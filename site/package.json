@@ -1,0 +1,41 @@
+{
+  "name": "@blockprotocol/site",
+  "version": "0.1.0",
+  "description": "The public-facing blockprotocol.org website",
+  "license": "MIT",
+  "repository": "https://github.com/blockprotocol/blockprotocol.git",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write './src/**/*'; eslint --ext .js,.ts,.tsx --fix ./src/",
+    "lint": "prettier --check './src/**/*' && eslint --ext .js,.ts,.tsx ./src/ && tsc --noEmit",
+    "build": "next build",
+    "clean": "rimraf ./.next/",
+    "dev": "next dev",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@twind/next": "1.0.8",
+    "lodash": "4.17.21",
+    "next": "10.2.3",
+    "next-images": "1.8.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "twind": "0.16.16"
+  },
+  "devDependencies": {
+    "@types/lodash": "4.14.171",
+    "@types/react": "17.0.7",
+    "@types/react-dom": "17.0.8",
+    "@typescript-eslint/eslint-plugin": "4.29.0",
+    "@typescript-eslint/parser": "4.29.0",
+    "babel-plugin-inline-react-svg": "2.0.1",
+    "eslint": "7.32.0",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-no-restricted-imports": "0.0.0",
+    "eslint-plugin-react": "7.24.0",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "prettier": "2.3.2",
+    "rimraf": "^3.0.2",
+    "typescript": "4.3.5"
+  }
+}

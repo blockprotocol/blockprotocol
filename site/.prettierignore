@@ -1,0 +1,7 @@
+# subsets adjacent .gitignore
+
+# Dependency directories
+node_modules/
+
+# Next.js build output
+.next
