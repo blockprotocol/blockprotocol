@@ -8,7 +8,7 @@
   "scripts": {
     "format": "prettier --write './src/**/*'; eslint --ext .js,.ts,.tsx --fix ./src/",
     "lint": "prettier --check './src/**/*' && eslint --ext .js,.ts,.tsx ./src/ && tsc --noEmit",
-    "build": "next build",
+    "build": "./scripts/build-blocks.sh && next build",
     "clean": "rimraf ./.next/",
     "dev": "next dev",
     "start": "next start"
