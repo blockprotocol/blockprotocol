@@ -8,7 +8,7 @@ export default function Partners() {
     <body className={tw`max-w-4xl mx-auto`} style={{ fontFamily: "'Inter', sans-serif" }}>
       <Header />
 
-      <main className={tw`text-center mt-4 mb-10`}>
+      <main className={tw`text-center mt-8 mb-10`}>
         <h1 className={tw`text-4xl font-extrabold`}>An open standard for blocks</h1>
         <div className={tw`mt-8`}>
           A standardized way to{" "}
