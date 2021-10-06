@@ -1,0 +1,11 @@
+#partners_form input {
+  width: 268px;
+}
+
+#partners_form textarea {
+  width: 535px;
+}
+
+#partners_form button {
+  background: linear-gradient(95.39deg, #24bdff 0%, #1e4fff 51.56%, #ff41e1 100%);
+}
