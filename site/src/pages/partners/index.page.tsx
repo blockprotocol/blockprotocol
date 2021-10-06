@@ -139,6 +139,11 @@ export default function Partners() {
             className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center`}
             type="submit"
           >
+            {/*
+              @aj try this instead
+              import Airplane from "../../assets/svg/airplane.svg";
+              <Airplane className={tw`ml-2`} />
+            */}
             Submit Form <img className={tw`ml-2`} src="/assets/airplane.svg" />
           </button>
         </form>

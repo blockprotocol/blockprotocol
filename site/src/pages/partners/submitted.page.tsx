@@ -27,6 +27,11 @@ export default function PartnersSubmitted() {
           className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center mx-auto`}
           onClick={() => (location.href = "https://hash.ai")}
         >
+          {/*
+            @aj try this instead
+            import KeyboardReturn from "../../assets/svg/keyboard-return.svg";
+            <KeyboardReturn className={tw`ml-2`} />
+          */}
           Return to HASH <img className={tw`ml-2`} src="/assets/keyboard-return.svg" />
         </button>
       </main>
