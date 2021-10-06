@@ -25,7 +25,7 @@ export default function PartnersSubmitted() {
         <button
           id="partners_button"
           className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center mx-auto`}
-          onClick={() => (location.href = "https://hash.ai")}
+          onClick={() => location.replace("https://hash.ai")}
         >
           {/*
             @aj try this instead
