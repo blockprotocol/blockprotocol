@@ -8,7 +8,7 @@ const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
 export default function Partners() {
   return (
     <body
-      className={tw` mx-auto px-4 md:px-0 lg:max-w-4xl md:max-w-2xl`}
+      className={tw`mx-auto px-4 md:px-0 lg:max-w-4xl md:max-w-2xl`}
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
       <Header />

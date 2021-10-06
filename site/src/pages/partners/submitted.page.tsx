@@ -5,7 +5,10 @@ import Header from "../../components/Header";
 
 export default function PartnersSubmitted() {
   return (
-    <body className={tw`max-w-4xl mx-auto`} style={{ fontFamily: "'Inter', sans-serif" }}>
+    <body
+      className={tw`mx-auto px-4 md:px-0 lg:max-w-4xl md:max-w-2xl`}
+      style={{ fontFamily: "'Inter', sans-serif" }}
+    >
       <Header />
 
       <main className={tw`text-center mt-8 mb-10`}>
