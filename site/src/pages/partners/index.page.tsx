@@ -3,9 +3,14 @@ import { tw } from "twind";
 
 import Header from "../../components/Header";
 
+const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
+
 export default function Partners() {
   return (
-    <body className={tw`max-w-4xl mx-auto`} style={{ fontFamily: "'Inter', sans-serif" }}>
+    <body
+      className={tw` mx-auto px-4 md:px-0 lg:max-w-4xl md:max-w-2xl`}
+      style={{ fontFamily: "'Inter', sans-serif" }}
+    >
       <Header />
 
       <main className={tw`text-center mt-8 mb-10`}>
@@ -35,7 +40,7 @@ export default function Partners() {
             <label htmlFor="NAME" className={tw`font-semibold uppercase `}>
               Full Name <span className={tw`text-blue-600 mr-2`}>*</span>
             </label>
-            <span className={tw`text-gray-500 font-light`}>Your full name</span>
+            <span className={tw`${labelSubtitleStyles}`}>Your full name</span>
 
             <input
               id="NAME"
@@ -50,7 +55,7 @@ export default function Partners() {
             <label htmlFor="EMAIL" className={tw`font-semibold uppercase `}>
               Email <span className={tw`text-blue-600 mr-2`}>*</span>
             </label>
-            <span className={tw`text-gray-500 font-light`}>
+            <span className={tw`${labelSubtitleStyles}`}>
               The best email address to contact you at
             </span>
 
@@ -67,7 +72,7 @@ export default function Partners() {
             <label htmlFor="PROJECT" className={tw`font-semibold uppercase `}>
               Project Name <span className={tw`text-blue-600 mr-2`}>*</span>
             </label>
-            <span className={tw`text-gray-500 font-light`}>
+            <span className={tw`${labelSubtitleStyles}`}>
               The name of the block editor (or related application) you’re working on
             </span>
 
@@ -84,7 +89,7 @@ export default function Partners() {
             <label htmlFor="PROJECTURL" className={tw`font-semibold uppercase mr-2`}>
               Project Homepage
             </label>
-            <span className={tw`text-gray-500 font-light`}>
+            <span className={tw`${labelSubtitleStyles}`}>
               Paste a link to your project or company’s homepage, if it’s public
             </span>
 
@@ -100,7 +105,7 @@ export default function Partners() {
             <label htmlFor="PROFILEURL" className={tw`font-semibold uppercase mr-2`}>
               Your Profile
             </label>
-            <span className={tw`text-gray-500 font-light`}>
+            <span className={tw`${labelSubtitleStyles}`}>
               Paste a link to a profile you maintain so we know who we’re talking to (GitHub,
               LinkedIn, Twitter, etc.)
             </span>
@@ -117,7 +122,7 @@ export default function Partners() {
             <label htmlFor="COMMENTS" className={tw`font-semibold uppercase mr-2`}>
               Comments
             </label>
-            <span className={tw`text-gray-500 font-light`}>
+            <span className={tw`${labelSubtitleStyles}`}>
               Let us know what interests you about the standard, or where you think you might be
               helpful
             </span>

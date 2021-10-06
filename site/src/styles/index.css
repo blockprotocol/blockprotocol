@@ -6,6 +6,17 @@
   width: 535px;
 }
 
-#partners_form button, #partners_button {
+#partners_form button,
+#partners_button {
   background: linear-gradient(95.39deg, #24bdff 0%, #1e4fff 51.56%, #ff41e1 100%);
+}
+
+@media (max-width: 768px) {
+  #partners_form input {
+    width: 100%;
+  }
+
+  #partners_form textarea {
+    width: 100%;
+  }
 }
