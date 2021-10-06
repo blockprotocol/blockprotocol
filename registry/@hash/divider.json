@@ -1,0 +1,6 @@
+{
+  "workspace": "@hashintel/block-divider",
+  "repository": "https://github.com/hashintel/dev.git",
+  "branch": "mr/fix-deps",
+  "distDir": "dist"
+}
