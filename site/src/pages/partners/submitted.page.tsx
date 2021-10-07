@@ -20,7 +20,7 @@ export default function PartnersSubmitted() {
       >
         <div className={tw`${containerString}`}>
           <h2 className={tw`font-extrabold`}>Thanks for registering</h2>
-          <div style={{ fontSize: 18 }} className={tw`mt-6`}>
+          <div style={{ fontSize: 18 }} className={tw`mt-4`}>
             We’ve received your submission and will be in touch.
           </div>
 

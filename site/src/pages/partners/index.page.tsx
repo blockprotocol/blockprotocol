@@ -17,7 +17,7 @@ export default function Partners() {
           <h2  className={tw`font-extrabold `}>
             Register an interest
           </h2>
-          <div style={{ fontSize: 18 }} className={tw`mt-6 px-0 lg:px-2`}>
+          <div style={{ fontSize: 18 }} className={tw`mt-4 px-0 lg:px-2`}>
             If you’re working on an existing or upcoming block editor, or would otherwise like to
             contribute to the new standard, fill in some details below and we’ll be in touch.
           </div>

@@ -15,7 +15,7 @@ export default function Header() {
       </a>
 
       <h1 className={tw`font-extrabold mt-8`}>An open standard for blocks</h1>
-      <div className={tw`mt-8`}>
+      <div className={tw`mt-5`}>
         A standardized way to{" "}
         <span className={tw`font-bold`}>create blocks whose contents are mapped to schemas</span>,
         which are both human and machine-readable.
