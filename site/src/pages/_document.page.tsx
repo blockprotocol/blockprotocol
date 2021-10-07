@@ -1,6 +1,14 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, { Html, Head, Main, NextScript, DocumentContext } from "next/document";
+import withTwindDocument from "@twind/next/document";
+
+import twindConfig from "../../twind.config";
 
 class MyDocument extends Document {
+  static async getInitialProps(ctx: DocumentContext) {
+    const initialProps = await Document.getInitialProps(ctx);
+    return { ...initialProps };
+  }
+
   render() {
     return (
       <Html>
@@ -16,4 +24,4 @@ class MyDocument extends Document {
   }
 }
 
-export default MyDocument;
+export default withTwindDocument(twindConfig, MyDocument);
