@@ -2,25 +2,17 @@ import { GetStaticProps } from "next";
 import React from "react";
 import { tw } from "twind";
 import Navbar from "../components/Navbar";
+import { BlockMetadata, readBlocksFromDisk } from "./api/blocks.api";
 
 interface PageProps {
-  catalog: Array<Record<string, string>>;
+  catalog: BlockMetadata[];
 }
 
 /**
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const fs = require("fs");
-  const catalog = require("glob")
-    .sync("public/blocks/**/metadata.json")
-    .map((path: string) => ({
-      // @todo should really be the .name property
-      path: path.match(/(@.*?)\.json$/)?.pop(),
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }));
-
-  return { props: { catalog } };
+  return { props: { catalog: readBlocksFromDisk() } };
 };
 
 const Gallery: React.VFC<PageProps> = ({ catalog }) => {
@@ -39,7 +31,8 @@ const Gallery: React.VFC<PageProps> = ({ catalog }) => {
         </p>
         <ul>
           {catalog.map(({ name, icon, description }) => (
-            <li key={name} className={tw`flex border border-gray-100 bg-gray-50 hover:bg-gray-100`}>
+            <li key={name} className={tw`flex hover:bg-gray-100`}>
+              <></>
               <div className={tw`flex w-16 items-center justify-center`}>
                 <img className={tw`w-6 h-6`} alt={name} src={icon} />
               </div>
