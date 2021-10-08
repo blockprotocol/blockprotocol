@@ -20,7 +20,7 @@ export type BlockMetadata = {
   icon?: string;
   license?: string;
   name?: string;
-  packageName?: string;
+  packageName: string;
   schema?: string;
   source?: string;
   variants?: BlockVariant[];

@@ -1,6 +1,8 @@
 import { GetStaticProps } from "next";
+import Link from "next/link";
 import React from "react";
 import { tw } from "twind";
+import type { UrlObject } from "url";
 import Navbar from "../components/Navbar";
 import { BlockMetadata, readBlocksFromDisk } from "./api/blocks.api";
 
@@ -30,16 +32,19 @@ const Gallery: React.VFC<PageProps> = ({ catalog }) => {
           others are using them, and test them out with dummy data
         </p>
         <ul>
-          {catalog.map(({ name, icon, description }) => (
-            <li key={name} className={tw`flex hover:bg-gray-100`}>
-              <></>
-              <div className={tw`flex w-16 items-center justify-center`}>
-                <img className={tw`w-6 h-6`} alt={name} src={icon} />
-              </div>
-              <div className={tw`py-3`}>
-                <p className={tw`text-sm font-bold`}>{name}</p>
-                <p className={tw`text-xs text-opacity-60 text-black`}>{description}</p>
-              </div>
+          {catalog.map(({ packageName, icon, description }) => (
+            <li key={packageName} className={tw`flex hover:bg-gray-100`}>
+              <Link href={packageName}>
+                <a>
+                  <div className={tw`flex w-16 items-center justify-center`}>
+                    <img className={tw`w-6 h-6`} alt={packageName} src={icon} />
+                  </div>
+                  <div className={tw`py-3`}>
+                    <p className={tw`text-sm font-bold`}>{packageName}</p>
+                    <p className={tw`text-xs text-opacity-60 text-black`}>{description}</p>
+                  </div>
+                </a>
+              </Link>
             </li>
           ))}
         </ul>
