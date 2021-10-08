@@ -12,7 +12,17 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+          <title>Blockprotocol</title>
+          <meta
+            name="description"
+            content="A standardized way to create blocks whose contents are mapped to schemas, which are both
+            human and machine-readable."
+          />
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+            rel="stylesheet"
+          ></link>
+          <link rel="shortcut icon" href="/assets/logo.svg" />
         </Head>
         <body>
           <Main />
