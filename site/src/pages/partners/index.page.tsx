@@ -9,7 +9,7 @@ const containerString = `mx-auto px-4 md:px-0 lg:max-w-4xl md:max-w-2xl`;
 
 export default function Partners() {
   return (
-    <body id="partners" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <div id="partners" style={{ fontFamily: "'Inter', sans-serif" }}>
       <Header />
 
       <main style={{ background: "#FCFDFE" }} className={tw`text-center pt-8 pb-10 w-auto`}>
@@ -153,6 +153,6 @@ export default function Partners() {
           </div>
         </div>
       </main>
-    </body>
+    </div>
   );
 }

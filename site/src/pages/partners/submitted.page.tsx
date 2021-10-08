@@ -7,7 +7,7 @@ const containerString = `mx-auto px-4 md:px-0 lg:max-w-4xl md:max-w-2xl`;
 
 export default function PartnersSubmitted() {
   return (
-    <body
+    <div
       id="partners"
       style={{ fontFamily: "'Inter', sans-serif" }}
       className={tw`flex flex-col min-h-screen`}
@@ -33,6 +33,6 @@ export default function PartnersSubmitted() {
           </button>
         </div>
       </main>
-    </body>
+    </div>
   );
 }
