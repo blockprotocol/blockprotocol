@@ -4,6 +4,7 @@ import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { tw } from "twind";
 import Navbar from "../../components/Navbar";
+import { Snippet } from "../../components/Snippet";
 import type { BlockMetadata } from "../api/blocks.api";
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.substring(1);
@@ -102,7 +103,7 @@ const Block: NextPage = () => {
             {org}
           </a>
         </p>
-        <div className="flex flex-row mb-8">
+        <div className="flex flex-row mb-10">
           <div className={tw`w-3/5 pr-5`}>
             <h3 className={tw`mb-4`}>Input Data</h3>
             <div
@@ -122,11 +123,13 @@ const Block: NextPage = () => {
             <h3 className={tw`mb-4`}>Input Schema</h3>
             <div
               style={{ height: 320, fontSize: 14 }}
-              className={tw`rounded-2xl bg-white p-3 w-full`}
+              className={tw`rounded-2xl bg-gray-800 p-3 w-full`}
             >
-              <pre className={tw`font-mono overflow-scroll h-full`}>
-                <code className="language-json">{JSON.stringify(schema, null, 2)}</code>
-              </pre>
+              <Snippet
+                className={tw`font-mono overflow-scroll h-full`}
+                source={JSON.stringify(schema, null, 2)}
+                language="json"
+              />
             </div>
           </div>
         </div>
