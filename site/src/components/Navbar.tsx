@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { tw } from "twind";
 
@@ -19,13 +20,17 @@ const Navbar: React.VFC<NavbarProps> = ({ className }) => {
           </a>
         </li>
         <li>
-          <span>Block Gallery</span>
+          <Link href="/gallery">Block Gallery</Link>
         </li>
         <li>
-          <span>Documentation</span>
+          <span className={tw`text-gray-500 cursor-not-allowed`} title="under construction">
+            Documentation
+          </span>
         </li>
         <li>
-          <span>Publish a Block</span>
+          <span className={tw`text-gray-500 cursor-not-allowed`} title="under construction">
+            Publish a Block
+          </span>
         </li>
       </ul>
     </nav>
