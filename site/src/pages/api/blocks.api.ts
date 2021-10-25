@@ -1,5 +1,4 @@
-
-import type { NextApiHandler } from "next/"
+import type { NextApiHandler } from "next/";
 
 /** @sync @hashintel/block-protocol */
 export type BlockProps = object;
@@ -7,8 +6,8 @@ export type BlockProps = object;
 /** @sync @hashintel/block-protocol */
 export type BlockVariant = {
   description?: string;
+  displayName?: string;
   icon?: string;
-  name?: string;
   properties?: BlockProps;
 };
 
@@ -16,15 +15,18 @@ export type BlockVariant = {
 export type BlockMetadata = {
   author?: string;
   description?: string;
+  displayName?: string;
   externals?: Record<string, string>;
   icon?: string;
   license?: string;
   name?: string;
-  packageName: string;
   schema?: string;
   source?: string;
   variants?: BlockVariant[];
   version?: string;
+
+  // @todo should be redundant to block's package.json#name
+  packagePath: string;
 };
 
 /**
@@ -34,14 +36,12 @@ export type BlockMetadata = {
 export const readBlocksFromDisk = (): BlockMetadata[] => {
   const fs = require("fs");
   const glob = require("glob");
-  
-  return glob
-    .sync(`${process.cwd()}/public/blocks/**/metadata.json`)
-    .map((path: string) => ({
-      // @todo possible redundant w/ .name property
-      packageName: path.split("/").slice(-3, -1).join("/"),
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }));
+
+  return glob.sync(`${process.cwd()}/public/blocks/**/metadata.json`).map((path: string) => ({
+    // @todo should be redundant to block's package.json#name
+    packagePath: path.split("/").slice(-3, -1).join("/"),
+    ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+  }));
 };
 
 let cachedBlocksFromDisk: Array<BlockMetadata> | null = null;

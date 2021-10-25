@@ -7,8 +7,6 @@ import Navbar from "../../components/Navbar";
 import { Snippet } from "../../components/Snippet";
 import type { BlockMetadata } from "../api/blocks.api";
 
-const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.substring(1);
-
 const validator = new Validator();
 
 const blockDependencies = {
@@ -83,8 +81,6 @@ const Block: NextPage = () => {
 
   if (!metadata || !schema) return null;
 
-  const displayName = metadata.name?.split("-").pop() ?? "";
-
   return (
     <div
       className={tw`mx-auto px-4 mt-5 md:px-0 lg:max-w-4xl md:max-w-2xl`}
@@ -94,8 +90,13 @@ const Block: NextPage = () => {
 
       <main className={tw`mt-20 mb-10`}>
         <h1 className={tw`text-6xl font-black`}>
-          {capitalize(displayName)} Block{" "}
-          <img className={tw`inline-block`} width="32px" height="32px" src={metadata.icon} />
+          {metadata.displayName}{" "}
+          <img
+            className={tw`inline-block`}
+            width="32px"
+            height="32px"
+            src={`/blocks/${org}/${block}/${metadata.icon}`}
+          />
         </h1>
         <p className={tw`text-lg font-bold mb-10`}>
           block from{" "}

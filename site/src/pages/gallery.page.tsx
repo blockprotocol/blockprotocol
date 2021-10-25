@@ -31,15 +31,18 @@ const Gallery: React.VFC<PageProps> = ({ catalog }) => {
           others are using them, and test them out with dummy data
         </p>
         <ul>
-          {catalog.map(({ packageName, icon, description }) => (
-            <li key={packageName}>
-              <Link href={packageName}>
+          {catalog.map(({ description, displayName, icon, packagePath }) => (
+            <li key={packagePath}>
+              <Link href={packagePath}>
                 <a className={tw`flex hover:bg-gray-100`}>
                   <div className={tw`flex w-16 items-center justify-center`}>
-                    <img className={tw`w-6 h-6`} src={icon} />
+                    <img className={tw`w-6 h-6`} src={`/blocks/${packagePath}/${icon}`} />
                   </div>
-                  <div className={tw`py-3`}>
-                    <p className={tw`text-sm font-bold`}>{packageName}</p>
+                  <div className={tw`py-4`}>
+                    <p className={tw`text-sm font-bold`}>
+                      {displayName}{" "}
+                      <span className={tw`font-normal text-gray-500`}>{packagePath}</span>
+                    </p>
                     <p className={tw`text-xs text-opacity-60 text-black`}>{description}</p>
                   </div>
                 </a>
