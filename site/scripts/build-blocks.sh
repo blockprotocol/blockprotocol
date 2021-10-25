@@ -23,6 +23,7 @@ set -o pipefail # prevent error masking in pipes
 # ----
 DIR=$(readlink -ne "${BASH_SOURCE[0]%/*}")
 REPO_ROOT="$DIR/../.."
+CACHE_DIR="${REPO_ROOT}/site/.next/cache"
 
 # util
 # ----
@@ -181,6 +182,9 @@ else
     build_block "$build_config"
   done
 fi  
+
+log info "pushing updated builds to the cache"
+rsync -a --delete "${REPO_ROOT}/site/public/blocks/" "${CACHE_DIR}/blocks"
 
 log info "finished w/o errors"
 exit 0
