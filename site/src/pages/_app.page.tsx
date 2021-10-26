@@ -5,7 +5,6 @@ import "../styles/index.css";
 /** @sync ../components/Snippet.tsx */
 import "../styles/prism.css";
 
-
 function MyApp({ Component, pageProps }: AppProps) {
   return <Component {...pageProps} />;
 }
