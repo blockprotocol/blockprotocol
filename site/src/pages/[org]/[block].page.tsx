@@ -93,8 +93,8 @@ const Block: NextPage = () => {
           {metadata.displayName}{" "}
           <img
             className={tw`inline-block`}
-            width="32px"
-            height="32px"
+            width="48px"
+            height="48px"
             src={`/blocks/${org}/${block}/${metadata.icon}`}
           />
         </h1>
