@@ -19,3 +19,6 @@ node_modules/
 # Next.js build output
 .next
 public/blocks
+
+# environment variables
+.env.local
