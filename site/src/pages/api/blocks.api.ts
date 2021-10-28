@@ -32,6 +32,8 @@ export type BlockMetadata = {
 /**
  * used to read block metadata from disk. dependencies are required at the
  * last moment to avoid bundle them w/ nextjs
+ * 
+ * @todo nextjs api endpoints don't have access to nextjs' public folder on vercel
  */
 export const readBlocksFromDisk = (): BlockMetadata[] => {
   const fs = require("fs");
