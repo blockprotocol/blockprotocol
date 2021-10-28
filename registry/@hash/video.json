@@ -1,5 +1,5 @@
 {
-  "workspace": "@hashintel/block-code",
+  "workspace": "@hashintel/block-video",
   "repository": "https://github.com/hashintel/dev.git",
   "branch": "main",
   "distDir": "dist"
