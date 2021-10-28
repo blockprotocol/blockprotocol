@@ -171,7 +171,7 @@ if [[ $# -gt 0 ]]; then
   log info "building block configs given as commandline arguments"
 
   for build_config in "${@:1}"; do
-    build_config=$(readlink -mn "$build_config")
+    build_config=$(readlink -n "$build_config")
     build_block "$build_config"
   done
 else

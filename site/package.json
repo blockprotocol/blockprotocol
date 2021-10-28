@@ -8,6 +8,8 @@
   "scripts": {
     "format": "prettier --write './src/**/*' #; eslint --ext .js,.ts,.tsx --fix ./src/",
     "lint": "prettier --check './src/**/*' && tsc --noEmit # && eslint --ext .js,.ts,.tsx ./src/ ",
+    "build-blocks": "find ../registry -type f | xargs ./scripts/build-blocks.sh",
+    "build-block": "./scripts/build-blocks.sh",
     "build": "./scripts/build-blocks.sh && next build",
     "clean": "rimraf ./.next/",
     "dev": "next dev",
@@ -15,7 +17,6 @@
   },
   "dependencies": {
     "@twind/next": "1.0.8",
-    "@types/prismjs": "^1.16.6",
     "glob": "^7.2.0",
     "jsonschema": "^1.4.0",
     "lodash": "4.17.21",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@types/lodash": "4.14.171",
+    "@types/prismjs": "^1.16.6",
     "@types/react": "17.0.7",
     "@types/react-dom": "17.0.8",
     "@typescript-eslint/eslint-plugin": "4.29.0",

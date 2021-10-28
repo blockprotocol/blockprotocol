@@ -16,6 +16,7 @@ const blockDependencies = {
 };
 
 type BlockExports = { default: React.FC };
+/** @sync @hashintel/block-protocol */
 type BlockSchema = Record<string, any>;
 type BlockDependency = keyof typeof blockDependencies;
 
