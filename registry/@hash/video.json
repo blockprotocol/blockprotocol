@@ -1,7 +1,7 @@
 {
   "workspace": "@hashintel/block-video",
   "repository": "https://github.com/hashintel/dev.git",
-  "branch": "main", 
+  "branch": "mr/fix-video-display-name", 
   "distDir": "dist",
-  "timestamp": "2021-10-29T10:59:11+02:00"
+  "timestamp": "2021-10-29T12:23:20+02:00"
 }
