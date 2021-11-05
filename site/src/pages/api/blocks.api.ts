@@ -30,14 +30,14 @@ export type BlockMetadata = {
 };
 
 /**
- * used to read block metadata from disk. dependencies are required at the
- * last moment to avoid bundle them w/ nextjs
- * 
+ * used to read block metadata from disk.
+ *
  * @todo nextjs api endpoints don't have access to nextjs' public folder on vercel
  */
 export const readBlocksFromDisk = (): BlockMetadata[] => {
-  const fs = require("fs");
-  const glob = require("glob");
+  /* why: required dependencies at runtime to avoid bundling them w/ nextjs */
+  const fs = require("fs"); // eslint-disable-line global-require
+  const glob = require("glob"); // eslint-disable-line global-require
 
   return glob.sync(`${process.cwd()}/public/blocks/**/metadata.json`).map((path: string) => ({
     // @todo should be redundant to block's package.json#name
@@ -49,7 +49,7 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
 let cachedBlocksFromDisk: Array<BlockMetadata> | null = null;
 
 const blocks: NextApiHandler<BlockMetadata[]> = (_req, res) => {
-  cachedBlocksFromDisk || (cachedBlocksFromDisk = readBlocksFromDisk());
+  cachedBlocksFromDisk ??= readBlocksFromDisk();
   res.status(200).json(cachedBlocksFromDisk);
 };
 

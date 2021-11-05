@@ -26,10 +26,15 @@ export default function PartnersSubmitted() {
 
           <button
             id="partners_button"
+            type="button"
             className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center mx-auto`}
-            onClick={() => location.replace("https://hash.ai")}
+            onClick={() => {
+              // eslint-disable-next-line no-restricted-globals
+              location.replace("https://hash.ai");
+            }}
           >
-            Return to HASH <img className={tw`ml-2`} src="/assets/keyboard-return.svg" />
+            Return to HASH{" "}
+            <img className={tw`ml-2`} alt="return" src="/assets/keyboard-return.svg" />
           </button>
         </div>
       </main>

@@ -1,3 +1,6 @@
+/* the lint rule requires <input/> fields to be children of their associated <label/>s */
+/* eslint-disable jsx-a11y/label-has-associated-control */
+
 import React from "react";
 import { tw } from "twind";
 
@@ -137,7 +140,7 @@ export default function Partners() {
               import Airplane from "../../assets/svg/airplane.svg";
               <Airplane className={tw`ml-2`} />
             */}
-              Submit Form <img className={tw`ml-2`} src="/assets/airplane.svg" />
+              Submit Form <img className={tw`ml-2`} alt="take-off" src="/assets/airplane.svg" />
             </button>
           </form>
 

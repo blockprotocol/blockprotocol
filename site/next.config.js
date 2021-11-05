@@ -1,4 +1,3 @@
-
 const withImages = require("next-images");
 
 module.exports = withImages({
@@ -6,6 +5,6 @@ module.exports = withImages({
   webpack5: false,
   optimizeFonts: true,
   async redirects() {
-    return [{ source: "/", destination: "/partners", permanent: false }]
-  }
+    return [{ source: "/", destination: "/partners", permanent: false }];
+  },
 });

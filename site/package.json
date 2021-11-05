@@ -1,18 +1,18 @@
 {
   "name": "@blockprotocol/site",
   "version": "0.1.0",
-  "description": "The public-facing blockprotocol.org website",
-  "license": "MIT",
-  "repository": "https://github.com/blockprotocol/blockprotocol.git",
   "private": true,
+  "description": "The public-facing blockprotocol.org website",
+  "repository": "https://github.com/blockprotocol/blockprotocol.git",
+  "license": "MIT",
   "scripts": {
-    "fix": "eslint --ext .js,.ts,.tsx --fix ./src/",
-    "lint": "eslint --ext .js,.ts,.tsx ./src/ && tsc --noEmit # @blockprotocol/site",
-    "build-blocks": "find ../registry -type f | xargs ./scripts/build-blocks.sh",
-    "build-block": "./scripts/build-blocks.sh",
     "build": "./scripts/build-blocks.sh && next build",
+    "build-block": "./scripts/build-blocks.sh",
+    "build-blocks": "find ../registry -type f | xargs ./scripts/build-blocks.sh",
     "clean": "rimraf ./.next/",
     "dev": "next dev",
+    "fix": "eslint --ext .js,.ts,.tsx --fix ./src/",
+    "lint": "eslint --ext .js,.ts,.tsx ./src/ && tsc --noEmit # @blockprotocol/site",
     "start": "next start"
   },
   "dependencies": {

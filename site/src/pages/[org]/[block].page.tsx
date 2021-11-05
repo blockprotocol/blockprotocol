@@ -9,11 +9,13 @@ import type { BlockMetadata } from "../api/blocks.api";
 
 const validator = new Validator();
 
+/* eslint-disable global-require */
 const blockDependencies = {
   react: require("react"),
   "react-dom": require("react-dom"),
   twind: require("twind"),
 };
+/* eslint-enable global-require */
 
 type BlockExports = { default: React.FC };
 /** @sync @hashintel/block-protocol */
@@ -46,38 +48,40 @@ const Block: NextPage = () => {
 
   useEffect(() => {
     if (!org || !block) return;
-    fetch(`/blocks/${org}/${block}/metadata.json`)
+    void fetch(`/blocks/${org}/${block}/metadata.json`)
       .then((response) => response.json())
       .then(setMetadata);
   }, [org, block]);
 
+  // exclude `org` and `block` from effect's deps to avoid refetching before `metadata` is updated
   useEffect(() => {
     if (!metadata) return;
-    fetch(`/blocks/${org}/${block}/${metadata.schema}`)
+    void fetch(`/blocks/${org}/${block}/${metadata.schema}`)
       .then((response) => response.json())
       .then(setSchema);
-  }, [metadata]);
+  }, [metadata]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // exclude `org` and `block` from effect's deps to avoid refetching before `metadata` is updated
   useEffect(() => {
     if (!metadata) return;
-    fetch(`/blocks/${org}/${block}/${metadata.source}`)
+    void fetch(`/blocks/${org}/${block}/${metadata.source}`)
       .then((response) => response.text())
       .then(blockEval)
       .then(setBlockModule);
-  }, [metadata]);
+  }, [metadata]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /** strictly speaking there's no need to cache results */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
-    let props = undefined;
+    let props_;
 
     try {
-      props = JSON.parse(text);
+      props_ = JSON.parse(text);
     } catch (err) {
-      return [props, [(err as Error).message]];
+      return [props_, [(err as Error).message]];
     }
 
-    const errors = validator.validate(props, schema ?? {}).errors;
-    return [props, errors.map((err) => `ValidationError: ${err.stack}`)];
+    const errors_ = validator.validate(props_, schema ?? {}).errors;
+    return [props_, errors_.map((err) => `ValidationError: ${err.stack}`)];
   }, [text, schema]);
 
   if (!metadata || !schema) return null;
@@ -96,6 +100,7 @@ const Block: NextPage = () => {
             className={tw`inline-block`}
             width="48px"
             height="48px"
+            alt={metadata.displayName}
             src={`/blocks/${org}/${block}/${metadata.icon}`}
           />
         </h1>
@@ -118,7 +123,7 @@ const Block: NextPage = () => {
                 style={{ minHeight: "100%" }}
                 className={tw`font-mono resize-none bg-white w-full overflow-scroll`}
                 placeholder="Your block input goes here..."
-              ></textarea>
+              />
             </div>
           </div>
           <div className={tw`w-2/5`}>
@@ -147,7 +152,7 @@ const Block: NextPage = () => {
           {errors.length > 0 && (
             <ul className={tw`rounded-2xl list-square mb-2 px-8 py-4 bg-red-200`}>
               {errors.map((err) => (
-                <li>{err}</li>
+                <li key={err}>{err}</li>
               ))}
             </ul>
           )}

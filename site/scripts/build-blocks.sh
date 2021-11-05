@@ -15,8 +15,8 @@
 #   changed by the last commit.
 # ------------------------------------------------------------------------------
 
-set -e # exit on error
-set -u # prevent access to yet undeclared variables
+set -e          # exit on error
+set -u          # prevent access to yet undeclared variables
 set -o pipefail # prevent error masking in pipes
 
 # conf
@@ -27,7 +27,7 @@ CACHE_DIR="${REPO_ROOT}/site/.next/cache"
 
 # util
 # ----
-function log {
+function log() {
   printf "[%s][%s] %s\n" "$1" "$(date +"%FT%T")" "$2" >&2
 }
 
@@ -66,7 +66,7 @@ log info "launching block builder"
 log debug "preping the field"
 TMP=$(mktemp -d)
 
-onexit () {
+onexit() {
   log debug "cleaning the field"
   rm -rf "$TMP"
 }
@@ -85,10 +85,10 @@ cp -a "${CACHE_DIR}/blocks" "${REPO_ROOT}/site/public"
 ##
 # used to build a block. if the given config no longer exists,
 # its cached build is removed.
-# 
+#
 # @param build_config - path to any config in <repo-root>/registry
 #
-function build_block {
+function build_block() {
   build_config="$1"
 
   # create block specific subfolder in nextjs' static root
@@ -166,7 +166,6 @@ function build_block {
   log debug "popd back to ${PWD}"
 }
 
-
 if [[ $# -gt 0 ]]; then
   log info "building block configs given as commandline arguments"
 
@@ -181,7 +180,7 @@ else
     build_config="${REPO_ROOT}/${build_config}"
     build_block "$build_config"
   done
-fi  
+fi
 
 log info "pushing updated builds to the cache"
 rsync -a --delete "${REPO_ROOT}/site/public/blocks/" "${CACHE_DIR}/blocks"

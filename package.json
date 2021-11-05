@@ -1,10 +1,10 @@
 {
-  "description": "blockprotocol monorepo",
   "private": true,
+  "description": "blockprotocol monorepo",
   "workspaces": [
     "./site"
   ],
-  "scripts":{
+  "scripts": {
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:workspaces": "yarn workspaces run fix",
     "fix:markdownlint": "markdownlint --fix \"**/*\"",

@@ -6,7 +6,11 @@ export default function Header() {
   return (
     <header id="partners_header" className={tw`text-center pt-4 pb-8 ${containerString}`}>
       <a className={tw`flex items-center justify-center`} href="/partners">
-        <img className={tw`inline w-12 md:w-20 mr-5 md:mr-6 rotate-12`} src="/assets/logo.png" />{" "}
+        <img
+          className={tw`inline w-12 md:w-20 mr-5 md:mr-6 rotate-12`}
+          alt="Blockprotocol Logo"
+          src="/assets/logo.png"
+        />{" "}
         <span>
           <span className={tw`font-bold`}>block</span>
           <span className={tw`font-medium`}>protocol</span>

@@ -36,7 +36,11 @@ const Gallery: React.VFC<PageProps> = ({ catalog }) => {
               <Link href={packagePath}>
                 <a className={tw`flex hover:bg-gray-100`}>
                   <div className={tw`flex w-16 items-center justify-center`}>
-                    <img className={tw`w-6 h-6`} src={`/blocks/${packagePath}/${icon}`} />
+                    <img
+                      className={tw`w-6 h-6`}
+                      alt={displayName}
+                      src={`/blocks/${packagePath}/${icon}`}
+                    />
                   </div>
                   <div className={tw`py-4`}>
                     <p className={tw`text-sm font-bold`}>
