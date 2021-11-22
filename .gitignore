@@ -16,9 +16,17 @@ node_modules/
 # Yarn Integrity file
 .yarn-integrity
 
+# macOS directory file
+.DS_Store
+
 # Next.js build output
 .next
-public/blocks
 
 # environment variables
 .env.local
+
+# vscode config
+.vscode
+
+# workspace specific
+site/public/blocks

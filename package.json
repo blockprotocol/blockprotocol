@@ -1,0 +1,25 @@
+{
+  "description": "blockprotocol monorepo",
+  "private": true,
+  "workspaces": [
+    "./site"
+  ],
+  "scripts":{
+    "fix": "npm-run-all --continue-on-error \"fix:*\"",
+    "fix:workspaces": "yarn workspaces run fix",
+    "fix:markdownlint": "markdownlint --fix \"**/*\"",
+    "fix:prettier": "prettier --write  --ignore-unknown \"**/*\"",
+    "lint": "npm-run-all --continue-on-error \"lint:*\"",
+    "lint:workspaces": "yarn workspaces run lint",
+    "lint:markdownlint": "markdownlint \"**/*\"",
+    "lint:prettier": "prettier --check --ignore-unknown \"**/*\""
+  },
+  "devDependencies": {
+    "concurrently": "6.2.0",
+    "markdownlint-cli": "0.29.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.3.2",
+    "prettier-plugin-packagejson": "2.2.13",
+    "prettier-plugin-sh": "0.7.1"
+  }
+}
