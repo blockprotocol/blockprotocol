@@ -33,7 +33,12 @@
 
 #partners_form button,
 #return_home {
-  background: linear-gradient(95.39deg, #24bdff 0%, #1e4fff 51.56%, #ff41e1 100%);
+  background: linear-gradient(
+    95.39deg,
+    #24bdff 0%,
+    #1e4fff 51.56%,
+    #ff41e1 100%
+  );
   font-size: 16px;
 }
 

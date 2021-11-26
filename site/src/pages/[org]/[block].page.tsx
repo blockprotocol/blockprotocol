@@ -23,7 +23,8 @@ type BlockSchema = Record<string, any>;
 type BlockDependency = keyof typeof blockDependencies;
 
 const blockRequire = (name: BlockDependency) => {
-  if (!(name in blockDependencies)) throw new Error(`missing dependency ${name}`);
+  if (!(name in blockDependencies))
+    throw new Error(`missing dependency ${name}`);
   return blockDependencies[name];
 };
 
@@ -48,7 +49,9 @@ const Block: NextPage = () => {
   const { org, block } = useRouter().query;
 
   const [text, setText] = useState("{}");
-  const [{ metadata, schema, blockModule }, setPageState] = useState<PageState>({});
+  const [{ metadata, schema, blockModule }, setPageState] = useState<PageState>(
+    {},
+  );
 
   useEffect(() => {
     if (!org || !block) return;
@@ -57,12 +60,20 @@ const Block: NextPage = () => {
       .then((metadata_) =>
         Promise.all([
           metadata_,
-          fetch(`/blocks/${org}/${block}/${metadata_.schema}`).then((res) => res.json()),
-          fetch(`/blocks/${org}/${block}/${metadata_.source}`).then((res) => res.text()),
+          fetch(`/blocks/${org}/${block}/${metadata_.schema}`).then((res) =>
+            res.json(),
+          ),
+          fetch(`/blocks/${org}/${block}/${metadata_.source}`).then((res) =>
+            res.text(),
+          ),
         ]),
       )
       .then(([metadata_, schema_, source]) => {
-        setPageState({ metadata: metadata_, schema: schema_, blockModule: blockEval(source) });
+        setPageState({
+          metadata: metadata_,
+          schema: schema_,
+          blockModule: blockEval(source),
+        });
       });
   }, [org, block]);
 
@@ -139,20 +150,28 @@ const Block: NextPage = () => {
         <div>
           <h3 className={tw`mb-2`}>Block Stage</h3>
           {errors.length ? (
-            <p className={tw`mb-2`}>The provided input raised the following errors:</p>
+            <p className={tw`mb-2`}>
+              The provided input raised the following errors:
+            </p>
           ) : (
             <p className={tw`mb-2`}>
-              The provided input is schema conform. See below the rendered output.
+              The provided input is schema conform. See below the rendered
+              output.
             </p>
           )}
           {errors.length > 0 && (
-            <ul className={tw`rounded-2xl list-square mb-2 px-8 py-4 bg-red-200`}>
+            <ul
+              className={tw`rounded-2xl list-square mb-2 px-8 py-4 bg-red-200`}
+            >
               {errors.map((err) => (
                 <li key={err}>{err}</li>
               ))}
             </ul>
           )}
-          <div style={{ height: 320 }} className={tw`bg-white rounded-2xl w-full p-4`}>
+          <div
+            style={{ height: 320 }}
+            className={tw`bg-white rounded-2xl w-full p-4`}
+          >
             {blockModule && <blockModule.default {...props} />}
           </div>
         </div>

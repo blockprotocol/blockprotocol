@@ -14,12 +14,16 @@ export default function Partners() {
     <div id="partners" style={{ fontFamily: "'Inter', sans-serif" }}>
       <Header />
 
-      <main style={{ background: "#FCFDFE" }} className={tw`text-center pt-8 pb-10 w-auto`}>
+      <main
+        style={{ background: "#FCFDFE" }}
+        className={tw`text-center pt-8 pb-10 w-auto`}
+      >
         <div className={tw`${containerString}`}>
           <h2 className={tw`font-extrabold `}>Register an interest</h2>
           <div style={{ fontSize: 18 }} className={tw`mt-4 px-0 lg:px-2`}>
-            If you’re working on an existing or upcoming block editor, or would otherwise like to
-            contribute to the new standard, fill in some details below and we’ll be in touch.
+            If you’re working on an existing or upcoming block editor, or would
+            otherwise like to contribute to the new standard, fill in some
+            details below and we’ll be in touch.
           </div>
 
           <form
@@ -68,7 +72,8 @@ export default function Partners() {
                 Project Name <span className={tw`text-blue-600 mr-2`}>*</span>
               </label>
               <span className={tw`${labelSubtitleStyles}`}>
-                The name of the block editor (or related application) you’re working on
+                The name of the block editor (or related application) you’re
+                working on
               </span>
 
               <input
@@ -81,11 +86,15 @@ export default function Partners() {
             </div>
 
             <div className={tw`mt-8`}>
-              <label htmlFor="PROJECTURL" className={tw`font-semibold uppercase mr-2`}>
+              <label
+                htmlFor="PROJECTURL"
+                className={tw`font-semibold uppercase mr-2`}
+              >
                 Project Homepage
               </label>
               <span className={tw`${labelSubtitleStyles}`}>
-                Paste a link to your project or company’s homepage, if it’s public
+                Paste a link to your project or company’s homepage, if it’s
+                public
               </span>
 
               <input
@@ -97,12 +106,15 @@ export default function Partners() {
             </div>
 
             <div className={tw`mt-8`}>
-              <label htmlFor="PROFILEURL" className={tw`font-semibold uppercase mr-2`}>
+              <label
+                htmlFor="PROFILEURL"
+                className={tw`font-semibold uppercase mr-2`}
+              >
                 Your Profile
               </label>
               <span className={tw`${labelSubtitleStyles}`}>
-                Paste a link to a profile you maintain so we know who we’re talking to (GitHub,
-                LinkedIn, Twitter, etc.)
+                Paste a link to a profile you maintain so we know who we’re
+                talking to (GitHub, LinkedIn, Twitter, etc.)
               </span>
 
               <input
@@ -114,12 +126,15 @@ export default function Partners() {
             </div>
 
             <div className={tw`mt-8`}>
-              <label htmlFor="COMMENTS" className={tw`font-semibold uppercase mr-2`}>
+              <label
+                htmlFor="COMMENTS"
+                className={tw`font-semibold uppercase mr-2`}
+              >
                 Comments
               </label>
               <span className={tw`${labelSubtitleStyles}`}>
-                Let us know what interests you about the standard, or where you think you might be
-                helpful
+                Let us know what interests you about the standard, or where you
+                think you might be helpful
               </span>
 
               <textarea
@@ -139,17 +154,25 @@ export default function Partners() {
               import Airplane from "../../assets/svg/airplane.svg";
               <Airplane className={tw`ml-2`} />
             */}
-              Submit Form <img className={tw`ml-2`} alt="take-off" src="/assets/airplane.svg" />
+              Submit Form{" "}
+              <img
+                className={tw`ml-2`}
+                alt="take-off"
+                src="/assets/airplane.svg"
+              />
             </button>
           </form>
 
-          <div style={{ fontSize: 15 }} className={tw`text-left text-gray-500 mt-10 pr-0 lg:pr-48`}>
+          <div
+            style={{ fontSize: 15 }}
+            className={tw`text-left text-gray-500 mt-10 pr-0 lg:pr-48`}
+          >
             By submitting this form, you agree to HASH’s{" "}
             <a className={tw`font-bold`} href="https://hash.ai/legal/privacy">
               privacy policy
             </a>
-            , and consent to being contacted in relation to the development and launch of the Block
-            Protocol. You can opt-out at any time.
+            , and consent to being contacted in relation to the development and
+            launch of the Block Protocol. You can opt-out at any time.
           </div>
         </div>
       </main>

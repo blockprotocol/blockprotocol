@@ -31,7 +31,11 @@ export default function PartnersSubmitted() {
               className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center inline-block mx-auto`}
             >
               Return to HASH{" "}
-              <img className={tw`ml-2 inline`} alt="return" src="/assets/keyboard-return.svg" />
+              <img
+                className={tw`ml-2 inline`}
+                alt="return"
+                src="/assets/keyboard-return.svg"
+              />
             </a>
           </Link>
         </div>

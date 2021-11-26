@@ -9,7 +9,9 @@ interface NavbarProps {
 const Navbar: React.VFC<NavbarProps> = ({ className }) => {
   return (
     <nav className={className}>
-      <ul className={tw`list-none flex flex-row justify-between items-center text-base font-bold`}>
+      <ul
+        className={tw`list-none flex flex-row justify-between items-center text-base font-bold`}
+      >
         <li>
           <a href="/partners">
             <span style={{ fontSize: "2rem" }}>
@@ -23,12 +25,18 @@ const Navbar: React.VFC<NavbarProps> = ({ className }) => {
           <Link href="/gallery">Block Gallery</Link>
         </li>
         <li>
-          <span className={tw`text-gray-500 cursor-not-allowed`} title="under construction">
+          <span
+            className={tw`text-gray-500 cursor-not-allowed`}
+            title="under construction"
+          >
             Documentation
           </span>
         </li>
         <li>
-          <span className={tw`text-gray-500 cursor-not-allowed`} title="under construction">
+          <span
+            className={tw`text-gray-500 cursor-not-allowed`}
+            title="under construction"
+          >
             Publish a Block
           </span>
         </li>

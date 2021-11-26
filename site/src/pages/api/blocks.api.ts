@@ -40,11 +40,13 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
   const glob = require("glob");
   /* eslint-enable global-require */
 
-  return glob.sync(`${process.cwd()}/public/blocks/**/metadata.json`).map((path: string) => ({
-    // @todo should be redundant to block's package.json#name
-    packagePath: path.split("/").slice(-3, -1).join("/"),
-    ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-  }));
+  return glob
+    .sync(`${process.cwd()}/public/blocks/**/metadata.json`)
+    .map((path: string) => ({
+      // @todo should be redundant to block's package.json#name
+      packagePath: path.split("/").slice(-3, -1).join("/"),
+      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+    }));
 };
 
 let cachedBlocksFromDisk: Array<BlockMetadata> | null = null;
