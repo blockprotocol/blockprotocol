@@ -13,7 +13,7 @@
     "lint:eslint": "eslint --ext .js,.ts,.tsx",
     "lint:markdownlint": "markdownlint \"**/*\"",
     "lint:prettier": "prettier --check --ignore-unknown \"**/*\"",
-    "lint:typecheck": "yarn workspaces run typecheck"
+    "lint:tsc": "yarn workspaces run lint:tsc"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "4.29.0",
