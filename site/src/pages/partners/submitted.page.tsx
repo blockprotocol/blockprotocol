@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { tw } from "twind";
 
@@ -24,18 +25,15 @@ export default function PartnersSubmitted() {
             We’ve received your submission and will be in touch.
           </div>
 
-          <button
-            id="partners_button"
-            type="button"
-            className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center mx-auto`}
-            onClick={() => {
-              // eslint-disable-next-line no-restricted-globals
-              location.replace("https://hash.ai");
-            }}
-          >
-            Return to HASH{" "}
-            <img className={tw`ml-2`} alt="return" src="/assets/keyboard-return.svg" />
-          </button>
+          <Link href="https://hash.ai" replace>
+            <a
+              id="return_home"
+              className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center inline-block mx-auto`}
+            >
+              Return to HASH{" "}
+              <img className={tw`ml-2 inline`} alt="return" src="/assets/keyboard-return.svg" />
+            </a>
+          </Link>
         </div>
       </main>
     </div>
