@@ -38,39 +38,35 @@ const blockEval = (source: string): BlockExports => {
   return module_.exports as BlockExports;
 };
 
+interface PageState {
+  schema?: BlockSchema;
+  metadata?: BlockMetadata;
+  blockModule?: BlockExports;
+}
+
 const Block: NextPage = () => {
   const { org, block } = useRouter().query;
 
   const [text, setText] = useState("{}");
-  const [schema, setSchema] = useState<BlockSchema | null>(null);
-  const [metadata, setMetadata] = useState<BlockMetadata | null>(null);
-  const [blockModule, setBlockModule] = useState<BlockExports | null>(null);
+  const [{ metadata, schema, blockModule }, setPageState] = useState<PageState>({});
 
   useEffect(() => {
     if (!org || !block) return;
     void fetch(`/blocks/${org}/${block}/metadata.json`)
-      .then((response) => response.json())
-      .then(setMetadata);
+      .then((res) => res.json())
+      .then((metadata_) =>
+        Promise.all([
+          metadata_,
+          fetch(`/blocks/${org}/${block}/${metadata_.schema}`).then((res) => res.json()),
+          fetch(`/blocks/${org}/${block}/${metadata_.source}`).then((res) => res.text()),
+        ]),
+      )
+      .then(([metadata_, schema_, source]) => {
+        setPageState({ metadata: metadata_, schema: schema_, blockModule: blockEval(source) });
+      });
   }, [org, block]);
 
-  // exclude `org` and `block` from effect's deps to avoid refetching before `metadata` is updated
-  useEffect(() => {
-    if (!metadata) return;
-    void fetch(`/blocks/${org}/${block}/${metadata.schema}`)
-      .then((response) => response.json())
-      .then(setSchema);
-  }, [metadata]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // exclude `org` and `block` from effect's deps to avoid refetching before `metadata` is updated
-  useEffect(() => {
-    if (!metadata) return;
-    void fetch(`/blocks/${org}/${block}/${metadata.source}`)
-      .then((response) => response.text())
-      .then(blockEval)
-      .then(setBlockModule);
-  }, [metadata]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  /** strictly speaking there's no need to cache results */
+  /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     let props_;
 
