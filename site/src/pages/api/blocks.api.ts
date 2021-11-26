@@ -35,9 +35,10 @@ export type BlockMetadata = {
  * @todo nextjs api endpoints don't have access to nextjs' public folder on vercel
  */
 export const readBlocksFromDisk = (): BlockMetadata[] => {
-  /* why: required dependencies at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs"); // eslint-disable-line global-require
-  const glob = require("glob"); // eslint-disable-line global-require
+  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
+  const fs = require("fs");
+  const glob = require("glob");
+  /* eslint-enable global-require */
 
   return glob.sync(`${process.cwd()}/public/blocks/**/metadata.json`).map((path: string) => ({
     // @todo should be redundant to block's package.json#name

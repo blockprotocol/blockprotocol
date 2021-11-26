@@ -1,5 +1,4 @@
-/* the lint rule requires <input/> fields to be children of their associated <label/>s */
-/* eslint-disable jsx-a11y/label-has-associated-control */
+/* eslint-disable jsx-a11y/label-has-associated-control -- the lint rule requires <input/> fields to be children of their associated <label/>s */
 
 import React from "react";
 import { tw } from "twind";
