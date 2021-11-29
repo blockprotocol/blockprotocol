@@ -6,10 +6,10 @@ import "../styles/prism.css";
 
 import createCache from "@emotion/cache";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import React from "react";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
 import twindConfig from "../../twind.config";
-import { theme } from "../components/theme";
+import { theme } from "../components/UI/theme";
 
 function createEmotionCache() {
   return createCache({ key: "css" });
