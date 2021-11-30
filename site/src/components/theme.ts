@@ -1,10 +1,11 @@
 import { colors, createTheme } from "@mui/material";
 
-import InterMedium from "../../assets/fonts/Inter-Medium.ttf";
-import InterRegular from "../../assets/fonts/Inter-Regular.ttf";
-import ApercuProRegular from "../../assets/fonts/ApercuPro-Regular.ttf";
-import ApercuProBold from "../../assets/fonts/ApercuPro-Bold.ttf";
+import InterMedium from "../assets/fonts/Inter-Medium.ttf";
+import InterRegular from "../assets/fonts/Inter-Regular.ttf";
+import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
+import ApercuProBold from "../assets/fonts/Apercu-bold-pro.ttf";
 
+// @todo figure out how to override material colors to work with ours
 const customColors = {
   ...colors,
   purple: {
@@ -32,18 +33,21 @@ const customColors = {
     500: "#C74E0B",
     600: "#9C3B21",
   },
+  gray: {
+
+  },
 };
 
 export const theme = createTheme({
-  //   palette: {
-  //     primary: {
-  //       //    light: "",
-  //       main: customColors.purple["500"],
-  //       //    dark: "",
-  //       //    contrastText: ""
-  //     },
-  //     secondary: {},
-  //   },
+  palette: {
+    primary: {
+      //    light: "",
+      main: customColors.purple["500"],
+      //    dark: "",
+      //    contrastText: ""
+    },
+    ...customColors
+  },
   typography: {
     fontFamily: "Inter",
     bpTitle: {
@@ -62,13 +66,16 @@ export const theme = createTheme({
       fontFamily: "Apercu Pro",
       fontSize: 43.95,
       lineHeight: 1.2,
-    },
+    }, 
     bpHeading3: {
       fontFamily: "Apercu Pro",
       fontSize: 28.13,
       lineHeight: 1.1,
     },
-    bpLargeText: {},
+    bpLargeText: {
+      fontSize: 22.5,
+      lineHeight: 1.1,
+    },
     bpBodyCopy: {
       fontSize: 18,
       fontWeight: 400,
@@ -84,6 +91,9 @@ export const theme = createTheme({
       lineHeight: 15.4,
     },
   },
+  // shadows: {
+
+  // },
   components: {
     MuiCssBaseline: {
       styleOverrides: `
@@ -108,6 +118,58 @@ export const theme = createTheme({
                 src: url(${ApercuProBold}) format("trueType");
             }
           `,
+    },
+    MuiButton: {
+      defaultProps: {
+        disableElevation: true,
+        disableRipple: true,
+        disableTouchRipple: true,
+      },
+
+      // @todo consider overriding existing variants
+      variants: [
+        {
+          props: { variant: "primary" },
+          style: {
+            backgroundColor: "unset",
+            background: customColors.purple["500"],
+            color: "#F5F6F6", // this should be taken from list of colors
+            "&:hover": {
+              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple["500"]} 100%)`,
+            },
+            borderRadius: 34,
+            border: "1px solid #6B54EF",
+          },
+        },
+        {
+          props: { variant: "secondary" },
+          style: {
+            background: "#FFFFFF",
+            border: `1px solid #6B54EF`,
+            color: "#6B54EF", // this should be taken from list of colors
+            "&:hover": {
+              background: "#CCEBF3",
+            },
+            borderRadius: 34,
+          },
+        },
+      ],
+      // styleOverrides: {
+      //   root: {},
+
+      //   contained: {
+      //   },
+      // },
+    },
+    // MuiContainer: {
+    //   styleOverrides: {
+
+    //   }
+    // }
+    MuiIcon: {
+      defaultProps: {
+        baseClassName: "fas",
+      },
     },
   },
 });

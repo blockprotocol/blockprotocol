@@ -6,10 +6,10 @@ import "../styles/index.css";
 import "../styles/prism.css";
 
 import createCache from "@emotion/cache";
-import CssBaseline from "@mui/material/CssBaseline";
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../components/UI/theme";
+import React from "react";
+import { theme } from "../components/theme";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 
 function createEmotionCache() {
   return createCache({ key: "css" });
