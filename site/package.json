@@ -27,6 +27,7 @@
     "twind": "^0.16.16"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.16.3",
     "@types/lodash": "4.14.171",
     "@types/prismjs": "^1.16.6",
     "@types/react": "17.0.7",
