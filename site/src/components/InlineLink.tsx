@@ -1,6 +1,5 @@
 import { Link, Popper, Box, Fade, LinkProps, Typography } from "@mui/material";
 import { useState, FC, useRef } from "react";
-import { useOutsideClick } from "rooks";
 
 type InlineLinkProps = {
   popperInfo?: { title?: string; content?: string };
@@ -14,12 +13,7 @@ export const InlineLink: FC<InlineLinkProps> = ({
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const linkRef = useRef(null);
-  const popperRef = useRef(null);
-
-  useOutsideClick(popperRef, () => setOpen(false));
-
-  const canBeOpen = open && Boolean(anchorEl);
-  const id = canBeOpen ? "transition-popper" : undefined;
+  const popperRef = useRef<HTMLDivElement>(null);
 
   if (linkRef.current && !anchorEl) {
     setAnchorEl(linkRef.current);
@@ -29,7 +23,13 @@ export const InlineLink: FC<InlineLinkProps> = ({
     <Box>
       {/* this should be a button */}
       <Link
-        onClick={() => setOpen((previousOpen) => !previousOpen)}
+        onMouseOver={() => setOpen(true)}
+        onMouseLeave={(e) => {
+          if (!popperRef.current) return;
+          if (!popperRef.current.contains(e.currentTarget)) {
+            setOpen(false);
+          }
+        }}
         ref={linkRef}
         sx={{
           color: "purple.600",
@@ -63,8 +63,7 @@ export const InlineLink: FC<InlineLinkProps> = ({
         {children}
       </Link>
       <Popper
-        id={id}
-        ref={popperRef}
+        // ref={popperRef}
         open={open}
         anchorEl={anchorEl}
         transition
@@ -73,6 +72,9 @@ export const InlineLink: FC<InlineLinkProps> = ({
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Box
+              component="div"
+              ref={popperRef}
+              onMouseLeave={() => setOpen(false)}
               sx={{
                 p: 2,
                 mb: 2,
@@ -93,7 +95,9 @@ export const InlineLink: FC<InlineLinkProps> = ({
                 },
               }}
             >
-              <Typography sx={{ fontWeight: "700", mb: 1 }}>{popperInfo?.title}</Typography>
+              <Typography sx={{ fontWeight: "700", mb: 1 }}>
+                {popperInfo?.title}
+              </Typography>
               <Typography>{popperInfo?.content}</Typography>
             </Box>
           </Fade>

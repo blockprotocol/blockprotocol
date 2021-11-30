@@ -5,6 +5,93 @@ import InterRegular from "../assets/fonts/Inter-Regular.ttf";
 import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
 import ApercuProBold from "../assets/fonts/Apercu-bold-pro.ttf";
 
+// @todo use more descriptive names instead of --step-1, --step-2
+const rootTypographyStyles = `
+  /* @link https://utopia.fyi/type/calculator?c=320,16,1.25,1140,18,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l */
+
+  :root {
+    --fluid-min-width: 320;
+    --fluid-max-width: 1140;
+
+    --fluid-screen: 100vw;
+    --fluid-bp: calc(
+      (var(--fluid-screen) - var(--fluid-min-width) / 16 * 1rem) /
+        (var(--fluid-max-width) - var(--fluid-min-width))
+    );
+  }
+
+  @media screen and (min-width: 1140px) {
+    :root {
+      --fluid-screen: calc(var(--fluid-max-width) * 1px);
+    }
+  }
+
+  :root {
+    --f--2-min: 13;
+    --f--2-max: 14;
+    --step--2: calc(
+      ((var(--f--2-min) / 16) * 1rem) + (var(--f--2-max) - var(--f--2-min)) *
+        var(--fluid-bp)
+    );
+
+    --f--1-min: 14;
+    --f--1-max: 15;
+    --step--1: calc(
+      ((var(--f--1-min) / 16) * 1rem) + (var(--f--1-max) - var(--f--1-min)) *
+        var(--fluid-bp)
+    );
+
+    --f-0-min: 16.00;
+    --f-0-max: 18.00;
+    --step-0: calc(
+      ((var(--f-0-min) / 16) * 1rem) + (var(--f-0-max) - var(--f-0-min)) *
+        var(--fluid-bp)
+    );
+
+    --f-1-min: 20.00;
+    --f-1-max: 22.50;
+    --step-1: calc(
+      ((var(--f-1-min) / 16) * 1rem) + (var(--f-1-max) - var(--f-1-min)) *
+        var(--fluid-bp)
+    );
+
+    --f-2-min: 25.00;
+    --f-2-max: 28.13;
+    --step-2: calc(
+      ((var(--f-2-min) / 16) * 1rem) + (var(--f-2-max) - var(--f-2-min)) *
+        var(--fluid-bp)
+    );
+
+    --f-3-min: 31.25;
+    --f-3-max: 35.16;
+    --step-3: calc(
+      ((var(--f-3-min) / 16) * 1rem) + (var(--f-3-max) - var(--f-3-min)) *
+        var(--fluid-bp)
+    );
+
+    --f-4-min: 39.06;
+    --f-4-max: 43.95;
+    --step-4: calc(
+      ((var(--f-4-min) / 16) * 1rem) + (var(--f-4-max) - var(--f-4-min)) *
+        var(--fluid-bp)
+    );
+
+    --f-5-min: 48.83;
+    --f-5-max: 54.93;
+    --step-5: calc(
+      ((var(--f-5-min) / 16) * 1rem) + (var(--f-5-max) - var(--f-5-min)) *
+        var(--fluid-bp)
+    );
+
+    --f-6-min: 61.04;
+    --f-6-max: 68.66;
+    --step-6: calc(
+      ((var(--f-6-min) / 16) * 1rem) + (var(--f-6-max) - var(--f-6-min)) *
+        var(--fluid-bp)
+    );
+  }
+`;
+
 const customColors = {
   // ...colors,
   purple: {
@@ -43,6 +130,7 @@ const customColors = {
     80: "#37434F",
   },
   black: "#0E1114",
+  white: "#FFFFFF",
 };
 
 export const theme = createTheme({
@@ -59,48 +147,48 @@ export const theme = createTheme({
     fontFamily: "Inter",
     bpTitle: {
       fontFamily: "Apercu Pro",
-      fontSize: 68.66,
+      fontSize: "var(--step-6)",
       lineHeight: 1,
       fontWeight: 700,
     },
     bpHeading1: {
       fontFamily: "Apercu Pro",
-      fontSize: 54.93,
+      fontSize: "var(--step-5)",
       lineHeight: 1.1,
       fontWeight: 700,
     },
     bpHeading2: {
       fontFamily: "Apercu Pro",
-      fontSize: 43.95,
+      fontSize: "var(--step-4)",
       lineHeight: 1.2,
     },
     bpHeading3: {
       fontFamily: "Apercu Pro",
-      fontSize: 28.13,
+      fontSize: "var(--step-3)",
       lineHeight: 1.1,
     },
     bpSmallCaps: {
       fontFamily: "Apercu Pro",
-      fontSize: 15,
+      fontSize: "var(--step--1)",
       lineHeight: 1.3,
     },
     bpLargeText: {
-      fontSize: 22.5,
+      fontSize: "var(--step-1)",
       lineHeight: 1.1,
     },
     bpBodyCopy: {
-      fontSize: 18,
+      fontSize: "var(--step-0)",
       fontWeight: 400,
       lineHeight: 1.7,
     },
     bpSmallCopy: {
       fontWeight: 500,
-      fontSize: 15,
+      fontSize: "var(--step--1)",
       lineHeight: 1.5,
     },
     bpMicroCopy: {
-      fontSize: 14,
-      lineHeight: 15.4,
+      fontSize: "var(--step--2)",
+      lineHeight: 1.1,
     },
   },
   // @todo see if it's possible to use keys "sm" | "lg" instead of the array index
@@ -135,6 +223,7 @@ export const theme = createTheme({
                 font-weight: 700;
                 src: url(${ApercuProBold}) format("trueType");
             }
+            ${rootTypographyStyles}
           `,
     },
     MuiButton: {
