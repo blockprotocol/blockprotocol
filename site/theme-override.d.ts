@@ -1,0 +1,50 @@
+import {
+  TypographyVariants,
+  TypographyVariantsOptions,
+} from "@mui/material/styles";
+import { TypographyPropsVariantOverrides } from "@mui/material/Typography";
+
+
+declare module "@mui/material/styles" {
+  interface TypographyVariants {
+    bpTitle: React.CSSProperties;
+    bpHeading1: React.CSSProperties;
+    bpHeading2: React.CSSProperties;
+    bpHeading3: React.CSSProperties;
+    bpLargeText: React.CSSProperties;
+    bpBodyCopy: React.CSSProperties;
+    bpSmallCopy: React.CSSProperties;
+    bpMicroCopy: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    bpTitle?: React.CSSProperties;
+    bpHeading1?: React.CSSProperties;
+    bpHeading2?: React.CSSProperties;
+    bpHeading3?: React.CSSProperties;
+    bpLargeText?: React.CSSProperties;
+    bpBodyCopy?: React.CSSProperties;
+    bpSmallCopy?: React.CSSProperties;
+    bpMicroCopy?: React.CSSProperties;
+  }
+}
+
+declare module "@mui/material/Typography" {
+  interface TypographyPropsVariantOverrides {
+    bpTitle: true;
+    bpHeading1: true;
+    bpHeading2: true;
+    bpHeading3: true;
+    bpLargeText: true;
+    bpBodyCopy: true;
+    bpSmallCopy: true;
+    bpMicroCopy: true;
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    primary: true;
+    secondary: true;
+  }
+}
