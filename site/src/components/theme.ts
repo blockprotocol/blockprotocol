@@ -1,13 +1,12 @@
-import { colors, createTheme } from "@mui/material";
+import { colors, createTheme, Shadows } from "@mui/material";
 
 import InterMedium from "../assets/fonts/Inter-Medium.ttf";
 import InterRegular from "../assets/fonts/Inter-Regular.ttf";
 import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
 import ApercuProBold from "../assets/fonts/Apercu-bold-pro.ttf";
 
-// @todo figure out how to override material colors to work with ours
 const customColors = {
-  ...colors,
+  // ...colors,
   purple: {
     50: "#F4F3FF",
     200: "#D9D6FE",
@@ -18,7 +17,6 @@ const customColors = {
   },
   blue: {
     50: "#F0F9FF",
-    // 100: "#D9D6FE",
     200: "#C5EDF8",
     300: "#86DDF3",
     400: "#24BDE0",
@@ -26,16 +24,25 @@ const customColors = {
     600: "#007F9E",
   },
   orange: {
-    50: "#007F9E",
+    50: "#FFF6ED",
     200: "#FDDCAB",
     300: "#FEB273",
     400: "#F58C4B",
     500: "#C74E0B",
     600: "#9C3B21",
   },
+  // should adjust to be consistent with the ones above
   gray: {
-
+    10: "#FAFBFC",
+    20: "#F2F5FA",
+    30: "#D8DFE5",
+    40: "#C5D1DB",
+    50: "#9EACBA",
+    60: "#64778C",
+    70: "#4D5C6C",
+    80: "#37434F",
   },
+  black: "#0E1114",
 };
 
 export const theme = createTheme({
@@ -46,7 +53,7 @@ export const theme = createTheme({
       //    dark: "",
       //    contrastText: ""
     },
-    ...customColors
+    ...customColors,
   },
   typography: {
     fontFamily: "Inter",
@@ -66,11 +73,16 @@ export const theme = createTheme({
       fontFamily: "Apercu Pro",
       fontSize: 43.95,
       lineHeight: 1.2,
-    }, 
+    },
     bpHeading3: {
       fontFamily: "Apercu Pro",
       fontSize: 28.13,
       lineHeight: 1.1,
+    },
+    bpSmallCaps: {
+      fontFamily: "Apercu Pro",
+      fontSize: 15,
+      lineHeight: 1.3,
     },
     bpLargeText: {
       fontSize: 22.5,
@@ -91,9 +103,15 @@ export const theme = createTheme({
       lineHeight: 15.4,
     },
   },
-  // shadows: {
-
-  // },
+  // @todo see if it's possible to use keys "sm" | "lg" instead of the array index
+  shadows: [
+    "none",
+    "0px 4px 11px rgba(39, 50, 86, 0.04), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.08), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
+    "0px 11px 30px rgba(61, 78, 133, 0.04), 0px 7.12963px 18.37px rgba(61, 78, 133, 0.05), 0px 4.23704px 8.1px rgba(61, 78, 133, 0.06), 0px 0.203704px 0.62963px rgba(61, 78, 133, 0.07)",
+    "0px 20px 41px rgba(61, 78, 133, 0.07), 0px 16px 25px rgba(61, 78, 133, 0.0531481), 0px 12px 12px rgba(61, 78, 133, 0.0325), 0px 2px 3.13px rgba(61, 78, 133, 0.02)",
+    "0px 51px 87px rgba(50, 65, 111, 0.07), 0px 33.0556px 50.9514px rgba(50, 65, 111, 0.0531481), 0px 19.6444px 27.7111px rgba(50, 65, 111, 0.0425185), 0px 10.2px 14.1375px rgba(50, 65, 111, 0.035), 0px 4.15556px 7.08889px rgba(50, 65, 111, 0.0274815), 0px 0.944444px 3.42361px rgba(50, 65, 111, 0.0168519)",
+    "0px 96px 129px rgba(61, 78, 133, 0.13), 0px 48.6px 56.2359px rgba(61, 78, 133, 0.08775), 0px 19.2px 20.9625px rgba(61, 78, 133, 0.065), 0px 4.2px 7.45781px rgba(61, 78, 133, 0.04225)",
+  ] as Shadows,
   components: {
     MuiCssBaseline: {
       styleOverrides: `
@@ -133,22 +151,22 @@ export const theme = createTheme({
           style: {
             backgroundColor: "unset",
             background: customColors.purple["500"],
-            color: "#F5F6F6", // this should be taken from list of colors
+            color: customColors.gray["20"], // this should be taken from list of colors
             "&:hover": {
               background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple["500"]} 100%)`,
             },
             borderRadius: 34,
-            border: "1px solid #6B54EF",
+            border: `1px solid ${customColors.purple["500"]}`,
           },
         },
         {
           props: { variant: "secondary" },
           style: {
-            background: "#FFFFFF",
-            border: `1px solid #6B54EF`,
-            color: "#6B54EF", // this should be taken from list of colors
+            background: customColors.gray["10"],
+            color: customColors.purple["500"], // this should be taken from list of colors
+            border: `1px solid currentColor`,
             "&:hover": {
-              background: "#CCEBF3",
+              background: customColors.purple["200"],
             },
             borderRadius: 34,
           },

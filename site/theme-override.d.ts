@@ -22,6 +22,7 @@ declare module "@mui/material/styles" {
     bpHeading1?: React.CSSProperties;
     bpHeading2?: React.CSSProperties;
     bpHeading3?: React.CSSProperties;
+    bpSmallCaps?: React.CSSProperties;
     bpLargeText?: React.CSSProperties;
     bpBodyCopy?: React.CSSProperties;
     bpSmallCopy?: React.CSSProperties;
@@ -35,6 +36,7 @@ declare module "@mui/material/Typography" {
     bpHeading1: true;
     bpHeading2: true;
     bpHeading3: true;
+    bpSmallCaps: true;
     bpLargeText: true;
     bpBodyCopy: true;
     bpSmallCopy: true;
