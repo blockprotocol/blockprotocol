@@ -79,16 +79,19 @@ const Block: NextPage = () => {
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
-    let props_;
+    let result;
 
     try {
-      props_ = JSON.parse(text);
+      result = JSON.parse(text);
     } catch (err) {
-      return [props_, [(err as Error).message]];
+      return [result, [(err as Error).message]];
     }
 
-    const errors_ = validator.validate(props_, schema ?? {}).errors;
-    return [props_, errors_.map((err) => `ValidationError: ${err.stack}`)];
+    const errorMessages = validator
+      .validate(result, schema ?? {})
+      .errors.map((err) => `ValidationError: ${err.stack}`);
+
+    return [result, errorMessages];
   }, [text, schema]);
 
   if (!metadata || !schema) return null;
