@@ -150,45 +150,55 @@ export const theme = createTheme({
       fontSize: "var(--step-6)",
       lineHeight: 1,
       fontWeight: 700,
+      color: customColors.gray["80"],
     },
     bpHeading1: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step-5)",
       lineHeight: 1.1,
       fontWeight: 700,
+      color: customColors.gray["80"],
     },
     bpHeading2: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step-4)",
       lineHeight: 1.2,
+      color: customColors.gray["80"],
     },
     bpHeading3: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step-3)",
       lineHeight: 1.1,
+      color: customColors.gray["70"],
     },
     bpSmallCaps: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step--1)",
       lineHeight: 1.3,
+      color: customColors.gray["70"],
     },
     bpLargeText: {
       fontSize: "var(--step-1)",
       lineHeight: 1.1,
+      color: customColors.gray["80"],
     },
     bpBodyCopy: {
       fontSize: "var(--step-0)",
       fontWeight: 400,
       lineHeight: 1.7,
+      color: customColors.gray["80"],
     },
     bpSmallCopy: {
       fontWeight: 500,
       fontSize: "var(--step--1)",
       lineHeight: 1.5,
+      color: customColors.gray["80"],
     },
     bpMicroCopy: {
+      fontWeight: 500,
       fontSize: "var(--step--2)",
       lineHeight: 1.1,
+      color: customColors.gray["80"],
     },
   },
   // @todo see if it's possible to use keys "sm" | "lg" instead of the array index
@@ -261,21 +271,29 @@ export const theme = createTheme({
           },
         },
       ],
-      // styleOverrides: {
-      //   root: {},
-
-      //   contained: {
-      //   },
-      // },
     },
-    // MuiContainer: {
-    //   styleOverrides: {
-
-    //   }
-    // }
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          paddingLeft: "16px",
+          paddingRight: "16px",
+          "@media (min-width): 900px": {
+            paddingLeft: "32px",
+            paddingRight: "32px",
+          },
+        },
+      },
+    },
     MuiIcon: {
       defaultProps: {
         baseClassName: "fas",
+      },
+    },
+    MuiSkeleton: {
+      defaultProps: {
+        sx: {
+          backgroundColor: customColors.gray["20"],
+        },
       },
     },
   },

@@ -7,10 +7,13 @@ import {
   Icon,
   useTheme,
   Box,
+  Grid,
 } from "@mui/material";
 import React from "react";
 import { Button } from "../components/Button";
 import { InlineLink } from "../components/InlineLink";
+import { BlockCard } from "../components/BlockCard";
+import { Spacer } from "../components/Spacer"
 
 const DesignSystem = () => {
   const theme = useTheme();
@@ -19,7 +22,7 @@ const DesignSystem = () => {
 
   return (
     <Container>
-      <Typography variant="bpHeading1">Typography</Typography>
+      <Typography variant="bpHeading2">Typography</Typography>
       <Card>
         <CardContent sx={{ p: 4 }}>
           <Stack>
@@ -33,7 +36,8 @@ const DesignSystem = () => {
           </Stack>
         </CardContent>
       </Card>
-      <Typography variant="bpHeading1">Button</Typography>
+      <Spacer height={5} />
+      <Typography variant="bpHeading2">Button</Typography>
       <Card>
         <CardContent sx={{ p: 4 }}>
           {/* <Stack direction="column"> */}
@@ -60,7 +64,19 @@ const DesignSystem = () => {
               Links
             </InlineLink>
           </Box>
-          {/* </Stack> */}
+        </CardContent>
+      </Card>
+      <Spacer height={5} />
+      <Typography variant="bpHeading2">Card Preview</Typography>
+      <Card>
+        <CardContent sx={{ p: 4 }}>
+          <Grid container spacing={3}>
+            {[1,2,3,4,5,6,7].map((item) => (
+              <Grid item>
+                <BlockCard blockName="Video"  />
+              </Grid>
+            ))}
+          </Grid>
         </CardContent>
       </Card>
     </Container>
