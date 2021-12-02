@@ -1,8 +1,8 @@
 import { FC } from "react";
 import { Box } from "@mui/material";
 
-type NavbarProps = {};
+type DropdownProps = {};
 
-export const Navbar: FC<NavbarProps> = () => {
+export const Dropdown: FC<DropdownProps> = () => {
   return <Box></Box>;
 };
