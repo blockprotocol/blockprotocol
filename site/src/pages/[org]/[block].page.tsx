@@ -3,7 +3,6 @@ import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
 import React, { useEffect, useMemo, useState } from "react";
 import { tw } from "twind";
-import Navbar from "../../components/Navbar";
 import { Snippet } from "../../components/Snippet";
 import type { BlockMetadata } from "../api/blocks.api";
 
@@ -103,8 +102,6 @@ const Block: NextPage = () => {
       className={tw`mx-auto px-4 mt-5 md:px-0 lg:max-w-4xl md:max-w-2xl`}
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
-      <Navbar className={tw`mt-14`} />
-
       <main className={tw`mt-20 mb-10`}>
         <h1 className={tw`text-6xl font-black`}>
           {metadata.displayName}{" "}

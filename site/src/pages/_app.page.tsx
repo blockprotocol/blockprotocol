@@ -8,8 +8,9 @@ import createCache from "@emotion/cache";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "../components/theme";
 import twindConfig from "../../twind.config";
-import { theme } from "../components/UI/theme";
+import { PageLayout } from "../components/PageLayout";
 
 function createEmotionCache() {
   return createCache({ key: "css" });
@@ -27,7 +28,9 @@ function MyApp(props: MyAppProps) {
     <CacheProvider value={emotionCache}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Component {...pageProps} />
+        <PageLayout>
+          <Component {...pageProps} />
+        </PageLayout>
       </ThemeProvider>
     </CacheProvider>
   );
