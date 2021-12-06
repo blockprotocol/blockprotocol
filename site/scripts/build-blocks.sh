@@ -88,7 +88,7 @@ cp -a "${CACHE_DIR}/blocks" "${REPO_ROOT}/site/public"
 #
 # @param build_config - path to any config in <repo-root>/registry
 #
-function build_block() {
+function build_block {
   build_config="$1"
 
   # create block specific subfolder in nextjs' static root
