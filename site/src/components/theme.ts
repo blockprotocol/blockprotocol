@@ -213,7 +213,16 @@ export const theme = createTheme({
       fontWeight: 400,
       lineHeight: 1.7,
       color: customColors.gray["80"],
-    },
+      "& a": {
+        fontWeight: 600,
+        transition: defaultTheme.transitions.create("color"),
+        color: customColors.purple["500"],
+        "&:hover": {
+          color: customColors.purple["600"],
+        },
+      },
+      /** @todo: figure out how to type this */
+    } as any,
     bpSmallCopy: {
       fontWeight: 500,
       fontSize: "var(--step--1)",
@@ -407,6 +416,13 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textDecoration: "none",
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
         },
       },
     },

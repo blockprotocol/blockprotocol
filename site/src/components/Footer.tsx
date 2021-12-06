@@ -7,6 +7,7 @@ import {
   Grid,
   useTheme,
   useMediaQuery,
+  BoxProps,
 } from "@mui/material";
 import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
@@ -121,17 +122,19 @@ const Socials = (
   </Box>
 );
 
-type FooterProps = {};
+type FooterProps = {} & BoxProps;
 
-export const Footer: FC<FooterProps> = () => {
+export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <Box
+      {...boxProps}
       sx={{
         backgroundColor: ({ palette }) => palette.gray[80],
+        ...boxProps.sx,
       }}
     >
       <Container
