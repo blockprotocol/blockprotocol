@@ -8,11 +8,11 @@ module.exports = {
     colors: {
       gray: {
         50: "#FBFBFB",
-        100: "#F1F1F1"
+        100: "#F1F1F1",
       },
       blue: {
-        300: "#2482FF"
-      }
+        300: "#2482FF",
+      },
     },
     extend: {},
   },

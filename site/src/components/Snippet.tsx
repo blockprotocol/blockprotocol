@@ -22,9 +22,14 @@ interface SnippetProps {
   language: Language;
 }
 
-export const Snippet: React.VFC<SnippetProps> = ({ className, source, language }) => (
+export const Snippet: React.VFC<SnippetProps> = ({
+  className,
+  source,
+  language,
+}) => (
   <pre className={className}>
     <code
+      // eslint-disable-next-line react/no-danger -- trust prism to properly escape the source
       dangerouslySetInnerHTML={{
         __html: Prism.highlight(source, Prism.languages[language], language),
       }}

@@ -9,11 +9,13 @@ import type { BlockMetadata } from "../api/blocks.api";
 
 const validator = new Validator();
 
+/* eslint-disable global-require */
 const blockDependencies = {
   react: require("react"),
   "react-dom": require("react-dom"),
   twind: require("twind"),
 };
+/* eslint-enable global-require */
 
 type BlockExports = { default: React.FC };
 /** @sync @hashintel/block-protocol */
@@ -21,7 +23,8 @@ type BlockSchema = Record<string, any>;
 type BlockDependency = keyof typeof blockDependencies;
 
 const blockRequire = (name: BlockDependency) => {
-  if (!(name in blockDependencies)) throw new Error(`missing dependency ${name}`);
+  if (!(name in blockDependencies))
+    throw new Error(`missing dependency ${name}`);
   return blockDependencies[name];
 };
 
@@ -36,48 +39,59 @@ const blockEval = (source: string): BlockExports => {
   return module_.exports as BlockExports;
 };
 
+interface PageState {
+  schema?: BlockSchema;
+  metadata?: BlockMetadata;
+  blockModule?: BlockExports;
+}
+
 const Block: NextPage = () => {
   const { org, block } = useRouter().query;
 
   const [text, setText] = useState("{}");
-  const [schema, setSchema] = useState<BlockSchema | null>(null);
-  const [metadata, setMetadata] = useState<BlockMetadata | null>(null);
-  const [blockModule, setBlockModule] = useState<BlockExports | null>(null);
+  const [{ metadata, schema, blockModule }, setPageState] = useState<PageState>(
+    {},
+  );
 
   useEffect(() => {
     if (!org || !block) return;
-    fetch(`/blocks/${org}/${block}/metadata.json`)
-      .then((response) => response.json())
-      .then(setMetadata);
+    void fetch(`/blocks/${org}/${block}/metadata.json`)
+      .then((res) => res.json())
+      .then((metadata_) =>
+        Promise.all([
+          metadata_,
+          fetch(`/blocks/${org}/${block}/${metadata_.schema}`).then((res) =>
+            res.json(),
+          ),
+          fetch(`/blocks/${org}/${block}/${metadata_.source}`).then((res) =>
+            res.text(),
+          ),
+        ]),
+      )
+      .then(([metadata_, schema_, source]) => {
+        setPageState({
+          metadata: metadata_,
+          schema: schema_,
+          blockModule: blockEval(source),
+        });
+      });
   }, [org, block]);
 
-  useEffect(() => {
-    if (!metadata) return;
-    fetch(`/blocks/${org}/${block}/${metadata.schema}`)
-      .then((response) => response.json())
-      .then(setSchema);
-  }, [metadata]);
-
-  useEffect(() => {
-    if (!metadata) return;
-    fetch(`/blocks/${org}/${block}/${metadata.source}`)
-      .then((response) => response.text())
-      .then(blockEval)
-      .then(setBlockModule);
-  }, [metadata]);
-
-  /** strictly speaking there's no need to cache results */
+  /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
-    let props = undefined;
+    let result;
 
     try {
-      props = JSON.parse(text);
+      result = JSON.parse(text);
     } catch (err) {
-      return [props, [(err as Error).message]];
+      return [result, [(err as Error).message]];
     }
 
-    const errors = validator.validate(props, schema ?? {}).errors;
-    return [props, errors.map((err) => `ValidationError: ${err.stack}`)];
+    const errorMessages = validator
+      .validate(result, schema ?? {})
+      .errors.map((err) => `ValidationError: ${err.stack}`);
+
+    return [result, errorMessages];
   }, [text, schema]);
 
   if (!metadata || !schema) return null;
@@ -96,6 +110,7 @@ const Block: NextPage = () => {
             className={tw`inline-block`}
             width="48px"
             height="48px"
+            alt={metadata.displayName}
             src={`/blocks/${org}/${block}/${metadata.icon}`}
           />
         </h1>
@@ -118,7 +133,7 @@ const Block: NextPage = () => {
                 style={{ minHeight: "100%" }}
                 className={tw`font-mono resize-none bg-white w-full overflow-scroll`}
                 placeholder="Your block input goes here..."
-              ></textarea>
+              />
             </div>
           </div>
           <div className={tw`w-2/5`}>
@@ -138,20 +153,28 @@ const Block: NextPage = () => {
         <div>
           <h3 className={tw`mb-2`}>Block Stage</h3>
           {errors.length ? (
-            <p className={tw`mb-2`}>The provided input raised the following errors:</p>
+            <p className={tw`mb-2`}>
+              The provided input raised the following errors:
+            </p>
           ) : (
             <p className={tw`mb-2`}>
-              The provided input is schema conform. See below the rendered output.
+              The provided input is schema conform. See below the rendered
+              output.
             </p>
           )}
           {errors.length > 0 && (
-            <ul className={tw`rounded-2xl list-square mb-2 px-8 py-4 bg-red-200`}>
+            <ul
+              className={tw`rounded-2xl list-square mb-2 px-8 py-4 bg-red-200`}
+            >
               {errors.map((err) => (
-                <li>{err}</li>
+                <li key={err}>{err}</li>
               ))}
             </ul>
           )}
-          <div style={{ height: 320 }} className={tw`bg-white rounded-2xl w-full p-4`}>
+          <div
+            style={{ height: 320 }}
+            className={tw`bg-white rounded-2xl w-full p-4`}
+          >
             {blockModule && <blockModule.default {...props} />}
           </div>
         </div>

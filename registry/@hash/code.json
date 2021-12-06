@@ -1,7 +1,7 @@
 {
   "workspace": "@hashintel/block-code",
   "repository": "https://github.com/hashintel/dev.git",
-  "branch": "main", 
+  "branch": "main",
   "distDir": "dist",
   "timestamp": "2021-10-29T10:59:11+02:00"
 }
