@@ -4,9 +4,7 @@ import {
 } from "@mui/material/styles";
 import { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 
-
 declare module "@mui/material/styles" {
-
   interface Palette {
     purple: {
       50: string;
@@ -66,7 +64,7 @@ declare module "@mui/material/Typography" {
   }
 }
 
-declare module '@mui/material/Button' {
+declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     primary: true;
     secondary: true;

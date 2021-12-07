@@ -1,6 +1,6 @@
 import { Typography, Box, Stack, Skeleton, Link } from "@mui/material";
 import { Spacer } from "./Spacer";
-import React, { FC } from "react";
+import React, { VFC } from "react";
 
 type BlockCardProps = {
   loading?: boolean;
@@ -13,7 +13,7 @@ type BlockCardProps = {
   lastUpdated: string;
 };
 
-export const BlockCard: FC<BlockCardProps> = ({
+export const BlockCard: VFC<BlockCardProps> = ({
   loading,
   displayName,
   description,

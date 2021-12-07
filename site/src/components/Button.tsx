@@ -4,10 +4,8 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 
-
-
 type ButtonProps = {
-  loading?: boolean
+  loading?: boolean;
 } & MuiButtonProps;
 
 // probably rename to BPButton?
