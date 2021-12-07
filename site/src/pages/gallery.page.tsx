@@ -2,7 +2,6 @@ import { GetStaticProps } from "next";
 import Link from "next/link";
 import React from "react";
 import { tw } from "twind";
-import Navbar from "../components/NavbarOld";
 import { BlockMetadata, readBlocksFromDisk } from "./api/blocks.api";
 
 interface PageProps {
@@ -22,8 +21,6 @@ const Gallery: React.VFC<PageProps> = ({ catalog }) => {
       className={tw`mx-auto px-4 mt-5 md:px-0 lg:max-w-4xl md:max-w-2xl`}
       style={{ fontFamily: "'Inter', sans-serif" }}
     >
-      <Navbar className={tw`mt-14`} />
-
       <main className={tw`mt-20 mb-10`}>
         <h1 className={tw`text-5xl font-black`}>Block Gallery</h1>
         <p className={tw`mt-8`}>
