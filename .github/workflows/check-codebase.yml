@@ -8,7 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: ./.github/actions/warm-up-repo
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: yarn
+
+      - run: yarn install
 
       - name: Run yarn lint:eslint
         if: ${{ success() || failure() }}
