@@ -6,7 +6,7 @@
   "repository": "https://github.com/blockprotocol/blockprotocol.git",
   "license": "MIT",
   "scripts": {
-    "build": "./scripts/build-blocks.sh && next build",
+    "build": "next build",
     "build-block": "./scripts/build-blocks.sh",
     "build-blocks": "find ../registry -type f | xargs ./scripts/build-blocks.sh",
     "clean": "rimraf ./.next/",
