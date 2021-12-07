@@ -1,4 +1,4 @@
-import { Typography, Box, Stack, Skeleton } from "@mui/material";
+import { Typography, Box, Stack, Skeleton, Link } from "@mui/material";
 import { Spacer } from "./Spacer";
 import React, { FC } from "react";
 
@@ -65,7 +65,7 @@ export const BlockCard: FC<BlockCardProps> = ({ loading, blockName }) => {
             Video
           </Typography>
         </Box>
-        <Typography variant="bpSmallCopy">
+        <Typography variant="bpSmallCopy" sx={{ color: "gray.70" }}>
           {/* @todo ensure only the first 100 chars are shown */}
           Play videos of any type or length with rich media controls.
         </Typography>
@@ -78,12 +78,16 @@ export const BlockCard: FC<BlockCardProps> = ({ loading, blockName }) => {
           <Typography variant="bpMicroCopy" color="purple.500">
             @hash
           </Typography>
-          <Typography variant="bpMicroCopy">V2.0.2</Typography>
-          <Typography variant="bpMicroCopy">Updated 6 months ago</Typography>
+          <Typography color="gray.60" variant="bpMicroCopy">
+            V2.0.2
+          </Typography>
+          <Typography color="gray.60" variant="bpMicroCopy">
+            Updated 6 months ago
+          </Typography>
         </Stack>
         <Stack direction="row">
           {/* ICON */}
-          <Typography variant="bpMicroCopy">344 weekly downloads</Typography>
+          <Typography color="gray.60" variant="bpMicroCopy">344 weekly downloads</Typography>
         </Stack>
       </Box>
     </Box>
@@ -130,5 +134,40 @@ const BlockCardLoading = () => {
 
 // @todo add BlockCardComingSoon
 export const BlockCardComingSoon = () => {
-
-}
+  return (
+    <Box
+      sx={{
+        py: 6,
+        px: 4.25,
+        minHeight: 400,
+        minWidth: 288,
+        maxWidth: 328,
+        backgroundColor: "white",
+        border: ({ palette }) => `2px dashed ${palette.gray["30"]}`,
+        borderRadius: "8px",
+      }}
+    >
+      <Typography variant="bpHeading2" sx={{ lineHeight: 1 }}>
+        More Blocks coming soon
+      </Typography>
+      <Spacer height={3} />
+      <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>
+        We’re working on checklists, kanban boards, blockquotes, and many
+        more...
+      </Box>
+      <Spacer height={3} />
+      <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>
+        You can also{" "}
+        <Link
+          sx={{
+            color: "purple.500",
+            fontWeight: 700,
+            textDecoration: "underline",
+          }}
+        >
+          build your own blocks.
+        </Link>
+      </Box>
+    </Box>
+  );
+};
