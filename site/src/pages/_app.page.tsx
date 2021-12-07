@@ -5,17 +5,13 @@ import "../styles/index.css";
 /** @sync ../components/Snippet.tsx */
 import "../styles/prism.css";
 
-import createCache from "@emotion/cache";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "../components/theme";
 import twindConfig from "../../twind.config";
 import { PageLayout } from "../components/PageLayout";
-
-function createEmotionCache() {
-  return createCache({ key: "css" });
-}
+import { createEmotionCache } from "../util/createEmotionCache";
 
 const clientSideEmotionCache = createEmotionCache();
 
