@@ -1,6 +1,6 @@
-########################
-## Markdownlint-specific
-########################
+############################
+## Scpecific to Markdownlint
+############################
 
 # Ignore all files (but still allow sub-folder scanning)
 *

@@ -1,6 +1,6 @@
-####################
-## Prettier-specific
-####################
+#######################
+## Specific to Prettier
+#######################
 
 # Ignore all files (but still allow sub-folder scanning)
 *
