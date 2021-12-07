@@ -50,12 +50,12 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
       },
       "&:first-child": {
         marginTop: {
-          xs: theme.spacing(1.5),
+          xs: 1.5,
           sm: 0,
         },
       },
       "&:not(:first-child)": {
-        marginTop: theme.spacing(1.5),
+        marginTop: 1.5,
       },
     })}
     key={href}
@@ -151,7 +151,7 @@ export const Footer: FC<FooterProps> = () => {
                   component="p"
                   variant="bpMicroCopy"
                   sx={{
-                    marginTop: theme.spacing(2),
+                    marginTop: 2,
                     lineHeight: "1.25rem",
                     color: ({ palette }) => palette.gray[50],
                   }}
@@ -194,7 +194,7 @@ export const Footer: FC<FooterProps> = () => {
                 component="a"
                 href="https://hash.ai"
                 sx={{
-                  marginLeft: theme.spacing(0.35),
+                  marginLeft: 0.35,
                   ":hover": {
                     color: ({ palette }) => palette.gray[30],
                   },

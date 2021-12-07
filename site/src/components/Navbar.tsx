@@ -16,14 +16,20 @@ import {
   ListItemText,
   Collapse,
   Divider,
+  useScrollTrigger,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { BlockHubIcon } from "./SvgIcon/BlockHubIcon";
 import { SpecificationIcon } from "./SvgIcon/SpecificationIcon";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
+import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 
-const MOBILE_NAVBAR_HEIGHT = 57;
+export const DESKTOP_NAVBAR_HEIGHT = 71.5;
+
+export const MOBILE_NAVBAR_HEIGHT = 57;
+
+const IDLE_NAVBAR_TIMEOUT_MS = 3000;
 
 type NavBarLink = {
   title: string;
@@ -71,27 +77,25 @@ const NAVBAR_LINKS: NavBarLink[] = [
 ];
 
 type MobileNavItemsProps = {
-  setDisplayMobileNav: (value: boolean) => void;
+  onClose: () => void;
 };
 
-const MobileNavItems: FC<MobileNavItemsProps> = ({ setDisplayMobileNav }) => {
+const MobileNavItems: FC<MobileNavItemsProps> = ({ onClose }) => {
   const { asPath } = useRouter();
 
-  const [displayChildrenOfHrefs, setDisplayChildrenOfHrefs] = useState<
-    string[]
-  >(
+  const [openedNavbarLinks, setOpenedNavbarLinks] = useState<string[]>(
     NAVBAR_LINKS.map(({ href }) => href).filter((href) =>
       asPath.startsWith(href),
     ),
   );
 
   useEffect(() => {
-    const displayChildrenOfHref = NAVBAR_LINKS.map(({ href }) => href).find(
-      (href) => asPath.startsWith(href),
-    );
+    const newOpenedNavbarLink = NAVBAR_LINKS.find(({ href }) =>
+      asPath.startsWith(href),
+    )?.href;
 
-    if (displayChildrenOfHref) {
-      setDisplayChildrenOfHrefs([displayChildrenOfHref]);
+    if (newOpenedNavbarLink) {
+      setOpenedNavbarLinks([newOpenedNavbarLink]);
     }
   }, [asPath]);
 
@@ -104,8 +108,8 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ setDisplayMobileNav }) => {
               <ListItemButton
                 selected={asPath.startsWith(parentHref)}
                 onClick={() => {
-                  setDisplayChildrenOfHrefs([parentHref]);
-                  setDisplayMobileNav(false);
+                  setOpenedNavbarLinks([parentHref]);
+                  onClose();
                 }}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
@@ -116,7 +120,7 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ setDisplayMobileNav }) => {
                       transition: (theme) =>
                         theme.transitions.create("transform"),
                       transform: `rotate(${
-                        displayChildrenOfHrefs.includes(parentHref)
+                        openedNavbarLinks.includes(parentHref)
                           ? "0deg"
                           : "-90deg"
                       })`,
@@ -124,7 +128,7 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ setDisplayMobileNav }) => {
                     onClick={(event) => {
                       event.preventDefault();
                       event.stopPropagation();
-                      setDisplayChildrenOfHrefs((prev) =>
+                      setOpenedNavbarLinks((prev) =>
                         prev.includes(parentHref)
                           ? prev.filter((prevHref) => prevHref !== parentHref)
                           : [...prev, parentHref],
@@ -145,7 +149,7 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ setDisplayMobileNav }) => {
           </Link>
           {children && children.length > 0 ? (
             <Collapse
-              in={displayChildrenOfHrefs.includes(parentHref)}
+              in={openedNavbarLinks.includes(parentHref)}
               timeout="auto"
               unmountOnExit
             >
@@ -156,8 +160,8 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ setDisplayMobileNav }) => {
                       <ListItemButton
                         selected={asPath.startsWith(childHref)}
                         onClick={() => {
-                          setDisplayChildrenOfHrefs([parentHref]);
-                          setDisplayMobileNav(false);
+                          setOpenedNavbarLinks([parentHref]);
+                          onClose();
                         }}
                         sx={{
                           backgroundColor: (theme) => theme.palette.gray[20],
@@ -195,7 +199,33 @@ export const Navbar: FC<NavbarProps> = () => {
   const theme = useTheme();
   const router = useRouter();
 
-  const [displayMobileNav, setDisplayMobileNav] = useState<boolean>();
+  const [displayMobileNav, setDisplayMobileNav] = useState<boolean>(false);
+  const [idleScrollPosition, setIdleScrollPosition] = useState<boolean>(false);
+  const [scrollY, setScrollY] = useState<number>(
+    typeof window === "undefined" ? 0 : window.scrollY,
+  );
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined = undefined;
+    const onScroll = () => {
+      setScrollY(window.scrollY);
+      setIdleScrollPosition(false);
+      if (timer) {
+        clearTimeout(timer);
+      }
+      timer = setTimeout(() => {
+        setIdleScrollPosition(true);
+      }, IDLE_NAVBAR_TIMEOUT_MS);
+    };
+
+    onScroll();
+
+    window.addEventListener("scroll", onScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   const { asPath } = router;
 
@@ -204,13 +234,51 @@ export const Navbar: FC<NavbarProps> = () => {
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const sm = useMediaQuery(theme.breakpoints.up("sm"));
 
+  const isDesktopSize = md;
+
   useEffect(() => {
-    if (md && displayMobileNav) {
+    if (isDesktopSize && displayMobileNav) {
       setDisplayMobileNav(false);
     }
-  }, [md, displayMobileNav]);
+  }, [isDesktopSize, displayMobileNav]);
 
-  const isNavBarTransparent = (!displayMobileNav && isHomePage) || md;
+  /** @todo: provide better documentation for the various states of the Navbar's styling */
+
+  const trigger = useScrollTrigger();
+
+  const isScrollYAtTopOfPage = scrollY === 0;
+
+  const isScrollYPastHeader = scrollY > HOME_PAGE_HEADER_HEIGHT;
+
+  const isNavbarPositionAbsolute =
+    isHomePage && !displayMobileNav && scrollY < HOME_PAGE_HEADER_HEIGHT * 0.5;
+
+  const isNavbarTransparent =
+    isHomePage && !displayMobileNav && !isScrollYPastHeader;
+
+  const isBorderBottomTransparent =
+    isNavbarTransparent || (isScrollYAtTopOfPage && !displayMobileNav);
+
+  const isNavbarHidden =
+    (trigger ||
+      (isHomePage && !isScrollYPastHeader) ||
+      (idleScrollPosition && !isScrollYAtTopOfPage)) &&
+    !displayMobileNav;
+
+  const isBoxShadowTransparent =
+    isBorderBottomTransparent || displayMobileNav || isNavbarHidden;
+
+  /**
+   * The Navbar is dark when
+   *  - the user is on the homepage, and
+   *  - the user hasn't scrolled past the header element, and
+   *  - the user is not currently displaying the mobile navigation menu
+   */
+  const isNavbarDark = isHomePage && !displayMobileNav && !isScrollYPastHeader;
+
+  const navbarHeight = isDesktopSize
+    ? DESKTOP_NAVBAR_HEIGHT
+    : MOBILE_NAVBAR_HEIGHT;
 
   return (
     <Box
@@ -222,24 +290,38 @@ export const Navbar: FC<NavbarProps> = () => {
       <Box
         sx={{
           width: "100%",
-          position: md ? undefined : "fixed",
-          zIndex: md ? undefined : 1,
-          py: md ? 2 : 1,
-          backgroundColor: isNavBarTransparent
+          position: isNavbarPositionAbsolute ? "absolute" : "fixed",
+          top: isNavbarHidden && !isNavbarPositionAbsolute ? -navbarHeight : 0,
+          zIndex: isDesktopSize ? undefined : 1,
+          py: isDesktopSize ? 2 : 1,
+          backgroundColor: isNavbarTransparent
             ? "transparent"
             : theme.palette.common.white,
-          transition: theme.transitions.create(
-            [
-              isHomePage ? [] : "border-bottom-color",
-              "padding-top",
-              "padding-bottom",
-            ].flat(),
-          ),
+          transition: [
+            isHomePage &&
+            !displayMobileNav &&
+            scrollY < HOME_PAGE_HEADER_HEIGHT * 0.75
+              ? []
+              : theme.transitions.create("top", { duration: 300 }),
+            theme.transitions.create(
+              [
+                "padding-top",
+                "padding-bottom",
+                "box-shadow",
+                "border-bottom-color",
+                "background-color",
+              ].flat(),
+            ),
+          ]
+            .flat()
+            .join(", "),
           borderBottomStyle: "solid",
-          borderBottomColor: isNavBarTransparent
+          borderBottomColor: isBorderBottomTransparent
             ? "transparent"
             : theme.palette.gray[30],
           borderBottomWidth: 1,
+          /** @todo: find way to make drop-shadow appear behind mobile navigation links */
+          boxShadow: isBoxShadowTransparent ? "none" : theme.shadows[1],
         }}
       >
         <Container>
@@ -254,9 +336,7 @@ export const Navbar: FC<NavbarProps> = () => {
                   onClick={() => setDisplayMobileNav(false)}
                   sx={{
                     color: ({ palette }) =>
-                      isHomePage && !displayMobileNav
-                        ? palette.purple.subtle
-                        : palette.gray[80],
+                      isNavbarDark ? palette.purple.subtle : palette.gray[80],
                   }}
                 />
               </a>
@@ -270,22 +350,22 @@ export const Navbar: FC<NavbarProps> = () => {
                         display="flex"
                         component="a"
                         sx={({ palette }) => ({
-                          marginRight: theme.spacing(2),
+                          marginRight: 2,
                           transition: theme.transitions.create("color", {
                             duration: 100,
                           }),
-                          color: isHomePage
+                          color: isNavbarDark
                             ? palette.purple[400]
                             : asPath === href
                             ? palette.purple[500]
                             : palette.gray[60],
                           "&:hover": {
-                            color: isHomePage
+                            color: isNavbarDark
                               ? palette.gray[30]
                               : palette.purple[500],
                           },
                           "&:active": {
-                            color: isHomePage
+                            color: isNavbarDark
                               ? palette.common.white
                               : palette.purple[600],
                           },
@@ -294,7 +374,7 @@ export const Navbar: FC<NavbarProps> = () => {
                         {icon}
                         <Typography
                           sx={{
-                            marginLeft: theme.spacing(1),
+                            marginLeft: 1,
                             fontWeight: 500,
                           }}
                         >
@@ -316,10 +396,9 @@ export const Navbar: FC<NavbarProps> = () => {
                 <IconButton
                   onClick={() => setDisplayMobileNav(!displayMobileNav)}
                   sx={{
-                    "& svg":
-                      isHomePage && !displayMobileNav
-                        ? { color: theme.palette.purple.subtle }
-                        : {},
+                    "& svg": isNavbarDark
+                      ? { color: theme.palette.purple.subtle }
+                      : {},
                   }}
                 >
                   <Icon className="fas fa-bars" />
@@ -350,7 +429,7 @@ export const Navbar: FC<NavbarProps> = () => {
               overflow: "auto",
             }}
           >
-            <MobileNavItems setDisplayMobileNav={setDisplayMobileNav} />
+            <MobileNavItems onClose={() => setDisplayMobileNav(false)} />
           </Box>
           <Box
             p={5}
