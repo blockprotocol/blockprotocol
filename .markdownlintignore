@@ -2,17 +2,13 @@
 ## Markdownlint-specific
 ########################
 
-# Ignore all extensions (folders with . are allowed)
-*.*
-!*.*/
+# Ignore all files (but still allow sub-folder scanning)
+*
+!*/
 
-# Allow certain extensions
+# Allow certain file types
 !*.md
 !*.mdx
-
-# Special cases (files without extensions)
-Dockerfile
-hooks/*
 
 ########################
 ## Same as in .gitignore

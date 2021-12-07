@@ -8,11 +8,11 @@
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:eslint": "eslint --ext .js,.ts,.tsx --fix",
     "fix:markdownlint": "markdownlint --fix \"**/*\"",
-    "fix:prettier": "prettier --write --ignore-unknown \"**/*.{js,json,ts,yaml}\"",
+    "fix:prettier": "prettier --write \"**/*\"",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
     "lint:eslint": "eslint --ext .js,.ts,.tsx",
     "lint:markdownlint": "markdownlint \"**/*\"",
-    "lint:prettier": "prettier --check --ignore-unknown \"**/*\"",
+    "lint:prettier": "prettier --check \"**/*\"",
     "lint:tsc": "yarn workspaces run lint:tsc"
   },
   "devDependencies": {
