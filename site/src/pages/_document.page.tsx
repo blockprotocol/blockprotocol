@@ -32,7 +32,7 @@ class MyDocument extends Document {
           <script
             src="https://kit.fontawesome.com/31605611a9.js"
             crossOrigin="anonymous"
-          ></script>
+          />
         </Head>
         <body>
           <Main />

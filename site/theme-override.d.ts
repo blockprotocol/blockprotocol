@@ -1,9 +1,3 @@
-import {
-  TypographyVariants,
-  TypographyVariantsOptions,
-} from "@mui/material/styles";
-import { TypographyPropsVariantOverrides } from "@mui/material/Typography";
-
 declare module "@mui/material/styles" {
   interface Palette {
     purple: {

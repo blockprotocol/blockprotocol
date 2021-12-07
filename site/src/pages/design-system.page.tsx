@@ -100,6 +100,7 @@ const CARDS = [
 const DesignSystem = () => {
   const theme = useTheme();
 
+  // eslint-disable-next-line no-console
   console.log("theme ==> ", theme);
 
   return (
@@ -153,7 +154,7 @@ const DesignSystem = () => {
         <CardContent sx={{ p: 4 }}>
           <Grid container spacing={3}>
             {CARDS.map((card) => (
-              <Grid item>
+              <Grid item key={card.displayName}>
                 <BlockCard {...card} />
               </Grid>
             ))}
