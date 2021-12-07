@@ -30,10 +30,12 @@ module.exports = {
     "no-underscore-dangle": "off",
     "no-nested-ternary": "off",
     camelcase: "off",
-    "import/no-cycle": "warn",
+    "import/no-cycle": "error",
     "import/prefer-default-export": "off",
     "no-await-in-loop": "off",
     "import/no-unresolved": "error",
+    "no-console": "error",
+    "no-dupe-class-members": "off",
     "react/prop-types": "off",
     // because we are using typescript this is redundant
     "jsx-a11y/anchor-is-valid": "off",
@@ -77,7 +79,7 @@ module.exports = {
     "react-hooks/exhaustive-deps": "error",
     "react/jsx-key": "error",
     "react/jsx-no-useless-fragment": "error",
-    "react/self-closing-comp": "warn",
+    "react/self-closing-comp": "error",
     "react/require-default-props": "off",
     "no-shadow": "off",
     // see https://github.com/typescript-eslint/typescript-eslint/issues/2483
