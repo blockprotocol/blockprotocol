@@ -25,6 +25,7 @@ declare module "@mui/material/styles" {
       70: string;
       80: string;
     };
+    grey: undefined;
   }
   interface TypographyVariants {
     bpTitle: React.CSSProperties;

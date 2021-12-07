@@ -3,7 +3,7 @@ import { createTheme } from "@mui/material";
 import InterMedium from "../assets/fonts/Inter-Medium.ttf";
 import InterRegular from "../assets/fonts/Inter-Regular.ttf";
 import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
-import ApercuProBold from "../assets/fonts/Apercu-bold-pro.ttf";
+import ApercuProBold from "../assets/fonts/apercu-bold-pro.ttf";
 
 // @todo use more descriptive names instead of --step-1, --step-2
 const rootTypographyStyles = `
@@ -128,6 +128,7 @@ const customColors = {
     70: "#4D5C6C",
     80: "#37434F",
   },
+  grey: undefined,
   black: "#0E1114",
   white: "#FFFFFF",
 };
