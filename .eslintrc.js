@@ -151,6 +151,15 @@ module.exports = {
   },
   overrides: [
     {
+      // top-level config files
+      files: ["*.config.js", "*rc.js"],
+      parser: "espree", // default parser; can be removed if we add top-level tsconfig.json
+      rules: {
+        "import/no-extraneous-dependencies": "off",
+        "global-require": "off",
+      },
+    },
+    {
       files: ["**/__mocks__/*", "*.test.ts", "*.test.tsx"],
       env: {
         "jest/globals": true,

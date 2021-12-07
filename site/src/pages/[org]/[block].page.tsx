@@ -23,8 +23,9 @@ type BlockSchema = Record<string, any>;
 type BlockDependency = keyof typeof blockDependencies;
 
 const blockRequire = (name: BlockDependency) => {
-  if (!(name in blockDependencies))
-    throw new Error(`missing dependency ${name}`);
+  if (!(name in blockDependencies)) 
+    {throw new Error(`missing dependency ${name}`);}
+  
   return blockDependencies[name];
 };
 
