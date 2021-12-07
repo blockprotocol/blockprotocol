@@ -162,6 +162,7 @@ export const theme = createTheme({
     bpHeading2: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step-4)",
+      fontWeight: 400,
       lineHeight: 1.2,
       color: customColors.gray["80"],
     },
@@ -235,6 +236,20 @@ export const theme = createTheme({
             }
             ${rootTypographyStyles}
           `,
+    },
+    MuiTypography: {
+      defaultProps: {
+        variantMapping: {
+          bpHeading1: "h1",
+          bpHeading2: "h2",
+          bpHeading3: "h2",
+          bpSmallCaps: "span",
+          bpLargeText: "span",
+          bpBodyCopy: "span",
+          bpSmallCopy: "span",
+          bpMicroCopy: "span",
+        },
+      },
     },
     MuiButton: {
       defaultProps: {
