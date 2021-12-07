@@ -1,5 +1,6 @@
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import "../styles/index.css";
 /** @sync ../components/Snippet.tsx */
 import "../styles/prism.css";
@@ -29,6 +30,9 @@ function MyApp(props: MyAppProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <PageLayout>
+          <Head>
+            <title>Blockprotocol</title>
+          </Head>
           <Component {...pageProps} />
         </PageLayout>
       </ThemeProvider>

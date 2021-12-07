@@ -18,7 +18,6 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <title>Blockprotocol</title>
           <meta
             name="description"
             content="A standardized way to create blocks whose contents are mapped to schemas, which are both
