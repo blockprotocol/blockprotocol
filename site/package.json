@@ -15,11 +15,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.7.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/material": "^5.2.1",
     "@twind/next": "1.0.8",
     "glob": "^7.2.0",
     "jsonschema": "^1.4.0",
     "lodash": "4.17.21",
     "next": "10.2.3",
+    "next-fonts": "^1.5.1",
     "next-images": "1.8.1",
     "prismjs": "^1.25.0",
     "react": "^17.0.2",
