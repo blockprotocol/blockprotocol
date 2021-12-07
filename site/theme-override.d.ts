@@ -6,6 +6,28 @@ import { TypographyPropsVariantOverrides } from "@mui/material/Typography";
 
 
 declare module "@mui/material/styles" {
+
+  interface Palette {
+    purple: {
+      50: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
+      subtle: string;
+    };
+    gray: {
+      10: string;
+      20: string;
+      30: string;
+      40: string;
+      50: string;
+      60: string;
+      70: string;
+      80: string;
+    };
+  }
   interface TypographyVariants {
     bpTitle: React.CSSProperties;
     bpHeading1: React.CSSProperties;

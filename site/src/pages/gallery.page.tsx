@@ -2,7 +2,7 @@ import { GetStaticProps } from "next";
 import Link from "next/link";
 import React from "react";
 import { tw } from "twind";
-import Navbar from "../components/NavbarOld";
+import Navbar from "../components/Navbar";
 import { BlockMetadata, readBlocksFromDisk } from "./api/blocks.api";
 
 interface PageProps {

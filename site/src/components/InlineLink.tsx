@@ -62,13 +62,7 @@ export const InlineLink: FC<InlineLinkProps> = ({
       >
         {children}
       </Link>
-      <Popper
-        // ref={popperRef}
-        open={open}
-        anchorEl={anchorEl}
-        transition
-        placement="top"
-      >
+      <Popper open={open} anchorEl={anchorEl} transition placement="top">
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>
             <Box

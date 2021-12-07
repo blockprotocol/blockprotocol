@@ -4,12 +4,24 @@ import React, { FC } from "react";
 
 type BlockCardProps = {
   loading?: boolean;
-  blockName: string;
+  displayName: string;
   image: string;
   icon: string;
+  description: string;
+  account: string;
+  version: string;
+  lastUpdated: string;
 };
 
-export const BlockCard: FC<BlockCardProps> = ({ loading, blockName }) => {
+export const BlockCard: FC<BlockCardProps> = ({
+  loading,
+  displayName,
+  description,
+  image,
+  account,
+  version,
+  lastUpdated,
+}) => {
   if (loading) {
     return <BlockCardLoading />;
   }
@@ -34,21 +46,26 @@ export const BlockCard: FC<BlockCardProps> = ({ loading, blockName }) => {
       <Box
         sx={{
           backgroundColor: "gray.20",
-          pt: 3,
-          pb: 3,
-          pl: 2.75,
-          pr: 2.75,
+          py: 3,
+          px: 2.75,
         }}
       >
-        {/* should be the image */}
-
         <Box
           sx={{
             height: 186,
             backgroundColor: "gray.70",
             borderRadius: "4px",
+            display: "flex",
           }}
-        ></Box>
+        >
+          {image && (
+            <Box
+              component="img"
+              sx={{ flex: 1, objectFit: "cover" }}
+              src={image}
+            ></Box>
+          )}
+        </Box>
       </Box>
       <Box
         sx={{
@@ -56,18 +73,17 @@ export const BlockCard: FC<BlockCardProps> = ({ loading, blockName }) => {
         }}
       >
         <Box sx={{ mb: 2 }}>
-          {/* Icon here */}
+          {/* @todo Icon should be here */}
           <Typography
             className="block-card__name"
             fontWeight="600"
             variant="bpLargeText"
           >
-            Video
+            {displayName}
           </Typography>
         </Box>
         <Typography variant="bpSmallCopy" sx={{ color: "gray.70" }}>
-          {/* @todo ensure only the first 100 chars are shown */}
-          Play videos of any type or length with rich media controls.
+          {description.slice(0, 100)}...
         </Typography>
         <Spacer height={3} />
         <Stack
@@ -76,19 +92,24 @@ export const BlockCard: FC<BlockCardProps> = ({ loading, blockName }) => {
           sx={{ mb: 1.5, typography: "bpMicroCopy" }}
         >
           <Typography variant="bpMicroCopy" color="purple.500">
-            @hash
+            {account}
           </Typography>
           <Typography color="gray.60" variant="bpMicroCopy">
-            V2.0.2
+            {version}
           </Typography>
           <Typography color="gray.60" variant="bpMicroCopy">
-            Updated 6 months ago
+            {/* @todo this should be a date */}
+            {lastUpdated}
+            {/* Updated 6 months ago */}
           </Typography>
         </Stack>
-        <Stack direction="row">
-          {/* ICON */}
-          <Typography color="gray.60" variant="bpMicroCopy">344 weekly downloads</Typography>
-        </Stack>
+        {/* Commenting this out since we don't currently track weekly downloads */}
+        {/* <Stack direction="row">
+     
+          <Typography color="gray.60" variant="bpMicroCopy">
+            344 weekly downloads
+          </Typography>
+        </Stack> */}
       </Box>
     </Box>
   );
@@ -107,10 +128,8 @@ const BlockCardLoading = () => {
       <Box
         sx={{
           backgroundColor: "gray.20",
-          pt: 3,
-          pb: 3,
-          pl: 2.75,
-          pr: 2.75,
+          py: 3,
+          px: 2.75,
         }}
       >
         <Skeleton variant="rectangular" height={186} />
@@ -132,7 +151,6 @@ const BlockCardLoading = () => {
   );
 };
 
-// @todo add BlockCardComingSoon
 export const BlockCardComingSoon = () => {
   return (
     <Box

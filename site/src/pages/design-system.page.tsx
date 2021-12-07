@@ -12,8 +12,90 @@ import {
 import React from "react";
 import { Button } from "../components/Button";
 import { InlineLink } from "../components/InlineLink";
-import { BlockCard } from "../components/BlockCard";
-import { Spacer } from "../components/Spacer"
+import { BlockCard, BlockCardComingSoon } from "../components/BlockCard";
+import { Spacer } from "../components/Spacer";
+
+const CARDS = [
+  {
+    displayName: "Video",
+    description: "Play videos of any type or length with rich media controls.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+  {
+    displayName: "Divider",
+    description:
+      "Separate content into sections with a subtle horizontal divider.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+  {
+    displayName: "Embed",
+    description:
+      "Separate content into sections with a subtle horizontal divider.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+  {
+    displayName: "Table",
+    description:
+      "Separate content into sections with a subtle horizontal divider.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+  {
+    displayName: "Person",
+    description:
+      "Separate content into sections with a subtle horizontal divider.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+  {
+    displayName: "Heading",
+    description:
+      "Separate content into sections with a subtle horizontal divider.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+  {
+    displayName: "Image",
+    description:
+      "Separate content into sections with a subtle horizontal divider.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+  {
+    displayName: "Paragraph",
+    description:
+      "Separate content into sections with a subtle horizontal divider.",
+    image: "",
+    icon: "",
+    account: "@hash",
+    version: "V2.0.2",
+    lastUpdated: "Updated 6 months ago",
+  },
+];
 
 const DesignSystem = () => {
   const theme = useTheme();
@@ -40,7 +122,6 @@ const DesignSystem = () => {
       <Typography variant="bpHeading2">Button</Typography>
       <Card>
         <CardContent sx={{ p: 4 }}>
-          {/* <Stack direction="column"> */}
           <Button
             variant="primary"
             sx={{ mr: 2 }}
@@ -71,14 +152,18 @@ const DesignSystem = () => {
       <Card>
         <CardContent sx={{ p: 4 }}>
           <Grid container spacing={3}>
-            {[1,2,3,4,5,6,7].map((item) => (
+            {CARDS.map((card) => (
               <Grid item>
-                <BlockCard blockName="Video"  />
+                <BlockCard {...card} />
               </Grid>
             ))}
+            <Grid item>
+              <BlockCardComingSoon />
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
+      <Spacer height={5} />
     </Container>
   );
 };
