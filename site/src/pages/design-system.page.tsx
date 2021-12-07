@@ -5,7 +5,6 @@ import {
   CardContent,
   Stack,
   Icon,
-  useTheme,
   Box,
   Grid,
 } from "@mui/material";
@@ -98,11 +97,6 @@ const CARDS = [
 ];
 
 const DesignSystem = () => {
-  const theme = useTheme();
-
-  // eslint-disable-next-line no-console
-  console.log("theme ==> ", theme);
-
   return (
     <Container>
       <Typography variant="bpHeading2">Typography</Typography>
