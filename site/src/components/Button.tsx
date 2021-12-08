@@ -10,6 +10,14 @@ type ButtonProps = {
 
 // probably rename to BPButton?
 // @todo implement loading
-export const Button: FC<ButtonProps> = ({ children, ...props }) => {
-  return <MuiButton {...props}>{children}</MuiButton>;
+export const Button: FC<ButtonProps> = ({
+  children,
+  variant = "primary",
+  ...props
+}) => {
+  return (
+    <MuiButton {...props} variant={variant}>
+      {children}
+    </MuiButton>
+  );
 };
