@@ -5,11 +5,7 @@ type InlineLinkProps = {
   popperInfo?: { title?: string; content?: string };
 } & LinkProps;
 
-export const InlineLink: FC<InlineLinkProps> = ({
-  children,
-  popperInfo,
-  ...props
-}) => {
+export const InlineLink: FC<InlineLinkProps> = ({ children, popperInfo }) => {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const linkRef = useRef(null);
@@ -24,9 +20,9 @@ export const InlineLink: FC<InlineLinkProps> = ({
       {/* this should be a button */}
       <Link
         onMouseOver={() => setOpen(true)}
-        onMouseLeave={(e) => {
+        onMouseLeave={(error) => {
           if (!popperRef.current) return;
-          if (!popperRef.current.contains(e.currentTarget)) {
+          if (!popperRef.current.contains(error.currentTarget)) {
             setOpen(false);
           }
         }}
@@ -47,14 +43,14 @@ export const InlineLink: FC<InlineLinkProps> = ({
             transform: "translateY(100%)",
             pointerEvents: "none",
             transition: "all 0.3s ease",
-            background: (theme) =>
+            background: () =>
               "linear-gradient(186.24deg, #BFA9F9 -37.93%, transparent 95.07%)", // todo pick color from theme
           },
           "&:hover": {
             "&:after": {
               transform: "translateY(0)",
               height: "100%",
-              background: (theme) =>
+              background: () =>
                 "linear-gradient(186.24deg, #BFA9F9 -37.93%, transparent 95.07%)",
             },
           },

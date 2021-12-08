@@ -8,7 +8,7 @@ module.exports = {
       },
     },
   },
-  preflight: (preflight, { theme }) => ({
+  preflight: (preflight) => ({
     ...preflight,
     h1: {
       "font-size": "2rem",

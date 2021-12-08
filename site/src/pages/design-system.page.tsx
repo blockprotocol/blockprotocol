@@ -5,7 +5,6 @@ import {
   CardContent,
   Stack,
   Icon,
-  useTheme,
   Box,
   Grid,
 } from "@mui/material";
@@ -98,10 +97,6 @@ const CARDS = [
 ];
 
 const DesignSystem = () => {
-  const theme = useTheme();
-
-  console.log("theme ==> ", theme);
-
   return (
     <Container>
       <Typography variant="bpHeading2">Typography</Typography>
@@ -153,7 +148,7 @@ const DesignSystem = () => {
         <CardContent sx={{ p: 4 }}>
           <Grid container spacing={3}>
             {CARDS.map((card) => (
-              <Grid item>
+              <Grid item key={card.displayName}>
                 <BlockCard {...card} />
               </Grid>
             ))}

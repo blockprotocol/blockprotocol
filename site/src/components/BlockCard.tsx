@@ -1,6 +1,6 @@
 import { Typography, Box, Stack, Skeleton, Link } from "@mui/material";
-import { Spacer } from "./Spacer";
 import React, { VFC } from "react";
+import { Spacer } from "./Spacer";
 
 type BlockCardProps = {
   loading?: boolean;
@@ -11,6 +11,42 @@ type BlockCardProps = {
   account: string;
   version: string;
   lastUpdated: string;
+};
+
+const BlockCardLoading = () => {
+  return (
+    <Box
+      sx={{
+        minWidth: 288,
+        maxWidth: 328,
+        borderRadius: "8px",
+        boxShadow: 1,
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: "gray.20",
+          py: 3,
+          px: 2.75,
+        }}
+      >
+        <Skeleton variant="rectangular" height={186} />
+      </Box>
+      <Box
+        sx={{
+          p: 3,
+        }}
+      >
+        <Skeleton variant="rectangular" width="100%" height={32} />
+        <Spacer height={1} />
+        <Skeleton variant="rectangular" width="72%" height={32} />
+        <Spacer height={3} />
+        <Skeleton variant="rectangular" width="72%" height={16} />
+        <Spacer height={1} />
+        <Skeleton variant="rectangular" width="52%" height={16} />
+      </Box>
+    </Box>
+  );
 };
 
 export const BlockCard: VFC<BlockCardProps> = ({
@@ -63,7 +99,7 @@ export const BlockCard: VFC<BlockCardProps> = ({
               component="img"
               sx={{ flex: 1, objectFit: "cover" }}
               src={image}
-            ></Box>
+            />
           )}
         </Box>
       </Box>
@@ -110,42 +146,6 @@ export const BlockCard: VFC<BlockCardProps> = ({
             344 weekly downloads
           </Typography>
         </Stack> */}
-      </Box>
-    </Box>
-  );
-};
-
-const BlockCardLoading = () => {
-  return (
-    <Box
-      sx={{
-        minWidth: 288,
-        maxWidth: 328,
-        borderRadius: "8px",
-        boxShadow: 1,
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: "gray.20",
-          py: 3,
-          px: 2.75,
-        }}
-      >
-        <Skeleton variant="rectangular" height={186} />
-      </Box>
-      <Box
-        sx={{
-          p: 3,
-        }}
-      >
-        <Skeleton variant="rectangular" width="100%" height={32} />
-        <Spacer height={1} />
-        <Skeleton variant="rectangular" width="72%" height={32} />
-        <Spacer height={3} />
-        <Skeleton variant="rectangular" width="72%" height={16} />
-        <Spacer height={1} />
-        <Skeleton variant="rectangular" width="52%" height={16} />
       </Box>
     </Box>
   );

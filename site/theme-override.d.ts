@@ -1,9 +1,3 @@
-import {
-  TypographyVariants,
-  TypographyVariantsOptions,
-} from "@mui/material/styles";
-import { TypographyPropsVariantOverrides } from "@mui/material/Typography";
-
 declare module "@mui/material/styles" {
   interface Palette {
     purple: {
@@ -27,6 +21,7 @@ declare module "@mui/material/styles" {
     };
     grey: undefined;
   }
+
   interface TypographyVariants {
     bpTitle: React.CSSProperties;
     bpHeading1: React.CSSProperties;
@@ -71,3 +66,6 @@ declare module "@mui/material/Button" {
     secondary: true;
   }
 }
+
+// https://github.com/mui-org/material-ui/issues/28244
+export default "";

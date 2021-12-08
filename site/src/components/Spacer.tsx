@@ -13,6 +13,6 @@ export const Spacer: FC<SpacerProps> = ({ height, width }) => {
         height: (theme) => theme.spacing(height ?? 0),
         width: (theme) => theme.spacing(width ?? 0),
       }}
-    ></Box>
+    />
   );
 };
