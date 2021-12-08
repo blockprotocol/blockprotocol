@@ -1,12 +1,14 @@
 import * as React from "react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
+// eslint-disable-next-line no-restricted-imports
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
+// eslint-disable-next-line no-restricted-imports
 import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
 
 /**
- * This component is based on https://github.com/mui-org/material-ui/blob/master/examples/nextjs/src/Link.js
+ * This component is based on https://github.com/mui-org/material-ui/blob/a5c92dfd84dfe5888a8b383a9b5fe5701a934564/examples/nextjs/src/Link.js
  */
 
 // Add support for the sx prop for consistency with the other branches.
@@ -72,11 +74,23 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
     if (isExternal) {
       if (noLinkStyle) {
         return (
-          <Anchor className={className} href={href} ref={ref} {...other} />
+          <Anchor
+            className={className}
+            href={href as string}
+            ref={ref}
+            {...other}
+          />
         );
       }
 
-      return <MuiLink className={className} href={href} ref={ref} {...other} />;
+      return (
+        <MuiLink
+          className={className}
+          href={href as string}
+          ref={ref}
+          {...other}
+        />
+      );
     }
 
     if (noLinkStyle) {

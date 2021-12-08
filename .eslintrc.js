@@ -162,6 +162,36 @@ module.exports = {
       },
     },
     {
+      files: ["site/**"],
+      rules: {
+        "no-restricted-imports": [
+          "error",
+          {
+            name: "@mui/material",
+            importNames: ["Link"],
+            message:
+              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+          },
+          {
+            name: "@mui/material/Link",
+            message:
+              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+          },
+          {
+            name: "next",
+            importNames: ["Link"],
+            message:
+              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+          },
+          {
+            name: "next/link",
+            message:
+              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+          },
+        ],
+      },
+    },
+    {
       files: ["**/__mocks__/*", "*.test.ts", "*.test.tsx"],
       env: {
         "jest/globals": true,
