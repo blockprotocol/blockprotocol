@@ -403,5 +403,12 @@ export const theme = createTheme({
         },
       },
     },
+    MuiLink: {
+      styleOverrides: {
+        root: {
+          textDecoration: "none",
+        },
+      },
+    },
   },
 });

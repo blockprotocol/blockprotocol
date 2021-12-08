@@ -1,5 +1,6 @@
-import { Typography, Box, Stack, Skeleton, Link } from "@mui/material";
-import React, { VFC } from "react";
+import { VFC } from "react";
+import { Typography, Box, Stack, Skeleton } from "@mui/material";
+import { Link } from "./Link";
 import { Spacer } from "./Spacer";
 
 type BlockCardProps = {
@@ -177,6 +178,7 @@ export const BlockCardComingSoon = () => {
       <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>
         You can also{" "}
         <Link
+          href="/"
           sx={{
             color: "purple.500",
             fontWeight: 700,
