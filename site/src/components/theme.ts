@@ -5,6 +5,8 @@ import InterRegular from "../assets/fonts/Inter-Regular.ttf";
 import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
 import ApercuProBold from "../assets/fonts/apercu-bold-pro.ttf";
 
+const defaultTheme = createTheme();
+
 // @todo use more descriptive names instead of --step-1, --step-2
 const rootTypographyStyles = `
   /* @link https://utopia.fyi/type/calculator?c=320,16,1.25,1140,18,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l */
@@ -92,6 +94,31 @@ const rootTypographyStyles = `
   }
 `;
 
+// Override MUI TypeScript types to support custom theme properties
+declare module "@mui/material" {
+  interface Palette {
+    purple: {
+      50: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
+      subtle: string;
+    };
+    gray: {
+      10: string;
+      20: string;
+      30: string;
+      40: string;
+      50: string;
+      60: string;
+      70: string;
+      80: string;
+    };
+  }
+}
+
 const customColors = {
   purple: {
     50: "#F4F3FF",
@@ -100,6 +127,7 @@ const customColors = {
     400: "#9B8AFB",
     500: "#6F59EC",
     600: "#4B37BF",
+    subtle: "#C3CAE7",
   },
   blue: {
     50: "#F0F9FF",
@@ -248,6 +276,31 @@ export const theme = createTheme({
         },
       },
     },
+    MuiIconButton: {
+      defaultProps: {
+        disableFocusRipple: true,
+        disableRipple: true,
+        disableTouchRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            svg: {
+              color: customColors.purple[500],
+            },
+          },
+          "&:active": {
+            svg: {
+              color: customColors.purple[600],
+            },
+          },
+          svg: {
+            color: customColors.gray[60],
+            transition: defaultTheme.transitions.create("color"),
+          },
+        },
+      },
+    },
     MuiButton: {
       defaultProps: {
         disableElevation: true,
@@ -305,6 +358,48 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: customColors.gray["20"],
+        },
+      },
+    },
+    MuiListItemButton: {
+      defaultProps: {
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          paddingLeft: defaultTheme.spacing(5),
+          "&:hover": {
+            backgroundColor: customColors.gray[20],
+          },
+          "&.Mui-selected": {
+            backgroundColor: "transparent",
+            "&:hover": {
+              backgroundColor: customColors.gray[20],
+            },
+            "& .MuiListItemIcon-root": {
+              color: defaultTheme.palette.common.black,
+            },
+            "& .MuiListItemText-primary": {
+              color: defaultTheme.palette.common.black,
+              fontWeight: 600,
+            },
+          },
+        },
+      },
+    },
+    MuiListItemIcon: {
+      styleOverrides: {
+        root: {
+          minWidth: defaultTheme.spacing(4),
+          color: customColors.gray[70],
+        },
+      },
+    },
+    MuiListItemText: {
+      styleOverrides: {
+        primary: {
+          fontWeight: 500,
+          color: customColors.gray[70],
         },
       },
     },
