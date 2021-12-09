@@ -14,7 +14,14 @@ Retrieve the 1password document `blockprotocol/site/.env.local` from the 1passwo
 
 Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/registry`
 with a build-config. The build-script `/site/scripts/build-blocks.sh` allows to build blocks
-individually. It requires the commandline tools `curl`, `rsync` and `jq` to be installed.
+individually. It requires the commandline tool:
+
+- `curl`
+- `jq`
+- `md5sha1sum`
+- `rsync`
+
+These can be installed by your cli pkg mngr of choice (use `brew` on macOS).
 
 ```sh
 # build one or more blocks
