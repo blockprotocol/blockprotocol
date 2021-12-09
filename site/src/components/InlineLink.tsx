@@ -1,11 +1,16 @@
-import { Link, Popper, Box, Fade, LinkProps, Typography } from "@mui/material";
 import { useState, FC, useRef } from "react";
+import { Popper, Box, Fade, Typography } from "@mui/material";
+import { Link, LinkProps } from "./Link";
 
 type InlineLinkProps = {
   popperInfo?: { title?: string; content?: string };
 } & LinkProps;
 
-export const InlineLink: FC<InlineLinkProps> = ({ children, popperInfo }) => {
+export const InlineLink: FC<InlineLinkProps> = ({
+  children,
+  popperInfo,
+  ...remainingProps
+}) => {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const linkRef = useRef(null);
@@ -55,6 +60,7 @@ export const InlineLink: FC<InlineLinkProps> = ({ children, popperInfo }) => {
             },
           },
         }}
+        {...remainingProps}
       >
         {children}
       </Link>

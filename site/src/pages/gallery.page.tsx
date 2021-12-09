@@ -1,4 +1,5 @@
 import { GetStaticProps } from "next";
+// eslint-disable-next-line no-restricted-imports
 import Link from "next/link";
 import React from "react";
 import { tw } from "twind";

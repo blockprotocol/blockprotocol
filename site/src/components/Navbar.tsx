@@ -1,5 +1,4 @@
 import { FC, ReactNode, useState, useEffect, Fragment } from "react";
-import Link from "next/link";
 import {
   Box,
   Typography,
@@ -19,6 +18,7 @@ import {
   useScrollTrigger,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { BlockHubIcon } from "./SvgIcon/BlockHubIcon";
 import { SpecificationIcon } from "./SvgIcon/SpecificationIcon";
@@ -104,48 +104,44 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ onClose }) => {
       {NAVBAR_LINKS.map(({ title, icon, href: parentHref, children }, i) => (
         <Fragment key={parentHref}>
           <Link href={parentHref}>
-            <a>
-              <ListItemButton
-                selected={asPath.startsWith(parentHref)}
-                onClick={() => {
-                  setOpenedNavbarLinks([parentHref]);
-                  onClose();
-                }}
-              >
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={title} />
-                {children && children.length > 0 ? (
-                  <IconButton
+            <ListItemButton
+              selected={asPath.startsWith(parentHref)}
+              onClick={() => {
+                setOpenedNavbarLinks([parentHref]);
+                onClose();
+              }}
+            >
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={title} />
+              {children && children.length > 0 ? (
+                <IconButton
+                  sx={{
+                    transition: (theme) =>
+                      theme.transitions.create("transform"),
+                    transform: `rotate(${
+                      openedNavbarLinks.includes(parentHref) ? "0deg" : "-90deg"
+                    })`,
+                  }}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    setOpenedNavbarLinks((prev) =>
+                      prev.includes(parentHref)
+                        ? prev.filter((prevHref) => prevHref !== parentHref)
+                        : [...prev, parentHref],
+                    );
+                  }}
+                >
+                  <Icon
                     sx={{
-                      transition: (theme) =>
-                        theme.transitions.create("transform"),
-                      transform: `rotate(${
-                        openedNavbarLinks.includes(parentHref)
-                          ? "0deg"
-                          : "-90deg"
-                      })`,
+                      fontSize: 15,
                     }}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      event.stopPropagation();
-                      setOpenedNavbarLinks((prev) =>
-                        prev.includes(parentHref)
-                          ? prev.filter((prevHref) => prevHref !== parentHref)
-                          : [...prev, parentHref],
-                      );
-                    }}
-                  >
-                    <Icon
-                      sx={{
-                        fontSize: 15,
-                      }}
-                      fontSize="inherit"
-                      className="fas fa-chevron-down"
-                    />
-                  </IconButton>
-                ) : null}
-              </ListItemButton>
-            </a>
+                    fontSize="inherit"
+                    className="fas fa-chevron-down"
+                  />
+                </IconButton>
+              ) : null}
+            </ListItemButton>
           </Link>
           {children && children.length > 0 ? (
             <Collapse
@@ -156,31 +152,28 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ onClose }) => {
               <List component="div" disablePadding>
                 {children.map(({ title: childTitle, href: childHref }) => (
                   <Link key={childHref} href={childHref}>
-                    <a>
-                      <ListItemButton
-                        selected={asPath.startsWith(childHref)}
-                        onClick={() => {
-                          setOpenedNavbarLinks([parentHref]);
-                          onClose();
-                        }}
-                        sx={{
+                    <ListItemButton
+                      selected={asPath.startsWith(childHref)}
+                      onClick={() => {
+                        setOpenedNavbarLinks([parentHref]);
+                        onClose();
+                      }}
+                      sx={{
+                        backgroundColor: (theme) => theme.palette.gray[20],
+                        "&.Mui-selected": {
                           backgroundColor: (theme) => theme.palette.gray[20],
-                          "&.Mui-selected": {
-                            backgroundColor: (theme) => theme.palette.gray[20],
-                            "&:hover": {
-                              backgroundColor: (theme) =>
-                                theme.palette.gray[40],
-                            },
-                          },
                           "&:hover": {
                             backgroundColor: (theme) => theme.palette.gray[40],
                           },
-                          pl: 9,
-                        }}
-                      >
-                        <ListItemText primary={childTitle} />
-                      </ListItemButton>
-                    </a>
+                        },
+                        "&:hover": {
+                          backgroundColor: (theme) => theme.palette.gray[40],
+                        },
+                        pl: 9,
+                      }}
+                    >
+                      <ListItemText primary={childTitle} />
+                    </ListItemButton>
                   </Link>
                 ))}
               </List>
@@ -331,56 +324,53 @@ export const Navbar: FC<NavbarProps> = () => {
             justifyContent="space-between"
           >
             <Link href="/">
-              <a>
-                <BlockProtocolLogoIcon
-                  onClick={() => setDisplayMobileNav(false)}
-                  sx={{
-                    color: ({ palette }) =>
-                      isNavbarDark ? palette.purple.subtle : palette.gray[80],
-                  }}
-                />
-              </a>
+              <BlockProtocolLogoIcon
+                onClick={() => setDisplayMobileNav(false)}
+                sx={{
+                  color: ({ palette }) =>
+                    isNavbarDark ? palette.purple.subtle : palette.gray[80],
+                }}
+              />
             </Link>
             <Box display="flex" alignItems="center">
               {md ? (
                 <>
                   {NAVBAR_LINKS.map(({ title, href, icon }) => (
-                    <Link href={href} key={href} passHref>
-                      <Box
-                        display="flex"
-                        component="a"
-                        sx={({ palette }) => ({
-                          marginRight: 2,
-                          transition: theme.transitions.create("color", {
-                            duration: 100,
-                          }),
+                    <Link
+                      href={href}
+                      key={href}
+                      sx={({ palette }) => ({
+                        display: "flex",
+                        marginRight: 2,
+                        transition: theme.transitions.create("color", {
+                          duration: 100,
+                        }),
+                        color: isNavbarDark
+                          ? palette.purple[400]
+                          : asPath === href
+                          ? palette.purple[500]
+                          : palette.gray[60],
+                        "&:hover": {
                           color: isNavbarDark
-                            ? palette.purple[400]
-                            : asPath === href
-                            ? palette.purple[500]
-                            : palette.gray[60],
-                          "&:hover": {
-                            color: isNavbarDark
-                              ? palette.gray[30]
-                              : palette.purple[500],
-                          },
-                          "&:active": {
-                            color: isNavbarDark
-                              ? palette.common.white
-                              : palette.purple[600],
-                          },
-                        })}
+                            ? palette.gray[30]
+                            : palette.purple[500],
+                        },
+                        "&:active": {
+                          color: isNavbarDark
+                            ? palette.common.white
+                            : palette.purple[600],
+                        },
+                      })}
+                    >
+                      {icon}
+                      <Typography
+                        sx={{
+                          marginLeft: 1,
+                          fontWeight: 500,
+                        }}
                       >
-                        {icon}
-                        <Typography
-                          sx={{
-                            marginLeft: 1,
-                            fontWeight: 500,
-                          }}
-                        >
-                          {title}
-                        </Typography>
-                      </Box>
+                        {title}
+                      </Typography>
                     </Link>
                   ))}
                   <Link href="/docs/quick-start">
@@ -443,22 +433,20 @@ export const Navbar: FC<NavbarProps> = () => {
             }}
           >
             <Link href="/docs/blocks">
-              <Box component="a">
-                <Button
-                  sx={{
-                    py: 1.5,
-                    px: 3,
-                    textTransform: "none",
-                  }}
-                  variant="primary"
-                  startIcon={<BoltIcon />}
-                  onClick={() => setDisplayMobileNav(false)}
-                >
-                  <Typography sx={{ fontWeight: 500, fontSize: "1.15rem" }}>
-                    {sm ? "Get started building blocks" : "Build a block"}
-                  </Typography>
-                </Button>
-              </Box>
+              <Button
+                sx={{
+                  py: 1.5,
+                  px: 3,
+                  textTransform: "none",
+                }}
+                variant="primary"
+                startIcon={<BoltIcon />}
+                onClick={() => setDisplayMobileNav(false)}
+              >
+                <Typography sx={{ fontWeight: 500, fontSize: "1.15rem" }}>
+                  {sm ? "Get started building blocks" : "Build a block"}
+                </Typography>
+              </Button>
             </Link>
           </Box>
         </Box>

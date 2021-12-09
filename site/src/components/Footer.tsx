@@ -1,5 +1,4 @@
 import { FC, ReactNode } from "react";
-import Link from "next/link";
 import {
   Icon,
   Box,
@@ -9,6 +8,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { HASHLogoIcon } from "./SvgIcon/HASHLogoIcon";
 
@@ -39,15 +39,7 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
   <Typography
     component="p"
     variant="bpSmallCopy"
-    sx={(theme) => ({
-      transition: theme.transitions.create("color", { duration: 150 }),
-      color: theme.palette.gray[40],
-      ":hover": {
-        color: theme.palette.gray[20],
-      },
-      ":active": {
-        color: theme.palette.common.white,
-      },
+    sx={{
       "&:first-child": {
         marginTop: {
           xs: 1.5,
@@ -57,11 +49,23 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
       "&:not(:first-child)": {
         marginTop: 1.5,
       },
-    })}
+    }}
     key={href}
   >
-    <Link href={href}>
-      <a>{name}</a>
+    <Link
+      href={href}
+      sx={(theme) => ({
+        transition: theme.transitions.create("color", { duration: 150 }),
+        color: theme.palette.gray[40],
+        ":hover": {
+          color: theme.palette.gray[20],
+        },
+        ":active": {
+          color: theme.palette.common.white,
+        },
+      })}
+    >
+      {name}
     </Link>
   </Typography>
 ));
@@ -87,30 +91,31 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
 const Socials = (
   <Box mt={3} display="flex">
     {SOCIALS.map(({ href, icon }) => (
-      <Link href={href} key={href} passHref>
-        <Box
-          mr={2.5}
-          sx={{
-            ":hover": {
-              svg: {
-                color: (theme) => theme.palette.gray[30],
-              },
-            },
-            ":active": {
-              svg: {
-                color: (theme) => theme.palette.common.white,
-              },
-            },
+      <Link
+        href={href}
+        key={href}
+        sx={{
+          "&:not(:first-child)": {
+            marginLeft: 2.5,
+          },
+          ":hover": {
             svg: {
-              transition: (theme) =>
-                theme.transitions.create("color", { duration: 150 }),
-              color: (theme) => theme.palette.gray[50],
+              color: (theme) => theme.palette.gray[30],
             },
-          }}
-          component="a"
-        >
-          {icon}
-        </Box>
+          },
+          ":active": {
+            svg: {
+              color: (theme) => theme.palette.common.white,
+            },
+          },
+          svg: {
+            transition: (theme) =>
+              theme.transitions.create("color", { duration: 150 }),
+            color: (theme) => theme.palette.gray[50],
+          },
+        }}
+      >
+        {icon}
       </Link>
     ))}
   </Box>
