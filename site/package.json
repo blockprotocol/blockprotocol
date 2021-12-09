@@ -33,8 +33,10 @@
     "prismjs": "^1.25.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-slick": "^0.28.1",
     "remark-mdx": "1.6.22",
     "remark-parse": "9.0.0",
+    "slick-carousel": "^1.8.1",
     "slugify": "^1.6.3",
     "twind": "^0.16.16",
     "unified": "9.2.2"
@@ -45,6 +47,7 @@
     "@types/prismjs": "^1.16.6",
     "@types/react": "17.0.7",
     "@types/react-dom": "17.0.8",
+    "@types/react-slick": "^0.23.7",
     "babel-plugin-inline-react-svg": "2.0.1",
     "rimraf": "^3.0.2",
     "typescript": "4.3.5"

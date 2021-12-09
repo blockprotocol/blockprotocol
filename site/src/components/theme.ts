@@ -339,6 +339,7 @@ export const theme = createTheme({
           bpSmallCopy: "span",
           bpMicroCopy: "span",
         },
+        variant: "bpBodyCopy"
       },
       variants: [
         {
@@ -373,7 +374,7 @@ export const theme = createTheme({
           },
           "&:active": {
             svg: {
-              color: customColors.purple[600],
+              color: customColors.purple[700],
             },
           },
           svg: {
