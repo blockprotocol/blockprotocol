@@ -19,17 +19,26 @@ set -e          # exit on error
 set -u          # prevent access to yet undeclared variables
 set -o pipefail # prevent error masking in pipes
 
-# conf
-# ----
-DIR=$(readlink -ne "${BASH_SOURCE[0]%/*}")
-REPO_ROOT="$DIR/../.."
-CACHE_DIR="${REPO_ROOT}/site/.next/cache"
-
 # util
 # ----
 function log() {
   printf "[%s][%s] %s\n" "$1" "$(date +"%FT%T")" "$2" >&2
 }
+
+## x-platform readline (linux, macOS)
+function abs() {
+  if [[ -d "$1" ]]; then
+    echo $(cd "$1"; echo "$PWD")
+  else
+    echo $(cd "${1%/*}"; echo "$PWD/${1##*/}")
+  fi
+}
+
+# conf
+# ----
+DIR=$(abs "${BASH_SOURCE[0]%/*}")
+REPO_ROOT="$DIR/../.."
+CACHE_DIR="${REPO_ROOT}/site/.next/cache"
 
 # deps
 # ----
@@ -170,7 +179,7 @@ if [[ $# -gt 0 ]]; then
   log info "building block configs given as commandline arguments"
 
   for build_config in "${@:1}"; do
-    build_config=$(readlink -n "$build_config")
+    build_config=$(abs "$build_config")
     build_block "$build_config"
   done
 else
