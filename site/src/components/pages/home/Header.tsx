@@ -1,9 +1,18 @@
 import React from "react";
-import { Container, Typography, Box } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import { Button } from "../../Button";
 import { BoltIcon } from "../../SvgIcon/BoltIcon";
 
 export const Header = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Box
       sx={{
@@ -14,14 +23,22 @@ export const Header = () => {
         overflowX: "hidden",
       }}
     >
-      <Container sx={{ pt: "20vh" }}>
-        <Box sx={{ width: "57%", maxWidth: 660 }}>
+      <Container sx={{ pt: { xs: "10vh", md: "20vh" }, mb: { xs: 20, md: 0 } }}>
+        <Box
+          sx={{
+            width: { xs: "100%", md: "57%" },
+            maxWidth: 660,
+            textAlign: { xs: "center", md: "left" },
+          }}
+        >
           <Typography
             sx={{
               textTransform: "uppercase",
               color: ({ palette }) => palette.purple[400],
               mb: 4,
               letterSpacing: "5%",
+              width: { xs: "55%", md: "100%" },
+              mx: "auto",
             }}
             variant="bpSmallCaps"
           >
@@ -33,9 +50,11 @@ export const Header = () => {
               lineHeight: 1,
               color: "white",
               mb: 4,
+              // @todo font-size should match design system
+              fontSize: { xs: 40, md: 60 },
             }}
           >
-            Build interactive blocks connected to the world of {" "}
+            Build interactive blocks connected to the world of{" "}
             <Box
               sx={{
                 position: "relative",
@@ -45,7 +64,7 @@ export const Header = () => {
                   top: "100%",
                   height: 4,
                   left: 0,
-                  width: 425,
+                  width: { xs: "100%", md: 425 },
                   background:
                     "linear-gradient(90deg, #6B54EF 1.95%, rgba(107, 84, 239, 0) 100%)",
                 },
@@ -54,7 +73,13 @@ export const Header = () => {
               structured data
             </Box>
           </Box>
-          <Typography variant="body1" color="purple.300" mb={4} width="74%">
+          <Typography
+            variant="body1"
+            color="purple.300"
+            mb={4}
+            width={{ xs: "100%", md: "74%" }}
+            textAlign={{ xs: "center", md: "left" }}
+          >
             An open standard for building
             <strong> blocks connected to structured data </strong>
             with <strong>schemas</strong>. Make your applications both human and
@@ -66,25 +91,33 @@ export const Header = () => {
 
       <Box
         sx={{
-          height: 320,
-          position: "absolute",
-          bottom: "15%",
+          height: { xs: "auto", md: "40vh" },
+          width: { xs: "100%", md: "auto" },
+          position: { xs: "relative", md: "absolute" },
+          bottom: { xs: 0, md: "15%" },
           right: 0,
-          transform: "translateX(10%)",
+          transform: { xs: "unset", md: "translateX(10%)" },
           "::after": {
             content: `""`,
             position: "absolute",
-            top: 0,
+            top: { xs: "50%", md: 0 },
             bottom: 0,
             right: 0,
-            width: "40%",
-            background: `linear-gradient(270.33deg, #2A2B37 1.28%, transparent 89.29%)`,
+            width: { xs: "100%", md: "40%" },
+            background: {
+              xs: `linear-gradient(0deg, #2A2B37 1.28%, transparent 89.29%)`,
+              md: `linear-gradient(270.33deg, #2A2B37 1.28%, transparent 89.29%)`,
+            },
           },
         }}
       >
         <Box
           component="img"
-          src="/assets/header-image.png"
+          src={
+            isMobile
+              ? "/assets/header-img-mobile.svg"
+              : "/assets/header-img.svg"
+          }
           sx={{ display: "block", height: "100%" }}
         />
       </Box>
