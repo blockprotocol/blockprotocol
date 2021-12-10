@@ -339,7 +339,7 @@ export const theme = createTheme({
           bpSmallCopy: "span",
           bpMicroCopy: "span",
         },
-        variant: "bpBodyCopy"
+        variant: "bpBodyCopy",
       },
       variants: [
         {

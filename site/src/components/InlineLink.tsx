@@ -1,10 +1,9 @@
 import { useState, FC, useRef } from "react";
-import { Popper, Box, Fade, Typography } from "@mui/material";
-import { Link, LinkProps } from "./Link";
+import { Popper, Box, BoxProps, Fade, Typography } from "@mui/material";
 
 type InlineLinkProps = {
   popperInfo?: { title?: string; content?: string };
-} & LinkProps;
+} & BoxProps;
 
 export const InlineLink: FC<InlineLinkProps> = ({
   children,
@@ -21,9 +20,8 @@ export const InlineLink: FC<InlineLinkProps> = ({
   }
 
   return (
-    <Box>
-      {/* this should be a button */}
-      <Link
+    <Box sx={{ display: "inline" }}>
+      <Box
         onMouseOver={() => setOpen(true)}
         onMouseLeave={(error) => {
           if (!popperRef.current) return;
@@ -38,6 +36,7 @@ export const InlineLink: FC<InlineLinkProps> = ({
           position: "relative",
           textDecoration: "none",
           cursor: "pointer",
+          display: "inline",
           "&:after": {
             content: "''",
             position: "absolute",
@@ -63,7 +62,7 @@ export const InlineLink: FC<InlineLinkProps> = ({
         {...remainingProps}
       >
         {children}
-      </Link>
+      </Box>
       <Popper open={open} anchorEl={anchorEl} transition placement="top">
         {({ TransitionProps }) => (
           <Fade {...TransitionProps} timeout={350}>

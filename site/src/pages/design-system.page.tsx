@@ -131,7 +131,6 @@ const DesignSystem = () => {
           <br />
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <InlineLink
-              href="/"
               popperInfo={{
                 title: "Schema",
                 content:

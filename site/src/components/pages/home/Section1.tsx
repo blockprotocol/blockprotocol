@@ -31,7 +31,7 @@ const steps = [
   },
 ];
 
-// @todo checkout Swiper library
+// @todo consider implementing this with gsap
 
 export const Section1 = () => {
   // const [activeStep, setActiveStep] = useState(0);
