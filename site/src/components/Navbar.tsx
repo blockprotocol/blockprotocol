@@ -285,7 +285,7 @@ export const Navbar: FC<NavbarProps> = () => {
           width: "100%",
           position: isNavbarPositionAbsolute ? "absolute" : "fixed",
           top: isNavbarHidden && !isNavbarPositionAbsolute ? -navbarHeight : 0,
-          zIndex: 1,
+          zIndex: 2,
           py: isDesktopSize ? 2 : 1,
           backgroundColor: isNavbarTransparent
             ? "transparent"
@@ -347,7 +347,7 @@ export const Navbar: FC<NavbarProps> = () => {
                         }),
                         color: isNavbarDark
                           ? palette.purple[500]
-                          : asPath === href
+                          : asPath.startsWith(href)
                           ? palette.purple[600]
                           : palette.gray[60],
                         "&:hover": {
@@ -401,6 +401,7 @@ export const Navbar: FC<NavbarProps> = () => {
       <Slide in={displayMobileNav}>
         <Box
           sx={{
+            zIndex: 1,
             marginTop: `${MOBILE_NAVBAR_HEIGHT}px`,
             position: "fixed",
             background: theme.palette.common.white,

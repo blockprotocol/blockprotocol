@@ -11,6 +11,30 @@ declare module "@mui/material/styles" {
       800: string;
       subtle: string;
     };
+    teal: {
+      100: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
+    };
+    orange: {
+      50: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
+    };
+    blue: {
+      50: string;
+      200: string;
+      300: string;
+      400: string;
+      500: string;
+      600: string;
+    };
     gray: {
       10: string;
       20: string;
@@ -66,6 +90,17 @@ declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     primary: true;
     secondary: true;
+  }
+
+  interface ButtonPropsColorOverrides {
+    teal: true;
+  }
+}
+
+declare module "@mui/material/Paper" {
+  interface PaperPropsVariantOverrides {
+    teal: true;
+    purple: true;
   }
 }
 

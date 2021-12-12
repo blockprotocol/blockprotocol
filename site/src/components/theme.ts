@@ -99,34 +99,6 @@ const rootTypographyStyles = `
   }
 `;
 
-// Override MUI TypeScript types to support custom theme properties
-declare module "@mui/material" {
-  interface Palette {
-    purple: {
-      50: string;
-      100: string;
-      200: string;
-      300: string;
-      400: string;
-      500: string;
-      600: string;
-      700: string;
-      800: string;
-      subtle: string;
-    };
-    gray: {
-      10: string;
-      20: string;
-      30: string;
-      40: string;
-      50: string;
-      60: string;
-      70: string;
-      80: string;
-    };
-  }
-}
-
 const customColors = {
   purple: {
     100: "#F4F3FF",
@@ -138,6 +110,14 @@ const customColors = {
     700: "#6048E5",
     800: "#4732BA",
     subtle: "#C3CAE7",
+  },
+  teal: {
+    100: "#F0F9FF",
+    200: "#D8F1F8",
+    300: "#9ED9E9",
+    400: "#24BDE0",
+    500: "#029EC1",
+    600: "#0081A1",
   },
   blue: {
     100: "#F0F9FF",
@@ -331,6 +311,23 @@ export const theme = createTheme({
           bpMicroCopy: "span",
         },
       },
+      variants: [
+        {
+          props: {
+            variant: "bpBodyCopy",
+          },
+          style: {
+            "& a": {
+              fontWeight: 600,
+              color: "currentColor",
+              borderBottomWidth: 2,
+              borderBottomColor: "currentColor",
+              borderBottomStyle: "solid",
+              transition: defaultTheme.transitions.create("color"),
+            },
+          },
+        },
+      ],
     },
     MuiIconButton: {
       defaultProps: {
@@ -356,6 +353,39 @@ export const theme = createTheme({
           },
         },
       },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+        },
+      },
+      variants: [
+        {
+          props: {
+            variant: "teal",
+          },
+          style: {
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderRadius: "6px",
+            borderColor: "#B0DDE9",
+            backgroundColor: customColors.teal[100],
+          },
+        },
+        {
+          props: {
+            variant: "purple",
+          },
+          style: {
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderRadius: "6px",
+            borderColor: customColors.purple[200],
+            backgroundColor: customColors.purple[100],
+          },
+        },
+      ],
     },
     MuiButton: {
       defaultProps: {
@@ -395,6 +425,19 @@ export const theme = createTheme({
               {
                 fontSize: "inherit",
               },
+          },
+        },
+        {
+          props: { variant: "primary", color: "teal" },
+          style: {
+            backgroundColor: "unset",
+            background: customColors.teal["500"],
+            color: customColors.gray["20"], // this should be taken from list of colors
+            "&:hover": {
+              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple["500"]} 100%)`,
+            },
+            borderRadius: 34,
+            border: `1px solid ${customColors.teal["500"]}`,
           },
         },
         {
@@ -486,13 +529,6 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textDecoration: "none",
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          borderRadius: 10,
         },
       },
     },
