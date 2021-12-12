@@ -562,5 +562,12 @@ export const theme = createTheme({
         },
       },
     },
+    MuiCheckbox: {
+      defaultProps: {
+        disableRipple: true,
+        disableFocusRipple: true,
+        disableTouchRipple: true,
+      }
+    }
   },
 });

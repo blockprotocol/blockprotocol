@@ -92,45 +92,99 @@ const CONTENT = [
 
 export const Section2 = () => {
   const boxRef = useRef(null);
-  //   const scrollTriggerRef = useRef(null);
 
   useLayoutEffect(() => {
-    // if (!window) return;
+    if (!window) return;
 
-    // const trigger = ScrollTrigger.create({
-    //   trigger: boxRef.current,
+    // const markers = gsap.utils.toArray(".box");
+
+    // const el = document.querySelectorAll(".stuff > img");
+
+    // markers.forEach((marker) => {
+    // let img: HTMLImageElement | undefined;
+    // el.forEach((node) => {
+    //   if (node.id === `step-${markers.indexOf(marker)}`) {
+    //     img = node;
+    //   }
+    // });
+    // ScrollTrigger.create({
+    //   trigger: marker,
     //   start: "top top",
     //   end: "bottom bottom",
-    //   // pin: ".right-content",
-    //   pin: true,
-    //   markers: true,
+    //   onEnter: () => {
+    //     console.log("Enter img ==> ", img);
+    //     //   @todo probably reset other images and leave the main one in question
+    //     gsap.fromTo(
+    //       // @todo temporarily added this to please typescript... Remove
+    //       img!,
+    //       {
+    //         autoAlpha: 0,
+    //       },
+    //       {
+    //         autoAlpha: 1,
+    //       },
+    //     );
+    //   },
+    //   // onEnterBack: () => {
+    //   //   gsap.fromTo(
+    //   //     img,
+    //   //     {
+    //   //       autoAlpha: 0,
+    //   //     },
+    //   //     { autoAlpha: 1 },
+    //   //   );
+    //   // },
+    //   onLeave: () => {
+    //     console.log("Leave img ==> ", img);
+    //     //   gsap.fromTo(img, {
+    //     //     autoAlpha: 1,
+    //     //   }, {
+    //     //       autoAlpha: 0
+    //     //   });
+    //   },
+    //   // markers: true,
+    // });
     // });
 
-    // const tl = gsap.timeline({
-    //   scrollTrigger: {
-    //     trigger: boxRef.current,
-    //     start: "top top",
-    //     end: "bottom bottom",
-    //     pin: ".right-content",
-    //   },
-    // });
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: boxRef.current,
+        start: "top top",
+        end: "bottom bottom",
+        pin: ".right-content",
+        // toggleActions: "play none none reverse",
+        // markers: true
+      },
+    });
 
     return () => {
-      // trigger.kill()
-      //   tl.scrollTrigger?.kill();
+      tl.scrollTrigger?.kill();
     };
   }, []);
 
   return (
-    <Box sx={{ pt: 20 }}>
-      <Container sx={{ display: "flex" }}>
-        <Box ref={boxRef} sx={{ width: "40%", mr: 4 }}>
+    <Box sx={{ pt: 2 }}>
+      <Container
+        ref={boxRef}
+        sx={{
+          display: "flex",
+          height: { xs: "100vh", md: "auto" },
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
+        <Box
+          sx={{
+            width: { xs: "100%", md: "40%" },
+            height: { xs: "50vh", md: "auto" },
+            mr: 4,
+          }}
+        >
           {CONTENT.map(({ id, title, content }) => (
             <Box
-              className="box"
+              // className="box"
               sx={{
                 typography: "bpBodyCopy",
-                height: "60vh",
+                height: { xs: "auto", md: "70vh" },
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -145,28 +199,50 @@ export const Section2 = () => {
           ))}
         </Box>
         <Box
-          className="right-content"
+          // className="right-content"
           sx={{
-            border: "1px solid red",
+            // border: "1px solid red",
             flex: 1,
-            height: "70vh",
+            height: { xs: "50vh", md: "90vh" },
             position: "relative",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white",
           }}
         >
           <Box
-            sx={{
-              height: 200,
-              width: 200,
-              backgroundColor: "red",
-              position: "absolute",
-              left: "50%",
-              top: "50%",
-            }}
+          // className="stuff"
           >
-            Right
+            {/* <Step1 /> */}
+            {[
+              "/assets/step-1-img.svg",
+              "/assets/step-2-img.svg",
+              "/assets/step-3-img.svg",
+              "/assets/step-4-img.svg",
+            ].map((src, index) => (
+              <Box
+                id={`step-${index}`}
+                sx={{
+                  opacity: index === 0 ? 1 : 0,
+                  visibility: "hidden",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+                key={src}
+                component="img"
+                src={src}
+              />
+            ))}
           </Box>
         </Box>
       </Container>
     </Box>
   );
 };
+
+// const Step1 = () => {
+//   return <Box></Box>;
+// };

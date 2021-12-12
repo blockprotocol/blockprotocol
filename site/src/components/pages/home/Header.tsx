@@ -58,13 +58,14 @@ export const Header = () => {
             <Box
               sx={{
                 position: "relative",
+                display: "inline-block",
                 ":after": {
                   content: "''",
                   position: "absolute",
                   top: "100%",
                   height: 4,
                   left: 0,
-                  width: { xs: "100%", md: 425 },
+                  width: "100%",
                   background:
                     "linear-gradient(90deg, #6B54EF 1.95%, rgba(107, 84, 239, 0) 100%)",
                 },
