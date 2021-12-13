@@ -74,7 +74,7 @@ export const BlockCard: VFC<BlockCardProps> = ({
         "&:hover": {
           boxShadow: 4,
           "& .block-card__name": {
-            color: "purple.500",
+            color: ({ palette }) => palette.purple[600],
           },
         },
         cursor: "pointer",
@@ -128,7 +128,10 @@ export const BlockCard: VFC<BlockCardProps> = ({
           gap={1.5}
           sx={{ mb: 1.5, typography: "bpMicroCopy" }}
         >
-          <Typography variant="bpMicroCopy" color="purple.500">
+          <Typography
+            variant="bpMicroCopy"
+            sx={{ color: ({ palette }) => palette.purple[600] }}
+          >
             {account}
           </Typography>
           <Typography color="gray.60" variant="bpMicroCopy">
@@ -180,7 +183,7 @@ export const BlockCardComingSoon = () => {
         <Link
           href="/"
           sx={{
-            color: "purple.500",
+            color: ({ palette }) => palette.purple[600],
             fontWeight: 700,
             textDecoration: "underline",
           }}

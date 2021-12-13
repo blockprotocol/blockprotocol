@@ -33,7 +33,7 @@ export const InlineLink: FC<InlineLinkProps> = ({
         }}
         ref={linkRef}
         sx={{
-          color: "purple.600",
+          color: ({ palette }) => palette.purple[600],
           fontWeight: "600",
           position: "relative",
           textDecoration: "none",
