@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import {
   Container,
   Typography,
@@ -10,42 +9,17 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Link } from "../../components/Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
-import { Sidebar } from "../../components/PageSidebar";
+import { PageStructure, Sidebar } from "../../components/PageSidebar";
 import {
-  SpecPageSubSection,
-  SpecPageSection,
-  SpecPage as SpecPageType,
-  SPECIFICATION_PAGES,
-} from "../../content/SpecificationPages";
-
-const renderPageContent = (pageHref: string) => {
-  const page = SPECIFICATION_PAGES.find(({ href }) => href === pageHref);
-
-  if (!page) return null;
-
-  const { Content, sections } = page;
-
-  return (
-    <>
-      {Content ? <Content /> : null}
-      {sections?.map(
-        ({ anchor: sectionAnchor, Content: SectionContent, subSections }) => (
-          <Fragment key={sectionAnchor}>
-            {SectionContent ? <SectionContent /> : null}
-            {subSections &&
-              subSections.map(
-                ({ anchor: subSectionAnchor, Content: SubSectionContent }) => (
-                  <SubSectionContent key={subSectionAnchor} />
-                ),
-              )}
-          </Fragment>
-        ),
-      )}
-    </>
-  );
-};
+  getAllPageHrefs,
+  getAllPageStructures,
+  getSerializedPage,
+} from "../../util/mdxUtils";
+import { mdxComponents } from "../../util/mdxComponents";
+import { parseIntFromPixelString } from "../../util/muiUtils";
 
 const GitHubInfoCard = (
   <Paper
@@ -104,11 +78,16 @@ const GitHubInfoCard = (
       </Typography>
       <Typography
         variant="bpBodyCopy"
-        sx={{
-          color: ({ palette }) => palette.teal[600],
+        sx={(theme) => ({
+          color: theme.palette.teal[600],
           fontSize: 15,
           lineHeight: 1.5,
-        }}
+          "& a": {
+            ":hover": {
+              color: theme.palette.teal[700],
+            },
+          },
+        })}
         maxWidth={650}
       >
         This specification is currently in progress. We’ve drafting it in public
@@ -146,39 +125,9 @@ const GitHubInfoCard = (
   </Paper>
 );
 
-type SpecPageWithoutContent = Omit<SpecPageType, "Content" | "sections"> & {
-  Content: null;
-  sections:
-    | (Omit<SpecPageSection, "Content" | "subSections"> & {
-        Content: null;
-        subSections:
-          | (Omit<SpecPageSubSection, "Content"> & {
-              Content: null;
-            })[]
-          | null;
-      })[]
-    | null;
-};
-
-const mapSpecPageToSpecPageWithoutContent = (
-  page: SpecPageType,
-): SpecPageWithoutContent => ({
-  ...page,
-  Content: null,
-  sections:
-    page.sections?.map((section) => ({
-      ...section,
-      Content: null,
-      subSections:
-        section.subSections?.map((subSection) => ({
-          ...subSection,
-          Content: null,
-        })) || null,
-    })) || null,
-});
-
 type SpecPageProps = {
-  page: SpecPageWithoutContent;
+  serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
+  allPageStructures: PageStructure[];
 };
 
 type SpecPageQueryParams = {
@@ -186,7 +135,7 @@ type SpecPageQueryParams = {
 };
 
 export const getStaticPaths: GetStaticPaths<SpecPageQueryParams> = async () => {
-  const paths = SPECIFICATION_PAGES.map(({ href }) => ({
+  const paths = getAllPageHrefs({ folderName: "spec" }).map((href) => ({
     params: {
       specSlug: href
         .replace("/spec", "")
@@ -207,43 +156,55 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   const { specSlug } = params || {};
 
-  const page =
-    specSlug && specSlug.length > 0
-      ? SPECIFICATION_PAGES.find(
-          ({ href }) => href === `/spec/${specSlug.join("/")}`,
-        )
-      : SPECIFICATION_PAGES.find(({ href }) => href === "/spec");
+  const fileNameWithoutIndex =
+    specSlug && specSlug.length > 0 ? specSlug[0] : "index";
 
-  if (!page) {
-    throw new Error("");
-  }
+  const serializedPage = await getSerializedPage({
+    folderName: "spec",
+    fileNameWithoutIndex,
+  });
 
   return {
     props: {
-      page: mapSpecPageToSpecPageWithoutContent(page),
+      serializedPage,
+      allPageStructures: getAllPageStructures({ folderName: "spec" }),
     },
     revalidate: true,
   };
 };
 
-const SpecPage: NextPage<SpecPageProps> = ({ page }) => {
+const SpecPage: NextPage<SpecPageProps> = ({
+  serializedPage,
+  allPageStructures,
+}) => {
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
-    <Container>
+    <Container
+      sx={{
+        marginTop: {
+          xs: 4,
+          md: 8,
+        },
+      }}
+    >
       <Typography
-        variant="bpHeading1"
-        sx={{ color: ({ palette }) => palette.common.black }}
+        variant="bpTitle"
+        sx={{
+          marginBottom: {
+            xs: 1,
+            md: 2,
+          },
+        }}
       >
         Specification
       </Typography>
       <Typography
-        variant="bpHeading2"
+        variant="bpSubtitle"
         maxWidth={750}
         sx={{
-          fontWeight: 100,
           marginBottom: {
             xs: 4,
             md: 6,
@@ -263,20 +224,22 @@ const SpecPage: NextPage<SpecPageProps> = ({ page }) => {
               position: "sticky",
               top:
                 DESKTOP_NAVBAR_HEIGHT +
-                parseInt(theme.spacing(2).slice(0, -2), 10),
+                parseIntFromPixelString(theme.spacing(2)),
             }}
           >
             <Sidebar
-              pages={SPECIFICATION_PAGES.filter(
-                ({ isAppendix }) => !isAppendix,
+              pages={allPageStructures.filter(
+                ({ title }) => !title.startsWith("Appendix"),
               )}
-              appendices={SPECIFICATION_PAGES.filter(
-                ({ isAppendix }) => isAppendix,
+              appendices={allPageStructures.filter(({ title }) =>
+                title.startsWith("Appendix"),
               )}
             />
           </Box>
         ) : null}
-        <Box flexGrow={1}>{renderPageContent(page.href)}</Box>
+        <Box flexGrow={1}>
+          <MDXRemote {...serializedPage} components={mdxComponents} />
+        </Box>
       </Box>
     </Container>
   );

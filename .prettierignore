@@ -10,6 +10,7 @@
 !*.js
 !*.json
 !*.md
+!*.mdx
 !*.ts
 !*.tsx
 !*.yml

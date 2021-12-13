@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import {
   Collapse,
   Box,
@@ -27,38 +26,38 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   transition: theme.transitions.create(["color"]),
   color: theme.palette.gray[70],
   ":hover": {
-    color: theme.palette.purple[500],
+    color: theme.palette.purple[600],
   },
   fontWeight: 400,
   fontSize: 15,
 }));
 
-type SidebarPageSubSection = {
+type PageStructureSubSection = {
   title: string;
   anchor: string;
 };
 
-type SidebarPageSection = {
+export type PageStructureSection = {
   title: string;
   anchor: string;
-  subSections?: SidebarPageSubSection[];
+  subSections?: PageStructureSubSection[];
 };
 
-type SidebarPage = {
+export type PageStructure = {
   title: string;
   href: string;
-  sections?: SidebarPageSection[];
+  sections?: PageStructureSection[];
 };
 
-type SidebarPagePagesProps = {
-  page: SidebarPage;
+type SidebarPageProps = {
+  page: PageStructure;
   maybeUpdateSelectedOffsetTop: () => void;
   setSelectedAnchorElement: (element: HTMLAnchorElement) => void;
   openedPages: string[];
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
 };
 
-const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
+const SidebarPage: VFC<SidebarPageProps> = ({
   page,
   maybeUpdateSelectedOffsetTop,
   setSelectedAnchorElement,
@@ -70,7 +69,7 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
 
   const { href, title, sections } = page;
 
-  const isSelected = asPath === href;
+  const isSelected = asPath === href || asPath === `${href}#`;
   const isOpen = openedPages.includes(href);
 
   return (
@@ -82,11 +81,16 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
               setSelectedAnchorElement(ref);
             }
           }}
+          onClick={() => {
+            if (asPath.startsWith(`${href}#`)) {
+              window.scrollTo({ top: 0 });
+            }
+          }}
           href={href}
           sx={(theme) => ({
             alignSelf: "flex-start",
             color: isSelected
-              ? theme.palette.purple[500]
+              ? theme.palette.purple[600]
               : theme.palette.gray[70],
             fontWeight: isSelected ? 700 : 400,
             paddingLeft: 1.25,
@@ -97,7 +101,7 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
         {sections && sections.length > 0 ? (
           <IconButton
             onClick={async () => {
-              if (asPath.startsWith(`${href}#`) && asPath !== href) {
+              if (asPath.startsWith(`${href}#`)) {
                 await router.push(href);
               }
               setOpenedPages((prev) =>
@@ -113,7 +117,7 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
               transform: `rotate(${isOpen ? "90deg" : "0deg"})`,
               "& svg": {
                 color: isSelected
-                  ? theme.palette.purple[500]
+                  ? theme.palette.purple[600]
                   : theme.palette.gray[50],
               },
             })}
@@ -140,8 +144,7 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
 
               const isSectionSelected = asPath === sectionHref;
               const hasSelectedSubSection =
-                subSections &&
-                subSections.find(
+                subSections?.find(
                   ({ anchor: subSectionAnchor }) =>
                     asPath === `${href}#${subSectionAnchor}`,
                 ) !== undefined;
@@ -160,7 +163,7 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
                       sx={(theme) => ({
                         paddingLeft: 3.25,
                         color: isSectionSelected
-                          ? theme.palette.purple[500]
+                          ? theme.palette.purple[600]
                           : theme.palette.gray[70],
                         fontWeight: isSectionSelected ? 700 : 400,
                       })}
@@ -190,7 +193,7 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
                           })`,
                           "& svg": {
                             color: isSectionSelected
-                              ? theme.palette.purple[500]
+                              ? theme.palette.purple[600]
                               : theme.palette.gray[50],
                           },
                         })}
@@ -232,7 +235,7 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
                                 marginBottom: 1,
                                 paddingLeft: 4.25,
                                 color: isSubSectionSelected
-                                  ? theme.palette.purple[500]
+                                  ? theme.palette.purple[600]
                                   : theme.palette.gray[70],
                                 fontWeight: isSubSectionSelected ? 700 : 400,
                               })}
@@ -255,12 +258,12 @@ const SidebarPagePages: VFC<SidebarPagePagesProps> = ({
 };
 
 type SidebarProps = {
-  pages: SidebarPage[];
-  appendices?: SidebarPage[];
+  pages: PageStructure[];
+  appendices?: PageStructure[];
 };
 
 const getInitialOpenedPages = (params: {
-  pages: SidebarPage[];
+  pages: PageStructure[];
   asPath: string;
 }): string[] => {
   const { pages, asPath } = params;
@@ -268,7 +271,7 @@ const getInitialOpenedPages = (params: {
   for (const page of pages) {
     const { href, sections } = page;
 
-    if (asPath === href) {
+    if (asPath === href || asPath === `${href}#`) {
       return [href];
     } else if (sections) {
       for (const section of sections) {
@@ -333,7 +336,7 @@ export const Sidebar: VFC<SidebarProps> = ({ appendices, pages }) => {
           position: "absolute",
           width: 3,
           height: 14,
-          backgroundColor: ({ palette }) => palette.purple[500],
+          backgroundColor: ({ palette }) => palette.purple[600],
           top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop + 4,
           opacity: selectedOffsetTop === undefined ? 0 : 1,
           transition: theme.transitions.create(["top", "opacity"], {
@@ -342,7 +345,7 @@ export const Sidebar: VFC<SidebarProps> = ({ appendices, pages }) => {
         })}
       />
       {pages.map((page) => (
-        <SidebarPagePages
+        <SidebarPage
           key={page.href}
           page={page}
           maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
@@ -353,9 +356,9 @@ export const Sidebar: VFC<SidebarProps> = ({ appendices, pages }) => {
       ))}
       {appendices && appendices.length > 0 ? (
         <>
-          <Divider />
+          <Divider sx={{ marginBottom: 2 }} />
           {appendices.map((page) => (
-            <SidebarPagePages
+            <SidebarPage
               key={page.href}
               page={page}
               maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}

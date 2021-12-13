@@ -9,6 +9,7 @@ import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
 import ApercuProBold from "../assets/fonts/apercu-bold-pro.ttf";
 import ApercuProLight from "../assets/fonts/apercu-light-pro.ttf";
 import ApercuProMedium from "../assets/fonts/apercu-medium-pro.ttf";
+import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 
 const defaultTheme = createTheme();
 
@@ -118,6 +119,7 @@ const customColors = {
     400: "#24BDE0",
     500: "#029EC1",
     600: "#0081A1",
+    700: "#00586e",
   },
   blue: {
     100: "#F0F9FF",
@@ -166,7 +168,7 @@ const customColors = {
 export const theme = createTheme({
   palette: {
     primary: {
-      main: customColors.purple["500"],
+      main: customColors.purple[600],
     },
     ...customColors,
   },
@@ -177,6 +179,13 @@ export const theme = createTheme({
       fontSize: "var(--step-6)",
       lineHeight: 1,
       fontWeight: 700,
+      color: customColors.gray["80"],
+    },
+    bpSubtitle: {
+      fontFamily: "Apercu Pro",
+      fontSize: "var(--step-3)",
+      lineHeight: 1.1,
+      fontWeight: 200,
       color: customColors.gray["80"],
     },
     bpHeading1: {
@@ -199,6 +208,12 @@ export const theme = createTheme({
       lineHeight: 1.1,
       color: customColors.gray["70"],
     },
+    bpHeading4: {
+      fontFamily: "Apercu Pro",
+      fontSize: "var(--step-2)",
+      lineHeight: 1.1,
+      color: customColors.gray["70"],
+    },
     bpSmallCaps: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step--1)",
@@ -218,7 +233,7 @@ export const theme = createTheme({
       "& a": {
         fontWeight: 600,
         transition: defaultTheme.transitions.create("color"),
-        color: customColors.purple["500"],
+        color: customColors.purple[600],
         "&:hover": {
           color: customColors.purple["600"],
         },
@@ -295,12 +310,26 @@ export const theme = createTheme({
               font-weight: 700;
               src: url(${ApercuProBold}) format("trueType");
             }
+
+            html {
+              scroll-behavior: smooth;
+            }
+
+            :target:before {
+              content: "";
+              display: block;
+              height: ${DESKTOP_NAVBAR_HEIGHT}px;
+              margin: -${DESKTOP_NAVBAR_HEIGHT}px 0 0;
+            }
+
             ${rootTypographyStyles}
           `,
     },
     MuiTypography: {
       defaultProps: {
         variantMapping: {
+          bpTitle: "h1",
+          bpSubtitle: "p",
           bpHeading1: "h1",
           bpHeading2: "h2",
           bpHeading3: "h3",
@@ -434,7 +463,7 @@ export const theme = createTheme({
             background: customColors.teal["500"],
             color: customColors.gray["20"], // this should be taken from list of colors
             "&:hover": {
-              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple["500"]} 100%)`,
+              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple[600]} 100%)`,
             },
             borderRadius: 34,
             border: `1px solid ${customColors.teal["500"]}`,

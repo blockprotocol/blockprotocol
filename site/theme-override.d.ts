@@ -18,6 +18,7 @@ declare module "@mui/material/styles" {
       400: string;
       500: string;
       600: string;
+      700: string;
     };
     orange: {
       50: string;
@@ -50,9 +51,11 @@ declare module "@mui/material/styles" {
 
   interface TypographyVariants {
     bpTitle: React.CSSProperties;
+    bpSubtitle: React.CSSProperties;
     bpHeading1: React.CSSProperties;
     bpHeading2: React.CSSProperties;
     bpHeading3: React.CSSProperties;
+    bpHeading4: React.CSSProperties;
     bpLargeText: React.CSSProperties;
     bpBodyCopy: React.CSSProperties;
     bpSmallCopy: React.CSSProperties;
@@ -61,9 +64,11 @@ declare module "@mui/material/styles" {
 
   interface TypographyVariantsOptions {
     bpTitle?: React.CSSProperties;
+    bpSubtitle?: React.CSSProperties;
     bpHeading1?: React.CSSProperties;
     bpHeading2?: React.CSSProperties;
     bpHeading3?: React.CSSProperties;
+    bpHeading4?: React.CSSProperties;
     bpSmallCaps?: React.CSSProperties;
     bpLargeText?: React.CSSProperties;
     bpBodyCopy?: React.CSSProperties;
@@ -75,9 +80,11 @@ declare module "@mui/material/styles" {
 declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
     bpTitle: true;
+    bpSubtitle: true;
     bpHeading1: true;
     bpHeading2: true;
     bpHeading3: true;
+    bpHeading4: true;
     bpSmallCaps: true;
     bpLargeText: true;
     bpBodyCopy: true;

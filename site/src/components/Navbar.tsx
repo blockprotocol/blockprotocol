@@ -42,12 +42,27 @@ const NAVBAR_LINKS: NavBarLink[] = [
   {
     title: "Block Hub",
     href: "/hub",
-    icon: <BlockHubIcon />,
+    icon: (
+      <BlockHubIcon
+        sx={{
+          width: 18,
+          height: 18,
+        }}
+      />
+    ),
   },
   {
     title: "Documentation",
     href: "/docs",
-    icon: <Icon className="fas fa-book-open" />,
+    icon: (
+      <Icon
+        className="fas fa-book-open"
+        sx={{
+          fontSize: 18,
+        }}
+        fontSize="inherit"
+      />
+    ),
     children: [
       {
         title: "Introduction",
@@ -62,7 +77,14 @@ const NAVBAR_LINKS: NavBarLink[] = [
   {
     title: "Specification",
     href: "/spec",
-    icon: <SpecificationIcon />,
+    icon: (
+      <SpecificationIcon
+        sx={{
+          width: 18,
+          height: 18,
+        }}
+      />
+    ),
     children: [
       {
         title: "Introduction",
@@ -341,12 +363,13 @@ export const Navbar: FC<NavbarProps> = () => {
                       key={href}
                       sx={({ palette }) => ({
                         display: "flex",
-                        marginRight: 2,
+                        alignItems: "center",
+                        marginRight: 3,
                         transition: theme.transitions.create("color", {
                           duration: 100,
                         }),
                         color: isNavbarDark
-                          ? palette.purple[500]
+                          ? palette.purple[300]
                           : asPath.startsWith(href)
                           ? palette.purple[600]
                           : palette.gray[60],
