@@ -346,19 +346,19 @@ export const Navbar: FC<NavbarProps> = () => {
                           duration: 100,
                         }),
                         color: isNavbarDark
-                          ? palette.purple[400]
-                          : asPath === href
                           ? palette.purple[500]
+                          : asPath === href
+                          ? palette.purple[600]
                           : palette.gray[60],
                         "&:hover": {
                           color: isNavbarDark
                             ? palette.gray[30]
-                            : palette.purple[500],
+                            : palette.purple[600],
                         },
                         "&:active": {
                           color: isNavbarDark
                             ? palette.common.white
-                            : palette.purple[600],
+                            : palette.purple[700],
                         },
                       })}
                     >

@@ -2,8 +2,13 @@ import { createTheme } from "@mui/material";
 
 import InterMedium from "../assets/fonts/Inter-Medium.ttf";
 import InterRegular from "../assets/fonts/Inter-Regular.ttf";
+import InterSemiBold from "../assets/fonts/Inter-SemiBold.ttf";
+import InterBold from "../assets/fonts/Inter-Bold.ttf";
+import InterLight from "../assets/fonts/Inter-Light.ttf";
 import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
 import ApercuProBold from "../assets/fonts/apercu-bold-pro.ttf";
+import ApercuProLight from "../assets/fonts/apercu-light-pro.ttf";
+import ApercuProMedium from "../assets/fonts/apercu-medium-pro.ttf";
 
 const defaultTheme = createTheme();
 
@@ -121,16 +126,18 @@ declare module "@mui/material" {
 
 const customColors = {
   purple: {
-    50: "#F4F3FF",
+    100: "#F4F3FF",
     200: "#D9D6FE",
     300: "#BDB4FE",
-    400: "#9B8AFB",
-    500: "#6F59EC",
-    600: "#4B37BF",
+    400: "#AD9EFF",
+    500: "#9B8AFB",
+    600: "#6F59EC",
+    700: "#6048E5",
+    800: "#4732BA",
     subtle: "#C3CAE7",
   },
   blue: {
-    50: "#F0F9FF",
+    100: "#F0F9FF",
     200: "#C5EDF8",
     300: "#86DDF3",
     400: "#24BDE0",
@@ -138,12 +145,13 @@ const customColors = {
     600: "#007F9E",
   },
   orange: {
-    50: "#FFF6ED",
+    100: "#FFF6ED",
     200: "#FDDCAB",
     300: "#FEB273",
     400: "#F58C4B",
-    500: "#C74E0B",
-    600: "#9C3B21",
+    500: "#ED6F28",
+    600: "#C74E0B",
+    700: "#8F2F14",
   },
   // should adjust to be consistent with the ones above
   gray: {
@@ -249,6 +257,11 @@ export const theme = createTheme({
     MuiCssBaseline: {
       styleOverrides: `
             @font-face {
+              font-family: 'Inter';
+              font-weight: 300;
+              src: url(${InterLight}) format("trueType");
+            }
+            @font-face {
                 font-family: 'Inter';
                 font-weight: 400;
                 src: url(${InterRegular}) format("trueType");
@@ -259,14 +272,34 @@ export const theme = createTheme({
                 src: url(${InterMedium}) format("trueType");
             }
             @font-face {
+              font-family: 'Inter';
+              font-weight: 600;
+              src: url(${InterSemiBold}) format("trueType");
+            }
+            @font-face {
+              font-family: 'Inter';
+              font-weight: 700;
+              src: url(${InterBold}) format("trueType");
+            }
+            @font-face {
+              font-family: 'Apercu Pro';
+              font-weight: 300;
+              src: url(${ApercuProLight}) format("trueType");
+            }
+            @font-face {
                 font-family: 'Apercu Pro';
                 font-weight: 400;
                 src: url(${ApercuProRegular}) format("trueType");
             }
             @font-face {
                 font-family: 'Apercu Pro';
-                font-weight: 700;
-                src: url(${ApercuProBold}) format("trueType");
+                font-weight: 500;
+                src: url(${ApercuProMedium}) format("trueType");
+            }
+            @font-face {
+              font-family: 'Apercu Pro';
+              font-weight: 700;
+              src: url(${ApercuProBold}) format("trueType");
             }
             ${rootTypographyStyles}
           `,
@@ -295,7 +328,7 @@ export const theme = createTheme({
         root: {
           "&:hover": {
             svg: {
-              color: customColors.purple[500],
+              color: customColors.purple[600],
             },
           },
           "&:active": {
