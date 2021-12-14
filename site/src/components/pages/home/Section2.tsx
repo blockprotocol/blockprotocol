@@ -168,14 +168,15 @@ export const Section2 = () => {
         ref={boxRef}
         sx={{
           display: "flex",
-          height: { xs: "100vh", md: "auto" },
-          flexDirection: { xs: "column", md: "row" },
+          height: { md: "auto" },
+          flexDirection: { md: "row" },
+          maxWidth: "100vw",
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", md: "40%" },
-            height: { xs: "50vh", md: "auto" },
+            width: { md: "40%" },
+            height: { md: "auto" },
             mr: 4,
           }}
         >
@@ -203,7 +204,7 @@ export const Section2 = () => {
           sx={{
             // border: "1px solid red",
             flex: 1,
-            height: { xs: "50vh", md: "90vh" },
+            height: { md: "90vh" },
             position: "relative",
             display: "flex",
             justifyContent: "center",

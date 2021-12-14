@@ -1,5 +1,11 @@
 import React, { useRef } from "react";
-import { Container, Typography, Box } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 
 // import dynamic from "next/dynamic"
 import Slider, { Settings } from "react-slick";
@@ -35,6 +41,9 @@ const steps = [
 
 export const Section1 = () => {
   // const [activeStep, setActiveStep] = useState(0);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   const slider = useRef<Slider>();
 
   const settings = {
@@ -42,15 +51,16 @@ export const Section1 = () => {
     centerMode: true,
     // centerPadding: "50px",
     infinite: true,
-    slidesToShow: 3,
-    // swipeToSlide: true,
+    slidesToShow: isMobile ? 1 : 3,
+    swipeToSlide: true,
     speed: 500,
-    initialSlide: 1,
-    // variableWidth: true,
+    initialSlide: isMobile ? 0 : 1,
+    nextArrow: <Box sx={{ display: "none !important" }} />,
+    prevArrow: <Box sx={{ display: "none !important" }} />,
   } as Settings;
 
   return (
-    <Box sx={{ pt: 16, width: "100%" }}>
+    <Box sx={{ width: "100%" }}>
       <Container
         sx={{
           display: "flex",
@@ -59,7 +69,7 @@ export const Section1 = () => {
       >
         <Box
           sx={{
-            width: "64%",
+            width: { xs: "100%", md: "64%" },
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -68,15 +78,21 @@ export const Section1 = () => {
           <Typography variant="bpHeading2" sx={{ mb: 3 }} textAlign="center">
             Embed any block anywhere on the web, using data from any source
           </Typography>
-          <Typography sx={{ width: "56%" }} textAlign="center">
+          <Typography sx={{ width: { md: "56%" } }} textAlign="center">
             Easily move data between applications without wrestling with APIs
             and custom integrations. View it any way you like in interactive
             blocks.
           </Typography>
         </Box>
       </Container>
-      <Box sx={{ position: "relative" }}>
-        <Box sx={{ position: "relative", maxWidth: "100%", zIndex: 2 }}>
+      <Box sx={{ position: "relative", maxWidth: "100%" }}>
+        <Box
+          sx={{
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          {/* @todo consider using a custom carousel */}
           <Slider
             ref={(node) => {
               if (node) {
@@ -89,7 +105,6 @@ export const Section1 = () => {
               <Box
                 key={id}
                 sx={{
-                  // border: "1px solid blue",
                   display: "flex !important",
                   justifyContent: "center",
                   alignItems: "center",
@@ -106,7 +121,7 @@ export const Section1 = () => {
                 key={position}
                 sx={{
                   position: "absolute",
-                  display: "flex",
+                  display: { xs: "none", md: "flex" },
                   alignItems: "center",
                   top: 0,
                   bottom: 0,

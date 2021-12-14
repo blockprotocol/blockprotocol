@@ -1,11 +1,22 @@
-import { Container, Typography, Box } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  useTheme,
+  useMediaQuery,
+  Icon,
+} from "@mui/material";
 import { SyncIcon } from "../../SvgIcon/SyncIcon";
 
 export const Section4 = () => {
+  const theme = useTheme();
+
+  const isDesktopSize = useMediaQuery(theme.breakpoints.up("md"));
+
   return (
     <Box
       sx={{
-        mb: 20,
+        mb: { xs: 10, md: 20 },
       }}
     >
       <Box
@@ -13,21 +24,45 @@ export const Section4 = () => {
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           justifyContent: { xs: "", md: "space-between" },
-          alignItems: { xs: "", md: "flex-end" },
+          alignItems: { xs: "flex-end", md: "flex-end" },
           position: "relative",
           pt: 7,
+          pb: { xs: 9, md: 0 },
           background: `#1C1B25`,
           overflowY: "hidden",
+          color: ({ palette }) => ({
+            xs: palette.common.white,
+            md: palette.gray[60],
+          }),
         }}
       >
         <Box
-          sx={{ flex: { xs: 1, md: 0.44 }, position: "relative", zIndex: 3 }}
+          sx={{
+            flex: { xs: 1, md: 0.44 },
+            position: "relative",
+            zIndex: 3,
+            mr: { xs: 2, md: 0 },
+            mb: { xs: 3, md: 0 },
+          }}
         >
-          <Typography>Personal Notes</Typography>
+          <Typography
+            sx={{ py: 2, px: 3, fontWeight: "500" }}
+            color="currentColor"
+          >
+            <Icon
+              sx={{ fontSize: "inherit", mr: 1.25 }}
+              className="fas fa-pencil"
+            />
+            Personal Notes
+          </Typography>
           <Box
             sx={{ display: "block", width: "100%" }}
             component="img"
-            src="/assets/realtime-left.svg"
+            src={
+              isDesktopSize
+                ? "/assets/realtime-left.svg"
+                : "/assets/realtime-left-mobile.svg"
+            }
           />
         </Box>
         <Box
@@ -36,13 +71,27 @@ export const Section4 = () => {
             position: "relative",
             zIndex: 3,
             textAlign: { xs: "left", md: "right" },
+            ml: { xs: 2, md: 0 },
           }}
         >
-          <Typography>Project Management App</Typography>
+          <Typography
+            sx={{ py: 2, px: 3, fontWeight: "500" }}
+            color="currentColor"
+          >
+            <Icon
+              sx={{ fontSize: "inherit", mr: 1.25 }}
+              className="fas fa-check-circle"
+            />
+            Project Management App
+          </Typography>
           <Box
             sx={{ display: "block", width: "100%" }}
             component="img"
-            src="/assets/realtime-right.svg"
+            src={
+              isDesktopSize
+                ? "/assets/realtime-right.svg"
+                : "/assets/realtime-right-mobile.svg"
+            }
           />
         </Box>
 
@@ -53,7 +102,7 @@ export const Section4 = () => {
             bottom: 0,
             top: 0,
             transform: "translateX(-50%)",
-            width: "27%",
+            width: { xs: "80%", md: "27%" },
             background: `linear-gradient(179.75deg, #644CFF 0.21%, rgba(38, 39, 49, 0) 143.36%)`,
             filter: "blur(34px)",
             zIndex: 1,
@@ -68,6 +117,7 @@ export const Section4 = () => {
           src="/assets/realtime-center.svg"
           sx={{
             position: "absolute",
+            display: { xs: "none", md: "block" },
             left: "50%",
             bottom: 0,
             height: "100%",
@@ -82,7 +132,7 @@ export const Section4 = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "30%",
+          width: { xs: "90%", md: "30%" },
           maxWidth: 450,
         }}
       >

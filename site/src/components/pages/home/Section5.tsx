@@ -7,13 +7,14 @@ export const Section5 = () => {
     <Box
       sx={{
         display: "flex",
+        flexDirection: { xs: "column", md: "row" },
         justifyContent: "space-between",
-        alignItems: "center",
-        mb: 20,
+        alignItems: { xs: "unset", md: "center" },
+        mb: { xs: 10, md: 20 },
       }}
     >
-      <Box sx={{ flex: 0.48 }}>
-        <Container sx={{ width: "75%" }}>
+      <Box sx={{ flex: { xs: 1, md: 0.48 }, mb: { xs: 4, md: 0 } }}>
+        <Container sx={{ width: { xs: "100%", md: "75%" } }}>
           <Typography
             sx={{ color: ({ palette }) => palette.gray[80] }}
             variant="bpHeading3"
@@ -21,7 +22,7 @@ export const Section5 = () => {
           >
             The Block Protocol makes interoperable, block-based data possible
           </Typography>
-          <Typography mb={6.125}>
+          <Typography mb={{ xs: 4, md: 6.125 }}>
             The <strong>Block Protocol</strong> specification provides a set of
             guidelines on how to write blocks that render, create, update, and
             delete data in a predictable way.
@@ -35,18 +36,19 @@ export const Section5 = () => {
       </Box>
       <Box
         sx={{
-          flex: 0.48,
-          py: 6,
+          flex: { xs: 1, md: 0.48 },
+          py: { xs: 2.8, md: 6 },
           backgroundColor: ({ palette }) => palette.gray[80],
           borderTopLeftRadius: "6px",
-          borderBottomLeftRadius: 6,
+          borderBottomLeftRadius: "6px",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          ml: { xs: 2, md: 0 },
         }}
       >
         <Box
-          sx={{ height: 380 }}
+          sx={{ height: { xs: 276, md: 380 } }}
           component="img"
           src="/assets/registry-section-illustration.svg"
         />

@@ -48,7 +48,7 @@ const Table = () => {
       sx={{
         borderRadius: 0.75,
         border: ({ palette }) => `1px solid ${palette.purple[300]}`,
-        width: 438,
+        width: { xs: "100%", md: 438 },
         color: ({ palette }) => palette.purple[300],
       }}
       columns={12}
@@ -63,7 +63,7 @@ const Table = () => {
           <Grid
             sx={{
               py: 1.5,
-              px: 3,
+              px: { xs: 1, md: 3 },
               borderRight: ({ palette }) => `1px solid ${palette.purple[300]}`,
               borderBottom: ({ palette }) => `1px solid ${palette.purple[300]}`,
               "&:last-of-type": {
@@ -78,7 +78,7 @@ const Table = () => {
           <Grid
             sx={{
               py: 1.5,
-              px: 3,
+              px: { xs: 1, md: 3 },
               borderBottom: ({ palette }) => `1px solid ${palette.purple[300]}`,
               "&:last-of-type": {
                 borderBottom: "none",
@@ -101,16 +101,6 @@ export const Section3 = () => {
       sx={{
         pt: 20,
         position: "relative",
-        "&:after": {
-          content: `""`,
-          position: "absolute",
-          top: "450px",
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: `radial-gradient(99.32% 99.32% at 50% 0.68%, #3F4553 0.52%, #1C1B25 100%)`,
-          zIndex: 1,
-        },
       }}
     >
       <Container
@@ -122,7 +112,7 @@ export const Section3 = () => {
           zIndex: 2,
         }}
       >
-        <Box sx={{ width: "55%", textAlign: "center" }}>
+        <Box sx={{ width: { xs: "100%", md: "55%" }, textAlign: "center" }}>
           <Typography variant="bpHeading2" mb={3}>
             Why would I want to build blocks with the block protocol?
           </Typography>
@@ -132,22 +122,39 @@ export const Section3 = () => {
             <strong>structured.</strong>
           </Typography>
         </Box>
-        <Box
+      </Container>
+
+      <Box
+        sx={{
+          background: `radial-gradient(99.32% 99.32% at 50% 0.68%, #3F4553 0.52%, #1C1B25 100%)`,
+          mt: 10,
+        }}
+      >
+        <Container
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            width: { md: "30%" },
           }}
         >
           {/* 1 */}
-          <TodoList />
+          <Box sx={{ mt: -10 }}>
+            <TodoList />
+          </Box>
           <Spacer height={13} />
 
           {/* 2  */}
-          <Typography color="white" mb={3}>
-            {/* use a percentage here instead of breaking it with br */}
-            We could pull in data from a checklist <br /> block our favorite
-            to-do app...
+          <Typography
+            sx={{
+              color: ({ palette }) => palette.common.white,
+              textAlign: "center",
+              width: { md: "80%" },
+            }}
+            mb={3}
+          >
+            We could pull in data from a checklist block our favorite to-do
+            app...
           </Typography>
           <TodoList />
           <Spacer height={18} />
@@ -171,9 +178,17 @@ export const Section3 = () => {
           <Spacer height={18} />
 
           {/* 4 */}
-          <Typography color="purple.200" mb={3}>
+          <Typography
+            sx={{
+              color: ({ palette }) => palette.purple[200],
+              textAlign: "center",
+              width: { md: "80%" },
+            }}
+            color="purple.200"
+            mb={3}
+          >
             {/* use a percentage here instead of breaking it with br */}
-            and access that same list in a
+            and access that same list in a{" "}
             <Box
               sx={{
                 color: ({ palette }) => palette.purple[400],
@@ -181,9 +196,9 @@ export const Section3 = () => {
               }}
               component="span"
             >
-              Table
+              Table{" "}
             </Box>
-            or
+            or{" "}
             <Box
               sx={{
                 color: ({ palette }) => palette.purple[400],
@@ -191,13 +206,13 @@ export const Section3 = () => {
               }}
               component="span"
             >
-              Kanban
+              Kanban{" "}
             </Box>
             block in other applications
           </Typography>
           <Table />
-        </Box>
-      </Container>
+        </Container>
+      </Box>
     </Box>
   );
 };

@@ -300,6 +300,7 @@ export const Navbar: FC<NavbarProps> = () => {
       sx={{
         width: "100%",
         position: "absolute",
+        zIndex: ({ zIndex }) => zIndex.appBar,
       }}
     >
       <Box
