@@ -12,7 +12,7 @@ import ApercuProMedium from "../assets/fonts/apercu-medium-pro.ttf";
 
 const defaultTheme = createTheme();
 
-// @todo use more descriptive names instead of --step-1, --step-2
+/** @todo use more descriptive names instead of --step-1, --step-2 */
 const rootTypographyStyles = `
   /* @link https://utopia.fyi/type/calculator?c=320,16,1.25,1140,18,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l */
 
@@ -104,11 +104,14 @@ declare module "@mui/material" {
   interface Palette {
     purple: {
       50: string;
+      100: string;
       200: string;
       300: string;
       400: string;
       500: string;
       600: string;
+      700: string;
+      800: string;
       subtle: string;
     };
     gray: {
@@ -138,11 +141,12 @@ const customColors = {
   },
   blue: {
     100: "#F0F9FF",
-    200: "#C5EDF8",
-    300: "#86DDF3",
+    200: "#D8F1F8",
+    300: "#9ED9E9",
     400: "#24BDE0",
     500: "#0A9FC0",
-    600: "#007F9E",
+    600: "#0081A1",
+    700: "#00586E",
   },
   orange: {
     100: "#FFF6ED",
@@ -152,6 +156,16 @@ const customColors = {
     500: "#ED6F28",
     600: "#C74E0B",
     700: "#8F2F14",
+  },
+  red: {
+    100: "#FCF3F6",
+    200: "#F4C2D4",
+    300: "#EE9BB9",
+    400: "#E7749D",
+    500: "#E04D82",
+    600: "#D92666",
+    700: "#AE1E52",
+    800: "#82173D",
   },
   // should adjust to be consistent with the ones above
   gray: {

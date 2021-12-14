@@ -8,6 +8,7 @@ declare module "@mui/material/styles" {
       500: string;
       600: string;
       700: string;
+      800: string;
       subtle: string;
     };
     gray: {
