@@ -285,7 +285,7 @@ export const Navbar: FC<NavbarProps> = () => {
           width: "100%",
           position: isNavbarPositionAbsolute ? "absolute" : "fixed",
           top: isNavbarHidden && !isNavbarPositionAbsolute ? -navbarHeight : 0,
-          zIndex: isDesktopSize ? undefined : 1,
+          zIndex: 1,
           py: isDesktopSize ? 2 : 1,
           backgroundColor: isNavbarTransparent
             ? "transparent"
