@@ -398,6 +398,7 @@ export const Navbar: FC<NavbarProps> = () => {
                   ))}
                   <Link href="/docs/quick-start">
                     <Button
+                      size="small"
                       variant="primary"
                       endIcon={<Icon className="fa-chevron-right" />}
                     >
