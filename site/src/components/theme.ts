@@ -391,6 +391,10 @@ export const theme = createTheme({
               },
             },
             borderRadius: 34,
+            "& > .MuiButton-startIcon>*:nth-of-type(1), > .MuiButton-endIcon>*:nth-of-type(1)":
+              {
+                fontSize: "inherit",
+              },
           },
         },
         {
@@ -404,6 +408,10 @@ export const theme = createTheme({
             "&:hover": {
               background: customColors.purple[200],
             },
+            "& > .MuiButton-startIcon>*:nth-of-type(1), > .MuiButton-endIcon>*:nth-of-type(1)":
+              {
+                fontSize: 15,
+              },
           },
         },
       ],
