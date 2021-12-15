@@ -369,26 +369,41 @@ export const theme = createTheme({
         {
           props: { variant: "primary" },
           style: {
-            backgroundColor: "unset",
-            background: customColors.purple["500"],
-            color: customColors.gray["20"], // this should be taken from list of colors
+            textTransform: "none",
+            background: customColors.purple[600],
+            overflow: "hidden",
+            zIndex: 0,
+            color: customColors.gray["20"],
+            "&:before": {
+              zIndex: -1,
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              content: `""`,
+              opacity: 0,
+              transition: defaultTheme.transitions.create("opacity"),
+              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple[600]} 100%)`,
+            },
             "&:hover": {
-              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple["500"]} 100%)`,
+              background: customColors.purple[600],
+              "&:before": {
+                opacity: 1,
+              },
             },
             borderRadius: 34,
-            border: `1px solid ${customColors.purple["500"]}`,
           },
         },
         {
           props: { variant: "secondary" },
           style: {
-            background: customColors.gray["10"],
-            color: customColors.purple["500"], // this should be taken from list of colors
+            textTransform: "none",
+            background: customColors.gray[10],
+            color: customColors.purple[600],
             border: `1px solid currentColor`,
-            "&:hover": {
-              background: customColors.purple["200"],
-            },
             borderRadius: 34,
+            "&:hover": {
+              background: customColors.purple[200],
+            },
           },
         },
       ],
