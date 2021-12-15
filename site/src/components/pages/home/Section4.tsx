@@ -24,7 +24,7 @@ export const Section4 = () => {
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
           justifyContent: { xs: "", md: "space-between" },
-          alignItems: { xs: "flex-end", md: "flex-end" },
+          alignItems: { xs: "flex-start", md: "flex-end" },
           position: "relative",
           pt: 7,
           pb: { xs: 9, md: 0 },
@@ -72,6 +72,7 @@ export const Section4 = () => {
             zIndex: 3,
             textAlign: { xs: "left", md: "right" },
             ml: { xs: 2, md: 0 },
+            alignSelf: "flex-end",
           }}
         >
           <Typography

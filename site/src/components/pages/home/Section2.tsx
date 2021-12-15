@@ -1,5 +1,5 @@
-import React, { useRef, useLayoutEffect } from "react";
-import { Container, Typography, Box } from "@mui/material";
+import React, { useState, useRef, useLayoutEffect } from "react";
+import { Container, Typography, Box, Fade } from "@mui/material";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import { InlineLink } from "../../InlineLink";
@@ -25,6 +25,7 @@ const CONTENT = [
         web application
       </Box>
     ),
+    image: "/assets/step-1-img.svg",
   },
   {
     id: 2,
@@ -40,6 +41,7 @@ const CONTENT = [
         built the API integration for you.
       </Box>
     ),
+    image: "/assets/step-2-img.svg",
   },
   {
     id: 3,
@@ -55,6 +57,7 @@ const CONTENT = [
         blocks, even if the blocks are in completely seperate applications.
       </Box>
     ),
+    image: "/assets/step-3-img.svg",
   },
   {
     id: 4,
@@ -87,108 +90,86 @@ const CONTENT = [
         embedded in.
       </Box>
     ),
+    image: "/assets/step-4-img.svg",
   },
 ];
 
 export const Section2 = () => {
+  const [activeImg, setActiveImg] = useState(0);
   const boxRef = useRef(null);
+  const pinElRef = useRef(null);
 
   useLayoutEffect(() => {
-    if (!window) return;
+    if (!window || !pinElRef.current || !boxRef.current) return;
 
-    // const markers = gsap.utils.toArray(".box");
+    const markers: Element[] = gsap.utils.toArray(".box");
 
-    // const el = document.querySelectorAll(".stuff > img");
+    const triggers: ScrollTrigger[] = [];
 
-    // markers.forEach((marker) => {
-    // let img: HTMLImageElement | undefined;
-    // el.forEach((node) => {
-    //   if (node.id === `step-${markers.indexOf(marker)}`) {
-    //     img = node;
-    //   }
-    // });
-    // ScrollTrigger.create({
-    //   trigger: marker,
-    //   start: "top top",
-    //   end: "bottom bottom",
-    //   onEnter: () => {
-    //     console.log("Enter img ==> ", img);
-    //     //   @todo probably reset other images and leave the main one in question
-    //     gsap.fromTo(
-    //       // @todo temporarily added this to please typescript... Remove
-    //       img!,
-    //       {
-    //         autoAlpha: 0,
-    //       },
-    //       {
-    //         autoAlpha: 1,
-    //       },
-    //     );
-    //   },
-    //   // onEnterBack: () => {
-    //   //   gsap.fromTo(
-    //   //     img,
-    //   //     {
-    //   //       autoAlpha: 0,
-    //   //     },
-    //   //     { autoAlpha: 1 },
-    //   //   );
-    //   // },
-    //   onLeave: () => {
-    //     console.log("Leave img ==> ", img);
-    //     //   gsap.fromTo(img, {
-    //     //     autoAlpha: 1,
-    //     //   }, {
-    //     //       autoAlpha: 0
-    //     //   });
-    //   },
-    //   // markers: true,
-    // });
-    // });
+    markers.forEach((marker) => {
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: marker,
+          start: "top center",
+          end: "bottom 50vh",
+          onEnter: () => {
+            setActiveImg(markers.indexOf(marker));
+          },
+          onEnterBack: () => {
+            setActiveImg(markers.indexOf(marker));
+          },
+        }),
+      );
+    });
 
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: boxRef.current,
+        // scrub: true,
         start: "top top",
         end: "bottom bottom",
-        pin: ".right-content",
-        // toggleActions: "play none none reverse",
-        // markers: true
+        pin: pinElRef.current,
       },
     });
 
     return () => {
       tl.scrollTrigger?.kill();
+      triggers.forEach((trigger) => trigger?.kill());
     };
   }, []);
 
   return (
-    <Box sx={{ pt: 2 }}>
+    <Box sx={{ pt: { xs: 2, md: 10 } }}>
       <Container
         ref={boxRef}
         sx={{
           display: "flex",
-          height: { md: "auto" },
-          flexDirection: { md: "row" },
+          height: { xs: "100vh", md: "unset" },
+          flexDirection: { xs: "column", md: "row" },
           maxWidth: "100vw",
+          // border: "1px solid blue",
+          // alignItems: "flex-start",
         }}
       >
         <Box
           sx={{
-            width: { md: "40%" },
-            height: { md: "auto" },
+            // flexBasis: "50%",
+            width: { xs: "100%", md: "40%" },
+            height: { xs: "50vh", md: "unset" },
             mr: 4,
+            overflowY: { xs: "scroll", md: "unset" },
           }}
         >
           {CONTENT.map(({ id, title, content }) => (
             <Box
-              // className="box"
+              className="box"
               sx={{
                 typography: "bpBodyCopy",
-                height: { xs: "auto", md: "70vh" },
+                minHeight: { xs: "auto", md: "70vh" },
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                pt: "20vh",
+                mb: 10,
               }}
               key={id}
             >
@@ -200,50 +181,35 @@ export const Section2 = () => {
           ))}
         </Box>
         <Box
-          // className="right-content"
+          ref={pinElRef}
           sx={{
-            // border: "1px solid red",
             flex: 1,
-            height: { md: "90vh" },
+            alignSelf: "flex-start",
+            height: { xs: "50vh", md: "100vh" },
             position: "relative",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "white",
+            backgroundColor: ({ palette }) => palette.common.white,
           }}
         >
-          <Box
-          // className="stuff"
-          >
-            {/* <Step1 /> */}
-            {[
-              "/assets/step-1-img.svg",
-              "/assets/step-2-img.svg",
-              "/assets/step-3-img.svg",
-              "/assets/step-4-img.svg",
-            ].map((src, index) => (
+          {CONTENT.map(({ image, id }, index) => (
+            <Fade key={id} in={activeImg === index}>
               <Box
-                id={`step-${index}`}
                 sx={{
-                  opacity: index === 0 ? 1 : 0,
-                  visibility: "hidden",
                   position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  pt: "20vh",
+                  display: "flex",
+                  justifyContent: "center",
+                  // border: "1px solid red",
                 }}
-                key={src}
-                component="img"
-                src={src}
-              />
-            ))}
-          </Box>
+              >
+                <Box id={`step-${id}`} component="img" src={image} />
+              </Box>
+            </Fade>
+          ))}
         </Box>
       </Container>
     </Box>
   );
 };
-
-// const Step1 = () => {
-//   return <Box></Box>;
-// };

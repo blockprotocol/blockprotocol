@@ -36,10 +36,7 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
       {banner ? <FooterBanner banner={banner} /> : null}
       <Footer
         sx={{
-          paddingTop: {
-            xs: banner?.overlapsFooter ? 8 : 0,
-            md: banner?.overlapsFooter ? 10 : 0,
-          },
+          paddingTop: banner?.overlapsFooter ? 8 : 0,
         }}
       />
     </Box>

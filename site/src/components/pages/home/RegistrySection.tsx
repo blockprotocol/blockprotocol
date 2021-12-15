@@ -3,6 +3,7 @@ import { Typography, Box } from "@mui/material";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
 import { Button } from "../../Button";
+import { BlockHubIcon } from "../../SvgIcon/BlockHubIcon";
 
 export const RegistrySection = () => {
   return (
@@ -37,7 +38,9 @@ export const RegistrySection = () => {
       />
       {/* @todo use Link instead */}
       <Box sx={{ textAlign: "center", width: { md: "40%" }, maxWidth: 540 }}>
-        <Button variant="secondary">Explore all Blocks</Button>
+        <Button variant="secondary" startIcon={<BlockHubIcon />}>
+          Explore all Blocks
+        </Button>
         <Spacer height={4} />
         <Box>
           Anyone can build new blocks and submit them to the registry. If you

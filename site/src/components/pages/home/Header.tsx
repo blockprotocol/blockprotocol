@@ -18,7 +18,7 @@ export const Header = () => {
       sx={{
         background:
           "radial-gradient(113.45% 113.45% at 50% -13.45%, #3F4656 0.52%, #1C1C29 100%)",
-        minHeight: "90vh",
+        minHeight: "95vh",
         position: "relative",
         overflowX: "hidden",
         mb: { xs: 10, md: 16 },
@@ -120,7 +120,7 @@ export const Header = () => {
               ? "/assets/header-img-mobile.svg"
               : "/assets/header-img.svg"
           }
-          sx={{ display: "block", height: "100%" }}
+          sx={{ boxShadow: 5, display: "block", height: "100%" }}
         />
       </Box>
     </Box>

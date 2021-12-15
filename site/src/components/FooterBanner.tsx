@@ -35,7 +35,7 @@ const BannerCard: FC<BannerCardProps> = ({
   <Paper
     sx={{
       transition: (theme) => theme.transitions.create("padding"),
-      padding: 4,
+      padding: { xs: 4, md: 6 },
       height: "100%",
       display: "flex",
       flexDirection: "column",
@@ -70,7 +70,7 @@ const BannerCard: FC<BannerCardProps> = ({
           variant="primary"
           startIcon={<BoltIcon />}
         >
-          <Typography>{buttonText}</Typography>
+          {buttonText}
         </Button>
       </a>
     </Link>
@@ -261,7 +261,7 @@ type FooterBannerProps = {
 export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
   <Box
     sx={{
-      paddingTop: banner.overlapsFooter ? 0 : (theme) => theme.spacing(8),
+      paddingTop: banner.overlapsFooter ? 0 : 8,
       /** @todo: tweak to better match designs */
       background: `radial-gradient(
               circle at 0% 100%,
@@ -275,12 +275,9 @@ export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
       sx={{
         paddingTop: {
           xs: banner.overlapsFooter ? 8 : 0,
-          md: banner.overlapsFooter ? 10 : 0,
+          md: banner.overlapsFooter ? 15 : 0,
         },
-        marginBottom: {
-          xs: banner.overlapsFooter ? -8 : 0,
-          md: banner.overlapsFooter ? -10 : 0,
-        },
+        marginBottom: banner.overlapsFooter ? -8 : 0,
       }}
     >
       {banner.contents}

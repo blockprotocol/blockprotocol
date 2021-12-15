@@ -13,7 +13,9 @@ import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 
 const defaultTheme = createTheme();
 
-/** @todo use more descriptive names instead of --step-1, --step-2 */
+// @todo use more descriptive names instead of --step-1, --step-2
+// wouldn't need this when this is in
+// @see https://github.com/mui-org/material-ui/issues/15251
 const rootTypographyStyles = `
   /* @link https://utopia.fyi/type/calculator?c=320,16,1.25,1140,18,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l */
 
@@ -98,6 +100,10 @@ const rootTypographyStyles = `
         var(--fluid-bp)
     );
   }
+
+  body, p {
+    font-size: var(--step-0);
+  }
 `;
 
 const customColors = {
@@ -172,8 +178,10 @@ export const theme = createTheme({
     },
     ...customColors,
   },
+  // @todo set base font size for body
   typography: {
     fontFamily: "Inter",
+    fontSize: 16,
     bpTitle: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step-6)",
@@ -422,6 +430,12 @@ export const theme = createTheme({
         disableElevation: true,
         disableRipple: true,
         disableTouchRipple: true,
+      },
+
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
       },
 
       // @todo consider overriding existing variants

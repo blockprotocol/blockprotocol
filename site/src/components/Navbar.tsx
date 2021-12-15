@@ -391,6 +391,7 @@ export const Navbar: FC<NavbarProps> = () => {
                         sx={{
                           marginLeft: 1,
                           fontWeight: 500,
+                          color: "currentColor",
                         }}
                       >
                         {title}

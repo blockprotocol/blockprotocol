@@ -40,7 +40,6 @@ const steps = [
 // @todo consider implementing this with gsap
 
 export const Section1 = () => {
-  // const [activeStep, setActiveStep] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -49,14 +48,23 @@ export const Section1 = () => {
   const settings = {
     className: "center",
     centerMode: true,
-    // centerPadding: "50px",
-    infinite: true,
+    infinite: !isMobile,
     slidesToShow: isMobile ? 1 : 3,
     swipeToSlide: true,
     speed: 500,
     initialSlide: isMobile ? 0 : 1,
     nextArrow: <Box sx={{ display: "none !important" }} />,
     prevArrow: <Box sx={{ display: "none !important" }} />,
+    customPaging: () => (
+      <Box
+        sx={{
+          height: "12px",
+          width: "12px",
+          borderRadius: "50%",
+        }}
+      />
+    ),
+    dots: true,
   } as Settings;
 
   return (
@@ -90,6 +98,14 @@ export const Section1 = () => {
           sx={{
             position: "relative",
             zIndex: 2,
+            "& .slick-dots": {
+              "li div": {
+                backgroundColor: ({ palette }) => palette.gray[30],
+              },
+              "li.slick-active div": {
+                backgroundColor: ({ palette }) => palette.purple[700],
+              },
+            },
           }}
         >
           {/* @todo consider using a custom carousel */}
@@ -108,10 +124,17 @@ export const Section1 = () => {
                   display: "flex !important",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: 400,
+                  height: { xs: 300, md: 400 },
                 }}
               >
-                <Box component="img" sx={{}} src={image} />
+                <Box
+                  component="img"
+                  sx={{
+                    display: "block",
+                    // height: { xs: 300, md: "auto" },
+                  }}
+                  src={image}
+                />
               </Box>
             ))}
           </Slider>
