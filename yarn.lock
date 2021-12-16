@@ -2165,7 +2165,7 @@ evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
     md5.js "^1.3.4"
     safe-buffer "^5.1.1"
 
-execa@^5.1.1:
+execa@^5.0.0, execa@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/execa/-/execa-5.1.1.tgz#f80ad9cbf4298f7bd1d4c9555c21e93741c411dd"
   integrity sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==
@@ -4888,6 +4888,13 @@ supports-color@^9.0.2:
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/supports-color/-/supports-color-9.2.1.tgz#599dc9d45acf74c6176e0d880bab1d7d718fe891"
   integrity sha512-Obv7ycoCTG51N7y175StI9BlAXrmgZrFhZOb0/PyjHBher/NmsdBgbbQ1Inhq+gIhz6+7Gb+jWF2Vqi7Mf1xnQ==
+
+suppress-exit-code@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/suppress-exit-code/-/suppress-exit-code-1.0.0.tgz#065bf1326b78cf29014ad5f861dfed627539d4ba"
+  integrity sha512-Dc6hENE7PH9ce8fQYoNm5JLbSwpQeyLcOqu48Nd5ItIf0xdQgr2ag2fNXzU53BudOZsnYbVz/H2awt0C2prGgQ==
+  dependencies:
+    execa "^5.0.0"
 
 svgo@^2.0.3:
   version "2.8.0"
