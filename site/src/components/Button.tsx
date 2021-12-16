@@ -1,4 +1,5 @@
 import {
+  // eslint-disable-next-line no-restricted-imports
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
 } from "@mui/material";

@@ -4,12 +4,12 @@ import {
   Box,
   Icon,
   Paper,
-  Button,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
 import { PageStructure, Sidebar } from "../../components/PageSidebar";
