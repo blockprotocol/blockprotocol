@@ -18,7 +18,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const TodoList = () => {
+const TodoListBlock = () => {
   return (
     <Box
       sx={{
@@ -51,7 +51,7 @@ const TodoList = () => {
   );
 };
 
-const Table = () => {
+const TableBlock = () => {
   return (
     <Grid
       container
@@ -123,7 +123,6 @@ const CONTENT = [
     id: 2,
     content: (
       <Typography sx={{ color: ({ palette }) => palette.purple[200] }}>
-        {/* use a percentage here instead of breaking it with br */}
         which maps onto an{" "}
         <Box
           sx={{
@@ -173,15 +172,15 @@ const CONTENT = [
   },
 ];
 
-export const Section3 = () => {
+export const WhyBlockProtocol1Section = () => {
   const pinRef = useRef(null);
-  const ref = useRef(null);
+  const boxRef = useRef(null);
   const [activeStep, setActiveStep] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useLayoutEffect(() => {
-    if (!ref.current || !pinRef.current) return;
+    if (!boxRef.current || !pinRef.current) return;
 
     const markers: Element[] = gsap.utils.toArray(".item");
 
@@ -209,16 +208,15 @@ export const Section3 = () => {
               setActiveStep(0);
             }
           },
-          //   markers: true,
         }),
       );
     });
 
     const tl = gsap.timeline({
       scrollTrigger: {
-        trigger: ref.current,
+        trigger: boxRef.current,
         start: "top top",
-        end: () => `bottom bottom-=${isMobile ? 100 : 250}px`, // @todo add calculation to derive this 250
+        end: () => `bottom bottom-=${isMobile ? 100 : 250}px`,
         pin: pinRef.current,
         pinSpacing: false,
       },
@@ -236,10 +234,9 @@ export const Section3 = () => {
         pt: 20,
         position: "relative",
       }}
-      ref={ref}
+      ref={boxRef}
     >
       <Container
-        className="container"
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -282,10 +279,14 @@ export const Section3 = () => {
             }}
           >
             {[
-              { id: 1, component: <TodoList /> },
-              { id: 2, component: <Table /> },
+              { id: 1, component: <TodoListBlock /> },
+              { id: 2, component: <TableBlock /> },
             ].map(({ id, component }, index) => (
-              <Fade key={id} in={activeStep === index}>
+              <Fade
+                key={id}
+                in={activeStep === index}
+                timeout={{ enter: 750, exit: 500 }}
+              >
                 <Box
                   sx={{
                     display: "flex",

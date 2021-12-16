@@ -102,7 +102,10 @@ const rootTypographyStyles = `
   }
 
   body, p {
-    font-size: var(--step-0);
+    fontSize: "var(--step-0)",
+    fontWeight: 400,
+    lineHeight: 1.7,
+    color: customColors.gray["80"],
   }
 `;
 
@@ -178,7 +181,6 @@ export const theme = createTheme({
     },
     ...customColors,
   },
-  // @todo set base font size for body
   typography: {
     fontFamily: "Inter",
     fontSize: 16,

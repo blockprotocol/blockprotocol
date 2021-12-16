@@ -24,7 +24,7 @@ export const Header = () => {
         mb: { xs: 10, md: 16 },
       }}
     >
-      <Container sx={{ pt: { xs: "10vh", md: "20vh" }, mb: { xs: 20, md: 0 } }}>
+      <Container sx={{ pt: { xs: "15vh", md: "20vh" }, mb: { xs: 20, md: 0 } }}>
         <Box
           sx={{
             width: { xs: "100%", md: "57%" },
@@ -93,7 +93,7 @@ export const Header = () => {
 
       <Box
         sx={{
-          height: { xs: "auto", md: "45vh" },
+          height: { xs: "auto", md: "40vh" },
           width: { xs: "100%", md: "auto" },
           position: { xs: "relative", md: "absolute" },
           bottom: { xs: 0, md: "15%" },

@@ -1,13 +1,13 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import {
   Container,
   Typography,
   Box,
   useTheme,
   useMediaQuery,
+  Fade,
 } from "@mui/material";
 
-// import dynamic from "next/dynamic"
 import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -19,53 +19,61 @@ const steps = [
   {
     id: 1,
     image: "/assets/person-with-paragraph.svg",
+    graphImg: "/assets/sequence-1.svg",
+    graphImgMobile: "/assets/sequence-1-mobile.svg",
   },
   {
     id: 2,
     image: "/assets/table-block.svg",
-    width: 300,
+    graphImg: "/assets/sequence-2.svg",
+    graphImgMobile: "/assets/sequence-2-mobile.svg",
   },
   {
     id: 3,
     image: "/assets/checklist-block.svg",
-    width: 244,
+    graphImg: "/assets/sequence-3.svg",
+    graphImgMobile: "/assets/sequence-3-mobile.svg",
   },
   {
     id: 4,
     image: "/assets/kanban-small-block.svg",
-    width: 620,
+    graphImg: "/assets/sequence-3.svg",
+    graphImgMobile: "/assets/sequence-3-mobile.svg",
   },
 ];
 
-// @todo consider implementing this with gsap
-
-export const Section1 = () => {
+export const IntroSection = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [activeStep, setActiveStep] = useState(1);
 
   const slider = useRef<Slider>();
 
-  const settings = {
-    className: "center",
-    centerMode: true,
-    infinite: !isMobile,
-    slidesToShow: isMobile ? 1 : 3,
-    swipeToSlide: true,
-    speed: 500,
-    initialSlide: isMobile ? 0 : 1,
-    nextArrow: <Box sx={{ display: "none !important" }} />,
-    prevArrow: <Box sx={{ display: "none !important" }} />,
-    customPaging: () => (
-      <Box
-        sx={{
-          height: "12px",
-          width: "12px",
-          borderRadius: "50%",
-        }}
-      />
-    ),
-    dots: true,
-  } as Settings;
+  const settings = useMemo(
+    () =>
+      ({
+        centerMode: true,
+        infinite: !isMobile,
+        slidesToShow: isMobile ? 1 : 3,
+        swipeToSlide: true,
+        speed: 500,
+        initialSlide: isMobile ? 0 : 1,
+        nextArrow: <Box sx={{ display: "none !important" }} />,
+        prevArrow: <Box sx={{ display: "none !important" }} />,
+        customPaging: () => (
+          <Box
+            sx={{
+              height: "12px",
+              width: "12px",
+              borderRadius: "50%",
+            }}
+          />
+        ),
+        beforeChange: (_, next) => setActiveStep(next),
+        dots: true,
+      } as Settings),
+    [isMobile],
+  );
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -73,6 +81,7 @@ export const Section1 = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
+          mb: 4,
         }}
       >
         <Box
@@ -96,6 +105,36 @@ export const Section1 = () => {
       <Box sx={{ position: "relative", maxWidth: "100%" }}>
         <Box
           sx={{
+            display: "flex",
+            width: "100%",
+            height: { xs: 250, md: 450 },
+            justifyContent: "center",
+            alignItems: "flex-end",
+            mx: "auto",
+            mb: -4,
+            position: "relative",
+          }}
+        >
+          {steps.map(({ graphImg, graphImgMobile, id }) => (
+            <Fade in={activeStep + 1 === id} key={id}>
+              <Box
+                key={id}
+                sx={{
+                  position: "absolute",
+                  bottom: 0,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  height: { xs: "auto", md: 400 },
+                  width: { xs: "90%", md: "auto" },
+                }}
+                src={isMobile ? graphImgMobile : graphImg}
+                component="img"
+              />
+            </Fade>
+          ))}
+        </Box>
+        <Box
+          sx={{
             position: "relative",
             zIndex: 2,
             "& .slick-dots": {
@@ -108,7 +147,6 @@ export const Section1 = () => {
             },
           }}
         >
-          {/* @todo consider using a custom carousel */}
           <Slider
             ref={(node) => {
               if (node) {
@@ -131,7 +169,9 @@ export const Section1 = () => {
                   component="img"
                   sx={{
                     display: "block",
-                    // height: { xs: 300, md: "auto" },
+                    height: { xs: "auto", md: "auto" },
+                    width: { xs: "90%", md: "auto" },
+                    boxShadow: 2,
                   }}
                   src={image}
                 />

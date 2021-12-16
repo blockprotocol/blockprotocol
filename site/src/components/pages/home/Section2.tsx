@@ -102,7 +102,7 @@ export const Section2 = () => {
   useLayoutEffect(() => {
     if (!window || !pinElRef.current || !boxRef.current) return;
 
-    const markers: Element[] = gsap.utils.toArray(".box");
+    const markers: Element[] = gsap.utils.toArray(".scroll-section");
 
     const triggers: ScrollTrigger[] = [];
 
@@ -147,13 +147,10 @@ export const Section2 = () => {
           height: { xs: "100vh", md: "unset" },
           flexDirection: { xs: "column", md: "row" },
           maxWidth: "100vw",
-          // border: "1px solid blue",
-          // alignItems: "flex-start",
         }}
       >
         <Box
           sx={{
-            // flexBasis: "50%",
             width: { xs: "100%", md: "40%" },
             height: { xs: "50vh", md: "unset" },
             mr: 4,
@@ -162,7 +159,7 @@ export const Section2 = () => {
         >
           {CONTENT.map(({ id, title, content }) => (
             <Box
-              className="box"
+              className="scroll-section"
               sx={{
                 typography: "bpBodyCopy",
                 minHeight: { xs: "auto", md: "70vh" },
@@ -191,7 +188,7 @@ export const Section2 = () => {
           }}
         >
           {CONTENT.map(({ image, id }, index) => (
-            <Fade key={id} in={activeImg === index}>
+            <Fade key={id} in={activeImg === index} timeout={500}>
               <Box
                 sx={{
                   position: "absolute",
@@ -201,7 +198,6 @@ export const Section2 = () => {
                   pt: "20vh",
                   display: "flex",
                   justifyContent: "center",
-                  // border: "1px solid red",
                 }}
               >
                 <Box id={`step-${id}`} component="img" src={image} />
