@@ -583,7 +583,7 @@ export const theme = createTheme({
         disableRipple: true,
         disableFocusRipple: true,
         disableTouchRipple: true,
-      }
-    }
+      },
+    },
   },
 });
