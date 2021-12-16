@@ -198,7 +198,7 @@ const DesignSystem = () => {
           <Grid container spacing={3}>
             {CARDS.map((card) => (
               <Grid item key={card.displayName}>
-                <BlockCard {...card} />
+                <BlockCard data={card} />
               </Grid>
             ))}
             <Grid item>

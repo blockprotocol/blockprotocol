@@ -11,6 +11,7 @@ export type BlockVariant = {
   properties?: BlockProps;
 };
 
+// move to types.ts
 /** @sync @hashintel/block-protocol */
 export type BlockMetadata = {
   author?: string;
