@@ -43,8 +43,8 @@ const BannerCard: FC<BannerCardProps> = ({
       alignItems: "flex-start",
       position: "relative",
       "&::before": {
-        position: "absolute",
         pointerEvents: "none",
+        position: "absolute",
         top: 0,
         right: 0,
         left: 0,
