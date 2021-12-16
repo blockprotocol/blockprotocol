@@ -23,15 +23,21 @@
     "@twind/next": "1.0.8",
     "clsx": "^1.1.1",
     "glob": "^7.2.0",
+    "gray-matter": "^4.0.3",
     "jsonschema": "^1.4.0",
     "lodash": "4.17.21",
     "next": "10.2.3",
     "next-fonts": "^1.5.1",
     "next-images": "1.8.1",
+    "next-mdx-remote": "^3.0.8",
     "prismjs": "^1.25.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "twind": "^0.16.16"
+    "remark-mdx": "1.6.22",
+    "remark-parse": "9.0.0",
+    "slugify": "^1.6.3",
+    "twind": "^0.16.16",
+    "unified": "9.2.2"
   },
   "devDependencies": {
     "@babel/runtime": "^7.16.3",

@@ -9,6 +9,7 @@ import ApercuProRegular from "../assets/fonts/apercu-regular-pro.ttf";
 import ApercuProBold from "../assets/fonts/apercu-bold-pro.ttf";
 import ApercuProLight from "../assets/fonts/apercu-light-pro.ttf";
 import ApercuProMedium from "../assets/fonts/apercu-medium-pro.ttf";
+import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 
 const defaultTheme = createTheme();
 
@@ -99,34 +100,6 @@ const rootTypographyStyles = `
   }
 `;
 
-// Override MUI TypeScript types to support custom theme properties
-declare module "@mui/material" {
-  interface Palette {
-    purple: {
-      50: string;
-      100: string;
-      200: string;
-      300: string;
-      400: string;
-      500: string;
-      600: string;
-      700: string;
-      800: string;
-      subtle: string;
-    };
-    gray: {
-      10: string;
-      20: string;
-      30: string;
-      40: string;
-      50: string;
-      60: string;
-      70: string;
-      80: string;
-    };
-  }
-}
-
 const customColors = {
   purple: {
     100: "#F4F3FF",
@@ -138,6 +111,15 @@ const customColors = {
     700: "#6048E5",
     800: "#4732BA",
     subtle: "#C3CAE7",
+  },
+  teal: {
+    100: "#F0F9FF",
+    200: "#D8F1F8",
+    300: "#9ED9E9",
+    400: "#24BDE0",
+    500: "#029EC1",
+    600: "#0081A1",
+    700: "#00586e",
   },
   blue: {
     100: "#F0F9FF",
@@ -186,7 +168,7 @@ const customColors = {
 export const theme = createTheme({
   palette: {
     primary: {
-      main: customColors.purple["500"],
+      main: customColors.purple[600],
     },
     ...customColors,
   },
@@ -197,6 +179,13 @@ export const theme = createTheme({
       fontSize: "var(--step-6)",
       lineHeight: 1,
       fontWeight: 700,
+      color: customColors.gray["80"],
+    },
+    bpSubtitle: {
+      fontFamily: "Apercu Pro",
+      fontSize: "var(--step-3)",
+      lineHeight: 1.1,
+      fontWeight: 200,
       color: customColors.gray["80"],
     },
     bpHeading1: {
@@ -219,6 +208,12 @@ export const theme = createTheme({
       lineHeight: 1.1,
       color: customColors.gray["70"],
     },
+    bpHeading4: {
+      fontFamily: "Apercu Pro",
+      fontSize: "var(--step-2)",
+      lineHeight: 1.1,
+      color: customColors.gray["70"],
+    },
     bpSmallCaps: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step--1)",
@@ -238,7 +233,7 @@ export const theme = createTheme({
       "& a": {
         fontWeight: 600,
         transition: defaultTheme.transitions.create("color"),
-        color: customColors.purple["500"],
+        color: customColors.purple[600],
         "&:hover": {
           color: customColors.purple["600"],
         },
@@ -315,12 +310,26 @@ export const theme = createTheme({
               font-weight: 700;
               src: url(${ApercuProBold}) format("trueType");
             }
+
+            html {
+              scroll-behavior: smooth;
+            }
+
+            :target:before {
+              content: "";
+              display: block;
+              height: ${DESKTOP_NAVBAR_HEIGHT}px;
+              margin: -${DESKTOP_NAVBAR_HEIGHT}px 0 0;
+            }
+
             ${rootTypographyStyles}
           `,
     },
     MuiTypography: {
       defaultProps: {
         variantMapping: {
+          bpTitle: "h1",
+          bpSubtitle: "p",
           bpHeading1: "h1",
           bpHeading2: "h2",
           bpHeading3: "h3",
@@ -331,6 +340,23 @@ export const theme = createTheme({
           bpMicroCopy: "span",
         },
       },
+      variants: [
+        {
+          props: {
+            variant: "bpBodyCopy",
+          },
+          style: {
+            "& a": {
+              fontWeight: 600,
+              color: "currentColor",
+              borderBottomWidth: 2,
+              borderBottomColor: "currentColor",
+              borderBottomStyle: "solid",
+              transition: defaultTheme.transitions.create("color"),
+            },
+          },
+        },
+      ],
     },
     MuiIconButton: {
       defaultProps: {
@@ -356,6 +382,39 @@ export const theme = createTheme({
           },
         },
       },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 10,
+        },
+      },
+      variants: [
+        {
+          props: {
+            variant: "teal",
+          },
+          style: {
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderRadius: "6px",
+            borderColor: "#B0DDE9",
+            backgroundColor: customColors.teal[100],
+          },
+        },
+        {
+          props: {
+            variant: "purple",
+          },
+          style: {
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderRadius: "6px",
+            borderColor: customColors.purple[200],
+            backgroundColor: customColors.purple[100],
+          },
+        },
+      ],
     },
     MuiButton: {
       defaultProps: {
@@ -395,6 +454,19 @@ export const theme = createTheme({
               {
                 fontSize: "inherit",
               },
+          },
+        },
+        {
+          props: { variant: "primary", color: "teal" },
+          style: {
+            backgroundColor: "unset",
+            background: customColors.teal["500"],
+            color: customColors.gray["20"], // this should be taken from list of colors
+            "&:hover": {
+              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple[600]} 100%)`,
+            },
+            borderRadius: 34,
+            border: `1px solid ${customColors.teal["500"]}`,
           },
         },
         {
@@ -486,13 +558,6 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textDecoration: "none",
-        },
-      },
-    },
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          borderRadius: 10,
         },
       },
     },

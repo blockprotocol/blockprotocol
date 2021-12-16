@@ -42,12 +42,27 @@ const NAVBAR_LINKS: NavBarLink[] = [
   {
     title: "Block Hub",
     href: "/hub",
-    icon: <BlockHubIcon />,
+    icon: (
+      <BlockHubIcon
+        sx={{
+          width: 18,
+          height: 18,
+        }}
+      />
+    ),
   },
   {
     title: "Documentation",
     href: "/docs",
-    icon: <Icon className="fas fa-book-open" />,
+    icon: (
+      <Icon
+        className="fas fa-book-open"
+        sx={{
+          fontSize: 18,
+        }}
+        fontSize="inherit"
+      />
+    ),
     children: [
       {
         title: "Introduction",
@@ -62,7 +77,14 @@ const NAVBAR_LINKS: NavBarLink[] = [
   {
     title: "Specification",
     href: "/spec",
-    icon: <SpecificationIcon />,
+    icon: (
+      <SpecificationIcon
+        sx={{
+          width: 18,
+          height: 18,
+        }}
+      />
+    ),
     children: [
       {
         title: "Introduction",
@@ -285,7 +307,7 @@ export const Navbar: FC<NavbarProps> = () => {
           width: "100%",
           position: isNavbarPositionAbsolute ? "absolute" : "fixed",
           top: isNavbarHidden && !isNavbarPositionAbsolute ? -navbarHeight : 0,
-          zIndex: 1,
+          zIndex: 2,
           py: isDesktopSize ? 2 : 1,
           backgroundColor: isNavbarTransparent
             ? "transparent"
@@ -341,13 +363,14 @@ export const Navbar: FC<NavbarProps> = () => {
                       key={href}
                       sx={({ palette }) => ({
                         display: "flex",
-                        marginRight: 2,
+                        alignItems: "center",
+                        marginRight: 3,
                         transition: theme.transitions.create("color", {
                           duration: 100,
                         }),
                         color: isNavbarDark
-                          ? palette.purple[500]
-                          : asPath === href
+                          ? palette.purple[300]
+                          : asPath.startsWith(href)
                           ? palette.purple[600]
                           : palette.gray[60],
                         "&:hover": {
@@ -401,6 +424,7 @@ export const Navbar: FC<NavbarProps> = () => {
       <Slide in={displayMobileNav}>
         <Box
           sx={{
+            zIndex: 1,
             marginTop: `${MOBILE_NAVBAR_HEIGHT}px`,
             position: "fixed",
             background: theme.palette.common.white,

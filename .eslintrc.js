@@ -29,6 +29,7 @@ module.exports = {
     "no-undef-init": "off",
     "no-underscore-dangle": "off",
     "no-nested-ternary": "off",
+    "no-restricted-syntax": "off",
     camelcase: "off",
     "import/no-cycle": "error",
     "import/prefer-default-export": "off",
