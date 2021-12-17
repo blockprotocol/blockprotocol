@@ -25,9 +25,18 @@ export type BlockMetadata = {
   source?: string;
   variants?: BlockVariant[];
   version?: string;
+  lastUpdated?: string;
 
   // @todo should be redundant to block's package.json#name
   packagePath: string;
+};
+
+export type BlockRegistryInfo = {
+  workspace: string;
+  repository: string;
+  branch: string;
+  distDir: string;
+  timestamp: string;
 };
 
 /**
@@ -41,12 +50,24 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
   const glob = require("glob");
   /* eslint-enable global-require */
 
+  const registryInfo: BlockRegistryInfo[] = glob
+    .sync(`${process.cwd()}/../registry/**/*.json`)
+    .map((path: string) => ({
+      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+    }));
+
   return glob
     .sync(`${process.cwd()}/public/blocks/**/metadata.json`)
     .map((path: string) => ({
       // @todo should be redundant to block's package.json#name
       packagePath: path.split("/").slice(-3, -1).join("/"),
       ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+    }))
+    .map((metadata: BlockMetadata) => ({
+      ...metadata,
+      lastUpdated: registryInfo.find(
+        ({ workspace }) => workspace === metadata.name,
+      )?.timestamp,
     }));
 };
 
