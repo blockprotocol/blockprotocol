@@ -5,10 +5,10 @@ import {
   Paper,
   Grid,
   Typography,
-  Button,
   PaperProps,
 } from "@mui/material";
 import Image from "next/image";
+import { Button } from "./Button";
 import { Link } from "./Link";
 import backgroundRainbow from "../../public/assets/background-corner-rainbow.png";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
@@ -43,13 +43,14 @@ const BannerCard: FC<BannerCardProps> = ({
       alignItems: "flex-start",
       position: "relative",
       "&::before": {
+        pointerEvents: "none",
         position: "absolute",
         top: 0,
         right: 0,
         left: 0,
         bottom: 0,
         content: `""`,
-        /** @todo: figure out IE compatiblity? (https://caniuse.com/mdn-css_properties_mix-blend-mode) */
+        /** @todo: figure out IE compatibility? (https://caniuse.com/mdn-css_properties_mix-blend-mode) */
         mixBlendMode: "multiply",
         boxShadow: [
           "0px 4.46px 3px 0px #7F8FAB1F",

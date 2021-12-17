@@ -126,15 +126,6 @@ const customColors = {
     200: "#D8F1F8",
     300: "#9ED9E9",
     400: "#24BDE0",
-    500: "#029EC1",
-    600: "#0081A1",
-    700: "#00586e",
-  },
-  blue: {
-    100: "#F0F9FF",
-    200: "#D8F1F8",
-    300: "#9ED9E9",
-    400: "#24BDE0",
     500: "#0A9FC0",
     600: "#0081A1",
     700: "#00586E",
@@ -429,27 +420,107 @@ export const theme = createTheme({
     },
     MuiButton: {
       defaultProps: {
+        variant: "primary",
+        color: "purple",
         disableElevation: true,
         disableRipple: true,
         disableTouchRipple: true,
       },
-
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-        },
-      },
-
-      // @todo consider overriding existing variants
       variants: [
         {
           props: { variant: "primary" },
           style: {
-            textTransform: "none",
-            background: customColors.purple[600],
-            overflow: "hidden",
-            zIndex: 0,
             color: customColors.gray["20"],
+            borderRadius: 34,
+          },
+        },
+        {
+          props: { variant: "secondary" },
+          style: {
+            background: customColors.gray[10],
+            border: `1px solid currentColor`,
+            borderRadius: 34,
+          },
+        },
+        {
+          props: { variant: "tertiary" },
+          style: {
+            border: `1px solid currentColor`,
+            borderRadius: 34,
+            color: customColors.gray[70],
+            borderColor: "#C1CFDE",
+            background: defaultTheme.palette.common.white,
+            "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
+              color: customColors.gray[40],
+            },
+          },
+        },
+        {
+          props: { size: "medium" },
+          style: {
+            fontSize: 18,
+          },
+        },
+        {
+          props: { variant: "primary", size: "medium" },
+          style: {
+            padding: defaultTheme.spacing(1.25, 2.5),
+          },
+        },
+        {
+          props: { variant: "secondary", size: "medium" },
+          style: {
+            paddingTop: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
+            paddingBottom: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
+            paddingLeft: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
+            paddingRight: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
+          },
+        },
+        {
+          props: { variant: "tertiary", size: "medium" },
+          style: {
+            paddingTop: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
+            paddingBottom: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
+            paddingLeft: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
+            paddingRight: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
+          },
+        },
+        {
+          props: { size: "small" },
+          style: {
+            fontSize: 15,
+          },
+        },
+        {
+          props: { variant: "primary", size: "small" },
+          style: {
+            padding: defaultTheme.spacing(0.5, 1.5),
+          },
+        },
+        {
+          props: { variant: "secondary", size: "small" },
+          style: {
+            paddingTop: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
+            paddingBottom: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
+            paddingLeft: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
+            paddingRight: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
+          },
+        },
+        {
+          props: { variant: "tertiary", size: "small" },
+          style: {
+            paddingTop: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
+            paddingBottom: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
+            paddingLeft: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
+            paddingRight: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
+          },
+        },
+        {
+          props: { variant: "primary", color: "purple" },
+          style: {
+            zIndex: 0,
+            overflow: "hidden",
+            background: customColors.purple[600],
             "&:before": {
               zIndex: -1,
               position: "absolute",
@@ -458,7 +529,7 @@ export const theme = createTheme({
               content: `""`,
               opacity: 0,
               transition: defaultTheme.transitions.create("opacity"),
-              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple[600]} 100%)`,
+              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.teal["400"]} 0%, ${customColors.purple[600]} 100%)`,
             },
             "&:hover": {
               background: customColors.purple[600],
@@ -466,44 +537,146 @@ export const theme = createTheme({
                 opacity: 1,
               },
             },
-            borderRadius: 34,
-            "& > .MuiButton-startIcon>*:nth-of-type(1), > .MuiButton-endIcon>*:nth-of-type(1)":
-              {
-                fontSize: "inherit",
-              },
           },
         },
         {
           props: { variant: "primary", color: "teal" },
           style: {
-            backgroundColor: "unset",
-            background: customColors.teal["500"],
-            color: customColors.gray["20"], // this should be taken from list of colors
-            "&:hover": {
-              background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.blue["400"]} 0%, ${customColors.purple[600]} 100%)`,
+            backgroundColor: customColors.teal[500],
+            ":hover": {
+              backgroundColor: customColors.teal[600],
             },
-            borderRadius: 34,
-            border: `1px solid ${customColors.teal["500"]}`,
           },
         },
         {
-          props: { variant: "secondary" },
+          props: { variant: "primary", color: "gray" },
           style: {
-            textTransform: "none",
-            background: customColors.gray[10],
-            color: customColors.purple[600],
-            border: `1px solid currentColor`,
-            borderRadius: 34,
-            "&:hover": {
-              background: customColors.purple[200],
+            backgroundColor: customColors.gray[60],
+            ":hover": {
+              backgroundColor: customColors.gray[70],
             },
-            "& > .MuiButton-startIcon>*:nth-of-type(1), > .MuiButton-endIcon>*:nth-of-type(1)":
-              {
-                fontSize: 15,
+          },
+        },
+        {
+          props: { variant: "primary", color: "warning" },
+          style: {
+            backgroundColor: customColors.orange[500],
+            ":hover": {
+              backgroundColor: customColors.orange[600],
+            },
+          },
+        },
+        {
+          props: { variant: "primary", color: "danger" },
+          style: {
+            backgroundColor: customColors.red[600],
+            ":hover": {
+              backgroundColor: customColors.red[700],
+            },
+          },
+        },
+        {
+          props: { variant: "secondary", color: "purple" },
+          style: {
+            color: customColors.purple[700],
+            ":hover": {
+              background: customColors.purple[200],
+              color: customColors.purple[800],
+            },
+          },
+        },
+        {
+          props: { variant: "secondary", color: "teal" },
+          style: {
+            color: customColors.teal[600],
+            ":hover": {
+              background: customColors.teal[200],
+              color: customColors.teal[700],
+            },
+          },
+        },
+        {
+          props: { variant: "secondary", color: "gray" },
+          style: {
+            color: customColors.gray[70],
+            ":hover": {
+              background: customColors.gray[30],
+              color: customColors.gray[70],
+            },
+          },
+        },
+        {
+          props: { variant: "secondary", color: "warning" },
+          style: {
+            color: customColors.orange[600],
+            borderColor: "#FEB173",
+            background: customColors.orange[100],
+            ":hover": {
+              color: customColors.orange[700],
+              background: customColors.orange[200],
+            },
+          },
+        },
+        {
+          props: { variant: "secondary", color: "danger" },
+          style: {
+            color: customColors.red[600],
+            ":hover": {
+              background: customColors.red[200],
+              color: customColors.red[700],
+            },
+          },
+        },
+        {
+          props: { variant: "tertiary", color: "purple" },
+          style: {
+            ":hover": {
+              color: customColors.purple[700],
+              borderColor: customColors.purple[500],
+              background: customColors.purple[100],
+              "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
+                color: customColors.purple[300],
               },
+            },
+            ":active": {
+              borderColor: customColors.purple[700],
+              background: customColors.purple[700],
+              color: customColors.purple[100],
+              "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
+                color: customColors.purple[100],
+              },
+            },
+          },
+        },
+        {
+          props: { variant: "tertiary", color: "warning" },
+          style: {
+            ":hover": {
+              color: customColors.orange[600],
+              borderColor: "#FEB173",
+              background: customColors.orange[100],
+              "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
+                color: customColors.orange[300],
+              },
+            },
           },
         },
       ],
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+        },
+        endIcon: {
+          "&>*:nth-of-type(1)": {
+            fontSize: "inherit",
+          },
+        },
+        startIcon: {
+          "&>*:nth-of-type(1)": {
+            fontSize: "inherit",
+          },
+        },
+      },
     },
     MuiContainer: {
       styleOverrides: {

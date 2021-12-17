@@ -30,3 +30,4 @@ node_modules/
 
 # workspace specific
 site/public/blocks
+site/site-map.json

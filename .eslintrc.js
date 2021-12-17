@@ -189,7 +189,25 @@ module.exports = {
             message:
               "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
           },
+          {
+            name: "@mui/material",
+            importNames: ["Button"],
+            message:
+              "Please use the custom src/components/Button component instead.",
+          },
+          {
+            name: "@mui/material/Button",
+            importNames: ["default"],
+            message:
+              "Please use the custom src/components/Button component instead.",
+          },
         ],
+      },
+    },
+    {
+      files: ["site/scripts/**"],
+      rules: {
+        "no-console": "off",
       },
     },
     {

@@ -1,8 +1,7 @@
-import { FC, ReactNode, useState, useEffect, Fragment } from "react";
+import { FC, useState, useEffect, Fragment, useContext } from "react";
 import {
   Box,
   Typography,
-  Button,
   Icon,
   Container,
   useTheme,
@@ -18,12 +17,14 @@ import {
   useScrollTrigger,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { Button } from "./Button";
 import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { BlockHubIcon } from "./SvgIcon/BlockHubIcon";
 import { SpecificationIcon } from "./SvgIcon/SpecificationIcon";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
+import SiteMapContext from "./context/SiteMapContext";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -31,72 +32,33 @@ export const MOBILE_NAVBAR_HEIGHT = 57;
 
 const IDLE_NAVBAR_TIMEOUT_MS = 3000;
 
-type NavBarLink = {
-  title: string;
-  href: string;
-  icon?: ReactNode;
-  children?: { title: string; href: string }[];
+const NAVBAR_LINK_ICONS: Record<string, JSX.Element> = {
+  "Block Hub": (
+    <BlockHubIcon
+      sx={{
+        width: 18,
+        height: 18,
+      }}
+    />
+  ),
+  Documentation: (
+    <Icon
+      className="fas fa-book-open"
+      sx={{
+        fontSize: 18,
+      }}
+      fontSize="inherit"
+    />
+  ),
+  Specification: (
+    <SpecificationIcon
+      sx={{
+        width: 18,
+        height: 18,
+      }}
+    />
+  ),
 };
-
-const NAVBAR_LINKS: NavBarLink[] = [
-  {
-    title: "Block Hub",
-    href: "/hub",
-    icon: (
-      <BlockHubIcon
-        sx={{
-          width: 18,
-          height: 18,
-        }}
-      />
-    ),
-  },
-  {
-    title: "Documentation",
-    href: "/docs",
-    icon: (
-      <Icon
-        className="fas fa-book-open"
-        sx={{
-          fontSize: 18,
-        }}
-        fontSize="inherit"
-      />
-    ),
-    children: [
-      {
-        title: "Introduction",
-        href: "/docs/introduction",
-      },
-      {
-        title: "Quick Start Guide",
-        href: "/docs/blocks",
-      },
-    ],
-  },
-  {
-    title: "Specification",
-    href: "/spec",
-    icon: (
-      <SpecificationIcon
-        sx={{
-          width: 18,
-          height: 18,
-        }}
-      />
-    ),
-    children: [
-      {
-        title: "Introduction",
-        href: "/spec/introduction",
-      },
-      {
-        title: "Terminology",
-        href: "/spec/terminology",
-      },
-    ],
-  },
-];
 
 type MobileNavItemsProps = {
   onClose: () => void;
@@ -104,26 +66,25 @@ type MobileNavItemsProps = {
 
 const MobileNavItems: FC<MobileNavItemsProps> = ({ onClose }) => {
   const { asPath } = useRouter();
+  const { pages } = useContext(SiteMapContext);
 
   const [openedNavbarLinks, setOpenedNavbarLinks] = useState<string[]>(
-    NAVBAR_LINKS.map(({ href }) => href).filter((href) =>
-      asPath.startsWith(href),
-    ),
+    pages.map(({ href }) => href).filter((href) => asPath.startsWith(href)),
   );
 
   useEffect(() => {
-    const newOpenedNavbarLink = NAVBAR_LINKS.find(({ href }) =>
+    const newOpenedNavbarLink = pages.find(({ href }) =>
       asPath.startsWith(href),
     )?.href;
 
     if (newOpenedNavbarLink) {
       setOpenedNavbarLinks([newOpenedNavbarLink]);
     }
-  }, [asPath]);
+  }, [asPath, pages]);
 
   return (
     <List>
-      {NAVBAR_LINKS.map(({ title, icon, href: parentHref, children }, i) => (
+      {pages.map(({ title, href: parentHref, subPages }, i) => (
         <Fragment key={parentHref}>
           <Link href={parentHref}>
             <ListItemButton
@@ -133,9 +94,9 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ onClose }) => {
                 onClose();
               }}
             >
-              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemIcon>{NAVBAR_LINK_ICONS[title]}</ListItemIcon>
               <ListItemText primary={title} />
-              {children && children.length > 0 ? (
+              {subPages && subPages.length > 0 ? (
                 <IconButton
                   sx={{
                     transition: (theme) =>
@@ -165,14 +126,14 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ onClose }) => {
               ) : null}
             </ListItemButton>
           </Link>
-          {children && children.length > 0 ? (
+          {subPages && subPages.length > 0 ? (
             <Collapse
               in={openedNavbarLinks.includes(parentHref)}
               timeout="auto"
               unmountOnExit
             >
               <List component="div" disablePadding>
-                {children.map(({ title: childTitle, href: childHref }) => (
+                {subPages.map(({ title: childTitle, href: childHref }) => (
                   <Link key={childHref} href={childHref}>
                     <ListItemButton
                       selected={asPath.startsWith(childHref)}
@@ -199,7 +160,7 @@ const MobileNavItems: FC<MobileNavItemsProps> = ({ onClose }) => {
                   </Link>
                 ))}
               </List>
-              {i < NAVBAR_LINKS.length - 1 ? <Divider /> : null}
+              {i < pages.length - 1 ? <Divider /> : null}
             </Collapse>
           ) : null}
         </Fragment>
@@ -213,6 +174,7 @@ type NavbarProps = {};
 export const Navbar: FC<NavbarProps> = () => {
   const theme = useTheme();
   const router = useRouter();
+  const { pages } = useContext(SiteMapContext);
 
   const [displayMobileNav, setDisplayMobileNav] = useState<boolean>(false);
   const [idleScrollPosition, setIdleScrollPosition] = useState<boolean>(false);
@@ -358,7 +320,7 @@ export const Navbar: FC<NavbarProps> = () => {
             <Box display="flex" alignItems="center">
               {md ? (
                 <>
-                  {NAVBAR_LINKS.map(({ title, href, icon }) => (
+                  {pages.map(({ title, href }) => (
                     <Link
                       href={href}
                       key={href}
@@ -386,7 +348,7 @@ export const Navbar: FC<NavbarProps> = () => {
                         },
                       })}
                     >
-                      {icon}
+                      {NAVBAR_LINK_ICONS[title]}
                       <Typography
                         sx={{
                           marginLeft: 1,
@@ -400,6 +362,7 @@ export const Navbar: FC<NavbarProps> = () => {
                   ))}
                   <Link href="/docs/quick-start">
                     <Button
+                      size="small"
                       variant="primary"
                       endIcon={<Icon className="fa-chevron-right" />}
                     >

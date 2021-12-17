@@ -20,7 +20,8 @@
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "theme-override.d.ts",
-    "assets.d.ts"
+    "assets.d.ts",
+    "./scripts/**/*.ts"
   ],
   "exclude": ["node_modules", ".next"]
 }
