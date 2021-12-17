@@ -1,37 +1,22 @@
 import { VFC } from "react";
-import { Typography, Box, Stack, Skeleton } from "@mui/material";
+import { Typography, Box, Skeleton } from "@mui/material";
+import { formatDistance, subDays } from "date-fns";
 import { Link } from "./Link";
 import { Spacer } from "./Spacer";
-
-/** @sync @hashintel/block-protocol */
-type BlockMetadata = {
-  author?: string;
-  description?: string;
-  displayName?: string;
-  externals?: Record<string, string>;
-  icon?: string;
-  license?: string;
-  name?: string;
-  schema?: string;
-  source?: string;
-  // variants?: BlockVariant[];
-  version?: string;
-
-  // @todo should be redundant to block's package.json#name
-  packagePath: string;
-};
+import { BlockMetadata } from "../pages/api/blocks.api";
 
 type BlockCardProps = {
   loading?: boolean;
-  data?: BlockMetadata;
+  data?: Omit<BlockMetadata, "source" | "schema" | "variants">;
 };
+
+// @todo add images to each block
 
 const BlockCardLoading = () => {
   return (
     <Box
       sx={{
-        minWidth: 288,
-        maxWidth: 328,
+        width: { xs: 288, lg: 328 },
         borderRadius: "8px",
         boxShadow: 1,
       }}
@@ -77,7 +62,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
     // image,
     author,
     version,
-    // lastUpdated,
+    lastUpdated,
     packagePath,
     icon,
   } = data;
@@ -86,9 +71,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
     <Link href={`${packagePath}`}>
       <Box
         sx={{
-          minWidth: 288,
-          maxWidth: 328,
-          width: "100%",
+          width: { xs: 288, lg: 328 },
           borderRadius: "8px",
           boxShadow: 1,
           transition: "0.3s ease",
@@ -107,6 +90,8 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             backgroundColor: "gray.20",
             py: 3,
             px: 2.75,
+            borderTopLeftRadius: "8px",
+            borderTopRightRadius: "8px",
           }}
         >
           <Box
@@ -148,33 +133,46 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
           </Box>
           <Typography
             variant="bpSmallCopy"
-            sx={{ display: "block", color: "gray.70", minHeight: "3em" }}
+            sx={{ display: "block", color: "gray.70" }}
           >
-            {description?.length <= 100
+            {description && description?.length <= 100
               ? description
               : `${description?.slice(0, 100)}...`}
           </Typography>
           <Spacer height={3} />
-          <Stack
-            direction="row"
-            gap={1.5}
-            sx={{ mb: 1.5, typography: "bpMicroCopy" }}
+          <Box
+            sx={{
+              typography: "bpMicroCopy",
+              display: "flex",
+              flexWrap: "wrap",
+            }}
           >
             <Typography
               variant="bpMicroCopy"
-              sx={{ color: ({ palette }) => palette.purple[600] }}
+              sx={{
+                color: ({ palette }) => palette.purple[600],
+                mr: 1.5,
+                mb: 1.5,
+              }}
             >
               @{author}
             </Typography>
-            <Typography color="gray.60" variant="bpMicroCopy">
+            <Typography
+              sx={{ mr: 1.5, mb: 1.5 }}
+              color="gray.60"
+              variant="bpMicroCopy"
+            >
               {version}
             </Typography>
             <Typography color="gray.60" variant="bpMicroCopy">
-              {/* @todo this should be a date */}
-              {/* {lastUpdated} */}
-              {/* Updated 6 months ago */}
+              {lastUpdated
+                ? `Updated 
+              ${formatDistance(subDays(new Date(), 3), new Date(), {
+                addSuffix: true,
+              })}`
+                : ""}
             </Typography>
-          </Stack>
+          </Box>
           {/* Commenting this out since we don't currently track weekly downloads */}
           {/* <Stack direction="row">
      
@@ -195,8 +193,7 @@ export const BlockCardComingSoon = () => {
         py: 6,
         px: 4.25,
         minHeight: 400,
-        minWidth: 288,
-        maxWidth: 328,
+        width: { xs: 288, lg: 328 },
         backgroundColor: "white",
         border: ({ palette }) => `2px dashed ${palette.gray["30"]}`,
         borderRadius: "8px",

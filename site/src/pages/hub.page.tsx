@@ -1,4 +1,4 @@
-import { Container, Typography, Box, Grid } from "@mui/material";
+import { Container, Typography, Box } from "@mui/material";
 import { VFC } from "react";
 import { GetStaticProps } from "next";
 import { BlockCard, BlockCardComingSoon } from "../components/BlockCard";
@@ -27,18 +27,18 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
         backgroundSize: "100% 100%",
       }}
     >
-      <Container>
+      <Container sx={{ padding: { xs: 0, sm: 16, md: 32 } }}>
         <Box
           sx={{
             mb: 10,
             pt: 8,
-            width: "65%",
+            width: { xs: "100%", sm: "80%", md: "65%" },
             mx: "auto",
             textAlign: "center",
           }}
         >
           <Typography
-            mb={3}
+            mb={{ xs: 2, md: 3 }}
             sx={{
               color: ({ palette }) => palette.purple[700],
               fontWeight: 700,
@@ -54,34 +54,38 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
             All open-source and free to use
           </Typography>
         </Box>
-
-        <Grid
-          spacing={4}
+        <Box
           sx={{
-            maxWidth: 1048,
-            mx: "auto",
+            display: "grid",
+            gridTemplateColumns: {
+              xs: "1fr",
+              sm: "repeat(2, 288px)",
+              lg: "repeat(3, 328px)",
+            },
+            gap: "32px",
+            justifyContent: "center",
+            justifyItems: { xs: "center", sm: "flex-start" },
             position: "relative",
             zIndex: 2,
           }}
-          container
         >
           {catalog
             ? catalog.map((block) => (
-                <Grid key={block.packagePath} item sm={6} md={4}>
+                <Box key={block.packagePath}>
                   <BlockCard data={block} />
-                </Grid>
+                </Box>
               ))
             : Array.from(Array(6), (_, index) => index + 1).map((key) => (
-                <Grid key={key} item>
+                <Box key={key}>
                   <BlockCard loading />
-                </Grid>
+                </Box>
               ))}
           {catalog && (
-            <Grid item>
+            <Box>
               <BlockCardComingSoon />
-            </Grid>
+            </Box>
           )}
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );
