@@ -13,7 +13,9 @@ import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 
 const defaultTheme = createTheme();
 
-/** @todo use more descriptive names instead of --step-1, --step-2 */
+// @todo use more descriptive names instead of --step-1, --step-2
+// wouldn't need this when this is in
+// @see https://github.com/mui-org/material-ui/issues/15251
 const rootTypographyStyles = `
   /* @link https://utopia.fyi/type/calculator?c=320,16,1.25,1140,18,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l */
 
@@ -98,6 +100,13 @@ const rootTypographyStyles = `
         var(--fluid-bp)
     );
   }
+
+  body, p {
+    fontSize: "var(--step-0)",
+    fontWeight: 400,
+    lineHeight: 1.7,
+    color: customColors.gray["80"],
+  }
 `;
 
 const customColors = {
@@ -165,6 +174,7 @@ export const theme = createTheme({
   },
   typography: {
     fontFamily: "Inter",
+    fontSize: 16,
     bpTitle: {
       fontFamily: "Apercu Pro",
       fontSize: "var(--step-6)",
@@ -330,6 +340,7 @@ export const theme = createTheme({
           bpSmallCopy: "span",
           bpMicroCopy: "span",
         },
+        variant: "bpBodyCopy",
       },
       variants: [
         {
@@ -364,7 +375,7 @@ export const theme = createTheme({
           },
           "&:active": {
             svg: {
-              color: customColors.purple[600],
+              color: customColors.purple[700],
             },
           },
           svg: {
@@ -738,6 +749,13 @@ export const theme = createTheme({
         root: {
           textDecoration: "none",
         },
+      },
+    },
+    MuiCheckbox: {
+      defaultProps: {
+        disableRipple: true,
+        disableFocusRipple: true,
+        disableTouchRipple: true,
       },
     },
   },
