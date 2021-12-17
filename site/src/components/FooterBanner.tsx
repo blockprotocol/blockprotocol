@@ -5,10 +5,10 @@ import {
   Paper,
   Grid,
   Typography,
-  Button,
   PaperProps,
 } from "@mui/material";
 import Image from "next/image";
+import { Button } from "./Button";
 import { Link } from "./Link";
 import backgroundRainbow from "../../public/assets/background-corner-rainbow.png";
 import { BoltIcon } from "./SvgIcon/BoltIcon";

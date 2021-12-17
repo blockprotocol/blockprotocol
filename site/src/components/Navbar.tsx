@@ -2,7 +2,6 @@ import { FC, ReactNode, useState, useEffect, Fragment } from "react";
 import {
   Box,
   Typography,
-  Button,
   Icon,
   Container,
   useTheme,
@@ -18,6 +17,7 @@ import {
   useScrollTrigger,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { Button } from "./Button";
 import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { BlockHubIcon } from "./SvgIcon/BlockHubIcon";
@@ -398,6 +398,7 @@ export const Navbar: FC<NavbarProps> = () => {
                   ))}
                   <Link href="/docs/quick-start">
                     <Button
+                      size="small"
                       variant="primary"
                       endIcon={<Icon className="fa-chevron-right" />}
                     >

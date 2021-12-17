@@ -116,17 +116,65 @@ const DesignSystem = () => {
       <Spacer height={5} />
       <Typography variant="bpHeading2">Button</Typography>
       <Card>
-        <CardContent sx={{ p: 4 }}>
-          <Button
-            variant="primary"
-            sx={{ mr: 2 }}
-            startIcon={<Icon className="fa-plus-circle" />}
-          >
-            Read the Quickstart Guide
-          </Button>
-          <Button variant="secondary" sx={{ mr: 2 }}>
-            Read the Spec
-          </Button>
+        <CardContent
+          sx={{
+            p: 4,
+          }}
+        >
+          {(["small", "medium"] as const).map((size) =>
+            (["purple", "teal", "gray", "warning", "danger"] as const).map(
+              (color) => (
+                <Box key={color} mb={1} sx={{ "> button": { mr: 2 } }}>
+                  <Typography variant="bpBodyCopy">
+                    {color} {size}
+                  </Typography>
+                  <Button
+                    variant="primary"
+                    color={color}
+                    startIcon={<Icon className="fa-plus-circle" />}
+                    size={size}
+                  >
+                    Primary Button
+                  </Button>
+                  <Button
+                    variant="primary"
+                    color={color}
+                    squared
+                    startIcon={<Icon className="fa-plus-circle" />}
+                    size={size}
+                  >
+                    Primary Button Squared
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    color={color}
+                    startIcon={<Icon className="fa-plus-circle" />}
+                    size={size}
+                  >
+                    Secondary Button
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    color={color}
+                    squared
+                    startIcon={<Icon className="fa-plus-circle" />}
+                    size={size}
+                  >
+                    Secondary Button squared
+                  </Button>
+                  <Button
+                    variant="tertiary"
+                    color={color}
+                    squared
+                    startIcon={<Icon className="fa-plus-circle" />}
+                    size={size}
+                  >
+                    Tertiary Button squared
+                  </Button>
+                </Box>
+              ),
+            ),
+          )}
           <br />
           <br />
           <Box sx={{ display: "flex", justifyContent: "center" }}>

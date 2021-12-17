@@ -28,14 +28,6 @@ declare module "@mui/material/styles" {
       500: string;
       600: string;
     };
-    blue: {
-      50: string;
-      200: string;
-      300: string;
-      400: string;
-      500: string;
-      600: string;
-    };
     gray: {
       10: string;
       20: string;
@@ -97,11 +89,29 @@ declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
     primary: true;
     secondary: true;
+    tertiary: true;
+    // Disable defaults
+    contained: false;
+    outlined: false;
+    text: false;
   }
 
   interface ButtonPropsColorOverrides {
+    purple: true;
     teal: true;
+    warning: true;
+    danger: true;
+    gray: true;
+    // Disable defaults
+    primary: false;
+    secondary: false;
+    success: false;
+    error: false;
+    info: false;
+    warning: false;
   }
+
+  interface ButtonPropsSizeOverrides {}
 }
 
 declare module "@mui/material/Paper" {
