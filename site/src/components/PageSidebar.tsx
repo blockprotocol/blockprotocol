@@ -16,6 +16,7 @@ import {
   useState,
   VFC,
 } from "react";
+import { SiteMapPage } from "../lib/sitemap";
 import { Link } from "./Link";
 
 const SidebarLink = styled(Link)(({ theme }) => ({
@@ -32,25 +33,8 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   fontSize: 15,
 }));
 
-type PageStructureSubSection = {
-  title: string;
-  anchor: string;
-};
-
-export type PageStructureSection = {
-  title: string;
-  anchor: string;
-  subSections?: PageStructureSubSection[];
-};
-
-export type PageStructure = {
-  title: string;
-  href: string;
-  sections?: PageStructureSection[];
-};
-
 type SidebarPageProps = {
-  page: PageStructure;
+  page: SiteMapPage;
   maybeUpdateSelectedOffsetTop: () => void;
   setSelectedAnchorElement: (element: HTMLAnchorElement) => void;
   openedPages: string[];
@@ -258,12 +242,12 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 };
 
 type SidebarProps = {
-  pages: PageStructure[];
-  appendices?: PageStructure[];
+  pages: SiteMapPage[];
+  appendices?: SiteMapPage[];
 };
 
 const getInitialOpenedPages = (params: {
-  pages: PageStructure[];
+  pages: SiteMapPage[];
   asPath: string;
 }): string[] => {
   const { pages, asPath } = params;

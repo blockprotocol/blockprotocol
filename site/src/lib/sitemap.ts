@@ -1,12 +1,12 @@
 import { getAllPageStructures } from "../util/mdxUtils";
 
-type SiteMapPageSection = {
+export type SiteMapPageSection = {
   title: string;
   anchor: string;
   subSections: SiteMapPageSection[];
 };
 
-type SiteMapPage = {
+export type SiteMapPage = {
   title: string;
   href: string;
   subPages: SiteMapPage[];

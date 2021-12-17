@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Container,
   Typography,
@@ -12,14 +13,11 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Link } from "../../components/Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
-import { PageStructure, Sidebar } from "../../components/PageSidebar";
-import {
-  getAllPageHrefs,
-  getAllPageStructures,
-  getSerializedPage,
-} from "../../util/mdxUtils";
+import { Sidebar } from "../../components/PageSidebar";
+import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
 import { mdxComponents } from "../../util/mdxComponents";
 import { parseIntFromPixelString } from "../../util/muiUtils";
+import SiteMapContext from "../../components/context/SiteMapContext";
 
 const GitHubInfoCard = (
   <Paper
@@ -127,7 +125,6 @@ const GitHubInfoCard = (
 
 type SpecPageProps = {
   serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
-  allPageStructures: PageStructure[];
 };
 
 type SpecPageQueryParams = {
@@ -167,17 +164,18 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       serializedPage,
-      allPageStructures: getAllPageStructures({ folderName: "spec" }),
     },
     revalidate: true,
   };
 };
 
-const SpecPage: NextPage<SpecPageProps> = ({
-  serializedPage,
-  allPageStructures,
-}) => {
+const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
   const theme = useTheme();
+  const { pages: allPages } = useContext(SiteMapContext);
+
+  const { subPages: specificationPages } = allPages.find(
+    ({ title }) => title === "Specification",
+  )!;
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -228,10 +226,10 @@ const SpecPage: NextPage<SpecPageProps> = ({
             }}
           >
             <Sidebar
-              pages={allPageStructures.filter(
+              pages={specificationPages.filter(
                 ({ title }) => !title.startsWith("Appendix"),
               )}
-              appendices={allPageStructures.filter(({ title }) =>
+              appendices={specificationPages.filter(({ title }) =>
                 title.startsWith("Appendix"),
               )}
             />

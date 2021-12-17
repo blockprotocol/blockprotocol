@@ -10,7 +10,7 @@ import remarkMdx from "remark-mdx";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import remarkParse from "remark-parse";
 import slugify from "slugify";
-import { PageStructure, PageStructureSection } from "../components/PageSidebar";
+import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 
 type FolderName = "spec" | "docs";
 
@@ -133,7 +133,7 @@ const getText = (node: Node): string =>
 const getPageStructure = (params: {
   folderName: string;
   fileName: string;
-}): PageStructure => {
+}): SiteMapPage => {
   const { folderName, fileName } = params;
 
   const source = readFileSync(
@@ -161,48 +161,47 @@ const getPageStructure = (params: {
     href: `/spec${
       name === "index" ? "" : `/${slugify(name, { lower: true })}`
     }`,
-    sections: headings.reduce<PageStructureSection[]>(
-      (prev, currentHeading) => {
-        if (currentHeading.depth === 2) {
-          const sectionTitle = getText(currentHeading);
-          return [
-            ...prev,
-            {
-              title: sectionTitle,
-              anchor: slugify(sectionTitle, { lower: true }),
-              subSections: [],
-            },
-          ];
-        } else if (currentHeading.depth === 3) {
-          const subSectionTitle = getText(currentHeading);
+    sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
+      if (currentHeading.depth === 2) {
+        const sectionTitle = getText(currentHeading);
+        return [
+          ...prev,
+          {
+            title: sectionTitle,
+            anchor: slugify(sectionTitle, { lower: true }),
+            subSections: [],
+          },
+        ];
+      } else if (currentHeading.depth === 3) {
+        const subSectionTitle = getText(currentHeading);
 
-          return prev.length > 0
-            ? [
-                ...prev.slice(0, -1),
-                {
-                  ...prev[prev.length - 1],
-                  subSections: [
-                    ...(prev[prev.length - 1].subSections || []),
-                    {
-                      title: subSectionTitle,
-                      anchor: slugify(subSectionTitle, { lower: true }),
-                    },
-                  ],
-                },
-              ]
-            : prev;
-        }
-        return prev;
-      },
-      [],
-    ),
+        return prev.length > 0
+          ? [
+              ...prev.slice(0, -1),
+              {
+                ...prev[prev.length - 1],
+                subSections: [
+                  ...(prev[prev.length - 1].subSections || []),
+                  {
+                    title: subSectionTitle,
+                    anchor: slugify(subSectionTitle, { lower: true }),
+                    subSections: [],
+                  },
+                ],
+              },
+            ]
+          : prev;
+      }
+      return prev;
+    }, []),
+    subPages: [],
   };
 };
 
 // Get the structure of a all MDX files in a given directory
 export const getAllPageStructures = (params: {
   folderName: FolderName;
-}): PageStructure[] => {
+}): SiteMapPage[] => {
   const { folderName } = params;
 
   const fileNames = readdirSync(

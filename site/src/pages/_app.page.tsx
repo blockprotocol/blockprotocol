@@ -12,28 +12,35 @@ import { theme } from "../components/theme";
 import twindConfig from "../../twind.config";
 import { PageLayout } from "../components/PageLayout";
 import { createEmotionCache } from "../util/createEmotionCache";
+import siteMap from "../../site-map.json";
+import SiteMapContext from "../components/context/SiteMapContext";
 
 const clientSideEmotionCache = createEmotionCache();
 
-interface MyAppProps extends AppProps {
+type MyAppProps = {
   emotionCache?: EmotionCache;
-}
+} & AppProps;
 
-function MyApp(props: MyAppProps) {
-  const { Component, pageProps, emotionCache = clientSideEmotionCache } = props;
+const MyApp = ({
+  Component,
+  pageProps,
+  emotionCache = clientSideEmotionCache,
+}: MyAppProps) => {
   return (
-    <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <PageLayout>
-          <Head>
-            <title>Blockprotocol</title>
-          </Head>
-          <Component {...pageProps} />
-        </PageLayout>
-      </ThemeProvider>
-    </CacheProvider>
+    <SiteMapContext.Provider value={siteMap}>
+      <CacheProvider value={emotionCache}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <PageLayout>
+            <Head>
+              <title>Blockprotocol</title>
+            </Head>
+            <Component {...pageProps} />
+          </PageLayout>
+        </ThemeProvider>
+      </CacheProvider>
+    </SiteMapContext.Provider>
   );
-}
+};
 
 export default withTwindApp(twindConfig, MyApp);
