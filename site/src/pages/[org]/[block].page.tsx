@@ -1,3 +1,8 @@
+/**
+ * @file
+ * @deprecate moving over to /hub/[block]
+ */
+
 import { Validator } from "jsonschema";
 import { NextPage } from "next";
 import { useRouter } from "next/dist/client/router";
