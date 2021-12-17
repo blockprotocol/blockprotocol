@@ -3,157 +3,218 @@
 A block type should be packaged and distributed in a form which embedding applications can easily insert into a web page, and accompanied by metadata files describing the structure of data that the block accepts. A block package might be made available via a URL, package manager, or catalog of block types.
 
 A block package MUST contain:
-source file or files (e.g. HTML and JavaScript files), which
-SHOULD contain valid HTML
-There are various tools to help in meeting these requirements.
+
+- **source file or files** (e.g. HTML and JavaScript files), which
+
+  - SHOULD contain valid HTML
+
+  - There are [various tools](/spec/implementation-and-rendering-context) to help in meeting these requirements.
 
 A block package SHOULD contain:
-a JSON file describing the properties the block accepts using JSON Schema vocabulary - the ‘block schema’, which can be automatically generated from block code, and which:
-MUST be called block-schema.json
-MUST specify a required array naming any properties the block will not render or function without
-SHOULD specify any further constraints or validation requirements which improve the block’s functionality
-a JSON file containing metadata describing the block, which:
-MUST be called block-metadata.json
-MUST specify:
-a name for the block
-any libraries the block expects the embedding application to supply it with under externals - i.e. libraries which the block depends on but does not include in its package - using the name of the library as it is usually distributed (e.g. via npm), and the expected version (or version range). For example, a block may SPO rely on React ("externals": [{ "react": "^16.0.0" }]), but assume that the embedding application will provide it, to save loading it multiple times on a page.
-the path or URL to the entrypoint source file (e.g. index.html, index.js) under source
-the version of the block, which SHOULD use semantic versioning
-protocol: the applicable block protocol version
-SHOULD specify:
-default - an object, conforming to the block’s schema, representing the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) variants is provided (see below).
-icon - an icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block)
-author
-description
-license
-MAY specify:
-variants - an array of objects, each with a name, description, icon, and properties, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants called ‘Heading 1’ and ‘Heading 2’, which start with { level: 1 } and { level: 2 } as properties, respectively.
+
+- a JSON file **describing the properties the block accepts** using [JSON Schema vocabulary](https://json-schema.org/) - the ‘block schema’, which can be [automatically generated](https://json-schema.org/implementations.html#from-code) from block code, and which:
+
+  - MUST be called `block-schema.json`
+
+  - MUST specify a `[required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3)` array naming any properties the block will not render or function without
+
+  - SHOULD specify any further constraints or [validation](https://json-schema.org/draft/2020-12/json-schema-validation.html) requirements which improve the block’s functionality
+
+- a JSON file containing <strong>metadata describing the block</strong>, which:
+
+  - MUST be called `block-metadata.json`
+
+  - MUST specify:
+
+    - a `name` for the block
+
+    - any libraries the block expects the embedding application to supply it with under `externals` - i.e. libraries which the block depends on but does not include in its package - using the name of the library as it is usually distributed (e.g. via npm), and the expected version (or version range).
+
+    For example, a block may SPO rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page.
+
+    - the path or URL to the entrypoint source file (e.g. index.html, index.js) under `source`
+
+    - the `version` of the block, which SHOULD use [semantic versioning](https://semver.org/)
+
+    - `protocol`: the applicable block protocol version
+
+  - SHOULD specify:
+
+    - `default` - an object, conforming to the block’s schema, representing
+      the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or
+      (b) `variants` is provided (see below).
+
+    - `icon` - an icon for the block, to be displayed when the user is
+      selecting from available blocks (as well as elsewhere as appropriate, e.g.
+      in a website listing the block)
+
+    - `author`
+
+    - `description`
+
+    - `license`
+
+  - MAY specify:
+
+    - `variants` - an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants called ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as properties, respectively.
+
+    - `image` - a preview image of the block for users to see it in action
+      before using it
 
 ## Requesting, creating, and updating data
 
 ### Data provided to blocks
 
-Blocks MUST use the data properties specified in their schema, if any. They can expect these properties to be made available to them by the embedding application, exactly how depending on rendering context. For example, for a React component block they would be passed as “props”. In a block with an HTML entrypoint, appropriately sandboxed by the embedding application, the properties would be in the global scope (of the sandbox).
+Blocks MUST use the data properties specified in their schema, if any.
+They can expect these properties to be made available to them by the embedding application, exactly how depending on [rendering context](/spec/implementation-and-rendering-context).
+For example, for a React component block they would be passed as ‘props’.
+In a block with an HTML entrypoint, appropriately sandboxed by the embedding application, the properties would be in the global scope (of the sandbox).
 
-The data for the block itself will be at the root level of the data made available to it, i.e. a block which had a level property at the root of the properties in its schema would have a level property passed in as a prop (or attached to the global scope of sandboxed HTML blocks).
+The data for the block itself will be at the root level of the data made available to it, i.e. a block which had a `level` property at the root of the properties in its schema would have a `level` property passed in as a prop (or attached to the global scope of sandboxed HTML blocks).
 
-The block’s data represents an “entity” in the system. Alongside the properties declared in its schema, blocks should expect an entityId and entityTypeId to be provided by the embedding application, representing the application’s identifiers for the particular instance and type of the block. These must be strings. The exact form of these will differ across applications - e.g. some might use human-readable strings for entityTypeId, others might use integers or uuids. In any case, the block need only pass these back when requesting updates to entity data.
+The block’s data represents an ‘entity’ in the system. Alongside the properties declared in its schema, blocks should expect an `entityId` and `entityTypeId` to be provided by the embedding application, representing the application’s identifiers for the particular instance and type of the block.
+These must be strings.
+The exact form of these will differ across applications – e.g. some might use human-readable strings for `entityTypeId`, others might use integers or uuids.
+In any case, the block need only pass these back when requesting updates to entity data.
 
-The entity for the block might link to other entities. For example, a Kanban board block might have a team property which links to another type of entity, a Team. Blocks should expect the following additional fields related to linked data to be passed to them:
-a linkedEntities field containing the entities linked from the block’s entity, and entities linked to from those entities, and so on\*
-a linkedAggregations field containing the results of aggregations linked from the block’s entity
-a links field which provides the links attached to the block or entities provided in either linkedEntities or linkedAggregations
-where available, an entityTypes field containing entity type definitions for any entities sent to the blocks, which can be parsed to understand the constraints on user input for each entity (e.g. which fields are editable, what sort of data they accept). Each entry in the array is a JSON schema object with an additional entityTypeId field corresponding to the entityTypeId of the entities it describes the shape of.
+The entity for the block might link to other entities.
+For example, a Kanban board block might have a `team` property which links to another type of entity, a Team.
+Blocks should expect the following additional fields related to linked data to be passed to them:
 
-\* Embedding applications will want to impose limits on the extent to which links between their records are followed for any given query, and not all indirectly linked entities may be provided with the block’s initial data. They can be requested using the functions listed below.
+- a `linkedEntities` field containing the entities linked from the block’s entity, and entities linked to from those entities, and so on\*
 
-Each entity provided under linkedEntities or linkedAggregations will also have an entityId and entityTypeId to be used as arguments when updating those entities. See linking entities for a discussion of how links are managed.
+- a `linkedAggregations` field containing the results of aggregations linked from the block’s entity
+
+- a `links` field which provides the links attached to the block or entities provided in either `linkedEntities` or `linkedAggregations`
+
+- where available, an `entityTypes` field containing entity type definitions for any entities sent to the blocks, which can be parsed to understand the constraints on user input for each entity (e.g. which fields are editable, what sort of data they accept). Each entry in the array is a JSON schema object with an additional `entityTypeId` field corresponding to the `entityTypeId` of the entities it describes the shape of.
+
+_\* Embedding applications will want to impose limits on the extent to which links between their records are followed for any given query, and not all indirectly linked entities may be provided with the block’s initial data.
+They can be requested using the functions listed below._
+
+Each entity provided under `linkedEntities` or `linkedAggregations` will also have an `entityId` and `entityTypeId` to be used as arguments when updating those entities. See [linking entities](#linking-entitites) for a discussion of how links are managed.
 
 ### Functions provided to blocks
 
-Subject to the permissions granted to them by the embedding application, blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their implementation:
+Subject to the permissions granted to them by the embedding application, blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their [implementation](#linking-entitites):
 
-`createEntity<T>(actions: Payload<T>[]): Promise<T[]>`
-creates one or more entities.
-returns: the created entities, i.e. objects inside an array.
-`Payload<T>`:
-entityTypeId [string]: the type of entity to create.
-`data<T>` [object]: the field(s) and value(s) with which to create the entity, i.e. its properties.
-links?: [object][optional]: any links to create along with this entity. See See linking entities.
-selection? [array of strings][optional]: limit the return to only include these fields on the entity.
-depth? [integer][optional]: limit the depth to which linked data in an entity will be resolved. See linking entities.
+- `createEntity<T>(actions: Payload<T>[]): Promise<T[]>`  
+  creates one or more entities  
+  **returns:** the created entities, i.e. _objects_ inside an _array_
 
-`updateEntity<T>(actions: Payload<T>[]): Promise<T[]>`
-updates one or more entities.
-returns: the updated entities, i.e. objects inside an array.
-`Payload<T>`: accepts a single array of objects each with the following shape:
-`data<T>` [object]: the fields and values to update on the entity.
-entityTypeId [string]: the type of entity to update.
-entityId [string]: the id of the entity to update.
-selection? [array of strings][optional]: limit the return to only include these fields on the entity.
-depth? [integer][optional]: limit the depth to which linked data in an entity will be resolved. See linking entities.
+  `Payload<T>`:
 
-`deleteEntity(actions: Payload[]): Promise<boolean[]>`
-deletes one or more entities.
-returns: an array of boolean indicating the success of each operation.
-Payload: accepts a single array of objects, each with the following shape:
-entityTypeId [string]: the type of entity to delete.
-entityId [string]: the id of the entity to delete. [integer]
+  - `entityTypeId` \[_string_]: the type of entity to create.
+  - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
+  - `links?`: \[_object_]\[_optional_]: any links to create along with this entity. See [linking entities](#linking-entitites).
+  - `selection?` [_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
+  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+    See [linking entities](#linking-entitites).
 
-`getEntity<T>(actions: Payload<T>[]): Promise<T[]>`
-retrieve one or more entities.
-returns: the retrieved entities, i.e. objects inside an array.
-Payload: accepts a single array of objects each with the following shape:
-entityTypeId [string]: the type of entity to retrieve.
-entityId [string]: the id of the entity to retrieve.
-selection? [array of strings][optional]: limit the return to only include these fields on the entity.
-depth? [integer][optional]: limit the depth to which linked data in an entity will be resolved. See linking entities.
+- `updateEntity<T>(actions: Payload<T>[]): Promise<T[]>`  
+  updates one or more entities  
+  **returns:** the updated entities, i.e. objects inside an array
 
-`aggregateEntity(action: Payload): Promise<AggregationResult>`
-retrieve a subset of entities of a given type.
-returns: an AggregationResult object
-pageNumber [integer]: the page number returned
-itemsPerPage [integer]: the number of results per page, i.e. returned.
-totalCount [integer]: the total number of records available for this query.
-nextPage [integer]: the number of the next page, if any (null otherwise).
-filters [array]: any filters applied (empty if none):
-field [string]: the field name filtered by.
-operator [enum]: the filter operator. One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
-value [string]: the value filtered against.
-sorts [array]: the sort(s) applied:
-field [string]: the field sorted on
-desc [boolean]: whether the sort was descending.
-arguments: optionally accepts a single object with the following shape
-entityTypeId [object]: the type of entity to provide aggregated data for
-selection? [array of strings][optional]: limit the return to only include these fields on the entity.
-depth? [integer][optional]: limit the depth to which linked data in an entity will be resolved. See linking entities.
-operation? [object][optional]: a description of the aggregation operation, which contains at least one of the following fields:
-pageNumber? [integer][optional]: the page number to request.
-itemsPerPage? [integer][optional]: the number of results to return.
-filters? [array][optional]: filter entities by a given field value:
-field [string]: the field name to filter by.
-operator [enum]: the filter operator. One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
-value [string]: the value to match against.
-sorts? [array][optional]: specify how to sort results by providing one or more objects with the following shape:
-field [string]: the field name to sort on.
-desc? [boolean][optional]: whether to sort descending.
-Embedding apps will provide a default aggregation if not provided.
+  `Payload<T>:` accepts a single array of objects each with the following shape:
 
-The functions defined above return entity data, but block authors should note that in many implementations the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
+  - `data<T>` \[_object_]: the fields and values to update on the entity.
+  - `entityTypeId` \[_string_]: the type of entity to update.
+  - `entityId` \[_string_]: the id of the entity to update.
+  - `selection?` \[_array of strings_]\[_optional_]: limit the return to only include these fields on the entity.
+  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+    See [linking entities](#linking-entitites).
+
+- `deleteEntity(actions: Payload[]): Promise<boolean[]>`  
+  deletes one or more entities.  
+  **returns:** an _array_ of `boolean` indicating the success of each operation.
+
+  `Payload`: accepts a single _array_ of _objects_, each with the following shape:
+
+  - `entityTypeId` \[_string_]: the type of entity to delete
+  - `entityId` \[_string_]: the id of the entity to delete.
+  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+    See [linking entities](#linking-entitites).
+
+- `getEntity<T>(actions: Payload<T>[]): Promise<T[]>`  
+  retrieve one or more entities  
+  **returns:** the retrieved entities, i.e. _objects_ inside an _array_.
+
+  `Payload`: accepts a single _array_ of _objects_ each with the following shape:
+
+  - `entityTypeId` \[_string_]: the type of entity to retrieve.
+  - `entityId` \[_string_]: the id of the entity to retrieve.
+  - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
+  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+    See [linking entities](#linking-entitites).
+
+<!--
+
+- `aggregateEntity(action: Payload): Promise<AggregationResult> \`
+  retrieve a subset of entities of a given type. \<strong>returns</strong>: an ` AggregationResult` object \* `pageNumber` _[integer]_: the page number returned
+  - `itemsPerPage` _[integer]_: the number of results per page,
+    i.e. returned. _ `totalCount` _[integer]_: the total number of
+    records available for this query. _ `nextPage` _[integer]_: the
+    number of the next page, if any (<em>null</em> otherwise). _ ` filters` _[array]_: any filters applied (empty if none): _ ` field` _[string]_: the field name filtered by. _ ` operator` _[enum]_: the filter operator. One of IS, IS_NOT, CONTAINS,
+    DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY. _ ` value` _[string]_: the value filtered against. \* `sorts` [
+    <em>array]_: the sort(s) applied: \* `field` _[string]_: the field
+sorted on \* `desc` _[boolean]\_: whether the sort was descending.
+
+<strong>arguments: </strong>optionally accepts a single <em>object </em>with the
+following shape{" "}
+
+    * `entityTypeId` [_object_]: the type of entity to provide aggregated data for
+    * `selection?` [_array_ of _strings_][_optional_]: limit the return to only include these fields on the entity.
+    * `depth?` [_integer_][_optional_]: limit the depth to which linked data in an entity will be resolved. See [linking entities](#heading=h.fka5rrv4b39u).
+
+_ `operation?` [*object*]\_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
+_ `pageNumber?` [\_integer_][_optional_]: the page number to request.
+_ `itemsPerPage?` [*integer*]\_optional_]: the number of results to return.
+_ `filters?` [\_array_][_optional_]: filter entities by a given field value:
+_ `field` [\_string_]: the field name to filter by.
+_ `operator` [\_enum_]: the filter operator. One of IS, IS*NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY. \* `value` [\_string*]: the value to match against.
+_ `sorts?` [*array*]\_optional_]: specify how to sort results by providing one or more objects with the following shape:
+_ `field` [\_string_]: the field name to sort on.
+_ `desc?` [*boolean*]\_optional_]: whether to sort descending.
+\_ Embedding apps will provide a default aggregation if not provided. \
+
+The functions defined above return entity data, but block authors should note that in many [implementations](#heading=h.l3qc1ds29wu3) the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
+
+<!--
 
 #### Functions for working with entity types
 
 Where supported and permitted by the embedding application, blocks may be provided with the following functions to work with entity types, i.e. data models.
 
-`createEntityType(actions: Payload[]): Promise<EntityType>[]>`
-creates one or more entity types.
-returns: the created entity types, i.e. objects inside an array. An EntityType is a JSON schema object with an additional entityTypeId field.
-Payload: accepts a single array of objects, each with the following shape:
-schema [object]: the JSON schema for the entity type.
+- `createEntityType(actions: Payload[]): Promise<EntityType>[]>` \
+  creates one or more entity types. \
+  **returns: **the created entity types, i.e. _objects_ inside an _array_. An `EntityType ` is a JSON schema object with an additional* `entityTypeId`* field. \
+  ` Payload<strong>: </strong>`
+  accepts a single <em>array</em> of <em>objects,</em> each with the following shape:
+  - `schema` _[object]_: the [JSON schema](https://json-schema.org/)
+    for the entity type.
+- `updateEntityType(actions: Payload[]): Promise<EntityType>[]>` \
+  updates one or more entity types. \<strong>returns: </strong>the updates entity
+  types \`
+  Payload<strong>: </strong>
+  `accepts a single <em>array</em> of <em>objects,</em> each with the following shape: * `entityTypeId`_[string]</em>: the id of the entity type to update. *`schema` _[object]_: the JSON schema for the entity
+  type. \
 
-`updateEntityType(actions: Payload[]): Promise<EntityType>[]>`
-updates one or more entity types.
-returns: the updates entity types
-Payload: accepts a single array of objects, each with the following shape:
-entityTypeId [string]: the id of the entity type to update.
-schema [object]: the JSON schema for the entity type.
+- `deleteEntityType(actions: Payload[]): Promise<boolean[]>` \ deletes
+  one or more entity types. \<strong>returns: </strong>an <em>array</em> of ` boolean` indicating the success of each operation. \`
+  Payload<strong>: </strong>
+  `accepts a single <em>array</em> of <em>objects,</em> each with the following shape: * `entityTypeId` _[string]_: the entity type to delete.
+- `getEntityType(actions: Payload[]): Promise<EntityType[]>` \ retrieve
+  one or more entity types. \<strong>returns: </strong>the retrieved entity types,
+  i.e. <em>objects</em> inside an <em>array</em>. \
+  ` Payload<strong>: </strong>`
+  accepts a single <em>array</em> of <em>objects</em> each with the following shape:
+  - `entityTypeId` _[string]_: the entity type to retrieve.
+- ` aggregateEntityTypes(action: Payload): Promise<AggregationResult>` \ retrieve one or more entity types. \<strong>returns: </strong>an ` AggregationResult` \`
+  Payload<strong>: </strong>
+  `accept an object with a single key, `operation`, which is
+  the [same shape as for aggregating entities](#bookmark=kix.gl0isvkc6k2g).
 
-`deleteEntityType(actions: Payload[]): Promise<boolean[]>`
-deletes one or more entity types.
-returns: an array of boolean indicating the success of each operation.
-Payload: accepts a single array of objects, each with the following shape:
-entityTypeId [string]: the entity type to delete.
-
-`getEntityType(actions: Payload[]): Promise<EntityType[]>`
-retrieve one or more entity types.
-returns: the retrieved entity types, i.e. objects inside an array.
-Payload: accepts a single array of objects each with the following shape:
-entityTypeId [string]: the entity type to retrieve.
-
-`aggregateEntityTypes(action: Payload): Promise<AggregationResult>`
-retrieve one or more entity types.
-returns: an AggregationResult
-Payload: accept an object with a single key, operation, which is the same shape as for aggregating entities.
+<!--
 
 ### Linking entities to other entities
 
@@ -163,76 +224,87 @@ When creating or updating an entity’s data, including its own, blocks will oft
 
 A block may also wish to link one of its properties to a particular entity or aggregation of entities. For example, a table block displaying the Top 10 people sorted by some property of Person, will need a way of encoding this aggregation in its data.
 
-In order to create a reference to a separate entity or entities as the desired value of a particular field, blocks should create a Link, which:
-MUST contain sourceId [string]: the entityId of the source entity
-MUST contain path [string]: the path to the field on the source entity this link is conceptually made on, expressed as a JSON path.
-MUST contain EITHER:
-destinationId [string] - the id of a single entity the link is made to, OR
-aggregate - an aggregation operation which the embedding application should resolve the link to, following the structure of the operation object described above.
+In order to create a reference to a separate entity or entities as the desired value of a particular field, blocks should create a* `Link`*, which:
 
-Once created, a Link includes a linkId.
+- MUST contain `sourceId` [_string_]: the `entityId` of the source entity
+- MUST contain `path` [_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
+- MUST contain EITHER:
+  - `destinationId` [_string_] - the id of a single entity the link is made to, OR
+  - `aggregate` - an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#bookmark=kix.gl0isvkc6k2g).
 
-E.g.1. creating a Link with the following data indicates that this particular user should be linked to a company with id company1, and that the link conceptually is made on the user’s employer field - although when delivering data to blocks the resolved data for entity company1 will be provided alongside the user to the block, in the linkedEntities array, rather than injected into the properties of the user, and the link itself available in the links array provided to the block.
+Once created, a `Link` includes a `linkId`.
 
-```json
+E.g.1. creating a `Link` with the following data indicates that this particular user should be linked to a company with id `company1`, and that the link conceptually is made on the user’s `employer` field - although when delivering data to blocks the resolved data for entity `company1` will be provided _alongside_ the user to the block, in the `linkedEntities` array, rather than injected into the properties of the user, and the link itself available in the `links` array provided to the block.
+
+```
 {
-  "sourceId": "user1",
-  "destinationId": "company1",
-  "path": "employer"
+  sourceId: "user1",
+  destinationId: "company1",
+  path: "employer"
 }
 ```
 
-E.g.2. creating a Link with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s rows field - although when delivering the data this data would be provided alongside the table, in the linkedAggregations array
+E.g.2. creating a `Link` with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field - although when delivering the data this data would be provided _alongside_ the table, in the `linkedAggregations` array
 
-```json
+```
 {
-  "sourceId": "table1",
-  "path": "rows",
-  "aggregate": {
-    "entityTypeId": "sales",
-    "sorts": [{ "field": "value", "desc": true }],
-    "itemsPerPage": 10,
-    "pageNumber": 1
+  sourceId: "table1",
+  path: "rows",
+  aggregate: {
+    entityTypeId: "sales",
+    sorts: [{ field: "value", "desc": true }],
+    itemsPerPage: 10,
+    pageNumber: 1
   }
 }
 ```
 
-An entry in linkedAggregations follows the shape of the AggregationResult object, with the addition of a link field containing the link which generated it (to allow identifying which entity and path the result ‘belongs’ to, where it might otherwise be ambiguous).
+An entry in linkedAggregations follows the shape of the [AggregationResult object](#bookmark=kix.y1d50rtfn9b1), with the addition of a `link` field containing the link which generated it (to allow identifying which entity and path the result ‘belongs’ to, where it might otherwise be ambiguous).
 
 To create, update and delete links between entities, blocks should expect the following functions to be made available to them:
 
-`createLink(actions: Link[]): Promise<Link>[]>`
-creates one or more links.
-returns: the created links, i.e. objects inside an array (now with linkId)
+- `
+    createLink(actions: [Link](#bookmark=kix.7d8szcnmhdcq)[]):
+    Promise<Link>[]>
+  ` \ creates one or more links. \<strong>returns: </strong>the created links,
+  i.e. <em>objects</em> inside an <em>array</em> (now with `linkId`)
+- `updateLink(actions: Payload[]): Promise<Link>[]>` \ updates one
+  or more links. \<strong>returns: </strong>the updated links, i.e. <em>
+    objects
+  </em> inside an <em>array</em> \`
+    Payload<strong>: </strong>
+  `accepts a single <em>array</em> of <em>objects,</em> each with the following
+  shape: * `linkId` _[string]</em>: the id of the link to update. * `
+    data
+  ` _[object]_: the `[Link](#bookmark=kix.7d8szcnmhdcq)` to
+  overwrite the existing one with. \
 
-`updateLink(actions: Payload[]): Promise<Link>[]>`
-updates one or more links.
-returns: the updated links, i.e. objects inside an array
-Payload: accepts a single array of objects, each with the following shape:
-linkId [string]: the id of the link to update.
-data [object]: the Link to overwrite the existing one with.
+- `deleteLink(actions: Payload[]): Promise<boolean[]>` \ deletes one
+  or more links. \<strong>returns: </strong>an <em>array</em> of `
+    boolean
+  ` indicating the success of each operation. \`
+    Payload<strong>: </strong>
+  `accepts a single <em>array</em> of <em>objects,</em> each with the following
+  shape: * `linkId` _[string]_: the entity type to delete.
+- `getLink(actions: Payload[]): Promise<Link[]>` \ retrieve one or
+  more links. \<strong>returns: </strong>the retrieved links, i.e. <em>
+    objects
+  </em> inside an <em>array</em>. \
+  `
+    Payload<strong>: </strong>
+  `
+  accepts a single <em>array</em> of <em>objects</em> each with the following shape:
+  * `linkId` _[string]_: the link to retrieve.
 
-`deleteLink(actions: Payload[]): Promise<boolean[]>`
-deletes one or more links.
-returns: an array of boolean indicating the success of each operation.
-Payload: accepts a single array of objects, each with the following shape:
-linkId [string]: the entity type to delete.
+<strong>Describing links in JSON schema</strong>
 
-`getLink(actions: Payload[]): Promise<Link[]>`
-retrieve one or more links.
-returns: the retrieved links, i.e. objects inside an array.
-Payload: accepts a single array of objects each with the following shape:
-linkId [string]: the link to retrieve.
+Where blocks wish to express in their schema - or in the schema of any other entity type - that the value of a field should be a link to another entity, they can use the JSON schema [$ref](https://json-schema.org/understanding-json-schema/structuring.html#ref) keyword when describing the accepted types for the field. The value of the $ref should be the value of $id in the JSON schema for the target type.
 
-#### Describing links in JSON schema
+Where blocks wish to express that a property in a schema is the _inverse of_ another property, they can use an `inverseOf` keyword with a $ref pointing to the relevant schema and property.
 
-Where blocks wish to express in their schema - or in the schema of any other entity type - that the value of a field should be a link to another entity, they can use the JSON schema $ref keyword when describing the accepted types for the field. The value of the $ref should be the value of $id in the JSON schema for the target type.
+E.g. to express that a company’s `employees` field is the inverse of users’ `employer` field:
 
-Where blocks wish to express that a property in a schema is the inverse of another property, they can use an inverseOf keyword with a $ref pointing to the relevant schema and property.
-
-E.g. to express that a company’s employees field is the inverse of users’ employer field:
-
-```json
+```
 {
   "$id": "https://example.com/schemas/company",
   "type": "object",
@@ -240,31 +312,32 @@ E.g. to express that a company’s employees field is the inverse of users’ em
     "employees": {
       "type": "array",
       "items": {
-        "type": { "$ref": "https://example.com/schemas/user" }
+        "type": { "$ref": "https://example.com/schemas/user" },
       },
       "inverseOf": {
         "$ref": "https://example.com/schemas/user#/properties/employer"
-      }
+       }
     }
   }
 }
 ```
 
-Embedding applications can use these inverseOf declarations to resolve inverse links without blocks needing to create them in both directions.
+\
+Embedding applications can use these `inverseOf` declarations to resolve inverse links without blocks needing to create them in both directions.
 
-#### Limiting linked data returned
+**Limiting linked data returned**
 
-When requesting entity data via a block protocol function, blocks MAY include a depth field which will specify how many levels of linked entity data to resolve, to avoid expensive queries that pull in unneeded data from an extensive entity graph. For example, a depth of 2 on a Person would resolve their linked Employer, and their Employer’s linked Location, but no further. A depth of 0 would resolve no links to other entities.
+When requesting entity data via a block protocol function, blocks MAY include a `depth` field which will specify how many levels of linked entity data to resolve, to avoid expensive queries that pull in unneeded data from an extensive entity graph. For example, a depth of 2 on a Person would resolve their linked Employer, and their Employer’s linked Location, but no further. A depth of 0 would resolve no links to other entities.
 
-### Putting it all together - the data gets sent to blocks
+#### **Putting it all together - the data gets sent to blocks**
 
 A block can expect the following fields to be made available to it, whether passed in as props or via another method appropriate to their rendering strategy:
 
-```txt
+```
 // data representing the block entity itself
 entityId
 entityTypeId
-// ...plus any keys declared in the block’s schema
+// ...plus any keys declared in the block's schema
 
 // data representing entities linked from the block and onwards
 linkedEntities
@@ -288,46 +361,103 @@ deleteLink
 getLink
 ```
 
-### Working with third-party data stores
+#### **Working with third-party data stores**
 
-Where blocks interact with third-party data stores, i.e. they send data for storage outside the embedding application, they SHOULD where possible keep the entity data in the embedding application in sync, for example by:
-creating entities via the functions described above at the same time as creating records in other data stores
-reflecting any changes to entities provided by the embedding application if the user takes action to edit them in the block UI, by updating entities via the functions described above
+Where blocks interact with third-party data stores, i.e. they send data for storage _outside_ the embedding application, they SHOULD where possible keep the entity data in the embedding application in sync, for example by:
 
-Where changes to relevant entity data can occur in both the embedding application and the third-party data store even when the block is not being used, additional synchronization outside the block will be required to ensure consistent user data.
+- creating entities via the functions described above at the same time as creating records in other data stores
+- reflecting any changes to entities provided by the embedding application if the user takes action to edit them in the block UI, by updating entities via the functions described above \
 
-## Tracking user action
+Where changes to relevant entity data can occur in both the embedding application and the third-party data store _even when the block is not being used_, additional synchronization outside the block will be required to ensure consistent user data.
+
+### Tracking user action
 
 🤔
+
 We are considering options for blocks reporting on user actions within them, both to allow the embedding application to track activity, and to be able to indicate user focus to other users where the application implements collaborative/multiplayer editing.
 
+\
 Potential options include:
 
-- passing a reportUserAction function to blocks, to report on keypresses, drags, etc.
-- passing a usersFocus property to blocks containing an array of focus objects, each indicating where different users are focused, to allow the block to render indicators.
+- passing a `reportUserAction` function to blocks, to report on keypresses, drags, etc.
+
+- passing a `usersFocus` property to blocks containing an array of focus objects, each indicating where different users are focused, to allow the block to render indicators.
+
 - handling tracking user focus and rendering focus indicators outside of blocks.
 
 Tracking user actions will also be important for a page-level action history/stack, e.g. for undos.
 
-## Edit history
+### \
+
+Edit history
 
 🤔
+
 While embedding applications can handle displaying an interface for reloading blocks at particular earlier versions, we will specify a way of communicating to blocks that (a) an earlier version is being displayed, and (b) the difference with the current version would allow blocks to implement visual diffs and so on.
 
-## Comments
+### \
+
+Comments
 
 🤔
+
 We want to facilitate users leaving comments on elements within blocks.
 
 This could be
 
 - managed entirely outside the block, e.g. by a wrapper around the block which provides a context menu to users for adding comments on blocks - which avoids blocks having to have any knowledge of commenting, but could interfere with how the block wants to respond to user input,or
+
 - managed by providing functions to blocks to trigger a comment attached to specific elements in blocks - which allows blocks to have control over how and to what element the user is able to attach comments, but means that blocks have to implement ‘offer comment option’ behavior.
 
-## Styling
+### Styling
 
 Blocks SHOULD provide at least basic visual styling to allow them to be embedded and used without modification by any web application.
 
-Blocks SHOULD use the CSS variables listed in Appendix A as property values where appropriate, but SHOULD provide fallback values in case the embedding application does not define them.
+Blocks SHOULD use the CSS variables listed in [Appendix A](#heading=h.m2awopbdcjiw) as property values where appropriate, but SHOULD provide [fallback values](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties#custom_property_fallback_values) in case the embedding application does not define them.
 
-Ideally, the embedding application will also provide a styleVariables object alongside block data, which includes keys with the same names as the CSS variables listed in Appendix A and appropriate values.
+Ideally, the embedding application will also provide a `styleVariables` object alongside block data, which includes keys with the same names as the CSS variables listed in [Appendix A](#heading=h.m2awopbdcjiw) and appropriate values.
+
+5. Embedding application implementation
+
+An embedding application is any app that renders blocks conforming to this protocol, by:
+
+    1. importing the source code for the blocks it wants to display (whether at runtime or compiled along with its own source)
+    2. combining the source with the data properties the block requires (how exactly this works depends on the rendering context)
+    3. rendering the block on a webpage (or other application)
+    4. providing any external dependencies the block requires
+
+The embedding application is responsible for any communication with databases and APIs required to persist and retrieve data rendered by blocks. In order to be portable anywhere, blocks should not need to have any knowledge of the datastore the data they render comes from and is persisted to (other than in cases where blocks are designed to interact with a specific datastore or external service).
+
+### Rendering blocks
+
+To render a block which defines a schema for the data it accepts, embedding applications MUST supply it with any data properties marked as required, SHOULD respect any other constraints expressed in the schema, and MAY supply any further properties expressed in the schema.
+
+Embedding applications SHOULD supply blocks with functions to get, aggregate, create, delete and update entities, entity types, and links between entities (subject to any permissions restrictions). These functions MUST conform to the naming conventions and function signatures outlined in [section 4](https://docs.google.com/document/d/1N3oO8-p5NbQdFo14q7jmPXnuRXgr2FMooyc-almzY1o/edit#heading=h.8ol6yq468pet). Embedding applications SHOULD provide defaults for aggregation operations to handle cases where the block doesn’t specify its own requirements.
+
+To enable blocks to update data of entities, including themselves, embedding applications SHOULD include an `entityId` and `entityTypeId` alongside the data for each entity it supplies the block with (including the `entityId` and `entityTypeId` of the block itself).
+
+To enable blocks to properly validate user input for entities, embedding applications SHOULD include an array of schemas relevant to the data sent to the block under a `entityTypes` property, during instantiation and again any time new entity types are sent.
+
+### Data validation
+
+An embedding application SHOULD be able to read a JSON schema file provided by a block describing the block’s interface, and check that the data provided to the block conform to the schema (e.g. that any validation constraints expressed by the block are respected).
+
+### Styling
+
+Embedding applications SHOULD define, in the global scope, any of the CSS variables listed in [Appendix A](#heading=h.k137zh1oq8qc) which they have a preferred value for, and additionally provide these values via a `styleVariables` object passed to the block alongside other data.
+
+### Security
+
+Naively running third-party code is inherently unsafe. Embedding applications should take suitable precautions to ensure that block code they execute is unable to compromise their systems or their users’ data. Risk mitigation might include various approaches to sandbox block code execution.
+
+Rendering HTML blocks inside iframes or web workers, and transferring data and offering function calls via messages, are obvious mitigations to explore.
+
+In these types of implementations, the embedding application would render a small application inside of an iframe or web worker. This sandbox application would in turn render the block, and provide it with the functions and data it needs. When the block calls a function (e.g. updateEntity), the sandboxing application sends messages with the request and payload to the parent application. Users should then be prompted to permit or deny the sort of action the block is attempting to take, and their preferences saved.
+
+### Making the rendered web page machine-readable
+
+Where an embedding application supplies a block with data corresponding to structured entities, and the web page and that entity data are for public consumption, the embedding application SHOULD [include machine-readable structured data on the page](https://developers.google.com/search/docs/guides/intro-structured-data).
+
+For example, JSON schema definitions for entities may include a `jsonld:context` [key pointing to a mapping between JSON terms and IRIs](https://www.w3.org/2019/wot/json-schema#defining-a-json-ld-context-for-data-instances), which can be used to construct a JSON-LD representation of the entity which embedding applications can embed on the page.
+
+-->

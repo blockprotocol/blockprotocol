@@ -1,5 +1,5 @@
 import slugify from "slugify";
-import { ReactNode } from "react";
+import { HTMLProps, ReactNode } from "react";
 import { TypographyProps, Typography, Box, Paper } from "@mui/material";
 import { Link, LinkProps } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
@@ -56,4 +56,15 @@ export const mdxComponents: Record<string, React.ReactNode> = {
     <Typography mb={2} variant="bpBodyCopy" {...props} />
   ),
   a: (props: LinkProps) => <Link {...props} />,
+  ul: (props: HTMLProps<HTMLUListElement>) => (
+    <ul style={{ margin: 20, listStyle: "unset" }} {...props} />
+  ),
+  inlineCode: (props: HTMLProps<HTMLElement>) => (
+    <code
+      {...props}
+      className="check"
+      // TODO: link to theme
+      style={{ color: "#d18d5b", fontSize: "95%" }}
+    />
+  ),
 };
