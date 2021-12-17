@@ -205,6 +205,12 @@ module.exports = {
       },
     },
     {
+      files: ["site/scripts/**"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+    {
       files: ["**/__mocks__/*", "*.test.ts", "*.test.tsx"],
       env: {
         "jest/globals": true,
