@@ -45,9 +45,9 @@ export const Header = () => {
           >
             A powerful new protocol for developers
           </Typography>
-          <Box
+          <Typography
+            variant="bpHeading1"
             sx={{
-              typography: "bpHeading1",
               lineHeight: 1,
               color: "white",
               mb: 4,
@@ -71,13 +71,14 @@ export const Header = () => {
                     "linear-gradient(90deg, #6B54EF 1.95%, rgba(107, 84, 239, 0) 100%)",
                 },
               }}
+              component="span"
             >
               structured data
             </Box>
-          </Box>
+          </Typography>
           <Typography
             variant="body1"
-            color="purple.300"
+            color={theme.palette.purple[300]}
             mb={4}
             width={{ xs: "100%", md: "74%" }}
             textAlign={{ xs: "center", md: "left" }}

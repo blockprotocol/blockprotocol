@@ -24,7 +24,7 @@ const TodoListBlock = () => {
       sx={{
         width: 290,
         p: 3,
-        backgroundColor: "white",
+        backgroundColor: ({ palette }) => palette.common.white,
         boxShadow: 1,
         borderRadius: 0.75,
       }}

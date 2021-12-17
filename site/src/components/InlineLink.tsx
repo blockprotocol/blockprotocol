@@ -8,7 +8,7 @@ type InlineLinkProps = {
 export const InlineLink: FC<InlineLinkProps> = ({
   children,
   popperInfo,
-  ...remainingProps
+  ...boxProps
 }) => {
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -20,7 +20,7 @@ export const InlineLink: FC<InlineLinkProps> = ({
   }
 
   return (
-    <Box sx={{ display: "inline" }}>
+    <Box {...boxProps} sx={{ display: "inline", ...boxProps.sx }}>
       <Box
         onMouseOver={() => setOpen(true)}
         onMouseLeave={(error) => {
@@ -59,7 +59,6 @@ export const InlineLink: FC<InlineLinkProps> = ({
             },
           },
         }}
-        {...remainingProps}
       >
         {children}
       </Box>
