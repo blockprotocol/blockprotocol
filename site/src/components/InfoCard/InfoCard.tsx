@@ -1,11 +1,21 @@
-import { VFC, ReactNode } from "react";
+import {
+  VoidFunctionComponent,
+  ReactNode,
+  isValidElement,
+  Children,
+  ReactElement,
+  ReactFragment,
+  ReactPortal,
+} from "react";
 import { Paper, PaperProps, Typography } from "@mui/material";
 
 export type InfoCardVariant = "info" | "warning";
 
+type PaperVariant = "purple" | "teal";
+
 const mapInfoCardVariantToPaperVariant = (
   infoCardVariant: InfoCardVariant,
-): "purple" | "teal" => {
+): PaperVariant => {
   if (infoCardVariant === "warning") {
     return "purple";
   }
@@ -15,17 +25,35 @@ const mapInfoCardVariantToPaperVariant = (
 type InfoCardProps = {
   variant?: "info" | "warning";
   title: ReactNode;
-  content: ReactNode;
+  children?: ReactNode;
   sx?: PaperProps["sx"];
 };
 
-export const InfoCard: VFC<InfoCardProps> = ({
+export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
   variant = "info",
   title,
-  content,
+  children,
   sx,
 }) => {
   const paperVariant = mapInfoCardVariantToPaperVariant(variant);
+
+  const ensureChildIsWrappedInTypography = (
+    child: ReactElement | ReactFragment | ReactPortal,
+  ) => {
+    return (
+      <Typography
+        sx={{
+          marginTop: 1,
+          color: ({ palette }) => palette[paperVariant][600],
+          fontSize: 15,
+          lineHeight: 1.75,
+        }}
+      >
+        {isValidElement(child) ? child.props.children : child}
+      </Typography>
+    );
+  };
+
   return (
     <Paper
       variant={paperVariant}
@@ -45,19 +73,10 @@ export const InfoCard: VFC<InfoCardProps> = ({
           color: ({ palette }) => palette[paperVariant][600],
           fontSize: 15,
         }}
-        marginBottom={1}
       >
         {title}
       </Typography>
-      <Typography
-        sx={{
-          color: ({ palette }) => palette[paperVariant][600],
-          fontSize: 15,
-          lineHeight: 1.75,
-        }}
-      >
-        {content}
-      </Typography>
+      {Children.toArray(children).map(ensureChildIsWrappedInTypography)}
     </Paper>
   );
 };
