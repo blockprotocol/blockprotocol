@@ -27,7 +27,7 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
         backgroundSize: "100% 100%",
       }}
     >
-      <Container sx={{ padding: { xs: 0, sm: 16, md: 32 } }}>
+      <Container sx={{ padding: { xs: 0, sm: 16, md: 4 } }}>
         <Box
           sx={{
             mb: 10,
