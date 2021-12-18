@@ -12,7 +12,7 @@ A block package MUST contain:
 
 A block package SHOULD contain:
 
-- a JSON file **describing the properties the block accepts** using [JSON Schema vocabulary](https://json-schema.org/) - the ‘block schema’, which can be [automatically generated](https://json-schema.org/implementations.html#from-code) from block code, and which:
+- a JSON file **describing the properties the block accepts** using [JSON Schema vocabulary](https://json-schema.org/) – the ‘block schema’, which can be [automatically generated](https://json-schema.org/implementations.html#from-code) from block code, and which:
 
   - MUST be called `block-schema.json`
   - MUST specify a [required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3) array naming any properties the block will not render or function without
@@ -32,9 +32,9 @@ A block package SHOULD contain:
 
   - SHOULD specify:
 
-    - `default` - an object, conforming to the block’s schema, representing
+    - `default` – an object, conforming to the block’s schema, representing
       the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) `variants` is provided (see below).
-    - `icon` - an icon for the block, to be displayed when the user is
+    - `icon` – an icon for the block, to be displayed when the user is
       selecting from available blocks (as well as elsewhere as appropriate, e.g.
       in a website listing the block)
     - `author`
@@ -43,8 +43,8 @@ A block package SHOULD contain:
 
   - MAY specify:
 
-    - `variants` - an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants called ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as properties, respectively.
-    - `image` - a preview image of the block for users to see it in action
+    - `variants` – an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants called ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as properties, respectively.
+    - `image` – a preview image of the block for users to see it in action
       before using it
 
 ## Requesting, creating, and updating data
@@ -100,7 +100,7 @@ creates one or more entities
 - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
 - `links?`: \[_object_]\[_optional_]: any links to create along with this entity.
   See [linking entities](#linking-entitites).
-- `selection?` [_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
+- `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entitites).
 
@@ -224,7 +224,7 @@ updates one or more entity types.
 
 `Payload`: accepts a single _array_ of _objects,_ each with the following shape:
 
-- `entityTypeId`\[_string_]: the id of the entity type to update.
+- `entityTypeId` \[_string_]: the id of the entity type to update.
 - `schema` \[_object_]: the JSON schema for the entity type.
 
 ```block-method
@@ -246,6 +246,7 @@ getEntityType(actions: Payload[]): Promise<EntityType[]>
 retrieves one or more entity types.
 
 **returns:** the retrieved entity types, i.e. _objects_ inside an _array_.
+
 `Payload`: accepts a single _array_ of _objects_ each with the following shape:
 
 - `entityTypeId` \[_string_]: the entity type to retrieve.
@@ -276,8 +277,8 @@ In order to create a reference to a separate entity or entities as the desired v
 - MUST contain `sourceId` \[_string_]: the `entityId` of the source entity
 - MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
 - MUST contain EITHER:
-  - `destinationId` \[_string_] - the id of a single entity the link is made to, OR
-  - `aggregate` - an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entity-operation).
+  - `destinationId` \[_string_] – the id of a single entity the link is made to, OR
+  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entity-operation).
 
 Once created, a `Link` includes a `linkId`.
 
@@ -291,7 +292,7 @@ Once created, a `Link` includes a `linkId`.
 }
 ```
 
-**E.g.2.** creating a `Link` with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field - although when delivering the data this data would be provided _alongside_ the table, in the `linkedAggregations` array
+**E.g.2.** creating a `Link` with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field – although when delivering the data this data would be provided _alongside_ the table, in the `linkedAggregations` array
 
 ```json
 {
@@ -390,15 +391,15 @@ When requesting entity data via a block protocol function, blocks MAY include a 
 For example, a depth of 2 on a Person would resolve their linked Employer, and their Employer’s linked Location, but no further.
 A depth of 0 would resolve no links to other entities.
 
-### Putting it all together - the data gets sent to blocks
+### Putting it all together – the data gets sent to blocks
 
 A block can expect the following fields to be made available to it, whether passed in as props or via another method appropriate to their rendering strategy:
 
-```json
+```json5
 // data representing the block entity itself
 entityId
 entityTypeId
-// ...plus any keys declared in the block's schema
+// ...plus any keys declared in the block’s schema
 
 // data representing entities linked from the block and onwards
 linkedEntities
@@ -466,9 +467,9 @@ We want to facilitate users leaving comments on elements within blocks.
 
 This could be
 
-- managed entirely outside the block, e.g. by a wrapper around the block which provides a context menu to users for adding comments on blocks - which avoids blocks having to have any knowledge of commenting, but could interfere with how the block wants to respond to user input,or
+- managed entirely outside the block, e.g. by a wrapper around the block which provides a context menu to users for adding comments on blocks – which avoids blocks having to have any knowledge of commenting, but could interfere with how the block wants to respond to user input,or
 
-- managed by providing functions to blocks to trigger a comment attached to specific elements in blocks - which allows blocks to have control over how and to what element the user is able to attach comments, but means that blocks have to implement ‘offer comment option’ behavior.
+- managed by providing functions to blocks to trigger a comment attached to specific elements in blocks – which allows blocks to have control over how and to what element the user is able to attach comments, but means that blocks have to implement ‘offer comment option’ behavior.
 
 </Frame>
 
