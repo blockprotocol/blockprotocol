@@ -304,13 +304,17 @@ An entry in linkedAggregations follows the shape of the [AggregationResult objec
 
 To create, update and delete links between entities, blocks should expect the following functions to be made available to them:
 
-##### `createLink(actions: Link[]): Promise<Link>[]>`
+```block-method
+createLink(actions: Link[]): Promise<Link>[]>
+```
 
 creates one or more links.
 
 **returns:** the created links, i.e. _objects_ inside an _array_ (now with `linkId`)
 
-##### `updateLink(actions: Payload[]): Promise<Link>[]>`
+```block-method
+updateLink(actions: Payload[]): Promise<Link>[]>
+```
 
 updates one or more links.
 
@@ -321,7 +325,9 @@ updates one or more links.
 - `linkId` \[_string_]: the id of the link to update.
 - `data` \[_object_]: the [`Link`](#bookmark=kix.7d8szcnmhdcq) to overwrite the existing one with.
 
-##### `deleteLink(actions: Payload[]): Promise<boolean[]>`
+```block-method
+deleteLink(actions: Payload[]): Promise<boolean[]>
+```
 
 deletes one or more links.
 
@@ -331,7 +337,9 @@ deletes one or more links.
 
 - `linkId` \[_string_]: the entity type to delete.
 
-##### `getLink(actions: Payload[]): Promise<Link[]>`
+```block-method
+getLink(actions: Payload[]): Promise<Link[]>
+```
 
 retrieve one or more links.
 
