@@ -1,5 +1,5 @@
 import slugify from "slugify";
-import { HTMLProps, ReactNode } from "react";
+import { HTMLAttributes, HTMLProps, ReactNode } from "react";
 import { TypographyProps, Typography, Box, Paper } from "@mui/material";
 import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
@@ -22,20 +22,6 @@ export const mdxComponents: Record<string, React.ReactNode> = {
   Typography,
   InfoCardWrapper,
   InfoCard,
-  SomethingToThinkAbout: ({ children }: { children: ReactNode }) => {
-    return (
-      <div
-        style={{
-          border: "1px solid black",
-          margin: "10px -15px",
-          padding: "0 15px",
-        }}
-      >
-        <div style={{ fontSize: "3em", textAlign: "center" }}>🤔</div>
-        {children}
-      </div>
-    );
-  },
   h1: (props: TypographyProps) => {
     return (
       <Link href="#">
@@ -79,17 +65,37 @@ export const mdxComponents: Record<string, React.ReactNode> = {
       <a id={props.id} />
     );
   },
-  ul: (props: HTMLProps<HTMLUListElement>) => (
+
+  // TODO: Improve style & implementation of below components
+
+  SomethingToThinkAbout: ({ children }: { children: ReactNode }) => {
+    return (
+      <div
+        style={{
+          border: "1px solid black",
+          margin: "10px -15px",
+          padding: "0 15px",
+        }}
+      >
+        <div style={{ fontSize: "3em", textAlign: "center" }}>🤔</div>
+        {children}
+      </div>
+    );
+  },
+  ol: (props: HTMLAttributes<HTMLOListElement>) => (
+    <ol style={{ margin: 20, listStyle: "auto" }} {...props} />
+  ),
+  ul: (props: HTMLAttributes<HTMLUListElement>) => (
     <ul style={{ margin: 20, listStyle: "unset" }} {...props} />
   ),
-  inlineCode: (props: HTMLProps<HTMLElement>) => (
+  inlineCode: (props: HTMLAttributes<HTMLElement>) => (
     <code
       {...props}
       // TODO: link to theme
       style={{ color: "#d18d5b", fontSize: "95%" }}
     />
   ),
-  code: (props: HTMLProps<HTMLElement>) => {
+  code: (props: HTMLAttributes<HTMLElement>) => {
     const isLanguageBlockMethod = props.className === "language-block-method";
     if (isLanguageBlockMethod) {
       const anchor = `${props.children}`.match(/^[\w]+/)?.[0] ?? "";

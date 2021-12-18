@@ -155,7 +155,7 @@ aggregateEntity(action: Payload): Promise<AggregationResult>
 
 retrieve a subset of entities of a given type
 
-**returns:** an `AggregationResult` object
+**returns:** <a id="aggregation-result-object" /> an `AggregationResult` object
 
 - `pageNumber` \[_integer_]: the page number returned.
 - `itemsPerPage` \[_integer_]: the number of results per page, i.e. returned.
@@ -174,7 +174,7 @@ following shape
 
 - `entityTypeId` \[_object_]: the type of entity to provide aggregated data for
 - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
-- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved. See [linking entities](#heading=h.fka5rrv4b39u).
+- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved. See [linking entities](#linking-entities-to-other-entities).
 - `operation?` <a id="aggregate-entity-operation" /> \[_object_]\[_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
 - `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
 - `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
@@ -187,7 +187,7 @@ following shape
     - `desc?` \[_boolean_]\[_optional_]: whether to sort descending.
 - Embedding apps will provide a default aggregation if not provided.
 
-The functions defined above return entity data, but block authors should note that in many [implementations](#heading=h.l3qc1ds29wu3) the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
+The functions defined above return entity data, but block authors should note that in many [implementations](/spec/embedding-application-implementation) the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
 
 ### Functions for working with entity types
 
@@ -265,7 +265,7 @@ For example, that a Person’s employer field should point to a particular Compa
 A block may also wish to link one of its properties to a particular entity or aggregation of entities.
 For example, a table block displaying the Top 10 people sorted by some property of Person, will need a way of encoding this aggregation in its data.
 
-In order to create a reference to a separate entity or entities as the desired value of a particular field, blocks should create a `Link`, which:
+In order to create a reference to a separate entity or entities as the desired value of a particular field, blocks should create a `Link` <a id="link-object" />, which:
 
 - MUST contain `sourceId` \[_string_]: the `entityId` of the source entity
 - MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
@@ -300,7 +300,7 @@ Once created, a `Link` includes a `linkId`.
 }
 ```
 
-An entry in linkedAggregations follows the shape of the [AggregationResult object](#bookmark=kix.y1d50rtfn9b1), with the addition of a `link` field containing the link which generated it (to allow identifying which entity and path the result ‘belongs’ to, where it might otherwise be ambiguous).
+An entry in linkedAggregations follows the shape of the [`AggregationResult` object](#aggregation-result-object), with the addition of a `link` field containing the link which generated it (to allow identifying which entity and path the result ‘belongs’ to, where it might otherwise be ambiguous).
 
 To create, update and delete links between entities, blocks should expect the following functions to be made available to them:
 
@@ -323,7 +323,7 @@ updates one or more links.
 `Payload`: accepts a single _array_ of _objects_, each with the following shape:
 
 - `linkId` \[_string_]: the id of the link to update.
-- `data` \[_object_]: the [`Link`](#bookmark=kix.7d8szcnmhdcq) to overwrite the existing one with.
+- `data` \[_object_]: the [`Link`](#link-object) to overwrite the existing one with.
 
 ```block-method
 deleteLink(actions: Payload[]): Promise<boolean[]>
@@ -471,50 +471,3 @@ Blocks SHOULD provide at least basic visual styling to allow them to be embedded
 Blocks SHOULD use the CSS variables listed in [Appendix A](/spec/appendix-a-block-protocol-css-variables) as property values where appropriate, but SHOULD provide [fallback values](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties#custom_property_fallback_values) in case the embedding application does not define them.
 
 Ideally, the embedding application will also provide a `styleVariables` object alongside block data, which includes keys with the same names as the CSS variables listed in [Appendix A](/spec/appendix-a-block-protocol-css-variables) and appropriate values.
-
-<!--
-
-5. Embedding application implementation
-
-An embedding application is any app that renders blocks conforming to this protocol, by:
-
-1.  importing the source code for the blocks it wants to display (whether at runtime or compiled along with its own source)
-1.  combining the source with the data properties the block requires (how exactly this works depends on the rendering context)
-1.  rendering the block on a webpage (or other application)
-1.  providing any external dependencies the block requires
-
-The embedding application is responsible for any communication with databases and APIs required to persist and retrieve data rendered by blocks. In order to be portable anywhere, blocks should not need to have any knowledge of the datastore the data they render comes from and is persisted to (other than in cases where blocks are designed to interact with a specific datastore or external service).
-
-### Rendering blocks
-
-To render a block which defines a schema for the data it accepts, embedding applications MUST supply it with any data properties marked as required, SHOULD respect any other constraints expressed in the schema, and MAY supply any further properties expressed in the schema.
-
-Embedding applications SHOULD supply blocks with functions to get, aggregate, create, delete and update entities, entity types, and links between entities (subject to any permissions restrictions). These functions MUST conform to the naming conventions and function signatures outlined in [section 4](https://docs.google.com/document/d/1N3oO8-p5NbQdFo14q7jmPXnuRXgr2FMooyc-almzY1o/edit#heading=h.8ol6yq468pet). Embedding applications SHOULD provide defaults for aggregation operations to handle cases where the block doesn’t specify its own requirements.
-
-To enable blocks to update data of entities, including themselves, embedding applications SHOULD include an `entityId` and `entityTypeId` alongside the data for each entity it supplies the block with (including the `entityId` and `entityTypeId` of the block itself).
-
-To enable blocks to properly validate user input for entities, embedding applications SHOULD include an array of schemas relevant to the data sent to the block under a `entityTypes` property, during instantiation and again any time new entity types are sent.
-
-### Data validation
-
-An embedding application SHOULD be able to read a JSON schema file provided by a block describing the block’s interface, and check that the data provided to the block conform to the schema (e.g. that any validation constraints expressed by the block are respected).
-
-### Styling
-
-Embedding applications SHOULD define, in the global scope, any of the CSS variables listed in [Appendix A](#heading=h.k137zh1oq8qc) which they have a preferred value for, and additionally provide these values via a `styleVariables` object passed to the block alongside other data.
-
-### Security
-
-Naively running third-party code is inherently unsafe. Embedding applications should take suitable precautions to ensure that block code they execute is unable to compromise their systems or their users’ data. Risk mitigation might include various approaches to sandbox block code execution.
-
-Rendering HTML blocks inside iframes or web workers, and transferring data and offering function calls via messages, are obvious mitigations to explore.
-
-In these types of implementations, the embedding application would render a small application inside of an iframe or web worker. This sandbox application would in turn render the block, and provide it with the functions and data it needs. When the block calls a function (e.g. updateEntity), the sandboxing application sends messages with the request and payload to the parent application. Users should then be prompted to permit or deny the sort of action the block is attempting to take, and their preferences saved.
-
-### Making the rendered web page machine-readable
-
-Where an embedding application supplies a block with data corresponding to structured entities, and the web page and that entity data are for public consumption, the embedding application SHOULD [include machine-readable structured data on the page](https://developers.google.com/search/docs/guides/intro-structured-data).
-
-For example, JSON schema definitions for entities may include a `jsonld:context` [key pointing to a mapping between JSON terms and IRIs](https://www.w3.org/2019/wot/json-schema#defining-a-json-ld-context-for-data-instances), which can be used to construct a JSON-LD representation of the entity which embedding applications can embed on the page.
-
--->

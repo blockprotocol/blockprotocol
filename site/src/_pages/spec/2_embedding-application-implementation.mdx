@@ -2,22 +2,25 @@
 
 An embedding application is any app that renders blocks conforming to this protocol, by:
 
-a. importing the source code for the blocks it wants to display (whether at runtime or compiled along with its own source)
-b. combining the source with the data properties the block requires (how exactly this works depends on the rendering context)
-c. rendering the block on a webpage (or other application)
-d. providing any external dependencies the block requires
+1.  importing the source code for the blocks it wants to display (whether at runtime or compiled along with its own source)
+1.  combining the source with the data properties the block requires (how exactly this works depends on the rendering context)
+1.  rendering the block on a webpage (or other application)
+1.  providing any external dependencies the block requires
 
-The embedding application is responsible for any communication with databases and APIs required to persist and retrieve data rendered by blocks. In order to be portable anywhere, blocks should not need to have any knowledge of the datastore the data they render comes from and is persisted to (other than in cases where blocks are designed to interact with a specific datastore or external service).
+The embedding application is responsible for any communication with databases and APIs required to persist and retrieve data rendered by blocks.
+In order to be portable anywhere, blocks should not need to have any knowledge of the datastore the data they render comes from and is persisted to (other than in cases where blocks are designed to interact with a specific datastore or external service).
 
 ## Rendering blocks
 
 To render a block which defines a schema for the data it accepts, embedding applications MUST supply it with any data properties marked as required, SHOULD respect any other constraints expressed in the schema, and MAY supply any further properties expressed in the schema.
 
-Embedding applications SHOULD supply blocks with functions to get, aggregate, create, delete and update entities, entity types, and links between entities (subject to any permissions restrictions). These functions MUST conform to the naming conventions and function signatures outlined in section 4. Embedding applications SHOULD provide defaults for aggregation operations to handle cases where the block doesn’t specify its own requirements.
+Embedding applications SHOULD supply blocks with functions to get, aggregate, create, delete and update entities, entity types, and links between entities (subject to any permissions restrictions).
+These functions MUST conform to the naming conventions and function signatures outlined in [the previous section](/spec/embedding-application-implementation).
+Embedding applications SHOULD provide defaults for aggregation operations to handle cases where the block doesn’t specify its own requirements.
 
-To enable blocks to update data of entities, including themselves, embedding applications SHOULD include an entityId and entityTypeId alongside the data for each entity it supplies the block with (including the entityId and entityTypeId of the block itself).
+To enable blocks to update data of entities, including themselves, embedding applications SHOULD include an `entityId` and `entityTypeId` alongside the data for each entity it supplies the block with (including the `entityId` and `entityTypeId` of the block itself).
 
-To enable blocks to properly validate user input for entities, embedding applications SHOULD include an array of schemas relevant to the data sent to the block under a entityTypes property, during instantiation and again any time new entity types are sent.
+To enable blocks to properly validate user input for entities, embedding applications SHOULD include an array of schemas relevant to the data sent to the block under a `entityTypes` property, during instantiation and again any time new entity types are sent.
 
 ## Data validation
 
@@ -25,18 +28,23 @@ An embedding application SHOULD be able to read a JSON schema file provided by a
 
 ## Styling
 
-Embedding applications SHOULD define, in the global scope, any of the CSS variables listed in Appendix A which they have a preferred value for, and additionally provide these values via a styleVariables object passed to the block alongside other data.
+Embedding applications SHOULD define, in the global scope, any of the CSS variables listed in [Appendix A](/spec/appendix-a-block-protocol-css-variables) which they have a preferred value for, and additionally provide these values via a `styleVariables` object passed to the block alongside other data.
 
 ## Security
 
-Naively running third-party code is inherently unsafe. Embedding applications should take suitable precautions to ensure that block code they execute is unable to compromise their systems or their users’ data. Risk mitigation might include various approaches to sandbox block code execution.
+Naively running third-party code is inherently unsafe.
+Embedding applications should take suitable precautions to ensure that block code they execute is unable to compromise their systems or their users’ data.
+Risk mitigation might include various approaches to sandbox block code execution.
 
 Rendering HTML blocks inside iframes or web workers, and transferring data and offering function calls via messages, are obvious mitigations to explore.
 
-In these types of implementations, the embedding application would render a small application inside of an iframe or web worker. This sandbox application would in turn render the block, and provide it with the functions and data it needs. When the block calls a function (e.g. updateEntity), the sandboxing application sends messages with the request and payload to the parent application. Users should then be prompted to permit or deny the sort of action the block is attempting to take, and their preferences saved.
+In these types of implementations, the embedding application would render a small application inside of an iframe or web worker.
+This sandbox application would in turn render the block, and provide it with the functions and data it needs.
+When the block calls a function (e.g. updateEntity), the sandboxing application sends messages with the request and payload to the parent application.
+Users should then be prompted to permit or deny the sort of action the block is attempting to take, and their preferences saved.
 
 ## Making the rendered web page machine-readable
 
-Where an embedding application supplies a block with data corresponding to structured entities, and the web page and that entity data are for public consumption, the embedding application SHOULD include machine-readable structured data on the page.
+Where an embedding application supplies a block with data corresponding to structured entities, and the web page and that entity data are for public consumption, the embedding application SHOULD [include machine-readable structured data on the page](https://developers.google.com/search/docs/guides/intro-structured-data).
 
-For example, JSON schema definitions for entities may include a jsonld:context key pointing to a mapping between JSON terms and IRIs, which can be used to construct a JSON-LD representation of the entity which embedding applications can embed on the page.
+For example, JSON schema definitions for entities may include a `jsonld:context` [key pointing to a mapping between JSON terms and IRIs](https://www.w3.org/2019/wot/json-schema#defining-a-json-ld-context-for-data-instances), which can be used to construct a JSON-LD representation of the entity which embedding applications can embed on the page.
