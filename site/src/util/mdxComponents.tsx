@@ -1,7 +1,7 @@
 import slugify from "slugify";
 import { HTMLProps, ReactNode } from "react";
 import { TypographyProps, Typography, Box, Paper } from "@mui/material";
-import { Link, LinkProps } from "../components/Link";
+import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 
@@ -22,6 +22,20 @@ export const mdxComponents: Record<string, React.ReactNode> = {
   Typography,
   InfoCardWrapper,
   InfoCard,
+  SomethingToThinkAbout: ({ children }: { children: ReactNode }) => {
+    return (
+      <div
+        style={{
+          border: "1px solid black",
+          margin: "10px -15px",
+          padding: "0 15px",
+        }}
+      >
+        <div style={{ fontSize: "3em", textAlign: "center" }}>🤔</div>
+        {children}
+      </div>
+    );
+  },
   h1: (props: TypographyProps) => {
     return (
       <Link href="#">
@@ -55,16 +69,49 @@ export const mdxComponents: Record<string, React.ReactNode> = {
   p: (props: TypographyProps) => (
     <Typography mb={2} variant="bpBodyCopy" {...props} />
   ),
-  a: (props: LinkProps) => <Link {...props} />,
+  a: (props: HTMLProps<HTMLAnchorElement>) => {
+    const { href, ref, ...rest } = props;
+    void ref;
+    return href ? (
+      <Link {...rest} href={href} />
+    ) : (
+      // eslint-disable-next-line jsx-a11y/anchor-has-content -- special case for creating bookmarks (for cross-linking)
+      <a id={props.id} />
+    );
+  },
   ul: (props: HTMLProps<HTMLUListElement>) => (
     <ul style={{ margin: 20, listStyle: "unset" }} {...props} />
   ),
   inlineCode: (props: HTMLProps<HTMLElement>) => (
     <code
       {...props}
-      className="check"
       // TODO: link to theme
       style={{ color: "#d18d5b", fontSize: "95%" }}
     />
   ),
+  code: (props: HTMLProps<HTMLElement>) => {
+    const isLanguageBlockMethod = props.className === "language-block-method";
+    if (isLanguageBlockMethod) {
+      const anchor = `${props.children}`.match(/^[\w]+/)?.[0] ?? "";
+      return (
+        <div id={anchor} style={{ fontWeight: "bold", color: "#d18d5b" }}>
+          <Link href={`#${anchor}`}>{props.children}</Link>
+        </div>
+      );
+    }
+
+    return (
+      <code
+        {...props}
+        // TODO: link to theme
+        style={{
+          color: "#d18d5b",
+          fontSize: "95%",
+          display: "block",
+          paddingBottom: 20,
+          textShadow: "none",
+        }}
+      />
+    );
+  },
 };
