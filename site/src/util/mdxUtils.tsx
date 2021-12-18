@@ -3,9 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import { readFileSync, readdirSync } from "fs";
 import unified from "unified";
-/** @todo: figure out how to get or declare the necessary types */
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
+// @ts-expect-error -- Need to figure out how to get or declare the necessary types
 import remarkMdx from "remark-mdx";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import remarkParse from "remark-parse";
