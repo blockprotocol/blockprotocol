@@ -1,6 +1,6 @@
 # blockprotocol.org website
 
-The public-facing blockprotocol.org serves the following endpoints:
+The public-facing [blockprotocol.org](https://blockprotocol.org) serves the following endpoints:
 
 - `/partners` provides a signup form
 - `/gallery` shows the catalog of available blocks

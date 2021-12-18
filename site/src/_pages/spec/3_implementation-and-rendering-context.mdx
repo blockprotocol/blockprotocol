@@ -1,22 +1,26 @@
 # Implementation and rendering context
 
-<InfoCard variant="info" title="A quick note">
+<InfoCard>
 
 This section is guidance which will form part of explanatory material rather than the specification itself.
-It is included in this preliminary document to aid the reader in understanding the full context, but will be published outside the spec in its final form.
+It is included in this preliminary document to aid the reader in understanding the full context, but will be published _outside_ the spec in its final form.
 
 </InfoCard>
 
 ## Ensuring compliance with requirements
 
-When publishing the block protocol, we will provide tooling to help validate block type compliance with the block protocol. We may wish to dictate that blocks meet certain standards before they are made available via the catalog to be hosted on blockprotocol.org.
+When publishing the block protocol, we will provide tooling to help validate block type compliance with the block protocol.
+We may wish to dictate that blocks meet certain standards before they are made available via the catalog to be hosted on [blockprotocol.org](https://blockprotocol.org).
 
 ## Rendering contexts
 
 This protocol specifies an interface between blocks and embedding applications, defining how data is referred to when it is communicated between the two, but leaves open:
-the particular implementation and composition of block source code
-how exactly data is transferred between an application and a block
-how exactly blocks are rendered (and re-rendered) by applications
+
+- the particular implementation and composition of block source code
+
+- how exactly data is transferred between an application and a block
+
+- how exactly blocks are rendered (and re-rendered) by applications
 
 There are various different implementations of embedding applications and blocks which would be compliant with the protocol but not with one another.
 
@@ -27,14 +31,18 @@ Some common web rendering strategies are discussed briefly below.
 ### React
 
 React lends itself well to block authoring and embedding, given its principles of composable, reusable components.
-A block authored in React should express its schema in line with the props of its entrypoint component, e.g. AppProps
-Blocks should be transpiled to ES5-compliant code with a commonjs module target, with the entrypoint source file of the component’s main JavaScript file: this allows embedding applications to render the component function in their main component tree and provide it with the imports it requires (by providing the commonjs requires function).
-Block authors should expect the required properties expressed in their schema passed into the component as props, alongside (possibly) the special block protocol functions, and (possibly) any properties not marked as required.
-Blocks authored in React should specify React as an external library, i.e. do not bundle React with their package, as the embedding application can provide it as described above via a special requires, saving on bundle size.
+
+- A block authored in React should express its schema in line with the props of its entrypoint component, e.g. `AppProps`.
+
+- Blocks should be transpiled to ES5-compliant code with a commonjs module target, with the entrypoint source file of the component’s main JavaScript file: this allows embedding applications to render the component function in their main component tree and provide it with the imports it requires (by providing the commonjs `requires` function).
+
+- Block authors should expect the required properties expressed in their schema passed into the component as props, alongside (possibly) the special block protocol functions, and (possibly) any properties not marked as required.
+
+- Blocks authored in React should specify React as an external library, i.e. do not bundle React with their package, as the embedding application can provide it as described above via a special `requires`, saving on bundle size.
 
 ### HTML
 
-A plain HTML block - i.e. a block that has a HTML entry point, and does not rely on the embedding application running a particular web rendering framework/library - is a valid block.
+A plain HTML block - i.e. a block that has a HTML entry point, and does not rely on the embedding application running a particular web rendering framework/library – is a valid block.
 
 If it has no data interface requirements, it need not be accompanied by a schema in its package.
 
@@ -42,4 +50,5 @@ Like any block, plain HTML blocks should be sandboxed, but particularly given th
 
 ### Templating languages
 
-Blocks written in templating languages can reference their expected data properties in the template. This offers a solution for versions of blocks authored for Ruby on Rails or Django web servers, for example.
+Blocks written in templating languages can reference their expected data properties in the template.
+This offers a solution for versions of blocks authored for Ruby on Rails or Django web servers, for example.
