@@ -68,7 +68,7 @@ export const mdxComponents: Record<string, React.ReactNode> = {
 
   // TODO: Improve style & implementation of below components
 
-  SomethingToThinkAbout: ({ children }: { children: ReactNode }) => {
+  Frame: ({ children, emoji }: { children?: ReactNode; emoji?: ReactNode }) => {
     return (
       <div
         style={{
@@ -77,7 +77,7 @@ export const mdxComponents: Record<string, React.ReactNode> = {
           padding: "0 15px",
         }}
       >
-        <div style={{ fontSize: "3em", textAlign: "center" }}>🤔</div>
+        <div style={{ fontSize: "3em", textAlign: "center" }}>{emoji}</div>
         {children}
       </div>
     );
