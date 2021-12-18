@@ -246,6 +246,7 @@ getEntityType(actions: Payload[]): Promise<EntityType[]>
 retrieves one or more entity types.
 
 **returns:** the retrieved entity types, i.e. _objects_ inside an _array_.
+
 `Payload`: accepts a single _array_ of _objects_ each with the following shape:
 
 - `entityTypeId` \[_string_]: the entity type to retrieve.
@@ -398,7 +399,7 @@ A block can expect the following fields to be made available to it, whether pass
 // data representing the block entity itself
 entityId
 entityTypeId
-// ...plus any keys declared in the block's schema
+// ...plus any keys declared in the block’s schema
 
 // data representing entities linked from the block and onwards
 linkedEntities
