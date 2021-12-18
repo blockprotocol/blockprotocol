@@ -22,6 +22,20 @@ export const mdxComponents: Record<string, React.ReactNode> = {
   Typography,
   InfoCardWrapper,
   InfoCard,
+  SomethingToThinkAbout: ({ children }: { children: ReactNode }) => {
+    return (
+      <div
+        style={{
+          border: "1px solid black",
+          margin: "10px -15px",
+          padding: "0 15px",
+        }}
+      >
+        <div style={{ fontSize: "3em", textAlign: "center" }}>🤔</div>
+        {children}
+      </div>
+    );
+  },
   h1: (props: TypographyProps) => {
     return (
       <Link href="#">

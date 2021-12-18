@@ -283,27 +283,25 @@ Once created, a `Link` includes a `linkId`.
 
 **E.g.1.** creating a `Link` with the following data indicates that this particular user should be linked to a company with id `company1`, and that the link conceptually is made on the user’s `employer` field – although when delivering data to blocks the resolved data for entity `company1` will be provided _alongside_ the user to the block, in the `linkedEntities` array, rather than injected into the properties of the user, and the link itself available in the `links` array provided to the block.
 
-E.g.1. creating a `Link` with the following data indicates that this particular user should be linked to a company with id `company1`, and that the link conceptually is made on the user’s `employer` field - although when delivering data to blocks the resolved data for entity `company1` will be provided _alongside_ the user to the block, in the `linkedEntities` array, rather than injected into the properties of the user, and the link itself available in the `links` array provided to the block.
-
-```
+```json
 {
-  sourceId: "user1",
-  destinationId: "company1",
-  path: "employer"
+  "sourceId": "user1",
+  "destinationId": "company1",
+  "path": "employer"
 }
 ```
 
 **E.g.2.** creating a `Link` with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field – although when delivering the data this data would be provided _alongside_ the table, in the `linkedAggregations` array
 
-```
+```json
 {
-  sourceId: "table1",
-  path: "rows",
-  aggregate: {
-    entityTypeId: "sales",
-    sorts: [{ field: "value", "desc": true }],
-    itemsPerPage: 10,
-    pageNumber: 1
+  "sourceId": "table1",
+  "path": "rows",
+  "aggregate": {
+    "entityTypeId": "sales",
+    "sorts": [{ "field": "value", "desc": true }],
+    "itemsPerPage": 10,
+    "pageNumber": 1
   }
 }
 ```
@@ -386,7 +384,7 @@ E.g. to express that a company’s `employees` field is the inverse of users’ 
 
 Embedding applications can use these `inverseOf` declarations to resolve inverse links without blocks needing to create them in both directions.
 
-**Limiting linked data returned**
+#### Limiting linked data returned
 
 When requesting entity data via a block protocol function, blocks MAY include a `depth` field which will specify how many levels of linked entity data to resolve, to avoid expensive queries that pull in unneeded data from an extensive entity graph.
 For example, a depth of 2 on a Person would resolve their linked Employer, and their Employer’s linked Location, but no further.
@@ -424,7 +422,7 @@ deleteLink
 getLink
 ```
 
-#### **Working with third-party data stores**
+### Working with third-party data stores
 
 Where blocks interact with third-party data stores, i.e. they send data for storage _outside_ the embedding application, they SHOULD where possible keep the entity data in the embedding application in sync, for example by:
 
@@ -434,15 +432,12 @@ Where blocks interact with third-party data stores, i.e. they send data for stor
 
 Where changes to relevant entity data can occur in both the embedding application and the third-party data store _even when the block is not being used_, additional synchronization outside the block will be required to ensure consistent user data.
 
-Where changes to relevant entity data can occur in both the embedding application and the third-party data store _even when the block is not being used_, additional synchronization outside the block will be required to ensure consistent user data.
-
-### Tracking user action
+## Tracking user action
 
 <Frame emoji="🤔">
 
 We are considering options for blocks reporting on user actions within them, both to allow the embedding application to track activity, and to be able to indicate user focus to other users where the application implements collaborative/multiplayer editing.
 
-\
 Potential options include:
 
 - passing a `reportUserAction` function to blocks, to report on keypresses, drags, etc.
@@ -477,7 +472,7 @@ This could be
 
 </Frame>
 
-### Styling
+## Styling
 
 Blocks SHOULD provide at least basic visual styling to allow them to be embedded and used without modification by any web application.
 
