@@ -20,7 +20,7 @@ A block package SHOULD contain:
 
   - SHOULD specify any further constraints or [validation](https://json-schema.org/draft/2020-12/json-schema-validation.html) requirements which improve the block’s functionality
 
-- a JSON file containing <strong>metadata describing the block</strong>, which:
+- a JSON file containing **metadata describing the block**, which:
 
   - MUST be called `block-metadata.json`
 
@@ -41,8 +41,7 @@ A block package SHOULD contain:
   - SHOULD specify:
 
     - `default` - an object, conforming to the block’s schema, representing
-      the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or
-      (b) `variants` is provided (see below).
+      the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) `variants` is provided (see below).
 
     - `icon` - an icon for the block, to be displayed when the user is
       selecting from available blocks (as well as elsewhere as appropriate, e.g.
@@ -98,121 +97,156 @@ Each entity provided under `linkedEntities` or `linkedAggregations` will also ha
 
 Subject to the permissions granted to them by the embedding application, blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their [implementation](#linking-entitites):
 
-- `createEntity<T>(actions: Payload<T>[]): Promise<T[]>`  
-  creates one or more entities  
-  **returns:** the created entities, i.e. _objects_ inside an _array_
+#### `createEntity<T>(actions: Payload<T>[]): Promise<T[]>`
 
-  `Payload<T>`:
+creates one or more entities
 
-  - `entityTypeId` \[_string_]: the type of entity to create.
-  - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
-  - `links?`: \[_object_]\[_optional_]: any links to create along with this entity. See [linking entities](#linking-entitites).
-  - `selection?` [_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
-  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-    See [linking entities](#linking-entitites).
+**returns:** the created entities, i.e. _objects_ inside an _array_
 
-- `updateEntity<T>(actions: Payload<T>[]): Promise<T[]>`  
-  updates one or more entities  
-  **returns:** the updated entities, i.e. objects inside an array
+`Payload<T>`:
 
-  `Payload<T>:` accepts a single array of objects each with the following shape:
+- `entityTypeId` \[_string_]: the type of entity to create.
+- `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
+- `links?`: \[_object_]\[_optional_]: any links to create along with this entity. See [linking entities](#linking-entitites).
+- `selection?` [_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
+- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+  See [linking entities](#linking-entitites).
 
-  - `data<T>` \[_object_]: the fields and values to update on the entity.
-  - `entityTypeId` \[_string_]: the type of entity to update.
-  - `entityId` \[_string_]: the id of the entity to update.
-  - `selection?` \[_array of strings_]\[_optional_]: limit the return to only include these fields on the entity.
-  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-    See [linking entities](#linking-entitites).
+#### `updateEntity<T>(actions: Payload<T>[]): Promise<T[]>`
 
-- `deleteEntity(actions: Payload[]): Promise<boolean[]>`  
-  deletes one or more entities.  
-  **returns:** an _array_ of `boolean` indicating the success of each operation.
+updates one or more entities
 
-  `Payload`: accepts a single _array_ of _objects_, each with the following shape:
+**returns:** the updated entities, i.e. objects inside an array
 
-  - `entityTypeId` \[_string_]: the type of entity to delete
-  - `entityId` \[_string_]: the id of the entity to delete.
-  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-    See [linking entities](#linking-entitites).
+`Payload<T>:` accepts a single array of objects each with the following shape:
 
-- `getEntity<T>(actions: Payload<T>[]): Promise<T[]>`  
-  retrieve one or more entities  
-  **returns:** the retrieved entities, i.e. _objects_ inside an _array_.
+- `data<T>` \[_object_]: the fields and values to update on the entity.
+- `entityTypeId` \[_string_]: the type of entity to update.
+- `entityId` \[_string_]: the id of the entity to update.
+- `selection?` \[_array of strings_]\[_optional_]: limit the return to only include these fields on the entity.
+- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+  See [linking entities](#linking-entitites).
 
-  `Payload`: accepts a single _array_ of _objects_ each with the following shape:
+#### `deleteEntity(actions: Payload[]): Promise<boolean[]>`
 
-  - `entityTypeId` \[_string_]: the type of entity to retrieve.
-  - `entityId` \[_string_]: the id of the entity to retrieve.
-  - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
-  - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-    See [linking entities](#linking-entitites).
+deletes one or more entities
 
-<!--
+**returns:** an _array_ of `boolean` indicating the success of each operation.
 
-- `aggregateEntity(action: Payload): Promise<AggregationResult> \`
-  retrieve a subset of entities of a given type. \<strong>returns</strong>: an ` AggregationResult` object \* `pageNumber` _[integer]_: the page number returned
-  - `itemsPerPage` _[integer]_: the number of results per page,
-    i.e. returned. _ `totalCount` _[integer]_: the total number of
-    records available for this query. _ `nextPage` _[integer]_: the
-    number of the next page, if any (<em>null</em> otherwise). _ ` filters` _[array]_: any filters applied (empty if none): _ ` field` _[string]_: the field name filtered by. _ ` operator` _[enum]_: the filter operator. One of IS, IS_NOT, CONTAINS,
-    DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY. _ ` value` _[string]_: the value filtered against. \* `sorts` [
-    <em>array]_: the sort(s) applied: \* `field` _[string]_: the field
-sorted on \* `desc` _[boolean]\_: whether the sort was descending.
+`Payload`: accepts a single _array_ of _objects_, each with the following shape:
 
-<strong>arguments: </strong>optionally accepts a single <em>object </em>with the
-following shape{" "}
+- `entityTypeId` \[_string_]: the type of entity to delete
+- `entityId` \[_string_]: the id of the entity to delete.
+- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+  See [linking entities](#linking-entitites).
 
-    * `entityTypeId` [_object_]: the type of entity to provide aggregated data for
-    * `selection?` [_array_ of _strings_][_optional_]: limit the return to only include these fields on the entity.
-    * `depth?` [_integer_][_optional_]: limit the depth to which linked data in an entity will be resolved. See [linking entities](#heading=h.fka5rrv4b39u).
+#### `getEntity<T>(actions: Payload<T>[]): Promise<T[]>`
 
-_ `operation?` [*object*]\_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
-_ `pageNumber?` [\_integer_][_optional_]: the page number to request.
-_ `itemsPerPage?` [*integer*]\_optional_]: the number of results to return.
-_ `filters?` [\_array_][_optional_]: filter entities by a given field value:
-_ `field` [\_string_]: the field name to filter by.
-_ `operator` [\_enum_]: the filter operator. One of IS, IS*NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY. \* `value` [\_string*]: the value to match against.
-_ `sorts?` [*array*]\_optional_]: specify how to sort results by providing one or more objects with the following shape:
-_ `field` [\_string_]: the field name to sort on.
-_ `desc?` [*boolean*]\_optional_]: whether to sort descending.
-\_ Embedding apps will provide a default aggregation if not provided. \
+retrieve one or more entities
+
+**returns:** the retrieved entities, i.e. _objects_ inside an _array_.
+
+`Payload`: accepts a single _array_ of _objects_ each with the following shape:
+
+- `entityTypeId` \[_string_]: the type of entity to retrieve.
+- `entityId` \[_string_]: the id of the entity to retrieve.
+- `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
+- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
+  See [linking entities](#linking-entitites).
+
+#### `aggregateEntity(action: Payload): Promise<AggregationResult>`
+
+retrieve a subset of entities of a given type
+
+**returns:** an `AggregationResult` object
+
+- `pageNumber` \[_integer_]: the page number returned.
+- `itemsPerPage` \[_integer_]: the number of results per page, i.e. returned.
+- `totalCount` \[_integer_]: the total number of records available for this query.
+- `nextPage` \[_integer_]: the number of the next page, if any (_null_ otherwise).
+- `filters` \[_array_]: any filters applied (empty if none):
+  - `field` \[_string_]: the field name filtered by.
+  - `operator` \[_enum_]: the filter operator. One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
+  - `value` \[_string_]: the value filtered against.
+- `sorts` \[_array_]: the sort(s) applied:
+  - `field` \[_string_]: the field sorted on.
+  - `desc` \[_boolean_]: whether the sort was descending.
+
+**arguments:** optionally accepts a single _object_ with the
+following shape
+
+- `entityTypeId` \[_object_]: the type of entity to provide aggregated data for
+- `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
+- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved. See [linking entities](#heading=h.fka5rrv4b39u).
+- `operation?` \[_object_]\[_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
+- `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
+- `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
+- `filters?` \[_array_]\[_optional_]: filter entities by a given field value:
+  - `field` \[_string_]: the field name to filter by.
+  - `operator` \[_enum_]: the filter operator. One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
+  - `value` \[_string_]: the value to match against.
+    - `sorts?` \[_array_]\[_optional_]: specify how to sort results by providing one or more objects with the following shape:
+    - `field` \[_string_]: the field name to sort on.
+    - `desc?` \[_boolean_]\[_optional_]: whether to sort descending.
+- Embedding apps will provide a default aggregation if not provided.
 
 The functions defined above return entity data, but block authors should note that in many [implementations](#heading=h.l3qc1ds29wu3) the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
 
-<!--
-
-#### Functions for working with entity types
+### Functions for working with entity types
 
 Where supported and permitted by the embedding application, blocks may be provided with the following functions to work with entity types, i.e. data models.
 
-- `createEntityType(actions: Payload[]): Promise<EntityType>[]>` \
-  creates one or more entity types. \
-  **returns: **the created entity types, i.e. _objects_ inside an _array_. An `EntityType ` is a JSON schema object with an additional* `entityTypeId`* field. \
-  ` Payload<strong>: </strong>`
-  accepts a single <em>array</em> of <em>objects,</em> each with the following shape:
-  - `schema` _[object]_: the [JSON schema](https://json-schema.org/)
-    for the entity type.
-- `updateEntityType(actions: Payload[]): Promise<EntityType>[]>` \
-  updates one or more entity types. \<strong>returns: </strong>the updates entity
-  types \`
-  Payload<strong>: </strong>
-  `accepts a single <em>array</em> of <em>objects,</em> each with the following shape: * `entityTypeId`_[string]</em>: the id of the entity type to update. *`schema` _[object]_: the JSON schema for the entity
-  type. \
+#### `createEntityType(actions: Payload[]): Promise<EntityType>[]>`
 
-- `deleteEntityType(actions: Payload[]): Promise<boolean[]>` \ deletes
-  one or more entity types. \<strong>returns: </strong>an <em>array</em> of ` boolean` indicating the success of each operation. \`
-  Payload<strong>: </strong>
-  `accepts a single <em>array</em> of <em>objects,</em> each with the following shape: * `entityTypeId` _[string]_: the entity type to delete.
-- `getEntityType(actions: Payload[]): Promise<EntityType[]>` \ retrieve
-  one or more entity types. \<strong>returns: </strong>the retrieved entity types,
-  i.e. <em>objects</em> inside an <em>array</em>. \
-  ` Payload<strong>: </strong>`
-  accepts a single <em>array</em> of <em>objects</em> each with the following shape:
-  - `entityTypeId` _[string]_: the entity type to retrieve.
-- ` aggregateEntityTypes(action: Payload): Promise<AggregationResult>` \ retrieve one or more entity types. \<strong>returns: </strong>an ` AggregationResult` \`
-  Payload<strong>: </strong>
-  `accept an object with a single key, `operation`, which is
-  the [same shape as for aggregating entities](#bookmark=kix.gl0isvkc6k2g).
+creates one or more entity types.
+
+**returns:** the created entity types, i.e. _objects_ inside an _array_.
+
+An `EntityType` is a JSON schema object with an additional `entityTypeId` field.
+
+`Payload`: accepts a single _array_ of _objects,_ each with the following shape:
+
+- `schema` \[_object_]: the [JSON schema](https://json-schema.org/)
+  for the entity type.
+
+#### `updateEntityType(actions: Payload[]): Promise<EntityType>[]>`
+
+updates one or more entity types.
+
+**returns:** the updates entity types
+
+`Payload`: accepts a single _array_ of _objects,_ each with the following shape:
+
+- `entityTypeId`\[_string_]: the id of the entity type to update.
+- `schema` \[_object_]: the JSON schema for the entity type.
+
+#### `deleteEntityType(actions: Payload[]): Promise<boolean[]>`
+
+deletes one or more entity types.
+
+**returns:** an _array_ of _boolean_ indicating the success of each operation.
+
+`Payload`: accepts a single _array_ of _objects,_ each with the following shape:
+
+- `entityTypeId` \[_string_]: the entity type to delete.
+
+#### `getEntityType(actions: Payload[]): Promise<EntityType[]>`
+
+retrieves one or more entity types.
+
+**returns:** the retrieved entity types, i.e. _objects_ inside an _array_.
+`Payload`: accepts a single _array_ of _objects_ each with the following shape:
+
+- `entityTypeId` \[_string_]: the entity type to retrieve.
+
+#### `aggregateEntityTypes(action: Payload): Promise<AggregationResult>`
+
+retrieve one or more entity types.
+
+**returns:** an `AggregationResult`
+
+`Payload` accept an object with a single key, `operation`, which is
+the [same shape as for aggregating entities](#bookmark=kix.gl0isvkc6k2g).
 
 <!--
 
@@ -266,37 +300,37 @@ To create, update and delete links between entities, blocks should expect the fo
 - `
     createLink(actions: [Link](#bookmark=kix.7d8szcnmhdcq)[]):
     Promise<Link>[]>
-  ` \ creates one or more links. \<strong>returns: </strong>the created links,
-  i.e. <em>objects</em> inside an <em>array</em> (now with `linkId`)
+  ` \ creates one or more links. \**returns:** the created links,
+  i.e. _objects_ inside an _array_ (now with `linkId`)
 - `updateLink(actions: Payload[]): Promise<Link>[]>` \ updates one
-  or more links. \<strong>returns: </strong>the updated links, i.e. <em>
+  or more links. \**returns:** the updated links, i.e. _
     objects
-  </em> inside an <em>array</em> \`
-    Payload<strong>: </strong>
-  `accepts a single <em>array</em> of <em>objects,</em> each with the following
-  shape: * `linkId` _[string]</em>: the id of the link to update. * `
+  _ inside an _array_ \`
+    Payload**:**
+  `accepts a single _array_ of _objects,_ each with the following
+  shape: * `linkId` _[string]_: the id of the link to update. * `
     data
   ` _[object]_: the `[Link](#bookmark=kix.7d8szcnmhdcq)` to
   overwrite the existing one with. \
 
 - `deleteLink(actions: Payload[]): Promise<boolean[]>` \ deletes one
-  or more links. \<strong>returns: </strong>an <em>array</em> of `
+  or more links. \**returns:** an _array_ of `
     boolean
   ` indicating the success of each operation. \`
-    Payload<strong>: </strong>
-  `accepts a single <em>array</em> of <em>objects,</em> each with the following
+    Payload**:**
+  `accepts a single _array_ of _objects,_ each with the following
   shape: * `linkId` _[string]_: the entity type to delete.
 - `getLink(actions: Payload[]): Promise<Link[]>` \ retrieve one or
-  more links. \<strong>returns: </strong>the retrieved links, i.e. <em>
+  more links. \**returns:** the retrieved links, i.e. _
     objects
-  </em> inside an <em>array</em>. \
+  _ inside an _array_. \
   `
-    Payload<strong>: </strong>
+    Payload**:**
   `
-  accepts a single <em>array</em> of <em>objects</em> each with the following shape:
+  accepts a single _array_ of _objects_ each with the following shape:
   * `linkId` _[string]_: the link to retrieve.
 
-<strong>Describing links in JSON schema</strong>
+**Describing _links in JSON schema__
 
 Where blocks wish to express in their schema - or in the schema of any other entity type - that the value of a field should be a link to another entity, they can use the JSON schema [$ref](https://json-schema.org/understanding-json-schema/structuring.html#ref) keyword when describing the accepted types for the field. The value of the $ref should be the value of $id in the JSON schema for the target type.
 
