@@ -1,15 +1,15 @@
 # blockprotocol.org website
 
-The public-facing [blockprotocol.org](https://blockprotocol.org) serves the following endpoints:
+The public-facing [blockprotocol.org](https://blockprotocol.org) website serves the following endpoints:
 
-- `/partners` provides a signup form
 - `/gallery` shows the catalog of available blocks
 - `/api/blocks` returns a JSON response w/ a list of available blocks
 - `/blocks/<organisation>/<blockname>` is the CDN base-URL of an individual block (e.g. `/blocks/@hash/code`)
+- `/partners` provides a temporary signup form to collect pre-release registrations of interest from potential adopters
 
 ## Local development
 
-Retrieve the 1password document `blockprotocol/site/.env.local` from the 1password vault
+Retrieve the 1Password document `blockprotocol/site/.env.local` from the 1password vault
 `HASH.dev/ai` and place it at `/site/.env.local`.
 
 Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/registry`
