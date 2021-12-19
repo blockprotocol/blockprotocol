@@ -18,33 +18,33 @@ import { ArrowRightIcon } from "../../SvgIcon/ArrowRight";
 const steps = [
   {
     id: 1,
-    image: "/assets/person-with-paragraph.svg",
-    graphImg: "/assets/sequence-1.svg",
-    graphImgMobile: "/assets/sequence-1-mobile.svg",
+    image: "/assets/person-with-paragraph-block.svg",
+    graphImg: "/assets/person-with-paragraph-block-tree.svg",
+    graphImgMobile: "/assets/person-with-paragraph-block-tree-mobile.svg",
   },
   {
     id: 2,
     image: "/assets/table-block.svg",
-    graphImg: "/assets/sequence-2.svg",
-    graphImgMobile: "/assets/sequence-2-mobile.svg",
+    graphImg: "/assets/table-block-tree.svg",
+    graphImgMobile: "/assets/table-block-tree-mobile.svg",
   },
   {
     id: 3,
     image: "/assets/checklist-block.svg",
     graphImg: "/assets/sequence-3.svg",
-    graphImgMobile: "/assets/sequence-3-mobile.svg",
+    graphImgMobile: "/assets/checklist-block-tree-mobile.svg",
   },
   {
     id: 4,
     image: "/assets/kanban-small-block.svg",
-    graphImg: "/assets/sequence-3.svg",
-    graphImgMobile: "/assets/sequence-3-mobile.svg",
+    graphImg: "/assets/kanban-small-block-tree.svg",
+    graphImgMobile: "/assets/kanban-small-block-tree-mobile.svg",
   },
 ];
 
 export const IntroSection = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [activeStep, setActiveStep] = useState(1);
 
   const slider = useRef<Slider>();
@@ -52,14 +52,13 @@ export const IntroSection = () => {
   const settings = useMemo(
     () =>
       ({
-        centerMode: true,
+        // centerMode: true,
         infinite: !isMobile,
-        slidesToShow: isMobile ? 1 : 3,
+        slidesToShow: isMobile ? 1 : 2,
         swipeToSlide: true,
         speed: 500,
         initialSlide: isMobile ? 0 : 1,
-        nextArrow: <Box sx={{ display: "none !important" }} />,
-        prevArrow: <Box sx={{ display: "none !important" }} />,
+        arrows: false,
         customPaging: () => (
           <Box
             sx={{
@@ -107,11 +106,10 @@ export const IntroSection = () => {
           sx={{
             display: "flex",
             width: "100%",
-            height: { xs: 250, md: 450 },
+            height: { xs: 250, md: 400 },
             justifyContent: "center",
             alignItems: "flex-end",
             mx: "auto",
-            mb: -4,
             position: "relative",
           }}
         >
@@ -124,8 +122,8 @@ export const IntroSection = () => {
                   bottom: 0,
                   left: "50%",
                   transform: "translateX(-50%)",
-                  height: { xs: "auto", md: 400 },
-                  width: { xs: "90%", md: "auto" },
+                  width: { xs: "90%", sm: "100%" },
+                  maxWidth: 1444,
                 }}
                 src={isMobile ? graphImgMobile : graphImg}
                 component="img"
@@ -137,6 +135,11 @@ export const IntroSection = () => {
           sx={{
             position: "relative",
             zIndex: 2,
+            "& .slick-track": {
+              paddingLeft: { md: "25%" }, // padding left = (100%/ no of slide to show)/2; https://github.com/kenwheeler/slick/issues/1784#issuecomment-831722031,
+              display: "flex",
+              alignItems: "center",
+            },
             "& .slick-dots": {
               "li div": {
                 backgroundColor: ({ palette }) => palette.gray[30],
@@ -169,7 +172,6 @@ export const IntroSection = () => {
                   component="img"
                   sx={{
                     display: "block",
-                    height: { xs: "auto", md: "auto" },
                     width: { xs: "90%", md: "auto" },
                     boxShadow: 2,
                   }}
