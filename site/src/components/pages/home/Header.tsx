@@ -11,7 +11,7 @@ import { BoltIcon } from "../../SvgIcon/BoltIcon";
 
 export const Header = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
     <Box
@@ -21,15 +21,16 @@ export const Header = () => {
         minHeight: "95vh",
         position: "relative",
         overflowX: "hidden",
-        mb: { xs: 10, md: 16 },
+        mb: { xs: 10, lg: 16 },
       }}
     >
-      <Container sx={{ pt: { xs: "15vh", md: "20vh" }, mb: { xs: 20, md: 0 } }}>
+      <Container sx={{ pt: { xs: "15vh", lg: "20vh" }, mb: { xs: 20, lg: 0 } }}>
         <Box
           sx={{
-            width: { xs: "100%", md: "57%" },
+            width: { xs: "100%", lg: "57%" },
             maxWidth: 660,
-            textAlign: { xs: "center", md: "left" },
+            mx: { xs: "auto", lg: "unset" },
+            textAlign: { xs: "center", lg: "left" },
           }}
         >
           <Typography
@@ -38,12 +39,12 @@ export const Header = () => {
               color: ({ palette }) => palette.purple[400],
               mb: 4,
               letterSpacing: "5%",
-              width: { xs: "55%", md: "100%" },
+              width: { lg: "100%" },
               mx: "auto",
             }}
             variant="bpSmallCaps"
           >
-            A powerful new protocol for developers
+            A powerful {isMobile && <br />} new protocol for developers
           </Typography>
           <Typography
             variant="bpHeading1"
@@ -52,7 +53,7 @@ export const Header = () => {
               color: "white",
               mb: 4,
               // @todo font-size should match design system
-              fontSize: { xs: 40, md: 60 },
+              fontSize: { xs: 40, lg: 60 },
             }}
           >
             Build interactive blocks connected to the world of{" "}
@@ -80,8 +81,8 @@ export const Header = () => {
             variant="body1"
             color={theme.palette.purple[300]}
             mb={4}
-            width={{ xs: "100%", md: "74%" }}
-            textAlign={{ xs: "center", md: "left" }}
+            width={{ xs: "100%", lg: "74%" }}
+            textAlign={{ xs: "center", lg: "left" }}
           >
             An open standard for building
             <strong> blocks connected to structured data </strong>
@@ -94,22 +95,24 @@ export const Header = () => {
 
       <Box
         sx={{
-          height: { xs: "auto", md: "40vh" },
-          width: { xs: "100%", md: "auto" },
-          position: { xs: "relative", md: "absolute" },
-          bottom: { xs: 0, md: "15%" },
+          height: { xs: "auto", lg: "40vh" },
+          width: { xs: "100%", lg: "auto" },
+          position: { xs: "relative", lg: "absolute" },
+          bottom: { xs: 0, lg: "15%" },
           right: 0,
-          transform: { xs: "unset", md: "translateX(10%)" },
+          transform: { xs: "unset", lg: "translateX(10%)" },
+          display: "flex",
+          justifyContent: "center",
           "::after": {
             content: `""`,
             position: "absolute",
-            top: { xs: "50%", md: 0 },
+            top: { xs: "50%", lg: 0 },
             bottom: 0,
             right: 0,
-            width: { xs: "100%", md: "40%" },
+            width: { xs: "100%", lg: "40%" },
             background: {
               xs: `linear-gradient(0deg, #2A2B37 1.28%, transparent 89.29%)`,
-              md: `linear-gradient(270.33deg, #2A2B37 1.28%, transparent 89.29%)`,
+              lg: `linear-gradient(270.33deg, #2A2B37 1.28%, transparent 89.29%)`,
             },
           },
         }}
@@ -121,7 +124,13 @@ export const Header = () => {
               ? "/assets/header-img-mobile.svg"
               : "/assets/header-img.svg"
           }
-          sx={{ boxShadow: 5, display: "block", height: "100%" }}
+          sx={{
+            boxShadow: 5,
+            display: "block",
+            height: { xs: "auto", lg: "100%" },
+            width: { xs: "80%", lg: "auto" },
+            maxWidth: { xs: 400, lg: "unset" },
+          }}
         />
       </Box>
     </Box>
