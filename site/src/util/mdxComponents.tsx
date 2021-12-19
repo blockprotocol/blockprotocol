@@ -16,6 +16,9 @@ const stringifyChildren = (node: ReactNode): string => {
   return "";
 };
 
+const HEADING_MARGIN_TOP = 6;
+const HEADING_MARGIN_BOTTOM = 2;
+
 export const mdxComponents: Record<string, React.ReactNode> = {
   Box,
   Paper,
@@ -24,8 +27,22 @@ export const mdxComponents: Record<string, React.ReactNode> = {
   InfoCard,
   h1: (props: TypographyProps) => {
     return (
-      <Link href="#">
-        <Typography mb={3} id="" variant="bpHeading1" {...props} />
+      <Link
+        href="#"
+        sx={{
+          "&:first-child": {
+            "& > h1": {
+              marginTop: 0,
+            },
+          },
+        }}
+      >
+        <Typography
+          mt={HEADING_MARGIN_TOP}
+          mb={HEADING_MARGIN_BOTTOM}
+          variant="bpHeading1"
+          {...props}
+        />
       </Link>
     );
   },
@@ -35,7 +52,13 @@ export const mdxComponents: Record<string, React.ReactNode> = {
     });
     return (
       <Link href={`#${anchor}`}>
-        <Typography mb={3} id={anchor} variant="bpHeading2" {...props} />
+        <Typography
+          mt={HEADING_MARGIN_TOP}
+          mb={HEADING_MARGIN_BOTTOM}
+          id={anchor}
+          variant="bpHeading2"
+          {...props}
+        />
       </Link>
     );
   },
@@ -45,12 +68,23 @@ export const mdxComponents: Record<string, React.ReactNode> = {
     });
     return (
       <Link href={`#${anchor}`}>
-        <Typography id={anchor} variant="bpHeading3" {...props} />
+        <Typography
+          mt={HEADING_MARGIN_TOP}
+          mb={HEADING_MARGIN_BOTTOM}
+          id={anchor}
+          variant="bpHeading3"
+          {...props}
+        />
       </Link>
     );
   },
   h4: (props: TypographyProps) => (
-    <Typography variant="bpHeading4" {...props} />
+    <Typography
+      mt={HEADING_MARGIN_TOP}
+      mb={HEADING_MARGIN_BOTTOM}
+      variant="bpHeading4"
+      {...props}
+    />
   ),
   p: (props: TypographyProps) => (
     <Typography mb={2} variant="bpBodyCopy" {...props} />
@@ -70,29 +104,62 @@ export const mdxComponents: Record<string, React.ReactNode> = {
 
   Frame: ({ children, emoji }: { children?: ReactNode; emoji?: ReactNode }) => {
     return (
-      <div
-        style={{
-          border: "1px solid black",
-          margin: "10px -15px",
-          padding: "0 15px",
+      <Paper
+        variant="teal"
+        sx={{
+          marginBottom: 3,
+          padding: {
+            xs: 2,
+            sm: 3,
+          },
         }}
       >
-        <div style={{ fontSize: "3em", textAlign: "center" }}>{emoji}</div>
+        <Box sx={{ fontSize: "3em", textAlign: "center" }}>{emoji}</Box>
         {children}
-      </div>
+      </Paper>
     );
   },
   ol: (props: HTMLAttributes<HTMLOListElement>) => (
-    <ol style={{ margin: 20, listStyle: "auto" }} {...props} />
+    <Box
+      component="ol"
+      sx={(theme) => ({
+        marginBottom: theme.spacing(2),
+        paddingLeft: theme.spacing(4),
+        listStyle: "auto",
+      })}
+      {...props}
+    />
   ),
   ul: (props: HTMLAttributes<HTMLUListElement>) => (
-    <ul style={{ margin: 20, listStyle: "unset" }} {...props} />
+    <Box
+      component="ul"
+      sx={(theme) => ({
+        marginBottom: theme.spacing(2),
+        paddingLeft: theme.spacing(4),
+        listStyle: "unset",
+      })}
+      {...props}
+    />
+  ),
+  li: (props: HTMLAttributes<HTMLLIElement>) => (
+    <Box {...props} component="li">
+      <Typography variant="bpBodyCopy">{props.children}</Typography>
+    </Box>
   ),
   inlineCode: (props: HTMLAttributes<HTMLElement>) => (
-    <code
+    <Box
+      component="code"
+      sx={(theme) => ({
+        fontSize: "80%",
+        color: theme.palette.purple[700],
+        background: theme.palette.purple[100],
+        padding: theme.spacing(0.25, 0.5),
+        borderColor: theme.palette.purple[200],
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderRadius: "4px",
+      })}
       {...props}
-      // TODO: link to theme
-      style={{ color: "#d18d5b", fontSize: "95%" }}
     />
   ),
   code: (props: HTMLAttributes<HTMLElement>) => {
@@ -100,22 +167,18 @@ export const mdxComponents: Record<string, React.ReactNode> = {
     if (isLanguageBlockMethod) {
       const anchor = `${props.children}`.match(/^[\w]+/)?.[0] ?? "";
       return (
-        <div id={anchor} style={{ fontWeight: "bold", color: "#d18d5b" }}>
+        <Box id={anchor} sx={{ fontWeight: "bold", color: "#d18d5b" }}>
           <Link href={`#${anchor}`}>{props.children}</Link>
-        </div>
+        </Box>
       );
     }
 
     return (
-      <code
+      <Box
         {...props}
-        // TODO: link to theme
-        style={{
-          color: "#d18d5b",
-          fontSize: "95%",
-          display: "block",
-          paddingBottom: 20,
-          textShadow: "none",
+        component="code"
+        sx={{
+          marginBottom: 2,
         }}
       />
     );
