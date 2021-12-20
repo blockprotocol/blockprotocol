@@ -183,7 +183,6 @@ export const WhyBlockProtocol1Section = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useLayoutEffect(() => {
-    // return;
     if (!boxRef.current || !pinRef.current) return;
 
     const markers: Element[] = gsap.utils.toArray(".item");
@@ -216,18 +215,7 @@ export const WhyBlockProtocol1Section = () => {
       );
     });
 
-    // const tl = gsap.timeline({
-    //   scrollTrigger: {
-    //     trigger: boxRef.current,
-    //     start: "top top",
-    //     end: () => `bottom bottom-=${isMobile ? 100 : 250}px`,
-    //     pin: pinRef.current,
-    //     pinSpacing: false,
-    //   },
-    // });
-
     return () => {
-      // tl.scrollTrigger?.kill();
       triggers.forEach((trigger) => trigger?.kill());
     };
   }, [isMobile]);
@@ -298,7 +286,7 @@ export const WhyBlockProtocol1Section = () => {
                     display: "flex",
                     justifyContent: "center",
                     zIndex: 2,
-                    ...(index == 0 && {
+                    ...(id === 1 && {
                       position: "absolute",
                       top: 0,
                       left: 0,
@@ -321,7 +309,6 @@ export const WhyBlockProtocol1Section = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "flex-start",
-                // pt: "15vh",
                 height: "60vh",
               }}
             >

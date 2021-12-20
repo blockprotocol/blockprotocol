@@ -19,7 +19,7 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
 
   return (
     <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
-      {/* <Navbar /> */}
+      <Navbar />
       <Box
         flexGrow={1}
         sx={{

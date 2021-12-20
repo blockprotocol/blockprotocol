@@ -31,7 +31,7 @@ const steps = [
   {
     id: 3,
     image: "/assets/checklist-block.svg",
-    graphImg: "/assets/sequence-3.svg",
+    graphImg: "/assets/checklist-block-tree.svg",
     graphImgMobile: "/assets/checklist-block-tree-mobile.svg",
   },
   {
@@ -44,7 +44,7 @@ const steps = [
 
 export const IntroSection = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeStep, setActiveStep] = useState(1);
 
   const slider = useRef<Slider>();
@@ -94,7 +94,10 @@ export const IntroSection = () => {
           <Typography variant="bpHeading2" sx={{ mb: 3 }} textAlign="center">
             Embed any block anywhere on the web, using data from any source
           </Typography>
-          <Typography sx={{ width: { md: "56%" } }} textAlign="center">
+          <Typography
+            sx={{ width: { md: "75%", lg: "56%" } }}
+            textAlign="center"
+          >
             Easily move data between applications without wrestling with APIs
             and custom integrations. View it any way you like in interactive
             blocks.
@@ -106,15 +109,16 @@ export const IntroSection = () => {
           sx={{
             display: "flex",
             width: "100%",
-            height: { xs: 250, md: 400 },
+            height: { xs: 300, sm: 350, md: 400 },
             justifyContent: "center",
             alignItems: "flex-end",
             mx: "auto",
             position: "relative",
+            mb: -4,
           }}
         >
           {steps.map(({ graphImg, graphImgMobile, id }) => (
-            <Fade in={activeStep + 1 === id} key={id}>
+            <Fade in={activeStep + 1 === id} key={id} timeout={1000}>
               <Box
                 key={id}
                 sx={{
@@ -122,7 +126,7 @@ export const IntroSection = () => {
                   bottom: 0,
                   left: "50%",
                   transform: "translateX(-50%)",
-                  width: { xs: "90%", sm: "100%" },
+                  width: { xs: "90%", sm: "50%", md: "100%" },
                   maxWidth: 1444,
                 }}
                 src={isMobile ? graphImgMobile : graphImg}
@@ -173,6 +177,7 @@ export const IntroSection = () => {
                   sx={{
                     display: "block",
                     width: { xs: "90%", md: "auto" },
+                    maxWidth: 450,
                     boxShadow: 2,
                   }}
                   src={image}
@@ -214,7 +219,7 @@ export const IntroSection = () => {
                     width: 44,
                     borderRadius: "50%",
                     display: "flex",
-                    justifyContent: "center",
+                    justifyContent: "flex-end",
                     alignItems: "center",
                     backgroundColor: "white",
                     cursor: "pointer",

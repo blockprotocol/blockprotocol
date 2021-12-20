@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
+import React, { useState, useRef, useLayoutEffect } from "react";
 import {
   Container,
   Typography,
@@ -27,9 +27,7 @@ const CONTENT = [
         web application
       </Box>
     ),
-    renderComponent: (isMobile: boolean, isActive?: boolean) => (
-      <Step1 isMobile={isMobile} />
-    ),
+    renderComponent: (isMobile: boolean) => <Step1 isMobile={isMobile} />,
   },
   {
     id: 2,
@@ -45,9 +43,7 @@ const CONTENT = [
         built the API integration for you.
       </Box>
     ),
-    renderComponent: (isMobile: boolean, isActive?: boolean) => (
-      <Step2 isMobile={isMobile} />
-    ),
+    renderComponent: (isMobile: boolean) => <Step2 isMobile={isMobile} />,
   },
   {
     id: 3,
@@ -98,16 +94,14 @@ const CONTENT = [
         embedded in.
       </Box>
     ),
-    renderComponent: (isMobile: boolean, isActive?: boolean) => (
-      <Step4 isMobile={isMobile} />
-    ),
+    renderComponent: (isMobile: boolean) => <Step4 isMobile={isMobile} />,
   },
 ];
 
 const CONTENT_CLASS_NAME = "scroll-section";
 
 export const Section2 = () => {
-  const [activeImg, setActiveImg] = useState(null);
+  const [activeImg, setActiveImg] = useState<number | null>(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const pinElRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
@@ -144,6 +138,7 @@ export const Section2 = () => {
         observer.unobserve(el);
       });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

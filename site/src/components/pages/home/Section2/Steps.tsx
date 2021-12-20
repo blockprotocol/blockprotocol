@@ -142,9 +142,9 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
           }}
         >
           {[
-            { text: <span>Write tests</span>, completed: true },
-            { text: <span>Review latest PRs</span>, completed: true },
-          ].map(({ text, completed }) => (
+            { text: <span>Write tests</span>, completed: true, id: 1 },
+            { text: <span>Review latest PRs</span>, completed: true, id: 2 },
+          ].map(({ text, completed, id }) => (
             <Box
               sx={{
                 display: "flex",
@@ -152,6 +152,7 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
                 whiteSpace: "nowrap",
                 fontSize: 17,
               }}
+              key={id}
             >
               <Icon
                 className={completed ? "fas fa-check-square" : "fal fa-stop"}
@@ -175,9 +176,14 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
                 </span>
               ),
               completed: false,
+              id: 3,
             },
-            { text: <span>Check the color contrast</span>, completed: false },
-          ].map(({ text, completed }) => (
+            {
+              text: <span>Check the color contrast</span>,
+              completed: false,
+              id: 4,
+            },
+          ].map(({ text, completed, id }) => (
             <Box
               sx={{
                 display: "flex",
@@ -185,6 +191,7 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
                 whiteSpace: "nowrap",
                 fontSize: 17,
               }}
+              key={id}
             >
               <Icon
                 className={completed ? "fas fa-check-square" : "fal fa-stop"}
@@ -347,6 +354,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
               typography: "bpSmallCopy",
               fontWeight: 500,
             }}
+            key={key}
           >
             <Box
               sx={{
@@ -540,9 +548,9 @@ export const Step1: VFC<StepProps> = ({ isMobile }) => {
   return (
     <Layout
       blocks={[
-        <TextBlock withTitle />,
-        <ChecklistBlock withTitle titleLocation="bottom" />,
-        <ImageBlock withTitle titleLocation="bottom" />,
+        <TextBlock key={1} withTitle />,
+        <ChecklistBlock key={2} withTitle titleLocation="bottom" />,
+        <ImageBlock key={3} withTitle titleLocation="bottom" />,
       ]}
     />
   );
@@ -556,9 +564,9 @@ export const Step2: VFC<StepProps> = ({ isMobile }) => {
   return (
     <Layout
       blocks={[
-        <App name="docs" block={<TextBlock noBoxShadow />} />,
-        <App name="todo" block={<ChecklistBlock noBoxShadow />} />,
-        <App name="notes" block={<ImageBlock />} />,
+        <App key={1} name="docs" block={<TextBlock noBoxShadow />} />,
+        <App key={2} name="todo" block={<ChecklistBlock noBoxShadow />} />,
+        <App key={3} name="notes" block={<ImageBlock />} />,
       ]}
     />
   );
@@ -598,11 +606,16 @@ export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
     <Layout
       blocks={[
         <App
+          key={1}
           name={titles[0]}
           block={<ChecklistBlock noBoxShadow active direction="row" />}
         />,
-        <App name={titles[1]} block={<ImageBlock active />} />,
-        <App name={titles[2]} block={<TextBlock noBoxShadow active />} />,
+        <App key={2} name={titles[1]} block={<ImageBlock active />} />,
+        <App
+          key={3}
+          name={titles[2]}
+          block={<TextBlock noBoxShadow active />}
+        />,
       ]}
       withBg
     />
@@ -616,9 +629,24 @@ export const Step4: VFC<StepProps> = ({ isMobile }) => {
   return (
     <Layout
       blocks={[
-        <SchemaBlock name="definedTerm" withTitle titleLocation="top" />,
-        <SchemaBlock name="itemList" withTitle titleLocation="bottom" />,
-        <SchemaBlock name="imageObject" withTitle titleLocation="bottom" />,
+        <SchemaBlock
+          key={1}
+          name="definedTerm"
+          withTitle
+          titleLocation="top"
+        />,
+        <SchemaBlock
+          key={2}
+          name="itemList"
+          withTitle
+          titleLocation="bottom"
+        />,
+        <SchemaBlock
+          key={3}
+          name="imageObject"
+          withTitle
+          titleLocation="bottom"
+        />,
       ]}
     />
   );
