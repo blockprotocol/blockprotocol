@@ -9,16 +9,15 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
 import { Sidebar } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
-import { mdxComponents } from "../../util/mdxComponents";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 import SiteMapContext from "../../components/context/SiteMapContext";
-import { INFO_CARD_WIDTH } from "../../components/InfoCard/InfoCardWrapper";
+import { MDXPageContent } from "../../components/MDXPageContent";
 
 const GitHubInfoCard = (
   <Paper
@@ -237,34 +236,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
             />
           </Box>
         ) : null}
-        <Box
-          flexGrow={1}
-          sx={{
-            width: "100%",
-            overflow: "scroll",
-            "& > :not(.info-card-wrapper), > a:not(.info-card-wrapper) > *": {
-              maxWidth: {
-                xs: "100%",
-                sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
-              },
-            },
-            '& pre:not([class*="language-"]) > code[class*="language-"]': {
-              overflow: "scroll",
-              display: "block",
-              fontSize: "80%",
-              color: theme.palette.purple[700],
-              background: theme.palette.purple[100],
-              padding: theme.spacing(2),
-              borderColor: theme.palette.purple[200],
-              borderWidth: 1,
-              borderStyle: "solid",
-              borderRadius: "8px",
-              textShadow: "none",
-            },
-          }}
-        >
-          <MDXRemote {...serializedPage} components={mdxComponents} />
-        </Box>
+        <MDXPageContent flexGrow={1} serializedPage={serializedPage} />
       </Box>
     </Container>
   );
