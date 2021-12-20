@@ -1,12 +1,14 @@
 import React, { useState, useRef, useLayoutEffect } from "react";
-import { Container, Typography, Box, Fade } from "@mui/material";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { InlineLink } from "../../InlineLink";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import {
+  Container,
+  Typography,
+  Box,
+  Fade,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { InlineLink } from "../../../InlineLink";
+import { Step1, Step2, Step3, Step4 } from "./StepBlocks";
 
 const CONTENT = [
   {
@@ -26,6 +28,7 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-1-img.svg",
+    renderComponent: (isMobile: boolean) => <Step1 isMobile={isMobile} />,
   },
   {
     id: 2,
@@ -42,6 +45,7 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-2-img.svg",
+    renderComponent: (isMobile: boolean) => <Step2 isMobile={isMobile} />,
   },
   {
     id: 3,
@@ -58,6 +62,7 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-3-img.svg",
+    renderComponent: (isMobile: boolean) => <Step3 isMobile={isMobile} />,
   },
   {
     id: 4,
@@ -91,50 +96,49 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-4-img.svg",
+    renderComponent: (isMobile: boolean) => <Step4 isMobile={isMobile} />,
   },
 ];
 
+const CONTENT_CLASS_NAME = "scroll-section";
+
 export const Section2 = () => {
-  const [activeImg, setActiveImg] = useState(0);
-  const boxRef = useRef(null);
-  const pinElRef = useRef(null);
+  const [activeImg, setActiveImg] = useState(CONTENT[0].id);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const pinElRef = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useLayoutEffect(() => {
-    if (!window || !pinElRef.current || !boxRef.current) return;
+    if (!window || !boxRef.current) return;
 
-    const markers: Element[] = gsap.utils.toArray(".scroll-section");
-
-    const triggers: ScrollTrigger[] = [];
-
-    markers.forEach((marker) => {
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: marker,
-          start: "top center",
-          end: "bottom 50vh",
-          onEnter: () => {
-            setActiveImg(markers.indexOf(marker));
-          },
-          onEnterBack: () => {
-            setActiveImg(markers.indexOf(marker));
-          },
-        }),
-      );
-    });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: boxRef.current,
-        // scrub: true,
-        start: "top top",
-        end: "bottom bottom",
-        pin: pinElRef.current,
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target instanceof HTMLElement) {
+            const newActiveImg = Number(entry.target.dataset.key);
+            if (newActiveImg !== activeImg) {
+              setActiveImg(newActiveImg);
+            }
+          }
+        });
       },
+      {
+        root: null,
+        rootMargin: `-50% 0% -50% 0%`,
+      },
+    );
+
+    const elements = boxRef.current.querySelectorAll(`.${CONTENT_CLASS_NAME}`);
+
+    elements.forEach((el) => {
+      observer.observe(el);
     });
 
     return () => {
-      tl.scrollTrigger?.kill();
-      triggers.forEach((trigger) => trigger?.kill());
+      elements.forEach((el) => {
+        observer.unobserve(el);
+      });
     };
   }, []);
 
@@ -144,28 +148,31 @@ export const Section2 = () => {
         ref={boxRef}
         sx={{
           display: "flex",
-          height: { xs: "100vh", md: "unset" },
+          px: 0,
           flexDirection: { xs: "column", md: "row" },
           maxWidth: "100vw",
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", md: "40%" },
-            height: { xs: "50vh", md: "unset" },
-            mr: 4,
-            overflowY: { xs: "scroll", md: "unset" },
+            width: { xs: "100%", sm: "80%", md: "40%" },
+            mr: { md: 4 },
           }}
         >
           {CONTENT.map(({ id, title, content }) => (
             <Box
-              className="scroll-section"
+              className={CONTENT_CLASS_NAME}
+              data-key={id}
               sx={{
                 typography: "bpBodyCopy",
                 minHeight: { xs: "auto", md: "70vh" },
                 display: "flex",
                 flexDirection: "column",
-                pt: "20vh",
+                px: { xs: "5%" },
+                pt: { md: "20vh" },
+                ":first-of-type": {
+                  pt: { xs: 10, md: "20vh" },
+                },
                 mb: 10,
               }}
               key={id}
@@ -180,27 +187,43 @@ export const Section2 = () => {
         <Box
           ref={pinElRef}
           sx={{
-            flex: 1,
+            flex: { xs: "unset", md: 1 },
             alignSelf: "flex-start",
             height: { xs: "50vh", md: "100vh" },
-            position: "relative",
+            position: "sticky",
+            top: { xs: "unset", md: 0 },
+            bottom: { xs: 0, md: "unset" },
+            width: { xs: "100%", md: "auto" },
+            // border: "1px solid green",
+            borderTop: ({ palette }) => ({
+              xs: `1px solid ${palette.gray[30]}`,
+              md: "none",
+            }),
             backgroundColor: ({ palette }) => palette.common.white,
           }}
         >
-          {CONTENT.map(({ image, id }, index) => (
-            <Fade key={id} in={activeImg === index} timeout={500}>
+          {CONTENT.map(({ image, id, renderComponent }) => (
+            <Fade key={id} in={activeImg === id}>
               <Box
                 sx={{
                   position: "absolute",
                   top: 0,
                   left: 0,
                   right: 0,
-                  pt: "20vh",
+                  bottom: { xs: 0, md: "unset" },
+                  pt: { md: "20vh" },
+                  px: { xs: "5%", lg: 0 },
                   display: "flex",
                   justifyContent: "center",
+                  alignItems: { xs: "center", md: "flex-start" },
                 }}
               >
-                <Box id={`step-${id}`} component="img" src={image} />
+                {/* <Box
+                  sx={{ height: { xs: "40vh", md: "auto" } }}
+                  component="img"
+                  src={image}
+                /> */}
+                {renderComponent(isMobile)}
               </Box>
             </Fade>
           ))}
