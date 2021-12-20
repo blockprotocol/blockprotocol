@@ -105,6 +105,7 @@ export const IntroSection = () => {
         </Box>
       </Container>
       <Box sx={{ position: "relative", maxWidth: "100%" }}>
+        {/* GRAPH SECTION */}
         <Box
           sx={{
             display: "flex",
@@ -135,6 +136,7 @@ export const IntroSection = () => {
             </Fade>
           ))}
         </Box>
+        {/* CAROUSEL SECTION */}
         <Box
           sx={{
             position: "relative",
@@ -167,7 +169,7 @@ export const IntroSection = () => {
                 key={id}
                 sx={{
                   display: "flex !important",
-                  justifyContent: "center",
+                  justifyContent: "flex-end",
                   alignItems: "center",
                   height: { xs: 300, md: 400 },
                 }}
@@ -219,7 +221,7 @@ export const IntroSection = () => {
                     width: 44,
                     borderRadius: "50%",
                     display: "flex",
-                    justifyContent: "flex-end",
+                    justifyContent: "center",
                     alignItems: "center",
                     backgroundColor: "white",
                     cursor: "pointer",
