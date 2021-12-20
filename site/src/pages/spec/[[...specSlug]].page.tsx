@@ -113,12 +113,13 @@ const GitHubInfoCard = (
       <Button
         variant="primary"
         color="teal"
+        size="small"
         startIcon={<Icon className="fab fa-github" />}
         sx={{
           textTransform: "none",
         }}
       >
-        <Typography>View the spec on Github</Typography>
+        View the spec on Github
       </Button>
     </Box>
   </Paper>
