@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, { useState, useRef, useLayoutEffect, useEffect } from "react";
 import {
   Container,
   Typography,
@@ -28,7 +28,9 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-1-img.svg",
-    renderComponent: (isMobile: boolean) => <Step1 isMobile={isMobile} />,
+    renderComponent: (isMobile: boolean, isActive?: boolean) => (
+      <Step1 isMobile={isMobile} />
+    ),
   },
   {
     id: 2,
@@ -45,7 +47,9 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-2-img.svg",
-    renderComponent: (isMobile: boolean) => <Step2 isMobile={isMobile} />,
+    renderComponent: (isMobile: boolean, isActive?: boolean) => (
+      <Step2 isMobile={isMobile} />
+    ),
   },
   {
     id: 3,
@@ -62,7 +66,9 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-3-img.svg",
-    renderComponent: (isMobile: boolean) => <Step3 isMobile={isMobile} />,
+    renderComponent: (isMobile: boolean, isActive?: boolean) => (
+      <Step3 isMobile={isMobile} isActive={isActive} />
+    ),
   },
   {
     id: 4,
@@ -96,7 +102,9 @@ const CONTENT = [
       </Box>
     ),
     image: "/assets/step-4-img.svg",
-    renderComponent: (isMobile: boolean) => <Step4 isMobile={isMobile} />,
+    renderComponent: (isMobile: boolean, isActive?: boolean) => (
+      <Step4 isMobile={isMobile} />
+    ),
   },
 ];
 
@@ -108,6 +116,10 @@ export const Section2 = () => {
   const pinElRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  useEffect(() => {
+    console.log("re-rendered");
+  });
 
   useLayoutEffect(() => {
     if (!window || !boxRef.current) return;
@@ -191,10 +203,13 @@ export const Section2 = () => {
             alignSelf: "flex-start",
             height: { xs: "50vh", md: "100vh" },
             position: "sticky",
+            // position: "fixed",
+            zIndex: 2,
             top: { xs: "unset", md: 0 },
             bottom: { xs: 0, md: "unset" },
+            left: 0,
+            right: 0,
             width: { xs: "100%", md: "auto" },
-            // border: "1px solid green",
             borderTop: ({ palette }) => ({
               xs: `1px solid ${palette.gray[30]}`,
               md: "none",
@@ -223,7 +238,7 @@ export const Section2 = () => {
                   component="img"
                   src={image}
                 /> */}
-                {renderComponent(isMobile)}
+                {renderComponent(isMobile, activeImg === id)}
               </Box>
             </Fade>
           ))}

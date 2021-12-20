@@ -51,15 +51,18 @@ const TodoListBlock = () => {
   );
 };
 
+const blockBorderColor = "#5F6483";
+
 const TableBlock = () => {
   return (
     <Grid
       container
       sx={{
         borderRadius: 0.75,
-        border: ({ palette }) => `1px solid ${palette.purple[300]}`,
+        border: `1px solid ${blockBorderColor}`,
         color: ({ palette }) => palette.purple[300],
         width: { xs: "100%", sm: 440 },
+        fontSize: { xs: 16, lg: 18 },
       }}
       columns={12}
     >
@@ -74,8 +77,8 @@ const TableBlock = () => {
             sx={{
               py: 1.5,
               px: { xs: 1, md: 2 },
-              borderRight: ({ palette }) => `1px solid ${palette.purple[300]}`,
-              borderBottom: ({ palette }) => `1px solid ${palette.purple[300]}`,
+              borderRight: `1px solid ${blockBorderColor}`,
+              borderBottom: `1px solid ${blockBorderColor}`,
               "&:last-of-type": {
                 borderBottom: "none",
               },
@@ -89,7 +92,7 @@ const TableBlock = () => {
             sx={{
               py: 1.5,
               px: { xs: 1, md: 2 },
-              borderBottom: ({ palette }) => `1px solid ${palette.purple[300]}`,
+              borderBottom: `1px solid ${blockBorderColor}`,
               "&:last-of-type": {
                 borderBottom: "none",
               },
@@ -180,6 +183,7 @@ export const WhyBlockProtocol1Section = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   useLayoutEffect(() => {
+    // return;
     if (!boxRef.current || !pinRef.current) return;
 
     const markers: Element[] = gsap.utils.toArray(".item");
@@ -212,18 +216,18 @@ export const WhyBlockProtocol1Section = () => {
       );
     });
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: boxRef.current,
-        start: "top top",
-        end: () => `bottom bottom-=${isMobile ? 100 : 250}px`,
-        pin: pinRef.current,
-        pinSpacing: false,
-      },
-    });
+    // const tl = gsap.timeline({
+    //   scrollTrigger: {
+    //     trigger: boxRef.current,
+    //     start: "top top",
+    //     end: () => `bottom bottom-=${isMobile ? 100 : 250}px`,
+    //     pin: pinRef.current,
+    //     pinSpacing: false,
+    //   },
+    // });
 
     return () => {
-      tl.scrollTrigger?.kill();
+      // tl.scrollTrigger?.kill();
       triggers.forEach((trigger) => trigger?.kill());
     };
   }, [isMobile]);
@@ -267,7 +271,7 @@ export const WhyBlockProtocol1Section = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            width: { md: "30%" },
+            width: { lg: "30%" },
           }}
         >
           <Box
@@ -276,6 +280,8 @@ export const WhyBlockProtocol1Section = () => {
               mt: -10,
               zIndex: 1,
               width: "100%",
+              position: "sticky",
+              top: "45vh",
             }}
           >
             {[
@@ -291,10 +297,13 @@ export const WhyBlockProtocol1Section = () => {
                   sx={{
                     display: "flex",
                     justifyContent: "center",
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    top: 0,
+                    zIndex: 2,
+                    ...(index == 0 && {
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                    }),
                   }}
                 >
                   {component}
@@ -312,9 +321,8 @@ export const WhyBlockProtocol1Section = () => {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "flex-start",
-                pt: "15vh",
+                // pt: "15vh",
                 height: "60vh",
-                minHeight: 350, // ensures there's enough space for the last animation step
               }}
             >
               <Box

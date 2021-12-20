@@ -1,6 +1,7 @@
 import {
   useState,
   useRef,
+  useEffect,
   useLayoutEffect,
   useMemo,
   VFC,
@@ -17,11 +18,23 @@ import {
   Icon,
 } from "@mui/material";
 
-type BlockProps = {
-  name: "text" | "checklist" | "image";
+/**
+ * @todo
+ * ~1. create components for step4
+ * ~2. add step4~
+ * ~3. update steps to render mobile components~
+ * ~4. add changing text animation for step 3~
+ * 5. confirm step 4 animation works well
+ */
+
+type TextBlockProps = {
+  noBoxShadow?: boolean;
+  withTitle?: boolean;
+  titleLocation?: "top" | "bottom";
+  active?: boolean;
 };
 
-const TextBlock = ({
+const TextBlock: VFC<TextBlockProps> = ({
   noBoxShadow,
   withTitle,
   titleLocation = "top",
@@ -82,7 +95,15 @@ const TextBlock = ({
   );
 };
 
-const ChecklistBlock = ({
+type ChecklistBlockProps = {
+  noBoxShadow?: boolean;
+  withTitle?: boolean;
+  titleLocation?: "top" | "bottom";
+  active?: boolean;
+  direction?: "column" | "row";
+};
+
+const ChecklistBlock: VFC<ChecklistBlockProps> = ({
   noBoxShadow,
   withTitle,
   titleLocation = "top",
@@ -194,6 +215,176 @@ const ChecklistBlock = ({
   );
 };
 
+type ImageBlockProps = {
+  withTitle?: boolean;
+  titleLocation?: "top" | "bottom";
+  active?: boolean;
+};
+
+const ImageBlock: VFC<ImageBlockProps> = ({
+  withTitle,
+  titleLocation = "top",
+  active,
+}) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: titleLocation === "top" ? "column" : "column-reverse",
+      }}
+    >
+      {withTitle && (
+        <Box
+          sx={{
+            ...(titleLocation === "top"
+              ? {
+                  mb: 1,
+                }
+              : {
+                  mt: 1.5,
+                }),
+            color: ({ palette }) => palette.gray[60],
+            fontSize: 15,
+            fontWeight: 400,
+          }}
+        >
+          Image Block
+        </Box>
+      )}
+      <Box
+        component="img"
+        sx={{
+          width: "100%",
+          border: ({ palette }) =>
+            `1px solid ${active ? palette.purple[700] : "transparent"}`,
+          borderRadius: "6px",
+        }}
+        src="/assets/image-block.png"
+      />
+    </Box>
+  );
+};
+
+const SCHEMA_CONTENT = {
+  definedTerm: {
+    title: "DefinedTerm",
+    content: [
+      { key: "name", value: "protocol" },
+      {
+        key: "description",
+        value:
+          "Protocols are standardized ways for two or more systems to communicate.",
+      },
+    ],
+  },
+  itemList: {
+    title: "ItemList",
+    content: [
+      { key: "numberOfItems", value: 4 },
+      { key: "ListItem", value: "write tests" },
+      { key: "ListItem", value: "review latest PRs" },
+      { key: "ListItem", value: "read The Big Short" },
+      { key: "ListItem", value: "check color contrast" },
+    ],
+  },
+  imageObject: {
+    title: "ImageObject",
+    content: [
+      { key: "caption", value: "a soft rainbow gradient" },
+      { key: "url", value: "https://pics.rainbow.png" },
+      { key: "thumbnail", value: "a soft rainbow gradient" },
+      { key: "associatedArticle", value: "https://atlantic.com" },
+    ],
+  },
+} as {
+  [key: string]: { title: string; content: { key: string; value: string }[] };
+};
+
+type SchemaProps = {
+  name: "definedTerm" | "itemList" | "imageObject";
+  withTitle?: boolean;
+  titleLocation?: "top" | "bottom";
+};
+
+const Schema: VFC<SchemaProps> = ({
+  name,
+  withTitle,
+  titleLocation = "top",
+}) => {
+  const { title, content } = SCHEMA_CONTENT[name ?? "definedTerm"];
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: titleLocation === "top" ? "column" : "column-reverse",
+      }}
+    >
+      {withTitle && (
+        <Box
+          sx={{
+            ...(titleLocation === "top"
+              ? {
+                  mb: 1,
+                }
+              : {
+                  mt: 1.5,
+                }),
+            color: ({ palette }) => palette.purple[700],
+            fontSize: 15,
+            fontWeight: 500,
+          }}
+        >
+          {title}
+        </Box>
+      )}
+      <Box
+        sx={{
+          backgroundColor: ({ palette }) => palette.common.white,
+          border: ({ palette }) => `2px solid ${palette.purple[700]}`,
+          boxShadow: 1,
+          p: 3,
+          ...(name === "definedTerm"
+            ? { pb: 5.75 }
+            : name === "imageObject"
+            ? { pb: 12.5 }
+            : {}),
+          borderRadius: "6px",
+        }}
+      >
+        {content.map(({ key, value }) => (
+          <Box
+            sx={{
+              display: "flex",
+              mb: 1,
+              ":last-of-type": {
+                mb: 0,
+              },
+              typography: "bpSmallCopy",
+              fontWeight: 500,
+            }}
+          >
+            <Box
+              sx={{
+                mr: 1,
+                color: ({ palette }) => palette.purple[700],
+              }}
+              component="span"
+            >
+              {key}
+            </Box>
+            <Box
+              sx={{ color: ({ palette }) => palette.gray[60] }}
+              component="span"
+            >
+              {value}
+            </Box>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
 const App: FC<{ name: "docs" | "notes" | "todo"; block: ReactElement }> = ({
   name,
   block,
@@ -228,26 +419,28 @@ const App: FC<{ name: "docs" | "notes" | "todo"; block: ReactElement }> = ({
         boxShadow: 1,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          fontWeight: 500,
-          mb: 1.5,
-          color: ({ palette }) => palette.gray[60],
-        }}
-      >
-        <Icon
-          className={iconClass}
+      <Fade key={title} in timeout={{ enter: 750, exit: 500 }}>
+        <Box
           sx={{
-            p: 1,
-            height: 16,
-            width: 16,
-            color: "currentColor",
+            display: "flex",
+            alignItems: "center",
+            fontWeight: 500,
+            mb: 1.5,
+            color: ({ palette }) => palette.gray[60],
           }}
-        />
-        {title}
-      </Box>
+        >
+          <Icon
+            className={iconClass}
+            sx={{
+              p: 1,
+              height: 16,
+              width: 16,
+              color: "currentColor",
+            }}
+          />
+          {title}
+        </Box>
+      </Fade>
       <Box>{block}</Box>
     </Box>
   );
@@ -300,12 +493,12 @@ const LayoutBg = (props) => {
   );
 };
 
-const Layout: VFC<{ blocks: ReactElement[]; withBg: boolean }> = ({
+const Layout: VFC<{ blocks: ReactElement[]; withBg?: boolean }> = ({
   blocks,
   withBg,
 }) => {
   return (
-    <Box sx={{ border: "1px solid black", p: 1, position: "relative" }}>
+    <Box sx={{ p: 1, position: "relative" }}>
       <Box
         sx={{
           width: "75%",
@@ -341,14 +534,19 @@ const Layout: VFC<{ blocks: ReactElement[]; withBg: boolean }> = ({
             alignItems: "center",
           }}
         >
-          <LayoutBg style={{ width: "100%" }} />
+          {/* <LayoutBg style={{ width: "100%" }} /> */}
         </Box>
       )}
     </Box>
   );
 };
 
-export const Step1 = ({ isMobile }) => {
+type StepProps = {
+  isMobile: boolean;
+  isActive?: boolean;
+};
+
+export const Step1: VFC<StepProps> = ({ isMobile }) => {
   if (isMobile) {
     return <ChecklistBlock withTitle />;
   }
@@ -358,47 +556,79 @@ export const Step1 = ({ isMobile }) => {
       blocks={[
         <TextBlock withTitle />,
         <ChecklistBlock withTitle titleLocation="bottom" />,
-        <TextBlock withTitle titleLocation="bottom" />,
+        <ImageBlock withTitle titleLocation="bottom" />,
       ]}
     />
   );
 };
 
-export const Step2 = ({ isMobile }) => {
+export const Step2: VFC<StepProps> = ({ isMobile }) => {
+  if (isMobile) {
+    return <App name="todo" block={<ChecklistBlock />} />;
+  }
+
   return (
     <Layout
       blocks={[
         <App name="docs" block={<TextBlock noBoxShadow />} />,
         <App name="todo" block={<ChecklistBlock noBoxShadow />} />,
-        <App name="notes" block={<TextBlock noBoxShadow />} />,
+        <App name="notes" block={<ImageBlock />} />,
       ]}
     />
   );
 };
 
-export const Step3 = ({ isMobile }) => {
+export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
+  const [titles, setTitles] = useState<string[]>(["todo", "docs", "notes"]);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    if (isActive) {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+      timerRef.current = setInterval(() => {
+        const newTitles = [...titles];
+        newTitles.unshift(newTitles.pop()!);
+        setTitles([...newTitles]);
+      }, 3000);
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isActive, titles]);
+
+  if (isMobile) {
+    return <App name="docs" block={<ChecklistBlock />} />;
+  }
   return (
     <Layout
       blocks={[
         <App
-          name="todo"
+          name={titles[0]}
           block={<ChecklistBlock noBoxShadow active direction="row" />}
         />,
-        <App name="docs" block={<TextBlock noBoxShadow active />} />,
-        <App name="notes" block={<TextBlock noBoxShadow active />} />,
+        <App name={titles[1]} block={<ImageBlock noBoxShadow active />} />,
+        <App name={titles[2]} block={<TextBlock noBoxShadow active />} />,
       ]}
       withBg
     />
   );
 };
 
-export const Step4 = ({ isMobile }) => {
+export const Step4: VFC<StepProps> = ({ isMobile }) => {
+  if (isMobile) {
+    return <Schema name="itemList" withTitle titleLocation="bottom" />;
+  }
   return (
     <Layout
       blocks={[
-        <App name="docs" block={<TextBlock noBoxShadow />} />,
-        <App name="todo" block={<ChecklistBlock noBoxShadow />} />,
-        <App name="notes" block={<TextBlock noBoxShadow />} />,
+        <Schema name="definedTerm" withTitle titleLocation="top" />,
+        <Schema name="itemList" withTitle titleLocation="bottom" />,
+        <Schema name="imageObject" withTitle titleLocation="bottom" />,
       ]}
     />
   );
