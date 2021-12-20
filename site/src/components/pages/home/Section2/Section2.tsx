@@ -8,7 +8,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { InlineLink } from "../../../InlineLink";
-import { Step1, Step2, Step3, Step4 } from "./StepBlocks";
+import { Step1, Step2, Step3, Step4 } from "./Steps";
 
 const CONTENT = [
   {
@@ -27,7 +27,6 @@ const CONTENT = [
         web application
       </Box>
     ),
-    image: "/assets/step-1-img.svg",
     renderComponent: (isMobile: boolean, isActive?: boolean) => (
       <Step1 isMobile={isMobile} />
     ),
@@ -46,7 +45,6 @@ const CONTENT = [
         built the API integration for you.
       </Box>
     ),
-    image: "/assets/step-2-img.svg",
     renderComponent: (isMobile: boolean, isActive?: boolean) => (
       <Step2 isMobile={isMobile} />
     ),
@@ -65,7 +63,6 @@ const CONTENT = [
         blocks, even if the blocks are in completely seperate applications.
       </Box>
     ),
-    image: "/assets/step-3-img.svg",
     renderComponent: (isMobile: boolean, isActive?: boolean) => (
       <Step3 isMobile={isMobile} isActive={isActive} />
     ),
@@ -101,7 +98,6 @@ const CONTENT = [
         embedded in.
       </Box>
     ),
-    image: "/assets/step-4-img.svg",
     renderComponent: (isMobile: boolean, isActive?: boolean) => (
       <Step4 isMobile={isMobile} />
     ),
@@ -111,15 +107,11 @@ const CONTENT = [
 const CONTENT_CLASS_NAME = "scroll-section";
 
 export const Section2 = () => {
-  const [activeImg, setActiveImg] = useState(CONTENT[0].id);
+  const [activeImg, setActiveImg] = useState(null);
   const boxRef = useRef<HTMLDivElement>(null);
   const pinElRef = useRef<HTMLDivElement>(null);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  useEffect(() => {
-    console.log("re-rendered");
-  });
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   useLayoutEffect(() => {
     if (!window || !boxRef.current) return;
@@ -155,20 +147,20 @@ export const Section2 = () => {
   }, []);
 
   return (
-    <Box sx={{ pt: { xs: 2, md: 10 } }}>
+    <Box sx={{ pt: { xs: 2, lg: 10 } }}>
       <Container
         ref={boxRef}
         sx={{
           display: "flex",
           px: 0,
-          flexDirection: { xs: "column", md: "row" },
+          flexDirection: { xs: "column", lg: "row" },
           maxWidth: "100vw",
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", sm: "80%", md: "40%" },
-            mr: { md: 4 },
+            width: { xs: "100%", sm: "80%", lg: "40%" },
+            mr: { lg: 4 },
           }}
         >
           {CONTENT.map(({ id, title, content }) => (
@@ -177,13 +169,13 @@ export const Section2 = () => {
               data-key={id}
               sx={{
                 typography: "bpBodyCopy",
-                minHeight: { xs: "auto", md: "70vh" },
+                minHeight: { xs: "auto", lg: "70vh" },
                 display: "flex",
                 flexDirection: "column",
                 px: { xs: "5%" },
-                pt: { md: "20vh" },
+                pt: { lg: "20vh" },
                 ":first-of-type": {
-                  pt: { xs: 10, md: "20vh" },
+                  pt: { xs: 10, lg: "20vh" },
                 },
                 mb: 10,
               }}
@@ -199,25 +191,28 @@ export const Section2 = () => {
         <Box
           ref={pinElRef}
           sx={{
-            flex: { xs: "unset", md: 1 },
+            flex: { xs: "unset", lg: 1 },
             alignSelf: "flex-start",
-            height: { xs: "50vh", md: "100vh" },
+            height: { xs: "40vh", lg: "100vh" },
             position: "sticky",
-            // position: "fixed",
             zIndex: 2,
-            top: { xs: "unset", md: 0 },
-            bottom: { xs: 0, md: "unset" },
+            top: { xs: "unset", lg: 0 },
+            bottom: { xs: 0, lg: "unset" },
             left: 0,
             right: 0,
-            width: { xs: "100%", md: "auto" },
-            borderTop: ({ palette }) => ({
-              xs: `1px solid ${palette.gray[30]}`,
-              md: "none",
-            }),
+            width: { xs: "100%", lg: "auto" },
+
+            borderTop: ({ palette }) =>
+              activeImg
+                ? {
+                    xs: `1px solid ${palette.gray[30]}`,
+                    lg: "none",
+                  }
+                : "none",
             backgroundColor: ({ palette }) => palette.common.white,
           }}
         >
-          {CONTENT.map(({ image, id, renderComponent }) => (
+          {CONTENT.map(({ id, renderComponent }) => (
             <Fade key={id} in={activeImg === id}>
               <Box
                 sx={{
@@ -225,19 +220,14 @@ export const Section2 = () => {
                   top: 0,
                   left: 0,
                   right: 0,
-                  bottom: { xs: 0, md: "unset" },
-                  pt: { md: "20vh" },
+                  bottom: { xs: 0, lg: "unset" },
+                  pt: { lg: "20vh" },
                   px: { xs: "5%", lg: 0 },
                   display: "flex",
                   justifyContent: "center",
-                  alignItems: { xs: "center", md: "flex-start" },
+                  alignItems: { xs: "center", lg: "flex-start" },
                 }}
               >
-                {/* <Box
-                  sx={{ height: { xs: "40vh", md: "auto" } }}
-                  component="img"
-                  src={image}
-                /> */}
                 {renderComponent(isMobile, activeImg === id)}
               </Box>
             </Fade>
