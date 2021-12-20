@@ -108,7 +108,7 @@ const DocsPage: NextPage<DocsPageProps> = ({
           <Tabs
             value={href}
             onChange={(_, newHref) => router.push(newHref)}
-            aria-label="basic tabs example"
+            aria-label="documentation-tabs"
           >
             {documentationPages.map(({ title: tabTitle, href: tabHref }, i) => (
               <Tab
