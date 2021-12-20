@@ -1,4 +1,4 @@
-import { getAllPageStructures } from "../util/mdxUtils";
+import { getAllPages, getPage } from "../util/mdxUtils";
 
 export type SiteMapPageSection = {
   title: string;
@@ -19,43 +19,33 @@ export type SiteMap = {
 
 export const getDocumentationSubPages = (): SiteMapPage[] => [
   {
+    ...getPage({
+      pathToDirectory: "docs",
+      fileName: "0_index.mdx",
+    }),
+    href: "/docs",
     title: "Introduction",
-    href: "/spec/introduction",
-    sections: [],
-    subPages: [],
   },
   {
+    ...getPage({
+      pathToDirectory: "docs",
+      fileName: "1_quick-start-guide.mdx",
+    }),
+    href: "/docs/quick-start-guide",
     title: "Quick Start Guide",
-    href: "/spec/quick-start-guide",
-    sections: [],
-    subPages: [],
+  },
+  {
+    ...getPage({
+      pathToDirectory: "docs",
+      fileName: "2_embedding-application.mdx",
+    }),
+    href: "/docs/embedding-application",
+    title: "Embedding Application",
   },
 ];
 
-export const getSpecSubPages = (): SiteMapPage[] => {
-  const pageStructures = getAllPageStructures({ folderName: "spec" });
-
-  return pageStructures.map(({ title, href, sections }) => ({
-    title,
-    href,
-    sections:
-      sections?.map(
-        ({ title: sectionTitle, anchor: sectionAnchor, subSections }) => ({
-          title: sectionTitle,
-          anchor: sectionAnchor,
-          subSections:
-            subSections?.map(
-              ({ title: subSectionTitle, anchor: subSectionAnchor }) => ({
-                title: subSectionTitle,
-                anchor: subSectionAnchor,
-                subSections: [],
-              }),
-            ) || [],
-        }),
-      ) || [],
-    subPages: [],
-  }));
-};
+export const getSpecSubPages = (): SiteMapPage[] =>
+  getAllPages({ pathToDirectory: "spec" });
 
 export const generateSiteMap = (): SiteMap => ({
   pages: [
