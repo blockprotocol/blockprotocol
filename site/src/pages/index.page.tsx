@@ -2,7 +2,7 @@ import React from "react";
 import { NextPage } from "next";
 import { Header } from "../components/pages/home/Header";
 import { IntroSection } from "../components/pages/home/IntroSection";
-import { Section2 } from "../components/pages/home/Section2/Section2";
+import { Section2 } from "../components/pages/home/Section2";
 import { Spacer } from "../components/Spacer";
 import { WhyBlockProtocol1Section } from "../components/pages/home/WhyBlockProtocol1Section";
 import { WhyBlockProtocol2Section } from "../components/pages/home/WhyBlockProtocol2Section";

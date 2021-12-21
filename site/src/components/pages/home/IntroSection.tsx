@@ -128,7 +128,7 @@ export const IntroSection = () => {
                   left: "50%",
                   transform: "translateX(-50%)",
                   width: { xs: "90%", sm: "50%", md: "100%" },
-                  maxWidth: 1444,
+                  maxWidth: { xs: 380, md: 1444 },
                 }}
                 src={isMobile ? graphImgMobile : graphImg}
                 component="img"
@@ -169,7 +169,7 @@ export const IntroSection = () => {
                 key={id}
                 sx={{
                   display: "flex !important",
-                  justifyContent: "flex-end",
+                  justifyContent: { xs: "center", md: "flex-end" },
                   alignItems: "center",
                   height: { xs: 300, md: 400 },
                 }}
