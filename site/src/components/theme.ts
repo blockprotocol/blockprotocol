@@ -763,5 +763,29 @@ export const theme = createTheme({
         disableTouchRipple: true,
       },
     },
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          height: 5,
+        },
+      },
+    },
+    MuiTab: {
+      defaultProps: {
+        disableFocusRipple: true,
+        disableRipple: true,
+        disableTouchRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          padding: defaultTheme.spacing(1, 0),
+          marginRight: defaultTheme.spacing(3),
+        },
+        textColorPrimary: {
+          color: customColors.gray[70],
+        },
+      },
+    },
   },
 });

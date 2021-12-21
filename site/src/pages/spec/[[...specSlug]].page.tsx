@@ -158,7 +158,7 @@ export const getStaticProps: GetStaticProps<
     specSlug && specSlug.length > 0 ? specSlug[0] : "index";
 
   const serializedPage = await getSerializedPage({
-    folderName: "spec",
+    pathToDirectory: "spec",
     fileNameWithoutIndex,
   });
 
@@ -166,7 +166,6 @@ export const getStaticProps: GetStaticProps<
     props: {
       serializedPage,
     },
-    revalidate: true,
   };
 };
 

@@ -10,8 +10,6 @@ import remarkParse from "remark-parse";
 import slugify from "slugify";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 
-type FolderName = "spec" | "docs";
-
 type Node = {
   type: string;
 };
@@ -71,9 +69,7 @@ const parseNameFromFileName = (fileName: string) => {
 };
 
 // Gets all hrefs corresponding to the MDX files in a directory
-export const getAllPageHrefs = (params: {
-  folderName: FolderName;
-}): string[] => {
+export const getAllPageHrefs = (params: { folderName: string }): string[] => {
   const { folderName } = params;
 
   const fileNames = readdirSync(
@@ -89,13 +85,13 @@ export const getAllPageHrefs = (params: {
 
 // Serializes an MDX file
 export const getSerializedPage = async (params: {
-  folderName: FolderName;
+  pathToDirectory: string;
   fileNameWithoutIndex: string;
 }): Promise<MDXRemoteSerializeResult<Record<string, unknown>>> => {
-  const { folderName, fileNameWithoutIndex } = params;
+  const { pathToDirectory, fileNameWithoutIndex } = params;
 
   const fileNames = readdirSync(
-    path.join(process.cwd(), `src/_pages/${folderName}`),
+    path.join(process.cwd(), `src/_pages/${pathToDirectory}`),
   );
 
   const fileName = fileNames.find((fullFileName) =>
@@ -103,7 +99,7 @@ export const getSerializedPage = async (params: {
   );
 
   const source = readFileSync(
-    path.join(process.cwd(), `src/_pages/${folderName}/${fileName}`),
+    path.join(process.cwd(), `src/_pages/${pathToDirectory}/${fileName}`),
   );
 
   const { content, data } = matter(source);
@@ -128,14 +124,14 @@ const getText = (node: Node): string =>
   ].join("");
 
 // Get the structure of a given MDX file in a given directory
-const getPageStructure = (params: {
-  folderName: string;
+export const getPage = (params: {
+  pathToDirectory: string;
   fileName: string;
 }): SiteMapPage => {
-  const { folderName, fileName } = params;
+  const { pathToDirectory, fileName } = params;
 
   const source = readFileSync(
-    path.join(process.cwd(), `src/_pages/${folderName}/${fileName}`),
+    path.join(process.cwd(), `src/_pages/${pathToDirectory}/${fileName}`),
   );
 
   const { content } = matter(source);
@@ -146,17 +142,13 @@ const getPageStructure = (params: {
 
   const h1 = headings.find(({ depth }) => depth === 1);
 
-  if (!h1) {
-    throw new Error("Need H1 to determine title of page");
-  }
-
-  const title = getText(h1);
+  const title = h1 ? getText(h1) : "Unknown";
 
   const name = parseNameFromFileName(fileName);
 
   return {
     title,
-    href: `/spec${
+    href: `/${pathToDirectory}${
       name === "index" ? "" : `/${slugify(name, { lower: true })}`
     }`,
     sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
@@ -197,18 +189,18 @@ const getPageStructure = (params: {
 };
 
 // Get the structure of a all MDX files in a given directory
-export const getAllPageStructures = (params: {
-  folderName: FolderName;
+export const getAllPages = (params: {
+  pathToDirectory: string;
 }): SiteMapPage[] => {
-  const { folderName } = params;
+  const { pathToDirectory } = params;
 
   const fileNames = readdirSync(
-    path.join(process.cwd(), `src/_pages/${folderName}`),
+    path.join(process.cwd(), `src/_pages/${pathToDirectory}`),
   );
 
   return fileNames.map((fileName) =>
-    getPageStructure({
-      folderName,
+    getPage({
+      pathToDirectory,
       fileName,
     }),
   );
