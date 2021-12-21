@@ -723,10 +723,10 @@ export const theme = createTheme({
               backgroundColor: customColors.gray[20],
             },
             "& .MuiListItemIcon-root": {
-              color: defaultTheme.palette.common.black,
+              color: customColors.purple[700],
             },
             "& .MuiListItemText-primary": {
-              color: defaultTheme.palette.common.black,
+              color: customColors.purple[700],
               fontWeight: 600,
             },
           },
