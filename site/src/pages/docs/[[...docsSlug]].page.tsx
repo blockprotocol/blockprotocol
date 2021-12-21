@@ -97,37 +97,41 @@ const DocsPage: NextPage<DocsPageProps> = ({
 
   return (
     <>
-      <Box
-        sx={{
-          borderBottom: 1,
-          borderColor: ({ palette }) => palette.gray[20],
-          borderBottomStyle: "solid",
-        }}
-      >
-        <Container>
-          <Tabs
-            value={href}
-            onChange={(_, newHref) => router.push(newHref)}
-            aria-label="documentation-tabs"
-          >
-            {documentationPages.map(({ title: tabTitle, href: tabHref }, i) => (
-              <Tab
-                key={tabHref}
-                label={tabTitle}
-                value={tabHref}
-                href={tabHref}
-                component="a"
-                onClick={(
-                  event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                ) => {
-                  event.preventDefault();
-                }}
-                {...a11yProps(i)}
-              />
-            ))}
-          </Tabs>
-        </Container>
-      </Box>
+      {md && (
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: ({ palette }) => palette.gray[20],
+            borderBottomStyle: "solid",
+          }}
+        >
+          <Container>
+            <Tabs
+              value={href}
+              onChange={(_, newHref) => router.push(newHref)}
+              aria-label="documentation-tabs"
+            >
+              {documentationPages.map(
+                ({ title: tabTitle, href: tabHref }, i) => (
+                  <Tab
+                    key={tabHref}
+                    label={tabTitle}
+                    value={tabHref}
+                    href={tabHref}
+                    component="a"
+                    onClick={(
+                      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+                    ) => {
+                      event.preventDefault();
+                    }}
+                    {...a11yProps(i)}
+                  />
+                ),
+              )}
+            </Tabs>
+          </Container>
+        </Box>
+      )}
       <Container
         sx={{
           marginTop: {

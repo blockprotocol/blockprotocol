@@ -1,7 +1,7 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT, Navbar } from "./Navbar";
+import { DESKTOP_NAVBAR_HEIGHT, Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { BANNERS, FooterBanner } from "./FooterBanner";
 
@@ -9,6 +9,10 @@ type PageLayoutProps = {};
 
 export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
   const { asPath, pathname } = useRouter();
+
+  const [navbarHeight, setNavbarHeight] = useState<number>(
+    DESKTOP_NAVBAR_HEIGHT,
+  );
 
   const isHomePage = asPath === "/";
 
@@ -19,16 +23,11 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
 
   return (
     <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
-      <Navbar />
+      <Navbar navbarHeight={navbarHeight} setNavbarHeight={setNavbarHeight} />
       <Box
         flexGrow={1}
         sx={{
-          paddingTop: isHomePage
-            ? {}
-            : {
-                xs: `${MOBILE_NAVBAR_HEIGHT}px`,
-                md: `${DESKTOP_NAVBAR_HEIGHT}px`,
-              },
+          paddingTop: isHomePage ? {} : `${navbarHeight}px`,
         }}
       >
         {children}
