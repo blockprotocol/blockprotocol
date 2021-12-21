@@ -12,6 +12,8 @@ type InfoCardWrapperProps = {
   children: ReactNode;
 };
 
+export const INFO_CARD_WIDTH = 275;
+
 export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
   children,
 }) => {
@@ -34,6 +36,7 @@ export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
   return (
     <Box
       display="flex"
+      className="info-card-wrapper"
       sx={{
         flexDirection: {
           xs: "column",
@@ -55,9 +58,11 @@ export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
         }}
       >
         {cloneElement(infoCardElement, {
-          width: {
-            sx: "unset",
-            sm: 275,
+          sx: {
+            width: {
+              xs: "unset",
+              sm: INFO_CARD_WIDTH,
+            },
           },
         })}
       </Box>

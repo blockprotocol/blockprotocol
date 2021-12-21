@@ -316,6 +316,10 @@ export const theme = createTheme({
               scroll-behavior: smooth;
             }
 
+            pre {
+              margin: unset;
+            }
+
             :target:before {
               content: "";
               display: block;

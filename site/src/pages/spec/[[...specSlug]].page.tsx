@@ -9,15 +9,15 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
 import { Sidebar } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
-import { mdxComponents } from "../../util/mdxComponents";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 import SiteMapContext from "../../components/context/SiteMapContext";
+import { MDXPageContent } from "../../components/MDXPageContent";
 
 const GitHubInfoCard = (
   <Paper
@@ -112,12 +112,13 @@ const GitHubInfoCard = (
       <Button
         variant="primary"
         color="teal"
+        size="small"
         startIcon={<Icon className="fab fa-github" />}
         sx={{
           textTransform: "none",
         }}
       >
-        <Typography>View the spec on Github</Typography>
+        View the spec on Github
       </Button>
     </Box>
   </Paper>
@@ -235,9 +236,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
             />
           </Box>
         ) : null}
-        <Box flexGrow={1}>
-          <MDXRemote {...serializedPage} components={mdxComponents} />
-        </Box>
+        <MDXPageContent flexGrow={1} serializedPage={serializedPage} />
       </Box>
     </Container>
   );
