@@ -10,13 +10,19 @@ type BlockCardProps = {
   data?: Omit<BlockMetadata, "source" | "schema" | "variants">;
 };
 
-// @todo add images to each block
+const blockWidthStyles = {
+  maxWidth: 450,
+  minWidth: 288,
+  width: "100%",
+};
 
 const BlockCardLoading = () => {
   return (
     <Box
       sx={{
-        width: { xs: 288, lg: 328 },
+        maxWidth: 450,
+        minWidth: 288,
+        width: "100%",
         borderRadius: "8px",
         boxShadow: 1,
       }}
@@ -59,7 +65,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
   const {
     displayName,
     description,
-    // image,
+    image,
     author,
     version,
     lastUpdated,
@@ -71,23 +77,25 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
     <Link href={`${packagePath}`}>
       <Box
         sx={{
-          width: { xs: 288, lg: 328 },
+          ...blockWidthStyles,
           borderRadius: "8px",
           boxShadow: 1,
-          transition: "0.3s ease",
+          transition: ({ transitions }) =>
+            transitions.create(["box-shadow", "transform"]),
           backgroundColor: ({ palette }) => palette.common.white,
           "&:hover": {
             boxShadow: 4,
             "& .block-card__name": {
               color: ({ palette }) => palette.purple[600],
             },
+            transform: "scale(1.05)",
           },
           cursor: "pointer",
         }}
       >
         <Box
           sx={{
-            backgroundColor: "gray.20",
+            backgroundColor: ({ palette }) => palette.gray[20],
             py: 3,
             px: 2.75,
             borderTopLeftRadius: "8px",
@@ -97,18 +105,18 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
           <Box
             sx={{
               height: 186,
-              backgroundColor: "gray.70",
+              backgroundColor: ({ palette }) => palette.gray[70],
               borderRadius: "4px",
               display: "flex",
             }}
           >
-            {/* {image && (
+            {image && (
               <Box
                 component="img"
                 sx={{ flex: 1, objectFit: "cover" }}
                 src={image}
               />
-            )} */}
+            )}
           </Box>
         </Box>
         <Box
@@ -193,7 +201,7 @@ export const BlockCardComingSoon = () => {
         py: 6,
         px: 4.25,
         minHeight: 400,
-        width: { xs: 288, lg: 328 },
+        ...blockWidthStyles,
         backgroundColor: "white",
         border: ({ palette }) => `2px dashed ${palette.gray["30"]}`,
         borderRadius: "8px",
