@@ -1,194 +1,244 @@
 {
-  "pages": [
-    {
-      "title": "Block Hub",
-      "href": "/hub",
-      "sections": [],
-      "subPages": []
-    },
-    {
-      "title": "Documentation",
-      "href": "/docs",
-      "sections": [],
-      "subPages": [
-        {
-          "title": "Introduction",
-          "href": "/spec/introduction",
-          "sections": [],
-          "subPages": []
-        },
-        {
-          "title": "Quick Start Guide",
-          "href": "/spec/quick-start-guide",
-          "sections": [],
-          "subPages": []
-        }
-      ]
-    },
-    {
-      "title": "Specification",
-      "href": "/spec",
-      "sections": [],
-      "subPages": [
-        {
-          "title": "Introduction",
-          "href": "/spec",
-          "sections": [
-            {
-              "title": "Overview",
-              "anchor": "overview",
-              "subSections": []
-            },
-            {
-              "title": "Terminology",
-              "anchor": "terminology",
-              "subSections": []
-            }
-          ],
-          "subPages": []
-        },
-        {
-          "title": "Block types",
-          "href": "/spec/block-types",
-          "sections": [
-            {
-              "title": "Requesting, creating, and updating data",
-              "anchor": "requesting-creating-and-updating-data",
-              "subSections": [
-                {
-                  "title": "Data provided to blocks",
-                  "anchor": "data-provided-to-blocks",
-                  "subSections": []
-                },
-                {
-                  "title": "Functions provided to blocks",
-                  "anchor": "functions-provided-to-blocks",
-                  "subSections": []
-                },
-                {
-                  "title": "Linking entities to other entities",
-                  "anchor": "linking-entities-to-other-entities",
-                  "subSections": []
-                },
-                {
-                  "title": "Putting it all together - the data gets sent to blocks",
-                  "anchor": "putting-it-all-together-the-data-gets-sent-to-blocks",
-                  "subSections": []
-                },
-                {
-                  "title": "Working with third-party data stores",
-                  "anchor": "working-with-third-party-data-stores",
-                  "subSections": []
-                }
-              ]
-            },
-            {
-              "title": "Tracking user action",
-              "anchor": "tracking-user-action",
-              "subSections": []
-            },
-            {
-              "title": "Edit history",
-              "anchor": "edit-history",
-              "subSections": []
-            },
-            {
-              "title": "Comments",
-              "anchor": "comments",
-              "subSections": []
-            },
-            {
-              "title": "Styling",
-              "anchor": "styling",
-              "subSections": []
-            }
-          ],
-          "subPages": []
-        },
-        {
-          "title": "Embedding application implementation",
-          "href": "/spec/embedding-application-implementation",
-          "sections": [
-            {
-              "title": "Rendering blocks",
-              "anchor": "rendering-blocks",
-              "subSections": []
-            },
-            {
-              "title": "Data validation",
-              "anchor": "data-validation",
-              "subSections": []
-            },
-            {
-              "title": "Styling",
-              "anchor": "styling",
-              "subSections": []
-            },
-            {
-              "title": "Security",
-              "anchor": "security",
-              "subSections": []
-            },
-            {
-              "title": "Making the rendered web page machine-readable",
-              "anchor": "making-the-rendered-web-page-machine-readable",
-              "subSections": []
-            }
-          ],
-          "subPages": []
-        },
-        {
-          "title": "Implementation and rendering context",
-          "href": "/spec/implementation-and-rendering-context",
-          "sections": [
-            {
-              "title": "Ensuring compliance with requirements",
-              "anchor": "ensuring-compliance-with-requirements",
-              "subSections": []
-            },
-            {
-              "title": "Rendering contexts",
-              "anchor": "rendering-contexts",
-              "subSections": [
-                {
-                  "title": "React",
-                  "anchor": "react",
-                  "subSections": []
-                },
-                {
-                  "title": "HTML",
-                  "anchor": "html",
-                  "subSections": []
-                },
-                {
-                  "title": "Templating languages",
-                  "anchor": "templating-languages",
-                  "subSections": []
-                }
-              ]
-            }
-          ],
-          "subPages": []
-        },
-        {
-          "title": "Appendix A: Block protocol CSS variables",
-          "href": "/spec/appendix-a-block-protocol-css-variables",
-          "sections": [],
-          "subPages": []
-        },
-        {
-          "title": "Appendix B: Accessibility",
-          "href": "/spec/appendix-b-accessibility",
-          "sections": [],
-          "subPages": []
-        },
-        {
-          "title": "Appendix C: Internationalization",
-          "href": "/spec/appendix-c-internationalization",
-          "sections": [],
-          "subPages": []
-        }
-      ]
-    }
-  ]
+	"pages": [
+		{
+			"title": "Block Hub",
+			"href": "/hub",
+			"sections": [],
+			"subPages": []
+		},
+		{
+			"title": "Documentation",
+			"href": "/docs",
+			"sections": [],
+			"subPages": [
+				{
+					"title": "Introduction",
+					"href": "/docs",
+					"sections": [
+						{
+							"title": "Introduction",
+							"anchor": "introduction",
+							"subSections": []
+						}
+					],
+					"subPages": []
+				},
+				{
+					"title": "Quick Start Guide",
+					"href": "/docs/quick-start-guide",
+					"sections": [
+						{
+							"title": "The quickest start",
+							"anchor": "the-quickest-start",
+							"subSections": []
+						},
+						{
+							"title": "Almost-as-quick start",
+							"anchor": "almost-as-quick-start",
+							"subSections": [
+								{
+									"title": "Install",
+									"anchor": "install",
+									"subSections": []
+								},
+								{
+									"title": "Code",
+									"anchor": "code",
+									"subSections": []
+								},
+								{
+									"title": "Build",
+									"anchor": "build",
+									"subSections": []
+								}
+							]
+						}
+					],
+					"subPages": []
+				},
+				{
+					"title": "Embedding Application",
+					"href": "/docs/embedding-application",
+					"sections": [
+						{
+							"title": "Embedding Application",
+							"anchor": "embedding-application",
+							"subSections": []
+						}
+					],
+					"subPages": []
+				}
+			]
+		},
+		{
+			"title": "Specification",
+			"href": "/spec",
+			"sections": [],
+			"subPages": [
+				{
+					"title": "Introduction",
+					"href": "/spec",
+					"sections": [
+						{
+							"title": "Overview",
+							"anchor": "overview",
+							"subSections": []
+						},
+						{
+							"title": "Terminology",
+							"anchor": "terminology",
+							"subSections": []
+						}
+					],
+					"subPages": []
+				},
+				{
+					"title": "Block types",
+					"href": "/spec/block-types",
+					"sections": [
+						{
+							"title": "Requesting, creating, and updating data",
+							"anchor": "requesting-creating-and-updating-data",
+							"subSections": [
+								{
+									"title": "Data provided to blocks",
+									"anchor": "data-provided-to-blocks",
+									"subSections": []
+								},
+								{
+									"title": "Functions provided to blocks",
+									"anchor": "functions-provided-to-blocks",
+									"subSections": []
+								},
+								{
+									"title": "Functions for working with entity types",
+									"anchor": "functions-for-working-with-entity-types",
+									"subSections": []
+								},
+								{
+									"title": "Linking entities to other entities",
+									"anchor": "linking-entities-to-other-entities",
+									"subSections": []
+								},
+								{
+									"title": "Putting it all together – the data gets sent to blocks",
+									"anchor": "putting-it-all-together---the-data-gets-sent-to-blocks",
+									"subSections": []
+								},
+								{
+									"title": "Working with third-party data stores",
+									"anchor": "working-with-third-party-data-stores",
+									"subSections": []
+								}
+							]
+						},
+						{
+							"title": "Tracking user action",
+							"anchor": "tracking-user-action",
+							"subSections": []
+						},
+						{
+							"title": "Edit history",
+							"anchor": "edit-history",
+							"subSections": []
+						},
+						{
+							"title": "Comments",
+							"anchor": "comments",
+							"subSections": []
+						},
+						{
+							"title": "Styling",
+							"anchor": "styling",
+							"subSections": []
+						}
+					],
+					"subPages": []
+				},
+				{
+					"title": "Embedding application implementation",
+					"href": "/spec/embedding-application-implementation",
+					"sections": [
+						{
+							"title": "Rendering blocks",
+							"anchor": "rendering-blocks",
+							"subSections": []
+						},
+						{
+							"title": "Data validation",
+							"anchor": "data-validation",
+							"subSections": []
+						},
+						{
+							"title": "Styling",
+							"anchor": "styling",
+							"subSections": []
+						},
+						{
+							"title": "Security",
+							"anchor": "security",
+							"subSections": []
+						},
+						{
+							"title": "Making the rendered web page machine-readable",
+							"anchor": "making-the-rendered-web-page-machine-readable",
+							"subSections": []
+						}
+					],
+					"subPages": []
+				},
+				{
+					"title": "Implementation and rendering context",
+					"href": "/spec/implementation-and-rendering-context",
+					"sections": [
+						{
+							"title": "Ensuring compliance with requirements",
+							"anchor": "ensuring-compliance-with-requirements",
+							"subSections": []
+						},
+						{
+							"title": "Rendering contexts",
+							"anchor": "rendering-contexts",
+							"subSections": [
+								{
+									"title": "React",
+									"anchor": "react",
+									"subSections": []
+								},
+								{
+									"title": "HTML",
+									"anchor": "html",
+									"subSections": []
+								},
+								{
+									"title": "Templating languages",
+									"anchor": "templating-languages",
+									"subSections": []
+								}
+							]
+						}
+					],
+					"subPages": []
+				},
+				{
+					"title": "Appendix A: Block protocol CSS variables",
+					"href": "/spec/appendix-a-block-protocol-css-variables",
+					"sections": [],
+					"subPages": []
+				},
+				{
+					"title": "Appendix B: Accessibility (a11y)",
+					"href": "/spec/appendix-b-accessibility",
+					"sections": [],
+					"subPages": []
+				},
+				{
+					"title": "Appendix C: Internationalization (i18n)",
+					"href": "/spec/appendix-c-internationalization",
+					"sections": [],
+					"subPages": []
+				}
+			]
+		}
+	]
 }

@@ -22,8 +22,20 @@ import { tw } from "twind";
 
 import { Link, LinkProps } from "../../components/Link";
 import { BlocksSlider } from "../../components/pages/home/BlocksSlider";
-import { Snippet } from "../../components/Snippet";
+import { BlockDataTabPanels } from "../../components/pages/hub/BlockDataTabPanels";
+import { BlockDataTabs } from "../../components/pages/hub/BlockDataTabs";
+import {
+  blockDependencies,
+  BlockDependency,
+  BlockSchema,
+  disableTabAnimations,
+  dummyUploadFile,
+  getEmbedBlock,
+} from "../../components/pages/hub/HubUtils";
+import { TabPanel } from "../../components/pages/hub/TabPanel";
 import { BlockMetadata } from "../api/blocks.api";
+import { BlockTabsModal } from "../../components/pages/hub/BlockTabsModal";
+import { BlockModalButton } from "../../components/pages/hub/BlockModalButton";
 
 const ChevronRight: React.VFC = () => (
   <Icon sx={{ fontSize: "0.8rem" }} className="fas fa-chevron-right" />
@@ -37,17 +49,9 @@ const BreadcrumbLink: React.FC<LinkProps> = ({ children, ...props }) => (
 
 const validator = new Validator();
 
-/* eslint-disable global-require */
-const blockDependencies = {
-  react: require("react"),
-  "react-dom": require("react-dom"),
-  twind: require("twind"),
+type BlockExports = {
+  default: React.FC;
 };
-
-type BlockExports = { default: React.FC };
-/** @sync @hashintel/block-protocol */
-type BlockSchema = Record<string, any>;
-type BlockDependency = keyof typeof blockDependencies;
 
 interface PageState {
   schema?: BlockSchema;
@@ -80,32 +84,6 @@ const Bullet: VoidFunctionComponent = () => {
   );
 };
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-}
-
 const Block: NextPage = () => {
   const org = "@hash";
   const { block } = useRouter().query;
@@ -119,8 +97,6 @@ const Block: NextPage = () => {
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const isDesktopSize = md;
-
-  // console.log({ metadata, schema, blockModule });
 
   useEffect(() => {
     if (!org || !block) return;
@@ -152,18 +128,29 @@ const Block: NextPage = () => {
 
     try {
       result = JSON.parse(text);
+      result.accountId = "test-account-id";
+      result.entityId = "test-entity-id";
+      result.uploadFile = dummyUploadFile;
+      result.getEmbedBlock = getEmbedBlock;
     } catch (err) {
       return [result, [(err as Error).message]];
     }
 
+    const errorsToEat = ["uploadFile", "getEmbedBlock"];
+
     const errorMessages = validator
       .validate(result, schema ?? {})
-      .errors.map((err) => `ValidationError: ${err.stack}`);
+      .errors.map((err) => `ValidationError: ${err.stack}`)
+      .filter(
+        (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
+      );
 
     return [result, errorMessages];
   }, [text, schema]);
 
-  const [currentTab, setCurrentTab] = useState(0);
+  const [blockDataTab, setBlockDataTab] = useState(0);
+  const [blockTab, setBlockTab] = useState(0);
+  const [blockModalOpen, setBlockModalOpen] = useState(false);
 
   if (!metadata || !schema) return null;
 
@@ -184,69 +171,127 @@ const Block: NextPage = () => {
           <Box
             sx={{ display: "inline-block", height: "2em", width: "2em" }}
             component="img"
-            src={`/blocks/@hash/video/${metadata.icon}`}
+            src={`/blocks/${org}/${block}/${metadata.icon}`}
           />
         </Typography>
         <div>
-          <Typography variant="bpHeading1" mt={4}>
+          <Typography variant="bpHeading1" mt={2}>
             {metadata.displayName}
           </Typography>
-          <div>{metadata.description}</div>
-          <div>
-            By <Link href="https://hash.ai/@hash">{org}</Link> <Bullet /> V
-            {metadata.version} <Bullet /> Updated Recently
-          </div>
+          <Typography variant="bpBodyCopy">
+            <div style={{ color: "#4D5C6C" }}>{metadata.description}</div>
+          </Typography>
+          <Typography variant="bpSmallCopy">
+            <div style={{ color: "#64778C" }}>
+              By {org}
+              <Bullet /> V{metadata.version} <Bullet /> Updated Recently
+            </div>
+          </Typography>
         </div>
       </Box>
 
-      <div className="flex flex-row mb-10">
-        <div className={tw`w-3/5 pr-5`}>
-          <div
-            style={{ height: 320 }}
-            className={tw`bg-white rounded-2xl w-full p-4`}
-          >
-            {blockModule && <blockModule.default {...props} />}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "60% 40%",
+          marginTop: 20,
+        }}
+        className="mb-10"
+      >
+        <div>
+          <div style={{ height: 320 }} className={tw`bg-white`}>
+            <Tabs
+              disableRipple
+              disableTouchRipple
+              TabIndicatorProps={{
+                style: { display: "none" },
+              }}
+              sx={{
+                "& .MuiTab-root": {
+                  textTransform: "none",
+                  color: "#64778C",
+                },
+                "& .MuiTab-root.Mui-selected": {
+                  backgroundColor: "#F7FAFC",
+                  color: "#6048E5",
+                  borderTopLeftRadius: 6,
+                  borderTopRightRadius: 6,
+                },
+              }}
+              value={blockTab}
+              onChange={(_event, newValue: number) => setBlockTab(newValue)}
+            >
+              <Tab {...disableTabAnimations} label={metadata.displayName} />
+            </Tabs>
+            <TabPanel value={blockTab} index={0}>
+              <div
+                style={{
+                  backgroundColor: "#F7FAFC",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "0px 30px",
+                  overflow: "auto",
+                }}
+              >
+                {blockModule && <blockModule.default {...props} />}
+              </div>
+            </TabPanel>
           </div>
         </div>
-        <div className={tw`w-2/5`}>
-          <Tabs
-            value={currentTab}
-            onChange={(_event, newValue: number) => setCurrentTab(newValue)}
+        <div>
+          <BlockDataTabs
+            blockDataTab={blockDataTab}
+            setBlockDataTab={setBlockDataTab}
+          />
+
+          <div
+            style={{
+              position: "relative",
+              borderBottomLeftRadius: 6,
+              borderBottomRightRadius: 6,
+            }}
           >
-            <Tab label="Input Schema" />
-            <Tab label="Input Data" />
-          </Tabs>
-          <TabPanel value={currentTab} index={0}>
+            <BlockDataTabPanels
+              blockDataTab={blockDataTab}
+              text={text}
+              setText={setText}
+              schema={schema}
+            />
+
             <div
-              style={{ height: 320, fontSize: 14 }}
-              className={tw`rounded-2xl bg-gray-800 p-3 w-full`}
+              style={{
+                position: "absolute",
+                height: "80px",
+                width: "100%",
+                bottom: 0,
+                background:
+                  "linear-gradient(0deg, #39444F 18.14%, rgba(57, 68, 79, 0) 100%)",
+                borderBottomLeftRadius: 6,
+                borderBottomRightRadius: 6,
+                textAlign: "right",
+              }}
             >
-              <Snippet
-                className={tw`font-mono overflow-scroll h-full`}
-                source={JSON.stringify(schema, null, 2)}
-                language="json"
+              <BlockModalButton setBlockModalOpen={setBlockModalOpen} />
+              <BlockTabsModal
+                open={blockModalOpen}
+                setOpen={setBlockModalOpen}
+                blockDataTab={blockDataTab}
+                setBlockDataTab={setBlockDataTab}
+                schema={schema}
+                text={text}
+                setText={setText}
               />
             </div>
-          </TabPanel>
-          <TabPanel value={currentTab} index={1}>
-            <div
-              style={{ height: 320, fontSize: 14 }}
-              className={tw`rounded-2xl bg-white p-3 w-full`}
-            >
-              <textarea
-                value={text}
-                onChange={(event) => setText(event.target.value)}
-                style={{ minHeight: "100%" }}
-                className={tw`font-mono resize-none bg-white w-full overflow-scroll`}
-                placeholder="Your block input goes here..."
-              />
-            </div>
-          </TabPanel>
+          </div>
         </div>
       </div>
 
-      <div className="flex flex-row mb-10">
-        <div className={tw`w-3/5 pr-5`}>
+      {/* <div
+        style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
+        className=" mb-10"
+      >
+        <div>
           <b>About</b>
           <p>
             Store information in rows and columns in a classic table layout.
@@ -259,7 +304,7 @@ const Block: NextPage = () => {
             and remove columns and rows, multiple views.
           </p>
         </div>
-        <div className={tw`w-2/5`}>
+        <div>
           <b>Repository</b>
           <Box sx={{ display: "flex" }}>
             <img
@@ -272,27 +317,29 @@ const Block: NextPage = () => {
             </Link>
           </Box>
         </div>
-      </div>
-      <div>
-        {errors.length ? (
-          <p className={tw`mb-2`}>
-            The provided input raised the following errors:
-          </p>
-        ) : (
-          <p className={tw`mb-2`}>
-            The provided input is schema conform. See below the rendered output.
-          </p>
-        )}
-        {errors.length > 0 && (
-          <ul className={tw`rounded-2xl list-square mb-2 px-8 py-4 bg-red-200`}>
-            {errors.map((err) => (
-              <li key={err}>{err}</li>
-            ))}
-          </ul>
-        )}
+      </div> */}
+
+      <div style={{ display: "grid", gridTemplateColumns: "60% 40%" }}>
+        <div />
+        <div>
+          {errors.length > 0 && (
+            <details className={tw`rounded-2xl mt-2 px-8 py-4 bg-red-200`}>
+              <summary style={{ cursor: "pointer" }}>Errors</summary>
+              <ul className={tw`list-square px-8 py-4 `}>
+                {errors.map((err) => (
+                  <li key={err}>{err}</li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </div>
       </div>
 
-      <Typography variant="bpHeading2" mb={3}>
+      <Typography
+        variant="bpHeading2"
+        mb={3}
+        sx={{ textAlign: "center", marginTop: 10 }}
+      >
         Explore more blocks
       </Typography>
 
