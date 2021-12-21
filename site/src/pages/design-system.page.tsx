@@ -16,83 +16,40 @@ import { Spacer } from "../components/Spacer";
 
 const CARDS = [
   {
-    displayName: "Video",
-    description: "Play videos of any type or length with rich media controls.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
+    name: "@hashintel/block-code",
+    version: "0.1.0",
+    description: "Capture a code snippet",
+    author: "teenoh",
+    license: "MIT",
+    schema: "block-schema.json",
+    displayName: "Code",
+    packagePath: "@hash/code",
+    icon: "public/code.svg",
+    timestamp: "2021-12-06T19:26:02.552Z",
   },
   {
-    displayName: "Divider",
-    description:
-      "Separate content into sections with a subtle horizontal divider.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
-  },
-  {
-    displayName: "Embed",
-    description:
-      "Separate content into sections with a subtle horizontal divider.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
-  },
-  {
+    name: "@hashintel/block-table",
+    version: "0.1.0",
+    description: "Create a table for storing information in rows and columns",
+    author: "Ciaran Morinan",
+    license: "MIT",
+    schema: "block-schema.json",
     displayName: "Table",
-    description:
-      "Separate content into sections with a subtle horizontal divider.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
+    packagePath: "@hash/table",
+    icon: "public/table.svg",
+    timestamp: "2021-12-06T19:26:02.552Z",
   },
   {
-    displayName: "Person",
-    description:
-      "Separate content into sections with a subtle horizontal divider.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
-  },
-  {
-    displayName: "Heading",
-    description:
-      "Separate content into sections with a subtle horizontal divider.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
-  },
-  {
-    displayName: "Image",
-    description:
-      "Separate content into sections with a subtle horizontal divider.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
-  },
-  {
-    displayName: "Paragraph",
-    description:
-      "Separate content into sections with a subtle horizontal divider.",
-    image: "",
-    icon: "",
-    account: "@hash",
-    version: "V2.0.2",
-    lastUpdated: "Updated 6 months ago",
+    name: "@hashintel/block-embed",
+    version: "0.1.0",
+    description: "Embed external content",
+    author: "hashintel",
+    license: "MIT",
+    displayName: "Embed",
+    packagePath: "@hash/embed",
+    icon: "public/embed.svg",
+    schema: "block-schema.json",
+    timestamp: "2021-12-06T19:26:02.552Z",
   },
 ];
 
@@ -197,7 +154,7 @@ const DesignSystem = () => {
           <Grid container spacing={3}>
             {CARDS.map((card) => (
               <Grid item key={card.displayName}>
-                <BlockCard {...card} />
+                <BlockCard data={card} />
               </Grid>
             ))}
             <Grid item>

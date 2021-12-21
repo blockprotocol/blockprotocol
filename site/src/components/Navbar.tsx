@@ -270,7 +270,7 @@ export const Navbar: FC<NavbarProps> = () => {
           width: "100%",
           position: isNavbarPositionAbsolute ? "absolute" : "fixed",
           top: isNavbarHidden && !isNavbarPositionAbsolute ? -navbarHeight : 0,
-          zIndex: 2,
+          zIndex: theme.zIndex.appBar,
           py: isDesktopSize ? 2 : 1,
           backgroundColor: isNavbarTransparent
             ? "transparent"

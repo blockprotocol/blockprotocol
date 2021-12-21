@@ -1,27 +1,31 @@
 import { VFC } from "react";
-import { Typography, Box, Stack, Skeleton } from "@mui/material";
+import { Typography, Box, Skeleton } from "@mui/material";
+import { formatDistance, subDays } from "date-fns";
 import { Link } from "./Link";
 import { Spacer } from "./Spacer";
+import { BlockMetadata } from "../pages/api/blocks.api";
 
 type BlockCardProps = {
   loading?: boolean;
-  displayName: string;
-  image: string;
-  icon: string;
-  description: string;
-  account: string;
-  version: string;
-  lastUpdated: string;
+  data?: Omit<BlockMetadata, "source" | "schema" | "variants">;
+};
+
+const blockWidthStyles = {
+  maxWidth: 450,
+  minWidth: 288,
+  width: "100%",
 };
 
 const BlockCardLoading = () => {
   return (
     <Box
       sx={{
+        maxWidth: 450,
         minWidth: 288,
-        maxWidth: 328,
+        width: "100%",
         borderRadius: "8px",
         boxShadow: 1,
+        overflow: "hidden",
       }}
     >
       <Box
@@ -36,6 +40,7 @@ const BlockCardLoading = () => {
       <Box
         sx={{
           p: 3,
+          backgroundColor: ({ palette }) => palette.common.white,
         }}
       >
         <Skeleton variant="rectangular" width="100%" height={32} />
@@ -50,108 +55,144 @@ const BlockCardLoading = () => {
   );
 };
 
-export const BlockCard: VFC<BlockCardProps> = ({
-  loading,
-  displayName,
-  description,
-  image,
-  account,
-  version,
-  lastUpdated,
-}) => {
+export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
   if (loading) {
     return <BlockCardLoading />;
   }
 
+  if (!data) {
+    return null;
+  }
+
+  const {
+    displayName,
+    description,
+    image,
+    author,
+    version,
+    lastUpdated,
+    packagePath,
+    icon,
+  } = data;
+
   return (
-    <Box
-      sx={{
-        minWidth: 288,
-        maxWidth: 328,
-        borderRadius: "8px",
-        boxShadow: 1,
-        transition: "0.3s ease",
-        "&:hover": {
-          boxShadow: 4,
-          "& .block-card__name": {
-            color: ({ palette }) => palette.purple[600],
-          },
-        },
-        cursor: "pointer",
-      }}
-    >
+    <Link href={`${packagePath}`}>
       <Box
         sx={{
-          backgroundColor: "gray.20",
-          py: 3,
-          px: 2.75,
+          ...blockWidthStyles,
+          borderRadius: "8px",
+          boxShadow: 1,
+          transition: ({ transitions }) =>
+            transitions.create(["box-shadow", "transform"]),
+          backgroundColor: ({ palette }) => palette.common.white,
+          "&:hover": {
+            boxShadow: 4,
+            "& .block-card__name": {
+              color: ({ palette }) => palette.purple[600],
+            },
+            transform: "scale(1.05)",
+          },
+          cursor: "pointer",
         }}
       >
         <Box
           sx={{
-            height: 186,
-            backgroundColor: "gray.70",
-            borderRadius: "4px",
-            display: "flex",
+            backgroundColor: ({ palette }) => palette.gray[20],
+            py: 3,
+            px: 2.75,
+            borderTopLeftRadius: "8px",
+            borderTopRightRadius: "8px",
           }}
         >
-          {image && (
-            <Box
-              component="img"
-              sx={{ flex: 1, objectFit: "cover" }}
-              src={image}
-            />
-          )}
-        </Box>
-      </Box>
-      <Box
-        sx={{
-          p: 3,
-        }}
-      >
-        <Box sx={{ mb: 2 }}>
-          {/* @todo Icon should be here */}
-          <Typography
-            className="block-card__name"
-            fontWeight="600"
-            variant="bpLargeText"
+          <Box
+            sx={{
+              height: 186,
+              backgroundColor: ({ palette }) => palette.gray[70],
+              borderRadius: "4px",
+              display: "flex",
+            }}
           >
-            {displayName}
-          </Typography>
+            {image && (
+              <Box
+                component="img"
+                sx={{ flex: 1, objectFit: "cover" }}
+                src={image}
+              />
+            )}
+          </Box>
         </Box>
-        <Typography variant="bpSmallCopy" sx={{ color: "gray.70" }}>
-          {description.slice(0, 100)}...
-        </Typography>
-        <Spacer height={3} />
-        <Stack
-          direction="row"
-          gap={1.5}
-          sx={{ mb: 1.5, typography: "bpMicroCopy" }}
+        <Box
+          sx={{
+            p: 3,
+          }}
         >
+          <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
+            {/* @todo Icon should be here */}
+            <Box
+              sx={{ mr: 1.5, width: 24, height: 24 }}
+              component="img"
+              src={`/blocks/${packagePath}/${icon}`}
+            />
+            <Typography
+              className="block-card__name"
+              fontWeight="600"
+              variant="bpLargeText"
+            >
+              {displayName}
+            </Typography>
+          </Box>
           <Typography
-            variant="bpMicroCopy"
-            sx={{ color: ({ palette }) => palette.purple[600] }}
+            variant="bpSmallCopy"
+            sx={{ display: "block", color: "gray.70" }}
           >
-            {account}
+            {description && description?.length <= 100
+              ? description
+              : `${description?.slice(0, 100)}...`}
           </Typography>
-          <Typography color="gray.60" variant="bpMicroCopy">
-            {version}
-          </Typography>
-          <Typography color="gray.60" variant="bpMicroCopy">
-            {/* @todo this should be a date */}
-            {lastUpdated}
-            {/* Updated 6 months ago */}
-          </Typography>
-        </Stack>
-        {/* Commenting this out since we don't currently track weekly downloads */}
-        {/* <Stack direction="row">
+          <Spacer height={3} />
+          <Box
+            sx={{
+              typography: "bpMicroCopy",
+              display: "flex",
+              flexWrap: "wrap",
+            }}
+          >
+            <Typography
+              variant="bpMicroCopy"
+              sx={{
+                color: ({ palette }) => palette.purple[600],
+                mr: 1.5,
+                mb: 1.5,
+              }}
+            >
+              @{author}
+            </Typography>
+            <Typography
+              sx={{ mr: 1.5, mb: 1.5 }}
+              color="gray.60"
+              variant="bpMicroCopy"
+            >
+              {version}
+            </Typography>
+            <Typography color="gray.60" variant="bpMicroCopy">
+              {lastUpdated
+                ? `Updated 
+              ${formatDistance(subDays(new Date(), 3), new Date(), {
+                addSuffix: true,
+              })}`
+                : ""}
+            </Typography>
+          </Box>
+          {/* Commenting this out since we don't currently track weekly downloads */}
+          {/* <Stack direction="row">
      
           <Typography color="gray.60" variant="bpMicroCopy">
             344 weekly downloads
           </Typography>
         </Stack> */}
+        </Box>
       </Box>
-    </Box>
+    </Link>
   );
 };
 
@@ -162,8 +203,7 @@ export const BlockCardComingSoon = () => {
         py: 6,
         px: 4.25,
         minHeight: 400,
-        minWidth: 288,
-        maxWidth: 328,
+        ...blockWidthStyles,
         backgroundColor: "white",
         border: ({ palette }) => `2px dashed ${palette.gray["30"]}`,
         borderRadius: "8px",
@@ -181,7 +221,7 @@ export const BlockCardComingSoon = () => {
       <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>
         You can also{" "}
         <Link
-          href="/"
+          href="/docs"
           sx={{
             color: ({ palette }) => palette.purple[600],
             fontWeight: 700,

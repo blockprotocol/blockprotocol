@@ -220,6 +220,7 @@ export const theme = createTheme({
       fontSize: "var(--step--1)",
       lineHeight: 1.3,
       color: customColors.gray["70"],
+      textTransform: "uppercase",
     },
     bpLargeText: {
       fontSize: "var(--step-1)",
