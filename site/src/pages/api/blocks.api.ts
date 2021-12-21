@@ -26,6 +26,7 @@ export type BlockMetadata = {
   variants?: BlockVariant[];
   version?: string;
   lastUpdated?: string;
+  image?: string;
 
   // @todo should be redundant to block's package.json#name
   packagePath: string;

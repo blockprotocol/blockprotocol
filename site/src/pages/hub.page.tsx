@@ -1,4 +1,4 @@
-import { Container, Typography, Box } from "@mui/material";
+import { Container, Typography, Box, Grid } from "@mui/material";
 import { VFC } from "react";
 import { GetStaticProps } from "next";
 import { BlockCard, BlockCardComingSoon } from "../components/BlockCard";
@@ -27,7 +27,7 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
         backgroundSize: "100% 100%",
       }}
     >
-      <Container sx={{ padding: { xs: 0, sm: 16, md: 4 } }}>
+      <Container sx={{ px: { xs: 1, sm: 4 } }}>
         <Box
           sx={{
             mb: 10,
@@ -54,38 +54,39 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
             All open-source and free to use
           </Typography>
         </Box>
-        <Box
+      </Container>
+      <Container
+        sx={{
+          px: "6.5%",
+          maxWidth: { md: 720, lg: 1200 },
+        }}
+      >
+        <Grid
+          columnSpacing={{ xs: 0, sm: 4 }}
+          rowSpacing={4}
           sx={{
-            display: "grid",
-            gridTemplateColumns: {
-              xs: "1fr",
-              sm: "repeat(2, 288px)",
-              lg: "repeat(3, 328px)",
-            },
-            gap: "32px",
-            justifyContent: "center",
-            justifyItems: { xs: "center", sm: "flex-start" },
             position: "relative",
             zIndex: 2,
           }}
+          container
         >
           {catalog
             ? catalog.map((block) => (
-                <Box key={block.packagePath}>
+                <Grid key={block.packagePath} item xs={12} sm={6} lg={4}>
                   <BlockCard data={block} />
-                </Box>
+                </Grid>
               ))
             : Array.from(Array(6), (_, index) => index + 1).map((key) => (
-                <Box key={key}>
+                <Grid key={key} item xs={12} sm={6} lg={4}>
                   <BlockCard loading />
-                </Box>
+                </Grid>
               ))}
           {catalog && (
-            <Box>
+            <Grid item xs={12} sm={6} lg={4}>
               <BlockCardComingSoon />
-            </Box>
+            </Grid>
           )}
-        </Box>
+        </Grid>
       </Container>
     </Box>
   );
