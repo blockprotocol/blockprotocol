@@ -1,12 +1,14 @@
 import React, { useState, useRef, useLayoutEffect } from "react";
-import { Container, Typography, Box, Fade } from "@mui/material";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { InlineLink } from "../../InlineLink";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import {
+  Container,
+  Typography,
+  Box,
+  Fade,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import { InlineLink } from "../../../InlineLink";
+import { Step1, Step2, Step3, Step4 } from "./Steps";
 
 const CONTENT = [
   {
@@ -25,7 +27,7 @@ const CONTENT = [
         web application
       </Box>
     ),
-    image: "/assets/step-1-img.svg",
+    renderComponent: (isMobile: boolean) => <Step1 isMobile={isMobile} />,
   },
   {
     id: 2,
@@ -41,7 +43,7 @@ const CONTENT = [
         built the API integration for you.
       </Box>
     ),
-    image: "/assets/step-2-img.svg",
+    renderComponent: (isMobile: boolean) => <Step2 isMobile={isMobile} />,
   },
   {
     id: 3,
@@ -57,7 +59,9 @@ const CONTENT = [
         blocks, even if the blocks are in completely seperate applications.
       </Box>
     ),
-    image: "/assets/step-3-img.svg",
+    renderComponent: (isMobile: boolean, isActive?: boolean) => (
+      <Step3 isMobile={isMobile} isActive={isActive} />
+    ),
   },
   {
     id: 4,
@@ -90,82 +94,84 @@ const CONTENT = [
         embedded in.
       </Box>
     ),
-    image: "/assets/step-4-img.svg",
+    renderComponent: (isMobile: boolean) => <Step4 isMobile={isMobile} />,
   },
 ];
 
+const CONTENT_CLASS_NAME = "scroll-section";
+
 export const Section2 = () => {
-  const [activeImg, setActiveImg] = useState(0);
-  const boxRef = useRef(null);
-  const pinElRef = useRef(null);
+  const [activeImg, setActiveImg] = useState<number | null>(null);
+  const boxRef = useRef<HTMLDivElement>(null);
+  const pinElRef = useRef<HTMLDivElement>(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   useLayoutEffect(() => {
-    if (!window || !pinElRef.current || !boxRef.current) return;
+    if (!window || !boxRef.current) return;
 
-    const markers: Element[] = gsap.utils.toArray(".scroll-section");
-
-    const triggers: ScrollTrigger[] = [];
-
-    markers.forEach((marker) => {
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: marker,
-          start: "top center",
-          end: "bottom 50vh",
-          onEnter: () => {
-            setActiveImg(markers.indexOf(marker));
-          },
-          onEnterBack: () => {
-            setActiveImg(markers.indexOf(marker));
-          },
-        }),
-      );
-    });
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: boxRef.current,
-        // scrub: true,
-        start: "top top",
-        end: "bottom bottom",
-        pin: pinElRef.current,
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.target instanceof HTMLElement) {
+            const newActiveImg = Number(entry.target.dataset.key);
+            if (newActiveImg !== activeImg) {
+              setActiveImg(newActiveImg);
+            }
+          }
+        });
       },
+      {
+        root: null,
+        rootMargin: `-50% 0% -50% 0%`,
+      },
+    );
+
+    const elements = boxRef.current.querySelectorAll(`.${CONTENT_CLASS_NAME}`);
+
+    elements.forEach((el) => {
+      observer.observe(el);
     });
 
     return () => {
-      tl.scrollTrigger?.kill();
-      triggers.forEach((trigger) => trigger?.kill());
+      elements.forEach((el) => {
+        observer.unobserve(el);
+      });
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Box sx={{ pt: { xs: 2, md: 10 } }}>
+    <Box sx={{ pt: { xs: 2, lg: 10 } }}>
       <Container
         ref={boxRef}
         sx={{
           display: "flex",
-          height: { xs: "100vh", md: "unset" },
-          flexDirection: { xs: "column", md: "row" },
+          px: 0,
+          flexDirection: { xs: "column", lg: "row" },
           maxWidth: "100vw",
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", md: "40%" },
-            height: { xs: "50vh", md: "unset" },
-            mr: 4,
-            overflowY: { xs: "scroll", md: "unset" },
+            width: { xs: "100%", sm: "80%", lg: "40%" },
+            mr: { lg: 4 },
           }}
         >
           {CONTENT.map(({ id, title, content }) => (
             <Box
-              className="scroll-section"
+              className={CONTENT_CLASS_NAME}
+              data-key={id}
               sx={{
                 typography: "bpBodyCopy",
-                minHeight: { xs: "auto", md: "70vh" },
+                minHeight: { xs: "auto", lg: "70vh" },
                 display: "flex",
                 flexDirection: "column",
-                pt: "20vh",
+                px: { xs: "5%" },
+                pt: { lg: "20vh" },
+                ":first-of-type": {
+                  pt: { xs: 10, lg: "20vh" },
+                },
                 mb: 10,
               }}
               key={id}
@@ -180,27 +186,44 @@ export const Section2 = () => {
         <Box
           ref={pinElRef}
           sx={{
-            flex: 1,
+            flex: { xs: "unset", lg: 1 },
             alignSelf: "flex-start",
-            height: { xs: "50vh", md: "100vh" },
-            position: "relative",
+            height: { xs: "40vh", lg: "100vh" },
+            position: "sticky",
+            zIndex: 2,
+            top: { xs: "unset", lg: 0 },
+            bottom: { xs: 0, lg: "unset" },
+            left: 0,
+            right: 0,
+            width: { xs: "100%", lg: "auto" },
+
+            borderTop: ({ palette }) =>
+              activeImg
+                ? {
+                    xs: `1px solid ${palette.gray[30]}`,
+                    lg: "none",
+                  }
+                : "none",
             backgroundColor: ({ palette }) => palette.common.white,
           }}
         >
-          {CONTENT.map(({ image, id }, index) => (
-            <Fade key={id} in={activeImg === index} timeout={500}>
+          {CONTENT.map(({ id, renderComponent }) => (
+            <Fade key={id} in={activeImg === id}>
               <Box
                 sx={{
                   position: "absolute",
                   top: 0,
                   left: 0,
                   right: 0,
-                  pt: "20vh",
+                  bottom: { xs: 0, lg: "unset" },
+                  pt: { lg: "20vh" },
+                  px: { xs: "5%", lg: 0 },
                   display: "flex",
                   justifyContent: "center",
+                  alignItems: { xs: "center", lg: "flex-start" },
                 }}
               >
-                <Box id={`step-${id}`} component="img" src={image} />
+                {renderComponent(isMobile, activeImg === id)}
               </Box>
             </Fade>
           ))}

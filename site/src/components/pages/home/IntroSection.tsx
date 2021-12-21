@@ -18,27 +18,27 @@ import { ArrowRightIcon } from "../../SvgIcon/ArrowRight";
 const steps = [
   {
     id: 1,
-    image: "/assets/person-with-paragraph.svg",
-    graphImg: "/assets/sequence-1.svg",
-    graphImgMobile: "/assets/sequence-1-mobile.svg",
+    image: "/assets/person-with-paragraph-block.svg",
+    graphImg: "/assets/person-with-paragraph-block-tree.svg",
+    graphImgMobile: "/assets/person-with-paragraph-block-tree-mobile.svg",
   },
   {
     id: 2,
     image: "/assets/table-block.svg",
-    graphImg: "/assets/sequence-2.svg",
-    graphImgMobile: "/assets/sequence-2-mobile.svg",
+    graphImg: "/assets/table-block-tree.svg",
+    graphImgMobile: "/assets/table-block-tree-mobile.svg",
   },
   {
     id: 3,
     image: "/assets/checklist-block.svg",
-    graphImg: "/assets/sequence-3.svg",
-    graphImgMobile: "/assets/sequence-3-mobile.svg",
+    graphImg: "/assets/checklist-block-tree.svg",
+    graphImgMobile: "/assets/checklist-block-tree-mobile.svg",
   },
   {
     id: 4,
     image: "/assets/kanban-small-block.svg",
-    graphImg: "/assets/sequence-3.svg",
-    graphImgMobile: "/assets/sequence-3-mobile.svg",
+    graphImg: "/assets/kanban-small-block-tree.svg",
+    graphImgMobile: "/assets/kanban-small-block-tree-mobile.svg",
   },
 ];
 
@@ -52,14 +52,13 @@ export const IntroSection = () => {
   const settings = useMemo(
     () =>
       ({
-        centerMode: true,
+        // centerMode: true,
         infinite: !isMobile,
-        slidesToShow: isMobile ? 1 : 3,
+        slidesToShow: isMobile ? 1 : 2,
         swipeToSlide: true,
         speed: 500,
         initialSlide: isMobile ? 0 : 1,
-        nextArrow: <Box sx={{ display: "none !important" }} />,
-        prevArrow: <Box sx={{ display: "none !important" }} />,
+        arrows: false,
         customPaging: () => (
           <Box
             sx={{
@@ -95,7 +94,10 @@ export const IntroSection = () => {
           <Typography variant="bpHeading2" sx={{ mb: 3 }} textAlign="center">
             Embed any block anywhere on the web, using data from any source
           </Typography>
-          <Typography sx={{ width: { md: "56%" } }} textAlign="center">
+          <Typography
+            sx={{ width: { md: "75%", lg: "56%" } }}
+            textAlign="center"
+          >
             Easily move data between applications without wrestling with APIs
             and custom integrations. View it any way you like in interactive
             blocks.
@@ -103,20 +105,21 @@ export const IntroSection = () => {
         </Box>
       </Container>
       <Box sx={{ position: "relative", maxWidth: "100%" }}>
+        {/* GRAPH SECTION */}
         <Box
           sx={{
             display: "flex",
             width: "100%",
-            height: { xs: 250, md: 450 },
+            height: { xs: 300, sm: 350, md: 400 },
             justifyContent: "center",
             alignItems: "flex-end",
             mx: "auto",
-            mb: -4,
             position: "relative",
+            mb: -4,
           }}
         >
           {steps.map(({ graphImg, graphImgMobile, id }) => (
-            <Fade in={activeStep + 1 === id} key={id}>
+            <Fade in={activeStep + 1 === id} key={id} timeout={1000}>
               <Box
                 key={id}
                 sx={{
@@ -124,8 +127,8 @@ export const IntroSection = () => {
                   bottom: 0,
                   left: "50%",
                   transform: "translateX(-50%)",
-                  height: { xs: "auto", md: 400 },
-                  width: { xs: "90%", md: "auto" },
+                  width: { xs: "90%", sm: "50%", md: "100%" },
+                  maxWidth: { xs: 380, md: 1444 },
                 }}
                 src={isMobile ? graphImgMobile : graphImg}
                 component="img"
@@ -133,10 +136,16 @@ export const IntroSection = () => {
             </Fade>
           ))}
         </Box>
+        {/* CAROUSEL SECTION */}
         <Box
           sx={{
             position: "relative",
             zIndex: 2,
+            "& .slick-track": {
+              paddingLeft: { md: "25%" }, // padding left = (100%/ no of slide to show)/2; https://github.com/kenwheeler/slick/issues/1784#issuecomment-831722031,
+              display: "flex",
+              alignItems: "center",
+            },
             "& .slick-dots": {
               "li div": {
                 backgroundColor: ({ palette }) => palette.gray[30],
@@ -160,7 +169,7 @@ export const IntroSection = () => {
                 key={id}
                 sx={{
                   display: "flex !important",
-                  justifyContent: "center",
+                  justifyContent: { xs: "center", md: "flex-end" },
                   alignItems: "center",
                   height: { xs: 300, md: 400 },
                 }}
@@ -169,8 +178,8 @@ export const IntroSection = () => {
                   component="img"
                   sx={{
                     display: "block",
-                    height: { xs: "auto", md: "auto" },
                     width: { xs: "90%", md: "auto" },
+                    maxWidth: 450,
                     boxShadow: 2,
                   }}
                   src={image}

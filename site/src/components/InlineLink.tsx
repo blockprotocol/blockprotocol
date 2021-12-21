@@ -48,14 +48,14 @@ export const InlineLink: FC<InlineLinkProps> = ({
             pointerEvents: "none",
             transition: "all 0.3s ease",
             background: () =>
-              "linear-gradient(186.24deg, #BFA9F9 -37.93%, transparent 95.07%)", // todo pick color from theme
+              "linear-gradient(186.24deg, #BFA9F9 -37.93%, #FFF 95.07%)", // todo pick color from theme
           },
           "&:hover": {
             "&:after": {
               transform: "translateY(0)",
               height: "100%",
               background: () =>
-                "linear-gradient(186.24deg, #BFA9F9 -37.93%, transparent 95.07%)",
+                "linear-gradient(186.24deg, #BFA9F9 -37.93%, #FFF 95.07%)",
             },
           },
         }}
