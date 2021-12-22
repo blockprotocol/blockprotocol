@@ -7,6 +7,9 @@ export const disableTabAnimations = {
 /** @todo type as JSON Schema. make part of blockprotocol package and publish. */
 export type BlockSchema = Record<string, any>;
 export type BlockDependency = keyof typeof blockDependencies;
+export type BlockExports = {
+  default: React.FC;
+};
 
 export type BlockProtocolFileMediaType = "image" | "video";
 
@@ -73,33 +76,12 @@ export const blockDependencies = {
   uploadFile: dummyUploadFile,
 };
 
-// @todo wait for hash backend to start working
-const apiGraphQLEndpoint = "https://alpha-api.hash.ai/graphql";
-
-export async function getEmbedBlock(
-  url: string,
-  type?: string,
-): Promise<{
+// @todo implement getembedblock
+export async function getEmbedBlock(): Promise<{
   html: string;
   error?: string;
   height?: number;
   width?: number;
-}> {
-  return fetch(apiGraphQLEndpoint, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      operationName: "getEmbedCode",
-      variables: { url, type },
-      query:
-        "query getEmbedCode($url: String!, $type: String) {\n  embedCode(url: $url, type: $type) {\n    html\n    providerName\n     height\n     width\n    __typename\n  }\n}\n",
-    }),
-  })
-    .then((response) => response.json())
-    .then((responseData) => ({
-      ...responseData.data?.embedCode,
-      error: responseData?.errors?.[0]?.message,
-    }));
+} | null> {
+  return null;
 }

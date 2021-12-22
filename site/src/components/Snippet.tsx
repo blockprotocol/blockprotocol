@@ -29,7 +29,7 @@ export const Snippet: React.VFC<SnippetProps> = ({
 }) => {
   const grammar = Prism.languages[language];
   if (!grammar) {
-    return <code className={className}>source</code>;
+    return <code className={className}>{source}</code>;
   }
 
   return (

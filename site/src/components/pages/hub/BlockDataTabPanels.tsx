@@ -1,5 +1,5 @@
-import { VoidFunctionComponent } from "react";
-import { tw } from "twind";
+import { Box } from "@mui/material";
+import { ChangeEvent, VoidFunctionComponent } from "react";
 
 import { Snippet } from "../../Snippet";
 import { BlockSchema } from "./HubUtils";
@@ -21,35 +21,50 @@ export const BlockDataTabPanels: VoidFunctionComponent<
   return (
     <>
       <TabPanel value={blockDataTab} index={1}>
-        <div
-          style={{
+        <Box
+          component="div"
+          sx={{
             height: modalHeight,
             fontSize: 14,
             backgroundColor: "#37434F",
             borderBottomLeftRadius: 6,
             borderBottomRightRadius: 6,
+            width: "100%",
           }}
-          className={tw` p-3 w-full font-mono overflow-auto h-full whitespace-break-spaces`}
+          p={3}
         >
-          <Snippet source={JSON.stringify(schema, null, 2)} language="json" />
-        </div>
+          <Snippet
+            sx={{
+              fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
+              overflow: "auto",
+              height: "100%",
+              whiteSpace: "break-spaces",
+            }}
+            source={JSON.stringify(schema, null, 2)}
+            language="json"
+          />
+        </Box>
       </TabPanel>
       <TabPanel value={blockDataTab} index={0}>
-        <div
-          style={{ height: modalHeight, fontSize: 14 }}
-          className={tw` w-full`}
-        >
-          <textarea
+        <div style={{ height: modalHeight, fontSize: 14, width: "100%" }}>
+          <Box
+            component="textarea"
             value={text}
-            onChange={(event) => setText(event.target.value)}
+            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
+              setText(event.target.value)
+            }
             style={{
               minHeight: "100%",
               backgroundColor: "#37434F",
               color: "white",
               borderBottomLeftRadius: 6,
               borderBottomRightRadius: 6,
+              fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
+              resize: "none",
+              width: "100%",
+              overflow: "auto",
             }}
-            className={tw`font-mono resize-none p-3 w-full overflow-auto`}
+            p={3}
             placeholder="Your block input goes here..."
           />
         </div>
