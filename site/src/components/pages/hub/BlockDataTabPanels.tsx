@@ -29,13 +29,9 @@ export const BlockDataTabPanels: VoidFunctionComponent<
             borderBottomLeftRadius: 6,
             borderBottomRightRadius: 6,
           }}
-          className={tw` p-3 w-full`}
+          className={tw` p-3 w-full font-mono overflow-auto h-full whitespace-break-spaces`}
         >
-          <Snippet
-            className={tw`font-mono overflow-auto h-full whitespace-break-spaces`}
-            source={JSON.stringify(schema, null, 2)}
-            language="json"
-          />
+          <Snippet source={JSON.stringify(schema, null, 2)} language="json" />
         </div>
       </TabPanel>
       <TabPanel value={blockDataTab} index={0}>

@@ -1,30 +1,63 @@
-/**
- * @file
- * @deprecate moving over to /hub/[block]
- */
-
+import {
+  Breadcrumbs,
+  Container,
+  Typography,
+  Icon,
+  Box,
+  useMediaQuery,
+  useTheme,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import { Validator } from "jsonschema";
 import { NextPage } from "next";
-import { useRouter } from "next/dist/client/router";
-import React, { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  VoidFunctionComponent,
+} from "react";
 import { tw } from "twind";
-import { Snippet } from "../../components/Snippet";
-import type { BlockMetadata } from "../api/blocks.api";
+
+import { Link, LinkProps } from "../../components/Link";
+import { BlocksSlider } from "../../components/pages/home/BlocksSlider";
+import { BlockDataTabPanels } from "../../components/pages/hub/BlockDataTabPanels";
+import { BlockDataTabs } from "../../components/pages/hub/BlockDataTabs";
+import {
+  blockDependencies,
+  BlockDependency,
+  BlockSchema,
+  disableTabAnimations,
+  dummyUploadFile,
+  getEmbedBlock,
+} from "../../components/pages/hub/HubUtils";
+import { TabPanel } from "../../components/pages/hub/TabPanel";
+import { BlockMetadata } from "../api/blocks.api";
+import { BlockTabsModal } from "../../components/pages/hub/BlockTabsModal";
+import { BlockModalButton } from "../../components/pages/hub/BlockModalButton";
+
+const ChevronRight: React.VFC = () => (
+  <Icon sx={{ fontSize: "0.8rem" }} className="fas fa-chevron-right" />
+);
+
+const BreadcrumbLink: React.FC<LinkProps> = ({ children, ...props }) => (
+  <Link style={{ textDecoration: "none" }} {...props}>
+    <Typography variant="bpSmallCopy">{children}</Typography>
+  </Link>
+);
 
 const validator = new Validator();
 
-/* eslint-disable global-require */
-const blockDependencies = {
-  react: require("react"),
-  "react-dom": require("react-dom"),
-  twind: require("twind"),
+type BlockExports = {
+  default: React.FC;
 };
-/* eslint-enable global-require */
 
-type BlockExports = { default: React.FC };
-/** @todo type as JSON Schema. make part of blockprotocol package and publish. */
-type BlockSchema = Record<string, any>;
-type BlockDependency = keyof typeof blockDependencies;
+interface PageState {
+  schema?: BlockSchema;
+  metadata?: BlockMetadata;
+  blockModule?: BlockExports;
+}
 
 const blockRequire = (name: BlockDependency) => {
   if (!(name in blockDependencies)) {
@@ -45,11 +78,11 @@ const blockEval = (source: string): BlockExports => {
   return module_.exports as BlockExports;
 };
 
-interface PageState {
-  schema?: BlockSchema;
-  metadata?: BlockMetadata;
-  blockModule?: BlockExports;
-}
+const Bullet: VoidFunctionComponent = () => {
+  return (
+    <span style={{ color: "#DDE7F0", marginLeft: 5, marginRight: 5 }}>•</span>
+  );
+};
 
 const Block: NextPage = () => {
   const { org, block } = useRouter().query;
@@ -58,6 +91,11 @@ const Block: NextPage = () => {
   const [{ metadata, schema, blockModule }, setPageState] = useState<PageState>(
     {},
   );
+
+  const theme = useTheme();
+
+  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const isDesktopSize = md;
 
   useEffect(() => {
     if (!org || !block) return;
@@ -89,102 +127,223 @@ const Block: NextPage = () => {
 
     try {
       result = JSON.parse(text);
+      result.accountId = "test-account-id";
+      result.entityId = "test-entity-id";
+      result.uploadFile = dummyUploadFile;
+      result.getEmbedBlock = getEmbedBlock;
     } catch (err) {
       return [result, [(err as Error).message]];
     }
 
+    const errorsToEat = ["uploadFile", "getEmbedBlock"];
+
     const errorMessages = validator
       .validate(result, schema ?? {})
-      .errors.map((err) => `ValidationError: ${err.stack}`);
+      .errors.map((err) => `ValidationError: ${err.stack}`)
+      .filter(
+        (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
+      );
 
     return [result, errorMessages];
   }, [text, schema]);
 
+  const [blockDataTab, setBlockDataTab] = useState(0);
+  const [blockTab, setBlockTab] = useState(0);
+  const [blockModalOpen, setBlockModalOpen] = useState(false);
+
   if (!metadata || !schema) return null;
 
   return (
-    <div
-      className={tw`mx-auto px-4 mt-5 md:px-0 lg:max-w-4xl md:max-w-2xl`}
-      style={{ fontFamily: "'Inter', sans-serif" }}
-    >
-      <main className={tw`mt-20 mb-10`}>
-        <h1 className={tw`text-6xl font-black`}>
-          {metadata.displayName}{" "}
-          <img
-            className={tw`inline-block`}
-            width="48px"
-            height="48px"
-            alt={metadata.displayName}
+    <Container sx={{ marginTop: 5, marginBottom: 10 }}>
+      {!isDesktopSize && (
+        <Breadcrumbs separator={<ChevronRight />}>
+          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink href="/gallery">Block Hub</BreadcrumbLink>
+          <BreadcrumbLink href={`/${org}/${metadata.name}`}>
+            {metadata.displayName}
+          </BreadcrumbLink>
+        </Breadcrumbs>
+      )}
+
+      <Box sx={{ display: "flex" }}>
+        <Typography variant="bpHeading1">
+          <Box
+            sx={{ display: "inline-block", height: "2em", width: "2em" }}
+            component="img"
             src={`/blocks/${org}/${block}/${metadata.icon}`}
           />
-        </h1>
-        <p className={tw`text-lg font-bold mb-10`}>
-          block from{" "}
-          <a className={tw`text-blue-300 font-bold`} href="#">
-            {org}
-          </a>
-        </p>
-        <div className="flex flex-row mb-10">
-          <div className={tw`w-3/5 pr-5`}>
-            <h3 className={tw`mb-4`}>Input Data</h3>
-            <div
-              style={{ height: 320, fontSize: 14 }}
-              className={tw`rounded-2xl bg-white p-3 w-full`}
-            >
-              <textarea
-                value={text}
-                onChange={(event) => setText(event.target.value)}
-                style={{ minHeight: "100%" }}
-                className={tw`font-mono resize-none bg-white w-full overflow-scroll`}
-                placeholder="Your block input goes here..."
-              />
+        </Typography>
+        <div>
+          <Typography variant="bpHeading1" mt={2}>
+            {metadata.displayName}
+          </Typography>
+          <Typography variant="bpBodyCopy">
+            <div style={{ color: "#4D5C6C" }}>{metadata.description}</div>
+          </Typography>
+          <Typography variant="bpSmallCopy">
+            <div style={{ color: "#64778C" }}>
+              By {org}
+              <Bullet /> V{metadata.version} <Bullet /> Updated Recently
             </div>
-          </div>
-          <div className={tw`w-2/5`}>
-            <h3 className={tw`mb-4`}>Input Schema</h3>
-            <div
-              style={{ height: 320, fontSize: 14 }}
-              className={tw`rounded-2xl bg-gray-800 p-3 w-full`}
+          </Typography>
+        </div>
+      </Box>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "60% 40%",
+          marginTop: 20,
+        }}
+        className="mb-10"
+      >
+        <div>
+          <div style={{ height: 320 }} className={tw`bg-white`}>
+            <Tabs
+              disableRipple
+              disableTouchRipple
+              TabIndicatorProps={{
+                style: { display: "none" },
+              }}
+              sx={{
+                "& .MuiTab-root": {
+                  textTransform: "none",
+                  color: "#64778C",
+                },
+                "& .MuiTab-root.Mui-selected": {
+                  backgroundColor: "#F7FAFC",
+                  color: "#6048E5",
+                  borderTopLeftRadius: 6,
+                  borderTopRightRadius: 6,
+                },
+              }}
+              value={blockTab}
+              onChange={(_event, newValue: number) => setBlockTab(newValue)}
             >
-              <pre className={tw`font-mono overflow-scroll h-full`}>
-                <Snippet
-                  source={JSON.stringify(schema, null, 2)}
-                  language="json"
-                />
-              </pre>
-            </div>
+              <Tab {...disableTabAnimations} label={metadata.displayName} />
+            </Tabs>
+            <TabPanel value={blockTab} index={0}>
+              <div
+                style={{
+                  backgroundColor: "#F7FAFC",
+                  height: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "0px 30px",
+                  overflow: "auto",
+                }}
+              >
+                {blockModule && <blockModule.default {...props} />}
+              </div>
+            </TabPanel>
           </div>
         </div>
         <div>
-          <h3 className={tw`mb-2`}>Block Stage</h3>
-          {errors.length ? (
-            <p className={tw`mb-2`}>
-              The provided input raised the following errors:
-            </p>
-          ) : (
-            <p className={tw`mb-2`}>
-              The provided input is schema conform. See below the rendered
-              output.
-            </p>
-          )}
-          {errors.length > 0 && (
-            <ul
-              className={tw`rounded-2xl list-square mb-2 px-8 py-4 bg-red-200`}
-            >
-              {errors.map((err) => (
-                <li key={err}>{err}</li>
-              ))}
-            </ul>
-          )}
+          <BlockDataTabs
+            blockDataTab={blockDataTab}
+            setBlockDataTab={setBlockDataTab}
+          />
+
           <div
-            style={{ height: 320 }}
-            className={tw`bg-white rounded-2xl w-full p-4`}
+            style={{
+              position: "relative",
+              borderBottomLeftRadius: 6,
+              borderBottomRightRadius: 6,
+            }}
           >
-            {blockModule && <blockModule.default {...props} />}
+            <BlockDataTabPanels
+              blockDataTab={blockDataTab}
+              text={text}
+              setText={setText}
+              schema={schema}
+            />
+
+            <div
+              style={{
+                position: "absolute",
+                height: "80px",
+                width: "100%",
+                bottom: 0,
+                background:
+                  "linear-gradient(0deg, #39444F 18.14%, rgba(57, 68, 79, 0) 100%)",
+                borderBottomLeftRadius: 6,
+                borderBottomRightRadius: 6,
+                textAlign: "right",
+              }}
+            >
+              <BlockModalButton setBlockModalOpen={setBlockModalOpen} />
+              <BlockTabsModal
+                open={blockModalOpen}
+                setOpen={setBlockModalOpen}
+                blockDataTab={blockDataTab}
+                setBlockDataTab={setBlockDataTab}
+                schema={schema}
+                text={text}
+                setText={setText}
+              />
+            </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+
+      {/* <div
+        style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
+        className=" mb-10"
+      >
+        <div>
+          <b>About</b>
+          <p>
+            Store information in rows and columns in a classic table layout.
+            Longer description talking about parameters and how to use like a
+            readme goes in here. Tables have filters, search, ability to add and
+            remove columns and rows, multiple views. Tables have filters,
+            search, ability to add and remove columns and rows, multiple views.
+            Tables have filters, search, ability to add and remove columns and
+            rows, multiple views. Tables have filters, search, ability to add
+            and remove columns and rows, multiple views.
+          </p>
+        </div>
+        <div>
+          <b>Repository</b>
+          <Box sx={{ display: "flex" }}>
+            <img
+              alt="GitHub Link"
+              style={{ marginRight: 5 }}
+              src="/assets/link.svg"
+            />{" "}
+            <Link href="https://github.com/hash/video">
+              github.com/hash/video
+            </Link>
+          </Box>
+        </div>
+      </div> */}
+
+      <div style={{ display: "grid", gridTemplateColumns: "60% 40%" }}>
+        <div />
+        <div>
+          {errors.length > 0 && (
+            <details className={tw`rounded-2xl mt-2 px-8 py-4 bg-red-200`}>
+              <summary style={{ cursor: "pointer" }}>Errors</summary>
+              <ul className={tw`list-square px-8 py-4 `}>
+                {errors.map((err) => (
+                  <li key={err}>{err}</li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </div>
+      </div>
+
+      <Typography
+        variant="bpHeading2"
+        mb={3}
+        sx={{ textAlign: "center", marginTop: 10 }}
+      >
+        Explore more blocks
+      </Typography>
+
+      <BlocksSlider />
+    </Container>
   );
 };
 

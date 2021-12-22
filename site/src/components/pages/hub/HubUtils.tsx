@@ -4,7 +4,7 @@ export const disableTabAnimations = {
   disableRipple: true,
 };
 
-/** @sync @hashintel/block-protocol */
+/** @todo type as JSON Schema. make part of blockprotocol package and publish. */
 export type BlockSchema = Record<string, any>;
 export type BlockDependency = keyof typeof blockDependencies;
 
