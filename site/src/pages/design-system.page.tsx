@@ -25,7 +25,7 @@ const CARDS = [
     displayName: "Code",
     packagePath: "@hash/code",
     icon: "public/code.svg",
-    timestamp: "2021-12-06T19:26:02.552Z",
+    timestamp: "2021-12-22T09:10:00.000Z",
   },
   {
     name: "@hashintel/block-table",
@@ -37,7 +37,7 @@ const CARDS = [
     displayName: "Table",
     packagePath: "@hash/table",
     icon: "public/table.svg",
-    timestamp: "2021-12-06T19:26:02.552Z",
+    timestamp: "2021-12-22T09:10:00.000Z",
   },
   {
     name: "@hashintel/block-embed",
@@ -49,7 +49,7 @@ const CARDS = [
     packagePath: "@hash/embed",
     icon: "public/embed.svg",
     schema: "block-schema.json",
-    timestamp: "2021-12-06T19:26:02.552Z",
+    timestamp: "2021-12-22T09:10:00.000Z",
   },
 ];
 
