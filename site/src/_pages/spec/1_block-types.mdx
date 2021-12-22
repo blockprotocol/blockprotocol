@@ -93,7 +93,7 @@ creates one or more entities
 
 **returns:** the created entities, i.e. _objects_ inside an _array_
 
-**accepts:** a single _array_ of _objects_ (`CreateEntityTypesAction`), each with the following shape:
+**accepts:** a single _array_ of _objects_ (`CreateEntitiesAction`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the type of entity to create.
 - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
@@ -157,7 +157,7 @@ aggregateEntities(payload?: AggregateEntitiesPayload): Promise<AggregateEntities
 
 retrieve a subset of entities of a given type
 
-**returns:** <a id="aggregation-result-object" /> an `AggregateEntitiesResult` object
+**returns:** <a id="aggregate-entities-result" /> an `AggregateEntitiesResult` object
 
 - `pageNumber` \[_integer_]: the page number returned.
 - `itemsPerPage` \[_integer_]: the number of results per page, i.e. returned.
@@ -336,7 +336,7 @@ N.B. this data structure has been chosen to allow for later pagination of links 
 The entities linked to will be provided under `linkedEntities` and `linkedAggregations`
 (and the entities they link onwards to, depending on the depth the graph is resolved to).
 
-An entry in linkedAggregations follows the shape of the [`AggregateEntitiesResult` object](#aggregation-result-object),
+An entry in linkedAggregations follows the shape of the [`AggregateEntitiesResult` object](#aggregate-entities-result),
 with the addition of a `link` field containing the link which generated it (to allow identifying which entity
 and path the result ‘belongs’ to, where it might otherwise be ambiguous).
 
