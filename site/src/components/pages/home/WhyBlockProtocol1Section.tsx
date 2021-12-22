@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
 import { Spacer } from "../../Spacer";
 
 if (typeof window !== "undefined") {
@@ -72,7 +72,7 @@ const TableBlock = () => {
         ["item: Write tests", "complete: true"],
         ["item: Review latest PRS", "complete: true"],
       ].map(([col0, col1]) => (
-        <>
+        <Fragment key={[col0, col1].join("-")}>
           <Grid
             sx={{
               py: 1.5,
@@ -102,7 +102,7 @@ const TableBlock = () => {
           >
             <Box sx={{ whiteSpace: "nowrap" }}>{col1}</Box>
           </Grid>
-        </>
+        </Fragment>
       ))}
     </Grid>
   );

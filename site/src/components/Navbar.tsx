@@ -6,6 +6,7 @@ import {
   useContext,
   SetStateAction,
   Dispatch,
+  useMemo,
 } from "react";
 import {
   Box,
@@ -23,6 +24,7 @@ import {
   Collapse,
   Divider,
   useScrollTrigger,
+  Breadcrumbs,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
@@ -38,6 +40,8 @@ import SiteMapContext from "./context/SiteMapContext";
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
 export const MOBILE_NAVBAR_HEIGHT = 57;
+
+const BREAD_CRUMBS_HEIGHT = 36;
 
 const IDLE_NAVBAR_TIMEOUT_MS = 3000;
 
@@ -69,6 +73,97 @@ const NAVBAR_LINK_ICONS: Record<string, JSX.Element> = {
   ),
 };
 
+const itemIsPage = (
+  item: SiteMapPage | SiteMapPageSection,
+): item is SiteMapPage => "href" in item;
+
+type MobileBreadcrumbsProps = {
+  crumbs: (SiteMapPage | SiteMapPageSection)[];
+};
+
+const findCrumbs = (params: {
+  asPath: string;
+  item: SiteMapPage | SiteMapPageSection;
+  parents?: (SiteMapPage | SiteMapPageSection)[];
+  parentHref?: string;
+}): (SiteMapPage | SiteMapPageSection)[] | null => {
+  const { parents, item, asPath, parentHref } = params;
+
+  for (const section of itemIsPage(item) ? item.sections : item.subSections) {
+    const crumbs = findCrumbs({
+      asPath,
+      item: section,
+      parents: [...(parents || []), item],
+      parentHref: itemIsPage(item) ? item.href : parentHref,
+    });
+
+    if (crumbs) {
+      return crumbs;
+    }
+  }
+
+  if (itemIsPage(item)) {
+    for (const page of item.subPages) {
+      const crumbs = findCrumbs({
+        asPath,
+        item: page,
+        parents: [...(parents || []), item],
+      });
+
+      if (crumbs) {
+        return crumbs;
+      }
+    }
+  }
+
+  const href = itemIsPage(item) ? item.href : `${parentHref}#${item.anchor}`;
+
+  if (asPath === href || (itemIsPage(item) && asPath === `${href}#`)) {
+    return [...(parents || []), item];
+  }
+
+  return null;
+};
+
+const MobileBreadcrumbs: VFC<MobileBreadcrumbsProps> = ({ crumbs }) => {
+  const { asPath } = useRouter();
+
+  return (
+    <Breadcrumbs
+      sx={{
+        marginTop: 2,
+      }}
+      separator={
+        <Icon
+          sx={{ fontSize: 14, color: ({ palette }) => palette.gray[40] }}
+          className="fas fa-chevron-right"
+        />
+      }
+    >
+      {crumbs.map((item, i) =>
+        i < crumbs.length - 1 ? (
+          <Link
+            key={item.title}
+            href={
+              itemIsPage(item)
+                ? asPath.startsWith(`${item.href}#`)
+                  ? "#"
+                  : item.href
+                : `#${item.anchor}`
+            }
+          >
+            {item.title}
+          </Link>
+        ) : (
+          <Typography variant="bpSmallCopy" color="inherit">
+            {item.title}
+          </Typography>
+        ),
+      )}
+    </Breadcrumbs>
+  );
+};
+
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: JSX.Element;
   item: T;
@@ -78,10 +173,6 @@ type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   setExpandedItems: Dispatch<SetStateAction<{ href: string; depth: number }[]>>;
   onClose: () => void;
 };
-
-const itemIsPage = (
-  item: SiteMapPage | SiteMapPageSection,
-): item is SiteMapPage => "href" in item;
 
 const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
   icon,
@@ -337,9 +428,12 @@ const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
   );
 };
 
-type NavbarProps = {};
+type NavbarProps = {
+  navbarHeight: number;
+  setNavbarHeight: (height: number) => void;
+};
 
-export const Navbar: VFC<NavbarProps> = () => {
+export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
   const theme = useTheme();
   const router = useRouter();
   const { pages } = useContext(SiteMapContext);
@@ -381,6 +475,30 @@ export const Navbar: VFC<NavbarProps> = () => {
 
   const isDesktopSize = md;
 
+  const crumbs = useMemo(() => {
+    const breadCrumbPages = pages.filter(({ title }) =>
+      ["Specification", "Documentation"].includes(title),
+    );
+
+    for (const page of breadCrumbPages) {
+      const maybeCrumbs = findCrumbs({ asPath, item: page });
+      if (maybeCrumbs) {
+        return maybeCrumbs;
+      }
+    }
+    return [];
+  }, [asPath, pages]);
+
+  const displayBreadcrumbs =
+    !isDesktopSize && !displayMobileNav && crumbs.length > 0;
+
+  useEffect(() => {
+    setNavbarHeight(
+      (isDesktopSize ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT) +
+        (displayBreadcrumbs ? BREAD_CRUMBS_HEIGHT : 0),
+    );
+  }, [isDesktopSize, displayBreadcrumbs, setNavbarHeight]);
+
   useEffect(() => {
     if (isDesktopSize && displayMobileNav) {
       setDisplayMobileNav(false);
@@ -421,9 +539,8 @@ export const Navbar: VFC<NavbarProps> = () => {
    */
   const isNavbarDark = isHomePage && !displayMobileNav && !isScrollYPastHeader;
 
-  const navbarHeight = isDesktopSize
-    ? DESKTOP_NAVBAR_HEIGHT
-    : MOBILE_NAVBAR_HEIGHT;
+  const hiddenNavbarTopOffset =
+    -1 * (navbarHeight - (displayBreadcrumbs ? BREAD_CRUMBS_HEIGHT : 0));
 
   return (
     <Box
@@ -437,7 +554,10 @@ export const Navbar: VFC<NavbarProps> = () => {
         sx={{
           width: "100%",
           position: isNavbarPositionAbsolute ? "absolute" : "fixed",
-          top: isNavbarHidden && !isNavbarPositionAbsolute ? -navbarHeight : 0,
+          top:
+            isNavbarHidden && !isNavbarPositionAbsolute
+              ? hiddenNavbarTopOffset
+              : 0,
           zIndex: theme.zIndex.appBar,
           py: isDesktopSize ? 2 : 1,
           backgroundColor: isNavbarTransparent
@@ -552,6 +672,9 @@ export const Navbar: VFC<NavbarProps> = () => {
               )}
             </Box>
           </Box>
+          <Collapse in={displayBreadcrumbs}>
+            <MobileBreadcrumbs crumbs={crumbs} />
+          </Collapse>
         </Container>
       </Box>
       <Slide in={displayMobileNav}>

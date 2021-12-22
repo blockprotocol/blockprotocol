@@ -787,5 +787,25 @@ export const theme = createTheme({
         },
       },
     },
+    MuiBreadcrumbs: {
+      styleOverrides: {
+        li: {
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          fontSize: 14,
+          color: customColors.gray[60],
+          "> a": {
+            borderBottomColor: "transparent",
+          },
+          "&:not(:last-child)": {
+            maxWidth: 150,
+          },
+          "&:last-child": {
+            color: customColors.purple[700],
+          },
+        },
+      },
+    },
   },
 });

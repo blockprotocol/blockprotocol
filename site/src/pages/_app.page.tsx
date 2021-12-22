@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import Head from "next/head";
 import "../styles/index.css";
 /** @sync ../components/Snippet.tsx */
@@ -26,6 +28,15 @@ const MyApp = ({
   pageProps,
   emotionCache = clientSideEmotionCache,
 }: MyAppProps) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const { asPath } = router;
+    if (asPath.endsWith("#")) {
+      void router.replace(asPath.slice(0, -1));
+    }
+  }, [router]);
+
   return (
     <SiteMapContext.Provider value={siteMap}>
       <CacheProvider value={emotionCache}>
