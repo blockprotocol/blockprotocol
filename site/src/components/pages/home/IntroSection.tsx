@@ -147,6 +147,8 @@ export const IntroSection = () => {
               alignItems: "center",
             },
             "& .slick-dots": {
+              bottom: "unset",
+              top: "110%",
               "li div": {
                 backgroundColor: ({ palette }) => palette.gray[30],
               },
