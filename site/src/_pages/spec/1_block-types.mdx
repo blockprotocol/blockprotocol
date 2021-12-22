@@ -317,7 +317,20 @@ creates one or more links.
 
 **returns:** the created links, i.e. _objects_ inside an _array_ (now with `linkId`)
 
-**accepts:** TODO
+**accepts:** a single _array_ of _objects_ (`CreateLinksAction<T>`).
+Each object:
+
+- MUST contain `sourceEntityId` \[_string_]: the `entityId` of the source entity.
+- MAY contain `sourceEntityVersionId` \[_string_]: optionally specify that this link is only from a specific version.
+- MAY contain `sourceEntityTypeId`: \[_string_]: the `entityTypeId` of the source entity.
+- MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
+- MUST contain EITHER:
+  - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
+  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entity-operation).
+- if `destinationEntityId` is defined:
+  - MAY contain `destinationEntityVersionId` \[_string_] to pin the link to a specific version of the destination entity.
+  - MAY contain `destinationEntityTypeId`: \[_string_]: the `entityTypeId` of the destination entity.
+- MAY contain `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
 
 ```block-function
 updateLinks(actions: UpdateLinksAction[]): Promise<Link[]>
