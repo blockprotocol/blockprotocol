@@ -9,9 +9,9 @@ import {
   SxProps,
   Theme,
 } from "@mui/material";
-import { NextPage } from "next";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
-import React, { useEffect, useState, VoidFunctionComponent } from "react";
+import React, { useMemo, VoidFunctionComponent } from "react";
 
 import { BlocksSlider } from "../../components/pages/home/BlocksSlider";
 import {
@@ -49,12 +49,6 @@ const BreadcrumbLink: React.FC<{ href: string; sx?: SxProps<Theme> }> = ({
   );
 };
 
-interface PageState {
-  schema?: BlockSchema;
-  metadata?: BlockMetadata;
-  blockModule?: BlockExports;
-}
-
 const blockRequire = (name: BlockDependency) => {
   if (!(name in blockDependencies)) {
     throw new Error(`missing dependency ${name}`);
@@ -82,43 +76,106 @@ const Bullet: VoidFunctionComponent = () => {
   );
 };
 
-const Block: NextPage = () => {
-  const { org, block } = useRouter().query;
+type BlockPageProps = {
+  metadata: BlockMetadata;
+  schema: BlockSchema;
+  blockStringifiedSource: string;
+};
 
-  const [{ metadata, schema, blockModule }, setPageState] = useState<PageState>(
-    {},
+type BlockPageQueryParams = {
+  org?: string[];
+  block?: string[];
+};
+
+export const getStaticPaths: GetStaticPaths<
+  BlockPageQueryParams
+> = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+const BASE_URL = `http://${
+  process.env.NEXT_PUBLIC_VERCEL_URL ?? "localhost:3000"
+}`;
+
+const parseQueryParams = ({ org, block }: BlockPageQueryParams) => {
+  const orgShortname = org
+    ? typeof org === "string"
+      ? org
+      : org.length === 1
+      ? org[0]
+      : undefined
+    : undefined;
+
+  if (!orgShortname) {
+    throw new Error("Could not parse org shortname from query");
+  }
+
+  const blockSlug = block
+    ? typeof block === "string"
+      ? block
+      : block.length === 1
+      ? block[0]
+      : undefined
+    : undefined;
+
+  if (!orgShortname) {
+    throw new Error("Could not parse block slug from query");
+  }
+
+  return { orgShortname, blockSlug };
+};
+
+export const getStaticProps: GetStaticProps<
+  BlockPageProps,
+  BlockPageQueryParams
+> = async ({ params }) => {
+  const { orgShortname, blockSlug } = parseQueryParams(params || {});
+
+  const metadata: BlockMetadata = await fetch(
+    `${BASE_URL}/blocks/${orgShortname}/${blockSlug}/metadata.json`,
+  ).then((res) => res.json());
+
+  const [schema, blockStringifiedSource] = await Promise.all([
+    fetch(
+      `${BASE_URL}/blocks/${orgShortname}/${blockSlug}/${metadata.schema}`,
+    ).then((res) => res.json()),
+    fetch(
+      `${BASE_URL}/blocks/${orgShortname}/${blockSlug}/${metadata.source}`,
+    ).then((res) => res.text()),
+  ]);
+
+  return {
+    props: {
+      metadata,
+      schema,
+      blockStringifiedSource,
+    },
+  };
+};
+
+const BlockPage: NextPage<BlockPageProps> = ({
+  metadata,
+  schema,
+  blockStringifiedSource,
+}) => {
+  const { query } = useRouter();
+  const { orgShortname, blockSlug } = parseQueryParams(query || {});
+
+  const blockModule = useMemo(
+    () =>
+      typeof window === "undefined"
+        ? undefined
+        : blockEval(blockStringifiedSource),
+    [blockStringifiedSource],
   );
 
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const isDesktopSize = md;
-
-  useEffect(() => {
-    if (!org || !block) return;
-    void fetch(`/blocks/${org}/${block}/metadata.json`)
-      .then((res) => res.json())
-      .then((metadata_) =>
-        Promise.all([
-          metadata_,
-          fetch(`/blocks/${org}/${block}/${metadata_.schema}`).then((res) =>
-            res.json(),
-          ),
-          fetch(`/blocks/${org}/${block}/${metadata_.source}`).then((res) =>
-            res.text(),
-          ),
-        ]),
-      )
-      .then(([metadata_, schema_, source]) => {
-        setPageState({
-          metadata: metadata_,
-          schema: schema_,
-          blockModule: blockEval(source),
-        });
-      });
-  }, [org, block]);
-
-  if (!metadata || !schema) return null;
 
   return (
     <Container sx={{ marginTop: 5, marginBottom: 10 }}>
@@ -140,7 +197,7 @@ const Block: NextPage = () => {
             <Box
               sx={{ display: "inline-block", height: "2em", width: "2em" }}
               component="img"
-              src={`/blocks/${org}/${block}/${metadata.icon}`}
+              src={`/blocks/${orgShortname}/${blockSlug}/${metadata.icon}`}
             />
           </Typography>
         )}
@@ -156,7 +213,7 @@ const Block: NextPage = () => {
                 mr={1}
                 sx={{ display: "inline-block", height: "1em", width: "1em" }}
                 component="img"
-                src={`/blocks/${org}/${block}/${metadata.icon}`}
+                src={`/blocks/${orgShortname}/${blockSlug}/${metadata.icon}`}
               />
             )}
             {metadata.displayName}
@@ -166,7 +223,7 @@ const Block: NextPage = () => {
           </Typography>
           <Typography variant="bpSmallCopy" sx={{ color: "#64778C" }}>
             <div>
-              By {org}
+              By {orgShortname}
               <Bullet /> V{metadata.version}{" "}
               {isDesktopSize && (
                 <>
@@ -231,4 +288,4 @@ const Block: NextPage = () => {
   );
 };
 
-export default Block;
+export default BlockPage;
