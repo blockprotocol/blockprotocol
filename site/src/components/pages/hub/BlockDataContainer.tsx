@@ -1,4 +1,4 @@
-import { Box, Tabs, Tab, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Tabs, Tab } from "@mui/material";
 import { Validator } from "jsonschema";
 import { useMemo, useState, VoidFunctionComponent } from "react";
 
@@ -10,17 +10,16 @@ import { BlockTabsModal } from "./BlockTabsModal";
 import {
   BlockExports,
   BlockSchema,
-  disableTabAnimations,
   dummyUploadFile,
   getEmbedBlock,
 } from "./HubUtils";
 import { TabPanel } from "./TabPanel";
 
-interface BlockDataContainerProps {
+type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
   blockModule: BlockExports | undefined;
-}
+};
 
 const validator = new Validator();
 
@@ -31,11 +30,6 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [text, setText] = useState("{}");
-
-  const theme = useTheme();
-
-  const md = useMediaQuery(theme.breakpoints.up("md"));
-  const isDesktopSize = md;
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
@@ -65,7 +59,6 @@ export const BlockDataContainer: VoidFunctionComponent<
 
   return (
     <Box
-      component="div"
       mt={5}
       sx={{
         display: { xs: "flex", md: "grid" },
@@ -73,8 +66,8 @@ export const BlockDataContainer: VoidFunctionComponent<
         gridTemplateColumns: { md: "60% 40%" },
       }}
     >
-      <div>
-        <div style={{ height: 320, backgroundColor: "white" }}>
+      <Box>
+        <Box sx={{ height: 320, backgroundColor: "white" }}>
           <Tabs
             disableRipple
             disableTouchRipple
@@ -96,32 +89,32 @@ export const BlockDataContainer: VoidFunctionComponent<
             value={blockTab}
             onChange={(_event, newValue: number) => setBlockTab(newValue)}
           >
-            <Tab {...disableTabAnimations} label={metadata.displayName} />
+            <Tab label={metadata.displayName} />
           </Tabs>
           <TabPanel value={blockTab} index={0}>
-            <div
-              style={{
+            <Box
+              display="flex"
+              alignItems="center"
+              sx={(theme) => ({
                 backgroundColor: "#F7FAFC",
                 height: "100%",
-                display: "flex",
-                alignItems: "center",
-                padding: "0px 30px",
+                padding: theme.spacing(0, 4),
                 overflow: "auto",
-              }}
+              })}
             >
               {blockModule && <blockModule.default {...props} />}
-            </div>
+            </Box>
           </TabPanel>
-        </div>
-      </div>
-      <div>
+        </Box>
+      </Box>
+      <Box>
         <BlockDataTabs
           blockDataTab={blockDataTab}
           setBlockDataTab={setBlockDataTab}
         />
 
-        <div
-          style={{
+        <Box
+          sx={{
             position: "relative",
             borderBottomLeftRadius: 6,
             borderBottomRightRadius: 6,
@@ -133,11 +126,10 @@ export const BlockDataContainer: VoidFunctionComponent<
             setText={setText}
             schema={schema}
           />
-
-          <div
-            style={{
+          <Box
+            sx={{
               position: "absolute",
-              height: "80px",
+              height: 80,
               width: "100%",
               bottom: 0,
               background:
@@ -157,8 +149,8 @@ export const BlockDataContainer: VoidFunctionComponent<
               text={text}
               setText={setText}
             />
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         {errors.length > 0 && (
           <Box
@@ -168,7 +160,9 @@ export const BlockDataContainer: VoidFunctionComponent<
             py={2}
             sx={{ borderRadius: 6, backgroundColor: "#fecaca" }}
           >
-            <summary style={{ cursor: "pointer" }}>Errors</summary>
+            <Box component="summary" sx={{ cursor: "pointer" }}>
+              Errors
+            </Box>
             <Box component="ul" px={4} py={2} sx={{ listStyleType: "square" }}>
               {errors.map((err) => (
                 <li key={err}>{err}</li>
@@ -176,7 +170,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             </Box>
           </Box>
         )}
-      </div>
+      </Box>
     </Box>
   );
 };

@@ -1,29 +1,27 @@
 import { FunctionComponent } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, BoxProps } from "@mui/material";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
+type TabPanelProps = {
   index: number;
   value: number;
-}
+} & BoxProps;
 
-export const TabPanel: FunctionComponent<TabPanelProps> = (props) => {
-  const { children, value, index, ...other } = props;
-
+export const TabPanel: FunctionComponent<TabPanelProps> = ({
+  value,
+  index,
+  children,
+  ...boxProps
+}) => {
   return (
-    <div
+    <Box
       role="tabpanel"
       hidden={value !== index}
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
-      style={{ height: "100%" }}
-      {...other}
+      sx={{ height: "100%", ...boxProps.sx }}
+      {...boxProps}
     >
-      {value === index && (
-        <Box sx={{ height: "100%" }}>
-          <Typography sx={{ height: "100%" }}>{children}</Typography>
-        </Box>
-      )}
-    </div>
+      {value === index ? children : null}
+    </Box>
   );
 };

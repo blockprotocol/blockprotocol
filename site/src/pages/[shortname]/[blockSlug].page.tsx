@@ -6,8 +6,6 @@ import {
   Box,
   useMediaQuery,
   useTheme,
-  SxProps,
-  Theme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
@@ -23,31 +21,6 @@ import {
 import { BlockMetadata } from "../api/blocks.api";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
-
-const ChevronRight: React.VFC = () => (
-  <Icon sx={{ fontSize: "0.8rem" }} className="fas fa-chevron-right" />
-);
-
-const BreadcrumbLink: React.FC<{ href: string; sx?: SxProps<Theme> }> = ({
-  children,
-  href,
-  sx,
-}) => {
-  return (
-    // @todo remove underline, underline=none or textDecoration none isn't working
-    <Link underline="none" href={href}>
-      <Typography
-        variant="bpSmallCopy"
-        sx={{
-          ...sx,
-          textDecoration: "none",
-        }}
-      >
-        {children}
-      </Typography>
-    </Link>
-  );
-};
 
 const blockRequire = (name: BlockDependency) => {
   if (!(name in blockDependencies)) {
@@ -178,71 +151,87 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const isDesktopSize = md;
 
   return (
-    <Container sx={{ marginTop: 5, marginBottom: 10 }}>
-      {!isDesktopSize && (
-        <Box mb={1}>
-          <Breadcrumbs separator={<ChevronRight />}>
-            <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            <BreadcrumbLink href="/hub">Block Hub</BreadcrumbLink>
-            <BreadcrumbLink sx={{ color: "#6048E5" }} href="">
-              {metadata.displayName}
-            </BreadcrumbLink>
-          </Breadcrumbs>
-        </Box>
-      )}
-
-      <Box sx={{ display: "flex" }}>
-        {isDesktopSize && (
-          <Typography variant="bpHeading1">
-            <Box
-              sx={{ display: "inline-block", height: "2em", width: "2em" }}
-              component="img"
-              src={`/blocks/${shortname}/${blockSlug}/${metadata.icon}`}
-            />
-          </Typography>
+    <>
+      <Container>
+        {isDesktopSize ? null : (
+          <Box mb={1}>
+            <Breadcrumbs
+              separator={
+                <Icon
+                  sx={{
+                    fontSize: 14,
+                    color: ({ palette }) => palette.gray[40],
+                  }}
+                  className="fas fa-chevron-right"
+                />
+              }
+            >
+              <Link href="/">Home</Link>
+              <Link href="/hub">Block Hub</Link>
+              <Typography variant="bpSmallCopy" color="inherit">
+                {metadata.displayName}
+              </Typography>
+            </Breadcrumbs>
+          </Box>
         )}
 
-        <div>
-          <Typography
-            sx={{ display: { xs: "flex", md: "unset" } }}
-            variant="bpHeading1"
-            mt={2}
-          >
-            {!isDesktopSize && (
+        <Box sx={{ display: "flex" }}>
+          {isDesktopSize ? (
+            <Typography variant="bpHeading1">
               <Box
-                mr={1}
-                sx={{ display: "inline-block", height: "1em", width: "1em" }}
+                sx={{ display: "inline-block", height: "2em", width: "2em" }}
                 component="img"
                 src={`/blocks/${shortname}/${blockSlug}/${metadata.icon}`}
               />
-            )}
-            {metadata.displayName}
-          </Typography>
-          <Typography variant="bpBodyCopy">
-            <div style={{ color: "#4D5C6C" }}>{metadata.description}</div>
-          </Typography>
-          <Typography variant="bpSmallCopy" sx={{ color: "#64778C" }}>
-            <div>
-              By {shortname}
-              <Bullet /> V{metadata.version}{" "}
-              {isDesktopSize && (
-                <>
-                  <Bullet /> Updated Recently
-                </>
+            </Typography>
+          ) : null}
+
+          <Box>
+            <Typography
+              sx={{ display: { xs: "flex", md: "unset" } }}
+              variant="bpHeading1"
+              mt={2}
+            >
+              {!isDesktopSize && (
+                <Box
+                  mr={1}
+                  sx={{ display: "inline-block", height: "1em", width: "1em" }}
+                  component="img"
+                  src={`/blocks/${shortname}/${blockSlug}/${metadata.icon}`}
+                />
               )}
-            </div>
-            {!isDesktopSize && <div>Updated Recently</div>}
-          </Typography>
-        </div>
-      </Box>
+              {metadata.displayName}
+            </Typography>
+            <Typography variant="bpBodyCopy">
+              <Box sx={{ color: theme.palette.gray[70] }}>
+                {metadata.description}
+              </Box>
+            </Typography>
+            <Typography
+              variant="bpSmallCopy"
+              sx={{ color: ({ palette }) => palette.gray[60] }}
+            >
+              <span>
+                By {shortname}
+                <Bullet /> V{metadata.version}{" "}
+                {isDesktopSize && (
+                  <>
+                    <Bullet /> Updated Recently
+                  </>
+                )}
+              </span>
+              {!isDesktopSize && <div>Updated Recently</div>}
+            </Typography>
+          </Box>
+        </Box>
 
-      <BlockDataContainer
-        metadata={metadata}
-        schema={schema}
-        blockModule={blockModule}
-      />
+        <BlockDataContainer
+          metadata={metadata}
+          schema={schema}
+          blockModule={blockModule}
+        />
 
-      {/* <div
+        {/* <div
         style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
         className=" mb-10"
       >
@@ -274,17 +263,12 @@ const BlockPage: NextPage<BlockPageProps> = ({
         </div>
       </div> */}
 
-      <Typography
-        variant="bpHeading2"
-        mb={3}
-        mt={10}
-        sx={{ textAlign: "center" }}
-      >
-        Explore more blocks
-      </Typography>
-
+        <Typography textAlign="center" variant="bpHeading2" mb={3} mt={10}>
+          Explore more blocks
+        </Typography>
+      </Container>
       <BlocksSlider />
-    </Container>
+    </>
   );
 };
 

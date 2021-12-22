@@ -34,7 +34,7 @@ export const RegistrySection = () => {
         All connected to powerful structured data formats.
       </Typography>
 
-      <BlocksSlider />
+      <BlocksSlider mb={6} />
 
       <Box sx={{ textAlign: "center", width: { md: "40%" }, maxWidth: 540 }}>
         <Button variant="secondary" startIcon={<BlockHubIcon />}>

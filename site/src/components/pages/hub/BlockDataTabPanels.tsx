@@ -5,13 +5,13 @@ import { Snippet } from "../../Snippet";
 import { BlockSchema } from "./HubUtils";
 import { TabPanel } from "./TabPanel";
 
-interface BlockDataTabPanelProps {
+type BlockDataTabPanelProps = {
   modalOpen?: boolean;
   blockDataTab: number;
   schema: BlockSchema;
   text: string;
   setText: (newValue: string) => void;
-}
+};
 
 export const BlockDataTabPanels: VoidFunctionComponent<
   BlockDataTabPanelProps
@@ -22,16 +22,17 @@ export const BlockDataTabPanels: VoidFunctionComponent<
     <>
       <TabPanel value={blockDataTab} index={1}>
         <Box
-          component="div"
-          sx={{
+          component="pre"
+          sx={(theme) => ({
             height: modalHeight,
             fontSize: 14,
-            backgroundColor: "#37434F",
+            backgroundColor: theme.palette.gray[80],
             borderBottomLeftRadius: 6,
             borderBottomRightRadius: 6,
+            overflow: "scroll",
             width: "100%",
-          }}
-          p={2}
+          })}
+          p={4}
         >
           <Snippet
             sx={{
@@ -46,16 +47,16 @@ export const BlockDataTabPanels: VoidFunctionComponent<
         </Box>
       </TabPanel>
       <TabPanel value={blockDataTab} index={0}>
-        <div style={{ height: modalHeight, fontSize: 14, width: "100%" }}>
+        <Box sx={{ height: modalHeight, fontSize: 14, width: "100%" }}>
           <Box
             component="textarea"
             value={text}
             onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
               setText(event.target.value)
             }
-            style={{
+            sx={(theme) => ({
               minHeight: "100%",
-              backgroundColor: "#37434F",
+              backgroundColor: theme.palette.gray[80],
               color: "white",
               borderBottomLeftRadius: 6,
               borderBottomRightRadius: 6,
@@ -63,11 +64,11 @@ export const BlockDataTabPanels: VoidFunctionComponent<
               resize: "none",
               width: "100%",
               overflow: "auto",
-            }}
+            })}
             p={2}
             placeholder="Your block input goes here..."
           />
-        </div>
+        </Box>
       </TabPanel>
     </>
   );

@@ -1,13 +1,11 @@
 import { VoidFunctionComponent } from "react";
 import { Tabs, Tab } from "@mui/material";
 
-import { disableTabAnimations } from "./HubUtils";
-
-interface BlockDataTabsProps {
+type BlockDataTabsProps = {
   blockDataTab: number;
   setBlockDataTab: (newValue: number) => void;
   modalOpen?: boolean;
-}
+};
 
 export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
   blockDataTab,
@@ -23,11 +21,11 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
       TabIndicatorProps={{
         style: { display: "none" },
       }}
-      sx={{
+      sx={(theme) => ({
         "& .MuiTab-root": {
           textTransform: "none",
-          color: modalOpen ? "#64778C" : "#37434F",
-          backgroundColor: modalOpen ? "#313D48" : "white",
+          color: theme.palette.gray[modalOpen ? 60 : 80],
+          backgroundColor: modalOpen ? "#313D48" : theme.palette.common.white,
           borderTopLeftRadius: 6,
           borderTopRightRadius: 6,
           border: "1px solid transparent",
@@ -37,7 +35,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           paddingLeft: "10px",
           paddingRight: "10px",
           ":hover": {
-            backgroundColor: modalOpen ? "white" : undefined,
+            backgroundColor: modalOpen ? theme.palette.common.white : undefined,
             color: modalOpen ? "black" : undefined,
             "&:not(.Mui-selected)": {
               border: !modalOpen ? "1px solid #e5e5e5" : undefined,
@@ -46,13 +44,13 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           },
         },
         "& .MuiTab-root.Mui-selected": {
-          backgroundColor: "#37434F",
-          color: "white",
+          backgroundColor: theme.palette.gray[80],
+          color: theme.palette.common.white,
         },
-      }}
+      })}
     >
-      <Tab {...disableTabAnimations} label="Data Source" />
-      <Tab {...disableTabAnimations} label="Block Schema" />
+      <Tab label="Data Source" />
+      <Tab label="Block Schema" />
     </Tabs>
   );
 };

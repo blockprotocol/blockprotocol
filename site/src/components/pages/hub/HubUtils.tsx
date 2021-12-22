@@ -1,9 +1,3 @@
-export const disableTabAnimations = {
-  disableFocusRipple: true,
-  disableTouchRipple: true,
-  disableRipple: true,
-};
-
 /** @todo type as JSON Schema. make part of blockprotocol package and publish. */
 export type BlockSchema = Record<string, any>;
 export type BlockDependency = keyof typeof blockDependencies;

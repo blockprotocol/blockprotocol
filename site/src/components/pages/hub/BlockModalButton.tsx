@@ -1,13 +1,12 @@
 import { Box } from "@mui/material";
 import { VoidFunctionComponent } from "react";
+import { CollapseIcon } from "../../SvgIcon/CollapseIcon";
+import { ExpandIcon } from "../../SvgIcon/ExpandIcon";
 
-import ExpandIcon from "../../../../public/assets/expand.svg";
-import CollapseIcon from "../../../../public/assets/collapse.svg";
-
-interface BlockModalButtonProps {
+type BlockModalButtonProps = {
   setBlockModalOpen: (setBlockCallback: (oldValue: boolean) => boolean) => void;
   modalOpen?: boolean;
-}
+};
 
 export const BlockModalButton: VoidFunctionComponent<BlockModalButtonProps> = ({
   setBlockModalOpen,
@@ -57,9 +56,13 @@ export const BlockModalButton: VoidFunctionComponent<BlockModalButtonProps> = ({
         {modalOpen ? "Collapse" : "Expand"}
       </Box>
       {modalOpen ? (
-        <CollapseIcon style={{ marginLeft: 10 }} />
+        <CollapseIcon
+          sx={{ marginLeft: (theme) => theme.spacing(1), color: "#64778C" }}
+        />
       ) : (
-        <ExpandIcon style={{ marginLeft: 10 }} />
+        <ExpandIcon
+          sx={{ marginLeft: (theme) => theme.spacing(1), color: "#64778C" }}
+        />
       )}
     </Box>
   );

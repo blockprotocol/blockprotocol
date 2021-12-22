@@ -1,21 +1,10 @@
 import { VoidFunctionComponent } from "react";
-import { Box, Modal, SxProps, Theme } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockSchema } from "./HubUtils";
 import { BlockModalButton } from "./BlockModalButton";
-
-const style: SxProps<Theme> | undefined = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: "50vw",
-  boxShadow: 24,
-  borderBottomLeftRadius: 6,
-  borderBottomRightRadius: 6,
-};
 
 interface BlockTabsModalProps {
   open: boolean;
@@ -38,8 +27,19 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
 }) => {
   return (
     <Modal open={open} onClose={() => setOpen((oldValue) => !oldValue)}>
-      <Box sx={style}>
-        <div style={{ position: "relative" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "50vw",
+          boxShadow: 24,
+          borderBottomLeftRadius: 6,
+          borderBottomRightRadius: 6,
+        }}
+      >
+        <Box position="relative">
           <BlockDataTabs
             blockDataTab={blockDataTab}
             setBlockDataTab={setBlockDataTab}
@@ -52,7 +52,7 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
             setText={setText}
             modalOpen
           />
-          <div
+          <Box
             style={{
               position: "absolute",
               height: "80px",
@@ -64,8 +64,8 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
             }}
           >
             <BlockModalButton modalOpen={open} setBlockModalOpen={setOpen} />
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Box>
     </Modal>
   );

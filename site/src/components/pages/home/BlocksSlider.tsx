@@ -1,4 +1,10 @@
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  BoxProps,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useMemo, useRef, VoidFunctionComponent } from "react";
 import Slider, { Settings } from "react-slick";
 import { ArrowLeftIcon } from "../../SvgIcon/ArrowLeft";
@@ -70,7 +76,9 @@ const ITEMS = [
   },
 ];
 
-export const BlocksSlider: VoidFunctionComponent = () => {
+export const BlocksSlider: VoidFunctionComponent<BoxProps> = ({
+  ...boxProps
+}) => {
   const slider = useRef<Slider>();
 
   const theme = useTheme();
@@ -108,7 +116,6 @@ export const BlocksSlider: VoidFunctionComponent = () => {
         overflow: "hidden",
 
         width: "100%",
-        mb: 6,
         position: "relative",
         zIndex: 2,
         py: 8,
@@ -127,7 +134,9 @@ export const BlocksSlider: VoidFunctionComponent = () => {
             backgroundColor: ({ palette }) => palette.purple[700],
           },
         },
+        ...boxProps.sx,
       }}
+      {...boxProps}
     >
       <Slider
         ref={(node) => {
