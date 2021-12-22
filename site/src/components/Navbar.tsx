@@ -648,7 +648,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                       </Typography>
                     </Link>
                   ))}
-                  <Link href="/docs/quick-start">
+                  <Link href="/docs/developing-blocks">
                     <Button
                       size="small"
                       variant="primary"
@@ -712,7 +712,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
               justifyContent: "center",
             }}
           >
-            <Link href="/docs/blocks">
+            <Link href="/docs/developing-blocks">
               <Button
                 sx={{
                   py: 1.5,
