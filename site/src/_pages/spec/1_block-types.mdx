@@ -359,7 +359,7 @@ Each object:
 - MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
 - MUST contain EITHER:
   - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
-  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entity-operation).
+  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
 - if `destinationEntityId` is defined:
   - MAY contain `destinationEntityVersionId` \[_string_] to pin the link to a specific version of the destination entity.
   - MAY contain `destinationEntityTypeId`: \[_string_]: the `entityTypeId` of the destination entity.
