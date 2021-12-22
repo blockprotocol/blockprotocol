@@ -11,8 +11,10 @@ type BlockCardProps = {
 };
 
 const blockWidthStyles = {
+  mx: "auto",
   maxWidth: 450,
-  minWidth: 288,
+  /** @todo: set min-width when parent grid has been refactored to use custom breakpoints */
+  // minWidth: 288,
   width: "100%",
 };
 
@@ -83,7 +85,10 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
           borderRadius: "8px",
           boxShadow: 1,
           transition: ({ transitions }) =>
-            transitions.create(["box-shadow", "transform"]),
+            transitions.create(["box-shadow", "transform"], {
+              duration: 300,
+              easing: "ease",
+            }),
           backgroundColor: ({ palette }) => palette.common.white,
           "&:hover": {
             boxShadow: 4,
@@ -106,18 +111,34 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
         >
           <Box
             sx={{
-              height: 186,
+              paddingTop: "66.67%", // height / width => 2/3
               backgroundColor: ({ palette }) => palette.gray[70],
               borderRadius: "4px",
-              display: "flex",
+              overflow: "hidden",
+              position: "relative",
             }}
           >
             {image && (
               <Box
-                component="img"
-                sx={{ flex: 1, objectFit: "cover" }}
-                src={image}
-              />
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                }}
+              >
+                <Box
+                  component="img"
+                  sx={{
+                    display: "block",
+                    height: "100%",
+                    width: "100%",
+                    objectFit: "cover",
+                  }}
+                  src={image}
+                />
+              </Box>
             )}
           </Box>
         </Box>
