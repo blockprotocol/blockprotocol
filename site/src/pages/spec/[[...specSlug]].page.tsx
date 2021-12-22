@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
@@ -18,6 +19,8 @@ import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 import SiteMapContext from "../../components/context/SiteMapContext";
 import { MDXPageContent } from "../../components/MDXPageContent";
+import { INFO_CARD_WIDTH } from "../../components/InfoCard/InfoCardWrapper";
+import { PageNavLinks } from "../../components/PageNavLinks";
 
 const GitHubInfoCard = (
   <Paper
@@ -171,11 +174,23 @@ export const getStaticProps: GetStaticProps<
 
 const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
   const theme = useTheme();
+  const { asPath } = useRouter();
   const { pages: allPages } = useContext(SiteMapContext);
 
   const { subPages: specificationPages } = allPages.find(
     ({ title }) => title === "Specification",
   )!;
+
+  const currentPageIndex = specificationPages.findIndex(
+    ({ href }) => asPath === href || asPath.startsWith(`${href}#`),
+  );
+
+  const prevPage =
+    currentPageIndex > 0 ? specificationPages[currentPageIndex - 1] : undefined;
+  const nextPage =
+    currentPageIndex < specificationPages.length - 1
+      ? specificationPages[currentPageIndex + 1]
+      : undefined;
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -212,7 +227,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         The open-source protocol for creating interactive, data-driven blocks
       </Typography>
       {GitHubInfoCard}
-      <Box py={4} display="flex" alignItems="flex-start">
+      <Box mb={4} py={4} display="flex" alignItems="flex-start">
         {md ? (
           <Box
             paddingRight={4}
@@ -237,6 +252,22 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         ) : null}
         <MDXPageContent flexGrow={1} serializedPage={serializedPage} />
       </Box>
+      <PageNavLinks
+        prevPage={prevPage}
+        nextPage={nextPage}
+        mb={8}
+        sx={{
+          marginLeft: {
+            xs: 0,
+            md: "300px",
+          },
+          maxWidth: {
+            xs: "100%",
+            sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
+            md: `calc(100% - ${INFO_CARD_WIDTH}px - 300px)`,
+          },
+        }}
+      />
     </Container>
   );
 };
