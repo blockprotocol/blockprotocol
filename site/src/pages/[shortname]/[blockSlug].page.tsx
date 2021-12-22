@@ -83,8 +83,8 @@ type BlockPageProps = {
 };
 
 type BlockPageQueryParams = {
-  org?: string[];
-  block?: string[];
+  shortname?: string[];
+  blockSlug?: string[];
 };
 
 export const getStaticPaths: GetStaticPaths<
@@ -100,50 +100,50 @@ const BASE_URL = `http://${
   process.env.NEXT_PUBLIC_VERCEL_URL ?? "localhost:3000"
 }`;
 
-const parseQueryParams = ({ org, block }: BlockPageQueryParams) => {
-  const orgShortname = org
-    ? typeof org === "string"
-      ? org
-      : org.length === 1
-      ? org[0]
+const parseQueryParams = (params: BlockPageQueryParams) => {
+  const shortname = params.shortname
+    ? typeof params.shortname === "string"
+      ? params.shortname
+      : params.shortname.length === 1
+      ? params.shortname[0]
       : undefined
     : undefined;
 
-  if (!orgShortname) {
+  if (!shortname) {
     throw new Error("Could not parse org shortname from query");
   }
 
-  const blockSlug = block
-    ? typeof block === "string"
-      ? block
-      : block.length === 1
-      ? block[0]
+  const blockSlug = params.blockSlug
+    ? typeof params.blockSlug === "string"
+      ? params.blockSlug
+      : params.blockSlug.length === 1
+      ? params.blockSlug[0]
       : undefined
     : undefined;
 
-  if (!orgShortname) {
+  if (!blockSlug) {
     throw new Error("Could not parse block slug from query");
   }
 
-  return { orgShortname, blockSlug };
+  return { shortname, blockSlug };
 };
 
 export const getStaticProps: GetStaticProps<
   BlockPageProps,
   BlockPageQueryParams
 > = async ({ params }) => {
-  const { orgShortname, blockSlug } = parseQueryParams(params || {});
+  const { shortname, blockSlug } = parseQueryParams(params || {});
 
   const metadata: BlockMetadata = await fetch(
-    `${BASE_URL}/blocks/${orgShortname}/${blockSlug}/metadata.json`,
+    `${BASE_URL}/blocks/${shortname}/${blockSlug}/metadata.json`,
   ).then((res) => res.json());
 
   const [schema, blockStringifiedSource] = await Promise.all([
     fetch(
-      `${BASE_URL}/blocks/${orgShortname}/${blockSlug}/${metadata.schema}`,
+      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${metadata.schema}`,
     ).then((res) => res.json()),
     fetch(
-      `${BASE_URL}/blocks/${orgShortname}/${blockSlug}/${metadata.source}`,
+      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${metadata.source}`,
     ).then((res) => res.text()),
   ]);
 
@@ -162,7 +162,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
   blockStringifiedSource,
 }) => {
   const { query } = useRouter();
-  const { orgShortname, blockSlug } = parseQueryParams(query || {});
+  const { shortname, blockSlug } = parseQueryParams(query || {});
 
   const blockModule = useMemo(
     () =>
@@ -197,7 +197,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             <Box
               sx={{ display: "inline-block", height: "2em", width: "2em" }}
               component="img"
-              src={`/blocks/${orgShortname}/${blockSlug}/${metadata.icon}`}
+              src={`/blocks/${shortname}/${blockSlug}/${metadata.icon}`}
             />
           </Typography>
         )}
@@ -213,7 +213,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 mr={1}
                 sx={{ display: "inline-block", height: "1em", width: "1em" }}
                 component="img"
-                src={`/blocks/${orgShortname}/${blockSlug}/${metadata.icon}`}
+                src={`/blocks/${shortname}/${blockSlug}/${metadata.icon}`}
               />
             )}
             {metadata.displayName}
@@ -223,7 +223,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           </Typography>
           <Typography variant="bpSmallCopy" sx={{ color: "#64778C" }}>
             <div>
-              By {orgShortname}
+              By {shortname}
               <Bullet /> V{metadata.version}{" "}
               {isDesktopSize && (
                 <>
