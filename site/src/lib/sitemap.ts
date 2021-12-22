@@ -32,15 +32,15 @@ export const getDocumentationSubPages = (): SiteMapPage[] => [
       fileName: "1_quick-start-guide.mdx",
     }),
     href: "/docs/quick-start-guide",
-    title: "Quick Start Guide",
+    title: "Authoring Blocks",
   },
   {
     ...getPage({
       pathToDirectory: "docs",
-      fileName: "2_embedding-application.mdx",
+      fileName: "2_embedding-blocks.mdx",
     }),
-    href: "/docs/embedding-application",
-    title: "Embedding Application",
+    href: "/docs/embedding-blocks",
+    title: "Embedding Blocks",
   },
 ];
 

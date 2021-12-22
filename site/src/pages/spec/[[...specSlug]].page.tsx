@@ -230,7 +230,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
       <Box mb={4} py={4} display="flex" alignItems="flex-start">
         {md ? (
           <Box
-            paddingRight={4}
+            paddingRight={6}
             width={300}
             flexGrow={0}
             sx={{
