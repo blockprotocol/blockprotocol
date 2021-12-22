@@ -1,4 +1,4 @@
-import { Button, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { VoidFunctionComponent } from "react";
 
 import ExpandIcon from "../../../../public/assets/expand.svg";
@@ -14,7 +14,8 @@ export const BlockModalButton: VoidFunctionComponent<BlockModalButtonProps> = ({
   modalOpen,
 }) => {
   return (
-    <Button
+    <Box
+      component="button"
       onClick={() => setBlockModalOpen((oldValue) => !oldValue)}
       sx={{
         padding: 0,
@@ -60,6 +61,6 @@ export const BlockModalButton: VoidFunctionComponent<BlockModalButtonProps> = ({
       ) : (
         <ExpandIcon style={{ marginLeft: 10 }} />
       )}
-    </Button>
+    </Box>
   );
 };

@@ -33,17 +33,21 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           border: "1px solid transparent",
           borderBottom: "0px",
           transition: "0.25s all ease-in-out",
+          margin: 0,
+          paddingLeft: "10px",
+          paddingRight: "10px",
           ":hover": {
             backgroundColor: modalOpen ? "white" : undefined,
             color: modalOpen ? "black" : undefined,
-            border: !modalOpen ? "1px solid #e5e5e5" : undefined,
-            borderBottom: "0px",
+            "&:not(.Mui-selected)": {
+              border: !modalOpen ? "1px solid #e5e5e5" : undefined,
+              borderBottom: "0px",
+            },
           },
         },
         "& .MuiTab-root.Mui-selected": {
           backgroundColor: "#37434F",
           color: "white",
-          border: "0px",
         },
       }}
     >

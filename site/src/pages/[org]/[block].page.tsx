@@ -27,12 +27,11 @@ const ChevronRight: React.VFC = () => (
 );
 
 const BreadcrumbLink: React.FC<{ href: string }> = ({ children, href }) => (
-  <Link href={href}>
-    <a style={{ textDecoration: "none" }}>
-      <Typography variant="bpSmallCopy" sx={{ textDecoration: "none" }}>
-        {children}
-      </Typography>
-    </a>
+  // @todo underline=none or textDecoration none isn't working
+  <Link underline="none" href={href}>
+    <Typography variant="bpSmallCopy" sx={{ textDecoration: "none" }}>
+      {children}
+    </Typography>
   </Link>
 );
 

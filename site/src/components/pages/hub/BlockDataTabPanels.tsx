@@ -31,7 +31,7 @@ export const BlockDataTabPanels: VoidFunctionComponent<
             borderBottomRightRadius: 6,
             width: "100%",
           }}
-          p={3}
+          p={2}
         >
           <Snippet
             sx={{
@@ -64,7 +64,7 @@ export const BlockDataTabPanels: VoidFunctionComponent<
               width: "100%",
               overflow: "auto",
             }}
-            p={3}
+            p={2}
             placeholder="Your block input goes here..."
           />
         </div>
