@@ -11,8 +11,10 @@ type BlockCardProps = {
 };
 
 const blockWidthStyles = {
+  mx: "auto",
   maxWidth: 450,
-  minWidth: 288,
+  /** @todo: set min-width when parent grid has been refactored to use custom breakpoints */
+  // minWidth: 288,
   width: "100%",
 };
 
