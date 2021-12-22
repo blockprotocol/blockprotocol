@@ -1,9 +1,9 @@
 import type { NextApiHandler } from "next/";
 
-/** @sync @hashintel/block-protocol */
+/** @todo type as JSON object */
 export type BlockProps = object;
 
-/** @sync @hashintel/block-protocol */
+/** @todo make part of blockprotocol package and publish */
 export type BlockVariant = {
   description?: string;
   displayName?: string;
@@ -11,8 +11,7 @@ export type BlockVariant = {
   properties?: BlockProps;
 };
 
-// move to types.ts
-/** @sync @hashintel/block-protocol */
+/** @todo make part of blockprotocol package and publish */
 export type BlockMetadata = {
   author?: string;
   description?: string;
@@ -44,6 +43,7 @@ export type BlockRegistryInfo = {
  * used to read block metadata from disk.
  *
  * @todo nextjs api endpoints don't have access to nextjs' public folder on vercel
+ *    fix this to fetch from the URL instead (or some other way)
  */
 export const readBlocksFromDisk = (): BlockMetadata[] => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */

@@ -25,7 +25,7 @@ A block package SHOULD contain:
 
     - a `name` for the block
     - any libraries the block expects the embedding application to supply it with under `externals` – i.e. libraries which the block depends on but does not include in its package – using the name of the library as it is usually distributed (e.g. via npm), and the expected version (or version range).
-      For example, a block may SPO rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page.
+      For example, a block may rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page. This is also a useful way of indicating how the block expects to be rendered.
     - the path or URL to the entrypoint source file (e.g. `index.html`, `index.js`) under `source`
     - the `version` of the block, which SHOULD use [semantic versioning](https://semver.org/)
     - `protocol`: the applicable block protocol version
@@ -44,8 +44,7 @@ A block package SHOULD contain:
   - MAY specify:
 
     - `variants` – an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants called ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as properties, respectively.
-    - `image` – a preview image of the block for users to see it in action
-      before using it
+    - `image` – a preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
 
 ## Requesting, creating, and updating data
 
@@ -71,7 +70,7 @@ Blocks should expect the following additional fields related to linked data to b
 
 - a `linkedAggregations` field containing the results of aggregations linked from the block’s entity
 
-- a `links` field which provides the links attached to the block or entities provided in either `linkedEntities` or `linkedAggregations`
+- a `linkGroups` field which provides the links attached to the block or entities provided in either `linkedEntities` or `linkedAggregations`, grouped by entity and path
 
 - where available, an `entityTypes` field containing entity type definitions for any entities sent to the blocks, which can be parsed to understand the constraints on user input for each entity (e.g. which fields are editable, what sort of data they accept).
   Each entry in the array is a JSON schema object with an additional `entityTypeId` field corresponding to the `entityTypeId` of the entities it describes the shape of.
@@ -80,11 +79,11 @@ _\* Embedding applications will want to impose limits on the extent to which lin
 They can be requested using the functions listed below._
 
 Each entity provided under `linkedEntities` or `linkedAggregations` will also have an `entityId` and `entityTypeId` to be used as arguments when updating those entities.
-See [linking entities](#linking-entitites) for a discussion of how links are managed.
+See [linking entities](#linking-entities) for a discussion of how links are managed.
 
 ### Functions provided to blocks
 
-Subject to the permissions granted to them by the embedding application, blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their [implementation](#linking-entitites):
+Subject to the permissions granted to them by the embedding application, blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their [implementation](#linking-entities):
 
 ```block-method
 createEntity<T>(actions: Payload<T>[]): Promise<T[]>
@@ -99,10 +98,10 @@ creates one or more entities
 - `entityTypeId` \[_string_]: the type of entity to create.
 - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
 - `links?`: \[_object_]\[_optional_]: any links to create along with this entity.
-  See [linking entities](#linking-entitites).
+  See [linking entities](#linking-entities).
 - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-  See [linking entities](#linking-entitites).
+  See [linking entities](#linking-entities).
 
 ```block-method
 updateEntity<T>(actions: Payload<T>[]): Promise<T[]>
@@ -119,7 +118,7 @@ updates one or more entities
 - `entityId` \[_string_]: the id of the entity to update.
 - `selection?` \[_array of strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-  See [linking entities](#linking-entitites).
+  See [linking entities](#linking-entities).
 
 ```block-method
 deleteEntity(actions: Payload[]): Promise<boolean[]>
@@ -134,7 +133,7 @@ deletes one or more entities
 - `entityTypeId` \[_string_]: the type of entity to delete
 - `entityId` \[_string_]: the id of the entity to delete.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-  See [linking entities](#linking-entitites).
+  See [linking entities](#linking-entities).
 
 ```block-method
 getEntity<T>(actions: Payload<T>[]): Promise<T[]>
@@ -150,7 +149,7 @@ retrieve one or more entities
 - `entityId` \[_string_]: the id of the entity to retrieve.
 - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-  See [linking entities](#linking-entitites).
+  See [linking entities](#linking-entities).
 
 ```block-method
 aggregateEntity(action: Payload): Promise<AggregationResult>
@@ -179,7 +178,7 @@ following shape
 - `entityTypeId` \[_object_]: the type of entity to provide aggregated data for
 - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-  See [linking entities](#linking-entities-to-other-entities).
+  See [linking entities](#linking-entities).
 - `operation?` <a id="aggregate-entity-operation" /> \[_object_]\[_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
 - `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
 - `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
@@ -220,7 +219,7 @@ updateEntityType(actions: Payload[]): Promise<EntityType>[]>
 
 updates one or more entity types.
 
-**returns:** the updates entity types
+**returns:** the updated entity types
 
 `Payload`: accepts a single _array_ of _objects,_ each with the following shape:
 
@@ -262,23 +261,33 @@ retrieve one or more entity types.
 `Payload` accept an object with a single key, `operation`, which is
 the [same shape as for aggregating entities](#aggregate-entity-operation).
 
-### Linking entities to other entities
+### Linking entities
 
 Another special set of functions provided to blocks relate to managing links between entities.
 
-When creating or updating an entity’s data, including its own, blocks will often wish to express that a certain property on an entity should be a reference to another entity or a collection of entities.
+When creating or updating an entity’s data, including its own, blocks will often wish to express
+that a certain property on an entity should be a reference to another entity.
+
 For example, that a Person’s employer field should point to a particular Company entity.
 
-A block may also wish to link one of its properties to a particular entity or aggregation of entities.
-For example, a table block displaying the Top 10 people sorted by some property of Person, will need a way of encoding this aggregation in its data.
+A block may also wish to link one of its properties to an aggregation of entities.
+
+For example, a table block displaying the Top 10 people sorted by some property of Person,
+will need a way of encoding this aggregation in its data.
 
 In order to create a reference to a separate entity or entities as the desired value of a particular field, blocks should create a `Link` <a id="link-object" />, which:
 
-- MUST contain `sourceId` \[_string_]: the `entityId` of the source entity
+- MUST contain `sourceEntityId` \[_string_]: the `entityId` of the source entity.
+- MAY contain `sourceEntityVersionId` \[_string_]: optionally specify that this link is only from a specific version.
+- MAY contain `sourceEntityTypeId`: \[_string_]: the `entityTypeId` of the source entity.
 - MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
 - MUST contain EITHER:
-  - `destinationId` \[_string_] – the id of a single entity the link is made to, OR
+  - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
   - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entity-operation).
+- if `destinationEntityId` is defined:
+  - MAY contain `destinationEntityVersionId` to pin the link to a specific version of the destination entity.
+  - MAY contain `destinationEntityTypeId`: \[_string_]: the `entityTypeId` of the destination entity.
+- MAY contain `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
 
 Once created, a `Link` includes a `linkId`.
 
@@ -286,8 +295,8 @@ Once created, a `Link` includes a `linkId`.
 
 ```json
 {
-  "sourceId": "user1",
-  "destinationId": "company1",
+  "sourceEntityId": "user1",
+  "destinationEntityId": "company1",
   "path": "employer"
 }
 ```
@@ -296,7 +305,7 @@ Once created, a `Link` includes a `linkId`.
 
 ```json
 {
-  "sourceId": "table1",
+  "sourceEntityId": "table1",
   "path": "rows",
   "aggregate": {
     "entityTypeId": "sales",
@@ -307,7 +316,31 @@ Once created, a `Link` includes a `linkId`.
 }
 ```
 
-An entry in linkedAggregations follows the shape of the [`AggregationResult` object](#aggregation-result-object), with the addition of a `link` field containing the link which generated it (to allow identifying which entity and path the result ‘belongs’ to, where it might otherwise be ambiguous).
+Links will be provided to a block under a `linkGroups` field, which is an array of objects,
+each of which specifies a source entity, a path (field name), and the links on that path.
+
+```json
+{
+  "sourceEntityId": "user1",
+  "path": "company",
+  "links": [
+    {
+      "sourceEntityId": "user1",
+      "destinationEntityId": "company1",
+      "path": "company"
+    }
+  ]
+}
+```
+
+N.B. this data structure has been chosen to allow for later pagination of links on a field.
+
+The entities linked to will be provided under `linkedEntities` and `linkedAggregations`
+(and the entities they link onwards to, depending on the depth the graph is resolved to).
+
+An entry in linkedAggregations follows the shape of the [`AggregationResult` object](#aggregation-result-object),
+with the addition of a `link` field containing the link which generated it (to allow identifying which entity
+and path the result ‘belongs’ to, where it might otherwise be ambiguous).
 
 To create, update and delete links between entities, blocks should expect the following functions to be made available to them:
 
