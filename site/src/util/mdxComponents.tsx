@@ -163,11 +163,15 @@ export const mdxComponents: Record<string, React.ReactNode> = {
     />
   ),
   code: (props: HTMLAttributes<HTMLElement>) => {
-    const isLanguageBlockMethod = props.className === "language-block-method";
-    if (isLanguageBlockMethod) {
+    const isLanguageBlockFunction =
+      props.className === "language-block-function";
+    if (isLanguageBlockFunction) {
       const anchor = `${props.children}`.match(/^[\w]+/)?.[0] ?? "";
       return (
-        <Box id={anchor} sx={{ fontWeight: "bold", color: "#d18d5b" }}>
+        <Box
+          id={anchor}
+          sx={{ fontWeight: "bold", color: "#d18d5b", whiteSpace: "normal" }}
+        >
           <Link href={`#${anchor}`}>{props.children}</Link>
         </Box>
       );
