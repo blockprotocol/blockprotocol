@@ -24,7 +24,8 @@ const documentationPages = (siteMap as SiteMap).pages.find(
 
 const DOCS_PAGE_SUBTITLES: Record<string, string> = {
   Introduction: "This is the introduction page",
-  "Quick Start Guide": "A quick start guide to developing blocks",
+  "Authoring Blocks": "A quick start guide to developing blocks",
+  "Embedding Blocks": "A guide for embedding applications",
 };
 
 const a11yProps = (index: number) => ({
@@ -168,7 +169,7 @@ const DocsPage: NextPage<DocsPageProps> = ({
         <Box py={4} display="flex" alignItems="flex-start">
           {md ? (
             <Box
-              paddingRight={4}
+              paddingRight={6}
               width={300}
               flexGrow={0}
               sx={{

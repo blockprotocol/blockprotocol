@@ -17,7 +17,7 @@ const blockDependencies = {
 /* eslint-enable global-require */
 
 type BlockExports = { default: React.FC };
-/** @sync @hashintel/block-protocol */
+/** @todo type as JSON Schema. make part of blockprotocol package and publish. */
 type BlockSchema = Record<string, any>;
 type BlockDependency = keyof typeof blockDependencies;
 
