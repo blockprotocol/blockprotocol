@@ -6,6 +6,8 @@ import {
   Box,
   useMediaQuery,
   useTheme,
+  SxProps,
+  Theme,
 } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
@@ -26,14 +28,26 @@ const ChevronRight: React.VFC = () => (
   <Icon sx={{ fontSize: "0.8rem" }} className="fas fa-chevron-right" />
 );
 
-const BreadcrumbLink: React.FC<{ href: string }> = ({ children, href }) => (
-  // @todo underline=none or textDecoration none isn't working
-  <Link underline="none" href={href}>
-    <Typography variant="bpSmallCopy" sx={{ textDecoration: "none" }}>
-      {children}
-    </Typography>
-  </Link>
-);
+const BreadcrumbLink: React.FC<{ href: string; sx?: SxProps<Theme> }> = ({
+  children,
+  href,
+  sx,
+}) => {
+  return (
+    // @todo remove underline, underline=none or textDecoration none isn't working
+    <Link underline="none" href={href}>
+      <Typography
+        variant="bpSmallCopy"
+        sx={{
+          ...sx,
+          textDecoration: "none",
+        }}
+      >
+        {children}
+      </Typography>
+    </Link>
+  );
+};
 
 interface PageState {
   schema?: BlockSchema;
@@ -112,8 +126,8 @@ const Block: NextPage = () => {
         <Box mb={1}>
           <Breadcrumbs separator={<ChevronRight />}>
             <BreadcrumbLink href="/">Home</BreadcrumbLink>
-            <BreadcrumbLink href="/gallery">Block Hub</BreadcrumbLink>
-            <BreadcrumbLink href={`/${org}/${metadata.name}`}>
+            <BreadcrumbLink href="/hub">Block Hub</BreadcrumbLink>
+            <BreadcrumbLink sx={{ color: "#6048E5" }} href="">
               {metadata.displayName}
             </BreadcrumbLink>
           </Breadcrumbs>

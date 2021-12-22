@@ -1,4 +1,4 @@
-import { Box, Tabs, Tab } from "@mui/material";
+import { Box, Tabs, Tab, useMediaQuery, useTheme } from "@mui/material";
 import { Validator } from "jsonschema";
 import { useMemo, useState, VoidFunctionComponent } from "react";
 
@@ -31,6 +31,11 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [text, setText] = useState("{}");
+
+  const theme = useTheme();
+
+  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const isDesktopSize = md;
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
