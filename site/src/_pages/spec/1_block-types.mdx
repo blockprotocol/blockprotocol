@@ -85,15 +85,15 @@ See [linking entities](#linking-entities) for a discussion of how links are mana
 
 Subject to the permissions granted to them by the embedding application, blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their [implementation](#linking-entities):
 
-```block-method
-createEntity<T>(actions: Payload<T>[]): Promise<T[]>
+```block-function
+createEntities<T>(actions: CreateEntitiesAction<T>[]): Promise<T[]>
 ```
 
 creates one or more entities
 
 **returns:** the created entities, i.e. _objects_ inside an _array_
 
-`Payload<T>`:
+**accepts:** a single _array_ of _objects_ (`CreateEntitiesAction`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the type of entity to create.
 - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
@@ -103,15 +103,15 @@ creates one or more entities
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entities).
 
-```block-method
-updateEntity<T>(actions: Payload<T>[]): Promise<T[]>
+```block-function
+updateEntities<T>(actions: UpdateEntitiesAction<T>[]): Promise<T[]>
 ```
 
 updates one or more entities
 
 **returns:** the updated entities, i.e. objects inside an array
 
-`Payload<T>:` accepts a single array of objects each with the following shape:
+**accepts:** a single _array_ of _objects_ (`UpdateEntitiesAction`), each with the following shape:
 
 - `data<T>` \[_object_]: the fields and values to update on the entity.
 - `entityTypeId` \[_string_]: the type of entity to update.
@@ -120,44 +120,44 @@ updates one or more entities
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entities).
 
-```block-method
-deleteEntity(actions: Payload[]): Promise<boolean[]>
+```block-function
+deleteEntities(actions: DeleteEntitiesAction[]): Promise<boolean[]>
 ```
 
 deletes one or more entities
 
 **returns:** an _array_ of `boolean` indicating the success of each operation.
 
-`Payload`: accepts a single _array_ of _objects_, each with the following shape:
+**accepts:** a single _array_ of _objects_ (`DeleteEntitiesAction`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the type of entity to delete
 - `entityId` \[_string_]: the id of the entity to delete.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entities).
 
-```block-method
-getEntity<T>(actions: Payload<T>[]): Promise<T[]>
+```block-function
+getEntities<T>(actions: GetEntitiesAction<T>[]): Promise<T[]>
 ```
 
 retrieve one or more entities
 
 **returns:** the retrieved entities, i.e. _objects_ inside an _array_.
 
-`Payload`: accepts a single _array_ of _objects_ each with the following shape:
+**accepts:** a single _array_ of _objects_ (`GetEntitiesAction<T>`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the type of entity to retrieve.
 - `entityId` \[_string_]: the id of the entity to retrieve.
-- `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
+- `selection<T>?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entities).
 
-```block-method
-aggregateEntity(action: Payload): Promise<AggregationResult>
+```block-function
+aggregateEntities(payload?: AggregateEntitiesPayload): Promise<AggregateEntitiesResult>
 ```
 
 retrieve a subset of entities of a given type
 
-**returns:** <a id="aggregation-result-object" /> an `AggregationResult` object
+**returns:** <a id="aggregate-entities-result" /> an `AggregateEntitiesResult` object
 
 - `pageNumber` \[_integer_]: the page number returned.
 - `itemsPerPage` \[_integer_]: the number of results per page, i.e. returned.
@@ -172,14 +172,13 @@ retrieve a subset of entities of a given type
   - `field` \[_string_]: the field sorted on.
   - `desc` \[_boolean_]: whether the sort was descending.
 
-**arguments:** optionally accepts a single _object_ with the
-following shape
+**accepts:** an optional _object_ (`AggregateEntitiesPayload`) with the following shape:
 
 - `entityTypeId` \[_object_]: the type of entity to provide aggregated data for
 - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entities).
-- `operation?` <a id="aggregate-entity-operation" /> \[_object_]\[_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
+- `operation?` <a id="aggregate-entities-operation" /> \[_object_]\[_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
 - `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
 - `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
 - `filters?` \[_array_]\[_optional_]: filter entities by a given field value:
@@ -198,68 +197,67 @@ The functions defined above return entity data, but block authors should note th
 
 Where supported and permitted by the embedding application, blocks may be provided with the following functions to work with entity types, i.e. data models.
 
-```block-method
-createEntityType(actions: Payload[]): Promise<EntityType>[]>
+```block-function
+createEntityTypes(actions: CreateEntityTypesAction[]): Promise<EntityType[]>
 ```
 
 creates one or more entity types.
 
 **returns:** the created entity types, i.e. _objects_ inside an _array_.
-
 An `EntityType` is a JSON schema object with an additional `entityTypeId` field.
 
-`Payload`: accepts a single _array_ of _objects,_ each with the following shape:
+**accepts:** a single _array_ of _objects_ (`CreateEntityTypesAction<T>`), each with the following shape:
 
 - `schema` \[_object_]: the [JSON schema](https://json-schema.org/)
   for the entity type.
 
-```block-method
-updateEntityType(actions: Payload[]): Promise<EntityType>[]>
+```block-function
+updateEntityTypes(actions: UpdateEntityTypesAction[]): Promise<EntityType[]>
 ```
 
 updates one or more entity types.
 
 **returns:** the updated entity types
 
-`Payload`: accepts a single _array_ of _objects,_ each with the following shape:
+**accepts:** a single _array_ of _objects_ (`UpdateEntityTypesAction<T>`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the id of the entity type to update.
 - `schema` \[_object_]: the JSON schema for the entity type.
 
-```block-method
-deleteEntityType(actions: Payload[]): Promise<boolean[]>
+```block-function
+deleteEntityTypes(actions: DeleteEntityTypesAction[]): Promise<boolean[]>
 ```
 
 deletes one or more entity types.
 
 **returns:** an _array_ of _boolean_ indicating the success of each operation.
 
-`Payload`: accepts a single _array_ of _objects,_ each with the following shape:
+**accepts:** a single _array_ of _objects_ (`DeleteEntityTypesAction<T>`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the entity type to delete.
 
-```block-method
-getEntityType(actions: Payload[]): Promise<EntityType[]>
+```block-function
+getEntityTypes(actions: GetEntityTypesAction[]): Promise<EntityType[]>
 ```
 
 retrieves one or more entity types.
 
 **returns:** the retrieved entity types, i.e. _objects_ inside an _array_.
 
-`Payload`: accepts a single _array_ of _objects_ each with the following shape:
+**accepts:** a single _array_ of _objects_ (`GetEntityTypesAction<T>`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the entity type to retrieve.
 
-```block-method
-aggregateEntityTypes(action: Payload): Promise<AggregationResult>
+```block-function
+aggregateEntityTypes(payload: AggregateEntityTypesPayload): Promise<AggregateEntitiesResult>
 ```
 
 retrieve one or more entity types.
 
-**returns:** an `AggregationResult`
+**returns:** an `AggregateEntitiesResult`
 
-`Payload` accept an object with a single key, `operation`, which is
-the [same shape as for aggregating entities](#aggregate-entity-operation).
+**accepts:** an optional _object_ (`AggregateEntityTypesPayload`) with a single key, `operation`.
+It has the [same shape as for aggregating entities](#aggregate-entities-operation).
 
 ### Linking entities
 
@@ -283,7 +281,7 @@ In order to create a reference to a separate entity or entities as the desired v
 - MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
 - MUST contain EITHER:
   - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
-  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entity-operation).
+  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
 - if `destinationEntityId` is defined:
   - MAY contain `destinationEntityVersionId` to pin the link to a specific version of the destination entity.
   - MAY contain `destinationEntityTypeId`: \[_string_]: the `entityTypeId` of the destination entity.
@@ -338,54 +336,69 @@ N.B. this data structure has been chosen to allow for later pagination of links 
 The entities linked to will be provided under `linkedEntities` and `linkedAggregations`
 (and the entities they link onwards to, depending on the depth the graph is resolved to).
 
-An entry in linkedAggregations follows the shape of the [`AggregationResult` object](#aggregation-result-object),
+An entry in linkedAggregations follows the shape of the [`AggregateEntitiesResult` object](#aggregate-entities-result),
 with the addition of a `link` field containing the link which generated it (to allow identifying which entity
 and path the result ‘belongs’ to, where it might otherwise be ambiguous).
 
 To create, update and delete links between entities, blocks should expect the following functions to be made available to them:
 
-```block-method
-createLink(actions: Link[]): Promise<Link>[]>
+```block-function
+createLinks(actions: CreateLinksAction[]): Promise<Link[]>
 ```
 
 creates one or more links.
 
 **returns:** the created links, i.e. _objects_ inside an _array_ (now with `linkId`)
 
-```block-method
-updateLink(actions: Payload[]): Promise<Link>[]>
+**accepts:** a single _array_ of _objects_ (`CreateLinksAction<T>`).
+Each object:
+
+- MUST contain `sourceEntityId` \[_string_]: the `entityId` of the source entity.
+- MAY contain `sourceEntityVersionId` \[_string_]: optionally specify that this link is only from a specific version.
+- MAY contain `sourceEntityTypeId`: \[_string_]: the `entityTypeId` of the source entity.
+- MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
+- MUST contain EITHER:
+  - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
+  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
+- if `destinationEntityId` is defined:
+  - MAY contain `destinationEntityVersionId` \[_string_] to pin the link to a specific version of the destination entity.
+  - MAY contain `destinationEntityTypeId`: \[_string_]: the `entityTypeId` of the destination entity.
+- MAY contain `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
+
+```block-function
+updateLinks(actions: UpdateLinksAction[]): Promise<Link[]>
 ```
 
 updates one or more links.
 
 **returns:** the updated links, i.e. _objects_ inside an _array_
 
-`Payload`: accepts a single _array_ of _objects_, each with the following shape:
+**accepts:** a single _array_ of _objects_ (`UpdateLinksAction`), each with the following shape:
 
 - `linkId` \[_string_]: the id of the link to update.
 - `data` \[_object_]: the [`Link`](#link-object) to overwrite the existing one with.
 
-```block-method
-deleteLink(actions: Payload[]): Promise<boolean[]>
+```block-function
+deleteLinks(actions: DeleteLinksAction[]): Promise<boolean[]>
 ```
 
 deletes one or more links.
 
 **returns:** an _array_ of _boolean_ indicating the success of each operation.
 
-`Payload`: accepts a single _array_ of _objects,_ each with the following shape:
+**accepts:** a single _array_ of _objects_ (`DeleteLinksAction`), each with the following shape:
 
 - `linkId` \[_string_]: the entity type to delete.
 
-```block-method
-getLink(actions: Payload[]): Promise<Link[]>
+```block-function
+getLinks(actions: GetLinksAction[]): Promise<Link[]>
 ```
 
 retrieve one or more links.
 
 **returns:** the retrieved links, i.e. _objects_ inside an _array_.
 
-`Payload`: accepts a single _array_ of _objects_ each with the following shape:
+**accepts:** a single _array_ of _objects_ (`GetLinksAction`), each with the following shape:
 
 - `linkId` \[_string_]: the link to retrieve.
 
@@ -440,20 +453,20 @@ linkedAggregations
 links
 
 // functions
-createEntity
-updateEntity
-deleteEntity
-getEntity
-aggregateEntity
-createEntityType
-updateEntityType
-deleteEntityType
-getEntityType
+createEntities
+updateEntities
+deleteEntities
+getEntities
+aggregateEntities
+createEntityTypes
+updateEntityTypes
+deleteEntityTypes
+getEntityTypes
 aggregateEntityTypes
-createLink
-updateLink
-deleteLink
-getLink
+createLinks
+updateLinks
+deleteLinks
+getLinks
 ```
 
 ### Working with third-party data stores
