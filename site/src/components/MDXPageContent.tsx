@@ -14,7 +14,7 @@ export const MDXPageContent: VFC<MDXPageContentProps> = ({
 }) => (
   <Box
     {...boxProps}
-    sx={(theme) => ({
+    sx={{
       width: "100%",
       overflow: "scroll",
       "& > :not(.info-card-wrapper), > a:not(.info-card-wrapper) > *": {
@@ -23,20 +23,7 @@ export const MDXPageContent: VFC<MDXPageContentProps> = ({
           sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
         },
       },
-      '& pre:not([class*="language-"]) > code[class*="language-"]': {
-        overflow: "scroll",
-        display: "block",
-        fontSize: "80%",
-        color: theme.palette.purple[700],
-        background: theme.palette.purple[100],
-        padding: theme.spacing(2),
-        borderColor: theme.palette.purple[200],
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderRadius: "8px",
-        textShadow: "none",
-      },
-    })}
+    }}
   >
     <MDXRemote {...serializedPage} components={mdxComponents} />
   </Box>

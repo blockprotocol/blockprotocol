@@ -4,6 +4,7 @@ import { TypographyProps, Typography, Box, Paper } from "@mui/material";
 import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
+import { Snippet } from "../components/Snippet";
 
 const stringifyChildren = (node: ReactNode): string => {
   if (typeof node === "string") {
@@ -162,6 +163,10 @@ export const mdxComponents: Record<string, React.ReactNode> = {
       {...props}
     />
   ),
+  pre: (props: HTMLAttributes<HTMLElement>) => {
+    // Delegate full control to code for more styling options
+    return props.children;
+  },
   code: (props: HTMLAttributes<HTMLElement>) => {
     const isLanguageBlockFunction =
       props.className === "language-block-function";
@@ -170,21 +175,35 @@ export const mdxComponents: Record<string, React.ReactNode> = {
       return (
         <Box
           id={anchor}
-          sx={{ fontWeight: "bold", color: "#d18d5b", whiteSpace: "normal" }}
+          component="code"
+          sx={{ fontWeight: "bold", color: "#d18d5b" }}
         >
           <Link href={`#${anchor}`}>{props.children}</Link>
         </Box>
       );
     }
-
     return (
       <Box
-        {...props}
-        component="code"
-        sx={{
+        component="pre"
+        sx={(theme) => ({
+          overflow: "scroll",
+          display: "block",
+          fontSize: "80%",
+          color: theme.palette.purple[700],
+          background: "#000",
+          padding: theme.spacing(2),
+          borderWidth: 1,
+          borderStyle: "solid",
+          borderRadius: "8px",
+          textShadow: "none",
           marginBottom: 2,
-        }}
-      />
+        })}
+      >
+        <Snippet
+          source={`${props.children}`}
+          language={props.className?.replace("language-", "") ?? ""}
+        />
+      </Box>
     );
   },
 };

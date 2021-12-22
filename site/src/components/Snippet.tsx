@@ -1,11 +1,9 @@
 import React from "react";
 import Prism from "prismjs";
-import "prismjs/components/prism-json";
 
 /**
  * Add support for another language:
  *
- * - add the language string id to the union type below
  * - import the grammar package from "prismjs/components/prism-[language]"
  * - eventually you may have to re-build and download the prism.css
  *   to support the new language at https://prismjs.com/download.html
@@ -14,25 +12,33 @@ import "prismjs/components/prism-json";
  *
  * @see https://prismjs.com
  */
-type Language = "json";
+
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-json5";
 
 interface SnippetProps {
   className?: string;
   source: string;
-  language: Language;
+  language: string;
 }
 
 export const Snippet: React.VFC<SnippetProps> = ({
   className,
   source,
   language,
-}) => (
-  <pre className={className}>
+}) => {
+  const grammar = Prism.languages[language];
+  if (!grammar) {
+    return <code className={className}>source</code>;
+  }
+
+  return (
     <code
+      className={className}
       // eslint-disable-next-line react/no-danger -- trust prism to properly escape the source
       dangerouslySetInnerHTML={{
-        __html: Prism.highlight(source, Prism.languages[language], language),
+        __html: Prism.highlight(source, grammar, language),
       }}
     />
-  </pre>
-);
+  );
+};

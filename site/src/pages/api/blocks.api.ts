@@ -75,7 +75,7 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
 let cachedBlocksFromDisk: Array<BlockMetadata> | null = null;
 
 const blocks: NextApiHandler<BlockMetadata[]> = (_req, res) => {
-  cachedBlocksFromDisk ??= readBlocksFromDisk();
+  cachedBlocksFromDisk = cachedBlocksFromDisk ?? readBlocksFromDisk();
   res.status(200).json(cachedBlocksFromDisk);
 };
 
