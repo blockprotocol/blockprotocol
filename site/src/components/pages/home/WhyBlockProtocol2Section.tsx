@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { SyncIcon } from "../../SvgIcon/SyncIcon";
 import { Button } from "../../Button";
+import { Link } from "../../Link";
 
 export const WhyBlockProtocol2Section = () => {
   const theme = useTheme();
@@ -195,7 +196,9 @@ export const WhyBlockProtocol2Section = () => {
               This standisation makes it possible to easily move both blocks and
               data between applications that adhere to the protocol.
             </Typography>
-            <Button variant="secondary">Read the Spec</Button>
+            <Link href="/spec">
+              <Button variant="secondary">Read the Spec</Button>
+            </Link>
           </Container>
         </Box>
         <Box

@@ -112,17 +112,19 @@ const GitHubInfoCard = (
         },
       }}
     >
-      <Button
-        variant="primary"
-        color="teal"
-        size="small"
-        startIcon={<Icon className="fab fa-github" />}
-        sx={{
-          textTransform: "none",
-        }}
-      >
-        View the spec on Github
-      </Button>
+      <Link href="https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec">
+        <Button
+          variant="primary"
+          color="teal"
+          size="small"
+          startIcon={<Icon className="fab fa-github" />}
+          sx={{
+            textTransform: "none",
+          }}
+        >
+          View the spec on Github
+        </Button>
+      </Link>
     </Box>
   </Paper>
 );
