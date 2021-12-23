@@ -39,13 +39,17 @@ export const Header = () => {
               textTransform: "uppercase",
               color: ({ palette }) => palette.purple[400],
               mb: 4,
+              fontWeight: 500,
               letterSpacing: "5%",
               width: { lg: "100%" },
               mx: "auto",
             }}
             variant="bpSmallCaps"
           >
-            A powerful {isMobile && <br />} new protocol for developers
+            A powerful{" "}
+            <span style={{ display: "inline-block" }}>
+              new protocol for developers
+            </span>
           </Typography>
           <Typography
             variant="bpHeading1"
@@ -57,7 +61,7 @@ export const Header = () => {
               fontSize: { xs: 40, lg: 60 },
             }}
           >
-            Build interactive blocks connected to the world of{" "}
+            Build and use interactive blocks connected to the world of{" "}
             <Box
               sx={{
                 position: "relative",
@@ -85,10 +89,9 @@ export const Header = () => {
             width={{ xs: "100%", lg: "74%" }}
             textAlign={{ xs: "center", lg: "left" }}
           >
-            An open standard for building
-            <strong> blocks connected to structured data </strong>
-            with <strong>schemas</strong>. Make your applications both human and
-            machine-readable.
+            An open standard for building and using
+            <strong> data-driven blocks</strong>. Make your applications both
+            human and machine-readable.
           </Typography>
           <Link href="/docs/developing-blocks">
             <Button startIcon={<BoltIcon />}>Read the Quickstart Guide</Button>

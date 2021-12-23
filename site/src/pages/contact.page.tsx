@@ -3,6 +3,7 @@
 import { Container, Typography, Box } from "@mui/material";
 import { NextPage } from "next";
 import { tw } from "twind";
+import { Link } from "../components/Link";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
 
@@ -29,11 +30,21 @@ const Partners: NextPage = () => {
             textAlign="center"
             maxWidth={750}
             variant="bpSubtitle"
-            sx={{ fontSize: 20 }}
+            sx={{ fontSize: 20, marginBottom: 2 }}
           >
             If you’re working on an existing or upcoming block editor, or would
             otherwise like to contribute to the new standard, fill in some
             details below and we’ll be in touch.
+          </Typography>
+          <Typography
+            textAlign="center"
+            maxWidth={750}
+            variant="bpSubtitle"
+            sx={{ fontSize: 20, marginBottom: 2 }}
+          >
+            You can also{" "}
+            <Link href="mailto:help@blockprotocol.org">email us</Link> or{" "}
+            <Link href="https://discord.gg/PefPteFe5j">chat to us on Discord</Link>.
           </Typography>
         </Box>
         <form
@@ -79,17 +90,16 @@ const Partners: NextPage = () => {
 
           <div className={tw`mt-8`}>
             <label htmlFor="PROJECT" className={tw`font-semibold uppercase `}>
-              Project Name <span className={tw`text-blue-600 mr-2`}>*</span>
+              Project Name
             </label>
             <span className={tw`${labelSubtitleStyles}`}>
-              The name of the block editor (or related application) you’re
-              working on
+              The name of the block editor you’re working on or block you'd like
+              to write (if applicable)
             </span>
 
             <input
               id="PROJECT"
               name="PROJECT"
-              required
               type="text"
               className={tw`block border-1 border-gray-300 rounded mt-4 px-5 py-2`}
             />
@@ -142,8 +152,8 @@ const Partners: NextPage = () => {
               Comments
             </label>
             <span className={tw`${labelSubtitleStyles}`}>
-              Let us know what interests you about the standard, or where you
-              think you might be helpful
+              Let us know what interests you about the Block Protocol, what
+              you'd like from us, or where you think you might be helpful
             </span>
 
             <textarea

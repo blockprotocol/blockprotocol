@@ -44,7 +44,10 @@ const MyApp = ({
           <CssBaseline />
           <PageLayout>
             <Head>
-              <title>Blockprotocol</title>
+              <title>
+                Block Protocol - an open standard for
+                data-driven blocks
+              </title>
             </Head>
             <Component {...pageProps} />
           </PageLayout>
