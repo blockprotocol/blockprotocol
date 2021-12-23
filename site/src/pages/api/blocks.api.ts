@@ -21,7 +21,7 @@ export type BlockMetadata = {
   image?: string;
   lastUpdated?: string;
   license?: string;
-  name?: string;
+  name: string;
   schema?: string;
   source?: string;
   variants?: BlockVariant[];
@@ -38,6 +38,47 @@ export type BlockRegistryInfo = {
   distDir: string;
   timestamp: string;
 };
+
+// This is temporarily used to populate each block with a preview image
+// It wouldn't be needed once the image is added to each block's metadata.json file
+const BLOCK_IMAGES = [
+  {
+    name: "@hashintel/block-table",
+    image: "/assets/table-block.svg",
+  },
+  {
+    name: "@hashintel/block-code",
+    image: "/assets/code-block.svg",
+  },
+  {
+    name: "@hashintel/block-header",
+    image: "/assets/heading-block.svg",
+  },
+  {
+    name: "@hashintel/block-image",
+    image: "/assets/image-block.png",
+  },
+  {
+    name: "@hashintel/block-paragraph",
+    image: "/assets/code-block.svg",
+  },
+  {
+    name: "@hashintel/block-person",
+    image: "/assets/code-block.svg",
+  },
+  {
+    name: "@hashintel/block-divider",
+    image: "/assets/divider-block.svg",
+  },
+  {
+    name: "@hashintel/block-embed",
+    image: "/assets/code-block.svg",
+  },
+  {
+    name: "@hashintel/block-video",
+    image: "/assets/code-block.svg",
+  },
+];
 
 /**
  * used to read block metadata from disk.
@@ -69,6 +110,7 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
       lastUpdated: registryInfo.find(
         ({ workspace }) => workspace === metadata.name,
       )?.timestamp,
+      image: BLOCK_IMAGES.find(({ name }) => name === metadata.name)?.image,
     }));
 };
 
