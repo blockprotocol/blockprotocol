@@ -255,7 +255,7 @@ export const RegistrySection = () => {
         <Box>
           Anyone can build new blocks and submit them to the registry. If you
           can’t see the block type you want,{" "}
-          <Link href="/">start building it today.</Link>
+          <Link href="/docs/developing-blocks">start building it today.</Link>
         </Box>
       </Box>
     </Box>
