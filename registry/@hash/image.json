@@ -1,7 +1,7 @@
 {
   "workspace": "@hashintel/block-image",
   "repository": "https://github.com/hashintel/dev.git",
-  "branch": "main",
+  "branch": "ak/match-bp-spec",
   "distDir": "dist",
   "timestamp": "2021-12-23T19:00:00.000Z"
 }
