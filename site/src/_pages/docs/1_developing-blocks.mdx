@@ -24,14 +24,14 @@ If you want to know when the demo application is available, please [register you
 ### Install
 
 1.  Clone [the `blockprotocol` repository](https://github.com/blockprotocol/blockprotocol)
-1.  Run `yarn new:block yourblockname`
-1.  Switch to your new folder: `cd blocks/yourblockname`
+1.  Run `yarn create-block-app yourblockname ./path/to/yourblockname`
+1.  Switch to your new folder: `cd path/to/yourblockname`
 1.  Run `yarn install && yarn start`
 1.  Open [http://localhost:9090](http://localhost:9090) in your browser. You should see `‘Hello World!’`
 
 ### Code
 
-Edit `App.tsx` to change the behavior of your block.
+Edit `src/App.tsx` to change the behavior of your block.
 
 The `AppProps` type describes what data your block accepts - the names and types of properties that embedding applications
 should pass to your block. You can pass in dummy data for testing in `webpack-dev-renderer.tsx`.
