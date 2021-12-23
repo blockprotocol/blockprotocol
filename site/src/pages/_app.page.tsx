@@ -45,8 +45,8 @@ const MyApp = ({
           <PageLayout>
             <Head>
               <title>
-                Block Protocol - an open standard for building blocks connected
-                to structured data
+                Block Protocol - an open standard for an open standard for
+                data-driven blocks
               </title>
             </Head>
             <Component {...pageProps} />
