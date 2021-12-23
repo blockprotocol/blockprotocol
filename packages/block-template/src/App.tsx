@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { BlockComponent } from "./block-protocol-types";
+import { BlockComponent } from "./blockprotocol-types";
 
 type AppProps = {
   name: string;
