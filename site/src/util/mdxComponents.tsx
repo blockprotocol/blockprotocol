@@ -93,7 +93,7 @@ export const mdxComponents: Record<string, React.ReactNode> = {
   a: (props: HTMLProps<HTMLAnchorElement>) => {
     const { href, ref: _ref, ...rest } = props;
     return href ? (
-      <Link {...rest} href={href} />
+      <Link {...rest} href={href.replace("https://blockprotocol.org", "")} />
     ) : (
       // eslint-disable-next-line jsx-a11y/anchor-has-content -- special case for creating bookmarks (for cross-linking)
       <a id={props.id} />
