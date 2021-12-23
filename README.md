@@ -52,13 +52,13 @@ Please consider **starring** the project and watching it on GitHub, to be kept a
 
 If you've got an idea for a new block, would like to make a suggestion that improves the protocol itself, or want to contribute to a better developer experience for users of the protocol, please open an issue with the tag "enhancement", and feel free to fork the repo in order to create a pull request.
 
-If you're looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen).
-
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
 3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+If you're looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
