@@ -63,17 +63,15 @@ const BannerCard: FC<BannerCardProps> = ({
   >
     <Box mb={2}>{contents}</Box>
     <Link href={buttonHref}>
-      <a>
-        <Button
-          sx={{
-            textTransform: "none",
-          }}
-          variant="primary"
-          startIcon={<BoltIcon />}
-        >
-          {buttonText}
-        </Button>
-      </a>
+      <Button
+        sx={{
+          textTransform: "none",
+        }}
+        variant="primary"
+        startIcon={<BoltIcon />}
+      >
+        {buttonText}
+      </Button>
     </Link>
   </Paper>
 );

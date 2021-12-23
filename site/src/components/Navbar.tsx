@@ -155,7 +155,7 @@ const MobileBreadcrumbs: VFC<MobileBreadcrumbsProps> = ({ crumbs }) => {
             {item.title}
           </Link>
         ) : (
-          <Typography variant="bpSmallCopy" color="inherit">
+          <Typography key={item.title} variant="bpSmallCopy" color="inherit">
             {item.title}
           </Typography>
         ),

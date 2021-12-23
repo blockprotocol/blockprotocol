@@ -91,8 +91,7 @@ export const mdxComponents: Record<string, React.ReactNode> = {
     <Typography mb={2} variant="bpBodyCopy" {...props} />
   ),
   a: (props: HTMLProps<HTMLAnchorElement>) => {
-    const { href, ref, ...rest } = props;
-    void ref;
+    const { href, ref: _ref, ...rest } = props;
     return href ? (
       <Link {...rest} href={href} />
     ) : (

@@ -69,9 +69,12 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
     const isExternal =
       typeof href === "string" &&
-      (href.indexOf("http") === 0 || href.indexOf("mailto:") === 0);
+      !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href);
 
     if (isExternal) {
+      other.rel = "noopener";
+      other.target = "_blank";
+
       if (noLinkStyle) {
         return (
           <Anchor
