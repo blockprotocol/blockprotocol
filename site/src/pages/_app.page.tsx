@@ -45,7 +45,7 @@ const MyApp = ({
           <PageLayout>
             <Head>
               <title>
-                Block Protocol - an open standard for an open standard for
+                Block Protocol - an open standard for
                 data-driven blocks
               </title>
             </Head>
