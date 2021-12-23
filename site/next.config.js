@@ -12,5 +12,19 @@ module.exports = withFonts(
     // Thus, we can get Playwright test results and Preview releases for WIP PRs.
     eslint: { ignoreDuringBuilds: true },
     typescript: { ignoreBuildErrors: true },
+    async redirects() {
+      return [
+        {
+          source: "/partners",
+          destination: "/contact",
+          permanent: true,
+        },
+        {
+          source: "/partners/submitted",
+          destination: "/contact/submitted",
+          permanent: true,
+        },
+      ];
+    },
   }),
 );

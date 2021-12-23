@@ -28,7 +28,7 @@ const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   },
   {
     name: "Publish a Block",
-    href: "/publish",
+    href: "/docs/publishing-blocks",
   },
   {
     name: "Contact Us",
