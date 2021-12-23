@@ -2,26 +2,26 @@
 
 import { Container, Typography, Box } from "@mui/material";
 import { NextPage } from "next";
-import React from "react";
 import { tw } from "twind";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
 
 const Partners: NextPage = () => {
   return (
-    <Container sx={{ marginBottom: 8 }}>
+    <Container
+      sx={{
+        marginTop: {
+          xs: 4,
+          md: 8,
+        },
+        marginBottom: {
+          xs: 4,
+          md: 8,
+        },
+      }}
+    >
       <main className={tw`text-center pt-8 pb-10 w-auto`}>
-        <Box
-          sx={{
-            marginBottom: {
-              xs: 4,
-              md: 8,
-            },
-          }}
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-        >
+        <Box display="flex" flexDirection="column" alignItems="center">
           <Typography mb={2} variant="bpTitle">
             Register an interest
           </Typography>
