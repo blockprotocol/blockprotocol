@@ -1,6 +1,6 @@
 import { VFC } from "react";
 import { Typography, Box, Skeleton } from "@mui/material";
-import { formatDistance, subDays } from "date-fns";
+import { formatDistance } from "date-fns";
 import { Link } from "./Link";
 import { Spacer } from "./Spacer";
 import { BlockMetadata } from "../pages/api/blocks.api";
@@ -198,7 +198,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             <Typography color="gray.60" variant="bpMicroCopy">
               {lastUpdated
                 ? `Updated 
-              ${formatDistance(subDays(new Date(), 3), new Date(), {
+              ${formatDistance(new Date(lastUpdated), new Date(), {
                 addSuffix: true,
               })}`
                 : ""}

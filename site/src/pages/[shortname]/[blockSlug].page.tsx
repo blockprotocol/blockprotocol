@@ -175,7 +175,9 @@ const BlockPage: NextPage<BlockPageProps> = ({
           </Box>
         )}
 
-        <Box sx={{ display: "flex" }}>
+        <Box
+          sx={{ display: "flex", pt: { xs: 4, md: 10 }, mb: { xs: 6, md: 12 } }}
+        >
           {isDesktopSize ? (
             <Typography variant="bpHeading1">
               <Box
@@ -209,18 +211,32 @@ const BlockPage: NextPage<BlockPageProps> = ({
             </Typography>
             <Typography
               variant="bpSmallCopy"
-              sx={{ color: ({ palette }) => palette.gray[60] }}
+              sx={{
+                color: ({ palette }) => palette.gray[60],
+              }}
             >
               <span>
-                By {shortname}
-                <Bullet /> V{metadata.version}{" "}
-                {isDesktopSize && (
-                  <>
-                    <Bullet /> Updated Recently
-                  </>
-                )}
+                By{" "}
+                <Box
+                  component="span"
+                  sx={{
+                    fontWeight: 400,
+                    color: ({ palette }) => palette.purple[700],
+                    textDecoration: "underline",
+                  }}
+                >
+                  {shortname}
+                </Box>
               </span>
-              {!isDesktopSize && <div>Updated Recently</div>}
+              <Bullet />
+              <span>V{metadata.version}</span>
+              {isDesktopSize && <Bullet />}
+              <Box
+                component="span"
+                sx={{ display: { xs: "block", md: "inline-block" } }}
+              >
+                Updated Recently
+              </Box>
             </Typography>
           </Box>
         </Box>
