@@ -146,7 +146,24 @@ function build_block {
 
     if [[ $res -ne 200 ]]; then
       log error "could not reach remote resource ${zip_url} (code: ${res})"
-      exit 3
+
+      # TODO: replace with "main"
+      fallback_branch="dev"
+      fallback_zip_url="${repo_url%\.git}/archive/refs/heads/${fallback_branch}.zip"
+
+      log info "downloading ${fallback_zip_url}"
+
+      # insert http basic auth credentials (https://<user:password>@domain.com)
+      # cannot use curl's -u options because that would also require a password
+      fallback_zip_url="${fallback_zip_url:0:8}${GH_ACCESS_TOKEN}@${fallback_zip_url:8}"
+
+      fallback_res=$(curl -sL -w '%{http_code}' -o "${repo_path}.zip" "$zip_url")
+
+      if [[ $fallback_res -ne 200 ]]; then
+        log error "could not reach remote resource ${zip_url} (code: ${res})"
+        exit 3
+      fi
+
     fi
 
     log info "unpacking zip-file"
