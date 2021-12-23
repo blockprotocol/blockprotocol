@@ -78,7 +78,7 @@ const BannerCard: FC<BannerCardProps> = ({
 
 export const BANNERS: Banner[] = [
   {
-    shouldDisplay: ({ pathname }) => pathname.startsWith("/hub"),
+    shouldDisplay: ({ pathname }) => pathname === "/hub",
     overlapsFooter: true,
     contents: (
       <BannerCard
@@ -162,7 +162,7 @@ export const BANNERS: Banner[] = [
                 </Typography>
               </Box>
             }
-            buttonHref="/docs/embedding"
+            buttonHref="/docs/embedding-blocks"
             buttonText="Read the Embedding Guide"
           />
         </Grid>
@@ -192,7 +192,7 @@ export const BANNERS: Banner[] = [
     ),
   },
   {
-    shouldDisplay: ({ pathname }) => pathname.startsWith("/[org]/[block]"),
+    shouldDisplay: ({ pathname }) => pathname === "/[org]/[block]",
     overlapsFooter: true,
     contents: (
       <BannerCard
