@@ -126,6 +126,7 @@ export const getStaticProps: GetStaticProps<
       schema,
       blockStringifiedSource,
     },
+    revalidate: 10,
   };
 };
 
