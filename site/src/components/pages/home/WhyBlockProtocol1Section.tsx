@@ -238,10 +238,10 @@ export const WhyBlockProtocol1Section = () => {
       >
         <Box sx={{ width: { xs: "100%", md: "55%" }, textAlign: "center" }}>
           <Typography variant="bpHeading2" mb={3}>
-            Why would I want to build blocks with the block protocol?
+            Why would I want to build blocks with the Block Protocol?
           </Typography>
           <Typography mb={4}>
-            Blocks built with the <strong>block protocol</strong> can easily
+            Blocks built with the <strong>Block Protocol</strong> can easily
             pass data between applications because the data within each block is{" "}
             <strong>structured.</strong>
           </Typography>

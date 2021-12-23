@@ -127,15 +127,15 @@ export const BANNERS: Banner[] = [
             >
               Anyone can create blocks and contribute to this growing,
               open-source registry of blocks. Read our{" "}
-              <Link href="/docs/blocks">
+              <Link href="/docs/developing-blocks">
                 <a>Quickstart guide</a>
               </Link>{" "}
               to start building your own blocks.
             </Typography>
           </Box>
         }
-        buttonHref="/docs/blocks"
-        buttonText="Read the Embedding Guide"
+        buttonHref="/docs/developing-blocks"
+        buttonText="Read the Quick Start Guide"
       />
     ),
   },
@@ -154,7 +154,7 @@ export const BANNERS: Banner[] = [
                   variant="bpHeading2"
                   sx={{ fontWeight: 700 }}
                 >
-                  Add blocks to your App
+                  Add blocks to your app
                 </Typography>
                 <Typography component="p" variant="bpBodyCopy">
                   Anyone with an existing application who wants to embed
@@ -186,7 +186,7 @@ export const BANNERS: Banner[] = [
                 </Typography>
               </Box>
             }
-            buttonHref="/"
+            buttonHref="/docs/developing-blocks"
             buttonText="Read the Quickstart Guide"
           />
         </Grid>
@@ -241,15 +241,15 @@ export const BANNERS: Banner[] = [
             >
               Anyone can create blocks and contribute to this growing,
               open-source registry of blocks. Read our{" "}
-              <Link href="/docs/blocks">
+              <Link href="/docs/developing-blocks">
                 <a>Quickstart guide</a>
               </Link>{" "}
               to start building your own blocks.
             </Typography>
           </Box>
         }
-        buttonHref="/docs/blocks"
-        buttonText="Read the Embedding Guide"
+        buttonHref="/docs/developing-blocks"
+        buttonText="Read the Quick Start Guide"
       />
     ),
   },

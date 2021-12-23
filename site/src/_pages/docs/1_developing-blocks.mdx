@@ -1,0 +1,66 @@
+## The quickest start
+
+Any valid HTML is already a block.
+
+Got some HTML? Congratulations, you have a block. Go [publish your block](#publish) so that others can find and use it!
+
+Do you want your block to interact with the application using it? Read on.
+
+## Almost-as-quick start
+
+Blocks are web components. We suggest writing them using React, a ready-made framework for writing web components.
+If you need it, here’s [an intro to React](https://reactjs.org/docs/getting-started.html).
+
+Blocks can be sent data by the apps using them. Blocks can tell apps what types of data they take.
+We suggest writing blocks in [TypeScript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html),
+which helps describe types.
+
+We’ve provided a template to help you get started - here’s how to use it.
+
+We'll be releasing a fully-working, open-source application showing off how to write and use blocks, in January 2022.
+
+If you want to know when the demo application is available, please [register your interest](https://blockprotocol.org/partners).
+
+### Install
+
+1.  Clone [the `blockprotocol` repository](https://github.com/blockprotocol/blockprotocol)
+1.  Run `yarn new:block yourblockname`
+1.  Switch to your new folder: `cd blocks/yourblockname`
+1.  Run `yarn install && yarn start`
+1.  Open [http://localhost:9090](http://localhost:9090) in your browser. You should see `‘Hello World!’`
+
+### Code
+
+Edit `App.tsx` to change the behavior of your block.
+
+The `AppProps` type describes what data your block accepts - the names and types of properties that embedding applications
+should pass to your block. You can pass in dummy data for testing in `webpack-dev-renderer.tsx`.
+
+Embedding applications may also pass an `updateEntities` function, an `entityId` and an `entityTypeId` as properties
+to your block - these are the ids identifying your block data in the app. Call `updateEntities` with any new data
+you want the app to set for your block - it should match the data types you have defined in `AppProps`.
+
+For more about editing data from blocks, [read the specification](https://blockprotocol.org/spec/block-types#requesting-creating-and-updating-data).
+
+### Build
+
+Once you’ve finished writing your block, run `yarn build`.
+
+This will produce a compiled version of your code in the `dist` folder, along with metadata files describing your block,
+and the data it accepts (its schema).
+
+You now have a block package that you can provide to apps to use, by [publishing it on the Block Hub](#publish).
+
+**I don’t want to use TypeScript**
+You can write your block in regular JavaScript using the method described above - just rename your app to App.jsx, remove the types, and get coding - but the block schema will not be automatically generated as part of the build process.
+
+You can write your own block schema manually, giving the type of props your App component accepts in
+[JSON Schema format](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
+
+**I don’t want to use React**
+We will be releasing examples of how to write blocks using different frontend libraries in the near future.
+
+### Publish
+
+Once you've built your block, make sure to [publish it on the Block Hub](https://blockprotocol.org/docs/publishing-blocks)
+to show it off to the world, and claim your blockprotocol.org namespace!

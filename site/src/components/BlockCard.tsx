@@ -242,7 +242,7 @@ export const BlockCardComingSoon = () => {
       <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>
         You can also{" "}
         <Link
-          href="/docs"
+          href="/docs/developing-blocks"
           sx={{
             color: ({ palette }) => palette.purple[600],
             fontWeight: 700,
