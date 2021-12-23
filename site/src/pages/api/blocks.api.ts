@@ -18,14 +18,14 @@ export type BlockMetadata = {
   displayName?: string;
   externals?: Record<string, string>;
   icon?: string;
+  image?: string;
+  lastUpdated?: string;
   license?: string;
   name?: string;
   schema?: string;
   source?: string;
   variants?: BlockVariant[];
   version?: string;
-  lastUpdated?: string;
-  image?: string;
 
   // @todo should be redundant to block's package.json#name
   packagePath: string;

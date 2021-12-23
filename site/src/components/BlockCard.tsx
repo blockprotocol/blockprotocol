@@ -4,6 +4,7 @@ import { formatDistance, subDays } from "date-fns";
 import { Link } from "./Link";
 import { Spacer } from "./Spacer";
 import { BlockMetadata } from "../pages/api/blocks.api";
+import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 
 type BlockCardProps = {
   loading?: boolean;
@@ -118,16 +119,16 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
               position: "relative",
             }}
           >
-            {image && (
-              <Box
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                }}
-              >
+            <Box
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+              }}
+            >
+              {image ? (
                 <Box
                   component="img"
                   sx={{
@@ -138,8 +139,21 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
                   }}
                   src={image}
                 />
-              </Box>
-            )}
+              ) : (
+                <Box
+                  display="flex"
+                  height="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <BlockProtocolLogoIcon
+                    sx={{
+                      color: ({ palette }) => palette.gray[50],
+                    }}
+                  />
+                </Box>
+              )}
+            </Box>
           </Box>
         </Box>
         <Box
