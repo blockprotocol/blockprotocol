@@ -1,5 +1,6 @@
 import React from "react";
 import Prism from "prismjs";
+import { Box, BoxProps } from "@mui/material";
 
 /**
  * Add support for another language:
@@ -16,26 +17,30 @@ import Prism from "prismjs";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-json5";
 
-interface SnippetProps {
-  className?: string;
+type SnippetProps = {
   source: string;
   language: string;
-}
+} & BoxProps;
 
 export const Snippet: React.VFC<SnippetProps> = ({
-  className,
   source,
   language,
+  ...boxProps
 }) => {
   const grammar = Prism.languages[language];
   if (!grammar) {
-    return <code className={className}>source</code>;
+    return (
+      <Box component="code" {...boxProps}>
+        {source}
+      </Box>
+    );
   }
 
   return (
-    <code
-      className={className}
-      // eslint-disable-next-line react/no-danger -- trust prism to properly escape the source
+    <Box
+      component="code"
+      {...boxProps}
+      // trust prism to properly escape the source
       dangerouslySetInnerHTML={{
         __html: Prism.highlight(source, grammar, language),
       }}
