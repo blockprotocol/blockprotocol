@@ -94,7 +94,7 @@ const Partners: NextPage = () => {
             </label>
             <span className={tw`${labelSubtitleStyles}`}>
               The name of the block editor you’re working on or block you'd like
-              to write
+              to write (if applicable)
             </span>
 
             <input
