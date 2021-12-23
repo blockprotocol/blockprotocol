@@ -21,8 +21,9 @@ export type BlockMetadata = {
   description?: string;
   displayName?: string;
   externals?: Record<string, string>;
-  license?: string;
   icon?: string;
+  image?: string;
+  license?: string;
   name?: string;
   schema?: string;
   source?: string;
