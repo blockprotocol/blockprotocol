@@ -167,8 +167,8 @@ export const IntroSection = () => {
               </Box>
             )}
             edgeBackground={{
-              left: `linear-gradient(89.92deg, #FFFFFF 47%, rgba(255, 255, 255, 0) 90%)`,
-              right: `linear-gradient(89.92deg, rgba(255, 255, 255, 0) 10%, #FFFFFF 53%)`,
+              left: `linear-gradient(89.92deg, #FFFFFF 50%, rgba(255, 255, 255, 0) 90%)`,
+              right: `linear-gradient(89.92deg, rgba(255, 255, 255, 0) 10%, #FFFFFF 45%)`,
             }}
             settings={sliderSettings}
           />

@@ -14,7 +14,8 @@ type CarouselProps<T> = {
   itemKey(option: T): string;
   edgeBackground?: { left: string; right: string };
   settings?: Partial<Settings>;
-} & BoxProps;
+  sx?: BoxProps["sx"];
+};
 
 type ArrowProps = {
   className?: string;
@@ -67,12 +68,11 @@ export const Carousel = <T,>({
   itemKey,
   settings = {},
   edgeBackground,
-  ...boxProps
+  sx,
 }: CarouselProps<T>): ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const slider = useRef<Slider>();
-  const { sx, ...otherBoxProps } = boxProps;
 
   const sliderSettings = useMemo(
     () =>
@@ -101,7 +101,6 @@ export const Carousel = <T,>({
 
   return (
     <Box
-      {...otherBoxProps}
       sx={{
         overflow: "hidden",
         width: "100%",
@@ -134,25 +133,25 @@ export const Carousel = <T,>({
             display: { xs: "none", md: "block" },
             content: `""`,
             position: "absolute",
-            top: 0,
-            bottom: "-20%",
+            top: "-30%",
+            bottom: "-30%",
             left: 0,
-            width: 200,
+            width: 150,
             zIndex: 2,
             ...(edgeBackground
               ? { background: edgeBackground.left }
               : {
-                  background: `linear-gradient(272.02deg, rgba(247, 250, 252, 0) #F7FAFC 1.67%, #F7FAFC  98.26%)`,
+                  background: `linear-gradient(88.02deg, #F7FAFC 1.67%, rgba(247, 250, 252, 0) 98.26%)`,
                 }),
           },
           ":after": {
             display: { xs: "none", md: "block" },
             content: `""`,
             position: "absolute",
-            top: 0,
-            bottom: "-20%", // temp fix for https://github.com/blockprotocol/blockprotocol/pull/42#discussion_r774474152
+            top: "-30%",
+            bottom: "-30%", // temp fix for https://github.com/blockprotocol/blockprotocol/pull/42#discussion_r774474152
             right: 0,
-            width: 200,
+            width: 150,
             zIndex: 2,
             ...(edgeBackground
               ? { background: edgeBackground.right }

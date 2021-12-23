@@ -1,16 +1,18 @@
-import React from "react";
+import { VFC } from "react";
 import { Typography, Box } from "@mui/material";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
 import { Button } from "../../Button";
 import { BlockHubIcon } from "../../SvgIcon/BlockHubIcon";
 
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { BlocksSlider } from "../../BlocksSlider";
+import { BlockMetadata } from "../../../pages/api/blocks.api";
 
-import { BlocksSlider } from "./BlocksSlider";
+type RegistrySectionProps = {
+  catalog: BlockMetadata[];
+};
 
-export const RegistrySection = () => {
+export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
   return (
     <Box
       sx={{
@@ -44,9 +46,9 @@ export const RegistrySection = () => {
           application. All connected to powerful structured data formats.
         </Typography>
       </Box>
-
-      <BlocksSlider mb={6} />
-
+      <Box sx={{ width: "100%" }} mb={6}>
+        <BlocksSlider catalog={catalog} />
+      </Box>
       <Box sx={{ textAlign: "center", width: { md: "40%" }, maxWidth: 540 }}>
         <Link href="/hub">
           <Button variant="secondary" startIcon={<BlockHubIcon />}>

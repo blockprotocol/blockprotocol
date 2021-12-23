@@ -4,11 +4,11 @@ import { Carousel } from "./Carousel";
 import { Link } from "./Link";
 import { BlockMetadata } from "../pages/api/blocks.api";
 
-type BlockSliderProps = {
+type BlocksSliderProps = {
   catalog: BlockMetadata[];
 };
 
-export const BlocksSlider: VFC<BlockSliderProps> = ({ catalog }) => {
+export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
   return (
     <Carousel
       sx={{

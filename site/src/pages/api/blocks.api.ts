@@ -60,9 +60,11 @@ const BLOCK_IMAGES = [
   },
   {
     name: "@hashintel/block-paragraph",
+    image: "/assets/default-block-img.svg",
   },
   {
     name: "@hashintel/block-person",
+    image: "/assets/default-block-img.svg",
   },
   {
     name: "@hashintel/block-divider",
@@ -70,9 +72,11 @@ const BLOCK_IMAGES = [
   },
   {
     name: "@hashintel/block-embed",
+    image: "/assets/default-block-img.svg",
   },
   {
     name: "@hashintel/block-video",
+    image: "/assets/default-block-img.svg",
   },
 ];
 
