@@ -37,7 +37,7 @@ _For more examples, please refer to the [Block Protocol documentation](https://h
 
 _We'll be publishing a public roadmap for the Block Protocol soon._
 
-See the [open issues](https://github.com/github_username/repo_name/issues) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a full list of proposed features (and known issues).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -50,7 +50,9 @@ The Block Protocol is an open-source standard, and community contributions are w
 
 Please consider **starring** the project and watching it on GitHub, to be kept abreast of future developments and show your appreciation.
 
-If you have a suggestion that would make the protocol itself or any of the attached tooling or infrastructure better, please open an issue with the tag "enhancement", and feel free to fork the repo in order to create a pull request.
+If you've got an idea for a new block, would like to make a suggestion that improves the protocol itself, or want to contribute to a better developer experience for users of the protocol, please open an issue with the tag "enhancement", and feel free to fork the repo in order to create a pull request.
+
+If you're looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen).
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
