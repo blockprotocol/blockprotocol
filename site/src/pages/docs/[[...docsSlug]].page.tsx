@@ -25,7 +25,7 @@ const documentationPages = (siteMap as SiteMap).pages.find(
 const DOCS_PAGE_SUBTITLES: Record<string, string> = {
   Introduction: "Getting started with the Block Protocol",
   "Developing Blocks": "A quick start guide to developing blocks",
-  "Publishing Blocks": "Built a block? Show it off!",
+  "Publishing Blocks": "Built a block? Share it with the world",
   "Embedding Blocks": "A guide for embedding applications",
 };
 
