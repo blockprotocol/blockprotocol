@@ -27,6 +27,10 @@ const GitHubInfoCard = (
   <Paper
     variant="teal"
     sx={{
+      marginBottom: {
+        xs: 3,
+        md: 6,
+      },
       padding: {
         xs: 2,
         sm: 3,
