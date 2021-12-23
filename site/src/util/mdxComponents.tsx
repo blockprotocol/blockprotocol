@@ -201,7 +201,12 @@ export const mdxComponents: Record<string, ReactNode> = {
         <Box
           id={anchor}
           component="code"
-          sx={{ fontWeight: "bold", color: "#d18d5b" }}
+          sx={{
+            fontWeight: "bold",
+            color: "#d18d5b",
+            display: "block",
+            marginTop: 4,
+          }}
         >
           <Link href={`#${anchor}`}>{props.children}</Link>
         </Box>
