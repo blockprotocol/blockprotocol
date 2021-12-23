@@ -113,7 +113,8 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
           <Box
             sx={{
               paddingTop: "66.67%", // height / width => 2/3
-              backgroundColor: ({ palette }) => palette.gray[70],
+              backgroundColor: ({ palette }) =>
+                image ? "transparent" : palette.gray[70],
               borderRadius: "4px",
               overflow: "hidden",
               position: "relative",
@@ -136,6 +137,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
                     height: "100%",
                     width: "100%",
                     objectFit: "cover",
+                    borderRadius: "4px",
                   }}
                   src={image}
                 />
@@ -162,7 +164,6 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
           }}
         >
           <Box sx={{ mb: 2, display: "flex", alignItems: "center" }}>
-            {/* @todo Icon should be here */}
             <Box
               sx={{ mr: 1.5, width: 24, height: 24 }}
               component="img"
@@ -245,7 +246,7 @@ export const BlockCardComingSoon = () => {
       }}
     >
       <Typography variant="bpHeading2" sx={{ lineHeight: 1 }}>
-        More Blocks coming soon
+        More blocks coming soon
       </Typography>
       <Spacer height={3} />
       <Box sx={{ typography: "bpSmallCopy", color: "gray.60" }}>

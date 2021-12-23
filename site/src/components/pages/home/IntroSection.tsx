@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Container,
   Typography,
@@ -48,7 +48,7 @@ export const IntroSection = () => {
       infinite: !isMobile,
       slidesToShow: isMobile ? 1 : 2,
       initialSlide: isMobile ? 0 : 1,
-      beforeChange: (_, next: number) => setActiveStep(next),
+      beforeChange: (_: number, next: number) => setActiveStep(next),
       dots: true,
     }),
     [isMobile],
@@ -166,7 +166,10 @@ export const IntroSection = () => {
                 />
               </Box>
             )}
-            edgeFadeColor="#FFFFFF"
+            edgeBackground={{
+              left: `linear-gradient(89.92deg, #FFFFFF 47%, rgba(255, 255, 255, 0) 90%)`,
+              right: `linear-gradient(89.92deg, rgba(255, 255, 255, 0) 10%, #FFFFFF 53%)`,
+            }}
             settings={sliderSettings}
           />
         </Box>

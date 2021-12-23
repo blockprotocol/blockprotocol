@@ -12,7 +12,7 @@ type CarouselProps<T> = {
   data: T[];
   renderItem(item: T): ReactElement;
   itemKey(option: T): string;
-  edgeFadeColor?: string;
+  edgeBackground?: { left: string; right: string };
   settings?: Partial<Settings>;
 } & BoxProps;
 
@@ -66,7 +66,7 @@ export const Carousel = <T,>({
   renderItem,
   itemKey,
   settings = {},
-  edgeFadeColor,
+  edgeBackground,
   ...boxProps
 }: CarouselProps<T>): ReactElement => {
   const theme = useTheme();
@@ -139,9 +139,11 @@ export const Carousel = <T,>({
             left: 0,
             width: 200,
             zIndex: 2,
-            background: `linear-gradient(to right, ${
-              edgeFadeColor || "#F7FAFC"
-            } 1.9%, transparent 80%)`,
+            ...(edgeBackground
+              ? { background: edgeBackground.left }
+              : {
+                  background: `linear-gradient(272.02deg, rgba(247, 250, 252, 0) #F7FAFC 1.67%, #F7FAFC  98.26%)`,
+                }),
           },
           ":after": {
             display: { xs: "none", md: "block" },
@@ -152,9 +154,11 @@ export const Carousel = <T,>({
             right: 0,
             width: 200,
             zIndex: 2,
-            background: `linear-gradient(to left, ${
-              edgeFadeColor || "#F7FAFC"
-            } 1.9%, transparent 80%)`,
+            ...(edgeBackground
+              ? { background: edgeBackground.right }
+              : {
+                  background: `linear-gradient(272.02deg, #F7FAFC 1.67%, rgba(247, 250, 252, 0) 98.26%)`,
+                }),
           },
         },
 
