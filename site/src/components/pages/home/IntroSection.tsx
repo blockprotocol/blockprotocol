@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Container,
   Typography,
@@ -8,12 +8,7 @@ import {
   Fade,
 } from "@mui/material";
 
-import Slider, { Settings } from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-
-import { ArrowLeftIcon } from "../../SvgIcon/ArrowLeft";
-import { ArrowRightIcon } from "../../SvgIcon/ArrowRight";
+import { Carousel } from "../../Carousel";
 
 const steps = [
   {
@@ -47,30 +42,15 @@ export const IntroSection = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeStep, setActiveStep] = useState(1);
 
-  const slider = useRef<Slider>();
-
-  const settings = useMemo(
-    () =>
-      ({
-        // centerMode: true,
-        infinite: !isMobile,
-        slidesToShow: isMobile ? 1 : 2,
-        swipeToSlide: true,
-        speed: 500,
-        initialSlide: isMobile ? 0 : 1,
-        arrows: false,
-        customPaging: () => (
-          <Box
-            sx={{
-              height: "12px",
-              width: "12px",
-              borderRadius: "50%",
-            }}
-          />
-        ),
-        beforeChange: (_, next) => setActiveStep(next),
-        dots: true,
-      } as Settings),
+  const sliderSettings = useMemo(
+    () => ({
+      centerMode: true,
+      infinite: !isMobile,
+      slidesToShow: isMobile ? 1 : 2,
+      initialSlide: isMobile ? 0 : 1,
+      beforeChange: (_: number, next: number) => setActiveStep(next),
+      dots: true,
+    }),
     [isMobile],
   );
 
@@ -115,7 +95,7 @@ export const IntroSection = () => {
             alignItems: "flex-end",
             mx: "auto",
             position: "relative",
-            mb: -4,
+            mb: { xs: -6, sm: -4 },
           }}
         >
           {steps.map(({ graphImg, graphImgMobile, id }) => (
@@ -140,119 +120,59 @@ export const IntroSection = () => {
         <Box
           sx={{
             position: "relative",
-            zIndex: 2,
-            "& .slick-track": {
-              paddingLeft: { md: "25%" }, // padding left = (100%/ no of slide to show)/2; https://github.com/kenwheeler/slick/issues/1784#issuecomment-831722031,
-              display: "flex",
-              alignItems: "center",
-            },
-            "& .slick-dots": {
-              "li div": {
-                backgroundColor: ({ palette }) => palette.gray[30],
-              },
-              "li.slick-active div": {
-                backgroundColor: ({ palette }) => palette.purple[700],
-              },
+            "&:after": {
+              content: `""`,
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              top: "40%",
+              backgroundColor: ({ palette }) => palette.gray[10],
+              zIndex: 1,
             },
           }}
         >
-          <Slider
-            ref={(node) => {
-              if (node) {
-                slider.current = node;
-              }
+          <Carousel
+            sx={{
+              "& .slick-track": {
+                paddingLeft: { xs: 0, md: "25%" }, // padding left = (100%/ no of slide to show)/2; https://github.com/kenwheeler/slick/issues/1784#issuecomment-831722031,
+                display: "flex",
+                alignItems: "center",
+              },
+              position: "relative",
+              zIndex: 2,
             }}
-            {...settings}
-          >
-            {steps.map(({ image, id }) => (
+            data={steps}
+            itemKey={({ id }) => id.toString()}
+            renderItem={({ image, id }) => (
               <Box
                 key={id}
                 sx={{
                   display: "flex !important",
                   justifyContent: { xs: "center", md: "flex-end" },
                   alignItems: "center",
-                  height: { xs: 300, md: 400 },
+                  height: { xs: 300, lg: 400 },
                 }}
               >
                 <Box
                   component="img"
                   sx={{
                     display: "block",
-                    width: { xs: "90%", md: "auto" },
+                    width: { xs: "90%", lg: "auto" },
                     maxWidth: 450,
                     boxShadow: 2,
                   }}
                   src={image}
                 />
               </Box>
-            ))}
-          </Slider>
-          <Box>
-            {["prev", "next"].map((position) => (
-              <Box
-                key={position}
-                sx={{
-                  position: "absolute",
-                  display: { xs: "none", md: "flex" },
-                  alignItems: "center",
-                  top: 0,
-                  bottom: 0,
-                  ...(position === "prev"
-                    ? {
-                        left: 0,
-                        pl: 4.5,
-                        justifyContent: "flex-start",
-                      }
-                    : {
-                        right: 0,
-                        pr: 4.5,
-                        justifyContent: "flex-end",
-                      }),
-                  width: 200,
-                  zIndex: 10,
-                  background: `linear-gradient(to ${
-                    position === "prev" ? "right" : "left"
-                  }, #FFFFFF 55%, transparent)`,
-                }}
-              >
-                <Box
-                  sx={{
-                    height: 44,
-                    width: 44,
-                    borderRadius: "50%",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    cursor: "pointer",
-                    //   check support for filter
-                    filter: `drop-shadow(0px 1px 2px rgba(27, 58, 117, 0.12)) drop-shadow(0px 4px 8px rgba(27, 58, 117, 0.07))`,
-                    //   boxShadow: 1
-                  }}
-                  onClick={() =>
-                    position === "next"
-                      ? slider.current?.slickNext()
-                      : slider.current?.slickPrev()
-                  }
-                >
-                  {position === "prev" ? (
-                    <ArrowLeftIcon sx={{ width: 24, height: 24 }} />
-                  ) : (
-                    <ArrowRightIcon sx={{ width: 24, height: 24 }} />
-                  )}
-                </Box>
-              </Box>
-            ))}
-          </Box>
+            )}
+            edgeBackground={{
+              left: `linear-gradient(89.92deg, #FFFFFF 50%, rgba(255, 255, 255, 0) 90%)`,
+              right: `linear-gradient(89.92deg, rgba(255, 255, 255, 0) 10%, #FFFFFF 45%)`,
+            }}
+            settings={sliderSettings}
+          />
         </Box>
-        <Box
-          sx={{
-            height: 296,
-            backgroundColor: "gray.10",
-            mt: -28,
-            borderBottom: ({ palette }) => `1px solid ${palette.gray[30]}`,
-          }}
-        />
       </Box>
     </Box>
   );

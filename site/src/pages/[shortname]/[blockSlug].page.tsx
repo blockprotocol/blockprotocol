@@ -12,14 +12,15 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, VoidFunctionComponent } from "react";
 
-import { BlocksSlider } from "../../components/pages/home/BlocksSlider";
+import { formatDistance } from "date-fns";
+import { BlocksSlider } from "../../components/BlocksSlider";
 import {
   blockDependencies,
   BlockDependency,
   BlockExports,
   BlockSchema,
 } from "../../components/pages/hub/HubUtils";
-import { BlockMetadata } from "../api/blocks.api";
+import { BlockMetadata, readBlocksFromDisk } from "../api/blocks.api";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
 
@@ -54,6 +55,7 @@ type BlockPageProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
   blockStringifiedSource: string;
+  catalog: BlockMetadata[];
 };
 
 type BlockPageQueryParams = {
@@ -108,9 +110,15 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   const { shortname, blockSlug } = parseQueryParams(params || {});
 
+  const catalog = readBlocksFromDisk();
+
   const metadata: BlockMetadata = await fetch(
     `${BASE_URL}/blocks/${shortname}/${blockSlug}/metadata.json`,
   ).then((res) => res.json());
+
+  metadata.lastUpdated = catalog.find(
+    ({ name }) => name === metadata.name,
+  )?.lastUpdated;
 
   const [schema, blockStringifiedSource] = await Promise.all([
     fetch(
@@ -126,6 +134,7 @@ export const getStaticProps: GetStaticProps<
       metadata,
       schema,
       blockStringifiedSource,
+      catalog,
     },
     revalidate: 10,
   };
@@ -135,6 +144,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
   metadata,
   schema,
   blockStringifiedSource,
+  catalog,
 }) => {
   const { query } = useRouter();
   const { shortname, blockSlug } = parseQueryParams(query || {});
@@ -151,6 +161,10 @@ const BlockPage: NextPage<BlockPageProps> = ({
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const isDesktopSize = md;
+
+  const sliderItems = useMemo(() => {
+    return catalog.filter(({ name }) => name !== metadata.name);
+  }, [catalog, metadata]);
 
   return (
     <>
@@ -242,7 +256,17 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 component="span"
                 sx={{ display: { xs: "block", md: "inline-block" } }}
               >
-                Updated Recently
+                {`Updated ${
+                  metadata.lastUpdated
+                    ? formatDistance(
+                        new Date(metadata.lastUpdated),
+                        new Date(),
+                        {
+                          addSuffix: true,
+                        },
+                      )
+                    : "Recently"
+                }`}
               </Box>
             </Typography>
           </Box>
@@ -290,7 +314,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           Explore more blocks
         </Typography>
       </Container>
-      <BlocksSlider />
+      <BlocksSlider catalog={sliderItems} />
     </>
   );
 };
