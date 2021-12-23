@@ -3,7 +3,7 @@
 import React from "react";
 import { tw } from "twind";
 
-import Header from "../../components/Header";
+import Header from "../components/Header";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
 
