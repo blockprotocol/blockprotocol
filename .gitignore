@@ -28,6 +28,9 @@ node_modules/
 # vscode config
 .vscode
 
+# vercel
+.vercel
+
 # workspace specific
 site/public/blocks
 site/site-map.json
