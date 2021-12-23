@@ -108,8 +108,9 @@ export const mdxComponents: Record<string, ReactNode> = {
       <a id={props.id} />
     );
   },
-  table: ({ children, ...props }: HTMLProps<HTMLTableElement>) => (
+  table: ({ children, ref: _ref, ...props }: HTMLProps<HTMLTableElement>) => (
     <Box
+      component="table"
       sx={{
         "td, th": {
           border: ({ palette }) => `1px solid ${palette.gray[30]}`,
@@ -119,8 +120,9 @@ export const mdxComponents: Record<string, ReactNode> = {
         },
         marginBottom: 2,
       }}
+      {...props}
     >
-      <table {...props}>{children}</table>
+      {children}
     </Box>
   ),
 

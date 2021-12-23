@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Button } from "../../components/Button";
@@ -197,80 +198,85 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
-    <Container
-      sx={{
-        marginTop: {
-          xs: 4,
-          md: 8,
-        },
-      }}
-    >
-      <Typography
-        variant="bpTitle"
+    <>
+      <Head>
+        <title>Block Protocol - Specification</title>
+      </Head>
+      <Container
         sx={{
-          marginBottom: {
-            xs: 1,
-            md: 2,
-          },
-        }}
-      >
-        Specification
-      </Typography>
-      <Typography
-        variant="bpSubtitle"
-        maxWidth={750}
-        sx={{
-          marginBottom: {
+          marginTop: {
             xs: 4,
-            md: 6,
+            md: 8,
           },
         }}
       >
-        The open-source protocol for creating interactive, data-driven blocks
-      </Typography>
-      {GitHubInfoCard}
-      <Box mb={4} py={4} display="flex" alignItems="flex-start">
-        {md ? (
-          <Box
-            paddingRight={6}
-            width={300}
-            flexGrow={0}
-            sx={{
-              position: "sticky",
-              top:
-                DESKTOP_NAVBAR_HEIGHT +
-                parseIntFromPixelString(theme.spacing(2)),
-            }}
-          >
-            <Sidebar
-              pages={specificationPages.filter(
-                ({ title }) => !title.startsWith("Appendix"),
-              )}
-              appendices={specificationPages.filter(({ title }) =>
-                title.startsWith("Appendix"),
-              )}
-            />
-          </Box>
-        ) : null}
-        <MDXPageContent flexGrow={1} serializedPage={serializedPage} />
-      </Box>
-      <PageNavLinks
-        prevPage={prevPage}
-        nextPage={nextPage}
-        mb={8}
-        sx={{
-          marginLeft: {
-            xs: 0,
-            md: "300px",
-          },
-          maxWidth: {
-            xs: "100%",
-            sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
-            md: `calc(100% - ${INFO_CARD_WIDTH}px - 300px)`,
-          },
-        }}
-      />
-    </Container>
+        <Typography
+          variant="bpTitle"
+          sx={{
+            marginBottom: {
+              xs: 1,
+              md: 2,
+            },
+          }}
+        >
+          Specification
+        </Typography>
+        <Typography
+          variant="bpSubtitle"
+          maxWidth={750}
+          sx={{
+            marginBottom: {
+              xs: 4,
+              md: 6,
+            },
+          }}
+        >
+          The open-source protocol for creating interactive, data-driven blocks
+        </Typography>
+        {GitHubInfoCard}
+        <Box mb={4} py={4} display="flex" alignItems="flex-start">
+          {md ? (
+            <Box
+              paddingRight={6}
+              width={300}
+              flexGrow={0}
+              sx={{
+                position: "sticky",
+                top:
+                  DESKTOP_NAVBAR_HEIGHT +
+                  parseIntFromPixelString(theme.spacing(2)),
+              }}
+            >
+              <Sidebar
+                pages={specificationPages.filter(
+                  ({ title }) => !title.startsWith("Appendix"),
+                )}
+                appendices={specificationPages.filter(({ title }) =>
+                  title.startsWith("Appendix"),
+                )}
+              />
+            </Box>
+          ) : null}
+          <MDXPageContent flexGrow={1} serializedPage={serializedPage} />
+        </Box>
+        <PageNavLinks
+          prevPage={prevPage}
+          nextPage={nextPage}
+          mb={8}
+          sx={{
+            marginLeft: {
+              xs: 0,
+              md: "300px",
+            },
+            maxWidth: {
+              xs: "100%",
+              sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
+              md: `calc(100% - ${INFO_CARD_WIDTH}px - 300px)`,
+            },
+          }}
+        />
+      </Container>
+    </>
   );
 };
 
