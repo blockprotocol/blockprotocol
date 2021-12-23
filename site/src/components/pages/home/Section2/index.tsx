@@ -7,7 +7,6 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { InlineLink } from "../../../InlineLink";
 import { Step1, Step2, Step3, Step4 } from "./Steps";
 
 const CONTENT = [
@@ -16,11 +15,8 @@ const CONTENT = [
     title: "What do you mean by 'blocks'?",
     content: (
       <Box>
-        <InlineLink popperInfo={{ title: "Blocks", content: "A block is" }}>
-          Blocks
-        </InlineLink>{" "}
-        are individual pieces of content on the web – images, text, videos,
-        checklists, and kanban boards are all examples of blocks.
+        Blocks are individual pieces of content on the web – images, text,
+        videos, checklists, and kanban boards are all examples of blocks.
         <br />
         <br />
         You’ve seen these around the web. They’re used in almost every modern
@@ -51,12 +47,9 @@ const CONTENT = [
       "Blocks created using the Block Protocol can easily move between apps",
     content: (
       <Box>
-        These blocks use{" "}
-        <InlineLink popperInfo={{ title: "structured data", content: "info" }}>
-          structured data
-        </InlineLink>{" "}
-        which makes it easy to move both block themselves, and the data within
-        blocks, even if the blocks are in completely seperate applications.
+        These blocks use structured data which makes it easy to move both block
+        themselves, and the data within blocks, even if the blocks are in
+        completely seperate applications.
       </Box>
     ),
     renderComponent: (isMobile: boolean, isActive?: boolean) => (
@@ -71,12 +64,9 @@ const CONTENT = [
         <strong>Structured data is any data that maps to a schema</strong>
         <br />
         <br />
-        <InlineLink popperInfo={{ title: "Schemas", content: "info" }}>
-          Schemas
-        </InlineLink>{" "}
-        are standardized formats that define the possible properties of a thing,
-        the expected types of those properties, and (sometimes) their expected
-        values.
+        Schemas are standardized formats that define the possible properties of
+        a thing, the expected types of those properties, and (sometimes) their
+        expected values.
         <br />
         <br />
         So the schema for a <strong>Person</strong> has the properties{" "}

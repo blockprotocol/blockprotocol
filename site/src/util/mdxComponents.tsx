@@ -20,7 +20,7 @@ const stringifyChildren = (node: ReactNode): string => {
 const HEADING_MARGIN_TOP = 6;
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, React.ReactNode> = {
+export const mdxComponents: Record<string, ReactNode> = {
   Box,
   Paper,
   Typography,
@@ -52,7 +52,16 @@ export const mdxComponents: Record<string, React.ReactNode> = {
       lower: true,
     });
     return (
-      <Link href={`#${anchor}`}>
+      <Link
+        href={`#${anchor}`}
+        sx={{
+          "&:first-child": {
+            "& > h2": {
+              marginTop: 0,
+            },
+          },
+        }}
+      >
         <Typography
           mt={HEADING_MARGIN_TOP}
           mb={HEADING_MARGIN_BOTTOM}
@@ -99,6 +108,21 @@ export const mdxComponents: Record<string, React.ReactNode> = {
       <a id={props.id} />
     );
   },
+  table: ({ children, ...props }: HTMLProps<HTMLTableElement>) => (
+    <Box
+      sx={{
+        "td, th": {
+          border: ({ palette }) => `1px solid ${palette.gray[30]}`,
+          paddingY: 1,
+          paddingX: 3,
+          typography: "bpSmallCopy",
+        },
+        marginBottom: 2,
+      }}
+    >
+      <table {...props}>{children}</table>
+    </Box>
+  ),
 
   // TODO: Improve style & implementation of below components
 

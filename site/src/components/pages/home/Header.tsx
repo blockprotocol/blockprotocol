@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { Button } from "../../Button";
 import { BoltIcon } from "../../SvgIcon/BoltIcon";
+import { Link } from "../../Link";
 
 export const Header = () => {
   const theme = useTheme();
@@ -89,7 +90,9 @@ export const Header = () => {
             with <strong>schemas</strong>. Make your applications both human and
             machine-readable.
           </Typography>
-          <Button startIcon={<BoltIcon />}>Read the Quickstart Guide</Button>
+          <Link href="/docs/developing-blocks">
+            <Button startIcon={<BoltIcon />}>Read the Quickstart Guide</Button>
+          </Link>
         </Box>
       </Container>
 

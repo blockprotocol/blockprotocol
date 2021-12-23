@@ -248,9 +248,11 @@ export const RegistrySection = () => {
       </Box>
 
       <Box sx={{ textAlign: "center", width: { md: "40%" }, maxWidth: 540 }}>
-        <Button variant="secondary" startIcon={<BlockHubIcon />}>
-          Explore all Blocks
-        </Button>
+        <Link href="/hub">
+          <Button variant="secondary" startIcon={<BlockHubIcon />}>
+            Explore all Blocks
+          </Button>
+        </Link>
         <Spacer height={4} />
         <Box>
           Anyone can build new blocks and submit them to the registry. If you
