@@ -60,11 +60,9 @@ const BLOCK_IMAGES = [
   },
   {
     name: "@hashintel/block-paragraph",
-    image: "/assets/code-block.svg",
   },
   {
     name: "@hashintel/block-person",
-    image: "/assets/code-block.svg",
   },
   {
     name: "@hashintel/block-divider",
@@ -72,11 +70,9 @@ const BLOCK_IMAGES = [
   },
   {
     name: "@hashintel/block-embed",
-    image: "/assets/code-block.svg",
   },
   {
     name: "@hashintel/block-video",
-    image: "/assets/code-block.svg",
   },
 ];
 
@@ -110,7 +106,8 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
       lastUpdated: registryInfo.find(
         ({ workspace }) => workspace === metadata.name,
       )?.timestamp,
-      image: BLOCK_IMAGES.find(({ name }) => name === metadata.name)?.image,
+      image:
+        BLOCK_IMAGES.find(({ name }) => name === metadata.name)?.image ?? null,
     }));
 };
 

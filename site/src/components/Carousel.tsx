@@ -135,7 +135,7 @@ export const Carousel = <T,>({
             content: `""`,
             position: "absolute",
             top: 0,
-            bottom: 0,
+            bottom: "-20%",
             left: 0,
             width: 200,
             zIndex: 2,
@@ -150,7 +150,7 @@ export const Carousel = <T,>({
             content: `""`,
             position: "absolute",
             top: 0,
-            bottom: 0,
+            bottom: "-20%", // temp fix for https://github.com/blockprotocol/blockprotocol/pull/42#discussion_r774474152
             right: 0,
             width: 200,
             zIndex: 2,
