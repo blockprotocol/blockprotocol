@@ -8,8 +8,11 @@ module.exports = {
     colors: {
       gray: {
         50: "#FBFBFB",
-        100: "#F1F1F1"
-      }
+        100: "#F1F1F1",
+      },
+      blue: {
+        300: "#2482FF",
+      },
     },
     extend: {},
   },
@@ -19,6 +22,6 @@ module.exports = {
   plugins: [],
   corePlugins: {
     // https://tailwindcss.com/docs/preflight - to sift through later
-    preflight: false,
+    preflight: true,
   },
 };

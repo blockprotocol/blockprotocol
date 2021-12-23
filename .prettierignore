@@ -1,0 +1,54 @@
+#######################
+## Specific to Prettier
+#######################
+
+# Ignore all files (but still allow sub-folder scanning)
+*
+!*/
+
+# Allow certain file types
+!*.js
+!*.json
+!*.md
+!*.mdx
+!*.ts
+!*.tsx
+!*.yml
+
+########################
+## Same as in .gitignore
+########################
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional eslint cache
+.eslintcache
+
+# Yarn Integrity file
+.yarn-integrity
+
+# macOS directory file
+.DS_Store
+
+# Next.js build output
+.next
+
+# environment variables
+.env.local
+
+# vscode config
+.vscode
+
+# workspace specific
+site/public/blocks
+site/site-map.json
