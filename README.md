@@ -26,7 +26,7 @@ Please refer to the [Block Protocol documentation](https://blockprotocol.org/doc
 
 We'll be publishing an example of an embedding application for the Block Protocol in January 2022. In the meantime:
 
-_For more examples, please refer to the [Block Protocol documentation](https://https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub)._
+_For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub)._
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
