@@ -9,9 +9,6 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
 ## Local development
 
-Retrieve the 1Password document `blockprotocol/site/.env.local` from the 1password vault
-`HASH.dev/ai` and place it at `/site/.env.local`.
-
 Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/registry`
 with a build-config. The build-script `/site/scripts/build-blocks.sh` allows to build blocks
 individually. It requires the commandline tool:

@@ -1,5 +1,4 @@
 /**
- * @file downstream of hashintel/dev/.prettierrc.js
  * @see https://prettier.io/docs/en/configuration.html
  */
 module.exports = {

@@ -1,6 +1,3 @@
-/**
- * @file downstream of hashintel/dev/packages/hash/.eslintrc.json
- */
 module.exports = {
   // this is the highest config lower ones will automatically extend
   root: true,
@@ -25,7 +22,6 @@ module.exports = {
     node: true,
   },
   rules: {
-    // overridden airbnb rules (if you wish to add to this list, please outline your reasoning here: https://www.notion.so/hashintel/HASH-dev-eslint-configuration-60c52c127d13478fbce6bb5579a6b7be)
     "no-undef-init": "off",
     "no-underscore-dangle": "off",
     "no-nested-ternary": "off",

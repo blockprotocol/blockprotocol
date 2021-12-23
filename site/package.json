@@ -1,7 +1,6 @@
 {
   "name": "@blockprotocol/site",
   "version": "0.1.0",
-  "private": true,
   "description": "The public-facing blockprotocol.org website",
   "repository": "https://github.com/blockprotocol/blockprotocol.git",
   "license": "MIT",
