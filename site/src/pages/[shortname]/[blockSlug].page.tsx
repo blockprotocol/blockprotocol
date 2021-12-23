@@ -8,6 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, VoidFunctionComponent } from "react";
 
@@ -153,6 +154,11 @@ const BlockPage: NextPage<BlockPageProps> = ({
 
   return (
     <>
+      <Head>
+        <title>
+          Block Protocol - {metadata.displayName} Block by {shortname}
+        </title>
+      </Head>
       <Container>
         {isDesktopSize ? null : (
           <Box mb={1}>

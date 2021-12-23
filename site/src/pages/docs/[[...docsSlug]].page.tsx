@@ -9,6 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
 import siteMap from "../../../site-map.json";
@@ -99,6 +100,9 @@ const DocsPage: NextPage<DocsPageProps> = ({
 
   return (
     <>
+      <Head>
+        <title>Block Protocol - Documentation</title>
+      </Head>
       {md && (
         <Box
           sx={{
