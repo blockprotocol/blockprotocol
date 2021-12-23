@@ -113,7 +113,7 @@ export const getStaticProps: GetStaticProps<
   const catalog = readBlocksFromDisk();
 
   const metadata: BlockMetadata = await fetch(
-    `${BASE_URL}/blocks/${shortname}/${blockSlug}/metadata.json`,
+    `${BASE_URL}/blocks/${shortname}/${blockSlug}/block-metadata.json`,
   ).then((res) => res.json());
 
   metadata.lastUpdated = catalog.find(
