@@ -18,7 +18,7 @@ Please refer to the [Block Protocol documentation](https://blockprotocol.org/doc
 
 ## Usage
 
-We'll be publishing an example of an embedding application for the Block Protocol in January 2022. In the meantime:
+We’ll be publishing an example of an embedding application for the Block Protocol in January 2022. In the meantime:
 
 _For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub)._
 
@@ -26,7 +26,7 @@ _For more examples, please refer to the [Block Protocol documentation](https://b
 
 ## Roadmap
 
-_We'll be publishing a public roadmap for the Block Protocol soon._
+_We’ll be publishing a public roadmap for the Block Protocol soon._
 
 See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a full list of proposed features (and known issues).
 
@@ -38,7 +38,7 @@ The Block Protocol is an open-source standard, and community contributions are w
 
 Please consider **starring** the project and watching it on GitHub, to be kept abreast of future developments and show your appreciation.
 
-If you've got an idea for a new block, would like to make a suggestion that improves the protocol itself, or want to contribute to a better developer experience for users of the protocol, please open an issue with the tag "enhancement", and feel free to fork the repo in order to create a pull request.
+If you’ve got an idea for a new block, would like to make a suggestion that improves the protocol itself, or want to contribute to a better developer experience for users of the protocol, please open an issue with the tag “enhancement”, and feel free to fork the repo in order to create a pull request.
 
 1.  Fork the Project
 1.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -46,7 +46,7 @@ If you've got an idea for a new block, would like to make a suggestion that impr
 1.  Push to the Branch (`git push origin feature/AmazingFeature`)
 1.  Open a Pull Request
 
-If you're looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen).
+If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen).
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
