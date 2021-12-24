@@ -40,7 +40,7 @@ export type BlockRegistryInfo = {
 };
 
 // This is temporarily used to populate each block with a preview image
-// It wouldn't be needed once the image is added to each block's metadata.json file
+// It wouldn't be needed once the image is added to each block's block-metadata.json file
 const BLOCK_IMAGES = [
   {
     name: "@hashintel/block-table",
@@ -99,7 +99,7 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
     }));
 
   return glob
-    .sync(`${process.cwd()}/public/blocks/**/metadata.json`)
+    .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string) => ({
       // @todo should be redundant to block's package.json#name
       packagePath: path.split("/").slice(-3, -1).join("/"),
