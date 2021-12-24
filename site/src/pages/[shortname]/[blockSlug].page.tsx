@@ -117,7 +117,7 @@ export const getStaticProps: GetStaticProps<
   const catalog = readBlocksFromDisk();
 
   const blockMetadataResponse = await fetch(
-    `${BASE_URL}/blocks/${shortname}/${blockSlug}/metadata.json`,
+    `${BASE_URL}/blocks/${shortname}/${blockSlug}/block-metadata.json`,
   );
 
   if (blockMetadataResponse.status === 404) {
