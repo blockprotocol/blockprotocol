@@ -56,8 +56,6 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-<!-- CONTACT -->
-
 ## Contact
 
 Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
@@ -67,8 +65,6 @@ You can also join our [community Discord server](https://discord.gg/PefPteFe5j) 
 Project Link: [https://github.com/blockprotocol/blockprotocol](https://github.com/blockprotocol/blockprotocol)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
 
 ## Acknowledgments
 
