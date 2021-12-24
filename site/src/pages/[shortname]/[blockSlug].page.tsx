@@ -52,7 +52,7 @@ const Bullet: VoidFunctionComponent = () => {
 };
 
 type BlockPageProps = {
-  metadata: BlockMetadata;
+  blockMetadata: BlockMetadata;
   schema: BlockSchema;
   blockStringifiedSource: string;
   catalog: BlockMetadata[];
@@ -72,9 +72,9 @@ export const getStaticPaths: GetStaticPaths<
   };
 };
 
-const BASE_URL = `http://${
-  process.env.NEXT_PUBLIC_VERCEL_URL ?? "localhost:3000"
-}`;
+const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : `http://localhost:3000`;
 
 const parseQueryParams = (params: BlockPageQueryParams) => {
   const shortname = params.shortname
@@ -110,28 +110,43 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   const { shortname, blockSlug } = parseQueryParams(params || {});
 
+  if (!shortname.startsWith("@")) {
+    return { notFound: true };
+  }
+
   const catalog = readBlocksFromDisk();
 
-  const metadata: BlockMetadata = await fetch(
+  const blockMetadataResponse = await fetch(
     `${BASE_URL}/blocks/${shortname}/${blockSlug}/metadata.json`,
-  ).then((res) => res.json());
+  );
 
-  metadata.lastUpdated = catalog.find(
-    ({ name }) => name === metadata.name,
+  if (blockMetadataResponse.status === 404) {
+    // TODO: Render custom 404 page for blocks
+    return { notFound: true };
+  } else if (!blockMetadataResponse.ok) {
+    // TODO: Render details of upstream error
+    throw new Error("Something went wrong");
+  }
+
+  // TODO: handle malformed block metadata
+  const blockMetadata: BlockMetadata = await blockMetadataResponse.json();
+
+  blockMetadata.lastUpdated = catalog.find(
+    ({ name }) => name === blockMetadata.name,
   )?.lastUpdated;
 
   const [schema, blockStringifiedSource] = await Promise.all([
     fetch(
-      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${metadata.schema}`,
+      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${blockMetadata.schema}`,
     ).then((res) => res.json()),
     fetch(
-      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${metadata.source}`,
+      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${blockMetadata.source}`,
     ).then((res) => res.text()),
   ]);
 
   return {
     props: {
-      metadata,
+      blockMetadata,
       schema,
       blockStringifiedSource,
       catalog,
@@ -141,7 +156,7 @@ export const getStaticProps: GetStaticProps<
 };
 
 const BlockPage: NextPage<BlockPageProps> = ({
-  metadata,
+  blockMetadata,
   schema,
   blockStringifiedSource,
   catalog,
@@ -163,14 +178,14 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const isDesktopSize = md;
 
   const sliderItems = useMemo(() => {
-    return catalog.filter(({ name }) => name !== metadata.name);
-  }, [catalog, metadata]);
+    return catalog.filter(({ name }) => name !== blockMetadata.name);
+  }, [catalog, blockMetadata]);
 
   return (
     <>
       <Head>
         <title>
-          Block Protocol - {metadata.displayName} Block by {shortname}
+          Block Protocol - {blockMetadata.displayName} Block by {shortname}
         </title>
       </Head>
       <Container>
@@ -190,7 +205,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               <Link href="/">Home</Link>
               <Link href="/hub">Block Hub</Link>
               <Typography variant="bpSmallCopy" color="inherit">
-                {metadata.displayName}
+                {blockMetadata.displayName}
               </Typography>
             </Breadcrumbs>
           </Box>
@@ -204,7 +219,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               <Box
                 sx={{ display: "inline-block", height: "2em", width: "2em" }}
                 component="img"
-                src={`/blocks/${shortname}/${blockSlug}/${metadata.icon}`}
+                src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
               />
             </Typography>
           ) : null}
@@ -220,14 +235,14 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   mr={1}
                   sx={{ display: "inline-block", height: "1em", width: "1em" }}
                   component="img"
-                  src={`/blocks/${shortname}/${blockSlug}/${metadata.icon}`}
+                  src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
                 />
               )}
-              {metadata.displayName}
+              {blockMetadata.displayName}
             </Typography>
             <Typography variant="bpBodyCopy">
               <Box sx={{ color: theme.palette.gray[70] }}>
-                {metadata.description}
+                {blockMetadata.description}
               </Box>
             </Typography>
             <Typography
@@ -250,16 +265,16 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 </Box>
               </span>
               <Bullet />
-              <span>V{metadata.version}</span>
+              <span>V{blockMetadata.version}</span>
               {isDesktopSize && <Bullet />}
               <Box
                 component="span"
                 sx={{ display: { xs: "block", md: "inline-block" } }}
               >
                 {`Updated ${
-                  metadata.lastUpdated
+                  blockMetadata.lastUpdated
                     ? formatDistance(
-                        new Date(metadata.lastUpdated),
+                        new Date(blockMetadata.lastUpdated),
                         new Date(),
                         {
                           addSuffix: true,
@@ -273,7 +288,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
         </Box>
 
         <BlockDataContainer
-          metadata={metadata}
+          metadata={blockMetadata}
           schema={schema}
           blockModule={blockModule}
         />
