@@ -47,12 +47,9 @@ const MyApp = ({
               <title>
                 Block Protocol - an open standard for data-driven blocks
               </title>
+              <meta itemProp="name" content="Block Protocol" />
               <meta
-                itemprop="name"
-                content="Block Protocol"
-              />
-              <meta
-                itemprop="description"
+                itemProp="description"
                 content="An open standard for data-driven blocks"
               />
             </Head>

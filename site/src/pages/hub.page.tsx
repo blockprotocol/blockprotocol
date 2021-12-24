@@ -21,12 +21,9 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
     <>
       <Head>
         <title>Block Protocol - Block Hub</title>
+        <meta itemProp="name" content="Block Hub" />
         <meta
-          itemprop="name"
-          content="Block Hub"
-        />
-        <meta
-          itemprop="description"
+          itemProp="description"
           content="The Block Protocol's registry of open-source blocks"
         />
       </Head>
