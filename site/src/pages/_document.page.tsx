@@ -26,10 +26,10 @@ class MyDocument extends Document {
             content="A standardized way to create blocks whose contents are mapped to schemas, which are both
             human and machine-readable."
           />
-          <link
+          {/* <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
             rel="stylesheet"
-          />
+          /> */}
           <script
             src="https://kit.fontawesome.com/31605611a9.js"
             crossOrigin="anonymous"

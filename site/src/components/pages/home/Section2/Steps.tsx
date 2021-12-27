@@ -261,35 +261,39 @@ const SCHEMA_CONTENT = {
   definedTerm: {
     title: "DefinedTerm",
     content: [
-      { key: "name", value: "protocol" },
+      { key: "name", value: "protocol", id: 1 },
       {
         key: "description",
         value:
           "Protocols are standardized ways for two or more systems to communicate.",
+        id: 2,
       },
     ],
   },
   itemList: {
     title: "ItemList",
     content: [
-      { key: "numberOfItems", value: 4 },
-      { key: "ListItem", value: "write tests" },
-      { key: "ListItem", value: "review latest PRs" },
-      { key: "ListItem", value: "read The Big Short" },
-      { key: "ListItem", value: "check color contrast" },
+      { id: 3, key: "numberOfItems", value: 4 },
+      { id: 5, key: "ListItem", value: "write tests" },
+      { id: 6, key: "ListItem", value: "review latest PRs" },
+      { id: 7, key: "ListItem", value: "read The Big Short" },
+      { id: 8, key: "ListItem", value: "check color contrast" },
     ],
   },
   imageObject: {
     title: "ImageObject",
     content: [
-      { key: "caption", value: "a soft rainbow gradient" },
-      { key: "url", value: "https://pics.rainbow.png" },
-      { key: "thumbnail", value: "a soft rainbow gradient" },
-      { key: "associatedArticle", value: "https://atlantic.com" },
+      { id: 9, key: "caption", value: "a soft rainbow gradient" },
+      { id: 10, key: "url", value: "https://pics.rainbow.png" },
+      { id: 11, key: "thumbnail", value: "a soft rainbow gradient" },
+      { id: 12, key: "associatedArticle", value: "https://atlantic.com" },
     ],
   },
 } as {
-  [key: string]: { title: string; content: { key: string; value: string }[] };
+  [key: string]: {
+    title: string;
+    content: { key: string; value: string; id: number }[];
+  };
 };
 
 type SchemaBlockProps = {
@@ -343,7 +347,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
           borderRadius: "6px",
         }}
       >
-        {content.map(({ key, value }) => (
+        {content.map(({ key, value, id }) => (
           <Box
             sx={{
               display: "flex",
@@ -354,7 +358,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
               typography: "bpSmallCopy",
               fontWeight: 500,
             }}
-            key={key}
+            key={id}
           >
             <Box
               sx={{
