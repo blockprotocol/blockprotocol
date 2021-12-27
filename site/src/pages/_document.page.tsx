@@ -26,10 +26,34 @@ class MyDocument extends Document {
             content="A standardized way to create blocks whose contents are mapped to schemas, which are both
             human and machine-readable."
           />
-          {/* <link
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Block Protocol" />
+          <meta
+            name="twitter:description"
+            content="An open standard for data-driven blocks"
+          />
+          <meta name="twitter:site" content="@blockprotocol" />
+          <meta
+            name="twitter:image:src"
+            content="https://blockprotocol.org/assets/bp_twitter_cover.png"
+          />
+
+          <meta name="og:title" content="Block Protocol" />
+          <meta
+            name="og:description"
+            content="An open standard for data-driven blocks"
+          />
+          <meta
+            property="og:image"
+            content="https://blockprotocol.org/assets/bp_og_cover.png"
+          />
+          <meta property="og:site_name" content="Block Protocol" />
+          <meta property="og:type" content="website" />
+
+          <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
             rel="stylesheet"
-          /> */}
+          />
           <script
             src="https://kit.fontawesome.com/31605611a9.js"
             crossOrigin="anonymous"

@@ -159,6 +159,16 @@ module.exports = {
       },
     },
     {
+      files: ["packages/block-template/*.js"],
+      parser: "espree",
+    },
+    {
+      files: ["packages/block-template/**"],
+      parserOptions: {
+        project: ["packages/block-template/tsconfig.json"],
+      },
+    },
+    {
       files: ["site/**"],
       rules: {
         "no-restricted-imports": [
@@ -201,7 +211,7 @@ module.exports = {
       },
     },
     {
-      files: ["site/scripts/**"],
+      files: ["**/scripts/**"],
       rules: {
         "no-console": "off",
       },

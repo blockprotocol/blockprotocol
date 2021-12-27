@@ -47,6 +47,11 @@ const MyApp = ({
               <title>
                 Block Protocol - an open standard for data-driven blocks
               </title>
+              <meta itemProp="name" content="Block Protocol" />
+              <meta
+                itemProp="description"
+                content="An open standard for data-driven blocks"
+              />
             </Head>
             <Component {...pageProps} />
           </PageLayout>

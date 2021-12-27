@@ -38,11 +38,19 @@ node_modules/
 # Next.js build output
 .next
 
-# environment variables
+# Environment variables
 .env.local
+
+# Build artifacts
+dist
 
 # vscode config
 .vscode
 
+# vercel
+.vercel
+
 # workspace specific
 site/public/blocks
+site/site-map.json
+site/yarn.lock
