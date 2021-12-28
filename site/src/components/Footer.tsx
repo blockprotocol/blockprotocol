@@ -194,6 +194,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
               sx={{
                 color: ({ palette }) => palette.gray[50],
                 fontWeight: 400,
+                disply: "flex",
               }}
               variant="bpSmallCopy"
             >
