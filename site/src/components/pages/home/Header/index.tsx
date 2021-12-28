@@ -228,8 +228,8 @@ export const Header = () => {
               opacity: 0.3,
               filter: "blur(30px)",
               position: "absolute",
-              top: `${Math.random() * 50}%`,
-              left: `${Math.random() * 50}%`,
+              top: `${Math.random() * 90}%`,
+              left: `${Math.random() * 90}%`,
             }}
           />
         ))}

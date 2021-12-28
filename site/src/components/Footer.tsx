@@ -194,7 +194,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
               sx={{
                 color: ({ palette }) => palette.gray[50],
                 fontWeight: 400,
-                disply: "flex",
+                display: "flex",
               }}
               variant="bpSmallCopy"
             >
@@ -203,7 +203,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                 component="a"
                 href="https://hash.ai"
                 sx={{
-                  marginLeft: 0.35,
+                  marginLeft: 1,
                   ":hover": {
                     color: ({ palette }) => palette.gray[30],
                   },

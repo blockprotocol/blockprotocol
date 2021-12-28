@@ -7,8 +7,8 @@
  * #person__image => line between #person and #image
  * #person__jobTitle => line between #person and #jobTitle
  * #person__card => line between #person and #card
- * #jobTitle__circle => group representing the concentric circles around #jobTitle
- * #imge__circle => group representing the concentric circles around #image
+ * #jobTitle_circle => group representing the concentric circles around #jobTitle
+ * #image_circle => group representing the concentric circles around #image
  */
 
 export const HeaderCardSvg = () => {
@@ -89,7 +89,7 @@ export const HeaderCardSvg = () => {
         strokeWidth={0.5}
       />
       <line
-        id="person_card"
+        id="person__card"
         x1={309.5}
         y1={124.996}
         x2={310.5}
@@ -97,7 +97,7 @@ export const HeaderCardSvg = () => {
         stroke="#7C74B6"
       />
       <line
-        id="person_jobTitle"
+        id="person__jobTitle"
         x1={314.786}
         y1={115.548}
         x2={468.786}
@@ -105,7 +105,7 @@ export const HeaderCardSvg = () => {
         stroke="#7C74B6"
       />
       <line
-        id="person_image"
+        id="person__image"
         x1={316.097}
         y1={122.509}
         x2={529.097}
@@ -251,7 +251,7 @@ export const HeaderCardSvg = () => {
         <circle cx={68} cy={454} r={63.5} stroke="#7C74B6" />
       </g>
       <line
-        id="issue_card"
+        id="issue__card"
         x1={78.937}
         y1={452.504}
         x2={204.937}

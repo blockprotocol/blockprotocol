@@ -103,7 +103,7 @@ export const WhyBlockProtocol2Section = () => {
             position: "absolute",
             left: "50%",
             bottom: 0,
-            top: 0,
+            top: 50,
             transform: "translateX(-50%)",
             width: { xs: "80%", md: "27%" },
             background: `linear-gradient(179.75deg, #644CFF 0.21%, rgba(38, 39, 49, 0) 143.36%)`,
