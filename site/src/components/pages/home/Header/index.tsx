@@ -142,58 +142,55 @@ export const Header = () => {
 
       <Box
         sx={{
-          width: { xs: "100%", lg: "40vw" },
           position: { xs: "relative", lg: "absolute" },
-          bottom: { xs: 0, lg: "10%" },
-          right: 0,
-          //   transform: { xs: "unset", lg: "translateX(10%)" },
-          display: "flex",
-          justifyContent: "center",
-          zIndex: 2,
-          "::after": {
-            content: `""`,
-            position: "absolute",
-            display: { xs: "block", lg: "none" },
-            top: { xs: "50%", lg: 0 },
-            bottom: 0,
-            right: 0,
-            width: { xs: "100%", lg: "40%" },
-            background: {
-              xs: `linear-gradient(0deg, #2A2B37 1.28%, transparent 89.29%)`,
-              lg: `linear-gradient(270.33deg, #2A2B37 1.28%, transparent 89.29%)`,
-            },
-          },
+          zIndex: 1,
+          maxWidth: 2000,
+          top: 0,
+          bottom: 0,
+          left: "50%",
+          width: "100%",
+          transform: "translateX(-50%)",
         }}
       >
-        {isMobile ? (
-          <Box
-            component="img"
-            src="/assets/header-img-mobile.svg"
-            sx={{
-              boxShadow: 5,
-              display: "block",
-              width: "80%",
-              maxWidth: 400,
-            }}
-          />
-        ) : (
-          <HeaderCard />
-        )}
-        {/* <Box
-          component="img"
-          src={
-            isMobile
-              ? "/assets/header-img-mobile.svg"
-              : "/assets/header-img.svg"
-          }
+        <Box
           sx={{
-            boxShadow: 5,
-            display: "block",
-            height: { xs: "auto", lg: "100%" },
-            width: { xs: "80%", lg: "auto" },
-            maxWidth: { xs: 400, lg: "unset" },
+            width: { xs: "100%", lg: "40vw" },
+            position: { xs: "relative", lg: "absolute" },
+            bottom: { xs: 0, lg: "10%" },
+            right: 0,
+            display: "flex",
+            justifyContent: "center",
+            zIndex: 2,
+            "::after": {
+              content: `""`,
+              position: "absolute",
+              display: { xs: "block", lg: "none" },
+              top: { xs: "50%", lg: 0 },
+              bottom: 0,
+              right: 0,
+              width: { xs: "100%", lg: "40%" },
+              background: {
+                xs: `linear-gradient(0deg, #2A2B37 1.28%, transparent 89.29%)`,
+                lg: `linear-gradient(270.33deg, #2A2B37 1.28%, transparent 89.29%)`,
+              },
+            },
           }}
-        /> */}
+        >
+          {isMobile ? (
+            <Box
+              component="img"
+              src="/assets/header-img-mobile.svg"
+              sx={{
+                boxShadow: 5,
+                display: "block",
+                width: "80%",
+                maxWidth: 400,
+              }}
+            />
+          ) : (
+            <HeaderCard />
+          )}
+        </Box>
       </Box>
 
       <Box
