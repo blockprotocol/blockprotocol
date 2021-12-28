@@ -17,21 +17,21 @@ export const Header = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   useEffect(() => {
-    const tl = gsap
-      .timeline()
-      .fromTo(
-        ".data-highlight",
-        {
-          background:
-            "linear-gradient(90deg, #6B54EF 0%, rgba(107, 84, 239, 0) 0%)",
-        },
-        {
-          background:
-            "linear-gradient(90deg, #6B54EF 1.95%, rgba(107, 84, 239, 0) 100%)",
-        },
-        1,
-      )
-      .to(".background-balls", {
+    const tl = gsap.timeline().fromTo(
+      ".data-highlight",
+      {
+        background:
+          "linear-gradient(90deg, #6B54EF 0%, rgba(107, 84, 239, 0) 0%)",
+      },
+      {
+        background:
+          "linear-gradient(90deg, #6B54EF 1.95%, rgba(107, 84, 239, 0) 100%)",
+      },
+      1,
+    );
+
+    if (!isMobile) {
+      tl.to(".background-balls", {
         x: "random(0, 100%)",
         y: "random(0, 100%)",
         duration: 3,
@@ -39,11 +39,12 @@ export const Header = () => {
         repeat: -1,
         repeatRefresh: true,
       });
+    }
 
     return () => {
       tl.kill();
     };
-  }, []);
+  }, [isMobile]);
 
   return (
     <Box
@@ -52,7 +53,6 @@ export const Header = () => {
           "radial-gradient(113.45% 113.45% at 50% -13.45%, #3F4656 0.52%, #1C1C29 100%)",
         minHeight: "95vh",
         position: "relative",
-        overflowX: "hidden",
         mb: { xs: 10, lg: 16 },
       }}
     >
@@ -117,8 +117,6 @@ export const Header = () => {
                   height: 4,
                   left: 0,
                   width: "100%",
-                  // background:
-                  //   "linear-gradient(90deg, #6B54EF 1.95%, rgba(107, 84, 239, 0) 100%)",
                 }}
               />
             </Box>
@@ -140,6 +138,7 @@ export const Header = () => {
         </Box>
       </Container>
 
+      {/* This box ensures the card doesn't get positioned at the end of the screen on much larger screens */}
       <Box
         sx={{
           position: { xs: "relative", lg: "absolute" },
