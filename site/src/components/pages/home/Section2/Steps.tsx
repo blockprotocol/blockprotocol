@@ -448,11 +448,10 @@ const App: FC<AppProps> = ({ name, block }) => {
 const LayoutBg = () => {
   return (
     <svg
-      width={619}
       height="auto"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ width: "80%" }}
+      style={{ width: "100%" }}
     >
       <g filter="url(#a)" transform="rotate(-180 309.5 260.5)">
         <ellipse cx={309.5} cy={260.5} rx={209} ry={160.5} fill="#C4C4C4" />
