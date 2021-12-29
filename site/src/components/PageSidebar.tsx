@@ -21,9 +21,7 @@ import { Link } from "./Link";
 
 const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
-  whiteSpace: "nowrap",
-  overflow: "hidden",
-  textOverflow: "ellipsis",
+  lineHeight: "1.25em",
   transition: theme.transitions.create(["color"]),
   color: theme.palette.gray[70],
   ":hover": {
@@ -73,7 +71,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 
   return (
     <>
-      <Box mb={1} display="flex" alignItems="center">
+      <Box mb={1.5} display="flex" alignItems="flex-start">
         <SidebarLink
           ref={(ref) => {
             if (ref && isSectionSelected) {
@@ -106,6 +104,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
             sx={(theme) => ({
               padding: 0,
               marginLeft: 1,
+              marginTop: 0.5,
               transition: theme.transitions.create("transform"),
               transform: `rotate(${isSectionOpen ? "90deg" : "0deg"})`,
               "& svg": {
@@ -173,7 +172,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 
   return (
     <Fragment key={href}>
-      <Box mb={1} display="flex" alignItems="center">
+      <Box mb={1.5} display="flex" alignItems="flex-start">
         <SidebarLink
           ref={(ref) => {
             if (ref && isSelected) {
@@ -212,6 +211,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
             sx={(theme) => ({
               padding: 0,
               marginLeft: 1,
+              marginTop: 0.5,
               transition: theme.transitions.create("transform"),
               transform: `rotate(${isOpen ? "90deg" : "0deg"})`,
               "& svg": {
