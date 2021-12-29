@@ -150,7 +150,7 @@ export const BANNERS: Banner[] = [
                 <Typography
                   component="h2"
                   variant="bpHeading2"
-                  sx={{ fontWeight: 700 }}
+                  sx={{ fontWeight: 700, marginBottom: 2 }}
                 >
                   Add blocks to your app
                 </Typography>
@@ -173,14 +173,15 @@ export const BANNERS: Banner[] = [
                 <Typography
                   component="h2"
                   variant="bpHeading2"
-                  sx={{ fontWeight: 700 }}
+                  sx={{ fontWeight: 700, marginBottom: 2 }}
                 >
                   Build your own blocks
                 </Typography>
                 <Typography component="p" variant="bpBodyCopy">
                   Any developer can build and publish blocks to the global
-                  registry for other developers to use. Contribute to an open
-                  source community changing the landscape of interoperable data.
+                  registry for other developers to use. Create blocks that solve
+                  real-world problems, and contribute to an open source
+                  community changing the landscape of interoperable data.
                 </Typography>
               </Box>
             }

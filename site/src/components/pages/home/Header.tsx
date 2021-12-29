@@ -28,8 +28,8 @@ export const Header = () => {
       <Container sx={{ pt: { xs: "15vh", lg: "20vh" }, mb: { xs: 20, lg: 0 } }}>
         <Box
           sx={{
-            width: { xs: "100%", lg: "57%" },
-            maxWidth: 660,
+            width: { xs: "100%", lg: "70%" },
+            maxWidth: 760,
             mx: { xs: "auto", lg: "unset" },
             textAlign: { xs: "center", lg: "left" },
           }}
@@ -40,7 +40,7 @@ export const Header = () => {
               color: ({ palette }) => palette.purple[400],
               mb: 4,
               fontWeight: 500,
-              letterSpacing: "5%",
+              letterSpacing: "0.06rem",
               width: { lg: "100%" },
               mx: "auto",
             }}
@@ -58,7 +58,7 @@ export const Header = () => {
               color: "white",
               mb: 4,
               // @todo font-size should match design system
-              fontSize: { xs: 40, lg: 60 },
+              fontSize: { xs: "3rem", lg: "3.6rem", xl: "4.2rem" },
             }}
           >
             Build and use interactive blocks connected to the world of{" "}
@@ -83,10 +83,10 @@ export const Header = () => {
             </Box>
           </Typography>
           <Typography
-            variant="body1"
-            color={theme.palette.purple[300]}
+            variant="bpBodyCopy"
+            color={theme.palette.purple[400]}
             mb={4}
-            width={{ xs: "100%", lg: "74%" }}
+            width={{ xs: "100%", lg: "80%" }}
             textAlign={{ xs: "center", lg: "left" }}
           >
             An open standard for building and using

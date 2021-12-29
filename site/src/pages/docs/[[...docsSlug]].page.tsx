@@ -174,8 +174,8 @@ const DocsPage: NextPage<DocsPageProps> = ({
         <Box py={4} display="flex" alignItems="flex-start">
           {md ? (
             <Box
-              paddingRight={6}
-              width={300}
+              paddingRight={7}
+              width={280}
               flexGrow={0}
               sx={{
                 position: "sticky",

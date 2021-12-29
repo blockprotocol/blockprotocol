@@ -186,6 +186,7 @@ export const Section2 = () => {
             left: 0,
             right: 0,
             width: { xs: "100%", lg: "auto" },
+            marginLeft: { md: 0, lg: 8 },
 
             borderTop: ({ palette }) =>
               activeImg

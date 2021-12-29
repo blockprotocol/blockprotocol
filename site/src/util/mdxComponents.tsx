@@ -218,15 +218,16 @@ export const mdxComponents: Record<string, ReactNode> = {
         sx={(theme) => ({
           overflow: "scroll",
           display: "block",
-          fontSize: "80%",
-          color: theme.palette.purple[700],
-          background: "#000",
-          padding: theme.spacing(2),
+          fontSize: "90%",
+          color: theme.palette.purple[400],
+          background: "#161a1f",
+          padding: theme.spacing(3),
           borderWidth: 1,
           borderStyle: "solid",
           borderRadius: "8px",
           textShadow: "none",
           marginBottom: 2,
+          maxWidth: "72ch",
         })}
       >
         <Snippet

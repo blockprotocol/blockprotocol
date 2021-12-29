@@ -241,8 +241,8 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
             <Box
-              paddingRight={6}
-              width={300}
+              paddingRight={7}
+              width={280}
               flexGrow={0}
               sx={{
                 position: "sticky",
