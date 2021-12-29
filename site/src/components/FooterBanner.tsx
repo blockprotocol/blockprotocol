@@ -264,10 +264,10 @@ export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
       paddingTop: banner.overlapsFooter ? 0 : 8,
       /** @todo: tweak to better match designs */
       background: `radial-gradient(
-              circle at 0% 100%,
-              #FFB172 0%,
-              #9482FF 50%,
-              #84E6FF 100%
+              ellipse at 10% 130%,
+              #ffac67 0%,
+              #9582ff 55%,
+              #79e4ff 100%
             )`,
     }}
   >
