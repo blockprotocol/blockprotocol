@@ -29,18 +29,16 @@ const GitHubInfoCard = (
     sx={{
       marginBottom: {
         xs: 3,
-        md: 6,
+        md: 4,
       },
-      padding: {
-        xs: 2,
-        sm: 3,
-      },
+      padding: 3,
       display: "flex",
       alignItems: "stretch",
       flexDirection: {
         xs: "column",
         md: "row",
       },
+      maxWidth: { xs: "100%", lg: "1012px" },
     }}
   >
     <Box
@@ -94,7 +92,7 @@ const GitHubInfoCard = (
             },
           },
         })}
-        maxWidth={650}
+        maxWidth="62ch"
       >
         This specification is currently in progress. We’ve drafting it in public
         to gather feedback and improve the final document. If you have any
@@ -241,7 +239,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
             <Box
-              paddingRight={7}
+              paddingRight={8}
               width={280}
               flexGrow={0}
               sx={{
@@ -270,12 +268,12 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
           sx={{
             marginLeft: {
               xs: 0,
-              md: "300px",
+              md: "280px",
             },
             maxWidth: {
               xs: "100%",
               sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
-              md: `calc(100% - ${INFO_CARD_WIDTH}px - 300px)`,
+              md: `calc(100% - ${INFO_CARD_WIDTH}px - 280px)`,
             },
           }}
         />

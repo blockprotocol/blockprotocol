@@ -171,10 +171,10 @@ const DocsPage: NextPage<DocsPageProps> = ({
             {DOCS_PAGE_SUBTITLES[title]}
           </Typography>
         ) : null}
-        <Box py={4} display="flex" alignItems="flex-start">
+        <Box py={4} display="flex" alignItems="flex-start" marginBottom={8}>
           {md ? (
             <Box
-              paddingRight={7}
+              paddingRight={8}
               width={280}
               flexGrow={0}
               sx={{

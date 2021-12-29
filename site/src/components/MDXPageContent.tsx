@@ -20,7 +20,7 @@ export const MDXPageContent: VFC<MDXPageContentProps> = ({
       "& > :not(.info-card-wrapper), > a:not(.info-card-wrapper) > *": {
         maxWidth: {
           xs: "100%",
-          sm: "62ch",
+          sm: "680px",
         },
       },
     }}
