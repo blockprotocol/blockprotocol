@@ -26,7 +26,15 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
   setText,
 }) => {
   return (
-    <Modal open={open} onClose={() => setOpen((oldValue) => !oldValue)}>
+    <Modal
+      open={open}
+      onClose={() => setOpen((oldValue) => !oldValue)}
+      sx={{
+        "& .MuiBackdrop-root": {
+          backgroundColor: "rgba(77, 92, 108, 0.6)",
+        },
+      }}
+    >
       <Box
         sx={{
           position: "absolute",
