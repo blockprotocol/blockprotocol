@@ -1,10 +1,37 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import slugify from "slugify";
-import { HTMLAttributes, HTMLProps, ReactNode } from "react";
+import {
+  HTMLAttributes,
+  HTMLProps,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+} from "react";
 import { TypographyProps, Typography, Box, Paper } from "@mui/material";
 import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 import { Snippet } from "../components/Snippet";
+import MDXPageContext from "../components/context/MDXPageContext";
+
+const useMDXHeading = (props: { anchor: string }) => {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const { headings, setHeadings } = useContext(MDXPageContext);
+
+  useEffect(() => {
+    const { anchor } = props;
+    if (
+      headingRef.current &&
+      headings.find((heading) => heading.anchor === anchor) === undefined
+    ) {
+      const element = headingRef.current;
+      setHeadings((prev) => [...prev, { anchor, element }]);
+    }
+  }, [props, headingRef, headings, setHeadings]);
+
+  return { headingRef };
+};
 
 const stringifyChildren = (node: ReactNode): string => {
   if (typeof node === "string") {
@@ -27,6 +54,7 @@ export const mdxComponents: Record<string, ReactNode> = {
   InfoCardWrapper,
   InfoCard,
   h1: (props: TypographyProps) => {
+    const { headingRef } = useMDXHeading({ anchor: "" });
     return (
       <Link
         href="#"
@@ -39,6 +67,7 @@ export const mdxComponents: Record<string, ReactNode> = {
         }}
       >
         <Typography
+          ref={headingRef}
           mt={HEADING_MARGIN_TOP}
           mb={HEADING_MARGIN_BOTTOM}
           variant="bpHeading1"
@@ -51,6 +80,7 @@ export const mdxComponents: Record<string, ReactNode> = {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
+    const { headingRef } = useMDXHeading({ anchor });
     return (
       <Link
         href={`#${anchor}`}
@@ -63,9 +93,9 @@ export const mdxComponents: Record<string, ReactNode> = {
         }}
       >
         <Typography
+          ref={headingRef}
           mt={HEADING_MARGIN_TOP}
           mb={HEADING_MARGIN_BOTTOM}
-          id={anchor}
           variant="bpHeading2"
           {...props}
         />
@@ -76,12 +106,13 @@ export const mdxComponents: Record<string, ReactNode> = {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
+    const { headingRef } = useMDXHeading({ anchor });
     return (
       <Link href={`#${anchor}`}>
         <Typography
+          ref={headingRef}
           mt={HEADING_MARGIN_TOP}
           mb={HEADING_MARGIN_BOTTOM}
-          id={anchor}
           variant="bpHeading3"
           {...props}
         />
