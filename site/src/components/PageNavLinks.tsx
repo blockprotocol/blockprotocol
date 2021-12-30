@@ -1,5 +1,13 @@
 import { VFC } from "react";
-import { Typography, Box, Icon, BoxProps, styled } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Icon,
+  BoxProps,
+  styled,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { Link } from "./Link";
 import { SiteMapPage } from "../lib/sitemap";
 
@@ -22,6 +30,9 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
   nextPage,
   ...boxProps
 }) => {
+  const theme = useTheme();
+  const hideIcons = useMediaQuery(theme.breakpoints.down(1050));
+
   return (
     <Box display="flex" justifyContent="space-between" {...boxProps}>
       <Box>
@@ -29,7 +40,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
           <Box display="flex" alignItems="flex-end">
             <Box>
               <Typography
-                sx={(theme) => ({ color: theme.palette.gray[60] })}
+                sx={{ color: theme.palette.gray[60] }}
                 component="p"
                 variant="bpSmallCopy"
               >
@@ -37,36 +48,29 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
               </Typography>
               <Box
                 display="flex"
-                sx={(theme) => ({
-                  marginLeft: {
-                    xs: 0,
-                    md: "-31px",
+                sx={{
+                  marginLeft: hideIcons ? 0 : "-31px",
+                  "& svg": {
+                    display: hideIcons ? "none" : "inherit",
+                    ":hover": {
+                      left: `-${theme.spacing(1)}`,
+                    },
                   },
-                  ":hover svg": {
-                    left: `-${theme.spacing(1)}`,
-                  },
-                })}
+                }}
               >
                 <NavArrowIcon
                   sx={{
                     marginRight: 2,
-                    display: {
-                      xs: "none",
-                      md: "inherit",
-                    },
                   }}
                   className="fas fa-arrow-left"
                 />
                 <Link
-                  sx={(theme) => ({
-                    maxWidth: {
-                      xs: 150,
-                      sm: 200,
-                    },
+                  sx={{
+                    maxWidth: hideIcons ? 150 : 200,
                     ":hover": {
                       color: theme.palette.purple[800],
                     },
-                  })}
+                  }}
                   href={prevPage.href}
                 >
                   {prevPage.title}
@@ -80,7 +84,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
         {nextPage && (
           <Box display="flex" flexDirection="column" alignItems="flex-end">
             <Typography
-              sx={(theme) => ({ color: theme.palette.gray[60] })}
+              sx={{ color: theme.palette.gray[60] }}
               component="p"
               variant="bpSmallCopy"
             >
@@ -88,27 +92,24 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
             </Typography>
             <Box
               display="flex"
-              sx={(theme) => ({
-                marginRight: {
-                  xs: 0,
-                  md: "-31px",
+              sx={{
+                marginRight: hideIcons ? 0 : "-31px",
+                "& svg": {
+                  display: hideIcons ? "none" : "inherit",
+                  ":hover": {
+                    left: theme.spacing(1),
+                  },
                 },
-                ":hover svg": {
-                  left: theme.spacing(1),
-                },
-              })}
+              }}
             >
               <Link
-                sx={(theme) => ({
+                sx={{
                   textAlign: "right",
-                  maxWidth: {
-                    xs: 150,
-                    sm: 200,
-                  },
+                  maxWidth: hideIcons ? 150 : 200,
                   ":hover": {
                     color: theme.palette.purple[800],
                   },
-                })}
+                }}
                 href={nextPage.href}
               >
                 {nextPage.title}
@@ -116,10 +117,6 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
               <NavArrowIcon
                 sx={{
                   marginLeft: 2,
-                  display: {
-                    xs: "none",
-                    md: "inherit",
-                  },
                 }}
                 className="fas fa-arrow-right"
               />

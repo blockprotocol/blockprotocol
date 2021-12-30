@@ -19,8 +19,10 @@ import { Sidebar } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 import SiteMapContext from "../../components/context/SiteMapContext";
-import { MDXPageContent } from "../../components/MDXPageContent";
-import { INFO_CARD_WIDTH } from "../../components/InfoCard/InfoCardWrapper";
+import {
+  MDXPageContent,
+  MDX_TEXT_CONTENT_MAX_WIDTH,
+} from "../../components/MDXPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
 
 const GitHubInfoCard = (
@@ -268,9 +270,8 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
               md: "290px",
             },
             maxWidth: {
-              xs: "100%",
-              sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
-              md: `calc(100% - ${INFO_CARD_WIDTH}px - 390px)`,
+              sx: "100%",
+              sm: MDX_TEXT_CONTENT_MAX_WIDTH,
             },
           }}
         />
