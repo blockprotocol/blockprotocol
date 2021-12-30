@@ -262,7 +262,6 @@ export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
   <Box
     sx={{
       paddingTop: banner.overlapsFooter ? 0 : 8,
-      /** @todo: tweak to better match designs */
       background: `radial-gradient(
               ellipse at 10% 130%,
               #ffac67 0%,
