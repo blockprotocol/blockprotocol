@@ -2,7 +2,6 @@ import { VFC } from "react";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Box, { BoxProps } from "@mui/material/Box";
 import { mdxComponents } from "../util/mdxComponents";
-import { INFO_CARD_WIDTH } from "./InfoCard/InfoCardWrapper";
 
 type MDXPageContentProps = {
   serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
