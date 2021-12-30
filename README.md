@@ -1,6 +1,8 @@
 <div id="top"></div>
 
 # Block Protocol
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fblockprotocol%2Fblockprotocol.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fblockprotocol%2Fblockprotocol?ref=badge_shield)
+
 
 The Block Protocol is an open standard for building and using data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines.
 
@@ -55,6 +57,9 @@ If you’re looking for inspiration regarding new blocks to build, or contributi
 Distributed under the MIT License. See `LICENSE.md` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fblockprotocol%2Fblockprotocol.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fblockprotocol%2Fblockprotocol?ref=badge_large)
 
 ## Contact
 
