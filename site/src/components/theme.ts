@@ -13,6 +13,8 @@ import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 
 const defaultTheme = createTheme();
 
+const FALLBACK_FONTS = [`"Helvetica"`, `"Arial"`, "sans-serif"];
+
 // @todo use more descriptive names instead of --step-1, --step-2
 // wouldn't need this when this is in
 // @see https://github.com/mui-org/material-ui/issues/15251
@@ -173,50 +175,50 @@ export const theme = createTheme({
     ...customColors,
   },
   typography: {
-    fontFamily: "Inter",
+    fontFamily: [`"Inter"`, ...FALLBACK_FONTS].join(", "),
     fontSize: 16,
     bpTitle: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-6)",
       lineHeight: 1,
       fontWeight: 700,
       color: customColors.gray["80"],
     },
     bpSubtitle: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-3)",
       lineHeight: 1.1,
       fontWeight: 200,
       color: customColors.gray["80"],
     },
     bpHeading1: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-5)",
       lineHeight: 1.1,
       fontWeight: 700,
       color: customColors.gray["80"],
     },
     bpHeading2: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-4)",
       fontWeight: 400,
       lineHeight: 1.2,
       color: customColors.gray["80"],
     },
     bpHeading3: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-3)",
       lineHeight: 1.1,
       color: customColors.gray["70"],
     },
     bpHeading4: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-2)",
       lineHeight: 1.1,
       color: customColors.gray["70"],
     },
     bpSmallCaps: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step--1)",
       lineHeight: 1.3,
       color: customColors.gray["70"],
