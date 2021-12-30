@@ -141,18 +141,15 @@ const DocsPage: NextPage<DocsPageProps> = ({
       <Container
         sx={{
           marginTop: {
-            xs: 4,
-            md: 8,
+            xs: 5,
+            md: 9,
           },
         }}
       >
         <Typography
           variant="bpTitle"
           sx={{
-            marginBottom: {
-              xs: 1,
-              md: 2,
-            },
+            marginBottom: 2,
           }}
         >
           {title}
@@ -163,8 +160,8 @@ const DocsPage: NextPage<DocsPageProps> = ({
             maxWidth={750}
             sx={{
               marginBottom: {
-                xs: 4,
-                md: 6,
+                xs: 2,
+                md: 3,
               },
             }}
           >
@@ -174,14 +171,14 @@ const DocsPage: NextPage<DocsPageProps> = ({
         <Box py={4} display="flex" alignItems="flex-start" marginBottom={8}>
           {md ? (
             <Box
-              paddingRight={8}
-              width={280}
+              marginRight={9}
+              width={220}
               flexGrow={0}
               sx={{
                 position: "sticky",
                 top:
                   DESKTOP_NAVBAR_HEIGHT +
-                  parseIntFromPixelString(theme.spacing(2)),
+                  parseIntFromPixelString(theme.spacing(1)),
               }}
             >
               <Sidebar pages={[tabPage]} />

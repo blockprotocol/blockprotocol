@@ -215,10 +215,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         <Typography
           variant="bpTitle"
           sx={{
-            marginBottom: {
-              xs: 1,
-              md: 2,
-            },
+            marginBottom: 2,
           }}
         >
           Specification
@@ -229,7 +226,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
           sx={{
             marginBottom: {
               xs: 4,
-              md: 6,
+              md: 4,
             },
           }}
         >
@@ -239,14 +236,14 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
             <Box
-              paddingRight={8}
-              width={280}
+              marginRight={9}
+              width={220}
               flexGrow={0}
               sx={{
                 position: "sticky",
                 top:
                   DESKTOP_NAVBAR_HEIGHT +
-                  parseIntFromPixelString(theme.spacing(2)),
+                  parseIntFromPixelString(theme.spacing(1)),
               }}
             >
               <Sidebar
@@ -268,12 +265,12 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
           sx={{
             marginLeft: {
               xs: 0,
-              md: "280px",
+              md: "290px",
             },
             maxWidth: {
               xs: "100%",
               sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
-              md: `calc(100% - ${INFO_CARD_WIDTH}px - 280px)`,
+              md: `calc(100% - ${INFO_CARD_WIDTH}px - 390px)`,
             },
           }}
         />
