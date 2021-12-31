@@ -263,7 +263,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         <PageNavLinks
           prevPage={prevPage}
           nextPage={nextPage}
-          mb={8}
+          mb={14}
           sx={{
             marginLeft: {
               xs: 0,
