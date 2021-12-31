@@ -209,7 +209,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
       <Container
         sx={{
           marginTop: {
-            xs: 4,
+            xs: 6,
             md: 8,
           },
         }}
@@ -263,7 +263,6 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         <PageNavLinks
           prevPage={prevPage}
           nextPage={nextPage}
-          mb={14}
           sx={{
             marginLeft: {
               xs: 0,
@@ -272,6 +271,10 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
             maxWidth: {
               sx: "100%",
               sm: MDX_TEXT_CONTENT_MAX_WIDTH,
+            },
+            marginBottom: {
+              xs: 8,
+              md: 14,
             },
           }}
         />
