@@ -274,7 +274,7 @@ export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
       sx={{
         paddingTop: {
           xs: banner.overlapsFooter ? 8 : 0,
-          md: banner.overlapsFooter ? 15 : 0,
+          md: banner.overlapsFooter ? 10 : 0,
         },
         marginBottom: banner.overlapsFooter ? -8 : 0,
       }}
