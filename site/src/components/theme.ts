@@ -86,14 +86,14 @@ const rootTypographyStyles = `
         var(--fluid-bp)
     );
 
-    --f-5-min: 48.83;
+    --f-5-min: 43.95;
     --f-5-max: 54.93;
     --step-5: calc(
       ((var(--f-5-min) / 16) * 1rem) + (var(--f-5-max) - var(--f-5-min)) *
         var(--fluid-bp)
     );
 
-    --f-6-min: 61.04;
+    --f-6-min: 54.93;
     --f-6-max: 68.66;
     --step-6: calc(
       ((var(--f-6-min) / 16) * 1rem) + (var(--f-6-max) - var(--f-6-min)) *
