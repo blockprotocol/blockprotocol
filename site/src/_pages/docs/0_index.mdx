@@ -1,11 +1,25 @@
 ## Overview
 
-These pages provide a practical introduction to implementing the block protocol, whether you are:
+The Block Protocol is a global standard for building interactive blocks connected to structured data.
 
-- interested in [developing blocks](https://blockprotocol.org/docs/developing-blocks), or
-- interested in [embedding blocks in your application](https://blockprotocol.org/docs/embedding-blocks)
+The following pages provide a practical introduction for developers who want to:
+
+- [develop blocks](https://blockprotocol.org/docs/developing-blocks) and publish them to the block registry
+- [embed blocks](https://blockprotocol.org/docs/embedding-blocks) in their own application
 
 For the full technical details, read [the Block Protocol specification](https://blockprotocol.org/spec).
+
+### What's a block?
+
+Blocks are the basic units we use to build pages on the modern web. They are rectangular, full-width sections stacked on top of one another – also known as "block-level" elements.
+
+Blocks can be created using plain HTML, or by using a block editor interface like Notion or Wordpress' Gutenberg. With block editors you can usually rearrange the order of blocks on a page using drag and drop.
+
+Each block has a type that determines how it displays data. You're probably familiar with the most common block types such as _paragraph_, _header_, _image_, _list_, and _table_. Some block types have more advanced interactive features such as filtering, search, and sorting.
+
+There are an inifinite number of possible block types. One goal of the Block Protocol is to encourage developers to build and share brand new block types we've never seen before.
+
+From a developer perspective, blocks are similar to [web components](https://en.wikipedia.org/wiki/Web_Components). They are reusable sets of HTML elements that can accept any data that matches the block's schema. For example, an image block can only accept an image URL or file, but not a text string.
 
 ## Demo application
 
