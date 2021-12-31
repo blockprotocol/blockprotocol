@@ -46,7 +46,7 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
           marginTop: 1,
           color: ({ palette }) => palette[paperVariant][600],
           fontSize: 15,
-          lineHeight: 1.75,
+          lineHeight: 1.5,
         }}
       >
         {isValidElement(child) ? child.props.children : child}
