@@ -19,6 +19,7 @@ export const Button: FC<ButtonProps> = ({ children, squared, ...props }) => {
       sx={{
         borderRadius: squared ? "6px" : undefined,
         ...props.sx,
+        lineHeight: "1.2",
       }}
     >
       {children}
