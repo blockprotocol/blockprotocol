@@ -1,23 +1,28 @@
 import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  VFC,
+} from "react";
+import { useRouter } from "next/router";
+import {
   Collapse,
   Box,
   Icon,
   IconButton,
   Divider,
   styled,
+  BoxProps,
+  useTheme,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import {
-  Dispatch,
-  Fragment,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-  VFC,
-} from "react";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Link } from "./Link";
+import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
+import { parseIntFromPixelString } from "../util/muiUtils";
 
 const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
@@ -257,7 +262,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 type SidebarProps = {
   pages: SiteMapPage[];
   appendices?: SiteMapPage[];
-};
+} & BoxProps;
 
 const getInitialOpenedPages = (params: {
   pages: SiteMapPage[];
@@ -294,8 +299,34 @@ const getInitialOpenedPages = (params: {
   return [];
 };
 
-export const Sidebar: VFC<SidebarProps> = ({ appendices, pages }) => {
+export const Sidebar: VFC<SidebarProps> = ({
+  appendices,
+  pages,
+  ...boxProps
+}) => {
+  const theme = useTheme();
   const { asPath } = useRouter();
+
+  const stickinessDetectorRef = useRef<HTMLDivElement>(null);
+  const [isSticky, setIsSticky] = useState<boolean>(false);
+
+  // Approach inspired by: https://stackoverflow.com/questions/16302483/event-to-detect-when-positionsticky-is-triggered
+  useEffect(() => {
+    const cachedRef = stickinessDetectorRef.current;
+
+    if (cachedRef) {
+      const observer = new IntersectionObserver(
+        ([event]) => setIsSticky(event.intersectionRatio < 1),
+        { threshold: [1] },
+      );
+
+      observer.observe(cachedRef);
+
+      return () => {
+        observer.unobserve(cachedRef);
+      };
+    }
+  }, []);
 
   const [selectedAnchorElement, setSelectedAnchorElement] =
     useState<HTMLAnchorElement>();
@@ -327,60 +358,99 @@ export const Sidebar: VFC<SidebarProps> = ({ appendices, pages }) => {
   }, [asPath, pages]);
 
   return (
-    <Box position="relative">
+    <Box
+      {...boxProps}
+      position="sticky"
+      marginRight={6}
+      width={220}
+      sx={{
+        ...boxProps.sx,
+        top: 0,
+      }}
+    >
       <Box
-        sx={(theme) => ({
+        ref={stickinessDetectorRef}
+        sx={{
           position: "absolute",
-          width: 3,
-          height: 14,
-          backgroundColor: ({ palette }) => palette.purple[600],
-          top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop + 4,
-          opacity: selectedOffsetTop === undefined ? 0 : 1,
-          transition: theme.transitions.create(["top", "opacity"], {
-            duration: 150,
-          }),
-        })}
+          top: "-1px",
+          height: "1px",
+          width: "1px",
+        }}
       />
-      {pages.length > 1
-        ? pages.map((page) => (
-            <SidebarPage
-              key={page.href}
-              page={page}
-              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-              setSelectedAnchorElement={setSelectedAnchorElement}
-              openedPages={openedPages}
-              setOpenedPages={setOpenedPages}
-            />
-          ))
-        : pages.length === 1
-        ? pages[0].sections.map((section, i) => (
-            <SidebarPageSection
-              isSelectedByDefault={i === 0}
-              key={section.anchor}
-              pageHref={pages[0].href}
-              section={section}
-              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-              setSelectedAnchorElement={setSelectedAnchorElement}
-              openedPages={openedPages}
-              setOpenedPages={setOpenedPages}
-            />
-          ))
-        : null}
-      {appendices && appendices.length > 0 ? (
-        <>
-          <Divider sx={{ marginBottom: 2 }} />
-          {appendices.map((page) => (
-            <SidebarPage
-              key={page.href}
-              page={page}
-              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-              setSelectedAnchorElement={setSelectedAnchorElement}
-              openedPages={openedPages}
-              setOpenedPages={setOpenedPages}
-            />
-          ))}
-        </>
-      ) : null}
+      <Box
+        paddingRight={3}
+        sx={{
+          maxHeight: isSticky ? "100vh" : undefined,
+          overflow: isSticky ? "scroll" : undefined,
+          paddingTop: isSticky
+            ? `${
+                DESKTOP_NAVBAR_HEIGHT +
+                parseIntFromPixelString(theme.spacing(1))
+              }px`
+            : 0,
+          paddingBottom: isSticky ? theme.spacing(6) : 0,
+          transition: theme.transitions.create([
+            "padding-top",
+            "padding-bottom",
+          ]),
+        }}
+      >
+        <Box position="relative">
+          <Box
+            sx={{
+              position: "absolute",
+              width: 3,
+              height: 14,
+              backgroundColor: ({ palette }) => palette.purple[600],
+              top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop + 3,
+              opacity: selectedOffsetTop === undefined ? 0 : 1,
+              transition: theme.transitions.create(["top", "opacity"], {
+                duration: 150,
+              }),
+            }}
+          />
+          {pages.length > 1
+            ? pages.map((page) => (
+                <SidebarPage
+                  key={page.href}
+                  page={page}
+                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                  setSelectedAnchorElement={setSelectedAnchorElement}
+                  openedPages={openedPages}
+                  setOpenedPages={setOpenedPages}
+                />
+              ))
+            : pages.length === 1
+            ? pages[0].sections.map((section, i) => (
+                <SidebarPageSection
+                  isSelectedByDefault={i === 0}
+                  key={section.anchor}
+                  pageHref={pages[0].href}
+                  section={section}
+                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                  setSelectedAnchorElement={setSelectedAnchorElement}
+                  openedPages={openedPages}
+                  setOpenedPages={setOpenedPages}
+                />
+              ))
+            : null}
+          {appendices && appendices.length > 0 ? (
+            <>
+              <Divider sx={{ marginBottom: 2 }} />
+              {appendices.map((page) => (
+                <SidebarPage
+                  key={page.href}
+                  page={page}
+                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                  setSelectedAnchorElement={setSelectedAnchorElement}
+                  openedPages={openedPages}
+                  setOpenedPages={setOpenedPages}
+                />
+              ))}
+            </>
+          ) : null}
+        </Box>
+      </Box>
     </Box>
   );
 };

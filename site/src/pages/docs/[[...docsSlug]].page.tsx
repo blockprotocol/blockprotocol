@@ -11,9 +11,7 @@ import {
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
 import siteMap from "../../../site-map.json";
-import { parseIntFromPixelString } from "../../util/muiUtils";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdxUtils";
 import { mdxComponents } from "../../util/mdxComponents";
@@ -168,22 +166,8 @@ const DocsPage: NextPage<DocsPageProps> = ({
             {DOCS_PAGE_SUBTITLES[title]}
           </Typography>
         ) : null}
-        <Box py={4} display="flex" alignItems="flex-start" marginBottom={8}>
-          {md ? (
-            <Box
-              marginRight={9}
-              width={220}
-              flexGrow={0}
-              sx={{
-                position: "sticky",
-                top:
-                  DESKTOP_NAVBAR_HEIGHT +
-                  parseIntFromPixelString(theme.spacing(1)),
-              }}
-            >
-              <Sidebar pages={[tabPage]} />
-            </Box>
-          ) : null}
+        <Box py={4} display="flex" alignItems="flex-start">
+          {md ? <Sidebar flexGrow={0} pages={[tabPage]} /> : null}
           <Box flexGrow={1}>
             <MDXRemote
               {...tabPageSerializedContent}
