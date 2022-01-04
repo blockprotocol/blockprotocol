@@ -31,7 +31,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Link
         href="#"
         sx={{
-          "&:first-child": {
+          "&:first-of-type": {
             "& > h1": {
               marginTop: 0,
             },
@@ -55,7 +55,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Link
         href={`#${anchor}`}
         sx={{
-          "&:first-child": {
+          "&:first-of-type": {
             "& > h2": {
               marginTop: 0,
             },
