@@ -445,8 +445,9 @@ const App: FC<AppProps> = ({ name, block }) => {
 const LayoutBg = () => {
   return (
     <svg
-      width={619}
-      height="auto"
+      width={620}
+      height={520}
+      viewBox="-20 -20 640 540"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "80%" }}
