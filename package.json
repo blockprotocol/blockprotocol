@@ -19,6 +19,9 @@
     "lint:prettier": "prettier --check --ignore-unknown \"**/*\"",
     "lint:tsc": "yarn workspaces run lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
+    "dev": "yarn workspace @blockprotocol/site dev",
+    "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
+    "dev:db": "yarn workspace @blockprotocol/site dev:db",
     "prepare": "husky install"
   },
   "lint-staged": {

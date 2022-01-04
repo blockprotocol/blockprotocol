@@ -5,6 +5,8 @@ services:
   mongo:
     image: mongo
     restart: always
+    env_file:
+      - .env.local
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-password}
@@ -14,6 +16,8 @@ services:
   mongo-express:
     image: mongo-express
     restart: always
+    env_file:
+      - .env.local
     ports:
       - 8081:8081
     environment:
