@@ -94,15 +94,11 @@ const Socials = (
   <Box
     mt={3}
     display="flex"
-    sx={{
-      flexDirection: {
-        xs: "column",
-        md: "row",
-      },
-      alignItems: { xs: "left", md: "center" },
-    }}
+    flexDirection="row"
+    alignItems="center"
+    flexWrap="wrap"
   >
-    <Box marginBottom="1rem">
+    <Box marginBottom={2.5} flexShrink={0}>
       {SOCIALS.map(({ href, icon }) => (
         <Link
           href={href}
@@ -130,7 +126,7 @@ const Socials = (
         </Link>
       ))}
     </Box>
-    <a href="https://github.com/blockprotocol/blockprotocol">
+    <Link href="https://github.com/blockprotocol/blockprotocol" flexShrink={0}>
       <Button
         variant="primary"
         size="small"
@@ -143,7 +139,7 @@ const Socials = (
       >
         Star us on Github
       </Button>{" "}
-    </a>
+    </Link>
   </Box>
 );
 
