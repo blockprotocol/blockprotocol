@@ -7,6 +7,18 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 - `/blocks/<organisation>/<blockname>` is the CDN base-URL of an individual block (e.g. `/blocks/@hash/code`)
 - `/partners` provides a temporary signup form to collect pre-release registrations of interest from potential adopters
 
+## API Routes
+
+### `POST /api/sendLoginCode`
+
+#### Request Body
+
+`email`: the email address associated with the BP account
+
+#### Response Body
+
+`userId`: the id of the user associated with the email address
+
 ## Local development
 
 Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/registry`
