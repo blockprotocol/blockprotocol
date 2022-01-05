@@ -166,7 +166,7 @@ export const WhyBlockProtocol2Section = () => {
           Keep data in sync, get real-time updates, and integrate with any
           service that uses the protocol.
           <br />
-          No extra configuration required
+          No extra configuration required.
         </Typography>
       </Container>
 
