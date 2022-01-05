@@ -193,7 +193,7 @@ export const WhyBlockProtocol2Section = () => {
               and delete data in a predictable way.
               <br />
               <br />
-              This standisation makes it possible to easily move both blocks and
+              This standardization makes it possible to easily move both blocks and
               data between applications that adhere to the protocol.
             </Typography>
             <Link href="/spec">
