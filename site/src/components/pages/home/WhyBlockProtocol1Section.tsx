@@ -118,7 +118,7 @@ const CONTENT = [
           textAlign: "center",
         }}
       >
-        We could pull in data from a checklist block our favorite to-do app...
+        We could pull in data from a checklist block on our favorite to-do app...
       </Typography>
     ),
   },
