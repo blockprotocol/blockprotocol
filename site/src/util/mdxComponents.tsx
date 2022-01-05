@@ -31,7 +31,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Link
         href="#"
         sx={{
-          "&:first-child": {
+          "&:first-of-type": {
             "& > h1": {
               marginTop: 0,
             },
@@ -55,7 +55,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Link
         href={`#${anchor}`}
         sx={{
-          "&:first-child": {
+          "&:first-of-type": {
             "& > h2": {
               marginTop: 0,
             },
@@ -169,7 +169,9 @@ export const mdxComponents: Record<string, ReactNode> = {
   ),
   li: (props: HTMLAttributes<HTMLLIElement>) => (
     <Box {...props} component="li">
-      <Typography variant="bpBodyCopy">{props.children}</Typography>
+      <Typography variant="bpBodyCopy" component="div">
+        {props.children}
+      </Typography>
     </Box>
   ),
   inlineCode: (props: HTMLAttributes<HTMLElement>) => (

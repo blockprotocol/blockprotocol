@@ -440,9 +440,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
 
   const [displayMobileNav, setDisplayMobileNav] = useState<boolean>(false);
   const [idleScrollPosition, setIdleScrollPosition] = useState<boolean>(false);
-  const [scrollY, setScrollY] = useState<number>(
-    typeof window === "undefined" ? 0 : window.scrollY,
-  );
+  const [scrollY, setScrollY] = useState<number>(0);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined = undefined;

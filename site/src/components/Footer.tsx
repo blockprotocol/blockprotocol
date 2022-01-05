@@ -42,13 +42,13 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
     component="p"
     variant="bpSmallCopy"
     sx={{
-      "&:first-child": {
+      "&:first-of-type": {
         marginTop: {
           xs: 1.5,
           sm: 0,
         },
       },
-      "&:not(:first-child)": {
+      "&:not(:first-of-type)": {
         marginTop: 1.5,
       },
     }}
