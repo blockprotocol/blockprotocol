@@ -1,11 +1,12 @@
 import expressSession from "express-session";
 import MongoStore from "connect-mongo";
+import { mustGetEnvVar } from "../../util/api";
 
 // cookie maximum age (365 days)
 const COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
-const SESSION_SECRET = "asdf";
-const MONGODB_URI = process.env.MONGODB_URI;
-const MONGODB_DB_NAME = process.env.MONGODB_DB_NAME;
+const SESSION_SECRET = mustGetEnvVar("SESSION_SECRET");
+const MONGODB_URI = mustGetEnvVar("MONGODB_URI");
+const MONGODB_DB_NAME = mustGetEnvVar("MONGODB_DB_NAME");
 
 const sessionStore = MongoStore.create({
   mongoUrl: MONGODB_URI,
