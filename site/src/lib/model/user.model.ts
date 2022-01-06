@@ -6,29 +6,39 @@ import {
 
 export type SerializedUser = {
   id: string;
+  shortname: string;
   preferredName: string;
 };
 
 export type UserProperties = {
-  preferredName: string;
   email: string;
-  loginCodes: DBRef[];
+  verifiedEmail?: boolean;
+  shortname?: string;
+  preferredName?: string;
+  loginCodes?: DBRef[];
+  emailVerificationCodes?: DBRef[];
 };
 
 type UserConstructorArgs = {
   id: string;
 } & UserProperties;
 
-type UserDocument = WithId<UserProperties>;
+export type UserDocument = WithId<UserProperties>;
 
 export class User {
   id: string;
 
-  preferredName: string;
-
   email: string;
 
+  verifiedEmail: boolean;
+
+  shortname?: string;
+
+  preferredName?: string;
+
   loginCodes: DBRef[];
+
+  emailVerificationCodes: DBRef[];
 
   static COLLECTION_NAME = "bp-users";
 
@@ -38,11 +48,20 @@ export class User {
   // The number of login codes that can be sent in a login code rate limit period
   static LOGIN_CODE_RATE_LIMIT = 5;
 
-  constructor({ id, preferredName, email, loginCodes }: UserConstructorArgs) {
-    this.id = id;
-    this.preferredName = preferredName;
-    this.loginCodes = loginCodes;
-    this.email = email;
+  // The period of time in milliseconds where the email verification code rate limit is enforced (1 hour)
+  static EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS = 60 * 60 * 1000;
+
+  // The number of email verification codes that can be sent in a login code rate limit period
+  static EMAIL_VERIFICATION_CODE_RATE_LIMIT = 5;
+
+  constructor(args: UserConstructorArgs) {
+    this.id = args.id;
+    this.preferredName = args.preferredName;
+    this.email = args.email;
+    this.verifiedEmail = args.verifiedEmail ?? false;
+    this.shortname = args.shortname;
+    this.loginCodes = args.loginCodes ?? [];
+    this.emailVerificationCodes = args.emailVerificationCodes ?? [];
   }
 
   private static fromDocument({ _id, ...remainingDocument }: UserDocument) {
@@ -66,24 +85,32 @@ export class User {
 
   static async getByEmail(
     db: Db,
-    params: { email: string },
+    params: { email: string; verifiedEmail: boolean },
   ): Promise<User | null> {
-    const { email } = params;
+    const { email, verifiedEmail } = params;
 
     const userDocument = await db
       .collection<UserDocument>(User.COLLECTION_NAME)
-      .findOne({ email });
+      .findOne({
+        $and: [{ email }, { verifiedEmail }],
+      });
 
     return userDocument ? User.fromDocument(userDocument) : null;
   }
 
   static async create(
     db: Db,
-    params: { preferredName: string; email: string },
+    params: {
+      email: string;
+      verifiedEmail: boolean;
+      preferredName?: string;
+      shortname?: string;
+    },
   ): Promise<User> {
     const userProperties: UserProperties = {
       ...params,
       loginCodes: [],
+      emailVerificationCodes: [],
     };
 
     const { insertedId } = await db
@@ -159,7 +186,58 @@ export class User {
     return loginCode;
   }
 
+  async createEmailVerificationCode(db: Db): Promise<VerificationCode> {
+    const emailVerificationCode = await VerificationCode.create(db);
+
+    await db.collection<UserDocument>(User.COLLECTION_NAME).updateOne(
+      { _id: new ObjectId(this.id) },
+      {
+        $push: {
+          emailVerificationCodes: emailVerificationCode.toRef(),
+        },
+      },
+    );
+
+    return emailVerificationCode;
+  }
+
+  async hasExceededEmailVerificationRateLimit(db: Db): Promise<boolean> {
+    const numberOfRecentEmailVerificationCodes = await db
+      .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
+      .count({
+        _id: { $in: this.emailVerificationCodes.map(({ oid }) => oid) },
+        createdAt: {
+          $gt: new Date(
+            new Date().getTime() -
+              User.EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS,
+          ),
+        },
+      });
+
+    return (
+      numberOfRecentEmailVerificationCodes >
+      User.EMAIL_VERIFICATION_CODE_RATE_LIMIT - 1
+    );
+  }
+
+  async sendEmailVerificationCode(db: Db): Promise<VerificationCode> {
+    const emailVerificationCode = await this.createEmailVerificationCode(db);
+
+    /** @todo: send email */
+    // eslint-disable-next-line no-console
+    console.log("Email verification code: ", emailVerificationCode.code);
+
+    return emailVerificationCode;
+  }
+
   serialize(): SerializedUser {
-    return { id: this.id, preferredName: this.preferredName };
+    if (!this.preferredName || !this.shortname) {
+      throw new Error("User must be signed up");
+    }
+    return {
+      id: this.id,
+      preferredName: this.preferredName,
+      shortname: this.shortname,
+    };
   }
 }
