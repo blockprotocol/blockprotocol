@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
-import { Sidebar } from "../../components/PageSidebar";
+import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
 import SiteMapContext from "../../components/context/SiteMapContext";
 import {
@@ -22,6 +22,7 @@ import {
   MDX_TEXT_CONTENT_MAX_WIDTH,
 } from "../../components/MDXPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
+import { parseIntFromPixelString } from "../../util/muiUtils";
 
 const GitHubInfoCard = (
   <Paper
@@ -237,6 +238,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
           {md ? (
             <Sidebar
               flexGrow={0}
+              marginRight={6}
               pages={specificationPages.filter(
                 ({ title }) => !title.startsWith("Appendix"),
               )}
@@ -253,7 +255,9 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
           sx={{
             marginLeft: {
               xs: 0,
-              md: "290px",
+              md: `${
+                SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
+              }px`,
             },
             maxWidth: {
               sx: "100%",

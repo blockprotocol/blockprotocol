@@ -167,7 +167,9 @@ const DocsPage: NextPage<DocsPageProps> = ({
           </Typography>
         ) : null}
         <Box py={4} display="flex" alignItems="flex-start">
-          {md ? <Sidebar flexGrow={0} pages={[tabPage]} /> : null}
+          {md ? (
+            <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
+          ) : null}
           <Box flexGrow={1}>
             <MDXRemote
               {...tabPageSerializedContent}

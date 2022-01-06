@@ -24,6 +24,8 @@ import { Link } from "./Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 import { parseIntFromPixelString } from "../util/muiUtils";
 
+export const SIDEBAR_WIDTH = 220;
+
 const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
   lineHeight: "1.25em",
@@ -361,8 +363,8 @@ export const Sidebar: VFC<SidebarProps> = ({
     <Box
       {...boxProps}
       position="sticky"
-      marginRight={6}
-      width={220}
+      flexShrink={0}
+      width={SIDEBAR_WIDTH}
       sx={{
         ...boxProps.sx,
         top: 0,
