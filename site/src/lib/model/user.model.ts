@@ -32,6 +32,12 @@ export class User {
 
   static COLLECTION_NAME = "bp-users";
 
+  // The period of time in milliseconds where the login code rate limit is enforced (5 minutes)
+  static LOGIN_CODE_RATE_LIMIT_PERIOD_MS = 5 * 60 * 1000;
+
+  // The number of login codes that can be sent in a login code rate limit period
+  static LOGIN_CODE_RATE_LIMIT = 5;
+
   constructor({ id, preferredName, email, loginCodes }: UserConstructorArgs) {
     this.id = id;
     this.preferredName = preferredName;
@@ -128,10 +134,23 @@ export class User {
     return loginCode ? VerificationCode.fromDocument(loginCode) : null;
   }
 
+  async hasExceededLoginCodeRateLimit(db: Db): Promise<boolean> {
+    const numberOfRecentLoginCodes = await db
+      .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
+      .count({
+        _id: { $in: this.loginCodes.map(({ oid }) => oid) },
+        createdAt: {
+          $gt: new Date(
+            new Date().getTime() - User.LOGIN_CODE_RATE_LIMIT_PERIOD_MS,
+          ),
+        },
+      });
+
+    return numberOfRecentLoginCodes > User.LOGIN_CODE_RATE_LIMIT - 1;
+  }
+
   async sendLoginCode(db: Db): Promise<VerificationCode> {
     const loginCode = await this.createLoginCode(db);
-
-    /** @todo: rate-limit sending of login codes */
 
     /** @todo: send email */
     // eslint-disable-next-line no-console

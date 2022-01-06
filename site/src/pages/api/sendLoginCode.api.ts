@@ -38,6 +38,16 @@ export default createBaseHandler<
       );
     }
 
+    if (await user.hasExceededLoginCodeRateLimit(db)) {
+      return res.status(403).json(
+        formatErrors({
+          msg: `Please wait ${
+            User.LOGIN_CODE_RATE_LIMIT_PERIOD_MS / 1000 / 60
+          } minutes and try again`,
+        }),
+      );
+    }
+
     const loginCode = await user.sendLoginCode(db);
 
     res.status(200).json({
