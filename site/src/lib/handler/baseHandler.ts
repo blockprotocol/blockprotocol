@@ -8,7 +8,10 @@ import {
 import { sessionMiddleware } from "../middleware/session.middleware";
 import { dbMiddleware, DbRequestExtensions } from "../middleware/db.middleware";
 
-export type BaseApiRequest<RequestBody = any> = Omit<NextApiRequest, "body"> &
+export type BaseApiRequest<RequestBody = unknown> = Omit<
+  NextApiRequest,
+  "body"
+> &
   PassportRequestExtensions &
   DbRequestExtensions & {
     body: RequestBody;
@@ -18,9 +21,9 @@ type ErrorResponse = {
   errors: Partial<ValidationError>[];
 };
 
-export type BaseApiResponse<T = any> = NextApiResponse<T | ErrorResponse>;
+export type BaseApiResponse<T = unknown> = NextApiResponse<T | ErrorResponse>;
 
-export const createBaseHandler = <RequestBody = any, Response = any>() =>
+export const createBaseHandler = <RequestBody = unknown, Response = any>() =>
   nextConnect<BaseApiRequest<RequestBody>, BaseApiResponse<Response>>()
     .use(dbMiddleware)
     .use(sessionMiddleware)

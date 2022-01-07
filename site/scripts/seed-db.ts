@@ -52,6 +52,7 @@ void (async () => {
 
   const mockUsers: UserProperties[] = [
     {
+      shortname: "alice",
       preferredName: "Alice",
       email: "alice@example.com",
     },

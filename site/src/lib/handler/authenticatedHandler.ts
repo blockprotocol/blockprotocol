@@ -1,26 +1,27 @@
 import { NextConnect } from "next-connect";
-import { User } from "../model/user.model";
+import {
+  isLoggedInMiddleware,
+  IsLoggedInRequestExtensions,
+} from "../middleware/isLoggedIn.middleware";
+import { isSignedUpMiddleware } from "../middleware/isSignedUp.middleware";
 import {
   BaseApiRequest,
   BaseApiResponse,
   createBaseHandler,
 } from "./baseHandler";
 
-type AuthenticatedApiRequest<RequestBody = any> =
-  BaseApiRequest<RequestBody> & {
-    user: User;
-  };
+export type AuthenticatedApiRequest<RequestBody = unknown> =
+  BaseApiRequest<RequestBody> & IsLoggedInRequestExtensions;
 
 export const createAuthenticatedHandler = <
-  RequestBody = any,
-  Response = any,
->(): NextConnect<
+  RequestBody = unknown,
+  Response = unknown,
+>(
+  isSignedUp: boolean = true,
+): NextConnect<
   AuthenticatedApiRequest<RequestBody>,
   BaseApiResponse<Response>
 > =>
-  createBaseHandler().use((req, res, next) => {
-    if (!req.user) {
-      res.status(401).send("Unauthorized");
-    }
-    next();
-  });
+  createBaseHandler().use(
+    ...[isLoggedInMiddleware, isSignedUp ? isSignedUpMiddleware : []].flat(),
+  );

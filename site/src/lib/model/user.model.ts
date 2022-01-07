@@ -7,8 +7,9 @@ import {
 
 export type SerializedUser = {
   id: string;
-  shortname: string;
-  preferredName: string;
+  isSignedUp: boolean;
+  shortname?: string;
+  preferredName?: string;
 };
 
 export type UserProperties = {
@@ -135,7 +136,7 @@ export class User {
 
     await db
       .collection<UserDocument>(User.COLLECTION_NAME)
-      .updateOne({ _id: new ObjectId(this.id) }, updatedProperties);
+      .updateOne({ _id: new ObjectId(this.id) }, { $set: updatedProperties });
 
     merge(this, updatedProperties);
 
@@ -260,11 +261,9 @@ export class User {
   }
 
   serialize(): SerializedUser {
-    if (!this.preferredName || !this.shortname) {
-      throw new Error("User must be signed up");
-    }
     return {
       id: this.id,
+      isSignedUp: true,
       preferredName: this.preferredName,
       shortname: this.shortname,
     };
