@@ -102,6 +102,19 @@ export class User {
     return userDocument ? User.fromDocument(userDocument) : null;
   }
 
+  static async getByShortname(
+    db: Db,
+    params: { shortname: string },
+  ): Promise<User | null> {
+    const { shortname } = params;
+
+    const userDocument = await db
+      .collection<UserDocument>(User.COLLECTION_NAME)
+      .findOne({ shortname });
+
+    return userDocument ? User.fromDocument(userDocument) : null;
+  }
+
   static async create(
     db: Db,
     params: {
