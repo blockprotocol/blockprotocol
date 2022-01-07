@@ -1,0 +1,54 @@
+{
+  "private": true,
+  "description": "blockprotocol monorepo",
+  "workspaces": [
+    "./packages/create-block-app",
+    "./packages/block-template",
+    "./site"
+  ],
+  "scripts": {
+    "create-block-app": "node ./packages/create-block-app/scripts/create-block-app.js",
+    "fix": "npm-run-all --continue-on-error \"fix:*\"",
+    "fix:eslint": "eslint --report-unused-disable-directives \"**/*\" --fix",
+    "fix:markdownlint": "markdownlint --fix \"**/*\"",
+    "fix:prettier": "prettier --write --ignore-unknown \"**/*.*\"",
+    "fix:yarn-deduplicate": "yarn install; yarn-deduplicate --strategy=fewer; yarn install",
+    "lint": "npm-run-all --continue-on-error \"lint:*\"",
+    "lint:eslint": "eslint --report-unused-disable-directives \"**/*\"",
+    "lint:markdownlint": "markdownlint \"**/*\"",
+    "lint:prettier": "prettier --check --ignore-unknown \"**/*\"",
+    "lint:tsc": "yarn workspaces run lint:tsc",
+    "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "**/*": [
+      "suppress-exit-code eslint --fix",
+      "suppress-exit-code markdownlint --fix",
+      "suppress-exit-code prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "4.29.0",
+    "@typescript-eslint/parser": "4.29.0",
+    "concurrently": "6.2.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jest": "24.5.0",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-no-restricted-imports": "0.0.0",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.1.2",
+    "markdownlint-cli": "0.29.0",
+    "npm-run-all": "4.1.5",
+    "prettier": "2.5.0",
+    "prettier-plugin-packagejson": "2.2.13",
+    "prettier-plugin-sh": "0.7.1",
+    "suppress-exit-code": "1.0.0",
+    "yarn-deduplicate": "^3.1.0"
+  }
+}

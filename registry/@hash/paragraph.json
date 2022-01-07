@@ -1,6 +1,7 @@
 {
   "workspace": "@hashintel/block-paragraph",
   "repository": "https://github.com/hashintel/dev.git",
-  "branch": "mr/fix-deps",
-  "distDir": "dist"
+  "branch": "main",
+  "distDir": "dist",
+  "timestamp": "2021-12-24T16:30:00.000Z"
 }

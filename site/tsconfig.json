@@ -15,6 +15,13 @@
     "target": "es5",
     "typeRoots": ["./src/types", "node_modules/@types"]
   },
-  "include": ["./next-env.d.ts", "./src/**/*.ts", "./src/**/*.tsx"],
+  "include": [
+    "./next-env.d.ts",
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "theme-override.d.ts",
+    "assets.d.ts",
+    "./scripts/**/*.ts"
+  ],
   "exclude": ["node_modules", ".next"]
 }
