@@ -1,3 +1,4 @@
+import { merge } from "lodash";
 import { Db, WithId, ObjectId, DBRef } from "mongodb";
 import {
   VerificationCode,
@@ -22,6 +23,8 @@ export type UserProperties = {
 type UserConstructorArgs = {
   id: string;
 } & UserProperties;
+
+type VerificationCodeVariant = "login" | "email";
 
 export type UserDocument = WithId<UserProperties>;
 
@@ -117,48 +120,86 @@ export class User {
       .collection<UserDocument>(User.COLLECTION_NAME)
       .insertOne(userProperties);
 
+    /** @todo: add to mailchimp mailing list */
+
     return new User({ id: insertedId.toString(), ...userProperties });
   }
 
-  async createLoginCode(db: Db): Promise<VerificationCode> {
-    const loginCode = await VerificationCode.create(db);
+  async update(
+    db: Db,
+    updatedProperties: Partial<UserProperties>,
+  ): Promise<User> {
+    if (this.shortname && updatedProperties.shortname) {
+      throw new Error("Cannot update shortname");
+    }
+
+    await db
+      .collection<UserDocument>(User.COLLECTION_NAME)
+      .updateOne({ _id: new ObjectId(this.id) }, updatedProperties);
+
+    merge(this, updatedProperties);
+
+    return this;
+  }
+
+  isSignedUp(): boolean {
+    return !!this.shortname && !!this.preferredName;
+  }
+
+  async createVerificationCode(
+    db: Db,
+    variant: VerificationCodeVariant,
+  ): Promise<VerificationCode> {
+    const verificationCode = await VerificationCode.create(db);
 
     await db.collection<UserDocument>(User.COLLECTION_NAME).updateOne(
       { _id: new ObjectId(this.id) },
       {
         $push: {
-          loginCodes: loginCode.toRef(),
+          [variant === "login" ? "loginCodes" : "emailVerificationCodes"]:
+            verificationCode.toRef(),
         },
       },
     );
 
-    return loginCode;
+    return verificationCode;
   }
 
-  async getLoginCode(
+  async getVerificationCode(
     db: Db,
-    params: { loginCodeId: string },
+    params: { verificationCodeId: string; variant: VerificationCodeVariant },
   ): Promise<VerificationCode | null> {
+    const { verificationCodeId, variant } = params;
+
+    const possibleVerificationCodes =
+      this[variant === "login" ? "loginCodes" : "emailVerificationCodes"];
+
     if (
-      !this.loginCodes.find(({ oid }) => oid.toString() === params.loginCodeId)
+      !possibleVerificationCodes.find(
+        ({ oid }) => oid.toString() === verificationCodeId,
+      )
     ) {
       return null;
     }
 
-    const loginCode = await db
+    const verificationCode = await db
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .findOne({
         $and: [
           {
-            _id: { $in: this.loginCodes.map(({ oid }) => oid) },
+            _id: {
+              $in: possibleVerificationCodes.map(({ oid }) => oid),
+            },
           },
           {
-            _id: new ObjectId(params.loginCodeId),
+            _id: new ObjectId(params.verificationCodeId),
           },
         ],
       });
 
-    return loginCode ? VerificationCode.fromDocument(loginCode) : null;
+    return verificationCode
+      ? VerificationCode.fromDocument(verificationCode)
+      : null;
   }
 
   async hasExceededLoginCodeRateLimit(db: Db): Promise<boolean> {
@@ -177,28 +218,13 @@ export class User {
   }
 
   async sendLoginCode(db: Db): Promise<VerificationCode> {
-    const loginCode = await this.createLoginCode(db);
+    const loginCode = await this.createVerificationCode(db, "login");
 
     /** @todo: send email */
     // eslint-disable-next-line no-console
     console.log("Login code: ", loginCode.code);
 
     return loginCode;
-  }
-
-  async createEmailVerificationCode(db: Db): Promise<VerificationCode> {
-    const emailVerificationCode = await VerificationCode.create(db);
-
-    await db.collection<UserDocument>(User.COLLECTION_NAME).updateOne(
-      { _id: new ObjectId(this.id) },
-      {
-        $push: {
-          emailVerificationCodes: emailVerificationCode.toRef(),
-        },
-      },
-    );
-
-    return emailVerificationCode;
   }
 
   async hasExceededEmailVerificationRateLimit(db: Db): Promise<boolean> {
@@ -221,7 +247,10 @@ export class User {
   }
 
   async sendEmailVerificationCode(db: Db): Promise<VerificationCode> {
-    const emailVerificationCode = await this.createEmailVerificationCode(db);
+    const emailVerificationCode = await this.createVerificationCode(
+      db,
+      "email",
+    );
 
     /** @todo: send email */
     // eslint-disable-next-line no-console

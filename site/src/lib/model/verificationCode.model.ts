@@ -1,5 +1,7 @@
 import { Db, WithId, ObjectId, DBRef } from "mongodb";
+import { NextApiResponse } from "next";
 import { rword } from "rword";
+import { formatErrors } from "../../util/api";
 
 export type VerificationCodeProperties = {
   code: string;
@@ -93,6 +95,38 @@ export class VerificationCode {
 
   toRef(): DBRef {
     return new DBRef(VerificationCode.COLLECTION_NAME, new ObjectId(this.id));
+  }
+
+  validate(
+    res: NextApiResponse,
+    { errorPrefix }: { errorPrefix: string },
+  ): boolean {
+    if (this.hasBeenUsed()) {
+      res.status(403).json(
+        formatErrors({
+          msg: `${errorPrefix || "Verification"} code has already been used`,
+        }),
+      );
+      return false;
+    } else if (this.hasExceededMaximumAttempts()) {
+      res.status(403).json(
+        formatErrors({
+          msg: `${
+            errorPrefix || "Verification"
+          } code has been used too many times`,
+        }),
+      );
+      return false;
+    } else if (this.hasExpired()) {
+      res.status(403).json(
+        formatErrors({
+          msg: `${errorPrefix || "Verification"} code has expired`,
+        }),
+      );
+      return false;
+    }
+
+    return true;
   }
 
   async incrementAttempts(db: Db) {
