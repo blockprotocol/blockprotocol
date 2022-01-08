@@ -18,6 +18,7 @@ export const Button: FC<ButtonProps> = ({ children, squared, ...props }) => {
       {...props}
       sx={{
         borderRadius: squared ? "6px" : undefined,
+        /** @todo: figure out how to properly merge this object with `props.sx` */
         ...props.sx,
         lineHeight: "1.5",
       }}

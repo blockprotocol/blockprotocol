@@ -431,9 +431,14 @@ const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
 type NavbarProps = {
   navbarHeight: number;
   setNavbarHeight: (height: number) => void;
+  openLoginModal: () => void;
 };
 
-export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
+export const Navbar: VFC<NavbarProps> = ({
+  navbarHeight,
+  setNavbarHeight,
+  openLoginModal,
+}) => {
   const theme = useTheme();
   const router = useRouter();
   const { pages } = useContext(SiteMapContext);
@@ -502,6 +507,10 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
       setDisplayMobileNav(false);
     }
   }, [isDesktopSize, displayMobileNav]);
+
+  const preventOverflowingNavLinks = useMediaQuery(
+    theme.breakpoints.between("md", 940),
+  );
 
   /** @todo: provide better documentation for the various states of the Navbar's styling */
 
@@ -647,13 +656,48 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                       </Typography>
                     </Link>
                   ))}
+                  <Button
+                    onClick={openLoginModal}
+                    variant="invisible"
+                    sx={{
+                      marginRight: 3,
+                      backgroundColor: "unset",
+                      transition: theme.transitions.create("color", {
+                        duration: 100,
+                      }),
+                      color: ({ palette }) =>
+                        isNavbarDark ? palette.purple[400] : palette.gray[60],
+                      "&:hover": {
+                        color: ({ palette }) =>
+                          isNavbarDark ? palette.gray[30] : palette.purple[600],
+                      },
+                      "&:active": {
+                        color: ({ palette }) =>
+                          isNavbarDark
+                            ? palette.common.white
+                            : palette.purple[700],
+                      },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        fontWeight: 500,
+                        fontSize: "var(--step--1)",
+                        color: "currentColor",
+                      }}
+                    >
+                      Log In
+                    </Typography>
+                  </Button>
                   <Link href="/docs/developing-blocks">
                     <Button
                       size="small"
                       variant="primary"
                       endIcon={<BoltIcon />}
                     >
-                      Quick Start Guide
+                      {preventOverflowingNavLinks
+                        ? "Build a block"
+                        : "Quick Start Guide"}
                     </Button>
                   </Link>
                 </>
@@ -703,17 +747,41 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
           <Box
             p={5}
             flexShrink={0}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
             sx={{
               borderTopStyle: "solid",
               borderTopWidth: 1,
               borderTopColor: theme.palette.gray[40],
-              display: "flex",
-              justifyContent: "center",
+              "> button, a": {
+                width: {
+                  xs: "100%",
+                  sm: "unset",
+                },
+                minWidth: {
+                  xs: "unset",
+                  sm: 320,
+                },
+              },
             }}
           >
+            <Button
+              onClick={() => {
+                setDisplayMobileNav(false);
+                openLoginModal();
+              }}
+              variant="secondary"
+              sx={{
+                marginBottom: 1,
+              }}
+            >
+              Log in
+            </Button>
             <Link href="/docs/developing-blocks">
               <Button
                 sx={{
+                  width: "100%",
                   py: 1.5,
                   px: 3,
                   textTransform: "none",

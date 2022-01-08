@@ -436,6 +436,16 @@ export const theme = createTheme({
       },
       variants: [
         {
+          props: { variant: "invisible" },
+          style: {
+            minWidth: "unset",
+            padding: "unset",
+            ":hover": {
+              backgroundColor: "unset",
+            },
+          },
+        },
+        {
           props: { variant: "primary" },
           style: {
             color: customColors.gray["20"],

@@ -13,6 +13,7 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
   const [navbarHeight, setNavbarHeight] = useState<number>(
     DESKTOP_NAVBAR_HEIGHT,
   );
+  const [displayLoginModal, setDisplayLoginModal] = useState<boolean>(false);
 
   const isHomePage = asPath === "/";
 
@@ -23,7 +24,11 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
 
   return (
     <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
-      <Navbar navbarHeight={navbarHeight} setNavbarHeight={setNavbarHeight} />
+      <Navbar
+        navbarHeight={navbarHeight}
+        setNavbarHeight={setNavbarHeight}
+        openLoginModal={() => setDisplayLoginModal(true)}
+      />
       <Box
         flexGrow={1}
         sx={{
