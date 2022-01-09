@@ -249,7 +249,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Box
         component="pre"
         sx={(theme) => ({
-          overflow: "scroll",
+          overflow: "auto",
           display: "block",
           fontSize: "90%",
           color: theme.palette.purple[400],

@@ -384,7 +384,7 @@ export const Sidebar: VFC<SidebarProps> = ({
         paddingRight={3}
         sx={{
           maxHeight: isSticky ? "100vh" : undefined,
-          overflow: isSticky ? "scroll" : undefined,
+          overflow: isSticky ? "auto" : undefined,
           paddingTop: isSticky
             ? `${
                 DESKTOP_NAVBAR_HEIGHT +

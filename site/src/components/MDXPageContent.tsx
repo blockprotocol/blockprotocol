@@ -123,7 +123,7 @@ export const MDXPageContent: VFC<MDXPageContentProps> = ({
         {...boxProps}
         sx={{
           width: "100%",
-          overflow: "scroll",
+          overflow: "auto",
           "& > :not(.info-card-wrapper), > a:not(.info-card-wrapper) > *": {
             maxWidth: {
               xs: "100%",
