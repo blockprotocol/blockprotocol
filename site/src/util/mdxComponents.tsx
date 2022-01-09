@@ -6,8 +6,16 @@ import {
   useContext,
   useEffect,
   useRef,
+  VFC,
 } from "react";
-import { TypographyProps, Typography, Box, Paper } from "@mui/material";
+import {
+  TypographyProps,
+  Typography,
+  Box,
+  Paper,
+  Icon,
+  IconButton,
+} from "@mui/material";
 import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
@@ -15,7 +23,7 @@ import { Snippet } from "../components/Snippet";
 import MdxPageContext from "../components/context/MdxPageContext";
 
 const useMDXHeading = (props: { anchor: string }) => {
-  const headingRef = useRef<HTMLHeadingElement>(null);
+  const headingRef = useRef<HTMLAnchorElement>(null);
   const { headings, setHeadings } = useContext(MdxPageContext);
 
   useEffect(() => {
@@ -30,6 +38,24 @@ const useMDXHeading = (props: { anchor: string }) => {
   }, [props, headingRef, headings, setHeadings]);
 
   return { headingRef };
+};
+
+const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
+  depth,
+  anchor,
+}) => {
+  const { headingRef } = useMDXHeading({ anchor });
+
+  return (
+    <Link ref={headingRef} href={`#${anchor}`} sx={{ display: "inline" }}>
+      <IconButton sx={{ marginLeft: 2, padding: 0 }}>
+        <Icon
+          sx={{ fontSize: depth === 1 ? 28 : depth === 2 ? 24 : 20 }}
+          className="fas fa-link"
+        />
+      </IconButton>
+    </Link>
+  );
 };
 
 const stringifyChildren = (node: ReactNode): string => {
@@ -53,54 +79,43 @@ export const mdxComponents: Record<string, ReactNode> = {
   InfoCardWrapper,
   InfoCard,
   h1: (props: TypographyProps) => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { headingRef } = useMDXHeading({ anchor: "" });
     return (
-      <Link
-        href="#"
+      <Typography
+        mt={HEADING_MARGIN_TOP}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading1"
         sx={{
           "&:first-of-type": {
-            "& > h1": {
-              marginTop: 0,
-            },
+            marginTop: 0,
           },
         }}
+        {...props}
       >
-        <Typography
-          ref={headingRef}
-          mt={HEADING_MARGIN_TOP}
-          mb={HEADING_MARGIN_BOTTOM}
-          variant="bpHeading1"
-          {...props}
-        />
-      </Link>
+        {props.children}
+        <HeadingAnchor anchor="" depth={1} />
+      </Typography>
     );
   },
   h2: (props: TypographyProps) => {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { headingRef } = useMDXHeading({ anchor });
+
     return (
-      <Link
-        href={`#${anchor}`}
+      <Typography
+        mt={HEADING_MARGIN_TOP}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading2"
         sx={{
           "&:first-of-type": {
-            "& > h2": {
-              marginTop: 0,
-            },
+            marginTop: 0,
           },
         }}
+        {...props}
       >
-        <Typography
-          ref={headingRef}
-          mt={HEADING_MARGIN_TOP}
-          mb={HEADING_MARGIN_BOTTOM}
-          variant="bpHeading2"
-          {...props}
-        />
-      </Link>
+        {props.children}
+        <HeadingAnchor anchor={anchor} depth={2} />
+      </Typography>
     );
   },
   h3: (props: TypographyProps) => {
@@ -110,15 +125,16 @@ export const mdxComponents: Record<string, ReactNode> = {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { headingRef } = useMDXHeading({ anchor });
     return (
-      <Link href={`#${anchor}`}>
-        <Typography
-          ref={headingRef}
-          mt={HEADING_MARGIN_TOP}
-          mb={HEADING_MARGIN_BOTTOM}
-          variant="bpHeading3"
-          {...props}
-        />
-      </Link>
+      <Typography
+        ref={headingRef}
+        mt={HEADING_MARGIN_TOP}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading3"
+        {...props}
+      >
+        {props.children}
+        <HeadingAnchor anchor={anchor} depth={3} />
+      </Typography>
     );
   },
   h4: (props: TypographyProps) => (

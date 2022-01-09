@@ -2,7 +2,7 @@ import { createContext, Dispatch, SetStateAction } from "react";
 
 export type Heading = {
   anchor: string;
-  element: HTMLHeadingElement;
+  element: HTMLAnchorElement;
 };
 
 type MdxPageContextProps = {
