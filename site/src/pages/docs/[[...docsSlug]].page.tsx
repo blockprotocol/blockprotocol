@@ -15,7 +15,7 @@ import siteMap from "../../../site-map.json";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdxUtils";
 import { Sidebar } from "../../components/PageSidebar";
-import { MDXPageContent } from "../../components/MDXPageContent";
+import { MdxPageContent } from "../../components/MdxPageContent";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",
@@ -170,7 +170,7 @@ const DocsPage: NextPage<DocsPageProps> = ({
           {md ? (
             <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
           ) : null}
-          <MDXPageContent
+          <MdxPageContent
             flexGrow={1}
             serializedPage={tabPageSerializedContent}
           />

@@ -5,14 +5,14 @@ export type Heading = {
   element: HTMLHeadingElement;
 };
 
-type MDXPageContextProps = {
+type MdxPageContextProps = {
   headings: Heading[];
   setHeadings: Dispatch<SetStateAction<Heading[]>>;
 };
 
-const MDXPageContext = createContext<MDXPageContextProps>({
+const MdxPageContext = createContext<MdxPageContextProps>({
   headings: [],
   setHeadings: () => undefined,
 });
 
-export default MDXPageContext;
+export default MdxPageContext;

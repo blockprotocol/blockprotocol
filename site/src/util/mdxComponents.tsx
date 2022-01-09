@@ -13,11 +13,11 @@ import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 import { Snippet } from "../components/Snippet";
-import MDXPageContext from "../components/context/MDXPageContext";
+import MdxPageContext from "../components/context/MdxPageContext";
 
 const useMDXHeading = (props: { anchor: string }) => {
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const { headings, setHeadings } = useContext(MDXPageContext);
+  const { headings, setHeadings } = useContext(MdxPageContext);
 
   useEffect(() => {
     const { anchor } = props;

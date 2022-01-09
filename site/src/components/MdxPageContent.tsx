@@ -4,17 +4,17 @@ import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Box, { BoxProps } from "@mui/material/Box";
 import { mdxComponents } from "../util/mdxComponents";
-import MDXPageContext, { Heading } from "./context/MDXPageContext";
+import MdxPageContext, { Heading } from "./context/MdxPageContext";
 
 export const MDX_TEXT_CONTENT_MAX_WIDTH = 680;
 
-type MDXPageContentProps = {
+type MdxPageContentProps = {
   serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
 } & BoxProps;
 
 let detectHeadingFromScrollTimer: NodeJS.Timeout | undefined = undefined;
 
-export const MDXPageContent: VFC<MDXPageContentProps> = ({
+export const MdxPageContent: VFC<MdxPageContentProps> = ({
   serializedPage,
   ...boxProps
 }) => {
@@ -113,7 +113,7 @@ export const MDXPageContent: VFC<MDXPageContentProps> = ({
   }, [router, headings, detectHeadingFromScroll]);
 
   return (
-    <MDXPageContext.Provider
+    <MdxPageContext.Provider
       value={{
         headings,
         setHeadings,
@@ -134,6 +134,6 @@ export const MDXPageContent: VFC<MDXPageContentProps> = ({
       >
         <MDXRemote {...serializedPage} components={mdxComponents} />
       </Box>
-    </MDXPageContext.Provider>
+    </MdxPageContext.Provider>
   );
 };
