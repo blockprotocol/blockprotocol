@@ -4,7 +4,7 @@ import {
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, forwardRef } from "react";
 
 // inspired by https://github.com/loadingio/css-spinner/blob/master/src/ellipsis/index.styl
 const loadingAnimation = (
@@ -79,23 +79,21 @@ type ButtonProps = {
 
 // probably rename to BPButton?
 // @todo implement loading
-export const Button: FC<ButtonProps> = ({
-  children,
-  squared,
-  loading,
-  ...props
-}) => {
-  return (
-    <MuiButton
-      {...props}
-      sx={{
-        borderRadius: squared ? "6px" : undefined,
-        /** @todo: figure out how to properly merge this object with `props.sx` */
-        ...props.sx,
-        lineHeight: "1.5",
-      }}
-    >
-      {loading ? loadingAnimation : children}
-    </MuiButton>
-  );
-};
+export const Button: FC<ButtonProps> = forwardRef(
+  ({ children, squared, loading, ...props }, ref) => {
+    return (
+      <MuiButton
+        {...props}
+        sx={{
+          borderRadius: squared ? "6px" : undefined,
+          /** @todo: figure out how to properly merge this object with `props.sx` */
+          ...props.sx,
+          lineHeight: "1.5",
+        }}
+        ref={ref}
+      >
+        {loading ? loadingAnimation : children}
+      </MuiButton>
+    );
+  },
+);

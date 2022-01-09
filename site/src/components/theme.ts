@@ -313,6 +313,10 @@ export const theme = createTheme({
               scroll-behavior: smooth;
             }
 
+            body {
+              overflow: overlay;
+            }
+
             body, p {
               font-size: var(--step-0);
               font-weight: 400;
