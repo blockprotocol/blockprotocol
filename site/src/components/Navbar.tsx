@@ -658,7 +658,7 @@ export const Navbar: VFC<NavbarProps> = ({
                   ))}
                   <Button
                     onClick={openLoginModal}
-                    variant="invisible"
+                    variant="transparent"
                     sx={{
                       marginRight: 3,
                       backgroundColor: "unset",

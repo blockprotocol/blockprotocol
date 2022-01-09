@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { DESKTOP_NAVBAR_HEIGHT, Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { BANNERS, FooterBanner } from "./FooterBanner";
+import { LoginModal } from "./Modal/LoginModal";
 
 type PageLayoutProps = {};
 
@@ -23,26 +24,32 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
   );
 
   return (
-    <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
-      <Navbar
-        navbarHeight={navbarHeight}
-        setNavbarHeight={setNavbarHeight}
-        openLoginModal={() => setDisplayLoginModal(true)}
+    <>
+      <LoginModal
+        open={displayLoginModal}
+        onClose={() => setDisplayLoginModal(false)}
       />
-      <Box
-        flexGrow={1}
-        sx={{
-          paddingTop: isHomePage ? {} : `${navbarHeight}px`,
-        }}
-      >
-        {children}
+      <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
+        <Navbar
+          navbarHeight={navbarHeight}
+          setNavbarHeight={setNavbarHeight}
+          openLoginModal={() => setDisplayLoginModal(true)}
+        />
+        <Box
+          flexGrow={1}
+          sx={{
+            paddingTop: isHomePage ? {} : `${navbarHeight}px`,
+          }}
+        >
+          {children}
+        </Box>
+        {banner ? <FooterBanner banner={banner} /> : null}
+        <Footer
+          sx={{
+            paddingTop: banner?.overlapsFooter ? 8 : 0,
+          }}
+        />
       </Box>
-      {banner ? <FooterBanner banner={banner} /> : null}
-      <Footer
-        sx={{
-          paddingTop: banner?.overlapsFooter ? 8 : 0,
-        }}
-      />
-    </Box>
+    </>
   );
 };

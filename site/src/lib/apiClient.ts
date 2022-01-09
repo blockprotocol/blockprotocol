@@ -1,5 +1,9 @@
 import { ValidationError } from "express-validator";
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import {
+  ApiSendLoginCodeRequestBody,
+  ApiSendLoginCodeResponse,
+} from "../pages/api/sendLoginCode.api";
 
 const BASE_URL = "http://localhost:3000/api/";
 
@@ -17,32 +21,41 @@ const handleAxiosError = (
   throw error;
 };
 
+const get = <ResponseData = any>(
+  url: string,
+  config?: AxiosRequestConfig<ResponseData>,
+): Promise<{
+  data?: ResponseData;
+  error?: AxiosError<{ errors: Partial<ValidationError>[] }>;
+}> =>
+  axiosClient
+    .get<ResponseData>(url, config)
+    .then(({ data }) => ({ data }))
+    .catch(handleAxiosError);
+
+const post = <RequestData = any, ResponseData = any>(
+  url: string,
+  requestData?: RequestData,
+  config?: AxiosRequestConfig<RequestData>,
+): Promise<{
+  data?: ResponseData;
+  error?: AxiosError<{ errors: Partial<ValidationError>[] }>;
+}> =>
+  axiosClient
+    .post<ResponseData, AxiosResponse<ResponseData>, RequestData>(
+      url,
+      requestData,
+      config,
+    )
+    .then(({ data }) => ({ data }))
+    .catch(handleAxiosError);
+
 export const apiClient = {
-  get: <ResponseData = any>(
-    url: string,
-    config?: AxiosRequestConfig<ResponseData>,
-  ): Promise<{
-    data?: ResponseData;
-    error?: AxiosError<{ errors: Partial<ValidationError>[] }>;
-  }> =>
-    axiosClient
-      .get<ResponseData>(url, config)
-      .then(({ data }) => ({ data }))
-      .catch(handleAxiosError),
-  post: <RequestData = any, ResponseData = any>(
-    url: string,
-    requestData?: RequestData,
-    config?: AxiosRequestConfig<RequestData>,
-  ): Promise<{
-    data?: ResponseData;
-    error?: AxiosError<{ errors: Partial<ValidationError>[] }>;
-  }> =>
-    axiosClient
-      .post<ResponseData, AxiosResponse<ResponseData>, RequestData>(
-        url,
-        requestData,
-        config,
-      )
-      .then(({ data }) => ({ data }))
-      .catch(handleAxiosError),
+  get,
+  post,
+  sendLoginCode: (requestData: ApiSendLoginCodeRequestBody) =>
+    apiClient.post<ApiSendLoginCodeRequestBody, ApiSendLoginCodeResponse>(
+      "sendLoginCode",
+      requestData,
+    ),
 };

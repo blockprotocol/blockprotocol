@@ -270,6 +270,19 @@ export class User {
       variant: "login",
     });
 
+    const magicLinkQueryParams: ApiLoginWithLoginCodeRequestBody & {
+      email: string;
+    } = {
+      email: this.email,
+      userId: this.id,
+      loginCodeId: loginCode.id,
+      code: loginCode.code,
+    };
+
+    const magicLink = `${FRONTEND_URL}/login?${new URLSearchParams(
+      magicLinkQueryParams,
+    ).toString()}`;
+
     /** @todo: send email */
     // eslint-disable-next-line no-console
     console.log("Login code: ", loginCode.code);

@@ -89,6 +89,8 @@ const GitHubInfoCard = (
           fontSize: 15,
           lineHeight: 1.5,
           "& a": {
+            color: theme.palette.teal[600],
+            borderColor: theme.palette.teal[600],
             ":hover": {
               color: theme.palette.teal[700],
             },
