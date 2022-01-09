@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import slugify from "slugify";
 import {
   HTMLAttributes,
@@ -54,6 +53,7 @@ export const mdxComponents: Record<string, ReactNode> = {
   InfoCardWrapper,
   InfoCard,
   h1: (props: TypographyProps) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { headingRef } = useMDXHeading({ anchor: "" });
     return (
       <Link
@@ -80,6 +80,7 @@ export const mdxComponents: Record<string, ReactNode> = {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { headingRef } = useMDXHeading({ anchor });
     return (
       <Link
@@ -106,6 +107,7 @@ export const mdxComponents: Record<string, ReactNode> = {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const { headingRef } = useMDXHeading({ anchor });
     return (
       <Link href={`#${anchor}`}>
