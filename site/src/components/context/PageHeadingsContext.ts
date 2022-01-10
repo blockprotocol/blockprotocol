@@ -2,17 +2,17 @@ import { createContext, Dispatch, SetStateAction } from "react";
 
 export type Heading = {
   anchor: string;
-  element: HTMLAnchorElement;
+  element: HTMLHeadingElement;
 };
 
-type MdxPageContextProps = {
+type PageHeadingsContextProps = {
   headings: Heading[];
   setHeadings: Dispatch<SetStateAction<Heading[]>>;
 };
 
-const MdxPageContext = createContext<MdxPageContextProps>({
+const PageHeadingsContext = createContext<PageHeadingsContextProps>({
   headings: [],
   setHeadings: () => undefined,
 });
 
-export default MdxPageContext;
+export default PageHeadingsContext;

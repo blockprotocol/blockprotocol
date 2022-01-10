@@ -20,14 +20,15 @@ import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 import { Snippet } from "../components/Snippet";
-import MdxPageContext from "../components/context/MdxPageContext";
+import PageHeadingsContext from "../components/context/PageHeadingsContext";
 
-const useMDXHeading = (props: { anchor: string }) => {
-  const headingRef = useRef<HTMLAnchorElement>(null);
-  const { headings, setHeadings } = useContext(MdxPageContext);
+const usePageHeading = (props: { anchor: string }) => {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const { headings, setHeadings } = useContext(PageHeadingsContext);
+
+  const { anchor } = props;
 
   useEffect(() => {
-    const { anchor } = props;
     if (
       headingRef.current &&
       headings.find((heading) => heading.anchor === anchor) === undefined
@@ -35,7 +36,7 @@ const useMDXHeading = (props: { anchor: string }) => {
       const element = headingRef.current;
       setHeadings((prev) => [...prev, { anchor, element }]);
     }
-  }, [props, headingRef, headings, setHeadings]);
+  }, [anchor, headingRef, headings, setHeadings]);
 
   return { headingRef };
 };
@@ -44,10 +45,8 @@ const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
   depth,
   anchor,
 }) => {
-  const { headingRef } = useMDXHeading({ anchor });
-
   return (
-    <Link ref={headingRef} href={`#${anchor}`} sx={{ display: "inline" }}>
+    <Link href={`#${anchor}`} sx={{ display: "inline" }}>
       <IconButton sx={{ marginLeft: 2, padding: 0 }}>
         <Icon
           sx={{ fontSize: depth === 1 ? 28 : depth === 2 ? 24 : 20 }}
@@ -79,8 +78,11 @@ export const mdxComponents: Record<string, ReactNode> = {
   InfoCardWrapper,
   InfoCard,
   h1: (props: TypographyProps) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { headingRef } = usePageHeading({ anchor: "" });
     return (
       <Typography
+        ref={headingRef}
         mt={HEADING_MARGIN_TOP}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading1"
@@ -101,8 +103,12 @@ export const mdxComponents: Record<string, ReactNode> = {
       lower: true,
     });
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { headingRef } = usePageHeading({ anchor });
+
     return (
       <Typography
+        ref={headingRef}
         mt={HEADING_MARGIN_TOP}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading2"
@@ -122,8 +128,10 @@ export const mdxComponents: Record<string, ReactNode> = {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
+
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { headingRef } = useMDXHeading({ anchor });
+    const { headingRef } = usePageHeading({ anchor });
+
     return (
       <Typography
         ref={headingRef}

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Box, { BoxProps } from "@mui/material/Box";
 import { mdxComponents } from "../util/mdxComponents";
-import MdxPageContext, { Heading } from "./context/MdxPageContext";
+import PageHeadingsContext, { Heading } from "./context/PageHeadingsContext";
 
 export const MDX_TEXT_CONTENT_MAX_WIDTH = 680;
 
@@ -75,6 +75,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
 
       for (const heading of headings.slice(1)) {
         const { element } = heading;
+
         const { top } = element.getBoundingClientRect();
         if (
           top < 150 &&
@@ -113,7 +114,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
   }, [router, headings, detectHeadingFromScroll]);
 
   return (
-    <MdxPageContext.Provider
+    <PageHeadingsContext.Provider
       value={{
         headings,
         setHeadings,
@@ -134,6 +135,6 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
       >
         <MDXRemote {...serializedPage} components={mdxComponents} />
       </Box>
-    </MdxPageContext.Provider>
+    </PageHeadingsContext.Provider>
   );
 };
