@@ -49,7 +49,7 @@ export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
         sx={{
           marginLeft: {
             xs: 0,
-            sm: 3,
+            sm: 4,
           },
           marginBottom: {
             xs: 2,

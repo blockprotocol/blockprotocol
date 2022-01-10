@@ -150,7 +150,7 @@ export const BANNERS: Banner[] = [
                 <Typography
                   component="h2"
                   variant="bpHeading2"
-                  sx={{ fontWeight: 700 }}
+                  sx={{ fontWeight: 700, marginBottom: 2 }}
                 >
                   Add blocks to your app
                 </Typography>
@@ -173,14 +173,15 @@ export const BANNERS: Banner[] = [
                 <Typography
                   component="h2"
                   variant="bpHeading2"
-                  sx={{ fontWeight: 700 }}
+                  sx={{ fontWeight: 700, marginBottom: 2 }}
                 >
                   Build your own blocks
                 </Typography>
                 <Typography component="p" variant="bpBodyCopy">
                   Any developer can build and publish blocks to the global
-                  registry for other developers to use. Contribute to an open
-                  source community changing the landscape of interoperable data.
+                  registry for other developers to use. Create blocks that solve
+                  real-world problems, and contribute to an open source
+                  community changing the landscape of interoperable data.
                 </Typography>
               </Box>
             }
@@ -261,12 +262,11 @@ export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
   <Box
     sx={{
       paddingTop: banner.overlapsFooter ? 0 : 8,
-      /** @todo: tweak to better match designs */
       background: `radial-gradient(
-              circle at 0% 100%,
-              #FFB172 0%,
-              #9482FF 50%,
-              #84E6FF 100%
+              ellipse at 10% 130%,
+              #ffac67 0%,
+              #9582ff 55%,
+              #79e4ff 100%
             )`,
     }}
   >
@@ -274,7 +274,7 @@ export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
       sx={{
         paddingTop: {
           xs: banner.overlapsFooter ? 8 : 0,
-          md: banner.overlapsFooter ? 15 : 0,
+          md: banner.overlapsFooter ? 10 : 0,
         },
         marginBottom: banner.overlapsFooter ? -8 : 0,
       }}

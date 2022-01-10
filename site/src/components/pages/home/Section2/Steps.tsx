@@ -445,6 +445,51 @@ const App: FC<AppProps> = ({ name, block }) => {
   );
 };
 
+const LayoutBg = () => {
+  return (
+    <svg
+      viewBox="-20 -20 640 540"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ width: "80%" }}
+    >
+      <g filter="url(#a)" transform="rotate(-180 309.5 260.5)">
+        <ellipse cx={309.5} cy={260.5} rx={209} ry={160.5} fill="#C4C4C4" />
+        <ellipse cx={309.5} cy={260.5} rx={209} ry={160.5} fill="url(#b)" />
+      </g>
+      <defs>
+        <linearGradient
+          id="b"
+          x1={323.292}
+          y1={299.901}
+          x2={127.164}
+          y2={128.376}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#A292FF" />
+          <stop offset={1} stopColor="#7CCFFF" />
+        </linearGradient>
+        <filter
+          id="a"
+          x={0.5}
+          y={0}
+          width={618}
+          height={521}
+          filterUnits="userSpaceOnUse"
+          colorInterpolationFilters="sRGB"
+        >
+          <feFlood floodOpacity={0} result="BackgroundImageFix" />
+          <feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+          <feGaussianBlur
+            stdDeviation={50}
+            result="effect1_foregroundBlur_1612_10700"
+          />
+        </filter>
+      </defs>
+    </svg>
+  );
+};
+
 const Layout: VFC<{ blocks: ReactElement[]; withBg?: boolean }> = ({
   blocks,
   withBg,
@@ -486,17 +531,7 @@ const Layout: VFC<{ blocks: ReactElement[]; withBg?: boolean }> = ({
             alignItems: "center",
           }}
         >
-          <Box
-            sx={{
-              background:
-                "linear-gradient(303.89deg, #A292FF 43.09%, #7CCFFF 92.63%), #C4C4C4",
-              filter: "blur(45px)",
-              transform: "rotate(-180deg)",
-              width: "62%",
-              height: "68%",
-              border: "5px solid black",
-            }}
-          />
+          <LayoutBg />
         </Box>
       )}
     </Box>

@@ -11,9 +11,7 @@ import {
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
 import siteMap from "../../../site-map.json";
-import { parseIntFromPixelString } from "../../util/muiUtils";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdxUtils";
 import { mdxComponents } from "../../util/mdxComponents";
@@ -141,18 +139,15 @@ const DocsPage: NextPage<DocsPageProps> = ({
       <Container
         sx={{
           marginTop: {
-            xs: 4,
-            md: 8,
+            xs: 5,
+            md: 9,
           },
         }}
       >
         <Typography
           variant="bpTitle"
           sx={{
-            marginBottom: {
-              xs: 1,
-              md: 2,
-            },
+            marginBottom: 2,
           }}
         >
           {title}
@@ -163,8 +158,8 @@ const DocsPage: NextPage<DocsPageProps> = ({
             maxWidth={750}
             sx={{
               marginBottom: {
-                xs: 4,
-                md: 6,
+                xs: 2,
+                md: 3,
               },
             }}
           >
@@ -173,19 +168,7 @@ const DocsPage: NextPage<DocsPageProps> = ({
         ) : null}
         <Box py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Box
-              paddingRight={6}
-              width={300}
-              flexGrow={0}
-              sx={{
-                position: "sticky",
-                top:
-                  DESKTOP_NAVBAR_HEIGHT +
-                  parseIntFromPixelString(theme.spacing(2)),
-              }}
-            >
-              <Sidebar pages={[tabPage]} />
-            </Box>
+            <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
           ) : null}
           <Box flexGrow={1}>
             <MDXRemote

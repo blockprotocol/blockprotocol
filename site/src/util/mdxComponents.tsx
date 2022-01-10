@@ -31,7 +31,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Link
         href="#"
         sx={{
-          "&:first-child": {
+          "&:first-of-type": {
             "& > h1": {
               marginTop: 0,
             },
@@ -55,7 +55,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Link
         href={`#${anchor}`}
         sx={{
-          "&:first-child": {
+          "&:first-of-type": {
             "& > h2": {
               marginTop: 0,
             },
@@ -169,7 +169,9 @@ export const mdxComponents: Record<string, ReactNode> = {
   ),
   li: (props: HTMLAttributes<HTMLLIElement>) => (
     <Box {...props} component="li">
-      <Typography variant="bpBodyCopy">{props.children}</Typography>
+      <Typography variant="bpBodyCopy" component="div">
+        {props.children}
+      </Typography>
     </Box>
   ),
   inlineCode: (props: HTMLAttributes<HTMLElement>) => (
@@ -218,15 +220,16 @@ export const mdxComponents: Record<string, ReactNode> = {
         sx={(theme) => ({
           overflow: "scroll",
           display: "block",
-          fontSize: "80%",
-          color: theme.palette.purple[700],
-          background: "#000",
-          padding: theme.spacing(2),
+          fontSize: "90%",
+          color: theme.palette.purple[400],
+          background: "#161a1f",
+          padding: theme.spacing(3),
           borderWidth: 1,
           borderStyle: "solid",
           borderRadius: "8px",
           textShadow: "none",
           marginBottom: 2,
+          maxWidth: "72ch",
         })}
       >
         <Snippet
