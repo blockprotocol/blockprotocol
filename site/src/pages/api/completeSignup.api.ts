@@ -4,7 +4,7 @@ import {
   AuthenticatedApiRequest,
 } from "../../lib/handler/authenticatedHandler";
 import { BaseApiResponse } from "../../lib/handler/baseHandler";
-import { SerializedUser } from "../../lib/model/user.model";
+import { SerializedUser, User } from "../../lib/model/user.model";
 import { formatErrors } from "../../util/api";
 
 export type ApiPutMeRequestBody = {
@@ -44,11 +44,10 @@ export default createAuthenticatedHandler<undefined, ApiMeResponse>(false)
           }),
         );
       }
+      if (await User.validateShortname(db, shortname, res)) {
+        await user.update(db, { shortname, preferredName });
 
-      /** @todo: validate shortname for correct characters */
-
-      await user.update(db, { shortname, preferredName });
-
-      res.status(200).json({ user: user.serialize() });
+        res.status(200).json({ user: user.serialize() });
+      }
     },
   );

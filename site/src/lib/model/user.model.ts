@@ -1,10 +1,14 @@
 import { merge } from "lodash";
 import { Db, WithId, ObjectId, DBRef } from "mongodb";
+import { NextApiResponse } from "next";
+import { formatErrors, RESTRICTED_SHORTNAMES } from "../../util/api";
 import {
   VerificationCode,
   VerificationCodeDocument,
   VerificationCodeVariant,
 } from "./verificationCode.model";
+
+export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
 export type SerializedUser = {
   id: string;
@@ -57,6 +61,71 @@ export class User {
     this.email = args.email;
     this.hasVerifiedEmail = args.hasVerifiedEmail ?? false;
     this.shortname = args.shortname;
+  }
+
+  private static isShortnameReserved(shortname: string): boolean {
+    return RESTRICTED_SHORTNAMES.includes(shortname);
+  }
+
+  static async isShortnameTaken(db: Db, shortname: string): Promise<boolean> {
+    return (
+      User.isShortnameReserved(shortname) ||
+      !!(await User.getByShortname(db, { shortname }))
+    );
+  }
+
+  static async validateShortname(
+    db: Db,
+    shortname: string,
+    res: NextApiResponse,
+  ): Promise<boolean> {
+    if (shortname.search(ALLOWED_SHORTNAME_CHARS)) {
+      res.status(400).json(
+        formatErrors({
+          msg: "Shortname may only contain letters, numbers, - or _",
+          param: "shortname",
+          value: shortname,
+        }),
+      );
+      return false;
+    } else if (shortname[0] === "-") {
+      res.status(400).json(
+        formatErrors({
+          msg: "Shortname cannot start with '-'",
+          param: "shortname",
+          value: shortname,
+        }),
+      );
+      return false;
+    } else if (await User.isShortnameTaken(db, shortname)) {
+      res.status(400).json(
+        formatErrors({
+          msg: `Shortname ${shortname} taken`,
+          param: "shortname",
+          value: shortname,
+        }),
+      );
+      return false;
+    } else if (shortname.length < 4) {
+      res.status(400).json(
+        formatErrors({
+          msg: "Shortname must be at least 4 characters long.",
+          param: "shortname",
+          value: shortname,
+        }),
+      );
+      return false;
+    } else if (shortname.length > 24) {
+      res.status(400).json(
+        formatErrors({
+          msg: "Shortname cannot be longer than 24 characters",
+          param: "shortname",
+          value: shortname,
+        }),
+      );
+      return false;
+    }
+    return true;
   }
 
   private static fromDocument({ _id, ...remainingDocument }: UserDocument) {
@@ -238,10 +307,12 @@ export class User {
             variant: "login",
           },
           {
-            $gt: new Date(
-              new Date().getTime() -
-                User.EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS,
-            ),
+            createdAt: {
+              $gt: new Date(
+                new Date().getTime() -
+                  User.EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS,
+              ),
+            },
           },
         ],
       });

@@ -23,7 +23,7 @@ export default createBaseHandler<
     const { db, body } = req;
     const { shortname } = body;
 
-    const userShortname = await User.getByShortname(db, { shortname });
+    const isShortnameTaken = await User.isShortnameTaken(db, shortname);
 
-    res.status(200).send(!!userShortname);
+    res.status(200).send(isShortnameTaken);
   });
