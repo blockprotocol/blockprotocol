@@ -25,7 +25,7 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
 
     const existingUser = await User.getByEmail(db, {
       email,
-      verifiedEmail: true,
+      hasVerifiedEmail: true,
     });
 
     if (existingUser) {
@@ -39,10 +39,10 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
     }
 
     const user =
-      (await User.getByEmail(db, { email, verifiedEmail: false })) ||
+      (await User.getByEmail(db, { email, hasVerifiedEmail: false })) ||
       (await User.create(db, {
         email,
-        verifiedEmail: false,
+        hasVerifiedEmail: false,
       }));
 
     if (await user.hasExceededEmailVerificationRateLimit(db)) {

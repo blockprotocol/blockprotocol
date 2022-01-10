@@ -60,7 +60,7 @@ void (async () => {
 
   await Promise.all(
     mockUsers.map((params) =>
-      User.create(db, { ...params, verifiedEmail: true }),
+      User.create(db, { ...params, hasVerifiedEmail: true }),
     ),
   );
 

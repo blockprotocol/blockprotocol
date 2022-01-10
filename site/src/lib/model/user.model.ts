@@ -14,7 +14,7 @@ export type SerializedUser = {
 
 export type UserProperties = {
   email: string;
-  verifiedEmail?: boolean;
+  hasVerifiedEmail?: boolean;
   shortname?: string;
   preferredName?: string;
   loginCodes?: DBRef[];
@@ -34,7 +34,7 @@ export class User {
 
   email: string;
 
-  verifiedEmail: boolean;
+  hasVerifiedEmail: boolean;
 
   shortname?: string;
 
@@ -62,7 +62,7 @@ export class User {
     this.id = args.id;
     this.preferredName = args.preferredName;
     this.email = args.email;
-    this.verifiedEmail = args.verifiedEmail ?? false;
+    this.hasVerifiedEmail = args.hasVerifiedEmail ?? false;
     this.shortname = args.shortname;
     this.loginCodes = args.loginCodes ?? [];
     this.emailVerificationCodes = args.emailVerificationCodes ?? [];
@@ -89,14 +89,14 @@ export class User {
 
   static async getByEmail(
     db: Db,
-    params: { email: string; verifiedEmail: boolean },
+    params: { email: string; hasVerifiedEmail: boolean },
   ): Promise<User | null> {
-    const { email, verifiedEmail } = params;
+    const { email, hasVerifiedEmail } = params;
 
     const userDocument = await db
       .collection<UserDocument>(User.COLLECTION_NAME)
       .findOne({
-        $and: [{ email }, { verifiedEmail }],
+        $and: [{ email }, { hasVerifiedEmail }],
       });
 
     return userDocument ? User.fromDocument(userDocument) : null;
@@ -119,7 +119,7 @@ export class User {
     db: Db,
     params: {
       email: string;
-      verifiedEmail: boolean;
+      hasVerifiedEmail: boolean;
       preferredName?: string;
       shortname?: string;
     },
