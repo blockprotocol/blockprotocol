@@ -24,7 +24,7 @@ export const HeaderCardSvg = () => {
       <g id="image_circle">
         <circle
           id="image_circle_inner"
-          opacity={0.3}
+          opacity={0.8}
           cx={536}
           cy={167}
           r={4}
@@ -42,6 +42,7 @@ export const HeaderCardSvg = () => {
       <g id="jobTitle_circle">
         <circle
           id="jobTitle_circle_inner"
+          opacity={0.8}
           cx={475}
           cy={38}
           r={4}
@@ -79,8 +80,16 @@ export const HeaderCardSvg = () => {
         fill="#AD9EFF"
         id="jobTitle"
       />
-      <circle cx={309} cy={120} r={15.5} stroke="#7C74B6" />
       <circle
+        id="person_concentric_3"
+        cx={309}
+        cy={120}
+        r={15.5}
+        opacity={1}
+        stroke="#7C74B6"
+      />
+      <circle
+        id="person_concentric_2"
         opacity={0.4}
         cx={309}
         cy={120}
@@ -88,6 +97,16 @@ export const HeaderCardSvg = () => {
         stroke="#7C74B6"
         strokeWidth={0.5}
       />
+      <circle
+        id="person_concentric_1"
+        opacity={0.1}
+        cx={309}
+        cy={120}
+        r={58.75}
+        stroke="#7C74B6"
+        strokeWidth={0.5}
+      />
+
       <line
         id="person__card"
         data-x1={309.5}
@@ -237,13 +256,21 @@ export const HeaderCardSvg = () => {
         stroke="#7C74B6"
       />
       <g id="issue_circle">
-        <circle id="issue_circle_inner" cx={68} cy={454} r={4} fill="#DDD0F9" />
+        <circle
+          id="issue_circle_inner"
+          cx={68}
+          cy={454}
+          r={4}
+          opacity={1}
+          fill="#DDD0F9"
+        />
         <circle
           id="issue_circle_outer"
           cx={68}
           cy={454}
           r={17.5}
           stroke="#7C74B6"
+          opacity={0.4}
         />
       </g>
       <path
@@ -253,8 +280,15 @@ export const HeaderCardSvg = () => {
         fill="#AD9EFF"
       />
 
-      <g opacity={0.3} filter="url(#filter5_f_1967_16200)">
-        <circle cx={68} cy={454} r={63.5} stroke="#7C74B6" />
+      <g filter="url(#filter5_f_1967_16200)">
+        <circle
+          id="issue_circle_outer2"
+          cx={68}
+          cy={454}
+          r={63.5}
+          opacity={0.3}
+          stroke="#7C74B6"
+        />
       </g>
       <line
         id="issue__card"

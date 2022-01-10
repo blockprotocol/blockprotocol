@@ -8,19 +8,20 @@ export const HeaderCard = () => {
     // return
     const tl = gsap
       .timeline({ repeat: -1 })
-      .to(
+      .to(["#person", "#image", "#jobTitle", "#card_circle", "#issue"], {
+        autoAlpha: 0,
+      })
+      .from(
         [
-          "#person",
-          "#image",
-          "#image_circle",
-          "#jobTitle",
-          "#jobTitle_circle",
-          "#card_circle",
-          "#issue",
-          "#issue_circle",
+          "#person_concentric_1",
+          "#person_concentric_2",
+          "#person_concentric_3",
         ],
         {
-          autoAlpha: 0,
+          attr: {
+            r: 0,
+            opacity: 1,
+          },
         },
       )
       .to("#person", {
@@ -44,8 +45,11 @@ export const HeaderCard = () => {
           y2: (_, target) => target.dataset.y1,
         },
       })
-      .to(["#jobTitle_circle", "#jobTitle_circle_inner"], {
-        autoAlpha: 1,
+      .from(["#jobTitle_circle_inner", "#jobTitle_circle_outer"], {
+        attr: {
+          r: 0,
+          opacity: 1,
+        },
       })
       .to(["#card_subtitle"], {
         fill: "#6048E5",
@@ -59,8 +63,11 @@ export const HeaderCard = () => {
           y2: (_, target) => target.dataset.y1,
         },
       })
-      .to(["#image_circle", "#image_circle_inner"], {
-        autoAlpha: 1,
+      .from(["#image_circle_inner", "#image_circle_outer"], {
+        attr: {
+          r: 0,
+          opacity: 1,
+        },
       })
       .to(["#card_circle"], {
         autoAlpha: 0.4,
@@ -68,9 +75,15 @@ export const HeaderCard = () => {
       .to(["#image_circle"], {
         autoAlpha: 0.5,
       })
-      .to(["#issue_circle"], {
-        autoAlpha: 1,
-      })
+      .from(
+        ["#issue_circle_inner", "#issue_circle_outer", "#issue_circle_outer2"],
+        {
+          attr: {
+            r: 0,
+            opacity: 1,
+          },
+        },
+      )
       .to(["#issue"], {
         autoAlpha: 0.92,
       })
