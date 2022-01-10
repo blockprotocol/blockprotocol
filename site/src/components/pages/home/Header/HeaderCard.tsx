@@ -1,14 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, VFC } from "react";
 import { Box } from "@mui/material";
 import { gsap } from "gsap";
 import { HeaderCardSvg } from "./HeaderCardSvg";
 
-export const HeaderCard = () => {
+type HeaderCardProps = {
+  hideGradient: boolean;
+};
+
+export const HeaderCard: VFC<HeaderCardProps> = ({ hideGradient }) => {
   useEffect(() => {
-    // return
     const tl = gsap
       .timeline({ repeat: -1 })
-      .to(["#person", "#image", "#jobTitle", "#card_circle", "#issue"], {
+      .to(["#person", "#image", "#jobTitle", "#fullName", "#issue"], {
         autoAlpha: 0,
       })
       .from(
@@ -29,20 +32,32 @@ export const HeaderCard = () => {
       })
       .from("#person__card", {
         attr: {
-          x2: (_, target) => target.dataset.x1,
-          y2: (_, target) => target.dataset.y1,
+          x2: (_, target) => target.getAttribute("x1"),
+          y2: (_, target) => target.getAttribute("y1"),
+        },
+      })
+      .to(["#jobTitle", "#image", "#fullName"], {
+        autoAlpha: 1,
+      })
+      .from("#person__fullName", {
+        attr: {
+          x2: (_, target) => target.getAttribute("x1"),
+          y2: (_, target) => target.getAttribute("y1"),
+        },
+      })
+      .from(["#fullName_circle_inner", "#fullName_circle_outer"], {
+        attr: {
+          r: 0,
+          opacity: 1,
         },
       })
       .to(["#card_title"], {
         fill: "#6048E5",
       })
-      .to(["#jobTitle", "#image"], {
-        autoAlpha: 1,
-      })
       .from("#person__jobTitle", {
         attr: {
-          x2: (_, target) => target.dataset.x1,
-          y2: (_, target) => target.dataset.y1,
+          x2: (_, target) => target.getAttribute("x1"),
+          y2: (_, target) => target.getAttribute("y1"),
         },
       })
       .from(["#jobTitle_circle_inner", "#jobTitle_circle_outer"], {
@@ -59,8 +74,8 @@ export const HeaderCard = () => {
       })
       .from("#person__image", {
         attr: {
-          x2: (_, target) => target.dataset.x1,
-          y2: (_, target) => target.dataset.y1,
+          x2: (_, target) => target.getAttribute("x1"),
+          y2: (_, target) => target.getAttribute("y1"),
         },
       })
       .from(["#image_circle_inner", "#image_circle_outer"], {
@@ -69,8 +84,11 @@ export const HeaderCard = () => {
           opacity: 1,
         },
       })
-      .to(["#card_circle"], {
-        autoAlpha: 0.4,
+      .from("#card_circle", {
+        attr: {
+          r: 0,
+          opacity: 1,
+        },
       })
       .to(["#image_circle"], {
         autoAlpha: 0.5,
@@ -89,8 +107,8 @@ export const HeaderCard = () => {
       })
       .from("#issue__card", {
         attr: {
-          x2: (_, target) => target.dataset.x1,
-          y2: (_, target) => target.dataset.y1,
+          x2: (_, target) => target.getAttribute("x1"),
+          y2: (_, target) => target.getAttribute("y1"),
         },
       });
 
@@ -101,7 +119,7 @@ export const HeaderCard = () => {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <HeaderCardSvg />
+      <HeaderCardSvg hideGradient={hideGradient} />
     </Box>
   );
 };
