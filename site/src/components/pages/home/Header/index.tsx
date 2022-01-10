@@ -15,6 +15,7 @@ import { HeaderCard } from "./HeaderCard";
 export const Header = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const hideAnimatedCardGradient = useMediaQuery("(min-width:2200px)");
 
   useEffect(() => {
     const tl = gsap.timeline().fromTo(
@@ -59,15 +60,15 @@ export const Header = () => {
       <Container
         sx={{
           position: "relative",
-          zIndex: 2,
+          zIndex: 3,
           pt: { xs: "15vh", lg: "20vh" },
           mb: { xs: 20, lg: 0 },
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", lg: "57%" },
-            maxWidth: 660,
+            width: { xs: "100%", lg: "70%" },
+            maxWidth: 760,
             mx: { xs: "auto", lg: "unset" },
             textAlign: { xs: "center", lg: "left" },
           }}
@@ -78,7 +79,7 @@ export const Header = () => {
               color: ({ palette }) => palette.purple[400],
               mb: 4,
               fontWeight: 500,
-              letterSpacing: "5%",
+              letterSpacing: "0.06rem",
               width: { lg: "100%" },
               mx: "auto",
             }}
@@ -96,7 +97,7 @@ export const Header = () => {
               color: "white",
               mb: 4,
               // @todo font-size should match design system
-              fontSize: { xs: 40, lg: 60 },
+              fontSize: { xs: "3rem", lg: "3.6rem", xl: "4.2rem" },
             }}
           >
             Build and use interactive blocks connected to the world of{" "}
@@ -122,10 +123,10 @@ export const Header = () => {
             </Box>
           </Typography>
           <Typography
-            variant="body1"
-            color={theme.palette.purple[300]}
+            variant="bpBodyCopy"
+            color={theme.palette.purple[400]}
             mb={4}
-            width={{ xs: "100%", lg: "74%" }}
+            width={{ xs: "100%", lg: "80%" }}
             textAlign={{ xs: "center", lg: "left" }}
           >
             An open standard for building and using
@@ -142,36 +143,36 @@ export const Header = () => {
       <Box
         sx={{
           position: { xs: "relative", lg: "absolute" },
-          zIndex: 1,
-          maxWidth: 2000,
+          zIndex: 2,
+          maxWidth: 2200,
           top: 0,
           bottom: 0,
-          left: "50%",
           width: "100%",
-          transform: "translateX(-50%)",
+          ...(hideAnimatedCardGradient && {
+            left: "50%",
+            transform: "translateX(-50%)",
+          }),
         }}
       >
         <Box
           sx={{
-            width: { xs: "100%", lg: "40vw" },
+            width: { xs: "100%", lg: "45vw" },
+            maxWidth: { xs: "auto", lg: 640 },
             position: { xs: "relative", lg: "absolute" },
-            bottom: { xs: 0, lg: "10%" },
+            top: { xs: 0, lg: "15%" },
             right: 0,
             display: "flex",
-            justifyContent: "center",
+            justifyContent: { xs: "center", lg: "flex-end" },
             zIndex: 2,
             "::after": {
               content: `""`,
               position: "absolute",
               display: { xs: "block", lg: "none" },
-              top: { xs: "50%", lg: 0 },
+              top: "50%",
               bottom: 0,
               right: 0,
-              width: { xs: "100%", lg: "40%" },
-              background: {
-                xs: `linear-gradient(0deg, #2A2B37 1.28%, transparent 89.29%)`,
-                lg: `linear-gradient(270.33deg, #2A2B37 1.28%, transparent 89.29%)`,
-              },
+              width: "100%",
+              background: `linear-gradient(0deg, #2A2B37 1.28%, transparent 89.29%)`,
             },
           }}
         >
@@ -187,7 +188,7 @@ export const Header = () => {
               }}
             />
           ) : (
-            <HeaderCard />
+            <HeaderCard hideGradient={hideAnimatedCardGradient} />
           )}
         </Box>
       </Box>
@@ -228,8 +229,8 @@ export const Header = () => {
               opacity: 0.3,
               filter: "blur(30px)",
               position: "absolute",
-              top: `${Math.random() * 90}%`,
-              left: `${Math.random() * 90}%`,
+              top: `${Math.random() * 95}%`,
+              left: `${Math.random() * 95}%`,
             }}
           />
         ))}
