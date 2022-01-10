@@ -15,12 +15,30 @@ import {
   Paper,
   Icon,
   IconButton,
+  styled,
 } from "@mui/material";
 import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 import { Snippet } from "../components/Snippet";
 import PageHeadingsContext from "../components/context/PageHeadingsContext";
+
+const Heading = styled(Typography)(({ theme }) => ({
+  "svg.fa-link": {
+    transition: theme.transitions.create("opacity"),
+    opacity: 0,
+  },
+  ":hover": {
+    "svg.fa-link": {
+      opacity: 1,
+    },
+  },
+  "@media (hover: none)": {
+    "svg.fa-link": {
+      opacity: 1,
+    },
+  },
+}));
 
 const usePageHeading = (props: { anchor: string }) => {
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -81,7 +99,7 @@ export const mdxComponents: Record<string, ReactNode> = {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { headingRef } = usePageHeading({ anchor: "" });
     return (
-      <Typography
+      <Heading
         ref={headingRef}
         mt={HEADING_MARGIN_TOP}
         mb={HEADING_MARGIN_BOTTOM}
@@ -95,7 +113,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       >
         {props.children}
         <HeadingAnchor anchor="" depth={1} />
-      </Typography>
+      </Heading>
     );
   },
   h2: (props: TypographyProps) => {
@@ -107,7 +125,7 @@ export const mdxComponents: Record<string, ReactNode> = {
     const { headingRef } = usePageHeading({ anchor });
 
     return (
-      <Typography
+      <Heading
         ref={headingRef}
         mt={HEADING_MARGIN_TOP}
         mb={HEADING_MARGIN_BOTTOM}
@@ -121,7 +139,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       >
         {props.children}
         <HeadingAnchor anchor={anchor} depth={2} />
-      </Typography>
+      </Heading>
     );
   },
   h3: (props: TypographyProps) => {
@@ -133,7 +151,7 @@ export const mdxComponents: Record<string, ReactNode> = {
     const { headingRef } = usePageHeading({ anchor });
 
     return (
-      <Typography
+      <Heading
         ref={headingRef}
         mt={HEADING_MARGIN_TOP}
         mb={HEADING_MARGIN_BOTTOM}
@@ -142,11 +160,11 @@ export const mdxComponents: Record<string, ReactNode> = {
       >
         {props.children}
         <HeadingAnchor anchor={anchor} depth={3} />
-      </Typography>
+      </Heading>
     );
   },
   h4: (props: TypographyProps) => (
-    <Typography
+    <Heading
       mt={HEADING_MARGIN_TOP}
       mb={HEADING_MARGIN_BOTTOM}
       variant="bpHeading4"
