@@ -5,6 +5,7 @@ import { HeaderCardSvg } from "./HeaderCardSvg";
 
 export const HeaderCard = () => {
   useEffect(() => {
+    // return
     const tl = gsap
       .timeline({ repeat: -1 })
       .to(
@@ -14,12 +15,8 @@ export const HeaderCard = () => {
           "#image_circle",
           "#jobTitle",
           "#jobTitle_circle",
-          "#person__image",
-          "#person__jobTitle",
-          "#person__card",
           "#card_circle",
           "#issue",
-          "#issue__card",
           "#issue_circle",
         ],
         {
@@ -29,8 +26,11 @@ export const HeaderCard = () => {
       .to("#person", {
         autoAlpha: 1,
       })
-      .to("#person__card", {
-        autoAlpha: 1,
+      .from("#person__card", {
+        attr: {
+          x2: (_, target) => target.dataset.x1,
+          y2: (_, target) => target.dataset.y1,
+        },
       })
       .to(["#card_title"], {
         fill: "#6048E5",
@@ -38,7 +38,13 @@ export const HeaderCard = () => {
       .to(["#jobTitle", "#image"], {
         autoAlpha: 1,
       })
-      .to(["#person__jobTitle", "#jobTitle_circle", "#jobTitle_circle_inner"], {
+      .from("#person__jobTitle", {
+        attr: {
+          x2: (_, target) => target.dataset.x1,
+          y2: (_, target) => target.dataset.y1,
+        },
+      })
+      .to(["#jobTitle_circle", "#jobTitle_circle_inner"], {
         autoAlpha: 1,
       })
       .to(["#card_subtitle"], {
@@ -47,7 +53,13 @@ export const HeaderCard = () => {
       .to(["#jobTitle_circle"], {
         autoAlpha: 0.5,
       })
-      .to(["#person__image", "#image_circle", "#image_circle_inner"], {
+      .from("#person__image", {
+        attr: {
+          x2: (_, target) => target.dataset.x1,
+          y2: (_, target) => target.dataset.y1,
+        },
+      })
+      .to(["#image_circle", "#image_circle_inner"], {
         autoAlpha: 1,
       })
       .to(["#card_circle"], {
@@ -62,8 +74,11 @@ export const HeaderCard = () => {
       .to(["#issue"], {
         autoAlpha: 0.92,
       })
-      .to(["#issue__card"], {
-        autoAlpha: 1,
+      .from("#issue__card", {
+        attr: {
+          x2: (_, target) => target.dataset.x1,
+          y2: (_, target) => target.dataset.y1,
+        },
       });
 
     return () => {

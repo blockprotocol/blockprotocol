@@ -90,6 +90,8 @@ export const HeaderCardSvg = () => {
       />
       <line
         id="person__card"
+        data-x1={309.5}
+        data-y1={124.996}
         x1={309.5}
         y1={124.996}
         x2={310.5}
@@ -98,6 +100,8 @@ export const HeaderCardSvg = () => {
       />
       <line
         id="person__jobTitle"
+        data-x1={314.786}
+        data-y1={115.548}
         x1={314.786}
         y1={115.548}
         x2={468.786}
@@ -106,6 +110,8 @@ export const HeaderCardSvg = () => {
       />
       <line
         id="person__image"
+        data-x1={316.097}
+        data-y1={122.509}
         x1={316.097}
         y1={122.509}
         x2={529.097}
@@ -252,6 +258,8 @@ export const HeaderCardSvg = () => {
       </g>
       <line
         id="issue__card"
+        data-x1={78.937}
+        data-y1={452.504}
         x1={78.937}
         y1={452.504}
         x2={204.937}
