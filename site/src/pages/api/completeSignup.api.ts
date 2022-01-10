@@ -35,12 +35,12 @@ export default createAuthenticatedHandler<undefined, ApiMeResponse>(false)
 
       const { shortname, preferredName } = body;
 
-      if (user.shortname) {
+      if (user.shortname && user.shortname !== shortname) {
         return res.status(400).json(
           formatErrors({
             msg: "Cannot update shortname of user",
             param: "shortname",
-            value: body.shortname,
+            value: shortname,
           }),
         );
       }

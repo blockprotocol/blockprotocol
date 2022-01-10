@@ -3,6 +3,7 @@ import { Db, WithId, ObjectId, DBRef } from "mongodb";
 import {
   VerificationCode,
   VerificationCodeDocument,
+  VerificationCodeVariant,
 } from "./verificationCode.model";
 
 export type SerializedUser = {
@@ -17,15 +18,11 @@ export type UserProperties = {
   hasVerifiedEmail?: boolean;
   shortname?: string;
   preferredName?: string;
-  loginCodes?: DBRef[];
-  emailVerificationCodes?: DBRef[];
 };
 
 type UserConstructorArgs = {
   id: string;
 } & UserProperties;
-
-type VerificationCodeVariant = "login" | "email";
 
 export type UserDocument = WithId<UserProperties>;
 
@@ -39,10 +36,6 @@ export class User {
   shortname?: string;
 
   preferredName?: string;
-
-  loginCodes: DBRef[];
-
-  emailVerificationCodes: DBRef[];
 
   static COLLECTION_NAME = "bp-users";
 
@@ -64,8 +57,6 @@ export class User {
     this.email = args.email;
     this.hasVerifiedEmail = args.hasVerifiedEmail ?? false;
     this.shortname = args.shortname;
-    this.loginCodes = args.loginCodes ?? [];
-    this.emailVerificationCodes = args.emailVerificationCodes ?? [];
   }
 
   private static fromDocument({ _id, ...remainingDocument }: UserDocument) {
@@ -126,8 +117,6 @@ export class User {
   ): Promise<User> {
     const userProperties: UserProperties = {
       ...params,
-      loginCodes: [],
-      emailVerificationCodes: [],
     };
 
     const { insertedId } = await db
@@ -143,7 +132,7 @@ export class User {
     db: Db,
     updatedProperties: Partial<UserProperties>,
   ): Promise<User> {
-    if (this.shortname && updatedProperties.shortname) {
+    if (this.shortname && updatedProperties.shortname !== this.shortname) {
       throw new Error("Cannot update shortname");
     }
 
@@ -162,19 +151,14 @@ export class User {
 
   async createVerificationCode(
     db: Db,
-    variant: VerificationCodeVariant,
+    params: { variant: VerificationCodeVariant },
   ): Promise<VerificationCode> {
-    const verificationCode = await VerificationCode.create(db);
+    const { variant } = params;
 
-    await db.collection<UserDocument>(User.COLLECTION_NAME).updateOne(
-      { _id: new ObjectId(this.id) },
-      {
-        $push: {
-          [variant === "login" ? "loginCodes" : "emailVerificationCodes"]:
-            verificationCode.toRef(),
-        },
-      },
-    );
+    const verificationCode = await VerificationCode.create(db, {
+      variant,
+      user: this,
+    });
 
     return verificationCode;
   }
@@ -185,28 +169,18 @@ export class User {
   ): Promise<VerificationCode | null> {
     const { verificationCodeId, variant } = params;
 
-    const possibleVerificationCodes =
-      this[variant === "login" ? "loginCodes" : "emailVerificationCodes"];
-
-    if (
-      !possibleVerificationCodes.find(
-        ({ oid }) => oid.toString() === verificationCodeId,
-      )
-    ) {
-      return null;
-    }
-
     const verificationCode = await db
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .findOne({
         $and: [
           {
-            _id: {
-              $in: possibleVerificationCodes.map(({ oid }) => oid),
-            },
+            user: this.toRef(),
           },
           {
-            _id: new ObjectId(params.verificationCodeId),
+            variant,
+          },
+          {
+            _id: new ObjectId(verificationCodeId),
           },
         ],
       });
@@ -220,19 +194,30 @@ export class User {
     const numberOfRecentLoginCodes = await db
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .count({
-        _id: { $in: this.loginCodes.map(({ oid }) => oid) },
-        createdAt: {
-          $gt: new Date(
-            new Date().getTime() - User.LOGIN_CODE_RATE_LIMIT_PERIOD_MS,
-          ),
-        },
+        $and: [
+          {
+            user: this.toRef(),
+          },
+          {
+            variant: "login",
+          },
+          {
+            createdAt: {
+              $gt: new Date(
+                new Date().getTime() - User.LOGIN_CODE_RATE_LIMIT_PERIOD_MS,
+              ),
+            },
+          },
+        ],
       });
 
     return numberOfRecentLoginCodes > User.LOGIN_CODE_RATE_LIMIT - 1;
   }
 
   async sendLoginCode(db: Db): Promise<VerificationCode> {
-    const loginCode = await this.createVerificationCode(db, "login");
+    const loginCode = await this.createVerificationCode(db, {
+      variant: "login",
+    });
 
     /** @todo: send email */
     // eslint-disable-next-line no-console
@@ -245,13 +230,20 @@ export class User {
     const numberOfRecentEmailVerificationCodes = await db
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .count({
-        _id: { $in: this.emailVerificationCodes.map(({ oid }) => oid) },
-        createdAt: {
-          $gt: new Date(
-            new Date().getTime() -
-              User.EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS,
-          ),
-        },
+        $and: [
+          {
+            user: this.toRef(),
+          },
+          {
+            variant: "login",
+          },
+          {
+            $gt: new Date(
+              new Date().getTime() -
+                User.EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS,
+            ),
+          },
+        ],
       });
 
     return (
@@ -261,16 +253,19 @@ export class User {
   }
 
   async sendEmailVerificationCode(db: Db): Promise<VerificationCode> {
-    const emailVerificationCode = await this.createVerificationCode(
-      db,
-      "email",
-    );
+    const emailVerificationCode = await this.createVerificationCode(db, {
+      variant: "email",
+    });
 
     /** @todo: send email */
     // eslint-disable-next-line no-console
     console.log("Email verification code: ", emailVerificationCode.code);
 
     return emailVerificationCode;
+  }
+
+  toRef(): DBRef {
+    return new DBRef(User.COLLECTION_NAME, new ObjectId(this.id));
   }
 
   serialize(): SerializedUser {

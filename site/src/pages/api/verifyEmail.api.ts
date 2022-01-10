@@ -37,6 +37,7 @@ export default createBaseHandler<
       return res.status(404).json(
         formatErrors({
           msg: "Could not find user with the provided id",
+          param: "userId",
           value: userId,
         }),
       );
@@ -44,28 +45,28 @@ export default createBaseHandler<
 
     const { emailVerificationCodeId, code } = body;
 
-    const emailVerificaitonCode = await user.getVerificationCode(db, {
+    const emailVerificationCode = await user.getVerificationCode(db, {
       verificationCodeId: emailVerificationCodeId,
       variant: "email",
     });
 
-    if (!emailVerificaitonCode) {
+    if (!emailVerificationCode) {
       return res.status(404).json(
         formatErrors({
           msg: "Could not find email verification code associated with user",
-          param: "emailVerificaitonCode",
-          value: emailVerificaitonCode,
+          param: "emailVerificationCodeId",
+          value: emailVerificationCodeId,
         }),
       );
     }
 
     if (
-      emailVerificaitonCode.validate(res, {
+      emailVerificationCode.validate(res, {
         errorPrefix: "Email verification",
       })
     ) {
-      if (emailVerificaitonCode.code !== code) {
-        await emailVerificaitonCode.incrementAttempts(db);
+      if (emailVerificationCode.code !== code) {
+        await emailVerificationCode.incrementAttempts(db);
 
         return res.status(403).json(
           formatErrors({

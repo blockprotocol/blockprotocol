@@ -2,8 +2,13 @@ import { Db, WithId, ObjectId, DBRef } from "mongodb";
 import { NextApiResponse } from "next";
 import { rword } from "rword";
 import { formatErrors } from "../../util/api";
+import { User } from "./user.model";
+
+export type VerificationCodeVariant = "login" | "email";
 
 export type VerificationCodeProperties = {
+  user: DBRef;
+  variant: VerificationCodeVariant;
   code: string;
   numberOfAttempts: number;
   used: boolean;
@@ -18,6 +23,10 @@ type VerificationCodeConstructorArgs = {
 
 export class VerificationCode {
   id: string;
+
+  variant: VerificationCodeVariant;
+
+  user: DBRef;
 
   code: string;
 
@@ -44,12 +53,16 @@ export class VerificationCode {
 
   constructor({
     id,
+    variant,
+    user,
     code,
     numberOfAttempts,
     used,
     createdAt,
   }: VerificationCodeConstructorArgs) {
     this.id = id;
+    this.variant = variant;
+    this.user = user;
     this.code = code;
     this.numberOfAttempts = numberOfAttempts;
     this.used = used;
@@ -63,9 +76,15 @@ export class VerificationCode {
     });
   }
 
-  static async create(db: Db) {
+  static async create(
+    db: Db,
+    params: { user: User; variant: VerificationCodeVariant },
+  ) {
+    const { user, variant } = params;
     const properties: VerificationCodeProperties = {
       used: false,
+      user: user.toRef(),
+      variant,
       numberOfAttempts: 0,
       code: VerificationCode.generateCode(),
       createdAt: new Date(),
@@ -91,10 +110,6 @@ export class VerificationCode {
 
   hasBeenUsed() {
     return this.used;
-  }
-
-  toRef(): DBRef {
-    return new DBRef(VerificationCode.COLLECTION_NAME, new ObjectId(this.id));
   }
 
   validate(
