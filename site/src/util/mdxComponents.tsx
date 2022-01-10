@@ -1,10 +1,79 @@
 import slugify from "slugify";
-import { HTMLAttributes, HTMLProps, ReactNode } from "react";
-import { TypographyProps, Typography, Box, Paper } from "@mui/material";
+import {
+  HTMLAttributes,
+  HTMLProps,
+  ReactNode,
+  useContext,
+  useEffect,
+  useRef,
+  VFC,
+} from "react";
+import {
+  TypographyProps,
+  Typography,
+  Box,
+  Paper,
+  Icon,
+  IconButton,
+  styled,
+} from "@mui/material";
 import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 import { Snippet } from "../components/Snippet";
+import PageHeadingsContext from "../components/context/PageHeadingsContext";
+
+const Heading = styled(Typography)(({ theme }) => ({
+  "svg.fa-link": {
+    transition: theme.transitions.create("opacity"),
+    opacity: 0,
+  },
+  ":hover": {
+    "svg.fa-link": {
+      opacity: 1,
+    },
+  },
+  "@media (hover: none)": {
+    "svg.fa-link": {
+      opacity: 1,
+    },
+  },
+}));
+
+const usePageHeading = (props: { anchor: string }) => {
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  const { headings, setHeadings } = useContext(PageHeadingsContext);
+
+  const { anchor } = props;
+
+  useEffect(() => {
+    if (
+      headingRef.current &&
+      headings.find((heading) => heading.anchor === anchor) === undefined
+    ) {
+      const element = headingRef.current;
+      setHeadings((prev) => [...prev, { anchor, element }]);
+    }
+  }, [anchor, headingRef, headings, setHeadings]);
+
+  return { headingRef };
+};
+
+const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
+  depth,
+  anchor,
+}) => {
+  return (
+    <Link href={`#${anchor}`} sx={{ display: "inline" }}>
+      <IconButton sx={{ marginLeft: 2, padding: 0 }}>
+        <Icon
+          sx={{ fontSize: depth === 1 ? 28 : depth === 2 ? 24 : 20 }}
+          className="fas fa-link"
+        />
+      </IconButton>
+    </Link>
+  );
+};
 
 const stringifyChildren = (node: ReactNode): string => {
   if (typeof node === "string") {
@@ -27,69 +96,75 @@ export const mdxComponents: Record<string, ReactNode> = {
   InfoCardWrapper,
   InfoCard,
   h1: (props: TypographyProps) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { headingRef } = usePageHeading({ anchor: "" });
     return (
-      <Link
-        href="#"
+      <Heading
+        ref={headingRef}
+        mt={HEADING_MARGIN_TOP}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading1"
         sx={{
           "&:first-of-type": {
-            "& > h1": {
-              marginTop: 0,
-            },
+            marginTop: 0,
           },
         }}
+        {...props}
       >
-        <Typography
-          mt={HEADING_MARGIN_TOP}
-          mb={HEADING_MARGIN_BOTTOM}
-          variant="bpHeading1"
-          {...props}
-        />
-      </Link>
+        {props.children}
+        <HeadingAnchor anchor="" depth={1} />
+      </Heading>
     );
   },
   h2: (props: TypographyProps) => {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { headingRef } = usePageHeading({ anchor });
+
     return (
-      <Link
-        href={`#${anchor}`}
+      <Heading
+        ref={headingRef}
+        mt={HEADING_MARGIN_TOP}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading2"
         sx={{
           "&:first-of-type": {
-            "& > h2": {
-              marginTop: 0,
-            },
+            marginTop: 0,
           },
         }}
+        {...props}
       >
-        <Typography
-          mt={HEADING_MARGIN_TOP}
-          mb={HEADING_MARGIN_BOTTOM}
-          id={anchor}
-          variant="bpHeading2"
-          {...props}
-        />
-      </Link>
+        {props.children}
+        <HeadingAnchor anchor={anchor} depth={2} />
+      </Heading>
     );
   },
   h3: (props: TypographyProps) => {
     const anchor = slugify(stringifyChildren(props.children), {
       lower: true,
     });
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { headingRef } = usePageHeading({ anchor });
+
     return (
-      <Link href={`#${anchor}`}>
-        <Typography
-          mt={HEADING_MARGIN_TOP}
-          mb={HEADING_MARGIN_BOTTOM}
-          id={anchor}
-          variant="bpHeading3"
-          {...props}
-        />
-      </Link>
+      <Heading
+        ref={headingRef}
+        mt={HEADING_MARGIN_TOP}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading3"
+        {...props}
+      >
+        {props.children}
+        <HeadingAnchor anchor={anchor} depth={3} />
+      </Heading>
     );
   },
   h4: (props: TypographyProps) => (
-    <Typography
+    <Heading
       mt={HEADING_MARGIN_TOP}
       mb={HEADING_MARGIN_BOTTOM}
       variant="bpHeading4"
@@ -218,7 +293,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       <Box
         component="pre"
         sx={(theme) => ({
-          overflow: "scroll",
+          overflow: "auto",
           display: "block",
           fontSize: "90%",
           color: theme.palette.purple[400],

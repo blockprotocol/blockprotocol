@@ -18,9 +18,9 @@ import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
 import SiteMapContext from "../../components/context/SiteMapContext";
 import {
-  MDXPageContent,
+  MdxPageContent,
   MDX_TEXT_CONTENT_MAX_WIDTH,
-} from "../../components/MDXPageContent";
+} from "../../components/MdxPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 
@@ -247,7 +247,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
               )}
             />
           ) : null}
-          <MDXPageContent flexGrow={1} serializedPage={serializedPage} />
+          <MdxPageContent flexGrow={1} serializedPage={serializedPage} />
         </Box>
         <PageNavLinks
           prevPage={prevPage}

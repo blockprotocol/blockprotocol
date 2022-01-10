@@ -64,7 +64,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 
   const { title: sectionTitle, anchor: sectionAnchor, subSections } = section;
 
-  const sectionHref = `${pageHref}#${sectionAnchor}`;
+  const sectionHref = sectionAnchor ? `${pageHref}#${sectionAnchor}` : pageHref;
 
   const isSectionSelected =
     asPath === sectionHref ||
@@ -80,6 +80,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
     <>
       <Box mb={1.5} display="flex" alignItems="flex-start">
         <SidebarLink
+          replace
           ref={(ref) => {
             if (ref && isSectionSelected) {
               setSelectedAnchorElement(ref);
@@ -383,7 +384,7 @@ export const Sidebar: VFC<SidebarProps> = ({
         paddingRight={3}
         sx={{
           maxHeight: isSticky ? "100vh" : undefined,
-          overflow: isSticky ? "scroll" : undefined,
+          overflow: isSticky ? "auto" : undefined,
           paddingTop: isSticky
             ? `${
                 DESKTOP_NAVBAR_HEIGHT +

@@ -29,7 +29,7 @@ export const BlockDataTabPanels: VoidFunctionComponent<
             backgroundColor: theme.palette.gray[80],
             borderBottomLeftRadius: 6,
             borderBottomRightRadius: 6,
-            overflow: "scroll",
+            overflow: "auto",
             width: "100%",
           })}
           p={4}
