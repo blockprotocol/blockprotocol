@@ -10,12 +10,12 @@ import {
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import siteMap from "../../../site-map.json";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdxUtils";
-import { mdxComponents } from "../../util/mdxComponents";
 import { Sidebar } from "../../components/PageSidebar";
+import { MdxPageContent } from "../../components/MdxPageContent";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",
@@ -170,12 +170,10 @@ const DocsPage: NextPage<DocsPageProps> = ({
           {md ? (
             <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
           ) : null}
-          <Box flexGrow={1}>
-            <MDXRemote
-              {...tabPageSerializedContent}
-              components={mdxComponents}
-            />
-          </Box>
+          <MdxPageContent
+            flexGrow={1}
+            serializedPage={tabPageSerializedContent}
+          />
         </Box>
       </Container>
     </>
