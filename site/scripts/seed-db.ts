@@ -2,7 +2,11 @@
 import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
-import { User, UserProperties } from "../src/lib/model/user.model";
+import {
+  User,
+  UserDocument,
+  UserProperties,
+} from "../src/lib/model/user.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
@@ -24,6 +28,10 @@ void (async () => {
 
   await db.createCollection(User.COLLECTION_NAME);
 
+  await db
+    .collection<UserDocument>(User.COLLECTION_NAME)
+    .createIndex({ email: 1 }, { unique: true });
+
   if (
     existingCollections.find(
       ({ collectionName }) =>
@@ -42,14 +50,19 @@ void (async () => {
       { expireAfterSeconds: VerificationCode.PRUNE_AGE_MS / 60 },
     );
 
-  const mockUsers: Omit<UserProperties, "loginCodes">[] = [
+  const mockUsers: UserProperties[] = [
     {
+      shortname: "alice",
       preferredName: "Alice",
       email: "alice@example.com",
     },
   ];
 
-  await Promise.all(mockUsers.map((params) => User.create(db, params)));
+  await Promise.all(
+    mockUsers.map((params) =>
+      User.create(db, { ...params, hasVerifiedEmail: true }),
+    ),
+  );
 
   await client.close();
 })();
