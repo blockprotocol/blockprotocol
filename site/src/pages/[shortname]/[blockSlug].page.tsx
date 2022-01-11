@@ -217,7 +217,12 @@ const BlockPage: NextPage<BlockPageProps> = ({
           {isDesktopSize ? (
             <Typography variant="bpHeading1">
               <Box
-                sx={{ display: "inline-block", height: "2em", width: "2em" }}
+                sx={{
+                  display: "inline-block",
+                  mr: 3,
+                  height: "2em",
+                  width: "2em",
+                }}
                 component="img"
                 src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
               />
@@ -232,8 +237,12 @@ const BlockPage: NextPage<BlockPageProps> = ({
             >
               {!isDesktopSize && (
                 <Box
-                  mr={1}
-                  sx={{ display: "inline-block", height: "1em", width: "1em" }}
+                  sx={{
+                    display: "inline-block",
+                    height: "1em",
+                    width: "1em",
+                    mr: 2,
+                  }}
                   component="img"
                   src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
                 />
