@@ -5,7 +5,7 @@ export type ApiMeResponse = {
   user: SerializedUser;
 };
 
-export default createAuthenticatedHandler<undefined, ApiMeResponse>().get(
+export default createAuthenticatedHandler<undefined, ApiMeResponse>(false).get(
   (req, res) => {
     const { user } = req;
 

@@ -155,9 +155,7 @@ export class User {
 
     const userDocument = await db
       .collection<UserDocument>(User.COLLECTION_NAME)
-      .findOne({
-        $and: [{ email }, { hasVerifiedEmail }],
-      });
+      .findOne({ email, hasVerifiedEmail });
 
     return userDocument ? User.fromDocument(userDocument) : null;
   }
@@ -241,17 +239,9 @@ export class User {
     const verificationCode = await db
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .findOne({
-        $and: [
-          {
-            user: this.toRef(),
-          },
-          {
-            variant,
-          },
-          {
-            _id: new ObjectId(verificationCodeId),
-          },
-        ],
+        user: this.toRef(),
+        variant,
+        _id: new ObjectId(verificationCodeId),
       });
 
     return verificationCode
@@ -263,21 +253,13 @@ export class User {
     const numberOfRecentLoginCodes = await db
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .count({
-        $and: [
-          {
-            user: this.toRef(),
-          },
-          {
-            variant: "login",
-          },
-          {
-            createdAt: {
-              $gt: new Date(
-                new Date().getTime() - User.LOGIN_CODE_RATE_LIMIT_PERIOD_MS,
-              ),
-            },
-          },
-        ],
+        user: this.toRef(),
+        variant: "login",
+        createdAt: {
+          $gt: new Date(
+            new Date().getTime() - User.LOGIN_CODE_RATE_LIMIT_PERIOD_MS,
+          ),
+        },
       });
 
     return numberOfRecentLoginCodes > User.LOGIN_CODE_RATE_LIMIT - 1;
@@ -299,22 +281,14 @@ export class User {
     const numberOfRecentEmailVerificationCodes = await db
       .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
       .count({
-        $and: [
-          {
-            user: this.toRef(),
-          },
-          {
-            variant: "login",
-          },
-          {
-            createdAt: {
-              $gt: new Date(
-                new Date().getTime() -
-                  User.EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS,
-              ),
-            },
-          },
-        ],
+        user: this.toRef(),
+        variant: "login",
+        createdAt: {
+          $gt: new Date(
+            new Date().getTime() -
+              User.EMAIL_VERIFICATION_CODE_RATE_LIMIT_PERIOD_MS,
+          ),
+        },
       });
 
     return (
@@ -342,7 +316,7 @@ export class User {
   serialize(): SerializedUser {
     return {
       id: this.id,
-      isSignedUp: true,
+      isSignedUp: this.isSignedUp(),
       preferredName: this.preferredName,
       shortname: this.shortname,
     };
