@@ -63,11 +63,9 @@ type BlockPageQueryParams = {
   blockSlug?: string[];
 };
 
-export const getStaticPaths: GetStaticPaths<
-  BlockPageQueryParams
-> = async () => {
+export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
   return {
-    paths: [],
+    paths: readBlocksFromDisk().map((metadata) => `/${metadata.packagePath}`),
     fallback: "blocking",
   };
 };
@@ -151,7 +149,7 @@ export const getStaticProps: GetStaticProps<
       blockStringifiedSource,
       catalog,
     },
-    revalidate: 10,
+    // revalidate: 10,
   };
 };
 
