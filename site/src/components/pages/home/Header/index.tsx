@@ -52,7 +52,7 @@ export const Header = () => {
       sx={{
         background:
           "radial-gradient(113.45% 113.45% at 50% -13.45%, #3F4656 0.52%, #1C1C29 100%)",
-        minHeight: { xs: "95vh", lg: "auto" },
+        minHeight: { xs: "95vh", lg: 700 },
         height: { lg: "95vh" },
         maxHeight: { xs: "auto", lg: 1200 },
         position: "relative",
