@@ -48,8 +48,10 @@ export const LoginModal: VFC<LoginModalProps> = ({
     setCurrentPage("VerificationCode");
   };
 
-  const handleLogin = (_user: SerializedUser) => {
-    /** @todo: redirect to signup page if user hasn't completed signup */
+  const handleLogin = ({ isSignedUp }: SerializedUser) => {
+    if (!isSignedUp) {
+      /** @todo: redirect to signup page if user hasn't completed signup */
+    }
     refetch();
     reset();
     onClose();

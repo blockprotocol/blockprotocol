@@ -37,6 +37,8 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
         />
         <Box
           flexGrow={1}
+          display="flex"
+          flexDirection="column"
           sx={{
             paddingTop: isHomePage ? {} : `${navbarHeight}px`,
           }}

@@ -7,6 +7,9 @@ import {
   VerificationCodeDocument,
   VerificationCodeVariant,
 } from "./verificationCode.model";
+import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLoginCode.api";
+
+const FRONTEND_URL = "http://localhost:3000";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
@@ -286,6 +289,8 @@ export class User {
     /** @todo: send email */
     // eslint-disable-next-line no-console
     console.log("Login code: ", loginCode.code);
+    // eslint-disable-next-line no-console
+    console.log("Magic link: ", magicLink);
 
     return loginCode;
   }
