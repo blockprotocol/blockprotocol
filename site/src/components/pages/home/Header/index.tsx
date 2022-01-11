@@ -35,7 +35,7 @@ export const Header = () => {
       tl.to(".background-balls", {
         x: "random(0, 100%)",
         y: "random(0, 100%)",
-        duration: 3,
+        duration: 5,
         ease: "none",
         repeat: -1,
         repeatRefresh: true,
