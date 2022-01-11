@@ -27,7 +27,7 @@ export default createBaseHandler<
 
     const { email } = body;
 
-    const user = await User.getByEmail(db, { email });
+    const user = await User.getByEmail(db, { email, hasVerifiedEmail: true });
 
     if (!user) {
       return res.status(404).json(

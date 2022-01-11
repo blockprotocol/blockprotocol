@@ -3,24 +3,24 @@ import { createBaseHandler } from "../../lib/handler/baseHandler";
 import { SerializedUser, User } from "../../lib/model/user.model";
 import { formatErrors } from "../../util/api";
 
-export type LoginWithLoginCodeRequestBody = {
+export type ApiVerifyEmailRequestBody = {
   userId: string;
-  loginCodeId: string;
+  emailVerificationCodeId: string;
   code: string;
 };
 
-export type LoginWithLoginCodeResponse = {
+export type ApiVerifyEmailResponse = {
   user: SerializedUser;
 };
 
 export default createBaseHandler<
-  LoginWithLoginCodeRequestBody,
-  LoginWithLoginCodeResponse
+  ApiVerifyEmailRequestBody,
+  ApiVerifyEmailResponse
 >()
   .use(
-    bodyValidator("userId").isString(),
-    bodyValidator("loginCodeId").isString(),
-    bodyValidator("code").isString(),
+    bodyValidator("userId").isString().notEmpty(),
+    bodyValidator("emailVerificationCodeId").isString().notEmpty(),
+    bodyValidator("code").isString().notEmpty(),
   )
   .post(async (req, res) => {
     const errors = validationResult(req);
@@ -28,8 +28,7 @@ export default createBaseHandler<
       return res.status(400).json(formatErrors(...errors.array()));
     }
 
-    const { body, db } = req;
-
+    const { db, body } = req;
     const { userId } = body;
 
     const user = await User.getById(db, { userId });
@@ -38,31 +37,36 @@ export default createBaseHandler<
       return res.status(404).json(
         formatErrors({
           msg: "Could not find user with the provided id",
+          param: "userId",
           value: userId,
         }),
       );
     }
 
-    const { loginCodeId, code } = body;
+    const { emailVerificationCodeId, code } = body;
 
-    const loginCode = await user.getVerificationCode(db, {
-      verificationCodeId: loginCodeId,
-      variant: "login",
+    const emailVerificationCode = await user.getVerificationCode(db, {
+      verificationCodeId: emailVerificationCodeId,
+      variant: "email",
     });
 
-    if (!loginCode) {
+    if (!emailVerificationCode) {
       return res.status(404).json(
         formatErrors({
-          msg: "Could not find login code associated with user",
-          param: "loginCodeId",
-          value: loginCodeId,
+          msg: "Could not find email verification code associated with user",
+          param: "emailVerificationCodeId",
+          value: emailVerificationCodeId,
         }),
       );
     }
 
-    if (loginCode.validate(res, { errorPrefix: "Login" })) {
-      if (loginCode.code !== code) {
-        await loginCode.incrementAttempts(db);
+    if (
+      emailVerificationCode.validate(res, {
+        errorPrefix: "Email verification",
+      })
+    ) {
+      if (emailVerificationCode.code !== code) {
+        await emailVerificationCode.incrementAttempts(db);
 
         return res.status(403).json(
           formatErrors({
@@ -73,12 +77,6 @@ export default createBaseHandler<
         );
       }
 
-      await loginCode.setToUsed(db);
-
-      const response: LoginWithLoginCodeResponse = {
-        user: user.serialize(),
-      };
-
-      req.login(user, () => res.status(200).json(response));
+      req.login(user, () => res.status(200).json({ user: user.serialize() }));
     }
   });

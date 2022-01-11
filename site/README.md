@@ -9,6 +9,48 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
 ## API Routes
 
+### `POST /api/signup`
+
+Request Body:
+
+- `email`: the email address to associate with the BP account
+
+Response Body:
+
+- `userId`: the id of the created BP user
+- `emailVerificationCodeId`: the id of the email verification code
+
+### `POST /api/verifyEmail`
+
+Request Body:
+
+- `userId`: the id of the BP user
+- `emailVerificationCodeId`: the id of the email verification code
+- `code`: the one-time memorable email verification code sent to the user's email
+
+Response Body:
+
+- `user`: the updated BP user
+
+### `GET /api/isShortnameTaken`
+
+Request Query:
+
+- `shortname`: the shortname that may or may not already be associated with another BP account
+
+Response: `true` or `false`
+
+### `POST /api/completeSignup` [authenticated]
+
+Request Body:
+
+- `shortname`: the shortname to associate with the BP account
+- `preferredName`: the preferred name of the user associated with the BP account
+
+Response Body:
+
+- `user`: the updated BP user
+
 ### `POST /api/sendLoginCode`
 
 Sends a login code to an existing BP user's email.
@@ -29,7 +71,7 @@ Logs in a user using a provide login code.
 
   - `userId`: the id of the BP user
   - `loginCodeId`: the id of the login code
-  - `code`: the memorable one-time login code sent to the user's email
+  - `code`: the one-time memorable login code sent to the user's email
 
 - Request Response:
   - `user`: the user that is now authenticated with the API
