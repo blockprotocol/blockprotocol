@@ -39,7 +39,7 @@ export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
         <Typography variant="bpHeading2" mb={3}>
           Tap into a global registry of reusable blocks
         </Typography>
-        <Typography sx={{ mb: 6, width: { xs: "100%", md: "60%", lg: "44%" } }}>
+        <Typography sx={{ mb: 6, width: { xs: "100%", md: "520px" } }}>
           As a developer, building your applications using the{" "}
           <strong>Block Protocol</strong> will give you access to a global
           registry of reusable, flexible blocks to embed inside your

@@ -440,9 +440,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
 
   const [displayMobileNav, setDisplayMobileNav] = useState<boolean>(false);
   const [idleScrollPosition, setIdleScrollPosition] = useState<boolean>(false);
-  const [scrollY, setScrollY] = useState<number>(
-    typeof window === "undefined" ? 0 : window.scrollY,
-  );
+  const [scrollY, setScrollY] = useState<number>(0);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined = undefined;
@@ -601,7 +599,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                 onClick={() => setDisplayMobileNav(false)}
                 sx={{
                   color: ({ palette }) =>
-                    isNavbarDark ? palette.purple.subtle : palette.gray[80],
+                    isNavbarDark ? palette.purple[400] : palette.gray[80],
                 }}
               />
             </Link>
@@ -620,7 +618,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                           duration: 100,
                         }),
                         color: isNavbarDark
-                          ? palette.purple[300]
+                          ? palette.purple[400]
                           : asPath.startsWith(href)
                           ? palette.purple[600]
                           : palette.gray[60],
@@ -641,6 +639,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                         sx={{
                           marginLeft: 1,
                           fontWeight: 500,
+                          fontSize: "var(--step--1)",
                           color: "currentColor",
                         }}
                       >
@@ -652,7 +651,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                     <Button
                       size="small"
                       variant="primary"
-                      endIcon={<Icon className="fa-chevron-right" />}
+                      endIcon={<BoltIcon />}
                     >
                       Quick Start Guide
                     </Button>

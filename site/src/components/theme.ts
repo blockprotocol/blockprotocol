@@ -13,6 +13,8 @@ import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 
 const defaultTheme = createTheme();
 
+const FALLBACK_FONTS = [`"Helvetica"`, `"Arial"`, "sans-serif"];
+
 // @todo use more descriptive names instead of --step-1, --step-2
 // wouldn't need this when this is in
 // @see https://github.com/mui-org/material-ui/issues/15251
@@ -44,8 +46,8 @@ const rootTypographyStyles = `
         var(--fluid-bp)
     );
 
-    --f--1-min: 14;
-    --f--1-max: 15;
+    --f--1-min: 14.50;
+    --f--1-max: 15.50;
     --step--1: calc(
       ((var(--f--1-min) / 16) * 1rem) + (var(--f--1-max) - var(--f--1-min)) *
         var(--fluid-bp)
@@ -86,14 +88,14 @@ const rootTypographyStyles = `
         var(--fluid-bp)
     );
 
-    --f-5-min: 48.83;
+    --f-5-min: 43.95;
     --f-5-max: 54.93;
     --step-5: calc(
       ((var(--f-5-min) / 16) * 1rem) + (var(--f-5-max) - var(--f-5-min)) *
         var(--fluid-bp)
     );
 
-    --f-6-min: 61.04;
+    --f-6-min: 54.93;
     --f-6-max: 68.66;
     --step-6: calc(
       ((var(--f-6-min) / 16) * 1rem) + (var(--f-6-max) - var(--f-6-min)) *
@@ -173,50 +175,50 @@ export const theme = createTheme({
     ...customColors,
   },
   typography: {
-    fontFamily: "Inter",
+    fontFamily: [`"Inter"`, ...FALLBACK_FONTS].join(", "),
     fontSize: 16,
     bpTitle: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-6)",
       lineHeight: 1,
       fontWeight: 700,
       color: customColors.gray["80"],
     },
     bpSubtitle: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-3)",
       lineHeight: 1.1,
       fontWeight: 200,
       color: customColors.gray["80"],
     },
     bpHeading1: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-5)",
       lineHeight: 1.1,
       fontWeight: 700,
       color: customColors.gray["80"],
     },
     bpHeading2: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-4)",
       fontWeight: 400,
       lineHeight: 1.2,
       color: customColors.gray["80"],
     },
     bpHeading3: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-3)",
       lineHeight: 1.1,
       color: customColors.gray["70"],
     },
     bpHeading4: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step-2)",
       lineHeight: 1.1,
       color: customColors.gray["70"],
     },
     bpSmallCaps: {
-      fontFamily: "Apercu Pro",
+      fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
       fontSize: "var(--step--1)",
       lineHeight: 1.3,
       color: customColors.gray["70"],
@@ -232,6 +234,7 @@ export const theme = createTheme({
       fontWeight: 400,
       lineHeight: 1.7,
       color: customColors.gray["80"],
+      maxWidth: "62ch",
       "& a": {
         fontWeight: 600,
         transition: defaultTheme.transitions.create("color"),
@@ -258,9 +261,9 @@ export const theme = createTheme({
   // @todo see if it's possible to use keys "sm" | "lg" instead of the array index
   shadows: [
     "none",
-    "0px 4px 11px rgba(39, 50, 86, 0.04), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.08), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
-    "0px 11px 30px rgba(61, 78, 133, 0.04), 0px 7.12963px 18.37px rgba(61, 78, 133, 0.05), 0px 4.23704px 8.1px rgba(61, 78, 133, 0.06), 0px 0.203704px 0.62963px rgba(61, 78, 133, 0.07)",
-    "0px 20px 41px rgba(61, 78, 133, 0.07), 0px 16px 25px rgba(61, 78, 133, 0.0531481), 0px 12px 12px rgba(61, 78, 133, 0.0325), 0px 2px 3.13px rgba(61, 78, 133, 0.02)",
+    "0px 2px 8px rgba(39, 50, 86, 0.04), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.06), 0px 0.5px 1px rgba(39, 50, 86, 0.10)",
+    "0px 9px 26px rgba(61, 78, 133, 0.03), 0px 7.12963px 18.37px rgba(61, 78, 133, 0.04), 0px 4.23704px 8.1px rgba(61, 78, 133, 0.05), 0px 0.203704px 0.62963px rgba(61, 78, 133, 0.06)",
+    "0px 20px 41px rgba(61, 78, 133, 0.04), 0px 16px 25px rgba(61, 78, 133, 0.03), 0px 12px 12px rgba(61, 78, 133, 0.02), 0px 2px 3.13px rgba(61, 78, 133, 0.01)",
     "0px 51px 87px rgba(50, 65, 111, 0.07), 0px 33.0556px 50.9514px rgba(50, 65, 111, 0.0531481), 0px 19.6444px 27.7111px rgba(50, 65, 111, 0.0425185), 0px 10.2px 14.1375px rgba(50, 65, 111, 0.035), 0px 4.15556px 7.08889px rgba(50, 65, 111, 0.0274815), 0px 0.944444px 3.42361px rgba(50, 65, 111, 0.0168519)",
     "0px 96px 129px rgba(61, 78, 133, 0.13), 0px 48.6px 56.2359px rgba(61, 78, 133, 0.08775), 0px 19.2px 20.9625px rgba(61, 78, 133, 0.065), 0px 4.2px 7.45781px rgba(61, 78, 133, 0.04225)",
   ] as any,
@@ -469,16 +472,13 @@ export const theme = createTheme({
         {
           props: { variant: "primary", size: "medium" },
           style: {
-            padding: defaultTheme.spacing(1.25, 2.5),
+            padding: defaultTheme.spacing("12px", "28px"),
           },
         },
         {
           props: { variant: "secondary", size: "medium" },
           style: {
-            paddingTop: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
-            paddingBottom: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
-            paddingLeft: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
-            paddingRight: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
+            padding: defaultTheme.spacing("8px", "24px"),
           },
         },
         {
@@ -499,7 +499,7 @@ export const theme = createTheme({
         {
           props: { variant: "primary", size: "small" },
           style: {
-            padding: defaultTheme.spacing(0.5, 1.5),
+            padding: defaultTheme.spacing("8px", "20px"),
           },
         },
         {
@@ -686,6 +686,9 @@ export const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         root: {
+          "@media (min-width: 1200px)": {
+            maxWidth: "1400px",
+          },
           paddingLeft: "16px",
           paddingRight: "16px",
           "@media (min-width): 900px": {

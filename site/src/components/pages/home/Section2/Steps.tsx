@@ -343,7 +343,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
           borderRadius: "6px",
         }}
       >
-        {content.map(({ key, value }) => (
+        {content.map(({ key, value }, index) => (
           <Box
             sx={{
               display: "flex",
@@ -354,7 +354,8 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
               typography: "bpSmallCopy",
               fontWeight: 500,
             }}
-            key={key}
+            // eslint-disable-next-line react/no-array-index-key -- ListItem is repeated, so "key" cannot be used
+            key={index}
           >
             <Box
               sx={{
@@ -444,8 +445,9 @@ const App: FC<AppProps> = ({ name, block }) => {
 const LayoutBg = () => {
   return (
     <svg
-      width={619}
-      height="auto"
+      width={620}
+      height={520}
+      viewBox="-20 -20 640 540"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       style={{ width: "80%" }}

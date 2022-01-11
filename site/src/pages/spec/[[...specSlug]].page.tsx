@@ -14,14 +14,15 @@ import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
-import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
-import { Sidebar } from "../../components/PageSidebar";
+import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
-import { parseIntFromPixelString } from "../../util/muiUtils";
 import SiteMapContext from "../../components/context/SiteMapContext";
-import { MDXPageContent } from "../../components/MDXPageContent";
-import { INFO_CARD_WIDTH } from "../../components/InfoCard/InfoCardWrapper";
+import {
+  MDXPageContent,
+  MDX_TEXT_CONTENT_MAX_WIDTH,
+} from "../../components/MDXPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
+import { parseIntFromPixelString } from "../../util/muiUtils";
 
 const GitHubInfoCard = (
   <Paper
@@ -29,18 +30,16 @@ const GitHubInfoCard = (
     sx={{
       marginBottom: {
         xs: 3,
-        md: 6,
+        md: 4,
       },
-      padding: {
-        xs: 2,
-        sm: 3,
-      },
+      padding: 3,
       display: "flex",
       alignItems: "stretch",
       flexDirection: {
         xs: "column",
         md: "row",
       },
+      maxWidth: { xs: "100%", lg: "1012px" },
     }}
   >
     <Box
@@ -94,7 +93,7 @@ const GitHubInfoCard = (
             },
           },
         })}
-        maxWidth={650}
+        maxWidth="62ch"
       >
         This specification is currently in progress. We’ve drafting it in public
         to gather feedback and improve the final document. If you have any
@@ -209,7 +208,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
       <Container
         sx={{
           marginTop: {
-            xs: 4,
+            xs: 6,
             md: 8,
           },
         }}
@@ -217,10 +216,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         <Typography
           variant="bpTitle"
           sx={{
-            marginBottom: {
-              xs: 1,
-              md: 2,
-            },
+            marginBottom: 2,
           }}
         >
           Specification
@@ -231,7 +227,7 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
           sx={{
             marginBottom: {
               xs: 4,
-              md: 6,
+              md: 4,
             },
           }}
         >
@@ -240,42 +236,36 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         {GitHubInfoCard}
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Box
-              paddingRight={6}
-              width={300}
+            <Sidebar
               flexGrow={0}
-              sx={{
-                position: "sticky",
-                top:
-                  DESKTOP_NAVBAR_HEIGHT +
-                  parseIntFromPixelString(theme.spacing(2)),
-              }}
-            >
-              <Sidebar
-                pages={specificationPages.filter(
-                  ({ title }) => !title.startsWith("Appendix"),
-                )}
-                appendices={specificationPages.filter(({ title }) =>
-                  title.startsWith("Appendix"),
-                )}
-              />
-            </Box>
+              marginRight={6}
+              pages={specificationPages.filter(
+                ({ title }) => !title.startsWith("Appendix"),
+              )}
+              appendices={specificationPages.filter(({ title }) =>
+                title.startsWith("Appendix"),
+              )}
+            />
           ) : null}
           <MDXPageContent flexGrow={1} serializedPage={serializedPage} />
         </Box>
         <PageNavLinks
           prevPage={prevPage}
           nextPage={nextPage}
-          mb={8}
           sx={{
             marginLeft: {
               xs: 0,
-              md: "300px",
+              md: `${
+                SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
+              }px`,
             },
             maxWidth: {
-              xs: "100%",
-              sm: `calc(100% - ${INFO_CARD_WIDTH}px)`,
-              md: `calc(100% - ${INFO_CARD_WIDTH}px - 300px)`,
+              sx: "100%",
+              sm: MDX_TEXT_CONTENT_MAX_WIDTH,
+            },
+            marginBottom: {
+              xs: 8,
+              md: 14,
             },
           }}
         />

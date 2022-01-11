@@ -47,9 +47,9 @@ const CONTENT = [
       "Blocks created using the Block Protocol can easily move between apps",
     content: (
       <Box>
-        These blocks use structured data which makes it easy to move both block
+        These blocks use structured data which makes it easy to move both blocks
         themselves, and the data within blocks, even if the blocks are in
-        completely seperate applications.
+        completely separate applications.
       </Box>
     ),
     renderComponent: (isMobile: boolean, isActive?: boolean) => (
@@ -186,6 +186,7 @@ export const Section2 = () => {
             left: 0,
             right: 0,
             width: { xs: "100%", lg: "auto" },
+            marginLeft: { md: 0, lg: 8 },
 
             borderTop: ({ palette }) =>
               activeImg

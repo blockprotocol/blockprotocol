@@ -12,6 +12,7 @@ import {
 import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { HASHLogoIcon } from "./SvgIcon/HASHLogoIcon";
+import { Button } from "./Button";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   {
@@ -41,13 +42,13 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
     component="p"
     variant="bpSmallCopy"
     sx={{
-      "&:first-child": {
+      "&:first-of-type": {
         marginTop: {
           xs: 1.5,
           sm: 0,
         },
       },
-      "&:not(:first-child)": {
+      "&:not(:first-of-type)": {
         marginTop: 1.5,
       },
     }}
@@ -73,11 +74,6 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
 
 const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
-    name: "GitHub",
-    icon: <Icon className="fab fa-github" />,
-    href: "https://github.com/blockprotocol",
-  },
-  {
     name: "Twitter",
     icon: <Icon className="fab fa-twitter" />,
     href: "https://twitter.com/blockprotocol",
@@ -87,38 +83,63 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
     icon: <Icon className="fab fa-discord" />,
     href: "https://discord.gg/PefPteFe5j",
   },
+  {
+    name: "GitHub",
+    icon: <Icon className="fab fa-github" />,
+    href: "https://github.com/blockprotocol",
+  },
 ];
 
 const Socials = (
-  <Box mt={3} display="flex">
-    {SOCIALS.map(({ href, icon }) => (
-      <Link
-        href={href}
-        key={href}
+  <Box
+    mt={3}
+    display="flex"
+    flexDirection="row"
+    alignItems="center"
+    flexWrap="wrap"
+  >
+    <Box marginBottom={2.5} flexShrink={0}>
+      {SOCIALS.map(({ href, icon }) => (
+        <Link
+          href={href}
+          key={href}
+          sx={{
+            marginRight: 2.5,
+            ":hover": {
+              svg: {
+                color: (theme) => theme.palette.gray[30],
+              },
+            },
+            ":active": {
+              svg: {
+                color: (theme) => theme.palette.common.white,
+              },
+            },
+            svg: {
+              transition: (theme) =>
+                theme.transitions.create("color", { duration: 150 }),
+              color: (theme) => theme.palette.gray[50],
+            },
+          }}
+        >
+          {icon}
+        </Link>
+      ))}
+    </Box>
+    <Link href="https://github.com/blockprotocol/blockprotocol" flexShrink={0}>
+      <Button
+        variant="primary"
+        size="small"
         sx={{
-          "&:not(:first-child)": {
-            marginLeft: 2.5,
-          },
-          ":hover": {
-            svg: {
-              color: (theme) => theme.palette.gray[30],
-            },
-          },
-          ":active": {
-            svg: {
-              color: (theme) => theme.palette.common.white,
-            },
-          },
-          svg: {
-            transition: (theme) =>
-              theme.transitions.create("color", { duration: 150 }),
-            color: (theme) => theme.palette.gray[50],
-          },
+          marginBottom: 2.5,
+          backgroundColor: (theme) => theme.palette.gray[70],
+          color: (theme) => theme.palette.gray[20],
         }}
+        startIcon={<Icon className="fa fa-star" />}
       >
-        {icon}
-      </Link>
-    ))}
+        Star us on Github
+      </Button>{" "}
+    </Link>
   </Box>
 );
 
