@@ -69,7 +69,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
     const isExternal =
       typeof href === "string" &&
-      !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href);
+      (href === "/discord" ||
+        !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href));
 
     if (isExternal) {
       other.rel = "noopener";

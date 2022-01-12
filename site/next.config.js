@@ -15,6 +15,11 @@ module.exports = withFonts(
     async redirects() {
       return [
         {
+          source: "/discord",
+          destination: "https://discord.gg/PefPteFe5j",
+          permanent: true,
+        },
+        {
           source: "/partners",
           destination: "/contact",
           permanent: true,
