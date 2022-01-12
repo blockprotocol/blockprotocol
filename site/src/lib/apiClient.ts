@@ -5,7 +5,7 @@ import {
   ApiSendLoginCodeResponse,
 } from "../pages/api/sendLoginCode.api";
 
-const BASE_URL = `/api/`;
+const BASE_URL = "/api/";
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
