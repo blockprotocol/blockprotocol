@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { SiteMap } from "../../lib/sitemap";
+import { SiteMap } from "../lib/sitemap";
 
 const SiteMapContext = createContext<SiteMap>({
   pages: [],

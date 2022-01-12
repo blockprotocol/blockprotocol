@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -15,7 +15,11 @@ import twindConfig from "../../twind.config";
 import { PageLayout } from "../components/PageLayout";
 import { createEmotionCache } from "../util/createEmotionCache";
 import siteMap from "../../site-map.json";
-import SiteMapContext from "../components/context/SiteMapContext";
+import SiteMapContext from "../context/SiteMapContext";
+import { SerializedUser } from "../lib/model/user.model";
+import { apiClient } from "../lib/apiClient";
+import { ApiMeResponse } from "./api/me.api";
+import UserContext from "../context/UserContext";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -30,6 +34,26 @@ const MyApp = ({
 }: MyAppProps) => {
   const router = useRouter();
 
+  const [user, setUser] = useState<SerializedUser>();
+
+  const refetchUser = useCallback(async () => {
+    const { data, error } = await apiClient.get<ApiMeResponse>("me");
+
+    if (error) {
+      if (error.response?.status === 401) {
+        setUser(undefined);
+      } else {
+        throw error;
+      }
+    } else if (data) {
+      setUser(data.user);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refetchUser();
+  }, [refetchUser]);
+
   useEffect(() => {
     const { asPath } = router;
     if (asPath.endsWith("#")) {
@@ -38,26 +62,28 @@ const MyApp = ({
   }, [router]);
 
   return (
-    <SiteMapContext.Provider value={siteMap}>
-      <CacheProvider value={emotionCache}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <PageLayout>
-            <Head>
-              <title>
-                Block Protocol - an open standard for data-driven blocks
-              </title>
-              <meta itemProp="name" content="Block Protocol" />
-              <meta
-                itemProp="description"
-                content="An open standard for data-driven blocks"
-              />
-            </Head>
-            <Component {...pageProps} />
-          </PageLayout>
-        </ThemeProvider>
-      </CacheProvider>
-    </SiteMapContext.Provider>
+    <UserContext.Provider value={{ user, setUser, refetch: refetchUser }}>
+      <SiteMapContext.Provider value={siteMap}>
+        <CacheProvider value={emotionCache}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <PageLayout>
+              <Head>
+                <title>
+                  Block Protocol - an open standard for data-driven blocks
+                </title>
+                <meta itemProp="name" content="Block Protocol" />
+                <meta
+                  itemProp="description"
+                  content="An open standard for data-driven blocks"
+                />
+              </Head>
+              <Component {...pageProps} />
+            </PageLayout>
+          </ThemeProvider>
+        </CacheProvider>
+      </SiteMapContext.Provider>
+    </UserContext.Provider>
   );
 };
 
