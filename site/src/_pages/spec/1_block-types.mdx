@@ -46,7 +46,7 @@ A block package SHOULD contain:
     - `variants` – an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants called ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as properties, respectively.
     - `image` – a preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
 
-## Requesting, creating, and updating data
+## Data transfer
 
 ### Data provided to blocks
 
@@ -81,7 +81,7 @@ They can be requested using the functions listed below._
 Each entity provided under `linkedEntities` or `linkedAggregations` will also have an `entityId` and `entityTypeId` to be used as arguments when updating those entities.
 See [linking entities](#linking-entities) for a discussion of how links are managed.
 
-### Functions provided to blocks
+### Entity functions
 
 Subject to the permissions granted to them by the embedding application, blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their [implementation](#linking-entities):
 
@@ -193,7 +193,7 @@ retrieve a subset of entities of a given type
 
 The functions defined above return entity data, but block authors should note that in many [implementations](https://blockprotocol.org/spec/embedding-application-implementation) the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
 
-### Functions for working with entity types
+### Entity type functions
 
 Where supported and permitted by the embedding application, blocks may be provided with the following functions to work with entity types, i.e. data models.
 
@@ -437,7 +437,7 @@ When requesting entity data via a block protocol function, blocks MAY include a 
 For example, a depth of 2 on a Person would resolve their linked Employer, and their Employer’s linked Location, but no further.
 A depth of 0 would resolve no links to other entities.
 
-### Putting it all together – the data gets sent to blocks
+### Field summary
 
 A block can expect the following fields to be made available to it, whether passed in as props or via another method appropriate to their rendering strategy:
 
@@ -469,7 +469,7 @@ deleteLinks
 getLinks
 ```
 
-### Working with third-party data stores
+### Third-party data stores
 
 Where blocks interact with third-party data stores, i.e. they send data for storage _outside_ the embedding application, they SHOULD where possible keep the entity data in the embedding application in sync, for example by:
 
