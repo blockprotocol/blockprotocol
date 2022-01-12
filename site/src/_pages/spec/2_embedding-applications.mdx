@@ -1,4 +1,4 @@
-# Embedding application implementation
+# Embedding applications
 
 An embedding application is any app that renders blocks conforming to this protocol, by:
 
@@ -43,7 +43,7 @@ This sandbox application would in turn render the block, and provide it with the
 When the block calls a function (e.g. updateEntity), the sandboxing application sends messages with the request and payload to the parent application.
 Users should then be prompted to permit or deny the sort of action the block is attempting to take, and their preferences saved.
 
-## Making the rendered web page machine-readable
+## Machine-readable pages
 
 Where an embedding application supplies a block with data corresponding to structured entities, and the web page and that entity data are for public consumption, the embedding application SHOULD [include machine-readable structured data on the page](https://developers.google.com/search/docs/guides/intro-structured-data).
 
