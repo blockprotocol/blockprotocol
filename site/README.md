@@ -7,62 +7,18 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 - `/blocks/<organisation>/<blockname>` is the CDN base-URL of an individual block (e.g. `/blocks/@hash/code`)
 - `/partners` provides a temporary signup form to collect pre-release registrations of interest from potential adopters
 
-## API Routes
-
-### `POST /api/sendLoginCode`
-
-Sends a login code to an existing BP user's email.
-
-- Request Body:
-
-  - `email`: the email address associated with the BP user
-
-- Response Body:
-  - `userId`: the id of the BP user
-  - `loginCodeId`: the id of the login code sent to the user (required for `/api/loginWithLoginCode`)
-
-### `POST /api/loginWithLoginCode`
-
-Logs in a user using a provide login code.
-
-- Request Body:
-
-  - `userId`: the id of the BP user
-  - `loginCodeId`: the id of the login code
-  - `code`: the memorable one-time login code sent to the user's email
-
-- Request Response:
-  - `user`: the user that is now authenticated with the API
-
-### `GET /api/me` [authenticated]
-
-Retrieves the user object of the currently logged in user.
-
-- Request Response:
-  - `user`: the user currently authenticated with the API
-
-### `POST /api/logout` [authenticated]
-
-Logs out the currently authenticated user.
-
-- Request Response: `SUCCESS`
-
 ## Local development
 
 ### BP Site
 
 1.  Add a `site/.env.local` environment variable file with the following environment variables:
 
-        - `SESSION_SECRET`: he secret used to sign the session ID cookie
-        - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
-        - `MONGODB_DB_NAME`: the name of the database (for example `local`)
-        - `MONGODB_USERNAME`: the database username
-        - `MONGODB_PASSWORD`: the database password
-
-<<<<<<< HEAD - `FRONTEND_DOMAIN` (optional): the domain where the frontend is hosted (defaults to `localhost:3000`)
-=======
-
-    > > > > > > > 1b24b9e ([SITE] API Authentication Routes (#74))
+    - `SESSION_SECRET`: the secret used to sign the session ID cookie
+    - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
+    - `MONGODB_DB_NAME`: the name of the database (for example `local`)
+    - `MONGODB_USERNAME`: the database username
+    - `MONGODB_PASSWORD`: the database password
+    - `FRONTEND_DOMAIN` (optional): the domain where the frontend is hosted (defaults to `localhost:3000`)
 
 1.  Install dependencies using:
 
