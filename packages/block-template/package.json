@@ -16,6 +16,9 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --config webpack-dev-server.config.js --open",
     "schema": "typescript-json-schema tsconfig.json AppProps --required true --out dist/block-schema.json"
   },
+  "dependencies": {
+    "blockprotocol": "0.0.1"
+  },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.5",

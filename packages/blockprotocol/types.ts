@@ -1,8 +1,3 @@
-/*
- * This file will be replaced with a package import.
- * Watch https://github.com/blockprotocol/blockprotocol for updates.
- */
-
 import type { VoidFunctionComponent } from "react";
 
 export type BlockVariant = {
