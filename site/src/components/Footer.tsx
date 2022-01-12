@@ -81,7 +81,7 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
     name: "Discord",
     icon: <Icon className="fab fa-discord" />,
-    href: "https://discord.gg/PefPteFe5j",
+    href: "/discord",
   },
   {
     name: "GitHub",

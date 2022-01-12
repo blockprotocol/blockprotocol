@@ -59,10 +59,7 @@ const Partners: NextPage = () => {
             >
               You can also{" "}
               <Link href="mailto:help@blockprotocol.org">email us</Link> or{" "}
-              <Link href="https://discord.gg/PefPteFe5j">
-                chat to us on Discord
-              </Link>
-              .
+              <Link href="/discord">chat to us on Discord</Link>.
             </Typography>
           </Box>
           <form
