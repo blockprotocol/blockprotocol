@@ -74,10 +74,6 @@ export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
   };
 };
 
-const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : `http://localhost:3000`;
-
 const parseQueryParams = (params: BlockPageQueryParams) => {
   const shortname = params.shortname
     ? typeof params.shortname === "string"
@@ -138,7 +134,7 @@ export const getStaticProps: GetStaticProps<
       blockStringifiedSource,
       catalog,
     },
-    revalidate: 60,
+    revalidate: 1800,
   };
 };
 
