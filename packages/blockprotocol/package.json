@@ -16,8 +16,8 @@
   "main": "core.js",
   "types": "core.d.ts",
   "files": [
-    "main.js",
-    "main.d.ts",
+    "core.js",
+    "core.d.ts",
     "react.js",
     "react.d.ts"
   ],
