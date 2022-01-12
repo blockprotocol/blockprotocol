@@ -3,19 +3,19 @@ import { createBaseHandler } from "../../lib/handler/baseHandler";
 import { SerializedUser, User } from "../../lib/model/user.model";
 import { formatErrors } from "../../util/api";
 
-export type LoginWithLoginCodeRequestBody = {
+export type ApiLoginWithLoginCodeRequestBody = {
   userId: string;
   loginCodeId: string;
   code: string;
 };
 
-export type LoginWithLoginCodeResponse = {
+export type ApiLoginWithLoginCodeResponse = {
   user: SerializedUser;
 };
 
 export default createBaseHandler<
-  LoginWithLoginCodeRequestBody,
-  LoginWithLoginCodeResponse
+  ApiLoginWithLoginCodeRequestBody,
+  ApiLoginWithLoginCodeResponse
 >()
   .use(
     bodyValidator("userId").isString(),
@@ -75,10 +75,10 @@ export default createBaseHandler<
 
       await loginCode.setToUsed(db);
 
-      const response: LoginWithLoginCodeResponse = {
-        user: user.serialize(),
-      };
-
-      req.login(user, () => res.status(200).json(response));
+      req.login(user, () =>
+        res.status(200).json({
+          user: user.serialize(),
+        }),
+      );
     }
   });

@@ -9,6 +9,6 @@ export default createAuthenticatedHandler<undefined, ApiMeResponse>(false).get(
   (req, res) => {
     const { user } = req;
 
-    res.status(200).send({ user: user.serialize() });
+    res.status(200).json({ user: user.serialize() });
   },
 );
