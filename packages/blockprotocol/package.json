@@ -13,11 +13,13 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
-  "main": "main.js",
-  "types": "main.d.ts",
+  "main": "core.js",
+  "types": "core.d.ts",
   "files": [
     "main.js",
-    "main.d.ts"
+    "main.d.ts",
+    "react.js",
+    "react.d.ts"
   ],
   "scripts": {
     "lint:tsc": "tsc --noEmit"
