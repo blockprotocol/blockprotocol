@@ -38,7 +38,6 @@ function abs() {
 # ----
 DIR=$(abs "${BASH_SOURCE[0]%/*}")
 REPO_ROOT="$DIR/../.."
-CACHE_DIR="${REPO_ROOT}/site/.next/cache"
 
 # deps
 # ----
@@ -81,12 +80,6 @@ onexit() {
 }
 
 trap onexit EXIT HUP INT QUIT PIPE TERM
-
-# use nextjs build cache to store previous builds (vercel does preserve it)
-# @see https://vercel.com/docs/concepts/deployments/build-step#caching
-log info "restore previous builds from the cache"
-mkdir -p "${CACHE_DIR}/blocks"
-cp -a "${CACHE_DIR}/blocks" "${REPO_ROOT}/site/public"
 
 # main
 # ----
@@ -190,9 +183,6 @@ else
     build_block "$build_config"
   done
 fi
-
-log info "pushing updated builds to the cache"
-rsync -a --delete "${REPO_ROOT}/site/public/blocks/" "${CACHE_DIR}/blocks"
 
 log info "finished w/o errors"
 exit 0
