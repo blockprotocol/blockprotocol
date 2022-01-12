@@ -73,8 +73,6 @@ const LoginPage: NextPage = () => {
 
       setCurrentPage("VerificationCode");
 
-      /** @todo: set to verification code screen */
-
       void apiClient
         .post<ApiLoginWithLoginCodeRequestBody, ApiLoginWithLoginCodeResponse>(
           "loginWithLoginCode",
