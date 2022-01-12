@@ -7,6 +7,74 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 - `/blocks/<organisation>/<blockname>` is the CDN base-URL of an individual block (e.g. `/blocks/@hash/code`)
 - `/partners` provides a temporary signup form to collect pre-release registrations of interest from potential adopters
 
+## Local development
+
+### BP Site
+
+1.  Add a `site/.env.local` environment variable file with the following environment variables:
+
+    - `SESSION_SECRET`: the secret used to sign the session ID cookie
+    - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
+    - `MONGODB_DB_NAME`: the name of the database (for example `local`)
+    - `MONGODB_USERNAME`: the database username
+    - `MONGODB_PASSWORD`: the database password
+    - `FRONTEND_URL` (optional): the url where the frontend is hosted (defaults to `http://localhost:3000`)
+
+1.  Install dependencies using:
+
+    ```sh
+    yarn install
+    ```
+
+1.  Run the developer database using:
+
+    ```sh
+    yarn dev:db
+    ```
+
+1.  **On first run**, or if you want to reset app data, seed the databse in a seperate terminal using:
+
+    ```sh
+    yarn dev:seed-db
+    ```
+
+1.  Run the Next.js app in a seperate terminal using:
+
+    ```sh
+    yarn dev
+    ```
+
+### Serving Blocks
+
+Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/registry`
+with a build-config. The build-script `/site/scripts/build-blocks.sh` allows to build blocks
+individually. It requires the commandline tool:
+
+- `curl`
+- `jq`
+- `md5sha1sum`
+- `rsync`
+
+These can be installed by your cli pkg mngr of choice (use `brew` on macOS).
+
+```sh
+# build one or more blocks
+yarn build-block ./registry/@hash/paragraph.json
+# build all blocks
+yarn build-blocks
+```
+
+Once the blocks are built, simply `yarn dev [--cwd ./site] [--port 3001]` and head over to
+`localhost:3001/gallery`.
+
+## Vercel Deployment
+
+If no build-config is provided to the build-script, it will pick up all build-configs changed by the
+last commit. This is part of `yarn build` which is also used by the deployment platform Vercel.
+
+Vercel preserves nextjs' cache `/site/.next/cache` between builds. The build script synchronizes its
+results with that cache and rebuilds only what has changed to speed up builds.
+
 ## API Routes
 
 ### `POST /api/sendLoginCode`
