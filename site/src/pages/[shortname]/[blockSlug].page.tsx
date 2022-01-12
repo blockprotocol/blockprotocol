@@ -279,11 +279,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
           </Box>
         </Box>
 
-        <BlockDataContainer
-          metadata={blockMetadata}
-          schema={schema}
-          blockModule={blockModule}
-        />
+        <Box sx={{ mb: 15 }}>
+          <BlockDataContainer
+            metadata={blockMetadata}
+            schema={schema}
+            blockModule={blockModule}
+          />
+        </Box>
 
         {/* <div
         style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
@@ -317,7 +319,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
         </div>
       </div> */}
 
-        <Typography textAlign="center" variant="bpHeading2" mb={3} mt={10}>
+        <Typography textAlign="center" variant="bpHeading2" mb={3}>
           Explore more blocks
         </Typography>
       </Container>

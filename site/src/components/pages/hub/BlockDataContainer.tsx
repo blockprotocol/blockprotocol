@@ -110,7 +110,6 @@ export const BlockDataContainer: VoidFunctionComponent<
         <Box
           sx={{
             ...(isMobile && {
-              // todo use an enum value instead
               display: activeMobileTab === 0 ? "block" : "none",
             }),
           }}
@@ -192,16 +191,20 @@ export const BlockDataContainer: VoidFunctionComponent<
                 textAlign: "right",
               }}
             >
-              <BlockModalButton setBlockModalOpen={setBlockModalOpen} />
-              <BlockTabsModal
-                open={blockModalOpen}
-                setOpen={setBlockModalOpen}
-                blockDataTab={blockDataTab}
-                setBlockDataTab={setBlockDataTab}
-                schema={schema}
-                text={text}
-                setText={setText}
-              />
+              {!isMobile && (
+                <>
+                  <BlockModalButton setBlockModalOpen={setBlockModalOpen} />
+                  <BlockTabsModal
+                    open={blockModalOpen}
+                    setOpen={setBlockModalOpen}
+                    blockDataTab={blockDataTab}
+                    setBlockDataTab={setBlockDataTab}
+                    schema={schema}
+                    text={text}
+                    setText={setText}
+                  />
+                </>
+              )}
             </Box>
           </Box>
 
@@ -209,9 +212,9 @@ export const BlockDataContainer: VoidFunctionComponent<
             <Box
               component="details"
               mt={2}
-              px={4}
+              px={3}
               py={2}
-              sx={{ borderRadius: 6, backgroundColor: "#fecaca" }}
+              sx={{ borderRadius: "6px", backgroundColor: "#fecaca" }}
             >
               <Box component="summary" sx={{ cursor: "pointer" }}>
                 Errors
