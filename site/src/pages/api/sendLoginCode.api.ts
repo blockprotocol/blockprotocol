@@ -3,18 +3,18 @@ import { createBaseHandler } from "../../lib/handler/baseHandler";
 import { User } from "../../lib/model/user.model";
 import { formatErrors } from "../../util/api";
 
-export type SendLoginCodeRequestBody = {
+export type ApiSendLoginCodeRequestBody = {
   email: string;
 };
 
-export type SendLoginCodeResponse = {
+export type ApiSendLoginCodeResponse = {
   userId: string;
   loginCodeId: string;
 };
 
 export default createBaseHandler<
-  SendLoginCodeRequestBody,
-  SendLoginCodeResponse
+  ApiSendLoginCodeRequestBody,
+  ApiSendLoginCodeResponse
 >()
   .use(bodyValidator("email").isEmail().toLowerCase())
   .post(async (req, res) => {
