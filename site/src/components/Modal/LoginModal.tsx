@@ -2,7 +2,7 @@ import { Modal, Paper, ModalProps, Box, Icon, Fade } from "@mui/material";
 import React, { useContext, useEffect, useState, VFC } from "react";
 import { SerializedUser } from "../../lib/model/user.model";
 import { Button } from "../Button";
-import UserContext from "../context/UserContext";
+import UserContext from "../../context/UserContext";
 import {
   LoginInfo,
   LoginWithLoginCodeScreen,

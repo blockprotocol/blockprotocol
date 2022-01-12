@@ -1,5 +1,5 @@
 import { createContext, Dispatch, SetStateAction } from "react";
-import { SerializedUser } from "../../lib/model/user.model";
+import { SerializedUser } from "../lib/model/user.model";
 
 type UserContextProps = {
   user?: SerializedUser;

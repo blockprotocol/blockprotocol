@@ -18,7 +18,7 @@ import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
 import { Sidebar } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
 import { parseIntFromPixelString } from "../../util/muiUtils";
-import SiteMapContext from "../../components/context/SiteMapContext";
+import SiteMapContext from "../../context/SiteMapContext";
 import {
   MDXPageContent,
   MDX_TEXT_CONTENT_MAX_WIDTH,

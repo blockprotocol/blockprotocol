@@ -20,7 +20,7 @@ import {
 import { useRouter } from "next/router";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { Link } from "../Link";
-import SiteMapContext from "../context/SiteMapContext";
+import SiteMapContext from "../../context/SiteMapContext";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {

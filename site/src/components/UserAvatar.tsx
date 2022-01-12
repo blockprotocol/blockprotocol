@@ -1,6 +1,6 @@
 import { VFC, useContext } from "react";
 import { Box } from "@mui/material";
-import UserContext from "./context/UserContext";
+import UserContext from "../context/UserContext";
 
 export const UserAvatar: VFC = () => {
   const { user } = useContext(UserContext);

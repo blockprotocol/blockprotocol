@@ -15,7 +15,7 @@ import {
 } from "../components/Modal/LoginWithLoginCodeScreen";
 import { SendLoginCodeScreen } from "../components/Modal/SendLoginCodeScreen";
 import { SerializedUser } from "../lib/model/user.model";
-import UserContext from "../components/context/UserContext";
+import UserContext from "../context/UserContext";
 
 type LoginPageParsedUrlQuery = {
   redirectAsPath?: string;

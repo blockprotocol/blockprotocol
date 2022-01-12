@@ -15,11 +15,11 @@ import twindConfig from "../../twind.config";
 import { PageLayout } from "../components/PageLayout";
 import { createEmotionCache } from "../util/createEmotionCache";
 import siteMap from "../../site-map.json";
-import SiteMapContext from "../components/context/SiteMapContext";
+import SiteMapContext from "../context/SiteMapContext";
 import { SerializedUser } from "../lib/model/user.model";
 import { apiClient } from "../lib/apiClient";
 import { ApiMeResponse } from "./api/me.api";
-import UserContext from "../components/context/UserContext";
+import UserContext from "../context/UserContext";
 
 const clientSideEmotionCache = createEmotionCache();
 

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Link } from "../Link";
 import { Button } from "../Button";
-import UserContext from "../context/UserContext";
+import UserContext from "../../context/UserContext";
 import { apiClient } from "../../lib/apiClient";
 import { UserAvatar } from "../UserAvatar";
 
