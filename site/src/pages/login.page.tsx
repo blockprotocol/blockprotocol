@@ -9,7 +9,10 @@ import {
   ApiLoginWithLoginCodeResponse,
 } from "./api/loginWithLoginCode.api";
 import { Button } from "../components/Button";
-import { LoginWithLoginCodeScreen } from "../components/Modal/LoginWithLoginCodeScreen";
+import {
+  LoginInfo,
+  LoginWithLoginCodeScreen,
+} from "../components/Modal/LoginWithLoginCodeScreen";
 import { SendLoginCodeScreen } from "../components/Modal/SendLoginCodeScreen";
 import { SerializedUser } from "../lib/model/user.model";
 import UserContext from "../components/context/UserContext";
@@ -28,7 +31,7 @@ const tbdIsLoginPageParsedUrlQuery = (
   typeof tbd.code === "string";
 
 const LoginPage: NextPage = () => {
-  const { user, refetch } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const router = useRouter();
 
   const parsedQuery = useMemo(() => {
@@ -43,19 +46,16 @@ const LoginPage: NextPage = () => {
   const [currentPage, setCurrentPage] = useState<"Email" | "VerificationCode">(
     "Email",
   );
-  const [email, setEmail] = useState<string>(parsedQuery?.email || "");
+
+  const [loginInfo, setLoginInfo] = useState<LoginInfo | undefined>(
+    parsedQuery ?? undefined,
+  );
 
   const [apiLoginErrorMessage, setApiLoginErrorMessage] = useState<ReactNode>();
-  const [userId, setUserId] = useState<string>(parsedQuery?.userId || "");
-  const [loginCodeId, setLoginCodeId] = useState<string>(
-    parsedQuery?.loginCodeId || "",
-  );
 
   useEffect(() => {
     if (parsedQuery) {
-      setEmail(parsedQuery.email);
-      setUserId(parsedQuery.userId);
-      setLoginCodeId(parsedQuery.loginCodeId);
+      setLoginInfo(parsedQuery);
     }
   }, [parsedQuery]);
 
@@ -101,17 +101,15 @@ const LoginPage: NextPage = () => {
     loginCodeId: string;
     email: string;
   }) => {
-    setUserId(params.userId);
-    setLoginCodeId(params.loginCodeId);
-    setEmail(params.email);
+    setLoginInfo(params);
     setCurrentPage("VerificationCode");
   };
 
-  const handleLogin = ({ isSignedUp }: SerializedUser) => {
-    if (!isSignedUp) {
+  const handleLogin = (loggedInUser: SerializedUser) => {
+    if (!loggedInUser.isSignedUp) {
       /** @todo: redirect to signup page if user hasn't completed signup */
     }
-    refetch();
+    setUser(loggedInUser);
     void router.push("/");
   };
 
@@ -178,21 +176,25 @@ const LoginPage: NextPage = () => {
           >
             {currentPage === "Email" ? (
               <SendLoginCodeScreen
-                initialEmail={email}
+                initialEmail={loginInfo?.email || ""}
                 onLoginCodeSent={handleLoginCodeSent}
               />
-            ) : (
+            ) : null}
+            {currentPage === "VerificationCode" && loginInfo ? (
               <LoginWithLoginCodeScreen
-                userId={userId!}
-                loginCodeId={loginCodeId!}
-                email={email}
-                setLoginCodeId={setLoginCodeId}
+                loginInfo={loginInfo}
+                setLoginCodeId={(loginCodeId) => {
+                  setLoginInfo({
+                    ...loginInfo,
+                    loginCodeId,
+                  });
+                }}
                 initialVerificationCode={parsedQuery?.code}
                 initialApiLoginErrorMessage={apiLoginErrorMessage}
                 onLogin={handleLogin}
                 onChangeEmail={() => setCurrentPage("Email")}
               />
-            )}
+            ) : null}
           </Box>
         </Paper>
       </Container>

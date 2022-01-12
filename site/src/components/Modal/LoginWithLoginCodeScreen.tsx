@@ -20,10 +20,14 @@ import {
   useVerificationCodeTextField,
 } from "../hooks/useVerificationCodeTextField";
 
-type LoginWithLoginCodeScreenProps = {
+export type LoginInfo = {
   userId: string;
   loginCodeId: string;
   email: string;
+};
+
+type LoginWithLoginCodeScreenProps = {
+  loginInfo: LoginInfo;
   initialVerificationCode?: string;
   initialApiLoginErrorMessage?: ReactNode;
   setLoginCodeId: (loginCodeId: string) => void;
@@ -35,9 +39,7 @@ const parseVerificationCodeInput = (inputCode: string) =>
   inputCode.replace(/\s/g, "");
 
 export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
-  userId,
-  loginCodeId,
-  email,
+  loginInfo,
   initialVerificationCode,
   initialApiLoginErrorMessage,
   setLoginCodeId,
@@ -83,6 +85,8 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
       setVerificationCode(initialVerificationCode);
     }
   }, [initialVerificationCode, setVerificationCode]);
+
+  const { userId, loginCodeId, email } = loginInfo;
 
   const handleResendEmail = async () => {
     setSendingLoginCode(true);

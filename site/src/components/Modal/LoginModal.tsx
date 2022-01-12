@@ -3,7 +3,10 @@ import React, { useContext, useEffect, useState, VFC } from "react";
 import { SerializedUser } from "../../lib/model/user.model";
 import { Button } from "../Button";
 import UserContext from "../context/UserContext";
-import { LoginWithLoginCodeScreen } from "./LoginWithLoginCodeScreen";
+import {
+  LoginInfo,
+  LoginWithLoginCodeScreen,
+} from "./LoginWithLoginCodeScreen";
 import { SendLoginCodeScreen } from "./SendLoginCodeScreen";
 
 type LoginModalProps = {
@@ -18,16 +21,12 @@ export const LoginModal: VFC<LoginModalProps> = ({
 }) => {
   const { user, setUser } = useContext(UserContext);
   const [currentPage, setCurrentPage] = useState<LoginModalPage>("Email");
-  const [email, setEmail] = useState<string>("");
 
-  const [userId, setUserId] = useState<string>();
-  const [loginCodeId, setLoginCodeId] = useState<string>();
+  const [loginInfo, setLoginInfo] = useState<LoginInfo>();
 
   const reset = () => {
     setCurrentPage("Email");
-    setEmail("");
-    setUserId(undefined);
-    setLoginCodeId(undefined);
+    setLoginInfo(undefined);
   };
 
   useEffect(() => {
@@ -42,9 +41,7 @@ export const LoginModal: VFC<LoginModalProps> = ({
     loginCodeId: string;
     email: string;
   }) => {
-    setUserId(params.userId);
-    setLoginCodeId(params.loginCodeId);
-    setEmail(params.email);
+    setLoginInfo(params);
     setCurrentPage("VerificationCode");
   };
 
@@ -150,19 +147,23 @@ export const LoginModal: VFC<LoginModalProps> = ({
             >
               {currentPage === "Email" ? (
                 <SendLoginCodeScreen
-                  initialEmail={email}
+                  initialEmail={loginInfo?.email || ""}
                   onLoginCodeSent={handleLoginCodeSent}
                 />
-              ) : (
+              ) : null}
+              {currentPage === "VerificationCode" && loginInfo ? (
                 <LoginWithLoginCodeScreen
-                  userId={userId!}
-                  loginCodeId={loginCodeId!}
-                  email={email!}
-                  setLoginCodeId={setLoginCodeId}
+                  loginInfo={loginInfo}
+                  setLoginCodeId={(loginCodeId) => {
+                    setLoginInfo({
+                      ...loginInfo,
+                      loginCodeId,
+                    });
+                  }}
                   onLogin={handleLogin}
                   onChangeEmail={() => setCurrentPage("Email")}
                 />
-              )}
+              ) : null}
             </Box>
           </Paper>
         </Box>
