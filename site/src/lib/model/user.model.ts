@@ -8,8 +8,7 @@ import {
   VerificationCodeVariant,
 } from "./verificationCode.model";
 import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLoginCode.api";
-
-const FRONTEND_URL = "http://localhost:3000";
+import { FRONTEND_URL } from "../config";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 

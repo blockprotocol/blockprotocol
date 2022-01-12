@@ -93,13 +93,14 @@ Logs out the currently authenticated user.
 
 ### BP Site
 
-1.  Add a `site/.env.local` environment variable file with the following environment variables: including the required environment variables
+1.  Add a `site/.env.local` environment variable file with the following environment variables:
 
-    - `SESSION_SECRET`: he secret used to sign the session ID cookie
+    - `SESSION_SECRET`: the secret used to sign the session ID cookie
     - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
     - `MONGODB_DB_NAME`: the name of the database (for example `local`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
+    - `FRONTEND_URL` (optional): the url where the frontend is hosted (defaults to `http://localhost:3000`)
 
 1.  Install dependencies using:
 
