@@ -6,6 +6,6 @@ Watch https://github.com/blockprotocol/blockprotocol for the updates!
 Usage example:
 
 ```ts
-import { BlockMetadata } from "blockprotocol";
-import { BlockComponent } from "blockprotocol/react";
+import type { BlockMetadata } from "blockprotocol";
+import type { BlockComponent } from "blockprotocol/react";
 ```
