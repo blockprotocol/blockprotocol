@@ -38,7 +38,6 @@ function abs() {
 # ----
 DIR=$(abs "${BASH_SOURCE[0]%/*}")
 REPO_ROOT="$DIR/../.."
-CACHE_DIR="${REPO_ROOT}/site/.next/cache"
 
 # deps
 # ----
@@ -82,12 +81,6 @@ onexit() {
 
 trap onexit EXIT HUP INT QUIT PIPE TERM
 
-# use nextjs build cache to store previous builds (vercel does preserve it)
-# @see https://vercel.com/docs/concepts/deployments/build-step#caching
-log info "restore previous builds from the cache"
-mkdir -p "${CACHE_DIR}/blocks"
-cp -a "${CACHE_DIR}/blocks" "${REPO_ROOT}/site/public"
-
 # main
 # ----
 
@@ -103,13 +96,6 @@ function build_block {
   # create block specific subfolder in nextjs' static root
   public_dir="${REPO_ROOT}/site/public/blocks/${build_config##*/registry/}"
   public_dir="${public_dir%\.json}"
-
-  # mirror deletions in the cache
-  if ! [[ -f "$build_config" ]]; then
-    log info "removing cached build for removed ${build_config}"
-    [[ -d "$public_dir" ]] && rm -rf "$public_dir"
-    return
-  fi
 
   log info "building ${build_config}"
   mkdir -p "$public_dir"
@@ -190,9 +176,6 @@ else
     build_block "$build_config"
   done
 fi
-
-log info "pushing updated builds to the cache"
-rsync -a --delete "${REPO_ROOT}/site/public/blocks/" "${CACHE_DIR}/blocks"
 
 log info "finished w/o errors"
 exit 0
