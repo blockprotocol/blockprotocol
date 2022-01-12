@@ -13,7 +13,7 @@ import { apiClient } from "../../lib/apiClient";
 import { UserAvatar } from "../UserAvatar";
 
 export const AccountDropdown: VFC = () => {
-  const { user, refetch } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -30,7 +30,7 @@ export const AccountDropdown: VFC = () => {
   const handleLogout = async () => {
     await apiClient.post("logout");
 
-    refetch();
+    setUser(undefined);
   };
 
   const { preferredName, shortname } = user || {};

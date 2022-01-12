@@ -16,7 +16,7 @@ export const LoginModal: VFC<LoginModalProps> = ({
   onClose,
   ...modalProps
 }) => {
-  const { user, refetch } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
   const [currentPage, setCurrentPage] = useState<LoginModalPage>("Email");
   const [email, setEmail] = useState<string>("");
 
@@ -48,11 +48,11 @@ export const LoginModal: VFC<LoginModalProps> = ({
     setCurrentPage("VerificationCode");
   };
 
-  const handleLogin = ({ isSignedUp }: SerializedUser) => {
-    if (!isSignedUp) {
+  const handleLogin = (loggedInUser: SerializedUser) => {
+    if (!loggedInUser.isSignedUp) {
       /** @todo: redirect to signup page if user hasn't completed signup */
     }
-    refetch();
+    setUser(loggedInUser);
     reset();
     onClose();
   };

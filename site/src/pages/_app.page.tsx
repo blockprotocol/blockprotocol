@@ -62,7 +62,7 @@ const MyApp = ({
   }, [router]);
 
   return (
-    <UserContext.Provider value={{ user, refetch: refetchUser }}>
+    <UserContext.Provider value={{ user, setUser, refetch: refetchUser }}>
       <SiteMapContext.Provider value={siteMap}>
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={theme}>
