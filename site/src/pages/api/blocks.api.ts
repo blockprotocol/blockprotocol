@@ -115,6 +115,27 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
     }));
 };
 
+export const readBlockDataFromDisk = ({
+  packagePath,
+  schema,
+  source,
+}: BlockMetadata) => {
+  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
+  const fs = require("fs");
+  return {
+    schema: JSON.parse(
+      fs.readFileSync(
+        `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
+        { encoding: "utf8" },
+      ),
+    ),
+    source: fs.readFileSync(
+      `${process.cwd()}/public/blocks/${packagePath}/${source}`,
+      "utf8",
+    ),
+  };
+};
+
 let cachedBlocksFromDisk: Array<BlockMetadata> | null = null;
 
 const blocks: NextApiHandler<BlockMetadata[]> = (_req, res) => {
