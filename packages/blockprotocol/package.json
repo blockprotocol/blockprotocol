@@ -15,6 +15,10 @@
   },
   "main": "main.js",
   "types": "main.d.ts",
+  "files": [
+    "main.js",
+    "main.d.ts"
+  ],
   "scripts": {
     "lint:tsc": "tsc --noEmit"
   },
