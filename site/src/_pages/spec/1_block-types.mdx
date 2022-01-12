@@ -8,7 +8,7 @@ A block package MUST contain:
 - **source file or files** (e.g. HTML and JavaScript files), which
 
   - SHOULD contain valid HTML
-  - There are [various tools](https://blockprotocol.org/spec/implementation-and-rendering-context) to help in meeting these requirements.
+  - There are [various tools](https://blockprotocol.org/spec/implementation-approaches) to help in meeting these requirements.
 
 A block package SHOULD contain:
 
@@ -51,7 +51,7 @@ A block package SHOULD contain:
 ### Data provided to blocks
 
 Blocks MUST use the data properties specified in their schema, if any.
-They can expect these properties to be made available to them by the embedding application, exactly how depending on [rendering context](https://blockprotocol.org/spec/implementation-and-rendering-context).
+They can expect these properties to be made available to them by the embedding application, exactly how depending on [rendering context](https://blockprotocol.org/spec/implementation-approaches).
 For example, for a React component block they would be passed as ‘props’.
 In a block with an HTML entrypoint, appropriately sandboxed by the embedding application, the properties would be in the global scope (of the sandbox).
 
@@ -191,7 +191,7 @@ retrieve a subset of entities of a given type
     - `desc?` \[_boolean_]\[_optional_]: whether to sort descending.
 - Embedding apps will provide a default aggregation if not provided.
 
-The functions defined above return entity data, but block authors should note that in many [implementations](https://blockprotocol.org/spec/embedding-application-implementation) the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
+The functions defined above return entity data, but block authors should note that in many [implementations](https://blockprotocol.org/spec/embedding-applications) the embedding application will re-render a block with new entity data whenever it is updated (whether by the block or some other actor), e.g. the block will automatically get sent new data via props when any entity it has previously received via props is updated.
 
 ### Entity type functions
 

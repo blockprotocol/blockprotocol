@@ -15,7 +15,7 @@ In order to be portable anywhere, blocks should not need to have any knowledge o
 To render a block which defines a schema for the data it accepts, embedding applications MUST supply it with any data properties marked as required, SHOULD respect any other constraints expressed in the schema, and MAY supply any further properties expressed in the schema.
 
 Embedding applications SHOULD supply blocks with functions to get, aggregate, create, delete and update entities, entity types, and links between entities (subject to any permissions restrictions).
-These functions MUST conform to the naming conventions and function signatures outlined in [the previous section](https://blockprotocol.org/spec/embedding-application-implementation).
+These functions MUST conform to the naming conventions and function signatures outlined in [the previous section](https://blockprotocol.org/spec/embedding-applications).
 Embedding applications SHOULD provide defaults for aggregation operations to handle cases where the block doesn’t specify its own requirements.
 
 To enable blocks to update data of entities, including themselves, embedding applications SHOULD include an `entityId` and `entityTypeId` alongside the data for each entity it supplies the block with (including the `entityId` and `entityTypeId` of the block itself).
