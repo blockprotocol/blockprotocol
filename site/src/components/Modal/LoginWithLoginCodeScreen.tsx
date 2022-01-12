@@ -7,6 +7,7 @@ import React, {
   VFC,
   ClipboardEventHandler,
 } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 import { apiClient } from "../../lib/apiClient";
 import { SerializedUser } from "../../lib/model/user.model";
 import {
@@ -104,10 +105,12 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
         throw error;
       }
     } else if (data) {
-      setVerificationCode("");
-      setApiLoginErrorMessage(undefined);
-      setTouchedVerificationCodeInput(false);
-      setLoginCodeId(data.loginCodeId);
+      unstable_batchedUpdates(() => {
+        setVerificationCode("");
+        setApiLoginErrorMessage(undefined);
+        setTouchedVerificationCodeInput(false);
+        setLoginCodeId(data.loginCodeId);
+      });
       if (loginCodeInputRef.current) {
         loginCodeInputRef.current.select();
       }
