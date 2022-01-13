@@ -18,7 +18,7 @@ export const Header = () => {
   const hideAnimatedCardGradient = useMediaQuery("(min-width:2200px)");
 
   useEffect(() => {
-    const tl = gsap.timeline().fromTo(
+    const dataHighlightTween = gsap.fromTo(
       ".data-highlight",
       {
         background:
@@ -31,8 +31,10 @@ export const Header = () => {
       1,
     );
 
+    let backgroundBallsTimeline: gsap.core.Timeline | null = null;
+
     if (!isMobile) {
-      tl.to(".background-balls", {
+      backgroundBallsTimeline = gsap.timeline().to(".background-balls", {
         x: "random(0, 100%)",
         y: "random(0, 100%)",
         duration: 5,
@@ -43,7 +45,7 @@ export const Header = () => {
     }
 
     return () => {
-      tl.kill();
+      backgroundBallsTimeline?.kill();
     };
   }, [isMobile]);
 

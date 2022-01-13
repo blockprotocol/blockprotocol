@@ -37,6 +37,19 @@ export const HeaderCard: VFC<HeaderCardProps> = ({ hideGradient }) => {
           autoAlpha: 0,
         },
       )
+      .to(
+        [
+          "#hcard_person__fullName",
+          "#hcard_person__image",
+          "#hcard_person__jobTitle",
+          "#hcard_person__card",
+          "#hcard_issue__card",
+        ],
+        {
+          autoAlpha: 1,
+        },
+        "<",
+      )
       .from(
         [
           "#hcard_person_circle_outer3",
@@ -105,7 +118,7 @@ export const HeaderCard: VFC<HeaderCardProps> = ({ hideGradient }) => {
         circleAnimationProps,
         "<",
       )
-      .to(["#hcard_issue"], {
+      .to("#hcard_issue", {
         autoAlpha: 0.92,
       })
       .from("#hcard_issue__card", lineDrawAnimationProps)

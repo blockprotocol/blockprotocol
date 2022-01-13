@@ -148,6 +148,7 @@ export const HeaderCardSvg: VFC<{ hideGradient: boolean }> = ({
         x2={310.5}
         y2={279.996}
         stroke="#7C74B6"
+        style={{ visibility: "hidden" }}
       />
       <line
         id="hcard_person__jobTitle"
@@ -156,16 +157,16 @@ export const HeaderCardSvg: VFC<{ hideGradient: boolean }> = ({
         x2={468.786}
         y2={69.5482}
         stroke="#7C74B6"
+        style={{ visibility: "hidden" }}
       />
       <line
         id="hcard_person__image"
-        data-x1={309.5}
-        data-y1={151.996}
         x1={316.097}
         y1={149.509}
         x2={529.097}
         y2={191.509}
         stroke="#7C74B6"
+        style={{ visibility: "hidden" }}
       />
       <line
         x1={304.667}
@@ -174,6 +175,7 @@ export const HeaderCardSvg: VFC<{ hideGradient: boolean }> = ({
         y2={42.373}
         stroke="#7C74B6"
         id="hcard_person__fullName"
+        style={{ visibility: "hidden" }}
       />
 
       <rect x={175} y={283} width={604} height={359} rx={6} fill="#F7FAFC" />
@@ -343,6 +345,7 @@ export const HeaderCardSvg: VFC<{ hideGradient: boolean }> = ({
         x2={204.937}
         y2={463.504}
         stroke="#746DAA"
+        style={{ visibility: "hidden" }}
       />
       <path
         d="M92.6683 31.5H99.1333V33.045H94.3333V35.805H98.2183V37.35H94.3333V42H92.6683V31.5ZM105.282 42.12C104.132 42.12 103.207 41.79 102.507 41.13C101.807 40.46 101.457 39.485 101.457 38.205V31.5H103.122V38.25C103.122 38.99 103.302 39.565 103.662 39.975C104.032 40.375 104.572 40.575 105.282 40.575C105.992 40.575 106.527 40.375 106.887 39.975C107.247 39.565 107.427 38.99 107.427 38.25V31.5H109.092V38.205C109.092 39.485 108.742 40.46 108.042 41.13C107.342 41.79 106.422 42.12 105.282 42.12ZM112.127 31.5H113.792V40.455H118.382V42H112.127V31.5ZM120.919 31.5H122.584V40.455H127.174V42H120.919V31.5ZM134.197 31.5H135.982L140.242 39.03V31.5H141.907V42H140.122L135.862 34.485V42H134.197V31.5ZM147.677 31.5H149.312L152.942 42H151.157L150.317 39.375H146.687L145.832 42H144.062L147.677 31.5ZM149.822 37.83L148.502 33.705L147.167 37.83H149.822ZM154.945 31.5H156.85L159.52 38.46L162.19 31.5H164.08V42H162.43V34.89L160.105 41.04H158.935L156.61 34.89V42H154.945V31.5ZM167.326 31.5H173.656V33.045H168.991V35.64H172.756V37.17H168.991V40.455H173.806V42H167.326V31.5Z"
