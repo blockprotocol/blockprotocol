@@ -18,7 +18,7 @@ export const Header = () => {
   const hideAnimatedCardGradient = useMediaQuery("(min-width:2200px)");
 
   useEffect(() => {
-    const dataHighlightTween = gsap.fromTo(
+    const dataHighlightTimeline = gsap.timeline().fromTo(
       ".data-highlight",
       {
         background:
@@ -45,6 +45,7 @@ export const Header = () => {
     }
 
     return () => {
+      dataHighlightTimeline.kill();
       backgroundBallsTimeline?.kill();
     };
   }, [isMobile]);
