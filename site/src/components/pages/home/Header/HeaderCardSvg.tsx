@@ -19,7 +19,11 @@ export const HeaderCardSvg: VFC<{ hideGradient: boolean }> = ({
   hideGradient,
 }) => {
   return (
-    <svg viewBox="0 0 718 642" fill="none" style={{ width: "100%" }}>
+    <svg
+      viewBox={hideGradient ? `0 0 800 642` : `0 0 718 642`}
+      fill="none"
+      style={{ width: "100%" }}
+    >
       <g id="hcard_jobTitle_circle">
         <g filter="url(#filter1_f_2132_16425)">
           <circle
