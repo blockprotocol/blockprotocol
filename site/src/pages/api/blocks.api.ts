@@ -31,7 +31,7 @@ export type BlockMetadata = {
   packagePath: string;
 };
 
-export type BlockRegistryInfo = {
+export type BuildConfig = {
   workspace: string;
   repository: string;
   branch: string;
@@ -92,7 +92,7 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
   const glob = require("glob");
   /* eslint-enable global-require */
 
-  const registryInfo: BlockRegistryInfo[] = glob
+  const buildConfig: BuildConfig[] = glob
     .sync(`${process.cwd()}/../hub/**/*.json`)
     .map((path: string) => ({
       ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
@@ -107,7 +107,7 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
     }))
     .map((metadata: BlockMetadata) => ({
       ...metadata,
-      lastUpdated: registryInfo.find(
+      lastUpdated: buildConfig.find(
         ({ workspace }) => workspace === metadata.name,
       )?.timestamp,
       image:
