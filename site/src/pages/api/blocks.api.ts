@@ -93,7 +93,7 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
   /* eslint-enable global-require */
 
   const registryInfo: BlockRegistryInfo[] = glob
-    .sync(`${process.cwd()}/../registry/**/*.json`)
+    .sync(`${process.cwd()}/../hub/**/*.json`)
     .map((path: string) => ({
       ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
     }));

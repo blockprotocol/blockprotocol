@@ -7,7 +7,7 @@
   "scripts": {
     "build": "yarn build-blocks && yarn generate-sitemap && next build",
     "build-block": "./scripts/build-blocks.sh",
-    "build-blocks": "find ../registry -type f | xargs ./scripts/build-blocks.sh",
+    "build-blocks": "find ../hub -type f | xargs ./scripts/build-blocks.sh",
     "clean": "rimraf ./.next/",
     "dev": "yarn generate-sitemap && next dev",
     "generate-sitemap": "node --max-old-space-size=2048 node_modules/.bin/ts-node --files --project tsconfig.json scripts/generate-sitemap",
