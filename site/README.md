@@ -18,6 +18,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     - `MONGODB_DB_NAME`: the name of the database (for example `local`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
+    - `FRONTEND_DOMAIN` (optional): the domain where the frontend is hosted (defaults to `localhost:3000`)
 
 1.  Install dependencies using:
 
