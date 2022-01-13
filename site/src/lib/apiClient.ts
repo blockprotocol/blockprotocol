@@ -4,9 +4,8 @@ import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
 } from "../pages/api/sendLoginCode.api";
-import { FRONTEND_URL } from "./config";
 
-const BASE_URL = `${FRONTEND_URL}/api/`;
+const BASE_URL = `/api/`;
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
