@@ -2,8 +2,7 @@
   "private": true,
   "description": "blockprotocol monorepo",
   "workspaces": [
-    "./packages/create-block-app",
-    "./packages/block-template",
+    "./packages/*",
     "./site"
   ],
   "scripts": {
