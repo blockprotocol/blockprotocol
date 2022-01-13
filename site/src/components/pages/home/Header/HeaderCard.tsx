@@ -67,10 +67,10 @@ export const HeaderCard: VFC<HeaderCardProps> = ({ hideGradient }) => {
         "<",
       )
       .from("#hcard_person__card", lineDrawAnimationProps)
-      .to(["#hcard_jobTitle", "#hcard_image", "#hcard_fullName"], {
+      .to("#hcard_fullName", {
         autoAlpha: 1,
       })
-      .from("#hcard_person__fullName", lineDrawAnimationProps)
+      .from("#hcard_person__fullName", lineDrawAnimationProps, "<")
       .from(
         ["#hcard_fullName_circle_inner", "#hcard_fullName_circle_outer"],
         circleAnimationProps,
@@ -84,6 +84,9 @@ export const HeaderCard: VFC<HeaderCardProps> = ({ hideGradient }) => {
       )
       .to(["#hcard_fullName_circle"], {
         autoAlpha: 0.5,
+      })
+      .to("#hcard_jobTitle", {
+        autoAlpha: 1,
       })
       .from("#hcard_person__jobTitle", lineDrawAnimationProps, "<")
       .from(
@@ -100,6 +103,13 @@ export const HeaderCard: VFC<HeaderCardProps> = ({ hideGradient }) => {
       .to(["#hcard_jobTitle_circle"], {
         autoAlpha: 0.5,
       })
+      .to(
+        "#hcard_image",
+        {
+          autoAlpha: 1,
+        },
+        "<",
+      )
       .from("#hcard_person__image", lineDrawAnimationProps, "<")
       .from(
         ["#hcard_image_circle_inner", "#hcard_image_circle_outer"],
