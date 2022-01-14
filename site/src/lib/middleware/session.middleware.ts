@@ -1,5 +1,9 @@
-import expressSession from "express-session";
+import { Middleware } from "next-connect";
+import { NextApiRequest, NextApiResponse } from "next";
+import nextSession from "next-session";
+import { promisifyStore } from "next-session/lib/compat";
 import MongoStore from "connect-mongo";
+import signature from "cookie-signature";
 import { mustGetEnvVar } from "../../util/api";
 import { FRONTEND_DOMAIN, USE_HTTPS } from "../config";
 
@@ -15,9 +19,8 @@ const sessionStore = MongoStore.create({
   collectionName: "bp-site-sessions",
 });
 
-export const sessionMiddleware = expressSession({
-  secret: SESSION_SECRET,
-  store: sessionStore,
+const getSession = nextSession({
+  store: promisifyStore(sessionStore),
   cookie: {
     domain: FRONTEND_DOMAIN.startsWith("localhost")
       ? "localhost"
@@ -28,6 +31,14 @@ export const sessionMiddleware = expressSession({
     secure: USE_HTTPS,
   },
   name: "blockprotocol-session-id",
-  resave: false,
-  saveUninitialized: false,
+  decode: (raw) => signature.unsign(raw.slice(2), SESSION_SECRET) || null,
+  encode: (sid) => (sid ? `s:${signature.sign(sid, SESSION_SECRET)}` : ""),
 });
+
+export const sessionMiddleware: Middleware<
+  NextApiRequest,
+  NextApiResponse
+> = async (req, res, next) => {
+  await getSession(req, res); // session is set to req.session
+  next();
+};
