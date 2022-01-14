@@ -1,6 +1,7 @@
 import expressSession from "express-session";
 import MongoStore from "connect-mongo";
 import { mustGetEnvVar } from "../../util/api";
+import { USE_HTTPS } from "../config";
 
 // cookie maximum age (365 days)
 const COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
@@ -24,7 +25,7 @@ export const sessionMiddleware = expressSession({
     maxAge: COOKIE_MAX_AGE_MS,
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: USE_HTTPS,
   },
   name: "blockprotocol-session-id",
   resave: false,

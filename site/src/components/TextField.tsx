@@ -13,7 +13,11 @@ type TextFieldProps = {
   displayErrorOnTouched?: boolean;
 } & MuiTextFieldProps;
 
-export const TextField: VFC<TextFieldProps> = ({ helperText, ...props }) => {
+export const TextField: VFC<TextFieldProps> = ({
+  helperText,
+  sx,
+  ...textFieldProps
+}) => {
   const [recentHelperText, setRecentHelperText] = useState<
     ReactNode | undefined
   >(helperText);
@@ -25,7 +29,7 @@ export const TextField: VFC<TextFieldProps> = ({ helperText, ...props }) => {
   }, [helperText]);
 
   return (
-    <Box>
+    <Box sx={sx}>
       {/** @todo: instead of using the wrapper MuiTextField component use the underlying Mui components:
        *     - [FormControl](https://mui.com/api/form-control/)
        *     - [InputLabel](https://mui.com/api/input-label/)
@@ -35,12 +39,12 @@ export const TextField: VFC<TextFieldProps> = ({ helperText, ...props }) => {
        *     - [FormHelperText](https://mui.com/api/form-helper-text/)
        */}
       <MuiTextField
-        {...props}
+        {...textFieldProps}
         InputProps={{
-          ...props.InputProps,
+          ...textFieldProps.InputProps,
           /** @todo: figure out why this is required and the theme defaultProps cannot be relied on */
           ...{ notched: false },
-          endAdornment: props.error ? (
+          endAdornment: textFieldProps.error ? (
             <Box>
               <Icon
                 sx={{ fontSize: 22, color: "currentColor" }}
@@ -48,16 +52,18 @@ export const TextField: VFC<TextFieldProps> = ({ helperText, ...props }) => {
               />
             </Box>
           ) : (
-            props.InputProps?.endAdornment
+            textFieldProps.InputProps?.endAdornment
           ),
         }}
       />
       <Collapse
         in={!!helperText}
-        sx={{ marginBottom: 2 }}
         onExited={() => setRecentHelperText(undefined)}
       >
-        <FormHelperText error={props.error} sx={{ marginTop: 1, fontSize: 15 }}>
+        <FormHelperText
+          error={textFieldProps.error}
+          sx={{ marginTop: 1, fontSize: 15 }}
+        >
           {recentHelperText}
         </FormHelperText>
       </Collapse>

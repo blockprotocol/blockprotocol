@@ -5,7 +5,7 @@ import { formatErrors } from "../../util/api";
 
 export type ApiLoginWithLoginCodeRequestBody = {
   userId: string;
-  loginCodeId: string;
+  verificationCodeId: string;
   code: string;
 };
 
@@ -19,7 +19,7 @@ export default createBaseHandler<
 >()
   .use(
     bodyValidator("userId").isString(),
-    bodyValidator("loginCodeId").isString(),
+    bodyValidator("verificationCodeId").isString(),
     bodyValidator("code").isString(),
   )
   .post(async (req, res) => {
@@ -43,10 +43,10 @@ export default createBaseHandler<
       );
     }
 
-    const { loginCodeId, code } = body;
+    const { verificationCodeId, code } = body;
 
     const loginCode = await user.getVerificationCode(db, {
-      verificationCodeId: loginCodeId,
+      verificationCodeId,
       variant: "login",
     });
 
@@ -54,8 +54,8 @@ export default createBaseHandler<
       return res.status(404).json(
         formatErrors({
           msg: "Could not find login code associated with user",
-          param: "loginCodeId",
-          value: loginCodeId,
+          param: "verificationCodeId",
+          value: verificationCodeId,
         }),
       );
     }

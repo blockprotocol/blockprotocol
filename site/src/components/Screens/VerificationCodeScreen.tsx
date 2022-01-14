@@ -6,14 +6,11 @@ import React, {
   useState,
   VFC,
   ClipboardEventHandler,
+  useCallback,
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
-import { apiClient } from "../../lib/apiClient";
+import { ApiClientError } from "../../lib/apiClient";
 import { SerializedUser } from "../../lib/model/user.model";
-import {
-  ApiLoginWithLoginCodeRequestBody,
-  ApiLoginWithLoginCodeResponse,
-} from "../../pages/api/loginWithLoginCode.api";
 import { Button } from "../Button";
 import { TextField } from "../TextField";
 import {
@@ -21,51 +18,64 @@ import {
   useVerificationCodeTextField,
 } from "../hooks/useVerificationCodeTextField";
 
-export type LoginInfo = {
+export type VerificationCodeInfo = {
   userId: string;
-  loginCodeId: string;
-  email: string;
+  verificationCodeId: string;
 };
 
-type LoginWithLoginCodeScreenProps = {
-  loginInfo: LoginInfo;
+type VerificationCodeScreenProps = {
+  verificationCodeInfo: VerificationCodeInfo;
+  email: string;
   initialVerificationCode?: string;
-  initialApiLoginErrorMessage?: ReactNode;
-  setLoginCodeId: (loginCodeId: string) => void;
-  onLogin: (user: SerializedUser) => void;
+  setVerificationCodeId: (verificationCodeId: string) => void;
+  onSubmit: (user: SerializedUser) => void;
   onChangeEmail: () => void;
+  resend: (params: { email: string }) => Promise<{
+    data?: { userId: string; verificationCodeId: string };
+    error?: ApiClientError;
+  }>;
+  submit: (params: {
+    userId: string;
+    verificationCodeId: string;
+    code: string;
+  }) => Promise<{
+    data?: { user: SerializedUser };
+    error?: ApiClientError;
+  }>;
 };
 
 const parseVerificationCodeInput = (inputCode: string) =>
   inputCode.replace(/\s/g, "");
 
-export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
-  loginInfo,
+export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
+  verificationCodeInfo,
+  email,
   initialVerificationCode,
-  initialApiLoginErrorMessage,
-  setLoginCodeId,
-  onLogin,
+  setVerificationCodeId,
+  onSubmit,
   onChangeEmail,
+  resend,
+  submit,
 }) => {
-  const loginCodeInputRef = useRef<HTMLInputElement>(null);
+  const verificationCodeInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (loginCodeInputRef.current) {
-      loginCodeInputRef.current.select();
+    if (verificationCodeInputRef.current) {
+      verificationCodeInputRef.current.select();
     }
-  }, [loginCodeInputRef]);
+  }, [verificationCodeInputRef]);
 
   const [touchedVerificationCodeInput, setTouchedVerificationCodeInput] =
     useState<boolean>(false);
 
-  const [sendingLoginCode, setSendingLoginCode] = useState<boolean>(false);
-  const [loggingIn, setLoggingIn] = useState<boolean>(false);
+  const [sendingVerificationCode, setSendingVerificationCode] =
+    useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const [apiResendEmailErrorMessage, setApiResendEmailErrorMessage] =
     useState<ReactNode>();
-  const [apiLoginErrorMessage, setApiLoginErrorMessage] = useState<ReactNode>(
-    initialApiLoginErrorMessage,
-  );
+  const [apiSubmittedErrorMessage, setApiSubmittedErrorMessage] =
+    useState<ReactNode>();
 
   const {
     verificationCode,
@@ -74,27 +84,14 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
     verificationCodeHelperText,
   } = useVerificationCodeTextField({ initialVerificationCode });
 
-  useEffect(() => {
-    if (initialApiLoginErrorMessage) {
-      setApiLoginErrorMessage(initialApiLoginErrorMessage);
-    }
-  }, [initialApiLoginErrorMessage]);
-
-  useEffect(() => {
-    if (initialVerificationCode) {
-      setTouchedVerificationCodeInput(true);
-      setVerificationCode(initialVerificationCode);
-    }
-  }, [initialVerificationCode, setVerificationCode]);
-
-  const { userId, loginCodeId, email } = loginInfo;
+  const { userId, verificationCodeId } = verificationCodeInfo;
 
   const handleResendEmail = async () => {
-    setSendingLoginCode(true);
+    setSendingVerificationCode(true);
     setApiResendEmailErrorMessage(undefined);
 
-    const { data, error } = await apiClient.sendLoginCode({ email });
-    setSendingLoginCode(false);
+    const { data, error } = await resend({ email });
+    setSendingVerificationCode(false);
 
     if (error) {
       if (error.response?.data.errors) {
@@ -107,41 +104,53 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
     } else if (data) {
       unstable_batchedUpdates(() => {
         setVerificationCode("");
-        setApiLoginErrorMessage(undefined);
+        setApiSubmittedErrorMessage(undefined);
         setTouchedVerificationCodeInput(false);
-        setLoginCodeId(data.loginCodeId);
+        setVerificationCodeId(data.verificationCodeId);
       });
-      if (loginCodeInputRef.current) {
-        loginCodeInputRef.current.select();
+      if (verificationCodeInputRef.current) {
+        verificationCodeInputRef.current.select();
       }
     }
   };
 
-  const handleSubmit = async (code: string) => {
-    setTouchedVerificationCodeInput(true);
-    setApiLoginErrorMessage(undefined);
+  const handleSubmit = useCallback(
+    async (code: string) => {
+      setTouchedVerificationCodeInput(true);
+      setApiSubmittedErrorMessage(undefined);
 
-    if (isVerificationCodeFormatted(code)) {
-      setLoggingIn(true);
-      const { data, error } = await apiClient.post<
-        ApiLoginWithLoginCodeRequestBody,
-        ApiLoginWithLoginCodeResponse
-      >("loginWithLoginCode", { userId, loginCodeId, code });
-      setLoggingIn(false);
+      if (isVerificationCodeFormatted(code)) {
+        setSubmitting(true);
+        const { data, error } = await submit({
+          userId,
+          verificationCodeId,
+          code,
+        });
+        setSubmitting(false);
 
-      if (error) {
-        if (error.response?.data.errors) {
-          setApiLoginErrorMessage(
-            error.response.data.errors.map(({ msg }) => msg),
-          );
-        } else {
-          throw error;
+        if (error) {
+          if (error.response?.data.errors) {
+            setApiSubmittedErrorMessage(
+              error.response.data.errors.map(({ msg }) => msg),
+            );
+          } else {
+            throw error;
+          }
+        } else if (data) {
+          onSubmit(data.user);
         }
-      } else if (data) {
-        onLogin(data.user);
       }
+    },
+    [onSubmit, submit, userId, verificationCodeId],
+  );
+
+  useEffect(() => {
+    if (initialVerificationCode) {
+      setTouchedVerificationCodeInput(true);
+      setVerificationCode(initialVerificationCode);
+      void handleSubmit(initialVerificationCode);
     }
-  };
+  }, [initialVerificationCode, setVerificationCode, handleSubmit]);
 
   const handleVerificationCodeInputPaste: ClipboardEventHandler<
     HTMLInputElement
@@ -164,17 +173,15 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
 
   const helperText = touchedVerificationCodeInput
     ? apiResendEmailErrorMessage ??
-      apiLoginErrorMessage ??
+      apiSubmittedErrorMessage ??
       verificationCodeHelperText
     : undefined;
 
-  const isVerificationCodeInvalid =
-    !!apiResendEmailErrorMessage ||
-    !!apiLoginErrorMessage ||
-    !isVerificationCodeInputValid;
+  const isVerificationCodeValid =
+    !(apiResendEmailErrorMessage || apiSubmittedErrorMessage) &&
+    isVerificationCodeInputValid;
 
-  const displayError =
-    touchedVerificationCodeInput && isVerificationCodeInvalid;
+  const displayError = touchedVerificationCodeInput && !isVerificationCodeValid;
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
@@ -234,6 +241,7 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
         marginBottom={3}
       >
         <TextField
+          sx={{ marginBottom: 2 }}
           fullWidth
           label="Verification Code"
           placeholder="your-verification-code"
@@ -243,13 +251,15 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
           helperText={helperText}
           onBlur={() => setTouchedVerificationCodeInput(true)}
           onChange={({ target }) => {
-            if (apiLoginErrorMessage) setApiLoginErrorMessage(undefined);
+            if (apiSubmittedErrorMessage) {
+              setApiSubmittedErrorMessage(undefined);
+            }
             setVerificationCode(target.value);
           }}
           inputProps={{
             onPaste: handleVerificationCodeInputPaste,
           }}
-          inputRef={loginCodeInputRef}
+          inputRef={verificationCodeInputRef}
         />
         <Box
           width="100%"
@@ -267,7 +277,7 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
             fullWidth
             squared
             onClick={handleResendEmail}
-            loading={sendingLoginCode}
+            loading={sendingVerificationCode}
             sx={{
               marginRight: {
                 xs: 0,
@@ -285,7 +295,7 @@ export const LoginWithLoginCodeScreen: VFC<LoginWithLoginCodeScreenProps> = ({
             fullWidth
             squared
             disabled={displayError}
-            loading={loggingIn}
+            loading={submitting}
             type="submit"
             sx={{
               marginLeft: {

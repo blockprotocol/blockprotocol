@@ -9,12 +9,14 @@ import {
 } from "./verificationCode.model";
 import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLoginCode.api";
 import { FRONTEND_URL } from "../config";
+import { ApiVerifyEmailRequestBody } from "../../pages/api/verifyEmail.api";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
 export type SerializedUser = {
   id: string;
   isSignedUp: boolean;
+  email: string;
   shortname?: string;
   preferredName?: string;
 };
@@ -277,7 +279,7 @@ export class User {
     } = {
       email: this.email,
       userId: this.id,
-      loginCodeId: loginCode.id,
+      verificationCodeId: loginCode.id,
       code: loginCode.code,
     };
 
@@ -319,9 +321,24 @@ export class User {
       variant: "email",
     });
 
+    const magicLinkQueryParams: ApiVerifyEmailRequestBody & {
+      email: string;
+    } = {
+      email: this.email,
+      userId: this.id,
+      verificationCodeId: emailVerificationCode.id,
+      code: emailVerificationCode.code,
+    };
+
+    const magicLink = `${FRONTEND_URL}/signup?${new URLSearchParams(
+      magicLinkQueryParams,
+    ).toString()}`;
+
     /** @todo: send email */
     // eslint-disable-next-line no-console
     console.log("Email verification code: ", emailVerificationCode.code);
+    // eslint-disable-next-line no-console
+    console.log("Magic Link: ", magicLink);
 
     return emailVerificationCode;
   }
@@ -334,6 +351,7 @@ export class User {
     return {
       id: this.id,
       isSignedUp: this.isSignedUp(),
+      email: this.email,
       preferredName: this.preferredName,
       shortname: this.shortname,
     };

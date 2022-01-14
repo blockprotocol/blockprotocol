@@ -5,7 +5,7 @@ import { formatErrors } from "../../util/api";
 
 export type ApiVerifyEmailRequestBody = {
   userId: string;
-  emailVerificationCodeId: string;
+  verificationCodeId: string;
   code: string;
 };
 
@@ -19,7 +19,7 @@ export default createBaseHandler<
 >()
   .use(
     bodyValidator("userId").isString().notEmpty(),
-    bodyValidator("emailVerificationCodeId").isString().notEmpty(),
+    bodyValidator("verificationCodeId").isString().notEmpty(),
     bodyValidator("code").isString().notEmpty(),
   )
   .post(async (req, res) => {
@@ -43,10 +43,10 @@ export default createBaseHandler<
       );
     }
 
-    const { emailVerificationCodeId, code } = body;
+    const { verificationCodeId, code } = body;
 
     const emailVerificationCode = await user.getVerificationCode(db, {
-      verificationCodeId: emailVerificationCodeId,
+      verificationCodeId,
       variant: "email",
     });
 
@@ -54,8 +54,8 @@ export default createBaseHandler<
       return res.status(404).json(
         formatErrors({
           msg: "Could not find email verification code associated with user",
-          param: "emailVerificationCodeId",
-          value: emailVerificationCodeId,
+          param: "verificationCodeId",
+          value: verificationCodeId,
         }),
       );
     }
@@ -76,6 +76,8 @@ export default createBaseHandler<
           }),
         );
       }
+
+      await user.update(db, { hasVerifiedEmail: true });
 
       req.login(user, () => res.status(200).json({ user: user.serialize() }));
     }

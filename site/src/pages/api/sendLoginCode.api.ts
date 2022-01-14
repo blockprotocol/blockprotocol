@@ -9,7 +9,7 @@ export type ApiSendLoginCodeRequestBody = {
 
 export type ApiSendLoginCodeResponse = {
   userId: string;
-  loginCodeId: string;
+  verificationCodeId: string;
 };
 
 export default createBaseHandler<
@@ -48,10 +48,10 @@ export default createBaseHandler<
       );
     }
 
-    const loginCode = await user.sendLoginCode(db);
+    const { id: verificationCodeId } = await user.sendLoginCode(db);
 
     res.status(200).json({
       userId: user.id,
-      loginCodeId: loginCode.id,
+      verificationCodeId,
     });
   });
