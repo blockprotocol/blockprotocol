@@ -70,7 +70,7 @@ The component can be debugged locally by first starting `yarn dev`.
 npm run start
 ```
 
-Now (using VSCODE), go to the Debug tab, select "Launch Chrome" and start the debugger (F5).
+Now (using VS Code), go to the Debug tab, select "Launch Chrome" and start the debugger (F5).
 
 You should now be able to set breakpoints and step through the code.
 
