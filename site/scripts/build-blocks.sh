@@ -88,13 +88,13 @@ trap onexit EXIT HUP INT QUIT PIPE TERM
 # used to build a block. if the given config no longer exists,
 # its cached build is removed.
 #
-# @param build_config - path to any config in <repo-root>/registry
+# @param build_config - path to any config in <repo-root>/hub
 #
 function build_block {
   build_config="$1"
 
   # create block specific subfolder in nextjs' static root
-  public_dir="${REPO_ROOT}/site/public/blocks/${build_config##*/registry/}"
+  public_dir="${REPO_ROOT}/site/public/blocks/${build_config##*/hub/}"
   public_dir="${public_dir%\.json}"
 
   log info "building ${build_config}"
@@ -171,7 +171,7 @@ if [[ $# -gt 0 ]]; then
 else
   log info "building block configs changed by last commit"
 
-  for build_config in $(git diff-tree --name-only --no-commit-id -r HEAD "${REPO_ROOT}/registry"); do
+  for build_config in $(git diff-tree --name-only --no-commit-id -r HEAD "${REPO_ROOT}/hub"); do
     build_config="${REPO_ROOT}/${build_config}"
     build_block "$build_config"
   done
