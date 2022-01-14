@@ -1,6 +1,6 @@
 {
   "workspace": "@hashintel/block-embed",
-  "repository": "https://github.com/hashintel/dev.git",
+  "repository": "https://github.com/hashintel/hash.git",
   "branch": "main",
   "distDir": "dist",
   "timestamp": "2021-12-25T16:30:00.000Z"
