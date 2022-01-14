@@ -1,6 +1,7 @@
 import { merge } from "lodash";
 import { Db, WithId, ObjectId, DBRef } from "mongodb";
 import { NextApiResponse } from "next";
+import dedent from "dedent";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../util/api";
 import {
   VerificationCode,
@@ -11,6 +12,7 @@ import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLogin
 import { ApiVerifyEmailRequestBody } from "../../pages/api/verifyEmail.api";
 import { FRONTEND_URL, isProduction } from "../config";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
+import { sendMail } from "../awsSes";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
@@ -305,11 +307,21 @@ export class User {
       magicLinkQueryParams,
     ).toString()}`;
 
-    /** @todo: send email */
-    // eslint-disable-next-line no-console
-    console.log("Login code: ", loginCode.code);
-    // eslint-disable-next-line no-console
-    console.log("Magic link: ", magicLink);
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.log("Email verification code: ", loginCode.code);
+      // eslint-disable-next-line no-console
+      console.log("Magic Link: ", magicLink);
+    } else {
+      await sendMail({
+        to: this.email,
+        subject: "Your Block Protocol verification code",
+        html: dedent`
+          <p>To log in, copy and paste your verification code or <a href="${magicLink}">click here</a>.</p>
+          <code>${loginCode.code}</code>
+        `,
+      });
+    }
 
     return loginCode;
   }
@@ -352,11 +364,21 @@ export class User {
       magicLinkQueryParams,
     ).toString()}`;
 
-    /** @todo: send email */
-    // eslint-disable-next-line no-console
-    console.log("Email verification code: ", emailVerificationCode.code);
-    // eslint-disable-next-line no-console
-    console.log("Magic Link: ", magicLink);
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.log("Email verification code: ", emailVerificationCode.code);
+      // eslint-disable-next-line no-console
+      console.log("Magic Link: ", magicLink);
+    } else {
+      await sendMail({
+        to: this.email,
+        subject: "Your Block Protocol verification code",
+        html: dedent`
+          <p>To verify your email address, copy and paste your verification code or <a href="${magicLink}">click here</a>.</p>
+          <code>${emailVerificationCode.code}</code>
+        `,
+      });
+    }
 
     return emailVerificationCode;
   }
