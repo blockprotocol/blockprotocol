@@ -21,6 +21,7 @@ const BASE_URL = "/api/";
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 const handleAxiosError = (
