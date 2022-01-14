@@ -1,7 +1,5 @@
 # Block template
 
-This template adapted (quite heavily now) from https://github.com/Paciolan/remote-component-starter
-
 ## Step one: copy this template
 
 See https://blockprotocol.org/docs/developing-blocks
@@ -75,3 +73,7 @@ npm run start
 Now (using VSCODE), go to the Debug tab, select "Launch Chrome" and start the debugger (F5).
 
 You should now be able to set breakpoints and step through the code.
+
+---
+
+This template adapted (quite heavily now) from https://github.com/Paciolan/remote-component-starter
