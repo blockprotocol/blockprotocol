@@ -767,6 +767,10 @@ export const theme = createTheme({
       },
     },
     MuiTabs: {
+      defaultProps: {
+        disableRipple: true,
+        disableTouchRipple: true,
+      },
       styleOverrides: {
         indicator: {
           height: 5,
