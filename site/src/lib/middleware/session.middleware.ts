@@ -21,7 +21,7 @@ export const sessionMiddleware = expressSession({
   cookie: {
     domain: FRONTEND_DOMAIN.startsWith("localhost")
       ? "localhost"
-      : `.${FRONTEND_DOMAIN}`,
+      : FRONTEND_DOMAIN,
     maxAge: COOKIE_MAX_AGE_MS,
     httpOnly: true,
     sameSite: "lax",

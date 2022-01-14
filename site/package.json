@@ -28,6 +28,7 @@
     "axios": "^0.24.0",
     "clsx": "^1.1.1",
     "connect-mongo": "^4.6.0",
+    "cors": "^2.8.5",
     "date-fns": "^2.27.0",
     "dotenv": "^10.0.0",
     "express-session": "^1.17.2",
@@ -58,6 +59,7 @@
   },
   "devDependencies": {
     "@babel/runtime": "^7.16.3",
+    "@types/cors": "^2.8.12",
     "@types/express-session": "^1.17.4",
     "@types/lodash": "4.14.171",
     "@types/passport": "^1.0.7",
