@@ -122,6 +122,8 @@ export const readBlockDataFromDisk = ({
 }: BlockMetadata) => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
   const fs = require("fs");
+  // @todo update to also return the metadata information
+  // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
   return {
     schema: JSON.parse(
       fs.readFileSync(

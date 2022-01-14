@@ -1,5 +1,5 @@
 import { VoidFunctionComponent } from "react";
-import { Box, Modal } from "@mui/material";
+import { Box, Modal, alpha } from "@mui/material";
 
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
@@ -29,9 +29,9 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
     <Modal
       open={open}
       onClose={() => setOpen((oldValue) => !oldValue)}
-      sx={{
-        "& .MuiBackdrop-root": {
-          backgroundColor: "rgba(77, 92, 108, 0.6)",
+      BackdropProps={{
+        sx: {
+          backgroundColor: ({ palette }) => alpha(palette.gray[70], 0.6),
         },
       }}
     >

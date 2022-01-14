@@ -67,13 +67,12 @@ export const BlockDataContainer: VoidFunctionComponent<
           value={activeMobileTab}
           onChange={(_event, newValue: number) => setActiveMobileTab(newValue)}
           sx={{
-            "&.MuiTabs-root": {
-              backgroundColor: theme.palette.gray[10],
-              border: `1px solid ${theme.palette.gray[20]}`,
-              borderRadius: "6px",
-              display: "flex",
-              position: "relative",
-            },
+            backgroundColor: theme.palette.gray[10],
+            border: `1px solid ${theme.palette.gray[20]}`,
+            borderRadius: "6px",
+            display: "flex",
+            position: "relative",
+
             "& .MuiTab-root": {
               flex: 1,
               zIndex: 2,
@@ -81,7 +80,9 @@ export const BlockDataContainer: VoidFunctionComponent<
               justifyContent: "center",
               marginRight: 0,
             },
-            ".MuiTabs-indicator": {
+          }}
+          TabIndicatorProps={{
+            style: {
               backgroundColor: theme.palette.common.white,
               borderRadius: "6px",
               position: "absolute",
@@ -89,7 +90,7 @@ export const BlockDataContainer: VoidFunctionComponent<
               bottom: 4,
               marginLeft: "4px",
               height: "unset",
-              boxShadow: 1,
+              boxShadow: theme.shadows[1],
               width: "48% !important",
             },
           }}
@@ -98,9 +99,8 @@ export const BlockDataContainer: VoidFunctionComponent<
           <Tab label="Source Code" />
         </Tabs>
       )}
-
       <Box
-        mt={5}
+        mt={{ xs: 2, md: 5 }}
         sx={{
           display: { xs: "flex", md: "grid" },
           flexDirection: { xs: "column", md: "unset" },
@@ -122,13 +122,13 @@ export const BlockDataContainer: VoidFunctionComponent<
               sx={{
                 "& .MuiTab-root": {
                   textTransform: "none",
-                  color: "#64778C",
-                },
-                "& .MuiTab-root.Mui-selected": {
-                  backgroundColor: theme.palette.gray[10],
-                  color: theme.palette.purple[700],
-                  borderTopLeftRadius: 6,
-                  borderTopRightRadius: 6,
+                  color: ({ palette }) => palette.gray[60],
+                  "&.Mui-selected": {
+                    backgroundColor: theme.palette.gray[10],
+                    color: theme.palette.purple[700],
+                    borderTopLeftRadius: 6,
+                    borderTopRightRadius: 6,
+                  },
                 },
               }}
               value={blockTab}
