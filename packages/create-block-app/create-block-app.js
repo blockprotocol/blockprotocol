@@ -6,7 +6,7 @@ const { promisify } = require("util");
 const child_process = require("child_process");
 const fs = require("fs");
 const path = require("path");
-const unpack = require("tar-pack").unpack;
+// const unpack = require("tar-pack").unpack;
 
 const exec = promisify(child_process.exec);
 
@@ -14,7 +14,7 @@ const exec = promisify(child_process.exec);
   const blockName = process.argv[2];
 
   if (!blockName) {
-    console.error("Please supply block name the script.");
+    console.error("Please supply block name");
     process.exit();
   }
 
