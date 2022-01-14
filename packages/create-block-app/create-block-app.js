@@ -1,20 +1,24 @@
+#!/usr/bin/env node
+
+/* eslint-disable no-console */
+
 const { promisify } = require("util");
 const child_process = require("child_process");
 const fs = require("fs");
 const path = require("path");
+const unpack = require("tar-pack").unpack;
 
 const exec = promisify(child_process.exec);
 
 (async () => {
   const blockName = process.argv[2];
-  const blockPath = process.argv[3];
 
-  if (!blockName || !blockPath) {
-    console.error(
-      "Please supply a block name and block path as an argument to the script.",
-    );
+  if (!blockName) {
+    console.error("Please supply block name the script.");
     process.exit();
   }
+
+  const blockPath = process.argv[3] ?? blockName;
 
   const resolvedBlockPath = path.resolve(blockPath);
 
@@ -30,7 +34,9 @@ const exec = promisify(child_process.exec);
 
   console.log("Copying required files...");
 
-  await exec(`mkdir -p ${path.dirname(resolvedBlockPath)}`);
+  fs.mkdirSync(path.dirname(resolvedBlockPath), { recursive: true });
+
+  // TODO: Replace with ‘download and unpack npm package’
   await exec(`cp -R ${__dirname}/../../block-template ${resolvedBlockPath}`);
 
   console.log("Writing metadata...");

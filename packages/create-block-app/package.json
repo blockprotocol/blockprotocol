@@ -1,3 +1,23 @@
 {
-  "name": "create-block-app"
+  "name": "create-block-app",
+  "version": "0.0.1",
+  "description": "Create new https://blockprotocol.org blocks",
+  "keywords": [
+    "blockprotocol"
+  ],
+  "bugs": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "packages/create-block-app"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "bin": "create-block-app.js",
+  "dependencies": {
+    "tar-pack": "3.4.1"
+  }
 }
