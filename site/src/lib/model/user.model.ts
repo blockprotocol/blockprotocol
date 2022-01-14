@@ -8,8 +8,9 @@ import {
   VerificationCodeVariant,
 } from "./verificationCode.model";
 import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLoginCode.api";
-import { FRONTEND_URL } from "../config";
 import { ApiVerifyEmailRequestBody } from "../../pages/api/verifyEmail.api";
+import { FRONTEND_URL, isProduction } from "../config";
+import { subscribeToMailchimp } from "../mailchimp";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
@@ -194,7 +195,11 @@ export class User {
       .collection<UserDocument>(User.COLLECTION_NAME)
       .insertOne(userProperties);
 
-    /** @todo: add to mailchimp mailing list */
+    const { email } = userProperties;
+
+    if (isProduction) {
+      await subscribeToMailchimp({ email });
+    }
 
     return new User({ id: insertedId.toString(), ...userProperties });
   }
