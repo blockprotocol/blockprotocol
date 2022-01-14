@@ -1,7 +1,7 @@
 import expressSession from "express-session";
 import MongoStore from "connect-mongo";
 import { mustGetEnvVar } from "../../util/api";
-import { USE_HTTPS } from "../config";
+import { FRONTEND_DOMAIN, USE_HTTPS } from "../config";
 
 // cookie maximum age (365 days)
 const COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
@@ -19,9 +19,9 @@ export const sessionMiddleware = expressSession({
   secret: SESSION_SECRET,
   store: sessionStore,
   cookie: {
-    domain: process.env.FRONTEND_DOMAIN?.includes("blockprotocol.org")
-      ? ".blockprotocol.org"
-      : "localhost",
+    domain: FRONTEND_DOMAIN.startsWith("localhost")
+      ? "localhost"
+      : `.${FRONTEND_DOMAIN}`,
     maxAge: COOKIE_MAX_AGE_MS,
     httpOnly: true,
     sameSite: "lax",
