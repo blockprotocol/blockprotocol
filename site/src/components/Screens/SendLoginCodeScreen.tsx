@@ -1,23 +1,26 @@
 import { Typography, Box } from "@mui/material";
 import React, { ReactNode, useEffect, useRef, useState, VFC } from "react";
 import { apiClient } from "../../lib/apiClient";
-import { ApiSendLoginCodeResponse } from "../../pages/api/sendLoginCode.api";
 import { Button } from "../Button";
 import { TextField } from "../TextField";
 import { Link } from "../Link";
 import { BlockProtocolIcon } from "../SvgIcon/BlockProtocolIcon";
 import { useEmailTextField } from "../hooks/useEmailTextField";
+import { VerificationCodeInfo } from "./VerificationCodeScreen";
 
 type SendLoginCodeScreenProps = {
-  initialEmail: string;
-  onLoginCodeSent: (
-    params: ApiSendLoginCodeResponse & { email: string },
-  ) => void;
+  initialEmail?: string;
+  onLoginCodeSent: (params: {
+    verificationCodeInfo: VerificationCodeInfo;
+    email: string;
+  }) => void;
+  onClose?: () => void;
 };
 
 export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
   initialEmail,
   onLoginCodeSent,
+  onClose,
 }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -45,9 +48,10 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
 
     if (isEmailInputValid) {
       setSendingLoginCode(true);
-      const { data, error } = await apiClient.sendLoginCode({
-        email: emailValue,
-      });
+      const { data: verificationCodeInfo, error } =
+        await apiClient.sendLoginCode({
+          email: emailValue,
+        });
       setSendingLoginCode(false);
 
       if (error) {
@@ -56,11 +60,22 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
         } else {
           throw error;
         }
-      } else if (data) {
-        const { userId, loginCodeId } = data;
-        onLoginCodeSent({ userId, loginCodeId, email: emailValue });
+      } else if (verificationCodeInfo) {
+        onLoginCodeSent({ verificationCodeInfo, email: emailValue });
       }
     }
+  };
+
+  const reset = () => {
+    setEmailValue("");
+    setTouchedEmailInput(false);
+    setSendingLoginCode(false);
+    setApiErrorMessage(undefined);
+  };
+
+  const handleClose = () => {
+    reset();
+    if (onClose) onClose();
   };
 
   const helperText = touchedEmailInput
@@ -90,15 +105,15 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
       </Typography>
       <Box width="100%" component="form" onSubmit={handleSubmit} noValidate>
         <TextField
+          sx={{ marginBottom: 2 }}
           required
           type="email"
-          onBlur={() => setTouchedEmailInput(true)}
           error={displayError}
           helperText={helperText}
           inputRef={emailInputRef}
           fullWidth
           label="Email address"
-          placeholder="you@example.com"
+          placeholder="claude@example.com"
           variant="outlined"
           value={emailValue}
           onChange={({ target }) => {
@@ -118,7 +133,16 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
         </Button>
       </Box>
       <Typography textAlign="center">
-        Not signed up yet? <Link href="/signup">Create an account</Link>
+        Not signed up yet?{" "}
+        <Link
+          href={{
+            pathname: "/signup",
+            query: emailValue ? { email: emailValue } : undefined,
+          }}
+          onClick={handleClose}
+        >
+          Create an account
+        </Link>
       </Typography>
     </>
   );
