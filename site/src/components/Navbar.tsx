@@ -343,7 +343,7 @@ export const Navbar: VFC<NavbarProps> = ({
                       </Typography>
                     </Button>
                   )}
-                  {!user ? (
+                  {user?.isSignedUp ? null : (
                     <Link href="/docs/developing-blocks">
                       <Button
                         size="small"
@@ -355,7 +355,7 @@ export const Navbar: VFC<NavbarProps> = ({
                           : "Quick Start Guide"}
                       </Button>
                     </Link>
-                  ) : null}
+                  )}
                 </>
               ) : (
                 <IconButton
@@ -369,7 +369,7 @@ export const Navbar: VFC<NavbarProps> = ({
                   <Icon className="fas fa-bars" />
                 </IconButton>
               )}
-              {user ? <AccountDropdown /> : null}
+              {user?.isSignedUp ? <AccountDropdown /> : null}
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>
