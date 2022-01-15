@@ -1,63 +1,70 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState, ReactNode, useMemo, useContext } from "react";
+import { useEffect, useState, useMemo, useContext } from "react";
 import { Paper, Box, Icon, Fade, Container } from "@mui/material";
-import { ParsedUrlQuery } from "querystring";
 import { apiClient } from "../lib/apiClient";
-import {
-  ApiLoginWithLoginCodeRequestBody,
-  ApiLoginWithLoginCodeResponse,
-} from "./api/loginWithLoginCode.api";
+import { ApiLoginWithLoginCodeRequestBody } from "./api/loginWithLoginCode.api";
 import { Button } from "../components/Button";
-import {
-  LoginInfo,
-  LoginWithLoginCodeScreen,
-} from "../components/Modal/LoginWithLoginCodeScreen";
-import { SendLoginCodeScreen } from "../components/Modal/SendLoginCodeScreen";
+import { SendLoginCodeScreen } from "../components/Screens/SendLoginCodeScreen";
 import { SerializedUser } from "../lib/model/user.model";
 import UserContext from "../context/UserContext";
+import {
+  VerificationCodeInfo,
+  VerificationCodeScreen,
+} from "../components/Screens/VerificationCodeScreen";
 
 type LoginPageParsedUrlQuery = {
-  redirectAsPath?: string;
-  email: string;
-} & ApiLoginWithLoginCodeRequestBody;
+  redirectPath?: string;
+  email?: string;
+} & Partial<ApiLoginWithLoginCodeRequestBody>;
 
-const tbdIsLoginPageParsedUrlQuery = (
-  tbd: ParsedUrlQuery,
-): tbd is LoginPageParsedUrlQuery =>
-  typeof tbd.email === "string" &&
-  typeof tbd.userId === "string" &&
-  typeof tbd.loginCodeId === "string" &&
-  typeof tbd.code === "string";
+const toStringElseUndefined = (item: string | string[] | undefined) =>
+  typeof item === "string" ? item : undefined;
 
 const LoginPage: NextPage = () => {
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
 
-  const parsedQuery = useMemo(() => {
+  const parsedQuery = useMemo((): LoginPageParsedUrlQuery => {
     const { query } = router;
 
-    if (tbdIsLoginPageParsedUrlQuery(query)) {
-      return query;
-    }
-    return undefined;
+    return {
+      redirectPath: toStringElseUndefined(query.redirectPath),
+      email: toStringElseUndefined(query.email),
+      userId: toStringElseUndefined(query.userId),
+      verificationCodeId: toStringElseUndefined(query.verificationCodeId),
+      code: toStringElseUndefined(query.code),
+    };
   }, [router]);
 
-  const [currentPage, setCurrentPage] = useState<"Email" | "VerificationCode">(
-    "Email",
-  );
+  const [currentScreen, setCurrentScreen] = useState<
+    "Email" | "VerificationCode"
+  >("Email");
 
-  const [loginInfo, setLoginInfo] = useState<LoginInfo | undefined>(
-    parsedQuery ?? undefined,
-  );
-
-  const [apiLoginErrorMessage, setApiLoginErrorMessage] = useState<ReactNode>();
+  const [email, setEmail] = useState<string>();
+  const [redirectPath, setRedirectPath] = useState<string>();
+  const [initialVerificationCode, setInitialVerificationCode] =
+    useState<string>();
+  const [verificationCodeInfo, setVerificationCodeInfo] = useState<
+    VerificationCodeInfo | undefined
+  >();
 
   useEffect(() => {
-    if (parsedQuery) {
-      setLoginInfo(parsedQuery);
+    if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
+      if (parsedQuery.email) setEmail(parsedQuery.email);
+      if (parsedQuery.redirectPath) setRedirectPath(parsedQuery.redirectPath);
+
+      const { userId, verificationCodeId, code } = parsedQuery;
+
+      if (parsedQuery.email && userId && verificationCodeId && code) {
+        setVerificationCodeInfo({ userId, verificationCodeId });
+        setInitialVerificationCode(code);
+        setCurrentScreen("VerificationCode");
+      }
+
+      void router.replace(router.route, undefined, { shallow: true });
     }
-  }, [parsedQuery]);
+  }, [parsedQuery, router]);
 
   useEffect(() => {
     if (user) {
@@ -65,42 +72,13 @@ const LoginPage: NextPage = () => {
     }
   }, [user, router]);
 
-  useEffect(() => {
-    const { query } = router;
-
-    if (tbdIsLoginPageParsedUrlQuery(query)) {
-      const { redirectAsPath, ...requestBody } = query;
-
-      setCurrentPage("VerificationCode");
-
-      void apiClient
-        .post<ApiLoginWithLoginCodeRequestBody, ApiLoginWithLoginCodeResponse>(
-          "loginWithLoginCode",
-          requestBody,
-        )
-        .then(({ data, error }) => {
-          if (error) {
-            if (error.response?.data.errors) {
-              setApiLoginErrorMessage(
-                error.response.data.errors.map(({ msg }) => msg),
-              );
-            } else {
-              throw error;
-            }
-          } else if (data) {
-            void router.push(redirectAsPath ?? "/");
-          }
-        });
-    }
-  }, [router]);
-
   const handleLoginCodeSent = (params: {
-    userId: string;
-    loginCodeId: string;
+    verificationCodeInfo: VerificationCodeInfo;
     email: string;
   }) => {
-    setLoginInfo(params);
-    setCurrentPage("VerificationCode");
+    setVerificationCodeInfo(params.verificationCodeInfo);
+    setEmail(params.email);
+    setCurrentScreen("VerificationCode");
   };
 
   const handleLogin = (loggedInUser: SerializedUser) => {
@@ -108,7 +86,7 @@ const LoginPage: NextPage = () => {
       /** @todo: redirect to signup page if user hasn't completed signup */
     }
     setUser(loggedInUser);
-    void router.push("/");
+    void router.push(redirectPath ?? "/");
   };
 
   return (
@@ -143,10 +121,10 @@ const LoginPage: NextPage = () => {
             justifyContent="space-between"
             width="100%"
           >
-            <Fade in={currentPage !== "Email"}>
+            <Fade in={currentScreen !== "Email"}>
               <Box>
                 <Button
-                  onClick={() => setCurrentPage("Email")}
+                  onClick={() => setCurrentScreen("Email")}
                   variant="transparent"
                   startIcon={
                     <Icon sx={{ fontSize: 16 }} className="fas fa-arrow-left" />
@@ -172,25 +150,29 @@ const LoginPage: NextPage = () => {
               },
             })}
           >
-            {currentPage === "Email" ? (
+            {currentScreen === "Email" ? (
               <SendLoginCodeScreen
-                initialEmail={loginInfo?.email || ""}
+                initialEmail={email}
                 onLoginCodeSent={handleLoginCodeSent}
               />
             ) : null}
-            {currentPage === "VerificationCode" && loginInfo ? (
-              <LoginWithLoginCodeScreen
-                loginInfo={loginInfo}
-                setLoginCodeId={(loginCodeId) => {
-                  setLoginInfo({
-                    ...loginInfo,
-                    loginCodeId,
+            {currentScreen === "VerificationCode" &&
+            verificationCodeInfo &&
+            email ? (
+              <VerificationCodeScreen
+                verificationCodeInfo={verificationCodeInfo}
+                email={email}
+                setVerificationCodeId={(verificationCodeId) => {
+                  setVerificationCodeInfo({
+                    ...verificationCodeInfo,
+                    verificationCodeId,
                   });
                 }}
-                initialVerificationCode={parsedQuery?.code}
-                initialApiLoginErrorMessage={apiLoginErrorMessage}
-                onLogin={handleLogin}
-                onChangeEmail={() => setCurrentPage("Email")}
+                initialVerificationCode={initialVerificationCode}
+                onSubmit={handleLogin}
+                onChangeEmail={() => setCurrentScreen("Email")}
+                resend={apiClient.sendLoginCode}
+                submit={apiClient.loginWithLoginCode}
               />
             ) : null}
           </Box>

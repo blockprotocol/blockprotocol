@@ -1498,6 +1498,16 @@
   dependencies:
     "@types/node" "*"
 
+"@types/cookie-signature@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@types/cookie-signature/-/cookie-signature-1.0.4.tgz#164cc7208f35fc379195a9d09431801677fc4559"
+  integrity sha512-B9LOCjVnLniz5NHq8pPFQdDjRGtLZKYG7tQHveMeUalWvZgOuLQ5OeWgx3y4/WLJFt0N+tYyk8HMEOsvCjf7Yw==
+
+"@types/cors@^2.8.12":
+  version "2.8.12"
+  resolved "https://registry.yarnpkg.com/@types/cors/-/cors-2.8.12.tgz#6b2c510a7ad7039e98e7b8d3d6598f4359e5c080"
+  integrity sha512-vt+kDhq/M2ayberEtJcIN/hxXy1Pk+59g2FV/ZQceeaTyCtCucjL2Q7FXlFjtWn4n15KCr1NE2lNNFhp0lEThw==
+
 "@types/express-serve-static-core@^4.17.18":
   version "4.17.27"
   resolved "https://registry.yarnpkg.com/@types/express-serve-static-core/-/express-serve-static-core-4.17.27.tgz#7a776191e47295d2a05962ecbb3a4ce97e38b401"
@@ -3204,7 +3214,12 @@ cookie-signature@1.0.6:
   resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.0.6.tgz#e303a882b342cc3ee8ca513a79999734dab3ae2c"
   integrity sha1-4wOogrNCzD7oylE6eZmXNNqzriw=
 
-cookie@0.4.1:
+cookie-signature@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/cookie-signature/-/cookie-signature-1.1.0.tgz#cc94974f91fb9a9c1bb485e95fc2b7f4b120aff2"
+  integrity sha512-Alvs19Vgq07eunykd3Xy2jF0/qSNv2u7KDbAek9H5liV1UMijbqFs5cycZvv5dVsvseT/U4H8/7/w8Koh35C4A==
+
+cookie@0.4.1, cookie@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.4.1.tgz#afd713fe26ebd21ba95ceb61f9a8116e50a537d1"
   integrity sha512-ZwrFkGJxUR3EIoXtO+yVE69Eb7KlixbaeAWfBQB9vVsNn/o+Yw69gBWSSDK825hQNdN+wF8zELf3dFNl/kxkUA==
@@ -3262,6 +3277,14 @@ core-util-is@~1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.3.tgz#a6042d3634c2b27e9328f837b965fac83808db85"
   integrity sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==
+
+cors@^2.8.5:
+  version "2.8.5"
+  resolved "https://registry.yarnpkg.com/cors/-/cors-2.8.5.tgz#eac11da51592dd86b9f06f6e7ac293b3df875d29"
+  integrity sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==
+  dependencies:
+    object-assign "^4"
+    vary "^1"
 
 cosmiconfig@^6.0.0:
   version "6.0.0"
@@ -6581,10 +6604,10 @@ nan@^2.12.1:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.15.0.tgz#3f34a473ff18e15c1b5626b62903b5ad6e665fee"
   integrity sha512-8ZtvEnA2c5aYCZYd1cvgdnU6cqwixRoYg70xPLWUws5ORTa/lnw+u4amixRS/Ac5U5mQVgp9pnlSUnbNWFaWZQ==
 
-nanoid@^3.1.23:
-  version "3.1.30"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.30.tgz#63f93cc548d2a113dc5dfbc63bfa09e2b9b64362"
-  integrity sha512-zJpuPDwOv8D2zq2WRoMe1HsfZthVewpel9CAvTfc/2mBD1uUT/agc5f7GHGWXlYkFvi1mVxe4IjvP2HNrop7nQ==
+nanoid@^3.1.23, nanoid@^3.1.25:
+  version "3.1.32"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.1.32.tgz#8f96069e6239cc0a9ae8c0d3b41a3b4933a88c0a"
+  integrity sha512-F8mf7R3iT9bvThBoW4tGXhXFHCctyCiUUPrWF8WaTqa3h96d9QybkSeba43XVOOE3oiLfkVDe4bT8MeGmkrTxw==
 
 nanomatch@^1.2.9:
   version "1.2.13"
@@ -6657,6 +6680,14 @@ next-mdx-remote@^3.0.8:
     "@mdx-js/react" "^1.6.22"
     esbuild "^0.12.9"
     pkg-dir "^5.0.0"
+
+next-session@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/next-session/-/next-session-4.0.4.tgz#aa351ac745beb1f163e9ef9dab4f0bdf4f053474"
+  integrity sha512-wMj3rg9+RomQGGxNNKUvkIgVvz+IZiW2v4IsLLshtgFUGoMI+svDYOo9P6Gja/aFjfDzRGPoBIJ4UmJeaQD9Hw==
+  dependencies:
+    cookie "^0.4.1"
+    nanoid "^3.1.25"
 
 next@11.1.3:
   version "11.1.3"
@@ -6846,7 +6877,7 @@ nth-check@^2.0.0:
   dependencies:
     boolbase "^1.0.0"
 
-object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
+object-assign@^4, object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
@@ -9586,7 +9617,7 @@ validator@^13.7.0:
   resolved "https://registry.yarnpkg.com/validator/-/validator-13.7.0.tgz#4f9658ba13ba8f3d82ee881d3516489ea85c0857"
   integrity sha512-nYXQLCBkpJ8X6ltALua9dRrZDHVYxjJ1wgskNt1lH9fzGjs3tgojGSCBjmEPwkWS1y29+DrizMTW19Pr9uB2nw==
 
-vary@~1.1.2:
+vary@^1, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=

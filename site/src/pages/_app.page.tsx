@@ -68,6 +68,13 @@ const MyApp = ({
     }
   }, [router]);
 
+  useEffect(() => {
+    const { route } = router;
+    if (user && !user.isSignedUp && route !== "/signup") {
+      void router.push("/signup");
+    }
+  }, [user, router]);
+
   return (
     <UserContext.Provider value={{ user, setUser, refetch: refetchUser }}>
       <SiteMapContext.Provider value={siteMap}>

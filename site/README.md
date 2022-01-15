@@ -11,7 +11,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
 ### BP Site
 
-1.  Add a `site/.env.local` environment variable file with the following environment variables: including the required environment variables
+1.  Add a `site/.env.local` environment variable file with the following environment variables:
 
     - `SESSION_SECRET`: he secret used to sign the session ID cookie
     - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
@@ -139,7 +139,7 @@ Logs in a user using a provide login code.
 
   - `userId`: the id of the BP user
   - `loginCodeId`: the id of the login code
-  - `code`: the one-time memorable login code sent to the user's email
+  - `code`: the memorable one-time login code sent to the user's email
 
 - Request Response:
   - `user`: the user that is now authenticated with the API
