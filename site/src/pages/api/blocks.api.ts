@@ -39,47 +39,6 @@ export type BuildConfig = {
   timestamp: string;
 };
 
-// This is temporarily used to populate each block with a preview image
-// It wouldn't be needed once the image is added to each block's block-metadata.json file
-const BLOCK_IMAGES = [
-  {
-    name: "@hashintel/block-table",
-    image: "/assets/table-block.svg",
-  },
-  {
-    name: "@hashintel/block-code",
-    image: "/assets/code-block.svg",
-  },
-  {
-    name: "@hashintel/block-header",
-    image: "/assets/heading-block.svg",
-  },
-  {
-    name: "@hashintel/block-image",
-    image: "/assets/image-block.svg",
-  },
-  {
-    name: "@hashintel/block-paragraph",
-    image: "/assets/paragraph-block.svg",
-  },
-  {
-    name: "@hashintel/block-person",
-    image: "/assets/person-block.svg",
-  },
-  {
-    name: "@hashintel/block-divider",
-    image: "/assets/divider-block.svg",
-  },
-  {
-    name: "@hashintel/block-embed",
-    image: "/assets/embed-block.svg",
-  },
-  {
-    name: "@hashintel/block-video",
-    image: "/assets/video-block.svg",
-  },
-];
-
 /**
  * used to read block metadata from disk.
  *
@@ -107,11 +66,10 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
     }))
     .map((metadata: BlockMetadata) => ({
       ...metadata,
+      image: `/blocks/${metadata.packagePath}/${metadata.image}`,
       lastUpdated: buildConfig.find(
         ({ workspace }) => workspace === metadata.name,
       )?.timestamp,
-      image:
-        BLOCK_IMAGES.find(({ name }) => name === metadata.name)?.image ?? null,
     }));
 };
 
