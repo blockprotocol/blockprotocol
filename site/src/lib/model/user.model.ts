@@ -10,7 +10,7 @@ import {
 import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLoginCode.api";
 import { ApiVerifyEmailRequestBody } from "../../pages/api/verifyEmail.api";
 import { FRONTEND_URL, isProduction } from "../config";
-import { subscribeToMailchimp } from "../mailchimp";
+import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
@@ -210,6 +210,19 @@ export class User {
   ): Promise<User> {
     if (this.shortname && updatedProperties.shortname !== this.shortname) {
       throw new Error("Cannot update shortname");
+    }
+
+    if (
+      isProduction &&
+      (updatedProperties.shortname || updatedProperties.preferredName)
+    ) {
+      await updateMailchimpMemberInfo({
+        email: this.email,
+        fields: {
+          SHORTNAME: updatedProperties.shortname,
+          PREFNAME: updatedProperties.preferredName,
+        },
+      });
     }
 
     await db
