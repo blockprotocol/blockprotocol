@@ -19,7 +19,6 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const HomePage: VFC<PageProps> = ({ catalog }) => {
-  console.log(catalog);
   return (
     <>
       <Header />
