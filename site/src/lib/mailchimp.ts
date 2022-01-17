@@ -1,37 +1,45 @@
-import axios from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import md5 from "md5";
 import { mustGetEnvVar } from "../util/api";
 
-const baseURL = "https://us15.api.mailchimp.com/3.0/lists/";
+let cachedMailchimpApi: AxiosInstance;
+
+const getMailchimpApi = (): AxiosInstance => {
+  const mailchimpListID = mustGetEnvVar("MAILCHIMP_LIST_ID");
+  const username = mustGetEnvVar("MAILCHIMP_API_USER");
+  const password = mustGetEnvVar("MAILCHIMP_API_KEY");
+
+  cachedMailchimpApi =
+    cachedMailchimpApi ||
+    axios.create({
+      baseURL: `https://us15.api.mailchimp.com/3.0/lists/${mailchimpListID}/`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      auth: {
+        username,
+        password,
+      },
+    });
+
+  return cachedMailchimpApi;
+};
 
 export const subscribeToMailchimp = async (params: {
   email: string;
 }): Promise<void> => {
   const { email } = params;
 
-  const mailchimpListID = mustGetEnvVar("MAILCHIMP_LIST_ID");
-  const username = mustGetEnvVar("MAILCHIMP_API_USER");
-  const password = mustGetEnvVar("MAILCHIMP_API_KEY");
+  const mailchimpApi = getMailchimpApi();
 
-  await axios
-    .post(
-      `${mailchimpListID}/members/`,
-      {
-        email_address: email,
-        status: "subscribed",
-      },
-      {
-        baseURL,
-        headers: {
-          "Content-Type": "application/json",
-        },
-        auth: {
-          username,
-          password,
-        },
-      },
-    )
-    .catch((error) => {
+  const memberID = md5(email);
+
+  await mailchimpApi
+    .put(`members/${memberID}`, {
+      email_address: email,
+      status: "subscribed",
+    })
+    .catch(async (error: AxiosError) => {
       /** @todo: properly log error */
       // eslint-disable-next-line no-console
       console.log(error);
@@ -45,22 +53,13 @@ export const updateMailchimpMemberInfo = async (params: {
   const { email, fields } = params;
   const memberID = md5(email);
 
-  const mailchimpListID = mustGetEnvVar("MAILCHIMP_LIST_ID");
-  const username = mustGetEnvVar("MAILCHIMP_API_USER");
-  const password = mustGetEnvVar("MAILCHIMP_API_KEY");
-
-  await axios.patch(
-    `${mailchimpListID}/members/${memberID}`,
-    { merge_fields: fields },
-    {
-      baseURL,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      auth: {
-        username,
-        password,
-      },
-    },
-  );
+  await getMailchimpApi()
+    .put(`members/${memberID}`, {
+      merge_fields: fields,
+    })
+    .catch((error: AxiosError) => {
+      /** @todo: properly log error */
+      // eslint-disable-next-line no-console
+      console.log(error);
+    });
 };
