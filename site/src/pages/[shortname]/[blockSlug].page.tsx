@@ -68,6 +68,8 @@ type BlockPageQueryParams = {
 };
 
 export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
+  // @todo we should generate paths for a subset of blocks and not all blocks
+  // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r7840683900
   return {
     paths: readBlocksFromDisk().map((metadata) => `/${metadata.packagePath}`),
     fallback: "blocking",

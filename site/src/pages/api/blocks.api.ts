@@ -56,15 +56,15 @@ const BLOCK_IMAGES = [
   },
   {
     name: "@hashintel/block-image",
-    image: "/assets/image-block.png",
+    image: "/assets/image-block.svg",
   },
   {
     name: "@hashintel/block-paragraph",
-    image: "/assets/default-block-img.svg",
+    image: "/assets/paragraph-block.svg",
   },
   {
     name: "@hashintel/block-person",
-    image: "/assets/default-block-img.svg",
+    image: "/assets/person-block.svg",
   },
   {
     name: "@hashintel/block-divider",
@@ -72,11 +72,11 @@ const BLOCK_IMAGES = [
   },
   {
     name: "@hashintel/block-embed",
-    image: "/assets/default-block-img.svg",
+    image: "/assets/embed-block.svg",
   },
   {
     name: "@hashintel/block-video",
-    image: "/assets/default-block-img.svg",
+    image: "/assets/video-block.svg",
   },
 ];
 
