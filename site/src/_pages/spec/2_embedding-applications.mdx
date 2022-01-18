@@ -58,7 +58,7 @@ Risk mitigation might include various approaches to sandbox block code execution
 
 Rendering HTML blocks inside iFrames or web workers are obvious mitigations to explore.
 
-In these types of implementations, the embedding application would run a small application inside the iframe or web worker. This sandbox application would in turn render the block, and provide it with the functions and data it needs.
+In these types of implementations, the embedding application would run a small application inside the iFrame or web worker. This sandbox application would in turn render the block, and provide it with the functions and data it needs.
 
 When the block calls a function (e.g. updateEntity), the sandboxing application sends messages with the request and payload to the parent application. An example iframe implementation can be found in [HASH, a working demo for a block-embedding application](https://github.com/hashintel/hash).
 
