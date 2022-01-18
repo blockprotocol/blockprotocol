@@ -1,6 +1,6 @@
 ## Overview
 
-The Block Protocol is a global standard for building interactive blocks connected to structured data.
+The Block Protocol is a global standard for building **interactive blocks** connected to **structured data**.
 
 The following pages provide a practical introduction for developers who want to:
 
@@ -8,6 +8,20 @@ The following pages provide a practical introduction for developers who want to:
 - [embed blocks](https://blockprotocol.org/docs/embedding-blocks) in their own application
 
 For the full technical details, read [the Block Protocol specification](https://blockprotocol.org/spec).
+
+### Why is structured data useful?
+
+Structured data allows computers to understand information. It is easier to create and easier to understand than unstructured data.
+
+Most of the data on the web is unstructured. When we write webpages in HTML, it's easily readable by humans, but not by computers. The computer only knows you've added a bunch of `<p>` tags to a page, but doesn't know anything about what you've written inside them.
+
+Unlike plain HTML, blocks created with the Block Protocol have **types**, such as _Person_, _Company_, and _Date_ that help computers understand what your text is about.
+
+{diagram of HTML vs. structure block data}
+
+Imagine you are creating a webpage to announce a book signing event with a well-known author. You could add an _Author_ block, a _Location_ block, and a _Time_ block to this page. Instead of being some mystery HTML, your information is now readable by computers. It would be much easier to automatically pass this information to other websites and applications, such as a calendar application, or the author's personal website.
+
+We are trying to fulfil the vision of the Semantic Web – the original Web 3.0 (before all the NFTs took over). Our goal is to update the web from a pile of randomly formatted, human-readable pages into a structure trove of knowledge.
 
 ### What is a block?
 
