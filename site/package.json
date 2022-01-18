@@ -4,11 +4,11 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "./scripts/build-blocks.sh && yarn generate-block-list && yarn generate-sitemap && next build",
+    "build": "./scripts/build-blocks.sh && yarn generate-blocks-data && yarn generate-sitemap && next build",
     "build-block": "./scripts/build-blocks.sh",
     "build-blocks": "find ../hub -type f | xargs ./scripts/build-blocks.sh",
     "clean": "rimraf ./.next/",
-    "dev": "yarn generate-sitemap && yarn generate-block-list && next dev",
+    "dev": "yarn generate-sitemap && yarn generate-blocks-data && next dev",
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
     "dev:seed-db": "node --max-old-space-size=2048 node_modules/.bin/ts-node --files --project tsconfig.json scripts/seed-db",
     "generate-blocks-data": "node --max-old-space-size=2048 node_modules/.bin/ts-node --files --project tsconfig.json scripts/generate-blocks-data",
