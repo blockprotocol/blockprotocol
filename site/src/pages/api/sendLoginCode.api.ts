@@ -1,4 +1,5 @@
 import { body as bodyValidator, validationResult } from "express-validator";
+import { isProduction } from "../../lib/config";
 import { createBaseHandler } from "../../lib/handler/baseHandler";
 import { ensureUserIsMailchimpMember } from "../../lib/mailchimp";
 import { User } from "../../lib/model/user.model";
@@ -51,7 +52,7 @@ export default createBaseHandler<
 
     const [{ id: verificationCodeId }] = await Promise.all([
       user.sendLoginCode(db),
-      ensureUserIsMailchimpMember({ user }),
+      isProduction ? ensureUserIsMailchimpMember({ user }) : undefined,
     ]);
 
     res.status(200).json({
