@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import md5 from "md5";
 import { mustGetEnvVar } from "../util/api";
+import { User } from "./model/user.model";
 
 let cachedMailchimpApi: AxiosInstance;
 
@@ -27,8 +28,9 @@ const getMailchimpApi = (): AxiosInstance => {
 
 export const subscribeToMailchimp = async (params: {
   email: string;
+  merge_fields?: { [key: string]: any };
 }): Promise<void> => {
-  const { email } = params;
+  const { email, merge_fields } = params;
 
   const mailchimpApi = getMailchimpApi();
 
@@ -38,6 +40,7 @@ export const subscribeToMailchimp = async (params: {
     .put(`members/${memberID}`, {
       email_address: email,
       status: "subscribed",
+      merge_fields,
     })
     .catch(async (error: AxiosError) => {
       /** @todo: properly log error */
@@ -46,16 +49,45 @@ export const subscribeToMailchimp = async (params: {
     });
 };
 
+export const ensureUserIsMailchimpMember = async (params: {
+  user: User;
+}): Promise<void> => {
+  const { user } = params;
+  const { email } = user;
+
+  const memberID = md5(email);
+
+  await getMailchimpApi()
+    .get(`members/${memberID}`)
+    .then(() => {})
+    .catch(async (error: AxiosError) => {
+      if (error.response?.status === 404) {
+        await subscribeToMailchimp({
+          email,
+          merge_fields: {
+            SHORTNAME: user.shortname,
+            PREFNAME: user.preferredName,
+          },
+        });
+      } else {
+        /** @todo: properly log error */
+        // eslint-disable-next-line no-console
+        console.log(error);
+      }
+    });
+};
+
 export const updateMailchimpMemberInfo = async (params: {
   email: string;
-  fields: { [key: string]: any };
+  merge_fields: { [key: string]: any };
 }): Promise<void> => {
-  const { email, fields } = params;
+  const { email, merge_fields } = params;
   const memberID = md5(email);
 
   await getMailchimpApi()
     .put(`members/${memberID}`, {
-      merge_fields: fields,
+      status_if_new: "subscribed",
+      merge_fields,
     })
     .catch((error: AxiosError) => {
       /** @todo: properly log error */

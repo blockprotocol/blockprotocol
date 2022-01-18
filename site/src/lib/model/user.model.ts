@@ -218,7 +218,7 @@ export class User {
     ) {
       await updateMailchimpMemberInfo({
         email: this.email,
-        fields: {
+        merge_fields: {
           SHORTNAME: updatedProperties.shortname,
           PREFNAME: updatedProperties.preferredName,
         },
