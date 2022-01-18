@@ -13,12 +13,23 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
 1.  Add a `site/.env.local` environment variable file with the following environment variables:
 
-    - `SESSION_SECRET`: he secret used to sign the session ID cookie
+    - `HASHING_SECRET`: the secret used to hash API keys
+    - `SESSION_SECRET`: the secret used to sign the session ID cookie
     - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
     - `MONGODB_DB_NAME`: the name of the database (for example `local`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
     - `FRONTEND_DOMAIN` (optional): the domain where the frontend is hosted (defaults to `localhost:3000`)
+
+Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
+
+```
+SESSION_SECRET=session-secret
+HASHING_SECRET=hash-secret
+
+MONGODB_URI=mongodb://root:password@localhost:27017/
+MONGODB_DB_NAME=local
+```
 
 1.  Install dependencies using:
 
@@ -32,7 +43,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     yarn dev:db
     ```
 
-1.  **On first run**, or if you want to reset app data, seed the databse in a seperate terminal using:
+1.  **On first run**, or if you want to reset app data, seed the database in a separate terminal using:
 
     ```sh
     yarn dev:seed-db
@@ -150,6 +161,20 @@ Retrieves the user object of the currently logged in user.
 
 - Request Response:
   - `user`: the user currently authenticated with the API
+
+### `GET /api/me/apiKeys` [authenticated]
+
+Retrieves metadata on the API keys associated with the authenticated user.
+
+- Request Response:
+  - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
+
+### `POST /api/me/generateApiKey` [authenticated]
+
+Generates a new API key for the authenticated user, and revokes any others.
+
+- Request Response:
+  - `apiKey`: the key itself, a string.
 
 ### `POST /api/logout` [authenticated]
 
