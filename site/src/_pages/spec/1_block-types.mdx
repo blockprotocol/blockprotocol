@@ -15,9 +15,9 @@ A block package might be made available via a URL, package manager, or catalog o
 
 A block package MUST contain:
 
-- **source file or files** (e.g. HTML and JavaScript files), which
+- **source file or files** (e.g. HTML and JavaScript files)
 
-  - where HTML is included, SHOULD be valid HTML
+  - where HTML is included, it SHOULD be valid HTML
 
 A block package SHOULD contain:
 
@@ -127,8 +127,9 @@ Subject to [the permissions granted to them by the embedding application](#block
 
 Blocks should have sensible fallbacks for when permissions are denied them, or when functions are absent, for example:
 
-- implementing a readonly / display mode for data which they are unable to edit
-- hiding or disabling specific controls depending on the specific permissions granted them
+- **implementing a readonly / display mode for data which they are unable to edit**: for example, embedding applications may choose to use blocks to display data as part of a static page, rather than in an editing environment.
+
+- **hiding or disabling specific controls depending on the specific permissions granted them**: for example, hiding a 'delete' button if delete permissions have been denied.
 
 <Frame emoji="🤔">
 
@@ -358,7 +359,7 @@ In order to create a reference to a separate entity or entities as the desired v
 
 Once created, a `Link` includes a `linkId`.
 
-**E.g.1.** creating a `Link` with the following data indicates that this particular user should be linked to a company with id `company1`, and that the link conceptually is made on the user’s `employer` field – although when delivering data to blocks the resolved data for entity `company1` will be provided _separately_ to `user1`, in the `linkedEntities` array, rather than injected into the properties of the user, and the link itself available in the `linkGroups` array provided to the block.
+**Example 1.** creating a `Link` with the following data indicates that this particular user should be linked to a company with id `company1`, and that the link conceptually is made on the user’s `employer` field:
 
 ```json
 {
@@ -368,7 +369,9 @@ Once created, a `Link` includes a `linkId`.
 }
 ```
 
-**E.g.2.** creating a `Link` with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field – although when delivering the data this data would be provided _alongside_ the table, in the `linkedAggregations` array
+When delivering data to blocks the resolved data for entity `company1` will be provided _separately_ to `user1`, in the `linkedEntities` array, rather than injected into the properties of the user, and the link itself available in the `linkGroups` array provided to the block.
+
+**Example 2.** creating a `Link` with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field:
 
 ```json
 {
@@ -382,6 +385,10 @@ Once created, a `Link` includes a `linkId`.
   }
 }
 ```
+
+When delivering the data this data would be provided _alongside_ the table, in the `linkedAggregations` array.
+
+---
 
 Links to specific entities will be provided to a block under a `linkGroups` field, which is an array of objects,
 each of which specifies a source entity, a path (field name), and the links on that path.
@@ -560,7 +567,6 @@ This will require several things we are developing:
 1.  A syntax for capturing permissions (e.g. what action on what type of entity, or specific entity)
 1.  The means by which blocks specify which permissions they either (a) require to function at all or (b) may wish to use
 1.  The means by which embedding applications inform blocks of the permissions they have been granted
-
 
 </Frame>
 

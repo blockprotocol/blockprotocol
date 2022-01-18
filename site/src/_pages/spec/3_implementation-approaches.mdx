@@ -37,12 +37,18 @@ The protocol specifies an interface between blocks and embedding applications, d
 
 There are various different implementations of embedding applications and blocks which would be compliant with the protocol, but not with one another.
 
-In order to meet the ultimate goal of the Block Protocol and supporting ecosystem of any embedding application being able to render any block, if both are correctly configured, there has to be some way of applications automatically dealing with blocks requiring different approaches - by implementing a number of rendering strategies, with the appropriate one based on the detected or reported block implementation.
+The ultimate goal of the Block Protocol and supporting ecosystem is that any embedding application should be able to render any block, if both are correctly configured.
+
+In order to achieve this, embedding applications will need to have strategies for handling blocks which are implemented in different ways.
 
 For example:
 
 - a block implemented as a React component would require an embedding application to render the block to the DOM using React, and pass the data and functions it expects as its "props"
 - in a block with an HTML entrypoint, appropriately sandboxed by the embedding application, the properties could be in the global scope of the sandbox (with the block assuming they are available)
+
+There must be some way of applications identifying how each block should be rendered. This might be achieved via inference from the block's source (e.g. the extension of its entrypoint), or by an explicit property in a block's metadata file. Either approach will require a small number of known, agreed 'block implementation approaches' which can be identified and handled.
+
+Examples in more detail:
 
 ### React
 
