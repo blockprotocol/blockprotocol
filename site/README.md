@@ -23,7 +23,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
 Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
-```
+```sh
 SESSION_SECRET=session-secret
 HASHING_SECRET=hash-secret
 
