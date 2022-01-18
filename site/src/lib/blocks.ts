@@ -29,7 +29,7 @@ export type BlockMetadata = {
   packagePath: string;
 };
 
-export type BlockRegistryInfo = {
+export type BuildConfig = {
   workspace: string;
   repository: string;
   branch: string;
@@ -78,14 +78,18 @@ const BLOCK_IMAGES = [
   },
 ];
 
+/**
+ * used to read block metadata from disk.
+ *
+ */
 export const readBlocksFromDisk = (): BlockMetadata[] => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
   const fs = require("fs");
   const glob = require("glob");
   /* eslint-enable global-require */
 
-  const registryInfo: BlockRegistryInfo[] = glob
-    .sync(`${process.cwd()}/../registry/**/*.json`)
+  const buildConfig: BuildConfig[] = glob
+    .sync(`${process.cwd()}/../hub/**/*.json`)
     .map((path: string) => ({
       ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
     }));
@@ -99,10 +103,33 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
     }))
     .map((metadata: BlockMetadata) => ({
       ...metadata,
-      lastUpdated: registryInfo.find(
+      lastUpdated: buildConfig.find(
         ({ workspace }) => workspace === metadata.name,
       )?.timestamp,
       image:
         BLOCK_IMAGES.find(({ name }) => name === metadata.name)?.image ?? null,
     }));
+};
+
+export const readBlockDataFromDisk = ({
+  packagePath,
+  schema,
+  source,
+}: BlockMetadata) => {
+  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
+  const fs = require("fs");
+  // @todo update to also return the metadata information
+  // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
+  return {
+    schema: JSON.parse(
+      fs.readFileSync(
+        `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
+        { encoding: "utf8" },
+      ),
+    ),
+    source: fs.readFileSync(
+      `${process.cwd()}/public/blocks/${packagePath}/${source}`,
+      "utf8",
+    ),
+  };
 };

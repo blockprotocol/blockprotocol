@@ -2,7 +2,7 @@ import { VFC } from "react";
 import { Typography, Box } from "@mui/material";
 import { Carousel } from "./Carousel";
 import { Link } from "./Link";
-import { BlockMetadata } from "../pages/api/blocks.api";
+import { BlockMetadata } from "../lib/blocks";
 
 type BlocksSliderProps = {
   catalog: BlockMetadata[];

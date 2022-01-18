@@ -39,6 +39,8 @@ const blocks: NextApiHandler<Response> = (_req, res) => {
     );
   }
 
+  // @todo paginate response
+
   res.status(200).json({
     results: data,
   });

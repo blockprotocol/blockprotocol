@@ -20,7 +20,11 @@ import {
   BlockExports,
   BlockSchema,
 } from "../../components/pages/hub/HubUtils";
-import { BlockMetadata, readBlocksFromDisk } from "../../lib/blocks";
+import {
+  BlockMetadata,
+  readBlocksFromDisk,
+  readBlockDataFromDisk,
+} from "../../lib/blocks";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
 
@@ -63,18 +67,12 @@ type BlockPageQueryParams = {
   blockSlug?: string[];
 };
 
-export const getStaticPaths: GetStaticPaths<
-  BlockPageQueryParams
-> = async () => {
+export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
   return {
-    paths: [],
+    paths: readBlocksFromDisk().map((metadata) => `/${metadata.packagePath}`),
     fallback: "blocking",
   };
 };
-
-const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : `http://localhost:3000`;
 
 const parseQueryParams = (params: BlockPageQueryParams) => {
   const shortname = params.shortname
@@ -114,35 +112,20 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
+  const packagePath = `${shortname}/${blockSlug}`;
   const catalog = readBlocksFromDisk();
 
-  const blockMetadataResponse = await fetch(
-    `${BASE_URL}/blocks/${shortname}/${blockSlug}/block-metadata.json`,
+  const blockMetadata = catalog.find(
+    (metadata) => metadata.packagePath === packagePath,
   );
 
-  if (blockMetadataResponse.status === 404) {
+  if (!blockMetadata) {
     // TODO: Render custom 404 page for blocks
     return { notFound: true };
-  } else if (!blockMetadataResponse.ok) {
-    // TODO: Render details of upstream error
-    throw new Error("Something went wrong");
   }
 
-  // TODO: handle malformed block metadata
-  const blockMetadata: BlockMetadata = await blockMetadataResponse.json();
-
-  blockMetadata.lastUpdated = catalog.find(
-    ({ name }) => name === blockMetadata.name,
-  )?.lastUpdated;
-
-  const [schema, blockStringifiedSource] = await Promise.all([
-    fetch(
-      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${blockMetadata.schema}`,
-    ).then((res) => res.json()),
-    fetch(
-      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${blockMetadata.source}`,
-    ).then((res) => res.text()),
-  ]);
+  const { schema, source: blockStringifiedSource } =
+    readBlockDataFromDisk(blockMetadata);
 
   return {
     props: {
@@ -151,7 +134,7 @@ export const getStaticProps: GetStaticProps<
       blockStringifiedSource,
       catalog,
     },
-    revalidate: 10,
+    revalidate: 1800,
   };
 };
 

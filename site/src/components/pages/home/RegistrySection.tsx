@@ -6,7 +6,7 @@ import { Button } from "../../Button";
 import { BlockHubIcon } from "../../SvgIcon/BlockHubIcon";
 
 import { BlocksSlider } from "../../BlocksSlider";
-import { BlockMetadata } from "../../../pages/api/blocks.api";
+import { BlockMetadata } from "../../../lib/blocks";
 
 type RegistrySectionProps = {
   catalog: BlockMetadata[];
