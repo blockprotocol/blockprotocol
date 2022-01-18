@@ -56,7 +56,7 @@ Blocks are as customizable as any other current component allows, but with a str
 **Entity:** an instance of data conforming to a schema, often corresponding to a thing in the real world.
 
 **Schema:** a definition of a data structure, prescribing the shape of an entity (its properties).
-In the context of the protocol, schemas are used both to describe the data a block type accepts (e.g. the schema for a Table block type), as well as the structure of data representing other entities (e.g. the schema for a Person, Movie, or List).
+A schema might describe an entity which is linked to a specific block (e.g. the schema for a Table block type, which has properties such as `initialColumns`), or an entity which can be used across multiple blocks (e.g. the schema for a Person, Movie, or List).
 
 **Properties:** the fields on a schema, what types of data are permitted as their values, and any other validation rules.
 Field types may be scalar (integer, string etc.), complex objects, collections (lists/arrays), or refer to another schema.

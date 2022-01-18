@@ -100,26 +100,51 @@ We welcome any thoughts or suggestions on this - [please open or contribute to a
 The entity for the block might link to other entities.
 For example, a Kanban board block might have a `team` property which links to another type of entity, a Team.
 
-Blocks should expect the following additional fields related to linked data to be passed to them:
+Blocks SHOULD expect the following additional fields related to linked data to be passed to them:
 
-- a `linkedEntities` field containing the entities linked from the block’s entity, and entities linked to from those entities, and so on\*
+- a `linkedEntities` field containing the entities linked from the block’s entity, and entities linked to from those entities, and so on. This field SHOULD contain all entities which have been resolved in the graph (rather than just those linked directly from the block entity).
 
-- a `linkedAggregations` field containing the results of aggregations linked from the block’s entity
+- a `linkedAggregations` field containing the results of aggregations linked from the block’s entity.
 
 - a `linkGroups` field which provides the links attached to the block or entities provided in either `linkedEntities` or `linkedAggregations`, grouped by entity and path
-
-_\* Embedding applications will want to impose limits on the extent to which links between their records are followed for any given query, and not all indirectly linked entities may be provided with the block’s initial data.
-They can be requested using the functions listed below._
 
 Each entity provided under `linkedEntities` or `linkedAggregations` will also have [identifying fields](#fields-identifying-blocks) to be used as arguments when updating those entities.
 
 See [linking entities](#linking-entities) for a discussion of how links are managed.
+
+<Frame emoji="🤔">
+
+There must be a limit on what links are followed from a block entity when providing data to it - if any are at all.
+
+The specification currently suggests that at least _some_ links are followed (otherwise there would be no `linkedEntities` at all).
+
+It could alternatively specify:
+
+1.  A default depth - e.g. 1, so that entities immediately linked from the block are included, but not any further.
+2.  That _no_ links should be followed, with blocks requesting linked entities as needed
+3.  That blocks can express their desired depth somehow, based on their functional requirements.
+
+Our own [work-in-progress embedding application](https://github.com/hashintel/hash/tree/main/packages/hash) uses a depth of 1-2 (for individual linked entities and linked aggregations, respectively), which aims to balance speed of block operation (by having more data available immediately) with avoiding resolving tons of data. As we develop more complex blocks we will update our view, and we welcome feedback.
+
+</Frame>
 
 #### Type fields
 
 Where available, blocks SHOULD expect and handle an `entityTypes` field containing entity type definitions for any entities sent to the blocks, which can be parsed to understand the constraints on user input for each entity (e.g. which fields are editable, what sort of data they accept).
 
 Each entry in the `entityTypes` array is a JSON schema object with an additional `entityTypeId` field corresponding to the `entityTypeId` of the entities it describes the shape of (which MAY be different to the URI value for the standard JSON schema `$id` property).
+
+<Frame emoji="🤔">
+
+The Block Protocol does not seek to describe or prescribe the shape of particular entities (e.g. what fields a `Person` has).
+
+Instead, it seeks to define the block-application interface.
+
+This does, however, mean there is a possibility of competing schemas attempting to describe the same entities, which different blocks using different schema - reducing the portability of blocks.
+
+The ability to translate between schemas would help - e.g. some way expressing an equivalence relationship between properties in different schema. This might be a keyword such as `sameAs` or `equivalentTo` mapping between schemas and their properties. Then, either blocks or embedding applications could programmatically translate between schemas.
+
+</Frame>
 
 ### Entity functions
 
@@ -138,6 +163,14 @@ There are various ways in which we may change the approach described here:
 1.  Finer-grained updates to entities - rather than sending data objects with multiple keys and values as described below - would be useful in supporting an embedding application implement collaborative editing and undo/redo stacks.
 1.  There are many functions listed. We could consolidate them in a single 'do something' function, with the type of action required specified.
 1.  Making functions available in the block's scope may not be the best way of handling action requests. One alternative, at least in a web context, is to define [custom DOM events](https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events) which are dispatched from blocks and listened for by embedding applications.
+
+There are also many other functions/operations one can imagine being useful for blocks, beyond the basic CRUD operations described below, e.g.
+
+1.  Useful, common operations which may not map onto entities in a data store, e.g. `getLocation`
+1.  Operations to handle data transfer in different ways than a single operation, e.g. subscriptions
+1.  Compound operations which bundle other operations together for convenience
+
+Any operations specified in the protocol should be useful in a wide variety of contexts. We welcome ideas!
 
 </Frame>
 

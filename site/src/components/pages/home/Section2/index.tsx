@@ -75,8 +75,8 @@ const CONTENT = [
         <br />
         <br />
         While the <strong>schema</strong> for an <strong>ItemList</strong> has
-        the properties <strong>numberOfItems</strong> (a number) and any number
-        of <strong>ListItems</strong> (an array of strings).
+        the properties <strong>numberOfItems</strong> (a number) and
+        <strong>ListItems</strong> (an array of strings).
         <br />
         <br />
         This standard format makes it easy for us to pass an ItemList between
