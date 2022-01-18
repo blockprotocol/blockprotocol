@@ -64,7 +64,7 @@ If it has no data interface requirements, it need not be accompanied by a schema
 
 Like any block, plain HTML blocks should be sandboxed, but particularly given that any JavaScript they load cannot otherwise be scoped to them in the way that a React component’s can.
 
-By sandboxing HTML blocks, e.g. in an iframe, any data, functions and properties they provide could be declared in the scope of the sandbox.
+By sandboxing HTML blocks, e.g. in an iFrame, any data, functions and properties they provide could be declared in the scope of the sandbox.
 
 One alternative to functions for blocks requesting action is to use is to define [custom DOM events](https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events) which are dispatched from blocks and listened for by embedding applications, inside the sandbox.
 
