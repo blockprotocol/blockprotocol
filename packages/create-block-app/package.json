@@ -23,6 +23,7 @@
     "lint:tsc": "echo \"Skipping: TypeScript not configured\""
   },
   "dependencies": {
-    "tar-pack": "3.4.1"
+    "decompress": "4.2.1",
+    "tmp": "0.2.1"
   }
 }

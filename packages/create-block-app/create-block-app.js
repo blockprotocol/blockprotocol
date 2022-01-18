@@ -6,9 +6,12 @@ const { promisify } = require("util");
 const child_process = require("child_process");
 const fs = require("fs");
 const path = require("path");
-// const unpack = require("tar-pack").unpack;
+const tmp = require("tmp");
+const decompress = require("decompress");
 
 const exec = promisify(child_process.exec);
+
+const templatePackageName = "block-template";
 
 (async () => {
   const blockName = process.argv[2];
@@ -32,12 +35,21 @@ const exec = promisify(child_process.exec);
     // noop (we expect statSync to fail)
   }
 
-  console.log("Copying required files...");
+  console.log("Downloading template...");
 
-  fs.mkdirSync(path.dirname(resolvedBlockPath), { recursive: true });
+  const tmpDir = tmp.dirSync({ unsafeCleanup: true });
 
-  // TODO: Replace with ‘download and unpack npm package’
-  await exec(`cp -R ${__dirname}/../../block-template ${resolvedBlockPath}`);
+  const npmPackResult = await exec(
+    `npm pack ${templatePackageName} --pack-destination ${tmpDir.name}`,
+  );
+  const tgzFileName = npmPackResult.stdout.trim();
+
+  console.log("Copying files...");
+  fs.mkdirSync(resolvedBlockPath, { recursive: true });
+  await decompress(path.resolve(tmpDir.name, tgzFileName), resolvedBlockPath, {
+    strip: 1,
+  });
+  tmpDir.removeCallback();
 
   console.log("Writing metadata...");
 
@@ -45,11 +57,15 @@ const exec = promisify(child_process.exec);
   const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
 
   packageJson.name = blockName;
+  packageJson.version = "0.0.0";
+  packageJson.private = true; // We don’t expect blocks to be published on NPM
   packageJson.description = `${blockName} block`;
+  delete packageJson.homepage;
+  delete packageJson.repository;
 
   try {
-    const { stdout } = await exec("git config --get user.name");
-    packageJson.author = stdout.trim();
+    const gitConfigUserNameResult = await exec("git config --get user.name");
+    packageJson.author = gitConfigUserNameResult.stdout.trim();
   } catch {
     delete packageJson.author;
   }
