@@ -112,7 +112,6 @@ function build_block {
 
     log info "downloading ${zip_url}"
 
-    zip_url="${zip_url:0:8}@${zip_url:8}"
 
     res=$(curl -sL -w '%{http_code}' -o "${repo_path}.zip" "$zip_url")
 
