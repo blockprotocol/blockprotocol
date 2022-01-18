@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 const { promisify } = require("util");
 const child_process = require("child_process");
 const fs = require("fs");
@@ -12,7 +14,6 @@ const exec = promisify(child_process.exec);
 const templatePackageName = "block-template";
 
 (async () => {
-  /* eslint-disable no-console */
   const blockName = process.argv[2];
 
   if (!blockName) {
