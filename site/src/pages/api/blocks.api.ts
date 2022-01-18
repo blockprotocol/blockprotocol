@@ -1,125 +1,47 @@
-import type { NextApiHandler } from "next/";
+import { NextApiHandler } from "next";
+import { BlockMetadata } from "../../lib/blocks";
+import { formatErrors } from "../../util/api";
+import blocksData from "../../../blocks-data.json";
 
-/** @todo type as JSON object */
-export type BlockProps = object;
-
-/** @todo make part of blockprotocol package and publish */
-export type BlockVariant = {
-  description?: string;
-  displayName?: string;
-  icon?: string;
-  properties?: BlockProps;
+const validateApiKey = (apiKey: string | string[] | undefined) => {
+  if (!apiKey || typeof apiKey !== "string") {
+    return false;
+  }
+  // @todo add logic to validate API Key
+  return true;
 };
 
-/** @todo make part of blockprotocol package and publish */
-export type BlockMetadata = {
-  author?: string;
-  description?: string;
-  displayName?: string;
-  externals?: Record<string, string>;
-  icon?: string;
-  image?: string;
-  lastUpdated?: string;
-  license?: string;
-  name: string;
-  schema?: string;
-  source?: string;
-  variants?: BlockVariant[];
-  version?: string;
+type Response = { results: BlockMetadata[] } | { errors: any };
 
-  // @todo should be redundant to block's package.json#name
-  packagePath: string;
-};
+const blocks: NextApiHandler<Response> = (_req, res) => {
+  const query = _req.query.q;
+  const apiKey = _req.headers["x-api-key"];
 
-export type BuildConfig = {
-  workspace: string;
-  repository: string;
-  branch: string;
-  distDir: string;
-  timestamp: string;
-};
+  if (!validateApiKey(apiKey)) {
+    return res.status(401).json(
+      formatErrors({
+        msg: "Unauthorized",
+      }),
+    );
+  }
 
-// This is temporarily used to populate each block with a preview image
-// It wouldn't be needed once the image is added to each block's block-metadata.json file
-const BLOCK_IMAGES = [
-  {
-    name: "@hashintel/block-table",
-    image: "/assets/table-block.svg",
-  },
-  {
-    name: "@hashintel/block-code",
-    image: "/assets/code-block.svg",
-  },
-  {
-    name: "@hashintel/block-header",
-    image: "/assets/heading-block.svg",
-  },
-  {
-    name: "@hashintel/block-image",
-    image: "/assets/image-block.png",
-  },
-  {
-    name: "@hashintel/block-paragraph",
-    image: "/assets/default-block-img.svg",
-  },
-  {
-    name: "@hashintel/block-person",
-    image: "/assets/default-block-img.svg",
-  },
-  {
-    name: "@hashintel/block-divider",
-    image: "/assets/divider-block.svg",
-  },
-  {
-    name: "@hashintel/block-embed",
-    image: "/assets/default-block-img.svg",
-  },
-  {
-    name: "@hashintel/block-video",
-    image: "/assets/default-block-img.svg",
-  },
-];
+  let data: BlockMetadata[] = [];
 
-/**
- * used to read block metadata from disk.
- *
- * @todo nextjs api endpoints don't have access to nextjs' public folder on vercel
- *    fix this to fetch from the URL instead (or some other way)
- */
-export const readBlocksFromDisk = (): BlockMetadata[] => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
-  const glob = require("glob");
-  /* eslint-enable global-require */
+  // do we return data when the query string is empty?
 
-  const buildConfig: BuildConfig[] = glob
-    .sync(`${process.cwd()}/../hub/**/*.json`)
-    .map((path: string) => ({
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }));
+  if (query && typeof query === "string") {
+    data = blocksData.filter(
+      ({ displayName, variants }) =>
+        displayName?.toLowerCase().includes(query) ||
+        variants?.some((variant) =>
+          variant.displayName?.toLowerCase().includes(query),
+        ),
+    );
+  }
 
-  return glob
-    .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
-    .map((path: string) => ({
-      // @todo should be redundant to block's package.json#name
-      packagePath: path.split("/").slice(-3, -1).join("/"),
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }))
-    .map((metadata: BlockMetadata) => ({
-      ...metadata,
-      lastUpdated: buildConfig.find(
-        ({ workspace }) => workspace === metadata.name,
-      )?.timestamp,
-      image:
-        BLOCK_IMAGES.find(({ name }) => name === metadata.name)?.image ?? null,
-    }));
-};
-
-let cachedBlocksFromDisk: Array<BlockMetadata> | null = null;
-
-const blocks: NextApiHandler<BlockMetadata[]> = (_req, res) => {
-  cachedBlocksFromDisk = cachedBlocksFromDisk ?? readBlocksFromDisk();
-  res.status(200).json(cachedBlocksFromDisk);
+  res.status(200).json({
+    results: data,
+  });
 };
 
 export default blocks;

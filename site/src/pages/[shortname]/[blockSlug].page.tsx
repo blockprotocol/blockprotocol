@@ -20,7 +20,7 @@ import {
   BlockExports,
   BlockSchema,
 } from "../../components/pages/hub/HubUtils";
-import { BlockMetadata, readBlocksFromDisk } from "../api/blocks.api";
+import { BlockMetadata, readBlocksFromDisk } from "../../lib/blocks";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
 
