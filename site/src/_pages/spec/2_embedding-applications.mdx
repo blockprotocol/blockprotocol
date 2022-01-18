@@ -56,7 +56,7 @@ Naively running third-party code is inherently unsafe.
 Embedding applications SHOULD take suitable precautions to ensure that block code they execute is unable to compromise their systems or their users’ data.
 Risk mitigation might include various approaches to sandbox block code execution.
 
-Rendering HTML blocks inside iframes or web workers are obvious mitigations to explore.
+Rendering HTML blocks inside iFrames or web workers are obvious mitigations to explore.
 
 In these types of implementations, the embedding application would run a small application inside the iframe or web worker. This sandbox application would in turn render the block, and provide it with the functions and data it needs.
 
