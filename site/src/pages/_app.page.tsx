@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
+import TagManager from "react-gtm-module";
 import Head from "next/head";
 import "../styles/index.css";
 /** @sync ../components/Snippet.tsx */
@@ -29,6 +30,12 @@ const MyApp = ({
   emotionCache = clientSideEmotionCache,
 }: MyAppProps) => {
   const router = useRouter();
+
+  useEffect(() => {
+    if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
+      TagManager.initialize({ gtmId: "GTM-5DRD4LS" });
+    }
+  }, []);
 
   useEffect(() => {
     const { asPath } = router;

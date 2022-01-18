@@ -20,7 +20,11 @@ import {
   BlockExports,
   BlockSchema,
 } from "../../components/pages/hub/HubUtils";
-import { BlockMetadata, readBlocksFromDisk } from "../api/blocks.api";
+import {
+  BlockMetadata,
+  readBlocksFromDisk,
+  readBlockDataFromDisk,
+} from "../api/blocks.api";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
 
@@ -63,18 +67,12 @@ type BlockPageQueryParams = {
   blockSlug?: string[];
 };
 
-export const getStaticPaths: GetStaticPaths<
-  BlockPageQueryParams
-> = async () => {
+export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
   return {
-    paths: [],
+    paths: readBlocksFromDisk().map((metadata) => `/${metadata.packagePath}`),
     fallback: "blocking",
   };
 };
-
-const BASE_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : `http://localhost:3000`;
 
 const parseQueryParams = (params: BlockPageQueryParams) => {
   const shortname = params.shortname
@@ -114,35 +112,20 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
+  const packagePath = `${shortname}/${blockSlug}`;
   const catalog = readBlocksFromDisk();
 
-  const blockMetadataResponse = await fetch(
-    `${BASE_URL}/blocks/${shortname}/${blockSlug}/block-metadata.json`,
+  const blockMetadata = catalog.find(
+    (metadata) => metadata.packagePath === packagePath,
   );
 
-  if (blockMetadataResponse.status === 404) {
+  if (!blockMetadata) {
     // TODO: Render custom 404 page for blocks
     return { notFound: true };
-  } else if (!blockMetadataResponse.ok) {
-    // TODO: Render details of upstream error
-    throw new Error("Something went wrong");
   }
 
-  // TODO: handle malformed block metadata
-  const blockMetadata: BlockMetadata = await blockMetadataResponse.json();
-
-  blockMetadata.lastUpdated = catalog.find(
-    ({ name }) => name === blockMetadata.name,
-  )?.lastUpdated;
-
-  const [schema, blockStringifiedSource] = await Promise.all([
-    fetch(
-      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${blockMetadata.schema}`,
-    ).then((res) => res.json()),
-    fetch(
-      `${BASE_URL}/blocks/${shortname}/${blockSlug}/${blockMetadata.source}`,
-    ).then((res) => res.text()),
-  ]);
+  const { schema, source: blockStringifiedSource } =
+    readBlockDataFromDisk(blockMetadata);
 
   return {
     props: {
@@ -151,7 +134,7 @@ export const getStaticProps: GetStaticProps<
       blockStringifiedSource,
       catalog,
     },
-    revalidate: 10,
+    revalidate: 1800,
   };
 };
 
@@ -217,7 +200,12 @@ const BlockPage: NextPage<BlockPageProps> = ({
           {isDesktopSize ? (
             <Typography variant="bpHeading1">
               <Box
-                sx={{ display: "inline-block", height: "2em", width: "2em" }}
+                sx={{
+                  display: "inline-block",
+                  mr: 3,
+                  height: "2em",
+                  width: "2em",
+                }}
                 component="img"
                 src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
               />
@@ -232,8 +220,12 @@ const BlockPage: NextPage<BlockPageProps> = ({
             >
               {!isDesktopSize && (
                 <Box
-                  mr={1}
-                  sx={{ display: "inline-block", height: "1em", width: "1em" }}
+                  sx={{
+                    display: "inline-block",
+                    height: "1em",
+                    width: "1em",
+                    mr: 2,
+                  }}
                   component="img"
                   src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
                 />
@@ -287,11 +279,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
           </Box>
         </Box>
 
-        <BlockDataContainer
-          metadata={blockMetadata}
-          schema={schema}
-          blockModule={blockModule}
-        />
+        <Box sx={{ mb: 15 }}>
+          <BlockDataContainer
+            metadata={blockMetadata}
+            schema={schema}
+            blockModule={blockModule}
+          />
+        </Box>
 
         {/* <div
         style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
@@ -325,7 +319,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
         </div>
       </div> */}
 
-        <Typography textAlign="center" variant="bpHeading2" mb={3} mt={10}>
+        <Typography textAlign="center" variant="bpHeading2" mb={3}>
           Explore more blocks
         </Typography>
       </Container>

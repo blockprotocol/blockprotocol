@@ -136,7 +136,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
                     display: "block",
                     height: "100%",
                     width: "100%",
-                    objectFit: "cover",
+                    objectFit: "contain",
                     borderRadius: "4px",
                   }}
                   src={image}

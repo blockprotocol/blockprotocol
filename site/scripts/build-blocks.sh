@@ -53,18 +53,6 @@ else
     log error "missing commandline tool 'rsync'"
     exit 2
   fi
-
-  if [[ -f "${REPO_ROOT}/site/.env.local" ]]; then
-    source "${REPO_ROOT}/site/.env.local"
-  else
-    log error "missing environment settings \${REPO_ROOT}/site/.env.local"
-    exit 3
-  fi
-fi
-
-if [[ -z "$GH_ACCESS_TOKEN" ]]; then
-  log error "missing environment variable GH_ACCESS_TOKEN"
-  exit 4
 fi
 
 # prep
@@ -124,9 +112,6 @@ function build_block {
 
     log info "downloading ${zip_url}"
 
-    # insert http basic auth credentials (https://<user:password>@domain.com)
-    # cannot use curl's -u options because that would also require a password
-    zip_url="${zip_url:0:8}${GH_ACCESS_TOKEN}@${zip_url:8}"
 
     res=$(curl -sL -w '%{http_code}' -o "${repo_path}.zip" "$zip_url")
 
@@ -143,7 +128,7 @@ function build_block {
   log debug "pushd into ${repo_path}/${inner_dir}"
   pushd "${repo_path}/${inner_dir}"
 
-  log info "installing, building and publishing"
+  log info "installing and building"
   if [[ "$workspace" == "null" ]]; then
     # devDependencies are required
     NODE_ENV=development yarn install
