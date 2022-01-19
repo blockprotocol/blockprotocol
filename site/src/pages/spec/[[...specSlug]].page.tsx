@@ -16,7 +16,7 @@ import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
-import SiteMapContext from "../../components/context/SiteMapContext";
+import SiteMapContext from "../../context/SiteMapContext";
 import {
   MdxPageContent,
   MDX_TEXT_CONTENT_MAX_WIDTH,
@@ -88,6 +88,8 @@ const GitHubInfoCard = (
           fontSize: 15,
           lineHeight: 1.5,
           "& a": {
+            color: theme.palette.teal[600],
+            borderColor: theme.palette.teal[600],
             ":hover": {
               color: theme.palette.teal[700],
             },
