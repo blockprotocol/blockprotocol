@@ -21,10 +21,10 @@ import {
   BlockSchema,
 } from "../../components/pages/hub/HubUtils";
 import {
-  BlockMetadata,
   readBlocksFromDisk,
   readBlockDataFromDisk,
-} from "../api/blocks.api";
+  ExpandedBlockMetadata as BlockMetadata,
+} from "../../lib/blocks";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
 
@@ -68,8 +68,6 @@ type BlockPageQueryParams = {
 };
 
 export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
-  // @todo we should generate paths for a subset of blocks and not all blocks
-  // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r7840683900
   return {
     paths: readBlocksFromDisk().map((metadata) => `/${metadata.packagePath}`),
     fallback: "blocking",

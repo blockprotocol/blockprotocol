@@ -1,122 +1,56 @@
-import type { NextApiHandler } from "next/";
+import { query as queryValidator } from "express-validator";
+import { formatErrors } from "../../util/api";
+import blocksData from "../../../blocks-data.json";
+import { createBaseHandler } from "../../lib/handler/baseHandler";
+import { ExpandedBlockMetadata as BlockMetadata } from "../../lib/blocks";
 
-/** @todo type as JSON object */
-export type BlockProps = object;
-
-/** @todo make part of blockprotocol package and publish */
-export type BlockVariant = {
-  description?: string;
-  displayName?: string;
-  icon?: string;
-  properties?: BlockProps;
-};
-
-/** @todo make part of blockprotocol package and publish */
-export type BlockMetadata = {
-  author?: string;
-  description?: string;
-  displayName?: string;
-  externals?: Record<string, string>;
-  icon?: string;
-  image?: string;
-  lastUpdated?: string;
-  license?: string;
-  name: string;
-  schema?: string;
-  source?: string;
-  variants?: BlockVariant[];
-  version?: string;
-
-  // @todo should be redundant to block's package.json#name
-  packagePath: string;
-};
-
-export type BuildConfig = {
-  workspace: string;
-  repository: string;
-  branch: string;
-  distDir: string;
-  timestamp: string;
-};
-
-const getBlockMediaUrl = (
-  mediaPath: string | undefined,
-  packagePath: string,
-): string | null => {
-  if (!mediaPath) {
-    return null;
+const validateApiKey = (apiKey: string | string[] | undefined) => {
+  if (!apiKey || typeof apiKey !== "string") {
+    return false;
   }
-  const regex = new RegExp("^(?:[a-z]+:)?//", "i");
-  if (regex.test(mediaPath)) {
-    return mediaPath;
-  }
-
-  return `/blocks/${packagePath}/${mediaPath}`;
+  // @todo add logic to validate API Key
+  return true;
 };
 
-/**
- * used to read block metadata from disk.
- *
- * @todo nextjs api endpoints don't have access to nextjs' public folder on vercel
- *    fix this to fetch from the URL instead (or some other way)
- */
-export const readBlocksFromDisk = (): BlockMetadata[] => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
-  const glob = require("glob");
-  /* eslint-enable global-require */
-
-  const buildConfig: BuildConfig[] = glob
-    .sync(`${process.cwd()}/../hub/**/*.json`)
-    .map((path: string) => ({
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }));
-
-  return glob
-    .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
-    .map((path: string) => ({
-      // @todo should be redundant to block's package.json#name
-      packagePath: path.split("/").slice(-3, -1).join("/"),
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }))
-    .map((metadata: BlockMetadata) => ({
-      ...metadata,
-      icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
-      image: getBlockMediaUrl(metadata.image, metadata.packagePath),
-      lastUpdated: buildConfig.find(
-        ({ workspace }) => workspace === metadata.name,
-      )?.timestamp,
-    }));
+export type ApiSearchRequestQuery = {
+  q: string;
 };
 
-export const readBlockDataFromDisk = ({
-  packagePath,
-  schema,
-  source,
-}: BlockMetadata) => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
-  // @todo update to also return the metadata information
-  // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
-  return {
-    schema: JSON.parse(
-      fs.readFileSync(
-        `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
-        { encoding: "utf8" },
-      ),
-    ),
-    source: fs.readFileSync(
-      `${process.cwd()}/public/blocks/${packagePath}/${source}`,
-      "utf8",
-    ),
-  };
+export type ApiSearchResponse = {
+  results: BlockMetadata[];
 };
 
-let cachedBlocksFromDisk: Array<BlockMetadata> | null = null;
+export default createBaseHandler<null, ApiSearchResponse>()
+  .use(queryValidator("q").isString().toLowerCase())
+  .get(async (req, res) => {
+    const { q: query } = req.query as ApiSearchRequestQuery;
+    const apiKey = req.headers["x-api-key"];
 
-const blocks: NextApiHandler<BlockMetadata[]> = (_req, res) => {
-  cachedBlocksFromDisk = cachedBlocksFromDisk ?? readBlocksFromDisk();
-  res.status(200).json(cachedBlocksFromDisk);
-};
+    if (!validateApiKey(apiKey)) {
+      return res.status(401).json(
+        formatErrors({
+          msg: "Unauthorized",
+        }),
+      );
+    }
 
-export default blocks;
+    let data: BlockMetadata[] = blocksData;
+
+    if (query) {
+      data = data.filter(
+        ({ displayName, variants, author, name }) =>
+          [displayName, author, name].some((item) =>
+            item?.toLowerCase().includes(query),
+          ) ||
+          variants?.some((variant) =>
+            variant.displayName?.toLowerCase().includes(query),
+          ),
+      );
+    }
+
+    // @todo paginate response
+
+    res.status(200).json({
+      results: data,
+    });
+  });
