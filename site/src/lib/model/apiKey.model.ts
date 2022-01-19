@@ -49,7 +49,7 @@ export class ApiKey {
 
   private static readonly KEY_FORMAT_REGEXP = new RegExp(
     // e.g. b10ck5.e84a616cedc8822b02ac96761b068f19.91ea0c90-acee-4215-a01e-85a4438af0ea
-    `^${ApiKey.PREFIX}\\.[a-z0-9]{${ApiKey.PUBLIC_ID_HEX_DIGIT_COUNT}\\.[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$`,
+    `^${ApiKey.PREFIX}\\.[a-z0-9]{${ApiKey.PUBLIC_ID_HEX_DIGIT_COUNT}}\\.[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}$`,
   );
 
   private constructor({
