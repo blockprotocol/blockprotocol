@@ -129,6 +129,8 @@ export const Header = () => {
           </Typography>
           <Typography
             variant="bpBodyCopy"
+            lineHeight={1.5}
+            fontSize="1.25rem"
             color={theme.palette.purple[400]}
             mb={4}
             width={{ xs: "100%", lg: "80%" }}

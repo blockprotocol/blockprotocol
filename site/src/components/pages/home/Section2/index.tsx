@@ -132,7 +132,7 @@ export const Section2 = () => {
   }, []);
 
   return (
-    <Box sx={{ pt: { xs: 2, lg: 10 } }}>
+    <Box sx={{ pt: 0 }}>
       <Container
         ref={boxRef}
         sx={{
@@ -158,7 +158,7 @@ export const Section2 = () => {
                 display: "flex",
                 flexDirection: "column",
                 px: { xs: "5%" },
-                pt: { lg: "20vh" },
+                pt: { lg: "16vh" },
                 ":first-of-type": {
                   pt: { xs: 10, lg: "20vh" },
                 },
@@ -207,7 +207,7 @@ export const Section2 = () => {
                   left: 0,
                   right: 0,
                   bottom: { xs: 0, lg: "unset" },
-                  pt: { lg: "20vh" },
+                  pt: { lg: "16vh" },
                   px: { xs: "5%", lg: 0 },
                   display: "flex",
                   justifyContent: "center",
