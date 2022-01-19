@@ -22,8 +22,8 @@ export const BpTable: VoidFunctionComponent<TableProps> = ({
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {header.map((title, index) => (
-              <TableCell sx={{ color: "#4D5C6C", fontWeight: 500 }}>
+            {header.map((title) => (
+              <TableCell key={title} sx={{ color: "#4D5C6C", fontWeight: 500 }}>
                 {title}
               </TableCell>
             ))}
@@ -32,10 +32,11 @@ export const BpTable: VoidFunctionComponent<TableProps> = ({
         <TableBody>
           {rows.map((row, rowIndex) => (
             <TableRow
-              key={rowIndex}
+              // eslint-disable-next-line react/no-array-index-key
+              key={`row-${rowIndex}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              {row.map((cell, cellIndex) =>
+              {row.map((cell) =>
                 typeof cell === "string" ? <TableCell>{cell}</TableCell> : cell,
               )}
             </TableRow>

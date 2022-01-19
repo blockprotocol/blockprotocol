@@ -167,8 +167,12 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
             paddingTop={2}
             paddingBottom={4}
           >
-            {dashboardCardData.map((dashboardCard) => (
-              <DashboardCard {...dashboardCard} />
+            {dashboardCardData.map((dashboardCard, dashboardCardIndex) => (
+              <DashboardCard
+                // eslint-disable-next-line react/no-array-index-key
+                key={`dashboardCard-${dashboardCardIndex}`}
+                {...dashboardCard}
+              />
             ))}
           </Box>
         </Container>

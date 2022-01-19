@@ -6,13 +6,11 @@ import {
   Tabs,
   Tab,
   Typography,
-  TableCell,
 } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState, VoidFunctionComponent } from "react";
-import { Button } from "../../components/Button";
+import { useState } from "react";
 
 import { Link } from "../../components/Link";
 import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiModal";
@@ -215,7 +213,7 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
                   component="button"
                   sx={dashboardSmallButtonStyles}
                   onClick={() => {
-                    tableRows.length
+                    return tableRows.length
                       ? setRegenerateKeyModalOpen(true)
                       : setGenerateKeyModalOpen(true);
                   }}

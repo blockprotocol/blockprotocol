@@ -22,10 +22,10 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
   const [copied, setCopied] = useState(false);
 
   const copyApiKey = () => {
-    if (navigator.clipboard != undefined) {
+    if (navigator.clipboard !== undefined) {
       // Chrome
-      navigator.clipboard.writeText(apiKey);
       setCopied(true);
+      return navigator.clipboard.writeText(apiKey);
     }
   };
 

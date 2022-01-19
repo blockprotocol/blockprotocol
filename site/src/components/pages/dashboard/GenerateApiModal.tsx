@@ -1,5 +1,6 @@
-import { Box, Typography, Button, TableCell } from "@mui/material";
+import { Box, Typography, TableCell } from "@mui/material";
 import { VoidFunctionComponent, ChangeEvent, FormEvent, useState } from "react";
+import { Button } from "../../Button";
 import { BpModal } from "../../Modal";
 import { WarningIcon } from "../../SvgIcon/WarningIcon";
 import { TableRows } from "../../Table";
@@ -33,8 +34,16 @@ const getMockRows: (keyName: string) => TableRows = (keyname) => [
   [
     keyname,
     "bpkey_7f89shh5009jg",
-    <RowDateTimeRenderer relative="2 hours ago" absolute="17.10 PM" />,
-    <RowDateTimeRenderer relative="8 months ago" absolute="17 April 2020" />,
+    <RowDateTimeRenderer
+      key="mock-key-lastuser"
+      relative="2 hours ago"
+      absolute="17.10 PM"
+    />,
+    <RowDateTimeRenderer
+      key="mock-key-created"
+      relative="8 months ago"
+      absolute="17 April 2020"
+    />,
   ],
 ];
 

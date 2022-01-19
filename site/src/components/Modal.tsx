@@ -1,7 +1,5 @@
-import { FunctionComponent, ReactNode, ReactElement } from "react";
+import { FunctionComponent, ReactNode } from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { SxProps, Theme } from "@mui/material";
 
