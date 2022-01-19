@@ -1,8 +1,8 @@
 import { query as queryValidator } from "express-validator";
-import { BlockMetadata } from "blockprotocol";
 import { formatErrors } from "../../util/api";
 import blocksData from "../../../blocks-data.json";
 import { createBaseHandler } from "../../lib/handler/baseHandler";
+import { ExpandedBlockMetadata as BlockMetadata } from "../../lib/blocks";
 
 const validateApiKey = (apiKey: string | string[] | undefined) => {
   if (!apiKey || typeof apiKey !== "string") {

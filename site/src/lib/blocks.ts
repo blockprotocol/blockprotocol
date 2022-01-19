@@ -1,6 +1,12 @@
 import { BlockMetadata } from "blockprotocol";
+
 /** @todo type as JSON object */
 export type BlockProps = object;
+
+export type ExpandedBlockMetadata = BlockMetadata & {
+  packagePath: string;
+  lastUpdated?: string;
+};
 
 export type BuildConfig = {
   workspace: string;
@@ -55,7 +61,7 @@ const BLOCK_IMAGES = [
  * used to read block metadata from disk.
  *
  */
-export const readBlocksFromDisk = (): BlockMetadata[] => {
+export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
   const fs = require("fs");
   const glob = require("glob");
@@ -88,7 +94,7 @@ export const readBlockDataFromDisk = ({
   packagePath,
   schema,
   source,
-}: BlockMetadata) => {
+}: ExpandedBlockMetadata) => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
   const fs = require("fs");
   // @todo update to also return the metadata information

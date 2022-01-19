@@ -1,6 +1,6 @@
 import { VFC } from "react";
 import { Typography, Box } from "@mui/material";
-import { BlockMetadata } from "blockprotocol";
+import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
 import { Button } from "../../Button";
