@@ -49,6 +49,16 @@ const templatePackageName = "block-template";
   await decompress(path.resolve(tmpDir.name, tgzFileName), resolvedBlockPath, {
     strip: 1,
   });
+
+  try {
+    fs.renameSync(
+      path.resolve(resolvedBlockPath, ".gitignore.dist"),
+      path.resolve(resolvedBlockPath, ".gitignore"),
+    );
+  } catch {
+    // noop (template is missing .gitignore.dist)
+  }
+
   tmpDir.removeCallback();
 
   console.log("Writing metadata...");
