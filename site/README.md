@@ -173,6 +173,10 @@ Retrieves metadata on the API keys associated with the authenticated user.
 
 Generates a new API key for the authenticated user, and revokes any others.
 
+- Request Body:
+
+  - `displayName`: a display name for the API key
+
 - Request Response:
   - `apiKey`: the key itself, a string.
 
