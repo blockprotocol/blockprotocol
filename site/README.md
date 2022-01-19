@@ -23,10 +23,10 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
     Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
-    ```
+    ```sh
     SESSION_SECRET=dev-session-secret
     HASHING_SECRET=dev-hashing-secret
-
+    
     MONGODB_URI=mongodb://root:password@localhost:27017/
     MONGODB_DB_NAME=local
     ```
