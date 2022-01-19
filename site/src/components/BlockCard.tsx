@@ -116,7 +116,6 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
               backgroundColor: ({ palette }) =>
                 image ? "transparent" : palette.gray[70],
               borderRadius: "4px",
-              overflow: "hidden",
               position: "relative",
             }}
           >
@@ -138,6 +137,11 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
                     width: "100%",
                     objectFit: "contain",
                     borderRadius: "4px",
+                    filter: `
+                        drop-shadow(0px 2px 8px rgba(39, 50, 86, 0.04))
+                        drop-shadow(0px 2.59259px 6.44213px rgba(39, 50, 86, 0.06))
+                        drop-shadow(0px 0.5px 1px rgba(39, 50, 86, 0.10))
+                      `,
                   }}
                   src={image}
                 />
@@ -167,7 +171,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             <Box
               sx={{ mr: 1.5, width: 24, height: 24 }}
               component="img"
-              src={`/blocks/${packagePath}/${icon}`}
+              src={icon}
             />
             <Typography
               className="block-card__name"
