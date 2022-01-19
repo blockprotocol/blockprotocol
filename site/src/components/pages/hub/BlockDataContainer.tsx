@@ -2,7 +2,7 @@ import { Box, Tabs, Tab } from "@mui/material";
 import { Validator } from "jsonschema";
 import { useMemo, useState, VoidFunctionComponent } from "react";
 
-import { BlockMetadata } from "../../../pages/api/blocks.api";
+import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
