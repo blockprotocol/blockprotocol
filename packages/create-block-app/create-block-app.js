@@ -58,7 +58,6 @@ const templatePackageName = "block-template";
 
   packageJson.name = blockName;
   packageJson.version = "0.0.0";
-  packageJson.private = true; // We don’t expect blocks to be published on NPM
   packageJson.description = `${blockName} block`;
   delete packageJson.homepage;
   delete packageJson.repository;
