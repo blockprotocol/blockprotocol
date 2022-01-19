@@ -127,7 +127,7 @@ Request Query:
 
 Response: `true` or `false`
 
-### `POST /api/completeSignup` [authenticated]
+### `POST /api/completeSignup` [requires cookie authentication]
 
 Request Body:
 
@@ -163,21 +163,21 @@ Logs in a user using a provide login code.
 - Request Response:
   - `user`: the user that is now authenticated with the API
 
-### `GET /api/me` [authenticated]
+### `GET /api/me` [requires cookie authentication]
 
 Retrieves the user object of the currently logged in user.
 
 - Request Response:
   - `user`: the user currently authenticated with the API
 
-### `GET /api/me/apiKeys` [authenticated]
+### `GET /api/me/apiKeys` [requires cookie authentication]
 
 Retrieves metadata on the API keys associated with the authenticated user.
 
 - Request Response:
   - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
 
-### `POST /api/me/generateApiKey` [authenticated]
+### `POST /api/me/generateApiKey` [requires cookie authentication]
 
 Generates a new API key for the authenticated user, and revokes any others.
 
@@ -188,8 +188,19 @@ Generates a new API key for the authenticated user, and revokes any others.
 - Request Response:
   - `apiKey`: the key itself, a string.
 
-### `POST /api/logout` [authenticated]
+### `POST /api/logout` [requires cookie authentication]
 
 Logs out the currently authenticated user.
 
 - Request Response: `SUCCESS`
+
+The following routes require a valid API key sent in an `x-api-key` header:
+
+### `GET /api/blocks` [requires API key authentication]
+
+- Request Params
+
+  - `q`: an optional text query to search for blocks with a matching name or author. If not provided, all blocks are returned.
+
+- Request Response:
+  - `results`: the results of the search: an array of block metadata JSON files
