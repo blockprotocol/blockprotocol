@@ -91,7 +91,7 @@ export class VerificationCode {
     };
 
     const { insertedId: _id } = await db
-      .collection<VerificationCodeDocument>(this.COLLECTION_NAME)
+      .collection<Omit<VerificationCodeDocument, "_id">>(this.COLLECTION_NAME)
       .insertOne(properties);
 
     return VerificationCode.fromDocument({ _id, ...properties });

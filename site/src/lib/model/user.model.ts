@@ -10,6 +10,7 @@ import {
 } from "./verificationCode.model";
 import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLoginCode.api";
 import { ApiVerifyEmailRequestBody } from "../../pages/api/verifyEmail.api";
+import { ApiKey } from "./apiKey.model";
 import { FRONTEND_URL, isProduction } from "../config";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 import { sendMail } from "../awsSes";
@@ -194,7 +195,7 @@ export class User {
     };
 
     const { insertedId } = await db
-      .collection<UserDocument>(User.COLLECTION_NAME)
+      .collection<Omit<UserDocument, "_id">>(User.COLLECTION_NAME)
       .insertOne(userProperties);
 
     const { email } = userProperties;
@@ -381,6 +382,19 @@ export class User {
     }
 
     return emailVerificationCode;
+  }
+
+  async generateApiKey(db: Db, params: { displayName: string }) {
+    const { displayName } = params;
+
+    /* @todo allow users to have multiple API keys - remove this once implemented */
+    await ApiKey.revokeAll(db, { user: this });
+
+    return await ApiKey.create(db, { displayName, user: this });
+  }
+
+  async apiKeys(db: Db) {
+    return await ApiKey.getByUser(db, { user: this });
   }
 
   toRef(): DBRef {
