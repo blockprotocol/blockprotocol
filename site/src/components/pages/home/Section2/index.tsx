@@ -178,7 +178,7 @@ export const Section2 = () => {
           sx={{
             flex: { xs: "unset", lg: 1 },
             alignSelf: "flex-start",
-            height: { xs: "40vh", lg: "100vh" },
+            height: { xs: "40vh", lg: "80vh" },
             position: "sticky",
             zIndex: 2,
             top: { xs: "unset", lg: 0 },
@@ -207,7 +207,7 @@ export const Section2 = () => {
                   left: 0,
                   right: 0,
                   bottom: { xs: 0, lg: "unset" },
-                  pt: { lg: "16vh" },
+                  pt: { lg: "14vh" },
                   px: { xs: "5%", lg: 0 },
                   display: "flex",
                   justifyContent: "center",
