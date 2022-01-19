@@ -4,8 +4,6 @@ import { Button } from "../../Button";
 import { ApiKeyGenerated } from "../../SvgIcon/ApiKeyGenerated";
 import { CopyIcon } from "../../SvgIcon/CopyIcon";
 
-import { dashboardSmallButtonStyles } from "./utils";
-
 type ApiKeyRendererProps = {
   apiKey: string;
   regenerate?: boolean;
@@ -55,8 +53,15 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
       </Typography>
       <Typography sx={{ marginBottom: 2 }}>
         Your key {keyName} has been {regenerate ? "regenerated" : "generated"}.
-        {regenerate ? " The previous key will no longer work." : ""} Here is
-        your new key:
+        <br />
+        {regenerate ? (
+          <strong>
+            The previous key will no longer work.
+            <br />
+          </strong>
+        ) : null}
+        Here is your new key - make a note of it, <br />
+        we can't show it to you again!
       </Typography>
 
       <Box
@@ -91,11 +96,8 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
             justifyContent: "center",
           }}
         >
-          <Box
-            component="button"
-            id="api-copy"
+          <Button
             sx={{
-              ...dashboardSmallButtonStyles,
               transition: "all 0.2s ease-in-out",
               display: "flex",
               alignItems: "center",
@@ -114,7 +116,7 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
                 Copy to Clipboard
               </>
             )}
-          </Box>
+          </Button>
         </Box>
       </Box>
 
@@ -125,7 +127,7 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
         }}
       >
         <Button onClick={closeModal} sx={{ borderRadius: 2 }}>
-          Go back to settings
+          Go back
         </Button>
       </Box>
     </Box>

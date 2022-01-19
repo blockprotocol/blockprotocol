@@ -1,5 +1,5 @@
 import { ReactNode, VoidFunctionComponent } from "react";
-import Table from "@mui/material/Table";
+import MuiTable from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -13,13 +13,10 @@ type TableProps = {
   rows: TableRows;
 };
 
-export const BpTable: VoidFunctionComponent<TableProps> = ({
-  header,
-  rows,
-}) => {
+export const Table: VoidFunctionComponent<TableProps> = ({ header, rows }) => {
   return (
     <TableContainer>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <MuiTable sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             {header.map((title) => (
@@ -42,7 +39,7 @@ export const BpTable: VoidFunctionComponent<TableProps> = ({
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+      </MuiTable>
     </TableContainer>
   );
 };

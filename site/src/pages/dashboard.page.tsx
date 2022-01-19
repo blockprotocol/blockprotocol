@@ -7,6 +7,7 @@ import {
   Tab,
   Typography,
 } from "@mui/material";
+import { MouseEvent, useContext } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -16,6 +17,7 @@ import {
   DashboardCardProps,
 } from "../components/pages/dashboard/DashboardCard";
 import { dashboardPages } from "../components/pages/dashboard/utils";
+import UserContext from "../context/UserContext";
 
 const href = "/dashboard";
 
@@ -23,14 +25,6 @@ const a11yProps = (index: number) => ({
   id: `simple-tab-${index}`,
   "aria-controls": `simple-tabpanel-${index}`,
 });
-
-type DashboardPageProps = {
-  userName: string;
-};
-
-const defaultProps: DashboardPageProps = {
-  userName: "Martha",
-};
 
 const dashboardCardData: DashboardCardProps[] = [
   {
@@ -60,7 +54,7 @@ const dashboardCardData: DashboardCardProps[] = [
     colorGradient:
       "linear-gradient(91.21deg, #FFB172 -84.62%, #9482FF 62.56%, #84E6FF 154.58%)",
     description:
-      "Your API key will allow you to browse the docs, submit blocks, and other exciting things in here.",
+      "Your API key will allow you to search for blocks by name, author, or compatible data structure.",
     link: {
       title: "Generate Key",
       href: "/settings/api-keys",
@@ -68,13 +62,18 @@ const dashboardCardData: DashboardCardProps[] = [
   },
 ];
 
-const DashboardPage: NextPage<DashboardPageProps> = () => {
+const DashboardPage: NextPage = () => {
   const router = useRouter();
   const theme = useTheme();
-
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
-  const { userName } = defaultProps;
+  const { user } = useContext(UserContext);
+
+  if (!user) {
+    void router.push("/");
+    return null;
+  }
+  const { preferredName: userName } = user;
 
   return (
     <>
@@ -102,9 +101,7 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
                   value={tabHref}
                   href={tabHref}
                   component="a"
-                  onClick={(
-                    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                  ) => {
+                  onClick={(event: MouseEvent) => {
                     event.preventDefault();
                   }}
                   {...a11yProps(i)}
@@ -167,10 +164,9 @@ const DashboardPage: NextPage<DashboardPageProps> = () => {
             paddingTop={2}
             paddingBottom={4}
           >
-            {dashboardCardData.map((dashboardCard, dashboardCardIndex) => (
+            {dashboardCardData.map((dashboardCard) => (
               <DashboardCard
-                // eslint-disable-next-line react/no-array-index-key
-                key={`dashboardCard-${dashboardCardIndex}`}
+                key={`dashboardCard-${dashboardCard.link.href}`}
                 {...dashboardCard}
               />
             ))}

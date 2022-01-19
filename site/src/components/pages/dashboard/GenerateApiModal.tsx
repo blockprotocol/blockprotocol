@@ -1,86 +1,46 @@
-import { Box, Typography, TableCell } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { VoidFunctionComponent, ChangeEvent, FormEvent, useState } from "react";
 import { Button } from "../../Button";
-import { BpModal } from "../../Modal";
+import { Modal } from "../../Modal";
 import { WarningIcon } from "../../SvgIcon/WarningIcon";
-import { TableRows } from "../../Table";
 import { ApiKeyRenderer } from "./ApiKeyRenderer";
-import { dashboardButtonStyles } from "./utils";
+import { apiClient } from "../../../lib/apiClient";
 
 type GenerateApiModalProps = {
-  generateKeyModalOpen: boolean;
-  closeGenerateModal: () => void;
-  setTableRows: (rows: TableRows) => void;
+  close: () => void;
+  keyNameToRegenerate?: string;
+  refetchKeyList: () => void;
 };
-
-type RowDateTimeRendererProps = {
-  relative: string;
-  absolute: string;
-};
-
-const RowDateTimeRenderer: VoidFunctionComponent<RowDateTimeRendererProps> = ({
-  absolute,
-  relative,
-}) => {
-  return (
-    <TableCell>
-      <Box sx={{ marginBottom: 1 }}>{relative}</Box>
-      <Box sx={{ fontSize: "0.9rem", color: "#64778C" }}>{absolute}</Box>
-    </TableCell>
-  );
-};
-
-const getMockRows: (keyName: string) => TableRows = (keyname) => [
-  [
-    keyname,
-    "bpkey_7f89shh5009jg",
-    <RowDateTimeRenderer
-      key="mock-key-lastuser"
-      relative="2 hours ago"
-      absolute="17.10 PM"
-    />,
-    <RowDateTimeRenderer
-      key="mock-key-created"
-      relative="8 months ago"
-      absolute="17 April 2020"
-    />,
-  ],
-];
 
 export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
-  closeGenerateModal,
-  generateKeyModalOpen,
-  setTableRows,
+  close,
+  keyNameToRegenerate,
+  refetchKeyList,
 }) => {
-  const [keyNameController, setKeyNameController] = useState("");
-  const [apiKey, setApiKey] = useState("");
+  const [apiKey, setApiKey] = useState<string>("");
+  const [keyName, setKeyName] = useState(keyNameToRegenerate || "");
 
-  const closeModal = () => {
-    setKeyNameController("");
-    setApiKey("");
-    closeGenerateModal();
-  };
+  const regenerate = !!keyNameToRegenerate;
 
-  const createKey = (event: FormEvent<HTMLFormElement>) => {
+  const createKey = (event: FormEvent) => {
     event.preventDefault();
-
-    if (!keyNameController.trim()) {
-      return;
-    }
-
-    setTableRows(getMockRows(keyNameController));
-    setApiKey(
-      "bpkey_7f89shh5009jg8hfnefj0989dqnm0076s00cl8kj9jj87hfnefj0989dqnm0000007shj9",
-    );
+    /** @todo handle errors and show the user a msg */
+    void apiClient.generateApiKey({ displayName: keyName }).then(({ data }) => {
+      if (data) {
+        setApiKey(data.apiKey);
+      }
+      refetchKeyList();
+    });
   };
 
   return (
-    <BpModal open={generateKeyModalOpen} onClose={closeModal}>
+    <Modal open onClose={close}>
       {apiKey ? (
         <ApiKeyRenderer
-          keyName={keyNameController}
+          keyName={keyName}
           apiKey={apiKey}
-          closeModal={closeModal}
+          closeModal={close}
+          regenerate={regenerate}
         />
       ) : (
         <Box sx={{ textAlign: "center" }}>
@@ -108,33 +68,46 @@ export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
               marginBottom: 2,
             }}
           >
-            Generate API Key
+            {regenerate ? `Regenerate ${keyName}` : "Generate API Key"}
           </Typography>
           <Typography sx={{ marginBottom: 1.5 }}>
-            <p>Name your key.</p> Key names usually describe where they’re used,
-            such as “Production”.
+            {regenerate ? (
+              <>
+                Regenerating the <b>{keyName}</b> key will invalidate it. <br />
+                This could break any application that relies on it. <br />
+                <b>Are you sure you want to regenerate it?</b>
+              </>
+            ) : (
+              <>
+                <p>Name your key.</p>
+                Key names usually describe where they’re used, <br />
+                such as “Production”.
+              </>
+            )}
           </Typography>
 
           <form onSubmit={createKey}>
-            <Box
-              value={keyNameController}
-              onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                setKeyNameController(event.target.value);
-              }}
-              component="input"
-              sx={{
-                background: "#FFFFFF",
-                border: "1px solid #D8DFE5",
-                width: "100%",
-                boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
-                borderRadius: "6px",
-                marginBottom: 2,
-              }}
-              py={1}
-              px={2}
-              placeholder="Key Name"
-              required
-            />
+            {regenerate ? null : (
+              <Box
+                value={keyName}
+                onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                  setKeyName(event.target.value);
+                }}
+                component="input"
+                sx={(theme) => ({
+                  background: "#FFFFFF",
+                  border: `1px solid ${theme.palette.gray[30]}`,
+                  width: "100%",
+                  boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
+                  borderRadius: "6px",
+                  marginBottom: 2,
+                })}
+                py={1}
+                px={2}
+                placeholder="Key Name"
+                required
+              />
+            )}
 
             <Box
               sx={{
@@ -143,21 +116,21 @@ export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
                 columnGap: 2,
               }}
             >
-              <Button type="submit" sx={{ borderRadius: 2, marginBottom: 2 }}>
-                Create Key
+              <Button
+                color={regenerate ? "warning" : "purple"}
+                type="submit"
+                variant="tertiary"
+              >
+                {regenerate ? "Regenerate Key" : "Create Key"}
               </Button>
 
-              <Box
-                onClick={closeModal}
-                component="button"
-                sx={{ ...dashboardButtonStyles, marginBottom: 2 }}
-              >
+              <Button onClick={close} color="gray" variant="tertiary">
                 Cancel
-              </Box>
+              </Button>
             </Box>
           </form>
         </Box>
       )}
-    </BpModal>
+    </Modal>
   );
 };

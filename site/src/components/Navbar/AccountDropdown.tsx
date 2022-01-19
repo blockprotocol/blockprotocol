@@ -79,14 +79,14 @@ export const AccountDropdown: VFC = () => {
         </Box>
         <Divider />
         <Box>
-          <Link href="/" onClick={() => setOpen(false)}>
+          <Link href="/dashboard" onClick={() => setOpen(false)}>
             <ListItemButton sx={{ padding: (theme) => theme.spacing(1.5, 2) }}>
               <Typography variant="bpSmallCopy">Dashboard</Typography>
             </ListItemButton>
           </Link>
-          <Link href="/settings" onClick={() => setOpen(false)}>
+          <Link href="/settings/api-keys" onClick={() => setOpen(false)}>
             <ListItemButton sx={{ padding: (theme) => theme.spacing(1.5, 2) }}>
-              <Typography variant="bpSmallCopy">Account Settings</Typography>
+              <Typography variant="bpSmallCopy">API Keys</Typography>
             </ListItemButton>
           </Link>
           <ListItemButton
