@@ -11,6 +11,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, VoidFunctionComponent } from "react";
+import { BlockMetadata } from "blockprotocol";
 
 import { formatDistance } from "date-fns";
 import { BlocksSlider } from "../../components/BlocksSlider";
@@ -20,11 +21,7 @@ import {
   BlockExports,
   BlockSchema,
 } from "../../components/pages/hub/HubUtils";
-import {
-  BlockMetadata,
-  readBlocksFromDisk,
-  readBlockDataFromDisk,
-} from "../../lib/blocks";
+import { readBlocksFromDisk, readBlockDataFromDisk } from "../../lib/blocks";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
 

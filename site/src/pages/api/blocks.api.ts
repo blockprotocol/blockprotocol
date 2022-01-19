@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import { BlockMetadata } from "../../lib/blocks";
+import { BlockMetadata } from "blockprotocol";
 import { formatErrors } from "../../util/api";
 import blocksData from "../../../blocks-data.json";
 

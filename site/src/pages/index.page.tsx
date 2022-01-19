@@ -1,12 +1,13 @@
 import { VFC } from "react";
 import { GetStaticProps } from "next";
+import { BlockMetadata } from "blockprotocol";
 import { Header } from "../components/pages/home/Header";
 import { IntroSection } from "../components/pages/home/IntroSection";
 import { Section2 } from "../components/pages/home/Section2";
 import { WhyBlockProtocol1Section } from "../components/pages/home/WhyBlockProtocol1Section";
 import { WhyBlockProtocol2Section } from "../components/pages/home/WhyBlockProtocol2Section";
 import { RegistrySection } from "../components/pages/home/RegistrySection";
-import { BlockMetadata, readBlocksFromDisk } from "../lib/blocks";
+import { readBlocksFromDisk } from "../lib/blocks";
 
 export const HOME_PAGE_HEADER_HEIGHT = 750;
 

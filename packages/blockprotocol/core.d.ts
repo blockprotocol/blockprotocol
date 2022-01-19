@@ -22,6 +22,7 @@ export type BlockMetadata = {
   source?: string;
   variants?: BlockVariant[];
   version?: string;
+  packagePath?: string;
 };
 
 export type BlockProtocolUpdateEntitiesAction<T> = {

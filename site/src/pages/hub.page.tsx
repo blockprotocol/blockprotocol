@@ -2,8 +2,9 @@ import { Container, Typography, Box, Grid } from "@mui/material";
 import { VFC } from "react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
+import { BlockMetadata } from "blockprotocol";
 import { BlockCard, BlockCardComingSoon } from "../components/BlockCard";
-import { BlockMetadata, readBlocksFromDisk } from "../lib/blocks";
+import { readBlocksFromDisk } from "../lib/blocks";
 
 interface PageProps {
   catalog: BlockMetadata[];
