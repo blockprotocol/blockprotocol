@@ -171,7 +171,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             <Box
               sx={{ mr: 1.5, width: 24, height: 24 }}
               component="img"
-              src={`/blocks/${packagePath}/${icon}`}
+              src={icon}
             />
             <Typography
               className="block-card__name"

@@ -39,6 +39,21 @@ export type BuildConfig = {
   timestamp: string;
 };
 
+const getBlockMediaUrl = (
+  mediaPath: string | undefined,
+  packagePath: string,
+): string | null => {
+  if (!mediaPath) {
+    return null;
+  }
+  const regex = new RegExp("^(?:[a-z]+:)?//", "i");
+  if (regex.test(mediaPath)) {
+    return mediaPath;
+  }
+
+  return `/blocks/${packagePath}/${mediaPath}`;
+};
+
 /**
  * used to read block metadata from disk.
  *
@@ -66,7 +81,8 @@ export const readBlocksFromDisk = (): BlockMetadata[] => {
     }))
     .map((metadata: BlockMetadata) => ({
       ...metadata,
-      image: `/blocks/${metadata.packagePath}/${metadata.image}`,
+      icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
+      image: getBlockMediaUrl(metadata.image, metadata.packagePath),
       lastUpdated: buildConfig.find(
         ({ workspace }) => workspace === metadata.name,
       )?.timestamp,
