@@ -1,9 +1,10 @@
 {
   "name": "create-block-app",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Create new https://blockprotocol.org blocks",
   "keywords": [
-    "blockprotocol"
+    "blockprotocol",
+    "blocks"
   ],
   "bugs": {
     "url": "https://github.com/blockprotocol/blockprotocol/issues"

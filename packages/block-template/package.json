@@ -1,7 +1,11 @@
 {
   "name": "block-template",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Block template",
+  "keywords": [
+    "blockprotocol",
+    "blocks"
+  ],
   "homepage": "https://blockprotocol.org",
   "repository": {
     "type": "git",
