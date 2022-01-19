@@ -11,8 +11,10 @@ export const hasValidApiKeyMiddleware: Middleware<
   try {
     const apiKey = req.headers["x-api-key"];
     if (!apiKey || typeof apiKey !== "string") {
-      throw new Error(
-        "A valid API key must be provided in a 'x-api-key' header.",
+      return res.status(401).send(
+        formatErrors({
+          msg: "A valid API key must be provided in a 'x-api-key' header.",
+        }),
       );
     }
 

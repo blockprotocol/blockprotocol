@@ -21,15 +21,15 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     - `MONGODB_PASSWORD`: the database password
     - `FRONTEND_DOMAIN` (optional): the domain where the frontend is hosted (defaults to `localhost:3000`)
 
-Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
+    Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
-```
-SESSION_SECRET=session-secret
-HASHING_SECRET=hash-secret
+    ```
+    SESSION_SECRET=dev-session-secret
+    HASHING_SECRET=dev-hashing-secret
 
-MONGODB_URI=mongodb://root:password@localhost:27017/
-MONGODB_DB_NAME=local
-```
+    MONGODB_URI=mongodb://root:password@localhost:27017/
+    MONGODB_DB_NAME=local
+    ```
 
 1.  Install dependencies using:
 

@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { Db, DBRef } from "mongodb";
 import { v4 as uuid } from "uuid";
+import { mustGetEnvVar } from "../../util/api";
 
 import { User } from "./user.model";
 
@@ -36,8 +37,12 @@ export class ApiKey {
 
   static readonly COLLECTION_NAME = "bp-api-keys";
 
-  private static readonly HASHING_SECRET = process.env.HASHING_SECRET;
+  private static readonly HASHING_SECRET = mustGetEnvVar("HASHING_SECRET");
 
+  /**
+   * This prefix helps to identify keys for both humans and automated code-scanners.
+   * It aims to balance human-readability with avoiding false positives (which plain "blocks" might do).
+   */
   private static readonly PREFIX = "b10ck5";
 
   private static readonly KEY_FORMAT_REGEXP = new RegExp(
@@ -76,12 +81,6 @@ export class ApiKey {
     privateId: string;
     salt: string;
   }) {
-    if (!this.HASHING_SECRET) {
-      throw new Error(
-        "Cannot hash API key: no HASHING_SECRET present in environment.",
-      );
-    }
-
     const stringToHash = `${publicId}.${privateId}.${salt}`;
 
     return crypto
@@ -94,12 +93,6 @@ export class ApiKey {
     db: Db,
     params: { displayName: string; user: User },
   ): Promise<string> {
-    if (!this.HASHING_SECRET) {
-      throw new Error(
-        "Cannot create API key: no HASHING_SECRET present in environment.",
-      );
-    }
-
     const { displayName, user } = params;
 
     const privateId = uuid();
@@ -126,18 +119,14 @@ export class ApiKey {
   private static async getByPublicId(
     db: Db,
     params: { publicId: string },
-  ): Promise<ApiKey | undefined> {
+  ): Promise<ApiKey | null> {
     const apiKeyRecord = await db
       .collection<ApiKeyDocument>(this.COLLECTION_NAME)
       .findOne({
         publicId: params.publicId,
       });
 
-    if (!apiKeyRecord) {
-      return undefined;
-    }
-
-    return new ApiKey(apiKeyRecord);
+    return apiKeyRecord ? new ApiKey(apiKeyRecord) : null;
   }
 
   static async getByUser(
@@ -171,12 +160,6 @@ export class ApiKey {
     db: Db,
     params: { apiKeyString: string },
   ): Promise<boolean> {
-    if (!ApiKey.HASHING_SECRET) {
-      throw new Error(
-        "Cannot validate API key: no HASHING_SECRET present in environment.",
-      );
-    }
-
     const { apiKeyString } = params;
 
     if (!apiKeyString.match(this.KEY_FORMAT_REGEXP)) {
