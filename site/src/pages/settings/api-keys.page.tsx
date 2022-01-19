@@ -140,8 +140,32 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
             Account Settings
           </Typography>
 
-          <Box py={4} display="flex" alignItems="flex-start">
-            {md ? <Sidebar flexGrow={0} pages={tabPages} /> : null}
+          <Box
+            py={4}
+            display={{ xs: "block", md: "flex" }}
+            alignItems="flex-start"
+          >
+            {md ? (
+              <Sidebar flexGrow={0} pages={tabPages} />
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  marginBottom: 1,
+                  background: "white",
+                  border: "1px solid #C5D1DB",
+                  boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
+                  borderRadius: 2,
+                  p: 1,
+                }}
+                component="select"
+                value="api-keys"
+              >
+                <option>General</option>
+                <option value="api-keys">API Keys</option>
+                <option>Security</option>
+              </Box>
+            )}
             <Box
               sx={{
                 boxShadow:
@@ -181,7 +205,7 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
               </Box>
               {!!tableRows.length && (
                 <BpTable
-                  header={["Name", "Publid ID", "Last Used", "Created"]}
+                  header={["Name", "Public ID", "Last Used", "Created"]}
                   rows={tableRows}
                 />
               )}

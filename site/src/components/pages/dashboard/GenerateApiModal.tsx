@@ -130,18 +130,18 @@ export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
             <Box
               sx={{
                 display: "grid",
-                gridTemplateColumns: "1fr 1fr",
+                gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
                 columnGap: 2,
               }}
             >
-              <Button type="submit" sx={{ borderRadius: 2 }}>
+              <Button type="submit" sx={{ borderRadius: 2, marginBottom: 2 }}>
                 Create Key
               </Button>
 
               <Box
                 onClick={closeModal}
                 component="button"
-                sx={dashboardButtonStyles}
+                sx={{ ...dashboardButtonStyles, marginBottom: 2 }}
               >
                 Cancel
               </Box>

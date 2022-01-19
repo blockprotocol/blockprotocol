@@ -53,8 +53,7 @@ export const dashboardSmallButtonStyles: SxProps<Theme> = {
 };
 
 export const dashboardDangerButtonStyles: SxProps<Theme> = {
-  px: 1,
-  py: 0.5,
+  padding: "11px 28px",
   background: "#FFF6ED",
   color: "#BF4908",
   border: "1px solid #FEB173",

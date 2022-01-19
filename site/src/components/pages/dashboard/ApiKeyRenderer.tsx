@@ -67,11 +67,6 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
           borderRadius: 2,
           p: 2,
           position: "relative",
-          "&:hover": {
-            "#api-copy": {
-              opacity: 1,
-            },
-          },
         }}
       >
         <Box
@@ -101,7 +96,6 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
             id="api-copy"
             sx={{
               ...dashboardSmallButtonStyles,
-              opacity: 0,
               transition: "all 0.2s ease-in-out",
               display: "flex",
               alignItems: "center",
