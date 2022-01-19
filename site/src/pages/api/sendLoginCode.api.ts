@@ -1,5 +1,7 @@
 import { body as bodyValidator, validationResult } from "express-validator";
+import { isProduction } from "../../lib/config";
 import { createBaseHandler } from "../../lib/handler/baseHandler";
+import { ensureUserIsMailchimpMember } from "../../lib/mailchimp";
 import { User } from "../../lib/model/user.model";
 import { formatErrors } from "../../util/api";
 
@@ -9,7 +11,7 @@ export type ApiSendLoginCodeRequestBody = {
 
 export type ApiSendLoginCodeResponse = {
   userId: string;
-  loginCodeId: string;
+  verificationCodeId: string;
 };
 
 export default createBaseHandler<
@@ -48,10 +50,13 @@ export default createBaseHandler<
       );
     }
 
-    const loginCode = await user.sendLoginCode(db);
+    const [{ id: verificationCodeId }] = await Promise.all([
+      user.sendLoginCode(db),
+      isProduction ? ensureUserIsMailchimpMember({ user }) : undefined,
+    ]);
 
     res.status(200).json({
       userId: user.id,
-      loginCodeId: loginCode.id,
+      verificationCodeId,
     });
   });

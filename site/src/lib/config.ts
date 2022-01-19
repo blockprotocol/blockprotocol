@@ -1,8 +1,9 @@
-export const FRONTEND_DOMAIN =
-  process.env.FRONTEND_DOMAIN ??
-  process.env.NEXT_PUBLIC_VERCEL_URL ??
-  "localhost:3000";
+export const FRONTEND_URL = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : process.env.FRONTEND_URL ?? "http://localhost:3000";
 
-export const FRONTEND_URL = `http${
-  FRONTEND_DOMAIN.startsWith("localhost") ? "" : "s"
-}//${FRONTEND_DOMAIN}`;
+export const FRONTEND_DOMAIN = new URL(FRONTEND_URL).hostname;
+
+export const isUsingHttps = new URL(FRONTEND_URL).protocol === "https";
+
+export const isProduction = process.env.NEXT_PUBLIC_VERCEL_ENV === "production";

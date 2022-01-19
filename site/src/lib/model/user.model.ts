@@ -1,6 +1,7 @@
 import { merge } from "lodash";
 import { Db, WithId, ObjectId, DBRef } from "mongodb";
 import { NextApiResponse } from "next";
+import dedent from "dedent";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../util/api";
 import {
   VerificationCode,
@@ -8,13 +9,18 @@ import {
   VerificationCodeVariant,
 } from "./verificationCode.model";
 import { ApiLoginWithLoginCodeRequestBody } from "../../pages/api/loginWithLoginCode.api";
-import { FRONTEND_URL } from "../config";
+import { ApiVerifyEmailRequestBody } from "../../pages/api/verifyEmail.api";
+import { ApiKey } from "./apiKey.model";
+import { FRONTEND_URL, isProduction } from "../config";
+import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
+import { sendMail } from "../awsSes";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
 export type SerializedUser = {
   id: string;
   isSignedUp: boolean;
+  email: string;
   shortname?: string;
   preferredName?: string;
 };
@@ -189,10 +195,14 @@ export class User {
     };
 
     const { insertedId } = await db
-      .collection<UserDocument>(User.COLLECTION_NAME)
+      .collection<Omit<UserDocument, "_id">>(User.COLLECTION_NAME)
       .insertOne(userProperties);
 
-    /** @todo: add to mailchimp mailing list */
+    const { email } = userProperties;
+
+    if (isProduction) {
+      await subscribeToMailchimp({ email });
+    }
 
     return new User({ id: insertedId.toString(), ...userProperties });
   }
@@ -203,6 +213,19 @@ export class User {
   ): Promise<User> {
     if (this.shortname && updatedProperties.shortname !== this.shortname) {
       throw new Error("Cannot update shortname");
+    }
+
+    if (
+      isProduction &&
+      (updatedProperties.shortname || updatedProperties.preferredName)
+    ) {
+      await updateMailchimpMemberInfo({
+        email: this.email,
+        merge_fields: {
+          SHORTNAME: updatedProperties.shortname,
+          PREFNAME: updatedProperties.preferredName,
+        },
+      });
     }
 
     await db
@@ -277,7 +300,7 @@ export class User {
     } = {
       email: this.email,
       userId: this.id,
-      loginCodeId: loginCode.id,
+      verificationCodeId: loginCode.id,
       code: loginCode.code,
     };
 
@@ -285,11 +308,21 @@ export class User {
       magicLinkQueryParams,
     ).toString()}`;
 
-    /** @todo: send email */
-    // eslint-disable-next-line no-console
-    console.log("Login code: ", loginCode.code);
-    // eslint-disable-next-line no-console
-    console.log("Magic link: ", magicLink);
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.log("Email verification code: ", loginCode.code);
+      // eslint-disable-next-line no-console
+      console.log("Magic Link: ", magicLink);
+    } else {
+      await sendMail({
+        to: this.email,
+        subject: "Your Block Protocol verification code",
+        html: dedent`
+          <p>To log in, copy and paste your verification code or <a href="${magicLink}">click here</a>.</p>
+          <code>${loginCode.code}</code>
+        `,
+      });
+    }
 
     return loginCode;
   }
@@ -319,11 +352,49 @@ export class User {
       variant: "email",
     });
 
-    /** @todo: send email */
-    // eslint-disable-next-line no-console
-    console.log("Email verification code: ", emailVerificationCode.code);
+    const magicLinkQueryParams: ApiVerifyEmailRequestBody & {
+      email: string;
+    } = {
+      email: this.email,
+      userId: this.id,
+      verificationCodeId: emailVerificationCode.id,
+      code: emailVerificationCode.code,
+    };
+
+    const magicLink = `${FRONTEND_URL}/signup?${new URLSearchParams(
+      magicLinkQueryParams,
+    ).toString()}`;
+
+    if (process.env.NODE_ENV === "development") {
+      // eslint-disable-next-line no-console
+      console.log("Email verification code: ", emailVerificationCode.code);
+      // eslint-disable-next-line no-console
+      console.log("Magic Link: ", magicLink);
+    } else {
+      await sendMail({
+        to: this.email,
+        subject: "Your Block Protocol verification code",
+        html: dedent`
+          <p>To verify your email address, copy and paste your verification code or <a href="${magicLink}">click here</a>.</p>
+          <code>${emailVerificationCode.code}</code>
+        `,
+      });
+    }
 
     return emailVerificationCode;
+  }
+
+  async generateApiKey(db: Db, params: { displayName: string }) {
+    const { displayName } = params;
+
+    /* @todo allow users to have multiple API keys - remove this once implemented */
+    await ApiKey.revokeAll(db, { user: this });
+
+    return await ApiKey.create(db, { displayName, user: this });
+  }
+
+  async apiKeys(db: Db) {
+    return await ApiKey.getByUser(db, { user: this });
   }
 
   toRef(): DBRef {
@@ -334,6 +405,7 @@ export class User {
     return {
       id: this.id,
       isSignedUp: this.isSignedUp(),
+      email: this.email,
       preferredName: this.preferredName,
       shortname: this.shortname,
     };

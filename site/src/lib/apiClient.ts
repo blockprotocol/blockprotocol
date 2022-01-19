@@ -4,11 +4,24 @@ import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
 } from "../pages/api/sendLoginCode.api";
+import {
+  ApiSignupRequestBody,
+  ApiSignupResponse,
+} from "../pages/api/signup.api";
+import {
+  ApiVerifyEmailRequestBody,
+  ApiVerifyEmailResponse,
+} from "../pages/api/verifyEmail.api";
+import {
+  ApiLoginWithLoginCodeRequestBody,
+  ApiLoginWithLoginCodeResponse,
+} from "../pages/api/loginWithLoginCode.api";
 
-const BASE_URL = `/api/`;
+const BASE_URL = "/api/";
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
+  withCredentials: true,
 });
 
 const handleAxiosError = (
@@ -21,15 +34,19 @@ const handleAxiosError = (
   throw error;
 };
 
-const get = <ResponseData = any>(
+export type ApiClientError = AxiosError<{ errors: Partial<ValidationError>[] }>;
+
+const get = <ResponseData = any, RequestParams = any>(
   url: string,
-  config?: AxiosRequestConfig<ResponseData>,
+  requestParams?: RequestParams,
 ): Promise<{
   data?: ResponseData;
-  error?: AxiosError<{ errors: Partial<ValidationError>[] }>;
+  error?: ApiClientError;
 }> =>
   axiosClient
-    .get<ResponseData>(url, config)
+    .get<ResponseData>(url, {
+      params: requestParams,
+    })
     .then(({ data }) => ({ data }))
     .catch(handleAxiosError);
 
@@ -39,7 +56,7 @@ const post = <RequestData = any, ResponseData = any>(
   config?: AxiosRequestConfig<RequestData>,
 ): Promise<{
   data?: ResponseData;
-  error?: AxiosError<{ errors: Partial<ValidationError>[] }>;
+  error?: ApiClientError;
 }> =>
   axiosClient
     .post<ResponseData, AxiosResponse<ResponseData>, RequestData>(
@@ -53,9 +70,21 @@ const post = <RequestData = any, ResponseData = any>(
 export const apiClient = {
   get,
   post,
+  signup: (requestData: ApiSignupRequestBody) =>
+    post<ApiSignupRequestBody, ApiSignupResponse>("signup", requestData),
+  verifyEmail: (requestData: ApiVerifyEmailRequestBody) =>
+    apiClient.post<ApiVerifyEmailRequestBody, ApiVerifyEmailResponse>(
+      "verifyEmail",
+      requestData,
+    ),
   sendLoginCode: (requestData: ApiSendLoginCodeRequestBody) =>
     apiClient.post<ApiSendLoginCodeRequestBody, ApiSendLoginCodeResponse>(
       "sendLoginCode",
       requestData,
     ),
+  loginWithLoginCode: (requestData: ApiLoginWithLoginCodeRequestBody) =>
+    apiClient.post<
+      ApiLoginWithLoginCodeRequestBody,
+      ApiLoginWithLoginCodeResponse
+    >("loginWithLoginCode", requestData),
 };

@@ -3,11 +3,12 @@ import React, { useContext, useEffect, useState, VFC } from "react";
 import { SerializedUser } from "../../lib/model/user.model";
 import { Button } from "../Button";
 import UserContext from "../../context/UserContext";
+import { SendLoginCodeScreen } from "../Screens/SendLoginCodeScreen";
 import {
-  LoginInfo,
-  LoginWithLoginCodeScreen,
-} from "./LoginWithLoginCodeScreen";
-import { SendLoginCodeScreen } from "./SendLoginCodeScreen";
+  VerificationCodeInfo,
+  VerificationCodeScreen,
+} from "../Screens/VerificationCodeScreen";
+import { apiClient } from "../../lib/apiClient";
 
 type LoginModalProps = {
   onClose: () => void;
@@ -22,11 +23,13 @@ export const LoginModal: VFC<LoginModalProps> = ({
   const { user, setUser } = useContext(UserContext);
   const [currentPage, setCurrentPage] = useState<LoginModalPage>("Email");
 
-  const [loginInfo, setLoginInfo] = useState<LoginInfo>();
+  const [email, setEmail] = useState<string>();
+  const [verificationCodeInfo, setVerificationCodeInfo] =
+    useState<VerificationCodeInfo>();
 
   const reset = () => {
     setCurrentPage("Email");
-    setLoginInfo(undefined);
+    setVerificationCodeInfo(undefined);
   };
 
   useEffect(() => {
@@ -37,11 +40,11 @@ export const LoginModal: VFC<LoginModalProps> = ({
   }, [modalProps.open, user, onClose]);
 
   const handleLoginCodeSent = (params: {
-    userId: string;
-    loginCodeId: string;
+    verificationCodeInfo: VerificationCodeInfo;
     email: string;
   }) => {
-    setLoginInfo(params);
+    setVerificationCodeInfo(params.verificationCodeInfo);
+    setEmail(params.email);
     setCurrentPage("VerificationCode");
   };
 
@@ -147,21 +150,27 @@ export const LoginModal: VFC<LoginModalProps> = ({
             >
               {currentPage === "Email" ? (
                 <SendLoginCodeScreen
-                  initialEmail={loginInfo?.email || ""}
+                  initialEmail={email}
                   onLoginCodeSent={handleLoginCodeSent}
+                  onClose={handleClose}
                 />
               ) : null}
-              {currentPage === "VerificationCode" && loginInfo ? (
-                <LoginWithLoginCodeScreen
-                  loginInfo={loginInfo}
-                  setLoginCodeId={(loginCodeId) => {
-                    setLoginInfo({
-                      ...loginInfo,
-                      loginCodeId,
+              {currentPage === "VerificationCode" &&
+              verificationCodeInfo &&
+              email ? (
+                <VerificationCodeScreen
+                  verificationCodeInfo={verificationCodeInfo}
+                  email={email}
+                  setVerificationCodeId={(verificationCodeId) => {
+                    setVerificationCodeInfo({
+                      ...verificationCodeInfo,
+                      verificationCodeId,
                     });
                   }}
-                  onLogin={handleLogin}
+                  onSubmit={handleLogin}
                   onChangeEmail={() => setCurrentPage("Email")}
+                  resend={apiClient.sendLoginCode}
+                  submit={apiClient.loginWithLoginCode}
                 />
               ) : null}
             </Box>

@@ -1,6 +1,11 @@
-import expressSession from "express-session";
+import { Middleware } from "next-connect";
+import { NextApiRequest, NextApiResponse } from "next";
+import nextSession from "next-session";
+import { promisifyStore } from "next-session/lib/compat";
 import MongoStore from "connect-mongo";
+import signature from "cookie-signature";
 import { mustGetEnvVar } from "../../util/api";
+import { FRONTEND_DOMAIN, isUsingHttps } from "../config";
 
 // cookie maximum age (365 days)
 const COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
@@ -14,19 +19,26 @@ const sessionStore = MongoStore.create({
   collectionName: "bp-site-sessions",
 });
 
-export const sessionMiddleware = expressSession({
-  secret: SESSION_SECRET,
-  store: sessionStore,
+const getSession = nextSession({
+  store: promisifyStore(sessionStore),
   cookie: {
-    domain: process.env.FRONTEND_DOMAIN?.includes("blockprotocol.org")
-      ? ".blockprotocol.org"
-      : "localhost",
+    domain: FRONTEND_DOMAIN.startsWith("localhost")
+      ? "localhost"
+      : FRONTEND_DOMAIN,
     maxAge: COOKIE_MAX_AGE_MS,
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: isUsingHttps,
   },
   name: "blockprotocol-session-id",
-  resave: false,
-  saveUninitialized: false,
+  decode: (raw) => signature.unsign(raw.slice(2), SESSION_SECRET) || null,
+  encode: (sid) => (sid ? `s:${signature.sign(sid, SESSION_SECRET)}` : ""),
 });
+
+export const sessionMiddleware: Middleware<
+  NextApiRequest,
+  NextApiResponse
+> = async (req, res, next) => {
+  await getSession(req, res); // session is set to req.session
+  next();
+};

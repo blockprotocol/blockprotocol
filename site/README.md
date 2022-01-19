@@ -11,14 +11,25 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
 ### BP Site
 
-1.  Add a `site/.env.local` environment variable file with the following environment variables: including the required environment variables
+1.  Add a `site/.env.local` environment variable file with the following environment variables:
 
-    - `SESSION_SECRET`: he secret used to sign the session ID cookie
+    - `HASHING_SECRET`: the secret used to hash API keys
+    - `SESSION_SECRET`: the secret used to sign the session ID cookie
     - `MONGODB_URI`: the URL where the mongo developer db instance is hosted (for example at `mongodb://root:password@localhost:27017/`)
     - `MONGODB_DB_NAME`: the name of the database (for example `local`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
-    - `FRONTEND_DOMAIN` (optional): the domain where the frontend is hosted (defaults to `localhost:3000`)
+    - `FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)
+
+    Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
+
+    ```sh
+    SESSION_SECRET=dev-session-secret
+    HASHING_SECRET=dev-hashing-secret
+    
+    MONGODB_URI=mongodb://root:password@localhost:27017/
+    MONGODB_DB_NAME=local
+    ```
 
 1.  Install dependencies using:
 
@@ -32,7 +43,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     yarn dev:db
     ```
 
-1.  **On first run**, or if you want to reset app data, seed the databse in a seperate terminal using:
+1.  **On first run**, or if you want to reset app data, seed the database in a separate terminal using:
 
     ```sh
     yarn dev:seed-db
@@ -43,6 +54,14 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     ```sh
     yarn dev
     ```
+
+### AWS configuration
+
+If you want to send verification codes to an email address, the following AWS environment variables have to be additionally configured:
+
+- `BP_AWS_REGION`: The region, eg. `us-east-1`
+- `BP_AWS_ACCESS_KEY_ID`: The AWS access key
+- `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
 
 ### Serving Blocks
 
@@ -108,7 +127,7 @@ Request Query:
 
 Response: `true` or `false`
 
-### `POST /api/completeSignup` [authenticated]
+### `POST /api/completeSignup` [requires cookie authentication]
 
 Request Body:
 
@@ -139,20 +158,49 @@ Logs in a user using a provide login code.
 
   - `userId`: the id of the BP user
   - `loginCodeId`: the id of the login code
-  - `code`: the one-time memorable login code sent to the user's email
+  - `code`: the memorable one-time login code sent to the user's email
 
 - Request Response:
   - `user`: the user that is now authenticated with the API
 
-### `GET /api/me` [authenticated]
+### `GET /api/me` [requires cookie authentication]
 
 Retrieves the user object of the currently logged in user.
 
 - Request Response:
   - `user`: the user currently authenticated with the API
 
-### `POST /api/logout` [authenticated]
+### `GET /api/me/apiKeys` [requires cookie authentication]
+
+Retrieves metadata on the API keys associated with the authenticated user.
+
+- Request Response:
+  - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
+
+### `POST /api/me/generateApiKey` [requires cookie authentication]
+
+Generates a new API key for the authenticated user, and revokes any others.
+
+- Request Body:
+
+  - `displayName`: a display name for the API key
+
+- Request Response:
+  - `apiKey`: the key itself, a string.
+
+### `POST /api/logout` [requires cookie authentication]
 
 Logs out the currently authenticated user.
 
 - Request Response: `SUCCESS`
+
+The following routes require a valid API key sent in an `x-api-key` header:
+
+### `GET /api/blocks` [requires API key authentication]
+
+- Request Params
+
+  - `q`: an optional text query to search for blocks with a matching name or author. If not provided, all blocks are returned.
+
+- Request Response:
+  - `results`: the results of the search: an array of block metadata JSON files

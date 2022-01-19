@@ -9,11 +9,11 @@ export type ApiSignupRequestBody = {
 
 export type ApiSignupResponse = {
   userId: string;
-  emailVerificationCodeId: string;
+  verificationCodeId: string;
 };
 
 export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
-  .use(bodyValidator("email").isEmail())
+  .use(bodyValidator("email").isEmail().toLowerCase())
   .post(async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -53,8 +53,7 @@ export default createBaseHandler<ApiSignupRequestBody, ApiSignupResponse>()
       );
     }
 
-    const { id: emailVerificationCodeId } =
-      await user.sendEmailVerificationCode(db);
+    const { id: verificationCodeId } = await user.sendEmailVerificationCode(db);
 
-    res.status(200).json({ userId: user.id, emailVerificationCodeId });
+    res.status(200).json({ userId: user.id, verificationCodeId });
   });
