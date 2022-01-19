@@ -6,9 +6,11 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
+export type TableRows = ReactNode[][];
+
 type TableProps = {
   header: string[];
-  rows: ReactNode[][];
+  rows: TableRows;
 };
 
 export const BpTable: VoidFunctionComponent<TableProps> = ({
