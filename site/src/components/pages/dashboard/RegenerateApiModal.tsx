@@ -68,7 +68,7 @@ export const RegenerateApiModal: VoidFunctionComponent<
           <Box
             sx={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: { xs: "1fr", sm: "1fr 1fr" },
               columnGap: 2,
             }}
           >
@@ -79,7 +79,7 @@ export const RegenerateApiModal: VoidFunctionComponent<
                 );
               }}
               component="button"
-              sx={dashboardDangerButtonStyles}
+              sx={{ ...dashboardDangerButtonStyles, marginBottom: 1 }}
             >
               Regenerate Key
             </Box>
@@ -87,7 +87,7 @@ export const RegenerateApiModal: VoidFunctionComponent<
             <Box
               onClick={closeModal}
               component="button"
-              sx={dashboardButtonStyles}
+              sx={{ ...dashboardButtonStyles, marginBottom: 1 }}
             >
               Cancel
             </Box>
