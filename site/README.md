@@ -19,7 +19,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     - `MONGODB_DB_NAME`: the name of the database (for example `local`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
-    - `FRONTEND_DOMAIN` (optional): the domain where the frontend is hosted (defaults to `localhost:3000`)
+    - `FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)
 
     Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
@@ -54,6 +54,14 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     ```sh
     yarn dev
     ```
+
+### AWS configuration
+
+If you want to send verification codes to an email address, the following AWS environment variables have to be additionally configured:
+
+- `BP_AWS_REGION`: The region, eg. `us-east-1`
+- `BP_AWS_ACCESS_KEY_ID`: The AWS access key
+- `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
 
 ### Serving Blocks
 
