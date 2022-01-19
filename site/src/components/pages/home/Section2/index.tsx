@@ -47,9 +47,9 @@ const CONTENT = [
       "Blocks created using the Block Protocol can easily move between apps",
     content: (
       <Box>
-        These blocks use structured data which makes it easy to move both block
+        These blocks use structured data which makes it easy to move both blocks
         themselves, and the data within blocks, even if the blocks are in
-        completely seperate applications.
+        completely separate applications.
       </Box>
     ),
     renderComponent: (isMobile: boolean, isActive?: boolean) => (

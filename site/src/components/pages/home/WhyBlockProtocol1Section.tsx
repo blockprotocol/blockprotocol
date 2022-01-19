@@ -60,6 +60,7 @@ const TableBlock = () => {
       sx={{
         borderRadius: 0.75,
         border: `1px solid ${blockBorderColor}`,
+        borderBottom: "none",
         color: ({ palette }) => palette.purple[300],
         width: { xs: "100%", sm: 440 },
         fontSize: { xs: 16, lg: 18 },
@@ -79,9 +80,6 @@ const TableBlock = () => {
               px: { xs: 1, md: 2 },
               borderRight: `1px solid ${blockBorderColor}`,
               borderBottom: `1px solid ${blockBorderColor}`,
-              "&:last-of-type": {
-                borderBottom: "none",
-              },
             }}
             item
             xs={7}
@@ -93,9 +91,6 @@ const TableBlock = () => {
               py: 1.5,
               px: { xs: 1, md: 2 },
               borderBottom: `1px solid ${blockBorderColor}`,
-              "&:last-of-type": {
-                borderBottom: "none",
-              },
             }}
             item
             xs={5}
@@ -118,7 +113,8 @@ const CONTENT = [
           textAlign: "center",
         }}
       >
-        We could pull in data from a checklist block our favorite to-do app...
+        We could pull in data from a checklist block on our favorite to-do
+        app...
       </Typography>
     ),
   },

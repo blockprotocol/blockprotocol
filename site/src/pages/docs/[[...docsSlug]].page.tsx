@@ -10,14 +10,12 @@ import {
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import siteMap from "../../../site-map.json";
-import { parseIntFromPixelString } from "../../util/muiUtils";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdxUtils";
-import { mdxComponents } from "../../util/mdxComponents";
 import { Sidebar } from "../../components/PageSidebar";
+import { MdxPageContent } from "../../components/MdxPageContent";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",
@@ -168,28 +166,14 @@ const DocsPage: NextPage<DocsPageProps> = ({
             {DOCS_PAGE_SUBTITLES[title]}
           </Typography>
         ) : null}
-        <Box py={4} display="flex" alignItems="flex-start" marginBottom={8}>
+        <Box py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Box
-              marginRight={9}
-              width={220}
-              flexGrow={0}
-              sx={{
-                position: "sticky",
-                top:
-                  DESKTOP_NAVBAR_HEIGHT +
-                  parseIntFromPixelString(theme.spacing(1)),
-              }}
-            >
-              <Sidebar pages={[tabPage]} />
-            </Box>
+            <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
           ) : null}
-          <Box flexGrow={1}>
-            <MDXRemote
-              {...tabPageSerializedContent}
-              components={mdxComponents}
-            />
-          </Box>
+          <MdxPageContent
+            flexGrow={1}
+            serializedPage={tabPageSerializedContent}
+          />
         </Box>
       </Container>
     </>

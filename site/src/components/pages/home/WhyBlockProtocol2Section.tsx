@@ -103,7 +103,7 @@ export const WhyBlockProtocol2Section = () => {
             position: "absolute",
             left: "50%",
             bottom: 0,
-            top: 0,
+            top: 50,
             transform: "translateX(-50%)",
             width: { xs: "80%", md: "27%" },
             background: `linear-gradient(179.75deg, #644CFF 0.21%, rgba(38, 39, 49, 0) 143.36%)`,
@@ -166,7 +166,7 @@ export const WhyBlockProtocol2Section = () => {
           Keep data in sync, get real-time updates, and integrate with any
           service that uses the protocol.
           <br />
-          No extra configuration required
+          No extra configuration required.
         </Typography>
       </Container>
 
@@ -193,8 +193,8 @@ export const WhyBlockProtocol2Section = () => {
               and delete data in a predictable way.
               <br />
               <br />
-              This standisation makes it possible to easily move both blocks and
-              data between applications that adhere to the protocol.
+              This standardization makes it possible to easily move both blocks
+              and data between applications that adhere to the protocol.
             </Typography>
             <Link href="/spec">
               <Button variant="secondary">Read the Spec</Button>

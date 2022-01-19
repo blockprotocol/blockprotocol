@@ -38,7 +38,6 @@ function abs() {
 # ----
 DIR=$(abs "${BASH_SOURCE[0]%/*}")
 REPO_ROOT="$DIR/../.."
-CACHE_DIR="${REPO_ROOT}/site/.next/cache"
 
 # deps
 # ----
@@ -54,18 +53,6 @@ else
     log error "missing commandline tool 'rsync'"
     exit 2
   fi
-
-  if [[ -f "${REPO_ROOT}/site/.env.local" ]]; then
-    source "${REPO_ROOT}/site/.env.local"
-  else
-    log error "missing environment settings \${REPO_ROOT}/site/.env.local"
-    exit 3
-  fi
-fi
-
-if [[ -z "$GH_ACCESS_TOKEN" ]]; then
-  log error "missing environment variable GH_ACCESS_TOKEN"
-  exit 4
 fi
 
 # prep
@@ -82,12 +69,6 @@ onexit() {
 
 trap onexit EXIT HUP INT QUIT PIPE TERM
 
-# use nextjs build cache to store previous builds (vercel does preserve it)
-# @see https://vercel.com/docs/concepts/deployments/build-step#caching
-log info "restore previous builds from the cache"
-mkdir -p "${CACHE_DIR}/blocks"
-cp -a "${CACHE_DIR}/blocks" "${REPO_ROOT}/site/public"
-
 # main
 # ----
 
@@ -95,21 +76,14 @@ cp -a "${CACHE_DIR}/blocks" "${REPO_ROOT}/site/public"
 # used to build a block. if the given config no longer exists,
 # its cached build is removed.
 #
-# @param build_config - path to any config in <repo-root>/registry
+# @param build_config - path to any config in <repo-root>/hub
 #
 function build_block {
   build_config="$1"
 
   # create block specific subfolder in nextjs' static root
-  public_dir="${REPO_ROOT}/site/public/blocks/${build_config##*/registry/}"
+  public_dir="${REPO_ROOT}/site/public/blocks/${build_config##*/hub/}"
   public_dir="${public_dir%\.json}"
-
-  # mirror deletions in the cache
-  if ! [[ -f "$build_config" ]]; then
-    log info "removing cached build for removed ${build_config}"
-    [[ -d "$public_dir" ]] && rm -rf "$public_dir"
-    return
-  fi
 
   log info "building ${build_config}"
   mkdir -p "$public_dir"
@@ -138,9 +112,6 @@ function build_block {
 
     log info "downloading ${zip_url}"
 
-    # insert http basic auth credentials (https://<user:password>@domain.com)
-    # cannot use curl's -u options because that would also require a password
-    zip_url="${zip_url:0:8}${GH_ACCESS_TOKEN}@${zip_url:8}"
 
     res=$(curl -sL -w '%{http_code}' -o "${repo_path}.zip" "$zip_url")
 
@@ -157,7 +128,7 @@ function build_block {
   log debug "pushd into ${repo_path}/${inner_dir}"
   pushd "${repo_path}/${inner_dir}"
 
-  log info "installing, building and publishing"
+  log info "installing and building"
   if [[ "$workspace" == "null" ]]; then
     # devDependencies are required
     NODE_ENV=development yarn install
@@ -185,14 +156,11 @@ if [[ $# -gt 0 ]]; then
 else
   log info "building block configs changed by last commit"
 
-  for build_config in $(git diff-tree --name-only --no-commit-id -r HEAD "${REPO_ROOT}/registry"); do
+  for build_config in $(git diff-tree --name-only --no-commit-id -r HEAD "${REPO_ROOT}/hub"); do
     build_config="${REPO_ROOT}/${build_config}"
     build_block "$build_config"
   done
 fi
-
-log info "pushing updated builds to the cache"
-rsync -a --delete "${REPO_ROOT}/site/public/blocks/" "${CACHE_DIR}/blocks"
 
 log info "finished w/o errors"
 exit 0

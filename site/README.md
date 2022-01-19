@@ -9,7 +9,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
 
 ## Local development
 
-Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/registry`
+Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/hub`
 with a build-config. The build-script `/site/scripts/build-blocks.sh` allows to build blocks
 individually. It requires the commandline tool:
 
@@ -22,7 +22,7 @@ These can be installed by your cli pkg mngr of choice (use `brew` on macOS).
 
 ```sh
 # build one or more blocks
-yarn build-block ./registry/@hash/paragraph.json
+yarn build-block ./hub/@hash/paragraph.json
 # build all blocks
 yarn build-blocks
 ```

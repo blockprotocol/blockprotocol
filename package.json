@@ -2,12 +2,10 @@
   "private": true,
   "description": "blockprotocol monorepo",
   "workspaces": [
-    "./packages/create-block-app",
-    "./packages/block-template",
+    "./packages/*",
     "./site"
   ],
   "scripts": {
-    "create-block-app": "node ./packages/create-block-app/scripts/create-block-app.js",
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:eslint": "eslint --report-unused-disable-directives \"**/*\" --fix",
     "fix:markdownlint": "markdownlint --fix \"**/*\"",

@@ -169,6 +169,12 @@ module.exports = {
       },
     },
     {
+      files: ["packages/blockprotocol/**"],
+      parserOptions: {
+        project: ["packages/blockprotocol/tsconfig.json"],
+      },
+    },
+    {
       files: ["site/**"],
       rules: {
         "no-restricted-imports": [

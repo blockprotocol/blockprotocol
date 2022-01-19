@@ -54,10 +54,6 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
             rel="stylesheet"
           />
-          <script
-            src="https://kit.fontawesome.com/31605611a9.js"
-            crossOrigin="anonymous"
-          />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
@@ -92,6 +88,11 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <script
+            defer
+            src="https://kit.fontawesome.com/31605611a9.js"
+            crossOrigin="anonymous"
+          />
         </body>
       </Html>
     );

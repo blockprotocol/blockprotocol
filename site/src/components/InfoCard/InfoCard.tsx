@@ -39,9 +39,11 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
 
   const ensureChildIsWrappedInTypography = (
     child: ReactElement | ReactFragment | ReactPortal,
+    index: number,
   ) => {
     return (
       <Typography
+        key={index}
         sx={{
           marginTop: 1,
           color: ({ palette }) => palette[paperVariant][600],

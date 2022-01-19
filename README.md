@@ -1,10 +1,6 @@
-<div id="top"></div>
-
 # Block Protocol
 
 The Block Protocol is an open standard for building and using data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Getting Started
 
@@ -14,23 +10,17 @@ Please refer to the [Block Protocol documentation](https://blockprotocol.org/doc
 - publishing blocks to the Block Hub; and
 - embedding blocks within your application.
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 ## Usage
 
 We’ll be publishing an example of an embedding application for the Block Protocol in January 2022. In the meantime:
 
 _For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub)._
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 ## Roadmap
 
 _We’ll be publishing a public roadmap for the Block Protocol soon._
 
 See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Contributing
 
@@ -48,27 +38,19 @@ If you’ve got an idea for a new block, would like to make a suggestion that im
 
 If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen).
 
-<p align="right">(<a href="#top">back to top</a>)</p>
-
 ## License
 
 Distributed under the MIT License. See `LICENSE.md` for more information.
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Contact
 
 Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
-You can also join our [community Discord server](https://discord.gg/PefPteFe5j) for quick help and support.
+You can also join our [community Discord server](https://blockprotocol.org/discord) for quick help and support.
 
 Project Link: [https://github.com/blockprotocol/blockprotocol](https://github.com/blockprotocol/blockprotocol)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Acknowledgments
 
 - [Ciaran Morinan](https://github.com/CiaranMn) - HASH ([profile](https://hash.ai/@ciaran))
 - [Joel Spolsky](https://github.com/jspolsky) - HASH ([profile](https://hash.ai/@spolsky))
-
-<p align="right">(<a href="#top">back to top</a>)</p>

@@ -23,9 +23,9 @@ If you want to know when the demo application is available, please [register you
 
 ### Install
 
-1.  Clone [the `blockprotocol` repository](https://github.com/blockprotocol/blockprotocol)
-1.  Run `yarn create-block-app yourblockname /path/to/yourblockname`
-1.  Switch to your new folder: `cd /path/to/yourblockname`
+1.  Move to a folder where you want to create your block
+1.  Run `npx create-block-app [your-block-name]` or `yarn create block-app [your-block-name]`
+1.  Switch to your new folder: `cd [your-block-name]`
 1.  Run `yarn install && yarn dev`
 1.  Open [http://localhost:9090](http://localhost:9090) in your browser. You should see `‘Hello World!’`
 
@@ -40,7 +40,7 @@ Embedding applications may also pass an `updateEntities` function, an `entityId`
 to your block - these are the ids identifying your block data in the app. Call `updateEntities` with any new data
 you want the app to set for your block - it should match the data types you have defined in `AppProps`.
 
-For more about editing data from blocks, [read the specification](https://blockprotocol.org/spec/block-types#requesting-creating-and-updating-data).
+For more about editing data from blocks, [read the specification](https://blockprotocol.org/spec/block-types#data-transfer).
 
 ### Build
 
