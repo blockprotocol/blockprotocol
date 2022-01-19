@@ -37,7 +37,7 @@ export default createBaseHandler<null, ApiSearchResponse>()
     let data: BlockMetadata[] = blocksData;
 
     if (query) {
-      data = blocksData.filter(
+      data = data.filter(
         ({ displayName, variants, author, name }) =>
           [displayName, author, name].some((item) =>
             item?.toLowerCase().includes(query),
