@@ -69,11 +69,12 @@ const DashboardPage: NextPage = () => {
 
   const { user } = useContext(UserContext);
 
-  if (!user) {
+  if (process.browser && !user) {
     void router.push("/");
     return null;
   }
-  const { preferredName: userName } = user;
+
+  const { preferredName: userName } = user ?? {};
 
   return (
     <>
