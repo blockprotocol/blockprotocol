@@ -2,7 +2,7 @@ import { VFC } from "react";
 import { Typography, Box } from "@mui/material";
 import { Carousel } from "./Carousel";
 import { Link } from "./Link";
-import { BlockMetadata } from "../pages/api/blocks.api";
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 
 type BlocksSliderProps = {
   catalog: BlockMetadata[];
@@ -15,7 +15,7 @@ export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
         backgroundColor: ({ palette }) => palette.gray[20],
       }}
       data={catalog}
-      itemKey={({ name }) => name}
+      itemKey={({ name }) => name!}
       renderItem={({ displayName, name, image, packagePath }) => {
         return (
           <Link

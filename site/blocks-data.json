@@ -11,7 +11,7 @@
 		"displayName": "Code",
 		"icon": "public/code.svg",
 		"image": "/assets/code-block.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/divider",
@@ -25,7 +25,7 @@
 		"displayName": "Divider",
 		"icon": "public/divider.svg",
 		"image": "/assets/divider-block.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/embed",
@@ -78,7 +78,7 @@
 		"displayName": "Embed",
 		"icon": "public/embed.svg",
 		"image": "/assets/default-block-img.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/header",
@@ -100,7 +100,7 @@
 		"displayName": "Heading",
 		"icon": "public/h1.svg",
 		"image": "/assets/heading-block.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/image",
@@ -114,7 +114,7 @@
 		"displayName": "Image",
 		"icon": "public/image.svg",
 		"image": "/assets/image-block.png",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/paragraph",
@@ -128,7 +128,7 @@
 		"displayName": "Paragraph",
 		"icon": "public/paragraph.svg",
 		"image": "/assets/default-block-img.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/person",
@@ -142,7 +142,7 @@
 		"displayName": "Person",
 		"icon": "public/account-circle.svg",
 		"image": "/assets/default-block-img.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/table",
@@ -156,7 +156,7 @@
 		"displayName": "Table",
 		"icon": "public/table.svg",
 		"image": "/assets/table-block.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	},
 	{
 		"packagePath": "@hash/video",
@@ -170,6 +170,6 @@
 		"displayName": "Video",
 		"icon": "public/play-box-outline.svg",
 		"image": "/assets/default-block-img.svg",
-		"lastUpdated": "2021-12-25T16:30:00.000Z"
+		"lastUpdated": "2022-01-17T12:25:04.907Z"
 	}
 ]
