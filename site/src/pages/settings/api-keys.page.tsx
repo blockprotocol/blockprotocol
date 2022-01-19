@@ -15,10 +15,16 @@ import { useState, VoidFunctionComponent } from "react";
 import { Button } from "../../components/Button";
 
 import { Link } from "../../components/Link";
+import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiModal";
+import { RegenerateApiModal } from "../../components/pages/dashboard/RegenerateApiModal";
 
-import { dashboardPages } from "../../components/pages/dashboard/utils";
+import {
+  dashboardPages,
+  dashboardSmallButtonStyles,
+} from "../../components/pages/dashboard/utils";
 import { Sidebar } from "../../components/PageSidebar";
-import { BpTable } from "../../components/Table";
+import { WarningIcon } from "../../components/SvgIcon/WarningIcon";
+import { BpTable, TableRows } from "../../components/Table";
 import { SiteMapPage } from "../../lib/sitemap";
 
 const href = "/settings/api-keys";
@@ -29,8 +35,6 @@ const a11yProps = (index: number) => ({
 });
 
 type ApiPageProps = {};
-
-const defaultProps: ApiPageProps = {};
 
 const tabPages: SiteMapPage[] = [
   {
@@ -53,75 +57,23 @@ const tabPages: SiteMapPage[] = [
   },
 ];
 
-const KeyRenderer: VoidFunctionComponent<{ apiKey: string }> = ({ apiKey }) => {
-  const [revealed, setRevealed] = useState(false);
-
-  return (
-    <TableCell sx={{ position: "relative", width: 300 }}>
-      <Box
-        sx={{
-          overflowWrap: "anywhere",
-          filter: revealed ? undefined : "blur(12px)",
-          transition: "filter 0.2s ease-in-out",
-        }}
-      >
-        {apiKey}
-      </Box>
-
-      <Box
-        sx={{
-          position: revealed ? "block" : "absolute",
-          width: "100%",
-          height: revealed ? "auto" : "100%",
-          top: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          paddingTop: 2,
-          transition: "all 0.2s ease-in-out",
-        }}
-      >
-        <Box
-          p={1}
-          component="button"
-          sx={{
-            background: "#FFFFFF",
-            border: "1px solid #C1CFDE",
-            boxShadow:
-              "0px 4px 11px rgba(39, 50, 86, 0.02), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.04), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
-            borderRadius: 2,
-          }}
-          onClick={() => setRevealed(!revealed)}
-        >
-          {revealed ? "Hide" : "Reveal"} Key
-        </Box>
-      </Box>
-    </TableCell>
-  );
-};
-
 const DashboardPage: NextPage<ApiPageProps> = () => {
   const router = useRouter();
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
-  const tableRows = [
-    [
-      "Key1",
-      <KeyRenderer apiKey="bpkey_7f89shh5009jg8hfnefj0989dqnm0076s00cl8kj9jj87hfnefj0989dqnm0000007shj9" />,
-      "2 hours ago",
-      "8 months ago",
-      "Dropdown",
-    ],
-    [
-      "Key2",
-      <KeyRenderer apiKey="bpkey_7f89shh5009jg8hfnefj0989dqnm0076s00cl8kj9jj87hfnefj0989dqnm0000007shj9" />,
-      "2 hours ago",
-      "8 months ago",
-      "Dropdown",
-    ],
-  ];
+  const [tableRows, setTableRows] = useState<TableRows>([]);
+  const [generateKeyModalOpen, setGenerateKeyModalOpen] = useState(false);
+  const [regenerateKeyModalOpen, setRegenerateKeyModalOpen] = useState(false);
+
+  const closeGenerateModal = () => {
+    setGenerateKeyModalOpen(false);
+  };
+
+  const closeRegenerateModal = () => {
+    setRegenerateKeyModalOpen(false);
+  };
 
   return (
     <>
@@ -227,10 +179,50 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
                   </Link>
                 </p>
               </Box>
-              <BpTable
-                header={["Name", "Token", "Last Used", "Created", ""]}
-                rows={tableRows}
-              />
+              {!!tableRows.length && (
+                <BpTable
+                  header={["Name", "Publid ID", "Last Used", "Created"]}
+                  rows={tableRows}
+                />
+              )}
+
+              <Box sx={{ paddingTop: 2 }}>
+                <Box
+                  component="button"
+                  sx={dashboardSmallButtonStyles}
+                  onClick={() => {
+                    tableRows.length
+                      ? setRegenerateKeyModalOpen(true)
+                      : setGenerateKeyModalOpen(true);
+                  }}
+                >
+                  {tableRows.length ? (
+                    <>
+                      <WarningIcon
+                        width="auto"
+                        height="1em"
+                        sx={{ fontSize: "1em", marginRight: 1 }}
+                      />{" "}
+                      Regenerate
+                    </>
+                  ) : (
+                    "+ Generate"
+                  )}{" "}
+                  API Key
+                </Box>
+
+                <GenerateApiModal
+                  closeGenerateModal={closeGenerateModal}
+                  generateKeyModalOpen={generateKeyModalOpen}
+                  setTableRows={setTableRows}
+                />
+
+                <RegenerateApiModal
+                  closeRegenerateModal={closeRegenerateModal}
+                  keyName={tableRows?.[0]?.[0]?.toString() ?? ""}
+                  regenerateKeyModalOpen={regenerateKeyModalOpen}
+                />
+              </Box>
             </Box>
           </Box>
         </Container>
