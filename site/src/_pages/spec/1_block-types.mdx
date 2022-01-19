@@ -121,8 +121,8 @@ The specification currently suggests that at least _some_ links are followed (ot
 It could alternatively specify:
 
 1.  A default depth - e.g. 1, so that entities immediately linked from the block are included, but not any further.
-2.  That _no_ links should be followed, with blocks requesting linked entities as needed
-3.  That blocks can express their desired depth somehow, based on their functional requirements.
+1.  That _no_ links should be followed, with blocks requesting linked entities as needed
+1.  That blocks can express their desired depth somehow, based on their functional requirements.
 
 Our own [work-in-progress embedding application](https://github.com/hashintel/hash/tree/main/packages/hash) uses a depth of 1-2 (for individual linked entities and linked aggregations, respectively), which aims to balance speed of block operation (by having more data available immediately) with avoiding resolving tons of data. As we develop more complex blocks we will update our view, and we welcome feedback.
 
