@@ -149,7 +149,7 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
               <Box
                 sx={{
                   width: "100%",
-                  marginBottom: 1,
+                  marginBottom: 2,
                   background: "white",
                   border: "1px solid #C5D1DB",
                   boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
