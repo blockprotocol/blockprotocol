@@ -96,6 +96,7 @@ creates one or more entities
 **accepts:** a single _array_ of _objects_ (`CreateEntitiesAction`), each with the following shape:
 
 - `entityTypeId` \[_string_]: the type of entity to create.
+- `entityTypeVersionId?` \[_string_]\[\_optional]: specify that this entity is of a particular version of the type (not simply the latest version).
 - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
 - `links?`: \[_object_]\[_optional_]: any links to create along with this entity.
   See [linking entities](#linking-entities).
@@ -114,7 +115,8 @@ updates one or more entities
 **accepts:** a single _array_ of _objects_ (`UpdateEntitiesAction`), each with the following shape:
 
 - `data<T>` \[_object_]: the fields and values to update on the entity.
-- `entityTypeId` \[_string_]: the type of entity to update.
+- `accountId?` \[_string_]\[_optional_]: the account id of the entity to update.
+- `entityTypeId?` \[_string_]\[_optional_]: the type id of the entity to update.
 - `entityId` \[_string_]: the id of the entity to update.
 - `selection?` \[_array of strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
@@ -130,10 +132,9 @@ deletes one or more entities
 
 **accepts:** a single _array_ of _objects_ (`DeleteEntitiesAction`), each with the following shape:
 
-- `entityTypeId` \[_string_]: the type of entity to delete
+- `accountId?` \[_string_]\[_optional_]: the account id of the entity to delete.
+- `entityTypeId?` \[_string_]\[_optional_]: the type id of the entity to delete.
 - `entityId` \[_string_]: the id of the entity to delete.
-- `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
-  See [linking entities](#linking-entities).
 
 ```block-function
 getEntities<T>(actions: GetEntitiesAction<T>[]): Promise<T[]>
@@ -145,7 +146,8 @@ retrieve one or more entities
 
 **accepts:** a single _array_ of _objects_ (`GetEntitiesAction<T>`), each with the following shape:
 
-- `entityTypeId` \[_string_]: the type of entity to retrieve.
+- `accountId?` \[_string_]\[_optional_]: the account id of the entity to retrieve.
+- `entityTypeId?` \[_string_]\[_optional_]: the type id of the entity to retrieve.
 - `entityId` \[_string_]: the id of the entity to retrieve.
 - `selection<T>?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
@@ -163,30 +165,34 @@ retrieve a subset of entities of a given type
 - `itemsPerPage` \[_integer_]: the number of results per page, i.e. returned.
 - `totalCount` \[_integer_]: the total number of records available for this query.
 - `nextPage` \[_integer_]: the number of the next page, if any (_null_ otherwise).
-- `filters` \[_array_]: any filters applied (empty if none):
+- `entityTypeId?` \[_object_]\[_optional_]:: the type of entities the results are limited to, if any
+- `entityTypeVersionId?` \[_object_]\[_optional_]:: the specific version of a type the results are limited to, if any
+- `multiFilter` \[_array_]: any filters applied (empty if none):
   - `field` \[_string_]: the field name filtered by.
-  - `operator` \[_enum_]: the filter operator.
-    One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
-  - `value` \[_string_]: the value filtered against.
-- `sorts` \[_array_]: the sort(s) applied:
+    - `operator` \[_enum_]: the filter operator.
+      One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
+    - `value` \[_string_]: the value filtered against.
+- `multiSort` \[_array_]: the sort(s) applied:
   - `field` \[_string_]: the field sorted on.
   - `desc` \[_boolean_]: whether the sort was descending.
 
-**accepts:** an optional _object_ (`AggregateEntitiesPayload`) with the following shape:
+**accepts:** an _object_ (`AggregateEntitiesPayload`) with the following shape:
 
-- `entityTypeId` \[_object_]: the type of entity to provide aggregated data for
+- `accountId?`: \[_optional_\: the account to retrieve entities from
 - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entities).
 - `operation?` <a id="aggregate-entities-operation" /> \[_object_]\[_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
-- `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
-- `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
-- `filters?` \[_array_]\[_optional_]: filter entities by a given field value:
-  - `field` \[_string_]: the field name to filter by.
-  - `operator` \[_enum_]: the filter operator.
-    One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
-  - `value` \[_string_]: the value to match against.
-    - `sorts?` \[_array_]\[_optional_]: specify how to sort results by providing one or more objects with the following shape:
+  - `entityTypeId?` \[_object_]\[_optional_]:: limit results to entities of a specific type
+  - `entityTypeVersionId?` \[_object_]\[_optional_]:: limit results to entities of a specific version of a type
+  - `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
+  - `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
+  - `multiFilter?` \[_array_]\[_optional_]: filter entities by a given field value:
+    - `field` \[_string_]: the field name to filter by.
+    - `operator` \[_enum_]: the filter operator.
+      One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
+    - `value` \[_string_]: the value to match against.
+  - `multiSort?` \[_array_]\[_optional_]: specify how to sort results by providing one or more objects with the following shape:
     - `field` \[_string_]: the field name to sort on.
     - `desc?` \[_boolean_]\[_optional_]: whether to sort descending.
 - Embedding apps will provide a default aggregation if not provided.
@@ -204,12 +210,13 @@ createEntityTypes(actions: CreateEntityTypesAction[]): Promise<EntityType[]>
 creates one or more entity types.
 
 **returns:** the created entity types, i.e. _objects_ inside an _array_.
-An `EntityType` is a JSON schema object with an additional `entityTypeId` field.
+An `EntityType` is a JSON schema object with an additional `entityTypeId` field and optional `accountId` field.
 
 **accepts:** a single _array_ of _objects_ (`CreateEntityTypesAction<T>`), each with the following shape:
 
 - `schema` \[_object_]: the [JSON schema](https://json-schema.org/)
   for the entity type.
+- `accountId?` \[_string_]\[_optional_]: the account to create the entity type in.
 
 ```block-function
 updateEntityTypes(actions: UpdateEntityTypesAction[]): Promise<EntityType[]>
@@ -221,6 +228,7 @@ updates one or more entity types.
 
 **accepts:** a single _array_ of _objects_ (`UpdateEntityTypesAction<T>`), each with the following shape:
 
+- `accountId?` \[_string_]\[_optional_]: the account of the entity type to update.
 - `entityTypeId` \[_string_]: the id of the entity type to update.
 - `schema` \[_object_]: the JSON schema for the entity type.
 
@@ -234,6 +242,7 @@ deletes one or more entity types.
 
 **accepts:** a single _array_ of _objects_ (`DeleteEntityTypesAction<T>`), each with the following shape:
 
+- `accountId?` \[_string_]\[_optional_]: the account of the entity type to delete.
 - `entityTypeId` \[_string_]: the entity type to delete.
 
 ```block-function
@@ -246,6 +255,7 @@ retrieves one or more entity types.
 
 **accepts:** a single _array_ of _objects_ (`GetEntityTypesAction<T>`), each with the following shape:
 
+- `accountId?` \[_string_]\[_optional_]: the account of the entity type to retrieve.
 - `entityTypeId` \[_string_]: the entity type to retrieve.
 
 ```block-function
@@ -256,8 +266,10 @@ retrieve one or more entity types.
 
 **returns:** an `AggregateEntitiesResult`
 
-**accepts:** an optional _object_ (`AggregateEntityTypesPayload`) with a single key, `operation`.
-It has the [same shape as for aggregating entities](#aggregate-entities-operation).
+**accepts:** an _object_ (`AggregateEntityTypesPayload`), with the following shape:
+
+- `accountId?` \[_string_]\[_optional_]: the account of the entity types to retrieve.
+- `operation?`: [an aggregating entities operation](#aggregate-entities-operation), omitting `entityTypeId`.
 
 ### Linking entities
 
@@ -275,17 +287,23 @@ will need a way of encoding this aggregation in its data.
 
 In order to create a reference to a separate entity or entities as the desired value of a particular field, blocks should create a `Link` <a id="link-object" />, which:
 
-- MUST contain `sourceEntityId` \[_string_]: the `entityId` of the source entity.
-- MAY contain `sourceEntityVersionId` \[_string_]: optionally specify that this link is only from a specific version.
-- MAY contain `sourceEntityTypeId`: \[_string_]: the `entityTypeId` of the source entity.
-- MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
-- MUST contain EITHER:
-  - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
-  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
-- if `destinationEntityId` is defined:
-  - MAY contain `destinationEntityVersionId` to pin the link to a specific version of the destination entity.
-  - MAY contain `destinationEntityTypeId`: \[_string_]: the `entityTypeId` of the destination entity.
-- MAY contain `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
+- MUST contain:
+  - `sourceEntityId` \[_string_]: the `entityId` of the source entity.
+  - `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
+  - EITHER:
+    - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
+    - `operation` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
+- MAY contain
+
+  - `sourceEntityVersionId?` \[_string_]\[_optional_]: optionally specify that this link is only from a specific version.
+  - `sourceEntityAccountId?`: \[_string_]\[_optional_]:: the `accountId` of the source entity.
+  - `sourceEntityTypeId?`: \[_string_]\[_optional_]:: the `entityTypeId` of the source entity.
+
+- if `destinationEntityId` is defined, MAY contain:
+  - `destinationEntityAccountId?`: \[_string_]\[_optional_]: the `accountId` of the destination entity.
+  - `destinationEntityVersionId:` \[_string_]\[_optional_]: to pin the link to a specific version of the destination entity.
+  - `destinationEntityTypeId?`: \[_string_]\[_optional_]: the `entityTypeId` of the destination entity.
+  - `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
 
 Once created, a `Link` includes a `linkId`.
 
@@ -307,7 +325,7 @@ Once created, a `Link` includes a `linkId`.
   "path": "rows",
   "aggregate": {
     "entityTypeId": "sales",
-    "sorts": [{ "field": "value", "desc": true }],
+    "multiSort": [{ "field": "value", "desc": true }],
     "itemsPerPage": 10,
     "pageNumber": 1
   }
@@ -350,20 +368,8 @@ creates one or more links.
 
 **returns:** the created links, i.e. _objects_ inside an _array_ (now with `linkId`)
 
-**accepts:** a single _array_ of _objects_ (`CreateLinksAction<T>`).
-Each object:
-
-- MUST contain `sourceEntityId` \[_string_]: the `entityId` of the source entity.
-- MAY contain `sourceEntityVersionId` \[_string_]: optionally specify that this link is only from a specific version.
-- MAY contain `sourceEntityTypeId`: \[_string_]: the `entityTypeId` of the source entity.
-- MUST contain `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
-- MUST contain EITHER:
-  - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
-  - `aggregate` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
-- if `destinationEntityId` is defined:
-  - MAY contain `destinationEntityVersionId` \[_string_] to pin the link to a specific version of the destination entity.
-  - MAY contain `destinationEntityTypeId`: \[_string_]: the `entityTypeId` of the destination entity.
-- MAY contain `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
+**accepts:** a single _array_ of _objects_ (`CreateLinksAction`) -
+each object is a [`Link`(#link-object)], omitting `linkId`.
 
 ```block-function
 updateLinks(actions: UpdateLinksAction[]): Promise<Link[]>
@@ -450,7 +456,7 @@ entityTypeId
 // data representing entities linked from the block and onwards
 linkedEntities
 linkedAggregations
-links
+linkGroups
 
 // functions
 createEntities
