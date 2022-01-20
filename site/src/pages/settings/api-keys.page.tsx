@@ -1,4 +1,4 @@
-import { Box, Container, Tabs, Tab, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
