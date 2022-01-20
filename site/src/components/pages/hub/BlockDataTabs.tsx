@@ -14,8 +14,6 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
 }) => {
   return (
     <Tabs
-      disableRipple
-      disableTouchRipple
       value={blockDataTab}
       onChange={(_event, newValue: number) => setBlockDataTab(newValue)}
       TabIndicatorProps={{

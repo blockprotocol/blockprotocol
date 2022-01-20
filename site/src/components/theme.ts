@@ -494,7 +494,7 @@ export const theme = createTheme({
           props: { variant: "tertiary" },
           style: {
             border: `1px solid currentColor`,
-            borderRadius: 34,
+            borderRadius: 6,
             color: customColors.gray[70],
             borderColor: "#C1CFDE",
             background: defaultTheme.palette.common.white,
@@ -681,6 +681,8 @@ export const theme = createTheme({
         {
           props: { variant: "tertiary", color: "purple" },
           style: {
+            color: customColors.purple[700],
+            borderColor: customColors.purple[700],
             ":hover": {
               color: customColors.purple[700],
               borderColor: customColors.purple[500],
@@ -813,6 +815,10 @@ export const theme = createTheme({
       },
     },
     MuiTabs: {
+      defaultProps: {
+        disableRipple: true,
+        disableTouchRipple: true,
+      },
       styleOverrides: {
         indicator: {
           height: 5,
