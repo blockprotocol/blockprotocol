@@ -1,16 +1,11 @@
 import { VFC, useState, useContext, useRef } from "react";
-import {
-  Box,
-  Typography,
-  ListItemButton,
-  Divider,
-  Popover,
-} from "@mui/material";
+import { Box, Typography, ListItemButton, Divider } from "@mui/material";
 import { Link } from "../Link";
 import { Button } from "../Button";
 import UserContext from "../../context/UserContext";
 import { apiClient } from "../../lib/apiClient";
 import { UserAvatar } from "../UserAvatar";
+import { Popover } from "../Popover/Popover";
 
 export const AccountDropdown: VFC = () => {
   const { user, setUser } = useContext(UserContext);
