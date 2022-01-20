@@ -16,6 +16,11 @@ import {
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse,
 } from "../pages/api/loginWithLoginCode.api";
+import {
+  ApiGenerateApiKeyBody,
+  ApiGenerateApiKeyResponse,
+} from "../pages/api/me/generateApiKey.api";
+import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
 
 const BASE_URL = "/api/";
 
@@ -70,6 +75,12 @@ const post = <RequestData = any, ResponseData = any>(
 export const apiClient = {
   get,
   post,
+  generateApiKey: (requestData: ApiGenerateApiKeyBody) =>
+    apiClient.post<ApiGenerateApiKeyBody, ApiGenerateApiKeyResponse>(
+      "me/generateApiKey",
+      requestData,
+    ),
+  getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/apiKeys"),
   signup: (requestData: ApiSignupRequestBody) =>
     post<ApiSignupRequestBody, ApiSignupResponse>("signup", requestData),
   verifyEmail: (requestData: ApiVerifyEmailRequestBody) =>

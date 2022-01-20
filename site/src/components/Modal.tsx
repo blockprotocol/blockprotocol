@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactNode } from "react";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
+import MuiModal from "@mui/material/Modal";
 import { SxProps, Theme } from "@mui/material";
 
 const style: SxProps<Theme> = {
@@ -19,25 +19,25 @@ const style: SxProps<Theme> = {
   p: 4,
 };
 
-type BpModalProps = {
+type ModalProps = {
   open: boolean;
   onClose: () => void;
   children: ReactNode;
 };
 
-export const BpModal: FunctionComponent<BpModalProps> = ({
+export const Modal: FunctionComponent<ModalProps> = ({
   open,
   children,
   onClose,
 }) => {
   return (
-    <Modal
+    <MuiModal
       open={open}
       onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>{children}</Box>
-    </Modal>
+    </MuiModal>
   );
 };

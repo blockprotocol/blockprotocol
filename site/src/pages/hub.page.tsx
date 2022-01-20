@@ -3,7 +3,10 @@ import { VFC } from "react";
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import { BlockCard, BlockCardComingSoon } from "../components/BlockCard";
-import { BlockMetadata, readBlocksFromDisk } from "./api/blocks.api";
+import {
+  ExpandedBlockMetadata as BlockMetadata,
+  readBlocksFromDisk,
+} from "../lib/blocks";
 
 interface PageProps {
   catalog: BlockMetadata[];

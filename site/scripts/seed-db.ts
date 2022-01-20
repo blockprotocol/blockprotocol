@@ -7,6 +7,7 @@ import {
   UserDocument,
   UserProperties,
 } from "../src/lib/model/user.model";
+import { ApiKey } from "../src/lib/model/apiKey.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
@@ -31,6 +32,20 @@ void (async () => {
   await db
     .collection<UserDocument>(User.COLLECTION_NAME)
     .createIndex({ email: 1 }, { unique: true });
+
+  if (
+    existingCollections.find(
+      ({ collectionName }) => collectionName === ApiKey.COLLECTION_NAME,
+    )
+  ) {
+    await db.dropCollection(ApiKey.COLLECTION_NAME);
+  }
+
+  await db.createCollection(ApiKey.COLLECTION_NAME);
+
+  await db
+    .collection<UserDocument>(ApiKey.COLLECTION_NAME)
+    .createIndex({ publicId: 1 }, { unique: true });
 
   if (
     existingCollections.find(

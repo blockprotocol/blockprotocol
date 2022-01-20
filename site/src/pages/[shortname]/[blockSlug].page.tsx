@@ -21,10 +21,10 @@ import {
   BlockSchema,
 } from "../../components/pages/hub/HubUtils";
 import {
-  BlockMetadata,
   readBlocksFromDisk,
   readBlockDataFromDisk,
-} from "../api/blocks.api";
+  ExpandedBlockMetadata as BlockMetadata,
+} from "../../lib/blocks";
 import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../components/Link";
 

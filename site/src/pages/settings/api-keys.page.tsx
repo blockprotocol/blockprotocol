@@ -10,20 +10,18 @@ import {
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { MouseEvent, useEffect, useMemo, useState } from "react";
 
 import { Link } from "../../components/Link";
 import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiModal";
-import { RegenerateApiModal } from "../../components/pages/dashboard/RegenerateApiModal";
 
-import {
-  dashboardPages,
-  dashboardSmallButtonStyles,
-} from "../../components/pages/dashboard/utils";
-import { Sidebar } from "../../components/PageSidebar";
+import { dashboardPages } from "../../components/pages/dashboard/utils";
 import { WarningIcon } from "../../components/SvgIcon/WarningIcon";
-import { BpTable, TableRows } from "../../components/Table";
-import { SiteMapPage } from "../../lib/sitemap";
+import { Table, TableRows } from "../../components/Table";
+import { UserFacingApiKeyProperties } from "../../lib/model/apiKey.model";
+import { apiClient } from "../../lib/apiClient";
+import { DateTimeCell } from "../../components/TableCells";
+import { Button } from "../../components/Button";
 
 const href = "/settings/api-keys";
 
@@ -34,43 +32,61 @@ const a11yProps = (index: number) => ({
 
 type ApiPageProps = {};
 
-const tabPages: SiteMapPage[] = [
-  {
-    title: "General",
-    href: "/settings/general",
-    sections: [],
-    subPages: [],
-  },
-  {
-    title: "API Keys",
-    href: "/settings/api-keys",
-    sections: [],
-    subPages: [],
-  },
-  {
-    title: "Security",
-    href: "/settings/security",
-    sections: [],
-    subPages: [],
-  },
-];
-
 const DashboardPage: NextPage<ApiPageProps> = () => {
   const router = useRouter();
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
-  const [tableRows, setTableRows] = useState<TableRows>([]);
-  const [generateKeyModalOpen, setGenerateKeyModalOpen] = useState(false);
-  const [regenerateKeyModalOpen, setRegenerateKeyModalOpen] = useState(false);
+  const [activeApiKeys, setActiveApiKeys] = useState<
+    UserFacingApiKeyProperties[]
+  >([]);
+
+  const [generateKeyStatus, setGenerateStatus] = useState<{
+    showModal: boolean;
+    keyToRegenerate?: UserFacingApiKeyProperties | undefined;
+  }>({
+    showModal: false,
+  });
+
+  const fetchAndSetApiKeys = () =>
+    apiClient
+      .getUserApiKeys()
+      .then(({ data }) =>
+        data
+          ? setActiveApiKeys(
+              data.apiKeysMetadata.filter((key) => !key.revokedAt),
+            )
+          : null,
+      );
+
+  useEffect(() => {
+    /** @todo handle errors and show the user a msg */
+    void fetchAndSetApiKeys();
+  }, []);
+
+  const tableRows: TableRows = useMemo(
+    () =>
+      activeApiKeys.map((key) => [
+        key.displayName,
+        key.publicId,
+        key.lastUsedAt ? (
+          <DateTimeCell key="lastUsed" timestamp={key.lastUsedAt} />
+        ) : (
+          "Never"
+        ),
+        <DateTimeCell key="createdAt" timestamp={key.createdAt} />,
+      ]),
+
+    [activeApiKeys],
+  );
+  const activeKey = activeApiKeys[0];
 
   const closeGenerateModal = () => {
-    setGenerateKeyModalOpen(false);
-  };
-
-  const closeRegenerateModal = () => {
-    setRegenerateKeyModalOpen(false);
+    setGenerateStatus({
+      showModal: false,
+      keyToRegenerate: undefined,
+    });
   };
 
   return (
@@ -99,9 +115,7 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
                   value={tabHref}
                   href={tabHref}
                   component="a"
-                  onClick={(
-                    event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                  ) => {
+                  onClick={(event: MouseEvent) => {
                     event.preventDefault();
                   }}
                   {...a11yProps(i)}
@@ -135,7 +149,7 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
               marginBottom: 2,
             }}
           >
-            Account Settings
+            Access the API
           </Typography>
 
           <Box
@@ -143,27 +157,6 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
             display={{ xs: "block", md: "flex" }}
             alignItems="flex-start"
           >
-            {md ? (
-              <Sidebar flexGrow={0} pages={tabPages} />
-            ) : (
-              <Box
-                sx={{
-                  width: "100%",
-                  marginBottom: 2,
-                  background: "white",
-                  border: "1px solid #C5D1DB",
-                  boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
-                  borderRadius: 2,
-                  p: 1,
-                }}
-                component="select"
-                value="api-keys"
-              >
-                <option>General</option>
-                <option value="api-keys">API Keys</option>
-                <option>Security</option>
-              </Box>
-            )}
             <Box
               sx={{
                 boxShadow:
@@ -172,78 +165,78 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
                 width: "100%",
                 borderRadius: 2,
               }}
-              p={4}
+              p={6}
             >
               <Typography
                 sx={{
-                  fontWeight: 500,
-                  fontSize: "22.5px",
-                  lineHeight: "110%",
-                  color: "#37434F",
-                  paddingBottom: 1,
+                  typography: "bpLargeText",
+                  fontWeight: "500",
                 }}
               >
                 API Keys
               </Typography>
-              <Box>
-                <p>
+              <Box sx={{ my: 2 }}>
+                <Typography
+                  sx={{
+                    typography: "bpBodyCopy",
+                  }}
+                >
                   These keys allow you to access the block protocol from within
                   your application.
-                </p>
-                <p>
+                </Typography>
+                <Typography
+                  sx={{
+                    typography: "bpBodyCopy",
+                  }}
+                >
                   Keep them private to prevent other people from accessing your
-                  account.{" "}
-                  <Link
-                    sx={{ color: "#6048E5", textDecoration: "underline" }}
-                    href="#"
-                  >
+                  account. <br />
+                  <Link href="/docs/embedding-blocks#discovering-blocks">
                     Learn More
                   </Link>
-                </p>
+                </Typography>
               </Box>
               {!!tableRows.length && (
-                <BpTable
+                <Table
                   header={["Name", "Public ID", "Last Used", "Created"]}
                   rows={tableRows}
                 />
               )}
 
               <Box sx={{ paddingTop: 2 }}>
-                <Box
-                  component="button"
-                  sx={dashboardSmallButtonStyles}
-                  onClick={() => {
-                    return tableRows.length
-                      ? setRegenerateKeyModalOpen(true)
-                      : setGenerateKeyModalOpen(true);
-                  }}
+                <Button
+                  color={activeKey ? "warning" : "gray"}
+                  onClick={() =>
+                    setGenerateStatus({
+                      showModal: true,
+                      keyToRegenerate: activeKey,
+                    })
+                  }
+                  variant="tertiary"
                 >
-                  {tableRows.length ? (
+                  {activeKey ? (
                     <>
                       <WarningIcon
                         width="auto"
                         height="1em"
                         sx={{ fontSize: "1em", marginRight: 1 }}
                       />{" "}
-                      Regenerate
+                      Regenerate API Key
                     </>
                   ) : (
-                    "+ Generate"
-                  )}{" "}
-                  API Key
-                </Box>
+                    <>Create new key</>
+                  )}
+                </Button>
 
-                <GenerateApiModal
-                  closeGenerateModal={closeGenerateModal}
-                  generateKeyModalOpen={generateKeyModalOpen}
-                  setTableRows={setTableRows}
-                />
-
-                <RegenerateApiModal
-                  closeRegenerateModal={closeRegenerateModal}
-                  keyName={tableRows?.[0]?.[0]?.toString() ?? ""}
-                  regenerateKeyModalOpen={regenerateKeyModalOpen}
-                />
+                {generateKeyStatus.showModal ? (
+                  <GenerateApiModal
+                    close={closeGenerateModal}
+                    keyNameToRegenerate={
+                      generateKeyStatus.keyToRegenerate?.displayName
+                    }
+                    refetchKeyList={fetchAndSetApiKeys}
+                  />
+                ) : null}
               </Box>
             </Box>
           </Box>
