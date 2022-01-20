@@ -120,11 +120,17 @@ export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
                 color={regenerate ? "warning" : "purple"}
                 type="submit"
                 variant="tertiary"
+                sx={{ marginBottom: 1 }}
               >
                 {regenerate ? "Regenerate Key" : "Create Key"}
               </Button>
 
-              <Button onClick={close} color="gray" variant="tertiary">
+              <Button
+                onClick={close}
+                color="gray"
+                variant="tertiary"
+                sx={{ marginBottom: 1 }}
+              >
                 Cancel
               </Button>
             </Box>
