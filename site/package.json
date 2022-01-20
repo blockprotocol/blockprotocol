@@ -11,7 +11,7 @@
     "dev": "yarn generate-sitemap && next dev",
     "generate-sitemap": "node --max-old-space-size=2048 node_modules/.bin/ts-node --files --project tsconfig.json scripts/generate-sitemap",
     "postinstall": "yarn generate-sitemap",
-    "lint:tsc": "tsc --noEmit # @blockprotocol/site",
+    "lint:tsc": "tsc --noEmit",
     "start": "next start"
   },
   "dependencies": {
