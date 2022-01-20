@@ -20,7 +20,14 @@ export const Table: VoidFunctionComponent<TableProps> = ({ header, rows }) => {
         <TableHead>
           <TableRow>
             {header.map((title) => (
-              <TableCell key={title} sx={{ color: "#4D5C6C", fontWeight: 500 }}>
+              <TableCell
+                key={title}
+                sx={{
+                  color: "#4D5C6C",
+                  fontWeight: 500,
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {title}
               </TableCell>
             ))}

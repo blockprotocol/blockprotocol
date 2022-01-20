@@ -81,37 +81,41 @@ const DashboardPage: NextPage = () => {
       <Head>
         <title>Block Protocol - Dashboard</title>
       </Head>
-      {md && (
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: ({ palette }) => palette.gray[20],
-            borderBottomStyle: "solid",
-          }}
-        >
-          <Container>
-            <Tabs
-              value={href}
-              onChange={(_, newHref) => router.push(newHref)}
-              aria-label="documentation-tabs"
-            >
-              {dashboardPages.map(({ tabTitle, tabHref }, i) => (
-                <Tab
-                  key={tabHref}
-                  label={tabTitle}
-                  value={tabHref}
-                  href={tabHref}
-                  component="a"
-                  onClick={(event: MouseEvent) => {
-                    event.preventDefault();
-                  }}
-                  {...a11yProps(i)}
-                />
-              ))}
-            </Tabs>
-          </Container>
-        </Box>
-      )}
+
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: ({ palette }) => palette.gray[20],
+          borderBottomStyle: "solid",
+          marginTop: {
+            xs: 2,
+            md: 0,
+          },
+        }}
+      >
+        <Container>
+          <Tabs
+            value={href}
+            onChange={(_, newHref) => router.push(newHref)}
+            aria-label="documentation-tabs"
+          >
+            {dashboardPages.map(({ tabTitle, tabHref }, i) => (
+              <Tab
+                key={tabHref}
+                label={tabTitle}
+                value={tabHref}
+                href={tabHref}
+                component="a"
+                onClick={(event: MouseEvent) => {
+                  event.preventDefault();
+                }}
+                {...a11yProps(i)}
+              />
+            ))}
+          </Tabs>
+        </Container>
+      </Box>
+
       <Box
         sx={{
           background:

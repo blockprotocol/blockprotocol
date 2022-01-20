@@ -94,37 +94,41 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
       <Head>
         <title>Block Protocol - Dashboard</title>
       </Head>
-      {md && (
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: ({ palette }) => palette.gray[20],
-            borderBottomStyle: "solid",
-          }}
-        >
-          <Container>
-            <Tabs
-              value={href}
-              onChange={(_, newHref) => router.push(newHref)}
-              aria-label="documentation-tabs"
-            >
-              {dashboardPages.map(({ tabTitle, tabHref }, i) => (
-                <Tab
-                  key={tabHref}
-                  label={tabTitle}
-                  value={tabHref}
-                  href={tabHref}
-                  component="a"
-                  onClick={(event: MouseEvent) => {
-                    event.preventDefault();
-                  }}
-                  {...a11yProps(i)}
-                />
-              ))}
-            </Tabs>
-          </Container>
-        </Box>
-      )}
+
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: ({ palette }) => palette.gray[20],
+          borderBottomStyle: "solid",
+          marginTop: {
+            xs: 2,
+            md: 0,
+          },
+        }}
+      >
+        <Container>
+          <Tabs
+            value={href}
+            onChange={(_, newHref) => router.push(newHref)}
+            aria-label="documentation-tabs"
+          >
+            {dashboardPages.map(({ tabTitle, tabHref }, i) => (
+              <Tab
+                key={tabHref}
+                label={tabTitle}
+                value={tabHref}
+                href={tabHref}
+                component="a"
+                onClick={(event: MouseEvent) => {
+                  event.preventDefault();
+                }}
+                {...a11yProps(i)}
+              />
+            ))}
+          </Tabs>
+        </Container>
+      </Box>
+
       <Box
         sx={{
           background:
@@ -165,7 +169,7 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
                 width: "100%",
                 borderRadius: 2,
               }}
-              p={6}
+              p={{ xs: 3, md: 6 }}
             >
               <Typography
                 sx={{
@@ -212,6 +216,12 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
                       keyToRegenerate: activeKey,
                     })
                   }
+                  sx={{
+                    width: {
+                      xs: "100%",
+                      md: "auto",
+                    },
+                  }}
                   variant="tertiary"
                 >
                   {activeKey ? (
