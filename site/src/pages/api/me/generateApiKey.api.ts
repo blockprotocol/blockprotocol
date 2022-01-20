@@ -4,17 +4,17 @@ import { validationResult } from "express-validator";
 import { createAuthenticatedHandler } from "../../../lib/handler/authenticatedHandler";
 import { formatErrors } from "../../../util/api";
 
-type GenerateApiKeyBody = {
+export type ApiGenerateApiKeyBody = {
   displayName: string;
 };
 
-export type GenerateApiKeyResponse = {
+export type ApiGenerateApiKeyResponse = {
   apiKey: string;
 };
 
 export default createAuthenticatedHandler<
-  GenerateApiKeyBody,
-  GenerateApiKeyResponse
+  ApiGenerateApiKeyBody,
+  ApiGenerateApiKeyResponse
 >(false)
   .use(bodyValidator("displayName").isString().notEmpty())
   .post(async (req, res) => {
