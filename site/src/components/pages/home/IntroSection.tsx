@@ -60,7 +60,7 @@ export const IntroSection = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
-          mb: 4,
+          mb: 0,
         }}
       >
         <Box
@@ -69,6 +69,7 @@ export const IntroSection = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            zIndex: "2",
           }}
         >
           <Typography variant="bpHeading2" sx={{ mb: 3 }} textAlign="center">
@@ -95,7 +96,7 @@ export const IntroSection = () => {
             alignItems: "flex-end",
             mx: "auto",
             position: "relative",
-            mb: { xs: -6, sm: -4 },
+            mb: { xs: -8, sm: -10, md: -16 },
           }}
         >
           {steps.map(({ graphImg, graphImgMobile, id }) => (
