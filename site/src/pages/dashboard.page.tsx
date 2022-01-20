@@ -1,12 +1,4 @@
-import {
-  useTheme,
-  useMediaQuery,
-  Box,
-  Container,
-  Tabs,
-  Tab,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Tabs, Tab, Typography } from "@mui/material";
 import { MouseEvent, useContext } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -64,8 +56,6 @@ const dashboardCardData: DashboardCardProps[] = [
 
 const DashboardPage: NextPage = () => {
   const router = useRouter();
-  const theme = useTheme();
-  const md = useMediaQuery(theme.breakpoints.up("md"));
 
   const { user } = useContext(UserContext);
 

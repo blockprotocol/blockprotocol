@@ -1,12 +1,4 @@
-import {
-  useTheme,
-  useMediaQuery,
-  Box,
-  Container,
-  Tabs,
-  Tab,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Tabs, Tab, Typography } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -34,9 +26,6 @@ type ApiPageProps = {};
 
 const DashboardPage: NextPage<ApiPageProps> = () => {
   const router = useRouter();
-  const theme = useTheme();
-
-  const md = useMediaQuery(theme.breakpoints.up("md"));
 
   const [activeApiKeys, setActiveApiKeys] = useState<
     UserFacingApiKeyProperties[]
