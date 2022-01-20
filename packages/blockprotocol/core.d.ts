@@ -1,27 +1,27 @@
 // -------------------------- BLOCK METADATA -------------------------- //
 export type BlockVariant = {
-  description?: string;
-  displayName?: string;
-  icon?: string;
-  properties?: JSONObject;
+  description?: string | null;
+  displayName?: string | null;
+  icon?: string | null;
+  properties?: JSONObject | null;
 };
 
 export type BlockMetadata = {
-  author?: string;
-  default?: JSONObject;
-  description?: string;
-  displayName?: string;
-  examples?: JSONObject[];
-  externals?: Record<string, string>;
-  icon?: string;
-  image?: string;
-  license?: string;
-  name: string;
-  protocol: string;
-  schema?: string;
-  source: string;
-  variants?: BlockVariant[];
-  version: string;
+  author?: string | null;
+  default?: JSONObject | null;
+  description?: string | null;
+  displayName?: string | null;
+  examples?: JSONObject[] | null;
+  externals?: Record<string, string> | null;
+  icon?: string | null;
+  image?: string | null;
+  license?: string | null;
+  name?: string | null;
+  protocol?: string | null;
+  schema?: string | null;
+  source?: string | null;
+  variants?: BlockVariant[] | null;
+  version?: string | null;
 };
 
 // ----------------------------- ENTITIES ----------------------------- //
