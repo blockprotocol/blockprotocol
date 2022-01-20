@@ -1,5 +1,5 @@
-import { Box, Container, Tabs, Tab, Typography } from "@mui/material";
-import { MouseEvent, useContext } from "react";
+import { Box, Container, Typography } from "@mui/material";
+import { useContext } from "react";
 import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -8,15 +8,8 @@ import {
   DashboardCard,
   DashboardCardProps,
 } from "../components/pages/dashboard/DashboardCard";
-import { dashboardPages } from "../components/pages/dashboard/utils";
 import UserContext from "../context/UserContext";
-
-const href = "/dashboard";
-
-const a11yProps = (index: number) => ({
-  id: `simple-tab-${index}`,
-  "aria-controls": `simple-tabpanel-${index}`,
-});
+import { TopNavigationTabs } from "../components/pages/dashboard/TopNavigationTabs";
 
 const dashboardCardData: DashboardCardProps[] = [
   {
@@ -72,39 +65,7 @@ const DashboardPage: NextPage = () => {
         <title>Block Protocol - Dashboard</title>
       </Head>
 
-      <Box
-        sx={{
-          borderBottom: 1,
-          borderColor: ({ palette }) => palette.gray[20],
-          borderBottomStyle: "solid",
-          marginTop: {
-            xs: 2,
-            md: 0,
-          },
-        }}
-      >
-        <Container>
-          <Tabs
-            value={href}
-            onChange={(_, newHref) => router.push(newHref)}
-            aria-label="documentation-tabs"
-          >
-            {dashboardPages.map(({ tabTitle, tabHref }, i) => (
-              <Tab
-                key={tabHref}
-                label={tabTitle}
-                value={tabHref}
-                href={tabHref}
-                component="a"
-                onClick={(event: MouseEvent) => {
-                  event.preventDefault();
-                }}
-                {...a11yProps(i)}
-              />
-            ))}
-          </Tabs>
-        </Container>
-      </Box>
+      <TopNavigationTabs />
 
       <Box
         sx={{

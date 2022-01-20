@@ -1,32 +1,20 @@
 import { Box, Container, Tabs, Tab, Typography } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { MouseEvent, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Link } from "../../components/Link";
 import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiModal";
 
-import { dashboardPages } from "../../components/pages/dashboard/utils";
 import { WarningIcon } from "../../components/SvgIcon/WarningIcon";
 import { Table, TableRows } from "../../components/Table";
 import { UserFacingApiKeyProperties } from "../../lib/model/apiKey.model";
 import { apiClient } from "../../lib/apiClient";
 import { DateTimeCell } from "../../components/TableCells";
 import { Button } from "../../components/Button";
+import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
 
-const href = "/settings/api-keys";
-
-const a11yProps = (index: number) => ({
-  id: `simple-tab-${index}`,
-  "aria-controls": `simple-tabpanel-${index}`,
-});
-
-type ApiPageProps = {};
-
-const DashboardPage: NextPage<ApiPageProps> = () => {
-  const router = useRouter();
-
+const DashboardPage: NextPage = () => {
   const [activeApiKeys, setActiveApiKeys] = useState<
     UserFacingApiKeyProperties[]
   >([]);
@@ -84,39 +72,7 @@ const DashboardPage: NextPage<ApiPageProps> = () => {
         <title>Block Protocol - Dashboard</title>
       </Head>
 
-      <Box
-        sx={{
-          borderBottom: 1,
-          borderColor: ({ palette }) => palette.gray[20],
-          borderBottomStyle: "solid",
-          marginTop: {
-            xs: 2,
-            md: 0,
-          },
-        }}
-      >
-        <Container>
-          <Tabs
-            value={href}
-            onChange={(_, newHref) => router.push(newHref)}
-            aria-label="documentation-tabs"
-          >
-            {dashboardPages.map(({ tabTitle, tabHref }, i) => (
-              <Tab
-                key={tabHref}
-                label={tabTitle}
-                value={tabHref}
-                href={tabHref}
-                component="a"
-                onClick={(event: MouseEvent) => {
-                  event.preventDefault();
-                }}
-                {...a11yProps(i)}
-              />
-            ))}
-          </Tabs>
-        </Container>
-      </Box>
+      <TopNavigationTabs />
 
       <Box
         sx={{
