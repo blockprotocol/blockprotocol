@@ -207,7 +207,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   width: "2em",
                 }}
                 component="img"
-                src={blockMetadata.icon}
+                src={blockMetadata.icon ?? undefined}
               />
             </Typography>
           ) : null}
@@ -227,7 +227,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     mr: 2,
                   }}
                   component="img"
-                  src={blockMetadata.icon}
+                  src={blockMetadata.icon ?? undefined}
                 />
               )}
               {blockMetadata.displayName}
