@@ -172,14 +172,14 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             <Box
               sx={{ mr: 1.5, width: 24, height: 24 }}
               component="img"
-              src={icon}
+              src={icon ?? undefined}
             />
             <Typography
               className="block-card__name"
               fontWeight="600"
               variant="bpLargeText"
             >
-              {displayName}
+              {displayName ?? undefined}
             </Typography>
           </Box>
           <Typography

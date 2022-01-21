@@ -17,7 +17,7 @@ export type BuildConfig = {
 };
 
 const getBlockMediaUrl = (
-  mediaPath: string | undefined,
+  mediaPath: string | undefined | null,
   packagePath: string,
 ): string | null => {
   if (!mediaPath) {
