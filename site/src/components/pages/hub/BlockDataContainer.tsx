@@ -136,15 +136,22 @@ export const BlockDataContainer: VoidFunctionComponent<
             >
               <Tab label={metadata.displayName} />
             </Tabs>
-            <TabPanel value={blockTab} index={0}>
+            <TabPanel
+              value={blockTab}
+              index={0}
+              sx={{
+                overflow: "auto",
+                padding: theme.spacing(4, 4),
+                height: "100%",
+                backgroundColor: "#F7FAFC",
+              }}
+            >
               <Box
                 display="flex"
                 alignItems="center"
                 sx={{
-                  backgroundColor: "#F7FAFC",
-                  height: "100%",
-                  padding: theme.spacing(0, 4),
-                  overflow: "auto",
+                  height: "max-content",
+                  minHeight: "100%",
                 }}
               >
                 {blockModule && <blockModule.default {...props} />}
