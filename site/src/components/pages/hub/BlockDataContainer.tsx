@@ -1,4 +1,5 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
+import { BlockProtocolUpdateEntitiesFunction } from "blockprotocol";
 import { Validator } from "jsonschema";
 import { useMemo, useState, VoidFunctionComponent } from "react";
 
@@ -34,16 +35,39 @@ export const BlockDataContainer: VoidFunctionComponent<
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
+  const updateEntities: BlockProtocolUpdateEntitiesFunction = async (
+    actions,
+  ) => {
+    for (const action of actions) {
+      if (action.entityId === blockState.entityId) {
+        setBlockState((blockState) => ({
+          ...blockState,
+          ...action.data,
+        }));
+      }
+    }
+
+    return actions;
+  };
+
+  const [blockState, setBlockState] = useState<Record<string, unknown>>({
+    accountId: "test-account-id",
+    entityId: "test-entity-id",
+    uploadFile: dummyUploadFile,
+    getEmbedBlock,
+    updateEntities,
+  });
+
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     let result;
 
     try {
       result = JSON.parse(text);
-      result.accountId = "test-account-id";
-      result.entityId = "test-entity-id";
-      result.uploadFile = dummyUploadFile;
-      result.getEmbedBlock = getEmbedBlock;
+
+      for (const propertyName of Object.keys(blockState)) {
+        result[propertyName] = blockState[propertyName];
+      }
     } catch (err) {
       return [result, [(err as Error).message]];
     }
@@ -58,7 +82,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema]);
+  }, [text, schema, blockState]);
 
   return (
     <>

@@ -31,6 +31,7 @@ interface IoEmbedData {
 
 type FetchEmbedCodeQuery = {
   url: string;
+  error?: string;
 };
 
 export default createBaseHandler<null, FetchEmbedCodeQuery>()
@@ -59,7 +60,7 @@ export default createBaseHandler<null, FetchEmbedCodeQuery>()
     }
 
     if (!oembedEndpoint) {
-      return res.sendStatus(404);
+      return res.status(404).send({ url: "", error: "Embed not found" });
     }
 
     try {
@@ -69,6 +70,6 @@ export default createBaseHandler<null, FetchEmbedCodeQuery>()
 
       res.send(oEmbedData);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ url: "", error: (error as string).toString() });
     }
   });
