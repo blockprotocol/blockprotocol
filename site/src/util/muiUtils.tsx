@@ -13,7 +13,7 @@ export const parseIntFromPixelString = (pixelString: string): number => {
  * This version applies different yet equally effective styles to the document element.
  *
  * Used to replace the functionality behind `disableScollLock` property of MUI's
- * components modal, drawer, menu, popover, modal.
+ * components modal, drawer, menu, popover, dialog.
  */
 export const useScrollLock = (active: boolean) =>
   useLayoutEffect(() => {
