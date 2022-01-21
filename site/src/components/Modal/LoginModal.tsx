@@ -9,6 +9,7 @@ import {
   VerificationCodeScreen,
 } from "../Screens/VerificationCodeScreen";
 import { apiClient } from "../../lib/apiClient";
+import { useScrollLock } from "../../util/muiUtils";
 
 type LoginModalProps = {
   onClose: () => void;
@@ -18,6 +19,7 @@ type LoginModalPage = "Email" | "VerificationCode";
 
 export const LoginModal: VFC<LoginModalProps> = ({
   onClose,
+  disableScrollLock = false,
   ...modalProps
 }) => {
   const { user, setUser } = useContext(UserContext);
@@ -31,6 +33,8 @@ export const LoginModal: VFC<LoginModalProps> = ({
     setCurrentPage("Email");
     setVerificationCodeInfo(undefined);
   };
+
+  useScrollLock(!disableScrollLock && modalProps.open);
 
   useEffect(() => {
     if (modalProps.open && user) {
@@ -76,6 +80,7 @@ export const LoginModal: VFC<LoginModalProps> = ({
         },
       }}
       onClose={handleClose}
+      disableScrollLock
       {...modalProps}
     >
       <Fade in={modalProps.open}>
