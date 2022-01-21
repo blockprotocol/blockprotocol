@@ -24,6 +24,14 @@ void (async () => {
       ({ collectionName }) => collectionName === User.COLLECTION_NAME,
     )
   ) {
+    if ((await db.collection(User.COLLECTION_NAME).count()) > 50) {
+      console.warn(`
+        You are attempting to drop a collection with a large number of users.
+        Are you sure you're connecting to the right database?
+        Please edit the script in which this message appears if you're sure.
+        `);
+      process.exit();
+    }
     await db.dropCollection(User.COLLECTION_NAME);
   }
 
