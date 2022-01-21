@@ -1,7 +1,9 @@
-import { FunctionComponent, ReactNode } from "react";
-import Box from "@mui/material/Box";
-import MuiModal from "@mui/material/Modal";
 import { SxProps, Theme } from "@mui/material";
+import Box from "@mui/material/Box";
+import MuiModal, { ModalProps as MuiModalProps } from "@mui/material/Modal";
+import React from "react";
+
+import { useScrollLock } from "../util/muiUtils";
 
 const style: SxProps<Theme> = {
   position: "absolute",
@@ -19,23 +21,23 @@ const style: SxProps<Theme> = {
   p: { xs: 2, md: 4 },
 };
 
-type ModalProps = {
-  open: boolean;
-  onClose: () => void;
-  children: ReactNode;
-};
+type ModalProps = Pick<MuiModalProps, "open" | "onClose" | "disableScrollLock">;
 
-export const Modal: FunctionComponent<ModalProps> = ({
+export const Modal: React.FC<ModalProps> = ({
   open,
   children,
+  disableScrollLock = false,
   onClose,
 }) => {
+  useScrollLock(!disableScrollLock && open);
+
   return (
     <MuiModal
       open={open}
       onClose={onClose}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      disableScrollLock
     >
       <Box sx={style}>{children}</Box>
     </MuiModal>
