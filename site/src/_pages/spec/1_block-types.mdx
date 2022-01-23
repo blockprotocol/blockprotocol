@@ -160,7 +160,7 @@ Blocks should have sensible fallbacks for when permissions are denied them, or w
 
 There are various ways in which we may change the approach described here:
 
-1.  Finer-grained updates to entities - rather than sending data objects with multiple keys and values as described below - would be useful in supporting an embedding application implement collaborative editing and undo/redo stacks.
+1.  Finer-grained updates to entities - rather than sending data objects with multiple keys and values as described below - would be useful in supporting an embedding application to implement collaborative editing and undo/redo stacks.
 1.  There are many functions listed. We could consolidate them in a single 'do something' function, with the type of action required specified.
 1.  Making functions available in the block's scope may not be the best way of handling action requests. One alternative, at least in a web context, is to define [custom DOM events](https://developer.mozilla.org/en-US/docs/Web/Events/Creating_and_triggering_events) which are dispatched from blocks and listened for by embedding applications.
 
@@ -184,6 +184,7 @@ creates one or more entities
 
 **accepts:** a single _array_ of _objects_ (`CreateEntitiesAction`), each with the following shape:
 
+- `accountId?` [string][optional]: the account id of the entity to create.
 - `entityTypeId` \[_string_]: the type of entity to create.
 - `entityTypeVersionId?` \[_string_]\[\_optional]: specify that this entity is of a particular version of the type (not simply the latest version).
 - `data<T>` \[_object_]: the field(s) and value(s) with which to create the entity, i.e. its properties.
@@ -203,8 +204,8 @@ updates one or more entities
 
 **accepts:** a single _array_ of _objects_ (`UpdateEntitiesAction`), each with the following shape:
 
-- `data<T>` \[_object_]: the fields and values to update on the entity.
 - `accountId?` \[_string_]\[_optional_]: the account id of the entity to update.
+- `data<T>` \[_object_]: the fields and values to update on the entity.
 - `entityTypeId?` \[_string_]\[_optional_]: the type id of the entity to update.
 - `entityId` \[_string_]: the id of the entity to update.
 - `selection?` \[_array of strings_]\[_optional_]: limit the return to only include these fields on the entity.
@@ -310,9 +311,9 @@ An `EntityType` is a JSON schema object with an additional `entityTypeId` field 
 
 **accepts:** a single _array_ of _objects_ (`CreateEntityTypesAction<T>`), each with the following shape:
 
+- `accountId?` \[_string_]\[_optional_]: the account to create the entity type in.
 - `schema` \[_object_]: the [JSON schema](https://json-schema.org/)
   for the entity type.
-- `accountId?` \[_string_]\[_optional_]: the account to create the entity type in.
 
 ```block-function
 updateEntityTypes(actions: UpdateEntityTypesAction[]): Promise<EntityType[]>
