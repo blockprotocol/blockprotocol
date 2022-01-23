@@ -102,13 +102,6 @@ const rootTypographyStyles = `
         var(--fluid-bp)
     );
   }
-
-  body, p {
-    fontSize: "var(--step-0)",
-    fontWeight: 400,
-    lineHeight: 1.7,
-    color: customColors.gray["80"],
-  }
 `;
 
 const customColors = {
@@ -320,6 +313,19 @@ export const theme = createTheme({
               scroll-behavior: smooth;
             }
 
+            body {
+              overflow: auto;${
+                "" /** @todo: find a pernament solution for preventing the navbar from shifting to the right when a modal is opened on an overflowing page */
+              }
+            }
+
+            body, p {
+              font-size: var(--step-0);
+              font-weight: 400;
+              line-height: 1.7;
+              color: ${customColors.gray["80"]};
+            }
+
             pre {
               margin: unset;
             }
@@ -358,11 +364,33 @@ export const theme = createTheme({
           style: {
             "& a": {
               fontWeight: 600,
+              color: customColors.purple[700],
+              borderBottomWidth: 2,
+              borderBottomColor: customColors.purple[700],
+              borderBottomStyle: "solid",
+              transition: defaultTheme.transitions.create("color"),
+              ":hover": {
+                color: customColors.purple[500],
+                borderBottomColor: customColors.purple[500],
+              },
+            },
+          },
+        },
+        {
+          props: {
+            variant: "bpSmallCopy",
+          },
+          style: {
+            "& a": {
               color: "currentColor",
               borderBottomWidth: 2,
               borderBottomColor: "currentColor",
               borderBottomStyle: "solid",
               transition: defaultTheme.transitions.create("color"),
+              ":hover": {
+                color: customColors.purple[700],
+                borderBottomColor: customColors.purple[700],
+              },
             },
           },
         },
@@ -436,6 +464,18 @@ export const theme = createTheme({
       },
       variants: [
         {
+          props: { variant: "transparent" },
+          style: {
+            minWidth: "unset",
+            padding: "unset",
+            color: customColors.gray[50],
+            ":hover": {
+              color: customColors.purple[600],
+              backgroundColor: "unset",
+            },
+          },
+        },
+        {
           props: { variant: "primary" },
           style: {
             color: customColors.gray["20"],
@@ -454,7 +494,7 @@ export const theme = createTheme({
           props: { variant: "tertiary" },
           style: {
             border: `1px solid currentColor`,
-            borderRadius: 34,
+            borderRadius: 6,
             color: customColors.gray[70],
             borderColor: "#C1CFDE",
             background: defaultTheme.palette.common.white,
@@ -473,12 +513,14 @@ export const theme = createTheme({
           props: { variant: "primary", size: "medium" },
           style: {
             padding: defaultTheme.spacing("12px", "28px"),
+            minHeight: 51,
           },
         },
         {
           props: { variant: "secondary", size: "medium" },
           style: {
             padding: defaultTheme.spacing("8px", "24px"),
+            minHeight: 51,
           },
         },
         {
@@ -526,6 +568,10 @@ export const theme = createTheme({
             zIndex: 0,
             overflow: "hidden",
             background: customColors.purple[600],
+            "&.Mui-disabled": {
+              background: customColors.purple[200],
+              color: customColors.purple[100],
+            },
             "&:before": {
               zIndex: -1,
               position: "absolute",
@@ -635,6 +681,8 @@ export const theme = createTheme({
         {
           props: { variant: "tertiary", color: "purple" },
           style: {
+            color: customColors.purple[700],
+            borderColor: customColors.purple[700],
             ":hover": {
               color: customColors.purple[700],
               borderColor: customColors.purple[500],
@@ -811,6 +859,92 @@ export const theme = createTheme({
           "&:last-child": {
             color: customColors.purple[700],
           },
+        },
+      },
+    },
+    MuiFormControl: {
+      defaultProps: {},
+      styleOverrides: {
+        root: {
+          display: "block",
+        },
+      },
+    },
+    MuiInputLabel: {
+      defaultProps: {
+        disableAnimation: true,
+        shrink: true,
+      },
+      styleOverrides: {
+        root: {
+          position: "unset",
+          left: "unset",
+          top: "unset",
+          transform: "unset",
+          fontSize: 15,
+          fontWeight: 500,
+          marginBottom: defaultTheme.spacing(0.5),
+        },
+      },
+    },
+    MuiInputBase: {
+      styleOverrides: {
+        adornedEnd: {
+          "&.Mui-error": {
+            svg: {
+              color: customColors.red[600],
+            },
+          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      defaultProps: {
+        notched: false,
+      },
+      styleOverrides: {
+        root: {
+          borderRadius: "6px",
+          "&:hover": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: customColors.gray[30],
+            },
+          },
+          "&.Mui-focused": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: customColors.purple[600],
+            },
+          },
+          "&.Mui-error": {
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: customColors.red[600],
+            },
+          },
+        },
+        input: {
+          padding: defaultTheme.spacing(1.5, 2),
+          fontSize: 18,
+        },
+        notchedOutline: {
+          borderColor: customColors.gray[30],
+        },
+        adornedEnd: {
+          "&.Mui-error": {
+            svg: {
+              color: customColors.red[600],
+            },
+          },
+        },
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        InputLabelProps: {
+          disableAnimation: true,
+          shrink: true,
+        },
+        InputProps: {
+          notched: false,
         },
       },
     },

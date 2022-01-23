@@ -1,12 +1,12 @@
 import { VFC } from "react";
 import { Typography, Box } from "@mui/material";
+import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
 import { Button } from "../../Button";
 import { BlockHubIcon } from "../../SvgIcon/BlockHubIcon";
 
 import { BlocksSlider } from "../../BlocksSlider";
-import { BlockMetadata } from "../../../pages/api/blocks.api";
 
 type RegistrySectionProps = {
   catalog: BlockMetadata[];

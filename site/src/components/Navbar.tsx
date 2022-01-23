@@ -1,13 +1,4 @@
-import {
-  VFC,
-  useState,
-  useEffect,
-  Fragment,
-  useContext,
-  SetStateAction,
-  Dispatch,
-  useMemo,
-} from "react";
+import { VFC, useState, useEffect, useContext, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -17,25 +8,22 @@ import {
   useMediaQuery,
   IconButton,
   Slide,
-  List,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Collapse,
-  Divider,
   useScrollTrigger,
-  Breadcrumbs,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Button } from "./Button";
 import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
-import { BlockHubIcon } from "./SvgIcon/BlockHubIcon";
-import { SpecificationIcon } from "./SvgIcon/SpecificationIcon";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
-import SiteMapContext from "./context/SiteMapContext";
+import SiteMapContext from "../context/SiteMapContext";
+import UserContext from "../context/UserContext";
+import { AccountDropdown } from "./Navbar/AccountDropdown";
+import { MobileNavItems } from "./Navbar/MobileNavItems";
+import { itemIsPage, NAVBAR_LINK_ICONS } from "./Navbar/util";
+import { MobileBreadcrumbs } from "./Navbar/MobileBreadcrumbs";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -44,42 +32,6 @@ export const MOBILE_NAVBAR_HEIGHT = 57;
 const BREAD_CRUMBS_HEIGHT = 36;
 
 const IDLE_NAVBAR_TIMEOUT_MS = 3000;
-
-const NAVBAR_LINK_ICONS: Record<string, JSX.Element> = {
-  "Block Hub": (
-    <BlockHubIcon
-      sx={{
-        width: 18,
-        height: 18,
-      }}
-    />
-  ),
-  Documentation: (
-    <Icon
-      className="fas fa-book-open"
-      sx={{
-        fontSize: 18,
-      }}
-      fontSize="inherit"
-    />
-  ),
-  Specification: (
-    <SpecificationIcon
-      sx={{
-        width: 18,
-        height: 18,
-      }}
-    />
-  ),
-};
-
-const itemIsPage = (
-  item: SiteMapPage | SiteMapPageSection,
-): item is SiteMapPage => "href" in item;
-
-type MobileBreadcrumbsProps = {
-  crumbs: (SiteMapPage | SiteMapPageSection)[];
-};
 
 const findCrumbs = (params: {
   asPath: string;
@@ -125,318 +77,21 @@ const findCrumbs = (params: {
   return null;
 };
 
-const MobileBreadcrumbs: VFC<MobileBreadcrumbsProps> = ({ crumbs }) => {
-  const { asPath } = useRouter();
-
-  return (
-    <Breadcrumbs
-      sx={{
-        marginTop: 2,
-      }}
-      separator={
-        <Icon
-          sx={{ fontSize: 14, color: ({ palette }) => palette.gray[40] }}
-          className="fas fa-chevron-right"
-        />
-      }
-    >
-      {crumbs.map((item, i) =>
-        i < crumbs.length - 1 ? (
-          <Link
-            key={item.title}
-            href={
-              itemIsPage(item)
-                ? asPath.startsWith(`${item.href}#`)
-                  ? "#"
-                  : item.href
-                : `#${item.anchor}`
-            }
-          >
-            {item.title}
-          </Link>
-        ) : (
-          <Typography key={item.title} variant="bpSmallCopy" color="inherit">
-            {item.title}
-          </Typography>
-        ),
-      )}
-    </Breadcrumbs>
-  );
-};
-
-type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
-  icon?: JSX.Element;
-  item: T;
-  parentPageHref: T extends SiteMapPageSection ? string : undefined;
-  depth?: number;
-  expandedItems: { href: string; depth: number }[];
-  setExpandedItems: Dispatch<SetStateAction<{ href: string; depth: number }[]>>;
-  onClose: () => void;
-};
-
-const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
-  icon,
-  depth = 0,
-  expandedItems,
-  parentPageHref,
-  setExpandedItems,
-  item,
-  onClose,
-}: MobileNavNestedPageProps<T>) => {
-  const router = useRouter();
-  const { asPath } = router;
-  const { title } = item;
-
-  const isRoot = depth === 0;
-
-  const href = itemIsPage(item)
-    ? item.href
-    : `${parentPageHref}#${item.anchor}`;
-
-  const isSelected = asPath === href;
-
-  const hasChildren = itemIsPage(item)
-    ? item.subPages.length > 0 || item.sections.length > 0
-    : item.subSections.length > 0;
-
-  const isOpen =
-    hasChildren &&
-    expandedItems.some(
-      (expandedItem) =>
-        expandedItem.href === href && expandedItem.depth === depth,
-    );
-
-  return (
-    <>
-      <Link href={href}>
-        <ListItemButton
-          selected={isSelected}
-          onClick={() => {
-            if (hasChildren && !isOpen) {
-              setExpandedItems((prev) => [...prev, { href, depth }]);
-            }
-            onClose();
-          }}
-          sx={(theme) => ({
-            backgroundColor: isRoot ? undefined : theme.palette.gray[20],
-            "&.Mui-selected": {
-              backgroundColor: isRoot ? undefined : theme.palette.gray[20],
-              "&:hover": {
-                backgroundColor: isRoot ? undefined : theme.palette.gray[40],
-              },
-            },
-            "&:hover": {
-              backgroundColor: isRoot ? undefined : theme.palette.gray[40],
-            },
-            pl: (icon ? 2 : 4) + depth * 2,
-          })}
-        >
-          {icon || !itemIsPage(item) ? (
-            <ListItemIcon
-              sx={(theme) => ({
-                minWidth: isRoot ? undefined : theme.spacing(3),
-              })}
-            >
-              {icon ?? (
-                <Icon
-                  sx={{
-                    fontSize: 15,
-                  }}
-                  color="inherit"
-                  className="fas fa-hashtag"
-                />
-              )}
-            </ListItemIcon>
-          ) : null}
-          <ListItemText
-            primary={title}
-            sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              "> .MuiListItemText-primary": {
-                display: "inline",
-              },
-            }}
-          />
-          {hasChildren ? (
-            <IconButton
-              sx={{
-                transition: (theme) => theme.transitions.create("transform"),
-                transform: `rotate(${isOpen ? "0deg" : "-90deg"})`,
-              }}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                setExpandedItems((prev) =>
-                  isOpen
-                    ? prev.filter(
-                        (expandedItem) =>
-                          !(
-                            expandedItem.href === href &&
-                            expandedItem.depth === depth
-                          ),
-                      )
-                    : [...prev, { href, depth }],
-                );
-              }}
-            >
-              <Icon
-                sx={{
-                  fontSize: 15,
-                }}
-                fontSize="inherit"
-                className="fas fa-chevron-down"
-              />
-            </IconButton>
-          ) : null}
-        </ListItemButton>
-      </Link>
-      {hasChildren ? (
-        <Collapse in={isOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            {itemIsPage(item) ? (
-              <>
-                {item.subPages.map((subPage) => (
-                  <MobileNavNestedPage<SiteMapPage>
-                    key={subPage.href}
-                    depth={depth + 1}
-                    item={subPage}
-                    parentPageHref={undefined}
-                    expandedItems={expandedItems}
-                    setExpandedItems={setExpandedItems}
-                    onClose={onClose}
-                  />
-                ))}
-              </>
-            ) : null}
-            {(itemIsPage(item) ? item.sections : item.subSections).map(
-              (subSection) => (
-                <MobileNavNestedPage<SiteMapPageSection>
-                  key={subSection.anchor}
-                  depth={depth + 1}
-                  parentPageHref={
-                    itemIsPage(item) ? item.href : (parentPageHref as string)
-                  }
-                  item={subSection}
-                  expandedItems={expandedItems}
-                  setExpandedItems={setExpandedItems}
-                  onClose={onClose}
-                />
-              ),
-            )}
-          </List>
-          {depth === 0 ? <Divider /> : null}
-        </Collapse>
-      ) : null}
-    </>
-  );
-};
-
-type MobileNavItemsProps = {
-  onClose: () => void;
-};
-
-const getInitialExpandedItems = ({
-  asPath,
-  parentHref,
-  item,
-  depth = 0,
-}: {
-  asPath: string;
-  parentHref?: string;
-  item: SiteMapPage | SiteMapPageSection;
-  depth?: number;
-}): { href: string; depth: number }[] => {
-  const expandedChildren = [
-    ...(itemIsPage(item)
-      ? item.subPages
-          .map((page) =>
-            getInitialExpandedItems({ item: page, asPath, depth: depth + 1 }),
-          )
-          .flat()
-      : []),
-    ...(itemIsPage(item) ? item.sections : item.subSections)
-      .map((section) =>
-        getInitialExpandedItems({
-          item: section,
-          asPath,
-          depth: depth + 1,
-          parentHref: itemIsPage(item) ? item.href : parentHref,
-        }),
-      )
-      .flat(),
-  ];
-
-  const href = itemIsPage(item) ? item.href : `${parentHref}#${item.anchor}`;
-
-  const isExpanded = asPath === href || expandedChildren.length > 0;
-
-  return isExpanded
-    ? [
-        {
-          href,
-          depth,
-        },
-        ...expandedChildren,
-      ]
-    : [];
-};
-
-const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
-  const { asPath } = useRouter();
-  const { pages } = useContext(SiteMapContext);
-
-  const [expandedItems, setExpandedItems] = useState<
-    { href: string; depth: number }[]
-  >(
-    pages.map((page) => getInitialExpandedItems({ asPath, item: page })).flat(),
-  );
-
-  useEffect(() => {
-    setExpandedItems((prev) => [
-      ...prev,
-      ...pages
-        .map((page) => getInitialExpandedItems({ asPath, item: page }))
-        .flat()
-        .filter(
-          (expanded) =>
-            prev.find(
-              ({ depth, href }) =>
-                expanded.depth === depth && expanded.href === href,
-            ) === undefined,
-        ),
-    ]);
-  }, [asPath, pages]);
-
-  return (
-    <List>
-      {pages.map((page) => (
-        <Fragment key={page.href}>
-          <MobileNavNestedPage<SiteMapPage>
-            key={page.href}
-            icon={NAVBAR_LINK_ICONS[page.title]}
-            item={page}
-            parentPageHref={undefined}
-            expandedItems={expandedItems}
-            setExpandedItems={setExpandedItems}
-            onClose={onClose}
-          />
-        </Fragment>
-      ))}
-    </List>
-  );
-};
-
 type NavbarProps = {
   navbarHeight: number;
   setNavbarHeight: (height: number) => void;
+  openLoginModal: () => void;
 };
 
-export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
+export const Navbar: VFC<NavbarProps> = ({
+  navbarHeight,
+  setNavbarHeight,
+  openLoginModal,
+}) => {
   const theme = useTheme();
   const router = useRouter();
   const { pages } = useContext(SiteMapContext);
+  const { user } = useContext(UserContext);
 
   const [displayMobileNav, setDisplayMobileNav] = useState<boolean>(false);
   const [idleScrollPosition, setIdleScrollPosition] = useState<boolean>(false);
@@ -502,6 +157,10 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
       setDisplayMobileNav(false);
     }
   }, [isDesktopSize, displayMobileNav]);
+
+  const preventOverflowingNavLinks = useMediaQuery(
+    theme.breakpoints.between("md", 940),
+  );
 
   /** @todo: provide better documentation for the various states of the Navbar's styling */
 
@@ -647,15 +306,56 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                       </Typography>
                     </Link>
                   ))}
-                  <Link href="/docs/developing-blocks">
+                  {user || router.pathname === "/login" ? null : (
                     <Button
-                      size="small"
-                      variant="primary"
-                      endIcon={<BoltIcon />}
+                      onClick={openLoginModal}
+                      variant="transparent"
+                      sx={{
+                        marginRight: 3,
+                        backgroundColor: "unset",
+                        transition: theme.transitions.create("color", {
+                          duration: 100,
+                        }),
+                        color: ({ palette }) =>
+                          isNavbarDark ? palette.purple[400] : palette.gray[60],
+                        "&:hover": {
+                          color: ({ palette }) =>
+                            isNavbarDark
+                              ? palette.gray[30]
+                              : palette.purple[600],
+                        },
+                        "&:active": {
+                          color: ({ palette }) =>
+                            isNavbarDark
+                              ? palette.common.white
+                              : palette.purple[700],
+                        },
+                      }}
                     >
-                      Quick Start Guide
+                      <Typography
+                        sx={{
+                          fontWeight: 500,
+                          fontSize: "var(--step--1)",
+                          color: "currentColor",
+                        }}
+                      >
+                        Log In
+                      </Typography>
                     </Button>
-                  </Link>
+                  )}
+                  {user?.isSignedUp ? null : (
+                    <Link href="/docs/developing-blocks">
+                      <Button
+                        size="small"
+                        variant="primary"
+                        endIcon={<BoltIcon />}
+                      >
+                        {preventOverflowingNavLinks
+                          ? "Build a block"
+                          : "Quick Start Guide"}
+                      </Button>
+                    </Link>
+                  )}
                 </>
               ) : (
                 <IconButton
@@ -669,6 +369,7 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
                   <Icon className="fas fa-bars" />
                 </IconButton>
               )}
+              {user?.isSignedUp ? <AccountDropdown /> : null}
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>
@@ -703,17 +404,43 @@ export const Navbar: VFC<NavbarProps> = ({ navbarHeight, setNavbarHeight }) => {
           <Box
             p={5}
             flexShrink={0}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
             sx={{
               borderTopStyle: "solid",
               borderTopWidth: 1,
               borderTopColor: theme.palette.gray[40],
-              display: "flex",
-              justifyContent: "center",
+              "> button, a": {
+                width: {
+                  xs: "100%",
+                  sm: "unset",
+                },
+                minWidth: {
+                  xs: "unset",
+                  sm: 320,
+                },
+              },
             }}
           >
+            {user ? null : router.pathname === "/login" ? null : (
+              <Button
+                onClick={() => {
+                  setDisplayMobileNav(false);
+                  openLoginModal();
+                }}
+                variant="secondary"
+                sx={{
+                  marginBottom: 1,
+                }}
+              >
+                Log in
+              </Button>
+            )}
             <Link href="/docs/developing-blocks">
               <Button
                 sx={{
+                  width: "100%",
                   py: 1.5,
                   px: 3,
                   textTransform: "none",

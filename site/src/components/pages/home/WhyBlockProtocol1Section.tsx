@@ -219,7 +219,7 @@ export const WhyBlockProtocol1Section = () => {
   return (
     <Box
       sx={{
-        pt: 20,
+        pt: 10,
         position: "relative",
       }}
       ref={boxRef}

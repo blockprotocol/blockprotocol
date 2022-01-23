@@ -6,7 +6,6 @@
     "./site"
   ],
   "scripts": {
-    "create-block-app": "node ./packages/create-block-app/scripts/create-block-app.js",
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:eslint": "eslint --report-unused-disable-directives \"**/*\" --fix",
     "fix:markdownlint": "markdownlint --fix \"**/*\"",
@@ -18,6 +17,9 @@
     "lint:prettier": "prettier --check --ignore-unknown \"**/*\"",
     "lint:tsc": "yarn workspaces run lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
+    "dev": "yarn workspace @blockprotocol/site dev",
+    "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
+    "dev:db": "yarn workspace @blockprotocol/site dev:db",
     "prepare": "husky install"
   },
   "lint-staged": {

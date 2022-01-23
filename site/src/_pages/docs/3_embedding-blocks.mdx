@@ -10,16 +10,21 @@ You can also [check out the source code](https://github.com/hashintel/hash/tree/
 You can browse prototype blocks in the [Block Hub](https://blockprotocol.org/hub) right now.
 You can view their schema (the structure of data they accept), and see how they look given different data.
 
-We will launch an API to search blocks in January 2022. As well as listing blocks and searching by name,
-this will enable you to provide a data object, and be told which blocks can display or edit it.
+You can also [generate an API key](https://blockprotocol.org/settings/api-keys) to search our API for available blocks:
+
+`https://blockprotocol.org/api/blocks?q=text_query`
+
+To authenticate with the API, pass your API key in an `x-api-key` header.
+
+### Coming soon
+
+We will soon introduce a feature to search blocks by data structure: allowing you to provide a data object, and be told which blocks can display or edit it.
 
 For example, if you provide `{ "name": "Bob", email: "bob@test.com" }`, the API will suggest the
 [person block](https://blockprotocol.org/@hash/person).
 
 Once your app implements the block protocol, your users can search and use blocks to work with a
 wide variety of data structures, without further effort on your part.
-
-If you want to know when the API launches, please [register your interest](https://blockprotocol.org/partners).
 
 ## Building the block's properties
 

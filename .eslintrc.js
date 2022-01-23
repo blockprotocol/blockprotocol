@@ -203,15 +203,27 @@ module.exports = {
           },
           {
             name: "@mui/material",
-            importNames: ["Button"],
+            importNames: ["Button", "TextField", "Popover"],
             message:
-              "Please use the custom src/components/Button component instead.",
+              "Please use the custom wrapper component in src/component instead.",
           },
           {
             name: "@mui/material/Button",
             importNames: ["default"],
             message:
               "Please use the custom src/components/Button component instead.",
+          },
+          {
+            name: "@mui/material/TextField",
+            importNames: ["default"],
+            message:
+              "Please use the custom src/components/TextField component instead.",
+          },
+          {
+            name: "@mui/material/Popover",
+            importNames: ["default"],
+            message:
+              "Please use the custom src/components/Popover component instead.",
           },
         ],
       },
