@@ -1,3 +1,5 @@
+import { BlockProtocolUploadFileFunction } from "blockprotocol";
+
 /** @todo type as JSON Schema. make part of blockprotocol package and publish. */
 export type BlockSchema = Record<string, any>;
 export type BlockDependency = keyof typeof blockDependencies;
@@ -7,17 +9,7 @@ export type BlockExports = {
 
 export type BlockProtocolFileMediaType = "image" | "video";
 
-type DummyUploadFile = (action: {
-  file?: File;
-  url?: string;
-  mediaType: BlockProtocolFileMediaType;
-}) => Promise<{
-  entityId: string;
-  url: string;
-  mediaType: BlockProtocolFileMediaType;
-}>;
-
-export const dummyUploadFile: DummyUploadFile = async ({
+export const dummyUploadFile: BlockProtocolUploadFileFunction = async ({
   file,
   url,
   mediaType,
@@ -34,7 +26,8 @@ export const dummyUploadFile: DummyUploadFile = async ({
 
     if (url?.trim()) {
       resolve({
-        entityId: "xxx",
+        accountId: "file-account-xxx",
+        entityId: "file-entity-xxx",
         url,
         mediaType,
       });
@@ -47,7 +40,8 @@ export const dummyUploadFile: DummyUploadFile = async ({
       reader.onload = (event) => {
         if (event.target?.result) {
           resolve({
-            entityId: "xxx",
+            accountId: "file-account-xxx",
+            entityId: "file-entity-xxx",
             url: event.target.result.toString(),
             mediaType,
           });

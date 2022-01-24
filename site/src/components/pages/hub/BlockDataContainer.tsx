@@ -1,7 +1,23 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
-import { BlockProtocolUpdateEntitiesFunction } from "blockprotocol";
+import {
+  BlockProtocolCreateLinksFunction,
+  BlockProtocolDeleteLinksFunction,
+  BlockProtocolEntity,
+  BlockProtocolLink,
+  BlockProtocolLinkGroup,
+  BlockProtocolProps,
+  BlockProtocolUpdateEntitiesFunction,
+  BlockProtocolUploadFileFunction,
+} from "blockprotocol";
 import { Validator } from "jsonschema";
-import { useCallback, useMemo, useState, VoidFunctionComponent } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  VoidFunctionComponent,
+} from "react";
+import { v4 as uuid } from "uuid";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
@@ -35,9 +51,15 @@ export const BlockDataContainer: VoidFunctionComponent<
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
-  const [blockState, setBlockState] = useState<Record<string, unknown>>({
+  const fileUrl = useRef<string | null>(null);
+
+  const [blockState, setBlockState] = useState<
+    Record<string, unknown> & Partial<BlockProtocolProps>
+  >({
     accountId: "test-account-id",
     entityId: "test-entity-id",
+    linkGroups: [],
+    linkedEntities: [],
   });
 
   const updateEntities: BlockProtocolUpdateEntitiesFunction = useCallback(
@@ -56,14 +78,84 @@ export const BlockDataContainer: VoidFunctionComponent<
     [blockState.entityId],
   );
 
+  const deleteLinks: BlockProtocolDeleteLinksFunction =
+    useCallback(async () => {
+      return [true];
+    }, []);
+
+  const createLinks: BlockProtocolCreateLinksFunction = useCallback(
+    async (actions) => {
+      const result: BlockProtocolLink[] = [];
+      const nextLinkGroups: BlockProtocolLinkGroup[] = [];
+      const nextLinkedEntities: BlockProtocolEntity[] = [];
+
+      for (const action of actions) {
+        if ("destinationAccountId" in action) {
+          const {
+            destinationEntityId,
+            path,
+            sourceEntityId,
+            destinationAccountId,
+            sourceEntityAccountId,
+          } = action;
+
+          const nextLink: BlockProtocolLink = {
+            destinationEntityId,
+            path,
+            sourceEntityId,
+            linkId: uuid(),
+            destinationAccountId,
+          };
+
+          const nextLinkGroup: BlockProtocolLinkGroup = {
+            sourceEntityId,
+            sourceEntityVersionId: sourceEntityId,
+            path,
+            sourceEntityAccountId,
+            links: [nextLink],
+          };
+
+          const nextLinkedEntity: BlockProtocolEntity = {
+            entityId: destinationEntityId,
+            url: fileUrl.current,
+          };
+
+          result.push(nextLink);
+          nextLinkGroups.push(nextLinkGroup);
+          nextLinkedEntities.push(nextLinkedEntity);
+        }
+      }
+
+      setBlockState({
+        linkGroups: nextLinkGroups,
+        linkedEntities: nextLinkedEntities,
+      });
+
+      return result;
+    },
+    [],
+  );
+
+  const uploadFile: BlockProtocolUploadFileFunction = useCallback(
+    async (...args) => {
+      const fileData = await dummyUploadFile(...args);
+
+      fileUrl.current = fileData.url;
+
+      return fileData;
+    },
+    [],
+  );
+
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     let result;
 
     const blockFunctions: Record<string, (params: any) => unknown> = {
-      uploadFile: dummyUploadFile,
+      uploadFile,
       getEmbedBlock,
       updateEntities,
+      deleteLinks,
     };
 
     try {
