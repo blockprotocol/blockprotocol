@@ -64,11 +64,11 @@ export default createBaseHandler<null, FetchEmbedCodeQuery>()
     }
 
     try {
-      const oEmbedData = await fetch(
+      const oEmbedResponse = await fetch(
         `${oembedEndpoint}?url=${url}&maxwidth=1000`,
       ).then((response) => response.json());
 
-      res.send(oEmbedData);
+      res.send(oEmbedResponse);
     } catch (error) {
       res.status(400).send({ url: "", error: (error as string).toString() });
     }

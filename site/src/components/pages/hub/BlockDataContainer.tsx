@@ -35,13 +35,18 @@ export const BlockDataContainer: VoidFunctionComponent<
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
+  const [blockState, setBlockState] = useState<Record<string, unknown>>({
+    accountId: "test-account-id",
+    entityId: "test-entity-id",
+  });
+
   const updateEntities: BlockProtocolUpdateEntitiesFunction = async (
     actions,
   ) => {
     for (const action of actions) {
       if (action.entityId === blockState.entityId) {
-        setBlockState((blockState) => ({
-          ...blockState,
+        setBlockState((previousBlockState) => ({
+          ...previousBlockState,
           ...action.data,
         }));
       }
@@ -50,20 +55,22 @@ export const BlockDataContainer: VoidFunctionComponent<
     return actions;
   };
 
-  const [blockState, setBlockState] = useState<Record<string, unknown>>({
-    accountId: "test-account-id",
-    entityId: "test-entity-id",
-    uploadFile: dummyUploadFile,
-    getEmbedBlock,
-    updateEntities,
-  });
-
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     let result;
 
+    const blockFunctions: Record<string, (params: any) => unknown> = {
+      uploadFile: dummyUploadFile,
+      getEmbedBlock,
+      updateEntities,
+    };
+
     try {
       result = JSON.parse(text);
+
+      for (const functionName of Object.keys(blockFunctions)) {
+        result[functionName] = blockFunctions[functionName];
+      }
 
       for (const propertyName of Object.keys(blockState)) {
         result[propertyName] = blockState[propertyName];
@@ -82,7 +89,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema, blockState]);
+  }, [text, schema, blockState, updateEntities]);
 
   return (
     <>
