@@ -77,7 +77,7 @@ export const getStaticProps: GetStaticProps<
   //
   //   Error: ENOENT: no such file or directory, open '{...}/_pages/docs/undefined'
   //
-  // Using try / catch prevents this, but we might not need it after upgrading Next.
+  // Using try / catch prevents 500, but we might not need them in Next v12+.
   try {
     const tabPageSerializedContent = await getSerializedPage({
       pathToDirectory: `docs`,
