@@ -86,7 +86,7 @@ type OembedResponse = {
   html: string;
 };
 
-// @todo implement getembedblock
+// @todo temporary fallback until block implements workarounds for CORS-blocked oembed endpoints
 export async function getEmbedBlock(url: string): Promise<{
   html: string;
   error?: string;
