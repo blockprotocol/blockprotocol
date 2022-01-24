@@ -168,16 +168,28 @@ export const getStaticProps: GetStaticProps<
   const fileNameWithoutIndex =
     specSlug && specSlug.length > 0 ? specSlug[0] : "index";
 
-  const serializedPage = await getSerializedPage({
-    pathToDirectory: "spec",
-    fileNameWithoutIndex,
-  });
+  // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
+  // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
+  //
+  //   Error: ENOENT: no such file or directory, open '{...}/_pages/docs/undefined'
+  //
+  // Using try / catch prevents 500, but we might not need them in Next v12+.
+  try {
+    const serializedPage = await getSerializedPage({
+      pathToDirectory: "spec",
+      fileNameWithoutIndex,
+    });
 
-  return {
-    props: {
-      serializedPage,
-    },
-  };
+    return {
+      props: {
+        serializedPage,
+      },
+    };
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
