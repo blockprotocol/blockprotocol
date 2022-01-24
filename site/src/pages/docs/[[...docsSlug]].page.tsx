@@ -72,17 +72,29 @@ export const getStaticProps: GetStaticProps<
 
   const tabPage = documentationPages.find(({ href }) => href === tabHref)!;
 
-  const tabPageSerializedContent = await getSerializedPage({
-    pathToDirectory: `docs`,
-    fileNameWithoutIndex: tabSlug ?? "index",
-  });
+  // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
+  // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
+  //
+  //   Error: ENOENT: no such file or directory, open '{...}/_pages/docs/undefined'
+  //
+  // Using try / catch prevents 500, but we might not need them in Next v12+.
+  try {
+    const tabPageSerializedContent = await getSerializedPage({
+      pathToDirectory: `docs`,
+      fileNameWithoutIndex: tabSlug ?? "index",
+    });
 
-  return {
-    props: {
-      tabPage,
-      tabPageSerializedContent,
-    },
-  };
+    return {
+      props: {
+        tabPage,
+        tabPageSerializedContent,
+      },
+    };
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 const DocsPage: NextPage<DocsPageProps> = ({

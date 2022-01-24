@@ -2,8 +2,8 @@
   "private": true,
   "description": "blockprotocol monorepo",
   "workspaces": [
-    "./packages/*",
-    "./site"
+    "packages/*",
+    "site"
   ],
   "scripts": {
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
