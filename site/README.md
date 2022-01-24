@@ -127,6 +127,83 @@ Request Query:
 
 Response: `true` or `false`
 
+### `GET /api/users/[shortname]`
+
+Route Parameter:
+
+- `shortname`: the shortname of the user to retrieve
+
+Response:
+
+- `user`: the user
+
+### `GET /api/users/[shortname]/blocks`
+
+Route Parameters
+
+- `shortname`: the shortname of the user to retrieve blocks for
+
+Response:
+
+- `blocks` An array of metadata objects for the blocks belonging to the user
+
+### `GET /api/users/[shortname]/types`
+
+Route Parameters
+
+- `shortname`: the shortname of the user to retrieve types for
+
+Response:
+
+- `entityTypes` An array of entity types belonging to the user
+
+### `GET /api/users/[shortname]/types/[title]`
+
+Route Parameters
+
+- `shortname`: the shortname of the user to retrieve a type for
+- `title`: the title of the type to retrieve
+
+Response:
+
+- `entityType` the entity type with the provided title belonging to the specified user
+
+### `GET /api/types/[entityTypeId]`
+
+Route Parameters
+
+- `entityTypeId`: the unique id of the entity type
+
+Response:
+
+- `entityType` the entity type with the specified id
+
+**Authentication required**
+
+### `POST /api/types/create` [requires cookie authentication]
+
+Creates an entity type belonging to the requesting user.
+
+Request Body
+
+- `schema`: a valid JSON schema object. Must have a `title` property, unique to the requesting user.
+
+Response:
+
+- `entityType` the created entity type
+
+### `PUT /api/types/[id]/update` [requires cookie authentication]
+
+Updates an entity type belonging to the requesting user.
+
+Request Body
+
+- `schema`: a valid JSON schema object to overwrite the existing one.
+
+Response:
+
+- `entityType` the updated entity type
+
 ### `POST /api/completeSignup` [requires cookie authentication]
 
 Request Body:
@@ -138,7 +215,7 @@ Response Body:
 
 - `user`: the updated BP user
 
-### `POST /api/sendLoginCode`
+### `POST /api/sendLoginCode` [requires cookie authentication]
 
 Sends a login code to an existing BP user's email.
 
@@ -193,6 +270,8 @@ Generates a new API key for the authenticated user, and revokes any others.
 Logs out the currently authenticated user.
 
 - Request Response: `SUCCESS`
+
+**API key required**
 
 The following routes require a valid API key sent in an `x-api-key` header:
 

@@ -14,13 +14,15 @@ import { ApiKey } from "./apiKey.model";
 import { FRONTEND_URL, isProduction } from "../config";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 import { sendMail } from "../awsSes";
+import { EntityType } from "./entityType.model";
+import blocksData from "../../../blocks-data.json";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
 export type SerializedUser = {
   id: string;
   isSignedUp: boolean;
-  email: string;
+  email?: string;
   shortname?: string;
   preferredName?: string;
 };
@@ -205,6 +207,15 @@ export class User {
     }
 
     return new User({ id: insertedId.toString(), ...userProperties });
+  }
+
+  static async getEntityTypesByShortname(
+    db: Db,
+    params: { shortname: string },
+  ): Promise<EntityType[] | null> {
+    const user = await User.getByShortname(db, params);
+
+    return user ? user.entityTypes(db) : null;
   }
 
   async update(
@@ -397,15 +408,23 @@ export class User {
     return await ApiKey.getByUser(db, { user: this });
   }
 
+  async entityTypes(db: Db) {
+    return await EntityType.getAllByUser(db, { user: this });
+  }
+
+  blocks() {
+    return blocksData.filter((block) => block.author === this.shortname);
+  }
+
   toRef(): DBRef {
     return new DBRef(User.COLLECTION_NAME, new ObjectId(this.id));
   }
 
-  serialize(): SerializedUser {
+  serialize(includePrivateFields: boolean = false): SerializedUser {
     return {
       id: this.id,
       isSignedUp: this.isSignedUp(),
-      email: this.email,
+      email: includePrivateFields ? this.email : undefined,
       preferredName: this.preferredName,
       shortname: this.shortname,
     };
