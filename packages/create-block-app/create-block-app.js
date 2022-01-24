@@ -36,7 +36,7 @@ const templatePackageName = "block-template";
 
   console.log("Downloading template...");
 
-  await pacote.extract(templatePackageName, resolvedBlockPath, {});
+  await pacote.extract(templatePackageName, resolvedBlockPath);
 
   console.log("Updating files...");
   try {
