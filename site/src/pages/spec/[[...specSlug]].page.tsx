@@ -168,16 +168,22 @@ export const getStaticProps: GetStaticProps<
   const fileNameWithoutIndex =
     specSlug && specSlug.length > 0 ? specSlug[0] : "index";
 
-  const serializedPage = await getSerializedPage({
-    pathToDirectory: "spec",
-    fileNameWithoutIndex,
-  });
+  try {
+    const serializedPage = await getSerializedPage({
+      pathToDirectory: "spec",
+      fileNameWithoutIndex,
+    });
 
-  return {
-    props: {
-      serializedPage,
-    },
-  };
+    return {
+      props: {
+        serializedPage,
+      },
+    };
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {

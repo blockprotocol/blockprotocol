@@ -72,17 +72,23 @@ export const getStaticProps: GetStaticProps<
 
   const tabPage = documentationPages.find(({ href }) => href === tabHref)!;
 
-  const tabPageSerializedContent = await getSerializedPage({
-    pathToDirectory: `docs`,
-    fileNameWithoutIndex: tabSlug ?? "index",
-  });
+  try {
+    const tabPageSerializedContent = await getSerializedPage({
+      pathToDirectory: `docs`,
+      fileNameWithoutIndex: tabSlug ?? "index",
+    });
 
-  return {
-    props: {
-      tabPage,
-      tabPageSerializedContent,
-    },
-  };
+    return {
+      props: {
+        tabPage,
+        tabPageSerializedContent,
+      },
+    };
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 const DocsPage: NextPage<DocsPageProps> = ({
