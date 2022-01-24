@@ -9,8 +9,8 @@ import {
 import { createApiKeyRequiredHandler } from "../../lib/handler/apiKeyRequiredHandler";
 
 export type ApiSearchRequestQuery = {
-  q: string;
-  json: string;
+  q?: string;
+  json?: string;
 };
 
 export type ApiSearchResponse = {
@@ -22,8 +22,6 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
   .use(queryValidator("json").isJSON())
   .get(async (req, res) => {
     const { q: query, json: jsonText } = req.query as ApiSearchRequestQuery;
-
-    const json = JSON.parse(jsonText);
 
     let data: BlockMetadata[] = blocksData;
 
@@ -41,7 +39,9 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
 
     // beware, this is a slow operation
     // @todo optimize for quicker passes.
-    if (json) {
+    if (jsonText) {
+      const json = JSON.parse(jsonText);
+
       // If any property is not a part of the schema, remove it from the validated json
       const ajv = new Ajv({ removeAdditional: "all" });
 
@@ -56,14 +56,14 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
           const valid = validate(withoutAdditional);
 
           // removeAdditional lets us count how many keys are a part of the schema
-          const keyCountWithouTAdditional =
+          const keyCountWithoutAdditional =
             Object.keys(withoutAdditional).length;
 
           const keyCountDifference =
-            Object.keys(json).length - keyCountWithouTAdditional;
+            Object.keys(json).length - keyCountWithoutAdditional;
 
           // Only show valid schemas with at least 1 matching field
-          return valid && keyCountWithouTAdditional >= 1
+          return valid && keyCountWithoutAdditional >= 1
             ? [[block, keyCountDifference]]
             : [];
         }) as [BlockMetadata, number][]
