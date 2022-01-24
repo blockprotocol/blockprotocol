@@ -3110,6 +3110,13 @@ bl@^1.0.0:
     readable-stream "^2.3.5"
     safe-buffer "^5.1.1"
 
+blockprotocol@0.0.1, blockprotocol@^0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/blockprotocol/-/blockprotocol-0.0.1.tgz#2723d6b80f50c3da7cf4984b4e5824fc26570f76"
+  integrity sha512-neITCxiFVxM5S0C0KTPucMCB2Xip5xIYo3LZFXUY/vamUKM5Ov2viv39+og1X6Vfd/IZwuwONK3gjO6dtGDXDA==
+  dependencies:
+    "@types/react" "^17.0.38"
+
 bluebird@^3.5.1, bluebird@^3.5.5:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
