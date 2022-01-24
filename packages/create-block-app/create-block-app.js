@@ -5,9 +5,8 @@
 const { promisify } = require("util");
 const child_process = require("child_process");
 const fs = require("fs");
+const pacote = require("pacote");
 const path = require("path");
-const tmp = require("tmp");
-const decompress = require("decompress");
 
 const exec = promisify(child_process.exec);
 
@@ -37,19 +36,9 @@ const templatePackageName = "block-template";
 
   console.log("Downloading template...");
 
-  const tmpDir = tmp.dirSync({ unsafeCleanup: true });
+  await pacote.extract(templatePackageName, resolvedBlockPath, {});
 
-  const npmPackResult = await exec(
-    `npm pack ${templatePackageName} --pack-destination ${tmpDir.name}`,
-  );
-  const tgzFileName = npmPackResult.stdout.trim();
-
-  console.log("Copying files...");
-  fs.mkdirSync(resolvedBlockPath, { recursive: true });
-  await decompress(path.resolve(tmpDir.name, tgzFileName), resolvedBlockPath, {
-    strip: 1,
-  });
-
+  console.log("Updating files...");
   try {
     fs.renameSync(
       path.resolve(resolvedBlockPath, ".gitignore.dist"),
@@ -58,8 +47,6 @@ const templatePackageName = "block-template";
   } catch {
     // noop (template is missing .gitignore.dist)
   }
-
-  tmpDir.removeCallback();
 
   console.log("Writing metadata...");
 
