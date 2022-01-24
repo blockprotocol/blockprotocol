@@ -2,6 +2,10 @@
   "name": "blockprotocol",
   "version": "0.0.1",
   "description": "TypeScript typings for https://blockprotocol.org developers",
+  "keywords": [
+    "blockprotocol",
+    "blocks"
+  ],
   "homepage": "https://blockprotocol.org",
   "repository": {
     "type": "git",

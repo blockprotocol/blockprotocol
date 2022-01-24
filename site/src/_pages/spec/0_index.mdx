@@ -19,8 +19,7 @@ It defines how structured data is passed between blocks and embedding applicatio
 
 <InfoCard variant="info" title="A quick note">
 
-This section is narrative and guidance which will form part of explanatory material rather than the specification itself.
-It is included in this preliminary document to aid the reader in understanding the full context, but will be published outside the spec in its final form.
+This section provides narrative and guidance to aid the reader in understanding the context and motivation for the Block Protocol. It does not form part of the specification.
 
 </InfoCard>
 
@@ -32,7 +31,7 @@ It is either (a) impossible for users to create new block types, or (b) impossib
 
 Even outside of content creation systems, web developers make use of a wide range of software libraries which implement web blocks: libraries to display, select, or edit particular types of data.
 These all have their own definition of what data they accept, how to send data into them, and how they send data back out.
-Making use of these libraries requires learning its own particular data interface and idiosyncrasies.
+Making use of these libraries often requires learning a specific data interface and its idiosyncrasies.
 
 This protocol aims to address both problems by defining a contract for data transfer between blocks and the applications which wish to make use of them, and how blocks describe the data they accept.
 If you adopt this protocol:
@@ -41,23 +40,23 @@ If you adopt this protocol:
 - Block types and the data they create and consume will not be tied to any specific implementation and may be easily ported between applications.
 - Given a particular data structure, embedding applications can determine which block types are suitable for displaying and editing it.
 
-It does this by specifying:
+The protocol enables this by specifying:
 
-- the functions which block types should call to request or update data, and which embedding applications should provide when instantiating blocks,
+- the functions which block types should call to request or update data, and which embedding applications should provide to blocks,
 - that blocks should express the data they accept in a machine-readable format.
 
-Given a catalog of blocks built in this way, and embedding applications which know how to use them – which we can provide abstractions for – users can more easily _find_ and _use_ blocks to display and edit data structures they are interested in, be that tasks, tweets, or anything else.
+Given a catalog of blocks built in compliance with the protocol, and embedding applications which know how to use them – which we can provide abstractions for – users can more easily _find_ and _use_ blocks to display and edit data structures they are interested in, be that tasks, tweets, or anything else.
+
 A user could take a data structure, and search for blocks which can handle that data structure (or a useful portion of it) – whether they are a developer wanting to bundle a block with an application, or an end user of an embedding application which allows users to find and add new blocks themselves.
 
-Blocks would be as customizable as any other current component allows, but with a strong default setup, theme, and a predictable interface governed by this protocol, that provides plug-and-play functionality for data.
+Blocks are as customizable as any other current component allows, but with a strong default setup, theme, and a predictable interface governed by this protocol, that provides plug-and-play functionality for data.
 
 ## Terminology
 
-**Entity:** an instance of data conforming to a schema, typically
-with a unique identifier.
+**Entity:** an instance of data conforming to a schema, often corresponding to a thing in the real world.
 
-**Schema:** a definition of a data structure, prescribing the shape of an entity.
-In the context of the protocol, schemas are used both to describe the data a block type accepts (e.g. the schema for a Table block type), as well as the structure of data representing other entities (e.g. the schema for a Person, Movie, or List).
+**Schema:** a definition of a data structure, prescribing the shape of an entity (its properties).
+A schema might describe an entity which is linked to a family of blocks (e.g. the schema for Table blocks, which might have properties such as `initialColumns`), or other non-block entities (e.g. the schema for a Person, Movie, or List). There is no technical difference between the two, and either can described the data a block accepts (e.g. a MovieSummary block might accept a Movie).
 
 **Properties:** the fields on a schema, what types of data are permitted as their values, and any other validation rules.
 Field types may be scalar (integer, string etc.), complex objects, collections (lists/arrays), or refer to another schema.

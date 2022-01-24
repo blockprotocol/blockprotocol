@@ -16,47 +16,20 @@ export type BuildConfig = {
   timestamp: string;
 };
 
-// This is temporarily used to populate each block with a preview image
-// It wouldn't be needed once the image is added to each block's block-metadata.json file
-const BLOCK_IMAGES = [
-  {
-    name: "@hashintel/block-table",
-    image: "/assets/table-block.svg",
-  },
-  {
-    name: "@hashintel/block-code",
-    image: "/assets/code-block.svg",
-  },
-  {
-    name: "@hashintel/block-header",
-    image: "/assets/heading-block.svg",
-  },
-  {
-    name: "@hashintel/block-image",
-    image: "/assets/image-block.png",
-  },
-  {
-    name: "@hashintel/block-paragraph",
-    image: "/assets/default-block-img.svg",
-  },
-  {
-    name: "@hashintel/block-person",
-    image: "/assets/default-block-img.svg",
-  },
-  {
-    name: "@hashintel/block-divider",
-    image: "/assets/divider-block.svg",
-  },
-  {
-    name: "@hashintel/block-embed",
-    image: "/assets/default-block-img.svg",
-  },
-  {
-    name: "@hashintel/block-video",
-    image: "/assets/default-block-img.svg",
-  },
-];
+const getBlockMediaUrl = (
+  mediaPath: string | undefined | null,
+  packagePath: string,
+): string | null => {
+  if (!mediaPath) {
+    return null;
+  }
+  const regex = new RegExp("^(?:[a-z]+:)?//", "i");
+  if (regex.test(mediaPath)) {
+    return mediaPath;
+  }
 
+  return `/blocks/${packagePath}/${mediaPath}`;
+};
 /**
  * used to read block metadata from disk.
  *
@@ -80,13 +53,13 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
       packagePath: path.split("/").slice(-3, -1).join("/"),
       ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
     }))
-    .map((metadata: BlockMetadata) => ({
+    .map((metadata: ExpandedBlockMetadata) => ({
       ...metadata,
+      icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
+      image: getBlockMediaUrl(metadata.image, metadata.packagePath),
       lastUpdated: buildConfig.find(
         ({ workspace }) => workspace === metadata.name,
       )?.timestamp,
-      image:
-        BLOCK_IMAGES.find(({ name }) => name === metadata.name)?.image ?? null,
     }));
 };
 

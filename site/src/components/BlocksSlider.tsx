@@ -18,13 +18,14 @@ export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
       itemKey={({ name }) => name!}
       renderItem={({ displayName, name, image, packagePath }) => {
         return (
-          <Link href={`/${packagePath}`}>
+          <Link
+            href={`/${packagePath}`}
+            sx={{ display: "block", maxWidth: 500, mx: "auto" }}
+          >
             <Box
               key={name}
               sx={{
-                px: 2,
-                maxWidth: 500,
-                mx: "auto",
+                px: 3,
               }}
             >
               <Typography sx={{ textAlign: "left", mb: 1.5 }}>
@@ -36,9 +37,13 @@ export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
                   display: "block",
                   width: "100%",
                   borderRadius: "6px",
-                  boxShadow: 1,
+                  filter: `
+                        drop-shadow(0px 2px 8px rgba(39, 50, 86, 0.04))
+                        drop-shadow(0px 2.59259px 6.44213px rgba(39, 50, 86, 0.06))
+                        drop-shadow(0px 0.5px 1px rgba(39, 50, 86, 0.10))
+                      `,
                 }}
-                src={image}
+                src={image ?? undefined}
               />
             </Box>
           </Link>

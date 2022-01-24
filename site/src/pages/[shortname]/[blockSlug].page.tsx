@@ -145,7 +145,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
   catalog,
 }) => {
   const { query } = useRouter();
-  const { shortname, blockSlug } = parseQueryParams(query || {});
+  const { shortname } = parseQueryParams(query || {});
 
   const blockModule = useMemo(
     () =>
@@ -207,7 +207,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   width: "2em",
                 }}
                 component="img"
-                src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
+                src={blockMetadata.icon ?? undefined}
               />
             </Typography>
           ) : null}
@@ -227,7 +227,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     mr: 2,
                   }}
                   component="img"
-                  src={`/blocks/${shortname}/${blockSlug}/${blockMetadata.icon}`}
+                  src={blockMetadata.icon ?? undefined}
                 />
               )}
               {blockMetadata.displayName}

@@ -75,8 +75,8 @@ const CONTENT = [
         <br />
         <br />
         While the <strong>schema</strong> for an <strong>ItemList</strong> has
-        the properties <strong>numberOfItems</strong> (a number) and any number
-        of <strong>ListItems</strong> (an array of strings).
+        the properties <strong>numberOfItems</strong> (a number) and
+        <strong>ListItems</strong> (an array of strings).
         <br />
         <br />
         This standard format makes it easy for us to pass an ItemList between
@@ -132,7 +132,7 @@ export const Section2 = () => {
   }, []);
 
   return (
-    <Box sx={{ pt: { xs: 2, lg: 10 } }}>
+    <Box sx={{ pt: 0 }}>
       <Container
         ref={boxRef}
         sx={{
@@ -158,7 +158,7 @@ export const Section2 = () => {
                 display: "flex",
                 flexDirection: "column",
                 px: { xs: "5%" },
-                pt: { lg: "20vh" },
+                pt: { lg: "16vh" },
                 ":first-of-type": {
                   pt: { xs: 10, lg: "20vh" },
                 },
@@ -178,7 +178,7 @@ export const Section2 = () => {
           sx={{
             flex: { xs: "unset", lg: 1 },
             alignSelf: "flex-start",
-            height: { xs: "40vh", lg: "100vh" },
+            height: { xs: "40vh", lg: "80vh" },
             position: "sticky",
             zIndex: 2,
             top: { xs: "unset", lg: 0 },
@@ -207,7 +207,7 @@ export const Section2 = () => {
                   left: 0,
                   right: 0,
                   bottom: { xs: 0, lg: "unset" },
-                  pt: { lg: "20vh" },
+                  pt: { lg: "14vh" },
                   px: { xs: "5%", lg: 0 },
                   display: "flex",
                   justifyContent: "center",

@@ -84,7 +84,7 @@ yarn build-blocks
 ```
 
 Once the blocks are built, simply `yarn dev [--cwd ./site] [--port 3001]` and head over to
-`localhost:3001/gallery`.
+`localhost:3000/hub`.
 
 ## Vercel Deployment
 
