@@ -16,15 +16,21 @@ You can also [generate an API key](https://blockprotocol.org/settings/api-keys) 
 
 To authenticate with the API, pass your API key in an `x-api-key` header.
 
-### Coming soon
+It is also possible to search blocks by data structure: allowing you to provide a data object, and be told which blocks can display or edit it.
 
-We will soon introduce a feature to search blocks by data structure: allowing you to provide a data object, and be told which blocks can display or edit it.
+For example, if you provide `{ "name": "Bob", "email": "bob@test.com" }` in the `json` query parameter, the API will suggest the
+[person block](https://blockprotocol.org/@hash/person). It's preferable to URL encode the json object.
 
-For example, if you provide `{ "name": "Bob", email: "bob@test.com" }`, the API will suggest the
-[person block](https://blockprotocol.org/@hash/person).
+`https://blockprotocol.org/api/blocks?json={"name":"Bob","email":"bob@test.com"}`
+
+URL encoded:
+
+`https://blockprotocol.org/api/blocks?json=%7B%20%22name%22%3A%20%22Bob%22,%20%22email%22%3A%20%22bob%40test.com%22%20%7D`
 
 Once your app implements the block protocol, your users can search and use blocks to work with a
 wide variety of data structures, without further effort on your part.
+
+Both the `q` and `json` query parameters work together.
 
 ## Building the block's properties
 

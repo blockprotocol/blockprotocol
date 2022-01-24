@@ -1,8 +1,5 @@
 import Ajv from "ajv";
-import {
-  query as queryValidator,
-  body as bodyValidator,
-} from "express-validator";
+import { query as queryValidator } from "express-validator";
 import { cloneDeep } from "lodash";
 import blocksData from "../../../blocks-data.json";
 import {
@@ -13,9 +10,6 @@ import { createApiKeyRequiredHandler } from "../../lib/handler/apiKeyRequiredHan
 
 export type ApiSearchRequestQuery = {
   q: string;
-};
-
-export type ApiSearchBody = {
   json: string;
 };
 
@@ -23,12 +17,13 @@ export type ApiSearchResponse = {
   results: BlockMetadata[];
 };
 
-export default createApiKeyRequiredHandler<ApiSearchBody, ApiSearchResponse>()
-  .use(bodyValidator("json").isJSON())
+export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
   .use(queryValidator("q").isString().toLowerCase())
+  .use(queryValidator("json").isJSON())
   .get(async (req, res) => {
-    const { q: query } = req.query as ApiSearchRequestQuery;
-    const { json } = req.body as ApiSearchBody;
+    const { q: query, json: jsonText } = req.query as ApiSearchRequestQuery;
+
+    const json = JSON.parse(jsonText);
 
     let data: BlockMetadata[] = blocksData;
 
