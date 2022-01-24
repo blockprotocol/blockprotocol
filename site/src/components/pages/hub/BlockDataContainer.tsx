@@ -1,7 +1,7 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
 import { BlockProtocolUpdateEntitiesFunction } from "blockprotocol";
 import { Validator } from "jsonschema";
-import { useMemo, useState, VoidFunctionComponent } from "react";
+import { useCallback, useMemo, useState, VoidFunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
@@ -40,20 +40,21 @@ export const BlockDataContainer: VoidFunctionComponent<
     entityId: "test-entity-id",
   });
 
-  const updateEntities: BlockProtocolUpdateEntitiesFunction = async (
-    actions,
-  ) => {
-    for (const action of actions) {
-      if (action.entityId === blockState.entityId) {
-        setBlockState((previousBlockState) => ({
-          ...previousBlockState,
-          ...action.data,
-        }));
+  const updateEntities: BlockProtocolUpdateEntitiesFunction = useCallback(
+    async (actions) => {
+      for (const action of actions) {
+        if (action.entityId === blockState.entityId) {
+          setBlockState((previousBlockState) => ({
+            ...previousBlockState,
+            ...action.data,
+          }));
+        }
       }
-    }
 
-    return actions;
-  };
+      return actions;
+    },
+    [blockState.entityId],
+  );
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
