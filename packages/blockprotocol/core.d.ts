@@ -312,19 +312,19 @@ export type BlockProtocolDeleteEntityTypesFunction = {
 
 export type BlockProtocolFunction =
   | BlockProtocolAggregateEntitiesFunction
-  | BlockProtocolCreateEntitiesFunction
-  | BlockProtocolGetEntitiesFunction
-  | BlockProtocolUpdateEntitiesFunction
-  | BlockProtocolDeleteEntitiesFunction
   | BlockProtocolAggregateEntityTypesFunction
+  | BlockProtocolCreateEntitiesFunction
   | BlockProtocolCreateEntityTypesFunction
-  | BlockProtocolGetEntityTypesFunction
-  | BlockProtocolDeleteEntityTypesFunction
-  | BlockProtocolUpdateEntityTypesFunction
   | BlockProtocolCreateLinksFunction
+  | BlockProtocolGetEntitiesFunction
+  | BlockProtocolGetEntityTypesFunction
   | BlockProtocolGetLinksFunction
-  | BlockProtocolUpdateLinksFunction
+  | BlockProtocolDeleteEntitiesFunction
+  | BlockProtocolDeleteEntityTypesFunction
   | BlockProtocolDeleteLinksFunction
+  | BlockProtocolUpdateEntitiesFunction
+  | BlockProtocolUpdateEntityTypesFunction
+  | BlockProtocolUpdateLinksFunction
   | BlockProtocolUploadFileFunction;
 
 export type BlockProtocolFunctions = {

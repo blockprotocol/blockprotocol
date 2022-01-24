@@ -26,7 +26,7 @@
     "@mui/material": "^5.2.1",
     "@twind/next": "1.0.8",
     "axios": "^0.24.0",
-    "blockprotocol": "^0.0.1",
+    "blockprotocol": "*",
     "clsx": "^1.1.1",
     "connect-mongo": "^4.6.0",
     "cookie-signature": "^1.1.0",
