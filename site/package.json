@@ -25,6 +25,7 @@
     "@emotion/styled": "^11.6.0",
     "@mui/material": "^5.2.1",
     "@twind/next": "1.0.8",
+    "ajv": "^8.9.0",
     "axios": "^0.24.0",
     "blockprotocol": "^0.0.1",
     "clsx": "^1.1.1",
