@@ -47,22 +47,30 @@ export default createApiKeyRequiredHandler<ApiSearchBody, ApiSearchResponse>()
     // beware, this is a slow operation
     // @todo optimize for quicker passes.
     if (json) {
+      // If any property is not a part of the schema, remove it from the validated json
       const ajv = new Ajv({ removeAdditional: "all" });
 
       data = (
         data.flatMap((block) => {
           const schema = readBlockDataFromDisk(block).schema;
           const validate = ajv.compile(schema);
+
           // withoutAdditional is transformed in validate.
           // eslint-disable-next-line prefer-const
           let withoutAdditional = cloneDeep(json);
           const valid = validate(withoutAdditional);
-          // removeAdditional lets us count how many keys are parsed vs how many are not through
-          // the transformed json payload
+
+          // removeAdditional lets us count how many keys are a part of the schema
+          const keyCountWithouTAdditional =
+            Object.keys(withoutAdditional).length;
+
           const keyCountDifference =
-            Object.keys(json).length - Object.keys(withoutAdditional).length;
-          // if the json isn't valid, don't add it to the list, otherwise prepare blocks for sorting
-          return valid ? [[block, keyCountDifference]] : [];
+            Object.keys(json).length - keyCountWithouTAdditional;
+
+          // Only show valid schemas with at least 1 matching field
+          return valid && keyCountWithouTAdditional >= 1
+            ? [[block, keyCountDifference]]
+            : [];
         }) as [BlockMetadata, number][]
       )
         // sort by how many keys are present in the validated output after removeAdditional.
