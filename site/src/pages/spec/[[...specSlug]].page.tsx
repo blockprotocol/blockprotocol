@@ -23,6 +23,7 @@ import {
 } from "../../components/MdxPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
 import { parseIntFromPixelString } from "../../util/muiUtils";
+import Search from "../../components/pages/docs/Search";
 
 const GitHubInfoCard = (
   <Paper
@@ -238,16 +239,19 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         {GitHubInfoCard}
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Sidebar
-              flexGrow={0}
-              marginRight={6}
-              pages={specificationPages.filter(
-                ({ title }) => !title.startsWith("Appendix"),
-              )}
-              appendices={specificationPages.filter(({ title }) =>
-                title.startsWith("Appendix"),
-              )}
-            />
+            <Box>
+              <Search variant="desktop" />
+              <Sidebar
+                flexGrow={0}
+                marginRight={6}
+                pages={specificationPages.filter(
+                  ({ title }) => !title.startsWith("Appendix"),
+                )}
+                appendices={specificationPages.filter(({ title }) =>
+                  title.startsWith("Appendix"),
+                )}
+              />
+            </Box>
           ) : null}
           <MdxPageContent flexGrow={1} serializedPage={serializedPage} />
         </Box>
