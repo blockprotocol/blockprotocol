@@ -29,7 +29,7 @@
     "schema": "typescript-json-schema tsconfig.json AppProps --required true --out dist/block-schema.json"
   },
   "dependencies": {
-    "blockprotocol": "0.0.1"
+    "blockprotocol": "0.0.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
