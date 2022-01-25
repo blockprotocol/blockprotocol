@@ -1,8 +1,8 @@
 import { Modal, Paper, ModalProps, Box, Icon, Fade } from "@mui/material";
-import React, { useContext, useEffect, useState, VFC } from "react";
+import React, { useEffect, useState, VFC } from "react";
 import { SerializedUser } from "../../lib/model/user.model";
 import { Button } from "../Button";
-import UserContext from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { SendLoginCodeScreen } from "../Screens/SendLoginCodeScreen";
 import {
   VerificationCodeInfo,
@@ -22,7 +22,7 @@ export const LoginModal: VFC<LoginModalProps> = ({
   disableScrollLock = false,
   ...modalProps
 }) => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
   const [currentPage, setCurrentPage] = useState<LoginModalPage>("Email");
 
   const [email, setEmail] = useState<string>();

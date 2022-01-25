@@ -1,10 +1,12 @@
-import { VFC, useContext } from "react";
+import { VFC } from "react";
 import { Box } from "@mui/material";
-import UserContext from "../context/UserContext";
+import { SerializedUser } from "../lib/model/user.model";
 
-export const UserAvatar: VFC = () => {
-  const { user } = useContext(UserContext);
+interface UserAvatarProps {
+  user: SerializedUser;
+}
 
+export const UserAvatar: VFC<UserAvatarProps> = ({ user }) => {
   const { preferredName } = user || {};
 
   return (
