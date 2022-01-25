@@ -27,7 +27,7 @@
     "@twind/next": "1.0.8",
     "ajv": "^8.9.0",
     "axios": "^0.24.0",
-    "blockprotocol": "*",
+    "blockprotocol": "0.0.4",
     "clsx": "^1.1.1",
     "connect-mongo": "^4.6.0",
     "cookie-signature": "^1.1.0",
