@@ -49,9 +49,9 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
   const outerNode = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
+    const handleClick = (event: MouseEvent) => {
       if (outerNode.current) {
-        if (!outerNode.current.contains(e.target as Node)) {
+        if (!outerNode.current.contains(event.target as Node)) {
           closeResultsMenu();
         }
       }
@@ -61,19 +61,13 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
     return () => document.removeEventListener("mousedown", handleClick, false);
   }, []);
 
-  const searchOnlineFunction = () => {
-    (document.querySelector(`.search-bar input`) as HTMLElement).focus();
-
-    searchOnlineDebounce(searchText);
-  };
-
   const searchOnlineDebounce = useMemo(
     () =>
-      debounce((searchText: string) => {
+      debounce((newSearchText: string) => {
         setSearchState("normal");
         setSearchLoading(true);
         index
-          .search<AlgoliaResult>(searchText)
+          .search<AlgoliaResult>(newSearchText)
           .then(({ hits }) => {
             if (hits.length === 0) {
               setSearchState("noresults");
@@ -81,10 +75,12 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
 
             setSearchResults(hits.slice(0, MAX_SEARCH_RESULTS));
             setActiveResult(MAX_SEARCH_RESULTS);
-            setCurrentSearchedText(searchText);
+            setCurrentSearchedText(newSearchText);
             setSearchLoading(false);
           })
           .catch((err) => {
+            // @todo use logger later
+            // eslint-disable-next-line no-console
             console.error(err);
             setSearchLoading(false);
             setSearchState("failed");
@@ -92,6 +88,12 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
       }, 500),
     [],
   );
+
+  const searchOnlineFunction = () => {
+    (document.querySelector(`.search-bar input`) as HTMLElement).focus();
+
+    searchOnlineDebounce(searchText);
+  };
 
   useEffect(() => {
     if (searchText.trim() && searchText.length > 2) {
@@ -109,9 +111,9 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
   }, [router.asPath]);
 
   // mousetrap is only registered for a key once, so the function needs to account for all cases
-  useMousetrap("/", (e) => {
-    e.preventDefault();
-    e.stopImmediatePropagation();
+  useMousetrap("/", (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
 
     (document.querySelector(`.search-bar input`) as HTMLElement).focus();
 
@@ -122,8 +124,8 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
 
   const getHighlight = (highlight: AlgoliaHighlightResult) => {
     const cleanContent = highlight?.content?.value
-      .replace(/\<(.*?)\>|\*|\#|\`|\\|\((.*?)\)|\[|\]/g, "")
-      .replace(/\<|\>/g, "");
+      .replace(/<(.*?)>|\*|#|`|\\|\((.*?)\)|\[|\]/g, "")
+      .replace(/<|>/g, "");
 
     const characterLimit = 120;
 
@@ -140,15 +142,15 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
       .replace(searchRegExp, `<span class="highlight-text">$&</span>`);
   };
 
-  const searchFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const searchFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     if (searchResults.length > 0 && searchResults[activeResult]) {
       const { slug } = searchResults[activeResult];
 
-      router.push(slug);
-
       (document.querySelector(".search-bar input") as HTMLElement).blur();
+
+      return router.push(slug);
     } else {
       searchOnlineFunction();
     }

@@ -27,11 +27,15 @@ const getFileInfos = (
 }[] => {
   const files = fs.readdirSync(dirPath);
 
-  arrayOfFiles = arrayOfFiles || [];
+  let newArrayOfFiles = arrayOfFiles || [];
 
-  files.forEach(function (file) {
-    if (fs.statSync(dirPath + "/" + file).isDirectory()) {
-      arrayOfFiles = getFileInfos(dirPath + "/" + file, arrayOfFiles, type);
+  files.forEach((file) => {
+    if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
+      newArrayOfFiles = getFileInfos(
+        `${dirPath}/${file}`,
+        newArrayOfFiles,
+        type,
+      );
     } else {
       const inputPath = path.join(dirPath, "/", file);
       const outputPath = `.\\output\\${path.join(
@@ -41,12 +45,12 @@ const getFileInfos = (
         file,
       )}`;
       if (inputPath.endsWith(".md") || inputPath.endsWith(".mdx")) {
-        arrayOfFiles.push({ inputPath, outputPath, type });
+        newArrayOfFiles.push({ inputPath, outputPath, type });
       }
     }
   });
 
-  return arrayOfFiles;
+  return newArrayOfFiles;
 };
 
 type AlgoliaRecord = {
@@ -148,10 +152,11 @@ const syncAlgoliaIndex = async () => {
 const main = async () => {
   try {
     await syncAlgoliaIndex();
+    // eslint-disable-next-line no-console
     console.log("Algolia Indexes Updated.");
   } catch (error) {
     throw new Error(`Error while running Algolia Update: ${error}`);
   }
 };
 
-main();
+void main();
