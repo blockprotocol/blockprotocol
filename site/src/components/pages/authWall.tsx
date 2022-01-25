@@ -21,7 +21,7 @@ const AuthWallWrapper: VoidFunctionComponent<{
     return null;
   }
 
-  if (!user) {
+  if (!user?.isSignedUp) {
     void router.push("/");
     return null;
   }
