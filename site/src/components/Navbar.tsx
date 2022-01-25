@@ -19,7 +19,7 @@ import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import SiteMapContext from "../context/SiteMapContext";
-import UserContext from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import { AccountDropdown } from "./Navbar/AccountDropdown";
 import { MobileNavItems } from "./Navbar/MobileNavItems";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./Navbar/util";
@@ -91,7 +91,7 @@ export const Navbar: VFC<NavbarProps> = ({
   const theme = useTheme();
   const router = useRouter();
   const { pages } = useContext(SiteMapContext);
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
 
   const [displayMobileNav, setDisplayMobileNav] = useState<boolean>(false);
   const [idleScrollPosition, setIdleScrollPosition] = useState<boolean>(false);
@@ -343,7 +343,7 @@ export const Navbar: VFC<NavbarProps> = ({
                       </Typography>
                     </Button>
                   )}
-                  {user?.isSignedUp ? null : (
+                  {user !== "loading" && !user?.isSignedUp ? (
                     <Link href="/docs/developing-blocks">
                       <Button
                         size="small"
@@ -355,7 +355,7 @@ export const Navbar: VFC<NavbarProps> = ({
                           : "Quick Start Guide"}
                       </Button>
                     </Link>
-                  )}
+                  ) : null}
                 </>
               ) : (
                 <IconButton
@@ -369,7 +369,7 @@ export const Navbar: VFC<NavbarProps> = ({
                   <Icon className="fas fa-bars" />
                 </IconButton>
               )}
-              {user?.isSignedUp ? <AccountDropdown /> : null}
+              <AccountDropdown />
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>

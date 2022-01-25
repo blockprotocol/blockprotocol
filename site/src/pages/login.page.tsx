@@ -1,13 +1,13 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState, useMemo, useContext } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Paper, Box, Icon, Fade, Container } from "@mui/material";
 import { apiClient } from "../lib/apiClient";
 import { ApiLoginWithLoginCodeRequestBody } from "./api/loginWithLoginCode.api";
 import { Button } from "../components/Button";
 import { SendLoginCodeScreen } from "../components/Screens/SendLoginCodeScreen";
 import { SerializedUser } from "../lib/model/user.model";
-import UserContext from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
@@ -22,7 +22,7 @@ const toStringElseUndefined = (item: string | string[] | undefined) =>
   typeof item === "string" ? item : undefined;
 
 const LoginPage: NextPage = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
   const router = useRouter();
 
   const parsedQuery = useMemo((): LoginPageParsedUrlQuery => {

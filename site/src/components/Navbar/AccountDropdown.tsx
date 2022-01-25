@@ -1,14 +1,14 @@
-import { VFC, useState, useContext, useRef } from "react";
+import { VFC, useState, useRef } from "react";
 import { Box, Typography, ListItemButton, Divider } from "@mui/material";
 import { Link } from "../Link";
 import { Button } from "../Button";
-import UserContext from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { apiClient } from "../../lib/apiClient";
 import { UserAvatar } from "../UserAvatar";
 import { Popover } from "../Popover";
 
 export const AccountDropdown: VFC = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -28,7 +28,11 @@ export const AccountDropdown: VFC = () => {
     setUser(undefined);
   };
 
-  const { preferredName, shortname } = user || {};
+  if (user === "loading" || !user) {
+    return null;
+  }
+
+  const { preferredName, shortname } = user;
 
   const id = open ? "simple-popover" : undefined;
 
@@ -40,7 +44,7 @@ export const AccountDropdown: VFC = () => {
         onClick={handleClick}
         ref={buttonRef}
       >
-        <UserAvatar />
+        <UserAvatar user={user} />
       </Button>
       <Popover
         id={id}

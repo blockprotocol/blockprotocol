@@ -1,5 +1,5 @@
 import { Box, Icon, Typography } from "@mui/material";
-import { useContext, useRef, useState, VFC } from "react";
+import { useRef, useState, VFC } from "react";
 import { TextField } from "../TextField";
 import { Button } from "../Button";
 import { useShortnameTextField } from "../hooks/useShortnameTextField";
@@ -8,7 +8,7 @@ import {
   ApiCompleteSignupRequestBody,
   ApiCompleteSignupResponse,
 } from "../../pages/api/completeSignup.api";
-import UserContext from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 
 type CompleteSignupScreenProps = {
   email: string;
@@ -17,7 +17,7 @@ type CompleteSignupScreenProps = {
 export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
   email,
 }) => {
-  const { setUser } = useContext(UserContext);
+  const { setUser } = useUser();
 
   const shortnameInputRef = useRef<HTMLInputElement>(null);
   const preferredNameInputRef = useRef<HTMLInputElement>(null);

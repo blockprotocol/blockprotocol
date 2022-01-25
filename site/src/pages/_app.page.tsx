@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
@@ -17,10 +17,13 @@ import { PageLayout } from "../components/PageLayout";
 import { createEmotionCache } from "../util/createEmotionCache";
 import siteMap from "../../site-map.json";
 import SiteMapContext from "../context/SiteMapContext";
-import { SerializedUser } from "../lib/model/user.model";
 import { apiClient } from "../lib/apiClient";
 import { ApiMeResponse } from "./api/me.api";
-import UserContext from "../context/UserContext";
+import {
+  UserContext,
+  UserContextValue,
+  UserState,
+} from "../context/UserContext";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -35,7 +38,7 @@ const MyApp = ({
 }: MyAppProps) => {
   const router = useRouter();
 
-  const [user, setUser] = useState<SerializedUser>();
+  const [user, setUser] = useState<UserState>("loading");
 
   const refetchUser = useCallback(async () => {
     const { data, error } = await apiClient.get<ApiMeResponse>("me");
@@ -70,13 +73,18 @@ const MyApp = ({
 
   useEffect(() => {
     const { route } = router;
-    if (user && !user.isSignedUp && route !== "/signup") {
+    if (user && user !== "loading" && !user.isSignedUp && route !== "/signup") {
       void router.push("/signup");
     }
   }, [user, router]);
 
+  const userContextValue = useMemo<UserContextValue>(
+    () => ({ user, setUser, refetch: refetchUser }),
+    [refetchUser, user],
+  );
+
   return (
-    <UserContext.Provider value={{ user, setUser, refetch: refetchUser }}>
+    <UserContext.Provider value={userContextValue}>
       <SiteMapContext.Provider value={siteMap}>
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={theme}>
