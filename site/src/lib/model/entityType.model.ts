@@ -54,17 +54,19 @@ export class EntityType {
   private static async validateAndCompleteSchema(
     db: Db,
     params: {
+      author: string;
       entityTypeId: string;
       maybeSchema: unknown;
       user: DBRef;
     },
   ) {
-    const { entityTypeId, maybeSchema, user } = params;
+    const { author, entityTypeId, maybeSchema, user } = params;
 
-    const compiledSchema = await validateAndCompleteJsonSchema(
+    const compiledSchema = await validateAndCompleteJsonSchema({
+      author,
       entityTypeId,
       maybeSchema,
-    );
+    });
 
     const { title } = compiledSchema;
 
@@ -96,6 +98,7 @@ export class EntityType {
     let checkedSchema;
     try {
       checkedSchema = await this.validateAndCompleteSchema(db, {
+        author: user.shortname!,
         entityTypeId,
         maybeSchema: schema,
         user: user.toRef(),
@@ -179,6 +182,7 @@ export class EntityType {
       checkedSchema = await EntityType.validateAndCompleteSchema(db, {
         entityTypeId,
         maybeSchema: schema,
+        author: this.schema.author,
         user: this.user,
       });
     } catch (err) {
