@@ -23,6 +23,11 @@ type AlertState = {
   subSchemaUsedInProperties: Array<string>;
 };
 
+/**
+ * Allows the user to select and delete a sub-schema
+ * Currently unused
+ * @todo use or remove this
+ */
 export const SubSchemaItem: VoidFunctionComponent<SubSchemaItemProps> = ({
   dispatchSchemaUpdate,
   subSchema,

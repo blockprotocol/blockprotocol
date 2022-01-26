@@ -293,7 +293,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
         </div>
       </section>
 
-      {/**
+      {/** @todo handle subschemas
        {updateEntityTypes || subSchemas.length > 0 ? (
         <section className={tw`mt-8`}>
           <h2>Sub-schemas in {title}</h2>
