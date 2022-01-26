@@ -1,9 +1,12 @@
-import ReactHtmlParser, { convertNodeToElement } from "react-html-parser";
+import ReactHtmlParser, {
+  convertNodeToElement,
+  Transform,
+} from "react-html-parser";
 
 import { Link } from "../components/Link";
 
-export const parseHTML = (html: any) => {
-  const transform = (node: any, index: number) => {
+export const parseHTML = (html: string) => {
+  const transform: Transform = (node, index) => {
     if (
       node.type === "tag" &&
       node.name === "a" &&
