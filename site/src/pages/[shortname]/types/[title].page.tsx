@@ -43,7 +43,7 @@ const EntityTypePage: NextPage = () => {
       })
       .then(({ data }) => setEntityType(data?.entityType))
       .catch((err) => {
-        // eslint-disable-next-line no-console - @todo handle 404s and show to user
+        // eslint-disable-next-line no-console -- @todo handle 404s and show to user
         console.error(err);
       });
   }, [shortnameWithoutLeadingAt, title, setEntityType]);
