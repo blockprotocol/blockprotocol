@@ -153,12 +153,12 @@ export type BlockProtocolFileMediaType = "image" | "video";
 
 export type BlockProtocolUploadFileFunction = {
   (action: {
-    accountId?: string;
+    accountId?: string | null;
     file?: File | null;
     url?: string | null;
     mediaType: BlockProtocolFileMediaType;
   }): Promise<{
-    accountId?: string;
+    accountId?: string | null;
     entityId: string;
     url: string;
     mediaType: BlockProtocolFileMediaType;
@@ -168,7 +168,6 @@ export type BlockProtocolUploadFileFunction = {
 // ----------------------------- LINKS -------------------------------- //
 
 type SingleTargetLinkFields = {
-  destinationAccountId?: string | null;
   destinationEntityId: string;
   destinationEntityTypeId?: string | null;
   destinationEntityVersionId?: string | null;
@@ -184,6 +183,7 @@ export type BlockProtocolLink = {
   sourceEntityId: string;
   sourceEntityTypeId?: string | null;
   sourceEntityVersionId?: string | null;
+  destinationAccountId?: string | null;
   index?: number | null;
   path: string;
 } & (SingleTargetLinkFields | AggregationTargetLinkFields);
@@ -224,6 +224,8 @@ export type BlockProtocolCreateLinksFunction = {
 
 export type BlockProtocolUpdateLinkAction = {
   data: BlockProtocolLink;
+  sourceAccountId?: string | null;
+  sourceEntityId?: string | null;
   linkId: string;
 };
 
@@ -232,6 +234,8 @@ export type BlockProtocolUpdateLinksFunction = {
 };
 
 export type BlockProtocolDeleteLinksAction = {
+  sourceAccountId?: string | null;
+  sourceEntityId?: string | null;
   linkId: string;
 };
 
@@ -328,24 +332,24 @@ export type BlockProtocolFunction =
   | BlockProtocolUploadFileFunction;
 
 export type BlockProtocolFunctions = {
-  aggregateEntities: BlockProtocolAggregateEntitiesFunction;
-  createEntities: BlockProtocolCreateEntitiesFunction;
-  getEntities: BlockProtocolGetEntitiesFunction;
-  deleteEntities: BlockProtocolDeleteEntitiesFunction;
-  updateEntities: BlockProtocolUpdateEntitiesFunction;
+  aggregateEntities: BlockProtocolAggregateEntitiesFunction | undefined;
+  createEntities: BlockProtocolCreateEntitiesFunction | undefined;
+  getEntities: BlockProtocolGetEntitiesFunction | undefined;
+  deleteEntities: BlockProtocolDeleteEntitiesFunction | undefined;
+  updateEntities: BlockProtocolUpdateEntitiesFunction | undefined;
 
-  aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction;
-  createEntityTypes: BlockProtocolCreateEntityTypesFunction;
-  getEntityTypes: BlockProtocolGetEntityTypesFunction;
-  updateEntityTypes: BlockProtocolUpdateEntityTypesFunction;
-  deleteEntityTypes: BlockProtocolDeleteEntityTypesFunction;
+  aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction | undefined;
+  createEntityTypes: BlockProtocolCreateEntityTypesFunction | undefined;
+  getEntityTypes: BlockProtocolGetEntityTypesFunction | undefined;
+  updateEntityTypes: BlockProtocolUpdateEntityTypesFunction | undefined;
+  deleteEntityTypes: BlockProtocolDeleteEntityTypesFunction | undefined;
 
-  getLinks: BlockProtocolGetLinksFunction;
-  createLinks: BlockProtocolCreateLinksFunction;
-  deleteLinks: BlockProtocolDeleteLinksFunction;
-  updateLinks: BlockProtocolUpdateLinksFunction;
+  getLinks: BlockProtocolGetLinksFunction | undefined;
+  createLinks: BlockProtocolCreateLinksFunction | undefined;
+  deleteLinks: BlockProtocolDeleteLinksFunction | undefined;
+  updateLinks: BlockProtocolUpdateLinksFunction | undefined;
 
-  uploadFile: BlockProtocolUploadFileFunction;
+  uploadFile: BlockProtocolUploadFileFunction | undefined;
 };
 
 export type JSONValue =
@@ -366,7 +370,7 @@ export interface JSONArray extends Array<JSONValue> {}
  */
 export type BlockProtocolProps = {
   accountId?: string;
-  entityId?: string;
+  entityId: string;
   entityTypeId?: string;
   entityTypes?: BlockProtocolEntityType[];
   linkedAggregations?: BlockProtocolLinkedAggregation[];
