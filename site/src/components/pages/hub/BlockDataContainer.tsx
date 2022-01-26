@@ -38,6 +38,7 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockState, setBlockState] = useState<Record<string, unknown>>({
     accountId: "test-account-id",
     entityId: "test-entity-id",
+    initialWidth: 300,
   });
 
   const updateEntities: BlockProtocolUpdateEntitiesFunction = useCallback(
@@ -146,7 +147,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 320, backgroundColor: "white" }}>
+          <Box sx={{ height: 420, backgroundColor: "white" }}>
             <Tabs
               TabIndicatorProps={{
                 style: { display: "none" },
@@ -184,6 +185,8 @@ export const BlockDataContainer: VoidFunctionComponent<
                 sx={{
                   height: "max-content",
                   minHeight: "100%",
+                  maxWidth: !isMobile ? "300px" : undefined,
+                  mx: "auto",
                 }}
               >
                 {blockModule && <blockModule.default {...props} />}

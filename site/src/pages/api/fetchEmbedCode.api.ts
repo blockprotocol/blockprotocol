@@ -65,7 +65,7 @@ export default createBaseHandler<null, FetchEmbedCodeQuery>()
 
     try {
       const oEmbedResponse = await fetch(
-        `${oembedEndpoint}?url=${url}&maxwidth=1000`,
+        `${oembedEndpoint}?url=${url}&maxheight=350&maxwidth=300`,
       ).then((response) => response.json());
 
       res.send(oEmbedResponse);
