@@ -12,7 +12,7 @@ import {
 import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { HASHLogoIcon } from "./SvgIcon/HASHLogoIcon";
-import { Button } from "./Button";
+import { LinkButton } from "./LinkButton";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   {
@@ -42,6 +42,7 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
     component="p"
     variant="bpSmallCopy"
     sx={{
+      color: ({ palette }) => palette.gray[40],
       "&:first-of-type": {
         marginTop: {
           xs: 1.5,
@@ -58,7 +59,6 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
       href={href}
       sx={(theme) => ({
         transition: theme.transitions.create("color", { duration: 150 }),
-        color: theme.palette.gray[40],
         ":hover": {
           color: theme.palette.gray[20],
         },
@@ -126,20 +126,20 @@ const Socials = (
         </Link>
       ))}
     </Box>
-    <Link href="https://github.com/blockprotocol/blockprotocol" flexShrink={0}>
-      <Button
-        variant="primary"
-        size="small"
-        sx={{
-          marginBottom: 2.5,
-          backgroundColor: (theme) => theme.palette.gray[70],
-          color: (theme) => theme.palette.gray[20],
-        }}
-        startIcon={<Icon className="fa fa-star" />}
-      >
-        Star us on Github
-      </Button>{" "}
-    </Link>
+    <LinkButton
+      href="https://github.com/blockprotocol/blockprotocol"
+      variant="primary"
+      size="small"
+      sx={{
+        flexShrink: 0,
+        marginBottom: 2.5,
+        backgroundColor: (theme) => theme.palette.gray[70],
+        color: (theme) => theme.palette.gray[20],
+      }}
+      startIcon={<Icon className="fa fa-star" />}
+    >
+      Star us on Github
+    </LinkButton>
   </Box>
 );
 

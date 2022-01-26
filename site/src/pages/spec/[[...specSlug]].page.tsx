@@ -12,7 +12,6 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
@@ -23,6 +22,7 @@ import {
 } from "../../components/MdxPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
 import { parseIntFromPixelString } from "../../util/muiUtils";
+import { LinkButton } from "../../components/LinkButton";
 
 const GitHubInfoCard = (
   <Paper
@@ -118,19 +118,18 @@ const GitHubInfoCard = (
         },
       }}
     >
-      <Link href="https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec">
-        <Button
-          variant="primary"
-          color="teal"
-          size="small"
-          startIcon={<Icon className="fab fa-github" />}
-          sx={{
-            textTransform: "none",
-          }}
-        >
-          View the spec on Github
-        </Button>
-      </Link>
+      <LinkButton
+        href="https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec"
+        variant="primary"
+        color="teal"
+        size="small"
+        startIcon={<Icon className="fab fa-github" />}
+        sx={{
+          textTransform: "none",
+        }}
+      >
+        View the spec on Github
+      </LinkButton>
     </Box>
   </Paper>
 );
