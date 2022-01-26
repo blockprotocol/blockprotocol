@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { NextPage } from "next";
 import { Box, Container, Paper, Fade, Icon, Typography } from "@mui/material";
 import { Button } from "../components/Button";
@@ -10,7 +10,7 @@ import {
 } from "../components/Screens/VerificationCodeScreen";
 import { SerializedUser } from "../lib/model/user.model";
 import { apiClient } from "../lib/apiClient";
-import UserContext from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import { ApiVerifyEmailRequestBody } from "./api/verifyEmail.api";
 import { CompleteSignupScreen } from "../components/Screens/CompleteSignupScreen";
 
@@ -45,7 +45,7 @@ const SignupPage: NextPage = () => {
     };
   }, [router]);
 
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
   const [currentScreen, setCurrentScreen] = useState<SignupPageScreen>("Email");
 
   const [email, setEmail] = useState<string>();
@@ -75,7 +75,7 @@ const SignupPage: NextPage = () => {
   }, [parsedQuery, router]);
 
   useEffect(() => {
-    if (user) {
+    if (user && user !== "loading") {
       if (user.isSignedUp) {
         void router.push(redirectPath ?? "/");
       } else if (currentScreen !== "CompleteSignup") {

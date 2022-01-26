@@ -1,5 +1,4 @@
 import { Box, Container, Typography } from "@mui/material";
-import { NextPage } from "next";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 
@@ -13,8 +12,12 @@ import { apiClient } from "../../lib/apiClient";
 import { DateTimeCell } from "../../components/TableCells";
 import { Button } from "../../components/Button";
 import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
+import {
+  AuthWallPageContent,
+  withAuthWall,
+} from "../../components/pages/authWall";
 
-const DashboardPage: NextPage = () => {
+const ApiKeys: AuthWallPageContent = () => {
   const [activeApiKeys, setActiveApiKeys] = useState<
     UserFacingApiKeyProperties[]
   >([]);
@@ -201,4 +204,4 @@ const DashboardPage: NextPage = () => {
   );
 };
 
-export default DashboardPage;
+export default withAuthWall(ApiKeys);
