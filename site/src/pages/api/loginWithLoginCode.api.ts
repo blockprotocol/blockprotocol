@@ -77,7 +77,7 @@ export default createBaseHandler<
 
       req.login(user, () =>
         res.status(200).json({
-          user: user.serialize(),
+          user: user.serialize(true),
         }),
       );
     }
