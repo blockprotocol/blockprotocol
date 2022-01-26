@@ -31,7 +31,7 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockModalOpen, setBlockModalOpen] = useState(false);
 
   const metadataExample = metadata.examples?.length
-    ? JSON.stringify(metadata.examples[0])
+    ? JSON.stringify(metadata.examples[0], null, 2)
     : "{}";
 
   const [text, setText] = useState(metadataExample);
