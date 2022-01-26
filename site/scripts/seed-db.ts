@@ -13,6 +13,7 @@ import {
   VerificationCodeDocument,
 } from "../src/lib/model/verificationCode.model";
 import { connectToDatabase } from "../src/lib/mongodb";
+import { EntityType } from "../src/lib/model/entityType.model";
 
 void (async () => {
   const { client, db } = await connectToDatabase();
@@ -51,9 +52,23 @@ void (async () => {
 
   await db.createCollection(ApiKey.COLLECTION_NAME);
 
+  if (
+    existingCollections.find(
+      ({ collectionName }) => collectionName === EntityType.COLLECTION_NAME,
+    )
+  ) {
+    await db.dropCollection(EntityType.COLLECTION_NAME);
+  }
+
+  await db.createCollection(EntityType.COLLECTION_NAME);
+
   await db
-    .collection<UserDocument>(ApiKey.COLLECTION_NAME)
-    .createIndex({ publicId: 1 }, { unique: true });
+    .collection(EntityType.COLLECTION_NAME)
+    .createIndex({ entityTypeId: 1 }, { unique: true });
+
+  await db
+    .collection(EntityType.COLLECTION_NAME)
+    .createIndex({ user: 1, "schema.title": 1 }, { unique: true });
 
   if (
     existingCollections.find(
