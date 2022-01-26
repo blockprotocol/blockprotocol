@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import { connectToDatabase } from "../../lib/mongodb";
 import { EntityType } from "../../lib/model/entityType.model";
+import { FRONTEND_URL } from "../../lib/config";
 
 const EntityTypeIdPage: NextPage = () => <div />;
 
@@ -19,13 +20,17 @@ export const getServerSideProps: GetServerSideProps<
   const entityTypeId = context.query.entityTypeId as string;
   const entityType = await EntityType.getById(db, { entityTypeId });
 
-  if (req.headers.accept?.includes("application/json")) {
+  const jsonFlag = new URL(`${FRONTEND_URL}${req.url}`).searchParams.get(
+    "json",
+  );
+
+  if (jsonFlag != null || req.headers.accept?.includes("application/json")) {
     if (entityType) {
       res.setHeader("Content-Type", "application/json; charset=utf-8");
       res.write(JSON.stringify(entityType.schema, undefined, 2));
     } else {
       res.statusCode = 404;
-      res.write(`Schema not found.`);
+      res.write("Schema not found.");
     }
     res.end();
   } else if (entityType) {

@@ -1,15 +1,13 @@
 import React, { FormEvent, useState, VoidFunctionComponent } from "react";
 import { tw } from "twind";
-import { SchemaSelectElementType } from "./SchemaEditor";
 import { SchemaPropertyRow } from "./SchemaPropertyRow";
-import { JsonSchema } from "../../../lib/json-utils";
+import { JsonSchema } from "../../../lib/jsonSchema";
 import { TextInputOrDisplay } from "./Inputs";
 import { SchemaEditorDispatcher } from "./schemaEditorReducer";
 import { Button } from "../../Button";
 
 type SchemaPropertiesTableProps = {
   dispatchSchemaUpdate: SchemaEditorDispatcher;
-  GoToSchemaElement: SchemaSelectElementType;
   readonly: boolean;
   selectedSchema: JsonSchema;
 };
@@ -22,7 +20,7 @@ export const tdClasses = tw`${cellPadding}`;
 
 export const SchemaPropertiesTable: VoidFunctionComponent<
   SchemaPropertiesTableProps
-> = ({ GoToSchemaElement, readonly, selectedSchema, dispatchSchemaUpdate }) => {
+> = ({ readonly, selectedSchema, dispatchSchemaUpdate }) => {
   const { properties, required } = selectedSchema;
   const requiredArray = required instanceof Array ? required : undefined;
 
@@ -55,14 +53,14 @@ export const SchemaPropertiesTable: VoidFunctionComponent<
           <th className={thClasses}>Property</th>
           <th className={thClasses}>Expected Type</th>
           <th className={thClasses}>Description</th>
+          <th className={thClasses}>schema.org equivalent</th>
           <th className={thClasses}>Array</th>
           <th className={thClasses}>Required</th>
-          <th className={thClasses}>Constraints</th>
-          <th className={thClasses}>Delete</th>
+          {!readonly && <th className={thClasses}>Delete</th>}
         </tr>
       </thead>
       <tbody>
-        {Object.entries(properties ?? {})
+        {Object.entries((properties ?? {}) as Record<string, JsonSchema>)
           ?.sort((a, b) => a[0].localeCompare(b[0]))
           .map(([name, propertySchema]) => {
             const isRequired =
@@ -72,7 +70,6 @@ export const SchemaPropertiesTable: VoidFunctionComponent<
                 dispatchSchemaUpdate={dispatchSchemaUpdate}
                 key={name}
                 name={name}
-                GoToSchemaElement={GoToSchemaElement}
                 property={propertySchema}
                 readonly={readonly}
                 required={isRequired}
@@ -82,10 +79,8 @@ export const SchemaPropertiesTable: VoidFunctionComponent<
         {!readonly ? (
           <tr className={trClasses}>
             <td className={tdClasses} colSpan={7}>
-              <div className={tw`text-uppercase font-bold mr-12 mb-1`}>
-                New property
-              </div>
-              <form onSubmit={onAddPropertyFormSubmit}>
+              <div className={tw`font-bold mt-4 mr-12 mb-1`}>New property</div>
+              <form onSubmit={onAddPropertyFormSubmit} className={tw`flex`}>
                 <TextInputOrDisplay
                   placeholder="newProperty"
                   readonly={false}
@@ -94,7 +89,14 @@ export const SchemaPropertiesTable: VoidFunctionComponent<
                   required
                 />
                 <br />
-                <Button type="submit">Create Property</Button>
+                <Button
+                  className={tw`ml-4`}
+                  type="submit"
+                  variant="primary"
+                  squared
+                >
+                  Create Property
+                </Button>
               </form>
             </td>
           </tr>

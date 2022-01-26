@@ -20,6 +20,7 @@
     "dev": "yarn workspace @blockprotocol/site dev",
     "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
     "dev:db": "yarn workspace @blockprotocol/site dev:db",
+    "postinstall": "patch-package",
     "prepare": "husky install"
   },
   "lint-staged": {
@@ -28,6 +29,9 @@
       "suppress-exit-code markdownlint --fix",
       "suppress-exit-code prettier --write"
     ]
+  },
+  "dependencies": {
+    "patch-package": "^6.4.7"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "4.29.0",

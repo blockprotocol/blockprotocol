@@ -6,7 +6,7 @@ import {
 } from "blockprotocol";
 import React, {
   createContext,
-  FormEvent,
+  ReactElement,
   useCallback,
   useEffect,
   useMemo,
@@ -17,39 +17,34 @@ import React, {
 import { tw } from "twind";
 import { debounce, get } from "lodash";
 
+import { Typography } from "@mui/material";
 import { SchemaPropertiesTable } from "./SchemaPropertiesTable";
-import { JsonSchema } from "../../../lib/json-utils";
+import { JsonSchema } from "../../../lib/jsonSchema";
 import { TextInputOrDisplay } from "./Inputs";
 import {
   schemaEditorReducer,
   SchemaEditorReducerAction,
 } from "./schemaEditorReducer";
-import { SubSchemaItem } from "./SubSchemaItem";
+// import { SubSchemaItem } from "./SubSchemaItem";
 import { Link } from "../../Link";
-import { Button } from "../../Button";
-
-export type SchemaSelectElementType = VoidFunctionComponent<{
-  schemaRef: string;
-}>;
+// import { Button } from "../../Button";
 
 export const SchemaOptionsContext = createContext<{
   availableEntityTypes: BlockProtocolEntityType[];
+  selectedSchema: JsonSchema;
   subSchemas: [string, JsonSchema][];
+  generateAbsoluteSchemaLink: ($ref: string) => ReactElement;
 } | null>(null);
 
 type JsonSchemaEditorProps = {
-  GoToSchemaElement: SchemaSelectElementType;
+  entityTypeId: string;
   schema: JsonSchema;
   subSchemaReference?: string;
-} & Pick<
-  BlockProtocolProps,
-  "aggregateEntityTypes" | "entityId" | "updateEntityTypes"
->;
+} & Pick<BlockProtocolProps, "aggregateEntityTypes" | "updateEntityTypes">;
 
 export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
   aggregateEntityTypes,
   entityTypeId,
-  GoToSchemaElement,
   schema: possiblyStaleDbSchema,
   subSchemaReference,
   updateEntityTypes,
@@ -84,7 +79,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
           );
         }
         return updateEntityTypes(...args);
-      }, 800),
+      }, 500),
     [updateEntityTypes],
   );
 
@@ -145,14 +140,66 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
     [dispatch, pathToSubSchema],
   );
 
-  const subSchemas = Object.entries(workingSchemaDraft.$defs ?? []);
+  // @todo handle subschemas properly
+  const subSchemas = Object.entries(
+    workingSchemaDraft.$defs ?? workingSchemaDraft.definitions ?? [],
+  );
 
-  const schemaOptions = useMemo(
-    () => ({
-      availableEntityTypes: availableEntityTypes ?? [],
-      subSchemas,
-    }),
-    [availableEntityTypes, subSchemas],
+  const schema$id = workingSchemaDraft.$id;
+
+  /**
+   * Generate a link for an absolute URI to a schema (or part of a schema), for a given value for $ref
+   */
+  const generateAbsoluteSchemaLink = useCallback(
+    ($ref) => {
+      const baseUrl = schema$id?.startsWith("http")
+        ? new URL(schema$id).origin
+        : undefined;
+
+      if (!baseUrl && ($ref.startsWith("#") || $ref.startsWith("/"))) {
+        throw new Error(
+          `Cannot resolve relative $ref '${$ref} as the schema has no absolute $id to resolve it against.`,
+        );
+      }
+
+      let schemaLinkPath = "";
+      /**
+       * @todo catch links to schemas served from outside blockprotocol.org, and instead of opening their off-site pages,
+       *    fetch them and load them into our viewer. Will need to update relative approaches too.
+       */
+      if ($ref.startsWith("#")) {
+        /**
+         * This is a relative link to a sub-schema of this same schema
+         * @see https://json-schema.org/understanding-json-schema/structuring.html#json-pointer
+         */
+        schemaLinkPath = schema$id + $ref;
+      } else if ($ref.startsWith("/")) {
+        /**
+         * This is a relative link to another schema to be resolved against the base URL of this schema.
+         * @see https://json-schema.org/understanding-json-schema/structuring.html#ref
+         */
+        schemaLinkPath = baseUrl + $ref;
+      } else if ($ref.startsWith("http")) {
+        schemaLinkPath = $ref;
+      } else {
+        /**
+         * This could be a property name for an object defined in the tree of the schema or a sub-schema within it.
+         * Really these should instead be defined under $defs and referenced as such, but they might exist.
+         */
+        schemaLinkPath = `${
+          schema$id + (subSchemaReference || "#")
+        }/properties/${$ref}`;
+      }
+
+      return (
+        <Link href={schemaLinkPath}>
+          <a>
+            <strong>{$ref.replace(/#\/\$defs\//g, "")}</strong>
+          </a>
+        </Link>
+      );
+    },
+    [schema$id, subSchemaReference],
   );
 
   /**
@@ -162,29 +209,43 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
     ? get(workingSchemaDraft, pathToSubSchema)
     : workingSchemaDraft;
 
-  const { title } = workingSchemaDraft;
+  const schemaOptions = useMemo(
+    () => ({
+      availableEntityTypes: availableEntityTypes ?? [],
+      generateAbsoluteSchemaLink,
+      selectedSchema,
+      subSchemas,
+    }),
+    [
+      availableEntityTypes,
+      generateAbsoluteSchemaLink,
+      selectedSchema,
+      subSchemas,
+    ],
+  );
+
   const { description } = selectedSchema;
 
   const readonly = !updateEntityTypes || !entityTypeId;
 
-  const addSubSchema = (newSubSchemaName: string) =>
-    dispatchSchemaUpdate({
-      type: "addSubSchema",
-      payload: { newSubSchemaName },
-    });
+  // const addSubSchema = (newSubSchemaName: string) =>
+  //   dispatchSchemaUpdate({
+  //     type: "addSubSchema",
+  //     payload: { newSubSchemaName },
+  //   });
+  //
+  // const [newSubSchemaName, setNewSubSchemaName] = useState("");
 
-  const [newSubSchemaName, setNewSubSchemaName] = useState("");
-
-  const onNewSubSchemaFormSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!newSubSchemaName.trim()) {
-      return;
-    }
-
-    addSubSchema(newSubSchemaName);
-    setNewSubSchemaName("");
-  };
+  // const onNewSubSchemaFormSubmit = (event: FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault();
+  //
+  //   if (!newSubSchemaName.trim()) {
+  //     return;
+  //   }
+  //
+  //   addSubSchema(newSubSchemaName);
+  //   setNewSubSchemaName("");
+  // };
 
   const updateSchemaDescription = (newSchemaDescription: string) => {
     return dispatchSchemaUpdate({
@@ -195,33 +256,28 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
 
   return (
     <div>
-      <header className={tw`mb-12`}>
-        <h1>
-          <strong>Schema: {title ?? "No title."}</strong>
-        </h1>
-      </header>
-
       <section>
         <div className={tw`flex items-center`}>
-          <h2>
-            Properties of{" "}
-            <Link href={workingSchemaDraft.$id ?? "#"}>{title}</Link>
-          </h2>
           {subSchemaReference ? (
             <h3 className={tw`mb-7 ml-2`}>{` > ${subSchemaReference
               .split("/")
               .pop()}`}</h3>
           ) : null}
         </div>
-        <div className={tw`mb-4`}>
-          <TextInputOrDisplay
-            placeholder="Describe your schema"
-            readonly={readonly}
-            updateText={updateSchemaDescription}
-            value={description ?? ""}
-            updateOnBlur
-          />
-        </div>
+        {!readonly && description != null && (
+          <div className={tw`mb-8`}>
+            <Typography variant="bpSmallCopy">
+              <strong>Schema description</strong>
+            </Typography>
+            <TextInputOrDisplay
+              placeholder="Describe your schema"
+              readonly={readonly}
+              updateText={updateSchemaDescription}
+              value={description ?? ""}
+              updateOnBlur
+            />
+          </div>
+        )}
         <div>
           {!availableEntityTypes ? (
             "Loading..."
@@ -229,7 +285,6 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
             <SchemaOptionsContext.Provider value={schemaOptions}>
               <SchemaPropertiesTable
                 selectedSchema={selectedSchema}
-                GoToSchemaElement={GoToSchemaElement}
                 readonly={readonly}
                 dispatchSchemaUpdate={dispatchSchemaUpdate}
               />
@@ -238,13 +293,13 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
         </div>
       </section>
 
-      {updateEntityTypes || subSchemas.length > 0 ? (
+      {/**
+       {updateEntityTypes || subSchemas.length > 0 ? (
         <section className={tw`mt-8`}>
           <h2>Sub-schemas in {title}</h2>
           {subSchemas.map((subSchema) => (
             <SubSchemaItem
               dispatchSchemaUpdate={dispatchSchemaUpdate}
-              GoToSchemaElement={GoToSchemaElement}
               key={subSchema[0]}
               subSchema={subSchema}
               subSchemaReference={subSchemaReference}
@@ -265,12 +320,15 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
                   value={newSubSchemaName}
                 />
                 <br />
-                <Button type="submit">Create Sub-schema</Button>
+                <Button type="submit" squared>
+                  Create Sub-schema
+                </Button>
               </form>
             </div>
           ) : null}
         </section>
       ) : null}
+       * */}
     </div>
   );
 };

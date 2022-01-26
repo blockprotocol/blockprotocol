@@ -2,7 +2,7 @@ import produce from "immer";
 import { Schema } from "jsonschema";
 import { get } from "lodash";
 import { Reducer } from "react";
-import { JsonSchema } from "../../../lib/json-utils";
+import { JsonSchema } from "../../../lib/jsonSchema";
 
 type Action<S, T> = {
   type: S;
@@ -19,6 +19,10 @@ export type SchemaEditorReducerAction =
   | Action<
       "updatePropertyDescription",
       { propertyName: string; newPropertyDescription: string }
+    >
+  | Action<
+      "updatePropertySchemaOrgLink",
+      { propertyName: string; newSchemaOrgUri: string }
     >
   | Action<"updateSchemaDescription", { newSchemaDescription: string }>
   | Action<
@@ -178,6 +182,7 @@ export const schemaEditorReducer: Reducer<
         schemaToEdit.$defs ??= {};
         schemaToEdit.$defs[action.payload.newSubSchemaName] = {
           type: "object",
+          required: [],
         };
       });
     }
@@ -292,6 +297,44 @@ export const schemaEditorReducer: Reducer<
         const schemaToEdit = selectSubSchema(draftRootSchema, pathToSubSchema);
         schemaToEdit.properties![propertyName].description =
           newPropertyDescription;
+      });
+    }
+
+    /** @see https://www.w3.org/2019/wot/json-schema#defining-a-json-ld-context-for-data-instances */
+    case "updatePropertySchemaOrgLink": {
+      const { propertyName, newSchemaOrgUri } = action.payload;
+
+      if (!subSchemaToCheck.properties?.[propertyName]) {
+        throw new Error(`Property '${propertyName}' not found.`);
+      }
+
+      return produce(schemaState, (draftRootSchema) => {
+        const schemaToEdit = selectSubSchema(draftRootSchema, pathToSubSchema);
+        schemaToEdit["@context"] ??= {
+          jsonld: "http://www.w3.org/ns/json-ld#",
+          "jsonld:iri": { "@type": "@id" },
+        };
+
+        schemaToEdit["jsonld:context"] ??= { "jsonld:definition": [] };
+
+        const schemaOrgLinks =
+          schemaToEdit["jsonld:context"]["jsonld:definition"];
+
+        const existingLink = schemaOrgLinks.find(
+          (link) => link["jsonld:term"] === propertyName,
+        );
+
+        if (existingLink) {
+          existingLink["jsonld:iri"] = newSchemaOrgUri;
+        } else {
+          schemaOrgLinks.push({
+            "@type": "jsonld:TermDefinition",
+            "jsonld:term": propertyName,
+            "jsonld:iri": newSchemaOrgUri,
+          });
+        }
+
+        return schemaToEdit;
       });
     }
 

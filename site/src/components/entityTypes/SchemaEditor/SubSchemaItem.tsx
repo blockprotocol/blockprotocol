@@ -1,27 +1,30 @@
 import { useRouter } from "next/router";
-import { useState, VoidFunctionComponent } from "react";
+import { useContext, useState, VoidFunctionComponent } from "react";
 import { tw } from "twind";
 
-import { JsonSchema } from "../../../lib/json-utils";
+import { JsonSchema } from "../../../lib/jsonSchema";
 import { ConfirmationAlert } from "../../ConfirmationAlert";
 import { Button } from "../../Button";
-import { SchemaSelectElementType } from "./SchemaEditor";
 import {
   getSubschemaDependentProperties,
   SchemaEditorReducerAction,
 } from "./schemaEditorReducer";
+import { SchemaOptionsContext } from "./SchemaEditor";
 
 type SubSchemaItemProps = {
   dispatchSchemaUpdate: (action: SchemaEditorReducerAction) => void;
-  GoToSchemaElement: SchemaSelectElementType;
   subSchema: [string, JsonSchema];
   subSchemaReference: string | undefined;
   workingSchemaDraft: JsonSchema;
 };
 
+type AlertState = {
+  open: boolean;
+  subSchemaUsedInProperties: Array<string>;
+};
+
 export const SubSchemaItem: VoidFunctionComponent<SubSchemaItemProps> = ({
   dispatchSchemaUpdate,
-  GoToSchemaElement,
   subSchema,
   subSchemaReference,
   workingSchemaDraft,
@@ -31,15 +34,14 @@ export const SubSchemaItem: VoidFunctionComponent<SubSchemaItemProps> = ({
 
   const subSchemaName = subSchema[0];
 
-  type AlertState = {
-    open: boolean;
-    subSchemaUsedInProperties: Array<string>;
-  };
-
   const [alertState, setAlertState] = useState<AlertState>({
     open: false,
     subSchemaUsedInProperties: [],
   });
+
+  const { generateAbsoluteSchemaLink } = useContext(SchemaOptionsContext) ?? {};
+
+  const SchemaLink = generateAbsoluteSchemaLink?.(`#/$defs/${subSchemaName}`);
 
   const updateAlertState = (newAlertState: Partial<AlertState>) => {
     setAlertState((oldAlertState) => ({
@@ -97,7 +99,7 @@ export const SubSchemaItem: VoidFunctionComponent<SubSchemaItemProps> = ({
 
   return (
     <div className={tw`mb-4`} key={subSchemaName}>
-      <GoToSchemaElement schemaRef={`#/$defs/${subSchemaName}`} />
+      {SchemaLink}
       <Button
         onClick={() => deleteSubschemaItem(subSchemaName)}
         color="warning"

@@ -1,5 +1,6 @@
-import { useEffect, useState, VoidFunctionComponent } from "react";
-import { Checkbox } from "../../forms/Checkbox";
+import Checkbox from "@mui/material/Checkbox";
+import { ChangeEvent, useEffect, useState, VoidFunctionComponent } from "react";
+
 import { TextField } from "../../TextField";
 
 export const TextInputOrDisplay: VoidFunctionComponent<{
@@ -31,9 +32,9 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
 
   let textChangeEvents: {
     onBlur?: () => void;
-    onChangeText: (value: string) => void;
+    onChange: (event: ChangeEvent<HTMLInputElement>) => void;
   } = {
-    onChangeText: updateText,
+    onChange: (evt) => updateText(evt.target.value),
   };
 
   if (updateOnBlur) {
@@ -44,16 +45,17 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
           setDraftText("");
         }
       },
-      onChangeText: setDraftText,
+      onChange: (evt) => setDraftText(evt.target.value),
     };
   }
 
   return (
     <TextField
-      placeholder={placeholder}
-      value={draftText}
-      required={required}
       {...textChangeEvents}
+      placeholder={placeholder}
+      required={required}
+      value={draftText}
+      variant="outlined"
     />
   );
 };
@@ -66,5 +68,7 @@ export const ToggleInputOrDisplay: VoidFunctionComponent<{
   if (readonly) {
     return <span>{checked ? "Yes" : "No"}</span>;
   }
-  return <Checkbox checked={checked} onChangeChecked={onChange} />;
+  return (
+    <Checkbox checked={checked} onChange={(_, value) => onChange(value)} />
+  );
 };

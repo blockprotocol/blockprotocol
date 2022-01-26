@@ -1,7 +1,25 @@
-import { JSONObject, JSONValue } from "blockprotocol";
+import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import Ajv2019 from "ajv/dist/2019";
+import { Schema } from "jsonschema";
 
 import { EntityType } from "./model/entityType.model";
+
+// @todo patch ajv schema type and remove additional jsonschema dep
+export type JsonSchema = Schema & {
+  $defs?: Record<string, JsonSchema>;
+  /** @see https://www.w3.org/2019/wot/json-schema#defining-a-json-ld-context-for-data-instances */
+  "@context"?: {
+    jsonld: "http://www.w3.org/ns/json-ld#";
+    "jsonld:iri": { "@type": "@id" };
+  };
+  "jsonld:context"?: {
+    "jsonld:definition": {
+      "@type": "jsonld:TermDefinition";
+      "jsonld:term": string;
+      "jsonld:iri": string;
+    }[];
+  };
+};
 
 /**
  * When compiling a schema AJV tries to resolve $refs to other schemas.
@@ -23,6 +41,23 @@ ajv.addKeyword({
   keyword: "author",
   schemaType: "string",
 });
+ajv.addKeyword({
+  keyword: "entityTypeId",
+  schemaType: "string",
+});
+/**
+ * ajv has been patched as it disallows '@context' as a key (patch-package patches)
+ * @todo figure out a proper way of dealing with this, might be using the wrong API
+ *   only need this keyword at the root, not on properties
+ */
+ajv.addKeyword({
+  keyword: "@context",
+  schemaType: "object",
+});
+ajv.addKeyword({
+  keyword: "jsonld:context",
+  schemaType: "object",
+});
 
 const jsonSchemaVersion = "https://json-schema.org/draft/2019-09/schema";
 
@@ -31,14 +66,6 @@ const jsonSchemaVersion = "https://json-schema.org/draft/2019-09/schema";
  * */
 const generateSchema$id = (entityTypeId: string) =>
   `${EntityType.DEFAULT_$ID_ORIGIN}/types/${entityTypeId}`;
-
-export type JSONSchema = {
-  $id: string;
-  $schema: string;
-  author: string;
-  title: string;
-  [key: string]: JSONValue;
-};
 
 /**
  * Create a JSON schema
@@ -51,7 +78,7 @@ export const validateAndCompleteJsonSchema = async (params: {
   author: string;
   entityTypeId: string;
   maybeSchema: unknown;
-}): Promise<JSONSchema> => {
+}): Promise<BlockProtocolEntityType> => {
   const { author, entityTypeId, maybeSchema } = params;
 
   if (
@@ -91,8 +118,10 @@ export const validateAndCompleteJsonSchema = async (params: {
     ...parsedSchema,
     author,
     title: parsedSchema.title as string,
+    type: typeof parsedSchema.type === "string" ? parsedSchema.type : "object",
     $schema: jsonSchemaVersion,
     $id: generateSchema$id(entityTypeId),
+    entityTypeId,
   };
 
   try {

@@ -1,16 +1,15 @@
-import { VoidFunctionComponent } from "react";
+import { useContext, VoidFunctionComponent } from "react";
 
 import { tdClasses, trClasses } from "./SchemaPropertiesTable";
 import { SchemaPropertyTypeList } from "./SchemaPropertyTypeList";
-import { SchemaSelectElementType } from "./SchemaEditor";
 import { ToggleInputOrDisplay, TextInputOrDisplay } from "./Inputs";
-import { JsonSchema } from "../../../lib/json-utils";
+import { JsonSchema } from "../../../lib/jsonSchema";
 import { SchemaEditorDispatcher } from "./schemaEditorReducer";
 import { Button } from "../../Button";
+import { SchemaOptionsContext } from "./SchemaEditor";
 
 type SchemaPropertyRowProps = {
   dispatchSchemaUpdate: SchemaEditorDispatcher;
-  GoToSchemaElement: SchemaSelectElementType;
   name: string;
   property: JsonSchema;
   readonly: boolean;
@@ -19,14 +18,9 @@ type SchemaPropertyRowProps = {
 
 export const SchemaPropertyRow: VoidFunctionComponent<
   SchemaPropertyRowProps
-> = ({
-  dispatchSchemaUpdate,
-  GoToSchemaElement,
-  name,
-  property,
-  readonly,
-  required,
-}) => {
+> = ({ dispatchSchemaUpdate, name, property, readonly, required }) => {
+  const { selectedSchema } = useContext(SchemaOptionsContext) ?? {};
+
   const isArray = property.type === "array";
 
   const togglePropertyIsArray = () =>
@@ -45,6 +39,12 @@ export const SchemaPropertyRow: VoidFunctionComponent<
     dispatchSchemaUpdate({
       type: "updatePropertyDescription",
       payload: { propertyName: name, newPropertyDescription: newDescription },
+    });
+
+  const updatePropertySchemaOrgLink = (newSchemaOrgUri: string) =>
+    dispatchSchemaUpdate({
+      type: "updatePropertySchemaOrgLink",
+      payload: { propertyName: name, newSchemaOrgUri },
     });
 
   const updatePropertyName = (newName: string) =>
@@ -68,16 +68,15 @@ export const SchemaPropertyRow: VoidFunctionComponent<
   /**
    * @todo deal with tuples and other array keywords, e.g. preferredItems
    */
-  const {
-    $ref,
-    type,
-    properties,
-    // we want description from [property], never items, but need it excluded from the ...rest
-    description: _,
-    ...constraints
-  } = isArray ? (property.items as JsonSchema) : property;
+  const { $ref, type, properties } = isArray
+    ? (property.items as JsonSchema)
+    : property;
 
   const { description } = property;
+
+  const schemaOrgLink = selectedSchema?.["jsonld:context"]?.[
+    "jsonld:definition"
+  ].find((def) => def["jsonld:term"] === name)?.["jsonld:iri"];
 
   return (
     <tr className={trClasses}>
@@ -94,7 +93,6 @@ export const SchemaPropertyRow: VoidFunctionComponent<
         <SchemaPropertyTypeList
           hasSubSchema={!!properties}
           propertyName={name}
-          GoToSchemaElement={GoToSchemaElement}
           readonly={readonly}
           $ref={$ref}
           type={type}
@@ -107,6 +105,15 @@ export const SchemaPropertyRow: VoidFunctionComponent<
           readonly={readonly}
           updateText={updatePropertyDescription}
           value={description ?? ""}
+          updateOnBlur
+        />
+      </td>
+      <td className={tdClasses}>
+        <TextInputOrDisplay
+          placeholder="URI to schema.org equivalent property"
+          readonly={readonly}
+          updateText={updatePropertySchemaOrgLink}
+          value={schemaOrgLink ?? ""}
           updateOnBlur
         />
       </td>
@@ -124,19 +131,18 @@ export const SchemaPropertyRow: VoidFunctionComponent<
           readonly={readonly}
         />
       </td>
-      <td className={tdClasses}>
-        {/* @todo constraints may appear on any in a list of types, need to display this multiple times */}
-        {Object.entries(constraints).map(([typeName, value]) => (
-          <div key={typeName}>
-            {typeName}: {value}
-          </div>
-        ))}
-      </td>
-      <td className={tdClasses}>
-        <Button onClick={deleteProperty} color="warning">
-          Delete
-        </Button>
-      </td>
+      {!readonly && (
+        <td className={tdClasses}>
+          <Button
+            onClick={deleteProperty}
+            color="danger"
+            variant="secondary"
+            squared
+          >
+            Delete
+          </Button>
+        </td>
+      )}
     </tr>
   );
 };

@@ -7,11 +7,11 @@ export type ApiBlocksByUserResponseQueryParams = {
   shortname: string;
 };
 
-export type ApiBlocksByUserResponseResponse = {
+export type ApiBlocksByUserResponse = {
   blocks: ExpandedBlockMetadata[];
 };
 
-export default createBaseHandler<null, ApiBlocksByUserResponseResponse>().get(
+export default createBaseHandler<null, ApiBlocksByUserResponse>().get(
   async (req, res) => {
     const { db, query } = req;
     const { shortname } = query as ApiBlocksByUserResponseQueryParams;
