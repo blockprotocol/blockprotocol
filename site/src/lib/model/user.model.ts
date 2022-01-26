@@ -16,6 +16,7 @@ import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 import { sendMail } from "../awsSes";
 import { EntityType } from "./entityType.model";
 import blocksData from "../../../blocks-data.json";
+import { ExpandedBlockMetadata } from "../blocks";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
@@ -414,7 +415,7 @@ export class User {
 
   blocks() {
     return blocksData.filter(
-      (block) => block && block.author === this.shortname,
+      (block: ExpandedBlockMetadata) => block.author === this.shortname,
     );
   }
 
