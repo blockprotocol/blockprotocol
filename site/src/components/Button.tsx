@@ -72,10 +72,10 @@ const loadingAnimation = (
   </Box>
 );
 
-type ButtonProps = {
+export type ButtonProps = {
   squared?: boolean;
   loading?: boolean;
-} & MuiButtonProps;
+} & MuiButtonProps & { rel?: string; target?: string }; // MUI button renders <a /> when href is provided, but typings miss rel and target
 
 // probably rename to BPButton?
 // @todo implement loading
