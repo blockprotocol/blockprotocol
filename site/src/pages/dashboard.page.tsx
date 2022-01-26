@@ -1,15 +1,15 @@
 import { Box, Container, Typography } from "@mui/material";
-import { useContext } from "react";
-import { NextPage } from "next";
 import Head from "next/head";
-import { useRouter } from "next/router";
 
 import {
   DashboardCard,
   DashboardCardProps,
 } from "../components/pages/dashboard/DashboardCard";
-import UserContext from "../context/UserContext";
 import { TopNavigationTabs } from "../components/pages/dashboard/TopNavigationTabs";
+import {
+  AuthWallPageContent,
+  withAuthWall,
+} from "../components/pages/authWall";
 
 const dashboardCardData: DashboardCardProps[] = [
   {
@@ -47,16 +47,7 @@ const dashboardCardData: DashboardCardProps[] = [
   },
 ];
 
-const DashboardPage: NextPage = () => {
-  const router = useRouter();
-
-  const { user } = useContext(UserContext);
-
-  if (process.browser && !user) {
-    void router.push("/");
-    return null;
-  }
-
+const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName } = user ?? {};
 
   return (
@@ -133,4 +124,4 @@ const DashboardPage: NextPage = () => {
   );
 };
 
-export default DashboardPage;
+export default withAuthWall(Dashboard);
