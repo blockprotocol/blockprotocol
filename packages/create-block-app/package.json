@@ -1,3 +1,30 @@
 {
-  "name": "create-block-app"
+  "name": "create-block-app",
+  "version": "0.0.2",
+  "description": "Create new https://blockprotocol.org blocks",
+  "keywords": [
+    "blockprotocol",
+    "blocks"
+  ],
+  "bugs": {
+    "url": "https://github.com/blockprotocol/blockprotocol/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "packages/create-block-app"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "bin": "create-block-app.js",
+  "scripts": {
+    "lint:tsc": "echo \"Skipping: TypeScript not configured\""
+  },
+  "dependencies": {
+    "decompress": "4.2.1",
+    "tmp": "0.2.1"
+  }
 }
