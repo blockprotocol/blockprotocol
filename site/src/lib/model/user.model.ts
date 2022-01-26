@@ -413,7 +413,9 @@ export class User {
   }
 
   blocks() {
-    return blocksData.filter((block) => block.author === this.shortname);
+    return blocksData.filter(
+      (block) => block && block.author === this.shortname,
+    );
   }
 
   toRef(): DBRef {
