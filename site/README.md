@@ -96,7 +96,9 @@ results with that cache and rebuilds only what has changed to speed up builds.
 
 ## API Routes
 
-### `POST /api/signup`
+### Unauthenticated (or via code in request body)
+
+#### `POST /api/signup`
 
 Request Body:
 
@@ -107,7 +109,7 @@ Response Body:
 - `userId`: the id of the created BP user
 - `emailVerificationCodeId`: the id of the email verification code
 
-### `POST /api/verifyEmail`
+#### `POST /api/verifyEmail`
 
 Request Body:
 
@@ -119,115 +121,7 @@ Response Body:
 
 - `user`: the updated BP user
 
-### `GET /api/isShortnameTaken`
-
-Request Query:
-
-- `shortname`: the shortname that may or may not already be associated with another BP account
-
-Response: `true` or `false`
-
-### `GET /api/users/[shortname]`
-
-Route Parameter:
-
-- `shortname`: the shortname of the user to retrieve
-
-Response:
-
-- `user`: the user
-
-### `GET /api/users/[shortname]/blocks`
-
-Route Parameters
-
-- `shortname`: the shortname of the user to retrieve blocks for
-
-Response:
-
-- `blocks` An array of metadata objects for the blocks belonging to the user
-
-### `GET /api/users/[shortname]/types`
-
-Route Parameters
-
-- `shortname`: the shortname of the user to retrieve types for
-
-Response:
-
-- `entityTypes` An array of entity types belonging to the user
-
-### `GET /api/users/[shortname]/types/[title]`
-
-Route Parameters
-
-- `shortname`: the shortname of the user to retrieve a type for
-- `title`: the title of the type to retrieve
-
-Response:
-
-- `entityType` the entity type with the provided title belonging to the specified user
-
-### `GET /api/types/[entityTypeId]`
-
-Route Parameters
-
-- `entityTypeId`: the unique id of the entity type
-
-Response:
-
-- `entityType` the entity type with the specified id
-
-**Authentication required**
-
-### `POST /api/types/create` [requires cookie authentication]
-
-Creates an entity type belonging to the requesting user.
-
-Request Body
-
-- `schema`: a valid JSON schema object. Must have a `title` property, unique to the requesting user.
-
-Response:
-
-- `entityType` the created entity type
-
-### `PUT /api/types/[id]/update` [requires cookie authentication]
-
-Updates an entity type belonging to the requesting user.
-
-Request Body
-
-- `schema`: a valid JSON schema object to overwrite the existing one.
-
-Response:
-
-- `entityType` the updated entity type
-
-### `POST /api/completeSignup` [requires cookie authentication]
-
-Request Body:
-
-- `shortname`: the shortname to associate with the BP account
-- `preferredName`: the preferred name of the user associated with the BP account
-
-Response Body:
-
-- `user`: the updated BP user
-
-### `POST /api/sendLoginCode` [requires cookie authentication]
-
-Sends a login code to an existing BP user's email.
-
-- Request Body:
-
-  - `email`: the email address associated with the BP user
-
-- Response Body:
-  - `userId`: the id of the BP user
-  - `loginCodeId`: the id of the login code sent to the user (required for `/api/loginWithLoginCode`)
-
-### `POST /api/loginWithLoginCode`
+#### `POST /api/loginWithLoginCode`
 
 Logs in a user using a provide login code.
 
@@ -240,21 +134,129 @@ Logs in a user using a provide login code.
 - Request Response:
   - `user`: the user that is now authenticated with the API
 
-### `GET /api/me` [requires cookie authentication]
+#### `GET /api/isShortnameTaken`
+
+Request Query:
+
+- `shortname`: the shortname that may or may not already be associated with another BP account
+
+Response: `true` or `false`
+
+#### `GET /api/users/[shortname]`
+
+Route Parameter:
+
+- `shortname`: the shortname of the user to retrieve
+
+Response:
+
+- `user`: the user
+
+#### `GET /api/users/[shortname]/blocks`
+
+Route Parameters
+
+- `shortname`: the shortname of the user to retrieve blocks for
+
+Response:
+
+- `blocks` An array of metadata objects for the blocks belonging to the user
+
+#### `GET /api/users/[shortname]/types`
+
+Route Parameters
+
+- `shortname`: the shortname of the user to retrieve types for
+
+Response:
+
+- `entityTypes` An array of entity types belonging to the user
+
+#### `GET /api/users/[shortname]/types/[title]`
+
+Route Parameters
+
+- `shortname`: the shortname of the user to retrieve a type for
+- `title`: the title of the type to retrieve
+
+Response:
+
+- `entityType` the entity type with the provided title belonging to the specified user
+
+#### `GET /api/types/[entityTypeId]`
+
+Route Parameters
+
+- `entityTypeId`: the unique id of the entity type
+
+Response:
+
+- `entityType` the entity type with the specified id
+
+### Cookie authentication required
+
+#### `POST /api/types/create` [requires cookie authentication]
+
+Creates an entity type belonging to the requesting user.
+
+Request Body
+
+- `schema`: a valid JSON schema object. Must have a `title` property, unique to the requesting user.
+
+Response:
+
+- `entityType` the created entity type
+
+#### `PUT /api/types/[id]/update` [requires cookie authentication]
+
+Updates an entity type belonging to the requesting user.
+
+Request Body
+
+- `schema`: a valid JSON schema object to overwrite the existing one.
+
+Response:
+
+- `entityType` the updated entity type
+
+#### `POST /api/completeSignup` [requires cookie authentication]
+
+Request Body:
+
+- `shortname`: the shortname to associate with the BP account
+- `preferredName`: the preferred name of the user associated with the BP account
+
+Response Body:
+
+- `user`: the updated BP user
+
+#### `POST /api/sendLoginCode` [requires cookie authentication]
+
+Sends a login code to an existing BP user's email.
+
+- Request Body:
+
+  - `email`: the email address associated with the BP user
+
+- Response Body:
+  - `userId`: the id of the BP user
+  - `loginCodeId`: the id of the login code sent to the user (required for `/api/loginWithLoginCode`)
+
+#### `GET /api/me` [requires cookie authentication]
 
 Retrieves the user object of the currently logged in user.
 
 - Request Response:
   - `user`: the user currently authenticated with the API
 
-### `GET /api/me/apiKeys` [requires cookie authentication]
+#### `GET /api/me/apiKeys` [requires cookie authentication]
 
 Retrieves metadata on the API keys associated with the authenticated user.
 
 - Request Response:
   - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
 
-### `POST /api/me/generateApiKey` [requires cookie authentication]
+#### `POST /api/me/generateApiKey` [requires cookie authentication]
 
 Generates a new API key for the authenticated user, and revokes any others.
 
@@ -265,17 +267,17 @@ Generates a new API key for the authenticated user, and revokes any others.
 - Request Response:
   - `apiKey`: the key itself, a string.
 
-### `POST /api/logout` [requires cookie authentication]
+#### `POST /api/logout` [requires cookie authentication]
 
 Logs out the currently authenticated user.
 
 - Request Response: `SUCCESS`
 
-**API key required**
+### API key required
 
 The following routes require a valid API key sent in an `x-api-key` header:
 
-### `GET /api/blocks` [requires API key authentication]
+#### `GET /api/blocks` [requires API key authentication]
 
 - Request Params
 
