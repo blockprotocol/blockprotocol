@@ -43,7 +43,7 @@ export default createAuthenticatedHandler<
   } catch (err) {
     return res.status(400).json(
       formatErrors({
-        msg: err.message,
+        msg: err instanceof Error ? err.message : "unknown error",
       }),
     );
   }

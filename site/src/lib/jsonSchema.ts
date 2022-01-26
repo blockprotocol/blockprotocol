@@ -68,7 +68,11 @@ export const validateAndCompleteJsonSchema = async (params: {
         ? JSON.parse(maybeSchema)
         : JSON.parse(JSON.stringify(maybeSchema));
   } catch (err) {
-    throw new Error(`Could not parse schema: ${err.message}`);
+    throw new Error(
+      `Could not parse schema: ${
+        err instanceof Error ? err.message : "unknown error"
+      }`,
+    );
   }
 
   const { title } = parsedSchema;
@@ -94,7 +98,11 @@ export const validateAndCompleteJsonSchema = async (params: {
   try {
     await ajv.compileAsync(schema);
   } catch (err) {
-    throw new Error(`Could not compile schema: ${err.message}`);
+    throw new Error(
+      `Could not compile schema: ${
+        err instanceof Error ? err.message : "unknown error"
+      }`,
+    );
   }
 
   return schema;

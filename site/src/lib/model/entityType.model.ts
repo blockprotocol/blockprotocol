@@ -104,7 +104,11 @@ export class EntityType {
         user: user.toRef(),
       });
     } catch (err) {
-      throw new Error(`Invalid schema: ${err.message}`);
+      throw new Error(
+        `Invalid schema: ${
+          err instanceof Error ? err.message : "unknown error"
+        }`,
+      );
     }
 
     const now = new Date();
@@ -186,7 +190,11 @@ export class EntityType {
         user: this.user,
       });
     } catch (err) {
-      throw new Error(`Could not compile JSON Schema: ${err.message}`);
+      throw new Error(
+        `Could not compile JSON Schema: ${
+          err instanceof Error ? err.message : "unknown error"
+        }`,
+      );
     }
 
     const { value: updatedType } = await db
