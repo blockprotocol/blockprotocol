@@ -36,7 +36,7 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --open --config dev/webpack.config.js"
   },
   "dependencies": {
-    "blockprotocol": "0.0.7",
+    "blockprotocol": "0.0.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
