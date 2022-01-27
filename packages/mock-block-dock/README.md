@@ -1,4 +1,4 @@
-# Mock Block Embedder
+# Mock Block Dock
 
 A component which provides mocks for testing [Block Protocol](https://blockprotocol.org) blocks.
 
