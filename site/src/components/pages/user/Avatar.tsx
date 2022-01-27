@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
+import { Box, Typography, BoxProps } from "@mui/material";
+import React, { VFC } from "react";
 
 const getInitial = (name: string) => {
   if (name.length > 0) {
@@ -8,7 +8,16 @@ const getInitial = (name: string) => {
   return "U";
 };
 
-export const Avatar = ({ size = 250, name = "A", sx }) => {
+type AvatarProps = {
+  size: number;
+  name?: string;
+} & BoxProps;
+
+export const Avatar: VFC<AvatarProps> = ({
+  size = 250,
+  name = "A",
+  ...boxProps
+}) => {
   return (
     <Box
       sx={{
@@ -19,7 +28,7 @@ export const Avatar = ({ size = 250, name = "A", sx }) => {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "6px",
-        ...sx,
+        ...boxProps.sx,
       }}
     >
       <Typography
