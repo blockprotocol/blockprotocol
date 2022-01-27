@@ -79,7 +79,9 @@ export const AccountDropdown: VFC = () => {
         <Divider />
         <Box>
           <Link href="/dashboard" onClick={() => setOpen(false)}>
-            <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 1.5) }}>
+            <ListItemButton
+              sx={{ padding: (theme) => theme.spacing(1, 2), mt: 0.5 }}
+            >
               <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
                 Dashboard
               </Typography>
@@ -100,7 +102,7 @@ export const AccountDropdown: VFC = () => {
             </ListItemButton>
           </Link>
           <ListItemButton
-            sx={{ padding: (theme) => theme.spacing(1.5, 2) }}
+            sx={{ padding: (theme) => theme.spacing(1, 2), mb: 0.5 }}
             onClick={handleLogout}
           >
             <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>

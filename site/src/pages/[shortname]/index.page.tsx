@@ -202,7 +202,10 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                             borderRadius: "30px",
                             px: 1,
                             py: 0.25,
-                            backgroundColor: ({ palette }) => palette.gray[20],
+                            backgroundColor: ({ palette }) =>
+                              value === activeTab
+                                ? palette.purple[100]
+                                : palette.gray[20],
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
@@ -211,7 +214,10 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                           <Typography
                             variant="bpMicroCopy"
                             sx={{
-                              color: ({ palette }) => palette.gray[60],
+                              color: ({ palette }) =>
+                                value === activeTab
+                                  ? palette.purple[600]
+                                  : palette.gray[60],
                             }}
                           >
                             {value === "blocks"
@@ -290,6 +296,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                   lastUpdated,
                   version,
                   name,
+                  packagePath,
                 }) => (
                   <ListViewCard
                     key={name}
@@ -298,6 +305,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                     title={displayName}
                     description={description}
                     lastUpdated={lastUpdated}
+                    url={`/${packagePath}`}
                   />
                 ),
               )}
@@ -310,6 +318,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                   title={schema.title}
                   description={schema.description || ""}
                   lastUpdated={updatedAt as unknown as string}
+                  url={schema.$id}
                 />
               ))}
             </TabPanel>
