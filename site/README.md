@@ -19,7 +19,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     - `MONGODB_DB_NAME`: the name of the database (for example `local`)
     - `MONGODB_USERNAME`: the database username
     - `MONGODB_PASSWORD`: the database password
-    - `FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)
+    - `NEXT_PUBLIC_FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)
 
     Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
