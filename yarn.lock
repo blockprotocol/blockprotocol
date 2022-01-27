@@ -3422,13 +3422,6 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
-blockprotocol@0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/blockprotocol/-/blockprotocol-0.0.5.tgz#3b3b7dcfd2b5c6513f0b10a6943d1a827f58367a"
-  integrity sha512-X1pSDhBWnGQV9k+w6V6wIVlmEBBdTmupZLhqy/7fCVWAGItgBA3DJMdJZIYBwWPNL7ZPZ7ij66NcrhVW7kq6qA==
-  dependencies:
-    "@types/react" "^17.0.38"
-
 bluebird@^3.5.1, bluebird@^3.5.5:
   version "3.7.2"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
