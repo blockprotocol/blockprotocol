@@ -1,18 +1,14 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
 import { Validator } from "jsonschema";
 import { useMemo, useState, VoidFunctionComponent } from "react";
+import MockBlockEmbedder from "mock-block-embedder";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
-import {
-  BlockExports,
-  BlockSchema,
-  dummyUploadFile,
-  getEmbedBlock,
-} from "./HubUtils";
+import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
 import { TabPanel } from "./TabPanel";
 
 type BlockDataContainerProps = {
@@ -42,7 +38,6 @@ export const BlockDataContainer: VoidFunctionComponent<
       result = JSON.parse(text);
       result.accountId = "test-account-id";
       result.entityId = "test-entity-id";
-      result.uploadFile = dummyUploadFile;
       result.getEmbedBlock = getEmbedBlock;
     } catch (err) {
       return [result, [(err as Error).message]];
@@ -147,7 +142,11 @@ export const BlockDataContainer: VoidFunctionComponent<
                   overflow: "auto",
                 }}
               >
-                {blockModule && <blockModule.default {...props} />}
+                {blockModule && (
+                  <MockBlockEmbedder>
+                    <blockModule.default {...props} />
+                  </MockBlockEmbedder>
+                )}
               </Box>
             </TabPanel>
           </Box>

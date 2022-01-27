@@ -175,6 +175,12 @@ module.exports = {
       },
     },
     {
+      files: ["packages/mock-block-embedder/**"],
+      parserOptions: {
+        project: ["packages/mock-block-embedder/tsconfig.json"],
+      },
+    },
+    {
       files: ["site/**"],
       rules: {
         "no-restricted-imports": [
