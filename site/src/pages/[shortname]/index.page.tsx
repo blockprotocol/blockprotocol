@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useMemo } from "react";
 import {
   Box,
   Container,
@@ -18,7 +18,7 @@ import { apiClient } from "../../lib/apiClient";
 import { EntityType } from "../../lib/model/entityType.model";
 import { ExpandedBlockMetadata } from "../../lib/blocks";
 import { SerializedUser } from "../../lib/model/user.model";
-import { Avatar } from "../../components/pages/user/Avatar";
+import { Sidebar } from "../../components/pages/user/Sidebar";
 import { OverviewCard } from "../../components/pages/user/OverviewCard";
 
 const tabs = [
@@ -43,7 +43,6 @@ type TabPanelProps = {
 } & BoxProps;
 
 const SIDEBAR_WIDTH = 300;
-const SIDEBAR_MARGIN = 64;
 
 export const TabPanel: FunctionComponent<TabPanelProps> = ({
   value,
@@ -119,6 +118,10 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  // const overviewItems = useMemo(() => {
+
+  // }, [blocks, entityTypes]);
+
   return (
     <>
       <Head>
@@ -149,11 +152,11 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
             maxWidth: "1200px !important",
           }}
         >
-          {/* sidebar */}
+          {/* SIDEBAR */}
           <Box
             sx={{
               width: { xs: "100%", md: SIDEBAR_WIDTH },
-              mr: { xs: 0, md: `${SIDEBAR_MARGIN}px` },
+              mr: { xs: 0, md: 8 },
               background: {
                 xs: theme.palette.common.white,
                 md: "transparent",
@@ -161,42 +164,15 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
               pb: 8,
             }}
           >
-            <Box
-              sx={{
-                width: "100%",
-                mt: { xs: 0, md: -4 },
-                display: "flex",
-                flexDirection: { xs: "row", md: "column" },
-              }}
-            >
-              <Avatar
-                size={isMobile ? 72 : 250}
-                name={user.preferredName || user.shortname}
-                sx={{
-                  mb: 2,
-                  mr: { xs: 2, md: 0 },
-                }}
-              />
-              <Box>
-                <Typography variant="bpHeading3" sx={{ mb: 0.5 }}>
-                  {user.preferredName}
-                </Typography>
-                <Typography
-                  variant="bpLargeText"
-                  sx={{
-                    color: ({ palette }) => palette.gray[60],
-                  }}
-                >
-                  {`@${user.shortname}`}
-                </Typography>
-              </Box>
-            </Box>
+            <Sidebar isMobile={isMobile} user={user} />
           </Box>
+          {/* CONTENT */}
           <Box
             sx={{
               flex: 1,
             }}
           >
+            {/* TAB HEADER */}
             <Tabs
               value={activeTab}
               onChange={(_, newValue) => setActiveTab(newValue)}
@@ -252,7 +228,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                 />
               ))}
             </Tabs>
-            {/*  */}
+            {/* TAB PANELS  */}
             <TabPanel activeTab={activeTab} value="overview" index={0}>
               <Grid
                 columnSpacing={{ xs: 0, sm: 2 }}
