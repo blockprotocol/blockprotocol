@@ -36,13 +36,13 @@ You can try out your block in an example embedding application:
 
 1.  Clone the example application, HASH, from [its repository](https://github.com/hashintel/hash/tree/main/packages/hash).
 
-1Follow the instructions in its README to set up and run HASH.
+1.  Follow the instructions in its README to set up and run HASH.
 
-3.  In a new terminal, run `yarn serve` in your block's folder). Your block dist is now available at http://localhost:5000.
+1.  In a new terminal, run `yarn serve` in your block's folder). Your block dist is now available at http://localhost:5000.
 
-4.  In the HASH frontend (once signed in), click on the context menu next to any block on a page. Paste http://localhost:5000 into the ‘load block from URL’ input.
+1.  In the HASH frontend (once signed in), click on the context menu next to any block on a page. Paste http://localhost:5000 into the ‘load block from URL’ input.
 
-5.  Your block should load in its default state. You can now test its functionality, and refresh the page to see how any changes you made persist.
+1.  Your block should load in its default state. You can now test its functionality, and refresh the page to see how any changes you made persist.
 
 ## Step four: publish your block
 
