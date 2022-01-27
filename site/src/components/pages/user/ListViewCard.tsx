@@ -8,14 +8,13 @@ import { Link } from "../../Link";
 type ListViewCardProps = {
   type: "block" | "schema";
   title: string;
-  description: string;
-  icon?: string;
-  lastUpdated: string;
+  description?: string | null;
+  icon?: string | null;
+  lastUpdated?: string;
   url: string;
 };
 
 export const ListViewCard: VFC<ListViewCardProps> = ({
-  type,
   title,
   description,
   icon,
@@ -23,7 +22,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
   url,
 }) => {
   return (
-    <Link href={url || "/"}>
+    <Link href={url}>
       <Box
         sx={{
           display: "flex",
@@ -57,6 +56,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
               sx={{
                 height: 24,
                 width: 24,
+                color: ({ palette }) => palette.gray[80],
               }}
               className="fa-solid fa-table-tree"
             />

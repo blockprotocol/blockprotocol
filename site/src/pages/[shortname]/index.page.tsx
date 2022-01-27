@@ -1,18 +1,16 @@
-import React, { FunctionComponent, useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback, FormEvent } from "react";
 import {
   Box,
   Container,
-  Typography,
-  Tabs,
-  Tab,
-  BoxProps,
   Grid,
   useMediaQuery,
   useTheme,
   Divider,
+  Typography,
 } from "@mui/material";
 import Head from "next/head";
 import { NextPage, GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import { ListViewCard } from "../../components/pages/user/ListViewCard";
 import { apiClient } from "../../lib/apiClient";
 import { EntityType } from "../../lib/model/entityType.model";
@@ -20,50 +18,11 @@ import { ExpandedBlockMetadata } from "../../lib/blocks";
 import { SerializedUser } from "../../lib/model/user.model";
 import { Sidebar } from "../../components/pages/user/Sidebar";
 import { OverviewCard } from "../../components/pages/user/OverviewCard";
-
-const tabs = [
-  {
-    title: "Overview",
-    value: "overview",
-  },
-  {
-    title: "Blocks",
-    value: "blocks",
-  },
-  {
-    title: "Schemas",
-    value: "schemas",
-  },
-] as const;
-
-type TabPanelProps = {
-  index: number;
-  value: string;
-  activeTab: string;
-} & BoxProps;
-
-const SIDEBAR_WIDTH = 300;
-
-export const TabPanel: FunctionComponent<TabPanelProps> = ({
-  value,
-  activeTab,
-  index,
-  children,
-  ...boxProps
-}) => {
-  return (
-    <Box
-      role="tabpanel"
-      hidden={value !== activeTab}
-      id={`profile-tabpanel-${index}`}
-      aria-labelledby={`profile-tab-${index}`}
-      sx={{ height: "100%", ...boxProps.sx }}
-      {...boxProps}
-    >
-      {value === activeTab ? children : null}
-    </Box>
-  );
-};
+import { TabHeader, TABS, TabPanel } from "../../components/pages/user/Tabs";
+import { Button } from "../../components/Button";
+import { useUser } from "../../context/UserContext";
+import { Modal } from "../../components/Modal";
+import { TextField } from "../../components/TextField";
 
 type UserPageProps = {
   user: SerializedUser;
@@ -112,15 +71,52 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
+const SIDEBAR_WIDTH = 300;
+
 const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
   const [activeTab, setActiveTab] =
-    useState<typeof tabs[number]["value"]>("overview");
+    useState<typeof TABS[number]["value"]>("overview");
+  const [schemaModalOpen, setSchemaModalOpen] = useState(false);
+  const [newSchemaTitle, setNewSchemaTitle] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const router = useRouter();
 
-  // const overviewItems = useMemo(() => {
+  const { user: currentUser } = useUser();
 
-  // }, [blocks, entityTypes]);
+  const isCurrentUserPage = useMemo(() => {
+    if (currentUser !== "loading" && currentUser) {
+      return currentUser.id === user.id;
+    }
+    return false;
+  }, [user, currentUser]);
+
+  const handleCreateSchema = useCallback(
+    async (evt: FormEvent) => {
+      evt.preventDefault();
+      setLoading(true);
+      const { data, error: apiError } = await apiClient.createEntityType({
+        schema: {
+          title: newSchemaTitle,
+        },
+      });
+      setLoading(false);
+      if (apiError) {
+        if (apiError.response?.data.errors) {
+          setError(apiError.response.data.errors[0].msg);
+        } else {
+          // @todo properly handle this
+          setError("An error occured");
+        }
+      } else {
+        const schemaTitle = data?.entityType.schema.title;
+        void router.push(`/@${user.shortname}/types/${schemaTitle}`);
+      }
+    },
+    [user, newSchemaTitle, router],
+  );
 
   return (
     <>
@@ -173,68 +169,17 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
             }}
           >
             {/* TAB HEADER */}
-            <Tabs
-              value={activeTab}
-              onChange={(_, newValue) => setActiveTab(newValue)}
-              aria-label="user-profile-tabs"
-              sx={{
-                mt: { xs: -6, md: -6 },
-                mb: 4,
+            <TabHeader
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              tabs={TABS}
+              tabItemsCount={{
+                blocks: blocks.length,
+                schemas: entityTypes.length,
               }}
-            >
-              {tabs.map(({ title, value }, i) => (
-                <Tab
-                  key={value}
-                  label={
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      {title}
-                      {value !== "overview" && (
-                        <Box
-                          sx={{
-                            ml: 1,
-                            minWidth: 25,
-                            minHeight: 25,
-                            borderRadius: "30px",
-                            px: 1,
-                            py: 0.25,
-                            backgroundColor: ({ palette }) =>
-                              value === activeTab
-                                ? palette.purple[100]
-                                : palette.gray[20],
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Typography
-                            variant="bpMicroCopy"
-                            sx={{
-                              color: ({ palette }) =>
-                                value === activeTab
-                                  ? palette.purple[600]
-                                  : palette.gray[60],
-                            }}
-                          >
-                            {value === "blocks"
-                              ? blocks.length
-                              : entityTypes.length}
-                          </Typography>
-                        </Box>
-                      )}
-                    </Box>
-                  }
-                  value={value}
-                  id={`profile-tab-${i}`}
-                  aria-controls={`profile-tabpanel-${i}`}
-                />
-              ))}
-            </Tabs>
+            />
             {/* TAB PANELS  */}
+            {/* @todo move this to pages/user/Tabs.tsx */}
             <TabPanel activeTab={activeTab} value="overview" index={0}>
               <Grid
                 columnSpacing={{ xs: 0, sm: 2 }}
@@ -278,8 +223,12 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                   <Grid key={entityTypeId} item xs={12} md={6}>
                     <OverviewCard
                       url={schema.$id}
-                      description={schema.description}
-                      lastUpdated={updatedAt}
+                      description={schema.description as string}
+                      lastUpdated={
+                        typeof updatedAt === "string"
+                          ? updatedAt
+                          : updatedAt?.toISOString()
+                      } // temporary hack to stop type error
                       title={schema.title}
                       type="schema"
                     />
@@ -294,7 +243,6 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                   description,
                   icon,
                   lastUpdated,
-                  version,
                   name,
                   packagePath,
                 }) => (
@@ -302,7 +250,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                     key={name}
                     type="block"
                     icon={icon}
-                    title={displayName}
+                    title={displayName!}
                     description={description}
                     lastUpdated={lastUpdated}
                     url={`/${packagePath}`}
@@ -311,12 +259,28 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
               )}
             </TabPanel>
             <TabPanel activeTab={activeTab} value="schemas" index={2}>
+              {isCurrentUserPage && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: { xs: "flex-start", md: "flex-end" },
+                  }}
+                >
+                  <Button
+                    squared
+                    size="small"
+                    onClick={() => setSchemaModalOpen(true)}
+                  >
+                    Create New Schema
+                  </Button>
+                </Box>
+              )}
               {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
                 <ListViewCard
-                  id={entityTypeId}
+                  key={entityTypeId}
                   type="schema"
                   title={schema.title}
-                  description={schema.description || ""}
+                  description={schema.description as string}
                   lastUpdated={updatedAt as unknown as string}
                   url={schema.$id}
                 />
@@ -325,6 +289,65 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
           </Box>
         </Container>
       </Box>
+      {/* Create Schema Modal */}
+      {/* @todo move to a separate component */}
+      <Modal
+        open={schemaModalOpen}
+        onClose={() => setSchemaModalOpen(false)}
+        contentStyle={{
+          top: "40%",
+        }}
+      >
+        <Box sx={{}}>
+          <Typography
+            variant="bpHeading4"
+            sx={{
+              mb: 2,
+              display: "block",
+            }}
+          >
+            Create New <strong>Schema</strong>
+          </Typography>
+          <Typography
+            sx={{
+              mb: 4,
+              fontSize: 16,
+              lineHeight: 1.5,
+              width: { xs: "90%", md: "85%" },
+            }}
+          >
+            {` Schemas are used to define the structure of entities - in other
+            words, define a ‘type’ of entity`}
+          </Typography>
+          <Box component="form" onSubmit={handleCreateSchema}>
+            <TextField
+              sx={{ mb: 3 }}
+              label="Schema Title"
+              fullWidth
+              helperText={error}
+              value={newSchemaTitle}
+              onChange={(evt) => {
+                if (error) {
+                  setError("");
+                }
+                setNewSchemaTitle(evt.target.value);
+              }}
+              required
+              error={Boolean(error)}
+            />
+
+            <Button
+              loading={loading}
+              // onClick={createSchema}
+              size="small"
+              squared
+              type="submit"
+            >
+              Create
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </>
   );
 };

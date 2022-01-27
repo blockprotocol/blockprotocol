@@ -7,11 +7,11 @@ import { Spacer } from "../../Spacer";
 type OverviewCardProps = {
   type: "block" | "schema";
   title: string;
-  description: string;
-  icon?: string;
-  lastUpdated: string;
-  image?: string;
-  version?: string;
+  description?: string;
+  icon?: string | null;
+  lastUpdated?: string;
+  image?: string | null;
+  version?: string | null;
   url: string;
   hideImage?: boolean;
 };
