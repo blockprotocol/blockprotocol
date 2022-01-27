@@ -163,6 +163,10 @@ module.exports = {
       parser: "espree",
     },
     {
+      files: ["packages/blockprotocol/*.js"],
+      parser: "espree",
+    },
+    {
       files: ["packages/block-template/**"],
       parserOptions: {
         project: ["packages/block-template/tsconfig.json"],
