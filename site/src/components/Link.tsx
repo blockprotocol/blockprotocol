@@ -1,11 +1,18 @@
 import * as React from "react";
 import clsx from "clsx";
+import { UrlObject } from "url";
 import { useRouter } from "next/router";
 // eslint-disable-next-line no-restricted-imports
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
 // eslint-disable-next-line no-restricted-imports
 import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
+import { Button } from "./Button";
+
+export const isHrefExternal = (href: string | UrlObject) =>
+  typeof href === "string" &&
+  (href === "/discord" ||
+    !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href));
 
 /**
  * This component is based on https://github.com/mui-org/material-ui/blob/a5c92dfd84dfe5888a8b383a9b5fe5701a934564/examples/nextjs/src/Link.js
@@ -67,12 +74,16 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       [activeClassName]: router.pathname === pathname && activeClassName,
     });
 
-    const isExternal =
-      typeof href === "string" &&
-      (href === "/discord" ||
-        !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href));
+    if (process.env.NODE_ENV !== "production") {
+      const children = other.children;
+      if (React.isValidElement(children) && children.type === Button) {
+        throw new Error(
+          "Please use <LinkButton /> instead of <Link><Button /></Link>",
+        );
+      }
+    }
 
-    if (isExternal) {
+    if (isHrefExternal(href)) {
       other.rel = "noopener";
       other.target = "_blank";
 
