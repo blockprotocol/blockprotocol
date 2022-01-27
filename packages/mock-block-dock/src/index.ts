@@ -1,3 +1,1 @@
-import { MockBlockDock } from "./MockBlockDock";
-
-export default MockBlockDock;
+export { MockBlockDock } from "./MockBlockDock";

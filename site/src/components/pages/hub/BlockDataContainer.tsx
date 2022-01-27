@@ -1,7 +1,7 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
 import { Validator } from "jsonschema";
 import { useMemo, useState, VoidFunctionComponent } from "react";
-import MockBlockDock from "mock-block-dock";
+import { MockBlockDock } from "mock-block-dock";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
