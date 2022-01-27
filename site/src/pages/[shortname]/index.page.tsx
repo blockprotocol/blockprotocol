@@ -109,7 +109,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
       evt.preventDefault();
-      if (newSchemaTitle == "") {
+      if (newSchemaTitle === "") {
         setError("Please enter a valid value");
         return;
       }
@@ -135,8 +135,6 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
     },
     [user, newSchemaTitle, router],
   );
-
-  console.log(entityTypes);
 
   return (
     <>
