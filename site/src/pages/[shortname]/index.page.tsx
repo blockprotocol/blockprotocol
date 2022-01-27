@@ -1,13 +1,25 @@
 import React, { FunctionComponent, useState } from "react";
-import { Box, Container, Typography, Tabs, Tab, BoxProps } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  Tabs,
+  Tab,
+  BoxProps,
+  Grid,
+  useMediaQuery,
+  useTheme,
+  Divider,
+} from "@mui/material";
 import Head from "next/head";
 import { NextPage, GetServerSideProps } from "next";
-import { ListView } from "../../components/pages/user/ListView";
+import { ListViewCard } from "../../components/pages/user/ListViewCard";
 import { apiClient } from "../../lib/apiClient";
 import { EntityType } from "../../lib/model/entityType.model";
 import { ExpandedBlockMetadata } from "../../lib/blocks";
 import { SerializedUser } from "../../lib/model/user.model";
 import { Avatar } from "../../components/pages/user/Avatar";
+import { OverviewCard } from "../../components/pages/user/OverviewCard";
 
 const tabs = [
   {
@@ -68,7 +80,6 @@ export const getServerSideProps: GetServerSideProps<
   UserPageProps,
   UserPageQueryParams
 > = async ({ params }) => {
-  console.log(params);
   const { shortname } = params || {};
 
   if (typeof shortname !== "string" || !shortname?.startsWith("@")) {
@@ -105,14 +116,19 @@ export const getServerSideProps: GetServerSideProps<
 const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
   const [activeTab, setActiveTab] =
     useState<typeof tabs[number]["value"]>("overview");
-
-  console.log({ user, blocks, entityTypes });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <>
       <Head>
         <title>{user.shortname}</title>
       </Head>
+      <Divider
+        sx={{
+          borderColor: ({ palette }) => palette.gray[20],
+        }}
+      />
       <Box
         sx={{
           background: ({ palette }) => palette.gray[10],
@@ -120,95 +136,187 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
           display: "flex",
           flexDirection: "column",
           minHeight: "80vh",
+          pb: 10,
+          mt: { xs: 4, md: 10 },
         }}
       >
-        <Box
+        <Container
           sx={{
-            borderBottom: 1,
-            borderColor: ({ palette }) => palette.gray[20],
-            backgroundColor: ({ palette }) => palette.common.white,
-            borderBottomStyle: "solid",
-            paddingTop: {
-              xs: 2,
-              md: 5,
-            },
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            flex: 1,
+            justifyContent: "flex-start",
+            maxWidth: "1200px !important",
           }}
         >
-          <Container>
+          {/* sidebar */}
+          <Box
+            sx={{
+              width: { xs: "100%", md: SIDEBAR_WIDTH },
+              mr: { xs: 0, md: `${SIDEBAR_MARGIN}px` },
+              background: {
+                xs: theme.palette.common.white,
+                md: "transparent",
+              },
+              pb: 8,
+            }}
+          >
+            <Box
+              sx={{
+                width: "100%",
+                mt: { xs: 0, md: -4 },
+                display: "flex",
+                flexDirection: { xs: "row", md: "column" },
+              }}
+            >
+              <Avatar
+                size={isMobile ? 72 : 250}
+                name={user.preferredName || user.shortname}
+                sx={{
+                  mb: 2,
+                  mr: { xs: 2, md: 0 },
+                }}
+              />
+              <Box>
+                <Typography variant="bpHeading3" sx={{ mb: 0.5 }}>
+                  {user.preferredName}
+                </Typography>
+                <Typography
+                  variant="bpLargeText"
+                  sx={{
+                    color: ({ palette }) => palette.gray[60],
+                  }}
+                >
+                  {`@${user.shortname}`}
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              flex: 1,
+            }}
+          >
             <Tabs
               value={activeTab}
               onChange={(_, newValue) => setActiveTab(newValue)}
               aria-label="user-profile-tabs"
               sx={{
-                paddingLeft: `${SIDEBAR_WIDTH + SIDEBAR_MARGIN}px`,
+                mt: { xs: -6, md: -6 },
+                mb: 4,
               }}
             >
               {tabs.map(({ title, value }, i) => (
                 <Tab
                   key={value}
-                  label={title}
+                  label={
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      {title}
+                      {value !== "overview" && (
+                        <Box
+                          sx={{
+                            ml: 1,
+                            minWidth: 25,
+                            minHeight: 25,
+                            borderRadius: "30px",
+                            px: 1,
+                            py: 0.25,
+                            backgroundColor: ({ palette }) => palette.gray[20],
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Typography
+                            variant="bpMicroCopy"
+                            sx={{
+                              color: ({ palette }) => palette.gray[60],
+                            }}
+                          >
+                            {value === "blocks"
+                              ? blocks.length
+                              : entityTypes.length}
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+                  }
                   value={value}
                   id={`profile-tab-${i}`}
                   aria-controls={`profile-tabpanel-${i}`}
                 />
               ))}
             </Tabs>
-          </Container>
-        </Box>
-
-        <Container
-          sx={{
-            display: "flex",
-            flex: 1,
-            justifyContent: "flex-start",
-          }}
-        >
-          {/* sidebar */}
-          <Box
-            sx={{
-              width: SIDEBAR_WIDTH,
-              marginRight: `${SIDEBAR_MARGIN}px`,
-            }}
-          >
-            <Box
-              sx={{
-                mt: -4,
-                width: "100%",
-              }}
-            >
-              <Avatar
-                size={250}
-                name={user.preferredName || user.shortname}
-                sx={{
-                  mb: 2,
-                }}
-              />
-              <Typography variant="bpHeading3" sx={{ mb: 0.5 }}>
-                {user.preferredName}
-              </Typography>
-              <Typography
-                variant="bpLargeText"
-                sx={{
-                  color: ({ palette }) => palette.gray[60],
-                }}
-              >
-                {`@${user.shortname}`}
-              </Typography>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              pt: 4,
-              flex: 1,
-            }}
-          >
+            {/*  */}
             <TabPanel activeTab={activeTab} value="overview" index={0}>
-              Overview
+              <Grid
+                columnSpacing={{ xs: 0, sm: 2 }}
+                rowSpacing={{ xs: 2, sm: 4 }}
+                container
+              >
+                {blocks
+                  .slice(0, 4)
+                  .map(
+                    (
+                      {
+                        displayName,
+                        description,
+                        icon,
+                        lastUpdated,
+                        version,
+                        name,
+                        image,
+                        packagePath,
+                      },
+                      index,
+                    ) => (
+                      <Grid key={name} item xs={12} md={6}>
+                        <OverviewCard
+                          url={`/${packagePath}`}
+                          description={description!}
+                          icon={icon}
+                          image={image}
+                          lastUpdated={lastUpdated}
+                          title={displayName!}
+                          type="block"
+                          version={version}
+                          // we only show images for the first 2 blocks
+                          // on desktop
+                          hideImage={index > 1 || isMobile}
+                        />
+                      </Grid>
+                    ),
+                  )}
+                {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
+                  <Grid key={entityTypeId} item xs={12} md={6}>
+                    <OverviewCard
+                      url={schema.$id}
+                      description={schema.description}
+                      lastUpdated={updatedAt}
+                      title={schema.title}
+                      type="schema"
+                    />
+                  </Grid>
+                ))}
+              </Grid>
             </TabPanel>
             <TabPanel activeTab={activeTab} value="blocks" index={1}>
               {blocks.map(
-                ({ displayName, description, icon, lastUpdated, version }) => (
-                  <ListView
+                ({
+                  displayName,
+                  description,
+                  icon,
+                  lastUpdated,
+                  version,
+                  name,
+                }) => (
+                  <ListViewCard
+                    key={name}
                     type="block"
                     icon={icon}
                     title={displayName}
@@ -220,7 +328,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
             </TabPanel>
             <TabPanel activeTab={activeTab} value="schemas" index={2}>
               {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
-                <ListView
+                <ListViewCard
                   id={entityTypeId}
                   type="schema"
                   title={schema.title}
