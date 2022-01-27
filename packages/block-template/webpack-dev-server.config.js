@@ -3,7 +3,7 @@ const webpack = require("webpack");
 const config = require("./webpack.config");
 
 module.exports = {
-  entry: "./src/webpack-dev-server.tsx",
+  entry: "./src/webpack-dev-server.js",
   plugins: [
     ...config[0].plugins,
     new HtmlWebpackPlugin({
