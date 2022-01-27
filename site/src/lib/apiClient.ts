@@ -20,9 +20,10 @@ import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generateApiKey.api";
-import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
-import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
 import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
+import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
+import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
+import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
 import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
 import {
   ApiTypeCreateRequest,
@@ -32,9 +33,9 @@ import {
   ApiTypeUpdateRequest,
   ApiTypeUpdateResponse,
 } from "../pages/api/types/[id]/update.api";
-import { ApiUserByShortnameResponseResponse } from "../pages/api/users/[shortname].api";
+import { FRONTEND_URL } from "./config";
 
-const BASE_URL = "/api/";
+const BASE_URL = `${FRONTEND_URL}/api/`;
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
@@ -112,7 +113,7 @@ export const apiClient = {
     ),
   getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/apiKeys"),
   getUser: ({ shortname }: { shortname: string }) =>
-    apiClient.get<ApiUserByShortnameResponseResponse>(`users/${shortname}`),
+    apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),
   getUserBlocks: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiBlocksByUserResponse>(`users/${shortname}/blocks`),
   getUserEntityTypes: ({ shortname }: { shortname: string }) =>

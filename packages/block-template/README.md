@@ -44,6 +44,10 @@ You can try out your block in an example embedding application:
 
 1.  Your block should load in its default state. You can now test its functionality, and refresh the page to see how any changes you made persist.
 
+## Step four: publish your block
+
+Head over to [blockprotocol.org](https://blockprotocol.org/docs/developing-blocks#publish) to read instructions on publishing your block.
+
 ## External Dependencies
 
 The Block Component is self contained with all of its dependencies bundled with webpack. Any dependencies that will be provided by the embedding app should be marked as `externals` in the `webpack.config.js`, added to `devDependencies` in package.json so they're available during development, and in `peerDependencies` if the component is to be made available as a library for importing via npm.

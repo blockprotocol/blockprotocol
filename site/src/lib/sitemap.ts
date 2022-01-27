@@ -50,6 +50,14 @@ export const getDocumentationSubPages = (): SiteMapPage[] => [
     href: "/docs/embedding-blocks",
     title: "Embedding Blocks",
   },
+  {
+    ...getPage({
+      pathToDirectory: "docs",
+      fileName: "4_faq.mdx",
+    }),
+    href: "/docs/faq",
+    title: "FAQ",
+  },
 ];
 
 export const getSpecSubPages = (): SiteMapPage[] =>

@@ -101,7 +101,7 @@ const EntityTypePage: NextPage = () => {
     <>
       <Head>
         <title>
-          Block Protocol - @{shortname}/{title} Schema
+          Block Protocol - {shortname}/{title} Schema
         </title>
       </Head>
       <Container
@@ -117,9 +117,9 @@ const EntityTypePage: NextPage = () => {
         }}
       >
         <header className={tw`mb-8`}>
-          <Link href={`/@${shortname}`}>
+          <Link href={`/${shortname}`}>
             <a>
-              @{shortname}
+              {shortname}
               {" >"}
             </a>
           </Link>
@@ -150,7 +150,7 @@ const EntityTypePage: NextPage = () => {
 
         <Box sx={{ mb: 2 }}>
           <Typography variant="bpSmallCopy" sx={{ maxWidth: "100%" }}>
-            Link properties to schema.org equivalents — e.g.{" "}
+            Link properties to schema.org or other equivalents — e.g.{" "}
             <Link href="https://schema.org/givenName">
               https://schema.org/givenName
             </Link>{" "}
@@ -167,7 +167,7 @@ const EntityTypePage: NextPage = () => {
           <Typography variant="bpSmallCopy">
             Looking for the raw JSON? Visit{" "}
             <Link href={`${uri}?json`}>this link</Link> or request the $id with
-            "application/json" in an "accepts" header.
+            "application/json" in an "accept" header.
           </Typography>
         </Box>
       </Container>

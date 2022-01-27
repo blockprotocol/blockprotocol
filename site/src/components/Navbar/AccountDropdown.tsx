@@ -79,20 +79,35 @@ export const AccountDropdown: VFC = () => {
         <Divider />
         <Box>
           <Link href="/dashboard" onClick={() => setOpen(false)}>
-            <ListItemButton sx={{ padding: (theme) => theme.spacing(1.5, 2) }}>
-              <Typography variant="bpSmallCopy">Dashboard</Typography>
+            <ListItemButton
+              sx={{ padding: (theme) => theme.spacing(1, 2), mt: 0.5 }}
+            >
+              <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+                Dashboard
+              </Typography>
+            </ListItemButton>
+          </Link>
+          <Link href={`/@${user.shortname}`} onClick={() => setOpen(false)}>
+            <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 2) }}>
+              <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+                Your Profile
+              </Typography>
             </ListItemButton>
           </Link>
           <Link href="/settings/api-keys" onClick={() => setOpen(false)}>
-            <ListItemButton sx={{ padding: (theme) => theme.spacing(1.5, 2) }}>
-              <Typography variant="bpSmallCopy">API Keys</Typography>
+            <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 2) }}>
+              <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+                API Keys
+              </Typography>
             </ListItemButton>
           </Link>
           <ListItemButton
-            sx={{ padding: (theme) => theme.spacing(1.5, 2) }}
+            sx={{ padding: (theme) => theme.spacing(1, 2), mb: 0.5 }}
             onClick={handleLogout}
           >
-            <Typography variant="bpSmallCopy">Log Out</Typography>
+            <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+              Log Out
+            </Typography>
           </ListItemButton>
         </Box>
       </Popover>
