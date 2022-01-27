@@ -3,17 +3,17 @@ import { EntityType } from "../../../../../lib/model/entityType.model";
 import { formatErrors } from "../../../../../util/api";
 import { User } from "../../../../../lib/model/user.model";
 
-export type ApiTypesByUserAndTitleRequest = {
+export type ApiTypeByUserAndTitleRequest = {
   title: string;
   shortname: string;
 };
 
-export type ApiTypesByUserAndTitleResponse = { entityType: EntityType };
+export type ApiTypeByUserAndTitleResponse = { entityType: EntityType };
 
-export default createBaseHandler<null, ApiTypesByUserAndTitleResponse>().get(
+export default createBaseHandler<null, ApiTypeByUserAndTitleResponse>().get(
   async (req, res) => {
     const { db, query } = req;
-    const { shortname, title } = query as ApiTypesByUserAndTitleRequest;
+    const { shortname, title } = query as ApiTypeByUserAndTitleRequest;
 
     const user = await User.getByShortname(db, { shortname });
 
