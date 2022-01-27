@@ -31,7 +31,7 @@
     "build:esm": "tsc --p tsconfig.build.json",
     "clean": "rimraf ./dist/",
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev -- --watch --verbose\" \"yarn run-dev-server\"",
-    "postinstall": "build",
+    "postinstall": "yarn build",
     "lint:tsc": "tsc --noEmit",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --open --config dev/webpack.config.js"
   },
