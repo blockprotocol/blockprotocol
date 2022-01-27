@@ -21,13 +21,19 @@ const style: SxProps<Theme> = {
   p: { xs: 2, md: 4 },
 };
 
-type ModalProps = Pick<MuiModalProps, "open" | "onClose" | "disableScrollLock">;
+type ModalProps = Pick<
+  MuiModalProps,
+  "open" | "onClose" | "disableScrollLock"
+> & {
+  contentStyle?: SxProps<Theme>;
+};
 
 export const Modal: React.FC<ModalProps> = ({
   open,
   children,
   disableScrollLock = false,
   onClose,
+  contentStyle,
 }) => {
   useScrollLock(!disableScrollLock && open);
 
@@ -39,7 +45,7 @@ export const Modal: React.FC<ModalProps> = ({
       aria-describedby="modal-modal-description"
       disableScrollLock
     >
-      <Box sx={style}>{children}</Box>
+      <Box sx={{ ...style, ...contentStyle }}>{children}</Box>
     </MuiModal>
   );
 };

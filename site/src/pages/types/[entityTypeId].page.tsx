@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<
     return {
       redirect: {
         permanent: false,
-        destination: `/${entityType.schema.author}/types/${entityType.schema.title}`,
+        destination: `/@${entityType.schema.author}/types/${entityType.schema.title}`,
       },
     };
   } else {
