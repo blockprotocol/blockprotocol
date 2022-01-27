@@ -19,11 +19,12 @@ import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import SiteMapContext from "../context/SiteMapContext";
-import UserContext from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import { AccountDropdown } from "./Navbar/AccountDropdown";
 import { MobileNavItems } from "./Navbar/MobileNavItems";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./Navbar/util";
 import { MobileBreadcrumbs } from "./Navbar/MobileBreadcrumbs";
+import { LinkButton } from "./LinkButton";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -91,7 +92,7 @@ export const Navbar: VFC<NavbarProps> = ({
   const theme = useTheme();
   const router = useRouter();
   const { pages } = useContext(SiteMapContext);
-  const { user } = useContext(UserContext);
+  const { user } = useUser();
 
   const [displayMobileNav, setDisplayMobileNav] = useState<boolean>(false);
   const [idleScrollPosition, setIdleScrollPosition] = useState<boolean>(false);
@@ -343,19 +344,18 @@ export const Navbar: VFC<NavbarProps> = ({
                       </Typography>
                     </Button>
                   )}
-                  {user?.isSignedUp ? null : (
-                    <Link href="/docs/developing-blocks">
-                      <Button
-                        size="small"
-                        variant="primary"
-                        endIcon={<BoltIcon />}
-                      >
-                        {preventOverflowingNavLinks
-                          ? "Build a block"
-                          : "Quick Start Guide"}
-                      </Button>
-                    </Link>
-                  )}
+                  {user !== "loading" && !user?.isSignedUp ? (
+                    <LinkButton
+                      href="/docs/developing-blocks"
+                      size="small"
+                      variant="primary"
+                      endIcon={<BoltIcon />}
+                    >
+                      {preventOverflowingNavLinks
+                        ? "Build a block"
+                        : "Quick Start Guide"}
+                    </LinkButton>
+                  ) : null}
                 </>
               ) : (
                 <IconButton
@@ -369,7 +369,7 @@ export const Navbar: VFC<NavbarProps> = ({
                   <Icon className="fas fa-bars" />
                 </IconButton>
               )}
-              {user?.isSignedUp ? <AccountDropdown /> : null}
+              <AccountDropdown />
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>
@@ -437,21 +437,20 @@ export const Navbar: VFC<NavbarProps> = ({
                 Log in
               </Button>
             )}
-            <Link href="/docs/developing-blocks">
-              <Button
-                sx={{
-                  width: "100%",
-                  py: 1.5,
-                  px: 3,
-                  textTransform: "none",
-                }}
-                variant="primary"
-                startIcon={<BoltIcon />}
-                onClick={() => setDisplayMobileNav(false)}
-              >
-                {sm ? "Get started building blocks" : "Build a block"}
-              </Button>
-            </Link>
+            <LinkButton
+              href="/docs/developing-blocks"
+              sx={{
+                width: "100%",
+                py: 1.5,
+                px: 3,
+                textTransform: "none",
+              }}
+              variant="primary"
+              startIcon={<BoltIcon />}
+              onClick={() => setDisplayMobileNav(false)}
+            >
+              {sm ? "Get started building blocks" : "Build a block"}
+            </LinkButton>
           </Box>
         </Box>
       </Slide>

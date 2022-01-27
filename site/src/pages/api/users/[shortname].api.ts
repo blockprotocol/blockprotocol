@@ -1,0 +1,33 @@
+import { createBaseHandler } from "../../../lib/handler/baseHandler";
+import { SerializedUser, User } from "../../../lib/model/user.model";
+import { formatErrors } from "../../../util/api";
+
+export type ApiUserByShortnameResponseQueryParams = {
+  shortname: string;
+};
+
+export type ApiUserByShortnameResponseResponse = {
+  user: SerializedUser;
+};
+
+export default createBaseHandler<
+  null,
+  ApiUserByShortnameResponseResponse
+>().get(async (req, res) => {
+  const { db, query } = req;
+  const { shortname } = query as ApiUserByShortnameResponseQueryParams;
+
+  const user = await User.getByShortname(db, { shortname });
+
+  if (!user) {
+    return res.status(404).json(
+      formatErrors({
+        msg: "Could not find user with the provided shortname",
+        param: "shortname",
+        value: shortname,
+      }),
+    );
+  }
+
+  res.status(200).send({ user: user.serialize() });
+});

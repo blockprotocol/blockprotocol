@@ -1,6 +1,6 @@
 {
   "name": "create-block-app",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Create new https://blockprotocol.org blocks",
   "keywords": [
     "blockprotocol",
@@ -24,7 +24,9 @@
     "lint:tsc": "echo \"Skipping: TypeScript not configured\""
   },
   "dependencies": {
-    "decompress": "4.2.1",
-    "tmp": "0.2.1"
+    "pacote": "12.0.2"
+  },
+  "devDependencies": {
+    "@types/pacote": "11.1.3"
   }
 }

@@ -1,16 +1,18 @@
-import { createContext, Dispatch, SetStateAction } from "react";
+import { createContext, Dispatch, SetStateAction, useContext } from "react";
 import { SerializedUser } from "../lib/model/user.model";
 
-type UserContextProps = {
-  user?: SerializedUser;
-  setUser: Dispatch<SetStateAction<SerializedUser | undefined>>;
+export type UserState = SerializedUser | "loading" | undefined;
+
+export type UserContextValue = {
+  user: UserState;
+  setUser: Dispatch<SetStateAction<UserState>>;
   refetch: () => void;
 };
 
-const UserContext = createContext<UserContextProps>({
+export const UserContext = createContext<UserContextValue>({
   user: undefined,
   setUser: () => undefined,
   refetch: () => undefined,
 });
 
-export default UserContext;
+export const useUser = () => useContext(UserContext);
