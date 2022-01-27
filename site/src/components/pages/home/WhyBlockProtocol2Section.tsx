@@ -7,8 +7,7 @@ import {
   Icon,
 } from "@mui/material";
 import { SyncIcon } from "../../SvgIcon/SyncIcon";
-import { Button } from "../../Button";
-import { Link } from "../../Link";
+import { LinkButton } from "../../LinkButton";
 
 export const WhyBlockProtocol2Section = () => {
   const theme = useTheme();
@@ -196,9 +195,9 @@ export const WhyBlockProtocol2Section = () => {
               This standardization makes it possible to easily move both blocks
               and data between applications that adhere to the protocol.
             </Typography>
-            <Link href="/spec">
-              <Button variant="secondary">Read the Spec</Button>
-            </Link>
+            <LinkButton href="/spec" variant="secondary">
+              Read the Spec
+            </LinkButton>
           </Container>
         </Box>
         <Box

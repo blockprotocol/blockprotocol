@@ -79,6 +79,8 @@ export default createBaseHandler<
 
       await user.update(db, { hasVerifiedEmail: true });
 
-      req.login(user, () => res.status(200).json({ user: user.serialize() }));
+      req.login(user, () =>
+        res.status(200).json({ user: user.serialize(true) }),
+      );
     }
   });

@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { Paper, Box, Icon, Fade, Container } from "@mui/material";
 import { apiClient } from "../lib/apiClient";
 import { ApiLoginWithLoginCodeRequestBody } from "./api/loginWithLoginCode.api";
@@ -81,13 +81,26 @@ const LoginPage: NextPage = () => {
     setCurrentScreen("VerificationCode");
   };
 
-  const handleLogin = (loggedInUser: SerializedUser) => {
-    if (!loggedInUser.isSignedUp) {
-      /** @todo: redirect to signup page if user hasn't completed signup */
-    }
-    setUser(loggedInUser);
-    void router.push(redirectPath ?? "/");
-  };
+  // Router reference invalidates after page load because isReady changes from false to true.
+  // We also update redirectPath in useEffect, which changes its reference too. Avoiding both
+  // variables inside handleLogin dependencies saves us from triggering multiple API calls.
+  const redirectRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    redirectRef.current = () => {
+      void router.push(redirectPath ?? "/");
+    };
+  }, [router, redirectPath]);
+
+  const handleLogin = useCallback(
+    (loggedInUser: SerializedUser) => {
+      if (!loggedInUser.isSignedUp) {
+        /** @todo: redirect to signup page if user hasn't completed signup */
+      }
+      setUser(loggedInUser);
+      redirectRef.current();
+    },
+    [setUser],
+  );
 
   return (
     <Box

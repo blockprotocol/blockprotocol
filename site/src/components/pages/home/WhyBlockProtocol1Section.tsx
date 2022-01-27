@@ -41,6 +41,7 @@ const TodoListBlock = () => {
               <Checkbox
                 sx={{ padding: 0, pr: 1.5 }}
                 checked={[2, 3].includes(index)}
+                tabIndex={-1}
               />
             }
             label={text}
