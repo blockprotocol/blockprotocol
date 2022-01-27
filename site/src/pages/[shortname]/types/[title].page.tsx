@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { tw } from "twind";
 import { NextPage } from "next";
+import NextError from "next/error";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import {
@@ -25,6 +26,7 @@ const EntityTypePage: NextPage = () => {
 
   const { user } = useUser();
 
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [entityType, setEntityType] = useState<EntityType | undefined>();
 
   // shortname and title will be undefined until useRouter populates them
@@ -45,7 +47,8 @@ const EntityTypePage: NextPage = () => {
       .catch((err) => {
         // eslint-disable-next-line no-console -- @todo handle 404s and show to user
         console.error(err);
-      });
+      })
+      .finally(() => setIsLoading(false));
   }, [shortnameWithoutLeadingAt, title, setEntityType]);
 
   const aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction =
@@ -80,8 +83,13 @@ const EntityTypePage: NextPage = () => {
         throw new Error("Could not update entity type");
       });
 
-  if (!entityType) {
+  if (isLoading) {
+    // @todo proper loading state
     return null;
+  }
+
+  if (!entityType) {
+    return <NextError statusCode={404} />;
   }
 
   const userCanEdit =

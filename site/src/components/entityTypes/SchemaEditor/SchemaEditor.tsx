@@ -25,8 +25,10 @@ import {
   schemaEditorReducer,
   SchemaEditorReducerAction,
 } from "./schemaEditorReducer";
-// import { SubSchemaItem } from "./SubSchemaItem";
 import { Link } from "../../Link";
+
+// @todo implement subschema handling (or remove this code)
+// import { SubSchemaItem } from "./SubSchemaItem";
 // import { Button } from "../../Button";
 
 export const SchemaOptionsContext = createContext<{
@@ -228,6 +230,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
 
   const readonly = !updateEntityTypes || !entityTypeId;
 
+  // @todo implement subschema handling (or remove this code)
   // const addSubSchema = (newSubSchemaName: string) =>
   //   dispatchSchemaUpdate({
   //     type: "addSubSchema",
@@ -293,7 +296,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
         </div>
       </section>
 
-      {/** @todo handle subschemas
+      {/** @todo handle subschemas or remove this code
        {updateEntityTypes || subSchemas.length > 0 ? (
         <section className={tw`mt-8`}>
           <h2>Sub-schemas in {title}</h2>
