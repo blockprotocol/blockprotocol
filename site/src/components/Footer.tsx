@@ -110,7 +110,7 @@ const Socials = (
                 color: (theme) => theme.palette.gray[30],
               },
             },
-            ":active": {
+            ":focus,:active": {
               svg: {
                 color: (theme) => theme.palette.common.white,
               },
@@ -129,12 +129,16 @@ const Socials = (
     <LinkButton
       href="https://github.com/blockprotocol/blockprotocol"
       variant="primary"
+      color="gray"
       size="small"
       sx={{
         flexShrink: 0,
         marginBottom: 2.5,
         backgroundColor: (theme) => theme.palette.gray[70],
         color: (theme) => theme.palette.gray[20],
+        ":focus:after": {
+          borderColor: (theme) => theme.palette.gray[70],
+        },
       }}
       startIcon={<Icon className="fa fa-star" />}
     >
