@@ -317,7 +317,6 @@ export const theme = createTheme({
               overflow: auto;${
                 "" /** @todo: find a pernament solution for preventing the navbar from shifting to the right when a modal is opened on an overflowing page */
               }
-              overflow-y: scroll
             }
 
             body, p {

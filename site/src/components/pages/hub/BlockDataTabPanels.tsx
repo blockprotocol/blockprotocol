@@ -16,7 +16,7 @@ type BlockDataTabPanelProps = {
 export const BlockDataTabPanels: VoidFunctionComponent<
   BlockDataTabPanelProps
 > = ({ blockDataTab, schema, text, setText, modalOpen }) => {
-  const modalHeight = modalOpen ? "60vh" : 420;
+  const modalHeight = modalOpen ? "60vh" : 450;
 
   return (
     <>

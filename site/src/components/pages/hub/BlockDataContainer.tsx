@@ -1,19 +1,14 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
-import { BlockProtocolUpdateEntitiesFunction } from "blockprotocol";
 import { Validator } from "jsonschema";
-import { useCallback, useMemo, useState, VoidFunctionComponent } from "react";
+import { useMemo, useState, VoidFunctionComponent } from "react";
+import { MockBlockDock } from "mock-block-dock";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
-import {
-  BlockExports,
-  BlockSchema,
-  dummyUploadFile,
-  getEmbedBlock,
-} from "./HubUtils";
+import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
 import { TabPanel } from "./TabPanel";
 
 type BlockDataContainerProps = {
@@ -30,52 +25,32 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
-  const [text, setText] = useState("{}");
+
+  const metadataExample = metadata.examples?.length
+    ? JSON.stringify(metadata.examples[0], null, 2)
+    : "{}";
+
+  const [text, setText] = useState(metadataExample);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
-
-  const [blockState, setBlockState] = useState<Record<string, unknown>>({
-    accountId: "test-account-id",
-    entityId: "test-entity-id",
-    initialWidth: 300,
-  });
-
-  const updateEntities: BlockProtocolUpdateEntitiesFunction = useCallback(
-    async (actions) => {
-      for (const action of actions) {
-        if (action.entityId === blockState.entityId) {
-          setBlockState((previousBlockState) => ({
-            ...previousBlockState,
-            ...action.data,
-          }));
-        }
-      }
-
-      return actions;
-    },
-    [blockState.entityId],
-  );
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     let result;
 
     const blockFunctions: Record<string, (params: any) => unknown> = {
-      uploadFile: dummyUploadFile,
       getEmbedBlock,
-      updateEntities,
     };
 
     try {
       result = JSON.parse(text);
+      result.accountId = "test-account-id";
+      result.entityId = "test-entity-id";
+      result.getEmbedBlock = getEmbedBlock;
 
       for (const functionName of Object.keys(blockFunctions)) {
         result[functionName] = blockFunctions[functionName];
-      }
-
-      for (const propertyName of Object.keys(blockState)) {
-        result[propertyName] = blockState[propertyName];
       }
     } catch (err) {
       return [result, [(err as Error).message]];
@@ -91,7 +66,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema, blockState, updateEntities]);
+  }, [text, schema]);
 
   return (
     <>
@@ -147,7 +122,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 420, backgroundColor: "white" }}>
+          <Box sx={{ height: 450, backgroundColor: "white" }}>
             <Tabs
               TabIndicatorProps={{
                 style: { display: "none" },
@@ -185,11 +160,14 @@ export const BlockDataContainer: VoidFunctionComponent<
                 sx={{
                   height: "max-content",
                   minHeight: "100%",
-                  maxWidth: !isMobile ? "300px" : undefined,
                   mx: "auto",
                 }}
               >
-                {blockModule && <blockModule.default {...props} />}
+                {blockModule && (
+                  <MockBlockDock>
+                    <blockModule.default {...props} />
+                  </MockBlockDock>
+                )}
               </Box>
             </TabPanel>
           </Box>
