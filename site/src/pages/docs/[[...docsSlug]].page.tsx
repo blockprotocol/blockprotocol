@@ -11,11 +11,13 @@ import {
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
+
 import siteMap from "../../../site-map.json";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdxUtils";
 import { Sidebar } from "../../components/PageSidebar";
 import { MdxPageContent } from "../../components/MdxPageContent";
+import Search from "../../components/pages/docs/Search";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",
@@ -180,7 +182,10 @@ const DocsPage: NextPage<DocsPageProps> = ({
         ) : null}
         <Box py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
+            <Box>
+              <Search variant="desktop" />
+              <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
+            </Box>
           ) : null}
           <MdxPageContent
             flexGrow={1}
