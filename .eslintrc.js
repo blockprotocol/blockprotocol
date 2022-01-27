@@ -181,6 +181,10 @@ module.exports = {
       },
     },
     {
+      files: [".github/workflows/algolia/**"],
+      parserOptions: { project: [".github/workflows/algolia/tsconfig.json"] },
+    },
+    {
       files: ["site/**"],
       rules: {
         "no-restricted-imports": [

@@ -136,8 +136,8 @@ export type BlockProtocolAggregateEntitiesResult<T = unknown> = {
     Required<
       Pick<BlockProtocolAggregateOperationInput, "pageNumber" | "itemsPerPage">
     > & {
-      pageCount: number;
-      totalCount: number;
+      pageCount?: number | null;
+      totalCount?: number | null;
     };
 };
 
@@ -268,6 +268,9 @@ export type BlockProtocolCreateEntityTypesFunction = {
 
 export type BlockProtocolAggregateEntityTypesPayload = {
   accountId?: string | null;
+  // @todo mention in spec or remove
+  // include entities that are used by, but don't belong to, the specified account
+  includeOtherTypesInUse?: boolean | null;
   operation?: Omit<
     BlockProtocolAggregateOperationInput,
     "entityTypeId" | "entityTypeVersionId"

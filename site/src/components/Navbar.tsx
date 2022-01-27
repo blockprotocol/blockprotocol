@@ -24,6 +24,7 @@ import { AccountDropdown } from "./Navbar/AccountDropdown";
 import { MobileNavItems } from "./Navbar/MobileNavItems";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./Navbar/util";
 import { MobileBreadcrumbs } from "./Navbar/MobileBreadcrumbs";
+import { LinkButton } from "./LinkButton";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -344,17 +345,16 @@ export const Navbar: VFC<NavbarProps> = ({
                     </Button>
                   )}
                   {user !== "loading" && !user?.isSignedUp ? (
-                    <Link href="/docs/developing-blocks">
-                      <Button
-                        size="small"
-                        variant="primary"
-                        endIcon={<BoltIcon />}
-                      >
-                        {preventOverflowingNavLinks
-                          ? "Build a block"
-                          : "Quick Start Guide"}
-                      </Button>
-                    </Link>
+                    <LinkButton
+                      href="/docs/developing-blocks"
+                      size="small"
+                      variant="primary"
+                      endIcon={<BoltIcon />}
+                    >
+                      {preventOverflowingNavLinks
+                        ? "Build a block"
+                        : "Quick Start Guide"}
+                    </LinkButton>
                   ) : null}
                 </>
               ) : (
@@ -437,21 +437,20 @@ export const Navbar: VFC<NavbarProps> = ({
                 Log in
               </Button>
             )}
-            <Link href="/docs/developing-blocks">
-              <Button
-                sx={{
-                  width: "100%",
-                  py: 1.5,
-                  px: 3,
-                  textTransform: "none",
-                }}
-                variant="primary"
-                startIcon={<BoltIcon />}
-                onClick={() => setDisplayMobileNav(false)}
-              >
-                {sm ? "Get started building blocks" : "Build a block"}
-              </Button>
-            </Link>
+            <LinkButton
+              href="/docs/developing-blocks"
+              sx={{
+                width: "100%",
+                py: 1.5,
+                px: 3,
+                textTransform: "none",
+              }}
+              variant="primary"
+              startIcon={<BoltIcon />}
+              onClick={() => setDisplayMobileNav(false)}
+            >
+              {sm ? "Get started building blocks" : "Build a block"}
+            </LinkButton>
           </Box>
         </Box>
       </Slide>

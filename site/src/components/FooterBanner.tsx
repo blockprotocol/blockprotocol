@@ -8,10 +8,10 @@ import {
   PaperProps,
 } from "@mui/material";
 import Image from "next/image";
-import { Button } from "./Button";
 import { Link } from "./Link";
 import backgroundRainbow from "../../public/assets/background-corner-rainbow.png";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
+import { LinkButton } from "./LinkButton";
 
 type Banner = {
   shouldDisplay: (params: { pathname: string }) => boolean;
@@ -62,17 +62,16 @@ const BannerCard: FC<BannerCardProps> = ({
     }}
   >
     <Box mb={2}>{contents}</Box>
-    <Link href={buttonHref}>
-      <Button
-        sx={{
-          textTransform: "none",
-        }}
-        variant="primary"
-        startIcon={<BoltIcon />}
-      >
-        {buttonText}
-      </Button>
-    </Link>
+    <LinkButton
+      href={buttonHref}
+      sx={{
+        textTransform: "none",
+      }}
+      variant="primary"
+      startIcon={<BoltIcon />}
+    >
+      {buttonText}
+    </LinkButton>
   </Paper>
 );
 

@@ -25,20 +25,39 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
-  const [text, setText] = useState("{}");
+
+  const metadataExample = metadata.examples?.length
+    ? JSON.stringify(metadata.examples[0], null, 2)
+    : "{}";
+
+  const [text, setText] = useState(metadataExample);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
+  const [blockState, setBlockState] = useState<Record<string, unknown>>({
+    accountId: "test-account-id",
+    entityId: "test-entity-id",
+    initialWidth: 300,
+  });
+
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     let result;
+
+    const blockFunctions: Record<string, (params: any) => unknown> = {
+      getEmbedBlock,
+    };
 
     try {
       result = JSON.parse(text);
       result.accountId = "test-account-id";
       result.entityId = "test-entity-id";
       result.getEmbedBlock = getEmbedBlock;
+
+      for (const functionName of Object.keys(blockFunctions)) {
+        result[functionName] = blockFunctions[functionName];
+      }
     } catch (err) {
       return [result, [(err as Error).message]];
     }
@@ -109,7 +128,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 320, backgroundColor: "white" }}>
+          <Box sx={{ height: 450, backgroundColor: "white" }}>
             <Tabs
               TabIndicatorProps={{
                 style: { display: "none" },
@@ -131,15 +150,23 @@ export const BlockDataContainer: VoidFunctionComponent<
             >
               <Tab label={metadata.displayName} />
             </Tabs>
-            <TabPanel value={blockTab} index={0}>
+            <TabPanel
+              value={blockTab}
+              index={0}
+              sx={{
+                overflow: "auto",
+                padding: theme.spacing(4, 4),
+                height: "100%",
+                backgroundColor: "#F7FAFC",
+              }}
+            >
               <Box
                 display="flex"
                 alignItems="center"
                 sx={{
-                  backgroundColor: "#F7FAFC",
-                  height: "100%",
-                  padding: theme.spacing(0, 4),
-                  overflow: "auto",
+                  height: "max-content",
+                  minHeight: "100%",
+                  mx: "auto",
                 }}
               >
                 {blockModule && (

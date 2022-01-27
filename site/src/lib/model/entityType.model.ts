@@ -1,17 +1,17 @@
 import { v4 as uuid } from "uuid";
 import { Db, DBRef } from "mongodb";
-import { JSONObject } from "blockprotocol";
+import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import { escapeRegExp } from "lodash";
 
 import { User } from "./user.model";
 import { FRONTEND_URL, isProduction } from "../config";
-import { JSONSchema, validateAndCompleteJsonSchema } from "../jsonSchema";
+import { validateAndCompleteJsonSchema } from "../jsonSchema";
 
 type EntityTypeProperties = {
   createdAt: Date;
   updatedAt: Date;
   entityTypeId: string;
-  schema: JSONSchema;
+  schema: BlockProtocolEntityType;
   user: DBRef;
 };
 
@@ -21,7 +21,7 @@ export class EntityType {
   createdAt: Date;
   updatedAt: Date;
   entityTypeId: string;
-  schema: JSONSchema;
+  schema: BlockProtocolEntityType;
   user: DBRef;
 
   static readonly COLLECTION_NAME = "bp-entity-types";
@@ -186,7 +186,10 @@ export class EntityType {
       checkedSchema = await EntityType.validateAndCompleteSchema(db, {
         entityTypeId,
         maybeSchema: schema,
-        author: this.schema.author,
+        author:
+          typeof this.schema.author === "string"
+            ? this.schema.author
+            : "unknown",
         user: this.user,
       });
     } catch (err) {

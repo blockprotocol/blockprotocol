@@ -1,0 +1,27 @@
+name: Algolia Upload Index
+
+env:
+  ALGOLIA_PROJECT: ${{ secrets.ALGOLIA_PROJECT }}
+  AGOLIA_WRITE_KEY: ${{ secrets.AGOLIA_WRITE_KEY }}
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "12"
+          cache: yarn
+
+      - name: Install Dependencies & Generate Sitemap
+        run: yarn
+
+      # Runs a single command using the runners shell
+      - name: Upload to algolia
+        run: cd .github/workflows/algolia && npx ts-node ./src/syncAlgoliaIndex.ts

@@ -12,7 +12,7 @@ import { Step1, Step2, Step3, Step4 } from "./Steps";
 const CONTENT = [
   {
     id: 1,
-    title: "What do you mean by 'blocks'?",
+    title: "What do you mean by ‘blocks’?",
     content: (
       <Box>
         Blocks are individual pieces of content on the web – images, text,

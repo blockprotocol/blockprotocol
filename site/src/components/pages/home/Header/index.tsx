@@ -7,10 +7,9 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { gsap } from "gsap";
-import { Button } from "../../../Button";
 import { BoltIcon } from "../../../SvgIcon/BoltIcon";
-import { Link } from "../../../Link";
 import { HeaderCard } from "./HeaderCard";
+import { LinkButton } from "../../../LinkButton";
 
 export const Header = () => {
   const theme = useTheme();
@@ -140,9 +139,9 @@ export const Header = () => {
             <strong> data-driven blocks</strong>. Make your applications both
             human and machine-readable.
           </Typography>
-          <Link href="/docs/developing-blocks">
-            <Button startIcon={<BoltIcon />}>Read the Quickstart Guide</Button>
-          </Link>
+          <LinkButton href="/docs/developing-blocks" startIcon={<BoltIcon />}>
+            Read the Quickstart Guide
+          </LinkButton>
         </Box>
       </Container>
 
