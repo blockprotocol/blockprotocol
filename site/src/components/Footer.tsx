@@ -62,11 +62,11 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
         ":hover": {
           color: theme.palette.gray[20],
         },
-        ":focus-visible:after": {
-          borderColor: theme.palette.gray[20],
-        },
         ":active": {
           color: theme.palette.common.white,
+        },
+        ":focus-visible": {
+          outlineColor: theme.palette.gray[40],
         },
       })}
     >
@@ -108,23 +108,24 @@ const Socials = (
           key={href}
           sx={{
             marginRight: 2.5,
+            color: (theme) => theme.palette.gray[50],
             ":hover": {
               svg: {
                 color: (theme) => theme.palette.gray[30],
               },
             },
-            ":focus-visible,:active": {
+            ":active": {
               svg: {
                 color: (theme) => theme.palette.common.white,
               },
             },
-            ":focus-visible:after": {
-              display: "none",
+            ":focus-visible": {
+              outlineColor: (theme) => theme.palette.gray[50],
             },
             svg: {
               transition: (theme) =>
                 theme.transitions.create("color", { duration: 150 }),
-              color: (theme) => theme.palette.gray[50],
+              color: "inherit",
             },
           }}
         >
@@ -241,13 +242,20 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                   ":active": {
                     color: ({ palette }) => palette.common.white,
                   },
+                  ":focus-visible": {
+                    borderColor: "transparent",
+                    outline: ({ palette }) => `1px solid ${palette.gray[50]}`,
+                  },
                 }}
               >
                 <HASHLogoIcon
                   sx={{
-                    transition: theme.transitions.create("color", {
-                      duration: 150,
-                    }),
+                    transition: theme.transitions.create(
+                      ["color", "borderColor"],
+                      {
+                        duration: 150,
+                      },
+                    ),
                   }}
                 />
               </Box>

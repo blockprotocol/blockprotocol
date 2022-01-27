@@ -18,9 +18,6 @@ const FALLBACK_FONTS = [`"Helvetica"`, `"Arial"`, "sans-serif"];
 const buttonFocusBorderOffset = 6;
 const buttonFocusBorderWidth = 4;
 
-const linkFocusBorderOffset = 6;
-const linkFocusBorderWidth = 2;
-
 // @todo use more descriptive names instead of --step-1, --step-2
 // wouldn't need this when this is in
 // @see https://github.com/mui-org/material-ui/issues/15251
@@ -419,6 +416,15 @@ export const theme = createTheme({
             svg: {
               color: customColors.purple[700],
             },
+          },
+          "&:focus": {
+            border: "none !important",
+            borderRadius: 0,
+          },
+          "&:focus-visible": {
+            borderRadius: 0,
+            border: "none !important",
+            outline: `1px solid ${customColors.purple[600]}`,
           },
           svg: {
             color: customColors.gray[60],
@@ -862,17 +868,7 @@ export const theme = createTheme({
           position: "relative",
           ":focus-visible": {
             border: "none",
-          },
-          ":focus-visible:after": {
-            content: `""`,
-            position: "absolute",
-            left: -linkFocusBorderOffset,
-            top: -linkFocusBorderOffset,
-            bottom: -linkFocusBorderOffset,
-            right: -linkFocusBorderOffset,
-            border: `${linkFocusBorderWidth}px solid`,
-            borderColor: customColors.purple[700],
-            borderRadius: 4 + linkFocusBorderOffset,
+            outline: `1px solid ${customColors.purple[700]}`,
           },
         },
       },
@@ -900,12 +896,17 @@ export const theme = createTheme({
         disableFocusRipple: true,
         disableRipple: true,
         disableTouchRipple: true,
+        tabIndex: 0,
       },
       styleOverrides: {
         root: {
+          border: "1px solid transparent",
           textTransform: "none",
           padding: defaultTheme.spacing(1, 0),
           marginRight: defaultTheme.spacing(3),
+          "&:focus-visible": {
+            borderColor: customColors.purple[600],
+          },
         },
         textColorPrimary: {
           color: customColors.gray[70],
@@ -916,7 +917,6 @@ export const theme = createTheme({
       styleOverrides: {
         li: {
           whiteSpace: "nowrap",
-          overflow: "hidden",
           textOverflow: "ellipsis",
           fontSize: 14,
           color: customColors.gray[60],

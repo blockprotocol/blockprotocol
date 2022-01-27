@@ -1,5 +1,5 @@
 *:focus {
-  outline: none !important;
+  outline: none;
 }
 
 #partners_form input {

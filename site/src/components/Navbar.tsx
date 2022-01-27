@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
-import { Button } from "./Button";
 import { Link } from "./Link";
 import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
 import { BoltIcon } from "./SvgIcon/BoltIcon";
@@ -254,13 +253,16 @@ export const Navbar: VFC<NavbarProps> = ({
             alignItems="center"
             justifyContent="space-between"
           >
-            <Link href="/">
+            <Link
+              href="/"
+              sx={{
+                color: ({ palette }) =>
+                  isNavbarDark ? palette.purple[400] : palette.gray[80],
+              }}
+            >
               <BlockProtocolLogoIcon
                 onClick={() => setDisplayMobileNav(false)}
-                sx={{
-                  color: ({ palette }) =>
-                    isNavbarDark ? palette.purple[400] : palette.gray[80],
-                }}
+                sx={{ color: "inherit" }}
               />
             </Link>
             <Box display="flex" alignItems="center">
@@ -308,9 +310,10 @@ export const Navbar: VFC<NavbarProps> = ({
                     </Link>
                   ))}
                   {user || router.pathname === "/login" ? null : (
-                    <Button
+                    <Link
+                      href="#"
                       onClick={openLoginModal}
-                      variant="transparent"
+                      // variant="transparent"
                       sx={{
                         marginRight: 3,
                         backgroundColor: "unset",
@@ -342,7 +345,7 @@ export const Navbar: VFC<NavbarProps> = ({
                       >
                         Log In
                       </Typography>
-                    </Button>
+                    </Link>
                   )}
                   {user !== "loading" && !user?.isSignedUp ? (
                     <LinkButton
@@ -424,18 +427,20 @@ export const Navbar: VFC<NavbarProps> = ({
             }}
           >
             {user ? null : router.pathname === "/login" ? null : (
-              <Button
-                onClick={() => {
+              <Link
+                href="#"
+                onClick={(event) => {
                   setDisplayMobileNav(false);
                   openLoginModal();
+                  event?.preventDefault();
                 }}
-                variant="secondary"
+                // variant="secondary"
                 sx={{
                   marginBottom: 1,
                 }}
               >
                 Log in
-              </Button>
+              </Link>
             )}
             <LinkButton
               href="/docs/developing-blocks"
