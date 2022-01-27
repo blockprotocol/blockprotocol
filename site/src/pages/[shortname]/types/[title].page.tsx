@@ -101,7 +101,7 @@ const EntityTypePage: NextPage = () => {
     <>
       <Head>
         <title>
-          Block Protocol - @{shortname}/{title} Schema
+          Block Protocol - {shortname}/{title} Schema
         </title>
       </Head>
       <Container
@@ -117,9 +117,9 @@ const EntityTypePage: NextPage = () => {
         }}
       >
         <header className={tw`mb-8`}>
-          <Link href={`/@${shortname}`}>
+          <Link href={`/${shortname}`}>
             <a>
-              @{shortname}
+              {shortname}
               {" >"}
             </a>
           </Link>

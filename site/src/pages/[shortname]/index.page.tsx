@@ -93,9 +93,27 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
     return false;
   }, [user, currentUser]);
 
+  const handleSchemaTitleChange = (value: string) => {
+    let formattedText = value.trim();
+    // replace all empty spaces
+    formattedText = formattedText.replace(/\s/g, "");
+
+    // capitalize text
+    if (formattedText.length > 1) {
+      formattedText = formattedText[0].toUpperCase() + formattedText.slice(1);
+    }
+
+    setNewSchemaTitle(formattedText);
+  };
+
   const handleCreateSchema = useCallback(
     async (evt: FormEvent) => {
       evt.preventDefault();
+      if (newSchemaTitle == "") {
+        setError("Please enter a valid value");
+        return;
+      }
+
       setLoading(true);
       const { data, error: apiError } = await apiClient.createEntityType({
         schema: {
@@ -117,6 +135,8 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
     },
     [user, newSchemaTitle, router],
   );
+
+  console.log(entityTypes);
 
   return (
     <>
@@ -330,7 +350,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                 if (error) {
                   setError("");
                 }
-                setNewSchemaTitle(evt.target.value);
+                handleSchemaTitleChange(evt.target.value);
               }}
               required
               error={Boolean(error)}
