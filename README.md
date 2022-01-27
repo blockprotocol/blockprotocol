@@ -48,7 +48,7 @@ Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or ema
 
 You can also join our [community Discord server](https://blockprotocol.org/discord) for quick help and support.
 
-Project Link: [https://github.com/blockprotocol/blockprotocol](https://github.com/blockprotocol/blockprotocol)
+Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
 ## Acknowledgments
 
