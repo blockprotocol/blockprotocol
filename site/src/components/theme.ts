@@ -479,7 +479,7 @@ export const theme = createTheme({
             height: "100%",
             border: "1px solid transparent",
           },
-          ":focus:after": {
+          ":focus-visible:after": {
             content: `""`,
             position: "absolute",
             left: -buttonFocusBorderOffset,
@@ -519,7 +519,7 @@ export const theme = createTheme({
           style: {
             color: customColors.gray["20"],
             borderRadius: 34,
-            ":focus:after": {
+            ":focus-visible:after": {
               borderRadius: 34 + buttonFocusBorderOffset,
             },
           },
@@ -532,7 +532,7 @@ export const theme = createTheme({
             ":before": {
               borderColor: "currentColor",
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderRadius: 34 + buttonFocusBorderOffset,
             },
           },
@@ -545,7 +545,7 @@ export const theme = createTheme({
             ":before": {
               borderColor: "#C1CFDE",
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderRadius: 34 + buttonFocusBorderOffset,
             },
             background: defaultTheme.palette.common.white,
@@ -634,7 +634,7 @@ export const theme = createTheme({
                 opacity: 1,
               },
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.purple[600],
             },
           },
@@ -646,7 +646,7 @@ export const theme = createTheme({
             ":hover": {
               backgroundColor: customColors.teal[600],
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.teal[500],
             },
           },
@@ -658,7 +658,7 @@ export const theme = createTheme({
             ":hover": {
               backgroundColor: customColors.gray[70],
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.gray[60],
             },
           },
@@ -670,7 +670,7 @@ export const theme = createTheme({
             ":hover": {
               backgroundColor: customColors.orange[600],
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.orange[500],
             },
           },
@@ -682,7 +682,7 @@ export const theme = createTheme({
             ":hover": {
               backgroundColor: customColors.red[700],
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.purple[700],
             },
           },
@@ -705,7 +705,7 @@ export const theme = createTheme({
               background: customColors.teal[200],
               color: customColors.teal[700],
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.teal[600],
             },
           },
@@ -718,7 +718,7 @@ export const theme = createTheme({
               background: customColors.gray[30],
               color: customColors.gray[70],
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.gray[70],
             },
           },
@@ -733,7 +733,7 @@ export const theme = createTheme({
               color: customColors.orange[700],
               background: customColors.orange[200],
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               borderColor: customColors.purple[600],
             },
           },
@@ -860,10 +860,10 @@ export const theme = createTheme({
         root: {
           textDecoration: "none",
           position: "relative",
-          ":focus": {
+          ":focus-visible": {
             border: "none",
           },
-          ":focus:after": {
+          ":focus-visible:after": {
             content: `""`,
             position: "absolute",
             left: -linkFocusBorderOffset,

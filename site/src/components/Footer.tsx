@@ -62,7 +62,7 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
         ":hover": {
           color: theme.palette.gray[20],
         },
-        ":focus:after": {
+        ":focus-visible:after": {
           borderColor: theme.palette.gray[20],
         },
         ":active": {
@@ -113,12 +113,12 @@ const Socials = (
                 color: (theme) => theme.palette.gray[30],
               },
             },
-            ":focus,:active": {
+            ":focus-visible,:active": {
               svg: {
                 color: (theme) => theme.palette.common.white,
               },
             },
-            ":focus:after": {
+            ":focus-visible:after": {
               display: "none",
             },
             svg: {
@@ -142,7 +142,7 @@ const Socials = (
         marginBottom: 2.5,
         backgroundColor: (theme) => theme.palette.gray[70],
         color: (theme) => theme.palette.gray[20],
-        ":focus:after": {
+        ":focus-visible:after": {
           borderColor: (theme) => theme.palette.gray[70],
         },
       }}
