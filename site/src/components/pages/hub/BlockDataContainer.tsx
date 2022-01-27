@@ -62,14 +62,6 @@ export const BlockDataContainer: VoidFunctionComponent<
       getEmbedBlock,
     };
 
-    const blockFunctions: Record<string, (params: any) => unknown> = {
-      getEmbedBlock,
-    };
-
-    for (const functionName of Object.keys(blockFunctions)) {
-      result[functionName] = blockFunctions[functionName];
-    }
-
     try {
       Object.assign(result, JSON.parse(text));
     } catch (err) {
