@@ -1,14 +1,14 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { TestBlock } from "./TestBlock";
-import { MockBlockEmbedder } from "../src/MockBlockEmbedder";
+import { MockBlockDock } from "../src/MockBlockDock";
 
 const node = document.getElementById("app");
 
 const DevApp = () => (
-  <MockBlockEmbedder>
+  <MockBlockDock>
     <TestBlock entityId="test-entity-1" name="World" />
-  </MockBlockEmbedder>
+  </MockBlockDock>
 );
 
 ReactDOM.render(<DevApp />, node);

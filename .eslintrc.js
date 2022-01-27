@@ -175,9 +175,9 @@ module.exports = {
       },
     },
     {
-      files: ["packages/mock-block-embedder/**"],
+      files: ["packages/mock-block-dock/**"],
       parserOptions: {
-        project: ["packages/mock-block-embedder/tsconfig.json"],
+        project: ["packages/mock-block-dock/tsconfig.json"],
       },
     },
     {

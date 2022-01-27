@@ -15,7 +15,7 @@ type MockBlockDockProps = {
   blockSchema?: Partial<BlockProtocolEntityType>;
 };
 
-export const MockBlockEmbedder: VoidFunctionComponent<MockBlockDockProps> = ({
+export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   children,
   blockSchema,
 }) => {

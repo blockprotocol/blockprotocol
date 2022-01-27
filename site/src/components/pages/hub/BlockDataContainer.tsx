@@ -1,7 +1,7 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
 import { Validator } from "jsonschema";
 import { useMemo, useState, VoidFunctionComponent } from "react";
-import MockBlockEmbedder from "mock-block-embedder";
+import MockBlockDock from "mock-block-dock";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
@@ -170,9 +170,9 @@ export const BlockDataContainer: VoidFunctionComponent<
                 }}
               >
                 {blockModule && (
-                  <MockBlockEmbedder>
+                  <MockBlockDock>
                     <blockModule.default {...props} />
-                  </MockBlockEmbedder>
+                  </MockBlockDock>
                 )}
               </Box>
             </TabPanel>

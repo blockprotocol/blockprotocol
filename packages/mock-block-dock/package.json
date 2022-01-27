@@ -1,5 +1,5 @@
 {
-  "name": "mock-block-embedder",
+  "name": "mock-block-dock",
   "version": "0.0.2",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
@@ -10,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:blockprotocol/blockprotocol.git",
-    "directory": "packages/mock-block-embedder"
+    "directory": "packages/mock-block-dock"
   },
   "license": "MIT",
   "author": {
@@ -35,7 +35,7 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --open --config dev/webpack.config.js"
   },
   "dependencies": {
-    "blockprotocol": "0.0.5",
+    "blockprotocol": "0.0.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

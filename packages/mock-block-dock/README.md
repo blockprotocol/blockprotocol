@@ -7,9 +7,9 @@ A component which provides mocks for testing [Block Protocol](https://blockproto
 When developing a block, wrap it in the embedder and pass your block its initial props:
 
 ```jsx
-<MockBlockEmbedder>
+<MockBlockDock>
   <TestBlock {...props} />
-</MockBlockEmbedder>
+</MockBlockDock>
 ```
 
 The embedder will automatically pass the following Block Protocol functions to your block:
@@ -34,7 +34,7 @@ Your block will be re-rendered with its new properties.
 
 It will also pass `linkGroups` and `linkedEntities`, which will be populated once you create links between entities using `createLinks` (see [linking entities](https://blockprotocol.org/spec/block-types#linking-entities) for more).
 
-`MockBlockEmbedder is` automatically included in [block-template](https://www.npmjs.com/package/block-template), which you can copy via [create-block-app](https://www.npmjs.com/package/create-block-app)
+`MockBlockDock is` automatically included in [block-template](https://www.npmjs.com/package/block-template), which you can copy via [create-block-app](https://www.npmjs.com/package/create-block-app)
 
 ## Note
 

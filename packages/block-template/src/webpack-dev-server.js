@@ -6,16 +6,16 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 // eslint-disable-next-line import/no-extraneous-dependencies -- TODO update config properly
-import MockBlockEmbedder from "mock-block-embedder";
+import MockBlockDock from "mock-block-dock";
 
 import Component from "./index";
 
 const node = document.getElementById("app");
 
 const App = () => (
-  <MockBlockEmbedder>
+  <MockBlockDock>
     <Component entityId="test-block-1" name="World" />
-  </MockBlockEmbedder>
+  </MockBlockDock>
 );
 
 ReactDOM.render(<App />, node);
