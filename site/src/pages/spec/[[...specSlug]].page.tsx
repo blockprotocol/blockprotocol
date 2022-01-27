@@ -23,6 +23,7 @@ import {
 import { PageNavLinks } from "../../components/PageNavLinks";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 import Search from "../../components/pages/docs/Search";
+import { LinkButton } from "../../components/LinkButton";
 
 const GitHubInfoCard = (
   <Paper
