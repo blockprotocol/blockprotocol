@@ -55,6 +55,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     }))
     .map((metadata: ExpandedBlockMetadata) => ({
       ...metadata,
+      author: metadata.packagePath.split("/")[0].replace(/^@/, ""),
       icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
       image: getBlockMediaUrl(metadata.image, metadata.packagePath),
       lastUpdated: buildConfig.find(

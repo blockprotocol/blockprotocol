@@ -42,6 +42,6 @@ export default createAuthenticatedHandler<
     if (await User.validateShortname(db, shortname, res)) {
       await user.update(db, { shortname, preferredName });
 
-      res.status(200).json({ user: user.serialize() });
+      res.status(200).json({ user: user.serialize(true) });
     }
   });

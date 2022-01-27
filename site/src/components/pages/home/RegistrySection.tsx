@@ -3,10 +3,10 @@ import { Typography, Box } from "@mui/material";
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
-import { Button } from "../../Button";
 import { BlockHubIcon } from "../../SvgIcon/BlockHubIcon";
 
 import { BlocksSlider } from "../../BlocksSlider";
+import { LinkButton } from "../../LinkButton";
 
 type RegistrySectionProps = {
   catalog: BlockMetadata[];
@@ -50,11 +50,13 @@ export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
         <BlocksSlider catalog={catalog} />
       </Box>
       <Box sx={{ textAlign: "center", width: { md: "40%" }, maxWidth: 540 }}>
-        <Link href="/hub">
-          <Button variant="secondary" startIcon={<BlockHubIcon />}>
-            Explore all Blocks
-          </Button>
-        </Link>
+        <LinkButton
+          href="/hub"
+          variant="secondary"
+          startIcon={<BlockHubIcon />}
+        >
+          Explore all Blocks
+        </LinkButton>
         <Spacer height={4} />
         <Box>
           Anyone can build new blocks and submit them to the registry. If you

@@ -21,6 +21,18 @@ import {
   ApiGenerateApiKeyResponse,
 } from "../pages/api/me/generateApiKey.api";
 import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
+import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
+import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
+import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
+import {
+  ApiTypeCreateRequest,
+  ApiTypeCreateResponse,
+} from "../pages/api/types/create.api";
+import {
+  ApiTypeUpdateRequest,
+  ApiTypeUpdateResponse,
+} from "../pages/api/types/[id]/update.api";
+import { ApiUserByShortnameResponseResponse } from "../pages/api/users/[shortname].api";
 
 const BASE_URL = "/api/";
 
@@ -72,15 +84,59 @@ const post = <RequestData = any, ResponseData = any>(
     .then(({ data }) => ({ data }))
     .catch(handleAxiosError);
 
+const put = <RequestData = any, ResponseData = any>(
+  url: string,
+  requestData?: RequestData,
+  config?: AxiosRequestConfig<RequestData>,
+): Promise<{
+  data?: ResponseData;
+  error?: ApiClientError;
+}> =>
+  axiosClient
+    .put<ResponseData, AxiosResponse<ResponseData>, RequestData>(
+      url,
+      requestData,
+      config,
+    )
+    .then(({ data }) => ({ data }))
+    .catch(handleAxiosError);
+
 export const apiClient = {
   get,
   post,
+  put,
   generateApiKey: (requestData: ApiGenerateApiKeyBody) =>
     apiClient.post<ApiGenerateApiKeyBody, ApiGenerateApiKeyResponse>(
       "me/generateApiKey",
       requestData,
     ),
   getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/apiKeys"),
+  getUser: ({ shortname }: { shortname: string }) =>
+    apiClient.get<ApiUserByShortnameResponseResponse>(`users/${shortname}`),
+  getUserBlocks: ({ shortname }: { shortname: string }) =>
+    apiClient.get<ApiBlocksByUserResponse>(`users/${shortname}/blocks`),
+  getUserEntityTypes: ({ shortname }: { shortname: string }) =>
+    apiClient.get<ApiTypesByUserResponse>(`users/${shortname}/types`),
+  getEntityTypeByUserAndTitle: ({
+    title,
+    shortname,
+  }: {
+    title: string;
+    shortname: string;
+  }) =>
+    apiClient.get<ApiTypeByUserAndTitleResponse>(
+      `users/${shortname}/types/${title}`,
+    ),
+  createEntityType: (requestData: ApiTypeCreateRequest) =>
+    apiClient.post<ApiTypeCreateRequest, ApiTypeCreateResponse>(
+      "types/create",
+      requestData,
+    ),
+  updateEntityType: (requestData: ApiTypeUpdateRequest, entityTypeId: string) =>
+    apiClient.put<ApiTypeUpdateRequest, ApiTypeUpdateResponse>(
+      `types/${entityTypeId}/update`,
+      requestData,
+    ),
   signup: (requestData: ApiSignupRequestBody) =>
     post<ApiSignupRequestBody, ApiSignupResponse>("signup", requestData),
   verifyEmail: (requestData: ApiVerifyEmailRequestBody) =>
