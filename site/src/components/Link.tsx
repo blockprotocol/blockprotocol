@@ -14,7 +14,7 @@ export const isHrefExternal = (href: string | UrlObject) =>
   typeof href === "string" &&
   (href === "/discord" ||
     !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href)) &&
-  !href.includes(FRONTEND_URL);
+  !href.startsWith(FRONTEND_URL);
 
 /**
  * This component is based on https://github.com/mui-org/material-ui/blob/a5c92dfd84dfe5888a8b383a9b5fe5701a934564/examples/nextjs/src/Link.js
