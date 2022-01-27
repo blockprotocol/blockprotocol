@@ -15,7 +15,11 @@ const defaultTheme = createTheme();
 
 const FALLBACK_FONTS = [`"Helvetica"`, `"Arial"`, "sans-serif"];
 
-const focusBorderOffset = 6;
+const buttonFocusBorderOffset = 6;
+const buttonFocusBorderWidth = 4;
+
+const linkFocusBorderOffset = 6;
+const linkFocusBorderWidth = 2;
 
 // @todo use more descriptive names instead of --step-1, --step-2
 // wouldn't need this when this is in
@@ -479,12 +483,12 @@ export const theme = createTheme({
           ":focus:after": {
             content: `""`,
             position: "absolute",
-            left: -focusBorderOffset,
-            top: -focusBorderOffset,
-            bottom: -focusBorderOffset,
-            right: -focusBorderOffset,
-            border: "4px solid",
-            borderRadius: 6 + focusBorderOffset,
+            left: -buttonFocusBorderOffset,
+            top: -buttonFocusBorderOffset,
+            bottom: -buttonFocusBorderOffset,
+            right: -buttonFocusBorderOffset,
+            border: `${buttonFocusBorderWidth}px solid`,
+            borderRadius: 6 + buttonFocusBorderOffset,
           },
         },
         endIcon: {
@@ -517,7 +521,7 @@ export const theme = createTheme({
             color: customColors.gray["20"],
             borderRadius: 34,
             ":focus:after": {
-              borderRadius: 34 + focusBorderOffset,
+              borderRadius: 34 + buttonFocusBorderOffset,
             },
           },
         },
@@ -530,7 +534,7 @@ export const theme = createTheme({
               borderColor: "currentColor",
             },
             ":focus:after": {
-              borderRadius: 34 + focusBorderOffset,
+              borderRadius: 34 + buttonFocusBorderOffset,
             },
           },
         },
@@ -543,7 +547,7 @@ export const theme = createTheme({
               borderColor: "#C1CFDE",
             },
             ":focus:after": {
-              borderRadius: 34 + focusBorderOffset,
+              borderRadius: 34 + buttonFocusBorderOffset,
             },
             background: defaultTheme.palette.common.white,
             "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
@@ -856,21 +860,20 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textDecoration: "none",
-          // display: "inl  ine-block",
           position: "relative",
           ":focus": {
-            borderBottom: "none",
+            border: "none",
           },
           ":focus:after": {
             content: `""`,
             position: "absolute",
-            left: -focusBorderOffset,
-            top: -focusBorderOffset,
-            bottom: -focusBorderOffset,
-            right: -focusBorderOffset,
-            border: "4px solid",
+            left: -linkFocusBorderOffset,
+            top: -linkFocusBorderOffset,
+            bottom: -linkFocusBorderOffset,
+            right: -linkFocusBorderOffset,
+            border: `${linkFocusBorderWidth}px solid`,
             borderColor: customColors.purple[700],
-            borderRadius: 6 + focusBorderOffset,
+            borderRadius: 4 + linkFocusBorderOffset,
           },
         },
       },
