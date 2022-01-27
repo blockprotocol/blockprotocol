@@ -476,7 +476,7 @@ export const theme = createTheme({
             height: "100%",
             border: "1px solid transparent",
           },
-          "&:focus:after": {
+          ":focus:after": {
             content: `""`,
             position: "absolute",
             left: -focusBorderOffset,
@@ -516,7 +516,7 @@ export const theme = createTheme({
           style: {
             color: customColors.gray["20"],
             borderRadius: 34,
-            "&:focus:after": {
+            ":focus:after": {
               borderRadius: 34 + focusBorderOffset,
             },
           },
@@ -529,7 +529,7 @@ export const theme = createTheme({
             ":before": {
               borderColor: "currentColor",
             },
-            "&:focus:after": {
+            ":focus:after": {
               borderRadius: 34 + focusBorderOffset,
             },
           },
@@ -542,7 +542,7 @@ export const theme = createTheme({
             ":before": {
               borderColor: "#C1CFDE",
             },
-            "&:focus:after": {
+            ":focus:after": {
               borderRadius: 34 + focusBorderOffset,
             },
             background: defaultTheme.palette.common.white,
@@ -856,6 +856,22 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textDecoration: "none",
+          // display: "inl  ine-block",
+          position: "relative",
+          ":focus": {
+            borderBottom: "none",
+          },
+          ":focus:after": {
+            content: `""`,
+            position: "absolute",
+            left: -focusBorderOffset,
+            top: -focusBorderOffset,
+            bottom: -focusBorderOffset,
+            right: -focusBorderOffset,
+            border: "4px solid",
+            borderColor: customColors.purple[700],
+            borderRadius: 6 + focusBorderOffset,
+          },
         },
       },
     },

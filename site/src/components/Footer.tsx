@@ -62,6 +62,9 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
         ":hover": {
           color: theme.palette.gray[20],
         },
+        ":focus:after": {
+          borderColor: theme.palette.gray[20],
+        },
         ":active": {
           color: theme.palette.common.white,
         },
@@ -114,6 +117,9 @@ const Socials = (
               svg: {
                 color: (theme) => theme.palette.common.white,
               },
+            },
+            ":focus:after": {
+              display: "none",
             },
             svg: {
               transition: (theme) =>
