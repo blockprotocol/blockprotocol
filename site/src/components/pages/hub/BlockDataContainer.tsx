@@ -35,12 +35,6 @@ export const BlockDataContainer: VoidFunctionComponent<
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
-  const [blockState, setBlockState] = useState<Record<string, unknown>>({
-    accountId: "test-account-id",
-    entityId: "test-entity-id",
-    initialWidth: 300,
-  });
-
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     let result;
