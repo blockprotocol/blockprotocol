@@ -1,14 +1,12 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-const config = require("./webpack.config");
 
 module.exports = {
-  entry: "./src/webpack-dev-server.tsx",
+  entry: "./dev/DevApp.tsx",
   plugins: [
-    ...config[0].plugins,
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: "src/index.html",
+      template: "./dev/index.html",
     }),
     new webpack.EnvironmentPlugin({
       "process.env.NODE_ENV": process.env.NODE_ENV,
@@ -16,7 +14,17 @@ module.exports = {
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  module: config[0].module,
+  module: {
+    rules: [
+      {
+        test: /\.(t|j)sx?$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
   devServer: {
     hot: true,
     contentBase: __dirname,
