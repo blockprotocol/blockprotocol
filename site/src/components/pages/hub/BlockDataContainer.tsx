@@ -43,7 +43,6 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockState, setBlockState] = useState<Record<string, unknown>>({
     accountId: "test-account-id",
     entityId: "test-entity-id",
-    initialWidth: 600,
   });
 
   const updateEntities: BlockProtocolUpdateEntitiesFunction = useCallback(
