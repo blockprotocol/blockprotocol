@@ -30,7 +30,12 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
-  const [text, setText] = useState("{}");
+
+  const metadataExample = metadata.examples?.length
+    ? JSON.stringify(metadata.examples[0], null, 2)
+    : "{}";
+
+  const [text, setText] = useState(metadataExample);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
@@ -147,7 +152,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 420, backgroundColor: "white" }}>
+          <Box sx={{ height: 450, backgroundColor: "white" }}>
             <Tabs
               TabIndicatorProps={{
                 style: { display: "none" },
@@ -185,7 +190,6 @@ export const BlockDataContainer: VoidFunctionComponent<
                 sx={{
                   height: "max-content",
                   minHeight: "100%",
-                  maxWidth: !isMobile ? "300px" : undefined,
                   mx: "auto",
                 }}
               >
