@@ -12,15 +12,15 @@ Please refer to the [Block Protocol documentation](https://blockprotocol.org/doc
 
 ## Usage
 
-We’ll be publishing an example of an embedding application for the Block Protocol in January 2022. In the meantime:
+[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an example embedding application for the Block Protocol.
 
-_For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub)._
+For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub).
 
 ## Roadmap
 
 _We’ll be publishing a public roadmap for the Block Protocol soon._
 
-See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a full list of proposed features (and known issues).
+See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a list of some proposed features (and known issues).
 
 ## Contributing
 
@@ -48,7 +48,7 @@ Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or ema
 
 You can also join our [community Discord server](https://blockprotocol.org/discord) for quick help and support.
 
-Project Link: [https://github.com/blockprotocol/blockprotocol](https://github.com/blockprotocol/blockprotocol)
+Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
 ## Acknowledgments
 

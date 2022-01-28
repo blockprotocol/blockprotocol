@@ -1,6 +1,12 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
 import { Validator } from "jsonschema";
-import { useMemo, useState, VoidFunctionComponent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  VoidFunctionComponent,
+} from "react";
 import { MockBlockDock } from "mock-block-dock";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
@@ -26,32 +32,38 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
 
-  const metadataExample = metadata.examples?.length
-    ? JSON.stringify(metadata.examples[0], null, 2)
-    : "{}";
+  const example = metadata.examples?.[0];
 
-  const [text, setText] = useState(metadataExample);
+  const [text, setText] = useState(
+    example ? JSON.stringify(example, undefined, 2) : "",
+  );
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
+  const prevPackage = useRef<string>(metadata.packagePath);
+  useEffect(() => {
+    if (prevPackage.current !== metadata.packagePath) {
+      // reset data source input when switching blocks
+      if (example) {
+        setText(JSON.stringify(example, undefined, 2));
+      } else {
+        setText("");
+      }
+    }
+    prevPackage.current = metadata.packagePath;
+  }, [example, metadata.packagePath, text]);
+
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
-    let result;
-
-    const blockFunctions: Record<string, (params: any) => unknown> = {
+    const result = {
+      accountId: "test-account-id",
+      entityId: "test-entity-id",
       getEmbedBlock,
     };
 
     try {
-      result = JSON.parse(text);
-      result.accountId = "test-account-id";
-      result.entityId = "test-entity-id";
-      result.getEmbedBlock = getEmbedBlock;
-
-      for (const functionName of Object.keys(blockFunctions)) {
-        result[functionName] = blockFunctions[functionName];
-      }
+      Object.assign(result, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }
