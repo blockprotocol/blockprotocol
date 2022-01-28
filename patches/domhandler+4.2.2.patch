@@ -1,0 +1,12 @@
+diff --git a/node_modules/domhandler/lib/index.d.ts b/node_modules/domhandler/lib/index.d.ts
+index befc7d8..88cc9b9 100644
+--- a/node_modules/domhandler/lib/index.d.ts
++++ b/node_modules/domhandler/lib/index.d.ts
+@@ -1,5 +1,7 @@
+ import { Node, Element, DataNode, NodeWithChildren, Document } from "./node";
+ export * from "./node";
++// @todo fix properly later
++export type DomElement = any;
+ export interface DomHandlerOptions {
+     /**
+      * Add a `startIndex` property to nodes.

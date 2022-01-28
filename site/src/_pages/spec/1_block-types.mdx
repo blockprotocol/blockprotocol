@@ -4,6 +4,8 @@
 
 We have published [HASH, an example embedding application with example blocks](https://github.com/hashintel/hash).
 
+You can see source code for an example block [here](https://github.com/hashintel/hash/tree/main/packages/blocks/code).
+
 We will be developing more complex blocks which demonstrate the full range of functionality described below.
 
 We welcome feedback and suggestions - [please open or contribute to a discussion](https://github.com/blockprotocol/blockprotocol/discussions) to do so.
@@ -37,7 +39,7 @@ A block package SHOULD contain:
       For example, a block may rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page.
     - the path or URL to the entrypoint source file (e.g. `index.html`, `index.js`) under `source`
     - the `version` of the block, which SHOULD use [semantic versioning](https://semver.org/)
-    - `protocol`: the applicable block protocol version, once the protocol is versioned (it is currently not).
+    - `protocol`: the applicable block protocol version: currently `0.1`.
 
   - SHOULD specify:
 

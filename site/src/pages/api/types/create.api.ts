@@ -1,9 +1,10 @@
+import { JSONObject } from "blockprotocol";
 import { createAuthenticatedHandler } from "../../../lib/handler/authenticatedHandler";
 import { EntityType } from "../../../lib/model/entityType.model";
 import { formatErrors } from "../../../util/api";
 
 export type ApiTypeCreateRequest = {
-  schema: string;
+  schema: string | JSONObject;
 };
 
 export type ApiTypeCreateResponse = {

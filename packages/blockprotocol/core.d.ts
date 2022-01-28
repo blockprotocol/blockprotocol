@@ -37,7 +37,7 @@ export type BlockProtocolEntity = {
   accountId?: string | null;
   entityId: string;
   entityTypeId?: string | null;
-  [key: string]: JSONValue;
+  [key: string]: unknown;
 };
 
 export type BlockProtocolCreateEntitiesAction<T> = {
@@ -136,8 +136,8 @@ export type BlockProtocolAggregateEntitiesResult<T = unknown> = {
     Required<
       Pick<BlockProtocolAggregateOperationInput, "pageNumber" | "itemsPerPage">
     > & {
-      pageCount: number;
-      totalCount: number;
+      pageCount?: number | null;
+      totalCount?: number | null;
     };
 };
 
@@ -252,7 +252,7 @@ export type BlockProtocolEntityType = {
   $schema: string;
   title: string;
   type: string;
-  [key: string]: JSONValue;
+  [key: string]: unknown;
 };
 
 type BlockProtocolCreateEntityTypesAction = {
@@ -268,6 +268,9 @@ export type BlockProtocolCreateEntityTypesFunction = {
 
 export type BlockProtocolAggregateEntityTypesPayload = {
   accountId?: string | null;
+  // @todo mention in spec or remove
+  // include entities that are used by, but don't belong to, the specified account
+  includeOtherTypesInUse?: boolean | null;
   operation?: Omit<
     BlockProtocolAggregateOperationInput,
     "entityTypeId" | "entityTypeVersionId"
@@ -332,24 +335,24 @@ export type BlockProtocolFunction =
   | BlockProtocolUploadFileFunction;
 
 export type BlockProtocolFunctions = {
-  aggregateEntities: BlockProtocolAggregateEntitiesFunction | undefined;
-  createEntities: BlockProtocolCreateEntitiesFunction | undefined;
-  getEntities: BlockProtocolGetEntitiesFunction | undefined;
-  deleteEntities: BlockProtocolDeleteEntitiesFunction | undefined;
-  updateEntities: BlockProtocolUpdateEntitiesFunction | undefined;
+  aggregateEntities?: BlockProtocolAggregateEntitiesFunction | undefined;
+  createEntities?: BlockProtocolCreateEntitiesFunction | undefined;
+  getEntities?: BlockProtocolGetEntitiesFunction | undefined;
+  deleteEntities?: BlockProtocolDeleteEntitiesFunction | undefined;
+  updateEntities?: BlockProtocolUpdateEntitiesFunction | undefined;
 
-  aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction | undefined;
-  createEntityTypes: BlockProtocolCreateEntityTypesFunction | undefined;
-  getEntityTypes: BlockProtocolGetEntityTypesFunction | undefined;
-  updateEntityTypes: BlockProtocolUpdateEntityTypesFunction | undefined;
-  deleteEntityTypes: BlockProtocolDeleteEntityTypesFunction | undefined;
+  aggregateEntityTypes?: BlockProtocolAggregateEntityTypesFunction | undefined;
+  createEntityTypes?: BlockProtocolCreateEntityTypesFunction | undefined;
+  getEntityTypes?: BlockProtocolGetEntityTypesFunction | undefined;
+  updateEntityTypes?: BlockProtocolUpdateEntityTypesFunction | undefined;
+  deleteEntityTypes?: BlockProtocolDeleteEntityTypesFunction | undefined;
 
-  getLinks: BlockProtocolGetLinksFunction | undefined;
-  createLinks: BlockProtocolCreateLinksFunction | undefined;
-  deleteLinks: BlockProtocolDeleteLinksFunction | undefined;
-  updateLinks: BlockProtocolUpdateLinksFunction | undefined;
+  getLinks?: BlockProtocolGetLinksFunction | undefined;
+  createLinks?: BlockProtocolCreateLinksFunction | undefined;
+  deleteLinks?: BlockProtocolDeleteLinksFunction | undefined;
+  updateLinks?: BlockProtocolUpdateLinksFunction | undefined;
 
-  uploadFile: BlockProtocolUploadFileFunction | undefined;
+  uploadFile?: BlockProtocolUploadFileFunction | undefined;
 };
 
 export type JSONValue =
@@ -369,9 +372,9 @@ export interface JSONArray extends Array<JSONValue> {}
  * which the embedding application should provide.
  */
 export type BlockProtocolProps = {
-  accountId?: string;
+  accountId?: string | null;
   entityId: string;
-  entityTypeId?: string;
+  entityTypeId?: string | null;
   entityTypes?: BlockProtocolEntityType[];
   linkedAggregations?: BlockProtocolLinkedAggregation[];
   linkedEntities?: BlockProtocolEntity[];

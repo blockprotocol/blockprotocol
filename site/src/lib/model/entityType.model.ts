@@ -1,27 +1,33 @@
 import { v4 as uuid } from "uuid";
 import { Db, DBRef } from "mongodb";
-import { JSONObject } from "blockprotocol";
+import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import { escapeRegExp } from "lodash";
 
 import { User } from "./user.model";
 import { FRONTEND_URL, isProduction } from "../config";
-import { JSONSchema, validateAndCompleteJsonSchema } from "../jsonSchema";
+import { validateAndCompleteJsonSchema } from "../jsonSchema";
 
 type EntityTypeProperties = {
   createdAt: Date;
   updatedAt: Date;
   entityTypeId: string;
-  schema: JSONSchema;
+  schema: BlockProtocolEntityType;
   user: DBRef;
 };
 
-type EntityTypeDocument = EntityTypeProperties;
+/**
+ * MongoDB < 5.0 does not allow $ in the initial position in a field name
+ *    @todo upgrade db to 5.0 (involves other changes) and remove changing schema to string and back
+ */
+type EntityTypeDocument = Omit<EntityTypeProperties, "schema"> & {
+  schema: string;
+};
 
 export class EntityType {
   createdAt: Date;
   updatedAt: Date;
   entityTypeId: string;
-  schema: JSONSchema;
+  schema: BlockProtocolEntityType;
   user: DBRef;
 
   static readonly COLLECTION_NAME = "bp-entity-types";
@@ -122,7 +128,7 @@ export class EntityType {
 
     await db
       .collection<EntityTypeDocument>(this.COLLECTION_NAME)
-      .insertOne(entityType);
+      .insertOne({ ...entityType, schema: JSON.stringify(checkedSchema) });
 
     return new EntityType(entityType);
   }
@@ -132,7 +138,7 @@ export class EntityType {
     params: { user: User },
   ): Promise<EntityType[]> {
     return await db
-      .collection<EntityTypeProperties>(this.COLLECTION_NAME)
+      .collection<EntityTypeDocument>(this.COLLECTION_NAME)
       .find(
         { user: params.user.toRef() },
         {
@@ -142,24 +148,35 @@ export class EntityType {
         },
       )
       .toArray()
-      .then((docs) => docs.map((doc) => new EntityType(doc)));
+      .then((docs) =>
+        docs.map(
+          (doc) => new EntityType({ ...doc, schema: JSON.parse(doc.schema) }),
+        ),
+      );
   }
 
   static async getByUserAndTitle(
     db: Db,
     params: { title?: string | undefined; user: DBRef },
   ): Promise<EntityType | null> {
-    return await db
-      .collection<EntityTypeProperties>(this.COLLECTION_NAME)
-      .findOne(
-        { "schema.title": params.title, user: params.user },
+    const userTypes = await db
+      .collection<EntityTypeDocument>(this.COLLECTION_NAME)
+      .find(
+        { user: params.user },
         {
           projection: {
             _id: 0,
           },
         },
       )
-      .then((type) => (type ? new EntityType(type) : null));
+      .toArray();
+    const foundType = userTypes.find(
+      (type) => JSON.parse(type.schema).title === params.title,
+    );
+
+    return foundType
+      ? new EntityType({ ...foundType, schema: JSON.parse(foundType.schema) })
+      : null;
   }
 
   static async getById(
@@ -171,7 +188,12 @@ export class EntityType {
       .collection<EntityTypeDocument>(this.COLLECTION_NAME)
       .findOne({ entityTypeId });
 
-    return entityTypeDocument ? new EntityType(entityTypeDocument) : null;
+    return entityTypeDocument
+      ? new EntityType({
+          ...entityTypeDocument,
+          schema: JSON.parse(entityTypeDocument.schema),
+        })
+      : null;
   }
 
   async update(
@@ -186,7 +208,10 @@ export class EntityType {
       checkedSchema = await EntityType.validateAndCompleteSchema(db, {
         entityTypeId,
         maybeSchema: schema,
-        author: this.schema.author,
+        author:
+          typeof this.schema.author === "string"
+            ? this.schema.author
+            : "unknown",
         user: this.user,
       });
     } catch (err) {
@@ -203,7 +228,7 @@ export class EntityType {
         { entityTypeId: this.entityTypeId, user: this.user },
         {
           $set: {
-            schema: checkedSchema,
+            schema: JSON.stringify(checkedSchema),
             updatedAt: new Date(),
           },
         },
@@ -216,6 +241,9 @@ export class EntityType {
       );
     }
 
-    return new EntityType(updatedType);
+    return new EntityType({
+      ...updatedType,
+      schema: JSON.parse(updatedType.schema),
+    });
   }
 }

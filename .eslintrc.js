@@ -163,6 +163,10 @@ module.exports = {
       parser: "espree",
     },
     {
+      files: ["packages/blockprotocol/*.js"],
+      parser: "espree",
+    },
+    {
       files: ["packages/block-template/**"],
       parserOptions: {
         project: ["packages/block-template/tsconfig.json"],
@@ -173,6 +177,16 @@ module.exports = {
       parserOptions: {
         project: ["packages/blockprotocol/tsconfig.json"],
       },
+    },
+    {
+      files: ["packages/mock-block-dock/**"],
+      parserOptions: {
+        project: ["packages/mock-block-dock/tsconfig.json"],
+      },
+    },
+    {
+      files: [".github/workflows/algolia/**"],
+      parserOptions: { project: [".github/workflows/algolia/tsconfig.json"] },
     },
     {
       files: ["site/**"],

@@ -1,18 +1,20 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
 import { Validator } from "jsonschema";
-import { useMemo, useState, VoidFunctionComponent } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  VoidFunctionComponent,
+} from "react";
+import { MockBlockDock } from "mock-block-dock";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
-import {
-  BlockExports,
-  BlockSchema,
-  dummyUploadFile,
-  getEmbedBlock,
-} from "./HubUtils";
+import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
 import { TabPanel } from "./TabPanel";
 
 type BlockDataContainerProps = {
@@ -29,21 +31,39 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
-  const [text, setText] = useState("{}");
+
+  const example = metadata.examples?.[0];
+
+  const [text, setText] = useState(
+    example ? JSON.stringify(example, undefined, 2) : "",
+  );
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
+  const prevPackage = useRef<string>(metadata.packagePath);
+  useEffect(() => {
+    if (prevPackage.current !== metadata.packagePath) {
+      // reset data source input when switching blocks
+      if (example) {
+        setText(JSON.stringify(example, undefined, 2));
+      } else {
+        setText("");
+      }
+    }
+    prevPackage.current = metadata.packagePath;
+  }, [example, metadata.packagePath, text]);
+
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
-    let result;
+    const result = {
+      accountId: "test-account-id",
+      entityId: "test-entity-id",
+      getEmbedBlock,
+    };
 
     try {
-      result = JSON.parse(text);
-      result.accountId = "test-account-id";
-      result.entityId = "test-entity-id";
-      result.uploadFile = dummyUploadFile;
-      result.getEmbedBlock = getEmbedBlock;
+      Object.assign(result, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }
@@ -114,7 +134,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 320, backgroundColor: "white" }}>
+          <Box sx={{ height: 450, backgroundColor: "white" }}>
             <Tabs
               TabIndicatorProps={{
                 style: { display: "none" },
@@ -136,18 +156,30 @@ export const BlockDataContainer: VoidFunctionComponent<
             >
               <Tab label={metadata.displayName} />
             </Tabs>
-            <TabPanel value={blockTab} index={0}>
+            <TabPanel
+              value={blockTab}
+              index={0}
+              sx={{
+                overflow: "auto",
+                padding: theme.spacing(4, 4),
+                height: "100%",
+                backgroundColor: "#F7FAFC",
+              }}
+            >
               <Box
                 display="flex"
                 alignItems="center"
                 sx={{
-                  backgroundColor: "#F7FAFC",
-                  height: "100%",
-                  padding: theme.spacing(0, 4),
-                  overflow: "auto",
+                  height: "max-content",
+                  minHeight: "100%",
+                  mx: "auto",
                 }}
               >
-                {blockModule && <blockModule.default {...props} />}
+                {blockModule && (
+                  <MockBlockDock>
+                    <blockModule.default {...props} />
+                  </MockBlockDock>
+                )}
               </Box>
             </TabPanel>
           </Box>
