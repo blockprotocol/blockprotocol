@@ -102,7 +102,10 @@ const GitHubInfoCard = (
         to gather feedback and improve the final document. If you have any
         suggestions or improvements you would like to add, or questions you
         would like to ask, feel free to submit a PR or open a discussion on{" "}
-        <Link href="https://github.com/blockprotocol/blockprotocol">
+        <Link
+          href="https://github.com/blockprotocol/blockprotocol"
+          sx={{ ":focus-visible": { outlineColor: "currentcolor" } }}
+        >
           our Github repo
         </Link>
         .

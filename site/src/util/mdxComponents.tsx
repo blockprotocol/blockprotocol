@@ -28,7 +28,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     transition: theme.transitions.create("opacity"),
     opacity: 0,
   },
-  ":hover": {
+  ":hover, a:focus-visible": {
     "svg.fa-link": {
       opacity: 1,
     },
@@ -63,14 +63,23 @@ const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
   depth,
   anchor,
 }) => {
+  const size = depth === 1 ? 28 : depth === 2 ? 24 : 20;
   return (
-    <Link href={`#${anchor}`} sx={{ display: "inline" }}>
-      <IconButton sx={{ marginLeft: 2, padding: 0 }}>
-        <Icon
-          sx={{ fontSize: depth === 1 ? 28 : depth === 2 ? 24 : 20 }}
-          className="fas fa-link"
-        />
-      </IconButton>
+    <Link
+      href={`#${anchor}`}
+      sx={{
+        display: "inline-block",
+        verticalAlign: "middle",
+        position: "relative",
+        marginLeft: 2,
+        height: size,
+        width: size,
+      }}
+    >
+      <Icon
+        sx={{ fontSize: size, position: "absolute", lineHeight: size }}
+        className="fas fa-link"
+      />
     </Link>
   );
 };
