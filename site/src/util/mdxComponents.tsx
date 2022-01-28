@@ -215,13 +215,29 @@ export const mdxComponents: Record<string, ReactNode> = {
     return (
       <Paper
         variant="teal"
-        sx={{
+        sx={({ palette }) => ({
           marginBottom: 3,
           padding: {
             xs: 2,
             sm: 3,
           },
-        }}
+          a: {
+            color: palette.teal[600],
+            borderColor: palette.teal[600],
+            ":hover": {
+              color: palette.teal[700],
+              borderColor: palette.teal[700],
+            },
+            ":focus-visible": {
+              outlineColor: palette.teal[600],
+            },
+          },
+          code: {
+            color: palette.teal[700],
+            background: palette.teal[200],
+            borderColor: palette.teal[300],
+          },
+        })}
       >
         <Box sx={{ fontSize: "3em", textAlign: "center" }}>{emoji}</Box>
         {children}
