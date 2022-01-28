@@ -66,7 +66,7 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
           sm: 3,
         },
         ...sx,
-        a: ({ palette }) => ({
+        "& a": ({ palette }) => ({
           color: palette[paperVariant][600],
           borderColor: palette[paperVariant][600],
           ":hover": {
