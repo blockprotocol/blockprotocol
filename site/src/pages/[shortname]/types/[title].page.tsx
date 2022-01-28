@@ -169,7 +169,7 @@ const EntityTypePage: NextPage = () => {
             <Link href={`${uri}?json`} target="_blank">
               this link
             </Link>{" "}
-            or request the $id with "application/json" in an "accept" header.
+            or request the $id with "application/json" in an "Accept" HTTP header.
           </Typography>
         </Box>
       </Container>
