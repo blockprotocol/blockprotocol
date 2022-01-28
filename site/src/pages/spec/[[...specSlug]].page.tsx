@@ -99,7 +99,7 @@ const GitHubInfoCard = (
         })}
         maxWidth="62ch"
       >
-        This specification is currently in progress. We’ve drafting it in public
+        This specification is currently in progress. We’re drafting it in public
         to gather feedback and improve the final document. If you have any
         suggestions or improvements you would like to add, or questions you
         would like to ask, feel free to submit a PR or open a discussion on{" "}
