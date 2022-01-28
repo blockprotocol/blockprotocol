@@ -518,6 +518,12 @@ export const theme = createTheme({
               color: customColors.purple[600],
               backgroundColor: "unset",
             },
+            ":focus-visible:after": {
+              borderWidth: 1,
+              bottom: 0,
+              top: 0,
+              borderRadius: 0,
+            },
           },
         },
         {
