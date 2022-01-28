@@ -248,12 +248,10 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 <Box
                   component="span"
                   sx={{
-                    fontWeight: 400,
                     color: ({ palette }) => palette.purple[700],
-                    textDecoration: "underline",
                   }}
                 >
-                  {shortname}
+                  <Link href={`/${shortname}`}>{shortname}</Link>
                 </Box>
               </span>
               <Bullet />

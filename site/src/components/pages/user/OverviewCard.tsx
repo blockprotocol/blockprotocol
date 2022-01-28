@@ -3,6 +3,7 @@ import { VFC } from "react";
 import { Box, Icon, Typography } from "@mui/material";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
+import { shy } from "./utils";
 
 type OverviewCardProps = {
   type: "block" | "schema";
@@ -129,7 +130,7 @@ export const OverviewCard: VFC<OverviewCardProps> = ({
                 mr: "80px", // ensures the title doesn't clash with "Block" | "Schema" badge
               }}
             >
-              {title}
+              {shy(title)}
             </Typography>
             <Box
               sx={{
