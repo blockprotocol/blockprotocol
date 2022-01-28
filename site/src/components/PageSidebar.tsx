@@ -265,6 +265,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 type SidebarProps = {
   pages: SiteMapPage[];
   appendices?: SiteMapPage[];
+  header?: React.ReactNode;
 } & BoxProps;
 
 const getInitialOpenedPages = (params: {
@@ -305,6 +306,7 @@ const getInitialOpenedPages = (params: {
 export const Sidebar: VFC<SidebarProps> = ({
   appendices,
   pages,
+  header,
   ...boxProps
 }) => {
   const theme = useTheme();
@@ -381,24 +383,34 @@ export const Sidebar: VFC<SidebarProps> = ({
         }}
       />
       <Box
-        paddingRight={3}
         sx={{
           maxHeight: isSticky ? "100vh" : undefined,
-          overflow: isSticky ? "auto" : undefined,
+          display: "flex",
+          flexDirection: "column",
           paddingTop: isSticky
             ? `${
                 DESKTOP_NAVBAR_HEIGHT +
                 parseIntFromPixelString(theme.spacing(1))
               }px`
             : 0,
-          paddingBottom: isSticky ? theme.spacing(6) : 0,
+          paddingRight: 3,
           transition: theme.transitions.create([
             "padding-top",
             "padding-bottom",
           ]),
         }}
       >
-        <Box position="relative">
+        {header}
+        <Box
+          position="relative"
+          sx={{
+            paddingRight: 3,
+            marginRight: -3,
+            overflow: "scroll",
+            paddingBottom: isSticky ? theme.spacing(6) : 0,
+            flexShrink: 1,
+          }}
+        >
           <Box
             sx={{
               position: "absolute",

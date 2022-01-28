@@ -250,19 +250,17 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         {GitHubInfoCard}
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Box>
-              <Search variant="desktop" />
-              <Sidebar
-                flexGrow={0}
-                marginRight={6}
-                pages={specificationPages.filter(
-                  ({ title }) => !title.startsWith("Appendix"),
-                )}
-                appendices={specificationPages.filter(({ title }) =>
-                  title.startsWith("Appendix"),
-                )}
-              />
-            </Box>
+            <Sidebar
+              flexGrow={0}
+              marginRight={6}
+              pages={specificationPages.filter(
+                ({ title }) => !title.startsWith("Appendix"),
+              )}
+              appendices={specificationPages.filter(({ title }) =>
+                title.startsWith("Appendix"),
+              )}
+              header={<Search variant="desktop" />}
+            />
           ) : null}
           <MdxPageContent flexGrow={1} serializedPage={serializedPage} />
         </Box>
