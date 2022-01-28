@@ -236,6 +236,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                 href="https://hash.ai"
                 sx={{
                   marginLeft: 1,
+                  borderBottomColor: "transparent !important",
                   ":hover": {
                     color: ({ palette }) => palette.gray[30],
                   },
@@ -243,7 +244,6 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                     color: ({ palette }) => palette.common.white,
                   },
                   ":focus-visible": {
-                    borderColor: "transparent",
                     outline: ({ palette }) => `1px solid ${palette.gray[50]}`,
                   },
                 }}
