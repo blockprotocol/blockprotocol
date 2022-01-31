@@ -406,7 +406,7 @@ export const Sidebar: VFC<SidebarProps> = ({
           sx={{
             paddingRight: 3,
             marginRight: -3,
-            overflow: "scroll",
+            overflow: "auto",
             paddingBottom: isSticky ? theme.spacing(6) : 0,
             flexShrink: 1,
           }}
