@@ -162,7 +162,6 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
       sx={{
         paddingBottom: "25px",
         position: "relative",
-        paddingRight: "3em",
       }}
       className={`search-bar ${variant ?? ""}`}
     >
@@ -233,7 +232,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
           <Box
             sx={{
               top: "0.35em",
-              right: "calc(3em + 10px)",
+              right: "calc(10px)",
               position: "absolute",
               cursor: "pointer",
               height: "20px",

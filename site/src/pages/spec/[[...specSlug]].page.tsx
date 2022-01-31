@@ -107,7 +107,7 @@ const GitHubInfoCard = (
           href="https://github.com/blockprotocol/blockprotocol"
           sx={{ ":focus-visible": { outlineColor: "currentcolor" } }}
         >
-          our Github repo
+          our GitHub repo
         </Link>
         .
       </Typography>
@@ -133,7 +133,7 @@ const GitHubInfoCard = (
           textTransform: "none",
         }}
       >
-        View the spec on Github
+        View the spec on GitHub
       </LinkButton>
     </Box>
   </Paper>
@@ -254,19 +254,17 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         {GitHubInfoCard}
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Box>
-              <Search variant="desktop" />
-              <Sidebar
-                flexGrow={0}
-                marginRight={6}
-                pages={specificationPages.filter(
-                  ({ title }) => !title.startsWith("Appendix"),
-                )}
-                appendices={specificationPages.filter(({ title }) =>
-                  title.startsWith("Appendix"),
-                )}
-              />
-            </Box>
+            <Sidebar
+              flexGrow={0}
+              marginRight={6}
+              pages={specificationPages.filter(
+                ({ title }) => !title.startsWith("Appendix"),
+              )}
+              appendices={specificationPages.filter(({ title }) =>
+                title.startsWith("Appendix"),
+              )}
+              header={<Search variant="desktop" />}
+            />
           ) : null}
           <MdxPageContent flexGrow={1} serializedPage={serializedPage} />
         </Box>
