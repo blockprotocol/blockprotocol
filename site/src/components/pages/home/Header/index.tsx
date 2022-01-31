@@ -202,6 +202,7 @@ export const Header = () => {
       <Box
         sx={{
           position: "absolute",
+          overflow: "hidden",
           top: 0,
           left: 0,
           right: 0,
