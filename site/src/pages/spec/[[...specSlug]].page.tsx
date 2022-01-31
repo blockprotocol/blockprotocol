@@ -88,11 +88,12 @@ const GitHubInfoCard = (
           color: theme.palette.teal[600],
           fontSize: 15,
           lineHeight: 1.5,
-          "& a": {
+          a: {
             color: theme.palette.teal[600],
             borderColor: theme.palette.teal[600],
             ":hover": {
               color: theme.palette.teal[700],
+              borderColor: theme.palette.teal[700],
             },
           },
         })}
@@ -102,8 +103,11 @@ const GitHubInfoCard = (
         to gather feedback and improve the final document. If you have any
         suggestions or improvements you would like to add, or questions you
         would like to ask, feel free to submit a PR or open a discussion on{" "}
-        <Link href="https://github.com/blockprotocol/blockprotocol">
-          our Github repo
+        <Link
+          href="https://github.com/blockprotocol/blockprotocol"
+          sx={{ ":focus-visible": { outlineColor: "currentcolor" } }}
+        >
+          our GitHub repo
         </Link>
         .
       </Typography>
@@ -129,7 +133,7 @@ const GitHubInfoCard = (
           textTransform: "none",
         }}
       >
-        View the spec on Github
+        View the spec on GitHub
       </LinkButton>
     </Box>
   </Paper>
