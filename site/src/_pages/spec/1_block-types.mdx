@@ -73,7 +73,7 @@ The block’s data represents an ‘entity’ in the system. Alongside the prope
 
 - `entityId`: an identifier for the entity
 - `entityTypeId`: an identifier for the type/class of the entity
-- `accountId`: an identifier the account/namespace/user to which the entity belongs
+- `accountId`: an identifier for the account/namespace/user to which the entity belongs
 
 These fields MUST be strings. Some MAY be left undefined.
 
@@ -107,7 +107,7 @@ Blocks SHOULD expect the following additional fields related to linked data to b
 - a `linkedEntities` field containing the entities linked from the block’s entity, and entities linked to from those entities, and so on. This field SHOULD contain all entities which have been resolved in the graph (rather than just those linked directly from the block entity), i.e. these are the **nodes** in a graph resolved from the block entity to a certain depth (see callout below).
 
 - a `linkGroups` field which provides the links attached to the block or the entities provided in `linkedEntities`, grouped by entity and path, i.e. these are the **edges** of the graph.
--
+
 - a `linkedAggregations` field containing the results of aggregations linked from the block’s entity - these are special links which represent an aggregation operation (e.g. in plain English, "top 10 Cars sorted by age, descending"), which are provided in this field along with the results of the operation at the time of request.
 
 Each entity provided under `linkedEntities` or `linkedAggregations` will also have [identifying fields](#fields-identifying-blocks) to be used as arguments when updating those entities.
@@ -479,7 +479,7 @@ creates one or more links.
 **returns:** the created links, i.e. _objects_ inside an _array_ (now with `linkId`)
 
 **accepts:** a single _array_ of _objects_ (`CreateLinksAction`) -
-each object is a [`Link`(#link-object)], omitting `linkId`.
+each object is a [`Link`](#link-object), omitting `linkId`.
 
 ```block-function
 updateLinks(actions: UpdateLinksAction[]): Promise<Link[]>
