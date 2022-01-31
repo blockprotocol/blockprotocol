@@ -20,6 +20,11 @@ module.exports = withFonts(
           permanent: true,
         },
         {
+          source: "/faq",
+          destination: "/docs/faq",
+          permanent: true,
+        },
+        {
           source: "/partners",
           destination: "/contact",
           permanent: true,
