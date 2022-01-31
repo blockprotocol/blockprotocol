@@ -26,7 +26,7 @@ void (async () => {
   await catchAndLog(() =>
     db
       .collection<UserDocument>(User.COLLECTION_NAME)
-      .createIndex({ email: 1 }, { unique: true }),
+      .createIndex({ email: 1 }, { unique: true, sparse: true }),
   );
 
   await catchAndLog(() =>
