@@ -14,7 +14,6 @@ import {
   Box,
   Paper,
   Icon,
-  IconButton,
   styled,
 } from "@mui/material";
 import { Link } from "../components/Link";
@@ -28,7 +27,7 @@ const Heading = styled(Typography)(({ theme }) => ({
     transition: theme.transitions.create("opacity"),
     opacity: 0,
   },
-  ":hover": {
+  ":hover, a:focus-visible": {
     "svg.fa-link": {
       opacity: 1,
     },
@@ -63,14 +62,23 @@ const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
   depth,
   anchor,
 }) => {
+  const size = depth === 1 ? 28 : depth === 2 ? 24 : 20;
   return (
-    <Link href={`#${anchor}`} sx={{ display: "inline" }}>
-      <IconButton sx={{ marginLeft: 2, padding: 0 }}>
-        <Icon
-          sx={{ fontSize: depth === 1 ? 28 : depth === 2 ? 24 : 20 }}
-          className="fas fa-link"
-        />
-      </IconButton>
+    <Link
+      href={`#${anchor}`}
+      sx={{
+        display: "inline-block",
+        verticalAlign: "middle",
+        position: "relative",
+        marginLeft: 2,
+        height: size,
+        width: size,
+      }}
+    >
+      <Icon
+        sx={{ fontSize: size, position: "absolute", lineHeight: size }}
+        className="fas fa-link"
+      />
     </Link>
   );
 };
@@ -207,13 +215,29 @@ export const mdxComponents: Record<string, ReactNode> = {
     return (
       <Paper
         variant="teal"
-        sx={{
+        sx={({ palette }) => ({
           marginBottom: 3,
           padding: {
             xs: 2,
             sm: 3,
           },
-        }}
+          a: {
+            color: palette.teal[600],
+            borderColor: palette.teal[600],
+            ":hover": {
+              color: palette.teal[700],
+              borderColor: palette.teal[700],
+            },
+            ":focus-visible": {
+              outlineColor: palette.teal[600],
+            },
+          },
+          code: {
+            color: palette.teal[700],
+            background: palette.teal[200],
+            borderColor: palette.teal[300],
+          },
+        })}
       >
         <Box sx={{ fontSize: "3em", textAlign: "center" }}>{emoji}</Box>
         {children}
