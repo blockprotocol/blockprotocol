@@ -666,6 +666,7 @@ export const theme = createTheme({
         {
           props: { variant: "primary", color: "gray" },
           style: {
+            color: customColors.gray[80],
             backgroundColor: customColors.gray[50],
             ":hover": {
               backgroundColor: customColors.gray[30],

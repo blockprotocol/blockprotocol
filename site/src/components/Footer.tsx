@@ -107,7 +107,7 @@ const Socials = (
           href={href}
           key={href}
           sx={{
-            marginRight: 2.5,
+            marginRight: 2.2,
             color: (theme) => theme.palette.gray[50],
             ":hover": {
               svg: {
@@ -123,6 +123,7 @@ const Socials = (
               outlineColor: (theme) => theme.palette.gray[50],
             },
             svg: {
+              padding: 0.3,
               transition: (theme) =>
                 theme.transitions.create("color", { duration: 150 }),
               color: "inherit",
@@ -140,12 +141,10 @@ const Socials = (
       size="small"
       sx={{
         flexShrink: 0,
+        paddingLeft: 2.2,
+        marginLeft: 0.3,
         marginBottom: 2.5,
-        // backgroundColor: (theme) => theme.palette.gray[70],
-        // color: (theme) => theme.palette.gray[20],
-        // ":focus-visible:after": {
-        //   borderColor: (theme) => theme.palette.gray[70],
-        // },
+        marginTop: -0.7,
       }}
       startIcon={<Icon className="fa fa-star" />}
     >
