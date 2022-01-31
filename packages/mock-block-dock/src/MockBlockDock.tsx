@@ -2,7 +2,9 @@ import {
   Children,
   cloneElement,
   ReactElement,
+  useEffect,
   useMemo,
+  useRef,
   VoidFunctionComponent,
 } from "react";
 import { BlockProtocolEntity, BlockProtocolEntityType } from "blockprotocol";
@@ -51,14 +53,30 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
 
   const latestBlockEntity = useMemo(
     () =>
-      entities.find(
-        (entity) => entity.entityId === initialBlockEntity.entityId,
-      ),
-    [entities, initialBlockEntity.entityId],
+      entities.find((entity) => entity.entityId === children.props.entityId),
+    [entities, children.props.entityId],
   );
   if (!latestBlockEntity) {
     throw new Error("Cannot find block entity. Did it delete itself?");
   }
+
+  const { accountId, entityId, entityTypeId } = latestBlockEntity;
+  const { updateEntities } = functions;
+
+  const prevChildPropsString = useRef<string>(JSON.stringify(children.props));
+  useEffect(() => {
+    if (JSON.stringify(children.props) !== prevChildPropsString.current) {
+      updateEntities?.([
+        {
+          accountId,
+          entityId,
+          entityTypeId,
+          ...children.props,
+        },
+      ]);
+    }
+    prevChildPropsString.current = JSON.stringify(children.props);
+  }, [accountId, entityId, entityTypeId, children.props, updateEntities]);
 
   const { linkGroups, linkedEntities } = useLinkFields({
     entities,

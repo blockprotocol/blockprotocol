@@ -2,8 +2,7 @@ import { VFC } from "react";
 import { Box, Typography, Icon } from "@mui/material";
 import { formatDistance } from "date-fns";
 import { Link } from "../../Link";
-
-// think of a better name
+import { shy } from "./utils";
 
 type ListViewCardProps = {
   type: "block" | "schema";
@@ -77,7 +76,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
               lineHeight: 1,
             }}
           >
-            {title}
+            {shy(title)}
           </Typography>
           <Typography
             variant="bpSmallCopy"
