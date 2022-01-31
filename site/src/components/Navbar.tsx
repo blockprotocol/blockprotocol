@@ -313,7 +313,6 @@ export const Navbar: VFC<NavbarProps> = ({
                     <Link
                       href="#"
                       onClick={openLoginModal}
-                      // variant="transparent"
                       sx={{
                         marginRight: 3,
                         backgroundColor: "unset",
@@ -434,7 +433,6 @@ export const Navbar: VFC<NavbarProps> = ({
                   openLoginModal();
                   event?.preventDefault();
                 }}
-                // variant="secondary"
                 sx={{
                   marginBottom: 1,
                 }}
