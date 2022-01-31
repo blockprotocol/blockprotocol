@@ -666,12 +666,12 @@ export const theme = createTheme({
         {
           props: { variant: "primary", color: "gray" },
           style: {
-            backgroundColor: customColors.gray[60],
+            backgroundColor: customColors.gray[50],
             ":hover": {
-              backgroundColor: customColors.gray[70],
+              backgroundColor: customColors.gray[30],
             },
             ":focus-visible:after": {
-              borderColor: customColors.gray[60],
+              borderColor: customColors.gray[50],
             },
           },
         },
