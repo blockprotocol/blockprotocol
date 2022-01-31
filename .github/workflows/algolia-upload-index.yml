@@ -19,9 +19,7 @@ jobs:
           node-version: "12"
           cache: yarn
 
-      - name: Install Dependencies & Generate Sitemap
-        run: yarn
+      - run: yarn install
 
-      # Runs a single command using the runners shell
-      - name: Upload to algolia
-        run: cd .github/workflows/algolia && npx ts-node ./src/syncAlgoliaIndex.ts
+      - name: Sync Algolia Index
+        run: yarn exe scripts/sync-algolia-index.ts

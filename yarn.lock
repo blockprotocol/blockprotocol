@@ -2232,6 +2232,95 @@
     domhandler "^4.2.0"
     selderee "^0.6.0"
 
+"@swc/core-android-arm-eabi@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-android-arm-eabi/-/core-android-arm-eabi-1.2.135.tgz#11a53c1e55d66cc281b5de8abbe8560465e268ab"
+  integrity sha512-Qx5PXLzedOVSWHIY88iTxEa6m5RONs7bDIF05mNH1qaXsOkBD52MZ+mFDW6uGZ2OnOuMjD2OY08877429atBgA==
+
+"@swc/core-android-arm64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-android-arm64/-/core-android-arm64-1.2.135.tgz#cddcd82d45229b82c0aa4aecca83dcc1c6667d61"
+  integrity sha512-XeZN9Efr44hGPOnHnrcNvdYU0Yn1UQOgR1LReS19aFJT7vWdI6Boe900V22J2K2ccJaOYqmic9BR6kRtDO7gGg==
+
+"@swc/core-darwin-arm64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.2.135.tgz#1fc8b9028660374c3ef78ca862c08b1b659df72f"
+  integrity sha512-2DSs8IuGbu86B+ENnJVTAtn57HU4KSw9FJTGQfA+5IWBuUHJgpANcfQ3Xp19MtolfLW+Z4Xy8HCvdFljiQONRQ==
+
+"@swc/core-darwin-x64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-darwin-x64/-/core-darwin-x64-1.2.135.tgz#f0af5c49128d91eebd9f2428c660d8a2d066b7d0"
+  integrity sha512-nS32iLbaW7g6ILlvWCZp1pwfLSndDGragsFcuw9xo6KR58KeDNdG54GQ6CwugqWiCEgzD+ZCvYmfcTjlgGJt/Q==
+
+"@swc/core-freebsd-x64@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-freebsd-x64/-/core-freebsd-x64-1.2.135.tgz#aa126c82e36ca47895fe68e2072fa93aebaa3c80"
+  integrity sha512-8tM7eOFsOT7bNlx1u0GoldopMVigPM9sLzKfwdRm4doDsE/DeUXumQI2mb8JTqzHpcjYxEiFBaNy8L7wf8wAEQ==
+
+"@swc/core-linux-arm-gnueabihf@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm-gnueabihf/-/core-linux-arm-gnueabihf-1.2.135.tgz#56cead34686a2233a36d6e546f7dd096f2c90b7a"
+  integrity sha512-sppILSuR/HClz9mzZuxziAH7/QSUSgM3gSxGKlXzC8AItcBZFJ/7ygqg0TjCFFcQ+n0BdNltUIMztdv+5qwRSg==
+
+"@swc/core-linux-arm64-gnu@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-gnu/-/core-linux-arm64-gnu-1.2.135.tgz#0ec99ccdda78aa7e0d018a6928691632eb84bff8"
+  integrity sha512-inu6jZCHiHw+3kSvmBRGUIDLMi/XFsIyMOue3QJReOuL5BTIQJ/I1oYhLsaSGcmEZM2Mo7QJ2jDBB3SjM5YzeA==
+
+"@swc/core-linux-arm64-musl@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-arm64-musl/-/core-linux-arm64-musl-1.2.135.tgz#e41cad8df03b5f8b9eeb124a2d723992061d4026"
+  integrity sha512-hPGetFUhez77OUgig1XmNHZbUmpKGt72u9cN0AX5NtmFdfYYu4p6l+6YB6jg6/TrPmyJlJD5vroVz8JR/pZS+w==
+
+"@swc/core-linux-x64-gnu@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-gnu/-/core-linux-x64-gnu-1.2.135.tgz#c2fd5206b0a40760f4f878f367a21033473c2d12"
+  integrity sha512-PTEzzMWvUaXI/sInu8oPo7yYj2WPgfl4QL3wo2OEEKwE27xFjUmKv80pXGIFD9/Xn33Xz8cA0d8yGTWYD+tOIg==
+
+"@swc/core-linux-x64-musl@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-linux-x64-musl/-/core-linux-x64-musl-1.2.135.tgz#fc12e424921dbffee0ef9d025dd162f8aaa45b74"
+  integrity sha512-6zqf/1x1QYIhYFIPRRo5ArHIvWVWfH8fuRE6AwL1nQz/Y19SAJx3PXgwlAjtu4CZfciuUqY99PeFtTOu1Dnjhg==
+
+"@swc/core-win32-arm64-msvc@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-arm64-msvc/-/core-win32-arm64-msvc-1.2.135.tgz#c65a44f48e6c48105460265a25dcebb5babe5315"
+  integrity sha512-vEMQSsvYMhdT5MS0pXRNmtMxfe3Bf/TZxMeezadLcOfSdYbeshQ8t41UdVsU1xvUvRA0fmbAcipXgNmwC14ACg==
+
+"@swc/core-win32-ia32-msvc@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-ia32-msvc/-/core-win32-ia32-msvc-1.2.135.tgz#cd92bb983c729f05128c9abe9b74c01467c0afe3"
+  integrity sha512-w1XwAGHaFNhhDOQgwy36GB0oXKi/0DKj0mmWol263YehMQic5f+usNF9EGfgFkWf8EnRpdP/oEAXpsDfniBmww==
+
+"@swc/core-win32-x64-msvc@1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core-win32-x64-msvc/-/core-win32-x64-msvc-1.2.135.tgz#ff293654b5ac3715782c9e6677cf5a188bb83597"
+  integrity sha512-hGSoHDbq7mGGb5gg1hTtzxXiqrhmEO02/oAVqSVTX7zsOnVSu9hBxim72R4a8/hqGaCGDIfeXmibwvhcYzrwfg==
+
+"@swc/core@^1.2.135":
+  version "1.2.135"
+  resolved "https://registry.yarnpkg.com/@swc/core/-/core-1.2.135.tgz#ab29d549385790d779e78066bb10e0849241c5e8"
+  integrity sha512-YaltU0YygEo+pmy28GIEuHgTIKP5mzUXbgathdU2AoKytM+rNTP6QtJLewUgK86CZuu1nDpH42srhgXWIUWz2g==
+  optionalDependencies:
+    "@swc/core-android-arm-eabi" "1.2.135"
+    "@swc/core-android-arm64" "1.2.135"
+    "@swc/core-darwin-arm64" "1.2.135"
+    "@swc/core-darwin-x64" "1.2.135"
+    "@swc/core-freebsd-x64" "1.2.135"
+    "@swc/core-linux-arm-gnueabihf" "1.2.135"
+    "@swc/core-linux-arm64-gnu" "1.2.135"
+    "@swc/core-linux-arm64-musl" "1.2.135"
+    "@swc/core-linux-x64-gnu" "1.2.135"
+    "@swc/core-linux-x64-musl" "1.2.135"
+    "@swc/core-win32-arm64-msvc" "1.2.135"
+    "@swc/core-win32-ia32-msvc" "1.2.135"
+    "@swc/core-win32-x64-msvc" "1.2.135"
+
+"@swc/helpers@^0.3.2":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.3.2.tgz#02b370431fb8827450577ff852d56fc5fb4e0b40"
+  integrity sha512-qEru2uaH1vKZNCZR4rFCUZaflsBP7IWiGcIoQe22qi5tm+HEG/yPdhSba+ZCNTWk2xyYpx/nEFkncDY3orEx3w==
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
@@ -4787,10 +4876,22 @@ dot-case@^3.0.4:
     no-case "^3.0.4"
     tslib "^2.0.3"
 
+dotenv-flow@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/dotenv-flow/-/dotenv-flow-3.2.0.tgz#a5d79dd60ddb6843d457a4874aaf122cf659a8b7"
+  integrity sha512-GEB6RrR4AbqDJvNSFrYHqZ33IKKbzkvLYiD5eo4+9aFXr4Y4G+QaFrB/fNp0y6McWBmvaPn3ZNjIufnj8irCtg==
+  dependencies:
+    dotenv "^8.0.0"
+
 dotenv@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-10.0.0.tgz#3d4227b8fb95f81096cdd2b66653fb2c7085ba81"
   integrity sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==
+
+dotenv@^8.0.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.6.0.tgz#061af664d19f7f4d8fc6e4ff9b584ce237adcb8b"
+  integrity sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==
 
 duplexer2@^0.1.2:
   version "0.1.4"
