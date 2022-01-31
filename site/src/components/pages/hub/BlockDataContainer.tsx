@@ -1,35 +1,20 @@
 import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
-import {
-  BlockProtocolCreateLinksFunction,
-  BlockProtocolDeleteLinksFunction,
-  BlockProtocolEntity,
-  BlockProtocolLink,
-  BlockProtocolLinkGroup,
-  BlockProtocolProps,
-  BlockProtocolUpdateEntitiesFunction,
-  BlockProtocolUploadFileFunction,
-} from "blockprotocol";
 import { Validator } from "jsonschema";
 import {
-  useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
   VoidFunctionComponent,
 } from "react";
-import { v4 as uuid } from "uuid";
+import { MockBlockDock } from "mock-block-dock";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
-import {
-  BlockExports,
-  BlockSchema,
-  dummyUploadFile,
-  getEmbedBlock,
-} from "./HubUtils";
+import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
 import { TabPanel } from "./TabPanel";
 
 type BlockDataContainerProps = {
@@ -46,128 +31,39 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockTab, setBlockTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
-  const [text, setText] = useState("{}");
+
+  const example = metadata.examples?.[0];
+
+  const [text, setText] = useState(
+    example ? JSON.stringify(example, undefined, 2) : "",
+  );
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
-  const fileUrl = useRef<string | null>(null);
-
-  const [blockState, setBlockState] = useState<
-    Record<string, unknown> & Partial<BlockProtocolProps>
-  >({
-    accountId: "test-account-id",
-    entityId: "test-entity-id",
-    linkGroups: [],
-    linkedEntities: [],
-  });
-
-  const updateEntities: BlockProtocolUpdateEntitiesFunction = useCallback(
-    async (actions) => {
-      for (const action of actions) {
-        if (action.entityId === blockState.entityId) {
-          setBlockState((previousBlockState) => ({
-            ...previousBlockState,
-            ...action.data,
-          }));
-        }
+  const prevPackage = useRef<string>(metadata.packagePath);
+  useEffect(() => {
+    if (prevPackage.current !== metadata.packagePath) {
+      // reset data source input when switching blocks
+      if (example) {
+        setText(JSON.stringify(example, undefined, 2));
+      } else {
+        setText("");
       }
-
-      return actions;
-    },
-    [blockState.entityId],
-  );
-
-  const deleteLinks: BlockProtocolDeleteLinksFunction =
-    useCallback(async () => {
-      return [true];
-    }, []);
-
-  const createLinks: BlockProtocolCreateLinksFunction = useCallback(
-    async (actions) => {
-      const result: BlockProtocolLink[] = [];
-      const nextLinkGroups: BlockProtocolLinkGroup[] = [];
-      const nextLinkedEntities: BlockProtocolEntity[] = [];
-
-      for (const action of actions) {
-        if ("destinationAccountId" in action) {
-          const {
-            destinationEntityId,
-            path,
-            sourceEntityId,
-            destinationAccountId,
-            sourceEntityAccountId,
-          } = action;
-
-          const nextLink: BlockProtocolLink = {
-            destinationEntityId,
-            path,
-            sourceEntityId,
-            linkId: uuid(),
-            destinationAccountId,
-          };
-
-          const nextLinkGroup: BlockProtocolLinkGroup = {
-            sourceEntityId,
-            sourceEntityVersionId: sourceEntityId,
-            path,
-            sourceEntityAccountId,
-            links: [nextLink],
-          };
-
-          const nextLinkedEntity: BlockProtocolEntity = {
-            entityId: destinationEntityId,
-            url: fileUrl.current,
-          };
-
-          result.push(nextLink);
-          nextLinkGroups.push(nextLinkGroup);
-          nextLinkedEntities.push(nextLinkedEntity);
-        }
-      }
-
-      setBlockState({
-        linkGroups: nextLinkGroups,
-        linkedEntities: nextLinkedEntities,
-      });
-
-      return result;
-    },
-    [],
-  );
-
-  const uploadFile: BlockProtocolUploadFileFunction = useCallback(
-    async (...args) => {
-      const fileData = await dummyUploadFile(...args);
-
-      fileUrl.current = fileData.url;
-
-      return fileData;
-    },
-    [],
-  );
+    }
+    prevPackage.current = metadata.packagePath;
+  }, [example, metadata.packagePath, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
-    let result;
-
-    const blockFunctions: Record<string, (params: any) => unknown> = {
-      uploadFile,
+    const result = {
+      accountId: "test-account-id",
+      entityId: "test-entity-id",
       getEmbedBlock,
-      updateEntities,
-      deleteLinks,
     };
 
     try {
-      result = JSON.parse(text);
-
-      for (const functionName of Object.keys(blockFunctions)) {
-        result[functionName] = blockFunctions[functionName];
-      }
-
-      for (const propertyName of Object.keys(blockState)) {
-        result[propertyName] = blockState[propertyName];
-      }
+      Object.assign(result, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }
@@ -182,7 +78,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema, blockState, updateEntities]);
+  }, [text, schema]);
 
   return (
     <>
@@ -238,7 +134,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 320, backgroundColor: "white" }}>
+          <Box sx={{ height: 450, backgroundColor: "white" }}>
             <Tabs
               TabIndicatorProps={{
                 style: { display: "none" },
@@ -276,9 +172,14 @@ export const BlockDataContainer: VoidFunctionComponent<
                 sx={{
                   height: "max-content",
                   minHeight: "100%",
+                  mx: "auto",
                 }}
               >
-                {blockModule && <blockModule.default {...props} />}
+                {blockModule && (
+                  <MockBlockDock>
+                    <blockModule.default {...props} />
+                  </MockBlockDock>
+                )}
               </Box>
             </TabPanel>
           </Box>
@@ -367,3 +268,4 @@ export const BlockDataContainer: VoidFunctionComponent<
     </>
   );
 };
+Copied;

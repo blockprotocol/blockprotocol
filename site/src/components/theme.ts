@@ -494,7 +494,7 @@ export const theme = createTheme({
           props: { variant: "tertiary" },
           style: {
             border: `1px solid currentColor`,
-            borderRadius: 6,
+            borderRadius: 34,
             color: customColors.gray[70],
             borderColor: "#C1CFDE",
             background: defaultTheme.palette.common.white,

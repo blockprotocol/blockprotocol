@@ -121,6 +121,7 @@ export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
                 type="submit"
                 variant="tertiary"
                 sx={{ marginBottom: 1 }}
+                squared
               >
                 {regenerate ? "Regenerate Key" : "Create Key"}
               </Button>
@@ -130,6 +131,7 @@ export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
                 color="gray"
                 variant="tertiary"
                 sx={{ marginBottom: 1 }}
+                squared
               >
                 Cancel
               </Button>

@@ -12,7 +12,6 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { Button } from "../../components/Button";
 import { Link } from "../../components/Link";
 import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
@@ -23,6 +22,8 @@ import {
 } from "../../components/MdxPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
 import { parseIntFromPixelString } from "../../util/muiUtils";
+import Search from "../../components/pages/docs/Search";
+import { LinkButton } from "../../components/LinkButton";
 
 const GitHubInfoCard = (
   <Paper
@@ -97,7 +98,7 @@ const GitHubInfoCard = (
         })}
         maxWidth="62ch"
       >
-        This specification is currently in progress. We’ve drafting it in public
+        This specification is currently in progress. We’re drafting it in public
         to gather feedback and improve the final document. If you have any
         suggestions or improvements you would like to add, or questions you
         would like to ask, feel free to submit a PR or open a discussion on{" "}
@@ -118,19 +119,18 @@ const GitHubInfoCard = (
         },
       }}
     >
-      <Link href="https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec">
-        <Button
-          variant="primary"
-          color="teal"
-          size="small"
-          startIcon={<Icon className="fab fa-github" />}
-          sx={{
-            textTransform: "none",
-          }}
-        >
-          View the spec on Github
-        </Button>
-      </Link>
+      <LinkButton
+        href="https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec"
+        variant="primary"
+        color="teal"
+        size="small"
+        startIcon={<Icon className="fab fa-github" />}
+        sx={{
+          textTransform: "none",
+        }}
+      >
+        View the spec on Github
+      </LinkButton>
     </Box>
   </Paper>
 );
@@ -168,16 +168,28 @@ export const getStaticProps: GetStaticProps<
   const fileNameWithoutIndex =
     specSlug && specSlug.length > 0 ? specSlug[0] : "index";
 
-  const serializedPage = await getSerializedPage({
-    pathToDirectory: "spec",
-    fileNameWithoutIndex,
-  });
+  // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
+  // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
+  //
+  //   Error: ENOENT: no such file or directory, open '{...}/_pages/docs/undefined'
+  //
+  // Using try / catch prevents 500, but we might not need them in Next v12+.
+  try {
+    const serializedPage = await getSerializedPage({
+      pathToDirectory: "spec",
+      fileNameWithoutIndex,
+    });
 
-  return {
-    props: {
-      serializedPage,
-    },
-  };
+    return {
+      props: {
+        serializedPage,
+      },
+    };
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
@@ -238,16 +250,19 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         {GitHubInfoCard}
         <Box mb={4} py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Sidebar
-              flexGrow={0}
-              marginRight={6}
-              pages={specificationPages.filter(
-                ({ title }) => !title.startsWith("Appendix"),
-              )}
-              appendices={specificationPages.filter(({ title }) =>
-                title.startsWith("Appendix"),
-              )}
-            />
+            <Box>
+              <Search variant="desktop" />
+              <Sidebar
+                flexGrow={0}
+                marginRight={6}
+                pages={specificationPages.filter(
+                  ({ title }) => !title.startsWith("Appendix"),
+                )}
+                appendices={specificationPages.filter(({ title }) =>
+                  title.startsWith("Appendix"),
+                )}
+              />
+            </Box>
           ) : null}
           <MdxPageContent flexGrow={1} serializedPage={serializedPage} />
         </Box>

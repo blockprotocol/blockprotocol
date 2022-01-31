@@ -1,14 +1,14 @@
-import { VFC, useState, useContext, useRef } from "react";
+import { VFC, useState, useRef } from "react";
 import { Box, Typography, ListItemButton, Divider } from "@mui/material";
 import { Link } from "../Link";
 import { Button } from "../Button";
-import UserContext from "../../context/UserContext";
+import { useUser } from "../../context/UserContext";
 import { apiClient } from "../../lib/apiClient";
 import { UserAvatar } from "../UserAvatar";
 import { Popover } from "../Popover";
 
 export const AccountDropdown: VFC = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -28,7 +28,11 @@ export const AccountDropdown: VFC = () => {
     setUser(undefined);
   };
 
-  const { preferredName, shortname } = user || {};
+  if (user === "loading" || !user) {
+    return null;
+  }
+
+  const { preferredName, shortname } = user;
 
   const id = open ? "simple-popover" : undefined;
 
@@ -40,7 +44,7 @@ export const AccountDropdown: VFC = () => {
         onClick={handleClick}
         ref={buttonRef}
       >
-        <UserAvatar />
+        <UserAvatar user={user} />
       </Button>
       <Popover
         id={id}
@@ -75,20 +79,35 @@ export const AccountDropdown: VFC = () => {
         <Divider />
         <Box>
           <Link href="/dashboard" onClick={() => setOpen(false)}>
-            <ListItemButton sx={{ padding: (theme) => theme.spacing(1.5, 2) }}>
-              <Typography variant="bpSmallCopy">Dashboard</Typography>
+            <ListItemButton
+              sx={{ padding: (theme) => theme.spacing(1, 2), mt: 0.5 }}
+            >
+              <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+                Dashboard
+              </Typography>
+            </ListItemButton>
+          </Link>
+          <Link href={`/@${user.shortname}`} onClick={() => setOpen(false)}>
+            <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 2) }}>
+              <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+                Your Profile
+              </Typography>
             </ListItemButton>
           </Link>
           <Link href="/settings/api-keys" onClick={() => setOpen(false)}>
-            <ListItemButton sx={{ padding: (theme) => theme.spacing(1.5, 2) }}>
-              <Typography variant="bpSmallCopy">API Keys</Typography>
+            <ListItemButton sx={{ padding: (theme) => theme.spacing(1, 2) }}>
+              <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+                API Keys
+              </Typography>
             </ListItemButton>
           </Link>
           <ListItemButton
-            sx={{ padding: (theme) => theme.spacing(1.5, 2) }}
+            sx={{ padding: (theme) => theme.spacing(1, 2), mb: 0.5 }}
             onClick={handleLogout}
           >
-            <Typography variant="bpSmallCopy">Log Out</Typography>
+            <Typography variant="bpSmallCopy" sx={{ lineHeight: 1 }}>
+              Log Out
+            </Typography>
           </ListItemButton>
         </Box>
       </Popover>

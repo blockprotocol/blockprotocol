@@ -11,11 +11,13 @@ import {
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
+
 import siteMap from "../../../site-map.json";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdxUtils";
 import { Sidebar } from "../../components/PageSidebar";
 import { MdxPageContent } from "../../components/MdxPageContent";
+import Search from "../../components/pages/docs/Search";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",
@@ -72,17 +74,29 @@ export const getStaticProps: GetStaticProps<
 
   const tabPage = documentationPages.find(({ href }) => href === tabHref)!;
 
-  const tabPageSerializedContent = await getSerializedPage({
-    pathToDirectory: `docs`,
-    fileNameWithoutIndex: tabSlug ?? "index",
-  });
+  // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
+  // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
+  //
+  //   Error: ENOENT: no such file or directory, open '{...}/_pages/docs/undefined'
+  //
+  // Using try / catch prevents 500, but we might not need them in Next v12+.
+  try {
+    const tabPageSerializedContent = await getSerializedPage({
+      pathToDirectory: `docs`,
+      fileNameWithoutIndex: tabSlug ?? "index",
+    });
 
-  return {
-    props: {
-      tabPage,
-      tabPageSerializedContent,
-    },
-  };
+    return {
+      props: {
+        tabPage,
+        tabPageSerializedContent,
+      },
+    };
+  } catch {
+    return {
+      notFound: true,
+    };
+  }
 };
 
 const DocsPage: NextPage<DocsPageProps> = ({
@@ -168,7 +182,10 @@ const DocsPage: NextPage<DocsPageProps> = ({
         ) : null}
         <Box py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
+            <Box>
+              <Search variant="desktop" />
+              <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
+            </Box>
           ) : null}
           <MdxPageContent
             flexGrow={1}

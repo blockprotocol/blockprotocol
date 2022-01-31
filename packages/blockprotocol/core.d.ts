@@ -1,4 +1,11 @@
+// ---------------------------- UTILITIES ----------------------------- //
+
+type DistributedOmit<T, K extends PropertyKey> = T extends T
+  ? Omit<T, K>
+  : never;
+
 // -------------------------- BLOCK METADATA -------------------------- //
+
 export type BlockVariant = {
   description?: string | null;
   displayName?: string | null;
@@ -25,11 +32,12 @@ export type BlockMetadata = {
 };
 
 // ----------------------------- ENTITIES ----------------------------- //
+
 export type BlockProtocolEntity = {
   accountId?: string | null;
   entityId: string;
   entityTypeId?: string | null;
-  [key: string]: JSONValue;
+  [key: string]: unknown;
 };
 
 export type BlockProtocolCreateEntitiesAction<T> = {
@@ -37,6 +45,13 @@ export type BlockProtocolCreateEntitiesAction<T> = {
   entityTypeVersionId?: string | null;
   data: T;
   accountId?: string | null;
+  links?: DistributedOmit<
+    BlockProtocolCreateLinksAction,
+    | "sourceAccountId"
+    | "sourceEntityId"
+    | "sourceEntityTypeId"
+    | "sourceEntityVersionId"
+  >[];
 };
 
 export type BlockProtocolCreateEntitiesFunction = {
@@ -72,7 +87,7 @@ export type BlockProtocolDeleteEntitiesAction = {
 };
 
 export type BlockProtocolDeleteEntitiesFunction = {
-  (actions: BlockProtocolDeleteEntitiesAction[]): Promise<unknown[]>;
+  (actions: BlockProtocolDeleteEntitiesAction[]): Promise<boolean[]>;
 };
 
 export type BlockProtocolFilterOperatorType =
@@ -117,10 +132,13 @@ export type BlockProtocolAggregateEntitiesPayload = {
 
 export type BlockProtocolAggregateEntitiesResult<T = unknown> = {
   results: T[];
-  operation: Required<BlockProtocolAggregateOperationInput> & {
-    pageCount: number;
-    totalCount: number;
-  };
+  operation: BlockProtocolAggregateOperationInput &
+    Required<
+      Pick<BlockProtocolAggregateOperationInput, "pageNumber" | "itemsPerPage">
+    > & {
+      pageCount?: number | null;
+      totalCount?: number | null;
+    };
 };
 
 export type BlockProtocolAggregateEntitiesFunction = {
@@ -130,14 +148,17 @@ export type BlockProtocolAggregateEntitiesFunction = {
 };
 
 // ------------------------ OTHER FUNCTIONS --------------------------- //
+
 export type BlockProtocolFileMediaType = "image" | "video";
 
 export type BlockProtocolUploadFileFunction = {
   (action: {
+    accountId?: string | null;
     file?: File | null;
     url?: string | null;
     mediaType: BlockProtocolFileMediaType;
   }): Promise<{
+    accountId?: string | null;
     entityId: string;
     url: string;
     mediaType: BlockProtocolFileMediaType;
@@ -145,32 +166,44 @@ export type BlockProtocolUploadFileFunction = {
 };
 
 // ----------------------------- LINKS -------------------------------- //
+
+type SingleTargetLinkFields = {
+  destinationEntityId: string;
+  destinationEntityTypeId?: string | null;
+  destinationEntityVersionId?: string | null;
+};
+
+type AggregationTargetLinkFields = {
+  operation: BlockProtocolAggregateOperationInput;
+};
+
 export type BlockProtocolLink = {
   linkId: string;
-  sourceEntityAccountId?: string | null;
+  sourceAccountId?: string | null;
   sourceEntityId: string;
   sourceEntityTypeId?: string | null;
   sourceEntityVersionId?: string | null;
+  destinationAccountId?: string | null;
   index?: number | null;
   path: string;
-} & (
-  | {
-      destinationAccountId?: string | null;
-      destinationEntityId: string;
-      destinationEntityTypeId?: string | null;
-      destinationEntityVersionId?: string | null;
-    }
-  | { operation: BlockProtocolAggregateOperationInput }
-);
+} & (SingleTargetLinkFields | AggregationTargetLinkFields);
 
 export type BlockProtocolLinkGroup = {
-  sourceEntityAccountId?: string | null;
+  sourceAccountId?: string | null;
   sourceEntityId: string;
   sourceEntityVersionId?: string | null;
   sourceEntityTypeId?: string | null;
   path: string;
   links: BlockProtocolLink[];
 };
+
+export type BlockProtocolLinkedAggregation = {
+  sourceAccountId?: string | null;
+  sourceEntityId: string;
+  sourceEntityVersionId?: string | null;
+  sourceEntityTypeId?: string | null;
+  path: string;
+} & BlockProtocolAggregateEntitiesResult;
 
 export type BlockProtocolGetLinkAction = {
   linkId: string;
@@ -180,7 +213,10 @@ export type BlockProtocolGetLinksFunction = {
   (actions: BlockProtocolGetLinkAction[]): Promise<BlockProtocolLink[]>;
 };
 
-export type BlockProtocolCreateLinksAction = Omit<BlockProtocolLink, "linkId">;
+export type BlockProtocolCreateLinksAction = DistributedOmit<
+  BlockProtocolLink,
+  "linkId"
+>;
 
 export type BlockProtocolCreateLinksFunction = {
   (actions: BlockProtocolCreateLinksAction[]): Promise<BlockProtocolLink[]>;
@@ -188,6 +224,8 @@ export type BlockProtocolCreateLinksFunction = {
 
 export type BlockProtocolUpdateLinkAction = {
   data: BlockProtocolLink;
+  sourceAccountId?: string | null;
+  sourceEntityId?: string | null;
   linkId: string;
 };
 
@@ -196,6 +234,8 @@ export type BlockProtocolUpdateLinksFunction = {
 };
 
 export type BlockProtocolDeleteLinksAction = {
+  sourceAccountId?: string | null;
+  sourceEntityId?: string | null;
   linkId: string;
 };
 
@@ -212,7 +252,7 @@ export type BlockProtocolEntityType = {
   $schema: string;
   title: string;
   type: string;
-  [key: string]: JSONValue;
+  [key: string]: unknown;
 };
 
 type BlockProtocolCreateEntityTypesAction = {
@@ -228,6 +268,9 @@ export type BlockProtocolCreateEntityTypesFunction = {
 
 export type BlockProtocolAggregateEntityTypesPayload = {
   accountId?: string | null;
+  // @todo mention in spec or remove
+  // include entities that are used by, but don't belong to, the specified account
+  includeOtherTypesInUse?: boolean | null;
   operation?: Omit<
     BlockProtocolAggregateOperationInput,
     "entityTypeId" | "entityTypeVersionId"
@@ -273,22 +316,44 @@ export type BlockProtocolDeleteEntityTypesFunction = {
 };
 
 // ------------------------- GENERAL / SUMMARY ----------------------------- //
+
 export type BlockProtocolFunction =
   | BlockProtocolAggregateEntitiesFunction
   | BlockProtocolAggregateEntityTypesFunction
   | BlockProtocolCreateEntitiesFunction
   | BlockProtocolCreateEntityTypesFunction
   | BlockProtocolCreateLinksFunction
-  | BlockProtocolDeleteEntitiesFunction
-  | BlockProtocolDeleteEntityTypesFunction
-  | BlockProtocolDeleteLinksFunction
   | BlockProtocolGetEntitiesFunction
   | BlockProtocolGetEntityTypesFunction
   | BlockProtocolGetLinksFunction
+  | BlockProtocolDeleteEntitiesFunction
+  | BlockProtocolDeleteEntityTypesFunction
+  | BlockProtocolDeleteLinksFunction
   | BlockProtocolUpdateEntitiesFunction
   | BlockProtocolUpdateEntityTypesFunction
   | BlockProtocolUpdateLinksFunction
   | BlockProtocolUploadFileFunction;
+
+export type BlockProtocolFunctions = {
+  aggregateEntities?: BlockProtocolAggregateEntitiesFunction | undefined;
+  createEntities?: BlockProtocolCreateEntitiesFunction | undefined;
+  getEntities?: BlockProtocolGetEntitiesFunction | undefined;
+  deleteEntities?: BlockProtocolDeleteEntitiesFunction | undefined;
+  updateEntities?: BlockProtocolUpdateEntitiesFunction | undefined;
+
+  aggregateEntityTypes?: BlockProtocolAggregateEntityTypesFunction | undefined;
+  createEntityTypes?: BlockProtocolCreateEntityTypesFunction | undefined;
+  getEntityTypes?: BlockProtocolGetEntityTypesFunction | undefined;
+  updateEntityTypes?: BlockProtocolUpdateEntityTypesFunction | undefined;
+  deleteEntityTypes?: BlockProtocolDeleteEntityTypesFunction | undefined;
+
+  getLinks?: BlockProtocolGetLinksFunction | undefined;
+  createLinks?: BlockProtocolCreateLinksFunction | undefined;
+  deleteLinks?: BlockProtocolDeleteLinksFunction | undefined;
+  updateLinks?: BlockProtocolUpdateLinksFunction | undefined;
+
+  uploadFile?: BlockProtocolUploadFileFunction | undefined;
+};
 
 export type JSONValue =
   | null
@@ -307,30 +372,11 @@ export interface JSONArray extends Array<JSONValue> {}
  * which the embedding application should provide.
  */
 export type BlockProtocolProps = {
-  accountId?: string;
-  aggregateEntities?: BlockProtocolAggregateEntitiesFunction;
-  aggregateEntitiesLoading?: boolean;
-  aggregateEntitiesError?: Error;
-  aggregateEntityTypes?: BlockProtocolAggregateEntityTypesFunction;
-  createEntities?: BlockProtocolCreateEntitiesFunction;
-  createEntitiesLoading?: boolean;
-  createEntitiesError?: Error;
-  createLinks?: BlockProtocolCreateLinksFunction;
-  createLinksLoading?: boolean;
-  createLinksError?: Error;
-  deleteLinks?: BlockProtocolDeleteLinksFunction;
-  deleteLinksLoading?: boolean;
-  deleteLinksError?: Error;
-  entityId?: string;
-  entityTypeId?: string;
+  accountId?: string | null;
+  entityId: string;
+  entityTypeId?: string | null;
   entityTypes?: BlockProtocolEntityType[];
+  linkedAggregations?: BlockProtocolLinkedAggregation[];
   linkedEntities?: BlockProtocolEntity[];
   linkGroups?: BlockProtocolLinkGroup[];
-  updateEntities?: BlockProtocolUpdateEntitiesFunction;
-  updateEntitiesLoading?: boolean;
-  updateEntitiesError?: Error;
-  updateEntityTypes?: BlockProtocolUpdateEntityTypesFunction;
-  updateEntityTypesLoading?: boolean;
-  updateEntityTypesError?: Error;
-  uploadFile?: BlockProtocolUploadFileFunction;
-};
+} & BlockProtocolFunctions;

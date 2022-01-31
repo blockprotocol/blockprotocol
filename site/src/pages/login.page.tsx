@@ -1,13 +1,13 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState, useMemo, useContext } from "react";
+import { useEffect, useState, useMemo, useCallback, useRef } from "react";
 import { Paper, Box, Icon, Fade, Container } from "@mui/material";
 import { apiClient } from "../lib/apiClient";
 import { ApiLoginWithLoginCodeRequestBody } from "./api/loginWithLoginCode.api";
 import { Button } from "../components/Button";
 import { SendLoginCodeScreen } from "../components/Screens/SendLoginCodeScreen";
 import { SerializedUser } from "../lib/model/user.model";
-import UserContext from "../context/UserContext";
+import { useUser } from "../context/UserContext";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
@@ -22,7 +22,7 @@ const toStringElseUndefined = (item: string | string[] | undefined) =>
   typeof item === "string" ? item : undefined;
 
 const LoginPage: NextPage = () => {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser } = useUser();
   const router = useRouter();
 
   const parsedQuery = useMemo((): LoginPageParsedUrlQuery => {
@@ -81,13 +81,26 @@ const LoginPage: NextPage = () => {
     setCurrentScreen("VerificationCode");
   };
 
-  const handleLogin = (loggedInUser: SerializedUser) => {
-    if (!loggedInUser.isSignedUp) {
-      /** @todo: redirect to signup page if user hasn't completed signup */
-    }
-    setUser(loggedInUser);
-    void router.push(redirectPath ?? "/");
-  };
+  // Router reference invalidates after page load because isReady changes from false to true.
+  // We also update redirectPath in useEffect, which changes its reference too. Avoiding both
+  // variables inside handleLogin dependencies saves us from triggering multiple API calls.
+  const redirectRef = useRef<() => void>(() => {});
+  useEffect(() => {
+    redirectRef.current = () => {
+      void router.push(redirectPath ?? "/");
+    };
+  }, [router, redirectPath]);
+
+  const handleLogin = useCallback(
+    (loggedInUser: SerializedUser) => {
+      if (!loggedInUser.isSignedUp) {
+        /** @todo: redirect to signup page if user hasn't completed signup */
+      }
+      setUser(loggedInUser);
+      redirectRef.current();
+    },
+    [setUser],
+  );
 
   return (
     <Box

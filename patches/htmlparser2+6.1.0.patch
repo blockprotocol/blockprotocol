@@ -1,0 +1,12 @@
+diff --git a/node_modules/htmlparser2/lib/index.d.ts b/node_modules/htmlparser2/lib/index.d.ts
+index 997c6d9..5a1fcbf 100644
+--- a/node_modules/htmlparser2/lib/index.d.ts
++++ b/node_modules/htmlparser2/lib/index.d.ts
+@@ -36,4 +36,6 @@ export * from "./FeedHandler";
+ export * as DomUtils from "domutils";
+ export { DomHandler as DefaultHandler };
+ export { FeedHandler as RssHandler } from "./FeedHandler";
++// @todo fix properly later
++export type DomElement = any;
+ //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file

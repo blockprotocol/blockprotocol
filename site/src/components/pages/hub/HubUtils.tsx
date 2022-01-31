@@ -1,58 +1,10 @@
-import { BlockProtocolUploadFileFunction } from "blockprotocol";
+import { FC } from "react";
 
-/** @todo type as JSON Schema. make part of blockprotocol package and publish. */
+/** @todo type as JSON Schema. */
 export type BlockSchema = Record<string, any>;
 export type BlockDependency = keyof typeof blockDependencies;
 export type BlockExports = {
-  default: React.FC;
-};
-
-export type BlockProtocolFileMediaType = "image" | "video";
-
-export const dummyUploadFile: BlockProtocolUploadFileFunction = async ({
-  file,
-  url,
-  mediaType,
-}) => {
-  return new Promise((resolve, reject) => {
-    if (!file && !url) {
-      reject(
-        new Error(
-          `Please enter a valid ${mediaType} URL or select a file below`,
-        ),
-      );
-      return;
-    }
-
-    if (url?.trim()) {
-      resolve({
-        accountId: "file-account-xxx",
-        entityId: "file-entity-xxx",
-        url,
-        mediaType,
-      });
-      return;
-    }
-
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          resolve({
-            accountId: "file-account-xxx",
-            entityId: "file-entity-xxx",
-            url: event.target.result.toString(),
-            mediaType,
-          });
-        } else {
-          reject(new Error("Couldn't read your file"));
-        }
-      };
-
-      reader.readAsDataURL(file);
-    }
-  });
+  default: FC;
 };
 
 /* eslint-disable global-require */
@@ -61,7 +13,6 @@ export const blockDependencies = {
   "react-dom": require("react-dom"),
   twind: require("twind"),
   lodash: require("lodash"),
-  uploadFile: dummyUploadFile,
 };
 
 type OembedResponse = {

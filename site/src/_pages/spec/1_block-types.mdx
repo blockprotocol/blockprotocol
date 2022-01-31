@@ -4,6 +4,8 @@
 
 We have published [HASH, an example embedding application with example blocks](https://github.com/hashintel/hash).
 
+You can see source code for an example block [here](https://github.com/hashintel/hash/tree/main/packages/blocks/code).
+
 We will be developing more complex blocks which demonstrate the full range of functionality described below.
 
 We welcome feedback and suggestions - [please open or contribute to a discussion](https://github.com/blockprotocol/blockprotocol/discussions) to do so.
@@ -37,7 +39,7 @@ A block package SHOULD contain:
       For example, a block may rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page.
     - the path or URL to the entrypoint source file (e.g. `index.html`, `index.js`) under `source`
     - the `version` of the block, which SHOULD use [semantic versioning](https://semver.org/)
-    - `protocol`: the applicable block protocol version, once the protocol is versioned (it is currently not).
+    - `protocol`: the applicable block protocol version: currently `0.1`.
 
   - SHOULD specify:
 
@@ -61,7 +63,7 @@ A block package SHOULD contain:
 
 Blocks MUST use the data properties specified in their schema, if any.
 
-They can expect these properties to be made available to them by the embedding application, exactly how depending on [rendering context](https://blockprotocol.org/spec/implementation-and-rendering-context).
+They can expect these properties to be made available to them by the embedding application, exactly how depending on [rendering context](https://blockprotocol.org/spec/implementation-approaches#rendering-contexts).
 
 The data for the block itself will be at the root level of the data made available to it, i.e. a block which had a `level` property at the root of the properties in its schema would have a `level` property passed to it.
 
@@ -71,7 +73,7 @@ The block’s data represents an ‘entity’ in the system. Alongside the prope
 
 - `entityId`: an identifier for the entity
 - `entityTypeId`: an identifier for the type/class of the entity
-- `accountId`: an identifier the account/namespace/user to which the entity belongs
+- `accountId`: an identifier for the account/namespace/user to which the entity belongs
 
 These fields MUST be strings. Some MAY be left undefined.
 
@@ -105,7 +107,7 @@ Blocks SHOULD expect the following additional fields related to linked data to b
 - a `linkedEntities` field containing the entities linked from the block’s entity, and entities linked to from those entities, and so on. This field SHOULD contain all entities which have been resolved in the graph (rather than just those linked directly from the block entity), i.e. these are the **nodes** in a graph resolved from the block entity to a certain depth (see callout below).
 
 - a `linkGroups` field which provides the links attached to the block or the entities provided in `linkedEntities`, grouped by entity and path, i.e. these are the **edges** of the graph.
--
+
 - a `linkedAggregations` field containing the results of aggregations linked from the block’s entity - these are special links which represent an aggregation operation (e.g. in plain English, "top 10 Cars sorted by age, descending"), which are provided in this field along with the results of the operation at the time of request.
 
 Each entity provided under `linkedEntities` or `linkedAggregations` will also have [identifying fields](#fields-identifying-blocks) to be used as arguments when updating those entities.
@@ -259,29 +261,30 @@ We are considering moving to the cursor-based [Connections pattern](https://rela
 
 - `results`: \[_array_]: an array of entities
 - `operation`: the aggregation operation applied:
-  - `entityTypeId?` \[_object_]\[_optional_]:: the specific type results were limited to
-  - `entityTypeVersionId?` \[_object_]\[_optional_]:: the specific version of a type results were limited to
+  - `entityTypeId?` \[_string_]\[_optional_]: the specific type results were limited to
+  - `entityTypeVersionId?` \[_string_]\[_optional_]: the specific version of a type results were limited to
   - `pageNumber` \[_integer_]: the page number returned.
-  - `itemsPerPage` \[_integer_]: the number of results per page, i.e. returned.
-  - `totalCount` \[_integer_]: the total number of records available for this query.
-  - `multiFilter` \[_array_]: any filters applied (empty if none):
+  - `itemsPerPage` \[_integer_]: the number of results per page - i.e. the number of results returned.
+  - `totalCount` \[_integer_]\[_optional_]: the total number of records available for this query.
+  - `pageCount` \[_integer_]\[_optional_]: the total number of pages available for this query.
+  - `multiFilter` \[_array_]\[_optional_]: any filters applied (empty or omitted if none):
     - `field` \[_string_]: the field name filtered by.
     - `operator` \[_enum_]: the filter operator.
       One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
     - `value` \[_string_]: the value filtered against.
-  - `multiSort` \[_array_]: the sort(s) applied:
+  - `multiSort` \[_array_]\[_optional_]: the sort(s) applied (empty or omitted if none):
     - `field` \[_string_]: the field sorted on.
     - `desc` \[_boolean_]: whether the sort was descending.
 
 **accepts:** an _object_ (`AggregateEntitiesPayload`) with the following shape:
 
-- `accountId?`: \[_optional_\: the account to retrieve entities from
+- `accountId?`: \[_optional_]\: the account to retrieve entities from
 - `selection?` \[_array_ of _strings_]\[_optional_]: limit the return to only include these fields on the entity.
 - `depth?` \[_integer_]\[_optional_]: limit the depth to which linked data in an entity will be resolved.
   See [linking entities](#linking-entities).
 - `operation?` <a id="aggregate-entities-operation" /> \[_object_]\[_optional_]: a description of the aggregation operation, which contains at least one of the following fields:
-  - `entityTypeId?` \[_object_]\[_optional_]:: limit results to entities of a specific type
-  - `entityTypeVersionId?` \[_object_]\[_optional_]:: limit results to entities of a specific version of a type
+  - `entityTypeId?` \[_string_]\[_optional_]:: limit results to entities of a specific type
+  - `entityTypeVersionId?` \[_string_]\[_optional_]:: limit results to entities of a specific version of a type
   - `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
   - `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
   - `multiFilter?` \[_array_]\[_optional_]: filter entities by a given field value:
@@ -392,12 +395,12 @@ In order to create a reference to a separate entity or entities as the desired v
     - `operation` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
 - MAY contain
 
+  - `destinationEntityAccountId?`: \[_string_]\[_optional_]: the `accountId` of the destination entity or account to aggregate entities from.
   - `sourceEntityVersionId?` \[_string_]\[_optional_]: optionally specify that this link is only from a specific version.
-  - `sourceEntityAccountId?`: \[_string_]\[_optional_]:: the `accountId` of the source entity.
+  - `sourceAccountId?`: \[_string_]\[_optional_]:: the `accountId` of the source entity.
   - `sourceEntityTypeId?`: \[_string_]\[_optional_]:: the `entityTypeId` of the source entity.
 
 - if `destinationEntityId` is defined, MAY contain:
-  - `destinationEntityAccountId?`: \[_string_]\[_optional_]: the `accountId` of the destination entity.
   - `destinationEntityVersionId:` \[_string_]\[_optional_]: to pin the link to a specific version of the destination entity.
   - `destinationEntityTypeId?`: \[_string_]\[_optional_]: the `entityTypeId` of the destination entity.
   - `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
@@ -460,8 +463,9 @@ The entities linked to - the **nodes** in the graph - will be provided under `li
 An entry in linkedAggregations follows the shape of the [`AggregateEntitiesResult` object](#aggregate-entities-result),
 with the addition of:
 
-- `sourceAccountId` \[_string_]: the `accountId` of the source entity.
+- `sourceAccountId?` \[_string_]\[_optional_]: the `accountId` of the source entity.
 - `sourceEntityId` \[_string_]: the `entityId` of the source entity.
+- `sourceEntityTypeId?` \[_string_]\[_optional_]: the `entityTypeId` of the source entity.
 - `path`: \[_string_]: the `path` on the source entity to which this aggregation is linked.
 
 To create, update and delete links between entities, blocks SHOULD expect the following functions to be made available to them:
@@ -475,7 +479,7 @@ creates one or more links.
 **returns:** the created links, i.e. _objects_ inside an _array_ (now with `linkId`)
 
 **accepts:** a single _array_ of _objects_ (`CreateLinksAction`) -
-each object is a [`Link`(#link-object)], omitting `linkId`.
+each object is a [`Link`](#link-object), omitting `linkId`.
 
 ```block-function
 updateLinks(actions: UpdateLinksAction[]): Promise<Link[]>
@@ -500,6 +504,8 @@ deletes one or more links.
 
 **accepts:** a single _array_ of _objects_ (`DeleteLinksAction`), each with the following shape:
 
+- `sourceAccountId?` \[_string_]\[_optional_]: the `accountId` of the source entity.
+- `sourceEntityId` \[_string_]\[_optional_]: the `entityId` of the source entity.
 - `linkId` \[_string_]: the entity type to delete.
 
 ```block-function
