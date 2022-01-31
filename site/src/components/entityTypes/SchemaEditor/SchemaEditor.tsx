@@ -17,7 +17,7 @@ import React, {
 import { tw } from "twind";
 import { debounce, get } from "lodash";
 
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { SchemaPropertiesTable } from "./SchemaPropertiesTable";
 import { JsonSchema } from "../../../lib/jsonSchema";
 import { TextInputOrDisplay } from "./Inputs";
@@ -281,7 +281,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
             />
           </div>
         )}
-        <div>
+        <Box sx={{ overflowX: "auto" }}>
           {!availableEntityTypes ? (
             "Loading..."
           ) : (
@@ -293,7 +293,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
               />
             </SchemaOptionsContext.Provider>
           )}
-        </div>
+        </Box>
       </section>
 
       {/** @todo handle subschemas or remove this code

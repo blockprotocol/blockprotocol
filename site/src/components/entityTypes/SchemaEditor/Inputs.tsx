@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { ChangeEvent, useEffect, useState, VoidFunctionComponent } from "react";
 
@@ -27,7 +28,22 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
   }, [value]);
 
   if (readonly) {
-    return <span>{value}</span>;
+    return (
+      <Box
+        sx={{
+          maxWidth: {
+            xs: "125px",
+            md: "unset",
+          },
+          width: {
+            xs: "max-content",
+            md: "unset",
+          },
+        }}
+      >
+        {value}
+      </Box>
+    );
   }
 
   let textChangeEvents: {

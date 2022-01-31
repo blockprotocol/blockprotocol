@@ -904,6 +904,7 @@ export const theme = createTheme({
       },
       styleOverrides: {
         root: {
+          minWidth: "125px",
           borderRadius: "6px",
           "&:hover": {
             "& .MuiOutlinedInput-notchedOutline": {
