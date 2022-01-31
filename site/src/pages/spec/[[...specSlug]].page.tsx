@@ -107,7 +107,7 @@ const GitHubInfoCard = (
           href="https://github.com/blockprotocol/blockprotocol"
           sx={{ ":focus-visible": { outlineColor: "currentcolor" } }}
         >
-          our Github repo
+          our GitHub repo
         </Link>
         .
       </Typography>
@@ -133,7 +133,7 @@ const GitHubInfoCard = (
           textTransform: "none",
         }}
       >
-        View the spec on Github
+        View the spec on GitHub
       </LinkButton>
     </Box>
   </Paper>

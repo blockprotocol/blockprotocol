@@ -148,7 +148,7 @@ const Socials = (
       }}
       startIcon={<Icon className="fa fa-star" />}
     >
-      Star us on Github
+      Star us on GitHub
     </LinkButton>
   </Box>
 );
