@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 import algoliasearch from "algoliasearch";
 
-import siteMap from "../../../../site/site-map.json";
+import siteMap from "../site/site-map.json";
 
 type DocsFrontMatter = {
   content: string;
@@ -73,6 +73,10 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
       return page.href.includes(type);
     });
 
+    if (!siteMapData) {
+      throw new Error("Unexpected empty siteMapData");
+    }
+
     const subPageData = siteMapData.subPages[fileIndex];
 
     const appendData = {
@@ -111,8 +115,8 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
 
 const syncAlgoliaIndex = async () => {
   const client = algoliasearch(
-    process.env.ALGOLIA_PROJECT,
-    process.env.AGOLIA_WRITE_KEY,
+    process.env.ALGOLIA_PROJECT ?? "",
+    process.env.AGOLIA_WRITE_KEY ?? "",
   );
 
   const index = client.initIndex("blockprotocol_testing");
@@ -149,14 +153,18 @@ const syncAlgoliaIndex = async () => {
   await index.saveObjects(indexObjects);
 };
 
-const main = async () => {
+const script = async () => {
   try {
     await syncAlgoliaIndex();
-    // eslint-disable-next-line no-console
     console.log("Algolia Indexes Updated.");
   } catch (error) {
-    throw new Error(`Error while running Algolia Update: ${error}`);
+    throw new Error(
+      `Error while running Algolia Update: ${
+        // @ts-expect-error -- TS is a bit too strict here. We can‘t use instanceof Error because Algolia errors are plain objects
+        error?.message ?? error
+      }`,
+    );
   }
 };
 
-void main();
+void script();
