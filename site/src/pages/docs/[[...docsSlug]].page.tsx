@@ -182,10 +182,12 @@ const DocsPage: NextPage<DocsPageProps> = ({
         ) : null}
         <Box py={4} display="flex" alignItems="flex-start">
           {md ? (
-            <Box>
-              <Search variant="desktop" />
-              <Sidebar flexGrow={0} marginRight={6} pages={[tabPage]} />
-            </Box>
+            <Sidebar
+              flexGrow={0}
+              marginRight={6}
+              pages={[tabPage]}
+              header={<Search variant="desktop" />}
+            />
           ) : null}
           <MdxPageContent
             flexGrow={1}
