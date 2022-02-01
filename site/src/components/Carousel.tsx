@@ -116,6 +116,17 @@ export const Carousel = <T,>({
           display: "flex",
         },
 
+        // this group of styles ensures consistent item height, which aligns focus outlines
+        "& .slick-list": {
+          display: { xs: "block", md: "flex" },
+          flexDirection: "row",
+          margin: "-10px 0 10px",
+          padding: "10px 0",
+        },
+        "& .slick-slide, & .slick-slide > div": {
+          display: { xs: "block", md: "flex" },
+        },
+
         "& .slick-dots": {
           bottom: "unset",
           top: "105%",

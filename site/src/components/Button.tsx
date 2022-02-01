@@ -89,6 +89,9 @@ export const Button: FC<ButtonProps> = forwardRef(
           /** @todo: figure out how to properly merge this object with `props.sx` */
           ...props.sx,
           lineHeight: "1.5",
+          ...(squared
+            ? { ":focus-visible:after": { borderRadius: 3 } }
+            : undefined),
         }}
         ref={ref}
       >

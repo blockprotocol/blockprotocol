@@ -15,6 +15,9 @@ const defaultTheme = createTheme();
 
 const FALLBACK_FONTS = [`"Helvetica"`, `"Arial"`, "sans-serif"];
 
+const buttonFocusBorderOffset = 6;
+const buttonFocusBorderWidth = 4;
+
 // @todo use more descriptive names instead of --step-1, --step-2
 // wouldn't need this when this is in
 // @see https://github.com/mui-org/material-ui/issues/15251
@@ -414,6 +417,15 @@ export const theme = createTheme({
               color: customColors.purple[700],
             },
           },
+          "&:focus": {
+            border: "none !important",
+            borderRadius: 0,
+          },
+          "&:focus-visible": {
+            borderRadius: 0,
+            border: "none !important",
+            outline: `1px solid ${customColors.purple[600]}`,
+          },
           svg: {
             color: customColors.gray[60],
             transition: defaultTheme.transitions.create("color"),
@@ -462,6 +474,39 @@ export const theme = createTheme({
         disableRipple: true,
         disableTouchRipple: true,
       },
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          "&:before": {
+            content: `""`,
+            borderRadius: "inherit",
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            border: "1px solid transparent",
+          },
+          ":focus-visible:after": {
+            content: `""`,
+            position: "absolute",
+            left: -buttonFocusBorderOffset,
+            top: -buttonFocusBorderOffset,
+            bottom: -buttonFocusBorderOffset,
+            right: -buttonFocusBorderOffset,
+            border: `${buttonFocusBorderWidth}px solid`,
+            borderRadius: 6 + buttonFocusBorderOffset,
+          },
+        },
+        endIcon: {
+          "&>*:nth-of-type(1)": {
+            fontSize: "inherit",
+          },
+        },
+        startIcon: {
+          "&>*:nth-of-type(1)": {
+            fontSize: "inherit",
+          },
+        },
+      },
       variants: [
         {
           props: { variant: "transparent" },
@@ -473,6 +518,12 @@ export const theme = createTheme({
               color: customColors.purple[600],
               backgroundColor: "unset",
             },
+            ":focus-visible:after": {
+              borderWidth: 1,
+              bottom: 0,
+              top: 0,
+              borderRadius: 0,
+            },
           },
         },
         {
@@ -480,23 +531,35 @@ export const theme = createTheme({
           style: {
             color: customColors.gray["20"],
             borderRadius: 34,
+            ":focus-visible:after": {
+              borderRadius: 34 + buttonFocusBorderOffset,
+            },
           },
         },
         {
           props: { variant: "secondary" },
           style: {
             background: customColors.gray[10],
-            border: `1px solid currentColor`,
             borderRadius: 34,
+            ":before": {
+              borderColor: "currentColor",
+            },
+            ":focus-visible:after": {
+              borderRadius: 34 + buttonFocusBorderOffset,
+            },
           },
         },
         {
           props: { variant: "tertiary" },
           style: {
-            border: `1px solid currentColor`,
             borderRadius: 34,
             color: customColors.gray[70],
-            borderColor: "#C1CFDE",
+            ":before": {
+              borderColor: "#C1CFDE",
+            },
+            ":focus-visible:after": {
+              borderRadius: 34 + buttonFocusBorderOffset,
+            },
             background: defaultTheme.palette.common.white,
             "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
               color: customColors.gray[40],
@@ -566,27 +629,25 @@ export const theme = createTheme({
           props: { variant: "primary", color: "purple" },
           style: {
             zIndex: 0,
-            overflow: "hidden",
             background: customColors.purple[600],
             "&.Mui-disabled": {
               background: customColors.purple[200],
               color: customColors.purple[100],
             },
-            "&:before": {
+            ":before": {
               zIndex: -1,
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              content: `""`,
               opacity: 0,
               transition: defaultTheme.transitions.create("opacity"),
               background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.teal["400"]} 0%, ${customColors.purple[600]} 100%)`,
             },
-            "&:hover": {
+            ":hover": {
               background: customColors.purple[600],
-              "&:before": {
+              ":before": {
                 opacity: 1,
               },
+            },
+            ":focus-visible:after": {
+              borderColor: customColors.purple[600],
             },
           },
         },
@@ -597,14 +658,21 @@ export const theme = createTheme({
             ":hover": {
               backgroundColor: customColors.teal[600],
             },
+            ":focus-visible:after": {
+              borderColor: customColors.teal[500],
+            },
           },
         },
         {
           props: { variant: "primary", color: "gray" },
           style: {
-            backgroundColor: customColors.gray[60],
+            color: customColors.gray[80],
+            backgroundColor: customColors.gray[50],
             ":hover": {
-              backgroundColor: customColors.gray[70],
+              backgroundColor: customColors.gray[30],
+            },
+            ":focus-visible:after": {
+              borderColor: customColors.gray[50],
             },
           },
         },
@@ -615,6 +683,9 @@ export const theme = createTheme({
             ":hover": {
               backgroundColor: customColors.orange[600],
             },
+            ":focus-visible:after": {
+              borderColor: customColors.orange[500],
+            },
           },
         },
         {
@@ -623,6 +694,9 @@ export const theme = createTheme({
             backgroundColor: customColors.red[600],
             ":hover": {
               backgroundColor: customColors.red[700],
+            },
+            ":focus-visible:after": {
+              borderColor: customColors.purple[700],
             },
           },
         },
@@ -644,6 +718,9 @@ export const theme = createTheme({
               background: customColors.teal[200],
               color: customColors.teal[700],
             },
+            ":focus-visible:after": {
+              borderColor: customColors.teal[600],
+            },
           },
         },
         {
@@ -653,6 +730,9 @@ export const theme = createTheme({
             ":hover": {
               background: customColors.gray[30],
               color: customColors.gray[70],
+            },
+            ":focus-visible:after": {
+              borderColor: customColors.gray[70],
             },
           },
         },
@@ -665,6 +745,9 @@ export const theme = createTheme({
             ":hover": {
               color: customColors.orange[700],
               background: customColors.orange[200],
+            },
+            ":focus-visible:after": {
+              borderColor: customColors.purple[600],
             },
           },
         },
@@ -715,21 +798,6 @@ export const theme = createTheme({
           },
         },
       ],
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-        },
-        endIcon: {
-          "&>*:nth-of-type(1)": {
-            fontSize: "inherit",
-          },
-        },
-        startIcon: {
-          "&>*:nth-of-type(1)": {
-            fontSize: "inherit",
-          },
-        },
-      },
     },
     MuiContainer: {
       styleOverrides: {
@@ -804,6 +872,11 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           textDecoration: "none",
+          position: "relative",
+          ":focus-visible": {
+            border: "none",
+            outline: `1px solid ${customColors.purple[700]}`,
+          },
         },
       },
     },
@@ -830,12 +903,17 @@ export const theme = createTheme({
         disableFocusRipple: true,
         disableRipple: true,
         disableTouchRipple: true,
+        tabIndex: 0,
       },
       styleOverrides: {
         root: {
+          border: "1px solid transparent",
           textTransform: "none",
           padding: defaultTheme.spacing(1, 0),
           marginRight: defaultTheme.spacing(3),
+          "&:focus-visible": {
+            borderColor: customColors.purple[600],
+          },
         },
         textColorPrimary: {
           color: customColors.gray[70],
@@ -846,7 +924,6 @@ export const theme = createTheme({
       styleOverrides: {
         li: {
           whiteSpace: "nowrap",
-          overflow: "hidden",
           textOverflow: "ellipsis",
           fontSize: 14,
           color: customColors.gray[60],
