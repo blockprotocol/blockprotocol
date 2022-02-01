@@ -5,10 +5,28 @@ import { MockBlockDock } from "../src/MockBlockDock";
 
 const node = document.getElementById("app");
 
-const DevApp = () => (
-  <MockBlockDock>
-    <TestBlock entityId="test-entity-1" name="World" />
-  </MockBlockDock>
-);
+const DevApp = () => {
+  const [name, setName] = React.useState("World");
+
+  return (
+    <div>
+      <button
+        onClick={() => {
+          if (name === "World") {
+            setName("Internet");
+          } else {
+            setName("World");
+          }
+        }}
+      >
+        Switch
+      </button>
+      <br />
+      <MockBlockDock>
+        <TestBlock entityId="test-entity-1" name={name} />
+      </MockBlockDock>
+    </div>
+  );
+};
 
 ReactDOM.render(<DevApp />, node);
