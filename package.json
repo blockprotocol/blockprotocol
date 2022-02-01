@@ -23,8 +23,7 @@
     "dev": "yarn workspace @blockprotocol/site dev",
     "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
     "dev:db": "yarn workspace @blockprotocol/site dev:db",
-    "postinstall": "patch-package",
-    "prepare": "husky install"
+    "prepare": "husky install && patch-package && yarn workspace mock-block-dock run prepare"
   },
   "lint-staged": {
     "**/*": [
