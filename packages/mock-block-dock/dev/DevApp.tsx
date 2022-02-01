@@ -18,6 +18,7 @@ const DevApp = () => {
             setName("World");
           }
         }}
+        type="button"
       >
         Switch
       </button>
