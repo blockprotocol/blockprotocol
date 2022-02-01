@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -31,8 +31,8 @@
     "build:esm": "tsc --p tsconfig.build.json",
     "clean": "rimraf ./dist/",
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev -- --watch --verbose\" \"yarn run-dev-server\"",
-    "postinstall": "yarn build",
     "lint:tsc": "tsc --noEmit",
+    "prepare": "yarn build",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --open --config dev/webpack.config.js"
   },
   "dependencies": {
