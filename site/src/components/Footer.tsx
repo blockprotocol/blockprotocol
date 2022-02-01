@@ -65,6 +65,9 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
         ":active": {
           color: theme.palette.common.white,
         },
+        ":focus-visible": {
+          outlineColor: theme.palette.gray[40],
+        },
       })}
     >
       {name}
@@ -104,7 +107,8 @@ const Socials = (
           href={href}
           key={href}
           sx={{
-            marginRight: 2.5,
+            marginRight: 2.2,
+            color: (theme) => theme.palette.gray[50],
             ":hover": {
               svg: {
                 color: (theme) => theme.palette.gray[30],
@@ -115,10 +119,14 @@ const Socials = (
                 color: (theme) => theme.palette.common.white,
               },
             },
+            ":focus-visible": {
+              outlineColor: (theme) => theme.palette.gray[50],
+            },
             svg: {
+              padding: 0.3,
               transition: (theme) =>
                 theme.transitions.create("color", { duration: 150 }),
-              color: (theme) => theme.palette.gray[50],
+              color: "inherit",
             },
           }}
         >
@@ -129,16 +137,18 @@ const Socials = (
     <LinkButton
       href="https://github.com/blockprotocol/blockprotocol"
       variant="primary"
+      color="gray"
       size="small"
       sx={{
         flexShrink: 0,
+        paddingLeft: 2.2,
+        marginLeft: 0.3,
         marginBottom: 2.5,
-        backgroundColor: (theme) => theme.palette.gray[70],
-        color: (theme) => theme.palette.gray[20],
+        marginTop: -0.7,
       }}
       startIcon={<Icon className="fa fa-star" />}
     >
-      Star us on Github
+      Star us on GitHub
     </LinkButton>
   </Box>
 );
@@ -225,19 +235,26 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                 href="https://hash.ai"
                 sx={{
                   marginLeft: 1,
+                  borderBottomColor: "transparent !important",
                   ":hover": {
                     color: ({ palette }) => palette.gray[30],
                   },
                   ":active": {
                     color: ({ palette }) => palette.common.white,
                   },
+                  ":focus-visible": {
+                    outline: ({ palette }) => `1px solid ${palette.gray[50]}`,
+                  },
                 }}
               >
                 <HASHLogoIcon
                   sx={{
-                    transition: theme.transitions.create("color", {
-                      duration: 150,
-                    }),
+                    transition: theme.transitions.create(
+                      ["color", "borderColor"],
+                      {
+                        duration: 150,
+                      },
+                    ),
                   }}
                 />
               </Box>

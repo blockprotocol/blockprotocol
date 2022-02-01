@@ -166,8 +166,11 @@ const EntityTypePage: NextPage = () => {
         <Box sx={{ mb: 2 }}>
           <Typography variant="bpSmallCopy">
             Looking for the raw JSON? Visit{" "}
-            <Link href={`${uri}?json`}>this link</Link> or request the $id with
-            "application/json" in an "accept" header.
+            <Link href={`${uri}?json`} target="_blank">
+              this link
+            </Link>{" "}
+            or request the $id with "application/json" in an "Accept" HTTP
+            header.
           </Typography>
         </Box>
       </Container>

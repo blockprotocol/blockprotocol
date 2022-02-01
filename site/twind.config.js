@@ -22,6 +22,7 @@ module.exports = {
       "font-size": "1.3rem",
       "font-weight": "400",
     },
+    "button:focus": {},
   }),
   variants: {
     extend: {
