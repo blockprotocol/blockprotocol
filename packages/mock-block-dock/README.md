@@ -36,6 +36,13 @@ It will also pass `linkGroups` and `linkedEntities`, which will be populated onc
 
 `MockBlockDock` is automatically included in [block-template](https://www.npmjs.com/package/block-template), which you can copy via [create-block-app](https://www.npmjs.com/package/create-block-app)
 
+## Updating Props
+
+Any props passed to the child of `MockBlockDock` are automatically updated whenever:
+
+1.  The list of entities passed to the `mockDataStore` change.
+2.  The entityId passed to the child changes.
+
 ## Note
 
 Only a subset of functionality listed in the [Block Protocol spec](https://blockprotocol.org/spec) is currently supported.
