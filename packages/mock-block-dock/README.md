@@ -41,7 +41,7 @@ It will also pass `linkGroups` and `linkedEntities`, which will be populated onc
 Any props passed to the child of `MockBlockDock` are automatically updated whenever:
 
 1.  The list of entities passed to the `mockDataStore` change.
-2.  The entityId passed to the child changes.
+1.  The entityId passed to the child changes.
 
 ## Note
 
