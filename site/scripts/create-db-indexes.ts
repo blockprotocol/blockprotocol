@@ -1,7 +1,3 @@
-/* eslint-disable import/first */
-import dotenv from "dotenv";
-
-dotenv.config({ path: ".env.local" });
 import { User, UserDocument } from "../src/lib/model/user.model";
 import {
   VerificationCode,
