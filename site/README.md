@@ -283,7 +283,7 @@ Logs out the currently authenticated user.
 
 #### `POST /api/uploadUserAvatar` [requires cookie authentication]
 
-Uploads a user avatar and apply it to logged in profil page.
+Uploads a user avatar and apply it to logged in profile page.
 
 - Multipart Request Body:
 
