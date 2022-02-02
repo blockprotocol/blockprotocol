@@ -7,6 +7,7 @@ const child_process = require("child_process");
 const fs = require("fs");
 const pacote = require("pacote");
 const path = require("path");
+const untildify = require("untildify");
 
 const exec = promisify(child_process.exec);
 
@@ -23,7 +24,7 @@ const templatePackageName = "block-template";
   // @todo: replace with `process.argv[3] ?? blockName` after upgrading ESLint
   const blockPath = process.argv[3] ? process.argv[3] : blockName;
 
-  const resolvedBlockPath = path.resolve(blockPath);
+  const resolvedBlockPath = path.resolve(untildify(blockPath));
 
   try {
     fs.statSync(resolvedBlockPath);

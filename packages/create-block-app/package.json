@@ -24,7 +24,8 @@
     "lint:tsc": "echo \"Skipping: TypeScript not configured\""
   },
   "dependencies": {
-    "pacote": "12.0.2"
+    "pacote": "12.0.2",
+    "untildify": "4.0.0"
   },
   "devDependencies": {
     "@types/pacote": "11.1.3"

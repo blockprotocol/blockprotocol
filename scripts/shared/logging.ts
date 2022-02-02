@@ -1,12 +1,12 @@
 let currentMarkEndOfPhase: (() => void) | undefined = undefined;
 
 export const logStepStart = (phaseName: string) => {
-  console.log();
+  console.log("");
   console.log("=".repeat(phaseName.length));
   console.log(phaseName);
   console.log("=".repeat(phaseName.length));
   console.log("↓".repeat(phaseName.length));
-  console.log();
+  console.log("");
 
   const startTime = Date.now();
 
@@ -16,12 +16,12 @@ export const logStepStart = (phaseName: string) => {
     const doneMessage = `Done in ${Math.round(
       (endTime - startTime) / 1000,
     )} s.`;
-    console.log();
+    console.log("");
     console.log("↑".repeat(doneMessage.length));
     console.log("=".repeat(doneMessage.length));
     console.log(doneMessage);
     console.log("=".repeat(doneMessage.length));
-    console.log();
+    console.log("");
   };
 };
 
