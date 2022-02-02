@@ -45,7 +45,7 @@ const script = async () => {
 
   const resolvedBlockDirPath = tmpDir
     ? path.resolve(tmpDir?.path, blockName)
-    : path.resolve(userDefinedBlockDirPath!);
+    : userDefinedBlockDirPath!;
 
   const fileNames =
     (await fs.readdir(resolvedBlockDirPath).catch(() => {})) ?? [];
