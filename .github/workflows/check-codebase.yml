@@ -112,3 +112,39 @@ jobs:
             echo 'ℹ️ ℹ️ ℹ️'
             exit 1;
           fi
+
+  packages:
+    name: NPM Packages
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: yarn
+
+      - run: yarn install
+
+      - name: Run local registry
+        run: |
+          docker pull verdaccio/verdaccio
+          docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio
+          yarn wait-on --timeout 30000 http://localhost:4873
+
+      - name: Publish NPM packages to local registry
+        run: |
+          yarn exe scripts/packages/mock-publish-to-local-registry.ts
+
+      - name: Smoke-test create-block-app
+        run: |
+          yarn exe scripts/packages/smoke-test-create-block-app.ts
+        env:
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: Show local registry logs and stop it
+        if: ${{ success() || failure() }}
+        run: |
+          docker logs verdaccio
+          docker stop verdaccio

@@ -20,6 +20,7 @@ module.exports = {
   devServer: {
     hot: true,
     contentBase: __dirname,
+    open: process.env.BROWSER !== "none",
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
