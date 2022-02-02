@@ -276,9 +276,12 @@ export const MobileNavItems: VFC<MobileNavItemsProps> = ({
 
   return (
     <List>
-      <Box m={2}>
-        <Search variant="mobile" closeDrawer={closeDrawer} />
-      </Box>
+      {(asPath.includes("spec") || asPath.includes("docs")) && (
+        <Box m={2}>
+          <Search variant="mobile" closeDrawer={closeDrawer} />
+        </Box>
+      )}
+
       {pages.map((page) => (
         <Fragment key={page.href}>
           <MobileNavNestedPage<SiteMapPage>
