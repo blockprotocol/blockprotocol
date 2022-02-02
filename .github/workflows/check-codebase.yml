@@ -156,5 +156,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: ${{ success() || failure() }}
         with:
-          name: blocks/${{ env.BLOCK_NAME }}
-          path: ${{ env.BLOCK_DIR_PATH }}
+          name: ${{ env.BLOCK_NAME }}
+          path: |
+            ${{ env.BLOCK_DIR_PATH }}
+            !${{ env.BLOCK_DIR_PATH }}/node_modules/**
