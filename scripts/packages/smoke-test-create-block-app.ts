@@ -1,5 +1,6 @@
 import execa from "execa";
 import path from "path";
+import sleep from "sleep-promise";
 import tmp from "tmp-promise";
 import waitOn from "wait-on";
 
@@ -43,7 +44,10 @@ const script = async () => {
       console.log("===== before kill");
       devProcess.kill("SIGINT");
       console.log("===== after kill");
-      await devProcess;
+      await Promise.any([devProcess, sleep(10000)]);
+      if (!devProcess.killed) {
+        devProcess.kill("SIGKILL");
+      }
       console.log("===== after kill await");
 
       await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
