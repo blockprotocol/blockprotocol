@@ -10,7 +10,7 @@ import { debounce } from "lodash";
 import algoliasearch from "algoliasearch";
 import { useMousetrap } from "use-mousetrap";
 import { useRouter } from "next/router";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import SearchItem, {
@@ -162,7 +162,6 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
       sx={{
         paddingBottom: "25px",
         position: "relative",
-        paddingRight: "3em",
       }}
       className={`search-bar ${variant ?? ""}`}
     >
@@ -177,6 +176,9 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
             py: 1,
             paddingRight: "36px",
             width: "100%",
+            ":focus-visible": {
+              borderColor: (theme) => theme.palette.purple[700],
+            },
           }}
           onFocus={() => {
             setSearchFocus(true);
@@ -230,15 +232,35 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
           <Box
             sx={{
               top: "0.35em",
-              right: "calc(3em + 10px)",
+              right: "calc(10px)",
               position: "absolute",
               cursor: "pointer",
               height: "20px",
             }}
           >
-            <button type="submit">
-              <SearchIcon sx={{ height: "20px" }} />
-            </button>
+            <IconButton
+              type="submit"
+              sx={{
+                height: "20px",
+                width: "20px",
+                padding: 0,
+                marginTop: "6px",
+                display: "inline-block",
+                verticalAlign: "middle",
+                position: "relative",
+              }}
+            >
+              <SearchIcon
+                sx={{
+                  left: 0,
+                  top: 0,
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  verticalAlign: "middle",
+                }}
+              />
+            </IconButton>
           </Box>
         )}
       </form>
