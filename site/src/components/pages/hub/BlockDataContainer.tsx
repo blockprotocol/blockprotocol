@@ -37,6 +37,7 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [text, setText] = useState(
     example ? JSON.stringify(example, undefined, 2) : "",
   );
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
@@ -57,8 +58,8 @@ export const BlockDataContainer: VoidFunctionComponent<
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     const result = {
-      accountId: "test-account-id",
-      entityId: "test-entity-id",
+      accountId: `test-account-${metadata.name}`,
+      entityId: `test-entity-${metadata.name}`,
       getEmbedBlock,
     };
 
@@ -78,7 +79,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema]);
+  }, [text, schema, metadata.name]);
 
   return (
     <>
