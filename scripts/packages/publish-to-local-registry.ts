@@ -29,9 +29,12 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
+  console.log("~~~~~");
   console.log("homedir");
   console.log(os.homedir());
-  console.log("homedir");
+  console.log("process.env keys");
+  console.log(Object.keys(process.env).join("\n"));
+  console.log("~~~~~");
 
   logStepStart("Login into local registry");
 
