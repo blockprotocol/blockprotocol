@@ -34,15 +34,17 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
+  const tmpNodeCacheDir = await tmp.dir({ unsafeCleanup: true });
+
   const blockName = process.env.BLOCK_NAME ?? "test-block";
   const userDefinedBlockDirPath = process.env.BLOCK_DIR_PATH;
 
-  const tmpDir = userDefinedBlockDirPath
+  const tmpBlockParentDir = userDefinedBlockDirPath
     ? undefined
     : await tmp.dir({ unsafeCleanup: true });
 
-  const blockDirPath = tmpDir
-    ? path.join(tmpDir?.path, blockName)
+  const blockDirPath = tmpBlockParentDir
+    ? path.join(tmpBlockParentDir?.path, blockName)
     : userDefinedBlockDirPath!;
 
   const resolvedBlockDirPath = path.resolve(untildify(blockDirPath));
@@ -58,10 +60,20 @@ const script = async () => {
   try {
     logStepStart("Create Block App");
 
-    await execa("npx", ["create-block-app", blockName, blockDirPath], {
-      ...defaultExecaOptions,
-      cwd: os.tmpdir(),
-    });
+    await execa(
+      "npx",
+      [
+        "create-block-app",
+        blockName,
+        blockDirPath,
+        "--cache",
+        tmpNodeCacheDir.path,
+      ],
+      {
+        ...defaultExecaOptions,
+        cwd: os.tmpdir(),
+      },
+    );
 
     logStepEnd();
     logStepStart("Install dependencies");
@@ -71,7 +83,11 @@ const script = async () => {
       cwd: resolvedBlockDirPath,
     };
 
-    await execa("npm", ["install"], execaOptionsInBlockDir);
+    await execa(
+      "npm",
+      ["install", "--cache", tmpNodeCacheDir.path],
+      execaOptionsInBlockDir,
+    );
 
     logStepEnd();
     logStepStart("Dev Server");
@@ -100,7 +116,10 @@ const script = async () => {
 
     logStepEnd();
   } finally {
-    await tmpDir?.cleanup();
+    await Promise.all([
+      tmpBlockParentDir?.cleanup(),
+      tmpNodeCacheDir.cleanup(),
+    ]);
   }
 };
 
