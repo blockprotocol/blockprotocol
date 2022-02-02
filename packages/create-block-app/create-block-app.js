@@ -7,7 +7,6 @@ const child_process = require("child_process");
 const fs = require("fs");
 const pacote = require("pacote");
 const path = require("path");
-const os = require("os");
 const untildify = require("untildify");
 
 const exec = promisify(child_process.exec);
@@ -26,17 +25,6 @@ const templatePackageName = "block-template";
   const blockPath = process.argv[3] ? process.argv[3] : blockName;
 
   const resolvedBlockPath = path.resolve(untildify(blockPath));
-
-  console.log("blockPath", JSON.stringify(blockPath));
-  console.log("untildify(blockPath)", JSON.stringify(untildify(blockPath)));
-  console.log("resolvedBlockPath", JSON.stringify(resolvedBlockPath));
-
-  console.log("~~~~~");
-  console.log("homedir");
-  console.log(os.homedir());
-  console.log("process.env keys");
-  console.log(Object.keys(process.env).join("\n"));
-  console.log("~~~~~");
 
   try {
     fs.statSync(resolvedBlockPath);
@@ -83,11 +71,6 @@ const templatePackageName = "block-template";
   }
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
-
-  console.log(`Testing testing (remove before merging)`);
-  console.log(`Testing testing (remove before merging)`);
-  console.log(`Testing testing (remove before merging)`);
-  console.log(`Testing testing (remove before merging)`);
 
   console.log(
     `Your ${blockName} block is ready to code in ${resolvedBlockPath}`,

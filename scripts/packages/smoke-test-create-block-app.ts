@@ -12,7 +12,7 @@ import { logStepStart, logStepEnd } from "../shared/logging";
  * Calling `execa.kill()` does not terminate processes recursively on Ubuntu.
  * Using `killProcessTree` helps avoid hanging processes.
  *
- * Anonymous function is use inside promisify because promisify(treeKill)
+ * Anonymous function is used inside promisify because promisify(treeKill)
  * produces incomplete typings.
  *
  * @see https://github.com/sindresorhus/execa/issues/96
@@ -81,7 +81,7 @@ const script = async () => {
       ...execaOptionsInBlockDir,
       env: {
         ...execaOptionsInBlockDir.env,
-        BROWSER: "none", // Blocks browser tab creation during local runs
+        BROWSER: "none", // Disable browser tab opening
       },
     });
 
@@ -101,7 +101,7 @@ const script = async () => {
 
     logStepEnd();
   } finally {
-    void tmpDir?.cleanup();
+    await tmpDir?.cleanup();
   }
 };
 

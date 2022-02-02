@@ -1,10 +1,9 @@
 import execa from "execa";
 import sleep from "sleep-promise";
 import path from "path";
-import os from "os";
 import { logStepEnd, logStepStart } from "../shared/logging";
 
-// These variables are hardcoded on purpose. We don’t want to accidentally push to a real registry.
+// These variables are hardcoded on purpose. We don’t want to publish to a real registry by mistake.
 const npmRegistry = "http://localhost:4873";
 const npmUserAndPassword = "verdaccio";
 const npmEmail = "verdaccio@example.com";
@@ -29,13 +28,6 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
-  console.log("~~~~~");
-  console.log("homedir");
-  console.log(os.homedir());
-  console.log("process.env keys");
-  console.log(Object.keys(process.env).join("\n"));
-  console.log("~~~~~");
-
   logStepStart("Login into local registry");
 
   const addUserProcess = execa("npm", ["adduser"], {
