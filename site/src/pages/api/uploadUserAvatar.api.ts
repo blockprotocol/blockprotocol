@@ -12,7 +12,6 @@ import {
 
 type Response = {
   fullUrl: string;
-  s3Key: string;
 };
 
 export default createAuthenticatedHandler<
@@ -29,13 +28,17 @@ export default createAuthenticatedHandler<
         stream,
         file.mimetype || "",
         user.id + new Date().valueOf(),
-        "dev",
+        "avatars",
         "image",
       );
+
+      // @todo should we delete previous user avatar before replacing it?
+
       await user.update(db, {
         userAvatar: { url: fullUrl, s3Key },
       });
-      res.status(200).json({ fullUrl, s3Key });
+
+      res.status(200).json({ fullUrl });
     } else {
       throw new Error("No file given. Please upload a file.");
     }

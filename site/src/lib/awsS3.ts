@@ -5,7 +5,8 @@ import mime from "mime-types";
 import { mustGetEnvVar } from "../util/api";
 import { isProduction } from "./config";
 
-export const defaultBucket = "blockprotocol";
+export const defaultBucket =
+  process.env.BP_AWS_S3_BUCKET_NAME ?? "blockprotocol";
 
 const getClient = () => {
   return new S3Client({
