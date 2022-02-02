@@ -1,16 +1,26 @@
 import execa from "execa";
 import path from "path";
-// import sleep from "sleep-promise";
 import tmp from "tmp-promise";
 import waitOn from "wait-on";
-import treeKillWillCallback from "tree-kill";
+import treeKill from "tree-kill";
 import { promisify } from "util";
+import fs from "fs/promises";
+import os from "os";
 
-const treeKill = promisify((pid: number, sig: string, callback: () => void) =>
-  treeKillWillCallback(pid, sig, callback),
+/**
+ * Calling `execa.kill()` does not terminate processes recursively on Ubuntu.
+ * Using `killProcessTree` helps avoid hanging processes.
+ *
+ * Anonymous function is use inside promisify because promisify(treeKill)
+ * produces incomplete typings.
+ *
+ * @see https://github.com/sindresorhus/execa/issues/96
+ *      https://github.com/nodejs/node/issues/40438
+ */
+const killProcessTree = promisify(
+  (pid: number, sig: string, callback: () => void) =>
+    treeKill(pid, sig, callback),
 );
-
-const blockName = "test-block";
 
 const defaultExecaOptions = {
   env: {
@@ -23,48 +33,57 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
-  await tmp.withDir(
-    async ({ path: tempDirPath }) => {
-      await execa("npx", ["create-block-app", blockName], {
-        ...defaultExecaOptions,
-        cwd: tempDirPath,
-      });
+  const blockName = process.env.BLOCK_NAME ?? "test-block";
+  const userDefinedBlockDirPath = process.env.BLOCK_DIR_PATH;
 
-      const execaOptionsInBlockDir = {
-        ...defaultExecaOptions,
-        cwd: path.resolve(tempDirPath, blockName),
-      };
+  const tmpDir = userDefinedBlockDirPath
+    ? undefined
+    : await tmp.dir({ unsafeCleanup: true });
 
-      await execa("npm", ["install"], execaOptionsInBlockDir);
+  const resolvedBlockDirPath = tmpDir
+    ? path.resolve(tmpDir?.path, blockName)
+    : path.resolve(userDefinedBlockDirPath!);
 
-      const devProcess = execa("npm", ["run", "dev"], {
-        ...execaOptionsInBlockDir,
-        env: {
-          ...execaOptionsInBlockDir.env,
-          BROWSER: "none", // Blocks browser tab creation during local runs
-        },
-      });
+  const fileNames =
+    (await fs.readdir(resolvedBlockDirPath).catch(() => {})) ?? [];
 
-      await waitOn({ resources: ["http://localhost:9090"], timeout: 10000 });
+  if (fileNames.length) {
+    throw new Error(
+      `Unable to use ${resolvedBlockDirPath} as block directory because it is not empty`,
+    );
+  }
 
-      console.log("===== before kill");
-      await treeKill(devProcess.pid!, "SIGINT");
-      // devProcess.kill("SIGINT");
-      // console.log("===== after kill");
-      // await Promise.any([devProcess, sleep(10000)]);
-      // if (!devProcess.killed) {
-      //   devProcess.kill("SIGKILL");
-      // }
-      console.log("===== after kill await");
+  try {
+    await execa("npx", ["create-block-app", blockName, resolvedBlockDirPath], {
+      ...defaultExecaOptions,
+      cwd: os.tmpdir(),
+    });
 
-      await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
-      console.log("===== after tsc");
+    const execaOptionsInBlockDir = {
+      ...defaultExecaOptions,
+      cwd: resolvedBlockDirPath,
+    };
 
-      await execa("npm", ["run", "build"], execaOptionsInBlockDir);
-      console.log("===== after build");
-    },
-    { unsafeCleanup: true },
-  );
+    await execa("npm", ["install"], execaOptionsInBlockDir);
+
+    const devProcess = execa("npm", ["run", "dev"], {
+      ...execaOptionsInBlockDir,
+      env: {
+        ...execaOptionsInBlockDir.env,
+        BROWSER: "none", // Blocks browser tab creation during local runs
+      },
+    });
+
+    await waitOn({ resources: ["http://localhost:9090"], timeout: 10000 });
+
+    await killProcessTree(devProcess.pid!, "SIGINT");
+
+    await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
+
+    await execa("npm", ["run", "build"], execaOptionsInBlockDir);
+  } finally {
+    void tmpDir?.cleanup();
+  }
 };
 
 void script();

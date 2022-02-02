@@ -37,7 +37,9 @@ const templatePackageName = "block-template";
 
   console.log("Downloading template...");
 
-  await pacote.extract(templatePackageName, resolvedBlockPath);
+  await pacote.extract(templatePackageName, resolvedBlockPath, {
+    registry: process.env.NPM_CONFIG_REGISTRY,
+  });
 
   console.log("Updating files...");
   try {
