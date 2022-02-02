@@ -1,8 +1,14 @@
 import execa from "execa";
 import path from "path";
-import sleep from "sleep-promise";
+// import sleep from "sleep-promise";
 import tmp from "tmp-promise";
 import waitOn from "wait-on";
+import treeKillWillCallback from "tree-kill";
+import { promisify } from "util";
+
+const treeKill = promisify((pid: number, sig: string, callback: () => void) =>
+  treeKillWillCallback(pid, sig, callback),
+);
 
 const blockName = "test-block";
 
@@ -42,12 +48,13 @@ const script = async () => {
       await waitOn({ resources: ["http://localhost:9090"], timeout: 10000 });
 
       console.log("===== before kill");
-      devProcess.kill("SIGINT");
-      console.log("===== after kill");
-      await Promise.any([devProcess, sleep(10000)]);
-      if (!devProcess.killed) {
-        devProcess.kill("SIGKILL");
-      }
+      await treeKill(devProcess.pid!, "SIGINT");
+      // devProcess.kill("SIGINT");
+      // console.log("===== after kill");
+      // await Promise.any([devProcess, sleep(10000)]);
+      // if (!devProcess.killed) {
+      //   devProcess.kill("SIGKILL");
+      // }
       console.log("===== after kill await");
 
       await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
