@@ -79,15 +79,18 @@ export const uploadToS3 = async (
   });
 
   let fullUrl;
-  let key;
+  let Key;
   try {
-    const uploadResult = await upload.done();
     // the AWS lib-storage API is currently not returning the correct values, thus an older
     // version of the library is used, as well as this for getting the location.
-    fullUrl = (uploadResult as any).Location as string;
-    key = (uploadResult as any).Key as string;
+    // see https://github.com/aws/aws-sdk-js-v3/pull/2700
+    // A patch is in place for lib-storage to mitigate this, but that means casting the values currently.
+    ({ Location: fullUrl, Key } = (await upload.done()) as {
+      Location: string;
+      Key: string;
+    });
   } catch (error) {
-    throw new Error("Could not upload image.");
+    throw new Error(`Could not upload image. ${error}`);
   }
 
   const s3Folder = filename
@@ -97,7 +100,7 @@ export const uploadToS3 = async (
 
   return {
     fullUrl,
-    s3Key: key,
+    s3Key: Key,
     s3Folder,
   };
 };

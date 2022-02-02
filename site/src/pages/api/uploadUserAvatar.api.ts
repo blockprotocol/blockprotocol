@@ -27,8 +27,8 @@ export default createAuthenticatedHandler<
       const { fullUrl, s3Key } = await uploadFileStreamToS3(
         stream,
         file.mimetype || "",
-        user.id + new Date().valueOf(),
-        "avatars",
+        new Date().valueOf().toString(),
+        `avatars/${user.id}`,
         "image",
       );
 

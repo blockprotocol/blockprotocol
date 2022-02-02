@@ -68,8 +68,8 @@ The default S3 bucket name is `blockprotocol` but can optionally be customized w
 
 - `BP_AWS_S3_BUCKET_NAME`: The AWS secret access key
 
-Avatars are uploaded to the `avatars/` folder within the bucket root.
-When running locally, avatars go to the `dev/avatars/` folder of the bucket.
+Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
+When running locally, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
 ### Serving Blocks
 
