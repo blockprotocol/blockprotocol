@@ -17,11 +17,9 @@ const packageNames = [
 
 const defaultExecaOptions = {
   env: {
-    HOME: process.env.HOME,
     NODE_ENV: "development",
     NPM_CONFIG_REGISTRY: npmRegistry,
     PATH: process.env.PATH,
-    USERPROFILE: process.env.USERPROFILE,
   },
   extendEnv: false,
   stdio: "inherit",
