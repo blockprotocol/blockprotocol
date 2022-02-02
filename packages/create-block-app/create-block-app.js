@@ -72,6 +72,11 @@ const templatePackageName = "block-template";
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
 
+  console.log(`Testing testing (remove before merging)`);
+  console.log(`Testing testing (remove before merging)`);
+  console.log(`Testing testing (remove before merging)`);
+  console.log(`Testing testing (remove before merging)`);
+
   console.log(
     `Your ${blockName} block is ready to code in ${resolvedBlockPath}`,
   );
