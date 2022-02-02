@@ -42,7 +42,7 @@ const script = async () => {
 
       devProcess.kill("SIGINT");
 
-      await execa("npm", ["run", "lint:tsc"]);
+      await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
 
       await execa("npm", ["run", "build"], execaOptionsInBlockDir);
     },
