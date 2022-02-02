@@ -40,11 +40,17 @@ const script = async () => {
 
       await waitOn({ resources: ["http://localhost:9090"], timeout: 10000 });
 
+      console.log("===== before kill");
       devProcess.kill("SIGINT");
+      console.log("===== after kill");
+      await devProcess;
+      console.log("===== after kill await");
 
       await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
+      console.log("===== after tsc");
 
       await execa("npm", ["run", "build"], execaOptionsInBlockDir);
+      console.log("===== after build");
     },
     { unsafeCleanup: true },
   );
