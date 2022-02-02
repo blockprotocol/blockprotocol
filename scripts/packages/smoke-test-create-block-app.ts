@@ -6,8 +6,8 @@ import treeKill from "tree-kill";
 import { promisify } from "util";
 import fs from "fs/promises";
 import os from "os";
+import untildify from "untildify";
 import { logStepStart, logStepEnd } from "../shared/logging";
-
 /**
  * Calling `execa.kill()` does not terminate processes recursively on Ubuntu.
  * Using `killProcessTree` helps avoid hanging processes.
@@ -43,23 +43,24 @@ const script = async () => {
     ? undefined
     : await tmp.dir({ unsafeCleanup: true });
 
-  const resolvedBlockDirPath = tmpDir
-    ? path.resolve(tmpDir?.path, blockName)
+  const blockDirPath = tmpDir
+    ? path.join(tmpDir?.path, blockName)
     : userDefinedBlockDirPath!;
 
-  const fileNames =
-    (await fs.readdir(resolvedBlockDirPath).catch(() => {})) ?? [];
+  const resolvedBlockDirPath = path.resolve(untildify(blockDirPath));
+
+  const fileNames = (await fs.readdir(blockDirPath).catch(() => {})) ?? [];
 
   if (fileNames.length) {
     throw new Error(
-      `Unable to use ${resolvedBlockDirPath} as block directory because it is not empty`,
+      `Unable to use ${blockDirPath} as block directory because it is not empty`,
     );
   }
 
   try {
     logStepStart("Create Block App");
 
-    await execa("npx", ["create-block-app", blockName, resolvedBlockDirPath], {
+    await execa("npx", ["create-block-app", blockName, blockDirPath], {
       ...defaultExecaOptions,
       cwd: os.tmpdir(),
     });

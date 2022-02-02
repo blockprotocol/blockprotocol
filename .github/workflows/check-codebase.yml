@@ -152,7 +152,7 @@ jobs:
           docker logs verdaccio
           docker stop verdaccio
 
-      - name: "Upload generated block folder as artifact for inspection"
+      - name: Upload block folder as artifact
         uses: actions/upload-artifact@v2
         if: ${{ success() || failure() }}
         with:
