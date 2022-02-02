@@ -16,12 +16,14 @@ import {
   ListItemText,
   Collapse,
   Divider,
+  Box,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { Link } from "../Link";
 import SiteMapContext from "../../context/SiteMapContext";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
+import Search from "../pages/docs/Search";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: JSX.Element;
@@ -194,6 +196,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
 
 type MobileNavItemsProps = {
   onClose: () => void;
+  closeDrawer: () => void;
 };
 
 const getInitialExpandedItems = ({
@@ -242,7 +245,10 @@ const getInitialExpandedItems = ({
     : [];
 };
 
-export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
+export const MobileNavItems: VFC<MobileNavItemsProps> = ({
+  onClose,
+  closeDrawer,
+}) => {
   const { asPath } = useRouter();
   const { pages } = useContext(SiteMapContext);
 
@@ -270,6 +276,9 @@ export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
 
   return (
     <List>
+      <Box m={2}>
+        <Search variant="mobile" closeDrawer={closeDrawer} />
+      </Box>
       {pages.map((page) => (
         <Fragment key={page.href}>
           <MobileNavNestedPage<SiteMapPage>

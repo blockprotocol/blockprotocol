@@ -10,7 +10,14 @@ import { debounce } from "lodash";
 import algoliasearch from "algoliasearch";
 import { useMousetrap } from "use-mousetrap";
 import { useRouter } from "next/router";
-import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  SxProps,
+  Theme,
+  Typography,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import SearchItem, {
@@ -115,11 +122,13 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    (document.querySelector(`.search-bar input`) as HTMLElement).focus();
+    const desktopSearchSelector = document.querySelector(
+      `.search-bar.desktop input`,
+    ) as HTMLElement;
 
-    const element = document.querySelector(".docs-list-sidebar");
-
-    element?.scrollIntoView({ behavior: "smooth" });
+    if (desktopSearchSelector) {
+      desktopSearchSelector.focus();
+    }
   });
 
   const getHighlight = (highlight: AlgoliaHighlightResult) => {
@@ -156,11 +165,21 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
     }
   };
 
+  const searchResultContainerStyles: SxProps<Theme> = {
+    width: variant === "desktop" ? "300px" : "100%",
+    maxHeight: "550px",
+    position: "absolute",
+    overflow: "auto",
+    border: "1px solid #d6d6d6",
+    borderRadius: 1,
+    zIndex: "1",
+  };
+
   return (
     <Box
       ref={outerNode}
       sx={{
-        paddingBottom: "25px",
+        paddingBottom: variant === "desktop" ? "25px" : "unset",
         position: "relative",
       }}
       className={`search-bar ${variant ?? ""}`}
@@ -218,7 +237,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
           <Box
             sx={{
               top: "0.65em",
-              right: "calc(3em + 14px)",
+              right: "14px",
               position: "absolute",
               cursor: "pointer",
               height: "20px",
@@ -232,7 +251,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
           <Box
             sx={{
               top: "0.35em",
-              right: "calc(10px)",
+              right: "10px",
               position: "absolute",
               cursor: "pointer",
               height: "20px",
@@ -244,7 +263,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
                 height: "20px",
                 width: "20px",
                 padding: 0,
-                marginTop: "6px",
+                marginTop: "2px",
                 display: "inline-block",
                 verticalAlign: "middle",
                 position: "relative",
@@ -266,17 +285,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
       </form>
 
       {searchResults.length > 0 && searchFocus && (
-        <Box
-          sx={{
-            width: "300px",
-            maxHeight: "550px",
-            position: "absolute",
-            overflow: "auto",
-            border: "1px solid #d6d6d6",
-            borderRadius: 1,
-            zIndex: "1",
-          }}
-        >
+        <Box sx={searchResultContainerStyles}>
           <Box sx={{ backgroundColor: "white" }}>
             {searchResults.map((searchResult, searchResultIndex) => (
               <SearchItem
@@ -302,17 +311,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
       )}
 
       {searchState !== "normal" && searchFocus && !searchLoading && (
-        <Box
-          sx={{
-            width: "300px",
-            maxHeight: "550px",
-            position: "absolute",
-            overflow: "auto",
-            border: "1px solid #d6d6d6",
-            borderRadius: 1,
-            zIndex: "1",
-          }}
-        >
+        <Box sx={searchResultContainerStyles}>
           <Box
             sx={{
               padding: "1em",
@@ -323,11 +322,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
               {searchState === "noresults"
                 ? `No results found for your search term - please try another term`
                 : `We couldn't reach our servers - please try again`}
-              , or{" "}
-              <Link href="/contact">
-                <a className="text-link">contact us</a>
-              </Link>
-              .
+              , or <Link href="/contact">contact us</Link>.
             </Typography>
           </Box>
         </Box>

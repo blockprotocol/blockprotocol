@@ -1,4 +1,11 @@
-import { VFC, useState, useEffect, useContext, useMemo } from "react";
+import {
+  VFC,
+  useState,
+  useEffect,
+  useContext,
+  useMemo,
+  useCallback,
+} from "react";
 import {
   Box,
   Typography,
@@ -157,6 +164,10 @@ export const Navbar: VFC<NavbarProps> = ({
       setDisplayMobileNav(false);
     }
   }, [isDesktopSize, displayMobileNav]);
+
+  const closeDrawer = useCallback(() => {
+    setDisplayMobileNav(false);
+  }, []);
 
   const preventOverflowingNavLinks = useMediaQuery(
     theme.breakpoints.between("md", 940),
@@ -401,7 +412,10 @@ export const Navbar: VFC<NavbarProps> = ({
               overflow: "auto",
             }}
           >
-            <MobileNavItems onClose={() => setDisplayMobileNav(false)} />
+            <MobileNavItems
+              onClose={() => setDisplayMobileNav(false)}
+              closeDrawer={closeDrawer}
+            />
           </Box>
           <Box
             p={5}
