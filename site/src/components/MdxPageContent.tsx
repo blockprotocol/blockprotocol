@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react";
+import { useEffect, useRef, useState, VFC } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
@@ -38,12 +38,30 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
     setAnchor(router.asPath.split("#")[1] ?? "");
   }, [router]);
 
+  const scrolledOnce = useRef(false);
+
   useEffect(() => {
     const headingWithCurrentAnchor = headings.find(
       (heading) => heading.anchor === anchor,
     );
 
-    if (headingWithCurrentAnchor) {
+    const previousRoute = sessionStorage.getItem("previousRoute");
+
+    const shouldScrollToAnchor =
+      // if anchor is empty and we haven't scrolled, prevent it
+      (anchor === "" && scrolledOnce.current) ||
+      // if anchor is not empty, always allow scroll
+      anchor !== "" ||
+      // OR if previous path is either a docs or spec page
+      (previousRoute?.includes("/docs") && router.asPath?.includes("/docs")) ||
+      (previousRoute?.includes("/spec") && router.asPath?.includes("/spec"));
+
+    // headings takes a while to load in, which can set this off
+    if (!scrolledOnce.current && !!headings.length) {
+      scrolledOnce.current = true;
+    }
+
+    if (headingWithCurrentAnchor && shouldScrollToAnchor) {
       if (
         !currentHeading ||
         headingWithCurrentAnchor.anchor !== currentHeading.anchor
@@ -65,7 +83,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         );
       }
     }
-  }, [anchor, headings, currentHeading]);
+  }, [anchor, headings, currentHeading, router.asPath]);
 
   useEffect(() => {
     const onScroll = () => {
