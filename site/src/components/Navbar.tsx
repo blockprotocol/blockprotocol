@@ -407,16 +407,20 @@ export const Navbar: VFC<NavbarProps> = ({
             justifyContent: "space-between",
           }}
         >
-          <Box
-            sx={{
-              overflow: "auto",
-            }}
-          >
-            <MobileNavItems
-              onClose={() => setDisplayMobileNav(false)}
-              closeDrawer={closeDrawer}
-            />
-          </Box>
+          {(router.asPath.includes("spec") ||
+            router.asPath.includes("docs")) && (
+            <Box
+              sx={{
+                overflow: "auto",
+              }}
+            >
+              <MobileNavItems
+                onClose={() => setDisplayMobileNav(false)}
+                closeDrawer={closeDrawer}
+              />
+            </Box>
+          )}
+
           <Box
             p={5}
             flexShrink={0}
