@@ -1,4 +1,3 @@
-// import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 import { uploadFileStreamToS3 } from "../../lib/awsS3";
 import {
   AuthenticatedApiRequest,
@@ -8,7 +7,7 @@ import {
 import {
   FormRequestExtensions,
   imageUploadMultipart,
-} from "../../lib/middleware/multipart";
+} from "../../lib/middleware/imageUploadMultipart";
 
 type Response = {
   fullUrl: string;
