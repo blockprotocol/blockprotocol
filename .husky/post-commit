@@ -2,6 +2,6 @@
 . "$(dirname "$0")/_/husky.sh"
 
 ## This hook was disabled in https://github.com/blockprotocol/blockprotocol/pull/184
-## @todo: Revert when whe cleanup `prepare` script in `package.json`
+## @todo: Revert when we cleanup `prepare` script in `package.json`
 
 # yarn install
