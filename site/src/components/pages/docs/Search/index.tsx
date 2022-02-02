@@ -171,7 +171,7 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
 
   const searchResultContainerStyles: SxProps<Theme> = {
     width: variant === "desktop" ? "300px" : "100%",
-    maxHeight: "550px",
+    maxHeight: variant === "desktop" ? "550px" : "60vh",
     position: "absolute",
     overflow: "auto",
     border: "1px solid #d6d6d6",
