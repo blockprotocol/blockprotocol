@@ -137,12 +137,10 @@ jobs:
           yarn wait-on --timeout 30000 http://localhost:4873
 
       - name: Publish NPM packages to local registry
-        run: |
-          yarn exe scripts/packages/publish-to-local-registry.ts
+        run: yarn exe scripts/packages/publish-to-local-registry.ts
 
       - name: Smoke-test create-block-app
-        run: |
-          yarn exe scripts/packages/smoke-test-create-block-app.ts
+        run: yarn exe scripts/packages/smoke-test-create-block-app.ts
         env:
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
