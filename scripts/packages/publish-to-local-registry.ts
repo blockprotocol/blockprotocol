@@ -1,6 +1,7 @@
 import execa from "execa";
 import sleep from "sleep-promise";
 import path from "path";
+import os from "os";
 import { logStepEnd, logStepStart } from "../shared/logging";
 
 // These variables are hardcoded on purpose. We don’t want to accidentally push to a real registry.
@@ -28,6 +29,10 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
+  console.log("homedir");
+  console.log(os.homedir());
+  console.log("homedir");
+
   logStepStart("Login into local registry");
 
   const addUserProcess = execa("npm", ["adduser"], {
