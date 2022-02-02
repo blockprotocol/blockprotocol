@@ -78,7 +78,6 @@ export const uploadToS3 = async (
     params,
   });
 
-  // eslint-disable-next-line no-console
   let fullUrl;
   let key;
   try {
