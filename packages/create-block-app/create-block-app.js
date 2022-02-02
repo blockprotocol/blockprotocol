@@ -20,7 +20,8 @@ const templatePackageName = "block-template";
     process.exit();
   }
 
-  const blockPath = process.argv[3] ?? blockName;
+  // @todo: replace with `process.argv[3] ?? blockName` after upgrading ESLint
+  const blockPath = process.argv[3] ? process.argv[3] : blockName;
 
   const resolvedBlockPath = path.resolve(blockPath);
 
@@ -30,7 +31,7 @@ const templatePackageName = "block-template";
       `${resolvedBlockPath} already exists, please specify another path!`,
     );
     process.exit();
-  } catch {
+  } catch (error) {
     // noop (we expect statSync to fail)
   }
 
@@ -44,7 +45,7 @@ const templatePackageName = "block-template";
       path.resolve(resolvedBlockPath, ".gitignore.dist"),
       path.resolve(resolvedBlockPath, ".gitignore"),
     );
-  } catch {
+  } catch (error) {
     // noop (template is missing .gitignore.dist)
   }
 
@@ -62,7 +63,7 @@ const templatePackageName = "block-template";
   try {
     const gitConfigUserNameResult = await exec("git config --get user.name");
     packageJson.author = gitConfigUserNameResult.stdout.trim();
-  } catch {
+  } catch (error) {
     delete packageJson.author;
   }
 
