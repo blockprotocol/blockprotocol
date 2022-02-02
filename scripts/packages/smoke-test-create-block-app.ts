@@ -6,6 +6,7 @@ import treeKill from "tree-kill";
 import { promisify } from "util";
 import fs from "fs/promises";
 import os from "os";
+import { logStepStart, logStepEnd } from "../shared/logging";
 
 /**
  * Calling `execa.kill()` does not terminate processes recursively on Ubuntu.
@@ -54,10 +55,15 @@ const script = async () => {
   }
 
   try {
+    logStepStart("Create Block App");
+
     await execa("npx", ["create-block-app", blockName, resolvedBlockDirPath], {
       ...defaultExecaOptions,
       cwd: os.tmpdir(),
     });
+
+    logStepEnd();
+    logStepStart("Install dependencies");
 
     const execaOptionsInBlockDir = {
       ...defaultExecaOptions,
@@ -65,6 +71,9 @@ const script = async () => {
     };
 
     await execa("npm", ["install"], execaOptionsInBlockDir);
+
+    logStepEnd();
+    logStepStart("Dev Server");
 
     const devProcess = execa("npm", ["run", "dev"], {
       ...execaOptionsInBlockDir,
@@ -78,9 +87,17 @@ const script = async () => {
 
     await killProcessTree(devProcess.pid!, "SIGINT");
 
+    logStepEnd();
+    logStepStart("Linting");
+
     await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
 
+    logStepEnd();
+    logStepStart("Build");
+
     await execa("npm", ["run", "build"], execaOptionsInBlockDir);
+
+    logStepEnd();
   } finally {
     void tmpDir?.cleanup();
   }

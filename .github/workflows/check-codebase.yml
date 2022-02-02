@@ -138,7 +138,7 @@ jobs:
 
       - name: Publish NPM packages to local registry
         run: |
-          yarn exe scripts/packages/mock-publish-to-local-registry.ts
+          yarn exe scripts/packages/publish-to-local-registry.ts
 
       - name: Smoke-test create-block-app
         run: |
