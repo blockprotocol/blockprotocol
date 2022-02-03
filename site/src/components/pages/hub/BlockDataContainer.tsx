@@ -79,7 +79,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema, metadata.name]);
+  }, [text, schema]);
 
   return (
     <>
