@@ -287,7 +287,7 @@ The following routes require a valid API key sent in an `x-api-key` header:
   - `q`: an optional text query to search for blocks with a matching name or author.
   - `json`: an optional JSON object that filters blocks by schema validity. Preferably URL encoded.
 
-If all of the optional params above are **not** provided, the result will contain all of the blocks.
+If all of the optional params are missing, the result will contain all of the blocks.
 
 - Request Response:
   - `results`: the results of the search: an array of block metadata JSON files
