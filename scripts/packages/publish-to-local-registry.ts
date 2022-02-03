@@ -28,6 +28,12 @@ const defaultExecaOptions = {
 const script = async () => {
   logStepStart("Login into local registry");
 
+  if (!npmRegistry.includes("localhost")) {
+    throw new Error(
+      "This script runs `npm unpublish` which can harm published packages. Please make sure `npmRegistry` value includes `localhost`.",
+    );
+  }
+
   const addUserProcess = execa("npm", ["adduser"], {
     ...defaultExecaOptions,
     stdio: undefined,
