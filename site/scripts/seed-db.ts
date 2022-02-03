@@ -1,17 +1,6 @@
-/* eslint-disable import/first */
-import dotenv from "dotenv";
-
-dotenv.config({ path: ".env.local" });
-import {
-  User,
-  UserDocument,
-  UserProperties,
-} from "../src/lib/model/user.model";
+import { User, UserProperties } from "../src/lib/model/user.model";
 import { ApiKey } from "../src/lib/model/apiKey.model";
-import {
-  VerificationCode,
-  VerificationCodeDocument,
-} from "../src/lib/model/verificationCode.model";
+import { VerificationCode } from "../src/lib/model/verificationCode.model";
 import { connectToDatabase } from "../src/lib/mongodb";
 import { EntityType } from "../src/lib/model/entityType.model";
 
@@ -38,10 +27,6 @@ void (async () => {
 
   await db.createCollection(User.COLLECTION_NAME);
 
-  await db
-    .collection<UserDocument>(User.COLLECTION_NAME)
-    .createIndex({ email: 1 }, { unique: true });
-
   if (
     existingCollections.find(
       ({ collectionName }) => collectionName === ApiKey.COLLECTION_NAME,
@@ -62,14 +47,6 @@ void (async () => {
 
   await db.createCollection(EntityType.COLLECTION_NAME);
 
-  await db
-    .collection(EntityType.COLLECTION_NAME)
-    .createIndex({ entityTypeId: 1 }, { unique: true });
-
-  await db
-    .collection(EntityType.COLLECTION_NAME)
-    .createIndex({ user: 1, "schema.title": 1 }, { unique: true });
-
   if (
     existingCollections.find(
       ({ collectionName }) =>
@@ -80,13 +57,6 @@ void (async () => {
   }
 
   await db.createCollection(VerificationCode.COLLECTION_NAME);
-
-  await db
-    .collection<VerificationCodeDocument>(VerificationCode.COLLECTION_NAME)
-    .createIndex(
-      { createdAt: 1 },
-      { expireAfterSeconds: VerificationCode.PRUNE_AGE_MS / 60 },
-    );
 
   const mockUsers: UserProperties[] = [
     {
@@ -103,4 +73,5 @@ void (async () => {
   );
 
   await client.close();
+  console.log("✅ Seeded DB");
 })();
