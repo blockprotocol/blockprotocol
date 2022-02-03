@@ -3,7 +3,6 @@ name: Algolia Upload Index
 env:
   ALGOLIA_PROJECT: ${{ secrets.ALGOLIA_PROJECT }}
   AGOLIA_WRITE_KEY: ${{ secrets.AGOLIA_WRITE_KEY }}
-  ALGOLIA_INDEX: ${{ secrets.ALGOLIA_INDEX }}
 
 on:
   push:
