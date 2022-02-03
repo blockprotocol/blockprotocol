@@ -196,7 +196,6 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
 
 type MobileNavItemsProps = {
   onClose: () => void;
-  closeDrawer: () => void;
 };
 
 const getInitialExpandedItems = ({
@@ -245,10 +244,7 @@ const getInitialExpandedItems = ({
     : [];
 };
 
-export const MobileNavItems: VFC<MobileNavItemsProps> = ({
-  onClose,
-  closeDrawer,
-}) => {
+export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
   const { asPath } = useRouter();
   const { pages } = useContext(SiteMapContext);
 
@@ -276,9 +272,9 @@ export const MobileNavItems: VFC<MobileNavItemsProps> = ({
 
   return (
     <List>
-      {(asPath.includes("spec") || asPath.includes("docs")) && (
+      {(asPath.includes("/spec") || asPath.includes("/docs")) && (
         <Box m={2}>
-          <Search variant="mobile" closeDrawer={closeDrawer} />
+          <Search variant="mobile" closeDrawer={onClose} />
         </Box>
       )}
 

@@ -27,12 +27,8 @@ import SearchItem, {
 } from "./SearchItem";
 import { Link } from "../../../Link";
 
-const isDev = process.env.NODE_ENV === "development";
-
 const client = algoliasearch("POOWZ64DSV", "96dc0442fd27b903440955dc03e5e60e");
-const index = client.initIndex(
-  isDev ? "blockprotocol_testing" : "blockprotocol",
-);
+const index = client.initIndex("blockprotocol");
 
 interface SearchProps {
   variant: SearchVariants;
