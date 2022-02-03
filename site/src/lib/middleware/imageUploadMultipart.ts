@@ -46,6 +46,9 @@ const parseForm = async (
     form.on("error", (err) => {
       reject(err);
     });
+    form.on("filesLimit", () => {
+      reject(new Error("Please only upload a single image file."));
+    });
     form.on("finish", () => {
       if (!result) {
         reject(new Error("Please provide an image file in multipart form."));

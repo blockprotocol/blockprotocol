@@ -36,8 +36,6 @@ export default createAuthenticatedHandler<
         userAvatar: { url: fullUrl, s3Key },
       });
 
-      // eslint-disable-next-line no-console
-      console.log("Yeah the url is ", { fullUrl, s3Key });
       res.status(200).json({ avatarUrl: fullUrl });
     } else {
       res.status(400).json(
