@@ -70,6 +70,7 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
       {...textChangeEvents}
       placeholder={placeholder}
       required={required}
+      sx={{ minWidth: "125px" }}
       value={draftText}
       variant="outlined"
     />
