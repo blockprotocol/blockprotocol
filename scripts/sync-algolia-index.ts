@@ -116,7 +116,7 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
 const syncAlgoliaIndex = async () => {
   const client = algoliasearch(
     process.env.ALGOLIA_PROJECT ?? "",
-    process.env.AGOLIA_WRITE_KEY ?? "",
+    process.env.ALGOLIA_WRITE_KEY ?? "",
   );
 
   const index = client.initIndex("blockprotocol");
