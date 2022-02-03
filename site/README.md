@@ -66,10 +66,10 @@ If you want to send verification codes to an email address, the following AWS en
 The above environment variables will also be used for S3 access for allowing user avatar uploads.
 The default S3 bucket name is `blockprotocol` but can optionally be customized with the following environment variable:
 
-- `BP_AWS_S3_BUCKET_NAME`: The AWS secret access key
+- `BP_AWS_S3_BUCKET_NAME`: The name of the S3 bucket to store files in (e.g. user avatars)
 
 Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
-When running locally, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
+When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
 ### Serving Blocks
 
@@ -290,7 +290,7 @@ Uploads a user avatar and apply it to logged in profile page.
   - `image`: The image file to be uploaded, extension must be one of jpg, jpeg, png, gif or svg.
 
 - Response Body:
-  - `fullUrl`: Url pointing to the newly uploaded user profile.
+  - `avatarUrl`: Url pointing to the newly uploaded user avatar.
 
 ### API key required
 

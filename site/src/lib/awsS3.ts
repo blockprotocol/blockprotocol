@@ -1,6 +1,8 @@
-import { PassThrough } from "stream";
-import { S3Client } from "@aws-sdk/client-s3";
-import { Upload } from "@aws-sdk/lib-storage";
+import {
+  PutObjectCommand,
+  PutObjectCommandInput,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import mime from "mime-types";
 import { mustGetEnvVar } from "../util/api";
 import { isProduction } from "./config";
@@ -18,35 +20,17 @@ const getClient = () => {
   });
 };
 
-const checkFiletypeAllowed = async (
-  extension: string | false,
-  recordType: "image",
-) => {
-  const imageExts = ["jpg", "jpeg", "png", "gif", "svg"];
-  const supportedMap = {
-    image: imageExts,
-  };
-  const supported = supportedMap[recordType];
-  if (!supported.find((ext) => ext === extension)) {
-    throw new Error(
-      `Please provide a file in one of ${supported.join(", ")} formats`,
-    );
-  }
-};
-
 export const uploadToS3 = async (
   filenameWithoutExtension: string,
   extension: string,
-  stream: PassThrough,
-  recordType: "image",
-  Bucket?: string,
+  buffer: Buffer,
+  bucket?: string,
 ): Promise<{
   fullUrl: string;
   s3Key: string;
   s3Folder: string;
 }> => {
   const client = getClient();
-  await checkFiletypeAllowed(extension, recordType);
 
   let filename = `${filenameWithoutExtension}.${extension}`;
   if (!isProduction && !filename.startsWith("dev/")) {
@@ -64,31 +48,36 @@ export const uploadToS3 = async (
   }
   const ACL = "public-read";
 
-  const params = {
+  const Bucket = bucket ?? defaultBucket;
+  const params: PutObjectCommandInput = {
     Key: filename,
-    Body: stream,
+    Body: buffer,
     ACL,
-    Bucket: Bucket ?? defaultBucket,
+    Bucket,
     ContentType,
     Metadata,
   };
-
-  const upload = new Upload({
-    client,
-    params,
-  });
+  const command = new PutObjectCommand(params);
 
   let fullUrl;
-  let Key;
+  const Key = filename;
   try {
-    // the AWS lib-storage API is currently not returning the correct values, thus an older
-    // version of the library is used, as well as this for getting the location.
+    // PutObjectCommand does not return the full URL for an uploaded file.
+    // the AWS lib-storage API would do this through Upload, but even it is currently not returning the correct values.
     // see https://github.com/aws/aws-sdk-js-v3/pull/2700
-    // A patch is in place for lib-storage to mitigate this, but that means casting the values currently.
-    ({ Location: fullUrl, Key } = (await upload.done()) as {
-      Location: string;
-      Key: string;
-    });
+    // The below URL construction is based on above PR.
+
+    const [_putResult, endpoint] = await Promise.all([
+      client.send(command),
+      client.config.endpoint(),
+    ]);
+
+    const locationKey = params
+      .Key!.split("/")
+      .map((segment: string) => encodeURIComponent(segment))
+      .join("/");
+
+    fullUrl = `${endpoint.protocol}//${Bucket}.${endpoint.hostname}/${locationKey}`;
   } catch (error) {
     throw new Error(`Could not upload image. ${error}`);
   }
@@ -105,55 +94,27 @@ export const uploadToS3 = async (
   };
 };
 
-export const checkSvg = (svgStream: NodeJS.ReadableStream) => {
-  return new Promise<void>((resolve, reject) => {
-    svgStream.on("data", (data: Buffer) => {
-      if (
-        data
-          .toString()
-          .match(
-            /(script|entity|onerror|onload|onmouseover|onclick|onfocus|foreignObject|<a)/i,
-          )
-      ) {
-        svgStream.pause();
-        reject(new Error("SVG disallowed."));
-      }
-    });
-    svgStream.on("end", () => {
-      resolve();
-    });
-  });
-};
-
 /**
  * upload a file/blob to S3
  */
-export const uploadFileStreamToS3 = async (
-  filePassthrough: PassThrough,
+export const uploadFileBufferToS3 = async (
+  fileBuffer: Buffer,
   mimeType: string,
   filename: string,
   folder: string,
-  recordType: "image",
 ): Promise<{
   fullUrl: string;
   s3Key: string;
 }> => {
-  const file = filePassthrough.pipe(new PassThrough());
-
   const extension = mime.extension(mimeType);
   if (!extension) {
     throw new Error(`Could not determine extension from file upload`);
   }
-  if (extension === "svg") {
-    const svgReader = filePassthrough.pipe(new PassThrough());
 
-    await checkSvg(svgReader);
-  }
   const { fullUrl, s3Key } = await uploadToS3(
     `${folder}/${filename}`,
     extension,
-    file,
-    recordType,
+    fileBuffer,
   );
   return {
     fullUrl,
