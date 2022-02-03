@@ -11,7 +11,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
 export type BuildConfig = {
   workspace?: string | null;
   repository: string;
-  branch?: string | null;
+  branch: string;
   distDir: string;
   timestamp?: string | null;
 };
