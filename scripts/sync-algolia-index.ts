@@ -115,6 +115,8 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
 };
 
 const script = async () => {
+  console.log("Syncing Algolia index");
+
   const env = envalid.cleanEnv(process.env, {
     ALGOLIA_PROJECT: envalid.str({
       desc: "Algolia app id",
@@ -162,7 +164,7 @@ const script = async () => {
 
   await index.saveObjects(indexObjects);
 
-  console.log("Algolia Indexes Updated.");
+  console.log("Algolia index updated.");
 };
 
 void script();
