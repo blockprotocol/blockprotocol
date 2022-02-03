@@ -1,0 +1,52 @@
+A-infra:
+  - ".github/*"
+  - ".github/.*"
+  - ".github/**/*"
+  - ".github/**/.*"
+  - ".husky/*"
+  - ".husky/.*"
+  - ".husky/**/*"
+  - ".husky/**/.*"
+  - "scripts/*"
+  - "scripts/.*"
+  - "scripts/**/*"
+  - "scripts/**/.*"
+  - ".markdownlint*"
+  - ".gitignore"
+  - ".prettier*"
+  - ".eslint*"
+  - ".tsconfig*"
+  - "vercel.json"
+
+A-blocks:
+  - "hub/*"
+  - "hub/.*"
+  - "hub/**/*"
+  - "hub/**/.*"
+
+A-packages:
+  - "packages/*"
+  - "packages/.*"
+  - "packages/**/*"
+  - "packages/**/.*"
+
+A-site:
+  - "site/*"
+  - "site/.*"
+  - "site/**/*"
+  - "site/**/.*"
+
+A-spec:
+  - "site/src/_pages/spec/*"
+  - "site/src/_pages/spec/.*"
+  - "site/src/_pages/spec/**/*"
+  - "site/src/_pages/spec/**/.*"
+
+C-dependencies:
+  - "**/yarn.lock"
+
+C-documentation:
+  - "site/src/_pages/*"
+  - "site/src/_pages/.*"
+  - "site/src/_pages/**/*"
+  - "site/src/_pages/**/.*"
