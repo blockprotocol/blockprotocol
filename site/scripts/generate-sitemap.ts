@@ -1,12 +1,16 @@
-import { writeFileSync } from "fs";
+import fs from "fs";
 import path from "path";
 import { generateSiteMap } from "../src/lib/sitemap";
 
-const sitemap = generateSiteMap();
+const script = async () => {
+  const sitemap = generateSiteMap();
 
-writeFileSync(
-  path.join(process.cwd(), `site-map.json`),
-  JSON.stringify(sitemap, null, "\t"),
-);
+  fs.writeFileSync(
+    path.join(process.cwd(), `site-map.json`),
+    JSON.stringify(sitemap, null, "\t"),
+  );
 
-console.log("✅ Generated site map");
+  console.log("✅ Generated site map");
+};
+
+export default script();

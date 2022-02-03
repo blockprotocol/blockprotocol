@@ -4,7 +4,7 @@ import { VerificationCode } from "../src/lib/model/verificationCode.model";
 import { connectToDatabase } from "../src/lib/mongodb";
 import { EntityType } from "../src/lib/model/entityType.model";
 
-void (async () => {
+const script = async () => {
   const { client, db } = await connectToDatabase();
 
   const existingCollections = await db.collections();
@@ -74,4 +74,10 @@ void (async () => {
 
   await client.close();
   console.log("✅ Seeded DB");
-})();
+
+  await (
+    await import("./create-db-indexes")
+  ).default;
+};
+
+export default script();
