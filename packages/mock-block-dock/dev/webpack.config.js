@@ -39,6 +39,7 @@ module.exports = {
         "sentry-trace",
       ],
     },
+    open: process.env.BROWSER !== "none",
   },
   resolve: {
     extensions: [
