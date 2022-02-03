@@ -272,7 +272,7 @@ export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
 
   return (
     <List>
-      {(asPath.includes("/spec") || asPath.includes("/docs")) && (
+      {(asPath.startsWith("/spec") || asPath.startsWith("/docs")) && (
         <Box m={2}>
           <Search variant="mobile" closeDrawer={onClose} />
         </Box>
