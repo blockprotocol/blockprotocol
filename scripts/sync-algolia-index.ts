@@ -119,7 +119,7 @@ const syncAlgoliaIndex = async () => {
     process.env.AGOLIA_WRITE_KEY ?? "",
   );
 
-  const index = client.initIndex("blockprotocol_testing");
+  const index = client.initIndex("blockprotocol");
 
   let oldIndexObjects: Array<{ objectID: string }> = [];
 
