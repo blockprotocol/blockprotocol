@@ -21,74 +21,72 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
   const router = useRouter();
 
   const [headings, setHeadings] = useState<Heading[]>([]);
-  const [currentHeading, setCurrentHeading] = useState<Heading | undefined>(
-    undefined,
-  );
+
   const [detectHeadingFromScroll, setDetectHeadingFromScroll] =
     useState<boolean>(true);
+
+  const currentHeading = useRef<Heading | undefined>(undefined);
 
   useEffect(() => {
     setHeadings([]);
 
     return () => {
-      setCurrentHeading(undefined);
+      currentHeading.current = undefined;
+      setHeadings([]);
     };
   }, [serializedPage]);
-
-  const [anchor, setAnchor] = useState<string>(
-    router.asPath.split("#")[1] ?? "",
-  );
-
-  useEffect(() => {
-    setAnchor(router.asPath.split("#")[1] ?? "");
-  }, [router]);
 
   const scrolledOnce = useRef(false);
 
   useEffect(() => {
-    const headingWithCurrentAnchor = headings.find(
-      (heading) => heading.anchor === anchor,
-    );
+    if (headings.length) {
+      const anchor = router.asPath.split("#")[1] ?? "";
 
-    const previousRoute = sessionStorage.getItem("previousRoute");
+      const headingWithCurrentAnchor = headings.find(
+        (heading) => heading.anchor === anchor,
+      );
 
-    const shouldScrollToAnchor =
-      // if anchor is empty and we haven't scrolled, prevent it
-      (anchor === "" && scrolledOnce.current) ||
-      // if anchor is not empty, always allow scroll
-      anchor !== "" ||
-      // OR if previous path is either a docs or spec page
-      (previousRoute?.includes("/docs") && router.asPath?.includes("/docs")) ||
-      (previousRoute?.includes("/spec") && router.asPath?.includes("/spec"));
+      const previousRoute = sessionStorage.getItem("previousRoute");
 
-    // headings takes a while to load in, which can set this off
-    if (!scrolledOnce.current && !!headings.length) {
-      scrolledOnce.current = true;
-    }
+      const shouldScrollToAnchor =
+        // if anchor is empty and we haven't scrolled, prevent it
+        (anchor === "" && scrolledOnce.current) ||
+        // if anchor is not empty, always allow scroll
+        anchor !== "" ||
+        // OR if previous path is either a docs or spec page
+        (previousRoute?.includes("/docs") &&
+          router.asPath?.includes("/docs")) ||
+        (previousRoute?.includes("/spec") && router.asPath?.includes("/spec"));
 
-    if (headingWithCurrentAnchor && shouldScrollToAnchor) {
-      if (
-        !currentHeading ||
-        headingWithCurrentAnchor.anchor !== currentHeading.anchor
-      ) {
-        setCurrentHeading(headingWithCurrentAnchor);
-        setDetectHeadingFromScroll(false);
+      // headings takes a while to load in, which can set this off
+      if (!scrolledOnce.current) {
+        scrolledOnce.current = true;
+      }
 
-        window.scrollTo({
-          top: headingWithCurrentAnchor.element.offsetTop - 100,
-          behavior: "smooth",
-        });
+      if (headingWithCurrentAnchor && shouldScrollToAnchor) {
+        if (
+          !currentHeading.current ||
+          headingWithCurrentAnchor.element !== currentHeading.current.element
+        ) {
+          currentHeading.current = headingWithCurrentAnchor;
+          setDetectHeadingFromScroll(false);
 
-        if (detectHeadingFromScrollTimer) {
-          clearTimeout(detectHeadingFromScrollTimer);
+          window.scrollTo({
+            top: headingWithCurrentAnchor.element.offsetTop - 100,
+            behavior: "smooth",
+          });
+
+          if (detectHeadingFromScrollTimer) {
+            clearTimeout(detectHeadingFromScrollTimer);
+          }
+          detectHeadingFromScrollTimer = setTimeout(
+            () => setDetectHeadingFromScroll(true),
+            1500,
+          );
         }
-        detectHeadingFromScrollTimer = setTimeout(
-          () => setDetectHeadingFromScroll(true),
-          1500,
-        );
       }
     }
-  }, [anchor, headings, currentHeading, router.asPath]);
+  }, [headings, router.asPath]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -115,10 +113,8 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
           ? !asPath.endsWith(`#${headingAtScrollPosition.anchor}`)
           : asPath !== asPath.split("#")[0]
       ) {
-        unstable_batchedUpdates(() => {
-          setCurrentHeading(headingAtScrollPosition);
-          setAnchor(headingAtScrollPosition.anchor);
-        });
+        currentHeading.current = headingAtScrollPosition;
+
         void router.replace(
           `${asPath.split("#")[0]}${
             headingAtScrollPosition.anchor
