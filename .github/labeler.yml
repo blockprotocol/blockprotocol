@@ -1,4 +1,4 @@
-A-infra:
+"area: infra":
   - ".github/*"
   - ".github/.*"
   - ".github/**/*"
@@ -18,34 +18,34 @@ A-infra:
   - ".tsconfig*"
   - "vercel.json"
 
-A-blocks:
+"area: blocks":
   - "hub/*"
   - "hub/.*"
   - "hub/**/*"
   - "hub/**/.*"
 
-A-packages:
+"area: packages"
   - "packages/*"
   - "packages/.*"
   - "packages/**/*"
   - "packages/**/.*"
 
-A-site:
+"area: site":
   - "site/*"
   - "site/.*"
   - "site/**/*"
   - "site/**/.*"
 
-A-spec:
+"area: spec":
   - "site/src/_pages/spec/*"
   - "site/src/_pages/spec/.*"
   - "site/src/_pages/spec/**/*"
   - "site/src/_pages/spec/**/.*"
 
-C-dependencies:
+"category: dependencies":
   - "**/yarn.lock"
 
-C-documentation:
+"category: documentation":
   - "site/src/_pages/*"
   - "site/src/_pages/.*"
   - "site/src/_pages/**/*"
