@@ -1,4 +1,4 @@
-let currentMarkEndOfPhase: (() => void) | undefined = undefined;
+let currentMarkEndOfStep: (() => void) | undefined = undefined;
 
 export const logStepStart = (phaseName: string) => {
   console.log("");
@@ -10,7 +10,7 @@ export const logStepStart = (phaseName: string) => {
 
   const startTime = Date.now();
 
-  currentMarkEndOfPhase = () => {
+  currentMarkEndOfStep = () => {
     const endTime = Date.now();
 
     const doneMessage = `Done in ${Math.round(
@@ -26,5 +26,5 @@ export const logStepStart = (phaseName: string) => {
 };
 
 export const logStepEnd = () => {
-  currentMarkEndOfPhase?.();
+  currentMarkEndOfStep?.();
 };

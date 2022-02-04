@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { User, UserDocument } from "../src/lib/model/user.model";
 import {
   VerificationCode,
@@ -18,6 +19,8 @@ const catchAndLog = async (func: () => Promise<void>) => {
 
 // Actions done in the following script should be _idempotent_ as they run in dev/prod
 const script = async () => {
+  console.log(chalk.bold("Creating DB indexes..."));
+
   const { client, db } = await connectToDatabase();
   await catchAndLog(async () => {
     await db
@@ -47,7 +50,7 @@ const script = async () => {
   });
 
   await client.close();
-  console.log("✅ Created MongoDB indexes");
+  console.log("✅ MongoDB indexes created");
 };
 
 export default script();

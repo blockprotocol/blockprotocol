@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { User, UserProperties } from "../src/lib/model/user.model";
 import { ApiKey } from "../src/lib/model/apiKey.model";
 import { VerificationCode } from "../src/lib/model/verificationCode.model";
@@ -5,6 +6,7 @@ import { connectToDatabase } from "../src/lib/mongodb";
 import { EntityType } from "../src/lib/model/entityType.model";
 
 const script = async () => {
+  console.log(chalk.bold("Seeding DB..."));
   const { client, db } = await connectToDatabase();
 
   const existingCollections = await db.collections();
@@ -73,7 +75,7 @@ const script = async () => {
   );
 
   await client.close();
-  console.log("✅ Seeded DB");
+  console.log("✅ DB seeded");
 
   await (
     await import("./create-db-indexes")

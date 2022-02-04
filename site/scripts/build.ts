@@ -1,6 +1,9 @@
+import chalk from "chalk";
 import execa from "execa";
 
 const script = async () => {
+  console.log(chalk.bold("Building..."));
+
   await execa("yarn", ["build-blocks"], { stdio: "inherit" });
 
   await (

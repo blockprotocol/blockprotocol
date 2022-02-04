@@ -1,8 +1,7 @@
 import chalk from "chalk";
-import execa from "execa";
 
 const script = async () => {
-  console.log(chalk.bold("Launching site in dev mode..."));
+  console.log(chalk.bold("Preparing..."));
 
   await (
     await import("./generate-sitemap")
@@ -11,12 +10,6 @@ const script = async () => {
   await (
     await import("./generate-blocks-data")
   ).default;
-
-  await (
-    await import("./create-db-indexes")
-  ).default;
-
-  await execa("next", ["dev"], { stdio: "inherit" });
 };
 
 export default script();

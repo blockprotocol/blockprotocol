@@ -13,7 +13,7 @@
     "dev:seed-db": "yarn exe scripts/seed-db",
     "exe": "ts-node --require dotenv-flow/config --transpile-only --transpiler=ts-node/transpilers/swc-experimental",
     "lint:tsc": "tsc --noEmit",
-    "prepare": "patch-package && yarn exe scripts/generate-sitemap && yarn exe scripts/generate-blocks-data",
+    "prepare": "patch-package && yarn exe scripts/prepare",
     "start": "next start"
   },
   "dependencies": {
@@ -93,6 +93,7 @@
     "@types/react-slick": "^0.23.7",
     "@types/uuid": "^8.3.4",
     "babel-plugin-inline-react-svg": "2.0.1",
+    "chalk": "^4.1.2",
     "execa": "^5.1.1",
     "rimraf": "^3.0.2",
     "ts-node": "^10.4.0",

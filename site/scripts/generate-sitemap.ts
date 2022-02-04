@@ -1,8 +1,11 @@
 import { writeFileSync } from "fs";
 import path from "path";
+import chalk from "chalk";
 import { generateSiteMap } from "../src/lib/sitemap";
 
 const script = async () => {
+  console.log(chalk.bold("Generating sitemap..."));
+
   const sitemap = generateSiteMap();
 
   writeFileSync(
@@ -10,7 +13,7 @@ const script = async () => {
     JSON.stringify(sitemap, null, "\t"),
   );
 
-  console.log("✅ Generated site map");
+  console.log("✅ Site map generated");
 };
 
 export default script();
