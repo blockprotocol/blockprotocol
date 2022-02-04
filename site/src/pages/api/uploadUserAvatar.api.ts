@@ -84,12 +84,21 @@ export default createAuthenticatedHandler<
 
         res.status(200).json({ avatarUrl: fullUrl });
       } catch (error) {
-        res.status(400).json(
-          formatErrors({
-            msg: error,
-            param: "image",
-          }),
-        );
+        if (error instanceof Error) {
+          res.status(400).json(
+            formatErrors({
+              msg: error.message,
+              param: "image",
+            }),
+          );
+        } else {
+          res.status(400).json(
+            formatErrors({
+              msg: "Unknown error while trying to receive uploaded files.",
+              param: "image",
+            }),
+          );
+        }
       }
     } else {
       res.status(400).json(
