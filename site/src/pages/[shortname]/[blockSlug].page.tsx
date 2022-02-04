@@ -147,6 +147,8 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
+  console.log({ blockMetadata });
+
   const blockModule = useMemo(
     () =>
       typeof window === "undefined"
@@ -277,12 +279,41 @@ const BlockPage: NextPage<BlockPageProps> = ({
           </Box>
         </Box>
 
-        <Box sx={{ mb: 15 }}>
+        <Box sx={{ mb: 10 }}>
           <BlockDataContainer
             metadata={blockMetadata}
             schema={schema}
             blockModule={blockModule}
           />
+        </Box>
+
+        <Box mb={10} sx={{ display: "grid", gridTemplateColumns: "60% 40%" }}>
+          <Box />
+          <Box pl={2}>
+            <Typography
+              variant="bpLargeText"
+              sx={{
+                fontWeight: "bold",
+                color: theme.palette.gray["70"],
+                marginBottom: 2,
+              }}
+            >
+              Repository
+            </Typography>
+            <Box sx={{ display: "flex" }}>
+              <Box
+                component="img"
+                alt="GitHub Link"
+                sx={{ marginRight: 1.5 }}
+                src="/assets/link.svg"
+              />{" "}
+              <Typography variant="bpSmallCopy">
+                <Link href="https://github.com/hash/video">
+                  github.com/hash/video
+                </Link>
+              </Typography>
+            </Box>
+          </Box>
         </Box>
 
         {/* <div
@@ -302,19 +333,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             and remove columns and rows, multiple views.
           </p>
         </div>
-        <div>
-          <b>Repository</b>
-          <Box sx={{ display: "flex" }}>
-            <img
-              alt="GitHub Link"
-              style={{ marginRight: 5 }}
-              src="/assets/link.svg"
-            />{" "}
-            <Link href="https://github.com/hash/video">
-              github.com/hash/video
-            </Link>
-          </Box>
-        </div>
+        
       </div> */}
 
         <Typography textAlign="center" variant="bpHeading2" mb={3}>

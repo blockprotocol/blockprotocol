@@ -25,6 +25,11 @@ export type BlockMetadata = {
   license?: string | null;
   name?: string | null;
   protocol?: string | null;
+  repository?: {
+    type: string;
+    url: string;
+    directory?: string;
+  };
   schema?: string | null;
   source?: string | null;
   variants?: BlockVariant[] | null;

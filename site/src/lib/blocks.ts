@@ -53,15 +53,17 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
       packagePath: path.split("/").slice(-3, -1).join("/"),
       ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
     }))
-    .map((metadata: ExpandedBlockMetadata) => ({
-      ...metadata,
-      author: metadata.packagePath.split("/")[0].replace(/^@/, ""),
-      icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
-      image: getBlockMediaUrl(metadata.image, metadata.packagePath),
-      lastUpdated:
-        buildConfig.find(({ workspace }) => workspace === metadata.name)
-          ?.timestamp ?? null,
-    }));
+    .map((metadata: ExpandedBlockMetadata) => {
+      return {
+        ...metadata,
+        author: metadata.packagePath.split("/")[0].replace(/^@/, ""),
+        icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
+        image: getBlockMediaUrl(metadata.image, metadata.packagePath),
+        lastUpdated:
+          buildConfig.find(({ workspace }) => workspace === metadata.name)
+            ?.timestamp ?? null,
+      };
+    });
 };
 
 export const readBlockDataFromDisk = ({
