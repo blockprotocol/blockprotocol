@@ -1,3 +1,16 @@
+"area: dependencies":
+  - "**/patches/*"
+  - "**/patches/.*"
+  - "**/patches/**/*"
+  - "**/patches/**/.*"
+  - "**/yarn.lock"
+
+"area: hub":
+  - "hub/*"
+  - "hub/.*"
+  - "hub/**/*"
+  - "hub/**/.*"
+
 "area: infra":
   - ".github/*"
   - ".github/.*"
@@ -5,24 +18,12 @@
   - ".github/**/.*"
   - ".husky/*"
   - ".husky/.*"
-  - ".husky/**/*"
-  - ".husky/**/.*"
   - "scripts/*"
   - "scripts/.*"
   - "scripts/**/*"
   - "scripts/**/.*"
-  - ".markdownlint*"
-  - ".gitignore"
-  - ".prettier*"
-  - ".eslint*"
-  - ".tsconfig*"
-  - "vercel.json"
-
-"area: blocks":
-  - "hub/*"
-  - "hub/.*"
-  - "hub/**/*"
-  - "hub/**/.*"
+  - "*"
+  - ".*"
 
 "area: packages":
   - "packages/*"
@@ -36,17 +37,38 @@
   - "site/**/*"
   - "site/**/.*"
 
-"area: spec":
+"package: block-template":
+  - "packages/block-template/*"
+  - "packages/block-template/.*"
+  - "packages/block-template/**/*"
+  - "packages/block-template/**/.*"
+
+"package: blockprotocol":
+  - "packages/blockprotocol/*"
+  - "packages/blockprotocol/.*"
+  - "packages/blockprotocol/**/*"
+  - "packages/blockprotocol/**/.*"
+
+"package: create-block-app":
+  - "packages/create-block-app/*"
+  - "packages/create-block-app/.*"
+  - "packages/create-block-app/**/*"
+  - "packages/create-block-app/**/.*"
+
+"package: mock-block-dock":
+  - "packages/mock-block-dock/*"
+  - "packages/mock-block-dock/.*"
+  - "packages/mock-block-dock/**/*"
+  - "packages/mock-block-dock/**/.*"
+
+"site: docs":
+  - "site/src/_pages/docs/*"
+  - "site/src/_pages/docs/.*"
+  - "site/src/_pages/docs/**/*"
+  - "site/src/_pages/docs/**/.*"
+
+"site: spec":
   - "site/src/_pages/spec/*"
   - "site/src/_pages/spec/.*"
   - "site/src/_pages/spec/**/*"
   - "site/src/_pages/spec/**/.*"
-
-"category: dependencies":
-  - "**/yarn.lock"
-
-"category: documentation":
-  - "site/src/_pages/*"
-  - "site/src/_pages/.*"
-  - "site/src/_pages/**/*"
-  - "site/src/_pages/**/.*"
