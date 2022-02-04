@@ -21,14 +21,19 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
   const router = useRouter();
 
   const [headings, setHeadings] = useState<Heading[]>([]);
+  const [currentHeading, setCurrentHeading] = useState<Heading | undefined>(
+    undefined,
+  );
+  const [detectHeadingFromScroll, setDetectHeadingFromScroll] =
+    useState<boolean>(true);
 
   useEffect(() => {
     setHeadings([]);
-  }, [serializedPage]);
 
-  const [currentHeading, setCurrentHeading] = useState<Heading>();
-  const [detectHeadingFromScroll, setDetectHeadingFromScroll] =
-    useState<boolean>(true);
+    return () => {
+      setCurrentHeading(undefined);
+    };
+  }, [serializedPage]);
 
   const [anchor, setAnchor] = useState<string>(
     router.asPath.split("#")[1] ?? "",
