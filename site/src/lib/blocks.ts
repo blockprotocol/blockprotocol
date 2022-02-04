@@ -9,11 +9,11 @@ export type ExpandedBlockMetadata = BlockMetadata & {
 };
 
 export type BuildConfig = {
-  workspace: string;
+  workspace?: string | null;
   repository: string;
   branch: string;
   distDir: string;
-  timestamp: string;
+  timestamp?: string | null;
 };
 
 const getBlockMediaUrl = (
@@ -58,9 +58,9 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
       author: metadata.packagePath.split("/")[0].replace(/^@/, ""),
       icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
       image: getBlockMediaUrl(metadata.image, metadata.packagePath),
-      lastUpdated: buildConfig.find(
-        ({ workspace }) => workspace === metadata.name,
-      )?.timestamp,
+      lastUpdated:
+        buildConfig.find(({ workspace }) => workspace === metadata.name)
+          ?.timestamp ?? null,
     }));
 };
 

@@ -35,12 +35,14 @@
   "devDependencies": {
     "@swc/core": "^1.2.135",
     "@swc/helpers": "^0.3.2",
+    "@types/wait-on": "^5.3.1",
     "@typescript-eslint/eslint-plugin": "4.29.0",
     "@typescript-eslint/parser": "4.29.0",
     "algoliasearch": "^4.12.0",
     "check-dependency-version-consistency": "^1.6.0",
     "concurrently": "^6.5.1",
     "dotenv-flow": "3.2.0",
+    "envalid": "^7.2.2",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "8.3.0",
@@ -50,6 +52,7 @@
     "eslint-plugin-no-restricted-imports": "0.0.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "4.2.0",
+    "execa": "^5.1.1",
     "gray-matter": "^4.0.3",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.2",
@@ -60,9 +63,14 @@
     "prettier-plugin-packagejson": "2.2.13",
     "prettier-plugin-sh": "0.7.1",
     "regenerator-runtime": "^0.13.9",
+    "sleep-promise": "^9.1.0",
     "suppress-exit-code": "1.0.0",
+    "tmp-promise": "^3.0.3",
+    "tree-kill": "^1.2.2",
     "ts-node": "^10.4.0",
+    "untildify": "4.0.0",
     "uuid": "^8.3.2",
+    "wait-on": "^6.0.0",
     "yarn-deduplicate": "^3.1.0"
   }
 }
