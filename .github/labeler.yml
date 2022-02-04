@@ -24,7 +24,7 @@
   - "hub/**/*"
   - "hub/**/.*"
 
-"area: packages"
+"area: packages":
   - "packages/*"
   - "packages/.*"
   - "packages/**/*"
