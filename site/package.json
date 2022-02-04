@@ -4,16 +4,16 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "yarn exe scripts/build",
+    "build": "yarn exe scripts/build.ts",
     "build-block": "./scripts/build-blocks.sh",
     "build-blocks": "find ../hub -type f | xargs ./scripts/build-blocks.sh",
     "clean": "rimraf ./.next/",
-    "dev": "yarn exe scripts/dev",
+    "dev": "yarn exe scripts/dev.ts",
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
-    "dev:seed-db": "yarn exe scripts/seed-db",
+    "dev:seed-db": "yarn exe scripts/seed-db.ts",
     "exe": "ts-node --require dotenv-flow/config --transpile-only --transpiler=ts-node/transpilers/swc-experimental",
     "lint:tsc": "tsc --noEmit",
-    "prepare": "patch-package && yarn exe scripts/prepare",
+    "prepare": "patch-package && yarn exe scripts/prepare.ts",
     "start": "next start"
   },
   "dependencies": {
