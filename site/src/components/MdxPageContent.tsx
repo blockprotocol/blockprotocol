@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, VFC } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Box, { BoxProps } from "@mui/material/Box";
