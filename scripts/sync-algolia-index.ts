@@ -6,6 +6,8 @@ import * as envalid from "envalid";
 
 import siteMap from "../site/site-map.json";
 
+const monorepoDirPath = path.resolve(__dirname, "..");
+
 type DocsFrontMatter = {
   content: string;
   data: Record<string, string>;
@@ -92,8 +94,16 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
     return appendData;
   };
 
-  const specFiles = getFileInfos("../../../site/src/_pages/spec", [], "spec");
-  const docsFiles = getFileInfos("../../../site/src/_pages/docs", [], "docs");
+  const specFiles = getFileInfos(
+    path.resolve(monorepoDirPath, "site/src/_pages/spec"),
+    [],
+    "spec",
+  );
+  const docsFiles = getFileInfos(
+    path.resolve(monorepoDirPath, "site/src/_pages/docs"),
+    [],
+    "docs",
+  );
 
   const specData = specFiles.map((filePath, fileIndex) => {
     const file = fs.readFileSync(filePath.inputPath, "utf8");
