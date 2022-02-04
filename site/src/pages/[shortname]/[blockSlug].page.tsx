@@ -256,23 +256,23 @@ const BlockPage: NextPage<BlockPageProps> = ({
               </span>
               <Bullet />
               <span>V{blockMetadata.version}</span>
-              {isDesktopSize && <Bullet />}
-              <Box
-                component="span"
-                sx={{ display: { xs: "block", md: "inline-block" } }}
-              >
-                {`Updated ${
-                  blockMetadata.lastUpdated
-                    ? formatDistance(
-                        new Date(blockMetadata.lastUpdated),
-                        new Date(),
-                        {
-                          addSuffix: true,
-                        },
-                      )
-                    : "Recently"
-                }`}
-              </Box>
+              {blockMetadata.lastUpdated ? (
+                <>
+                  {isDesktopSize && <Bullet />}
+                  <Box
+                    component="span"
+                    sx={{ display: { xs: "block", md: "inline-block" } }}
+                  >
+                    {`Updated ${formatDistance(
+                      new Date(blockMetadata.lastUpdated),
+                      new Date(),
+                      {
+                        addSuffix: true,
+                      },
+                    )}`}
+                  </Box>
+                </>
+              ) : null}
             </Typography>
           </Box>
         </Box>
