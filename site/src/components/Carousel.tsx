@@ -5,7 +5,7 @@ import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { ArrowLeftIconIcon, ArrowRightIconIcon } from "./icons";
+import { ArrowLeftIcon, ArrowRightIconIcon } from "./icons";
 
 type CarouselProps<T> = {
   data: T[];
@@ -43,7 +43,7 @@ const Arrow: VFC<ArrowProps> = ({ className, onClick, arrowType }) => {
       onClick={onClick}
     >
       {arrowType === "prev" ? (
-        <ArrowLeftIconIcon
+        <ArrowLeftIcon
           sx={{
             width: 24,
             height: 24,
