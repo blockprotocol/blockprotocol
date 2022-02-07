@@ -26,7 +26,7 @@ A block package SHOULD contain:
 - a JSON file **describing the properties the block accepts** using [JSON Schema vocabulary](https://json-schema.org/) – the ‘block schema’, which can be [automatically generated](https://json-schema.org/implementations.html#from-code) from block code, and which:
 
   - MUST be called `block-schema.json`
-  - MUST specify a [required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3) array naming any properties the block will not render or function without
+  - If the block does not function without certain properties, MUST specify a [required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3) array naming them
   - SHOULD specify any further constraints or [validation](https://json-schema.org/draft/2020-12/json-schema-validation.html) requirements which improve the block’s functionality
 
 - a JSON file containing **metadata describing the block**, which:
@@ -45,9 +45,11 @@ A block package SHOULD contain:
 
     - `default` – an object, conforming to the block’s schema, representing
       the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) `variants` is provided (see below).
+    - `examples` - an array of objects conforming to the block's schema which provide examples of the data that can be passed to it
     - `icon` – an icon for the block, to be displayed when the user is
       selecting from available blocks (as well as elsewhere as appropriate, e.g.
       in a website listing the block)
+    - `image` – a preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
     - `author`: a display name for the author of the block
     - `description`: a brief description of the block
     - `license`: the license the block is made available under (e.g. MIT)
@@ -55,7 +57,6 @@ A block package SHOULD contain:
   - MAY specify:
 
     - `variants` – an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively.
-    - `image` – a preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
 
 ## Data transfer
 
@@ -664,3 +665,9 @@ This could be
 Blocks SHOULD provide at least basic visual styling to allow them to be embedded and used without modification by any web application.
 
 Blocks SHOULD use the theme variables provided under the `styleVariables` object and listed in [Appendix A](https://blockprotocol.org/spec/appendix-a-styling) as property values where appropriate, and provide [fallback values](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties#custom_property_fallback_values) in case the embedding application does not define them.
+
+<Frame emoji="🤔">
+
+We are considering alternative approaches to styling - [please contribute to the discussion](https://github.com/blockprotocol/blockprotocol/discussions/180) if you have questions or views.
+
+</Frame>
