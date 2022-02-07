@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { SvgIcon, SvgIconProps } from "@mui/material";
 
-export const ApiKeyGenerated: FC<SvgIconProps> = (props) => {
+export const ApiKeyGeneratedIcon: FC<SvgIconProps> = (props) => {
   return (
     <SvgIcon {...props} width="52" height="52" viewBox="0 0 52 52" fill="none">
       <rect width="52" height="52" rx="24" fill="#D9D6FE" />

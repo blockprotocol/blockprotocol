@@ -4,17 +4,16 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "build": "yarn build-blocks && yarn generate-blocks-data && yarn generate-sitemap && next build",
+    "build": "yarn build-blocks && yarn exe scripts/generate-blocks-data && yarn exe scripts/generate-sitemap && yarn exe scripts/create-db-indexes && next build",
     "build-block": "./scripts/build-blocks.sh",
     "build-blocks": "find ../hub -type f | xargs ./scripts/build-blocks.sh",
     "clean": "rimraf ./.next/",
-    "dev": "yarn generate-sitemap && yarn generate-blocks-data && next dev",
+    "dev": "yarn exe scripts/generate-sitemap && yarn exe scripts/generate-blocks-data && yarn exe scripts/create-db-indexes && next dev",
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
-    "dev:seed-db": "node --max-old-space-size=2048 node_modules/.bin/ts-node --files --project tsconfig.json scripts/seed-db",
-    "generate-blocks-data": "node --max-old-space-size=2048 node_modules/.bin/ts-node --files --project tsconfig.json scripts/generate-blocks-data",
-    "generate-sitemap": "node --max-old-space-size=2048 node_modules/.bin/ts-node --files --project tsconfig.json scripts/generate-sitemap",
+    "dev:seed-db": "yarn exe scripts/seed-db && yarn exe scripts/create-db-indexes",
+    "exe": "ts-node --require dotenv-flow/config --transpile-only --transpiler=ts-node/transpilers/swc-experimental",
     "lint:tsc": "tsc --noEmit",
-    "prepare": "patch-package && yarn generate-sitemap && yarn generate-blocks-data",
+    "prepare": "patch-package && yarn exe scripts/generate-sitemap && yarn exe scripts/generate-blocks-data",
     "start": "next start"
   },
   "dependencies": {

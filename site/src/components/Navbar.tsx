@@ -14,8 +14,7 @@ import {
 import { useRouter } from "next/router";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Link } from "./Link";
-import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
-import { BoltIcon } from "./SvgIcon/BoltIcon";
+import { BlockProtocolLogoIcon, BoltIcon } from "./icons";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import SiteMapContext from "../context/SiteMapContext";
 import { useUser } from "../context/UserContext";
@@ -403,6 +402,7 @@ export const Navbar: VFC<NavbarProps> = ({
           >
             <MobileNavItems onClose={() => setDisplayMobileNav(false)} />
           </Box>
+
           <Box
             p={5}
             flexShrink={0}
