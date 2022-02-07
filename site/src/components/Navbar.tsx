@@ -403,6 +403,7 @@ export const Navbar: VFC<NavbarProps> = ({
           >
             <MobileNavItems onClose={() => setDisplayMobileNav(false)} />
           </Box>
+
           <Box
             p={5}
             flexShrink={0}

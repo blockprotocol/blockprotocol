@@ -1,6 +1,6 @@
 {
   "name": "block-template",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Block template",
   "keywords": [
     "blockprotocol",
@@ -25,7 +25,7 @@
     "clean": "rimraf ./dist/",
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev -- --watch --verbose\" \"yarn run-dev-server\"",
     "lint:tsc": "tsc --noEmit",
-    "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --config webpack-dev-server.config.js --open",
+    "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --config webpack-dev-server.config.js",
     "schema": "typescript-json-schema tsconfig.json AppProps --required true --out dist/block-schema.json"
   },
   "dependencies": {
@@ -67,6 +67,10 @@
   },
   "blockprotocol": {
     "displayName": "Template",
-    "icon": "public/omega.svg"
+    "examples": [
+      {}
+    ],
+    "icon": "public/omega.svg",
+    "image": "public/block-preview.svg"
   }
 }

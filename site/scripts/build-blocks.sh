@@ -103,10 +103,10 @@ function build_block {
     mkdir -p "$repo_path"
 
     # add others as needed (gitlab, bitbucket)
-    if [[ "$repo_url" =~ ^https://github\.com/.+\.git$ ]]; then
+    if [[ "$repo_url" =~ ^https://github\.com ]]; then
       zip_url="${repo_url%\.git}/archive/refs/heads/${branch}.zip"
     else
-      log error "cannot handle repository url (yet): $url"
+      log error "cannot handle repository url (yet): $repo_url"
       exit 2
     fi
 
