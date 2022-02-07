@@ -147,8 +147,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
-  console.log({ blockMetadata });
-
   const blockModule = useMemo(
     () =>
       typeof window === "undefined"
