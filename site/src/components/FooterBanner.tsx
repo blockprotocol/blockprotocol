@@ -10,7 +10,7 @@ import {
 import Image from "next/image";
 import { Link } from "./Link";
 import backgroundRainbow from "../../public/assets/background-corner-rainbow.png";
-import { BoltIcon } from "./SvgIcon/BoltIcon";
+import { BoltIcon } from "./icons";
 import { LinkButton } from "./LinkButton";
 
 type Banner = {

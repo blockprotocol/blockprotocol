@@ -1,7 +1,6 @@
 import { Icon } from "@mui/material";
 
-import { BlockHubIcon } from "../SvgIcon/BlockHubIcon";
-import { SpecificationIcon } from "../SvgIcon/SpecificationIcon";
+import { BlockHubIcon, SpecificationIcon } from "../icons";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 
