@@ -1,8 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useState, VoidFunctionComponent } from "react";
 import { Button } from "../../Button";
-import { ApiKeyGenerated } from "../../SvgIcon/ApiKeyGenerated";
-import { CopyIcon } from "../../SvgIcon/CopyIcon";
+import { ApiKeyGenerated, CopyIcon } from "../../icons";
 
 type ApiKeyRendererProps = {
   apiKey: string;
