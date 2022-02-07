@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { ChangeEvent, useEffect, useState, VoidFunctionComponent } from "react";
 
@@ -29,8 +29,12 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
 
   if (readonly) {
     return (
-      <Box
+      <Typography
         sx={{
+          overflowWrap: {
+            xs: "anywhere",
+            md: "unset",
+          },
           maxWidth: {
             xs: "125px",
             md: "unset",
@@ -42,7 +46,7 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
         }}
       >
         {value}
-      </Box>
+      </Typography>
     );
   }
 
