@@ -36,6 +36,12 @@
   - "site/.*"
   - "site/**/*"
   - "site/**/.*"
+  
+"area: spec":
+  - "site/src/_pages/spec/*"
+  - "site/src/_pages/spec/.*"
+  - "site/src/_pages/spec/**/*"
+  - "site/src/_pages/spec/**/.*"
 
 "package: block-template":
   - "packages/block-template/*"
@@ -66,9 +72,3 @@
   - "site/src/_pages/docs/.*"
   - "site/src/_pages/docs/**/*"
   - "site/src/_pages/docs/**/.*"
-
-"site: spec":
-  - "site/src/_pages/spec/*"
-  - "site/src/_pages/spec/.*"
-  - "site/src/_pages/spec/**/*"
-  - "site/src/_pages/spec/**/.*"
