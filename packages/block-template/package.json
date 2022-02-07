@@ -1,6 +1,6 @@
 {
   "name": "block-template",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Block template",
   "keywords": [
     "blockprotocol",
@@ -67,6 +67,10 @@
   },
   "blockprotocol": {
     "displayName": "Template",
-    "icon": "public/omega.svg"
+    "examples": [
+      {}
+    ],
+    "icon": "public/omega.svg",
+    "image": "public/block-preview.svg"
   }
 }
