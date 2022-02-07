@@ -22,8 +22,13 @@ See https://blockprotocol.org/docs/developing-blocks
     - Generates a `block-metadata.json` file which:
       - points to the `schema` and `source` files
       - brings in metadata from `package.json`, such as the block name and description
+      - additional brings in anything in the `blockprotocol` object in `package.json`, e.g.
+        - `displayName`: a friendly display name
+        - `examples`: an array of example data structures your block would accept and use
+        - `image`: a preview image showing your block in action
+        - `icon`: an icon to be associated with your block
       - lists the `externals` - libraries the block expects the host app to provide (React, unless modified)
-    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema.
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/spec/block-types).
 
 N.B.
 
