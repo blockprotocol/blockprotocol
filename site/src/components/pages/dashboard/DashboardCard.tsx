@@ -1,7 +1,7 @@
 import { Box, Typography, Link } from "@mui/material";
 import { VoidFunctionComponent } from "react";
 
-import { ArrowRightIcon } from "../../icons";
+import { ArrowRightIconIcon } from "../../icons";
 
 export type DashboardCardProps = {
   title: string;
@@ -65,7 +65,7 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
             <Box component="span" paddingRight={1}>
               {link.title}
             </Box>
-            <ArrowRightIcon
+            <ArrowRightIconIcon
               sx={{
                 width: "auto",
                 height: "0.8em",

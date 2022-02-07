@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { useState, VoidFunctionComponent } from "react";
 import { Button } from "../../Button";
-import { ApiKeyGenerated, CopyIcon } from "../../icons";
+import { ApiKeyGeneratedIcon, CopyIcon } from "../../icons";
 
 type ApiKeyRendererProps = {
   apiKey: string;
@@ -37,7 +37,7 @@ export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
           marginBottom: 2,
         }}
       >
-        <ApiKeyGenerated sx={{ fontSize: "52px" }} />
+        <ApiKeyGeneratedIcon sx={{ fontSize: "52px" }} />
       </Box>
       <Typography
         sx={{
