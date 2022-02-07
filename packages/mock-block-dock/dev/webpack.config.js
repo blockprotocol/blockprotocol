@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
+/** @type import("webpack").Configuration */
 module.exports = {
   entry: "./dev/DevApp.tsx",
   plugins: [
@@ -11,7 +12,6 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       "process.env.NODE_ENV": process.env.NODE_ENV,
     }),
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
   ],
   module: {
@@ -40,6 +40,9 @@ module.exports = {
       ],
     },
     open: process.env.BROWSER !== "none",
+  },
+  optimization: {
+    moduleIds: "named",
   },
   resolve: {
     extensions: [

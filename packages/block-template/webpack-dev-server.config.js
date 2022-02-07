@@ -2,6 +2,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const config = require("./webpack.config");
 
+/** @type import("webpack").Configuration */
 module.exports = {
   entry: "./src/webpack-dev-server.js",
   plugins: [
@@ -13,7 +14,6 @@ module.exports = {
     new webpack.EnvironmentPlugin({
       "process.env.NODE_ENV": process.env.NODE_ENV,
     }),
-    new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
   ],
   module: config[0].module,

@@ -7,7 +7,7 @@
 const webpack = require("webpack");
 const WebpackAssetsManifest = require("webpack-assets-manifest");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin");
 const { StatsPlugin } = require("./webpack-block-metadata-plugin");
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
     }),
     new WebpackAssetsManifest(),
     new StatsPlugin(),
-    new CopyWebpackPlugin([{ from: "./public/", to: "./public/" }]),
+    new CopyPlugin({ patterns: [{ from: "./public/", to: "./public/" }] }),
   ],
 
   entry: {
