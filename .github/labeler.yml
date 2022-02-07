@@ -36,7 +36,7 @@
   - "site/.*"
   - "site/**/*"
   - "site/**/.*"
-  
+
 "area: spec":
   - "site/src/_pages/spec/*"
   - "site/src/_pages/spec/.*"
