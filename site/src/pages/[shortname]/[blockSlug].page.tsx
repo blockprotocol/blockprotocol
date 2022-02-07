@@ -166,6 +166,26 @@ const BlockPage: NextPage<BlockPageProps> = ({
     return catalog.filter(({ name }) => name !== blockMetadata.name);
   }, [catalog, blockMetadata]);
 
+  const repositoryUrl = useMemo(() => {
+    const { type, url, directory } = blockMetadata.repository ?? {};
+
+    if (url) {
+      let returnUrl = url;
+
+      if (type === "git") {
+        returnUrl = returnUrl.replace(".git", "");
+
+        if (directory) {
+          returnUrl = `${returnUrl}/tree/main/${directory}`;
+        }
+      }
+
+      return new URL(returnUrl);
+    }
+
+    return null;
+  }, [blockMetadata]);
+
   return (
     <>
       <Head>
@@ -287,34 +307,45 @@ const BlockPage: NextPage<BlockPageProps> = ({
           />
         </Box>
 
-        <Box mb={10} sx={{ display: "grid", gridTemplateColumns: "60% 40%" }}>
-          <Box />
-          <Box pl={2}>
-            <Typography
-              variant="bpLargeText"
-              sx={{
-                fontWeight: "bold",
-                color: theme.palette.gray["70"],
-                marginBottom: 2,
-              }}
-            >
-              Repository
-            </Typography>
-            <Box sx={{ display: "flex" }}>
-              <Box
-                component="img"
-                alt="GitHub Link"
-                sx={{ marginRight: 1.5 }}
-                src="/assets/link.svg"
-              />{" "}
-              <Typography variant="bpSmallCopy">
-                <Link href="https://github.com/hash/video">
-                  github.com/hash/video
-                </Link>
+        {repositoryUrl && (
+          <Box
+            mb={10}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "60% 40%" },
+            }}
+          >
+            <Box />
+            <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
+              <Typography
+                variant="bpLargeText"
+                sx={{
+                  fontWeight: "bold",
+                  color: theme.palette.gray["70"],
+                  marginBottom: 2,
+                }}
+              >
+                Repository
               </Typography>
+              <Box sx={{ display: "flex" }}>
+                <Box
+                  component="img"
+                  alt="GitHub Link"
+                  sx={{ marginRight: 1.5 }}
+                  src="/assets/link.svg"
+                />{" "}
+                <Typography
+                  variant="bpSmallCopy"
+                  sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                >
+                  <Link href={repositoryUrl.href}>
+                    {repositoryUrl.hostname}/{repositoryUrl.pathname}
+                  </Link>
+                </Typography>
+              </Box>
             </Box>
           </Box>
-        </Box>
+        )}
 
         {/* <div
         style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
