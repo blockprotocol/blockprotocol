@@ -17,6 +17,7 @@ import {
 } from "react";
 import { MockBlockDock } from "mock-block-dock";
 
+import { BlockVariant } from "blockprotocol";
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
@@ -26,7 +27,7 @@ import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
 import { BlockVariantsTabs } from "./BlockVariantsTabs";
 
 type BlockDataContainerProps = {
-  metadata: BlockMetadata;
+  metadata: BlockMetadata | undefined;
   schema: BlockSchema;
   blockModule: BlockExports | undefined;
 };
@@ -41,7 +42,7 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState("{}");
 
   const previousBlockVariantsTab = useRef(-1);
   const propertiesToRemove = useRef<string[]>([]);
@@ -50,14 +51,14 @@ export const BlockDataContainer: VoidFunctionComponent<
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
-  const prevPackage = useRef<string | null>(null);
+  const prevPackage = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    if (prevPackage.current !== metadata.packagePath) {
+    if (prevPackage.current !== metadata?.packagePath) {
       const example = {
-        ...metadata.examples?.[0],
-        ...metadata.variants?.[0].examples?.[0],
-        ...metadata.variants?.[0].properties,
+        ...metadata?.examples?.[0],
+        ...metadata?.variants?.[0].examples?.[0],
+        ...metadata?.variants?.[0].properties,
       };
 
       // reset data source input when switching blocks
@@ -67,16 +68,17 @@ export const BlockDataContainer: VoidFunctionComponent<
         setText("");
       }
 
-      prevPackage.current = metadata.packagePath;
+      prevPackage.current = metadata?.packagePath;
     }
   }, [metadata, text]);
 
   useEffect(() => {
     if (
-      metadata.variants &&
+      metadata?.variants &&
       previousBlockVariantsTab.current !== blockVariantsTab
     ) {
-      const blockVariant = metadata.variants[blockVariantsTab];
+      const blockVariant: BlockVariant | undefined =
+        metadata?.variants[blockVariantsTab];
 
       try {
         const parsedText = JSON.parse(text);
@@ -86,7 +88,7 @@ export const BlockDataContainer: VoidFunctionComponent<
         }
 
         const nextText = {
-          ...blockVariant.properties,
+          ...blockVariant?.properties,
           ...blockVariant.examples?.[0],
           ...parsedText,
         };
@@ -94,22 +96,24 @@ export const BlockDataContainer: VoidFunctionComponent<
         setText(JSON.stringify(nextText, undefined, 2));
         previousBlockVariantsTab.current = blockVariantsTab;
       } catch (err) {
+        console.error(err);
         setAlertSnackBarOpen(true);
         setBlockVariantsTab(previousBlockVariantsTab.current);
       }
     }
 
     return () => {
-      if (metadata.variants) {
-        const blockVariant = metadata.variants[blockVariantsTab];
+      if (metadata?.variants) {
+        const blockVariant: BlockVariant | undefined =
+          metadata?.variants[blockVariantsTab];
 
         propertiesToRemove.current = Object.keys({
-          ...blockVariant.properties,
+          ...blockVariant?.properties,
           ...blockVariant.examples?.[0],
         });
       }
     };
-  }, [blockVariantsTab, metadata.variants, text]);
+  }, [blockVariantsTab, metadata?.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
@@ -195,7 +199,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
               setBlockVariantsTab={setBlockVariantsTab}
-              metadata={metadata}
+              metadata={metadata ?? {}}
             />
 
             <Box
