@@ -41,15 +41,7 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
 
-  const example = {
-    ...metadata.examples?.[0],
-    ...metadata.variants?.[0].examples?.[0],
-    ...metadata.variants?.[0].properties,
-  };
-
-  const [text, setText] = useState(
-    example ? JSON.stringify(example, undefined, 2) : "",
-  );
+  const [text, setText] = useState("");
 
   const previousBlockVariantsTab = useRef(-1);
   const propertiesToRemove = useRef<string[]>([]);
@@ -58,18 +50,26 @@ export const BlockDataContainer: VoidFunctionComponent<
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [activeMobileTab, setActiveMobileTab] = useState(0);
 
-  const prevPackage = useRef<string>(metadata.packagePath);
+  const prevPackage = useRef<string | null>(null);
+
   useEffect(() => {
     if (prevPackage.current !== metadata.packagePath) {
+      const example = {
+        ...metadata.examples?.[0],
+        ...metadata.variants?.[0].examples?.[0],
+        ...metadata.variants?.[0].properties,
+      };
+
       // reset data source input when switching blocks
       if (example) {
         setText(JSON.stringify(example, undefined, 2));
       } else {
         setText("");
       }
+
+      prevPackage.current = metadata.packagePath;
     }
-    prevPackage.current = metadata.packagePath;
-  }, [example, metadata.packagePath, text]);
+  }, [metadata, text]);
 
   useEffect(() => {
     if (
