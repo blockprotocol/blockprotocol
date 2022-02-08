@@ -41,7 +41,11 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
 
-  const example = metadata.examples?.[0];
+  const example = {
+    ...metadata.examples?.[0],
+    ...metadata.variants?.[0].examples?.[0],
+    ...metadata.variants?.[0].properties,
+  };
 
   const [text, setText] = useState(
     example ? JSON.stringify(example, undefined, 2) : "",
