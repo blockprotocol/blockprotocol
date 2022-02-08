@@ -2,53 +2,53 @@ import { ThemeOptions } from "@mui/material";
 import { customColors } from "./palette";
 import { defaultTheme } from "./util";
 
-const FALLBACK_FONTS = [`"Helvetica"`, `"Arial"`, "sans-serif"];
+const fallbackFonts = [`"Helvetica"`, `"Arial"`, "sans-serif"];
 
 export const typography: ThemeOptions["typography"] = {
-  fontFamily: [`"Inter"`, ...FALLBACK_FONTS].join(", "),
+  fontFamily: [`"Inter"`, ...fallbackFonts].join(", "),
   fontSize: 16,
   bpTitle: {
-    fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step-6)",
     lineHeight: 1,
     fontWeight: 700,
     color: customColors.gray["80"],
   },
   bpSubtitle: {
-    fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step-3)",
     lineHeight: 1.1,
     fontWeight: 200,
     color: customColors.gray["80"],
   },
   bpHeading1: {
-    fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step-5)",
     lineHeight: 1.1,
     fontWeight: 700,
     color: customColors.gray["80"],
   },
   bpHeading2: {
-    fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step-4)",
     fontWeight: 400,
     lineHeight: 1.2,
     color: customColors.gray["80"],
   },
   bpHeading3: {
-    fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step-3)",
     lineHeight: 1.1,
     color: customColors.gray["70"],
   },
   bpHeading4: {
-    fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step-2)",
     lineHeight: 1.1,
     color: customColors.gray["70"],
   },
   bpSmallCaps: {
-    fontFamily: [`"Apercu Pro"`, ...FALLBACK_FONTS].join(", "),
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step--1)",
     lineHeight: 1.3,
     color: customColors.gray["70"],
