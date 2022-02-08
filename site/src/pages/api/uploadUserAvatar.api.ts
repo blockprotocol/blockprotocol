@@ -4,12 +4,12 @@ import { uploadFileBufferToS3 } from "../../lib/awsS3";
 import {
   AuthenticatedApiRequest,
   createAuthenticatedHandler,
-} from "../../lib/handler/authenticatedHandler";
+} from "../../lib/api/handler/authenticatedHandler";
 
 import {
   MultipartExtensions,
   multipartUploads,
-} from "../../lib/middleware/multipartUploads";
+} from "../../lib/api/middleware/multipartUploads.middleware";
 import { formatErrors } from "../../util/api";
 
 type Response = {

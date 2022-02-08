@@ -1,7 +1,7 @@
-import { createBaseHandler } from "../../../../../lib/handler/baseHandler";
-import { EntityType } from "../../../../../lib/model/entityType.model";
+import { createBaseHandler } from "../../../../../lib/api/handler/baseHandler";
+import { EntityType } from "../../../../../lib/api/model/entityType.model";
 import { formatErrors } from "../../../../../util/api";
-import { User } from "../../../../../lib/model/user.model";
+import { User } from "../../../../../lib/api/model/user.model";
 
 export type ApiTypeByUserAndTitleRequest = {
   title: string;

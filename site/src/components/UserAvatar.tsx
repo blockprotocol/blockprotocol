@@ -1,6 +1,6 @@
 import { VFC } from "react";
 import { Box } from "@mui/material";
-import { SerializedUser } from "../lib/model/user.model";
+import { SerializedUser } from "../lib/api/model/user.model";
 
 interface UserAvatarProps {
   user: SerializedUser;

@@ -1,4 +1,4 @@
-import { createAuthenticatedHandler } from "../../lib/handler/authenticatedHandler";
+import { createAuthenticatedHandler } from "../../lib/api/handler/authenticatedHandler";
 
 type LogoutResponse = "SUCCESS";
 
