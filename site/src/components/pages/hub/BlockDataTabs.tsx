@@ -38,7 +38,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
       TabIndicatorProps={{
         style: { display: "none" },
       }}
-      sx={(theme) => ({
+      sx={{
         "& .MuiTab-root": {
           textTransform: "none",
           color: theme.palette.gray[modalOpen ? 60 : 80],
@@ -64,7 +64,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           backgroundColor: theme.palette.gray[80],
           color: theme.palette.common.white,
         },
-      })}
+      }}
     >
       <Tab label="Data Source" />
       <Tab label="Block Schema" />

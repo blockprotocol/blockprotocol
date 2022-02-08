@@ -68,7 +68,10 @@ export const BlockDataContainer: VoidFunctionComponent<
   }, [example, metadata.packagePath, text]);
 
   useEffect(() => {
-    if (metadata.variants) {
+    if (
+      metadata.variants &&
+      previousBlockVariantsTab.current !== blockVariantsTab
+    ) {
       const blockVariant = metadata.variants[blockVariantsTab];
 
       try {
@@ -94,7 +97,10 @@ export const BlockDataContainer: VoidFunctionComponent<
     }
 
     return () => {
-      if (metadata.variants) {
+      if (
+        metadata.variants &&
+        previousBlockVariantsTab.current !== blockVariantsTab
+      ) {
         const blockVariant = metadata.variants[blockVariantsTab];
 
         propertiesToRemove.current = Object.keys({
@@ -103,7 +109,7 @@ export const BlockDataContainer: VoidFunctionComponent<
         });
       }
     };
-  }, [blockVariantsTab, metadata.variants]);
+  }, [blockVariantsTab, metadata.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
