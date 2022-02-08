@@ -1,4 +1,12 @@
-import { Box, Tabs, Tab, useTheme, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Tabs,
+  Tab,
+  useTheme,
+  useMediaQuery,
+  Alert,
+  Snackbar,
+} from "@mui/material";
 import { Validator } from "jsonschema";
 import {
   useEffect,
@@ -15,7 +23,7 @@ import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
 import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
-import { TabPanel } from "./TabPanel";
+import { BlockDisplayTabs } from "./BlockDisplayTabs";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
@@ -29,14 +37,18 @@ export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
 > = ({ metadata, schema, blockModule }) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
-  const [blockTab, setBlockTab] = useState(0);
+  const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
+  const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
 
   const example = metadata.examples?.[0];
 
   const [text, setText] = useState(
     example ? JSON.stringify(example, undefined, 2) : "",
   );
+
+  const previousBlockVariantsTab = useRef(-1);
+  const propertiesToRemove = useRef<string[]>([]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -54,6 +66,37 @@ export const BlockDataContainer: VoidFunctionComponent<
     }
     prevPackage.current = metadata.packagePath;
   }, [example, metadata.packagePath, text]);
+
+  useEffect(() => {
+    if (metadata.variants) {
+      const blockVariant = metadata.variants[blockVariantsTab];
+
+      try {
+        const parsedText = JSON.parse(text);
+
+        for (const propertyToRemove of propertiesToRemove.current) {
+          delete parsedText[propertyToRemove];
+        }
+
+        const nextText = { ...blockVariant.properties, ...parsedText };
+
+        setText(JSON.stringify(nextText, undefined, 2));
+
+        previousBlockVariantsTab.current = blockVariantsTab;
+      } catch (err) {
+        setAlertSnackBarOpen(true);
+        setBlockVariantsTab(previousBlockVariantsTab.current);
+      }
+    }
+
+    return () => {
+      if (metadata.variants) {
+        const blockVariant = metadata.variants[blockVariantsTab];
+
+        propertiesToRemove.current = Object.keys(blockVariant.properties ?? {});
+      }
+    };
+  }, [blockVariantsTab, metadata.variants]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
@@ -112,7 +155,7 @@ export const BlockDataContainer: VoidFunctionComponent<
               marginLeft: "4px",
               height: "unset",
               boxShadow: theme.shadows[1],
-              width: "48% !important",
+              width: "48%",
             },
           }}
         >
@@ -136,35 +179,22 @@ export const BlockDataContainer: VoidFunctionComponent<
           }}
         >
           <Box sx={{ height: 450, backgroundColor: "white" }}>
-            <Tabs
-              TabIndicatorProps={{
-                style: { display: "none" },
-              }}
-              sx={{
-                "& .MuiTab-root": {
-                  textTransform: "none",
-                  color: ({ palette }) => palette.gray[60],
-                  "&.Mui-selected": {
-                    backgroundColor: theme.palette.gray[10],
-                    color: theme.palette.purple[700],
-                    borderTopLeftRadius: 6,
-                    borderTopRightRadius: 6,
-                  },
-                },
-              }}
-              value={blockTab}
-              onChange={(_event, newValue: number) => setBlockTab(newValue)}
-            >
-              <Tab label={metadata.displayName} />
-            </Tabs>
-            <TabPanel
-              value={blockTab}
-              index={0}
+            <BlockDisplayTabs
+              blockTab={blockVariantsTab}
+              setBlockTab={setBlockVariantsTab}
+              metadata={metadata}
+            />
+
+            <Box
               sx={{
                 overflow: "auto",
                 padding: theme.spacing(4, 4),
                 height: "100%",
                 backgroundColor: "#F7FAFC",
+                borderRadius: {
+                  xs: 3,
+                  md: 0,
+                },
               }}
             >
               <Box
@@ -182,7 +212,7 @@ export const BlockDataContainer: VoidFunctionComponent<
                   </MockBlockDock>
                 )}
               </Box>
-            </TabPanel>
+            </Box>
           </Box>
         </Box>
         <Box
@@ -264,6 +294,20 @@ export const BlockDataContainer: VoidFunctionComponent<
               </Box>
             </Box>
           )}
+
+          <Snackbar
+            open={alertSnackBarOpen}
+            autoHideDuration={4000}
+            anchorOrigin={{
+              horizontal: "right",
+              vertical: "bottom",
+            }}
+            onClose={() => setAlertSnackBarOpen(false)}
+          >
+            <Alert severity="warning">
+              Please fix the errors in the <b>Data Source</b> before proceeding.{" "}
+            </Alert>
+          </Snackbar>
         </Box>
       </Box>
     </>

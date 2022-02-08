@@ -1,5 +1,12 @@
 import { VoidFunctionComponent } from "react";
-import { Tabs, Tab } from "@mui/material";
+import {
+  Tabs,
+  Tab,
+  useMediaQuery,
+  useTheme,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 type BlockDataTabsProps = {
   blockDataTab: number;
@@ -12,7 +19,19 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
   setBlockDataTab,
   modalOpen,
 }) => {
-  return (
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  return isMobile ? (
+    <Select
+      sx={{ width: "100%", mb: 2 }}
+      value={blockDataTab}
+      onChange={(event) => setBlockDataTab(event.target.value as number)}
+    >
+      <MenuItem value={0}>Data Source</MenuItem>
+      <MenuItem value={1}>Block Schema</MenuItem>
+    </Select>
+  ) : (
     <Tabs
       value={blockDataTab}
       onChange={(_event, newValue: number) => setBlockDataTab(newValue)}
