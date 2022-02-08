@@ -3,34 +3,22 @@ import { customColors } from "../palette";
 
 export const MuiPaper: Components["MuiPaper"] = {
   styleOverrides: {
-    root: {
+    root: ({ ownerState }) => ({
       borderRadius: 10,
-    },
-  },
-  variants: [
-    {
-      props: {
-        variant: "teal",
-      },
-      style: {
+      ...((ownerState.variant === "teal" ||
+        ownerState.variant === "purple") && {
         borderWidth: 1,
         borderStyle: "solid",
         borderRadius: "6px",
+      }),
+      ...(ownerState.variant === "teal" && {
         borderColor: "#B0DDE9",
         backgroundColor: customColors.teal[100],
-      },
-    },
-    {
-      props: {
-        variant: "purple",
-      },
-      style: {
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderRadius: "6px",
+      }),
+      ...(ownerState.variant === "purple" && {
         borderColor: customColors.purple[200],
         backgroundColor: customColors.purple[100],
-      },
-    },
-  ],
+      }),
+    }),
+  },
 };
