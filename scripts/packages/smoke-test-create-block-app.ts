@@ -7,7 +7,9 @@ import { promisify } from "util";
 import fs from "fs/promises";
 import os from "os";
 import untildify from "untildify";
+import chalk from "chalk";
 import { logStepStart, logStepEnd } from "../shared/logging";
+
 /**
  * Calling `execa.kill()` does not terminate processes recursively on Ubuntu.
  * Using `killProcessTree` helps avoid hanging processes.
@@ -34,6 +36,8 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
+  console.log(chalk.bold("Smoke-testing create-block-app..."));
+
   const tmpNodeCacheDir = await tmp.dir({ unsafeCleanup: true });
 
   const blockName = process.env.BLOCK_NAME ?? "test-block";
