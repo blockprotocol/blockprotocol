@@ -96,7 +96,6 @@ export const BlockDataContainer: VoidFunctionComponent<
         setText(JSON.stringify(nextText, undefined, 2));
         previousBlockVariantsTab.current = blockVariantsTab;
       } catch (err) {
-        console.error(err);
         setAlertSnackBarOpen(true);
         setBlockVariantsTab(previousBlockVariantsTab.current);
       }
