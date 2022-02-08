@@ -18,13 +18,10 @@ export const MuiTypography: Components["MuiTypography"] = {
     },
     variant: "bpBodyCopy",
   },
-  variants: [
-    {
-      props: {
-        variant: "bpBodyCopy",
-      },
-      style: {
-        "& a": {
+  styleOverrides: {
+    root: ({ ownerState }) => ({
+      "& a": {
+        ...(ownerState.variant === "bpBodyCopy" && {
           fontWeight: 600,
           color: customColors.purple[700],
           borderBottomWidth: 2,
@@ -35,15 +32,8 @@ export const MuiTypography: Components["MuiTypography"] = {
             color: customColors.purple[500],
             borderBottomColor: customColors.purple[500],
           },
-        },
-      },
-    },
-    {
-      props: {
-        variant: "bpSmallCopy",
-      },
-      style: {
-        "& a": {
+        }),
+        ...(ownerState.variant === "bpSmallCopy" && {
           color: "currentColor",
           borderBottomWidth: 2,
           borderBottomColor: "currentColor",
@@ -53,8 +43,8 @@ export const MuiTypography: Components["MuiTypography"] = {
             color: customColors.purple[700],
             borderBottomColor: customColors.purple[700],
           },
-        },
+        }),
       },
-    },
-  ],
+    }),
+  },
 };
