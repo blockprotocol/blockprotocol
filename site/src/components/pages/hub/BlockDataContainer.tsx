@@ -78,7 +78,11 @@ export const BlockDataContainer: VoidFunctionComponent<
           delete parsedText[propertyToRemove];
         }
 
-        const nextText = { ...blockVariant.properties, ...parsedText };
+        const nextText = {
+          ...blockVariant.properties,
+          ...blockVariant.examples?.[0],
+          ...parsedText,
+        };
 
         setText(JSON.stringify(nextText, undefined, 2));
 
@@ -93,7 +97,10 @@ export const BlockDataContainer: VoidFunctionComponent<
       if (metadata.variants) {
         const blockVariant = metadata.variants[blockVariantsTab];
 
-        propertiesToRemove.current = Object.keys(blockVariant.properties ?? {});
+        propertiesToRemove.current = Object.keys({
+          ...blockVariant.properties,
+          ...blockVariant.examples?.[0],
+        });
       }
     };
   }, [blockVariantsTab, metadata.variants]);
