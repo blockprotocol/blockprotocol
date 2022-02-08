@@ -164,14 +164,18 @@ const BlockPage: NextPage<BlockPageProps> = ({
     return catalog.filter(({ name }) => name !== blockMetadata.name);
   }, [catalog, blockMetadata]);
 
-  const repositoryUrl = useMemo(() => {
+  const repositoryUrl: URL | null = useMemo(() => {
+    if (typeof blockMetadata.repository === "string") {
+      return new URL(blockMetadata.repository);
+    }
+
     const { type, url, directory } = blockMetadata.repository ?? {};
 
     if (url) {
       let returnUrl = url;
 
       if (type === "git") {
-        returnUrl = returnUrl.replace(".git", "");
+        returnUrl = returnUrl.replace(new RegExp(/\.git$/), "");
 
         if (directory) {
           returnUrl = `${returnUrl}/tree/main/${directory}`;
@@ -337,7 +341,8 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
                 >
                   <Link href={repositoryUrl.href}>
-                    {repositoryUrl.hostname}/{repositoryUrl.pathname}
+                    {repositoryUrl.hostname}
+                    {repositoryUrl.pathname}
                   </Link>
                 </Typography>
               </Box>
