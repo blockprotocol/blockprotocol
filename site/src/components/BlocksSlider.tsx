@@ -43,7 +43,7 @@ export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
                         drop-shadow(0px 0.5px 1px rgba(39, 50, 86, 0.10))
                       `,
                 }}
-                src={image ?? undefined}
+                src={image ?? "/assets/default-block-img.svg"}
               />
             </Box>
           </Link>

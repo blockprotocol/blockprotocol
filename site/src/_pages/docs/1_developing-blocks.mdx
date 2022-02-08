@@ -8,8 +8,10 @@ Do you want your block to interact with the application using it? Read on.
 
 ## Almost-as-quick start
 
-Blocks are web components. We suggest writing them using React, a ready-made framework for writing web components.
-If you need it, here’s [an intro to React](https://reactjs.org/docs/getting-started.html).
+Blocks are discrete components that render information or provide functionality. You can create them using any web technology or framework.
+In our current examples, we use _React_, a ready-made library for writing components. If you need it, here’s [an intro to React](https://reactjs.org/docs/getting-started.html).
+
+Note: you can define blocks without using React. We'll be expanding this section of the documentation soon with examples covering other approaches.
 
 Blocks can be sent data by the apps using them. Blocks can tell apps what types of data they take.
 We suggest writing blocks in [TypeScript](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html),
@@ -51,14 +53,16 @@ For more details on creating entities and links between them, [read the specific
 Points worth noting:
 
 - embedding applications may provide some `styleVariables` for use - [see styling](https://blockprotocol.org/spec/block-types#styling) - which you should use where appropriate, and if defined, but otherwise provide your own styling.
-- you can include dependencies in your block, but keep in mind bundle size. Common dependencies which you can reasonalby expect an embedding application to provide (e.g. React) can be defined as `externals`/`peerDependencies` - see [the template README](https://github.com/blockprotocol/blockprotocol/tree/main/packages/block-template).
+- you can include dependencies in your block, but keep in mind bundle size. Common dependencies which you can reasonably expect an embedding application to provide (e.g. React) can be defined as `externals`/`peerDependencies` - see [the template README](https://github.com/blockprotocol/blockprotocol/tree/main/packages/block-template).
 
 ### Build
 
 Once you’ve finished writing your block, run `yarn build`.
 
-This will produce a compiled version of your code in the `dist` folder, along with metadata files describing your block,
-and the data it accepts (its schema).
+This will produce a compiled version of your code in the `dist` folder, along with metadata files describing your block (`block-metadata.json`),
+and the data it accepts (`block-schema.json`).
+
+It is worth updating the `blockprotocol` object in `package.json` to include your own `icon`, `image`, and `examples` for your block. These will automatically be included in the `block-metadata.json` produced after running `yarn build`.
 
 You now have a block package that you can provide to apps to use, by [publishing it on the Block Hub](#publish).
 
@@ -78,4 +82,4 @@ You can write your own block schema manually, giving the type of props your App 
 
 #### I don’t want to use React
 
-We will be releasing examples of how to write blocks using different frontend libraries in the near future.
+We will be releasing examples of how to write blocks using different web technologies and frontend libraries in the near future.

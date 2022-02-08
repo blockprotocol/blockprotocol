@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   Icon,
 } from "@mui/material";
-import { SyncIcon } from "../../SvgIcon/SyncIcon";
+import { SyncIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
 export const WhyBlockProtocol2Section = () => {
