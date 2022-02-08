@@ -88,7 +88,6 @@ export const BlockDataContainer: VoidFunctionComponent<
         };
 
         setText(JSON.stringify(nextText, undefined, 2));
-
         previousBlockVariantsTab.current = blockVariantsTab;
       } catch (err) {
         setAlertSnackBarOpen(true);
@@ -97,10 +96,7 @@ export const BlockDataContainer: VoidFunctionComponent<
     }
 
     return () => {
-      if (
-        metadata.variants &&
-        previousBlockVariantsTab.current !== blockVariantsTab
-      ) {
+      if (metadata.variants) {
         const blockVariant = metadata.variants[blockVariantsTab];
 
         propertiesToRemove.current = Object.keys({
