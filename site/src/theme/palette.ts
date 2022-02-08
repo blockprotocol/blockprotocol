@@ -54,7 +54,7 @@ export const customColors = {
   grey: undefined,
   black: "#0E1114",
   white: "#FFFFFF",
-};
+} as const;
 
 export const palette: ThemeOptions["palette"] = {
   ...customColors,
