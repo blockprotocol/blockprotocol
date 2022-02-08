@@ -2,7 +2,7 @@ import { Components } from "@mui/material";
 import { customColors } from "../palette";
 import { defaultTheme } from "../util";
 
-export const MuiTypography: Components["MuiTypography"] = {
+export const MuiTypographyThemeOptions: Components["MuiTypography"] = {
   defaultProps: {
     variantMapping: {
       bpTitle: "h1",

@@ -1,6 +1,6 @@
 import { Components } from "@mui/material";
 
-export const MuiIcon: Components["MuiIcon"] = {
+export const MuiIconThemeOptions: Components["MuiIcon"] = {
   defaultProps: {
     baseClassName: "fas",
   },

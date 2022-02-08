@@ -1,7 +1,7 @@
 import { Components } from "@mui/material";
 import { customColors } from "../palette";
 
-export const MuiInputBase: Components["MuiInputBase"] = {
+export const MuiInputBaseThemeOptions: Components["MuiInputBase"] = {
   styleOverrides: {
     adornedEnd: {
       "&.Mui-error": {

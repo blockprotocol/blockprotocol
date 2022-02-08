@@ -2,7 +2,7 @@ import { Components } from "@mui/material";
 import { customColors } from "../palette";
 import { defaultTheme } from "../util";
 
-export const MuiListItemButton: Components["MuiListItemButton"] = {
+export const MuiListItemButtonThemeOptions: Components["MuiListItemButton"] = {
   defaultProps: {
     disableRipple: true,
   },
@@ -25,24 +25,6 @@ export const MuiListItemButton: Components["MuiListItemButton"] = {
           fontWeight: 600,
         },
       },
-    },
-  },
-};
-
-export const MuiListItemIcon: Components["MuiListItemIcon"] = {
-  styleOverrides: {
-    root: {
-      minWidth: defaultTheme.spacing(4),
-      color: customColors.gray[70],
-    },
-  },
-};
-
-export const MuiListItemText: Components["MuiListItemText"] = {
-  styleOverrides: {
-    primary: {
-      fontWeight: 500,
-      color: customColors.gray[70],
     },
   },
 };

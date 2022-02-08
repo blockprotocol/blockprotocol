@@ -5,7 +5,7 @@ import { defaultTheme } from "../util";
 const buttonFocusBorderOffset = 6;
 const buttonFocusBorderWidth = 4;
 
-export const MuiButton: Components["MuiButton"] = {
+export const MuiButtonThemeOptions: Components["MuiButton"] = {
   defaultProps: {
     variant: "primary",
     color: "purple",

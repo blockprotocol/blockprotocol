@@ -2,7 +2,7 @@ import { Components } from "@mui/material";
 import { customColors } from "../palette";
 import { defaultTheme } from "../util";
 
-export const MuiIconButton: Components["MuiIconButton"] = {
+export const MuiIconButtonThemeOptions: Components["MuiIconButton"] = {
   defaultProps: {
     disableFocusRipple: true,
     disableRipple: true,

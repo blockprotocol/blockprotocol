@@ -102,7 +102,7 @@ const rootTypographyStyles = `
   }
 `;
 
-export const MuiCssBaseline: Components["MuiCssBaseline"] = {
+export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
   styleOverrides: `
           @font-face {
             font-family: 'Inter';

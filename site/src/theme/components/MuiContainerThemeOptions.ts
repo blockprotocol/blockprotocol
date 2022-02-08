@@ -1,6 +1,6 @@
 import { Components } from "@mui/material";
 
-export const MuiContainer: Components["MuiContainer"] = {
+export const MuiContainerThemeOptions: Components["MuiContainer"] = {
   styleOverrides: {
     root: {
       "@media (min-width: 1200px)": {

@@ -2,19 +2,7 @@ import { Components } from "@mui/material";
 import { customColors } from "../palette";
 import { defaultTheme } from "../util";
 
-export const MuiTabs: Components["MuiTabs"] = {
-  defaultProps: {
-    disableRipple: true,
-    disableTouchRipple: true,
-  },
-  styleOverrides: {
-    indicator: {
-      height: 5,
-    },
-  },
-};
-
-export const MuiTab: Components["MuiTab"] = {
+export const MuiTabThemeOptions: Components["MuiTab"] = {
   defaultProps: {
     disableFocusRipple: true,
     disableRipple: true,

@@ -1,7 +1,7 @@
 import { Components } from "@mui/material";
 import { customColors } from "../palette";
 
-export const MuiLink: Components["MuiLink"] = {
+export const MuiLinkThemeOptions: Components["MuiLink"] = {
   styleOverrides: {
     root: {
       textDecoration: "none",

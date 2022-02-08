@@ -1,9 +1,13 @@
 import { Components } from "@mui/material";
 
-export const MuiCheckbox: Components["MuiCheckbox"] = {
+export const MuiTabsThemeOptions: Components["MuiTabs"] = {
   defaultProps: {
     disableRipple: true,
-    disableFocusRipple: true,
     disableTouchRipple: true,
+  },
+  styleOverrides: {
+    indicator: {
+      height: 5,
+    },
   },
 };

@@ -1,7 +1,7 @@
 import { Components } from "@mui/material";
 import { customColors } from "../palette";
 
-export const MuiBreadcrumbs: Components["MuiBreadcrumbs"] = {
+export const MuiBreadcrumbsThemeOptions: Components["MuiBreadcrumbs"] = {
   styleOverrides: {
     li: {
       whiteSpace: "nowrap",

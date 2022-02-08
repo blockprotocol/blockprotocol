@@ -1,7 +1,7 @@
 import { Components } from "@mui/material";
 import { customColors } from "../palette";
 
-export const MuiPaper: Components["MuiPaper"] = {
+export const MuiPaperThemeOptions: Components["MuiPaper"] = {
   styleOverrides: {
     root: ({ ownerState }) => ({
       borderRadius: 10,

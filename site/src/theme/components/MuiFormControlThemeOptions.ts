@@ -1,6 +1,6 @@
 import { Components } from "@mui/material";
 
-export const MuiFormControl: Components["MuiFormControl"] = {
+export const MuiFormControlThemeOptions: Components["MuiFormControl"] = {
   styleOverrides: {
     root: {
       display: "block",
