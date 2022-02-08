@@ -9,25 +9,23 @@ import {
 import { BlockMetadata } from "blockprotocol";
 import { VoidFunctionComponent } from "react";
 
-type BlockDisplayTabsProps = {
-  blockTab: number;
+type BlockVariantsTabsProps = {
+  blockVariantsTab: number;
   metadata: BlockMetadata;
-  setBlockTab: (newValue: number) => void;
+  setBlockVariantsTab: (newValue: number) => void;
 };
 
-export const BlockDisplayTabs: VoidFunctionComponent<BlockDisplayTabsProps> = ({
-  blockTab,
-  metadata,
-  setBlockTab,
-}) => {
+export const BlockVariantsTabs: VoidFunctionComponent<
+  BlockVariantsTabsProps
+> = ({ blockVariantsTab, metadata, setBlockVariantsTab }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return isMobile ? (
     <Select
       sx={{ width: "100%", mb: 2 }}
-      value={blockTab}
-      onChange={(event) => setBlockTab(event.target.value as number)}
+      value={blockVariantsTab}
+      onChange={(event) => setBlockVariantsTab(event.target.value as number)}
     >
       {metadata.variants ? (
         metadata.variants.map((variant, variantIndex) => (
@@ -67,8 +65,8 @@ export const BlockDisplayTabs: VoidFunctionComponent<BlockDisplayTabsProps> = ({
           },
         },
       }}
-      value={blockTab}
-      onChange={(_event, newValue: number) => setBlockTab(newValue)}
+      value={blockVariantsTab}
+      onChange={(_event, newValue: number) => setBlockVariantsTab(newValue)}
     >
       {metadata.variants ? (
         metadata.variants.map((variant) => (

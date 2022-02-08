@@ -23,7 +23,7 @@ import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
 import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
-import { BlockDisplayTabs } from "./BlockDisplayTabs";
+import { BlockVariantsTabs } from "./BlockVariantsTabs";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
@@ -192,9 +192,9 @@ export const BlockDataContainer: VoidFunctionComponent<
           }}
         >
           <Box sx={{ height: 450, backgroundColor: "white" }}>
-            <BlockDisplayTabs
-              blockTab={blockVariantsTab}
-              setBlockTab={setBlockVariantsTab}
+            <BlockVariantsTabs
+              blockVariantsTab={blockVariantsTab}
+              setBlockVariantsTab={setBlockVariantsTab}
               metadata={metadata}
             />
 
