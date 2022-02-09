@@ -11,8 +11,6 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, VoidFunctionComponent } from "react";
-import hostedGitInfo from "hosted-git-info";
-import { BlockMetadataRepository } from "blockprotocol";
 import { formatDistance } from "date-fns";
 
 import { BlocksSlider } from "../../components/BlocksSlider";
@@ -62,7 +60,6 @@ type BlockPageProps = {
   schema: BlockSchema;
   blockStringifiedSource: string;
   catalog: BlockMetadata[];
-  repositoryUrl: string | null;
 };
 
 type BlockPageQueryParams = {
@@ -105,33 +102,6 @@ const parseQueryParams = (params: BlockPageQueryParams) => {
   return { shortname, blockSlug };
 };
 
-// this only runs on the server-side because hosted-git-info uses some nodejs dependencies
-const getRepositoryUrl = (
-  repository: BlockMetadataRepository | undefined,
-): string | null => {
-  if (typeof repository === "string") {
-    const repositoryUrl = hostedGitInfo.fromUrl(repository)?.browse("");
-
-    if (repositoryUrl) {
-      return repositoryUrl;
-    }
-
-    return null;
-  }
-
-  const { url, directory } = repository ?? {};
-
-  if (url) {
-    const repositoryUrl = hostedGitInfo.fromUrl(url)?.browse(directory ?? "");
-
-    if (repositoryUrl) {
-      return repositoryUrl;
-    }
-  }
-
-  return null;
-};
-
 export const getStaticProps: GetStaticProps<
   BlockPageProps,
   BlockPageQueryParams
@@ -157,15 +127,12 @@ export const getStaticProps: GetStaticProps<
   const { schema, source: blockStringifiedSource } =
     readBlockDataFromDisk(blockMetadata);
 
-  const repositoryUrl = getRepositoryUrl(blockMetadata.repository);
-
   return {
     props: {
       blockMetadata,
       schema,
       blockStringifiedSource,
       catalog,
-      repositoryUrl,
     },
     revalidate: 1800,
   };
@@ -176,12 +143,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
   schema,
   blockStringifiedSource,
   catalog,
-  repositoryUrl,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
-  const blockRepositoryUrl = repositoryUrl ? new URL(repositoryUrl) : null;
+  const blockRepositoryUrl = blockMetadata.repository
+    ? new URL(blockMetadata.repository)
+    : null;
 
   const blockModule = useMemo(
     () =>
