@@ -33,6 +33,8 @@
     ]
   },
   "devDependencies": {
+    "@babel/eslint-parser": "7.17.0",
+    "@babel/preset-react": "^7.16.7",
     "@swc/core": "1.2.138",
     "@swc/helpers": "0.3.2",
     "@types/wait-on": "5.3.1",

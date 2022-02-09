@@ -162,7 +162,13 @@ module.exports = {
   overrides: [
     {
       files: ["**/*.js"],
-      parser: "espree", // default parser (no typescript rules)
+      parser: "@babel/eslint-parser", // disables typescript rules
+      parserOptions: {
+        requireConfigFile: false,
+        babelOptions: {
+          presets: ["@babel/preset-react"], // allows jsx
+        },
+      },
     },
     {
       // top-level config files
