@@ -60,8 +60,6 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
       let repository = metadata.repository ?? null;
 
-      console.log({ blockConfig });
-
       if (!repository && blockConfig) {
         repository = `${blockConfig.repository}#${blockConfig.branch}`;
       }

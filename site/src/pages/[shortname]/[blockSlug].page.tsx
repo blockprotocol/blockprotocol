@@ -124,13 +124,6 @@ const getRepositoryUrl = (
   if (url) {
     const repositoryUrl = hostedGitInfo.fromUrl(url)?.browse(directory ?? "");
 
-    console.log(
-      url,
-      hostedGitInfo
-        .fromUrl("git@github.com:npm/hosted-git-info.git")
-        ?.browse(""),
-    );
-
     if (repositoryUrl) {
       return repositoryUrl;
     }
