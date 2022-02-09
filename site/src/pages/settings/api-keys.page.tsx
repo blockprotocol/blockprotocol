@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "../../components/Link";
 import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiModal";
 
-import { WarningIcon } from "../../components/SvgIcon/WarningIcon";
+import { WarningIcon } from "../../components/icons";
 import { Table, TableRows } from "../../components/Table";
 import { UserFacingApiKeyProperties } from "../../lib/model/apiKey.model";
 import { apiClient } from "../../lib/apiClient";

@@ -4,7 +4,7 @@ import { formatDistance } from "date-fns";
 
 import { Link } from "./Link";
 import { Spacer } from "./Spacer";
-import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
+import { BlockProtocolLogoIcon } from "./icons";
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 
 type BlockCardProps = {

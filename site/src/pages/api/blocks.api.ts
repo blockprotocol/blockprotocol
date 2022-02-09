@@ -9,8 +9,11 @@ import {
 import { createApiKeyRequiredHandler } from "../../lib/handler/apiKeyRequiredHandler";
 
 export type ApiSearchRequestQuery = {
-  q?: string;
+  author?: string;
   json?: string;
+  license?: string;
+  name?: string;
+  q?: string;
 };
 
 export type ApiSearchResponse = {
@@ -18,12 +21,41 @@ export type ApiSearchResponse = {
 };
 
 export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
+  .use(queryValidator("author").isString().toLowerCase())
+  .use(queryValidator("license").isString().toLowerCase())
+  .use(queryValidator("name").isString().toLowerCase())
   .use(queryValidator("q").isString().toLowerCase())
   .use(queryValidator("json").isJSON())
   .get(async (req, res) => {
-    const { q: query, json: jsonText } = req.query as ApiSearchRequestQuery;
+    const {
+      author: authorQuery,
+      license: licenseQuery,
+      name: nameQuery,
+      q: query,
+      json: jsonText,
+    } = req.query as ApiSearchRequestQuery;
 
     let data: BlockMetadata[] = blocksData;
+
+    if (authorQuery) {
+      data = data.filter(({ author }) =>
+        author?.toLowerCase().includes(authorQuery),
+      );
+    }
+
+    if (licenseQuery) {
+      data = data.filter(
+        ({ license }) => license?.toLowerCase() === licenseQuery,
+      );
+    }
+
+    if (nameQuery) {
+      data = data.filter(({ displayName, name }) =>
+        [displayName, name].some((item) =>
+          item?.toLowerCase().includes(nameQuery),
+        ),
+      );
+    }
 
     if (query) {
       data = data.filter(
