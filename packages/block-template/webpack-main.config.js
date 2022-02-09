@@ -20,7 +20,9 @@ module.exports = {
       openAnalyzer: false,
       reportFilename: "webpack-bundle-analyzer-report.html",
     }),
-    new WebpackAssetsManifest(),
+    new WebpackAssetsManifest({
+      output: "manifest.json",
+    }),
     new StatsPlugin(),
     new CopyPlugin({ patterns: [{ from: "./public/", to: "./public/" }] }),
   ],
