@@ -57,32 +57,32 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
           router.asPath?.includes("/docs")) ||
         (previousRoute?.includes("/spec") && router.asPath?.includes("/spec"));
 
-      // headings takes a while to load in, which can set this off
       if (!scrolledOnce.current) {
         scrolledOnce.current = true;
       }
 
-      if (headingWithCurrentAnchor && shouldScrollToAnchor) {
-        if (
-          !currentHeading.current ||
-          headingWithCurrentAnchor.element !== currentHeading.current.element
-        ) {
-          currentHeading.current = headingWithCurrentAnchor;
-          setDetectHeadingFromScroll(false);
+      if (
+        headingWithCurrentAnchor &&
+        shouldScrollToAnchor &&
+        (!currentHeading.current ||
+          headingWithCurrentAnchor.element !==
+            currentHeading.current.element) &&
+        document.body.contains(headingWithCurrentAnchor.element)
+      ) {
+        currentHeading.current = headingWithCurrentAnchor;
+        setDetectHeadingFromScroll(false);
 
-          window.scrollTo({
-            top: headingWithCurrentAnchor.element.offsetTop - 100,
-            behavior: "smooth",
-          });
+        window.scrollTo({
+          top: headingWithCurrentAnchor.element.offsetTop - 100,
+        });
 
-          if (detectHeadingFromScrollTimer) {
-            clearTimeout(detectHeadingFromScrollTimer);
-          }
-          detectHeadingFromScrollTimer = setTimeout(
-            () => setDetectHeadingFromScroll(true),
-            1500,
-          );
+        if (detectHeadingFromScrollTimer) {
+          clearTimeout(detectHeadingFromScrollTimer);
         }
+        detectHeadingFromScrollTimer = setTimeout(
+          () => setDetectHeadingFromScroll(true),
+          1500,
+        );
       }
     }
   }, [headings, router.asPath]);
