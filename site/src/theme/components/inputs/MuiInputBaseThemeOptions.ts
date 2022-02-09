@@ -1,14 +1,13 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
+import { Components, Theme } from "@mui/material";
 
-export const MuiInputBaseThemeOptions: Components["MuiInputBase"] = {
+export const MuiInputBaseThemeOptions: Components<Theme>["MuiInputBase"] = {
   styleOverrides: {
-    adornedEnd: {
+    adornedEnd: ({ theme }) => ({
       "&.Mui-error": {
         svg: {
-          color: customColors.red[600],
+          color: theme.palette.red[600],
         },
       },
-    },
+    }),
   },
 };

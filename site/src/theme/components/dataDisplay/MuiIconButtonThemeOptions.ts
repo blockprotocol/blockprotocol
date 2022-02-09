@@ -1,23 +1,21 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
-import { defaultTheme } from "../../util";
+import { Components, Theme } from "@mui/material";
 
-export const MuiIconButtonThemeOptions: Components["MuiIconButton"] = {
+export const MuiIconButtonThemeOptions: Components<Theme>["MuiIconButton"] = {
   defaultProps: {
     disableFocusRipple: true,
     disableRipple: true,
     disableTouchRipple: true,
   },
   styleOverrides: {
-    root: {
+    root: ({ theme }) => ({
       "&:hover": {
         svg: {
-          color: customColors.purple[600],
+          color: theme.palette.purple[600],
         },
       },
       "&:active": {
         svg: {
-          color: customColors.purple[700],
+          color: theme.palette.purple[700],
         },
       },
       "&:focus": {
@@ -27,12 +25,12 @@ export const MuiIconButtonThemeOptions: Components["MuiIconButton"] = {
       "&:focus-visible": {
         borderRadius: 0,
         border: "none !important",
-        outline: `1px solid ${customColors.purple[600]}`,
+        outline: `1px solid ${theme.palette.purple[600]}`,
       },
       svg: {
-        color: customColors.gray[60],
-        transition: defaultTheme.transitions.create("color"),
+        color: theme.palette.gray[60],
+        transition: theme.transitions.create("color"),
       },
-    },
+    }),
   },
 };

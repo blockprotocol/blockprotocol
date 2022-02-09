@@ -1,11 +1,9 @@
-import { Components, CSSObject } from "@mui/material";
-import { customColors } from "../../palette";
-import { defaultTheme } from "../../util";
+import { Components, CSSObject, Theme } from "@mui/material";
 
 const buttonFocusBorderOffset = 6;
 const buttonFocusBorderWidth = 4;
 
-export const MuiButtonThemeOptions: Components["MuiButton"] = {
+export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
   defaultProps: {
     variant: "primary",
     color: "purple",
@@ -14,7 +12,7 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
     disableTouchRipple: true,
   },
   styleOverrides: {
-    root: ({ ownerState }) => {
+    root: ({ ownerState, theme }) => {
       const { variant, color, size } = ownerState;
 
       const baseStyles: CSSObject = {
@@ -52,28 +50,28 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
 
       if (variant === "primary") {
         Object.assign(baseStyles, {
-          color: customColors.gray[20],
+          color: theme.palette.gray[20],
           borderRadius: 34,
           ...(size === "small" && {
-            padding: defaultTheme.spacing("8px", "20px"),
+            padding: theme.spacing("8px", "20px"),
           }),
           ...(size === "medium" && {
-            padding: defaultTheme.spacing("12px", "28px"),
+            padding: theme.spacing("12px", "28px"),
             minHeight: 51,
           }),
           ...(color &&
             {
               purple: {
                 zIndex: 0,
-                background: customColors.purple[600],
+                background: theme.palette.purple[600],
               },
-              teal: { backgroundColor: customColors.teal[500] },
+              teal: { backgroundColor: theme.palette.teal[500] },
               gray: {
-                color: customColors.gray[80],
-                backgroundColor: customColors.gray[50],
+                color: theme.palette.gray[80],
+                backgroundColor: theme.palette.gray[50],
               },
-              warning: { backgroundColor: customColors.orange[500] },
-              danger: { backgroundColor: customColors.red[600] },
+              warning: { backgroundColor: theme.palette.orange[500] },
+              danger: { backgroundColor: theme.palette.red[600] },
               inherit: {},
             }[color]),
         });
@@ -81,69 +79,69 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
           ...(color === "purple" && {
             zIndex: -1,
             opacity: 0,
-            transition: defaultTheme.transitions.create("opacity"),
-            background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${customColors.teal["400"]} 0%, ${customColors.purple[600]} 100%)`,
+            transition: theme.transitions.create("opacity"),
+            background: `radial-gradient(57.38% 212.75% at 50.1% 134.31%, ${theme.palette.teal["400"]} 0%, ${theme.palette.purple[600]} 100%)`,
           }),
         });
         Object.assign(hoverStyles, {
           ...(color &&
             {
               purple: {
-                background: customColors.purple[600],
+                background: theme.palette.purple[600],
                 ":before": {
                   opacity: 1,
                 },
               },
-              teal: { backgroundColor: customColors.teal[600] },
-              gray: { backgroundColor: customColors.gray[30] },
-              warning: { backgroundColor: customColors.orange[600] },
-              danger: { backgroundColor: customColors.red[700] },
+              teal: { backgroundColor: theme.palette.teal[600] },
+              gray: { backgroundColor: theme.palette.gray[30] },
+              warning: { backgroundColor: theme.palette.orange[600] },
+              danger: { backgroundColor: theme.palette.red[700] },
               inherit: {},
             }[color]),
         });
         Object.assign(disabledStyles, {
           ...(color === "purple" && {
-            background: customColors.purple[200],
-            color: customColors.purple[100],
+            background: theme.palette.purple[200],
+            color: theme.palette.purple[100],
           }),
         });
         Object.assign(focusVisibleAfterStyles, {
           borderRadius: 34 + buttonFocusBorderOffset,
           ...(color &&
             {
-              purple: { borderColor: customColors.purple[600] },
-              teal: { borderColor: customColors.teal[500] },
-              gray: { borderColor: customColors.gray[50] },
-              warning: { borderColor: customColors.orange[500] },
-              danger: { borderColor: customColors.red[700] },
+              purple: { borderColor: theme.palette.purple[600] },
+              teal: { borderColor: theme.palette.teal[500] },
+              gray: { borderColor: theme.palette.gray[50] },
+              warning: { borderColor: theme.palette.orange[500] },
+              danger: { borderColor: theme.palette.red[700] },
               inherit: {},
             }[color]),
         });
       } else if (variant === "secondary") {
         Object.assign(baseStyles, {
-          background: customColors.gray[10],
+          background: theme.palette.gray[10],
           borderRadius: 34,
           ...(size === "small" && {
-            paddingTop: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
-            paddingBottom: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
-            paddingLeft: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
-            paddingRight: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
+            paddingTop: `calc(${theme.spacing(0.5)} - 1px)`,
+            paddingBottom: `calc(${theme.spacing(0.5)} - 1px)`,
+            paddingLeft: `calc(${theme.spacing(1.5)} - 1px)`,
+            paddingRight: `calc(${theme.spacing(1.5)} - 1px)`,
           }),
           ...(size === "medium" && {
-            padding: defaultTheme.spacing("8px", "24px"),
+            padding: theme.spacing("8px", "24px"),
             minHeight: 51,
           }),
           ...(color &&
             {
-              purple: { color: customColors.purple[700] },
-              teal: { color: customColors.teal[600] },
-              gray: { color: customColors.gray[70] },
+              purple: { color: theme.palette.purple[700] },
+              teal: { color: theme.palette.teal[600] },
+              gray: { color: theme.palette.gray[70] },
               warning: {
-                color: customColors.orange[600],
+                color: theme.palette.orange[600],
                 borderColor: "#FEB173",
-                background: customColors.orange[100],
+                background: theme.palette.orange[100],
               },
-              danger: { color: customColors.red[600] },
+              danger: { color: theme.palette.red[600] },
               inherit: {},
             }[color]),
         });
@@ -154,24 +152,24 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
           ...(color &&
             {
               purple: {
-                background: customColors.purple[200],
-                color: customColors.purple[800],
+                background: theme.palette.purple[200],
+                color: theme.palette.purple[800],
               },
               teal: {
-                background: customColors.teal[200],
-                color: customColors.teal[700],
+                background: theme.palette.teal[200],
+                color: theme.palette.teal[700],
               },
               gray: {
-                background: customColors.gray[30],
-                color: customColors.gray[70],
+                background: theme.palette.gray[30],
+                color: theme.palette.gray[70],
               },
               warning: {
-                color: customColors.orange[700],
-                background: customColors.orange[200],
+                color: theme.palette.orange[700],
+                background: theme.palette.orange[200],
               },
               danger: {
-                background: customColors.red[200],
-                color: customColors.red[700],
+                background: theme.palette.red[200],
+                color: theme.palette.red[700],
               },
               inherit: {},
             }[color]),
@@ -181,9 +179,9 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
           ...(color &&
             {
               purple: {},
-              teal: { borderColor: customColors.teal[600] },
-              gray: { borderColor: customColors.gray[70] },
-              warning: { borderColor: customColors.purple[600] },
+              teal: { borderColor: theme.palette.teal[600] },
+              gray: { borderColor: theme.palette.gray[70] },
+              warning: { borderColor: theme.palette.purple[600] },
               danger: {},
               inherit: {},
             }[color]),
@@ -191,26 +189,26 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
       } else if (variant === "tertiary") {
         Object.assign(baseStyles, {
           borderRadius: 34,
-          color: customColors.gray[70],
-          background: defaultTheme.palette.common.white,
+          color: theme.palette.gray[70],
+          background: theme.palette.common.white,
           "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
-            color: customColors.gray[40],
+            color: theme.palette.gray[40],
           },
           ...(size === "small" && {
-            paddingTop: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
-            paddingBottom: `calc(${defaultTheme.spacing(0.5)} - 1px)`,
-            paddingLeft: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
-            paddingRight: `calc(${defaultTheme.spacing(1.5)} - 1px)`,
+            paddingTop: `calc(${theme.spacing(0.5)} - 1px)`,
+            paddingBottom: `calc(${theme.spacing(0.5)} - 1px)`,
+            paddingLeft: `calc(${theme.spacing(1.5)} - 1px)`,
+            paddingRight: `calc(${theme.spacing(1.5)} - 1px)`,
           }),
           ...(size === "medium" && {
-            paddingTop: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
-            paddingBottom: `calc(${defaultTheme.spacing(1.25)} - 1px)`,
-            paddingLeft: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
-            paddingRight: `calc(${defaultTheme.spacing(2.5)} - 1px)`,
+            paddingTop: `calc(${theme.spacing(1.25)} - 1px)`,
+            paddingBottom: `calc(${theme.spacing(1.25)} - 1px)`,
+            paddingLeft: `calc(${theme.spacing(2.5)} - 1px)`,
+            paddingRight: `calc(${theme.spacing(2.5)} - 1px)`,
           }),
           ...(color === "purple" && {
-            color: customColors.purple[700],
-            borderColor: customColors.purple[700],
+            color: theme.palette.purple[700],
+            borderColor: theme.palette.purple[700],
           }),
         });
         Object.assign(beforeStyles, {
@@ -220,21 +218,21 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
           ...(color &&
             {
               purple: {
-                color: customColors.purple[700],
-                borderColor: customColors.purple[500],
-                background: customColors.purple[100],
+                color: theme.palette.purple[700],
+                borderColor: theme.palette.purple[500],
+                background: theme.palette.purple[100],
                 "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
-                  color: customColors.purple[300],
+                  color: theme.palette.purple[300],
                 },
               },
               teal: {},
               gray: {},
               warning: {
-                color: customColors.orange[600],
+                color: theme.palette.orange[600],
                 borderColor: "#FEB173",
-                background: customColors.orange[100],
+                background: theme.palette.orange[100],
                 "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
-                  color: customColors.orange[300],
+                  color: theme.palette.orange[300],
                 },
               },
               danger: {},
@@ -245,11 +243,11 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
           ...(color &&
             {
               purple: {
-                borderColor: customColors.purple[700],
-                background: customColors.purple[700],
-                color: customColors.purple[100],
+                borderColor: theme.palette.purple[700],
+                background: theme.palette.purple[700],
+                color: theme.palette.purple[100],
                 "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
-                  color: customColors.purple[100],
+                  color: theme.palette.purple[100],
                 },
               },
               teal: {},
@@ -266,10 +264,10 @@ export const MuiButtonThemeOptions: Components["MuiButton"] = {
         Object.assign(baseStyles, {
           minWidth: "unset",
           padding: "unset",
-          color: customColors.gray[50],
+          color: theme.palette.gray[50],
         });
         Object.assign(hoverStyles, {
-          color: customColors.purple[600],
+          color: theme.palette.purple[600],
           backgroundColor: "unset",
         });
         Object.assign(focusVisibleAfterStyles, {

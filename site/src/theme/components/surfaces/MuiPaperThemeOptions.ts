@@ -1,9 +1,8 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
+import { Components, Theme } from "@mui/material";
 
-export const MuiPaperThemeOptions: Components["MuiPaper"] = {
+export const MuiPaperThemeOptions: Components<Theme>["MuiPaper"] = {
   styleOverrides: {
-    root: ({ ownerState }) => ({
+    root: ({ ownerState, theme }) => ({
       borderRadius: 10,
       ...((ownerState.variant === "teal" ||
         ownerState.variant === "purple") && {
@@ -13,11 +12,11 @@ export const MuiPaperThemeOptions: Components["MuiPaper"] = {
       }),
       ...(ownerState.variant === "teal" && {
         borderColor: "#B0DDE9",
-        backgroundColor: customColors.teal[100],
+        backgroundColor: theme.palette.teal[100],
       }),
       ...(ownerState.variant === "purple" && {
-        borderColor: customColors.purple[200],
-        backgroundColor: customColors.purple[100],
+        borderColor: theme.palette.purple[200],
+        backgroundColor: theme.palette.purple[100],
       }),
     }),
   },

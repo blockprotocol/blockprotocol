@@ -1,15 +1,14 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
+import { Components, Theme } from "@mui/material";
 
-export const MuiLinkThemeOptions: Components["MuiLink"] = {
+export const MuiLinkThemeOptions: Components<Theme>["MuiLink"] = {
   styleOverrides: {
-    root: {
+    root: ({ theme }) => ({
       textDecoration: "none",
       position: "relative",
       ":focus-visible": {
         border: "none",
-        outline: `1px solid ${customColors.purple[700]}`,
+        outline: `1px solid ${theme.palette.purple[700]}`,
       },
-    },
+    }),
   },
 };

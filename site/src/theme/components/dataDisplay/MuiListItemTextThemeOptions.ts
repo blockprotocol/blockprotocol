@@ -1,11 +1,11 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
+import { Components, Theme } from "@mui/material";
 
-export const MuiListItemTextThemeOptions: Components["MuiListItemText"] = {
-  styleOverrides: {
-    primary: {
-      fontWeight: 500,
-      color: customColors.gray[70],
+export const MuiListItemTextThemeOptions: Components<Theme>["MuiListItemText"] =
+  {
+    styleOverrides: {
+      primary: ({ theme }) => ({
+        fontWeight: 500,
+        color: theme.palette.gray[70],
+      }),
     },
-  },
-};
+  };

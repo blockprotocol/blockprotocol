@@ -1,6 +1,7 @@
-import { ThemeOptions } from "@mui/material";
+import { ThemeOptions, createTheme } from "@mui/material";
 import { customColors } from "./palette";
-import { defaultTheme } from "./util";
+
+const defaultTheme = createTheme();
 
 const fallbackFonts = [`"Helvetica"`, `"Arial"`, "sans-serif"];
 

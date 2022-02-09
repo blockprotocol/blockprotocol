@@ -1,8 +1,6 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
-import { defaultTheme } from "../../util";
+import { Components, Theme } from "@mui/material";
 
-export const MuiTypographyThemeOptions: Components["MuiTypography"] = {
+export const MuiTypographyThemeOptions: Components<Theme>["MuiTypography"] = {
   defaultProps: {
     variantMapping: {
       bpTitle: "h1",
@@ -19,18 +17,18 @@ export const MuiTypographyThemeOptions: Components["MuiTypography"] = {
     variant: "bpBodyCopy",
   },
   styleOverrides: {
-    root: ({ ownerState }) => ({
+    root: ({ ownerState, theme }) => ({
       "& a": {
         ...(ownerState.variant === "bpBodyCopy" && {
           fontWeight: 600,
-          color: customColors.purple[700],
+          color: theme.palette.purple[700],
           borderBottomWidth: 2,
-          borderBottomColor: customColors.purple[700],
+          borderBottomColor: theme.palette.purple[700],
           borderBottomStyle: "solid",
-          transition: defaultTheme.transitions.create("color"),
+          transition: theme.transitions.create("color"),
           ":hover": {
-            color: customColors.purple[500],
-            borderBottomColor: customColors.purple[500],
+            color: theme.palette.purple[500],
+            borderBottomColor: theme.palette.purple[500],
           },
         }),
         ...(ownerState.variant === "bpSmallCopy" && {
@@ -38,10 +36,10 @@ export const MuiTypographyThemeOptions: Components["MuiTypography"] = {
           borderBottomWidth: 2,
           borderBottomColor: "currentColor",
           borderBottomStyle: "solid",
-          transition: defaultTheme.transitions.create("color"),
+          transition: theme.transitions.create("color"),
           ":hover": {
-            color: customColors.purple[700],
-            borderBottomColor: customColors.purple[700],
+            color: theme.palette.purple[700],
+            borderBottomColor: theme.palette.purple[700],
           },
         }),
       },

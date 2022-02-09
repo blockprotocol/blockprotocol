@@ -1,43 +1,42 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
-import { defaultTheme } from "../../util";
+import { Components, Theme } from "@mui/material";
 
-export const MuiOutlinedInputThemeOptions: Components["MuiOutlinedInput"] = {
-  defaultProps: {
-    notched: false,
-  },
-  styleOverrides: {
-    root: {
-      borderRadius: "6px",
-      "&:hover": {
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: customColors.gray[30],
-        },
-      },
-      "&.Mui-focused": {
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: customColors.purple[600],
-        },
-      },
-      "&.Mui-error": {
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: customColors.red[600],
-        },
-      },
+export const MuiOutlinedInputThemeOptions: Components<Theme>["MuiOutlinedInput"] =
+  {
+    defaultProps: {
+      notched: false,
     },
-    input: {
-      padding: defaultTheme.spacing(1.5, 2),
-      fontSize: 18,
-    },
-    notchedOutline: {
-      borderColor: customColors.gray[30],
-    },
-    adornedEnd: {
-      "&.Mui-error": {
-        svg: {
-          color: customColors.red[600],
+    styleOverrides: {
+      root: ({ theme }) => ({
+        borderRadius: "6px",
+        "&:hover": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.gray[30],
+          },
         },
-      },
+        "&.Mui-focused": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.purple[600],
+          },
+        },
+        "&.Mui-error": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.red[600],
+          },
+        },
+      }),
+      input: ({ theme }) => ({
+        padding: theme.spacing(1.5, 2),
+        fontSize: 18,
+      }),
+      notchedOutline: ({ theme }) => ({
+        borderColor: theme.palette.gray[30],
+      }),
+      adornedEnd: ({ theme }) => ({
+        "&.Mui-error": {
+          svg: {
+            color: theme.palette.red[600],
+          },
+        },
+      }),
     },
-  },
-};
+  };

@@ -1,13 +1,12 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
+import { Components, Theme } from "@mui/material";
 
-export const MuiBreadcrumbsThemeOptions: Components["MuiBreadcrumbs"] = {
+export const MuiBreadcrumbsThemeOptions: Components<Theme>["MuiBreadcrumbs"] = {
   styleOverrides: {
-    li: {
+    li: ({ theme }) => ({
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       fontSize: 14,
-      color: customColors.gray[60],
+      color: theme.palette.gray[60],
       "> a": {
         borderBottomColor: "transparent",
       },
@@ -15,8 +14,8 @@ export const MuiBreadcrumbsThemeOptions: Components["MuiBreadcrumbs"] = {
         maxWidth: 150,
       },
       "&:last-child": {
-        color: customColors.purple[700],
+        color: theme.palette.purple[700],
       },
-    },
+    }),
   },
 };

@@ -1,12 +1,11 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
-import { defaultTheme } from "../../util";
+import { Components, Theme } from "@mui/material";
 
-export const MuiListItemIconThemeOptions: Components["MuiListItemIcon"] = {
-  styleOverrides: {
-    root: {
-      minWidth: defaultTheme.spacing(4),
-      color: customColors.gray[70],
+export const MuiListItemIconThemeOptions: Components<Theme>["MuiListItemIcon"] =
+  {
+    styleOverrides: {
+      root: ({ theme }) => ({
+        minWidth: theme.spacing(4),
+        color: theme.palette.gray[70],
+      }),
     },
-  },
-};
+  };

@@ -1,10 +1,9 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
+import { Components, Theme } from "@mui/material";
 
-export const MuiSkeletonThemeOptions: Components["MuiSkeleton"] = {
+export const MuiSkeletonThemeOptions: Components<Theme>["MuiSkeleton"] = {
   styleOverrides: {
-    root: {
-      backgroundColor: customColors.gray["20"],
-    },
+    root: ({ theme }) => ({
+      backgroundColor: theme.palette.gray["20"],
+    }),
   },
 };

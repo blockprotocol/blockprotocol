@@ -1,20 +1,19 @@
-import { Components } from "@mui/material";
-import { defaultTheme } from "../../util";
+import { Components, Theme } from "@mui/material";
 
-export const MuiInputLabelThemeOptions: Components["MuiInputLabel"] = {
+export const MuiInputLabelThemeOptions: Components<Theme>["MuiInputLabel"] = {
   defaultProps: {
     disableAnimation: true,
     shrink: true,
   },
   styleOverrides: {
-    root: {
+    root: ({ theme }) => ({
       position: "unset",
       left: "unset",
       top: "unset",
       transform: "unset",
       fontSize: 15,
       fontWeight: 500,
-      marginBottom: defaultTheme.spacing(0.5),
-    },
+      marginBottom: theme.spacing(0.5),
+    }),
   },
 };

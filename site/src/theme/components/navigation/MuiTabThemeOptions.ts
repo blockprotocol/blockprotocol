@@ -1,8 +1,6 @@
-import { Components } from "@mui/material";
-import { customColors } from "../../palette";
-import { defaultTheme } from "../../util";
+import { Components, Theme } from "@mui/material";
 
-export const MuiTabThemeOptions: Components["MuiTab"] = {
+export const MuiTabThemeOptions: Components<Theme>["MuiTab"] = {
   defaultProps: {
     disableFocusRipple: true,
     disableRipple: true,
@@ -10,17 +8,17 @@ export const MuiTabThemeOptions: Components["MuiTab"] = {
     tabIndex: 0,
   },
   styleOverrides: {
-    root: {
+    root: ({ theme }) => ({
       border: "1px solid transparent",
       textTransform: "none",
-      padding: defaultTheme.spacing(1, 0),
-      marginRight: defaultTheme.spacing(3),
+      padding: theme.spacing(1, 0),
+      marginRight: theme.spacing(3),
       "&:focus-visible": {
-        borderColor: customColors.purple[600],
+        borderColor: theme.palette.purple[600],
       },
-    },
-    textColorPrimary: {
-      color: customColors.gray[70],
-    },
+    }),
+    textColorPrimary: ({ theme }) => ({
+      color: theme.palette.gray[70],
+    }),
   },
 };
