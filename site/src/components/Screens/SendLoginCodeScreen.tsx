@@ -4,7 +4,7 @@ import { apiClient } from "../../lib/apiClient";
 import { Button } from "../Button";
 import { TextField } from "../TextField";
 import { Link } from "../Link";
-import { BlockProtocolIcon } from "../SvgIcon/BlockProtocolIcon";
+import { BlockProtocolIcon } from "../icons";
 import { useEmailTextField } from "../hooks/useEmailTextField";
 import { VerificationCodeInfo } from "./VerificationCodeScreen";
 

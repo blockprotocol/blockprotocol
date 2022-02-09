@@ -9,6 +9,7 @@ let cachedDb: Db | null = null;
 
 export const connectToDatabase = async () => {
   if (cachedClient && cachedDb) {
+    await cachedClient?.connect(); // Reconnect if client.close() was called previously
     return { client: cachedClient, db: cachedDb };
   }
 
