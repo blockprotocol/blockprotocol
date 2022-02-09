@@ -1,6 +1,6 @@
 import { Components } from "@mui/material";
-import { customColors } from "../palette";
-import { defaultTheme } from "../util";
+import { customColors } from "../../palette";
+import { defaultTheme } from "../../util";
 
 export const MuiListItemButtonThemeOptions: Components["MuiListItemButton"] = {
   defaultProps: {

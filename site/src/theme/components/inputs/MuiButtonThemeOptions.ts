@@ -1,6 +1,6 @@
 import { Components, CSSObject } from "@mui/material";
-import { customColors } from "../palette";
-import { defaultTheme } from "../util";
+import { customColors } from "../../palette";
+import { defaultTheme } from "../../util";
 
 const buttonFocusBorderOffset = 6;
 const buttonFocusBorderWidth = 4;

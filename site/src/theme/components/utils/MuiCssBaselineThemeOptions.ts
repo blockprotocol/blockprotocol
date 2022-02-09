@@ -3,17 +3,17 @@
 
 import { Components } from "@mui/material";
 
-import InterMedium from "../../assets/fonts/Inter-Medium.ttf";
-import InterRegular from "../../assets/fonts/Inter-Regular.ttf";
-import InterSemiBold from "../../assets/fonts/Inter-SemiBold.ttf";
-import InterBold from "../../assets/fonts/Inter-Bold.ttf";
-import InterLight from "../../assets/fonts/Inter-Light.ttf";
-import ApercuProRegular from "../../assets/fonts/apercu-regular-pro.ttf";
-import ApercuProBold from "../../assets/fonts/apercu-bold-pro.ttf";
-import ApercuProLight from "../../assets/fonts/apercu-light-pro.ttf";
-import ApercuProMedium from "../../assets/fonts/apercu-medium-pro.ttf";
-import { DESKTOP_NAVBAR_HEIGHT } from "../../components/Navbar";
-import { customColors } from "../palette";
+import InterMedium from "../../../assets/fonts/Inter-Medium.ttf";
+import InterRegular from "../../../assets/fonts/Inter-Regular.ttf";
+import InterSemiBold from "../../../assets/fonts/Inter-SemiBold.ttf";
+import InterBold from "../../../assets/fonts/Inter-Bold.ttf";
+import InterLight from "../../../assets/fonts/Inter-Light.ttf";
+import ApercuProRegular from "../../../assets/fonts/apercu-regular-pro.ttf";
+import ApercuProBold from "../../../assets/fonts/apercu-bold-pro.ttf";
+import ApercuProLight from "../../../assets/fonts/apercu-light-pro.ttf";
+import ApercuProMedium from "../../../assets/fonts/apercu-medium-pro.ttf";
+import { DESKTOP_NAVBAR_HEIGHT } from "../../../components/Navbar";
+import { customColors } from "../../palette";
 
 // @see https://github.com/mui-org/material-ui/issues/15251
 const rootTypographyStyles = `

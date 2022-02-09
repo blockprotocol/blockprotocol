@@ -1,5 +1,5 @@
 import { Components } from "@mui/material";
-import { defaultTheme } from "../util";
+import { defaultTheme } from "../../util";
 
 export const MuiInputLabelThemeOptions: Components["MuiInputLabel"] = {
   defaultProps: {
