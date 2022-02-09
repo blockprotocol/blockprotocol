@@ -1,7 +1,7 @@
 import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 import { validationResult } from "express-validator";
 
-import { createAuthenticatedHandler } from "../../../lib/handler/authenticatedHandler";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticatedHandler";
 import { formatErrors } from "../../../util/api";
 
 export type ApiGenerateApiKeyBody = {

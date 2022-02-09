@@ -2,7 +2,7 @@ import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import Ajv2019 from "ajv/dist/2019";
 import { Schema } from "jsonschema";
 
-import { EntityType } from "./model/entityType.model";
+import { EntityType } from "./api/model/entityType.model";
 
 // @todo patch ajv schema type and remove additional jsonschema dep
 export type JsonSchema = Schema & {

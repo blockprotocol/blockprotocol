@@ -4,8 +4,8 @@ import nextSession from "next-session";
 import { promisifyStore } from "next-session/lib/compat";
 import MongoStore from "connect-mongo";
 import signature from "cookie-signature";
-import { mustGetEnvVar } from "../../util/api";
-import { FRONTEND_DOMAIN, isUsingHttps } from "../config";
+import { mustGetEnvVar } from "../../../util/api";
+import { FRONTEND_DOMAIN, isUsingHttps } from "../../config";
 
 // cookie maximum age (365 days)
 const COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
