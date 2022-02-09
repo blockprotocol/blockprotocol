@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from "react";
+import { useEffect, useMemo, useState, VFC } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
@@ -113,13 +113,16 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
     };
   }, [router, headings, detectHeadingFromScroll]);
 
+  const contextValue = useMemo(
+    () => ({
+      headings,
+      setHeadings,
+    }),
+    [headings],
+  );
+
   return (
-    <PageHeadingsContext.Provider
-      value={{
-        headings,
-        setHeadings,
-      }}
-    >
+    <PageHeadingsContext.Provider value={contextValue}>
       <Box
         {...boxProps}
         sx={{
