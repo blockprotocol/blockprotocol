@@ -8,7 +8,7 @@ import {
 } from "../middleware/passport.middleware";
 import { sessionMiddleware } from "../middleware/session.middleware";
 import { dbMiddleware, DbRequestExtensions } from "../middleware/db.middleware";
-import { FRONTEND_URL } from "../config";
+import { FRONTEND_URL } from "../../config";
 
 export type BaseApiRequest<RequestBody = unknown> = Omit<
   NextApiRequest,
