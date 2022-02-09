@@ -31,7 +31,7 @@ const script = async () => {
   await catchAndLog(async () => {
     await db
       .collection<UserDocument>(User.COLLECTION_NAME)
-      .createIndex({ shortname: 1 });
+      .createIndex({ shortname: 1 }, { unique: true, sparse: true });
   });
 
   await catchAndLog(async () => {
