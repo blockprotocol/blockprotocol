@@ -13,6 +13,14 @@ export type BlockVariant = {
   properties?: JSONObject | null;
 };
 
+export type BlockMetadataRepository =
+  | {
+      type: string;
+      url: string;
+      directory?: string;
+    }
+  | string;
+
 export type BlockMetadata = {
   author?: string | null;
   default?: JSONObject | null;
@@ -25,13 +33,7 @@ export type BlockMetadata = {
   license?: string | null;
   name?: string | null;
   protocol?: string | null;
-  repository?:
-    | {
-        type: string;
-        url: string;
-        directory?: string;
-      }
-    | string;
+  repository?: BlockMetadataRepository;
   schema?: string | null;
   source?: string | null;
   variants?: BlockVariant[] | null;
