@@ -30,7 +30,9 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
   if (readonly) {
     return (
       <Typography
+        component="span"
         sx={{
+          display: "inline-block",
           overflowWrap: {
             xs: "anywhere",
             md: "unset",
