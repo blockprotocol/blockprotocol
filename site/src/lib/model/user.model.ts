@@ -26,6 +26,7 @@ export type SerializedUser = {
   email?: string;
   shortname?: string;
   preferredName?: string;
+  userAvatarUrl?: string;
 };
 
 export type UserProperties = {
@@ -33,6 +34,12 @@ export type UserProperties = {
   hasVerifiedEmail?: boolean;
   shortname?: string;
   preferredName?: string;
+  userAvatar?: UserAvatarProperties;
+};
+
+export type UserAvatarProperties = {
+  url: string;
+  s3Key: string;
 };
 
 type UserConstructorArgs = {
@@ -51,6 +58,8 @@ export class User {
   shortname?: string;
 
   preferredName?: string;
+
+  userAvatar?: UserAvatarProperties;
 
   static COLLECTION_NAME = "bp-users";
 
@@ -72,6 +81,7 @@ export class User {
     this.email = args.email;
     this.hasVerifiedEmail = args.hasVerifiedEmail ?? false;
     this.shortname = args.shortname;
+    this.userAvatar = args.userAvatar;
   }
 
   private static isShortnameReserved(shortname: string): boolean {
@@ -223,7 +233,10 @@ export class User {
     db: Db,
     updatedProperties: Partial<UserProperties>,
   ): Promise<User> {
-    if (this.shortname && updatedProperties.shortname !== this.shortname) {
+    if (
+      updatedProperties.shortname &&
+      updatedProperties.shortname !== this.shortname
+    ) {
       throw new Error("Cannot update shortname");
     }
 
@@ -430,6 +443,7 @@ export class User {
       email: includePrivateFields ? this.email : undefined,
       preferredName: this.preferredName,
       shortname: this.shortname,
+      userAvatarUrl: this.userAvatar?.url,
     };
   }
 }

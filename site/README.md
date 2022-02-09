@@ -63,6 +63,14 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_ACCESS_KEY_ID`: The AWS access key
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
 
+The above environment variables will also be used for S3 access for allowing user avatar uploads.
+The default S3 bucket name is `blockprotocol` but can optionally be customized with the following environment variable:
+
+- `BP_AWS_S3_BUCKET_NAME`: The name of the S3 bucket to store files in (e.g. user avatars)
+
+Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
+When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
+
 ### Serving Blocks
 
 Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/hub`
@@ -272,6 +280,17 @@ Generates a new API key for the authenticated user, and revokes any others.
 Logs out the currently authenticated user.
 
 - Request Response: `SUCCESS`
+
+#### `POST /api/uploadUserAvatar` [requires cookie authentication]
+
+Uploads a user avatar and apply it to logged in profile page.
+
+- Multipart Request Body:
+
+  - `image`: The image file to be uploaded, extension must be one of jpg, jpeg, png, gif or svg.
+
+- Response Body:
+  - `avatarUrl`: Url pointing to the newly uploaded user avatar.
 
 ### API key required
 
