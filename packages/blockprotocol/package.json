@@ -29,6 +29,6 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@types/react": "^17.0.38"
+    "@types/react": "^17.0.39"
   }
 }
