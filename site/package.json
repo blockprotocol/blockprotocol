@@ -79,7 +79,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.16.5",
+    "@babel/runtime": "^7.17.2",
     "@types/cookie-signature": "^1.0.4",
     "@types/cors": "^2.8.12",
     "@types/dedent": "^0.7.0",
