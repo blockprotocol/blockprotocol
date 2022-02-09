@@ -2,7 +2,7 @@ import busboy from "busboy";
 import { Middleware } from "next-connect";
 import { BaseApiResponse } from "../handler/baseHandler";
 import { AuthenticatedApiRequest } from "../handler/authenticatedHandler";
-import { formatErrors } from "../../util/api";
+import { formatErrors } from "../../../util/api";
 
 export type MultipartUploadsOptions = {
   fieldsLimit: number;

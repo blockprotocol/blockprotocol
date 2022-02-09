@@ -10,7 +10,7 @@ import {
 } from "blockprotocol";
 import { Box, Container, Typography } from "@mui/material";
 
-import { EntityType } from "../../../lib/model/entityType.model";
+import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SchemaEditor } from "../../../components/entityTypes/SchemaEditor/SchemaEditor";
 import { apiClient } from "../../../lib/apiClient";
 import { useUser } from "../../../context/UserContext";

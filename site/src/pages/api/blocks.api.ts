@@ -6,7 +6,7 @@ import {
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,
 } from "../../lib/blocks";
-import { createApiKeyRequiredHandler } from "../../lib/handler/apiKeyRequiredHandler";
+import { createApiKeyRequiredHandler } from "../../lib/api/handler/apiKeyRequiredHandler";
 
 export type ApiSearchRequestQuery = {
   author?: string;
