@@ -32,6 +32,9 @@ module.exports = {
     },
     hot: true,
     open: process.env.BROWSER !== "none",
+    optimization: {
+      moduleIds: "named",
+    },
     port: 9090,
     static: {
       directory: __dirname,
