@@ -1,7 +1,7 @@
 import { Box, Typography, Link } from "@mui/material";
 import { VoidFunctionComponent } from "react";
 
-import { ArrowRightIcon } from "../../SvgIcon/ArrowRight";
+import { ArrowRightIcon } from "../../icons";
 
 export type DashboardCardProps = {
   title: string;

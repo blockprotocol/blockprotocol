@@ -2,6 +2,9 @@ module.exports = {
   // this is the highest config lower ones will automatically extend
   root: true,
   parser: "@typescript-eslint/parser",
+  parserOptions: {
+    project: "tsconfig.json",
+  },
   plugins: ["@typescript-eslint", "react-hooks", "jest"],
   extends: [
     "plugin:@typescript-eslint/base",
@@ -150,21 +153,16 @@ module.exports = {
   },
   overrides: [
     {
+      files: ["**/*.js"],
+      parser: "espree", // default parser (no typescript rules)
+    },
+    {
       // top-level config files
       files: ["*.config.js", "*rc.js"],
-      parser: "espree", // default parser; can be removed if we add top-level tsconfig.json
       rules: {
         "import/no-extraneous-dependencies": "off",
         "global-require": "off",
       },
-    },
-    {
-      files: ["packages/block-template/*.js"],
-      parser: "espree",
-    },
-    {
-      files: ["packages/blockprotocol/*.js"],
-      parser: "espree",
     },
     {
       files: ["packages/block-template/**"],
@@ -245,6 +243,10 @@ module.exports = {
     {
       files: ["**/scripts/**"],
       rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
         "no-console": "off",
       },
     },
