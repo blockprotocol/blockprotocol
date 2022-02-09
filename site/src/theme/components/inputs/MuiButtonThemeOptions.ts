@@ -15,10 +15,17 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
     root: ({ ownerState, theme }) => {
       const { variant, color, size } = ownerState;
 
+      const { typography } = theme;
+
       // The base CSS styling applied to the button
       const baseStyles: CSSObject = {
         textTransform: "none",
-        fontSize: size === "small" ? 15 : size === "medium" ? 18 : undefined,
+        fontSize:
+          size === "small"
+            ? typography.bpSmallCopy.fontSize
+            : size === "medium"
+            ? typography.bpBodyCopy.fontSize
+            : undefined,
       };
 
       // The :before CSS styling applied to the button

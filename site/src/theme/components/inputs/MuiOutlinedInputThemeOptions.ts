@@ -26,7 +26,7 @@ export const MuiOutlinedInputThemeOptions: Components<Theme>["MuiOutlinedInput"]
       }),
       input: ({ theme }) => ({
         padding: theme.spacing(1.5, 2),
-        fontSize: 18,
+        fontSize: theme.typography.bpBodyCopy.fontSize,
       }),
       notchedOutline: ({ theme }) => ({
         borderColor: theme.palette.gray[30],

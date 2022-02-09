@@ -11,7 +11,7 @@ export const MuiInputLabelThemeOptions: Components<Theme>["MuiInputLabel"] = {
       left: "unset",
       top: "unset",
       transform: "unset",
-      fontSize: 15,
+      fontSize: theme.typography.bpSmallCopy.fontSize,
       fontWeight: 500,
       marginBottom: theme.spacing(0.5),
     }),
