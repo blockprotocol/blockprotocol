@@ -33,7 +33,7 @@
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
     "lint:tsc": "tsc --noEmit",
     "prepare": "yarn build",
-    "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --config dev/webpack.config.js"
+    "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
     "blockprotocol": "0.0.6",

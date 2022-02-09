@@ -3,6 +3,7 @@ const webpack = require("webpack");
 
 /** @type import("webpack").Configuration */
 module.exports = {
+  devtool: "eval-cheap-module-source-map",
   entry: "./dev/DevApp.tsx",
   plugins: [
     new HtmlWebpackPlugin({
@@ -26,8 +27,6 @@ module.exports = {
     ],
   },
   devServer: {
-    hot: true,
-    contentBase: __dirname,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
@@ -39,7 +38,12 @@ module.exports = {
         "sentry-trace",
       ],
     },
+    hot: true,
     open: process.env.BROWSER !== "none",
+    port: 9090,
+    static: {
+      directory: __dirname,
+    },
   },
   optimization: {
     moduleIds: "named",

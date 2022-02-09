@@ -4,6 +4,7 @@ const config = require("./webpack.config");
 
 /** @type import("webpack").Configuration */
 module.exports = {
+  devtool: "eval-cheap-module-source-map",
   entry: "./src/webpack-dev-server.js",
   plugins: [
     ...config[0].plugins,
@@ -18,8 +19,6 @@ module.exports = {
   ],
   module: config[0].module,
   devServer: {
-    hot: true,
-    contentBase: __dirname,
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
@@ -31,7 +30,12 @@ module.exports = {
         "sentry-trace",
       ],
     },
+    hot: true,
     open: process.env.BROWSER !== "none",
+    port: 9090,
+    static: {
+      directory: __dirname,
+    },
   },
   resolve: {
     extensions: [
