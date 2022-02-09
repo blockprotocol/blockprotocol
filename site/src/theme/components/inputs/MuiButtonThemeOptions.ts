@@ -15,13 +15,13 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
     root: ({ ownerState, theme }) => {
       const { variant, color, size } = ownerState;
 
+      // The base CSS styling applied to the button
       const baseStyles: CSSObject = {
         textTransform: "none",
         fontSize: size === "small" ? 15 : size === "medium" ? 18 : undefined,
-        "&:before": {},
-        ":focus-visible:after": {},
       };
 
+      // The :before CSS styling applied to the button
       const beforeStyles: CSSObject = {
         content: `""`,
         borderRadius: "inherit",
@@ -31,12 +31,16 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
         border: "1px solid transparent",
       };
 
+      // The :hover CSS styling applied to the button
       const hoverStyles: CSSObject = {};
 
+      // The .Mui-disabled CSS styling applied to the button
       const disabledStyles: CSSObject = {};
 
+      // The :active CSS styling applied to the button
       const activeStyles: CSSObject = {};
 
+      // The :focus-visible:after CSS styling applied to the button
       const focusVisibleAfterStyles: CSSObject = {
         content: `""`,
         position: "absolute",
@@ -49,6 +53,8 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
       };
 
       if (variant === "primary") {
+        /** ===== PRIMARY button specific styling ===== */
+
         Object.assign(baseStyles, {
           color: theme.palette.gray[20],
           borderRadius: 34,
@@ -118,6 +124,8 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
             }[color]),
         });
       } else if (variant === "secondary") {
+        /** ===== SECONDARY button specific styling ===== */
+
         Object.assign(baseStyles, {
           background: theme.palette.gray[10],
           borderRadius: 34,
@@ -187,6 +195,8 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
             }[color]),
         });
       } else if (variant === "tertiary") {
+        /** ===== TERTIARY button specific styling ===== */
+
         Object.assign(baseStyles, {
           borderRadius: 34,
           color: theme.palette.gray[70],
@@ -261,6 +271,8 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
           borderRadius: 34 + buttonFocusBorderOffset,
         });
       } else if (variant === "transparent") {
+        /** ===== TRANSPARENT button specific styling ===== */
+
         Object.assign(baseStyles, {
           minWidth: "unset",
           padding: "unset",
