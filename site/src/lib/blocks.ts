@@ -9,6 +9,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
 };
 
 export type BuildConfig = {
+  folder?: string | null;
   workspace?: string | null;
   repository: string;
   branch: string;

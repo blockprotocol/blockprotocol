@@ -1,5 +1,5 @@
 import { MongoClient, Db } from "mongodb";
-import { mustGetEnvVar } from "../util/api";
+import { mustGetEnvVar } from "../../util/api";
 
 const MONGODB_URI = mustGetEnvVar("MONGODB_URI");
 const MONGODB_DB_NAME = mustGetEnvVar("MONGODB_DB_NAME");

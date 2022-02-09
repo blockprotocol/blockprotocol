@@ -1,5 +1,5 @@
-import { createAuthenticatedHandler } from "../../../lib/handler/authenticatedHandler";
-import { UserFacingApiKeyProperties } from "../../../lib/model/apiKey.model";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticatedHandler";
+import { UserFacingApiKeyProperties } from "../../../lib/api/model/apiKey.model";
 
 export type ApiKeysResponse = {
   apiKeysMetadata: UserFacingApiKeyProperties[];

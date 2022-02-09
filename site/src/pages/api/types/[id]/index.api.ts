@@ -1,5 +1,5 @@
-import { createBaseHandler } from "../../../../lib/handler/baseHandler";
-import { EntityType } from "../../../../lib/model/entityType.model";
+import { createBaseHandler } from "../../../../lib/api/handler/baseHandler";
+import { EntityType } from "../../../../lib/api/model/entityType.model";
 import { formatErrors } from "../../../../util/api";
 
 export type ApiTypeByIdRequest = {

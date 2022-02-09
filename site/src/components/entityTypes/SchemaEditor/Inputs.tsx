@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { ChangeEvent, useEffect, useState, VoidFunctionComponent } from "react";
 
@@ -27,7 +28,28 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
   }, [value]);
 
   if (readonly) {
-    return <span>{value}</span>;
+    return (
+      <Typography
+        component="span"
+        sx={{
+          display: "inline-block",
+          overflowWrap: {
+            xs: "anywhere",
+            md: "unset",
+          },
+          maxWidth: {
+            xs: "125px",
+            md: "unset",
+          },
+          width: {
+            xs: "max-content",
+            md: "unset",
+          },
+        }}
+      >
+        {value}
+      </Typography>
+    );
   }
 
   let textChangeEvents: {
@@ -54,6 +76,7 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
       {...textChangeEvents}
       placeholder={placeholder}
       required={required}
+      sx={{ minWidth: "125px" }}
       value={draftText}
       variant="outlined"
     />
