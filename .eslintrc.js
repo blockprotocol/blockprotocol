@@ -206,6 +206,11 @@ module.exports = {
         "no-restricted-imports": [
           "error",
           {
+            name: "fs",
+            message:
+              "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
+          },
+          {
             name: "@mui/material",
             importNames: ["Link"],
             message:
