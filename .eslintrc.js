@@ -1,3 +1,14 @@
+const sharedNoRestrictedImportsConfig = {
+  paths: [],
+  patterns: [
+    {
+      group: ["fs", "fs/*"],
+      message:
+        "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
+    },
+  ],
+};
+
 module.exports = {
   // this is the highest config lower ones will automatically extend
   root: true,
@@ -40,6 +51,7 @@ module.exports = {
     "react/prop-types": "off",
     // because we are using typescript this is redundant
     "jsx-a11y/anchor-is-valid": "off",
+    "no-restricted-imports": ["error", sharedNoRestrictedImportsConfig],
     "react/function-component-definition": [
       "error",
       {
@@ -202,54 +214,64 @@ module.exports = {
     },
     {
       files: ["site/**"],
+      parserOptions: {
+        tsconfigRootDir: `${__dirname}/site`,
+        project: "tsconfig.json",
+      },
       rules: {
         "no-restricted-imports": [
           "error",
           {
-            name: "@mui/material",
-            importNames: ["Link"],
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "@mui/material/Link",
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "next",
-            importNames: ["Link"],
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "next/link",
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "@mui/material",
-            importNames: ["Button", "TextField", "Popover"],
-            message:
-              "Please use the custom wrapper component in src/component instead.",
-          },
-          {
-            name: "@mui/material/Button",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/Button component instead.",
-          },
-          {
-            name: "@mui/material/TextField",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/TextField component instead.",
-          },
-          {
-            name: "@mui/material/Popover",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/Popover component instead.",
+            ...sharedNoRestrictedImportsConfig,
+            paths: [
+              ...sharedNoRestrictedImportsConfig.paths,
+              {
+                name: "@mui/material",
+                importNames: ["Link"],
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "@mui/material/Link",
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "next",
+                importNames: ["Link"],
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "next/link",
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "@mui/material",
+                importNames: ["Button", "TextField", "Popover"],
+                message:
+                  "Please use the custom wrapper component in src/component instead.",
+              },
+              {
+                name: "@mui/material/Button",
+                importNames: ["default"],
+                message:
+                  "Please use the custom src/components/Button component instead.",
+              },
+              {
+                name: "@mui/material/TextField",
+                importNames: ["default"],
+                message:
+                  "Please use the custom src/components/TextField component instead.",
+              },
+              {
+                name: "@mui/material/Popover",
+                importNames: ["default"],
+                message:
+                  "Please use the custom src/components/Popover component instead.",
+              },
+            ],
           },
         ],
       },

@@ -37,7 +37,7 @@ const getBlockMediaUrl = (
  */
 export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
+  const fs = require("fs-extra");
   const glob = require("glob");
   /* eslint-enable global-require */
 
@@ -71,7 +71,7 @@ export const readBlockDataFromDisk = ({
   source,
 }: ExpandedBlockMetadata) => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
+  const fs = require("fs-extra");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
   return {
