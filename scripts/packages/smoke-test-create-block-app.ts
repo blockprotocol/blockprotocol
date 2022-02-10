@@ -1,10 +1,10 @@
 import execa from "execa";
 import path from "path";
 import tmp from "tmp-promise";
+import fs from "fs-extra";
 import waitOn from "wait-on";
 import treeKill from "tree-kill";
 import { promisify } from "util";
-import fs from "fs/promises";
 import os from "os";
 import untildify from "untildify";
 import chalk from "chalk";
@@ -78,6 +78,19 @@ const script = async () => {
         cwd: os.tmpdir(),
       },
     );
+
+    logStepEnd();
+    logStepStart("Check folder structure");
+
+    for (const relativePath of [".npmignore", "dist"]) {
+      if (
+        await fs.pathExists(path.resolve(resolvedBlockDirPath, relativePath))
+      ) {
+        throw new Error(
+          `Unexpected to find \`${relativePath}\` in the published block template`,
+        );
+      }
+    }
 
     logStepEnd();
     logStepStart("Install dependencies");
