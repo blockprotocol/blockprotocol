@@ -187,11 +187,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               setSelectedAnchorElement(ref);
             }
           }}
-          onClick={() => {
-            if (asPath.startsWith(`${href}#`)) {
-              window.scrollTo({ top: 0 });
-            }
-          }}
+          scroll={!asPath?.startsWith("/docs") && !asPath?.startsWith("/spec")}
           href={href}
           sx={(theme) => ({
             alignSelf: "flex-start",
