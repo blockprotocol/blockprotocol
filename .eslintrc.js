@@ -1,3 +1,14 @@
+const sharedNoRestrictedImportsConfig = {
+  paths: [],
+  patterns: [
+    {
+      group: ["fs", "fs/*"],
+      message:
+        "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
+    },
+  ],
+};
+
 module.exports = {
   // this is the highest config lower ones will automatically extend
   root: true,
@@ -40,6 +51,7 @@ module.exports = {
     "react/prop-types": "off",
     // because we are using typescript this is redundant
     "jsx-a11y/anchor-is-valid": "off",
+    "no-restricted-imports": ["error", sharedNoRestrictedImportsConfig],
     "react/function-component-definition": [
       "error",
       {
@@ -210,7 +222,9 @@ module.exports = {
         "no-restricted-imports": [
           "error",
           {
+            ...sharedNoRestrictedImportsConfig,
             paths: [
+              ...sharedNoRestrictedImportsConfig.paths,
               {
                 name: "@mui/material",
                 importNames: ["Link"],
@@ -256,13 +270,6 @@ module.exports = {
                 importNames: ["default"],
                 message:
                   "Please use the custom src/components/Popover component instead.",
-              },
-            ],
-            patterns: [
-              {
-                group: ["fs", "fs/*"],
-                message:
-                  "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
               },
             ],
           },
