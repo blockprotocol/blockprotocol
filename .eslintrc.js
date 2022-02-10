@@ -202,6 +202,10 @@ module.exports = {
     },
     {
       files: ["site/**"],
+      parserOptions: {
+        tsconfigRootDir: `${__dirname}/site`,
+        project: "tsconfig.json",
+      },
       rules: {
         "no-restricted-imports": [
           "error",
