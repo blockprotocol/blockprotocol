@@ -83,6 +83,7 @@ export const Carousel = <T,>({
         initialSlide: 0,
         prevArrow: <Arrow arrowType="prev" />,
         nextArrow: <Arrow arrowType="next" />,
+        // eslint-disable-next-line react/no-unstable-nested-components
         customPaging: () => (
           <Box
             sx={{

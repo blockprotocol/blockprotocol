@@ -66,7 +66,7 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   const prevChildPropsString = useRef<string>(JSON.stringify(children.props));
   useEffect(() => {
     if (JSON.stringify(children.props) !== prevChildPropsString.current) {
-      updateEntities?.([
+      void updateEntities?.([
         {
           accountId,
           entityId,

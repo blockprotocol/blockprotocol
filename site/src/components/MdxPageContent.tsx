@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, VFC } from "react";
+import { useEffect, useMemo, useRef, useState, VFC } from "react";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Box, { BoxProps } from "@mui/material/Box";
@@ -131,13 +131,16 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
     };
   }, [router, headings, detectHeadingFromScroll]);
 
+  const contextValue = useMemo(
+    () => ({
+      headings,
+      setHeadings,
+    }),
+    [headings],
+  );
+
   return (
-    <PageHeadingsContext.Provider
-      value={{
-        headings,
-        setHeadings,
-      }}
-    >
+    <PageHeadingsContext.Provider value={contextValue}>
       <Box
         {...boxProps}
         sx={{

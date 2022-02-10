@@ -67,7 +67,7 @@ export default createAuthenticatedHandler<
 
     if (body?.uploads?.image) {
       try {
-        const { mime, buffer } = body.uploads?.image;
+        const { mime, buffer } = body.uploads?.image ?? {};
         await validateImage(mime, buffer);
 
         const { fullUrl, s3Key } = await uploadFileBufferToS3(
