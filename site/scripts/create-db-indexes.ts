@@ -1,11 +1,11 @@
 import chalk from "chalk";
-import { User, UserDocument } from "../src/lib/model/user.model";
+import { User, UserDocument } from "../src/lib/api/model/user.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
-} from "../src/lib/model/verificationCode.model";
-import { connectToDatabase } from "../src/lib/mongodb";
-import { EntityType } from "../src/lib/model/entityType.model";
+} from "../src/lib/api/model/verificationCode.model";
+import { connectToDatabase } from "../src/lib/api/mongodb";
+import { EntityType } from "../src/lib/api/model/entityType.model";
 
 const catchAndLog = async (func: () => Promise<void>) => {
   try {
@@ -26,6 +26,12 @@ const script = async () => {
     await db
       .collection<UserDocument>(User.COLLECTION_NAME)
       .createIndex({ email: 1 }, { unique: true, sparse: true });
+  });
+
+  await catchAndLog(async () => {
+    await db
+      .collection<UserDocument>(User.COLLECTION_NAME)
+      .createIndex({ shortname: 1 }, { unique: true, sparse: true });
   });
 
   await catchAndLog(async () => {

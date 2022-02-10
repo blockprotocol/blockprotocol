@@ -1,8 +1,8 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 import { isProduction } from "../../lib/config";
-import { createBaseHandler } from "../../lib/handler/baseHandler";
-import { ensureUserIsMailchimpMember } from "../../lib/mailchimp";
-import { User } from "../../lib/model/user.model";
+import { createBaseHandler } from "../../lib/api/handler/baseHandler";
+import { ensureUserIsMailchimpMember } from "../../lib/api/mailchimp";
+import { User } from "../../lib/api/model/user.model";
 import { formatErrors } from "../../util/api";
 
 export type ApiSendLoginCodeRequestBody = {
