@@ -4,8 +4,8 @@ import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import { escapeRegExp } from "lodash";
 
 import { User } from "./user.model";
-import { FRONTEND_URL, isProduction } from "../config";
-import { validateAndCompleteJsonSchema } from "../jsonSchema";
+import { FRONTEND_URL, isProduction } from "../../config";
+import { validateAndCompleteJsonSchema } from "../../jsonSchema";
 
 type EntityTypeProperties = {
   createdAt: Date;

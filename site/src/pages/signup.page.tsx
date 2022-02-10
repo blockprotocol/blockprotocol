@@ -8,7 +8,7 @@ import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../components/Screens/VerificationCodeScreen";
-import { SerializedUser } from "../lib/model/user.model";
+import { SerializedUser } from "../lib/api/model/user.model";
 import { apiClient } from "../lib/apiClient";
 import { useUser } from "../context/UserContext";
 import { ApiVerifyEmailRequestBody } from "./api/verifyEmail.api";

@@ -1,5 +1,4 @@
-import { useEffect, useState, VFC } from "react";
-import { unstable_batchedUpdates } from "react-dom";
+import { useEffect, useMemo, useRef, useState, VFC } from "react";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import Box, { BoxProps } from "@mui/material/Box";
@@ -22,38 +21,59 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
 
   const [headings, setHeadings] = useState<Heading[]>([]);
 
-  useEffect(() => {
-    setHeadings([]);
-  }, [serializedPage]);
-
-  const [currentHeading, setCurrentHeading] = useState<Heading>();
   const [detectHeadingFromScroll, setDetectHeadingFromScroll] =
     useState<boolean>(true);
 
-  const [anchor, setAnchor] = useState<string>(
-    router.asPath.split("#")[1] ?? "",
-  );
+  const currentHeading = useRef<Heading | undefined>(undefined);
 
   useEffect(() => {
-    setAnchor(router.asPath.split("#")[1] ?? "");
-  }, [router]);
+    setHeadings([]);
+
+    return () => {
+      currentHeading.current = undefined;
+      setHeadings([]);
+    };
+  }, [serializedPage]);
+
+  const scrolledOnce = useRef(false);
 
   useEffect(() => {
-    const headingWithCurrentAnchor = headings.find(
-      (heading) => heading.anchor === anchor,
-    );
+    if (headings.length) {
+      const anchor = router.asPath.split("#")[1] ?? "";
 
-    if (headingWithCurrentAnchor) {
+      const headingWithCurrentAnchor = headings.find(
+        (heading) => heading.anchor === anchor,
+      );
+
+      const previousRoute = sessionStorage.getItem("previousRoute");
+
+      const shouldScrollToAnchor =
+        // if anchor is empty and we haven't scrolled, prevent it
+        (anchor === "" && scrolledOnce.current) ||
+        // if anchor is not empty, always allow scroll
+        anchor !== "" ||
+        // OR if previous path is either a docs or spec page
+        (previousRoute?.includes("/docs") &&
+          router.asPath?.includes("/docs")) ||
+        (previousRoute?.includes("/spec") && router.asPath?.includes("/spec"));
+
+      if (!scrolledOnce.current) {
+        scrolledOnce.current = true;
+      }
+
       if (
-        !currentHeading ||
-        headingWithCurrentAnchor.anchor !== currentHeading.anchor
+        headingWithCurrentAnchor &&
+        shouldScrollToAnchor &&
+        (!currentHeading.current ||
+          headingWithCurrentAnchor.element !==
+            currentHeading.current.element) &&
+        document.body.contains(headingWithCurrentAnchor.element)
       ) {
-        setCurrentHeading(headingWithCurrentAnchor);
+        currentHeading.current = headingWithCurrentAnchor;
         setDetectHeadingFromScroll(false);
 
         window.scrollTo({
           top: headingWithCurrentAnchor.element.offsetTop - 100,
-          behavior: "smooth",
         });
 
         if (detectHeadingFromScrollTimer) {
@@ -65,7 +85,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         );
       }
     }
-  }, [anchor, headings, currentHeading]);
+  }, [headings, router.asPath]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -92,10 +112,8 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
           ? !asPath.endsWith(`#${headingAtScrollPosition.anchor}`)
           : asPath !== asPath.split("#")[0]
       ) {
-        unstable_batchedUpdates(() => {
-          setCurrentHeading(headingAtScrollPosition);
-          setAnchor(headingAtScrollPosition.anchor);
-        });
+        currentHeading.current = headingAtScrollPosition;
+
         void router.replace(
           `${asPath.split("#")[0]}${
             headingAtScrollPosition.anchor
@@ -113,13 +131,16 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
     };
   }, [router, headings, detectHeadingFromScroll]);
 
+  const contextValue = useMemo(
+    () => ({
+      headings,
+      setHeadings,
+    }),
+    [headings],
+  );
+
   return (
-    <PageHeadingsContext.Provider
-      value={{
-        headings,
-        setHeadings,
-      }}
-    >
+    <PageHeadingsContext.Provider value={contextValue}>
       <Box
         {...boxProps}
         sx={{

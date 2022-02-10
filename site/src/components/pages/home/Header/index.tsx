@@ -7,7 +7,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { gsap } from "gsap";
-import { BoltIcon } from "../../../SvgIcon/BoltIcon";
+import { BoltIcon } from "../../../icons";
 import { HeaderCard } from "./HeaderCard";
 import { LinkButton } from "../../../LinkButton";
 

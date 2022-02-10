@@ -9,6 +9,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
 };
 
 export type BuildConfig = {
+  folder?: string | null;
   workspace?: string | null;
   repository: string;
   branch: string;
@@ -23,7 +24,7 @@ const getBlockMediaUrl = (
   if (!mediaPath) {
     return null;
   }
-  const regex = new RegExp("^(?:[a-z]+:)?//", "i");
+  const regex = /^(?:[a-z]+:)?\/\//i;
   if (regex.test(mediaPath)) {
     return mediaPath;
   }

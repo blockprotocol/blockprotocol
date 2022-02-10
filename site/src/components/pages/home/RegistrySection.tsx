@@ -3,7 +3,7 @@ import { Typography, Box } from "@mui/material";
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
-import { BlockHubIcon } from "../../SvgIcon/BlockHubIcon";
+import { BlockHubIcon } from "../../icons";
 
 import { BlocksSlider } from "../../BlocksSlider";
 import { LinkButton } from "../../LinkButton";

@@ -1,12 +1,19 @@
+import chalk from "chalk";
 import { writeFileSync } from "fs";
 import path from "path";
 import { readBlocksFromDisk } from "../src/lib/blocks";
 
-const blocksInfo = readBlocksFromDisk();
+const script = async () => {
+  console.log(chalk.bold("Generating blocks data..."));
 
-writeFileSync(
-  path.join(process.cwd(), `blocks-data.json`),
-  JSON.stringify(blocksInfo, null, "\t"),
-);
+  const blocksInfo = readBlocksFromDisk();
 
-console.log("✅ Generated blocks data");
+  writeFileSync(
+    path.join(process.cwd(), `blocks-data.json`),
+    JSON.stringify(blocksInfo, null, "\t"),
+  );
+
+  console.log("✅ Blocks data generated");
+};
+
+export default script();
