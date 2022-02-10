@@ -1,5 +1,6 @@
 import { Components, CSSObject, Theme } from "@mui/material";
 
+const buttonBorderRadius = 34;
 const buttonFocusBorderOffset = 6;
 const buttonFocusBorderWidth = 4;
 
@@ -64,7 +65,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
 
         Object.assign(baseStyles, {
           color: theme.palette.gray[20],
-          borderRadius: 34,
+          borderRadius: buttonBorderRadius,
           ...(size === "small" && {
             padding: theme.spacing("8px", "20px"),
           }),
@@ -119,7 +120,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
           }),
         });
         Object.assign(focusVisibleAfterStyles, {
-          borderRadius: 34 + buttonFocusBorderOffset,
+          borderRadius: buttonBorderRadius + buttonFocusBorderOffset,
           ...(color &&
             {
               purple: { borderColor: theme.palette.purple[600] },
@@ -135,7 +136,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
 
         Object.assign(baseStyles, {
           background: theme.palette.gray[10],
-          borderRadius: 34,
+          borderRadius: buttonBorderRadius,
           ...(size === "small" && {
             paddingTop: `calc(${theme.spacing(0.5)} - 1px)`,
             paddingBottom: `calc(${theme.spacing(0.5)} - 1px)`,
@@ -190,7 +191,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
             }[color]),
         });
         Object.assign(focusVisibleAfterStyles, {
-          borderRadius: 34 + buttonFocusBorderOffset,
+          borderRadius: buttonBorderRadius + buttonFocusBorderOffset,
           ...(color &&
             {
               purple: {},
@@ -205,7 +206,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
         /** ===== TERTIARY button specific styling ===== */
 
         Object.assign(baseStyles, {
-          borderRadius: 34,
+          borderRadius: buttonBorderRadius,
           color: theme.palette.gray[70],
           background: theme.palette.common.white,
           "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
@@ -275,7 +276,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
             }[color]),
         });
         Object.assign(focusVisibleAfterStyles, {
-          borderRadius: 34 + buttonFocusBorderOffset,
+          borderRadius: buttonBorderRadius + buttonFocusBorderOffset,
         });
       } else if (variant === "transparent") {
         /** ===== TRANSPARENT button specific styling ===== */
