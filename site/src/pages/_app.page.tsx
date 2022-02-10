@@ -11,7 +11,7 @@ import "../styles/prism.css";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../components/theme";
+import { theme } from "../theme";
 import twindConfig from "../../twind.config";
 import { PageLayout } from "../components/PageLayout";
 import { createEmotionCache } from "../util/createEmotionCache";
