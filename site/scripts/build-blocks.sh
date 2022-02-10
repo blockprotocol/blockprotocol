@@ -89,6 +89,7 @@ function build_block {
   mkdir -p "$public_dir"
 
   # read in block config
+  folder=$(jq -r '.folder' < "$build_config")
   workspace=$(jq -r '.workspace' < "$build_config")
   branch=$(jq -r '.branch' < "$build_config")
   dist_dir=$(jq -r '.distDir' < "$build_config")
@@ -103,10 +104,10 @@ function build_block {
     mkdir -p "$repo_path"
 
     # add others as needed (gitlab, bitbucket)
-    if [[ "$repo_url" =~ ^https://github\.com/.+\.git$ ]]; then
+    if [[ "$repo_url" =~ ^https://github\.com ]]; then
       zip_url="${repo_url%\.git}/archive/refs/heads/${branch}.zip"
     else
-      log error "cannot handle repository url (yet): $url"
+      log error "cannot handle repository url (yet): $repo_url"
       exit 2
     fi
 
@@ -130,6 +131,9 @@ function build_block {
 
   log info "installing and building"
   if [[ "$workspace" == "null" ]]; then
+    if [[ "$folder" != "null" ]]; then
+      cd "$folder"
+    fi
     # devDependencies are required
     NODE_ENV=development yarn install
     yarn build

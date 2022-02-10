@@ -6,7 +6,7 @@ import { apiClient } from "../lib/apiClient";
 import { ApiLoginWithLoginCodeRequestBody } from "./api/loginWithLoginCode.api";
 import { Button } from "../components/Button";
 import { SendLoginCodeScreen } from "../components/Screens/SendLoginCodeScreen";
-import { SerializedUser } from "../lib/model/user.model";
+import { SerializedUser } from "../lib/api/model/user.model";
 import { useUser } from "../context/UserContext";
 import {
   VerificationCodeInfo,

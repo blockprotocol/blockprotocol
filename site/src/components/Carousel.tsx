@@ -5,8 +5,7 @@ import Slider, { Settings } from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-import { ArrowLeftIcon } from "./SvgIcon/ArrowLeft";
-import { ArrowRightIcon } from "./SvgIcon/ArrowRight";
+import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
 
 type CarouselProps<T> = {
   data: T[];

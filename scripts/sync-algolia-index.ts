@@ -2,8 +2,11 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import algoliasearch from "algoliasearch";
+import * as envalid from "envalid";
 
 import siteMap from "../site/site-map.json";
+
+const monorepoDirPath = path.resolve(__dirname, "..");
 
 type DocsFrontMatter = {
   content: string;
@@ -91,8 +94,16 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
     return appendData;
   };
 
-  const specFiles = getFileInfos("../../../site/src/_pages/spec", [], "spec");
-  const docsFiles = getFileInfos("../../../site/src/_pages/docs", [], "docs");
+  const specFiles = getFileInfos(
+    path.resolve(monorepoDirPath, "site/src/_pages/spec"),
+    [],
+    "spec",
+  );
+  const docsFiles = getFileInfos(
+    path.resolve(monorepoDirPath, "site/src/_pages/docs"),
+    [],
+    "docs",
+  );
 
   const specData = specFiles.map((filePath, fileIndex) => {
     const file = fs.readFileSync(filePath.inputPath, "utf8");
@@ -113,13 +124,24 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
   return [...specData, ...docsData];
 };
 
-const syncAlgoliaIndex = async () => {
-  const client = algoliasearch(
-    process.env.ALGOLIA_PROJECT ?? "",
-    process.env.AGOLIA_WRITE_KEY ?? "",
-  );
+const script = async () => {
+  console.log("Syncing Algolia index");
 
-  const index = client.initIndex("blockprotocol_testing");
+  const env = envalid.cleanEnv(process.env, {
+    ALGOLIA_PROJECT: envalid.str({
+      desc: "Algolia app id",
+      example: "A1B2C3D4C5D6",
+      docs: "https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/javascript/?client=javascript",
+    }),
+    ALGOLIA_WRITE_KEY: envalid.str({
+      desc: "Algolia app API key with write permissions (32-char HEX)",
+      docs: "https://www.algolia.com/doc/api-client/getting-started/instantiate-client-index/javascript/?client=javascript",
+    }),
+  });
+
+  const client = algoliasearch(env.ALGOLIA_PROJECT, env.ALGOLIA_WRITE_KEY);
+
+  const index = client.initIndex("blockprotocol");
 
   let oldIndexObjects: Array<{ objectID: string }> = [];
 
@@ -151,20 +173,8 @@ const syncAlgoliaIndex = async () => {
   await index.deleteObjects(objectIDsToDelete);
 
   await index.saveObjects(indexObjects);
-};
 
-const script = async () => {
-  try {
-    await syncAlgoliaIndex();
-    console.log("Algolia Indexes Updated.");
-  } catch (error) {
-    throw new Error(
-      `Error while running Algolia Update: ${
-        // @ts-expect-error -- TS is a bit too strict here. We can‘t use instanceof Error because Algolia errors are plain objects
-        error?.message ?? error
-      }`,
-    );
-  }
+  console.log("Algolia index updated.");
 };
 
 void script();

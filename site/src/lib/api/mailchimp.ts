@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 import md5 from "md5";
-import { mustGetEnvVar } from "../util/api";
+import { mustGetEnvVar } from "../../util/api";
 import { User } from "./model/user.model";
 
 let cachedMailchimpApi: AxiosInstance;

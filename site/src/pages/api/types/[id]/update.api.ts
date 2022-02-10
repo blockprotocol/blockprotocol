@@ -1,5 +1,5 @@
-import { createAuthenticatedHandler } from "../../../../lib/handler/authenticatedHandler";
-import { EntityType } from "../../../../lib/model/entityType.model";
+import { createAuthenticatedHandler } from "../../../../lib/api/handler/authenticatedHandler";
+import { EntityType } from "../../../../lib/api/model/entityType.model";
 import { formatErrors } from "../../../../util/api";
 
 export type ApiTypeUpdateRequest = {

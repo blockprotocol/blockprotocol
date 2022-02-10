@@ -10,8 +10,7 @@ import {
   BoxProps,
 } from "@mui/material";
 import { Link } from "./Link";
-import { BlockProtocolLogoIcon } from "./SvgIcon/BlockProtocolLogoIcon";
-import { HASHLogoIcon } from "./SvgIcon/HASHLogoIcon";
+import { BlockProtocolLogoIcon, HASHLogoIcon } from "./icons";
 import { LinkButton } from "./LinkButton";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [

@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 import { ApiClientError } from "../../lib/apiClient";
-import { SerializedUser } from "../../lib/model/user.model";
+import { SerializedUser } from "../../lib/api/model/user.model";
 import { Button } from "../Button";
 import { TextField } from "../TextField";
 import {
