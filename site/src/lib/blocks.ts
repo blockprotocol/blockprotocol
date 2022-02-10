@@ -94,7 +94,11 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         blockRepository = `${blockConfig.repository}#${blockConfig.branch}`;
       }
 
-      const repository = getRepositoryUrl(blockRepository);
+      let repository = getRepositoryUrl(blockRepository);
+
+      if (repository) {
+        repository = repository.replace(/\/$/, "");
+      }
 
       return {
         ...metadata,
