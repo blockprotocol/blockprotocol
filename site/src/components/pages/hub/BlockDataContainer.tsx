@@ -73,13 +73,10 @@ export const BlockDataContainer: VoidFunctionComponent<
   }, [metadata, text]);
 
   useEffect(() => {
-    if (
-      metadata?.variants &&
-      previousBlockVariantsTab.current !== blockVariantsTab
-    ) {
-      const blockVariant: BlockVariant | undefined =
-        metadata?.variants[blockVariantsTab];
+    const blockVariant: BlockVariant | undefined =
+      metadata?.variants?.[blockVariantsTab];
 
+    if (blockVariant && previousBlockVariantsTab.current !== blockVariantsTab) {
       try {
         const parsedText = JSON.parse(text);
 
@@ -88,7 +85,7 @@ export const BlockDataContainer: VoidFunctionComponent<
         }
 
         const nextText = {
-          ...blockVariant?.properties,
+          ...blockVariant.properties,
           ...blockVariant.examples?.[0],
           ...parsedText,
         };
@@ -102,12 +99,12 @@ export const BlockDataContainer: VoidFunctionComponent<
     }
 
     return () => {
-      if (metadata?.variants) {
-        const blockVariant: BlockVariant | undefined =
-          metadata?.variants[blockVariantsTab];
+      const blockVariant: BlockVariant | undefined =
+        metadata?.variants?.[blockVariantsTab];
 
+      if (blockVariant) {
         propertiesToRemove.current = Object.keys({
-          ...blockVariant?.properties,
+          ...blockVariant.properties,
           ...blockVariant.examples?.[0],
         });
       }
