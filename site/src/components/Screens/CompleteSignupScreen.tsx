@@ -55,7 +55,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
       setCompletingSignup(false);
 
       if (error) {
-        setCompleteSignupError(error.parsedErrorMessage);
+        setCompleteSignupError(error.message);
       } else if (data) {
         setUser(data.user);
       }

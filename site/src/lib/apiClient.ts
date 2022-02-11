@@ -44,9 +44,9 @@ const axiosClient = axios.create({
 
 export type ApiClientError = AxiosError<{
   errors?: Partial<ValidationError>[];
-}> & { parsedErrorMessage: string };
+}>;
 
-const parseErrorMessageFromAxiosError = (error: ApiClientError) => {
+const parseErrorMessageFromAxiosError = (error: ApiClientError): string => {
   const firstValidationErrorMessage = error.response?.data.errors?.find(
     ({ msg }) => !!msg,
   )?.msg;
@@ -54,7 +54,7 @@ const parseErrorMessageFromAxiosError = (error: ApiClientError) => {
   return (
     firstValidationErrorMessage ??
     error.response?.statusText ??
-    "An unknown error occurred"
+    "An error occurred"
   );
 };
 
@@ -64,7 +64,7 @@ const handleAxiosError = (
   /** @todo: report unexpected server errors to sentry or equivalent */
   const error = {
     ...axiosError,
-    parsedErrorMessage: parseErrorMessageFromAxiosError(axiosError),
+    message: parseErrorMessageFromAxiosError(axiosError),
   };
   return { error };
 };
