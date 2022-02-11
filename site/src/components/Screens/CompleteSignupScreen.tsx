@@ -1,5 +1,5 @@
-import { Box, Icon, Typography } from "@mui/material";
-import { useRef, useState, VFC } from "react";
+import { Box, Collapse, FormHelperText, Icon, Typography } from "@mui/material";
+import { ReactNode, useRef, useState, VFC } from "react";
 import { TextField } from "../TextField";
 import { Button } from "../Button";
 import { useShortnameTextField } from "../hooks/useShortnameTextField";
@@ -28,6 +28,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
     useState<boolean>(false);
 
   const [completingSignup, setCompletingSignup] = useState<boolean>(false);
+  const [completeSignupError, setCompleteSignupError] = useState<ReactNode>();
 
   const { shortname, setShortname, isShortnameValid, shortnameHelperText } =
     useShortnameTextField({
@@ -54,7 +55,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
       setCompletingSignup(false);
 
       if (error) {
-        throw error;
+        setCompleteSignupError(error.message);
       } else if (data) {
         setUser(data.user);
       }
@@ -146,6 +147,11 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
         >
           Continue
         </Button>
+        <Collapse in={!!completeSignupError}>
+          <FormHelperText error sx={{ marginTop: 1, fontSize: 15 }}>
+            {completeSignupError}
+          </FormHelperText>
+        </Collapse>
       </Box>
     </Box>
   );
