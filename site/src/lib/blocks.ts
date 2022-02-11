@@ -46,7 +46,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     .map((path: string) => ({
       // @todo should be redundant to block's package.json#name
       packagePath: path.split("/").slice(-3, -1).join("/"),
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+      ...fs.readJsonSync(path),
     }))
     .map((metadata: ExpandedBlockMetadata) => ({
       ...metadata,

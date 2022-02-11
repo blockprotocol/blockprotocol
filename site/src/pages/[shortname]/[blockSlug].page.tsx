@@ -121,7 +121,7 @@ export const getStaticProps: GetStaticProps<
 
   if (!blockMetadata) {
     // TODO: Render custom 404 page for blocks
-    return { notFound: true };
+    return { notFound: true, revalidate: true };
   }
 
   const { schema, source: blockStringifiedSource } =

@@ -12,7 +12,7 @@ import { Link } from "./Link";
 import { BoltIcon } from "./icons";
 import { LinkButton } from "./LinkButton";
 
-const backgroundRainbow = "/public/assets/background-corner-rainbow.png";
+const backgroundRainbow = "/assets/background-corner-rainbow.png";
 
 type Banner = {
   shouldDisplay: (params: { pathname: string }) => boolean;
