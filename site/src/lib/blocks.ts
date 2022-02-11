@@ -70,8 +70,9 @@ export const readBlockDataFromDisk = ({
     schema: fs.readJsonSync(
       `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
     ),
-    source: fs.readJsonSync(
+    source: fs.readFileSync(
       `${process.cwd()}/public/blocks/${packagePath}/${source}`,
+      "utf-8",
     ),
   };
 };
