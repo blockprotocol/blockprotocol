@@ -234,6 +234,7 @@ export class User {
     updatedProperties: Partial<UserProperties>,
   ): Promise<User> {
     if (
+      this.shortname &&
       updatedProperties.shortname &&
       updatedProperties.shortname !== this.shortname
     ) {
