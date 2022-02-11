@@ -40,9 +40,7 @@ const getBlockMediaUrl = (
 export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
   const buildConfig: BuildConfig[] = globSync(
     `${process.cwd()}/../hub/**/*.json`,
-  ).map((path: string) => ({
-    ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-  }));
+  ).map((path: string) => ({ ...fs.readJsonSync(path) }));
 
   return globSync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string) => ({
@@ -69,15 +67,11 @@ export const readBlockDataFromDisk = ({
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
   return {
-    schema: JSON.parse(
-      fs.readFileSync(
-        `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
-        { encoding: "utf8" },
-      ),
+    schema: fs.readJsonSync(
+      `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
     ),
-    source: fs.readFileSync(
+    source: fs.readJsonSync(
       `${process.cwd()}/public/blocks/${packagePath}/${source}`,
-      "utf8",
     ),
   };
 };
