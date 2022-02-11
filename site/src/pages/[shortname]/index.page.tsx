@@ -226,7 +226,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                           description={description!}
                           icon={icon}
                           image={image}
-                          lastUpdated={lastUpdated}
+                          lastUpdated={lastUpdated ?? undefined}
                           title={displayName!}
                           type="block"
                           version={version}
@@ -270,7 +270,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                     icon={icon}
                     title={displayName!}
                     description={description}
-                    lastUpdated={lastUpdated}
+                    lastUpdated={lastUpdated ?? undefined}
                     url={`/${packagePath}`}
                   />
                 ),
