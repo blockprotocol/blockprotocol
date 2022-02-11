@@ -55,11 +55,7 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
       setSendingLoginCode(false);
 
       if (error) {
-        if (error.response?.data.errors) {
-          setApiErrorMessage(error.response.data.errors.map(({ msg }) => msg));
-        } else {
-          throw error;
-        }
+        setApiErrorMessage(error.parsedErrorMessage);
       } else if (verificationCodeInfo) {
         onLoginCodeSent({ verificationCodeInfo, email: emailValue });
       }

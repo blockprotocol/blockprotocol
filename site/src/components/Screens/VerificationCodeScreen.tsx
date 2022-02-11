@@ -94,13 +94,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
     setSendingVerificationCode(false);
 
     if (error) {
-      if (error.response?.data.errors) {
-        setApiResendEmailErrorMessage(
-          error.response.data.errors.map(({ msg }) => msg),
-        );
-      } else {
-        throw error;
-      }
+      setApiResendEmailErrorMessage(error.parsedErrorMessage);
     } else if (data) {
       unstable_batchedUpdates(() => {
         setVerificationCode("");
@@ -129,13 +123,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         setSubmitting(false);
 
         if (error) {
-          if (error.response?.data.errors) {
-            setApiSubmittedErrorMessage(
-              error.response.data.errors.map(({ msg }) => msg),
-            );
-          } else {
-            throw error;
-          }
+          setApiSubmittedErrorMessage(error.parsedErrorMessage);
         } else if (data) {
           onSubmit(data.user);
         }
