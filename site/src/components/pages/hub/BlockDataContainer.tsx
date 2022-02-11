@@ -99,13 +99,13 @@ export const BlockDataContainer: VoidFunctionComponent<
     }
 
     return () => {
-      const blockVariant: BlockVariant | undefined =
+      const previousBlockVariant: BlockVariant | undefined =
         metadata?.variants?.[blockVariantsTab];
 
-      if (blockVariant) {
+      if (previousBlockVariant) {
         propertiesToRemove.current = Object.keys({
-          ...blockVariant.properties,
-          ...blockVariant.examples?.[0],
+          ...previousBlockVariant.properties,
+          ...previousBlockVariant.examples?.[0],
         });
       }
     };
