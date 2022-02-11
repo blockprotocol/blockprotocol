@@ -134,7 +134,6 @@ export const getStaticProps: GetStaticProps<
       blockStringifiedSource,
       catalog,
     },
-    revalidate: 1800,
   };
 };
 
