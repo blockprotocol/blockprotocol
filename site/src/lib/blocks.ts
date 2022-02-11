@@ -1,11 +1,13 @@
 import { BlockMetadata } from "blockprotocol";
+import fs from "fs-extra";
+import { sync as globSync } from "glob";
 
 /** @todo type as JSON object */
 export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
   packagePath: string;
-  lastUpdated?: string;
+  lastUpdated?: string | null;
 };
 
 export type BuildConfig = {
@@ -36,19 +38,13 @@ const getBlockMediaUrl = (
  *
  */
 export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
-  const glob = require("glob");
-  /* eslint-enable global-require */
+  const buildConfig: BuildConfig[] = globSync(
+    `${process.cwd()}/../hub/**/*.json`,
+  ).map((path: string) => ({
+    ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+  }));
 
-  const buildConfig: BuildConfig[] = glob
-    .sync(`${process.cwd()}/../hub/**/*.json`)
-    .map((path: string) => ({
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }));
-
-  return glob
-    .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
+  return globSync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string) => ({
       // @todo should be redundant to block's package.json#name
       packagePath: path.split("/").slice(-3, -1).join("/"),
@@ -70,8 +66,6 @@ export const readBlockDataFromDisk = ({
   schema,
   source,
 }: ExpandedBlockMetadata) => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
   return {
