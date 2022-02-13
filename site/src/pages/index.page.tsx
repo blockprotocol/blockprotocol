@@ -3,8 +3,8 @@ import { GetStaticProps } from "next";
 import { Header } from "../components/pages/home/Header";
 import { IntroSection } from "../components/pages/home/IntroSection";
 import { Section2 } from "../components/pages/home/Section2";
-import { WhyBlockProtocol1Section } from "../components/pages/home/WhyBlockProtocol1Section";
-import { WhyBlockProtocol2Section } from "../components/pages/home/WhyBlockProtocol2Section";
+import { WhyBlockProtocolSection } from "../components/pages/home/WhyBlockProtocolSection";
+// import { WhyBlockProtocol2Section } from "../components/pages/home/WhyBlockProtocol2Section";
 import { RegistrySection } from "../components/pages/home/RegistrySection";
 import {
   ExpandedBlockMetadata as BlockMetadata,
@@ -27,8 +27,8 @@ const HomePage: VFC<PageProps> = ({ catalog }) => {
       <Header />
       <IntroSection />
       <Section2 />
-      <WhyBlockProtocol1Section />
-      <WhyBlockProtocol2Section />
+      <WhyBlockProtocolSection />
+      {/* <WhyBlockProtocol2Section /> */}
       <RegistrySection catalog={catalog} />
     </>
   );
