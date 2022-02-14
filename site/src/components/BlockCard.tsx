@@ -84,22 +84,50 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
       <Box
         sx={{
           ...blockWidthStyles,
+          position: "relative",
           borderRadius: "8px",
-          boxShadow: 1,
           transition: ({ transitions }) =>
-            transitions.create(["box-shadow", "transform"], {
+            transitions.create(["transform"], {
               duration: 300,
               easing: "ease",
             }),
           backgroundColor: ({ palette }) => palette.common.white,
-          "&:hover": {
+          cursor: "pointer",
+          "&::before, &::after": {
+            content: `""`,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            pointerEvents: "none",
+            borderRadius: "8px",
+            transition: ({ transitions }) =>
+              transitions.create(["opacity"], {
+                duration: 300,
+                easing: "ease",
+              }),
+          },
+          "&::before": {
+            boxShadow: 1,
+            opacity: 1,
+          },
+          "&::after": {
             boxShadow: 4,
+            opacity: 0,
+          },
+          "&:hover": {
             "& .block-card__name": {
               color: ({ palette }) => palette.purple[600],
             },
             transform: "scale(1.05)",
+            "&::before": {
+              opacity: 0,
+            },
+            "&::after": {
+              opacity: 1,
+            },
           },
-          cursor: "pointer",
         }}
       >
         <Box
