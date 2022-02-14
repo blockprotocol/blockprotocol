@@ -95,6 +95,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             transitions.create(["transform"], cardHoverTransition),
           backgroundColor: ({ palette }) => palette.common.white,
           cursor: "pointer",
+          willChange: "transform",
           "&::before, &::after": {
             content: `""`,
             position: "absolute",
