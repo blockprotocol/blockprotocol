@@ -119,7 +119,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             "& .block-card__name": {
               color: ({ palette }) => palette.purple[600],
             },
-            transform: "scale(1.05)",
+            transform: "scale(1.03)",
             "&::before": {
               opacity: 0,
             },
