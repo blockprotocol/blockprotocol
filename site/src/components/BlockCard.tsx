@@ -20,6 +20,11 @@ const blockWidthStyles = {
   width: "100%",
 };
 
+const cardHoverTransition = {
+  duration: 300,
+  easing: "ease",
+};
+
 const BlockCardLoading = () => {
   return (
     <Box
@@ -87,10 +92,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
           position: "relative",
           borderRadius: "8px",
           transition: ({ transitions }) =>
-            transitions.create(["transform"], {
-              duration: 300,
-              easing: "ease",
-            }),
+            transitions.create(["transform"], cardHoverTransition),
           backgroundColor: ({ palette }) => palette.common.white,
           cursor: "pointer",
           "&::before, &::after": {
@@ -103,10 +105,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             pointerEvents: "none",
             borderRadius: "8px",
             transition: ({ transitions }) =>
-              transitions.create(["opacity"], {
-                duration: 300,
-                easing: "ease",
-              }),
+              transitions.create(["opacity"], cardHoverTransition),
           },
           "&::before": {
             boxShadow: 1,
