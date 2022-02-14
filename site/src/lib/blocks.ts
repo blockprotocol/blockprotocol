@@ -5,7 +5,7 @@ export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
   packagePath: string;
-  lastUpdated?: string;
+  lastUpdated?: string | null;
 };
 
 export type BuildConfig = {
