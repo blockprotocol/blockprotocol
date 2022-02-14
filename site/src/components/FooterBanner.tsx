@@ -9,9 +9,10 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Link } from "./Link";
-import backgroundRainbow from "../../public/assets/background-corner-rainbow.png";
 import { BoltIcon } from "./icons";
 import { LinkButton } from "./LinkButton";
+
+const backgroundRainbow = "/assets/background-corner-rainbow.png";
 
 type Banner = {
   shouldDisplay: (params: { pathname: string }) => boolean;
