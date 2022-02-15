@@ -35,7 +35,7 @@ export const BlockDataContainer: VoidFunctionComponent<
   const example = metadata.examples?.[0];
 
   const [text, setText] = useState(
-    example ? JSON.stringify(example, undefined, 2) : "",
+    example ? JSON.stringify(example, undefined, 2) : "{}",
   );
 
   const theme = useTheme();
