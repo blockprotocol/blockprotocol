@@ -10,7 +10,7 @@ type OverviewCardProps = {
   title: string;
   description?: string;
   icon?: string | null;
-  lastUpdated?: string;
+  lastUpdated?: string | null;
   image?: string | null;
   version?: string | null;
   url: string;
