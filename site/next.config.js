@@ -4,7 +4,6 @@ const withFonts = require("next-fonts");
 module.exports = withFonts(
   withImages({
     pageExtensions: ["page.ts", "page.tsx", "api.ts"],
-    webpack5: false,
     optimizeFonts: true,
 
     // We call linters in GitHub Actions for all pull requests. By not linting
