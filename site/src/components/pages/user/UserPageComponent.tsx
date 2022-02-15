@@ -14,7 +14,6 @@ import {
   Container,
   Grid,
   Typography,
-  TextField,
   useTheme,
 } from "@mui/material";
 
@@ -30,6 +29,7 @@ import { OverviewCard } from "./OverviewCard";
 import { Sidebar } from "./Sidebar";
 import { TABS, TabHeader, TabPanel } from "./Tabs";
 import { Modal } from "../../Modal";
+import { TextField } from "../../TextField";
 
 const SIDEBAR_WIDTH = 300;
 
@@ -163,7 +163,7 @@ export const UserPageComponent: VoidFunctionComponent<
               activeTab={activeTab}
               setActiveTab={(nextTab) => {
                 setActiveTab(nextTab);
-                router.push(
+                return router.push(
                   `/@${user.shortname}/${
                     TABS.find((tab) => tab.value === nextTab)?.slug
                   }`,
