@@ -49,15 +49,19 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
+const UserSchemasPage: NextPage<UserPageProps> = ({
+  user,
+  blocks,
+  entityTypes,
+}) => {
   return (
     <UserPageComponent
       user={user}
       blocks={blocks}
       entityTypes={entityTypes}
-      initialActiveTab="overview"
+      initialActiveTab="schemas"
     />
   );
 };
 
-export default UserPage;
+export default UserSchemasPage;
