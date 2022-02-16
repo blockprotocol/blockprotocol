@@ -27,6 +27,7 @@ const CardWrapper: FC<CardWrapperProps> = ({ children, onClick, href }) => {
       position: "relative",
 
       "&::after": {
+        content: `""`,
         position: "absolute",
         top: 0,
         left: 0,
@@ -182,7 +183,9 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
           >
             {title}
           </Typography>
-          <Typography color="#4D5C6C">{description}</Typography>
+          <Typography mb={2} color="#4D5C6C">
+            {description}
+          </Typography>
           <Box
             sx={{
               color: "#6048E5",
@@ -192,7 +195,6 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
               },
               display: "flex",
               alignItems: "center",
-              marginTop: 2,
             }}
           >
             <Box component="span" paddingRight={1}>
