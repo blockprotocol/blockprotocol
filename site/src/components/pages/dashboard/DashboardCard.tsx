@@ -25,6 +25,11 @@ const CardWrapper: FC<CardWrapperProps> = ({ children, onClick, href }) => {
   const sharedStyles: BoxProps["sx"] = useMemo(
     () => ({
       position: "relative",
+      height: "100%",
+
+      "& > *": {
+        height: "100%",
+      },
 
       "&::after": {
         content: `""`,
@@ -86,20 +91,33 @@ export const DashboardCardSecondary: VoidFunctionComponent<
           sx={{ fontSize: 32, mr: 3, color: ({ palette }) => palette.gray[40] }}
           className={icon}
         />
-        <Box>
-          <Typography variant="bpLargeText" sx={{ mb: 0.75 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Typography
+            variant="bpLargeText"
+            sx={{
+              mb: 0.75,
+              color: ({ palette }) => palette.gray[80],
+              fontWeight: 500,
+            }}
+          >
             {title}
           </Typography>
           <Typography sx={{ mb: 2 }}>{description}</Typography>
           <Box
             sx={{
               color: ({ palette }) => palette.purple[700],
-              fontWeight: 600,
+              fontWeight: 400,
               path: {
                 fill: "currentColor",
               },
               display: "flex",
               alignItems: "center",
+              mt: "auto",
             }}
           >
             <Box component="span" paddingRight={1}>
@@ -143,6 +161,8 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
             "0px 4px 11px rgba(39, 50, 86, 0.02), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.04), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
           borderRadius: 2,
           position: "relative",
+          display: "flex",
+          flexDirection: "column",
 
           "&::after": {
             content: `""`,
@@ -171,7 +191,14 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
           }}
           height={8}
         />
-        <Box p={4}>
+        <Box
+          p={4}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            flex: 1,
+          }}
+        >
           <Typography
             sx={{
               fontFamily: "Apercu Pro",
@@ -195,6 +222,7 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
               },
               display: "flex",
               alignItems: "center",
+              mt: "auto",
             }}
           >
             <Box component="span" paddingRight={1}>
