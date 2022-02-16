@@ -68,6 +68,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
           borderRadius: buttonBorderRadius,
           ...(size === "small" && {
             padding: theme.spacing("8px", "20px"),
+            minHeight: 40,
           }),
           ...(size === "medium" && {
             padding: theme.spacing("12px", "28px"),

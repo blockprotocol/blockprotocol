@@ -1,5 +1,5 @@
-import { Box, Typography, Link, Icon } from "@mui/material";
-import { VoidFunctionComponent, FC } from "react";
+import { Box, Typography, Link, Icon, BoxProps } from "@mui/material";
+import { VoidFunctionComponent, FC, useMemo } from "react";
 
 import { ArrowRightIcon } from "../../icons";
 
@@ -22,15 +22,50 @@ type CardWrapperProps = {
 };
 
 const CardWrapper: FC<CardWrapperProps> = ({ children, onClick, href }) => {
+  const sharedStyles: BoxProps["sx"] = useMemo(
+    () => ({
+      position: "relative",
+
+      "&::after": {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        height: "100%",
+        width: "100%",
+        boxShadow: 1,
+        opacity: 0,
+        transition: ({ transitions }) =>
+          transitions.create("opacity", { duration: 300 }),
+      },
+
+      "&:hover::after": {
+        opacity: 1,
+      },
+
+      "&:focus-visible": {
+        outline: ({ palette }) => `1px solid ${palette.purple[700]}`,
+      },
+    }),
+    [],
+  );
+
   if (onClick) {
     return (
-      <Box component="button" sx={{ textAlign: "left" }} onClick={onClick}>
+      <Box
+        component="button"
+        sx={{ textAlign: "left", ...sharedStyles }}
+        onClick={onClick}
+      >
         {children}
       </Box>
     );
   }
 
-  return <Link href={href}>{children}</Link>;
+  return (
+    <Link href={href} sx={sharedStyles}>
+      {children}
+    </Link>
+  );
 };
 
 export const DashboardCardSecondary: VoidFunctionComponent<
@@ -54,7 +89,7 @@ export const DashboardCardSecondary: VoidFunctionComponent<
           <Typography variant="bpLargeText" sx={{ mb: 0.75 }}>
             {title}
           </Typography>
-          <Typography sx={{ mb: 0.75 }}>{description}</Typography>
+          <Typography sx={{ mb: 2 }}>{description}</Typography>
           <Box
             sx={{
               color: ({ palette }) => palette.purple[700],
@@ -64,7 +99,6 @@ export const DashboardCardSecondary: VoidFunctionComponent<
               },
               display: "flex",
               alignItems: "center",
-              marginTop: 2,
             }}
           >
             <Box component="span" paddingRight={1}>
@@ -103,9 +137,29 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
     <CardWrapper href={link.href} onClick={link.onClick}>
       <Box
         sx={{
+          // @todo update theme config to include microShadow
           boxShadow:
             "0px 4px 11px rgba(39, 50, 86, 0.02), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.04), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
           borderRadius: 2,
+          position: "relative",
+
+          "&::after": {
+            content: `""`,
+            position: "absolute",
+            zIndex: -1,
+            top: 0,
+            left: 0,
+            height: "100%",
+            width: "100%",
+            boxShadow: 2,
+            opacity: 0,
+            transition: ({ transitions }) =>
+              transitions.create("opacity", { duration: 300 }),
+          },
+
+          "&:hover::after": {
+            opacity: 1,
+          },
         }}
       >
         <Box
@@ -123,13 +177,12 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
               fontSize: "28.128px",
               lineHeight: "120%",
               color: "#37434F",
+              mb: 1,
             }}
           >
             {title}
           </Typography>
-          <Typography color="#4D5C6C" paddingTop={1}>
-            {description}
-          </Typography>
+          <Typography color="#4D5C6C">{description}</Typography>
           <Box
             sx={{
               color: "#6048E5",
