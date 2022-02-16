@@ -66,7 +66,8 @@ const getDashboardSecondaryCardData = (
   },
   {
     title: "View your public profile",
-    description: "View blocks and schemas you have created",
+    description:
+      "See what others see and browse your published blocks and schemas",
     link: {
       title: "View Profile",
       href: profileLink,
