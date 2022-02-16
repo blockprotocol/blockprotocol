@@ -145,11 +145,8 @@ export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
   icon,
 }) => {
   if (variant === "secondary") {
-    return (
-      <DashboardCardSecondary
-        {...{ title, description, link, variant, icon }}
-      />
-    );
+    const secondaryCardProps = { title, description, link, variant, icon };
+    return <DashboardCardSecondary {...secondaryCardProps} />;
   }
 
   return (
