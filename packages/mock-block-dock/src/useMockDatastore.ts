@@ -13,17 +13,19 @@ import {
   BlockProtocolUpdateLinksFunction,
   BlockProtocolUploadFileFunction,
 } from "blockprotocol";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { matchIdentifiers } from "./util";
 
-type MockData = {
+export type MockData = {
   entities: BlockProtocolEntity[];
   links: BlockProtocolLink[];
   entityTypes: BlockProtocolEntityType[];
+  blockEntityId?: string;
 };
 
 type MockDataStore = MockData & {
+  latestBlockEntity: BlockProtocolEntity | undefined;
   functions: Omit<
     // @todo implement missing functions
     BlockProtocolFunctions,
@@ -44,15 +46,37 @@ export const useMockDatastore: UseMockDataStore = (
     entities: [],
     links: [],
     entityTypes: [],
+    blockEntityId: "",
   },
 ) => {
   const [entities, setEntities] = useState<MockDataStore["entities"]>(
     initialData.entities,
   );
+  const [latestBlockEntity, setLatestBlockEntity] = useState(
+    entities.find((entity) => entity.entityId === initialData.blockEntityId),
+  );
   const [links, setLinks] = useState<MockDataStore["links"]>(initialData.links);
   const [entityTypes, _setEntityTypes] = useState<MockDataStore["entityTypes"]>(
     initialData.entityTypes,
   );
+
+  useEffect(() => {
+    setEntities(initialData.entities);
+  }, [initialData.entities]);
+
+  useEffect(() => {
+    let nextLatestBlockEntity = entities.find(
+      (entity) => entity.entityId === initialData.blockEntityId,
+    );
+
+    if (!nextLatestBlockEntity) {
+      nextLatestBlockEntity = initialData.entities.find(
+        (entity) => entity.entityId === initialData.blockEntityId,
+      );
+    }
+
+    setLatestBlockEntity(nextLatestBlockEntity);
+  }, [initialData.blockEntityId, initialData.entities, entities]);
 
   const createEntities: BlockProtocolCreateEntitiesFunction = useCallback(
     async (actions) => {
@@ -263,7 +287,6 @@ export const useMockDatastore: UseMockDataStore = (
   return {
     entities,
     entityTypes,
-    links,
     functions: {
       getEntities,
       createEntities,
@@ -275,5 +298,7 @@ export const useMockDatastore: UseMockDataStore = (
       updateLinks,
       uploadFile,
     },
+    latestBlockEntity,
+    links,
   };
 };
