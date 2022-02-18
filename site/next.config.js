@@ -1,4 +1,7 @@
-module.exports = {
+// @ts-check
+
+/** @type {import("next").NextConfig} */
+const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
@@ -32,3 +35,5 @@ module.exports = {
     ];
   },
 };
+
+module.exports = nextConfig;
