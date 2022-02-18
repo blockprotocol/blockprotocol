@@ -1,18 +1,17 @@
 import * as React from "react";
-import { SvgIcon, BoxProps } from "@mui/material";
+import { SvgIcon, SvgIconProps } from "@mui/material";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 type FontAwesomeSvgIconProps = {
   icon: IconDefinition;
-  sx?: BoxProps["sx"];
-};
+} & SvgIconProps;
 
 // gotten from https://mui.com/components/icons/#font-awesome
 export const FontAwesomeSvgIcon = React.forwardRef<
   SVGSVGElement,
   FontAwesomeSvgIconProps
 >((props, ref) => {
-  const { icon, sx } = props;
+  const { icon, sx, ...otherProps } = props;
 
   const {
     icon: [width, height, , , svgPathData],
@@ -24,8 +23,12 @@ export const FontAwesomeSvgIcon = React.forwardRef<
       viewBox={`0 0 ${width} ${height}`}
       sx={{
         color: "currentColor",
+        width: "1em",
+        height: "1em",
+        fontSize: "15px",
         ...sx,
       }}
+      {...otherProps}
     >
       {typeof svgPathData === "string" ? (
         <path d={svgPathData} />

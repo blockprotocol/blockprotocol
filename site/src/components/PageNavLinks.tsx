@@ -2,16 +2,17 @@ import { VFC } from "react";
 import {
   Typography,
   Box,
-  Icon,
   BoxProps,
   styled,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "./Link";
 import { SiteMapPage } from "../lib/sitemap";
+import { FontAwesomeSvgIcon } from "./icons";
 
-const NavArrowIcon = styled(Icon)(({ theme }) => ({
+const NavArrowIcon = styled(FontAwesomeSvgIcon)(({ theme }) => ({
   color: theme.palette.purple[300],
   fontSize: 15,
   marginTop: theme.spacing(0.8),
@@ -62,7 +63,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
                   sx={{
                     marginRight: 2,
                   }}
-                  className="fas fa-arrow-left"
+                  icon={faArrowLeft}
                 />
                 <Link
                   sx={{
@@ -118,7 +119,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
                 sx={{
                   marginLeft: 2,
                 }}
-                className="fas fa-arrow-right"
+                icon={faArrowRight}
               />
             </Box>
           </Box>

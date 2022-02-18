@@ -1,6 +1,5 @@
 import { FC, ReactNode } from "react";
 import {
-  Icon,
   Box,
   Container,
   Typography,
@@ -9,8 +8,18 @@ import {
   useMediaQuery,
   BoxProps,
 } from "@mui/material";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faGithub,
+  faTwitter,
+  faDiscord,
+} from "@fortawesome/free-brands-svg-icons";
+import {
+  BlockProtocolLogoIcon,
+  HASHLogoIcon,
+  FontAwesomeSvgIcon,
+} from "./icons";
 import { Link } from "./Link";
-import { BlockProtocolLogoIcon, HASHLogoIcon } from "./icons";
 import { LinkButton } from "./LinkButton";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
@@ -77,17 +86,17 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
 const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
     name: "Twitter",
-    icon: <Icon className="fab fa-twitter" />,
+    icon: <FontAwesomeSvgIcon icon={faTwitter} />,
     href: "https://twitter.com/blockprotocol",
   },
   {
     name: "Discord",
-    icon: <Icon className="fab fa-discord" />,
+    icon: <FontAwesomeSvgIcon icon={faDiscord} />,
     href: "/discord",
   },
   {
     name: "GitHub",
-    icon: <Icon className="fab fa-github" />,
+    icon: <FontAwesomeSvgIcon icon={faGithub} />,
     href: "https://github.com/blockprotocol",
   },
 ];
@@ -145,7 +154,7 @@ const Socials = (
         marginBottom: 2.5,
         marginTop: -0.7,
       }}
-      startIcon={<Icon className="fa fa-star" />}
+      startIcon={<FontAwesomeSvgIcon icon={faStar} />}
     >
       Star us on GitHub
     </LinkButton>

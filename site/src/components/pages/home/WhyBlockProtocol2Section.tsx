@@ -4,9 +4,9 @@ import {
   Box,
   useTheme,
   useMediaQuery,
-  Icon,
 } from "@mui/material";
-import { SyncIcon } from "../../icons";
+import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { SyncIcon, FontAwesomeSvgIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
 export const WhyBlockProtocol2Section = () => {
@@ -50,9 +50,9 @@ export const WhyBlockProtocol2Section = () => {
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <Icon
+            <FontAwesomeSvgIcon
+              icon={faPencil}
               sx={{ fontSize: "inherit", mr: 1.25 }}
-              className="fas fa-pencil"
             />
             Personal Notes
           </Typography>
@@ -80,9 +80,12 @@ export const WhyBlockProtocol2Section = () => {
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <Icon
-              sx={{ fontSize: "inherit", mr: 1.25 }}
-              className="fas fa-check-circle"
+            <FontAwesomeSvgIcon
+              icon={faCheckCircle}
+              sx={{
+                fontSize: "inherit",
+                mr: 1.25,
+              }}
             />
             Project Management App
           </Typography>

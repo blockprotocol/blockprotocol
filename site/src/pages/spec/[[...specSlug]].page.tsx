@@ -3,7 +3,6 @@ import {
   Container,
   Typography,
   Box,
-  Icon,
   Paper,
   useMediaQuery,
   useTheme,
@@ -12,6 +11,8 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { Link } from "../../components/Link";
 import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
@@ -24,6 +25,7 @@ import { PageNavLinks } from "../../components/PageNavLinks";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 import Search from "../../components/pages/docs/Search";
 import { LinkButton } from "../../components/LinkButton";
+import { FontAwesomeSvgIcon } from "../../components/icons";
 
 const GitHubInfoCard = (
   <Paper
@@ -52,13 +54,12 @@ const GitHubInfoCard = (
         },
       }}
     >
-      <Icon
+      <FontAwesomeSvgIcon
         sx={{
           color: ({ palette }) => palette.teal[600],
           fontSize: 18,
         }}
-        fontSize="inherit"
-        className="fas fa-exclamation-triangle"
+        icon={faExclamationTriangle}
       />
     </Box>
     <Box
@@ -128,7 +129,7 @@ const GitHubInfoCard = (
         variant="primary"
         color="teal"
         size="small"
-        startIcon={<Icon className="fab fa-github" />}
+        startIcon={<FontAwesomeSvgIcon icon={faGithub} />}
         sx={{
           textTransform: "none",
         }}

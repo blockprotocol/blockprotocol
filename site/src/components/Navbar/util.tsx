@@ -1,6 +1,5 @@
-import { Icon } from "@mui/material";
-
-import { BlockHubIcon, SpecificationIcon } from "../icons";
+import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
+import { BlockHubIcon, SpecificationIcon, FontAwesomeSvgIcon } from "../icons";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 
@@ -18,12 +17,11 @@ export const NAVBAR_LINK_ICONS: Record<string, JSX.Element> = {
     />
   ),
   Documentation: (
-    <Icon
-      className="fas fa-book-open"
+    <FontAwesomeSvgIcon
+      icon={faBookOpen}
       sx={{
         fontSize: 18,
       }}
-      fontSize="inherit"
     />
   ),
   Specification: (

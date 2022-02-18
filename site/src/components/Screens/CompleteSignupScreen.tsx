@@ -1,4 +1,4 @@
-import { Box, Collapse, FormHelperText, Icon, Typography } from "@mui/material";
+import { Box, Collapse, FormHelperText, Typography } from "@mui/material";
 import { ReactNode, useRef, useState, VFC } from "react";
 import { TextField } from "../TextField";
 import { Button } from "../Button";
@@ -9,6 +9,7 @@ import {
   ApiCompleteSignupResponse,
 } from "../../pages/api/completeSignup.api";
 import { useUser } from "../../context/UserContext";
+import { BadgeCheckIcon } from "../icons/BadgeCheckIcon";
 
 type CompleteSignupScreenProps = {
   email: string;
@@ -64,8 +65,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Icon
-        className="fa-solid fa-badge-check"
+      <BadgeCheckIcon
         sx={{
           fontSize: 50,
           color: ({ palette }) => palette.purple[600],

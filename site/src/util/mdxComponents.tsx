@@ -8,32 +8,27 @@ import {
   useRef,
   VFC,
 } from "react";
-import {
-  TypographyProps,
-  Typography,
-  Box,
-  Paper,
-  Icon,
-  styled,
-} from "@mui/material";
+import { TypographyProps, Typography, Box, Paper, styled } from "@mui/material";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "../components/Link";
 import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 import { Snippet } from "../components/Snippet";
 import PageHeadingsContext from "../components/context/PageHeadingsContext";
+import { FontAwesomeSvgIcon } from "../components/icons";
 
 const Heading = styled(Typography)(({ theme }) => ({
-  "svg.fa-link": {
+  "svg.link-icon": {
     transition: theme.transitions.create("opacity"),
     opacity: 0,
   },
   ":hover, a:focus-visible": {
-    "svg.fa-link": {
+    "svg.link-icon": {
       opacity: 1,
     },
   },
   "@media (hover: none)": {
-    "svg.fa-link": {
+    "svg.link-icon": {
       opacity: 1,
     },
   },
@@ -75,9 +70,14 @@ const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
         width: size,
       }}
     >
-      <Icon
-        sx={{ fontSize: size, position: "absolute", lineHeight: size }}
-        className="fas fa-link"
+      <FontAwesomeSvgIcon
+        icon={faLink}
+        className="link-icon"
+        sx={{
+          fontSize: size,
+          position: "absolute",
+          lineHeight: size,
+        }}
       />
     </Link>
   );

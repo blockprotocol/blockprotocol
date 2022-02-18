@@ -1,7 +1,8 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState, useMemo, useCallback, useRef } from "react";
-import { Paper, Box, Icon, Fade, Container } from "@mui/material";
+import { Paper, Box, Fade, Container } from "@mui/material";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { apiClient } from "../lib/apiClient";
 import { ApiLoginWithLoginCodeRequestBody } from "./api/loginWithLoginCode.api";
 import { Button } from "../components/Button";
@@ -12,6 +13,7 @@ import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../components/Screens/VerificationCodeScreen";
+import { FontAwesomeSvgIcon } from "../components/icons";
 
 type LoginPageParsedUrlQuery = {
   redirectPath?: string;
@@ -140,7 +142,10 @@ const LoginPage: NextPage = () => {
                   onClick={() => setCurrentScreen("Email")}
                   variant="transparent"
                   startIcon={
-                    <Icon sx={{ fontSize: 16 }} className="fas fa-arrow-left" />
+                    <FontAwesomeSvgIcon
+                      icon={faArrowLeft}
+                      sx={{ fontSize: 16 }}
+                    />
                   }
                   sx={{
                     fontSize: 15,
