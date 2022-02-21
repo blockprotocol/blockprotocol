@@ -12,7 +12,6 @@ import {
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
-import { getStaticPaths } from "../../../pages/[shortname]/[blockSlug].page";
 import { Spacer } from "../../Spacer";
 import { WhyBlockProtocol2Section } from "./WhyBlockProtocol2Section";
 
@@ -198,7 +197,7 @@ export const WhyBlockProtocolSection = () => {
           start: "bottom center",
           end: "top top+=100",
           scrub: true,
-          markers: true,
+          // markers: true,
           onEnter: () => {
             // console.log("enter => ", marker);
             gsap.to(marker, {
