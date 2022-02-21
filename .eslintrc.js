@@ -1,3 +1,14 @@
+const sharedNoRestrictedImportsConfig = {
+  paths: [],
+  patterns: [
+    {
+      group: ["fs", "fs/*"],
+      message:
+        "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
+    },
+  ],
+};
+
 module.exports = {
   // this is the highest config lower ones will automatically extend
   root: true,
@@ -30,6 +41,7 @@ module.exports = {
     "no-nested-ternary": "off",
     "no-restricted-syntax": "off",
     camelcase: "off",
+    "default-param-last": "off", // using @typescript-eslint/default-param-last instead
     "import/no-cycle": "error",
     "import/prefer-default-export": "off",
     "no-await-in-loop": "off",
@@ -39,7 +51,14 @@ module.exports = {
     "react/prop-types": "off",
     // because we are using typescript this is redundant
     "jsx-a11y/anchor-is-valid": "off",
-    // because we use next.js empty anchor tags should be used when using the Link component
+    "no-restricted-imports": ["error", sharedNoRestrictedImportsConfig],
+    "react/function-component-definition": [
+      "error",
+      {
+        namedComponents: "arrow-function",
+        unnamedComponents: "arrow-function",
+      },
+    ], // because we use next.js empty anchor tags should be used when using the Link component
     "react/jsx-filename-extension": [
       "error",
       {
@@ -82,6 +101,7 @@ module.exports = {
     "react/self-closing-comp": "error",
     "react/require-default-props": "off",
     "no-shadow": "off",
+    "@typescript-eslint/default-param-last": "error",
     // see https://github.com/typescript-eslint/typescript-eslint/issues/2483
     "@typescript-eslint/no-shadow": "error",
     "no-use-before-define": "off",
@@ -154,7 +174,13 @@ module.exports = {
   overrides: [
     {
       files: ["**/*.js"],
-      parser: "espree", // default parser (no typescript rules)
+      parser: "@babel/eslint-parser", // disables typescript rules
+      parserOptions: {
+        requireConfigFile: false,
+        babelOptions: {
+          presets: ["@babel/preset-react"], // allows jsx
+        },
+      },
     },
     {
       // top-level config files
@@ -188,54 +214,64 @@ module.exports = {
     },
     {
       files: ["site/**"],
+      parserOptions: {
+        tsconfigRootDir: `${__dirname}/site`,
+        project: "tsconfig.json",
+      },
       rules: {
         "no-restricted-imports": [
           "error",
           {
-            name: "@mui/material",
-            importNames: ["Link"],
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "@mui/material/Link",
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "next",
-            importNames: ["Link"],
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "next/link",
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
-            name: "@mui/material",
-            importNames: ["Button", "TextField", "Popover"],
-            message:
-              "Please use the custom wrapper component in src/component instead.",
-          },
-          {
-            name: "@mui/material/Button",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/Button component instead.",
-          },
-          {
-            name: "@mui/material/TextField",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/TextField component instead.",
-          },
-          {
-            name: "@mui/material/Popover",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/Popover component instead.",
+            ...sharedNoRestrictedImportsConfig,
+            paths: [
+              ...sharedNoRestrictedImportsConfig.paths,
+              {
+                name: "@mui/material",
+                importNames: ["Link"],
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "@mui/material/Link",
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "next",
+                importNames: ["Link"],
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "next/link",
+                message:
+                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
+              },
+              {
+                name: "@mui/material",
+                importNames: ["Button", "TextField", "Popover"],
+                message:
+                  "Please use the custom wrapper component in src/component instead.",
+              },
+              {
+                name: "@mui/material/Button",
+                importNames: ["default"],
+                message:
+                  "Please use the custom src/components/Button component instead.",
+              },
+              {
+                name: "@mui/material/TextField",
+                importNames: ["default"],
+                message:
+                  "Please use the custom src/components/TextField component instead.",
+              },
+              {
+                name: "@mui/material/Popover",
+                importNames: ["default"],
+                message:
+                  "Please use the custom src/components/Popover component instead.",
+              },
+            ],
           },
         ],
       },

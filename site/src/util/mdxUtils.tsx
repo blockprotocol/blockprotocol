@@ -1,7 +1,7 @@
 import { serialize } from "next-mdx-remote/serialize";
 import path from "path";
 import matter from "gray-matter";
-import { readFileSync, readdirSync } from "fs";
+import fs from "fs-extra";
 import unified from "unified";
 // @ts-expect-error -- Need to figure out how to get or declare the necessary types
 import remarkMdx from "remark-mdx";
@@ -72,7 +72,7 @@ const parseNameFromFileName = (fileName: string) => {
 export const getAllPageHrefs = (params: { folderName: string }): string[] => {
   const { folderName } = params;
 
-  const fileNames = readdirSync(
+  const fileNames = fs.readdirSync(
     path.join(process.cwd(), `src/_pages/${folderName}`),
   );
 
@@ -90,7 +90,7 @@ export const getSerializedPage = async (params: {
 }): Promise<MDXRemoteSerializeResult<Record<string, unknown>>> => {
   const { pathToDirectory, fileNameWithoutIndex } = params;
 
-  const fileNames = readdirSync(
+  const fileNames = await fs.readdir(
     path.join(process.cwd(), `src/_pages/${pathToDirectory}`),
   );
 
@@ -98,7 +98,7 @@ export const getSerializedPage = async (params: {
     fullFileName.endsWith(`${fileNameWithoutIndex}.mdx`),
   );
 
-  const source = readFileSync(
+  const source = await fs.readFile(
     path.join(process.cwd(), `src/_pages/${pathToDirectory}/${fileName}`),
   );
 
@@ -130,7 +130,7 @@ export const getPage = (params: {
 }): SiteMapPage => {
   const { pathToDirectory, fileName } = params;
 
-  const source = readFileSync(
+  const source = fs.readFileSync(
     path.join(process.cwd(), `src/_pages/${pathToDirectory}/${fileName}`),
   );
 
@@ -194,7 +194,7 @@ export const getAllPages = (params: {
 }): SiteMapPage[] => {
   const { pathToDirectory } = params;
 
-  const fileNames = readdirSync(
+  const fileNames = fs.readdirSync(
     path.join(process.cwd(), `src/_pages/${pathToDirectory}`),
   );
 
