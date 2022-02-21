@@ -8,8 +8,8 @@ import {
   VoidFunctionComponent,
 } from "react";
 import { BlockProtocolEntity, BlockProtocolEntityType } from "blockprotocol";
-import { useMockDatastore } from "./useMockDatastore";
-import { mockData } from "./data";
+import { MockData, useMockDatastore } from "./useMockDatastore";
+import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./useLinkFields";
 
 type MockBlockDockProps = {
@@ -21,41 +21,54 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   children,
   blockSchema,
 }) => {
-  const blockEntityType: BlockProtocolEntityType = {
-    entityTypeId: "blockType1",
-    title: "BlockType",
-    type: "object",
-    $schema: "https://json-schema.org/draft/2019-09/schema",
-    $id: "http://localhost/blockType1",
-    ...(blockSchema ?? {}),
-  };
+  const mockData = useMemo((): MockData => {
+    const blockEntityType: BlockProtocolEntityType = {
+      entityTypeId: "blockType1",
+      title: "BlockType",
+      type: "object",
+      $schema: "https://json-schema.org/draft/2019-09/schema",
+      $id: "http://localhost/blockType1",
+      ...(blockSchema ?? {}),
+    };
 
-  const initialBlockEntity: BlockProtocolEntity = {
-    accountId: "account1",
-    entityId: "block1",
-  };
+    const initialBlockEntity: BlockProtocolEntity = {
+      accountId: "account1",
+      entityId: "block1",
+    };
 
-  if (
-    children.props &&
-    typeof children.props === "object" &&
-    Object.keys(children.props).length > 0
-  ) {
-    Object.assign(initialBlockEntity, children.props);
-  }
+    if (
+      children.props &&
+      typeof children.props === "object" &&
+      Object.keys(children.props).length > 0
+    ) {
+      Object.assign(initialBlockEntity, children.props);
+    }
 
-  initialBlockEntity.entityTypeId = blockEntityType.entityTypeId;
+    initialBlockEntity.entityTypeId = blockEntityType.entityTypeId;
 
-  mockData.entities.push(initialBlockEntity);
-  mockData.entityTypes.push(blockEntityType);
+    const nextMockData: MockData = { ...initialMockData };
+
+    nextMockData.entities = [...initialMockData.entities, initialBlockEntity];
+    nextMockData.entityTypes = [
+      ...initialMockData.entityTypes,
+      blockEntityType,
+    ];
+
+    return nextMockData;
+  }, [blockSchema, children.props]);
 
   const { entities, entityTypes, links, functions } =
     useMockDatastore(mockData);
 
-  const latestBlockEntity = useMemo(
-    () =>
-      entities.find((entity) => entity.entityId === children.props.entityId),
-    [entities, children.props.entityId],
-  );
+  const latestBlockEntity = useMemo(() => {
+    return (
+      entities.find((entity) => entity.entityId === children.props.entityId) ??
+      mockData.entities.find(
+        (entity) => entity.entityId === children.props.entityId,
+      )
+    );
+  }, [entities, children.props.entityId, mockData.entities]);
+
   if (!latestBlockEntity) {
     throw new Error("Cannot find block entity. Did it delete itself?");
   }
