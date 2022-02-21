@@ -12,6 +12,7 @@ import {
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
+import { getStaticPaths } from "../../../pages/[shortname]/[blockSlug].page";
 import { Spacer } from "../../Spacer";
 import { WhyBlockProtocol2Section } from "./WhyBlockProtocol2Section";
 
@@ -19,7 +20,7 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-function TodoListBlock() {
+const TodoListBlock = () => {
   return (
     <Box
       sx={{
@@ -51,11 +52,11 @@ function TodoListBlock() {
       ))}
     </Box>
   );
-}
+};
 
 const blockBorderColor = "#5F6483";
 
-function TableBlock() {
+const TableBlock = () => {
   return (
     <Grid
       container
@@ -103,7 +104,7 @@ function TableBlock() {
       ))}
     </Grid>
   );
-}
+};
 
 const CONTENT = [
   {
@@ -173,7 +174,7 @@ const CONTENT = [
   },
 ];
 
-export function WhyBlockProtocolSection() {
+export const WhyBlockProtocolSection = () => {
   const pinRef = useRef(null);
   const boxRef = useRef(null);
   const [activeStep, setActiveStep] = useState(0);
@@ -189,27 +190,41 @@ export function WhyBlockProtocolSection() {
     const triggers: ScrollTrigger[] = [];
 
     markers.forEach((marker) => {
-      gsap.from(marker, {
-        scrollTrigger: {
-          trigger: marker,
-          scrub: true,
-          start: "bottom center",
-          end: "bottom center+=50",
-        },
-        autoAlpha: 0,
-        ease: "none",
-      });
+      gsap.set(marker, { autoAlpha: 0 });
 
-      // gsap.to(marker, {
-      //   scrollTrigger: {
-      //     trigger: marker,
-      //     scrub: true,
-      //     start: "bottom top-=100",
-      //     end: "bottom top",
-      //   },
-      //   autoAlpha: 0,
-      //   ease: "none",
-      // });
+      triggers.push(
+        ScrollTrigger.create({
+          trigger: marker,
+          start: "bottom center",
+          end: "top top+=100",
+          scrub: true,
+          markers: true,
+          onEnter: () => {
+            // console.log("enter => ", marker);
+            gsap.to(marker, {
+              autoAlpha: 1,
+            });
+          },
+          onEnterBack: () => {
+            gsap.to(marker, {
+              autoAlpha: 1,
+            });
+            // console.log("enterback => ", marker);
+          },
+          onLeave: () => {
+            gsap.to(marker, {
+              autoAlpha: 0,
+            });
+            // console.log("leave => ", marker);
+          },
+          onLeaveBack: () => {
+            // console.log("leaveBack => ", marker);
+            gsap.to(marker, {
+              autoAlpha: 0,
+            });
+          },
+        }),
+      );
 
       triggers.push(
         ScrollTrigger.create({
@@ -217,6 +232,7 @@ export function WhyBlockProtocolSection() {
           start: "top center",
           end: "bottom center+=50",
           scrub: true,
+          markers: true,
           onEnter: () => {
             const markerIndex = markers.indexOf(marker);
             if (markerIndex > 0) {
@@ -243,7 +259,6 @@ export function WhyBlockProtocolSection() {
         scrub: true,
         start: "top bottom",
         end: "top center",
-        markers: true,
       },
       autoAlpha: 1,
     });
@@ -338,7 +353,7 @@ export function WhyBlockProtocolSection() {
             {CONTENT.map(({ content, id }) => (
               <Box
                 key={id}
-                className="item"
+                className={`item item--${id}`}
                 sx={{
                   display: "flex",
                   justifyContent: "center",
@@ -371,4 +386,4 @@ export function WhyBlockProtocolSection() {
       <WhyBlockProtocol2Section fadeRef={fadeRef} />
     </>
   );
-}
+};
