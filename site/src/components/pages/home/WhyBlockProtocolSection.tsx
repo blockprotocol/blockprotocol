@@ -231,7 +231,7 @@ export const WhyBlockProtocolSection = () => {
           start: "top center",
           end: "bottom center+=50",
           scrub: true,
-          markers: true,
+          // markers: true,
           onEnter: () => {
             const markerIndex = markers.indexOf(marker);
             if (markerIndex > 0) {
