@@ -195,7 +195,7 @@ export const WhyBlockProtocolSection = () => {
         ScrollTrigger.create({
           trigger: marker,
           start: "bottom center",
-          end: "top top+=100",
+          end: "top top+=10",
           scrub: true,
           // markers: true,
           onEnter: () => {
