@@ -1,9 +1,10 @@
 import { Container, Typography } from "@mui/material";
+import { NextPage } from "next";
 import React from "react";
 import { tw } from "twind";
 import { Button } from "../../components/Button";
 
-export default function PartnersSubmitted() {
+const PartnersSubmitted: NextPage = () => {
   return (
     <Container
       sx={{
@@ -37,4 +38,6 @@ export default function PartnersSubmitted() {
       </Button>
     </Container>
   );
-}
+};
+
+export default PartnersSubmitted;

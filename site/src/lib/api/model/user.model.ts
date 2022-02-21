@@ -233,9 +233,11 @@ export class User {
     db: Db,
     updatedProperties: Partial<UserProperties>,
   ): Promise<User> {
+    // Prevent the user from updating their shortname if...
     if (
-      updatedProperties.shortname &&
-      updatedProperties.shortname !== this.shortname
+      this.shortname && // ...the user already has a shortname, and...
+      updatedProperties.shortname && // ...the user is trying to update the shortname, and...
+      updatedProperties.shortname !== this.shortname // ...the updated shortname is different from the user's original shortname.
     ) {
       throw new Error("Cannot update shortname");
     }

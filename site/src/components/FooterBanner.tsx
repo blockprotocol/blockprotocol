@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { Link } from "./Link";
-import backgroundRainbow from "../../public/assets/background-corner-rainbow.png";
 import { BoltIcon } from "./icons";
 import { LinkButton } from "./LinkButton";
 
@@ -24,6 +23,16 @@ type BannerCardProps = {
   contents: ReactNode;
   buttonHref: string;
   buttonText: ReactNode;
+};
+
+const BackgroundRainbow: FC = () => {
+  return (
+    <Image
+      width={250}
+      height={250}
+      src="/assets/background-corner-rainbow.png"
+    />
+  );
 };
 
 const BannerCard: FC<BannerCardProps> = ({
@@ -101,7 +110,7 @@ export const BANNERS: Banner[] = [
                 transition: (theme) => theme.transitions.create("opacity"),
               }}
             >
-              <Image width={250} height={250} src={backgroundRainbow} />
+              <BackgroundRainbow />
             </Box>
             <Typography
               component="h2"
@@ -216,7 +225,7 @@ export const BANNERS: Banner[] = [
                 transition: (theme) => theme.transitions.create("opacity"),
               }}
             >
-              <Image width={250} height={250} src={backgroundRainbow} />
+              <BackgroundRainbow />
             </Box>
             <Typography
               component="h2"
