@@ -90,7 +90,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         blockRepository = `${blockConfig.repository}#${blockConfig.branch}`;
       }
 
-      let repository = getRepositoryUrl(blockRepository);
+      let repository = getRepositoryUrl(blockRepository) ?? undefined;
 
       if (repository) {
         repository = repository.replace(/\/$/, "");
@@ -121,7 +121,7 @@ export const readBlockDataFromDisk = ({
     ),
     source: fs.readFileSync(
       `${process.cwd()}/public/blocks/${packagePath}/${source}`,
-      "utf-8",
+      "utf8",
     ),
   };
 };
