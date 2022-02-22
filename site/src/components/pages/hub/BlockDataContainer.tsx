@@ -114,8 +114,8 @@ export const BlockDataContainer: VoidFunctionComponent<
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     const result = {
-      accountId: `test-account-${metadata.name}`,
-      entityId: `test-entity-${metadata.name}`,
+      accountId: `test-account-${metadata?.name}`,
+      entityId: `test-entity-${metadata?.name}`,
       getEmbedBlock,
     };
 
@@ -135,7 +135,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema, metadata.name]);
+  }, [text, schema, metadata?.name]);
 
   return (
     <>
