@@ -107,8 +107,6 @@ export const getStaticProps: GetStaticProps<
 > = async ({ params }) => {
   const { shortname, blockSlug } = parseQueryParams(params || {});
 
-  console.log({ blockSlug });
-
   if (!shortname.startsWith("@")) {
     return { notFound: true };
   }

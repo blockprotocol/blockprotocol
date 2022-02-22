@@ -57,13 +57,13 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
 
     if (!matchingTab) {
       if (process.browser) {
-        router.replace(`/@${user.shortname}`);
+        void router.replace(`/@${user.shortname}`);
       }
       return TABS[0].value;
     }
 
     return matchingTab.value;
-  }, [router]);
+  }, [router, user.shortname]);
 
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
   const [newSchemaTitle, setNewSchemaTitle] = useState("");
