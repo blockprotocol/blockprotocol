@@ -42,9 +42,7 @@ export const BlockDataContainer: VoidFunctionComponent<
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
 
-  const [text, setText] = useState(
-    example ? JSON.stringify(example, undefined, 2) : "{}",
-  );
+  const [text, setText] = useState("{}");
 
   const previousBlockVariantsTab = useRef(-1);
   const propertiesToRemove = useRef<string[]>([]);
