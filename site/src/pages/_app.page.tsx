@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import TagManager from "react-gtm-module";
 import Head from "next/head";
 import "../styles/index.css";
@@ -11,7 +11,7 @@ import "../styles/prism.css";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../components/theme";
+import { theme } from "../theme";
 import twindConfig from "../../twind.config";
 import { PageLayout } from "../components/PageLayout";
 import { createEmotionCache } from "../util/createEmotionCache";
@@ -58,10 +58,24 @@ const MyApp = ({
     void refetchUser();
   }, [refetchUser]);
 
+  const updatePreviousRoute = (url: string) => {
+    // routeChangeStart also runs on initial load,
+    // so this condition prevents the initial URL being added to sessionStorage
+    if (!document.location.href.includes(url)) {
+      sessionStorage.setItem("previousRoute", document.location.href);
+    }
+  };
+
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
       TagManager.initialize({ gtmId: "GTM-5DRD4LS" });
     }
+
+    Router.events.on("routeChangeStart", updatePreviousRoute);
+
+    return () => {
+      Router.events.off("routeChangeStart", updatePreviousRoute);
+    };
   }, []);
 
   useEffect(() => {

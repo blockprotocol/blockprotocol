@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 import { ApiClientError } from "../../lib/apiClient";
-import { SerializedUser } from "../../lib/model/user.model";
+import { SerializedUser } from "../../lib/api/model/user.model";
 import { Button } from "../Button";
 import { TextField } from "../TextField";
 import {
@@ -94,13 +94,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
     setSendingVerificationCode(false);
 
     if (error) {
-      if (error.response?.data.errors) {
-        setApiResendEmailErrorMessage(
-          error.response.data.errors.map(({ msg }) => msg),
-        );
-      } else {
-        throw error;
-      }
+      setApiResendEmailErrorMessage(error.message);
     } else if (data) {
       unstable_batchedUpdates(() => {
         setVerificationCode("");
@@ -129,13 +123,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         setSubmitting(false);
 
         if (error) {
-          if (error.response?.data.errors) {
-            setApiSubmittedErrorMessage(
-              error.response.data.errors.map(({ msg }) => msg),
-            );
-          } else {
-            throw error;
-          }
+          setApiSubmittedErrorMessage(error.message);
         } else if (data) {
           onSubmit(data.user);
         }

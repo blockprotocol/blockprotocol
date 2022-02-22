@@ -1,12 +1,17 @@
-import { writeFileSync } from "fs";
+import fs from "fs-extra";
 import path from "path";
+import chalk from "chalk";
 import { generateSiteMap } from "../src/lib/sitemap";
 
-const sitemap = generateSiteMap();
+const script = async () => {
+  console.log(chalk.bold("Generating sitemap..."));
 
-writeFileSync(
-  path.join(process.cwd(), `site-map.json`),
-  JSON.stringify(sitemap, null, "\t"),
-);
+  const sitemap = generateSiteMap();
 
-console.log("✅ Generated site map");
+  const siteMapFilePath = path.join(process.cwd(), `site-map.json`);
+  await fs.writeJson(siteMapFilePath, sitemap, { spaces: "\t" });
+
+  console.log(`✅ Site map generated: ${siteMapFilePath}`);
+};
+
+export default script();

@@ -1,10 +1,11 @@
-import { User, UserDocument } from "../src/lib/model/user.model";
+import chalk from "chalk";
+import { User, UserDocument } from "../src/lib/api/model/user.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
-} from "../src/lib/model/verificationCode.model";
-import { connectToDatabase } from "../src/lib/mongodb";
-import { EntityType } from "../src/lib/model/entityType.model";
+} from "../src/lib/api/model/verificationCode.model";
+import { connectToDatabase } from "../src/lib/api/mongodb";
+import { EntityType } from "../src/lib/api/model/entityType.model";
 
 const catchAndLog = async (func: () => Promise<void>) => {
   try {
@@ -18,11 +19,19 @@ const catchAndLog = async (func: () => Promise<void>) => {
 
 // Actions done in the following script should be _idempotent_ as they run in dev/prod
 const script = async () => {
+  console.log(chalk.bold("Creating DB indexes..."));
+
   const { client, db } = await connectToDatabase();
   await catchAndLog(async () => {
     await db
       .collection<UserDocument>(User.COLLECTION_NAME)
       .createIndex({ email: 1 }, { unique: true, sparse: true });
+  });
+
+  await catchAndLog(async () => {
+    await db
+      .collection<UserDocument>(User.COLLECTION_NAME)
+      .createIndex({ shortname: 1 }, { unique: true, sparse: true });
   });
 
   await catchAndLog(async () => {
@@ -47,7 +56,7 @@ const script = async () => {
   });
 
   await client.close();
-  console.log("✅ Created MongoDB indexes");
+  console.log("✅ MongoDB indexes created");
 };
 
-void script();
+export default script();

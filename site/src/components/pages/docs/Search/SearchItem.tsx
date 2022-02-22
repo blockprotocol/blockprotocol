@@ -42,7 +42,7 @@ const algoliaTypeMap: Record<AlgoliaPageType, string> = {
   spec: "Specification",
 };
 
-export default function SearchItem({
+const SearchItem: React.VoidFunctionComponent<SearchItemProps> = ({
   searchResult,
   closeDrawer,
   index,
@@ -52,7 +52,7 @@ export default function SearchItem({
   variant,
   closeResultsMenu,
   sx,
-}: SearchItemProps) {
+}) => {
   const intersectionRef = React.useRef(null);
   const intersection = useIntersection(intersectionRef, {
     root: null,
@@ -147,4 +147,6 @@ export default function SearchItem({
       </Box>
     </Link>
   );
-}
+};
+
+export default SearchItem;

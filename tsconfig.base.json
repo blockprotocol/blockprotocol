@@ -6,6 +6,7 @@
     "lib": ["es2021"],
     "module": "commonjs",
     "moduleResolution": "node",
+    "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,

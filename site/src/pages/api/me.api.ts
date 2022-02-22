@@ -1,5 +1,5 @@
-import { createAuthenticatedHandler } from "../../lib/handler/authenticatedHandler";
-import { SerializedUser } from "../../lib/model/user.model";
+import { createAuthenticatedHandler } from "../../lib/api/handler/authenticatedHandler";
+import { SerializedUser } from "../../lib/api/model/user.model";
 
 export type ApiMeResponse = {
   user: SerializedUser;
