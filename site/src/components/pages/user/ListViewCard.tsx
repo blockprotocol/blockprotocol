@@ -9,7 +9,7 @@ type ListViewCardProps = {
   title: string;
   description?: string | null;
   icon?: string | null;
-  lastUpdated?: string;
+  lastUpdated?: string | null;
   url: string;
 };
 

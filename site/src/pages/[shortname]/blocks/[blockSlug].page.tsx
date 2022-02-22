@@ -11,7 +11,6 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, VoidFunctionComponent } from "react";
-
 import { formatDistance } from "date-fns";
 import { BlocksSlider } from "../../../components/BlocksSlider";
 import {
@@ -149,6 +148,10 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
+  const blockRepositoryUrl = blockMetadata.repository
+    ? new URL(blockMetadata.repository)
+    : null;
+
   const blockModule = useMemo(
     () =>
       typeof window === "undefined"
@@ -279,13 +282,54 @@ const BlockPage: NextPage<BlockPageProps> = ({
           </Box>
         </Box>
 
-        <Box sx={{ mb: 15 }}>
+        <Box sx={{ mb: 10 }}>
           <BlockDataContainer
             metadata={blockMetadata}
             schema={schema}
             blockModule={blockModule}
           />
         </Box>
+
+        {blockRepositoryUrl && (
+          <Box
+            mb={10}
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "60% 40%" },
+            }}
+          >
+            <Box />
+            <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
+              <Typography
+                variant="bpLargeText"
+                sx={{
+                  fontWeight: "bold",
+                  color: theme.palette.gray["70"],
+                  marginBottom: 2,
+                }}
+              >
+                Repository
+              </Typography>
+              <Box sx={{ display: "flex" }}>
+                <Box
+                  component="img"
+                  alt="GitHub Link"
+                  sx={{ marginRight: 1.5 }}
+                  src="/assets/link.svg"
+                />{" "}
+                <Typography
+                  variant="bpSmallCopy"
+                  sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                >
+                  <Link href={blockRepositoryUrl.href}>
+                    {blockRepositoryUrl.hostname}
+                    {blockRepositoryUrl.pathname}
+                  </Link>
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+        )}
 
         {/* <div
         style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
@@ -304,19 +348,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             and remove columns and rows, multiple views.
           </p>
         </div>
-        <div>
-          <b>Repository</b>
-          <Box sx={{ display: "flex" }}>
-            <img
-              alt="GitHub Link"
-              style={{ marginRight: 5 }}
-              src="/assets/link.svg"
-            />{" "}
-            <Link href="https://github.com/hash/video">
-              github.com/hash/video
-            </Link>
-          </Box>
-        </div>
+        
       </div> */}
 
         <Typography textAlign="center" variant="bpHeading2" mb={3}>
