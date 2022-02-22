@@ -16,10 +16,10 @@ export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
       }}
       data={catalog}
       itemKey={({ name }) => name!}
-      renderItem={({ displayName, name, image, packagePath }) => {
+      renderItem={({ displayName, name, image, slug }) => {
         return (
           <Link
-            href={`/${packagePath}`}
+            href={`/${slug}`}
             sx={{ display: "block", maxWidth: 500, mx: "auto" }}
           >
             <Box

@@ -39,22 +39,38 @@ export type UserPageProps = {
   entityTypes: EntityType[];
 };
 
-type UserPageComponentProps = UserPageProps & {
-  initialActiveTab: typeof TABS[number]["value"];
-};
+export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
+  blocks,
+  entityTypes,
+  user,
+}) => {
+  const router = useRouter();
 
-export const UserPageComponent: VoidFunctionComponent<
-  UserPageComponentProps
-> = ({ blocks, entityTypes, user, initialActiveTab }) => {
-  const [activeTab, setActiveTab] =
-    useState<typeof TABS[number]["value"]>(initialActiveTab);
+  const activeTab = useMemo(() => {
+    const { profileTabs } = router.query;
+
+    if (!profileTabs?.length) {
+      return TABS[0].value;
+    }
+
+    const matchingTab = TABS.find((tab) => tab.slug === profileTabs?.[0]);
+
+    if (!matchingTab) {
+      if (process.browser) {
+        router.replace(`/@${user.shortname}`);
+      }
+      return TABS[0].value;
+    }
+
+    return matchingTab.value;
+  }, [router]);
+
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
   const [newSchemaTitle, setNewSchemaTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const router = useRouter();
 
   const { user: currentUser } = useUser();
 
@@ -162,7 +178,6 @@ export const UserPageComponent: VoidFunctionComponent<
             <TabHeader
               activeTab={activeTab}
               setActiveTab={(nextTab) => {
-                setActiveTab(nextTab);
                 return router.push(
                   `/@${user.shortname}/${
                     TABS.find((tab) => tab.value === nextTab)?.slug
@@ -195,13 +210,13 @@ export const UserPageComponent: VoidFunctionComponent<
                         version,
                         name,
                         image,
-                        packagePath,
+                        slug,
                       },
                       index,
                     ) => (
                       <Grid key={name} item xs={12} md={6}>
                         <OverviewCard
-                          url={`/${packagePath}`}
+                          url={`/${slug}`}
                           description={description!}
                           icon={icon}
                           image={image}
@@ -241,7 +256,7 @@ export const UserPageComponent: VoidFunctionComponent<
                   icon,
                   lastUpdated,
                   name,
-                  packagePath,
+                  slug,
                 }) => (
                   <ListViewCard
                     key={name}
@@ -250,7 +265,7 @@ export const UserPageComponent: VoidFunctionComponent<
                     title={displayName!}
                     description={description}
                     lastUpdated={lastUpdated}
-                    url={`/${packagePath}`}
+                    url={`/${slug}`}
                   />
                 ),
               )}

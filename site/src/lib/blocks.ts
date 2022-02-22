@@ -4,8 +4,9 @@ import { BlockMetadata } from "blockprotocol";
 export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
-  packagePath: string;
   lastUpdated?: string;
+  packagePath: string;
+  slug: string;
 };
 
 export type BuildConfig = {
@@ -49,16 +50,21 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
-    .map((path: string) => ({
-      // @todo should be redundant to block's package.json#name
-      packagePath: path.split("/").slice(-3, -1).join("/"),
-      ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
-    }))
+    .map((path: string) => {
+      const packagePath = path.split("/").slice(-3, -1).join("/");
+
+      return {
+        // @todo should be redundant to block's package.json#name
+        packagePath,
+        ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+      };
+    })
     .map((metadata: ExpandedBlockMetadata) => ({
       ...metadata,
       author: metadata.packagePath.split("/")[0].replace(/^@/, ""),
       icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
       image: getBlockMediaUrl(metadata.image, metadata.packagePath),
+      slug: metadata.packagePath.split("/").join("/blocks/"),
       lastUpdated:
         buildConfig.find(({ workspace }) => workspace === metadata.name)
           ?.timestamp ?? null,
