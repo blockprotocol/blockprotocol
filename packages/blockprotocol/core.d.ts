@@ -22,22 +22,79 @@ export type BlockMetadataRepository =
   | string;
 
 export type BlockMetadata = {
-  author?: string | null;
-  default?: JSONObject | null;
-  description?: string | null;
-  displayName?: string | null;
-  examples?: JSONObject[] | null;
-  externals?: Record<string, string> | null;
-  icon?: string | null;
-  image?: string | null;
-  license?: string | null;
-  name?: string | null;
-  protocol?: string | null;
-  repository?: BlockMetadataRepository;
-  schema?: string | null;
-  source?: string | null;
-  variants?: BlockVariant[] | null;
-  version?: string | null;
+  /**
+   * The name of the author of the block
+   */
+  author: string;
+  /**
+   * The default object used to populate a block's schema
+   */
+  default?: {
+    [k: string]: unknown;
+  };
+  /**
+   * Describes what a block does
+   */
+  description: string;
+  /**
+   * The display name used for a block
+   */
+  displayName: string;
+  /**
+   * A list of examples used to showcase a block's capabilities
+   */
+  examples: {
+    [k: string]: unknown;
+  }[];
+  /**
+   * The external dependencies to be provided to a block
+   */
+  externals: {
+    [k: string]: unknown;
+  }[];
+  /**
+   * An icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block).
+   */
+  icon: string;
+  /**
+   * A preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
+   */
+  image: string;
+  /**
+   * The license the block is made available under (e.g. MIT).
+   */
+  license: string;
+  /**
+   * A unique name for the block.
+   */
+  name: string;
+  /**
+   * The applicable block protocol version.
+   */
+  protocol: string;
+  /**
+   * Specify the place where your code lives. This is helpful for people who want to contribute.
+   */
+  repository: BlockMetadataRepository;
+  /**
+   * The path or URL to the entrypoint source file (e.g. index.html, index.js).
+   */
+  source: string;
+  /**
+   * A list which represents different variants of the block that the user can create.
+   */
+  variants?: {
+    description: string;
+    icon: string;
+    name: string;
+    properties: {
+      [k: string]: unknown;
+    };
+  }[];
+  /**
+   * The version of the block, which SHOULD use semantic versioning.
+   */
+  version: string;
 };
 
 // ----------------------------- ENTITIES ----------------------------- //
