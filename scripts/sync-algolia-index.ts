@@ -1,4 +1,4 @@
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
 import matter from "gray-matter";
 import algoliasearch from "algoliasearch";

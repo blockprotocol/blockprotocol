@@ -7,7 +7,7 @@ import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiMo
 
 import { WarningIcon } from "../../components/icons";
 import { Table, TableRows } from "../../components/Table";
-import { UserFacingApiKeyProperties } from "../../lib/model/apiKey.model";
+import { UserFacingApiKeyProperties } from "../../lib/api/model/apiKey.model";
 import { apiClient } from "../../lib/apiClient";
 import { DateTimeCell } from "../../components/TableCells";
 import { Button } from "../../components/Button";

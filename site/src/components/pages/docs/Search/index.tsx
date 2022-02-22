@@ -37,7 +37,10 @@ interface SearchProps {
 
 const MAX_SEARCH_RESULTS = 10;
 
-export default function Search({ variant, closeDrawer }: SearchProps) {
+const Search: React.VoidFunctionComponent<SearchProps> = ({
+  variant,
+  closeDrawer,
+}) => {
   const router = useRouter();
 
   const [searchText, setSearchText] = useState("");
@@ -329,4 +332,6 @@ export default function Search({ variant, closeDrawer }: SearchProps) {
       )}
     </Box>
   );
-}
+};
+
+export default Search;

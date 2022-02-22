@@ -77,7 +77,7 @@ class MyDocument extends Document {
             href="/assets/safari-pinned-tab.svg"
             color="#39444f"
           />
-          <link rel="shortcut icon" href="/assets/favicon.ico" />
+          <link rel="icon" href="/assets/favicon.ico" />
           <meta name="msapplication-TileColor" content="#39444f" />
           <meta
             name="msapplication-config"
@@ -134,6 +134,7 @@ MyDocument.getInitialProps = async (ctx) => {
   ctx.renderPage = () =>
     originalRenderPage({
       enhanceApp: (App: any) =>
+        // eslint-disable-next-line react/function-component-definition
         function EnhanceApp(props) {
           return <App emotionCache={cache} {...props} />;
         },

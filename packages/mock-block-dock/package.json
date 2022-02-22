@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -30,36 +30,36 @@
     "build:dev": "clean; cross-env NODE_ENV=development webpack --mode development",
     "build:esm": "tsc --p tsconfig.build.json",
     "clean": "rimraf ./dist/",
-    "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev -- --watch --verbose\" \"yarn run-dev-server\"",
+    "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
     "lint:tsc": "tsc --noEmit",
     "prepare": "yarn build",
-    "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server -d --port 9090 --config dev/webpack.config.js"
+    "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
     "blockprotocol": "0.0.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.5",
-    "@babel/plugin-proposal-class-properties": "^7.16.5",
-    "@babel/plugin-transform-runtime": "^7.16.5",
-    "@babel/preset-env": "^7.16.5",
-    "@babel/preset-react": "^7.16.5",
-    "@babel/preset-typescript": "7.16.5",
-    "@babel/runtime": "^7.16.5",
+    "@babel/cli": "^7.17.0",
+    "@babel/core": "^7.17.2",
+    "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "7.16.7",
+    "@babel/runtime": "^7.17.2",
     "babel-loader": "^8.2.3",
-    "core-js": "^2.6.12",
+    "core-js": "^3.21.0",
     "cross-env": "^7.0.3",
-    "html-webpack-plugin": "^4.5.2",
+    "html-webpack-plugin": "^5.5.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "regenerator-runtime": "^0.13.9",
     "rimraf": "^3.0.2",
-    "typescript": "^4.5.4",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3"
+    "typescript": "^4.5.5",
+    "webpack": "^5.68.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
   },
   "peerDependencies": {
     "react": "^17.0.2",

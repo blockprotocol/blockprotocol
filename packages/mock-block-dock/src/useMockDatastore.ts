@@ -13,11 +13,11 @@ import {
   BlockProtocolUpdateLinksFunction,
   BlockProtocolUploadFileFunction,
 } from "blockprotocol";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { matchIdentifiers } from "./util";
 
-type MockData = {
+export type MockData = {
   entities: BlockProtocolEntity[];
   links: BlockProtocolLink[];
   entityTypes: BlockProtocolEntityType[];
@@ -53,6 +53,10 @@ export const useMockDatastore: UseMockDataStore = (
   const [entityTypes, _setEntityTypes] = useState<MockDataStore["entityTypes"]>(
     initialData.entityTypes,
   );
+
+  useEffect(() => {
+    setEntities(initialData.entities);
+  }, [initialData.entities]);
 
   const createEntities: BlockProtocolCreateEntitiesFunction = useCallback(
     async (actions) => {
@@ -263,7 +267,6 @@ export const useMockDatastore: UseMockDataStore = (
   return {
     entities,
     entityTypes,
-    links,
     functions: {
       getEntities,
       createEntities,
@@ -275,5 +278,6 @@ export const useMockDatastore: UseMockDataStore = (
       updateLinks,
       uploadFile,
     },
+    links,
   };
 };

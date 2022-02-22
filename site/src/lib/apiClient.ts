@@ -42,17 +42,32 @@ const axiosClient = axios.create({
   withCredentials: true,
 });
 
-const handleAxiosError = (
-  error: AxiosError,
-): { error: AxiosError<{ errors: Partial<ValidationError>[] }> } => {
-  /** @todo: stop special casing unauthorized errors */
-  if (error.response?.status === 401 || error.response?.data.errors) {
-    return { error };
-  }
-  throw error;
+export type ApiClientError = AxiosError<{
+  errors?: Partial<ValidationError>[];
+}>;
+
+const parseErrorMessageFromAxiosError = (error: ApiClientError): string => {
+  const firstValidationErrorMessage = error.response?.data.errors?.find(
+    ({ msg }) => !!msg,
+  )?.msg;
+
+  return (
+    firstValidationErrorMessage ??
+    error.response?.statusText ??
+    "An error occurred"
+  );
 };
 
-export type ApiClientError = AxiosError<{ errors: Partial<ValidationError>[] }>;
+const handleAxiosError = (
+  axiosError: ApiClientError,
+): { error: ApiClientError } => {
+  /** @todo: report unexpected server errors to sentry or equivalent */
+  const error = {
+    ...axiosError,
+    message: parseErrorMessageFromAxiosError(axiosError),
+  };
+  return { error };
+};
 
 const get = <ResponseData = any, RequestParams = any>(
   url: string,

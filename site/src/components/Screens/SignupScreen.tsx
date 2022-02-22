@@ -54,11 +54,7 @@ export const SignupScreen: VFC<SignupScreenProps> = ({
       setSigningUp(false);
 
       if (error) {
-        if (error.response?.data.errors) {
-          setApiErrorMessage(error.response.data.errors.map(({ msg }) => msg));
-        } else {
-          throw error;
-        }
+        setApiErrorMessage(error.message);
       } else if (verificationCodeInfo) {
         onSignup({ verificationCodeInfo, email: emailValue });
       }
