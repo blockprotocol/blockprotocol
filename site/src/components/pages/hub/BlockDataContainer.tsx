@@ -85,9 +85,9 @@ export const BlockDataContainer: VoidFunctionComponent<
         }
 
         const nextText = {
-          ...blockVariant.properties,
-          ...blockVariant.examples?.[0],
           ...parsedText,
+          ...blockVariant.examples?.[0],
+          ...blockVariant.properties,
         };
 
         setText(JSON.stringify(nextText, undefined, 2));
