@@ -334,7 +334,7 @@ const script = async () => {
   console.log(chalk.bold("Preparing blocks..."));
 
   const env = envalid.cleanEnv(process.env, {
-    BLOCK_NAME_FILTER: envalid.str({
+    BLOCK_FILTER: envalid.str({
       desc: "Optional glob you can use to prepare specific blocks.",
       example: "@hashintel/paragraph or @hashintel/*",
       default: "",
@@ -359,7 +359,7 @@ const script = async () => {
 
   const blockInfosDirPath = path.resolve(env.BLOCK_INFOS_DIR);
   const blocksDirPath = path.resolve(env.BLOCKS_DIR);
-  const blockNameFilter = env.BLOCK_NAME_FILTER;
+  const blockFilter = env.BLOCK_FILTER;
 
   console.log(`HUB_DIR is resolved to ${blockInfosDirPath}`);
   console.log(`BLOCKS_DIR is resolved to ${blocksDirPath}`);
@@ -372,17 +372,17 @@ const script = async () => {
     );
   }
 
-  const filteredFullBlockInfos = blockNameFilter
-    ? blockInfos.filter(({ name }) => micromatch.any([name], blockNameFilter))
+  const filteredBlockInfos = blockFilter
+    ? blockInfos.filter(({ name }) => micromatch.any(name, blockFilter))
     : blockInfos;
 
   const numberOfBlocksThatDontMatchFilter =
-    blockInfos.length - filteredFullBlockInfos.length;
+    blockInfos.length - filteredBlockInfos.length;
 
   if (numberOfBlocksThatDontMatchFilter > 0) {
     console.log(
       chalk.gray(
-        `Number of blocks skipped: ${numberOfBlocksThatDontMatchFilter} (names do not match BLOCK_NAME_FILTER=${blockNameFilter})`,
+        `Number of blocks skipped: ${numberOfBlocksThatDontMatchFilter} (names do not match BLOCK_FILTER=${blockFilter})`,
       ),
     );
   }
@@ -392,7 +392,7 @@ const script = async () => {
       unsafeCleanup: true,
     });
 
-  for (const blockInfo of filteredFullBlockInfos) {
+  for (const blockInfo of filteredBlockInfos) {
     const blockName = blockInfo.name;
     const blockDirPath = path.resolve(blocksDirPath, blockName);
     const blockMetadataPath = path.resolve(blockDirPath, "block-metadata.json");

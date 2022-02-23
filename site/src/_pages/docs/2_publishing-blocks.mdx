@@ -19,22 +19,26 @@ The JSON metadata file should look like this:
 ```json5
 {
   // REQUIRED - path to the repository with your block's source code
-  repository: "https://github.com/hashintel/dev.git",
-  // REQUIRED - name of the branch to build your block from
-  branch: "main",
-  // REQUIRED - name of the folder your built blocks will appear in after running `yarn build`
+  repository: "https://github.com/hashintel/hash.git",
+  // REQUIRED - commit hash (pins block to a specific version)
+  commit: "adb915bf8fc4f84e33a2cd21f217225e50c3d7fa",
+
+  // IF NEEDED - see below
   distDir: "dist",
-  // IF NEEDED - where your commands are in a subfolder,
-  // provide ONE OF the folder path or yarn workspace
   folder: "packages/blocks/block-embed",
   workspace: "@hashintel/block-embed",
 }
 ```
 
-We assume that running `yarn install && yarn build` will create your block's distribution in the specified `distDir`,
-unless:
+If `distDir` is not provided, we assume that the block is ready to be deployed without building.
+This usually applies to simple blocks with little or no JavaScript.
+If your simple block is located in a subfolder, use `folder` to define its path.
 
-- `workspace` is provided, in which case we will modify both yarn commands with the provided workspace, OR
-- `folder` is provided, in which case we will run the commands in the specified folder of your repo.
+If `distDir` is provided, we assume that that running `yarn install && yarn build` will create your block’s distribution in the specified `distDir`.
+If your repo contains `package-lock.json` instead of `yarn.lock`, we will run `npm install && npm run build`.
 
-There is no need to provide either if running `yarn install && yarn build` in the root folder of your repository will build the block.
+If you provide `folder`, the above commands will run in a specific part of your repository source.
+
+Providing `workspace` replaces `yarn build` with `yarn workspace [your workspace] build`, which is needed in monorepos.
+
+Specified `distDir` will be relevant to `workspace` directory or `folder`, if provided.

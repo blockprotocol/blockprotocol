@@ -73,14 +73,15 @@ When running in development environments, avatars go to the `dev/avatars/(user.i
 
 ### Serving Blocks
 
-Before serving any blocks, they need to be prepared (i.e. `built` in most cases). Blocks can be registered in the repo's `/hub`
-with a build-config. The build-script `yarn exe yarn exe site/scripts/prepare-blocks.ts` allows to prepare blocks.
+Before serving any blocks, they need to be prepared (i.e. built in most cases).
+Blocks can be registered in the repo's `/hub` with a build-config.
+The build-script `yarn exe yarn exe site/scripts/prepare-blocks.ts` allows to prepare blocks.
 
 ```sh
-# build all blocks
+# prepare all blocks
 yarn exe yarn exe site/scripts/prepare-blocks.ts
 
-# build one or more blocks
+# prepare one or more blocks
 BLOCK_FILTER="@hash/*" yarn exe site/scripts/prepare-blocks.ts
 ```
 
