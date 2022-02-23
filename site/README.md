@@ -74,24 +74,17 @@ When running in development environments, avatars go to the `dev/avatars/(user.i
 ### Serving Blocks
 
 Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/hub`
-with a build-config. The build-script `/site/scripts/build-blocks.sh` allows to build blocks
-individually. It requires the commandline tool:
-
-- `curl`
-- `jq`
-- `md5sha1sum`
-- `rsync`
-
-These can be installed by your cli pkg mngr of choice (use `brew` on macOS).
+with a build-config. The build-script `yarn exe site/scripts/build-blocks.ts` allows to build blocks.
 
 ```sh
-# build one or more blocks
-yarn build-block ./hub/@hash/paragraph.json
 # build all blocks
-yarn build-blocks
+yarn exe site/scripts/build-blocks.ts
+
+# build one or more blocks
+BLOCK_FILTER="/^@hash\/" yarn exe site/scripts/build-blocks.ts
 ```
 
-Once the blocks are built, simply `yarn dev [--cwd ./site] [--port 3001]` and head over to
+Once the blocks are built, simply `yarn dev` and head over to
 `localhost:3000/hub`.
 
 ## Vercel Deployment

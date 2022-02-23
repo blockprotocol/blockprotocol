@@ -1,7 +1,7 @@
 {
-  "workspace": "@hashintel/block-divider",
   "repository": "https://github.com/hashintel/hash.git",
-  "branch": "main",
-  "distDir": "dist",
-  "timestamp": "2022-02-16T06:59:59.000Z"
+  "commit": "8b049e0b3cdcf48705cb283afe707469ac3f32a9",
+
+  "workspace": "@hashintel/block-divider",
+  "distDir": "dist"
 }

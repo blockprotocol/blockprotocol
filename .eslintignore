@@ -55,4 +55,4 @@ dist
 # workspace specific
 site/public/blocks
 site/site-map.json
-site/yarn.lock
+site/blocks-data.json
