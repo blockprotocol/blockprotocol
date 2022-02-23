@@ -20,7 +20,7 @@ const defaultExecaOptions = {
   stdio: "inherit",
 } as const;
 
-interface BlockInfo {
+interface StoredBlockInfo {
   repository: string;
   commit: string;
 
@@ -29,7 +29,7 @@ interface BlockInfo {
   workspace?: string;
 }
 
-const blockInfoSchema: JSONSchemaType<BlockInfo> = {
+const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
   type: "object",
   properties: {
     repository: { type: "string" },
@@ -44,19 +44,19 @@ const blockInfoSchema: JSONSchemaType<BlockInfo> = {
 };
 
 const ajv = new Ajv();
-const validateBlockInfoSchema = ajv.compile(blockInfoSchema);
+const validateStoredBlockInfo = ajv.compile(storedBlockInfoSchema);
 
-interface FullBlockInfo extends BlockInfo {
+interface BlockInfo extends StoredBlockInfo {
   name: string;
 }
 
-const listFullBlockInfos = async (
+const listBlockInfos = async (
   blockInfosDirPath: string,
-): Promise<FullBlockInfo[]> => {
+): Promise<BlockInfo[]> => {
   const blockInfoPaths = glob.sync("**/*.json", { cwd: blockInfosDirPath });
   console.log(`Block source infos found in HUB_DIR: ${blockInfoPaths.length}`);
 
-  const result: FullBlockInfo[] = [];
+  const result: BlockInfo[] = [];
 
   for (const blockInfoPath of blockInfoPaths) {
     try {
@@ -69,19 +69,19 @@ const listFullBlockInfos = async (
         );
       }
 
-      const blockInfo = (await fs.readJSON(
+      const storedBlockInfo = (await fs.readJSON(
         path.resolve(blockInfosDirPath, blockInfoPath),
       )) as unknown;
 
-      if (validateBlockInfoSchema(blockInfo)) {
+      if (validateStoredBlockInfo(storedBlockInfo)) {
         result.push({
           name: `@${blockVendorName}/${blockNameWithinVendor}`,
-          ...blockInfo,
+          ...storedBlockInfo,
         });
       } else {
         throw new Error(
           `${
-            validateBlockInfoSchema.errors
+            validateStoredBlockInfo.errors
               ?.map((error) => error.message)
               .join("\n") ?? ""
           }`,
@@ -120,11 +120,11 @@ const findWorkspaceDirPath = async (
 };
 
 const prepareBlock = async ({
-  fullBlockInfo,
+  blockInfo,
   blockDirPath,
   validateLockfile,
 }: {
-  fullBlockInfo: FullBlockInfo;
+  blockInfo: BlockInfo;
   blockDirPath: string;
   validateLockfile: boolean;
 }) => {
@@ -132,24 +132,24 @@ const prepareBlock = async ({
 
   try {
     if (
-      !fullBlockInfo.repository.match(
+      !blockInfo.repository.match(
         /^https:\/\/github.com\/[\w-]+\/[\w-]+(\/|.git)?$/i,
       )
     ) {
-      if (fullBlockInfo.repository.startsWith("https?://github.com")) {
+      if (blockInfo.repository.startsWith("https?://github.com")) {
         throw new Error(
-          `Cannot handle repository URL ${fullBlockInfo.repository}. Only GitHub links are currently supported. We will add more services based on the demand.`,
+          `Cannot handle repository URL ${blockInfo.repository}. Only GitHub links are currently supported. We will add more services based on the demand.`,
         );
       } else {
         throw new Error(
-          `Cannot handle repository URL ${fullBlockInfo.repository}. It needs to match https://github.com/org/repo`,
+          `Cannot handle repository URL ${blockInfo.repository}. It needs to match https://github.com/org/repo`,
         );
       }
     }
-    const cleanedRepoUrl = fullBlockInfo.repository
+    const normalizedRepoUrl = blockInfo.repository
       .replace(/(\/|.git)$/i, "")
       .toLowerCase();
-    const zipUrl = `${cleanedRepoUrl}/archive/${fullBlockInfo.commit}.zip`;
+    const zipUrl = `${normalizedRepoUrl}/archive/${blockInfo.commit}.zip`;
 
     console.log(chalk.green(`Downloading ${zipUrl}...`));
     // @todo consider finding cross-platform NPM packages for curl and unzip commands
@@ -170,8 +170,8 @@ const prepareBlock = async ({
     const innerDir = await fs.readdir(unzipPath);
     const repoDirPath = path.resolve(unzipPath, innerDir[0]!);
 
-    const rootWorkspaceDirPath = fullBlockInfo.folder
-      ? path.resolve(repoDirPath, fullBlockInfo.folder)
+    const rootWorkspaceDirPath = blockInfo.folder
+      ? path.resolve(repoDirPath, blockInfo.folder)
       : repoDirPath;
 
     if (path.relative(repoDirPath, rootWorkspaceDirPath).startsWith("..")) {
@@ -180,18 +180,15 @@ const prepareBlock = async ({
       );
     }
 
-    const workspaceDirPath = fullBlockInfo.workspace
+    const workspaceDirPath = blockInfo.workspace
       ? path.resolve(
           rootWorkspaceDirPath,
-          await findWorkspaceDirPath(
-            rootWorkspaceDirPath,
-            fullBlockInfo.workspace,
-          ),
+          await findWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace),
         )
       : rootWorkspaceDirPath;
 
-    const distDirPath = fullBlockInfo.distDir
-      ? path.resolve(workspaceDirPath, fullBlockInfo.distDir)
+    const distDirPath = blockInfo.distDir
+      ? path.resolve(workspaceDirPath, blockInfo.distDir)
       : workspaceDirPath;
 
     const packageLockJsonPath = path.resolve(
@@ -209,13 +206,13 @@ const prepareBlock = async ({
       console.log({ yarnLockPath, yarnLockModifiedAt });
       throw new Error(
         `Could not find yarn.lock or package-lock.json in ${
-          fullBlockInfo.folder ? `folder ${fullBlockInfo.folder} of ` : ""
+          blockInfo.folder ? `folder ${blockInfo.folder} of ` : ""
         }the downloaded repository archive`,
       );
     }
 
     const packageManager = packageLockJsonModifiedAt ? "npm" : "yarn";
-    if (packageManager === "npm" && fullBlockInfo.workspace) {
+    if (packageManager === "npm" && blockInfo.workspace) {
       throw new Error(
         'Using "workspace" param is not compatible with npm (please remove this field from block info or package-lock.json from the repo)',
       );
@@ -232,8 +229,8 @@ const prepareBlock = async ({
       });
 
       console.log(chalk.green(`Building...`));
-      if (packageManager === "yarn" && fullBlockInfo.workspace) {
-        await execa("yarn", ["workspace", fullBlockInfo.workspace, "build"], {
+      if (packageManager === "yarn" && blockInfo.workspace) {
+        await execa("yarn", ["workspace", blockInfo.workspace, "build"], {
           cwd: rootWorkspaceDirPath,
           ...defaultExecaOptions,
         });
@@ -317,22 +314,20 @@ const script = async () => {
   console.log(`HUB_DIR is resolved to ${blockInfosDirPath}`);
   console.log(`BLOCKS_DIR is resolved to ${blocksDirPath}`);
 
-  const fullBlockInfos = await listFullBlockInfos(blockInfosDirPath);
+  const blockInfos = await listBlockInfos(blockInfosDirPath);
 
-  if (!fullBlockInfos.length) {
+  if (!blockInfos.length) {
     throw new Error(
       "No valid block infos found, please make sure that HUB_DIR is correct and it contains valid JSON files.",
     );
   }
 
   const filteredFullBlockInfos = blockNameFilter
-    ? fullBlockInfos.filter(({ name }) =>
-        micromatch.any([name], blockNameFilter),
-      )
-    : fullBlockInfos;
+    ? blockInfos.filter(({ name }) => micromatch.any([name], blockNameFilter))
+    : blockInfos;
 
   const numberOfBlocksThatDontMatchFilter =
-    fullBlockInfos.length - filteredFullBlockInfos.length;
+    blockInfos.length - filteredFullBlockInfos.length;
 
   if (numberOfBlocksThatDontMatchFilter > 0) {
     console.log(
@@ -342,11 +337,11 @@ const script = async () => {
     );
   }
 
-  for (const fullBlockInfo of filteredFullBlockInfos) {
-    const blockName = fullBlockInfo.name;
+  for (const blockInfo of filteredFullBlockInfos) {
+    const blockName = blockInfo.name;
     const blockDirPath = path.resolve(blocksDirPath, blockName);
     const blockMetadataPath = path.resolve(blockDirPath, "block-metadata.json");
-    const blockInfoChecksum = md5(JSON.stringify(fullBlockInfo));
+    const blockInfoChecksum = md5(JSON.stringify(blockInfo));
 
     if (env.CACHE) {
       try {
@@ -372,7 +367,7 @@ const script = async () => {
     try {
       await fs.ensureDir(blockDirPath);
       await prepareBlock({
-        fullBlockInfo,
+        blockInfo,
         blockDirPath,
         validateLockfile: env.VALIDATE_LOCKFILE,
       });
@@ -380,7 +375,7 @@ const script = async () => {
       const blockMetadata = await fs.readJson(blockMetadataPath);
       blockMetadata.unstable_hubInfo = {
         checksum: blockInfoChecksum,
-        commit: fullBlockInfo.commit,
+        commit: blockInfo.commit,
         preparedAt: new Date().toISOString(),
       };
       await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
