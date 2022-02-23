@@ -12,6 +12,7 @@
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
     "dev:seed-db": "yarn exe scripts/seed-db.ts",
     "exe": "ts-node --require dotenv-flow/config --transpile-only --transpiler=ts-node/transpilers/swc-experimental",
+    "generate-blockmetadata-schema": "typescript-json-schema ../packages/blockprotocol/core.d.ts BlockMetadata --required true --out public/schemas/block-metadata.json",
     "lint:tsc": "tsc --noEmit",
     "prepare": "patch-package && yarn exe scripts/prepare.ts",
     "start": "next start"
