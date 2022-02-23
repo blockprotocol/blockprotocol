@@ -2,6 +2,7 @@ import { merge } from "lodash";
 import { Db, WithId, ObjectId, DBRef } from "mongodb";
 import { NextApiResponse } from "next";
 import dedent from "dedent";
+import { BlockMetadata } from "blockprotocol";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
 import {
   VerificationCode,
@@ -428,8 +429,8 @@ export class User {
     return await EntityType.getAllByUser(db, { user: this });
   }
 
-  blocks() {
-    return blocksData.filter(
+  blocks(): ExpandedBlockMetadata[] {
+    return (blocksData as BlockMetadata[]).filter(
       (block: ExpandedBlockMetadata) => block.author === this.shortname,
     );
   }
