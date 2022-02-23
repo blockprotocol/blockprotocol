@@ -23,7 +23,7 @@ export const TABS = [
   slug: "" | "blocks" | "schemas";
 }[];
 
-type TabValue = typeof TABS[number]["value"];
+export type TabValue = typeof TABS[number]["value"];
 
 type TabHeaderProps = {
   activeTab: string;

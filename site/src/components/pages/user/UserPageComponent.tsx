@@ -1,6 +1,7 @@
 import {
   FormEvent,
   useCallback,
+  useEffect,
   useMemo,
   useState,
   VoidFunctionComponent,
@@ -27,43 +28,38 @@ import { Button } from "../../Button";
 import { ListViewCard } from "./ListViewCard";
 import { OverviewCard } from "./OverviewCard";
 import { Sidebar } from "./Sidebar";
-import { TABS, TabHeader, TabPanel } from "./Tabs";
+import { TABS, TabHeader, TabPanel, TabValue } from "./Tabs";
 import { Modal } from "../../Modal";
 import { TextField } from "../../TextField";
 
 const SIDEBAR_WIDTH = 300;
 
 export type UserPageProps = {
-  user: SerializedUser;
   blocks: ExpandedBlockMetadata[];
   entityTypes: EntityType[];
+  initialActiveTab: TabValue;
+  user: SerializedUser;
 };
 
 export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
   blocks,
   entityTypes,
+  initialActiveTab,
   user,
 }) => {
   const router = useRouter();
 
-  const activeTab = useMemo(() => {
+  useEffect(() => {
     const { profileTabs } = router.query;
-
-    if (!profileTabs?.length) {
-      return TABS[0].value;
-    }
 
     const matchingTab = TABS.find((tab) => tab.slug === profileTabs?.[0]);
 
-    if (!matchingTab) {
-      if (process.browser) {
-        void router.replace(`/@${user.shortname}`);
-      }
-      return TABS[0].value;
+    if (!matchingTab && typeof window !== undefined) {
+      void router.replace(`/@${user.shortname}`);
     }
-
-    return matchingTab.value;
   }, [router, user.shortname]);
+
+  const [activeTab, setActiveTab] = useState(initialActiveTab);
 
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
   const [newSchemaTitle, setNewSchemaTitle] = useState("");
@@ -178,6 +174,7 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
             <TabHeader
               activeTab={activeTab}
               setActiveTab={(nextTab) => {
+                setActiveTab(nextTab);
                 return router.push(
                   `/@${user.shortname}/${
                     TABS.find((tab) => tab.value === nextTab)?.slug
