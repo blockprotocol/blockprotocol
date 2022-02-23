@@ -210,13 +210,13 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
                         version,
                         name,
                         image,
-                        slug,
+                        blockPackagePath,
                       },
                       index,
                     ) => (
                       <Grid key={name} item xs={12} md={6}>
                         <OverviewCard
-                          url={`/${slug}`}
+                          url={blockPackagePath}
                           description={description!}
                           icon={icon}
                           image={image}
@@ -256,7 +256,7 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
                   icon,
                   lastUpdated,
                   name,
-                  slug,
+                  blockPackagePath,
                 }) => (
                   <ListViewCard
                     key={name}
@@ -265,7 +265,7 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
                     title={displayName!}
                     description={description}
                     lastUpdated={lastUpdated}
-                    url={`/${slug}`}
+                    url={blockPackagePath}
                   />
                 ),
               )}

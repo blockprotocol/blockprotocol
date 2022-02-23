@@ -68,7 +68,9 @@ type BlockPageQueryParams = {
 
 export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
   return {
-    paths: readBlocksFromDisk().map((metadata) => `/${metadata.slug}`),
+    paths: readBlocksFromDisk().map(
+      (metadata) => `/${metadata.blockPackagePath}`,
+    ),
     fallback: "blocking",
   };
 };
