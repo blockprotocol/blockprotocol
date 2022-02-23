@@ -54,7 +54,7 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
 
     const matchingTab = TABS.find((tab) => tab.slug === profileTabs?.[0]);
 
-    if (!matchingTab && typeof window !== "undefined") {
+    if (!matchingTab) {
       void router.replace(`/@${user.shortname}`);
     }
   }, [router, user.shortname]);
