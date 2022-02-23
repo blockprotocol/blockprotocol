@@ -2,7 +2,6 @@ import chalk from "chalk";
 import path from "path";
 import fs from "fs-extra";
 import * as envalid from "envalid";
-import execa from "execa";
 
 const monorepoRoot = path.resolve(__dirname, "../..");
 
@@ -26,14 +25,22 @@ const script = async () => {
     env.BLOCKS_CI_CACHE_DIR,
   );
 
-  await fs.ensureDir(resolvedBlocksDir);
-  await fs.ensureDir(resolvedBlocksCiCacheDir);
+  if (!(await fs.pathExists(resolvedBlocksCiCacheDir))) {
+    console.log(
+      chalk.gray(
+        `Skipping (CI cache not found at ${resolvedBlocksCiCacheDir})`,
+      ),
+    );
+    return;
+  }
 
-  await execa(
-    "rsync",
-    ["--recursive", "--delete", resolvedBlocksDir, resolvedBlocksCiCacheDir],
-    { stdio: "inherit" },
-  );
+  await fs.ensureDir(path.dirname(resolvedBlocksDir));
+
+  await fs.copy(resolvedBlocksCiCacheDir, resolvedBlocksDir, {
+    recursive: true,
+  });
+
+  console.log(`Done.`);
 };
 
 export default script();
