@@ -21,13 +21,7 @@ export type BuildConfig = {
   timestamp?: string | null;
 };
 
-const getBlockMediaUrl = (
-  mediaPath: string | undefined | null,
-  packagePath: string,
-): string | null => {
-  if (!mediaPath) {
-    return null;
-  }
+const getBlockMediaUrl = (mediaPath: string, packagePath: string): string => {
   const regex = /^(?:[a-z]+:)?\/\//i;
   if (regex.test(mediaPath)) {
     return mediaPath;

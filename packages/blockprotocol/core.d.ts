@@ -75,7 +75,7 @@ export type BlockMetadata = {
   /**
    * Specify the place where your code lives. This is helpful for people who want to contribute.
    */
-  repository: BlockMetadataRepository;
+  repository?: BlockMetadataRepository;
   /**
    * The path or URL to the entrypoint source file (e.g. index.html, index.js).
    */
