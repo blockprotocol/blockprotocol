@@ -5,18 +5,25 @@ export const TABS = [
   {
     title: "Overview",
     value: "overview",
+    slug: "",
   },
   {
     title: "Blocks",
     value: "blocks",
+    slug: "blocks",
   },
   {
     title: "Schemas",
     value: "schemas",
+    slug: "schemas",
   },
-] as { title: string; value: "overview" | "blocks" | "schemas" }[];
+] as {
+  title: string;
+  value: "overview" | "blocks" | "schemas";
+  slug: "" | "blocks" | "schemas";
+}[];
 
-type TabValue = typeof TABS[number]["value"];
+export type TabValue = typeof TABS[number]["value"];
 
 type TabHeaderProps = {
   activeTab: string;

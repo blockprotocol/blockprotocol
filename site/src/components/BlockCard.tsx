@@ -80,12 +80,12 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
     author,
     version,
     lastUpdated,
-    packagePath,
+    blockPackagePath,
     icon,
   } = data;
 
   return (
-    <Link href={`/${packagePath}`}>
+    <Link href={blockPackagePath}>
       <Box
         sx={{
           ...blockWidthStyles,

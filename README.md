@@ -22,6 +22,21 @@ _We’ll be publishing a public roadmap for the Block Protocol soon._
 
 See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a list of some proposed features (and known issues).
 
+## Repository contents
+
+We welcome [contributions](#contributing) to this repository. Within it you will find folders for:
+
+1.  `site`: the code for [blockprotocol.org](https://blockprotocol.org), including:
+
+    - the [Block Protocol specification](https://blockprotocol.org/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec)
+    - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
+
+1.  `packages`: utility packages for constructing Block Protocol blocks. These are all available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
+    - `block-template`: a template for a React-based block
+    - `blockprotocol`: TypeScript types for Block Protocol properties and functions, as described in the spec
+    - `create-block-app`: a script to [create a new block](https://blockprotocol.org/docs/developing-blocks) using `block-template`
+    - `mock-block-dock`: a mock embedding application used for developing blocks
+
 ## Contributing
 
 The Block Protocol is an open-source standard, and community contributions are what make open-source such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
