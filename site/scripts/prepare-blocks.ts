@@ -1,3 +1,15 @@
+/**
+ * This script converts JSON block infos into a folder with static block files.
+ * It downloads and builds block sources for that. The result of this script is
+ * then served by the Next.js app on Vercel.
+ *
+ * To avoid unnecessary rebuilds, this script puts unstable_hubInfo.checksum into
+ * each block-metadata.json file. This checksum is matched against the block info
+ * in subsequent runs to find cache matches.
+ *
+ * We plan to separate block artifacts from the Vercel deployment in the future.
+ * This script will be removed, but its parts will be recycled.
+ */
 import chalk from "chalk";
 import execa from "execa";
 import path from "path";
@@ -51,6 +63,9 @@ interface BlockInfo extends StoredBlockInfo {
   name: string;
 }
 
+/**
+ * Reads and validates JSON files a given directory with block infos.
+ */
 const listBlockInfos = async (
   blockInfosDirPath: string,
 ): Promise<BlockInfo[]> => {
@@ -97,8 +112,9 @@ const listBlockInfos = async (
 };
 
 /**
- * Downloads repo snapshot
- * @returns directory path
+ * Downloads repository snapshot (only supports GitHub repos for now)
+ *
+ * @returns directory path that contains downloaded repository files
  */
 const ensureRepositorySnapshot = async ({
   repositoryHref,
@@ -122,6 +138,7 @@ const ensureRepositorySnapshot = async ({
       );
     }
   }
+
   const normalizedRepoUrl = repositoryHref
     .replace(/(\/|.git)$/i, "")
     .toLowerCase();
@@ -151,7 +168,7 @@ const ensureRepositorySnapshot = async ({
 
   try {
     console.log(chalk.green(`Downloading ${zipUrl}...`));
-    // @todo consider finding cross-platform NPM packages for curl and unzip commands
+    // @todo Consider finding cross-platform NPM packages for curl and unzip commands
     await execa(
       "curl",
       ["-sL", "-o", path.resolve(unzipDirPath, `repo.zip`), zipUrl],
@@ -189,7 +206,7 @@ const getFileModifiedAt = async (
   }
 };
 
-const findWorkspaceDirPath = async (
+const locateWorkspaceDirPath = async (
   workingDirPath: string,
   workspaceName: string,
 ) => {
@@ -203,6 +220,11 @@ const findWorkspaceDirPath = async (
   }
 };
 
+/**
+ * Downloads repository snapshot or reuses the existing one, then installs
+ * dependencies and runs the build command. Exits with error if `validateLockfile`
+ * is `true`, but a lock file does not exist or changes on install.
+ */
 const prepareBlock = async ({
   blockInfo,
   blockDirPath,
@@ -237,7 +259,7 @@ const prepareBlock = async ({
   const workspaceDirPath = blockInfo.workspace
     ? path.resolve(
         rootWorkspaceDirPath,
-        await findWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace),
+        await locateWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace),
       )
     : rootWorkspaceDirPath;
 
