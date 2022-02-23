@@ -11,6 +11,15 @@ import tmp from "tmp-promise";
 
 const monorepoRoot = path.resolve(__dirname, "../..");
 
+const defaultExecaOptions = {
+  env: {
+    NODE_ENV: "development",
+    PATH: process.env.PATH,
+  },
+  extendEnv: false,
+  stdio: "inherit",
+} as const;
+
 interface BlockInfo {
   repository: string;
   commit: string;
@@ -147,7 +156,7 @@ const prepareBlock = async ({
     await execa(
       "curl",
       ["-sL", "-o", path.resolve(tempDirPath, "repo.zip"), zipUrl],
-      { stdio: "inherit" },
+      defaultExecaOptions,
     );
 
     const unzipPath = path.resolve(tempDirPath, "repo");
@@ -155,7 +164,7 @@ const prepareBlock = async ({
     await execa(
       "unzip",
       ["-q", path.resolve(tempDirPath, "repo.zip"), "-d", unzipPath],
-      { stdio: "inherit" },
+      defaultExecaOptions,
     );
 
     const innerDir = await fs.readdir(unzipPath);
@@ -218,25 +227,25 @@ const prepareBlock = async ({
       // https://classic.yarnpkg.com/lang/en/docs/cli/install/#toc-yarn-install-focus
       // https://yarnpkg.com/cli/workspaces/focus
       await execa(packageManager, ["install"], {
-        stdio: "inherit",
         cwd: rootWorkspaceDirPath,
+        ...defaultExecaOptions,
       });
 
       console.log(chalk.green(`Building...`));
       if (packageManager === "yarn" && fullBlockInfo.workspace) {
         await execa("yarn", ["workspace", fullBlockInfo.workspace, "build"], {
           cwd: rootWorkspaceDirPath,
-          stdio: "inherit",
+          ...defaultExecaOptions,
         });
       } else if (packageManager === "yarn") {
         await execa("yarn", ["build"], {
           cwd: rootWorkspaceDirPath,
-          stdio: "inherit",
+          ...defaultExecaOptions,
         });
       } else {
         await execa("npm", ["run", "build"], {
           cwd: rootWorkspaceDirPath,
-          stdio: "inherit",
+          ...defaultExecaOptions,
         });
       }
     }
