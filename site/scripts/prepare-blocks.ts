@@ -8,6 +8,7 @@ import * as envalid from "envalid";
 import md5 from "md5";
 import Ajv, { JSONSchemaType } from "ajv";
 import tmp from "tmp-promise";
+import slugify from "slugify";
 
 const monorepoRoot = path.resolve(__dirname, "../..");
 
@@ -95,6 +96,89 @@ const listBlockInfos = async (
   return result;
 };
 
+/**
+ * Downloads repo snapshot
+ * @returns directory path
+ */
+const ensureRepositorySnapshot = async ({
+  repositoryHref,
+  commit,
+  workshopDirPath,
+}: {
+  repositoryHref: string;
+  commit: string;
+  workshopDirPath: string;
+}): Promise<string> => {
+  if (
+    !repositoryHref.match(/^https:\/\/github.com\/[\w-]+\/[\w-]+(\/|.git)?$/i)
+  ) {
+    if (repositoryHref.startsWith("https?://github.com")) {
+      throw new Error(
+        `Cannot handle repository URL ${repositoryHref}. Only GitHub links are currently supported. We will add more services based on the demand.`,
+      );
+    } else {
+      throw new Error(
+        `Cannot handle repository URL ${repositoryHref}. It needs to match https://github.com/org/repo`,
+      );
+    }
+  }
+  const normalizedRepoUrl = repositoryHref
+    .replace(/(\/|.git)$/i, "")
+    .toLowerCase();
+  const zipUrl = `${normalizedRepoUrl}/archive/${commit}.zip`;
+  const repositorySnapshotSlug = slugify(
+    `${normalizedRepoUrl.replace("https://", "")}-${commit}`,
+    {},
+  );
+
+  const repositorySnapshotDirPath = path.resolve(
+    workshopDirPath,
+    repositorySnapshotSlug,
+  );
+
+  if (await fs.pathExists(repositorySnapshotDirPath)) {
+    console.log(
+      chalk.gray(
+        `Reusing existing repository snapshot in ${repositorySnapshotDirPath}`,
+      ),
+    );
+    return repositorySnapshotDirPath;
+  }
+
+  const { path: unzipDirPath, cleanup: cleanupUnzipDirPath } = await tmp.dir({
+    unsafeCleanup: true,
+  });
+
+  try {
+    console.log(chalk.green(`Downloading ${zipUrl}...`));
+    // @todo consider finding cross-platform NPM packages for curl and unzip commands
+    await execa(
+      "curl",
+      ["-sL", "-o", path.resolve(unzipDirPath, `repo.zip`), zipUrl],
+      defaultExecaOptions,
+    );
+
+    console.log(chalk.green(`Unpacking archive...`));
+    const unzipPath = path.resolve(unzipDirPath, "repo");
+    await execa(
+      "unzip",
+      ["-q", path.resolve(unzipDirPath, "repo.zip"), "-d", unzipPath],
+      defaultExecaOptions,
+    );
+
+    const innerDir = await fs.readdir(unzipPath);
+    await fs.move(
+      path.resolve(unzipPath, innerDir[0]!),
+      repositorySnapshotDirPath,
+    );
+
+    console.log(`Repository snapshot ready in ${repositorySnapshotDirPath}`);
+    return repositorySnapshotDirPath;
+  } finally {
+    await cleanupUnzipDirPath();
+  }
+};
+
 const getFileModifiedAt = async (
   filePath: string,
 ): Promise<number | undefined> => {
@@ -122,162 +206,128 @@ const findWorkspaceDirPath = async (
 const prepareBlock = async ({
   blockInfo,
   blockDirPath,
+  workshopDirPath,
   validateLockfile,
 }: {
   blockInfo: BlockInfo;
   blockDirPath: string;
+  workshopDirPath: string;
   validateLockfile: boolean;
 }) => {
-  const { path: tempDirPath, cleanup } = await tmp.dir({ unsafeCleanup: true });
+  const repositorySnapshotDirPath = await ensureRepositorySnapshot({
+    repositoryHref: blockInfo.repository,
+    commit: blockInfo.commit,
+    workshopDirPath,
+  });
 
-  try {
-    if (
-      !blockInfo.repository.match(
-        /^https:\/\/github.com\/[\w-]+\/[\w-]+(\/|.git)?$/i,
+  const rootWorkspaceDirPath = blockInfo.folder
+    ? path.resolve(repositorySnapshotDirPath, blockInfo.folder)
+    : repositorySnapshotDirPath;
+
+  if (
+    path
+      .relative(repositorySnapshotDirPath, rootWorkspaceDirPath)
+      .startsWith("..")
+  ) {
+    throw new Error(
+      `Value of "folder" is invalid: ${rootWorkspaceDirPath}. The folder must be within the repo.`,
+    );
+  }
+
+  const workspaceDirPath = blockInfo.workspace
+    ? path.resolve(
+        rootWorkspaceDirPath,
+        await findWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace),
       )
-    ) {
-      if (blockInfo.repository.startsWith("https?://github.com")) {
-        throw new Error(
-          `Cannot handle repository URL ${blockInfo.repository}. Only GitHub links are currently supported. We will add more services based on the demand.`,
-        );
-      } else {
-        throw new Error(
-          `Cannot handle repository URL ${blockInfo.repository}. It needs to match https://github.com/org/repo`,
-        );
-      }
-    }
-    const normalizedRepoUrl = blockInfo.repository
-      .replace(/(\/|.git)$/i, "")
-      .toLowerCase();
-    const zipUrl = `${normalizedRepoUrl}/archive/${blockInfo.commit}.zip`;
+    : rootWorkspaceDirPath;
 
-    console.log(chalk.green(`Downloading ${zipUrl}...`));
-    // @todo consider finding cross-platform NPM packages for curl and unzip commands
-    await execa(
-      "curl",
-      ["-sL", "-o", path.resolve(tempDirPath, "repo.zip"), zipUrl],
-      defaultExecaOptions,
+  const distDirPath = blockInfo.distDir
+    ? path.resolve(workspaceDirPath, blockInfo.distDir)
+    : workspaceDirPath;
+
+  const packageLockJsonPath = path.resolve(
+    rootWorkspaceDirPath,
+    "package-lock.json",
+  );
+  const packageLockJsonModifiedAt = await getFileModifiedAt(
+    packageLockJsonPath,
+  );
+
+  const yarnLockPath = path.resolve(rootWorkspaceDirPath, "yarn.lock");
+  const yarnLockModifiedAt = await getFileModifiedAt(yarnLockPath);
+
+  if (validateLockfile && !packageLockJsonModifiedAt && !yarnLockModifiedAt) {
+    throw new Error(
+      `Could not find yarn.lock or package-lock.json in ${
+        blockInfo.folder ? `folder ${blockInfo.folder} of ` : ""
+      }the downloaded repository archive`,
     );
+  }
 
-    const unzipPath = path.resolve(tempDirPath, "repo");
-    console.log(chalk.green(`Unpacking archive to ${unzipPath}...`));
-    await execa(
-      "unzip",
-      ["-q", path.resolve(tempDirPath, "repo.zip"), "-d", unzipPath],
-      defaultExecaOptions,
+  const packageManager = packageLockJsonModifiedAt ? "npm" : "yarn";
+  if (packageManager === "npm" && blockInfo.workspace) {
+    throw new Error(
+      'Using "workspace" param is not compatible with npm (please remove this field from block info or delete package-lock.json from the repo)',
     );
+  }
 
-    const innerDir = await fs.readdir(unzipPath);
-    const repoDirPath = path.resolve(unzipPath, innerDir[0]!);
+  if (distDirPath !== repositorySnapshotDirPath) {
+    console.log(chalk.green(`Installing dependencies...`));
+    // @todo explore focus mode to speed up yarn install in monorepos
+    // https://classic.yarnpkg.com/lang/en/docs/cli/install/#toc-yarn-install-focus
+    // https://yarnpkg.com/cli/workspaces/focus
+    await execa(packageManager, ["install"], {
+      cwd: rootWorkspaceDirPath,
+      ...defaultExecaOptions,
+    });
 
-    const rootWorkspaceDirPath = blockInfo.folder
-      ? path.resolve(repoDirPath, blockInfo.folder)
-      : repoDirPath;
-
-    if (path.relative(repoDirPath, rootWorkspaceDirPath).startsWith("..")) {
-      throw new Error(
-        `Value of "folder" is invalid: ${rootWorkspaceDirPath}. The folder must be within the repo.`,
-      );
-    }
-
-    const workspaceDirPath = blockInfo.workspace
-      ? path.resolve(
-          rootWorkspaceDirPath,
-          await findWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace),
-        )
-      : rootWorkspaceDirPath;
-
-    const distDirPath = blockInfo.distDir
-      ? path.resolve(workspaceDirPath, blockInfo.distDir)
-      : workspaceDirPath;
-
-    const packageLockJsonPath = path.resolve(
-      rootWorkspaceDirPath,
-      "package-lock.json",
-    );
-    const packageLockJsonModifiedAt = await getFileModifiedAt(
-      packageLockJsonPath,
-    );
-
-    const yarnLockPath = path.resolve(rootWorkspaceDirPath, "yarn.lock");
-    const yarnLockModifiedAt = await getFileModifiedAt(yarnLockPath);
-
-    if (validateLockfile && !packageLockJsonModifiedAt && !yarnLockModifiedAt) {
-      console.log({ yarnLockPath, yarnLockModifiedAt });
-      throw new Error(
-        `Could not find yarn.lock or package-lock.json in ${
-          blockInfo.folder ? `folder ${blockInfo.folder} of ` : ""
-        }the downloaded repository archive`,
-      );
-    }
-
-    const packageManager = packageLockJsonModifiedAt ? "npm" : "yarn";
-    if (packageManager === "npm" && blockInfo.workspace) {
-      throw new Error(
-        'Using "workspace" param is not compatible with npm (please remove this field from block info or package-lock.json from the repo)',
-      );
-    }
-
-    if (distDirPath !== repoDirPath) {
-      console.log(chalk.green(`Installing dependencies...`));
-      // @todo explore focus mode to speed up yarn install in monorepos
-      // https://classic.yarnpkg.com/lang/en/docs/cli/install/#toc-yarn-install-focus
-      // https://yarnpkg.com/cli/workspaces/focus
-      await execa(packageManager, ["install"], {
+    console.log(chalk.green(`Building...`));
+    if (packageManager === "yarn" && blockInfo.workspace) {
+      await execa("yarn", ["workspace", blockInfo.workspace, "build"], {
         cwd: rootWorkspaceDirPath,
         ...defaultExecaOptions,
       });
-
-      console.log(chalk.green(`Building...`));
-      if (packageManager === "yarn" && blockInfo.workspace) {
-        await execa("yarn", ["workspace", blockInfo.workspace, "build"], {
-          cwd: rootWorkspaceDirPath,
-          ...defaultExecaOptions,
-        });
-      } else if (packageManager === "yarn") {
-        await execa("yarn", ["build"], {
-          cwd: rootWorkspaceDirPath,
-          ...defaultExecaOptions,
-        });
-      } else {
-        await execa("npm", ["run", "build"], {
-          cwd: rootWorkspaceDirPath,
-          ...defaultExecaOptions,
-        });
-      }
+    } else if (packageManager === "yarn") {
+      await execa("yarn", ["build"], {
+        cwd: rootWorkspaceDirPath,
+        ...defaultExecaOptions,
+      });
+    } else {
+      await execa("npm", ["run", "build"], {
+        cwd: rootWorkspaceDirPath,
+        ...defaultExecaOptions,
+      });
     }
-
-    if (validateLockfile) {
-      if (
-        packageLockJsonModifiedAt &&
-        packageLockJsonModifiedAt !==
-          (await getFileModifiedAt(packageLockJsonPath))
-      ) {
-        throw new Error(
-          `Installing dependencies changes package-lock.json. Please install dependencies locally and commit changes.`,
-        );
-      }
-      if (
-        yarnLockModifiedAt &&
-        yarnLockModifiedAt !== (await getFileModifiedAt(yarnLockPath))
-      ) {
-        throw new Error(
-          `Installing dependencies changes yarn.lock. Please install dependencies locally and commit changes.`,
-        );
-      }
-    }
-
-    console.log(chalk.green(`Moving files...`));
-    await fs.ensureDir(path.dirname(blockDirPath));
-    if (await fs.pathExists(blockDirPath)) {
-      await fs.remove(blockDirPath);
-    }
-
-    await fs.move(distDirPath, blockDirPath);
-    console.log(chalk.green(`Done!`));
-  } finally {
-    await cleanup();
   }
+
+  if (validateLockfile) {
+    if (
+      packageLockJsonModifiedAt &&
+      packageLockJsonModifiedAt !==
+        (await getFileModifiedAt(packageLockJsonPath))
+    ) {
+      throw new Error(
+        `Installing dependencies changes package-lock.json. Please install dependencies locally and commit.`,
+      );
+    }
+    if (
+      yarnLockModifiedAt &&
+      yarnLockModifiedAt !== (await getFileModifiedAt(yarnLockPath))
+    ) {
+      throw new Error(
+        `Installing dependencies changes yarn.lock. Please install dependencies locally and commit.`,
+      );
+    }
+  }
+
+  console.log(chalk.green(`Moving files...`));
+  await fs.ensureDir(path.dirname(blockDirPath));
+  if (await fs.pathExists(blockDirPath)) {
+    await fs.remove(blockDirPath);
+  }
+
+  await fs.move(distDirPath, blockDirPath);
+  console.log(chalk.green(`Done!`));
 };
 
 const script = async () => {
@@ -337,6 +387,11 @@ const script = async () => {
     );
   }
 
+  const { path: workshopDirPath, cleanup: cleanupWorkshopDirPath } =
+    await tmp.dir({
+      unsafeCleanup: true,
+    });
+
   for (const blockInfo of filteredFullBlockInfos) {
     const blockName = blockInfo.name;
     const blockDirPath = path.resolve(blocksDirPath, blockName);
@@ -369,6 +424,7 @@ const script = async () => {
       await prepareBlock({
         blockInfo,
         blockDirPath,
+        workshopDirPath,
         validateLockfile: env.VALIDATE_LOCKFILE,
       });
 
@@ -395,6 +451,8 @@ const script = async () => {
       );
     }
   }
+
+  await cleanupWorkshopDirPath();
 
   // @todo Cleanup unknown blocks if blockNameFilter is empty.
   // As a workaround, we can clear CI cache for now.
