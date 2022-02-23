@@ -12,21 +12,20 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useMemo, VoidFunctionComponent } from "react";
 import { formatDistance } from "date-fns";
-
-import { BlocksSlider } from "../../components/BlocksSlider";
+import { BlocksSlider } from "../../../components/BlocksSlider";
 import {
   blockDependencies,
   BlockDependency,
   BlockExports,
   BlockSchema,
-} from "../../components/pages/hub/HubUtils";
+} from "../../../components/pages/hub/HubUtils";
 import {
   readBlocksFromDisk,
   readBlockDataFromDisk,
   ExpandedBlockMetadata as BlockMetadata,
-} from "../../lib/blocks";
-import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
-import { Link } from "../../components/Link";
+} from "../../../lib/blocks";
+import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
+import { Link } from "../../../components/Link";
 
 const blockRequire = (name: BlockDependency) => {
   if (!(name in blockDependencies)) {
@@ -69,7 +68,7 @@ type BlockPageQueryParams = {
 
 export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
   return {
-    paths: readBlocksFromDisk().map((metadata) => `/${metadata.packagePath}`),
+    paths: readBlocksFromDisk().map((metadata) => metadata.blockPackagePath),
     fallback: "blocking",
   };
 };
