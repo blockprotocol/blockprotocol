@@ -56,6 +56,6 @@ dist
 .vercel
 
 # workspace specific
+site/blocks-data.json
 site/public/blocks
 site/site-map.json
-site/blocks-data.json
