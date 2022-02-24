@@ -27,7 +27,7 @@ export type BlockMetadata = {
    */
   author: string;
   /**
-   * The default object used to populate a block's schema
+   * The default data used as the block's properties on first load - must comply with its schema
    */
   default?: {
     [k: string]: unknown;
