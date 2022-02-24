@@ -65,12 +65,14 @@ export const BlockDataContainer: VoidFunctionComponent<
       if (example) {
         setText(JSON.stringify(example, undefined, 2));
       } else {
-        setText("");
+        setText("{}");
       }
+
+      setBlockVariantsTab(0);
 
       prevPackage.current = metadata?.packagePath;
     }
-  }, [metadata, text]);
+  }, [metadata]);
 
   useEffect(() => {
     const blockVariant: BlockVariant | undefined =
