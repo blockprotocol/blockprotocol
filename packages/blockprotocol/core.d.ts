@@ -92,7 +92,7 @@ export type BlockMetadata = {
     };
   }[];
   /**
-   * The version of the block, which SHOULD use semantic versioning.
+   * The version of the block, which should use semantic versioning (@see https://semver.org/).
    */
   version: string;
 };
