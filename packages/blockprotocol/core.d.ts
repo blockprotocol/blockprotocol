@@ -73,7 +73,7 @@ export type BlockMetadata = {
    */
   protocol: string;
   /**
-   * Specify the place where your code lives. This is helpful for people who want to contribute.
+   * Specify the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
    */
   repository?: BlockMetadataRepository;
   /**
