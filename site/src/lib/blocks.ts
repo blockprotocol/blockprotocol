@@ -5,9 +5,10 @@ import hostedGitInfo from "hosted-git-info";
 export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
+  lastUpdated?: string | null;
   packagePath: string;
   repository?: string;
-  lastUpdated?: string | null;
+  blockPackagePath: string;
 };
 
 export type BuildConfig = {
@@ -73,7 +74,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
-    .map((path: string) => {
+    .map((path: string): ExpandedBlockMetadata => {
       const packagePath = path.split("/").slice(-3, -1).join("/");
 
       const metadata: ExpandedBlockMetadata = {
@@ -94,7 +95,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         blockRepository = `${blockConfig.repository}#${blockConfig.branch}`;
       }
 
-      let repository = getRepositoryUrl(blockRepository);
+      let repository = getRepositoryUrl(blockRepository) ?? undefined;
 
       if (repository) {
         repository = repository.replace(/\/$/, "");
@@ -106,6 +107,9 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
         image: getBlockMediaUrl(metadata.image, metadata.packagePath),
         repository,
+        blockPackagePath: `/${metadata.packagePath
+          .split("/")
+          .join("/blocks/")}`,
         lastUpdated: blockConfig?.timestamp ?? null,
       };
     });
