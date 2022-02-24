@@ -65,7 +65,7 @@ export type BlockMetadata = {
    */
   license: string;
   /**
-   * A unique name for the block.
+   * A unique, slugified name for the block.
    */
   name: string;
   /**
