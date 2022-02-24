@@ -235,30 +235,39 @@ export const useMockDatastore: UseMockDataStore = (
           (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
         );
       } else if (file) {
-        const reader = new FileReader();
+        const result = await new Promise<FileReader["result"] | null>(
+          (resolve, reject) => {
+            const reader = new FileReader();
 
-        reader.onload = (event) => {
-          if (event.target?.result) {
-            return createEntities([
-              {
-                accountId,
-                data: {
-                  url: event.target.result.toString(),
-                  mediaType,
-                },
-                entityTypeId: "file1",
+            reader.onload = (event) => {
+              resolve(event.target?.result ?? null);
+            };
+
+            reader.onerror = (event) => {
+              reject(event);
+            };
+
+            reader.readAsDataURL(file);
+          },
+        );
+
+        if (result) {
+          return createEntities([
+            {
+              accountId,
+              data: {
+                url: result.toString(),
+                mediaType,
               },
-            ]).then(
-              (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
-            );
-          } else {
-            throw new Error("Couldn't read your file");
-          }
-        };
+              entityTypeId: "file1",
+            },
+          ]).then(
+            (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
+          );
+        }
 
-        reader.readAsDataURL(file);
+        throw new Error("Couldn't read your file");
       }
-
       throw new Error("Unreachable.");
     },
     [createEntities],
