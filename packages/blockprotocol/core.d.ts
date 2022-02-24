@@ -33,7 +33,7 @@ export type BlockMetadata = {
     [k: string]: unknown;
   };
   /**
-   * Describes what a block does
+   * A short description of the block, to help users understand its capabilities
    */
   description: string;
   /**
