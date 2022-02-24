@@ -29,8 +29,11 @@ export const BlockVariantsTabs: VoidFunctionComponent<
     >
       {metadata.variants ? (
         metadata.variants.map((variant, variantIndex) => (
-          <MenuItem key={variant.displayName} value={variantIndex}>
-            {variant.displayName}
+          <MenuItem
+            key={variant.name ?? variant.displayName}
+            value={variantIndex}
+          >
+            {variant.name ?? variant.displayName}
           </MenuItem>
         ))
       ) : (
@@ -70,7 +73,10 @@ export const BlockVariantsTabs: VoidFunctionComponent<
     >
       {metadata.variants ? (
         metadata.variants.map((variant) => (
-          <Tab key={variant.displayName} label={variant.displayName} />
+          <Tab
+            key={variant.name ?? variant.displayName}
+            label={variant.name ?? variant.displayName}
+          />
         ))
       ) : (
         <Tab label={metadata.displayName} />
