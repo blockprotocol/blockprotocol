@@ -21,8 +21,6 @@ export const BlockVariantsTabs: VoidFunctionComponent<
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  console.log(metadata.variants);
-
   return isMobile ? (
     <Select
       sx={{ width: "100%", mb: 2 }}
