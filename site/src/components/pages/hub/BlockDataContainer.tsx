@@ -112,7 +112,7 @@ export const BlockDataContainer: VoidFunctionComponent<
         });
       }
     };
-  }, [blockVariantsTab, metadata?.variants, text]);
+  }, [blockVariantsTab, metadata?.examples, metadata?.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
