@@ -25,27 +25,29 @@ export type BlockMetadata = {
   /**
    * The name of the author of the block
    */
-  author: string;
+  author?: string | null;
   /**
    * The default object used to populate a block's schema
    */
   default?: {
     [k: string]: unknown;
-  };
+  } | null;
   /**
    * Describes what a block does
    */
-  description: string;
+  description?: string | null;
   /**
    * The display name used for a block
    */
-  displayName: string;
+  displayName?: string | null;
   /**
    * A list of examples used to showcase a block's capabilities
    */
-  examples: {
-    [k: string]: unknown;
-  }[];
+  examples?:
+    | {
+        [k: string]: unknown;
+      }[]
+    | null;
   /**
    * The external dependencies to be provided to a block
    */
@@ -55,15 +57,15 @@ export type BlockMetadata = {
   /**
    * An icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block).
    */
-  icon: string;
+  icon?: string | null;
   /**
    * A preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
    */
-  image: string;
+  image?: string | null;
   /**
    * The license the block is made available under (e.g. MIT).
    */
-  license: string;
+  license?: string | null;
   /**
    * A unique name for the block.
    */
@@ -75,7 +77,7 @@ export type BlockMetadata = {
   /**
    * Specify the place where your code lives. This is helpful for people who want to contribute.
    */
-  repository?: BlockMetadataRepository;
+  repository?: BlockMetadataRepository | null;
   /**
    * The path or URL to the entrypoint source file (e.g. index.html, index.js).
    */
@@ -83,14 +85,16 @@ export type BlockMetadata = {
   /**
    * A list which represents different variants of the block that the user can create.
    */
-  variants?: {
-    description: string;
-    icon: string;
-    name: string;
-    properties: {
-      [k: string]: unknown;
-    };
-  }[];
+  variants?:
+    | {
+        description: string;
+        icon: string;
+        name: string;
+        properties: {
+          [k: string]: unknown;
+        };
+      }[]
+    | null;
   /**
    * The version of the block, which SHOULD use semantic versioning.
    */
