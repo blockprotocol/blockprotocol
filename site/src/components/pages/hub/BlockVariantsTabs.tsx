@@ -21,6 +21,8 @@ export const BlockVariantsTabs: VoidFunctionComponent<
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  console.log(metadata.variants);
+
   return isMobile ? (
     <Select
       sx={{ width: "100%", mb: 2 }}
@@ -29,8 +31,11 @@ export const BlockVariantsTabs: VoidFunctionComponent<
     >
       {metadata.variants ? (
         metadata.variants.map((variant, variantIndex) => (
-          <MenuItem key={variant.displayName} value={variantIndex}>
-            {variant.displayName}
+          <MenuItem
+            key={variant.name ?? variant.displayName}
+            value={variantIndex}
+          >
+            {variant.name ?? variant.displayName}
           </MenuItem>
         ))
       ) : (
@@ -70,7 +75,10 @@ export const BlockVariantsTabs: VoidFunctionComponent<
     >
       {metadata.variants ? (
         metadata.variants.map((variant) => (
-          <Tab key={variant.displayName} label={variant.displayName} />
+          <Tab
+            key={variant.name ?? variant.displayName}
+            label={variant.name ?? variant.displayName}
+          />
         ))
       ) : (
         <Tab label={metadata.displayName} />
