@@ -40,8 +40,9 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
   <Typography
     component="p"
     variant="bpSmallCopy"
-    sx={{
-      color: ({ palette }) => palette.gray[40],
+    key={href}
+    sx={(theme) => ({
+      color: theme.palette.gray[40],
       "&:first-of-type": {
         marginTop: {
           xs: 1.5,
@@ -51,12 +52,8 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
       "&:not(:first-of-type)": {
         marginTop: 1.5,
       },
-    }}
-    key={href}
-  >
-    <Link
-      href={href}
-      sx={(theme) => ({
+      "> a": {
+        borderBottomWidth: 0,
         transition: theme.transitions.create("color", { duration: 150 }),
         ":hover": {
           color: theme.palette.gray[20],
@@ -67,10 +64,10 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
         ":focus-visible": {
           outlineColor: theme.palette.gray[40],
         },
-      })}
-    >
-      {name}
-    </Link>
+      },
+    })}
+  >
+    <Link href={href}>{name}</Link>
   </Typography>
 ));
 
