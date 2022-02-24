@@ -27,13 +27,13 @@ export type BlockMetadata = {
    */
   author?: string | null;
   /**
-   * The default object used to populate a block's schema
+   * The default data used as the block's properties on first load - must comply with its schema
    */
   default?: {
     [k: string]: unknown;
   } | null;
   /**
-   * Describes what a block does
+   * A short description of the block, to help users understand its capabilities
    */
   description?: string | null;
   /**
@@ -49,7 +49,7 @@ export type BlockMetadata = {
       }[]
     | null;
   /**
-   * The external dependencies to be provided to a block
+   * The dependencies a block relies on but expects the embedding application to provide
    */
   externals: {
     [k: string]: unknown;
@@ -67,7 +67,7 @@ export type BlockMetadata = {
    */
   license?: string | null;
   /**
-   * A unique name for the block.
+   * A unique, slugified name for the block.
    */
   name: string;
   /**
@@ -75,7 +75,7 @@ export type BlockMetadata = {
    */
   protocol: string;
   /**
-   * Specify the place where your code lives. This is helpful for people who want to contribute.
+   * Specify the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
    */
   repository?: BlockMetadataRepository | null;
   /**
@@ -96,7 +96,7 @@ export type BlockMetadata = {
       }[]
     | null;
   /**
-   * The version of the block, which SHOULD use semantic versioning.
+   * The version of the block, which should use semantic versioning (@see https://semver.org/).
    */
   version: string;
 };
