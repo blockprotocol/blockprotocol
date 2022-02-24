@@ -222,16 +222,14 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                 color: ({ palette }) => palette.gray[50],
                 fontWeight: 400,
                 display: "flex",
-              }}
-              variant="bpSmallCopy"
-            >
-              Supported by{" "}
-              <Box
-                component="a"
-                href="https://hash.ai"
-                sx={{
-                  marginLeft: 1,
-                  borderBottomColor: "transparent !important",
+                "> a": {
+                  borderBottomWidth: 0,
+                  transition: theme.transitions.create(
+                    ["color", "borderColor"],
+                    {
+                      duration: 150,
+                    },
+                  ),
                   ":hover": {
                     color: ({ palette }) => palette.gray[30],
                   },
@@ -241,19 +239,21 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                   ":focus-visible": {
                     outline: ({ palette }) => `1px solid ${palette.gray[50]}`,
                   },
+                },
+              }}
+              variant="bpSmallCopy"
+            >
+              Supported by{" "}
+              <Link
+                href="https://hash.ai"
+                sx={{
+                  position: "relative",
+                  top: -1,
+                  marginLeft: 1,
                 }}
               >
-                <HASHLogoIcon
-                  sx={{
-                    transition: theme.transitions.create(
-                      ["color", "borderColor"],
-                      {
-                        duration: 150,
-                      },
-                    ),
-                  }}
-                />
-              </Box>
+                <HASHLogoIcon />
+              </Link>
             </Typography>
           </Grid>
         </Grid>
