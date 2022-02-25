@@ -72,17 +72,23 @@ The Block Protocol does not define the structure of entities passed between bloc
 
 Implementers of the Block Protocol could use the structure of entities as defined by [schema.org](http://schema.org), if they wished (e.g. a block could be built to render or edit a [schema.org Event)](https://schema.org/Event).
 
+We recommend that users link their schemas and their properties to [schema.org](http://schema.org) types and properties where possible, and have included a way of doing so in our schema editor.
+
 <InfoCardWrapper>
 
-<InfoCard variant="warning" title="Crosswalked?">
+There are two different types of ‘crosswalking’ we intend to support in the Block Protocol:
 
-Mapping different schemas and their properties to one another is a process known as ‘crosswalking’. It helps machines more easily understand how new schemas fit in to existing knowledge graphs and ontologies.
+<InfoCard variant="warning" title="Crosswalking?">
+
+Mapping different schemas and their properties to one another is a process known as ‘crosswalking’.
+
+It helps machines more easily understand how new schemas fit in to existing knowledge graphs and ontologies.
 
 </InfoCard>
 
-We recommend that users link their schemas and their properties to [schema.org](http://schema.org) types and properties where possible, and have included a way of doing so in our schema editor.
+1.  Crosswalking from JSON schema properties to [schema.org](http://schema.org) (and equivalent) properties, in order to make rendered pages machine-readable - as described above, supported in the schema editor, and mentioned in the spec [here](https://blockprotocol.org/spec/embedding-applications#machine-readable-pages). The purpose of this is to mark up web pages with structured data describing the entities within.
 
-You can find all [schema.org](https://schema.org) definitions on the Block Protocol website already, ready to be ‘crosswalked’ back to.
+1.  Crosswalking from JSON schema properties to other JSON schema properties, in order for applications to understand that seemingly incompatible schemas may in fact be compatible, and to translate between them. For example, if one Table schema has a 'rows' property, and another Table schema has a 'records' property, declaring that the two are equivalent allows applications to translate data conforming to the first Table schema for use in places where data conforming to the second Table schema is expected. This mitigates the impact of different approaches being taken to describe the same data.
 
 </InfoCardWrapper>
 
