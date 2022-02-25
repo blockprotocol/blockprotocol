@@ -8,9 +8,11 @@ type DistributedOmit<T, K extends PropertyKey> = T extends T
 
 export type BlockVariant = {
   description?: string | null;
+  /** @deprecated displayName has beeen deprecated - use 'name' instead */
   displayName?: string | null;
   examples?: JSONObject[] | null;
   icon?: string | null;
+  name?: string | null;
   properties?: JSONObject | null;
 };
 
