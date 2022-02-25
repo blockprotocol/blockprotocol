@@ -24,7 +24,7 @@ export const UserAvatar: VFC<UserAvatarProps> = ({ user }) => {
         borderColor: ({ palette }) => palette.gray[30],
       }}
     >
-      <Box component="span" sx={{ color: ({ palette }) => palette.gray[60] }}>
+      <Box component="span" sx={{ color: ({ palette }) => palette.gray[70] }}>
         {preferredName?.charAt(0).toUpperCase()}
       </Box>
     </Box>

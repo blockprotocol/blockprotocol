@@ -50,7 +50,7 @@ export const BlockVariantsTabs: VoidFunctionComponent<
         "& .MuiTab-root": {
           textTransform: "none",
           margin: 0,
-          color: ({ palette }) => palette.gray[60],
+          color: ({ palette }) => palette.gray[70],
           transition: "0.25s all ease-in-out",
           paddingLeft: "10px",
           paddingRight: "10px",
@@ -58,7 +58,7 @@ export const BlockVariantsTabs: VoidFunctionComponent<
             backgroundColor: theme.palette.gray[10],
             borderTopLeftRadius: 6,
             borderTopRightRadius: 6,
-            color: ({ palette }) => palette.gray[70],
+            color: ({ palette }) => palette.gray[80],
           },
           "&.Mui-selected": {
             backgroundColor: theme.palette.gray[10],

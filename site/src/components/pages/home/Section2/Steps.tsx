@@ -46,7 +46,7 @@ const TextBlock: VFC<TextBlockProps> = ({
               : {
                   mt: 1.5,
                 }),
-            color: ({ palette }) => palette.gray[60],
+            color: ({ palette }) => palette.gray[70],
             fontSize: 15,
             fontWeight: 400,
           }}
@@ -66,7 +66,7 @@ const TextBlock: VFC<TextBlockProps> = ({
       >
         <Box
           sx={{
-            color: ({ palette }) => palette.gray[80],
+            color: ({ palette }) => palette.gray[90],
             fontWeight: 600,
             fontSize: 22,
             lineHeight: 1.3,
@@ -75,7 +75,7 @@ const TextBlock: VFC<TextBlockProps> = ({
         >
           What's a protocol
         </Box>
-        <Box sx={{ fontWeight: 400, color: ({ palette }) => palette.gray[80] }}>
+        <Box sx={{ fontWeight: 400, color: ({ palette }) => palette.gray[90] }}>
           Protocols are standardized ways for two or more systems to
           communicate.
         </Box>
@@ -116,7 +116,7 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
               : {
                   mt: 1.5,
                 }),
-            color: ({ palette }) => palette.gray[60],
+            color: ({ palette }) => palette.gray[70],
             fontSize: 15,
             fontWeight: 400,
           }}
@@ -235,7 +235,7 @@ const ImageBlock: VFC<ImageBlockProps> = ({
               : {
                   mt: 1.5,
                 }),
-            color: ({ palette }) => palette.gray[60],
+            color: ({ palette }) => palette.gray[70],
             fontSize: 15,
             fontWeight: 400,
           }}
@@ -370,7 +370,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
               {key}
             </Box>
             <Box
-              sx={{ color: ({ palette }) => palette.gray[60] }}
+              sx={{ color: ({ palette }) => palette.gray[70] }}
               component="span"
             >
               {value}
@@ -425,7 +425,7 @@ const App: FC<AppProps> = ({ name, block }) => {
             alignItems: "center",
             fontWeight: 500,
             mb: 1.5,
-            color: ({ palette }) => palette.gray[60],
+            color: ({ palette }) => palette.gray[70],
           }}
         >
           <Icon

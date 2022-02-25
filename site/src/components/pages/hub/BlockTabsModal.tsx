@@ -31,7 +31,7 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
       onClose={() => setOpen((oldValue) => !oldValue)}
       BackdropProps={{
         sx: {
-          backgroundColor: ({ palette }) => alpha(palette.gray[70], 0.6),
+          backgroundColor: ({ palette }) => alpha(palette.gray[80], 0.6),
         },
       }}
     >

@@ -256,7 +256,7 @@ export const Navbar: VFC<NavbarProps> = ({
               href="/"
               sx={{
                 color: ({ palette }) =>
-                  isNavbarDark ? palette.purple[400] : palette.gray[80],
+                  isNavbarDark ? palette.purple[400] : palette.gray[90],
               }}
             >
               <BlockProtocolLogoIcon
@@ -282,7 +282,7 @@ export const Navbar: VFC<NavbarProps> = ({
                           ? palette.purple[400]
                           : asPath.startsWith(href)
                           ? palette.purple[600]
-                          : palette.gray[60],
+                          : palette.gray[70],
                         "&:hover": {
                           color: isNavbarDark
                             ? palette.gray[30]
@@ -319,7 +319,7 @@ export const Navbar: VFC<NavbarProps> = ({
                           duration: 100,
                         }),
                         color: ({ palette }) =>
-                          isNavbarDark ? palette.purple[400] : palette.gray[60],
+                          isNavbarDark ? palette.purple[400] : palette.gray[70],
                         "&:hover": {
                           color: ({ palette }) =>
                             isNavbarDark
