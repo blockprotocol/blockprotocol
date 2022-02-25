@@ -81,7 +81,7 @@ The build-script `yarn exe site/scripts/prepare-blocks.ts` allows to prepare blo
 # prepare all blocks
 yarn exe site/scripts/prepare-blocks.ts
 
-# prepare one or more blocks
+# prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
 BLOCK_FILTER="@hash/*" yarn exe site/scripts/prepare-blocks.ts
 ```
 
