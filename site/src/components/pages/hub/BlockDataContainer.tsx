@@ -200,7 +200,6 @@ export const BlockDataContainer: VoidFunctionComponent<
               setBlockVariantsTab={setBlockVariantsTab}
               metadata={metadata ?? {}}
             />
-
             <Box
               sx={{
                 overflow: "auto",
