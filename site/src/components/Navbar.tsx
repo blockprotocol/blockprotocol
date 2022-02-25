@@ -426,8 +426,9 @@ export const Navbar: VFC<NavbarProps> = ({
             }}
           >
             {user ? null : router.pathname === "/login" ? null : (
-              <Link
+              <LinkButton
                 href="#"
+                variant="secondary"
                 onClick={(event) => {
                   setDisplayMobileNav(false);
                   openLoginModal();
@@ -438,7 +439,7 @@ export const Navbar: VFC<NavbarProps> = ({
                 }}
               >
                 Log in
-              </Link>
+              </LinkButton>
             )}
             <LinkButton
               href="/docs/developing-blocks"

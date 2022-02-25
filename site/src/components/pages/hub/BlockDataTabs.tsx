@@ -49,8 +49,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           borderBottom: "0px",
           transition: "0.25s all ease-in-out",
           margin: 0,
-          paddingLeft: "10px",
-          paddingRight: "10px",
+          padding: theme.spacing(1.5, 2),
           ":hover": {
             backgroundColor: modalOpen ? theme.palette.common.white : undefined,
             color: modalOpen ? "black" : undefined,
