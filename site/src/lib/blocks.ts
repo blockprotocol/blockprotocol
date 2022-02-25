@@ -11,14 +11,14 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   blockPackagePath: string;
 };
 
-export type BuildConfig = {
-  folder?: string | null;
-  workspace?: string | null;
+export interface StoredBlockInfo {
   repository: string;
-  branch: string;
-  distDir: string;
-  timestamp?: string | null;
-};
+  commit: string;
+
+  distDir?: string;
+  folder?: string;
+  workspace?: string;
+}
 
 const getBlockMediaUrl = (
   mediaPath: string | undefined | null,
@@ -37,8 +37,8 @@ const getBlockMediaUrl = (
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
 const getRepositoryUrl = (
-  repository: BlockMetadataRepository | null,
-): string | null => {
+  repository: BlockMetadataRepository | undefined,
+): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo.fromUrl(repository)?.browse("");
 
@@ -46,7 +46,7 @@ const getRepositoryUrl = (
       return repositoryUrl;
     }
 
-    return null;
+    return undefined;
   }
 
   const { url, directory } = repository ?? {};
@@ -59,7 +59,7 @@ const getRepositoryUrl = (
     }
   }
 
-  return null;
+  return undefined;
 };
 
 /**
@@ -83,23 +83,15 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
       };
 
-      const blockConfig: BuildConfig = JSON.parse(
+      const storedBlockInfo: StoredBlockInfo = JSON.parse(
         fs.readFileSync(`${process.cwd()}/../hub/${packagePath}.json`, {
           encoding: "utf8",
         }),
       );
 
-      let blockRepository = metadata.repository ?? null;
-
-      if (!blockRepository && blockConfig) {
-        blockRepository = `${blockConfig.repository}#${blockConfig.branch}`;
-      }
-
-      let repository = getRepositoryUrl(blockRepository) ?? undefined;
-
-      if (repository) {
-        repository = repository.replace(/\/$/, "");
-      }
+      const repository = getRepositoryUrl(
+        metadata.repository ?? storedBlockInfo.repository,
+      )?.replace(/\/$/, "");
 
       return {
         ...metadata,
@@ -110,7 +102,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         blockPackagePath: `/${metadata.packagePath
           .split("/")
           .join("/blocks/")}`,
-        lastUpdated: blockConfig?.timestamp ?? null,
+        lastUpdated: null, // TODO: derive from block data when provided by the hub
       };
     });
 };

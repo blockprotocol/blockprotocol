@@ -21,6 +21,7 @@ import md5 from "md5";
 import Ajv, { JSONSchemaType } from "ajv";
 import tmp from "tmp-promise";
 import slugify from "slugify";
+import { StoredBlockInfo } from "../src/lib/blocks";
 
 const monorepoRoot = path.resolve(__dirname, "../..");
 
@@ -32,15 +33,6 @@ const defaultExecaOptions = {
   extendEnv: false,
   stdio: "inherit",
 } as const;
-
-interface StoredBlockInfo {
-  repository: string;
-  commit: string;
-
-  distDir?: string;
-  folder?: string;
-  workspace?: string;
-}
 
 const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
   type: "object",
