@@ -32,6 +32,11 @@ const nextConfig = {
         destination: "/contact/submitted",
         permanent: true,
       },
+      {
+        source: "/dashboard/create-schema",
+        destination: "/dashboard?create-schema=true",
+        permanent: true,
+      },
     ];
   },
 };

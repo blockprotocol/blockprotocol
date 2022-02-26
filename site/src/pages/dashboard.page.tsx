@@ -1,7 +1,8 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
   DashboardCard,
   DashboardCardProps,
@@ -80,6 +81,13 @@ const getDashboardSecondaryCardData = (
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if ("create-schema" in router.query) {
+      setSchemaModalOpen(true);
+    }
+  }, [router.query]);
 
   const openSchemaModal = useCallback(() => {
     setSchemaModalOpen(true);

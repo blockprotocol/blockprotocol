@@ -22,6 +22,8 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
   const router = useRouter();
   const { user } = useUser();
 
+  // @todo might be a good idea to split this into a hook
+  // @see https://github.com/blockprotocol/blockprotocol/pull/223#discussion_r808072665
   const handleSchemaTitleChange = (value: string) => {
     let formattedText = value.trim();
     // replace all empty spaces
@@ -48,6 +50,8 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
       }
 
       setLoading(true);
+      setError("");
+
       const { data, error: apiError } = await apiClient.createEntityType({
         schema: {
           title: newSchemaTitle,
@@ -55,14 +59,9 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
       });
       setLoading(false);
       if (apiError) {
-        if (apiError.response?.data.errors) {
-          setError(apiError.response.data.errors[0].msg);
-        } else {
-          // @todo properly handle this
-          setError("An error occured");
-        }
-      } else {
-        const schemaTitle = data?.entityType.schema.title;
+        setError(apiError.message);
+      } else if (data) {
+        const schemaTitle = data.entityType.schema.title;
         void router.push(`/@${user.shortname}/types/${schemaTitle}`);
       }
     },
@@ -95,8 +94,8 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
             width: { xs: "90%", md: "85%" },
           }}
         >
-          {` Schemas are used to define the structure of entities - in other
-            words, define a ‘type’ of entity`}
+          {`Schemas are used to define the structure of entities - in other words,
+          define a ‘type’ of entity`}
         </Typography>
         <Box component="form" onSubmit={handleCreateSchema}>
           <TextField
@@ -115,7 +114,13 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
             error={Boolean(error)}
           />
 
-          <Button loading={loading} size="small" squared type="submit">
+          <Button
+            disabled={Boolean(error)}
+            loading={loading}
+            size="small"
+            squared
+            type="submit"
+          >
             Create
           </Button>
         </Box>

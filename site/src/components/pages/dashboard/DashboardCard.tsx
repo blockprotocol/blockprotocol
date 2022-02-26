@@ -1,5 +1,5 @@
 import { Box, Typography, Link, Icon, BoxProps } from "@mui/material";
-import { VoidFunctionComponent, FC, useMemo } from "react";
+import { VoidFunctionComponent, FC } from "react";
 
 import { ArrowRightIcon } from "../../icons";
 
@@ -21,47 +21,41 @@ type CardWrapperProps = {
   href?: string;
 };
 
+const sharedStyles: BoxProps["sx"] = () => ({
+  position: "relative",
+  height: "100%",
+  textAlign: "left",
+
+  "& > *": {
+    height: "100%",
+  },
+
+  "&::after": {
+    content: `""`,
+    position: "absolute",
+    top: 0,
+    left: 0,
+    height: "100%",
+    width: "100%",
+    boxShadow: 1,
+    opacity: 0,
+    transition: ({ transitions }) =>
+      transitions.create("opacity", { duration: 300 }),
+  },
+
+  "&:hover::after": {
+    opacity: 1,
+  },
+
+  "&:focus-visible": {
+    outline: ({ palette }) => `1px solid ${palette.purple[700]}`,
+  },
+});
+
 const CardWrapper: FC<CardWrapperProps> = ({ children, onClick, href }) => {
-  const sharedStyles: BoxProps["sx"] = useMemo(
-    () => ({
-      position: "relative",
-      height: "100%",
-
-      "& > *": {
-        height: "100%",
-      },
-
-      "&::after": {
-        content: `""`,
-        position: "absolute",
-        top: 0,
-        left: 0,
-        height: "100%",
-        width: "100%",
-        boxShadow: 1,
-        opacity: 0,
-        transition: ({ transitions }) =>
-          transitions.create("opacity", { duration: 300 }),
-      },
-
-      "&:hover::after": {
-        opacity: 1,
-      },
-
-      "&:focus-visible": {
-        outline: ({ palette }) => `1px solid ${palette.purple[700]}`,
-      },
-    }),
-    [],
-  );
-
   if (onClick) {
     return (
-      <Box
-        component="button"
-        sx={{ textAlign: "left", ...sharedStyles }}
-        onClick={onClick}
-      >
+      <Box component="button" sx={sharedStyles} onClick={onClick}>
         {children}
       </Box>
     );
