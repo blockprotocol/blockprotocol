@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { FC, useState, FormEvent, useCallback } from "react";
+import { FC, useState, FormEvent, useCallback, ReactNode } from "react";
 import { useRouter } from "next/router";
+import { unstable_batchedUpdates } from "react-dom";
 import { Modal } from "./Modal";
 import { apiClient } from "../../lib/apiClient";
 import { Button } from "../Button";
@@ -17,8 +18,9 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
   onClose,
 }) => {
   const [newSchemaTitle, setNewSchemaTitle] = useState("");
+  const [touchedInput, setTouchedInput] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>(undefined);
   const router = useRouter();
   const { user } = useUser();
 
@@ -30,7 +32,7 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
     formattedText = formattedText.replace(/\s/g, "");
 
     // capitalize text
-    if (formattedText.length > 1) {
+    if (formattedText.length > 0) {
       formattedText = formattedText[0].toUpperCase() + formattedText.slice(1);
     }
 
@@ -44,22 +46,20 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
         return;
       }
 
-      if (newSchemaTitle === "") {
-        setError("Please enter a valid value");
-        return;
-      }
+      unstable_batchedUpdates(() => {
+        setTouchedInput(true);
+        setLoading(true);
+        setApiErrorMessage(undefined);
+      });
 
-      setLoading(true);
-      setError("");
-
-      const { data, error: apiError } = await apiClient.createEntityType({
+      const { data, error } = await apiClient.createEntityType({
         schema: {
           title: newSchemaTitle,
         },
       });
       setLoading(false);
-      if (apiError) {
-        setError(apiError.message);
+      if (error) {
+        setApiErrorMessage(error.message);
       } else if (data) {
         const schemaTitle = data.entityType.schema.title;
         void router.push(`/@${user.shortname}/types/${schemaTitle}`);
@@ -67,6 +67,16 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
     },
     [user, newSchemaTitle, router],
   );
+
+  // @todo introduce a library for handling forms
+  const helperText = touchedInput
+    ? apiErrorMessage ||
+      (newSchemaTitle === "" ? "Please enter a valid value" : undefined)
+    : undefined;
+
+  const isSchemaTitleInvalid = !!apiErrorMessage || newSchemaTitle === "";
+
+  const displayError = touchedInput && isSchemaTitleInvalid;
 
   return (
     <Modal
@@ -102,20 +112,20 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
             sx={{ mb: 3 }}
             label="Schema Title"
             fullWidth
-            helperText={error}
+            helperText={helperText}
             value={newSchemaTitle}
             onChange={(evt) => {
-              if (error) {
-                setError("");
+              if (apiErrorMessage) {
+                setApiErrorMessage(undefined);
               }
               handleSchemaTitleChange(evt.target.value);
             }}
             required
-            error={Boolean(error)}
+            error={displayError}
           />
 
           <Button
-            disabled={Boolean(error)}
+            disabled={displayError}
             loading={loading}
             size="small"
             squared
