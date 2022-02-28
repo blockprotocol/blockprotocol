@@ -1,9 +1,4 @@
-import {
-  useEffect,
-  useMemo,
-  useState,
-  VoidFunctionComponent,
-} from "react";
+import { useEffect, useMemo, useState, VoidFunctionComponent } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import {
