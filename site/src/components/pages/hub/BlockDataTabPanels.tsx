@@ -26,7 +26,7 @@ export const BlockDataTabPanels: VoidFunctionComponent<
           sx={(theme) => ({
             height: modalHeight,
             fontSize: 14,
-            backgroundColor: theme.palette.gray[80],
+            backgroundColor: theme.palette.gray[90],
             borderTopLeftRadius: {
               xs: 6,
               md: 0,
@@ -64,7 +64,7 @@ export const BlockDataTabPanels: VoidFunctionComponent<
             }
             sx={(theme) => ({
               minHeight: "100%",
-              backgroundColor: theme.palette.gray[80],
+              backgroundColor: theme.palette.gray[90],
               color: "white",
               borderTopLeftRadius: {
                 xs: 6,

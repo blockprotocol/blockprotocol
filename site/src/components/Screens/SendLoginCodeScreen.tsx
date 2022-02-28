@@ -92,7 +92,7 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
         variant="bpHeading3"
         textAlign="center"
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
         }}
       >
         Sign in to the

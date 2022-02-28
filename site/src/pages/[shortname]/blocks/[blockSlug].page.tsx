@@ -236,14 +236,14 @@ const BlockPage: NextPage<BlockPageProps> = ({
               {blockMetadata.displayName}
             </Typography>
             <Typography variant="bpBodyCopy">
-              <Box sx={{ color: theme.palette.gray[70] }}>
+              <Box sx={{ color: theme.palette.gray[80] }}>
                 {blockMetadata.description}
               </Box>
             </Typography>
             <Typography
               variant="bpSmallCopy"
               sx={{
-                color: ({ palette }) => palette.gray[60],
+                color: ({ palette }) => palette.gray[70],
               }}
             >
               <span>

@@ -6,7 +6,7 @@ export const MuiBreadcrumbsThemeOptions: Components<Theme>["MuiBreadcrumbs"] = {
       whiteSpace: "nowrap",
       textOverflow: "ellipsis",
       fontSize: theme.typography.bpSmallCopy.fontSize,
-      color: theme.palette.gray[60],
+      color: theme.palette.gray[70],
       "> a": {
         borderBottomColor: "transparent",
       },

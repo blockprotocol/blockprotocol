@@ -299,7 +299,7 @@ const SignupPage: NextPage = () => {
                     variant="bpBodyCopy"
                     mb={1}
                     sx={{
-                      color: ({ palette }) => palette.gray[80],
+                      color: ({ palette }) => palette.gray[90],
                       fontWeight: 600,
                       lineHeight: "1.25em",
                     }}
@@ -310,7 +310,7 @@ const SignupPage: NextPage = () => {
                     component="p"
                     variant="bpSmallCopy"
                     sx={{
-                      color: ({ palette }) => palette.gray[60],
+                      color: ({ palette }) => palette.gray[70],
                       fontWeight: 400,
                       lineHeight: "1.5em",
                     }}

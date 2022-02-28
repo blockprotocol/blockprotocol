@@ -60,7 +60,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           },
         },
         "& .MuiTab-root.Mui-selected": {
-          backgroundColor: theme.palette.gray[80],
+          backgroundColor: theme.palette.gray[90],
           color: theme.palette.common.white,
         },
       }}

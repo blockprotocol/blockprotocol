@@ -186,7 +186,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         textAlign="center"
         marginBottom={2}
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
           fontWeight: 500,
         }}
       >
@@ -300,7 +300,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         variant="bpSmallCopy"
         textAlign="center"
         sx={{
-          color: ({ palette }) => palette.gray[70],
+          color: ({ palette }) => palette.gray[80],
           maxWidth: {
             xs: "unset",
             sm: "70%",
@@ -313,7 +313,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
       <Typography
         variant="bpSmallCopy"
         sx={{
-          color: ({ palette }) => palette.gray[60],
+          color: ({ palette }) => palette.gray[70],
           maxWidth: {
             xs: "unset",
             sm: "70%",
