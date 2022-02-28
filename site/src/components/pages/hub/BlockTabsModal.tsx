@@ -41,7 +41,7 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: "50vw",
+          width: "75vw",
           boxShadow: 24,
           borderBottomLeftRadius: 6,
           borderBottomRightRadius: 6,

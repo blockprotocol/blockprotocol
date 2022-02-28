@@ -52,8 +52,7 @@ export const BlockVariantsTabs: VoidFunctionComponent<
           margin: 0,
           color: ({ palette }) => palette.gray[70],
           transition: "0.25s all ease-in-out",
-          paddingLeft: "10px",
-          paddingRight: "10px",
+          padding: theme.spacing(1.5, 2),
           "&:hover": {
             backgroundColor: theme.palette.gray[10],
             borderTopLeftRadius: 6,

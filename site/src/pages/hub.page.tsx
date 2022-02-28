@@ -63,7 +63,13 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
             <Typography mb={3} variant="bpHeading1">
               Interactive, data-driven blocks to use in your projects
             </Typography>
-            <Typography sx={{ color: ({ palette }) => palette.gray[70] }}>
+            <Typography
+              textAlign="center"
+              sx={{
+                color: ({ palette }) => palette.gray[70],
+                maxWidth: "unset",
+              }}
+            >
               All open-source and free to use
             </Typography>
           </Box>
