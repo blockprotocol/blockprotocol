@@ -302,7 +302,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 variant="bpLargeText"
                 sx={{
                   fontWeight: "bold",
-                  color: theme.palette.gray["70"],
+                  color: theme.palette.gray[80],
                   marginBottom: 2,
                 }}
               >

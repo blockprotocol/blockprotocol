@@ -155,7 +155,7 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             font-size: var(--step-0);
             font-weight: 400;
             line-height: 1.7;
-            color: ${customColors.gray["80"]};
+            color: ${customColors.gray[90]};
           }
 
           pre {
