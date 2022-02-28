@@ -95,7 +95,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
               },
               letterSpacing: "0.05em",
               textTransform: "uppercase",
-              color: ({ palette }) => palette.gray[60],
+              color: ({ palette }) => palette.gray[70],
               fontWeight: 600,
             }}
           >
