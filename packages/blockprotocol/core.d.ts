@@ -10,6 +10,10 @@ export type BlockVariant = {
   description: string;
   icon: string;
   name: string;
+  /**
+   * @deprecated - Use the `name` field instead.
+   */
+  displayName: string;
   properties: {
     [k: string]: unknown;
   };

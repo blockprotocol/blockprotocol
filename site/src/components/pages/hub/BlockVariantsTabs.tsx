@@ -11,7 +11,7 @@ import { VoidFunctionComponent } from "react";
 
 type BlockVariantsTabsProps = {
   blockVariantsTab: number;
-  metadata: BlockMetadata | undefined;
+  metadata: BlockMetadata;
   setBlockVariantsTab: (newValue: number) => void;
 };
 
@@ -27,14 +27,17 @@ export const BlockVariantsTabs: VoidFunctionComponent<
       value={blockVariantsTab}
       onChange={(event) => setBlockVariantsTab(event.target.value as number)}
     >
-      {metadata?.variants ? (
-        metadata?.variants.map((variant, variantIndex) => (
-          <MenuItem key={variant.name ?? variant.name} value={variantIndex}>
-            {variant.name ?? variant.name}
+      {metadata.variants ? (
+        metadata.variants.map((variant, variantIndex) => (
+          <MenuItem
+            key={variant.name ?? variant.displayName}
+            value={variantIndex}
+          >
+            {variant.name ?? variant.displayName}
           </MenuItem>
         ))
       ) : (
-        <MenuItem value={0}>{metadata?.displayName}</MenuItem>
+        <MenuItem value={0}>{metadata.displayName}</MenuItem>
       )}
     </Select>
   ) : (
@@ -67,15 +70,15 @@ export const BlockVariantsTabs: VoidFunctionComponent<
       value={blockVariantsTab}
       onChange={(_event, newValue: number) => setBlockVariantsTab(newValue)}
     >
-      {metadata?.variants ? (
-        metadata?.variants.map((variant) => (
+      {metadata.variants ? (
+        metadata.variants.map((variant) => (
           <Tab
-            key={variant.name ?? variant.name}
-            label={variant.name ?? variant.name}
+            key={variant.name ?? variant.displayName}
+            label={variant.name ?? variant.displayName}
           />
         ))
       ) : (
-        <Tab label={metadata?.displayName} />
+        <Tab label={metadata.displayName} />
       )}
     </Tabs>
   );
