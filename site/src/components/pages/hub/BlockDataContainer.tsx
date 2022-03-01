@@ -198,7 +198,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
               setBlockVariantsTab={setBlockVariantsTab}
-              metadata={metadata ?? {}}
+              metadata={metadata}
             />
             <Box
               sx={{

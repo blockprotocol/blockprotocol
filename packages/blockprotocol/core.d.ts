@@ -7,13 +7,17 @@ type DistributedOmit<T, K extends PropertyKey> = T extends T
 // -------------------------- BLOCK METADATA -------------------------- //
 
 export type BlockVariant = {
-  description?: string | null;
-  /** @deprecated displayName has beeen deprecated - use 'name' instead */
-  displayName?: string | null;
-  examples?: JSONObject[] | null;
-  icon?: string | null;
-  name?: string | null;
-  properties?: JSONObject | null;
+  description: string;
+  icon: string;
+  name: string;
+  properties: {
+    [k: string]: unknown;
+  };
+  examples?:
+    | {
+        [k: string]: unknown;
+      }[]
+    | null;
 };
 
 export type BlockMetadataRepository =
@@ -88,16 +92,7 @@ export type BlockMetadata = {
   /**
    * A list which represents different variants of the block that the user can create.
    */
-  variants?:
-    | {
-        description: string;
-        icon: string;
-        name: string;
-        properties: {
-          [k: string]: unknown;
-        };
-      }[]
-    | null;
+  variants?: BlockVariant[] | null;
   /**
    * The version of the block, which should use semantic versioning (@see https://semver.org/).
    */
