@@ -77,7 +77,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           }}
         >
           <Typography
-            variant="bpTitle"
+            variant="bpHeading2"
             sx={{
               marginBottom: 2,
             }}
@@ -86,14 +86,16 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           </Typography>
 
           <Typography
+            variant="bpSmallCaps"
             maxWidth={750}
             sx={{
               marginTop: {
                 xs: 3,
                 md: 6,
               },
+              letterSpacing: "0.05em",
               textTransform: "uppercase",
-              color: "#64778C",
+              color: ({ palette }) => palette.gray[70],
               fontWeight: 600,
             }}
           >

@@ -119,7 +119,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             "& .block-card__name": {
               color: ({ palette }) => palette.purple[600],
             },
-            transform: "scale(1.03)",
+            transform: "scale(1.02)",
             "&::before": {
               opacity: 0,
             },
@@ -142,7 +142,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             sx={{
               paddingTop: "66.67%", // height / width => 2/3
               backgroundColor: ({ palette }) =>
-                image ? "transparent" : palette.gray[70],
+                image ? "transparent" : palette.gray[80],
               borderRadius: "4px",
               position: "relative",
             }}

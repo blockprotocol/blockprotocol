@@ -10,27 +10,61 @@ You can also [check out the source code](https://github.com/hashintel/hash/tree/
 You can browse prototype blocks in the [Block Hub](https://blockprotocol.org/hub) right now.
 You can view their schema (the structure of data they accept), and see how they look given different data.
 
-You can also [generate an API key](https://blockprotocol.org/settings/api-keys) to search our API for available blocks:
+### Block API
 
-`https://blockprotocol.org/api/blocks?q=text_query`
+You can also [generate an API key](https://blockprotocol.org/settings/api-keys) to search our API for available blocks.
 
-To authenticate with the API, pass your API key in an `x-api-key` header.
+The API endpoint is `https://blockprotocol.org/api/blocks`.
 
-It is also possible to search blocks by data structure: allowing you to provide a data object, and be told which blocks can display or edit it.
+You must authenticate with the API by passing your API key in an `x-api-key` header.
+
+For example, to retrieve a list of all blocks:
+
+```javascript
+fetch("https://blockprotocol.org/api/blocks", {
+  headers: {
+    "content-type": "application/json",
+    "x-api-key": "YOUR_API_KEY",
+  },
+})
+  .then((resp) => resp.json())
+  .then(console.log);
+```
+
+The following query parameters are available. All are optional, and may be combined to narrow results by a combination of filters:
+
+- `author`: search for blocks with a matching author.
+- `license`: search for blocks with a matching license.
+- `name`: search for blocks with a matching name.
+- `q`: search for blocks with a matching name or author.
+- `json`: filters blocks by compatability with a given data object.
+
+The `json` query parameter searches blocks by data structure: allowing you to provide a data object (as a string, preferably URL encoded), and retrieve a list of blocks that can display or edit it.
 
 For example, if you provide `{ "name": "Bob", "email": "bob@test.com" }` in the `json` query parameter, the API will suggest the
-[person block](https://blockprotocol.org/@hash/blocks/person). It's preferable to URL encode the json object.
+[person block](https://blockprotocol.org/@hash/blocks/person).
 
-`https://blockprotocol.org/api/blocks?json={"name":"Bob","email":"bob@test.com"}`
+Full example:
 
-URL encoded:
+```javascript
+const dataObject = { name: "Bob", email: "bob@test.com" };
 
-`https://blockprotocol.org/api/blocks?json=%7B%20%22name%22%3A%20%22Bob%22,%20%22email%22%3A%20%22bob%40test.com%22%20%7D`
+const stringifiedObject = JSON.stringify(dataObject);
+
+const encodedString = encodeURIComponent(stringifiedObject);
+
+fetch(`https://blockprotocol.org/api/blocks?json=${encodedString}`, {
+  headers: {
+    "content-type": "application/json",
+    "x-api-key": "YOUR_API_KEY",
+  },
+})
+  .then((resp) => resp.json())
+  .then(console.log);
+```
 
 Once your app implements the block protocol, your users can search and use blocks to work with a
 wide variety of data structures, without further effort on your part.
-
-Both the `q` and `json` query parameters work together. You may provide either, both, or none.
 
 ## Building the block's properties
 

@@ -58,7 +58,7 @@ A block package SHOULD contain:
 
   - MAY specify:
 
-    - `variants` – an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively.
+    - `variants` – an array of objects, each with a `name`, `description`, `icon`, `properties`, and `examples`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively.
 
 ## Data transfer
 
@@ -148,6 +148,8 @@ Instead, it seeks to define the block-application interface.
 This does, however, mean there is a possibility of competing schemas attempting to describe the same entities, which different blocks using different schema - reducing the portability of blocks.
 
 The ability to translate between schemas would help - e.g. some way expressing an equivalence relationship between properties in different schema. This might be a keyword such as `sameAs` or `equivalentTo` mapping between schemas and their properties. Then, either blocks or embedding applications could programmatically translate between schemas.
+
+Note that this is about translating between different JSON Schemas, and is not to be confused with the process of translating JSON schema to schema.org (and equivalent) types, which has an established technical approach mentioned [here](https://blockprotocol.org/spec/embedding-applications#machine-readable-pages).
 
 </Frame>
 

@@ -18,7 +18,7 @@ export const MuiTabThemeOptions: Components<Theme>["MuiTab"] = {
       },
     }),
     textColorPrimary: ({ theme }) => ({
-      color: theme.palette.gray[70],
+      color: theme.palette.gray[80],
     }),
   },
 };
