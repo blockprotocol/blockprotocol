@@ -27,7 +27,7 @@ import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
 import { BlockVariantsTabs } from "./BlockVariantsTabs";
 
 type BlockDataContainerProps = {
-  metadata: BlockMetadata | undefined;
+  metadata: BlockMetadata;
   schema: BlockSchema;
   blockModule: BlockExports | undefined;
 };
@@ -70,7 +70,7 @@ export const BlockDataContainer: VoidFunctionComponent<
 
       setBlockVariantsTab(0);
 
-      prevPackage.current = metadata?.packagePath;
+      prevPackage.current = metadata.packagePath;
     }
   }, [metadata]);
 
@@ -117,8 +117,8 @@ export const BlockDataContainer: VoidFunctionComponent<
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
     const result = {
-      accountId: `test-account-${metadata?.name}`,
-      entityId: `test-entity-${metadata?.name}`,
+      accountId: `test-account-${metadata.name}`,
+      entityId: `test-entity-${metadata.name}`,
       getEmbedBlock,
     };
 
@@ -138,7 +138,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       );
 
     return [result, errorMessages];
-  }, [text, schema, metadata?.name]);
+  }, [text, schema, metadata.name]);
 
   return (
     <>
@@ -198,7 +198,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
               setBlockVariantsTab={setBlockVariantsTab}
-              metadata={metadata ?? {}}
+              metadata={metadata}
             />
             <Box
               sx={{

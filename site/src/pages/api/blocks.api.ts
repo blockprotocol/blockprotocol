@@ -35,7 +35,7 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
       json: jsonText,
     } = req.query as ApiSearchRequestQuery;
 
-    let data: BlockMetadata[] = blocksData;
+    let data: BlockMetadata[] = blocksData as BlockMetadata[];
 
     if (authorQuery) {
       data = data.filter(({ author }) =>
@@ -64,7 +64,7 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
             item?.toLowerCase().includes(query),
           ) ||
           variants?.some((variant) =>
-            variant.displayName?.toLowerCase().includes(query),
+            variant.name?.toLowerCase().includes(query),
           ),
       );
     }

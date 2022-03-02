@@ -7,13 +7,21 @@ type DistributedOmit<T, K extends PropertyKey> = T extends T
 // -------------------------- BLOCK METADATA -------------------------- //
 
 export type BlockVariant = {
-  description?: string | null;
-  /** @deprecated displayName has beeen deprecated - use 'name' instead */
-  displayName?: string | null;
-  examples?: JSONObject[] | null;
-  icon?: string | null;
-  name?: string | null;
-  properties?: JSONObject | null;
+  description: string;
+  icon: string;
+  name: string;
+  /**
+   * @deprecated - Use the `name` field instead.
+   */
+  displayName: string;
+  properties: {
+    [k: string]: unknown;
+  };
+  examples?:
+    | {
+        [k: string]: unknown;
+      }[]
+    | null;
 };
 
 export type BlockMetadataRepository =
@@ -25,22 +33,74 @@ export type BlockMetadataRepository =
   | string;
 
 export type BlockMetadata = {
+  /**
+   * The name of the author of the block
+   */
   author?: string | null;
-  default?: JSONObject | null;
+  /**
+   * The default data used as the block's properties on first load - must comply with its schema
+   */
+  default?: {
+    [k: string]: unknown;
+  } | null;
+  /**
+   * A short description of the block, to help users understand its capabilities
+   */
   description?: string | null;
+  /**
+   * The display name used for a block
+   */
   displayName?: string | null;
-  examples?: JSONObject[] | null;
-  externals?: Record<string, string> | null;
+  /**
+   * A list of examples used to showcase a block's capabilities
+   */
+  examples?:
+    | {
+        [k: string]: unknown;
+      }[]
+    | null;
+  /**
+   * The dependencies a block relies on but expects the embedding application to provide
+   */
+  externals: {
+    [k: string]: unknown;
+  }[];
+  /**
+   * An icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block).
+   */
   icon?: string | null;
+  /**
+   * A preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
+   */
   image?: string | null;
+  /**
+   * The license the block is made available under (e.g. MIT).
+   */
   license?: string | null;
-  name?: string | null;
-  protocol?: string | null;
-  repository?: BlockMetadataRepository;
-  schema?: string | null;
-  source?: string | null;
+  /**
+   * A unique, slugified name for the block.
+   */
+  name: string;
+  /**
+   * The applicable block protocol version.
+   */
+  protocol: string;
+  /**
+   * Specify the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
+   */
+  repository?: BlockMetadataRepository | null;
+  /**
+   * The path or URL to the entrypoint source file (e.g. index.html, index.js).
+   */
+  source: string;
+  /**
+   * A list which represents different variants of the block that the user can create.
+   */
   variants?: BlockVariant[] | null;
-  version?: string | null;
+  /**
+   * The version of the block, which should use semantic versioning (@see https://semver.org/).
+   */
+  version: string;
 };
 
 // ----------------------------- ENTITIES ----------------------------- //
