@@ -34,7 +34,7 @@ A block package SHOULD contain:
   - MUST be called `block-metadata.json`
   - MUST specify:
 
-    - a `name` for the block
+    - a unique, slugified `name` for the block. It should be **unique** because it's used as a slug wherever required.
     - any libraries the block expects the embedding application to supply it with under `externals` – i.e. libraries which the block depends on but does not include in its package – using the name of the library as it is usually distributed (e.g. via npm), and the expected version (or version range).
       For example, a block may rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page.
     - the path or URL to the entrypoint source file (e.g. `index.html`, `index.js`) under `source`
@@ -45,6 +45,7 @@ A block package SHOULD contain:
 
     - `default` – an object, conforming to the block’s schema, representing
       the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) `variants` is provided (see below).
+    - `displayName` - a display name used for a block
     - `examples` - an array of objects conforming to the block's schema which provide examples of the data that can be passed to it
     - `icon` – an icon for the block, to be displayed when the user is
       selecting from available blocks (as well as elsewhere as appropriate, e.g.
@@ -53,6 +54,7 @@ A block package SHOULD contain:
     - `author`: a display name for the author of the block
     - `description`: a brief description of the block
     - `license`: the license the block is made available under (e.g. MIT)
+    - `repository`: specifies the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
 
   - MAY specify:
 
