@@ -26,6 +26,70 @@ Various frontend libraries and technologies provide means of implementing encaps
 
 Our focus is on supporting the web first and foremost, as this is the context we expect the Block Protocol to be most useful in. Implementation details will vary across contexts — for example, the details of how data can be passed around or operations called — but the general principles of the Block Protocol in defining a contract between applications and embedded blocks are applicable beyond the web. In the future we intend to support non-web contexts more directly.
 
+### Why would a developer build a Block Protocol block?
+
+Developers may build blocks to add functionality they want to applications that implement the Block Protocol.
+
+They may also be motivated by the sorts of factors that motivate anyone to build open-source software: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
+
+### What might embedding applications choose to support the Block Protocol?
+
+Implementing the Block Protocol means that an embedding application can easily add new functionality, increasing its value to users.
+
+Once they are Block Protocol-compliant, applications can easily search for blocks which can visualize or edit any type of data, and add them without any further configuration.
+
+### How does the Block Protocol relate to HASH’s simulation efforts?
+
+HASH’s mission is to help everybody make the right decisions. Part of how we do this is by making it easier to bring data together in a form that allows information to be understood and used both by humans and machines (e.g. other applications).
+
+We started life as a simulation platform, offering insights from modelling the world to anyone with a browser. But this is just one way to get insight from data, and simulation models can be greatly enhanced when built atop the sort of timely, structured information that the Block Protocol makes accessible.
+
+The Block Protocol advances HASH’s mission by encouraging both data itself and the tools that edit and visualize data to be structured and portable. This makes it easier to work with more data in more places, and unlocks more functionality for more users, increasing the ability for people to understand and learn from the world.
+
+## Block Implementation
+
+### Where can users host block and entity data?
+
+Blocks can be [published to the Block Hub](https://blockprotocol.org/docs/publishing-blocks) to make them browsable on [blockprotocol.org](https://blockprotocol.org/hub), and to make their metadata and source code available via our API.
+
+Entity data can be hosted in any application which implements the Block Protocol - we are developing one such application, [HASH](https://hash.ai/platform/hash), which will be in public beta in the Spring.
+
+### Can blocks fetch their own data?
+
+Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
+
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the [operations defined in the spec](https://blockprotocol.org/spec/block-types#entity-functions).
+
+For example, a mapping block which persists a user’s choices about map positioning or styling back to the application – all without the application having to know anything about the block, or the block having to know anything about the application.
+
+### Can blocks hold local state?
+
+Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
+
+To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/spec/block-types#entity-functions) to send updates to the embedding application.
+
+### How are Block Protocol blocks different to Web Components?
+
+The Block Protocol standardizes how requests to retrieve or update data are made from a block to an embedding application.
+
+Web Components can *describe* the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it. The goal of the Block Protocol is to make it so that new blocks can be added to an application without any configuration or without having to learn how they handle data.
+
+We currently describe Web Components as one way of implementing Block Protocol blocks, and we are exploring how to best build on top of the existing Web Component technology - including potentially making them a recommended / default way of defining the application-block interface.
+
+### How will blocks match the visual style of embedding applications?
+
+We believe blocks should provide neutral, minimal styling of their own, and leave it to embedding applications to provide additional styling - this might be in the form of an entire stylesheet for blocks to load, or style variables which can be selectively applied.
+
+There is [ongoing discussion on this topic](https://github.com/blockprotocol/blockprotocol/discussions) - we welcome your views.
+
+### Are blocks composable?
+
+Blocks composed of other blocks is an important feature which we believe the Block Protocol must support, and which we have begun exploring.
+
+A simple example is a `ListBlock` which is composed of a list of other blocks, and for which it has placeholders within it.
+
+Blocks which are made up of other blocks may be referred to as “compound blocks”. We will be publishing example compound blocks soon.
+
 ## Schemas, vocabularies and the semantic web
 
 ### What is the semantic web?
@@ -54,7 +118,7 @@ One way of representing entities in a machine-readable way is in [JSON-LD](https
 }
 ```
 
-### Is the Block Protocol an ontology of the real-world?
+### Is the Block Protocol an ontology of the real world?
 
 No, and _for the most part_ the Block Protocol itself does not define the structure of entities passed between blocks and applications. Instead it specifies _how_ entities should be defined, transmitted and updated.
 
