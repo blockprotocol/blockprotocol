@@ -14,6 +14,8 @@ const script = async () => {
     await import("./prepare-blocks")
   ).default;
 
+  await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
+
   await (
     await import("./generate-sitemap")
   ).default;

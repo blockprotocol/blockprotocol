@@ -5,10 +5,11 @@ import hostedGitInfo from "hosted-git-info";
 export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
+  blockPackagePath: string;
   lastUpdated?: string | null;
   packagePath: string;
   repository?: string;
-  blockPackagePath: string;
+  schema?: string | null;
 };
 
 export interface StoredBlockInfo {
