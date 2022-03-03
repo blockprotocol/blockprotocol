@@ -1,5 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import { FC, useState, FormEvent, useCallback, ReactNode } from "react";
+import {
+  FC,
+  useState,
+  FormEvent,
+  useCallback,
+  ReactNode,
+  useRef,
+  useEffect,
+} from "react";
 import { useRouter } from "next/router";
 import { unstable_batchedUpdates } from "react-dom";
 import { Modal } from "./Modal";
@@ -21,6 +29,7 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
   const [touchedInput, setTouchedInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>(undefined);
+  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { user } = useUser();
 
@@ -86,7 +95,7 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
         top: "40%",
       }}
     >
-      <Box sx={{}}>
+      <Box>
         <Typography
           variant="bpHeading4"
           sx={{
@@ -104,12 +113,13 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
             width: { xs: "90%", md: "85%" },
           }}
         >
-          {`Schemas are used to define the structure of entities - in other words,
-          define a ‘type’ of entity`}
+          Schemas are used to define the structure of entities - in other words,
+          define a ‘type’ of entity
         </Typography>
         <Box component="form" onSubmit={handleCreateSchema}>
           <TextField
             sx={{ mb: 3 }}
+            autoFocus
             label="Schema Title"
             fullWidth
             helperText={helperText}
@@ -125,7 +135,7 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
           />
 
           <Button
-            disabled={displayError}
+            disabled={isSchemaTitleInvalid}
             loading={loading}
             size="small"
             squared

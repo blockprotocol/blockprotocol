@@ -21,7 +21,7 @@ type CardWrapperProps = {
   href?: string;
 };
 
-const sharedStyles: BoxProps["sx"] = () => ({
+const sharedStyles: BoxProps["sx"] = {
   position: "relative",
   height: "100%",
   textAlign: "left",
@@ -50,7 +50,7 @@ const sharedStyles: BoxProps["sx"] = () => ({
   "&:focus-visible": {
     outline: ({ palette }) => `1px solid ${palette.purple[700]}`,
   },
-});
+};
 
 const CardWrapper: FC<CardWrapperProps> = ({ children, onClick, href }) => {
   if (onClick) {

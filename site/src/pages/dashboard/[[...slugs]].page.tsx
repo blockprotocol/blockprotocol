@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import {
   DashboardCard,
   DashboardCardProps,
-} from "../components/pages/dashboard/DashboardCard";
-import { TopNavigationTabs } from "../components/pages/dashboard/TopNavigationTabs";
+} from "../../components/pages/dashboard/DashboardCard";
+import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../components/pages/authWall";
-import { CreateSchemaModal } from "../components/Modal/CreateSchemaModal";
+} from "../../components/pages/authWall";
+import { CreateSchemaModal } from "../../components/Modal/CreateSchemaModal";
 
 const getDashboardPrimaryCardData = (
   openCreateSchemaModal: () => void,
@@ -84,7 +84,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if ("create-schema" in router.query) {
+    if (router.query?.slugs?.includes("create-schema")) {
       setSchemaModalOpen(true);
     }
   }, [router.query]);
