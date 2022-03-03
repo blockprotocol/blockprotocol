@@ -22,7 +22,7 @@ const AuthWallWrapper: VoidFunctionComponent<{
   }
 
   if (!user?.isSignedUp) {
-    void router.push("/");
+    void router.push(`/login?redirectPath=${router.asPath}`);
     return null;
   }
 

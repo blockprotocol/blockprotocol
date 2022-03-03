@@ -1,11 +1,4 @@
-import {
-  FormEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  VoidFunctionComponent,
-} from "react";
+import { useEffect, useMemo, useState, VoidFunctionComponent } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import {
@@ -14,23 +7,20 @@ import {
   Box,
   Container,
   Grid,
-  Typography,
   useTheme,
 } from "@mui/material";
 
 import { useUser } from "../../../context/UserContext";
 import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
-import { apiClient } from "../../../lib/apiClient";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { Button } from "../../Button";
 
+import { CreateSchemaModal } from "../../Modal/CreateSchemaModal";
 import { ListViewCard } from "./ListViewCard";
 import { OverviewCard } from "./OverviewCard";
 import { Sidebar } from "./Sidebar";
 import { TABS, TabHeader, TabPanel, TabValue } from "./Tabs";
-import { Modal } from "../../Modal";
-import { TextField } from "../../TextField";
 
 const SIDEBAR_WIDTH = 300;
 
@@ -62,9 +52,6 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
   const [activeTab, setActiveTab] = useState(initialActiveTab);
 
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
-  const [newSchemaTitle, setNewSchemaTitle] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -76,49 +63,6 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
     }
     return false;
   }, [user, currentUser]);
-
-  const handleSchemaTitleChange = (value: string) => {
-    let formattedText = value.trim();
-    // replace all empty spaces
-    formattedText = formattedText.replace(/\s/g, "");
-
-    // capitalize text
-    if (formattedText.length > 1) {
-      formattedText = formattedText[0].toUpperCase() + formattedText.slice(1);
-    }
-
-    setNewSchemaTitle(formattedText);
-  };
-
-  const handleCreateSchema = useCallback(
-    async (evt: FormEvent) => {
-      evt.preventDefault();
-      if (newSchemaTitle === "") {
-        setError("Please enter a valid value");
-        return;
-      }
-
-      setLoading(true);
-      const { data, error: apiError } = await apiClient.createEntityType({
-        schema: {
-          title: newSchemaTitle,
-        },
-      });
-      setLoading(false);
-      if (apiError) {
-        if (apiError.response?.data.errors) {
-          setError(apiError.response.data.errors[0].msg);
-        } else {
-          // @todo properly handle this
-          setError("An error occured");
-        }
-      } else {
-        const schemaTitle = data?.entityType.schema.title;
-        void router.push(`/@${user.shortname}/types/${schemaTitle}`);
-      }
-    },
-    [user, newSchemaTitle, router],
-  );
 
   return (
     <>
@@ -298,65 +242,10 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
           </Box>
         </Container>
       </Box>
-      {/* Create Schema Modal */}
-      {/* @todo move to a separate component */}
-      <Modal
+      <CreateSchemaModal
         open={schemaModalOpen}
         onClose={() => setSchemaModalOpen(false)}
-        contentStyle={{
-          top: "40%",
-        }}
-      >
-        <Box sx={{}}>
-          <Typography
-            variant="bpHeading4"
-            sx={{
-              mb: 2,
-              display: "block",
-            }}
-          >
-            Create New <strong>Schema</strong>
-          </Typography>
-          <Typography
-            sx={{
-              mb: 4,
-              fontSize: 16,
-              lineHeight: 1.5,
-              width: { xs: "90%", md: "85%" },
-            }}
-          >
-            {` Schemas are used to define the structure of entities - in other
-        words, define a ‘type’ of entity`}
-          </Typography>
-          <Box component="form" onSubmit={handleCreateSchema}>
-            <TextField
-              sx={{ mb: 3 }}
-              label="Schema Title"
-              fullWidth
-              helperText={error}
-              value={newSchemaTitle}
-              onChange={(evt) => {
-                if (error) {
-                  setError("");
-                }
-                handleSchemaTitleChange(evt.target.value);
-              }}
-              required
-              error={Boolean(error)}
-            />
-
-            <Button
-              loading={loading}
-              // onClick={createSchema}
-              size="small"
-              squared
-              type="submit"
-            >
-              Create
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      />
     </>
   );
 };

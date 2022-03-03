@@ -66,12 +66,6 @@ const LoginPage: NextPage = () => {
     }
   }, [parsedQuery, router]);
 
-  useEffect(() => {
-    if (user) {
-      void router.push("/");
-    }
-  }, [user, router]);
-
   const handleLoginCodeSent = (params: {
     verificationCodeInfo: VerificationCodeInfo;
     email: string;
@@ -85,11 +79,18 @@ const LoginPage: NextPage = () => {
   // We also update redirectPath in useEffect, which changes its reference too. Avoiding both
   // variables inside handleLogin dependencies saves us from triggering multiple API calls.
   const redirectRef = useRef<() => void>(() => {});
+
   useEffect(() => {
     redirectRef.current = () => {
       void router.push(redirectPath ?? "/");
     };
   }, [router, redirectPath]);
+
+  useEffect(() => {
+    if (user) {
+      redirectRef.current();
+    }
+  }, [user]);
 
   const handleLogin = useCallback(
     (loggedInUser: SerializedUser) => {
