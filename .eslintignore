@@ -55,4 +55,5 @@ dist
 # workspace specific
 site/blocks-data.json
 site/public/blocks
+site/public/schemas
 site/site-map.json
