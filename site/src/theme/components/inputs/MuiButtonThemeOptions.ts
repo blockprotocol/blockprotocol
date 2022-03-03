@@ -81,7 +81,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
               },
               teal: { backgroundColor: theme.palette.teal[500] },
               gray: {
-                color: theme.palette.gray[80],
+                color: theme.palette.gray[90],
                 backgroundColor: theme.palette.gray[50],
               },
               warning: { backgroundColor: theme.palette.orange[500] },
@@ -151,7 +151,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
             {
               purple: { color: theme.palette.purple[700] },
               teal: { color: theme.palette.teal[600] },
-              gray: { color: theme.palette.gray[70] },
+              gray: { color: theme.palette.gray[80] },
               warning: {
                 color: theme.palette.orange[600],
                 borderColor: "#FEB173",
@@ -177,7 +177,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
               },
               gray: {
                 background: theme.palette.gray[30],
-                color: theme.palette.gray[70],
+                color: theme.palette.gray[80],
               },
               warning: {
                 color: theme.palette.orange[700],
@@ -196,7 +196,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
             {
               purple: {},
               teal: { borderColor: theme.palette.teal[600] },
-              gray: { borderColor: theme.palette.gray[70] },
+              gray: { borderColor: theme.palette.gray[80] },
               warning: { borderColor: theme.palette.purple[600] },
               danger: {},
               inherit: {},
@@ -207,7 +207,7 @@ export const MuiButtonThemeOptions: Components<Theme>["MuiButton"] = {
 
         Object.assign(baseStyles, {
           borderRadius: buttonBorderRadius,
-          color: theme.palette.gray[70],
+          color: theme.palette.gray[80],
           background: theme.palette.common.white,
           "& > .MuiButton-startIcon, > .MuiButton-endIcon": {
             color: theme.palette.gray[40],

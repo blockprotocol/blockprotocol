@@ -28,7 +28,7 @@ export const MuiIconButtonThemeOptions: Components<Theme>["MuiIconButton"] = {
         outline: `1px solid ${theme.palette.purple[600]}`,
       },
       svg: {
-        color: theme.palette.gray[60],
+        color: theme.palette.gray[70],
         transition: theme.transitions.create("color"),
       },
     }),

@@ -428,9 +428,9 @@ export class User {
     return await EntityType.getAllByUser(db, { user: this });
   }
 
-  blocks() {
-    return blocksData.filter(
-      (block: ExpandedBlockMetadata) => block.author === this.shortname,
+  blocks(): ExpandedBlockMetadata[] {
+    return (blocksData as ExpandedBlockMetadata[]).filter(
+      (block) => block.author === this.shortname,
     );
   }
 

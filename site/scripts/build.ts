@@ -6,6 +6,8 @@ const script = async () => {
 
   await execa("yarn", ["build-blocks"], { stdio: "inherit" });
 
+  await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
+
   await (
     await import("./generate-sitemap")
   ).default;

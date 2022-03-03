@@ -160,7 +160,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
     <Box
       {...boxProps}
       sx={{
-        backgroundColor: ({ palette }) => palette.gray[80],
+        backgroundColor: ({ palette }) => palette.gray[90],
         ...boxProps.sx,
       }}
     >

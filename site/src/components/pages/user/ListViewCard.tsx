@@ -55,7 +55,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
               sx={{
                 height: 24,
                 width: 24,
-                color: ({ palette }) => palette.gray[80],
+                color: ({ palette }) => palette.gray[90],
               }}
               className="fa-solid fa-table-tree"
             />
@@ -71,7 +71,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
             className="list-view__title"
             sx={{
               fontWeight: 600,
-              color: ({ palette }) => palette.gray[80],
+              color: ({ palette }) => palette.gray[90],
               mb: 1,
               lineHeight: 1,
             }}
@@ -81,7 +81,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
           <Typography
             variant="bpSmallCopy"
             sx={{
-              color: ({ palette }) => palette.gray[70],
+              color: ({ palette }) => palette.gray[80],
               mb: 1,
             }}
           >
@@ -90,7 +90,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
           <Typography
             variant="bpMicroCopy"
             sx={{
-              color: ({ palette }) => palette.gray[60],
+              color: ({ palette }) => palette.gray[70],
             }}
           >
             {lastUpdated

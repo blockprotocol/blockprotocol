@@ -30,7 +30,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
   lineHeight: "1.25em",
   transition: theme.transitions.create(["color"]),
-  color: theme.palette.gray[70],
+  color: theme.palette.gray[80],
   ":hover": {
     color: theme.palette.purple[600],
   },
@@ -91,7 +91,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
             paddingLeft: depth * 1 + 1.25,
             color: isSectionSelected
               ? theme.palette.purple[600]
-              : theme.palette.gray[70],
+              : theme.palette.gray[80],
             fontWeight: isSectionSelected ? 700 : 400,
           })}
         >
@@ -193,7 +193,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
             alignSelf: "flex-start",
             color: isSelected
               ? theme.palette.purple[600]
-              : theme.palette.gray[70],
+              : theme.palette.gray[80],
             fontWeight: isSelected ? 700 : 400,
             paddingLeft: 1.25,
           })}

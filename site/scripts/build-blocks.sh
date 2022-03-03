@@ -59,7 +59,7 @@ fi
 # ----
 log info "launching block builder"
 
-log debug "preping the field"
+log debug "prepping the field"
 TMP=$(mktemp -d)
 
 onexit() {
