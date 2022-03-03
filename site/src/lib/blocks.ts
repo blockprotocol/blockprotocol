@@ -39,9 +39,12 @@ const getBlockMediaUrl = (
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
 const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
+  commit: string,
 ): string | undefined => {
   if (typeof repository === "string") {
-    const repositoryUrl = hostedGitInfo.fromUrl(repository)?.browse("");
+    const repositoryUrl = hostedGitInfo
+      .fromUrl(repository)
+      ?.browse("", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -53,7 +56,9 @@ const getRepositoryUrl = (
   const { url, directory } = repository ?? {};
 
   if (url) {
-    const repositoryUrl = hostedGitInfo.fromUrl(url)?.browse(directory ?? "");
+    const repositoryUrl = hostedGitInfo
+      .fromUrl(url)
+      ?.browse(directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -92,6 +97,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
       const repository = getRepositoryUrl(
         metadata.repository ?? storedBlockInfo.repository,
+        storedBlockInfo.commit,
       )?.replace(/\/$/, "");
 
       return {
