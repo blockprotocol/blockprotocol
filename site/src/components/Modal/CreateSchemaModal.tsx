@@ -1,13 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import {
-  FC,
-  useState,
-  FormEvent,
-  useCallback,
-  ReactNode,
-  useRef,
-  useEffect,
-} from "react";
+import { FC, useState, FormEvent, useCallback, ReactNode } from "react";
 import { useRouter } from "next/router";
 import { unstable_batchedUpdates } from "react-dom";
 import { Modal } from "./Modal";
@@ -29,7 +21,6 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
   const [touchedInput, setTouchedInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>(undefined);
-  const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const { user } = useUser();
 
