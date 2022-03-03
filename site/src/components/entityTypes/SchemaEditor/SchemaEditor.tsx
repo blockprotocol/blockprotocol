@@ -262,9 +262,9 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
       <section>
         <div className={tw`flex items-center`}>
           {subSchemaReference ? (
-            <h3 className={tw`mb-7 ml-2`}>{` > ${subSchemaReference
-              .split("/")
-              .pop()}`}</h3>
+            <Typography variant="bpHeading4" component="h3">
+              {` > ${subSchemaReference.split("/").pop()}`}
+            </Typography>
           ) : null}
         </div>
         {!readonly && description != null && (

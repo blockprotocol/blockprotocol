@@ -4,7 +4,7 @@ import type { AppProps } from "next/app";
 import { Router, useRouter } from "next/router";
 import TagManager from "react-gtm-module";
 import Head from "next/head";
-import "../styles/index.css";
+
 /** @sync ../components/Snippet.tsx */
 import "../styles/prism.css";
 
