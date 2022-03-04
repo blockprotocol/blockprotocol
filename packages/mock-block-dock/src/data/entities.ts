@@ -14,19 +14,13 @@ const createPerson = (entityId: number): BlockProtocolEntity => {
   const name = personNames[entityId];
   return {
     entityId: `person-${entityId.toString()}`,
-    timestamps: {
-      createdAt: now,
-      updatedAt: now,
-    },
-    properties: {
-      age: Math.ceil(Math.random() * 100),
-      email: {
-        address: `${name}@example.com`,
-        primary: true,
-      },
-      name,
-      username: name.toLowerCase(),
-    },
+    entityTypeId: "Person",
+    createdAt: now,
+    updatedAt: now,
+    age: Math.ceil(Math.random() * 100),
+    email: `${name}@example.com`,
+    name,
+    username: name.toLowerCase(),
   };
 };
 
@@ -34,15 +28,12 @@ const createCompany = (entityId: number): BlockProtocolEntity => {
   const now = new Date();
   const name = companyNames[entityId];
   return {
-    entityId: entityId.toString(),
-    timestamps: {
-      createdAt: now,
-      updatedAt: now,
-    },
-    properties: {
-      employees: Math.ceil(Math.random() * 10_000),
-      name,
-    },
+    entityId: `company-${entityId.toString()}`,
+    entityTypeId: "Company",
+    createdAt: now,
+    updatedAt: now,
+    employees: Math.ceil(Math.random() * 10_000),
+    name,
   };
 };
 

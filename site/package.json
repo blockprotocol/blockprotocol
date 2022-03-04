@@ -5,8 +5,6 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn exe scripts/build.ts",
-    "build-block": "./scripts/build-blocks.sh",
-    "build-blocks": "find ../hub -type f | xargs ./scripts/build-blocks.sh",
     "clean": "rimraf ./.next/",
     "dev": "yarn exe scripts/dev.ts",
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
