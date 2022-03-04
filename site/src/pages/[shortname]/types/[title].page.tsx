@@ -123,9 +123,9 @@ const EntityTypePage: NextPage = () => {
               {" >"}
             </a>
           </Link>
-          <h1>
+          <Typography variant="bpHeading3" component="h1">
             <strong>{title ?? "Unnamed"}</strong> Schema
-          </h1>
+          </Typography>
         </header>
 
         <section>
