@@ -24,11 +24,8 @@ export const getServerSideProps: GetServerSideProps<
     return { notFound: true };
   }
 
-  const [blocksResponse, entityTypesResponse] = await Promise.all([
+  const [blocksResponse] = await Promise.all([
     apiClient.getUserBlocks({
-      shortname: shortname.replace("@", ""),
-    }),
-    apiClient.getUserEntityTypes({
       shortname: shortname.replace("@", ""),
     }),
   ]);
@@ -44,7 +41,7 @@ export const getServerSideProps: GetServerSideProps<
   return {
     props: {
       blocks: blocksResponse.data?.blocks || [],
-      entityTypes: entityTypesResponse.data?.entityTypes || [],
+      entityTypes: [],
       initialActiveTab,
       user: {},
     },
