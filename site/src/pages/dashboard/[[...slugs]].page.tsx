@@ -1,17 +1,22 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import {
   DashboardCard,
   DashboardCardProps,
-} from "../components/pages/dashboard/DashboardCard";
-import { TopNavigationTabs } from "../components/pages/dashboard/TopNavigationTabs";
+} from "../../components/pages/dashboard/DashboardCard";
+import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../components/pages/authWall";
+} from "../../components/pages/authWall";
+import { CreateSchemaModal } from "../../components/Modal/CreateSchemaModal";
 
-const dashboardCardData: DashboardCardProps[] = [
+const getDashboardPrimaryCardData = (
+  openCreateSchemaModal: () => void,
+): DashboardCardProps[] => [
   {
     title: "Read our quick start guide to building blocks",
     colorGradient:
@@ -35,20 +40,58 @@ const dashboardCardData: DashboardCardProps[] = [
     },
   },
   {
-    title: "Generate your API key",
+    title: "Create a Schema",
     colorGradient:
       "linear-gradient(91.21deg, #FFB172 -84.62%, #9482FF 62.56%, #84E6FF 154.58%)",
+    description:
+      "Schemas are a formal way to describe data – they define the expected properties of things like People, Companies, and Books",
+    link: {
+      title: "Create a schema",
+      onClick: openCreateSchemaModal,
+    },
+  },
+];
+
+const getDashboardSecondaryCardData = (
+  profileLink: string,
+): DashboardCardProps[] => [
+  {
+    title: "Generate your API key",
     description:
       "Your API key will allow you to search for blocks by name, author, or compatible data structure.",
     link: {
       title: "Generate Key",
       href: "/settings/api-keys",
     },
+    icon: "fa-solid fa-key",
+  },
+  {
+    title: "View your public profile",
+    description:
+      "See what others see and browse your published blocks and schemas",
+    link: {
+      title: "View Profile",
+      href: profileLink,
+    },
+    icon: "fa-solid fa-user",
+    variant: "secondary",
   },
 ];
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
-  const { preferredName: userName } = user ?? {};
+  const { preferredName: userName, shortname } = user ?? {};
+  const [schemaModalOpen, setSchemaModalOpen] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query?.slugs?.includes("create-schema")) {
+      setSchemaModalOpen(true);
+    }
+  }, [router.query]);
+
+  const openSchemaModal = useCallback(() => {
+    setSchemaModalOpen(true);
+  }, [setSchemaModalOpen]);
 
   return (
     <>
@@ -89,14 +132,15 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
             variant="bpSmallCaps"
             maxWidth={750}
             sx={{
-              marginTop: {
+              mt: {
                 xs: 3,
                 md: 6,
               },
               letterSpacing: "0.05em",
               textTransform: "uppercase",
-              color: ({ palette }) => palette.gray[60],
+              color: ({ palette }) => palette.gray[70],
               fontWeight: 600,
+              mb: 2,
             }}
           >
             Start Exploring
@@ -110,18 +154,45 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
               md: "1fr 1fr 1fr",
             }}
             columnGap={2}
-            paddingTop={2}
+            rowGap={3}
+            mb={3}
+          >
+            {getDashboardPrimaryCardData(openSchemaModal).map(
+              (dashboardCard) => (
+                <DashboardCard
+                  key={`dashboardCard-${dashboardCard.link.href}`}
+                  {...dashboardCard}
+                />
+              ),
+            )}
+          </Box>
+          <Box
+            display="grid"
+            gridTemplateColumns={{
+              xs: "1fr",
+              md: "1fr 1fr",
+            }}
+            alignItems="flex-start"
+            columnGap={3}
+            rowGap={3}
             paddingBottom={4}
           >
-            {dashboardCardData.map((dashboardCard) => (
-              <DashboardCard
-                key={`dashboardCard-${dashboardCard.link.href}`}
-                {...dashboardCard}
-              />
-            ))}
+            {getDashboardSecondaryCardData(`/@${shortname}`).map(
+              (dashboardCard) => (
+                <DashboardCard
+                  key={`dashboardCard-${dashboardCard.link.href}`}
+                  {...dashboardCard}
+                  variant="secondary"
+                />
+              ),
+            )}
           </Box>
         </Container>
       </Box>
+      <CreateSchemaModal
+        open={schemaModalOpen}
+        onClose={() => setSchemaModalOpen(false)}
+      />
     </>
   );
 };

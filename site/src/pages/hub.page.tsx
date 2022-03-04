@@ -66,7 +66,7 @@ const HubPage: VFC<PageProps> = ({ catalog }) => {
             <Typography
               textAlign="center"
               sx={{
-                color: ({ palette }) => palette.gray[60],
+                color: ({ palette }) => palette.gray[70],
                 maxWidth: "unset",
               }}
             >

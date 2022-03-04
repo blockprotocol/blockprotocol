@@ -122,7 +122,7 @@ export const BANNERS: Banner[] = [
             <Typography
               component="h2"
               variant="bpHeading2"
-              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[60] }}
+              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[70] }}
             >
               You can build it!
             </Typography>
@@ -237,7 +237,7 @@ export const BANNERS: Banner[] = [
             <Typography
               component="h2"
               variant="bpHeading2"
-              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[60] }}
+              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[70] }}
             >
               Anyone can contribute
             </Typography>

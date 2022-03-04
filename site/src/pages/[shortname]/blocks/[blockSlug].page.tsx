@@ -146,10 +146,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
-  const blockRepositoryUrl = blockMetadata.repository
-    ? new URL(blockMetadata.repository)
-    : null;
-
   const blockModule = useMemo(
     () =>
       typeof window === "undefined"
@@ -236,14 +232,14 @@ const BlockPage: NextPage<BlockPageProps> = ({
               {blockMetadata.displayName}
             </Typography>
             <Typography variant="bpBodyCopy">
-              <Box sx={{ color: theme.palette.gray[70] }}>
+              <Box sx={{ color: theme.palette.gray[80] }}>
                 {blockMetadata.description}
               </Box>
             </Typography>
             <Typography
               variant="bpSmallCopy"
               sx={{
-                color: ({ palette }) => palette.gray[60],
+                color: ({ palette }) => palette.gray[70],
               }}
             >
               <span>
@@ -288,7 +284,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           />
         </Box>
 
-        {blockRepositoryUrl && (
+        {blockMetadata.repository && (
           <Box
             mb={10}
             sx={{
@@ -302,7 +298,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 variant="bpLargeText"
                 sx={{
                   fontWeight: "bold",
-                  color: theme.palette.gray["70"],
+                  color: theme.palette.gray[80],
                   marginBottom: 2,
                 }}
               >
@@ -319,9 +315,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   variant="bpSmallCopy"
                   sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
                 >
-                  <Link href={blockRepositoryUrl.href}>
-                    {blockRepositoryUrl.hostname}
-                    {blockRepositoryUrl.pathname}
+                  <Link href={blockMetadata.repository}>
+                    {/* Show `github.com/org/repo` instead of full URL with protocol, commit hash and path */}
+                    {blockMetadata.repository
+                      .replace(/^https?:\/\//, "")
+                      .split("/")
+                      .slice(0, 3)
+                      .join("/")}
                   </Link>
                 </Typography>
               </Box>

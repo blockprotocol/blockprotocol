@@ -33,7 +33,7 @@ export const WhyBlockProtocol2Section = () => {
           overflowY: "hidden",
           color: ({ palette }) => ({
             xs: palette.common.white,
-            md: palette.gray[60],
+            md: palette.gray[70],
           }),
         }}
       >
@@ -180,7 +180,7 @@ export const WhyBlockProtocol2Section = () => {
         <Box sx={{ flex: { xs: 1, md: 0.48 }, mb: { xs: 4, md: 0 } }}>
           <Container sx={{ width: { xs: "100%", md: "75%" } }}>
             <Typography
-              sx={{ color: ({ palette }) => palette.gray[80] }}
+              sx={{ color: ({ palette }) => palette.gray[90] }}
               variant="bpHeading3"
               mb={2.25}
             >
@@ -204,7 +204,7 @@ export const WhyBlockProtocol2Section = () => {
           sx={{
             flex: { xs: 1, md: 0.48 },
             py: { xs: 2.8, md: 6 },
-            backgroundColor: ({ palette }) => palette.gray[80],
+            backgroundColor: ({ palette }) => palette.gray[90],
             borderTopLeftRadius: "6px",
             borderBottomLeftRadius: "6px",
             display: "flex",
