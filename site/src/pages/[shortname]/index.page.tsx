@@ -1,8 +1,6 @@
 import React from "react";
 import { NextPage, GetServerSideProps } from "next";
 
-import { apiClient } from "../../lib/apiClient";
-
 import {
   UserPageComponent,
   UserPageProps,
