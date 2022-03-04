@@ -298,8 +298,15 @@ export type BlockProtocolUpdateLinkAction = {
   data: BlockProtocolLink;
   sourceAccountId?: string | null;
   sourceEntityId?: string | null;
-  linkId: string;
-};
+} & (
+  | { linkId: string }
+  | {
+      // temporary identifiers for LinkedAggregations - to be replaced with a single id
+      sourceAccountId?: string | null;
+      sourceEntityId: string;
+      path: string;
+    }
+);
 
 export type BlockProtocolUpdateLinksFunction = {
   (actions: BlockProtocolUpdateLinkAction[]): Promise<BlockProtocolLink[]>;
@@ -343,10 +350,10 @@ export type BlockProtocolAggregateEntityTypesPayload = {
   // @todo mention in spec or remove
   // include entities that are used by, but don't belong to, the specified account
   includeOtherTypesInUse?: boolean | null;
-  operation?: Omit<
+  operation?: DistributedOmit<
     BlockProtocolAggregateOperationInput,
     "entityTypeId" | "entityTypeVersionId"
-  >;
+  > | null;
 };
 
 export type BlockProtocolAggregateEntityTypesFunction = {

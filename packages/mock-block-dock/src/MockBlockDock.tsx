@@ -31,8 +31,10 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
       ...(blockSchema ?? {}),
     };
 
+    const accountId = children.props.accountId ?? "accountId";
+
     const initialBlockEntity: BlockProtocolEntity = {
-      accountId: "account1",
+      accountId,
       entityId: "block1",
     };
 
@@ -48,9 +50,19 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
 
     const nextMockData: MockData = { ...initialMockData };
 
-    nextMockData.entities = [...initialMockData.entities, initialBlockEntity];
+    // give the entities/types the same accountId as the root entity
+    nextMockData.entities = [
+      ...initialMockData.entities.map((entity) => ({
+        ...entity,
+        accountId,
+      })),
+      initialBlockEntity,
+    ];
     nextMockData.entityTypes = [
-      ...initialMockData.entityTypes,
+      ...initialMockData.entityTypes.map((entityType) => ({
+        ...entityType,
+        accountId,
+      })),
       blockEntityType,
     ];
 
@@ -91,7 +103,7 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
     prevChildPropsString.current = JSON.stringify(children.props);
   }, [accountId, entityId, entityTypeId, children.props, updateEntities]);
 
-  const { linkGroups, linkedEntities } = useLinkFields({
+  const { linkedAggregations, linkedEntities, linkGroups } = useLinkFields({
     entities,
     links,
     startingEntity: latestBlockEntity,
@@ -112,9 +124,10 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   const propsToInject = {
     ...latestBlockEntity,
     ...functions,
-    entityTypes: [latestBlockEntityType],
-    linkGroups,
+    entityTypes,
+    linkedAggregations,
     linkedEntities,
+    linkGroups,
   };
 
   return cloneElement(Children.only(children), propsToInject);
