@@ -24,12 +24,6 @@ export const getServerSideProps: GetServerSideProps<
     return { notFound: true };
   }
 
-  const [blocksResponse] = await Promise.all([
-    apiClient.getUserBlocks({
-      shortname: shortname.replace("@", ""),
-    }),
-  ]);
-
   let initialActiveTab: TabValue = TABS[0].value;
 
   const matchingTab = TABS.find((tab) => tab.slug === profileTabs?.[0]);
@@ -40,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
-      blocks: blocksResponse.data?.blocks || [],
+      blocks: [],
       entityTypes: [],
       initialActiveTab,
       user: {},
