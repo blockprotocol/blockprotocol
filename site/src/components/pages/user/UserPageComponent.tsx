@@ -41,8 +41,9 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
 
   useEffect(() => {
     const { profileTabs } = router.query;
+    const profileTabSlug = Array.isArray(profileTabs) ? profileTabs[0] : "";
 
-    const matchingTab = TABS.find((tab) => tab.slug === profileTabs?.[0]);
+    const matchingTab = TABS.find((tab) => profileTabSlug === tab.slug);
 
     if (!matchingTab) {
       void router.replace(`/@${user.shortname}`);
