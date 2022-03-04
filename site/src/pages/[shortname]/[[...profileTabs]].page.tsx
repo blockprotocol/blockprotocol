@@ -24,23 +24,14 @@ export const getServerSideProps: GetServerSideProps<
     return { notFound: true };
   }
 
-  const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
-    [
-      apiClient.getUser({
-        shortname: shortname.replace("@", ""),
-      }),
-      apiClient.getUserBlocks({
-        shortname: shortname.replace("@", ""),
-      }),
-      apiClient.getUserEntityTypes({
-        shortname: shortname.replace("@", ""),
-      }),
-    ],
-  );
-
-  if (userResponse.error || !userResponse.data) {
-    return { notFound: true };
-  }
+  const [blocksResponse, entityTypesResponse] = await Promise.all([
+    apiClient.getUserBlocks({
+      shortname: shortname.replace("@", ""),
+    }),
+    apiClient.getUserEntityTypes({
+      shortname: shortname.replace("@", ""),
+    }),
+  ]);
 
   let initialActiveTab: TabValue = TABS[0].value;
 
@@ -55,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<
       blocks: blocksResponse.data?.blocks || [],
       entityTypes: entityTypesResponse.data?.entityTypes || [],
       initialActiveTab,
-      user: userResponse.data?.user,
+      user: {},
     },
   };
 };
