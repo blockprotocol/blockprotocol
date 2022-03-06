@@ -68,7 +68,7 @@ const script = async () => {
     },
     {
       shortname: "hash",
-      preferredName: "Hash",
+      preferredName: "HASH",
       email: "hash@example.com",
     },
   ];
