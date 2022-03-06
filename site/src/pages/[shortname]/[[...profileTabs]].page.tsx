@@ -2,6 +2,7 @@ import React from "react";
 import { NextPage, GetServerSideProps } from "next";
 
 import { useRouter } from "next/router";
+import Error from "next/error";
 import { apiClient } from "../../lib/apiClient";
 
 import {
@@ -15,14 +16,25 @@ type UserPageQueryParams = {
   shortname: string;
 };
 
+const findTab = (rawProfileTabs: string[] | string | undefined) => {
+  const activeTabSlug = rawProfileTabs?.[0] ?? "";
+  return TABS.find((tab) => tab.slug === activeTabSlug);
+};
+
 export const getServerSideProps: GetServerSideProps<
   Omit<UserPageProps, "activeTab">,
   UserPageQueryParams
 > = async ({ params }) => {
-  const { shortname } = params || {};
-
+  const shortname = params?.shortname;
   if (typeof shortname !== "string" || !shortname.startsWith("@")) {
     return { notFound: true };
+  }
+
+  const matchingTab = findTab(params?.profileTabs);
+  if (!matchingTab) {
+    return {
+      notFound: true,
+    };
   }
 
   const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
@@ -55,8 +67,12 @@ export const getServerSideProps: GetServerSideProps<
 const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
   const router = useRouter();
 
-  const activeTabSlug = router.query.profileTabs?.[0] ?? "";
-  const matchingTab = TABS.find((tab) => tab.slug === activeTabSlug);
+  const matchingTab = findTab(router.query.profileTabs);
+
+  // Protect against unlikely client-side navigation to a non-existing profile tab
+  if (!matchingTab) {
+    return <Error statusCode={404} />;
+  }
 
   return (
     <UserPageComponent
