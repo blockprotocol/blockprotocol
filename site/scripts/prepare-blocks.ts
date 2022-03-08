@@ -124,11 +124,9 @@ const ensureRepositorySnapshot = async ({
     ?.tarball({ committish: commit });
 
   if (!tarballUrl) {
-    {
-      throw new Error(
-        `Cannot get tarball for repository URL ${repositoryHref}. It needs to be a valid repository URL.`,
-      );
-    }
+    throw new Error(
+      `Cannot get tarball for repository URL ${repositoryHref}. It needs to be a valid repository URL.`,
+    );
   }
 
   const repositorySnapshotSlug = slugify(
