@@ -163,11 +163,16 @@ const ensureRepositorySnapshot = async ({
       defaultExecaOptions,
     );
 
-    console.log(chalk.green(`Unpacking archive...`));
     const untarPath = path.resolve(untarDirPath, "repo");
+
+    console.log(chalk.green(`Creating output directory...`));
+    await execa("mkdir", ["-p", untarPath]);
+
+    console.log(chalk.green(`Unpacking archive...`));
+
     await execa(
       "tar",
-      ["-xfv", path.resolve(untarDirPath, "repo.tar.gz"), "-C", untarPath],
+      ["-xvf", path.resolve(untarDirPath, "repo.tar.gz"), "-C", untarPath],
       defaultExecaOptions,
     );
 
