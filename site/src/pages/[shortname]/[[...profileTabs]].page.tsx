@@ -1,5 +1,7 @@
 import React from "react";
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage, GetStaticPaths, GetStaticProps } from "next";
+
+import { apiClient } from "../../lib/apiClient";
 
 import {
   UserPageComponent,
@@ -12,7 +14,14 @@ type UserPageQueryParams = {
   shortname: string;
 };
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps<
   UserPageProps,
   UserPageQueryParams
 > = async ({ params }) => {
@@ -20,6 +29,24 @@ export const getServerSideProps: GetServerSideProps<
 
   if (typeof shortname !== "string" || !shortname?.startsWith("@")) {
     return { notFound: true };
+  }
+
+  const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
+    [
+      apiClient.getUser({
+        shortname: shortname.replace("@", ""),
+      }),
+      apiClient.getUserBlocks({
+        shortname: shortname.replace("@", ""),
+      }),
+      apiClient.getUserEntityTypes({
+        shortname: shortname.replace("@", ""),
+      }),
+    ],
+  );
+
+  if (userResponse.error || !userResponse.data) {
+    return { notFound: true, revalidate: 60 };
   }
 
   let initialActiveTab: TabValue = TABS[0].value;
@@ -32,11 +59,12 @@ export const getServerSideProps: GetServerSideProps<
 
   return {
     props: {
-      blocks: [],
-      entityTypes: [],
+      blocks: blocksResponse.data?.blocks || [],
+      entityTypes: entityTypesResponse.data?.entityTypes || [],
       initialActiveTab,
-      user: {},
+      user: userResponse.data?.user,
     },
+    revalidate: 60,
   };
 };
 
