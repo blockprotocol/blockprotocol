@@ -8,7 +8,8 @@ on:
 jobs:
   ##  && github.event.deployment.environment == 'refs/heads/main'
   warm-up:
-    if: \!github.event.deployment_status || (github.event.deployment_status.state == 'success')
+    if: |
+      !github.event.deployment_status || (github.event.deployment_status.state == 'success')
     runs-on: ubuntu-20.04
     steps:
       - name: Visit URLs that use AWS Lambda
