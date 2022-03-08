@@ -6,10 +6,9 @@ on:
     - cron: "*/10 * * * *" ## every 10 minutes
 
 jobs:
+  ##  && github.event.deployment.environment == 'refs/heads/main'
   warm-up:
-    if: |
-      (github.event.type == 'DeploymentStatus' && github.event.deployment_status.state == 'success')
-      || github.event.type == 'Schedule'
+    if: \!github.event.deployment_status || (github.event.deployment_status.state == 'success')
     runs-on: ubuntu-20.04
     steps:
       - name: Visit URLs that use AWS Lambda
