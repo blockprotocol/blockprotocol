@@ -1,7 +1,6 @@
 import { VFC, FC } from "react";
 import { Box, Tabs, Typography, BoxProps, Tab } from "@mui/material";
-// eslint-disable-next-line no-restricted-imports
-import Link from "next/link";
+import { BaseLink } from "../../BaseLink";
 
 export const TABS = [
   {
@@ -46,9 +45,8 @@ export const TabHeader: VFC<TabHeaderProps> = ({
         const tabIsActive = value === activeTab;
 
         return (
-          <Link
+          <BaseLink
             href={`/@hash${slug ? `/${slug}` : ""}`}
-            passHref
             shallow
             key={value}
           >
@@ -99,7 +97,7 @@ export const TabHeader: VFC<TabHeaderProps> = ({
               id={`profile-tab-${index}`}
               aria-controls={`profile-tabpanel-${index}`}
             />
-          </Link>
+          </BaseLink>
         );
       })}
     </Tabs>

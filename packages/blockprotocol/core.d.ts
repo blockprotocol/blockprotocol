@@ -62,7 +62,7 @@ export type BlockMetadata = {
   /**
    * The dependencies a block relies on but expects the embedding application to provide
    */
-  externals: {
+  externals?: {
     [k: string]: unknown;
   }[];
   /**
