@@ -6,22 +6,24 @@ on:
     - cron: "*/10 * * * *" ## every 10 minutes
 
 jobs:
-  warm-up:
+  fetch:
+    name: "Fetch"
     if: |
       !github.event.deployment_status || (github.event.deployment_status.state == 'success')
     runs-on: ubuntu-20.04
     steps:
-      - name: Visit URLs that use AWS Lambda
+      - name: Fetch URLs that use AWS Lambda
         run: |
+          cat << EOF > curl-format.txt
+            %{url}\n
+              Status code: %{http_code}\n
+              Time: %{time_total}\n
+            \n
+          EOF
+
           for PATHNAME in "/@hash" "/types/DUMMY_ENTITY_ID"
           do
-            echo ""
-            echo ""
-            echo "========"
-            echo "${BASE_URL}${PATHNAME}"
-            echo "========"
-            echo ""
-            time curl --head "${BASE_URL}${PATHNAME}"
+            curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
           done
         env:
-          BASE_URL: "${{ github.event.deployment_status && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}"
+          BASE_URL: ${{ github.event.deployment_status && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
