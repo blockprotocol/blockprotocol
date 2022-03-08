@@ -1,0 +1,20 @@
+name: Warm-up Vercel
+
+on:
+  deployment_status:
+  schedule:
+    - cron: "*/10 * * * *" ## every 10 minutes
+
+jobs:
+  warm-up:
+    if: |
+      (github.event.type == 'DeploymentStatus' && github.event.deployment_status.state == 'success')
+      || github.event.type == 'Schedule'
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Visit URLs that use AWS Lambda
+        run: |
+          curl "${BASE_URL}/@hash"
+          curl "${BASE_URL}/types/DUMMY_ENTITY_ID"
+        env:
+          BASE_URL: ${{ github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
