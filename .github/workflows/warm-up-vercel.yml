@@ -6,7 +6,6 @@ on:
     - cron: "*/10 * * * *" ## every 10 minutes
 
 jobs:
-  ##  && github.event.deployment.environment == 'refs/heads/main'
   warm-up:
     if: |
       !github.event.deployment_status || (github.event.deployment_status.state == 'success')
@@ -14,7 +13,15 @@ jobs:
     steps:
       - name: Visit URLs that use AWS Lambda
         run: |
-          curl "${BASE_URL}/@hash"
-          curl "${BASE_URL}/types/DUMMY_ENTITY_ID"
+          for PATHNAME in "/@hash" "/types/DUMMY_ENTITY_ID"
+          do
+            echo ""
+            echo ""
+            echo "========"
+            echo "${BASE_URL}${PATHNAME}"
+            echo "========"
+            echo ""
+            time curl --head "${BASE_URL}${PATHNAME}"
+          done
         env:
-          BASE_URL: ${{ github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
+          BASE_URL: "${{ github.event.deployment_status ? github.event.deployment_status.target_url : 'https://blockprotocol.org' }}"
