@@ -56,9 +56,10 @@ const Bullet: VoidFunctionComponent = () => {
 
 type BlockPageProps = {
   blockMetadata: BlockMetadata;
-  schema: BlockSchema;
   blockStringifiedSource: string;
   catalog: BlockMetadata[];
+  repositoryDisplayUrl: string;
+  schema: BlockSchema;
 };
 
 type BlockPageQueryParams = {
@@ -101,6 +102,17 @@ const parseQueryParams = (params: BlockPageQueryParams) => {
   return { shortname, blockSlug };
 };
 
+// Show `github.com/org/repo` instead of full URL with protocol, commit hash and path
+const generateRepositoryUrl = (repository: string): string => {
+  const displayUrl = repository.replace(/^https?:\/\//, "");
+
+  if (repository.includes("github.com/")) {
+    return displayUrl.split("/").slice(0, 3).join("/");
+  }
+
+  return displayUrl;
+};
+
 export const getStaticProps: GetStaticProps<
   BlockPageProps,
   BlockPageQueryParams
@@ -123,15 +135,21 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
+  // getStaticProps doesn't parse undefined, so returning an empty string instead
+  const repositoryDisplayUrl = blockMetadata.repository
+    ? generateRepositoryUrl(blockMetadata.repository)
+    : "";
+
   const { schema, source: blockStringifiedSource } =
     readBlockDataFromDisk(blockMetadata);
 
   return {
     props: {
       blockMetadata,
-      schema,
       blockStringifiedSource,
       catalog,
+      repositoryDisplayUrl,
+      schema,
     },
     revalidate: 1800,
   };
@@ -139,9 +157,10 @@ export const getStaticProps: GetStaticProps<
 
 const BlockPage: NextPage<BlockPageProps> = ({
   blockMetadata,
-  schema,
   blockStringifiedSource,
   catalog,
+  repositoryDisplayUrl,
+  schema,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
@@ -316,12 +335,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
                 >
                   <Link href={blockMetadata.repository}>
-                    {/* Show `github.com/org/repo` instead of full URL with protocol, commit hash and path */}
-                    {blockMetadata.repository
-                      .replace(/^https?:\/\//, "")
-                      .split("/")
-                      .slice(0, 3)
-                      .join("/")}
+                    {repositoryDisplayUrl}
                   </Link>
                 </Typography>
               </Box>
