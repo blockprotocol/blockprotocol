@@ -1,9 +1,13 @@
+## Vercel uses AWS Lambda. When we call getStaticProps in fallback mode or getServerSideProps,
+## a cold Lambda function may take 5-15 seconds to execute. This pipeline warms up Lambda
+## containers for new deployments and keeps them up by fetching affected URLs every 10 minutes.
+
 name: Warm-up Vercel
 
 on:
   deployment_status:
   schedule:
-    - cron: "*/10 * * * *" ## every 10 minutes
+    - cron: "*/10 * * * *"
 
 jobs:
   fetch:
