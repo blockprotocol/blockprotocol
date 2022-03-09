@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, VoidFunctionComponent } from "react";
+import { useEffect, useState, VoidFunctionComponent } from "react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import {
@@ -6,21 +6,18 @@ import {
   Divider,
   Box,
   Container,
-  Grid,
   useTheme,
 } from "@mui/material";
 
-import { useUser } from "../../../context/UserContext";
 import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { Button } from "../../Button";
 
-import { CreateSchemaModal } from "../../Modal/CreateSchemaModal";
-import { ListViewCard } from "./ListViewCard";
-import { OverviewCard } from "./OverviewCard";
 import { Sidebar } from "./Sidebar";
 import { TABS, TabHeader, TabPanel, TabValue } from "./Tabs";
+import { TabPanelContentsWithOverview } from "./TabPanelContentsWithOverview";
+import { TabPanelContentsWithSchemas } from "./TabPanelContentsWithSchemas";
+import { TabPanelContentsWithBlocks } from "./TabPanelContentsWithBlocks";
 
 const SIDEBAR_WIDTH = 300;
 
@@ -52,18 +49,8 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
 
   const [activeTab, setActiveTab] = useState(initialActiveTab);
 
-  const [schemaModalOpen, setSchemaModalOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-
-  const { user: currentUser } = useUser();
-
-  const isCurrentUserPage = useMemo(() => {
-    if (currentUser !== "loading" && currentUser) {
-      return currentUser.id === user.id;
-    }
-    return false;
-  }, [user, currentUser]);
 
   return (
     <>
@@ -133,120 +120,28 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
               }}
             />
             {/* TAB PANELS  */}
-            {/* @todo move this to pages/user/Tabs.tsx */}
             <TabPanel activeTab={activeTab} value="overview" index={0}>
-              <Grid
-                columnSpacing={{ xs: 0, sm: 2 }}
-                rowSpacing={{ xs: 2, sm: 4 }}
-                container
-              >
-                {blocks
-                  .slice(0, 4)
-                  .map(
-                    (
-                      {
-                        displayName,
-                        description,
-                        icon,
-                        lastUpdated,
-                        version,
-                        name,
-                        image,
-                        blockPackagePath,
-                      },
-                      index,
-                    ) => (
-                      <Grid key={name} item xs={12} md={6}>
-                        <OverviewCard
-                          url={blockPackagePath}
-                          description={description!}
-                          icon={icon}
-                          image={image}
-                          lastUpdated={lastUpdated}
-                          title={displayName!}
-                          type="block"
-                          version={version}
-                          // we only show images for the first 2 blocks
-                          // on desktop
-                          hideImage={index > 1 || isMobile}
-                        />
-                      </Grid>
-                    ),
-                  )}
-                {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
-                  <Grid key={entityTypeId} item xs={12} md={6}>
-                    <OverviewCard
-                      url={schema.$id}
-                      description={schema.description as string}
-                      lastUpdated={
-                        typeof updatedAt === "string"
-                          ? updatedAt
-                          : updatedAt?.toISOString()
-                      } // temporary hack to stop type error
-                      title={schema.title}
-                      type="schema"
-                    />
-                  </Grid>
-                ))}
-              </Grid>
+              <TabPanelContentsWithOverview
+                user={user}
+                blocks={blocks}
+                entityTypes={entityTypes}
+              />
             </TabPanel>
             <TabPanel activeTab={activeTab} value="blocks" index={1}>
-              {blocks.map(
-                ({
-                  displayName,
-                  description,
-                  icon,
-                  lastUpdated,
-                  name,
-                  blockPackagePath,
-                }) => (
-                  <ListViewCard
-                    key={name}
-                    type="block"
-                    icon={icon}
-                    title={displayName!}
-                    description={description}
-                    lastUpdated={lastUpdated}
-                    url={blockPackagePath}
-                  />
-                ),
-              )}
+              <TabPanelContentsWithBlocks //
+                user={user}
+                blocks={blocks}
+              />
             </TabPanel>
             <TabPanel activeTab={activeTab} value="schemas" index={2}>
-              {isCurrentUserPage && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: { xs: "flex-start", md: "flex-end" },
-                  }}
-                >
-                  <Button
-                    squared
-                    size="small"
-                    onClick={() => setSchemaModalOpen(true)}
-                  >
-                    Create New Schema
-                  </Button>
-                </Box>
-              )}
-              {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
-                <ListViewCard
-                  key={entityTypeId}
-                  type="schema"
-                  title={schema.title}
-                  description={schema.description as string}
-                  lastUpdated={updatedAt as unknown as string}
-                  url={schema.$id}
-                />
-              ))}
+              <TabPanelContentsWithSchemas
+                user={user}
+                entityTypes={entityTypes}
+              />
             </TabPanel>
           </Box>
         </Container>
       </Box>
-      <CreateSchemaModal
-        open={schemaModalOpen}
-        onClose={() => setSchemaModalOpen(false)}
-      />
     </>
   );
 };
