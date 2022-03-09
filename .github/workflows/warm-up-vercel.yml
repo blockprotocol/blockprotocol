@@ -16,7 +16,7 @@ jobs:
         run: |
           cat << EOF > curl-format.txt
             %{url_effective}\n
-              Status code: %{http_code}\n
+              Status code: %{response_code}\n
               Time: %{time_total}\n
             \n
           EOF
@@ -26,4 +26,4 @@ jobs:
             curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
           done
         env:
-          BASE_URL: ${{ github.event.deployment_status && github.event.deployment_status.target_url || "https://blockprotocol.org" }}
+          BASE_URL: ${{ github.event.deployment_status && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
