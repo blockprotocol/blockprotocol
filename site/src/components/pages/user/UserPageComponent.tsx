@@ -1,88 +1,60 @@
-import React, { useState, useMemo, useCallback, FormEvent } from "react";
+import { useEffect, useMemo, useState, VoidFunctionComponent } from "react";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import {
+  useMediaQuery,
+  Divider,
   Box,
   Container,
   Grid,
-  useMediaQuery,
   useTheme,
-  Divider,
-  Typography,
 } from "@mui/material";
-import Head from "next/head";
-import { NextPage, GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import { ListViewCard } from "../../components/pages/user/ListViewCard";
-import { apiClient } from "../../lib/apiClient";
-import { EntityType } from "../../lib/api/model/entityType.model";
-import { ExpandedBlockMetadata } from "../../lib/blocks";
-import { SerializedUser } from "../../lib/api/model/user.model";
-import { Sidebar } from "../../components/pages/user/Sidebar";
-import { OverviewCard } from "../../components/pages/user/OverviewCard";
-import { TabHeader, TABS, TabPanel } from "../../components/pages/user/Tabs";
-import { Button } from "../../components/Button";
-import { useUser } from "../../context/UserContext";
-import { Modal } from "../../components/Modal";
-import { TextField } from "../../components/TextField";
 
-type UserPageProps = {
-  user: SerializedUser;
-  blocks: ExpandedBlockMetadata[];
-  entityTypes: EntityType[];
-};
+import { useUser } from "../../../context/UserContext";
+import { EntityType } from "../../../lib/api/model/entityType.model";
+import { SerializedUser } from "../../../lib/api/model/user.model";
+import { ExpandedBlockMetadata } from "../../../lib/blocks";
+import { Button } from "../../Button";
 
-type UserPageQueryParams = {
-  shortname: string;
-};
-
-export const getServerSideProps: GetServerSideProps<
-  UserPageProps,
-  UserPageQueryParams
-> = async ({ params }) => {
-  const { shortname } = params || {};
-
-  if (typeof shortname !== "string" || !shortname?.startsWith("@")) {
-    return { notFound: true };
-  }
-
-  const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
-    [
-      apiClient.getUser({
-        shortname: shortname.replace("@", ""),
-      }),
-      apiClient.getUserBlocks({
-        shortname: shortname.replace("@", ""),
-      }),
-      apiClient.getUserEntityTypes({
-        shortname: shortname.replace("@", ""),
-      }),
-    ],
-  );
-
-  if (userResponse.error || !userResponse.data) {
-    return { notFound: true };
-  }
-
-  return {
-    props: {
-      user: userResponse.data?.user,
-      blocks: blocksResponse.data?.blocks || [],
-      entityTypes: entityTypesResponse.data?.entityTypes || [],
-    },
-  };
-};
+import { CreateSchemaModal } from "../../Modal/CreateSchemaModal";
+import { ListViewCard } from "./ListViewCard";
+import { OverviewCard } from "./OverviewCard";
+import { Sidebar } from "./Sidebar";
+import { TABS, TabHeader, TabPanel, TabValue } from "./Tabs";
 
 const SIDEBAR_WIDTH = 300;
 
-const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
-  const [activeTab, setActiveTab] =
-    useState<typeof TABS[number]["value"]>("overview");
+export type UserPageProps = {
+  blocks: ExpandedBlockMetadata[];
+  entityTypes: EntityType[];
+  initialActiveTab: TabValue;
+  user: SerializedUser;
+};
+
+export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
+  blocks,
+  entityTypes,
+  initialActiveTab,
+  user,
+}) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const { profileTabs } = router.query;
+    const profileTabSlug = Array.isArray(profileTabs) ? profileTabs[0] : "";
+
+    const matchingTab = TABS.find((tab) => profileTabSlug === tab.slug);
+
+    if (!matchingTab) {
+      void router.replace(`/@${user.shortname}`);
+    }
+  }, [router, user.shortname]);
+
+  const [activeTab, setActiveTab] = useState(initialActiveTab);
+
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
-  const [newSchemaTitle, setNewSchemaTitle] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const router = useRouter();
 
   const { user: currentUser } = useUser();
 
@@ -92,49 +64,6 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
     }
     return false;
   }, [user, currentUser]);
-
-  const handleSchemaTitleChange = (value: string) => {
-    let formattedText = value.trim();
-    // replace all empty spaces
-    formattedText = formattedText.replace(/\s/g, "");
-
-    // capitalize text
-    if (formattedText.length > 1) {
-      formattedText = formattedText[0].toUpperCase() + formattedText.slice(1);
-    }
-
-    setNewSchemaTitle(formattedText);
-  };
-
-  const handleCreateSchema = useCallback(
-    async (evt: FormEvent) => {
-      evt.preventDefault();
-      if (newSchemaTitle === "") {
-        setError("Please enter a valid value");
-        return;
-      }
-
-      setLoading(true);
-      const { data, error: apiError } = await apiClient.createEntityType({
-        schema: {
-          title: newSchemaTitle,
-        },
-      });
-      setLoading(false);
-      if (apiError) {
-        if (apiError.response?.data.errors) {
-          setError(apiError.response.data.errors[0].msg);
-        } else {
-          // @todo properly handle this
-          setError("An error occured");
-        }
-      } else {
-        const schemaTitle = data?.entityType.schema.title;
-        void router.push(`/@${user.shortname}/types/${schemaTitle}`);
-      }
-    },
-    [user, newSchemaTitle, router],
-  );
 
   return (
     <>
@@ -189,7 +118,14 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
             {/* TAB HEADER */}
             <TabHeader
               activeTab={activeTab}
-              setActiveTab={setActiveTab}
+              setActiveTab={(nextTab) => {
+                setActiveTab(nextTab);
+                return router.push(
+                  `/@${user.shortname}/${
+                    TABS.find((tab) => tab.value === nextTab)?.slug
+                  }`,
+                );
+              }}
               tabs={TABS}
               tabItemsCount={{
                 blocks: blocks.length,
@@ -216,13 +152,13 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                         version,
                         name,
                         image,
-                        packagePath,
+                        blockPackagePath,
                       },
                       index,
                     ) => (
                       <Grid key={name} item xs={12} md={6}>
                         <OverviewCard
-                          url={`/${packagePath}`}
+                          url={blockPackagePath}
                           description={description!}
                           icon={icon}
                           image={image}
@@ -262,7 +198,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                   icon,
                   lastUpdated,
                   name,
-                  packagePath,
+                  blockPackagePath,
                 }) => (
                   <ListViewCard
                     key={name}
@@ -271,7 +207,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
                     title={displayName!}
                     description={description}
                     lastUpdated={lastUpdated}
-                    url={`/${packagePath}`}
+                    url={blockPackagePath}
                   />
                 ),
               )}
@@ -307,67 +243,10 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
           </Box>
         </Container>
       </Box>
-      {/* Create Schema Modal */}
-      {/* @todo move to a separate component */}
-      <Modal
+      <CreateSchemaModal
         open={schemaModalOpen}
         onClose={() => setSchemaModalOpen(false)}
-        contentStyle={{
-          top: "40%",
-        }}
-      >
-        <Box sx={{}}>
-          <Typography
-            variant="bpHeading4"
-            sx={{
-              mb: 2,
-              display: "block",
-            }}
-          >
-            Create New <strong>Schema</strong>
-          </Typography>
-          <Typography
-            sx={{
-              mb: 4,
-              fontSize: 16,
-              lineHeight: 1.5,
-              width: { xs: "90%", md: "85%" },
-            }}
-          >
-            {` Schemas are used to define the structure of entities - in other
-            words, define a ‘type’ of entity`}
-          </Typography>
-          <Box component="form" onSubmit={handleCreateSchema}>
-            <TextField
-              sx={{ mb: 3 }}
-              label="Schema Title"
-              fullWidth
-              helperText={error}
-              value={newSchemaTitle}
-              onChange={(evt) => {
-                if (error) {
-                  setError("");
-                }
-                handleSchemaTitleChange(evt.target.value);
-              }}
-              required
-              error={Boolean(error)}
-            />
-
-            <Button
-              loading={loading}
-              // onClick={createSchema}
-              size="small"
-              squared
-              type="submit"
-            >
-              Create
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      />
     </>
   );
 };
-
-export default UserPage;

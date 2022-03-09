@@ -1,15 +1,17 @@
 import {
   BlockProtocolEntity,
   BlockProtocolLink,
+  BlockProtocolLinkedAggregation,
   BlockProtocolLinkGroup,
   BlockProtocolProps,
 } from "blockprotocol";
 import { useMemo } from "react";
-import { matchIdentifiers } from "./util";
+import { filterAndSortEntitiesOrTypes, matchIdentifiers } from "./util";
 
 type LinkFields = {
-  linkGroups: BlockProtocolLinkGroup[];
+  linkedAggregations: BlockProtocolProps["linkedAggregations"];
   linkedEntities: BlockProtocolProps["linkedEntities"];
+  linkGroups: BlockProtocolLinkGroup[];
 };
 
 export const useLinkFields = ({
@@ -23,7 +25,7 @@ export const useLinkFields = ({
   startingEntity: BlockProtocolEntity;
 }): LinkFields => {
   // @todo optionally resolve to further depth, i.e. follow links from linked entities
-  const { linkGroups, linkedEntities } = useMemo(() => {
+  const { linkedAggregations, linkedEntities, linkGroups } = useMemo(() => {
     const linksFromStartingEntity = links.filter(
       ({ sourceAccountId, sourceEntityId, sourceEntityTypeId }) =>
         matchIdentifiers(
@@ -39,6 +41,14 @@ export const useLinkFields = ({
     const calculatedLinkGroups = linksFromStartingEntity.reduce<
       BlockProtocolLinkGroup[]
     >((linkGroupsAcc, link) => {
+      if ("operation" in link) {
+        /**
+         * this is an aggregation link - they don't go in linkGroups,
+         * because they are in linkedAggregations
+         * @todo should they be in linkGroups too?
+         * */
+        return linkGroupsAcc;
+      }
       const existingGroup = linkGroupsAcc.find(
         (group) =>
           matchIdentifiers(
@@ -83,13 +93,33 @@ export const useLinkFields = ({
       ),
     );
 
+    const calculatedLinkedAggregations: BlockProtocolLinkedAggregation[] =
+      linksFromStartingEntity
+        .map((link) => {
+          if (!("operation" in link)) {
+            return null;
+          }
+          const results = filterAndSortEntitiesOrTypes(entities, {
+            operation: link.operation,
+          });
+          return {
+            ...link,
+            ...results,
+          };
+        })
+        .filter(
+          (thing): thing is Exclude<typeof thing, null> => thing !== null,
+        );
+
     return {
-      linkGroups: calculatedLinkGroups,
+      linkedAggregations: calculatedLinkedAggregations,
       linkedEntities: calculatedLinkedEntities,
+      linkGroups: calculatedLinkGroups,
     };
   }, [entities, links, startingEntity]);
 
   return {
+    linkedAggregations,
     linkGroups,
     linkedEntities,
   };

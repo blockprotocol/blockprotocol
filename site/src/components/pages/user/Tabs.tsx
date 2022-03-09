@@ -5,18 +5,25 @@ export const TABS = [
   {
     title: "Overview",
     value: "overview",
+    slug: "",
   },
   {
     title: "Blocks",
     value: "blocks",
+    slug: "blocks",
   },
   {
     title: "Schemas",
     value: "schemas",
+    slug: "schemas",
   },
-] as { title: string; value: "overview" | "blocks" | "schemas" }[];
+] as {
+  title: string;
+  value: "overview" | "blocks" | "schemas";
+  slug: "" | "blocks" | "schemas";
+}[];
 
-type TabValue = typeof TABS[number]["value"];
+export type TabValue = typeof TABS[number]["value"];
 
 type TabHeaderProps = {
   activeTab: string;
@@ -76,7 +83,7 @@ export const TabHeader: VFC<TabHeaderProps> = ({
                       color: ({ palette }) =>
                         value === activeTab
                           ? palette.purple[600]
-                          : palette.gray[60],
+                          : palette.gray[70],
                     }}
                   >
                     {value === "blocks"

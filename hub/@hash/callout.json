@@ -1,7 +1,7 @@
 {
-  "workspace": "@hashintel/block-callout",
   "repository": "https://github.com/hashintel/hash.git",
-  "branch": "main",
-  "distDir": "dist",
-  "timestamp": "2022-02-18T17:25:00.000Z"
+  "commit": "ec9e50601629207f1fde76a817b02aa8733762fe",
+
+  "workspace": "@hashintel/block-callout",
+  "distDir": "dist"
 }

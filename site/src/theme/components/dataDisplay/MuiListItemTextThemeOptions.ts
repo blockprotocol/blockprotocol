@@ -5,7 +5,7 @@ export const MuiListItemTextThemeOptions: Components<Theme>["MuiListItemText"] =
     styleOverrides: {
       primary: ({ theme }) => ({
         fontWeight: 500,
-        color: theme.palette.gray[70],
+        color: theme.palette.gray[80],
       }),
     },
   };

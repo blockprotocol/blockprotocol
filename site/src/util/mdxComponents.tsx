@@ -94,7 +94,12 @@ const stringifyChildren = (node: ReactNode): string => {
   return "";
 };
 
-const HEADING_MARGIN_TOP = 6;
+const HEADING_MARGIN_TOP = {
+  H1: 8,
+  H2: 8,
+  H3: 6,
+  H4: 6,
+};
 const HEADING_MARGIN_BOTTOM = 2;
 
 export const mdxComponents: Record<string, ReactNode> = {
@@ -109,14 +114,9 @@ export const mdxComponents: Record<string, ReactNode> = {
     return (
       <Heading
         ref={headingRef}
-        mt={HEADING_MARGIN_TOP}
+        mt={HEADING_MARGIN_TOP.H1}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading1"
-        sx={{
-          "&:first-of-type": {
-            marginTop: 0,
-          },
-        }}
         {...props}
       >
         {props.children}
@@ -135,14 +135,9 @@ export const mdxComponents: Record<string, ReactNode> = {
     return (
       <Heading
         ref={headingRef}
-        mt={HEADING_MARGIN_TOP}
+        mt={HEADING_MARGIN_TOP.H2}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading2"
-        sx={{
-          "&:first-of-type": {
-            marginTop: 0,
-          },
-        }}
         {...props}
       >
         {props.children}
@@ -161,7 +156,7 @@ export const mdxComponents: Record<string, ReactNode> = {
     return (
       <Heading
         ref={headingRef}
-        mt={HEADING_MARGIN_TOP}
+        mt={HEADING_MARGIN_TOP.H3}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading3"
         {...props}
@@ -173,7 +168,7 @@ export const mdxComponents: Record<string, ReactNode> = {
   },
   h4: (props: TypographyProps) => (
     <Heading
-      mt={HEADING_MARGIN_TOP}
+      mt={HEADING_MARGIN_TOP.H4}
       mb={HEADING_MARGIN_BOTTOM}
       variant="bpHeading4"
       {...props}

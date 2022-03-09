@@ -12,21 +12,21 @@ import { useRouter } from "next/router";
 import React, { useMemo, VoidFunctionComponent } from "react";
 import { formatDistance } from "date-fns";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { BlocksSlider } from "../../components/BlocksSlider";
+import { BlocksSlider } from "../../../components/BlocksSlider";
 import {
   blockDependencies,
   BlockDependency,
   BlockExports,
   BlockSchema,
-} from "../../components/pages/hub/HubUtils";
+} from "../../../components/pages/hub/HubUtils";
 import {
   readBlocksFromDisk,
   readBlockDataFromDisk,
   ExpandedBlockMetadata as BlockMetadata,
-} from "../../lib/blocks";
-import { BlockDataContainer } from "../../components/pages/hub/BlockDataContainer";
-import { Link } from "../../components/Link";
-import { FontAwesomeSvgIcon } from "../../components/icons";
+} from "../../../lib/blocks";
+import { FontAwesomeSvgIcon } from "../../../components/icons";
+import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
+import { Link } from "../../../components/Link";
 
 const blockRequire = (name: BlockDependency) => {
   if (!(name in blockDependencies)) {
@@ -69,7 +69,7 @@ type BlockPageQueryParams = {
 
 export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
   return {
-    paths: readBlocksFromDisk().map((metadata) => `/${metadata.packagePath}`),
+    paths: readBlocksFromDisk().map((metadata) => metadata.blockPackagePath),
     fallback: "blocking",
   };
 };
@@ -146,10 +146,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
-
-  const blockRepositoryUrl = blockMetadata.repository
-    ? new URL(blockMetadata.repository)
-    : null;
 
   const blockModule = useMemo(
     () =>
@@ -237,14 +233,14 @@ const BlockPage: NextPage<BlockPageProps> = ({
               {blockMetadata.displayName}
             </Typography>
             <Typography variant="bpBodyCopy">
-              <Box sx={{ color: theme.palette.gray[70] }}>
+              <Box sx={{ color: theme.palette.gray[80] }}>
                 {blockMetadata.description}
               </Box>
             </Typography>
             <Typography
               variant="bpSmallCopy"
               sx={{
-                color: ({ palette }) => palette.gray[60],
+                color: ({ palette }) => palette.gray[70],
               }}
             >
               <span>
@@ -289,7 +285,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           />
         </Box>
 
-        {blockRepositoryUrl && (
+        {blockMetadata.repository && (
           <Box
             mb={10}
             sx={{
@@ -303,7 +299,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 variant="bpLargeText"
                 sx={{
                   fontWeight: "bold",
-                  color: theme.palette.gray["70"],
+                  color: theme.palette.gray[80],
                   marginBottom: 2,
                 }}
               >
@@ -320,9 +316,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   variant="bpSmallCopy"
                   sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
                 >
-                  <Link href={blockRepositoryUrl.href}>
-                    {blockRepositoryUrl.hostname}
-                    {blockRepositoryUrl.pathname}
+                  <Link href={blockMetadata.repository}>
+                    {/* Show `github.com/org/repo` instead of full URL with protocol, commit hash and path */}
+                    {blockMetadata.repository
+                      .replace(/^https?:\/\//, "")
+                      .split("/")
+                      .slice(0, 3)
+                      .join("/")}
                   </Link>
                 </Typography>
               </Box>

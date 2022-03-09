@@ -152,6 +152,13 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
               sm: MDX_TEXT_CONTENT_MAX_WIDTH,
             },
           },
+          /** Headers that come after headers shouldn't have a top margin */
+          "& h1 + h2, h1 + h3, h1 + h4, h2 + h3, h2 + h4, h3 + h4": {
+            marginTop: 0,
+          },
+          "& > :first-child": {
+            marginTop: 0,
+          },
         }}
       >
         <MDXRemote {...serializedPage} components={mdxComponents} />

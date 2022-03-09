@@ -49,8 +49,9 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
   <Typography
     component="p"
     variant="bpSmallCopy"
-    sx={{
-      color: ({ palette }) => palette.gray[40],
+    key={href}
+    sx={(theme) => ({
+      color: theme.palette.gray[40],
       "&:first-of-type": {
         marginTop: {
           xs: 1.5,
@@ -60,12 +61,8 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
       "&:not(:first-of-type)": {
         marginTop: 1.5,
       },
-    }}
-    key={href}
-  >
-    <Link
-      href={href}
-      sx={(theme) => ({
+      "> a": {
+        borderBottomWidth: 0,
         transition: theme.transitions.create("color", { duration: 150 }),
         ":hover": {
           color: theme.palette.gray[20],
@@ -76,10 +73,10 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
         ":focus-visible": {
           outlineColor: theme.palette.gray[40],
         },
-      })}
-    >
-      {name}
-    </Link>
+      },
+    })}
+  >
+    <Link href={href}>{name}</Link>
   </Typography>
 ));
 
@@ -172,7 +169,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
     <Box
       {...boxProps}
       sx={{
-        backgroundColor: ({ palette }) => palette.gray[80],
+        backgroundColor: ({ palette }) => palette.gray[90],
         ...boxProps.sx,
       }}
     >
@@ -234,16 +231,14 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                 color: ({ palette }) => palette.gray[50],
                 fontWeight: 400,
                 display: "flex",
-              }}
-              variant="bpSmallCopy"
-            >
-              Supported by{" "}
-              <Box
-                component="a"
-                href="https://hash.ai"
-                sx={{
-                  marginLeft: 1,
-                  borderBottomColor: "transparent !important",
+                "> a": {
+                  borderBottomWidth: 0,
+                  transition: theme.transitions.create(
+                    ["color", "borderColor"],
+                    {
+                      duration: 150,
+                    },
+                  ),
                   ":hover": {
                     color: ({ palette }) => palette.gray[30],
                   },
@@ -253,19 +248,21 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                   ":focus-visible": {
                     outline: ({ palette }) => `1px solid ${palette.gray[50]}`,
                   },
+                },
+              }}
+              variant="bpSmallCopy"
+            >
+              Supported by{" "}
+              <Link
+                href="https://hash.ai"
+                sx={{
+                  position: "relative",
+                  top: -1,
+                  marginLeft: 1,
                 }}
               >
-                <HASHLogoIcon
-                  sx={{
-                    transition: theme.transitions.create(
-                      ["color", "borderColor"],
-                      {
-                        duration: 150,
-                      },
-                    ),
-                  }}
-                />
-              </Box>
+                <HASHLogoIcon />
+              </Link>
             </Typography>
           </Grid>
         </Grid>

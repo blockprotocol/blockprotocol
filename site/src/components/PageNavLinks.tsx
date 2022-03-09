@@ -41,7 +41,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
           <Box display="flex" alignItems="flex-end">
             <Box>
               <Typography
-                sx={{ color: theme.palette.gray[60] }}
+                sx={{ color: theme.palette.gray[70] }}
                 component="p"
                 variant="bpSmallCopy"
               >
@@ -85,7 +85,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
         {nextPage && (
           <Box display="flex" flexDirection="column" alignItems="flex-end">
             <Typography
-              sx={{ color: theme.palette.gray[60] }}
+              sx={{ color: theme.palette.gray[70] }}
               component="p"
               variant="bpSmallCopy"
             >

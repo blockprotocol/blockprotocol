@@ -3,15 +3,6 @@
 
 import { Components } from "@mui/material";
 
-import InterMedium from "../../../assets/fonts/Inter-Medium.ttf";
-import InterRegular from "../../../assets/fonts/Inter-Regular.ttf";
-import InterSemiBold from "../../../assets/fonts/Inter-SemiBold.ttf";
-import InterBold from "../../../assets/fonts/Inter-Bold.ttf";
-import InterLight from "../../../assets/fonts/Inter-Light.ttf";
-import ApercuProRegular from "../../../assets/fonts/apercu-regular-pro.ttf";
-import ApercuProBold from "../../../assets/fonts/apercu-bold-pro.ttf";
-import ApercuProLight from "../../../assets/fonts/apercu-light-pro.ttf";
-import ApercuProMedium from "../../../assets/fonts/apercu-medium-pro.ttf";
 import { DESKTOP_NAVBAR_HEIGHT } from "../../../components/Navbar";
 import { customColors } from "../../palette";
 
@@ -107,47 +98,47 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
           @font-face {
             font-family: 'Inter';
             font-weight: 300;
-            src: url(${InterLight}) format("trueType");
+            src: url("/assets/fonts/inter-light.ttf") format("trueType");
           }
           @font-face {
               font-family: 'Inter';
               font-weight: 400;
-              src: url(${InterRegular}) format("trueType");
+              src: url("/assets/fonts/inter-regular.ttf") format("trueType");
           }
           @font-face {
               font-family: 'Inter';
               font-weight: 500;
-              src: url(${InterMedium}) format("trueType");
+              src: url("/assets/fonts/inter-medium.ttf") format("trueType");
           }
           @font-face {
             font-family: 'Inter';
             font-weight: 600;
-            src: url(${InterSemiBold}) format("trueType");
+            src: url("/assets/fonts/inter-semibold.ttf") format("trueType");
           }
           @font-face {
             font-family: 'Inter';
             font-weight: 700;
-            src: url(${InterBold}) format("trueType");
+            src: url("/assets/fonts/inter-bold.ttf") format("trueType");
           }
           @font-face {
             font-family: 'Apercu Pro';
             font-weight: 300;
-            src: url(${ApercuProLight}) format("trueType");
+            src: url("/assets/fonts/apercu-light-pro.ttf") format("trueType");
           }
           @font-face {
               font-family: 'Apercu Pro';
               font-weight: 400;
-              src: url(${ApercuProRegular}) format("trueType");
+              src: url("/assets/fonts/apercu-regular-pro.ttf") format("trueType");
           }
           @font-face {
               font-family: 'Apercu Pro';
               font-weight: 500;
-              src: url(${ApercuProMedium}) format("trueType");
+              src: url("/assets/fonts/apercu-medium-pro.ttf") format("trueType");
           }
           @font-face {
             font-family: 'Apercu Pro';
             font-weight: 700;
-            src: url(${ApercuProBold}) format("trueType");
+            src: url("/assets/fonts/apercu-bold-pro.ttf") format("trueType");
           }
 
           html {
@@ -164,7 +155,7 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             font-size: var(--step-0);
             font-weight: 400;
             line-height: 1.7;
-            color: ${customColors.gray["80"]};
+            color: ${customColors.gray[90]};
           }
 
           pre {

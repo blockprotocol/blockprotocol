@@ -26,7 +26,15 @@ export const BlockDataTabPanels: VoidFunctionComponent<
           sx={(theme) => ({
             height: modalHeight,
             fontSize: 14,
-            backgroundColor: theme.palette.gray[80],
+            backgroundColor: theme.palette.gray[90],
+            borderTopLeftRadius: {
+              xs: 6,
+              md: 0,
+            },
+            borderTopRightRadius: {
+              xs: 6,
+              md: 0,
+            },
             borderBottomLeftRadius: 6,
             borderBottomRightRadius: 6,
             overflow: "auto",
@@ -56,8 +64,16 @@ export const BlockDataTabPanels: VoidFunctionComponent<
             }
             sx={(theme) => ({
               minHeight: "100%",
-              backgroundColor: theme.palette.gray[80],
+              backgroundColor: theme.palette.gray[90],
               color: "white",
+              borderTopLeftRadius: {
+                xs: 6,
+                md: 0,
+              },
+              borderTopRightRadius: {
+                xs: 6,
+                md: 0,
+              },
               borderBottomLeftRadius: 6,
               borderBottomRightRadius: 6,
               fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,

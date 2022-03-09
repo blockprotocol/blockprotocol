@@ -1,7 +1,7 @@
 {
-  "workspace": "@hashintel/block-embed",
   "repository": "https://github.com/hashintel/hash.git",
-  "branch": "main",
-  "distDir": "dist",
-  "timestamp": "2022-02-04T13:48:55.043Z"
+  "commit": "ec9e50601629207f1fde76a817b02aa8733762fe",
+
+  "workspace": "@hashintel/block-embed",
+  "distDir": "dist"
 }

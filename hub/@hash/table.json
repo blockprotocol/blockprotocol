@@ -1,7 +1,7 @@
 {
-  "workspace": "@hashintel/block-table",
   "repository": "https://github.com/hashintel/hash.git",
-  "branch": "main",
-  "distDir": "dist",
-  "timestamp": "2022-02-04T13:48:55.043Z"
+  "commit": "81eef9dc847b355b8122e1ff256e0bb9155fe66a",
+
+  "workspace": "@hashintel/block-table",
+  "distDir": "dist"
 }

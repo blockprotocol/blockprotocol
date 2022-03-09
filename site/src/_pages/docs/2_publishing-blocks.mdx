@@ -19,22 +19,31 @@ The JSON metadata file should look like this:
 ```json5
 {
   // REQUIRED - path to the repository with your block's source code
-  repository: "https://github.com/hashintel/dev.git",
-  // REQUIRED - name of the branch to build your block from
-  branch: "main",
-  // REQUIRED - name of the folder your built blocks will appear in after running `yarn build`
+  repository: "https://github.com/hashintel/hash.git",
+  // REQUIRED - commit hash (pins block to a specific version)
+  commit: "adb915bf8fc4f84e33a2cd21f217225e50c3d7fa",
+
+  // IF NEEDED - see below
   distDir: "dist",
-  // IF NEEDED - where your commands are in a subfolder,
-  // provide ONE OF the folder path or yarn workspace
   folder: "packages/blocks/block-embed",
   workspace: "@hashintel/block-embed",
 }
 ```
 
-We assume that running `yarn install && yarn build` will create your block's distribution in the specified `distDir`,
-unless:
+<!-- markdownlint-disable no-emphasis-as-heading -->
 
-- `workspace` is provided, in which case we will modify both yarn commands with the provided workspace, OR
-- `folder` is provided, in which case we will run the commands in the specified folder of your repo.
+**My block source is in a subfolder**
 
-There is no need to provide either if running `yarn install && yarn build` in the root folder of your repository will build the block.
+- If it’s in a yarn workspace, please provide `workspace`
+- If it’s not in a yarn workspace, please provide its `folder` path
+
+**My block requires building from its source**
+
+- please provide the `distDir` where the build artifacts will appear
+
+<InfoCard variant="info" title="Note">
+
+We assume that running `yarn install && yarn build` will build your block (after switching to the relevant folder/workspace, if provided).
+The specified `distDir` will be relative to the workspace directory or folder, if provided.
+
+</InfoCard>

@@ -1,4 +1,6 @@
 import {
+  BlockProtocolAggregateEntitiesFunction,
+  BlockProtocolAggregateEntityTypesFunction,
   BlockProtocolCreateEntitiesFunction,
   BlockProtocolCreateLinksFunction,
   BlockProtocolDeleteEntitiesFunction,
@@ -15,7 +17,7 @@ import {
 } from "blockprotocol";
 import { useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { matchIdentifiers } from "./util";
+import { filterAndSortEntitiesOrTypes, matchIdentifiers } from "./util";
 
 export type MockData = {
   entities: BlockProtocolEntity[];
@@ -27,25 +29,20 @@ type MockDataStore = MockData & {
   functions: Omit<
     // @todo implement missing functions
     BlockProtocolFunctions,
-    | "aggregateEntities"
-    | "aggregateEntityTypes"
     | "getEntityTypes"
     | "createEntityTypes"
     | "updateEntityTypes"
     | "deleteEntityTypes"
-    | "uploadFile"
   >;
 };
 
-type UseMockDataStore = (initialData?: MockData) => MockDataStore;
-
-export const useMockDatastore: UseMockDataStore = (
-  initialData = {
+export const useMockDatastore = (
+  initialData: MockData = {
     entities: [],
     links: [],
     entityTypes: [],
   },
-) => {
+): MockDataStore => {
   const [entities, setEntities] = useState<MockDataStore["entities"]>(
     initialData.entities,
   );
@@ -57,6 +54,19 @@ export const useMockDatastore: UseMockDataStore = (
   useEffect(() => {
     setEntities(initialData.entities);
   }, [initialData.entities]);
+
+  const aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction =
+    useCallback(
+      async (payload) => {
+        return filterAndSortEntitiesOrTypes(entityTypes, payload);
+      },
+      [entityTypes],
+    );
+
+  const aggregateEntities: BlockProtocolAggregateEntitiesFunction = useCallback(
+    async (payload) => filterAndSortEntitiesOrTypes(entities, payload),
+    [entities],
+  );
 
   const createEntities: BlockProtocolCreateEntitiesFunction = useCallback(
     async (actions) => {
@@ -177,11 +187,19 @@ export const useMockDatastore: UseMockDataStore = (
       const updatedLinks: BlockProtocolLink[] = [];
       setLinks((currentLinks) =>
         currentLinks.map((link) => {
-          const actionToApply = actions.find(
-            (action) => link.linkId === action.linkId,
-          );
+          const actionToApply = actions.find((action) => {
+            if ("linkId" in action) {
+              return link.linkId === action.linkId;
+            }
+            const { sourceEntityId, sourceAccountId, path } = action;
+            return (
+              sourceEntityId === link.sourceEntityId &&
+              path === link.path &&
+              (!sourceAccountId || sourceAccountId === link.sourceAccountId)
+            );
+          });
           if (actionToApply) {
-            const newLink = { ...link, ...actionToApply } as BlockProtocolLink;
+            const newLink = { ...link, operation: actionToApply.data };
             updatedLinks.push(newLink);
             return newLink;
           }
@@ -235,30 +253,39 @@ export const useMockDatastore: UseMockDataStore = (
           (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
         );
       } else if (file) {
-        const reader = new FileReader();
+        const result = await new Promise<FileReader["result"] | null>(
+          (resolve, reject) => {
+            const reader = new FileReader();
 
-        reader.onload = (event) => {
-          if (event.target?.result) {
-            return createEntities([
-              {
-                accountId,
-                data: {
-                  url: event.target.result.toString(),
-                  mediaType,
-                },
-                entityTypeId: "file1",
+            reader.onload = (event) => {
+              resolve(event.target?.result ?? null);
+            };
+
+            reader.onerror = (event) => {
+              reject(event);
+            };
+
+            reader.readAsDataURL(file);
+          },
+        );
+
+        if (result) {
+          return createEntities([
+            {
+              accountId,
+              data: {
+                url: result.toString(),
+                mediaType,
               },
-            ]).then(
-              (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
-            );
-          } else {
-            throw new Error("Couldn't read your file");
-          }
-        };
+              entityTypeId: "file1",
+            },
+          ]).then(
+            (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
+          );
+        }
 
-        reader.readAsDataURL(file);
+        throw new Error("Couldn't read your file");
       }
-
       throw new Error("Unreachable.");
     },
     [createEntities],
@@ -268,6 +295,8 @@ export const useMockDatastore: UseMockDataStore = (
     entities,
     entityTypes,
     functions: {
+      aggregateEntities,
+      aggregateEntityTypes,
       getEntities,
       createEntities,
       deleteEntities,

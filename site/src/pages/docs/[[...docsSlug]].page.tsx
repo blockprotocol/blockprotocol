@@ -172,15 +172,24 @@ const DocsPage: NextPage<DocsPageProps> = ({
             maxWidth={750}
             sx={{
               marginBottom: {
-                xs: 2,
-                md: 3,
+                xs: 3,
+                md: 8,
               },
             }}
           >
             {DOCS_PAGE_SUBTITLES[title]}
           </Typography>
         ) : null}
-        <Box py={4} display="flex" alignItems="flex-start">
+        <Box
+          display="flex"
+          alignItems="flex-start"
+          sx={{
+            marginBottom: {
+              xs: 3,
+              md: 8,
+            },
+          }}
+        >
           {md ? (
             <Sidebar
               flexGrow={0}

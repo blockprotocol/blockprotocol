@@ -33,7 +33,7 @@ export const Sidebar: VFC<SidebarProps> = ({ isMobile, user }) => {
         <Typography
           variant="bpLargeText"
           sx={{
-            color: ({ palette }) => palette.gray[60],
+            color: ({ palette }) => palette.gray[70],
           }}
         >
           {`@${user.shortname}`}

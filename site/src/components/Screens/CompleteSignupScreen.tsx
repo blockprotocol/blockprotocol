@@ -90,7 +90,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
         textAlign="center"
         marginBottom={2}
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
           fontWeight: 500,
         }}
       >

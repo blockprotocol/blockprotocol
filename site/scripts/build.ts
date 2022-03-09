@@ -4,7 +4,17 @@ import execa from "execa";
 const script = async () => {
   console.log(chalk.bold("Building..."));
 
-  await execa("yarn", ["build-blocks"], { stdio: "inherit" });
+  if (process.env.VERCEL) {
+    await (
+      await import("./copy-blocks-from-ci-cache")
+    ).default;
+  }
+
+  await (
+    await import("./prepare-blocks")
+  ).default;
+
+  await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
 
   await (
     await import("./generate-sitemap")
@@ -19,6 +29,12 @@ const script = async () => {
   ).default;
 
   await execa("next", ["build"], { stdio: "inherit" });
+
+  if (process.env.VERCEL) {
+    await (
+      await import("./copy-blocks-to-ci-cache")
+    ).default;
+  }
 };
 
 export default script();

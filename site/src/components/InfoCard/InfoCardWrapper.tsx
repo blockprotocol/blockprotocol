@@ -44,7 +44,15 @@ export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
         },
       }}
     >
-      <Box>{childrenWithoutInfoCard}</Box>
+      <Box
+        sx={{
+          "& > :first-child": {
+            marginTop: 0,
+          },
+        }}
+      >
+        {childrenWithoutInfoCard}
+      </Box>
       <Box
         sx={{
           marginLeft: {

@@ -33,7 +33,7 @@ const GitHubInfoCard = (
     sx={{
       marginBottom: {
         xs: 3,
-        md: 4,
+        md: 5,
       },
       padding: 3,
       display: "flex",
@@ -245,15 +245,15 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
           maxWidth={750}
           sx={{
             marginBottom: {
-              xs: 4,
-              md: 4,
+              xs: 6,
+              md: 8,
             },
           }}
         >
           The open-source protocol for creating interactive, data-driven blocks
         </Typography>
         {GitHubInfoCard}
-        <Box mb={4} py={4} display="flex" alignItems="flex-start">
+        <Box mb={4} display="flex" alignItems="flex-start">
           {md ? (
             <Sidebar
               flexGrow={0}

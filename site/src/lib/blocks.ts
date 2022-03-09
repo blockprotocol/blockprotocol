@@ -5,19 +5,21 @@ import hostedGitInfo from "hosted-git-info";
 export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
+  blockPackagePath: string;
+  lastUpdated?: string | null;
   packagePath: string;
   repository?: string;
-  lastUpdated?: string | null;
+  schema?: string | null;
 };
 
-export type BuildConfig = {
-  folder?: string | null;
-  workspace?: string | null;
+export interface StoredBlockInfo {
   repository: string;
-  branch: string;
-  distDir: string;
-  timestamp?: string | null;
-};
+  commit: string;
+
+  distDir?: string;
+  folder?: string;
+  workspace?: string;
+}
 
 const getBlockMediaUrl = (
   mediaPath: string | undefined | null,
@@ -36,29 +38,34 @@ const getBlockMediaUrl = (
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
 const getRepositoryUrl = (
-  repository: BlockMetadataRepository | null,
-): string | null => {
+  repository: BlockMetadataRepository | undefined,
+  commit: string,
+): string | undefined => {
   if (typeof repository === "string") {
-    const repositoryUrl = hostedGitInfo.fromUrl(repository)?.browse("");
+    const repositoryUrl = hostedGitInfo
+      .fromUrl(repository)
+      ?.browse("", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
     }
 
-    return null;
+    return undefined;
   }
 
   const { url, directory } = repository ?? {};
 
   if (url) {
-    const repositoryUrl = hostedGitInfo.fromUrl(url)?.browse(directory ?? "");
+    const repositoryUrl = hostedGitInfo
+      .fromUrl(url)
+      ?.browse(directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
     }
   }
 
-  return null;
+  return undefined;
 };
 
 /**
@@ -73,7 +80,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
-    .map((path: string) => {
+    .map((path: string): ExpandedBlockMetadata => {
       const packagePath = path.split("/").slice(-3, -1).join("/");
 
       const metadata: ExpandedBlockMetadata = {
@@ -82,23 +89,16 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
       };
 
-      const blockConfig: BuildConfig = JSON.parse(
+      const storedBlockInfo: StoredBlockInfo = JSON.parse(
         fs.readFileSync(`${process.cwd()}/../hub/${packagePath}.json`, {
           encoding: "utf8",
         }),
       );
 
-      let blockRepository = metadata.repository ?? null;
-
-      if (!blockRepository && blockConfig) {
-        blockRepository = `${blockConfig.repository}#${blockConfig.branch}`;
-      }
-
-      let repository = getRepositoryUrl(blockRepository);
-
-      if (repository) {
-        repository = repository.replace(/\/$/, "");
-      }
+      const repository = getRepositoryUrl(
+        metadata.repository ?? storedBlockInfo.repository,
+        storedBlockInfo.commit,
+      )?.replace(/\/$/, "");
 
       return {
         ...metadata,
@@ -106,7 +106,10 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
         image: getBlockMediaUrl(metadata.image, metadata.packagePath),
         repository,
-        lastUpdated: blockConfig?.timestamp ?? null,
+        blockPackagePath: `/${metadata.packagePath
+          .split("/")
+          .join("/blocks/")}`,
+        lastUpdated: null, // TODO: derive from block data when provided by the hub
       };
     });
 };
