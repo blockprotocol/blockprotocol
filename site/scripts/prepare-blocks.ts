@@ -148,7 +148,7 @@ const ensureRepositorySnapshot = async ({
     return repositorySnapshotDirPath;
   }
 
-  const { path: tarDirPath, cleanup: cleanupTarDirPath } = await tmp.dir({
+  const { path: tarDirPath, cleanup: cleanupTarDir } = await tmp.dir({
     unsafeCleanup: true,
   });
 

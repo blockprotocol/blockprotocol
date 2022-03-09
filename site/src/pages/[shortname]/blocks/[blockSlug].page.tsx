@@ -102,8 +102,11 @@ const parseQueryParams = (params: BlockPageQueryParams) => {
   return { shortname, blockSlug };
 };
 
-// Show `github.com/org/repo` instead of full URL with protocol, commit hash and path
-const generateRepositoryUrl = (repository: string): string => {
+/**
+ * Helps display `github.com/org/repo` instead of a full URL with protocol, commit hash and path.
+ * If a URL is not recognised as a GitHub repo, only `https://` is removed.
+ */
+const generateRepositoryDisplayUrl = (repository: string): string => {
   const repositoryUrlObject = new URL(repository);
   const displayUrl = `${repositoryUrlObject.hostname}${repositoryUrlObject.pathname}`;
 
