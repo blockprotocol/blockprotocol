@@ -138,8 +138,6 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  // getStaticProps doesn't parse undefined, so returning an empty string instead
-
   const { schema, source: blockStringifiedSource } =
     readBlockDataFromDisk(blockMetadata);
 
