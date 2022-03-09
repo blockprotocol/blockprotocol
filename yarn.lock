@@ -6575,7 +6575,7 @@ lockfile-lint-api@^5.1.7:
     debug "^4.1.1"
     object-hash "^2.0.1"
 
-lockfile-lint@^4.6.2:
+lockfile-lint@4.6.2:
   version "4.6.2"
   resolved "https://registry.yarnpkg.com/lockfile-lint/-/lockfile-lint-4.6.2.tgz#ca4a896f702ea22b04d4084246ce0ecfb2b4ff74"
   integrity sha512-TvWN2Yfc/dvSy1GKdpy0wJ6GCvq/9Qj457D+QQtP+eYvsX4zNp3vaaB2LS1d+TK1lO/7I0VQ0qqRCRCOzSj2wQ==
