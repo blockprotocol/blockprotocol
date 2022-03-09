@@ -176,7 +176,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
     <Box display="flex" flexDirection="column" alignItems="center">
       <EnvelopeDotIcon
         sx={{
-          fontSize: 50,
+          fontSize: 60,
           color: ({ palette }) => palette.purple[600],
           marginBottom: 3,
         }}

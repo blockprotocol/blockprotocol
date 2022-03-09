@@ -67,7 +67,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
     <Box display="flex" flexDirection="column" alignItems="center">
       <BadgeCheckIcon
         sx={{
-          fontSize: 50,
+          fontSize: 60,
           color: ({ palette }) => palette.purple[600],
           marginBottom: 3,
         }}

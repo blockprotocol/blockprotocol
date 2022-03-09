@@ -54,8 +54,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
           ) : (
             <TableTreeIcon
               sx={{
-                height: 24,
-                width: 24,
+                fontSize: 24,
                 color: ({ palette }) => palette.gray[90],
               }}
             />

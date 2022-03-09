@@ -7,7 +7,7 @@ import { Button } from "../components/Button";
 import { SignupScreen } from "../components/Screens/SignupScreen";
 import {
   FontAwesomeSvgIcon,
-  UpIcon,
+  ArrowUpCircleIcon,
   PullRequestIcon,
 } from "../components/icons";
 import {
@@ -249,9 +249,9 @@ const SignupPage: NextPage = () => {
               [
                 {
                   icon: (
-                    <UpIcon
+                    <ArrowUpCircleIcon
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
                     />
@@ -268,7 +268,7 @@ const SignupPage: NextPage = () => {
                   icon: (
                     <PullRequestIcon
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
                     />
@@ -286,7 +286,7 @@ const SignupPage: NextPage = () => {
                     <FontAwesomeSvgIcon
                       icon={faUser}
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
                     />

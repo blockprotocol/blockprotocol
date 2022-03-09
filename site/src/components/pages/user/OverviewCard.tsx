@@ -115,8 +115,7 @@ export const OverviewCard: VFC<OverviewCardProps> = ({
             ) : (
               <TableTreeIcon
                 sx={{
-                  height: 24,
-                  width: 24,
+                  fontSize: 24,
                   mr: 1.5,
                   color: ({ palette }) => palette.gray[90],
                 }}
