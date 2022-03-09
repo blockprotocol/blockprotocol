@@ -58,7 +58,6 @@ type BlockPageProps = {
   blockMetadata: BlockMetadata;
   blockStringifiedSource: string;
   catalog: BlockMetadata[];
-  repositoryDisplayUrl: string;
   schema: BlockSchema;
 };
 
@@ -140,9 +139,6 @@ export const getStaticProps: GetStaticProps<
   }
 
   // getStaticProps doesn't parse undefined, so returning an empty string instead
-  const repositoryDisplayUrl = blockMetadata.repository
-    ? generateRepositoryUrl(blockMetadata.repository)
-    : "";
 
   const { schema, source: blockStringifiedSource } =
     readBlockDataFromDisk(blockMetadata);
@@ -152,7 +148,6 @@ export const getStaticProps: GetStaticProps<
       blockMetadata,
       blockStringifiedSource,
       catalog,
-      repositoryDisplayUrl,
       schema,
     },
     revalidate: 1800,
@@ -163,7 +158,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
   blockMetadata,
   blockStringifiedSource,
   catalog,
-  repositoryDisplayUrl,
   schema,
 }) => {
   const { query } = useRouter();
@@ -185,6 +179,10 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const sliderItems = useMemo(() => {
     return catalog.filter(({ name }) => name !== blockMetadata.name);
   }, [catalog, blockMetadata]);
+
+  const repositoryDisplayUrl = blockMetadata.repository
+    ? generateRepositoryDisplayUrl(blockMetadata.repository)
+    : "";
 
   return (
     <>

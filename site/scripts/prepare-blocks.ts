@@ -189,7 +189,7 @@ const ensureRepositorySnapshot = async ({
     console.log(`Repository snapshot ready in ${repositorySnapshotDirPath}`);
     return repositorySnapshotDirPath;
   } finally {
-    await cleanupTarDirPath();
+    await cleanupTarDir();
   }
 };
 
