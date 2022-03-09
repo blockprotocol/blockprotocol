@@ -148,42 +148,48 @@ const ensureRepositorySnapshot = async ({
     return repositorySnapshotDirPath;
   }
 
-  const { path: untarDirPath, cleanup: cleanupUntarDirPath } = await tmp.dir({
+  const { path: tarDirPath, cleanup: cleanupTarDirPath } = await tmp.dir({
     unsafeCleanup: true,
   });
 
   try {
     console.log(chalk.green(`Downloading ${tarballUrl}...`));
-    // @todo Consider finding cross-platform NPM packages for curl and untar commands
+    // @todo Consider finding cross-platform NPM packages for curl and tar commands
     await execa(
       "curl",
-      ["-sL", "-o", path.resolve(untarDirPath, `repo.tar.gz`), tarballUrl],
+      ["-sL", "-o", path.resolve(tarDirPath, `repo.tar.gz`), tarballUrl],
       defaultExecaOptions,
     );
 
-    const untarPath = path.resolve(untarDirPath, "repo");
+    const outputDirPath = path.resolve(tarDirPath, "repo");
 
-    console.log(chalk.green(`Creating output directory...`));
-    await execa("mkdir", ["-p", untarPath]);
+    console.log(chalk.green(`Ensuring output directory exists...`));
+    await fs.ensureDir(outputDirPath);
 
     console.log(chalk.green(`Unpacking archive...`));
 
     await execa(
       "tar",
-      ["-xvf", path.resolve(untarDirPath, "repo.tar.gz"), "-C", untarPath],
+      [
+        "--extract",
+        `--file=${path.resolve(tarDirPath, "repo.tar.gz")}`,
+        `--directory=${outputDirPath}`,
+        "--verbose",
+      ],
       defaultExecaOptions,
     );
 
-    const innerDir = await fs.readdir(untarPath);
+    const innerDirName = (await fs.readdir(outputDirPath))[0]!;
+
     await fs.move(
-      path.resolve(untarPath, innerDir[0]!),
+      path.resolve(outputDirPath, innerDirName),
       repositorySnapshotDirPath,
     );
 
     console.log(`Repository snapshot ready in ${repositorySnapshotDirPath}`);
     return repositorySnapshotDirPath;
   } finally {
-    await cleanupUntarDirPath();
+    await cleanupTarDirPath();
   }
 };
 
