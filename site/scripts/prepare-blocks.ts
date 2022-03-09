@@ -154,7 +154,7 @@ const ensureRepositorySnapshot = async ({
 
   try {
     console.log(chalk.green(`Downloading ${tarballUrl}...`));
-    // @todo Consider finding cross-platform NPM packages for curl and tar commands
+    // @todo Consider finding cross-platform NPM packages for `curl` and `tar` commands
     await execa(
       "curl",
       ["-sL", "-o", path.resolve(tarDirPath, `repo.tar.gz`), tarballUrl],
