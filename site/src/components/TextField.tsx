@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeSvgIcon } from "./icons";
+import { FontAwesomeIcon } from "./icons";
 
 type TextFieldProps = {
   displayErrorOnTouched?: boolean;
@@ -47,7 +47,7 @@ export const TextField: VFC<TextFieldProps> = ({
           ...{ notched: false },
           endAdornment: textFieldProps.error ? (
             <Box>
-              <FontAwesomeSvgIcon
+              <FontAwesomeIcon
                 icon={faCircleExclamation}
                 sx={{
                   fontSize: 22,

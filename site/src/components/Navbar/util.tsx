@@ -1,5 +1,5 @@
 import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
-import { BlockHubIcon, SpecificationIcon, FontAwesomeSvgIcon } from "../icons";
+import { BlockHubIcon, SpecificationIcon, FontAwesomeIcon } from "../icons";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 
@@ -17,7 +17,7 @@ export const NAVBAR_LINK_ICONS: Record<string, JSX.Element> = {
     />
   ),
   Documentation: (
-    <FontAwesomeSvgIcon
+    <FontAwesomeIcon
       icon={faBookOpen}
       sx={{
         fontSize: 18,

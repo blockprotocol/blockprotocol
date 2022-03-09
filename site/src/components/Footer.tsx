@@ -14,11 +14,7 @@ import {
   faTwitter,
   faDiscord,
 } from "@fortawesome/free-brands-svg-icons";
-import {
-  BlockProtocolLogoIcon,
-  HASHLogoIcon,
-  FontAwesomeSvgIcon,
-} from "./icons";
+import { BlockProtocolLogoIcon, HASHLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./Link";
 import { LinkButton } from "./LinkButton";
 
@@ -83,17 +79,17 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
 const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
     name: "Twitter",
-    icon: <FontAwesomeSvgIcon icon={faTwitter} />,
+    icon: <FontAwesomeIcon icon={faTwitter} />,
     href: "https://twitter.com/blockprotocol",
   },
   {
     name: "Discord",
-    icon: <FontAwesomeSvgIcon icon={faDiscord} />,
+    icon: <FontAwesomeIcon icon={faDiscord} />,
     href: "/discord",
   },
   {
     name: "GitHub",
-    icon: <FontAwesomeSvgIcon icon={faGithub} />,
+    icon: <FontAwesomeIcon icon={faGithub} />,
     href: "https://github.com/blockprotocol",
   },
 ];
@@ -151,7 +147,7 @@ const Socials = (
         paddingLeft: 2.2,
         marginLeft: 2.2,
       }}
-      startIcon={<FontAwesomeSvgIcon icon={faStar} />}
+      startIcon={<FontAwesomeIcon icon={faStar} />}
     >
       Star us on GitHub
     </LinkButton>

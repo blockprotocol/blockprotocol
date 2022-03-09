@@ -13,7 +13,7 @@ import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../components/Screens/VerificationCodeScreen";
-import { FontAwesomeSvgIcon } from "../components/icons";
+import { FontAwesomeIcon } from "../components/icons";
 
 type LoginPageParsedUrlQuery = {
   redirectPath?: string;
@@ -143,10 +143,7 @@ const LoginPage: NextPage = () => {
                   onClick={() => setCurrentScreen("Email")}
                   variant="transparent"
                   startIcon={
-                    <FontAwesomeSvgIcon
-                      icon={faArrowLeft}
-                      sx={{ fontSize: 16 }}
-                    />
+                    <FontAwesomeIcon icon={faArrowLeft} sx={{ fontSize: 16 }} />
                   }
                   sx={{
                     fontSize: 15,

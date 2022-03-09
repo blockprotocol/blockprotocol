@@ -5,7 +5,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { Link } from "../Link";
 import { itemIsPage } from "./util";
-import { FontAwesomeSvgIcon } from "../icons";
+import { FontAwesomeIcon } from "../icons";
 
 type MobileBreadcrumbsProps = {
   crumbs: (SiteMapPage | SiteMapPageSection)[];
@@ -19,7 +19,7 @@ export const MobileBreadcrumbs: VFC<MobileBreadcrumbsProps> = ({ crumbs }) => {
       sx={{
         marginTop: 2,
       }}
-      separator={<FontAwesomeSvgIcon icon={faChevronRight} />}
+      separator={<FontAwesomeIcon icon={faChevronRight} />}
     >
       {crumbs.map((item, i) =>
         i < crumbs.length - 1 ? (

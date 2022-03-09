@@ -14,7 +14,7 @@ import {
   faCheckCircle,
   faFileAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeSvgIcon } from "../../../icons";
+import { FontAwesomeIcon } from "../../../icons";
 
 /**
  * This file contains code needed for the sticky section in Section2.tsx
@@ -162,7 +162,7 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
               key={id}
             >
               {completed ? (
-                <FontAwesomeSvgIcon
+                <FontAwesomeIcon
                   sx={{
                     height: 19,
                     width: 19,
@@ -213,7 +213,7 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
               key={id}
             >
               {completed ? (
-                <FontAwesomeSvgIcon
+                <FontAwesomeIcon
                   sx={{
                     height: 19,
                     width: 19,
@@ -459,7 +459,7 @@ const App: FC<AppProps> = ({ name, block }) => {
             color: ({ palette }) => palette.gray[70],
           }}
         >
-          <FontAwesomeSvgIcon
+          <FontAwesomeIcon
             icon={icon}
             sx={{
               m: 1,

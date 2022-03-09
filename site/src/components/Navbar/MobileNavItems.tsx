@@ -24,7 +24,7 @@ import { Link } from "../Link";
 import SiteMapContext from "../../context/SiteMapContext";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 import Search from "../pages/docs/Search";
-import { FontAwesomeSvgIcon } from "../icons";
+import { FontAwesomeIcon } from "../icons";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: JSX.Element;
@@ -100,7 +100,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
               })}
             >
               {icon ?? (
-                <FontAwesomeSvgIcon
+                <FontAwesomeIcon
                   icon={faHashtag}
                   sx={{ color: "inherit", fontSize: 15 }}
                 />
@@ -140,7 +140,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
                 );
               }}
             >
-              <FontAwesomeSvgIcon
+              <FontAwesomeIcon
                 sx={{
                   fontSize: 15,
                 }}

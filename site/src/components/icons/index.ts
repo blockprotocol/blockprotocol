@@ -12,7 +12,7 @@ export * from "./HASHLogoIcon";
 export * from "./SpecificationIcon";
 export * from "./SyncIcon";
 export * from "./WarningIcon";
-export * from "./FontAwesomeSvgIcon";
+export * from "./FontAwesomeIcon";
 export * from "./PullRequestIcon";
 export * from "./TableTreeIcon";
 export * from "./BadgeCheckIcon";

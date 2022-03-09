@@ -15,7 +15,7 @@ import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
 import { InfoCard } from "../components/InfoCard/InfoCard";
 import { Snippet } from "../components/Snippet";
 import PageHeadingsContext from "../components/context/PageHeadingsContext";
-import { FontAwesomeSvgIcon } from "../components/icons";
+import { FontAwesomeIcon } from "../components/icons";
 
 const Heading = styled(Typography)(({ theme }) => ({
   "svg.link-icon": {
@@ -70,7 +70,7 @@ const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
         width: size,
       }}
     >
-      <FontAwesomeSvgIcon
+      <FontAwesomeIcon
         icon={faLink}
         className="link-icon"
         sx={{

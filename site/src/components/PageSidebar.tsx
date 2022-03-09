@@ -23,7 +23,7 @@ import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Link } from "./Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 import { parseIntFromPixelString } from "../util/muiUtils";
-import { FontAwesomeSvgIcon } from "./icons";
+import { FontAwesomeIcon } from "./icons";
 
 export const SIDEBAR_WIDTH = 220;
 
@@ -123,7 +123,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
               },
             })}
           >
-            <FontAwesomeSvgIcon
+            <FontAwesomeIcon
               icon={faChevronRight}
               sx={{
                 fontSize: 14,
@@ -226,7 +226,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               },
             })}
           >
-            <FontAwesomeSvgIcon icon={faChevronRight} />
+            <FontAwesomeIcon icon={faChevronRight} />
           </IconButton>
         ) : null}
       </Box>

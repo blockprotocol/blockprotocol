@@ -10,9 +10,9 @@ import {
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "./Link";
 import { SiteMapPage } from "../lib/sitemap";
-import { FontAwesomeSvgIcon } from "./icons";
+import { FontAwesomeIcon } from "./icons";
 
-const NavArrowIcon = styled(FontAwesomeSvgIcon)(({ theme }) => ({
+const NavArrowIcon = styled(FontAwesomeIcon)(({ theme }) => ({
   color: theme.palette.purple[300],
   fontSize: 15,
   marginTop: theme.spacing(0.8),

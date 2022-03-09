@@ -6,7 +6,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
-import { SyncIcon, FontAwesomeSvgIcon } from "../../icons";
+import { SyncIcon, FontAwesomeIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
 export const WhyBlockProtocol2Section = () => {
@@ -50,7 +50,7 @@ export const WhyBlockProtocol2Section = () => {
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <FontAwesomeSvgIcon
+            <FontAwesomeIcon
               icon={faPencil}
               sx={{ fontSize: "inherit", mr: 1.25 }}
             />
@@ -80,7 +80,7 @@ export const WhyBlockProtocol2Section = () => {
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <FontAwesomeSvgIcon
+            <FontAwesomeIcon
               icon={faCheckCircle}
               sx={{
                 fontSize: "inherit",

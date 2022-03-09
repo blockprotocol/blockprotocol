@@ -24,7 +24,7 @@ import {
   readBlockDataFromDisk,
   ExpandedBlockMetadata as BlockMetadata,
 } from "../../../lib/blocks";
-import { FontAwesomeSvgIcon } from "../../../components/icons";
+import { FontAwesomeIcon } from "../../../components/icons";
 import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../../components/Link";
 
@@ -176,7 +176,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           <Box mb={1}>
             <Breadcrumbs
               separator={
-                <FontAwesomeSvgIcon
+                <FontAwesomeIcon
                   icon={faChevronRight}
                   sx={{
                     fontSize: 14,

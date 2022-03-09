@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Link } from "./Link";
-import { BlockProtocolLogoIcon, BoltIcon, FontAwesomeSvgIcon } from "./icons";
+import { BlockProtocolLogoIcon, BoltIcon, FontAwesomeIcon } from "./icons";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import SiteMapContext from "../context/SiteMapContext";
 import { useUser } from "../context/UserContext";
@@ -367,7 +367,7 @@ export const Navbar: VFC<NavbarProps> = ({
                       : {},
                   }}
                 >
-                  <FontAwesomeSvgIcon icon={faBars} />
+                  <FontAwesomeIcon icon={faBars} />
                 </IconButton>
               )}
               <AccountDropdown />

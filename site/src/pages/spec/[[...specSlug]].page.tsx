@@ -25,7 +25,7 @@ import { PageNavLinks } from "../../components/PageNavLinks";
 import { parseIntFromPixelString } from "../../util/muiUtils";
 import Search from "../../components/pages/docs/Search";
 import { LinkButton } from "../../components/LinkButton";
-import { FontAwesomeSvgIcon } from "../../components/icons";
+import { FontAwesomeIcon } from "../../components/icons";
 
 const GitHubInfoCard = (
   <Paper
@@ -54,7 +54,7 @@ const GitHubInfoCard = (
         },
       }}
     >
-      <FontAwesomeSvgIcon
+      <FontAwesomeIcon
         sx={{
           color: ({ palette }) => palette.teal[600],
           fontSize: 18,
@@ -129,7 +129,7 @@ const GitHubInfoCard = (
         variant="primary"
         color="teal"
         size="small"
-        startIcon={<FontAwesomeSvgIcon icon={faGithub} />}
+        startIcon={<FontAwesomeIcon icon={faGithub} />}
         sx={{
           textTransform: "none",
         }}

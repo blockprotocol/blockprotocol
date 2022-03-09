@@ -11,7 +11,7 @@ import {
 } from "../Screens/VerificationCodeScreen";
 import { apiClient } from "../../lib/apiClient";
 import { useScrollLock } from "../../util/muiUtils";
-import { FontAwesomeSvgIcon } from "../icons";
+import { FontAwesomeIcon } from "../icons";
 
 type LoginModalProps = {
   onClose: () => void;
@@ -117,7 +117,7 @@ export const LoginModal: VFC<LoginModalProps> = ({
                     onClick={() => setCurrentPage("Email")}
                     variant="transparent"
                     startIcon={
-                      <FontAwesomeSvgIcon
+                      <FontAwesomeIcon
                         icon={faArrowLeft}
                         sx={{ fontSize: 16 }}
                       />
@@ -134,7 +134,7 @@ export const LoginModal: VFC<LoginModalProps> = ({
                 onClick={handleClose}
                 variant="transparent"
                 endIcon={
-                  <FontAwesomeSvgIcon icon={faTimes} sx={{ fontSize: 16 }} />
+                  <FontAwesomeIcon icon={faTimes} sx={{ fontSize: 16 }} />
                 }
                 sx={{
                   fontSize: 15,

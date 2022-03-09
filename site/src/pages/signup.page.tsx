@@ -6,7 +6,7 @@ import { faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../components/Button";
 import { SignupScreen } from "../components/Screens/SignupScreen";
 import {
-  FontAwesomeSvgIcon,
+  FontAwesomeIcon,
   ArrowUpCircleIcon,
   PullRequestIcon,
 } from "../components/icons";
@@ -164,10 +164,7 @@ const SignupPage: NextPage = () => {
                   disabled={currentScreen === SIGNUP_PAGE_SCREENS[0]}
                   variant="transparent"
                   startIcon={
-                    <FontAwesomeSvgIcon
-                      icon={faArrowLeft}
-                      sx={{ fontSize: 16 }}
-                    />
+                    <FontAwesomeIcon icon={faArrowLeft} sx={{ fontSize: 16 }} />
                   }
                   sx={{
                     fontSize: 15,
@@ -283,7 +280,7 @@ const SignupPage: NextPage = () => {
                 },
                 {
                   icon: (
-                    <FontAwesomeSvgIcon
+                    <FontAwesomeIcon
                       icon={faUser}
                       sx={{
                         fontSize: 20,
