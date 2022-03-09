@@ -101,18 +101,20 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
 const Socials = (
   <Box
     mt={3}
+    mb={2.5}
     display="flex"
     flexDirection="row"
     alignItems="center"
     flexWrap="wrap"
   >
-    <Box marginBottom={2.5} flexShrink={0}>
-      {SOCIALS.map(({ href, icon }) => (
+    <Box flexShrink={0}>
+      {SOCIALS.map(({ href, icon }, index) => (
         <Link
           href={href}
           key={href}
           sx={{
-            marginRight: 2.2,
+            padding: 1.5,
+            ...(index === 0 && { paddingLeft: 0 }),
             color: (theme) => theme.palette.gray[50],
             ":hover": {
               svg: {
@@ -128,7 +130,7 @@ const Socials = (
               outlineColor: (theme) => theme.palette.gray[50],
             },
             svg: {
-              padding: 0.3,
+              fontSize: 20,
               transition: (theme) =>
                 theme.transitions.create("color", { duration: 150 }),
               color: "inherit",
@@ -147,9 +149,7 @@ const Socials = (
       sx={{
         flexShrink: 0,
         paddingLeft: 2.2,
-        marginLeft: 0.3,
-        marginBottom: 2.5,
-        marginTop: -0.7,
+        marginLeft: 2.2,
       }}
       startIcon={<FontAwesomeSvgIcon icon={faStar} />}
     >
