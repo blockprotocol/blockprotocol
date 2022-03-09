@@ -15,7 +15,7 @@ jobs:
       - name: Fetch URLs that use AWS Lambda
         run: |
           cat << EOF > curl-format.txt
-            %{url}\n
+            %{url_effective}\n
               Status code: %{http_code}\n
               Time: %{time_total}\n
             \n
