@@ -104,9 +104,10 @@ const parseQueryParams = (params: BlockPageQueryParams) => {
 
 // Show `github.com/org/repo` instead of full URL with protocol, commit hash and path
 const generateRepositoryUrl = (repository: string): string => {
-  const displayUrl = repository.replace(/^https?:\/\//, "");
+  const repositoryUrlObject = new URL(repository);
+  const displayUrl = `${repositoryUrlObject.hostname}${repositoryUrlObject.pathname}`;
 
-  if (repository.includes("github.com/")) {
+  if (repositoryUrlObject.hostname === "github.com") {
     return displayUrl.split("/").slice(0, 3).join("/");
   }
 
