@@ -1,17 +1,24 @@
 import React from "react";
 import { NextPage, GetStaticPaths, GetStaticProps } from "next";
 
+import { useRouter } from "next/router";
+import Error from "next/error";
 import { apiClient } from "../../lib/apiClient";
 
 import {
   UserPageComponent,
   UserPageProps,
 } from "../../components/pages/user/UserPageComponent";
-import { TABS, TabValue } from "../../components/pages/user/Tabs";
+import { TABS } from "../../components/pages/user/Tabs";
 
 type UserPageQueryParams = {
   profileTabs: string[];
   shortname: string;
+};
+
+const findTab = (rawProfileTabs: string[] | string | undefined) => {
+  const activeTabSlug = rawProfileTabs?.[0] ?? "";
+  return TABS.find((tab) => tab.slug === activeTabSlug);
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -22,13 +29,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps<
-  UserPageProps,
+  Omit<UserPageProps, "activeTab">,
   UserPageQueryParams
 > = async ({ params }) => {
-  const { shortname, profileTabs } = params || {};
-
-  if (typeof shortname !== "string" || !shortname?.startsWith("@")) {
+  const shortname = params?.shortname;
+  if (typeof shortname !== "string" || !shortname.startsWith("@")) {
     return { notFound: true };
+  }
+
+  const matchingTab = findTab(params?.profileTabs);
+  if (!matchingTab) {
+    return {
+      notFound: true,
+    };
   }
 
   const [userResponse, blocksResponse, entityTypesResponse] = await Promise.all(
@@ -49,37 +62,32 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true, revalidate: 60 };
   }
 
-  let initialActiveTab: TabValue = TABS[0].value;
-
-  const matchingTab = TABS.find((tab) => tab.slug === profileTabs?.[0]);
-
-  if (matchingTab) {
-    initialActiveTab = matchingTab.value;
-  }
-
   return {
     props: {
       blocks: blocksResponse.data?.blocks || [],
       entityTypes: entityTypesResponse.data?.entityTypes || [],
-      initialActiveTab,
-      user: userResponse.data?.user,
+      user: userResponse.data.user,
     },
     revalidate: 60,
   };
 };
 
-const UserPage: NextPage<UserPageProps> = ({
-  user,
-  blocks,
-  entityTypes,
-  initialActiveTab,
-}) => {
+const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
+  const router = useRouter();
+
+  const matchingTab = findTab(router.query.profileTabs);
+
+  // Protect against unlikely client-side navigation to a non-existing profile tab
+  if (!matchingTab) {
+    return <Error statusCode={404} />;
+  }
+
   return (
     <UserPageComponent
       user={user}
       blocks={blocks}
       entityTypes={entityTypes}
-      initialActiveTab={initialActiveTab}
+      activeTab={matchingTab!.value}
     />
   );
 };
