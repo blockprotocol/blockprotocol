@@ -1,5 +1,5 @@
 import React from "react";
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage, GetStaticPaths, GetStaticProps } from "next";
 
 import { apiClient } from "../../lib/apiClient";
 
@@ -14,7 +14,14 @@ type UserPageQueryParams = {
   shortname: string;
 };
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps<
   UserPageProps,
   UserPageQueryParams
 > = async ({ params }) => {
@@ -39,7 +46,7 @@ export const getServerSideProps: GetServerSideProps<
   );
 
   if (userResponse.error || !userResponse.data) {
-    return { notFound: true };
+    return { notFound: true, revalidate: 60 };
   }
 
   let initialActiveTab: TabValue = TABS[0].value;
@@ -57,6 +64,7 @@ export const getServerSideProps: GetServerSideProps<
       initialActiveTab,
       user: userResponse.data?.user,
     },
+    revalidate: 60,
   };
 };
 
