@@ -1,5 +1,5 @@
 import React from "react";
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage, GetStaticPaths, GetStaticProps } from "next";
 
 import { useRouter } from "next/router";
 import Error from "next/error";
@@ -21,7 +21,14 @@ const findTab = (rawProfileTabs: string[] | string | undefined) => {
   return TABS.find((tab) => tab.slug === activeTabSlug);
 };
 
-export const getServerSideProps: GetServerSideProps<
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps<
   Omit<UserPageProps, "activeTab">,
   UserPageQueryParams
 > = async ({ params }) => {
@@ -52,7 +59,7 @@ export const getServerSideProps: GetServerSideProps<
   );
 
   if (userResponse.error || !userResponse.data) {
-    return { notFound: true };
+    return { notFound: true, revalidate: 60 };
   }
 
   return {
@@ -61,6 +68,7 @@ export const getServerSideProps: GetServerSideProps<
       entityTypes: entityTypesResponse.data?.entityTypes || [],
       user: userResponse.data.user,
     },
+    revalidate: 60,
   };
 };
 
