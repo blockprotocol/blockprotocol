@@ -6,6 +6,18 @@ type DistributedOmit<T, K extends PropertyKey> = T extends T
 
 type UnknownRecord = Record<string, unknown>;
 
+export type JSONValue =
+  | null
+  | boolean
+  | number
+  | string
+  | JSONValue[]
+  | JSONObject;
+
+export type JSONObject = { [key: string]: JSONValue };
+
+export interface JSONArray extends Array<JSONValue> {}
+
 // -------------------------- BLOCK METADATA -------------------------- //
 
 export type BlockVariant = {
@@ -16,12 +28,8 @@ export type BlockVariant = {
    * @deprecated - Use the `name` field instead.
    */
   displayName: string;
-  properties: UnknownRecord;
-  examples?:
-    | {
-        [k: string]: unknown;
-      }[]
-    | null;
+  properties: JSONObject;
+  examples?: JSONObject[] | null;
 };
 
 export type BlockMetadataRepository =
@@ -40,7 +48,7 @@ export type BlockMetadata = {
   /**
    * The default data used as the block's properties on first load - must comply with its schema
    */
-  default?: UnknownRecord | null;
+  default?: JSONObject | null;
   /**
    * A short description of the block, to help users understand its capabilities
    */
@@ -52,15 +60,11 @@ export type BlockMetadata = {
   /**
    * A list of examples used to showcase a block's capabilities
    */
-  examples?:
-    | {
-        [k: string]: unknown;
-      }[]
-    | null;
+  examples?: JSONObject[] | null;
   /**
    * The dependencies a block relies on but expects the embedding application to provide
    */
-  externals?: UnknownRecord[];
+  externals?: JSONObject[];
   /**
    * An icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block).
    */
@@ -434,18 +438,6 @@ export type BlockProtocolFunctions = {
 
   uploadFile?: BlockProtocolUploadFileFunction | undefined;
 };
-
-export type JSONValue =
-  | null
-  | boolean
-  | number
-  | string
-  | JSONValue[]
-  | JSONObject;
-
-export type JSONObject = { [key: string]: JSONValue };
-
-export interface JSONArray extends Array<JSONValue> {}
 
 /**
  * Block Protocol-specified properties,
