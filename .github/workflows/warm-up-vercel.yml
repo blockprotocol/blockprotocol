@@ -2,7 +2,7 @@
 ## a cold Lambda function may take 5-15 seconds to execute. This pipeline warms up Lambda
 ## containers for new deployments and keeps them up by fetching affected URLs every 10 minutes.
 
-name: Warm-up Vercel
+name: Warm up Vercel
 
 on:
   deployment_status:
@@ -12,8 +12,7 @@ on:
 jobs:
   fetch:
     name: "Fetch"
-    if: |
-      !github.event.deployment_status || github.event.deployment_status.state == 'success'
+    if: github.event_name == 'schedule' || github.event.deployment_status.state == 'success'
     runs-on: ubuntu-20.04
     steps:
       - name: Fetch URLs that use AWS Lambda
@@ -29,4 +28,4 @@ jobs:
             curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
           done
         env:
-          BASE_URL: ${{ github.event.deployment_status && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
+          BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
