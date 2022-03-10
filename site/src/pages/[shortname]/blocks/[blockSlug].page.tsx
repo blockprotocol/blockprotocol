@@ -56,9 +56,9 @@ const Bullet: VoidFunctionComponent = () => {
 
 type BlockPageProps = {
   blockMetadata: BlockMetadata;
-  schema: BlockSchema;
   blockStringifiedSource: string;
   catalog: BlockMetadata[];
+  schema: BlockSchema;
 };
 
 type BlockPageQueryParams = {
@@ -101,6 +101,21 @@ const parseQueryParams = (params: BlockPageQueryParams) => {
   return { shortname, blockSlug };
 };
 
+/**
+ * Helps display `github.com/org/repo` instead of a full URL with protocol, commit hash and path.
+ * If a URL is not recognised as a GitHub repo, only `https://` is removed.
+ */
+const generateRepositoryDisplayUrl = (repository: string): string => {
+  const repositoryUrlObject = new URL(repository);
+  const displayUrl = `${repositoryUrlObject.hostname}${repositoryUrlObject.pathname}`;
+
+  if (repositoryUrlObject.hostname === "github.com") {
+    return displayUrl.split("/").slice(0, 3).join("/");
+  }
+
+  return displayUrl;
+};
+
 export const getStaticProps: GetStaticProps<
   BlockPageProps,
   BlockPageQueryParams
@@ -129,9 +144,9 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       blockMetadata,
-      schema,
       blockStringifiedSource,
       catalog,
+      schema,
     },
     revalidate: 1800,
   };
@@ -139,9 +154,9 @@ export const getStaticProps: GetStaticProps<
 
 const BlockPage: NextPage<BlockPageProps> = ({
   blockMetadata,
-  schema,
   blockStringifiedSource,
   catalog,
+  schema,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
@@ -162,6 +177,10 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const sliderItems = useMemo(() => {
     return catalog.filter(({ name }) => name !== blockMetadata.name);
   }, [catalog, blockMetadata]);
+
+  const repositoryDisplayUrl = blockMetadata.repository
+    ? generateRepositoryDisplayUrl(blockMetadata.repository)
+    : "";
 
   return (
     <>
@@ -316,12 +335,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
                 >
                   <Link href={blockMetadata.repository}>
-                    {/* Show `github.com/org/repo` instead of full URL with protocol, commit hash and path */}
-                    {blockMetadata.repository
-                      .replace(/^https?:\/\//, "")
-                      .split("/")
-                      .slice(0, 3)
-                      .join("/")}
+                    {repositoryDisplayUrl}
                   </Link>
                 </Typography>
               </Box>

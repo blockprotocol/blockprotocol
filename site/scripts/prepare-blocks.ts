@@ -21,6 +21,8 @@ import md5 from "md5";
 import Ajv, { JSONSchemaType } from "ajv";
 import tmp from "tmp-promise";
 import slugify from "slugify";
+import hostedGitInfo from "hosted-git-info";
+
 import { StoredBlockInfo } from "../src/lib/blocks";
 
 const monorepoRoot = path.resolve(__dirname, "../..");
@@ -117,26 +119,18 @@ const ensureRepositorySnapshot = async ({
   commit: string;
   workshopDirPath: string;
 }): Promise<string> => {
-  if (
-    !repositoryHref.match(/^https:\/\/github.com\/[\w-]+\/[\w-]+(\/|.git)?$/i)
-  ) {
-    if (repositoryHref.startsWith("https?://github.com")) {
-      throw new Error(
-        `Cannot handle repository URL ${repositoryHref}. Only GitHub links are currently supported. We will add more services based on the demand.`,
-      );
-    } else {
-      throw new Error(
-        `Cannot handle repository URL ${repositoryHref}. It needs to match https://github.com/org/repo`,
-      );
-    }
+  const tarballUrl = hostedGitInfo
+    .fromUrl(repositoryHref)
+    ?.tarball({ committish: commit });
+
+  if (!tarballUrl) {
+    throw new Error(
+      `Cannot get tarball for repository URL ${repositoryHref}. It needs to be a valid repository URL.`,
+    );
   }
 
-  const normalizedRepoUrl = repositoryHref
-    .replace(/(\/|.git)$/i, "")
-    .toLowerCase();
-  const zipUrl = `${normalizedRepoUrl}/archive/${commit}.zip`;
   const repositorySnapshotSlug = slugify(
-    `${normalizedRepoUrl.replace("https://", "")}-${commit}`,
+    tarballUrl.replace("https://", ""),
     {},
   );
 
@@ -154,37 +148,48 @@ const ensureRepositorySnapshot = async ({
     return repositorySnapshotDirPath;
   }
 
-  const { path: unzipDirPath, cleanup: cleanupUnzipDirPath } = await tmp.dir({
+  const { path: tarDirPath, cleanup: cleanupTarDir } = await tmp.dir({
     unsafeCleanup: true,
   });
 
   try {
-    console.log(chalk.green(`Downloading ${zipUrl}...`));
-    // @todo Consider finding cross-platform NPM packages for curl and unzip commands
+    console.log(chalk.green(`Downloading ${tarballUrl}...`));
+    // @todo Consider finding cross-platform NPM packages for `curl` and `tar` commands
     await execa(
       "curl",
-      ["-sL", "-o", path.resolve(unzipDirPath, `repo.zip`), zipUrl],
+      ["-sL", "-o", path.resolve(tarDirPath, `repo.tar.gz`), tarballUrl],
       defaultExecaOptions,
     );
+
+    const outputDirPath = path.resolve(tarDirPath, "repo");
+
+    console.log(chalk.green(`Ensuring output directory exists...`));
+    await fs.ensureDir(outputDirPath);
 
     console.log(chalk.green(`Unpacking archive...`));
-    const unzipPath = path.resolve(unzipDirPath, "repo");
+
     await execa(
-      "unzip",
-      ["-q", path.resolve(unzipDirPath, "repo.zip"), "-d", unzipPath],
+      "tar",
+      [
+        "--extract",
+        `--file=${path.resolve(tarDirPath, "repo.tar.gz")}`,
+        `--directory=${outputDirPath}`,
+        "--verbose",
+      ],
       defaultExecaOptions,
     );
 
-    const innerDir = await fs.readdir(unzipPath);
+    const innerDirName = (await fs.readdir(outputDirPath))[0]!;
+
     await fs.move(
-      path.resolve(unzipPath, innerDir[0]!),
+      path.resolve(outputDirPath, innerDirName),
       repositorySnapshotDirPath,
     );
 
     console.log(`Repository snapshot ready in ${repositorySnapshotDirPath}`);
     return repositorySnapshotDirPath;
   } finally {
-    await cleanupUnzipDirPath();
+    await cleanupTarDir();
   }
 };
 

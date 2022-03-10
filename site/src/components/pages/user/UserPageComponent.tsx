@@ -1,6 +1,5 @@
-import { useEffect, useState, VoidFunctionComponent } from "react";
+import { VoidFunctionComponent } from "react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import {
   useMediaQuery,
   Divider,
@@ -14,7 +13,7 @@ import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 
 import { Sidebar } from "./Sidebar";
-import { TABS, TabHeader, TabPanel, TabValue } from "./Tabs";
+import { TabHeader, TabPanel, TabValue } from "./Tabs";
 import { TabPanelContentsWithOverview } from "./TabPanelContentsWithOverview";
 import { TabPanelContentsWithSchemas } from "./TabPanelContentsWithSchemas";
 import { TabPanelContentsWithBlocks } from "./TabPanelContentsWithBlocks";
@@ -24,31 +23,16 @@ const SIDEBAR_WIDTH = 300;
 export type UserPageProps = {
   blocks: ExpandedBlockMetadata[];
   entityTypes: EntityType[];
-  initialActiveTab: TabValue;
+  activeTab: TabValue;
   user: SerializedUser;
 };
 
 export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
   blocks,
   entityTypes,
-  initialActiveTab,
+  activeTab,
   user,
 }) => {
-  const router = useRouter();
-
-  useEffect(() => {
-    const { profileTabs } = router.query;
-    const profileTabSlug = Array.isArray(profileTabs) ? profileTabs[0] : "";
-
-    const matchingTab = TABS.find((tab) => profileTabSlug === tab.slug);
-
-    if (!matchingTab) {
-      void router.replace(`/@${user.shortname}`);
-    }
-  }, [router, user.shortname]);
-
-  const [activeTab, setActiveTab] = useState(initialActiveTab);
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -105,15 +89,6 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
             {/* TAB HEADER */}
             <TabHeader
               activeTab={activeTab}
-              setActiveTab={(nextTab) => {
-                setActiveTab(nextTab);
-                return router.push(
-                  `/@${user.shortname}/${
-                    TABS.find((tab) => tab.value === nextTab)?.slug
-                  }`,
-                );
-              }}
-              tabs={TABS}
               tabItemsCount={{
                 blocks: blocks.length,
                 schemas: entityTypes.length,

@@ -25,16 +25,16 @@ A block package SHOULD contain:
 
 - a JSON file **describing the properties the block accepts** using [JSON Schema vocabulary](https://json-schema.org/) – the ‘block schema’, which can be [automatically generated](https://json-schema.org/implementations.html#from-code) from block code, and which:
 
-  - MUST be called `block-schema.json`
   - If the block does not function without certain properties, MUST specify a [required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3) array naming them
   - SHOULD specify any further constraints or [validation](https://json-schema.org/draft/2020-12/json-schema-validation.html) requirements which improve the block’s functionality
 
 - a JSON file containing **metadata describing the block**, which:
 
-  - MUST be called `block-metadata.json`
+  - MUST be called `block-metadata.json`, so that it can be reliably identified as the entry point for the block's other files
   - MUST specify:
 
     - a unique, slugified `name` for the block. It should be **unique** because it's used as a slug wherever required.
+    - `schema`: the URL or path to the block's schema
     - any libraries the block expects the embedding application to supply it with under `externals` – i.e. libraries which the block depends on but does not include in its package – using the name of the library as it is usually distributed (e.g. via npm), and the expected version (or version range).
       For example, a block may rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page.
     - the path or URL to the entrypoint source file (e.g. `index.html`, `index.js`) under `source`
@@ -408,7 +408,7 @@ In order to create a reference to a separate entity or entities as the desired v
 - if `destinationEntityId` is defined, MAY contain:
   - `destinationEntityVersionId:` \[_string_]\[_optional_]: to pin the link to a specific version of the destination entity.
   - `destinationEntityTypeId?`: \[_string_]\[_optional_]: the `entityTypeId` of the destination entity.
-  - `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
+  - `index` \[_integer_]\[_optional_]: the position of this link in a list (for where ordering of links is important).
 
 Once created, a `Link` includes a `linkId`.
 
