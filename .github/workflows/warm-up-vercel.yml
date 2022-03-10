@@ -28,4 +28,4 @@ jobs:
             curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
           done
         env:
-          BASE_URL: ${{ github.event.deployment-check.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
+          BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
