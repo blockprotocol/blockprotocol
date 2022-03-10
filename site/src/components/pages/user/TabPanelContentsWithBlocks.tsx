@@ -1,10 +1,10 @@
 import { VoidFunctionComponent } from "react";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { LinkButton } from "../../LinkButton";
 import { ListViewCard } from "./ListViewCard";
 import { Placeholder } from "./Placeholder";
-import { useUserIsCurrent } from "./useUserIsCurrent";
+import { BrowseHubButton, BuildBlockButton } from "./PlaceholderButtons";
+import { useUserStatus } from "./useUserStatus";
 
 export interface TabPanelContentsWithBlocksProps {
   blocks: ExpandedBlockMetadata[];
@@ -14,28 +14,24 @@ export interface TabPanelContentsWithBlocksProps {
 export const TabPanelContentsWithBlocks: VoidFunctionComponent<
   TabPanelContentsWithBlocksProps
 > = ({ blocks, user }) => {
-  const userIsCurrent = useUserIsCurrent(user);
+  const userStatus = useUserStatus(user);
 
   if (!blocks.length) {
-    return userIsCurrent ? (
+    if (userStatus === "loading") {
+      return null;
+    }
+
+    return userStatus === "current" ? (
       <Placeholder
         header="You haven’t created any blocks yet"
         tip="Start building to see your creations show up here."
-        actions={
-          <LinkButton variant="secondary" href="/hub">
-            Browse the Block Hub
-          </LinkButton>
-        }
+        actions={<BuildBlockButton />}
       />
     ) : (
       <Placeholder
         header={`@${user.shortname} hasn’t created any blocks yet`}
-        tip="You can browse existing blocks and schemas on the Block Hub."
-        actions={
-          <LinkButton variant="secondary" href="/hub">
-            Browse the Block Hub
-          </LinkButton>
-        }
+        tip="You can browse existing blocks on the Block Hub."
+        actions={<BrowseHubButton />}
       />
     );
   }

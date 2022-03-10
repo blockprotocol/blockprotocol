@@ -88,6 +88,7 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
           >
             {/* TAB HEADER */}
             <TabHeader
+              userShortname={user.shortname!}
               activeTab={activeTab}
               tabItemsCount={{
                 blocks: blocks.length,

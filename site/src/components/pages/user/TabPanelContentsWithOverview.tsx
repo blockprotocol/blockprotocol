@@ -3,12 +3,15 @@ import { useState, VoidFunctionComponent } from "react";
 import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { Button } from "../../Button";
-import { LinkButton } from "../../LinkButton";
 import { CreateSchemaModal } from "../../Modal/CreateSchemaModal";
 import { OverviewCard } from "./OverviewCard";
 import { Placeholder } from "./Placeholder";
-import { useUserIsCurrent } from "./useUserIsCurrent";
+import {
+  BrowseHubButton,
+  BuildBlockButton,
+  CreateSchemaButton,
+} from "./PlaceholderButtons";
+import { useUserStatus } from "./useUserStatus";
 
 export interface TabPanelContentsWithOverviewProps {
   blocks: ExpandedBlockMetadata[];
@@ -21,27 +24,23 @@ export const TabPanelContentsWithOverview: VoidFunctionComponent<
 > = ({ blocks, entityTypes, user }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const userIsCurrent = useUserIsCurrent(user);
+  const userStatus = useUserStatus(user);
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
 
   if (!blocks.length && !entityTypes.length) {
-    return userIsCurrent ? (
+    if (userStatus === "loading") {
+      return null;
+    }
+
+    return userStatus === "current" ? (
       <>
         <Placeholder
           header="You haven’t created any blocks or schemas yet"
           tip="Start building to see your creations show up here."
           actions={
             <>
-              <LinkButton variant="secondary" href="/hub" sx={{ margin: 1 }}>
-                Browse the Block Hub
-              </LinkButton>
-              <Button
-                sx={{ margin: 1 }}
-                variant="secondary"
-                onClick={() => setSchemaModalOpen(true)}
-              >
-                Create New Schema
-              </Button>
+              <BuildBlockButton />
+              <CreateSchemaButton onClick={() => setSchemaModalOpen(true)} />
             </>
           }
         />
@@ -54,11 +53,7 @@ export const TabPanelContentsWithOverview: VoidFunctionComponent<
       <Placeholder
         header={`@${user.shortname} hasn’t created any blocks or schemas yet`}
         tip="You can browse existing blocks and schemas on the Block Hub."
-        actions={
-          <LinkButton variant="secondary" href="/hub">
-            Browse the Block Hub
-          </LinkButton>
-        }
+        actions={<BrowseHubButton />}
       />
     );
   }

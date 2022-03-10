@@ -25,11 +25,13 @@ export type TabValue = typeof TABS[number]["value"];
 type TabHeaderProps = {
   activeTab: string;
   tabItemsCount: Partial<Record<TabValue, number>>;
+  userShortname: string;
 };
 
 export const TabHeader: VFC<TabHeaderProps> = ({
   activeTab,
   tabItemsCount,
+  userShortname,
 }) => {
   return (
     <Tabs
@@ -46,7 +48,7 @@ export const TabHeader: VFC<TabHeaderProps> = ({
 
         return (
           <BaseLink
-            href={`/@hash${slug ? `/${slug}` : ""}`}
+            href={`/@${userShortname}/${slug ? `/${slug}` : ""}`}
             shallow
             key={value}
           >

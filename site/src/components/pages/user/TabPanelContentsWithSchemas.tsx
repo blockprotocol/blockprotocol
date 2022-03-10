@@ -5,9 +5,9 @@ import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ListViewCard } from "./ListViewCard";
 import { CreateSchemaModal } from "../../Modal/CreateSchemaModal";
-import { useUserIsCurrent } from "./useUserIsCurrent";
-import { LinkButton } from "../../LinkButton";
+import { useUserStatus } from "./useUserStatus";
 import { Placeholder } from "./Placeholder";
+import { BrowseHubButton, CreateSchemaButton } from "./PlaceholderButtons";
 
 export interface TabPanelContentsWithSchemasProps {
   entityTypes: EntityType[];
@@ -18,35 +18,42 @@ export const TabPanelContentsWithSchemas: VoidFunctionComponent<
   TabPanelContentsWithSchemasProps
 > = ({ user, entityTypes }) => {
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
-  const userIsCurrent = useUserIsCurrent(user);
+  const userStatus = useUserStatus(user);
+  const createSchemaModal = (
+    <CreateSchemaModal
+      open={schemaModalOpen}
+      onClose={() => setSchemaModalOpen(false)}
+    />
+  );
 
   if (!entityTypes.length) {
-    return userIsCurrent ? (
-      <Placeholder
-        header="You haven’t created any schemas yet"
-        tip="Start building to see your creations show up here."
-        actions={
-          <LinkButton variant="secondary" href="/hub">
-            Browse the Block Hub
-          </LinkButton>
-        }
-      />
+    if (userStatus === "loading") {
+      return null;
+    }
+
+    return userStatus === "current" ? (
+      <>
+        <Placeholder
+          header="You haven’t created any schemas yet"
+          tip="Start building to see your creations show up here."
+          actions={
+            <CreateSchemaButton onClick={() => setSchemaModalOpen(true)} />
+          }
+        />
+        {createSchemaModal}
+      </>
     ) : (
       <Placeholder
         header={`@${user.shortname} hasn’t created any schemas yet`}
-        tip="You can browse existing blocks and schemas on the Block Hub."
-        actions={
-          <LinkButton variant="secondary" href="/hub">
-            Browse the Block Hub
-          </LinkButton>
-        }
+        tip="You can browse existing schemas on the Block Hub."
+        actions={<BrowseHubButton />}
       />
     );
   }
 
   return (
     <>
-      {userIsCurrent && (
+      {userStatus === "current" && (
         <Box
           sx={{
             display: "flex",
@@ -68,10 +75,7 @@ export const TabPanelContentsWithSchemas: VoidFunctionComponent<
           url={schema.$id}
         />
       ))}
-      <CreateSchemaModal
-        open={schemaModalOpen}
-        onClose={() => setSchemaModalOpen(false)}
-      />
+      {createSchemaModal}
     </>
   );
 };
