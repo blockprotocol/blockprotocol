@@ -100,7 +100,7 @@ const getDependentProperties = (
     if (
       property?.$ref?.includes(subSchemaNameToDelete) ||
       (Array.isArray(property?.items)
-        ? property?.items[0].$ref?.includes(subSchemaNameToDelete)
+        ? property?.items[0]?.$ref?.includes(subSchemaNameToDelete)
         : property?.items?.$ref?.includes(subSchemaNameToDelete))
     ) {
       dependentProperties.push(prefix ? [prefix, propertyName] : propertyName);
