@@ -10,7 +10,7 @@ import {
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useMemo, VoidFunctionComponent } from "react";
+import React, { ComponentType, useMemo, VoidFunctionComponent } from "react";
 import { formatDistance } from "date-fns";
 import { BlocksSlider } from "../../../components/BlocksSlider";
 import {
@@ -35,7 +35,14 @@ const blockRequire = (name: BlockDependency) => {
   return blockDependencies[name];
 };
 
-const blockEval = (source: string): BlockExports => {
+const blockComponentFromSource = (source: string): ComponentType => {
+  // this does not guarantee filtering out all non-React components
+  if (!source.includes("createElement")) {
+    throw new Error(
+      "Block is not a React component - please implement rendering support for whatever it is and update this check. Note that we may in future change the recommended implementation for blocks to avoid this issue.",
+    );
+  }
+
   const exports_ = {};
   const module_ = { exports: exports_ };
 
@@ -43,7 +50,21 @@ const blockEval = (source: string): BlockExports => {
   const moduleFactory = new Function("require", "module", "exports", source);
   moduleFactory(blockRequire, module_, exports_);
 
-  return module_.exports as BlockExports;
+  const exports = module_.exports as BlockExports;
+
+  if (exports.default) {
+    return exports.default;
+  }
+  if (exports.App) {
+    return exports.App;
+  }
+  if (Object.keys(exports).length === 1) {
+    return exports[Object.keys(exports)[0]]!;
+  }
+
+  throw new Error(
+    "Block component must be exported as default, App, or the only named export in the source file.",
+  );
 };
 
 const Bullet: VoidFunctionComponent = () => {
@@ -161,11 +182,11 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
-  const blockModule = useMemo(
+  const BlockComponent = useMemo(
     () =>
       typeof window === "undefined"
         ? undefined
-        : blockEval(blockStringifiedSource),
+        : blockComponentFromSource(blockStringifiedSource),
     [blockStringifiedSource],
   );
 
@@ -299,7 +320,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           <BlockDataContainer
             metadata={blockMetadata}
             schema={schema}
-            blockModule={blockModule}
+            BlockComponent={BlockComponent}
           />
         </Box>
 
