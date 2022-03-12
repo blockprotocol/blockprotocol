@@ -193,11 +193,12 @@ const ensureRepositorySnapshot = async ({
   }
 };
 
-const getFileModifiedAt = async (
+const getFileChecksum = async (
   filePath: string,
-): Promise<number | undefined> => {
+): Promise<string | undefined> => {
   try {
-    return (await fs.stat(filePath)).mtimeMs;
+    // Treating file contents as checksum is simple and performant for the given context
+    return await fs.readFile(filePath, "utf8");
   } catch {
     return undefined;
   }
@@ -268,14 +269,12 @@ const prepareBlock = async ({
     rootWorkspaceDirPath,
     "package-lock.json",
   );
-  const packageLockJsonModifiedAt = await getFileModifiedAt(
-    packageLockJsonPath,
-  );
+  const packageLockJsonChecksum = await getFileChecksum(packageLockJsonPath);
 
   const yarnLockPath = path.resolve(rootWorkspaceDirPath, "yarn.lock");
-  const yarnLockModifiedAt = await getFileModifiedAt(yarnLockPath);
+  const yarnLockChecksum = await getFileChecksum(yarnLockPath);
 
-  if (validateLockfile && !packageLockJsonModifiedAt && !yarnLockModifiedAt) {
+  if (validateLockfile && !packageLockJsonChecksum && !yarnLockChecksum) {
     throw new Error(
       `Could not find yarn.lock or package-lock.json in ${
         blockInfo.folder ? `folder ${blockInfo.folder} of ` : ""
@@ -283,7 +282,7 @@ const prepareBlock = async ({
     );
   }
 
-  const packageManager = packageLockJsonModifiedAt ? "npm" : "yarn";
+  const packageManager = packageLockJsonChecksum ? "npm" : "yarn";
   if (packageManager === "npm" && blockInfo.workspace) {
     throw new Error(
       'Using "workspace" param is not compatible with npm (please remove this field from block info or delete package-lock.json from the repo)',
@@ -321,17 +320,17 @@ const prepareBlock = async ({
 
   if (validateLockfile) {
     if (
-      packageLockJsonModifiedAt &&
-      packageLockJsonModifiedAt !==
-        (await getFileModifiedAt(packageLockJsonPath))
+      packageLockJsonChecksum &&
+      packageLockJsonChecksum !== (await getFileChecksum(packageLockJsonPath))
     ) {
       throw new Error(
         `Installing dependencies changes package-lock.json. Please install dependencies locally and commit.`,
       );
     }
+
     if (
-      yarnLockModifiedAt &&
-      yarnLockModifiedAt !== (await getFileModifiedAt(yarnLockPath))
+      yarnLockChecksum &&
+      yarnLockChecksum !== (await getFileChecksum(yarnLockPath))
     ) {
       throw new Error(
         `Installing dependencies changes yarn.lock. Please install dependencies locally and commit.`,
