@@ -193,11 +193,12 @@ const ensureRepositorySnapshot = async ({
   }
 };
 
-const getFileChecksum = async (
+const extractFileChecksum = async (
   filePath: string,
 ): Promise<string | undefined> => {
   try {
-    // Treating file contents as checksum is simple and performant for the given context
+    // Treating file contents as its checksum is generally a bad idea.
+    // This approach is both simple and performant for the given context though.
     return await fs.readFile(filePath, "utf8");
   } catch {
     return undefined;
@@ -269,10 +270,12 @@ const prepareBlock = async ({
     rootWorkspaceDirPath,
     "package-lock.json",
   );
-  const packageLockJsonChecksum = await getFileChecksum(packageLockJsonPath);
+  const packageLockJsonChecksum = await extractFileChecksum(
+    packageLockJsonPath,
+  );
 
   const yarnLockPath = path.resolve(rootWorkspaceDirPath, "yarn.lock");
-  const yarnLockChecksum = await getFileChecksum(yarnLockPath);
+  const yarnLockChecksum = await extractFileChecksum(yarnLockPath);
 
   if (validateLockfile && !packageLockJsonChecksum && !yarnLockChecksum) {
     throw new Error(
@@ -321,7 +324,8 @@ const prepareBlock = async ({
   if (validateLockfile) {
     if (
       packageLockJsonChecksum &&
-      packageLockJsonChecksum !== (await getFileChecksum(packageLockJsonPath))
+      packageLockJsonChecksum !==
+        (await extractFileChecksum(packageLockJsonPath))
     ) {
       throw new Error(
         `Installing dependencies changes package-lock.json. Please install dependencies locally and commit.`,
@@ -330,7 +334,7 @@ const prepareBlock = async ({
 
     if (
       yarnLockChecksum &&
-      yarnLockChecksum !== (await getFileChecksum(yarnLockPath))
+      yarnLockChecksum !== (await extractFileChecksum(yarnLockPath))
     ) {
       throw new Error(
         `Installing dependencies changes yarn.lock. Please install dependencies locally and commit.`,
