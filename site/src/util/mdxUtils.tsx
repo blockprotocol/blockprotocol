@@ -169,9 +169,9 @@ export const getPage = (params: {
           ? [
               ...prev.slice(0, -1),
               {
-                ...prev[prev.length - 1],
+                ...prev[prev.length - 1]!,
                 subSections: [
-                  ...(prev[prev.length - 1].subSections || []),
+                  ...(prev[prev.length - 1]!.subSections || []),
                   {
                     title: subSectionTitle,
                     anchor: slugify(subSectionTitle, { lower: true }),
