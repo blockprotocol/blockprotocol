@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { Validator } from "jsonschema";
 import {
+  ComponentType,
   useEffect,
   useMemo,
   useRef,
@@ -23,20 +24,20 @@ import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
-import { BlockExports, BlockSchema, getEmbedBlock } from "./HubUtils";
+import { BlockSchema, getEmbedBlock } from "./HubUtils";
 import { BlockVariantsTabs } from "./BlockVariantsTabs";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
-  blockModule: BlockExports | undefined;
+  BlockComponent?: ComponentType | undefined;
 };
 
 const validator = new Validator();
 
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
-> = ({ metadata, schema, blockModule }) => {
+> = ({ metadata, schema, BlockComponent }) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
@@ -221,9 +222,9 @@ export const BlockDataContainer: VoidFunctionComponent<
                   mx: "auto",
                 }}
               >
-                {blockModule && (
+                {BlockComponent && (
                   <MockBlockDock>
-                    <blockModule.default {...props} />
+                    <BlockComponent {...props} />
                   </MockBlockDock>
                 )}
               </Box>
