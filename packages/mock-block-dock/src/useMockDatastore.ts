@@ -109,9 +109,17 @@ export const useMockDatastore = (
 
   const getEntities: BlockProtocolGetEntitiesFunction = useCallback(
     async (actions) =>
-      actions.map((action) =>
-        entities.find((entity) => matchIdentifiers(entity, action)),
-      ),
+      actions.map((action) => {
+        const foundEntity = entities.find((entity) =>
+          matchIdentifiers(entity, action),
+        );
+        if (!foundEntity) {
+          throw new Error(
+            `Could not find entity with identifiers ${JSON.stringify(action)}`,
+          );
+        }
+        return foundEntity;
+      }),
     [entities],
   );
 
@@ -250,7 +258,10 @@ export const useMockDatastore = (
             entityTypeId: "file1",
           },
         ]).then(
-          (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
+          (resp) =>
+            Promise.resolve(
+              resp[0],
+            ) as ReturnType<BlockProtocolUploadFileFunction>,
         );
       } else if (file) {
         const result = await new Promise<FileReader["result"] | null>(
@@ -280,7 +291,10 @@ export const useMockDatastore = (
               entityTypeId: "file1",
             },
           ]).then(
-            (resp) => resp[0] as ReturnType<BlockProtocolUploadFileFunction>,
+            (resp) =>
+              Promise.resolve(
+                resp[0],
+              ) as ReturnType<BlockProtocolUploadFileFunction>,
           );
         }
 

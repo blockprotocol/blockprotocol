@@ -8,6 +8,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   blockPackagePath: string;
   lastUpdated?: string | null;
   packagePath: string;
+  // repository is passed down as a string upon expansion
   repository?: string;
   schema?: string | null;
 };
@@ -15,7 +16,6 @@ export type ExpandedBlockMetadata = BlockMetadata & {
 export interface StoredBlockInfo {
   repository: string;
   commit: string;
-
   distDir?: string;
   folder?: string;
   workspace?: string;

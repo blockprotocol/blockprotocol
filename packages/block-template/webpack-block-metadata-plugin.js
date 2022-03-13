@@ -11,9 +11,8 @@ const {
   author,
   license,
   blockprotocol,
+  peerDependencies,
 } = require("./package.json");
-
-const { externals } = require("./webpack-main.config");
 
 const variants = fs.existsSync("./variants.json")
   ? require("./variants.json")
@@ -22,8 +21,8 @@ const variants = fs.existsSync("./variants.json")
 class StatsPlugin {
   apply(compiler) {
     compiler.hooks.done.tap(this.constructor.name, (stats) => {
-      const main = Object.keys(stats.compilation.assets).find((asset) =>
-        asset.startsWith("main"),
+      const main = Object.keys(stats.compilation.assets).find(
+        (asset) => asset.startsWith("main") && asset.endsWith(".js"),
       );
 
       const blockMetadata = {
@@ -32,7 +31,7 @@ class StatsPlugin {
         description,
         author,
         license,
-        externals,
+        externals: peerDependencies,
         schema: "block-schema.json",
         source: main,
         variants,

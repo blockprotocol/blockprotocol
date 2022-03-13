@@ -6599,6 +6599,25 @@ locate-path@^6.0.0:
   dependencies:
     p-locate "^5.0.0"
 
+lockfile-lint-api@^5.1.7:
+  version "5.1.7"
+  resolved "https://registry.yarnpkg.com/lockfile-lint-api/-/lockfile-lint-api-5.1.7.tgz#052f615ab85ac3ad69f8c90b03eb3b64dbd6ebd9"
+  integrity sha512-o10D4DiLUFXl/8UqYBsuNnye3DcNtAuIm6+vCsnSwHONIQqR6etWUA0v94lMhh5tIDqPOV08Gc8Ds+A3bMqW4g==
+  dependencies:
+    "@yarnpkg/lockfile" "^1.1.0"
+    debug "^4.1.1"
+    object-hash "^2.0.1"
+
+lockfile-lint@4.6.2:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lockfile-lint/-/lockfile-lint-4.6.2.tgz#ca4a896f702ea22b04d4084246ce0ecfb2b4ff74"
+  integrity sha512-TvWN2Yfc/dvSy1GKdpy0wJ6GCvq/9Qj457D+QQtP+eYvsX4zNp3vaaB2LS1d+TK1lO/7I0VQ0qqRCRCOzSj2wQ==
+  dependencies:
+    cosmiconfig "^6.0.0"
+    debug "^4.1.1"
+    lockfile-lint-api "^5.1.7"
+    yargs "^16.0.0"
+
 lockfile@^1.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lockfile/-/lockfile-1.0.4.tgz#07f819d25ae48f87e538e6578b6964a4981a5609"
@@ -7333,6 +7352,11 @@ object-assign@^4, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
+
+object-hash@^2.0.1:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/object-hash/-/object-hash-2.2.0.tgz#5ad518581eefc443bd763472b8ff2e9c2c0d54a5"
+  integrity sha512-gScRMn0bS5fH+IuwyIFgnh9zBdo4DV+6GhygmWM9HyNJSgS0hScp1f5vjtm7oIIOiT9trXrShAkLFSc2IqKNgw==
 
 object-inspect@^1.11.0, object-inspect@^1.12.0, object-inspect@^1.9.0:
   version "1.12.0"
@@ -9908,7 +9932,7 @@ yargs-parser@^21.0.0:
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-21.0.0.tgz#a485d3966be4317426dd56bdb6a30131b281dc55"
   integrity sha512-z9kApYUOCwoeZ78rfRYYWdiU/iNL6mwwYlkkZfJoyMR1xps+NEBX5X7XmRpxkZHhXJ6+Ey00IwKxBBSW9FIjyA==
 
-yargs@^16.2.0:
+yargs@^16.0.0, yargs@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
   integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==
