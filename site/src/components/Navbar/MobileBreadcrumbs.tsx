@@ -19,7 +19,12 @@ export const MobileBreadcrumbs: VFC<MobileBreadcrumbsProps> = ({ crumbs }) => {
       sx={{
         marginTop: 2,
       }}
-      separator={<FontAwesomeIcon icon={faChevronRight} />}
+      separator={
+        <FontAwesomeIcon
+          sx={{ fontSize: 14, color: ({ palette }) => palette.gray[40] }}
+          icon={faChevronRight}
+        />
+      }
     >
       {crumbs.map((item, i) =>
         i < crumbs.length - 1 ? (

@@ -226,7 +226,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               },
             })}
           >
-            <FontAwesomeIcon icon={faChevronRight} />
+            <FontAwesomeIcon icon={faChevronRight} sx={{ fontSize: 14 }} />
           </IconButton>
         ) : null}
       </Box>

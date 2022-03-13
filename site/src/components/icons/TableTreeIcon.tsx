@@ -2,17 +2,8 @@ import { FC } from "react";
 import { SvgIcon, SvgIconProps } from "@mui/material";
 
 export const TableTreeIcon: FC<SvgIconProps> = (props) => {
-  const { sx, ...otherProps } = props;
   return (
-    <SvgIcon
-      {...otherProps}
-      sx={{
-        width: "1em",
-        height: "1em",
-        ...sx,
-      }}
-      viewBox="0 0 24 24"
-    >
+    <SvgIcon width="1em" height="1em" {...props} viewBox="0 0 24 24">
       <path
         fillRule="evenodd"
         clipRule="evenodd"

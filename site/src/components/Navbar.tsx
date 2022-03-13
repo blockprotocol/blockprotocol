@@ -362,9 +362,12 @@ export const Navbar: VFC<NavbarProps> = ({
                 <IconButton
                   onClick={() => setDisplayMobileNav(!displayMobileNav)}
                   sx={{
-                    "& svg": isNavbarDark
-                      ? { color: theme.palette.purple.subtle }
-                      : {},
+                    "& svg": {
+                      fontSize: 27.5,
+                      ...(isNavbarDark
+                        ? { color: theme.palette.purple.subtle }
+                        : {}),
+                    },
                   }}
                 >
                   <FontAwesomeIcon icon={faBars} />
