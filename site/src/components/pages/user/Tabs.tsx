@@ -48,7 +48,7 @@ export const TabHeader: VFC<TabHeaderProps> = ({
 
         return (
           <BaseLink
-            href={`/@${userShortname}/${slug ? `/${slug}` : ""}`}
+            href={`/@${userShortname}${slug ? `/${slug}` : ""}`}
             shallow
             key={value}
           >
