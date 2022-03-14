@@ -317,7 +317,7 @@ export const Sidebar: VFC<SidebarProps> = ({
 
     if (cachedRef) {
       const observer = new IntersectionObserver(
-        ([event]) => setIsSticky(event.intersectionRatio < 1),
+        ([event]) => setIsSticky(event!.intersectionRatio < 1),
         { threshold: [1] },
       );
 
@@ -432,11 +432,11 @@ export const Sidebar: VFC<SidebarProps> = ({
                 />
               ))
             : pages.length === 1
-            ? pages[0].sections.map((section, i) => (
+            ? pages[0]!.sections.map((section, i) => (
                 <SidebarPageSection
                   isSelectedByDefault={i === 0}
                   key={section.anchor}
-                  pageHref={pages[0].href}
+                  pageHref={pages[0]!.href}
                   section={section}
                   maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
                   setSelectedAnchorElement={setSelectedAnchorElement}

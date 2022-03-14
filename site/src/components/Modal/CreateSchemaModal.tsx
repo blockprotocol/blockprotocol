@@ -32,8 +32,9 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
     formattedText = formattedText.replace(/\s/g, "");
 
     // capitalize text
-    if (formattedText.length > 0) {
-      formattedText = formattedText[0].toUpperCase() + formattedText.slice(1);
+    const firstChar = formattedText[0];
+    if (typeof firstChar === "string") {
+      formattedText = firstChar.toUpperCase() + formattedText.slice(1);
     }
 
     setNewSchemaTitle(formattedText);

@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { ComponentType } from "react";
 
 /** @todo type as JSON Schema. */
 export type BlockSchema = Record<string, any>;
 export type BlockDependency = keyof typeof blockDependencies;
 export type BlockExports = {
-  default: FC;
+  [key: string]: ComponentType | undefined;
 };
 
 /* eslint-disable global-require */
