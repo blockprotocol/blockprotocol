@@ -1,6 +1,7 @@
-import { Icon } from "@mui/material";
+import { faHammer, faTable } from "@fortawesome/free-solid-svg-icons";
 import { VoidFunctionComponent } from "react";
 import { Button } from "../../Button";
+import { FontAwesomeIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
 export const BuildBlockButton: VoidFunctionComponent = () => {
@@ -9,7 +10,7 @@ export const BuildBlockButton: VoidFunctionComponent = () => {
       variant="secondary"
       href="/docs/developing-blocks"
       sx={{ margin: 1 }}
-      startIcon={<Icon className="fa-regular fa-hammer" />}
+      startIcon={<FontAwesomeIcon icon={faHammer} />}
     >
       Build a block
     </LinkButton>
@@ -24,7 +25,7 @@ export const CreateSchemaButton: VoidFunctionComponent<{
       sx={{ margin: 1 }}
       variant="secondary"
       onClick={onClick}
-      startIcon={<Icon className="fa-regular fa-table-tree" />}
+      startIcon={<FontAwesomeIcon icon={faTable} />}
     >
       Create a schema
     </Button>
