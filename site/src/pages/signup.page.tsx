@@ -1,9 +1,15 @@
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 import { NextPage } from "next";
-import { Box, Container, Paper, Fade, Icon, Typography } from "@mui/material";
+import { Box, Container, Paper, Fade, Typography } from "@mui/material";
+import { faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "../components/Button";
 import { SignupScreen } from "../components/Screens/SignupScreen";
+import {
+  FontAwesomeIcon,
+  ArrowUpCircleIcon,
+  PullRequestIcon,
+} from "../components/icons";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
@@ -158,7 +164,7 @@ const SignupPage: NextPage = () => {
                   disabled={currentScreen === SIGNUP_PAGE_SCREENS[0]}
                   variant="transparent"
                   startIcon={
-                    <Icon sx={{ fontSize: 16 }} className="fas fa-arrow-left" />
+                    <FontAwesomeIcon icon={faArrowLeft} sx={{ fontSize: 16 }} />
                   }
                   sx={{
                     fontSize: 15,
@@ -240,12 +246,11 @@ const SignupPage: NextPage = () => {
               [
                 {
                   icon: (
-                    <Icon
+                    <ArrowUpCircleIcon
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
-                      className="fa-solid fa-up"
                     />
                   ),
                   heading: <>Publish blocks to the block hub</>,
@@ -258,12 +263,11 @@ const SignupPage: NextPage = () => {
                 },
                 {
                   icon: (
-                    <Icon
+                    <PullRequestIcon
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
-                      className="fa-solid fa-code-pull-request"
                     />
                   ),
                   heading: <>Take part in a growing, open source community</>,
@@ -276,12 +280,12 @@ const SignupPage: NextPage = () => {
                 },
                 {
                   icon: (
-                    <Icon
+                    <FontAwesomeIcon
+                      icon={faUser}
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
-                      className="fa-solid fa-user"
                     />
                   ),
                   heading: <>Claim your favorite username</>,
