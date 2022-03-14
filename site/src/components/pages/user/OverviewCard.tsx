@@ -1,9 +1,10 @@
 import { formatDistance } from "date-fns";
 import { VFC } from "react";
-import { Box, Icon, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
 import { shy } from "./utils";
+import { TableTreeIcon } from "../../icons";
 
 type OverviewCardProps = {
   type: "block" | "schema";
@@ -112,14 +113,12 @@ export const OverviewCard: VFC<OverviewCardProps> = ({
                 src={icon ?? undefined}
               />
             ) : (
-              <Icon
+              <TableTreeIcon
                 sx={{
-                  height: 24,
-                  width: 24,
+                  fontSize: 24,
                   mr: 1.5,
                   color: ({ palette }) => palette.gray[90],
                 }}
-                className="fa-solid fa-table-tree"
               />
             )}
             <Typography

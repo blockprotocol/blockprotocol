@@ -88,11 +88,6 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script
-            defer
-            src="https://kit.fontawesome.com/31605611a9.js"
-            crossOrigin="anonymous"
-          />
         </body>
       </Html>
     );

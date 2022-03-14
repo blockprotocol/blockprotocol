@@ -49,7 +49,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     yarn dev:seed-db
     ```
 
-1.  Run the Next.js app in a seperate terminal using:
+1.  Run the Next.js app in a separate terminal using:
 
     ```sh
     yarn dev

@@ -1,8 +1,9 @@
 import { VFC } from "react";
-import { Box, Typography, Icon } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
 import { Link } from "../../Link";
 import { shy } from "./utils";
+import { TableTreeIcon } from "../../icons";
 
 type ListViewCardProps = {
   type: "block" | "schema";
@@ -51,13 +52,11 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
               }}
             />
           ) : (
-            <Icon
+            <TableTreeIcon
               sx={{
-                height: 24,
-                width: 24,
+                fontSize: 24,
                 color: ({ palette }) => palette.gray[90],
               }}
-              className="fa-solid fa-table-tree"
             />
           )}
         </Box>

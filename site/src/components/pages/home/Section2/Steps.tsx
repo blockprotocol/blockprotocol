@@ -7,7 +7,14 @@ import {
   FC,
   ReactElement,
 } from "react";
-import { Box, Fade, Icon } from "@mui/material";
+import { Box, Fade } from "@mui/material";
+import {
+  faCheckSquare,
+  faPencil,
+  faCheckCircle,
+  faFileAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "../../../icons";
 
 /**
  * This file contains code needed for the sticky section in Section2.tsx
@@ -154,15 +161,27 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
               }}
               key={id}
             >
-              <Icon
-                className={completed ? "fas fa-check-square" : "fal fa-stop"}
-                sx={{
-                  height: 19,
-                  width: 19,
-                  mr: 1,
-                  color: ({ palette }) => palette.purple[700],
-                }}
-              />
+              {completed ? (
+                <FontAwesomeIcon
+                  sx={{
+                    height: 19,
+                    width: 19,
+                    mr: 1,
+                    color: ({ palette }) => palette.purple[700],
+                  }}
+                  icon={faCheckSquare}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    height: 17,
+                    width: 17,
+                    mr: 1,
+                    borderRadius: "2px",
+                    border: ({ palette }) => `1px solid ${palette.purple[700]}`,
+                  }}
+                />
+              )}
               {text}
             </Box>
           ))}
@@ -193,15 +212,27 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
               }}
               key={id}
             >
-              <Icon
-                className={completed ? "fas fa-check-square" : "fal fa-stop"}
-                sx={{
-                  height: 19,
-                  width: 19,
-                  mr: 1,
-                  color: ({ palette }) => palette.purple[700],
-                }}
-              />
+              {completed ? (
+                <FontAwesomeIcon
+                  sx={{
+                    height: 19,
+                    width: 19,
+                    mr: 1,
+                    color: ({ palette }) => palette.purple[700],
+                  }}
+                  icon={faCheckSquare}
+                />
+              ) : (
+                <Box
+                  sx={{
+                    height: 17,
+                    width: 17,
+                    mr: 1,
+                    borderRadius: "2px",
+                    border: ({ palette }) => `1px solid ${palette.purple[700]}`,
+                  }}
+                />
+              )}
               {text}
             </Box>
           ))}
@@ -307,7 +338,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
   withTitle,
   titleLocation = "top",
 }) => {
-  const { title, content } = SCHEMA_CONTENT[name ?? "definedTerm"];
+  const { title, content } = SCHEMA_CONTENT[name ?? "definedTerm"] ?? {};
   return (
     <Box
       sx={{
@@ -347,7 +378,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
           borderRadius: "6px",
         }}
       >
-        {content.map(({ key, value, id }) => (
+        {content?.map(({ key, value, id }) => (
           <Box
             sx={{
               display: "flex",
@@ -388,22 +419,22 @@ type AppProps = {
 };
 
 const App: FC<AppProps> = ({ name, block }) => {
-  const { iconClass, title } = useMemo(() => {
+  const { icon, title } = useMemo(() => {
     switch (name) {
       case "docs":
         return {
-          iconClass: "fas fa-file-alt",
+          icon: faFileAlt,
           title: "Team Docs",
         };
       case "notes":
         return {
-          iconClass: "fas fa-pencil",
+          icon: faPencil,
           title: "Personal Notes",
         };
       case "todo":
       default:
         return {
-          iconClass: "fas fa-check-circle",
+          icon: faCheckCircle,
           title: "To-do App",
         };
     }
@@ -428,13 +459,11 @@ const App: FC<AppProps> = ({ name, block }) => {
             color: ({ palette }) => palette.gray[70],
           }}
         >
-          <Icon
-            className={iconClass}
+          <FontAwesomeIcon
+            icon={icon}
             sx={{
-              p: 1,
-              height: 16,
-              width: 16,
-              color: "currentColor",
+              m: 1,
+              fontSize: 16,
             }}
           />
           {title}
@@ -576,11 +605,9 @@ export const Step2: VFC<StepProps> = ({ isMobile }) => {
 };
 
 export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
-  const [titles, setTitles] = useState<AppProps["name"][]>([
-    "todo",
-    "docs",
-    "notes",
-  ]);
+  const [titles, setTitles] = useState<
+    [AppProps["name"], AppProps["name"], AppProps["name"]]
+  >(["todo", "docs", "notes"]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -589,9 +616,8 @@ export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(() => {
-        const newTitles = [...titles];
-        newTitles.unshift(newTitles.pop()!);
-        setTitles([...newTitles]);
+        const [title0, title1, title2] = titles;
+        setTitles([title2, title0, title1]);
       }, 3000);
     }
 

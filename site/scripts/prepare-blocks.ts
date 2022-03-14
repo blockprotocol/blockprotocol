@@ -21,6 +21,8 @@ import md5 from "md5";
 import Ajv, { JSONSchemaType } from "ajv";
 import tmp from "tmp-promise";
 import slugify from "slugify";
+import hostedGitInfo from "hosted-git-info";
+
 import { StoredBlockInfo } from "../src/lib/blocks";
 
 const monorepoRoot = path.resolve(__dirname, "../..");
@@ -117,26 +119,18 @@ const ensureRepositorySnapshot = async ({
   commit: string;
   workshopDirPath: string;
 }): Promise<string> => {
-  if (
-    !repositoryHref.match(/^https:\/\/github.com\/[\w-]+\/[\w-]+(\/|.git)?$/i)
-  ) {
-    if (repositoryHref.startsWith("https?://github.com")) {
-      throw new Error(
-        `Cannot handle repository URL ${repositoryHref}. Only GitHub links are currently supported. We will add more services based on the demand.`,
-      );
-    } else {
-      throw new Error(
-        `Cannot handle repository URL ${repositoryHref}. It needs to match https://github.com/org/repo`,
-      );
-    }
+  const tarballUrl = hostedGitInfo
+    .fromUrl(repositoryHref)
+    ?.tarball({ committish: commit });
+
+  if (!tarballUrl) {
+    throw new Error(
+      `Cannot get tarball for repository URL ${repositoryHref}. It needs to be a valid repository URL.`,
+    );
   }
 
-  const normalizedRepoUrl = repositoryHref
-    .replace(/(\/|.git)$/i, "")
-    .toLowerCase();
-  const zipUrl = `${normalizedRepoUrl}/archive/${commit}.zip`;
   const repositorySnapshotSlug = slugify(
-    `${normalizedRepoUrl.replace("https://", "")}-${commit}`,
+    tarballUrl.replace("https://", ""),
     {},
   );
 
@@ -154,45 +148,57 @@ const ensureRepositorySnapshot = async ({
     return repositorySnapshotDirPath;
   }
 
-  const { path: unzipDirPath, cleanup: cleanupUnzipDirPath } = await tmp.dir({
+  const { path: tarDirPath, cleanup: cleanupTarDir } = await tmp.dir({
     unsafeCleanup: true,
   });
 
   try {
-    console.log(chalk.green(`Downloading ${zipUrl}...`));
-    // @todo Consider finding cross-platform NPM packages for curl and unzip commands
+    console.log(chalk.green(`Downloading ${tarballUrl}...`));
+    // @todo Consider finding cross-platform NPM packages for `curl` and `tar` commands
     await execa(
       "curl",
-      ["-sL", "-o", path.resolve(unzipDirPath, `repo.zip`), zipUrl],
+      ["-sL", "-o", path.resolve(tarDirPath, `repo.tar.gz`), tarballUrl],
       defaultExecaOptions,
     );
+
+    const outputDirPath = path.resolve(tarDirPath, "repo");
+
+    console.log(chalk.green(`Ensuring output directory exists...`));
+    await fs.ensureDir(outputDirPath);
 
     console.log(chalk.green(`Unpacking archive...`));
-    const unzipPath = path.resolve(unzipDirPath, "repo");
+
     await execa(
-      "unzip",
-      ["-q", path.resolve(unzipDirPath, "repo.zip"), "-d", unzipPath],
+      "tar",
+      [
+        "--extract",
+        `--file=${path.resolve(tarDirPath, "repo.tar.gz")}`,
+        `--directory=${outputDirPath}`,
+      ],
       defaultExecaOptions,
     );
 
-    const innerDir = await fs.readdir(unzipPath);
+    const innerDirName = (await fs.readdir(outputDirPath))[0]!;
+
     await fs.move(
-      path.resolve(unzipPath, innerDir[0]!),
+      path.resolve(outputDirPath, innerDirName),
       repositorySnapshotDirPath,
     );
 
     console.log(`Repository snapshot ready in ${repositorySnapshotDirPath}`);
     return repositorySnapshotDirPath;
   } finally {
-    await cleanupUnzipDirPath();
+    await cleanupTarDir();
   }
 };
 
-const getFileModifiedAt = async (
+const extractFileChecksum = async (
   filePath: string,
-): Promise<number | undefined> => {
+): Promise<string | undefined> => {
   try {
-    return (await fs.stat(filePath)).mtimeMs;
+    // Treating file contents as its checksum is generally a bad idea.
+    // This approach is both simple and performant for the given context though.
+    return await fs.readFile(filePath, "utf8");
   } catch {
     return undefined;
   }
@@ -263,14 +269,14 @@ const prepareBlock = async ({
     rootWorkspaceDirPath,
     "package-lock.json",
   );
-  const packageLockJsonModifiedAt = await getFileModifiedAt(
+  const packageLockJsonChecksum = await extractFileChecksum(
     packageLockJsonPath,
   );
 
   const yarnLockPath = path.resolve(rootWorkspaceDirPath, "yarn.lock");
-  const yarnLockModifiedAt = await getFileModifiedAt(yarnLockPath);
+  const yarnLockChecksum = await extractFileChecksum(yarnLockPath);
 
-  if (validateLockfile && !packageLockJsonModifiedAt && !yarnLockModifiedAt) {
+  if (validateLockfile && !packageLockJsonChecksum && !yarnLockChecksum) {
     throw new Error(
       `Could not find yarn.lock or package-lock.json in ${
         blockInfo.folder ? `folder ${blockInfo.folder} of ` : ""
@@ -278,7 +284,7 @@ const prepareBlock = async ({
     );
   }
 
-  const packageManager = packageLockJsonModifiedAt ? "npm" : "yarn";
+  const packageManager = packageLockJsonChecksum ? "npm" : "yarn";
   if (packageManager === "npm" && blockInfo.workspace) {
     throw new Error(
       'Using "workspace" param is not compatible with npm (please remove this field from block info or delete package-lock.json from the repo)',
@@ -316,17 +322,18 @@ const prepareBlock = async ({
 
   if (validateLockfile) {
     if (
-      packageLockJsonModifiedAt &&
-      packageLockJsonModifiedAt !==
-        (await getFileModifiedAt(packageLockJsonPath))
+      packageLockJsonChecksum &&
+      packageLockJsonChecksum !==
+        (await extractFileChecksum(packageLockJsonPath))
     ) {
       throw new Error(
         `Installing dependencies changes package-lock.json. Please install dependencies locally and commit.`,
       );
     }
+
     if (
-      yarnLockModifiedAt &&
-      yarnLockModifiedAt !== (await getFileModifiedAt(yarnLockPath))
+      yarnLockChecksum &&
+      yarnLockChecksum !== (await extractFileChecksum(yarnLockPath))
     ) {
       throw new Error(
         `Installing dependencies changes yarn.lock. Please install dependencies locally and commit.`,

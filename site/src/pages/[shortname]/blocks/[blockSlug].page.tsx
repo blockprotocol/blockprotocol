@@ -2,7 +2,6 @@ import {
   Breadcrumbs,
   Container,
   Typography,
-  Icon,
   Box,
   useMediaQuery,
   useTheme,
@@ -10,8 +9,9 @@ import {
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useMemo, VoidFunctionComponent } from "react";
+import React, { ComponentType, useMemo, VoidFunctionComponent } from "react";
 import { formatDistance } from "date-fns";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { BlocksSlider } from "../../../components/BlocksSlider";
 import {
   blockDependencies,
@@ -24,6 +24,7 @@ import {
   readBlockDataFromDisk,
   ExpandedBlockMetadata as BlockMetadata,
 } from "../../../lib/blocks";
+import { FontAwesomeIcon } from "../../../components/icons";
 import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../../components/Link";
 
@@ -35,7 +36,14 @@ const blockRequire = (name: BlockDependency) => {
   return blockDependencies[name];
 };
 
-const blockEval = (source: string): BlockExports => {
+const blockComponentFromSource = (source: string): ComponentType => {
+  // this does not guarantee filtering out all non-React components
+  if (!source.includes("createElement")) {
+    throw new Error(
+      "Block is not a React component - please implement rendering support for whatever it is and update this check. Note that we may in future change the recommended implementation for blocks to avoid this issue.",
+    );
+  }
+
   const exports_ = {};
   const module_ = { exports: exports_ };
 
@@ -43,7 +51,21 @@ const blockEval = (source: string): BlockExports => {
   const moduleFactory = new Function("require", "module", "exports", source);
   moduleFactory(blockRequire, module_, exports_);
 
-  return module_.exports as BlockExports;
+  const exports = module_.exports as BlockExports;
+
+  if (exports.default) {
+    return exports.default;
+  }
+  if (exports.App) {
+    return exports.App;
+  }
+  if (Object.keys(exports).length === 1) {
+    return exports[Object.keys(exports)[0]!]!;
+  }
+
+  throw new Error(
+    "Block component must be exported as default, App, or the only named export in the source file.",
+  );
 };
 
 const Bullet: VoidFunctionComponent = () => {
@@ -56,9 +78,9 @@ const Bullet: VoidFunctionComponent = () => {
 
 type BlockPageProps = {
   blockMetadata: BlockMetadata;
-  schema: BlockSchema;
   blockStringifiedSource: string;
   catalog: BlockMetadata[];
+  schema: BlockSchema;
 };
 
 type BlockPageQueryParams = {
@@ -101,6 +123,21 @@ const parseQueryParams = (params: BlockPageQueryParams) => {
   return { shortname, blockSlug };
 };
 
+/**
+ * Helps display `github.com/org/repo` instead of a full URL with protocol, commit hash and path.
+ * If a URL is not recognised as a GitHub repo, only `https://` is removed.
+ */
+const generateRepositoryDisplayUrl = (repository: string): string => {
+  const repositoryUrlObject = new URL(repository);
+  const displayUrl = `${repositoryUrlObject.hostname}${repositoryUrlObject.pathname}`;
+
+  if (repositoryUrlObject.hostname === "github.com") {
+    return displayUrl.split("/").slice(0, 3).join("/");
+  }
+
+  return displayUrl;
+};
+
 export const getStaticProps: GetStaticProps<
   BlockPageProps,
   BlockPageQueryParams
@@ -129,9 +166,9 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       blockMetadata,
-      schema,
       blockStringifiedSource,
       catalog,
+      schema,
     },
     revalidate: 1800,
   };
@@ -139,18 +176,18 @@ export const getStaticProps: GetStaticProps<
 
 const BlockPage: NextPage<BlockPageProps> = ({
   blockMetadata,
-  schema,
   blockStringifiedSource,
   catalog,
+  schema,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
-  const blockModule = useMemo(
+  const BlockComponent = useMemo(
     () =>
       typeof window === "undefined"
         ? undefined
-        : blockEval(blockStringifiedSource),
+        : blockComponentFromSource(blockStringifiedSource),
     [blockStringifiedSource],
   );
 
@@ -162,6 +199,10 @@ const BlockPage: NextPage<BlockPageProps> = ({
   const sliderItems = useMemo(() => {
     return catalog.filter(({ name }) => name !== blockMetadata.name);
   }, [catalog, blockMetadata]);
+
+  const repositoryDisplayUrl = blockMetadata.repository
+    ? generateRepositoryDisplayUrl(blockMetadata.repository)
+    : "";
 
   return (
     <>
@@ -175,12 +216,12 @@ const BlockPage: NextPage<BlockPageProps> = ({
           <Box mb={1}>
             <Breadcrumbs
               separator={
-                <Icon
+                <FontAwesomeIcon
+                  icon={faChevronRight}
                   sx={{
                     fontSize: 14,
                     color: ({ palette }) => palette.gray[40],
                   }}
-                  className="fas fa-chevron-right"
                 />
               }
             >
@@ -280,7 +321,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           <BlockDataContainer
             metadata={blockMetadata}
             schema={schema}
-            blockModule={blockModule}
+            BlockComponent={BlockComponent}
           />
         </Box>
 
@@ -316,12 +357,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
                 >
                   <Link href={blockMetadata.repository}>
-                    {/* Show `github.com/org/repo` instead of full URL with protocol, commit hash and path */}
-                    {blockMetadata.repository
-                      .replace(/^https?:\/\//, "")
-                      .split("/")
-                      .slice(0, 3)
-                      .join("/")}
+                    {repositoryDisplayUrl}
                   </Link>
                 </Typography>
               </Box>

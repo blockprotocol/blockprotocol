@@ -1,5 +1,6 @@
 import { VFC, FC } from "react";
 import { Box, Tabs, Typography, BoxProps, Tab } from "@mui/material";
+import { BaseLink } from "../../BaseLink";
 
 export const TABS = [
   {
@@ -17,88 +18,88 @@ export const TABS = [
     value: "schemas",
     slug: "schemas",
   },
-] as {
-  title: string;
-  value: "overview" | "blocks" | "schemas";
-  slug: "" | "blocks" | "schemas";
-}[];
+] as const;
 
 export type TabValue = typeof TABS[number]["value"];
 
 type TabHeaderProps = {
   activeTab: string;
-  setActiveTab: (tab: TabValue) => void;
-  tabs: { title: string; value: TabValue }[];
-  tabItemsCount: { blocks: number; schemas: number };
+  tabItemsCount: Partial<Record<TabValue, number>>;
 };
 
 export const TabHeader: VFC<TabHeaderProps> = ({
   activeTab,
-  setActiveTab,
-  tabs,
   tabItemsCount,
 }) => {
   return (
     <Tabs
-      value={activeTab}
-      onChange={(_, newValue) => setActiveTab(newValue)}
+      value={TABS.findIndex((tab) => tab.value === activeTab)}
       aria-label="user-profile-tabs"
       sx={{
         mt: { xs: -6, md: -6 },
         mb: 4,
       }}
     >
-      {tabs.map(({ title, value }, i) => (
-        <Tab
-          key={value}
-          label={
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {title}
-              {value !== "overview" && (
+      {TABS.map(({ title, value, slug }, index) => {
+        const itemCount = tabItemsCount[value];
+        const tabIsActive = value === activeTab;
+
+        return (
+          <BaseLink
+            href={`/@hash${slug ? `/${slug}` : ""}`}
+            shallow
+            key={value}
+          >
+            <Tab
+              sx={{ opacity: 1 }}
+              label={
                 <Box
+                  component="span"
                   sx={{
-                    ml: 1,
-                    minWidth: 25,
-                    minHeight: 25,
-                    borderRadius: "30px",
-                    px: 1,
-                    py: 0.25,
-                    backgroundColor: ({ palette }) =>
-                      value === activeTab
-                        ? palette.purple[100]
-                        : palette.gray[20],
                     display: "flex",
-                    justifyContent: "center",
                     alignItems: "center",
                   }}
                 >
-                  <Typography
-                    variant="bpMicroCopy"
-                    sx={{
-                      color: ({ palette }) =>
-                        value === activeTab
-                          ? palette.purple[600]
-                          : palette.gray[70],
-                    }}
-                  >
-                    {value === "blocks"
-                      ? tabItemsCount.blocks
-                      : tabItemsCount.schemas}
-                  </Typography>
+                  {title}
+                  {typeof itemCount === "number" && (
+                    <Box
+                      component="span"
+                      sx={{
+                        ml: 1,
+                        minWidth: 25,
+                        minHeight: 25,
+                        borderRadius: "30px",
+                        px: 1,
+                        py: 0.25,
+                        backgroundColor: ({ palette }) =>
+                          tabIsActive ? palette.purple[100] : palette.gray[20],
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Typography
+                        variant="bpMicroCopy"
+                        sx={{
+                          color: ({ palette }) =>
+                            tabIsActive
+                              ? palette.purple[600]
+                              : palette.gray[70],
+                        }}
+                      >
+                        {itemCount}
+                      </Typography>
+                    </Box>
+                  )}
                 </Box>
-              )}
-            </Box>
-          }
-          value={value}
-          id={`profile-tab-${i}`}
-          aria-controls={`profile-tabpanel-${i}`}
-        />
-      ))}
+              }
+              value={value}
+              id={`profile-tab-${index}`}
+              aria-controls={`profile-tabpanel-${index}`}
+            />
+          </BaseLink>
+        );
+      })}
     </Tabs>
   );
 };
