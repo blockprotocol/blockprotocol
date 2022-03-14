@@ -51,7 +51,7 @@ export const TabPanelContentsWithOverview: VoidFunctionComponent<
       </>
     ) : (
       <Placeholder
-        header={`@${user.shortname} hasn’t created any blocks or schemas yet`}
+        header={`@${user.shortname} hasn’t published any blocks or schemas yet`}
         tip="You can browse existing blocks and schemas on the Block Hub."
         actions={<BrowseHubButton />}
       />

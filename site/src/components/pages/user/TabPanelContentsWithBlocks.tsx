@@ -29,7 +29,7 @@ export const TabPanelContentsWithBlocks: VoidFunctionComponent<
       />
     ) : (
       <Placeholder
-        header={`@${user.shortname} hasn’t created any blocks yet`}
+        header={`@${user.shortname} hasn’t published any blocks yet`}
         tip="You can browse existing blocks on the Block Hub."
         actions={<BrowseHubButton />}
       />

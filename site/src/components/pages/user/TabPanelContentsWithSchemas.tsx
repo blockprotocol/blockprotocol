@@ -44,7 +44,7 @@ export const TabPanelContentsWithSchemas: VoidFunctionComponent<
       </>
     ) : (
       <Placeholder
-        header={`@${user.shortname} hasn’t created any schemas yet`}
+        header={`@${user.shortname} hasn’t published any schemas yet`}
         tip="You can browse existing schemas on the Block Hub."
         actions={<BrowseHubButton />}
       />
