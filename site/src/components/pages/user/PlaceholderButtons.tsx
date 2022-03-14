@@ -1,7 +1,7 @@
-import { faHammer, faTable } from "@fortawesome/free-solid-svg-icons";
+import { faHammer } from "@fortawesome/free-solid-svg-icons";
 import { VoidFunctionComponent } from "react";
 import { Button } from "../../Button";
-import { FontAwesomeIcon } from "../../icons";
+import { FontAwesomeIcon, TableTreeIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
 export const BuildBlockButton: VoidFunctionComponent = () => {
@@ -25,7 +25,7 @@ export const CreateSchemaButton: VoidFunctionComponent<{
       sx={{ margin: 1 }}
       variant="secondary"
       onClick={onClick}
-      startIcon={<FontAwesomeIcon icon={faTable} />}
+      startIcon={<TableTreeIcon />}
     >
       Create a schema
     </Button>
