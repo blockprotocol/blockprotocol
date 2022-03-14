@@ -12,17 +12,18 @@ import { useRouter } from "next/router";
 import {
   Collapse,
   Box,
-  Icon,
   IconButton,
   Divider,
   styled,
   BoxProps,
   useTheme,
 } from "@mui/material";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Link } from "./Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 import { parseIntFromPixelString } from "../util/muiUtils";
+import { FontAwesomeIcon } from "./icons";
 
 export const SIDEBAR_WIDTH = 220;
 
@@ -122,8 +123,8 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
               },
             })}
           >
-            <Icon
-              className="fa-chevron-right"
+            <FontAwesomeIcon
+              icon={faChevronRight}
               sx={{
                 fontSize: 14,
               }}
@@ -225,12 +226,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               },
             })}
           >
-            <Icon
-              className="fa-chevron-right"
-              sx={{
-                fontSize: 14,
-              }}
-            />
+            <FontAwesomeIcon icon={faChevronRight} sx={{ fontSize: 14 }} />
           </IconButton>
         ) : null}
       </Box>

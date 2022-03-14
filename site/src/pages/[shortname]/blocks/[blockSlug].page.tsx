@@ -2,7 +2,6 @@ import {
   Breadcrumbs,
   Container,
   Typography,
-  Icon,
   Box,
   useMediaQuery,
   useTheme,
@@ -12,6 +11,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ComponentType, useMemo, VoidFunctionComponent } from "react";
 import { formatDistance } from "date-fns";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { BlocksSlider } from "../../../components/BlocksSlider";
 import {
   blockDependencies,
@@ -24,6 +24,7 @@ import {
   readBlockDataFromDisk,
   ExpandedBlockMetadata as BlockMetadata,
 } from "../../../lib/blocks";
+import { FontAwesomeIcon } from "../../../components/icons";
 import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
 import { Link } from "../../../components/Link";
 
@@ -215,12 +216,12 @@ const BlockPage: NextPage<BlockPageProps> = ({
           <Box mb={1}>
             <Breadcrumbs
               separator={
-                <Icon
+                <FontAwesomeIcon
+                  icon={faChevronRight}
                   sx={{
                     fontSize: 14,
                     color: ({ palette }) => palette.gray[40],
                   }}
-                  className="fas fa-chevron-right"
                 />
               }
             >

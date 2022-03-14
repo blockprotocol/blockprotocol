@@ -1,4 +1,4 @@
-import { Typography, Box, Icon } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import React, {
   ReactNode,
   useEffect,
@@ -17,6 +17,7 @@ import {
   isVerificationCodeFormatted,
   useVerificationCodeTextField,
 } from "../hooks/useVerificationCodeTextField";
+import { EnvelopeDotIcon } from "../icons";
 
 export type VerificationCodeInfo = {
   userId: string;
@@ -173,10 +174,9 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Icon
-        className="fa-solid fa-envelope-dot"
+      <EnvelopeDotIcon
         sx={{
-          fontSize: 50,
+          fontSize: 60,
           color: ({ palette }) => palette.purple[600],
           marginBottom: 3,
         }}
