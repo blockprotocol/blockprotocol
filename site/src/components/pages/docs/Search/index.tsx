@@ -158,7 +158,7 @@ const Search: React.VoidFunctionComponent<SearchProps> = ({
     event.preventDefault();
 
     if (searchResults.length > 0 && searchResults[activeResult]) {
-      const { slug } = searchResults[activeResult];
+      const { slug } = searchResults[activeResult]!;
 
       (document.querySelector(".search-bar input") as HTMLElement).blur();
 

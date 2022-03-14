@@ -171,7 +171,7 @@ export const getStaticProps: GetStaticProps<
   const { specSlug } = params || {};
 
   const fileNameWithoutIndex =
-    specSlug && specSlug.length > 0 ? specSlug[0] : "index";
+    specSlug && specSlug.length > 0 ? specSlug[0]! : "index";
 
   // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
   // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
