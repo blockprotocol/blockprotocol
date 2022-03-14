@@ -102,7 +102,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
       return {
         ...metadata,
-        author: metadata.packagePath.split("/")[0].replace(/^@/, ""),
+        author: metadata.packagePath.split("/")[0]!.replace(/^@/, ""),
         icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
         image: getBlockMediaUrl(metadata.image, metadata.packagePath),
         repository,

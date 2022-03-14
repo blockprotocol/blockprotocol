@@ -91,7 +91,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
     const onScroll = () => {
       if (!detectHeadingFromScroll) return;
 
-      let headingAtScrollPosition: Heading = headings[0];
+      let headingAtScrollPosition: Heading = headings[0]!;
 
       for (const heading of headings.slice(1)) {
         const { element } = heading;

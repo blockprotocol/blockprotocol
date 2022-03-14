@@ -59,7 +59,7 @@ const blockComponentFromSource = (source: string): ComponentType => {
     return exports.App;
   }
   if (Object.keys(exports).length === 1) {
-    return exports[Object.keys(exports)[0]]!;
+    return exports[Object.keys(exports)[0]!]!;
   }
 
   throw new Error(

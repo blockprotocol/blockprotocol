@@ -307,7 +307,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
   withTitle,
   titleLocation = "top",
 }) => {
-  const { title, content } = SCHEMA_CONTENT[name ?? "definedTerm"];
+  const { title, content } = SCHEMA_CONTENT[name ?? "definedTerm"] ?? {};
   return (
     <Box
       sx={{
@@ -347,7 +347,7 @@ const SchemaBlock: VFC<SchemaBlockProps> = ({
           borderRadius: "6px",
         }}
       >
-        {content.map(({ key, value, id }) => (
+        {content?.map(({ key, value, id }) => (
           <Box
             sx={{
               display: "flex",
@@ -576,11 +576,9 @@ export const Step2: VFC<StepProps> = ({ isMobile }) => {
 };
 
 export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
-  const [titles, setTitles] = useState<AppProps["name"][]>([
-    "todo",
-    "docs",
-    "notes",
-  ]);
+  const [titles, setTitles] = useState<
+    [AppProps["name"], AppProps["name"], AppProps["name"]]
+  >(["todo", "docs", "notes"]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -589,9 +587,8 @@ export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
         clearInterval(timerRef.current);
       }
       timerRef.current = setInterval(() => {
-        const newTitles = [...titles];
-        newTitles.unshift(newTitles.pop()!);
-        setTitles([...newTitles]);
+        const [title0, title1, title2] = titles;
+        setTitles([title2, title0, title1]);
       }, 3000);
     }
 

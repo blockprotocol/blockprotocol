@@ -172,7 +172,11 @@ export class ApiKey {
 
     const INVALID_KEY_ERROR_MSG = "Invalid API key.";
 
-    const [_prefix, publicId, privateId] = apiKeyString.split(".");
+    const [_prefix, publicId, privateId] = apiKeyString.split(".") as [
+      string,
+      string,
+      string,
+    ]; // This assertion is based on KEY_FORMAT_REGEXP;
 
     const apiKey = await ApiKey.getByPublicId(db, { publicId });
 
