@@ -174,7 +174,6 @@ const ensureRepositorySnapshot = async ({
         "--extract",
         `--file=${path.resolve(tarDirPath, "repo.tar.gz")}`,
         `--directory=${outputDirPath}`,
-        "--verbose",
       ],
       defaultExecaOptions,
     );
