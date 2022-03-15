@@ -15,7 +15,7 @@ export const Placeholder: VoidFunctionComponent<PlaceholderProps> = ({
   return (
     <Box
       sx={{
-        border: "1px dashed #C5D1DB",
+        border: ({ palette }) => "1px dashed ${palette.gray[40]}",
         borderRadius: "8px",
         textAlign: "center",
         paddingY: { xs: 6, sm: 12 },
