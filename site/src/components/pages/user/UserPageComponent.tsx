@@ -104,10 +104,7 @@ export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
               />
             </TabPanel>
             <TabPanel activeTab={activeTab} value="blocks" index={1}>
-              <TabPanelContentsWithBlocks //
-                user={user}
-                blocks={blocks}
-              />
+              <TabPanelContentsWithBlocks user={user} blocks={blocks} />
             </TabPanel>
             <TabPanel activeTab={activeTab} value="schemas" index={2}>
               <TabPanelContentsWithSchemas
