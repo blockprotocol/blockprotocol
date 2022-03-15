@@ -97,7 +97,7 @@ export const TabPanelContentsWithOverview: VoidFunctionComponent<
             </Grid>
           ),
         )}
-      {entityTypes.slice(0, 4).map(({ entityTypeId, schema, updatedAt }) => (
+      {entityTypes.slice(0, 8).map(({ entityTypeId, schema, updatedAt }) => (
         <Grid key={entityTypeId} item xs={12} md={6}>
           <OverviewCard
             url={schema.$id}
