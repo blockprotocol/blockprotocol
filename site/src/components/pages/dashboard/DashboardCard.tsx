@@ -1,7 +1,8 @@
-import { Box, Typography, Link, Icon, BoxProps } from "@mui/material";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { Box, Typography, Link, BoxProps } from "@mui/material";
 import { VoidFunctionComponent, FC } from "react";
 
-import { ArrowRightIcon } from "../../icons";
+import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
 
 export type DashboardCardProps = {
   title: string;
@@ -12,7 +13,7 @@ export type DashboardCardProps = {
     href?: string;
     onClick?: () => void;
   };
-  icon?: string;
+  icon?: IconDefinition;
   variant?: "primary" | "secondary";
 };
 
@@ -81,10 +82,16 @@ export const DashboardCardSecondary: VoidFunctionComponent<
           p: 3,
         }}
       >
-        <Icon
-          sx={{ fontSize: 32, mr: 3, color: ({ palette }) => palette.gray[40] }}
-          className={icon}
-        />
+        {icon ? (
+          <FontAwesomeIcon
+            sx={{
+              fontSize: 32,
+              mr: 3,
+              color: ({ palette }) => palette.gray[40],
+            }}
+            icon={icon}
+          />
+        ) : null}
         <Box
           sx={{
             display: "flex",
