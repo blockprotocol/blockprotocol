@@ -292,12 +292,14 @@ We are considering moving to the cursor-based [Connections pattern](https://rela
   - `entityTypeVersionId?` \[_string_]\[_optional_]:: limit results to entities of a specific version of a type
   - `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
   - `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
-  - `multiFilter?` \[_array_]\[_optional_]: filter entities by a given field value:
-    - `field` \[_string_]: the field name to filter by.
-    - `operator` \[_enum_]: the filter operator.
-      One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
-    - `value` \[_string_]: the value to match against.
-  - `multiSort?` \[_array_]\[_optional_]: specify how to sort results by providing one or more objects with the following shape:
+  - `multiFilter?` \[_object_]\[_optional_]: filter entities by a given field value:
+    - `operator` \[_enum_]: one of "AND" or "OR": determines whether all filters must be matched ("AND"), or only one ("OR").
+    - `filters` \[_array_]: an array of filter objects of the following shape:
+      - `field` \[_string_]: the field name to filter by.
+      - `operator` \[_enum_]: the filter operator.
+        One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
+      - `value` \[_string_]: the value to match against.
+  - `multiSort?` \[_array_]\[_optional_]: specify how to sort results by providing one or more objects, inside an array, of the following shape:
     - `field` \[_string_]: the field name to sort on.
     - `desc?` \[_boolean_]\[_optional_]: whether to sort descending.
 - Embedding apps SHOULD provide a default aggregation if not provided.

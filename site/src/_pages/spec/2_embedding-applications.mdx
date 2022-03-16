@@ -31,8 +31,6 @@ Embedding applications SHOULD supply blocks with functions to get, aggregate, cr
 
 These functions MUST conform to the naming conventions and function signatures outlined in [the previous section](https://blockprotocol.org/spec/embedding-applications).
 
-Embedding applications SHOULD provide defaults for aggregation operations to handle cases where the block doesn’t specify its own requirements.
-
 Embedding applications SHOULD provide defaults for aggregation operations to handle cases where the block doesn’t specify its own requirements (e.g. default sort, default items per response)
 
 To enable blocks to update data of entities, including themselves, embedding applications MUST include an `entityId` alongside the data for each entity it supplies the block with - along with any other [entity identifiers](https://blockprotocol.org/spec/block-types#fields-identifying-entities) the application needs blocks to send back to it when making requests. The `entityId` SHOULD be unique within the application, in order for blocks to use it reliably to identify entities.
