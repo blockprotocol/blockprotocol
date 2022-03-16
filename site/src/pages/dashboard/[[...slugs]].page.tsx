@@ -1,5 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
+import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -63,7 +64,7 @@ const getDashboardSecondaryCardData = (
       title: "Generate Key",
       href: "/settings/api-keys",
     },
-    icon: "fa-solid fa-key",
+    icon: faKey,
   },
   {
     title: "View your public profile",
@@ -73,7 +74,7 @@ const getDashboardSecondaryCardData = (
       title: "View Profile",
       href: profileLink,
     },
-    icon: "fa-solid fa-user",
+    icon: faUser,
     variant: "secondary",
   },
 ];
