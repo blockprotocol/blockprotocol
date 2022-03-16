@@ -62,9 +62,9 @@ export type BlockMetadata = {
    */
   examples?: JSONObject[] | null;
   /**
-   * The dependencies a block relies on but expects the embedding application to provide
+   * The dependencies a block relies on but expects the embedding application to provide, e.g. { "react": "^17.0.2" }
    */
-  externals?: JSONObject[];
+  externals?: JSONObject;
   /**
    * An icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block).
    */
