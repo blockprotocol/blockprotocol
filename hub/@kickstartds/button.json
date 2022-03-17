@@ -1,6 +1,6 @@
 {
-  "repository": "git@github.com:kachkaev/blocks.git",
-  "commit": "48eef89e1a7e61d792b6e195bc8bb98613dcbc50",
+  "repository": "git@github.com:kickstartDS/blocks.git",
+  "commit": "b1a6b814d82308d9f48c441d537073957b577052",
 
   "workspace": "@kickstartds/block-button",
   "distDir": "dist"
