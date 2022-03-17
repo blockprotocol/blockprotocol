@@ -62,11 +62,12 @@ interface BlockInfo extends StoredBlockInfo {
  */
 const listBlockInfos = async (
   blockInfosDirPath: string,
-): Promise<BlockInfo[]> => {
+): Promise<{ blockInfos: BlockInfo[]; errorMessages: string[] }> => {
   const blockInfoPaths = glob.sync("**/*.json", { cwd: blockInfosDirPath });
   console.log(`Block source infos found in HUB_DIR: ${blockInfoPaths.length}`);
 
-  const result: BlockInfo[] = [];
+  const blockInfos: BlockInfo[] = [];
+  const errorMessages: string[] = [];
 
   for (const blockInfoPath of blockInfoPaths) {
     try {
@@ -84,7 +85,7 @@ const listBlockInfos = async (
       )) as unknown;
 
       if (validateStoredBlockInfo(storedBlockInfo)) {
-        result.push({
+        blockInfos.push({
           name: `@${blockVendorName}/${blockNameWithinVendor}`,
           ...storedBlockInfo,
         });
@@ -98,11 +99,11 @@ const listBlockInfos = async (
         );
       }
     } catch (error) {
-      console.log(chalk.red(`Ignoring ${blockInfoPath}. ${error}`));
+      errorMessages.push(`${blockInfoPath}: ${error}`);
     }
   }
 
-  return result;
+  return { blockInfos, errorMessages };
 };
 
 /**
@@ -372,6 +373,10 @@ const script = async () => {
       desc: "If set to false, blocks are prepared even if there is a cache hit.",
       default: true,
     }),
+    CONTINUE_ON_ERROR: envalid.bool({
+      desc: "If set to true, a failure to read block info or to build does not result early exit.",
+      default: false,
+    }),
     VALIDATE_LOCKFILE: envalid.bool({
       desc: "If set to true, blocks with non-existing or unstable yarn.lock / package.json will not end up in BLOCKS_DIR.",
       default: true,
@@ -381,11 +386,21 @@ const script = async () => {
   const blockInfosDirPath = path.resolve(env.BLOCK_INFOS_DIR);
   const blocksDirPath = path.resolve(env.BLOCKS_DIR);
   const blockFilter = env.BLOCK_FILTER;
+  const continueOnError = env.CONTINUE_ON_ERROR;
 
   console.log(`HUB_DIR is resolved to ${blockInfosDirPath}`);
   console.log(`BLOCKS_DIR is resolved to ${blocksDirPath}`);
 
-  const blockInfos = await listBlockInfos(blockInfosDirPath);
+  const { blockInfos, errorMessages } = await listBlockInfos(blockInfosDirPath);
+
+  if (errorMessages.length) {
+    for (const errorMessage of errorMessages) {
+      console.log(chalk.red(errorMessage));
+    }
+    if (!continueOnError) {
+      process.exit(1);
+    }
+  }
 
   if (!blockInfos.length) {
     throw new Error(
@@ -462,6 +477,10 @@ const script = async () => {
           `Block ${chalk.bold(`${blockName}`)} could not be prepared. ${error}`,
         ),
       );
+
+      if (!continueOnError) {
+        process.exit(1);
+      }
 
       await fs.remove(blockDirPath);
 
