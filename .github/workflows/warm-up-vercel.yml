@@ -24,7 +24,7 @@ jobs:
             \n
           EOF
 
-          for PATHNAME in "/@hash" "/types/DUMMY_ENTITY_ID"; do
+          for PATHNAME in "/@hash" "/api/me" "/types/DUMMY_ENTITY_ID"; do
             curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
           done
         env:
