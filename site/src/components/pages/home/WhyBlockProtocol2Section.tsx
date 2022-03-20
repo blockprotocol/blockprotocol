@@ -5,9 +5,9 @@ import {
   Box,
   useTheme,
   useMediaQuery,
-  Icon,
 } from "@mui/material";
-import { SyncIcon } from "../../icons";
+import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { SyncIcon, FontAwesomeIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
 type WhyBlockProtocol2SectionProps = {
@@ -40,7 +40,7 @@ export const WhyBlockProtocol2Section: React.FC<
           overflowY: "hidden",
           color: ({ palette }) => ({
             xs: palette.common.white,
-            md: palette.gray[60],
+            md: palette.gray[70],
           }),
         }}
       >
@@ -57,9 +57,9 @@ export const WhyBlockProtocol2Section: React.FC<
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <Icon
+            <FontAwesomeIcon
+              icon={faPencil}
               sx={{ fontSize: "inherit", mr: 1.25 }}
-              className="fas fa-pencil"
             />
             Personal Notes
           </Typography>
@@ -87,9 +87,12 @@ export const WhyBlockProtocol2Section: React.FC<
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <Icon
-              sx={{ fontSize: "inherit", mr: 1.25 }}
-              className="fas fa-check-circle"
+            <FontAwesomeIcon
+              icon={faCheckCircle}
+              sx={{
+                fontSize: "inherit",
+                mr: 1.25,
+              }}
             />
             Project Management App
           </Typography>
@@ -189,7 +192,7 @@ export const WhyBlockProtocol2Section: React.FC<
         <Box sx={{ flex: { xs: 1, md: 0.48 }, mb: { xs: 4, md: 0 } }}>
           <Container sx={{ width: { xs: "100%", md: "75%" } }}>
             <Typography
-              sx={{ color: ({ palette }) => palette.gray[80] }}
+              sx={{ color: ({ palette }) => palette.gray[90] }}
               variant="bpHeading3"
               mb={2.25}
             >
@@ -213,7 +216,7 @@ export const WhyBlockProtocol2Section: React.FC<
           sx={{
             flex: { xs: 1, md: 0.48 },
             py: { xs: 2.8, md: 6 },
-            backgroundColor: ({ palette }) => palette.gray[80],
+            backgroundColor: ({ palette }) => palette.gray[90],
             borderTopLeftRadius: "6px",
             borderBottomLeftRadius: "6px",
             display: "flex",

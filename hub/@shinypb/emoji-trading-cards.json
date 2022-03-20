@@ -1,5 +1,6 @@
 {
   "repository": "https://github.com/shinypb/emoji-trading-cards",
-  "branch": "main",
+  "commit": "12657ff0f18c6d360edcaf57a380f71d4170f007",
+
   "distDir": "dist"
 }

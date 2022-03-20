@@ -91,7 +91,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
     const onScroll = () => {
       if (!detectHeadingFromScroll) return;
 
-      let headingAtScrollPosition: Heading = headings[0];
+      let headingAtScrollPosition: Heading = headings[0]!;
 
       for (const heading of headings.slice(1)) {
         const { element } = heading;
@@ -151,6 +151,13 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
               xs: "100%",
               sm: MDX_TEXT_CONTENT_MAX_WIDTH,
             },
+          },
+          /** Headers that come after headers shouldn't have a top margin */
+          "& h1 + h2, h1 + h3, h1 + h4, h2 + h3, h2 + h4, h3 + h4": {
+            marginTop: 0,
+          },
+          "& > :first-child": {
+            marginTop: 0,
           },
         }}
       >

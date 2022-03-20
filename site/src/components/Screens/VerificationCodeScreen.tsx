@@ -1,4 +1,4 @@
-import { Typography, Box, Icon } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import React, {
   ReactNode,
   useEffect,
@@ -17,6 +17,7 @@ import {
   isVerificationCodeFormatted,
   useVerificationCodeTextField,
 } from "../hooks/useVerificationCodeTextField";
+import { EnvelopeDotIcon } from "../icons";
 
 export type VerificationCodeInfo = {
   userId: string;
@@ -173,10 +174,9 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Icon
-        className="fa-solid fa-envelope-dot"
+      <EnvelopeDotIcon
         sx={{
-          fontSize: 50,
+          fontSize: 60,
           color: ({ palette }) => palette.purple[600],
           marginBottom: 3,
         }}
@@ -186,7 +186,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         textAlign="center"
         marginBottom={2}
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
           fontWeight: 500,
         }}
       >
@@ -300,7 +300,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         variant="bpSmallCopy"
         textAlign="center"
         sx={{
-          color: ({ palette }) => palette.gray[70],
+          color: ({ palette }) => palette.gray[80],
           maxWidth: {
             xs: "unset",
             sm: "70%",
@@ -313,7 +313,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
       <Typography
         variant="bpSmallCopy"
         sx={{
-          color: ({ palette }) => palette.gray[60],
+          color: ({ palette }) => palette.gray[70],
           maxWidth: {
             xs: "unset",
             sm: "70%",

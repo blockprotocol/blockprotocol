@@ -12,17 +12,18 @@ import { useRouter } from "next/router";
 import {
   Collapse,
   Box,
-  Icon,
   IconButton,
   Divider,
   styled,
   BoxProps,
   useTheme,
 } from "@mui/material";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Link } from "./Link";
 import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 import { parseIntFromPixelString } from "../util/muiUtils";
+import { FontAwesomeIcon } from "./icons";
 
 export const SIDEBAR_WIDTH = 220;
 
@@ -30,7 +31,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
   lineHeight: "1.25em",
   transition: theme.transitions.create(["color"]),
-  color: theme.palette.gray[70],
+  color: theme.palette.gray[80],
   ":hover": {
     color: theme.palette.purple[600],
   },
@@ -91,7 +92,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
             paddingLeft: depth * 1 + 1.25,
             color: isSectionSelected
               ? theme.palette.purple[600]
-              : theme.palette.gray[70],
+              : theme.palette.gray[80],
             fontWeight: isSectionSelected ? 700 : 400,
           })}
         >
@@ -122,8 +123,8 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
               },
             })}
           >
-            <Icon
-              className="fa-chevron-right"
+            <FontAwesomeIcon
+              icon={faChevronRight}
               sx={{
                 fontSize: 14,
               }}
@@ -193,7 +194,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
             alignSelf: "flex-start",
             color: isSelected
               ? theme.palette.purple[600]
-              : theme.palette.gray[70],
+              : theme.palette.gray[80],
             fontWeight: isSelected ? 700 : 400,
             paddingLeft: 1.25,
           })}
@@ -225,12 +226,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               },
             })}
           >
-            <Icon
-              className="fa-chevron-right"
-              sx={{
-                fontSize: 14,
-              }}
-            />
+            <FontAwesomeIcon icon={faChevronRight} sx={{ fontSize: 14 }} />
           </IconButton>
         ) : null}
       </Box>
@@ -317,7 +313,7 @@ export const Sidebar: VFC<SidebarProps> = ({
 
     if (cachedRef) {
       const observer = new IntersectionObserver(
-        ([event]) => setIsSticky(event.intersectionRatio < 1),
+        ([event]) => setIsSticky(event!.intersectionRatio < 1),
         { threshold: [1] },
       );
 
@@ -432,11 +428,11 @@ export const Sidebar: VFC<SidebarProps> = ({
                 />
               ))
             : pages.length === 1
-            ? pages[0].sections.map((section, i) => (
+            ? pages[0]!.sections.map((section, i) => (
                 <SidebarPageSection
                   isSelectedByDefault={i === 0}
                   key={section.anchor}
-                  pageHref={pages[0].href}
+                  pageHref={pages[0]!.href}
                   section={section}
                   maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
                   setSelectedAnchorElement={setSelectedAnchorElement}

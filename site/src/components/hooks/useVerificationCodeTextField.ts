@@ -7,7 +7,7 @@ type UseVerificationCodeTextFieldProps = {
 
 export const isVerificationCodeFormatted = (verificationCode: string) => {
   const units = verificationCode.split("-");
-  return units.length >= 4 && units?.[3].length > 0;
+  return units.length >= 4 && units?.[3]!.length > 0;
 };
 
 export const useVerificationCodeTextField = ({

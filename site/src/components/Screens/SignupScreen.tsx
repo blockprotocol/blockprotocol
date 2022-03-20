@@ -91,7 +91,7 @@ export const SignupScreen: VFC<SignupScreenProps> = ({
         variant="bpHeading3"
         textAlign="center"
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
         }}
       >
         Create your Block Protocol account

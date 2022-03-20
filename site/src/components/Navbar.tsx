@@ -2,7 +2,6 @@ import { VFC, useState, useEffect, useContext, useMemo } from "react";
 import {
   Box,
   Typography,
-  Icon,
   Container,
   useTheme,
   useMediaQuery,
@@ -12,9 +11,10 @@ import {
   useScrollTrigger,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { Link } from "./Link";
-import { BlockProtocolLogoIcon, BoltIcon } from "./icons";
+import { BlockProtocolLogoIcon, BoltIcon, FontAwesomeIcon } from "./icons";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import SiteMapContext from "../context/SiteMapContext";
 import { useUser } from "../context/UserContext";
@@ -256,7 +256,7 @@ export const Navbar: VFC<NavbarProps> = ({
               href="/"
               sx={{
                 color: ({ palette }) =>
-                  isNavbarDark ? palette.purple[400] : palette.gray[80],
+                  isNavbarDark ? palette.purple[400] : palette.gray[90],
               }}
             >
               <BlockProtocolLogoIcon
@@ -282,7 +282,7 @@ export const Navbar: VFC<NavbarProps> = ({
                           ? palette.purple[400]
                           : asPath.startsWith(href)
                           ? palette.purple[600]
-                          : palette.gray[60],
+                          : palette.gray[70],
                         "&:hover": {
                           color: isNavbarDark
                             ? palette.gray[30]
@@ -319,7 +319,7 @@ export const Navbar: VFC<NavbarProps> = ({
                           duration: 100,
                         }),
                         color: ({ palette }) =>
-                          isNavbarDark ? palette.purple[400] : palette.gray[60],
+                          isNavbarDark ? palette.purple[400] : palette.gray[70],
                         "&:hover": {
                           color: ({ palette }) =>
                             isNavbarDark
@@ -361,13 +361,16 @@ export const Navbar: VFC<NavbarProps> = ({
               ) : (
                 <IconButton
                   onClick={() => setDisplayMobileNav(!displayMobileNav)}
-                  sx={{
-                    "& svg": isNavbarDark
-                      ? { color: theme.palette.purple.subtle }
-                      : {},
-                  }}
                 >
-                  <Icon className="fas fa-bars" />
+                  <FontAwesomeIcon
+                    sx={{
+                      fontSize: 27.5,
+                      ...(isNavbarDark && {
+                        color: theme.palette.purple.subtle,
+                      }),
+                    }}
+                    icon={faBars}
+                  />
                 </IconButton>
               )}
               <AccountDropdown />
@@ -426,8 +429,9 @@ export const Navbar: VFC<NavbarProps> = ({
             }}
           >
             {user ? null : router.pathname === "/login" ? null : (
-              <Link
+              <LinkButton
                 href="#"
+                variant="secondary"
                 onClick={(event) => {
                   setDisplayMobileNav(false);
                   openLoginModal();
@@ -438,7 +442,7 @@ export const Navbar: VFC<NavbarProps> = ({
                 }}
               >
                 Log in
-              </Link>
+              </LinkButton>
             )}
             <LinkButton
               href="/docs/developing-blocks"

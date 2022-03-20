@@ -66,6 +66,16 @@ const script = async () => {
       preferredName: "Alice",
       email: "alice@example.com",
     },
+    {
+      shortname: "bob",
+      preferredName: "Bob",
+      email: "bob@example.com",
+    },
+    {
+      shortname: "hash",
+      preferredName: "HASH",
+      email: "hash@example.com",
+    },
   ];
 
   await Promise.all(
