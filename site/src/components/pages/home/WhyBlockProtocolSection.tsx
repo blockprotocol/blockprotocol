@@ -190,62 +190,25 @@ export const WhyBlockProtocolSection = () => {
     const triggers: ScrollTrigger[] = [];
 
     markers.forEach((marker, index) => {
-      // gsap.set(marker, { autoAlpha: 0 });
-      const nextIndex = index < markers.length ? index : markers.length - 1;
-      const prevIndex = index < 0 ? 0 : index;
-
       triggers.push(
         ScrollTrigger.create({
           trigger: marker,
           start: "top center-=100",
           end: "top top+=200vh",
-          // endTrigger: fadeRef.current,
           scrub: true,
-          markers: true,
           onEnter: () => {
             setStep(index);
           },
           onEnterBack: () => {
             setStep(index);
           },
+          onLeaveBack: () => {
+            if (index === 0) {
+              setStep(undefined);
+            }
+          },
         }),
       );
-
-      // triggers.push(
-      //   ScrollTrigger.create({
-      //     trigger: marker,
-      //     // start: "bottom center",
-      //     // end: "top top+=10",
-      //     start: "bottom center",
-      //     endTrigger: markers[nextIndex],
-      //     scrub: true,
-      //     pin: true,
-      //     pinSpacing: false,
-      //     // markers: true,
-      //     onEnter: () => {
-      //       // console.log("enter => ", marker);
-      //       gsap.to(marker, {
-      //         autoAlpha: 1,
-      //       });
-      //     },
-      //     onEnterBack: () => {
-      //       gsap.to(marker, {
-      //         autoAlpha: 1,
-      //       });
-      //     },
-      //     onLeave: () => {
-      //       gsap.to(marker, {
-      //         autoAlpha: 0,
-      //       });
-      //       // console.log("leave => ", marker);
-      //     },
-      //     onLeaveBack: () => {
-      //       gsap.to(marker, {
-      //         autoAlpha: 0,
-      //       });
-      //     },
-      //   }),
-      // );
 
       // change from table to block
       triggers.push(
@@ -254,7 +217,6 @@ export const WhyBlockProtocolSection = () => {
           start: "top center",
           end: "bottom center+=50",
           scrub: true,
-          // markers: true,
           onEnter: () => {
             const markerIndex = markers.indexOf(marker);
             if (markerIndex > 0) {
@@ -341,9 +303,35 @@ export const WhyBlockProtocolSection = () => {
                 width: "100%",
                 position: "sticky",
                 top: `calc(50vh - 105px)`,
-                // display: "none",
               }}
             >
+              {CONTENT.map(({ content, id }, index) => (
+                <Fade in={step === index} key={id}>
+                  <Box
+                    sx={{
+                      // backgroundColor: "#373B49",
+                      zIndex: 2,
+                      width: { md: "80%" },
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      // boxShadow: 1,
+                      p: 1.5,
+                      borderRadius: "4px",
+                      // border: "1px solid red",
+                      ...((index !== 0 || true) && {
+                        position: "absolute",
+                        top: -100,
+                        left: "50%",
+                        transform: `translateX(-50%)`,
+                      }),
+                    }}
+                  >
+                    {content}
+                  </Box>
+                </Fade>
+              ))}
+
               {[
                 { id: 1, component: <TodoListBlock /> },
                 { id: 2, component: <TableBlock /> },
@@ -373,7 +361,7 @@ export const WhyBlockProtocolSection = () => {
             </Box>
             <Spacer height={7} />
 
-            {CONTENT.map(({ content, id }, index) => (
+            {CONTENT.map(({ id }) => (
               <Box
                 key={id}
                 className={`item item--${id}`}
@@ -381,34 +369,9 @@ export const WhyBlockProtocolSection = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "flex-start",
-                  // height: "60vh",
-                  // height: "50vh",
                   height: "60vh",
-                  // marginBottom: "30vh",
-                  // border: "1px solid white",
-                  position: "sticky",
-                  top: "30vh",
                 }}
-              >
-                <Fade in={step === index}>
-                  <Box
-                    sx={{
-                      // backgroundColor: "#373B49",
-                      zIndex: 2,
-                      width: { md: "80%" },
-                      display: "flex",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      // boxShadow: 1,
-                      p: 1.5,
-                      borderRadius: "4px",
-                      // border: "1px solid red",
-                    }}
-                  >
-                    {content}
-                  </Box>
-                </Fade>
-              </Box>
+              />
             ))}
           </Container>
         </Box>
