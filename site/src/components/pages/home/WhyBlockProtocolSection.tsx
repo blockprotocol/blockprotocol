@@ -176,8 +176,7 @@ const CONTENT = [
 export const WhyBlockProtocolSection = () => {
   const pinRef = useRef(null);
   const boxRef = useRef(null);
-  const [activeStep, setActiveStep] = useState(0);
-  const [step, setStep] = useState<number | undefined>();
+  const [activeStep, setActiveStep] = useState<number | undefined>();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const fadeRef = useRef(null);
@@ -197,40 +196,14 @@ export const WhyBlockProtocolSection = () => {
           end: "top top+=200vh",
           scrub: true,
           onEnter: () => {
-            setStep(index);
+            setActiveStep(index);
           },
           onEnterBack: () => {
-            setStep(index);
+            setActiveStep(index);
           },
           onLeaveBack: () => {
             if (index === 0) {
-              setStep(undefined);
-            }
-          },
-        }),
-      );
-
-      // change from table to block
-      triggers.push(
-        ScrollTrigger.create({
-          trigger: marker,
-          start: "top center",
-          end: "bottom center+=50",
-          scrub: true,
-          onEnter: () => {
-            const markerIndex = markers.indexOf(marker);
-            if (markerIndex > 0) {
-              setActiveStep(1);
-            } else {
-              setActiveStep(0);
-            }
-          },
-          onEnterBack: () => {
-            const markerIndex = markers.indexOf(marker);
-            if (markerIndex > 0) {
-              setActiveStep(1);
-            } else {
-              setActiveStep(0);
+              setActiveStep(undefined);
             }
           },
         }),
@@ -306,7 +279,7 @@ export const WhyBlockProtocolSection = () => {
               }}
             >
               {CONTENT.map(({ content, id }, index) => (
-                <Fade in={step === index} key={id}>
+                <Fade in={activeStep === index} key={id}>
                   <Box
                     sx={{
                       // backgroundColor: "#373B49",
@@ -333,12 +306,14 @@ export const WhyBlockProtocolSection = () => {
               ))}
 
               {[
-                { id: 1, component: <TodoListBlock /> },
-                { id: 2, component: <TableBlock /> },
-              ].map(({ id, component }, index) => (
+                { id: "todo", component: <TodoListBlock /> },
+                { id: "table", component: <TableBlock /> },
+              ].map(({ id, component }) => (
                 <Fade
                   key={id}
-                  in={activeStep === index}
+                  in={
+                    id === "todo" ? !activeStep : !!activeStep && activeStep > 0
+                  }
                   timeout={{ enter: 750, exit: 500 }}
                 >
                   <Box
@@ -346,7 +321,7 @@ export const WhyBlockProtocolSection = () => {
                       display: "flex",
                       justifyContent: "center",
                       zIndex: 2,
-                      ...(id === 1 && {
+                      ...(id === "table" && {
                         position: "absolute",
                         top: 0,
                         left: 0,
