@@ -10,4 +10,4 @@ export const createApiKeyRequiredHandler = <
   RequestBody = unknown,
   Response = unknown,
 >(): NextConnect<BaseApiRequest<RequestBody>, BaseApiResponse<Response>> =>
-  createBaseHandler().use(hasValidApiKeyMiddleware);
+  createBaseHandler({ isPublicApi: true }).use(hasValidApiKeyMiddleware);

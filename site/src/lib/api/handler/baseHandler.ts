@@ -25,9 +25,17 @@ type ErrorResponse = {
 
 export type BaseApiResponse<T = unknown> = NextApiResponse<T | ErrorResponse>;
 
-export const createBaseHandler = <RequestBody = unknown, Response = any>() =>
-  nextConnect<BaseApiRequest<RequestBody>, BaseApiResponse<Response>>()
-    .use(cors({ origin: FRONTEND_URL, credentials: true }))
+export const createBaseHandler = <
+  RequestBody = unknown,
+  Response = any,
+>(options?: {
+  isPublicApi?: boolean;
+}) => {
+  const { isPublicApi } = options ?? {};
+
+  return nextConnect<BaseApiRequest<RequestBody>, BaseApiResponse<Response>>()
+    .use(cors({ origin: isPublicApi ? "*" : FRONTEND_URL, credentials: true }))
     .use(dbMiddleware)
     .use(sessionMiddleware)
     .use(...passportMiddleware);
+};
