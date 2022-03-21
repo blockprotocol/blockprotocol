@@ -265,7 +265,8 @@ export const WhyBlockProtocolSection = () => {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              width: { lg: "30%" },
+              width: "90%",
+              maxWidth: { xs: "90%", sm: 440 },
             }}
           >
             <Box
@@ -283,7 +284,7 @@ export const WhyBlockProtocolSection = () => {
                   <Box
                     sx={{
                       zIndex: 2,
-                      width: { xs: "100%", md: "80%" },
+                      width: { xs: "100%", md: "90%" },
                       display: "flex",
                       justifyContent: "center",
                       textAlign: "center",
