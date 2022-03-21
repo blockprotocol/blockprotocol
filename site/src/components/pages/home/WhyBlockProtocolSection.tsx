@@ -282,22 +282,17 @@ export const WhyBlockProtocolSection = () => {
                 <Fade in={activeStep === index} key={id}>
                   <Box
                     sx={{
-                      // backgroundColor: "#373B49",
                       zIndex: 2,
-                      width: { md: "80%" },
+                      width: { xs: "100%", md: "80%" },
                       display: "flex",
                       justifyContent: "center",
                       textAlign: "center",
-                      // boxShadow: 1,
                       p: 1.5,
                       borderRadius: "4px",
-                      // border: "1px solid red",
-                      ...((index !== 0 || true) && {
-                        position: "absolute",
-                        top: -100,
-                        left: "50%",
-                        transform: `translateX(-50%)`,
-                      }),
+                      position: "absolute",
+                      top: -100,
+                      left: "50%",
+                      transform: `translateX(-50%)`,
                     }}
                   >
                     {content}

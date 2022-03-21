@@ -4,7 +4,6 @@ import { Header } from "../components/pages/home/Header";
 import { IntroSection } from "../components/pages/home/IntroSection";
 import { Section2 } from "../components/pages/home/Section2";
 import { WhyBlockProtocolSection } from "../components/pages/home/WhyBlockProtocolSection";
-// import { WhyBlockProtocol2Section } from "../components/pages/home/WhyBlockProtocol2Section";
 import { RegistrySection } from "../components/pages/home/RegistrySection";
 import {
   ExpandedBlockMetadata as BlockMetadata,
@@ -28,7 +27,6 @@ const HomePage: VFC<PageProps> = ({ catalog }) => {
       <IntroSection />
       <Section2 />
       <WhyBlockProtocolSection />
-      {/* <WhyBlockProtocol2Section /> */}
       <RegistrySection catalog={catalog} />
     </>
   );
