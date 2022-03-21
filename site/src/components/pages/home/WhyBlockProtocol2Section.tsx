@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Container,
   Typography,
@@ -9,7 +10,13 @@ import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
 import { SyncIcon, FontAwesomeIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
-export const WhyBlockProtocol2Section = () => {
+type WhyBlockProtocol2SectionProps = {
+  fadeRef: React.Ref<HTMLDivElement>;
+};
+
+export const WhyBlockProtocol2Section: React.FC<
+  WhyBlockProtocol2SectionProps
+> = ({ fadeRef }) => {
   const theme = useTheme();
 
   const isDesktopSize = useMediaQuery(theme.breakpoints.up("md"));
@@ -101,6 +108,7 @@ export const WhyBlockProtocol2Section = () => {
         </Box>
 
         <Box
+          ref={fadeRef}
           sx={{
             position: "absolute",
             left: "50%",
@@ -114,6 +122,7 @@ export const WhyBlockProtocol2Section = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            opacity: 0.3,
           }}
         />
 

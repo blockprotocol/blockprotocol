@@ -13,6 +13,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
 import { Spacer } from "../../Spacer";
+import { WhyBlockProtocol2Section } from "./WhyBlockProtocol2Section";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -172,44 +173,51 @@ const CONTENT = [
   },
 ];
 
-export const WhyBlockProtocol1Section = () => {
+export const WhyBlockProtocolSection = () => {
   const pinRef = useRef(null);
   const boxRef = useRef(null);
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState<number | undefined>();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const fadeRef = useRef(null);
 
   useLayoutEffect(() => {
-    if (!boxRef.current || !pinRef.current) return;
+    if (!boxRef.current || !pinRef.current || !fadeRef.current) return;
 
     const markers: Element[] = gsap.utils.toArray(".item");
 
     const triggers: ScrollTrigger[] = [];
 
-    markers.forEach((marker) => {
+    markers.forEach((marker, index) => {
       triggers.push(
         ScrollTrigger.create({
           trigger: marker,
-          start: "top center",
-          end: "bottom center+=50",
+          start: "top center-=100",
+          end: "top top+=200vh",
+          scrub: true,
           onEnter: () => {
-            const markerIndex = markers.indexOf(marker);
-            if (markerIndex > 0) {
-              setActiveStep(1);
-            } else {
-              setActiveStep(0);
-            }
+            setActiveStep(index);
           },
           onEnterBack: () => {
-            const markerIndex = markers.indexOf(marker);
-            if (markerIndex > 0) {
-              setActiveStep(1);
-            } else {
-              setActiveStep(0);
+            setActiveStep(index);
+          },
+          onLeaveBack: () => {
+            if (index === 0) {
+              setActiveStep(undefined);
             }
           },
         }),
       );
+    });
+
+    gsap.to(fadeRef.current, {
+      scrollTrigger: {
+        trigger: fadeRef.current,
+        scrub: true,
+        start: "top bottom",
+        end: "top center",
+      },
+      autoAlpha: 1,
     });
 
     return () => {
@@ -218,116 +226,128 @@ export const WhyBlockProtocol1Section = () => {
   }, [isMobile]);
 
   return (
-    <Box
-      sx={{
-        pt: 10,
-        position: "relative",
-      }}
-      ref={boxRef}
-    >
-      <Container
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          position: "relative",
-        }}
-      >
-        <Box sx={{ width: { xs: "100%", md: "55%" }, textAlign: "center" }}>
-          <Typography variant="bpHeading2" mb={3}>
-            Why would I want to build blocks with the Block Protocol?
-          </Typography>
-          <Typography mb={4}>
-            Blocks built with the <strong>Block Protocol</strong> can easily
-            pass data between applications because the data within each block is{" "}
-            <strong>structured.</strong>
-          </Typography>
-        </Box>
-      </Container>
-
+    <>
       <Box
         sx={{
-          background: `radial-gradient(99.32% 99.32% at 50% 0.68%, #3F4553 0.52%, #1C1B25 100%)`,
-          mt: 10,
+          pt: 10,
+          position: "relative",
         }}
+        ref={boxRef}
       >
         <Container
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            width: { lg: "30%" },
+            position: "relative",
           }}
         >
-          <Box
-            ref={pinRef}
+          <Box sx={{ width: { xs: "100%", md: "55%" }, textAlign: "center" }}>
+            <Typography variant="bpHeading2" mb={3}>
+              Why would I want to build blocks with the Block Protocol?
+            </Typography>
+            <Typography mb={4}>
+              Blocks built with the <strong>Block Protocol</strong> can easily
+              pass data between applications because the data within each block
+              is <strong>structured.</strong>
+            </Typography>
+          </Box>
+        </Container>
+
+        <Box
+          sx={{
+            background: `radial-gradient(99.32% 99.32% at 50% 0.68%, #3F4553 0.52%, #1C1B25 100%)`,
+            mt: 10,
+          }}
+        >
+          <Container
             sx={{
-              mt: -10,
-              zIndex: 1,
-              width: "100%",
-              position: "sticky",
-              top: "45vh",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              width: "90%",
+              maxWidth: { xs: "90%", sm: 440 },
             }}
           >
-            {[
-              { id: 1, component: <TodoListBlock /> },
-              { id: 2, component: <TableBlock /> },
-            ].map(({ id, component }, index) => (
-              <Fade
-                key={id}
-                in={activeStep === index}
-                timeout={{ enter: 750, exit: 500 }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    zIndex: 2,
-                    ...(id === 1 && {
-                      position: "absolute",
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                    }),
-                  }}
-                >
-                  {component}
-                </Box>
-              </Fade>
-            ))}
-          </Box>
-          <Spacer height={13} />
-
-          {CONTENT.map(({ content, id }) => (
             <Box
-              key={id}
-              className="item"
+              ref={pinRef}
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "flex-start",
-                height: "60vh",
+                mt: -10,
+                zIndex: 1,
+                width: "100%",
+                position: "sticky",
+                top: `calc(50vh - 105px)`,
               }}
             >
+              {CONTENT.map(({ content, id }, index) => (
+                <Fade in={activeStep === index} key={id}>
+                  <Box
+                    sx={{
+                      zIndex: 2,
+                      width: { xs: "100%", md: "90%" },
+                      display: "flex",
+                      justifyContent: "center",
+                      textAlign: "center",
+                      p: 1.5,
+                      borderRadius: "4px",
+                      position: "absolute",
+                      top: -100,
+                      left: "50%",
+                      transform: `translateX(-50%)`,
+                    }}
+                  >
+                    {content}
+                  </Box>
+                </Fade>
+              ))}
+
+              {[
+                { id: "todo", component: <TodoListBlock /> },
+                { id: "table", component: <TableBlock /> },
+              ].map(({ id, component }) => (
+                <Fade
+                  key={id}
+                  in={
+                    id === "todo" ? !activeStep : !!activeStep && activeStep > 0
+                  }
+                  timeout={{ enter: 750, exit: 500 }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      zIndex: 2,
+                      ...(id === "table" && {
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                      }),
+                    }}
+                  >
+                    {component}
+                  </Box>
+                </Fade>
+              ))}
+            </Box>
+            <Spacer height={7} />
+
+            {CONTENT.map(({ id }) => (
               <Box
+                key={id}
+                className={`item item--${id}`}
                 sx={{
-                  backgroundColor: "#373B49",
-                  zIndex: 2,
-                  width: { md: "80%" },
                   display: "flex",
                   justifyContent: "center",
-                  textAlign: "center",
-                  boxShadow: 1,
-                  p: 1.5,
-                  borderRadius: "4px",
+                  alignItems: "flex-start",
+                  height: "60vh",
                 }}
-              >
-                {content}
-              </Box>
-            </Box>
-          ))}
-        </Container>
+              />
+            ))}
+          </Container>
+        </Box>
       </Box>
-    </Box>
+      <WhyBlockProtocol2Section fadeRef={fadeRef} />
+    </>
   );
 };
