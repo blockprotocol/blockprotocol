@@ -106,8 +106,8 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
         .map(([block, _]) => block);
     }
 
-    // Generate absolute URLs for block icons
     for (const block of data) {
+      // Generate absolute URLs for block icons
       if (block.icon && !block.icon.startsWith("http")) {
         block.icon = `${FRONTEND_URL}${block.icon}`;
       }

@@ -1,11 +1,13 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
 import hostedGitInfo from "hosted-git-info";
+import { FRONTEND_URL } from "./config";
 
 /** @todo type as JSON object */
 export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
   blockPackagePath: string;
+  componentId: string;
   lastUpdated?: string | null;
   packagePath: string;
   // repository is passed down as a string upon expansion
@@ -85,6 +87,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
       const metadata: ExpandedBlockMetadata = {
         // @todo should be redundant to block's package.json#name
+        componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
         packagePath,
         ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
       };
