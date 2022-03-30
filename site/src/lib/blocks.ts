@@ -113,6 +113,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
           ...variant,
           icon: getBlockMediaUrl(variant.icon, metadata.packagePath)!,
         })),
+        schema: getBlockMediaUrl(metadata.schema, metadata.packagePath)!,
         repository,
         blockPackagePath: `/${metadata.packagePath
           .split("/")
