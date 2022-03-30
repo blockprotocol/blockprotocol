@@ -7,6 +7,7 @@ import {
   readBlockDataFromDisk,
 } from "../../lib/blocks";
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/apiKeyRequiredHandler";
+import { FRONTEND_URL } from "../../lib/config";
 
 export type ApiSearchRequestQuery = {
   author?: string;
@@ -103,6 +104,21 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
         // sort by how many keys are present in the validated output after removeAdditional.
         .sort(([_, a], [__, b]) => a - b)
         .map(([block, _]) => block);
+    }
+
+    // Generate absolute URLs for block icons
+    for (const block of data) {
+      if (block.icon && !block.icon.startsWith("http")) {
+        block.icon = `${FRONTEND_URL}${block.icon}`;
+      }
+
+      for (const variant of block.variants ?? []) {
+        if (variant.icon.startsWith("public")) {
+          variant.icon = `${block.icon!.split("public/")[0]}public/${
+            variant.icon.split("public/")[1]
+          }`;
+        }
+      }
     }
 
     // @todo paginate response
