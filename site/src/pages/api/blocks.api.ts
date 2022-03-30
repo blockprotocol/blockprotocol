@@ -106,21 +106,6 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
         .map(([block, _]) => block);
     }
 
-    for (const block of data) {
-      // Generate absolute URLs for block icons
-      if (block.icon && !block.icon.startsWith("http")) {
-        block.icon = `${FRONTEND_URL}${block.icon}`;
-      }
-
-      for (const variant of block.variants ?? []) {
-        if (variant.icon.startsWith("public")) {
-          variant.icon = `${block.icon!.split("public/")[0]}public/${
-            variant.icon.split("public/")[1]
-          }`;
-        }
-      }
-    }
-
     // @todo paginate response
 
     res.status(200).json({

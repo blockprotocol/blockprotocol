@@ -35,7 +35,7 @@ const getBlockMediaUrl = (
     return mediaPath;
   }
 
-  return `/blocks/${packagePath}/${mediaPath}`;
+  return `${FRONTEND_URL}/blocks/${packagePath}/${mediaPath}`;
 };
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
@@ -108,6 +108,11 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         author: metadata.packagePath.split("/")[0]!.replace(/^@/, ""),
         icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
         image: getBlockMediaUrl(metadata.image, metadata.packagePath),
+        source: getBlockMediaUrl(metadata.source, metadata.packagePath)!,
+        variants: metadata.variants?.map((variant) => ({
+          ...variant,
+          icon: getBlockMediaUrl(variant.icon, metadata.packagePath)!,
+        })),
         repository,
         blockPackagePath: `/${metadata.packagePath
           .split("/")
