@@ -7,7 +7,6 @@ import {
   readBlockDataFromDisk,
 } from "../../lib/blocks";
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/apiKeyRequiredHandler";
-import { FRONTEND_URL } from "../../lib/config";
 
 export type ApiSearchRequestQuery = {
   author?: string;
