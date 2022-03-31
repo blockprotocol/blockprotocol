@@ -27,7 +27,7 @@
     "lint:tsc": "tsc --noEmit",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config webpack-dev-server.config.js",
     "schema": "typescript-json-schema tsconfig.json AppProps --required true --out dist/block-schema.json",
-    "serve": "serve -C -l 61234 ./dist/"
+    "serve": "npx serve -C -l 61234 ./dist/"
   },
   "dependencies": {
     "blockprotocol": "0.0.7"
@@ -52,7 +52,6 @@
     "react-dom": "^17.0.2",
     "regenerator-runtime": "^0.13.9",
     "rimraf": "^3.0.2",
-    "serve": "^13.0.2",
     "typescript": "^4.6.2",
     "typescript-json-schema": "^0.53.0",
     "webpack": "^5.68.0",
