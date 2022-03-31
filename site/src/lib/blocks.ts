@@ -138,21 +138,25 @@ export const readBlockDataFromDisk = async ({
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 
-  const schema = metadataSchema.startsWith("http")
-    ? await fetch(metadataSchema).then((response) => response.json())
-    : JSON.parse(
+  const schema = metadataSchema.startsWith(FRONTEND_URL)
+    ? JSON.parse(
         fs.readFileSync(
-          `${process.cwd()}/public/blocks/${packagePath}/${metadataSchema}`,
+          `${process.cwd()}/public/blocks/${packagePath}/${metadataSchema.substring(
+            metadataSchema.lastIndexOf("/") + 1,
+          )}`,
           { encoding: "utf8" },
         ),
-      );
+      )
+    : await fetch(metadataSchema).then((response) => response.json());
 
-  const source = metadataSource.startsWith("http")
-    ? await fetch(metadataSource).then((response) => response.text())
-    : fs.readFileSync(
-        `${process.cwd()}/public/blocks/${packagePath}/${metadataSource}`,
+  const source = metadataSource.startsWith(FRONTEND_URL)
+    ? fs.readFileSync(
+        `${process.cwd()}/public/blocks/${packagePath}/${metadataSource.substring(
+          metadataSource.lastIndexOf("/") + 1,
+        )}`,
         { encoding: "utf8" },
-      );
+      )
+    : await fetch(metadataSource).then((response) => response.text());
 
   return {
     schema,
