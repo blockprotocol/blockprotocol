@@ -26,7 +26,8 @@
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
     "lint:tsc": "tsc --noEmit",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config webpack-dev-server.config.js",
-    "schema": "typescript-json-schema tsconfig.json AppProps --required true --out dist/block-schema.json"
+    "schema": "typescript-json-schema tsconfig.json AppProps --required true --out dist/block-schema.json",
+    "serve": "npx serve --cors --listen 61234 ./dist/"
   },
   "dependencies": {
     "blockprotocol": "0.0.7"
