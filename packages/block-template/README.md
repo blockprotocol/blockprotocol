@@ -43,7 +43,7 @@ You can try out your block in an example embedding application:
 
 1.  Follow the instructions in its README to set up and run HASH.
 
-1.  In a new terminal, run `yarn serve` in your block's folder). Your block dist is now available at http://localhost:61234.
+1.  In a new terminal, run `yarn serve` in your block's folder. Your block dist is now available at http://localhost:61234.
 
 1.  In the HASH frontend (once signed in), click on the context menu next to any block on a page. Paste http://localhost:61234 into the ‘load block from URL’ input.
 
