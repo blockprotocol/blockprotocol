@@ -112,10 +112,12 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
         icon: generateBlockFileUrl(metadata.icon, metadata.packagePath),
         image: generateBlockFileUrl(metadata.image, metadata.packagePath),
         source: generateBlockFileUrl(metadata.source, metadata.packagePath)!,
-        variants: metadata.variants?.map((variant) => ({
-          ...variant,
-          icon: generateBlockFileUrl(variant.icon, metadata.packagePath)!,
-        })),
+        variants: metadata.variants?.length
+          ? metadata.variants?.map((variant) => ({
+              ...variant,
+              icon: generateBlockFileUrl(variant.icon, metadata.packagePath)!,
+            }))
+          : null,
         schema: generateBlockFileUrl(metadata.schema, metadata.packagePath)!,
         repository,
         blockPackagePath: `/${metadata.packagePath
@@ -126,25 +128,34 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     });
 };
 
-export const readBlockDataFromDisk = ({
+export const readBlockDataFromDisk = async ({
   packagePath,
-  schema,
-  source,
+  schema: metadataSchema,
+  source: metadataSource,
 }: ExpandedBlockMetadata) => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
   const fs = require("fs");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
-  return {
-    schema: JSON.parse(
-      fs.readFileSync(
-        `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
+
+  const schema = metadataSchema.startsWith("http")
+    ? await fetch(metadataSchema).then((response) => response.json())
+    : JSON.parse(
+        fs.readFileSync(
+          `${process.cwd()}/public/blocks/${packagePath}/${metadataSchema}`,
+          { encoding: "utf8" },
+        ),
+      );
+
+  const source = metadataSource.startsWith("http")
+    ? await fetch(metadataSource).then((response) => response.text())
+    : fs.readFileSync(
+        `${process.cwd()}/public/blocks/${packagePath}/${metadataSource}`,
         { encoding: "utf8" },
-      ),
-    ),
-    source: fs.readFileSync(
-      `${process.cwd()}/public/blocks/${packagePath}/${source}`,
-      "utf8",
-    ),
+      );
+
+  return {
+    schema,
+    source,
   };
 };
