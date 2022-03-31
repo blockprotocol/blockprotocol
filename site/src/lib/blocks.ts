@@ -1,11 +1,13 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
 import hostedGitInfo from "hosted-git-info";
+import { FRONTEND_URL } from "./config";
 
 /** @todo type as JSON object */
 export type BlockProps = object;
 
 export type ExpandedBlockMetadata = BlockMetadata & {
   blockPackagePath: string;
+  componentId: string;
   lastUpdated?: string | null;
   packagePath: string;
   // repository is passed down as a string upon expansion
@@ -21,7 +23,7 @@ export interface StoredBlockInfo {
   workspace?: string;
 }
 
-const getBlockMediaUrl = (
+const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
   packagePath: string,
 ): string | null => {
@@ -33,7 +35,10 @@ const getBlockMediaUrl = (
     return mediaPath;
   }
 
-  return `/blocks/${packagePath}/${mediaPath}`;
+  return `${FRONTEND_URL}/blocks/${packagePath}/${mediaPath.replace(
+    /^\//,
+    "",
+  )}`;
 };
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
@@ -85,6 +90,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
 
       const metadata: ExpandedBlockMetadata = {
         // @todo should be redundant to block's package.json#name
+        componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
         packagePath,
         ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
       };
@@ -103,8 +109,16 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
       return {
         ...metadata,
         author: metadata.packagePath.split("/")[0]!.replace(/^@/, ""),
-        icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
-        image: getBlockMediaUrl(metadata.image, metadata.packagePath),
+        icon: generateBlockFileUrl(metadata.icon, metadata.packagePath),
+        image: generateBlockFileUrl(metadata.image, metadata.packagePath),
+        source: generateBlockFileUrl(metadata.source, metadata.packagePath)!,
+        variants: metadata.variants?.length
+          ? metadata.variants?.map((variant) => ({
+              ...variant,
+              icon: generateBlockFileUrl(variant.icon, metadata.packagePath)!,
+            }))
+          : null,
+        schema: generateBlockFileUrl(metadata.schema, metadata.packagePath)!,
         repository,
         blockPackagePath: `/${metadata.packagePath
           .split("/")
@@ -114,25 +128,38 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     });
 };
 
-export const readBlockDataFromDisk = ({
+export const readBlockDataFromDisk = async ({
   packagePath,
-  schema,
-  source,
+  schema: metadataSchema,
+  source: metadataSource,
 }: ExpandedBlockMetadata) => {
   /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
   const fs = require("fs");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
-  return {
-    schema: JSON.parse(
-      fs.readFileSync(
-        `${process.cwd()}/public/blocks/${packagePath}/${schema}`,
+
+  const schema = metadataSchema.startsWith(FRONTEND_URL)
+    ? JSON.parse(
+        fs.readFileSync(
+          `${process.cwd()}/public/blocks/${packagePath}/${metadataSchema.substring(
+            metadataSchema.lastIndexOf("/") + 1,
+          )}`,
+          { encoding: "utf8" },
+        ),
+      )
+    : await fetch(metadataSchema).then((response) => response.json());
+
+  const source = metadataSource.startsWith(FRONTEND_URL)
+    ? fs.readFileSync(
+        `${process.cwd()}/public/blocks/${packagePath}/${metadataSource.substring(
+          metadataSource.lastIndexOf("/") + 1,
+        )}`,
         { encoding: "utf8" },
-      ),
-    ),
-    source: fs.readFileSync(
-      `${process.cwd()}/public/blocks/${packagePath}/${source}`,
-      "utf8",
-    ),
+      )
+    : await fetch(metadataSource).then((response) => response.text());
+
+  return {
+    schema,
+    source,
   };
 };

@@ -161,7 +161,7 @@ export const getStaticProps: GetStaticProps<
   }
 
   const { schema, source: blockStringifiedSource } =
-    readBlockDataFromDisk(blockMetadata);
+    await readBlockDataFromDisk(blockMetadata);
 
   return {
     props: {

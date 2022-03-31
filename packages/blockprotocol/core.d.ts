@@ -27,7 +27,7 @@ export type BlockVariant = {
   /**
    * @deprecated - Use the `name` field instead.
    */
-  displayName: string;
+  displayName?: string;
   properties: JSONObject;
   examples?: JSONObject[] | null;
 };
