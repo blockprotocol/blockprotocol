@@ -23,7 +23,7 @@ export interface StoredBlockInfo {
   workspace?: string;
 }
 
-const getBlockMediaUrl = (
+const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
   packagePath: string,
 ): string | null => {
@@ -35,7 +35,10 @@ const getBlockMediaUrl = (
     return mediaPath;
   }
 
-  return `${FRONTEND_URL}/blocks/${packagePath}/${mediaPath}`;
+  return `${FRONTEND_URL}/blocks/${packagePath}/${mediaPath.replace(
+    /^\//,
+    "",
+  )}`;
 };
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
@@ -106,14 +109,14 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
       return {
         ...metadata,
         author: metadata.packagePath.split("/")[0]!.replace(/^@/, ""),
-        icon: getBlockMediaUrl(metadata.icon, metadata.packagePath),
-        image: getBlockMediaUrl(metadata.image, metadata.packagePath),
-        source: getBlockMediaUrl(metadata.source, metadata.packagePath)!,
+        icon: generateBlockFileUrl(metadata.icon, metadata.packagePath),
+        image: generateBlockFileUrl(metadata.image, metadata.packagePath),
+        source: generateBlockFileUrl(metadata.source, metadata.packagePath)!,
         variants: metadata.variants?.map((variant) => ({
           ...variant,
-          icon: getBlockMediaUrl(variant.icon, metadata.packagePath)!,
+          icon: generateBlockFileUrl(variant.icon, metadata.packagePath)!,
         })),
-        schema: getBlockMediaUrl(metadata.schema, metadata.packagePath)!,
+        schema: generateBlockFileUrl(metadata.schema, metadata.packagePath)!,
         repository,
         blockPackagePath: `/${metadata.packagePath
           .split("/")
