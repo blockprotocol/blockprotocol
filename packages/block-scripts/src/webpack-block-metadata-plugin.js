@@ -12,7 +12,7 @@ const {
   license,
   blockprotocol,
   peerDependencies,
-} = require("./package.json");
+} = require("../package.json");
 
 const variants = fs.existsSync("./variants.json")
   ? require("./variants.json")
