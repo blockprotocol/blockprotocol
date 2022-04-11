@@ -147,8 +147,8 @@ jobs:
 
       - name: Run local registry
         run: |
-          docker pull verdaccio/verdaccio
-          docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio
+          docker pull verdaccio/verdaccio:5
+          docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio:5
           yarn wait-on --timeout 30000 http://localhost:4873
 
       - name: Publish NPM packages to local registry
