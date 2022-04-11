@@ -21,8 +21,8 @@ export interface JSONArray extends Array<JSONValue> {}
 // -------------------------- BLOCK METADATA -------------------------- //
 
 export type BlockVariant = {
-  description: string;
-  icon: string;
+  description?: string | null;
+  icon?: string | null;
   name: string;
   /**
    * @deprecated - Use the `name` field instead.
