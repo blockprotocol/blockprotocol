@@ -25,7 +25,8 @@ jobs:
           EOF
 
           for PATHNAME in "/@hash" "/api/me" "/types/DUMMY_ENTITY_ID"; do
-            curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
+            npx retry-cli@0.6.0 -- curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
           done
         env:
           BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
+          NODE_OPTIONS: --no-deprecation ## https://github.com/tirsen/retry-cli/issues/7
