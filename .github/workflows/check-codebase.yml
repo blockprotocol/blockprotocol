@@ -142,7 +142,7 @@ jobs:
           cache: yarn
 
       - name: Downgrade global NPM version
-        run: npm install --global npm@8.3.1 ## https://github.com/blockprotocol/blockprotocol/pull/281
+        run: npm install --global npm@8.4.0 ## https://github.com/blockprotocol/blockprotocol/pull/281
 
       - run: yarn install
 
