@@ -141,6 +141,8 @@ jobs:
           node-version: 16
           cache: yarn
 
+      - run: npm install --global npm@8.5.5
+
       - run: yarn install
 
       - name: Run local registry
