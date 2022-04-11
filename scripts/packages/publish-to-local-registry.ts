@@ -76,7 +76,7 @@ const script = async () => {
 
     await execa(
       "npm",
-      ["unpublish", "--force", `${packageName}${packageJson.version}`],
+      ["unpublish", "--force", `${packageName}@${packageJson.version}`],
       {
         ...defaultExecaOptions,
         cwd: packageDirPath,
