@@ -2,7 +2,6 @@ import execa from "execa";
 import sleep from "sleep-promise";
 import path from "path";
 import chalk from "chalk";
-import fs from "fs-extra";
 import { logStepEnd, logStepStart } from "../shared/logging";
 
 // These variables are hardcoded on purpose. We don’t want to publish to a real registry by mistake.
@@ -70,19 +69,12 @@ const script = async () => {
     const packageDirPath = path.resolve(`packages/${packageName}`);
 
     logStepStart(`Unpublish ${packageName} from local registry (if present)`);
-    const packageJson = await fs.readJson(
-      path.resolve(packageDirPath, "package.json"),
-    );
 
-    await execa(
-      "npm",
-      ["unpublish", "--force", `${packageName}@${packageJson.version}`],
-      {
-        ...defaultExecaOptions,
-        cwd: packageDirPath,
-        reject: false,
-      },
-    );
+    await execa("npm", ["unpublish", "--force"], {
+      ...defaultExecaOptions,
+      cwd: packageDirPath,
+      reject: false,
+    });
 
     logStepEnd();
     logStepStart(`Publish ${packageName} to local registry`);
