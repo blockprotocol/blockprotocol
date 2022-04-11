@@ -141,8 +141,6 @@ jobs:
           node-version: 16.14.0
           cache: yarn
 
-      - run: npm --version
-
       - run: yarn install
 
       - name: Run local registry
