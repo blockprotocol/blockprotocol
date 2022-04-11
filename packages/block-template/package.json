@@ -30,7 +30,7 @@
     "serve": "npx serve --cors --listen 61234 ./dist/"
   },
   "dependencies": {
-    "blockprotocol": "0.0.7"
+    "blockprotocol": "0.0.8"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.0",
