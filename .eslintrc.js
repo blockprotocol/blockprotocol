@@ -193,6 +193,12 @@ module.exports = {
       },
     },
     {
+      files: ["packages/block-scripts/**"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+    {
       files: ["packages/block-template/**"],
       parserOptions: {
         project: ["packages/block-template/tsconfig.json"],
