@@ -18,7 +18,7 @@
     "url": "https://hash.ai"
   },
   "type": "module",
-  "bin": "bin.js",
+  "bin": "bin.mjs",
   "scripts": {
     "lint:tsc": "echo \"Skipping: TypeScript not configured\""
   },
