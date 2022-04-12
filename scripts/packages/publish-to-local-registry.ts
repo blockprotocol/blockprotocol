@@ -10,6 +10,7 @@ const npmUserAndPassword = "verdaccio";
 const npmEmail = "verdaccio@example.com";
 
 const packageNames = [
+  "block-scripts",
   "block-template",
   "blockprotocol",
   "create-block-app",
