@@ -33,7 +33,7 @@
     "ajv": "^8.9.0",
     "algoliasearch": "4.12.1",
     "axios": "^0.24.0",
-    "blockprotocol": "0.0.7",
+    "blockprotocol": "0.0.8",
     "busboy": "^1.4.0",
     "clsx": "^1.1.1",
     "connect-mongo": "^4.6.0",
