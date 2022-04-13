@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { URL } from "node:url";
 
 await new Promise((resolve) => {
