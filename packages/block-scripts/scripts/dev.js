@@ -1,7 +1,7 @@
-console.log("action serve");
+console.log("dev script");
 
 await new Promise((resolve) => {
   setTimeout(resolve, 1000);
 });
 
-console.log(process.argv);
+console.log(process.env.SCRIPT_ARGV);

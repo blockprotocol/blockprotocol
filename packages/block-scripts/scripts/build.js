@@ -1,7 +1,7 @@
-console.log("action dev");
+console.log("build script");
 
 await new Promise((resolve) => {
   setTimeout(resolve, 1000);
 });
 
-console.log(process.argv);
+console.log(process.env.SCRIPT_ARGV);
