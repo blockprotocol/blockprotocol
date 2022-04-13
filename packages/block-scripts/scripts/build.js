@@ -1,7 +1,14 @@
-console.log("build script");
+import webpack from "webpack";
+import { promisify } from "node:util";
+import webpackMainConfig from "../config/webpack-main.config.cjs";
+import { cleanDist } from "../shared/clean-dist.js";
 
-await new Promise((resolve) => {
-  setTimeout(resolve, 1000);
-});
+const promisifiedWebpack = promisify(webpack);
 
-console.log(process.env.SCRIPT_ARGV);
+const script = async () => {
+  await cleanDist();
+
+  await promisifiedWebpack({ ...webpackMainConfig, mode: "production" });
+};
+
+await script();

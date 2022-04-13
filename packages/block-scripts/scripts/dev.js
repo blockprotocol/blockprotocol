@@ -1,7 +1,12 @@
+import { webpack } from "webpack";
+import { cleanDist } from "../shared/clean-dist";
+
 console.log("dev script");
 
-await new Promise((resolve) => {
-  setTimeout(resolve, 1000);
-});
+const script = async () => {
+  await cleanDist();
 
-console.log(process.env.SCRIPT_ARGV);
+  await Promise.any([webpack({})]);
+};
+
+await script();

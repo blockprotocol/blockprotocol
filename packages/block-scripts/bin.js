@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { URL, fileURLToPath } from "node:url";
 import parser from "yargs-parser";
-import fs from "node:fs/promises";
+import fs from "fs-extra";
 import path from "node:path";
 
 const knownScriptNames = (

@@ -1,6 +1,6 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-const config = require("./webpack.config");
+const config = require("./webpack.config.cjs");
 
 /** @type import("webpack").Configuration */
 module.exports = {

@@ -1,8 +1,12 @@
 const fs = require("fs");
 const { promisify } = require("util");
+const path = require('path')
 
 const writeFile = promisify(fs.writeFile);
 const beautify = (obj) => JSON.stringify(obj, null, 2);
+
+const packageJsonPath = path.resolve(process.cwd(), "./package.json")
+const variantsJsonPath = path.resolve(process.cwd(), "./variants.json")
 
 const {
   name,
@@ -12,10 +16,10 @@ const {
   license,
   blockprotocol,
   peerDependencies,
-} = require("../package.json");
+} = require(packageJsonPath);
 
-const variants = fs.existsSync("./variants.json")
-  ? require("./variants.json")
+const variants = fs.existsSync(variantsJsonPath)
+  ? require(variantsJsonPath)
   : undefined;
 
 class StatsPlugin {
