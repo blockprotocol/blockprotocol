@@ -1,23 +1,25 @@
+const path = require('path')
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-const config = require("./webpack.config.cjs");
+const config = require("./webpack-main.config.cjs");
 
 /** @type import("webpack").Configuration */
 module.exports = {
   devtool: "eval-cheap-module-source-map",
-  entry: "./src/webpack-dev-server.js",
+  entry: "./src/dev.js",
   plugins: [
-    ...config[0].plugins,
+    ...config.plugins,
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: "src/index.html",
+      template: path.resolve(__dirname, "index.html"),
     }),
     new webpack.EnvironmentPlugin({
-      "process.env.NODE_ENV": process.env.NODE_ENV,
+      "process.env.NODE_ENV": "development",
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  module: config[0].module,
+  module: config.module,
+  mode: 'development',
   devServer: {
     headers: {
       "Access-Control-Allow-Origin": "*",

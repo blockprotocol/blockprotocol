@@ -10,8 +10,8 @@ const knownScriptNames = (
   )
 ).map((scriptFileName) => path.basename(scriptFileName, ".js"));
 
-const argv = parser(process.argv.slice(2));
-const scriptName = (argv._.shift() ?? "help").toLowerCase();
+const scriptConfig = parser(process.argv.slice(2));
+const scriptName = (scriptConfig._.shift() ?? "help").toLowerCase();
 
 if (!knownScriptNames.includes(scriptName)) {
   console.log(
@@ -22,6 +22,6 @@ if (!knownScriptNames.includes(scriptName)) {
   process.exit(1);
 }
 
-process.env.SCRIPT_ARGV = JSON.stringify(argv);
+process.env.SCRIPT_CONFIG = JSON.stringify(scriptConfig);
 const scriptModuleUrl = new URL(`./scripts/${scriptName}.js`, import.meta.url);
 await import(scriptModuleUrl);

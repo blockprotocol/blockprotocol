@@ -1,11 +1,14 @@
 import webpack from "webpack";
+import WebpackDevServer from "webpack-dev-server";
 import webpackMainConfig from "../config/webpack-main.config.cjs";
+import webpackDevServerConfig from "../config/webpack-dev-server.config.cjs";
 import { cleanDist } from "../shared/clean-dist.js";
-import { serveDist } from "../shared/serve-dist.js";
+import { serve } from "../shared/serve.js";
 
 const script = async () => {
   await cleanDist();
 
+  // Dist compiler
   webpack(
     {
       ...webpackMainConfig,
@@ -17,8 +20,15 @@ const script = async () => {
     },
   );
 
-  serveDist(9090);
-  // await Promise.any([webpack({})]);
+  // Dev server
+  const compiler = webpack(webpackDevServerConfig);
+  const server = new WebpackDevServer(
+    webpackDevServerConfig.devServer,
+    compiler,
+  );
+  await server.start();
+
+  serve();
 };
 
 await script();

@@ -1,7 +1,3 @@
-console.log("serve script");
+import { serve } from "../shared/serve.js";
 
-await new Promise((resolve) => {
-  setTimeout(resolve, 1000);
-});
-
-console.log(process.env.SCRIPT_ARGV);
+serve();

@@ -206,6 +206,15 @@ module.exports = {
       },
     },
     {
+      files: ["packages/block-template/src/dev.js"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
+    {
       files: ["packages/blockprotocol/**"],
       parserOptions: {
         project: ["packages/blockprotocol/tsconfig.json"],
