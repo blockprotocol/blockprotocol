@@ -1,4 +1,4 @@
-const path = require('path')
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 const config = require("./webpack-main.config.cjs");
@@ -19,7 +19,8 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
   ],
   module: config.module,
-  mode: 'development',
+  mode: "development",
+  target: "web",
   devServer: {
     headers: {
       "Access-Control-Allow-Origin": "*",

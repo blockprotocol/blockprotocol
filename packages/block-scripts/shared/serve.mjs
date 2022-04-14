@@ -3,7 +3,7 @@ import http from "node:http";
 import {
   extractScriptConfig,
   extractBlockScriptsConfigFromPackageJson,
-} from "./config.js";
+} from "./config.mjs";
 
 export const serve = async () => {
   const server = http.createServer((request, response) => {

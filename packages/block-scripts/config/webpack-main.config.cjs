@@ -10,7 +10,7 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CopyPlugin = require("copy-webpack-plugin");
 const { StatsPlugin } = require("./webpack-block-metadata-plugin.cjs");
 
-const packageJsonPath = path.resolve(process.cwd(), "./package.json")
+const packageJsonPath = path.resolve(process.cwd(), "./package.json");
 const { peerDependencies } = require(packageJsonPath);
 
 module.exports = {
@@ -24,6 +24,9 @@ module.exports = {
       output: "manifest.json",
     }),
     new StatsPlugin(),
+    new webpack.EnvironmentPlugin({
+      "process.env.NODE_ENV": "development",
+    }),
     new CopyPlugin({ patterns: [{ from: "./public/", to: "./public/" }] }),
   ],
 
@@ -44,7 +47,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",
-          options: require('./babelrc.json')
+          options: require("./babelrc.json"),
         },
       },
     ],

@@ -1,12 +1,12 @@
 const fs = require("fs");
 const { promisify } = require("util");
-const path = require('path')
+const path = require("path");
 
 const writeFile = promisify(fs.writeFile);
 const beautify = (obj) => JSON.stringify(obj, null, 2);
 
-const packageJsonPath = path.resolve(process.cwd(), "./package.json")
-const variantsJsonPath = path.resolve(process.cwd(), "./variants.json")
+const packageJsonPath = path.resolve(process.cwd(), "./package.json");
+const variantsJsonPath = path.resolve(process.cwd(), "./variants.json");
 
 const {
   name,

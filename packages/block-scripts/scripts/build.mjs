@@ -1,7 +1,7 @@
 import webpack from "webpack";
 import { promisify } from "node:util";
 import webpackMainConfig from "../config/webpack-main.config.cjs";
-import { cleanDist } from "../shared/clean-dist.js";
+import { cleanDist } from "../shared/clean-dist.mjs";
 
 const promisifiedWebpack = promisify(webpack);
 
