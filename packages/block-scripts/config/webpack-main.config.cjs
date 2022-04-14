@@ -5,6 +5,7 @@
  *  - dist/webpack-bundle-analyzer-report.html
  */
 const path = require("path");
+const webpack = require("webpack");
 const WebpackAssetsManifest = require("webpack-assets-manifest");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CopyPlugin = require("copy-webpack-plugin");
