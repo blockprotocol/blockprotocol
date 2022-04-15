@@ -1,4 +1,4 @@
-import { serve } from "../shared/serve.mjs";
+import { serve } from "../shared/serve.js";
 
 const script = async () => {
   await serve();

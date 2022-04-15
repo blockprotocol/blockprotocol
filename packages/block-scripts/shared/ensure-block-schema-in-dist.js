@@ -1,7 +1,7 @@
 import * as TJS from "typescript-json-schema";
 import fs from "fs-extra";
 import path from "path";
-import { blockDistDirPath, blockRootDirPath } from "./paths.mjs";
+import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 
 export const ensureBlockSchemaInDist = async () => {
   const blockSchemaInDistFilePath = path.resolve(

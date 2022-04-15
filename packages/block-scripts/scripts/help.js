@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { getBlockScriptsVersion } from "../shared/config.mjs";
+import { getBlockScriptsVersion } from "../shared/config.js";
 
 const script = async () => {
   console.log(

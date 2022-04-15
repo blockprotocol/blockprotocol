@@ -2,9 +2,9 @@ import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
 import generateBaseWebpackConfig from "../config/generate-base-webpack-config.cjs";
 import webpackDevServerConfig from "../config/webpack-dev-server.config.cjs";
-import { cleanDist } from "../shared/clean-dist.mjs";
-import { serve } from "../shared/serve.mjs";
-import { ensureBlockSchemaInDist } from "../shared/ensure-block-schema-in-dist.mjs";
+import { cleanDist } from "../shared/clean-dist.js";
+import { serve } from "../shared/serve.js";
+import { ensureBlockSchemaInDist } from "../shared/ensure-block-schema-in-dist.js";
 
 const script = async () => {
   await cleanDist();

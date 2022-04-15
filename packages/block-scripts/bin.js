@@ -8,7 +8,7 @@ const knownScriptNames = (
   await fs.readdir(
     path.resolve(path.dirname(fileURLToPath(import.meta.url)), "scripts"),
   )
-).map((scriptFileName) => path.basename(scriptFileName, ".mjs"));
+).map((scriptFileName) => path.basename(scriptFileName, ".js"));
 
 const scriptConfig = parser(process.argv.slice(2));
 const scriptName = scriptConfig.help
@@ -25,5 +25,5 @@ if (!knownScriptNames.includes(scriptName)) {
 }
 
 process.env.SCRIPT_CONFIG = JSON.stringify(scriptConfig);
-const scriptModuleUrl = new URL(`./scripts/${scriptName}.mjs`, import.meta.url);
+const scriptModuleUrl = new URL(`./scripts/${scriptName}.js`, import.meta.url);
 await import(scriptModuleUrl);

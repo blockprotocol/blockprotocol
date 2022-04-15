@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 
-import { blockPackageJsonPath, packageJsonDirPath } from "./paths.mjs";
+import { blockPackageJsonPath, packageJsonDirPath } from "./paths.js";
 
 export const extractScriptConfig = () => {
   try {
