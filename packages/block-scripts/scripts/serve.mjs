@@ -1,3 +1,7 @@
 import { serve } from "../shared/serve.mjs";
 
-serve();
+const script = async () => {
+  await serve();
+};
+
+await script();

@@ -8,7 +8,16 @@ export const blockPackageJsonPath = path.resolve(
   "package.json",
 );
 
-export const scriptsPath = path.resolve(
+export const packageRootDirPath = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
+export const packageScriptsDirPath = path.resolve(
+  packageRootDirPath,
   "scripts",
+);
+
+export const packageJsonDirPath = path.resolve(
+  packageRootDirPath,
+  "package.json",
 );

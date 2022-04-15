@@ -1,3 +1,3 @@
-# Block Protocol Scripts
+# Block Scripts
 
-Block development framework
+See https://blockprotocol.org/docs/developing-blocks

@@ -1,6 +1,6 @@
 import webpack from "webpack";
 import { promisify } from "node:util";
-import webpackMainConfig from "../config/webpack-main.config.cjs";
+import generateBaseWebpackConfig from "../config/generate-base-webpack-config.cjs";
 import { cleanDist } from "../shared/clean-dist.mjs";
 import { ensureBlockSchemaInDist } from "../shared/ensure-block-schema-in-dist.mjs";
 
@@ -11,7 +11,7 @@ const script = async () => {
 
   await ensureBlockSchemaInDist();
 
-  await promisifiedWebpack({ ...webpackMainConfig, mode: "production" });
+  await promisifiedWebpack(generateBaseWebpackConfig("production"));
 };
 
 await script();

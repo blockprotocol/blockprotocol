@@ -10,7 +10,7 @@ See https://blockprotocol.org/docs/developing-blocks
 
 1.  Change into the folder: `cd path/to/your-block-name`
 
-1.  Write a React component starting in `App.tsx`. To test it during development:
+1.  Write a React component starting in `app.tsx`. To test it during development:
 
     - edit `package.json` → `examples` to give your component some props to test with
 

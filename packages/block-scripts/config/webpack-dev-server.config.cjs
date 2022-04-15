@@ -1,7 +1,9 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-const config = require("./webpack-main.config.cjs");
+const generateBaseWebpackConfig = require("./generate-base-webpack-config.cjs");
+
+const config = generateBaseWebpackConfig("development");
 
 /** @type import("webpack").Configuration */
 module.exports = {

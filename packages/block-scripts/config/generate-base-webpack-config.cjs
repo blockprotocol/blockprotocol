@@ -16,7 +16,10 @@ const packageJsonPath = path.resolve(process.cwd(), "./package.json");
 // eslint-disable-next-line import/no-dynamic-require
 const { peerDependencies } = require(packageJsonPath);
 
-module.exports = {
+/**
+ * @param {"development" | "production"} mode
+ */
+module.exports = (mode) => ({
   plugins: [
     new BundleAnalyzerPlugin({
       analyzerMode: "static",
@@ -26,10 +29,10 @@ module.exports = {
     new WebpackAssetsManifest({
       output: "manifest.json",
     }),
-    new StatsPlugin(),
     new webpack.EnvironmentPlugin({
-      "process.env.NODE_ENV": "development",
+      "process.env.NODE_ENV": mode,
     }),
+    new StatsPlugin(),
     new CopyPlugin({ patterns: [{ from: "./public/", to: "./public/" }] }),
   ],
 
@@ -43,6 +46,7 @@ module.exports = {
   externals: Object.fromEntries(
     Object.keys(peerDependencies).map((key) => [key, key]),
   ),
+  mode,
   module: {
     rules: [
       {
@@ -65,4 +69,4 @@ module.exports = {
       ".css", // Preserving webpack default
     ],
   },
-};
+});

@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 
-import { blockPackageJsonPath } from "./paths.mjs";
+import { blockPackageJsonPath, packageJsonDirPath } from "./paths.mjs";
 
 export const extractScriptConfig = () => {
   try {
@@ -10,10 +10,22 @@ export const extractScriptConfig = () => {
   }
 };
 
+const getBlockPackageJson = async () => {
+  return await fs.readJson(blockPackageJsonPath);
+};
+
 export const extractBlockScriptsConfigFromPackageJson = async () => {
   try {
-    return (await fs.readJson(blockPackageJsonPath))["block-scripts"] ?? {};
+    return (await getBlockPackageJson())["block-scripts"] ?? {};
   } catch {
     return {};
   }
+};
+
+const getBlockScriptsPackageJson = async () => {
+  return await fs.readJson(packageJsonDirPath);
+};
+
+export const getBlockScriptsVersion = async () => {
+  return (await getBlockScriptsPackageJson()).version;
 };

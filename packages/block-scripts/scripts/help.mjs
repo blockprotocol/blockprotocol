@@ -1,7 +1,19 @@
-console.log("help script");
+import chalk from "chalk";
+import { getBlockScriptsVersion } from "../shared/config.mjs";
 
-await new Promise((resolve) => {
-  setTimeout(resolve, 1000);
-});
+const script = async () => {
+  console.log(
+    `${chalk.bold(
+      "Block Scripts",
+    )} (version ${await getBlockScriptsVersion()})`,
+  );
+  console.log("");
+  console.log(
+    `See ${chalk.underline(
+      "https://blockprotocol.org/docs/developing-blocks",
+    )}`,
+  );
+  console.log("");
+};
 
-console.log(process.env.SCRIPT_ARGV);
+await script();

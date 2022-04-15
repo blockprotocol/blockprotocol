@@ -1,6 +1,6 @@
 import webpack from "webpack";
 import WebpackDevServer from "webpack-dev-server";
-import webpackMainConfig from "../config/webpack-main.config.cjs";
+import generateBaseWebpackConfig from "../config/generate-base-webpack-config.cjs";
 import webpackDevServerConfig from "../config/webpack-dev-server.config.cjs";
 import { cleanDist } from "../shared/clean-dist.mjs";
 import { serve } from "../shared/serve.mjs";
@@ -14,8 +14,7 @@ const script = async () => {
   // Dist compiler
   webpack(
     {
-      ...webpackMainConfig,
-      mode: "development",
+      ...generateBaseWebpackConfig("development"),
       watch: true,
     },
     () => {},

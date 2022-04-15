@@ -11,7 +11,9 @@ const knownScriptNames = (
 ).map((scriptFileName) => path.basename(scriptFileName, ".mjs"));
 
 const scriptConfig = parser(process.argv.slice(2));
-const scriptName = (scriptConfig._.shift() ?? "help").toLowerCase();
+const scriptName = scriptConfig.help
+  ? "help"
+  : (scriptConfig._.shift() ?? "help").toLowerCase();
 
 if (!knownScriptNames.includes(scriptName)) {
   console.log(
