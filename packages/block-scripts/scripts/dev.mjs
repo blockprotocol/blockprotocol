@@ -4,9 +4,12 @@ import webpackMainConfig from "../config/webpack-main.config.cjs";
 import webpackDevServerConfig from "../config/webpack-dev-server.config.cjs";
 import { cleanDist } from "../shared/clean-dist.mjs";
 import { serve } from "../shared/serve.mjs";
+import { ensureBlockSchemaInDist } from "../shared/ensure-block-schema-in-dist.mjs";
 
 const script = async () => {
   await cleanDist();
+
+  await ensureBlockSchemaInDist();
 
   // Dist compiler
   webpack(
@@ -15,9 +18,7 @@ const script = async () => {
       mode: "development",
       watch: true,
     },
-    (args) => {
-      console.log(args);
-    },
+    () => {},
   );
 
   // Dev server
