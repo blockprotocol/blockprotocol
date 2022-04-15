@@ -16,10 +16,12 @@ const {
   license,
   blockprotocol,
   peerDependencies,
+  // eslint-disable-next-line import/no-dynamic-require
 } = require(packageJsonPath);
 
 const variants = fs.existsSync(variantsJsonPath)
-  ? require(variantsJsonPath)
+  ? // eslint-disable-next-line import/no-dynamic-require
+    require(variantsJsonPath)
   : undefined;
 
 class StatsPlugin {

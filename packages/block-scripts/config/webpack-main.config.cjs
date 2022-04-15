@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /**
  * generates:
  *  - dist/main.js
@@ -12,6 +13,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 const { StatsPlugin } = require("./webpack-block-metadata-plugin.cjs");
 
 const packageJsonPath = path.resolve(process.cwd(), "./package.json");
+// eslint-disable-next-line import/no-dynamic-require
 const { peerDependencies } = require(packageJsonPath);
 
 module.exports = {
