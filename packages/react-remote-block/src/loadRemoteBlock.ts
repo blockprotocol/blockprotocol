@@ -1,70 +1,107 @@
-import { memoizeFetchFunction } from "./util";
-import { blockDependencies } from "../../../block.dependencies";
+import { v4 as uuid } from "uuid";
 
-export type UnknownComponent =
-  | typeof HTMLElement
-  | ((...props: any[]) => JSX.Element);
+import { crossFrameRequestMap, UnknownBlock } from "./shared";
 
-export type FetchSourceFn = (
+type FetchSourceFunction = (
   url: string,
   signal?: AbortSignal | undefined,
 ) => Promise<string>;
 
-/**
- * Adapted from https://github.com/Paciolan/remote-module-loader
- */
-
-const requires = (name: string) => {
-  if (!(name in blockDependencies)) {
-    throw new Error(
-      `Could not require '${name}'. '${name}' does not exist in dependencies.`,
-    );
-  }
-
-  return blockDependencies[name];
-};
-
-const defaultFetchFn: FetchSourceFn = (url, signal) =>
+const defaultFetchFunction: FetchSourceFunction = (url, signal) =>
   fetch(url, { signal: signal ?? null }).then((data) => data.text());
 
-const crossFrameFetchFn = (url: string) =>
-  sendMessage<string>({ payload: url, type: "fetchTextFromUrl" });
+const crossFrameFetchFunction = (url: string) => {
+  const requestId = uuid();
+  const promise = new Promise<string>((resolve, reject) => {
+    crossFrameRequestMap.set(requestId, { resolve, reject });
 
-type FetchAndParseFn = (
-  fetchSourceFn: FetchSourceFn,
-) => (
-  url: string,
-  signal?: AbortSignal,
-) => Promise<string | Record<string, UnknownComponent>>;
-
-const fetchAndParseBlock: FetchAndParseFn = (fetchSourceFn) => (url, signal) =>
-  fetchSourceFn(url, signal).then((source) => {
-    if (url.endsWith(".html")) {
-      return source;
-    }
-
-    /**
-     * Load a commonjs module from a url and wrap it/supply with key variables
-     * @see https://nodejs.org/api/modules.html#modules_the_module_wrapper
-     * @see https://github.com/Paciolan/remote-module-loader/blob/master/src/lib/loadRemoteModule.ts
-     */
-    const exports = {};
-    const module = { exports };
-    // eslint-disable-next-line no-new-func,@typescript-eslint/no-implied-eval
-    const func = new Function("require", "module", "exports", source);
-    func(requires, module, exports);
-
-    /**
-     * @todo check it's actually a React component
-     * we can use a different rendering strategy for other component types
-     * */
-    return module.exports as Record<string, UnknownComponent>;
+    const timeout = 10_000;
+    setTimeout(() => {
+      reject(
+        new Error(
+          `Cross-frame request ${requestId} unresolved in ${
+            timeout / 1000
+          } seconds.`,
+        ),
+      );
+    }, timeout);
   });
 
-export const loadRemoteBlock = memoizeFetchFunction(
-  fetchAndParseBlock(defaultFetchFn),
+  // eslint-disable-next-line no-restricted-globals
+  parent.window.postMessage(
+    { payload: url, requestId, type: "fetchTextFromUrl" },
+    origin,
+  );
+  return promise;
+};
+
+type FetchAndParseFunction = (
+  url: string,
+  signal?: AbortSignal | undefined,
+  requiresFunction?: Record<string, any>,
+) => Promise<string | Record<string, UnknownBlock>>;
+
+type CreateFetchAndParseFunction = (
+  fetchSourceFunction: FetchSourceFunction,
+) => FetchAndParseFunction;
+
+const createFetchAndParseBlockFunction: CreateFetchAndParseFunction =
+  (fetchSourceFunction) => (url, signal, requiresFunction) =>
+    fetchSourceFunction(url, signal).then((source) => {
+      if (url.endsWith(".html")) {
+        return source;
+      }
+
+      /**
+       * Load a commonjs module from a url and wrap it/supply with key variables
+       * @see https://nodejs.org/api/modules.html#modules_the_module_wrapper
+       */
+      const exports = {};
+      const module = { exports };
+      // eslint-disable-next-line no-new-func,@typescript-eslint/no-implied-eval
+      const func = new Function("require", "module", "exports", source);
+      func(requiresFunction, module, exports);
+
+      return module.exports as Record<string, UnknownBlock>;
+    });
+
+const memoizeFetchAndParseFunction = (
+  fetchFunction: FetchAndParseFunction,
+): FetchAndParseFunction => {
+  const cache: Record<string, Promise<any>> = {};
+
+  return async (url, signal) => {
+    if (cache[url] == null) {
+      let fulfilled = false;
+      const promise = fetchFunction(url, signal);
+
+      promise
+        .then(() => {
+          fulfilled = true;
+        })
+        .catch(() => {
+          if (cache[url] === promise) {
+            delete cache[url];
+          }
+        });
+
+      signal?.addEventListener("abort", () => {
+        if (cache[url] === promise && !fulfilled) {
+          delete cache[url];
+        }
+      });
+
+      cache[url] = promise;
+    }
+
+    return await cache[url];
+  };
+};
+
+export const loadRemoteBlock = memoizeFetchAndParseFunction(
+  createFetchAndParseBlockFunction(defaultFetchFunction),
 );
 
-export const loadCrossFrameRemoteBlock = memoizeFetchFunction(
-  fetchAndParseBlock(crossFrameFetchFn),
+export const loadCrossFrameRemoteBlock = memoizeFetchAndParseFunction(
+  createFetchAndParseBlockFunction(crossFrameFetchFunction),
 );

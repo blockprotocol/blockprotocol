@@ -1,45 +1,55 @@
-# Mock Block Dock
+# React Remote Block
 
-A component which provides mocks for testing [Block Protocol](https://blockprotocol.org) blocks.
+A component which will load a [Block Protocol](https://blockprotocol.org) blocks.
 
 ## Usage
 
 When developing a block, wrap it in the embedder and pass your block its initial props:
 
 ```jsx
-<MockBlockDock>
-  <TestBlock {...props} />
-</MockBlockDock>
+<RemoteBlock sourceUrl={"https://"} />
 ```
 
-The embedder will automatically pass the following Block Protocol functions to your block:
+## Props
 
-- `getEntities`
-- `createEntities`
-- `deleteEntities`
-- `updateEntities`
-- `getLinks`
-- `createLinks`
-- `deleteLinks`
-- `updateLinks`
-- `uploadFile`
+| name | type | required | description |
+| ---- | ---- | -------- | ----------- |
 
-For example, to update your block's props, get `entityId` and `updateEntities` from props and call:
+|
+|
+
+## External dependencies
+
+A block may indicate `externals` in `block-metadata.json` ([docs](https://blockprotocol.org/spec/block-types)).
+
+These are libraries the blocks expects the embedding application to supply it with under externals,
+to save every block bundling its own copy.
 
 ```typescript
-updateEntities?.([{ entityId, data: { ...newProps } }]);
+const blockDependencies: Record<string, any> = {
+  react: require("react"),
+  "react-dom": require("react-dom"),
+};
 ```
 
-Your block will be re-rendered with its new properties.
+## Caching
 
-It will also pass `linkGroups` and `linkedEntities`, which will be populated once you create links between entities using `createLinks` (see [linking entities](https://blockprotocol.org/spec/block-types#linking-entities) for more).
+## Inside iFrames
 
-The block will also be re-rendered with new properties if you update them on the child directly (e.g. if you are supplying the block component wrapped by `MockBlockDock` with props from some outside state).
+## Blocks supported
 
-`MockBlockDock` is automatically included in [block-template](https://www.npmjs.com/package/block-template), which you can copy via [create-block-app](https://www.npmjs.com/package/create-block-app)
+The component will parse and render blocks which are defined as:
 
-## Note
+- React components (i.e. a JavaScript file which exports a React component)
+- Web Components (i.e. a JavaScript file which exports a custom element class)
+- HTML (i.e. an HTML file, which may in turn load other assets)
 
-Only a subset of functionality listed in the [Block Protocol spec](https://blockprotocol.org/spec) is currently supported.
+For JavaScript files, the exported component must be one of:
 
-We will be adding more in the coming weeks.
+1.  the default export from the file
+2.  the only named export in the file
+3.  an export named `App`
+
+## Acknowledgements
+
+The `useRemoteBlock` hook was adapted from [Paciolan/remote-component](https://github.com/Paciolan/remote-component)

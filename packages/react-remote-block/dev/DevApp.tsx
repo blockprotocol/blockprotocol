@@ -2,8 +2,7 @@ import * as React from "react";
 import { useState } from "react";
 import * as ReactDOM from "react-dom";
 
-import { TestBlock } from "./TestBlock";
-import { MockBlockDock } from "../src/MockBlockDock";
+import { MockBlockDock } from "mock-block-dock";
 
 const node = document.getElementById("app");
 
@@ -16,9 +15,7 @@ const DevApp = () => {
         Increment Entity ID
       </button>
       <br />
-      <MockBlockDock>
-        <TestBlock entityId={`test-entity-${entityId}`} name="World" />
-      </MockBlockDock>
+      <MockBlockDock />
     </>
   );
 };

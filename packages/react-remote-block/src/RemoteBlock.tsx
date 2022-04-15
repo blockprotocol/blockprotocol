@@ -3,37 +3,55 @@ import {
   BlockProtocolFunctions,
   BlockProtocolProps,
 } from "blockprotocol";
-import React from "react";
+import { ReactElement, VoidFunctionComponent } from "react";
 
 import { HtmlBlock } from "./HtmlBlock";
 import { useRemoteBlock } from "./useRemoteBlock";
 import { WebComponentBlock } from "./WebComponentBlock";
-import { UnknownComponent } from "./loadRemoteBlock";
+import { BlockNameWithNamespace, UnknownBlock } from "./shared";
 
 type RemoteBlockProps = {
   blockMetadata: BlockMetadata;
   blockProperties: Omit<BlockProtocolProps, keyof BlockProtocolFunctions>;
-  crossFrame?: boolean;
   blockProtocolFunctions: BlockProtocolFunctions;
+  crossFrame?: boolean;
+  externalDependencies?: Record<string, any>;
+  LoadingIndicator?: ReactElement;
   sourceUrl: string;
   onBlockLoaded?: () => void;
 };
 
-export const BlockLoadingIndicator: React.VFC = () => <div>Loading...</div>;
+export const FallbackLoadingIndicator: VoidFunctionComponent = () => (
+  <div>Loading...</div>
+);
 
 const isHtmlElement = (
-  component: UnknownComponent,
+  component: UnknownBlock,
 ): component is typeof HTMLElement =>
-  component.prototype instanceof HTMLElement;
+  typeof component !== "string" && component.prototype instanceof HTMLElement;
 
 /**
- * @see https://github.com/Paciolan/remote-component/blob/2b2cfbb5b6006117c56f3aa7daa2292d3823bb83/src/createRemoteComponent.tsx
+ * Fetches, parses, and renders a component or HTML file from a provided URL.
+ * Passes on any supplied properties and functions as specified in the Block Protocol.
+ * For Web Components, will listen to emitted events which match BP function names.
+ *
+ * @param {Object} [blockMetadata] the block's block-metadata.json. Used to determine Web Component tag names.
+ * @param {Object} blockProperties the block's own properties, and BP-specified properties (e.g. entityId, linkGroups)
+ * @param {boolean} [crossFrame = false] whether this block should make requests to the parent window for block source
+ * @param {Object} blockProtocolFunctions
+ * @param {Object} [externalDependencies]
+ * @param LoadingIndicator
+ * @param sourceUrl
+ * @param onBlockLoaded
+ * @constructor
  */
-export const RemoteBlock: React.VFC<RemoteBlockProps> = ({
+export const RemoteBlock: VoidFunctionComponent<RemoteBlockProps> = ({
   blockMetadata,
   blockProperties,
-  crossFrame,
+  crossFrame = false,
   blockProtocolFunctions,
+  externalDependencies,
+  LoadingIndicator,
   sourceUrl,
   onBlockLoaded,
 }) => {
@@ -41,10 +59,11 @@ export const RemoteBlock: React.VFC<RemoteBlockProps> = ({
     sourceUrl,
     crossFrame,
     onBlockLoaded,
+    externalDependencies,
   );
 
   if (loading) {
-    return <BlockLoadingIndicator />;
+    return LoadingIndicator ?? <FallbackLoadingIndicator />;
   }
 
   if (err) {
@@ -64,8 +83,10 @@ export const RemoteBlock: React.VFC<RemoteBlockProps> = ({
       <WebComponentBlock
         name={{
           // @todo figure out if we should enforce 'namespace/name' block name format, and update bp type
-          blockName: blockMetadata.name as any,
-          // @todo add custom element tag name to metadata and use when defined
+          blockName:
+            (blockMetadata?.name as BlockNameWithNamespace | undefined) ??
+            "@unknown/fallback-element-name",
+          // @todo add custom element tag name to block metadata and use when defined
         }}
         elementClass={Component}
         functions={blockProtocolFunctions}

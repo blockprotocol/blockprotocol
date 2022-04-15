@@ -2,6 +2,7 @@ import React, { useCallback, VFC } from "react";
 
 import { createComponent, EventName } from "@lit-labs/react";
 import { BlockProtocolFunctions, BlockProtocolProps } from "blockprotocol";
+import { BlockNameWithNamespace } from "./shared";
 
 /**
  * Custom elements must not use be registered with these names.
@@ -55,8 +56,6 @@ type BpEventData<
    */
   data: Parameters<Required<BlockProtocolFunctions>[Operation]>[0];
 };
-
-type BlockNameWithNamespace = `@${string}/${string}`;
 
 /**
  * Determines the name that will be used to register the custom element.
@@ -127,6 +126,7 @@ export const WebComponentBlock: VFC<WebComponentBlockProps> = ({
       customElements.define(tagName, elementClass);
     } catch (err) {
       // @todo this error is hit even when should not have been already defined - find out why
+      // eslint-disable-next-line no-console -- TODO: consider using logger
       console.warn(`Error defining custom element: ${(err as Error).message}`);
     }
   } else if (existingCustomElement !== elementClass) {
@@ -143,11 +143,13 @@ export const WebComponentBlock: VFC<WebComponentBlockProps> = ({
     try {
       customElements.define(`${tagName}${i}`, elementClass);
     } catch (err) {
+      // eslint-disable-next-line no-console -- TODO: consider using logger
       console.warn(`Error defining custom element: ${(err as Error).message}`);
     }
   }
 
-  const CustomElement = createComponent(React, tagName, elementClass, {
+  // @todo fix type mismatch with React.lazy
+  const CustomElement = createComponent(React as any, tagName, elementClass, {
     onBlockProtocolEvent: "blockProtocolEvent" as EventName<
       CustomEvent<BpEventData>
     >,
