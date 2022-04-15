@@ -5,6 +5,7 @@ import { DESKTOP_NAVBAR_HEIGHT, Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { BANNERS, FooterBanner } from "./FooterBanner";
 import { LoginModal } from "./Modal/LoginModal";
+import { HiringBanner } from "./HiringBanner";
 
 type PageLayoutProps = {};
 
@@ -51,6 +52,7 @@ export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
             paddingTop: banner?.overlapsFooter ? 8 : 0,
           }}
         />
+        <HiringBanner />
       </Box>
     </>
   );
