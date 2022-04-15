@@ -19,7 +19,6 @@
   },
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "browser": "./dist/cjs/index.js",
   "types": "./dist/esm/index.d.ts",
   "files": [
     "dist"
