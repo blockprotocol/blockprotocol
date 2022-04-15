@@ -36,4 +36,3 @@ export const ensureBlockSchemaInDist = async () => {
     console.warn(`Unable to generate block-schema: ${error}`);
   }
 };
-// typescript-json-schema tsconfig.json AppProps --required true --out dist/block-schema.json

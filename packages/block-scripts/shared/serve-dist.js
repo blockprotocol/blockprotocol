@@ -5,7 +5,7 @@ import {
   extractBlockScriptsConfigFromPackageJson,
 } from "./config.js";
 
-export const serve = async () => {
+export const serveDist = async () => {
   const server = http.createServer((request, response) => {
     return handler(request, response, {
       public: "dist",
@@ -18,7 +18,7 @@ export const serve = async () => {
       (await extractBlockScriptsConfigFromPackageJson()).servePort,
       10,
     ) ||
-    9090;
+    63212;
 
   server.listen(servePort, () => {
     console.log(`Serving block's dist folder http://localhost:${servePort}`);

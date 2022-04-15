@@ -1,7 +1,7 @@
-import { serve } from "../shared/serve.js";
+import { serveDist } from "../shared/serve-dist.js";
 
 const script = async () => {
-  await serve();
+  await serveDist();
 };
 
 await script();
