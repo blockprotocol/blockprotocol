@@ -55,7 +55,6 @@ const script = async () => {
   await addUserProcess;
 
   logStepEnd();
-
   logStepStart(
     `Run yarn build in block-template (to check if dist files are published)`,
   );
