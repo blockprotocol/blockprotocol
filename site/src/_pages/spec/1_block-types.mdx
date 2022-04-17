@@ -27,7 +27,7 @@ A block package SHOULD contain:
 
   - If the block does not function without certain properties, MUST specify a [required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3) array naming them
   - SHOULD specify any further constraints or [validation](https://json-schema.org/draft/2020-12/json-schema-validation.html) requirements which improve the block’s functionality
-  - MAY specify an additional field, `configProperties`, which is an array of `string` values which MUST be present as a key on the block schema's `properties`, i.e. each must name a property the block expects. This field is used to indicate which properties a block considers to be part of 'configuring' how it appears or behaves, rather than data users are creating or viewing via the blocks. Embedding applications may choose to display their own UI for setting these values, and could allow users to set values for them for all blocks of a type (rather than on a per-block instance basis).
+  - MAY specify an additional root-level field, `configProperties`, which is an array of `string` values which MUST be present as a key on the block schema's `properties`, i.e. each must name a property the block expects. This field is used to indicate which properties a block considers to be part of 'configuring' how it appears or behaves, rather than data users are creating or viewing via the blocks. Embedding applications may choose to display their own UI for setting these values, and could allow users to set values for them for all blocks of a type (rather than on a per-block instance basis).
 
 - a JSON file containing **metadata describing the block**, which:
 
