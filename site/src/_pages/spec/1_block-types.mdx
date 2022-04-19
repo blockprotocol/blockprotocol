@@ -27,6 +27,7 @@ A block package SHOULD contain:
 
   - If the block does not function without certain properties, MUST specify a [required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3) array naming them
   - SHOULD specify any further constraints or [validation](https://json-schema.org/draft/2020-12/json-schema-validation.html) requirements which improve the block’s functionality
+  - MAY specify an additional root-level field, `configProperties`, which is an array of `string` values which MUST be present as a key on the block schema's `properties`, i.e. each must name a property the block expects. This field is used to indicate which properties a block considers to be part of 'configuring' how it appears or behaves, rather than data users are creating or viewing via the blocks. Embedding applications may choose to display their own UI for setting these values, and could allow users to set values for them for all blocks of a type (rather than on a per-block instance basis).
 
 - a JSON file containing **metadata describing the block**, which:
 
@@ -152,6 +153,27 @@ The ability to translate between schemas would help - e.g. some way expressing a
 Note that this is about translating between different JSON Schemas, and is not to be confused with the process of translating JSON schema to schema.org (and equivalent) types, which has an established technical approach mentioned [here](https://blockprotocol.org/spec/embedding-applications#machine-readable-pages).
 
 </Frame>
+
+#### JSON Schema extensions
+
+As well as `entityTypeId`, entity schemas SHOULD specify the following field at the root of the schema:
+
+- `labelProperty`: a single `string`, which MUST be present as a key on the schema's `properties`, i.e. it must name a property available on the entity. This will be used by blocks as a display name for the entity where appropriate.
+
+```json
+{
+  ...
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "labelProperty": "name"
+  ...
+}
+```
+
+We will publish a JSON schema vocabulary and meta-schema which allows for validating these custom fields.
 
 ### Entity functions
 
