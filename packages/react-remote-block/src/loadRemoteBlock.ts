@@ -1,6 +1,10 @@
 import { v4 as uuid } from "uuid";
 
-import { crossFrameRequestMap, UnknownBlock } from "./shared";
+import {
+  crossFrameRequestMap,
+  TextFromUrlRequestMessage,
+  UnknownBlock,
+} from "./shared";
 
 type FetchSourceFunction = (
   url: string,
@@ -27,11 +31,14 @@ const crossFrameFetchFunction = (url: string) => {
     }, timeout);
   });
 
+  const message: TextFromUrlRequestMessage = {
+    payload: { url },
+    requestId,
+    type: "requestTextFromUrl",
+  };
+
   // eslint-disable-next-line no-restricted-globals
-  parent.window.postMessage(
-    { payload: url, requestId, type: "fetchTextFromUrl" },
-    origin,
-  );
+  parent.window.postMessage(message, origin);
   return promise;
 };
 
@@ -39,7 +46,7 @@ type FetchAndParseFunction = (
   url: string,
   signal?: AbortSignal | undefined,
   requiresFunction?: Record<string, any>,
-) => Promise<string | Record<string, UnknownBlock>>;
+) => Promise<UnknownBlock>;
 
 type CreateFetchAndParseFunction = (
   fetchSourceFunction: FetchSourceFunction,
@@ -56,13 +63,27 @@ const createFetchAndParseBlockFunction: CreateFetchAndParseFunction =
        * Load a commonjs module from a url and wrap it/supply with key variables
        * @see https://nodejs.org/api/modules.html#modules_the_module_wrapper
        */
-      const exports = {};
+      const exports: Record<string, UnknownBlock> = {};
       const module = { exports };
       // eslint-disable-next-line no-new-func,@typescript-eslint/no-implied-eval
       const func = new Function("require", "module", "exports", source);
       func(requiresFunction, module, exports);
 
-      return module.exports as Record<string, UnknownBlock>;
+      if (!("exports" in module)) {
+        throw new Error(`Parsed block module does not contain 'exports'.`);
+      }
+
+      if (module.exports.default) {
+        return exports.default;
+      } else if (module.exports.App) {
+        return exports.App;
+      } else if (Object.keys(exports).length === 1) {
+        return exports[Object.keys(exports)[0]!]!;
+      }
+
+      throw new Error(
+        "Block component must be exported as default, App, or the only named export in the source file.",
+      );
     });
 
 const memoizeFetchAndParseFunction = (

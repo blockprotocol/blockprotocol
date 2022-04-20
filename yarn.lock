@@ -3018,15 +3018,6 @@
     "@types/scheduler" "*"
     csstype "^3.0.2"
 
-"@types/react@^17.0.38":
-  version "17.0.44"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.44.tgz#c3714bd34dd551ab20b8015d9d0dbec812a51ec7"
-  integrity sha512-Ye0nlw09GeMp2Suh8qoOv0odfgCoowfM/9MG6WeRD60Gq9wS90bdkdRtYbRkNhXOpG4H+YXGvj4wOWhAC0LJ1g==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
 "@types/retry@^0.12.0":
   version "0.12.1"
   resolved "https://registry.yarnpkg.com/@types/retry/-/retry-0.12.1.tgz#d8f1c0d0dc23afad6dc16a9e993a0865774b4065"
@@ -3754,13 +3745,6 @@ binary-extensions@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
-
-blockprotocol@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/blockprotocol/-/blockprotocol-0.0.6.tgz#9a547a9889f06158634124608fba0e73da1e8cab"
-  integrity sha512-iNpPKjahDrYtct2Pg4E9QzaAMH44KWi3AGA4lUOyhi6QT1T/y7xNv+U56eKMd4xQ0zsoZtCpEMDSKhYDXUhDvQ==
-  dependencies:
-    "@types/react" "^17.0.38"
 
 bn.js@^4.0.0:
   version "4.12.0"

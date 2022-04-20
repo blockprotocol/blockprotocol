@@ -7,16 +7,19 @@ A component which will load a [Block Protocol](https://blockprotocol.org) blocks
 When developing a block, wrap it in the embedder and pass your block its initial props:
 
 ```jsx
-<RemoteBlock sourceUrl={"https://"} />
+<RemoteBlock
+    blockMetadata={}
+    sourceUrl={"https://blockprotocol.org/blocks/@hash/code"}
+/>
 ```
 
 ## Props
 
-| name | type | required | description |
-| ---- | ---- | -------- | ----------- |
-
-|
-|
+| name              | type      | required | default | description                                                                         |
+| ----------------- | --------- | -------- | ------- | ----------------------------------------------------------------------------------- |
+| `blockMetadata`   | `object`  | no       |         | the block's block-metadata.json. Used to determine Web Component tag names.         |
+| `blockProperties` | `object`  | yes      |         | the block's own properties, and BP-specified properties (e.g. entityId, linkGroups) |
+| `crossFrame`      | `boolean` | no       | `false` | whether this block should make requests to the parent window for block source       |
 
 ## External dependencies
 
@@ -32,7 +35,7 @@ const blockDependencies: Record<string, any> = {
 };
 ```
 
-## Caching
+## Source Caching
 
 ## Inside iFrames
 

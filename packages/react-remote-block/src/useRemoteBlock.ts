@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { loadCrossFrameRemoteBlock, loadRemoteBlock } from "./loadRemoteBlock";
-import { UnknownBlock } from "./shared";
+import {
+  crossFrameRequestMap,
+  isTextFromUrlResponseMessage,
+  UnknownBlock,
+} from "./shared";
 
 type UseRemoteBlockHook = {
   (
@@ -69,14 +73,16 @@ export const useRemoteBlock: UseRemoteBlockHook = (
       return;
     }
 
-    const sourceTransferHandler = ({ data }: MessageEvent) => {
-      if (
-        typeof data === "object" &&
-        data !== null &&
-        "type" in data &&
-        data.type === "fetchTextFromUrl"
-      ) {
-        // @todo add this
+    const sourceTransferHandler = (message: MessageEvent<unknown>) => {
+      if (isTextFromUrlResponseMessage(message)) {
+        const { requestId, payload } = message.data;
+        const promise = crossFrameRequestMap.get(requestId);
+        if (!promise) {
+          throw new Error(
+            `Received response to requestId '${requestId}', but request is not in request map.`,
+          );
+        }
+        promise.resolve(payload.text);
       }
     };
 
@@ -119,11 +125,11 @@ export const useRemoteBlock: UseRemoteBlockHook = (
       : loadRemoteBlock;
 
     blockLoaderFn(url, signal, requiresFunction)
-      .then((module) => {
+      .then((fetchedComponent) => {
         update({
           loading: false,
           err: undefined,
-          component: typeof module === "string" ? module : module.default,
+          component: fetchedComponent,
           url,
         });
 
@@ -143,7 +149,6 @@ export const useRemoteBlock: UseRemoteBlockHook = (
     return () => {
       controller.abort();
 
-      // invalidate update function for stale closures
       update = () => {};
     };
   }, [
