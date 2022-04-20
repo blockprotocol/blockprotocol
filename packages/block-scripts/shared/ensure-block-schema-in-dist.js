@@ -34,5 +34,6 @@ export const ensureBlockSchemaInDist = async () => {
     await fs.writeJson(blockSchemaInDistFilePath, schema, { spaces: 2 });
   } catch (error) {
     console.warn(`Unable to generate block-schema: ${error}`);
+    await fs.writeJson(blockSchemaInDistFilePath, {}, { spaces: 2 });
   }
 };
