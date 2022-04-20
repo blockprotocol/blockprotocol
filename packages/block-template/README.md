@@ -12,7 +12,7 @@ See https://blockprotocol.org/docs/developing-blocks
 
 1.  Write a React component starting in `app.tsx`. To test it during development:
 
-    - edit `package.json` → `examples` to give your component some props to test with
+    - edit `package.json` → `blockprotocol` → `examples` to give your component some props to test with. . This will also be included as example data in the generated `block-metadata.json`
 
     - run the dev server with `yarn dev`
 
