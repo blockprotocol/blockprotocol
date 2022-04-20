@@ -19,7 +19,8 @@ See https://blockprotocol.org/docs/developing-blocks
 1.  When finished, run `yarn build`, which:
 
     - Bundles the component, without React, into a single source file
-    - Generates a JSON schema from the `AppProps` type representing the data interface with the block
+    - Generates a JSON schema from the `AppProps` type representing the data interface with the block.
+      If your block folder contains `block-schema.json`, this custom schema will be used instead.
     - Generates a `block-metadata.json` file which:
       - points to the `schema` and `source` files
       - brings in metadata from `package.json`, such as the block name and description
