@@ -5,7 +5,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-// eslint-disable-next-line import/no-extraneous-dependencies -- TODO update config properly
 import { MockBlockDock } from "mock-block-dock";
 
 import Component from "./index";

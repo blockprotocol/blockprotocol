@@ -1,6 +1,7 @@
 import execa from "execa";
 import sleep from "sleep-promise";
 import path from "path";
+import fs from "fs-extra";
 import chalk from "chalk";
 import { logStepEnd, logStepStart } from "../shared/logging";
 
@@ -8,13 +9,6 @@ import { logStepEnd, logStepStart } from "../shared/logging";
 const npmRegistry = "http://localhost:4873";
 const npmUserAndPassword = "verdaccio";
 const npmEmail = "verdaccio@example.com";
-
-const packageNames = [
-  "block-template",
-  "blockprotocol",
-  "create-block-app",
-  "mock-block-dock",
-];
 
 const defaultExecaOptions = {
   env: {
@@ -28,6 +22,26 @@ const defaultExecaOptions = {
 
 const script = async () => {
   console.log(chalk.bold("Publishing to local registry..."));
+
+  const publishablePackageNames: string[] = [];
+  for (const packageName of await fs.readdir("packages")) {
+    try {
+      const packageJson = await fs.readJson(
+        `packages/${packageName}/package.json`,
+      );
+      if (packageJson.private !== true) {
+        publishablePackageNames.push(packageName);
+      }
+    } catch {
+      // noop (packages/* is a file or does not contain package.json)
+    }
+  }
+
+  console.log(
+    `Publishable package names: ${["", ...publishablePackageNames].join(
+      "\n- ",
+    )}`,
+  );
 
   logStepStart("Login into local registry");
 
@@ -65,7 +79,7 @@ const script = async () => {
 
   logStepEnd();
 
-  for (const packageName of packageNames) {
+  for (const packageName of publishablePackageNames) {
     const packageDirPath = path.resolve(`packages/${packageName}`);
 
     logStepStart(`Unpublish ${packageName} from local registry (if present)`);

@@ -1,23 +1,28 @@
+const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-const config = require("./webpack.config");
+const generateBaseWebpackConfig = require("./generate-base-webpack-config.cjs");
+
+const config = generateBaseWebpackConfig("development");
 
 /** @type import("webpack").Configuration */
 module.exports = {
   devtool: "eval-cheap-module-source-map",
-  entry: "./src/webpack-dev-server.js",
+  entry: "./src/dev.js",
   plugins: [
-    ...config[0].plugins,
+    ...config.plugins,
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: "src/index.html",
+      template: path.resolve(__dirname, "index.html"),
     }),
     new webpack.EnvironmentPlugin({
-      "process.env.NODE_ENV": process.env.NODE_ENV,
+      "process.env.NODE_ENV": "development",
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  module: config[0].module,
+  module: config.module,
+  mode: "development",
+  target: "web",
   devServer: {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -32,7 +37,6 @@ module.exports = {
     },
     hot: true,
     open: process.env.BROWSER !== "none",
-    port: 9090,
     static: {
       directory: __dirname,
     },

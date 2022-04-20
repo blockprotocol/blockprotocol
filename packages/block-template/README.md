@@ -8,17 +8,19 @@ See https://blockprotocol.org/docs/developing-blocks
 
 ## Step two: write and build a component
 
-1.  Change into the folder: `cd packages/hash/blocks/<name>`
+1.  Change into the folder: `cd path/to/your-block-name`
 
-1.  Write a React component starting in `App.tsx`. To test it during development:
+1.  Write a React component starting in `app.tsx`. To test it during development:
 
-    - edit `src/webpack-dev-server.js` to give your component some props to test with
-    - run the dev server with `yarn start`
+    - edit `package.json` → `blockprotocol` → `examples` to give your component some props to test with. . This will also be included as example data in the generated `block-metadata.json`
+
+    - run the dev server with `yarn dev`
 
 1.  When finished, run `yarn build`, which:
 
     - Bundles the component, without React, into a single source file
-    - Generates a JSON schema from the `AppProps` type representing the data interface with the block
+    - Generates a JSON schema from the `AppProps` type representing the data interface with the block.
+      If your block folder contains `block-schema.json`, this custom schema will be used instead.
     - Generates a `block-metadata.json` file which:
       - points to the `schema` and `source` files
       - brings in metadata from `package.json`, such as the block name and description
@@ -72,8 +74,6 @@ module.exports = {
 There are a few important files, one set is used for the bundle, another set for local development.
 
 - `src/index.js` - Entrypoint of the Block Component. The component needs to be the `default` export.
-- `src/webpack-dev-server.js` - Entrypoint for `yarn dev`. This is only used for development and will not be included in the final bundle.
-- `src/index.html` - HTML for `yarn dev`. This is only used for development and will not be included in the final bundle.
 - `variants.json` - Defines named presets of block properties to be presented as
   separate or at least related block-types to the end-user.
 

@@ -43,6 +43,12 @@
   - "site/src/_pages/spec/**/*"
   - "site/src/_pages/spec/**/.*"
 
+"package: block-scripts":
+  - "packages/block-scripts/*"
+  - "packages/block-scripts/.*"
+  - "packages/block-scripts/**/*"
+  - "packages/block-scripts/**/.*"
+
 "package: block-template":
   - "packages/block-template/*"
   - "packages/block-template/.*"

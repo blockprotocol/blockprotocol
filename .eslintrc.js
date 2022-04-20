@@ -193,9 +193,25 @@ module.exports = {
       },
     },
     {
+      files: ["packages/block-scripts/**"],
+      rules: {
+        "no-console": "off",
+        "import/extensions": ["error", "always"],
+      },
+    },
+    {
       files: ["packages/block-template/**"],
       parserOptions: {
         project: ["packages/block-template/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/block-template/src/dev.js"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
       },
     },
     {
