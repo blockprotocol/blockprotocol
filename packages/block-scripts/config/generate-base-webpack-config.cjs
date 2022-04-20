@@ -1,21 +1,26 @@
+/* eslint-disable global-require */
 /**
  * generates:
  *  - dist/main.js
  *  - dist/manifest.json
  *  - dist/webpack-bundle-analyzer-report.html
  */
+const path = require("path");
 const webpack = require("webpack");
 const WebpackAssetsManifest = require("webpack-assets-manifest");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const CopyPlugin = require("copy-webpack-plugin");
-const { StatsPlugin } = require("./webpack-block-metadata-plugin");
-const { peerDependencies } = require("./package.json");
+const { StatsPlugin } = require("./webpack-block-metadata-plugin.cjs");
 
-module.exports = {
+const packageJsonPath = path.resolve(process.cwd(), "./package.json");
+// eslint-disable-next-line import/no-dynamic-require
+const { peerDependencies } = require(packageJsonPath);
+
+/**
+ * @param {"development" | "production"} mode
+ */
+module.exports = (mode) => ({
   plugins: [
-    new webpack.EnvironmentPlugin({
-      "process.env.NODE_ENV": process.env.NODE_ENV,
-    }),
     new BundleAnalyzerPlugin({
       analyzerMode: "static",
       openAnalyzer: false,
@@ -23,6 +28,9 @@ module.exports = {
     }),
     new WebpackAssetsManifest({
       output: "manifest.json",
+    }),
+    new webpack.EnvironmentPlugin({
+      "process.env.NODE_ENV": mode,
     }),
     new StatsPlugin(),
     new CopyPlugin({ patterns: [{ from: "./public/", to: "./public/" }] }),
@@ -38,6 +46,7 @@ module.exports = {
   externals: Object.fromEntries(
     Object.keys(peerDependencies).map((key) => [key, key]),
   ),
+  mode,
   module: {
     rules: [
       {
@@ -45,6 +54,7 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         use: {
           loader: "babel-loader",
+          options: require("./babelrc.json"),
         },
       },
     ],
@@ -59,4 +69,4 @@ module.exports = {
       ".css", // Preserving webpack default
     ],
   },
-};
+});

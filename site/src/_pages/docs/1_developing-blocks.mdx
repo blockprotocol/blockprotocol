@@ -29,10 +29,10 @@ We’ve provided a template to help you get started - here’s how to use it:
 
 ### Code
 
-Edit `src/App.tsx` to change the behavior of your block.
+Edit `src/app.tsx` to change the behavior of your block.
 
 The `AppProps` type describes what data your block accepts - the names and types of properties that embedding applications
-should pass to your block. You can pass in starting props for testing in `webpack-dev-server.js`.
+should pass to your block. You can pass in starting props for testing in `dev.js`.
 
 Embedding applications may also pass an `updateEntities` function, an `entityId` and an `entityTypeId` as properties
 to your block - these are the ids identifying your block data in the app. Call `updateEntities` with any new data
