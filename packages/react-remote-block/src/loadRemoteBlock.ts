@@ -2,6 +2,7 @@ import { v4 as uuid } from "uuid";
 
 import {
   crossFrameRequestMap,
+  isTextFromUrlResponseMessage,
   TextFromUrlRequestMessage,
   UnknownBlock,
 } from "./shared";
@@ -11,10 +12,17 @@ type FetchSourceFunction = (
   signal?: AbortSignal | undefined,
 ) => Promise<string>;
 
-const defaultFetchFunction: FetchSourceFunction = (url, signal) =>
+/**
+ * A simple function to fetch data from a URL and return it as text.
+ */
+const defaultTextFetchFunction: FetchSourceFunction = (url, signal) =>
   fetch(url, { signal: signal ?? null }).then((data) => data.text());
 
-const crossFrameFetchFunction = (url: string) => {
+/**
+ * A function that sends a request to the parent window for text from a URL,
+ * and leaves a promise to be settled by {@link crossFrameTextFetchResponseHandler}
+ */
+const crossFrameTextFetchRequestFunction = (url: string) => {
   const requestId = uuid();
   const promise = new Promise<string>((resolve, reject) => {
     crossFrameRequestMap.set(requestId, { resolve, reject });
@@ -42,6 +50,32 @@ const crossFrameFetchFunction = (url: string) => {
   return promise;
 };
 
+/**
+ * Listens for a response to messages sent by {@link crossFrameTextFetchRequestFunction},
+ * and settles the waiting promises wih the response payload.
+ */
+export const crossFrameTextFetchResponseHandler = (
+  message: MessageEvent<unknown>,
+) => {
+  if (isTextFromUrlResponseMessage(message)) {
+    const { payload, requestId } = message.data;
+    const promiseSettlerFns = crossFrameRequestMap.get(requestId);
+    if (!promiseSettlerFns) {
+      throw new Error(
+        `Received response to requestId '${requestId}', but request is not in request map.`,
+      );
+    }
+    if (payload.data != null) {
+      promiseSettlerFns.resolve(payload.data);
+    } else {
+      promiseSettlerFns.reject(
+        new Error(payload.error || "Request could not be fulfilled."),
+      );
+    }
+    crossFrameRequestMap.delete(requestId);
+  }
+};
+
 type FetchAndParseFunction = (
   url: string,
   signal?: AbortSignal | undefined,
@@ -52,6 +86,10 @@ type CreateFetchAndParseFunction = (
   fetchSourceFunction: FetchSourceFunction,
 ) => FetchAndParseFunction;
 
+/**
+ * Creates a function to fetch and parse a source file, allowing for different functions for _fetching_ to be used.
+ * @param fetchSourceFunction the function to fetch the source
+ */
 const createFetchAndParseBlockFunction: CreateFetchAndParseFunction =
   (fetchSourceFunction) => (url, signal, requiresFunction) =>
     fetchSourceFunction(url, signal).then((source) => {
@@ -86,7 +124,10 @@ const createFetchAndParseBlockFunction: CreateFetchAndParseFunction =
       );
     });
 
-const memoizeFetchAndParseFunction = (
+/*
+ * Memoizes the result of a fetch function by URL.
+ */
+const memoizeFetchFunction = (
   fetchFunction: FetchAndParseFunction,
 ): FetchAndParseFunction => {
   const cache: Record<string, Promise<any>> = {};
@@ -119,10 +160,10 @@ const memoizeFetchAndParseFunction = (
   };
 };
 
-export const loadRemoteBlock = memoizeFetchAndParseFunction(
-  createFetchAndParseBlockFunction(defaultFetchFunction),
+export const loadRemoteBlock = memoizeFetchFunction(
+  createFetchAndParseBlockFunction(defaultTextFetchFunction),
 );
 
-export const loadCrossFrameRemoteBlock = memoizeFetchAndParseFunction(
-  createFetchAndParseBlockFunction(crossFrameFetchFunction),
+export const loadCrossFrameRemoteBlock = memoizeFetchFunction(
+  createFetchAndParseBlockFunction(crossFrameTextFetchRequestFunction),
 );

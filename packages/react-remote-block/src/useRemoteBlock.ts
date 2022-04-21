@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { loadCrossFrameRemoteBlock, loadRemoteBlock } from "./loadRemoteBlock";
 import {
-  crossFrameRequestMap,
-  isTextFromUrlResponseMessage,
-  UnknownBlock,
-} from "./shared";
+  crossFrameTextFetchResponseHandler,
+  loadCrossFrameRemoteBlock,
+  loadRemoteBlock,
+} from "./loadRemoteBlock";
+import { UnknownBlock } from "./shared";
 
 type UseRemoteBlockHook = {
   (
@@ -73,22 +73,10 @@ export const useRemoteBlock: UseRemoteBlockHook = (
       return;
     }
 
-    const sourceTransferHandler = (message: MessageEvent<unknown>) => {
-      if (isTextFromUrlResponseMessage(message)) {
-        const { requestId, payload } = message.data;
-        const promise = crossFrameRequestMap.get(requestId);
-        if (!promise) {
-          throw new Error(
-            `Received response to requestId '${requestId}', but request is not in request map.`,
-          );
-        }
-        promise.resolve(payload.text);
-      }
-    };
+    window.addEventListener("message", crossFrameTextFetchResponseHandler);
 
-    window.addEventListener("message", sourceTransferHandler);
-
-    return () => window.removeEventListener("message", sourceTransferHandler);
+    return () =>
+      window.removeEventListener("message", crossFrameTextFetchResponseHandler);
   }, [crossFrame]);
 
   const requiresFunction = useCallback(

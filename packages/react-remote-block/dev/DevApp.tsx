@@ -3,6 +3,7 @@ import { useState } from "react";
 import * as ReactDOM from "react-dom";
 
 import { MockBlockDock } from "mock-block-dock";
+import { RemoteBlock } from "../src";
 
 const node = document.getElementById("app");
 

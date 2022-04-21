@@ -16,7 +16,7 @@ export type TextFromUrlRequestMessage = {
 const textFromUrlResponseMessageType = "returnTextFromUrl";
 
 export type TextFromUrlResponseMessage = {
-  payload: { text: string };
+  payload: { data: string; error?: string };
   requestId: string;
   type: typeof textFromUrlResponseMessageType;
 };

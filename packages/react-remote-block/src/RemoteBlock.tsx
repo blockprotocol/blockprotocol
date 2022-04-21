@@ -18,8 +18,8 @@ type RemoteBlockProps = {
   crossFrame?: boolean;
   externalDependencies?: Record<string, any>;
   LoadingIndicator?: ReactElement;
-  sourceUrl: string;
   onBlockLoaded?: () => void;
+  sourceUrl: string;
 };
 
 export const FallbackLoadingIndicator: VoidFunctionComponent = () => (
@@ -36,25 +36,25 @@ const isHtmlElement = (
  * Passes on any supplied properties and functions as specified in the Block Protocol.
  * For Web Components, will listen to emitted events which match BP function names.
  *
- * @param {Object} [blockMetadata] the block's block-metadata.json. Used to determine Web Component tag names.
- * @param {Object} blockProperties the block's own properties, and BP-specified properties (e.g. entityId, linkGroups)
+ * @param {object} [blockMetadata] the block's block-metadata.json. Used to determine Web Component tag names.
+ * @param {object} blockProperties the block's own properties, and BP-specified properties (e.g. entityId, linkGroups)
+ * @param {object} blockProtocolFunctions the functions listed in the Block Protocol spec
  * @param {boolean} [crossFrame = false] whether this block should make requests to the parent window for block source
- * @param {Object} blockProtocolFunctions the functions listed in the Block Protocol spec
- * @param {Object} [externalDependencies] any dependencies the block lists as 'externals' that it expects to be provided
- * @param {Function} [LoadingIndicator] a React component to display when the block is loading
- * @param sourceUrl the URL to the entry source file for the block
- * @param {Function} [onBlockLoaded] a callback, called when the block has been successfully parsed and loaded
+ * @param {object} [externalDependencies] any dependencies the block lists as 'externals' that it expects to be provided
+ * @param {ReactElement} [LoadingIndicator] an element to display while the block is loading
+ * @param {function} [onBlockLoaded] a callback, called when the block has been successfully parsed and loaded
+ * @param {string} sourceUrl the URL to the entry source file for the block
  * @constructor
  */
 export const RemoteBlock: VoidFunctionComponent<RemoteBlockProps> = ({
   blockMetadata,
   blockProperties,
-  crossFrame = false,
   blockProtocolFunctions,
+  crossFrame = false,
   externalDependencies,
   LoadingIndicator,
-  sourceUrl,
   onBlockLoaded,
+  sourceUrl,
 }) => {
   const [loading, err, Component] = useRemoteBlock(
     sourceUrl,
