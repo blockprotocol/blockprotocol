@@ -1,3 +1,7 @@
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: ["true", "1"].includes(process.env.ANALYZE),
+});
+
 // @ts-check
 
 /** @type {import("next").NextConfig} */
@@ -36,4 +40,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);
