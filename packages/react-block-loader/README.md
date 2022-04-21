@@ -1,24 +1,63 @@
-# React Remote Block
+# React Block Loader
 
-A component which will load a [Block Protocol](https://blockprotocol.org) block from a remote URL,
-and pass the functions and properties provided from it to the block.
+A component which loads a [Block Protocol](https://blockprotocol.org) block from a remote URL, and passes on the properties and functions you provide.
 
 ## Usage
 
-When developing a block, wrap it in the embedder and pass your block its initial props:
+Pass RemoteBlock (at a minimum) a source url (`sourceUrl`), the properties the block expects (`blockProperties`),
+and functions for it to call (`blockProtocolFunctions`), as set out in [the specification](https://blockprotocol.org/spec).
 
 ```jsx
-<RemoteBlock
-    blockMetadata={}
-    sourceUrl={"https://blockprotocol.org/blocks/@hash/code"}
-/>
+const blockDependencies = {
+  react: require("react"),
+  "react-dom": require("react-dom"),
+};
+
+const BlockLoader = ({ blockSourceFolder: string }) => {
+  const [blockMetadata, setBlockMetadata] = useState(null);
+
+  useEffect(() => {
+    fetch(`${blockSourceFolder}/block-metadata.json`)
+      .then((resp) => resp.json())
+      .then(setBlockMetadata);
+  }, [componentId]);
+
+  if (!blockMetadata) {
+    return <div>Loading block metadata...</div>;
+  }
+
+  const blockProperties = {
+    // block's own properties, entityId, linkedEntities, linkGroups, etc
+  };
+
+  const blockProtocolFunctions = {
+    updateEntities: (actions) => {
+      // persist block updates wherever you store them
+    },
+    // more Block Protocol Functions
+  };
+
+  return (
+    <RemoteBlock
+      blockMetadata={blockMetadata}
+      blockProperties={blockProperties}
+      blockProtocolFunctions={blockProtocolFunctions}
+      externalDependencies={blockDependencies}
+      LoadingIndicator={<h1>Optional custom loading indicator</h1>}
+      onBlockLoaded={() =>
+        console.log(`Block with componentId ${componentId} loaded.`)
+      }
+      sourceUrl={`${blockSourceFolder}/${blockMetadata.source}`}
+    />
+  );
+};
 ```
 
 ## Props
 
 | name                     | type           | required | default                 | description                                                                                                                                  |
 | ------------------------ | -------------- | -------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `blockMetadata`          | `object`       | no       |                         | the block's [block-metadata.json](https://blockprotocol.org/spec/block-types). Used to determine Web Component tag names.                    |
+| `blockMetadata`          | `object`       | no       |                         | the block's [block-metadata.json](https://blockprotocol.org/spec/block-types). Will be used to determine Web Component tag names (TBD soon). |
 | `blockProperties`        | `object`       | yes      |                         | the block's own properties, and BP-specified properties (e.g. entityId, linkGroups)                                                          |
 | `crossFrame`             | `boolean`      | no       | `false`                 | whether this block should make requests to [the parent window](#inside-iframes) for block source                                             |
 | `blockProtocolFunctions` | `object`       | yes      |                         | the [functions provided to blocks](https://blockprotocol.org/spec/block-types#entity-functions) for reading and editing entity and link data |
@@ -32,14 +71,13 @@ When developing a block, wrap it in the embedder and pass your block its initial
 A block may indicate `externals` in `block-metadata.json` ([docs](https://blockprotocol.org/spec/block-types)).
 
 These are libraries the blocks expects the embedding application to supply it.
-For example, a block may rely on React ("externals": [{ "react": "^16.0.0" }]),
-but assume that the embedding application will provide it, to save loading it multiple times on a page.
+For example, a block may rely on React, but assume that the embedding application will provide it, to save loading it multiple times on a page.
 
 In order to provide blocks with these dependencies, pass an object where the key is `<package-name>`,
 and the value is `require(<package-name>)`, e.g.
 
-```typescript
-const blockDependencies: Record<string, any> = {
+```javascript
+const blockDependencies = {
   react: require("react"),
   "react-dom": require("react-dom"),
 };
@@ -82,6 +120,7 @@ window.addEventListener("message", (requestMessage) => {
 
     const { payload, requestId } = requestMessage.data;
 
+    // implement memoizedFetch to cache the text by URL, to avoid fetching it for multiple blocks
     memoizedFetch(payload.url)
       .then((resp) => resp.text())
       .then((text) => {

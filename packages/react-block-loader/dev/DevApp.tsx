@@ -91,20 +91,6 @@ const MockBlockToRemoteBlock: VoidFunctionComponent<
   const absoluteSourceUrl = absoluteUrlRegExp.test(blockMetadata.source)
     ? blockMetadata.source
     : `${componentId}/${blockMetadata.source}`;
-
-  return (
-    <RemoteBlock
-      blockMetadata={blockMetadata}
-      blockProperties={blockProperties}
-      blockProtocolFunctions={blockProtocolFunctions}
-      externalDependencies={blockDependencies}
-      LoadingIndicator={<h1>Custom loading indicator</h1>}
-      onBlockLoaded={() =>
-        console.log(`Block with componentId ${componentId} loaded.`)
-      }
-      sourceUrl={absoluteSourceUrl}
-    />
-  );
 };
 
 const DevApp = () => {
