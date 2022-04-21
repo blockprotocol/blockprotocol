@@ -22,6 +22,10 @@ type UseRemoteComponentState = {
   url: string | null;
 };
 
+/**
+ * This caches the entire component state for an instance of the hook.
+ * @todo we probably don't need both this and the caching in memoizeFetchFunction
+ */
 const remoteModuleCache: Record<string, UseRemoteComponentState> = {};
 
 export const isTopWindow = () => {
@@ -33,7 +37,8 @@ export const isTopWindow = () => {
 };
 
 /**
- * @see https://github.com/Paciolan/remote-component/blob/master/src/hooks/useRemoteComponent.ts
+ * A hook to request a component is fetched and parsed, given a URL to its source.
+ * Requests are cached per URL. See README for crossFrame instructions.
  */
 export const useRemoteBlock: UseRemoteBlockHook = (
   url,

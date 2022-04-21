@@ -7,6 +7,10 @@ export type UnknownBlock =
 
 const textFromUrlRequestMessageType = "requestTextFromUrl";
 
+/**
+ * A cross-frame request to retrieve text from a specified URL.
+ * Expects a {@link TextFromUrlResponseMessage} in return.
+ */
 export type TextFromUrlRequestMessage = {
   payload: { url: string };
   requestId: string;
@@ -15,6 +19,10 @@ export type TextFromUrlRequestMessage = {
 
 const textFromUrlResponseMessageType = "returnTextFromUrl";
 
+/**
+ * A cross-frame response, returning text fetched from a URL.
+ * Responding to a {@link TextFromUrlRequestMessage}
+ */
 export type TextFromUrlResponseMessage = {
   payload: { data: string; error?: string };
   requestId: string;

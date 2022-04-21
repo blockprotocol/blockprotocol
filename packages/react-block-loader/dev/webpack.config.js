@@ -26,6 +26,8 @@ module.exports = {
       },
     ],
   },
+  mode: "development",
+  target: "web",
   devServer: {
     headers: {
       "Access-Control-Allow-Origin": "*",

@@ -215,6 +215,15 @@ module.exports = {
       },
     },
     {
+      files: ["packages/react-block-loader/dev/*"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
+    {
       files: ["packages/blockprotocol/**"],
       parserOptions: {
         project: ["packages/blockprotocol/tsconfig.json"],

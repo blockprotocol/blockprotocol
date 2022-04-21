@@ -126,16 +126,17 @@ const createFetchAndParseBlockFunction: CreateFetchAndParseFunction =
 
 /*
  * Memoizes the result of a fetch function by URL.
+ * @todo we probably don't need both this and remoteModuleCache in useRemoteBlock
  */
 const memoizeFetchFunction = (
   fetchFunction: FetchAndParseFunction,
 ): FetchAndParseFunction => {
   const cache: Record<string, Promise<any>> = {};
 
-  return async (url, signal) => {
+  return async (url, signal, ...args) => {
     if (cache[url] == null) {
       let fulfilled = false;
-      const promise = fetchFunction(url, signal);
+      const promise = fetchFunction(url, signal, ...args);
 
       promise
         .then(() => {

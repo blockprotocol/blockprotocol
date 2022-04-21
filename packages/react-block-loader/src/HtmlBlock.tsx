@@ -5,6 +5,9 @@ type HtmlBlockProps = {
   [key: string]: any;
 };
 
+/**
+ * Creates an element from a given HTML string, including script tags.
+ */
 export const HtmlBlock: VoidFunctionComponent<HtmlBlockProps> = ({
   html,
   ...props
@@ -16,6 +19,7 @@ export const HtmlBlock: VoidFunctionComponent<HtmlBlockProps> = ({
       return;
     }
 
+    // This approach means that any <script> tags in the HTML actually work.
     const docFragment = document.createRange().createContextualFragment(html);
 
     divRef.current.innerHTML = "";

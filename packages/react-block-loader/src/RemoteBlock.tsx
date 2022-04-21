@@ -3,15 +3,14 @@ import {
   BlockProtocolFunctions,
   BlockProtocolProps,
 } from "blockprotocol";
-import { ReactElement, VoidFunctionComponent } from "react";
+import React, { ReactElement, VoidFunctionComponent } from "react";
 
 import { HtmlBlock } from "./HtmlBlock";
 import { useRemoteBlock } from "./useRemoteBlock";
 import { WebComponentBlock } from "./WebComponentBlock";
 import { BlockNameWithNamespace, UnknownBlock } from "./shared";
 
-type RemoteBlockProps = {
-  // the block's block-metadata.json. Used to determine Web Component tag names.
+export type RemoteBlockProps = {
   blockMetadata: BlockMetadata;
   blockProperties: Omit<BlockProtocolProps, keyof BlockProtocolFunctions>;
   blockProtocolFunctions: BlockProtocolFunctions;
@@ -35,6 +34,7 @@ const isHtmlElement = (
  * Fetches, parses, and renders a component or HTML file from a provided URL.
  * Passes on any supplied properties and functions as specified in the Block Protocol.
  * For Web Components, will listen to emitted events which match BP function names.
+ * @see https://blockprotocol.org
  *
  * @param {object} [blockMetadata] the block's block-metadata.json. Used to determine Web Component tag names.
  * @param {object} blockProperties the block's own properties, and BP-specified properties (e.g. entityId, linkGroups)
@@ -44,7 +44,6 @@ const isHtmlElement = (
  * @param {ReactElement} [LoadingIndicator] an element to display while the block is loading
  * @param {function} [onBlockLoaded] a callback, called when the block has been successfully parsed and loaded
  * @param {string} sourceUrl the URL to the entry source file for the block
- * @constructor
  */
 export const RemoteBlock: VoidFunctionComponent<RemoteBlockProps> = ({
   blockMetadata,
@@ -76,7 +75,7 @@ export const RemoteBlock: VoidFunctionComponent<RemoteBlockProps> = ({
   }
 
   if (typeof Component === "string") {
-    return <HtmlBlock html={Component} />;
+    return <HtmlBlock html={Component} {...blockProperties} />;
   }
 
   if (isHtmlElement(Component)) {
