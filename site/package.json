@@ -77,7 +77,7 @@
     "slick-carousel": "^1.8.1",
     "slugify": "^1.6.3",
     "tmp-promise": "3.0.3",
-    "twind": "^0.16.16",
+    "twind": "^0.16.17",
     "unified": "9.2.2",
     "use-mousetrap": "^1.0.4",
     "uuid": "^8.3.2"

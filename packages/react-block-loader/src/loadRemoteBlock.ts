@@ -103,7 +103,7 @@ const createFetchAndParseBlockFunction: CreateFetchAndParseFunction =
        */
       const exports: Record<string, UnknownBlock> = {};
       const module = { exports };
-      // eslint-disable-next-line no-new-func,@typescript-eslint/no-implied-eval
+      // eslint-disable-next-line no-new-func
       const func = new Function("require", "module", "exports", source);
       func(requiresFunction, module, exports);
 

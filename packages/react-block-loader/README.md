@@ -145,8 +145,8 @@ The component will parse and render blocks which are defined as:
 For JavaScript files, the exported component must be one of:
 
 1.  the default export from the file
-2.  the only named export in the file
-3.  an export named `App`
+1.  the only named export in the file
+1.  an export named `App`
 
 ## Acknowledgements
 
