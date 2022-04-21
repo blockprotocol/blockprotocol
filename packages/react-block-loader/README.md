@@ -4,10 +4,14 @@ A component which loads a [Block Protocol](https://blockprotocol.org) block from
 
 ## Usage
 
+`yarn install "react-block-loader"`
+
 Pass RemoteBlock (at a minimum) a source url (`sourceUrl`), the properties the block expects (`blockProperties`),
 and functions for it to call (`blockProtocolFunctions`), as set out in [the specification](https://blockprotocol.org/spec).
 
 ```jsx
+import { RemoteBlock } from "react-block-loader";
+
 const blockDependencies = {
   react: require("react"),
   "react-dom": require("react-dom"),
@@ -98,7 +102,7 @@ Requests are cached by URL, so that each source URL only has to be fetched once,
 Where each `RemoteBlock` instance is loaded in its own iFrame, you can optionally pass `crossFrame=true`,
 and the block will send a message to the parent window requesting the text of the source file.
 This allows the parent window to keep a cache of text per `sourceUrl`, which is useful if you have multiple
-iFrames each loading the same remote block. Each window will still have to parsed the source.
+iFrames each loading the same remote block. Each iFrame will still have to parse the source.
 
 See the following exports:
 
