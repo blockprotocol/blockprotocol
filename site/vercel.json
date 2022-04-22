@@ -1,11 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "functions": {
-    "pages/[shortname]/[[...profileTabs]].page.tsx": {
+    "[shortname]/[[...profileTabs]].js": {
       "memory": 3008,
       "maxDuration": 30
     },
-    "pages/api/me.api.ts": {
+    "api/me.js": {
       "memory": 2880,
       "maxDuration": 30
     }
