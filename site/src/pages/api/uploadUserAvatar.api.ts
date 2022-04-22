@@ -1,5 +1,6 @@
 import mimeType from "mime-types";
 
+import { PageConfig } from "next";
 import { uploadFileBufferToS3 } from "../../lib/awsS3";
 import {
   AuthenticatedApiRequest,
@@ -110,7 +111,7 @@ export default createAuthenticatedHandler<
     }
   });
 
-export const config = {
+export const config: PageConfig = {
   api: {
     bodyParser: false,
   },
