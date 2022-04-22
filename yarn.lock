@@ -3016,7 +3016,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.38", "@types/react@^17.0.39":
+"@types/react@*", "@types/react@^17.0.39":
   version "17.0.44"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.44.tgz#c3714bd34dd551ab20b8015d9d0dbec812a51ec7"
   integrity sha512-Ye0nlw09GeMp2Suh8qoOv0odfgCoowfM/9MG6WeRD60Gq9wS90bdkdRtYbRkNhXOpG4H+YXGvj4wOWhAC0LJ1g==
@@ -3752,13 +3752,6 @@ binary-extensions@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/binary-extensions/-/binary-extensions-2.2.0.tgz#75f502eeaf9ffde42fc98829645be4ea76bd9e2d"
   integrity sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==
-
-blockprotocol@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/blockprotocol/-/blockprotocol-0.0.6.tgz#9a547a9889f06158634124608fba0e73da1e8cab"
-  integrity sha512-iNpPKjahDrYtct2Pg4E9QzaAMH44KWi3AGA4lUOyhi6QT1T/y7xNv+U56eKMd4xQ0zsoZtCpEMDSKhYDXUhDvQ==
-  dependencies:
-    "@types/react" "^17.0.38"
 
 bn.js@^4.0.0:
   version "4.12.0"
@@ -7036,15 +7029,6 @@ mkdirp@^1.0.3, mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
-
-mock-block-dock@0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.6.tgz#86dbc984fffb67e0ae4d442bf716288350d9bf61"
-  integrity sha512-bJNMflnr0wFSzMsV135wRFhkVyFLm76Su267EAl4R+oqb4MbtHnypP8Z/zOOhF3N1+op7COAZhWwk/nsRw4nIQ==
-  dependencies:
-    blockprotocol "0.0.6"
-    lodash "^4.17.21"
-    uuid "^8.3.2"
 
 mongodb-connection-string-url@^2.3.2:
   version "2.4.1"
