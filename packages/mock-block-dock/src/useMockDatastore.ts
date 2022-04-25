@@ -59,7 +59,6 @@ export const useMockDatastore = (
     const initialEntitiesString = JSON.stringify(initialData.entities);
     if (initialEntitiesString !== previousInitialEntitiesString.current) {
       setEntities(initialData.entities);
-    } else {
       previousInitialEntitiesString.current = initialEntitiesString;
     }
   }, [initialData.entities]);
