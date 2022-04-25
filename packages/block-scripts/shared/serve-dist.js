@@ -7,6 +7,7 @@ import {
 
 export const serveDist = async () => {
   const server = http.createServer((request, response) => {
+    response.setHeader("Access-Control-Allow-Origin", "*"); // cors
     return handler(request, response, {
       public: "dist",
     });
