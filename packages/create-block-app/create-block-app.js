@@ -60,7 +60,7 @@ const templatePackageName = "block-template";
   packageJson.name = blockName;
   packageJson.version = "0.0.0";
   packageJson.description = `${blockName} block`;
-  packageJson.blockProtocol.displayName = blockName;
+  packageJson.blockprotocol.displayName = blockName;
   delete packageJson.homepage;
   delete packageJson.repository;
 
