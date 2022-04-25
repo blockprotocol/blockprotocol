@@ -41,7 +41,7 @@ module.exports = (mode) => ({
   },
   output: {
     libraryTarget: "commonjs",
-    filename: "main.[contenthash].js",
+    filename: mode === "production" ? "main.[contenthash].js" : "main.js",
   },
   externals: Object.fromEntries(
     Object.keys(peerDependencies).map((key) => [key, key]),
@@ -56,6 +56,14 @@ module.exports = (mode) => ({
           loader: "babel-loader",
           options: require("./babelrc.json"),
         },
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
     ],
   },
