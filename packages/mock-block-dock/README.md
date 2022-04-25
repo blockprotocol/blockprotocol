@@ -42,11 +42,11 @@ The block will also be re-rendered with new properties if you update them on the
 
 ## Mock entities
 
-`MockBlockDock` automatically supplies additional dummy entities and entity types in `src/data/entities.ts` and `src/data/entityTypes.ts`.
+`MockBlockDock` automatically supplies additional dummy entities and entity types in `src/data/entities.ts` and `src/data/entityTypes.ts`, and links between entities in `src/data/links.ts`.
 
-These dummy entities will be in the data store, and your block can discover them by calling `aggregateEntityTypes` or `aggregateEntities`.
+These dummy entities/links will be in the data store, and your block can discover them by calling `aggregateEntityTypes` or `aggregateEntities`.
 
-If you prefer, you can provide your own `initialEntities` and/or `initialEntityTypes` as props.
+If you prefer, you can provide your own `initialEntities` and/or `initialEntityTypes` and/or `initialLinks` as props.
 
 ```jsx
 <MockBlockDock
