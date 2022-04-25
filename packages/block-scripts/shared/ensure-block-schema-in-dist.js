@@ -1,7 +1,8 @@
 import * as TJS from "typescript-json-schema";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import { blockDistDirPath, blockRootDirPath } from "./paths.js";
+import { writeFormattedJson } from "./write-formatted-json.js";
 
 export const ensureBlockSchemaInDist = async () => {
   const blockSchemaInDistFilePath = path.resolve(
@@ -31,9 +32,9 @@ export const ensureBlockSchemaInDist = async () => {
 
     const schema = TJS.generateSchema(program, "AppProps", settings);
     await fs.ensureDir(blockDistDirPath);
-    await fs.writeJson(blockSchemaInDistFilePath, schema, { spaces: 2 });
+    await writeFormattedJson(blockSchemaInDistFilePath, schema);
   } catch (error) {
     console.warn(`Unable to generate block-schema: ${error}`);
-    await fs.writeJson(blockSchemaInDistFilePath, {}, { spaces: 2 });
+    await writeFormattedJson(blockSchemaInDistFilePath, {});
   }
 };
