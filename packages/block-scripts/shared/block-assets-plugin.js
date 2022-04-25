@@ -1,5 +1,6 @@
 import { ensureBlockMetadataInDist } from "./ensure-block-metadata-in-dist.js";
 import { ensureBlockSchemaInDist } from "./ensure-block-schema-in-dist.js";
+import { ensureReadmeInDist } from "./ensure-readme-in-dist.js";
 
 export class BlockAssetsPlugin {
   apply(compiler) {
@@ -9,8 +10,9 @@ export class BlockAssetsPlugin {
       );
 
       await Promise.all([
-        ensureBlockSchemaInDist(),
         ensureBlockMetadataInDist(source),
+        ensureBlockSchemaInDist(),
+        ensureReadmeInDist(),
       ]);
     });
   }
