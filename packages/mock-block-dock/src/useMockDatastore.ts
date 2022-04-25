@@ -15,7 +15,7 @@ import {
   BlockProtocolUpdateLinksFunction,
   BlockProtocolUploadFileFunction,
 } from "blockprotocol";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { filterAndSortEntitiesOrTypes, matchIdentifiers } from "./util";
 
@@ -43,6 +43,10 @@ export const useMockDatastore = (
     entityTypes: [],
   },
 ): MockDataStore => {
+  const previousInitialEntitiesString = useRef(
+    JSON.stringify(initialData.entities),
+  );
+
   const [entities, setEntities] = useState<MockDataStore["entities"]>(
     initialData.entities,
   );
@@ -52,7 +56,12 @@ export const useMockDatastore = (
   );
 
   useEffect(() => {
-    setEntities(initialData.entities);
+    const initialEntitiesString = JSON.stringify(initialData.entities);
+    if (initialEntitiesString !== previousInitialEntitiesString.current) {
+      setEntities(initialData.entities);
+    } else {
+      previousInitialEntitiesString.current = initialEntitiesString;
+    }
   }, [initialData.entities]);
 
   const aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction =

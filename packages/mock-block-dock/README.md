@@ -14,6 +14,8 @@ When developing a block, wrap it in the embedder and pass your block its initial
 
 The embedder will automatically pass the following Block Protocol functions to your block:
 
+- `aggregateEntities`
+- `aggregateEntityTypes`
 - `getEntities`
 - `createEntities`
 - `deleteEntities`
@@ -37,6 +39,30 @@ It will also pass `linkGroups` and `linkedEntities`, which will be populated onc
 The block will also be re-rendered with new properties if you update them on the child directly (e.g. if you are supplying the block component wrapped by `MockBlockDock` with props from some outside state).
 
 `MockBlockDock` is automatically included in [block-template](https://www.npmjs.com/package/block-template), which you can copy via [create-block-app](https://www.npmjs.com/package/create-block-app)
+
+## Mock entities
+
+`MockBlockDock` automatically supplies additional dummy entities and entity types in `src/data/entities.ts` and `src/data/entityTypes.ts`.
+
+These dummy entities will be in the data store, and your block can discover them by calling `aggregateEntityTypes` or `aggregateEntities`.
+
+If you prefer, you can provide your own `initialEntities` and/or `initialEntityTypes` as props.
+
+```jsx
+<MockBlockDock
+  initialEntities={[
+    // other entities for your block to use can be loaded into the datastore here
+    {
+      entityId: "my-dummy-entity",
+      entityTypeId: "dummy",
+      myOtherEntitysProperty: "foo",
+    },
+  ]}
+>
+  <TestBlock myBlockProperty="bar" /> // starting properties for your block
+  should still be set here
+</MockBlockDock>
+```
 
 ## Note
 
