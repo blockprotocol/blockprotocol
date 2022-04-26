@@ -34,6 +34,7 @@ export const generateBaseWebpackConfig = async (mode) => {
       main: "./src/index.ts",
     },
     output: {
+      publicPath: "",
       libraryTarget: "commonjs",
       filename: mode === "production" ? "main.[contenthash].js" : "main.js",
     },
