@@ -34,7 +34,7 @@ const script = async () => {
       : baseWebpackConfig.plugins,
   };
 
-  const stats = await promisifiedWebpack(webpackConfig);
+  const stats = await promisifiedWebpack([webpackConfig]);
 
   if (stats.hasErrors()) {
     console.log(stats.toString());
