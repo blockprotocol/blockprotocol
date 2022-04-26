@@ -11,6 +11,7 @@ import { packageRootDirPath } from "./paths.js";
 
 /**
  * @param {"development" | "production"} mode
+ * @return {import("webpack").Configuration}
  */
 export const generateBaseWebpackConfig = async (mode) => {
   const packageJsonPath = path.resolve(process.cwd(), "./package.json");
@@ -79,5 +80,6 @@ export const generateBaseWebpackConfig = async (mode) => {
         ".css", // Preserving webpack default
       ],
     },
+    stats: "minimal",
   };
 };
