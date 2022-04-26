@@ -37,7 +37,6 @@
     "react-dom": "^17.0.2"
   },
   "block-scripts": {
-    "analyze": true,
     "port": 63212
   },
   "blockprotocol": {

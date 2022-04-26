@@ -42,7 +42,9 @@ const script = async () => {
 
     process.exit(1);
   } else {
-    console.log(`Done. Build result can be found in ${blockDistDirPath}`);
+    console.log(
+      `Done. Build result is ready to be served from ${blockDistDirPath}`,
+    );
   }
 };
 

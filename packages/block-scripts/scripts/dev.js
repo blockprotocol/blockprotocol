@@ -17,7 +17,6 @@ const entryPointFilePaths = [
 ];
 
 const script = async () => {
-  // TODO: pick existing or throw
   let entryPointFilePath;
   for (const candidateDevEntryPointFilePath of entryPointFilePaths) {
     if (await fs.pathExists(candidateDevEntryPointFilePath)) {
@@ -65,16 +64,8 @@ const script = async () => {
     optimization: {
       moduleIds: "named",
     },
-    resolve: {
-      extensions: [
-        ".ts", // Add typescript support
-        ".tsx", // Add typescript + react support
-        ".js", // Preserving webpack default
-        ".jsx", // Preserving webpack default
-        ".json", // Preserving webpack default
-        ".css", // Preserving webpack default
-      ],
-    },
+    resolve: baseWebpackConfig.resolve,
+    stats: "minimal",
   };
 
   const webpackDevServerConfig = {
@@ -95,13 +86,6 @@ const script = async () => {
       directory: "dist",
     },
     port: await getPort("development"),
-    // devMiddleware: {
-    //   index: true,
-    //   mimeTypes: { phtml: "text/html" },
-    //   publicPath: "/dist",
-    //   // serverSideRender: true,
-    //   writeToDisk: true,
-    // },
   };
 
   const compiler = webpack(webpackConfig);
