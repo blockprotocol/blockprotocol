@@ -12,6 +12,7 @@ export const generateDistBlockMetadata = async (source) => {
 
   const {
     name,
+    displayName,
     version,
     description,
     author,
@@ -26,6 +27,7 @@ export const generateDistBlockMetadata = async (source) => {
 
   const blockMetadata = {
     name,
+    displayName,
     version,
     description,
     author,
@@ -33,6 +35,7 @@ export const generateDistBlockMetadata = async (source) => {
     externals: peerDependencies,
     schema: "block-schema.json",
     source,
+    builtAt: new Date().toISOString(),
     variants,
     ...blockprotocol,
   };

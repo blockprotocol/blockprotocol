@@ -68,6 +68,9 @@ const script = async () => {
     stats: "minimal",
   };
 
+  /**
+   * @type import("webpack-dev-server").Configuration
+   */
   const webpackDevServerConfig = {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -86,6 +89,12 @@ const script = async () => {
       directory: "dist",
     },
     port: await getPort("development"),
+    watchFiles: [
+      "block-schema.json",
+      "package.json",
+      "public/**/*",
+      "README.md",
+    ],
   };
 
   const compiler = webpack(webpackConfig);
