@@ -1,6 +1,6 @@
 {
   "name": "block-template",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Block template",
   "keywords": [
     "blockprotocol",
@@ -27,7 +27,7 @@
     "blockprotocol": "0.0.8"
   },
   "devDependencies": {
-    "block-scripts": "0.0.3",
+    "block-scripts": "0.0.4",
     "mock-block-dock": "0.0.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
@@ -37,6 +37,7 @@
     "react-dom": "^17.0.2"
   },
   "block-scripts": {
+    "analyze": true,
     "port": 63212
   },
   "blockprotocol": {

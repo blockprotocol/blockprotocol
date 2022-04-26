@@ -1,9 +1,7 @@
 import path from "node:path";
 import webpack from "webpack";
 import fs from "fs-extra";
-
-// const WebpackAssetsManifest = require("webpack-assets-manifest");
-// const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
+import WebpackAssetsManifest from "webpack-assets-manifest";
 import CopyPlugin from "copy-webpack-plugin";
 
 import { BlockAssetsPlugin } from "./block-assets-plugin.js";
@@ -24,19 +22,12 @@ export const generateBaseWebpackConfig = async (mode) => {
 
   return {
     plugins: [
-      // new BundleAnalyzerPlugin({
-      //   analyzerMode: "static",
-      //   openAnalyzer: false,
-      //   reportFilename: "webpack-bundle-analyzer-report.html",
-      // }),
-      // new WebpackAssetsManifest({
-      //   output: "manifest.json",
-      // }),
       new webpack.EnvironmentPlugin({
         "process.env.NODE_ENV": mode,
       }),
       new BlockAssetsPlugin(),
       new CopyPlugin({ patterns: [{ from: "./public/", to: "./public/" }] }),
+      new WebpackAssetsManifest(),
     ],
 
     entry: {

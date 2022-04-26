@@ -9,7 +9,12 @@ import { cleanDist } from "../shared/clean-dist.js";
 import { getPort } from "../shared/config.js";
 import { generateBaseWebpackConfig } from "../shared/generate-base-webpack-config.js";
 
-const entryPointFilePaths = ["./src/dev.tsx", "./src/dev.ts", "./src/dev.js"];
+const entryPointFilePaths = [
+  "./src/dev.js",
+  "./src/dev.jsx",
+  "./src/dev.ts",
+  "./src/dev.tsx",
+];
 
 const script = async () => {
   // TODO: pick existing or throw
