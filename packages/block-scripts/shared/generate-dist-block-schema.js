@@ -4,7 +4,7 @@ import path from "node:path";
 import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 import { writeFormattedJson } from "./write-formatted-json.js";
 
-export const ensureBlockSchemaInDist = async () => {
+export const generateDistBlockSchema = async () => {
   const blockSchemaInDistFilePath = path.resolve(
     blockDistDirPath,
     "block-schema.json",

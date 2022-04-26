@@ -6,7 +6,7 @@ import { writeFormattedJson } from "./write-formatted-json.js";
 /**
  * @param {string} source
  */
-export const ensureBlockMetadataInDist = async (source) => {
+export const generateDistBlockMetadata = async (source) => {
   const packageJsonPath = path.resolve(blockRootDirPath, "./package.json");
   const variantsJsonPath = path.resolve(blockRootDirPath, "./variants.json");
 
