@@ -25,6 +25,9 @@ export const generateBaseWebpackConfig = async (mode) => {
       new webpack.EnvironmentPlugin({
         "process.env.NODE_ENV": mode,
       }),
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
+      }),
       new BlockAssetsPlugin(),
       new CopyPlugin({ patterns: [{ from: "./public/", to: "./public/" }] }),
       new WebpackAssetsManifest(),
