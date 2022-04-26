@@ -11,7 +11,7 @@ import { packageRootDirPath } from "./paths.js";
 
 /**
  * @param {"development" | "production"} mode
- * @return {import("webpack").Configuration}
+ * @return {Promise<import("webpack").Configuration>}
  */
 export const generateBaseWebpackConfig = async (mode) => {
   const packageJsonPath = path.resolve(process.cwd(), "./package.json");

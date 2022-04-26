@@ -3,17 +3,34 @@ import WebpackDevServer from "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import fs from "fs-extra";
+import chalk from "chalk";
 import { cleanDist } from "../shared/clean-dist.js";
-import { serveDist } from "../shared/serve-dist.js";
-import {
-  extractBlockScriptsConfigFromPackageJson,
-  extractScriptConfig,
-} from "../shared/config.js";
+import { getPort } from "../shared/config.js";
 import { generateBaseWebpackConfig } from "../shared/generate-base-webpack-config.js";
+
+const entryPointFilePaths = ["./src/dev.tsx", "./src/dev.ts", "./src/dev.js"];
 
 const script = async () => {
   // TODO: pick existing or throw
-  const devServerEntryPointFilePath = "./src/dev.js";
+  let entryPointFilePath;
+  for (const candidateDevEntryPointFilePath of entryPointFilePaths) {
+    if (await fs.pathExists(candidateDevEntryPointFilePath)) {
+      entryPointFilePath = candidateDevEntryPointFilePath;
+      break;
+    }
+  }
+
+  if (!entryPointFilePath) {
+    console.log(
+      chalk.red(
+        `Unable to find entry point for the dev server. Please create one of these files: ${entryPointFilePaths.join(
+          ", ",
+        )}`,
+      ),
+    );
+    process.exit(1);
+  }
 
   await cleanDist();
 
@@ -22,7 +39,7 @@ const script = async () => {
   /** @type import("webpack").Configuration */
   const webpackConfig = {
     devtool: "eval-cheap-module-source-map",
-    entry: devServerEntryPointFilePath,
+    entry: entryPointFilePath,
     plugins: [
       ...baseWebpackConfig.plugins,
       new HtmlWebpackPlugin({
@@ -55,14 +72,6 @@ const script = async () => {
     },
   };
 
-  const port =
-    Number.parseInt(extractScriptConfig().listen, 10) ||
-    Number.parseInt(
-      (await extractBlockScriptsConfigFromPackageJson()).devPort,
-      10,
-    ) ||
-    9090;
-
   const webpackDevServerConfig = {
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -80,7 +89,7 @@ const script = async () => {
     static: {
       directory: "dist",
     },
-    port,
+    port: await getPort("development"),
     // devMiddleware: {
     //   index: true,
     //   mimeTypes: { phtml: "text/html" },
@@ -93,8 +102,6 @@ const script = async () => {
   const compiler = webpack(webpackConfig);
   const server = new WebpackDevServer(webpackDevServerConfig, compiler);
   await server.start();
-
-  serveDist();
 };
 
 await script();
