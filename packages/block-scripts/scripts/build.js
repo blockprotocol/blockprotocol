@@ -15,9 +15,8 @@ const script = async () => {
   const baseWebpackConfig = await generateBaseWebpackConfig("production");
 
   const analyze = Boolean(
-    ["true", "1"].includes(process.env.ANALYZE)(
-      await extractBlockScriptsConfigFromPackageJson(),
-    ).analyze,
+    ["true", "1"].includes(process.env.ANALYZE) ||
+      (await extractBlockScriptsConfigFromPackageJson()).analyze,
   );
 
   /** @type import("webpack").Configuration */
