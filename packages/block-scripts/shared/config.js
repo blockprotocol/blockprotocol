@@ -22,6 +22,25 @@ export const extractBlockScriptsConfigFromPackageJson = async () => {
   }
 };
 
+/**
+ * @param {"development" | "production"} mode
+ * @returns {Promise<number>}
+ */
+export const getPort = async (mode) => {
+  const blockScriptsConfig = await extractBlockScriptsConfigFromPackageJson();
+  return (
+    Number.parseInt(extractScriptConfig().listen, 10) ||
+    Number.parseInt(
+      mode === "development"
+        ? blockScriptsConfig.devPort
+        : blockScriptsConfig.servePort,
+      10,
+    ) ||
+    Number.parseInt(blockScriptsConfig.port, 10) ||
+    63212
+  );
+};
+
 const getBlockScriptsPackageJson = async () => {
   return await fs.readJson(packageJsonDirPath);
 };
