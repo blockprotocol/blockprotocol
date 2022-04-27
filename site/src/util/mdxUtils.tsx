@@ -2,7 +2,7 @@ import fs from "fs-extra";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
-import path from "path";
+import path from "node:path";
 // @ts-expect-error -- Need to figure out how to get or declare the necessary types
 import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";

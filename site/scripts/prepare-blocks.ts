@@ -19,7 +19,7 @@ import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
-import path from "path";
+import path from "node:path";
 import slugify from "slugify";
 import tmp from "tmp-promise";
 

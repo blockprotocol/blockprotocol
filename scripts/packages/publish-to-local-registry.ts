@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import execa from "execa";
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
 import sleep from "sleep-promise";
 
 import { logStepEnd, logStepStart } from "../shared/logging";
