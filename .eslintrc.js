@@ -16,7 +16,13 @@ module.exports = {
   parserOptions: {
     project: "tsconfig.json",
   },
-  plugins: ["@typescript-eslint", "react-hooks", "jest", "simple-import-sort"],
+  plugins: [
+    "@typescript-eslint",
+    "react-hooks",
+    "jest",
+    "simple-import-sort",
+    "unicorn",
+  ],
   extends: [
     "plugin:@typescript-eslint/base",
     "airbnb",
@@ -167,6 +173,7 @@ module.exports = {
     "@typescript-eslint/no-redeclare": ["error"],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
+    "unicorn/prefer-node-protocol": "error",
   },
   settings: {
     "import/resolver": {
