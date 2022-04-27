@@ -7,7 +7,11 @@ import {
   useRef,
   VoidFunctionComponent,
 } from "react";
-import { BlockProtocolEntity, BlockProtocolEntityType } from "blockprotocol";
+import {
+  BlockProtocolEntity,
+  BlockProtocolEntityType,
+  BlockProtocolLink,
+} from "blockprotocol";
 import { MockData, useMockDatastore } from "./useMockDatastore";
 import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./useLinkFields";
@@ -15,11 +19,17 @@ import { useLinkFields } from "./useLinkFields";
 type MockBlockDockProps = {
   children: ReactElement;
   blockSchema?: Partial<BlockProtocolEntityType>;
+  initialEntities?: BlockProtocolEntity[];
+  initialEntityTypes?: BlockProtocolEntityType[];
+  initialLinks?: BlockProtocolLink[];
 };
 
 export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   children,
   blockSchema,
+  initialEntities,
+  initialEntityTypes,
+  initialLinks,
 }) => {
   const mockData = useMemo((): MockData => {
     const blockEntityType: BlockProtocolEntityType = {
@@ -48,26 +58,34 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
 
     initialBlockEntity.entityTypeId = blockEntityType.entityTypeId;
 
-    const nextMockData: MockData = { ...initialMockData };
+    const nextMockData: MockData = {
+      entities:
+        initialEntities ??
+        // give the entities/types the same accountId as the root entity if user not supplying their own mocks
+        initialMockData.entities.map((entity) => ({
+          ...entity,
+          accountId,
+        })),
+      entityTypes:
+        initialEntityTypes ??
+        initialMockData.entityTypes.map((entityType) => ({
+          ...entityType,
+          accountId,
+        })),
+      links: initialLinks ?? initialMockData.links,
+    };
 
-    // give the entities/types the same accountId as the root entity
-    nextMockData.entities = [
-      ...initialMockData.entities.map((entity) => ({
-        ...entity,
-        accountId,
-      })),
-      initialBlockEntity,
-    ];
-    nextMockData.entityTypes = [
-      ...initialMockData.entityTypes.map((entityType) => ({
-        ...entityType,
-        accountId,
-      })),
-      blockEntityType,
-    ];
+    nextMockData.entities.push(initialBlockEntity);
+    nextMockData.entityTypes.push(blockEntityType);
 
     return nextMockData;
-  }, [blockSchema, children.props]);
+  }, [
+    blockSchema,
+    initialEntities,
+    initialEntityTypes,
+    initialLinks,
+    children.props,
+  ]);
 
   const { entities, entityTypes, links, functions } =
     useMockDatastore(mockData);
