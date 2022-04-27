@@ -1,14 +1,15 @@
+import cors from "cors";
+import { ValidationError } from "express-validator";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import { ValidationError } from "express-validator";
-import cors from "cors";
+
+import { FRONTEND_URL } from "../../config";
+import { dbMiddleware, DbRequestExtensions } from "../middleware/db.middleware";
 import {
   passportMiddleware,
   PassportRequestExtensions,
 } from "../middleware/passport.middleware";
 import { sessionMiddleware } from "../middleware/session.middleware";
-import { dbMiddleware, DbRequestExtensions } from "../middleware/db.middleware";
-import { FRONTEND_URL } from "../../config";
 
 export type BaseApiRequest<RequestBody = unknown> = Omit<
   NextApiRequest,

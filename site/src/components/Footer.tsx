@@ -1,20 +1,21 @@
-import { FC, ReactNode } from "react";
 import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  useTheme,
-  useMediaQuery,
-  BoxProps,
-} from "@mui/material";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import {
+  faDiscord,
   faGithub,
   faTwitter,
-  faDiscord,
 } from "@fortawesome/free-brands-svg-icons";
-import { BlockProtocolLogoIcon, HASHLogoIcon, FontAwesomeIcon } from "./icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  Box,
+  BoxProps,
+  Container,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
+import { FC, ReactNode } from "react";
+
+import { BlockProtocolLogoIcon, FontAwesomeIcon, HASHLogoIcon } from "./icons";
 import { Link } from "./Link";
 import { LinkButton } from "./LinkButton";
 

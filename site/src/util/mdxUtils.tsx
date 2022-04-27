@@ -1,13 +1,14 @@
+import fs from "fs-extra";
+import matter from "gray-matter";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import path from "path";
-import matter from "gray-matter";
-import fs from "fs-extra";
-import unified from "unified";
 // @ts-expect-error -- Need to figure out how to get or declare the necessary types
 import remarkMdx from "remark-mdx";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import remarkParse from "remark-parse";
 import slugify from "slugify";
+import unified from "unified";
+
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 
 type Node = {

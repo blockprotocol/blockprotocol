@@ -1,18 +1,22 @@
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
+  Box,
   Breadcrumbs,
   Container,
   Typography,
-  Box,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ComponentType, useMemo, VoidFunctionComponent } from "react";
-import { formatDistance } from "date-fns";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
 import { BlocksSlider } from "../../../components/BlocksSlider";
+import { FontAwesomeIcon } from "../../../components/icons";
+import { Link } from "../../../components/Link";
+import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
 import {
   blockDependencies,
   BlockDependency,
@@ -20,13 +24,10 @@ import {
   BlockSchema,
 } from "../../../components/pages/hub/HubUtils";
 import {
-  readBlocksFromDisk,
-  readBlockDataFromDisk,
   ExpandedBlockMetadata as BlockMetadata,
+  readBlockDataFromDisk,
+  readBlocksFromDisk,
 } from "../../../lib/blocks";
-import { FontAwesomeIcon } from "../../../components/icons";
-import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
-import { Link } from "../../../components/Link";
 
 const blockRequire = (name: BlockDependency) => {
   if (!(name in blockDependencies)) {

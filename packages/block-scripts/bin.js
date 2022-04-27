@@ -2,6 +2,7 @@
 import chalk from "chalk";
 import { URL } from "node:url";
 import parser from "yargs-parser";
+
 import { listAvailableScriptNames } from "./shared/list-available-script-names.js";
 
 const scriptConfig = parser(process.argv.slice(2));

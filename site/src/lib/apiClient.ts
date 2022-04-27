@@ -1,5 +1,15 @@
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ValidationError } from "express-validator";
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+
+import {
+  ApiLoginWithLoginCodeRequestBody,
+  ApiLoginWithLoginCodeResponse,
+} from "../pages/api/loginWithLoginCode.api";
+import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
+import {
+  ApiGenerateApiKeyBody,
+  ApiGenerateApiKeyResponse,
+} from "../pages/api/me/generateApiKey.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
@@ -9,30 +19,21 @@ import {
   ApiSignupResponse,
 } from "../pages/api/signup.api";
 import {
-  ApiVerifyEmailRequestBody,
-  ApiVerifyEmailResponse,
-} from "../pages/api/verifyEmail.api";
-import {
-  ApiLoginWithLoginCodeRequestBody,
-  ApiLoginWithLoginCodeResponse,
-} from "../pages/api/loginWithLoginCode.api";
-import {
-  ApiGenerateApiKeyBody,
-  ApiGenerateApiKeyResponse,
-} from "../pages/api/me/generateApiKey.api";
-import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
-import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
-import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
-import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
-import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
+  ApiTypeUpdateRequest,
+  ApiTypeUpdateResponse,
+} from "../pages/api/types/[id]/update.api";
 import {
   ApiTypeCreateRequest,
   ApiTypeCreateResponse,
 } from "../pages/api/types/create.api";
+import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
+import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
+import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
+import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
 import {
-  ApiTypeUpdateRequest,
-  ApiTypeUpdateResponse,
-} from "../pages/api/types/[id]/update.api";
+  ApiVerifyEmailRequestBody,
+  ApiVerifyEmailResponse,
+} from "../pages/api/verifyEmail.api";
 import { FRONTEND_URL } from "./config";
 
 const BASE_URL = `${FRONTEND_URL}/api/`;

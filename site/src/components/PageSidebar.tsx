@@ -1,3 +1,14 @@
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  Box,
+  BoxProps,
+  Collapse,
+  Divider,
+  IconButton,
+  styled,
+  useTheme,
+} from "@mui/material";
+import { useRouter } from "next/router";
 import {
   Dispatch,
   Fragment,
@@ -8,22 +19,12 @@ import {
   useState,
   VFC,
 } from "react";
-import { useRouter } from "next/router";
-import {
-  Collapse,
-  Box,
-  IconButton,
-  Divider,
-  styled,
-  BoxProps,
-  useTheme,
-} from "@mui/material";
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
-import { Link } from "./Link";
-import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 import { parseIntFromPixelString } from "../util/muiUtils";
 import { FontAwesomeIcon } from "./icons";
+import { Link } from "./Link";
+import { DESKTOP_NAVBAR_HEIGHT } from "./Navbar";
 
 export const SIDEBAR_WIDTH = 220;
 

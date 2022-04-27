@@ -1,14 +1,15 @@
+import chalk from "chalk";
 import execa from "execa";
+import fs from "fs-extra";
+import os from "os";
 import path from "path";
 import tmp from "tmp-promise";
-import fs from "fs-extra";
-import waitOn from "wait-on";
 import treeKill from "tree-kill";
-import { promisify } from "util";
-import os from "os";
 import untildify from "untildify";
-import chalk from "chalk";
-import { logStepStart, logStepEnd } from "../shared/logging";
+import { promisify } from "util";
+import waitOn from "wait-on";
+
+import { logStepEnd, logStepStart } from "../shared/logging";
 
 /**
  * Calling `execa.kill()` does not terminate processes recursively on Ubuntu.

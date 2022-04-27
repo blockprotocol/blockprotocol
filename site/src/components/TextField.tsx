@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState, VFC } from "react";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Collapse,
@@ -7,7 +7,8 @@ import {
   TextFieldProps as MuiTextFieldProps,
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
-import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
+import { ReactNode, useEffect, useState, VFC } from "react";
+
 import { FontAwesomeIcon } from "./icons";
 
 type TextFieldProps = {

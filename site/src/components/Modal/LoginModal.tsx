@@ -1,17 +1,18 @@
-import { Modal, Paper, ModalProps, Box, Fade } from "@mui/material";
+import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Box, Fade, Modal, ModalProps, Paper } from "@mui/material";
 import React, { useEffect, useState, VFC } from "react";
-import { faTimes, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { SerializedUser } from "../../lib/api/model/user.model";
-import { Button } from "../Button";
+
 import { useUser } from "../../context/UserContext";
+import { SerializedUser } from "../../lib/api/model/user.model";
+import { apiClient } from "../../lib/apiClient";
+import { useScrollLock } from "../../util/muiUtils";
+import { Button } from "../Button";
+import { FontAwesomeIcon } from "../icons";
 import { SendLoginCodeScreen } from "../Screens/SendLoginCodeScreen";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../Screens/VerificationCodeScreen";
-import { apiClient } from "../../lib/apiClient";
-import { useScrollLock } from "../../util/muiUtils";
-import { FontAwesomeIcon } from "../icons";
 
 type LoginModalProps = {
   onClose: () => void;

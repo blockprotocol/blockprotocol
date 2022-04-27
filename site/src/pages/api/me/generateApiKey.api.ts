@@ -1,5 +1,5 @@
-import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 import { validationResult } from "express-validator";
+import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticatedHandler";
 import { formatErrors } from "../../../util/api";

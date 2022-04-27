@@ -1,6 +1,7 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { VoidFunctionComponent } from "react";
+
 import { useUser } from "../../context/UserContext";
 import { SerializedUser } from "../../lib/api/model/user.model";
 

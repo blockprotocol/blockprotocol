@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import path from "path";
-import fs from "fs-extra";
 import * as envalid from "envalid";
+import fs from "fs-extra";
+import path from "path";
 
 const monorepoRoot = path.resolve(__dirname, "../..");
 

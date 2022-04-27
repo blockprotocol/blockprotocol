@@ -1,31 +1,25 @@
 import { ThemeOptions } from "@mui/material";
 
-import { MuiFormControlThemeOptions } from "./inputs/MuiFormControlThemeOptions";
-import { MuiInputLabelThemeOptions } from "./inputs/MuiInputLabelThemeOptions";
-import { MuiInputBaseThemeOptions } from "./inputs/MuiInputBaseThemeOptions";
-import { MuiOutlinedInputThemeOptions } from "./inputs/MuiOutlinedInputThemeOptions";
-import { MuiTextFieldThemeOptions } from "./inputs/MuiTextFieldThemeOptions";
-import { MuiButtonThemeOptions } from "./inputs/MuiButtonThemeOptions";
-import { MuiCheckboxThemeOptions } from "./inputs/MuiCheckboxThemeOptions";
-
-import { MuiTypographyThemeOptions } from "./dataDisplay/MuiTypographyThemeOptions";
 import { MuiIconButtonThemeOptions } from "./dataDisplay/MuiIconButtonThemeOptions";
 import { MuiIconThemeOptions } from "./dataDisplay/MuiIconThemeOptions";
 import { MuiListItemButtonThemeOptions } from "./dataDisplay/MuiListItemButtonThemeOptions";
 import { MuiListItemIconThemeOptions } from "./dataDisplay/MuiListItemIconThemeOptions";
 import { MuiListItemTextThemeOptions } from "./dataDisplay/MuiListItemTextThemeOptions";
-
-import { MuiPaperThemeOptions } from "./surfaces/MuiPaperThemeOptions";
-
+import { MuiTypographyThemeOptions } from "./dataDisplay/MuiTypographyThemeOptions";
+import { MuiSkeletonThemeOptions } from "./feedback/MuiSkeletonThemeOptions";
+import { MuiButtonThemeOptions } from "./inputs/MuiButtonThemeOptions";
+import { MuiCheckboxThemeOptions } from "./inputs/MuiCheckboxThemeOptions";
+import { MuiFormControlThemeOptions } from "./inputs/MuiFormControlThemeOptions";
+import { MuiInputBaseThemeOptions } from "./inputs/MuiInputBaseThemeOptions";
+import { MuiInputLabelThemeOptions } from "./inputs/MuiInputLabelThemeOptions";
+import { MuiOutlinedInputThemeOptions } from "./inputs/MuiOutlinedInputThemeOptions";
+import { MuiTextFieldThemeOptions } from "./inputs/MuiTextFieldThemeOptions";
 import { MuiContainerThemeOptions } from "./layout/MuiContainerThemeOptions";
-
 import { MuiBreadcrumbsThemeOptions } from "./navigation/MuiBreadcrumbsThemeOptions";
 import { MuiLinkThemeOptions } from "./navigation/MuiLinkThemeOptions";
 import { MuiTabsThemeOptions } from "./navigation/MuiTabsThemeOptions";
 import { MuiTabThemeOptions } from "./navigation/MuiTabThemeOptions";
-
-import { MuiSkeletonThemeOptions } from "./feedback/MuiSkeletonThemeOptions";
-
+import { MuiPaperThemeOptions } from "./surfaces/MuiPaperThemeOptions";
 import { MuiCssBaselineThemeOptions } from "./utils/MuiCssBaselineThemeOptions";
 
 export const components: ThemeOptions["components"] = {

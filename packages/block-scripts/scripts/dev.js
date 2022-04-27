@@ -1,10 +1,11 @@
-import webpack from "webpack";
-import WebpackDevServer from "webpack-dev-server";
+import chalk from "chalk";
+import fs from "fs-extra";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import fs from "fs-extra";
-import chalk from "chalk";
+import webpack from "webpack";
+import WebpackDevServer from "webpack-dev-server";
+
 import { cleanDist } from "../shared/clean-dist.js";
 import { getPort } from "../shared/config.js";
 import { generateBaseWebpackConfig } from "../shared/generate-base-webpack-config.js";

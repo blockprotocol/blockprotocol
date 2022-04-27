@@ -1,8 +1,8 @@
 import { Middleware } from "next-connect";
-import { BaseApiRequest, BaseApiResponse } from "../handler/baseHandler";
 
-import { ApiKey } from "../model/apiKey.model";
 import { formatErrors } from "../../../util/api";
+import { BaseApiRequest, BaseApiResponse } from "../handler/baseHandler";
+import { ApiKey } from "../model/apiKey.model";
 
 export const hasValidApiKeyMiddleware: Middleware<
   BaseApiRequest,

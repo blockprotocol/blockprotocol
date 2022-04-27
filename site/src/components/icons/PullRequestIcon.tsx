@@ -1,5 +1,5 @@
-import { FC } from "react";
 import { SvgIcon, SvgIconProps } from "@mui/material";
+import { FC } from "react";
 
 export const PullRequestIcon: FC<SvgIconProps> = (props) => {
   return (

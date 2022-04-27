@@ -1,8 +1,9 @@
-import execa from "execa";
-import sleep from "sleep-promise";
-import path from "path";
-import fs from "fs-extra";
 import chalk from "chalk";
+import execa from "execa";
+import fs from "fs-extra";
+import path from "path";
+import sleep from "sleep-promise";
+
 import { logStepEnd, logStepStart } from "../shared/logging";
 
 // These variables are hardcoded on purpose. We don’t want to publish to a real registry by mistake.

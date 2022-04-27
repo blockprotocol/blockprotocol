@@ -1,8 +1,8 @@
-import fs from "fs-extra";
-import path from "path";
-import matter from "gray-matter";
 import algoliasearch from "algoliasearch";
 import * as envalid from "envalid";
+import fs from "fs-extra";
+import matter from "gray-matter";
+import path from "path";
 
 import siteMap from "../site/site-map.json";
 

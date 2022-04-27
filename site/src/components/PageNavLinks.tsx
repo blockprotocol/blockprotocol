@@ -1,16 +1,17 @@
-import { VFC } from "react";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {
-  Typography,
   Box,
   BoxProps,
   styled,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "./Link";
+import { VFC } from "react";
+
 import { SiteMapPage } from "../lib/sitemap";
 import { FontAwesomeIcon } from "./icons";
+import { Link } from "./Link";
 
 const NavArrowIcon = styled(FontAwesomeIcon)(({ theme }) => ({
   color: theme.palette.purple[300],

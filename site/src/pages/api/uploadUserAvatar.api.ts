@@ -1,15 +1,14 @@
 import mimeType from "mime-types";
 
-import { uploadFileBufferToS3 } from "../../lib/awsS3";
 import {
   AuthenticatedApiRequest,
   createAuthenticatedHandler,
 } from "../../lib/api/handler/authenticatedHandler";
-
 import {
   MultipartExtensions,
   multipartUploads,
 } from "../../lib/api/middleware/multipartUploads.middleware";
+import { uploadFileBufferToS3 } from "../../lib/awsS3";
 import { formatErrors } from "../../util/api";
 
 type Response = {

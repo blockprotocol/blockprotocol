@@ -1,8 +1,9 @@
+import { Box, Typography } from "@mui/material";
 import { VFC } from "react";
-import { Typography, Box } from "@mui/material";
+
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { Carousel } from "./Carousel";
 import { Link } from "./Link";
-import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 
 type BlocksSliderProps = {
   catalog: BlockMetadata[];

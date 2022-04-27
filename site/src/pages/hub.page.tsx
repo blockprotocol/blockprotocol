@@ -1,7 +1,8 @@
-import { Container, Typography, Box, Grid } from "@mui/material";
-import { VFC } from "react";
+import { Box, Container, Grid, Typography } from "@mui/material";
 import { GetStaticProps } from "next";
 import Head from "next/head";
+import { VFC } from "react";
+
 import { BlockCard, BlockCardComingSoon } from "../components/BlockCard";
 import {
   ExpandedBlockMetadata as BlockMetadata,

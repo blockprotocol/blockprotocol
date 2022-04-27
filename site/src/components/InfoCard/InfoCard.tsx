@@ -1,13 +1,13 @@
+import { Paper, PaperProps, Typography } from "@mui/material";
 import {
-  VoidFunctionComponent,
-  ReactNode,
-  isValidElement,
   Children,
+  isValidElement,
   ReactElement,
   ReactFragment,
+  ReactNode,
   ReactPortal,
+  VoidFunctionComponent,
 } from "react";
-import { Paper, PaperProps, Typography } from "@mui/material";
 
 export type InfoCardVariant = "info" | "warning";
 

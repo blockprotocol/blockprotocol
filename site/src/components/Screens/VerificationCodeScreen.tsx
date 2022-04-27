@@ -1,23 +1,24 @@
-import { Typography, Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, {
+  ClipboardEventHandler,
   ReactNode,
+  useCallback,
   useEffect,
   useRef,
   useState,
   VFC,
-  ClipboardEventHandler,
-  useCallback,
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
-import { ApiClientError } from "../../lib/apiClient";
+
 import { SerializedUser } from "../../lib/api/model/user.model";
+import { ApiClientError } from "../../lib/apiClient";
 import { Button } from "../Button";
-import { TextField } from "../TextField";
 import {
   isVerificationCodeFormatted,
   useVerificationCodeTextField,
 } from "../hooks/useVerificationCodeTextField";
 import { EnvelopeDotIcon } from "../icons";
+import { TextField } from "../TextField";
 
 export type VerificationCodeInfo = {
   userId: string;

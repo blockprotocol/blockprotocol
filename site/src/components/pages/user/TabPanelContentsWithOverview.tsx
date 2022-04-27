@@ -1,5 +1,6 @@
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import { useState, VoidFunctionComponent } from "react";
+
 import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";

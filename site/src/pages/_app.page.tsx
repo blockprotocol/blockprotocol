@@ -1,29 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import withTwindApp from "@twind/next/app";
-import type { AppProps } from "next/app";
-import { Router, useRouter } from "next/router";
-import TagManager from "react-gtm-module";
-import Head from "next/head";
-
 /** @sync ../components/Snippet.tsx */
 import "../styles/prism.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import { theme } from "../theme";
+import withTwindApp from "@twind/next/app";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import { Router, useRouter } from "next/router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import TagManager from "react-gtm-module";
+
+import siteMap from "../../site-map.json";
 import twindConfig from "../../twind.config";
 import { PageLayout } from "../components/PageLayout";
-import { createEmotionCache } from "../util/createEmotionCache";
-import siteMap from "../../site-map.json";
 import SiteMapContext from "../context/SiteMapContext";
-import { apiClient } from "../lib/apiClient";
-import { ApiMeResponse } from "./api/me.api";
 import {
   UserContext,
   UserContextValue,
   UserState,
 } from "../context/UserContext";
+import { apiClient } from "../lib/apiClient";
+import { theme } from "../theme";
+import { createEmotionCache } from "../util/createEmotionCache";
+import { ApiMeResponse } from "./api/me.api";
 
 const clientSideEmotionCache = createEmotionCache();
 

@@ -1,22 +1,21 @@
-import { VoidFunctionComponent } from "react";
-import Head from "next/head";
 import {
-  useMediaQuery,
-  Divider,
   Box,
   Container,
+  Divider,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
+import Head from "next/head";
+import { VoidFunctionComponent } from "react";
 
 import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
-
 import { Sidebar } from "./Sidebar";
-import { TabHeader, TabPanel, TabValue } from "./Tabs";
+import { TabPanelContentsWithBlocks } from "./TabPanelContentsWithBlocks";
 import { TabPanelContentsWithOverview } from "./TabPanelContentsWithOverview";
 import { TabPanelContentsWithSchemas } from "./TabPanelContentsWithSchemas";
-import { TabPanelContentsWithBlocks } from "./TabPanelContentsWithBlocks";
+import { TabHeader, TabPanel, TabValue } from "./Tabs";
 
 const SIDEBAR_WIDTH = 300;
 

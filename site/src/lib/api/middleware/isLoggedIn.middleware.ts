@@ -1,6 +1,7 @@
 import { Middleware } from "next-connect";
-import { BaseApiRequest, BaseApiResponse } from "../handler/baseHandler";
+
 import { formatErrors } from "../../../util/api";
+import { BaseApiRequest, BaseApiResponse } from "../handler/baseHandler";
 import { User } from "../model/user.model";
 
 export type IsLoggedInRequestExtensions = {
