@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
@@ -20,7 +20,7 @@
   "type": "module",
   "bin": "./bin.js",
   "scripts": {
-    "lint:tsc": "echo \"Skipping: TypeScript not configured\""
+    "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@babel/cli": "^7.17.6",

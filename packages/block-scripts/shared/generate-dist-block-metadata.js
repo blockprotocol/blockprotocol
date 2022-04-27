@@ -33,6 +33,7 @@ export const generateDistBlockMetadata = async (source) => {
     externals: peerDependencies,
     schema: "block-schema.json",
     source,
+    builtAt: new Date().toISOString(),
     variants,
     ...blockprotocol,
   };
