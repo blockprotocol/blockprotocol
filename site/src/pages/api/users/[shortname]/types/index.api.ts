@@ -1,6 +1,6 @@
 import { createBaseHandler } from "../../../../../lib/api/handler/baseHandler";
-import { User } from "../../../../../lib/api/model/user.model";
 import { EntityType } from "../../../../../lib/api/model/entityType.model";
+import { User } from "../../../../../lib/api/model/user.model";
 import { formatErrors } from "../../../../../util/api";
 
 export type ApiTypesByUserRequest = {

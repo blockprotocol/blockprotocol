@@ -1,7 +1,7 @@
 import { createBaseHandler } from "../../../../../lib/api/handler/baseHandler";
 import { User } from "../../../../../lib/api/model/user.model";
-import { formatErrors } from "../../../../../util/api";
 import { ExpandedBlockMetadata } from "../../../../../lib/blocks";
+import { formatErrors } from "../../../../../util/api";
 
 export type ApiBlocksByUserResponseQueryParams = {
   shortname: string;

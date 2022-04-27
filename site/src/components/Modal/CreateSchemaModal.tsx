@@ -1,12 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import { FC, useState, FormEvent, useCallback, ReactNode } from "react";
 import { useRouter } from "next/router";
+import { FC, FormEvent, ReactNode, useCallback, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
-import { Modal } from "./Modal";
+
+import { useUser } from "../../context/UserContext";
 import { apiClient } from "../../lib/apiClient";
 import { Button } from "../Button";
-import { useUser } from "../../context/UserContext";
 import { TextField } from "../TextField";
+import { Modal } from "./Modal";
 
 type CreateSchemaModalProps = {
   open: boolean;

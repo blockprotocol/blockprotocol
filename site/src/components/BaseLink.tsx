@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
+import { UrlObject } from "node:url";
 import React, { VoidFunctionComponent } from "react";
-import { UrlObject } from "url";
 
 import { FRONTEND_URL } from "../lib/config";
 

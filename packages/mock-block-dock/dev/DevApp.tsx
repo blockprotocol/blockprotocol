@@ -2,8 +2,8 @@ import * as React from "react";
 import { useState } from "react";
 import * as ReactDOM from "react-dom";
 
-import { TestBlock } from "./TestBlock";
 import { MockBlockDock } from "../src/MockBlockDock";
+import { TestBlock } from "./TestBlock";
 
 const node = document.getElementById("app");
 

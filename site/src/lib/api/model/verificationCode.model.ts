@@ -1,6 +1,7 @@
-import { Db, WithId, ObjectId, DBRef } from "mongodb";
+import { Db, DBRef, ObjectId, WithId } from "mongodb";
 import { NextApiResponse } from "next";
 import { rword } from "rword";
+
 import { formatErrors } from "../../../util/api";
 import { User } from "./user.model";
 

@@ -1,5 +1,5 @@
-import { VFC } from "react";
 import { SvgIcon, SvgIconProps } from "@mui/material";
+import { VFC } from "react";
 
 export const SyncIcon: VFC<SvgIconProps> = (props) => {
   return (

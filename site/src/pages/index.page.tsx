@@ -1,10 +1,11 @@
-import { VFC } from "react";
 import { GetStaticProps } from "next";
+import { VFC } from "react";
+
 import { Header } from "../components/pages/home/Header";
 import { IntroSection } from "../components/pages/home/IntroSection";
+import { RegistrySection } from "../components/pages/home/RegistrySection";
 import { Section2 } from "../components/pages/home/Section2";
 import { WhyBlockProtocolSection } from "../components/pages/home/WhyBlockProtocolSection";
-import { RegistrySection } from "../components/pages/home/RegistrySection";
 import {
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,

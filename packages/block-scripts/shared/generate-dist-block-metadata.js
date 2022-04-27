@@ -1,6 +1,7 @@
-import path from "node:path";
 import fs from "fs-extra";
-import { blockRootDirPath, blockDistDirPath } from "./paths.js";
+import path from "node:path";
+
+import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 import { writeFormattedJson } from "./write-formatted-json.js";
 
 /**

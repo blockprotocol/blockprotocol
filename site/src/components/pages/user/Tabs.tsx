@@ -1,5 +1,6 @@
-import { VFC, FC } from "react";
-import { Box, Tabs, Typography, BoxProps, Tab } from "@mui/material";
+import { Box, BoxProps, Tab, Tabs, Typography } from "@mui/material";
+import { FC, VFC } from "react";
+
 import { BaseLink } from "../../BaseLink";
 
 export const TABS = [

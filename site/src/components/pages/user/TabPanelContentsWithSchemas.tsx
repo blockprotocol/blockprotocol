@@ -1,13 +1,14 @@
 import { Box } from "@mui/material";
 import { useState, VoidFunctionComponent } from "react";
-import { Button } from "../../Button";
+
 import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
-import { ListViewCard } from "./ListViewCard";
+import { Button } from "../../Button";
 import { CreateSchemaModal } from "../../Modal/CreateSchemaModal";
-import { useUserStatus } from "./useUserStatus";
+import { ListViewCard } from "./ListViewCard";
 import { Placeholder } from "./Placeholder";
 import { BrowseHubButton, CreateSchemaButton } from "./PlaceholderButtons";
+import { useUserStatus } from "./useUserStatus";
 
 export interface TabPanelContentsWithSchemasProps {
   entityTypes: EntityType[];

@@ -1,20 +1,20 @@
-import Head from "next/head";
-import { tw } from "twind";
-import { NextPage } from "next";
-import NextError from "next/error";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { Box, Container, Typography } from "@mui/material";
 import {
   BlockProtocolAggregateEntityTypesFunction,
   BlockProtocolUpdateEntityTypesFunction,
 } from "blockprotocol";
-import { Box, Container, Typography } from "@mui/material";
+import { NextPage } from "next";
+import NextError from "next/error";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
+import { tw } from "twind";
 
-import { EntityType } from "../../../lib/api/model/entityType.model";
 import { SchemaEditor } from "../../../components/entityTypes/SchemaEditor/SchemaEditor";
-import { apiClient } from "../../../lib/apiClient";
-import { useUser } from "../../../context/UserContext";
 import { Link } from "../../../components/Link";
+import { useUser } from "../../../context/UserContext";
+import { EntityType } from "../../../lib/api/model/entityType.model";
+import { apiClient } from "../../../lib/apiClient";
 
 type EntityTypePageQueryParams = {
   shortname?: string;

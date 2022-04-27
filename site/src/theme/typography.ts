@@ -1,4 +1,5 @@
-import { ThemeOptions, createTheme } from "@mui/material";
+import { createTheme, ThemeOptions } from "@mui/material";
+
 import { customColors } from "./palette";
 
 const defaultTheme = createTheme();

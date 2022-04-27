@@ -1,6 +1,7 @@
 import { VoidFunctionComponent } from "react";
-import { ButtonProps, Button } from "./Button";
+
 import { BaseLink, BaseLinkProps } from "./BaseLink";
+import { Button, ButtonProps } from "./Button";
 
 export interface LinkButtonProps
   extends Omit<ButtonProps, "href">,

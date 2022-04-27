@@ -1,19 +1,20 @@
 import {
-  useState,
-  useRef,
-  useEffect,
-  useMemo,
-  VFC,
-  FC,
-  ReactElement,
-} from "react";
+  faCheckCircle,
+  faCheckSquare,
+  faFileAlt,
+  faPencil,
+} from "@fortawesome/free-solid-svg-icons";
 import { Box, Fade } from "@mui/material";
 import {
-  faCheckSquare,
-  faPencil,
-  faCheckCircle,
-  faFileAlt,
-} from "@fortawesome/free-solid-svg-icons";
+  FC,
+  ReactElement,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  VFC,
+} from "react";
+
 import { FontAwesomeIcon } from "../../../icons";
 
 /**

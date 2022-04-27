@@ -1,8 +1,8 @@
-import crypto from "crypto";
 import { Db, DBRef } from "mongodb";
+import crypto from "node:crypto";
 import { v4 as uuid } from "uuid";
-import { mustGetEnvVar } from "../../../util/api";
 
+import { mustGetEnvVar } from "../../../util/api";
 import { User } from "./user.model";
 
 type ApiKeyProperties = {

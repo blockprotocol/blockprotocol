@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { Box, Typography, Link, BoxProps } from "@mui/material";
-import { VoidFunctionComponent, FC } from "react";
+import { Box, BoxProps, Link, Typography } from "@mui/material";
+import { FC, VoidFunctionComponent } from "react";
 
 import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
 

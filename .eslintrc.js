@@ -16,7 +16,13 @@ module.exports = {
   parserOptions: {
     project: "tsconfig.json",
   },
-  plugins: ["@typescript-eslint", "react-hooks", "jest"],
+  plugins: [
+    "@typescript-eslint",
+    "react-hooks",
+    "jest",
+    "simple-import-sort",
+    "unicorn",
+  ],
   extends: [
     "plugin:@typescript-eslint/base",
     "airbnb",
@@ -42,10 +48,13 @@ module.exports = {
     "no-restricted-syntax": "off",
     camelcase: "off",
     "default-param-last": "off", // using @typescript-eslint/default-param-last instead
-    "import/no-cycle": "error",
-    "import/prefer-default-export": "off",
     "no-await-in-loop": "off",
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-cycle": "error",
+    "import/no-duplicates": "error",
     "import/no-unresolved": "error",
+    "import/prefer-default-export": "off",
     "no-console": "error",
     "no-dupe-class-members": "off",
     "react/prop-types": "off",
@@ -165,6 +174,9 @@ module.exports = {
     ],
     "no-redeclare": "off",
     "@typescript-eslint/no-redeclare": ["error"],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "unicorn/prefer-node-protocol": "error",
   },
   settings: {
     "import/resolver": {

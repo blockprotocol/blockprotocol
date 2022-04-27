@@ -1,12 +1,13 @@
 import Ajv from "ajv";
 import { query as queryValidator } from "express-validator";
 import { cloneDeep } from "lodash";
+
 import blocksData from "../../../blocks-data.json";
+import { createApiKeyRequiredHandler } from "../../lib/api/handler/apiKeyRequiredHandler";
 import {
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,
 } from "../../lib/blocks";
-import { createApiKeyRequiredHandler } from "../../lib/api/handler/apiKeyRequiredHandler";
 
 export type ApiSearchRequestQuery = {
   author?: string;

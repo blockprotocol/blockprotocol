@@ -3,13 +3,13 @@ import { useContext, useState, VoidFunctionComponent } from "react";
 import { tw } from "twind";
 
 import { JsonSchema } from "../../../lib/jsonSchema";
-import { ConfirmationAlert } from "../../ConfirmationAlert";
 import { Button } from "../../Button";
+import { ConfirmationAlert } from "../../ConfirmationAlert";
+import { SchemaOptionsContext } from "./SchemaEditor";
 import {
   getSubschemaDependentProperties,
   SchemaEditorReducerAction,
 } from "./schemaEditorReducer";
-import { SchemaOptionsContext } from "./SchemaEditor";
 
 type SubSchemaItemProps = {
   dispatchSchemaUpdate: (action: SchemaEditorReducerAction) => void;
