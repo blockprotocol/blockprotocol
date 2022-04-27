@@ -16,7 +16,7 @@ module.exports = {
   parserOptions: {
     project: "tsconfig.json",
   },
-  plugins: ["@typescript-eslint", "react-hooks", "jest"],
+  plugins: ["@typescript-eslint", "react-hooks", "jest", "simple-import-sort"],
   extends: [
     "plugin:@typescript-eslint/base",
     "airbnb",
@@ -165,6 +165,8 @@ module.exports = {
     ],
     "no-redeclare": "off",
     "@typescript-eslint/no-redeclare": ["error"],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
   },
   settings: {
     "import/resolver": {
