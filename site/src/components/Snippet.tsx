@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates -- import "prismjs" has a side-effect so needs to be listed before "prismjs/components/*"  */
 /**
  * Add support for another language:
  *
@@ -9,6 +10,7 @@
  *
  * @see https://prismjs.com
  */
+import "prismjs";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-json5";
 
