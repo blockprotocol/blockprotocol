@@ -1,11 +1,11 @@
-import React, { useEffect, useState, VoidFunctionComponent } from "react";
-import * as ReactDOM from "react-dom";
 import {
   BlockMetadata,
-  BlockProtocolProps,
   BlockProtocolFunctions,
+  BlockProtocolProps,
 } from "blockprotocol";
 import { MockBlockDock } from "mock-block-dock";
+import React, { useEffect, useState, VoidFunctionComponent } from "react";
+import * as ReactDOM from "react-dom";
 
 import { RemoteBlock } from "../src";
 import { RemoteBlockProps } from "../src/RemoteBlock";

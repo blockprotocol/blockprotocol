@@ -1,7 +1,7 @@
-import React, { useCallback, VFC } from "react";
-
 import { createComponent, EventName } from "@lit-labs/react";
 import { BlockProtocolFunctions, BlockProtocolProps } from "blockprotocol";
+import React, { useCallback, VFC } from "react";
+
 import { BlockNameWithNamespace } from "./shared";
 
 /**

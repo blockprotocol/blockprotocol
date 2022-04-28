@@ -6,9 +6,9 @@ import {
 import React, { ReactElement, VoidFunctionComponent } from "react";
 
 import { HtmlBlock } from "./HtmlBlock";
+import { BlockNameWithNamespace, UnknownBlock } from "./shared";
 import { useRemoteBlock } from "./useRemoteBlock";
 import { WebComponentBlock } from "./WebComponentBlock";
-import { BlockNameWithNamespace, UnknownBlock } from "./shared";
 
 export type RemoteBlockProps = {
   blockMetadata: BlockMetadata;
