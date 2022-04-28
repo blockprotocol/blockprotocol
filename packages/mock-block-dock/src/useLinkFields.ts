@@ -6,6 +6,7 @@ import {
   BlockProtocolProps,
 } from "blockprotocol";
 import { useMemo } from "react";
+
 import { filterAndSortEntitiesOrTypes, matchIdentifiers } from "./util";
 
 type LinkFields = {

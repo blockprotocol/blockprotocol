@@ -1,6 +1,6 @@
-import * as React from "react";
-import { SvgIcon, SvgIconProps } from "@mui/material";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { SvgIcon, SvgIconProps } from "@mui/material";
+import * as React from "react";
 
 type FontAwesomeIconProps = {
   icon: IconDefinition;

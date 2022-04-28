@@ -1,11 +1,12 @@
-import { FC, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { DESKTOP_NAVBAR_HEIGHT, Navbar } from "./Navbar";
+import { FC, useMemo, useState } from "react";
+
 import { Footer } from "./Footer";
 import { BANNERS, FooterBanner } from "./FooterBanner";
-import { LoginModal } from "./Modal/LoginModal";
 import { HiringBanner } from "./HiringBanner";
+import { LoginModal } from "./Modal/LoginModal";
+import { DESKTOP_NAVBAR_HEIGHT, Navbar } from "./Navbar";
 
 type PageLayoutProps = {};
 

@@ -1,8 +1,8 @@
+import CopyPlugin from "copy-webpack-plugin";
+import fs from "fs-extra";
 import path from "node:path";
 import webpack from "webpack";
-import fs from "fs-extra";
 import WebpackAssetsManifest from "webpack-assets-manifest";
-import CopyPlugin from "copy-webpack-plugin";
 
 import { BlockAssetsPlugin } from "./block-assets-plugin.js";
 import { packageRootDirPath } from "./paths.js";

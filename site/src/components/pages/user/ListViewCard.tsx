@@ -1,9 +1,10 @@
-import { VFC } from "react";
 import { Box, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
+import { VFC } from "react";
+
+import { TableTreeIcon } from "../../icons";
 import { Link } from "../../Link";
 import { shy } from "./utils";
-import { TableTreeIcon } from "../../icons";
 
 type ListViewCardProps = {
   type: "block" | "schema";

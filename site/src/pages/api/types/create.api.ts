@@ -1,4 +1,5 @@
 import { JSONObject } from "blockprotocol";
+
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticatedHandler";
 import { EntityType } from "../../../lib/api/model/entityType.model";
 import { formatErrors } from "../../../util/api";

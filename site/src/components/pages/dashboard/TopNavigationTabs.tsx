@@ -1,6 +1,6 @@
-import { VoidFunctionComponent, MouseEvent } from "react";
-import { Box, Container, Tabs, Tab } from "@mui/material";
+import { Box, Container, Tab, Tabs } from "@mui/material";
 import { useRouter } from "next/router";
+import { MouseEvent, VoidFunctionComponent } from "react";
 
 import { dashboardPages } from "./utils";
 

@@ -1,5 +1,6 @@
 import fs from "fs-extra";
-import path from "path";
+import path from "node:path";
+
 import { generateDistBlockMetadata } from "./generate-dist-block-metadata.js";
 import { generateDistBlockSchema } from "./generate-dist-block-schema.js";
 import { generateDistReadme } from "./generate-dist-readme.js";

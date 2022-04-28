@@ -1,11 +1,11 @@
-import { VFC } from "react";
-import { Typography, Box, Skeleton } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
+import { VFC } from "react";
 
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
+import { BlockProtocolLogoIcon } from "./icons";
 import { Link } from "./Link";
 import { Spacer } from "./Spacer";
-import { BlockProtocolLogoIcon } from "./icons";
-import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 
 type BlockCardProps = {
   loading?: boolean;

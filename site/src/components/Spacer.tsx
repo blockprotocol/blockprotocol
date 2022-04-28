@@ -1,5 +1,5 @@
-import { FC } from "react";
 import { Box } from "@mui/material";
+import { FC } from "react";
 
 type SpacerProps = {
   height?: number;

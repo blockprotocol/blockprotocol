@@ -1,7 +1,7 @@
 import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
-import { BlockHubIcon, SpecificationIcon, FontAwesomeIcon } from "../icons";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
+import { BlockHubIcon, FontAwesomeIcon, SpecificationIcon } from "../icons";
 
 export const itemIsPage = (
   item: SiteMapPage | SiteMapPageSection,

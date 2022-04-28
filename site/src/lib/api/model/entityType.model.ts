@@ -1,11 +1,11 @@
-import { v4 as uuid } from "uuid";
-import { Db, DBRef } from "mongodb";
 import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import { escapeRegExp } from "lodash";
+import { Db, DBRef } from "mongodb";
+import { v4 as uuid } from "uuid";
 
-import { User } from "./user.model";
 import { FRONTEND_URL, isProduction } from "../../config";
 import { validateAndCompleteJsonSchema } from "../../jsonSchema";
+import { User } from "./user.model";
 
 type EntityTypeProperties = {
   createdAt: Date;

@@ -1,5 +1,6 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
 import hostedGitInfo from "hosted-git-info";
+
 import { FRONTEND_URL } from "./config";
 
 /** @todo type as JSON object */

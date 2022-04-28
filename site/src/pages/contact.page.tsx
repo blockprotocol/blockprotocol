@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/label-has-associated-control -- the lint rule requires <input/> fields to be children of their associated <label/>s */
 
-import { Container, Typography, Box } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
 import { tw } from "twind";
+
 import { Link } from "../components/Link";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";

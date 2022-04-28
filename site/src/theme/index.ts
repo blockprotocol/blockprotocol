@@ -1,9 +1,9 @@
 import { createTheme } from "@mui/material";
 
-import { palette } from "./palette";
-import { typography } from "./typography";
-import { shadows } from "./shadows";
 import { components } from "./components";
+import { palette } from "./palette";
+import { shadows } from "./shadows";
+import { typography } from "./typography";
 
 export const theme = createTheme({
   palette,

@@ -1,13 +1,15 @@
 import {
-  Box,
-  Tabs,
-  Tab,
-  useTheme,
-  useMediaQuery,
   Alert,
+  Box,
   Snackbar,
+  Tab,
+  Tabs,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import { BlockVariant } from "blockprotocol";
 import { Validator } from "jsonschema";
+import { MockBlockDock } from "mock-block-dock";
 import {
   ComponentType,
   useEffect,
@@ -16,16 +18,14 @@ import {
   useState,
   VoidFunctionComponent,
 } from "react";
-import { MockBlockDock } from "mock-block-dock";
 
-import { BlockVariant } from "blockprotocol";
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
 import { BlockModalButton } from "./BlockModalButton";
 import { BlockTabsModal } from "./BlockTabsModal";
-import { BlockSchema, getEmbedBlock } from "./HubUtils";
 import { BlockVariantsTabs } from "./BlockVariantsTabs";
+import { BlockSchema, getEmbedBlock } from "./HubUtils";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;

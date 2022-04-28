@@ -1,30 +1,31 @@
+import { faChevronDown, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import {
-  VFC,
-  useState,
-  useEffect,
-  Fragment,
-  useContext,
-  SetStateAction,
-  Dispatch,
-} from "react";
-import {
+  Box,
+  Collapse,
+  Divider,
   IconButton,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Collapse,
-  Divider,
-  Box,
 } from "@mui/material";
-import { faChevronDown, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/router";
-import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
-import { Link } from "../Link";
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+  VFC,
+} from "react";
+
 import SiteMapContext from "../../context/SiteMapContext";
-import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
-import Search from "../pages/docs/Search";
+import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { FontAwesomeIcon } from "../icons";
+import { Link } from "../Link";
+import Search from "../pages/docs/Search";
+import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: JSX.Element;

@@ -1,15 +1,16 @@
 import { Box, Collapse, FormHelperText, Typography } from "@mui/material";
 import { ReactNode, useRef, useState, VFC } from "react";
-import { TextField } from "../TextField";
-import { Button } from "../Button";
-import { useShortnameTextField } from "../hooks/useShortnameTextField";
+
+import { useUser } from "../../context/UserContext";
 import { apiClient } from "../../lib/apiClient";
 import {
   ApiCompleteSignupRequestBody,
   ApiCompleteSignupResponse,
 } from "../../pages/api/completeSignup.api";
-import { useUser } from "../../context/UserContext";
+import { Button } from "../Button";
+import { useShortnameTextField } from "../hooks/useShortnameTextField";
 import { BadgeCheckIcon } from "../icons/BadgeCheckIcon";
+import { TextField } from "../TextField";
 
 type CompleteSignupScreenProps = {
   email: string;

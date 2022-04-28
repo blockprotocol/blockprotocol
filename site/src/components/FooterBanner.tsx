@@ -1,15 +1,16 @@
-import { FC, ReactNode } from "react";
 import {
   Box,
   Container,
-  Paper,
   Grid,
-  Typography,
+  Paper,
   PaperProps,
+  Typography,
 } from "@mui/material";
 import Image from "next/image";
-import { Link } from "./Link";
+import { FC, ReactNode } from "react";
+
 import { BoltIcon } from "./icons";
+import { Link } from "./Link";
 import { LinkButton } from "./LinkButton";
 
 type Banner = {

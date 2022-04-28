@@ -1,15 +1,14 @@
-import React from "react";
-import { NextPage, GetStaticPaths, GetStaticProps } from "next";
-
-import { useRouter } from "next/router";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Error from "next/error";
-import { apiClient } from "../../lib/apiClient";
+import { useRouter } from "next/router";
+import React from "react";
 
+import { TABS } from "../../components/pages/user/Tabs";
 import {
   UserPageComponent,
   UserPageProps,
 } from "../../components/pages/user/UserPageComponent";
-import { TABS } from "../../components/pages/user/Tabs";
+import { apiClient } from "../../lib/apiClient";
 
 type UserPageQueryParams = {
   profileTabs: string[];

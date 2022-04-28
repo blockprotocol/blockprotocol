@@ -1,9 +1,10 @@
 import {
-  faBullhorn,
   faArrowRight,
   faArrowsLeftRight,
+  faBullhorn,
 } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Typography } from "@mui/material";
+
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./Link";
 

@@ -1,7 +1,4 @@
-import React from "react";
-import Prism from "prismjs";
-import { Box, BoxProps } from "@mui/material";
-
+/* eslint-disable import/no-duplicates -- import "prismjs" has a side-effect so needs to be listed before "prismjs/components/*"  */
 /**
  * Add support for another language:
  *
@@ -13,9 +10,13 @@ import { Box, BoxProps } from "@mui/material";
  *
  * @see https://prismjs.com
  */
-
+import "prismjs";
 import "prismjs/components/prism-json";
 import "prismjs/components/prism-json5";
+
+import { Box, BoxProps } from "@mui/material";
+import Prism from "prismjs";
+import React from "react";
 
 type SnippetProps = {
   source: string;

@@ -1,12 +1,12 @@
 import { useContext, VoidFunctionComponent } from "react";
 
+import { JsonSchema } from "../../../lib/jsonSchema";
+import { Button } from "../../Button";
+import { TextInputOrDisplay, ToggleInputOrDisplay } from "./Inputs";
+import { SchemaOptionsContext } from "./SchemaEditor";
+import { SchemaEditorDispatcher } from "./schemaEditorReducer";
 import { tdClasses, trClasses } from "./SchemaPropertiesTable";
 import { SchemaPropertyTypeList } from "./SchemaPropertyTypeList";
-import { ToggleInputOrDisplay, TextInputOrDisplay } from "./Inputs";
-import { JsonSchema } from "../../../lib/jsonSchema";
-import { SchemaEditorDispatcher } from "./schemaEditorReducer";
-import { Button } from "../../Button";
-import { SchemaOptionsContext } from "./SchemaEditor";
 
 type SchemaPropertyRowProps = {
   dispatchSchemaUpdate: SchemaEditorDispatcher;

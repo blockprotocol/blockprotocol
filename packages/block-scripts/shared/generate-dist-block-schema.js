@@ -1,6 +1,7 @@
-import * as TJS from "typescript-json-schema";
 import fs from "fs-extra";
 import path from "node:path";
+import * as TJS from "typescript-json-schema";
+
 import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 import { writeFormattedJson } from "./write-formatted-json.js";
 

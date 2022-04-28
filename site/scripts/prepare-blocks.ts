@@ -10,18 +10,18 @@
  * We plan to separate block artifacts from the Vercel deployment in the future.
  * This script will be removed, but its parts will be recycled.
  */
+import Ajv, { JSONSchemaType } from "ajv";
 import chalk from "chalk";
+import * as envalid from "envalid";
 import execa from "execa";
-import path from "path";
 import fs from "fs-extra";
 import glob from "glob";
-import micromatch from "micromatch";
-import * as envalid from "envalid";
-import md5 from "md5";
-import Ajv, { JSONSchemaType } from "ajv";
-import tmp from "tmp-promise";
-import slugify from "slugify";
 import hostedGitInfo from "hosted-git-info";
+import md5 from "md5";
+import micromatch from "micromatch";
+import path from "node:path";
+import slugify from "slugify";
+import tmp from "tmp-promise";
 
 import { StoredBlockInfo } from "../src/lib/blocks";
 
