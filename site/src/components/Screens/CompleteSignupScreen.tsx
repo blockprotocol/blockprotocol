@@ -6,7 +6,7 @@ import { apiClient } from "../../lib/apiClient";
 import {
   ApiCompleteSignupRequestBody,
   ApiCompleteSignupResponse,
-} from "../../pages/api/completeSignup.api";
+} from "../../pages/api/complete-signup.api";
 import { Button } from "../Button";
 import { useShortnameTextField } from "../hooks/useShortnameTextField";
 import { BadgeCheckIcon } from "../icons/BadgeCheckIcon";

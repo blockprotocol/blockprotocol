@@ -86,7 +86,7 @@ type BlockPageProps = {
 
 type BlockPageQueryParams = {
   shortname?: string[];
-  blockSlug?: string[];
+  "block-slug"?: string;
 };
 
 export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
@@ -109,13 +109,7 @@ const parseQueryParams = (params: BlockPageQueryParams) => {
     throw new Error("Could not parse org shortname from query");
   }
 
-  const blockSlug = params.blockSlug
-    ? typeof params.blockSlug === "string"
-      ? params.blockSlug
-      : params.blockSlug.length === 1
-      ? params.blockSlug[0]
-      : undefined
-    : undefined;
+  const blockSlug = params["block-slug"];
 
   if (!blockSlug) {
     throw new Error("Could not parse block slug from query");

@@ -4,16 +4,16 @@ import { ValidationError } from "express-validator";
 import {
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse,
-} from "../pages/api/loginWithLoginCode.api";
-import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
+} from "../pages/api/login-with-cogin-code.api";
+import { ApiKeysResponse } from "../pages/api/me/api-keys.api";
 import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
-} from "../pages/api/me/generateApiKey.api";
+} from "../pages/api/me/generate-api-key.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
-} from "../pages/api/sendLoginCode.api";
+} from "../pages/api/send-login-code.api";
 import {
   ApiSignupRequestBody,
   ApiSignupResponse,
@@ -33,7 +33,7 @@ import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/ind
 import {
   ApiVerifyEmailRequestBody,
   ApiVerifyEmailResponse,
-} from "../pages/api/verifyEmail.api";
+} from "../pages/api/verify-email.api";
 import { FRONTEND_URL } from "./config";
 
 const BASE_URL = `${FRONTEND_URL}/api/`;
@@ -124,10 +124,10 @@ export const apiClient = {
   put,
   generateApiKey: (requestData: ApiGenerateApiKeyBody) =>
     apiClient.post<ApiGenerateApiKeyBody, ApiGenerateApiKeyResponse>(
-      "me/generateApiKey",
+      "me/generate-api-key",
       requestData,
     ),
-  getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/apiKeys"),
+  getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/api-keys"),
   getUser: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),
   getUserBlocks: ({ shortname }: { shortname: string }) =>
@@ -158,17 +158,17 @@ export const apiClient = {
     post<ApiSignupRequestBody, ApiSignupResponse>("signup", requestData),
   verifyEmail: (requestData: ApiVerifyEmailRequestBody) =>
     apiClient.post<ApiVerifyEmailRequestBody, ApiVerifyEmailResponse>(
-      "verifyEmail",
+      "verify-email",
       requestData,
     ),
   sendLoginCode: (requestData: ApiSendLoginCodeRequestBody) =>
     apiClient.post<ApiSendLoginCodeRequestBody, ApiSendLoginCodeResponse>(
-      "sendLoginCode",
+      "send-login-code",
       requestData,
     ),
   loginWithLoginCode: (requestData: ApiLoginWithLoginCodeRequestBody) =>
     apiClient.post<
       ApiLoginWithLoginCodeRequestBody,
       ApiLoginWithLoginCodeResponse
-    >("loginWithLoginCode", requestData),
+    >("login-with-login-code", requestData),
 };

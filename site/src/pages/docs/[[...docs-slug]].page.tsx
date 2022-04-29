@@ -36,7 +36,7 @@ const a11yProps = (index: number) => ({
 });
 
 type DocsPageQueryParams = {
-  docsSlug?: string[];
+  "docs-slug"?: string[];
 };
 
 type DocsPageProps = {
@@ -49,7 +49,7 @@ export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
 
   const paths = possibleHrefs.map((href) => ({
     params: {
-      docsSlug: href
+      "docs-slug": href
         .replace("/docs", "")
         .split("/")
         .filter((item) => !!item),
@@ -66,7 +66,7 @@ export const getStaticProps: GetStaticProps<
   DocsPageProps,
   DocsPageQueryParams
 > = async ({ params }) => {
-  const { docsSlug } = params || {};
+  const { "docs-slug": docsSlug } = params || {};
 
   const tabSlug = docsSlug && docsSlug.length > 0 ? docsSlug[0] : undefined;
 

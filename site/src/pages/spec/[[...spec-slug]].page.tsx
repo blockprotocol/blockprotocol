@@ -146,13 +146,13 @@ type SpecPageProps = {
 };
 
 type SpecPageQueryParams = {
-  specSlug?: string[];
+  "spec-slug"?: string[];
 };
 
 export const getStaticPaths: GetStaticPaths<SpecPageQueryParams> = async () => {
   const paths = getAllPageHrefs({ folderName: "spec" }).map((href) => ({
     params: {
-      specSlug: href
+      "spec-slug": href
         .replace("/spec", "")
         .split("/")
         .filter((item) => !!item),
@@ -169,7 +169,7 @@ export const getStaticProps: GetStaticProps<
   SpecPageProps,
   SpecPageQueryParams
 > = async ({ params }) => {
-  const { specSlug } = params || {};
+  const specSlug = (params || {})["spec-slug"];
 
   const fileNameWithoutIndex =
     specSlug && specSlug.length > 0 ? specSlug[0]! : "index";
