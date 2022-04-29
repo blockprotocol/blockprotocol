@@ -14,7 +14,7 @@ import {
 import { useUser } from "../context/UserContext";
 import { SerializedUser } from "../lib/api/model/user.model";
 import { apiClient } from "../lib/apiClient";
-import { ApiLoginWithLoginCodeRequestBody } from "./api/login-with-cogin-code.api";
+import { ApiLoginWithLoginCodeRequestBody } from "./api/login-with-login-code.api";
 
 type LoginPageParsedUrlQuery = {
   redirectPath?: string;

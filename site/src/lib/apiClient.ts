@@ -4,7 +4,7 @@ import { ValidationError } from "express-validator";
 import {
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse,
-} from "../pages/api/login-with-cogin-code.api";
+} from "../pages/api/login-with-login-code.api";
 import { ApiKeysResponse } from "../pages/api/me/api-keys.api";
 import {
   ApiGenerateApiKeyBody,

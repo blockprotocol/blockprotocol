@@ -4,7 +4,7 @@ import { Db, DBRef, ObjectId, WithId } from "mongodb";
 import { NextApiResponse } from "next";
 
 import blocksData from "../../../../blocks-data.json";
-import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-cogin-code.api";
+import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
 import { ExpandedBlockMetadata } from "../../blocks";
