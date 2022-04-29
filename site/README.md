@@ -258,7 +258,7 @@ Retrieves metadata on the API keys associated with the authenticated user.
 - Request Response:
   - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
 
-#### `POST /api/me/generateApiKey` [requires cookie authentication]
+#### `POST /api/me/generate-api-key` [requires cookie authentication]
 
 Generates a new API key for the authenticated user, and revokes any others.
 
