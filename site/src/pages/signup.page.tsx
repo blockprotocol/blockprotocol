@@ -19,7 +19,7 @@ import {
 import { useUser } from "../context/UserContext";
 import { SerializedUser } from "../lib/api/model/user.model";
 import { apiClient } from "../lib/apiClient";
-import { ApiVerifyEmailRequestBody } from "./api/verifyEmail.api";
+import { ApiVerifyEmailRequestBody } from "./api/verify-email.api";
 
 const SIGNUP_PAGE_SCREENS = [
   "Email",

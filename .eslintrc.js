@@ -205,6 +205,14 @@ module.exports = {
       },
     },
     {
+      files: [
+        "packages/{block-scripts,block-template,blockprotocol,create-block-app}/**",
+      ],
+      rules: {
+        "unicorn/filename-case": "error",
+      },
+    },
+    {
       files: ["packages/block-scripts/**"],
       rules: {
         "no-console": "off",
@@ -246,10 +254,6 @@ module.exports = {
       parserOptions: {
         project: ["packages/mock-block-dock/tsconfig.json"],
       },
-    },
-    {
-      files: [".github/workflows/algolia/**"],
-      parserOptions: { project: [".github/workflows/algolia/tsconfig.json"] },
     },
     {
       files: ["site/**"],
@@ -313,6 +317,12 @@ module.exports = {
             ],
           },
         ],
+      },
+    },
+    {
+      files: ["site/src/pages/**"],
+      rules: {
+        "unicorn/filename-case": "error",
       },
     },
     {

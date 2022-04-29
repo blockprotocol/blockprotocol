@@ -5,7 +5,7 @@ import { apiClient } from "../../lib/apiClient";
 import {
   ApiIsShortnameTakenQueryParams,
   ApiIsShortnameTakenResponse,
-} from "../../pages/api/isShortnameTaken.api";
+} from "../../pages/api/is-shortname-taken.api";
 
 const parseShortnameInput = (input: string) =>
   input.replaceAll(/[^a-zA-Z0-9-_]/g, "").toLowerCase();
@@ -34,7 +34,7 @@ export const useShortnameTextField = ({
         const { data: isShortnameTaken, error } = await apiClient.get<
           ApiIsShortnameTakenResponse,
           ApiIsShortnameTakenQueryParams
-        >("isShortnameTaken", params);
+        >("is-shortname-taken", params);
 
         if (error) {
           throw error;

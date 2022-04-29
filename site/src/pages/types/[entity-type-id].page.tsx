@@ -10,14 +10,14 @@ export default EntityTypeIdPage;
 export const getServerSideProps: GetServerSideProps<
   {},
   {
-    entityTypeId: string;
+    "entity-type-id": string;
   }
 > = async (context) => {
   const { req, res } = context;
 
   const { db } = await connectToDatabase();
 
-  const entityTypeId = context.query.entityTypeId as string;
+  const entityTypeId = context.query["entity-type-id"] as string;
   const entityType = await EntityType.getById(db, { entityTypeId });
 
   const jsonFlag = Object.prototype.hasOwnProperty.call(context.query, "json");
