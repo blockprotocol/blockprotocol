@@ -53,7 +53,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
       const { data, error } = await apiClient.post<
         ApiCompleteSignupRequestBody,
         ApiCompleteSignupResponse
-      >("completeSignup", { shortname, preferredName });
+      >("complete-signup", { shortname, preferredName });
       setCompletingSignup(false);
 
       if (error) {
