@@ -2,7 +2,7 @@
 
 A component which provides mocks for testing [Block Protocol](https://blockprotocol.org) blocks.
 
-`yarn install mock-block-dock`
+`yarn add mock-block-dock`
 
 ## Usage
 
