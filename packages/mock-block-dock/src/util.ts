@@ -10,13 +10,16 @@ import {
 } from "blockprotocol";
 import { get, orderBy } from "lodash";
 
-type Identifiers = {
+type EntityIdentifiers = {
   accountId?: string | null;
   entityId: string;
   entityTypeId?: string | null;
 };
 
-export const matchIdentifiers = (first: Identifiers, second: Identifiers) => {
+export const matchEntityIdentifiers = (
+  first: EntityIdentifiers,
+  second: EntityIdentifiers,
+) => {
   if (first.entityId !== second.entityId) {
     return false;
   }
@@ -27,6 +30,24 @@ export const matchIdentifiers = (first: Identifiers, second: Identifiers) => {
     first.entityTypeId != null &&
     first.entityTypeId !== second.entityTypeId
   ) {
+    return false;
+  }
+  return true;
+};
+
+type EntityTypeIdentifiers = {
+  accountId?: string | null;
+  entityTypeId: string | null;
+};
+
+export const matchEntityTypeIdentifiers = (
+  first: EntityTypeIdentifiers,
+  second: EntityTypeIdentifiers,
+) => {
+  if (first.entityTypeId !== second.entityTypeId) {
+    return false;
+  }
+  if (first.accountId != null && first.accountId !== second.accountId) {
     return false;
   }
   return true;
@@ -106,7 +127,11 @@ const sortEntitiesOrTypes = <
 
   return orderBy(
     [...entities],
-    multiSort.map(({ field }) => field),
+    multiSort.map(
+      ({ field }) =>
+        (entity) =>
+          get(entity, field),
+    ),
     multiSort.map(({ desc }) => (desc ? "desc" : "asc")),
   );
 };
