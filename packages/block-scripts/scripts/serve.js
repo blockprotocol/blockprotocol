@@ -6,6 +6,7 @@ import { getPort } from "../shared/config.js";
 const script = async () => {
   const server = http.createServer((request, response) => {
     response.setHeader("Access-Control-Allow-Origin", "*"); // cors
+    response.setHeader("Cache-Control", "no-store");
     return handler(request, response, {
       public: "dist",
     });
