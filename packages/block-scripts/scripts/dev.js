@@ -83,6 +83,7 @@ const script = async () => {
         "Authorization",
         "sentry-trace",
       ],
+      "Cache-Control": "no-store",
     },
     hot: true,
     open: process.env.BROWSER !== "none",
