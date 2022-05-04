@@ -1,4 +1,5 @@
 import chalk from "chalk";
+
 import { getBlockScriptsVersion } from "../shared/config.js";
 import { listAvailableScriptNames } from "../shared/list-available-script-names.js";
 

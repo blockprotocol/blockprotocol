@@ -1,9 +1,10 @@
-import { Middleware } from "next-connect";
-import { NextApiRequest, NextApiResponse } from "next";
-import nextSession from "next-session";
-import { promisifyStore } from "next-session/lib/compat";
 import MongoStore from "connect-mongo";
 import signature from "cookie-signature";
+import { NextApiRequest, NextApiResponse } from "next";
+import { Middleware } from "next-connect";
+import nextSession from "next-session";
+import { promisifyStore } from "next-session/lib/compat";
+
 import { mustGetEnvVar } from "../../../util/api";
 import { FRONTEND_DOMAIN, isUsingHttps } from "../../config";
 

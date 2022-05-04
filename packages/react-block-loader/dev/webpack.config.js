@@ -1,26 +1,31 @@
-const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
-const generateBaseWebpackConfig = require("./generate-base-webpack-config.cjs");
-
-const config = generateBaseWebpackConfig("development");
 
 /** @type import("webpack").Configuration */
 module.exports = {
   devtool: "eval-cheap-module-source-map",
-  entry: "./src/dev.js",
+  entry: "./dev/DevApp.tsx",
   plugins: [
-    ...config.plugins,
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: path.resolve(__dirname, "index.html"),
+      template: "./dev/index.html",
     }),
     new webpack.EnvironmentPlugin({
-      "process.env.NODE_ENV": "development",
+      "process.env.NODE_ENV": process.env.NODE_ENV,
     }),
     new webpack.HotModuleReplacementPlugin(),
   ],
-  module: config.module,
+  module: {
+    rules: [
+      {
+        test: /\.(t|j)sx?$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "babel-loader",
+        },
+      },
+    ],
+  },
   mode: "development",
   target: "web",
   devServer: {
@@ -37,6 +42,7 @@ module.exports = {
     },
     hot: true,
     open: process.env.BROWSER !== "none",
+    port: 9090,
     static: {
       directory: __dirname,
     },

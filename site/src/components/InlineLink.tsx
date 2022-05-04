@@ -1,5 +1,5 @@
-import { useState, FC, useRef } from "react";
-import { Popper, Box, BoxProps, Fade, Typography } from "@mui/material";
+import { Box, BoxProps, Fade, Popper, Typography } from "@mui/material";
+import { FC, useRef, useState } from "react";
 
 type InlineLinkProps = {
   popperInfo?: { title?: string; content?: string };

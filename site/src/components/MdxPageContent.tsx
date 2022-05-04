@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState, VFC } from "react";
+import Box, { BoxProps } from "@mui/material/Box";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import Box, { BoxProps } from "@mui/material/Box";
+import { useEffect, useMemo, useRef, useState, VFC } from "react";
+
 import { mdxComponents } from "../util/mdxComponents";
 import PageHeadingsContext, { Heading } from "./context/PageHeadingsContext";
 

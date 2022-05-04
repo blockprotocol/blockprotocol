@@ -1,5 +1,6 @@
 import { faHammer } from "@fortawesome/free-solid-svg-icons";
 import { VoidFunctionComponent } from "react";
+
 import { Button } from "../../Button";
 import { FontAwesomeIcon, TableTreeIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";

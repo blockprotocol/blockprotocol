@@ -1,4 +1,5 @@
 import passport from "passport";
+
 import { User as UserModel } from "../model/user.model";
 import { connectToDatabase } from "../mongodb";
 

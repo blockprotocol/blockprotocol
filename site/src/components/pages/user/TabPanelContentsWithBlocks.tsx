@@ -1,4 +1,5 @@
 import { VoidFunctionComponent } from "react";
+
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { ListViewCard } from "./ListViewCard";

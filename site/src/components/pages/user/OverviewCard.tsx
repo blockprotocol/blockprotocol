@@ -1,10 +1,11 @@
+import { Box, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
 import { VFC } from "react";
-import { Box, Typography } from "@mui/material";
+
+import { TableTreeIcon } from "../../icons";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
 import { shy } from "./utils";
-import { TableTreeIcon } from "../../icons";
 
 type OverviewCardProps = {
   type: "block" | "schema";

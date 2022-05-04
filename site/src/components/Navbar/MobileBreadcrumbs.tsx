@@ -1,11 +1,12 @@
-import { VFC } from "react";
-import { Typography, Breadcrumbs } from "@mui/material";
-import { useRouter } from "next/router";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { Breadcrumbs, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+import { VFC } from "react";
+
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
+import { FontAwesomeIcon } from "../icons";
 import { Link } from "../Link";
 import { itemIsPage } from "./util";
-import { FontAwesomeIcon } from "../icons";
 
 type MobileBreadcrumbsProps = {
   crumbs: (SiteMapPage | SiteMapPageSection)[];

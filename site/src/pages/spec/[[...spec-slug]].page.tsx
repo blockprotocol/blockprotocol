@@ -1,9 +1,10 @@
-import { useContext } from "react";
+import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import {
-  Container,
-  Typography,
   Box,
+  Container,
   Paper,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -11,21 +12,21 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { useContext } from "react";
+
+import { FontAwesomeIcon } from "../../components/icons";
 import { Link } from "../../components/Link";
-import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
-import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
-import SiteMapContext from "../../context/SiteMapContext";
+import { LinkButton } from "../../components/LinkButton";
 import {
-  MdxPageContent,
   MDX_TEXT_CONTENT_MAX_WIDTH,
+  MdxPageContent,
 } from "../../components/MdxPageContent";
 import { PageNavLinks } from "../../components/PageNavLinks";
-import { parseIntFromPixelString } from "../../util/muiUtils";
 import Search from "../../components/pages/docs/Search";
-import { LinkButton } from "../../components/LinkButton";
-import { FontAwesomeIcon } from "../../components/icons";
+import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
+import SiteMapContext from "../../context/SiteMapContext";
+import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
+import { parseIntFromPixelString } from "../../util/muiUtils";
 
 const GitHubInfoCard = (
   <Paper
@@ -145,13 +146,13 @@ type SpecPageProps = {
 };
 
 type SpecPageQueryParams = {
-  specSlug?: string[];
+  "spec-slug"?: string[];
 };
 
 export const getStaticPaths: GetStaticPaths<SpecPageQueryParams> = async () => {
   const paths = getAllPageHrefs({ folderName: "spec" }).map((href) => ({
     params: {
-      specSlug: href
+      "spec-slug": href
         .replace("/spec", "")
         .split("/")
         .filter((item) => !!item),
@@ -168,7 +169,7 @@ export const getStaticProps: GetStaticProps<
   SpecPageProps,
   SpecPageQueryParams
 > = async ({ params }) => {
-  const { specSlug } = params || {};
+  const specSlug = (params || {})["spec-slug"];
 
   const fileNameWithoutIndex =
     specSlug && specSlug.length > 0 ? specSlug[0]! : "index";

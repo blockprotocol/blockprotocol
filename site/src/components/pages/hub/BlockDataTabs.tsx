@@ -1,12 +1,12 @@
-import { VoidFunctionComponent } from "react";
 import {
-  Tabs,
+  MenuItem,
+  Select,
   Tab,
+  Tabs,
   useMediaQuery,
   useTheme,
-  Select,
-  MenuItem,
 } from "@mui/material";
+import { VoidFunctionComponent } from "react";
 
 type BlockDataTabsProps = {
   blockDataTab: number;

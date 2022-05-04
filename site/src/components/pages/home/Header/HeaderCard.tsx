@@ -1,6 +1,7 @@
-import React, { useEffect, VFC } from "react";
 import { Box } from "@mui/material";
 import { gsap } from "gsap";
+import React, { useEffect, VFC } from "react";
+
 import { HeaderCardSvg } from "./HeaderCardSvg";
 
 type HeaderCardProps = {

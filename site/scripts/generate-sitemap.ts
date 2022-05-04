@@ -1,6 +1,7 @@
-import fs from "fs-extra";
-import path from "path";
 import chalk from "chalk";
+import fs from "fs-extra";
+import path from "node:path";
+
 import { generateSiteMap } from "../src/lib/sitemap";
 
 const script = async () => {

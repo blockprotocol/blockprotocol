@@ -1,10 +1,10 @@
+import { alpha, Box, Modal } from "@mui/material";
 import { VoidFunctionComponent } from "react";
-import { Box, Modal, alpha } from "@mui/material";
 
 import { BlockDataTabPanels } from "./BlockDataTabPanels";
 import { BlockDataTabs } from "./BlockDataTabs";
-import { BlockSchema } from "./HubUtils";
 import { BlockModalButton } from "./BlockModalButton";
+import { BlockSchema } from "./HubUtils";
 
 interface BlockTabsModalProps {
   open: boolean;

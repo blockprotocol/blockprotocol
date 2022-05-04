@@ -1,5 +1,5 @@
-import { FC } from "react";
 import { SvgIcon, SvgIconProps } from "@mui/material";
+import { FC } from "react";
 
 export const BoltIcon: FC<SvgIconProps> = (props) => {
   return (

@@ -1,4 +1,9 @@
 import {
+  BlockProtocolEntity,
+  BlockProtocolEntityType,
+  BlockProtocolLink,
+} from "blockprotocol";
+import {
   Children,
   cloneElement,
   ReactElement,
@@ -14,8 +19,10 @@ import {
   BlockProtocolLinkedAggregationDefinition,
 } from "blockprotocol";
 import { MockData, useMockDatastore } from "./useMockDatastore";
+
 import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./useLinkFields";
+
 
 type MockBlockDockProps = {
   children: ReactElement;

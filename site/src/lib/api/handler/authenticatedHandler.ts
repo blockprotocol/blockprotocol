@@ -1,4 +1,5 @@
 import { NextConnect } from "next-connect";
+
 import {
   isLoggedInMiddleware,
   IsLoggedInRequestExtensions,

@@ -1,9 +1,9 @@
-import React, { useMemo, useRef, VFC, ReactElement } from "react";
-import { Box, useTheme, useMediaQuery, BoxProps } from "@mui/material";
-import Slider, { Settings } from "react-slick";
-
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
+import { Box, BoxProps, useMediaQuery, useTheme } from "@mui/material";
+import React, { ReactElement, useMemo, useRef, VFC } from "react";
+import Slider, { Settings } from "react-slick";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
 
