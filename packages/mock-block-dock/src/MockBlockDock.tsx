@@ -2,6 +2,7 @@ import {
   BlockProtocolEntity,
   BlockProtocolEntityType,
   BlockProtocolLink,
+  BlockProtocolLinkedAggregationDefinition,
 } from "blockprotocol";
 import {
   Children,
@@ -12,17 +13,10 @@ import {
   useRef,
   VoidFunctionComponent,
 } from "react";
-import {
-  BlockProtocolEntity,
-  BlockProtocolEntityType,
-  BlockProtocolLink,
-  BlockProtocolLinkedAggregationDefinition,
-} from "blockprotocol";
-import { MockData, useMockDatastore } from "./useMockDatastore";
 
 import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./useLinkFields";
-
+import { MockData, useMockDatastore } from "./useMockDatastore";
 
 type MockBlockDockProps = {
   children: ReactElement;

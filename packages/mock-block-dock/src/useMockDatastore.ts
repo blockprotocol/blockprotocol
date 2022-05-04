@@ -26,12 +26,13 @@ import {
 } from "blockprotocol";
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
+
+import { useDefaultArrayState } from "./useDefaultArrayState";
 import {
   filterAndSortEntitiesOrTypes,
   matchEntityIdentifiers,
   matchEntityTypeIdentifiers,
 } from "./util";
-import { useDefaultArrayState } from "./useDefaultArrayState";
 
 export type MockData = {
   entities: BlockProtocolEntity[];
