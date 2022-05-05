@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@lit-labs/react": "^1.0.4",
-    "blockprotocol": "0.0.8",
+    "blockprotocol": "0.0.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "uuid": "^8.3.2"
@@ -56,7 +56,7 @@
     "cross-env": "^7.0.3",
     "html-webpack-plugin": "^5.5.0",
     "lodash": "^4.17.21",
-    "mock-block-dock": "0.0.8",
+    "mock-block-dock": "0.0.9",
     "regenerator-runtime": "^0.13.9",
     "rimraf": "^3.0.2",
     "twind": "^0.16.17",

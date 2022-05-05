@@ -2,73 +2,73 @@ import {
   BlockProtocolAggregateEntitiesFunction,
   BlockProtocolAggregateEntityTypesFunction,
   BlockProtocolCreateEntitiesFunction,
+  BlockProtocolCreateEntityTypesFunction,
+  BlockProtocolCreateLinkedAggregationsFunction,
   BlockProtocolCreateLinksFunction,
   BlockProtocolDeleteEntitiesFunction,
+  BlockProtocolDeleteEntityTypesFunction,
+  BlockProtocolDeleteLinkedAggregationsFunction,
   BlockProtocolDeleteLinksFunction,
   BlockProtocolEntity,
   BlockProtocolEntityType,
   BlockProtocolFunctions,
   BlockProtocolGetEntitiesFunction,
+  BlockProtocolGetEntityTypesFunction,
+  BlockProtocolGetLinkedAggregationsFunction,
   BlockProtocolGetLinksFunction,
   BlockProtocolLink,
+  BlockProtocolLinkedAggregationDefinition,
   BlockProtocolUpdateEntitiesFunction,
+  BlockProtocolUpdateEntityTypesFunction,
+  BlockProtocolUpdateLinkedAggregationsFunction,
   BlockProtocolUpdateLinksFunction,
   BlockProtocolUploadFileFunction,
 } from "blockprotocol";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
-import { filterAndSortEntitiesOrTypes, matchIdentifiers } from "./util";
+import { useDefaultArrayState } from "./useDefaultArrayState";
+import {
+  filterAndSortEntitiesOrTypes,
+  matchEntityIdentifiers,
+  matchEntityTypeIdentifiers,
+} from "./util";
 
 export type MockData = {
   entities: BlockProtocolEntity[];
   links: BlockProtocolLink[];
+  linkedAggregationDefinitions: BlockProtocolLinkedAggregationDefinition[];
   entityTypes: BlockProtocolEntityType[];
 };
 
 type MockDataStore = MockData & {
-  functions: Omit<
-    // @todo implement missing functions
-    BlockProtocolFunctions,
-    | "getEntityTypes"
-    | "createEntityTypes"
-    | "updateEntityTypes"
-    | "deleteEntityTypes"
-  >;
+  functions: BlockProtocolFunctions;
 };
 
 export const useMockDatastore = (
   initialData: MockData = {
     entities: [],
     links: [],
+    linkedAggregationDefinitions: [],
     entityTypes: [],
   },
 ): MockDataStore => {
-  const previousInitialEntitiesString = useRef(
-    JSON.stringify(initialData.entities),
+  const [entities, setEntities] = useDefaultArrayState<
+    MockDataStore["entities"]
+  >(initialData.entities);
+  const [entityTypes, setEntityTypes] = useDefaultArrayState<
+    MockDataStore["entityTypes"]
+  >(initialData.entityTypes);
+  const [links, setLinks] = useDefaultArrayState<MockDataStore["links"]>(
+    initialData.links,
   );
-
-  const [entities, setEntities] = useState<MockDataStore["entities"]>(
-    initialData.entities,
-  );
-  const [links, setLinks] = useState<MockDataStore["links"]>(initialData.links);
-  const [entityTypes, _setEntityTypes] = useState<MockDataStore["entityTypes"]>(
-    initialData.entityTypes,
-  );
-
-  useEffect(() => {
-    const initialEntitiesString = JSON.stringify(initialData.entities);
-    if (initialEntitiesString !== previousInitialEntitiesString.current) {
-      setEntities(initialData.entities);
-      previousInitialEntitiesString.current = initialEntitiesString;
-    }
-  }, [initialData.entities]);
+  const [linkedAggregations, setLinkedAggregations] = useDefaultArrayState<
+    MockDataStore["linkedAggregationDefinitions"]
+  >(initialData.linkedAggregationDefinitions);
 
   const aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction =
     useCallback(
-      async (payload) => {
-        return filterAndSortEntitiesOrTypes(entityTypes, payload);
-      },
+      async (payload) => filterAndSortEntitiesOrTypes(entityTypes, payload),
       [entityTypes],
     );
 
@@ -113,18 +113,25 @@ export const useMockDatastore = (
       setLinks((currentLinks) => [...currentLinks, ...newLinks]);
       return newEntities;
     },
-    [],
+    [setEntities, setLinks],
   );
 
   const getEntities: BlockProtocolGetEntitiesFunction = useCallback(
     async (actions) =>
       actions.map((action) => {
         const foundEntity = entities.find((entity) =>
-          matchIdentifiers(entity, action),
+          matchEntityIdentifiers({
+            entityToCheck: entity,
+            providedIdentifiers: action,
+          }),
         );
         if (!foundEntity) {
           throw new Error(
-            `Could not find entity with identifiers ${JSON.stringify(action)}`,
+            `Could not find entity for getEntities action ${JSON.stringify(
+              action,
+              undefined,
+              2,
+            )}`,
           );
         }
         return foundEntity;
@@ -138,7 +145,10 @@ export const useMockDatastore = (
       setEntities((currentEntities) =>
         currentEntities.map((entity) => {
           const actionToApply = actions.find((action) =>
-            matchIdentifiers(action, entity),
+            matchEntityIdentifiers({
+              entityToCheck: entity,
+              providedIdentifiers: action,
+            }),
           );
           if (actionToApply) {
             const newEntity = {
@@ -156,27 +166,122 @@ export const useMockDatastore = (
       );
       return updatedEntities;
     },
-    [],
+    [setEntities],
   );
 
   const deleteEntities: BlockProtocolDeleteEntitiesFunction = useCallback(
     async (actions) => {
+      const operationStatus = new Array(actions.length).fill(false);
       setEntities((currentEntities) =>
-        currentEntities
-          .map((entity) => {
-            const isMatch = actions.some((action) =>
-              matchIdentifiers(entity, action),
-            );
-            if (isMatch) {
-              return null;
-            }
-            return entity;
-          })
-          .filter((entity): entity is BlockProtocolEntity => !!entity),
+        currentEntities.filter((entity) => {
+          const deleteActionIndex = actions.findIndex((action) =>
+            matchEntityIdentifiers({
+              entityToCheck: entity,
+              providedIdentifiers: action,
+            }),
+          );
+          if (deleteActionIndex > -1) {
+            operationStatus[deleteActionIndex] = true;
+            return false;
+          }
+          return true;
+        }),
       );
-      return new Array(actions.length).fill(true);
+      return operationStatus;
     },
-    [],
+    [setEntities],
+  );
+
+  const createEntityTypes: BlockProtocolCreateEntityTypesFunction = useCallback(
+    async (actions) => {
+      const newEntityTypes = actions.map<BlockProtocolEntityType>((action) => {
+        const entityTypeId = uuid();
+        const { accountId, schema } = action;
+        return {
+          accountId,
+          entityTypeId,
+          ...schema,
+        } as BlockProtocolEntityType; // @todo fix this – make 'schema' a narrower object in BP types?
+      });
+      setEntityTypes((currentEntityTypes) => [
+        ...currentEntityTypes,
+        ...newEntityTypes,
+      ]);
+      return newEntityTypes;
+    },
+    [setEntityTypes],
+  );
+
+  const getEntityTypes: BlockProtocolGetEntityTypesFunction = useCallback(
+    async (actions) =>
+      actions.map((action) => {
+        const foundEntityType = entityTypes.find((entityType) =>
+          matchEntityTypeIdentifiers({
+            entityTypeToCheck: entityType,
+            providedIdentifiers: action,
+          }),
+        );
+        if (!foundEntityType) {
+          throw new Error(
+            `Could not find entity type for getEntityTypes action ${JSON.stringify(
+              action,
+            )}`,
+          );
+        }
+        return foundEntityType;
+      }),
+    [entityTypes],
+  );
+
+  const updateEntityTypes: BlockProtocolUpdateEntityTypesFunction = useCallback(
+    async (actions) => {
+      const updatedEntityTypes: BlockProtocolEntityType[] = [];
+      setEntityTypes((currentEntityTypes) =>
+        currentEntityTypes.map((entityType) => {
+          const actionToApply = actions.find((action) =>
+            matchEntityTypeIdentifiers({
+              entityTypeToCheck: entityType,
+              providedIdentifiers: action,
+            }),
+          );
+          if (actionToApply) {
+            const newEntityType = {
+              ...actionToApply.schema,
+              accountId: entityType.accountId,
+              entityTypeId: entityType.entityTypeId,
+            } as BlockProtocolEntityType;
+            updatedEntityTypes.push(newEntityType);
+            return newEntityType;
+          }
+          return entityType;
+        }),
+      );
+      return updatedEntityTypes;
+    },
+    [setEntityTypes],
+  );
+
+  const deleteEntityTypes: BlockProtocolDeleteEntityTypesFunction = useCallback(
+    async (actions) => {
+      const operationStatus = new Array(actions.length).fill(false);
+      setEntityTypes((currentEntityTypes) =>
+        currentEntityTypes.filter((entityType) => {
+          const deleteActionIndex = actions.findIndex((action) =>
+            matchEntityTypeIdentifiers({
+              entityTypeToCheck: entityType,
+              providedIdentifiers: action,
+            }),
+          );
+          if (deleteActionIndex > -1) {
+            operationStatus[deleteActionIndex] = true;
+            return true;
+          }
+          return true;
+        }),
+      );
+      return operationStatus;
+    },
+    [setEntityTypes],
   );
 
   const createLinks: BlockProtocolCreateLinksFunction = useCallback(
@@ -188,14 +293,18 @@ export const useMockDatastore = (
       setLinks((currentLinks) => [...currentLinks, ...newLinks]);
       return newLinks;
     },
-    [],
+    [setLinks],
   );
 
   const getLinks: BlockProtocolGetLinksFunction = useCallback(
     async (actions) =>
-      actions.map(
-        ({ linkId }) => links.find((link) => link.linkId === linkId)!,
-      ),
+      actions.map(({ linkId }) => {
+        const foundLink = links.find((link) => link.linkId === linkId);
+        if (!foundLink) {
+          throw new Error(`link with linkId '${linkId}' not found.`);
+        }
+        return foundLink;
+      }),
     [links],
   );
 
@@ -204,28 +313,20 @@ export const useMockDatastore = (
       const updatedLinks: BlockProtocolLink[] = [];
       setLinks((currentLinks) =>
         currentLinks.map((link) => {
-          const actionToApply = actions.find((action) => {
-            if ("linkId" in action) {
-              return link.linkId === action.linkId;
-            }
-            const { sourceEntityId, sourceAccountId, path } = action;
-            return (
-              sourceEntityId === link.sourceEntityId &&
-              path === link.path &&
-              (!sourceAccountId || sourceAccountId === link.sourceAccountId)
-            );
-          });
+          const actionToApply = actions.find(
+            (action) => link.linkId === action.linkId,
+          );
           if (actionToApply) {
-            const newLink = { ...link, operation: actionToApply.data };
+            const newLink = { ...link, index: actionToApply.data.index };
             updatedLinks.push(newLink);
             return newLink;
           }
           return link;
         }),
       );
-      return updatedLinks as BlockProtocolLink[];
+      return updatedLinks;
     },
-    [],
+    [setLinks],
   );
 
   const deleteLinks: BlockProtocolDeleteLinksFunction = useCallback(
@@ -245,8 +346,99 @@ export const useMockDatastore = (
       );
       return new Array(actions.length).fill(true);
     },
-    [],
+    [setLinks],
   );
+
+  const createLinkedAggregations: BlockProtocolCreateLinkedAggregationsFunction =
+    useCallback(
+      async (actions) => {
+        const newLinkedAggregations = actions.map((action) => ({
+          aggregationId: uuid(),
+          ...action,
+        }));
+        setLinkedAggregations((currentLinkedAggregations) => [
+          ...currentLinkedAggregations,
+          ...newLinkedAggregations,
+        ]);
+        return newLinkedAggregations;
+      },
+      [setLinkedAggregations],
+    );
+
+  const getLinkedAggregations: BlockProtocolGetLinkedAggregationsFunction =
+    useCallback(
+      async (actions) =>
+        actions.map(({ aggregationId }) => {
+          const foundLinkedAggregation = linkedAggregations.find(
+            (linkedAggregation) =>
+              linkedAggregation.aggregationId === aggregationId,
+          );
+          if (!foundLinkedAggregation) {
+            throw new Error(
+              `LinkedAggregation with aggregationId '${aggregationId}' not found.`,
+            );
+          }
+          return {
+            ...foundLinkedAggregation,
+            ...filterAndSortEntitiesOrTypes(entities, foundLinkedAggregation),
+          };
+        }),
+      [entities, linkedAggregations],
+    );
+
+  const updateLinkedAggregations: BlockProtocolUpdateLinkedAggregationsFunction =
+    useCallback(
+      async (actions) => {
+        const updatedLinkedAggregations: BlockProtocolLinkedAggregationDefinition[] =
+          [];
+        setLinkedAggregations((currentLinkedAggregations) =>
+          currentLinkedAggregations.map((linkedAggregation) => {
+            const actionToApply = actions.find(
+              (action) =>
+                linkedAggregation.aggregationId === action.aggregationId,
+            );
+            if (actionToApply) {
+              const newLinkedAggregation = {
+                ...linkedAggregation,
+                operation: actionToApply.operation,
+              };
+              updatedLinkedAggregations.push(newLinkedAggregation);
+              return newLinkedAggregation;
+            }
+            return linkedAggregation;
+          }),
+        );
+        return updatedLinkedAggregations;
+      },
+      [setLinkedAggregations],
+    );
+
+  const deleteLinkedAggregations: BlockProtocolDeleteLinkedAggregationsFunction =
+    useCallback(
+      async (actions) => {
+        setLinkedAggregations((currentLinkedAggregations) =>
+          currentLinkedAggregations
+            .map((linkedAggregation) => {
+              const isMatch = actions.some(
+                (action) =>
+                  action.aggregationId === linkedAggregation.aggregationId,
+              );
+              if (isMatch) {
+                return null;
+              }
+              return linkedAggregation;
+            })
+            .filter(
+              (
+                linkedAggregation,
+              ): linkedAggregation is BlockProtocolLinkedAggregationDefinition =>
+                !!linkedAggregation,
+            ),
+        );
+        return new Array(actions.length).fill(true);
+      },
+      [setLinkedAggregations],
+    );
 
   const uploadFile: BlockProtocolUploadFileFunction = useCallback(
     async ({ accountId, file, url, mediaType }) => {
@@ -324,12 +516,21 @@ export const useMockDatastore = (
       createEntities,
       deleteEntities,
       updateEntities,
+      getEntityTypes,
+      createEntityTypes,
+      deleteEntityTypes,
+      updateEntityTypes,
       getLinks,
       createLinks,
       deleteLinks,
       updateLinks,
+      getLinkedAggregations,
+      createLinkedAggregations,
+      deleteLinkedAggregations,
+      updateLinkedAggregations,
       uploadFile,
     },
     links,
+    linkedAggregationDefinitions: linkedAggregations,
   };
 };

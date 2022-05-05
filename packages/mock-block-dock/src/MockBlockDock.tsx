@@ -2,6 +2,7 @@ import {
   BlockProtocolEntity,
   BlockProtocolEntityType,
   BlockProtocolLink,
+  BlockProtocolLinkedAggregationDefinition,
 } from "blockprotocol";
 import {
   Children,
@@ -23,14 +24,27 @@ type MockBlockDockProps = {
   initialEntities?: BlockProtocolEntity[];
   initialEntityTypes?: BlockProtocolEntityType[];
   initialLinks?: BlockProtocolLink[];
+  initialLinkedAggregations?: BlockProtocolLinkedAggregationDefinition[];
 };
 
+/**
+ * A component to wrap a Block Protocol block, acting as a mock embedding application.
+ * It provides the functions specified in the Block Protocol, and mock data which can be customized via props.
+ * See README.md for usage instructions.
+ * @param children the block component to be provided mock data and functions, with any starting props
+ * @param [blockSchema] - The schema for the block entity
+ * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [initialEntityTypes] - The entity types to include in the data store (NOT the block's type, which is always provided)
+ * @param [initialLinks] - The links to include in the data store
+ * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ */
 export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   children,
   blockSchema,
   initialEntities,
   initialEntityTypes,
   initialLinks,
+  initialLinkedAggregations,
 }) => {
   const mockData = useMemo((): MockData => {
     const blockEntityType: BlockProtocolEntityType = {
@@ -74,6 +88,9 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
           accountId,
         })),
       links: initialLinks ?? initialMockData.links,
+      linkedAggregationDefinitions:
+        initialLinkedAggregations ??
+        initialMockData.linkedAggregationDefinitions,
     };
 
     nextMockData.entities.push(initialBlockEntity);
@@ -85,15 +102,22 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
     initialEntities,
     initialEntityTypes,
     initialLinks,
+    initialLinkedAggregations,
     children.props,
   ]);
 
-  const { entities, entityTypes, links, functions } =
-    useMockDatastore(mockData);
+  const {
+    entities,
+    entityTypes,
+    links,
+    linkedAggregationDefinitions,
+    functions,
+  } = useMockDatastore(mockData);
 
   const latestBlockEntity = useMemo(() => {
     return (
       entities.find((entity) => entity.entityId === children.props.entityId) ??
+      // fallback in case the entityId of the wrapped component is updated by updating its props
       mockData.entities.find(
         (entity) => entity.entityId === children.props.entityId,
       )
@@ -107,6 +131,7 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   const { accountId, entityId, entityTypeId } = latestBlockEntity;
   const { updateEntities } = functions;
 
+  // watch for changes to the props provided to the wrapped component, and update the associated entity if they change
   const prevChildPropsString = useRef<string>(JSON.stringify(children.props));
   useEffect(() => {
     if (JSON.stringify(children.props) !== prevChildPropsString.current) {
@@ -122,12 +147,15 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
     prevChildPropsString.current = JSON.stringify(children.props);
   }, [accountId, entityId, entityTypeId, children.props, updateEntities]);
 
+  // construct BP-specified link fields from the links and linkedAggregations in the datastore
   const { linkedAggregations, linkedEntities, linkGroups } = useLinkFields({
     entities,
     links,
+    linkedAggregationDefinitions,
     startingEntity: latestBlockEntity,
   });
 
+  // @todo we don't do anything with this type except check it exists - do we need to do this?
   const latestBlockEntityType = useMemo(
     () =>
       entityTypes.find(
