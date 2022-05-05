@@ -33,14 +33,14 @@ export const useLinkFields = ({
     useMemo(() => {
       const linksFromStartingEntity = links.filter(
         ({ sourceAccountId, sourceEntityId, sourceEntityTypeId }) =>
-          matchEntityIdentifiers(
-            {
+          matchEntityIdentifiers({
+            providedIdentifiers: {
               accountId: sourceAccountId,
               entityId: sourceEntityId,
               entityTypeId: sourceEntityTypeId,
             },
-            startingEntity,
-          ),
+            entityToCheck: startingEntity,
+          }),
       );
 
       const calculatedLinkGroups = linksFromStartingEntity.reduce<
@@ -48,18 +48,18 @@ export const useLinkFields = ({
       >((linkGroupsAcc, link) => {
         const existingGroup = linkGroupsAcc.find(
           (group) =>
-            matchEntityIdentifiers(
-              {
+            matchEntityIdentifiers({
+              providedIdentifiers: {
                 accountId: link.sourceAccountId,
                 entityId: link.sourceEntityId,
                 entityTypeId: link.sourceEntityTypeId,
               },
-              {
+              entityToCheck: {
                 accountId: group.sourceAccountId,
                 entityId: group.sourceEntityId,
                 entityTypeId: group.sourceEntityTypeId,
               },
-            ) && link.path === group.path,
+            }) && link.path === group.path,
         );
         if (existingGroup) {
           existingGroup.links.push(link);
@@ -77,28 +77,28 @@ export const useLinkFields = ({
 
       const calculatedLinkedEntities = entities.filter((entity) =>
         linksFromStartingEntity.find((link) =>
-          matchEntityIdentifiers(
-            {
+          matchEntityIdentifiers({
+            providedIdentifiers: {
               accountId: link.destinationAccountId,
               entityId: link.destinationEntityId,
               entityTypeId: link.destinationEntityTypeId,
             },
-            entity,
-          ),
+            entityToCheck: entity,
+          }),
         ),
       );
 
       const calculatedLinkedAggregations: BlockProtocolLinkedAggregation[] =
         linkedAggregationDefinitions
           .map((linkedAggregation) => {
-            const isLinkedFromStartingEntity = matchEntityIdentifiers(
-              {
+            const isLinkedFromStartingEntity = matchEntityIdentifiers({
+              providedIdentifiers: {
                 accountId: linkedAggregation.sourceAccountId,
                 entityId: linkedAggregation.sourceEntityId,
                 entityTypeId: linkedAggregation.sourceEntityTypeId,
               },
-              startingEntity,
-            );
+              entityToCheck: startingEntity,
+            });
             if (!isLinkedFromStartingEntity) {
               return null;
             }

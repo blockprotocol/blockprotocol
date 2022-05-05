@@ -120,7 +120,10 @@ export const useMockDatastore = (
     async (actions) =>
       actions.map((action) => {
         const foundEntity = entities.find((entity) =>
-          matchEntityIdentifiers(entity, action),
+          matchEntityIdentifiers({
+            entityToCheck: entity,
+            providedIdentifiers: action,
+          }),
         );
         if (!foundEntity) {
           throw new Error(
@@ -142,7 +145,10 @@ export const useMockDatastore = (
       setEntities((currentEntities) =>
         currentEntities.map((entity) => {
           const actionToApply = actions.find((action) =>
-            matchEntityIdentifiers(action, entity),
+            matchEntityIdentifiers({
+              entityToCheck: entity,
+              providedIdentifiers: action,
+            }),
           );
           if (actionToApply) {
             const newEntity = {
@@ -169,7 +175,10 @@ export const useMockDatastore = (
         currentEntities
           .map((entity) => {
             const isMatch = actions.some((action) =>
-              matchEntityIdentifiers(entity, action),
+              matchEntityIdentifiers({
+                entityToCheck: entity,
+                providedIdentifiers: action,
+              }),
             );
             if (isMatch) {
               return null;
@@ -207,7 +216,10 @@ export const useMockDatastore = (
     async (actions) =>
       actions.map((action) => {
         const foundEntityType = entityTypes.find((entityType) =>
-          matchEntityTypeIdentifiers(entityType, action),
+          matchEntityTypeIdentifiers({
+            entityTypeToCheck: entityType,
+            providedIdentifiers: action,
+          }),
         );
         if (!foundEntityType) {
           throw new Error(
@@ -227,7 +239,10 @@ export const useMockDatastore = (
       setEntityTypes((currentEntityTypes) =>
         currentEntityTypes.map((entityType) => {
           const actionToApply = actions.find((action) =>
-            matchEntityTypeIdentifiers(action, entityType),
+            matchEntityTypeIdentifiers({
+              entityTypeToCheck: entityType,
+              providedIdentifiers: action,
+            }),
           );
           if (actionToApply) {
             const newEntityType = {
@@ -252,7 +267,10 @@ export const useMockDatastore = (
         currentEntityTypes
           .map((entityType) => {
             const isMatch = actions.some((action) =>
-              matchEntityTypeIdentifiers(entityType, action),
+              matchEntityTypeIdentifiers({
+                entityTypeToCheck: entityType,
+                providedIdentifiers: action,
+              }),
             );
             if (isMatch) {
               return null;
