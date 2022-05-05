@@ -384,7 +384,7 @@ export const useMockDatastore = (
             if (actionToApply) {
               const newLinkedAggregation = {
                 ...linkedAggregation,
-                operation: actionToApply.data,
+                operation: actionToApply.operation,
               };
               updatedLinkedAggregations.push(newLinkedAggregation);
               return newLinkedAggregation;

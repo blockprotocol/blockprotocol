@@ -342,7 +342,7 @@ export type BlockProtocolUpdateLinkedAggregationActionFragment = {
 export type BlockProtocolUpdateLinkedAggregationAction = {
   sourceAccountId?: string | null;
   aggregationId: string;
-  data: BlockProtocolLinkedAggregationDefinition["operation"];
+  operation: BlockProtocolLinkedAggregationDefinition["operation"];
 };
 
 export type BlockProtocolUpdateLinkedAggregationsFunction = {
