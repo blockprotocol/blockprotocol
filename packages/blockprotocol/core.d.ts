@@ -119,10 +119,7 @@ export type BlockProtocolCreateEntitiesAction = {
   accountId?: string | null;
   links?: Omit<
     BlockProtocolCreateLinksAction,
-    | "sourceAccountId"
-    | "sourceEntityId"
-    | "sourceEntityTypeId"
-    | "sourceEntityVersionId"
+    "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
   >[];
 };
 
@@ -250,11 +247,9 @@ export type BlockProtocolLink = {
   sourceAccountId?: string | null;
   sourceEntityId: string;
   sourceEntityTypeId?: string | null;
-  sourceEntityVersionId?: string | null;
   destinationAccountId?: string | null;
   destinationEntityId: string;
   destinationEntityTypeId?: string | null;
-  destinationEntityVersionId?: string | null;
   index?: number | null;
   path: string;
 };
@@ -262,7 +257,6 @@ export type BlockProtocolLink = {
 export type BlockProtocolLinkGroup = {
   sourceAccountId?: string | null;
   sourceEntityId: string;
-  sourceEntityVersionId?: string | null;
   sourceEntityTypeId?: string | null;
   path: string;
   links: BlockProtocolLink[];
@@ -308,7 +302,6 @@ export type BlockProtocolLinkedAggregationDefinition = {
   sourceAccountId?: string | null;
   sourceEntityId: string;
   sourceEntityTypeId?: string | null;
-  sourceEntityVersionId?: string | null;
   path: string;
   operation: BlockProtocolAggregateOperationInput;
 };
