@@ -1,6 +1,8 @@
-import { VFC } from "react";
-import { Box, Typography, Icon } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
+import { VFC } from "react";
+
+import { TableTreeIcon } from "../../icons";
 import { Link } from "../../Link";
 import { shy } from "./utils";
 
@@ -51,13 +53,11 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
               }}
             />
           ) : (
-            <Icon
+            <TableTreeIcon
               sx={{
-                height: 24,
-                width: 24,
-                color: ({ palette }) => palette.gray[80],
+                fontSize: 24,
+                color: ({ palette }) => palette.gray[90],
               }}
-              className="fa-solid fa-table-tree"
             />
           )}
         </Box>
@@ -71,7 +71,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
             className="list-view__title"
             sx={{
               fontWeight: 600,
-              color: ({ palette }) => palette.gray[80],
+              color: ({ palette }) => palette.gray[90],
               mb: 1,
               lineHeight: 1,
             }}
@@ -81,7 +81,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
           <Typography
             variant="bpSmallCopy"
             sx={{
-              color: ({ palette }) => palette.gray[70],
+              color: ({ palette }) => palette.gray[80],
               mb: 1,
             }}
           >
@@ -90,7 +90,7 @@ export const ListViewCard: VFC<ListViewCardProps> = ({
           <Typography
             variant="bpMicroCopy"
             sx={{
-              color: ({ palette }) => palette.gray[60],
+              color: ({ palette }) => palette.gray[70],
             }}
           >
             {lastUpdated

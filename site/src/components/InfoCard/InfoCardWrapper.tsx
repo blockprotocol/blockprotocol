@@ -1,3 +1,4 @@
+import { Box } from "@mui/material";
 import {
   Children,
   cloneElement,
@@ -6,7 +7,6 @@ import {
   ReactNode,
   VoidFunctionComponent,
 } from "react";
-import { Box } from "@mui/material";
 
 type InfoCardWrapperProps = {
   children: ReactNode;
@@ -44,7 +44,15 @@ export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
         },
       }}
     >
-      <Box>{childrenWithoutInfoCard}</Box>
+      <Box
+        sx={{
+          "& > :first-child": {
+            marginTop: 0,
+          },
+        }}
+      >
+        {childrenWithoutInfoCard}
+      </Box>
       <Box
         sx={{
           marginLeft: {

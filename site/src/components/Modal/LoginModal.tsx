@@ -1,15 +1,18 @@
-import { Modal, Paper, ModalProps, Box, Icon, Fade } from "@mui/material";
+import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Box, Fade, Modal, ModalProps, Paper } from "@mui/material";
 import React, { useEffect, useState, VFC } from "react";
-import { SerializedUser } from "../../lib/api/model/user.model";
-import { Button } from "../Button";
+
 import { useUser } from "../../context/UserContext";
+import { SerializedUser } from "../../lib/api/model/user.model";
+import { apiClient } from "../../lib/apiClient";
+import { useScrollLock } from "../../util/muiUtils";
+import { Button } from "../Button";
+import { FontAwesomeIcon } from "../icons";
 import { SendLoginCodeScreen } from "../Screens/SendLoginCodeScreen";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../Screens/VerificationCodeScreen";
-import { apiClient } from "../../lib/apiClient";
-import { useScrollLock } from "../../util/muiUtils";
 
 type LoginModalProps = {
   onClose: () => void;
@@ -115,9 +118,9 @@ export const LoginModal: VFC<LoginModalProps> = ({
                     onClick={() => setCurrentPage("Email")}
                     variant="transparent"
                     startIcon={
-                      <Icon
+                      <FontAwesomeIcon
+                        icon={faArrowLeft}
                         sx={{ fontSize: 16 }}
-                        className="fas fa-arrow-left"
                       />
                     }
                     sx={{
@@ -132,7 +135,7 @@ export const LoginModal: VFC<LoginModalProps> = ({
                 onClick={handleClose}
                 variant="transparent"
                 endIcon={
-                  <Icon sx={{ fontSize: 16 }} className="fas fa-times" />
+                  <FontAwesomeIcon icon={faTimes} sx={{ fontSize: 16 }} />
                 }
                 sx={{
                   fontSize: 15,

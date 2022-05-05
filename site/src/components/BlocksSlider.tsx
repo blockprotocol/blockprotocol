@@ -1,8 +1,9 @@
+import { Box, Typography } from "@mui/material";
 import { VFC } from "react";
-import { Typography, Box } from "@mui/material";
+
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { Carousel } from "./Carousel";
 import { Link } from "./Link";
-import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 
 type BlocksSliderProps = {
   catalog: BlockMetadata[];
@@ -16,10 +17,10 @@ export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
       }}
       data={catalog}
       itemKey={({ name }) => name!}
-      renderItem={({ displayName, name, image, packagePath }) => {
+      renderItem={({ displayName, name, image, blockPackagePath }) => {
         return (
           <Link
-            href={`/${packagePath}`}
+            href={blockPackagePath}
             sx={{ display: "block", maxWidth: 500, mx: "auto" }}
           >
             <Box

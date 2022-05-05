@@ -43,6 +43,12 @@
   - "site/src/_pages/spec/**/*"
   - "site/src/_pages/spec/**/.*"
 
+"package: block-scripts":
+  - "packages/block-scripts/*"
+  - "packages/block-scripts/.*"
+  - "packages/block-scripts/**/*"
+  - "packages/block-scripts/**/.*"
+
 "package: block-template":
   - "packages/block-template/*"
   - "packages/block-template/.*"
@@ -66,6 +72,12 @@
   - "packages/mock-block-dock/.*"
   - "packages/mock-block-dock/**/*"
   - "packages/mock-block-dock/**/.*"
+
+"package: react-block-loader":
+  - "packages/react-block-loader/*"
+  - "packages/react-block-loader/.*"
+  - "packages/react-block-loader/**/*"
+  - "packages/react-block-loader/**/.*"
 
 "site: docs":
   - "site/src/_pages/docs/*"

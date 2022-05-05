@@ -1,15 +1,4 @@
-import React, {
-  ChangeEvent,
-  KeyboardEvent,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { debounce } from "lodash";
-import algoliasearch from "algoliasearch";
-import { useMousetrap } from "use-mousetrap";
-import { useRouter } from "next/router";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   CircularProgress,
@@ -18,14 +7,25 @@ import {
   Theme,
   Typography,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import algoliasearch from "algoliasearch";
+import { debounce } from "lodash";
+import { useRouter } from "next/router";
+import React, {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { useMousetrap } from "use-mousetrap";
 
+import { Link } from "../../../Link";
 import SearchItem, {
   AlgoliaHighlightResult,
   AlgoliaResult,
   SearchVariants,
 } from "./SearchItem";
-import { Link } from "../../../Link";
 
 const client = algoliasearch("POOWZ64DSV", "96dc0442fd27b903440955dc03e5e60e");
 const index = client.initIndex("blockprotocol");
@@ -158,7 +158,7 @@ const Search: React.VoidFunctionComponent<SearchProps> = ({
     event.preventDefault();
 
     if (searchResults.length > 0 && searchResults[activeResult]) {
-      const { slug } = searchResults[activeResult];
+      const { slug } = searchResults[activeResult]!;
 
       (document.querySelector(".search-bar input") as HTMLElement).blur();
 

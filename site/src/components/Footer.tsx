@@ -1,16 +1,22 @@
-import { FC, ReactNode } from "react";
 import {
-  Icon,
+  faDiscord,
+  faGithub,
+  faTwitter,
+} from "@fortawesome/free-brands-svg-icons";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
   Box,
-  Container,
-  Typography,
-  Grid,
-  useTheme,
-  useMediaQuery,
   BoxProps,
+  Container,
+  Grid,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import { FC, ReactNode } from "react";
+
+import { BlockProtocolLogoIcon, FontAwesomeIcon, HASHLogoIcon } from "./icons";
 import { Link } from "./Link";
-import { BlockProtocolLogoIcon, HASHLogoIcon } from "./icons";
 import { LinkButton } from "./LinkButton";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
@@ -40,8 +46,9 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
   <Typography
     component="p"
     variant="bpSmallCopy"
-    sx={{
-      color: ({ palette }) => palette.gray[40],
+    key={href}
+    sx={(theme) => ({
+      color: theme.palette.gray[40],
       "&:first-of-type": {
         marginTop: {
           xs: 1.5,
@@ -51,12 +58,8 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
       "&:not(:first-of-type)": {
         marginTop: 1.5,
       },
-    }}
-    key={href}
-  >
-    <Link
-      href={href}
-      sx={(theme) => ({
+      "> a": {
+        borderBottomWidth: 0,
         transition: theme.transitions.create("color", { duration: 150 }),
         ":hover": {
           color: theme.palette.gray[20],
@@ -67,27 +70,27 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
         ":focus-visible": {
           outlineColor: theme.palette.gray[40],
         },
-      })}
-    >
-      {name}
-    </Link>
+      },
+    })}
+  >
+    <Link href={href}>{name}</Link>
   </Typography>
 ));
 
 const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
     name: "Twitter",
-    icon: <Icon className="fab fa-twitter" />,
+    icon: <FontAwesomeIcon icon={faTwitter} />,
     href: "https://twitter.com/blockprotocol",
   },
   {
     name: "Discord",
-    icon: <Icon className="fab fa-discord" />,
+    icon: <FontAwesomeIcon icon={faDiscord} />,
     href: "/discord",
   },
   {
     name: "GitHub",
-    icon: <Icon className="fab fa-github" />,
+    icon: <FontAwesomeIcon icon={faGithub} />,
     href: "https://github.com/blockprotocol",
   },
 ];
@@ -95,18 +98,20 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
 const Socials = (
   <Box
     mt={3}
+    mb={2.5}
     display="flex"
     flexDirection="row"
     alignItems="center"
     flexWrap="wrap"
   >
-    <Box marginBottom={2.5} flexShrink={0}>
-      {SOCIALS.map(({ href, icon }) => (
+    <Box flexShrink={0}>
+      {SOCIALS.map(({ href, icon }, index) => (
         <Link
           href={href}
           key={href}
           sx={{
-            marginRight: 2.2,
+            padding: 1.5,
+            ...(index === 0 && { paddingLeft: 0 }),
             color: (theme) => theme.palette.gray[50],
             ":hover": {
               svg: {
@@ -122,7 +127,7 @@ const Socials = (
               outlineColor: (theme) => theme.palette.gray[50],
             },
             svg: {
-              padding: 0.3,
+              fontSize: 20,
               transition: (theme) =>
                 theme.transitions.create("color", { duration: 150 }),
               color: "inherit",
@@ -141,11 +146,9 @@ const Socials = (
       sx={{
         flexShrink: 0,
         paddingLeft: 2.2,
-        marginLeft: 0.3,
-        marginBottom: 2.5,
-        marginTop: -0.7,
+        marginLeft: 2.2,
       }}
-      startIcon={<Icon className="fa fa-star" />}
+      startIcon={<FontAwesomeIcon icon={faStar} />}
     >
       Star us on GitHub
     </LinkButton>
@@ -163,7 +166,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
     <Box
       {...boxProps}
       sx={{
-        backgroundColor: ({ palette }) => palette.gray[80],
+        backgroundColor: ({ palette }) => palette.gray[90],
         ...boxProps.sx,
       }}
     >
@@ -225,16 +228,14 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                 color: ({ palette }) => palette.gray[50],
                 fontWeight: 400,
                 display: "flex",
-              }}
-              variant="bpSmallCopy"
-            >
-              Supported by{" "}
-              <Box
-                component="a"
-                href="https://hash.ai"
-                sx={{
-                  marginLeft: 1,
-                  borderBottomColor: "transparent !important",
+                "> a": {
+                  borderBottomWidth: 0,
+                  transition: theme.transitions.create(
+                    ["color", "borderColor"],
+                    {
+                      duration: 150,
+                    },
+                  ),
                   ":hover": {
                     color: ({ palette }) => palette.gray[30],
                   },
@@ -244,19 +245,21 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
                   ":focus-visible": {
                     outline: ({ palette }) => `1px solid ${palette.gray[50]}`,
                   },
+                },
+              }}
+              variant="bpSmallCopy"
+            >
+              Supported by{" "}
+              <Link
+                href="https://hash.ai"
+                sx={{
+                  position: "relative",
+                  top: -1,
+                  marginLeft: 1,
                 }}
               >
-                <HASHLogoIcon
-                  sx={{
-                    transition: theme.transitions.create(
-                      ["color", "borderColor"],
-                      {
-                        duration: 150,
-                      },
-                    ),
-                  }}
-                />
-              </Box>
+                <HASHLogoIcon />
+              </Link>
             </Typography>
           </Grid>
         </Grid>

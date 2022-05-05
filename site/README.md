@@ -49,7 +49,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     yarn dev:seed-db
     ```
 
-1.  Run the Next.js app in a seperate terminal using:
+1.  Run the Next.js app in a separate terminal using:
 
     ```sh
     yarn dev
@@ -73,25 +73,19 @@ When running in development environments, avatars go to the `dev/avatars/(user.i
 
 ### Serving Blocks
 
-Before serving any blocks, they need to be built. Blocks can be registered in the repo's `/hub`
-with a build-config. The build-script `/site/scripts/build-blocks.sh` allows to build blocks
-individually. It requires the commandline tool:
-
-- `curl`
-- `jq`
-- `md5sha1sum`
-- `rsync`
-
-These can be installed by your cli pkg mngr of choice (use `brew` on macOS).
+Before serving any blocks, they need to be prepared (i.e. built in most cases).
+Blocks can be registered in the repo's `/hub` with a build-config.
+The build-script `yarn exe site/scripts/prepare-blocks.ts` prepares blocks.
 
 ```sh
-# build one or more blocks
-yarn build-block ./hub/@hash/paragraph.json
-# build all blocks
-yarn build-blocks
+# prepare all blocks
+yarn exe site/scripts/prepare-blocks.ts
+
+# prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
+BLOCK_FILTER="@hash/*" yarn exe site/scripts/prepare-blocks.ts
 ```
 
-Once the blocks are built, simply `yarn dev [--cwd ./site] [--port 3001]` and head over to
+Once the blocks are built, simply `yarn dev` and head over to
 `localhost:3000/hub`.
 
 ## Vercel Deployment
@@ -117,7 +111,7 @@ Response Body:
 - `userId`: the id of the created BP user
 - `emailVerificationCodeId`: the id of the email verification code
 
-#### `POST /api/verifyEmail`
+#### `POST /api/verify-email`
 
 Request Body:
 
@@ -129,7 +123,7 @@ Response Body:
 
 - `user`: the updated BP user
 
-#### `POST /api/loginWithLoginCode`
+#### `POST /api/login-with-login-code`
 
 Logs in a user using a provide login code.
 
@@ -142,7 +136,7 @@ Logs in a user using a provide login code.
 - Request Response:
   - `user`: the user that is now authenticated with the API
 
-#### `GET /api/isShortnameTaken`
+#### `GET /api/is-shortname-taken`
 
 Request Query:
 
@@ -227,7 +221,7 @@ Response:
 
 - `entityType` the updated entity type
 
-#### `POST /api/completeSignup` [requires cookie authentication]
+#### `POST /api/complete-signup` [requires cookie authentication]
 
 Request Body:
 
@@ -238,7 +232,7 @@ Response Body:
 
 - `user`: the updated BP user
 
-#### `POST /api/sendLoginCode` [requires cookie authentication]
+#### `POST /api/send-login-code` [requires cookie authentication]
 
 Sends a login code to an existing BP user's email.
 
@@ -248,7 +242,7 @@ Sends a login code to an existing BP user's email.
 
 - Response Body:
   - `userId`: the id of the BP user
-  - `loginCodeId`: the id of the login code sent to the user (required for `/api/loginWithLoginCode`)
+  - `loginCodeId`: the id of the login code sent to the user (required for `/api/login-with-login-code`)
 
 #### `GET /api/me` [requires cookie authentication]
 
@@ -257,14 +251,14 @@ Retrieves the user object of the currently logged in user.
 - Request Response:
   - `user`: the user currently authenticated with the API
 
-#### `GET /api/me/apiKeys` [requires cookie authentication]
+#### `GET /api/me/api-keys` [requires cookie authentication]
 
 Retrieves metadata on the API keys associated with the authenticated user.
 
 - Request Response:
   - `apiKeys`: metadata on API keys (the key itself is only visible at the point of generation)
 
-#### `POST /api/me/generateApiKey` [requires cookie authentication]
+#### `POST /api/me/generate-api-key` [requires cookie authentication]
 
 Generates a new API key for the authenticated user, and revokes any others.
 
@@ -281,7 +275,7 @@ Logs out the currently authenticated user.
 
 - Request Response: `SUCCESS`
 
-#### `POST /api/uploadUserAvatar` [requires cookie authentication]
+#### `POST /api/upload-user-avatar` [requires cookie authentication]
 
 Uploads a user avatar and apply it to logged in profile page.
 

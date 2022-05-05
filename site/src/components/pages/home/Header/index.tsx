@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
 import {
+  Box,
   Container,
   Typography,
-  Box,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { gsap } from "gsap";
+import React, { useEffect } from "react";
+
 import { BoltIcon } from "../../../icons";
-import { HeaderCard } from "./HeaderCard";
 import { LinkButton } from "../../../LinkButton";
+import { HeaderCard } from "./HeaderCard";
 
 export const Header = () => {
   const theme = useTheme();

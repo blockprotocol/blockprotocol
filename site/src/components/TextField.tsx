@@ -1,13 +1,15 @@
-import { ReactNode, useEffect, useState, VFC } from "react";
+import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Collapse,
   // eslint-disable-next-line no-restricted-imports
   TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
-  Icon,
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
+import { ReactNode, useEffect, useState, VFC } from "react";
+
+import { FontAwesomeIcon } from "./icons";
 
 type TextFieldProps = {
   displayErrorOnTouched?: boolean;
@@ -46,9 +48,11 @@ export const TextField: VFC<TextFieldProps> = ({
           ...{ notched: false },
           endAdornment: textFieldProps.error ? (
             <Box>
-              <Icon
-                sx={{ fontSize: 22, color: "currentColor" }}
-                className="fa-solid fa-circle-exclamation"
+              <FontAwesomeIcon
+                icon={faCircleExclamation}
+                sx={{
+                  fontSize: 22,
+                }}
               />
             </Box>
           ) : (

@@ -1,22 +1,24 @@
-import { Typography, Box, Icon } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, {
+  ClipboardEventHandler,
   ReactNode,
+  useCallback,
   useEffect,
   useRef,
   useState,
   VFC,
-  ClipboardEventHandler,
-  useCallback,
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
-import { ApiClientError } from "../../lib/apiClient";
+
 import { SerializedUser } from "../../lib/api/model/user.model";
+import { ApiClientError } from "../../lib/apiClient";
 import { Button } from "../Button";
-import { TextField } from "../TextField";
 import {
   isVerificationCodeFormatted,
   useVerificationCodeTextField,
 } from "../hooks/useVerificationCodeTextField";
+import { EnvelopeDotIcon } from "../icons";
+import { TextField } from "../TextField";
 
 export type VerificationCodeInfo = {
   userId: string;
@@ -173,10 +175,9 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Icon
-        className="fa-solid fa-envelope-dot"
+      <EnvelopeDotIcon
         sx={{
-          fontSize: 50,
+          fontSize: 60,
           color: ({ palette }) => palette.purple[600],
           marginBottom: 3,
         }}
@@ -186,7 +187,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         textAlign="center"
         marginBottom={2}
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
           fontWeight: 500,
         }}
       >
@@ -300,7 +301,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         variant="bpSmallCopy"
         textAlign="center"
         sx={{
-          color: ({ palette }) => palette.gray[70],
+          color: ({ palette }) => palette.gray[80],
           maxWidth: {
             xs: "unset",
             sm: "70%",
@@ -313,7 +314,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
       <Typography
         variant="bpSmallCopy"
         sx={{
-          color: ({ palette }) => palette.gray[60],
+          color: ({ palette }) => palette.gray[70],
           maxWidth: {
             xs: "unset",
             sm: "70%",

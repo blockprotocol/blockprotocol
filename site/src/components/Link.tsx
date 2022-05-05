@@ -1,20 +1,12 @@
-import * as React from "react";
-import clsx from "clsx";
-import { UrlObject } from "url";
-import { useRouter } from "next/router";
-// eslint-disable-next-line no-restricted-imports
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
 // eslint-disable-next-line no-restricted-imports
 import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
-import { Button } from "./Button";
-import { FRONTEND_URL } from "../lib/config";
+import clsx from "clsx";
+import { useRouter } from "next/router";
+import * as React from "react";
 
-export const isHrefExternal = (href: string | UrlObject) =>
-  typeof href === "string" &&
-  (href === "/discord" ||
-    !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href)) &&
-  !href.startsWith(FRONTEND_URL);
+import { BaseLink, BaseLinkProps } from "./BaseLink";
+import { Button } from "./Button";
 
 /**
  * This component is based on https://github.com/mui-org/material-ui/blob/a5c92dfd84dfe5888a8b383a9b5fe5701a934564/examples/nextjs/src/Link.js
@@ -23,38 +15,35 @@ export const isHrefExternal = (href: string | UrlObject) =>
 // Add support for the sx prop for consistency with the other branches.
 const Anchor = styled("a")({});
 
-type NextLinkComposedProps = {
-  to: NextLinkProps["href"];
-} & Omit<NextLinkProps, "href" | "passHref"> &
+type PlainLinkWithAnchorProps = BaseLinkProps &
   Omit<MuiLinkProps, "href" | "color">;
 
-export const NextLinkComposed = React.forwardRef<
+export const BaseLinkWithAnchor = React.forwardRef<
   HTMLAnchorElement,
-  NextLinkComposedProps
+  PlainLinkWithAnchorProps
 >((props, ref) => {
-  const { as, to, replace, scroll, shallow, prefetch, locale, ...other } =
+  const { as, href, replace, scroll, shallow, prefetch, locale, ...other } =
     props;
 
   return (
-    <NextLink
-      href={to}
+    <BaseLink
+      href={href}
       prefetch={prefetch}
       as={as}
       replace={replace}
       scroll={scroll}
       shallow={shallow}
-      passHref
       locale={locale}
     >
       <Anchor ref={ref} {...other} />
-    </NextLink>
+    </BaseLink>
   );
 });
 
 export type LinkProps = {
   activeClassName?: string;
-  noLinkStyle?: boolean;
-} & Omit<NextLinkProps, "passHref"> &
+  children?: React.ReactNode;
+} & Omit<BaseLinkProps, "children" | "passHref"> &
   Omit<MuiLinkProps, "href" | "color">;
 
 // A styled version of the Next.js Link component:
@@ -66,18 +55,18 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       as: linkAs,
       className: classNameProps,
       href,
-      noLinkStyle,
-      ...other
+      ...rest
     } = props;
 
     const router = useRouter();
-    const pathname = typeof href === "string" ? href : href.pathname;
+    const pathname =
+      typeof href === "string" ? href : href.pathname ?? undefined;
     const className = clsx(classNameProps, {
       [activeClassName]: router.pathname === pathname && activeClassName,
     });
 
     if (process.env.NODE_ENV !== "production") {
-      const children = other.children;
+      const { children } = rest;
       if (React.isValidElement(children) && children.type === Button) {
         throw new Error(
           "Please use <LinkButton /> instead of <Link><Button /></Link>",
@@ -85,50 +74,14 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
       }
     }
 
-    if (isHrefExternal(href)) {
-      other.rel = "noopener";
-      other.target = "_blank";
-
-      if (noLinkStyle) {
-        return (
-          <Anchor
-            className={className}
-            href={href as string}
-            ref={ref}
-            {...other}
-          />
-        );
-      }
-
-      return (
-        <MuiLink
-          className={className}
-          href={href as string}
-          ref={ref}
-          {...other}
-        />
-      );
-    }
-
-    if (noLinkStyle) {
-      return (
-        <NextLinkComposed
-          className={className}
-          ref={ref}
-          to={href}
-          {...other}
-        />
-      );
-    }
-
     return (
       <MuiLink
-        component={NextLinkComposed}
+        component={BaseLinkWithAnchor}
         as={linkAs}
         className={className}
         ref={ref}
-        to={href}
-        {...other}
+        href={href as string}
+        {...rest}
       />
     );
   },

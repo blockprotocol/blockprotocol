@@ -25,14 +25,14 @@ We’ve provided a template to help you get started - here’s how to use it:
 1.  Run `npx create-block-app [your-block-name]` or `yarn create block-app [your-block-name]`
 1.  Switch to your new folder: `cd [your-block-name]`
 1.  Run `yarn install && yarn dev`
-1.  Open [http://localhost:9090](http://localhost:9090) in your browser. You should see `‘Hello World!’`
+1.  Open [http://localhost:63212](http://localhost:63212) in your browser. You should see `‘Hello World!’`
 
 ### Code
 
-Edit `src/App.tsx` to change the behavior of your block.
+Edit `src/app.tsx` to change the behavior of your block.
 
 The `AppProps` type describes what data your block accepts - the names and types of properties that embedding applications
-should pass to your block. You can pass in starting props for testing in `webpack-dev-server.js`.
+should pass to your block. You can pass in starting props for testing in `dev.js`.
 
 Embedding applications may also pass an `updateEntities` function, an `entityId` and an `entityTypeId` as properties
 to your block - these are the ids identifying your block data in the app. Call `updateEntities` with any new data

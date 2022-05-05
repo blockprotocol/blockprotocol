@@ -1,16 +1,31 @@
 // ---------------------------- UTILITIES ----------------------------- //
 
-type DistributedOmit<T, K extends PropertyKey> = T extends T
-  ? Omit<T, K>
-  : never;
+type UnknownRecord = Record<string, unknown>;
+
+export type JSONValue =
+  | null
+  | boolean
+  | number
+  | string
+  | JSONValue[]
+  | JSONObject;
+
+export type JSONObject = { [key: string]: JSONValue };
+
+export interface JSONArray extends Array<JSONValue> {}
 
 // -------------------------- BLOCK METADATA -------------------------- //
 
 export type BlockVariant = {
   description?: string | null;
-  displayName?: string | null;
   icon?: string | null;
-  properties?: JSONObject | null;
+  name: string;
+  /**
+   * @deprecated - Use the `name` field instead.
+   */
+  displayName?: string;
+  properties: JSONObject;
+  examples?: JSONObject[] | null;
 };
 
 export type BlockMetadataRepository =
@@ -22,22 +37,70 @@ export type BlockMetadataRepository =
   | string;
 
 export type BlockMetadata = {
+  /**
+   * The name of the author of the block
+   */
   author?: string | null;
+  /**
+   * The default data used as the block's properties on first load - must comply with its schema
+   */
   default?: JSONObject | null;
+  /**
+   * A short description of the block, to help users understand its capabilities
+   */
   description?: string | null;
+  /**
+   * The display name used for a block
+   */
   displayName?: string | null;
+  /**
+   * A list of examples used to showcase a block's capabilities
+   */
   examples?: JSONObject[] | null;
-  externals?: Record<string, string> | null;
+  /**
+   * The dependencies a block relies on but expects the embedding application to provide, e.g. { "react": "^17.0.2" }
+   */
+  externals?: JSONObject;
+  /**
+   * An icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block).
+   */
   icon?: string | null;
+  /**
+   * A preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
+   */
   image?: string | null;
+  /**
+   * The license the block is made available under (e.g. MIT).
+   */
   license?: string | null;
-  name?: string | null;
-  protocol?: string | null;
-  repository?: BlockMetadataRepository;
-  schema?: string | null;
-  source?: string | null;
+  /**
+   * A unique, slugified name for the block.
+   */
+  name: string;
+  /**
+   * The applicable block protocol version.
+   */
+  protocol: string;
+  /**
+   * Specify the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
+   */
+  repository?: BlockMetadataRepository | null;
+  /**
+   * The path or URL to the block's schema (e.g. block-schema.json)
+   */
+  schema: string;
+  /**
+   * The path or URL to the entrypoint source file (e.g. index.html, index.js).
+   */
+  source: string;
+  /**
+   * A list which represents different variants of the block that the user can create.
+   */
   variants?: BlockVariant[] | null;
-  version?: string | null;
+  /**
+   * The version of the block, which should use semantic versioning (@see https://semver.org/).
+   */
+  version: string;
 };
 
 // ----------------------------- ENTITIES ----------------------------- //
@@ -49,22 +112,21 @@ export type BlockProtocolEntity = {
   [key: string]: unknown;
 };
 
-export type BlockProtocolCreateEntitiesAction<T> = {
+export type BlockProtocolCreateEntitiesAction = {
   entityTypeId: string;
   entityTypeVersionId?: string | null;
-  data: T;
+  data: UnknownRecord;
   accountId?: string | null;
-  links?: DistributedOmit<
+  links?: Omit<
     BlockProtocolCreateLinksAction,
-    | "sourceAccountId"
-    | "sourceEntityId"
-    | "sourceEntityTypeId"
-    | "sourceEntityVersionId"
+    "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
   >[];
 };
 
 export type BlockProtocolCreateEntitiesFunction = {
-  <T>(actions: BlockProtocolCreateEntitiesAction<T>[]): Promise<unknown[]>;
+  (actions: BlockProtocolCreateEntitiesAction[]): Promise<
+    BlockProtocolEntity[]
+  >;
 };
 
 export type BlockProtocolGetEntitiesAction = {
@@ -74,19 +136,21 @@ export type BlockProtocolGetEntitiesAction = {
 };
 
 export type BlockProtocolGetEntitiesFunction = {
-  (actions: BlockProtocolGetEntitiesAction[]): Promise<unknown[]>;
+  (actions: BlockProtocolGetEntitiesAction[]): Promise<BlockProtocolEntity[]>;
 };
 
-export type BlockProtocolUpdateEntitiesAction<T> = {
+export type BlockProtocolUpdateEntitiesAction = {
   entityTypeId?: string | null;
   entityTypeVersionId?: string | null;
   entityId: string;
   accountId?: string | null;
-  data: T;
+  data: UnknownRecord;
 };
 
 export type BlockProtocolUpdateEntitiesFunction = {
-  <T>(actions: BlockProtocolUpdateEntitiesAction<T>[]): Promise<unknown[]>;
+  (actions: BlockProtocolUpdateEntitiesAction[]): Promise<
+    BlockProtocolEntity[]
+  >;
 };
 
 export type BlockProtocolDeleteEntitiesAction = {
@@ -139,7 +203,9 @@ export type BlockProtocolAggregateEntitiesPayload = {
   accountId?: string | null;
 };
 
-export type BlockProtocolAggregateEntitiesResult<T = unknown> = {
+export type BlockProtocolAggregateEntitiesResult<
+  T extends BlockProtocolEntity | BlockProtocolEntityType,
+> = {
   results: T[];
   operation: BlockProtocolAggregateOperationInput &
     Required<
@@ -151,9 +217,9 @@ export type BlockProtocolAggregateEntitiesResult<T = unknown> = {
 };
 
 export type BlockProtocolAggregateEntitiesFunction = {
-  (
-    payload: BlockProtocolAggregateEntitiesPayload,
-  ): Promise<BlockProtocolAggregateEntitiesResult>;
+  (payload: BlockProtocolAggregateEntitiesPayload): Promise<
+    BlockProtocolAggregateEntitiesResult<BlockProtocolEntity>
+  >;
 };
 
 // ------------------------ OTHER FUNCTIONS --------------------------- //
@@ -176,43 +242,25 @@ export type BlockProtocolUploadFileFunction = {
 
 // ----------------------------- LINKS -------------------------------- //
 
-type SingleTargetLinkFields = {
-  destinationEntityId: string;
-  destinationEntityTypeId?: string | null;
-  destinationEntityVersionId?: string | null;
-};
-
-type AggregationTargetLinkFields = {
-  operation: BlockProtocolAggregateOperationInput;
-};
-
 export type BlockProtocolLink = {
   linkId: string;
   sourceAccountId?: string | null;
   sourceEntityId: string;
   sourceEntityTypeId?: string | null;
-  sourceEntityVersionId?: string | null;
   destinationAccountId?: string | null;
+  destinationEntityId: string;
+  destinationEntityTypeId?: string | null;
   index?: number | null;
   path: string;
-} & (SingleTargetLinkFields | AggregationTargetLinkFields);
+};
 
 export type BlockProtocolLinkGroup = {
   sourceAccountId?: string | null;
   sourceEntityId: string;
-  sourceEntityVersionId?: string | null;
   sourceEntityTypeId?: string | null;
   path: string;
   links: BlockProtocolLink[];
 };
-
-export type BlockProtocolLinkedAggregation = {
-  sourceAccountId?: string | null;
-  sourceEntityId: string;
-  sourceEntityVersionId?: string | null;
-  sourceEntityTypeId?: string | null;
-  path: string;
-} & BlockProtocolAggregateEntitiesResult;
 
 export type BlockProtocolGetLinkAction = {
   linkId: string;
@@ -222,29 +270,24 @@ export type BlockProtocolGetLinksFunction = {
   (actions: BlockProtocolGetLinkAction[]): Promise<BlockProtocolLink[]>;
 };
 
-export type BlockProtocolCreateLinksAction = DistributedOmit<
-  BlockProtocolLink,
-  "linkId"
->;
+export type BlockProtocolCreateLinksAction = Omit<BlockProtocolLink, "linkId">;
 
 export type BlockProtocolCreateLinksFunction = {
   (actions: BlockProtocolCreateLinksAction[]): Promise<BlockProtocolLink[]>;
 };
 
-export type BlockProtocolUpdateLinkAction = {
-  data: BlockProtocolLink;
+export type BlockProtocolUpdateLinksAction = {
   sourceAccountId?: string | null;
-  sourceEntityId?: string | null;
   linkId: string;
+  data: Pick<BlockProtocolLink, "index">;
 };
 
 export type BlockProtocolUpdateLinksFunction = {
-  (actions: BlockProtocolUpdateLinkAction[]): Promise<BlockProtocolLink[]>;
+  (actions: BlockProtocolUpdateLinksAction[]): Promise<BlockProtocolLink[]>;
 };
 
 export type BlockProtocolDeleteLinksAction = {
   sourceAccountId?: string | null;
-  sourceEntityId?: string | null;
   linkId: string;
 };
 
@@ -252,11 +295,76 @@ export type BlockProtocolDeleteLinksFunction = {
   (actions: BlockProtocolDeleteLinksAction[]): Promise<boolean[]>;
 };
 
+// ---------------------- LINKED AGGREGATIONS ------------------------- //
+
+export type BlockProtocolLinkedAggregationDefinition = {
+  aggregationId: string;
+  sourceAccountId?: string | null;
+  sourceEntityId: string;
+  sourceEntityTypeId?: string | null;
+  path: string;
+  operation: BlockProtocolAggregateOperationInput;
+};
+
+export type BlockProtocolLinkedAggregation = Omit<
+  BlockProtocolLinkedAggregationDefinition,
+  "operation"
+> &
+  BlockProtocolAggregateEntitiesResult<BlockProtocolEntity>;
+
+export type BlockProtocolGetLinkedAggregationAction = {
+  sourceAccountId?: string | null;
+  aggregationId: string;
+};
+
+export type BlockProtocolGetLinkedAggregationsFunction = {
+  (actions: BlockProtocolGetLinkedAggregationAction[]): Promise<
+    BlockProtocolLinkedAggregation[]
+  >;
+};
+
+export type BlockProtocolCreateLinkedAggregationAction = Omit<
+  BlockProtocolLinkedAggregationDefinition,
+  "aggregationId"
+>;
+
+export type BlockProtocolCreateLinkedAggregationsFunction = {
+  (actions: BlockProtocolCreateLinkedAggregationAction[]): Promise<
+    BlockProtocolLinkedAggregationDefinition[]
+  >;
+};
+
+export type BlockProtocolUpdateLinkedAggregationActionFragment = {
+  sourceAccountId?: string | null;
+  aggregationId: string;
+};
+
+export type BlockProtocolUpdateLinkedAggregationAction = {
+  sourceAccountId?: string | null;
+  aggregationId: string;
+  operation: BlockProtocolLinkedAggregationDefinition["operation"];
+};
+
+export type BlockProtocolUpdateLinkedAggregationsFunction = {
+  (actions: BlockProtocolUpdateLinkedAggregationAction[]): Promise<
+    BlockProtocolLinkedAggregationDefinition[]
+  >;
+};
+
+export type BlockProtocolDeleteLinkedAggregationAction = {
+  sourceAccountId?: string | null;
+  aggregationId: string;
+};
+
+export type BlockProtocolDeleteLinkedAggregationsFunction = {
+  (actions: BlockProtocolDeleteLinkedAggregationAction[]): Promise<boolean[]>;
+};
+
 // ------------------------- ENTITY TYPES ----------------------------- //
 
 export type BlockProtocolEntityType = {
   accountId?: string | null;
-  entityTypeId: string;
+  entityTypeId: string; // @todo consider removing this and just using $id, the URI
   $id: string;
   $schema: string;
   title: string;
@@ -266,7 +374,7 @@ export type BlockProtocolEntityType = {
 
 type BlockProtocolCreateEntityTypesAction = {
   accountId?: string | null;
-  schema: JSONObject;
+  schema: JSONObject; // @todo should this be an Omit<BlockProtocolEntityType, "entityTypeId" | "$id">?
 };
 
 export type BlockProtocolCreateEntityTypesFunction = {
@@ -283,7 +391,7 @@ export type BlockProtocolAggregateEntityTypesPayload = {
   operation?: Omit<
     BlockProtocolAggregateOperationInput,
     "entityTypeId" | "entityTypeVersionId"
-  >;
+  > | null;
 };
 
 export type BlockProtocolAggregateEntityTypesFunction = {
@@ -332,15 +440,19 @@ export type BlockProtocolFunction =
   | BlockProtocolCreateEntitiesFunction
   | BlockProtocolCreateEntityTypesFunction
   | BlockProtocolCreateLinksFunction
+  | BlockProtocolCreateLinkedAggregationsFunction
   | BlockProtocolGetEntitiesFunction
   | BlockProtocolGetEntityTypesFunction
   | BlockProtocolGetLinksFunction
+  | BlockProtocolGetLinkedAggregationsFunction
   | BlockProtocolDeleteEntitiesFunction
   | BlockProtocolDeleteEntityTypesFunction
   | BlockProtocolDeleteLinksFunction
+  | BlockProtocolDeleteLinkedAggregationsFunction
   | BlockProtocolUpdateEntitiesFunction
   | BlockProtocolUpdateEntityTypesFunction
   | BlockProtocolUpdateLinksFunction
+  | BlockProtocolUpdateLinkedAggregationsFunction
   | BlockProtocolUploadFileFunction;
 
 export type BlockProtocolFunctions = {
@@ -361,20 +473,21 @@ export type BlockProtocolFunctions = {
   deleteLinks?: BlockProtocolDeleteLinksFunction | undefined;
   updateLinks?: BlockProtocolUpdateLinksFunction | undefined;
 
+  getLinkedAggregations?:
+    | BlockProtocolGetLinkedAggregationsFunction
+    | undefined;
+  createLinkedAggregations?:
+    | BlockProtocolCreateLinkedAggregationsFunction
+    | undefined;
+  deleteLinkedAggregations?:
+    | BlockProtocolDeleteLinkedAggregationsFunction
+    | undefined;
+  updateLinkedAggregations?:
+    | BlockProtocolUpdateLinkedAggregationsFunction
+    | undefined;
+
   uploadFile?: BlockProtocolUploadFileFunction | undefined;
 };
-
-export type JSONValue =
-  | null
-  | boolean
-  | number
-  | string
-  | JSONValue[]
-  | JSONObject;
-
-export type JSONObject = { [key: string]: JSONValue };
-
-export interface JSONArray extends Array<JSONValue> {}
 
 /**
  * Block Protocol-specified properties,
@@ -384,6 +497,7 @@ export type BlockProtocolProps = {
   accountId?: string | null;
   entityId: string;
   entityTypeId?: string | null;
+  entityTypeVersionId?: string | null;
   entityTypes?: BlockProtocolEntityType[];
   linkedAggregations?: BlockProtocolLinkedAggregation[];
   linkedEntities?: BlockProtocolEntity[];

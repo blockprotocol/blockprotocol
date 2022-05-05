@@ -1,13 +1,14 @@
-import { serialize } from "next-mdx-remote/serialize";
-import path from "path";
-import matter from "gray-matter";
 import fs from "fs-extra";
-import unified from "unified";
+import matter from "gray-matter";
+import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
+import path from "node:path";
 // @ts-expect-error -- Need to figure out how to get or declare the necessary types
 import remarkMdx from "remark-mdx";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import remarkParse from "remark-parse";
 import slugify from "slugify";
+import unified from "unified";
+
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 
 type Node = {
@@ -58,14 +59,14 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
     .flat();
 
 // Parses the name from a MDX file name (removing the prefix index and the .mdx file extension)
-const parseNameFromFileName = (fileName: string) => {
+const parseNameFromFileName = (fileName: string): string => {
   const matches = fileName.match(/^\d+_(.*?)\.mdx$/);
 
   if (!matches || matches.length < 2) {
     throw new Error(`Invalid MDX fileName: ${fileName}`);
   }
 
-  return matches[1];
+  return matches[1]!;
 };
 
 // Gets all hrefs corresponding to the MDX files in a directory
@@ -169,9 +170,9 @@ export const getPage = (params: {
           ? [
               ...prev.slice(0, -1),
               {
-                ...prev[prev.length - 1],
+                ...prev[prev.length - 1]!,
                 subSections: [
-                  ...(prev[prev.length - 1].subSections || []),
+                  ...(prev[prev.length - 1]!.subSections || []),
                   {
                     title: subSectionTitle,
                     anchor: slugify(subSectionTitle, { lower: true }),

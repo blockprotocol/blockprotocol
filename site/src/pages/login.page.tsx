@@ -1,17 +1,20 @@
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { Box, Container, Fade, Paper } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState, useMemo, useCallback, useRef } from "react";
-import { Paper, Box, Icon, Fade, Container } from "@mui/material";
-import { apiClient } from "../lib/apiClient";
-import { ApiLoginWithLoginCodeRequestBody } from "./api/loginWithLoginCode.api";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+
 import { Button } from "../components/Button";
+import { FontAwesomeIcon } from "../components/icons";
 import { SendLoginCodeScreen } from "../components/Screens/SendLoginCodeScreen";
-import { SerializedUser } from "../lib/api/model/user.model";
-import { useUser } from "../context/UserContext";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../components/Screens/VerificationCodeScreen";
+import { useUser } from "../context/UserContext";
+import { SerializedUser } from "../lib/api/model/user.model";
+import { apiClient } from "../lib/apiClient";
+import { ApiLoginWithLoginCodeRequestBody } from "./api/login-with-login-code.api";
 
 type LoginPageParsedUrlQuery = {
   redirectPath?: string;
@@ -66,12 +69,6 @@ const LoginPage: NextPage = () => {
     }
   }, [parsedQuery, router]);
 
-  useEffect(() => {
-    if (user) {
-      void router.push("/");
-    }
-  }, [user, router]);
-
   const handleLoginCodeSent = (params: {
     verificationCodeInfo: VerificationCodeInfo;
     email: string;
@@ -85,11 +82,18 @@ const LoginPage: NextPage = () => {
   // We also update redirectPath in useEffect, which changes its reference too. Avoiding both
   // variables inside handleLogin dependencies saves us from triggering multiple API calls.
   const redirectRef = useRef<() => void>(() => {});
+
   useEffect(() => {
     redirectRef.current = () => {
       void router.push(redirectPath ?? "/");
     };
   }, [router, redirectPath]);
+
+  useEffect(() => {
+    if (user) {
+      redirectRef.current();
+    }
+  }, [user]);
 
   const handleLogin = useCallback(
     (loggedInUser: SerializedUser) => {
@@ -140,7 +144,7 @@ const LoginPage: NextPage = () => {
                   onClick={() => setCurrentScreen("Email")}
                   variant="transparent"
                   startIcon={
-                    <Icon sx={{ fontSize: 16 }} className="fas fa-arrow-left" />
+                    <FontAwesomeIcon icon={faArrowLeft} sx={{ fontSize: 16 }} />
                   }
                   sx={{
                     fontSize: 15,

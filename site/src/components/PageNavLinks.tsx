@@ -1,17 +1,19 @@
-import { VFC } from "react";
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import {
-  Typography,
   Box,
-  Icon,
   BoxProps,
   styled,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Link } from "./Link";
-import { SiteMapPage } from "../lib/sitemap";
+import { VFC } from "react";
 
-const NavArrowIcon = styled(Icon)(({ theme }) => ({
+import { SiteMapPage } from "../lib/sitemap";
+import { FontAwesomeIcon } from "./icons";
+import { Link } from "./Link";
+
+const NavArrowIcon = styled(FontAwesomeIcon)(({ theme }) => ({
   color: theme.palette.purple[300],
   fontSize: 15,
   marginTop: theme.spacing(0.8),
@@ -40,7 +42,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
           <Box display="flex" alignItems="flex-end">
             <Box>
               <Typography
-                sx={{ color: theme.palette.gray[60] }}
+                sx={{ color: theme.palette.gray[70] }}
                 component="p"
                 variant="bpSmallCopy"
               >
@@ -62,7 +64,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
                   sx={{
                     marginRight: 2,
                   }}
-                  className="fas fa-arrow-left"
+                  icon={faArrowLeft}
                 />
                 <Link
                   sx={{
@@ -84,7 +86,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
         {nextPage && (
           <Box display="flex" flexDirection="column" alignItems="flex-end">
             <Typography
-              sx={{ color: theme.palette.gray[60] }}
+              sx={{ color: theme.palette.gray[70] }}
               component="p"
               variant="bpSmallCopy"
             >
@@ -118,7 +120,7 @@ export const PageNavLinks: VFC<PageNavLinksProps> = ({
                 sx={{
                   marginLeft: 2,
                 }}
-                className="fas fa-arrow-right"
+                icon={faArrowRight}
               />
             </Box>
           </Box>

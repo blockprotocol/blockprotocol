@@ -1,7 +1,7 @@
 {
   "repository": "https://github.com/JMackie80/blocks.git",
-  "branch": "main",
-  "distDir": "dist",
+  "commit": "e38dde1575c1d8b80d09815f3f9b3427869bfd0e",
+
   "folder": "src/packages/quote",
-  "timestamp": "2022-02-08T16:16:00.578Z"
+  "distDir": "dist"
 }

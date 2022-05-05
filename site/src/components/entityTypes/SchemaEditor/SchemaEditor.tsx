@@ -1,9 +1,11 @@
+import { Box, Typography } from "@mui/material";
 import {
   BlockProtocolEntityType,
-  BlockProtocolUpdateEntityTypesFunction,
   BlockProtocolProps,
+  BlockProtocolUpdateEntityTypesFunction,
   JSONObject,
 } from "blockprotocol";
+import { debounce, get } from "lodash";
 import React, {
   createContext,
   ReactElement,
@@ -15,17 +17,15 @@ import React, {
   VoidFunctionComponent,
 } from "react";
 import { tw } from "twind";
-import { debounce, get } from "lodash";
 
-import { Box, Typography } from "@mui/material";
-import { SchemaPropertiesTable } from "./SchemaPropertiesTable";
 import { JsonSchema } from "../../../lib/jsonSchema";
+import { Link } from "../../Link";
 import { TextInputOrDisplay } from "./Inputs";
 import {
   schemaEditorReducer,
   SchemaEditorReducerAction,
 } from "./schemaEditorReducer";
-import { Link } from "../../Link";
+import { SchemaPropertiesTable } from "./SchemaPropertiesTable";
 
 // @todo implement subschema handling (or remove this code)
 // import { SubSchemaItem } from "./SubSchemaItem";
@@ -262,9 +262,9 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
       <section>
         <div className={tw`flex items-center`}>
           {subSchemaReference ? (
-            <h3 className={tw`mb-7 ml-2`}>{` > ${subSchemaReference
-              .split("/")
-              .pop()}`}</h3>
+            <Typography variant="bpHeading4" component="h3">
+              {` > ${subSchemaReference.split("/").pop()}`}
+            </Typography>
           ) : null}
         </div>
         {!readonly && description != null && (

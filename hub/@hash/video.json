@@ -1,7 +1,7 @@
 {
-  "workspace": "@hashintel/block-video",
   "repository": "https://github.com/hashintel/hash.git",
-  "branch": "main",
-  "distDir": "dist",
-  "timestamp": "2022-02-04T13:48:55.043Z"
+  "commit": "ef018d9e132a45ec7e68e171a85e1d814ee7501d",
+
+  "workspace": "@hashintel/block-video",
+  "distDir": "dist"
 }

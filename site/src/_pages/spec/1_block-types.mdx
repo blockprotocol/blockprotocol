@@ -25,16 +25,17 @@ A block package SHOULD contain:
 
 - a JSON file **describing the properties the block accepts** using [JSON Schema vocabulary](https://json-schema.org/) – the ‘block schema’, which can be [automatically generated](https://json-schema.org/implementations.html#from-code) from block code, and which:
 
-  - MUST be called `block-schema.json`
   - If the block does not function without certain properties, MUST specify a [required](https://json-schema.org/draft/2019-09/json-schema-validation.html#rfc.section.6.5.3) array naming them
   - SHOULD specify any further constraints or [validation](https://json-schema.org/draft/2020-12/json-schema-validation.html) requirements which improve the block’s functionality
+  - MAY specify an additional root-level field, `configProperties`, which is an array of `string` values which MUST be present as a key on the block schema's `properties`, i.e. each must name a property the block expects. This field is used to indicate which properties a block considers to be part of 'configuring' how it appears or behaves, rather than data users are creating or viewing via the blocks. Embedding applications may choose to display their own UI for setting these values, and could allow users to set values for them for all blocks of a type (rather than on a per-block instance basis).
 
 - a JSON file containing **metadata describing the block**, which:
 
-  - MUST be called `block-metadata.json`
+  - MUST be called `block-metadata.json`, so that it can be reliably identified as the entry point for the block's other files
   - MUST specify:
 
-    - a `name` for the block
+    - a unique, slugified `name` for the block. It should be **unique** because it's used as a slug wherever required.
+    - `schema`: the URL or path to the block's schema
     - any libraries the block expects the embedding application to supply it with under `externals` – i.e. libraries which the block depends on but does not include in its package – using the name of the library as it is usually distributed (e.g. via npm), and the expected version (or version range).
       For example, a block may rely on React (`"externals": [{ "react": "^16.0.0" }]`), but assume that the embedding application will provide it, to save loading it multiple times on a page.
     - the path or URL to the entrypoint source file (e.g. `index.html`, `index.js`) under `source`
@@ -45,6 +46,7 @@ A block package SHOULD contain:
 
     - `default` – an object, conforming to the block’s schema, representing
       the default data that applications should provide when creating a block, unless (a) the block can handle being provided no data when first instantiated or (b) `variants` is provided (see below).
+    - `displayName` - a display name used for a block
     - `examples` - an array of objects conforming to the block's schema which provide examples of the data that can be passed to it
     - `icon` – an icon for the block, to be displayed when the user is
       selecting from available blocks (as well as elsewhere as appropriate, e.g.
@@ -53,10 +55,11 @@ A block package SHOULD contain:
     - `author`: a display name for the author of the block
     - `description`: a brief description of the block
     - `license`: the license the block is made available under (e.g. MIT)
+    - `repository`: specifies the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
 
   - MAY specify:
 
-    - `variants` – an array of objects, each with a `name`, `description`, `icon`, and `properties`, which represents different variants of the block that the user can create. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively.
+    - `variants` – an array of objects, each with a `name` and `properties`, and optionally `description`, `icon`, and `examples`. These objects represents different variants of the block that the user can create, where `properties` sets the starting properties. As a simple example, a ‘header’ block might have variants with the `name` ‘Heading 1’ and ‘Heading 2’, which start with `{ level: 1 }` and `{ level: 2 }` as `properties`, respectively.
 
 ## Data transfer
 
@@ -109,9 +112,9 @@ Blocks SHOULD expect the following additional fields related to linked data to b
 
 - a `linkGroups` field which provides the links attached to the block or the entities provided in `linkedEntities`, grouped by entity and path, i.e. these are the **edges** of the graph.
 
-- a `linkedAggregations` field containing the results of aggregations linked from the block’s entity - these are special links which represent an aggregation operation (e.g. in plain English, "top 10 Cars sorted by age, descending"), which are provided in this field along with the results of the operation at the time of request.
+- a `linkedAggregations` field containing the definitions and results of aggregations linked from the block’s entity - `LinkedAggregations` are special objects which contain an aggregation definition (e.g. in plain English, "top 10 Cars sorted by age, descending") and its results at the time of provision.
 
-Each entity provided under `linkedEntities` or `linkedAggregations` will also have [identifying fields](#fields-identifying-blocks) to be used as arguments when updating those entities.
+Each entity provided under `linkedEntities` or `linkedAggregations` will also have [identifying fields](#fields-identifying-entities) to be used as arguments when updating those entities.
 
 See [linking entities](#linking-entities) for a discussion of how links are managed.
 
@@ -147,11 +150,36 @@ This does, however, mean there is a possibility of competing schemas attempting 
 
 The ability to translate between schemas would help - e.g. some way expressing an equivalence relationship between properties in different schema. This might be a keyword such as `sameAs` or `equivalentTo` mapping between schemas and their properties. Then, either blocks or embedding applications could programmatically translate between schemas.
 
+Note that this is about translating between different JSON Schemas, and is not to be confused with the process of translating JSON schema to schema.org (and equivalent) types, which has an established technical approach mentioned [here](https://blockprotocol.org/spec/embedding-applications#machine-readable-pages).
+
 </Frame>
+
+#### JSON Schema extensions
+
+As well as `entityTypeId`, entity schemas SHOULD specify the following field at the root of the schema:
+
+- `labelProperty`: a single `string`, which MUST be present as a key on the schema's `properties`, i.e. it must name a property available on the entity. This will be used by blocks as a display name for the entity where appropriate.
+
+```json
+{
+  ...
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  },
+  "labelProperty": "name"
+  ...
+}
+```
+
+We will publish a JSON schema vocabulary and meta-schema which allows for validating these custom fields.
 
 ### Entity functions
 
 Subject to [the permissions granted to them by the embedding application](#block-permissions), blocks can expect functions with the names and signatures listed below to be made available to them, i.e. to be passed in along with the properties defined in their schema, or to be otherwise made available in their scope depending on their [implementation](https://blockprotocol.org/spec/implementation-approaches).
+
+**TypeScript types for these functions are available from the [`blockprotocol`](https://github.com/blockprotocol/blockprotocol/tree/main/packages/blockprotocol) package**
 
 Blocks should have sensible fallbacks for when permissions are denied them, or when functions are absent, for example:
 
@@ -178,12 +206,14 @@ Any operations specified in the protocol should be useful in a wide variety of c
 </Frame>
 
 ```block-function
-createEntities<T>(actions: CreateEntitiesAction<T>[]): Promise<T[]>
+createEntities(actions: CreateEntitiesAction[]): Promise<Entity[]>
 ```
 
 creates one or more entities
 
-**returns:** the created entities, i.e. _objects_ inside an _array_
+**returns:** the created entities, i.e. _objects_ inside an _array_.
+
+An `Entity` contains [identifying fields](#fields-identifying-entities) and the entity's other properties.
 
 **accepts:** a single _array_ of _objects_ (`CreateEntitiesAction`), each with the following shape:
 
@@ -198,7 +228,7 @@ creates one or more entities
   See [linking entities](#linking-entities).
 
 ```block-function
-updateEntities<T>(actions: UpdateEntitiesAction<T>[]): Promise<T[]>
+updateEntities(actions: UpdateEntitiesAction[]): Promise<Entity[]>
 ```
 
 updates one or more entities
@@ -230,7 +260,7 @@ deletes one or more entities
 - `entityId` \[_string_]: the id of the entity to delete.
 
 ```block-function
-getEntities<T>(actions: GetEntitiesAction<T>[]): Promise<T[]>
+getEntities(actions: GetEntitiesAction[]): Promise<Entity[]>
 ```
 
 retrieve one or more entities
@@ -288,12 +318,14 @@ We are considering moving to the cursor-based [Connections pattern](https://rela
   - `entityTypeVersionId?` \[_string_]\[_optional_]:: limit results to entities of a specific version of a type
   - `pageNumber?` \[_integer_]\[_optional_]: the page number to request.
   - `itemsPerPage?` \[_integer_]\[_optional_]: the number of results to return.
-  - `multiFilter?` \[_array_]\[_optional_]: filter entities by a given field value:
-    - `field` \[_string_]: the field name to filter by.
-    - `operator` \[_enum_]: the filter operator.
-      One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
-    - `value` \[_string_]: the value to match against.
-  - `multiSort?` \[_array_]\[_optional_]: specify how to sort results by providing one or more objects with the following shape:
+  - `multiFilter?` \[_object_]\[_optional_]: filter entities by a given field value:
+    - `operator` \[_enum_]: one of "AND" or "OR": determines whether all filters must be matched ("AND"), or only one ("OR").
+    - `filters` \[_array_]: an array of filter objects of the following shape:
+      - `field` \[_string_]: the field name to filter by.
+      - `operator` \[_enum_]: the filter operator.
+        One of IS, IS_NOT, CONTAINS, DOES_NOT_CONTAIN, STARTS_WITH, ENDS_WITH, IS_EMPTY, IS_NOT_EMPTY.
+      - `value` \[_string_]: the value to match against.
+  - `multiSort?` \[_array_]\[_optional_]: specify how to sort results by providing one or more objects, inside an array, of the following shape:
     - `field` \[_string_]: the field name to sort on.
     - `desc?` \[_boolean_]\[_optional_]: whether to sort descending.
 - Embedding apps SHOULD provide a default aggregation if not provided.
@@ -376,39 +408,32 @@ retrieve one or more entity types.
 
 Another special set of functions provided to blocks relate to managing links between entities.
 
+#### Links (single target links)
+
 When creating or updating an entity’s data, including its own, blocks will often wish to express
 that a certain property on an entity should be a reference to another entity.
 
 - For example, that a Person’s employer field should point to a particular Company entity.
 
-A block may also wish to link one of its properties to a particular aggregation of entities.
-
-- For example, a table block displaying the Top 10 people sorted by some property of Person,
-  will need a way of encoding this aggregation in its data.
-
 In order to create a reference to a separate entity or entities as the desired value of a particular field, blocks SHOULD create a `Link` <a id="link-object" />, which:
 
 - MUST contain:
+
   - `sourceEntityId` \[_string_]: the `entityId` of the source entity.
   - `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
-  - EITHER:
-    - `destinationEntityId` \[_string_] – the id of a single entity the link is made to, OR
-    - `operation` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
+  - `destinationEntityId` \[_string_] – the id of a single entity the link is made to
+
 - MAY contain
 
   - `destinationEntityAccountId?`: \[_string_]\[_optional_]: the `accountId` of the destination entity or account to aggregate entities from.
-  - `sourceEntityVersionId?` \[_string_]\[_optional_]: optionally specify that this link is only from a specific version.
+  - `destinationEntityTypeId?`: \[_string_]\[_optional_]: the `entityTypeId` of the destination entity.
+  - `index` \[_integer_]\[_optional_]: the position of this link in a list (for where ordering of links is important).
   - `sourceAccountId?`: \[_string_]\[_optional_]:: the `accountId` of the source entity.
   - `sourceEntityTypeId?`: \[_string_]\[_optional_]:: the `entityTypeId` of the source entity.
 
-- if `destinationEntityId` is defined, MAY contain:
-  - `destinationEntityVersionId:` \[_string_]\[_optional_]: to pin the link to a specific version of the destination entity.
-  - `destinationEntityTypeId?`: \[_string_]\[_optional_]: the `entityTypeId` of the destination entity.
-  - `index` \[_integer_]: the position of this link in a list (for where ordering of links is important).
-
 Once created, a `Link` includes a `linkId`.
 
-**Example 1.** creating a `Link` with the following data indicates that this particular user should be linked to a company with id `company1`, and that the link conceptually is made on the user’s `employer` field:
+**Example.** creating a `Link` with the following data indicates that this particular user should be linked to a company with id `company1`, and that the link conceptually is made on the user’s `employer` field:
 
 ```json
 {
@@ -418,29 +443,13 @@ Once created, a `Link` includes a `linkId`.
 }
 ```
 
-When delivering data to blocks the resolved data for entity `company1` will be provided _separately_ to `user1`, in the `linkedEntities` array, rather than injected into the properties of the user, and the link itself available in the `linkGroups` array provided to the block.
+The entities linked to - the **nodes** in the graph - will be provided under `linkedEntities`
+(and the entities they link onwards to, depending on the depth the graph is resolved to from the starting entity). e.g. in the above example, the data for entity `company1` will be provided in the `linkedEntities` array, rather than injected into the properties of the user.
 
-**Example 2.** creating a `Link` with the following data indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field:
+Links themselves – **edges** in the graph – will be provided to a block under a `linkGroups` field, which is an array of objects,
+each of which groups links by their source entity and path (field name).
 
-```json
-{
-  "sourceEntityId": "table1",
-  "path": "rows",
-  "aggregate": {
-    "entityTypeId": "sales",
-    "multiSort": [{ "field": "value", "desc": true }],
-    "itemsPerPage": 10,
-    "pageNumber": 1
-  }
-}
-```
-
-When delivering the data this data would be provided _alongside_ the table, in the `linkedAggregations` array.
-
----
-
-Links between specific entities - **edges** in the graph - will be provided to a block under a `linkGroups` field, which is an array of objects,
-each of which specifies a source entity, a path (field name), and the links on that path.
+e.g. the link in the above example would appear as the following object – one of the entries in `linkGroups`
 
 ```json
 {
@@ -458,16 +467,7 @@ each of which specifies a source entity, a path (field name), and the links on t
 
 N.B. this data structure has been chosen to allow for later pagination of links on a field.
 
-The entities linked to - the **nodes** in the graph - will be provided under `linkedEntities`
-(and the entities they link onwards to, depending on the depth the graph is resolved to from the starting entity).
-
-An entry in linkedAggregations follows the shape of the [`AggregateEntitiesResult` object](#aggregate-entities-result),
-with the addition of:
-
-- `sourceAccountId?` \[_string_]\[_optional_]: the `accountId` of the source entity.
-- `sourceEntityId` \[_string_]: the `entityId` of the source entity.
-- `sourceEntityTypeId?` \[_string_]\[_optional_]: the `entityTypeId` of the source entity.
-- `path`: \[_string_]: the `path` on the source entity to which this aggregation is linked.
+#### Link functions
 
 To create, update and delete links between entities, blocks SHOULD expect the following functions to be made available to them:
 
@@ -507,7 +507,7 @@ deletes one or more links.
 
 - `sourceAccountId?` \[_string_]\[_optional_]: the `accountId` of the source entity.
 - `sourceEntityId` \[_string_]\[_optional_]: the `entityId` of the source entity.
-- `linkId` \[_string_]: the entity type to delete.
+- `linkId` \[_string_]: the link to delete.
 
 ```block-function
 getLinks(actions: GetLinksAction[]): Promise<Link[]>
@@ -520,6 +520,101 @@ retrieve one or more links.
 **accepts:** a single _array_ of _objects_ (`GetLinksAction`), each with the following shape:
 
 - `linkId` \[_string_]: the link to retrieve.
+
+#### Linked Aggregations (links to aggregated entities)
+
+A block may also wish to link an entity to a particular aggregation of entities.
+
+- For example, a table block displaying the top 10 people sorted by some property of `Person`,
+  will need a way of encoding this aggregation in its data.
+
+To do so, blocks SHOULD create a `LinkedAggregationDefinition`, which:
+
+- MUST contain:
+
+  - `sourceEntityId` \[_string_]: the `entityId` of the source entity.
+  - `operation` – an aggregation operation which the embedding application should resolve the link to, following the structure of the `operation` object [described above](#aggregate-entities-operation).
+  - `path` \[_string_]: the path to the field on the source entity this link is conceptually made on, expressed as a [JSON path](https://goessner.net/articles/JsonPath/).
+
+- MAY contain
+  - `sourceAccountId?`: \[_string_]\[_optional_]:: the `accountId` of the source entity.
+  - `sourceEntityTypeId?`: \[_string_]\[_optional_]:: the `entityTypeId` of the source entity.
+
+Once created, a `LinkedAggregationDefinition` also has an `aggregationId`.
+
+**Example.** creating a `LinkedAggregationDefinition` with the following operation indicates that this particular table should be linked to the top 10 sales by value, and that the link is conceptually made on the table’s `rows` field:
+
+```json
+{
+  "sourceEntityId": "table1",
+  "path": "rows",
+  "aggregate": {
+    "entityTypeId": "sales",
+    "multiSort": [{ "field": "value", "desc": true }],
+    "itemsPerPage": 10,
+    "pageNumber": 1
+  }
+}
+```
+
+This data will be provided _alongside_ the table, in the `linkedAggregations` array.
+
+An entry in linkedAggregations is a `LinkedAggregation`, which adds the resolved `results` to the `LinkedAggregationDefinition`,
+where the results follow the shape of the [`AggregateEntitiesResult` object](#aggregate-entities-result).
+
+#### LinkedAggregation functions
+
+To create, update and delete `LinkedAggregations` from a particular entity, blocks SHOULD expect the following functions to be made available to them.
+
+```block-function
+createLinkedAggregation(actions: CreateLinkedAggregationAction[]): Promise<LinkedAggregationDefinition[]>
+```
+
+creates one or more linked aggregations.
+
+**accepts:** a single _array_ of _objects_ (`CreateLinkedAggregationAction`) -
+each object is a `LinkedAggregationDefinition`, without `aggregationId`.
+
+**returns:** the created `LinkedAggregationDefinition`s, i.e. _objects_ inside an _array_ (now with `aggregationId`)
+
+```block-function
+updateLinkedAggregation(actions: UpdateLinkedAggregationAction[]): Promise<LinkedAggregationDefinition[]>
+```
+
+updates one or more `LinkedAggregationDefinition`s.
+
+**accepts:** a single _array_ of _objects_ (`UpdateLinkedAggregationAction`), each with the following shape:
+
+- `aggregationId` \[_string_]: the id of the link to update.
+- `data` \[_object_]: the [_operation_](#aggregate-entities-operation) to overwrite the existing one with.
+
+**returns:** the updated`LinkedAggregationDefinition`s, i.e. _objects_ inside an _array_.
+
+```block-function
+deleteLinkedAggregation(actions: DeleteLinkedAggregationAction[]): Promise<boolean[]>
+```
+
+deletes one or more `LinkedAggregationDefinition`s.
+
+**accepts:** a single _array_ of _objects_ (`DeleteLinkedAggregationAction`), each with the following shape:
+
+- `sourceAccountId?` \[_string_]\[_optional_]: the `accountId` of the source entity.
+- `aggregationId` \[_string_]: the id of the aggregation to delete.
+
+**returns:** an _array_ of _boolean_ indicating the success of each operation.
+
+```block-function
+getLinkedAggregation(actions: GetLinkedAggregationAction[]): Promise<LinkedAggregation[]>
+```
+
+retrieve one or more `LinkedAggregation`s.
+
+**returns:** the retrieved `LinkedAggregations`, i.e. _objects_ inside an _array_. **Note:** this SHOULD include the `results` of the aggregation.
+
+**accepts:** a single _array_ of _objects_ (`GetLinkedAggregationAction`), each with the following shape:
+
+- `sourceAccountId?` \[_string_]\[_optional_]: the `accountId` of the source entity.
+- `aggregationId` \[_string_]: the `LinkedAggregation` to retrieve.
 
 #### Describing links in JSON schema
 

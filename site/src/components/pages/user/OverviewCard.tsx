@@ -1,6 +1,8 @@
+import { Box, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
 import { VFC } from "react";
-import { Box, Icon, Typography } from "@mui/material";
+
+import { TableTreeIcon } from "../../icons";
 import { Link } from "../../Link";
 import { Spacer } from "../../Spacer";
 import { shy } from "./utils";
@@ -58,7 +60,7 @@ export const OverviewCard: VFC<OverviewCardProps> = ({
               sx={{
                 paddingTop: "66.67%", // height / width => 2/3
                 backgroundColor: ({ palette }) =>
-                  image ? "transparent" : palette.gray[70],
+                  image ? "transparent" : palette.gray[80],
                 borderRadius: "4px",
                 position: "relative",
               }}
@@ -112,14 +114,12 @@ export const OverviewCard: VFC<OverviewCardProps> = ({
                 src={icon ?? undefined}
               />
             ) : (
-              <Icon
+              <TableTreeIcon
                 sx={{
-                  height: 24,
-                  width: 24,
+                  fontSize: 24,
                   mr: 1.5,
-                  color: ({ palette }) => palette.gray[80],
+                  color: ({ palette }) => palette.gray[90],
                 }}
-                className="fa-solid fa-table-tree"
               />
             )}
             <Typography
@@ -147,7 +147,7 @@ export const OverviewCard: VFC<OverviewCardProps> = ({
             >
               <Typography
                 variant="bpMicroCopy"
-                sx={{ lineHeight: 1, color: ({ palette }) => palette.gray[60] }}
+                sx={{ lineHeight: 1, color: ({ palette }) => palette.gray[70] }}
               >
                 {type === "block" ? "Block" : "Schema"}
               </Typography>

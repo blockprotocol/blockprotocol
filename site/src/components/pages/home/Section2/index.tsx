@@ -1,12 +1,13 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
 import {
-  Container,
-  Typography,
   Box,
+  Container,
   Fade,
-  useTheme,
+  Typography,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import React, { useLayoutEffect, useRef, useState } from "react";
+
 import { Step1, Step2, Step3, Step4 } from "./Steps";
 
 const CONTENT = [

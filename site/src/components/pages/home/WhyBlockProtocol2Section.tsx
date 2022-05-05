@@ -1,15 +1,23 @@
+import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
 import {
+  Box,
   Container,
   Typography,
-  Box,
-  useTheme,
   useMediaQuery,
-  Icon,
+  useTheme,
 } from "@mui/material";
-import { SyncIcon } from "../../icons";
+import React from "react";
+
+import { FontAwesomeIcon, SyncIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
-export const WhyBlockProtocol2Section = () => {
+type WhyBlockProtocol2SectionProps = {
+  fadeRef: React.Ref<HTMLDivElement>;
+};
+
+export const WhyBlockProtocol2Section: React.FC<
+  WhyBlockProtocol2SectionProps
+> = ({ fadeRef }) => {
   const theme = useTheme();
 
   const isDesktopSize = useMediaQuery(theme.breakpoints.up("md"));
@@ -33,7 +41,7 @@ export const WhyBlockProtocol2Section = () => {
           overflowY: "hidden",
           color: ({ palette }) => ({
             xs: palette.common.white,
-            md: palette.gray[60],
+            md: palette.gray[70],
           }),
         }}
       >
@@ -50,9 +58,9 @@ export const WhyBlockProtocol2Section = () => {
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <Icon
+            <FontAwesomeIcon
+              icon={faPencil}
               sx={{ fontSize: "inherit", mr: 1.25 }}
-              className="fas fa-pencil"
             />
             Personal Notes
           </Typography>
@@ -80,9 +88,12 @@ export const WhyBlockProtocol2Section = () => {
             sx={{ py: 2, px: 3, fontWeight: "500" }}
             color="currentColor"
           >
-            <Icon
-              sx={{ fontSize: "inherit", mr: 1.25 }}
-              className="fas fa-check-circle"
+            <FontAwesomeIcon
+              icon={faCheckCircle}
+              sx={{
+                fontSize: "inherit",
+                mr: 1.25,
+              }}
             />
             Project Management App
           </Typography>
@@ -98,6 +109,7 @@ export const WhyBlockProtocol2Section = () => {
         </Box>
 
         <Box
+          ref={fadeRef}
           sx={{
             position: "absolute",
             left: "50%",
@@ -111,6 +123,7 @@ export const WhyBlockProtocol2Section = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            opacity: 0.3,
           }}
         />
 
@@ -180,7 +193,7 @@ export const WhyBlockProtocol2Section = () => {
         <Box sx={{ flex: { xs: 1, md: 0.48 }, mb: { xs: 4, md: 0 } }}>
           <Container sx={{ width: { xs: "100%", md: "75%" } }}>
             <Typography
-              sx={{ color: ({ palette }) => palette.gray[80] }}
+              sx={{ color: ({ palette }) => palette.gray[90] }}
               variant="bpHeading3"
               mb={2.25}
             >
@@ -204,7 +217,7 @@ export const WhyBlockProtocol2Section = () => {
           sx={{
             flex: { xs: 1, md: 0.48 },
             py: { xs: 2.8, md: 6 },
-            backgroundColor: ({ palette }) => palette.gray[80],
+            backgroundColor: ({ palette }) => palette.gray[90],
             borderTopLeftRadius: "6px",
             borderBottomLeftRadius: "6px",
             display: "flex",

@@ -1,15 +1,16 @@
-import { FC, ReactNode } from "react";
 import {
   Box,
   Container,
-  Paper,
   Grid,
-  Typography,
+  Paper,
   PaperProps,
+  Typography,
 } from "@mui/material";
 import Image from "next/image";
-import { Link } from "./Link";
+import { FC, ReactNode } from "react";
+
 import { BoltIcon } from "./icons";
+import { Link } from "./Link";
 import { LinkButton } from "./LinkButton";
 
 type Banner = {
@@ -122,7 +123,7 @@ export const BANNERS: Banner[] = [
             <Typography
               component="h2"
               variant="bpHeading2"
-              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[60] }}
+              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[70] }}
             >
               You can build it!
             </Typography>
@@ -237,7 +238,7 @@ export const BANNERS: Banner[] = [
             <Typography
               component="h2"
               variant="bpHeading2"
-              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[60] }}
+              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[70] }}
             >
               Anyone can contribute
             </Typography>

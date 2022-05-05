@@ -1,18 +1,25 @@
+import { faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
+import { Box, Container, Fade, Paper, Typography } from "@mui/material";
+import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
-import { NextPage } from "next";
-import { Box, Container, Paper, Fade, Icon, Typography } from "@mui/material";
+
 import { Button } from "../components/Button";
+import {
+  ArrowUpCircleIcon,
+  FontAwesomeIcon,
+  PullRequestIcon,
+} from "../components/icons";
+import { CompleteSignupScreen } from "../components/Screens/CompleteSignupScreen";
 import { SignupScreen } from "../components/Screens/SignupScreen";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
 } from "../components/Screens/VerificationCodeScreen";
+import { useUser } from "../context/UserContext";
 import { SerializedUser } from "../lib/api/model/user.model";
 import { apiClient } from "../lib/apiClient";
-import { useUser } from "../context/UserContext";
-import { ApiVerifyEmailRequestBody } from "./api/verifyEmail.api";
-import { CompleteSignupScreen } from "../components/Screens/CompleteSignupScreen";
+import { ApiVerifyEmailRequestBody } from "./api/verify-email.api";
 
 const SIGNUP_PAGE_SCREENS = [
   "Email",
@@ -158,7 +165,7 @@ const SignupPage: NextPage = () => {
                   disabled={currentScreen === SIGNUP_PAGE_SCREENS[0]}
                   variant="transparent"
                   startIcon={
-                    <Icon sx={{ fontSize: 16 }} className="fas fa-arrow-left" />
+                    <FontAwesomeIcon icon={faArrowLeft} sx={{ fontSize: 16 }} />
                   }
                   sx={{
                     fontSize: 15,
@@ -240,12 +247,11 @@ const SignupPage: NextPage = () => {
               [
                 {
                   icon: (
-                    <Icon
+                    <ArrowUpCircleIcon
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
-                      className="fa-solid fa-up"
                     />
                   ),
                   heading: <>Publish blocks to the block hub</>,
@@ -258,12 +264,11 @@ const SignupPage: NextPage = () => {
                 },
                 {
                   icon: (
-                    <Icon
+                    <PullRequestIcon
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
-                      className="fa-solid fa-code-pull-request"
                     />
                   ),
                   heading: <>Take part in a growing, open source community</>,
@@ -276,12 +281,12 @@ const SignupPage: NextPage = () => {
                 },
                 {
                   icon: (
-                    <Icon
+                    <FontAwesomeIcon
+                      icon={faUser}
                       sx={{
-                        fontSize: 16,
+                        fontSize: 20,
                         color: ({ palette }) => palette.purple[700],
                       }}
-                      className="fa-solid fa-user"
                     />
                   ),
                   heading: <>Claim your favorite username</>,
@@ -299,7 +304,7 @@ const SignupPage: NextPage = () => {
                     variant="bpBodyCopy"
                     mb={1}
                     sx={{
-                      color: ({ palette }) => palette.gray[80],
+                      color: ({ palette }) => palette.gray[90],
                       fontWeight: 600,
                       lineHeight: "1.25em",
                     }}
@@ -310,7 +315,7 @@ const SignupPage: NextPage = () => {
                     component="p"
                     variant="bpSmallCopy"
                     sx={{
-                      color: ({ palette }) => palette.gray[60],
+                      color: ({ palette }) => palette.gray[70],
                       fontWeight: 400,
                       lineHeight: "1.5em",
                     }}

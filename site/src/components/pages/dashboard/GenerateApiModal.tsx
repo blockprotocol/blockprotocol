@@ -1,10 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { VoidFunctionComponent, ChangeEvent, FormEvent, useState } from "react";
-import { Button } from "../../Button";
-import { Modal } from "../../Modal";
-import { WarningIcon } from "../../icons";
-import { ApiKeyRenderer } from "./ApiKeyRenderer";
+import { ChangeEvent, FormEvent, useState, VoidFunctionComponent } from "react";
+
 import { apiClient } from "../../../lib/apiClient";
+import { Button } from "../../Button";
+import { WarningIcon } from "../../icons";
+import { Modal } from "../../Modal/Modal";
+import { ApiKeyRenderer } from "./ApiKeyRenderer";
 
 type GenerateApiModalProps = {
   close: () => void;

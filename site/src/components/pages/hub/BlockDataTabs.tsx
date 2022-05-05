@@ -1,5 +1,12 @@
+import {
+  MenuItem,
+  Select,
+  Tab,
+  Tabs,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { VoidFunctionComponent } from "react";
-import { Tabs, Tab } from "@mui/material";
 
 type BlockDataTabsProps = {
   blockDataTab: number;
@@ -12,14 +19,26 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
   setBlockDataTab,
   modalOpen,
 }) => {
-  return (
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  return isMobile ? (
+    <Select
+      sx={{ width: "100%", mb: 2 }}
+      value={blockDataTab}
+      onChange={(event) => setBlockDataTab(event.target.value as number)}
+    >
+      <MenuItem value={0}>Data Source</MenuItem>
+      <MenuItem value={1}>Block Schema</MenuItem>
+    </Select>
+  ) : (
     <Tabs
       value={blockDataTab}
       onChange={(_event, newValue: number) => setBlockDataTab(newValue)}
       TabIndicatorProps={{
         style: { display: "none" },
       }}
-      sx={(theme) => ({
+      sx={{
         "& .MuiTab-root": {
           textTransform: "none",
           color: theme.palette.gray[modalOpen ? 60 : 80],
@@ -30,8 +49,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           borderBottom: "0px",
           transition: "0.25s all ease-in-out",
           margin: 0,
-          paddingLeft: "10px",
-          paddingRight: "10px",
+          padding: theme.spacing(1.5, 2),
           ":hover": {
             backgroundColor: modalOpen ? theme.palette.common.white : undefined,
             color: modalOpen ? "black" : undefined,
@@ -42,10 +60,10 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
           },
         },
         "& .MuiTab-root.Mui-selected": {
-          backgroundColor: theme.palette.gray[80],
+          backgroundColor: theme.palette.gray[90],
           color: theme.palette.common.white,
         },
-      })}
+      }}
     >
       <Tab label="Data Source" />
       <Tab label="Block Schema" />

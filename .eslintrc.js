@@ -16,7 +16,13 @@ module.exports = {
   parserOptions: {
     project: "tsconfig.json",
   },
-  plugins: ["@typescript-eslint", "react-hooks", "jest"],
+  plugins: [
+    "@typescript-eslint",
+    "react-hooks",
+    "jest",
+    "simple-import-sort",
+    "unicorn",
+  ],
   extends: [
     "plugin:@typescript-eslint/base",
     "airbnb",
@@ -42,10 +48,13 @@ module.exports = {
     "no-restricted-syntax": "off",
     camelcase: "off",
     "default-param-last": "off", // using @typescript-eslint/default-param-last instead
-    "import/no-cycle": "error",
-    "import/prefer-default-export": "off",
     "no-await-in-loop": "off",
+    "import/first": "error",
+    "import/newline-after-import": "error",
+    "import/no-cycle": "error",
+    "import/no-duplicates": "error",
     "import/no-unresolved": "error",
+    "import/prefer-default-export": "off",
     "no-console": "error",
     "no-dupe-class-members": "off",
     "react/prop-types": "off",
@@ -163,6 +172,11 @@ module.exports = {
         ],
       },
     ],
+    "no-redeclare": "off",
+    "@typescript-eslint/no-redeclare": ["error"],
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+    "unicorn/prefer-node-protocol": "error",
   },
   settings: {
     "import/resolver": {
@@ -191,9 +205,42 @@ module.exports = {
       },
     },
     {
+      files: [
+        "packages/{block-scripts,block-template,blockprotocol,create-block-app}/**",
+      ],
+      rules: {
+        "unicorn/filename-case": "error",
+      },
+    },
+    {
+      files: ["packages/block-scripts/**"],
+      rules: {
+        "no-console": "off",
+        "import/extensions": ["error", "always"],
+      },
+    },
+    {
       files: ["packages/block-template/**"],
       parserOptions: {
         project: ["packages/block-template/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/block-template/src/dev.js"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
+    {
+      files: ["packages/react-block-loader/dev/*"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
       },
     },
     {
@@ -207,10 +254,6 @@ module.exports = {
       parserOptions: {
         project: ["packages/mock-block-dock/tsconfig.json"],
       },
-    },
-    {
-      files: [".github/workflows/algolia/**"],
-      parserOptions: { project: [".github/workflows/algolia/tsconfig.json"] },
     },
     {
       files: ["site/**"],
@@ -274,6 +317,12 @@ module.exports = {
             ],
           },
         ],
+      },
+    },
+    {
+      files: ["site/src/pages/**"],
+      rules: {
+        "unicorn/filename-case": "error",
       },
     },
     {

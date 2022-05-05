@@ -1,22 +1,23 @@
-import { merge } from "lodash";
-import { Db, WithId, ObjectId, DBRef } from "mongodb";
-import { NextApiResponse } from "next";
 import dedent from "dedent";
+import { merge } from "lodash";
+import { Db, DBRef, ObjectId, WithId } from "mongodb";
+import { NextApiResponse } from "next";
+
+import blocksData from "../../../../blocks-data.json";
+import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
+import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
+import { ExpandedBlockMetadata } from "../../blocks";
+import { FRONTEND_URL, isProduction } from "../../config";
+import { sendMail } from "../awsSes";
+import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
+import { ApiKey } from "./apiKey.model";
+import { EntityType } from "./entityType.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
   VerificationCodeVariant,
 } from "./verificationCode.model";
-import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/loginWithLoginCode.api";
-import { ApiVerifyEmailRequestBody } from "../../../pages/api/verifyEmail.api";
-import { ApiKey } from "./apiKey.model";
-import { FRONTEND_URL, isProduction } from "../../config";
-import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
-import { sendMail } from "../awsSes";
-import { EntityType } from "./entityType.model";
-import blocksData from "../../../../blocks-data.json";
-import { ExpandedBlockMetadata } from "../../blocks";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 
@@ -428,9 +429,9 @@ export class User {
     return await EntityType.getAllByUser(db, { user: this });
   }
 
-  blocks() {
-    return blocksData.filter(
-      (block: ExpandedBlockMetadata) => block.author === this.shortname,
+  blocks(): ExpandedBlockMetadata[] {
+    return (blocksData as ExpandedBlockMetadata[]).filter(
+      (block) => block.author === this.shortname,
     );
   }
 

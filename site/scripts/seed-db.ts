@@ -1,9 +1,10 @@
 import chalk from "chalk";
-import { User, UserProperties } from "../src/lib/api/model/user.model";
+
 import { ApiKey } from "../src/lib/api/model/apiKey.model";
+import { EntityType } from "../src/lib/api/model/entityType.model";
+import { User, UserProperties } from "../src/lib/api/model/user.model";
 import { VerificationCode } from "../src/lib/api/model/verificationCode.model";
 import { connectToDatabase } from "../src/lib/api/mongodb";
-import { EntityType } from "../src/lib/api/model/entityType.model";
 
 const script = async () => {
   console.log(chalk.bold("Seeding DB..."));
@@ -65,6 +66,16 @@ const script = async () => {
       shortname: "alice",
       preferredName: "Alice",
       email: "alice@example.com",
+    },
+    {
+      shortname: "bob",
+      preferredName: "Bob",
+      email: "bob@example.com",
+    },
+    {
+      shortname: "hash",
+      preferredName: "HASH",
+      email: "hash@example.com",
     },
   ];
 

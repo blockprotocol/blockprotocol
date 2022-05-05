@@ -1,29 +1,31 @@
+import { faChevronDown, faHashtag } from "@fortawesome/free-solid-svg-icons";
 import {
-  VFC,
-  useState,
-  useEffect,
-  Fragment,
-  useContext,
-  SetStateAction,
-  Dispatch,
-} from "react";
-import {
-  Icon,
+  Box,
+  Collapse,
+  Divider,
   IconButton,
   List,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Collapse,
-  Divider,
-  Box,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
-import { Link } from "../Link";
+import {
+  Dispatch,
+  Fragment,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
+  VFC,
+} from "react";
+
 import SiteMapContext from "../../context/SiteMapContext";
-import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
+import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
+import { FontAwesomeIcon } from "../icons";
+import { Link } from "../Link";
 import Search from "../pages/docs/Search";
+import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: JSX.Element;
@@ -99,12 +101,9 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
               })}
             >
               {icon ?? (
-                <Icon
-                  sx={{
-                    fontSize: 15,
-                  }}
-                  color="inherit"
-                  className="fas fa-hashtag"
+                <FontAwesomeIcon
+                  icon={faHashtag}
+                  sx={{ color: "inherit", fontSize: 15 }}
                 />
               )}
             </ListItemIcon>
@@ -142,12 +141,11 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
                 );
               }}
             >
-              <Icon
+              <FontAwesomeIcon
                 sx={{
                   fontSize: 15,
                 }}
-                fontSize="inherit"
-                className="fas fa-chevron-down"
+                icon={faChevronDown}
               />
             </IconButton>
           ) : null}

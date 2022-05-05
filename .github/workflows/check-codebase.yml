@@ -39,6 +39,19 @@ jobs:
             exit 1
           fi
 
+      - name: Run yarn lint:lockfile-lint
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:lockfile-lint; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Try resetting yarn.lock to its previous state and then run `yarn install`.'
+            echo 'If your `~/.npmrc` mentions a custom registry, you should remove this setting first.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
       - name: Run yarn lint:markdownlint
         if: ${{ success() || failure() }}
         run: |
@@ -128,12 +141,15 @@ jobs:
           node-version: 16
           cache: yarn
 
+      - name: Downgrade global NPM version
+        run: npm install --global npm@8.4.1 ## https://github.com/blockprotocol/blockprotocol/pull/281
+
       - run: yarn install
 
       - name: Run local registry
         run: |
-          docker pull verdaccio/verdaccio
-          docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio
+          docker pull verdaccio/verdaccio:5
+          docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio:5
           yarn wait-on --timeout 30000 http://localhost:4873
 
       - name: Publish NPM packages to local registry

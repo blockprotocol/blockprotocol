@@ -1,8 +1,8 @@
-import crypto from "crypto";
 import { Db, DBRef } from "mongodb";
+import crypto from "node:crypto";
 import { v4 as uuid } from "uuid";
-import { mustGetEnvVar } from "../../../util/api";
 
+import { mustGetEnvVar } from "../../../util/api";
 import { User } from "./user.model";
 
 type ApiKeyProperties = {
@@ -172,7 +172,11 @@ export class ApiKey {
 
     const INVALID_KEY_ERROR_MSG = "Invalid API key.";
 
-    const [_prefix, publicId, privateId] = apiKeyString.split(".");
+    const [_prefix, publicId, privateId] = apiKeyString.split(".") as [
+      string,
+      string,
+      string,
+    ]; // This assertion is based on KEY_FORMAT_REGEXP;
 
     const apiKey = await ApiKey.getByPublicId(db, { publicId });
 

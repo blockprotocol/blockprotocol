@@ -48,6 +48,7 @@ declare module "@mui/material/styles" {
       60: string;
       70: string;
       80: string;
+      90: string;
     };
     grey: undefined;
   }

@@ -1,7 +1,10 @@
-import { VFC } from "react";
-import { Typography, Icon, Breadcrumbs } from "@mui/material";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { Breadcrumbs, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import { VFC } from "react";
+
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
+import { FontAwesomeIcon } from "../icons";
 import { Link } from "../Link";
 import { itemIsPage } from "./util";
 
@@ -18,9 +21,9 @@ export const MobileBreadcrumbs: VFC<MobileBreadcrumbsProps> = ({ crumbs }) => {
         marginTop: 2,
       }}
       separator={
-        <Icon
+        <FontAwesomeIcon
           sx={{ fontSize: 14, color: ({ palette }) => palette.gray[40] }}
-          className="fas fa-chevron-right"
+          icon={faChevronRight}
         />
       }
     >

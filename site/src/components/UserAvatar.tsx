@@ -1,5 +1,6 @@
-import { VFC } from "react";
 import { Box } from "@mui/material";
+import { VFC } from "react";
+
 import { SerializedUser } from "../lib/api/model/user.model";
 
 interface UserAvatarProps {
@@ -24,7 +25,7 @@ export const UserAvatar: VFC<UserAvatarProps> = ({ user }) => {
         borderColor: ({ palette }) => palette.gray[30],
       }}
     >
-      <Box component="span" sx={{ color: ({ palette }) => palette.gray[60] }}>
+      <Box component="span" sx={{ color: ({ palette }) => palette.gray[70] }}>
         {preferredName?.charAt(0).toUpperCase()}
       </Box>
     </Box>

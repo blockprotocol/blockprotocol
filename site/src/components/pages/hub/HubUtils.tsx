@@ -1,10 +1,10 @@
-import { FC } from "react";
+import { ComponentType } from "react";
 
 /** @todo type as JSON Schema. */
 export type BlockSchema = Record<string, any>;
 export type BlockDependency = keyof typeof blockDependencies;
 export type BlockExports = {
-  default: FC;
+  [key: string]: ComponentType | undefined;
 };
 
 /* eslint-disable global-require */
@@ -42,7 +42,7 @@ export async function getEmbedBlock(url: string): Promise<{
   let embedResponse: (OembedResponse & { error: boolean }) | null = null;
 
   try {
-    embedResponse = await fetch(`/api/fetchEmbedCode?url=${url}`).then(
+    embedResponse = await fetch(`/api/fetch-embed-code?url=${url}`).then(
       (response) =>
         response.json() as unknown as OembedResponse & { error: boolean },
     );

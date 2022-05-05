@@ -1,13 +1,14 @@
-import React from "react";
+import createEmotionServer from "@emotion/server/create-instance";
+import withTwindDocument from "@twind/next/document";
 import Document, {
-  Html,
+  DocumentContext,
   Head,
+  Html,
   Main,
   NextScript,
-  DocumentContext,
 } from "next/document";
-import withTwindDocument from "@twind/next/document";
-import createEmotionServer from "@emotion/server/create-instance";
+import React from "react";
+
 import twindConfig from "../../twind.config";
 import { createEmotionCache } from "../util/createEmotionCache";
 
@@ -88,11 +89,6 @@ class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
-          <script
-            defer
-            src="https://kit.fontawesome.com/31605611a9.js"
-            crossOrigin="anonymous"
-          />
         </body>
       </Html>
     );

@@ -1,11 +1,12 @@
-import { Typography, Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { ReactNode, useEffect, useRef, useState, VFC } from "react";
+
 import { apiClient } from "../../lib/apiClient";
 import { Button } from "../Button";
-import { TextField } from "../TextField";
-import { Link } from "../Link";
-import { BlockProtocolIcon } from "../icons";
 import { useEmailTextField } from "../hooks/useEmailTextField";
+import { BlockProtocolIcon } from "../icons";
+import { Link } from "../Link";
+import { TextField } from "../TextField";
 import { VerificationCodeInfo } from "./VerificationCodeScreen";
 
 type SignupScreenProps = {
@@ -91,7 +92,7 @@ export const SignupScreen: VFC<SignupScreenProps> = ({
         variant="bpHeading3"
         textAlign="center"
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
         }}
       >
         Create your Block Protocol account

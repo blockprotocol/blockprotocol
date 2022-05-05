@@ -2,20 +2,19 @@ import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 
-import { Link } from "../../components/Link";
-import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiModal";
-
-import { WarningIcon } from "../../components/icons";
-import { Table, TableRows } from "../../components/Table";
-import { UserFacingApiKeyProperties } from "../../lib/api/model/apiKey.model";
-import { apiClient } from "../../lib/apiClient";
-import { DateTimeCell } from "../../components/TableCells";
 import { Button } from "../../components/Button";
-import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
+import { WarningIcon } from "../../components/icons";
+import { Link } from "../../components/Link";
 import {
   AuthWallPageContent,
   withAuthWall,
 } from "../../components/pages/authWall";
+import { GenerateApiModal } from "../../components/pages/dashboard/GenerateApiModal";
+import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
+import { Table, TableRows } from "../../components/Table";
+import { DateTimeCell } from "../../components/TableCells";
+import { UserFacingApiKeyProperties } from "../../lib/api/model/apiKey.model";
+import { apiClient } from "../../lib/apiClient";
 
 const ApiKeys: AuthWallPageContent = () => {
   const [activeApiKeys, setActiveApiKeys] = useState<

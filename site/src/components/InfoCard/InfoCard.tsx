@@ -1,13 +1,13 @@
+import { Paper, PaperProps, Typography } from "@mui/material";
 import {
-  VoidFunctionComponent,
-  ReactNode,
-  isValidElement,
   Children,
+  isValidElement,
   ReactElement,
   ReactFragment,
+  ReactNode,
   ReactPortal,
+  VoidFunctionComponent,
 } from "react";
-import { Paper, PaperProps, Typography } from "@mui/material";
 
 export type InfoCardVariant = "info" | "warning";
 
@@ -49,6 +49,17 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
           color: ({ palette }) => palette[paperVariant][600],
           fontSize: 15,
           lineHeight: 1.5,
+          "& a": ({ palette }) => ({
+            color: palette[paperVariant][600],
+            borderColor: palette[paperVariant][600],
+            ":hover": {
+              color: palette[paperVariant][700],
+              borderColor: palette[paperVariant][700],
+            },
+            ":focus-visible": {
+              outlineColor: palette[paperVariant][600],
+            },
+          }),
         }}
       >
         {isValidElement(child) ? child.props.children : child}
@@ -66,17 +77,6 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
           sm: 3,
         },
         ...sx,
-        "& a": ({ palette }) => ({
-          color: palette[paperVariant][600],
-          borderColor: palette[paperVariant][600],
-          ":hover": {
-            color: palette[paperVariant][700],
-            borderColor: palette[paperVariant][700],
-          },
-          ":focus-visible": {
-            outlineColor: palette[paperVariant][600],
-          },
-        }),
       }}
     >
       <Typography

@@ -1,11 +1,11 @@
-import { VFC } from "react";
 import { GetStaticProps } from "next";
+import { VFC } from "react";
+
 import { Header } from "../components/pages/home/Header";
 import { IntroSection } from "../components/pages/home/IntroSection";
-import { Section2 } from "../components/pages/home/Section2";
-import { WhyBlockProtocol1Section } from "../components/pages/home/WhyBlockProtocol1Section";
-import { WhyBlockProtocol2Section } from "../components/pages/home/WhyBlockProtocol2Section";
 import { RegistrySection } from "../components/pages/home/RegistrySection";
+import { Section2 } from "../components/pages/home/Section2";
+import { WhyBlockProtocolSection } from "../components/pages/home/WhyBlockProtocolSection";
 import {
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,
@@ -27,8 +27,7 @@ const HomePage: VFC<PageProps> = ({ catalog }) => {
       <Header />
       <IntroSection />
       <Section2 />
-      <WhyBlockProtocol1Section />
-      <WhyBlockProtocol2Section />
+      <WhyBlockProtocolSection />
       <RegistrySection catalog={catalog} />
     </>
   );

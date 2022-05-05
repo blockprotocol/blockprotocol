@@ -1,11 +1,11 @@
-import { VFC } from "react";
-import { Typography, Box, Skeleton } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
+import { VFC } from "react";
 
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
+import { BlockProtocolLogoIcon } from "./icons";
 import { Link } from "./Link";
 import { Spacer } from "./Spacer";
-import { BlockProtocolLogoIcon } from "./icons";
-import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 
 type BlockCardProps = {
   loading?: boolean;
@@ -80,12 +80,12 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
     author,
     version,
     lastUpdated,
-    packagePath,
+    blockPackagePath,
     icon,
   } = data;
 
   return (
-    <Link href={`/${packagePath}`}>
+    <Link href={blockPackagePath}>
       <Box
         sx={{
           ...blockWidthStyles,
@@ -119,7 +119,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             "& .block-card__name": {
               color: ({ palette }) => palette.purple[600],
             },
-            transform: "scale(1.03)",
+            transform: "scale(1.02)",
             "&::before": {
               opacity: 0,
             },
@@ -142,7 +142,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
             sx={{
               paddingTop: "66.67%", // height / width => 2/3
               backgroundColor: ({ palette }) =>
-                image ? "transparent" : palette.gray[70],
+                image ? "transparent" : palette.gray[80],
               borderRadius: "4px",
               position: "relative",
             }}

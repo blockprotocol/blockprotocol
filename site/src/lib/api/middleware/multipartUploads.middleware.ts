@@ -1,8 +1,9 @@
 import busboy from "busboy";
 import { Middleware } from "next-connect";
-import { BaseApiResponse } from "../handler/baseHandler";
-import { AuthenticatedApiRequest } from "../handler/authenticatedHandler";
+
 import { formatErrors } from "../../../util/api";
+import { AuthenticatedApiRequest } from "../handler/authenticatedHandler";
+import { BaseApiResponse } from "../handler/baseHandler";
 
 export type MultipartUploadsOptions = {
   fieldsLimit: number;
@@ -47,7 +48,7 @@ const parseForm = async (
     form.on("file", (fieldName, file, info) => {
       buffers[fieldName] = [];
       file.on("data", (data) => {
-        buffers[fieldName].push(data);
+        buffers[fieldName]!.push(data);
       });
       file.on("limit", () => {
         reject(
@@ -59,7 +60,7 @@ const parseForm = async (
       file.on("end", () => {
         uploads[fieldName] = {
           mime: info.mimeType,
-          buffer: Buffer.concat(buffers[fieldName]),
+          buffer: Buffer.concat(buffers[fieldName]!),
         };
       });
     });

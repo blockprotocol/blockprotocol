@@ -1,14 +1,16 @@
-import { Box, Collapse, FormHelperText, Icon, Typography } from "@mui/material";
+import { Box, Collapse, FormHelperText, Typography } from "@mui/material";
 import { ReactNode, useRef, useState, VFC } from "react";
-import { TextField } from "../TextField";
-import { Button } from "../Button";
-import { useShortnameTextField } from "../hooks/useShortnameTextField";
+
+import { useUser } from "../../context/UserContext";
 import { apiClient } from "../../lib/apiClient";
 import {
   ApiCompleteSignupRequestBody,
   ApiCompleteSignupResponse,
-} from "../../pages/api/completeSignup.api";
-import { useUser } from "../../context/UserContext";
+} from "../../pages/api/complete-signup.api";
+import { Button } from "../Button";
+import { useShortnameTextField } from "../hooks/useShortnameTextField";
+import { BadgeCheckIcon } from "../icons/BadgeCheckIcon";
+import { TextField } from "../TextField";
 
 type CompleteSignupScreenProps = {
   email: string;
@@ -51,7 +53,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
       const { data, error } = await apiClient.post<
         ApiCompleteSignupRequestBody,
         ApiCompleteSignupResponse
-      >("completeSignup", { shortname, preferredName });
+      >("complete-signup", { shortname, preferredName });
       setCompletingSignup(false);
 
       if (error) {
@@ -64,10 +66,9 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center">
-      <Icon
-        className="fa-solid fa-badge-check"
+      <BadgeCheckIcon
         sx={{
-          fontSize: 50,
+          fontSize: 60,
           color: ({ palette }) => palette.purple[600],
           marginBottom: 3,
         }}
@@ -90,7 +91,7 @@ export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
         textAlign="center"
         marginBottom={2}
         sx={{
-          color: ({ palette }) => palette.gray[80],
+          color: ({ palette }) => palette.gray[90],
           fontWeight: 500,
         }}
       >
