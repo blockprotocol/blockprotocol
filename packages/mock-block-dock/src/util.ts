@@ -16,19 +16,25 @@ type EntityIdentifiers = {
   entityTypeId?: string | null;
 };
 
-export const matchEntityIdentifiers = (
-  first: EntityIdentifiers,
-  second: EntityIdentifiers,
-) => {
-  if (first.entityId !== second.entityId) {
-    return false;
-  }
-  if (first.accountId != null && first.accountId !== second.accountId) {
+export const matchEntityIdentifiers = ({
+  providedIdentifiers,
+  entityToCheck,
+}: {
+  providedIdentifiers: EntityIdentifiers;
+  entityToCheck: EntityIdentifiers;
+}) => {
+  if (providedIdentifiers.entityId !== entityToCheck.entityId) {
     return false;
   }
   if (
-    first.entityTypeId != null &&
-    first.entityTypeId !== second.entityTypeId
+    providedIdentifiers.accountId != null &&
+    providedIdentifiers.accountId !== entityToCheck.accountId
+  ) {
+    return false;
+  }
+  if (
+    providedIdentifiers.entityTypeId != null &&
+    providedIdentifiers.entityTypeId !== entityToCheck.entityTypeId
   ) {
     return false;
   }
@@ -40,14 +46,20 @@ type EntityTypeIdentifiers = {
   entityTypeId: string | null;
 };
 
-export const matchEntityTypeIdentifiers = (
-  first: EntityTypeIdentifiers,
-  second: EntityTypeIdentifiers,
-) => {
-  if (first.entityTypeId !== second.entityTypeId) {
+export const matchEntityTypeIdentifiers = ({
+  providedIdentifiers,
+  entityTypeToCheck,
+}: {
+  providedIdentifiers: EntityTypeIdentifiers;
+  entityTypeToCheck: EntityTypeIdentifiers;
+}) => {
+  if (providedIdentifiers.entityTypeId !== entityTypeToCheck.entityTypeId) {
     return false;
   }
-  if (first.accountId != null && first.accountId !== second.accountId) {
+  if (
+    providedIdentifiers.accountId != null &&
+    providedIdentifiers.accountId !== entityTypeToCheck.accountId
+  ) {
     return false;
   }
   return true;
