@@ -31,7 +31,6 @@ The embedder will automatically pass the following Block Protocol functions to y
 - `deleteLinkedAggregations`
 - `updateLinkedAggregations`
 - `uploadFile`
-- `uploadFile`
 
 For example, to update your block's props, get `entityId` and `updateEntities` from props and call:
 
