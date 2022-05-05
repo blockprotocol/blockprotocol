@@ -32,11 +32,11 @@ type MockBlockDockProps = {
  * It provides the functions specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
  * @param children the block component to be provided mock data and functions, with any starting props
- * @param [blockSchema] the schema for the block entity
- * @param [initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
- * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
- * @param [initialLinks] the links to include in the data store
- * @param [initialLinkedAggregations] the linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [blockSchema] - The schema for the block entity
+ * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [initialEntityTypes] - The entity types to include in the data store (NOT the block's type, which is always provided)
+ * @param [initialLinks] - The links to include in the data store
+ * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   children,
