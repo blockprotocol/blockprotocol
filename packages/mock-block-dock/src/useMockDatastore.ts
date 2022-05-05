@@ -171,9 +171,9 @@ export const useMockDatastore = (
 
   const deleteEntities: BlockProtocolDeleteEntitiesFunction = useCallback(
     async (actions) => {
+      const operationStatus = new Array(actions.length).fill(false);
       setEntities((currentEntities) =>
         currentEntities.filter((entity) => {
-          const operationStatus = new Array(actions.length).fill(false);
           const deleteActionIndex = actions.findIndex((action) =>
             matchEntityIdentifiers({
               entityToCheck: entity,
@@ -187,7 +187,7 @@ export const useMockDatastore = (
           return true;
         }),
       );
-      return new Array(actions.length).fill(true);
+      return operationStatus;
     },
     [setEntities],
   );
