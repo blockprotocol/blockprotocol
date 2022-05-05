@@ -172,20 +172,20 @@ export const useMockDatastore = (
   const deleteEntities: BlockProtocolDeleteEntitiesFunction = useCallback(
     async (actions) => {
       setEntities((currentEntities) =>
-        currentEntities
-          .map((entity) => {
-            const isMatch = actions.some((action) =>
-              matchEntityIdentifiers({
-                entityToCheck: entity,
-                providedIdentifiers: action,
-              }),
-            );
-            if (isMatch) {
-              return null;
-            }
-            return entity;
-          })
-          .filter((entity): entity is BlockProtocolEntity => !!entity),
+        currentEntities.filter((entity) => {
+          const operationStatus = new Array(actions.length).fill(false);
+          const deleteActionIndex = actions.findIndex((action) =>
+            matchEntityIdentifiers({
+              entityToCheck: entity,
+              providedIdentifiers: action,
+            }),
+          );
+          if (deleteActionIndex > -1) {
+            operationStatus[deleteActionIndex] = true;
+            return false;
+          }
+          return true;
+        }),
       );
       return new Array(actions.length).fill(true);
     },
@@ -263,25 +263,23 @@ export const useMockDatastore = (
 
   const deleteEntityTypes: BlockProtocolDeleteEntityTypesFunction = useCallback(
     async (actions) => {
+      const operationStatus = new Array(actions.length).fill(false);
       setEntityTypes((currentEntityTypes) =>
-        currentEntityTypes
-          .map((entityType) => {
-            const isMatch = actions.some((action) =>
-              matchEntityTypeIdentifiers({
-                entityTypeToCheck: entityType,
-                providedIdentifiers: action,
-              }),
-            );
-            if (isMatch) {
-              return null;
-            }
-            return entityType;
-          })
-          .filter(
-            (entityType): entityType is BlockProtocolEntityType => !!entityType,
-          ),
+        currentEntityTypes.filter((entityType) => {
+          const deleteActionIndex = actions.findIndex((action) =>
+            matchEntityTypeIdentifiers({
+              entityTypeToCheck: entityType,
+              providedIdentifiers: action,
+            }),
+          );
+          if (deleteActionIndex > -1) {
+            operationStatus[deleteActionIndex] = true;
+            return true;
+          }
+          return true;
+        }),
       );
-      return new Array(actions.length).fill(true);
+      return operationStatus;
     },
     [setEntityTypes],
   );
