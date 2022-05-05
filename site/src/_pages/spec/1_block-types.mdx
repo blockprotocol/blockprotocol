@@ -449,7 +449,7 @@ The entities linked to - the **nodes** in the graph - will be provided under `li
 (and the entities they link onwards to, depending on the depth the graph is resolved to from the starting entity). e.g. in the above example, the data for entity `company1` will be provided in the `linkedEntities` array, rather than injected into the properties of the user.
 
 Links themselves – **edges** in the graph – will be provided to a block under a `linkGroups` field, which is an array of objects,
-each of which specifies a source entity, a path (field name), and the links on that path.
+each of which groups links by their source entity and path (field name).
 
 e.g. the link in the above example would appear as the following object – one of the entries in `linkGroups`
 
