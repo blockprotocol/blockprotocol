@@ -205,9 +205,7 @@ module.exports = {
       },
     },
     {
-      files: [
-        "packages/{block-scripts,block-template,blockprotocol,create-block-app}/**",
-      ],
+      files: ["packages/**"],
       rules: {
         "unicorn/filename-case": "error",
       },
