@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import React from "react";
 import { tw } from "twind";
 
-import { Button } from "../../components/Button";
+import { Button } from "../../components/button";
 
 const PartnersSubmitted: NextPage = () => {
   return (

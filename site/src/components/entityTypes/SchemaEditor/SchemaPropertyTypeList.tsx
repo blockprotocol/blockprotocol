@@ -1,10 +1,10 @@
 import { MenuItem } from "@mui/material";
-import Select from "@mui/material/Select";
+import Select from "@mui/material/select";
 import { ReactNode, useContext, useMemo, VoidFunctionComponent } from "react";
 import { tw } from "twind";
 
-import { JsonSchema } from "../../../lib/jsonSchema";
-import { SchemaOptionsContext } from "./SchemaEditor";
+import { JsonSchema } from "../../../lib/json-schema";
+import { SchemaOptionsContext } from "./schema-editor";
 
 const primitiveJsonTypes = [
   "boolean",

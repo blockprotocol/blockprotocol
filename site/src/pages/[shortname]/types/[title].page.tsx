@@ -10,11 +10,11 @@ import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { tw } from "twind";
 
-import { SchemaEditor } from "../../../components/entityTypes/SchemaEditor/SchemaEditor";
-import { Link } from "../../../components/Link";
-import { useUser } from "../../../context/UserContext";
-import { EntityType } from "../../../lib/api/model/entityType.model";
-import { apiClient } from "../../../lib/apiClient";
+import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor";
+import { Link } from "../../../components/link";
+import { useUser } from "../../../context/user-context";
+import { EntityType } from "../../../lib/api/model/entity-type.model";
+import { apiClient } from "../../../lib/api-client";
 
 type EntityTypePageQueryParams = {
   shortname?: string;

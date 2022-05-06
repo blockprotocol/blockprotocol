@@ -18,18 +18,18 @@ import React, {
 } from "react";
 import { tw } from "twind";
 
-import { JsonSchema } from "../../../lib/jsonSchema";
-import { Link } from "../../Link";
-import { TextInputOrDisplay } from "./Inputs";
+import { JsonSchema } from "../../../lib/json-schema";
+import { Link } from "../../link";
+import { TextInputOrDisplay } from "./inputs";
 import {
   schemaEditorReducer,
   SchemaEditorReducerAction,
-} from "./schemaEditorReducer";
-import { SchemaPropertiesTable } from "./SchemaPropertiesTable";
+} from "./schema-editor-reducer";
+import { SchemaPropertiesTable } from "./schema-properties-table";
 
 // @todo implement subschema handling (or remove this code)
-// import { SubSchemaItem } from "./SubSchemaItem";
-// import { Button } from "../../Button";
+// import { SubSchemaItem } from './sub-schema-item';
+// import { Button } from '../../button';
 
 export const SchemaOptionsContext = createContext<{
   availableEntityTypes: BlockProtocolEntityType[];

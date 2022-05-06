@@ -2,14 +2,14 @@ import { useRouter } from "next/router";
 import { useContext, useState, VoidFunctionComponent } from "react";
 import { tw } from "twind";
 
-import { JsonSchema } from "../../../lib/jsonSchema";
-import { Button } from "../../Button";
-import { ConfirmationAlert } from "../../ConfirmationAlert";
-import { SchemaOptionsContext } from "./SchemaEditor";
+import { JsonSchema } from "../../../lib/json-schema";
+import { Button } from "../../button";
+import { ConfirmationAlert } from "../../confirmation-alert";
+import { SchemaOptionsContext } from "./schema-editor";
 import {
   getSubschemaDependentProperties,
   SchemaEditorReducerAction,
-} from "./schemaEditorReducer";
+} from "./schema-editor-reducer";
 
 type SubSchemaItemProps = {
   dispatchSchemaUpdate: (action: SchemaEditorReducerAction) => void;

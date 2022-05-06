@@ -15,18 +15,18 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { useContext } from "react";
 
 import { FontAwesomeIcon } from "../../components/icons";
-import { Link } from "../../components/Link";
-import { LinkButton } from "../../components/LinkButton";
+import { Link } from "../../components/link";
+import { LinkButton } from "../../components/link-button";
 import {
   MDX_TEXT_CONTENT_MAX_WIDTH,
   MdxPageContent,
-} from "../../components/MdxPageContent";
-import { PageNavLinks } from "../../components/PageNavLinks";
-import Search from "../../components/pages/docs/Search";
-import { Sidebar, SIDEBAR_WIDTH } from "../../components/PageSidebar";
-import SiteMapContext from "../../context/SiteMapContext";
-import { getAllPageHrefs, getSerializedPage } from "../../util/mdxUtils";
-import { parseIntFromPixelString } from "../../util/muiUtils";
+} from "../../components/mdx-page-content";
+import { PageNavLinks } from "../../components/page-nav-links";
+import { Sidebar, SIDEBAR_WIDTH } from "../../components/page-sidebar";
+import Search from "../../components/pages/docs/search";
+import SiteMapContext from "../../context/site-map-context";
+import { getAllPageHrefs, getSerializedPage } from "../../util/mdx-utils";
+import { parseIntFromPixelString } from "../../util/mui-utils";
 
 const GitHubInfoCard = (
   <Paper

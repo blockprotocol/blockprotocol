@@ -1,6 +1,6 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 
-import { createAuthenticatedHandler } from "../../lib/api/handler/authenticatedHandler";
+import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
 import { SerializedUser, User } from "../../lib/api/model/user.model";
 import { formatErrors } from "../../util/api";
 

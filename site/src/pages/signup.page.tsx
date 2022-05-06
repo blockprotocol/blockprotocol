@@ -4,21 +4,21 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "../components/Button";
+import { Button } from "../components/button";
 import {
   ArrowUpCircleIcon,
   FontAwesomeIcon,
   PullRequestIcon,
 } from "../components/icons";
-import { CompleteSignupScreen } from "../components/Screens/CompleteSignupScreen";
-import { SignupScreen } from "../components/Screens/SignupScreen";
+import { CompleteSignupScreen } from "../components/screens/complete-signup-screen";
+import { SignupScreen } from "../components/screens/signup-screen";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../components/Screens/VerificationCodeScreen";
-import { useUser } from "../context/UserContext";
+} from "../components/screens/verification-code-screen";
+import { useUser } from "../context/user-context";
 import { SerializedUser } from "../lib/api/model/user.model";
-import { apiClient } from "../lib/apiClient";
+import { apiClient } from "../lib/api-client";
 import { ApiVerifyEmailRequestBody } from "./api/verify-email.api";
 
 const SIGNUP_PAGE_SCREENS = [

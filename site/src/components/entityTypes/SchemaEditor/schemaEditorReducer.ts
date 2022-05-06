@@ -3,7 +3,7 @@ import { Schema } from "jsonschema";
 import { get } from "lodash";
 import { Reducer } from "react";
 
-import { JsonSchema } from "../../../lib/jsonSchema";
+import { JsonSchema } from "../../../lib/json-schema";
 
 type Action<S, T> = {
   type: S;

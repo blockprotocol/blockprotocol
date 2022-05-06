@@ -4,16 +4,16 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Button } from "../components/Button";
+import { Button } from "../components/button";
 import { FontAwesomeIcon } from "../components/icons";
-import { SendLoginCodeScreen } from "../components/Screens/SendLoginCodeScreen";
+import { SendLoginCodeScreen } from "../components/screens/send-login-code-screen";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../components/Screens/VerificationCodeScreen";
-import { useUser } from "../context/UserContext";
+} from "../components/screens/verification-code-screen";
+import { useUser } from "../context/user-context";
 import { SerializedUser } from "../lib/api/model/user.model";
-import { apiClient } from "../lib/apiClient";
+import { apiClient } from "../lib/api-client";
 import { ApiLoginWithLoginCodeRequestBody } from "./api/login-with-login-code.api";
 
 type LoginPageParsedUrlQuery = {

@@ -13,11 +13,11 @@ import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 import siteMap from "../../../site-map.json";
-import { MdxPageContent } from "../../components/MdxPageContent";
-import Search from "../../components/pages/docs/Search";
-import { Sidebar } from "../../components/PageSidebar";
+import { MdxPageContent } from "../../components/mdx-page-content";
+import { Sidebar } from "../../components/page-sidebar";
+import Search from "../../components/pages/docs/search";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
-import { getSerializedPage } from "../../util/mdxUtils";
+import { getSerializedPage } from "../../util/mdx-utils";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",
