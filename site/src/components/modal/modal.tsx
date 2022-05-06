@@ -1,6 +1,6 @@
 import { SxProps, Theme } from "@mui/material";
-import Box from "@mui/material/box";
-import MuiModal, { ModalProps as MuiModalProps } from "@mui/material/modal";
+import Box from "@mui/material/Box";
+import MuiModal, { ModalProps as MuiModalProps } from "@mui/material/Modal";
 import React from "react";
 
 import { useScrollLock } from "../../util/mui-utils";

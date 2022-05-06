@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/dist/scroll-trigger";
+import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
 
 import { Spacer } from "../../spacer";

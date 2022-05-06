@@ -1,4 +1,4 @@
-import SearchIcon from "@mui/icons-material/search";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   CircularProgress,

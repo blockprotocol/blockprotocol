@@ -1,9 +1,9 @@
-import MuiTable from "@mui/material/table";
-import TableBody from "@mui/material/table-body";
-import TableCell from "@mui/material/table-cell";
-import TableContainer from "@mui/material/table-container";
-import TableHead from "@mui/material/table-head";
-import TableRow from "@mui/material/table-row";
+import MuiTable from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 import { ReactNode, VoidFunctionComponent } from "react";
 
 export type TableRows = ReactNode[][];

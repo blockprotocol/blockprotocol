@@ -6,7 +6,7 @@ import {
   TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
 } from "@mui/material";
-import FormHelperText from "@mui/material/form-helper-text";
+import FormHelperText from "@mui/material/FormHelperText";
 import { ReactNode, useEffect, useState, VFC } from "react";
 
 import { FontAwesomeIcon } from "./icons";

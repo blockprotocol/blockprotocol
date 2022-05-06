@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import Checkbox from "@mui/material/checkbox";
+import Checkbox from "@mui/material/Checkbox";
 import { ChangeEvent, useEffect, useState, VoidFunctionComponent } from "react";
 
 import { TextField } from "../../text-field";

@@ -1,5 +1,5 @@
 import { MenuItem } from "@mui/material";
-import Select from "@mui/material/select";
+import Select from "@mui/material/Select";
 import { ReactNode, useContext, useMemo, VoidFunctionComponent } from "react";
 import { tw } from "twind";
 

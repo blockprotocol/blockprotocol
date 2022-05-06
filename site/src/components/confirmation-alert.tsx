@@ -1,8 +1,8 @@
-import Dialog from "@mui/material/dialog";
-import DialogActions from "@mui/material/dialog-actions";
-import DialogContent from "@mui/material/dialog-content";
-import DialogContentText from "@mui/material/dialog-content-text";
-import DialogTitle from "@mui/material/dialog-title";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import { FunctionComponent, ReactNode } from "react";
 
 import { Button } from "./button";
