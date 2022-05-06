@@ -15,8 +15,8 @@ import {
 } from "react";
 
 import { mockData as initialMockData } from "./data";
-import { useLinkFields } from "./useLinkFields";
-import { MockData, useMockDatastore } from "./useMockDatastore";
+import { useLinkFields } from "./use-link-fields";
+import { MockData, useMockDatastore } from "./use-mock-datastore";
 
 type MockBlockDockProps = {
   children: ReactElement;

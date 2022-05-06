@@ -1,1 +1,1 @@
-export { MockBlockDock } from "./MockBlockDock";
+export { MockBlockDock } from "./mock-block-dock";
