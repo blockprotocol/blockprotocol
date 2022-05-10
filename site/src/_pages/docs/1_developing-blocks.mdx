@@ -52,7 +52,7 @@ For more details on creating entities and links between them, [read the specific
 
 Points worth noting:
 
-- embedding applications may provide some `styleVariables` for use - [see styling](https://blockprotocol.org/spec/block-types#styling) - which you should use where appropriate, and if defined, but otherwise provide your own styling.
+- embedding applications may provide some `styleVariables` for use - [see styling](https://blockprotocol.org/spec/block-types#styling) - which you should use where appropriate, and if defined. See also: [Design guidelines for developing blocks](https://hash.dev/blog/block-design)
 - you can include dependencies in your block, but keep in mind bundle size. Common dependencies which you can reasonably expect an embedding application to provide (e.g. React) can be defined as `externals`/`peerDependencies` - see [the template README](https://github.com/blockprotocol/blockprotocol/tree/main/packages/block-template).
 
 ### Build
