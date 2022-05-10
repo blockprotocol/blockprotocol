@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from "react";
 import { ChevronRight } from "@mui/icons-material";
-import { useIntersection } from "react-use";
 import { Box, SxProps, Theme } from "@mui/material";
+import React, { useEffect, useRef } from "react";
+import { useIntersection } from "react-use";
 
 import { parseHTML } from "../../../../util/htmlUtils";
 import { Link } from "../../../Link";

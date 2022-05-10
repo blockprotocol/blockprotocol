@@ -1,7 +1,8 @@
 import { Middleware } from "next-connect";
-import { BaseApiResponse } from "../handler/baseHandler";
+
 import { formatErrors } from "../../../util/api";
 import { AuthenticatedApiRequest } from "../handler/authenticatedHandler";
+import { BaseApiResponse } from "../handler/baseHandler";
 
 export const isSignedUpMiddleware: Middleware<
   AuthenticatedApiRequest,

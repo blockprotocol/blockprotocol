@@ -1,9 +1,10 @@
 import * as aws from "@aws-sdk/client-ses";
-import nodemailer from "nodemailer";
 import { convert } from "html-to-text";
+import nodemailer from "nodemailer";
 import SESTransport from "nodemailer/lib/ses-transport";
-import { isProduction } from "../config";
+
 import { mustGetEnvVar } from "../../util/api";
+import { isProduction } from "../config";
 
 const FROM_ADDRESS = "Block Protocol <noreply@blockprotocol.org>";
 

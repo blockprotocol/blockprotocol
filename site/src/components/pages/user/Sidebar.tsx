@@ -1,7 +1,8 @@
-import { VFC } from "react";
 import { Box, Typography } from "@mui/material";
-import { Avatar } from "./Avatar";
+import { VFC } from "react";
+
 import { SerializedUser } from "../../../lib/api/model/user.model";
+import { Avatar } from "./Avatar";
 
 type SidebarProps = {
   isMobile: boolean;

@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
-import { connectToDatabase } from "../../lib/api/mongodb";
+
 import { EntityType } from "../../lib/api/model/entityType.model";
+import { connectToDatabase } from "../../lib/api/mongodb";
 
 const EntityTypeIdPage: NextPage = () => <div />;
 
@@ -9,14 +10,14 @@ export default EntityTypeIdPage;
 export const getServerSideProps: GetServerSideProps<
   {},
   {
-    entityTypeId: string;
+    "entity-type-id": string;
   }
 > = async (context) => {
   const { req, res } = context;
 
   const { db } = await connectToDatabase();
 
-  const entityTypeId = context.query.entityTypeId as string;
+  const entityTypeId = context.query["entity-type-id"] as string;
   const entityType = await EntityType.getById(db, { entityTypeId });
 
   const jsonFlag = Object.prototype.hasOwnProperty.call(context.query, "json");

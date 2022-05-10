@@ -1,17 +1,18 @@
 import {
-  Container,
-  Typography,
   Box,
   Checkbox,
+  Container,
+  Fade,
   FormControlLabel,
   Grid,
-  Fade,
-  useTheme,
+  Typography,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
+
 import { Spacer } from "../../Spacer";
 import { WhyBlockProtocol2Section } from "./WhyBlockProtocol2Section";
 

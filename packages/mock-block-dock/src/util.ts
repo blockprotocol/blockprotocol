@@ -10,22 +10,55 @@ import {
 } from "blockprotocol";
 import { get, orderBy } from "lodash";
 
-type Identifiers = {
+type EntityIdentifiers = {
   accountId?: string | null;
   entityId: string;
   entityTypeId?: string | null;
 };
 
-export const matchIdentifiers = (first: Identifiers, second: Identifiers) => {
-  if (first.entityId !== second.entityId) {
-    return false;
-  }
-  if (first.accountId != null && first.accountId !== second.accountId) {
+export const matchEntityIdentifiers = ({
+  providedIdentifiers,
+  entityToCheck,
+}: {
+  providedIdentifiers: EntityIdentifiers;
+  entityToCheck: EntityIdentifiers;
+}) => {
+  if (providedIdentifiers.entityId !== entityToCheck.entityId) {
     return false;
   }
   if (
-    first.entityTypeId != null &&
-    first.entityTypeId !== second.entityTypeId
+    providedIdentifiers.accountId != null &&
+    providedIdentifiers.accountId !== entityToCheck.accountId
+  ) {
+    return false;
+  }
+  if (
+    providedIdentifiers.entityTypeId != null &&
+    providedIdentifiers.entityTypeId !== entityToCheck.entityTypeId
+  ) {
+    return false;
+  }
+  return true;
+};
+
+type EntityTypeIdentifiers = {
+  accountId?: string | null;
+  entityTypeId: string | null;
+};
+
+export const matchEntityTypeIdentifiers = ({
+  providedIdentifiers,
+  entityTypeToCheck,
+}: {
+  providedIdentifiers: EntityTypeIdentifiers;
+  entityTypeToCheck: EntityTypeIdentifiers;
+}) => {
+  if (providedIdentifiers.entityTypeId !== entityTypeToCheck.entityTypeId) {
+    return false;
+  }
+  if (
+    providedIdentifiers.accountId != null &&
+    providedIdentifiers.accountId !== entityTypeToCheck.accountId
   ) {
     return false;
   }
@@ -106,7 +139,11 @@ const sortEntitiesOrTypes = <
 
   return orderBy(
     [...entities],
-    multiSort.map(({ field }) => field),
+    multiSort.map(
+      ({ field }) =>
+        (entity) =>
+          get(entity, field),
+    ),
     multiSort.map(({ desc }) => (desc ? "desc" : "asc")),
   );
 };

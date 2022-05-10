@@ -1,19 +1,19 @@
+import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
-import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
-
-import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+
+import { CreateSchemaModal } from "../../components/Modal/CreateSchemaModal";
+import {
+  AuthWallPageContent,
+  withAuthWall,
+} from "../../components/pages/authWall";
 import {
   DashboardCard,
   DashboardCardProps,
 } from "../../components/pages/dashboard/DashboardCard";
 import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
-import {
-  AuthWallPageContent,
-  withAuthWall,
-} from "../../components/pages/authWall";
-import { CreateSchemaModal } from "../../components/Modal/CreateSchemaModal";
 
 const getDashboardPrimaryCardData = (
   openCreateSchemaModal: () => void,

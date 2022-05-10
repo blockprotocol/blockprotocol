@@ -1,18 +1,17 @@
-import React from "react";
-import { NextPage, GetStaticPaths, GetStaticProps } from "next";
-
-import { useRouter } from "next/router";
+import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Error from "next/error";
-import { apiClient } from "../../lib/apiClient";
+import { useRouter } from "next/router";
+import React from "react";
 
+import { TABS } from "../../components/pages/user/Tabs";
 import {
   UserPageComponent,
   UserPageProps,
 } from "../../components/pages/user/UserPageComponent";
-import { TABS } from "../../components/pages/user/Tabs";
+import { apiClient } from "../../lib/apiClient";
 
 type UserPageQueryParams = {
-  profileTabs: string[];
+  "profile-tabs": string[];
   shortname: string;
 };
 
@@ -37,7 +36,7 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const matchingTab = findTab(params?.profileTabs);
+  const matchingTab = findTab(params?.["profile-tabs"]);
   if (!matchingTab) {
     return {
       notFound: true,
@@ -75,7 +74,7 @@ export const getStaticProps: GetStaticProps<
 const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
   const router = useRouter();
 
-  const matchingTab = findTab(router.query.profileTabs);
+  const matchingTab = findTab(router.query["profile-tabs"]);
 
   // Protect against unlikely client-side navigation to a non-existing profile tab
   if (!matchingTab) {

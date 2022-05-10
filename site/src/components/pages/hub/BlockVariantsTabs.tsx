@@ -1,10 +1,10 @@
 import {
-  Tabs,
-  Tab,
-  useTheme,
   MenuItem,
   Select,
+  Tab,
+  Tabs,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { BlockMetadata } from "blockprotocol";
 import { VoidFunctionComponent } from "react";

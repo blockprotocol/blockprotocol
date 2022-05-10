@@ -1,13 +1,14 @@
-import React from "react";
+import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
 import {
+  Box,
   Container,
   Typography,
-  Box,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from "@mui/material";
-import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
-import { SyncIcon, FontAwesomeIcon } from "../../icons";
+import React from "react";
+
+import { FontAwesomeIcon, SyncIcon } from "../../icons";
 import { LinkButton } from "../../LinkButton";
 
 type WhyBlockProtocol2SectionProps = {

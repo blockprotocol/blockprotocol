@@ -1,4 +1,5 @@
-import slugify from "slugify";
+import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
   HTMLAttributes,
   HTMLProps,
@@ -8,14 +9,14 @@ import {
   useRef,
   VFC,
 } from "react";
-import { TypographyProps, Typography, Box, Paper, styled } from "@mui/material";
-import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { Link } from "../components/Link";
-import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
-import { InfoCard } from "../components/InfoCard/InfoCard";
-import { Snippet } from "../components/Snippet";
+import slugify from "slugify";
+
 import PageHeadingsContext from "../components/context/PageHeadingsContext";
 import { FontAwesomeIcon } from "../components/icons";
+import { InfoCard } from "../components/InfoCard/InfoCard";
+import { InfoCardWrapper } from "../components/InfoCard/InfoCardWrapper";
+import { Link } from "../components/Link";
+import { Snippet } from "../components/Snippet";
 
 const Heading = styled(Typography)(({ theme }) => ({
   "svg.link-icon": {

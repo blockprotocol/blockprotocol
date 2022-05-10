@@ -1,23 +1,23 @@
-import { useRouter } from "next/router";
 import {
-  Container,
-  Typography,
   Box,
-  Tabs,
+  Container,
   Tab,
+  Tabs,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 import siteMap from "../../../site-map.json";
-import { SiteMap, SiteMapPage } from "../../lib/sitemap";
-import { getSerializedPage } from "../../util/mdxUtils";
-import { Sidebar } from "../../components/PageSidebar";
 import { MdxPageContent } from "../../components/MdxPageContent";
 import Search from "../../components/pages/docs/Search";
+import { Sidebar } from "../../components/PageSidebar";
+import { SiteMap, SiteMapPage } from "../../lib/sitemap";
+import { getSerializedPage } from "../../util/mdxUtils";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",
@@ -36,7 +36,7 @@ const a11yProps = (index: number) => ({
 });
 
 type DocsPageQueryParams = {
-  docsSlug?: string[];
+  "docs-slug"?: string[];
 };
 
 type DocsPageProps = {
@@ -49,7 +49,7 @@ export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
 
   const paths = possibleHrefs.map((href) => ({
     params: {
-      docsSlug: href
+      "docs-slug": href
         .replace("/docs", "")
         .split("/")
         .filter((item) => !!item),
@@ -66,7 +66,7 @@ export const getStaticProps: GetStaticProps<
   DocsPageProps,
   DocsPageQueryParams
 > = async ({ params }) => {
-  const { docsSlug } = params || {};
+  const { "docs-slug": docsSlug } = params || {};
 
   const tabSlug = docsSlug && docsSlug.length > 0 ? docsSlug[0] : undefined;
 

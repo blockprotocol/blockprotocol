@@ -1,5 +1,5 @@
-import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import Ajv2019 from "ajv/dist/2019";
+import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import { Schema } from "jsonschema";
 
 import { EntityType } from "./api/model/entityType.model";

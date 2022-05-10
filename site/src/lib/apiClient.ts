@@ -1,38 +1,39 @@
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ValidationError } from "express-validator";
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+
+import {
+  ApiLoginWithLoginCodeRequestBody,
+  ApiLoginWithLoginCodeResponse,
+} from "../pages/api/login-with-login-code.api";
+import { ApiKeysResponse } from "../pages/api/me/api-keys.api";
+import {
+  ApiGenerateApiKeyBody,
+  ApiGenerateApiKeyResponse,
+} from "../pages/api/me/generate-api-key.api";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
-} from "../pages/api/sendLoginCode.api";
+} from "../pages/api/send-login-code.api";
 import {
   ApiSignupRequestBody,
   ApiSignupResponse,
 } from "../pages/api/signup.api";
 import {
-  ApiVerifyEmailRequestBody,
-  ApiVerifyEmailResponse,
-} from "../pages/api/verifyEmail.api";
-import {
-  ApiLoginWithLoginCodeRequestBody,
-  ApiLoginWithLoginCodeResponse,
-} from "../pages/api/loginWithLoginCode.api";
-import {
-  ApiGenerateApiKeyBody,
-  ApiGenerateApiKeyResponse,
-} from "../pages/api/me/generateApiKey.api";
-import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
-import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
-import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
-import { ApiKeysResponse } from "../pages/api/me/apiKeys.api";
-import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
+  ApiTypeUpdateRequest,
+  ApiTypeUpdateResponse,
+} from "../pages/api/types/[id]/update.api";
 import {
   ApiTypeCreateRequest,
   ApiTypeCreateResponse,
 } from "../pages/api/types/create.api";
+import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
+import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
+import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
+import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
 import {
-  ApiTypeUpdateRequest,
-  ApiTypeUpdateResponse,
-} from "../pages/api/types/[id]/update.api";
+  ApiVerifyEmailRequestBody,
+  ApiVerifyEmailResponse,
+} from "../pages/api/verify-email.api";
 import { FRONTEND_URL } from "./config";
 
 const BASE_URL = `${FRONTEND_URL}/api/`;
@@ -123,10 +124,10 @@ export const apiClient = {
   put,
   generateApiKey: (requestData: ApiGenerateApiKeyBody) =>
     apiClient.post<ApiGenerateApiKeyBody, ApiGenerateApiKeyResponse>(
-      "me/generateApiKey",
+      "me/generate-api-key",
       requestData,
     ),
-  getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/apiKeys"),
+  getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/api-keys"),
   getUser: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),
   getUserBlocks: ({ shortname }: { shortname: string }) =>
@@ -157,17 +158,17 @@ export const apiClient = {
     post<ApiSignupRequestBody, ApiSignupResponse>("signup", requestData),
   verifyEmail: (requestData: ApiVerifyEmailRequestBody) =>
     apiClient.post<ApiVerifyEmailRequestBody, ApiVerifyEmailResponse>(
-      "verifyEmail",
+      "verify-email",
       requestData,
     ),
   sendLoginCode: (requestData: ApiSendLoginCodeRequestBody) =>
     apiClient.post<ApiSendLoginCodeRequestBody, ApiSendLoginCodeResponse>(
-      "sendLoginCode",
+      "send-login-code",
       requestData,
     ),
   loginWithLoginCode: (requestData: ApiLoginWithLoginCodeRequestBody) =>
     apiClient.post<
       ApiLoginWithLoginCodeRequestBody,
       ApiLoginWithLoginCodeResponse
-    >("loginWithLoginCode", requestData),
+    >("login-with-login-code", requestData),
 };

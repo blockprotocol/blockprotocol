@@ -1,6 +1,7 @@
+import { Db } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 import { Middleware } from "next-connect";
-import { Db } from "mongodb";
+
 import { connectToDatabase } from "../mongodb";
 
 export type DbRequestExtensions = {

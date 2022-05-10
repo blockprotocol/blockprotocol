@@ -1,12 +1,12 @@
-import React, { useState, useMemo } from "react";
 import {
-  Container,
-  Typography,
   Box,
-  useTheme,
-  useMediaQuery,
+  Container,
   Fade,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
+import React, { useMemo, useState } from "react";
 
 import { Carousel } from "../../Carousel";
 

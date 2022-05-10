@@ -1,13 +1,14 @@
-import React from "react";
+import createEmotionServer from "@emotion/server/create-instance";
+import withTwindDocument from "@twind/next/document";
 import Document, {
-  Html,
+  DocumentContext,
   Head,
+  Html,
   Main,
   NextScript,
-  DocumentContext,
 } from "next/document";
-import withTwindDocument from "@twind/next/document";
-import createEmotionServer from "@emotion/server/create-instance";
+import React from "react";
+
 import twindConfig from "../../twind.config";
 import { createEmotionCache } from "../util/createEmotionCache";
 

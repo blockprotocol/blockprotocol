@@ -1,6 +1,6 @@
-import { VoidFunctionComponent } from "react";
 import { Box, TableCell } from "@mui/material";
-import { formatRelative, formatDistance } from "date-fns";
+import { formatDistance, formatRelative } from "date-fns";
+import { VoidFunctionComponent } from "react";
 
 export const DateTimeCell: VoidFunctionComponent<{
   timestamp: Date | string;
