@@ -56,7 +56,7 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
       ...(blockSchema ?? {}),
     };
 
-    const accountId = children.props.accountId ?? "accountId";
+    const accountId = children.props.accountId;
 
     const initialBlockEntity: BlockProtocolEntity = {
       accountId,
