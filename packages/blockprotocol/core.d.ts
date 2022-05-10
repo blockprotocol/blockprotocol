@@ -164,30 +164,41 @@ export type BlockProtocolDeleteEntitiesFunction = {
 };
 
 export type BlockProtocolFilterOperatorType =
+  | BlockProtocolFilterOperatorRequiringValue
+  | BlockProtocolFilterOperatorWithoutValue;
+
+export type BlockProtocolFilterOperatorWithoutValue =
+  | "IS_EMPTY"
+  | "IS_NOT_EMPTY";
+
+export type BlockProtocolFilterOperatorRequiringValue =
   | "CONTAINS"
   | "DOES_NOT_CONTAIN"
   | "IS"
   | "IS_NOT"
   | "STARTS_WITH"
-  | "ENDS_WITH"
-  | "IS_EMPTY"
-  | "IS_NOT_EMPTY";
+  | "ENDS_WITH";
 
 export type BlockProtocolMultiFilterOperatorType = "AND" | "OR";
 
 export type BlockProtocolMultiFilter = {
-  filters: {
-    field: string;
-    operator: BlockProtocolFilterOperatorType;
-    value: string;
-  }[];
+  filters: (
+    | {
+        field: string;
+        operator: BlockProtocolFilterOperatorRequiringValue;
+        value: string;
+      }
+    | { field: string; operator: BlockProtocolFilterOperatorWithoutValue }
+  )[];
   operator: BlockProtocolMultiFilterOperatorType;
 };
 
-export type BlockProtocolMultiSort = {
+export type BlockProtocolSort = {
   field: string;
   desc?: boolean | undefined | null;
-}[];
+};
+
+export type BlockProtocolMultiSort = BlockProtocolSort[];
 
 export type BlockProtocolAggregateOperationInput = {
   entityTypeId?: string | null;
