@@ -13,16 +13,16 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { ComponentType, useMemo, VoidFunctionComponent } from "react";
 
-import { BlocksSlider } from "../../../components/BlocksSlider";
+import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
-import { Link } from "../../../components/Link";
-import { BlockDataContainer } from "../../../components/pages/hub/BlockDataContainer";
+import { Link } from "../../../components/link";
+import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
 import {
   blockDependencies,
   BlockDependency,
   BlockExports,
   BlockSchema,
-} from "../../../components/pages/hub/HubUtils";
+} from "../../../components/pages/hub/hub-utils";
 import {
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,

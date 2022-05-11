@@ -9,15 +9,15 @@ import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
 import { ExpandedBlockMetadata } from "../../blocks";
 import { FRONTEND_URL, isProduction } from "../../config";
-import { sendMail } from "../awsSes";
+import { sendMail } from "../aws-ses";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
-import { ApiKey } from "./apiKey.model";
-import { EntityType } from "./entityType.model";
+import { ApiKey } from "./api-key.model";
+import { EntityType } from "./entity-type.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
   VerificationCodeVariant,
-} from "./verificationCode.model";
+} from "./verification-code.model";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 

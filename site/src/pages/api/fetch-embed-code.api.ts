@@ -1,7 +1,7 @@
 import { query as queryValidator, validationResult } from "express-validator";
 import oEmbedData from "oembed-providers/providers.json";
 
-import { createBaseHandler } from "../../lib/api/handler/baseHandler";
+import { createBaseHandler } from "../../lib/api/handler/base-handler";
 import { formatErrors } from "../../util/api";
 
 oEmbedData.unshift({

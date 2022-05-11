@@ -3,7 +3,7 @@ import { GetStaticProps } from "next";
 import Head from "next/head";
 import { VFC } from "react";
 
-import { BlockCard, BlockCardComingSoon } from "../components/BlockCard";
+import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import {
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,

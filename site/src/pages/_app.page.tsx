@@ -13,16 +13,16 @@ import TagManager from "react-gtm-module";
 
 import siteMap from "../../site-map.json";
 import twindConfig from "../../twind.config";
-import { PageLayout } from "../components/PageLayout";
-import SiteMapContext from "../context/SiteMapContext";
+import { PageLayout } from "../components/page-layout";
+import SiteMapContext from "../context/site-map-context";
 import {
   UserContext,
   UserContextValue,
   UserState,
-} from "../context/UserContext";
-import { apiClient } from "../lib/apiClient";
+} from "../context/user-context";
+import { apiClient } from "../lib/api-client";
 import { theme } from "../theme";
-import { createEmotionCache } from "../util/createEmotionCache";
+import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";
 
 const clientSideEmotionCache = createEmotionCache();

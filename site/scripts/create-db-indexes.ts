@@ -1,11 +1,11 @@
 import chalk from "chalk";
 
-import { EntityType } from "../src/lib/api/model/entityType.model";
+import { EntityType } from "../src/lib/api/model/entity-type.model";
 import { User, UserDocument } from "../src/lib/api/model/user.model";
 import {
   VerificationCode,
   VerificationCodeDocument,
-} from "../src/lib/api/model/verificationCode.model";
+} from "../src/lib/api/model/verification-code.model";
 import { connectToDatabase } from "../src/lib/api/mongodb";
 
 const catchAndLog = async (func: () => Promise<void>) => {
