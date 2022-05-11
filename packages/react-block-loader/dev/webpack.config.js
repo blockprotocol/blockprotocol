@@ -4,7 +4,7 @@ const webpack = require("webpack");
 /** @type import("webpack").Configuration */
 module.exports = {
   devtool: "eval-cheap-module-source-map",
-  entry: "./dev/DevApp.tsx",
+  entry: "./dev/dev-app.tsx",
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",

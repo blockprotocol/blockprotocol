@@ -5,10 +5,10 @@ import {
 } from "blockprotocol";
 import React, { ReactElement, VoidFunctionComponent } from "react";
 
-import { HtmlBlock } from "./HtmlBlock";
+import { HtmlBlock } from "./html-block";
 import { BlockNameWithNamespace, UnknownBlock } from "./shared";
-import { useRemoteBlock } from "./useRemoteBlock";
-import { WebComponentBlock } from "./WebComponentBlock";
+import { useRemoteBlock } from "./use-remote-block";
+import { WebComponentBlock } from "./web-component-block";
 
 export type RemoteBlockProps = {
   blockMetadata: BlockMetadata;

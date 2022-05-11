@@ -1,4 +1,4 @@
-export { RemoteBlock } from "./RemoteBlock";
+export { RemoteBlock } from "./remote-block";
 export type {
   TextFromUrlRequestMessage,
   TextFromUrlResponseMessage,

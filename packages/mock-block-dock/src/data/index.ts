@@ -1,7 +1,7 @@
-import { MockData } from "../useMockDatastore";
+import { MockData } from "../use-mock-datastore";
 import { entities } from "./entities";
-import { entityTypes } from "./entityTypes";
-import { linkedAggregationDefinitions } from "./linkedAggregationDefinitions";
+import { entityTypes } from "./entity-types";
+import { linkedAggregationDefinitions } from "./linked-aggregation-definitions";
 import { links } from "./links";
 
 export const mockData: MockData = {

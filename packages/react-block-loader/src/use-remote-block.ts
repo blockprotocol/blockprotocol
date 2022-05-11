@@ -4,7 +4,7 @@ import {
   crossFrameTextFetchResponseHandler,
   loadCrossFrameRemoteBlock,
   loadRemoteBlock,
-} from "./loadRemoteBlock";
+} from "./load-remote-block";
 import { UnknownBlock } from "./shared";
 
 type UseRemoteBlockHook = {

@@ -27,7 +27,7 @@ import {
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
-import { useDefaultArrayState } from "./useDefaultArrayState";
+import { useDefaultArrayState } from "./use-default-array-state";
 import {
   filterAndSortEntitiesOrTypes,
   matchEntityIdentifiers,
