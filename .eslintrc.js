@@ -98,6 +98,7 @@ module.exports = {
     "react/no-unescapted-entities": "off",
     "jsx-a11y/no-autofocus": "off",
     "no-plusplus": "off",
+    "unicorn/filename-case": "error",
     "prefer-destructuring": "off",
     "no-else-return": "off",
     "arrow-body-style": "off",
@@ -202,12 +203,6 @@ module.exports = {
       rules: {
         "import/no-extraneous-dependencies": "off",
         "global-require": "off",
-      },
-    },
-    {
-      files: ["packages/**"],
-      rules: {
-        "unicorn/filename-case": "error",
       },
     },
     {
