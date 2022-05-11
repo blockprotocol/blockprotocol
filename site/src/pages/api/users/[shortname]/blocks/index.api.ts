@@ -1,4 +1,4 @@
-import { createBaseHandler } from "../../../../../lib/api/handler/baseHandler";
+import { createBaseHandler } from "../../../../../lib/api/handler/base-handler";
 import { User } from "../../../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../../../lib/blocks";
 import { formatErrors } from "../../../../../util/api";

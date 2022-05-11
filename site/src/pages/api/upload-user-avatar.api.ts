@@ -3,12 +3,12 @@ import mimeType from "mime-types";
 import {
   AuthenticatedApiRequest,
   createAuthenticatedHandler,
-} from "../../lib/api/handler/authenticatedHandler";
+} from "../../lib/api/handler/authenticated-handler";
 import {
   MultipartExtensions,
   multipartUploads,
-} from "../../lib/api/middleware/multipartUploads.middleware";
-import { uploadFileBufferToS3 } from "../../lib/awsS3";
+} from "../../lib/api/middleware/multipart-uploads.middleware";
+import { uploadFileBufferToS3 } from "../../lib/aws-s3";
 import { formatErrors } from "../../util/api";
 
 type Response = {

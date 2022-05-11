@@ -1,4 +1,4 @@
-import { createAuthenticatedHandler } from "../../lib/api/handler/authenticatedHandler";
+import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
 import { SerializedUser } from "../../lib/api/model/user.model";
 
 export type ApiMeResponse = {

@@ -4,16 +4,16 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 
-import { CreateSchemaModal } from "../../components/Modal/CreateSchemaModal";
+import { CreateSchemaModal } from "../../components/modal/create-schema-modal";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../components/pages/authWall";
+} from "../../components/pages/auth-wall";
 import {
   DashboardCard,
   DashboardCardProps,
-} from "../../components/pages/dashboard/DashboardCard";
-import { TopNavigationTabs } from "../../components/pages/dashboard/TopNavigationTabs";
+} from "../../components/pages/dashboard/dashboard-card";
+import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 
 const getDashboardPrimaryCardData = (
   openCreateSchemaModal: () => void,

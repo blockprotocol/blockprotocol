@@ -1,7 +1,7 @@
 import { JSONObject } from "blockprotocol";
 
-import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticatedHandler";
-import { EntityType } from "../../../lib/api/model/entityType.model";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
+import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { formatErrors } from "../../../util/api";
 
 export type ApiTypeCreateRequest = {

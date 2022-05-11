@@ -318,7 +318,7 @@ module.exports = {
       },
     },
     {
-      files: ["site/src/pages/**"],
+      files: ["site/**"],
       rules: {
         "unicorn/filename-case": "error",
       },

@@ -10,7 +10,7 @@ import Document, {
 import React from "react";
 
 import twindConfig from "../../twind.config";
-import { createEmotionCache } from "../util/createEmotionCache";
+import { createEmotionCache } from "../util/create-emotion-cache";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

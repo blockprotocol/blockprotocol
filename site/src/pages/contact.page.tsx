@@ -5,7 +5,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { tw } from "twind";
 
-import { Link } from "../components/Link";
+import { Link } from "../components/link";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
 

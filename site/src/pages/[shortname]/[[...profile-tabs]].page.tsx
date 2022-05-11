@@ -3,12 +3,12 @@ import Error from "next/error";
 import { useRouter } from "next/router";
 import React from "react";
 
-import { TABS } from "../../components/pages/user/Tabs";
+import { TABS } from "../../components/pages/user/tabs";
 import {
   UserPageComponent,
   UserPageProps,
-} from "../../components/pages/user/UserPageComponent";
-import { apiClient } from "../../lib/apiClient";
+} from "../../components/pages/user/user-page-component";
+import { apiClient } from "../../lib/api-client";
 
 type UserPageQueryParams = {
   "profile-tabs": string[];
