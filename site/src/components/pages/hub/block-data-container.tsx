@@ -7,11 +7,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { BlockVariant } from "blockprotocol";
+import { BlockProtocolEntity, BlockVariant } from "blockprotocol";
 import { Validator } from "jsonschema";
-import { MockBlockDock } from "mock-block-dock";
 import {
-  ComponentType,
   useEffect,
   useMemo,
   useRef,
@@ -20,6 +18,7 @@ import {
 } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
+import { Block } from "./block";
 import { BlockDataTabPanels } from "./block-data-tab-panels";
 import { BlockDataTabs } from "./block-data-tabs";
 import { BlockModalButton } from "./block-modal-button";
@@ -30,14 +29,13 @@ import { BlockSchema, getEmbedBlock } from "./hub-utils";
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
-  BlockComponent?: ComponentType | undefined;
 };
 
 const validator = new Validator();
 
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
-> = ({ metadata, schema, BlockComponent }) => {
+> = ({ metadata, schema }) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
@@ -116,7 +114,9 @@ export const BlockDataContainer: VoidFunctionComponent<
   }, [blockVariantsTab, metadata?.examples, metadata?.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
-  const [props, errors] = useMemo<[object | undefined, string[]]>(() => {
+  const [blockProperties, errors] = useMemo<
+    [BlockProtocolEntity | undefined, string[]]
+  >(() => {
     const result = {
       accountId: `test-account-${metadata.name}`,
       entityId: `test-entity-${metadata.name}`,
@@ -222,11 +222,11 @@ export const BlockDataContainer: VoidFunctionComponent<
                   mx: "auto",
                 }}
               >
-                {BlockComponent && (
-                  <MockBlockDock>
-                    <BlockComponent {...props} />
-                  </MockBlockDock>
-                )}
+                <Block
+                  blockProperties={blockProperties ?? { entityId: "test" }}
+                  blockMetadata={metadata}
+                  blockSchema={schema}
+                />
               </Box>
             </Box>
           </Box>

@@ -1,6 +1,10 @@
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: ["true", "1"].includes(process.env.ANALYZE),
 });
+const withPlugins = require("next-compose-plugins");
+const withTranspileModules = require("next-transpile-modules")([
+  "react-block-loader",
+]);
 
 // @ts-check
 
@@ -40,4 +44,7 @@ const nextConfig = {
   },
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = withPlugins(
+  [withBundleAnalyzer, withTranspileModules],
+  nextConfig,
+);
