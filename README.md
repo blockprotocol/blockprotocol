@@ -33,9 +33,11 @@ We welcome [contributions](#contributing) to this repository. Within it you will
 
 1.  `packages`: utility packages for constructing Block Protocol blocks. These are all available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
     - `block-template`: a template for a React-based block
+    - `block-scripts`: the scripts relied on by `block-template` for building and serving a block
     - `blockprotocol`: TypeScript types for Block Protocol properties and functions, as described in the spec
     - `create-block-app`: a script to [create a new block](https://blockprotocol.org/docs/developing-blocks) using `block-template`
     - `mock-block-dock`: a mock embedding application used for developing blocks
+    - `react-block-loader`: a React component for loading a block, given a URL to a source file
 
 ## Contributing
 
