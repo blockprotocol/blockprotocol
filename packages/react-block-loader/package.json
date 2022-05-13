@@ -18,16 +18,15 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
+  "main": "./dist/esm/index.js",
+  "browser": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean; yarn build:cjs; yarn build:esm",
-    "build:cjs": "tsc --p tsconfig.build.json --module commonjs --outDir dist/cjs ",
-    "build:dev": "clean; cross-env NODE_ENV=development webpack --mode development",
+    "build": "yarn clean; yarn build:esm",
+    "build:dev": "yarn clean; cross-env NODE_ENV=development webpack --mode development",
     "build:esm": "tsc --p tsconfig.build.json",
     "clean": "rimraf ./dist/",
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
@@ -56,7 +55,7 @@
     "cross-env": "^7.0.3",
     "html-webpack-plugin": "^5.5.0",
     "lodash": "^4.17.21",
-    "mock-block-dock": "0.0.9",
+    "mock-block-dock": "0.0.10",
     "regenerator-runtime": "^0.13.9",
     "rimraf": "^3.0.2",
     "twind": "^0.16.17",

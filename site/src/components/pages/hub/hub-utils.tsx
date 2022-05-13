@@ -1,19 +1,5 @@
-import { ComponentType } from "react";
-
 /** @todo type as JSON Schema. */
 export type BlockSchema = Record<string, any>;
-export type BlockDependency = keyof typeof blockDependencies;
-export type BlockExports = {
-  [key: string]: ComponentType | undefined;
-};
-
-/* eslint-disable global-require */
-export const blockDependencies = {
-  react: require("react"),
-  "react-dom": require("react-dom"),
-  twind: require("twind"),
-  lodash: require("lodash"),
-};
 
 type OembedResponse = {
   title: string;

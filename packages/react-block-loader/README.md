@@ -6,11 +6,11 @@ A component which loads a [Block Protocol](https://blockprotocol.org) block from
 
 `yarn install "react-block-loader"`
 
-Pass RemoteBlock (at a minimum) a source url (`sourceUrl`), the properties the block expects (`blockProperties`),
+Pass BlockLoader (at a minimum) a source url (`sourceUrl`), the properties the block expects (`blockProperties`),
 and functions for it to call (`blockProtocolFunctions`), as set out in [the specification](https://blockprotocol.org/spec).
 
 ```jsx
-import { RemoteBlock } from "react-block-loader";
+import { BlockLoader } from "react-block-loader";
 
 const blockDependencies = {
   react: require("react"),
@@ -42,7 +42,7 @@ const BlockLoader = ({ blockSourceFolder: string }) => {
   };
 
   return (
-    <RemoteBlock
+    <BlockLoader
       blockMetadata={blockMetadata}
       blockProperties={blockProperties}
       blockProtocolFunctions={blockProtocolFunctions}

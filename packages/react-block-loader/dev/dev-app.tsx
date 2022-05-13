@@ -7,8 +7,7 @@ import { MockBlockDock } from "mock-block-dock";
 import React, { useEffect, useState, VoidFunctionComponent } from "react";
 import * as ReactDOM from "react-dom";
 
-import { RemoteBlock } from "../src";
-import { RemoteBlockProps } from "../src/remote-block";
+import { BlockLoader, BlockLoaderProps } from "../src/block-loader";
 
 const node = document.getElementById("app");
 
@@ -63,8 +62,8 @@ const MockBlockToRemoteBlock: VoidFunctionComponent<
   const { blockProperties, blockProtocolFunctions } = Object.entries(
     props,
   ).reduce<{
-    blockProperties: RemoteBlockProps["blockProperties"];
-    blockProtocolFunctions: RemoteBlockProps["blockProtocolFunctions"];
+    blockProperties: BlockLoaderProps["blockProperties"];
+    blockProtocolFunctions: BlockLoaderProps["blockProtocolFunctions"];
   }>(
     (objectSoFar, [key, value]) => {
       if (key in blockProtocolFunctionNames) {
@@ -93,7 +92,7 @@ const MockBlockToRemoteBlock: VoidFunctionComponent<
     : `${componentId}/${blockMetadata.source}`;
 
   return (
-    <RemoteBlock
+    <BlockLoader
       blockMetadata={blockMetadata}
       blockProperties={blockProperties}
       blockProtocolFunctions={blockProtocolFunctions}

@@ -10,8 +10,8 @@ import { BlockNameWithNamespace, UnknownBlock } from "./shared";
 import { useRemoteBlock } from "./use-remote-block";
 import { WebComponentBlock } from "./web-component-block";
 
-export type RemoteBlockProps = {
-  blockMetadata: BlockMetadata;
+export type BlockLoaderProps = {
+  blockMetadata?: BlockMetadata;
   blockProperties: Omit<BlockProtocolProps, keyof BlockProtocolFunctions>;
   blockProtocolFunctions: BlockProtocolFunctions;
   crossFrame?: boolean;
@@ -20,10 +20,6 @@ export type RemoteBlockProps = {
   onBlockLoaded?: () => void;
   sourceUrl: string;
 };
-
-export const FallbackLoadingIndicator: VoidFunctionComponent = () => (
-  <div>Loading...</div>
-);
 
 const isHtmlElement = (
   component: UnknownBlock,
@@ -45,7 +41,7 @@ const isHtmlElement = (
  * @param {function} [onBlockLoaded] a callback, called when the block has been successfully parsed and loaded
  * @param {string} sourceUrl the URL to the entry source file for the block
  */
-export const RemoteBlock: VoidFunctionComponent<RemoteBlockProps> = ({
+export const BlockLoader: VoidFunctionComponent<BlockLoaderProps> = ({
   blockMetadata,
   blockProperties,
   blockProtocolFunctions,
@@ -63,7 +59,7 @@ export const RemoteBlock: VoidFunctionComponent<RemoteBlockProps> = ({
   );
 
   if (loading) {
-    return LoadingIndicator ?? <FallbackLoadingIndicator />;
+    return LoadingIndicator ?? <div>Loading...</div>;
   }
 
   if (err) {
