@@ -86,7 +86,7 @@ type WebComponentBlockProps = {
  * Registers (if not already registered) and loads a custom element.
  * Listens for events matching Block Protocol functions and calls the relevant function.
  */
-export const WebComponentBlock: VFC<WebComponentBlockProps> = ({
+const WebComponentBlock: VFC<WebComponentBlockProps> = ({
   elementClass,
   functions,
   name,
@@ -157,3 +157,5 @@ export const WebComponentBlock: VFC<WebComponentBlockProps> = ({
 
   return <CustomElement onBlockProtocolEvent={handleBpEvent} {...props} />;
 };
+
+export default WebComponentBlock;

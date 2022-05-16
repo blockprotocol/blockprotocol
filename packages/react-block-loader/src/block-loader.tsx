@@ -8,7 +8,8 @@ import React, { ReactElement, VoidFunctionComponent } from "react";
 import { HtmlBlock } from "./html-block";
 import { BlockNameWithNamespace, UnknownBlock } from "./shared";
 import { useRemoteBlock } from "./use-remote-block";
-import { WebComponentBlock } from "./web-component-block";
+
+const WebComponentBlock = React.lazy(() => import("./web-component-block"));
 
 export type BlockLoaderProps = {
   blockMetadata?: BlockMetadata;
