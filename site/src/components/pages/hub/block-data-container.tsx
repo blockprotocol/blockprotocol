@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { BlockVariant } from "blockprotocol";
 import { Validator } from "jsonschema";
-// import { MockBlockDock } from "mock-block-dock";
 import {
   useEffect,
   useMemo,
@@ -122,7 +121,6 @@ export const BlockDataContainer: VoidFunctionComponent<
     const result = {
       accountId: `test-account-${metadata.name}`,
       entityId: `test-entity-${metadata.name}`,
-      // getEmbedBlock,
     };
 
     try {
@@ -131,7 +129,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       return [result, [(err as Error).message]];
     }
 
-    const errorsToEat = ["uploadFile", "getEmbedBlock"];
+    const errorsToEat = ["uploadFile"];
 
     const errorMessages = validator
       .validate(result, schema ?? {})
