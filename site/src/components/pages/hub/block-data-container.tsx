@@ -129,7 +129,7 @@ export const BlockDataContainer: VoidFunctionComponent<
       return [result, [(err as Error).message]];
     }
 
-    const errorsToEat = ["uploadFile"];
+    const errorsToEat = ["uploadFile", "getEmbedBlock"];
 
     const errorMessages = validator
       .validate(result, schema ?? {})
