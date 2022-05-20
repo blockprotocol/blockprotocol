@@ -137,7 +137,7 @@ export const SandboxedBlock: VoidFunctionComponent<SandboxedBlockProps> = ({
       ref={iframeRef}
       title="block"
       srcDoc={srcDoc}
-      sandbox="alllow-forms allow-scripts"
+      sandbox="allow-forms allow-scripts"
       onLoad={() => {
         postBlockProps();
       }}
