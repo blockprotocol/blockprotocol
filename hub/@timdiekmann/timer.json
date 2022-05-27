@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/hashintel/hash.git",
-  "commit": "71b171adee74a1f8c46e6aaf45d45f275e30c04d",
+  "commit": "ad4e84539ef4100ebbf85a6a8f832d44545ab118",
 
   "workspace": "@hashintel/block-timer",
   "distDir": "dist"
