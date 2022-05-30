@@ -70,6 +70,7 @@ const listBlockInfos = async (
   const errorMessages: string[] = [];
 
   for (const blockInfoPath of blockInfoPaths) {
+    if (!blockInfoPath.includes("tldraw")) continue;
     try {
       const [, blockVendorName, blockNameWithinVendor] =
         blockInfoPath.match(/^@([\w-]+)\/([\w-]+).json$/) ?? [];

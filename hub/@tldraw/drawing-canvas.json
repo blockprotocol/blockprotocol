@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/hashintel/hash.git",
-  "commit": "5f5ad685c426c2add86f9ab9de9fd2e87434de2c",
+  "commit": "46123f39cd2c5cc0706e7dbc1e82afb626218a76",
   "workspace": "@hashintel/drawing-canvas",
   "distDir": "dist"
 }
