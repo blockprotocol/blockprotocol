@@ -7,7 +7,7 @@ type AppProps = {
 
 export const App: BlockComponent<AppProps> = ({ entityId, name }) => (
   <>
-    <h1>Hello, {name}!</h1>
+    <h1>Hellodd, {name}!</h1>
     <p>
       The entityId of this block is {entityId}. Use it to update its data when
       calling updateEntities.

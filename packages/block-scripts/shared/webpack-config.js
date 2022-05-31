@@ -50,7 +50,7 @@ const generateBaseWebpackConfig = async (mode) => {
     output: {
       publicPath: "",
       libraryTarget: "commonjs",
-      filename: mode === "production" ? "main.[contenthash].js" : "main.js",
+      filename: mode === "production" ? "[name].[contenthash].js" : "[name].js",
     },
     externals: Object.fromEntries(
       Object.keys(peerDependencies).map((key) => [key, key]),
@@ -107,9 +107,11 @@ export const generateBuildWebpackConfig = async (mode) => {
   return {
     ...baseWebpackConfig,
     watch: mode === "development",
+    devtool: "inline-source-map",
+    // mode: "production",
     plugins: [
       ...baseWebpackConfig.plugins,
-      new BlockAssetsPlugin(),
+      ...(mode === "production" ? [new BlockAssetsPlugin()] : []),
       new CopyPlugin({
         patterns: [{ from: "./public/", to: "./public/" }],
       }),
@@ -134,12 +136,15 @@ export const generateDevWebpackConfig = async () => {
 
   return {
     devtool: "eval-cheap-module-source-map",
-    entry: await pickExistingFilePath(
-      ["./src/dev.js", "./src/dev.jsx", "./src/dev.ts", "./src/dev.tsx"],
-      "dev server entry point",
-    ),
+    entry: {
+      dev: await pickExistingFilePath(
+        ["./src/dev.js", "./src/dev.jsx", "./src/dev.ts", "./src/dev.tsx"],
+        "dev server entry point",
+      ),
+    },
     plugins: [
       ...baseWebpackConfig.plugins,
+      new BlockAssetsPlugin(),
       new HtmlWebpackPlugin({
         filename: "index.html",
         template: path.resolve(
@@ -147,10 +152,6 @@ export const generateDevWebpackConfig = async () => {
           "../assets/index.html",
         ),
       }),
-      new webpack.EnvironmentPlugin({
-        "process.env.NODE_ENV": "development",
-      }),
-      new webpack.HotModuleReplacementPlugin(),
     ],
     module: baseWebpackConfig.module,
     mode: "development",

@@ -44,7 +44,7 @@ const script = async () => {
   const buildWebpackConfig = await generateBuildWebpackConfig("development");
   const devWebpackConfig = await generateDevWebpackConfig();
 
-  webpack(buildWebpackConfig);
+  webpack(buildWebpackConfig, () => {});
 
   const devCompiler = webpack(devWebpackConfig);
   const devServer = new WebpackDevServer(webpackDevServerConfig, devCompiler);
