@@ -25,7 +25,7 @@ export class BlockAssetsPlugin {
       const metadataExtra = { source: assetsManifest["main.js"] };
 
       if (stats.compilation.options.mode === "development") {
-        metadataExtra.devRefreshEndpoint = `ws://localhost:${await getPort(
+        metadataExtra.devReloadEndpoint = `ws://localhost:${await getPort(
           "development",
         )}/ws`;
       }
