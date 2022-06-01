@@ -1,5 +1,6 @@
 import chalk from "chalk";
 
+/** If unhandled, printed to stdout without a call stack */
 export class UserFriendlyError extends Error {}
 
 process.on("uncaughtException", (error) => {
