@@ -34,7 +34,6 @@ const Bullet: VoidFunctionComponent = () => {
 
 type BlockPageProps = {
   blockMetadata: BlockMetadata;
-  blockStringifiedSource: string;
   catalog: BlockMetadata[];
   schema: BlockSchema;
 };
@@ -110,13 +109,11 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const { schema, source: blockStringifiedSource } =
-    await readBlockDataFromDisk(blockMetadata);
+  const { schema } = await readBlockDataFromDisk(blockMetadata);
 
   return {
     props: {
       blockMetadata,
-      blockStringifiedSource,
       catalog,
       schema,
     },
@@ -126,7 +123,6 @@ export const getStaticProps: GetStaticProps<
 
 const BlockPage: NextPage<BlockPageProps> = ({
   blockMetadata,
-  blockStringifiedSource,
   catalog,
   schema,
 }) => {
@@ -260,11 +256,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
         </Box>
 
         <Box sx={{ mb: 10 }}>
-          <BlockDataContainer
-            metadata={blockMetadata}
-            schema={schema}
-            stringifiedSource={blockStringifiedSource}
-          />
+          <BlockDataContainer metadata={blockMetadata} schema={schema} />
         </Box>
 
         {blockMetadata.repository && (

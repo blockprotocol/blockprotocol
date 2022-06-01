@@ -1,17 +1,7 @@
-import { BlockMetadata, JSONObject } from "blockprotocol";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  VoidFunctionComponent,
-} from "react";
+import { JSONObject } from "blockprotocol";
+import { NextApiHandler } from "next";
 
-export interface SandboxedBlockProps {
-  metadata: BlockMetadata;
-  stringifiedSource: string;
-  blockProps: Record<string, unknown> | undefined;
-}
+import { readBlockDataFromDisk, readBlocksFromDisk } from "../../../lib/blocks";
 
 /**
  * @todo remove after fixing
@@ -36,34 +26,44 @@ const hotfixPackageName = (packageName: string): string => {
   return packageName === "lodash" ? "lodash-es" : packageName;
 };
 
-export const SandboxedBlock: VoidFunctionComponent<SandboxedBlockProps> = ({
-  metadata,
-  stringifiedSource,
-  blockProps,
-}) => {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+const handler: NextApiHandler = async (req, res) => {
+  // @todo prevent direct access to this endpoint
 
-  const reactVersion = metadata.externals?.react ?? "17.0.2";
+  const catalog = readBlocksFromDisk();
+
+  const packagePath = `${req.query.shortname}/${req.query.blockslug}`;
+
+  const blockMetadata = catalog.find(
+    (metadata) => metadata.packagePath === packagePath,
+  );
+
+  if (!blockMetadata) {
+    res.status(404);
+    res.write("Block not found");
+    res.end();
+    return;
+  }
+
+  const { source } = await readBlockDataFromDisk(blockMetadata);
+  const reactVersion = blockMetadata.externals?.react ?? "17.0.2";
   const mockBlockDockVersion = "0.0.9";
 
-  const externalUrlLookup = useMemo(() => {
-    const result: Record<string, string> = {};
+  const externalUrlLookup: Record<string, string> = {};
 
-    const externals = hotfixExternals(metadata.externals);
+  const externals = hotfixExternals(blockMetadata.externals);
 
-    for (const [packageName, packageVersion] of Object.entries(externals)) {
-      result[packageName] = `https://esm.sh/${hotfixPackageName(
-        packageName,
-      )}@${packageVersion}`;
-    }
+  for (const [packageName, packageVersion] of Object.entries(externals)) {
+    externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
+      packageName,
+    )}@${packageVersion}`;
+  }
 
-    return result;
-  }, [metadata]);
-
-  const srcDoc = useMemo(
-    () => `
+  const html = `
     <script type="module">
       const handleMessage = ({ data }) => {
+        if (typeof data !== "string") {
+          return;
+        }
         globalThis.initialBlockProps = JSON.parse(data);
         window.addEventListener("message", handleMessage);
       }
@@ -73,7 +73,7 @@ export const SandboxedBlock: VoidFunctionComponent<SandboxedBlockProps> = ({
       import React from "https://esm.sh/react@${reactVersion}"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}?alias=lodash:lodash-es"
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}?alias=lodash:lodash-es&deps=react@${reactVersion}"
 
       const requireLookup = {
         "react-dom": ReactDOM,
@@ -102,7 +102,7 @@ export const SandboxedBlock: VoidFunctionComponent<SandboxedBlockProps> = ({
         return module.default ?? module.App ?? module[Object.keys(module)[0]];
       }
 
-      const blockSource = ${JSON.stringify(stringifiedSource)};
+      const blockSource = ${JSON.stringify(source)};
       const BlockComponent = findComponentExport(loadCjsFromSource(blockSource));
       const render = (blockComponentProps) => {
         ReactDOM.render(
@@ -111,45 +111,20 @@ export const SandboxedBlock: VoidFunctionComponent<SandboxedBlockProps> = ({
         );
       }
 
+      
+      window.addEventListener("message", ({ data }) => { if (typeof data === "string") { render(JSON.parse(data)) }}, false);
+      
       if (globalThis.initialBlockProps) {
         render(globalThis.initialBlockProps)
       }
-      window.addEventListener("message", ({ data }) => render(JSON.parse(data)), false);
+      
     </script>
     <div id="container"></div>
-  `,
-    [externalUrlLookup, reactVersion, stringifiedSource],
-  );
+  `;
 
-  const postBlockProps = useCallback(() => {
-    iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify(blockProps),
-      "*",
-    );
-  }, [blockProps]);
-
-  useEffect(() => {
-    postBlockProps();
-  }, [postBlockProps]);
-
-  return (
-    <iframe
-      ref={iframeRef}
-      title="block"
-      srcDoc={srcDoc}
-      sandbox="allow-forms allow-scripts"
-      onLoad={() => {
-        postBlockProps();
-      }}
-      // todo: remove 100% after implementing viewport negotiation
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        right: 0,
-        width: "100%",
-        height: "100%",
-      }}
-    />
-  );
+  res.status(200);
+  res.write(html);
+  res.end();
 };
+
+export default handler;

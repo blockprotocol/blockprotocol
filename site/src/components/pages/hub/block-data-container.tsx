@@ -24,19 +24,18 @@ import { BlockModalButton } from "./block-modal-button";
 import { BlockTabsModal } from "./block-tabs-modal";
 import { BlockVariantsTabs } from "./block-variants-tabs";
 import { BlockSchema } from "./hub-utils";
-import { SandboxedBlock } from "./sandboxed-block";
+import { SandboxedBlockDemo } from "./sandboxed-block-demo";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
-  stringifiedSource: string;
 };
 
 const validator = new Validator();
 
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
-> = ({ metadata, schema, stringifiedSource }) => {
+> = ({ metadata, schema }) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
@@ -223,13 +222,7 @@ export const BlockDataContainer: VoidFunctionComponent<
                   position: "relative",
                 }}
               >
-                {stringifiedSource && (
-                  <SandboxedBlock
-                    metadata={metadata}
-                    stringifiedSource={stringifiedSource}
-                    blockProps={props}
-                  />
-                )}
+                <SandboxedBlockDemo metadata={metadata} props={props} />
               </Box>
             </Box>
           </Box>
