@@ -1,6 +1,6 @@
 {
   "name": "react-block-loader",
-  "version": "0.0.10",
+  "version": "0.0.3",
   "description": "A React component to load Block Protocol blocks from a URL",
   "keywords": [
     "blockprotocol",
