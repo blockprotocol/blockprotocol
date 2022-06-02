@@ -28,7 +28,6 @@ const script = async () => {
       "Cache-Control": "no-store",
     },
     hot: true,
-    open: process.env.BROWSER !== "none",
     static: {
       directory: "dist",
     },
