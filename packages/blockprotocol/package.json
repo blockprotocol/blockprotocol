@@ -1,6 +1,6 @@
 {
   "name": "blockprotocol",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "TypeScript typings for https://blockprotocol.org developers",
   "keywords": [
     "blockprotocol",
