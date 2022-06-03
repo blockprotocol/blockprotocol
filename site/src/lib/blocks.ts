@@ -1,5 +1,7 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
+import glob from "glob"
 import hostedGitInfo from "hosted-git-info";
+import fs from "node:fs"
 
 import { FRONTEND_URL } from "./config";
 
@@ -79,11 +81,6 @@ const getRepositoryUrl = (
  *
  */
 export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
-  const glob = require("glob");
-  /* eslint-enable global-require */
-
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
@@ -134,8 +131,6 @@ export const readBlockDataFromDisk = async ({
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 

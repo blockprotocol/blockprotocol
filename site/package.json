@@ -3,13 +3,14 @@
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "build": "yarn exe scripts/build.ts",
     "clean": "rimraf ./.next/",
     "dev": "yarn exe scripts/dev.ts",
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
     "dev:seed-db": "yarn exe scripts/seed-db.ts",
-    "exe": "ts-node --require dotenv-flow/config --transpile-only --transpiler=ts-node/transpilers/swc-experimental",
+    "exe": "node --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require dotenv-flow/config",
     "generate-blockmetadata-schema": "typescript-json-schema ../packages/blockprotocol/core.d.ts BlockMetadata --required true --out public/schemas/block-metadata.json",
     "lint:tsc": "tsc --noEmit",
     "prepare": "patch-package && yarn exe scripts/prepare.ts",
@@ -111,7 +112,7 @@
     "execa": "^5.1.1",
     "micromatch": "^4.0.4",
     "rimraf": "^3.0.2",
-    "ts-node": "10.5.0",
+    "ts-node": "10.8.0",
     "typescript": "^4.6.3"
   }
 }

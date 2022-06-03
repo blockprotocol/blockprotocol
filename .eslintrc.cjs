@@ -71,7 +71,7 @@ module.exports = {
     "react/jsx-filename-extension": [
       "error",
       {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        extensions: [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"],
       },
     ],
     "react/jsx-props-no-spreading": "off",
@@ -182,16 +182,17 @@ module.exports = {
   settings: {
     "import/resolver": {
       node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        extensions: [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"],
       },
     },
   },
   overrides: [
     {
-      files: ["**/*.js"],
+      files: ["**/*.{c,m,}js"],
       parser: "@babel/eslint-parser", // disables typescript rules
       parserOptions: {
         requireConfigFile: false,
+        extraFileExtensions: [".cjs"],
         babelOptions: {
           presets: ["@babel/preset-react"], // allows jsx
         },
@@ -199,7 +200,7 @@ module.exports = {
     },
     {
       // top-level config files
-      files: ["*.config.js", "*rc.js"],
+      files: ["*.config.{c,m,}js", "*rc.{c,m,}js"],
       rules: {
         "import/no-extraneous-dependencies": "off",
         "global-require": "off",
@@ -216,15 +217,6 @@ module.exports = {
       files: ["packages/block-template/**"],
       parserOptions: {
         project: ["packages/block-template/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/block-template/src/dev.js"],
-      rules: {
-        "import/no-extraneous-dependencies": [
-          "error",
-          { devDependencies: true },
-        ],
       },
     },
     {
