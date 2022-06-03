@@ -43,7 +43,7 @@
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
     "algoliasearch": "4.12.1",
-    "chalk": "4.1.2",
+    "chalk": "5.0.1",
     "check-dependency-version-consistency": "2.0.0",
     "concurrently": "^7.0.0",
     "dotenv-flow": "3.2.0",
