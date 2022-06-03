@@ -11,14 +11,9 @@ import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, {
-  ComponentType,
-  ReactNode,
-  useMemo,
-  VoidFunctionComponent,
-} from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
+import React, { ComponentType, useMemo, VoidFunctionComponent } from "react";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
@@ -38,22 +33,12 @@ import {
 import { FRONTEND_URL } from "../../../lib/config";
 import { mdxComponents } from "../../../util/mdx-components";
 
+// Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(
   Object.entries(mdxComponents).filter(
     ([key]) => key[0]?.toLowerCase() === key[0],
   ),
 );
-
-markdownComponents.code = ({
-  inline,
-  ...rest
-}: {
-  inline?: boolean;
-  children?: ReactNode;
-}) => {
-  const Component = (inline ? mdxComponents.inlineCode : mdxComponents.code)!;
-  return <Component {...rest} />;
-};
 
 const blockRequire = (name: BlockDependency) => {
   if (!(name in blockDependencies)) {
@@ -104,7 +89,7 @@ const Bullet: VoidFunctionComponent = () => {
 };
 
 type BlockPageProps = {
-  blockReadme?: string;
+  compiledReadme?: string;
   blockMetadata: BlockMetadata;
   blockStringifiedSource: string;
   catalog: BlockMetadata[];
@@ -185,23 +170,27 @@ export const getStaticProps: GetStaticProps<
   const { schema, source: blockStringifiedSource } =
     await readBlockDataFromDisk(blockMetadata);
 
-  let blockReadme: string | undefined;
+  let readmeMd: string | undefined;
   try {
     const response = await fetch(
       `${FRONTEND_URL}/blocks/${blockMetadata.packagePath}/README.md`,
     );
     if (response.status === 200) {
-      blockReadme = await response.text();
+      readmeMd = await response.text();
     }
   } catch {
     // noop (readme resource does not exist)
   }
 
+  const compiledReadme = readmeMd
+    ? (await serialize(readmeMd)).compiledSource
+    : undefined;
+
   return {
     props: {
       blockMetadata,
       blockStringifiedSource,
-      ...(blockReadme ? { blockReadme } : {}), // https://github.com/vercel/next.js/discussions/11209
+      ...(compiledReadme ? { compiledReadme } : {}), // https://github.com/vercel/next.js/discussions/11209
       catalog,
       schema,
     },
@@ -210,7 +199,7 @@ export const getStaticProps: GetStaticProps<
 };
 
 const BlockPage: NextPage<BlockPageProps> = ({
-  blockReadme,
+  compiledReadme,
   blockMetadata,
   blockStringifiedSource,
   catalog,
@@ -370,7 +359,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               marginBottom: 10,
             }}
           >
-            {blockReadme ? (
+            {compiledReadme ? (
               <Box
                 sx={{
                   "& > h1:first-child": {
@@ -378,12 +367,10 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   },
                 }}
               >
-                <ReactMarkdown
+                <MDXRemote
+                  compiledSource={compiledReadme}
                   components={markdownComponents}
-                  remarkPlugins={[remarkGfm]}
-                >
-                  {blockReadme}
-                </ReactMarkdown>
+                />
               </Box>
             ) : (
               <div />

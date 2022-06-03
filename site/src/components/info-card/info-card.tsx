@@ -24,7 +24,7 @@ const mapInfoCardVariantToPaperVariant = (
 
 type InfoCardProps = {
   variant?: "info" | "warning";
-  title?: ReactNode;
+  title: ReactNode;
   children?: ReactNode;
   sx?: PaperProps["sx"];
 };
