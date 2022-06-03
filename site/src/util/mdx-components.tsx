@@ -1,8 +1,10 @@
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
+  ComponentType,
   HTMLAttributes,
   HTMLProps,
+  ReactElement,
   ReactNode,
   useContext,
   useEffect,
@@ -103,7 +105,7 @@ const HEADING_MARGIN_TOP = {
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, ReactNode> = {
+export const mdxComponents: Record<string, ComponentType> = {
   Box,
   Paper,
   Typography,
@@ -287,7 +289,7 @@ export const mdxComponents: Record<string, ReactNode> = {
   ),
   pre: (props: HTMLAttributes<HTMLElement>) => {
     // Delegate full control to code for more styling options
-    return props.children;
+    return props.children as ReactElement;
   },
   code: (props: HTMLAttributes<HTMLElement>) => {
     const isLanguageBlockFunction =

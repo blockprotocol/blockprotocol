@@ -9,7 +9,7 @@ import {
 } from "react";
 
 type InfoCardWrapperProps = {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export const INFO_CARD_WIDTH = 275;
