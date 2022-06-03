@@ -183,7 +183,8 @@ export const getStaticProps: GetStaticProps<
   }
 
   const compiledReadme = readmeMd
-    ? (await serialize(readmeMd)).compiledSource
+    ? (await serialize(readmeMd, { mdxOptions: { format: "md" } }))
+        .compiledSource
     : undefined;
 
   return {
