@@ -75,9 +75,9 @@ export class GraphEmbedderHandler
 
   getInitPayload(this: GraphEmbedderHandler): Record<string, any> {
     return {
-      blockEntity: this.blockEntity,
-      blockGraph: this.blockGraph,
-      linkedAggregations: this.linkedAggregations,
+      blockEntity: this._blockEntity,
+      blockGraph: this._blockGraph,
+      linkedAggregations: this._linkedAggregations,
     };
   }
 
@@ -86,7 +86,7 @@ export class GraphEmbedderHandler
     void this.sendMessage({
       message: {
         messageName: "blockEntity",
-        data: this.blockEntity,
+        data: this._blockEntity,
       },
     });
   }
@@ -96,7 +96,7 @@ export class GraphEmbedderHandler
     void this.sendMessage({
       message: {
         messageName: "blockGraph",
-        data: this.blockGraph,
+        data: this._blockGraph,
       },
     });
   }
@@ -106,7 +106,7 @@ export class GraphEmbedderHandler
     void this.sendMessage({
       message: {
         messageName: "linkedAggregations",
-        data: this.linkedAggregations,
+        data: this._linkedAggregations,
       },
     });
   }
