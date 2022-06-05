@@ -70,7 +70,7 @@ const Partners: NextPage = () => {
             className={tw`text-left`}
           >
             <input type="hidden" name="u" value="fdd8507b12076e95d84141f86" />
-            <input type="hidden" name="id" value="e511d9c097" />
+            <input type="hidden" name="id" value="7ef48267fd" />
 
             <div>
               <label htmlFor="NAME" className={tw`font-semibold uppercase `}>
