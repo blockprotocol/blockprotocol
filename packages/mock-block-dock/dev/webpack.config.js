@@ -39,7 +39,6 @@ module.exports = {
       ],
     },
     hot: true,
-    open: process.env.BROWSER !== "none",
     port: 9090,
     static: {
       directory: __dirname,

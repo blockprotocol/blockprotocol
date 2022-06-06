@@ -50,6 +50,10 @@ export type BlockMetadata = {
    */
   description?: string | null;
   /**
+   * URL of a web socket that reports updates in locally developed blocks. To be used by EAs to auto reload.
+   */
+  devReloadEndpoint?: string | null;
+  /**
    * The display name used for a block
    */
   displayName?: string | null;
