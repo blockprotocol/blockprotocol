@@ -4,20 +4,20 @@ This package supports the forthcoming Block Protocol v0.2, and is not currently 
 
 Check back soon for full instructions.
 
-# Block Protocol – Graph service
+## Block Protocol – Graph service
 
 This package implements the Block Protocol Graph service for blocks and embedding applications.
 
 To get started:
 
 1.  `yarn add @blockprotocol/graph` or `npm install @blockprotocol/graph`
-2.  Follow the instructions to use the graph service as a [block](#blocks) or an [embedding application](#embedding-applications)
+1.  Follow the instructions to use the graph service as a [block](#blocks) or an [embedding application](#embedding-applications)
 
 ## Blocks
 
 To create a GraphBlockHandler, pass the constructor an element in your block, along with any callbacks you wish to register to handle incoming messages.
 
-**React example**
+### React example
 
 ```javascript
 import React from "react";
@@ -39,7 +39,7 @@ export const App = () => {
 }
 ```
 
-**Custom element example**
+### Custom element example
 
 ```javascript
 import { GraphBlockHandler } from "@blockprotocol/graph";
@@ -66,7 +66,7 @@ To create a GraphEmbedderHandler, pass the constructor:
 - `blockGraph`
 - `linkedAggregations`
 
-**Example**
+### Example
 
 ```typescript
 import { GraphBlockHandler } from "@blockprotocol/graph";
