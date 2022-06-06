@@ -27,7 +27,10 @@ const hotfixPackageName = (packageName: string): string => {
 };
 
 const handler: NextApiHandler = async (req, res) => {
-  // @todo prevent direct access to this endpoint
+  if (req.url?.startsWith("/api/rewrites/")) {
+    res.status(404).send("Not found");
+    return;
+  }
 
   const catalog = readBlocksFromDisk();
 
