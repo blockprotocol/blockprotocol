@@ -27,7 +27,6 @@
     "blockprotocol": "0.0.10"
   },
   "devDependencies": {
-    "block-scripts": "0.0.6",
     "block-scripts": "0.0.7",
     "mock-block-dock": "0.0.10",
     "react": "^17.0.2",
