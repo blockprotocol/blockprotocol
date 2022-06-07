@@ -19,24 +19,20 @@ To create a GraphBlockHandler, pass the constructor an element in your block, al
 
 ### React example
 
+For React, we provide a `useGraphBlockService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
+
 ```javascript
 import React from "react";
-import { GraphBlockHandler } from "@blockprotocol/graph";
+
+import { useGraphBlockService } from "@blockprotocol/graph";
 
 export const App = () => {
-  const blockRef = React.useRef<HTMLDivElement>(null);
+  const blockRef = React.useRef < HTMLDivElement > null;
 
-  const [graphService, setGraphService] = React.useState<BlockGraphHandler>();
-  useEffect(() => {
-    if (blockRef.current) {
-      setGraphService(new BlockGraphHandler({ element: blockRef.current }));
-    }
-  }, []);
+  const { graphService } = useGraphBlockService({ ref: blockRef });
 
-  return (
-      <div ref={blockRef} />
-  )
-}
+  return <div ref={blockRef} />;
+};
 ```
 
 ### Custom element example
@@ -66,7 +62,7 @@ To create a GraphEmbedderHandler, pass the constructor:
 - `blockGraph`
 - `linkedAggregations`
 
-### Example
+These starting values should also be passed in a `graph` property object, if the block can be passed or assigned properties.
 
 ```typescript
 import { GraphBlockHandler } from "@blockprotocol/graph";
@@ -78,4 +74,31 @@ const graphService = new EmbedderGraphHandler({
   },
   element: elementWrappingTheBlock,
 });
+```
+
+### React example
+
+For React, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
+
+```javascript
+import React from "react";
+
+import { useGraphEmbedderService } from "@blockprotocol/graph";
+
+export const App = () => {
+  const wrappingRref = React.useRef < HTMLDivElement > null;
+
+  const blockEntity = { entityId: "123", properties: { name: "Bob" } };
+
+  const { graphService } = useGraphEmbedderService({
+    blockEntity,
+    ref: blockRef,
+  });
+
+  return (
+    <div ref={wrappingRref}>
+      <Block graph={{ blockEntity }} />
+    </div>
+  );
+};
 ```

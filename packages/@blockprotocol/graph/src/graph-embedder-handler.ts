@@ -36,7 +36,7 @@ export class GraphEmbedderHandler
     blockGraph?: BlockGraph;
     callbacks?: Partial<EmbedderGraphMessageCallbacks>;
     element: HTMLElement;
-    entityTypes: EntityType[];
+    entityTypes?: EntityType[];
     linkedAggregations?: LinkedAggregations;
   }) {
     super({ element, serviceName: "graph", sourceType: "embedder" });
