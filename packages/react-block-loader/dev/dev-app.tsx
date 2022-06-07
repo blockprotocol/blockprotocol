@@ -7,8 +7,7 @@ import { MockBlockDock } from "mock-block-dock";
 import React, { useEffect, useState, VoidFunctionComponent } from "react";
 import * as ReactDOM from "react-dom";
 
-import { RemoteBlock } from "../src";
-import { RemoteBlockProps } from "../src/remote-block";
+import { RemoteBlock, RemoteBlockProps } from "../src/remote-block";
 
 const node = document.getElementById("app");
 
