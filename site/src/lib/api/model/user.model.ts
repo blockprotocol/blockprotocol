@@ -3,7 +3,7 @@ import { merge } from "lodash";
 import { Db, DBRef, ObjectId, WithId } from "mongodb";
 import { NextApiResponse } from "next";
 
-import blocksData from "../../../../blocks-data.json";
+import blocksData from "../../../../blocks-data.json" assert { type: "json" };
 import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
