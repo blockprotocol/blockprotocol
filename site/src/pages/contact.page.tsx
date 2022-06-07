@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/label-has-associated-control -- the lint rule requires <input/> fields to be children of their associated <label/>s */
 
-import { Box, Container, Typography } from "@mui/material";
+import { Box, buttonClasses, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
 import { tw } from "twind";
 
+import { Button } from "../components/button";
+import { AirplaneIcon } from "../components/icons";
 import { Link } from "../components/link";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
@@ -181,17 +183,22 @@ const Partners: NextPage = () => {
               />
             </div>
 
-            <button
-              className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center`}
+            <Button
+              sx={{
+                marginTop: 4,
+                fontWeight: 600,
+                borderRadius: 1,
+                paddingX: 5,
+                color: ({ palette }) => palette.common.white,
+                [`& .${buttonClasses.endIcon}`]: {
+                  fontSize: 20,
+                },
+              }}
+              endIcon={<AirplaneIcon />}
               type="submit"
             >
-              Submit Form{" "}
-              <img
-                className={tw`ml-2`}
-                alt="take-off"
-                src="/assets/airplane.svg"
-              />
-            </button>
+              Submit Form
+            </Button>
           </form>
 
           <div
