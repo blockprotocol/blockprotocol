@@ -5,9 +5,9 @@ import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 import { writeFormattedJson } from "./write-formatted-json.js";
 
 /**
- * @param {string} source
+ * @param {Record<string, string>} extra
  */
-export const generateDistBlockMetadata = async (source) => {
+export const generateDistBlockMetadata = async (extra) => {
   const packageJsonPath = path.resolve(blockRootDirPath, "./package.json");
   const variantsJsonPath = path.resolve(blockRootDirPath, "./variants.json");
 
@@ -33,10 +33,9 @@ export const generateDistBlockMetadata = async (source) => {
     license,
     externals: peerDependencies,
     schema: "block-schema.json",
-    source,
-    builtAt: new Date().toISOString(),
     variants,
     ...blockprotocol,
+    ...extra,
   };
 
   return writeFormattedJson(
