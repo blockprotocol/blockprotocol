@@ -1,20 +1,29 @@
 # Mock Block Dock
 
-A component which provides mocks for testing [Block Protocol](https://blockprotocol.org) blocks.
+Mock datastore and functions for testing [Block Protocol](https://blockprotocol.org) blocks.
+
+Use as a component to wrap your block, or as a hook.
 
 `yarn add mock-block-dock`
 
 ## Usage
 
-When developing a block, wrap it in the embedder and pass your block its initial props:
+### Wrapper component
+
+When developing a block, wrap it in `MockBlockDock` and pass your block its initial props:
 
 ```jsx
+import { MockBlockDock } from "mock-block-dock";
+
 <MockBlockDock>
-  <TestBlock {...props} />
-</MockBlockDock>
+  <TestBlock
+    entityId="optional-custom-entity-id"
+    {...blocksStartingProperties}
+  />
+</MockBlockDock>;
 ```
 
-The embedder will automatically pass the following Block Protocol functions to your block:
+`MockBlockDock` will automatically pass the following Block Protocol functions to your block:
 
 - `aggregateEntities`
 - `aggregateEntityTypes`
@@ -32,6 +41,9 @@ The embedder will automatically pass the following Block Protocol functions to y
 - `updateLinkedAggregations`
 - `uploadFile`
 
+...as well as the starting properties you pass to your block (if any),
+and a fallback `entityId` if you do not provide one as part of the block's starting properties.
+
 For example, to update your block's props, get `entityId` and `updateEntities` from props and call:
 
 ```typescript
@@ -40,14 +52,44 @@ updateEntities?.([{ entityId, data: { ...newProps } }]);
 
 Your block will be re-rendered with its new properties.
 
-It will also pass:
+`MockBlockDock` will also pass:
 
-- `linkGroups` and `linkedEntities`, which will be populated once you create links between entities using `createLinks` (see [linking entities](https://blockprotocol.org/spec/block-types#linking-entities) for more).
-- `linkedAggregations`, which will be populated if you create a link from an entity to an aggregation of entities, using `createLinkedAggregations` – this includes both the definition of the aggregation operation, and the results of the operation.
+- `linkGroups` and `linkedEntities`, which will be populated once you create a `Link` between entities using `createLinks` (see [linking entities](https://blockprotocol.org/spec/block-types#linking-entities) for more).
+- `linkedAggregations`, which will be populated if you create a `LinkedAggregation` from an entity to an aggregation of entities, using `createLinkedAggregations` – this includes both the definition of the aggregation operation, and the results of the operation.
 
 The block will also be re-rendered with new properties if you update them on the child directly (e.g. if you are supplying the block component wrapped by `MockBlockDock` with props from some outside state).
 
 `MockBlockDock` is automatically included in [block-template](https://www.npmjs.com/package/block-template), which you can copy via [create-block-app](https://www.npmjs.com/package/create-block-app)
+
+### Hook
+
+If you want more control or visibility over the mock properties, you can retrieve them as a hook instead,
+and pass them to your block yourself.
+
+You should pass `blockProperties` to set your block's starting properties.
+
+```jsx
+import { useMockBlockProps } from "mock-block-dock";
+
+const {
+  blockProperties,
+  blockProtocolFunctions,
+  entityTypes,
+  linkedAggregations,
+  linkedEntities,
+  linkGroups,
+} = useMockBlockProps({
+  blockProperties,
+  blockSchema,
+});
+```
+
+As with the component, you can also pass the following optional arguments to customise the datastore:
+
+- `initialEntities`
+- `initialEntityTypes`
+- `initialLinks`
+- `initialLinkedAggregations`
 
 ## Mock entities
 
