@@ -20,7 +20,10 @@ export interface JSONArray extends Array<JSONValue> {}
 
 export type Entity = {
   entityId: string;
-  [key: string]: unknown;
+  entityTypeId: string;
+  properties: {
+    [key: string]: unknown;
+  };
 };
 
 export type CreateEntityData = {
@@ -233,6 +236,7 @@ export type BlockGraph = {
 export type BlockGraphMessageCallbacks = {
   blockGraph: MessageCallback<BlockGraph, null>;
   blockEntity: MessageCallback<Entity, null>;
+  entityTypes: MessageCallback<EntityType[], null>;
   linkedAggregations: MessageCallback<LinkedAggregations, null>;
 };
 

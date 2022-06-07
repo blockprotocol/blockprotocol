@@ -123,21 +123,27 @@ export abstract class CoreHandler {
     this.attachEventListeners();
   }
 
+  private eventListener(event: Event) {
+    void this.processReceivedMessage(event as CustomEvent);
+  }
+
   protected attachEventListeners(this: CoreHandler) {
     if (!this.element) {
       throw new Error(
         "Cannot attach event listeners before element set on CoreHandler instance.",
       );
     }
-    this.element.addEventListener(CoreHandler.customEventName, (event) => {
-      void this.processReceivedMessage(event as CustomEvent);
-    });
+    this.element.addEventListener(
+      CoreHandler.customEventName,
+      this.eventListener,
+    );
   }
 
   protected removeEventListeners(this: CoreHandler) {
-    this.element?.removeEventListener(CoreHandler.customEventName, (event) => {
-      void this.processReceivedMessage(event as CustomEvent);
-    });
+    this.element?.removeEventListener(
+      CoreHandler.customEventName,
+      this.eventListener,
+    );
   }
 
   /**

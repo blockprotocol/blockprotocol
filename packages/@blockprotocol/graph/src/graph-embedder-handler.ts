@@ -6,6 +6,7 @@ import {
   EmbedderGraphMessageCallbacks,
   EmbedderGraphMessages,
   Entity,
+  EntityType,
   LinkedAggregations,
 } from "./types";
 
@@ -20,6 +21,7 @@ export class GraphEmbedderHandler
 {
   private _blockEntity?: Entity;
   private _blockGraph?: BlockGraph;
+  private _entityTypes?: EntityType[];
   private _linkedAggregations?: LinkedAggregations;
 
   constructor({
@@ -27,18 +29,21 @@ export class GraphEmbedderHandler
     blockGraph,
     callbacks,
     element,
+    entityTypes,
     linkedAggregations,
   }: {
     blockEntity?: Entity;
     blockGraph?: BlockGraph;
-    callbacks?: EmbedderGraphMessageCallbacks;
+    callbacks?: Partial<EmbedderGraphMessageCallbacks>;
     element: HTMLElement;
+    entityTypes: EntityType[];
     linkedAggregations?: LinkedAggregations;
   }) {
     super({ element, serviceName: "graph", sourceType: "embedder" });
     this._blockEntity = blockEntity;
-    this._linkedAggregations = linkedAggregations;
     this._blockGraph = blockGraph;
+    this._entityTypes = entityTypes;
+    this._linkedAggregations = linkedAggregations;
 
     if (callbacks) {
       this.registerCallbacks(callbacks);
@@ -97,6 +102,16 @@ export class GraphEmbedderHandler
       message: {
         messageName: "blockGraph",
         data: this._blockGraph,
+      },
+    });
+  }
+
+  entityTypes({ data }: { data?: EntityType[] }) {
+    this._entityTypes = data;
+    void this.sendMessage({
+      message: {
+        messageName: "entityTypes",
+        data: this._entityTypes,
       },
     });
   }
