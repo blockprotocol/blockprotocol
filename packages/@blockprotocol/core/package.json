@@ -7,14 +7,14 @@
     "blocks",
     "core"
   ],
-  "homepage": "https://github.com/blockprotocol/blockprotocol#readme",
+  "homepage": "https://blockprotocol.org",
   "bugs": {
     "url": "https://github.com/blockprotocol/blockprotocol/issues"
   },
   "repository": {
     "type": "git",
     "url": "git@github.com:blockprotocol/blockprotocol.git",
-    "directory": "packages/core"
+    "directory": "packages/@blockprotocol/core"
   },
   "license": "MIT",
   "author": {
