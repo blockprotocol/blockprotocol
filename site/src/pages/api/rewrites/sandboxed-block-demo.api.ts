@@ -70,9 +70,9 @@ const handler: NextApiHandler = async (req, res) => {
           return;
         }
         globalThis.initialBlockProps = JSON.parse(data);
-        window.addEventListener("message", handleMessage);
+        window.removeEventListener("message", handleMessage);
       }
-      window.addEventListener("message", handleMessage, false);
+      window.addEventListener("message", handleMessage);
     </script>
     <script type="module">
       import React from "https://esm.sh/react@${reactVersion}"
@@ -116,14 +116,12 @@ const handler: NextApiHandler = async (req, res) => {
         );
       }
 
-      
-      window.addEventListener("message", ({ data }) => { if (typeof data === "string") { render(JSON.parse(data)) }}, false);
-      
+      window.addEventListener("message", ({ data }) => { if (typeof data === "string") { render(JSON.parse(data)) }});
+
       if (globalThis.initialBlockProps) {
         render(globalThis.initialBlockProps)
       }
-      
-    </script>
+      </script>
     <div id="container"></div>
   `;
 
