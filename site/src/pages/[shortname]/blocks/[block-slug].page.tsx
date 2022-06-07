@@ -63,8 +63,10 @@ const generateSandboxBaseUrl = (): string => {
 
   // @see https://vercel.com/docs/concepts/deployments/automatic-urls
   const slugifiedBranch = branch.toLowerCase().replace(/[^\w-]+/g, "-");
-  const branchPrefix =
-    `https://blockprotocol-git-${slugifiedBranch}-hashintel`.slice(0, 64);
+  const branchPrefix = `blockprotocol-git-${slugifiedBranch}-hashintel`.slice(
+    0,
+    64,
+  );
   return `https://${branchPrefix}.vercel.app`;
 };
 
