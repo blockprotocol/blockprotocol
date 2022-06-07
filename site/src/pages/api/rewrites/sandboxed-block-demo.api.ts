@@ -1,6 +1,7 @@
 import { JSONObject } from "blockprotocol";
 import { NextApiHandler } from "next";
 
+import packageJson from "../../../../package.json";
 import { readBlockDataFromDisk, readBlocksFromDisk } from "../../../lib/blocks";
 
 /**
@@ -12,9 +13,9 @@ import { readBlockDataFromDisk, readBlocksFromDisk } from "../../../lib/blocks";
 const hotfixExternals = (externals: JSONObject | undefined): JSONObject => {
   return (
     externals ?? {
-      react: "17.0.2",
-      lodash: "4.17.21",
-      twind: "0.16.16",
+      react: packageJson.dependencies.react,
+      lodash: packageJson.dependencies.lodash,
+      twind: packageJson.dependencies.twind,
     }
   );
 };
@@ -48,8 +49,9 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const { source } = await readBlockDataFromDisk(blockMetadata);
-  const reactVersion = blockMetadata.externals?.react ?? "17.0.2";
-  const mockBlockDockVersion = "0.0.9";
+  const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
+  const reactVersion =
+    blockMetadata.externals?.react ?? packageJson.dependencies.react;
 
   const externalUrlLookup: Record<string, string> = {};
 
