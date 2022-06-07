@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control -- the lint rule requires <input/> fields to be children of their associated <label/>s */
 
-import { Box, buttonClasses, Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
 import { tw } from "twind";
@@ -186,16 +186,10 @@ const Partners: NextPage = () => {
             <Button
               sx={{
                 marginTop: 4,
-                fontWeight: 600,
-                borderRadius: 1,
-                paddingX: 5,
-                color: ({ palette }) => palette.common.white,
-                [`& .${buttonClasses.endIcon}`]: {
-                  fontSize: 20,
-                },
               }}
               endIcon={<AirplaneIcon />}
               type="submit"
+              squared
             >
               Submit Form
             </Button>
