@@ -86,7 +86,7 @@ import React from "react";
 import { useGraphEmbedderService } from "@blockprotocol/graph";
 
 export const App = () => {
-  const wrappingRref = React.useRef < HTMLDivElement > null;
+  const wrappingRef = React.useRef < HTMLDivElement > null;
 
   const blockEntity = { entityId: "123", properties: { name: "Bob" } };
 
@@ -96,7 +96,7 @@ export const App = () => {
   });
 
   return (
-    <div ref={wrappingRref}>
+    <div ref={wrappingRef}>
       <Block graph={{ blockEntity }} />
     </div>
   );
