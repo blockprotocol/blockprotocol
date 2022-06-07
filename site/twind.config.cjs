@@ -1,5 +1,5 @@
 /** @type {import('twind').Configuration} */
-export default {
+module.exports = {
   theme: {
     extend: {
       colors: {},
