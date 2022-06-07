@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import algoliasearch from "algoliasearch";
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
 import React, {
   ChangeEvent,

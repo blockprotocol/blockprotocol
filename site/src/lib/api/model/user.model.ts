@@ -1,5 +1,5 @@
 import dedent from "dedent";
-import { merge } from "lodash";
+import merge from "lodash/merge";
 import { Db, DBRef, ObjectId, WithId } from "mongodb";
 import { NextApiResponse } from "next";
 
