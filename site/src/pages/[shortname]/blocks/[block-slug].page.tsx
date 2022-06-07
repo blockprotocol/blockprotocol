@@ -40,11 +40,13 @@ import { isProduction } from "../../../lib/config";
  */
 const generateSandboxBaseUrl = (): string => {
   if (isProduction) {
-    const deploymentUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
+    const deploymentUrl =
+      process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL ??
+      process.env.NEXT_PUBLIC_VERCEL_URL;
 
     if (!deploymentUrl) {
       throw new Error(
-        "Could not generate frame origin: production environment detected but no process.env.NEXT_PUBLIC_VERCEL_URL",
+        "Could not generate frame origin: production environment detected but no process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL or process.env.NEXT_PUBLIC_VERCEL_URL",
       );
     }
 
