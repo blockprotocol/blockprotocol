@@ -33,6 +33,11 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
+  if (req.headers.origin === "blockprotocol.org") {
+    res.status(403).send("Forbidden");
+    return;
+  }
+
   const catalog = readBlocksFromDisk();
 
   const packagePath = `${req.query.shortname}/${req.query.blockslug}`;
