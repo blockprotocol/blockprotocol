@@ -155,8 +155,8 @@ export abstract class CoreHandler {
       serviceName: string;
     },
   ) {
-    this.messageCallbacksByService[serviceName] ??= {};
-    this.messageCallbacksByService[serviceName]![messageName] = callback;
+    this.messageCallbacksByService[serviceName] ??= new Map();
+    this.messageCallbacksByService[serviceName]!.set(messageName, callback);
   }
 
   sendMessage(this: CoreHandler, args: SendMessageArgs): Message;
@@ -228,7 +228,7 @@ export abstract class CoreHandler {
       message;
 
     const callback: GenericMessageCallback | undefined =
-      this.messageCallbacksByService[service]?.[messageName] ??
+      this.messageCallbacksByService[service]?.get(messageName) ??
       this.defaultMessageCallback;
 
     if (respondedToBy && !callback) {

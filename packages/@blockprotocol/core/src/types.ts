@@ -57,11 +57,7 @@ export type GenericMessageCallback =
   | MessageCallback<any, null, any, string>;
 
 export type MessageCallbacksByService = {
-  [serviceName: string]:
-    | {
-        [messageName: string]: GenericMessageCallback | undefined;
-      }
-    | undefined;
+  [serviceName: string]: Map<string, GenericMessageCallback> | undefined;
 };
 
 export type EmbedderInitMessage = {
