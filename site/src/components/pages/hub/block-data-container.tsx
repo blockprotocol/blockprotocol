@@ -29,13 +29,14 @@ import { SandboxedBlockDemo } from "./sandboxed-block-demo";
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
+  sandboxBaseUrl: string;
 };
 
 const validator = new Validator();
 
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
-> = ({ metadata, schema }) => {
+> = ({ metadata, schema, sandboxBaseUrl }) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
@@ -222,7 +223,11 @@ export const BlockDataContainer: VoidFunctionComponent<
                   position: "relative",
                 }}
               >
-                <SandboxedBlockDemo metadata={metadata} props={props} />
+                <SandboxedBlockDemo
+                  metadata={metadata}
+                  props={props}
+                  sandboxBaseUrl={sandboxBaseUrl}
+                />
               </Box>
             </Box>
           </Box>

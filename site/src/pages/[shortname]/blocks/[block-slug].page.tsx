@@ -23,6 +23,50 @@ import {
   readBlockDataFromDisk,
   readBlocksFromDisk,
 } from "../../../lib/blocks";
+import { isProduction } from "../../../lib/config";
+
+/**
+ * We want a different origin for the iFrame to the parent window
+ * so that it can't use cookies issued to the user in the main app.
+ *
+ * The PRODUCTION origin will be blockprotocol.org, so we can use
+ * the unique Vercel deployment URL as the origin in production.
+ *
+ * In STAGING, we will mostly be visiting unique deployment URLs
+ * for testing, so we can use the unique branch URL as the origin.
+ * Note: this means the frame in preview deployments will always be
+ * built from the tip of the branch - if you visit the non-latest preview
+ * deployment AND you have changed the framed code, they may be out of sync.
+ */
+const generateSandboxBaseUrl = (): string => {
+  if (isProduction) {
+    const deploymentUrl = process.env.NEXT_PUBLIC_VERCEL_URL;
+
+    if (!deploymentUrl) {
+      throw new Error(
+        "Could not generate frame origin: production environment detected but no process.env.NEXT_PUBLIC_VERCEL_URL",
+      );
+    }
+
+    return deploymentUrl;
+  }
+
+  const branch = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF;
+
+  if (!branch) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "Running locally: block hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
+    );
+    return "";
+  }
+
+  // @see https://vercel.com/docs/concepts/deployments/automatic-urls
+  const slugifiedBranch = branch.toLowerCase().replace(/[^\w-]+/g, "-");
+  const branchPrefix =
+    `https://blockprotocol-git-${slugifiedBranch}-hashintel`.slice(0, 64);
+  return `https://${branchPrefix}.vercel.app`;
+};
 
 const Bullet: VoidFunctionComponent = () => {
   return (
@@ -35,6 +79,7 @@ const Bullet: VoidFunctionComponent = () => {
 type BlockPageProps = {
   blockMetadata: BlockMetadata;
   catalog: BlockMetadata[];
+  sandboxBaseUrl: string;
   schema: BlockSchema;
 };
 
@@ -115,6 +160,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       blockMetadata,
       catalog,
+      sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
     },
     revalidate: 1800,
@@ -124,6 +170,7 @@ export const getStaticProps: GetStaticProps<
 const BlockPage: NextPage<BlockPageProps> = ({
   blockMetadata,
   catalog,
+  sandboxBaseUrl,
   schema,
 }) => {
   const { query } = useRouter();
@@ -256,7 +303,11 @@ const BlockPage: NextPage<BlockPageProps> = ({
         </Box>
 
         <Box sx={{ mb: 10 }}>
-          <BlockDataContainer metadata={blockMetadata} schema={schema} />
+          <BlockDataContainer
+            metadata={blockMetadata}
+            schema={schema}
+            sandboxBaseUrl={sandboxBaseUrl}
+          />
         </Box>
 
         {blockMetadata.repository && (

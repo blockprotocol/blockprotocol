@@ -5,11 +5,13 @@ import { ExpandedBlockMetadata } from "../../../lib/blocks";
 export interface SandboxedBlockProps {
   metadata: ExpandedBlockMetadata;
   props: Record<string, unknown> | undefined;
+  sandboxBaseUrl: string;
 }
 
 export const SandboxedBlockDemo: VoidFunctionComponent<SandboxedBlockProps> = ({
   metadata,
   props,
+  sandboxBaseUrl,
 }) => {
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
@@ -21,9 +23,7 @@ export const SandboxedBlockDemo: VoidFunctionComponent<SandboxedBlockProps> = ({
     postBlockProps();
   }, [postBlockProps]);
 
-  const aliasBaseUrl = ""; // @todo
-
-  const sandboxedDemoUrl = `${aliasBaseUrl}/${metadata.packagePath.replace(
+  const sandboxedDemoUrl = `${sandboxBaseUrl}/${metadata.packagePath.replace(
     "/",
     "/blocks/",
   )}/sandboxed-demo`;
