@@ -104,7 +104,11 @@ const handler: NextApiHandler = async (req, res) => {
       }
 
       const findComponentExport = (module) => {
-        return module.default ?? module.App ?? module[Object.keys(module)[0]];
+        const result = module.default ?? module.App ?? module[Object.keys(module)[0]];
+        if (!result) {
+          throw new Error("Could not find component export");
+        }
+        return result;
       }
 
       const blockSource = ${JSON.stringify(source)};
