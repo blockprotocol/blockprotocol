@@ -12,7 +12,7 @@ export const TestBlock: BlockComponent<AppProps> = ({ graph }) => {
   } = graph;
   const blockRef = useRef<HTMLDivElement>(null);
 
-  const { graphService } = useGraphBlockService({ ref: blockRef });
+  const { graphService } = useGraphBlockService(blockRef);
 
   return (
     <div ref={blockRef}>
