@@ -298,6 +298,11 @@ const prepareBlock = async ({
 
   if (distDirPath !== repositorySnapshotDirPath) {
     console.log(chalk.green(`Installing dependencies...`));
+
+    if (packageManager === "yarn" && process.env.VERCEL) {
+      await execa("yarn", ["cache", "clean"], defaultExecaOptions);
+    }
+
     // @todo explore focus mode to speed up yarn install in monorepos
     // https://classic.yarnpkg.com/lang/en/docs/cli/install/#toc-yarn-install-focus
     // https://yarnpkg.com/cli/workspaces/focus
