@@ -149,6 +149,14 @@ const ensureRepositorySnapshot = async ({
     return repositorySnapshotDirPath;
   }
 
+  // Vercel builds may fail when block build cache is empty. The error says
+  // "Could not write file /tmp/..." "ENOSPC: no space left on device"
+  // Preventing workshop dir path folder from growing too fast reduces
+  // the chances of failure.
+  if (process.env.VERCEL) {
+    await fs.emptyDir(workshopDirPath);
+  }
+
   const { path: tarDirPath, cleanup: cleanupTarDir } = await tmp.dir({
     unsafeCleanup: true,
   });
@@ -350,14 +358,6 @@ const prepareBlock = async ({
   }
 
   await fs.move(distDirPath, blockDirPath);
-
-  // Vercel builds may fail on cold starts (when block build cache is empty).
-  // The error says "Could not write file /tmp/..." "ENOSPC: no space left on device"
-  // Preventing /tmp/ folder from growing too fast slows down block builds but reduces
-  // the chances of failure.
-  if (process.env.VERCEL) {
-    await fs.remove(path.resolve(rootWorkspaceDirPath, "node_modules"));
-  }
 
   console.log(chalk.green(`Done!`));
 };
