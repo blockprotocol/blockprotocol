@@ -465,6 +465,10 @@ const script = async () => {
     console.log("");
     console.log(chalk.blue(`Block ${chalk.bold(blockName)} needs preparing.`));
 
+    console.log("==============");
+    await execa("df", ["-h"], { stdio: "inherit" });
+    console.log("==============");
+
     try {
       await fs.ensureDir(blockDirPath);
       await prepareBlock({
