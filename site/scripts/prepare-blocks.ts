@@ -507,4 +507,4 @@ const script = async () => {
   // As a workaround, we can clear CI cache for now.
 };
 
-export default script();
+await script();

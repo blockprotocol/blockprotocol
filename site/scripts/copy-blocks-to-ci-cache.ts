@@ -38,4 +38,4 @@ const script = async () => {
   console.log("Done.");
 };
 
-export default script();
+await script();

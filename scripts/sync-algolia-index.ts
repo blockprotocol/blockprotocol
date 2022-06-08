@@ -181,4 +181,4 @@ const script = async () => {
   console.log("Algolia index updated.");
 };
 
-void script();
+await script();

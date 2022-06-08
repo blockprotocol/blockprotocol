@@ -15,4 +15,4 @@ const script = async () => {
   console.log(`✅ Blocks data generated: ${blocksDataFilePath}`);
 };
 
-export default script();
+await script();
