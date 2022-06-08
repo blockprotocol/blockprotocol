@@ -4,4 +4,4 @@ This package implements the Block Protocol Core specification and is published a
 
 It is currently for use only as a dependency of packages implementing Block Protocol services.
 
-See the `graph` package for an example.
+See the `@blockprotocol/graph` package for an example.
