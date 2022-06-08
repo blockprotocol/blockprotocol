@@ -36,7 +36,7 @@ const useGraphServiceConstructor = <
     | null
   >(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- this will not loop, and we d
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- will not loop & we don't want to reconstruct on other args
   useEffect(() => {
     if (ref.current === previousRef.current) {
       return;
