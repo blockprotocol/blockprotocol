@@ -65,15 +65,16 @@ export abstract class CoreHandler {
   private static readonly instanceMap = new WeakMap<HTMLElement, CoreHandler>();
 
   private static isBlockProtocolMessage(message: unknown): message is Message {
-  return (
-    typeof message === "object" &&
-    message !== null &&
-    !Array.isArray(message) &&
-    "requestId" in message &&
-    "service" in message &&
-    "source" in message &&
-    "messageName" in message
-  );
+    return (
+      typeof message === "object" &&
+      message !== null &&
+      !Array.isArray(message) &&
+      "requestId" in message &&
+      "service" in message &&
+      "source" in message &&
+      "messageName" in message
+    );
+  }
 
   /**
    * Register a ServiceHandler for the given element.
@@ -125,7 +126,7 @@ export abstract class CoreHandler {
   }
 
   private eventListener = (event: Event) => {
-    void this.processReceivedMessage(event as CustomEvent);
+    this.processReceivedMessage(event as CustomEvent);
   };
 
   protected attachEventListeners(this: CoreHandler) {
@@ -259,7 +260,7 @@ export abstract class CoreHandler {
         const { data: responsePayload, errors: responseErrors } =
           (await callback({ data, errors })) ?? {};
 
-        void this.sendMessage({
+        this.sendMessage({
           partialMessage: {
             messageName: respondedToBy,
             data: responsePayload,
@@ -276,7 +277,7 @@ export abstract class CoreHandler {
         );
       }
     } else {
-      void callback({ data, errors });
+      callback({ data, errors });
     }
   }
 
@@ -286,10 +287,7 @@ export abstract class CoreHandler {
    * 2. Calls any callbacks which have been registered for dealing with the message
    * 3. Processes the init messages - see {@link processInitMessage}
    */
-  private async processReceivedMessage(
-    this: CoreHandler,
-    messageEvent: CustomEvent,
-  ) {
+  private processReceivedMessage(this: CoreHandler, messageEvent: CustomEvent) {
     if (messageEvent.type !== CoreHandler.customEventName) {
       return;
     }
