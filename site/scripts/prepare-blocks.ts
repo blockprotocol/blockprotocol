@@ -151,8 +151,7 @@ const ensureRepositorySnapshot = async ({
 
   // Vercel builds may fail when block build cache is empty. The error says
   // "Could not write file /tmp/..." "ENOSPC: no space left on device"
-  // Preventing workshop dir path folder from growing too fast reduces
-  // the chances of failure.
+  // Preventing workshop folder from growing indefinitely reduces the chances of failure.
   if (process.env.VERCEL) {
     await fs.emptyDir(workshopDirPath);
   }
@@ -302,7 +301,6 @@ const prepareBlock = async ({
 
   if (distDirPath !== repositorySnapshotDirPath) {
     console.log(chalk.green(`Installing dependencies...`));
-
     // @todo explore focus mode to speed up yarn install in monorepos
     // https://classic.yarnpkg.com/lang/en/docs/cli/install/#toc-yarn-install-focus
     // https://yarnpkg.com/cli/workspaces/focus
@@ -358,7 +356,6 @@ const prepareBlock = async ({
   }
 
   await fs.move(distDirPath, blockDirPath);
-
   console.log(chalk.green(`Done!`));
 };
 
@@ -464,10 +461,6 @@ const script = async () => {
 
     console.log("");
     console.log(chalk.blue(`Block ${chalk.bold(blockName)} needs preparing.`));
-
-    console.log("==============");
-    await execa("df", ["-h"], { stdio: "inherit" });
-    console.log("==============");
 
     try {
       await fs.ensureDir(blockDirPath);
