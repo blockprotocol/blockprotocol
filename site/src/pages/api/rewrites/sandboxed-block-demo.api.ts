@@ -69,6 +69,9 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const html = `
+<!DOCTYPE html>
+<html>
+  <head>
     <script type="module">
       const handleMessage = ({ data }) => {
         if (typeof data !== "string") {
@@ -131,7 +134,9 @@ const handler: NextApiHandler = async (req, res) => {
         render(globalThis.initialBlockProps)
       }
       </script>
-    <div id="container"></div>
+    </head>
+    <body style="margin: 0; padding: 0;"><div id="container"></div></body>
+  </html>
   `;
 
   res.status(200);
