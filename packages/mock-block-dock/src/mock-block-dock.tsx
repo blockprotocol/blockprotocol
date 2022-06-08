@@ -124,7 +124,7 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
     }
   }, [linkedAggregations, graphService]);
 
-  const Component = cloneElement(Children.only(children), propsToInject);
+  const child = cloneElement(Children.only(children), propsToInject);
 
-  return <div ref={wrapperRef}>{graphService ? Component : null}</div>;
+  return <div ref={wrapperRef}>{graphService ? child : null}</div>;
 };
