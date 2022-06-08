@@ -62,7 +62,7 @@ export abstract class CoreHandler {
    * A map of instances of CoreHandler, by the element they are listening on,
    * used to ensure that two handlers aren't instantiated for the same element.
    */
-  private static readonly instanceMap = new Map<HTMLElement, CoreHandler>();
+  private static readonly instanceMap = new WeakMap<HTMLElement, CoreHandler>();
 
   private static isBlockProtocolMessage(message: unknown): message is Message {
     if (
