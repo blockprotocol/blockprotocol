@@ -20,9 +20,11 @@ const catchAndLog = async (func: () => Promise<void>) => {
 
 // Actions done in the following script should be _idempotent_ as they run in dev/prod
 const script = async () => {
+  console.log("inside create-db-indexes")
   console.log(chalk.bold("Creating DB indexes..."));
 
   const { client, db } = await connectToDatabase();
+  console.log("inside create-db-indexes (connected to db)")
   await catchAndLog(async () => {
     await db
       .collection<UserDocument>(User.COLLECTION_NAME)

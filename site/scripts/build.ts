@@ -10,9 +10,9 @@ const script = async () => {
     ).default;
   }
 
-  await (
-    await import("./prepare-blocks")
-  ).default;
+  // await (
+  //   await import("./prepare-blocks")
+  // ).default;
 
   await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
 
@@ -24,6 +24,7 @@ const script = async () => {
     await import("./generate-blocks-data")
   ).default;
 
+  console.log("before create-db-indexes")
   await (
     await import("./create-db-indexes")
   ).default;
