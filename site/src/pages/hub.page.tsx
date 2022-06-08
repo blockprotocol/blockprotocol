@@ -5,8 +5,8 @@ import { VFC } from "react";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import {
+  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  filterBlocksToShow,
   readBlocksFromDisk,
 } from "../lib/blocks";
 
@@ -20,7 +20,7 @@ interface PageProps {
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
   return {
     props: {
-      catalog: filterBlocksToShow(readBlocksFromDisk()),
+      catalog: excludeHiddenBlocks(readBlocksFromDisk()),
     },
   };
 };

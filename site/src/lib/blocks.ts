@@ -137,7 +137,7 @@ const blocksToHide = [
 ];
 
 /** Helps consistently hide certain blocks from the hub and user profile pages */
-export const filterBlocksToShow = (
+export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
