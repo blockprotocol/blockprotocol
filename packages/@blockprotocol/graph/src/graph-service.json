@@ -171,7 +171,9 @@
       "data": {
         "type": "object",
         "properties": {
-          "operation": { "type": "object" },
+          "operation": {
+            "$ref": "https://blockprotocol.org/types/LinkedAggregationOperation"
+          },
           "results": {
             "type": "array",
             "items": { "$ref": "https://blockprotocol.org/types/Entity" }

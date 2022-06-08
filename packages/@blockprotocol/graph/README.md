@@ -65,9 +65,9 @@ To create a GraphEmbedderHandler, pass the constructor:
 These starting values should also be passed in a `graph` property object, if the block can be passed or assigned properties.
 
 ```typescript
-import { GraphBlockHandler } from "@blockprotocol/graph";
+import { GraphEmbedderHandler } from "@blockprotocol/graph";
 
-const graphService = new EmbedderGraphHandler({
+const graphService = new GraphEmbedderHandler({
   blockEntity: { entityId: "123", properties: { name: "Bob" } },
   callbacks: {
     updateEntity: ({ data }) => updateEntityInYourDatastore(data),
