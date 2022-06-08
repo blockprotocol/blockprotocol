@@ -105,6 +105,15 @@ export abstract class CoreHandler {
     return handler;
   }
 
+  unregisterService({ service }: { service: ServiceHandler }) {
+    const { serviceName } = service;
+    this.services.delete(serviceName);
+    if (this.services.size === 0) {
+      this.removeEventListeners();
+      CoreHandler.instanceMap.delete(this.element);
+    }
+  }
+
   protected constructor({
     element,
     sourceType,

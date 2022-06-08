@@ -46,7 +46,7 @@ export class GraphBlockHandler
     callbacks,
     element,
   }: {
-    callbacks?: BlockGraphMessageCallbacks;
+    callbacks?: Partial<BlockGraphMessageCallbacks>;
     element: HTMLElement;
   }) {
     super({ element, serviceName: "graph", sourceType: "block" });

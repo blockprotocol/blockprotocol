@@ -25,6 +25,8 @@ export abstract class ServiceHandler {
   /** the name of the service */
   readonly serviceName: string;
 
+  private destroyed?: boolean;
+
   /**
    * a method individual embedder services handlers implement to provide the messages they send on initialization,
    * i.e. the messages that are marked as 'sentOnInitialization: true'.
@@ -76,6 +78,22 @@ export abstract class ServiceHandler {
     }
   }
 
+  /**
+   * Unregister and clean up the service.
+   */
+  destroy() {
+    this.coreHandler.unregisterService({ service: this });
+    this.destroyed = true;
+  }
+
+  private checkIfDestroyed() {
+    if (this.destroyed) {
+      throw new Error(
+        "Service has been destroyed. Please construct a new instance.",
+      );
+    }
+  }
+
   /** Register callbacks with the CoreHandler to handle incoming messages of specific types */
   protected registerCallbacks(
     this: ServiceHandler,
@@ -97,6 +115,8 @@ export abstract class ServiceHandler {
       callback: GenericMessageCallback;
     },
   ) {
+    this.checkIfDestroyed();
+
     this.coreHandler.registerCallback({
       callback,
       messageName,
@@ -130,6 +150,8 @@ export abstract class ServiceHandler {
         }
       | { message: MessageContents },
   ) {
+    this.checkIfDestroyed();
+
     const { message } = args;
     if ("respondedToBy" in args) {
       return this.coreHandler.sendMessage<

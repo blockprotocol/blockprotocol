@@ -1,6 +1,7 @@
 import {
   RefObject,
-  useLayoutEffect,
+  useEffect,
+  useRef,
   useState,
   VoidFunctionComponent,
 } from "react";
@@ -15,42 +16,91 @@ export type BlockComponent<
   Properties extends Record<string, unknown> | null = null,
 > = VoidFunctionComponent<BlockGraphProperties<Properties>>;
 
-export const useGraphBlockService = ({
-  callbacks,
+const useGraphServiceConstructor = <
+  T extends typeof GraphBlockHandler | typeof GraphEmbedderHandler,
+>({
+  Handler,
+  constructorArgs,
   ref,
 }: {
-  callbacks: ConstructorParameters<typeof GraphBlockHandler>[0]["callbacks"];
+  Handler: T;
+  constructorArgs?: Omit<ConstructorParameters<T>[0], "element">;
   ref: RefObject<HTMLElement>;
 }) => {
-  const [graphService, setGraphService] = useState<GraphBlockHandler>();
-  useLayoutEffect(() => {
+  const previousRef = useRef<HTMLElement | null>(null);
+
+  const [graphService, setGraphService] = useState<
+    | (T extends typeof GraphBlockHandler
+        ? GraphBlockHandler
+        : GraphEmbedderHandler)
+    | null
+  >(null);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- this will not loop, and we d
+  useEffect(() => {
+    if (ref.current === previousRef.current) {
+      return;
+    }
+
+    if (previousRef.current) {
+      graphService?.destroy();
+    }
+
+    previousRef.current = ref.current;
+
     if (ref.current) {
       setGraphService(
-        new GraphBlockHandler({ callbacks, element: ref.current }),
+        new Handler({
+          element: ref.current,
+          ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
+        }) as T extends typeof GraphBlockHandler // @todo fix these casts
+          ? GraphBlockHandler
+          : GraphEmbedderHandler,
       );
     }
-  }, [callbacks, ref]);
+  });
 
   return { graphService };
 };
 
-export const useGraphEmbedderService = ({
+/**
+ * Create a GraphBlockHandler instance, using a reference to an element in the block.
+ *
+ * The graphService will only be reconstructed if the element reference changes.
+ * Updates to any callbacks after first constructing should be made by calling graphService.on("messageName", callback);
+ */
+export const useGraphBlockService = ({
   ref,
-  ...rest
+  ...constructorArgs
 }: {
   ref: RefObject<HTMLElement>;
-} & Omit<ConstructorParameters<typeof GraphEmbedderHandler>[0], "element">) => {
-  const [graphService, setGraphService] = useState<GraphEmbedderHandler>();
-  useLayoutEffect(() => {
-    if (ref.current) {
-      setGraphService(
-        new GraphEmbedderHandler({
-          element: ref.current,
-          ...rest,
-        }),
-      );
-    }
-  }, [ref, rest]);
+} & Omit<ConstructorParameters<typeof GraphBlockHandler>[0], "element">): {
+  graphService: GraphBlockHandler | null;
+} => {
+  return useGraphServiceConstructor({
+    Handler: GraphBlockHandler,
+    constructorArgs,
+    ref,
+  });
+};
 
-  return { graphService };
+/**
+ * Create a GraphBlockHandler instance, using a reference to an element in the block.
+ *
+ * The graphService will only be reconstructed if the element reference changes.
+ * Updates to any callbacks after first constructing should be made by calling graphService.on("messageName", callback);
+ */
+export const useGraphEmbedderService = ({
+  ref,
+  ...constructorArgs
+}: {
+  ref: RefObject<HTMLElement>;
+} & Omit<ConstructorParameters<typeof GraphEmbedderHandler>[0], "element">): {
+  graphService: GraphEmbedderHandler | null;
+} => {
+  return useGraphServiceConstructor({
+    Handler: GraphEmbedderHandler,
+    ref,
+    constructorArgs,
+  });
 };
