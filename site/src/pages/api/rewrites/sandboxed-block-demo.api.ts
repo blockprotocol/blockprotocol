@@ -72,6 +72,7 @@ const handler: NextApiHandler = async (req, res) => {
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charSet="utf-8" />
     <script type="module">
       const handleMessage = ({ data }) => {
         if (typeof data !== "string") {
