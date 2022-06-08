@@ -1,6 +1,19 @@
-import { RefObject, useLayoutEffect, useState } from "react";
+import {
+  RefObject,
+  useLayoutEffect,
+  useState,
+  VoidFunctionComponent,
+} from "react";
 
-import { GraphBlockHandler, GraphEmbedderHandler } from "./index";
+import {
+  BlockGraphProperties,
+  GraphBlockHandler,
+  GraphEmbedderHandler,
+} from "./index";
+
+export type BlockComponent<
+  Properties extends Record<string, unknown> | null = null,
+> = VoidFunctionComponent<BlockGraphProperties<Properties>>;
 
 export const useGraphBlockService = ({
   callbacks,

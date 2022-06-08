@@ -101,7 +101,7 @@ export abstract class CoreHandler {
     const handler =
       this.instanceMap.get(element) ?? Reflect.construct(this, [{ element }]);
     handler.services.set(serviceName, service);
-    handler.messageCallbacksByService[serviceName] ??= {};
+    handler.messageCallbacksByService[serviceName] ??= new Map();
     return handler;
   }
 
@@ -123,9 +123,9 @@ export abstract class CoreHandler {
     this.attachEventListeners();
   }
 
-  private eventListener(event: Event) {
+  private eventListener = (event: Event) => {
     void this.processReceivedMessage(event as CustomEvent);
-  }
+  };
 
   protected attachEventListeners(this: CoreHandler) {
     if (!this.element) {

@@ -18,17 +18,15 @@ export interface JSONArray extends Array<JSONValue> {}
 
 // ----------------------------- ENTITIES ----------------------------- //
 
-export type Entity = {
+export type Entity<Properties = Record<string, unknown>> = {
   entityId: string;
   entityTypeId: string;
-  properties: {
-    [key: string]: unknown;
-  };
+  properties: Properties;
 };
 
 export type CreateEntityData = {
   entityTypeId: string;
-  data: UnknownRecord;
+  properties: UnknownRecord;
   links?: Omit<
     CreateLinkData,
     "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
@@ -41,7 +39,7 @@ export type GetEntityData = {
 
 export type UpdateEntityData = {
   entityId: string;
-  data: UnknownRecord;
+  properties: UnknownRecord;
 };
 
 export type DeleteEntityData = {
@@ -195,17 +193,14 @@ export type EntityType = {
 };
 
 export type CreateEntityTypeData = {
-  schema: JSONObject;
+  schema: EntityType["schema"];
 };
 
 export type AggregateEntityTypesData = {
   // @todo mention in spec or remove
   // include entities that are used by, but don't belong to, the specified account
   includeOtherTypeInUse?: boolean | null;
-  operation?: Omit<
-    AggregateOperationInput,
-    "entityTypeId" | "entityTypeVersionId"
-  > | null;
+  operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
 };
 
 export type GetEntityTypeData = {
@@ -214,7 +209,7 @@ export type GetEntityTypeData = {
 
 export type UpdateEntityTypeData = {
   entityTypeId: string;
-  schema: JSONObject;
+  schema: Partial<EntityType["schema"]>;
 };
 
 export type DeleteEntityTypeData = {
@@ -233,9 +228,21 @@ export type BlockGraph = {
   linkGroups: LinkGroups;
 };
 
+export type BlockGraphProperties<
+  BlockEntityProperties extends Record<string, unknown> | null,
+> = {
+  graph: {
+    blockGraph?: BlockGraph;
+    entityTypes?: EntityType[];
+    linkedAggregations?: LinkedAggregations;
+  } & (BlockEntityProperties extends null
+    ? { blockEntity?: Entity }
+    : { blockEntity: Entity<BlockEntityProperties> });
+};
+
 export type BlockGraphMessageCallbacks = {
-  blockGraph: MessageCallback<BlockGraph, null>;
   blockEntity: MessageCallback<Entity, null>;
+  blockGraph: MessageCallback<BlockGraph, null>;
   entityTypes: MessageCallback<EntityType[], null>;
   linkedAggregations: MessageCallback<LinkedAggregations, null>;
 };
@@ -316,7 +323,7 @@ export type EmbedderGraphMessageCallbacks = {
     ReadOrModifyResourceError
   >;
   aggregateEntityTypes: MessageCallback<
-    AggregateEntitiesData,
+    AggregateEntityTypesData,
     null,
     AggregateEntitiesResult<EntityType>,
     ReadOrModifyResourceError
@@ -338,13 +345,13 @@ export type EmbedderGraphMessageCallbacks = {
   createLinkedAggregation: MessageCallback<
     CreateLinkedAggregationData,
     null,
-    LinkedAggregation,
+    LinkedAggregationDefinition,
     CreateResourceError
   >;
   updateLinkedAggregation: MessageCallback<
     UpdateLinkedAggregationData,
     null,
-    LinkedAggregation,
+    LinkedAggregationDefinition,
     ReadOrModifyResourceError
   >;
   deleteLinkedAggregation: MessageCallback<
@@ -356,7 +363,7 @@ export type EmbedderGraphMessageCallbacks = {
   getLinkedAggregation: MessageCallback<
     GetLinkedAggregationData,
     null,
-    LinkedAggregation,
+    LinkedAggregationDefinition,
     ReadOrModifyResourceError
   >;
   uploadFile: MessageCallback<

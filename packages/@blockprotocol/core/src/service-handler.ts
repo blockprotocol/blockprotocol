@@ -69,10 +69,11 @@ export abstract class ServiceHandler {
         element,
         service: this,
       });
+    } else {
+      throw new Error(
+        `Provided sourceType '${sourceType}' must be one of 'block' or 'embedder'.`,
+      );
     }
-    throw new Error(
-      `Provided sourceType '${sourceType}' must be one of 'block' or 'embedder'.`,
-    );
   }
 
   /** Register callbacks with the CoreHandler to handle incoming messages of specific types */

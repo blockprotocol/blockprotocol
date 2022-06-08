@@ -4,6 +4,7 @@ import serviceJsonDefinition from "./graph-service.json";
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
+  AggregateEntityTypesData,
   BlockGraphMessageCallbacks,
   BlockGraphMessages,
   CreateEntityData,
@@ -178,7 +179,7 @@ export class GraphBlockHandler
     });
   }
 
-  aggregateEntityTypes({ data }: { data?: AggregateEntitiesData }) {
+  aggregateEntityTypes({ data }: { data?: AggregateEntityTypesData }) {
     return this.sendMessage<
       AggregateEntitiesResult<EntityType>,
       ReadOrModifyResourceError
