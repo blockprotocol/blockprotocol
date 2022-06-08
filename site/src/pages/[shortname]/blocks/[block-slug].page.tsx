@@ -92,7 +92,9 @@ type BlockPageQueryParams = {
   "block-slug"?: string;
 };
 
-export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
+export const getStaticPaths: GetStaticPaths<
+  BlockPageQueryParams
+> = async () => {
   return {
     paths: (await readBlocksFromDisk()).map(
       (metadata) => metadata.blockPackagePath,
