@@ -1,7 +1,7 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
-import glob from "glob"
+import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
-import fs from "node:fs"
+import fs from "node:fs";
 
 import { FRONTEND_URL } from "./config";
 

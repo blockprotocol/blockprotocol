@@ -2,7 +2,7 @@ import chalk from "chalk";
 import * as envalid from "envalid";
 import fs from "fs-extra";
 import path from "node:path";
-import { fileURLToPath } from "node:url"
+import { fileURLToPath } from "node:url";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
