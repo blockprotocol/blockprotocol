@@ -13,11 +13,24 @@ interface PageProps {
   catalog: BlockMetadata[];
 }
 
+const blocksToHide = [
+  "@hash/callout",
+  "@hash/embed",
+  "@hash/header",
+  "@hash/paragraph",
+];
+
 /**
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  return { props: { catalog: readBlocksFromDisk() } };
+  return {
+    props: {
+      catalog: readBlocksFromDisk().filter(
+        ({ name }) => !blocksToHide.includes(name),
+      ),
+    },
+  };
 };
 
 const HubPage: VFC<PageProps> = ({ catalog }) => {
