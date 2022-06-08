@@ -71,7 +71,7 @@ const useGraphServiceConstructor = <
  */
 export const useGraphBlockService = (
   ref: RefObject<HTMLElement>,
-  constructorArgs: Omit<
+  constructorArgs?: Omit<
     ConstructorParameters<typeof GraphBlockHandler>[0],
     "element"
   >,
@@ -91,7 +91,7 @@ export const useGraphBlockService = (
  */
 export const useGraphEmbedderService = (
   ref: RefObject<HTMLElement>,
-  constructorArgs: Omit<
+  constructorArgs?: Omit<
     ConstructorParameters<typeof GraphEmbedderHandler>[0],
     "element"
   >,
