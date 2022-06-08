@@ -69,14 +69,13 @@ const useGraphServiceConstructor = <
  * The graphService will only be reconstructed if the element reference changes.
  * Updates to any callbacks after first constructing should be made by calling graphService.on("messageName", callback);
  */
-export const useGraphBlockService = ({
-  ref,
-  ...constructorArgs
-}: {
-  ref: RefObject<HTMLElement>;
-} & Omit<ConstructorParameters<typeof GraphBlockHandler>[0], "element">): {
-  graphService: GraphBlockHandler | null;
-} => {
+export const useGraphBlockService = (
+  ref: RefObject<HTMLElement>,
+  constructorArgs: Omit<
+    ConstructorParameters<typeof GraphBlockHandler>[0],
+    "element"
+  >,
+): { graphService: GraphBlockHandler | null } => {
   return useGraphServiceConstructor({
     Handler: GraphBlockHandler,
     constructorArgs,
@@ -90,14 +89,13 @@ export const useGraphBlockService = ({
  * The graphService will only be reconstructed if the element reference changes.
  * Updates to any callbacks after first constructing should be made by calling graphService.on("messageName", callback);
  */
-export const useGraphEmbedderService = ({
-  ref,
-  ...constructorArgs
-}: {
-  ref: RefObject<HTMLElement>;
-} & Omit<ConstructorParameters<typeof GraphEmbedderHandler>[0], "element">): {
-  graphService: GraphEmbedderHandler | null;
-} => {
+export const useGraphEmbedderService = (
+  ref: RefObject<HTMLElement>,
+  constructorArgs: Omit<
+    ConstructorParameters<typeof GraphEmbedderHandler>[0],
+    "element"
+  >,
+): { graphService: GraphEmbedderHandler | null } => {
   return useGraphServiceConstructor({
     Handler: GraphEmbedderHandler,
     ref,

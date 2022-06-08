@@ -29,7 +29,7 @@ import { useGraphBlockService } from "@blockprotocol/graph";
 export const App = () => {
   const blockRef = React.useRef < HTMLDivElement > null;
 
-  const { graphService } = useGraphBlockService({ ref: blockRef });
+  const { graphService } = useGraphBlockService(blockRef);
 
   return <div ref={blockRef} />;
 };
@@ -78,7 +78,8 @@ const graphService = new GraphEmbedderHandler({
 
 ### React example
 
-For React, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
+For React, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any
+additional constructor arguments you wish to pass.
 
 ```javascript
 import React from "react";
@@ -90,9 +91,8 @@ export const App = () => {
 
   const blockEntity = { entityId: "123", properties: { name: "Bob" } };
 
-  const { graphService } = useGraphEmbedderService({
+  const { graphService } = useGraphEmbedderService(blockRef, {
     blockEntity,
-    ref: blockRef,
   });
 
   return (
