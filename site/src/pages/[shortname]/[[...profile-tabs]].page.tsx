@@ -9,6 +9,7 @@ import {
   UserPageProps,
 } from "../../components/pages/user/user-page-component";
 import { apiClient } from "../../lib/api-client";
+import { filterBlocksToShow } from "../../lib/blocks";
 
 type UserPageQueryParams = {
   "profile-tabs": string[];
@@ -63,7 +64,7 @@ export const getStaticProps: GetStaticProps<
 
   return {
     props: {
-      blocks: blocksResponse.data?.blocks || [],
+      blocks: filterBlocksToShow(blocksResponse.data?.blocks || []),
       entityTypes: entityTypesResponse.data?.entityTypes || [],
       user: userResponse.data.user,
     },

@@ -6,6 +6,7 @@ import { VFC } from "react";
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import {
   ExpandedBlockMetadata as BlockMetadata,
+  filterBlocksToShow,
   readBlocksFromDisk,
 } from "../lib/blocks";
 
@@ -13,22 +14,13 @@ interface PageProps {
   catalog: BlockMetadata[];
 }
 
-const blocksToHide = [
-  "@hash/callout",
-  "@hash/embed",
-  "@hash/header",
-  "@hash/paragraph",
-];
-
 /**
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
   return {
     props: {
-      catalog: readBlocksFromDisk().filter(
-        ({ name }) => !blocksToHide.includes(name),
-      ),
+      catalog: filterBlocksToShow(readBlocksFromDisk()),
     },
   };
 };
