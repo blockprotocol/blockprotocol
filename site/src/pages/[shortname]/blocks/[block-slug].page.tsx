@@ -86,6 +86,7 @@ type BlockPageProps = {
   sandboxBaseUrl: string;
   schema: BlockSchema;
   sliderItems: BlockMetadata[];
+  exampleGraph: any; // todo fix typing
 };
 
 type BlockPageQueryParams = {
@@ -163,7 +164,7 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const { schema } = await readBlockDataFromDisk(blockMetadata);
+  const { schema, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
   return {
     props: {
@@ -173,6 +174,7 @@ export const getStaticProps: GetStaticProps<
       ),
       sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
+      exampleGraph,
     },
     revalidate: 1800,
   };
@@ -183,7 +185,15 @@ const BlockPage: NextPage<BlockPageProps> = ({
   sandboxBaseUrl,
   schema,
   sliderItems,
+  exampleGraph,
 }) => {
+  console.log({
+    blockMetadata,
+    blockStringifiedSource,
+    catalog,
+    schema,
+    exampleGraph,
+  });
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
@@ -314,6 +324,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             metadata={blockMetadata}
             schema={schema}
             sandboxBaseUrl={sandboxBaseUrl}
+            exampleGraph={exampleGraph}
           />
         </Box>
 

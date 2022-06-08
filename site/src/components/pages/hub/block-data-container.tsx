@@ -30,13 +30,14 @@ type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
   sandboxBaseUrl: string;
+  exampleGraph: any;
 };
 
 const validator = new Validator();
 
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
-> = ({ metadata, schema, sandboxBaseUrl }) => {
+> = ({ metadata, schema, exampleGraph, sandboxBaseUrl }) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
@@ -257,6 +258,7 @@ export const BlockDataContainer: VoidFunctionComponent<
               text={text}
               setText={setText}
               schema={schema}
+              exampleGraph={exampleGraph}
             />
             <Box
               sx={{
@@ -280,6 +282,7 @@ export const BlockDataContainer: VoidFunctionComponent<
                     blockDataTab={blockDataTab}
                     setBlockDataTab={setBlockDataTab}
                     schema={schema}
+                    exampleGraph={exampleGraph}
                     text={text}
                     setText={setText}
                   />

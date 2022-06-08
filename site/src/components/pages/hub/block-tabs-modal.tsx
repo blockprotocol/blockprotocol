@@ -14,6 +14,7 @@ interface BlockTabsModalProps {
   schema: BlockSchema;
   text: string;
   setText: (newValue: string) => void;
+  exampleGraph: any;
 }
 
 export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
@@ -24,6 +25,7 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
   schema,
   text,
   setText,
+  exampleGraph,
 }) => {
   return (
     <Modal
@@ -56,6 +58,7 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
           <BlockDataTabPanels
             blockDataTab={blockDataTab}
             schema={schema}
+            exampleGraph={exampleGraph}
             text={text}
             setText={setText}
             modalOpen
