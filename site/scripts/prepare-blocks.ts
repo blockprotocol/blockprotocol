@@ -297,10 +297,10 @@ const prepareBlock = async ({
 
     // Vercel builds may fail on cold starts (when block build cache is empty).
     // The error says "Could not write file /tmp/..." "ENOSPC: no space left on device"
-    // Clearing yarn cache slows down block builds but helps keep /tmp folder small.
-    if (packageManager === "yarn" && process.env.VERCEL) {
-      await execa("yarn", ["cache", "clean"], defaultExecaOptions);
-    }
+    // Preventing yarn cache from growing slows down block builds but helps keep /tmp folder small.
+    const yarnCacheDir = process.env.VERCEL
+      ? await tmp.dir({ unsafeCleanup: true })
+      : undefined;
 
     // @todo explore focus mode to speed up yarn install in monorepos
     // https://classic.yarnpkg.com/lang/en/docs/cli/install/#toc-yarn-install-focus
@@ -308,7 +308,15 @@ const prepareBlock = async ({
     await execa(packageManager, ["install"], {
       cwd: rootWorkspaceDirPath,
       ...defaultExecaOptions,
+      env: yarnCacheDir
+        ? {
+            ...defaultExecaOptions.env,
+            YARN_CACHE_FOLDER: yarnCacheDir.path,
+          }
+        : defaultExecaOptions.env,
     });
+
+    await yarnCacheDir?.cleanup();
 
     console.log(chalk.green(`Building...`));
     if (packageManager === "yarn" && blockInfo.workspace) {
