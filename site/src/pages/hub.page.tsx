@@ -20,7 +20,7 @@ interface PageProps {
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
   return {
     props: {
-      catalog: excludeHiddenBlocks(readBlocksFromDisk()),
+      catalog: excludeHiddenBlocks(await readBlocksFromDisk()),
     },
   };
 };

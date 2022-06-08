@@ -1,7 +1,5 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
-import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
-import fs from "node:fs";
 
 import { FRONTEND_URL } from "./config";
 
@@ -76,11 +74,32 @@ const getRepositoryUrl = (
   return undefined;
 };
 
+const blocksToHide = [
+  "@hash/callout",
+  "@hash/embed",
+  "@hash/header",
+  "@hash/paragraph",
+];
+
+/** Helps consistently hide certain blocks from the hub and user profile pages */
+export const excludeHiddenBlocks = (
+  blocks: ExpandedBlockMetadata[],
+): ExpandedBlockMetadata[] => {
+  return blocks.filter(
+    ({ packagePath }) => !blocksToHide.includes(packagePath),
+  );
+};
+
 /**
  * used to read block metadata from disk.
  *
  */
-export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
+export const readBlocksFromDisk = async (): Promise<
+  ExpandedBlockMetadata[]
+> => {
+  const fs = (await import("node:fs")).default;
+  const glob = (await import("glob")).default;
+
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
@@ -126,27 +145,12 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     });
 };
 
-const blocksToHide = [
-  "@hash/callout",
-  "@hash/embed",
-  "@hash/header",
-  "@hash/paragraph",
-];
-
-/** Helps consistently hide certain blocks from the hub and user profile pages */
-export const excludeHiddenBlocks = (
-  blocks: ExpandedBlockMetadata[],
-): ExpandedBlockMetadata[] => {
-  return blocks.filter(
-    ({ packagePath }) => !blocksToHide.includes(packagePath),
-  );
-};
-
 export const readBlockDataFromDisk = async ({
   packagePath,
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
+  const fs = (await import("node:fs")).default;
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 

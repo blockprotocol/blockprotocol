@@ -18,7 +18,7 @@ interface PageProps {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  return { props: { catalog: readBlocksFromDisk() } };
+  return { props: { catalog: await readBlocksFromDisk() } };
 };
 
 const HomePage: VFC<PageProps> = ({ catalog }) => {
