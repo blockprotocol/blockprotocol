@@ -6,6 +6,11 @@ const sharedNoRestrictedImportsConfig = {
       message:
         "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
     },
+    {
+      group: ["lodash"],
+      message:
+        "Please import lodash functions from lodash/functionName for CJS/ESM interop. Check if your task needs lodash at https://you-dont-need.github.io/You-Dont-Need-Lodash-Underscore/#/",
+    },
   ],
 };
 
