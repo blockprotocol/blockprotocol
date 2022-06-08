@@ -15,7 +15,7 @@ import chalk from "chalk";
 import * as envalid from "envalid";
 import execa from "execa";
 import fs from "fs-extra";
-import { sync as globSync } from "glob";
+import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
@@ -67,7 +67,7 @@ interface BlockInfo extends StoredBlockInfo {
 const listBlockInfos = async (
   blockInfosDirPath: string,
 ): Promise<{ blockInfos: BlockInfo[]; errorMessages: string[] }> => {
-  const blockInfoPaths = globSync("**/*.json", { cwd: blockInfosDirPath });
+  const blockInfoPaths = glob.sync("**/*.json", { cwd: blockInfosDirPath });
   console.log(`Block source infos found in HUB_DIR: ${blockInfoPaths.length}`);
 
   const blockInfos: BlockInfo[] = [];
