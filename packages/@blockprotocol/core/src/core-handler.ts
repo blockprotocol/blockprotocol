@@ -65,23 +65,15 @@ export abstract class CoreHandler {
   private static readonly instanceMap = new WeakMap<HTMLElement, CoreHandler>();
 
   private static isBlockProtocolMessage(message: unknown): message is Message {
-    if (
-      typeof message !== "object" ||
-      message === null ||
-      Array.isArray(message)
-    ) {
-      return false;
-    }
-    if (
-      !("requestId" in message) ||
-      !("service" in message) ||
-      !("source" in message) ||
-      !("messageName" in message)
-    ) {
-      return false;
-    }
-    return true;
-  }
+  return (
+    typeof message === "object" &&
+    message !== null &&
+    !Array.isArray(message) &&
+    "requestId" in message &&
+    "service" in message &&
+    "source" in message &&
+    "messageName" in message
+  );
 
   /**
    * Register a ServiceHandler for the given element.
