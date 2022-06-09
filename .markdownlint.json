@@ -1,6 +1,9 @@
 {
   "default": true,
   "first-line-heading": false,
+  "no-duplicate-header": {
+    "siblings_only": true
+  },
   "line-length": false,
   "list-marker-space": { "ol_multi": 2, "ol_single": 2 },
   "no-alt-text": false,
