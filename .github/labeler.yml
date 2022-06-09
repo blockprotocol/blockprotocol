@@ -56,16 +56,16 @@
   - "packages/block-template/**/.*"
 
 "package: blockprotocol":
-  - "packages/blockprotocol/*"
-  - "packages/blockprotocol/.*"
-  - "packages/blockprotocol/**/*"
-  - "packages/blockprotocol/**/.*"
+  - "packages/@blockprotocol/*"
+  - "packages/@blockprotocol/.*"
+  - "packages/@blockprotocol/**/*"
+  - "packages/@blockprotocol/**/.*"
 
 "package: core":
-  - "packages/core/*"
-  - "packages/core/.*"
-  - "packages/core/**/*"
-  - "packages/core/**/.*"
+  - "packages/@blockprotocol/core/*"
+  - "packages/@blockprotocol/core/.*"
+  - "packages/@blockprotocol/core/**/*"
+  - "packages/@blockprotocol/core/**/.*"
 
 "package: create-block-app":
   - "packages/create-block-app/*"
@@ -74,10 +74,10 @@
   - "packages/create-block-app/**/.*"
 
 "package: graph":
-  - "packages/graph/*"
-  - "packages/graph/.*"
-  - "packages/graph/**/*"
-  - "packages/graph/**/.*"
+  - "packages/@blockprotocol/graph/*"
+  - "packages/@blockprotocol/graph/.*"
+  - "packages/@blockprotocol/graph/**/*"
+  - "packages/@blockprotocol/graph/**/.*"
 
 "package: mock-block-dock":
   - "packages/mock-block-dock/*"
