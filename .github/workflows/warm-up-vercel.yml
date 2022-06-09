@@ -24,7 +24,7 @@ jobs:
             \n
           EOF
 
-          for PATHNAME in "/@hash" "/api/me" "/types/DUMMY_ENTITY_ID"; do
+          for PATHNAME in "/@hash" "@hash/blocks/divider/sandboxed-demo" "/api/me" "/types/DUMMY_ENTITY_ID"; do
             npx retry-cli@0.6.0 -- curl --output /dev/null --silent --write-out "@curl-format.txt" "${BASE_URL}${PATHNAME}"
           done
         env:
