@@ -15,4 +15,9 @@ module.exports = {
       backgroundColor: ["odd", "even"],
     },
   },
+  preflight: {
+    "button:focus": {
+      outline: "none",
+    },
+  },
 };
