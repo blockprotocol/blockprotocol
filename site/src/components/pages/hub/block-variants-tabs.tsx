@@ -1,3 +1,4 @@
+import { BlockMetadata } from "@blockprotocol/core";
 import {
   MenuItem,
   Select,
@@ -6,7 +7,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { BlockMetadata } from "blockprotocol";
 import { VoidFunctionComponent } from "react";
 
 type BlockVariantsTabsProps = {

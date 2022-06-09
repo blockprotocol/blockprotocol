@@ -1,3 +1,5 @@
+import { BlockVariant } from "@blockprotocol/core";
+import { BlockGraphProperties } from "@blockprotocol/graph";
 import {
   Alert,
   Box,
@@ -7,7 +9,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { BlockVariant } from "blockprotocol";
 import { Validator } from "jsonschema";
 import {
   useEffect,
@@ -116,15 +117,20 @@ export const BlockDataContainer: VoidFunctionComponent<
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<
-    [Record<string, unknown> | undefined, string[]]
+    [BlockGraphProperties<any> | undefined, string[]]
   >(() => {
     const result = {
-      accountId: `test-account-${metadata.name}`,
-      entityId: `test-entity-${metadata.name}`,
+      graph: {
+        blockEntity: {
+          accountId: `test-account-${metadata.name}`,
+          entityId: `test-entity-${metadata.name}`,
+          properties: {},
+        },
+      },
     };
 
     try {
-      Object.assign(result, JSON.parse(text));
+      Object.assign(result.graph.blockEntity.properties, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }

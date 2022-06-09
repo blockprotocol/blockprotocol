@@ -1,20 +1,4 @@
-// ---------------------------- UTILITIES ----------------------------- //
-
-import { MessageCallback } from "@blockprotocol/core";
-
-export type UnknownRecord = Record<string, unknown>;
-
-export type JSONValue =
-  | null
-  | boolean
-  | number
-  | string
-  | JSONValue[]
-  | JSONObject;
-
-export type JSONObject = { [key: string]: JSONValue };
-
-export interface JSONArray extends Array<JSONValue> {}
+import { MessageCallback, UnknownRecord } from "@blockprotocol/core";
 
 // ----------------------------- ENTITIES ----------------------------- //
 
@@ -203,7 +187,7 @@ export type CreateEntityTypeData = {
 export type AggregateEntityTypesData = {
   // @todo mention in spec or remove
   // include entities that are used by, but don't belong to, the specified account
-  includeOtherTypeInUse?: boolean | null;
+  includeOtherTypesInUse?: boolean | null;
   operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
 };
 

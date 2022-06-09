@@ -100,8 +100,8 @@ const PropertyTypeSelect: VoidFunctionComponent<
         },
         ...availableEntityTypes.map((entityType) => ({
           disabled: false,
-          label: entityType.title,
-          value: entityType.$id,
+          label: entityType.schema.title,
+          value: entityType.schema.$id,
         })),
       );
     }

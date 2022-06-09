@@ -1,4 +1,4 @@
-import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
+import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
 import hostedGitInfo from "hosted-git-info";
 
 import { FRONTEND_URL } from "./config";
@@ -129,6 +129,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     });
 };
 
+// Blocks which are currently not compliant with the spec, and are thus misleading examples
 const blocksToHide = [
   "@hash/callout",
   "@hash/embed",
@@ -141,7 +142,8 @@ export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
-    ({ packagePath }) => !blocksToHide.includes(packagePath),
+    ({ packagePath, protocol }) =>
+      !blocksToHide.includes(packagePath) && parseFloat(protocol) >= 0.2,
   );
 };
 
