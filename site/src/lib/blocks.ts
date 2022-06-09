@@ -129,6 +129,22 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     });
 };
 
+const blocksToHide = [
+  "@hash/callout",
+  "@hash/embed",
+  "@hash/header",
+  "@hash/paragraph",
+];
+
+/** Helps consistently hide certain blocks from the hub and user profile pages */
+export const excludeHiddenBlocks = (
+  blocks: ExpandedBlockMetadata[],
+): ExpandedBlockMetadata[] => {
+  return blocks.filter(
+    ({ packagePath }) => !blocksToHide.includes(packagePath),
+  );
+};
+
 export const readBlockDataFromDisk = async ({
   packagePath,
   schema: metadataSchema,
