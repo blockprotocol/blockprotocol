@@ -1,5 +1,5 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
-// eslint-disable-next-line no-restricted-imports,unicorn/prefer-node-protocol
+// eslint-disable-next-line no-restricted-imports,unicorn/prefer-node-protocol -- https://github.com/vercel/nft/issues/293
 import fs from "fs";
 import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
