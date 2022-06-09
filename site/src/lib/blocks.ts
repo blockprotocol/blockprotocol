@@ -85,8 +85,8 @@ export const readBlocksFromDisk = async (): Promise<
 > => {
   // https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
   // @todo Explain this hack if it works
-  // eslint-disable-next-line no-constant-condition
-  if (false) {
+  // @ts-expect-error -- todo: describe
+  if (globalThis.nonExistingVariableThatCannotBeTruthy) {
     // eslint-disable-next-line global-require
     require("fs");
   }
