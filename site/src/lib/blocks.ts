@@ -32,6 +32,8 @@ const forceFsOnVercel = () => {
   try {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars,global-require
     const fakeFs = require("fs");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,global-require
+    const fakeGlob = require("glob");
   } catch {
     // noop
   }
