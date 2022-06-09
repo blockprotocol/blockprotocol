@@ -12,7 +12,7 @@ See https://blockprotocol.org/docs/developing-blocks
 
 1.  Write a React component starting in `app.tsx`. To test it during development:
 
-    - edit `package.json` → `blockprotocol` → `examples` to give your component some props to test with. . This will also be included as example data in the generated `block-metadata.json`
+    - edit `dev.tsx` to give your block starting properties
 
     - run the dev server with `yarn dev`
 
@@ -30,7 +30,7 @@ See https://blockprotocol.org/docs/developing-blocks
         - `image`: a preview image showing your block in action
         - `icon`: an icon to be associated with your block
       - lists the `externals` - libraries the block expects the host app to provide (React, unless modified)
-    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/spec/block-types).
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/spec).
 
 N.B.
 
@@ -73,17 +73,13 @@ module.exports = {
 
 There are a few important files, one set is used for the bundle, another set for local development.
 
-- `src/index.js` - Entrypoint of the Block Component. The component needs to be the `default` export.
+- `src/index.ts` - Entrypoint of the Block Component. The component needs to be the `default` export.
 - `variants.json` - Defines named presets of block properties to be presented as
   separate or at least related block-types to the end-user.
 
 ## Debugging
 
 The component can be debugged locally by first starting `yarn dev`.
-
-```sh
-npm run start
-```
 
 Now (using VS Code), go to the Debug tab, select "Launch Chrome" and start the debugger (F5).
 

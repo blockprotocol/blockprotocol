@@ -40,6 +40,7 @@ const templatePackageName = "block-template";
 
   await pacote.extract(templatePackageName, resolvedBlockPath, {
     registry: process.env.NPM_CONFIG_REGISTRY,
+    defaultTag: "beta",
   });
 
   console.log("Updating files...");

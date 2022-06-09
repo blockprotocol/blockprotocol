@@ -7,10 +7,7 @@ export type Entity<
 > = {
   entityId: string;
   entityTypeId?: string;
-  properties?: Properties extends Record<string, unknown>
-    ? Properties
-    : undefined;
-};
+} & (Properties extends null ? {} : { properties: Properties });
 
 export type CreateEntityData = {
   entityTypeId: string;
