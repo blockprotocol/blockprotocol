@@ -14,7 +14,7 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 
-  async redirects() {
+  redirects: () => {
     return [
       {
         source: "/discord",
@@ -35,6 +35,15 @@ const nextConfig = {
         source: "/partners/submitted",
         destination: "/contact/submitted",
         permanent: true,
+      },
+    ];
+  },
+
+  rewrites: () => {
+    return [
+      {
+        source: "/:shortname/blocks/:blockslug/sandboxed-demo",
+        destination: "/api/rewrites/sandboxed-block-demo",
       },
     ];
   },

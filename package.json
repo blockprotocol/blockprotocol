@@ -3,6 +3,7 @@
   "description": "blockprotocol monorepo",
   "workspaces": [
     "packages/*",
+    "packages/@blockprotocol/*",
     "site"
   ],
   "scripts": {
@@ -24,7 +25,7 @@
     "dev": "yarn workspace @blockprotocol/site dev",
     "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
     "dev:db": "yarn workspace @blockprotocol/site dev:db",
-    "prepare": "patch-package && husky install && yarn workspace mock-block-dock run prepare && yarn workspace @blockprotocol/site run prepare"
+    "prepare": "patch-package && husky install && yarn workspace @blockprotocol/core run prepare && yarn workspace @blockprotocol/graph run prepare && yarn workspace mock-block-dock run prepare && yarn workspace @blockprotocol/site run prepare"
   },
   "lint-staged": {
     "**/*": [
