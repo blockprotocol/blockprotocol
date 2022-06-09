@@ -72,7 +72,7 @@
   - "packages/create-block-app/.*"
   - "packages/create-block-app/**/*"
   - "packages/create-block-app/**/.*"
-  -
+
 "package: graph":
   - "packages/graph/*"
   - "packages/graph/.*"
