@@ -26,6 +26,17 @@ export interface StoredBlockInfo {
   workspace?: string;
 }
 
+// https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
+// @todo Explain this hack if it works
+const forceFsOnVercel = () => {
+  try {
+    // eslint-disable-next-line global-require
+    require("fs");
+  } catch {
+    // noop
+  }
+};
+
 const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
   packagePath: string,
@@ -83,13 +94,7 @@ const getRepositoryUrl = (
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
-  // https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
-  // @todo Explain this hack if it works
-  // @ts-expect-error -- todo: describe
-  if (globalThis.nonExistingVariableThatCannotBeTruthy) {
-    // eslint-disable-next-line global-require
-    require("fs");
-  }
+  forceFsOnVercel();
 
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
@@ -157,13 +162,7 @@ export const readBlockDataFromDisk = async ({
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
-  // https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
-  // @todo Explain this hack if it works
-  // @ts-expect-error -- todo: describe
-  if (globalThis.nonExistingVariableThatCannotBeTruthy) {
-    // eslint-disable-next-line global-require
-    require("fs");
-  }
+  forceFsOnVercel();
 
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
