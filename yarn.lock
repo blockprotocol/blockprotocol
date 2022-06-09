@@ -1994,21 +1994,6 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@blockprotocol/core@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.2.tgz#f9ef68143981e5aadfe14556f0afa8931c6a472d"
-  integrity sha512-vqM7aXwQqea6v2BYB510WoHYmQlJIKxgYcXePtKmQq7f2u2of1rlJ20syQ9jRO+Uo8Vx/a3Ark8f2Npae0rkAQ==
-  dependencies:
-    uuid "^8.3.2"
-
-"@blockprotocol/graph@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.2.tgz#b1e852474ff07caaca03c46dfa57d95902ab930f"
-  integrity sha512-RBSTgwP2rMk1EC9p07P2xmm0GABp7VuQElx+6Nt4PWFDwHEtdPDnDCC2NPGEkNSuFGoVtw6bHCExMxQc0GOx4w==
-  dependencies:
-    "@blockprotocol/core" "0.0.2"
-    react "^17.0.2"
-
 "@cspotcode/source-map-consumer@0.8.0":
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-consumer/-/source-map-consumer-0.8.0.tgz#33bf4b7b39c178821606f669bbc447a6a629786b"
