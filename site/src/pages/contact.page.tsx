@@ -5,6 +5,8 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { tw } from "twind";
 
+import { Button } from "../components/button";
+import { AirplaneIcon } from "../components/icons";
 import { Link } from "../components/link";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
@@ -183,17 +185,16 @@ const Partners: NextPage = () => {
             <div hidden>
               <input type="hidden" name="tags" value="1830797" />
             </div>
-            <button
-              className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center`}
+            <Button
+              sx={{
+                marginTop: 4,
+              }}
+              endIcon={<AirplaneIcon />}
               type="submit"
+              squared
             >
-              Submit Form{" "}
-              <img
-                className={tw`ml-2`}
-                alt="take-off"
-                src="/assets/airplane.svg"
-              />
-            </button>
+              Submit Form
+            </Button>
           </form>
 
           <div
