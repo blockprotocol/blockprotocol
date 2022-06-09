@@ -174,6 +174,7 @@ export const getStaticProps: GetStaticProps<
       sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
     },
+    revalidate: 1800,
   };
 };
 
