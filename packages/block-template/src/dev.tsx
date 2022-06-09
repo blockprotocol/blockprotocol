@@ -12,7 +12,14 @@ const node = document.getElementById("app");
 
 const App = () => (
   <MockBlockDock>
-    <Component entityId="test-block-1" name="World" />
+    <Component
+      graph={{
+        blockEntity: {
+          entityId: "test-block-1",
+          properties: { name: "World" },
+        },
+      }}
+    />
   </MockBlockDock>
 );
 
