@@ -1,12 +1,7 @@
 import { CoreBlockHandler } from "./core-block-handler";
 import { CoreEmbedderHandler } from "./core-embedder-handler";
 import { CoreHandler } from "./core-handler";
-import {
-  GenericMessageCallback,
-  Message,
-  MessageContents,
-  MessageData,
-} from "./types";
+import { GenericMessageCallback, MessageContents, MessageData } from "./types";
 
 /**
  * The base class for creating service handlers from.
@@ -127,7 +122,7 @@ export abstract class ServiceHandler {
   protected sendMessage(
     this: ServiceHandler,
     args: { message: MessageContents },
-  ): Message;
+  ): void;
 
   protected sendMessage<
     ExpectedResponseData,

@@ -26,13 +26,14 @@ export abstract class CoreHandler {
   private readonly defaultMessageCallback?: GenericMessageCallback;
 
   /** an object containing registered callbacks for messages, by service and message name */
-  private readonly messageCallbacksByService: MessageCallbacksByService;
+  private readonly messageCallbacksByService: MessageCallbacksByService = {};
 
   /** a map of promise settlers and expected response names for requests, by requestId */
-  private readonly responseSettlersByRequestIdMap: ResponseSettlersByRequestIdMap;
+  private readonly responseSettlersByRequestIdMap: ResponseSettlersByRequestIdMap =
+    new Map();
 
   /** the service handlers which have been registered to receive and send messages */
-  protected readonly services: Map<string, ServiceHandler>;
+  protected readonly services: Map<string, ServiceHandler> = new Map();
 
   /** the element on which messages will be listened to, and from which they will be dispatched */
   protected element: HTMLElement;
@@ -114,10 +115,6 @@ export abstract class CoreHandler {
     element: HTMLElement;
     sourceType: "block" | "embedder";
   }) {
-    this.responseSettlersByRequestIdMap = new Map();
-    this.messageCallbacksByService = {};
-    this.services = new Map();
-
     this.element = element;
     this.sourceType = sourceType;
     (this.constructor as typeof CoreHandler).instanceMap.set(element, this);
@@ -167,7 +164,7 @@ export abstract class CoreHandler {
     this.messageCallbacksByService[serviceName]!.set(messageName, callback);
   }
 
-  sendMessage(this: CoreHandler, args: SendMessageArgs): Message;
+  sendMessage(this: CoreHandler, args: SendMessageArgs): void;
 
   sendMessage<
     ExpectedResponseData,
@@ -189,9 +186,9 @@ export abstract class CoreHandler {
   >(
     this: CoreHandler,
     args: SendMessageArgs | (SendMessageArgs & { respondedToBy: string }),
-  ):
-    | Message
-    | Promise<MessageData<ExpectedResponseData, ExpectedResponseErrorCodes>> {
+  ): void | Promise<
+    MessageData<ExpectedResponseData, ExpectedResponseErrorCodes>
+  > {
     const { partialMessage, requestId, sender } = args;
     if (!sender.serviceName) {
       throw new Error("Message sender has no serviceName set.");
@@ -203,12 +200,14 @@ export abstract class CoreHandler {
       service: sender.serviceName,
       source: this.sourceType,
     };
+
     const event = new CustomEvent(CoreHandler.customEventName, {
       bubbles: true,
       composed: true,
       detail: fullMessage,
     });
     this.element.dispatchEvent(event);
+
     if ("respondedToBy" in args && args.respondedToBy) {
       let resolverToStore: PromiseResolver | undefined = undefined;
       let rejecterToStore: PromiseRejecter | undefined = undefined;
@@ -225,11 +224,12 @@ export abstract class CoreHandler {
       });
       return promise;
     }
-    return fullMessage;
   }
 
   /**
    * Calls any callback which has been registered for the provided message.
+   *
+   * @throws Error if expected responses could not be produced, or callbacks error when called
    */
   protected async callCallback({ message }: { message: Message }) {
     const { errors, messageName, data, requestId, respondedToBy, service } =
@@ -277,7 +277,13 @@ export abstract class CoreHandler {
         );
       }
     } else {
-      callback({ data, errors });
+      try {
+        await callback({ data, errors });
+      } catch (err) {
+        throw new Error(
+          `Error calling callback for message '${messageName}: ${err}`,
+        );
+      }
     }
   }
 
@@ -314,7 +320,13 @@ export abstract class CoreHandler {
     }
 
     // @todo should we await this?
-    void this.callCallback({ message });
+    this.callCallback({ message }).catch((err) => {
+      // eslint-disable-next-line no-console -- intentional feedback for users
+      console.error(
+        `Error calling callback for '${service}' service, for message '${messageName}: ${err}`,
+      );
+      throw err;
+    });
 
     // Check if this message is responding to another, and settle the outstanding promise
     const messageAwaitingResponse =

@@ -88,7 +88,7 @@ export class GraphEmbedderHandler
 
   blockEntity({ data }: { data?: Entity }) {
     this._blockEntity = data;
-    void this.sendMessage({
+    this.sendMessage({
       message: {
         messageName: "blockEntity",
         data: this._blockEntity,
@@ -98,7 +98,7 @@ export class GraphEmbedderHandler
 
   blockGraph({ data }: { data?: BlockGraph }) {
     this._blockGraph = data;
-    void this.sendMessage({
+    this.sendMessage({
       message: {
         messageName: "blockGraph",
         data: this._blockGraph,
@@ -108,7 +108,7 @@ export class GraphEmbedderHandler
 
   entityTypes({ data }: { data?: EntityType[] }) {
     this._entityTypes = data;
-    void this.sendMessage({
+    this.sendMessage({
       message: {
         messageName: "entityTypes",
         data: this._entityTypes,
@@ -118,7 +118,7 @@ export class GraphEmbedderHandler
 
   linkedAggregations({ data }: { data?: LinkedAggregations }) {
     this._linkedAggregations = data;
-    void this.sendMessage({
+    this.sendMessage({
       message: {
         messageName: "linkedAggregations",
         data: this._linkedAggregations,
