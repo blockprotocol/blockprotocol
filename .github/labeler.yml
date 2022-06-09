@@ -61,11 +61,23 @@
   - "packages/blockprotocol/**/*"
   - "packages/blockprotocol/**/.*"
 
+"package: core":
+  - "packages/core/*"
+  - "packages/core/.*"
+  - "packages/core/**/*"
+  - "packages/core/**/.*"
+
 "package: create-block-app":
   - "packages/create-block-app/*"
   - "packages/create-block-app/.*"
   - "packages/create-block-app/**/*"
   - "packages/create-block-app/**/.*"
+  -
+"package: graph":
+  - "packages/graph/*"
+  - "packages/graph/.*"
+  - "packages/graph/**/*"
+  - "packages/graph/**/.*"
 
 "package: mock-block-dock":
   - "packages/mock-block-dock/*"
