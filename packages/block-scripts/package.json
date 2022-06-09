@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
@@ -44,7 +44,7 @@
     "sass-loader": "^12.6.0",
     "serve-handler": "^6.1.3",
     "style-loader": "^3.3.1",
-    "typescript": "^4.6.3",
+    "typescript": "4.7.2",
     "typescript-json-schema": "^0.53.0",
     "uuid": "^8.3.2",
     "webpack": "^5.72.0",

@@ -1,0 +1,6 @@
+{
+  "repository": "https://github.com/hashintel/hash.git",
+  "commit": "6624aa198af439d9c66f95c7ad9052cf94027581",
+  "workspace": "@hashintel/drawing",
+  "distDir": "dist"
+}

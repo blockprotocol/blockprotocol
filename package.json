@@ -3,18 +3,21 @@
   "description": "blockprotocol monorepo",
   "workspaces": [
     "packages/*",
+    "packages/@blockprotocol/*",
     "site"
   ],
   "scripts": {
     "exe": "ts-node --require dotenv-flow/config --transpile-only --transpiler=ts-node/transpilers/swc-experimental",
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
-    "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
+    "@todo.1": "Remove the ignore argument below once repo is upgraded fully to 0.2 spec",
+    "fix:dependency-version-consistency": "check-dependency-version-consistency --fix . --ignore-package-pattern mock-block-dock",
     "fix:eslint": "eslint --report-unused-disable-directives \"**/*\" --fix",
     "fix:markdownlint": "markdownlint --fix \"**/*\"",
     "fix:prettier": "prettier --write --ignore-unknown \"**/*.*\"",
     "fix:yarn-deduplicate": "yarn install; yarn-deduplicate --strategy=fewer; yarn install",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
-    "lint:dependency-version-consistency": "check-dependency-version-consistency .",
+    "@todo.2": "Remove the ignore argument below once repo is upgraded fully to 0.2 spec",
+    "lint:dependency-version-consistency": "check-dependency-version-consistency . --ignore-package-pattern mock-block-dock",
     "lint:eslint": "eslint --report-unused-disable-directives \"**/*\"",
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
     "lint:markdownlint": "markdownlint \"**/*\"",
@@ -24,7 +27,7 @@
     "dev": "yarn workspace @blockprotocol/site dev",
     "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
     "dev:db": "yarn workspace @blockprotocol/site dev:db",
-    "prepare": "patch-package && husky install && yarn workspace mock-block-dock run prepare && yarn workspace @blockprotocol/site run prepare"
+    "prepare": "patch-package && husky install && yarn workspace @blockprotocol/core run prepare && yarn workspace @blockprotocol/graph run prepare && yarn workspace mock-block-dock run prepare && yarn workspace @blockprotocol/site run prepare"
   },
   "lint-staged": {
     "**/*": [
@@ -80,5 +83,8 @@
     "uuid": "^8.3.2",
     "wait-on": "6.0.0",
     "yarn-deduplicate": "3.1.0"
+  },
+  "engines": {
+    "node": "^14.18.0 || >=16.13.0"
   }
 }
