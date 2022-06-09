@@ -30,8 +30,8 @@ export interface StoredBlockInfo {
 // @todo Explain this hack if it works
 const forceFsOnVercel = () => {
   try {
-    // eslint-disable-next-line global-require
-    require("fs");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,global-require
+    const fakeFs = require("fs");
   } catch {
     // noop
   }
