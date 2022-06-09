@@ -1,7 +1,16 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
+import fs from "fs-extra";
+import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
 
 import { FRONTEND_URL } from "./config";
+
+// https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
+// @todo Explain this hack if it works
+if (process.env.VERCEL) {
+  // eslint-disable-next-line global-require
+  require("fs");
+}
 
 /** @todo type as JSON object */
 export type BlockProps = object;
@@ -81,9 +90,6 @@ const getRepositoryUrl = (
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
-  const fs = await import("node:fs");
-  const glob = (await import("glob")).default;
-
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
@@ -150,7 +156,6 @@ export const readBlockDataFromDisk = async ({
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
-  const fs = await import("node:fs");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 
