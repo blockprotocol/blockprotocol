@@ -187,13 +187,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
   sliderItems,
   exampleGraph,
 }) => {
-  console.log({
-    blockMetadata,
-    blockStringifiedSource,
-    catalog,
-    schema,
-    exampleGraph,
-  });
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
 
