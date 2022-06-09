@@ -26,19 +26,6 @@ export interface StoredBlockInfo {
   workspace?: string;
 }
 
-// https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
-// @todo Explain this hack if it works
-const forceFsOnVercel = () => {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars,global-require
-    const fakeFs = require("fs");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars,global-require
-    const fakeGlob = require("glob");
-  } catch {
-    // noop
-  }
-};
-
 const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
   packagePath: string,
@@ -96,8 +83,6 @@ const getRepositoryUrl = (
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
-  forceFsOnVercel();
-
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
@@ -164,8 +149,6 @@ export const readBlockDataFromDisk = async ({
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
-  forceFsOnVercel();
-
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 
