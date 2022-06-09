@@ -180,7 +180,9 @@ const Partners: NextPage = () => {
                 rows={8}
               />
             </div>
-
+            <div hidden>
+              <input type="hidden" name="tags" value="1830797" />
+            </div>
             <button
               className={tw`text-white mt-8 px-10 py-3 rounded font-semibold flex items-center`}
               type="submit"
