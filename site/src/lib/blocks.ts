@@ -4,6 +4,7 @@ import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
 
 import { FRONTEND_URL } from "./config";
+import forceFsOnVercel from "./force-fs-on-vercel.cjs";
 
 /** @todo type as JSON object */
 export type BlockProps = object;
@@ -83,6 +84,8 @@ const getRepositoryUrl = (
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
+  forceFsOnVercel();
+
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
@@ -149,6 +152,8 @@ export const readBlockDataFromDisk = async ({
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
+  forceFsOnVercel();
+
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 

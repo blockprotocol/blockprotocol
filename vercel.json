@@ -1,10 +1,5 @@
 {
   "github": {
     "silent": true
-  },
-  "functions": {
-    "[shortname]/blocks/[block-slug].js": {
-      "includeFiles": "public/blocks/**"
-    }
   }
 }
