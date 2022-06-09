@@ -56,12 +56,12 @@
   - "packages/block-template/**/.*"
 
 "package: blockprotocol":
-  - "packages/@blockprotocol/*"
-  - "packages/@blockprotocol/.*"
-  - "packages/@blockprotocol/**/*"
-  - "packages/@blockprotocol/**/.*"
+  - "packages/blockprotocol/*"
+  - "packages/blockprotocol/.*"
+  - "packages/blockprotocol/**/*"
+  - "packages/blockprotocol/**/.*"
 
-"package: core":
+"package: Þ core":
   - "packages/@blockprotocol/core/*"
   - "packages/@blockprotocol/core/.*"
   - "packages/@blockprotocol/core/**/*"
@@ -73,7 +73,7 @@
   - "packages/create-block-app/**/*"
   - "packages/create-block-app/**/.*"
 
-"package: graph":
+"package: Þ graph":
   - "packages/@blockprotocol/graph/*"
   - "packages/@blockprotocol/graph/.*"
   - "packages/@blockprotocol/graph/**/*"
