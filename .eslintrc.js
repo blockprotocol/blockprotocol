@@ -219,7 +219,7 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-template/src/dev.js"],
+      files: ["packages/block-template/src/dev.tsx"],
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
