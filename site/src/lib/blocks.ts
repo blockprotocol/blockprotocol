@@ -157,6 +157,14 @@ export const readBlockDataFromDisk = async ({
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
+  // https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
+  // @todo Explain this hack if it works
+  // @ts-expect-error -- todo: describe
+  if (globalThis.nonExistingVariableThatCannotBeTruthy) {
+    // eslint-disable-next-line global-require
+    require("fs");
+  }
+
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 
