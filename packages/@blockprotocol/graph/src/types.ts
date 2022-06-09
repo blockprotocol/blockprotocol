@@ -18,10 +18,14 @@ export interface JSONArray extends Array<JSONValue> {}
 
 // ----------------------------- ENTITIES ----------------------------- //
 
-export type Entity<Properties = Record<string, unknown>> = {
+export type Entity<
+  Properties extends Record<string, unknown> | null = Record<string, unknown>,
+> = {
   entityId: string;
-  entityTypeId: string;
-  properties: Properties;
+  entityTypeId?: string;
+  properties?: Properties extends Record<string, unknown>
+    ? Properties
+    : undefined;
 };
 
 export type CreateEntityData = {

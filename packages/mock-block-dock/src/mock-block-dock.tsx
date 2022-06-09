@@ -1,13 +1,18 @@
 import {
-  BlockProtocolEntity,
-  BlockProtocolEntityType,
-  BlockProtocolLink,
-  BlockProtocolLinkedAggregationDefinition,
-} from "blockprotocol";
-import {
+  BlockGraphProperties,
+  Entity,
+  EntityType,
+  GraphEmbedderHandler,
+  Link,
+  LinkedAggregationDefinition,
+} from "@blockprotocol/graph";
+import React, {
   Children,
   cloneElement,
   ReactElement,
+  useEffect,
+  useRef,
+  useState,
   VoidFunctionComponent,
 } from "react";
 
@@ -15,11 +20,11 @@ import { useMockBlockProps } from "./use-mock-block-props";
 
 type MockBlockDockProps = {
   children: ReactElement;
-  blockSchema?: Partial<BlockProtocolEntityType>;
-  initialEntities?: BlockProtocolEntity[];
-  initialEntityTypes?: BlockProtocolEntityType[];
-  initialLinks?: BlockProtocolLink[];
-  initialLinkedAggregations?: BlockProtocolLinkedAggregationDefinition[];
+  blockSchema?: Partial<EntityType>;
+  initialEntities?: Entity[];
+  initialEntityTypes?: EntityType[];
+  initialLinks?: Link[];
+  initialLinkedAggregations?: LinkedAggregationDefinition[];
 };
 
 /**
@@ -42,14 +47,13 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   initialLinkedAggregations,
 }) => {
   const {
-    blockProperties,
-    blockProtocolFunctions,
+    blockEntity,
+    blockGraph,
     entityTypes,
+    graphServiceCallbacks,
     linkedAggregations,
-    linkedEntities,
-    linkGroups,
   } = useMockBlockProps({
-    blockProperties: children.props,
+    blockEntity: children.props?.graph?.blockEntity,
     blockSchema,
     initialEntities,
     initialEntityTypes,
@@ -57,14 +61,70 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
     initialLinkedAggregations,
   });
 
-  const propsToInject = {
-    ...blockProperties,
-    ...blockProtocolFunctions,
-    entityTypes,
-    linkedAggregations,
-    linkedEntities,
-    linkGroups,
+  const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
+    null,
+  );
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const propsToInject: BlockGraphProperties<any> = {
+    graph: {
+      blockEntity,
+      blockGraph,
+      entityTypes,
+      linkedAggregations,
+    },
   };
 
-  return cloneElement(Children.only(children), propsToInject);
+  useEffect(() => {
+    if (!wrapperRef.current) {
+      throw new Error(
+        "No reference to wrapping element – cannot listen for messages from block",
+      );
+    } else if (graphService) {
+      return;
+    }
+    setGraphService(
+      new GraphEmbedderHandler({
+        blockGraph,
+        blockEntity,
+        linkedAggregations,
+        callbacks: graphServiceCallbacks,
+        element: wrapperRef.current,
+      }),
+    );
+  }, [
+    blockEntity,
+    blockGraph,
+    graphService,
+    graphServiceCallbacks,
+    linkedAggregations,
+  ]);
+
+  useEffect(() => {
+    if (graphService) {
+      graphService.blockEntity({ data: blockEntity });
+    }
+  }, [blockEntity, graphService]);
+
+  useEffect(() => {
+    if (graphService) {
+      graphService.blockGraph({ data: blockGraph });
+    }
+  }, [blockGraph, graphService]);
+
+  useEffect(() => {
+    if (graphService) {
+      graphService.entityTypes({ data: entityTypes });
+    }
+  }, [entityTypes, graphService]);
+
+  useEffect(() => {
+    if (graphService) {
+      graphService.linkedAggregations({ data: linkedAggregations });
+    }
+  }, [linkedAggregations, graphService]);
+
+  const child = cloneElement(Children.only(children), propsToInject);
+
+  return <div ref={wrapperRef}>{graphService ? child : null}</div>;
 };

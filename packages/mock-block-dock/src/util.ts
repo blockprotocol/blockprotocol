@@ -1,91 +1,27 @@
 import {
-  BlockProtocolAggregateEntitiesFunction,
-  BlockProtocolAggregateEntitiesPayload,
-  BlockProtocolAggregateEntityTypesFunction,
-  BlockProtocolAggregateEntityTypesPayload,
-  BlockProtocolEntity,
-  BlockProtocolEntityType,
-  BlockProtocolMultiFilter,
-  BlockProtocolMultiSort,
-} from "blockprotocol";
+  AggregateEntitiesData,
+  AggregateEntitiesResult,
+  AggregateEntityTypesData,
+  Entity,
+  EntityType,
+  MultiFilter,
+  MultiSort,
+} from "@blockprotocol/graph";
 import { get, orderBy } from "lodash";
-
-type EntityIdentifiers = {
-  accountId?: string | null;
-  entityId: string;
-  entityTypeId?: string | null;
-};
-
-export const matchEntityIdentifiers = ({
-  providedIdentifiers,
-  entityToCheck,
-}: {
-  providedIdentifiers: EntityIdentifiers;
-  entityToCheck: EntityIdentifiers;
-}) => {
-  if (providedIdentifiers.entityId !== entityToCheck.entityId) {
-    return false;
-  }
-  if (
-    providedIdentifiers.accountId != null &&
-    providedIdentifiers.accountId !== entityToCheck.accountId
-  ) {
-    return false;
-  }
-  if (
-    providedIdentifiers.entityTypeId != null &&
-    providedIdentifiers.entityTypeId !== entityToCheck.entityTypeId
-  ) {
-    return false;
-  }
-  return true;
-};
-
-type EntityTypeIdentifiers = {
-  accountId?: string | null;
-  entityTypeId: string | null;
-};
-
-export const matchEntityTypeIdentifiers = ({
-  providedIdentifiers,
-  entityTypeToCheck,
-}: {
-  providedIdentifiers: EntityTypeIdentifiers;
-  entityTypeToCheck: EntityTypeIdentifiers;
-}) => {
-  if (providedIdentifiers.entityTypeId !== entityTypeToCheck.entityTypeId) {
-    return false;
-  }
-  if (
-    providedIdentifiers.accountId != null &&
-    providedIdentifiers.accountId !== entityTypeToCheck.accountId
-  ) {
-    return false;
-  }
-  return true;
-};
 
 type FilterEntitiesFn = {
   (params: {
     entityTypeId?: string | null;
-    entityTypeVersionId?: string | null;
-    entities: BlockProtocolEntity[];
-    multiFilter: BlockProtocolMultiFilter;
-  }): BlockProtocolEntity[];
+    entities: Entity[];
+    multiFilter: MultiFilter;
+  }): Entity[];
 };
 
 const filterEntities: FilterEntitiesFn = (params) => {
-  const { entityTypeId, entityTypeVersionId, entities, multiFilter } = params;
+  const { entityTypeId, entities, multiFilter } = params;
 
   return entities.filter((entity) => {
     if (entityTypeId && entityTypeId !== entity.entityTypeId) {
-      return false;
-    }
-
-    if (
-      entityTypeVersionId &&
-      entityTypeVersionId !== entity.entityTypeVersionId
-    ) {
       return false;
     }
 
@@ -129,11 +65,9 @@ const filterEntities: FilterEntitiesFn = (params) => {
   });
 };
 
-const sortEntitiesOrTypes = <
-  T extends BlockProtocolEntity | BlockProtocolEntityType,
->(params: {
+const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
   entities: T[];
-  multiSort: BlockProtocolMultiSort;
+  multiSort: MultiSort;
 }): T[] => {
   const { entities, multiSort } = params;
 
@@ -149,28 +83,22 @@ const sortEntitiesOrTypes = <
 };
 
 const isEntityTypes = (
-  entities: BlockProtocolEntity[] | BlockProtocolEntityType[],
-): entities is BlockProtocolEntityType[] => "$schema" in entities[0];
-
-type Unpromise<T extends Promise<any>> = T extends Promise<infer U> ? U : never;
+  entities: Entity[] | EntityType[],
+): entities is EntityType[] => "schema" in entities[0];
 
 export function filterAndSortEntitiesOrTypes(
-  entities: BlockProtocolEntity[],
-  payload: BlockProtocolAggregateEntitiesPayload,
-): Unpromise<ReturnType<BlockProtocolAggregateEntitiesFunction>>;
+  entities: Entity[],
+  payload: AggregateEntitiesData,
+): AggregateEntitiesResult<Entity>;
 export function filterAndSortEntitiesOrTypes(
-  entities: BlockProtocolEntityType[],
-  payload: BlockProtocolAggregateEntityTypesPayload,
-): Unpromise<ReturnType<BlockProtocolAggregateEntityTypesFunction>>;
+  entities: EntityType[],
+  payload: AggregateEntityTypesData,
+): AggregateEntitiesResult<EntityType>;
 export function filterAndSortEntitiesOrTypes(
-  entities: BlockProtocolEntity[] | BlockProtocolEntityType[],
-  payload:
-    | BlockProtocolAggregateEntitiesPayload
-    | BlockProtocolAggregateEntityTypesPayload,
-):
-  | Unpromise<ReturnType<BlockProtocolAggregateEntitiesFunction>>
-  | Unpromise<ReturnType<BlockProtocolAggregateEntityTypesFunction>> {
-  const { accountId, operation } = payload;
+  entities: Entity[] | EntityType[],
+  payload: AggregateEntitiesResult<EntityType> | AggregateEntityTypesData,
+): AggregateEntitiesResult<Entity> | AggregateEntitiesResult<EntityType> {
+  const { operation } = payload;
 
   const pageNumber = operation?.pageNumber || 1;
   const itemsPerPage = operation?.itemsPerPage || 10;
@@ -190,9 +118,6 @@ export function filterAndSortEntitiesOrTypes(
   // @todo add filtering to entityTypes, remove duplication below
   if (isEntityTypes(entities)) {
     let results = [...entities];
-    if (accountId) {
-      results = results.filter((entity) => entity.accountId);
-    }
     const totalCount = results.length;
     const pageCount = Math.ceil(totalCount / itemsPerPage);
     results = sortEntitiesOrTypes({ entities: results, multiSort }).slice(
@@ -212,7 +137,7 @@ export function filterAndSortEntitiesOrTypes(
   let results = [...entities];
   if (multiFilter) {
     results = filterEntities({
-      entities: results as BlockProtocolEntity[],
+      entities: results,
       multiFilter,
     });
   }
