@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.2",
-    "blockprotocol": "0.0.10",
     "lodash": "^4.17.21",
     "uuid": "^8.3.2"
   },
