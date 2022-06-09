@@ -5,14 +5,6 @@ import hostedGitInfo from "hosted-git-info";
 
 import { FRONTEND_URL } from "./config";
 
-// https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
-// @todo Explain this hack if it works
-// eslint-disable-next-line no-constant-condition
-if (false) {
-  // eslint-disable-next-line global-require
-  require("fs");
-}
-
 /** @todo type as JSON object */
 export type BlockProps = object;
 
@@ -91,6 +83,14 @@ const getRepositoryUrl = (
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
+  // https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
+  // @todo Explain this hack if it works
+  // eslint-disable-next-line no-constant-condition
+  if (false) {
+    // eslint-disable-next-line global-require
+    require("fs");
+  }
+
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
