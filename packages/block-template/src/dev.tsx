@@ -10,10 +10,17 @@ import Component from "./index";
 
 const node = document.getElementById("app");
 
-const App = () => (
+const DevApp = () => (
   <MockBlockDock>
-    <Component entityId="test-block-1" name="World" />
+    <Component
+      graph={{
+        blockEntity: {
+          entityId: "test-block-1",
+          properties: { name: "World" },
+        },
+      }}
+    />
   </MockBlockDock>
 );
 
-ReactDOM.render(<App />, node);
+ReactDOM.render(<DevApp />, node);
