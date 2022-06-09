@@ -10,7 +10,7 @@ import Component from "./index";
 
 const node = document.getElementById("app");
 
-const App = () => (
+const DevApp = () => (
   <MockBlockDock>
     <Component
       graph={{
@@ -23,4 +23,4 @@ const App = () => (
   </MockBlockDock>
 );
 
-ReactDOM.render(<App />, node);
+ReactDOM.render(<DevApp />, node);
