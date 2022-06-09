@@ -7,6 +7,7 @@ import { RegistrySection } from "../components/pages/home/registry-section";
 import { Section2 } from "../components/pages/home/section2";
 import { WhyBlockProtocolSection } from "../components/pages/home/why-block-protocol-section";
 import {
+  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,
 } from "../lib/blocks";
@@ -18,7 +19,7 @@ interface PageProps {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  return { props: { catalog: readBlocksFromDisk() } };
+  return { props: { catalog: excludeHiddenBlocks(readBlocksFromDisk()) } };
 };
 
 const HomePage: VFC<PageProps> = ({ catalog }) => {
