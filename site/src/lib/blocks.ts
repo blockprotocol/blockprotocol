@@ -7,7 +7,8 @@ import { FRONTEND_URL } from "./config";
 
 // https://vercel.com/docs/runtimes#advanced-usage/technical-details/including-additional-files
 // @todo Explain this hack if it works
-if (process.env.VERCEL) {
+// eslint-disable-next-line no-constant-condition
+if (false) {
   // eslint-disable-next-line global-require
   require("fs");
 }
