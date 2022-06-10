@@ -128,17 +128,16 @@ const handler: NextApiHandler = async (req, res) => {
         return result;
       }
 
-      const BlockComponent = findComponentExport(loadCjsFromSource(blockSource));
       const blockSource = ${JSON.stringify(source)};
+      const BlockComponent = findComponentExport(loadCjsFromSource(blockSource));
+      const mockBlockDockProps = ${JSON.stringify(mockBlockDockProps)}
+      console.log({mockBlockDockProps})
       const render = (blockComponentProps) => {
         ReactDOM.render(
           _jsx(MockBlockDock, { children: _jsx(BlockComponent, blockComponentProps), ...mockBlockDockProps  }),
           document.getElementById("container")
         );
       }
-
-      const mockBlockDockProps = ${JSON.stringify(mockBlockDockProps)}
-      console.log(mockBlockDockProps)
 
       window.addEventListener("message", ({ data }) => { if (typeof data === "string") { render(JSON.parse(data)) }});
 
