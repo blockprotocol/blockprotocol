@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
@@ -32,7 +32,7 @@
     "@babel/preset-typescript": "7.16.7",
     "@babel/runtime": "^7.17.9",
     "babel-loader": "^8.2.4",
-    "chalk": "4.1.2",
+    "chalk": "5.0.1",
     "copy-webpack-plugin": "10.2.4",
     "core-js": "^3.21.1",
     "cross-env": "^7.0.3",

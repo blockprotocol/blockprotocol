@@ -5,36 +5,24 @@ const script = async () => {
   console.log(chalk.bold("Building..."));
 
   if (process.env.VERCEL) {
-    await (
-      await import("./copy-blocks-from-ci-cache")
-    ).default;
+    await import("./copy-blocks-from-ci-cache");
   }
 
-  await (
-    await import("./prepare-blocks")
-  ).default;
+  await import("./prepare-blocks");
 
   await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
 
-  await (
-    await import("./generate-sitemap")
-  ).default;
+  await import("./generate-sitemap");
 
-  await (
-    await import("./generate-blocks-data")
-  ).default;
+  await import("./generate-blocks-data");
 
-  await (
-    await import("./create-db-indexes")
-  ).default;
+  await import("./create-db-indexes");
 
   await execa("next", ["build"], { stdio: "inherit" });
 
   if (process.env.VERCEL) {
-    await (
-      await import("./copy-blocks-to-ci-cache")
-    ).default;
+    await import("./copy-blocks-to-ci-cache");
   }
 };
 
-export default script();
+await script();

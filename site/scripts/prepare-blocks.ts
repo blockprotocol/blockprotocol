@@ -20,12 +20,16 @@ import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import slugify from "slugify";
 import tmp from "tmp-promise";
 
 import { StoredBlockInfo } from "../src/lib/blocks";
 
-const monorepoRoot = path.resolve(__dirname, "../..");
+const monorepoRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../..",
+);
 
 const defaultExecaOptions = {
   env: {
@@ -518,4 +522,4 @@ const script = async () => {
   // As a workaround, we can clear CI cache for now.
 };
 
-export default script();
+await script();

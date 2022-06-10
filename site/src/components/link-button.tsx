@@ -5,7 +5,7 @@ import { Button, ButtonProps } from "./button";
 
 export interface LinkButtonProps
   extends Omit<ButtonProps, "href">,
-    Omit<BaseLinkProps, "children"> {
+    Omit<BaseLinkProps, "children" | "onClick" | "onMouseEnter"> {
   children: React.ReactNode;
 }
 
