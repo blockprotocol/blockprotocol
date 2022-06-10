@@ -24,9 +24,10 @@ import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,
+  readBlockReadmeFromDisk,
   readBlocksFromDisk,
 } from "../../../lib/blocks";
-import { FRONTEND_URL, isProduction } from "../../../lib/config";
+import { isProduction } from "../../../lib/config";
 import { mdxComponents } from "../../../util/mdx-components";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
@@ -176,17 +177,7 @@ export const getStaticProps: GetStaticProps<
 
   const { schema } = await readBlockDataFromDisk(blockMetadata);
 
-  let readmeMd: string | undefined;
-  try {
-    const response = await fetch(
-      `${FRONTEND_URL}/blocks/${blockMetadata.packagePath}/README.md`,
-    );
-    if (response.status === 200) {
-      readmeMd = await response.text();
-    }
-  } catch {
-    // noop (readme resource does not exist)
-  }
+  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
 
   const compiledReadme = readmeMd
     ? (await serialize(readmeMd, { mdxOptions: { format: "md" } }))
