@@ -14,6 +14,8 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // repository is passed down as a string upon expansion
   repository?: string;
   schema?: string | null;
+
+  unstable_hubInfo?: Record<string, string>;
 };
 
 export interface StoredBlockInfo {
@@ -46,11 +48,12 @@ const generateBlockFileUrl = (
 const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
   commit: string,
+  path: string | undefined,
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
       .fromUrl(repository)
-      ?.browse("", { committish: commit });
+      ?.browse(path ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -64,7 +67,7 @@ const getRepositoryUrl = (
   if (url) {
     const repositoryUrl = hostedGitInfo
       .fromUrl(url)
-      ?.browse(directory ?? "", { committish: commit });
+      ?.browse(path ?? directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -105,6 +108,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
       const repository = getRepositoryUrl(
         metadata.repository ?? storedBlockInfo.repository,
         storedBlockInfo.commit,
+        metadata.unstable_hubInfo?.directory,
       )?.replace(/\/$/, "");
 
       return {
