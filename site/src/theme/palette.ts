@@ -52,7 +52,6 @@ export const customColors = {
     80: "#4D5C6C",
     90: "#37434F",
   },
-  grey: undefined,
   black: "#0E1114",
   white: "#FFFFFF",
 } as const;
