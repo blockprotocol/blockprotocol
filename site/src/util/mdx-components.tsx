@@ -2,6 +2,7 @@ import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
   Children,
+  ComponentType,
   HTMLAttributes,
   HTMLProps,
   isValidElement,
@@ -105,7 +106,7 @@ const HEADING_MARGIN_TOP = {
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, ReactNode> = {
+export const mdxComponents: Record<string, ComponentType> = {
   Box,
   Paper,
   Typography,

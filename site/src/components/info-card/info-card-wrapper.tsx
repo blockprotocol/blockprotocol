@@ -11,7 +11,7 @@ import {
 import { InfoCard } from "./info-card";
 
 type InfoCardWrapperProps = {
-  children: ReactNode;
+  children?: ReactNode;
 };
 
 export const INFO_CARD_WIDTH = 275;
