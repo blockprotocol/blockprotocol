@@ -86,7 +86,7 @@ export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
   const blockMetadataFilePaths = await globby(
-    path.join(process.cwd(), `/public/blocks/**/block-metadata.json`),
+    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`),
   );
 
   const result: ExpandedBlockMetadata[] = [];
@@ -104,7 +104,7 @@ export const readBlocksFromDisk = async (): Promise<
     };
 
     const storedBlockInfo: StoredBlockInfo = await fs.readJson(
-      `${process.cwd()}/../hub/${packagePath}.json`,
+      path.resolve(process.cwd(), `../hub/${packagePath}.json`),
       {
         encoding: "utf8",
       },
@@ -164,7 +164,7 @@ export const readBlockDataFromDisk = async ({
   const schema = metadataSchema.startsWith(FRONTEND_URL)
     ? JSON.parse(
         await fs.readFile(
-          path.join(
+          path.resolve(
             process.cwd(),
             `public/blocks/${packagePath}/${metadataSchema.substring(
               metadataSchema.lastIndexOf("/") + 1,
@@ -177,7 +177,7 @@ export const readBlockDataFromDisk = async ({
 
   const source = metadataSource.startsWith(FRONTEND_URL)
     ? await fs.readFile(
-        path.join(
+        path.resolve(
           process.cwd(),
           `public/blocks/${packagePath}/${metadataSource.substring(
             metadataSource.lastIndexOf("/") + 1,
