@@ -4,7 +4,7 @@ import fs from "fs";
 import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
 
-import { FRONTEND_URL } from "./config";
+import { DEPLOYMENT_URL, FRONTEND_URL } from "./config";
 
 /** @todo type as JSON object */
 export type BlockProps = object;
@@ -39,9 +39,10 @@ const generateBlockFileUrl = (
     return mediaPath;
   }
 
-  return `${
-    process.env.NEXT_PUBLIC_VERCEL_URL ?? FRONTEND_URL
-  }/blocks/${packagePath}/${mediaPath.replace(/^\//, "")}`;
+  return `${DEPLOYMENT_URL}/blocks/${packagePath}/${mediaPath.replace(
+    /^\//,
+    "",
+  )}`;
 };
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
@@ -182,9 +183,11 @@ export const fetchBlockAsset = async (
   blockMetadata: ExpandedBlockMetadata,
   relativeAssetPath: string,
 ): Promise<string | undefined> => {
-  const response = await fetch(
-    generateBlockFileUrl(relativeAssetPath, blockMetadata.packagePath)!,
+  const url = generateBlockFileUrl(
+    relativeAssetPath,
+    blockMetadata.packagePath,
   );
+  const response = await fetch(url!);
 
   if (response.status === 200) {
     return await response.text();
