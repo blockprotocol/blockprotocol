@@ -2,11 +2,10 @@ import fs from "fs-extra";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import path from "node:path";
-// @ts-expect-error -- Need to figure out how to get or declare the necessary types
 import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";
 import slugify from "slugify";
-import unified from "unified";
+import { unified } from "unified";
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 
