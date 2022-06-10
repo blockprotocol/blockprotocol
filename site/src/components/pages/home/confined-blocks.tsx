@@ -12,9 +12,11 @@ export const ConfinedBlocks = () => {
   return (
     <Box
       sx={{
-        background: "linear-gradient(40.4deg, #161619 63.75%, #3D3D46 82.21%)",
+        background:
+          "linear-gradient(40.4deg, rgb(29, 29, 38) 63.75%, rgb(62, 62, 73) 82.21%)",
         py: { xs: 10, md: 12 },
         px: { xs: "1rem", lg: "0" },
+        border: "2px solid rgb(5, 5, 7)",
       }}
     >
       <Box
