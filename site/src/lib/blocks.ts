@@ -89,11 +89,17 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     .map((path: string): ExpandedBlockMetadata => {
       const packagePath = path.split("/").slice(-3, -1).join("/");
 
+      const partialMetadata = JSON.parse(
+        fs.readFileSync(path, { encoding: "utf8" }),
+      );
+
       const metadata: ExpandedBlockMetadata = {
         // @todo should be redundant to block's package.json#name
         componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
         packagePath,
-        ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+        // fallback while not all blocks have blockType defined
+        blockType: partialMetadata.blockType ?? { entryPoint: "react" },
+        ...partialMetadata,
       };
 
       const storedBlockInfo: StoredBlockInfo = JSON.parse(
