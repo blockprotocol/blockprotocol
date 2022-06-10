@@ -18,7 +18,9 @@ interface PageProps {
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  return { props: { catalog: excludeHiddenBlocks(readBlocksFromDisk()) } };
+  return {
+    props: { catalog: excludeHiddenBlocks(await readBlocksFromDisk()) },
+  };
 };
 
 const HubPage: VFC<PageProps> = ({ catalog }) => {

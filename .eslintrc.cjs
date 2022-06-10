@@ -1,5 +1,11 @@
 const sharedNoRestrictedImportsConfig = {
-  paths: [],
+  paths: [
+    {
+      name: "lodash",
+      message:
+        "Please import lodash functions from lodash/functionName for CJS/ESM interop. Check if your task needs lodash at https://you-dont-need.github.io/You-Dont-Need-Lodash-Underscore/#/",
+    },
+  ],
   patterns: [
     {
       group: ["fs", "fs/*"],
@@ -71,7 +77,7 @@ module.exports = {
     "react/jsx-filename-extension": [
       "error",
       {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        extensions: [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"],
       },
     ],
     "react/jsx-props-no-spreading": "off",
@@ -182,16 +188,17 @@ module.exports = {
   settings: {
     "import/resolver": {
       node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        extensions: [".cjs", ".js", ".jsx", ".mjs", ".ts", ".tsx"],
       },
     },
   },
   overrides: [
     {
-      files: ["**/*.js"],
+      files: ["**/*.{c,m,}js"],
       parser: "@babel/eslint-parser", // disables typescript rules
       parserOptions: {
         requireConfigFile: false,
+        extraFileExtensions: [".cjs"],
         babelOptions: {
           presets: ["@babel/preset-react"], // allows jsx
         },
@@ -199,7 +206,7 @@ module.exports = {
     },
     {
       // top-level config files
-      files: ["*.config.js", "*rc.js"],
+      files: ["*.config.{c,m,}js", "*rc.{c,m,}js"],
       rules: {
         "import/no-extraneous-dependencies": "off",
         "global-require": "off",

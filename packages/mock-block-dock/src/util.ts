@@ -8,7 +8,8 @@ import {
   BlockProtocolMultiFilter,
   BlockProtocolMultiSort,
 } from "blockprotocol";
-import { get, orderBy } from "lodash";
+import get from "lodash/get";
+import orderBy from "lodash/orderBy";
 
 type EntityIdentifiers = {
   accountId?: string | null;
