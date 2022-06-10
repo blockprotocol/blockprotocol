@@ -5,7 +5,8 @@ import {
   BlockProtocolUpdateEntityTypesFunction,
   JSONObject,
 } from "blockprotocol";
-import { debounce, get } from "lodash";
+import debounce from "lodash/debounce";
+import get from "lodash/get";
 import React, {
   createContext,
   ReactElement,

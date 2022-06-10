@@ -88,9 +88,7 @@ const script = async () => {
   await client.close();
   console.log("✅ DB seeded");
 
-  await (
-    await import("./create-db-indexes")
-  ).default;
+  await import("./create-db-indexes");
 };
 
-export default script();
+await script();

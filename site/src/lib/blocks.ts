@@ -1,4 +1,7 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
+// eslint-disable-next-line no-restricted-imports,unicorn/prefer-node-protocol -- https://github.com/vercel/nft/issues/293
+import fs from "fs";
+import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
 
 import { FRONTEND_URL } from "./config";
@@ -78,12 +81,9 @@ const getRepositoryUrl = (
  * used to read block metadata from disk.
  *
  */
-export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
-  const glob = require("glob");
-  /* eslint-enable global-require */
-
+export const readBlocksFromDisk = async (): Promise<
+  ExpandedBlockMetadata[]
+> => {
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
@@ -129,13 +129,27 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     });
 };
 
+const blocksToHide = [
+  "@hash/callout",
+  "@hash/embed",
+  "@hash/header",
+  "@hash/paragraph",
+];
+
+/** Helps consistently hide certain blocks from the hub and user profile pages */
+export const excludeHiddenBlocks = (
+  blocks: ExpandedBlockMetadata[],
+): ExpandedBlockMetadata[] => {
+  return blocks.filter(
+    ({ packagePath }) => !blocksToHide.includes(packagePath),
+  );
+};
+
 export const readBlockDataFromDisk = async ({
   packagePath,
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 

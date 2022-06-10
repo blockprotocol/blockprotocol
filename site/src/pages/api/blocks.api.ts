@@ -1,8 +1,8 @@
 import Ajv from "ajv";
 import { query as queryValidator } from "express-validator";
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash/cloneDeep";
 
-import blocksData from "../../../blocks-data.json";
+import blocksData from "../../../blocks-data.json" assert { type: "json" };
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
 import {
   ExpandedBlockMetadata as BlockMetadata,
