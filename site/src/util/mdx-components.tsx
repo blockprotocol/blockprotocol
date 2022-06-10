@@ -1,8 +1,10 @@
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
+  Children,
   HTMLAttributes,
   HTMLProps,
+  isValidElement,
   ReactNode,
   useContext,
   useEffect,
@@ -269,69 +271,82 @@ export const mdxComponents: Record<string, ReactNode> = {
       </Typography>
     </Box>
   ),
-  inlineCode: (props: HTMLAttributes<HTMLElement>) => (
-    <Box
-      component="code"
-      sx={(theme) => ({
-        fontSize: "80%",
-        color: theme.palette.purple[700],
-        background: theme.palette.purple[100],
-        padding: theme.spacing(0.25, 0.5),
-        borderColor: theme.palette.purple[200],
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderRadius: "4px",
-      })}
-      {...props}
-    />
-  ),
-  pre: (props: HTMLAttributes<HTMLElement>) => {
-    // Delegate full control to code for more styling options
-    return props.children;
-  },
-  code: (props: HTMLAttributes<HTMLElement>) => {
-    const isLanguageBlockFunction =
-      props.className === "language-block-function";
-    if (isLanguageBlockFunction) {
-      const anchor = `${props.children}`.match(/^[\w]+/)?.[0] ?? "";
+  // block code (```) - consists of <pre><code>...</code></pre>
+  pre: ({ children, ...rest }: HTMLAttributes<HTMLElement>) => {
+    const [child, ...otherChildren] = Children.toArray(children);
+    if (
+      isValidElement(child) &&
+      child.type === mdxComponents.code &&
+      !otherChildren.length
+    ) {
+      const childProps = child.props;
+      const isLanguageBlockFunction =
+        childProps.className === "language-block-function";
+
+      if (isLanguageBlockFunction) {
+        const anchor = `${childProps.children}`.match(/^[\w]+/)?.[0] ?? "";
+        return (
+          <Box
+            id={anchor}
+            component="code"
+            sx={{
+              fontWeight: "bold",
+              color: "#d18d5b",
+              display: "block",
+              marginTop: 4,
+            }}
+          >
+            <Link href={`#${anchor}`}>{childProps.children}</Link>
+          </Box>
+        );
+      }
+
       return (
         <Box
-          id={anchor}
-          component="code"
-          sx={{
-            fontWeight: "bold",
-            color: "#d18d5b",
+          component="pre"
+          sx={(theme) => ({
+            overflow: "auto",
             display: "block",
-            marginTop: 4,
-          }}
+            fontSize: "90%",
+            color: theme.palette.purple[400],
+            background: "#161a1f",
+            padding: theme.spacing(3),
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderRadius: "8px",
+            textShadow: "none",
+            marginBottom: 2,
+            maxWidth: "72ch",
+          })}
         >
-          <Link href={`#${anchor}`}>{props.children}</Link>
+          <Snippet
+            source={`${childProps.children}`}
+            language={childProps.className?.replace("language-", "") ?? ""}
+          />
         </Box>
       );
     }
+
+    // fallback
+    return <pre {...rest}>{children}</pre>;
+  },
+  // inline code (`)
+  code: (props: HTMLAttributes<HTMLElement>) => {
     return (
       <Box
-        component="pre"
+        component="code"
         sx={(theme) => ({
-          overflow: "auto",
-          display: "block",
-          fontSize: "90%",
-          color: theme.palette.purple[400],
-          background: "#161a1f",
-          padding: theme.spacing(3),
+          fontSize: "80%",
+          color: theme.palette.purple[700],
+          background: theme.palette.purple[100],
+          padding: theme.spacing(0.25, 0.5),
+          borderColor: theme.palette.purple[200],
           borderWidth: 1,
           borderStyle: "solid",
-          borderRadius: "8px",
-          textShadow: "none",
-          marginBottom: 2,
-          maxWidth: "72ch",
+          borderRadius: "4px",
         })}
-      >
-        <Snippet
-          source={`${props.children}`}
-          language={props.className?.replace("language-", "") ?? ""}
-        />
-      </Box>
+        {...props}
+      />
     );
   },
 };

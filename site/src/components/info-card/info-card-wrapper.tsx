@@ -8,6 +8,8 @@ import {
   VoidFunctionComponent,
 } from "react";
 
+import { InfoCard } from "./info-card";
+
 type InfoCardWrapperProps = {
   children: ReactNode;
 };
@@ -19,7 +21,7 @@ export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
 }) => {
   const childrenAsArray = Children.toArray(children);
   const infoCardElements = childrenAsArray.filter(
-    (child) => isValidElement(child) && child.props.mdxType === "InfoCard",
+    (child) => isValidElement(child) && child.type === InfoCard,
   );
 
   if (infoCardElements.length !== 1) {
