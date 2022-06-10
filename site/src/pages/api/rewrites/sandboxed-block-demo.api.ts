@@ -53,7 +53,7 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { source } = await readBlockDataFromDisk(blockMetadata);
+  const { source, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
   const reactVersion =
     blockMetadata.externals?.react ?? packageJson.dependencies.react;
@@ -67,6 +67,12 @@ const handler: NextApiHandler = async (req, res) => {
       packageName,
     )}@${packageVersion}`;
   }
+
+  const mockBlockDockProps = {
+    initialEntities: exampleGraph.entities,
+    initialEntityTypes: exampleGraph.entityTypes,
+    initialLinks: exampleGraph.links,
+  };
 
   const html = `
 <!DOCTYPE html>
@@ -120,11 +126,13 @@ const handler: NextApiHandler = async (req, res) => {
         return result;
       }
 
-      const blockSource = ${JSON.stringify(source)};
       const BlockComponent = findComponentExport(loadCjsFromSource(blockSource));
+      const mockBlockDockProps = ${JSON.stringify(mockBlockDockProps)}
+      console.log(mockBlockDockProps)
+      const blockSource = ${JSON.stringify(source)};
       const render = (blockComponentProps) => {
         ReactDOM.render(
-          _jsx(MockBlockDock, { children: _jsx(BlockComponent, blockComponentProps) }),
+          _jsx(MockBlockDock, { children: _jsx(BlockComponent, blockComponentProps), ...mockBlockDockProps  }),
           document.getElementById("container")
         );
       }
