@@ -23,8 +23,8 @@ import { BlockSchema } from "../../../components/pages/hub/hub-utils";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
+  fetchBlockAsset,
   readBlockDataFromDisk,
-  readBlockReadmeFromDisk,
   readBlocksFromDisk,
 } from "../../../lib/blocks";
 import { isProduction } from "../../../lib/config";
@@ -177,7 +177,7 @@ export const getStaticProps: GetStaticProps<
 
   const { schema } = await readBlockDataFromDisk(blockMetadata);
 
-  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
+  const readmeMd = await fetchBlockAsset(blockMetadata, "README.md");
 
   const compiledReadme = readmeMd
     ? (await serialize(readmeMd, { mdxOptions: { format: "md" } }))

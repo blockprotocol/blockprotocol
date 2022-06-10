@@ -77,19 +77,6 @@ const getRepositoryUrl = (
   return undefined;
 };
 
-export const readBlockReadmeFromDisk = async (
-  blockMetadata: ExpandedBlockMetadata,
-): Promise<string | undefined> => {
-  try {
-    return fs.readFileSync(
-      `${process.cwd()}/public/blocks/${blockMetadata.packagePath}/README.md`,
-      "utf8",
-    );
-  } catch {
-    return undefined;
-  }
-};
-
 /**
  * used to read block metadata from disk.
  *
@@ -190,4 +177,19 @@ export const readBlockDataFromDisk = async ({
     schema,
     source,
   };
+};
+
+export const fetchBlockAsset = async (
+  blockMetadata: ExpandedBlockMetadata,
+  relativeAssetPath: string,
+): Promise<string | undefined> => {
+  const response = await fetch(
+    generateBlockFileUrl(relativeAssetPath, blockMetadata.packagePath)!,
+  );
+
+  if (response.status === 200) {
+    return await response.text();
+  }
+
+  return undefined;
 };
