@@ -131,7 +131,6 @@ const handler: NextApiHandler = async (req, res) => {
       const blockSource = ${JSON.stringify(source)};
       const BlockComponent = findComponentExport(loadCjsFromSource(blockSource));
       const mockBlockDockProps = ${JSON.stringify(mockBlockDockProps)}
-      console.log({mockBlockDockProps})
       const render = (blockComponentProps) => {
         ReactDOM.render(
           _jsx(MockBlockDock, { children: _jsx(BlockComponent, blockComponentProps), ...mockBlockDockProps  }),

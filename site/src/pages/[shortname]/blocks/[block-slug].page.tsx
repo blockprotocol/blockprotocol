@@ -17,7 +17,10 @@ import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
 import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
-import { BlockSchema } from "../../../components/pages/hub/hub-utils";
+import {
+  BlockExampleGraph,
+  BlockSchema,
+} from "../../../components/pages/hub/hub-utils";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -86,7 +89,7 @@ type BlockPageProps = {
   sandboxBaseUrl: string;
   schema: BlockSchema;
   sliderItems: BlockMetadata[];
-  exampleGraph: any; // todo fix typing
+  exampleGraph: BlockExampleGraph; // todo fix typing
 };
 
 type BlockPageQueryParams = {

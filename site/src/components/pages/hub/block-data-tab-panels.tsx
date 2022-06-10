@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, BoxProps, experimental_sx as sx, styled } from "@mui/material";
 import { ChangeEvent, VoidFunctionComponent } from "react";
 
 import { Snippet } from "../../snippet";
@@ -13,6 +13,36 @@ type BlockDataTabPanelProps = {
   text: string;
   setText: (newValue: string) => void;
 };
+
+const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
+  <Box {...props} component="pre" p={4}>
+    {children}
+  </Box>
+))(({ theme }) =>
+  sx({
+    fontSize: 14,
+    backgroundColor: theme.palette.gray[90],
+    borderTopLeftRadius: {
+      xs: 6,
+      md: 0,
+    },
+    borderTopRightRadius: {
+      xs: 6,
+      md: 0,
+    },
+    borderBottomLeftRadius: 6,
+    borderBottomRightRadius: 6,
+    overflow: "auto",
+    width: "100%",
+
+    ".snippet": {
+      fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
+      overflow: "auto",
+      height: "100%",
+      whiteSpace: "break-spaces",
+    },
+  }),
+);
 
 export const BlockDataTabPanels: VoidFunctionComponent<
   BlockDataTabPanelProps
@@ -54,74 +84,23 @@ export const BlockDataTabPanels: VoidFunctionComponent<
         </Box>
       </TabPanel>
       <TabPanel value={blockDataTab} index={1}>
-        {/* @todo make this reusable */}
-        <Box
-          component="pre"
-          sx={(theme) => ({
-            height: modalHeight,
-            fontSize: 14,
-            backgroundColor: theme.palette.gray[90],
-            borderTopLeftRadius: {
-              xs: 6,
-              md: 0,
-            },
-            borderTopRightRadius: {
-              xs: 6,
-              md: 0,
-            },
-            borderBottomLeftRadius: 6,
-            borderBottomRightRadius: 6,
-            overflow: "auto",
-            width: "100%",
-          })}
-          p={4}
-        >
+        <SnippetContainer height={modalHeight}>
           <Snippet
-            sx={{
-              fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
-              overflow: "auto",
-              height: "100%",
-              whiteSpace: "break-spaces",
-            }}
+            className="snippet"
             source={JSON.stringify(schema, null, 2)}
             language="json"
           />
-        </Box>
+        </SnippetContainer>
       </TabPanel>
       {!!exampleGraph && (
         <TabPanel value={blockDataTab} index={2}>
-          <Box
-            component="pre"
-            sx={(theme) => ({
-              height: modalHeight,
-              fontSize: 14,
-              backgroundColor: theme.palette.gray[90],
-              borderTopLeftRadius: {
-                xs: 6,
-                md: 0,
-              },
-              borderTopRightRadius: {
-                xs: 6,
-                md: 0,
-              },
-              borderBottomLeftRadius: 6,
-              borderBottomRightRadius: 6,
-              overflow: "auto",
-              width: "100%",
-            })}
-            p={4}
-          >
+          <SnippetContainer height={modalHeight}>
             <Snippet
-              sx={{
-                fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
-                overflow: "auto",
-                height: "100%",
-                whiteSpace: "break-spaces",
-              }}
+              className="snippet"
               source={JSON.stringify(exampleGraph, null, 2)}
               language="json"
             />
-          </Box>
+          </SnippetContainer>
         </TabPanel>
       )}
     </>
