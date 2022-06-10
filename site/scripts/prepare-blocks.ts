@@ -20,12 +20,16 @@ import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import slugify from "slugify";
 import tmp from "tmp-promise";
 
 import { StoredBlockInfo } from "../src/lib/blocks";
 
-const monorepoRoot = path.resolve(__dirname, "../..");
+const monorepoRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../..",
+);
 
 const defaultExecaOptions = {
   env: {
@@ -147,6 +151,14 @@ const ensureRepositorySnapshot = async ({
       ),
     );
     return repositorySnapshotDirPath;
+  }
+
+  // Vercel builds may fail when block build cache is empty. The error says
+  // "Could not write file /tmp/..." "ENOSPC: no space left on device"
+  // Preventing workshop folder from growing indefinitely reduces the chances of failure.
+  // See details in https://github.com/blockprotocol/blockprotocol/pull/327
+  if (process.env.VERCEL) {
+    await fs.emptyDir(workshopDirPath);
   }
 
   const { path: tarDirPath, cleanup: cleanupTarDir } = await tmp.dir({
@@ -498,4 +510,4 @@ const script = async () => {
   // As a workaround, we can clear CI cache for now.
 };
 
-export default script();
+await script();

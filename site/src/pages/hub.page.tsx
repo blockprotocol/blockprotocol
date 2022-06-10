@@ -5,6 +5,7 @@ import { VFC } from "react";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import {
+  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,
 } from "../lib/blocks";
@@ -17,7 +18,9 @@ interface PageProps {
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  return { props: { catalog: readBlocksFromDisk() } };
+  return {
+    props: { catalog: excludeHiddenBlocks(await readBlocksFromDisk()) },
+  };
 };
 
 const HubPage: VFC<PageProps> = ({ catalog }) => {

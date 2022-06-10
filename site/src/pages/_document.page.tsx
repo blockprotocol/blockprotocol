@@ -9,7 +9,7 @@ import Document, {
 } from "next/document";
 import React from "react";
 
-import twindConfig from "../../twind.config";
+import twindConfig from "../../twind.config.cjs";
 import { createEmotionCache } from "../util/create-emotion-cache";
 
 class MyDocument extends Document {
