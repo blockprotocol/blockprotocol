@@ -30,18 +30,18 @@ const CodeBlock = () => {
     <Box
       sx={{
         margin: {
-          xs: "1rem 1rem 0 1.5rem",
-          sm: "2rem 2rem 0 2.5rem",
-          md: "3rem 3rem 0 3.5rem",
+          xs: "2rem 1rem 0 1em",
+          sm: "3rem 2rem 0 2em",
+          lg: "3rem 3rem 0 3.5rem",
         },
-        maxWidth: { xs: "80%", md: "50%" },
+        maxWidth: { xs: "100%", md: "50%" },
         overflow: "hidden",
       }}
     >
       <Box
         component="img"
         src="/assets/new-home/code-box-header.svg"
-        sx={{ width: "100%", marginBottom: "-3px" }}
+        sx={{ width: "100%", marginBottom: "-4px" }}
       />
       <Box
         sx={{
@@ -92,7 +92,6 @@ export const AnyFramework = () => {
           background: "linear-gradient(181.4deg, #FFFFFF 50%, #FDFCFE 94.38%)",
           border: "2px solid #EBF2F7",
           borderRadius: "8px",
-
           boxShadow:
             "0px 2.8px 2.2px rgba(174, 155, 190, 0.15), 0px 6.7px 5.3px rgba(174, 155, 190, 0.08), 0px 12.5px 10px rgba(174, 155, 190, 0.05), 0px 22.3px 17.9px rgba(174, 155, 190, 0.09), 0px 41.8px 33.4px rgba(174, 155, 190, 0.1)",
         }}
@@ -101,7 +100,7 @@ export const AnyFramework = () => {
           sx={{
             maxWidth: { xs: "100%", md: "48%" },
             padding: {
-              xs: "1rem 1rem 0 1.5rem",
+              xs: "2rem 2rem 0 2rem",
               sm: "3rem 3rem 0 3.5rem",
               md: "4rem 0 4rem 4.5rem",
             },
@@ -136,7 +135,15 @@ export const AnyFramework = () => {
           </Typography>
           <Box
             mt={4}
-            sx={{ display: "flex", gridGap: "1.5rem", flexWrap: "wrap" }}
+            sx={{
+              display: "grid",
+              gridGap: "1.5rem",
+              placeItems: "center",
+              gridTemplateColumns: {
+                xs: "repeat(3, 1fr)",
+                sm: "repeat(5, 1fr)",
+              },
+            }}
           >
             <Box component="img" src="/assets/new-home/webc-logo.svg" />
             <Box component="img" src="/assets/new-home/react-logo.svg" />

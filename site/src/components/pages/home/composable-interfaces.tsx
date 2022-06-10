@@ -35,7 +35,7 @@ export const ComposableInterfaces = () => {
           sx={{
             width: "160px",
             height: "2px",
-            my: 2,
+            my: 1.5,
             background:
               "linear-gradient(to right, rgb(149, 135, 239, 1), rgba(172, 159, 255, 0))",
           }}
@@ -45,7 +45,7 @@ export const ComposableInterfaces = () => {
           textAlign="center"
           sx={{
             color: ({ palette }) => palette.gray[80],
-            maxWidth: { xs: "100%", md: "46ch" },
+            maxWidth: "46ch",
             margin: "1rem auto 1rem",
           }}
         >
@@ -57,7 +57,7 @@ export const ComposableInterfaces = () => {
           textAlign="center"
           sx={{
             color: ({ palette }) => palette.gray[80],
-            maxWidth: { xs: "100%", md: "46ch" },
+            maxWidth: "46ch",
             margin: "0 auto",
           }}
         >

@@ -60,7 +60,7 @@ export const WhatAreBlocks = () => {
                 textAlign: { xs: "center", md: "left" },
                 margin: "0 auto 1rem",
               }}
-              maxWidth="40ch"
+              maxWidth="52ch"
             >
               Blocks are individual front-end components that display data. They
               allow regular users to edit their contents without needing to
@@ -70,9 +70,9 @@ export const WhatAreBlocks = () => {
               variant="bpBodyCopy"
               sx={{
                 textAlign: { xs: "center", md: "left" },
-                margin: "0 auto 1rem",
+                margin: "0 auto",
               }}
-              maxWidth="40ch"
+              maxWidth="52ch"
             >
               Blocks can be simple and static, like an image or a text block, or
               they can be more complex, like a checklist or chart block.
@@ -85,7 +85,7 @@ export const WhatAreBlocks = () => {
               borderRadius: "6px",
               boxShadow:
                 "0px 1px 0.629px 0px rgba(175, 155, 193, 0.081), 0px 4.237px 8.10px 0px rgba(175, 155, 193, 0.123), 0px 8px 20px 0px rgba(175, 155, 193, 0.083)",
-              margin: { xs: 1, md: "2.5rem 4rem 4rem 4rem" },
+              margin: { xs: 1, md: "2rem 4rem 2.5rem 4rem" },
               maxWidth: "500px",
               alignSelf: "center",
               justifySelf: "center",
