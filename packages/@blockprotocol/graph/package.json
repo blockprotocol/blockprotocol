@@ -1,7 +1,7 @@
 {
   "name": "@blockprotocol/graph",
   "version": "0.0.4",
-  "description": "Implementation of the Block Protocol Graph services specification for blocks and embedding applications",
+  "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
     "blocks",

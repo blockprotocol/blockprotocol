@@ -29,8 +29,8 @@ import { isProduction } from "../../../lib/config";
  * We want a different origin for the iFrame to the parent window
  * so that it can't use cookies issued to the user in the main app.
  *
- * The PRODUCTION origin will be blockprotocol.org, so we can use
- * the unique Vercel deployment URL as the origin in production.
+ * The PRODUCTION origin will be blockprotocol.org, and we can use
+ * a custom domain or the unique Vercel deployment URL as the origin .
  *
  * In STAGING, we will mostly be visiting unique deployment URLs
  * for testing, so we can use the unique branch URL as the origin.

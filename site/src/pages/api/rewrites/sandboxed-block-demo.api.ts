@@ -1,4 +1,4 @@
-import { JSONObject } from "blockprotocol";
+import { JsonObject } from "@blockprotocol/core";
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
@@ -10,7 +10,7 @@ import { readBlockDataFromDisk, readBlocksFromDisk } from "../../../lib/blocks";
  * - https://blockprotocol.org/@shinypb/blocks/emoji-trading-cards
  * - https://blockprotocol.org/@kickstartds/blocks/button
  */
-const hotfixExternals = (externals: JSONObject | undefined): JSONObject => {
+const hotfixExternals = (externals: JsonObject | undefined): JsonObject => {
   return (
     externals ?? {
       react: packageJson.dependencies.react,

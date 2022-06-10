@@ -1,4 +1,5 @@
-import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
+import { JsonObject } from "@blockprotocol/core";
+import { EntityType as BlockProtocolEntityType } from "@blockprotocol/graph";
 import { escapeRegExp } from "lodash";
 import { Db, DBRef } from "mongodb";
 import { v4 as uuid } from "uuid";
@@ -7,11 +8,9 @@ import { FRONTEND_URL, isProduction } from "../../config";
 import { validateAndCompleteJsonSchema } from "../../json-schema";
 import { User } from "./user.model";
 
-type EntityTypeProperties = {
+type EntityTypeProperties = BlockProtocolEntityType & {
   createdAt: Date;
   updatedAt: Date;
-  entityTypeId: string;
-  schema: BlockProtocolEntityType;
   user: DBRef;
 };
 
@@ -27,7 +26,7 @@ export class EntityType {
   createdAt: Date;
   updatedAt: Date;
   entityTypeId: string;
-  schema: BlockProtocolEntityType;
+  schema: BlockProtocolEntityType["schema"];
   user: DBRef;
 
   static readonly COLLECTION_NAME = "bp-entity-types";
@@ -93,7 +92,7 @@ export class EntityType {
   static async create(
     db: Db,
     params: {
-      schema: JSONObject | string;
+      schema: JsonObject | string;
       user: User;
     },
   ): Promise<EntityType> {
@@ -198,7 +197,7 @@ export class EntityType {
 
   async update(
     db: Db,
-    params: { schema: JSONObject | string },
+    params: { schema: JsonObject | string },
   ): Promise<EntityType> {
     const { schema } = params;
     const { entityTypeId } = this;

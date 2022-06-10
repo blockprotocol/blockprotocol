@@ -1,4 +1,4 @@
-import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
+import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
 import hostedGitInfo from "hosted-git-info";
 
 import { FRONTEND_URL } from "./config";
@@ -89,11 +89,17 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     .map((path: string): ExpandedBlockMetadata => {
       const packagePath = path.split("/").slice(-3, -1).join("/");
 
+      const partialMetadata = JSON.parse(
+        fs.readFileSync(path, { encoding: "utf8" }),
+      );
+
       const metadata: ExpandedBlockMetadata = {
         // @todo should be redundant to block's package.json#name
         componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
         packagePath,
-        ...JSON.parse(fs.readFileSync(path, { encoding: "utf8" })),
+        // fallback while not all blocks have blockType defined
+        blockType: partialMetadata.blockType ?? { entryPoint: "react" },
+        ...partialMetadata,
       };
 
       const storedBlockInfo: StoredBlockInfo = JSON.parse(
@@ -129,6 +135,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
     });
 };
 
+// Blocks which are currently not compliant with the spec, and are thus misleading examples
 const blocksToHide = [
   "@hash/callout",
   "@hash/embed",
@@ -141,7 +148,8 @@ export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
-    ({ packagePath }) => !blocksToHide.includes(packagePath),
+    ({ packagePath, protocol }) =>
+      !blocksToHide.includes(packagePath) && parseFloat(protocol) >= 0.2,
   );
 };
 

@@ -1,5 +1,6 @@
+import { JsonObject } from "@blockprotocol/core";
+import { EntityType as BlockProtocolEntityType } from "@blockprotocol/graph";
 import Ajv2019 from "ajv/dist/2019";
-import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
 import { Schema } from "jsonschema";
 
 import { EntityType } from "./api/model/entity-type.model";
@@ -78,7 +79,7 @@ export const validateAndCompleteJsonSchema = async (params: {
   author: string;
   entityTypeId: string;
   maybeSchema: unknown;
-}): Promise<BlockProtocolEntityType> => {
+}): Promise<BlockProtocolEntityType["schema"]> => {
   const { author, entityTypeId, maybeSchema } = params;
 
   if (
@@ -88,7 +89,7 @@ export const validateAndCompleteJsonSchema = async (params: {
     throw new Error("Schema must be either a JSON string or parsed object.");
   }
 
-  let parsedSchema: JSONObject;
+  let parsedSchema: JsonObject;
   try {
     parsedSchema =
       typeof maybeSchema === "string"
