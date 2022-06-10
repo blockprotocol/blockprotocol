@@ -39,10 +39,9 @@ const generateBlockFileUrl = (
     return mediaPath;
   }
 
-  return `${FRONTEND_URL}/blocks/${packagePath}/${mediaPath.replace(
-    /^\//,
-    "",
-  )}`;
+  return `${
+    process.env.NEXT_PUBLIC_VERCEL_URL ?? FRONTEND_URL
+  }/blocks/${packagePath}/${mediaPath.replace(/^\//, "")}`;
 };
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
