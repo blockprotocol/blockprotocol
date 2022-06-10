@@ -52,12 +52,14 @@ type BlockDataTabsProps = {
   blockDataTab: number;
   setBlockDataTab: (newValue: number) => void;
   modalOpen?: boolean;
+  showExampleGraphTab?: boolean;
 };
 
 export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
   blockDataTab,
   setBlockDataTab,
   modalOpen,
+  showExampleGraphTab,
 }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -70,7 +72,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
     >
       <MenuItem value={0}>Data Source</MenuItem>
       <MenuItem value={1}>Block Schema</MenuItem>
-      <MenuItem value={2}>Example Graph</MenuItem>
+      {showExampleGraphTab && <MenuItem value={2}>Example Graph</MenuItem>}
     </Select>
   ) : (
     <DesktopTabs
@@ -80,7 +82,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
     >
       <Tab label="Data Source" />
       <Tab label="Block Schema" />
-      <Tab label="Example Graph" />
+      {showExampleGraphTab && <Tab label="Example Graph" />}
     </DesktopTabs>
   );
 };

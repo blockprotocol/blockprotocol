@@ -54,6 +54,7 @@ export const BlockDataTabPanels: VoidFunctionComponent<
         </Box>
       </TabPanel>
       <TabPanel value={blockDataTab} index={1}>
+        {/* @todo make this reusable */}
         <Box
           component="pre"
           sx={(theme) => ({
@@ -87,40 +88,42 @@ export const BlockDataTabPanels: VoidFunctionComponent<
           />
         </Box>
       </TabPanel>
-      <TabPanel value={blockDataTab} index={2}>
-        <Box
-          component="pre"
-          sx={(theme) => ({
-            height: modalHeight,
-            fontSize: 14,
-            backgroundColor: theme.palette.gray[90],
-            borderTopLeftRadius: {
-              xs: 6,
-              md: 0,
-            },
-            borderTopRightRadius: {
-              xs: 6,
-              md: 0,
-            },
-            borderBottomLeftRadius: 6,
-            borderBottomRightRadius: 6,
-            overflow: "auto",
-            width: "100%",
-          })}
-          p={4}
-        >
-          <Snippet
-            sx={{
-              fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
+      {!!exampleGraph && (
+        <TabPanel value={blockDataTab} index={2}>
+          <Box
+            component="pre"
+            sx={(theme) => ({
+              height: modalHeight,
+              fontSize: 14,
+              backgroundColor: theme.palette.gray[90],
+              borderTopLeftRadius: {
+                xs: 6,
+                md: 0,
+              },
+              borderTopRightRadius: {
+                xs: 6,
+                md: 0,
+              },
+              borderBottomLeftRadius: 6,
+              borderBottomRightRadius: 6,
               overflow: "auto",
-              height: "100%",
-              whiteSpace: "break-spaces",
-            }}
-            source={JSON.stringify(exampleGraph, null, 2)}
-            language="json"
-          />
-        </Box>
-      </TabPanel>
+              width: "100%",
+            })}
+            p={4}
+          >
+            <Snippet
+              sx={{
+                fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
+                overflow: "auto",
+                height: "100%",
+                whiteSpace: "break-spaces",
+              }}
+              source={JSON.stringify(exampleGraph, null, 2)}
+              language="json"
+            />
+          </Box>
+        </TabPanel>
+      )}
     </>
   );
 };

@@ -68,11 +68,13 @@ const handler: NextApiHandler = async (req, res) => {
     )}@${packageVersion}`;
   }
 
-  const mockBlockDockProps = {
-    initialEntities: exampleGraph.entities,
-    initialEntityTypes: exampleGraph.entityTypes,
-    initialLinks: exampleGraph.links,
-  };
+  const mockBlockDockProps = exampleGraph
+    ? {
+        initialEntities: exampleGraph.entities ?? [],
+        initialEntityTypes: exampleGraph.entityTypes ?? [],
+        initialLinks: exampleGraph.links ?? [],
+      }
+    : {};
 
   const html = `
 <!DOCTYPE html>
@@ -127,8 +129,6 @@ const handler: NextApiHandler = async (req, res) => {
       }
 
       const BlockComponent = findComponentExport(loadCjsFromSource(blockSource));
-      const mockBlockDockProps = ${JSON.stringify(mockBlockDockProps)}
-      console.log(mockBlockDockProps)
       const blockSource = ${JSON.stringify(source)};
       const render = (blockComponentProps) => {
         ReactDOM.render(
@@ -136,6 +136,9 @@ const handler: NextApiHandler = async (req, res) => {
           document.getElementById("container")
         );
       }
+
+      const mockBlockDockProps = ${JSON.stringify(mockBlockDockProps)}
+      console.log(mockBlockDockProps)
 
       window.addEventListener("message", ({ data }) => { if (typeof data === "string") { render(JSON.parse(data)) }});
 

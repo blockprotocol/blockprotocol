@@ -54,6 +54,7 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
             blockDataTab={blockDataTab}
             setBlockDataTab={setBlockDataTab}
             modalOpen
+            showExampleGraphTab={!!exampleGraph}
           />
           <BlockDataTabPanels
             blockDataTab={blockDataTab}
