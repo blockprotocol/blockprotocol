@@ -23,12 +23,13 @@ export type BlockVariant = {
   description?: string | null;
   icon?: string | null;
   name: string;
-  /**
-   * @deprecated - Use the `name` field instead.
-   */
-  displayName?: string;
   properties: JsonObject;
   examples?: JsonObject[] | null;
+};
+
+export type BlockType = {
+  entryPoint: "custom-element" | "html" | "react";
+  tag?: string;
 };
 
 export type BlockMetadataRepository =
@@ -44,6 +45,10 @@ export type BlockMetadata = {
    * The name of the author of the block
    */
   author?: string | null;
+  /**
+   * The type of block this is (e.g. custom element, React)
+   */
+  blockType: BlockType;
   /**
    * The default data used as the block's properties on first load - must comply with its schema
    */
