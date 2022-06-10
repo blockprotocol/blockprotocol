@@ -1,6 +1,7 @@
 import fs from "fs-extra";
 import matter from "gray-matter";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
 import path from "node:path";
 import remarkMdx from "remark-mdx";
 import remarkParse from "remark-parse";
@@ -102,9 +103,6 @@ export const getSerializedPage = async (params: {
   );
 
   const { content, data } = matter(source);
-
-  // @todo bring back conventional import after compiling scripts to ESM instead of CJS
-  const { serialize } = await import("next-mdx-remote/serialize");
 
   const serializedMdx = await serialize(content, {
     // Optionally pass remark/rehype plugins
