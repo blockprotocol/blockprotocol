@@ -3,10 +3,14 @@ import * as envalid from "envalid";
 import fs from "fs-extra";
 import matter from "gray-matter";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-import siteMap from "../site/site-map.json";
+import siteMap from "../site/site-map.json" assert { type: "json" };
 
-const monorepoDirPath = path.resolve(__dirname, "..");
+const monorepoRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
 
 type DocsFrontMatter = {
   content: string;
@@ -80,7 +84,7 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
       throw new Error("Unexpected empty siteMapData");
     }
 
-    const subPageData = siteMapData.subPages[fileIndex];
+    const subPageData = siteMapData.subPages[fileIndex]!;
 
     const appendData = {
       ...matterData.data,
@@ -95,12 +99,12 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
   };
 
   const specFiles = getFileInfos(
-    path.resolve(monorepoDirPath, "site/src/_pages/spec"),
+    path.resolve(monorepoRoot, "site/src/_pages/spec"),
     [],
     "spec",
   );
   const docsFiles = getFileInfos(
-    path.resolve(monorepoDirPath, "site/src/_pages/docs"),
+    path.resolve(monorepoRoot, "site/src/_pages/docs"),
     [],
     "docs",
   );
@@ -177,4 +181,4 @@ const script = async () => {
   console.log("Algolia index updated.");
 };
 
-void script();
+await script();

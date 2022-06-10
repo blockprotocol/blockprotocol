@@ -11,7 +11,7 @@ import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useMemo, VoidFunctionComponent } from "react";
+import React, { VoidFunctionComponent } from "react";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
@@ -19,6 +19,7 @@ import { Link } from "../../../components/link";
 import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
 import { BlockSchema } from "../../../components/pages/hub/hub-utils";
 import {
+  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,
   readBlocksFromDisk,
@@ -82,9 +83,9 @@ const Bullet: VoidFunctionComponent = () => {
 
 type BlockPageProps = {
   blockMetadata: BlockMetadata;
-  catalog: BlockMetadata[];
   sandboxBaseUrl: string;
   schema: BlockSchema;
+  sliderItems: BlockMetadata[];
 };
 
 type BlockPageQueryParams = {
@@ -92,9 +93,13 @@ type BlockPageQueryParams = {
   "block-slug"?: string;
 };
 
-export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
+export const getStaticPaths: GetStaticPaths<
+  BlockPageQueryParams
+> = async () => {
   return {
-    paths: readBlocksFromDisk().map((metadata) => metadata.blockPackagePath),
+    paths: (await readBlocksFromDisk()).map(
+      (metadata) => metadata.blockPackagePath,
+    ),
     fallback: "blocking",
   };
 };
@@ -147,7 +152,7 @@ export const getStaticProps: GetStaticProps<
   }
 
   const packagePath = `${shortname}/${blockSlug}`;
-  const catalog = readBlocksFromDisk();
+  const catalog = await readBlocksFromDisk();
 
   const blockMetadata = catalog.find(
     (metadata) => metadata.packagePath === packagePath,
@@ -163,7 +168,9 @@ export const getStaticProps: GetStaticProps<
   return {
     props: {
       blockMetadata,
-      catalog,
+      sliderItems: excludeHiddenBlocks(catalog).filter(
+        ({ name }) => name !== blockMetadata.name,
+      ),
       sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
     },
@@ -173,9 +180,9 @@ export const getStaticProps: GetStaticProps<
 
 const BlockPage: NextPage<BlockPageProps> = ({
   blockMetadata,
-  catalog,
   sandboxBaseUrl,
   schema,
+  sliderItems,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
@@ -184,10 +191,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const isDesktopSize = md;
-
-  const sliderItems = useMemo(() => {
-    return catalog.filter(({ name }) => name !== blockMetadata.name);
-  }, [catalog, blockMetadata]);
 
   const repositoryDisplayUrl = blockMetadata.repository
     ? generateRepositoryDisplayUrl(blockMetadata.repository)
