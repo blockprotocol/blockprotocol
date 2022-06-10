@@ -16,11 +16,15 @@ export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
   return (
     <Box
       sx={{
-        my: 12,
+        py: 12,
+        px: { xs: "1rem", lg: 0 },
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         textAlign: "center",
+        background:
+          "radial-gradient(116.02% 95.04% at 50% 100.79%, #f5f3fa 0%, #FFFFFF 80.54%)",
+        borderBottom: "1px solid #eceaf1",
       }}
     >
       <Box
@@ -65,7 +69,7 @@ export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
       <Box sx={{ width: "100%" }} mb={4}>
         <BlocksSlider catalog={catalog} />
       </Box>
-      <Box sx={{ textAlign: "center", width: { md: "40%" }, maxWidth: 540 }}>
+      <Box sx={{ textAlign: "center" }}>
         <LinkButton
           href="/hub"
           variant="secondary"
@@ -73,12 +77,12 @@ export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
         >
           Explore all Blocks
         </LinkButton>
-        <Spacer height={3} />
         <Box>
           <Typography
             sx={{
               width: { xs: "100%", md: "50ch" },
               color: ({ palette }) => palette.gray[80],
+              mt: 3,
             }}
           >
             Anyone can build new blocks and submit them to the registry. If you

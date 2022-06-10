@@ -12,11 +12,6 @@ type BlocksSliderProps = {
 export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
   return (
     <Carousel
-      sx={{
-        background:
-          "radial-gradient(116.02% 95.04% at 50% 100.79%, #f5f3fa 0%, #FFFFFF 80.54%)",
-        borderBottom: "1px solid #eceaf1",
-      }}
       data={catalog}
       itemKey={({ name }) => name!}
       renderItem={({ displayName, name, image, blockPackagePath }) => {
