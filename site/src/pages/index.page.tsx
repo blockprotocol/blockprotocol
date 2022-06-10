@@ -1,11 +1,14 @@
 import { GetStaticProps } from "next";
 import { VFC } from "react";
 
+import { AnyFramework } from "../components/pages/home/anyframework";
+import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
+import { ConfinedBlocks } from "../components/pages/home/confined-blocks";
+import { FinalCTA } from "../components/pages/home/final-cta";
 import { Header } from "../components/pages/home/header";
-import { IntroSection } from "../components/pages/home/intro-section";
+import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
 import { RegistrySection } from "../components/pages/home/registry-section";
-import { Section2 } from "../components/pages/home/section2";
-import { WhyBlockProtocolSection } from "../components/pages/home/why-block-protocol-section";
+import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import {
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,
@@ -25,10 +28,13 @@ const HomePage: VFC<PageProps> = ({ catalog }) => {
   return (
     <>
       <Header />
-      <IntroSection />
-      <Section2 />
-      <WhyBlockProtocolSection />
+      <WhatAreBlocks />
+      <ConfinedBlocks />
+      <InteroperableBlocks />
+      <AnyFramework />
+      <ComposableInterfaces />
       <RegistrySection catalog={catalog} />
+      <FinalCTA />
     </>
   );
 };
