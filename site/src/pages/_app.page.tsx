@@ -12,7 +12,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import TagManager from "react-gtm-module";
 
 import siteMap from "../../site-map.json";
-import twindConfig from "../../twind.config";
+import twindConfig from "../../twind.config.cjs";
 import { PageLayout } from "../components/page-layout";
 import SiteMapContext from "../context/site-map-context";
 import {

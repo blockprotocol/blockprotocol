@@ -1,4 +1,4 @@
-import { debounce } from "lodash";
+import debounce from "lodash/debounce";
 import { useEffect, useMemo, useState } from "react";
 
 import { apiClient } from "../../lib/api-client";

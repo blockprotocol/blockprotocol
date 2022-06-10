@@ -1,5 +1,5 @@
 import { BlockProtocolEntityType, JSONObject } from "blockprotocol";
-import { escapeRegExp } from "lodash";
+import escapeRegExp from "lodash/escapeRegExp";
 import { Db, DBRef } from "mongodb";
 import { v4 as uuid } from "uuid";
 

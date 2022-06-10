@@ -3,13 +3,9 @@ import chalk from "chalk";
 const script = async () => {
   console.log(chalk.bold("Preparing..."));
 
-  await (
-    await import("./generate-sitemap")
-  ).default;
+  await import("./generate-sitemap");
 
-  await (
-    await import("./generate-blocks-data")
-  ).default;
+  await import("./generate-blocks-data");
 };
 
-export default script();
+await script();
