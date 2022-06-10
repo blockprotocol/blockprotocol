@@ -272,24 +272,22 @@ export const mdxComponents: Record<string, ReactNode> = {
     </Box>
   ),
   // inline code (`)
-  code: (props: HTMLAttributes<HTMLElement>) => {
-    return (
-      <Box
-        component="code"
-        sx={(theme) => ({
-          fontSize: "80%",
-          color: theme.palette.purple[700],
-          background: theme.palette.purple[100],
-          padding: theme.spacing(0.25, 0.5),
-          borderColor: theme.palette.purple[200],
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderRadius: "4px",
-        })}
-        {...props}
-      />
-    );
-  },
+  code: (props: HTMLAttributes<HTMLElement>) => (
+    <Box
+      component="code"
+      sx={(theme) => ({
+        fontSize: "80%",
+        color: theme.palette.purple[700],
+        background: theme.palette.purple[100],
+        padding: theme.spacing(0.25, 0.5),
+        borderColor: theme.palette.purple[200],
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderRadius: "4px",
+      })}
+      {...props}
+    />
+  ),
   // block code (```) - consists of <pre><code>...</code></pre>
   pre: ({ children, ...rest }: HTMLAttributes<HTMLElement>) => {
     const [child, ...otherChildren] = Children.toArray(children);
