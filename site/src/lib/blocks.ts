@@ -1,6 +1,6 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
 import fs from "fs-extra";
-import glob from "glob";
+import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 // eslint-disable-next-line unicorn/prefer-node-protocol -- Replace "path" with "node:path" after upgrading next from 12.1.6 https://github.com/vercel/nft/issues/293
 import path from "path";
@@ -85,7 +85,7 @@ const getRepositoryUrl = (
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
-  const blockMetadataFilePaths = await glob.__promisify__(
+  const blockMetadataFilePaths = await globby(
     path.join(process.cwd(), `/public/blocks/**/block-metadata.json`),
   );
 
