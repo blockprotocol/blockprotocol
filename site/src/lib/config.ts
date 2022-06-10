@@ -1,10 +1,8 @@
-export const DEPLOYMENT_URL = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : "http://localhost:3000";
-
 export const FRONTEND_URL = process.env.NEXT_PUBLIC_FRONTEND_URL
   ? process.env.NEXT_PUBLIC_FRONTEND_URL
-  : DEPLOYMENT_URL;
+  : process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : "http://localhost:3000";
 
 export const FRONTEND_DOMAIN = new URL(FRONTEND_URL).hostname;
 
