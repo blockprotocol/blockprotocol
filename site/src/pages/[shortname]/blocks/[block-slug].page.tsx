@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import React, { VoidFunctionComponent } from "react";
+import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
@@ -180,8 +181,16 @@ export const getStaticProps: GetStaticProps<
   const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
 
   const compiledReadme = readmeMd
-    ? (await serialize(readmeMd, { mdxOptions: { format: "md" } }))
-        .compiledSource
+    ? (
+        await serialize(readmeMd, {
+          mdxOptions: {
+            format: "md",
+            remarkPlugins: [
+              remarkGfm, // GitHub-flavoured markdown (includes automatic detection of URLs)
+            ],
+          },
+        })
+      ).compiledSource
     : undefined;
 
   return {
