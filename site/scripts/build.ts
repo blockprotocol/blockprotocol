@@ -10,6 +10,8 @@ const script = async () => {
 
   await import("./prepare-blocks");
 
+  await import("./make-block-assets-compatible-with-vercel-lambdas");
+
   await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
 
   await import("./generate-sitemap");

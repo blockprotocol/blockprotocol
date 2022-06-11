@@ -179,17 +179,17 @@ export const readBlockDataFromDisk = async ({
   };
 };
 
-export const fetchBlockAsset = async (
+export const readBlockReadmeFromDisk = async (
   blockMetadata: ExpandedBlockMetadata,
-  relativeAssetPath: string,
 ): Promise<string | undefined> => {
-  const response = await fetch(
-    generateBlockFileUrl(relativeAssetPath, blockMetadata.packagePath)!,
-  );
-
-  if (response.status === 200) {
-    return await response.text();
+  try {
+    return fs.readFileSync(
+      `${process.cwd()}/public/blocks/${
+        blockMetadata.packagePath
+      }/README.vercel-hack.md`,
+      "utf8",
+    );
+  } catch {
+    return undefined;
   }
-
-  return undefined;
 };
