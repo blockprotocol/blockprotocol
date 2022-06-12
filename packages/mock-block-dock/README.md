@@ -1,67 +1,99 @@
 # Mock Block Dock
 
-Mock datastore and functions for testing [Block Protocol](https://blockprotocol.org) blocks.
-
-Use as a component to wrap your block, or as a hook.
+Mock datastore and embedding application for testing [Block Protocol](https://blockprotocol.org) blocks.
 
 `yarn add mock-block-dock`
 
+`MockBlockDock` is automatically included the template generated using [create-block-app](https://www.npmjs.com/package/create-block-app)
+
+See the docs for help with the fundamental Block Protocol concepts [Block Protocol](https://blockprotocol.org/docs)
+
 ## Usage
 
-### Wrapper component
+There are two options for usage:
 
-When developing a block, wrap it in `MockBlockDock` and pass your block its initial props:
+1.  Use the component `MockBlockDock`, and pass it your block source, to have it automatically:
+
+- render your block
+- pass it its starting properties
+- listen for messages from the block, updates the datastore and respond appropriately
+
+1.  Use the hook `useMockBlockProps`, which returns the mock data, properties and message callbacks for your custom use.
+
+### Component: mock embedding application
+
+```js
+import { MockBlockDock } from "mock-block-dock";
+```
+
+The component will automatically load your block, pass it properties (where it accepts properties),
+and listen for messages from the block, responding accordingly.
+
+The properties passed are described in the full [Block Protocol documentation]((https://blockprotocol.org/docs).
+
+For example, if you call `updateEntity`, MockBlockDock will update the specified entity and return it.
+If the entity is part of the properties sent to your block, they will be updated and the block re-rendered.
+
+```typescript
+const { data, errors } = await graphService.updateEntity({
+  entityId,
+  properties: newProps,
+});
+```
+
+There are different ways of loading your block source depending on the entry point.
+
+For each, you can set the block's starting entity via the `blockEntity` prop:
+
+```typescript
+const blockEntity: Entity = {
+  entityId: "test-id-1",
+  properties: {
+    name: "World",
+  },
+};
+```
+
+#### React
+
+When developing a React block, pass your component
 
 ```jsx
 import { MockBlockDock } from "mock-block-dock";
 
-<MockBlockDock>
-  <TestBlock
-    entityId="optional-custom-entity-id"
-    {...blocksStartingProperties}
-  />
-</MockBlockDock>;
+import MyBlock from "./my-block.tsx";
+
+<MockBlockDock
+  blockDefinition={{ ReactComponent: MyBlock }}
+  blockEntity={blockEntity}
+/>;
 ```
 
-`MockBlockDock` will automatically pass the following Block Protocol functions to your block:
+#### Custom element / Web Component
 
-- `aggregateEntities`
-- `aggregateEntityTypes`
-- `getEntities`
-- `createEntities`
-- `deleteEntities`
-- `updateEntities`
-- `getLinks`
-- `createLinks`
-- `deleteLinks`
-- `updateLinks`
-- `getLinkedAggregations`
-- `createLinkedAggregations`
-- `deleteLinkedAggregations`
-- `updateLinkedAggregations`
-- `uploadFile`
+When developing a custom element block, pass `MockBlockDock` the class and the desired tag name.
 
-...as well as the starting properties you pass to your block (if any),
-and a fallback `entityId` if you do not provide one as part of the block's starting properties.
+```jsx
+import { MockBlockDock } from "mock-block-dock";
 
-For example, to update your block's props, get `entityId` and `updateEntities` from props and call:
+import MyCustomElement from "./my-custom-element.ts";
 
-```typescript
-updateEntities?.([{ entityId, data: { ...newProps } }]);
+<MockBlockDock
+  blockDefinition={{
+    customElement: { elementClass: MyCustomClass, tagName: "my-block" },
+  }}
+  properties={blockEntity}
+/>;
 ```
 
-Your block will be re-rendered with its new properties.
+#### Debug mode
 
-`MockBlockDock` will also pass:
+When passed `debug=true`, `MockBlockDock` will also render a display of:
 
-- `linkGroups` and `linkedEntities`, which will be populated once you create a `Link` between entities using `createLinks` (see [linking entities](https://blockprotocol.org/spec/block-types#linking-entities) for more).
-- `linkedAggregations`, which will be populated if you create a `LinkedAggregation` from an entity to an aggregation of entities, using `createLinkedAggregations` – this includes both the definition of the aggregation operation, and the results of the operation.
+1.  the properties being passed to the blocks (for non-HTML blocks), which are derived from the mock datastore
+1.  the raw contents of the mock datastore
 
-The block will also be re-rendered with new properties if you update them on the child directly (e.g. if you are supplying the block component wrapped by `MockBlockDock` with props from some outside state).
-
-`MockBlockDock` is automatically included in [block-template](https://www.npmjs.com/package/block-template), which you can copy via [create-block-app](https://www.npmjs.com/package/create-block-app)
-
-### Hook
+### Hook: custom, manual control
 
 If you want more control or visibility over the mock properties, you can retrieve them as a hook instead,
 and pass them to your block yourself.
@@ -84,20 +116,18 @@ const {
 });
 ```
 
-As with the component, you can also pass the following optional arguments to customise the datastore:
+## Customising the mock data
+
+With either the hook or component you can also pass the following optional arguments to customise the datastore:
 
 - `initialEntities`
 - `initialEntityTypes`
 - `initialLinks`
 - `initialLinkedAggregations`
 
-## Mock entities
+For any omissions, the default mock data in `src/data/*` will be used.
 
-`MockBlockDock` automatically supplies additional dummy entities and entity types in `src/data/entities.ts` and `src/data/entityTypes.ts`, and links between entities in `src/data/links.ts`.
-
-These dummy entities/links will be in the data store, and your block can discover them by calling `aggregateEntityTypes` or `aggregateEntities`.
-
-If you prefer, you can provide your own `initialEntities` and/or `initialEntityTypes` and/or `initialLinks` and/or `initialLinkedAggregations` as props.
+These dummy records will be in the data store, and your block can discover them by calling `aggregateEntityTypes` or `aggregateEntities`.
 
 ```jsx
 <MockBlockDock

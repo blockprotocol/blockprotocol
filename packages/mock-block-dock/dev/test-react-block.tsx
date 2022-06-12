@@ -6,7 +6,7 @@ type AppProps = {
   name: string;
 };
 
-export const TestBlock: BlockComponent<AppProps> = ({ graph }) => {
+export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
   const {
     blockEntity: { entityId, properties },
   } = graph;

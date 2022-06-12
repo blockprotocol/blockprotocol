@@ -9,8 +9,8 @@ import {
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
+import { filterAndSortEntitiesOrTypes } from "../util";
 import { useDefaultArrayState } from "./use-default-array-state";
-import { filterAndSortEntitiesOrTypes } from "./util";
 
 export type MockData = {
   entities: Entity[];

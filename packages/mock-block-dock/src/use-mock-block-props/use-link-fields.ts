@@ -8,7 +8,7 @@ import {
 } from "@blockprotocol/graph";
 import { useMemo } from "react";
 
-import { filterAndSortEntitiesOrTypes } from "./util";
+import { filterAndSortEntitiesOrTypes } from "../util";
 
 type LinkFields = {
   blockGraph: BlockGraph;
