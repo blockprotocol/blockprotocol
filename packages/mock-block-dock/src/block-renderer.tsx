@@ -1,10 +1,4 @@
-import React, {
-  Children,
-  cloneElement,
-  ComponentType,
-  ReactElement,
-  VoidFunctionComponent,
-} from "react";
+import React, { ComponentType, VoidFunctionComponent } from "react";
 
 import { CustomElementLoader } from "./block-renderer/custom-element";
 
