@@ -8,7 +8,7 @@ import {
 /** @todo type as JSON Schema. */
 export type BlockSchema = Record<string, any>;
 
-/** @todo revisit type this */
+/** @todo possibly extend this type */
 export type BlockExampleGraph = {
   entities?: BlockProtocolEntity[];
   entityTypes?: BlockProtocolEntityType[];
