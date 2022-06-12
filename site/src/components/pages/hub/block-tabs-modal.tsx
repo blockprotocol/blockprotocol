@@ -14,7 +14,7 @@ interface BlockTabsModalProps {
   schema: BlockSchema;
   text: string;
   setText: (newValue: string) => void;
-  exampleGraph: BlockExampleGraph;
+  exampleGraph: BlockExampleGraph | null;
 }
 
 export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({

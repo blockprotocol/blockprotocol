@@ -89,7 +89,7 @@ type BlockPageProps = {
   sandboxBaseUrl: string;
   schema: BlockSchema;
   sliderItems: BlockMetadata[];
-  exampleGraph: BlockExampleGraph; // todo fix typing
+  exampleGraph: BlockExampleGraph | null; // todo fix typing
 };
 
 type BlockPageQueryParams = {
