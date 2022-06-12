@@ -2,6 +2,7 @@ import {
   BlockProtocolEntity,
   BlockProtocolEntityType,
   BlockProtocolLink,
+  BlockProtocolLinkedAggregation,
 } from "blockprotocol";
 
 /** @todo type as JSON Schema. */
@@ -12,4 +13,5 @@ export type BlockExampleGraph = {
   entities?: BlockProtocolEntity[];
   entityTypes?: BlockProtocolEntityType[];
   links?: BlockProtocolLink[];
+  linkedAggregations?: BlockProtocolLinkedAggregation[];
 };

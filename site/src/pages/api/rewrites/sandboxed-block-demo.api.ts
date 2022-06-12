@@ -68,13 +68,12 @@ const handler: NextApiHandler = async (req, res) => {
     )}@${packageVersion}`;
   }
 
-  const mockBlockDockProps = exampleGraph
-    ? {
-        initialEntities: exampleGraph.entities ?? [],
-        initialEntityTypes: exampleGraph.entityTypes ?? [],
-        initialLinks: exampleGraph.links ?? [],
-      }
-    : {};
+  const mockBlockDockProps = {
+    initialEntities: exampleGraph?.entities ?? [],
+    initialEntityTypes: exampleGraph?.entityTypes ?? [],
+    initialLinks: exampleGraph?.links ?? [],
+    initialLinkedAggregations: exampleGraph?.linkedAggregations ?? [],
+  };
 
   const html = `
 <!DOCTYPE html>
