@@ -1,6 +1,7 @@
 import React, { ComponentType, VoidFunctionComponent } from "react";
 
 import { CustomElementLoader } from "./block-renderer/custom-element";
+import { HtmlLoader } from "./block-renderer/html";
 
 type BlockRendererProps = {
   customElement?: {
@@ -23,7 +24,7 @@ export const BlockRenderer: VoidFunctionComponent<BlockRendererProps> = ({
   } else if (customElement) {
     return <CustomElementLoader properties={properties} {...customElement} />;
   } else if (htmlString) {
-    // @todo implement HTML block renderer
+    return <HtmlLoader htmlString={htmlString} />;
   }
   throw new Error(
     "One of reactElement, customElement or htmlString must be provided.",

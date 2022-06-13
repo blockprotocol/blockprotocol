@@ -1,4 +1,4 @@
-const availableTemplates = ["custom-element", "react"];
+const availableTemplates = ["custom-element", "react", "html"];
 
 const commandLineArguments = [
   {

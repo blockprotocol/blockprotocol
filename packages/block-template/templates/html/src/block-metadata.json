@@ -1,0 +1,20 @@
+{
+  "name": "html-block",
+  "version": "0.0.0",
+  "description": "Block Protocol block template for an HTML element-based block",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "license": "MIT",
+  "schema": "block-schema.json",
+  "variants": [],
+  "blockType": {
+    "kind": "html"
+  },
+  "displayName": "Template",
+  "examples": [{}],
+  "icon": "public/omega.svg",
+  "image": "public/block-preview.svg",
+  "source": "main.js"
+}
