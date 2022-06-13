@@ -75,7 +75,7 @@ const script = async () => {
 
   await execa("yarn", ["build"], {
     ...defaultExecaOptions,
-    cwd: path.resolve(`packages/block-template`),
+    cwd: path.resolve(`packages/block-template/templates/react`),
   });
 
   logStepEnd();
