@@ -194,7 +194,7 @@ export const Navbar: VFC<NavbarProps> = ({
    *  - the user hasn't scrolled past the header element, and
    *  - the user is not currently displaying the mobile navigation menu
    */
-  const isNavbarDark = isHomePage && !displayMobileNav && !isScrollYPastHeader;
+  const isNavbarDark = false;
 
   const hiddenNavbarTopOffset =
     -1 * (navbarHeight - (displayBreadcrumbs ? BREAD_CRUMBS_HEIGHT : 0));
@@ -347,15 +347,8 @@ export const Navbar: VFC<NavbarProps> = ({
                     </Link>
                   )}
                   {user !== "loading" && !user?.isSignedUp ? (
-                    <LinkButton
-                      href="/docs/developing-blocks"
-                      size="small"
-                      variant="primary"
-                      endIcon={<BoltIcon />}
-                    >
-                      {preventOverflowingNavLinks
-                        ? "Build a block"
-                        : "Quick Start Guide"}
+                    <LinkButton href="/signup" size="small" variant="primary">
+                      Sign Up
                     </LinkButton>
                   ) : null}
                 </>
@@ -365,7 +358,7 @@ export const Navbar: VFC<NavbarProps> = ({
                 >
                   <FontAwesomeIcon
                     sx={{
-                      fontSize: 27.5,
+                      fontSize: 20,
                       ...(isNavbarDark && {
                         color: theme.palette.purple.subtle,
                       }),
@@ -382,7 +375,15 @@ export const Navbar: VFC<NavbarProps> = ({
           </Collapse>
         </Container>
       </Box>
-      <Slide in={displayMobileNav}>
+      <Slide
+        in={displayMobileNav}
+        direction="right"
+        timeout={400}
+        easing={{
+          enter: "ease-in-out",
+          exit: "ease-in-out",
+        }}
+      >
         <Box
           sx={{
             zIndex: 1,
@@ -446,7 +447,7 @@ export const Navbar: VFC<NavbarProps> = ({
               </LinkButton>
             )}
             <LinkButton
-              href="/docs/developing-blocks"
+              href="/signup"
               sx={{
                 width: "100%",
                 py: 1.5,
@@ -454,10 +455,9 @@ export const Navbar: VFC<NavbarProps> = ({
                 textTransform: "none",
               }}
               variant="primary"
-              startIcon={<BoltIcon />}
               onClick={() => setDisplayMobileNav(false)}
             >
-              {sm ? "Get started building blocks" : "Build a block"}
+              Sign Up
             </LinkButton>
           </Box>
         </Box>
