@@ -357,13 +357,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             }}
           >
             {compiledReadme ? (
-              <Box
-                sx={{
-                  "& > h1:first-child": {
-                    display: "none",
-                  },
-                }}
-              >
+              <Box>
                 <MDXRemote
                   compiledSource={compiledReadme}
                   components={markdownComponents}
