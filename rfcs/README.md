@@ -51,7 +51,7 @@ As a rule of thumb, receiving encouraging feedback from long-standing project de
 
 [What the process is]: #what-the-process-is
 
-In short, to get a major feature added to the Block Protocol, one must first get the RFC merged into the [`/./rfcs`](../rfcs) folder as a markdown file. At that point the RFC is "active" and may be implemented with the goal of eventual inclusion into the Block Protocol.
+In short, to get a major feature added to the Block Protocol, one must first get the RFC merged into the [`/rfcs`](../rfcs) folder as a markdown file. At that point the RFC is "active" and may be implemented with the goal of eventual inclusion into the Block Protocol.
 
 - Fork the Block Protocol repo https://github.com/blockprotocol/blockprotocol
 - Copy [`rfcs/0000-template.md`](0000-template.md) to `rfcs/text/0000-my-feature.md` (where
