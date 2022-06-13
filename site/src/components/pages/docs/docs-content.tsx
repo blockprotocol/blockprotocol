@@ -62,30 +62,7 @@ export const DocsContent: VFC<DocsPageProps> = ({
         },
       }}
     >
-      <Typography
-        variant="bpTitle"
-        sx={{
-          marginBottom: 2,
-        }}
-      >
-        {title}
-      </Typography>
-      {subtitle ? (
-        <Typography
-          variant="bpSubtitle"
-          maxWidth={750}
-          sx={{
-            marginBottom: {
-              xs: 6,
-              md: 8,
-            },
-          }}
-        >
-          {subtitle}
-        </Typography>
-      ) : null}
-      {hero}
-      <Box mb={hasMultiplePages ? 4 : 0} display="flex" alignItems="flex-start">
+      <Box display="flex" alignItems="flex-start">
         {md ? (
           <Sidebar
             flexGrow={0}
@@ -95,30 +72,57 @@ export const DocsContent: VFC<DocsPageProps> = ({
             header={<Search variant="desktop" />}
           />
         ) : null}
-        <MdxPageContent flexGrow={1} serializedPage={content} />
+        <Container>
+          <Typography
+            variant="bpTitle"
+            sx={{
+              marginBottom: 2,
+            }}
+          >
+            {title}
+          </Typography>
+          {subtitle ? (
+            <Typography
+              variant="bpSubtitle"
+              maxWidth={750}
+              sx={{
+                marginBottom: {
+                  xs: 6,
+                  md: 8,
+                },
+              }}
+            >
+              {subtitle}
+            </Typography>
+          ) : null}
+          {hero}
+          <Box mb={hasMultiplePages ? 4 : 0}>
+            <MdxPageContent flexGrow={1} serializedPage={content} />
+          </Box>
+          {hasMultiplePages ? (
+            <PageNavLinks
+              prevPage={prevPage}
+              nextPage={nextPage}
+              sx={{
+                marginLeft: {
+                  xs: 0,
+                  md: `${
+                    SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
+                  }px`,
+                },
+                maxWidth: {
+                  sx: "100%",
+                  sm: MDX_TEXT_CONTENT_MAX_WIDTH,
+                },
+                marginBottom: {
+                  xs: 8,
+                  md: 14,
+                },
+              }}
+            />
+          ) : null}
+        </Container>
       </Box>
-      {hasMultiplePages ? (
-        <PageNavLinks
-          prevPage={prevPage}
-          nextPage={nextPage}
-          sx={{
-            marginLeft: {
-              xs: 0,
-              md: `${
-                SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
-              }px`,
-            },
-            maxWidth: {
-              sx: "100%",
-              sm: MDX_TEXT_CONTENT_MAX_WIDTH,
-            },
-            marginBottom: {
-              xs: 8,
-              md: 14,
-            },
-          }}
-        />
-      ) : null}
     </Container>
   );
 };
