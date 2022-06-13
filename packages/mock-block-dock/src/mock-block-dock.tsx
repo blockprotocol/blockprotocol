@@ -43,7 +43,7 @@ type MockBlockDockProps = {
  * A component which acts as a mock embedding application for Blcok Protocol blocks.
  * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
- *  @param [blockDefinition] the source for the block and any additional metadata required
+ * @param [blockDefinition] the source for the block and any additional metadata required
  * @param [blockEntity] the starting properties for the block entity
  * @param [blockSchema] the schema for the block entity
  * @param [debug=false] display debugging information
@@ -144,24 +144,26 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   if (!debug) {
     return (
       <div ref={wrapperRef}>
-        <BlockRenderer
-          customElement={
-            "customElement" in blockDefinition
-              ? blockDefinition.customElement
-              : undefined
-          }
-          htmlString={
-            "htmlString" in blockDefinition
-              ? blockDefinition.htmlString
-              : undefined
-          }
-          properties={propsToInject}
-          ReactComponent={
-            "ReactComponent" in blockDefinition
-              ? blockDefinition.ReactComponent
-              : undefined
-          }
-        />
+        {graphService ? (
+          <BlockRenderer
+            customElement={
+              "customElement" in blockDefinition
+                ? blockDefinition.customElement
+                : undefined
+            }
+            htmlString={
+              "htmlString" in blockDefinition
+                ? blockDefinition.htmlString
+                : undefined
+            }
+            properties={propsToInject}
+            ReactComponent={
+              "ReactComponent" in blockDefinition
+                ? blockDefinition.ReactComponent
+                : undefined
+            }
+          />
+        ) : null}
       </div>
     );
   }
@@ -172,24 +174,26 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
         <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
         <div style={{ padding: 15, border: "1px dashed black" }}>
           <div ref={wrapperRef}>
-            <BlockRenderer
-              customElement={
-                "customElement" in blockDefinition
-                  ? blockDefinition.customElement
-                  : undefined
-              }
-              htmlString={
-                "htmlString" in blockDefinition
-                  ? blockDefinition.htmlString
-                  : undefined
-              }
-              properties={propsToInject}
-              ReactComponent={
-                "ReactComponent" in blockDefinition
-                  ? blockDefinition.ReactComponent
-                  : undefined
-              }
-            />
+            {graphService ? (
+              <BlockRenderer
+                customElement={
+                  "customElement" in blockDefinition
+                    ? blockDefinition.customElement
+                    : undefined
+                }
+                htmlString={
+                  "htmlString" in blockDefinition
+                    ? blockDefinition.htmlString
+                    : undefined
+                }
+                properties={propsToInject}
+                ReactComponent={
+                  "ReactComponent" in blockDefinition
+                    ? blockDefinition.ReactComponent
+                    : undefined
+                }
+              />
+            ) : null}
           </div>
         </div>
       </div>

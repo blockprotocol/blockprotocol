@@ -14,27 +14,22 @@ export interface BlockElementBase<
 export abstract class BlockElementBase<
   BlockEntityProperties extends Record<string, unknown> | null,
 > extends LitElement {
-  protected graphService: GraphBlockHandler;
+  protected graphService?: GraphBlockHandler;
 
   static properties = {
     graph: { type: Object },
   };
 
-  constructor() {
-    super();
-    this.graphService = new GraphBlockHandler({ element: this });
-  }
-
   connectedCallback() {
     super.connectedCallback();
-    if (this.graphService.destroyed) {
+    if (!this.graphService || this.graphService.destroyed) {
       this.graphService = new GraphBlockHandler({ element: this });
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    if (!this.graphService.destroyed) {
+    if (this.graphService && !this.graphService.destroyed) {
       this.graphService.destroy();
     }
   }
@@ -53,6 +48,9 @@ export abstract class BlockElementBase<
    * @param properties the properties to update, which will be merged with any others
    */
   protected updateSelf(properties: UpdateEntityData["properties"]) {
+    if (!this.graphService) {
+      throw new Error("Cannot updateSelf – graphService not yet connected.");
+    }
     if (!this.graph) {
       throw new Error(
         "Cannot update self: no 'graph' property object passed to block.",

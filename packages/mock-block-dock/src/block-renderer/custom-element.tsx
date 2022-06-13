@@ -23,9 +23,9 @@ export const CustomElementLoader: VFC<CustomElementLoaderProps> = ({
     try {
       customElements.define(tagName, elementClass);
     } catch (err) {
-      // @todo this error is hit even when should not have been already defined - find out why
       // eslint-disable-next-line no-console -- TODO: consider using logger
-      console.warn(`Error defining custom element: ${(err as Error).message}`);
+      console.error(`Error defining custom element: ${(err as Error).message}`);
+      throw err;
     }
   } else if (existingCustomElement !== elementClass) {
     /**

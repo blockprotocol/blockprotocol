@@ -24,12 +24,12 @@
     "serve": "node_modules/.bin/block-scripts serve"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.5",
+    "@blockprotocol/graph": "0.0.6",
     "lit": "^2.2.5"
   },
   "devDependencies": {
     "block-scripts": "0.0.8-next.1",
-    "mock-block-dock": "0.0.14-next.0",
+    "mock-block-dock": "0.0.14-next.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },

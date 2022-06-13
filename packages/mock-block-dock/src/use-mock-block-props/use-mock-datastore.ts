@@ -139,33 +139,40 @@ export const useMockDatastore = (
             ],
           };
         }
-        let newEntity;
-        setEntities((currentEntities) =>
-          currentEntities.map((entity) => {
-            if (entity.entityId === data.entityId) {
-              newEntity = {
-                ...entity,
-                properties: {
-                  ...entity.properties,
-                  ...data.properties,
-                },
-              };
-              return newEntity;
+
+        return new Promise((resolve) => {
+          setEntities((currentEntities) => {
+            if (
+              !currentEntities.find(
+                ({ entityId }) => entityId === data.entityId,
+              )
+            ) {
+              resolve({
+                errors: [
+                  {
+                    code: "NOT_FOUND",
+                    message: `Could not find entity with entityId '${data.entityId}'`,
+                  },
+                ],
+              });
+              return currentEntities;
             }
-            return entity;
-          }),
-        );
-        if (!newEntity) {
-          return {
-            errors: [
-              {
-                code: "NOT_FOUND",
-                message: `Could not find entity with entityId '${data.entityId}'`,
-              },
-            ],
-          };
-        }
-        return { data: newEntity };
+            return currentEntities.map((entity) => {
+              if (entity.entityId === data.entityId) {
+                const newEntity = {
+                  ...entity,
+                  properties: {
+                    ...entity.properties,
+                    ...data.properties,
+                  },
+                };
+                resolve({ data: newEntity });
+                return newEntity;
+              }
+              return entity;
+            });
+          });
+        });
       },
       [setEntities],
     );
@@ -183,27 +190,32 @@ export const useMockDatastore = (
             ],
           };
         }
-        let deleted = false;
-        setEntities((currentEntities) =>
-          currentEntities.filter((entity) => {
-            if (entity.entityId === data.entityId) {
-              deleted = true;
-              return false;
+        return new Promise((resolve) => {
+          setEntities((currentEntities) => {
+            if (
+              !currentEntities.find(
+                ({ entityId }) => entityId === data.entityId,
+              )
+            ) {
+              resolve({
+                errors: [
+                  {
+                    code: "NOT_FOUND",
+                    message: `Could not find entity with entityId '${data.entityId}'`,
+                  },
+                ],
+              });
+              return currentEntities;
             }
-            return true;
-          }),
-        );
-        if (!deleted) {
-          return {
-            errors: [
-              {
-                code: "NOT_FOUND",
-                message: `Could not find entity with entityId '${data.entityId}'`,
-              },
-            ],
-          };
-        }
-        return { data: true };
+            return currentEntities.filter((entity) => {
+              if (entity.entityId === data.entityId) {
+                resolve({ data: true });
+                return false;
+              }
+              return true;
+            });
+          });
+        });
       },
       [setEntities],
     );
@@ -281,33 +293,40 @@ export const useMockDatastore = (
             ],
           };
         }
-        let newEntityType;
-        setEntityTypes((currentEntityTypes) =>
-          currentEntityTypes.map((entityType) => {
-            if (entityType.entityTypeId === data.entityTypeId) {
-              newEntityType = {
-                ...entityType,
-                schema: {
-                  ...entityType.schema,
-                  ...data.schema,
-                },
-              };
-              return newEntityType;
+
+        return new Promise((resolve) => {
+          setEntityTypes((currentEntityTypes) => {
+            if (
+              !currentEntityTypes.find(
+                ({ entityTypeId }) => entityTypeId === data.entityTypeId,
+              )
+            ) {
+              resolve({
+                errors: [
+                  {
+                    code: "NOT_FOUND",
+                    message: `Could not find entity type with entityTypeId '${data.entityTypeId}'`,
+                  },
+                ],
+              });
+              return currentEntityTypes;
             }
-            return entityType;
-          }),
-        );
-        if (!newEntityType) {
-          return {
-            errors: [
-              {
-                code: "NOT_FOUND",
-                message: `Could not find entity type with entityId '${data.entityTypeId}'`,
-              },
-            ],
-          };
-        }
-        return { data: newEntityType };
+            return currentEntityTypes.map((entityType) => {
+              if (entityType.entityTypeId === data.entityTypeId) {
+                const newEntityType = {
+                  ...entityType,
+                  schema: {
+                    ...entityType.schema,
+                    ...data.schema,
+                  },
+                };
+                resolve({ data: newEntityType });
+                return newEntityType;
+              }
+              return entityType;
+            });
+          });
+        });
       },
       [setEntityTypes],
     );
@@ -325,27 +344,32 @@ export const useMockDatastore = (
             ],
           };
         }
-        let deleted = false;
-        setEntityTypes((currentEntityTypes) =>
-          currentEntityTypes.filter((entityType) => {
-            if (entityType.entityTypeId === data.entityTypeId) {
-              deleted = true;
-              return false;
+        return new Promise((resolve) => {
+          setEntityTypes((currentEntityTypes) => {
+            if (
+              !currentEntityTypes.find(
+                ({ entityTypeId }) => entityTypeId === data.entityTypeId,
+              )
+            ) {
+              resolve({
+                errors: [
+                  {
+                    code: "NOT_FOUND",
+                    message: `Could not find entity type with entityTypeId '${data.entityTypeId}'`,
+                  },
+                ],
+              });
+              return currentEntityTypes;
             }
-            return true;
-          }),
-        );
-        if (!deleted) {
-          return {
-            errors: [
-              {
-                code: "NOT_FOUND",
-                message: `Could not find entity type with entityTypeId '${data.entityTypeId}'`,
-              },
-            ],
-          };
-        }
-        return { data: true };
+            return currentEntityTypes.filter((entityType) => {
+              if (entityType.entityTypeId === data.entityTypeId) {
+                resolve({ data: true });
+                return false;
+              }
+              return true;
+            });
+          });
+        });
       },
       [setEntityTypes],
     );
@@ -412,27 +436,32 @@ export const useMockDatastore = (
           ],
         };
       }
-      let updatedLink;
-      setLinks((currentLinks) =>
-        currentLinks.map((link) => {
-          if (link.linkId === data.linkId) {
-            updatedLink = { ...link, index: data.data.index };
-            return updatedLink;
+      return new Promise((resolve) => {
+        setLinks((currentLinks) => {
+          if (!currentLinks.find(({ linkId }) => linkId === data.linkId)) {
+            resolve({
+              errors: [
+                {
+                  code: "NOT_FOUND",
+                  message: `Could not find link with linkId '${data.linkId}'`,
+                },
+              ],
+            });
+            return currentLinks;
           }
-          return link;
-        }),
-      );
-      if (!updatedLink) {
-        return {
-          errors: [
-            {
-              code: "NOT_FOUND",
-              message: `Could not find link with linkId '${data.linkId}'`,
-            },
-          ],
-        };
-      }
-      return { data: updatedLink };
+          return currentLinks.map((link) => {
+            if (link.linkId === data.linkId) {
+              const newLink = {
+                ...link,
+                index: data.data.index,
+              };
+              resolve({ data: newLink });
+              return newLink;
+            }
+            return link;
+          });
+        });
+      });
     },
     [setLinks],
   );
@@ -449,29 +478,28 @@ export const useMockDatastore = (
           ],
         };
       }
-      let deleted = false;
-      setLinks((currentLinks) =>
-        currentLinks
-          .map((link) => {
-            if (data.linkId === link.linkId) {
-              return null;
+      return new Promise((resolve) => {
+        setLinks((currentLinks) => {
+          if (!currentLinks.find(({ linkId }) => linkId === data.linkId)) {
+            resolve({
+              errors: [
+                {
+                  code: "NOT_FOUND",
+                  message: `Could not find link with linkId '${data.linkId}'`,
+                },
+              ],
+            });
+            return currentLinks;
+          }
+          return currentLinks.filter((link) => {
+            if (link.linkId === data.linkId) {
+              resolve({ data: true });
+              return false;
             }
-            deleted = true;
-            return link;
-          })
-          .filter((link): link is Link => !!link),
-      );
-      if (!deleted) {
-        return {
-          errors: [
-            {
-              code: "NOT_FOUND",
-              message: `Could not find link with linkId '${data.linkId}'`,
-            },
-          ],
-        };
-      }
-      return { data: deleted };
+            return true;
+          });
+        });
+      });
     },
     [setLinks],
   );
@@ -552,31 +580,36 @@ export const useMockDatastore = (
             ],
           };
         }
-        let updatedLinkedAggregation: LinkedAggregationDefinition | undefined =
-          undefined;
-        setLinkedAggregations((currentLinkedAggregations) =>
-          currentLinkedAggregations.map((linkedAggregation) => {
-            if (linkedAggregation.aggregationId === data.aggregationId) {
-              updatedLinkedAggregation = {
-                ...linkedAggregation,
-                operation: data.operation,
-              };
-              return updatedLinkedAggregation;
+        return new Promise((resolve) => {
+          setLinkedAggregations((currentLinkedAggregations) => {
+            if (
+              !currentLinkedAggregations.find(
+                ({ aggregationId }) => aggregationId === data.aggregationId,
+              )
+            ) {
+              resolve({
+                errors: [
+                  {
+                    code: "NOT_FOUND",
+                    message: `Could not find linked aggregation with aggregationId '${data.aggregationId}'`,
+                  },
+                ],
+              });
+              return currentLinkedAggregations;
             }
-            return linkedAggregation;
-          }),
-        );
-        if (!updatedLinkedAggregation) {
-          return {
-            errors: [
-              {
-                code: "NOT_FOUND",
-                message: `Could not find linkedAggregation with aggregationId '${data.aggregationId}'`,
-              },
-            ],
-          };
-        }
-        return { data: updatedLinkedAggregation };
+            return currentLinkedAggregations.map((linkedAggregation) => {
+              if (linkedAggregation.aggregationId === data.aggregationId) {
+                const newLinkedAggregation = {
+                  ...linkedAggregation,
+                  operation: data.operation,
+                };
+                resolve({ data: newLinkedAggregation });
+                return newLinkedAggregation;
+              }
+              return linkedAggregation;
+            });
+          });
+        });
       },
       [setLinkedAggregations],
     );
@@ -594,34 +627,32 @@ export const useMockDatastore = (
             ],
           };
         }
-        let deleted = false;
-        setLinkedAggregations((currentLinkedAggregations) =>
-          currentLinkedAggregations
-            .map((linkedAggregation) => {
-              if (data.aggregationId === linkedAggregation.aggregationId) {
-                return null;
+        return new Promise((resolve) => {
+          setLinkedAggregations((currentLinkedAggregations) => {
+            if (
+              !currentLinkedAggregations.find(
+                ({ aggregationId }) => aggregationId === data.aggregationId,
+              )
+            ) {
+              resolve({
+                errors: [
+                  {
+                    code: "NOT_FOUND",
+                    message: `Could not find link with aggregationId '${data.aggregationId}'`,
+                  },
+                ],
+              });
+              return currentLinkedAggregations;
+            }
+            return currentLinkedAggregations.filter((link) => {
+              if (link.aggregationId === data.aggregationId) {
+                resolve({ data: true });
+                return false;
               }
-              deleted = true;
-              return linkedAggregation;
-            })
-            .filter(
-              (
-                linkedAggregation,
-              ): linkedAggregation is LinkedAggregationDefinition =>
-                !!linkedAggregation,
-            ),
-        );
-        if (!deleted) {
-          return {
-            errors: [
-              {
-                code: "NOT_FOUND",
-                message: `Could not find linkedAggregation with aggregationId '${data.aggregationId}'`,
-              },
-            ],
-          };
-        }
-        return { data: deleted };
+              return true;
+            });
+          });
+        });
       },
       [setLinkedAggregations],
     );
