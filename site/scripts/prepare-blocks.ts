@@ -267,11 +267,11 @@ const prepareBlock = async ({
     );
   }
 
-  const workspaceDirPath = blockInfo.workspace
-    ? path.resolve(
-        rootWorkspaceDirPath,
-        await locateWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace),
-      )
+  const workspacePath = blockInfo.workspace
+    ? await locateWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace)
+    : null;
+  const workspaceDirPath = workspacePath
+    ? path.resolve(rootWorkspaceDirPath, workspacePath)
     : rootWorkspaceDirPath;
 
   const distDirPath = blockInfo.distDir
@@ -362,6 +362,10 @@ const prepareBlock = async ({
 
   await fs.move(distDirPath, blockDirPath);
   console.log(chalk.green(`Done!`));
+
+  return {
+    directory: workspacePath ?? blockInfo.folder,
+  };
 };
 
 const script = async () => {
@@ -444,7 +448,14 @@ const script = async () => {
     const blockName = blockInfo.name;
     const blockDirPath = path.resolve(blocksDirPath, blockName);
     const blockMetadataPath = path.resolve(blockDirPath, "block-metadata.json");
-    const blockInfoChecksum = md5(JSON.stringify(blockInfo));
+    const blockInfoChecksum = md5(
+      JSON.stringify({
+        ...blockInfo,
+        // This will allow you to force re-preparing all blocks when the
+        // format of `unstable_hubInfo` changes, by incrementing this.
+        unstableVersion: 2,
+      }),
+    );
 
     if (env.CACHE) {
       try {
@@ -469,7 +480,7 @@ const script = async () => {
 
     try {
       await fs.ensureDir(blockDirPath);
-      await prepareBlock({
+      const hubInfo = await prepareBlock({
         blockInfo,
         blockDirPath,
         workshopDirPath,
@@ -478,6 +489,7 @@ const script = async () => {
 
       const blockMetadata = await fs.readJson(blockMetadataPath);
       blockMetadata.unstable_hubInfo = {
+        ...hubInfo,
         checksum: blockInfoChecksum,
         commit: blockInfo.commit,
         preparedAt: new Date().toISOString(),

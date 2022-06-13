@@ -18,6 +18,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   repository?: string;
   schema?: string | null;
   exampleGraph: string | null;
+  unstable_hubInfo?: Record<string, string>;
 };
 
 export interface StoredBlockInfo {
@@ -50,11 +51,12 @@ const generateBlockFileUrl = (
 const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
   commit: string,
+  path: string | undefined,
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
       .fromUrl(repository)
-      ?.browse("", { committish: commit });
+      ?.browse(path ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -68,7 +70,7 @@ const getRepositoryUrl = (
   if (url) {
     const repositoryUrl = hostedGitInfo
       .fromUrl(url)
-      ?.browse(directory ?? "", { committish: commit });
+      ?.browse(path ?? directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -106,6 +108,7 @@ export const readBlocksFromDisk = async (): Promise<
       const repository = getRepositoryUrl(
         metadata.repository ?? storedBlockInfo.repository,
         storedBlockInfo.commit,
+        metadata.unstable_hubInfo?.directory,
       )?.replace(/\/$/, "");
 
       return {
@@ -199,4 +202,19 @@ export const readBlockDataFromDisk = async ({
     source,
     exampleGraph,
   };
+};
+
+export const readBlockReadmeFromDisk = async (
+  blockMetadata: ExpandedBlockMetadata,
+): Promise<string | undefined> => {
+  try {
+    return fs.readFileSync(
+      `${process.cwd()}/public/blocks/${
+        blockMetadata.packagePath
+      }/README.vercel-hack.md`,
+      "utf8",
+    );
+  } catch {
+    return undefined;
+  }
 };

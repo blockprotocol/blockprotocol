@@ -11,7 +11,10 @@ import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
 import React, { VoidFunctionComponent } from "react";
+import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
@@ -25,9 +28,18 @@ import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,
+  readBlockReadmeFromDisk,
   readBlocksFromDisk,
 } from "../../../lib/blocks";
 import { isProduction } from "../../../lib/config";
+import { mdxComponents } from "../../../util/mdx-components";
+
+// Exclude <FooBar />, but keep <h1 />, <ul />, etc.
+const markdownComponents = Object.fromEntries(
+  Object.entries(mdxComponents).filter(
+    ([key]) => key[0]?.toLowerCase() === key[0],
+  ),
+);
 
 /**
  * We want a different origin for the iFrame to the parent window
@@ -85,6 +97,7 @@ const Bullet: VoidFunctionComponent = () => {
 };
 
 type BlockPageProps = {
+  compiledReadme?: string;
   blockMetadata: BlockMetadata;
   sandboxBaseUrl: string;
   schema: BlockSchema;
@@ -169,9 +182,25 @@ export const getStaticProps: GetStaticProps<
 
   const { schema, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
+  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
+
+  const compiledReadme = readmeMd
+    ? (
+        await serialize(readmeMd, {
+          mdxOptions: {
+            format: "md",
+            remarkPlugins: [
+              remarkGfm, // GitHub-flavoured markdown (includes automatic detection of URLs)
+            ],
+          },
+        })
+      ).compiledSource
+    : undefined;
+
   return {
     props: {
       blockMetadata,
+      ...(compiledReadme ? { compiledReadme } : {}), // https://github.com/vercel/next.js/discussions/11209
       sliderItems: excludeHiddenBlocks(catalog).filter(
         ({ name }) => name !== blockMetadata.name,
       ),
@@ -184,6 +213,7 @@ export const getStaticProps: GetStaticProps<
 };
 
 const BlockPage: NextPage<BlockPageProps> = ({
+  compiledReadme,
   blockMetadata,
   sandboxBaseUrl,
   schema,
@@ -330,9 +360,25 @@ const BlockPage: NextPage<BlockPageProps> = ({
             sx={{
               display: "grid",
               gridTemplateColumns: { xs: "1fr", md: "60% 40%" },
+              marginBottom: 10,
             }}
           >
-            <Box />
+            {compiledReadme ? (
+              <Box
+                sx={{
+                  "& > h1:first-child": {
+                    marginTop: 0,
+                  },
+                }}
+              >
+                <MDXRemote
+                  compiledSource={compiledReadme}
+                  components={markdownComponents}
+                />
+              </Box>
+            ) : (
+              <div />
+            )}
             <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
               <Typography
                 variant="bpLargeText"
@@ -363,26 +409,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
             </Box>
           </Box>
         )}
-
-        {/* <div
-        style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
-        className=" mb-10"
-      >
-        <div>
-          <b>About</b>
-          <p>
-            Store information in rows and columns in a classic table layout.
-            Longer description talking about parameters and how to use like a
-            readme goes in here. Tables have filters, search, ability to add and
-            remove columns and rows, multiple views. Tables have filters,
-            search, ability to add and remove columns and rows, multiple views.
-            Tables have filters, search, ability to add and remove columns and
-            rows, multiple views. Tables have filters, search, ability to add
-            and remove columns and rows, multiple views.
-          </p>
-        </div>
-        
-      </div> */}
 
         <Typography textAlign="center" variant="bpHeading2" mb={3}>
           Explore more blocks
