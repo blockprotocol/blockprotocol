@@ -3,7 +3,6 @@ import {
   Container,
   Tab,
   Tabs,
-  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -13,9 +12,7 @@ import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 
 import siteMap from "../../../site-map.json";
-import { MdxPageContent } from "../../components/mdx-page-content";
-import { Sidebar } from "../../components/page-sidebar";
-import Search from "../../components/pages/docs/search";
+import { DocsContent } from "../../components/pages/docs/docs-content";
 import { SiteMap, SiteMapPage } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdx-utils";
 
@@ -150,60 +147,12 @@ const DocsPage: NextPage<DocsPageProps> = ({
           </Container>
         </Box>
       )}
-      <Container
-        sx={{
-          marginTop: {
-            xs: 5,
-            md: 9,
-          },
-        }}
-      >
-        <Typography
-          variant="bpTitle"
-          sx={{
-            marginBottom: 2,
-          }}
-        >
-          {title}
-        </Typography>
-        {DOCS_PAGE_SUBTITLES[title] ? (
-          <Typography
-            variant="bpSubtitle"
-            maxWidth={750}
-            sx={{
-              marginBottom: {
-                xs: 3,
-                md: 8,
-              },
-            }}
-          >
-            {DOCS_PAGE_SUBTITLES[title]}
-          </Typography>
-        ) : null}
-        <Box
-          display="flex"
-          alignItems="flex-start"
-          sx={{
-            marginBottom: {
-              xs: 3,
-              md: 8,
-            },
-          }}
-        >
-          {md ? (
-            <Sidebar
-              flexGrow={0}
-              marginRight={6}
-              pages={[tabPage]}
-              header={<Search variant="desktop" />}
-            />
-          ) : null}
-          <MdxPageContent
-            flexGrow={1}
-            serializedPage={tabPageSerializedContent}
-          />
-        </Box>
-      </Container>
+      <DocsContent
+        title={title}
+        subtitle={DOCS_PAGE_SUBTITLES[title]}
+        content={tabPageSerializedContent}
+        pages={[tabPage]}
+      />
     </>
   );
 };

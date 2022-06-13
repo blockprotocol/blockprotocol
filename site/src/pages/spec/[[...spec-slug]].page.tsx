@@ -1,13 +1,6 @@
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-import {
-  Box,
-  Container,
-  Paper,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Paper, Typography, useTheme } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -17,18 +10,15 @@ import { useContext } from "react";
 import { FontAwesomeIcon } from "../../components/icons";
 import { Link } from "../../components/link";
 import { LinkButton } from "../../components/link-button";
-import {
-  MDX_TEXT_CONTENT_MAX_WIDTH,
-  MdxPageContent,
-} from "../../components/mdx-page-content";
+import { MDX_TEXT_CONTENT_MAX_WIDTH } from "../../components/mdx-page-content";
 import { PageNavLinks } from "../../components/page-nav-links";
-import { Sidebar, SIDEBAR_WIDTH } from "../../components/page-sidebar";
-import Search from "../../components/pages/docs/search";
+import { SIDEBAR_WIDTH } from "../../components/page-sidebar";
+import { DocsContent } from "../../components/pages/docs/docs-content";
 import SiteMapContext from "../../context/site-map-context";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdx-utils";
 import { parseIntFromPixelString } from "../../util/mui-utils";
 
-const GitHubInfoCard = (
+const gitHubInfoCard = (
   <Paper
     variant="teal"
     sx={{
@@ -218,79 +208,50 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
       ? specificationPages[currentPageIndex + 1]
       : undefined;
 
-  const md = useMediaQuery(theme.breakpoints.up("md"));
-
   return (
     <>
       <Head>
         <title>Block Protocol - Specification</title>
       </Head>
-      <Container
-        sx={{
-          marginTop: {
-            xs: 6,
-            md: 8,
-          },
-        }}
-      >
-        <Typography
-          variant="bpTitle"
-          sx={{
-            marginBottom: 2,
-          }}
-        >
-          Specification
-        </Typography>
-        <Typography
-          variant="bpSubtitle"
-          maxWidth={750}
-          sx={{
-            marginBottom: {
-              xs: 6,
-              md: 8,
-            },
-          }}
-        >
-          The open-source protocol for creating interactive, data-driven blocks
-        </Typography>
-        {GitHubInfoCard}
-        <Box mb={4} display="flex" alignItems="flex-start">
-          {md ? (
-            <Sidebar
-              flexGrow={0}
-              marginRight={6}
-              pages={specificationPages.filter(
-                ({ title }) => !title.startsWith("Appendix"),
-              )}
-              appendices={specificationPages.filter(({ title }) =>
-                title.startsWith("Appendix"),
-              )}
-              header={<Search variant="desktop" />}
-            />
-          ) : null}
-          <MdxPageContent flexGrow={1} serializedPage={serializedPage} />
-        </Box>
-        <PageNavLinks
-          prevPage={prevPage}
-          nextPage={nextPage}
-          sx={{
-            marginLeft: {
-              xs: 0,
-              md: `${
-                SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
-              }px`,
-            },
-            maxWidth: {
-              sx: "100%",
-              sm: MDX_TEXT_CONTENT_MAX_WIDTH,
-            },
-            marginBottom: {
-              xs: 8,
-              md: 14,
-            },
-          }}
-        />
-      </Container>
+      <DocsContent
+        title={<>Specification</>}
+        subtitle={
+          <>
+            The open-source protocol for creating interactive, data-driven
+            blocks
+          </>
+        }
+        hero={gitHubInfoCard}
+        content={serializedPage}
+        pages={specificationPages.filter(
+          ({ title }) => !title.startsWith("Appendix"),
+        )}
+        appendices={specificationPages.filter(({ title }) =>
+          title.startsWith("Appendix"),
+        )}
+        footer={
+          <PageNavLinks
+            prevPage={prevPage}
+            nextPage={nextPage}
+            sx={{
+              marginLeft: {
+                xs: 0,
+                md: `${
+                  SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
+                }px`,
+              },
+              maxWidth: {
+                sx: "100%",
+                sm: MDX_TEXT_CONTENT_MAX_WIDTH,
+              },
+              marginBottom: {
+                xs: 8,
+                md: 14,
+              },
+            }}
+          />
+        }
+      />
     </>
   );
 };
