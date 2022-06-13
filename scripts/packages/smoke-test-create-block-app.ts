@@ -68,9 +68,8 @@ const script = async () => {
     await execa(
       "npx",
       [
-        "create-block-app",
-        blockName,
-        blockDirPath,
+        "-c",
+        `'create-block-app ${blockName} --path ${blockDirPath}'`,
         "--cache",
         tmpNodeCacheDir.path,
       ],
