@@ -69,10 +69,10 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const mockBlockDockProps = {
-    initialEntities: exampleGraph?.entities ?? [],
-    initialEntityTypes: exampleGraph?.entityTypes ?? [],
-    initialLinks: exampleGraph?.links ?? [],
-    initialLinkedAggregations: exampleGraph?.linkedAggregations ?? [],
+    initialEntities: exampleGraph?.entities,
+    initialEntityTypes: exampleGraph?.entityTypes,
+    initialLinks: exampleGraph?.links,
+    initialLinkedAggregations: exampleGraph?.linkedAggregations,
   };
 
   const html = `

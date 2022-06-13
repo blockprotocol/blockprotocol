@@ -80,9 +80,9 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
       onChange={(_event, newValue: number) => setBlockDataTab(newValue)}
       modalOpen={modalOpen}
     >
-      <Tab label="Data Source" />
+      <Tab label="Block Properties" />
       <Tab label="Block Schema" />
-      {showExampleGraphTab && <Tab label="Example Graph" />}
+      {showExampleGraphTab && <Tab label="Mock Datastore" />}
     </DesktopTabs>
   );
 };
