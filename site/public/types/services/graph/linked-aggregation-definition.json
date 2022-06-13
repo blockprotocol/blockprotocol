@@ -1,0 +1,17 @@
+{
+  "$id": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition",
+  "title": "LinkedAggregationDefinition",
+  "type": "object",
+  "properties": {
+    "sourceEntityId": {
+      "type": "string"
+    },
+    "path": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "object"
+    }
+  },
+  "required": ["sourceEntityId", "operation", "path"]
+}

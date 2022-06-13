@@ -45,6 +45,10 @@ const nextConfig = {
         source: "/:shortname/blocks/:blockslug/sandboxed-demo",
         destination: "/api/rewrites/sandboxed-block-demo",
       },
+      {
+        source: "/types/services/:servicename/:typename",
+        destination: "/types/services/:servicename/:typename.json",
+      },
     ];
   },
 };
