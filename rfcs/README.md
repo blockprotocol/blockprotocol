@@ -105,4 +105,3 @@ The Block Protocols's RFC process strongly owes its inspiration to the [Rust RFC
 We're open to changing it as needed in response to feedback.
 
 [community Discord server]: https://blockprotocol.org/discord
-[developer discussion forum]: https://internals.rust-lang.org/
