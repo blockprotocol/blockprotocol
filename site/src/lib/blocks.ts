@@ -178,3 +178,18 @@ export const readBlockDataFromDisk = async ({
     source,
   };
 };
+
+export const readBlockReadmeFromDisk = async (
+  blockMetadata: ExpandedBlockMetadata,
+): Promise<string | undefined> => {
+  try {
+    return fs.readFileSync(
+      `${process.cwd()}/public/blocks/${
+        blockMetadata.packagePath
+      }/README.vercel-hack.md`,
+      "utf8",
+    );
+  } catch {
+    return undefined;
+  }
+};
