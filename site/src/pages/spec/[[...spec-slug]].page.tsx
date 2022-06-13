@@ -1,6 +1,6 @@
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
-import { Box, Paper, Typography, useTheme } from "@mui/material";
+import { Box, Paper, Typography } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -10,13 +10,9 @@ import { useContext } from "react";
 import { FontAwesomeIcon } from "../../components/icons";
 import { Link } from "../../components/link";
 import { LinkButton } from "../../components/link-button";
-import { MDX_TEXT_CONTENT_MAX_WIDTH } from "../../components/mdx-page-content";
-import { PageNavLinks } from "../../components/page-nav-links";
-import { SIDEBAR_WIDTH } from "../../components/page-sidebar";
 import { DocsContent } from "../../components/pages/docs/docs-content";
 import SiteMapContext from "../../context/site-map-context";
 import { getAllPageHrefs, getSerializedPage } from "../../util/mdx-utils";
-import { parseIntFromPixelString } from "../../util/mui-utils";
 
 const gitHubInfoCard = (
   <Paper
@@ -189,7 +185,6 @@ export const getStaticProps: GetStaticProps<
 };
 
 const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
-  const theme = useTheme();
   const { asPath } = useRouter();
   const { pages: allPages } = useContext(SiteMapContext);
 
@@ -197,16 +192,9 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
     ({ title }) => title === "Specification",
   )!;
 
-  const currentPageIndex = specificationPages.findIndex(
+  const currentPage = specificationPages.find(
     ({ href }) => asPath === href || asPath.startsWith(`${href}#`),
   );
-
-  const prevPage =
-    currentPageIndex > 0 ? specificationPages[currentPageIndex - 1] : undefined;
-  const nextPage =
-    currentPageIndex < specificationPages.length - 1
-      ? specificationPages[currentPageIndex + 1]
-      : undefined;
 
   return (
     <>
@@ -226,31 +214,10 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         pages={specificationPages.filter(
           ({ title }) => !title.startsWith("Appendix"),
         )}
+        currentPage={currentPage}
         appendices={specificationPages.filter(({ title }) =>
           title.startsWith("Appendix"),
         )}
-        footer={
-          <PageNavLinks
-            prevPage={prevPage}
-            nextPage={nextPage}
-            sx={{
-              marginLeft: {
-                xs: 0,
-                md: `${
-                  SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
-                }px`,
-              },
-              maxWidth: {
-                sx: "100%",
-                sm: MDX_TEXT_CONTENT_MAX_WIDTH,
-              },
-              marginBottom: {
-                xs: 8,
-                md: 14,
-              },
-            }}
-          />
-        }
       />
     </>
   );

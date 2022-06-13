@@ -152,6 +152,7 @@ const DocsPage: NextPage<DocsPageProps> = ({
         subtitle={DOCS_PAGE_SUBTITLES[title]}
         content={tabPageSerializedContent}
         pages={[tabPage]}
+        currentPage={tabPage}
       />
     </>
   );

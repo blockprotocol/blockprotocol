@@ -9,8 +9,13 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { ReactNode, VFC } from "react";
 
 import { SiteMapPage } from "../../../lib/sitemap";
-import { MdxPageContent } from "../../mdx-page-content";
-import { Sidebar } from "../../page-sidebar";
+import { parseIntFromPixelString } from "../../../util/mui-utils";
+import {
+  MDX_TEXT_CONTENT_MAX_WIDTH,
+  MdxPageContent,
+} from "../../mdx-page-content";
+import { PageNavLinks } from "../../page-nav-links";
+import { Sidebar, SIDEBAR_WIDTH } from "../../page-sidebar";
 import Search from "./search";
 
 type DocsPageProps = {
@@ -18,9 +23,9 @@ type DocsPageProps = {
   subtitle: ReactNode;
   hero?: ReactNode;
   content: MDXRemoteSerializeResult<Record<string, unknown>>;
-  footer?: ReactNode;
   pages: SiteMapPage[];
   appendices?: SiteMapPage[];
+  currentPage?: SiteMapPage | undefined;
 };
 
 export const DocsContent: VFC<DocsPageProps> = ({
@@ -28,12 +33,25 @@ export const DocsContent: VFC<DocsPageProps> = ({
   subtitle,
   hero,
   content,
-  footer,
   pages,
+  currentPage,
   appendices,
 }) => {
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.up("md"));
+
+  const allPages = [...pages, ...(appendices ?? [])];
+
+  const currentPageIndex = currentPage ? allPages.indexOf(currentPage) : -1;
+
+  const prevPage =
+    currentPageIndex > 0 ? allPages[currentPageIndex - 1] : undefined;
+  const nextPage =
+    currentPageIndex < allPages.length - 1
+      ? allPages[currentPageIndex + 1]
+      : undefined;
+
+  const hasMultiplePages = allPages.length > 0;
 
   return (
     <Container
@@ -67,7 +85,7 @@ export const DocsContent: VFC<DocsPageProps> = ({
         </Typography>
       ) : null}
       {hero}
-      <Box mb={footer ? 4 : 0} display="flex" alignItems="flex-start">
+      <Box mb={hasMultiplePages ? 4 : 0} display="flex" alignItems="flex-start">
         {md ? (
           <Sidebar
             flexGrow={0}
@@ -79,7 +97,28 @@ export const DocsContent: VFC<DocsPageProps> = ({
         ) : null}
         <MdxPageContent flexGrow={1} serializedPage={content} />
       </Box>
-      {footer}
+      {hasMultiplePages ? (
+        <PageNavLinks
+          prevPage={prevPage}
+          nextPage={nextPage}
+          sx={{
+            marginLeft: {
+              xs: 0,
+              md: `${
+                SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
+              }px`,
+            },
+            maxWidth: {
+              sx: "100%",
+              sm: MDX_TEXT_CONTENT_MAX_WIDTH,
+            },
+            marginBottom: {
+              xs: 8,
+              md: 14,
+            },
+          }}
+        />
+      ) : null}
     </Container>
   );
 };
