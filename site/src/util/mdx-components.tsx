@@ -1,8 +1,11 @@
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
+  Children,
+  ComponentType,
   HTMLAttributes,
   HTMLProps,
+  isValidElement,
   ReactNode,
   useContext,
   useEffect,
@@ -103,7 +106,7 @@ const HEADING_MARGIN_TOP = {
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, ReactNode> = {
+export const mdxComponents: Record<string, ComponentType> = {
   Box,
   Paper,
   Typography,
@@ -269,7 +272,8 @@ export const mdxComponents: Record<string, ReactNode> = {
       </Typography>
     </Box>
   ),
-  inlineCode: (props: HTMLAttributes<HTMLElement>) => (
+  // inline code (`)
+  code: (props: HTMLAttributes<HTMLElement>) => (
     <Box
       component="code"
       sx={(theme) => ({
@@ -285,53 +289,63 @@ export const mdxComponents: Record<string, ReactNode> = {
       {...props}
     />
   ),
-  pre: (props: HTMLAttributes<HTMLElement>) => {
-    // Delegate full control to code for more styling options
-    return props.children;
-  },
-  code: (props: HTMLAttributes<HTMLElement>) => {
-    const isLanguageBlockFunction =
-      props.className === "language-block-function";
-    if (isLanguageBlockFunction) {
-      const anchor = `${props.children}`.match(/^[\w]+/)?.[0] ?? "";
+  // block code (```) - consists of <pre><code>...</code></pre>
+  pre: ({ children, ...rest }: HTMLAttributes<HTMLElement>) => {
+    const [child, ...otherChildren] = Children.toArray(children);
+    if (
+      isValidElement(child) &&
+      child.type === mdxComponents.code &&
+      !otherChildren.length
+    ) {
+      const childProps = child.props;
+      const isLanguageBlockFunction =
+        childProps.className === "language-block-function";
+
+      if (isLanguageBlockFunction) {
+        const anchor = `${childProps.children}`.match(/^[\w]+/)?.[0] ?? "";
+        return (
+          <Box
+            id={anchor}
+            component="code"
+            sx={{
+              fontWeight: "bold",
+              color: "#d18d5b",
+              display: "block",
+              marginTop: 4,
+            }}
+          >
+            <Link href={`#${anchor}`}>{childProps.children}</Link>
+          </Box>
+        );
+      }
+
       return (
         <Box
-          id={anchor}
-          component="code"
-          sx={{
-            fontWeight: "bold",
-            color: "#d18d5b",
+          component="pre"
+          sx={(theme) => ({
+            overflow: "auto",
             display: "block",
-            marginTop: 4,
-          }}
+            fontSize: "90%",
+            color: theme.palette.purple[400],
+            background: "#161a1f",
+            padding: theme.spacing(3),
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderRadius: "8px",
+            textShadow: "none",
+            marginBottom: 2,
+            maxWidth: "72ch",
+          })}
         >
-          <Link href={`#${anchor}`}>{props.children}</Link>
+          <Snippet
+            source={`${childProps.children}`}
+            language={childProps.className?.replace("language-", "") ?? ""}
+          />
         </Box>
       );
     }
-    return (
-      <Box
-        component="pre"
-        sx={(theme) => ({
-          overflow: "auto",
-          display: "block",
-          fontSize: "90%",
-          color: theme.palette.purple[400],
-          background: "#161a1f",
-          padding: theme.spacing(3),
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderRadius: "8px",
-          textShadow: "none",
-          marginBottom: 2,
-          maxWidth: "72ch",
-        })}
-      >
-        <Snippet
-          source={`${props.children}`}
-          language={props.className?.replace("language-", "") ?? ""}
-        />
-      </Box>
-    );
+
+    // fallback
+    return <pre {...rest}>{children}</pre>;
   },
 };
