@@ -1,4 +1,4 @@
-- Feature Name: (fill me in with a unique ident, `my_awesome_feature`)
+- Feature Name: (fill me in with a unique ident such as `my-feature`, this should be used in the name of the file)
 - Start Date: (fill me in with today's date, YYYY-MM-DD)
 - RFC PR: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/pull/0000)
 - Block Protocol Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
