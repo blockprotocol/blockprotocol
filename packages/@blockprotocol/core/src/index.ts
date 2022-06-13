@@ -1,5 +1,6 @@
 export { CoreBlockHandler } from "./core-block-handler";
 export { CoreEmbedderHandler } from "./core-embedder-handler";
+export { assignBlockprotocolGlobals } from "./html";
 export { ServiceHandler } from "./service-handler";
 export type {
   BlockMetadata,
