@@ -82,7 +82,7 @@ export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
     >
       <Tab label="Data Source" />
       <Tab label="Block Schema" />
-      {showExampleGraphTab && <Tab label="Example Graph" />}
+      {showExampleGraphTab && <Tab label="Mock Datastore" />}
     </DesktopTabs>
   );
 };
