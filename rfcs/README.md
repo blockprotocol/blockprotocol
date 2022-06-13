@@ -9,6 +9,16 @@ Some changes though are "substantial", and we ask that these be put through a bi
 [Active RFCs](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc)
 [Proposed RFCs](https://github.com/blockprotocol/blockprotocol/pulls?q=is%3Aopen+is%3Apr+label%3A%22category%3A+rfc%22)
 
+## Table of Contents
+
+- [When to follow this process]
+- [Before creating an RFC]
+- [What the process is]
+- [The RFC life-cycle]
+- [Reviewing RFCs]
+- [Implementing an RFC]
+- [Inspiration]
+
 ## When to follow this process
 
 [When to follow this process]: #when-to-follow-this-process
@@ -55,9 +65,9 @@ In short, to get a major feature added to the Block Protocol, one must first get
 - An RFC may be rejected by the team after public discussion has settled and comments have been made summarizing the rationale for rejection. A member of the team should then close the RFCs associated pull request.
 - An RFC may be accepted by decision of the core team. A team member will merge the RFCs associated pull request, at which point the RFC will become 'active'.
 
-## The RFC lifecycle
+## The RFC life-cycle
 
-[The RFC lifecycle]: #the-rfc-lifecycle
+[The RFC life-cycle]: #the-rfc-life-cycle
 
 Once an RFC becomes active, then authors may implement it and submit the feature as a pull request to the Block Protocol repo. Becoming 'active' is not a rubber stamp, and in particular still does not mean the feature will ultimately be merged; it does mean that the core team has agreed to it in principle and are amenable to merging it.
 
