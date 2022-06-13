@@ -96,17 +96,21 @@ export const markBlockScripts = (block: HTMLElement) => {
   }
 };
 
-const blockprotocolGlobals = {
+export const blockprotocolGlobals = {
   getBlockContainer,
   markScript,
-  resetBlocks,
   markBlockScripts,
   getIdForRef,
 };
 
+export const teardownBlockprotocol = () => {
+  delete window.blockprotocol;
+  resetBlocks();
+};
+
 declare global {
   interface Window {
-    blockprotocol: typeof blockprotocolGlobals;
+    blockprotocol?: typeof blockprotocolGlobals;
   }
 }
 
