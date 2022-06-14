@@ -38,7 +38,8 @@ We welcome [contributions](#contributing) to this repository. Within it you will
     - `block-template`: starter templates for blocks, used by `create-block-app`
     - `create-block-app`: a script to [create a new block](https://blockprotocol.org/docs/developing-blocks) using `block-template`
     - `mock-block-dock`: a mock embedding application used for developing blocks
-    - `react-block-loader`: a component for loading Block Protocol blocks from a remote URL (pending an update)
+    - `react-block-loader`: a component for loading Block Protocol blocks from a remote URL (pending an update to support Block Protocol v0.2)
+    - [DEPRECATED] `blockprotocol`: types for the v0.1 Block Protocol, now superseded by `@blockprotocol/core` and `@blockprotocol/graph`
 
 ## Contributing
 
@@ -60,7 +61,7 @@ If you’re looking for inspiration regarding new blocks to build, or contributi
 
 Distributed under the MIT License. See `LICENSE.md` for more information.
 
-## Contact
+........................................................................................................................## Contact
 
 Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
