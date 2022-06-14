@@ -15,8 +15,9 @@ export const ComposableInterfaces = () => {
         background:
           "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%);",
         mt: 2,
-        pb: 8,
+        pb: { xs: 5, sm: 8 },
         borderBottom: `1px solid #eceaf1`,
+        overflow: "hidden",
       }}
     >
       <Box
@@ -26,6 +27,7 @@ export const ComposableInterfaces = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          px: { xs: 2, md: 0 },
         }}
       >
         <Typography variant="bpHeading2" textAlign="center" my={2}>
@@ -73,15 +75,11 @@ export const ComposableInterfaces = () => {
           display: "flex",
           alignContent: "center",
           justifyContent: "center",
+          width: { xs: "180%", sm: "100%" },
+          marginLeft: { xs: "-40%", sm: 0 },
         }}
       >
-        <Box
-          component="img"
-          src="/assets/new-home/composable-full.png"
-          sx={{
-            width: "100%",
-          }}
-        />
+        <Box component="img" src="/assets/new-home/composable-full.png" />
       </Box>
     </Box>
   );
