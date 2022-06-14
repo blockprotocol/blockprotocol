@@ -66,7 +66,7 @@ const script = async () => {
     logStepStart("Create Block App");
 
     await execa(
-      "npm",
+      "npx",
       [
         "--cache",
         tmpNodeCacheDir.path,
