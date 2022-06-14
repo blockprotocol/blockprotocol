@@ -12,9 +12,6 @@ type BlocksSliderProps = {
 export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
   return (
     <Carousel
-      sx={{
-        backgroundColor: ({ palette }) => palette.gray[20],
-      }}
       data={catalog}
       itemKey={({ name }) => name!}
       renderItem={({ displayName, name, image, blockPackagePath }) => {
