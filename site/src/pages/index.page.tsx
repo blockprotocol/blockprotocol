@@ -9,6 +9,7 @@ import { Header } from "../components/pages/home/header";
 import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
 import { RegistrySection } from "../components/pages/home/registry-section";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
+import { useUser } from "../context/user-context";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -28,6 +29,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const HomePage: VFC<PageProps> = ({ catalog }) => {
+  const { user } = useUser();
   return (
     <>
       <Header />
@@ -37,7 +39,7 @@ const HomePage: VFC<PageProps> = ({ catalog }) => {
       <AnyFramework />
       <ComposableInterfaces />
       <RegistrySection catalog={catalog} />
-      <FinalCTA />
+      {!user && <FinalCTA />}
     </>
   );
 };
