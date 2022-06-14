@@ -48,11 +48,12 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
     variant="bpSmallCopy"
     key={href}
     sx={(theme) => ({
-      color: theme.palette.gray[40],
+      color: theme.palette.gray[50],
+      marginLeft: { xs: 0, md: 4 },
       "&:first-of-type": {
         marginTop: {
-          xs: 1.5,
-          sm: 0,
+          xs: 2,
+          md: 0,
         },
       },
       "&:not(:first-of-type)": {
@@ -177,7 +178,13 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
           },
         }}
       >
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            margin: "0 auto",
+          }}
+        >
           <Grid item xs={12} md={5} lg={4}>
             <BlockProtocolLogoIcon
               sx={{
