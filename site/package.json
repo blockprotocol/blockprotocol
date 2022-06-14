@@ -75,6 +75,7 @@
     "react-use": "^17.3.2",
     "remark-gfm": "^3.0.1",
     "remark-mdx": "^2.1.1",
+    "remark-mdx-disable-explicit-jsx": "^0.1.0",
     "remark-parse": "^10.0.1",
     "rword": "^3.2.0",
     "slick-carousel": "^1.8.1",
