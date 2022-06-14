@@ -1,4 +1,7 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import Image from "next/image";
+
+import transparentBlocksWithCircleImage from "../../../../public/assets/new-home/transparent-blocks-with-circle-min.png";
 
 export const InteroperableBlocks = () => {
   const theme = useTheme();
@@ -49,9 +52,9 @@ export const InteroperableBlocks = () => {
               width: { md: "100%", lg: "95%", xl: "90%" },
               zIndex: "3",
             }}
-            component="img"
-            src="/assets/new-home/transparent-blocks-with-circle.png"
-          />
+          >
+            <Image src={transparentBlocksWithCircleImage} />
+          </Box>
         )}
 
         <Box
