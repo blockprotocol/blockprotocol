@@ -55,6 +55,13 @@ While embedding applications can handle displaying an interface for reloading bl
 
 #### Block definition
 
+##### Entity types
+
+We’re intending to move away from entities having to fully describe the constraints of each of their properties.
+Instead, type definitions are going to become shareable and reusable in a new type system which establishes
+a hierarchy of types to address a number of shortcomings in our current system.
+For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/352).
+
 ##### Self-contained blocks and sandboxing
 
 At the moment, the specification is largely silent on sandboxing, and blocks should be designed to work whether in their own scope or in the scope of a wider application, e.g. by not polluting the global scope.
