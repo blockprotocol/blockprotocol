@@ -1,5 +1,8 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
+import Image from "next/image";
 import React from "react";
+
+import primaryHelixImage from "../../../../../public/assets/new-home/primary-helix-min.png";
 
 export const Header = () => {
   const theme = useTheme();
@@ -11,6 +14,7 @@ export const Header = () => {
           "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%)",
         pb: { xs: 20, md: 28 },
         borderBottom: `1px solid #edeaf1`,
+        position: "relative",
       }}
     >
       <Container
@@ -67,11 +71,7 @@ export const Header = () => {
           infinitely extensible with interoperable components called blocks.
         </Typography>
       </Container>
-      <Box
-        sx={{ width: "100vw" }}
-        component="img"
-        src="/assets/new-home/primary-helix.png"
-      />
+      <Image layout="responsive" src={primaryHelixImage} />
     </Box>
   );
 };

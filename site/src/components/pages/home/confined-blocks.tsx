@@ -1,4 +1,7 @@
 import { Box, Typography } from "@mui/material";
+import Image from "next/image";
+
+import darkBoxImage from "../../../../public/assets/new-home/dark-box-min.png";
 
 export const ConfinedBlocks = () => {
   return (
@@ -93,11 +96,9 @@ export const ConfinedBlocks = () => {
             application.
           </Typography>
         </Box>
-        <Box
-          sx={{ width: { xs: "90%", md: "55%" } }}
-          component="img"
-          src="/assets/new-home/dark-box.png"
-        />
+        <Box sx={{ width: { xs: "90%", md: "55%" } }}>
+          <Image src={darkBoxImage} />
+        </Box>
       </Box>
     </Box>
   );
