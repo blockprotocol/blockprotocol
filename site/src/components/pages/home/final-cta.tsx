@@ -80,8 +80,8 @@ export const FinalCTA: NextPage = () => {
 
   useEffect(() => {
     if (user && user !== "loading") {
-      if (user.isSignedUp) {
-        void router.push(redirectPath ?? "/");
+      if (user.isSignedUp && redirectPath && redirectPath !== "/") {
+        void router.push(redirectPath);
       } else if (currentScreen !== "CompleteSignup") {
         setEmail(user.email);
         setCurrentScreen("CompleteSignup");
@@ -180,7 +180,11 @@ export const FinalCTA: NextPage = () => {
           })}
         >
           {currentScreen === "Email" ? (
-            <SignupScreen initialEmail={email} onSignup={handleSignup} />
+            <SignupScreen
+              autoFocus={false}
+              initialEmail={email}
+              onSignup={handleSignup}
+            />
           ) : null}
           {currentScreen === "VerificationCode" &&
           verificationCodeInfo &&
