@@ -1,4 +1,7 @@
 import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
+// eslint-disable-next-line no-restricted-imports,unicorn/prefer-node-protocol -- https://github.com/vercel/nft/issues/293
+import fs from "fs";
+import glob from "glob";
 import hostedGitInfo from "hosted-git-info";
 
 import { FRONTEND_URL } from "./config";
@@ -14,6 +17,8 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // repository is passed down as a string upon expansion
   repository?: string;
   schema?: string | null;
+
+  unstable_hubInfo?: Record<string, string>;
 };
 
 export interface StoredBlockInfo {
@@ -46,11 +51,12 @@ const generateBlockFileUrl = (
 const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
   commit: string,
+  path: string | undefined,
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
       .fromUrl(repository)
-      ?.browse("", { committish: commit });
+      ?.browse(path ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -64,7 +70,7 @@ const getRepositoryUrl = (
   if (url) {
     const repositoryUrl = hostedGitInfo
       .fromUrl(url)
-      ?.browse(directory ?? "", { committish: commit });
+      ?.browse(path ?? directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -78,12 +84,9 @@ const getRepositoryUrl = (
  * used to read block metadata from disk.
  *
  */
-export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
-  const glob = require("glob");
-  /* eslint-enable global-require */
-
+export const readBlocksFromDisk = async (): Promise<
+  ExpandedBlockMetadata[]
+> => {
   return glob
     .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
     .map((path: string): ExpandedBlockMetadata => {
@@ -105,6 +108,7 @@ export const readBlocksFromDisk = (): ExpandedBlockMetadata[] => {
       const repository = getRepositoryUrl(
         metadata.repository ?? storedBlockInfo.repository,
         storedBlockInfo.commit,
+        metadata.unstable_hubInfo?.directory,
       )?.replace(/\/$/, "");
 
       return {
@@ -150,8 +154,6 @@ export const readBlockDataFromDisk = async ({
   schema: metadataSchema,
   source: metadataSource,
 }: ExpandedBlockMetadata) => {
-  /* eslint-disable global-require -- dependencies are required at runtime to avoid bundling them w/ nextjs */
-  const fs = require("fs");
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
 
@@ -179,4 +181,19 @@ export const readBlockDataFromDisk = async ({
     schema,
     source,
   };
+};
+
+export const readBlockReadmeFromDisk = async (
+  blockMetadata: ExpandedBlockMetadata,
+): Promise<string | undefined> => {
+  try {
+    return fs.readFileSync(
+      `${process.cwd()}/public/blocks/${
+        blockMetadata.packagePath
+      }/README.vercel-hack.md`,
+      "utf8",
+    );
+  } catch {
+    return undefined;
+  }
 };

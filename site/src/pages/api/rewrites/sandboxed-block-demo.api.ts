@@ -38,7 +38,7 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const catalog = readBlocksFromDisk();
+  const catalog = await readBlocksFromDisk();
 
   const packagePath = `${req.query.shortname}/${req.query.blockslug}`;
 
