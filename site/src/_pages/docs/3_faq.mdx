@@ -1,12 +1,14 @@
+# FAQs
+
 ## Motivation
 
 ### What’s the point of the Block Protocol?
 
 The Block Protocol provides a specification for the interaction between web blocks and applications using them: how data structures are typed and passed around, and what data operations are available to blocks.
 
-Its ultimate goal in doing so is to enable any blocks to be usable by any web application without any configuration or human intervention, once both are compliant with the Protocol.
+Its ultimate goal in doing so is to enable any blocks to be usable by any web application without any configuration, once both are compliant with the Protocol.
 
-More information on the motivation can be found in [the specification overview.](https://blockprotocol.org/spec)
+More information on the motivation can be found in [the specification overview.](/spec)
 
 ### What’s the scope of the Block Protocol?
 
@@ -18,13 +20,13 @@ It does not specify what happens to data once it crosses that boundary - it only
 
 We do not believe that any existing protocol or specification serves the need of defining the interface between web blocks and embedding applications.
 
-There are efforts which do so for a particular ecosystem (e.g. [Microsoft Loop](https://www.microsoft.com/en-us/microsoft-loop?ms.url=microsoftcommicrosoft-loop)) — but none which improve the web as a whole. The Block Protocol is a generic contract which can be implemented by any web application.
+There are efforts which do so for a particular ecosystem (e.g. [Microsoft Loop](https://www.microsoft.com/en-us/microsoft-loop?ms.url=microsoftcommicrosoft-loop)) - but none which improve the web as a whole. The Block Protocol is a generic contract which can be implemented by any web application.
 
-Various frontend libraries and technologies provide means of implementing encapsulated blocks (e.g. React, Web Components) — but they do not standardise the interface between those blocks and the applications using them (e.g. the operations available to them).
+Various frontend libraries and technologies provide means of implementing encapsulated blocks (e.g. React, Web Components) - but they do not standardise the interface between those blocks and the applications using them (e.g. the operations available to them).
 
 ### What about non-web contexts? e.g. native applications
 
-Our focus is on supporting the web first and foremost, as this is the context we expect the Block Protocol to be most useful in. Implementation details will vary across contexts — for example, the details of how data can be passed around or operations called — but the general principles of the Block Protocol in defining a contract between applications and embedded blocks are applicable beyond the web. In the future we intend to support non-web contexts more directly.
+Our focus is on supporting the web first and foremost, as this is the context we expect the Block Protocol to be most useful in. Implementation details will vary across contexts - for example, the details of how data can be passed around or operations called - but the general principles of the Block Protocol in defining a contract between applications and embedded blocks are applicable beyond the web. In the future we intend to support non-web contexts more directly.
 
 ### Why would a developer build a Block Protocol block?
 
@@ -32,7 +34,7 @@ Developers may build blocks to add functionality they want to applications that 
 
 They may also be motivated by the sorts of factors that motivate anyone to build open-source software: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
 
-### What might embedding applications choose to support the Block Protocol?
+### Why might embedding applications choose to support the Block Protocol?
 
 Implementing the Block Protocol means that an embedding application can easily add new functionality, increasing its value to users.
 
@@ -40,7 +42,7 @@ Once they are Block Protocol-compliant, applications can easily search for block
 
 ### How does the Block Protocol relate to HASH’s simulation efforts?
 
-HASH’s mission is to help everybody make the right decisions. Part of how we do this is by making it easier to bring data together in a form that allows information to be understood and used both by humans and machines (e.g. other applications).
+HASH’s mission is to help everybody make the best decisions. Part of how we do this is by making it easier to bring data together in a form that allows information to be understood and used both by humans and machines (e.g. other applications).
 
 We started life as a simulation platform, offering insights from modelling the world to anyone with a browser. But this is just one way to get insight from data, and simulation models can be greatly enhanced when built atop the sort of timely, structured information that the Block Protocol makes accessible.
 
@@ -50,31 +52,33 @@ The Block Protocol advances HASH’s mission by encouraging both data itself and
 
 ### Where can users host block and entity data?
 
-Blocks can be [published to the Block Hub](https://blockprotocol.org/docs/publishing-blocks) to make them browsable on [blockprotocol.org](https://blockprotocol.org/hub), and to make their metadata and source code available via our API.
+Blocks can be [published to the Block Hub](/docs/developing-blocks#publishing) to make them browsable on [blockprotocol.org](/hub), and to make their metadata and source code available via our API.
 
-Entity data can be hosted in any application which implements the Block Protocol - we are developing one such application, [HASH](https://hash.ai/platform/hash), which will be in public beta in the Spring.
+Entity data can be hosted in any application which implements the Block Protocol - we are developing one such application, [HASH](https://hash.ai/platform/hash), which will be in public beta in Q3 2022.
 
 ### Can blocks fetch their own data?
 
 Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
 
-We believe the best blocks will communicate data back and forth with the embedding application, making use of the [operations defined in the spec](https://blockprotocol.org/spec/block-types#entity-functions).
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the [operations defined in the spec](/spec/graph-service-specification).
 
 For example, a mapping block which persists a user’s choices about map positioning or styling back to the application – all without the application having to know anything about the block, or the block having to know anything about the application.
+
+One aim of the Block Protocol is that blocks can store and retrieve data in an application without awareness of how exactly the data is stored.
 
 ### Can blocks hold local state?
 
 Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
 
-To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/spec/block-types#entity-functions) to send updates to the embedding application.
+To save data beyond the session, blocks should make use of the [operations defined in the spec](/spec/graph-service-specification) to send updates to the embedding application.
 
 ### How are Block Protocol blocks different to Web Components?
 
 The Block Protocol standardizes how data requests are made between a block and an embedding application.
 
-Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it. The goal of the Block Protocol is to make it so that new blocks can be added to an application without any configuration or without having to learn how they handle data.
+Web Components (or custom elements) are one way of implementing Block Protocol blocks.
 
-We currently describe Web Components as one way of implementing Block Protocol blocks, and we are exploring how to best build on top of the existing Web Component technology - including potentially making them a recommended / default way of defining the application-block interface.
+Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it. The goal of the Block Protocol is to make it so that new blocks can be added to an application without any configuration or without having to learn how they handle data.
 
 ### How will blocks match the visual style of embedding applications?
 
@@ -94,7 +98,7 @@ Blocks which are made up of other blocks may be referred to as “compound block
 
 ### What is the semantic web?
 
-The goal of the [Semantic Web](https://en.wikipedia.org/wiki/Semantic_Web) is to make internet data machine-readable.
+The goal of the [Semantic Web](https://en.wikipedia.org/wiki/Semantic_Web) is to make internet data machine-readable.
 
 It involves making sure there is data on web pages which can be parsed by machines, in order to determine the entities described, and their links to other entities elsewhere on the web.
 
@@ -103,6 +107,8 @@ It involves making sure there is data on web pages which can be parsed by machin
 The Block Protocol requires that the data passed between blocks and applications is in the form of entities conforming to a defined structure: a schema.
 
 This structure can then be used to include data on web pages which describes the entities in a machine-readable way.
+
+While the Block Protocol doesn’t require this data to be exposed or made downloadable, we do encourage embedding applications to do this as much as possible.
 
 For example, where a page contains a block displaying a movie, machine-readable data would also be included describing the various properties of the movie (e.g. `releaseDate`), as well as linking to other pages which describe entities linked to it - e.g. its `director`.
 
@@ -118,13 +124,17 @@ One way of representing entities in a machine-readable way is in [JSON-LD](https
 }
 ```
 
+The structure of entities in the Block Protocol are described by JSON schema, and we encourage these to be
+[mapped to terms which can be used to construct a JSON-LD representation of the entity],
+which embedding applications can include in the page's markup.
+
 ### Is the Block Protocol an ontology of the real world?
 
 No, and _for the most part_ the Block Protocol itself does not define the structure of entities passed between blocks and applications. Instead it specifies _how_ entities should be defined, transmitted and updated.
 
 The Block Protocol specifies that [JSON Schema](https://json-schema.org/) should be used to describe the properties of an entity and expected types of property values - not what those properties should be.
 
-You can use existing [schema.org](https://schema.org) schemas, or can create new schemas through the [Block Protocol](https://blockprotocol.org/) website, once logged in. The schema creator on the Block Protocol website aims to make it easier for users to define the different types of data structures that their blocks will work with.
+You can use existing [schema.org](https://schema.org) schemas, or can create new schemas through the [Block Protocol](/) website, once logged in. The schema creator on the Block Protocol website aims to make it easier for users to define the different types of data structures that their blocks will work with.
 
 We don’t prescribe canonical types for any _thing_, but do recommend that users link their schemas and properties to [schema.org](https://schema.org) types and properties where possible, to help in making the pages that use their schemas machine-readable. We have included a way of doing so in our schema editor. Mapping different schemas and their properties to one another is a process known as ‘crosswalking’.
 
@@ -150,7 +160,7 @@ It helps machines more easily understand how new schemas fit in to existing know
 
 </InfoCard>
 
-1.  Crosswalking from JSON schema properties to [schema.org](http://schema.org) (and equivalent) properties, in order to make rendered pages machine-readable - as described above, supported in the schema editor, and mentioned in the spec [here](https://blockprotocol.org/spec/embedding-applications#machine-readable-pages). The purpose of this is to mark up web pages with structured data describing the entities within.
+1.  Crosswalking from JSON schema properties to [schema.org](http://schema.org) (and equivalent) properties, in order to make rendered pages machine-readable - as described above and supported in the schema editor. The purpose of this is to mark up web pages with structured data describing the entities within.
 
 1.  Crosswalking from JSON schema properties to other JSON schema properties, in order for applications to understand that seemingly incompatible schemas may in fact be compatible, and to translate between them. For example, if one Table schema has a 'rows' property, and another Table schema has a 'records' property, declaring that the two are equivalent allows applications to translate data conforming to the first Table schema for use in places where data conforming to the second Table schema is expected. This mitigates the impact of different approaches being taken to describe the same data.
 
@@ -179,7 +189,7 @@ All schemas created on the Block Protocol website are currently public. In futur
 [schema.org](https://schema.org) provides a great base ontology for defining lots of types of ‘things’ out there in the world.
 
 1.  Many times, certain ‘properties’ or data won’t be relevant to your use case, resulting in bloated entity type definitions.
-1.  On other occasions you’ll want to store information differently than how it’s set out in the [schema.org](http://schema.org) definition. For example, [schema.org/Person](http://schema.org/Person) defines a person as having a `givenName` and a `familyName` and yet in various cultures this isn’t guaranteed. HASH uses `preferredName` and `legalName` instead - in communications and billing contexts respectively. You can view the HASH ‘Person’ schema at [https://blockprotocol.org/@hash/types/Person](https://blockprotocol.org/@hash/types/Person) and see how it crosswalks with the canonical definition of a person provided by Schema.org. This is just one example of how custom schemas can be made to relate back to the core ontology provided by Schema.org.
+1.  On other occasions you’ll want to store information differently than how it’s set out in the [schema.org](http://schema.org) definition. For example, [schema.org/Person](http://schema.org/Person) defines a person as having a `givenName` and a `familyName` and yet in various cultures this isn’t guaranteed. HASH uses `preferredName` and `legalName` instead - in communications and billing contexts respectively. You can view the HASH ‘Person’ schema at [https://blockprotocol.org/@hash/types/Person](/@hash/types/Person) and see how it crosswalks with the canonical definition of a person provided by Schema.org. This is just one example of how custom schemas can be made to relate back to the core ontology provided by Schema.org.
 1.  The [schema.org](https://schema.org) ontology is slow to change. This is by design, similar to how most standards organizations operate. And while it can move fast when clear universal impetus exists (evidenced by its excellent response to COVID) it ultimately represents a pseudo-centralized model of maintaining a schema registry. The Block Protocol provides the permissionless ability to build atop and extend [schema.org](https://schema.org), unbounded by the processing constraints and imagination of any single working group or organization.
 1.  Not everything is included in the [schema.org](https://schema.org) ontology. For example, although _animal shelters_ and _pet stores_ exist, _animals_ and _pets_ themselves are missing entirely. This arguably reflects the priorities of schema.org’s maintainers (notably corporates, and search engines at that).
 
@@ -191,9 +201,9 @@ We expect to have to add custom keywords to cover relationships which JSON Schem
 
 ### How does the Block Protocol relate to JSON-LD?
 
-We [encourage applications to include JSON-LD describing entities on their public pages](https://blockprotocol.org/spec/embedding-applications#machine-readable-pages) to make them machine-readable.
+We encourage applications to include JSON-LD describing entities on their public pages to make them machine-readable.
 
-In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/spec/block-types#linking-entities). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
+In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](/spec/graph-service-specification). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
 
 ### How does the Block Protocol relate to GraphQL?
 

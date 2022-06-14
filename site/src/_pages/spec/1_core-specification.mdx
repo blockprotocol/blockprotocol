@@ -220,7 +220,7 @@ The content of `data` and the permissible codes under `errors` are left to servi
   - MUST include the `source`, which MUST be one of `"block"` or `"embedder"`
   - MUST contain one or both of `data` and `errors`
     - `data` may be any type of JSON value (string, object, null, etc)
-    - `errors` MUST be an array of objects, each of which MUST have a `code` and `message` – both strings – and MAY have `extensions`, an arbitrary JSON object defined by the service specification. Valid error codes are defined per message, in an `errorCodes` property in [the message definition](#messages-error-codes).
+    - `errors` MUST be an array of objects, each of which MUST have a `code` and `message` – both strings – and MAY have `extensions`, an arbitrary JSON object defined by the service specification. Valid error codes are defined per message, in an `errorCodes` property in [the message definition](#messages-error-codes)
 
 Messages MUST therefore be an object which conforms to the following schema:
 
