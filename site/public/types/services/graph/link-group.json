@@ -9,12 +9,12 @@
     "links": {
       "type": "array",
       "items": {
-        "$ref": { "https://blockprotocol.org/types/services/graph/link" }
+        "$ref": "https://blockprotocol.org/types/services/graph/link"
       }
     },
     "path": {
       "type": "string"
-    },
+    }
   },
   "required": ["sourceEntityId", "links", "path"]
 }
