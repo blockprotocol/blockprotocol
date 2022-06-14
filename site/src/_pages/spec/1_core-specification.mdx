@@ -251,7 +251,15 @@ Messages MUST therefore be an object which conforms to the following schema:
         "data": {},
         "errors": {
           "type": "array",
-          "items": {}
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" },
+              "message": { "type": "string" },
+              "extensions": { "type": "object" }
+            },
+            "required": ["code", "message"]
+          }
         }
       },
       "required": ["requestId", "name", "service", "source"]
@@ -269,7 +277,7 @@ The `data` and `errors` of any messages exchanged between applications and block
 
 The core specification defines messages which are related to the core functionality of the Block Protocol. There are currently two such messages:
 
-- `"initRequest"`: a message a block sends on load
+- `"init"`: a message a block sends on load
 - `"initResponse"`: a message the embedder sends in response
 
 These messages are how blocks may exchange messages which are `sentOnInitiliazation`, which might be values available immediately on load, or configuration information, or anything else the service defines as useful for blocks and embedders to exchange on initialization.
@@ -316,7 +324,7 @@ When an `"init"` message is received, embedding applications MUST send a message
 
 <span id="initResponse-initialization-data">**Initialization data**</span>
 
-The `data` for both `"initRequest"` and `"initResponse"` MUST be an object, where
+The `data` for both `"init"` and `"initResponse"` MUST be an object, where
 
 - the keys of the object MUST be the names of services
 - the values for those keys MUST be objects
@@ -352,7 +360,7 @@ A service aims to provide a logical grouping of functionality and/or solve a spe
 
 A service definition must set out the **messages** that a block and application will exchange as part of the service.
 
-**Messages** should be specified in a JSON file. The JSON file must conform to [the constraints defined by the Service Specification JSON Schema.](https://www.notion.so/Core-Specification-v0-2-c5a95a9542614d139e02443a5dad8cee) To aid understanding, the constraints defined by the JSON schema are laid out in this section (**definition**), and a section related to **messages.**
+**Messages** should be specified in a JSON file. The JSON file must conform to [the constraints defined by the Service Specification JSON Schema.](#json-schema-for-service-specification) To aid understanding, the constraints defined by the JSON schema are laid out in this section (**definition**), and a section related to **messages.**
 
 Services may also include an additional markdown file which provides further explanation and narrative, and imposes any additional requirements not captured via messages. This may, for example, specify additional metadata related to the service that can be expressed as part of a block package, whether in `block-metadata.json` or in an additional file or files.
 
@@ -364,7 +372,7 @@ Each service:
 - MAY define an additional Markdown file which:
   - MAY provide additional narrative and explanation on the contents of its JSON file
   - MAY impose additional arbitrary requirements on embedding applications and blocks
-  - is OVERRULED by the JSON file in the event that there is any inconsistency between the two in how messages and metadata are defined
+  - is OVERRULED by the JSON file in the event that there is any inconsistency between the two in how messages are defined
 
 The JSON schema requires that a service specification is a JSON object which
 
@@ -373,10 +381,6 @@ The JSON schema requires that a service specification is a JSON object which
   - `description`
   - `messages`
   - `version`
-- MAY contain:
-  - `metadata`
-  - `glossary`
-  - `overview`
 
 If there are any discrepancies between the requirements listed above and the requirements in the JSON schema, the JSON schema takes precedence.
 

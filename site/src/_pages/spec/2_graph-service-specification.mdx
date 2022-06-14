@@ -124,11 +124,11 @@ i.e. any entity MUST conform to the following schema:
 Embedding applications SHOULD also provide – via the `entityTypes` message – an **entity type** for each entity they provide the block, including the block entity. Where provided, an **entity type**:
 
 - MUST be represented by an object, which:
-  - MUST contain an `entityTypeId` identifying the type, which MUST be a str
+  - MUST contain an `entityTypeId` identifying the type, which MUST be a string
   - MUST contain a `schema`, a JSON Schema object defining the constraints on the data in the entity’s `properties` field, which
-  - MUST be of `type: "object"`
-  - SHOULD use our JSON Schema extensions where appropriate
-  - MAY otherwise contain any valid JSON Schema
+    - MUST be of `type: "object"`
+    - SHOULD use our JSON Schema extensions where appropriate
+    - MAY otherwise contain any valid JSON Schema
 
 i.e. entity types MUST conform to the following JSON schema:
 
@@ -157,7 +157,7 @@ Entities MAY be connected by a **link**, which:
 
 - MUST contain:
   - `sourceEntityId`: the `entityId` of the source entity, which MUST be a string
-  - `destinationEntityId`– the id of a single entity the link is made to, which MUST be a string
+  - `destinationEntityId`: the id of a single entity the link is made to, which MUST be a string
   - `path`: the path to the field on the source entity this link is conceptually made on, expressed as a **[JSON path](https://goessner.net/articles/JsonPath/)**, which MUST be a string
 - MAY contain
   - `index`: the position of this link in a list (for where ordering of links is important), which MUST be an integer (if defined), where 0 is the first entry in the list
@@ -211,7 +211,7 @@ Where the block entity has links from it to other entities:
     "links": {
       "type": "array",
       "items": {
-        "$ref": "https://blockprotocol.org/types/services/graph/link-group"
+        "$ref": "https://blockprotocol.org/types/services/graph/link"
       }
     },
     "sourceEntityId": {
@@ -249,8 +249,7 @@ i.e. a linked aggregation definition must conform to the following schema:
       "type": "string"
     },
     "operation": {
-      "type": "integer",
-      "inclusiveMinimum": 0
+      "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
     }
   },
   "required": ["sourceEntityId", "operation", "path"]
@@ -261,9 +260,9 @@ i.e. a linked aggregation definition must conform to the following schema:
 
 #### <Hidden>Identification </Hidden>Summary
 
-Blocks must pass all of the **identifying fields** provided to them when making requests in respect of any entity.
+Blocks must pass an `entityId` when making requests in respect of any entity. 
 
-If the embedding application provides a value for any identifying field, it should be assumed it is required to reliably identify the entity.
+Embedding applications should ensure this is stable and unique for any given entity.
 
 #### <Hidden>Identification </Hidden>Specification
 
