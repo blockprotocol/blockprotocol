@@ -76,6 +76,10 @@ const helpSections = [
         example:
           "Create a block which is defined as a React function component",
       },
+      {
+        description: "html",
+        example: "Create a block which is defined using raw HTML",
+      },
     ],
   },
 ];
