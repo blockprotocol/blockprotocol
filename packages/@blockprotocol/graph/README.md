@@ -1,14 +1,12 @@
-# WORK IN PROGRESS
-
-This package supports the forthcoming Block Protocol v0.2, and is not currently intended for public use.
-
-Check back soon for full instructions.
-
 ## Block Protocol – Graph service
 
 This package implements the Block Protocol Graph service for blocks and embedding applications.
 
-To get started:
+If you are a block author, we have several templates available to get you started:
+
+`npx create-block-app --help`
+
+If you want to roll your own, to get started:
 
 1.  `yarn add @blockprotocol/graph` or `npm install @blockprotocol/graph`
 1.  Follow the instructions to use the graph service as a [block](#blocks) or an [embedding application](#embedding-applications)
@@ -21,29 +19,14 @@ To create a GraphBlockHandler, pass the constructor an element in your block, al
 
 For React, we provide a `useGraphBlockService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
 
-```javascript
-import React from "react";
+See `npx create-block-app my-block --template react` for an example.
 
-import { useGraphBlockService } from "@blockprotocol/graph";
+### Custom elements
 
-export const App = () => {
-  const blockRef = React.useRef < HTMLDivElement > null;
+For custom elements, this package exports a `BlockElementBase` class
+which uses the [Lit](https://lit.dev/) framework, and sets `graphService` on the instance.
 
-  const { graphService } = useGraphBlockService(blockRef);
-
-  return <div ref={blockRef} />;
-};
-```
-
-### Custom element example
-
-```javascript
-import { BlockElementBase } from "@blockprotocol/graph";
-
-export class MyBlock extends BlockElementBase {}
-```
-
-https://blockprotocol.org/docs will include further usage instructions when 0.2 is released.
+See `npx create-block-app my-block --template custom-element` for an example.
 
 ## Embedding applications
 
@@ -71,10 +54,9 @@ const graphService = new GraphEmbedderHandler({
 });
 ```
 
-### React example
+### React
 
-For React, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any
-additional constructor arguments you wish to pass.
+For React embedding applications, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
 
 ```javascript
 import React from "react";
