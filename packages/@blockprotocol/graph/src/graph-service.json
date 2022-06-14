@@ -497,7 +497,7 @@
       "respondedToByMessage": null,
       "sentOnInitialization": false,
       "data": {
-        "description": "'true' if the operation succeeded. Otherwise, 'errors' should be returned",
+        "description": "'true' if the operation succeeded. Otherwise, 'errors' should be returned.",
         "type": "boolean"
       },
       "errorsCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
