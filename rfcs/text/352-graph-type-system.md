@@ -1,4 +1,11 @@
+- Feature Name: graph-type-system
+- Start Date: 2022-06-14
+- RFC PR: [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
+- Block Protocol Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
+
 # Summary
+
+[summary]: #summary
 
 This RFC proposes changing the way data structural requirements are expressed within the BP.
 
@@ -13,7 +20,9 @@ These elements are used in combination to make expressions of data structural re
 
 By using the proposed types, Blocks, Embedding Applications, and end users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities.
 
-# Main Motivation
+# Motivation
+
+[motivation]: #motivation
 
 The Block Protocol operates in-between parties that otherwise have limited to no communication. A Block developer may not even be aware of the existence of an Embedding Application or the data within it, and in some scenarios the developers and owners of an Embedding Application may not be aware of the existence of a block (in the case of dynamic selection and loading at run-time). This is a common occurrence already in technology, whether it be library authors not knowing what projects are built with their work, or developers using libraries without utilising pathways for communication (online forums or otherwise). This is made possible through encoded contracts: function signatures, documentation, REST APIs, etc. These tools are ways of asynchronously, and often autonomously, declaring one side of the communication channel. In such a system of such imperfect information, the standardisation of communication mediums is essential to effective function.
 
@@ -88,7 +97,9 @@ In the following document we outline an approach to being more specific about th
 - have a toolkit to better describe the data they're producing and to help them be explicit about semantic meaning
 - benefit from a community-driven description of knowledge, potentially removing barriers of communication between domains
 
-# Guide-Level Explanation
+# Guide-Level explanation
+
+[guide-level-explanation]: #guide-level-explanation
 
 ## Goals
 
@@ -583,7 +594,9 @@ The largest change (in terms of number of interfaces modified) is unsurprisingly
   - Referencing a type that isn't in the Embedding Application
   - Submitting a type that is malformed
 
-# Reference-Level Explanation
+# Reference-Level explanation
+
+[reference-level-explanation]: #reference-level-explanation
 
 ## Data Types
 
@@ -1730,6 +1743,8 @@ The cardinality of the link specified in the source Entity Type dictates what is
 
 # Drawbacks
 
+[drawbacks]: #drawbacks
+
 ### Implementation Complexity
 
 This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new service-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilise the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph service implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
@@ -1754,7 +1769,9 @@ A version control model will likely be developed in tandem to the implementation
 
 A more immediately apparent concern is if schemas are versioned, but their use isn't pinned to a version, then they might implicitly change if their dependencies are updated. More verbosely, if we have a Property Type `Age` on version `1.1`, and an Entity Type `Person` which simply refers to `Age`, if `Age` is updated then the Entity Type implicitly changes.
 
-# Rationale and Alternatives
+# Rationale and alternatives
+
+[rationale-and-alternatives]: #rationale-and-alternatives
 
 ## The Big Picture
 
@@ -1882,7 +1899,9 @@ The inclusion of the `Object` Data Type is less strongly supported. At the momen
 
 There's a risk that it could be utilised instead of Property Type objects, which means the inner data won't be accessible through tooling designed around the Type System. However at the moment it seems a convenient inclusion to allow users to prototype and quickly throw in semi-structured data as black boxes, later on transitioning to Data Types. As the type is very constrained in the current proposal, with it not being possible to add further JSON schema keywords, etc. the risk that users will misuse it seems low.
 
-# Prior Art
+# Prior art
+
+[prior-art]: #prior-art
 
 As mentioned in a few sections, this design basically defines a way for communities to build a compound ontology. As such it's worth mentioning some of the alternative knowledge representation models to provide points of discussion, and to invite members of their communities to give thoughts. There are a few specific technologies that we've taken particular interest in while designing the RFC.
 
@@ -1899,14 +1918,18 @@ As mentioned in a few sections, this design basically defines a way for communit
 - [Schema.org](https://schema.org/)
 - [DBPedia](https://dbpedia.org/)
 
-# Unresolved Questions
+# Unresolved questions
+
+[unresolved-questions]: #unresolved-questions
 
 1.  Are there further impacts on block schemas?
 1.  Do we permit spaces in type names
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
     As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`
 
-# Future Possibilities
+# Future possibilities
+
+[future-possibilities]: #future-possibilities
 
 This RFC establishes components which are quite fundamental. As such, there is a lot of potential work that can be made to improve ergonomics, functionality, etc.
 
