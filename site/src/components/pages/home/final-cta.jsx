@@ -25,7 +25,7 @@ export const FinalCTA = () => {
       sx={{
         background:
           "radial-gradient(60% 100% at 50% 110%, #FFB172 -10%, #9482FF 40%, #84e0ff 110%) ",
-        py: 12,
+        py: 14,
         display: "flex",
         alignItems: {
           xs: "center",
@@ -42,7 +42,6 @@ export const FinalCTA = () => {
         sx={{
           flexShrink: 0,
           width: "100%",
-          maxWidth: "1100px",
           background: "white",
           border: "2px solid white",
           borderTopLeftRadius: "6px",
@@ -109,13 +108,13 @@ export const FinalCTA = () => {
             heading: <>Build your own blocks</>,
             subHeading: (
               <>
-                Any developer can build and publish blocks to the global
-                registry for other applications to embed.
+                Any registered developer can build and publish blocks to the
+                global registry for other applications to embed.
               </>
             ),
             link: (
               <Link href="/docs/developing-blocks">
-                Read the guide to building blocks
+                Read the block builder guide
               </Link>
             ),
           },
@@ -124,12 +123,14 @@ export const FinalCTA = () => {
             subHeading: (
               <>
                 Anyone with an existing application who wants to make their user
-                interface extensible with interoperable blocks can use the
-                protocol.
+                interface extensible with interoperable blocks can sign up to
+                use the protocol.
               </>
             ),
             link: (
-              <Link href="/docs/embedding-blocks">Read the guide for apps</Link>
+              <Link href="/docs/embedding-blocks">
+                Read the embedding app guide
+              </Link>
             ),
           },
         ].map(({ heading, subHeading, link }, i) => (
