@@ -85,7 +85,7 @@ export const SignupScreen: VFC<SignupScreenProps> = ({
   return (
     <>
       <BlockProtocolIcon
-        sx={{ color: (theme) => theme.palette.purple[700], marginBottom: 3 }}
+        sx={{ color: (theme) => theme.palette.purple[700], marginBottom: 4 }}
       />
       <Typography
         mb={3}
