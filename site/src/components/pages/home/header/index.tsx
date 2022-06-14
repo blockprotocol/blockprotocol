@@ -1,19 +1,8 @@
-import {
-  Box,
-  Container,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
-import React, { useEffect } from "react";
-
-import { BoltIcon } from "../../../icons";
-import { LinkButton } from "../../../link-button";
-import { HeaderCard } from "./header-card";
+import { Box, Container, Typography, useTheme } from "@mui/material";
+import React from "react";
 
 export const Header = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
     <Box

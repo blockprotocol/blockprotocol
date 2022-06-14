@@ -1,10 +1,4 @@
-import {
-  Box,
-  Container,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const WhatAreBlocks = () => {
   return (

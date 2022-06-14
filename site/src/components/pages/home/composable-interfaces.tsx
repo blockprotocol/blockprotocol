@@ -1,14 +1,6 @@
-import {
-  Box,
-  Container,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const ComposableInterfaces = () => {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{

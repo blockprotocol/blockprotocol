@@ -1,10 +1,4 @@
-import {
-  Box,
-  Container,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import { Snippet } from "../../snippet";
 
@@ -24,8 +18,6 @@ const reactDummyCode = `export const App: BlockComponent<AppProps> =({
          {toDoList.map(todo => {`;
 
 const CodeBlock = () => {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
@@ -74,8 +66,6 @@ const CodeBlock = () => {
 };
 
 export const AnyFramework = () => {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
