@@ -16,6 +16,7 @@ import {
   FontAwesomeIcon,
   PullRequestIcon,
 } from "../../icons";
+import { Link } from "../../link";
 import { SignupScreen } from "../../screens/signup-screen";
 
 export const FinalCTA = () => {
@@ -24,7 +25,6 @@ export const FinalCTA = () => {
       sx={{
         background:
           "radial-gradient(60% 100% at 50% 110%, #FFB172 -10%, #9482FF 40%, #84e0ff 110%) ",
-        borderBottom: "1px solid #eceaf1",
         py: 12,
         display: "flex",
         alignItems: {
@@ -96,73 +96,51 @@ export const FinalCTA = () => {
             md: "0px",
           },
           padding: {
-            xs: 2.5,
-            md: 4,
+            xs: 6,
+            md: 6,
           },
+          gridGap: "3rem",
           background:
             "linear-gradient(180deg, rgba(255, 255, 255, 0.91) 33.6%, rgba(250, 251, 252, 0.38) 113.46%)",
         }}
       >
         {[
           {
-            icon: (
-              <ArrowUpCircleIcon
-                sx={{
-                  fontSize: 20,
-                  color: ({ palette }) => palette.purple[700],
-                }}
-              />
-            ),
-            heading: <>Publish blocks to the block hub</>,
+            heading: <>Build your own blocks</>,
             subHeading: (
               <>
-                Help make open source blocks and structured data avaliable to
-                everyone on the web
+                Any developer can build and publish blocks to the global
+                registry for other applications to embed.
               </>
+            ),
+            link: (
+              <Link href="/docs/developing-blocks">
+                Read the guide to building blocks
+              </Link>
             ),
           },
           {
-            icon: (
-              <PullRequestIcon
-                sx={{
-                  fontSize: 20,
-                  color: ({ palette }) => palette.purple[700],
-                }}
-              />
-            ),
-            heading: <>Take part in a growing, open source community</>,
+            heading: <>Add blocks to your app</>,
             subHeading: (
               <>
-                Create open source, reusable blocks connected to rich data
-                structures
+                Anyone with an existing application who wants to make their user
+                interface extensible with interoperable blocks can use the
+                protocol.
               </>
             ),
-          },
-          {
-            icon: (
-              <FontAwesomeIcon
-                icon={faUser}
-                sx={{
-                  fontSize: 20,
-                  color: ({ palette }) => palette.purple[700],
-                }}
-              />
+            link: (
+              <Link href="/docs/embedding-blocks">Read the guide for apps</Link>
             ),
-            heading: <>Claim your favorite username</>,
-            subHeading: <>@pizza goes fast</>,
           },
-        ].map(({ icon, heading, subHeading }, i) => (
-          <Box key={i} mb={3} display="flex" alignItems="flex-start">
-            <Box width={40} flexShrink={0}>
-              {icon}
-            </Box>
+        ].map(({ heading, subHeading, link }, i) => (
+          <Box key={i} display="flex" alignItems="flex-start">
             <Box>
               <Typography
-                variant="bpBodyCopy"
+                variant="bpHeading4"
                 mb={1}
                 sx={{
                   color: ({ palette }) => palette.gray[90],
-                  fontWeight: 600,
+                  fontWeight: 400,
                   lineHeight: "1.25em",
                 }}
               >
@@ -172,12 +150,23 @@ export const FinalCTA = () => {
                 component="p"
                 variant="bpSmallCopy"
                 sx={{
-                  color: ({ palette }) => palette.gray[70],
+                  color: ({ palette }) => palette.gray[80],
                   fontWeight: 400,
                   lineHeight: "1.5em",
+                  marginBottom: 1,
                 }}
               >
                 {subHeading}
+              </Typography>
+              <Typography
+                component="span"
+                sx={{
+                  lineHeight: "1.5em",
+                  textDecoration: "none",
+                  fontSize: "1rem",
+                }}
+              >
+                {link}
               </Typography>
             </Box>
           </Box>
