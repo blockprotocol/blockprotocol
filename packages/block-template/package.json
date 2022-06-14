@@ -1,6 +1,6 @@
 {
   "name": "block-template",
-  "version": "0.0.18-next.1",
+  "version": "0.0.21",
   "description": "Block Protocol block templates",
   "keywords": [
     "blockprotocol",

@@ -90,7 +90,6 @@ const usage = commandLineUsage(helpSections);
 
   await pacote.extract(templatePackageName, tempExtractionDir, {
     registry: process.env.NPM_CONFIG_REGISTRY,
-    defaultTag: "next",
   });
 
   const templatePath = path.join(tempExtractionDir, "templates", template);
