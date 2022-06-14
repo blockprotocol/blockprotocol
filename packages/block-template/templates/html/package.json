@@ -17,9 +17,13 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
+  "main": "dist/main.js",
+  "module": "dist/module.js",
   "source": "src/index.js",
   "scripts": {
-    "dev": "parcel src/dev.html"
+    "build": "parcel build",
+    "dev": "parcel src/dev.html",
+    "watch": "parcel watch"
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.6",
