@@ -32,7 +32,7 @@ These templates also allow you [to use other technologies](#i-want-to-use-a-diff
 1.  Run `yarn install && yarn dev`.
 1.  Open [http://localhost:63212](http://localhost:63212/) in your browser to see your block.
 
-## Understanding your development environment
+## The development environment
 
 The `create-block-app` package provides everything you need to develop a block.
 
@@ -61,8 +61,8 @@ When a block is loaded into an embedding application:
 
 1.  the embedding application parses its `block-metadata.json` file and:
 1.  provides any external dependencies which the block needs.
-1.  sets up message handling as described in [block-application communication](https://www.notion.so/Core-Specification-v0-2-c5a95a9542614d139e02443a5dad8cee).
-1.  loads the block with the appropriate strategy for its `kind`.
+1.  sets up message handling as described in the core specification.
+1.  loads the block with the appropriate strategy for its `blockType`.
 1.  the block then receives any data which the embedder can provide straight away:
 1.  `custom-element` and `react`-type blocks will be sent this initial data as properties.
 1.  `html`-type blocks will be sent messages containing the initial data.
@@ -71,14 +71,14 @@ When a block is loaded into an embedding application:
 
 The starter blocks created by `create-block-app` implement a simple example of this lifecycle:
 
-1.  the `BlockEntityProperties` type in `src/app.tsx` defines the properties expected for the `blockEntity` (part of [the Graph Service](#reading-and-writing-data-with-the-graph-service)).
+1.  the `BlockEntityProperties` type in `src/app.tsx` defines the properties expected for the `blockEntity` (part of [the Graph Service](#using-the-graph-service)).
 1.  mock values for the `blockEntity` are passed to `MockBlockDock` in `dev.tsx`, including the `properties` it expects (in this case, a `name` of type `string`).
 1.  the block receives the data for `blockEntity`:
 1.  the `react` and `custom-element` blocks receive the `blockEntity` as part of the `graph` object in their properties.
 1.  the `html` block registers a callback for the `blockEntity` message.
 1.  the block accesses the properties in `blockEntity` and uses the `name` property to render its `Hello, World!` message.
 
-## Reading and writing data with the Graph Service
+## Using the Graph Service
 
 The Graph Service describes how entities can be created, queried, updated, and linked together, including the block entity. It enables your block to create, read, update, and delete data in the embedding application.
 
