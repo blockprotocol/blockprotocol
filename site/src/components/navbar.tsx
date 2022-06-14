@@ -17,7 +17,7 @@ import SiteMapContext from "../context/site-map-context";
 import { useUser } from "../context/user-context";
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
-import { BlockProtocolLogoIcon, BoltIcon, FontAwesomeIcon } from "./icons";
+import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { LinkButton } from "./link-button";
 import { AccountDropdown } from "./navbar/account-dropdown";
@@ -124,7 +124,6 @@ export const Navbar: VFC<NavbarProps> = ({
   const isHomePage = asPath === "/";
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
-  const sm = useMediaQuery(theme.breakpoints.up("sm"));
 
   const isDesktopSize = md;
 
@@ -157,10 +156,6 @@ export const Navbar: VFC<NavbarProps> = ({
       setDisplayMobileNav(false);
     }
   }, [isDesktopSize, displayMobileNav]);
-
-  const preventOverflowingNavLinks = useMediaQuery(
-    theme.breakpoints.between("md", 940),
-  );
 
   /** @todo: provide better documentation for the various states of the Navbar's styling */
 
@@ -359,9 +354,11 @@ export const Navbar: VFC<NavbarProps> = ({
                   <FontAwesomeIcon
                     sx={{
                       fontSize: 20,
-                      ...(isNavbarDark && {
-                        color: theme.palette.purple.subtle,
-                      }),
+                      ...(isNavbarDark
+                        ? {
+                            color: theme.palette.purple.subtle,
+                          }
+                        : {}),
                     }}
                     icon={faBars}
                   />

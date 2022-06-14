@@ -1,14 +1,6 @@
-import {
-  Box,
-  Container,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 export const ConfinedBlocks = () => {
-  const theme = useTheme();
-
   return (
     <Box
       sx={{
@@ -83,8 +75,8 @@ export const ConfinedBlocks = () => {
             mb={2}
             variant="bpBodyCopy"
           >
-            Open source components can save some time, but still need to
-            be individually integrated.
+            Open source components can save some time, but still need to be
+            individually integrated.
           </Typography>
           <Typography
             sx={{

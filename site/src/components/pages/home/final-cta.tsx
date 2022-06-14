@@ -1,13 +1,5 @@
-import { faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
-import {
-  Box,
-  Container,
-  Fade,
-  Paper,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { Box, Fade, Paper, Typography } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -15,14 +7,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useUser } from "../../../context/user-context";
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { apiClient } from "../../../lib/api-client";
+import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { Button } from "../../button";
-import {
-  ArrowUpCircleIcon,
-  FontAwesomeIcon,
-  PullRequestIcon,
-} from "../../icons";
+import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
-import { ApiVerifyEmailRequestBody } from "../../pages/api/verify-email.api";
 import { CompleteSignupScreen } from "../../screens/complete-signup-screen";
 import { SignupScreen } from "../../screens/signup-screen";
 import {
@@ -100,9 +88,6 @@ export const FinalCTA: NextPage = () => {
       }
     }
   }, [user, router, currentScreen, redirectPath]);
-
-  const displayInfoSidebar =
-    currentScreen === "Email" || currentScreen === "VerificationCode";
 
   const handleSignup = (params: {
     verificationCodeInfo: VerificationCodeInfo;
@@ -280,8 +265,9 @@ export const FinalCTA: NextPage = () => {
               </Link>
             ),
           },
-        ].map(({ heading, subHeading, link }, i) => (
-          <Box key={i} display="flex" alignItems="flex-start">
+        ].map(({ heading, subHeading, link }, index) => (
+          // eslint-disable-next-line react/no-array-index-key -- TODO fix this
+          <Box key={index} display="flex" alignItems="flex-start">
             <Box>
               <Typography
                 variant="bpHeading4"
