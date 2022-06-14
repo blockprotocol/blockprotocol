@@ -427,91 +427,28 @@ An entry in `messages` MAY specify:
       "description": "A unique name for the service, consisting of lowercase letters, numbers, and hyphens only.",
       "pattern": "^[-a-z0-9]$"
     },
-    "glossary": {
+    "messages": {
       "type": "array",
-      "description": "Definitions for key terms and concepts used in the service",
+      "description": "The messages that may be exchanged by blocks and embedding applications as part of the service",
       "items": {
         "type": "object",
         "properties": {
-          "term": {
-            "type": "string",
-            "description": "The word or term to be defined."
-          },
-          "definition": {
-            "type": "string",
-            "description": "A short definition of the term. Markdown is permitted."
-          }
-        }
-      },
-      "overview": {
-        "type": "string",
-        "description": "A longer description of the service, providing any explanation that would help understand the intention, theme and concepts of the service. Markdown is permitted."
-      },
-      "messages": {
-        "type": "array",
-        "description": "The messages that may be exchanged by blocks and embedding applications as part of the service",
-        "items": {
-          "type": "object",
-          "properties": {
-            "//": "@todo insert properties listed above"
-          },
-          "required": ["description", "messageName", "source", "data"]
-        }
-      },
-      "metadata": {
-        "type": "object",
-        "description": "Additional metadata files and keys that the blocks may add to its block package and block-metadata.json, respectively, which are relevant to the service.",
-        "properties": {
-          "files": {
-            "type": "array",
-            "description": "Additional metadata files related to the service that the block may (or is required to) include in its block package, if it uses the service.",
-            "items": {
-              "type": "object",
-              "properties": {
-                "description": {
-                  "description": "A description of the purpose of the file. Markdown is permitted.",
-                  "type": "string"
-                },
-                "filename": {
-                  "description": "The name of the file, including its extension, as a string literal or Regular Expression",
-                  "type": "string"
-                },
-                "required": {
-                  "default": false,
-                  "description": "Whether or not the file is required.",
-                  "type": "boolean"
-                }
-              },
-              "required": ["description", "filename"]
-            }
-          },
-          "keys": {
-            "type": "array",
-            "description": "The keys that blocks may (or are required to) add to block-metadata.json, related to this service",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "description": "The purpose of this key. Markdown is permitted.",
-                  "type": "string"
-                },
-                "type": {
-                  "description": "The permitted types of value(s) for this key, expressed in JSON schema.",
-                  "$ref": "https://json-schema.org/draft/2020-12/schema"
-                }
-              },
-              "required": ["name", "type"]
-            }
-          }
-        }
+          "description": { "type": "string" },
+          "messageName": { "type": "string" },
+          "source": { "type": "string", "enum": ["block", "embedder"] },
+          "data": { "type": "object" },
+          "errorCodes": { "type": "array", "items": { "type": "string" },
+          "sentOnInitialization": { "type": "boolean" },
+          "respondedToBy": { "type": "string" }
+        },
+        "required": ["description", "messageName", "source", "data"]
       }
     },
     "version": {
       "type": "string",
-      "description": "The semantic version of this service specification",
-      "format": "// @todo semVer regExp"
+      "description": "The semantic version of this service specification"
     }
-  },
-  "required": ["description", "messages", "name", "version"]
+   },
+   "required": ["description", "messages", "name", "version"]
 }
 ```
