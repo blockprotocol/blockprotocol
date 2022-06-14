@@ -103,6 +103,7 @@ const Socials = (
     flexDirection="row"
     alignItems="center"
     flexWrap="wrap"
+    sx={{ gridGap: "1rem" }}
   >
     <Box flexShrink={0}>
       {SOCIALS.map(({ href, icon }, index) => (
@@ -145,8 +146,6 @@ const Socials = (
       size="small"
       sx={{
         flexShrink: 0,
-        paddingLeft: 2.2,
-        marginLeft: 2.2,
       }}
       startIcon={<FontAwesomeIcon icon={faStar} />}
     >
@@ -173,7 +172,7 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
       <Container
         sx={{
           py: {
-            sm: 8,
+            sm: 9,
             xs: 4,
           },
         }}
