@@ -1,6 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 
 export const InteroperableBlocks = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
     <Box
       sx={{
@@ -12,38 +15,52 @@ export const InteroperableBlocks = () => {
         sx={{
           position: "relative",
           top: 0,
-          height: { md: "85vh", lg: "105vh", xl: "106vh" },
-          marginLeft: { md: "-10rem", lg: "-6rem", xl: "1rem" },
+          right: 0,
+          display: { xs: "flex", md: "block" },
+          flexDirection: {
+            xs: "column-reverse",
+            sm: "row-reverse",
+            md: "unset",
+          },
+          gridGap: { xs: "1rem", md: 0 },
+          alignItems: { xs: "flex-end", sm: "unset" },
+          height: { md: "85vh", lg: "100vh", xl: "105vh" },
+          marginLeft: { xs: "0", md: "-12rem", lg: "-8rem", xl: "1rem" },
+          padding: { xs: "2rem 0 1rem 1rem", sm: "4rem 0 4rem 2rem", md: 0 },
         }}
       >
+        {isMobile ? (
+          <Box
+            sx={{
+              position: "relative",
+              width: { xs: "80%", sm: "40%" },
+              height: "50%",
+              zIndex: "3",
+            }}
+            component="img"
+            src="/assets/new-home/transparent-blocks-mobile.png"
+          />
+        ) : (
+          <Box
+            sx={{
+              position: { sm: "relative", md: "absolute" },
+              right: 0,
+              top: 0,
+              width: { md: "100%", lg: "95%", xl: "90%" },
+              zIndex: "3",
+            }}
+            component="img"
+            src="/assets/new-home/transparent-blocks-with-circle.png"
+          />
+        )}
+
         <Box
           sx={{
-            position: { sm: "relative", md: "absolute" },
-            right: 0,
-            top: 0,
-            width: { md: "100%", lg: "95%", xl: "90%" },
-            zIndex: "3",
-          }}
-          component="img"
-          src="/assets/new-home/transparent-blocks-with-circle.png"
-        />
-        {/* <Box
-          sx={{
-            position: "relative",
-            top: "-20rem",
-            width: "100%",
-            zIndex: "2",
-            transform: "rotate(180deg)",
-          }}
-          component="img"
-          src="/assets/new-home/small-helix.png"
-        /> */}
-        <Box
-          sx={{
-            position: { sm: "relative", md: "absolute" },
+            position: { xs: "relative", md: "absolute" },
             top: { md: "8%", lg: "10%", xl: "12%" },
             right: { md: "16%", lg: "18%", xl: "22%" },
-            maxWidth: { md: "49ch" },
+            maxWidth: { xs: "100%", sm: "100%", md: "49ch" },
+            flexShrink: 1,
           }}
         >
           <Typography
