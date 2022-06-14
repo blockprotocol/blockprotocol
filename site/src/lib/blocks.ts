@@ -17,7 +17,7 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // repository is passed down as a string upon expansion
   repository?: string;
   schema?: string | null;
-
+  exampleGraph: string | null;
   unstable_hubInfo?: Record<string, string>;
 };
 
@@ -128,6 +128,10 @@ export const readBlocksFromDisk = async (): Promise<
         blockPackagePath: `/${metadata.packagePath
           .split("/")
           .join("/blocks/")}`,
+        exampleGraph: generateBlockFileUrl(
+          metadata.exampleGraph,
+          metadata.packagePath,
+        ),
         lastUpdated: null, // TODO: derive from block data when provided by the hub
       };
     });
@@ -153,6 +157,7 @@ export const readBlockDataFromDisk = async ({
   packagePath,
   schema: metadataSchema,
   source: metadataSource,
+  exampleGraph: metadataExampleGraph,
 }: ExpandedBlockMetadata) => {
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
@@ -177,9 +182,25 @@ export const readBlockDataFromDisk = async ({
       )
     : await fetch(metadataSource).then((response) => response.text());
 
+  let exampleGraph = null;
+
+  if (metadataExampleGraph) {
+    exampleGraph = metadataExampleGraph.startsWith(FRONTEND_URL)
+      ? JSON.parse(
+          fs.readFileSync(
+            `${process.cwd()}/public/blocks/${packagePath}/${metadataExampleGraph.substring(
+              metadataExampleGraph.lastIndexOf("/") + 1,
+            )}`,
+            { encoding: "utf8" },
+          ),
+        )
+      : await fetch(metadataExampleGraph).then((response) => response.json());
+  }
+
   return {
     schema,
     source,
+    exampleGraph,
   };
 };
 
