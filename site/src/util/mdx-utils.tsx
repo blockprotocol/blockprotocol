@@ -4,6 +4,7 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import path from "node:path";
 import remarkMdx from "remark-mdx";
+import remarkMdxDisableExplicitJsx from "remark-mdx-disable-explicit-jsx";
 import remarkParse from "remark-parse";
 import slugify from "slugify";
 import { unified } from "unified";
@@ -12,6 +13,7 @@ import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 
 type Node = {
   type: string;
+  name?: string;
 };
 
 type TextNode = {
@@ -107,7 +109,7 @@ export const getSerializedPage = async (params: {
   const serializedMdx = await serialize(content, {
     // Optionally pass remark/rehype plugins
     mdxOptions: {
-      remarkPlugins: [],
+      remarkPlugins: [remarkMdxDisableExplicitJsx],
       rehypePlugins: [],
     },
     scope: data,
@@ -117,10 +119,20 @@ export const getSerializedPage = async (params: {
 };
 
 // Recursively construct the text from leaf text nodes in an MDX AST
-const getText = (node: Node): string =>
+const getFullText = (node: Node): string =>
   [
     isTextNode(node) ? node.value : "",
-    ...(isParent(node) ? node.children.map(getText) : []),
+    ...(isParent(node) ? node.children.map(getFullText) : []),
+  ].join("");
+
+// Recursively construct the text from leaf text nodes in an MDX AST
+const getVisibleText = (node: Node): string =>
+  [
+    isTextNode(node) ? node.value : "",
+    ...(isParent(node) &&
+    (node.type !== "mdxJsxTextElement" || node.name !== "Hidden")
+      ? node.children.map(getVisibleText)
+      : []),
   ].join("");
 
 // Get the structure of a given MDX file in a given directory
@@ -142,7 +154,7 @@ export const getPage = (params: {
 
   const h1 = headings.find(({ depth }) => depth === 1);
 
-  const title = h1 ? getText(h1) : "Unknown";
+  const title = h1 ? getVisibleText(h1) : "Unknown";
 
   const name = parseNameFromFileName(fileName);
 
@@ -152,19 +164,17 @@ export const getPage = (params: {
       name === "index" ? "" : `/${slugify(name, { lower: true })}`
     }`,
     sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
-      if (currentHeading.depth === 2) {
-        const sectionTitle = getText(currentHeading);
-        return [
-          ...prev,
-          {
-            title: sectionTitle,
-            anchor: slugify(sectionTitle, { lower: true }),
-            subSections: [],
-          },
-        ];
-      } else if (currentHeading.depth === 3) {
-        const subSectionTitle = getText(currentHeading);
+      const newSection = {
+        title: getVisibleText(currentHeading),
+        anchor: slugify(getFullText(currentHeading), {
+          lower: true,
+        }),
+        subSections: [],
+      };
 
+      if (currentHeading.depth === 2) {
+        return [...prev, newSection];
+      } else if (currentHeading.depth === 3) {
         return prev.length > 0
           ? [
               ...prev.slice(0, -1),
@@ -172,15 +182,33 @@ export const getPage = (params: {
                 ...prev[prev.length - 1]!,
                 subSections: [
                   ...(prev[prev.length - 1]!.subSections || []),
-                  {
-                    title: subSectionTitle,
-                    anchor: slugify(subSectionTitle, { lower: true }),
-                    subSections: [],
-                  },
+                  newSection,
                 ],
               },
             ]
           : prev;
+      } else if (currentHeading.depth === 4) {
+        if (prev.length > 0) {
+          const heading2 = prev[prev.length - 1]!;
+          const heading3 =
+            heading2.subSections[heading2.subSections.length - 1]!;
+
+          return [
+            ...prev.slice(0, -1),
+            {
+              ...heading2,
+              subSections: [
+                ...(heading2.subSections || []).slice(0, -1),
+                {
+                  ...heading3,
+                  subSections: [...(heading3.subSections || []), newSection],
+                },
+              ],
+            },
+          ];
+        } else {
+          return prev;
+        }
       }
       return prev;
     }, []),
