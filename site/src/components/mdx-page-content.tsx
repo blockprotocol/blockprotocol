@@ -62,7 +62,22 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         scrolledOnce.current = true;
       }
 
-      if (
+      if (anchor === "" && shouldScrollToAnchor) {
+        currentHeading.current = headings[0]!;
+        setDetectHeadingFromScroll(false);
+
+        window.scrollTo({
+          top: 0,
+        });
+
+        if (detectHeadingFromScrollTimer) {
+          clearTimeout(detectHeadingFromScrollTimer);
+        }
+        detectHeadingFromScrollTimer = setTimeout(
+          () => setDetectHeadingFromScroll(true),
+          1500,
+        );
+      } else if (
         headingWithCurrentAnchor &&
         shouldScrollToAnchor &&
         (!currentHeading.current ||
