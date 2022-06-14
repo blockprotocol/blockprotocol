@@ -20,7 +20,10 @@ import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
 import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
-import { BlockSchema } from "../../../components/pages/hub/hub-utils";
+import {
+  BlockExampleGraph,
+  BlockSchema,
+} from "../../../components/pages/hub/hub-utils";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -99,6 +102,7 @@ type BlockPageProps = {
   sandboxBaseUrl: string;
   schema: BlockSchema;
   sliderItems: BlockMetadata[];
+  exampleGraph: BlockExampleGraph | null; // todo fix typing
 };
 
 type BlockPageQueryParams = {
@@ -176,7 +180,7 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const { schema } = await readBlockDataFromDisk(blockMetadata);
+  const { schema, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
   const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
 
@@ -202,6 +206,7 @@ export const getStaticProps: GetStaticProps<
       ),
       sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
+      exampleGraph,
     },
     revalidate: 1800,
   };
@@ -213,6 +218,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
   sandboxBaseUrl,
   schema,
   sliderItems,
+  exampleGraph,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
@@ -344,6 +350,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             metadata={blockMetadata}
             schema={schema}
             sandboxBaseUrl={sandboxBaseUrl}
+            exampleGraph={exampleGraph}
           />
         </Box>
 
