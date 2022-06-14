@@ -34,6 +34,7 @@ export const SandboxedBlockDemo: VoidFunctionComponent<SandboxedBlockProps> = ({
       title="block"
       src={sandboxedDemoUrl}
       sandbox="allow-forms allow-scripts allow-same-origin"
+      allow="clipboard-write"
       onLoad={() => {
         postBlockProps();
       }}
