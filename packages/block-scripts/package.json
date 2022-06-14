@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.0.7",
+  "version": "0.0.8-next.2",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
@@ -26,6 +26,7 @@
     "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.9",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
+    "@babel/plugin-proposal-decorators": "^7.18.2",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
@@ -37,7 +38,7 @@
     "core-js": "^3.21.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
-    "fs-extra": "^10.0.1",
+    "fs-extra": "^10.1.0",
     "html-webpack-plugin": "^5.5.0",
     "lodash": "^4.17.21",
     "regenerator-runtime": "^0.13.9",

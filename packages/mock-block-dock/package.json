@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.13-beta",
+  "version": "0.0.14-next.1",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -35,8 +35,10 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.4",
+    "@blockprotocol/graph": "0.0.6",
+    "@lit-labs/react": "^1.0.4",
     "lodash": "^4.17.21",
+    "react-json-view": "^1.21.3",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -52,6 +54,7 @@
     "core-js": "^3.21.1",
     "cross-env": "^7.0.3",
     "html-webpack-plugin": "^5.5.0",
+    "lit": "^2.2.5",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "regenerator-runtime": "^0.13.9",

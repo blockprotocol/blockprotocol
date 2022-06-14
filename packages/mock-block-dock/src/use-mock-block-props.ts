@@ -10,14 +10,17 @@ import {
 import { useMemo } from "react";
 
 import { mockData as initialMockData } from "./data";
-import { useLinkFields } from "./use-link-fields";
-import { MockData, useMockDatastore } from "./use-mock-datastore";
+import { useLinkFields } from "./use-mock-block-props/use-link-fields";
+import {
+  MockData,
+  useMockDatastore,
+} from "./use-mock-block-props/use-mock-datastore";
 
 /**
- * A hook to generate Block Protocol properties to pass to a block for testing.
- * It provides the functions specified in the Block Protocol, and mock data which can be customized via props.
+ * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
+ * The starting mock data can be customized using the initial[X] props.
  * See README.md for usage instructions.
- * @param [blockProperties] the block's own starting properties, if any
+ * @param [blockEntity] the block's own starting properties, if any
  * @param [blockSchema] - The schema for the block entity
  * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [initialEntityTypes] - The entity types to include in the data store (NOT the block's type, which is always provided)
@@ -32,7 +35,7 @@ export const useMockBlockProps = ({
   initialLinks,
   initialLinkedAggregations,
 }: {
-  blockEntity: Entity;
+  blockEntity?: Entity;
   blockSchema?: Partial<EntityType>;
   initialEntities?: Entity[];
   initialEntityTypes?: EntityType[];
@@ -41,6 +44,7 @@ export const useMockBlockProps = ({
 }): {
   blockEntity: Entity;
   blockGraph: BlockGraph;
+  datastore: MockData;
   entityTypes: EntityType[];
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
   linkedAggregations: LinkedAggregation[];
@@ -74,12 +78,12 @@ export const useMockBlockProps = ({
 
     const nextMockData: MockData = {
       entities: [
-        ...(initialEntities ?? initialMockData.entities),
         newBlockEntity,
+        ...(initialEntities ?? initialMockData.entities),
       ],
       entityTypes: [
-        ...(initialEntityTypes ?? initialMockData.entityTypes),
         blockEntityType,
+        ...(initialEntityTypes ?? initialMockData.entityTypes),
       ],
       links: initialLinks ?? initialMockData.links,
       linkedAggregationDefinitions:
@@ -97,13 +101,15 @@ export const useMockBlockProps = ({
     initialLinkedAggregations,
   ]);
 
+  const datastore = useMockDatastore(mockData);
+
   const {
     entities,
     entityTypes,
     graphServiceCallbacks,
     links,
     linkedAggregationDefinitions,
-  } = useMockDatastore(mockData);
+  } = datastore;
 
   const latestBlockEntity = useMemo(() => {
     return (
@@ -145,6 +151,7 @@ export const useMockBlockProps = ({
   return {
     blockEntity: latestBlockEntity,
     blockGraph,
+    datastore,
     entityTypes,
     linkedAggregations,
     graphServiceCallbacks,

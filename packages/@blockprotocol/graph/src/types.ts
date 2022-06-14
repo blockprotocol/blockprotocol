@@ -268,7 +268,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteEntity: MessageCallback<
     DeleteEntityData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getEntity: MessageCallback<
@@ -298,7 +298,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteEntityType: MessageCallback<
     DeleteEntityTypeData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getEntityType: MessageCallback<
@@ -323,7 +323,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteLink: MessageCallback<
     DeleteLinkData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getLink: MessageCallback<GetLinkData, null, Link, ReadOrModifyResourceError>;
@@ -342,7 +342,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteLinkedAggregation: MessageCallback<
     DeleteLinkedAggregationData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getLinkedAggregation: MessageCallback<

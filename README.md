@@ -32,10 +32,13 @@ We welcome [contributions](#contributing) to this repository. Within it you will
     - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
 
 1.  `packages`: utility packages for constructing Block Protocol blocks. These are all available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
-    - `block-template`: a template for a React-based block
-    - `blockprotocol`: TypeScript types for Block Protocol properties and functions, as described in the spec
+    - `@blockprotocol/core`: implements the Block Protocol core specification for blocks and embedding applications
+    - `@blockprotocol/graph`: implements the Block Protocol graph specification for blocks and embedding applications
+    - `block-scripts`: scripts used by `block-template`
+    - `block-template`: starter templates for blocks, used by `create-block-app`
     - `create-block-app`: a script to [create a new block](https://blockprotocol.org/docs/developing-blocks) using `block-template`
     - `mock-block-dock`: a mock embedding application used for developing blocks
+    - `react-block-loader`: a component for loading Block Protocol blocks from a remote URL (pending an update)
 
 ## Contributing
 

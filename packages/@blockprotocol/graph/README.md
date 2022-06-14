@@ -38,14 +38,9 @@ export const App = () => {
 ### Custom element example
 
 ```javascript
-import { GraphBlockHandler } from "@blockprotocol/graph";
+import { BlockElementBase } from "@blockprotocol/graph";
 
-class MyBlock extends HTMLButtonElement {
-  constructor() {
-    super();
-    this.graphService = new GraphBlockHandler({ element: this });
-  }
-}
+export class MyBlock extends BlockElementBase {}
 ```
 
 https://blockprotocol.org/docs will include further usage instructions when 0.2 is released.

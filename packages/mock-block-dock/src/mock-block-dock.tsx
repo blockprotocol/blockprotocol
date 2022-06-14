@@ -7,20 +7,32 @@ import {
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import React, {
-  Children,
-  cloneElement,
-  ReactElement,
+  ComponentType,
   useEffect,
   useRef,
   useState,
   VoidFunctionComponent,
 } from "react";
 
+import { BlockRenderer } from "./block-renderer";
+import { JsonView } from "./json-view";
 import { useMockBlockProps } from "./use-mock-block-props";
 
+type BlockDefinition =
+  | { ReactComponent: ComponentType<any> }
+  | {
+      customElement: {
+        elementClass: typeof HTMLElement;
+        tagName: string;
+      };
+    }
+  | { htmlString: string };
+
 type MockBlockDockProps = {
-  children: ReactElement;
+  blockDefinition: BlockDefinition;
+  blockEntity?: Entity;
   blockSchema?: Partial<EntityType>;
+  debug?: boolean;
   initialEntities?: Entity[];
   initialEntityTypes?: EntityType[];
   initialLinks?: Link[];
@@ -28,19 +40,24 @@ type MockBlockDockProps = {
 };
 
 /**
- * A component to wrap a Block Protocol block, acting as a mock embedding application.
- * It provides the functions specified in the Block Protocol, and mock data which can be customized via props.
+ * A component which acts as a mock embedding application for Blcok Protocol blocks.
+ * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
- * @param children the block component to be provided mock data and functions, with any starting props
- * @param [blockSchema] - The schema for the block entity
- * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
- * @param [initialEntityTypes] - The entity types to include in the data store (NOT the block's type, which is always provided)
- * @param [initialLinks] - The links to include in the data store
+ * @param [blockDefinition] the source for the block and any additional metadata required
+ * @param [blockEntity] the starting properties for the block entity
+ * @param [blockSchema] the schema for the block entity
+ * @param [debug=false] display debugging information
+ * @param [initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
+ * @param [initialLinks] the links to include in the data store
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @para
  */
 export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
-  children,
+  blockDefinition,
+  blockEntity: initialBlockEntity,
   blockSchema,
+  debug,
   initialEntities,
   initialEntityTypes,
   initialLinks,
@@ -49,11 +66,12 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   const {
     blockEntity,
     blockGraph,
+    datastore,
     entityTypes,
     graphServiceCallbacks,
     linkedAggregations,
   } = useMockBlockProps({
-    blockEntity: children.props?.graph?.blockEntity,
+    blockEntity: initialBlockEntity,
     blockSchema,
     initialEntities,
     initialEntityTypes,
@@ -80,18 +98,17 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
       throw new Error(
         "No reference to wrapping element – cannot listen for messages from block",
       );
-    } else if (graphService) {
-      return;
+    } else if (!graphService) {
+      setGraphService(
+        new GraphEmbedderHandler({
+          blockGraph,
+          blockEntity,
+          linkedAggregations,
+          callbacks: graphServiceCallbacks,
+          element: wrapperRef.current,
+        }),
+      );
     }
-    setGraphService(
-      new GraphEmbedderHandler({
-        blockGraph,
-        blockEntity,
-        linkedAggregations,
-        callbacks: graphServiceCallbacks,
-        element: wrapperRef.current,
-      }),
-    );
   }, [
     blockEntity,
     blockGraph,
@@ -124,7 +141,90 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
     }
   }, [linkedAggregations, graphService]);
 
-  const child = cloneElement(Children.only(children), propsToInject);
+  if (!debug) {
+    return (
+      <div ref={wrapperRef}>
+        {graphService ? (
+          <BlockRenderer
+            customElement={
+              "customElement" in blockDefinition
+                ? blockDefinition.customElement
+                : undefined
+            }
+            htmlString={
+              "htmlString" in blockDefinition
+                ? blockDefinition.htmlString
+                : undefined
+            }
+            properties={propsToInject}
+            ReactComponent={
+              "ReactComponent" in blockDefinition
+                ? blockDefinition.ReactComponent
+                : undefined
+            }
+          />
+        ) : null}
+      </div>
+    );
+  }
 
-  return <div ref={wrapperRef}>{graphService ? child : null}</div>;
+  return (
+    <div style={{ fontFamily: "sans-serif" }}>
+      <div style={{ marginBottom: 30 }}>
+        <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
+        <div style={{ padding: 15, border: "1px dashed black" }}>
+          <div ref={wrapperRef}>
+            {graphService ? (
+              <BlockRenderer
+                customElement={
+                  "customElement" in blockDefinition
+                    ? blockDefinition.customElement
+                    : undefined
+                }
+                htmlString={
+                  "htmlString" in blockDefinition
+                    ? blockDefinition.htmlString
+                    : undefined
+                }
+                properties={propsToInject}
+                ReactComponent={
+                  "ReactComponent" in blockDefinition
+                    ? blockDefinition.ReactComponent
+                    : undefined
+                }
+              />
+            ) : null}
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 30 }}>
+        <h3 style={{ marginBottom: 4 }}>Block Properties</h3>
+        <JsonView
+          collapseKeys={["graph"]}
+          rootName="props"
+          src={propsToInject}
+        />
+      </div>
+
+      <div style={{ marginBottom: 30 }}>
+        <h3 style={{ marginBottom: 4 }}>Datastore</h3>
+        <JsonView
+          collapseKeys={[
+            "entities",
+            "entityTypes",
+            "links",
+            "linkedAggregations",
+          ]}
+          rootName="datastore"
+          src={{
+            entities: datastore.entities,
+            entityTypes: datastore.entityTypes,
+            links: datastore.links,
+            linkedAggregations: datastore.linkedAggregationDefinitions,
+          }}
+        />
+      </div>
+    </div>
+  );
 };

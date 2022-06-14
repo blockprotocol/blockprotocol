@@ -75,7 +75,7 @@ const script = async () => {
 
   await execa("yarn", ["build"], {
     ...defaultExecaOptions,
-    cwd: path.resolve(`packages/block-template`),
+    cwd: path.resolve(`packages/block-template/templates/react`),
   });
 
   logStepEnd();
@@ -94,7 +94,13 @@ const script = async () => {
     logStepEnd();
     logStepStart(`Publish ${packageName} to local registry`);
 
-    await execa("npm", ["publish", "--force"], {
+    // @todo remove this temporary hack
+    const args = ["publish", "--force"];
+    if (packageName === "block-template") {
+      args.push("--tag", "next");
+    }
+
+    await execa("npm", args, {
       ...defaultExecaOptions,
       cwd: packageDirPath,
     });
