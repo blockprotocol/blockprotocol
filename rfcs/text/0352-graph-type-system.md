@@ -574,13 +574,15 @@ Links will likely continue to be returned in a separate collection alongside ent
 
 The Link Functions will be updated to handle Link Types, removing the `path` fields and instead using the URI of the Link Type.
 
-### Block Schemas and Structure-based Queries
+### Block Schemas
 
 Block schemas will need to be updated to be built using the types outlined above, the specifics of this are explored in-depth in the Reference-Level Explanation, however the basic premise is that instead of writing new definitions inline in every block schema, instead the properties and links should be defined as references to their respective types. If a type does not exist for a given property then it will need to be created, and so on.
 
-Queries on the structure of data (those which do not directly reference an exact Entity Type), such as `AggregateEntities` and any future methods the BlockProtocol supports, behave somewhat similarly to expressing a type. Requiring combinations of properties, constraints, etc. will need to refer to the respective Property Types, Link Types, etc.
+### Structure-based Queries
 
-#### Link Constraints
+Queries on the structure of data (those which do not directly reference an exact Entity Type), such as `AggregateEntities`, `AggregateEntityType` and any future methods the BlockProtocol supports, behave somewhat similarly to expressing a type. Requiring combinations of properties, constraints, etc. will need to refer to the respective Property Types, Link Types, etc.
+
+### Link Constraints
 
 This RFC does not currently mention ways of constraining the destination of a Link Type used in an Entity Type. **This is different from current way of handling things**. The detailed reasoning for removing this, and a potential solution, is outlined in a follow-up RFC [RFC: Structural Link Constraints](LINK TODO).
 
@@ -1735,9 +1737,15 @@ Links can be ordered in the current system, and the behaviour will stay mostly t
 
 The cardinality of the link specified in the source Entity Type dictates what is a valid `createLink` request.
 
-### Block Schemas and Structure-based Queries
+### Block Schemas
 
-#### Link Constraints (to be changed)
+### Structure-based Queries
+
+Structure-based Queries, which in the current system are any methods that use `LinkedAggregationOperation`, will have to change to refer to the respective `Property Types` and `Link Types` they must structrually match against.
+
+The idea of having structure-based queries in the type system will be explored in detail in an upcoming Structure-based Query RFC.
+
+### Link Constraints (to be changed)
 
 ### Interfacing with Types
 
