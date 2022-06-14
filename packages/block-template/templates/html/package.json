@@ -21,9 +21,8 @@
   "module": "dist/module.js",
   "source": "src/index.js",
   "scripts": {
-    "build": "parcel build",
-    "dev": "parcel src/dev.html",
-    "watch": "parcel watch"
+    "build": "parcel build && cp block-schema.json ./dist/block-schema.json && cp block-metadata.json ./dist/block-metadata.json && cp -R public dist/public",
+    "dev": "parcel src/dev.html"
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.8",
