@@ -1,4 +1,4 @@
-# Block template
+# Block template: React
 
 ## Step one: copy this template
 

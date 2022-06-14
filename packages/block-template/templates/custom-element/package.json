@@ -38,14 +38,17 @@
   },
   "blockprotocol": {
     "blockType": {
-      "kind": "custom-element",
+      "entryPoint": "custom-element",
       "tagName": "my-block"
     },
     "displayName": "Template",
     "examples": [
-      {}
+      {
+        "name": "World"
+      }
     ],
     "icon": "public/omega.svg",
-    "image": "public/block-preview.svg"
+    "image": "public/block-preview.svg",
+    "protocol": "0.2"
   }
 }

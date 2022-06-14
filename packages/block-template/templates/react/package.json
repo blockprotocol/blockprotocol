@@ -41,13 +41,16 @@
   },
   "blockprotocol": {
     "blockType": {
-      "kind": "React"
+      "entryPoint": "React"
     },
     "displayName": "Template",
     "examples": [
-      {}
+      {
+        "name": "World"
+      }
     ],
     "icon": "public/omega.svg",
-    "image": "public/block-preview.svg"
+    "image": "public/block-preview.svg",
+    "protocol": "0.2"
   }
 }

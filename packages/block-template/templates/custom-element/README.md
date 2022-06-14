@@ -1,4 +1,4 @@
-# Block Protocol template: custom element
+# Block template: custom element
 
 ## Step one: copy this template
 

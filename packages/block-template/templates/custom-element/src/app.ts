@@ -6,7 +6,7 @@ import { css, html } from "lit";
  * They will be provided under this.graph.blockEntity.properties.
  */
 type BlockEntityProperties = {
-  name: "string";
+  name: string;
 };
 
 export class BlockElement extends BlockElementBase<BlockEntityProperties> {
@@ -26,7 +26,7 @@ export class BlockElement extends BlockElementBase<BlockEntityProperties> {
     return html` <h1>Hello, ${this.blockEntity.properties.name}</h1>
       <p>
         The entityId of this block is ${this.blockEntity.entityId}. Use it to
-        update its data when calling updateEntities.
+        update its data when calling updateEntity.
       </p>
       <!-- @see https://lit.dev/docs/components/events -->
       <input
