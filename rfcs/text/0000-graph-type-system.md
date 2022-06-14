@@ -1,0 +1,1933 @@
+# Summary
+
+This RFC proposes changing the way data structural requirements are expressed within the BP.
+
+Rather than allowing any free-form JSON schema, this RFC defines a set JSON schema vocabularies, and accompanying meta-schemas, which describe:
+
+- Data Types
+- Property Types
+- Link Types
+- Entity Types
+
+These elements are used in combination to make expressions of data structural requirements more well-defined and re-usable.
+
+By using the proposed types, Blocks, Embedding Applications, and end users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities.
+
+# Main Motivation
+
+The Block Protocol operates in-between parties that otherwise have limited to no communication. A Block developer may not even be aware of the existence of an Embedding Application or the data within it, and in some scenarios the developers and owners of an Embedding Application may not be aware of the existence of a block (in the case of dynamic selection and loading at run-time). This is a common occurrence already in technology, whether it be library authors not knowing what projects are built with their work, or developers using libraries without utilising pathways for communication (online forums or otherwise). This is made possible through encoded contracts: function signatures, documentation, REST APIs, etc. These tools are ways of asynchronously, and often autonomously, declaring one side of the communication channel. In such a system of such imperfect information, the standardisation of communication mediums is essential to effective function.
+
+By getting both parties to agree to a prescriptive standard, new technological possibilities become viable. Included in such possibilities that are enabled through the Block Protocol, is a new class of applications, ones that are able to dynamically load complex front-end components at runtime which are immediately usable and functional, even if the component was previously unknown to the application.
+
+The foundation of this capability is the standardisation of the expression of requirements. Most notably, the block and entity schemas expressed through the graph service allow for dynamic resolution of expected input data.
+
+---
+
+**Example**:
+
+A Block expresses that it needs a URL hosting an image (presumably so that it can render it):
+
+```json
+{
+  "properties": {
+    "image_url": "string"
+  }
+}
+```
+
+The embedding application is then able to search across its data to find entities that satisfy this requirement, such as:
+
+```json
+{
+  "image_url": "https://dummyimage.com/300.jpg",
+  ... // some other fields
+}
+```
+
+It is then able to pass the value to the block, satisfying its requirements for input data.
+
+---
+
+This works most easily when the data uses the same identifier (key in the object) as the block expects, but problems arise if people have different ways of describing compatible data. For example, the embedding application might have an entity that looks like:
+
+```json
+{
+  "display_picture": "https://dummyimage.com/300.jpg",
+  ... // some other fields
+}
+```
+
+At this point, there isn't a clear route to deciding compatibility. The block could try and define a [regex to ensure the URL has an image extension](https://stackoverflow.com/questions/42853961/regex-that-matches-image-links-but-exclude-normal-url), and the embedding application could ignore the key and just match on values, but:
+
+- This is potentially flakey ([here's an example](https://dummyimage.com/300) of a URL that points to an image but _does not_ have an extension)
+- The solution ends up being very domain-specific
+- It introduces a large maintenance burden
+- Is generally not re-useable, possibly leading to similar bespoke logic being defined in multiple places, with possible subtle but incompatible variations
+
+Thus the main reason for following RFC:
+
+> 💬 By removing some flexibility and providing routes for more standardization, we create a stronger contract between the block developer, and the embedding application, allowing for more powerful runtime inference, and general confidence.
+
+In the following document we outline an approach to being more specific about the types that describe data. Through the following definitions of types, the community will be able to **gradually converge** upon a **consensus** of how to describe information.
+
+## Motivating implications
+
+**Embedding Applications:**
+
+- are required to do less guess work about what the Block is asking for
+- require less user intervention (or hard-coded logic / guesses) to map X to Y
+
+**Blocks:**
+
+- have greater confidence that the data to them is correct and useable
+- are able to be more specific about their requirements and more easily express the function of the data
+  - This also facilitates more powerful composition as there's greater confidence about other parties' functionalities.
+
+**Data Producers** (whether that be end-users, EA developers, businesses):
+
+- have a toolkit to better describe the data they're producing and to help them be explicit about semantic meaning
+- benefit from a community-driven description of knowledge, potentially removing barriers of communication between domains
+
+# Guide-Level Explanation
+
+## Goals
+
+Given the motivation above and some other implications of the current design, this RFC attempts to:
+
+1.  make descriptions of data **discoverable**, **re-useable**, and **composable**
+2.  remove the few instances where the specification currently misuses (modifies in a breaking way) JSON schema
+
+As well as addressing these existing shortcomings, this RFC seeks to:
+
+3.  define a constrained type system that is able to describe any JSON structure and linking between entity definitions
+
+## Types
+
+Underpinning this proposal is the definition of four classes of 'types'. One of these classes is an extension of the current definition of an _Entity Type_ while the other three are new classifications that are designed to improve the usability and expressiveness of the _Entity Types_.
+
+### Data Types
+
+A **Data Type** describes a space of possible valid _values_. For instance, the _string_ value `"foo"` might be an instance of a `Text` Data Type, or a _float_ value `0.6` might be an instance of a `Number` Data Type (instance of means that the value satisfies the constraints expressed on the Data Type, or alternatively you can view it as saying the value is within the value space of the Data Type).
+
+> 💬 The underlying value's representation will depend on the implementation environment, different languages and technologies may store these differently.
+
+A Data Type is composed of the following:
+
+- a **required** `$id`, which is a globally unique identifier, where the Data Type's definition can be accessed (in most cases this will be a URL)
+- a **required** `name`, which should generally be a non-pluralised short description of the Data Type (for example: "Number" not "Numbers")
+- **optionally** a `description` to further explain the semantic meaning of the Data Type
+- a **required** definition of its possible value
+
+#### Primitive Top-Level Data Types
+
+We pre-define a set of primitive top-level Data Types.
+These can be considered the least restrictive value spaces:
+
+- `Text`
+- `Number`
+- `Boolean`
+- `Null`
+- `Object`
+- `Empty List`
+
+#### Creating new Data-Types
+
+Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a follow-up RFC is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
+
+[TODO RFC: User-Created Data-Types](TODO)
+
+### Property Types
+
+A **Property Type** is a description of a named piece of data, including its possible values. A Property Type is composed of the following:
+
+- a **required** `$id`, which is a globally unique identifier, where the property type's definition can be accessed (in most cases this will be a URL)
+- a **required** `name`, which should generally be a non-pluralised description of the property (for example: "Address" not "Addresses")
+- **optionally** a `description` to further explain the semantic meaning of the property type
+- a **required** definition of its possible values
+
+**Defining the possible values of a property**
+
+#### Data Types
+
+A Property Type can have plain data as its value, which it can define by using a Data Type.
+
+**Example 1**
+
+The `Favourite Quote` property type could define its value as being an instance of the `Text` Data Type.
+
+- Sample data when used in (simplified view of) an Entity
+
+  ```json
+  {
+    "favoriteQuote": "He who controls the spice controls the universe"
+  }
+  ```
+
+**Example 2**
+
+The `Age` property type could define its value as being an instance of the `Number` Data Type.
+
+- Sample data when used in (simplified view of) an Entity
+
+  ```json
+  {
+    "age": 67
+  }
+  ```
+
+#### Objects
+
+A Property Type can also have an object made up of other properties as its value. These properties are defined by using Property Types, where when using one it's also possible to define that there is a list of properties.
+
+**Example 1**
+
+The `Contact Information` Property Type could define its value as being an object which has an `E-mail` property and a `Phone Number` property.
+
+- Sample data when used in (simplified view of) an Entity
+
+  Assuming that `E-mail` and `Phone Number` accept instances of `Text`, although these would likely be defined with more complicated constraints in a future iteration
+
+  ```json
+  {
+    "contactInformation": {
+      "email": "leto.atreides@example.com",
+      "phoneNumber": "020-7946-0999"
+    }
+    ...
+  }
+  ```
+
+**Example 2**
+
+The `Interests` property type could define its value as being an object which has a `Favorite Film` property, a `Favorite Song` property, and _a list_ of `Hobby` properties.
+
+- Sample data when used in (simplified view of) an Entity
+
+  Assuming that `Favourite Film`, `Favorite Song`, and `Hobby` all accept instances of `Text`. (Although these would be better expressed as Entities that are linked)
+
+  ```json
+  {
+    "interests": {
+      "favoriteFilm": "Dune (2021)",
+      "favoriteSong": "Rocket Man - Elton John",
+      "hobby": [
+        "Extreme Ironing",
+        "Stone Skipping",
+        ...
+      ]
+    }
+    ...
+  }
+  ```
+
+#### Collection of things
+
+A Property Type can also express that it has a list of things as its value.
+
+> ⚠️ It's important to note that in **most circumstances a Property Type should be expressed as a singular item** as this encourages re-usability and allows the parent object to define whether there is a collection or not.
+>
+> As such, examples are not provided in this section, refer to the Reference-Level description for more information.
+
+#### Describing multiple possibilities
+
+A Property Type can also express that its value is _either_ something _or_ something else, where "something" and "something else" are defined as outlined above using Data Types or an object definition.
+
+**Example 1**
+
+The `User ID` Property Type could define its value as being _either_ an instance of the `Text` Data Type _or_ an instance of the `Number` Data Type
+
+- Sample data when used in (simplified view of) an Entity
+
+  ```json
+  {
+    "userId": 42088130893
+  }
+  ```
+
+  or
+
+  ```json
+  {
+    "userId": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
+  }
+  ```
+
+**Example 2**
+
+The `Contrived Property` Property Type could define its value as being _either_ an instance of the `Number` Data Type, _or_ an object which has a `Foo` property
+
+- Sample data when used in (simplified view of) an Entity
+
+  Assuming that `Foo` accepts an instance of the `Text` Data Type
+
+  ```json
+  {
+    "contrivedProperty": 32
+  }
+  ```
+
+  or
+
+  ```json
+  {
+    "contrivedProperty": {
+      "foo": "something here"
+    },
+    ...
+  }
+  ```
+
+### Link Types
+
+A **Link Type** is a description of a _directional_ relationship between two things. A Link Type is composed of the following:
+
+- a **required** `$id`, which is a globally unique identifier, where the property type's definition can be accessed (in most cases this will be a URL)
+- a **required** `name`, which should be a non-pluralised description of the relationship (for example: "Friend" not "Friends")
+- a **required** `description` to further explain the semantic meaning of the relationship
+- a **possible** `relatedKeywords`, which is a list of terms that are related to the link type
+
+> 💭 As the next section (Entity Types) will outline, there's an additional step to quantifying the types of things on either end of the relationship, as such the descriptions **should** be very general and most of the time not contain specific words about types (such as person).
+
+**Example 1**
+
+There could be an `Owns` link type with a `description` of "Have (something) as one's own; possess"
+
+**Example 2**
+
+There could be a `Submitted By` link type with a `description` of "Suggested, proposed, or presented by"
+
+### Entity Types
+
+An Entity Type is a description of a particular "thing", made up of identifiable pieces of data. An Entity Type is composed of the following:
+
+- a **required** `$id`, which is a globally unique identifier, where the Entity Type's definition can be accessed (in most cases this will be a URL)
+- a **required** `name`, which should generally be a non-pluralised description of the thing
+- **optionally** a `description` to further explain the semantic meaning of the Entity Type
+- a **required** definition of its possible values.
+
+#### Defining an Entity Type's Properties
+
+- **Specifying an Entity Type has Property Types** - The data _within_ an Entity is described simply through a set of Property Types
+
+  **Example 1**
+
+  The `Book` Entity Type could contain the Property Types `Name`, a `Published On` and a `Blurb`
+
+  - Sample (simplified) Data
+    Assuming that
+
+    - The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
+
+    ```json
+    {
+      "name": "The Time Machine",
+      "publishedOn": "1895-05",
+      "blurb": ...
+    }
+    ```
+
+- **Specifying there is a list of properties** - The entity type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type
+  **Example 1**
+  The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
+
+  - Sample (simplified) Data
+    Assuming that
+
+    - The `Model`, `Make`, `Spec`, and `Year` Property Types all have values that are instances of the `Text` Data Type
+    - The `Extra Trim` Property Type is a list where the values are instances of the `Text` Data Type
+    - The `Brake Horsepower` Property Type has a value that is an instance of the `Number` Data Type
+
+    ```json
+    {
+      "make": "Mercedes-Benz",
+      "model": "300 SL",
+      "year": "1957",
+      "brake_horsepower": 222,
+      "extra_trim": ["Leather Seats", "Cream and Red"]
+    }
+    ```
+
+#### Defining Relationships between Entities
+
+Entity Types can also express the types of relationships they have with other things.
+
+- **Specifying an Entity Type has out-going Links** - The links going _from_ an Entity are described a set of Link Types
+
+  **Example 1**
+
+  The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link
+
+  - Sample (simplified) Data
+    With the same assumptions as outlined above
+
+    ```json
+    [
+      // Person entity
+      {
+        "entityId": 111,
+        "name": "Herbert George Wells",
+        ...
+      },
+      // Book Entity
+      {
+        "entityId": 112,
+        "name": "The Time Machine",
+        "publishedOn": "1895-05",
+        "blurb": ...,
+        "writtenBy": 111 // referring to the Person entity ID
+      }
+    ]
+    ```
+
+  **Example 2**
+
+  The `Building` Entity Type could contain some Property Types, a `Located At` link, and a `Tenant` link
+
+  - Sample (simplified) Data
+    With the same assumptions as outlined above
+
+    ```json
+    [
+      // UK Address entity
+      {
+        "entityId": 113,
+        "addressLine1": "Buckingham Palace",
+        "postcode": "SW1A 1AA",
+        "city": "London",
+        ...
+      },
+      // Organisation entity
+      {
+        "entityId": 114,
+        "name": "HASH, Ltd.",
+        ...
+      }
+      // Building entity
+      {
+        "entityId": 115,
+        "address": 113, // referring to the UK Address entity ID
+        "tenant": 114, // referring to the Organisation entity ID
+        ...
+      }
+    ]
+    ```
+
+- **Specifying there is a List of Links** - The Entity Type can also express that it can have multiple out-going links of the same type
+
+  **Example 1**
+
+  The `Person` Entity Type could contain some Property Types, and multiple `Friend Of` links
+
+  - Sample (simplified) Data
+
+    ```json
+    [
+      // Person entities
+      {
+        "entityId": 211,
+        "name": "Alice",
+      },
+      {
+        "entityId": 212,
+        "name": "Bob",
+      }
+      {
+        "entityId": 213,
+        "name": "Charlie",
+        "friendsOf": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
+      }
+    ]
+    ```
+
+- **Specifying there is an Ordered List of Links** - The Entity Type can also express that its out-going links (of the same type) are ordered
+  **Example 1**
+  The `Playlist` Entity Type could contain some Property Types, and an _ordered_ list of `Contains` links
+
+  - Sample (simplified) Data
+
+    ```json
+    [
+      // Songs
+      {
+        "entityId": 312,
+        "name": "Rocket Man",
+        ...
+      },
+      {
+        "entityId": 313,
+        "name": "Du Hast",
+        ...
+      },
+      {
+        "entityId": 314,
+        "name": "Valley of the Shadows",
+        ...
+      },
+      // Playlist
+      {
+        "entityId": 315,
+        "name": "Favorite Songs",
+        "contains": [312, 314, 313] // referring to the song entity IDs, ordering is intentional and stable
+        ...
+      }
+    ]
+    ```
+
+    **Example 2**
+    The `Page` Entity Type could contain some Property Types, a `Written By` link, and an _ordered_ list of `Contains` links
+
+  - Sample (simplified) Data
+
+    ```json
+    [
+      // Paragraph Entity
+      {
+        "entityId": 316,
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas.",
+        ...
+      },
+      // Heading Entity
+      {
+        "entityId": 317,
+        "name": "Duo Reges: constructio interrete.",
+        ...
+      },
+      // Divider Entity
+      {
+        "entityId": 318,
+        "width": "full",
+        ...
+      },
+      // User Entity
+      {
+        "entityId": 319,
+        "name": "Alice",
+        ...
+      }
+      // Page Entity
+      {
+        "entityId": 320,
+        "name": "Lorum Ipsum",
+        "writtenBy": 319 // referring to the User entity ID
+        "contains": [317, 316, 318] // referring to IDs of the various types of page contents above
+        ...
+      }
+    ]
+    ```
+
+## Using the Types in the Block Protocol
+
+> 💭 This section has been kept purposefully brief, as in-depth discussion of implications has been reserved for the Reference-Level Explanation due to heavy reliance on technical details
+
+### Interfacing with properties on Entities
+
+As the `name` of a Property Type is not guaranteed to be globally unique, the representation of entities is likely going to need to change, especially with regards to changing the keys to be the Property Type URIs:
+
+**An example of an entity in the current system:**
+
+```json
+{
+  "name": "Arthur Philip Dent",
+  "age": 30,
+  "planetOfOrigin": "Earth",
+  "occupation": "Intergalactic Traveler"
+}
+```
+
+**A simplified example of an entity in the proposed system:**
+
+```json
+{
+  "http://example.com/property-types/name": "Arthur Philip Dent",
+  "http://example.com/property-types/age": 30,
+  "http://example.com/property-types/planetOfOrigin": "Earth",
+  "http://example.com/property-types/occupation": "Intergalactic Traveler"
+}
+```
+
+> 💭 Acknowledgement: This is less ergonomic than the current state of things; this drawback among others, is explored with some possible mitigations in the [Drawbacks](#drawbacks), [Rationale and Alternatives](#rationale-and-alternatives), and [Future Possibilities](future-possibilities) sections
+
+This will have impact on how developers:
+
+- **access** fields in entities
+- format properties when they **create** entities
+- format properties when they **update** entities
+
+### Interfacing with Linked Entities
+
+#### Receiving Links and Linked Entities
+
+Links will likely continue to be returned in a separate collection alongside entities when blocks receive data. The data within the `linkGroups` object might change to incorporate the new type information, likely with the `path` field being replaced with something that uses the link type's URI.
+
+#### Creating Links
+
+The Link Functions will be updated to handle Link Types, removing the `path` fields and instead using the URI of the Link Type.
+
+### Block Schemas and Structure-based Queries
+
+Block schemas will need to be updated to be built using the types outlined above, the specifics of this are explored in-depth in the Reference-Level Explanation, however the basic premise is that instead of writing new definitions inline in every block schema, instead the properties and links should be defined as references to their respective types. If a type does not exist for a given property then it will need to be created, and so on.
+
+Queries on the structure of data (those which do not directly reference an exact Entity Type), such as `AggregateEntities` and any future methods the BlockProtocol supports, behave somewhat similarly to expressing a type. Requiring combinations of properties, constraints, etc. will need to refer to the respective Property Types, Link Types, etc.
+
+#### Link Constraints
+
+This RFC does not currently mention ways of constraining the destination of a Link Type used in an Entity Type. **This is different from current way of handling things**. The detailed reasoning for removing this, and a potential solution, is outlined in a follow-up RFC [RFC: Structural Link Constraints](LINK TODO).
+
+### Interfacing with Types
+
+The largest change (in terms of number of interfaces modified) is unsurprisingly the updates that will need to be made to the Entity Type functions.
+
+- The Type objects will be updated to capture the new structures and references between them
+- New `create`, `get`, `update`, and `delete` methods will need to be made for Property Types, Data Types, and Link Types
+- The error conditions of the Type methods will be updated to include further validation errors that include but are not limited to
+  - Referencing a type that isn't in the Embedding Application
+  - Submitting a type that is malformed
+
+# Reference-Level Explanation
+
+## Data Types
+
+A **Data Type** is a JSON schema that satisfies the following JSON meta-schema:
+
+```json
+{
+  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/data-type",
+  "description": "Specifies the structure of a Data Type",
+  "properties": {
+    "kind": {
+      "const": "dataType"
+    },
+    "$id": { "type": "string", "format": "uri" },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "type": { "type": "string" }
+  },
+  "required": ["kind", "$id", "name", "type"]
+}
+```
+
+### Primitive Top-Level Data Types
+
+This RFC defines the following primitive top-level Data Types
+
+- `Text`
+
+  ```json
+  {
+    "kind": "dataType",
+    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/text",
+    "name": "Text",
+    "description": "An ordered sequence of characters",
+    "type": "string"
+  }
+  ```
+
+- `Number`
+
+  ```json
+  {
+    "kind": "dataType",
+    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/number",
+    "name": "Number",
+    "description": "An arithmetical value (in the Real number system)",
+    "type": "number"
+  }
+  ```
+
+- `Boolean`
+
+  ```json
+  {
+    "kind": "dataType",
+    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/boolean",
+    "name": "Boolean",
+    "description": "A True or False value",
+    "type": "boolean"
+  }
+  ```
+
+- `Null`
+
+  ```json
+  {
+    "kind": "dataType",
+    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/null",
+    "name": "Null",
+    "description": "A placeholder value representing 'nothing'",
+    "type": "null"
+  }
+  ```
+
+- `Object`
+
+  ```json
+  {
+    "kind": "dataType",
+    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/object",
+    "name": "Object",
+    "description": "A plain JSON object with no pre-defined structure",
+    "type": "object"
+  }
+  ```
+
+- `Empty List`
+
+  ```json
+  {
+    "kind": "dataType",
+    "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/empty-list",
+    "name": "Empty List",
+    "description": "An Empty List",
+    "type": "array",
+    "maxItems": 0
+  }
+  ```
+
+### Creating new Data-Types
+
+Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a follow-up RFC is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
+
+[RFC: User-Created Data-Types](LINK TODO)
+
+## Property Types
+
+A **Property Type** is a JSON schema that satisfies the following JSON meta-schema:
+
+```json
+{
+  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/property-type",
+  "description": "Specifies the structure of a Property Type",
+  "properties": {
+    "kind": {
+      "const": "propertyType"
+    },
+    "$id": {
+      "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+    },
+    "name": { "type": "string" },
+    "description": { "type": "string" }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/propertyValues"
+    },
+    {
+      "properties": {
+        "type": {
+          "const": "array"
+        },
+        "items": {
+          "type": "object",
+          "$ref": "#/$defs/propertyValues"
+        }
+      },
+      "required": ["type", "items"]
+    }
+  ],
+  "required": ["kind", "$id", "name"],
+
+  "$defs": {
+    "propertyValues": {
+      "$comment": "The definition of potential property values, made up of a `oneOf` keyword which has a list of options of either references to Data Types, or objects made up of more Property Types ",
+      "properties": {
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/propertyTypeObject" },
+              { "$ref": "#/$defs/dataTypeReference" }
+            ]
+          }
+        }
+      },
+      "required": ["oneOf"]
+    },
+    "propertyTypeObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "object"
+        },
+        "properties": {
+          "type": "object",
+          "propertyNames": {
+            "$comment": "Property names must be a valid URI to a property-type",
+            "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+          },
+          "patternProperties": {
+            ".*": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/propertyTypeReference"
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": { "const": "array" },
+                    "items": { "$ref": "#/$defs/propertyTypeReference" }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "propertyTypeReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$ref": {
+          "$comment": "Property Object values must be defined through references to the same valid URI to a property-type",
+          "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+        }
+      }
+    },
+    "dataTypeReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "$ref": {
+          "$ref": "http://blockprotocol.org/type-system/schema/data-type-uri"
+        }
+      },
+      "required": ["$ref"]
+    }
+  }
+}
+```
+
+### Defining the possible values of a property
+
+A property type describes its possible values through a `oneOf` definition, which can include:
+
+#### Data Types
+
+**Example 1**
+
+The `Favourite Quote` property type could define its value as being an instance of the `Text` Data Type.
+
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/favorite-quote",
+  "name": "Favourite Quote",
+  "oneOf": [
+    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" }
+  ]
+}
+```
+
+**Example 2**
+
+The `Age` property type could define its value as being an instance of the `Number` Data Type.
+
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/age",
+  "name": "Age",
+  "oneOf": [
+    {
+      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/Number"
+    }
+  ]
+}
+```
+
+**Example 3**
+
+The `User ID` property type could define its value as being _either_ an instance of the `Text` Data Type _or_ an instance of the `Number` Data Type.
+
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "name": "User ID",
+  "oneOf": [
+    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
+    {
+      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+    }
+  ]
+}
+```
+
+#### Objects
+
+The value of a Property Type can also be an object which is itself defined through Property Types (either singular ones, or as lists). The key of the property value is the Property Type URI, as shown in the following examples.
+
+**Example 1**
+
+The `Contact Information` Property Type could define its value as being an object which has an `E-mail` property and a `Phone Number` property.
+
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/contact-information",
+  "name": "Contact Information",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "https://blockprotocol.org/types/@blockprotocol/property-type/email": {
+          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/email"
+        },
+        "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number": {
+          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number"
+        }
+      }
+    }
+  ]
+}
+```
+
+**Example 2**
+
+The `Interests` Property Type could define its value as being an object which has a `Favorite Film` property, a `Favorite Song` property, and _a list_ of `Hobby` properties.
+
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/interests",
+  "name": "Interests",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film": { "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film" },
+        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song": { "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song" }
+        "https://blockprotocol.org/types/@blockprotocol/property-type/hobby": {
+          "type": "array",
+          "items": { "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song" }
+        }
+      }
+    }
+  ]
+}
+```
+
+#### Collection of things
+
+A Property Type can also express that it has a list of things as its value.
+
+> ⚠️ It's important to note that in **most circumstances a Property Type should be expressed as a singular item** as this encourages re-usability and allows the parent object to define whether there is a collection or not.
+>
+> This ability is kept in the type system to allow for nested lists, and other complicated structures of data that might occur in existing data sets. These structures are otherwise not representable, as the data doesn't have keys associated with them and therefore can't be represented as a property type.
+>
+> These are generally not ergonomic to work with in the type system and other ways of structuring the data should likely be explored. When needing to type existing data, it's possible to do some variant of the following:
+
+**Discouraged example**
+
+In the case that it is a requirement to deal with multi-dimensional arrays, it is possible to define them through Property Types.
+
+For example if it is a strong requirement to model a grid of numbers, it can be done as follows
+
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/numbers",
+  "name": "Numbers",
+  "type": "array",
+  "items": {
+    "oneOf": [
+      {
+        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      }
+    ]
+  }
+}
+```
+
+The `Numbers` Property Type models data of the following shape
+
+```json
+[1, 2, ...]
+```
+
+#### Describing multiple possibilities
+
+A Property Type can also express that its value is _either_ something _or_ something else, where "something" and "something else" are defined as outlined above using Data Types or an object definition.
+
+**Example 1**
+
+The `User ID` Property Type could define its value as being _either_ an instance of the `Text` Data Type _or_ an instance of the `Number` Data Type.
+
+Sample data when used in (simplified view of) an Entity
+
+```json
+{
+  "userId": 42088130893
+}
+```
+
+or
+
+```json
+{
+  "userId": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
+}
+```
+
+**Example 2**
+
+The `Contrived Property` Property Type could define its value as being _either_ an instance of the `Number` Data Type, _or_ an object which has a `Foo` property.
+
+Sample data when used in (simplified view of) an Entity
+
+Assuming that `Foo` accepts an instance of the `Text` Data Type
+
+```json
+{
+  "contrivedProperty": 32
+}
+```
+
+or
+
+```json
+{
+  "contrivedProperty": {
+    "foo": "something here"
+  },
+  ...
+}
+```
+
+## Link Types
+
+A **Link Type** is a JSON schema which satisfies the following the following JSON meta-schema:
+
+```json
+{
+  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/link-type",
+  "description": "Specifies the structure of a Link Type",
+  "properties": {
+    "kind": {
+      "const": "linkType"
+    },
+    "$id": {
+      "$ref": "http://blockprotocol.org/type-system/schema/link-type-uri"
+    },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "relatedKeywords": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["kind", "$id", "name", "description"]
+}
+```
+
+> 💭 As the next section (Entity Types) will outline, there's an additional step to quantifying the types of things on either end of the relationship, as such the descriptions **should** be very general and most of the time not contain specific words about types (such as person).
+
+**Example 1** - `Owns`
+
+```json
+{
+  "kind": "linkType",
+  "$id": "https://blockprotocol.org/types/@alice/link-type/owns"
+  "name": "Owns",
+  "description": "Have (something) as one's own; possess"
+}
+```
+
+**Example 2** - `Submitted By`
+
+```json
+{
+  "kind": "linkType",
+  "$id": "https://blockprotocol.org/types/@alice/link-type/submitted-by"
+  "name": "Submitted By",
+  "description": "Suggested, proposed, or presented by"
+}
+```
+
+## Entity Types
+
+An **Entity Type** is a JSON schema which satisfies the following the following JSON meta-schema:
+
+```json
+{
+  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/entity-type",
+  "description": "Specifies the structure of an Entity Type",
+  "properties": {
+    "kind": {
+      "const": "entityType"
+    },
+    "$id": {
+      "$ref": "http://blockprotocol.org/type-system/schema/entity-type-uri"
+    },
+    "name": { "type": "string" },
+    "description": { "type": "string" },
+    "properties": { "$ref": "#/$defs/propertyTypeObject" },
+    "links": {
+      "type": "object",
+      "propertyNames": {
+        "$comment": "Property names must be a valid URI to a link-type",
+        "$ref": "http://blockprotocol.org/type-system/schema/link-type-uri"
+      },
+      "patternProperties": {
+        ".*": {
+          "type": "object",
+          "oneOf": [
+            {
+              "properties": {
+                "ordered": { "type": "boolean", "default": false },
+                "type": { "const": "array" }
+              },
+              "required": ["ordered", "type"]
+            },
+            {}
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": ["kind", "$id", "name", "properties"],
+  "$defs": {
+    "propertyTypeObject": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "object"
+        },
+        "properties": {
+          "type": "object",
+          "propertyNames": {
+            "$comment": "Property names must be a valid URI to a property-type",
+            "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+          },
+          "patternProperties": {
+            ".*": {
+              "oneOf": [
+                { "$ref": "#/$defs/propertyTypeReference" },
+                {
+                  "type": "object",
+                  "properties": {
+                    "type": { "const": "array" },
+                    "items": { "$ref": "#/$defs/propertyTypeReference" }
+                  },
+                  "additionalProperties": false
+                }
+              ]
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "propertyTypeReference": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "$comment": "Property Object values must be defined through references to the same valid URI to a property-type",
+          "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+        }
+      },
+      "additionalProperties": false
+    },
+    "entityTypeReference": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "$comment": "Property Object values must be defined through references to the same valid URI to a entity-type",
+          "$ref": "http://blockprotocol.org/type-system/schema/entity-type-uri"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+```
+
+### Defining an Entity Type's Properties
+
+#### Specifying an Entity Type has Property Types
+
+The data _within_ an Entity is described simply through a set of Property Types
+
+**Example 1**
+
+The `Book` Entity Type could contain the Property Types `Name`, a `Published On` and a `Blurb`
+
+- The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Book",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    }
+  }
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+{
+  "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
+  "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
+  "https://blockprotocol.org/types/@alice/property-type/blurb": ...
+}
+```
+
+#### Specifying there is a list of properties
+
+The entity type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type
+
+**Example 1**
+
+The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
+
+- The `Model`, `Make`, `Spec`, and `Year` Property Types all have values that are instances of the `Text` Data Type
+- The `Brake Horsepower` Property Type has a value that is an instance of the `Number` Data Type
+- The `Extra Trim` Property Type is a list where the values are instances of the `Text` Data Type
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Car",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/make": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/make"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/model": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/model"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/spec": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/spec"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/year": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/year"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/brake-horsepower": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/brake-horsepower"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/extra-trim": {
+      "type": "array",
+      "items": {
+        "$ref": "https://blockprotocol.org/types/@alice/property-type/extra-trim"
+      }
+    }
+  }
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+{
+  "https://blockprotocol.org/types/@alice/property-type/make": "Mercedes-Benz",
+  "https://blockprotocol.org/types/@alice/property-type/model": "300 SL",
+  "https://blockprotocol.org/types/@alice/property-type/year": "1957",
+  "https://blockprotocol.org/types/@alice/property-type/brake-horsepower": 222,
+  "https://blockprotocol.org/types/@alice/property-type/extra-trim": [
+    "Leather Seats",
+    "Cream and Red"
+  ]
+}
+```
+
+### Defining Relationships between Entities
+
+Entity Types can also express the types of relationships they have with other things.
+
+#### Specifying an Entity Type has out-going Links
+
+The links going _from_ an Entity are described a set of Link Types
+
+**Example 1**
+
+The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link
+
+The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Book",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": { "$ref": "https://blockprotocol.org/types/@alice/property-type/name" },
+    "https://blockprotocol.org/types/@alice/property-type/published-on": { "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on" },
+    "https://blockprotocol.org/types/@alice/property-type/blurb": { "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb" },
+  }
+  "links": {
+    "https://blockprotocol.org/types/@alice/property-type/written-by": {}
+  }
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+[
+  // Person entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 111,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+    ...
+  },
+  // Book Entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 112,
+    "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
+    "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
+    "https://blockprotocol.org/types/@alice/property-type/blurb": ...,
+    "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+  }
+]
+```
+
+**Example 2**
+
+The `Uk Address` Entity Type could contain Property Types `address-line-1`, `postcode`, and `city`
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "UK Address",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/address-line-1": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/address-line-1"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/postcode": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/postcode"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/city": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/city"
+    }
+  }
+}
+```
+
+The `Organisation` Entity Type could contain Property Type `name`
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Organisation",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    }
+  }
+}
+```
+
+The `Building` Entity Type could a `Located At` link, and a `Tenant` link
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Bulding",
+  "properties": {},
+  "links": {
+    "https://blockprotocol.org/types/@alice/property-type/located-at": {},
+    "https://blockprotocol.org/types/@alice/property-type/tenant": {}
+  }
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+[
+  // UK Address entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 113,
+    "https://blockprotocol.org/types/@alice/property-type/address-line-1": "Buckingham Palace",
+    "https://blockprotocol.org/types/@alice/property-type/postcode": "SW1A 1AA",
+    "https://blockprotocol.org/types/@alice/property-type/city": "London"
+  },
+  // Organisation entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 114,
+    "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+  }
+  // Building entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 115,
+    "https://blockprotocol.org/types/@alice/property-type/located-at": 113, // referring to the UK Address entity ID
+    "https://blockprotocol.org/types/@alice/property-type/tenant": 114, // referring to the Organisation entity ID
+  }
+]
+```
+
+#### Specifying there is a List of Links
+
+The Entity Type can also express that it can have multiple out-going links of the same type
+
+**Example 1**
+
+The `Person` Entity Type could contain some Property Types, and multiple `Friend Of` links
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Person",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    }
+  },
+  "links": {
+    "https://blockprotocol.org/types/@alice/property-type/friend-of": {
+      "type": "array",
+      "ordered": false
+    }
+  }
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+[
+  // Person entities
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 211,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+  },
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 212,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Bob"
+  },
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 213,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Charlie",
+    "https://blockprotocol.org/types/@alice/property-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
+  }
+]
+```
+
+#### Specifying there is an Ordered List of Links
+
+The Entity Type can also express that its out-going links (of the same type) are ordered
+
+**Example 1**
+
+The `Playlist` Entity Type could contain some Property Types, and an _ordered_ list of `Contains` links
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Playlist",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    }
+  },
+  "links": {
+    "https://blockprotocol.org/types/@alice/property-type/contains": {
+      "type": "array",
+      "ordered": true
+    }
+  }
+}
+```
+
+The `Song` Entity Type could contain some Property Types.
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Playlist",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    }
+  }
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+[
+  // Songs
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 312,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Rocket Man"
+  },
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 313,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Du Hast"
+  },
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 314,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Valley of the Shadows"
+  },
+  // Playlist
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 315,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Favorite Songs",
+    "https://blockprotocol.org/types/@alice/property-type/contains": [
+      312, 314, 313
+    ] // referring to the song entity IDs, ordering is intentional and stable
+  }
+]
+```
+
+**Example 2**
+
+The `Page` Entity Type could contain some Property Types, a `Written By` link, and an _ordered_ list of `Contains` links.
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Page",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/text": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/text"
+    }
+  },
+  "links": {
+    "https://blockprotocol.org/types/@alice/property-type/written-by": {},
+    "https://blockprotocol.org/types/@alice/property-type/contains": {
+      "type": "array",
+      "ordered": true
+    }
+  }
+}
+```
+
+Omitted `Paragraph`, `Heading`, `Divider` and `User` entities.
+
+This would accept Entity instances with the following shape
+
+```json
+[
+  // Paragraph Entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 316,
+    "https://blockprotocol.org/types/@alice/property-type/text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas."
+  },
+  // Heading Entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 317,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Duo Reges: constructio interrete."
+  },
+  // Divider Entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 318,
+    "https://blockprotocol.org/types/@alice/property-type/width": "full"
+  },
+  // User Entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 319,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+  },
+  // Page Entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 320,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum",
+    "https://blockprotocol.org/types/@alice/property-type/written-by": 319 // referring to the User entity ID
+    "https://blockprotocol.org/types/@alice/property-type/contains": [317, 316, 318] // referring to IDs of the various types of page contents above
+  }
+]
+```
+
+## Using the Types in the Block Protocol
+
+Using the proposed type system for Block Protocol imposes changes on the Graph Service and how Block Schemas are defined.
+
+The Graph Service is currently specified as [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json).
+
+### Interfacing with properties on Entities
+
+A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties which use simple keys will now have to point at _Property Type URIs_.
+
+**An example of an entity instance in the current system:**
+
+```json
+{
+  "entityId": 111
+  "name": "Arthur Philip Dent",
+  "age": 30,
+  "planetOfOrigin": "Earth",
+  "occupation": "Intergalactic Traveler"
+}
+```
+
+**An example of an entity instance in the proposed system:**
+
+```json
+{
+  "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 111,
+
+  "https://blockprotocol.org/types/@alice/property-type/name": "Arthur Philip Dent",
+  "https://blockprotocol.org/types/@alice/property-type/age": 30,
+  "https://blockprotocol.org/types/@alice/property-type/planet-of-origin": "Earth",
+  "https://blockprotocol.org/types/@alice/property-type/occupation": "Intergalactic Traveler"
+}
+```
+
+This change canonicalizes property keys, such that they uniquely identify a Property Type.
+
+**Within blocks** this impacts
+
+- how entity fields are accessed
+- how Block Protocol messages are constructed
+- payload size of Block Protocol messages
+
+**For block authors** this impacts
+
+- how Block Schemas are defiend
+- reusability of properties (the need for some kind of type discovery)
+
+> 💡 Notice that `entityId`s are replaced by a Property Type URI that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
+
+### Interfacing with Linked Entities
+
+#### Receiving Links and Linked Entities
+
+Link groups and Linked entities in the Graph Service are currently supplied outside the entity as separate objects. This behaviour will stay the same, but the objects received will be of a different shape.
+
+**An example of a `linkGroup` instance in the current system:**
+
+```json
+{
+  "sourceEntityId": "user1",
+  "path": "company",
+  "links": [
+    {
+      "sourceEntityId": "user1",
+      "destinationEntityId": "company1",
+      "path": "company"
+    }
+  ]
+}
+```
+
+**An example of a `linkGroup` instance in the proposed system:**
+
+```json
+{
+  "sourceEntityId": 111,
+  "link": "https://blockprotocol.org/types/@alice/link-type/company",
+  "links": [
+    {
+      "sourceEntityId": 111,
+      "destinationEntityId": 222,
+      "link": "https://blockprotocol.org/types/@alice/link-type/company"
+    }
+  ]
+}
+```
+
+> 💡 In the proposed system example instance, the `path` key has been replaces with `link`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `linkType`, etc.
+
+Links (which are given in the `linkGroup` field `links`) will use Link Type URIs instead of a `path`.
+
+As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
+
+**An example of a `linkedEntities` instance in the current system:**
+
+```json
+[
+  {
+    "entityId": 222,
+    "name": "HASH, Ltd."
+  }
+]
+```
+
+**An example of a `linkedEntities` instance in the proposed system:**
+
+```json
+[
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 222,
+    "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+  }
+]
+```
+
+Links in the proposed system has the notion of cardinality. A link can be one-to-one and one-to-many. The "many" cardinality can further be constrained and set to be ordered or unordered. The indices of ordered links are transparent to the users, and implicit in the order that they appear in the `links` array. More on this in the next section.
+
+#### Creating Links
+
+Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URIs.
+
+**An example of a `createLink` instance in the current system:**
+
+```json
+{
+  "sourceEntityId": 111,
+  "destinationEntityId": 222,
+  "path": "company"
+}
+```
+
+**An example of `createLink` instance in the proposed system:**
+
+```json
+{
+  "sourceEntityId": 111,
+  "destinationEntityId": 222,
+  "link": "https://blockprotocol.org/types/@alice/link-type/company"
+}
+```
+
+Any link will use Link Type URIs instead of a `path`.
+
+Links can be ordered in the current system, and the behaviour will stay mostly the same in the proposed system
+**An example of an ordered `createLink` instance in the current system:**
+
+```json
+{
+  "sourceEntityId": 333,
+  "destinationEntityId": 444,
+  "index": 4,
+  "path": "stopsAt"
+}
+```
+
+**An example of an ordered `createLink` instance in the proposed system:**
+
+```json
+{
+  "sourceEntityId": 333,
+  "destinationEntityId": 444,
+  "index": 4,
+  "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+}
+```
+
+The cardinality of the link specified in the source Entity Type dictates what is a valid `createLink` request.
+
+### Block Schemas and Structure-based Queries
+
+#### Link Constraints (to be changed)
+
+### Interfacing with Types
+
+# Drawbacks
+
+### Implementation Complexity
+
+This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new service-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilise the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph service implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
+
+It's worth noting that standard JSON schema validators won't natively support the full Type System (due to some of the new keywords that have been created), however they should be able to do partial validation, where prior to this RFC there were occurrences where misusing JSON schema could break the validators entirely.
+
+### Ergonomics of manually writing schemas
+
+This RFC greatly decreases the ergonomics of writing block schemas **by hand**. The verbosity of schemas is significantly increased, as well as the general complexity of their expression due to them being composed of other schemas that need to be referred to.
+
+This has the potential to increase the barrier-to-entry, and dissuade people from picking up the Protocol if its capabilities prove to be too complicated for their use cases.
+
+### Ecosystem lock-in
+
+With some of the potential solutions proposed in [Future Possibilities](#future-possibilities) there will be large benefits to participating within the Block Protocol ecosystem and community. This naturally brings the potential downside of opportunity cost of _not_ participating within the ecosystem.
+
+This type system is designed around reusable types, where people can share and benefit from other people's work, isolating development from the community means that types will not end up being reusable and a lot of the value is lost.
+
+### Versioning Considerations
+
+A version control model will likely be developed in tandem to the implementation of this type system. As such, there are potential complications to how dependencies are managed and the ramifications of having a large-connected system. Some of these are explored in detail in the Link Constraints RFC (link TODO). The major drawback here is that this greatly increases cognitive load, and reasoning about changes within the ecosystem will become more involved.
+
+A more immediately apparent concern is if schemas are versioned, but their use isn't pinned to a version, then they might implicitly change if their dependencies are updated. More verbosely, if we have a Property Type `Age` on version `1.1`, and an Entity Type `Person` which simply refers to `Age`, if `Age` is updated then the Entity Type implicitly changes.
+
+# Rationale and Alternatives
+
+## The Big Picture
+
+As outlined in the [Main Motivation section](#main-motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
+
+- Complex use-cases (such as those that are able to dynamically load and use a block at run-time)
+- Simple use-cases (such as those that include a handful of blocks in the source-code at build-time).
+
+**This RFC is heavily weighted towards facilitating useful, complex use-cases, and explicitly recognises that it likely makes the development experience worse for simpler use-cases.**
+
+This decision is guided by the thoughts outlined in the [Main Motivation section](#main-motivation), most notably the acknowledgement that a standard being prescriptive can actually lead to new functionalities. Although there are [drawbacks](#drawbacks), the system allows parties on either side of the communication channel to have greater confidence, and to be able to express themselves more comprehensively. The compromise is argued for by first understanding the concept of consensus, and then exploring its practical implications.
+
+### Convergence and divergence of consensus
+
+There is an incredibly diverse number of domains in which the Block Protocol could be utilised. It's also important to recognise that the Protocol is designed to be added to _existing_ systems, and when integrated it must be able to interoperate with whatever surrounds it. Due to this, it can't rely on a prescriptive global definition of how data should be structured, as the vast quantity of the data is pre-existing and has been made according to different systems, and it's highly impractical to expect entire data-stores to be restructured.
+
+Across the domains, data will vary to the point that it's completely infeasible to define one perfect description of it (an _ontology_), there will simply be too much disagreement about what a certain "thing" looks like, i.e. there will be a lack of consensus. It's also worth mentioning that this is not just due to differences in domains, but also in data-quality, where misconfigured data must still be _able_ to be represented in the system, which is a lot less likely with one global view of the world.
+
+As such, the key identified benefit of this type system is that _continues_ to allow for **partial-consensus**, where different domains can create and utilise different subsets of the wider ecosystem. It allows for **divergence** of definitions of "things" (Bob can define "Person" differently to Alice), but _encourages_ **gradual convergence** through reusability and further standardisation.
+
+#### Reusability
+
+An issue with the current system is that for each block developed, the devleoper needs to describe its requirements autonomously. They decide what data it needs, and importantly, decide _how to describe that data_. The toolkit they're provided with right now is to embed semantic meaning into the key of the JSON blob. But as shown in the [Main Motivation](#main-motivation), this falls short quickly in the real world as language is imperfect, and words chosen as keys can have synonyms, they can prove ambiguous, etc.
+
+This is rectified through the following:
+
+- Allow people to describe the individual pieces of data _within_ "things"
+- Make it possible to reuse those descriptions
+
+The system proposed in the RFC creates another vector of communication, the description of the data is no longer _necessarily_ as autonomous, people describing data can benefit from existing descriptions. This gives a route for **convergence** of descriptions, because as a block developer I can _discover_ an existing Property Type for `Timestamp` and reuse it, mitigating some of the risk of instead describing it as "time". This is less one-sided because a producer of data is also able to discover descriptions which they can use to create their data.
+
+That's not to say this will be perfect or that it will happen most of the time, but it's a possibility that's opened up by the system, and which future tooling and processes can leverage and guide people towards. This is beneficial for a number of reasons, one of which is that reusability of descriptions leads to emergent standardisation.
+
+#### Emergent standardisation
+
+The interaction of behaviors within a complex system often leads to emergent phenomena (properties that only appear as a result of interaction). In the case of the Block Protocol ecosystem, we want to encourage behaviors that lead to emergent properties that can be beneficially leveraged by participants of the ecosystem. Through the hierarchy of _reusable_ types we hope to encourage **gradual convergence** towards descriptions of data that are common across a lot of domains.
+
+These common descriptions will form **standards** that **emerge** as a result of the community effort as the system evolves. This differs from trying to design a prescriptive ontology to describe all data, and instead allows different views of the world to develop in parallel, tailored to their own domains, which can overlap when it proves useful.
+
+### The practical implications of such a system
+
+The section above describes the general philosophical goals and benefits of the Type System. These benefits materialize in immediate and practical forms however.
+
+#### Complex use-cases
+
+As outlined, the Type System is tailored towards improving complex use cases of the Block Protocol; specifically around enabling dynamic functionalities such as loading unknown blocks at run-time.
+
+In the immediate term, having a more rigorous definition of semantic meaning (e.g. what I actually "mean" when I say the "timestamp" of my entity) improves the experience of embedding applications, block developers, and end-users as outlined in the [Motivating implications](#motivating-implications).
+
+In the longer term, blocks can be developed _within_ emergent standards, discovering related descriptions of data, and having greater confidence that they fit the problems well. Users benefit from an ecosystem with less guesswork, and greater specificity. Embedding applications have greater potential to implement programmatic inferrence, and have a better specified toolkit to utilise when addressing problems of mapping data.
+
+#### Simple use-cases
+
+Although there are numerous [drawbacks](#drawbacks) that affect the simpler use-cases, there are still large benefits to the proposal. Having better-defined types improves machine comprehension, but also improves human comprehension. A developer trying to manually map their data to the API of a block can better understand what the block needs, and more quickly satisfy its requirements.
+
+A block developer trying to create a block that's specific to their domain for their own application might inadvertently create something that's useful to a wider audience, by participating in the wider ecosystem. The chance of them creating something useful is increased through reusability of descriptions.
+
+## Specific Decisions
+
+There are a number of very specific design decisions that are also encapsulated within this proposal, it's worth capturing some of the note-worthy ones.
+
+#### Allowing `oneOf`
+
+Representing the Type System within common structures like a Relation Database is greatly complicated by the inclusion of the boolean operators (`oneOf` is equivalent to an `or` operator). It is required under the constraint of being able to map any existing JSON data, as reasoned above. A simple example of this is trying to represent an object (this case occurs either in an Entity or a Property Type object) that looks like the following:
+
+```json
+{
+  "someProperty": [2.0, "foo"]
+}
+```
+
+To be able to represent this object, a property type would need to be created that looks like (a simplified view for brevity):
+
+```json
+{
+  "name": "someProperty",
+  "oneOf": [{ "$ref": "data-type/number" }, { "$ref": "data-type/text" }]
+}
+```
+
+More specifically, it's required to allow `oneOf` with more variants than _just Data Types_ because:
+
+```json
+{
+  "someProperty": [{ "bar": 2.0 }, "foo"]
+}
+```
+
+Requires something like
+
+```json
+{
+  "name": "someProperty",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "bar": { "$ref": "property-type/bar" }
+      }
+    },
+    { "$ref": "data-type/text" }
+  ]
+}
+```
+
+#### Including an `Empty List` Data Type
+
+Similarly, the `Empty List` Data Type is required to be able to programmatically map unknown JSON data into the system. Given an incoming entity like:
+
+```json
+{
+    "foo": [
+        [],
+        [2, 6, 10, ...],
+        [{...}, {...}, ...]
+    ]
+}
+```
+
+There isn't a good assumption to make about the type of the first array. As such, including `Empty List` makes it possible to treat this as a value without an inner type, and a user will be forced to retype it to be able to modify it.
+
+#### Including an `Object` Data Type
+
+The inclusion of the `Object` Data Type is less strongly supported. At the moment it seems like it's easy to include in implementations (as datastores will already need to be able to represent JSON-like structures), so instead the discussion at the moment is around looking for a reason to exclude it.
+
+There's a risk that it could be utilised instead of Property Type objects, which means the inner data won't be accessible through tooling designed around the Type System. However at the moment it seems a convenient inclusion to allow users to prototype and quickly throw in semi-structured data as black boxes, later on transitioning to Data Types. As the type is very constrained in the current proposal, with it not being possible to add further JSON schema keywords, etc. the risk that users will misuse it seems low.
+
+# Prior Art
+
+As mentioned in a few sections, this design basically defines a way for communities to build a compound ontology. As such it's worth mentioning some of the alternative knowledge representation models to provide points of discussion, and to invite members of their communities to give thoughts. There are a few specific technologies that we've taken particular interest in while designing the RFC.
+
+> Note: Some planning has been made around **varying**-levels of compatibility with these technologies, although in-depth designs for their interfacing have not been written up yet.
+
+## Data Description Formats
+
+- [RDF](https://www.w3.org/RDF/)
+- [RDFS](https://www.w3.org/TR/rdf-schema/)
+- [OWL](https://www.w3.org/OWL/)
+
+## Ontologies
+
+- [Schema.org](https://schema.org/)
+- [DBPedia](https://dbpedia.org/)
+
+# Unresolved Questions
+
+1.  Are there further impacts on block schemas?
+1.  Do we permit spaces in type names
+1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
+    As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`
+
+# Future Possibilities
+
+This RFC establishes components which are quite fundamental. As such, there is a lot of potential work that can be made to improve ergonomics, functionality, etc.
+
+## Constraining possible destinations of Links
+
+As alluded to elsewhere in the document, during the writing of this RFC some problems were discovered with Entity Types constraining the destinations of a Link. This has been made into another RFC outlining the issue and a potential solution. (LINK TODO)
+
+## User-Created Data Types
+
+In this RFC Data Types are limited to a set of primitive ones. There's potential to introduce a system that lets users create new Data Types by constraining and combining the primitives. This is explored in another RFC. (LINK TODO)
+
+## Discoverability
+
+Reusability has been mentioned as a large benefit of the Type System. These benefits will be limited if types aren't easily discoverable. A potential solution to this would be establishing a standard for a Type Repository. This standard could potentially be written to work like Linux (or npm, pip, etc.) package repositories.
+
+It should therefore be possible to allow for a decentralised system, while also providing centralised ecosystem (or multiple) for those who wish to benefit from it, likely having a blockprotocol.org Type Repository.
+
+Having repositories should make it possible to build tooling around type discoverability, whether it be autocomplete in Schema Editors, or embedding applications being able to create and modify types within a repository.
+
+This is also made a lot easier as the proposed Type System has provisioned that `$id`s of types are unique URIs, which should make it easier to allow for a decentralised system for hosting them, while also enabling the creation of centralised ones for people who want to benefit from a closer-knit system.
+
+## Supplementary tooling
+
+As hinted to in the section above, there's a suite of supplementary tooling that could be created to mitigate some of the negative impact on ergonomics that this RFC creates. These could include Schema Editors designed for the Block Protocol Type System, IDE plugins (that potentially consume from Type Repositories) to aid in writing the schemas.
