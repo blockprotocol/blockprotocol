@@ -50,7 +50,7 @@ export const customColors = {
     60: "#758AA1",
     70: "#64778C",
     80: "#4D5C6C",
-    90: "#37434F",
+    90: "#37434e",
   },
   black: "#0E1114",
   white: "#FFFFFF",
