@@ -52,7 +52,7 @@
     },
     {
       "name": "updateEntity",
-      "description": "A request to update an entity, with the properties to update",
+      "description": "Request to update an entity, with the properties to update",
       "source": "block",
       "respondedToByMessage": "updateEntityResponse",
       "sentOnInitialization": false,
