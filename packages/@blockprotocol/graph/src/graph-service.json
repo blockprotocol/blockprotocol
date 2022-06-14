@@ -767,7 +767,7 @@
             }
           },
           "linkGroups": {
-            "description": "The links attached to the block or the entities provided in inkedEntities, grouped by entity and path.",
+            "description": "The links attached to the block or the entities provided in linkedEntities, grouped by entity and path.",
             "type": "array",
             "items": {
               "$ref": "https://blockprotocol.org/types/services/graph/link-group"
