@@ -64,7 +64,7 @@ If you’re looking for inspiration regarding new blocks to build, or contributi
 
 Distributed under the MIT License. See `LICENSE.md` for more information.
 
-........................................................................................................................## Contact
+## Contact
 
 Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
