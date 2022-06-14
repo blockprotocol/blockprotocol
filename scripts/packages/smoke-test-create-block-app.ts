@@ -68,10 +68,9 @@ const script = async () => {
     await execa(
       "npm",
       [
-        "exec",
         "--cache",
         tmpNodeCacheDir.path,
-        "create-block-app@next",
+        "create-block-app",
         blockName,
         "--path",
         blockDirPath,
