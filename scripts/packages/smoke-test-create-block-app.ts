@@ -70,7 +70,7 @@ const script = async () => {
       [
         "--cache",
         tmpNodeCacheDir.path,
-        "create-block-app@next",
+        "create-block-app@0.0.6-next.0",
         blockName,
         "--path",
         blockDirPath,
