@@ -29,7 +29,8 @@ export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
       <Box
         sx={{
           mx: "auto",
-          width: { xs: "100%", md: "1100px" },
+          width: { xs: "100%", md: "100%" },
+          maxWidth: { xs: "100%", md: "1100px" },
           display: "flex",
           flexDirection: "column",
           alignItems: { xs: "center", md: "flex-start" },
