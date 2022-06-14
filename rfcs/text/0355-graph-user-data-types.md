@@ -1,6 +1,6 @@
 - Feature Name: graph-user-data-types
 - Start Date: 2022-06-14
-- RFC PR: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/pull/0000)
+- RFC PR: [blockprotocol/blockprotocol#355](https://github.com/blockprotocol/blockprotocol/pull/355)
 - Block Protocol Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
 
 # Summary
