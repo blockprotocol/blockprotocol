@@ -1,10 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { JsonObject } from "@blockprotocol/core";
 import {
-  BlockProtocolEntityType,
-  BlockProtocolProps,
-  BlockProtocolUpdateEntityTypesFunction,
-  JSONObject,
-} from "blockprotocol";
+  EmbedderGraphMessageCallbacks,
+  EntityType,
+} from "@blockprotocol/graph";
+import { Box, Typography } from "@mui/material";
 import debounce from "lodash/debounce";
 import get from "lodash/get";
 import React, {
@@ -33,7 +32,7 @@ import { SchemaPropertiesTable } from "./schema-properties-table";
 // import { Button } from '../../button';
 
 export const SchemaOptionsContext = createContext<{
-  availableEntityTypes: BlockProtocolEntityType[];
+  availableEntityTypes: EntityType[];
   selectedSchema: JsonSchema;
   subSchemas: [string, JsonSchema][];
   generateAbsoluteSchemaLink: ($ref: string) => ReactElement;
@@ -43,23 +42,24 @@ type JsonSchemaEditorProps = {
   entityTypeId: string;
   schema: JsonSchema;
   subSchemaReference?: string;
-} & Pick<BlockProtocolProps, "aggregateEntityTypes" | "updateEntityTypes">;
+} & Pick<EmbedderGraphMessageCallbacks, "aggregateEntityTypes"> &
+  Partial<Pick<EmbedderGraphMessageCallbacks, "updateEntityType">>;
 
 export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
   aggregateEntityTypes,
   entityTypeId,
   schema: possiblyStaleDbSchema,
   subSchemaReference,
-  updateEntityTypes,
+  updateEntityType,
 }) => {
   const [availableEntityTypes, setAvailableEntityTypes] = useState<
-    BlockProtocolEntityType[] | undefined
+    EntityType[] | undefined
   >(undefined);
 
   useEffect(() => {
     if (aggregateEntityTypes) {
-      aggregateEntityTypes({ includeOtherTypesInUse: true })
-        .then((response) => setAvailableEntityTypes(response.results))
+      aggregateEntityTypes({ data: { includeOtherTypesInUse: true } })
+        .then(({ data }) => setAvailableEntityTypes(data?.results ?? []))
         .catch((err) =>
           // eslint-disable-next-line no-console -- TODO: consider using logger
           console.error(`Error fetching entity type options: ${err.message}`),
@@ -75,15 +75,15 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
 
   const debouncedUpdate = useMemo(
     () =>
-      debounce<BlockProtocolUpdateEntityTypesFunction>((...args) => {
-        if (!updateEntityTypes) {
+      debounce<EmbedderGraphMessageCallbacks["updateEntityType"]>((...args) => {
+        if (!updateEntityType) {
           throw new Error(
             "updateEntityType function not provided. Schema cannot be updated.",
           );
         }
-        return updateEntityTypes(...args);
+        return updateEntityType(...args);
       }, 500),
-    [updateEntityTypes],
+    [updateEntityType],
   );
 
   useEffect(() => {
@@ -97,12 +97,12 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
       return;
     }
     // Send updates to the API periodically when the draft is updated
-    debouncedUpdate([
-      {
+    debouncedUpdate({
+      data: {
         entityTypeId,
-        schema: workingSchemaDraft as JSONObject,
+        schema: workingSchemaDraft as JsonObject,
       },
-    ])?.catch((err) => {
+    })?.catch((err) => {
       // eslint-disable-next-line no-console -- TODO: consider using logger
       console.error(`Error updating schema: ${err.message}`);
       throw err;
@@ -229,7 +229,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
 
   const { description } = selectedSchema;
 
-  const readonly = !updateEntityTypes || !entityTypeId;
+  const readonly = !updateEntityType || !entityTypeId;
 
   // @todo implement subschema handling (or remove this code)
   // const addSubSchema = (newSubSchemaName: string) =>

@@ -1,3 +1,5 @@
+# Introduction
+
 <InfoCardWrapper>
 
 <InfoCard variant="warning" title="What’s a specification?">
@@ -7,13 +9,23 @@ They help make applications and websites interoperable.
 
 </InfoCard>
 
-# Introduction
-
-This document specifies a protocol for defining web ‘blocks’ – discrete components displayed on a web page or other application – and how they communicate with any application embedding them.
+The Block Protocol specifies how developers can define web "blocks" – discrete components displayed on a web page or other application – and how such blocks communicate with any application embedding them.
 
 It defines how structured data is passed between blocks and embedding applications, enabling any protocol-compliant application to use any protocol-compliant block to make structured data viewable and editable by users.
 
 </InfoCardWrapper>
+
+## Structure
+
+The Block Protocol is split into a core specification and service specifications.
+
+The [core specification](Block%20Protocol%20v0%202%209ae60f02aaf745eba5fa488b31b12ff1/Core%20Specification%20v0%202%20c5a95a9542614d139e02443a5dad8cee.md) sets out how blocks should be defined, how services are defined, how embedding applications should initialize blocks, and _how_ applications and blocks communicate.
+
+Each **service specification** defines _what_ applications and blocks communicate. A service is a logical grouping of messages blocks and applications may exchange.
+
+Each specification is versioned separately, allowing them to evolve independently.
+
+Any reference to the ‘protocol version’ should be read as _the version of the core specification_.
 
 ## Overview
 
@@ -50,26 +62,3 @@ Given a catalog of blocks built in compliance with the protocol, and embedding a
 A user could take a data structure, and search for blocks which can handle that data structure (or a useful portion of it) – whether they are a developer wanting to bundle a block with an application, or an end user of an embedding application which allows users to find and add new blocks themselves.
 
 Blocks are as customizable as any other current component allows, but with a strong default setup, theme, and a predictable interface governed by this protocol, that provides plug-and-play functionality for data.
-
-## Terminology
-
-**Entity:** an instance of data conforming to a schema, often corresponding to a thing in the real world.
-
-**Schema:** a definition of a data structure, prescribing the shape of an entity (its properties).
-A schema might describe an entity which is linked to a family of blocks (e.g. the schema for Table blocks, which might have properties such as `initialColumns`), or other non-block entities (e.g. the schema for a Person, Movie, or List). There is no technical difference between the two, and either can described the data a block accepts (e.g. a MovieSummary block might accept a Movie).
-
-**Properties:** the fields on a schema, what types of data are permitted as their values, and any other validation rules.
-Field types may be scalar (integer, string etc.), complex objects, collections (lists/arrays), or refer to another schema.
-
-**Block type:** a definition and implementation – i.e. code – for a discrete component on a web page, which provides functionality for structured data (rendering it, editing it).
-A block type specifies the data it accepts via a schema in accordance with [the spec](https://blockprotocol.org/spec/embedding-applications).
-
-**Block:** an instance of a block type inserted into a web page and supplied with data by an embedding application.
-
-**Block package:** a collection of files making a block type available for use by embedding applications, including its source code and accompanying metadata.
-
-**Embedding application:** an application which can take a block type and insert it in a web page, supplying the block with the structured data and dependencies it needs in accordance with the [specification](https://blockprotocol.org/spec/embedding-applications).
-
-When capitalized, the words ‘MUST’, ‘MUST NOT’, ‘SHOULD’, ‘SHOULD NOT’, and ’MAY’ in this document are to be interpreted as described in IETF [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
-
-This document is focused on web software, but the principles of the contract between blocks and embedding applications can also be applied to other software.

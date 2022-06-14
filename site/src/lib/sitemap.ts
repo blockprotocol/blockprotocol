@@ -37,15 +37,7 @@ export const getDocumentationSubPages = (): SiteMapPage[] => [
   {
     ...getPage({
       pathToDirectory: "docs",
-      fileName: "2_publishing-blocks.mdx",
-    }),
-    href: "/docs/publishing-blocks",
-    title: "Publishing Blocks",
-  },
-  {
-    ...getPage({
-      pathToDirectory: "docs",
-      fileName: "3_embedding-blocks.mdx",
+      fileName: "2_embedding-blocks.mdx",
     }),
     href: "/docs/embedding-blocks",
     title: "Embedding Blocks",
@@ -53,7 +45,7 @@ export const getDocumentationSubPages = (): SiteMapPage[] => [
   {
     ...getPage({
       pathToDirectory: "docs",
-      fileName: "4_faq.mdx",
+      fileName: "3_faq.mdx",
     }),
     href: "/docs/faq",
     title: "FAQ",

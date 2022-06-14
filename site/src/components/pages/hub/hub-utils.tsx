@@ -1,17 +1,17 @@
 import {
-  BlockProtocolEntity,
-  BlockProtocolEntityType,
-  BlockProtocolLink,
-  BlockProtocolLinkedAggregation,
-} from "blockprotocol";
+  Entity,
+  EntityType,
+  Link,
+  LinkedAggregation,
+} from "@blockprotocol/graph";
 
 /** @todo type as JSON Schema. */
 export type BlockSchema = Record<string, any>;
 
 /** @todo possibly extend this type */
 export type BlockExampleGraph = {
-  entities?: BlockProtocolEntity[];
-  entityTypes?: BlockProtocolEntityType[];
-  links?: BlockProtocolLink[];
-  linkedAggregations?: BlockProtocolLinkedAggregation[];
+  entities?: Entity[];
+  entityTypes?: EntityType[];
+  links?: Link[];
+  linkedAggregations?: LinkedAggregation[];
 };

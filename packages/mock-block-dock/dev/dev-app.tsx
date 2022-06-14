@@ -1,25 +1,66 @@
 import * as React from "react";
-import { useState } from "react";
 import * as ReactDOM from "react-dom";
 
-import { MockBlockDock } from "../src/mock-block-dock";
-import { TestBlock } from "./test-block";
+import { MockBlockDock } from "../src";
+import { TestCustomElementBlock } from "./test-custom-element-block";
+import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
 
 const DevApp = () => {
-  const [entityId, setEntityId] = useState(1);
+  const [entityId, setEntityId] = React.useState(1);
+  const [name, setName] = React.useState("World");
+
+  const blockEntity = {
+    entityId: `test-entity-${entityId}`,
+    entityTypeId: "test-type-1",
+    properties: { name },
+  };
 
   return (
-    <>
-      <button type="button" onClick={() => setEntityId(entityId + 1)}>
-        Increment Entity ID
-      </button>
+    <div style={{ fontFamily: "sans-serif" }}>
+      <div
+        style={{
+          border: "1px solid black",
+          padding: 15,
+        }}
+      >
+        <h2>Update component props from outside the block</h2>
+        <button type="button" onClick={() => setEntityId(entityId + 1)}>
+          Increment Entity ID
+        </button>
+        <br />
+        <br />
+        <input
+          type="text"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          placeholder={"blockEntity's name property"}
+        />
+      </div>
       <br />
-      <MockBlockDock>
-        <TestBlock entityId={`test-entity-${entityId}`} name="World" />
-      </MockBlockDock>
-    </>
+      <h2>React</h2>
+      <div style={{ border: "1px solid black", padding: 15 }}>
+        <MockBlockDock
+          debug
+          blockDefinition={{ ReactComponent: TestReactBlock }}
+          blockEntity={blockEntity}
+        />
+      </div>
+      <h2>Custom Element</h2>
+      <div style={{ border: "1px solid black", padding: 15 }}>
+        <MockBlockDock
+          debug
+          blockDefinition={{
+            customElement: {
+              elementClass: TestCustomElementBlock,
+              tagName: "test-custom-element-block",
+            },
+          }}
+          blockEntity={blockEntity}
+        />
+      </div>
+    </div>
   );
 };
 

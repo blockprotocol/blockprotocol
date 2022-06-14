@@ -1,13 +1,16 @@
-# [Block Protocol](https://blockprotocol.org)
+# DEPRECATED
 
-`yarn add blockprotocol`
+With the introduction of Block Protocol v0.2, this package is no longer in use.
 
-Current version of this package only provides TypeScript types.
-Watch https://github.com/blockprotocol/blockprotocol for the updates!
+The Block Protocol is now composed of a `core` specification, and multiple **service** specifications.
 
-Usage example:
+Each specification is implemented in separate packages.
 
-```ts
-import type { BlockMetadata } from "blockprotocol";
-import type { BlockComponent } from "blockprotocol/react";
-```
+For types, please see:
+
+- `@blockprotocol/graph` for all types related to entities, entity types, and links.
+  Note that the `BlockProtocol` prefix has been removed.
+
+- `@blockprotocol/core` for types related to block metadata.
+
+See [https://blockprotocol.org/docs](https://blockprotocol.org/docs) for a fuller explanation of the Block Protocol.

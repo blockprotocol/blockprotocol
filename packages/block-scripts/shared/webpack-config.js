@@ -53,7 +53,7 @@ const generateBaseWebpackConfig = async (mode) => {
       filename: mode === "production" ? "[name].[contenthash].js" : "[name].js",
     },
     externals: Object.fromEntries(
-      Object.keys(peerDependencies).map((key) => [key, key]),
+      Object.keys(peerDependencies ?? {}).map((key) => [key, key]),
     ),
     mode,
     module: {

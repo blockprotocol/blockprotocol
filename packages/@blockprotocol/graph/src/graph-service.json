@@ -5,7 +5,7 @@
   "messages": [
     {
       "name": "createEntity",
-      "description": "Request to create an entity, expecting the created entity in response.",
+      "description": "Request to create an entity",
       "source": "block",
       "respondedToByMessage": "createEntityResponse",
       "sentOnInitialization": false,
@@ -19,6 +19,13 @@
           "properties": {
             "description": "The properties of the entity to create",
             "type": "object"
+          },
+          "links": {
+            "description": "Links to create along with the entity",
+            "type": "array",
+            "items": {
+              "$ref": "https://blockprotocol.org/types/services/graph/link"
+            }
           }
         },
         "required": ["entityTypeId", "properties"]
@@ -34,8 +41,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The newly created entity",
           "entity": {
-            "$ref": "https://blockprotocol.org/types/Entity"
+            "$ref": "https://blockprotocol.org/types/services/graph/entity"
           }
         },
         "required": ["entity"]
@@ -44,7 +52,7 @@
     },
     {
       "name": "updateEntity",
-      "description": "Request to update an entity, expecting the updated entity in response.",
+      "description": "Request to update an entity, with the properties to update",
       "source": "block",
       "respondedToByMessage": "updateEntityResponse",
       "sentOnInitialization": false,
@@ -73,8 +81,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The updated entity",
           "entity": {
-            "$ref": "https://blockprotocol.org/types/Entity"
+            "$ref": "https://blockprotocol.org/types/services/graph/entity"
           }
         },
         "required": ["entity"]
@@ -83,7 +92,7 @@
     },
     {
       "name": "deleteEntity",
-      "description": "Request to delete an entity, expecting a boolean in response.",
+      "description": "Request to delete an entity, expecting 'true' in response if the operation succeeds.",
       "source": "block",
       "respondedToByMessage": "deleteEntityResponse",
       "sentOnInitialization": false,
@@ -106,6 +115,7 @@
       "respondedToByMessage": null,
       "sentOnInitialization": false,
       "data": {
+        "description": "'true' if the operation succeeded. Otherwise, errors should be returned.",
         "type": "boolean"
       },
       "errorsCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
@@ -137,8 +147,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The retrieved entity",
           "entity": {
-            "$ref": "https://blockprotocol.org/types/Entity"
+            "$ref": "https://blockprotocol.org/types/services/graph/entity"
           }
         },
         "required": ["entity"]
@@ -154,8 +165,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The aggregation operation to apply",
           "operation": {
-            "$ref": "https://blockprotocol.org/types/LinkedAggregationOperation"
+            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
           }
         },
         "required": ["operation"]
@@ -172,11 +184,15 @@
         "type": "object",
         "properties": {
           "operation": {
-            "$ref": "https://blockprotocol.org/types/LinkedAggregationOperation"
+            "description": "The aggregation operation that was applied to generate the results, including any defaults set by the application.",
+            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
           },
           "results": {
+            "description": "The entities returned by the aggregation operation",
             "type": "array",
-            "items": { "$ref": "https://blockprotocol.org/types/Entity" }
+            "items": {
+              "$ref": "https://blockprotocol.org/types/services/graph/entity"
+            }
           }
         },
         "required": ["operation", "results"]
@@ -193,7 +209,7 @@
         "type": "object",
         "properties": {
           "schema": {
-            "description": "The schema of the entityType to create",
+            "description": "The schema of the entity type to create",
             "type": "object"
           }
         },
@@ -210,8 +226,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The created entity type",
           "entityType": {
-            "$ref": "https://blockprotocol.org/types/EntityType"
+            "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
           }
         },
         "required": ["entityType"]
@@ -242,15 +259,16 @@
     },
     {
       "name": "updateEntityTypeResponse",
-      "description": "The response to a request to update an entityType",
+      "description": "The response to a request to update an entity type",
       "source": "embedder",
       "respondedToByMessage": null,
       "sentOnInitialization": false,
       "data": {
         "type": "object",
         "properties": {
+          "description": "The updated entity type",
           "entityType": {
-            "$ref": "https://blockprotocol.org/types/EntityType"
+            "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
           }
         },
         "required": ["entityType"]
@@ -277,18 +295,19 @@
     },
     {
       "name": "deleteEntityTypeResponse",
-      "description": "The response to a request to delete an entityType",
+      "description": "The response to a request to delete an entity type",
       "source": "embedder",
       "respondedToByMessage": null,
       "sentOnInitialization": false,
       "data": {
+        "description": "'true' if the operation succeeded. Otherwise, 'errors' will be returned.",
         "type": "boolean"
       },
       "errorsCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
     },
     {
       "name": "getEntityType",
-      "description": "Request to retrieve an entityType, expecting the entityType in response.",
+      "description": "Request to retrieve an entity type, expecting the entity type in response.",
       "source": "block",
       "respondedToByMessage": "getEntityTypeResponse",
       "sentOnInitialization": false,
@@ -296,7 +315,7 @@
         "type": "object",
         "properties": {
           "entityTypeId": {
-            "description": "The entityTypeId of the entityType to retrieve",
+            "description": "The entityTypeId of the entity type to retrieve",
             "type": "string"
           }
         },
@@ -306,15 +325,16 @@
     },
     {
       "name": "getEntityTypeResponse",
-      "description": "The response to a request to get an entityType",
+      "description": "The response to a request to get an entity type",
       "source": "embedder",
       "respondedToByMessage": null,
       "sentOnInitialization": false,
       "data": {
         "type": "object",
         "properties": {
+          "description": "The retrieved entity type",
           "entityType": {
-            "$ref": "https://blockprotocol.org/types/EntityType"
+            "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
           }
         },
         "required": ["entityType"]
@@ -330,6 +350,7 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The aggregation operation to apply",
           "operation": {
             "$ref": "https://blockprotocol.org/types/LinkedAggregationOperation"
           }
@@ -347,10 +368,16 @@
       "data": {
         "type": "object",
         "properties": {
-          "operation": { "type": "object" },
+          "operation": {
+            "description": "The aggregation operation that was applied to generate the results, including any defaults set by the application.",
+            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+          },
           "results": {
+            "description": "The entity types returned by the aggregation operation",
             "type": "array",
-            "items": { "$ref": "https://blockprotocol.org/types/EntityType" }
+            "items": {
+              "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
+            }
           }
         },
         "required": ["operation", "results"]
@@ -366,10 +393,22 @@
       "data": {
         "type": "object",
         "properties": {
-          "sourceEntityId": { "type": "string" },
-          "destinationEntityId": { "type": "string" },
-          "index": { "type": "string" },
-          "path": { "type": "string" }
+          "sourceEntityId": {
+            "description": "The entityId of the source entity for the link",
+            "type": "string"
+          },
+          "destinationEntityId": {
+            "description": "The entityId of the destination entity for the link",
+            "type": "string"
+          },
+          "index": {
+            "description": "The position of this link in an ordered list of links, where ordering is important. An index of 0 represents the first position in the list.",
+            "type": "number"
+          },
+          "path": {
+            "description": "The path or field on the entity where this link is made (e.g. 'friend', 'employer')",
+            "type": "string"
+          }
         },
         "required": ["sourceEntityId", "destinationEntityId", "path"]
       },
@@ -384,8 +423,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The created link",
           "link": {
-            "$ref": "https://blockprotocol.org/types/Link"
+            "$ref": "https://blockprotocol.org/types/services/graph/link"
           }
         },
         "required": ["link"]
@@ -423,8 +463,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The updated link",
           "link": {
-            "$ref": "https://blockprotocol.org/types/Link"
+            "$ref": "https://blockprotocol.org/types/services/graph/link"
           }
         },
         "required": ["link"]
@@ -456,6 +497,7 @@
       "respondedToByMessage": null,
       "sentOnInitialization": false,
       "data": {
+        "description": "'true' if the operation succeeded. Otherwise, 'errors' should be returned.",
         "type": "boolean"
       },
       "errorsCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
@@ -487,8 +529,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The retrieved link",
           "link": {
-            "$ref": "https://blockprotocol.org/types/Link"
+            "$ref": "https://blockprotocol.org/types/services/graph/link"
           }
         },
         "required": ["link"]
@@ -504,11 +547,18 @@
       "data": {
         "type": "object",
         "properties": {
-          "sourceEntityId": { "type": "string" },
-          "operation": {
-            "$ref": "https://blockprotocol.org/types/LinkedAggregationOperation"
+          "sourceEntityId": {
+            "description": "The entityId of the source entity of this linked aggregation",
+            "type": "string"
           },
-          "path": { "type": "string" }
+          "operation": {
+            "description": "The aggregation operation to apply",
+            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+          },
+          "path": {
+            "description": "The path or field on the entity where this linked aggregation is made (e.g. 'rows')",
+            "type": "string"
+          }
         },
         "required": ["sourceEntityId", "operation", "path"]
       },
@@ -523,8 +573,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The created linked aggregation",
           "linkedAggregation": {
-            "$ref": "https://blockprotocol.org/types/LinkedAggregation"
+            "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition"
           }
         },
         "required": ["linkedAggregation"]
@@ -533,7 +584,7 @@
     },
     {
       "name": "updateLinkedAggregation",
-      "description": "Request to update a linkedAggregation, expecting the updated linkedAggregation in response.",
+      "description": "Request to update a linked aggregation, expecting the updated linked aggregation in response.",
       "source": "block",
       "respondedToByMessage": "updateLinkedAggregationResponse",
       "sentOnInitialization": false,
@@ -541,12 +592,12 @@
         "type": "object",
         "properties": {
           "aggregationId": {
-            "description": "The aggregationId of the linkedAggregation to update",
+            "description": "The aggregationId of the linked aggregation to update",
             "type": "string"
           },
           "operation": {
             "description": "The new aggregation operation",
-            "$ref": "https://blockprotocol.org/types/LinkedAggregationOperation"
+            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
           }
         },
         "required": ["aggregationId", "operation"]
@@ -555,15 +606,16 @@
     },
     {
       "name": "updateLinkedAggregationResponse",
-      "description": "The response to a request to update a linkedAggregation",
+      "description": "The response to a request to update a linked aggregation",
       "source": "embedder",
       "respondedToByMessage": null,
       "sentOnInitialization": false,
       "data": {
         "type": "object",
         "properties": {
+          "description": "The updated linked aggregation definition",
           "linkedAggregation": {
-            "$ref": "https://blockprotocol.org/types/LinkedAggregation"
+            "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition"
           },
           "required": ["linkedAggregation"]
         }
@@ -572,7 +624,7 @@
     },
     {
       "name": "deleteLinkedAggregation",
-      "description": "Request to delete a linkedAggregation, expecting a boolean in response.",
+      "description": "Request to delete a linked aggregation, expecting a boolean in response.",
       "source": "block",
       "respondedToByMessage": "deleteLinkedAggregationResponse",
       "sentOnInitialization": false,
@@ -580,7 +632,7 @@
         "type": "object",
         "properties": {
           "aggregationId": {
-            "description": "The aggregationId of the linkedAggregation to delete",
+            "description": "The aggregationId of the linked aggregation to delete",
             "type": "string"
           }
         },
@@ -590,7 +642,7 @@
     },
     {
       "name": "deleteLinkedAggregationResponse",
-      "description": "The response to a request to delete a linkedAggregation",
+      "description": "The response to a request to delete a linked aggregation",
       "source": "embedder",
       "respondedToByMessage": null,
       "sentOnInitialization": false,
@@ -601,7 +653,7 @@
     },
     {
       "name": "getLinkedAggregation",
-      "description": "Request to retrieve a linkedAggregation, expecting the linkedAggregation in response.",
+      "description": "Request to retrieve a linked aggregation, expecting the linked aggregation in response.",
       "source": "block",
       "respondedToByMessage": "getLinkedAggregationResponse",
       "sentOnInitialization": false,
@@ -626,8 +678,9 @@
       "data": {
         "type": "object",
         "properties": {
+          "description": "The retrieved linked aggregation",
           "linkedAggregation": {
-            "$ref": "https://blockprotocol.org/types/LinkedAggregation"
+            "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation"
           }
         },
         "required": ["linkedAggregation"]
@@ -685,6 +738,89 @@
         "required": ["entityId", "mediaType", "url"]
       },
       "errorsCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
+    },
+    {
+      "name": "blockEntity",
+      "description": "The entity associated with the block",
+      "source": "embedder",
+      "respondedToByMessage": null,
+      "sentOnInitialization": true,
+      "data": {
+        "$ref": "https://blockprotocol.org/types/services/graph/entity"
+      },
+      "errorCodes": []
+    },
+    {
+      "name": "blockGraph",
+      "description": "A graph of entities with the block entity at the root, resolved to the specified depth.",
+      "source": "embedder",
+      "respondedToByMessage": null,
+      "sentOnInitialization": true,
+      "data": {
+        "type": "object",
+        "properties": {
+          "linkedEntities": {
+            "description": "The entities linked from the block entity, and potentially entities linked from them, and so on, depending on depth.",
+            "type": "array",
+            "items": {
+              "$ref": "https://blockprotocol.org/types/services/graph/entity"
+            }
+          },
+          "linkGroups": {
+            "description": "The links attached to the block or the entities provided in linkedEntities, grouped by entity and path.",
+            "type": "array",
+            "items": {
+              "$ref": "https://blockprotocol.org/types/services/graph/link-group"
+            }
+          },
+          "depth": {
+            "description": "The number of links that will be followed from the block when resolving the graph.",
+            "type": "integer",
+            "inclusiveMinimum": 0
+          }
+        },
+        "required": ["linkedEntities", "linkGroups", "depth"]
+      },
+      "errorCodes": []
+    },
+    {
+      "name": "entityTypes",
+      "description": "The entity types for any entities provided to the block as part of other messages.",
+      "source": "embedder",
+      "respondedToByMessage": null,
+      "sentOnInitialization": true,
+      "data": {
+        "type": "array",
+        "items": {
+          "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
+        }
+      },
+      "errorCodes": []
+    },
+    {
+      "name": "linkedAggregations",
+      "description": "Aggregations which are linked to from the block entity.",
+      "source": "embedder",
+      "respondedToByMessage": null,
+      "sentOnInitialization": true,
+      "data": {
+        "type": "array",
+        "items": {
+          "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition"
+        }
+      },
+      "errorCodes": []
+    },
+    {
+      "name": "readonly",
+      "description": "Indicates if the block should display in 'readonly' mode, i.e. without editing controls.",
+      "source": "embedder",
+      "respondedToByMessage": null,
+      "sentOnInitialization": true,
+      "data": {
+        "type": "boolean"
+      },
+      "errorCodes": []
     }
   ]
 }

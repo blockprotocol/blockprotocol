@@ -45,8 +45,8 @@ const markdownComponents = Object.fromEntries(
  * We want a different origin for the iFrame to the parent window
  * so that it can't use cookies issued to the user in the main app.
  *
- * The PRODUCTION origin will be blockprotocol.org, so we can use
- * the unique Vercel deployment URL as the origin in production.
+ * The PRODUCTION origin will be blockprotocol.org, and we can use
+ * a custom domain or the unique Vercel deployment URL as the origin .
  *
  * In STAGING, we will mostly be visiting unique deployment URLs
  * for testing, so we can use the unique branch URL as the origin.
@@ -80,7 +80,10 @@ const generateSandboxBaseUrl = (): string => {
   }
 
   // @see https://vercel.com/docs/concepts/deployments/automatic-urls
-  const slugifiedBranch = branch.toLowerCase().replace(/[^\w-]+/g, "-");
+  const slugifiedBranch = branch
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^\w-]+/g, "-");
   const branchPrefix = `blockprotocol-git-${slugifiedBranch}-hashintel`.slice(
     0,
     64,
