@@ -1,5 +1,5 @@
 import { BlockVariant } from "@blockprotocol/core";
-import { BlockGraphProperties } from "@blockprotocol/graph";
+import { Entity } from "@blockprotocol/graph";
 import {
   Alert,
   Box,
@@ -117,21 +117,15 @@ export const BlockDataContainer: VoidFunctionComponent<
   }, [blockVariantsTab, metadata?.examples, metadata?.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
-  const [props, errors] = useMemo<
-    [BlockGraphProperties<any> | undefined, string[]]
-  >(() => {
+  const [props, errors] = useMemo<[Entity<any> | undefined, string[]]>(() => {
     const result = {
-      graph: {
-        blockEntity: {
-          accountId: `test-account-${metadata.name}`,
-          entityId: `test-entity-${metadata.name}`,
-          properties: {},
-        },
-      },
+      accountId: `test-account-${metadata.name}`,
+      entityId: `test-entity-${metadata.name}`,
+      properties: {},
     };
 
     try {
-      Object.assign(result.graph.blockEntity.properties, JSON.parse(text));
+      Object.assign(result.properties, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }
@@ -139,7 +133,7 @@ export const BlockDataContainer: VoidFunctionComponent<
     const errorsToEat = ["uploadFile", "getEmbedBlock"];
 
     const errorMessages = validator
-      .validate(result, schema ?? {})
+      .validate(result.properties, schema ?? {})
       .errors.map((err) => `ValidationError: ${err.stack}`)
       .filter(
         (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),

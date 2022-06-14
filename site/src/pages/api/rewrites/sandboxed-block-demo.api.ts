@@ -54,7 +54,11 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   const { source, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
-  const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
+
+  // @todo REVERT WHEN VERSION IN PACKAGE.JSON IS PUBLISHED
+  // const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
+  const mockBlockDockVersion = "0.0.14-next.1";
+
   const reactVersion =
     blockMetadata.externals?.react ?? packageJson.dependencies.react;
 
@@ -68,7 +72,7 @@ const handler: NextApiHandler = async (req, res) => {
     )}@${packageVersion}`;
   }
 
-  const mockBlockDockProps = {
+  const mockBlockDockInitialData = {
     initialEntities: exampleGraph?.entities,
     initialEntityTypes: exampleGraph?.entityTypes,
     initialLinks: exampleGraph?.links,
@@ -85,7 +89,7 @@ const handler: NextApiHandler = async (req, res) => {
         if (typeof data !== "string") {
           return;
         }
-        globalThis.initialBlockProps = JSON.parse(data);
+        globalThis.blockEntityProps = JSON.parse(data);
         window.removeEventListener("message", handleMessage);
       }
       window.addEventListener("message", handleMessage);
@@ -119,28 +123,45 @@ const handler: NextApiHandler = async (req, res) => {
         return module.exports;
       }
 
-      const findComponentExport = (module) => {
+      const findBlockExport = (module) => {
         const result = module.default ?? module.App ?? module[Object.keys(module)[0]];
         if (!result) {
-          throw new Error("Could not find component export");
+          throw new Error("Could not find export from block source");
         }
         return result;
       }
+      
+      const blockType = ${JSON.stringify(blockMetadata.blockType)};
 
-      const blockSource = ${JSON.stringify(source)};
-      const BlockComponent = findComponentExport(loadCjsFromSource(blockSource));
-      const mockBlockDockProps = ${JSON.stringify(mockBlockDockProps)}
-      const render = (blockComponentProps) => {
+      const rawBlockSource = ${JSON.stringify(source)};
+      const blockExport = blockType.entryPoint === "html" ? rawBlockSource : findBlockExport(loadCjsFromSource(rawBlockSource));
+      
+      const blockDefinition = {
+        ReactComponent: blockType.entryPoint === "react" ? blockExport : undefined,
+        customElement: blockType.entryPoint === "custom-element" ? {
+          elementClass: blockExport,
+          tagName: blockType.tagName
+        } : undefined,
+        htmlString: blockType.entryPoint === "html" ? blockExport : undefined
+      }
+      
+      const mockBlockDockInitialData = ${JSON.stringify(
+        mockBlockDockInitialData,
+      )}
+      
+      const render = (blockEntityProps) => {
+        const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData  };
+      
         ReactDOM.render(
-          _jsx(MockBlockDock, { children: _jsx(BlockComponent, blockComponentProps), ...mockBlockDockProps  }),
+          _jsx(MockBlockDock, mockBlockDockProps),
           document.getElementById("container")
         );
       }
 
       window.addEventListener("message", ({ data }) => { if (typeof data === "string") { render(JSON.parse(data)) }});
 
-      if (globalThis.initialBlockProps) {
-        render(globalThis.initialBlockProps)
+      if (globalThis.blockEntityProps) {
+        render(globalThis.blockEntityProps)
       }
       </script>
     </head>
