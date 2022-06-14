@@ -34,7 +34,7 @@ You will see the following sub-headers within each section:
 At a minimum, blocks consist of:
 
 1.  **source code**, and
-2.  a **metadata file** describing the block.
+1.  a **metadata file** describing the block.
 
 We refer to the collection of files defining a block as a **block package.**
 
@@ -98,9 +98,9 @@ Embedding applications are responsible for rendering blocks as part of their app
 An embedding application MUST render blocks by:
 
 1.  importing the source code for the blocks it wants to display (whether at runtime or compiled along with its own source)
-2.  rendering the block as part of a webpage (whether in a sandbox or not, at the application’s discretion)
-3.  providing any external dependencies the block requires
-4.  setting up message handling as described in [block-application communication](#block-application-communication)
+1.  rendering the block as part of a webpage (whether in a sandbox or not, at the application’s discretion)
+1.  providing any external dependencies the block requires
+1.  setting up message handling as described in [block-application communication](#block-application-communication)
 
 Blocks MUST be loaded with a strategy appropriate to their declared `entryPoint`, e.g.
 
@@ -110,7 +110,7 @@ Blocks MUST be loaded with a strategy appropriate to their declared `entryPoint`
 
 The embedding application MUST pass the data of [`"initResponse"`](#initResponse-initialization-data) to blocks as properties, where blocks support being passed or assigned properties, so that the data within it is made available synchronously and immediately to blocks.
 
-**HTML blocks**
+##### HTML blocks
 
 Blocks of kind `"html"` require special handling in order that they can identify elements within them – since they may share their scope with other blocks, including identical blocks, they cannot rely on finding elements by id or other selectors.
 

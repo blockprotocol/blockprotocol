@@ -49,6 +49,12 @@ export const typography: ThemeOptions["typography"] = {
     lineHeight: 1.1,
     color: customColors.gray[80],
   },
+  bpHeading5: {
+    fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
+    fontSize: "var(--step-1)",
+    lineHeight: 1.1,
+    color: customColors.gray[80],
+  },
   bpSmallCaps: {
     fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step--1)",

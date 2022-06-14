@@ -36,7 +36,7 @@ Blocks may also add `default` and `examples` keys to `block-metadata.json` to de
 
 #### <Hidden>Block package </Hidden>Specification
 
-**Blocks**
+##### Blocks
 
 A block using the graph service MAY expand `block-metadata.json` to specify:
 
@@ -60,7 +60,7 @@ If more complex example data is required, a block’s package may also include a
 
 If defined, each field MUST be an array of JSON objects, which MUST conform to the structure defined for each of these resources, as specified in [entity definition](#structure-specification).
 
-**Embedding applications**
+##### Embedding applications
 
 Embedding applications MUST use the constraints set in the block’s schema, if defined, to constrain the data it sends under `properties` in the **block entity**, assuming the embedding application implements the `blockEntity` message.
 
@@ -86,7 +86,7 @@ Each entity has an **entity type** representing the type of thing that it is. In
 
 #### <Hidden>Structure </Hidden>Specification
 
-**Entities**
+##### Entities
 
 When embedding applications pass entities to blocks, whether the **block entity** or any other:
 
@@ -119,7 +119,7 @@ i.e. any entity MUST conform to the following schema:
 }
 ```
 
-**Entity types**
+##### Entity types
 
 Embedding applications SHOULD also provide – via the `entityTypes` message – an **entity type** for each entity they provide the block, including the block entity. Where provided, an **entity type**:
 
@@ -151,7 +151,7 @@ i.e. entity types MUST conform to the following JSON schema:
 
 Blocks SHOULD use any schemas provided in the `entityTypes` message to understand the constraints on user input for each entity (e.g. what type(s) of data are valid for each property).
 
-**Links**
+##### Links
 
 Entities MAY be connected by a **link**, which:
 
@@ -225,7 +225,7 @@ Where the block entity has links from it to other entities:
 }
 ```
 
-**Linked aggregations**
+##### Linked aggregations
 
 Blocks may also wish to link an entity to a particular aggregation of entities. To do so, blocks SHOULD create a **LinkedAggregationDefinition**, which:
 
@@ -343,6 +343,6 @@ The **requests** may be made by the block once it has been initialized, and repr
 
 #### <Hidden>Message definitions </Hidden>Specification
 
-**Graph service JSON definition**
+##### Graph service JSON definition
 
 See in the repo [here](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json#L5)

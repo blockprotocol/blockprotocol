@@ -55,7 +55,7 @@ While embedding applications can handle displaying an interface for reloading bl
 
 #### Block definition
 
-**Self-contained blocks and sandboxing**
+##### Self-contained blocks and sandboxing
 
 At the moment, the specification is largely silent on sandboxing, and blocks should be designed to work whether in their own scope or in the scope of a wider application, e.g. by not polluting the global scope.
 
@@ -70,7 +70,7 @@ We also considered having **two distinct types** of block, with different render
 - send messages to the embedding application by dispatching a `CustomEvent`
 - may specify `externals` – libraries they depend on but expect the embedding application to make available in their scope.
 
-2.  **Self-contained block (addition or alternative)**
+1.  **Self-contained block (addition or alternative)**
 
 - must have an HTML entry point and be designed to be loaded directly into an iFrame
 - must be sandboxed by the embedding application
@@ -86,7 +86,7 @@ Making self-contained blocks the **only** type of block would eliminate a class 
 
 Having **no** **self-contained blocks** (the current position) makes it more cumbersome to write blocks that own a scope or use a specific origin, as they must load their own iFrame to do so. Writing HTML blocks also involves additional steps for both the embedding application and block author, in order for the block to be able to identify itself.
 
-**Component entry point**
+##### Component entry point
 
 Even within block definition as currently specified (described above as the **component** type), we allow that blocks may be defined in different ways, with an entry point specified by the `type` in their metadata. For example, a HTML file, React component, or custom element (Web Component).
 
@@ -107,7 +107,7 @@ Many blocks will require certain services, and parts of services.
 
 Blocks will not work in applications that do not implement the services they require, and the parts of services they require. If there is a mismatch which is not identified prior to a block being selected for use, they may crash or be non-functional at the point of use.
 
-**Proposal**
+##### Proposal
 
 In order to predict in advance whether a given block will work in a given application, it would be helpful for blocks to be able to indicate which services and parts of services they require.
 

@@ -104,6 +104,7 @@ const HEADING_MARGIN_TOP = {
   H2: 8,
   H3: 6,
   H4: 6,
+  H5: 6,
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
@@ -197,6 +198,16 @@ export const mdxComponents: Record<string, ComponentType> = {
         {props.children}
         <HeadingAnchor anchor={anchor} depth={4} />
       </Heading>
+    );
+  },
+  h5: (props: TypographyProps) => {
+    return (
+      <Heading
+        mt={HEADING_MARGIN_TOP.H5}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading5"
+        {...props}
+      />
     );
   },
   p: (props: TypographyProps) => (

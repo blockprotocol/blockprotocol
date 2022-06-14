@@ -60,6 +60,7 @@ declare module "@mui/material/styles" {
     bpHeading2: React.CSSProperties;
     bpHeading3: React.CSSProperties;
     bpHeading4: React.CSSProperties;
+    bpHeading5: React.CSSProperties;
     bpLargeText: React.CSSProperties;
     bpBodyCopy: React.CSSProperties;
     bpSmallCopy: React.CSSProperties;
@@ -73,6 +74,7 @@ declare module "@mui/material/styles" {
     bpHeading2?: React.CSSProperties;
     bpHeading3?: React.CSSProperties;
     bpHeading4?: React.CSSProperties;
+    bpHeading5?: React.CSSProperties;
     bpSmallCaps?: React.CSSProperties;
     bpLargeText?: React.CSSProperties;
     bpBodyCopy?: React.CSSProperties;
@@ -89,6 +91,7 @@ declare module "@mui/material/Typography" {
     bpHeading2: true;
     bpHeading3: true;
     bpHeading4: true;
+    bpHeading5: true;
     bpSmallCaps: true;
     bpLargeText: true;
     bpBodyCopy: true;
