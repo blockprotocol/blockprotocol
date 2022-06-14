@@ -49,11 +49,11 @@ A block package MUST contain:
 - **a metadata file describing the block**, in JSON format, which:
   - MUST be called `block-metadata.json`, so that it can be reliably identified as the entry point for the block's other files
   - MUST specify in all circumstances:
+    - `blockType`: the type of block this is, so that embedding applications know how to render it – see [Types of block](#types-of-block)).
     - `name:` a name for the block, in slug format. This will be expected to be unique in the package manager or catalog where the block package is hosted
     - `source`: the path or URL to the entry point source file (e.g. `index.html`, `index.js`)
     - `version`: the version of the block in the package in question, which SHOULD use **[semantic versioning](https://semver.org/)**
-    - `protocol`: the version of this core specification the block complies with.
-    - `type`: the type of block this is, so that embedding applications know how to render it – see [Types of block](#types-of-block)).
+    - `protocol`: the version of this core specification the block complies with
   - MUST specify under certain conditions:
     - `externals`: any libraries the block expects the embedding application to supply it with, i.e. libraries which the block depends on but does not include in its package and expects to be available when it calls `import "library"`. This MAY be omitted if the block does not have any such dependencies. If defined, this MUST be an array of objects where the key is the name of the library used when importing it and the value is the expected version (or version range). For example, `"externals": [{ "react": "^16.0.0" }]`
   - SHOULD specify:
