@@ -1968,19 +1968,19 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@blockprotocol/core@0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.4.tgz#a4f72b2c6bf915c072b178768702e490cf089c57"
-  integrity sha512-RHu8KA5xJkYLhIODU2K7ux5VmH4K/F/o/9hk9E4podQTf6+AoUSg8n0ArHOmvDUGmG1COSY5dhK8x0F1Vf+MTw==
+"@blockprotocol/core@0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.5.tgz#1e9979d14fa5a6ae0c59fca819164e8bec103c6f"
+  integrity sha512-miiyq07AUPgy+kollS8bQLfxKJw0JvJvdQ+4xiy4oZrMNn8P9N2vZppNU6Q5k7a2lh187zXYeHwwFWwI1aCh6w==
   dependencies:
     uuid "^8.3.2"
 
-"@blockprotocol/graph@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.6.tgz#c9972a80c86627f05654819674322d3d68a5736b"
-  integrity sha512-+RiCLLSIRzdtIVrkHWI20CCShOZHT8rqhv5opdCb7LH8dIzmI7AGWFKzOp132150MI4hKooS6eATu7zIwuWffg==
+"@blockprotocol/graph@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.7.tgz#dcf218d0a5a5ba2c048972db0885e7675afdcc12"
+  integrity sha512-BDFDHmIKcNBRw3vm/2JuZaFSXd+aTTrPBpzGJsNcTK53fSWnEzm1rGfUHrugHLPma+2o75C5VEaU4C+3ntvbCA==
   dependencies:
-    "@blockprotocol/core" "0.0.4"
+    "@blockprotocol/core" "0.0.5"
     lit "^2.2.5"
     react "^17.0.2"
 
@@ -8513,12 +8513,12 @@ mock-block-dock@0.0.10:
     lodash "^4.17.21"
     uuid "^8.3.2"
 
-mock-block-dock@0.0.14-next.1:
-  version "0.0.14-next.1"
-  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.14-next.1.tgz#3037bc540fe19869e9f5e9714e1279d9e9fa1fd7"
-  integrity sha512-WnZB9RTxu5LCNXRXTQ1AqB3Yg9FumM65mnlcMP/dqc3G0UolBs/XkqIQCzeHYlThrI3YRQfnGw0NJqdtUiM3JA==
+mock-block-dock@0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.14.tgz#af563425414ef7eca865f0f6639ac85495561533"
+  integrity sha512-zafcaTg7XhJFru47jIl/ukFCvYm3KecHu/br3Oe2Al4L2EQMrlzZlw4wBfnQFJPwX3LwtDI+QDVKbCtcDekZKw==
   dependencies:
-    "@blockprotocol/graph" "0.0.6"
+    "@blockprotocol/graph" "0.0.7"
     "@lit-labs/react" "^1.0.4"
     lodash "^4.17.21"
     react-json-view "^1.21.3"
