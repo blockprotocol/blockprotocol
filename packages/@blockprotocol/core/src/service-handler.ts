@@ -20,7 +20,7 @@ export abstract class ServiceHandler {
   /** the name of the service */
   readonly serviceName: string;
 
-  private destroyed?: boolean;
+  destroyed?: boolean;
 
   /**
    * a method individual embedder services handlers implement to provide the messages they send on initialization,

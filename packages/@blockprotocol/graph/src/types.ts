@@ -1,28 +1,13 @@
-// ---------------------------- UTILITIES ----------------------------- //
-
-import { MessageCallback } from "@blockprotocol/core";
-
-export type UnknownRecord = Record<string, unknown>;
-
-export type JSONValue =
-  | null
-  | boolean
-  | number
-  | string
-  | JSONValue[]
-  | JSONObject;
-
-export type JSONObject = { [key: string]: JSONValue };
-
-export interface JSONArray extends Array<JSONValue> {}
+import { MessageCallback, UnknownRecord } from "@blockprotocol/core";
 
 // ----------------------------- ENTITIES ----------------------------- //
 
-export type Entity<Properties = Record<string, unknown>> = {
+export type Entity<
+  Properties extends Record<string, unknown> | null = Record<string, unknown>,
+> = {
   entityId: string;
-  entityTypeId: string;
-  properties: Properties;
-};
+  entityTypeId?: string;
+} & (Properties extends null ? {} : { properties: Properties });
 
 export type CreateEntityData = {
   entityTypeId: string;
@@ -199,7 +184,7 @@ export type CreateEntityTypeData = {
 export type AggregateEntityTypesData = {
   // @todo mention in spec or remove
   // include entities that are used by, but don't belong to, the specified account
-  includeOtherTypeInUse?: boolean | null;
+  includeOtherTypesInUse?: boolean | null;
   operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
 };
 
@@ -283,7 +268,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteEntity: MessageCallback<
     DeleteEntityData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getEntity: MessageCallback<
@@ -313,7 +298,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteEntityType: MessageCallback<
     DeleteEntityTypeData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getEntityType: MessageCallback<
@@ -338,7 +323,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteLink: MessageCallback<
     DeleteLinkData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getLink: MessageCallback<GetLinkData, null, Link, ReadOrModifyResourceError>;
@@ -357,7 +342,7 @@ export type EmbedderGraphMessageCallbacks = {
   deleteLinkedAggregation: MessageCallback<
     DeleteLinkedAggregationData,
     null,
-    boolean,
+    true,
     ReadOrModifyResourceError
   >;
   getLinkedAggregation: MessageCallback<

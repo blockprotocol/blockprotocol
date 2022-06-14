@@ -31,7 +31,11 @@ export const generateDistBlockSchema = async () => {
       required: true,
     };
 
-    const schema = TJS.generateSchema(program, "AppProps", settings);
+    const schema = TJS.generateSchema(
+      program,
+      "BlockEntityProperties",
+      settings,
+    );
     await fs.ensureDir(blockDistDirPath);
     await writeFormattedJson(blockSchemaInDistFilePath, schema);
   } catch (error) {

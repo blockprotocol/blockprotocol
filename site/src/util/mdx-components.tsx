@@ -299,7 +299,7 @@ export const mdxComponents: Record<string, ComponentType> = {
       sx={(theme) => ({
         marginBottom: theme.spacing(2),
         paddingLeft: theme.spacing(4),
-        listStyle: "unset",
+        listStyle: "initial",
       })}
       {...props}
     />

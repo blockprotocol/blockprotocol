@@ -49,21 +49,21 @@ A block package MUST contain:
 - **a metadata file describing the block**, in JSON format, which:
   - MUST be called `block-metadata.json`, so that it can be reliably identified as the entry point for the block's other files
   - MUST specify in all circumstances:
+    - `blockType`: the type of block this is, so that embedding applications know how to render it – see [Types of block](#types-of-block)).
     - `name:` a name for the block, in slug format. This will be expected to be unique in the package manager or catalog where the block package is hosted
     - `source`: the path or URL to the entry point source file (e.g. `index.html`, `index.js`)
     - `version`: the version of the block in the package in question, which SHOULD use **[semantic versioning](https://semver.org/)**
-    - `protocol`: the version of this core specification the block complies with.
-    - `type`: the type of block this is, so that embedding applications know how to render it – see [Types of block](#types-of-block)).
+    - `protocol`: the version of this core specification the block complies with
   - MUST specify under certain conditions:
     - `externals`: any libraries the block expects the embedding application to supply it with, i.e. libraries which the block depends on but does not include in its package and expects to be available when it calls `import "library"`. This MAY be omitted if the block does not have any such dependencies. If defined, this MUST be an array of objects where the key is the name of the library used when importing it and the value is the expected version (or version range). For example, `"externals": [{ "react": "^16.0.0" }]`
   - SHOULD specify:
     - `author`: a display name for the author of the block
     - `description`: a brief description of the block
     - `displayName`: a display name used for the block
-    - `icon`: a path to the icon for the block, to be displayed when the user is selecting from available blocks (and elsewhere as appropriate, e.g. in a website listing the block). This should be 1:1 width:height ratio, with no padding around the icon.
+    - `icon`: a path to the icon for the block, to be displayed when the user is selecting from available blocks (and elsewhere as appropriate, e.g. in a website listing the block). This should be 1:1 width:height ratio, with no padding around the icon
     - `image`: a path to the preview image of the block to help users visualize it before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x600px
     - `license`: the name of the license the block is made available under (e.g. MIT), or the URL of a license
-    - `repository`: specifies the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
+    - `repository`: specifies the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development
 
 ### Types of block
 
@@ -78,10 +78,10 @@ HTML blocks also require some special provisions in order to enable interaction 
 The `blockType` of the block in `block-metadata.json` MUST define the type of entry point of the block, which MUST be an object, which:
 
 - MUST contain an `entryPoint` key defining what exactly the block’s source is or exports, which MUST be one of:
-  - `"custom-element"`: a user-defined [CustomElement](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), often referred to by the broader technology [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components). This includes components written using libraries and exported as a custom element. Blocks of this kind MUST export the class as the default or single named export from their `source` file, and MUST specify `tag` (see below).
+  - `"custom-element"`: a user-defined [CustomElement](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), often referred to by the broader technology [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components). This includes components written using libraries and exported as a custom element. Blocks of this kind MUST export the class as the default or single named export from their `source` file, and MUST specify `tagName` (see below).
   - `"html"`: an HTML file, whether a simple `<p>` or a complicated block that loads various scripts. Blocks of this kind MUST have an `.html` file as their `source`.
   - `"react"`: a React component. Blocks of this kind MUST export the component function as the default or single named export from their `source` file.
-- where the block `entryPoint` is `"custom-element"`, MUST also specify a `tag` key, to specify the element tag name. This is important where the block’s code relies on the custom element being registered by the application using a specific tag.
+- where the block `entryPoint` is `"custom-element"`, MUST also specify a `tagName` key, to specify the element tag name. This is important where the block’s code relies on the custom element being registered by the application using a specific tag.
 
 See [loading blocks](#loading-blocks) for more handling of different kinds of blocks.
 
@@ -213,14 +213,14 @@ The content of `data` and the permissible codes under `errors` are left to servi
 - MUST have `type: "blockprotocolmessage"`
 - MUST have a `detail` object which:
   - MUST include a `requestId`, which MUST be a `uuid`
-  - if the message is a direct response to another message, it MUST provide the `requestId` of the original message
-  - otherwise, the dispatcher MUST generate the `requestId`
+    - if the message is a direct response to another message, it MUST provide the `requestId` of the original message
+    - otherwise, the dispatcher MUST generate the `requestId`
   - MUST include the `service` this message relates to (or `"core"` for messages defined in this document)
   - MUST include the `name` of the message, as defined in the relevant specification
   - MUST include the `source`, which MUST be one of `"block"` or `"embedder"`
   - MUST contain one or both of `data` and `errors`
-  - `data` may be any type of JSON value (string, object, null, etc)
-  - `errors` MUST be an array of objects, each of which MUST have a `code` and `message` – both strings – and MAY have `extensions`, an arbitrary JSON object defined by the service specification. Valid error codes are defined per message, in an `errorCodes` property in [the message definition](#messages-error-codes).
+    - `data` may be any type of JSON value (string, object, null, etc)
+    - `errors` MUST be an array of objects, each of which MUST have a `code` and `message` – both strings – and MAY have `extensions`, an arbitrary JSON object defined by the service specification. Valid error codes are defined per message, in an `errorCodes` property in [the message definition](#messages-error-codes)
 
 Messages MUST therefore be an object which conforms to the following schema:
 
@@ -251,7 +251,15 @@ Messages MUST therefore be an object which conforms to the following schema:
         "data": {},
         "errors": {
           "type": "array",
-          "items": {}
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" },
+              "message": { "type": "string" },
+              "extensions": { "type": "object" }
+            },
+            "required": ["code", "message"]
+          }
         }
       },
       "required": ["requestId", "name", "service", "source"]
@@ -269,7 +277,7 @@ The `data` and `errors` of any messages exchanged between applications and block
 
 The core specification defines messages which are related to the core functionality of the Block Protocol. There are currently two such messages:
 
-- `"initRequest"`: a message a block sends on load
+- `"init"`: a message a block sends on load
 - `"initResponse"`: a message the embedder sends in response
 
 These messages are how blocks may exchange messages which are `sentOnInitiliazation`, which might be values available immediately on load, or configuration information, or anything else the service defines as useful for blocks and embedders to exchange on initialization.
@@ -316,7 +324,7 @@ When an `"init"` message is received, embedding applications MUST send a message
 
 <span id="initResponse-initialization-data">**Initialization data**</span>
 
-The `data` for both `"initRequest"` and `"initResponse"` MUST be an object, where
+The `data` for both `"init"` and `"initResponse"` MUST be an object, where
 
 - the keys of the object MUST be the names of services
 - the values for those keys MUST be objects
@@ -352,7 +360,7 @@ A service aims to provide a logical grouping of functionality and/or solve a spe
 
 A service definition must set out the **messages** that a block and application will exchange as part of the service.
 
-**Messages** should be specified in a JSON file. The JSON file must conform to [the constraints defined by the Service Specification JSON Schema.](https://www.notion.so/Core-Specification-v0-2-c5a95a9542614d139e02443a5dad8cee) To aid understanding, the constraints defined by the JSON schema are laid out in this section (**definition**), and a section related to **messages.**
+**Messages** should be specified in a JSON file. The JSON file must conform to [the constraints defined by the Service Specification JSON Schema.](#json-schema-for-service-specification) To aid understanding, the constraints defined by the JSON schema are laid out in this section (**definition**), and a section related to **messages.**
 
 Services may also include an additional markdown file which provides further explanation and narrative, and imposes any additional requirements not captured via messages. This may, for example, specify additional metadata related to the service that can be expressed as part of a block package, whether in `block-metadata.json` or in an additional file or files.
 
@@ -364,7 +372,8 @@ Each service:
 - MAY define an additional Markdown file which:
   - MAY provide additional narrative and explanation on the contents of its JSON file
   - MAY impose additional arbitrary requirements on embedding applications and blocks
-  - is OVERRULED by the JSON file in the event that there is any inconsistency between the two in how messages and metadata are defined
+  - is OVERRULED by the JSON file in the event that there is any inconsistency between the two in how messages are defined
+
 
 The JSON schema requires that a service specification is a JSON object which
 
@@ -373,10 +382,6 @@ The JSON schema requires that a service specification is a JSON object which
   - `description`
   - `messages`
   - `version`
-- MAY contain:
-  - `metadata`
-  - `glossary`
-  - `overview`
 
 If there are any discrepancies between the requirements listed above and the requirements in the JSON schema, the JSON schema takes precedence.
 

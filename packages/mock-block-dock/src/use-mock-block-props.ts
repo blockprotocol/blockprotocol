@@ -1,22 +1,26 @@
 import {
-  BlockProtocolEntity,
-  BlockProtocolEntityType,
-  BlockProtocolFunctions,
-  BlockProtocolLink,
-  BlockProtocolLinkedAggregationDefinition,
-  BlockProtocolProps,
-} from "blockprotocol";
-import { useEffect, useMemo, useRef } from "react";
+  BlockGraph,
+  EmbedderGraphMessageCallbacks,
+  Entity,
+  EntityType,
+  Link,
+  LinkedAggregation,
+  LinkedAggregationDefinition,
+} from "@blockprotocol/graph";
+import { useMemo } from "react";
 
 import { mockData as initialMockData } from "./data";
-import { useLinkFields } from "./use-link-fields";
-import { MockData, useMockDatastore } from "./use-mock-datastore";
+import { useLinkFields } from "./use-mock-block-props/use-link-fields";
+import {
+  MockData,
+  useMockDatastore,
+} from "./use-mock-block-props/use-mock-datastore";
 
 /**
- * A hook to generate Block Protocol properties to pass to a block for testing.
- * It provides the functions specified in the Block Protocol, and mock data which can be customized via props.
+ * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
+ * The starting mock data can be customized using the initial[X] props.
  * See README.md for usage instructions.
- * @param [blockProperties] the block's own starting properties, if any
+ * @param [blockEntity] the block's own starting properties, if any
  * @param [blockSchema] - The schema for the block entity
  * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
  * @param [initialEntityTypes] - The entity types to include in the data store (NOT the block's type, which is always provided)
@@ -24,79 +28,72 @@ import { MockData, useMockDatastore } from "./use-mock-datastore";
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockProps = ({
-  blockProperties,
+  blockEntity,
   blockSchema,
   initialEntities,
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
 }: {
-  blockProperties: BlockProtocolEntity;
-  blockSchema?: Partial<BlockProtocolEntityType>;
-  initialEntities?: BlockProtocolEntity[];
-  initialEntityTypes?: BlockProtocolEntityType[];
-  initialLinks?: BlockProtocolLink[];
-  initialLinkedAggregations?: BlockProtocolLinkedAggregationDefinition[];
+  blockEntity?: Entity;
+  blockSchema?: Partial<EntityType>;
+  initialEntities?: Entity[];
+  initialEntityTypes?: EntityType[];
+  initialLinks?: Link[];
+  initialLinkedAggregations?: LinkedAggregationDefinition[];
 }): {
-  blockProperties: BlockProtocolEntity;
-  blockProtocolFunctions: Required<BlockProtocolFunctions>;
-  entityTypes: BlockProtocolProps["entityTypes"];
-  linkedAggregations: BlockProtocolProps["linkedAggregations"];
-  linkedEntities: BlockProtocolProps["linkedEntities"];
-  linkGroups: BlockProtocolProps["linkGroups"];
+  blockEntity: Entity;
+  blockGraph: BlockGraph;
+  datastore: MockData;
+  entityTypes: EntityType[];
+  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
+  linkedAggregations: LinkedAggregation[];
 } => {
   const { initialBlockEntity, mockData } = useMemo((): {
-    initialBlockEntity: BlockProtocolEntity;
+    initialBlockEntity: Entity;
     mockData: MockData;
   } => {
-    const blockEntityType: BlockProtocolEntityType = {
-      entityTypeId: "blockType1",
-      title: "BlockType",
-      type: "object",
-      $schema: "https://json-schema.org/draft/2019-09/schema",
-      $id: "http://localhost/blockType1",
-      ...(blockSchema ?? {}),
+    const entityTypeId = blockEntity?.entityTypeId ?? "block-type-1";
+
+    const blockEntityType: EntityType = {
+      entityTypeId,
+      schema: {
+        title: "BlockType",
+        type: "object",
+        $schema: "https://json-schema.org/draft/2019-09/schema",
+        $id: "http://localhost/blockType1",
+        ...(blockSchema ?? {}),
+      },
     };
 
-    const accountId = blockProperties.accountId ?? "accountId";
-
-    const blockEntity: BlockProtocolEntity = {
-      accountId,
+    const newBlockEntity: Entity = {
       entityId: "block1",
+      entityTypeId,
+      properties: {},
     };
 
-    if (blockProperties && Object.keys(blockProperties).length > 0) {
-      Object.assign(blockEntity, blockProperties);
+    if (blockEntity && Object.keys(blockEntity).length > 0) {
+      Object.assign(newBlockEntity, blockEntity);
     }
 
-    blockEntity.entityTypeId = blockEntityType.entityTypeId;
-
     const nextMockData: MockData = {
-      entities:
-        initialEntities ??
-        // give the entities/types the same accountId as the root entity if user not supplying their own mocks
-        initialMockData.entities.map((entity) => ({
-          ...entity,
-          accountId,
-        })),
-      entityTypes:
-        initialEntityTypes ??
-        initialMockData.entityTypes.map((entityType) => ({
-          ...entityType,
-          accountId,
-        })),
+      entities: [
+        newBlockEntity,
+        ...(initialEntities ?? initialMockData.entities),
+      ],
+      entityTypes: [
+        blockEntityType,
+        ...(initialEntityTypes ?? initialMockData.entityTypes),
+      ],
       links: initialLinks ?? initialMockData.links,
       linkedAggregationDefinitions:
         initialLinkedAggregations ??
         initialMockData.linkedAggregationDefinitions,
     };
 
-    nextMockData.entities.push(blockEntity);
-    nextMockData.entityTypes.push(blockEntityType);
-
-    return { initialBlockEntity: blockEntity, mockData: nextMockData };
+    return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
   }, [
-    blockProperties,
+    blockEntity,
     blockSchema,
     initialEntities,
     initialEntityTypes,
@@ -104,13 +101,15 @@ export const useMockBlockProps = ({
     initialLinkedAggregations,
   ]);
 
+  const datastore = useMockDatastore(mockData);
+
   const {
     entities,
     entityTypes,
+    graphServiceCallbacks,
     links,
     linkedAggregationDefinitions,
-    functions,
-  } = useMockDatastore(mockData);
+  } = datastore;
 
   const latestBlockEntity = useMemo(() => {
     return (
@@ -128,27 +127,8 @@ export const useMockBlockProps = ({
     throw new Error("Cannot find block entity. Did it delete itself?");
   }
 
-  const { accountId, entityId, entityTypeId } = latestBlockEntity;
-  const { updateEntities } = functions;
-
-  // watch for changes to the props provided to the wrapped component, and update the associated entity if they change
-  const prevChildPropsString = useRef<string>(JSON.stringify(blockProperties));
-  useEffect(() => {
-    if (JSON.stringify(blockProperties) !== prevChildPropsString.current) {
-      void updateEntities?.([
-        {
-          accountId,
-          entityId,
-          entityTypeId,
-          data: blockProperties,
-        },
-      ]);
-    }
-    prevChildPropsString.current = JSON.stringify(blockProperties);
-  }, [accountId, blockProperties, entityId, entityTypeId, updateEntities]);
-
   // construct BP-specified link fields from the links and linkedAggregations in the datastore
-  const { linkedAggregations, linkedEntities, linkGroups } = useLinkFields({
+  const { blockGraph, linkedAggregations } = useLinkFields({
     entities,
     links,
     linkedAggregationDefinitions,
@@ -169,11 +149,11 @@ export const useMockBlockProps = ({
   }
 
   return {
-    blockProperties: latestBlockEntity,
-    blockProtocolFunctions: functions,
+    blockEntity: latestBlockEntity,
+    blockGraph,
+    datastore,
     entityTypes,
     linkedAggregations,
-    linkedEntities,
-    linkGroups,
+    graphServiceCallbacks,
   };
 };

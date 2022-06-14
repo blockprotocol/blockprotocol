@@ -1,7 +1,7 @@
 {
   "name": "@blockprotocol/graph",
-  "version": "0.0.2",
-  "description": "Implementation of the Block Protocol Graph services specification for blocks and embedding applications",
+  "version": "0.0.7",
+  "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
     "blocks",
@@ -36,7 +36,8 @@
     "prepare": "yarn build"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.2",
+    "@blockprotocol/core": "0.0.5",
+    "lit": "^2.2.5",
     "react": "^17.0.2"
   },
   "devDependencies": {

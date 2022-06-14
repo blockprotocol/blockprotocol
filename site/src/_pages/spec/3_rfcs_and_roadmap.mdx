@@ -4,7 +4,7 @@
 
 We will introduce the following new services to the Block Protocol to support additional functionality that requires application-block cooperation.
 
-We welcome suggestions for other services that may be useful, via GitHub [discussions](https://github.com/blockprotocol/blockprotocol/discussions).
+We welcome suggestions for other services that may be useful, via GitHub [discussions](https://github.com/blockprotocol/blockprotocol/discussions) or by creating [RFCs](https://github.com/blockprotocol/blockprotocol/tree/main/rfcs).
 
 ### Actions
 
@@ -70,7 +70,7 @@ We also considered having **two distinct types** of block, with different render
 - send messages to the embedding application by dispatching a `CustomEvent`
 - may specify `externals` – libraries they depend on but expect the embedding application to make available in their scope.
 
-1.  **Self-contained block (addition or alternative)**
+1.  **Self-contained block (addition or alternative)**:
 
 - must have an HTML entry point and be designed to be loaded directly into an iFrame
 - must be sandboxed by the embedding application
