@@ -261,7 +261,7 @@ Messages MUST therefore be an object which conforms to the following schema:
 }
 ```
 
-The `data` and `errors` of any messages exchanged between applications and blocks, and not described in [Core messages](#core-messages), MUST be described in separate service specifications.
+The `data` and `errors` of any messages exchanged between applications and blocks, and not described in [Core messages](#core-messages), MUST be described in separate [service specifications](#defining-services).
 
 ### Core messages
 
@@ -360,7 +360,7 @@ Services may also include an additional markdown file which provides further exp
 
 Each service:
 
-- MUST define any messages and metadata it introduces in a JSON file conforming to this schema
+- MUST define any messages it introduces in a JSON file conforming to [this schema](#json-schema-for-service-specification)
 - MAY define an additional Markdown file which:
   - MAY provide additional narrative and explanation on the contents of its JSON file
   - MAY impose additional arbitrary requirements on embedding applications and blocks

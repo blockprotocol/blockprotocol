@@ -92,7 +92,7 @@ When embedding applications pass entities to blocks, whether the **block entity*
 
 - entities MUST be represented by an object, which contains one or more **identifying fields** at the top level. The object:
   - MUST contain an `entityId` identifying the entity, which MUST be a string.
-  - - MAY contain an `entityTypeId` identifying the entity type the entity belongs to, which MUST be a string (if defined).
+    - - MAY contain an `entityTypeId` identifying the entity type the entity belongs to, which MUST be a string (if defined).
 - MUST contain a `properties` field if the block has defined any `required` properties in its schema, and otherwise MAY be omitted. If present, it:
   - MUST be an object
   - MUST conform to the constraints described in the entity’s schema, if any
@@ -209,6 +209,12 @@ Where the block entity has links from it to other entities:
   "title": "LinkGroup",
   "type": "object",
   "properties": {
+    "links": {
+      "type": "array",
+      "items": {
+        "$ref": "https://blockprotocol.org/types/services/graph/link-group"
+      }
+    },
     "sourceEntityId": {
       "type": "string"
     },
