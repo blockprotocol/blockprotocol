@@ -23,7 +23,7 @@ Explain the proposal as if it was already included in the protocol and you were 
 
 - Introducing new named concepts.
 - Explaining the feature largely in terms of examples.
-- Explaining how Block Protocol implementors and users should *think* about the feature, and how it should impact the way they use the protocol. It should explain the impact as concretely as possible.
+- Explaining how Block Protocol implementors and users should _think_ about the feature, and how it should impact the way they use the protocol. It should explain the impact as concretely as possible.
 - If applicable, provide sample error messages, deprecation warnings, or migration guidance.
 - If applicable, describe the differences between teaching this to existing and new Block Protocol users.
 
@@ -45,7 +45,7 @@ The section should return to the examples given in the previous section, and exp
 
 [drawbacks]: #drawbacks
 
-Why should we *not* do this?
+Why should we _not_ do this?
 
 # Rationale and alternatives
 

@@ -21,7 +21,7 @@ Some changes though are "substantial", and we ask that these be put through a bi
 
 ## When to follow this process
 
-[When to follow this process]: #when-to-follow-this-process
+[when to follow this process]: #when-to-follow-this-process
 
 You should consider using this process if you intend to make "substantial" changes to the Block Protocol or its documentation. Some examples that would benefit from an RFC are:
 
@@ -37,11 +37,11 @@ Some changes do not require an RFC:
 
 ## Before creating an RFC
 
-[Before creating an RFC]: #before-creating-an-rfc
+[before creating an rfc]: #before-creating-an-rfc
 
-A hastily-proposed RFC can hurt its chances of acceptance. Low quality proposals, proposals for previously-rejected features, or those that don't fit into the near-term roadmap, may be quickly rejected, which can be demotivating for the unprepared contributor. Laying some groundwork ahead of the RFC can make the process smoother. 
+A hastily-proposed RFC can hurt its chances of acceptance. Low quality proposals, proposals for previously-rejected features, or those that don't fit into the near-term roadmap, may be quickly rejected, which can be demotivating for the unprepared contributor. Laying some groundwork ahead of the RFC can make the process smoother.
 
-Although there is no single way to prepare for submitting an RFC, it is generally a good idea to pursue feedback from other project developers beforehand, to ascertain that the RFC may be desirable; having a consistent impact on the project requires concerted effort toward consensus-building. 
+Although there is no single way to prepare for submitting an RFC, it is generally a good idea to pursue feedback from other project developers beforehand, to ascertain that the RFC may be desirable; having a consistent impact on the project requires concerted effort toward consensus-building.
 
 The most common preparations for writing and submitting an RFC includes talking the idea over on our [community Discord server], or in relevant Issue threads when the idea stems from previous discussion.
 
@@ -49,13 +49,12 @@ As a rule of thumb, receiving encouraging feedback from long-standing project de
 
 ## What the process is
 
-[What the process is]: #what-the-process-is
+[what the process is]: #what-the-process-is
 
 In short, to get a major feature added to the Block Protocol, one must first get the RFC merged into the [`/rfcs`](../rfcs) folder as a markdown file. At that point the RFC is "active" and may be implemented with the goal of eventual inclusion into the Block Protocol.
 
 - Fork the Block Protocol repo https://github.com/blockprotocol/blockprotocol
-- Copy [`rfcs/0000-template.md`](0000-template.md) to `rfcs/text/0000-my-feature.md` (where
-'my-feature' is descriptive. Don't assign an RFC number yet).
+- Copy [`rfcs/0000-template.md`](0000-template.md) to `rfcs/text/0000-my-feature.md` (where 'my-feature' is descriptive. Don't assign an RFC number yet).
 - Fill in the RFC. Put care into the details: **RFCs that do not present convincing motivation, demonstrate understanding of the impact of the design, or are disingenuous about the drawbacks or alternatives tend to be poorly-received**.
 - Submit a pull request. As a pull request the RFC will receive design feedback from the larger community, and the author should be prepared to revise it in response.
 - Now that your RFC has an open pull request, use the issue number of the PR to update your `0000-` prefix to that number
@@ -67,7 +66,7 @@ In short, to get a major feature added to the Block Protocol, one must first get
 
 ## The RFC life-cycle
 
-[The RFC life-cycle]: #the-rfc-life-cycle
+[the rfc life-cycle]: #the-rfc-life-cycle
 
 Once an RFC becomes active, then authors may implement it and submit the feature as a pull request to the Block Protocol repo. Becoming 'active' is not a rubber stamp, and in particular still does not mean the feature will ultimately be merged; it does mean that the core team has agreed to it in principle and are amenable to merging it.
 
@@ -77,7 +76,7 @@ Modifications to active RFCs can be done in followup PRs. We strive to write eac
 
 ## Reviewing RFCs
 
-[Reviewing RFCs]: #reviewing-rfcs
+[reviewing rfcs]: #reviewing-rfcs
 
 While the RFC pull request is up, the team may schedule meetings with the author and/or relevant stakeholders to discuss the issues in greater detail. In such cases a summary from the meeting will be posted back to the RFC pull request.
 
@@ -85,7 +84,7 @@ The team makes final decisions about RFCs after the benefits and drawbacks are w
 
 ## Implementing an RFC
 
-[Implementing an RFC]: #implementing-an-rfc
+[implementing an rfc]: #implementing-an-rfc
 
 Some accepted RFCs represent vital features that need to be implemented right away. Other accepted RFCs can represent features that can wait until some arbitrary developer feels like doing the work. Every accepted RFC will have an associated thread on [GitHub Discussions](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc) tracking its implementation in the Block Protocol repository; thus that associated discussion can be assigned a priority via the triage process that the team uses for all known-issues.
 
@@ -95,13 +94,13 @@ If you are interested in working on the implementation for an "active" RFC, but 
 
 ## Inspiration
 
-[Inspiration]: #inspiration
+[inspiration]: #inspiration
 
 The Block Protocols's RFC process strongly owes its inspiration to the [Rust RFC process], and [React RFC process].
 
-[Rust RFC process]: https://github.com/rust-lang/rfcs
-[React RFC process]: https://github.com/reactjs/rfcs
+[rust rfc process]: https://github.com/rust-lang/rfcs
+[react rfc process]: https://github.com/reactjs/rfcs
 
 We're open to changing it as needed in response to feedback.
 
-[community Discord server]: https://blockprotocol.org/discord
+[community discord server]: https://blockprotocol.org/discord
