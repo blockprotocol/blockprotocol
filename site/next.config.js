@@ -36,6 +36,11 @@ const nextConfig = {
         destination: "/contact/submitted",
         permanent: true,
       },
+      {
+        source: "/docs/publishing-blocks",
+        destination: "/docs/developing-blocks#publish",
+        permanent: true,
+      },
     ];
   },
 
