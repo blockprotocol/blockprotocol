@@ -7,14 +7,14 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5"
+    "target": "es2017"
   },
   "include": ["next-env.d.ts", "theme-override.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

@@ -142,4 +142,4 @@ const script = async () => {
   }
 };
 
-void script();
+await script();

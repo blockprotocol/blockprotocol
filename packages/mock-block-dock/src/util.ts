@@ -7,7 +7,8 @@ import {
   MultiFilter,
   MultiSort,
 } from "@blockprotocol/graph";
-import { get, orderBy } from "lodash";
+import get from "lodash/get";
+import orderBy from "lodash/orderBy";
 
 type FilterEntitiesFn = {
   (params: {

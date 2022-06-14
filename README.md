@@ -20,7 +20,8 @@ For more examples, please refer to the [Block Protocol documentation](https://bl
 
 _We’ll be publishing a public roadmap for the Block Protocol soon._
 
-See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a list of some proposed features (and known issues).
+- See the [RFC category on GitHub Discussions](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc) for a list of active RFCs
+- See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a list of some other proposed features (and known issues).
 
 ## Repository contents
 
@@ -47,7 +48,9 @@ The Block Protocol is an open-source standard, and community contributions are w
 
 Please consider **starring** the project and watching it on GitHub, to be kept abreast of future developments and show your appreciation.
 
-If you’ve got an idea for a new block, would like to make a suggestion that improves the protocol itself, or want to contribute to a better developer experience for users of the protocol, please open an issue with the tag “enhancement”, and feel free to fork the repo in order to create a pull request.
+If you’ve got an idea for a new block, would like to make a suggestion that improves the protocol itself, or want to contribute to a better developer experience for users of the protocol, then please either open an RFC, or open an issue with the tag “enhancement”. If you're unsure of which to do, read the ["When to follow this process" section of our RFC README](rfcs/README.md#when-to-follow-this-process)
+
+Please feel free to fork the repo in order to create a pull request:
 
 1.  Fork the Project
 1.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)

@@ -24,20 +24,21 @@ import { BlockDataTabs } from "./block-data-tabs";
 import { BlockModalButton } from "./block-modal-button";
 import { BlockTabsModal } from "./block-tabs-modal";
 import { BlockVariantsTabs } from "./block-variants-tabs";
-import { BlockSchema } from "./hub-utils";
+import { BlockExampleGraph, BlockSchema } from "./hub-utils";
 import { SandboxedBlockDemo } from "./sandboxed-block-demo";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;
   schema: BlockSchema;
   sandboxBaseUrl: string;
+  exampleGraph: BlockExampleGraph | null;
 };
 
 const validator = new Validator();
 
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
-> = ({ metadata, schema, sandboxBaseUrl }) => {
+> = ({ metadata, schema, exampleGraph, sandboxBaseUrl }) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
@@ -249,6 +250,7 @@ export const BlockDataContainer: VoidFunctionComponent<
           <BlockDataTabs
             blockDataTab={blockDataTab}
             setBlockDataTab={setBlockDataTab}
+            showExampleGraphTab={!!exampleGraph}
           />
 
           <Box
@@ -263,6 +265,7 @@ export const BlockDataContainer: VoidFunctionComponent<
               text={text}
               setText={setText}
               schema={schema}
+              exampleGraph={exampleGraph}
             />
             <Box
               sx={{
@@ -286,6 +289,7 @@ export const BlockDataContainer: VoidFunctionComponent<
                     blockDataTab={blockDataTab}
                     setBlockDataTab={setBlockDataTab}
                     schema={schema}
+                    exampleGraph={exampleGraph}
                     text={text}
                     setText={setText}
                   />

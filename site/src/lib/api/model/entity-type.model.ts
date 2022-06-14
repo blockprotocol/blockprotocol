@@ -1,6 +1,6 @@
 import { JsonObject } from "@blockprotocol/core";
 import { EntityType as BlockProtocolEntityType } from "@blockprotocol/graph";
-import { escapeRegExp } from "lodash";
+import escapeRegExp from "lodash/escapeRegExp";
 import { Db, DBRef } from "mongodb";
 import { v4 as uuid } from "uuid";
 

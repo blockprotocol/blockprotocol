@@ -4,7 +4,8 @@ import {
   EntityType,
 } from "@blockprotocol/graph";
 import { Box, Typography } from "@mui/material";
-import { debounce, get } from "lodash";
+import debounce from "lodash/debounce";
+import get from "lodash/get";
 import React, {
   createContext,
   ReactElement,
