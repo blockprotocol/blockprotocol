@@ -5,7 +5,7 @@
   "messages": [
     {
       "name": "createEntity",
-      "description": "A request from a block to an embedding application to create an entity",
+      "description": "Request to create an entity",
       "source": "block",
       "respondedToByMessage": "createEntityResponse",
       "sentOnInitialization": false,
