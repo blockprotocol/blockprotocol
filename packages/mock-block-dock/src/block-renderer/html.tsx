@@ -1,7 +1,6 @@
 import {
   assignBlockprotocolGlobals,
   blockprotocolGlobals,
-  teardownBlockprotocol,
 } from "@blockprotocol/core";
 import React, { useLayoutEffect, useRef, VFC } from "react";
 
@@ -9,24 +8,31 @@ type HtmlElementLoaderProps = {
   htmlString: string;
 };
 
+if (typeof window !== "undefined") {
+  assignBlockprotocolGlobals();
+}
+
 export const HtmlLoader: VFC<HtmlElementLoaderProps> = ({ htmlString }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
-    assignBlockprotocolGlobals();
-
     const node = ref.current;
 
     if (node) {
-      const frag = document.createRange().createContextualFragment(htmlString);
+      node.innerHTML = "";
+      const range = document.createRange();
+
+      range.selectNodeContents(node);
+
+      const frag = range.createContextualFragment(htmlString);
       const parent = document.createElement("div");
       parent.append(frag);
 
       blockprotocolGlobals.markBlockScripts(parent);
 
       node.appendChild(parent);
+
       return () => {
-        teardownBlockprotocol();
         node.innerHTML = "";
       };
     }
