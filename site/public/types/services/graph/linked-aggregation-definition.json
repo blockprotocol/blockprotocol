@@ -10,7 +10,7 @@
       "type": "string"
     },
     "operation": {
-      "type": "object"
+      "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
     }
   },
   "required": ["sourceEntityId", "operation", "path"]
