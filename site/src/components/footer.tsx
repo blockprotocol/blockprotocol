@@ -48,11 +48,12 @@ const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
     variant="bpSmallCopy"
     key={href}
     sx={(theme) => ({
-      color: theme.palette.gray[40],
+      color: theme.palette.gray[50],
+      marginLeft: { xs: 0, md: 4 },
       "&:first-of-type": {
         marginTop: {
-          xs: 1.5,
-          sm: 0,
+          xs: 2,
+          md: 0,
         },
       },
       "&:not(:first-of-type)": {
@@ -103,6 +104,7 @@ const Socials = (
     flexDirection="row"
     alignItems="center"
     flexWrap="wrap"
+    sx={{ gridGap: "1rem" }}
   >
     <Box flexShrink={0}>
       {SOCIALS.map(({ href, icon }, index) => (
@@ -145,8 +147,6 @@ const Socials = (
       size="small"
       sx={{
         flexShrink: 0,
-        paddingLeft: 2.2,
-        marginLeft: 2.2,
       }}
       startIcon={<FontAwesomeIcon icon={faStar} />}
     >
@@ -173,12 +173,18 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
       <Container
         sx={{
           py: {
-            sm: 8,
+            sm: 9,
             xs: 4,
           },
         }}
       >
-        <Grid container spacing={2}>
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            margin: "0 auto",
+          }}
+        >
           <Grid item xs={12} md={5} lg={4}>
             <BlockProtocolLogoIcon
               sx={{

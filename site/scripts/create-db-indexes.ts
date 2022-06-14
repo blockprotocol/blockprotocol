@@ -41,11 +41,12 @@ const script = async () => {
       .createIndex({ entityTypeId: 1 }, { unique: true });
   });
 
-  await catchAndLog(async () => {
-    await db
-      .collection(EntityType.COLLECTION_NAME)
-      .createIndex({ user: 1, "schema.title": 1 }, { unique: true });
-  });
+  // @todo re-enable this when schema is jsonb again. it's currently a string
+  // await catchAndLog(async () => {
+  //   await db
+  //     .collection(EntityType.COLLECTION_NAME)
+  //     .createIndex({ user: 1, "schema.title": 1 }, { unique: true });
+  // });
 
   await catchAndLog(async () => {
     await db

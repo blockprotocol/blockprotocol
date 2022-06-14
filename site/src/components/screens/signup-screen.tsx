@@ -11,6 +11,7 @@ import { VerificationCodeInfo } from "./verification-code-screen";
 
 type SignupScreenProps = {
   initialEmail?: string;
+  autoFocus?: boolean;
   onSignup: (params: {
     verificationCodeInfo: VerificationCodeInfo;
     email: string;
@@ -19,6 +20,7 @@ type SignupScreenProps = {
 };
 
 export const SignupScreen: VFC<SignupScreenProps> = ({
+  autoFocus = true,
   initialEmail,
   onSignup,
   onClose,
@@ -26,10 +28,10 @@ export const SignupScreen: VFC<SignupScreenProps> = ({
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (emailInputRef.current) {
+    if (emailInputRef.current && autoFocus) {
       emailInputRef.current.select();
     }
-  }, [emailInputRef]);
+  }, [autoFocus, emailInputRef]);
 
   const {
     emailValue,
@@ -85,7 +87,7 @@ export const SignupScreen: VFC<SignupScreenProps> = ({
   return (
     <>
       <BlockProtocolIcon
-        sx={{ color: (theme) => theme.palette.purple[700], marginBottom: 3 }}
+        sx={{ color: (theme) => theme.palette.purple[700], marginBottom: 4 }}
       />
       <Typography
         mb={3}

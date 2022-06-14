@@ -29,8 +29,8 @@ type BannerCardProps = {
 const BackgroundRainbow: FC = () => {
   return (
     <Image
-      width={250}
-      height={250}
+      width={350}
+      height={350}
       src="/assets/background-corner-rainbow.png"
     />
   );
@@ -93,7 +93,8 @@ export const BANNERS: Banner[] = [
       <BannerCard
         sx={{
           padding: (theme) => ({
-            xs: theme.spacing(4),
+            xs: theme.spacing(5),
+            sm: theme.spacing(6),
             md: theme.spacing(8),
           }),
         }}
@@ -123,7 +124,11 @@ export const BANNERS: Banner[] = [
             <Typography
               component="h2"
               variant="bpHeading2"
-              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[70] }}
+              sx={{
+                fontWeight: 700,
+                color: ({ palette }) => palette.gray[70],
+                mb: 2,
+              }}
             >
               You can build it!
             </Typography>
@@ -147,8 +152,7 @@ export const BANNERS: Banner[] = [
     ),
   },
   {
-    shouldDisplay: ({ pathname }) =>
-      pathname.startsWith("/spec") || pathname === "/",
+    shouldDisplay: ({ pathname }) => pathname.startsWith("/spec"),
     overlapsFooter: true,
     contents: (
       <Grid container spacing={3}>

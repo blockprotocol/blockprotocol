@@ -200,7 +200,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         sx={{
           maxWidth: {
             xs: "unset",
-            sm: "70%",
+            sm: "40ch",
           },
         }}
       >
@@ -214,7 +214,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
         sx={{
           maxWidth: {
             xs: "unset",
-            sm: "70%",
+            sm: "30ch",
           },
         }}
       >
@@ -306,6 +306,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
             xs: "unset",
             sm: "70%",
           },
+          mb: 2,
         }}
       >
         It may take a few minutes to arrive. Make sure you check your spam
