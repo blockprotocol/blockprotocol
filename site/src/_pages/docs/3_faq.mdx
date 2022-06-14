@@ -52,7 +52,7 @@ The Block Protocol advances HASH’s mission by encouraging both data itself and
 
 ### Where can users host block and entity data?
 
-Blocks can be [published to the Block Hub](/docs/publishing-blocks) to make them browsable on [blockprotocol.org](/hub), and to make their metadata and source code available via our API.
+Blocks can be [published to the Block Hub](/docs/developing-blocks#publishing) to make them browsable on [blockprotocol.org](/hub), and to make their metadata and source code available via our API.
 
 Entity data can be hosted in any application which implements the Block Protocol - we are developing one such application, [HASH](https://hash.ai/platform/hash), which will be in public beta in Q3 2022.
 
@@ -64,19 +64,21 @@ We believe the best blocks will communicate data back and forth with the embeddi
 
 For example, a mapping block which persists a user’s choices about map positioning or styling back to the application – all without the application having to know anything about the block, or the block having to know anything about the application.
 
+One aim of the Block Protocol is that blocks can store and retrieve data in an application without awareness of how exactly the data is stored.
+
 ### Can blocks hold local state?
 
 Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
 
-To save data beyond the session, blocks should make use of the [operations defined in the spec](/spec/block-types#entity-functions) to send updates to the embedding application.
+To save data beyond the session, blocks should make use of the [operations defined in the spec](/spec/graph-service-specification) to send updates to the embedding application.
 
 ### How are Block Protocol blocks different to Web Components?
 
 The Block Protocol standardizes how data requests are made between a block and an embedding application.
 
-Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it. The goal of the Block Protocol is to make it so that new blocks can be added to an application without any configuration or without having to learn how they handle data.
+Web Components (or custom elements) are one way of implementing Block Protocol blocks.
 
-We currently describe Web Components as one way of implementing Block Protocol blocks, and we are exploring how to best build on top of the existing Web Component technology - including potentially making them a recommended / default way of defining the application-block interface.
+Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it. The goal of the Block Protocol is to make it so that new blocks can be added to an application without any configuration or without having to learn how they handle data.
 
 ### How will blocks match the visual style of embedding applications?
 
@@ -121,6 +123,10 @@ One way of representing entities in a machine-readable way is in [JSON-LD](https
   "spouse": "http://dbpedia.org/resource/Cynthia_Lennon"
 }
 ```
+
+The structure of entities in the Block Protocol are described by JSON schema, and we encourage these to be
+[mapped to terms which can be used to construct a JSON-LD representation of the entity],
+which embedding applications can include in the page's markup.
 
 ### Is the Block Protocol an ontology of the real world?
 
