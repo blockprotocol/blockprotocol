@@ -1755,6 +1755,10 @@ This RFC introduces additional barriers for developers who want to **fully** imp
 
 It's worth noting that standard JSON schema validators won't natively support the full Type System (due to some of the new keywords that have been created), however they should be able to do partial validation, where prior to this RFC there were occurrences where misusing JSON schema could break the validators entirely.
 
+### Increased dependency on external parties
+
+A potential negative side-effect of building an open-ecosystem is introducing more dependencies on external parties. Although the magnitude of the impact will depend on the accompanying tooling and implementation that comes about as a result of this RFC, generally speaking there will be an increased reliance on external parties hosting and maintaining types. That said, the Block Protocol is focused around frontend components, and generally speaking there is already a high-reliance on external ecosystems (whether it be npm, etc.), so this is a risk that should be familiar for developers. Some of the [Future possibilities](#future-possibilities) outlined later on would also help mitigate this with potential centralised repositories for types to improve confidence in guarantees and consistency, etc.
+
 ### Ergonomics of manually writing schemas
 
 This RFC greatly decreases the ergonomics of writing block schemas **by hand**. The verbosity of schemas is significantly increased, as well as the general complexity of their expression due to them being composed of other schemas that need to be referred to.
