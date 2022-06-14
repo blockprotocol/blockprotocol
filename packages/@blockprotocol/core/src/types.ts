@@ -29,7 +29,7 @@ export type BlockVariant = {
 
 export type BlockType = {
   entryPoint: "custom-element" | "html" | "react";
-  tag?: string;
+  tagName?: string;
 };
 
 export type BlockMetadataRepository =
