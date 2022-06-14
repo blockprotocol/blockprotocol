@@ -147,8 +147,7 @@ export const BANNERS: Banner[] = [
     ),
   },
   {
-    shouldDisplay: ({ pathname }) =>
-      pathname.startsWith("/spec") || pathname === "/",
+    shouldDisplay: ({ pathname }) => pathname.startsWith("/spec"),
     overlapsFooter: true,
     contents: (
       <Grid container spacing={3}>
