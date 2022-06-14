@@ -213,8 +213,8 @@ The content of `data` and the permissible codes under `errors` are left to servi
 - MUST have `type: "blockprotocolmessage"`
 - MUST have a `detail` object which:
   - MUST include a `requestId`, which MUST be a `uuid`
-  - if the message is a direct response to another message, it MUST provide the `requestId` of the original message
-  - otherwise, the dispatcher MUST generate the `requestId`
+    - if the message is a direct response to another message, it MUST provide the `requestId` of the original message
+    - otherwise, the dispatcher MUST generate the `requestId`
   - MUST include the `service` this message relates to (or `"core"` for messages defined in this document)
   - MUST include the `name` of the message, as defined in the relevant specification
   - MUST include the `source`, which MUST be one of `"block"` or `"embedder"`
