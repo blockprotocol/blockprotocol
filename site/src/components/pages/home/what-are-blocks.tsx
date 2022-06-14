@@ -4,6 +4,7 @@ export const WhatAreBlocks = () => {
   return (
     <Box
       sx={{
+        zIndex: 1,
         background:
           "radial-gradient(116.02% 95.04% at 50% 100.79%, #f5f3fa 0%, #FFFFFF 80.54%)",
         borderBottom: "1px solid #eceaf1",
