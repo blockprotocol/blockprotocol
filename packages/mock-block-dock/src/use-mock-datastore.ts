@@ -42,7 +42,7 @@ export type MockData = {
 };
 
 type MockDataStore = MockData & {
-  functions: BlockProtocolFunctions;
+  functions: Required<BlockProtocolFunctions>;
 };
 
 export const useMockDatastore = (

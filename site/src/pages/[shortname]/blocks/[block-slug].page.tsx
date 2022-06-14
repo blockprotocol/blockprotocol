@@ -11,62 +11,81 @@ import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { ComponentType, useMemo, VoidFunctionComponent } from "react";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
+import React, { VoidFunctionComponent } from "react";
+import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
 import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
 import {
-  blockDependencies,
-  BlockDependency,
-  BlockExports,
+  BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
 import {
+  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,
+  readBlockReadmeFromDisk,
   readBlocksFromDisk,
 } from "../../../lib/blocks";
+import { isProduction } from "../../../lib/config";
+import { mdxComponents } from "../../../util/mdx-components";
 
-const blockRequire = (name: BlockDependency) => {
-  if (!(name in blockDependencies)) {
-    throw new Error(`missing dependency ${name}`);
+// Exclude <FooBar />, but keep <h1 />, <ul />, etc.
+const markdownComponents = Object.fromEntries(
+  Object.entries(mdxComponents).filter(
+    ([key]) => key[0]?.toLowerCase() === key[0],
+  ),
+);
+
+/**
+ * We want a different origin for the iFrame to the parent window
+ * so that it can't use cookies issued to the user in the main app.
+ *
+ * The PRODUCTION origin will be blockprotocol.org, so we can use
+ * the unique Vercel deployment URL as the origin in production.
+ *
+ * In STAGING, we will mostly be visiting unique deployment URLs
+ * for testing, so we can use the unique branch URL as the origin.
+ * Note: this means the frame in preview deployments will always be
+ * built from the tip of the branch - if you visit the non-latest preview
+ * deployment AND you have changed the framed code, they may be out of sync.
+ */
+const generateSandboxBaseUrl = (): string => {
+  if (isProduction) {
+    const deploymentUrl =
+      process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL ??
+      process.env.NEXT_PUBLIC_VERCEL_URL;
+
+    if (!deploymentUrl) {
+      throw new Error(
+        "Could not generate frame origin: production environment detected but no process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL or process.env.NEXT_PUBLIC_VERCEL_URL",
+      );
+    }
+
+    return deploymentUrl;
   }
 
-  return blockDependencies[name];
-};
+  const branch = process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_REF;
 
-const blockComponentFromSource = (source: string): ComponentType => {
-  // this does not guarantee filtering out all non-React components
-  if (!source.includes("createElement")) {
-    throw new Error(
-      "Block is not a React component - please implement rendering support for whatever it is and update this check. Note that we may in future change the recommended implementation for blocks to avoid this issue.",
+  if (!branch) {
+    // eslint-disable-next-line no-console
+    console.warn(
+      "Running locally: block hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
     );
+    return "";
   }
 
-  const exports_ = {};
-  const module_ = { exports: exports_ };
-
-  // eslint-disable-next-line no-new-func
-  const moduleFactory = new Function("require", "module", "exports", source);
-  moduleFactory(blockRequire, module_, exports_);
-
-  const exports = module_.exports as BlockExports;
-
-  if (exports.default) {
-    return exports.default;
-  }
-  if (exports.App) {
-    return exports.App;
-  }
-  if (Object.keys(exports).length === 1) {
-    return exports[Object.keys(exports)[0]!]!;
-  }
-
-  throw new Error(
-    "Block component must be exported as default, App, or the only named export in the source file.",
+  // @see https://vercel.com/docs/concepts/deployments/automatic-urls
+  const slugifiedBranch = branch.toLowerCase().replace(/[^\w-]+/g, "-");
+  const branchPrefix = `blockprotocol-git-${slugifiedBranch}-hashintel`.slice(
+    0,
+    64,
   );
+  return `https://${branchPrefix}.vercel.app`;
 };
 
 const Bullet: VoidFunctionComponent = () => {
@@ -78,10 +97,12 @@ const Bullet: VoidFunctionComponent = () => {
 };
 
 type BlockPageProps = {
+  compiledReadme?: string;
   blockMetadata: BlockMetadata;
-  blockStringifiedSource: string;
-  catalog: BlockMetadata[];
+  sandboxBaseUrl: string;
   schema: BlockSchema;
+  sliderItems: BlockMetadata[];
+  exampleGraph: BlockExampleGraph | null; // todo fix typing
 };
 
 type BlockPageQueryParams = {
@@ -89,9 +110,13 @@ type BlockPageQueryParams = {
   "block-slug"?: string;
 };
 
-export const getStaticPaths: GetStaticPaths<BlockPageQueryParams> = () => {
+export const getStaticPaths: GetStaticPaths<
+  BlockPageQueryParams
+> = async () => {
   return {
-    paths: readBlocksFromDisk().map((metadata) => metadata.blockPackagePath),
+    paths: (await readBlocksFromDisk()).map(
+      (metadata) => metadata.blockPackagePath,
+    ),
     fallback: "blocking",
   };
 };
@@ -144,7 +169,7 @@ export const getStaticProps: GetStaticProps<
   }
 
   const packagePath = `${shortname}/${blockSlug}`;
-  const catalog = readBlocksFromDisk();
+  const catalog = await readBlocksFromDisk();
 
   const blockMetadata = catalog.find(
     (metadata) => metadata.packagePath === packagePath,
@@ -155,45 +180,53 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const { schema, source: blockStringifiedSource } =
-    await readBlockDataFromDisk(blockMetadata);
+  const { schema, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
+
+  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
+
+  const compiledReadme = readmeMd
+    ? (
+        await serialize(readmeMd, {
+          mdxOptions: {
+            format: "md",
+            remarkPlugins: [
+              remarkGfm, // GitHub-flavoured markdown (includes automatic detection of URLs)
+            ],
+          },
+        })
+      ).compiledSource
+    : undefined;
 
   return {
     props: {
       blockMetadata,
-      blockStringifiedSource,
-      catalog,
+      ...(compiledReadme ? { compiledReadme } : {}), // https://github.com/vercel/next.js/discussions/11209
+      sliderItems: excludeHiddenBlocks(catalog).filter(
+        ({ name }) => name !== blockMetadata.name,
+      ),
+      sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
+      exampleGraph,
     },
     revalidate: 1800,
   };
 };
 
 const BlockPage: NextPage<BlockPageProps> = ({
+  compiledReadme,
   blockMetadata,
-  blockStringifiedSource,
-  catalog,
+  sandboxBaseUrl,
   schema,
+  sliderItems,
+  exampleGraph,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
-
-  const BlockComponent = useMemo(
-    () =>
-      typeof window === "undefined"
-        ? undefined
-        : blockComponentFromSource(blockStringifiedSource),
-    [blockStringifiedSource],
-  );
 
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const isDesktopSize = md;
-
-  const sliderItems = useMemo(() => {
-    return catalog.filter(({ name }) => name !== blockMetadata.name);
-  }, [catalog, blockMetadata]);
 
   const repositoryDisplayUrl = blockMetadata.repository
     ? generateRepositoryDisplayUrl(blockMetadata.repository)
@@ -316,7 +349,8 @@ const BlockPage: NextPage<BlockPageProps> = ({
           <BlockDataContainer
             metadata={blockMetadata}
             schema={schema}
-            BlockComponent={BlockComponent}
+            sandboxBaseUrl={sandboxBaseUrl}
+            exampleGraph={exampleGraph}
           />
         </Box>
 
@@ -326,9 +360,25 @@ const BlockPage: NextPage<BlockPageProps> = ({
             sx={{
               display: "grid",
               gridTemplateColumns: { xs: "1fr", md: "60% 40%" },
+              marginBottom: 10,
             }}
           >
-            <Box />
+            {compiledReadme ? (
+              <Box
+                sx={{
+                  "& > h1:first-child": {
+                    marginTop: 0,
+                  },
+                }}
+              >
+                <MDXRemote
+                  compiledSource={compiledReadme}
+                  components={markdownComponents}
+                />
+              </Box>
+            ) : (
+              <div />
+            )}
             <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
               <Typography
                 variant="bpLargeText"
@@ -359,26 +409,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
             </Box>
           </Box>
         )}
-
-        {/* <div
-        style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
-        className=" mb-10"
-      >
-        <div>
-          <b>About</b>
-          <p>
-            Store information in rows and columns in a classic table layout.
-            Longer description talking about parameters and how to use like a
-            readme goes in here. Tables have filters, search, ability to add and
-            remove columns and rows, multiple views. Tables have filters,
-            search, ability to add and remove columns and rows, multiple views.
-            Tables have filters, search, ability to add and remove columns and
-            rows, multiple views. Tables have filters, search, ability to add
-            and remove columns and rows, multiple views.
-          </p>
-        </div>
-        
-      </div> */}
 
         <Typography textAlign="center" variant="bpHeading2" mb={3}>
           Explore more blocks

@@ -15,4 +15,4 @@ const script = async () => {
   console.log(`✅ Site map generated: ${siteMapFilePath}`);
 };
 
-export default script();
+await script();

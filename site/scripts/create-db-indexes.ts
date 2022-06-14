@@ -60,4 +60,4 @@ const script = async () => {
   console.log("✅ MongoDB indexes created");
 };
 
-export default script();
+await script();
