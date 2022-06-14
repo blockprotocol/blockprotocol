@@ -331,11 +331,9 @@ The **values** are all sent from the embedding application to the block on initi
 - `blockEntity`: the block entity, conforming to the constraints defined in the block schema
 - `entityTypes`: the entity type definitions for any entities provided to the block in other messages
 - <span id="block-graph">`blockGraph`</span>: the entity graph with the block at
-  its root, which contains: - `linkedEntities`: the entities linked from the
-  block entity, and from those entities, and so on, resolved to a depth
-  determined by the embedding application - `linkGroups`: the links from the
-  block entity and the links from any entities in `linkedEntities`, grouped by
-  source entity and link path
+  its root, which contains: 
+  - `linkedEntities`: the entities linked from the block entity, and from those entities, and so on, resolved to a depth determined by the embedding application 
+  - `linkGroups`: the links from the block entity and the links from any entities in `linkedEntities`, grouped by source entity and link path
 - `linkedAggregations`: field containing the definitions and results of aggregations linked from the block’s entity - these are special objects which contain an aggregation definition (e.g. in plain English, "top 10 Cars sorted by age, descending") and its results at the time of provision
 - `readonly`: whether or not the block should display in ‘readonly’ mode, disabling or hiding any editing controls it offers.
 
