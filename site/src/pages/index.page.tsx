@@ -10,6 +10,7 @@ import { InteroperableBlocks } from "../components/pages/home/interoperable-bloc
 import { RegistrySection } from "../components/pages/home/registry-section";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import {
+  excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,
 } from "../lib/blocks";
@@ -21,7 +22,9 @@ interface PageProps {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  return { props: { catalog: readBlocksFromDisk() } };
+  return {
+    props: { catalog: excludeHiddenBlocks(await readBlocksFromDisk()) },
+  };
 };
 
 const HomePage: VFC<PageProps> = ({ catalog }) => {

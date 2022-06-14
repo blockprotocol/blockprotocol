@@ -1,4 +1,4 @@
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
+const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
   enabled: ["true", "1"].includes(process.env.ANALYZE),
 });
 
@@ -14,7 +14,7 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
 
-  async redirects() {
+  redirects: () => {
     return [
       {
         source: "/discord",
@@ -38,6 +38,15 @@ const nextConfig = {
       },
     ];
   },
+
+  rewrites: () => {
+    return [
+      {
+        source: "/:shortname/blocks/:blockslug/sandboxed-demo",
+        destination: "/api/rewrites/sandboxed-block-demo",
+      },
+    ];
+  },
 };
 
-module.exports = withBundleAnalyzer(nextConfig);
+export default withBundleAnalyzer(nextConfig);

@@ -20,12 +20,16 @@ import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import slugify from "slugify";
 import tmp from "tmp-promise";
 
 import { StoredBlockInfo } from "../src/lib/blocks";
 
-const monorepoRoot = path.resolve(__dirname, "../..");
+const monorepoRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../..",
+);
 
 const defaultExecaOptions = {
   env: {
@@ -149,6 +153,14 @@ const ensureRepositorySnapshot = async ({
     return repositorySnapshotDirPath;
   }
 
+  // Vercel builds may fail when block build cache is empty. The error says
+  // "Could not write file /tmp/..." "ENOSPC: no space left on device"
+  // Preventing workshop folder from growing indefinitely reduces the chances of failure.
+  // See details in https://github.com/blockprotocol/blockprotocol/pull/327
+  if (process.env.VERCEL) {
+    await fs.emptyDir(workshopDirPath);
+  }
+
   const { path: tarDirPath, cleanup: cleanupTarDir } = await tmp.dir({
     unsafeCleanup: true,
   });
@@ -255,11 +267,11 @@ const prepareBlock = async ({
     );
   }
 
-  const workspaceDirPath = blockInfo.workspace
-    ? path.resolve(
-        rootWorkspaceDirPath,
-        await locateWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace),
-      )
+  const workspacePath = blockInfo.workspace
+    ? await locateWorkspaceDirPath(rootWorkspaceDirPath, blockInfo.workspace)
+    : null;
+  const workspaceDirPath = workspacePath
+    ? path.resolve(rootWorkspaceDirPath, workspacePath)
     : rootWorkspaceDirPath;
 
   const distDirPath = blockInfo.distDir
@@ -350,6 +362,10 @@ const prepareBlock = async ({
 
   await fs.move(distDirPath, blockDirPath);
   console.log(chalk.green(`Done!`));
+
+  return {
+    directory: workspacePath ?? blockInfo.folder,
+  };
 };
 
 const script = async () => {
@@ -432,7 +448,14 @@ const script = async () => {
     const blockName = blockInfo.name;
     const blockDirPath = path.resolve(blocksDirPath, blockName);
     const blockMetadataPath = path.resolve(blockDirPath, "block-metadata.json");
-    const blockInfoChecksum = md5(JSON.stringify(blockInfo));
+    const blockInfoChecksum = md5(
+      JSON.stringify({
+        ...blockInfo,
+        // This will allow you to force re-preparing all blocks when the
+        // format of `unstable_hubInfo` changes, by incrementing this.
+        unstableVersion: 2,
+      }),
+    );
 
     if (env.CACHE) {
       try {
@@ -457,7 +480,7 @@ const script = async () => {
 
     try {
       await fs.ensureDir(blockDirPath);
-      await prepareBlock({
+      const hubInfo = await prepareBlock({
         blockInfo,
         blockDirPath,
         workshopDirPath,
@@ -466,6 +489,7 @@ const script = async () => {
 
       const blockMetadata = await fs.readJson(blockMetadataPath);
       blockMetadata.unstable_hubInfo = {
+        ...hubInfo,
         checksum: blockInfoChecksum,
         commit: blockInfo.commit,
         preparedAt: new Date().toISOString(),
@@ -498,4 +522,4 @@ const script = async () => {
   // As a workaround, we can clear CI cache for now.
 };
 
-export default script();
+await script();

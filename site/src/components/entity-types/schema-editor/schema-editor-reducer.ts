@@ -1,6 +1,6 @@
 import produce from "immer";
 import { Schema } from "jsonschema";
-import { get } from "lodash";
+import get from "lodash/get";
 import { Reducer } from "react";
 
 import { JsonSchema } from "../../../lib/json-schema";
