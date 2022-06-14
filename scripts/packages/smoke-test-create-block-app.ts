@@ -71,7 +71,7 @@ const script = async () => {
         "exec",
         "--cache",
         tmpNodeCacheDir.path,
-        "create-block-app@0.0.6-next.0",
+        "create-block-app@next",
         blockName,
         "--path",
         blockDirPath,

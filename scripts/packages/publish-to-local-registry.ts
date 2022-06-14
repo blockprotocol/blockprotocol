@@ -94,7 +94,7 @@ const script = async () => {
     logStepEnd();
     logStepStart(`Publish ${packageName} to local registry`);
 
-    await execa("npm", ["publish", "--force"], {
+    await execa("npm", ["publish", "--tag", "next", "--force"], {
       ...defaultExecaOptions,
       cwd: packageDirPath,
     });
