@@ -68,7 +68,7 @@ export const Header = () => {
           }}
         >
           The Block Protocol enables applications to make their interfaces
-          infinitely extensible with interoperable components: blocks.
+          infinitely extensible with interoperable components called blocks.
         </Typography>
       </Container>
       <Image layout="responsive" src={primaryHelixImage} />
