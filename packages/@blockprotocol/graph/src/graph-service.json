@@ -548,7 +548,7 @@
         "type": "object",
         "properties": {
           "sourceEntityId": {
-            "description": "The entityId of the source of this linked aggregation",
+            "description": "The entityId of the source entity of this linked aggregation",
             "type": "string"
           },
           "operation": {
