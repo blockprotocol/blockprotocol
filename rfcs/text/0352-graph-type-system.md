@@ -143,9 +143,7 @@ These can be considered the least restrictive value spaces:
 
 #### Creating new Data-Types
 
-Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a follow-up RFC is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
-
-[TODO RFC: User-Created Data-Types](TODO)
+Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
 
 ### Property Types
 
@@ -584,7 +582,7 @@ Queries on the structure of data (those which do not directly reference an exact
 
 ### Link Constraints
 
-This RFC does not currently mention ways of constraining the destination of a Link Type used in an Entity Type. **This is different from current way of handling things**. The detailed reasoning for removing this, and a potential solution, is outlined in a follow-up RFC [RFC: Structural Link Constraints](LINK TODO).
+This RFC does not currently mention ways of constraining the destination of a Link Type used in an Entity Type. **This is different from current way of handling things**. The detailed reasoning for removing this, and a potential solution, is outlined in a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/354).
 
 ### Interfacing with Types
 
@@ -700,9 +698,7 @@ This RFC defines the following primitive top-level Data Types
 
 ### Creating new Data-Types
 
-Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a follow-up RFC is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
-
-[RFC: User-Created Data-Types](LINK TODO)
+Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
 
 ## Property Types
 
@@ -1773,7 +1769,7 @@ This type system is designed around reusable types, where people can share and b
 
 ### Versioning Considerations
 
-A version control model will likely be developed in tandem to the implementation of this type system. As such, there are potential complications to how dependencies are managed and the ramifications of having a large-connected system. Some of these are explored in detail in the Link Constraints RFC (link TODO). The major drawback here is that this greatly increases cognitive load, and reasoning about changes within the ecosystem will become more involved.
+A version control model will likely be developed in tandem to the implementation of this type system. As such, there are potential complications to how dependencies are managed and the ramifications of having a large-connected system. Some of these are explored in detail in the [RFC about constraining Links](https://github.com/blockprotocol/blockprotocol/pull/354). The major drawback here is that this greatly increases cognitive load, and reasoning about changes within the ecosystem will become more involved.
 
 A more immediately apparent concern is if schemas are versioned, but their use isn't pinned to a version, then they might implicitly change if their dependencies are updated. More verbosely, if we have a Property Type `Age` on version `1.1`, and an Entity Type `Person` which simply refers to `Age`, if `Age` is updated then the Entity Type implicitly changes.
 
@@ -1943,11 +1939,11 @@ This RFC establishes components which are quite fundamental. As such, there is a
 
 ## Constraining possible destinations of Links
 
-As alluded to elsewhere in the document, during the writing of this RFC some problems were discovered with Entity Types constraining the destinations of a Link. This has been made into another RFC outlining the issue and a potential solution. (LINK TODO)
+As alluded to elsewhere in the document, during the writing of this RFC some problems were discovered with Entity Types constraining the destinations of a Link. This has been made into [another RFC](https://github.com/blockprotocol/blockprotocol/pull/354) outlining the issue and a potential solution.
 
 ## User-Created Data Types
 
-In this RFC Data Types are limited to a set of primitive ones. There's potential to introduce a system that lets users create new Data Types by constraining and combining the primitives. This is explored in another RFC. (LINK TODO)
+In this RFC Data Types are limited to a set of primitive ones. There's potential to introduce a system that lets users create new Data Types by constraining and combining the primitives. This is explored in [another RFC](https://github.com/blockprotocol/blockprotocol/pull/355).
 
 ## Discoverability
 
