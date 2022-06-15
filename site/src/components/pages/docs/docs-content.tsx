@@ -68,7 +68,7 @@ export const DocsContent: VFC<DocsPageProps> = ({
       <Container
         sx={{
           margin: 0,
-          marginTop: 6,
+          marginTop: { xs: 5, md: 8 },
         }}
       >
         {title ? (
