@@ -41,6 +41,11 @@ const nextConfig = {
         destination: "/docs/developing-blocks#publish",
         permanent: true,
       },
+      {
+        source: "/spec/block-types",
+        destination: "/spec/core-specification",
+        permanent: true,
+      },
     ];
   },
 
