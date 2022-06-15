@@ -6,6 +6,7 @@ import {
   Divider,
   IconButton,
   styled,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -15,16 +16,14 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useRef,
   useState,
   VFC,
 } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
-import { parseIntFromPixelString } from "../util/mui-utils";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
-import { DESKTOP_NAVBAR_HEIGHT } from "./navbar";
+import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
 
 export const SIDEBAR_WIDTH = 220;
 
@@ -278,47 +277,6 @@ type SidebarProps = {
   header?: React.ReactNode;
 } & BoxProps;
 
-const findPathToCurrentPage = (
-  page: SiteMapPage,
-  path: string,
-): (SiteMapPage | SiteMapPageSection)[] | null => {
-  if (page.subPages) {
-    for (const subPage of page.subPages) {
-      const result = findPathToCurrentPage(subPage, path);
-
-      if (result) {
-        return [page, ...result];
-      }
-    }
-  }
-
-  if (page.href === path.replace(/#$/, "")) {
-    return [page];
-  }
-
-  if (page.sections) {
-    for (const section of page.sections) {
-      const sectionHref = `${page.href}#${section.anchor}`;
-
-      if (sectionHref === path) {
-        return [page, section];
-      }
-
-      if (section.subSections) {
-        for (const subSection of [section, ...(section.subSections ?? [])]) {
-          const subSectionHref = `${page.href}#${subSection.anchor}`;
-
-          if (subSectionHref === path) {
-            return [page, section, subSection];
-          }
-        }
-      }
-    }
-  }
-
-  return null;
-};
-
 const findSectionPath = (
   href: string,
   sections: SiteMapPageSection[],
@@ -361,23 +319,6 @@ const getInitialOpenedPages = (params: {
         return onThisPage;
       } else if (sections) {
         const sectionPath = findSectionPath(href, sections, asPath);
-        // for (const section of sections) {
-        //   const { anchor: sectionAnchor, subSections } = section;
-        //   const sectionHref = `${href}#${sectionAnchor}`;
-        //
-        //   if (asPath === sectionHref) {
-        //     return [...onThisPage, sectionHref];
-        //   } else if (subSections) {
-        //     for (const subSection of subSections) {
-        //       const { anchor: subSectionAnchor } = subSection;
-        //       const subSectionHref = `${href}#${subSectionAnchor}`;
-        //
-        //       if (asPath === subSectionHref) {
-        //         return [...onThisPage, sectionHref, subSectionHref];
-        //       }
-        //     }
-        //   }
-
         if (sectionPath) {
           return [...onThisPage, ...sectionPath];
         }
@@ -397,26 +338,7 @@ export const Sidebar: VFC<SidebarProps> = ({
   const theme = useTheme();
   const { asPath } = useRouter();
 
-  const stickinessDetectorRef = useRef<HTMLDivElement>(null);
-  const [isSticky, setIsSticky] = useState<boolean>(false);
-
-  // Approach inspired by: https://stackoverflow.com/questions/16302483/event-to-detect-when-positionsticky-is-triggered
-  useEffect(() => {
-    const cachedRef = stickinessDetectorRef.current;
-
-    if (cachedRef) {
-      const observer = new IntersectionObserver(
-        ([event]) => setIsSticky(event!.intersectionRatio < 1),
-        { threshold: [1] },
-      );
-
-      observer.observe(cachedRef);
-
-      return () => {
-        observer.unobserve(cachedRef);
-      };
-    }
-  }, []);
+  const md = useMediaQuery(theme.breakpoints.up("md"));
 
   const [selectedAnchorElement, setSelectedAnchorElement] =
     useState<HTMLAnchorElement>();
@@ -456,28 +378,17 @@ export const Sidebar: VFC<SidebarProps> = ({
       sx={{
         ...boxProps.sx,
         top: 0,
+        marginTop: `${-(md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT)}px`,
+        paddingTop: `${
+          (md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT) + 10
+        }px`,
       }}
     >
       <Box
-        ref={stickinessDetectorRef}
         sx={{
-          position: "absolute",
-          top: "-1px",
-          height: "1px",
-          width: "1px",
-        }}
-      />
-      <Box
-        sx={{
-          maxHeight: isSticky ? "100vh" : undefined,
           display: "flex",
           flexDirection: "column",
-          paddingTop: isSticky
-            ? `${
-                DESKTOP_NAVBAR_HEIGHT +
-                parseIntFromPixelString(theme.spacing(1))
-              }px`
-            : 0,
+          paddingTop: 0,
           paddingRight: 3,
           transition: theme.transitions.create([
             "padding-top",
@@ -492,7 +403,7 @@ export const Sidebar: VFC<SidebarProps> = ({
             paddingRight: 3,
             marginRight: -3,
             overflow: "auto",
-            paddingBottom: isSticky ? theme.spacing(6) : 0,
+            paddingBottom: 0,
             flexShrink: 1,
           }}
         >

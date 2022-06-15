@@ -116,15 +116,29 @@ const useMobileNavVisible = (canDisplayMobileNav: boolean) => {
   return [mobileNavVisible, setMobileNavVisible] as const;
 };
 
-const useScrollingNavbar = (isHomePage: boolean, mobileNavVisible: boolean) => {
+const useScrollingNavbar = (
+  alwaysVisible: boolean,
+  threshold: number | null,
+  mobileNavVisible: boolean,
+) => {
   const [navbarHiddenByIdle, setNavbarHiddenByIdle] = useState(false);
 
-  const [scrolledPast, setScrolledPast] = useState<Record<string, boolean>>({
+  const defaultScrolledPast = {
     0: false,
-    [HOME_PAGE_HEADER_HEIGHT * 0.5]: false,
-    [HOME_PAGE_HEADER_HEIGHT * 0.75]: false,
-    [HOME_PAGE_HEADER_HEIGHT]: false,
-  });
+    ...(threshold !== null
+      ? {
+          [threshold * 0.5]: false,
+          [threshold * 0.75]: false,
+          [threshold]: false,
+        }
+      : {}),
+  };
+  const [scrolledPast, setScrolledPast] =
+    useState<Record<string, boolean>>(defaultScrolledPast);
+
+  if (threshold !== null && !Object.hasOwn(defaultScrolledPast, threshold)) {
+    setScrolledPast(defaultScrolledPast);
+  }
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined = undefined;
@@ -138,9 +152,11 @@ const useScrollingNavbar = (isHomePage: boolean, mobileNavVisible: boolean) => {
             ]),
           );
 
-          return Object.keys(nextScrolledPast).some(
-            (key) => nextScrolledPast[key] !== currentValue[key],
-          )
+          return (threshold !== null &&
+            !Object.hasOwn(nextScrolledPast, threshold)) ||
+            Object.keys(nextScrolledPast).some(
+              (key) => nextScrolledPast[key] !== currentValue[key],
+            )
             ? nextScrolledPast
             : currentValue;
         });
@@ -166,15 +182,16 @@ const useScrollingNavbar = (isHomePage: boolean, mobileNavVisible: boolean) => {
       }
       window.removeEventListener("scroll", onScroll);
     };
-  }, []);
+  }, [threshold]);
 
   const trigger = useScrollTrigger();
 
   const isNavbarHidden =
     !mobileNavVisible &&
+    !alwaysVisible &&
     scrolledPast[0] &&
     (trigger ||
-      (isHomePage && !scrolledPast[HOME_PAGE_HEADER_HEIGHT]) ||
+      (threshold !== null && !scrolledPast[threshold]) ||
       navbarHiddenByIdle);
 
   return { scrolledPast, isNavbarHidden };
@@ -188,13 +205,15 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
   const { user } = useUser();
 
   const isHomePage = asPath === "/";
+  const isDocs = asPath.startsWith("/docs");
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
   const [mobileNavVisible, setMobileNavVisible] = useMobileNavVisible(!md);
 
   const { scrolledPast, isNavbarHidden } = useScrollingNavbar(
-    isHomePage,
+    isDocs,
+    isHomePage ? HOME_PAGE_HEADER_HEIGHT : null,
     mobileNavVisible,
   );
 
@@ -241,12 +260,13 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
             borderBottomWidth: 1,
             borderBottomColor: "transparent",
             /** @todo: find way to make drop-shadow appear behind mobile navigation links */
-            ...(scrolledPast[isHomePage ? HOME_PAGE_HEADER_HEIGHT : 0] ||
+            ...(isDocs ||
+            scrolledPast[isHomePage ? HOME_PAGE_HEADER_HEIGHT : 0] ||
             mobileNavVisible
               ? {
                   borderBottomColor: theme.palette.gray[30],
                   boxShadow:
-                    !mobileNavVisible && !isNavbarHidden
+                    !mobileNavVisible && !isNavbarHidden && !isDocs
                       ? theme.shadows[1]
                       : "none",
                 }
