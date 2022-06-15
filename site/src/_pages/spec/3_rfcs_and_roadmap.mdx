@@ -55,13 +55,6 @@ While embedding applications can handle displaying an interface for reloading bl
 
 #### Block definition
 
-##### Entity types
-
-We’re intending to move away from entities having to fully describe the constraints of each of their properties.
-Instead, type definitions are going to become shareable and reusable in a new type system which establishes
-a hierarchy of types to address a number of shortcomings in our current system.
-For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/352).
-
 ##### Self-contained blocks and sandboxing
 
 At the moment, the specification is largely silent on sandboxing, and blocks should be designed to work whether in their own scope or in the scope of a wider application, e.g. by not polluting the global scope.
@@ -127,6 +120,13 @@ The most detailed version of this would be for blocks to be able to:
 
 ### Graph
 
+##### Entity types
+
+We’re intending to move away from entities having to fully describe the constraints of each of their properties.
+Instead, type definitions are going to become shareable and reusable in a new type system which establishes
+a hierarchy of types to address a number of shortcomings in our current system.
+For in-depth motivation, a proposed implementation plan, and the wide-reaching implications [please see the RFC](https://github.com/blockprotocol/blockprotocol/pull/352).
+
 #### Pagination
 
 We intend to move to a cursor-based method for paginating aggregations of entities, likely based on the [Connections](https://relay.dev/graphql/connections.htm) specification.
@@ -141,4 +141,4 @@ This does, however, mean there is a possibility of competing schemas attempting 
 
 The ability to translate between schemas would help - e.g. some way expressing an equivalence relationship between properties in different schema. This might be a keyword such as `sameAs` or `equivalentTo` mapping between schemas and their properties. Then, either blocks or embedding applications could programmatically translate between schemas.
 
-Note that this is about translating between different JSON Schemas, and is not to be confused with the process of translating JSON schema to schema.org (and equivalent) types, which has an established technical approach mentioned **[here](https://blockprotocol.org/spec/embedding-applications#machine-readable-pages)**.
+Note that this is about translating between different JSON Schemas, and is not to be confused with the process of translating JSON schema to schema.org (and equivalent) types, which has an established technical approach mentioned **[here](/docs/faq#how-does-the-block-protocol-advance-the-semantic-web)**.
