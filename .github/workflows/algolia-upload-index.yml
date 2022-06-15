@@ -22,4 +22,4 @@ jobs:
       - run: yarn install
 
       - name: Sync Algolia Index
-        run: yarn exe scripts/sync-algolia-index.ts
+        run: yarn exe site/scripts/sync-algolia-index.ts

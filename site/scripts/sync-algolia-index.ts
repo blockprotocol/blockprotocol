@@ -5,7 +5,7 @@ import matter from "gray-matter";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import siteMap from "../site/site-map.json" assert { type: "json" };
+import siteMap from "../site-map.json" assert { type: "json" };
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
