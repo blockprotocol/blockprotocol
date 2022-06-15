@@ -52,7 +52,7 @@ type SidebarPageSectionProps = {
 };
 
 const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
-  depth = 0,
+  depth = 1,
   isSelectedByDefault = false,
   pageHref,
   section,
@@ -158,6 +158,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 };
 
 type SidebarPageProps = {
+  depth?: number;
   page: SiteMapPage;
   maybeUpdateSelectedOffsetTop: () => void;
   setSelectedAnchorElement: (element: HTMLAnchorElement) => void;
@@ -166,6 +167,7 @@ type SidebarPageProps = {
 };
 
 const SidebarPage: VFC<SidebarPageProps> = ({
+  depth = 0,
   page,
   maybeUpdateSelectedOffsetTop,
   setSelectedAnchorElement,
@@ -175,10 +177,14 @@ const SidebarPage: VFC<SidebarPageProps> = ({
   const router = useRouter();
   const { asPath } = router;
 
-  const { href, title, sections } = page;
+  const { href, title, sections, subPages } = page;
 
-  const isSelected = asPath === href || asPath === `${href}#`;
-  const isOpen = openedPages.includes(href);
+  const isSelected =
+    (asPath === href || asPath === `${href}#`) && !subPages?.length;
+  const pageKey = subPages.length ? `page${href}` : href;
+
+  const isOpen = openedPages.includes(pageKey);
+  const hasChildren = (sections?.length ?? 0) + (subPages?.length ?? 0) > 0;
 
   return (
     <Fragment key={href}>
@@ -197,21 +203,21 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               ? theme.palette.purple[600]
               : theme.palette.gray[80],
             fontWeight: isSelected ? 700 : 400,
-            paddingLeft: 1.25,
+            paddingLeft: depth * 1 + 1.25,
           })}
         >
           {title}
         </SidebarLink>
-        {sections && sections.length > 0 ? (
+        {hasChildren ? (
           <IconButton
             onClick={async () => {
               if (asPath.startsWith(`${href}#`)) {
                 await router.push(href);
               }
               setOpenedPages((prev) =>
-                prev.includes(href)
-                  ? prev.filter((prevHref) => prevHref !== href)
-                  : [...prev, href],
+                prev.includes(pageKey)
+                  ? prev.filter((prevHref) => prevHref !== pageKey)
+                  : [...prev, pageKey],
               );
             }}
             sx={(theme) => ({
@@ -231,7 +237,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
           </IconButton>
         ) : null}
       </Box>
-      {sections && sections.length > 0 ? (
+      {hasChildren ? (
         <Collapse
           in={isOpen}
           onEntered={maybeUpdateSelectedOffsetTop}
@@ -239,10 +245,21 @@ const SidebarPage: VFC<SidebarPageProps> = ({
         >
           {sections.map((section) => (
             <SidebarPageSection
-              depth={1}
+              depth={depth + 1}
               key={section.anchor}
               pageHref={href}
               section={section}
+              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+              setSelectedAnchorElement={setSelectedAnchorElement}
+              openedPages={openedPages}
+              setOpenedPages={setOpenedPages}
+            />
+          ))}
+          {subPages.map((subpage) => (
+            <SidebarPage
+              key={subpage.href}
+              depth={depth + 1}
+              page={subpage}
               maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
               setSelectedAnchorElement={setSelectedAnchorElement}
               openedPages={openedPages}
@@ -261,6 +278,71 @@ type SidebarProps = {
   header?: React.ReactNode;
 } & BoxProps;
 
+const findPathToCurrentPage = (
+  page: SiteMapPage,
+  path: string,
+): (SiteMapPage | SiteMapPageSection)[] | null => {
+  if (page.subPages) {
+    for (const subPage of page.subPages) {
+      const result = findPathToCurrentPage(subPage, path);
+
+      if (result) {
+        return [page, ...result];
+      }
+    }
+  }
+
+  if (page.href === path.replace(/#$/, "")) {
+    return [page];
+  }
+
+  if (page.sections) {
+    for (const section of page.sections) {
+      const sectionHref = `${page.href}#${section.anchor}`;
+
+      if (sectionHref === path) {
+        return [page, section];
+      }
+
+      if (section.subSections) {
+        for (const subSection of [section, ...(section.subSections ?? [])]) {
+          const subSectionHref = `${page.href}#${subSection.anchor}`;
+
+          if (subSectionHref === path) {
+            return [page, section, subSection];
+          }
+        }
+      }
+    }
+  }
+
+  return null;
+};
+
+const findSectionPath = (
+  href: string,
+  sections: SiteMapPageSection[],
+  asPath: string,
+): string[] | null => {
+  for (const section of sections) {
+    const sectionHref = `${href}#${section.anchor}`;
+
+    if (asPath === sectionHref) {
+      return [sectionHref];
+    }
+
+    if (section.subSections) {
+      const result = findSectionPath(href, section.subSections, asPath);
+
+      if (result) {
+        return [sectionHref, ...result];
+      }
+    }
+  }
+
+  return null;
+};
+
 const getInitialOpenedPages = (params: {
   pages: SiteMapPage[];
   asPath: string;
@@ -268,26 +350,36 @@ const getInitialOpenedPages = (params: {
   const { pages, asPath } = params;
 
   for (const page of pages) {
-    const { href, sections } = page;
+    const hasSubPages = page.subPages?.length;
+    const subPages = hasSubPages ? page.subPages : [page];
 
-    if (asPath === href || asPath === `${href}#`) {
-      return [href];
-    } else if (sections) {
-      for (const section of sections) {
-        const { anchor: sectionAnchor, subSections } = section;
-        const sectionHref = `${href}#${sectionAnchor}`;
+    for (const subPage of subPages) {
+      const { href, sections } = subPage;
+      const onThisPage = hasSubPages ? [`page${page.href}`, href] : [href];
 
-        if (asPath === sectionHref) {
-          return [href, sectionHref];
-        } else if (subSections) {
-          for (const subSection of subSections) {
-            const { anchor: subSectionAnchor } = subSection;
-            const subSectionHref = `${href}#${subSectionAnchor}`;
+      if (asPath === href || asPath === `${href}#`) {
+        return onThisPage;
+      } else if (sections) {
+        const sectionPath = findSectionPath(href, sections, asPath);
+        // for (const section of sections) {
+        //   const { anchor: sectionAnchor, subSections } = section;
+        //   const sectionHref = `${href}#${sectionAnchor}`;
+        //
+        //   if (asPath === sectionHref) {
+        //     return [...onThisPage, sectionHref];
+        //   } else if (subSections) {
+        //     for (const subSection of subSections) {
+        //       const { anchor: subSectionAnchor } = subSection;
+        //       const subSectionHref = `${href}#${subSectionAnchor}`;
+        //
+        //       if (asPath === subSectionHref) {
+        //         return [...onThisPage, sectionHref, subSectionHref];
+        //       }
+        //     }
+        //   }
 
-            if (asPath === subSectionHref) {
-              return [href, sectionHref, subSectionHref];
-            }
-          }
+        if (sectionPath) {
+          return [...onThisPage, ...sectionPath];
         }
       }
     }

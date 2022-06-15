@@ -41,6 +41,11 @@ const nextConfig = {
         destination: "/docs/developing-blocks#publish",
         permanent: true,
       },
+      {
+        source: "/spec/:slug*",
+        destination: "/docs/spec/:slug*",
+        permanent: true,
+      },
     ];
   },
 

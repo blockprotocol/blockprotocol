@@ -19,8 +19,8 @@ import { Sidebar, SIDEBAR_WIDTH } from "../../page-sidebar";
 import Search from "./search";
 
 type DocsPageProps = {
-  title: ReactNode;
-  subtitle: ReactNode;
+  title?: ReactNode;
+  subtitle?: ReactNode;
   hero?: ReactNode;
   content: MDXRemoteSerializeResult<Record<string, unknown>>;
   pages: SiteMapPage[];
@@ -73,14 +73,16 @@ export const DocsContent: VFC<DocsPageProps> = ({
           />
         ) : null}
         <Container>
-          <Typography
-            variant="bpTitle"
-            sx={{
-              marginBottom: 2,
-            }}
-          >
-            {title}
-          </Typography>
+          {title ? (
+            <Typography
+              variant="bpTitle"
+              sx={{
+                marginBottom: 2,
+              }}
+            >
+              {title}
+            </Typography>
+          ) : null}
           {subtitle ? (
             <Typography
               variant="bpSubtitle"
@@ -104,12 +106,6 @@ export const DocsContent: VFC<DocsPageProps> = ({
               prevPage={prevPage}
               nextPage={nextPage}
               sx={{
-                marginLeft: {
-                  xs: 0,
-                  md: `${
-                    SIDEBAR_WIDTH + parseIntFromPixelString(theme.spacing(6))
-                  }px`,
-                },
                 maxWidth: {
                   sx: "100%",
                   sm: MDX_TEXT_CONTENT_MAX_WIDTH,
