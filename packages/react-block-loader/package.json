@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@lit-labs/react": "^1.0.4",
-    "blockprotocol": "0.0.10",
+    "blockprotocol": "0.0.11",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "uuid": "^8.3.2"
