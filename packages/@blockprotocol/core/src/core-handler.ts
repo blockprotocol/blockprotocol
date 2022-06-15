@@ -122,6 +122,8 @@ export abstract class CoreHandler {
     this.attachEventListeners();
   }
 
+  abstract initialize(): void;
+
   private eventListener = (event: Event) => {
     this.processReceivedMessage(event as CustomEvent);
   };

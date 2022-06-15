@@ -53,6 +53,7 @@ export class GraphBlockHandler
     if (callbacks) {
       this.registerCallbacks(callbacks);
     }
+    this.coreHandler.initialize();
   }
 
   getInitPayload(): Record<string, any> {

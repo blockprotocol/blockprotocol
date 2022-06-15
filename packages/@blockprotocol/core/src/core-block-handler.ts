@@ -7,14 +7,13 @@ import { EmbedderInitMessage, Message } from "./types";
 export class CoreBlockHandler extends CoreHandler {
   constructor({ element }: { element: HTMLElement }) {
     super({ element, sourceType: "block" });
-    this.initialize();
   }
 
   /**
    * Send the init message, to which an initResponse is expected from the embedder.
    * The response will be processed in {@link processInitMessage}
    */
-  private initialize() {
+  initialize() {
     void this.sendMessage({
       partialMessage: { messageName: "init" },
       respondedToBy: "initResponse",
@@ -47,6 +46,7 @@ export class CoreBlockHandler extends CoreHandler {
             ...message,
             data: data[serviceName][messageName],
             messageName,
+            service: serviceName,
           },
         });
       }
