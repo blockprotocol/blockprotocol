@@ -180,10 +180,6 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
     }
   };
 
-  const searchResultContainerStyles: SxProps<Theme> = {
-    width: "100%",
-  };
-
   return (
     <Box
       sx={{
@@ -389,35 +385,29 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
         )}
 
       {searchResults.length > 0 && (
-        <Box sx={searchResultContainerStyles}>
-          <Box
-            sx={({ palette }) => ({ backgroundColor: palette.common.white })}
-          >
-            <ModalSearchList
-              searchResults={searchResults}
-              variant={variant}
-              getHighlight={getHighlight}
-              closeModal={closeModal}
-            />
-          </Box>
+        <Box sx={({ palette }) => ({ backgroundColor: palette.common.white })}>
+          <ModalSearchList
+            searchResults={searchResults}
+            variant={variant}
+            getHighlight={getHighlight}
+            closeModal={closeModal}
+          />
         </Box>
       )}
 
       {searchState !== "normal" && !searchLoading && (
-        <Box sx={searchResultContainerStyles}>
-          <Box
-            sx={({ palette }) => ({
-              padding: 1.5,
-              backgroundColor: palette.common.white,
-            })}
-          >
-            <Typography variant="bpSmallCopy">
-              {searchState === "noresults"
-                ? `No results found for your search term - please try another term`
-                : `We couldn't reach our servers - please try again`}
-              , or <Link href="/contact">contact us</Link>.
-            </Typography>
-          </Box>
+        <Box
+          sx={({ palette }) => ({
+            padding: 1.5,
+            backgroundColor: palette.common.white,
+          })}
+        >
+          <Typography variant="bpSmallCopy">
+            {searchState === "noresults"
+              ? `No results found for your search term - please try another term`
+              : `We couldn't reach our servers - please try again`}
+            , or <Link href="/contact">contact us</Link>.
+          </Typography>
         </Box>
       )}
     </Box>
