@@ -2,7 +2,7 @@
   "name": "html-block",
   "version": "0.0.0",
   "description": "Block Protocol block template for an HTML element-based block",
-  "author": {
+  "author": "HASH"
     "name": "HASH",
     "url": "https://hash.ai"
   },
@@ -10,10 +10,11 @@
   "schema": "block-schema.json",
   "variants": [],
   "blockType": {
-    "kind": "html"
+    "blockType": "html"
   },
+  "protocol": "0.2",
   "displayName": "Template",
-  "examples": [{}],
+  "examples": [{ "name": "World" }],
   "icon": "public/omega.svg",
   "image": "public/block-preview.svg",
   "source": "main.js"

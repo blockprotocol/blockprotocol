@@ -12,7 +12,7 @@ Other templates are available. See `npx create-block-app --help`
 
 1.  Change into the folder: `cd path/to/your-block-name`
 
-1.  Update `block-metadata.json` and `block-schema.json` to define your block's metadata and the properties it take1. . [Other block types]() can define much of this for you. See [Block types](https://blockprotocol.org/spec/block-types).
+1.  Update `block-metadata.json` and `block-schema.json` to define your block's metadata and the properties it takes.
 
 1.  Write your block starting in `app.html`. To test it during development:
 

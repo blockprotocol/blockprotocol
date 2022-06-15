@@ -19,7 +19,7 @@ const handler = new GraphBlockHandler({
             entityId = entity.data.entityId;
 
             title.innerText = `Hello, ${entity.data.properties.name}`;
-            paragraph.innerText = `The entityId of this block is ${entity.data.entityId}. Use it to update its data when calling updateEntities`;
+            paragraph.innerText = `The entityId of this block is ${entity.data.entityId}. Use it to update its data when calling updateEntity`;
             input.value = entity.data.properties.name;
         },
     },
@@ -36,7 +36,7 @@ input.addEventListener("change", (event) => {
             })
             .catch((err) => {
                 // eslint-disable-next-line no-console
-                console.error(err);
+                console.error(`Error calling updateEntity: ${err}`);
             });
     }
 });
