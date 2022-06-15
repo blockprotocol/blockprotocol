@@ -53,7 +53,7 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { source, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
+  const { exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
   // @todo REVERT WHEN VERSION IN PACKAGE.JSON IS PUBLISHED
   // const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
@@ -132,40 +132,67 @@ const handler: NextApiHandler = async (req, res) => {
       }
       
       const blockType = ${JSON.stringify(blockMetadata.blockType)};
-
-      const rawBlockSource = ${JSON.stringify(source)};
-      const blockExport = blockType.entryPoint === "html" ? rawBlockSource : findBlockExport(loadCjsFromSource(rawBlockSource));
       
-      const blockDefinition = {
-        ReactComponent: blockType.entryPoint === "react" ? blockExport : undefined,
-        customElement: blockType.entryPoint === "custom-element" ? {
-          elementClass: blockExport,
-          tagName: blockType.tagName
-        } : undefined,
-        htmlString: blockType.entryPoint === "html" ? blockExport : undefined
-      }
+      const timeout = setTimeout(() => { 
+        document.getElementById("loading-indicator").style.visibility = "visible";
+      }, 400);
+        
+      fetch("${
+        blockMetadata.source
+      }").then((response) => response.text()).then(source => {
+          clearTimeout(timeout);
       
-      const mockBlockDockInitialData = ${JSON.stringify(
-        mockBlockDockInitialData,
-      )}
+          const rawBlockSource = source;
+          const blockExport = blockType.entryPoint === "html" ? rawBlockSource : findBlockExport(loadCjsFromSource(rawBlockSource));
+          const blockDefinition = {
+            ReactComponent: blockType.entryPoint === "react" ? blockExport : undefined,
+            customElement: blockType.entryPoint === "custom-element" ? {
+              elementClass: blockExport,
+              tagName: blockType.tagName
+            } : undefined,
+            htmlString: blockType.entryPoint === "html" ? blockExport : undefined
+          }
+          
+          const mockBlockDockInitialData = ${JSON.stringify(
+            mockBlockDockInitialData,
+          )}
       
-      const render = (blockEntityProps) => {
-        const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData  };
-      
-        ReactDOM.render(
-          _jsx(MockBlockDock, mockBlockDockProps),
-          document.getElementById("container")
-        );
-      }
-
-      window.addEventListener("message", ({ data }) => { if (typeof data === "string") { render(JSON.parse(data)) }});
-
-      if (globalThis.blockEntityProps) {
-        render(globalThis.blockEntityProps)
-      }
+          const render = (blockEntityProps) => {
+            const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData  };
+            
+            document.getElementById("loading-indicator")?.remove();
+          
+            ReactDOM.render(
+              _jsx(MockBlockDock, mockBlockDockProps),
+              document.getElementById("container")
+            );
+          }
+          
+          if (globalThis.blockEntityProps) {
+            render(globalThis.blockEntityProps)
+          }
+          
+          window.addEventListener(
+              "message", 
+              ({ data }) => { 
+                if (typeof data === "string") { 
+                  render(JSON.parse(data)) 
+                }
+              }
+          );
+      });
       </script>
     </head>
-    <body style="margin: 0; padding: 0;"><div id="container"></div></body>
+    <body style="margin: 0; padding: 0;">
+      <div id="container">
+        <img 
+          alt="Loading block source..." 
+          id="loading-indicator" 
+          src="/assets/blocks-loading.gif" 
+          style="visibility:hidden;height:42px;width:42px;"
+        />
+      </div>
+    </body>
   </html>
   `;
 

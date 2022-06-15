@@ -196,7 +196,7 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 450, backgroundColor: "white" }}>
+          <Box sx={{ height: 500, backgroundColor: "white" }}>
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
               setBlockVariantsTab={setBlockVariantsTab}
