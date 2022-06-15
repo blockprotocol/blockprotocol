@@ -1,0 +1,12 @@
+{
+  "description": "Define the properties the block expects to be passed.\nThey will be provided using the blockEntity callback of the graph service.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": ["string"]
+    }
+  },
+  "required": ["name"],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}

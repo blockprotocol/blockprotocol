@@ -9,6 +9,8 @@ export class CoreEmbedderHandler extends CoreHandler {
     super({ element, sourceType: "embedder" });
   }
 
+  initialize() {}
+
   /**
    * Update the HTML element messages are exchanged via.
    * @param element the new element to use for dispatching and listening to messages.
