@@ -19,7 +19,10 @@ import {
 } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
-import { BlockDataTabPanels } from "./block-data-tab-panels";
+import {
+  BlockDataTabPanels,
+  blockPreviewAndDataHeight,
+} from "./block-data-tab-panels";
 import { BlockDataTabs } from "./block-data-tabs";
 import { BlockModalButton } from "./block-modal-button";
 import { BlockTabsModal } from "./block-tabs-modal";
@@ -196,7 +199,9 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 500, backgroundColor: "white" }}>
+          <Box
+            sx={{ height: blockPreviewAndDataHeight, backgroundColor: "white" }}
+          >
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
               setBlockVariantsTab={setBlockVariantsTab}
