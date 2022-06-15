@@ -2,7 +2,7 @@
 
 This package is not yet updated to Block Protocol version 0.2.
 
-# React Block Loader
+## React Block Loader
 
 A component which loads a [Block Protocol](https://blockprotocol.org) block from a remote URL, and passes on the properties and functions you provide.
 
