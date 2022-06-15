@@ -115,7 +115,20 @@ const usage = commandLineUsage(helpSections);
   packageJson.name = slugifiedBlockName;
   packageJson.version = "0.0.0";
   packageJson.description = `${blockName} block`;
-  packageJson.blockprotocol.displayName = blockName;
+
+  const blockMetadataPath = `${resolvedBlockPath}/block-metadata.json`;
+  const blockMetadata =
+    template === "html"
+      ? JSON.parse(fs.readFileSync(blockMetadataPath))
+      : undefined;
+
+  if (template === "html") {
+    blockMetadata.displayName = blockName;
+    blockMetadata.name = slugifiedBlockName;
+  } else {
+    packageJson.blockprotocol.displayName = blockName;
+  }
+
   delete packageJson.homepage;
   delete packageJson.repository;
 
@@ -125,12 +138,27 @@ const usage = commandLineUsage(helpSections);
 
   try {
     const gitConfigUserNameResult = await exec("git config --get user.name");
-    packageJson.author = gitConfigUserNameResult.stdout.trim();
+    const userName = gitConfigUserNameResult.stdout.trim();
+    packageJson.author = userName;
+
+    if (template === "html") {
+      blockMetadata.author = userName;
+    }
   } catch {
     delete packageJson.author;
+
+    if (template === "html") {
+      delete blockMetadata.author;
+    }
   }
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
+  if (template === "html") {
+    fs.writeFileSync(
+      blockMetadataPath,
+      JSON.stringify(blockMetadata, undefined, 2),
+    );
+  }
 
   console.log(
     `Your ${blockName} block is ready to code in ${resolvedBlockPath}.\nRun 'yarn install && yarn dev' to get started`,

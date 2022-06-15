@@ -44,10 +44,12 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
   }),
 );
 
+export const blockPreviewAndDataHeight = 500;
+
 export const BlockDataTabPanels: VoidFunctionComponent<
   BlockDataTabPanelProps
 > = ({ blockDataTab, schema, exampleGraph, text, setText, modalOpen }) => {
-  const modalHeight = modalOpen ? "60vh" : 450;
+  const modalHeight = modalOpen ? "60vh" : blockPreviewAndDataHeight;
 
   return (
     <>

@@ -357,12 +357,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
           />
         </Box>
 
-        {blockMetadata.repository && (
+        {(blockMetadata.repository || compiledReadme) && (
           <Box
             mb={10}
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "60% 40%" },
+              gridTemplateColumns: { xs: "1fr", md: "1fr 40%" },
+              gridGap: { md: 60 },
               marginBottom: 10,
             }}
           >
@@ -373,6 +374,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     marginTop: 0,
                   },
                 }}
+                mb={{ xs: 2, md: 0 }}
               >
                 <MDXRemote
                   compiledSource={compiledReadme}
@@ -382,34 +384,36 @@ const BlockPage: NextPage<BlockPageProps> = ({
             ) : (
               <div />
             )}
-            <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
-              <Typography
-                variant="bpLargeText"
-                sx={{
-                  fontWeight: "bold",
-                  color: theme.palette.gray[80],
-                  marginBottom: 2,
-                }}
-              >
-                Repository
-              </Typography>
-              <Box sx={{ display: "flex" }}>
-                <Box
-                  component="img"
-                  alt="GitHub Link"
-                  sx={{ marginRight: 1.5 }}
-                  src="/assets/link.svg"
-                />{" "}
+            {blockMetadata.repository ? (
+              <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
                 <Typography
-                  variant="bpSmallCopy"
-                  sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  variant="bpLargeText"
+                  sx={{
+                    fontWeight: "bold",
+                    color: theme.palette.gray[80],
+                    marginBottom: 2,
+                  }}
                 >
-                  <Link href={blockMetadata.repository}>
-                    {repositoryDisplayUrl}
-                  </Link>
+                  Repository
                 </Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Box
+                    component="img"
+                    alt="GitHub Link"
+                    sx={{ marginRight: 1.5 }}
+                    src="/assets/link.svg"
+                  />{" "}
+                  <Typography
+                    variant="bpSmallCopy"
+                    sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  >
+                    <Link href={blockMetadata.repository}>
+                      {repositoryDisplayUrl}
+                    </Link>
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
+            ) : null}
           </Box>
         )}
       </Container>
