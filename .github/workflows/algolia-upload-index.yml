@@ -22,4 +22,4 @@ jobs:
       - run: yarn install
 
       - name: Sync Algolia Index
-        run: yarn workspace @blockprotocol/site scripts/sync-algolia-index.ts
+        run: yarn workspace @blockprotocol/site exe scripts/sync-algolia-index.ts
