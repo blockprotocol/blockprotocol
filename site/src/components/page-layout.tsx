@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/router";
 import { FC, useMemo, useState } from "react";
 
-import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
 import { Footer } from "./footer";
 import { BANNERS, FooterBanner } from "./footer-banner";
 import { HiringBanner } from "./hiring-banner";

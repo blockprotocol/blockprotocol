@@ -9,13 +9,12 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { ReactNode, VFC } from "react";
 
 import { SiteMapPage } from "../../../lib/sitemap";
-import { parseIntFromPixelString } from "../../../util/mui-utils";
 import {
   MDX_TEXT_CONTENT_MAX_WIDTH,
   MdxPageContent,
 } from "../../mdx-page-content";
 import { PageNavLinks } from "../../page-nav-links";
-import { Sidebar, SIDEBAR_WIDTH } from "../../page-sidebar";
+import { Sidebar } from "../../page-sidebar";
 import Search from "./search";
 
 type DocsPageProps = {

@@ -1,4 +1,4 @@
-import { getAllPages, getPage } from "../util/mdx-utils";
+import { getAllPages } from "../util/mdx-utils";
 
 export type SiteMapPageSection = {
   title: string;
