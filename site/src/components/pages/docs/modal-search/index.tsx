@@ -58,7 +58,7 @@ interface SearchProps {
 const MAX_SEARCH_RESULTS = 10;
 
 const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
-  variant,
+  variant = "desktop",
   closeModal,
 }) => {
   const router = useRouter();
@@ -175,8 +175,6 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
 
   const searchResultContainerStyles: SxProps<Theme> = {
     width: "100%",
-    // maxHeight: variant === "desktop" ? "550px" : "60vh",
-    // overflow: "auto",
   };
 
   return (
@@ -250,15 +248,15 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
         {searchLoading && (
           <Box
             sx={{
-              top: "0.65em",
-              right: "14px",
+              top: 14,
+              right: 14,
               position: "absolute",
               cursor: "pointer",
-              height: "20px",
+              height: 20,
             }}
           >
             <CircularProgress
-              style={{ height: "20px", width: "20px", color: "#c3c3c3" }}
+              style={{ height: 20, width: 20, color: "#c3c3c3" }}
             />
           </Box>
         )}
@@ -284,106 +282,113 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
         )}
       </form>
 
-      {!searchResults.length && searchState === "normal" && (
-        <Box sx={{ marginTop: 1.5 }}>
-          <Typography
-            sx={({ palette }) => ({
-              fontWeight: 600,
-              fontSize: 13,
-              color: palette.gray[50],
-              padding: "4px 16px",
-              letterSpacing: "0.05em",
-            })}
-          >
-            SUGGESTED TOPICS
-          </Typography>
+      {variant === "desktop" &&
+        !searchResults.length &&
+        searchState === "normal" && (
+          <Box sx={{ marginTop: 1.5 }}>
+            <Typography
+              sx={({ palette }) => ({
+                fontWeight: 600,
+                fontSize: 13,
+                color: palette.gray[50],
+                paddingY: 0.5,
+                paddingX: 2,
+                letterSpacing: "0.05em",
+              })}
+            >
+              SUGGESTED TOPICS
+            </Typography>
 
-          {[
-            "Introduction to the Block Protocol",
-            "Quick start guide to developing blocks",
-            "A guide for embedding applications",
-            "Frequently asked questions",
-          ].map((label) => (
-            <Button
+            {[
+              "Introduction to the Block Protocol",
+              "Quick start guide to developing blocks",
+              "A guide for embedding applications",
+              "Frequently asked questions",
+            ].map((label) => (
+              <Button
+                sx={{
+                  width: 1,
+                  justifyContent: "start",
+                  fontSize: 15,
+                  color: theme.palette.gray[90],
+                  paddingY: 0.5,
+                  paddingX: 2,
+                  "&:hover, :focus-visible": {
+                    color: theme.palette.purple[800],
+                    background: theme.palette.purple[100],
+                  },
+                }}
+                key={label}
+                variant="transparent"
+                onClick={() => setSearchText(label)}
+              >
+                {label}
+              </Button>
+            ))}
+
+            <LinkButton
               sx={{
+                background: theme.palette.teal[100],
+                alignItems: "start",
+                padding: "12px 16px",
+                borderRadius: 1,
                 width: 1,
                 justifyContent: "start",
-                fontSize: 15,
-                color: theme.palette.gray[90],
-                padding: "4px 16px",
-                "&:hover, :focus-visible": {
-                  color: theme.palette.purple[800],
-                  background: theme.palette.purple[100],
+                marginTop: 1.5,
+                [`& .${buttonClasses.startIcon}`]: {
+                  color: theme.palette.teal[600],
+                  paddingTop: 0.5,
+                  paddingLeft: 0.5,
+                  marginRight: 1.5,
+                  marginLeft: 0,
+                },
+                "&:hover": {
+                  background: theme.palette.teal[200],
+                },
+                "&::before": {
+                  display: "none",
                 },
               }}
-              key={label}
-              variant="transparent"
-              onClick={() => setSearchText(label)}
+              href="/spec"
+              onClick={() => closeModal?.()}
+              startIcon={<SpecificationIcon />}
+              squared
             >
-              {label}
-            </Button>
-          ))}
-
-          <LinkButton
-            sx={{
-              background: theme.palette.teal[100],
-              alignItems: "start",
-              padding: "12px 16px",
-              borderRadius: 1,
-              width: 1,
-              justifyContent: "start",
-              marginTop: 1.5,
-              [`& .${buttonClasses.startIcon}`]: {
-                color: theme.palette.teal[600],
-                paddingTop: 0.5,
-                paddingLeft: 0.5,
-                marginRight: 1.5,
-                marginLeft: 0,
-              },
-              "&:hover": {
-                background: theme.palette.teal[200],
-              },
-              "&::before": {
-                display: "none",
-              },
-            }}
-            href="/spec"
-            onClick={() => closeModal?.()}
-            startIcon={<SpecificationIcon />}
-            squared
-          >
-            <Box>
-              <Typography
-                sx={{
-                  color: theme.palette.teal[700],
-                  fontWeight: 600,
-                  fontSize: 15,
-                  textAlign: "start",
-                }}
-              >
-                Read the official specification
-              </Typography>
-              <Typography
-                sx={{
-                  color: theme.palette.teal[600],
-                  fontWeight: 500,
-                  fontSize: 14,
-                  textAlign: "start",
-                }}
-              >
-                Our open-source protocol for creating interoperable, data-driven
-                blocks
-              </Typography>
-            </Box>
-          </LinkButton>
-        </Box>
-      )}
+              <Box>
+                <Typography
+                  sx={{
+                    color: theme.palette.teal[700],
+                    fontWeight: 600,
+                    fontSize: 15,
+                    textAlign: "start",
+                  }}
+                >
+                  Read the official specification
+                </Typography>
+                <Typography
+                  sx={{
+                    color: theme.palette.teal[600],
+                    fontWeight: 500,
+                    fontSize: 14,
+                    textAlign: "start",
+                  }}
+                >
+                  Our open-source protocol for creating interoperable,
+                  data-driven blocks
+                </Typography>
+              </Box>
+            </LinkButton>
+          </Box>
+        )}
 
       {searchResults.length > 0 && (
         <Box sx={searchResultContainerStyles}>
-          <Box sx={{ backgroundColor: "white" }}>
+          <Box
+            sx={({ palette }) => ({ backgroundColor: palette.common.white })}
+          >
             <ModalSearchList
               searchResults={searchResults}
+              variant={variant}
               getHighlight={getHighlight}
               closeModal={closeModal}
             />
@@ -394,10 +399,10 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
       {searchState !== "normal" && !searchLoading && (
         <Box sx={searchResultContainerStyles}>
           <Box
-            sx={{
+            sx={({ palette }) => ({
               padding: 1.5,
-              backgroundColor: "white",
-            }}
+              backgroundColor: palette.common.white,
+            })}
           >
             <Typography variant="bpSmallCopy">
               {searchState === "noresults"

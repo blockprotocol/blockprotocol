@@ -3,7 +3,7 @@ import React from "react";
 
 import { parseHTML } from "../../../../util/html-utils";
 import { LinkButton } from "../../../link-button";
-import { AlgoliaHighlightResult, AlgoliaResult } from "./modal-search";
+import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
 
 interface SearchItemProps {
   searchResult: AlgoliaResult;

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "./button";
 import { Modal } from "./modal/modal";
-import Search from "./pages/docs/modal-search/modal-search";
+import ModalSearch from "./pages/docs/modal-search";
 
 export const SearchNavButton = () => {
   const theme = useTheme();
@@ -98,7 +98,10 @@ export const SearchNavButton = () => {
         open={displayModal}
         onClose={() => setDisplayModal(false)}
       >
-        <Search variant="desktop" closeModal={() => setDisplayModal(false)} />
+        <ModalSearch
+          variant="desktop"
+          closeModal={() => setDisplayModal(false)}
+        />
       </Modal>
     </>
   );

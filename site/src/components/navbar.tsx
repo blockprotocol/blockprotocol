@@ -30,7 +30,7 @@ import { SearchNavButton } from "./search-nav-button";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
-export const MOBILE_NAVBAR_HEIGHT = 57;
+export const MOBILE_NAVBAR_HEIGHT = 53;
 
 const BREAD_CRUMBS_HEIGHT = 36;
 
@@ -429,7 +429,9 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
         >
           <Box
             sx={{
-              overflow: "auto",
+              overflowY: "auto",
+              overflowX: "hidden",
+              overscrollBehavior: "contain",
             }}
           >
             <MobileNavItems onClose={() => setMobileNavVisible(false)} />

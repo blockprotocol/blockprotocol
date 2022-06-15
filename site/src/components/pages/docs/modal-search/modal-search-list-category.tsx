@@ -1,7 +1,7 @@
 import { Box, Grid, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
-import { AlgoliaHighlightResult, AlgoliaResult } from "./modal-search";
+import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
 import ModalSearchHeading from "./modal-search-list-heading";
 import ModalSearchItem from "./modal-search-list-item";
 

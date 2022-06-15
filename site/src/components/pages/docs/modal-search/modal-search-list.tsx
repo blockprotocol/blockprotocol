@@ -3,17 +3,19 @@ import { Box, Divider, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 import { FontAwesomeIcon, SpecificationIcon } from "../../../icons";
-import { AlgoliaHighlightResult, AlgoliaResult } from "./modal-search";
+import { AlgoliaHighlightResult, AlgoliaResult, SearchVariants } from "./index";
 import ModalSearchListCategory from "./modal-search-list-category";
 
 interface SearchItemProps {
   searchResults: AlgoliaResult[];
+  variant?: SearchVariants;
   getHighlight: (highlight: AlgoliaHighlightResult) => string;
   closeModal?: () => void;
 }
 
 const ModalSearchList: React.VoidFunctionComponent<SearchItemProps> = ({
   searchResults,
+  variant = "desktop",
   getHighlight,
   closeModal,
 }) => {
@@ -29,12 +31,12 @@ const ModalSearchList: React.VoidFunctionComponent<SearchItemProps> = ({
   return (
     <Box
       sx={{
-        maxHeight: 800,
+        maxHeight: variant === "desktop" ? 800 : "none",
         marginTop: 3,
-        overflowY: "auto",
+        overflowY: variant === "desktop" ? "auto" : "visible",
         overflowX: "visible",
-        paddingRight: 1.25,
-        marginRight: -1.25,
+        paddingRight: variant === "desktop" ? 1.25 : 0,
+        marginRight: variant === "desktop" ? -1.25 : 0,
       }}
     >
       <ModalSearchListCategory
