@@ -412,12 +412,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
             </Box>
           </Box>
         )}
-
-        <Typography textAlign="center" variant="bpHeading2" mb={3}>
+      </Container>
+      <Box my={4}>
+        <Typography textAlign="center" variant="bpHeading3" mb={2}>
           Explore more blocks
         </Typography>
-      </Container>
-      <BlocksSlider catalog={sliderItems} />
+        <BlocksSlider catalog={sliderItems} />
+      </Box>
     </>
   );
 };
