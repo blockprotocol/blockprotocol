@@ -169,8 +169,8 @@ const Search: React.VoidFunctionComponent<SearchProps> = ({
   };
 
   const searchResultContainerStyles: SxProps<Theme> = {
-    width: variant === "desktop" ? "300px" : "100%",
-    maxHeight: variant === "desktop" ? "550px" : "60vh",
+    width: variant === "desktop" ? "275px" : "100%",
+    maxHeight: "60vh",
     position: "absolute",
     overflow: "auto",
     border: "1px solid #d6d6d6",
@@ -182,7 +182,6 @@ const Search: React.VoidFunctionComponent<SearchProps> = ({
     <Box
       ref={outerNode}
       sx={{
-        paddingBottom: variant === "desktop" ? "25px" : "unset",
         position: "relative",
       }}
       className={`search-bar ${variant ?? ""}`}

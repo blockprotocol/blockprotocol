@@ -16,6 +16,7 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
+  useRef,
   useState,
   VFC,
 } from "react";
@@ -25,7 +26,7 @@ import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
 
-export const SIDEBAR_WIDTH = 220;
+export const SIDEBAR_WIDTH = 300;
 
 const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
@@ -35,8 +36,13 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   ":hover": {
     color: theme.palette.purple[600],
   },
-  fontWeight: 400,
+  fontWeight: 500,
   fontSize: 15,
+  paddingTop: 8,
+  paddingBottom: 8,
+  whiteSpace: "nowrap",
+  textOverflow: "ellipsis",
+  overflow: "hidden",
 }));
 
 type SidebarPageSectionProps = {
@@ -79,7 +85,14 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 
   return (
     <>
-      <Box mb={1.5} display="flex" alignItems="flex-start">
+      <Box
+        display="flex"
+        alignItems="center"
+        bgcolor={
+          isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
+        }
+        pr={1}
+      >
         <SidebarLink
           replace
           ref={(ref) => {
@@ -91,9 +104,8 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
           sx={(theme) => ({
             paddingLeft: depth * 1 + 1.25,
             color: isSectionSelected
-              ? theme.palette.purple[600]
+              ? theme.palette.purple[700]
               : theme.palette.gray[80],
-            fontWeight: isSectionSelected ? 700 : 400,
           })}
         >
           {sectionTitle}
@@ -113,12 +125,11 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
             sx={(theme) => ({
               padding: 0,
               marginLeft: 1,
-              marginTop: 0.5,
               transition: theme.transitions.create("transform"),
               transform: `rotate(${isSectionOpen ? "90deg" : "0deg"})`,
               "& svg": {
                 color: isSectionSelected
-                  ? theme.palette.purple[600]
+                  ? theme.palette.purple[700]
                   : theme.palette.gray[50],
               },
             })}
@@ -187,7 +198,12 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 
   return (
     <Fragment key={href}>
-      <Box mb={1.5} display="flex" alignItems="flex-start">
+      <Box
+        display="flex"
+        alignItems="center"
+        bgcolor={isSelected ? (theme) => theme.palette.purple[100] : "white"}
+        pr={1}
+      >
         <SidebarLink
           ref={(ref) => {
             if (ref && isSelected) {
@@ -199,9 +215,8 @@ const SidebarPage: VFC<SidebarPageProps> = ({
           sx={(theme) => ({
             alignSelf: "flex-start",
             color: isSelected
-              ? theme.palette.purple[600]
+              ? theme.palette.purple[800]
               : theme.palette.gray[80],
-            fontWeight: isSelected ? 700 : 400,
             paddingLeft: depth * 1 + 1.25,
           })}
         >
@@ -216,18 +231,19 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               setOpenedPages((prev) =>
                 prev.includes(pageKey)
                   ? prev.filter((prevHref) => prevHref !== pageKey)
+                  : depth === 0
+                  ? [pageKey]
                   : [...prev, pageKey],
               );
             }}
             sx={(theme) => ({
               padding: 0,
               marginLeft: 1,
-              marginTop: 0.5,
               transition: theme.transitions.create("transform"),
               transform: `rotate(${isOpen ? "90deg" : "0deg"})`,
               "& svg": {
                 color: isSelected
-                  ? theme.palette.purple[600]
+                  ? theme.palette.purple[800]
                   : theme.palette.gray[50],
               },
             })}
@@ -369,98 +385,112 @@ export const Sidebar: VFC<SidebarProps> = ({
     ]);
   }, [asPath, pages]);
 
+  const indicator = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (selectedOffsetTop && indicator.current) {
+        const parent = indicator.current.offsetParent as HTMLElement;
+        const min = parent!.scrollTop;
+        const max = min + parent!.offsetHeight - 100;
+        const pos = indicator.current.offsetTop;
+
+        if (pos <= min || pos >= max) {
+          parent!.scrollTop += pos - max;
+        }
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [selectedOffsetTop]);
+
+  const height = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
+
   return (
     <Box
       {...boxProps}
       position="sticky"
-      flexShrink={0}
+      overflow="auto"
       width={SIDEBAR_WIDTH}
+      top={`${height}px`}
+      height={`calc(100vh - ${height}px)`}
       sx={{
         ...boxProps.sx,
-        top: 0,
-        marginTop: `${-(md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT)}px`,
-        paddingTop: `${
-          (md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT) + 10
-        }px`,
+        borderRightColor: theme.palette.gray[30],
+        borderRightStyle: "solid",
+        borderRightWidth: 1,
       }}
     >
+      <Box position="sticky" top={0} bgcolor="white" zIndex={3} p={1.5} pb={0}>
+        {header}
+      </Box>
       <Box
         sx={{
+          p: 1.5,
           display: "flex",
           flexDirection: "column",
-          paddingTop: 0,
-          paddingRight: 3,
           transition: theme.transitions.create([
             "padding-top",
             "padding-bottom",
           ]),
         }}
       >
-        {header}
         <Box
-          position="relative"
+          ref={indicator}
           sx={{
-            paddingRight: 3,
-            marginRight: -3,
-            overflow: "auto",
-            paddingBottom: 0,
-            flexShrink: 1,
+            position: "absolute",
+            width: 3,
+            height: 35,
+            backgroundColor: ({ palette }) => palette.purple[600],
+            top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop,
+            opacity: selectedOffsetTop === undefined ? 0 : 1,
+            transition: theme.transitions.create(["top", "opacity"], {
+              duration: 150,
+            }),
+            zIndex: 2,
           }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              width: 3,
-              height: 14,
-              backgroundColor: ({ palette }) => palette.purple[600],
-              top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop + 3,
-              opacity: selectedOffsetTop === undefined ? 0 : 1,
-              transition: theme.transitions.create(["top", "opacity"], {
-                duration: 150,
-              }),
-            }}
-          />
-          {pages.length > 1
-            ? pages.map((page) => (
-                <SidebarPage
-                  key={page.href}
-                  page={page}
-                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))
-            : pages.length === 1
-            ? pages[0]!.sections.map((section, i) => (
-                <SidebarPageSection
-                  isSelectedByDefault={i === 0}
-                  key={section.anchor}
-                  pageHref={pages[0]!.href}
-                  section={section}
-                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))
-            : null}
-          {appendices && appendices.length > 0 ? (
-            <>
-              <Divider sx={{ marginBottom: 2 }} />
-              {appendices.map((page) => (
-                <SidebarPage
-                  key={page.href}
-                  page={page}
-                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))}
-            </>
-          ) : null}
-        </Box>
+        />
+        {pages.length > 1
+          ? pages.map((page) => (
+              <SidebarPage
+                key={page.href}
+                page={page}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))
+          : pages.length === 1
+          ? pages[0]!.sections.map((section, i) => (
+              <SidebarPageSection
+                isSelectedByDefault={i === 0}
+                key={section.anchor}
+                pageHref={pages[0]!.href}
+                section={section}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))
+          : null}
+        {appendices && appendices.length > 0 ? (
+          <>
+            <Divider sx={{ marginBottom: 2 }} />
+            {appendices.map((page) => (
+              <SidebarPage
+                key={page.href}
+                page={page}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))}
+          </>
+        ) : null}
       </Box>
     </Box>
   );

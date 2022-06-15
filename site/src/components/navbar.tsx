@@ -296,7 +296,11 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
             : []),
         ]}
       >
-        <Container>
+        <Container
+          sx={[
+            isDocs && { width: "100% !important", maxWidth: "100% !important" },
+          ]}
+        >
           <Box
             display="flex"
             alignItems="center"

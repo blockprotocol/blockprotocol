@@ -222,7 +222,8 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
       </Head>
       <DocsContent
         content={serializedPage}
-        pages={flatSubPages}
+        pages={subPages}
+        flatPages={flatSubPages}
         currentPage={currentPage}
         {...(isSpec
           ? {
