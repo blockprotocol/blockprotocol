@@ -24,6 +24,7 @@ import { AccountDropdown } from "./navbar/account-dropdown";
 import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
 import { MobileNavItems } from "./navbar/mobile-nav-items";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./navbar/util";
+import { SearchNavButton } from "./search-nav-button";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -263,6 +264,8 @@ export const Navbar: VFC<NavbarProps> = ({
             <Box display="flex" alignItems="center">
               {md ? (
                 <>
+                  <SearchNavButton />
+
                   {pages.map(({ title, href }) => (
                     <Link
                       href={href}
