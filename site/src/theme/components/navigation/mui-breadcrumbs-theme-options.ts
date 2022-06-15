@@ -10,9 +10,6 @@ export const MuiBreadcrumbsThemeOptions: Components<Theme>["MuiBreadcrumbs"] = {
       "> a": {
         borderBottomColor: "transparent",
       },
-      "&:not(:last-child)": {
-        maxWidth: 150,
-      },
       "&:last-child": {
         color: theme.palette.purple[700],
       },
