@@ -102,7 +102,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
           }}
           href={sectionHref}
           sx={(theme) => ({
-            paddingLeft: depth * 1 + 1.25,
+            paddingLeft: depth * 2 + 1.25,
             color: isSectionSelected
               ? theme.palette.purple[700]
               : theme.palette.gray[80],
@@ -217,7 +217,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
             color: isSelected
               ? theme.palette.purple[800]
               : theme.palette.gray[80],
-            paddingLeft: depth * 1 + 1.25,
+            paddingLeft: depth * 2 + 1.25,
           })}
         >
           {title}
