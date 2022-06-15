@@ -81,6 +81,7 @@ export const Carousel = <T,>({
         slidesToScroll: 1,
         swipeToSlide: true,
         initialSlide: 0,
+        variableWidth: true,
         prevArrow: <Arrow arrowType="prev" />,
         nextArrow: <Arrow arrowType="next" />,
         // eslint-disable-next-line react/no-unstable-nested-components
@@ -106,13 +107,15 @@ export const Carousel = <T,>({
         width: "100%",
         position: "relative",
         zIndex: 2,
-
-        pt: { xs: 4, md: 8 },
-        pb: { xs: 8, md: 8 },
+        py: 4,
 
         // this gives the carousel an initial left padding to match the design
         "& .slick-track": {
-          paddingLeft: { xs: 0, md: "8%" },
+          marginLeft: {
+            xs: 0,
+            lg: "4rem",
+            xl: "12rem",
+          },
           display: "flex",
         },
 
@@ -126,12 +129,20 @@ export const Carousel = <T,>({
         "& .slick-slide, & .slick-slide > div": {
           display: { xs: "block", md: "flex" },
         },
+        ".slick-slide": {
+          minWidth: { xs: "unset", md: "350px" },
+          maxWidth: { xs: "280px", md: "unset" },
+          mx: 1,
+        },
 
         "& .slick-dots": {
           bottom: "unset",
-          top: "105%",
+          li: {
+            margin: "0 3px",
+          },
           "li div": {
             backgroundColor: ({ palette }) => palette.gray[30],
+            transition: "all 0.3s ease",
           },
           "li.slick-active div": {
             backgroundColor: ({ palette }) => palette.purple[700],
@@ -152,7 +163,7 @@ export const Carousel = <T,>({
             ...(edgeBackground
               ? { background: edgeBackground.left }
               : {
-                  background: `linear-gradient(88.02deg, #F7FAFC 1.67%, rgba(247, 250, 252, 0) 98.26%)`,
+                  background: `linear-gradient(88.02deg, rgba(247, 250, 252, 0.952) 0%, rgba(247, 250, 252, 0) 40%)`,
                 }),
           },
           ":after": {
