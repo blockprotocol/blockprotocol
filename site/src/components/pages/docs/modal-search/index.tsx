@@ -140,7 +140,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
   });
 
   const getHighlight = (highlight: AlgoliaHighlightResult) => {
-    const content = highlight.content.value;
+    let content = highlight.content.value;
     const title = `# ${highlight.title.value}\n\n`;
 
     if (content.indexOf(title) === 0) {
