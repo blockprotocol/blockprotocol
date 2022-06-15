@@ -190,28 +190,6 @@ export const getPage = (params: {
               },
             ]
           : prev;
-      } else if (currentHeading.depth === 4) {
-        if (prev.length > 0) {
-          const heading2 = prev[prev.length - 1]!;
-          const heading3 =
-            heading2.subSections[heading2.subSections.length - 1]!;
-
-          return [
-            ...prev.slice(0, -1),
-            {
-              ...heading2,
-              subSections: [
-                ...(heading2.subSections || []).slice(0, -1),
-                {
-                  ...heading3,
-                  subSections: [...(heading3.subSections || []), newSection],
-                },
-              ],
-            },
-          ];
-        } else {
-          return prev;
-        }
       }
       return prev;
     }, []),
