@@ -1,7 +1,11 @@
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography, typographyClasses, useTheme } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 
+import SiteMapContext from "../../../../context/site-map-context";
 import { parseHTML } from "../../../../util/html-utils";
+import { useCrumbs } from "../../../hooks/use-crumbs";
+import { FontAwesomeIcon } from "../../../icons";
 import { LinkButton } from "../../../link-button";
 import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
 
@@ -17,7 +21,10 @@ const ModalSearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
   closeModal,
 }) => {
   const theme = useTheme();
-  const { title, _highlightResult, slug } = searchResult;
+  const { _highlightResult, slug } = searchResult;
+
+  const { pages } = useContext(SiteMapContext);
+  const crumbs = useCrumbs(pages, searchResult.slug);
 
   return (
     <LinkButton
@@ -52,7 +59,20 @@ const ModalSearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
             marginBottom: 0.5,
           })}
         >
-          {title}
+          {crumbs.map((crumb, index) => (
+            <>
+              <span key={crumb.title}>{crumb.title}</span>
+              {index < crumbs.length - 1 && (
+                <FontAwesomeIcon
+                  icon={faChevronRight}
+                  sx={{
+                    fontSize: 12,
+                    marginX: 0.75,
+                  }}
+                />
+              )}
+            </>
+          ))}
         </Typography>
 
         <Typography
