@@ -88,22 +88,25 @@ export const getAllPageHrefs = (params: { folderName: string }): string[] => {
 // Serializes an MDX file
 export const getSerializedPage = async (params: {
   pathToDirectory: string;
-  fileNameWithoutIndex: string;
+  parts: string[];
 }): Promise<MDXRemoteSerializeResult<Record<string, unknown>>> => {
-  const { pathToDirectory, fileNameWithoutIndex } = params;
+  const { pathToDirectory, parts } = params;
 
-  const fileNames = await fs.readdir(
-    path.join(process.cwd(), `src/_pages/${pathToDirectory}`),
-  );
+  let mdxPath = path.join(process.cwd(), `src/_pages/${pathToDirectory}`);
 
-  const fileName = fileNames.find((fullFileName) =>
-    fullFileName.endsWith(`${fileNameWithoutIndex}.mdx`),
-  );
+  for (const part of parts) {
+    const fileNames = await fs.readdir(mdxPath);
+    const nextFileNamePart = fileNames.find(
+      (fileName) => fileName.endsWith(part) || fileName.endsWith(`${part}.mdx`),
+    )!;
+    mdxPath = path.join(mdxPath, nextFileNamePart);
+  }
 
-  const source = await fs.readFile(
-    path.join(process.cwd(), `src/_pages/${pathToDirectory}/${fileName}`),
-  );
+  if ((await fs.lstat(mdxPath)).isDirectory()) {
+    mdxPath = path.join(mdxPath, "0_index.mdx");
+  }
 
+  const source = await fs.readFile(mdxPath);
   const { content, data } = matter(source);
 
   const serializedMdx = await serialize(content, {
@@ -160,7 +163,7 @@ export const getPage = (params: {
 
   return {
     title,
-    href: `/${pathToDirectory}${
+    href: `/${pathToDirectory.replace(/\d+_/g, "")}${
       name === "index" ? "" : `/${slugify(name, { lower: true })}`
     }`,
     sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
@@ -222,14 +225,36 @@ export const getAllPages = (params: {
 }): SiteMapPage[] => {
   const { pathToDirectory } = params;
 
-  const fileNames = fs.readdirSync(
-    path.join(process.cwd(), `src/_pages/${pathToDirectory}`),
-  );
+  const fileNames = fs
+    .readdirSync(path.join(process.cwd(), `src/_pages/${pathToDirectory}`))
+    .filter((name) => name !== "title.txt");
 
-  return fileNames.map((fileName) =>
-    getPage({
+  return fileNames.flatMap((fileName) => {
+    if (
+      fs.lstatSync(`src/_pages/${pathToDirectory}/${fileName}`).isDirectory()
+    ) {
+      const href = `/${pathToDirectory}/${fileName.replace(/\d+_/g, "")}`;
+
+      const subPages = getAllPages({
+        pathToDirectory: `${pathToDirectory}/${fileName}`,
+      });
+
+      const title = fs.readFileSync(
+        `src/_pages/${pathToDirectory}/${fileName}/title.txt`,
+        "utf8",
+      );
+
+      return {
+        title,
+        href,
+        subPages,
+        sections: [],
+      };
+    }
+
+    return getPage({
       pathToDirectory,
       fileName,
-    }),
-  );
+    });
+  });
 };
