@@ -17,40 +17,8 @@ export type SiteMap = {
   pages: SiteMapPage[];
 };
 
-export const getDocumentationSubPages = (): SiteMapPage[] => [
-  {
-    ...getPage({
-      pathToDirectory: "docs",
-      fileName: "0_index.mdx",
-    }),
-    href: "/docs",
-    title: "Introduction",
-  },
-  {
-    ...getPage({
-      pathToDirectory: "docs",
-      fileName: "1_developing-blocks.mdx",
-    }),
-    href: "/docs/developing-blocks",
-    title: "Developing Blocks",
-  },
-  {
-    ...getPage({
-      pathToDirectory: "docs",
-      fileName: "2_embedding-blocks.mdx",
-    }),
-    href: "/docs/embedding-blocks",
-    title: "Embedding Blocks",
-  },
-  {
-    ...getPage({
-      pathToDirectory: "docs",
-      fileName: "3_faq.mdx",
-    }),
-    href: "/docs/faq",
-    title: "FAQ",
-  },
-];
+export const getDocumentationSubPages = (): SiteMapPage[] =>
+  getAllPages({ pathToDirectory: "docs" });
 
 export const getSpecSubPages = (): SiteMapPage[] =>
   getAllPages({ pathToDirectory: "spec" });

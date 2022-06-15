@@ -211,13 +211,8 @@ const SpecPage: NextPage<SpecPageProps> = ({ serializedPage }) => {
         }
         hero={gitHubInfoCard}
         content={serializedPage}
-        pages={specificationPages.filter(
-          ({ title }) => !title.startsWith("Appendix"),
-        )}
+        pages={specificationPages}
         currentPage={currentPage}
-        appendices={specificationPages.filter(({ title }) =>
-          title.startsWith("Appendix"),
-        )}
       />
     </>
   );

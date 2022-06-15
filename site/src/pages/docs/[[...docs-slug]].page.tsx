@@ -1,19 +1,13 @@
-import {
-  Box,
-  Container,
-  Tab,
-  Tabs,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { useContext } from "react";
 
 import siteMap from "../../../site-map.json";
 import { DocsContent } from "../../components/pages/docs/docs-content";
-import { SiteMap, SiteMapPage } from "../../lib/sitemap";
+import SiteMapContext from "../../context/site-map-context";
+import { SiteMap } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdx-utils";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
@@ -27,18 +21,12 @@ const DOCS_PAGE_SUBTITLES: Record<string, string> = {
   "Embedding Blocks": "A guide for embedding applications",
 };
 
-const a11yProps = (index: number) => ({
-  id: `simple-tab-${index}`,
-  "aria-controls": `simple-tabpanel-${index}`,
-});
-
 type DocsPageQueryParams = {
   "docs-slug"?: string[];
 };
 
 type DocsPageProps = {
-  tabPage: SiteMapPage;
-  tabPageSerializedContent: MDXRemoteSerializeResult<Record<string, unknown>>;
+  serializedPage: MDXRemoteSerializeResult<Record<string, unknown>>;
 };
 
 export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
@@ -63,13 +51,10 @@ export const getStaticProps: GetStaticProps<
   DocsPageProps,
   DocsPageQueryParams
 > = async ({ params }) => {
-  const { "docs-slug": docsSlug } = params || {};
+  const docsSlug = (params || {})["docs-slug"];
 
-  const tabSlug = docsSlug && docsSlug.length > 0 ? docsSlug[0] : undefined;
-
-  const tabHref = `/docs${tabSlug ? `/${tabSlug}` : ""}`;
-
-  const tabPage = documentationPages.find(({ href }) => href === tabHref)!;
+  const fileNameWithoutIndex =
+    docsSlug && docsSlug.length > 0 ? docsSlug[0]! : "index";
 
   // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
   // from calling getStaticProps for unknown pages. This causes 500 instead of 404:
@@ -78,15 +63,14 @@ export const getStaticProps: GetStaticProps<
   //
   // Using try / catch prevents 500, but we might not need them in Next v12+.
   try {
-    const tabPageSerializedContent = await getSerializedPage({
-      pathToDirectory: `docs`,
-      fileNameWithoutIndex: tabSlug ?? "index",
+    const serializedPage = await getSerializedPage({
+      pathToDirectory: "docs",
+      fileNameWithoutIndex,
     });
 
     return {
       props: {
-        tabPage,
-        tabPageSerializedContent,
+        serializedPage,
       },
     };
   } catch {
@@ -96,63 +80,31 @@ export const getStaticProps: GetStaticProps<
   }
 };
 
-const DocsPage: NextPage<DocsPageProps> = ({
-  tabPage,
-  tabPageSerializedContent,
-}) => {
-  const router = useRouter();
-  const theme = useTheme();
+const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
+  const { asPath } = useRouter();
+  const { pages: allPages } = useContext(SiteMapContext);
 
-  const { href, title } = tabPage;
+  const { subPages: specificationPages } = allPages.find(
+    ({ title }) => title === "Documentation",
+  )!;
 
-  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const currentPage = specificationPages.find(
+    ({ href }) => asPath === href || asPath.startsWith(`${href}#`),
+  );
+
+  const { title } = currentPage!;
 
   return (
     <>
       <Head>
         <title>Block Protocol - Documentation</title>
       </Head>
-      {md && (
-        <Box
-          sx={{
-            borderBottom: 1,
-            borderColor: ({ palette }) => palette.gray[20],
-            borderBottomStyle: "solid",
-          }}
-        >
-          <Container>
-            <Tabs
-              value={href}
-              onChange={(_, newHref) => router.push(newHref)}
-              aria-label="documentation-tabs"
-            >
-              {documentationPages.map(
-                ({ title: tabTitle, href: tabHref }, i) => (
-                  <Tab
-                    key={tabHref}
-                    label={tabTitle}
-                    value={tabHref}
-                    href={tabHref}
-                    component="a"
-                    onClick={(
-                      event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
-                    ) => {
-                      event.preventDefault();
-                    }}
-                    {...a11yProps(i)}
-                  />
-                ),
-              )}
-            </Tabs>
-          </Container>
-        </Box>
-      )}
       <DocsContent
         title={title}
         subtitle={DOCS_PAGE_SUBTITLES[title]}
-        content={tabPageSerializedContent}
-        pages={[tabPage]}
-        currentPage={tabPage}
+        content={serializedPage}
+        pages={specificationPages}
+        currentPage={currentPage}
       />
     </>
   );
