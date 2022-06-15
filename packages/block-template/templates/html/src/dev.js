@@ -12,28 +12,16 @@ const node = document.getElementById("app");
 
 const DevApp = () => {
   return (
-    <>
-      <MockBlockDock
-        blockDefinition={{
-          htmlString,
-        }}
-        blockEntity={{
-          entityId: "test-block-1",
-          properties: { name: "World" },
-        }}
-        debug
-      />
-      <MockBlockDock
-        blockDefinition={{
-          htmlString,
-        }}
-        blockEntity={{
-          entityId: "test-block-2",
-          properties: { name: "Friend" },
-        }}
-        debug
-      />
-    </>
+    <MockBlockDock
+      blockDefinition={{
+        htmlString,
+      }}
+      blockEntity={{
+        entityId: "test-block-1",
+        properties: { name: "World" },
+      }}
+      debug
+    />
   );
 };
 
