@@ -46,6 +46,16 @@ const nextConfig = {
         destination: "/docs/spec/:slug*",
         permanent: true,
       },
+      {
+        source: "/docs/spec/block-types",
+        destination: "/docs/spec/core-specification",
+        permanent: true,
+      },
+      {
+        source: "/spec/block-types",
+        destination: "/docs/spec/core-specification",
+        permanent: true,
+      },
     ];
   },
 
