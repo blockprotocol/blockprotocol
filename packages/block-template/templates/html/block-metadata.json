@@ -2,10 +2,7 @@
   "name": "html-block",
   "version": "0.0.0",
   "description": "Block Protocol block template for an HTML element-based block",
-  "author": "HASH"
-    "name": "HASH",
-    "url": "https://hash.ai"
-  },
+  "author": "HASH",
   "license": "MIT",
   "schema": "block-schema.json",
   "variants": [],

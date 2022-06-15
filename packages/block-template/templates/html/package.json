@@ -22,7 +22,8 @@
   "source": "src/index.js",
   "scripts": {
     "build": "parcel build && cp block-schema.json ./dist/block-schema.json && cp block-metadata.json ./dist/block-metadata.json && cp -R public dist/public",
-    "dev": "parcel src/dev.html"
+    "dev": "parcel src/dev.html",
+    "lint:tsc": "echo \"Skipping: TypeScript not configured\""
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.8",
