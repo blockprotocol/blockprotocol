@@ -395,7 +395,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
         <Box sx={searchResultContainerStyles}>
           <Box
             sx={{
-              padding: "1em",
+              padding: 1.5,
               backgroundColor: "white",
             }}
           >
