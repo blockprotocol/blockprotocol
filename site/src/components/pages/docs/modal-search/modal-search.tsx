@@ -27,27 +27,39 @@ import { Button } from "../../../button";
 import { SpecificationIcon } from "../../../icons";
 import { Link } from "../../../link";
 import { LinkButton } from "../../../link-button";
-import SearchItem, {
-  AlgoliaHighlightResult,
-  AlgoliaResult,
-  SearchVariants,
-} from "./modal-search-item";
+import ModalSearchList from "./modal-search-list";
 
 const client = algoliasearch("POOWZ64DSV", "96dc0442fd27b903440955dc03e5e60e");
 const index = client.initIndex("blockprotocol");
 
+export type AlgoliaPageType = "docs" | "spec";
+
+export type SearchVariants = "mobile" | "desktop";
+
+export type AlgoliaResult = {
+  objectID: string;
+  title: string;
+  description: string;
+  content: string;
+  slug: string;
+  type: AlgoliaPageType;
+  _highlightResult: AlgoliaHighlightResult;
+};
+
+export type AlgoliaHighlightResult = Record<
+  keyof AlgoliaResult,
+  { value: string; matchLevel: "none" | "full" }
+>;
 interface SearchProps {
   variant: SearchVariants;
-  closeDrawer?: () => void;
-  buttonCallback?: () => void;
+  closeModal?: () => void;
 }
 
 const MAX_SEARCH_RESULTS = 10;
 
 const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
   variant,
-  closeDrawer,
-  buttonCallback,
+  closeModal,
 }) => {
   const router = useRouter();
   const theme = useTheme();
@@ -163,8 +175,8 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
 
   const searchResultContainerStyles: SxProps<Theme> = {
     width: "100%",
-    maxHeight: variant === "desktop" ? "550px" : "60vh",
-    overflow: "auto",
+    // maxHeight: variant === "desktop" ? "550px" : "60vh",
+    // overflow: "auto",
   };
 
   return (
@@ -280,6 +292,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
               fontSize: 13,
               color: palette.gray[50],
               padding: "4px 16px",
+              letterSpacing: "0.05em",
             })}
           >
             SUGGESTED TOPICS
@@ -335,7 +348,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
               },
             }}
             href="/spec"
-            onClick={() => buttonCallback?.()}
+            onClick={() => closeModal?.()}
             startIcon={<SpecificationIcon />}
             squared
           >
@@ -369,24 +382,11 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
       {searchResults.length > 0 && (
         <Box sx={searchResultContainerStyles}>
           <Box sx={{ backgroundColor: "white" }}>
-            {searchResults.map((searchResult, searchResultIndex) => (
-              <SearchItem
-                variant={variant}
-                searchResult={searchResult}
-                key={searchResult.objectID}
-                closeDrawer={closeDrawer}
-                index={searchResultIndex}
-                activeResult={activeResult}
-                setActiveResult={setActiveResult}
-                getHighlight={getHighlight}
-                sx={{
-                  borderBottom:
-                    searchResultIndex < searchResults.length - 1
-                      ? "1px solid #f1f3f6"
-                      : undefined,
-                }}
-              />
-            ))}
+            <ModalSearchList
+              searchResults={searchResults}
+              getHighlight={getHighlight}
+              closeModal={closeModal}
+            />
           </Box>
         </Box>
       )}
