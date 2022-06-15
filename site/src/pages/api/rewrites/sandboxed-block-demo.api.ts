@@ -55,9 +55,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const { exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
-  // @todo REVERT WHEN VERSION IN PACKAGE.JSON IS PUBLISHED
-  // const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
-  const mockBlockDockVersion = "0.0.14-next.1";
+  const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 
   const reactVersion =
     blockMetadata.externals?.react ?? packageJson.dependencies.react;
