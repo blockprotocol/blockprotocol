@@ -2,10 +2,10 @@ import { Box, Grid, Typography, useTheme } from "@mui/material";
 import React, { useEffect, useState } from "react";
 
 import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
-import ModalSearchHeading from "./modal-search-list-heading";
-import ModalSearchItem from "./modal-search-list-item";
+import SearchHeading from "./search-list-heading";
+import SearchItem from "./search-list-item";
 
-interface SearchItemProps {
+interface SearchItemCategoryProps {
   title: string;
   icon: JSX.Element;
   searchResults: AlgoliaResult[];
@@ -13,13 +13,9 @@ interface SearchItemProps {
   closeModal?: () => void;
 }
 
-const ModalSearchListCategory: React.VoidFunctionComponent<SearchItemProps> = ({
-  title,
-  icon,
-  searchResults,
-  getHighlight,
-  closeModal,
-}) => {
+const SearchListCategory: React.VoidFunctionComponent<
+  SearchItemCategoryProps
+> = ({ title, icon, searchResults, getHighlight, closeModal }) => {
   const theme = useTheme();
   const [sections, setSections] = useState<AlgoliaResult[]>([]);
   const [items, setItems] = useState<AlgoliaResult[]>([]);
@@ -65,12 +61,12 @@ const ModalSearchListCategory: React.VoidFunctionComponent<SearchItemProps> = ({
         <Grid container spacing={0.5}>
           {sections.map((res) => (
             <Grid item sx={{ width: 1 }} key={res.objectID}>
-              <ModalSearchHeading searchResult={res} closeModal={closeModal} />
+              <SearchHeading searchResult={res} closeModal={closeModal} />
             </Grid>
           ))}
           {items.map((res) => (
             <Grid item sx={{ width: 1 }} key={res.objectID}>
-              <ModalSearchItem
+              <SearchItem
                 searchResult={res}
                 getHighlight={getHighlight}
                 closeModal={closeModal}
@@ -83,4 +79,4 @@ const ModalSearchListCategory: React.VoidFunctionComponent<SearchItemProps> = ({
   );
 };
 
-export default ModalSearchListCategory;
+export default SearchListCategory;

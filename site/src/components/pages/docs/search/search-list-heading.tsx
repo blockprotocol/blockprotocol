@@ -4,35 +4,16 @@ import React from "react";
 
 import { FontAwesomeIcon } from "../../../icons";
 import { LinkButton } from "../../../link-button";
+import { AlgoliaResult } from "./index";
 
-export type AlgoliaPageType = "docs" | "spec";
-
-export type AlgoliaResult = {
-  objectID: string;
-  title: string;
-  description: string;
-  content: string;
-  slug: string;
-  type: AlgoliaPageType;
-  _highlightResult: AlgoliaHighlightResult;
-};
-
-export type AlgoliaHighlightResult = Record<
-  keyof AlgoliaResult,
-  { value: string; matchLevel: "none" | "full" }
->;
-
-export type SearchVariants = "mobile" | "desktop";
-
-interface SearchItemProps {
+interface SearchItemHeadingProps {
   searchResult: AlgoliaResult;
   closeModal?: () => void;
 }
 
-const ModalSearchListHeading: React.VoidFunctionComponent<SearchItemProps> = ({
-  searchResult,
-  closeModal,
-}) => {
+const SearchListHeading: React.VoidFunctionComponent<
+  SearchItemHeadingProps
+> = ({ searchResult, closeModal }) => {
   const theme = useTheme();
   const { title, slug } = searchResult;
 
@@ -74,4 +55,4 @@ const ModalSearchListHeading: React.VoidFunctionComponent<SearchItemProps> = ({
   );
 };
 
-export default ModalSearchListHeading;
+export default SearchListHeading;

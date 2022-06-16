@@ -15,7 +15,7 @@ interface SearchItemProps {
   closeModal?: () => void;
 }
 
-const ModalSearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
+const SearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
   searchResult,
   getHighlight,
   closeModal,
@@ -93,4 +93,4 @@ const ModalSearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
   );
 };
 
-export default ModalSearchListItem;
+export default SearchListItem;

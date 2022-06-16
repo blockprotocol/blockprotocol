@@ -4,16 +4,16 @@ import React, { useEffect, useState } from "react";
 
 import { FontAwesomeIcon, SpecificationIcon } from "../../../icons";
 import { AlgoliaHighlightResult, AlgoliaResult, SearchVariants } from "./index";
-import ModalSearchListCategory from "./modal-search-list-category";
+import SearchListCategory from "./search-list-category";
 
-interface SearchItemProps {
+interface SearchListProps {
   searchResults: AlgoliaResult[];
   variant?: SearchVariants;
   getHighlight: (highlight: AlgoliaHighlightResult) => string;
   closeModal?: () => void;
 }
 
-const ModalSearchList: React.VoidFunctionComponent<SearchItemProps> = ({
+const SearchList: React.VoidFunctionComponent<SearchListProps> = ({
   searchResults,
   variant = "desktop",
   getHighlight,
@@ -48,7 +48,7 @@ const ModalSearchList: React.VoidFunctionComponent<SearchItemProps> = ({
         ...listWrapperStyles[variant],
       }}
     >
-      <ModalSearchListCategory
+      <SearchListCategory
         title="DOCUMENTATION"
         icon={
           <FontAwesomeIcon
@@ -67,7 +67,7 @@ const ModalSearchList: React.VoidFunctionComponent<SearchItemProps> = ({
 
       <Divider sx={{ marginY: 2.5 }} />
 
-      <ModalSearchListCategory
+      <SearchListCategory
         title="SPECIFICATION"
         icon={
           <SpecificationIcon
@@ -86,4 +86,4 @@ const ModalSearchList: React.VoidFunctionComponent<SearchItemProps> = ({
   );
 };
 
-export default ModalSearchList;
+export default SearchList;
