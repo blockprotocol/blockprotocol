@@ -1,5 +1,4 @@
-import { faArrowRight, faBars, faZap } from "@fortawesome/free-solid-svg-icons";
-import { ArrowRight } from "@mui/icons-material";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Collapse,
@@ -343,21 +342,8 @@ export const Navbar: VFC<NavbarProps> = ({
                     </Link>
                   )}
                   {user !== "loading" && !user?.isSignedUp ? (
-                    <LinkButton
-                      href="/docs"
-                      size="small"
-                      variant="primary"
-                      endIcon={
-                        <FontAwesomeIcon
-                          icon={faArrowRight}
-                          sx={{
-                            fontSize: "16px !important",
-                            color: ({ palette }) => palette.gray[10],
-                          }}
-                        />
-                      }
-                    >
-                      Read the Docs
+                    <LinkButton href="/signup" size="small" variant="primary">
+                      Sign Up
                     </LinkButton>
                   ) : null}
                 </>
@@ -419,30 +405,30 @@ export const Navbar: VFC<NavbarProps> = ({
             <MobileNavItems onClose={() => setDisplayMobileNav(false)} />
           </Box>
 
-          <Box
-            flexShrink={0}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            sx={{
-              paddingY: 4,
-              paddingX: 4.25,
-              borderTopStyle: "solid",
-              borderTopWidth: 1,
-              borderTopColor: theme.palette.gray[40],
-              "> button, a": {
-                width: {
-                  xs: "100%",
-                  sm: "unset",
+          {user ? null : router.pathname === "/login" ? null : (
+            <Box
+              flexShrink={0}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              sx={{
+                paddingY: 4,
+                paddingX: 4.25,
+                borderTopStyle: "solid",
+                borderTopWidth: 1,
+                borderTopColor: theme.palette.gray[40],
+                "> button, a": {
+                  width: {
+                    xs: "100%",
+                    sm: "unset",
+                  },
+                  minWidth: {
+                    xs: "unset",
+                    sm: 320,
+                  },
                 },
-                minWidth: {
-                  xs: "unset",
-                  sm: 320,
-                },
-              },
-            }}
-          >
-            {user ? null : router.pathname === "/login" ? null : (
+              }}
+            >
               <LinkButton
                 href="#"
                 variant="secondary"
@@ -458,28 +444,19 @@ export const Navbar: VFC<NavbarProps> = ({
               >
                 Log in
               </LinkButton>
-            )}
-            <LinkButton
-              href="/docs"
-              sx={{
-                fontSize: 18,
-              }}
-              startIcon={
-                <FontAwesomeIcon
-                  icon={faZap}
-                  sx={{
-                    color: ({ palette }) => palette.gray[10],
-                    marginRight: 0.5,
-                    fontSize: "16px !important",
-                  }}
-                />
-              }
-              variant="primary"
-              onClick={() => setDisplayMobileNav(false)}
-            >
-              Read the Docs
-            </LinkButton>
-          </Box>
+
+              <LinkButton
+                href="/signup"
+                sx={{
+                  fontSize: 18,
+                }}
+                variant="primary"
+                onClick={() => setDisplayMobileNav(false)}
+              >
+                Sign Up
+              </LinkButton>
+            </Box>
+          )}
         </Box>
       </Slide>
     </Box>
