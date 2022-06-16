@@ -28,15 +28,24 @@ const ModalSearchList: React.VoidFunctionComponent<SearchItemProps> = ({
     setSpecResults(searchResults.filter((result) => result.type === "spec"));
   }, [searchResults]);
 
+  const listWrapperStyles = {
+    desktop: {
+      maxHeight: 800,
+      overflowY: "auto",
+      paddingRight: 1.25,
+      marginRight: -1.25,
+    },
+    mobile: {
+      overflowY: "visible",
+    },
+  };
+
   return (
     <Box
       sx={{
-        maxHeight: variant === "desktop" ? 800 : "none",
         marginTop: 3,
-        overflowY: variant === "desktop" ? "auto" : "visible",
         overflowX: "visible",
-        paddingRight: variant === "desktop" ? 1.25 : 0,
-        marginRight: variant === "desktop" ? -1.25 : 0,
+        ...listWrapperStyles[variant],
       }}
     >
       <ModalSearchListCategory
