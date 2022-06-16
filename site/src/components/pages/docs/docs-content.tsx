@@ -69,6 +69,7 @@ export const DocsContent: VFC<DocsPageProps> = ({
         sx={{
           margin: 0,
           marginTop: { xs: 5, md: 8 },
+          width: "inherit",
         }}
       >
         {title ? (

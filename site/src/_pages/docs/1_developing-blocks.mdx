@@ -16,7 +16,7 @@ In practice, most block developers will not need to know the lower-level details
 
 We provide three templates which allow you to define the entry point for your block in different ways:
 
-- `custom-element`: create a block defined as a custom element (or Web Component).
+- `custom-element`: create a block defined as a custom element (also known as Web Components).
 - `html`: create a block defined as an HTML file, with JavaScript added via `<script>` tags.
 - `react`: create a block defined as a React component.
 
@@ -217,7 +217,7 @@ If you want to write blocks **using other technologies or frameworks**, you have
 
 1.  use a `custom-element` template and use different approaches when constructing the element-i.e. use a custom element as a wrapper for anything else you like.
 1.  use an `html` template and import and use your additional libraries inside the `<script>` tag.
-1.  use a React component as a wrapper around something else. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block in F#, wrapped as a React component.
+1.  use languages which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React, you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
 
 ### I don’t want to use TypeScript
 

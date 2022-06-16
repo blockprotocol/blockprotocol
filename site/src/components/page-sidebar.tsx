@@ -40,9 +40,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   fontSize: 15,
   paddingTop: 8,
   paddingBottom: 8,
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
-  overflow: "hidden",
+  wordBreak: "break-word",
 }));
 
 type SidebarPageSectionProps = {
@@ -434,6 +432,7 @@ export const Sidebar: VFC<SidebarProps> = ({
             "padding-top",
             "padding-bottom",
           ]),
+          wordBreak: "break-word",
         }}
       >
         <Box
