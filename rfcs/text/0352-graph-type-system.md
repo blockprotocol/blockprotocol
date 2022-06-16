@@ -118,7 +118,7 @@ Underpinning this proposal is the definition of four classes of 'types'. One of 
 
 ### Data Types
 
-A **Data Type** describes a space of possible valid _values_. For instance, the _string_ value `"foo"` might be an instance of a `Text` Data Type, or a _float_ value `0.6` might be an instance of a `Number` Data Type (instance of means that the value satisfies the constraints expressed on the Data Type, or alternatively you can view it as saying the value is within the value space of the Data Type).
+A **Data Type** describes a space of possible valid _values_. For instance, the _string_ value `"foo"` might be an instance of a `Text` Data Type, or a _float_ value `0.6` might be an instance of a `Number` Data Type ("instance of" means that the value satisfies the constraints expressed on the Data Type, or alternatively you can view it as saying the value is within the value space of the Data Type).
 
 > 💬 The underlying value's representation will depend on the implementation environment, different languages and technologies may store these differently.
 
