@@ -176,7 +176,7 @@ const gitHubInfoCard = (
       }}
     >
       <LinkButton
-        href="https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec"
+        href="https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec"
         variant="primary"
         color="teal"
         size="small"

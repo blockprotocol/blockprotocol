@@ -22,6 +22,7 @@ import {
 } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
+import { theme as themeImport } from "../theme";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
@@ -40,9 +41,7 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   fontSize: 15,
   paddingTop: 8,
   paddingBottom: 8,
-  whiteSpace: "nowrap",
-  textOverflow: "ellipsis",
-  overflow: "hidden",
+  wordBreak: "break-word",
 }));
 
 type SidebarPageSectionProps = {
@@ -55,6 +54,12 @@ type SidebarPageSectionProps = {
   openedPages: string[];
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
 };
+
+const highlightSection = (isSectionSelected: boolean) => ({
+  borderLeft: `3px solid ${
+    isSectionSelected ? themeImport.palette.purple[700] : "white"
+  }`,
+});
 
 const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
   depth = 1,
@@ -88,6 +93,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
       <Box
         display="flex"
         alignItems="center"
+        justifyContent="space-between"
         bgcolor={
           isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
         }
@@ -106,6 +112,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
             color: isSectionSelected
               ? theme.palette.purple[700]
               : theme.palette.gray[80],
+            ...highlightSection(isSectionSelected),
           })}
         >
           {sectionTitle}
@@ -201,6 +208,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
       <Box
         display="flex"
         alignItems="center"
+        justifyContent="space-between"
         bgcolor={isSelected ? (theme) => theme.palette.purple[100] : "white"}
         pr={1}
       >
@@ -218,6 +226,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               ? theme.palette.purple[800]
               : theme.palette.gray[80],
             paddingLeft: depth * 2 + 1.25,
+            ...highlightSection(isSelected),
           })}
         >
           {title}
@@ -434,21 +443,15 @@ export const Sidebar: VFC<SidebarProps> = ({
             "padding-top",
             "padding-bottom",
           ]),
+          wordBreak: "break-word",
         }}
       >
         <Box
           ref={indicator}
           sx={{
             position: "absolute",
-            width: 3,
-            height: 35,
-            backgroundColor: ({ palette }) => palette.purple[600],
             top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop,
-            opacity: selectedOffsetTop === undefined ? 0 : 1,
-            transition: theme.transitions.create(["top", "opacity"], {
-              duration: 150,
-            }),
-            zIndex: 2,
+            opacity: 0,
           }}
         />
         {pages.length > 1
