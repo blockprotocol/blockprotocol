@@ -9,7 +9,7 @@ import siteMap from "../site-map.json" assert { type: "json" };
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "..",
+  "../..",
 );
 
 type DocsFrontMatter = {
