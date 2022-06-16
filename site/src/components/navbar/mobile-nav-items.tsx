@@ -24,7 +24,7 @@ import SiteMapContext from "../../context/site-map-context";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
-import ModalSearch from "../pages/docs/modal-search";
+import Search from "../pages/docs/search";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
@@ -271,7 +271,7 @@ export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
   return (
     <List>
       <Box m={2}>
-        <ModalSearch variant="mobile" />
+        <Search variant="mobile" />
       </Box>
 
       {pages.map((page) => (
