@@ -110,7 +110,7 @@ Given the motivation above and some other implications of the current design, th
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
-1.  define a constrained type system that is able to describe any JSON structure and linking between entity definitions
+3.  define a constrained type system that is able to describe any JSON structure and linking between entity definitions
 
 ## Types
 
