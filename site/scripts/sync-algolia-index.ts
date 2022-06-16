@@ -5,11 +5,11 @@ import matter from "gray-matter";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import siteMap from "../site/site-map.json" assert { type: "json" };
+import siteMap from "../site-map.json" assert { type: "json" };
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "..",
+  "../..",
 );
 
 type DocsFrontMatter = {
@@ -19,6 +19,12 @@ type DocsFrontMatter = {
 
 type BlockProtocolFileTypes = "spec" | "docs";
 
+type FileTypeAndPaths = {
+  inputPath: string;
+  outputPath: string;
+  type: BlockProtocolFileTypes;
+};
+
 const getFileInfos = (
   dirPath: string,
   arrayOfFiles: Array<{
@@ -27,33 +33,26 @@ const getFileInfos = (
     type: BlockProtocolFileTypes;
   }>,
   type: BlockProtocolFileTypes,
-): {
-  inputPath: string;
-  outputPath: string;
-  type: BlockProtocolFileTypes;
-}[] => {
+): FileTypeAndPaths[] => {
   const files = fs.readdirSync(dirPath);
 
-  let newArrayOfFiles = arrayOfFiles || [];
+  const newArrayOfFiles: FileTypeAndPaths[] = [];
 
   files.forEach((file) => {
     if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
-      newArrayOfFiles = getFileInfos(
-        `${dirPath}/${file}`,
-        newArrayOfFiles,
-        type,
-      );
-    } else {
-      const inputPath = path.join(dirPath, "/", file);
-      const outputPath = `.\\output\\${path.join(
-        "./output/",
-        dirPath,
-        "/",
-        file,
-      )}`;
-      if (inputPath.endsWith(".md") || inputPath.endsWith(".mdx")) {
-        newArrayOfFiles.push({ inputPath, outputPath, type });
-      }
+      // the only subfolder, 3_spec, is indexed as a different type
+      return;
+    }
+
+    const inputPath = path.join(dirPath, "/", file);
+    const outputPath = `.\\output\\${path.join(
+      "./output/",
+      dirPath,
+      "/",
+      file,
+    )}`;
+    if (inputPath.endsWith(".md") || inputPath.endsWith(".mdx")) {
+      newArrayOfFiles.push({ inputPath, outputPath, type });
     }
   });
 
@@ -76,9 +75,17 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
     type: BlockProtocolFileTypes,
     fileIndex: number,
   ): AlgoliaRecord => {
-    const siteMapData = siteMap.pages.find((page) => {
-      return page.href.includes(type);
+    const docsRoot = siteMap.pages.find((page) => {
+      return page.href === "/docs";
     });
+    if (!docsRoot) {
+      throw new Error("Cannot find /docs root page in sitemap");
+    }
+
+    const siteMapData =
+      type === "docs"
+        ? docsRoot
+        : docsRoot.subPages.find((subPage) => subPage.href === "/docs/spec");
 
     if (!siteMapData) {
       throw new Error("Unexpected empty siteMapData");
@@ -99,7 +106,7 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
   };
 
   const specFiles = getFileInfos(
-    path.resolve(monorepoRoot, "site/src/_pages/spec"),
+    path.resolve(monorepoRoot, "site/src/_pages/docs/3_spec"),
     [],
     "spec",
   );
@@ -117,13 +124,21 @@ const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
     return getFormattedData(grayMatterData, filePath.type, fileIndex);
   });
 
-  const docsData = docsFiles.map((filePath, fileIndex) => {
-    const file = fs.readFileSync(filePath.inputPath, "utf8");
+  const docsData = docsFiles
+    .map((filePath, fileIndex) => {
+      const file = fs.readFileSync(filePath.inputPath, "utf8");
 
-    const grayMatterData = matter(file) as unknown as DocsFrontMatter;
+      const grayMatterData = matter(file) as unknown as DocsFrontMatter;
 
-    return getFormattedData(grayMatterData, filePath.type, fileIndex);
-  });
+      const data = getFormattedData(grayMatterData, filePath.type, fileIndex);
+
+      if (filePath.type === "docs" && data.slug === "/docs/spec") {
+        // avoid double counting the spec root, which will be indexed as a 'spec' type
+        return null;
+      }
+      return data;
+    })
+    .filter((file): file is AlgoliaRecord => !!file);
 
   return [...specData, ...docsData];
 };
@@ -151,7 +166,6 @@ const script = async () => {
 
   await index.browseObjects({
     query: "", // Empty query will match all records
-    filters: "type:docs OR type:glossary",
     attributesToRetrieve: ["objectID"],
     batch: (batch) => {
       oldIndexObjects = oldIndexObjects.concat(batch);

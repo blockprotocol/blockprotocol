@@ -6,6 +6,7 @@ import {
   Snackbar,
   Tab,
   Tabs,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -315,7 +316,13 @@ export const BlockDataContainer: VoidFunctionComponent<
                 sx={{ listStyleType: "square" }}
               >
                 {errors.map((err) => (
-                  <li key={err}>{err}</li>
+                  <Typography
+                    component="li"
+                    key={err}
+                    sx={{ wordBreak: "break-word" }}
+                  >
+                    {err}
+                  </Typography>
                 ))}
               </Box>
             </Box>

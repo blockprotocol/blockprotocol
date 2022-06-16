@@ -114,9 +114,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
           <ListItemText
             primary={title}
             sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+              wordBreak: "break-word",
               "> .MuiListItemText-primary": {
                 display: "inline",
               },
