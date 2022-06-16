@@ -110,7 +110,8 @@ Given the motivation above and some other implications of the current design, th
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
-3.  define a constrained type system that is able to describe any JSON structure and linking between entity definitions
+3.  define a constrained type system that is able to describe any JSON structure
+4.  refine the current way of defining links between entities, encapsulating the approach within the type system
 
 ## Types
 
@@ -186,11 +187,14 @@ The `Age` property type could define its value as being an instance of the `Numb
 
 #### Objects
 
-A Property Type can also have an object made up of other properties as its value. These properties are defined by using Property Types, where when using one it's also possible to define that there is a list of properties.
+A Property Type can also have an object made up of other properties as its value. These properties are defined by using Property Types, where when using one it's also possible to define:
+
+- that there is a list of properties
+- that a property is **required**
 
 **Example 1**
 
-The `Contact Information` Property Type could define its value as being an object which has an `E-mail` property and a `Phone Number` property.
+The `Contact Information` Property Type could define its value as being an object which has an `E-mail` property and a **required** `Phone Number` property.
 
 - Sample data when used in (simplified view of) an Entity
 
@@ -233,7 +237,7 @@ The `Interests` property type could define its value as being an object which ha
 
 A Property Type can also express that it has a list of things as its value.
 
-> ⚠️ It's important to note that in **most circumstances a Property Type should be expressed as a singular item** as this encourages re-usability and allows the parent object to define whether there is a collection or not.
+> ⚠️ It's important to note that in **most circumstances a Property Type should be expressed as a singular item** as this encourages reusability and allows the parent object to define whether there is a collection or not.
 >
 > As such, examples are not provided in this section, refer to the Reference-Level description for more information.
 
@@ -335,7 +339,36 @@ An Entity Type is a description of a particular "thing", made up of identifiable
     }
     ```
 
+- **Specifying properties are required** - The entity type can also define which of its properties are **required**, _note: properties are **optional** by default_
+  **Example 1**
+  The `Blog Post` Entity Type could contain the **required** Property Types `Title`, `Author`, and `Contents`, and the **optional** Property Type `Category`
+
+  - Sample (simplified) Data
+    Assuming that
+
+    - The `Title`, `Author`, `Contents`, and `Category` Property Types all have values that are instances of the `Text` Data Type
+
+    ```json
+    {
+      "title": "Making the web better. With blocks!",
+      "author": "Joel Spolsky",
+      "contents": ..., // omitted for brevity
+      "category": "News"
+    }
+    ```
+
+    or
+
+    ```json
+    {
+      "title": "The non-negotiable principle",
+      "author": "David Wilkinson",
+      "contents": ..., // omitted for brevity
+    }
+    ```
+
 - **Specifying there is a list of properties** - The entity type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type
+
   **Example 1**
   The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
 
@@ -421,6 +454,30 @@ Entity Types can also express the types of relationships they have with other th
     ]
     ```
 
+- **Specifying that a Link is required** - The entity type can also define that some of its links are **required**, _note: links are **optional** by default_
+
+  **Example 1**
+  The `Bank Account` Entity Type could have a **required** `Maintained By` link
+
+  - Sample (simplified) Data
+
+    ```json
+    [
+      // Bank entity
+      {
+        "entityId": 211,
+        "name": "Iron Bank of Braavos"
+      },
+      // Bank Account entity
+      {
+        "entityId": 212,
+        "sortCode": 100000,
+        "accountNumber": 31510604,
+        "maintainedBy": 211
+      }
+    ]
+    ```
+
 - **Specifying there is a List of Links** - The Entity Type can also express that it can have multiple out-going links of the same type
 
   **Example 1**
@@ -433,17 +490,17 @@ Entity Types can also express the types of relationships they have with other th
     [
       // Person entities
       {
-        "entityId": 211,
+        "entityId": 311,
         "name": "Alice",
       },
       {
-        "entityId": 212,
+        "entityId": 312,
         "name": "Bob",
       }
       {
-        "entityId": 213,
+        "entityId": 313,
         "name": "Charlie",
-        "friendsOf": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
+        "friendsOf": [311, 312] // referring to the Person entity IDs, where the array ordering is unstable
       }
     ]
     ```
@@ -458,25 +515,25 @@ Entity Types can also express the types of relationships they have with other th
     [
       // Songs
       {
-        "entityId": 312,
+        "entityId": 412,
         "name": "Rocket Man",
         ...
       },
       {
-        "entityId": 313,
+        "entityId": 413,
         "name": "Du Hast",
         ...
       },
       {
-        "entityId": 314,
+        "entityId": 414,
         "name": "Valley of the Shadows",
         ...
       },
       // Playlist
       {
-        "entityId": 315,
+        "entityId": 415,
         "name": "Favorite Songs",
-        "contains": [312, 314, 313] // referring to the song entity IDs, ordering is intentional and stable
+        "contains": [412, 414, 413] // referring to the song entity IDs, ordering is intentional and stable
         ...
       }
     ]
@@ -491,34 +548,34 @@ Entity Types can also express the types of relationships they have with other th
     [
       // Paragraph Entity
       {
-        "entityId": 316,
+        "entityId": 416,
         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas.",
         ...
       },
       // Heading Entity
       {
-        "entityId": 317,
+        "entityId": 417,
         "name": "Duo Reges: constructio interrete.",
         ...
       },
       // Divider Entity
       {
-        "entityId": 318,
+        "entityId": 418,
         "width": "full",
         ...
       },
       // User Entity
       {
-        "entityId": 319,
+        "entityId": 419,
         "name": "Alice",
         ...
       }
       // Page Entity
       {
-        "entityId": 320,
+        "entityId": 420,
         "name": "Lorum Ipsum",
-        "writtenBy": 319 // referring to the User entity ID
-        "contains": [317, 316, 318] // referring to IDs of the various types of page contents above
+        "writtenBy": 419 // referring to the User entity ID
+        "contains": [417, 416, 418] // referring to IDs of the various types of page contents above
         ...
       }
     ]
