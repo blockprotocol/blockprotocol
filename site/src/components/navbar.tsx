@@ -405,7 +405,7 @@ export const Navbar: VFC<NavbarProps> = ({
             <MobileNavItems onClose={() => setDisplayMobileNav(false)} />
           </Box>
 
-          {user ? null : router.pathname === "/login" ? null : (
+          {user ? null : (
             <Box
               flexShrink={0}
               display="flex"
