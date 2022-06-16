@@ -93,6 +93,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
       <Box
         display="flex"
         alignItems="center"
+        justifyContent="space-between"
         bgcolor={
           isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
         }
@@ -207,6 +208,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
       <Box
         display="flex"
         alignItems="center"
+        justifyContent="space-between"
         bgcolor={isSelected ? (theme) => theme.palette.purple[100] : "white"}
         pr={1}
       >
