@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from "../../components/icons";
 import { Link } from "../../components/link";
 import { LinkButton } from "../../components/link-button";
 import { DocsContent } from "../../components/pages/docs/docs-content";
+import { generatePathWithoutParams } from "../../components/shared";
 import SiteMapContext from "../../context/site-map-context";
 import { SiteMap } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdx-utils";
@@ -195,7 +196,7 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
   const { asPath } = useRouter();
   const { pages: allPages } = useContext(SiteMapContext);
 
-  const pathWithoutParams = asPath.match(/^[^?]*/)?.[0];
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   const { subPages } = allPages.find(({ title }) => title === "Documentation")!;
 
