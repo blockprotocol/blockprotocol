@@ -1,4 +1,5 @@
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faBars, faZap } from "@fortawesome/free-solid-svg-icons";
+import { ArrowRight } from "@mui/icons-material";
 import {
   Box,
   Collapse,
@@ -342,8 +343,21 @@ export const Navbar: VFC<NavbarProps> = ({
                     </Link>
                   )}
                   {user !== "loading" && !user?.isSignedUp ? (
-                    <LinkButton href="/signup" size="small" variant="primary">
-                      Sign Up
+                    <LinkButton
+                      href="/docs"
+                      size="small"
+                      variant="primary"
+                      endIcon={
+                        <FontAwesomeIcon
+                          icon={faArrowRight}
+                          sx={{
+                            fontSize: "16px !important",
+                            color: ({ palette }) => palette.gray[10],
+                          }}
+                        />
+                      }
+                    >
+                      Read the Docs
                     </LinkButton>
                   ) : null}
                 </>
@@ -406,12 +420,13 @@ export const Navbar: VFC<NavbarProps> = ({
           </Box>
 
           <Box
-            p={5}
             flexShrink={0}
             display="flex"
             flexDirection="column"
             alignItems="center"
             sx={{
+              paddingY: 4,
+              paddingX: 4.25,
               borderTopStyle: "solid",
               borderTopWidth: 1,
               borderTopColor: theme.palette.gray[40],
@@ -437,24 +452,32 @@ export const Navbar: VFC<NavbarProps> = ({
                   event?.preventDefault();
                 }}
                 sx={{
-                  marginBottom: 1,
+                  fontSize: 18,
+                  marginBottom: 1.25,
                 }}
               >
                 Log in
               </LinkButton>
             )}
             <LinkButton
-              href="/signup"
+              href="/docs"
               sx={{
-                width: "100%",
-                py: 1.5,
-                px: 3,
-                textTransform: "none",
+                fontSize: 18,
               }}
+              startIcon={
+                <FontAwesomeIcon
+                  icon={faZap}
+                  sx={{
+                    color: ({ palette }) => palette.gray[10],
+                    marginRight: 0.5,
+                    fontSize: "16px !important",
+                  }}
+                />
+              }
               variant="primary"
               onClick={() => setDisplayMobileNav(false)}
             >
-              Sign Up
+              Read the Docs
             </LinkButton>
           </Box>
         </Box>
