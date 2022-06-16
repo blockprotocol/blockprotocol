@@ -840,6 +840,10 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
               ]
             }
           }
+        },
+        "required": {
+          "type": "array",
+          "items": "string"
         }
       }
     },
@@ -851,7 +855,8 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
           "$comment": "Property Object values must be defined through references to the same valid URI to a property-type",
           "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
         }
-      }
+      },
+      "required": ["$ref"]
     },
     "dataTypeReference": {
       "type": "object",
@@ -925,11 +930,16 @@ The `User ID` property type could define its value as being _either_ an instance
 
 #### Objects
 
-The value of a Property Type can also be an object which is itself defined through Property Types (either singular ones, or as lists). The key of the property value is the Property Type URI, as shown in the following examples.
+The value of a Property Type can also be an object which is itself defined through Property Types which can additionally be marked as:
+
+- being an array
+- being required
+
+The key of the property value is the Property Type URI, as shown in the following examples.
 
 **Example 1**
 
-The `Contact Information` Property Type could define its value as being an object which has an `E-mail` property and a `Phone Number` property.
+The `Contact Information` Property Type could define its value as being an object which has a **required** `E-mail` property and a `Phone Number` property.
 
 ```json
 {
@@ -946,7 +956,10 @@ The `Contact Information` Property Type could define its value as being an objec
         "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number": {
           "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/phone-number"
         }
-      }
+      },
+      "required": [
+        "https://blockprotocol.org/types/@blockprotocol/property-type/email"
+      ]
     }
   ]
 }
@@ -1098,7 +1111,7 @@ A **Link Type** is a JSON schema which satisfies the following the following JSO
 ```json
 {
   "kind": "linkType",
-  "$id": "https://blockprotocol.org/types/@alice/link-type/owns"
+  "$id": "https://blockprotocol.org/types/@alice/link-type/owns",
   "name": "Owns",
   "description": "Have (something) as one's own; possess"
 }
@@ -1109,7 +1122,7 @@ A **Link Type** is a JSON schema which satisfies the following the following JSO
 ```json
 {
   "kind": "linkType",
-  "$id": "https://blockprotocol.org/types/@alice/link-type/submitted-by"
+  "$id": "https://blockprotocol.org/types/@alice/link-type/submitted-by",
   "name": "Submitted By",
   "description": "Suggested, proposed, or presented by"
 }
@@ -1133,6 +1146,10 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
     "name": { "type": "string" },
     "description": { "type": "string" },
     "properties": { "$ref": "#/$defs/propertyTypeObject" },
+    "required": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
     "links": {
       "type": "object",
       "propertyNames": {
@@ -1187,6 +1204,10 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
               ]
             }
           }
+        },
+        "required": {
+          "type": "array",
+          "items": "string"
         }
       },
       "additionalProperties": false
@@ -1199,16 +1220,7 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
           "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
         }
       },
-      "additionalProperties": false
-    },
-    "entityTypeReference": {
-      "type": "object",
-      "properties": {
-        "$ref": {
-          "$comment": "Property Object values must be defined through references to the same valid URI to a entity-type",
-          "$ref": "http://blockprotocol.org/type-system/schema/entity-type-uri"
-        }
-      },
+      "required": ["$ref"],
       "additionalProperties": false
     }
   }
@@ -1223,7 +1235,7 @@ The data _within_ an Entity is described simply through a set of Property Types
 
 **Example 1**
 
-The `Book` Entity Type could contain the Property Types `Name`, a `Published On` and a `Blurb`
+The `Book` Entity Type could contain the Property Types `Name`, a `Published On` and a `Blurb`, where `Name` is **required**
 
 - The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
 
@@ -1242,7 +1254,8 @@ The `Book` Entity Type could contain the Property Types `Name`, a `Published On`
     "https://blockprotocol.org/types/@alice/property-type/blurb": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
     }
-  }
+  },
+  "required": ["https://blockprotocol.org/types/@alice/property-type/name"]
 }
 ```
 
@@ -1334,10 +1347,16 @@ The `Name`, `Published On`, and `Blurb` Property Types all have values that are 
   "kind": "entityType",
   "name": "Book",
   "properties": {
-    "https://blockprotocol.org/types/@alice/property-type/name": { "$ref": "https://blockprotocol.org/types/@alice/property-type/name" },
-    "https://blockprotocol.org/types/@alice/property-type/published-on": { "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on" },
-    "https://blockprotocol.org/types/@alice/property-type/blurb": { "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb" },
-  }
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    }
+  },
   "links": {
     "https://blockprotocol.org/types/@alice/property-type/written-by": {}
   }
@@ -1367,7 +1386,7 @@ This would accept Entity instances with the following shape
 
 **Example 2**
 
-The `Uk Address` Entity Type could contain Property Types `address-line-1`, `postcode`, and `city`
+The `UK Address` Entity Type could contain Property Types `address-line-1`, `postcode`, and `city`, where all of them are **required**
 
 ```json
 {
@@ -1384,11 +1403,16 @@ The `Uk Address` Entity Type could contain Property Types `address-line-1`, `pos
     "https://blockprotocol.org/types/@alice/property-type/city": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/city"
     }
-  }
+  },
+  "required": [
+    "https://blockprotocol.org/types/@alice/property-type/address-line-1",
+    "https://blockprotocol.org/types/@alice/property-type/postcode",
+    "https://blockprotocol.org/types/@alice/property-type/city"
+  ]
 }
 ```
 
-The `Organisation` Entity Type could contain Property Type `name`
+The `Organisation` Entity Type could contain the Property Type `Name`
 
 ```json
 {
@@ -1403,7 +1427,7 @@ The `Organisation` Entity Type could contain Property Type `name`
 }
 ```
 
-The `Building` Entity Type could a `Located At` link, and a `Tenant` link
+The `Building` Entity Type could contain a `Located At` link, and a `Tenant` link
 
 ```json
 {
@@ -1615,8 +1639,10 @@ This would accept Entity instances with the following shape
   {
     "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 320,
     "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum",
-    "https://blockprotocol.org/types/@alice/property-type/written-by": 319 // referring to the User entity ID
-    "https://blockprotocol.org/types/@alice/property-type/contains": [317, 316, 318] // referring to IDs of the various types of page contents above
+    "https://blockprotocol.org/types/@alice/property-type/written-by": 319, // referring to the User entity ID
+    "https://blockprotocol.org/types/@alice/property-type/contains": [
+      317, 316, 318
+    ] // referring to IDs of the various types of page contents above
   }
 ]
 ```
@@ -1635,7 +1661,7 @@ A key change for allowing the proposed type system to work is moving away from a
 
 ```json
 {
-  "entityId": 111
+  "entityId": 111,
   "name": "Arthur Philip Dent",
   "age": 30,
   "planetOfOrigin": "Earth",
