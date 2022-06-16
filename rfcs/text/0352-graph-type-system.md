@@ -1770,6 +1770,7 @@ Link groups and Linked entities in the Graph Service are currently supplied outs
 {
   "sourceEntityId": "user1",
   "path": "company",
+  "ordered": false,
   "links": [
     {
       "sourceEntityId": "user1",
@@ -1786,6 +1787,7 @@ Link groups and Linked entities in the Graph Service are currently supplied outs
 {
   "sourceEntityId": 111,
   "link": "https://blockprotocol.org/types/@alice/link-type/company",
+  "ordered": false,
   "links": [
     {
       "sourceEntityId": 111,
@@ -1799,6 +1801,7 @@ Link groups and Linked entities in the Graph Service are currently supplied outs
 > 💡 In the proposed system example instance, the `path` key has been replaces with `link`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `linkType`, etc.
 
 Links (which are given in the `linkGroup` field `links`) will use Link Type URIs instead of a `path`.
+The `linkGroup` has a new key `ordered` which specifies whether or not the `links` array is ordered. More on this in the [Ordering of links](#ordering-of-links) section.
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
 
@@ -1823,8 +1826,6 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
   }
 ]
 ```
-
-Links in the proposed system has the notion of cardinality. A link can be one-to-one and one-to-many. The "many" cardinality can further be constrained and set to be ordered or unordered. The indices of ordered links are transparent to the users, and implicit in the order that they appear in the `links` array. More on this in the next section.
 
 #### Creating Links
 
@@ -1852,8 +1853,13 @@ Link creation will not be using arbitrary `path`s, instead Link Types must be us
 
 Any link will use Link Type URIs instead of a `path`.
 
+### Ordering of links
+
+Links in the proposed system has the notion of cardinality. A link can be one-to-one and one-to-many. The "many" cardinality can further be constrained and set to be ordered or unordered.
+
 Links can be ordered in the current system, and the behaviour will stay mostly the same in the proposed system
-**An example of an ordered `createLink` instance in the current system:**
+
+**An example of an _ordered_ `createLink` instance in the current system:**
 
 ```json
 {
@@ -1864,7 +1870,7 @@ Links can be ordered in the current system, and the behaviour will stay mostly t
 }
 ```
 
-**An example of an ordered `createLink` instance in the proposed system:**
+**An example of an _ordered_ `createLink` instance in the proposed system:**
 
 ```json
 {
@@ -1875,9 +1881,40 @@ Links can be ordered in the current system, and the behaviour will stay mostly t
 }
 ```
 
-The cardinality of the link specified in the source Entity Type dictates what is a valid `createLink` request.
+The link cardinality specified in source Entity Types dictate how `createLink` requests will be perceived.
+If, for example, a block issues the above `createLink` request on an Entity that through its Entity Type does _not_ allow multiple links, setting an `index` on a `createLink` request would be invalid or unnecessary.
 
-### block Schemas
+The indices of ordered links are transparent to the users, and implicitly given by the order that appear in the `links` array.
+
+**An example of an ordered `linkGroup` instance in the proposed system:**
+
+```jsonc
+{
+  // A list of ordered links
+  "sourceEntityId": 111,
+  "link": "https://blockprotocol.org/types/@alice/link-type/stops-at",
+  // Elements of this links array are ordered'
+  "ordered": true,
+  "links": [
+    {
+      // First link
+      "sourceEntityId": 111,
+      "destinationEntityId": 222,
+      "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+    },
+    {
+      // Second link
+      "sourceEntityId": 111,
+      "destinationEntityId": 333,
+      "link": "https://blockprotocol.org/types/@alice/link-type/stops-at"
+    }
+  ]
+}
+```
+
+> 💡 Having implicit link ordering means that embedding applications can implement their own index-tracking, such as [fractional indices](https://www.figma.com/blog/how-figmas-multiplayer-technology-works/#syncing-trees-of-objects). It would be trivial to augment the `links` elements to contain an `index` key that reassures the order.
+
+### Block Schemas
 
 ### Structure-based Queries
 
