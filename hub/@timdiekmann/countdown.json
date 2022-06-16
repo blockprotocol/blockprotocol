@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/hashintel/hash.git",
-  "commit": "bd9a2427546f4cdd5fd00eb9d319fd028ecba648",
+  "commit": "02f8050c38a276c2d7515fc23a64c605ba48277c",
   "workspace": "@hashintel/block-countdown",
   "distDir": "dist"
 }

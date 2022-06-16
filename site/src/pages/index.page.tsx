@@ -16,6 +16,7 @@ import {
   readBlocksFromDisk,
 } from "../lib/blocks";
 
+// @todo how does this magic number work?
 export const HOME_PAGE_HEADER_HEIGHT = 750;
 
 interface PageProps {

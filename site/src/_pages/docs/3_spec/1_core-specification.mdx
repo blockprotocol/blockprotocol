@@ -1,4 +1,4 @@
-# Core Specification
+# Core Specification 0.2
 
 This document specifies how to define and use "blocks" – discrete components which can be used across multiple applications.
 
@@ -118,12 +118,13 @@ Embedding applications which load ANY block of `kind: "html"` MUST provide a `bl
 
 - MUST contain a `getBlockContainer` key where the value is a function, which the HTML block can call to obtain a reference to the container element for that specific block:
   - this MUST accept a single argument, which MUST be either a single script element, or a URL, and may be omitted
-  - the implementation of these functions relies on embedding applications attaching ids to script tags when loading blocks by which they can be later identified (or when the block provides additional scripts via `markScripts`). A reference implementation is available in our documentation **[TODO: link to functions]**
+  - the implementation of these functions relies on embedding applications attaching ids to script tags when loading blocks by which they can be later identified (or when the block provides additional scripts via `markScripts`).
 - MUST contain a `markScripts` key where the value is a function, which is used to attach ids to dynamically script tags so that they can be identified when calling `getBlockContainer`
   - This MUST accept TWO arguments:
     - the first MUST be the script source
     - the second MUST be either a single script element, or a URL.
-  - A reference implementation is available in our documentation.
+
+The `@blockprotocol/core` package exports a `blockprotocolGlobals` object which implements these functions.
 
 Blocks of `kind: "html"` MUST call `getBlockContainer` from within any script they load, with different strategies depending on whether the script is:
 
@@ -175,6 +176,8 @@ If blocks generate any scripts dynamically at runtime, they MUST call `markScrip
     </tr>
   </tbody>
 </table>
+
+An example HTML block is available via `npx create-block-app your-block-name --template html`
 
 ## Block-application communication
 

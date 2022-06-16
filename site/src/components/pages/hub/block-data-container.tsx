@@ -6,6 +6,7 @@ import {
   Snackbar,
   Tab,
   Tabs,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
@@ -19,7 +20,10 @@ import {
 } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
-import { BlockDataTabPanels } from "./block-data-tab-panels";
+import {
+  BlockDataTabPanels,
+  blockPreviewAndDataHeight,
+} from "./block-data-tab-panels";
 import { BlockDataTabs } from "./block-data-tabs";
 import { BlockModalButton } from "./block-modal-button";
 import { BlockTabsModal } from "./block-tabs-modal";
@@ -196,7 +200,9 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 450, backgroundColor: "white" }}>
+          <Box
+            sx={{ height: blockPreviewAndDataHeight, backgroundColor: "white" }}
+          >
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
               setBlockVariantsTab={setBlockVariantsTab}
@@ -310,7 +316,13 @@ export const BlockDataContainer: VoidFunctionComponent<
                 sx={{ listStyleType: "square" }}
               >
                 {errors.map((err) => (
-                  <li key={err}>{err}</li>
+                  <Typography
+                    component="li"
+                    key={err}
+                    sx={{ wordBreak: "break-word" }}
+                  >
+                    {err}
+                  </Typography>
                 ))}
               </Box>
             </Box>
