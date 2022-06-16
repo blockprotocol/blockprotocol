@@ -25,6 +25,7 @@ import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
+import { generatePathWithoutParams } from "./shared";
 
 export const SIDEBAR_WIDTH = 300;
 
@@ -68,18 +69,20 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 }) => {
   const router = useRouter();
   const { asPath } = router;
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   const { title: sectionTitle, anchor: sectionAnchor, subSections } = section;
 
   const sectionHref = sectionAnchor ? `${pageHref}#${sectionAnchor}` : pageHref;
 
   const isSectionSelected =
-    asPath === sectionHref ||
-    (isSelectedByDefault && (asPath === pageHref || asPath === `${pageHref}#`));
+    pathWithoutParams === sectionHref ||
+    (isSelectedByDefault &&
+      (pathWithoutParams === pageHref || pathWithoutParams === `${pageHref}#`));
   const hasSelectedSubSection =
     subSections?.find(
       ({ anchor: subSectionAnchor }) =>
-        asPath === `${pageHref}#${subSectionAnchor}`,
+        pathWithoutParams === `${pageHref}#${subSectionAnchor}`,
     ) !== undefined;
   const isSectionOpen = openedPages.includes(sectionHref);
 
@@ -186,11 +189,13 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 }) => {
   const router = useRouter();
   const { asPath } = router;
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   const { href, title, sections, subPages } = page;
 
   const isSelected =
-    (asPath === href || asPath === `${href}#`) && !subPages?.length;
+    (pathWithoutParams === href || pathWithoutParams === `${href}#`) &&
+    !subPages?.length;
   const pageKey = subPages.length ? `page${href}` : href;
 
   const isOpen = openedPages.includes(pageKey);
@@ -296,17 +301,21 @@ type SidebarProps = {
 const findSectionPath = (
   href: string,
   sections: SiteMapPageSection[],
-  asPath: string,
+  pathWithoutParams: string,
 ): string[] | null => {
   for (const section of sections) {
     const sectionHref = `${href}#${section.anchor}`;
 
-    if (asPath === sectionHref) {
+    if (pathWithoutParams === sectionHref) {
       return [sectionHref];
     }
 
     if (section.subSections) {
-      const result = findSectionPath(href, section.subSections, asPath);
+      const result = findSectionPath(
+        href,
+        section.subSections,
+        pathWithoutParams,
+      );
 
       if (result) {
         return [sectionHref, ...result];
@@ -322,6 +331,7 @@ const getInitialOpenedPages = (params: {
   asPath: string;
 }): string[] => {
   const { pages, asPath } = params;
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   for (const page of pages) {
     const hasSubPages = page.subPages?.length;
@@ -331,10 +341,10 @@ const getInitialOpenedPages = (params: {
       const { href, sections } = subPage;
       const onThisPage = hasSubPages ? [`page${page.href}`, href] : [href];
 
-      if (asPath === href || asPath === `${href}#`) {
+      if (pathWithoutParams === href || pathWithoutParams === `${href}#`) {
         return onThisPage;
       } else if (sections) {
-        const sectionPath = findSectionPath(href, sections, asPath);
+        const sectionPath = findSectionPath(href, sections, pathWithoutParams);
         if (sectionPath) {
           return [...onThisPage, ...sectionPath];
         }

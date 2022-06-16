@@ -195,13 +195,16 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
   const { asPath } = useRouter();
   const { pages: allPages } = useContext(SiteMapContext);
 
+  const pathWithoutParams = asPath.match(/^[^?]*/)?.[0];
+
   const { subPages } = allPages.find(({ title }) => title === "Documentation")!;
 
   const flatSubPages = subPages.flatMap((page) =>
     page.subPages?.length ? page.subPages : [page],
   );
   const currentPage = flatSubPages.find(
-    ({ href }) => asPath === href || asPath.startsWith(`${href}#`),
+    ({ href }) =>
+      pathWithoutParams === href || pathWithoutParams?.startsWith(`${href}#`),
   );
 
   const isSpec = currentPage!.href.startsWith("/docs/spec");
