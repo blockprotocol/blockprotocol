@@ -1150,6 +1150,11 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
       "type": "array",
       "items": { "type": "string" }
     },
+    "requiredLinks": {
+      "$comment": "A list of link-types which are required. This is a separate field to 'required' to avoid breaking standard JSON schema validation",
+      "type": "array",
+      "items": {"type": "string" }
+    }
     "links": {
       "type": "object",
       "propertyNames": {
@@ -1463,6 +1468,62 @@ This would accept Entity instances with the following shape
     "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 115,
     "https://blockprotocol.org/types/@alice/property-type/located-at": 113, // referring to the UK Address entity ID
     "https://blockprotocol.org/types/@alice/property-type/tenant": 114, // referring to the Organisation entity ID
+  }
+]
+```
+
+#### Specifying that a Link is required
+
+The entity type can also define that some of its links are **required**, _note: links are **optional** by default_
+
+**Example 1**
+
+The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link **which is required**
+
+The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
+
+```json
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Book",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/published-on"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/blurb"
+    }
+  },
+  "links": {
+    "https://blockprotocol.org/types/@alice/property-type/written-by": {}
+  },
+  "requiredLinks": [
+    "https://blockprotocol.org/types/@alice/property-type/written-by"
+  ]
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+[
+  // Person entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 111,
+    "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+    ...
+  },
+  // Book Entity
+  {
+    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 112,
+    "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
+    "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
+    "https://blockprotocol.org/types/@alice/property-type/blurb": ...,
+    "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
   }
 ]
 ```
