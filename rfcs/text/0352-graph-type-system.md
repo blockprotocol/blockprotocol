@@ -88,7 +88,7 @@ In the following document we outline an approach to being more specific about th
 
 **blocks:**
 
-- have greater confidence that the data to them is correct and useable
+- have greater confidence that the data passed to them is correct and useable
 - are able to be more specific about their requirements and more easily express the function of the data
   - This also facilitates more powerful composition as there's greater confidence about other parties' functionalities.
 
