@@ -454,7 +454,6 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                     sm: 320,
                   },
                 },
-
               }}
             >
               <LinkButton
@@ -479,7 +478,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                   fontSize: 18,
                 }}
                 variant="primary"
-                onClick={() => setDisplayMobileNav(false)}
+                onClick={() => setMobileNavVisible(false)}
               >
                 Sign Up
               </LinkButton>
