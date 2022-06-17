@@ -587,6 +587,19 @@ Entity Types can also express the types of relationships they have with other th
     ]
     ```
 
+## JSON Schema additions
+
+The proposed type system will make use of a couple of non-standard JSON Schema keywords. These will be used to add explicitness and to allow for new semantics within schemas.
+
+The `kind` keyword will be used to identify the kind of the schema being described. The value of `kind` must be one of
+
+- `entityType`
+- `propertyType`
+- `dataType`
+- `linkType`
+
+The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link. More on that in the Reference-Level explanation.
+
 ## Using the Types in the Block Protocol
 
 > 💭 This section has been kept purposefully brief, as in-depth discussion of implications has been reserved for the Reference-Level Explanation due to heavy reliance on technical details
@@ -1832,6 +1845,50 @@ This would accept Entity instances with the following shape
 ]
 ```
 
+## JSON Schema additions
+
+We can define the new JSON Schema keywords that the system uses through JSON Schemas
+
+```json
+{
+  // Custom JSON Schema keywords
+  "kind": {
+    "enum": ["entityType", "propertyType", "dataType", "linkType"]
+  },
+  // Links here the same definition given in the Entity Type meta JSON Schema.
+  "links": {
+    "type": "object",
+    "propertyNames": {
+      "$comment": "Property names must be a valid URI to a link-type",
+      "type": "string",
+      "format": "uri"
+    },
+    "patternProperties": {
+      ".*": {
+        "type": "object",
+        "oneOf": [
+          {
+            "properties": {
+              "ordered": { "type": "boolean", "default": false },
+              "type": { "const": "array" }
+            },
+            "required": ["ordered", "type"]
+          },
+          {}
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+the `kind` can as explained in the Guide-Level explanation only take on values that specify the types of the proposed type system.
+
+The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
+
+For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
+
 ## Using the Types in the Block Protocol
 
 Using the proposed type system for Block Protocol imposes changes on the Graph Service and how Block Schemas are defined.
@@ -2453,6 +2510,7 @@ As mentioned in a few sections, this design basically defines a way for communit
     As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`
 1.  Should we further constrain allowed URIs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema
 1.  Do we want to allow types to define a plural name that can be used when they're set to `"type": "array"`?
+1.  How would we define our custom JSON Schema keywords in a JSON Schema Vocabulary? Could our meta schemas be defined as JSON Schema Vocabularies?
 
 # Future possibilities
 
