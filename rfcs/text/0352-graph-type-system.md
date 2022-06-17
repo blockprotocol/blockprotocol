@@ -1011,14 +1011,18 @@ For example if it is a strong requirement to model a grid of numbers, it can be 
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/numbers",
   "name": "Numbers",
-  "type": "array",
-  "items": {
-    "oneOf": [
-      {
-        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+  "oneOf": [
+    {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+          }
+        ]
       }
-    ]
-  }
+    }
+  ]
 }
 ```
 
@@ -1036,11 +1040,25 @@ A Property Type can also express that its value is _either_ something _or_ somet
 
 The `User ID` Property Type could define its value as being _either_ an instance of the `Text` Data Type _or_ an instance of the `Number` Data Type.
 
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
+  "name": "User ID",
+  "oneOf": [
+    { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
+    {
+      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+    }
+  ]
+}
+```
+
 Sample data when used in (simplified view of) an Entity
 
 ```json
 {
-  "userId": 42088130893
+  "https://blockprotocol.org/types/@alice/property-type/user-id": 42088130893
 }
 ```
 
@@ -1048,7 +1066,7 @@ or
 
 ```json
 {
-  "userId": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
+  "https://blockprotocol.org/types/@alice/property-type/user-id": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
 }
 ```
 
@@ -1056,13 +1074,34 @@ or
 
 The `Contrived Property` Property Type could define its value as being _either_ an instance of the `Number` Data Type, _or_ an object which has a `Foo` property.
 
+```json
+{
+  "kind": "propertyType",
+  "$id": "https://blockprotocol.org/types/@alice/property-type/contrived-property",
+  "name": "Contrived Property",
+  "oneOf": [
+    {
+      "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+    },
+    {
+      "type": "Object",
+      "properties": {
+        "https://blockprotocol.org/types/@blockprotocol/data-type/number": {
+          "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+        }
+      }
+    }
+  ]
+}
+```
+
 Sample data when used in (simplified view of) an Entity
 
 Assuming that `Foo` accepts an instance of the `Text` Data Type
 
 ```json
 {
-  "contrivedProperty": 32
+  "https://blockprotocol.org/types/@alice/property-type/contrived-property": 32
 }
 ```
 
@@ -1070,8 +1109,8 @@ or
 
 ```json
 {
-  "contrivedProperty": {
-    "foo": "something here"
+  "https://blockprotocol.org/types/@alice/property-type/contrived-property": {
+    "https://blockprotocol.org/types/@alice/property-type/foo": "something here"
   },
   ...
 }
@@ -2115,6 +2154,7 @@ As mentioned in a few sections, this design basically defines a way for communit
 1.  Do we permit spaces in type names
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
     As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`
+1.  Do we want to allow types to define a plural name that can be used when they're set to "type": "array"?
 
 # Future possibilities
 
