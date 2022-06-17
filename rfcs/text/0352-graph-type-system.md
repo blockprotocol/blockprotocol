@@ -600,6 +600,8 @@ The `kind` keyword will be used to identify the kind of the schema being describ
 
 The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link. More on that in the Reference-Level explanation.
 
+Additionally, some keywords may have a slightly different meaning in the type schemas, such as `description` which adds semantic meaning to Link Types.
+
 ## Using the Types in the Block Protocol
 
 > 💭 This section has been kept purposefully brief, as in-depth discussion of implications has been reserved for the Reference-Level Explanation due to heavy reliance on technical details
@@ -1887,7 +1889,12 @@ the `kind` can as explained in the Guide-Level explanation only take on values t
 
 The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
 
-For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
+# <<<<<<< Updated upstream
+
+As mentioned in the Guide-Level explanation, `description` for Link Types add semantic meaning to a link, which could be encapsulated in a vocabulary specification for the meta schemas.
+
+> > > > > > > Stashed changes
+> > > > > > > For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
 
 ## Using the Types in the Block Protocol
 
