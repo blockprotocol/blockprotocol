@@ -109,7 +109,7 @@ export const AnyFramework = () => {
             }}
           >
             Blocks can be built with Web Components, React, Vue, TypeScript,
-            Angular, or simply plain HTML. The Protocol only defines how blocks
+            Angular, or simply plain HTML. The protocol only defines how blocks
             communicate with the application they’re embedded within, not how
             they should be built.
           </Typography>
