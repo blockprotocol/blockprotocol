@@ -24,7 +24,7 @@ By using the proposed types, blocks, embedding applications, and end-users can a
 
 [motivation]: #motivation
 
-The Block Protocol operates in-between parties that otherwise have limited to no communication. A block developer may not even be aware of the existence of an embedding application or the data within it, and in some scenarios the developers and owners of an embedding application may not be aware of the existence of a block (in the case of dynamic selection and loading at run-time). This is a common occurrence already in technology, whether it be library authors not knowing what projects are built with their work, or developers using libraries without utilising pathways for communication (online forums or otherwise). This is made possible through encoded contracts: function signatures, documentation, REST APIs, etc. These tools are ways of asynchronously, and often autonomously, declaring one side of the communication channel. In such a system of such imperfect information, the standardization of communication mediums is essential to effective function.
+The Block Protocol operates in-between parties that otherwise have limited to no communication. A block developer may not even be aware of the existence of an embedding application or the data within it, and in some scenarios the developers and owners of an embedding application may not be aware of the existence of a block (in the case of dynamic selection and loading at run-time). This is a common occurrence already in technology, whether it be library authors not knowing what projects are built with their work, or developers using libraries without utilizing pathways for communication (online forums or otherwise). This is made possible through encoded contracts: function signatures, documentation, REST APIs, etc. These tools are ways of asynchronously, and often autonomously, declaring one side of the communication channel. In such a system of such imperfect information, the standardization of communication mediums is essential to effective function.
 
 By getting both parties to agree to a prescriptive standard, new technological possibilities become viable. The Block Protocol is an example of this, enabling a new class of applications, ones that are able to dynamically load complex front-end components at run-time which are immediately usable and functional, even if the component was previously unknown to the application.
 
@@ -83,8 +83,8 @@ In the following document we outline an approach to being more specific about th
 
 **embedding applications:**
 
-- are required to do less guess work about what the block is asking for
-- require less user intervention (or hard-coded logic / guesses) to map X to Y
+- are required to do less guesswork about what the block is asking for
+- require less user intervention (or hard-coded logic/guesses) to map X to Y
 
 **blocks:**
 
@@ -92,7 +92,7 @@ In the following document we outline an approach to being more specific about th
 - are able to be more specific about their requirements and more easily express the function of the data
   - This also facilitates more powerful composition as there's greater confidence about other parties' functionalities.
 
-**Data Producers** (whether that be end-users, EA developers, businesses):
+**Data Producers** (whether that be end-users, EA developers, or businesses):
 
 - have a toolkit to better describe the data they're producing and to help them be explicit about semantic meaning
 - benefit from a community-driven description of knowledge, potentially removing barriers of communication between domains
@@ -126,7 +126,7 @@ A **Data Type** describes a space of possible valid _values_. For instance, the 
 A Data Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the Data Type's definition can be accessed (in most cases this will be a URL)
-- a **required** `name`, which should generally be a non-pluralised short description of the Data Type (for example: "Number" not "Numbers")
+- a **required** `name`, which should generally be a non-pluralized short description of the Data Type (for example: "Number" not "Numbers")
 - **optionally** a `description` to further explain the semantic meaning of the Data Type
 - a **required** definition of its possible value
 
@@ -151,7 +151,7 @@ Due to the size of this RFC, creating new data-types has been deemed out-of-scop
 A **Property Type** is a description of a named piece of data, including its possible values. A Property Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the property type's definition can be accessed (in most cases this will be a URL)
-- a **required** `name`, which should generally be a non-pluralised description of the property (for example: "Address" not "Addresses")
+- a **required** `name`, which should generally be a non-pluralized description of the property (for example: "Address" not "Addresses")
 - **optionally** a `description` to further explain the semantic meaning of the property type
 - a **required** definition of its possible values
 
@@ -297,7 +297,7 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 A **Link Type** is a description of a _directional_ relationship between two things. A Link Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the property type's definition can be accessed (in most cases this will be a URL)
-- a **required** `name`, which should be a non-pluralised description of the relationship (for example: "Friend" not "Friends")
+- a **required** `name`, which should be a non-pluralized description of the relationship (for example: "Friend" not "Friends")
 - a **required** `description` to further explain the semantic meaning of the relationship
 - a **possible** `relatedKeywords`, which is a list of terms that are related to the link type
 
@@ -634,7 +634,7 @@ As the `name` of a Property Type is not guaranteed to be globally unique, the re
 
 > 💭 Acknowledgement: This is less ergonomic than the current state of things; this drawback among others, is explored with some possible mitigations in the [Drawbacks](#drawbacks), [Rationale and Alternatives](#rationale-and-alternatives), and [Future Possibilities](future-possibilities) sections
 
-This will have impact on how developers:
+This will have an impact on how developers:
 
 - **access** fields in entities
 - format properties when they **create** entities
@@ -648,7 +648,7 @@ Links will likely continue to be returned in a separate collection alongside ent
 
 #### Creating Links
 
-The Link Functions will be updated to handle Link Types, removing the `path` fields and instead using the URI of the Link Type.
+The Link Functions will be updated to handle Link Types, removing the `path` fields and instead use the URI of the Link Type.
 
 ### Block Schemas
 
@@ -656,7 +656,7 @@ block schemas will need to be updated to be built using the types outlined above
 
 ### Structure-based Queries
 
-Queries on the structure of data (those which do not directly reference an exact Entity Type), such as `AggregateEntities`, `AggregateEntityType` and any future methods the blockProtocol supports, behave somewhat similarly to expressing a type. Requiring combinations of properties, constraints, etc. will need to refer to the respective Property Types, Link Types, etc.
+Queries on the structure of data (those which do not directly reference an exact Entity Type), such as `AggregateEntities`, `AggregateEntityType` and any future methods the Block Protocol supports, behave somewhat similarly to expressing a type. Requiring combinations of properties, constraints, etc. will need to refer to the respective Property Types, Link Types, etc.
 
 ### Link Constraints
 
@@ -664,7 +664,7 @@ This RFC does not currently mention ways of constraining the destination of a Li
 
 ### Interfacing with Types
 
-The largest change (in terms of number of interfaces modified) is unsurprisingly the updates that will need to be made to the Entity Type functions.
+The largest change (in terms of the number of interfaces modified) is unsurprisingly the updates that will need to be made to the Entity Type functions.
 
 - The Type objects will be updated to capture the new structures and references between them
 - New `create`, `get`, `update`, and `delete` methods will need to be made for Property Types, Data Types, and Link Types
@@ -774,9 +774,9 @@ This RFC defines the following primitive top-level Data Types
   }
   ```
 
-### Creating new Data-Types
+### Creating new Data Types
 
-Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
+Due to the size of this RFC, creating new Data Types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
 
 ## Property Types
 
@@ -1150,7 +1150,7 @@ or
 
 ## Link Types
 
-A **Link Type** is a JSON schema which satisfies the following the following JSON meta-schema:
+A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 
 ```json
 {
@@ -1202,7 +1202,7 @@ A **Link Type** is a JSON schema which satisfies the following the following JSO
 
 ## Entity Types
 
-An **Entity Type** is a JSON schema which satisfies the following the following JSON meta-schema:
+An **Entity Type** is a JSON schema that satisfies the following JSON meta-schema:
 
 ```json
 {
@@ -1468,7 +1468,7 @@ Entity Types can also express the types of relationships they have with other th
 
 #### Specifying an Entity Type has out-going Links
 
-The links going _from_ an Entity are described a set of Link Types
+The links going _from_ an Entity are described as a set of Link Types
 
 **Example 1**
 
@@ -2344,7 +2344,7 @@ Link Types do not exist.
 ```json
 {
   // updateLinkType message
-  "propertyTypeId": "Friend of",
+  "linkTypeId": "Friend of",
   "keywords": ["knows"]
 }
 ```
@@ -2363,13 +2363,13 @@ For Entity Types, Property Types, and Link Types, changing anything on the types
 
 ### Implementation Complexity
 
-This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new service-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilise the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph service implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
+This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new service-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilize the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph service implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
 
 It's worth noting that standard JSON schema validators won't natively support the full Type System (due to some of the new keywords that have been created), however they should be able to do partial validation, where prior to this RFC there were occurrences where misusing JSON schema could break the validators entirely.
 
 ### Increased dependency on external parties
 
-A potential negative side-effect of building an open-ecosystem is introducing more dependencies on external parties. Although the magnitude of the impact will depend on the accompanying tooling and implementation that comes about as a result of this RFC, generally speaking there will be an increased reliance on external parties hosting and maintaining types. That said, the Block Protocol is focused around front-end components, and generally speaking there is already a high-reliance on external ecosystems (whether it be npm, etc.), so this is a risk that should be familiar for developers. Some of the [Future possibilities](#future-possibilities) outlined later on would also help mitigate this with potential centralised repositories for types to improve confidence in guarantees and consistency, etc.
+A potential negative side-effect of building an open ecosystem is introducing more dependencies on external parties. Although the magnitude of the impact will depend on the accompanying tooling and implementation that comes about as a result of this RFC, generally speaking there will be an increased reliance on external parties hosting and maintaining types. That said, the Block Protocol is focused around front-end components, and generally speaking there is already a high-reliance on external ecosystems (whether it be npm, etc.), so this is a risk that should be familiar for developers. Some of the [Future possibilities](#future-possibilities) outlined later on would also help mitigate this with potential centralized repositories for types to improve confidence in guarantees and consistency, etc.
 
 ### Ergonomics of manually writing schemas
 
@@ -2379,7 +2379,7 @@ This has the potential to increase the barrier-to-entry, and dissuade people fro
 
 ### Ecosystem lock-in
 
-With some of the potential solutions proposed in [Future Possibilities](#future-possibilities) there will be large benefits to participating within the Block Protocol ecosystem and community. This naturally brings the potential downside of opportunity cost of _not_ participating within the ecosystem.
+With some of the potential solutions proposed in [Future Possibilities](#future-possibilities) there will be large benefits to participating within the Block Protocol ecosystem and community. This naturally brings the potential downside of the opportunity cost of _not_ participating within the ecosystem.
 
 This type system is designed around reusable types, where people can share and benefit from other people's work, isolating development from the community means that types will not end up being reusable and a lot of the value is lost.
 
@@ -2398,7 +2398,7 @@ A more immediately apparent concern is if schemas are versioned, but their use i
 As outlined in the [Main Motivation section](#main-motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
 
 - Complex use-cases (such as those that are able to dynamically load and use a block at run-time)
-- Simple use-cases (such as those that include a handful of blocks in the source-code at build-time).
+- Simple use-cases (such as those that include a handful of blocks in the source code at build-time).
 
 **This RFC is heavily weighted towards facilitating useful, complex use-cases, and explicitly recognises that it likely makes the development experience worse for simpler use-cases.**
 
@@ -2406,22 +2406,22 @@ This decision is guided by the thoughts outlined in the [Main Motivation section
 
 ### Convergence and divergence of consensus
 
-There is an incredibly diverse number of domains in which the Block Protocol could be utilised. It's also important to recognise that the Protocol is designed to be added to _existing_ systems, and when integrated it must be able to interoperate with whatever surrounds it. Due to this, it can't rely on a prescriptive global definition of how data should be structured, as the vast quantity of the data is pre-existing and has been made according to different systems, and it's highly impractical to expect entire data-stores to be restructured.
+There is an incredibly diverse number of domains in which the Block Protocol could be utilized. It's also important to recognize that the Protocol is designed to be added to _existing_ systems, and when integrated it must be able to interoperate with whatever surrounds it. Due to this, it can't rely on a prescriptive global definition of how data should be structured, as the vast quantity of the data is pre-existing and has been made according to different systems, and it's highly impractical to expect entire data-stores to be restructured.
 
 Across the domains, data will vary to the point that it's completely infeasible to define one perfect description of it (an _ontology_), there will simply be too much disagreement about what a certain "thing" looks like, i.e. there will be a lack of consensus. It's also worth mentioning that this is not just due to differences in domains, but also in data-quality, where misconfigured data must still be _able_ to be represented in the system, which is a lot less likely with one global view of the world.
 
-As such, the key identified benefit of this type system is that _continues_ to allow for **partial-consensus**, where different domains can create and utilise different subsets of the wider ecosystem. It allows for **divergence** of definitions of "things" (Bob can define "Person" differently to Alice), but _encourages_ **gradual convergence** through reusability and further standardization.
+As such, the key identified benefit of this type system is that _continues_ to allow for **partial-consensus**, where different domains can create and utilize different subsets of the wider ecosystem. It allows for **divergence** of definitions of "things" (Bob can define "Person" differently to Alice), but _encourages_ **gradual convergence** through reusability and further standardization.
 
 #### Reusability
 
-An issue with the current system is that for each block developed, the devleoper needs to describe its requirements autonomously. They decide what data it needs, and importantly, decide _how to describe that data_. The toolkit they're provided with right now is to embed semantic meaning into the key of the JSON blob. But as shown in the [Main Motivation](#main-motivation), this falls short quickly in the real world as language is imperfect, and words chosen as keys can have synonyms, they can prove ambiguous, etc.
+An issue with the current system is that for each block developed, the developer needs to describe its requirements autonomously. They decide what data it needs, and importantly, decide _how to describe that data_. The toolkit they're provided with right now is to embed semantic meaning into the key of the JSON blob. But as shown in the [Main Motivation](#main-motivation), this falls short quickly in the real world as language is imperfect, and words chosen as keys can have synonyms, they can prove ambiguous, etc.
 
 This is rectified through the following:
 
 - Allow people to describe the individual pieces of data _within_ "things"
 - Make it possible to reuse those descriptions
 
-The system proposed in the RFC creates another vector of communication, the description of the data is no longer _necessarily_ as autonomous, people describing data can benefit from existing descriptions. This gives a route for **convergence** of descriptions, because as a block developer I can _discover_ an existing Property Type for `Timestamp` and reuse it, mitigating some of the risk of instead describing it as "time". This is less one-sided because a producer of data is also able to discover descriptions which they can use to create their data.
+The system proposed in the RFC creates another vector of communication, the description of the data is no longer _necessarily_ as autonomous, people describing data can benefit from existing descriptions. This gives a route for **convergence** of descriptions, because as a block developer I can _discover_ an existing Property Type for `Timestamp` and reuse it, mitigating some of the risks of instead describing it as "time". This is less one-sided because a producer of data is also able to discover descriptions which they can use to create their data.
 
 That's not to say this will be perfect or that it will happen most of the time, but it's a possibility that's opened up by the system, and which future tooling and processes can leverage and guide people towards. This is beneficial for a number of reasons, one of which is that reusability of descriptions leads to emergent standardization.
 
@@ -2441,7 +2441,7 @@ As outlined, the Type System is tailored towards improving complex use cases of 
 
 In the immediate term, having a more rigorous definition of semantic meaning (e.g. what I actually "mean" when I say the "timestamp" of my entity) improves the experience of embedding applications, block developers, and end-users as outlined in the [Motivating implications](#motivating-implications).
 
-In the longer term, blocks can be developed _within_ emergent standards, discovering related descriptions of data, and having greater confidence that they fit the problems well. Users benefit from an ecosystem with less guesswork, and greater specificity. embedding applications have greater potential to implement programmatic inferrence, and have a better specified toolkit to utilise when addressing problems of mapping data.
+In the longer term, blocks can be developed _within_ emergent standards, discovering related descriptions of data, and having greater confidence that they fit the problems well. Users benefit from an ecosystem with less guesswork, and greater specificity. embedding applications have greater potential to implement programmatic inference, and have a better specified toolkit to utilize when addressing problems of mapping data.
 
 #### Simple use-cases
 
@@ -2451,7 +2451,7 @@ A block developer trying to create a block that's specific to their domain for t
 
 ## Specific Decisions
 
-There are a number of very specific design decisions that are also encapsulated within this proposal, it's worth capturing some of the note-worthy ones.
+There are a number of very specific design decisions that are also encapsulated within this proposal, it's worth capturing some of the noteworthy ones.
 
 #### Allowing `oneOf`
 
@@ -2517,7 +2517,7 @@ There isn't a good assumption to make about the type of the first array. As such
 
 The inclusion of the `Object` Data Type is less strongly supported. At the moment it seems like it's easy to include in implementations (as datastores will already need to be able to represent JSON-like structures), so instead the discussion at the moment is around looking for a reason to exclude it.
 
-There's a risk that it could be utilised instead of Property Type objects, which means the inner data won't be accessible through tooling designed around the Type System. However at the moment it seems a convenient inclusion to allow users to prototype and quickly throw in semi-structured data as black boxes, later on transitioning to Data Types. As the type is very constrained in the current proposal, with it not being possible to add further JSON schema keywords, etc. the risk that users will misuse it seems low.
+There's a risk that it could be utilized instead of Property Type objects, which means the inner data won't be accessible through tooling designed around the Type System. However at the moment it seems a convenient inclusion to allow users to prototype and quickly throw in semi-structured data as black boxes, later on transitioning to Data Types. As the type is very constrained in the current proposal, with it not being possible to add further JSON schema keywords, etc. the risk that users will misuse it seems low.
 
 # Prior art
 
@@ -2554,7 +2554,7 @@ As mentioned in a few sections, this design basically defines a way for communit
 
 [future-possibilities]: #future-possibilities
 
-This RFC establishes components which are quite fundamental. As such, there is a lot of potential work that can be made to improve ergonomics, functionality, etc.
+This RFC establishes components that are quite fundamental. As such, there is a lot of potential work that can be made to improve ergonomics, functionality, etc.
 
 ## Constraining possible destinations of Links
 
@@ -2568,12 +2568,12 @@ In this RFC Data Types are limited to a set of primitive ones. There's potential
 
 Reusability has been mentioned as a large benefit of the Type System. These benefits will be limited if types aren't easily discoverable. A potential solution to this would be establishing a standard for a Type Repository. This standard could potentially be written to work like Linux (or npm, pip, etc.) package repositories.
 
-It should therefore be possible to allow for a decentralised system, while also providing centralised ecosystem (or multiple) for those who wish to benefit from it, likely having a blockprotocol.org Type Repository.
+It should therefore be possible to allow for a decentralized system, while also providing centralized ecosystem (or multiple) for those who wish to benefit from it, likely having a blockprotocol.org Type Repository.
 
 Having repositories should make it possible to build tooling around type discoverability, whether it be autocomplete in Schema Editors, or embedding applications being able to create and modify types within a repository.
 
-This is also made a lot easier as the proposed Type System has provisioned that `$id`s of types are unique URIs, which should make it easier to allow for a decentralised system for hosting them, while also enabling the creation of centralised ones for people who want to benefit from a closer-knit system.
+This is also made a lot easier as the proposed Type System has provisioned that `$id`s of types are unique URIs, which should make it easier to allow for a decentralized system for hosting them, while also enabling the creation of centralized ones for people who want to benefit from a closer-knit system.
 
 ## Supplementary tooling
 
-As hinted to in the section above, there's a suite of supplementary tooling that could be created to mitigate some of the negative impact on ergonomics that this RFC creates. These could include Schema Editors designed for the Block Protocol Type System, IDE plugins (that potentially consume from Type Repositories) to aid in writing the schemas.
+As hinted at in the section above, there's a suite of supplementary tooling that could be created to mitigate some of the negative impact on ergonomics that this RFC creates. These could include Schema Editors designed for the Block Protocol Type System, IDE plugins (that potentially consume from Type Repositories) to aid in writing the schemas.
