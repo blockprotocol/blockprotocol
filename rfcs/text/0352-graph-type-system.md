@@ -314,7 +314,7 @@ There could be a `Submitted By` link type with a `description` of "Suggested, pr
 An Entity Type is a description of a particular "thing", made up of identifiable pieces of data. An Entity Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the Entity Type's definition can be accessed (in most cases this will be a URL)
-- a **required** `name`, which should generally be a non-pluralised description of the thing
+- a **required** `name`, which should generally be a non-pluralized description of the thing
 - **optionally** a `description` to further explain the semantic meaning of the Entity Type
 - a **required** definition of its possible values.
 
@@ -757,7 +757,7 @@ This RFC defines the following primitive top-level Data Types
 
 Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
 
-## Property Types
+<h2 id="reference-level-property-types">Property Types</h2>
 
 A **Property Type** is a JSON schema that satisfies the following JSON meta-schema:
 
@@ -1167,7 +1167,7 @@ A **Link Type** is a JSON schema which satisfies the following the following JSO
 }
 ```
 
-## Entity Types
+<h2 id="reference-level-entity-types">Entity Types</h2>
 
 An **Entity Type** is a JSON schema which satisfies the following the following JSON meta-schema:
 
@@ -2028,9 +2028,161 @@ Structure-based Queries, which in the current system are any methods that use `L
 
 The idea of having structure-based queries in the type system will be explored in detail in an upcoming Structure-based Query RFC.
 
-### Link Constraints (to be changed)
-
 ### Interfacing with Types
+
+In the current system, we are already able to Create, Read, Update and Delete (CRUD) Entity Types.
+With the proposed system, this needs to be expanded such that we can CRUD Property Types as well.
+
+The current system also supplies a way to "aggregate" Entity Types, which is a filtering operation on all Entity Types within the embedding application. On a side note, "aggregation" is a place where Structure-based Queries could be used.
+
+**Type-related CRUD operations in the current system:**
+
+```jsonc
+createEntityType
+updateEntityType
+deleteEntityType
+getEntityType
+aggregateEntityTypes
+```
+
+**Type-related CRUD operations in the proposed system:**
+
+```
+createPropertyType
+updatePropertyType
+deletePropertyType
+getPropertyType
+aggregatePropertyTypes
+
+createEntityType
+updateEntityType
+deleteEntityType
+getEntityType
+aggregateEntityTypes
+```
+
+The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types must be added.
+
+In the proposed system, Entity Types can be created and updated with the same semantics but have to conform to the [Entity Type](#reference-level-entity-types) schema instead of arbitrary JSON schemas.
+Property Types will be defined similarly to Entity Types in the proposed system, conforming to the [Property Type](#reference-level-property-types) schemas instead.
+
+**Entity Type Create and Update messages in the current system:**
+
+```jsonc
+{
+  // createEntityType message
+  "schema": {
+    "type": "object",
+    "name": "Person",
+    "properties": {
+      "name": { "type": "string" },
+      "email": { "type": "string" },
+      "phoneNumber": { "type": "string" }
+    }
+  }
+}
+```
+
+```jsonc
+{
+  // updateEntityType message
+  "entityTypeId": "Person",
+  "schema": {
+    "properties": {
+      "birthDate": { "type": "string", "format": "date" }
+    }
+  }
+}
+```
+
+**Entity Type Create and Update messages in the proposed system:**
+
+```jsonc
+{
+  // createEntityType message
+  "schema": {
+    "type": "object",
+    "kind": "entityType",
+    "name": "Person",
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": {
+        "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+      },
+      "https://blockprotocol.org/types/@alice/property-type/email": {
+        "$ref": "https://blockprotocol.org/types/@alice/property-type/email"
+      },
+      "https://blockprotocol.org/types/@alice/property-type/phone-number": {
+        "$ref": "https://blockprotocol.org/types/@alice/property-type/phone-number"
+      }
+    }
+  }
+}
+```
+
+```jsonc
+{
+  // updateEntityType message
+  "entityTypeId": "Person",
+  "schema": {
+    // The properties here are partially applied to the original Entity Type.
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/birth-date": {
+        "$ref": "https://blockprotocol.org/types/@alice/property-type/birth-date"
+      }
+    }
+  }
+}
+```
+
+The update messages of both the current and new systems make use of partial schemas, merging the schema given in the message contents with the existing Entity Type. This may or may not be the desired semantics of updating, and could lead to undesired behavior. In that case, the semantics can be changed to treat updates as a complete replacement.
+
+> 💡 The `entityTypeId` here refers to the unique name of the Entity Type. It could make use of the Entity Type's canonical URI instead.
+
+**Property Type Create and Update messages in the current system:**
+
+Property Types do not exist.
+
+**Property Type Create and Update messages in the proposed system:**
+
+```jsonc
+{
+  // createPropertyType message
+  "schema": {
+    "kind": "propertyType",
+    "name": "User ID",
+    "oneOf": [
+      {
+        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text"
+      }
+    ]
+  }
+}
+```
+
+```jsonc
+{
+  // updatePropertyType message
+  "propertyTypeId": "User ID",
+  "schema": {
+    "oneOf": [
+      {
+        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text"
+      },
+      {
+        "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+      }
+    ]
+  }
+}
+```
+
+For Property Types, having partial update semantics could lead to a lot of confusion because of Property TYpes with top-level `oneOf`. Here replacing the Property Type in its entirety is to be preferred.
+
+For both Entity Types and Property Types, changing anything on the types could be a breaking change. We have not discussed this in this RFC yet, but there're a lot of considerations to be put into the semantics of updating/removing existing types. For the sake of simplicity, these example messages show how the Block Protocol in its current shape could be transformed to make use of this new Type System but in reality, the semantics of working with the types will need to be handled differently.
+
+> 💡 Currently, "schemas" can be defined from the [blockprotocol.org](https://blockprotocol.org/) website. With the proposed system's canonical URIs, types need to be globally identifiable and usable from Embedding Applications. Property Types and Entity Types in the examples are namespaces under the `@alice` user, but we've not specified how these types are defined. This is left out-of-scope for the purposes of this RFC.
+
+### Link Constraints (to be changed)
 
 # Drawbacks
 
