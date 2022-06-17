@@ -757,7 +757,7 @@ This RFC defines the following primitive top-level Data Types
 
 Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.:
 
-<h2 id="reference-level-property-types">Property Types</h2>
+## Property Types
 
 A **Property Type** is a JSON schema that satisfies the following JSON meta-schema:
 
@@ -1162,7 +1162,7 @@ A **Link Type** is a JSON schema which satisfies the following the following JSO
 }
 ```
 
-<h2 id="reference-level-entity-types">Entity Types</h2>
+## Entity Types
 
 An **Entity Type** is a JSON schema which satisfies the following the following JSON meta-schema:
 
@@ -2040,34 +2040,30 @@ The current system also supplies a way to "aggregate" Entity Types, which is a f
 
 **Type-related CRUD operations in the current system:**
 
-```json
-createEntityType
-updateEntityType
-deleteEntityType
-getEntityType
-aggregateEntityTypes
-```
+- `createEntityType`
+- `updateEntityType`
+- `deleteEntityType`
+- `getEntityType`
+- `aggregateEntityTypes`
 
 **Type-related CRUD operations in the proposed system:**
 
-```
-createPropertyType
-updatePropertyType
-deletePropertyType
-getPropertyType
-aggregatePropertyTypes
+- `createPropertyType`
+- `updatePropertyType`
+- `deletePropertyType`
+- `getPropertyType`
+- `aggregatePropertyTypes`
 
-createEntityType
-updateEntityType
-deleteEntityType
-getEntityType
-aggregateEntityTypes
-```
+- `createEntityType`
+- `updateEntityType`
+- `deleteEntityType`
+- `getEntityType`
+- `aggregateEntityTypes`
 
 The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types must be added.
 
-In the proposed system, Entity Types can be created and updated with the same semantics but have to conform to the [Entity Type](#reference-level-entity-types) schema instead of arbitrary JSON schemas.
-Property Types will be defined similarly to Entity Types in the proposed system, conforming to the [Property Type](#reference-level-property-types) schemas instead.
+In the proposed system, Entity Types can be created and updated with the same semantics but have to conform to the [Entity Type](#entity-types-1) schema instead of arbitrary JSON schemas.
+Property Types will be defined similarly to Entity Types in the proposed system, conforming to the [Property Type](#property-types-1) schemas instead.
 
 **Entity Type Create and Update messages in the current system:**
 
@@ -2184,8 +2180,6 @@ For Property Types, having partial update semantics could lead to a lot of confu
 For both Entity Types and Property Types, changing anything on the types could be a breaking change. We have not discussed this in this RFC yet, but there're a lot of considerations to be put into the semantics of updating/removing existing types. For the sake of simplicity, these example messages show how the Block Protocol in its current shape could be transformed to make use of this new Type System but in reality, the semantics of working with the types will need to be handled differently.
 
 > 💡 Currently, "schemas" can be defined from the [blockprotocol.org](https://blockprotocol.org/) website. With the proposed system's canonical URIs, types need to be globally identifiable and usable from Embedding Applications. Property Types and Entity Types in the examples are namespaces under the `@alice` user, but we've not specified how these types are defined. This is left out-of-scope for the purposes of this RFC.
-
-### Link Constraints (to be changed)
 
 # Drawbacks
 
