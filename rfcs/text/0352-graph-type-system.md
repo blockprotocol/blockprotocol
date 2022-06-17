@@ -2179,7 +2179,7 @@ The idea of having structure-based queries in the type system will be explored i
 ### Interfacing with Types
 
 In the current system, we are already able to Create, Read, Update and Delete (CRUD) Entity Types.
-With the proposed system, this needs to be expanded such that we can CRUD Property Types as well.
+With the proposed system, this needs to be expanded such that we can CRUD Property Types and Link Types as well. User-defined Data Types are not a part of this proposal.
 
 The current system also supplies a way to "aggregate" Entity Types, which is a filtering operation on all Entity Types within the embedding application. On a side note, "aggregation" is a place where Structure-based Queries could be used.
 
@@ -2205,10 +2205,17 @@ The current system also supplies a way to "aggregate" Entity Types, which is a f
 - `getEntityType`
 - `aggregateEntityTypes`
 
-The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types must be added.
+- `createLinkType`
+- `updateLinkType`
+- `deleteLinkType`
+- `getLinkType`
+- `aggregateLinkTypes`
+
+The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types and Link Types must be added.
 
 In the proposed system, Entity Types can be created and updated with the same semantics but have to conform to the [Entity Type](#entity-types-1) schema instead of arbitrary JSON schemas.
 Property Types will be defined similarly to Entity Types in the proposed system, conforming to the [Property Type](#property-types-1) schemas instead.
+Link Types do not contain further structural data, which make them semantically simpler than Entity Types and Property Types.
 
 **Entity Type Create and Update messages in the current system:**
 
@@ -2320,9 +2327,36 @@ Property Types do not exist.
 }
 ```
 
-For Property Types, having partial update semantics could lead to a lot of confusion because of Property TYpes with top-level `oneOf`. Here replacing the Property Type in its entirety is to be preferred.
+**Link Type Create and Update messages in the current system:**
 
-For both Entity Types and Property Types, changing anything on the types could be a breaking change. We have not discussed this in this RFC yet, but there're a lot of considerations to be put into the semantics of updating/removing existing types. For the sake of simplicity, these example messages show how the Block Protocol in its current shape could be transformed to make use of this new Type System but in reality, the semantics of working with the types will need to be handled differently.
+Link Types do not exist.
+
+**Link Type Create and Update messages in the proposed system:**
+
+```json
+{
+  // createLinkType message
+  "schema": {
+    "kind": "LinkType",
+    "name": "Friend of",
+    "description": "Being friends with"
+  }
+}
+```
+
+```json
+{
+  // updateLinkType message
+  "propertyTypeId": "Friend of",
+  "keywords": ["knows"]
+}
+```
+
+---
+
+For Property Types, having partial update semantics could lead to a lot of confusion because of Property Types with top-level `oneOf`. Here replacing the Property Type in its entirety is to be preferred.
+
+For Entity Types, Property Types, and Link Types, changing anything on the types could be a breaking change. We have not discussed this in this RFC yet, but there're a lot of considerations to be put into the semantics of updating/removing existing types. For the sake of simplicity, these example messages show how the Block Protocol in its current shape could be transformed to make use of this new Type System but in reality, the semantics of working with the types will need to be handled differently.
 
 > 💡 Currently, "schemas" can be defined from the [blockprotocol.org](https://blockprotocol.org/) website. With the proposed system's canonical URIs, types need to be globally identifiable and usable from Embedding Applications. Property Types and Entity Types in the examples are namespaces under the `@alice` user, but we've not specified how these types are defined. This is left out-of-scope for the purposes of this RFC.
 
