@@ -59,7 +59,7 @@ export const ComposableInterfaces = () => {
           }}
         >
           This means you can give users access to a wide variety of blocks – far
-          more than you could build yourself. Empower users build their own
+          more than you could build yourself. Empower users to build their own
           modular interfaces and solutions to complex problems.
         </Typography>
       </Box>
