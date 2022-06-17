@@ -1889,12 +1889,9 @@ the `kind` can as explained in the Guide-Level explanation only take on values t
 
 The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
 
-# <<<<<<< Updated upstream
-
 As mentioned in the Guide-Level explanation, `description` for Link Types add semantic meaning to a link, which could be encapsulated in a vocabulary specification for the meta schemas.
 
-> > > > > > > Stashed changes
-> > > > > > > For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
+For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
 
 ## Using the Types in the Block Protocol
 
