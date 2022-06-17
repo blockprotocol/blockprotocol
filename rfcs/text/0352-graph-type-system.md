@@ -768,7 +768,8 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
   "properties": {
     "kind": { "const": "propertyType" },
     "$id": {
-      "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+      "type": "string",
+      "format": "uri"
     },
     "name": { "type": "string" },
     "description": { "type": "string" },
@@ -816,7 +817,8 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
           "type": "object",
           "propertyNames": {
             "$comment": "Property names must be a valid URI to a property-type",
-            "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+            "type": "string",
+            "format": "uri"
           },
           "patternProperties": {
             ".*": {
@@ -848,7 +850,8 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
       "properties": {
         "$ref": {
           "$comment": "Property Object values must be defined through references to the same valid URI to a property-type",
-          "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+          "type": "string",
+          "format": "uri"
         }
       },
       "required": ["$ref"]
@@ -858,7 +861,8 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
       "additionalProperties": false,
       "properties": {
         "$ref": {
-          "$ref": "http://blockprotocol.org/type-system/schema/data-type-uri"
+          "type": "string",
+          "format": "uri"
         }
       },
       "required": ["$ref"]
@@ -1124,7 +1128,8 @@ A **Link Type** is a JSON schema which satisfies the following the following JSO
       "const": "linkType"
     },
     "$id": {
-      "$ref": "http://blockprotocol.org/type-system/schema/link-type-uri"
+      "type": "string",
+      "format": "uri"
     },
     "name": { "type": "string" },
     "description": { "type": "string" },
@@ -1175,7 +1180,8 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
       "const": "entityType"
     },
     "$id": {
-      "$ref": "http://blockprotocol.org/type-system/schema/entity-type-uri"
+      "type": "string",
+      "format": "uri"
     },
     "name": { "type": "string" },
     "description": { "type": "string" },
@@ -1193,7 +1199,8 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
       "type": "object",
       "propertyNames": {
         "$comment": "Property names must be a valid URI to a link-type",
-        "$ref": "http://blockprotocol.org/type-system/schema/link-type-uri"
+        "type": "string",
+        "format": "uri"
       },
       "patternProperties": {
         ".*": {
@@ -1227,7 +1234,8 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
           "type": "object",
           "propertyNames": {
             "$comment": "Property names must be a valid URI to a property-type",
-            "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+            "type": "string",
+            "format": "uri"
           },
           "patternProperties": {
             ".*": {
@@ -1264,7 +1272,8 @@ An **Entity Type** is a JSON schema which satisfies the following the following 
       "properties": {
         "$ref": {
           "$comment": "Property Object values must be defined through references to the same valid URI to a property-type",
-          "$ref": "http://blockprotocol.org/type-system/schema/property-type-uri"
+          "type": "string",
+          "format": "uri"
         }
       },
       "required": ["$ref"],
@@ -2370,7 +2379,8 @@ As mentioned in a few sections, this design basically defines a way for communit
 1.  Do we permit spaces in type names
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
     As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`
-1.  Do we want to allow types to define a plural name that can be used when they're set to "type": "array"?
+1.  Should we further constrain allowed URIs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema
+1.  Do we want to allow types to define a plural name that can be used when they're set to `"type": "array"`?
 
 # Future possibilities
 
