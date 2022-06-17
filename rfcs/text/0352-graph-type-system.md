@@ -190,6 +190,8 @@ The `Age` property type could define its value as being an instance of the `Numb
 A Property Type can also have an object made up of other properties as its value. These properties are defined by using Property Types, where when using one it's also possible to define:
 
 - that there is a list of properties
+  - that the list has a minimum amount of values
+  - that the list has a maximum amount of values
 - that a property is **required**
 
 **Example 1**
@@ -267,7 +269,7 @@ The `User ID` Property Type could define its value as being _either_ an instance
 
 **Example 2**
 
-The `Contrived Property` Property Type could define its value as being _either_ an instance of the `Number` Data Type, _or_ an object which has a `Foo` property
+The `Contrived Property` Property Type could define its value as being _either_ an instance of the `Number` Data Type, _or_ an object which has a list with a maximum of 4 `Foo` property values
 
 - Sample data when used in (simplified view of) an Entity
 
@@ -284,7 +286,7 @@ The `Contrived Property` Property Type could define its value as being _either_ 
   ```json
   {
     "contrivedProperty": {
-      "foo": "something here"
+      "foo": ["one", "two"]
     },
     ...
   }
@@ -367,7 +369,11 @@ An Entity Type is a description of a particular "thing", made up of identifiable
     }
     ```
 
-- **Specifying there is a list of properties** - The entity type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type
+- **Specifying there is a list of properties** - The entity type can also define whether its properties are lists, where
+
+  - the elements of the list are described by a Property Type
+  - there is an optionally specified _maximum_ amount of items in the list
+  - there is an optionally specified _minimum_ amount of items in the list
 
   **Example 1**
   The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
@@ -929,10 +935,12 @@ The `User ID` property type could define its value as being _either_ an instance
 
 #### Objects
 
-The value of a Property Type can also be an object which is itself defined through Property Types which can additionally be marked as:
+A Property Type can also have an object made up of other properties as its value. These properties are defined by using Property Types, where when using one it's also possible to define:
 
-- being an array
-- being required
+- that there is a list of properties
+  - that the list has a minimum amount of values
+  - that the list has a maximum amount of values
+- that a property is **required**
 
 The key of the property value is the Property Type URI, as shown in the following examples.
 
@@ -977,11 +985,17 @@ The `Interests` Property Type could define its value as being an object which ha
     {
       "type": "object",
       "properties": {
-        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film": { "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film" },
-        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song": { "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song" }
+        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film": {
+          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-film"
+        },
+        "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song": {
+          "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song"
+        },
         "https://blockprotocol.org/types/@blockprotocol/property-type/hobby": {
           "type": "array",
-          "items": { "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song" }
+          "items": {
+            "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song"
+          }
         }
       }
     }
@@ -1071,7 +1085,7 @@ or
 
 **Example 2**
 
-The `Contrived Property` Property Type could define its value as being _either_ an instance of the `Number` Data Type, _or_ an object which has a `Foo` property.
+The `Contrived Property` Property Type could define its value as being _either_ an instance of the `Number` Data Type, _or_ an object which has a list with a maximum of 4 `Foo` property values
 
 ```json
 {
@@ -1086,7 +1100,11 @@ The `Contrived Property` Property Type could define its value as being _either_ 
       "type": "object",
       "properties": {
         "https://blockprotocol.org/types/@blockprotocol/data-type/number": {
-          "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+          "type": "array",
+          "items": {
+            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+          },
+          "maxItems": 4
         }
       }
     }
@@ -1297,8 +1315,9 @@ The `Book` Entity Type could contain the Property Types `Name`, a `Published On`
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "type": "object",
   "name": "Book",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
@@ -1327,20 +1346,23 @@ This would accept Entity instances with the following shape
 
 #### Specifying there is a list of properties
 
-The entity type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type
+The entity type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type, optionally paired with constraints on the _minimum_ and _maximum_ amount of items in the lists
 
 **Example 1**
 
 The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
 
+Assuming that
+
 - The `Model`, `Make`, `Spec`, and `Year` Property Types all have values that are instances of the `Text` Data Type
-- The `Brake Horsepower` Property Type has a value that is an instance of the `Number` Data Type
+- The `Brake Horsepower` Property Type has values that is an instance of the `Number` Data Type
 - The `Extra Trim` Property Type is a list where the values are instances of the `Text` Data Type
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/car",
+  "type": "object",
   "name": "Car",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/make": {
@@ -1383,6 +1405,48 @@ This would accept Entity instances with the following shape
 }
 ```
 
+**Example 2**
+
+The `Product` Entity Type could contain a **required** list of values of the `Tag` Property Type where there's at least 1 and up to 5.
+
+Assuming that
+
+- The `Tag` Property Type has values that are instances of the `Text` Data Type
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/product",
+  "type": "object",
+  "name": "Product",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/tag": {
+      "type": "array",
+      "items": {
+        "$ref": "https://blockprotocol.org/types/@alice/property-type/tag"
+      },
+      "minItems": 1,
+      "maxItems": 5
+    },
+    ...
+  },
+  "required": ["https://blockprotocol.org/types/@alice/property-type/tag"]
+}
+```
+
+This would accept Entity instances with the following shape
+
+```json
+{
+  "https://blockprotocol.org/types/@alice/property-type/tag": [
+    "Clothing",
+    "Summer",
+    "Leisurewear"
+  ],
+  ...
+}
+```
+
 ### Defining Relationships between Entities
 
 Entity Types can also express the types of relationships they have with other things.
@@ -1399,8 +1463,9 @@ The `Name`, `Published On`, and `Blurb` Property Types all have values that are 
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "type": "object",
   "name": "Book",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
@@ -1446,8 +1511,9 @@ The `UK Address` Entity Type could contain Property Types `address-line-1`, `pos
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/uk-address",
+  "type": "object",
   "name": "UK Address",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/address-line-1": {
@@ -1472,8 +1538,9 @@ The `Organisation` Entity Type could contain the Property Type `Name`
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/organisation",
+  "type": "object",
   "name": "Organisation",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
@@ -1487,8 +1554,9 @@ The `Building` Entity Type could contain a `Located At` link, and a `Tenant` lin
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/building",
+  "type": "object",
   "name": "Bulding",
   "properties": {},
   "links": {
@@ -1535,8 +1603,9 @@ The `Name`, `Published On`, and `Blurb` Property Types all have values that are 
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
+  "type": "object",
   "name": "Book",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
@@ -1589,8 +1658,9 @@ The `Person` Entity Type could contain some Property Types, and multiple `Friend
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/person",
+  "type": "object",
   "name": "Person",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
@@ -1637,8 +1707,9 @@ The `Playlist` Entity Type could contain some Property Types, and an _ordered_ l
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/playlist",
+  "type": "object",
   "name": "Playlist",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
@@ -1658,9 +1729,10 @@ The `Song` Entity Type could contain some Property Types.
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
-  "name": "Playlist",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/Song",
+  "type": "object",
+  "name": "Song",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1703,8 +1775,9 @@ The `Page` Entity Type could contain some Property Types, a `Written By` link, a
 
 ```json
 {
-  "type": "object",
   "kind": "entityType",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/page",
+  "type": "object",
   "name": "Page",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/text": {
@@ -1786,7 +1859,6 @@ A key change for allowing the proposed type system to work is moving away from a
 ```json
 {
   "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 111,
-
   "https://blockprotocol.org/types/@alice/property-type/name": "Arthur Philip Dent",
   "https://blockprotocol.org/types/@alice/property-type/age": 30,
   "https://blockprotocol.org/types/@alice/property-type/planet-of-origin": "Earth",
