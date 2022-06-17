@@ -26,6 +26,7 @@ import { AccountDropdown } from "./navbar/account-dropdown";
 import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
 import { MobileNavItems } from "./navbar/mobile-nav-items";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./navbar/util";
+import { generatePathWithoutParams } from "./shared";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -42,6 +43,8 @@ const findCrumbs = (params: {
   parentHref?: string;
 }): (SiteMapPage | SiteMapPageSection)[] | null => {
   const { parents, item, asPath, parentHref } = params;
+
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   for (const section of itemIsPage(item) ? item.sections : item.subSections) {
     const crumbs = findCrumbs({
@@ -72,7 +75,10 @@ const findCrumbs = (params: {
 
   const href = itemIsPage(item) ? item.href : `${parentHref}#${item.anchor}`;
 
-  if (asPath === href || (itemIsPage(item) && asPath === `${href}#`)) {
+  if (
+    pathWithoutParams === href ||
+    (itemIsPage(item) && pathWithoutParams === `${href}#`)
+  ) {
     return [...(parents || []), item];
   }
 
@@ -210,7 +216,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
 
-  const isHomePage = asPath === "/";
+  const isHomePage = generatePathWithoutParams(asPath) === "/";
   const isDocs = asPath.startsWith("/docs");
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
