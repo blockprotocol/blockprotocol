@@ -1930,7 +1930,7 @@ The indices of ordered links are transparent to the users, and implicitly given 
 
 **An example of an ordered `linkGroup` instance in the proposed system:**
 
-```jsonc
+```json
 {
   // A list of ordered links
   "sourceEntityId": 111,
@@ -1965,7 +1965,7 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
 
 **An example of a Block Schema in the current system:**
 
-```jsonc
+```json
 {
   "type": "object",
   "name": "Person Card",
@@ -1989,7 +1989,7 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
 
 **An example of a Block Schema in the proposed system:**
 
-```jsonc
+```json
 {
   "type": "object",
   "kind": "entityType",
@@ -2040,7 +2040,7 @@ The current system also supplies a way to "aggregate" Entity Types, which is a f
 
 **Type-related CRUD operations in the current system:**
 
-```jsonc
+```json
 createEntityType
 updateEntityType
 deleteEntityType
@@ -2071,7 +2071,7 @@ Property Types will be defined similarly to Entity Types in the proposed system,
 
 **Entity Type Create and Update messages in the current system:**
 
-```jsonc
+```json
 {
   // createEntityType message
   "schema": {
@@ -2086,7 +2086,7 @@ Property Types will be defined similarly to Entity Types in the proposed system,
 }
 ```
 
-```jsonc
+```json
 {
   // updateEntityType message
   "entityTypeId": "Person",
@@ -2100,7 +2100,7 @@ Property Types will be defined similarly to Entity Types in the proposed system,
 
 **Entity Type Create and Update messages in the proposed system:**
 
-```jsonc
+```json
 {
   // createEntityType message
   "schema": {
@@ -2122,7 +2122,7 @@ Property Types will be defined similarly to Entity Types in the proposed system,
 }
 ```
 
-```jsonc
+```json
 {
   // updateEntityType message
   "entityTypeId": "Person",
@@ -2147,7 +2147,7 @@ Property Types do not exist.
 
 **Property Type Create and Update messages in the proposed system:**
 
-```jsonc
+```json
 {
   // createPropertyType message
   "schema": {
@@ -2162,7 +2162,7 @@ Property Types do not exist.
 }
 ```
 
-```jsonc
+```json
 {
   // updatePropertyType message
   "propertyTypeId": "User ID",
