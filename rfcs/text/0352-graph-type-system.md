@@ -1749,13 +1749,13 @@ This would accept Entity instances with the following shape
 
 ## Using the Types in the Block Protocol
 
-Using the proposed type system for Block Protocol imposes changes on the Graph Service and how block Schemas are defined.
+Using the proposed type system for Block Protocol imposes changes on the Graph Service and how Block Schemas are defined.
 
 The Graph Service is currently specified as [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json).
 
 ### Interfacing with properties on Entities
 
-A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties which use simple keys will now have to point at _Property Type URIs_.
+A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URIs_.
 
 **An example of an entity instance in the current system:**
 
@@ -1792,7 +1792,7 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 **For block authors** this impacts
 
-- how block Schemas are defiend
+- how Block Schemas are defined
 - reusability of properties (the need for some kind of type discovery)
 
 > 💡 Notice that `entityId`s are replaced by a Property Type URI that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
@@ -1801,7 +1801,7 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 #### Receiving Links and Linked Entities
 
-Link groups and Linked entities in the Graph Service are currently supplied outside the entity as separate objects. This behaviour will stay the same, but the objects received will be of a different shape.
+Link groups and Linked entities in the Graph Service are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
 
 **An example of a `linkGroup` instance in the current system:**
 
@@ -1894,9 +1894,9 @@ Any link will use Link Type URIs instead of a `path`.
 
 ### Ordering of links
 
-Links in the proposed system has the notion of cardinality. A link can be one-to-one and one-to-many. The "many" cardinality can further be constrained and set to be ordered or unordered.
+Links in the proposed system have the notion of cardinality. A link can be one-to-one or one-to-many. The "many" cardinality can further be constrained and set to be ordered or unordered.
 
-Links can be ordered in the current system, and the behaviour will stay mostly the same in the proposed system
+Links can be ordered in the current system, and the behavior will stay mostly the same in the proposed system
 
 **An example of an _ordered_ `createLink` instance in the current system:**
 
@@ -1920,10 +1920,10 @@ Links can be ordered in the current system, and the behaviour will stay mostly t
 }
 ```
 
-The link cardinality specified in source Entity Types dictate how `createLink` requests will be perceived.
+The link cardinality specified in source Entity Types dictates how `createLink` requests will be perceived.
 If, for example, a block issues the above `createLink` request on an Entity that through its Entity Type does _not_ allow multiple links, setting an `index` on a `createLink` request would be invalid or unnecessary.
 
-The indices of ordered links are transparent to the users, and implicitly given by the order that appear in the `links` array.
+The indices of ordered links are transparent to the users, and implicitly given by the order that they appear in the `links` array.
 
 **An example of an ordered `linkGroup` instance in the proposed system:**
 
@@ -1955,9 +1955,76 @@ The indices of ordered links are transparent to the users, and implicitly given 
 
 ### Block Schemas
 
+Block Schemas in the Block Protocol describe the shape of their own properties.
+These properties should be stored within the same type system as the one that can be queried through the Graph Service.
+
+In the proposed system, Block Schemas are analogous to Entity Types. A Block Schema would need to be described in terms of Property Types. Links in Block Schemas in the proposed system must be explicit.
+
+**An example of a Block Schema in the current system:**
+
+```jsonc
+{
+  "type": "object",
+  "name": "Person Card",
+  "properties": {
+    "name": { "type": "string" },
+    "email": { "type": "string" },
+    // "link" here is an URL for ther person's website for example.
+    "link": { "type": "string", "format": "uri" },
+    "avatar": { "type": "string", "format": "uri" },
+    "employer": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "position": { "type": "string" }
+      },
+      "required": ["name", "position"]
+    }
+  }
+}
+```
+
+**An example of a Block Schema in the proposed system:**
+
+```jsonc
+{
+  "type": "object",
+  "kind": "entityType",
+  "name": "Person Card",
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/email": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/email"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/website-url": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/website-url"
+    },
+    "https://blockprotocol.org/types/@alice/property-type/avatar-image": {
+      "$ref": "https://blockprotocol.org/types/@alice/property-type/avatar-image"
+    }
+  },
+  "links": {
+    // Employer
+    "https://blockprotocol.org/types/@alice/property-type/company": {}
+  }
+}
+```
+
+> 💡 As the syntax and validations of Block Schemas are closely related to Entity Types, they have the same `kind` for now. We would likely have a distinct `"blockSchema"` kind to make the distinction clear and to allow the two kinds of schemas to diverge.
+
+One clear difference in the new system is that properties are no longer named arbitrarily.
+Every Block Schema property must be a Property Type URI, which means semantic meaning is attached to every key.
+
+This, as mentioned previously, allows for a greater level of confidence that data passed to blocks is correct and useable as there will be less guesswork for Embedding Applications.
+
+For any Embedding Application that loads a Block Schema defined with the proposed system, it will be clear what _exact_ Property Types and Links to look for when finding applicable Entity Types that satisfy the Block Schema.
+In the case of the Property Types not existing in the Embedding Application, the URIs, as they are canonical, can be used to fetch definitions.
+
 ### Structure-based Queries
 
-Structure-based Queries, which in the current system are any methods that use `LinkedAggregationOperation`, will have to change to refer to the respective `Property Types` and `Link Types` they must structrually match against.
+Structure-based Queries, which in the current system are any methods that use `LinkedAggregationOperation`, will have to change to refer to the respective `Property Types` and `Link Types` they must structurally match against.
 
 The idea of having structure-based queries in the type system will be explored in detail in an upcoming Structure-based Query RFC.
 
