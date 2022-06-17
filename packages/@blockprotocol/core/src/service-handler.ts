@@ -10,7 +10,7 @@ import { GenericMessageCallback, MessageContents, MessageData } from "./types";
  */
 export abstract class ServiceHandler {
   /** the CoreHandler this service is registered with, for passing messages via */
-  private readonly coreHandler: CoreHandler;
+  readonly coreHandler: CoreHandler;
   /** the element messages are sent via */
   private readonly element: HTMLElement;
 
@@ -20,7 +20,7 @@ export abstract class ServiceHandler {
   /** the name of the service */
   readonly serviceName: string;
 
-  private destroyed?: boolean;
+  destroyed?: boolean;
 
   /**
    * a method individual embedder services handlers implement to provide the messages they send on initialization,

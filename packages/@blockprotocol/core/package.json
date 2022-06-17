@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/core",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Implementation of the Block Protocol Core specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",

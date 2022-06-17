@@ -122,6 +122,8 @@ export abstract class CoreHandler {
     this.attachEventListeners();
   }
 
+  abstract initialize(): void;
+
   private eventListener = (event: Event) => {
     this.processReceivedMessage(event as CustomEvent);
   };
@@ -178,7 +180,6 @@ export abstract class CoreHandler {
    * Sends a message by dispatching a CustomEvent containing the message details.
    * If the message expects a response, i.e. has a value for respondedToBy,
    * this will return a promise which will be settled when the response is received.
-   * Otherwise the sent message is returned.
    */
   sendMessage<
     ExpectedResponseData,

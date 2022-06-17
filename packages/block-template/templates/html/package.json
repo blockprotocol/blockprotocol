@@ -1,0 +1,36 @@
+{
+  "name": "html-block",
+  "version": "0.0.0",
+  "description": "Block Protocol block template for an html-based block",
+  "keywords": [
+    "blockprotocol",
+    "blocks"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "packages/block-template"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "main": "dist/main.js",
+  "module": "dist/module.js",
+  "source": "src/index.js",
+  "scripts": {
+    "build": "parcel build && cp block-schema.json ./dist/block-schema.json && cp block-metadata.json ./dist/block-metadata.json && cp -R public dist/public",
+    "dev": "parcel src/dev.html",
+    "lint:tsc": "echo \"Skipping: TypeScript not configured\""
+  },
+  "dependencies": {
+    "@blockprotocol/graph": "0.0.8",
+    "@parcel/transformer-inline-string": "^2.6.0",
+    "mock-block-dock": "0.0.15",
+    "parcel": "^2.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

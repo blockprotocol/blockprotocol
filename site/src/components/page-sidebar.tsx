@@ -6,6 +6,7 @@ import {
   Divider,
   IconButton,
   styled,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { useRouter } from "next/router";
@@ -21,12 +22,13 @@ import {
 } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
-import { parseIntFromPixelString } from "../util/mui-utils";
+import { theme as themeImport } from "../theme";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
-import { DESKTOP_NAVBAR_HEIGHT } from "./navbar";
+import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
+import { generatePathWithoutParams } from "./shared";
 
-export const SIDEBAR_WIDTH = 220;
+export const SIDEBAR_WIDTH = 300;
 
 const SidebarLink = styled(Link)(({ theme }) => ({
   display: "block",
@@ -36,8 +38,11 @@ const SidebarLink = styled(Link)(({ theme }) => ({
   ":hover": {
     color: theme.palette.purple[600],
   },
-  fontWeight: 400,
+  fontWeight: 500,
   fontSize: 15,
+  paddingTop: 8,
+  paddingBottom: 8,
+  wordBreak: "break-word",
 }));
 
 type SidebarPageSectionProps = {
@@ -51,8 +56,14 @@ type SidebarPageSectionProps = {
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
 };
 
+const highlightSection = (isSectionSelected: boolean) => ({
+  borderLeft: `3px solid ${
+    isSectionSelected ? themeImport.palette.purple[700] : "white"
+  }`,
+});
+
 const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
-  depth = 0,
+  depth = 1,
   isSelectedByDefault = false,
   pageHref,
   section,
@@ -63,24 +74,34 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 }) => {
   const router = useRouter();
   const { asPath } = router;
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   const { title: sectionTitle, anchor: sectionAnchor, subSections } = section;
 
   const sectionHref = sectionAnchor ? `${pageHref}#${sectionAnchor}` : pageHref;
 
   const isSectionSelected =
-    asPath === sectionHref ||
-    (isSelectedByDefault && (asPath === pageHref || asPath === `${pageHref}#`));
+    pathWithoutParams === sectionHref ||
+    (isSelectedByDefault &&
+      (pathWithoutParams === pageHref || pathWithoutParams === `${pageHref}#`));
   const hasSelectedSubSection =
     subSections?.find(
       ({ anchor: subSectionAnchor }) =>
-        asPath === `${pageHref}#${subSectionAnchor}`,
+        pathWithoutParams === `${pageHref}#${subSectionAnchor}`,
     ) !== undefined;
   const isSectionOpen = openedPages.includes(sectionHref);
 
   return (
     <>
-      <Box mb={1.5} display="flex" alignItems="flex-start">
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        bgcolor={
+          isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
+        }
+        pr={1}
+      >
         <SidebarLink
           replace
           ref={(ref) => {
@@ -90,11 +111,11 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
           }}
           href={sectionHref}
           sx={(theme) => ({
-            paddingLeft: depth * 1 + 1.25,
+            paddingLeft: depth * 2 + 1.25,
             color: isSectionSelected
-              ? theme.palette.purple[600]
+              ? theme.palette.purple[700]
               : theme.palette.gray[80],
-            fontWeight: isSectionSelected ? 700 : 400,
+            ...highlightSection(isSectionSelected),
           })}
         >
           {sectionTitle}
@@ -114,12 +135,11 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
             sx={(theme) => ({
               padding: 0,
               marginLeft: 1,
-              marginTop: 0.5,
               transition: theme.transitions.create("transform"),
               transform: `rotate(${isSectionOpen ? "90deg" : "0deg"})`,
               "& svg": {
                 color: isSectionSelected
-                  ? theme.palette.purple[600]
+                  ? theme.palette.purple[700]
                   : theme.palette.gray[50],
               },
             })}
@@ -158,6 +178,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 };
 
 type SidebarPageProps = {
+  depth?: number;
   page: SiteMapPage;
   maybeUpdateSelectedOffsetTop: () => void;
   setSelectedAnchorElement: (element: HTMLAnchorElement) => void;
@@ -166,6 +187,7 @@ type SidebarPageProps = {
 };
 
 const SidebarPage: VFC<SidebarPageProps> = ({
+  depth = 0,
   page,
   maybeUpdateSelectedOffsetTop,
   setSelectedAnchorElement,
@@ -174,15 +196,27 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 }) => {
   const router = useRouter();
   const { asPath } = router;
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  const { href, title, sections } = page;
+  const { href, title, sections, subPages } = page;
 
-  const isSelected = asPath === href || asPath === `${href}#`;
-  const isOpen = openedPages.includes(href);
+  const isSelected =
+    (pathWithoutParams === href || pathWithoutParams === `${href}#`) &&
+    !subPages?.length;
+  const pageKey = subPages.length ? `page${href}` : href;
+
+  const isOpen = openedPages.includes(pageKey);
+  const hasChildren = (sections?.length ?? 0) + (subPages?.length ?? 0) > 0;
 
   return (
     <Fragment key={href}>
-      <Box mb={1.5} display="flex" alignItems="flex-start">
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        bgcolor={isSelected ? (theme) => theme.palette.purple[100] : "white"}
+        pr={1}
+      >
         <SidebarLink
           ref={(ref) => {
             if (ref && isSelected) {
@@ -194,35 +228,36 @@ const SidebarPage: VFC<SidebarPageProps> = ({
           sx={(theme) => ({
             alignSelf: "flex-start",
             color: isSelected
-              ? theme.palette.purple[600]
+              ? theme.palette.purple[800]
               : theme.palette.gray[80],
-            fontWeight: isSelected ? 700 : 400,
-            paddingLeft: 1.25,
+            paddingLeft: depth * 2 + 1.25,
+            ...highlightSection(isSelected),
           })}
         >
           {title}
         </SidebarLink>
-        {sections && sections.length > 0 ? (
+        {hasChildren ? (
           <IconButton
             onClick={async () => {
               if (asPath.startsWith(`${href}#`)) {
                 await router.push(href);
               }
               setOpenedPages((prev) =>
-                prev.includes(href)
-                  ? prev.filter((prevHref) => prevHref !== href)
-                  : [...prev, href],
+                prev.includes(pageKey)
+                  ? prev.filter((prevHref) => prevHref !== pageKey)
+                  : depth === 0
+                  ? [pageKey]
+                  : [...prev, pageKey],
               );
             }}
             sx={(theme) => ({
               padding: 0,
               marginLeft: 1,
-              marginTop: 0.5,
               transition: theme.transitions.create("transform"),
               transform: `rotate(${isOpen ? "90deg" : "0deg"})`,
               "& svg": {
                 color: isSelected
-                  ? theme.palette.purple[600]
+                  ? theme.palette.purple[800]
                   : theme.palette.gray[50],
               },
             })}
@@ -231,7 +266,7 @@ const SidebarPage: VFC<SidebarPageProps> = ({
           </IconButton>
         ) : null}
       </Box>
-      {sections && sections.length > 0 ? (
+      {hasChildren ? (
         <Collapse
           in={isOpen}
           onEntered={maybeUpdateSelectedOffsetTop}
@@ -239,10 +274,21 @@ const SidebarPage: VFC<SidebarPageProps> = ({
         >
           {sections.map((section) => (
             <SidebarPageSection
-              depth={1}
+              depth={depth + 1}
               key={section.anchor}
               pageHref={href}
               section={section}
+              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+              setSelectedAnchorElement={setSelectedAnchorElement}
+              openedPages={openedPages}
+              setOpenedPages={setOpenedPages}
+            />
+          ))}
+          {subPages.map((subpage) => (
+            <SidebarPage
+              key={subpage.href}
+              depth={depth + 1}
+              page={subpage}
               maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
               setSelectedAnchorElement={setSelectedAnchorElement}
               openedPages={openedPages}
@@ -261,33 +307,55 @@ type SidebarProps = {
   header?: React.ReactNode;
 } & BoxProps;
 
+const findSectionPath = (
+  href: string,
+  sections: SiteMapPageSection[],
+  pathWithoutParams: string,
+): string[] | null => {
+  for (const section of sections) {
+    const sectionHref = `${href}#${section.anchor}`;
+
+    if (pathWithoutParams === sectionHref) {
+      return [sectionHref];
+    }
+
+    if (section.subSections) {
+      const result = findSectionPath(
+        href,
+        section.subSections,
+        pathWithoutParams,
+      );
+
+      if (result) {
+        return [sectionHref, ...result];
+      }
+    }
+  }
+
+  return null;
+};
+
 const getInitialOpenedPages = (params: {
   pages: SiteMapPage[];
   asPath: string;
 }): string[] => {
   const { pages, asPath } = params;
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   for (const page of pages) {
-    const { href, sections } = page;
+    const hasSubPages = page.subPages?.length;
+    const subPages = hasSubPages ? page.subPages : [page];
 
-    if (asPath === href || asPath === `${href}#`) {
-      return [href];
-    } else if (sections) {
-      for (const section of sections) {
-        const { anchor: sectionAnchor, subSections } = section;
-        const sectionHref = `${href}#${sectionAnchor}`;
+    for (const subPage of subPages) {
+      const { href, sections } = subPage;
+      const onThisPage = hasSubPages ? [`page${page.href}`, href] : [href];
 
-        if (asPath === sectionHref) {
-          return [href, sectionHref];
-        } else if (subSections) {
-          for (const subSection of subSections) {
-            const { anchor: subSectionAnchor } = subSection;
-            const subSectionHref = `${href}#${subSectionAnchor}`;
-
-            if (asPath === subSectionHref) {
-              return [href, sectionHref, subSectionHref];
-            }
-          }
+      if (pathWithoutParams === href || pathWithoutParams === `${href}#`) {
+        return onThisPage;
+      } else if (sections) {
+        const sectionPath = findSectionPath(href, sections, pathWithoutParams);
+        if (sectionPath) {
+          return [...onThisPage, ...sectionPath];
         }
       }
     }
@@ -305,26 +373,7 @@ export const Sidebar: VFC<SidebarProps> = ({
   const theme = useTheme();
   const { asPath } = useRouter();
 
-  const stickinessDetectorRef = useRef<HTMLDivElement>(null);
-  const [isSticky, setIsSticky] = useState<boolean>(false);
-
-  // Approach inspired by: https://stackoverflow.com/questions/16302483/event-to-detect-when-positionsticky-is-triggered
-  useEffect(() => {
-    const cachedRef = stickinessDetectorRef.current;
-
-    if (cachedRef) {
-      const observer = new IntersectionObserver(
-        ([event]) => setIsSticky(event!.intersectionRatio < 1),
-        { threshold: [1] },
-      );
-
-      observer.observe(cachedRef);
-
-      return () => {
-        observer.unobserve(cachedRef);
-      };
-    }
-  }, []);
+  const md = useMediaQuery(theme.breakpoints.up("md"));
 
   const [selectedAnchorElement, setSelectedAnchorElement] =
     useState<HTMLAnchorElement>();
@@ -355,109 +404,106 @@ export const Sidebar: VFC<SidebarProps> = ({
     ]);
   }, [asPath, pages]);
 
+  const indicator = useRef<HTMLElement>(null);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (selectedOffsetTop && indicator.current) {
+        const parent = indicator.current.offsetParent as HTMLElement;
+        const min = parent!.scrollTop;
+        const max = min + parent!.offsetHeight - 100;
+        const pos = indicator.current.offsetTop;
+
+        if (pos <= min || pos >= max) {
+          parent!.scrollTop += pos - max;
+        }
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [selectedOffsetTop]);
+
+  const height = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
+
   return (
     <Box
       {...boxProps}
       position="sticky"
-      flexShrink={0}
+      overflow="auto"
       width={SIDEBAR_WIDTH}
+      top={`${height}px`}
+      height={`calc(100vh - ${height}px)`}
       sx={{
         ...boxProps.sx,
-        top: 0,
+        borderRightColor: theme.palette.gray[30],
+        borderRightStyle: "solid",
+        borderRightWidth: 1,
       }}
     >
-      <Box
-        ref={stickinessDetectorRef}
-        sx={{
-          position: "absolute",
-          top: "-1px",
-          height: "1px",
-          width: "1px",
-        }}
-      />
+      <Box position="sticky" top={0} bgcolor="white" zIndex={3} p={1.5} pb={0}>
+        {header}
+      </Box>
       <Box
         sx={{
-          maxHeight: isSticky ? "100vh" : undefined,
+          p: 1.5,
           display: "flex",
           flexDirection: "column",
-          paddingTop: isSticky
-            ? `${
-                DESKTOP_NAVBAR_HEIGHT +
-                parseIntFromPixelString(theme.spacing(1))
-              }px`
-            : 0,
-          paddingRight: 3,
           transition: theme.transitions.create([
             "padding-top",
             "padding-bottom",
           ]),
+          wordBreak: "break-word",
         }}
       >
-        {header}
         <Box
-          position="relative"
+          ref={indicator}
           sx={{
-            paddingRight: 3,
-            marginRight: -3,
-            overflow: "auto",
-            paddingBottom: isSticky ? theme.spacing(6) : 0,
-            flexShrink: 1,
+            position: "absolute",
+            top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop,
+            opacity: 0,
           }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              width: 3,
-              height: 14,
-              backgroundColor: ({ palette }) => palette.purple[600],
-              top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop + 3,
-              opacity: selectedOffsetTop === undefined ? 0 : 1,
-              transition: theme.transitions.create(["top", "opacity"], {
-                duration: 150,
-              }),
-            }}
-          />
-          {pages.length > 1
-            ? pages.map((page) => (
-                <SidebarPage
-                  key={page.href}
-                  page={page}
-                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))
-            : pages.length === 1
-            ? pages[0]!.sections.map((section, i) => (
-                <SidebarPageSection
-                  isSelectedByDefault={i === 0}
-                  key={section.anchor}
-                  pageHref={pages[0]!.href}
-                  section={section}
-                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))
-            : null}
-          {appendices && appendices.length > 0 ? (
-            <>
-              <Divider sx={{ marginBottom: 2 }} />
-              {appendices.map((page) => (
-                <SidebarPage
-                  key={page.href}
-                  page={page}
-                  maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                  setSelectedAnchorElement={setSelectedAnchorElement}
-                  openedPages={openedPages}
-                  setOpenedPages={setOpenedPages}
-                />
-              ))}
-            </>
-          ) : null}
-        </Box>
+        />
+        {pages.length > 1
+          ? pages.map((page) => (
+              <SidebarPage
+                key={page.href}
+                page={page}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))
+          : pages.length === 1
+          ? pages[0]!.sections.map((section, i) => (
+              <SidebarPageSection
+                isSelectedByDefault={i === 0}
+                key={section.anchor}
+                pageHref={pages[0]!.href}
+                section={section}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))
+          : null}
+        {appendices && appendices.length > 0 ? (
+          <>
+            <Divider sx={{ marginBottom: 2 }} />
+            {appendices.map((page) => (
+              <SidebarPage
+                key={page.href}
+                page={page}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))}
+          </>
+        ) : null}
       </Box>
     </Box>
   );

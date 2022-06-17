@@ -1,13 +1,15 @@
+import { BlockVariant } from "@blockprotocol/core";
+import { Entity } from "@blockprotocol/graph";
 import {
   Alert,
   Box,
   Snackbar,
   Tab,
   Tabs,
+  Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { BlockVariant } from "blockprotocol";
 import { Validator } from "jsonschema";
 import {
   useEffect,
@@ -18,7 +20,10 @@ import {
 } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
-import { BlockDataTabPanels } from "./block-data-tab-panels";
+import {
+  BlockDataTabPanels,
+  blockPreviewAndDataHeight,
+} from "./block-data-tab-panels";
 import { BlockDataTabs } from "./block-data-tabs";
 import { BlockModalButton } from "./block-modal-button";
 import { BlockTabsModal } from "./block-tabs-modal";
@@ -116,16 +121,15 @@ export const BlockDataContainer: VoidFunctionComponent<
   }, [blockVariantsTab, metadata?.examples, metadata?.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
-  const [props, errors] = useMemo<
-    [Record<string, unknown> | undefined, string[]]
-  >(() => {
+  const [props, errors] = useMemo<[Entity<any> | undefined, string[]]>(() => {
     const result = {
       accountId: `test-account-${metadata.name}`,
       entityId: `test-entity-${metadata.name}`,
+      properties: {},
     };
 
     try {
-      Object.assign(result, JSON.parse(text));
+      Object.assign(result.properties, JSON.parse(text));
     } catch (err) {
       return [result, [(err as Error).message]];
     }
@@ -133,7 +137,7 @@ export const BlockDataContainer: VoidFunctionComponent<
     const errorsToEat = ["uploadFile", "getEmbedBlock"];
 
     const errorMessages = validator
-      .validate(result, schema ?? {})
+      .validate(result.properties, schema ?? {})
       .errors.map((err) => `ValidationError: ${err.stack}`)
       .filter(
         (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
@@ -196,7 +200,9 @@ export const BlockDataContainer: VoidFunctionComponent<
             }),
           }}
         >
-          <Box sx={{ height: 450, backgroundColor: "white" }}>
+          <Box
+            sx={{ height: blockPreviewAndDataHeight, backgroundColor: "white" }}
+          >
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
               setBlockVariantsTab={setBlockVariantsTab}
@@ -310,7 +316,13 @@ export const BlockDataContainer: VoidFunctionComponent<
                 sx={{ listStyleType: "square" }}
               >
                 {errors.map((err) => (
-                  <li key={err}>{err}</li>
+                  <Typography
+                    component="li"
+                    key={err}
+                    sx={{ wordBreak: "break-word" }}
+                  >
+                    {err}
+                  </Typography>
                 ))}
               </Box>
             </Box>

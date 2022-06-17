@@ -119,7 +119,7 @@ const LoginPage: NextPage = () => {
     >
       <Container
         sx={{
-          paddingTop: 4,
+          py: { xs: 8, md: 14 },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -128,16 +128,10 @@ const LoginPage: NextPage = () => {
         <Paper
           sx={{
             borderRadius: "6px",
-            padding: 2.5,
-            maxWidth: 600,
+            maxWidth: 800,
           }}
         >
-          <Box
-            marginTop="-3px"
-            display="flex"
-            justifyContent="space-between"
-            width="100%"
-          >
+          <Box display="flex" justifyContent="space-between" width="100%">
             <Fade in={currentScreen !== "Email"}>
               <Box>
                 <Button
@@ -162,8 +156,8 @@ const LoginPage: NextPage = () => {
             sx={(theme) => ({
               transition: theme.transitions.create("padding"),
               padding: {
-                xs: theme.spacing(2, 0),
-                sm: 4,
+                xs: theme.spacing(6),
+                sm: theme.spacing(4, 8, 6),
               },
             })}
           >

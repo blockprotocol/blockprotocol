@@ -3,6 +3,7 @@ import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
   Children,
   ComponentType,
+  FunctionComponent,
   HTMLAttributes,
   HTMLProps,
   isValidElement,
@@ -57,11 +58,11 @@ const usePageHeading = (props: { anchor: string }) => {
   return { headingRef };
 };
 
-const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
+const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 }> = ({
   depth,
   anchor,
 }) => {
-  const size = depth === 1 ? 28 : depth === 2 ? 24 : 20;
+  const size = depth === 1 ? 28 : depth === 2 ? 24 : depth === 3 ? 20 : 16;
   return (
     <Link
       href={`#${anchor}`}
@@ -103,6 +104,7 @@ const HEADING_MARGIN_TOP = {
   H2: 8,
   H3: 6,
   H4: 6,
+  H5: 6,
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
@@ -112,6 +114,13 @@ export const mdxComponents: Record<string, ComponentType> = {
   Typography,
   InfoCardWrapper,
   InfoCard,
+  Hidden: (({ children }) => {
+    return (
+      <span aria-hidden style={{ display: "none" }}>
+        {children}
+      </span>
+    );
+  }) as FunctionComponent,
   h1: (props: TypographyProps) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { headingRef } = usePageHeading({ anchor: "" });
@@ -170,14 +179,26 @@ export const mdxComponents: Record<string, ComponentType> = {
       </Heading>
     );
   },
-  h4: (props: TypographyProps) => (
-    <Heading
-      mt={HEADING_MARGIN_TOP.H4}
-      mb={HEADING_MARGIN_BOTTOM}
-      variant="bpHeading4"
-      {...props}
-    />
-  ),
+  h4: (props: TypographyProps) => {
+    return (
+      <Heading
+        mt={HEADING_MARGIN_TOP.H5}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading5"
+        {...props}
+      />
+    );
+  },
+  h5: (props: TypographyProps) => {
+    return (
+      <Heading
+        mt={HEADING_MARGIN_TOP.H5}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading5"
+        {...props}
+      />
+    );
+  },
   p: (props: TypographyProps) => (
     <Typography mb={2} variant="bpBodyCopy" {...props} />
   ),
@@ -192,19 +213,26 @@ export const mdxComponents: Record<string, ComponentType> = {
   },
   table: ({ children, ref: _ref, ...props }: HTMLProps<HTMLTableElement>) => (
     <Box
-      component="table"
       sx={{
-        "td, th": {
-          border: ({ palette }) => `1px solid ${palette.gray[30]}`,
-          paddingY: 1,
-          paddingX: 3,
-          typography: "bpSmallCopy",
-        },
-        marginBottom: 2,
+        overflow: "auto",
+        maxWidth: "100%",
       }}
-      {...props}
     >
-      {children}
+      <Box
+        component="table"
+        sx={{
+          "td, th": {
+            border: ({ palette }) => `1px solid ${palette.gray[30]}`,
+            paddingY: 1,
+            paddingX: 3,
+            typography: "bpSmallCopy",
+          },
+          marginBottom: 2,
+        }}
+        {...props}
+      >
+        {children}
+      </Box>
     </Box>
   ),
 
@@ -260,7 +288,7 @@ export const mdxComponents: Record<string, ComponentType> = {
       sx={(theme) => ({
         marginBottom: theme.spacing(2),
         paddingLeft: theme.spacing(4),
-        listStyle: "unset",
+        listStyle: "initial",
       })}
       {...props}
     />

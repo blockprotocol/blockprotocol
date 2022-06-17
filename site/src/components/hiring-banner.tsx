@@ -77,8 +77,8 @@ export const HiringBanner = () => {
               sx={({ palette }) => ({
                 color: palette.teal[200],
                 fontWeight: "medium",
-                mr: { xs: 0, lg: 1.5 },
-                mb: { xs: 1.5, lg: 0 },
+                mr: { xs: 0, md: 1.5 },
+                mb: { xs: 1.5, md: 0 },
               })}
             >
               <Box component="span" mr="0.5ch">
@@ -102,7 +102,7 @@ export const HiringBanner = () => {
                 fontWeight: 700,
                 color: palette.gray[10],
                 lineHeight: 1.1,
-                display: { xs: "flex", lg: "inline-flex" },
+                display: { xs: "flex", md: "inline-flex" },
                 width: "content",
                 alignItems: "center",
                 borderBottom: "1px solid currentColor",

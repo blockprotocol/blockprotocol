@@ -36,6 +36,26 @@ const nextConfig = {
         destination: "/contact/submitted",
         permanent: true,
       },
+      {
+        source: "/docs/publishing-blocks",
+        destination: "/docs/developing-blocks#publish",
+        permanent: true,
+      },
+      {
+        source: "/spec/:slug*",
+        destination: "/docs/spec/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/block-types",
+        destination: "/docs/spec/core-specification",
+        permanent: true,
+      },
+      {
+        source: "/spec/block-types",
+        destination: "/docs/spec/core-specification",
+        permanent: true,
+      },
     ];
   },
 
@@ -44,6 +64,10 @@ const nextConfig = {
       {
         source: "/:shortname/blocks/:blockslug/sandboxed-demo",
         destination: "/api/rewrites/sandboxed-block-demo",
+      },
+      {
+        source: "/types/services/:servicename/:typename",
+        destination: "/types/services/:servicename/:typename.json",
       },
     ];
   },

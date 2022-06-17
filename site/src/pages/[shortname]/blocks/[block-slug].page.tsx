@@ -45,8 +45,8 @@ const markdownComponents = Object.fromEntries(
  * We want a different origin for the iFrame to the parent window
  * so that it can't use cookies issued to the user in the main app.
  *
- * The PRODUCTION origin will be blockprotocol.org, so we can use
- * the unique Vercel deployment URL as the origin in production.
+ * The PRODUCTION origin will be blockprotocol.org, and we can use
+ * a custom domain or the unique Vercel deployment URL as the origin .
  *
  * In STAGING, we will mostly be visiting unique deployment URLs
  * for testing, so we can use the unique branch URL as the origin.
@@ -80,7 +80,10 @@ const generateSandboxBaseUrl = (): string => {
   }
 
   // @see https://vercel.com/docs/concepts/deployments/automatic-urls
-  const slugifiedBranch = branch.toLowerCase().replace(/[^\w-]+/g, "-");
+  const slugifiedBranch = branch
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^\w-]+/g, "-");
   const branchPrefix = `blockprotocol-git-${slugifiedBranch}-hashintel`.slice(
     0,
     64,
@@ -354,12 +357,13 @@ const BlockPage: NextPage<BlockPageProps> = ({
           />
         </Box>
 
-        {blockMetadata.repository && (
+        {(blockMetadata.repository || compiledReadme) && (
           <Box
             mb={10}
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "60% 40%" },
+              gridTemplateColumns: { xs: "1fr", md: "1fr 40%" },
+              gridGap: { md: 60 },
               marginBottom: 10,
             }}
           >
@@ -370,6 +374,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     marginTop: 0,
                   },
                 }}
+                mb={{ xs: 2, md: 0 }}
               >
                 <MDXRemote
                   compiledSource={compiledReadme}
@@ -379,42 +384,45 @@ const BlockPage: NextPage<BlockPageProps> = ({
             ) : (
               <div />
             )}
-            <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
-              <Typography
-                variant="bpLargeText"
-                sx={{
-                  fontWeight: "bold",
-                  color: theme.palette.gray[80],
-                  marginBottom: 2,
-                }}
-              >
-                Repository
-              </Typography>
-              <Box sx={{ display: "flex" }}>
-                <Box
-                  component="img"
-                  alt="GitHub Link"
-                  sx={{ marginRight: 1.5 }}
-                  src="/assets/link.svg"
-                />{" "}
+            {blockMetadata.repository ? (
+              <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
                 <Typography
-                  variant="bpSmallCopy"
-                  sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  variant="bpLargeText"
+                  sx={{
+                    fontWeight: "bold",
+                    color: theme.palette.gray[80],
+                    marginBottom: 2,
+                  }}
                 >
-                  <Link href={blockMetadata.repository}>
-                    {repositoryDisplayUrl}
-                  </Link>
+                  Repository
                 </Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Box
+                    component="img"
+                    alt="GitHub Link"
+                    sx={{ marginRight: 1.5 }}
+                    src="/assets/link.svg"
+                  />{" "}
+                  <Typography
+                    variant="bpSmallCopy"
+                    sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  >
+                    <Link href={blockMetadata.repository}>
+                      {repositoryDisplayUrl}
+                    </Link>
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
+            ) : null}
           </Box>
         )}
-
-        <Typography textAlign="center" variant="bpHeading2" mb={3}>
+      </Container>
+      <Box my={4}>
+        <Typography textAlign="center" variant="bpHeading3" mb={2}>
           Explore more blocks
         </Typography>
-      </Container>
-      <BlocksSlider catalog={sliderItems} />
+        <BlocksSlider catalog={sliderItems} />
+      </Box>
     </>
   );
 };
