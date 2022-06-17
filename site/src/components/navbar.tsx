@@ -136,7 +136,10 @@ const useScrollingNavbar = (
   const [scrolledPast, setScrolledPast] =
     useState<Record<string, boolean>>(defaultScrolledPast);
 
-  if (threshold !== null && !Object.hasOwn(defaultScrolledPast, threshold)) {
+  if (
+    threshold !== null &&
+    !Object.prototype.hasOwnProperty.call(defaultScrolledPast, threshold)
+  ) {
     setScrolledPast(defaultScrolledPast);
   }
 
@@ -153,7 +156,10 @@ const useScrollingNavbar = (
           );
 
           return (threshold !== null &&
-            !Object.hasOwn(nextScrolledPast, threshold)) ||
+            !Object.prototype.hasOwnProperty.call(
+              nextScrolledPast,
+              threshold,
+            )) ||
             Object.keys(nextScrolledPast).some(
               (key) => nextScrolledPast[key] !== currentValue[key],
             )
