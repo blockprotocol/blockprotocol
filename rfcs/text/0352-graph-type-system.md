@@ -590,7 +590,7 @@ Entity Types can also express the types of relationships they have with other th
 
 ## JSON Schema additions
 
-The proposed type system will make use of a couple of non-standard JSON Schema keywords. These will be used to add explicitness and to allow for new semantics within schemas.
+The proposed type system will make use of several non-standard JSON Schema keywords to add explicitness and allow for new semantics within the schemas.
 
 The `kind` keyword will be used to identify the kind of the schema being described. The value of `kind` must be one of
 
