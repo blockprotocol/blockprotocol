@@ -599,7 +599,7 @@ The `kind` keyword will be used to identify the kind of the schema being describ
 - `dataType`
 - `linkType`
 
-The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation).
+The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
 
 Additionally, some keywords may have a slightly different meaning in the type schemas, such as `description` which adds semantic meaning to Link Types.
 
