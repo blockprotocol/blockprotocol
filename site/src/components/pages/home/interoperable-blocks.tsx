@@ -91,7 +91,7 @@ export const InteroperableBlocks = () => {
           />
           <Typography variant="bpBodyCopy" textAlign="left" mb={1}>
             Blocks that adhere to the Block Protocol can work in any application
-            which also uses the protocol. Without any extra configuration.
+            which also uses the protocol, without any extra configuration.
           </Typography>
           <Typography variant="bpBodyCopy" textAlign="left" mr={6}>
             Any developer can build a world-class block for others to use.
