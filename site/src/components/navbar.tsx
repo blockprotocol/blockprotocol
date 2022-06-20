@@ -444,29 +444,30 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
             <MobileNavItems onClose={() => setMobileNavVisible(false)} />
           </Box>
 
-          <Box
-            p={5}
-            flexShrink={0}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            sx={{
-              borderTopStyle: "solid",
-              borderTopWidth: 1,
-              borderTopColor: theme.palette.gray[40],
-              "> button, a": {
-                width: {
-                  xs: "100%",
-                  sm: "unset",
+          {user ? null : (
+            <Box
+              flexShrink={0}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              sx={{
+                paddingY: 4,
+                paddingX: 4.25,
+                borderTopStyle: "solid",
+                borderTopWidth: 1,
+                borderTopColor: theme.palette.gray[40],
+                "> button, a": {
+                  width: {
+                    xs: "100%",
+                    sm: "unset",
+                  },
+                  minWidth: {
+                    xs: "unset",
+                    sm: 320,
+                  },
                 },
-                minWidth: {
-                  xs: "unset",
-                  sm: 320,
-                },
-              },
-            }}
-          >
-            {user ? null : pathname === "/login" ? null : (
+              }}
+            >
               <LinkButton
                 href="#"
                 variant="secondary"
@@ -476,26 +477,25 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                   event?.preventDefault();
                 }}
                 sx={{
-                  marginBottom: 1,
+                  fontSize: 18,
+                  marginBottom: 1.25,
                 }}
               >
                 Log in
               </LinkButton>
-            )}
-            <LinkButton
-              href="/signup"
-              sx={{
-                width: "100%",
-                py: 1.5,
-                px: 3,
-                textTransform: "none",
-              }}
-              variant="primary"
-              onClick={() => setMobileNavVisible(false)}
-            >
-              Sign Up
-            </LinkButton>
-          </Box>
+
+              <LinkButton
+                href="/signup"
+                sx={{
+                  fontSize: 18,
+                }}
+                variant="primary"
+                onClick={() => setMobileNavVisible(false)}
+              >
+                Sign Up
+              </LinkButton>
+            </Box>
+          )}
         </Box>
       </Slide>
     </Box>
