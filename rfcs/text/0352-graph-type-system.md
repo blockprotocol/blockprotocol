@@ -1115,16 +1115,13 @@ The `Contrived Property` Property Type could define its value as being _either_ 
       "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
     },
     {
-      "type": "object",
-      "properties": {
-        "https://blockprotocol.org/types/@blockprotocol/data-type/number": {
-          "type": "array",
-          "items": {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
-          },
-          "maxItems": 4
-        }
-      }
+      "type": "array",
+      "items": {
+        "oneOf": [
+          { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number" }
+        ]
+      },
+      "maxItems": 4
     }
   ]
 }
