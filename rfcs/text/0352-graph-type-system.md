@@ -801,7 +801,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
 
   "$defs": {
     "propertyValues": {
-      "$comment": "The definition of potential property values, made up of a `oneOf` keyword which has a list of options of either references to Data Types, or objects made up of more Property Types ",
+      "$comment": "The definition of potential property values, made up of a `oneOf` keyword which has a list of options of either references to Data Types, or objects made up of more Property Types",
       "oneOf": [
         {
           "properties": {
