@@ -399,7 +399,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
 Entity Types can also express the types of relationships they have with other things.
 
-- **Specifying an Entity Type has out-going Links** - The links going _from_ an Entity are described a set of Link Types
+- **Specifying an Entity Type has outgoing Links** - The links going _from_ an Entity are described a set of Link Types
 
   **Example 1**
 
@@ -482,7 +482,7 @@ Entity Types can also express the types of relationships they have with other th
     ]
     ```
 
-- **Specifying there is a List of Links** - The Entity Type can also express that it can have multiple out-going links of the same type
+- **Specifying there is a List of Links** - The Entity Type can also express that it can have multiple outgoing links of the same type
 
   **Example 1**
 
@@ -509,7 +509,7 @@ Entity Types can also express the types of relationships they have with other th
     ]
     ```
 
-- **Specifying there is an Ordered List of Links** - The Entity Type can also express that its out-going links (of the same type) are ordered
+- **Specifying there is an Ordered List of Links** - The Entity Type can also express that its outgoing links (of the same type) are ordered
 
   **Example 1**
 
@@ -1469,7 +1469,7 @@ This would accept Entity instances with the following shape
 
 Entity Types can also express the types of relationships they have with other things.
 
-#### Specifying an Entity Type has out-going Links
+#### Specifying an Entity Type has outgoing Links
 
 The links going _from_ an Entity are described as a set of Link Types
 
@@ -1670,7 +1670,7 @@ This would accept Entity instances with the following shape
 
 #### Specifying there is a List of Links
 
-The Entity Type can also express that it can have multiple out-going links of the same type
+The Entity Type can also express that it can have multiple outgoing links of the same type
 
 **Example 1**
 
@@ -1719,7 +1719,7 @@ This would accept Entity instances with the following shape
 
 #### Specifying there is an Ordered List of Links
 
-The Entity Type can also express that its out-going links (of the same type) are ordered
+The Entity Type can also express that its outgoing links (of the same type) are ordered
 
 **Example 1**
 
