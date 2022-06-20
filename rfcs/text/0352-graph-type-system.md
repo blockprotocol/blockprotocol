@@ -150,9 +150,9 @@ Due to the size of this RFC, creating new data-types has been deemed out-of-scop
 
 A **Property Type** is a description of a named piece of data, including its possible values. A Property Type is composed of the following:
 
-- a **required** `$id`, which is a globally unique identifier, where the property type's definition can be accessed (in most cases this will be a URL)
+- a **required** `$id`, which is a globally unique identifier, where the Property Type's definition can be accessed (in most cases this will be a URL)
 - a **required** `name`, which should generally be a non-pluralized description of the property (for example: "Address" not "Addresses")
-- **optionally** a `description` to further explain the semantic meaning of the property type
+- **optionally** a `description` to further explain the semantic meaning of the Property Type
 - a **required** definition of its possible values
 
 **Defining the possible values of a property**
@@ -163,7 +163,7 @@ A Property Type can have plain data as its value, which it can define by using a
 
 **Example 1**
 
-The `Favorite Quote` property type could define its value as being an instance of the `Text` Data Type.
+The `Favorite Quote` Property Type could define its value as being an instance of the `Text` Data Type.
 
 - Sample data when used in (simplified view of) an Entity
 
@@ -175,7 +175,7 @@ The `Favorite Quote` property type could define its value as being an instance o
 
 **Example 2**
 
-The `Age` property type could define its value as being an instance of the `Number` Data Type.
+The `Age` Property Type could define its value as being an instance of the `Number` Data Type.
 
 - Sample data when used in (simplified view of) an Entity
 
@@ -214,7 +214,7 @@ The `Contact Information` Property Type could define its value as being an objec
 
 **Example 2**
 
-The `Interests` property type could define its value as being an object which has a `Favorite Film` property, a `Favorite Song` property, and _a list_ of `Hobby` properties.
+The `Interests` Property Type could define its value as being an object which has a `Favorite Film` property, a `Favorite Song` property, and _a list_ of `Hobby` properties.
 
 - Sample data when used in (simplified view of) an Entity
 
@@ -296,7 +296,7 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 
 A **Link Type** is a description of a _directional_ relationship between two things. A Link Type is composed of the following:
 
-- a **required** `$id`, which is a globally unique identifier, where the property type's definition can be accessed (in most cases this will be a URL)
+- a **required** `$id`, which is a globally unique identifier, where the Property Type's definition can be accessed (in most cases this will be a URL)
 - a **required** `name`, which should be a non-pluralized description of the relationship (for example: "Friend" not "Friends")
 - a **required** `description` to further explain the semantic meaning of the relationship
 - a **possible** `relatedKeywords`, which is a list of terms that are related to the link type
@@ -894,13 +894,13 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
 
 ### Defining the possible values of a property
 
-A property type describes its possible values through a `oneOf` definition, which can include:
+A Property Type describes its possible values through a `oneOf` definition, which can include:
 
 #### Data Types
 
 **Example 1**
 
-The `Favorite Quote` property type could define its value as being an instance of the `Text` Data Type.
+The `Favorite Quote` Property Type could define its value as being an instance of the `Text` Data Type.
 
 ```json
 {
@@ -915,7 +915,7 @@ The `Favorite Quote` property type could define its value as being an instance o
 
 **Example 2**
 
-The `Age` property type could define its value as being an instance of the `Number` Data Type.
+The `Age` Property Type could define its value as being an instance of the `Number` Data Type.
 
 ```json
 {
@@ -932,7 +932,7 @@ The `Age` property type could define its value as being an instance of the `Numb
 
 **Example 3**
 
-The `User ID` property type could define its value as being _either_ an instance of the `Text` Data Type _or_ an instance of the `Number` Data Type.
+The `User ID` Property Type could define its value as being _either_ an instance of the `Text` Data Type _or_ an instance of the `Number` Data Type.
 
 ```json
 {
@@ -1024,7 +1024,7 @@ A Property Type can also express that it has a list of things as its value.
 
 > ⚠️ It's important to note that in **most circumstances a Property Type should be expressed as a singular item** as this encourages re-usability and allows the parent object to define whether there is a collection or not.
 >
-> This ability is kept in the type system to allow for nested lists, and other complicated structures of data that might occur in existing data sets. These structures are otherwise not representable, as the data doesn't have keys associated with them and therefore can't be represented as a property type.
+> This ability is kept in the type system to allow for nested lists, and other complicated structures of data that might occur in existing data sets. These structures are otherwise not representable, as the data doesn't have keys associated with them and therefore can't be represented as a Property Type.
 >
 > These are generally not ergonomic to work with in the type system and other ways of structuring the data should likely be explored. When needing to type existing data, it's possible to do some variant of the following:
 
@@ -2463,7 +2463,7 @@ Representing the Type System within common structures like a Relation Database i
 }
 ```
 
-To be able to represent this object, a property type would need to be created that looks like (a simplified view for brevity):
+To be able to represent this object, a Property Type would need to be created that looks like (a simplified view for brevity):
 
 ```json
 {
