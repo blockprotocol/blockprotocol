@@ -328,8 +328,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
   The `Book` Entity Type could contain the Property Types `Name`, a `Published On` and a `Blurb`
 
-  - Sample (simplified) Data
-    Assuming that
+  - Sample (simplified) data assuming that
 
     - The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
 
@@ -347,8 +346,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
   The `Blog Post` Entity Type could contain the **required** Property Types `Title`, `Author`, and `Contents`, and the **optional** Property Type `Category`
 
-  - Sample (simplified) Data
-    Assuming that
+  - Sample (simplified) data assuming that
 
     - The `Title`, `Author`, `Contents`, and `Category` Property Types all have values that are instances of the `Text` Data Type
 
@@ -381,8 +379,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
   The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
 
-  - Sample (simplified) Data
-    Assuming that
+  - Sample (simplified) data assuming that
 
     - The `Model`, `Make`, `Spec`, and `Year` Property Types all have values that are instances of the `Text` Data Type
     - The `Extra Trim` Property Type is a list where the list items are instances of the `Text` Data Type
@@ -408,8 +405,7 @@ Entity Types can also express the types of relationships they have with other th
 
   The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link
 
-  - Sample (simplified) Data
-    With the same assumptions as outlined above
+  - Sample (simplified) data with the same assumptions as outlined above
 
     ```json
     [
@@ -434,8 +430,7 @@ Entity Types can also express the types of relationships they have with other th
 
   The `Building` Entity Type could contain some Property Types, a `Located At` link, and a `Tenant` link
 
-  - Sample (simplified) Data
-    With the same assumptions as outlined above
+  - Sample (simplified) data with the same assumptions as outlined above
 
     ```json
     [
@@ -468,7 +463,7 @@ Entity Types can also express the types of relationships they have with other th
   **Example 1**
   The `Bank Account` Entity Type could have a **required** `Maintained By` link
 
-  - Sample (simplified) Data
+  - Sample (simplified) data
 
     ```json
     [
@@ -493,7 +488,7 @@ Entity Types can also express the types of relationships they have with other th
 
   The `Person` Entity Type could contain some Property Types, and multiple `Friend Of` links
 
-  - Sample (simplified) Data
+  - Sample (simplified) data
 
     ```json
     [
@@ -518,7 +513,7 @@ Entity Types can also express the types of relationships they have with other th
   **Example 1**
   The `Playlist` Entity Type could contain some Property Types, and an _ordered_ list of `Contains` links
 
-  - Sample (simplified) Data
+  - Sample (simplified) data
 
     ```json
     [
@@ -551,7 +546,7 @@ Entity Types can also express the types of relationships they have with other th
     **Example 2**
     The `Page` Entity Type could contain some Property Types, a `Written By` link, and an _ordered_ list of `Contains` links
 
-  - Sample (simplified) Data
+  - Sample (simplified) data
 
     ```json
     [
