@@ -1892,7 +1892,7 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
 }
 ```
 
-the `kind` can as explained in the Guide-Level explanation only take on values that specify the types of the proposed type system.
+The `kind` can as explained in the Guide-Level explanation only take on values that specify the types of the proposed type system.
 
 The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
 
