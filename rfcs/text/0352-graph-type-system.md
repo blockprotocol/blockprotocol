@@ -442,7 +442,7 @@ Entity Types can also express the types of relationships they have with other th
         "city": "London",
         ...
       },
-      // Organisation entity
+      // Organization entity
       {
         "entityId": 114,
         "name": "HASH, Ltd.",
@@ -452,7 +452,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 115,
         "address": 113, // referring to the UK Address entity ID
-        "tenant": 114, // referring to the Organisation entity ID
+        "tenant": 114, // referring to the Organization entity ID
         ...
       }
     ]
@@ -1554,14 +1554,14 @@ The `UK Address` Entity Type could contain Property Types `address-line-1`, `pos
 }
 ```
 
-The `Organisation` Entity Type could contain the Property Type `Name`
+The `Organization` Entity Type could contain the Property Type `Name`
 
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/types/@alice/entity-type/organisation",
+  "$id": "https://blockprotocol.org/types/@alice/entity-type/organization",
   "type": "object",
-  "name": "Organisation",
+  "name": "Organization",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1597,7 +1597,7 @@ This would accept Entity instances with the following shape
     "https://blockprotocol.org/types/@alice/property-type/postcode": "SW1A 1AA",
     "https://blockprotocol.org/types/@alice/property-type/city": "London"
   },
-  // Organisation entity
+  // Organization entity
   {
     "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 114,
     "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
@@ -1606,7 +1606,7 @@ This would accept Entity instances with the following shape
   {
     "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 115,
     "https://blockprotocol.org/types/@alice/property-type/located-at": 113, // referring to the UK Address entity ID
-    "https://blockprotocol.org/types/@alice/property-type/tenant": 114, // referring to the Organisation entity ID
+    "https://blockprotocol.org/types/@alice/property-type/tenant": 114, // referring to the Organization entity ID
   }
 ]
 ```
