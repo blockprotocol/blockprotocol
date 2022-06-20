@@ -1010,7 +1010,7 @@ The `Interests` Property Type could define its value as being an object which ha
         "https://blockprotocol.org/types/@blockprotocol/property-type/hobby": {
           "type": "array",
           "items": {
-            "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/favorite-song"
+            "$ref": "https://blockprotocol.org/types/@blockprotocol/property-type/hobby"
           }
         }
       }
