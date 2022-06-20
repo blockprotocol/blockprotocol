@@ -504,7 +504,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 313,
         "name": "Charlie",
-        "friendsOf": [311, 312] // referring to the Person entity IDs, where the array ordering is unstable
+        "friendOf": [311, 312] // referring to the Person entity IDs, where the array ordering is unstable
       }
     ]
     ```
