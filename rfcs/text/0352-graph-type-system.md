@@ -669,9 +669,9 @@ The largest change (in terms of the number of interfaces modified) is unsurprisi
 
 - The Type objects will be updated to capture the new structures and references between them
 - New `create`, `get`, `update`, and `delete` methods will need to be made for Property Types, Data Types, and Link Types
-- The error conditions of the Type methods will be updated to include further validation errors that include but are not limited to
-  - Referencing a type that isn't in the embedding application
-  - Submitting a type that is malformed
+- The error conditions of the Type methods will be updated to include further validation errors that include but are not limited to:
+  - referencing a type that isn't in the embedding application
+  - submitting a type that is malformed
 
 # Reference-Level explanation
 
