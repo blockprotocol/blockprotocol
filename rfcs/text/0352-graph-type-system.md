@@ -670,7 +670,8 @@ This RFC does not currently mention ways of constraining the destination of a Li
 The largest change (in terms of the number of interfaces modified) is unsurprisingly the updates that will need to be made to the Entity Type functions.
 
 - The Type objects will be updated to capture the new structures and references between them
-- New `create`, `get`, `update`, and `delete` methods will need to be made for Property Types, Data Types, and Link Types
+- New `create`, `get`, `update`, and `delete` methods will need to be made for Property Types and Link Types
+- A new `get` method will need to be made for Data Types (as they are not user-defined, they do not require full CRUD yet.)
 - The error conditions of the Type methods will be updated to include further validation errors that include but are not limited to:
   - referencing a type that isn't in the embedding application
   - submitting a type that is malformed
@@ -854,9 +855,10 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
                     "type": { "const": "array" },
                     "items": { "$ref": "#/$defs/propertyTypeReference" },
                     "minItems": { "type": "number" },
-                    "maxItems": { "type": "number" },
-                    "additionalProperties": false
-                  }
+                    "maxItems": { "type": "number" }
+                  },
+                  "required": ["type", "items"],
+                  "additionalProperties": false
                 }
               ]
             }
@@ -1115,16 +1117,15 @@ The `Contrived Property` Property Type could define its value as being _either_ 
       "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
     },
     {
-      "type": "object",
-      "properties": {
-        "https://blockprotocol.org/types/@blockprotocol/data-type/number": {
-          "type": "array",
-          "items": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
             "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
-          },
-          "maxItems": 4
-        }
-      }
+          }
+        ]
+      },
+      "maxItems": 4
     }
   ]
 }
@@ -1912,15 +1913,17 @@ The Graph Service is currently specified as [this schema](https://github.com/blo
 
 A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URIs_.
 
-**An example of an entity instance in the current system:**
+**An example of an [`Entity`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
 
 ```json
 {
   "entityId": 111,
-  "name": "Arthur Philip Dent",
-  "age": 30,
-  "planetOfOrigin": "Earth",
-  "occupation": "Intergalactic Traveler"
+  "properties": {
+    "name": "Arthur Philip Dent",
+    "age": 30,
+    "planetOfOrigin": "Earth",
+    "occupation": "Intergalactic Traveler"
+  }
 }
 ```
 
@@ -1957,13 +1960,12 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 Link groups and Linked entities in the Graph Service are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
 
-**An example of a `linkGroup` instance in the current system:**
+**An example of a [`LinkGroup`](https://blockprotocol.org/types/services/graph/link-group) instance in the current system:**
 
 ```json
 {
   "sourceEntityId": "user1",
   "path": "company",
-  "ordered": false,
   "links": [
     {
       "sourceEntityId": "user1",
@@ -1974,37 +1976,39 @@ Link groups and Linked entities in the Graph Service are currently supplied outs
 }
 ```
 
-**An example of a `linkGroup` instance in the proposed system:**
+**An example of a `LinkGroup` instance in the proposed system:**
 
 ```json
 {
   "sourceEntityId": 111,
-  "link": "https://blockprotocol.org/types/@alice/link-type/company",
+  "linkType": "https://blockprotocol.org/types/@alice/link-type/company",
   "ordered": false,
   "links": [
     {
       "sourceEntityId": 111,
       "destinationEntityId": 222,
-      "link": "https://blockprotocol.org/types/@alice/link-type/company"
+      "linkType": "https://blockprotocol.org/types/@alice/link-type/company"
     }
   ]
 }
 ```
 
-> 💡 In the proposed system example instance, the `path` key has been replaces with `link`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `linkType`, etc.
+> 💡 In the proposed system example instance, the `path` key has been replaced with `linkType`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `link`, etc.
 
-Links (which are given in the `linkGroup` field `links`) will use Link Type URIs instead of a `path`.
-The `linkGroup` has a new key `ordered` which specifies whether or not the `links` array is ordered. More on this in the [Ordering of links](#ordering-of-links) section.
+Links (which are provided by the `links` field in the items of the `LinkGroups` array) will use Link Type URIs instead of a `path`.
+The `LinkGroup` has a new key `ordered` which specifies whether or not the `links` array is ordered. More on this in the [Ordering of links](#ordering-of-links) section.
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
 
-**An example of a `linkedEntities` instance in the current system:**
+**An example of [`linkedEntities`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
 
 ```json
 [
   {
     "entityId": 222,
-    "name": "HASH, Ltd."
+    "properties": {
+      "name": "HASH, Ltd."
+    }
   }
 ]
 ```
@@ -2024,7 +2028,7 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
 
 Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URIs.
 
-**An example of a `createLink` instance in the current system:**
+**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2052,7 +2056,7 @@ Links in the proposed system have the notion of cardinality. A link can be one-t
 
 Links can be ordered in the current system, and the behavior will stay mostly the same in the proposed system
 
-**An example of an _ordered_ `createLink` instance in the current system:**
+**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2079,7 +2083,7 @@ If, for example, a block issues the above `createLink` request on an Entity that
 
 The indices of ordered links are transparent to the users, and implicitly given by the order that they appear in the `links` array.
 
-**An example of an ordered `linkGroup` instance in the proposed system:**
+**An example of an ordered `LinkGroup` instance in the proposed system:**
 
 ```json
 {
@@ -2189,7 +2193,7 @@ With the proposed system, this needs to be expanded such that we can CRUD Proper
 
 The current system also supplies a way to "aggregate" Entity Types, which is a filtering operation on all Entity Types within the embedding application. On a side note, "aggregation" is a place where Structure-based Queries could be used.
 
-**Type-related CRUD operations in the current system:**
+**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) in the current system:**
 
 - `createEntityType`
 - `updateEntityType`
@@ -2216,6 +2220,8 @@ The current system also supplies a way to "aggregate" Entity Types, which is a f
 - `deleteLinkType`
 - `getLinkType`
 - `aggregateLinkTypes`
+
+- `aggregateDataTypes`
 
 The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types and Link Types must be added.
 
