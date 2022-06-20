@@ -49,6 +49,8 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     yarn dev:seed-db
     ```
 
+1. **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build block hub blocks](#building-block-hub-blocks)
+
 1.  Run the Next.js app in a separate terminal using:
 
     ```sh
@@ -71,9 +73,9 @@ The default S3 bucket name is `blockprotocol` but can optionally be customized w
 Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
 When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
-### Serving Blocks
+### Building Block Hub blocks
 
-Before serving any blocks, they need to be prepared (i.e. built in most cases).
+Before serving any blocks via the Block Hub, they need to be prepared (i.e. built in most cases).
 Blocks can be registered in the repo's `/hub` with a build-config.
 The build-script `yarn exe site/scripts/prepare-blocks.ts` prepares blocks.
 
