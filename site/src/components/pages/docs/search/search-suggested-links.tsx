@@ -50,6 +50,9 @@ const SearchSuggestedLinks: React.VoidFunctionComponent<
               color: theme.palette.purple[800],
               background: theme.palette.purple[100],
             },
+            "&::before": {
+              width: "auto",
+            },
           }}
           key={label}
           variant="transparent"
