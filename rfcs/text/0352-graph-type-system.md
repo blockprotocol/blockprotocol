@@ -115,7 +115,7 @@ As well as addressing these existing shortcomings, this RFC seeks to:
 
 ## Types
 
-Underpinning this proposal is the definition of four classes of 'types'. One of these classes is an extension of the current definition of an _Entity Type_ while the other three are new classifications that are designed to improve the usability and expressiveness of _Entity Types_.
+Underpinning this proposal is the definition of four classes of "types". One of these classes is an extension of the current definition of an _Entity Type_ while the other three are new classifications that are designed to improve the usability and expressiveness of _Entity Types_.
 
 ### Data Types
 
