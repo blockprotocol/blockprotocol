@@ -106,7 +106,7 @@ const SearchSuggestedLinks: React.VoidFunctionComponent<
               textAlign: "start",
             }}
           >
-            Our open-source protocol for creating interoperable, data-driven
+            The open-source protocol for creating interoperable, data-driven
             blocks
           </Typography>
         </Box>
