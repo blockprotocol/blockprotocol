@@ -1913,15 +1913,17 @@ The Graph Service is currently specified as [this schema](https://github.com/blo
 
 A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URIs_.
 
-**An example of an entity instance in the current system:**
+**An example of an [`Entity`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
 
 ```json
 {
   "entityId": 111,
-  "name": "Arthur Philip Dent",
-  "age": 30,
-  "planetOfOrigin": "Earth",
-  "occupation": "Intergalactic Traveler"
+  "properties": {
+    "name": "Arthur Philip Dent",
+    "age": 30,
+    "planetOfOrigin": "Earth",
+    "occupation": "Intergalactic Traveler"
+  }
 }
 ```
 
@@ -1998,13 +2000,15 @@ The `LinkGroup` has a new key `ordered` which specifies whether or not the `link
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
 
-**An example of a `linkedEntities` instance in the current system:**
+**An example of [`linkedEntities`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
 
 ```json
 [
   {
     "entityId": 222,
-    "name": "HASH, Ltd."
+    "properties": {
+      "name": "HASH, Ltd."
+    }
   }
 ]
 ```
@@ -2024,7 +2028,7 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
 
 Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URIs.
 
-**An example of a `createLink` instance in the current system:**
+**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2052,7 +2056,7 @@ Links in the proposed system have the notion of cardinality. A link can be one-t
 
 Links can be ordered in the current system, and the behavior will stay mostly the same in the proposed system
 
-**An example of an _ordered_ `createLink` instance in the current system:**
+**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2189,7 +2193,7 @@ With the proposed system, this needs to be expanded such that we can CRUD Proper
 
 The current system also supplies a way to "aggregate" Entity Types, which is a filtering operation on all Entity Types within the embedding application. On a side note, "aggregation" is a place where Structure-based Queries could be used.
 
-**Type-related CRUD operations in the current system:**
+**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) in the current system:**
 
 - `createEntityType`
 - `updateEntityType`
