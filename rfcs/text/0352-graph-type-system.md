@@ -341,7 +341,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
     }
     ```
 
-- **Specifying properties are required** - The entity type can also define which of its properties are **required**, _note: properties are **optional** by default_
+- **Specifying properties are required** - The Entity Type can also define which of its properties are **required**, _note: properties are **optional** by default_
   **Example 1**
   The `Blog Post` Entity Type could contain the **required** Property Types `Title`, `Author`, and `Contents`, and the **optional** Property Type `Category`
 
@@ -369,7 +369,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
     }
     ```
 
-- **Specifying there is a list of properties** - The entity type can also define whether its properties are lists, where
+- **Specifying there is a list of properties** - The Entity Type can also define whether its properties are lists, where
 
   - the elements of the list are described by a Property Type
   - there is an optionally specified _maximum_ amount of items in the list
@@ -460,7 +460,7 @@ Entity Types can also express the types of relationships they have with other th
     ]
     ```
 
-- **Specifying that a Link is required** - The entity type can also define that some of its links are **required**, _note: links are **optional** by default_
+- **Specifying that a Link is required** - The Entity Type can also define that some of its links are **required**, _note: links are **optional** by default_
 
   **Example 1**
   The `Bank Account` Entity Type could have a **required** `Maintained By` link
@@ -1361,7 +1361,7 @@ This would accept Entity instances with the following shape
 
 #### Specifying there is a list of properties
 
-The entity type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type, optionally paired with constraints on the _minimum_ and _maximum_ amount of items in the lists
+The Entity Type can also define whether or not its properties are lists, where the elements of the list are described by a Property Type, optionally paired with constraints on the _minimum_ and _maximum_ amount of items in the lists
 
 **Example 1**
 
@@ -1608,7 +1608,7 @@ This would accept Entity instances with the following shape
 
 #### Specifying that a Link is required
 
-The entity type can also define that some of its links are **required**, _note: links are **optional** by default_
+The Entity Type can also define that some of its links are **required**, _note: links are **optional** by default_
 
 **Example 1**
 
