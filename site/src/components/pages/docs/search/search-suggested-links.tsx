@@ -13,7 +13,7 @@ interface SearchSuggestedLinksProps {
 const SUGGESTED_LINKS = [
   "Introduction to the Block Protocol",
   "Quick start guide to developing blocks",
-  "A guide for embedding applications",
+  "Embed blocks within your site or app",
   "Frequently asked questions",
 ];
 
