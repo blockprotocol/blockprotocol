@@ -1325,9 +1325,11 @@ The data _within_ an Entity is described simply through a set of Property Types
 
 **Example 1**
 
-The `Book` Entity Type could contain the Property Types `Name`, a `Published On` and a `Blurb`, where `Name` is **required**
+The `Book` Entity Type could contain the Property Types `Name`, a `Published On` and a `Blurb`, where `Name` is **required**.
 
-- The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
+Assuming that:
+
+- the `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
 
 ```json
 {
@@ -1366,13 +1368,13 @@ The Entity Type can also define whether or not its properties are lists, where t
 
 **Example 1**
 
-The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
+The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`.
 
-Assuming that
+Assuming that:
 
-- The `Model`, `Make`, `Spec`, and `Year` Property Types all have values that are instances of the `Text` Data Type
-- The `Brake Horsepower` Property Type has values that is an instance of the `Number` Data Type
-- The `Extra Trim` Property Type is a list where the values are instances of the `Text` Data Type
+- the `Model`, `Make`, `Spec`, and `Year` Property Types all have values that are instances of the `Text` Data Type
+- the `Brake Horsepower` Property Type has values that is an instance of the `Number` Data Type
+- the `Extra Trim` Property Type is a list where the values are instances of the `Text` Data Type
 
 ```json
 {
@@ -1425,9 +1427,9 @@ This would accept Entity instances with the following shape
 
 The `Product` Entity Type could contain a **required** list of values of the `Tag` Property Type where there's at least 1 and up to 5.
 
-Assuming that
+Assuming that:
 
-- The `Tag` Property Type has values that are instances of the `Text` Data Type
+- the `Tag` Property Type has values that are instances of the `Text` Data Type
 
 ```json
 {
@@ -1473,9 +1475,11 @@ The links going _from_ an Entity are described as a set of Link Types
 
 **Example 1**
 
-The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link
+The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link.
 
-The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
+Assuming that:
+
+- the `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
 
 ```json
 {
@@ -1523,7 +1527,7 @@ This would accept Entity instances with the following shape
 
 **Example 2**
 
-The `UK Address` Entity Type could contain Property Types `address-line-1`, `postcode`, and `city`, where all of them are **required**
+The `UK Address` Entity Type could contain Property Types `address-line-1`, `postcode`, and `city`, where all of them are **required**.
 
 ```json
 {
