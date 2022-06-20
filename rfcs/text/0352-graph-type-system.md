@@ -18,7 +18,7 @@ Rather than allowing any free-form JSON schema, this RFC defines a set of JSON s
 
 These elements are used in combination to improve reusability of, and better define, expressions of data structural requirements.
 
-By using the proposed types, blocks, embedding applications, and end-users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities. Reusability of descriptions of data should decrease developmental overhead, with all members of the ecosystem benefiting from emergent standardization.
+By using the proposed types, blocks, embedding applications, and end-users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities. Reusability of descriptions of data should decrease developmental overhead over time, with all members of the ecosystem benefiting from emergent standardization.
 
 # Motivation
 
