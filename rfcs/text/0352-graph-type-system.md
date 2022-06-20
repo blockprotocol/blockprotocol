@@ -510,7 +510,9 @@ Entity Types can also express the types of relationships they have with other th
     ```
 
 - **Specifying there is an Ordered List of Links** - The Entity Type can also express that its out-going links (of the same type) are ordered
+
   **Example 1**
+
   The `Playlist` Entity Type could contain some Property Types, and an _ordered_ list of `Contains` links
 
   - Sample (simplified) data
@@ -544,6 +546,7 @@ Entity Types can also express the types of relationships they have with other th
     ```
 
     **Example 2**
+
     The `Page` Entity Type could contain some Property Types, a `Written By` link, and an _ordered_ list of `Contains` links
 
   - Sample (simplified) data
