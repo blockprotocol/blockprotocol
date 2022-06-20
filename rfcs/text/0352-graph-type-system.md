@@ -163,7 +163,7 @@ A Property Type can have plain data as its value, which it can define by using a
 
 **Example 1**
 
-The `Favourite Quote` property type could define its value as being an instance of the `Text` Data Type.
+The `Favorite Quote` property type could define its value as being an instance of the `Text` Data Type.
 
 - Sample data when used in (simplified view of) an Entity
 
@@ -218,7 +218,7 @@ The `Interests` property type could define its value as being an object which ha
 
 - Sample data when used in (simplified view of) an Entity
 
-  Assuming that `Favourite Film`, `Favorite Song`, and `Hobby` all accept instances of `Text`. (Although these would be better expressed as Entities that are linked)
+  Assuming that `Favorite Film`, `Favorite Song`, and `Hobby` all accept instances of `Text`. (Although these would be better expressed as Entities that are linked)
 
   ```json
   {
@@ -900,13 +900,13 @@ A property type describes its possible values through a `oneOf` definition, whic
 
 **Example 1**
 
-The `Favourite Quote` property type could define its value as being an instance of the `Text` Data Type.
+The `Favorite Quote` property type could define its value as being an instance of the `Text` Data Type.
 
 ```json
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/favorite-quote",
-  "name": "Favourite Quote",
+  "name": "Favorite Quote",
   "oneOf": [
     { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" }
   ]
