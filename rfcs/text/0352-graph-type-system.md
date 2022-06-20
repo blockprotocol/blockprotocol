@@ -66,11 +66,11 @@ This works most easily when the data uses the same identifier (key in the object
 }
 ```
 
-This is an example of a lack of **consensus**, where two parties don't agree on how to describe the data in question. At this point, there isn't a clear route to deciding compatibility. Block schemas could perhaps be modified so that the block could express it needs something that matches a [regex to ensure the URL has an image extension](https://stackoverflow.com/questions/42853961/regex-that-matches-image-links-but-exclude-normal-url), and the embedding application could ignore the key and just match on values, but:
+This is an example of a lack of **consensus**, where two parties don't agree on how to describe the data in question. At this point, there isn't a clear route to deciding compatibility. Block schemas could perhaps be modified so that the block could express it needs something that matches a [regex to ensure the URL has an image extension](https://stackoverflow.com/questions/42853961/regex-that-matches-image-links-but-exclude-normal-url), and the embedding application could ignore the key and just match on values, but this:
 
-- this is potentially flakey ([here's an example](https://dummyimage.com/300) of a URL that points to an image but _does not_ have an extension)
-- the solution ends up being very domain-specific
-- it introduces a large maintenance burden
+- is potentially flakey ([here's an example](https://dummyimage.com/300) of a URL that points to an image but _does not_ have an extension)
+- ends up being very domain-specific
+- introduces a large maintenance burden
 - is generally not reusable, possibly leading to similar bespoke logic being defined in multiple places, with possible subtle but incompatible variations
 
 Thus the main reason for following RFC:
