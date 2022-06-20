@@ -30,11 +30,11 @@ const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   },
   {
     name: "Specification",
-    href: "/spec",
+    href: "/docs/spec",
   },
   {
     name: "Publish a Block",
-    href: "/docs/publishing-blocks",
+    href: "/docs/developing-blocks#publish",
   },
   {
     name: "Contact Us",

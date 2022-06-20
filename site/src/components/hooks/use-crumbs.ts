@@ -2,6 +2,7 @@ import { useMemo } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { itemIsPage } from "../navbar/util";
+import { generatePathWithoutParams } from "../shared";
 
 const findCrumbs = (params: {
   asPath: string;
@@ -10,6 +11,8 @@ const findCrumbs = (params: {
   parentHref?: string;
 }): (SiteMapPage | SiteMapPageSection)[] | null => {
   const { parents, item, asPath, parentHref } = params;
+
+  const pathWithoutParams = generatePathWithoutParams(asPath);
 
   for (const section of itemIsPage(item) ? item.sections : item.subSections) {
     const crumbs = findCrumbs({
@@ -40,7 +43,10 @@ const findCrumbs = (params: {
 
   const href = itemIsPage(item) ? item.href : `${parentHref}#${item.anchor}`;
 
-  if (asPath === href || (itemIsPage(item) && asPath === `${href}#`)) {
+  if (
+    pathWithoutParams === href ||
+    (itemIsPage(item) && pathWithoutParams === `${href}#`)
+  ) {
     return [...(parents || []), item];
   }
 

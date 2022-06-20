@@ -27,6 +27,7 @@ import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
 import { MobileNavItems } from "./navbar/mobile-nav-items";
 import { NAVBAR_LINK_ICONS } from "./navbar/util";
 import { SearchNavButton } from "./search-nav-button";
+import { generatePathWithoutParams } from "./shared";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -75,7 +76,10 @@ const useScrollingNavbar = (
   const [scrolledPast, setScrolledPast] =
     useState<Record<string, boolean>>(defaultScrolledPast);
 
-  if (threshold !== null && !Object.hasOwn(defaultScrolledPast, threshold)) {
+  if (
+    threshold !== null &&
+    !Object.prototype.hasOwnProperty.call(defaultScrolledPast, threshold)
+  ) {
     setScrolledPast(defaultScrolledPast);
   }
 
@@ -92,7 +96,10 @@ const useScrollingNavbar = (
           );
 
           return (threshold !== null &&
-            !Object.hasOwn(nextScrolledPast, threshold)) ||
+            !Object.prototype.hasOwnProperty.call(
+              nextScrolledPast,
+              threshold,
+            )) ||
             Object.keys(nextScrolledPast).some(
               (key) => nextScrolledPast[key] !== currentValue[key],
             )
@@ -143,7 +150,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
 
-  const isHomePage = asPath === "/";
+  const isHomePage = generatePathWithoutParams(asPath) === "/";
   const isDocs = asPath.startsWith("/docs");
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
@@ -380,29 +387,30 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
             <MobileNavItems onClose={() => setMobileNavVisible(false)} />
           </Box>
 
-          <Box
-            p={5}
-            flexShrink={0}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            sx={{
-              borderTopStyle: "solid",
-              borderTopWidth: 1,
-              borderTopColor: theme.palette.gray[40],
-              "> button, a": {
-                width: {
-                  xs: "100%",
-                  sm: "unset",
+          {user ? null : (
+            <Box
+              flexShrink={0}
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              sx={{
+                paddingY: 4,
+                paddingX: 4.25,
+                borderTopStyle: "solid",
+                borderTopWidth: 1,
+                borderTopColor: theme.palette.gray[40],
+                "> button, a": {
+                  width: {
+                    xs: "100%",
+                    sm: "unset",
+                  },
+                  minWidth: {
+                    xs: "unset",
+                    sm: 320,
+                  },
                 },
-                minWidth: {
-                  xs: "unset",
-                  sm: 320,
-                },
-              },
-            }}
-          >
-            {user ? null : pathname === "/login" ? null : (
+              }}
+            >
               <LinkButton
                 href="#"
                 variant="secondary"
@@ -412,26 +420,25 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                   event?.preventDefault();
                 }}
                 sx={{
-                  marginBottom: 1,
+                  fontSize: 18,
+                  marginBottom: 1.25,
                 }}
               >
                 Log in
               </LinkButton>
-            )}
-            <LinkButton
-              href="/signup"
-              sx={{
-                width: "100%",
-                py: 1.5,
-                px: 3,
-                textTransform: "none",
-              }}
-              variant="primary"
-              onClick={() => setMobileNavVisible(false)}
-            >
-              Sign Up
-            </LinkButton>
-          </Box>
+
+              <LinkButton
+                href="/signup"
+                sx={{
+                  fontSize: 18,
+                }}
+                variant="primary"
+                onClick={() => setMobileNavVisible(false)}
+              >
+                Sign Up
+              </LinkButton>
+            </Box>
+          )}
         </Box>
       </Slide>
     </Box>
