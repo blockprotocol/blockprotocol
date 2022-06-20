@@ -49,7 +49,7 @@ The public-facing [blockprotocol.org](https://blockprotocol.org) website serves 
     yarn dev:seed-db
     ```
 
-1. **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build block hub blocks](#building-block-hub-blocks)
+1.  **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build block hub blocks](#building-block-hub-blocks)
 
 1.  Run the Next.js app in a separate terminal using:
 
