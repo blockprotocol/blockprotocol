@@ -1617,9 +1617,11 @@ The Entity Type can also define that some of its links are **required**, _note: 
 
 **Example 1**
 
-The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link **which is required**
+The `Book` Entity Type could contain the Property Types outlined above, and a `Written By` link **which is required**.
 
-The `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
+Assuming that:
+
+- the `Name`, `Published On`, and `Blurb` Property Types all have values that are instances of the `Text` Data Type
 
 ```json
 {
