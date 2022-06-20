@@ -653,7 +653,7 @@ The Link Functions will be updated to handle Link Types, removing the `path` fie
 
 ### Block Schemas
 
-Block schemas will need to be updated to be built using the types outlined above, the specifics of this are explored in-depth in the Reference-Level Explanation, however the basic premise is that instead of writing new definitions inline in every block schema, instead the properties and links should be defined as references to their respective types. If a type does not exist for a given property then it will need to be created, and so on.
+Block schemas will need to be updated to be built using the types outlined above. The specifics of this are explored in-depth in the Reference-Level explanation, however the basic premise is that instead of writing new definitions inline in every block schema, the properties and links should be defined as references to their respective types. If a type does not exist for a given property then it will need to be created, and so on.
 
 ### Structure-based Queries
 
