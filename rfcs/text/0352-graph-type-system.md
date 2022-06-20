@@ -28,7 +28,7 @@ The Block Protocol operates in-between parties that otherwise have limited to no
 
 By getting both parties to agree to a prescriptive standard, new technological possibilities become viable. The Block Protocol is an example of this, enabling a new class of applications, ones that are able to dynamically load complex front-end components at run-time which are immediately usable and functional, even if the component was previously unknown to the application.
 
-The foundation of this capability is the standardization of the expression of requirements. Most notably, the block and entity schemas expressed through the graph service allow for dynamic resolution of expected input data.
+The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through the graph service allow for dynamic resolution of expected input data.
 
 ---
 
