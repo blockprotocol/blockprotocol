@@ -144,7 +144,7 @@ These can be considered the least restrictive value spaces:
 
 #### Creating new Data-Types
 
-Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work, please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.
+Due to the size of this RFC, creating new data-types has been deemed out-of-scope and a [follow-up RFC](https://github.com/blockprotocol/blockprotocol/pull/355) is in the works to spec out how this could work. Please consult it for plans on introducing a suite of Data Types including ones like `Date`, `Positive Number`, etc.
 
 ### Property Types
 
