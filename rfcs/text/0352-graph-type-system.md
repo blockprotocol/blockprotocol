@@ -2121,7 +2121,7 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
   "properties": {
     "name": { "type": "string" },
     "email": { "type": "string" },
-    // "link" here is an URL for ther person's website for example.
+    // "link" here is a URL for ther person's website for example.
     "link": { "type": "string", "format": "uri" },
     "avatar": { "type": "string", "format": "uri" },
     "employer": {
