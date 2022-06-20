@@ -342,7 +342,9 @@ An Entity Type is a description of a particular "thing", made up of identifiable
     ```
 
 - **Specifying properties are required** - The Entity Type can also define which of its properties are **required**, _note: properties are **optional** by default_
+
   **Example 1**
+
   The `Blog Post` Entity Type could contain the **required** Property Types `Title`, `Author`, and `Contents`, and the **optional** Property Type `Category`
 
   - Sample (simplified) Data
@@ -376,6 +378,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
   - there is an optionally specified _minimum_ amount of items in the list
 
   **Example 1**
+
   The `Car` Entity Type could contain the Property Types `Make`, `Model`, `Year`, `Brake Horsepower`, and a list of `Extra Trim`
 
   - Sample (simplified) Data
