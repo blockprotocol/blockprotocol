@@ -855,9 +855,10 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
                     "type": { "const": "array" },
                     "items": { "$ref": "#/$defs/propertyTypeReference" },
                     "minItems": { "type": "number" },
-                    "maxItems": { "type": "number" },
-                    "additionalProperties": false
-                  }
+                    "maxItems": { "type": "number" }
+                  },
+                  "required": ["type", "items"],
+                  "additionalProperties": false
                 }
               ]
             }
