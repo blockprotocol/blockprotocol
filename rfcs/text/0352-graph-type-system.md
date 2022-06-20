@@ -670,7 +670,8 @@ This RFC does not currently mention ways of constraining the destination of a Li
 The largest change (in terms of the number of interfaces modified) is unsurprisingly the updates that will need to be made to the Entity Type functions.
 
 - The Type objects will be updated to capture the new structures and references between them
-- New `create`, `get`, `update`, and `delete` methods will need to be made for Property Types, Data Types, and Link Types
+- New `create`, `get`, `update`, and `delete` methods will need to be made for Property Types and Link Types
+- A new `get` method will need to be made for Data Types (as they are not user-defined, they do not require full CRUD yet.)
 - The error conditions of the Type methods will be updated to include further validation errors that include but are not limited to:
   - referencing a type that isn't in the embedding application
   - submitting a type that is malformed
@@ -1118,7 +1119,9 @@ The `Contrived Property` Property Type could define its value as being _either_ 
       "type": "array",
       "items": {
         "oneOf": [
-          { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number" }
+          {
+            "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
+          }
         ]
       },
       "maxItems": 4
@@ -2213,6 +2216,8 @@ The current system also supplies a way to "aggregate" Entity Types, which is a f
 - `deleteLinkType`
 - `getLinkType`
 - `aggregateLinkTypes`
+
+- `aggregateDataTypes`
 
 The main changes imposed by the proposed system are that Entity Types must be defined as previously outlined - with canonical Property Type URIs and that new messages for managing Property Types and Link Types must be added.
 
