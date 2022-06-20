@@ -63,7 +63,7 @@ export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
         >
           As a developer, building your applications using the Block Protocol
           will give you access to a global registry of reusable, flexible blocks
-          to embed inside your application.
+          to embed.
         </Typography>
       </Box>
       <Box sx={{ width: "100%" }} mb={4}>
