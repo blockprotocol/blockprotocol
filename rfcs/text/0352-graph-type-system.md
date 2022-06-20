@@ -1936,13 +1936,13 @@ A key change for allowing the proposed type system to work is moving away from a
 
 This change canonicalizes property keys, such that they uniquely identify a Property Type.
 
-**Within blocks** this impacts
+**Within blocks** this impacts:
 
 - how entity fields are accessed
 - how Block Protocol messages are constructed
 - payload size of Block Protocol messages
 
-**For block authors** this impacts
+**For block authors** this impacts:
 
 - how Block Schemas are defined
 - reusability of properties (the need for some kind of type discovery)
