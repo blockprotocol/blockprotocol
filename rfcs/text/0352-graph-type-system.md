@@ -1958,13 +1958,12 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 Link groups and Linked entities in the Graph Service are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
 
-**An example of a `linkGroup` instance in the current system:**
+**An example of a [`LinkGroup`](https://blockprotocol.org/types/services/graph/link-group) instance in the current system:**
 
 ```json
 {
   "sourceEntityId": "user1",
   "path": "company",
-  "ordered": false,
   "links": [
     {
       "sourceEntityId": "user1",
@@ -1975,27 +1974,27 @@ Link groups and Linked entities in the Graph Service are currently supplied outs
 }
 ```
 
-**An example of a `linkGroup` instance in the proposed system:**
+**An example of a `LinkGroup` instance in the proposed system:**
 
 ```json
 {
   "sourceEntityId": 111,
-  "link": "https://blockprotocol.org/types/@alice/link-type/company",
+  "linkType": "https://blockprotocol.org/types/@alice/link-type/company",
   "ordered": false,
   "links": [
     {
       "sourceEntityId": 111,
       "destinationEntityId": 222,
-      "link": "https://blockprotocol.org/types/@alice/link-type/company"
+      "linkType": "https://blockprotocol.org/types/@alice/link-type/company"
     }
   ]
 }
 ```
 
-> 💡 In the proposed system example instance, the `path` key has been replaces with `link`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `linkType`, etc.
+> 💡 In the proposed system example instance, the `path` key has been replaced with `linkType`. This is an implementation detail which is not dictated by the proposal. Alternatives could be `linkUri`, `link`, etc.
 
-Links (which are given in the `linkGroup` field `links`) will use Link Type URIs instead of a `path`.
-The `linkGroup` has a new key `ordered` which specifies whether or not the `links` array is ordered. More on this in the [Ordering of links](#ordering-of-links) section.
+Links (which are provided by the `links` field in the items of the `LinkGroups` array) will use Link Type URIs instead of a `path`.
+The `LinkGroup` has a new key `ordered` which specifies whether or not the `links` array is ordered. More on this in the [Ordering of links](#ordering-of-links) section.
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
 
@@ -2080,7 +2079,7 @@ If, for example, a block issues the above `createLink` request on an Entity that
 
 The indices of ordered links are transparent to the users, and implicitly given by the order that they appear in the `links` array.
 
-**An example of an ordered `linkGroup` instance in the proposed system:**
+**An example of an ordered `LinkGroup` instance in the proposed system:**
 
 ```json
 {
