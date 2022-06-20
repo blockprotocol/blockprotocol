@@ -60,8 +60,8 @@ const SearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
           })}
         >
           {crumbs.map((crumb, index) => (
-            <>
-              <span key={crumb.title}>{crumb.title}</span>
+            <span key={crumb.title}>
+              {crumb.title}
               {index < crumbs.length - 1 && (
                 <FontAwesomeIcon
                   icon={faChevronRight}
@@ -71,7 +71,7 @@ const SearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
                   }}
                 />
               )}
-            </>
+            </span>
           ))}
         </Typography>
 
