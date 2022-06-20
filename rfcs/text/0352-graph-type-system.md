@@ -385,7 +385,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
     Assuming that
 
     - The `Model`, `Make`, `Spec`, and `Year` Property Types all have values that are instances of the `Text` Data Type
-    - The `Extra Trim` Property Type is a list where the values are instances of the `Text` Data Type
+    - The `Extra Trim` Property Type is a list where the list items are instances of the `Text` Data Type
     - The `Brake Horsepower` Property Type has a value that is an instance of the `Number` Data Type
 
     ```json
