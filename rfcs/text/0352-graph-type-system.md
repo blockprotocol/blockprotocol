@@ -9,7 +9,7 @@
 
 This RFC proposes changing the way data structural requirements are expressed within the BP.
 
-Rather than allowing any free-form JSON schema, this RFC defines a set of JSON schema meta-schemas, which describe:
+Rather than allowing any free-form JSON schema, this RFC defines the following classes of constrained JSON schemas:
 
 - Data Types
 - Property Types
@@ -17,6 +17,8 @@ Rather than allowing any free-form JSON schema, this RFC defines a set of JSON s
 - Entity Types
 
 These elements are used in combination to improve reusability of, and better define, expressions of data structural requirements.
+
+The structure of these types are defined by (and can be validated against) their meta-schemas, which can be found in the [reference-level explanation](#reference-level-explanation).
 
 By using the proposed types, blocks, embedding applications, and end-users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities. Reusability of descriptions of data should decrease developmental overhead over time, with all members of the ecosystem benefiting from emergent standardization.
 
