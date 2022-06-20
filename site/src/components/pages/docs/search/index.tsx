@@ -230,7 +230,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               setSearchText(event.target.value)
             }
-            placeholder="Search The BP"
+            placeholder="Search…"
             required
           />
           <SearchIcon
