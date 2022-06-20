@@ -1,6 +1,6 @@
 import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { Box, Divider, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { FontAwesomeIcon, SpecificationIcon } from "../../../icons";
 import { AlgoliaHighlightResult, AlgoliaResult, SearchVariants } from "./index";
@@ -23,7 +23,7 @@ const SearchList: React.VoidFunctionComponent<SearchListProps> = ({
   const [docResults, setDocResults] = useState<AlgoliaResult[]>([]);
   const [specResults, setSpecResults] = useState<AlgoliaResult[]>([]);
 
-  useEffect(() => {
+  useMemo(() => {
     setDocResults(searchResults.filter((result) => result.type === "docs"));
     setSpecResults(searchResults.filter((result) => result.type === "spec"));
   }, [searchResults]);

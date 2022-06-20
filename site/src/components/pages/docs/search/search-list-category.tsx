@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
 import SearchHeading from "./search-list-heading";
@@ -20,7 +20,7 @@ const SearchListCategory: React.VoidFunctionComponent<
   const [sections, setSections] = useState<AlgoliaResult[]>([]);
   const [items, setItems] = useState<AlgoliaResult[]>([]);
 
-  useEffect(() => {
+  useMemo(() => {
     setSections(
       searchResults.filter(
         (result) => result._highlightResult?.title?.matchLevel !== "none",

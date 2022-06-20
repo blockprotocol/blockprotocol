@@ -1,15 +1,15 @@
 import SearchIcon from "@mui/icons-material/Search";
 import { Chip, chipClasses, modalClasses, useTheme } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 import { Button } from "./button";
 import { Modal } from "./modal/modal";
 import Search from "./pages/docs/search";
 
 export const SearchNavButton = () => {
-  const theme = useTheme();
+  const [isWindows, setIsWindows] = useState(false);
   const [displayModal, setDisplayModal] = useState(false);
-  const isWindows = window.navigator.userAgent.indexOf("Win") > -1;
+  const theme = useTheme();
 
   useEffect(() => {
     const onKeyDown = ({ key, ctrlKey, metaKey }: KeyboardEvent) => {
@@ -21,7 +21,13 @@ export const SearchNavButton = () => {
     window.addEventListener("keydown", onKeyDown);
 
     return () => window.removeEventListener("keydown", onKeyDown);
-  });
+  }, [isWindows, displayModal]);
+
+  useLayoutEffect(() => {
+    if (window.navigator.userAgent.indexOf("Win") > -1) {
+      setIsWindows(true);
+    }
+  }, []);
 
   return (
     <>
