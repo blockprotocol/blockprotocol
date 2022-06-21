@@ -6,6 +6,11 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
+  // https://github.com/vercel/community/discussions/496#discussioncomment-2997454
+  experimental: {
+    outputStandalone: true,
+  },
+
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
