@@ -24,7 +24,7 @@ const defaultExecaOptions = {
 const script = async () => {
   console.log(chalk.bold("Publishing to local registry..."));
 
-  const publishablePackageNames: string[] = [];
+  const publishablePackages: { name: string; path: string }[] = [];
 
   const packageParentFolders = [
     "packages",
@@ -49,7 +49,7 @@ const script = async () => {
       const packageJson = await fs.readJson(`${packagePath}/package.json`);
       const packageName = packageJson.name;
       if (packageJson.private !== true) {
-        publishablePackageNames.push(packageName);
+        publishablePackages.push({ name: packageName, path: packagePath });
       }
     } catch {
       // noop (packages/* is a file or does not contain package.json)
@@ -57,9 +57,10 @@ const script = async () => {
   }
 
   console.log(
-    `Publishable package names: ${["", ...publishablePackageNames].join(
-      "\n- ",
-    )}`,
+    `Publishable package names: ${[
+      "",
+      ...publishablePackages.map(({ name }) => name),
+    ].join("\n- ")}`,
   );
 
   logStepStart("Login into local registry");
@@ -98,10 +99,12 @@ const script = async () => {
 
   logStepEnd();
 
-  for (const packageName of publishablePackageNames) {
-    const packageDirPath = path.resolve(`packages/${packageName}`);
+  for (const publishablePackage of publishablePackages) {
+    const packageDirPath = path.resolve(`packages/${publishablePackage.path}`);
 
-    logStepStart(`Unpublish ${packageName} from local registry (if present)`);
+    logStepStart(
+      `Unpublish ${publishablePackage.name} from local registry (if present)`,
+    );
 
     await execa("npm", ["unpublish", "--force"], {
       ...defaultExecaOptions,
@@ -110,7 +113,7 @@ const script = async () => {
     });
 
     logStepEnd();
-    logStepStart(`Publish ${packageName} to local registry`);
+    logStepStart(`Publish ${publishablePackage.name} to local registry`);
 
     await execa("npm", ["publish", "--force"], {
       ...defaultExecaOptions,
