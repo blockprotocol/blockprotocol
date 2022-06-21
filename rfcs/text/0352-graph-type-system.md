@@ -112,8 +112,12 @@ Given the motivation above and some other implications of the current design, th
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
+<!-- markdownlint-disable  MD029-->
+
 3.  define a constrained type system that is able to describe any JSON structure
 4.  refine the current way of defining links between entities, encapsulating the approach within the type system
+
+<!-- markdownlint-enable  MD029-->
 
 ## Types
 
@@ -2376,29 +2380,29 @@ For Entity Types, Property Types, and Link Types, changing anything on the types
 
 [drawbacks]: #drawbacks
 
-### Implementation Complexity
+## Implementation Complexity
 
 This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new service-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilize the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph service implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
 
 It's worth noting that standard JSON schema validators won't natively support the full Type System (due to some of the new keywords that have been created), however they should be able to do partial validation, where prior to this RFC there were occurrences where misusing JSON schema could break the validators entirely.
 
-### Increased dependency on external parties
+## Increased dependency on external parties
 
 A potential negative side-effect of building an open ecosystem is introducing more dependencies on external parties. Although the magnitude of the impact will depend on the accompanying tooling and implementation that comes about as a result of this RFC, generally speaking there will be an increased reliance on external parties hosting and maintaining types. That said, the Block Protocol is focused around front-end components, and generally speaking there is already a high-reliance on external ecosystems (whether it be npm, etc.), so this is a risk that should be familiar for developers. Some of the [Future possibilities](#future-possibilities) outlined later on would also help mitigate this with potential centralized repositories for types to improve confidence in guarantees and consistency, etc.
 
-### Ergonomics of manually writing schemas
+## Ergonomics of manually writing schemas
 
 This RFC greatly decreases the ergonomics of writing block schemas **by hand**. The verbosity of schemas is significantly increased, as well as the general complexity of their expression due to them being composed of other schemas that need to be referred to.
 
 This has the potential to increase the barrier-to-entry, and dissuade people from picking up the Protocol if its capabilities prove to be too complicated for their use cases.
 
-### Ecosystem lock-in
+## Ecosystem lock-in
 
 With some of the potential solutions proposed in [Future Possibilities](#future-possibilities) there will be large benefits to participating within the Block Protocol ecosystem and community. This naturally brings the potential downside of the opportunity cost of _not_ participating within the ecosystem.
 
 This type system is designed around reusable types, where people can share and benefit from other people's work, isolating development from the community means that types will not end up being reusable and a lot of the value is lost.
 
-### Versioning Considerations
+## Versioning Considerations
 
 A version control model will likely be developed in tandem to the implementation of this type system. As such, there are potential complications to how dependencies are managed and the ramifications of having a large-connected system. Some of these are explored in detail in the [RFC about constraining Links](https://github.com/blockprotocol/blockprotocol/pull/354). The major drawback here is that this greatly increases cognitive load, and reasoning about changes within the ecosystem will become more involved.
 
@@ -2468,7 +2472,7 @@ A block developer trying to create a block that's specific to their domain for t
 
 There are a number of very specific design decisions that are also encapsulated within this proposal, it's worth capturing some of the noteworthy ones.
 
-#### Allowing `oneOf`
+### Allowing `oneOf`
 
 Representing the Type System within common structures like a Relation Database is greatly complicated by the inclusion of the boolean operators (`oneOf` is equivalent to an `or` operator). It is required under the constraint of being able to map any existing JSON data, as reasoned above. A simple example of this is trying to represent an object (this case occurs either in an Entity or a Property Type object) that looks like the following:
 
@@ -2512,7 +2516,7 @@ Requires something like
 }
 ```
 
-#### Including an `Empty List` Data Type
+### Including an `Empty List` Data Type
 
 Similarly, the `Empty List` Data Type is required to be able to programmatically map unknown JSON data into the system. Given an incoming entity like:
 
@@ -2528,7 +2532,7 @@ Similarly, the `Empty List` Data Type is required to be able to programmatically
 
 There isn't a good assumption to make about the type of the first array. As such, including `Empty List` makes it possible to treat this as a value without an inner type, and a user will be forced to retype it to be able to modify it.
 
-#### Including an `Object` Data Type
+### Including an `Object` Data Type
 
 The inclusion of the `Object` Data Type is less strongly supported. At the moment it seems like it's easy to include in implementations (as datastores will already need to be able to represent JSON-like structures), so instead the discussion at the moment is around looking for a reason to exclude it.
 
