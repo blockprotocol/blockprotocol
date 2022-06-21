@@ -92,7 +92,7 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
     name: "GitHub",
     icon: <FontAwesomeIcon icon={faGithub} />,
-    href: "https://github.com/blockprotocol",
+    href: "https://github.com/blockprotocol/blockprotocol",
   },
 ];
 
