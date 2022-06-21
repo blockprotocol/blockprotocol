@@ -100,15 +100,13 @@ const script = async () => {
   logStepEnd();
 
   for (const publishablePackage of publishablePackages) {
-    const packageDirPath = path.resolve(`packages/${publishablePackage.path}`);
-
     logStepStart(
       `Unpublish ${publishablePackage.name} from local registry (if present)`,
     );
 
     await execa("npm", ["unpublish", "--force"], {
       ...defaultExecaOptions,
-      cwd: packageDirPath,
+      cwd: publishablePackage.path,
       reject: false,
     });
 
@@ -117,7 +115,7 @@ const script = async () => {
 
     await execa("npm", ["publish", "--force"], {
       ...defaultExecaOptions,
-      cwd: packageDirPath,
+      cwd: publishablePackage.path,
     });
 
     logStepEnd();
