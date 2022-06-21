@@ -3,6 +3,8 @@
 - RFC PR: [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
 - Block Protocol Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
 
+<!-- markdownlint-disable  MD036 -->
+
 # Summary
 
 [summary]: #summary
@@ -112,12 +114,12 @@ Given the motivation above and some other implications of the current design, th
 
 As well as addressing these existing shortcomings, this RFC seeks to:
 
-<!-- markdownlint-disable  MD029-->
+<!-- markdownlint-disable  MD029 -->
 
 3.  define a constrained type system that is able to describe any JSON structure
 4.  refine the current way of defining links between entities, encapsulating the approach within the type system
 
-<!-- markdownlint-enable  MD029-->
+<!-- markdownlint-enable  MD029 -->
 
 ## Types
 
