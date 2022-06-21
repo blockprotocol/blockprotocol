@@ -1,6 +1,6 @@
 import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { Box, Divider, useTheme } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
 import { FontAwesomeIcon, SpecificationIcon } from "../../../icons";
 import { AlgoliaHighlightResult, AlgoliaResult, SearchVariants } from "./index";
@@ -20,13 +20,14 @@ const SearchList: React.VoidFunctionComponent<SearchListProps> = ({
   closeModal,
 }) => {
   const theme = useTheme();
-  const [docResults, setDocResults] = useState<AlgoliaResult[]>([]);
-  const [specResults, setSpecResults] = useState<AlgoliaResult[]>([]);
 
-  useMemo(() => {
-    setDocResults(searchResults.filter((result) => result.type === "docs"));
-    setSpecResults(searchResults.filter((result) => result.type === "spec"));
-  }, [searchResults]);
+  const [docResults, specResults] = useMemo(
+    () => [
+      searchResults.filter((result) => result.type === "docs"),
+      searchResults.filter((result) => result.type === "spec"),
+    ],
+    [searchResults],
+  );
 
   const listWrapperStyles = {
     desktop: {

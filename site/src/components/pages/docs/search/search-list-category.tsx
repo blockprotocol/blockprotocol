@@ -1,5 +1,5 @@
 import { Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
 import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
 import SearchHeading from "./search-list-heading";
@@ -17,21 +17,18 @@ const SearchListCategory: React.VoidFunctionComponent<
   SearchItemCategoryProps
 > = ({ title, icon, searchResults, getHighlight, closeModal }) => {
   const theme = useTheme();
-  const [sections, setSections] = useState<AlgoliaResult[]>([]);
-  const [items, setItems] = useState<AlgoliaResult[]>([]);
 
-  useMemo(() => {
-    setSections(
+  const [sections, items] = useMemo(
+    () => [
       searchResults.filter(
         (result) => result._highlightResult?.title?.matchLevel !== "none",
       ),
-    );
-    setItems(
       searchResults.filter(
         (result) => result._highlightResult?.title?.matchLevel === "none",
       ),
-    );
-  }, [searchResults]);
+    ],
+    [searchResults],
+  );
 
   return (
     <Box>
