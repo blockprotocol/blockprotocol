@@ -143,10 +143,10 @@ const ServiceMessage: React.VoidFunctionComponent<{
           <Typography variant="bpSmallCopy" sx={{ fontWeight: 600 }}>
             {errorCodes && errorCodes.length > 0
               ? errorCodes.map((code, index) => (
-                  <>
+                  <React.Fragment key={code}>
                     {index > 0 ? ", " : ""}
-                    <MdxCode key={code}>{code}</MdxCode>
-                  </>
+                    <MdxCode>{code}</MdxCode>
+                  </React.Fragment>
                 ))
               : "none"}
           </Typography>
