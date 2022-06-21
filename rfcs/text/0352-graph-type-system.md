@@ -2456,7 +2456,7 @@ As outlined, the Type System is tailored towards improving complex use cases of 
 
 In the immediate term, having a more rigorous definition of semantic meaning (e.g. what I actually "mean" when I say the "timestamp" of my entity) improves the experience of embedding applications, block developers, and end-users as outlined in the [Motivating implications](#motivating-implications).
 
-In the longer term, blocks can be developed _within_ emergent standards, discovering related descriptions of data, and having greater confidence that they fit the problems well. Users benefit from an ecosystem with less guesswork, and greater specificity. embedding applications have greater potential to implement programmatic inference, and have a better specified toolkit to utilize when addressing problems of mapping data.
+In the longer term, blocks can be developed _within_ emergent standards, discovering related descriptions of data, and having greater confidence that they fit the problems well. Users benefit from an ecosystem with less guesswork, and greater specificity. Embedding applications have greater potential to implement programmatic inference, and have a better specified toolkit to utilize when addressing problems of mapping data.
 
 #### Simple use-cases
 
