@@ -148,7 +148,7 @@ These can be considered the least restrictive value spaces:
 - `Boolean`
 - `Null`
 - `Object`
-- `Empty List`
+- `Empty List` (see [here](#including-an-empty-list-data-type) for why this is a top-level Data Type)
 
 #### Creating new Data-Types
 
