@@ -2,7 +2,6 @@ import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
   Children,
-  ComponentType,
   FunctionComponent,
   HTMLAttributes,
   HTMLProps,
@@ -16,6 +15,7 @@ import {
 import slugify from "slugify";
 
 import PageHeadingsContext from "../components/context/page-headings-context";
+import { GraphServiceMessageList } from "../components/graph-service-message-list";
 import { FontAwesomeIcon } from "../components/icons";
 import { InfoCard } from "../components/info-card/info-card";
 import { InfoCardWrapper } from "../components/info-card/info-card-wrapper";
@@ -58,7 +58,7 @@ const usePageHeading = (props: { anchor: string }) => {
   return { headingRef };
 };
 
-const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 }> = ({
+const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 | 5 }> = ({
   depth,
   anchor,
 }) => {
@@ -108,12 +108,13 @@ const HEADING_MARGIN_TOP = {
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, ComponentType> = {
+export const mdxComponents: Record<string, FunctionComponent<any>> = {
   Box,
   Paper,
   Typography,
   InfoCardWrapper,
   InfoCard,
+  GraphServiceMessageList,
   Hidden: (({ children }) => {
     return (
       <span aria-hidden style={{ display: "none" }}>
@@ -180,23 +181,45 @@ export const mdxComponents: Record<string, ComponentType> = {
     );
   },
   h4: (props: TypographyProps) => {
+    const anchor = slugify(stringifyChildren(props.children), {
+      lower: true,
+    });
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { headingRef } = usePageHeading({ anchor });
+
     return (
       <Heading
+        ref={headingRef}
         mt={HEADING_MARGIN_TOP.H5}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading5"
         {...props}
-      />
+      >
+        {props.children}
+        <HeadingAnchor anchor={anchor} depth={4} />
+      </Heading>
     );
   },
   h5: (props: TypographyProps) => {
+    const anchor = slugify(stringifyChildren(props.children), {
+      lower: true,
+    });
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { headingRef } = usePageHeading({ anchor });
+
     return (
       <Heading
+        ref={headingRef}
         mt={HEADING_MARGIN_TOP.H5}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading5"
         {...props}
-      />
+      >
+        {props.children}
+        <HeadingAnchor anchor={anchor} depth={5} />
+      </Heading>
     );
   },
   p: (props: TypographyProps) => (
