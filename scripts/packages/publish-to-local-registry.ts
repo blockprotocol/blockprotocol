@@ -25,11 +25,29 @@ const script = async () => {
   console.log(chalk.bold("Publishing to local registry..."));
 
   const publishablePackageNames: string[] = [];
-  for (const packageName of await fs.readdir("packages")) {
+
+  const packageParentFolders = [
+    "packages",
+    "packages/block-template/templates",
+    "packages/@blockprotocol",
+  ];
+
+  const packagePaths = (
+    await Promise.all(
+      packageParentFolders.map((parent) =>
+        fs
+          .readdir(parent)
+          .then((children) => children.map((child) => `${parent}/${child}`)),
+      ),
+    )
+  ).flat();
+
+  console.log({ packagePaths });
+
+  for (const packagePath of packagePaths) {
     try {
-      const packageJson = await fs.readJson(
-        `packages/${packageName}/package.json`,
-      );
+      const packageJson = await fs.readJson(`${packagePath}/package.json`);
+      const packageName = packageJson.name;
       if (packageJson.private !== true) {
         publishablePackageNames.push(packageName);
       }
