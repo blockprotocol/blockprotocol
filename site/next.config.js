@@ -1,3 +1,6 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
   enabled: ["true", "1"].includes(process.env.ANALYZE),
 });
@@ -8,6 +11,10 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 const nextConfig = {
   // https://github.com/vercel/community/discussions/496#discussioncomment-2997454
   experimental: {
+    outputFileTracingRoot: path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      "..",
+    ),
     outputStandalone: true,
   },
 
