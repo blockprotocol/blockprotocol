@@ -283,10 +283,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
       {variant === "desktop" &&
         !searchResults.length &&
         searchState === "normal" && (
-          <SearchSuggestedLinks
-            setSearchText={setSearchText}
-            closeModal={closeModal}
-          />
+          <SearchSuggestedLinks closeModal={closeModal} />
         )}
 
       {searchResults.length > 0 && (

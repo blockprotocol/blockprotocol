@@ -1,25 +1,40 @@
 import { Box, buttonClasses, Typography, useTheme } from "@mui/material";
 import React from "react";
 
-import { Button } from "../../../button";
 import { SpecificationIcon } from "../../../icons";
 import { LinkButton } from "../../../link-button";
 
 interface SearchSuggestedLinksProps {
-  setSearchText?: (text: string) => void;
   closeModal?: () => void;
 }
 
-const SUGGESTED_LINKS = [
-  "Introduction to the Block Protocol",
-  "Quick start guide to developing blocks",
-  "Embed blocks within your site or app",
-  "Frequently asked questions",
+interface SuggestedLink {
+  label: string;
+  href: string;
+}
+
+const SUGGESTED_LINKS: SuggestedLink[] = [
+  {
+    label: "Introduction to the Block Protocol",
+    href: "/docs",
+  },
+  {
+    label: "Quick start guide to developing blocks",
+    href: "/docs/developing-blocks",
+  },
+  {
+    label: "Embed blocks within your site or app",
+    href: "/docs/embedding-blocks",
+  },
+  {
+    label: "Frequently asked questions",
+    href: "/docs/faq",
+  },
 ];
 
 const SearchSuggestedLinks: React.VoidFunctionComponent<
   SearchSuggestedLinksProps
-> = ({ setSearchText, closeModal }) => {
+> = ({ closeModal }) => {
   const theme = useTheme();
 
   return (
@@ -37,8 +52,8 @@ const SearchSuggestedLinks: React.VoidFunctionComponent<
         SUGGESTED TOPICS
       </Typography>
 
-      {SUGGESTED_LINKS.map((label) => (
-        <Button
+      {SUGGESTED_LINKS.map(({ label, href }) => (
+        <LinkButton
           sx={{
             width: 1,
             justifyContent: "start",
@@ -56,10 +71,11 @@ const SearchSuggestedLinks: React.VoidFunctionComponent<
           }}
           key={label}
           variant="transparent"
-          onClick={() => setSearchText?.(label)}
+          href={href}
+          onClick={() => closeModal?.()}
         >
           {label}
-        </Button>
+        </LinkButton>
       ))}
 
       <LinkButton
@@ -85,7 +101,7 @@ const SearchSuggestedLinks: React.VoidFunctionComponent<
             display: "none",
           },
         }}
-        href="/spec"
+        href="/docs/spec"
         onClick={() => closeModal?.()}
         startIcon={<SpecificationIcon />}
         squared
