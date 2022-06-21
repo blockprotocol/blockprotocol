@@ -41,7 +41,7 @@
   },
   "blockprotocol": {
     "blockType": {
-      "entryPoint": "React"
+      "entryPoint": "react"
     },
     "displayName": "Template",
     "examples": [
