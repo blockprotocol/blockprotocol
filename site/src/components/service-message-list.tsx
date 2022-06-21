@@ -4,7 +4,6 @@ import {
 } from "@blockprotocol/core";
 import { Box, Typography } from "@mui/material";
 import * as React from "react";
-import slugify from "slugify";
 
 import { JsonSchema } from "../lib/json-schema";
 import { mdxComponents } from "../util/mdx-components";
@@ -108,7 +107,6 @@ const ServiceMessage: React.VoidFunctionComponent<{
   const MdxLi = mdxComponents.li!;
   const MdxUl = mdxComponents.ul!;
   const MdxH5 = mdxComponents.h5!;
-  const MdxA = mdxComponents.a!;
 
   const {
     data,
@@ -140,12 +138,14 @@ const ServiceMessage: React.VoidFunctionComponent<{
         </MdxLi>
         <MdxLi>
           <MdxCode>errorCodes</MdxCode>:{" "}
-          <Typography variant="bpSmallCopy" sx={{ fontWeight: 600 }}>
+          <Typography variant="bpSmallCopy">
             {errorCodes && errorCodes.length > 0
               ? errorCodes.map((code, index) => (
                   <>
                     {index > 0 ? ", " : ""}
-                    <MdxCode key={code}>{code}</MdxCode>
+                    <MdxCode sx={{ fontWeight: 600 }} key={code}>
+                      {code}
+                    </MdxCode>
                   </>
                 ))
               : "none"}
@@ -153,14 +153,11 @@ const ServiceMessage: React.VoidFunctionComponent<{
         </MdxLi>
         <MdxLi>
           <MdxCode>respondedToBy</MdxCode>:{" "}
-          <Typography variant="bpSmallCopy" sx={{ fontWeight: 600 }}>
-            {respondedToBy ? (
-              <MdxA href={`#${slugify(respondedToBy, { lower: true })}`}>
-                {respondedToBy}
-              </MdxA>
-            ) : (
-              "none"
-            )}
+          <Typography
+            variant="bpSmallCopy"
+            sx={{ fontWeight: respondedToBy ? 600 : 400 }}
+          >
+            {respondedToBy ?? "none"}
           </Typography>
         </MdxLi>
         <MdxLi>

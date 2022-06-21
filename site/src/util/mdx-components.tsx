@@ -181,45 +181,23 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
     );
   },
   h4: (props: TypographyProps) => {
-    const anchor = slugify(stringifyChildren(props.children), {
-      lower: true,
-    });
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { headingRef } = usePageHeading({ anchor });
-
     return (
       <Heading
-        ref={headingRef}
         mt={HEADING_MARGIN_TOP.H5}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading5"
         {...props}
-      >
-        {props.children}
-        <HeadingAnchor anchor={anchor} depth={4} />
-      </Heading>
+      />
     );
   },
   h5: (props: TypographyProps) => {
-    const anchor = slugify(stringifyChildren(props.children), {
-      lower: true,
-    });
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const { headingRef } = usePageHeading({ anchor });
-
     return (
       <Heading
-        ref={headingRef}
         mt={HEADING_MARGIN_TOP.H5}
         mb={HEADING_MARGIN_BOTTOM}
         variant="bpHeading5"
         {...props}
-      >
-        {props.children}
-        <HeadingAnchor anchor={anchor} depth={5} />
-      </Heading>
+      />
     );
   },
   p: (props: TypographyProps) => (
@@ -249,6 +227,9 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
             paddingY: 1,
             paddingX: 3,
             typography: "bpSmallCopy",
+          },
+          th: {
+            backgroundColor: ({ palette }) => palette.gray[10],
           },
           marginBottom: 2,
         }}

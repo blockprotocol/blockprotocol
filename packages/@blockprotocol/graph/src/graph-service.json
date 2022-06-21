@@ -616,9 +616,9 @@
           "linkedAggregation": {
             "description": "The updated linked aggregation definition",
             "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition"
-          },
-          "required": ["linkedAggregation"]
-        }
+          }
+        },
+        "required": ["linkedAggregation"]
       },
       "errorCodes": ["FORBIDDEN", "INVALID_INPUT", "NOT_FOUND"]
     },
