@@ -135,14 +135,10 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
   });
 
   const getHighlight = (highlight: AlgoliaHighlightResult) => {
-    let content = highlight.content.value;
-    const title = `# ${highlight.title.value}\n\n`;
-
-    if (content.indexOf(title) === 0) {
-      content = content.slice(title.length);
-    }
+    const content = highlight.content.value;
 
     const cleanContent = content
+      .replace(/^#.*$/gm, "")
       .replace(/<(.*?)>|\*|#|`|\\|\((.*?)\)|\[|\]/g, "")
       .replace(/<|>/g, "");
 
