@@ -49,40 +49,46 @@ const SearchList: React.VoidFunctionComponent<SearchListProps> = ({
         ...listWrapperStyles[variant],
       }}
     >
-      <SearchListCategory
-        title="DOCUMENTATION"
-        icon={
-          <FontAwesomeIcon
-            icon={faBookOpen}
-            sx={{
-              fontSize: 16,
-              fill: theme.palette.gray[70],
-              marginRight: 1.5,
-            }}
-          />
-        }
-        searchResults={docResults}
-        getHighlight={getHighlight}
-        closeModal={closeModal}
-      />
+      {!!docResults.length && (
+        <SearchListCategory
+          title="DOCUMENTATION"
+          icon={
+            <FontAwesomeIcon
+              icon={faBookOpen}
+              sx={{
+                fontSize: 16,
+                fill: theme.palette.gray[70],
+                marginRight: 1.5,
+              }}
+            />
+          }
+          searchResults={docResults}
+          getHighlight={getHighlight}
+          closeModal={closeModal}
+        />
+      )}
 
-      <Divider sx={{ marginY: 2.5 }} />
+      {!!docResults.length && !!specResults.length && (
+        <Divider sx={{ marginY: 2.5 }} />
+      )}
 
-      <SearchListCategory
-        title="SPECIFICATION"
-        icon={
-          <SpecificationIcon
-            sx={{
-              fontSize: 16,
-              color: theme.palette.gray[70],
-              marginRight: 1.5,
-            }}
-          />
-        }
-        searchResults={specResults}
-        getHighlight={getHighlight}
-        closeModal={closeModal}
-      />
+      {!!specResults.length && (
+        <SearchListCategory
+          title="SPECIFICATION"
+          icon={
+            <SpecificationIcon
+              sx={{
+                fontSize: 16,
+                color: theme.palette.gray[70],
+                marginRight: 1.5,
+              }}
+            />
+          }
+          searchResults={specResults}
+          getHighlight={getHighlight}
+          closeModal={closeModal}
+        />
+      )}
     </Box>
   );
 };
