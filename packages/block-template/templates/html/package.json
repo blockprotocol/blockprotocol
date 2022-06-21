@@ -26,7 +26,7 @@
     "lint:tsc": "echo \"Skipping: TypeScript not configured\""
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.8",
+    "@blockprotocol/graph": "0.0.9",
     "@parcel/transformer-inline-string": "^2.6.0",
     "mock-block-dock": "0.0.15",
     "parcel": "^2.6.0",
