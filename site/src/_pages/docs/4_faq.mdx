@@ -26,7 +26,14 @@ Various frontend libraries and technologies provide means of implementing encaps
 
 ### What about non-web contexts? e.g. native applications
 
-Our focus is on supporting the web first and foremost, as this is the context we expect the Block Protocol to be most useful in. Implementation details will vary across contexts - for example, the details of how data can be passed around or operations called - but the general principles of the Block Protocol in defining a contract between applications and embedded blocks are applicable beyond the web. In the future we intend to support non-web contexts more directly.
+Our focus is on supporting the web first and foremost, as this is the context we expect the Block Protocol to be most useful in,
+but we believe it will be portable to other environments.
+
+Since version 0.2 of the Block Protocol, messages are passed between blocks and applications by dispatching and listening for events,
+which is a pattern which can be translated to many non-web contexts. While some implementation details will vary across contexts,
+the general principles of the Block Protocol in defining a contract between applications and embedded blocks are widely applicable.
+
+In the future we intend to support non-web contexts more directly.
 
 ### Why would a developer build a Block Protocol block?
 
