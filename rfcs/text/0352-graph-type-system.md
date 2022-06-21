@@ -320,7 +320,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 - a **required** `$id`, which is a globally unique identifier, where the Entity Type's definition can be accessed (in most cases this will be a URL)
 - a **required** `name`, which should generally be a non-pluralized description of the thing
 - **optionally** a `description` to further explain the semantic meaning of the Entity Type
-- a **required** definition of its possible values.
+- a **required** definition of its possible properties and links.
 
 #### Defining an Entity Type's Properties
 
