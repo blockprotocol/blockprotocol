@@ -33,8 +33,8 @@ const SearchList: React.VoidFunctionComponent<SearchListProps> = ({
     desktop: {
       maxHeight: 800,
       overflowY: "auto",
-      paddingRight: 1.25,
-      marginRight: -1.25,
+      paddingX: 1.25,
+      marginX: -1.25,
     },
     mobile: {
       overflowY: "visible",
