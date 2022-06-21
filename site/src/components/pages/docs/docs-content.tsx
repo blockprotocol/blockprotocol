@@ -15,7 +15,6 @@ import {
 } from "../../mdx-page-content";
 import { PageNavLinks } from "../../page-nav-links";
 import { Sidebar } from "../../page-sidebar";
-import Search from "./search";
 
 type DocsPageProps = {
   title?: ReactNode;
@@ -62,7 +61,6 @@ export const DocsContent: VFC<DocsPageProps> = ({
           marginRight="62px"
           pages={pages}
           appendices={appendices}
-          header={<Search variant="desktop" />}
         />
       ) : null}
       <Container

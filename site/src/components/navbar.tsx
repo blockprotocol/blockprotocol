@@ -12,78 +12,30 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useMemo, useState, VFC } from "react";
+import { useContext, useEffect, useState, VFC } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import SiteMapContext from "../context/site-map-context";
 import { useUser } from "../context/user-context";
-import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
+import { useCrumbs } from "./hooks/use-crumbs";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { LinkButton } from "./link-button";
 import { AccountDropdown } from "./navbar/account-dropdown";
 import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
 import { MobileNavItems } from "./navbar/mobile-nav-items";
-import { itemIsPage, NAVBAR_LINK_ICONS } from "./navbar/util";
+import { NAVBAR_LINK_ICONS } from "./navbar/util";
+import { SearchNavButton } from "./search-nav-button";
 import { generatePathWithoutParams } from "./shared";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
-export const MOBILE_NAVBAR_HEIGHT = 57;
+export const MOBILE_NAVBAR_HEIGHT = 53;
 
 const BREAD_CRUMBS_HEIGHT = 36;
 
 const IDLE_NAVBAR_TIMEOUT_MS = 3_000;
-
-const findCrumbs = (params: {
-  asPath: string;
-  item: SiteMapPage | SiteMapPageSection;
-  parents?: (SiteMapPage | SiteMapPageSection)[];
-  parentHref?: string;
-}): (SiteMapPage | SiteMapPageSection)[] | null => {
-  const { parents, item, asPath, parentHref } = params;
-
-  const pathWithoutParams = generatePathWithoutParams(asPath);
-
-  for (const section of itemIsPage(item) ? item.sections : item.subSections) {
-    const crumbs = findCrumbs({
-      asPath,
-      item: section,
-      parents: [...(parents || []), item],
-      parentHref: itemIsPage(item) ? item.href : parentHref,
-    });
-
-    if (crumbs) {
-      return crumbs;
-    }
-  }
-
-  if (itemIsPage(item)) {
-    for (const page of item.subPages) {
-      const crumbs = findCrumbs({
-        asPath,
-        item: page,
-        parents: [...(parents || []), item],
-      });
-
-      if (crumbs) {
-        return crumbs;
-      }
-    }
-  }
-
-  const href = itemIsPage(item) ? item.href : `${parentHref}#${item.anchor}`;
-
-  if (
-    pathWithoutParams === href ||
-    (itemIsPage(item) && pathWithoutParams === `${href}#`)
-  ) {
-    return [...(parents || []), item];
-  }
-
-  return null;
-};
 
 type NavbarProps = {
   openLoginModal: () => void;
@@ -92,24 +44,6 @@ type NavbarProps = {
 const navbarClasses = {
   link: "Navbar-Link",
   interactiveLink: "Navbar-InteractiveLink",
-};
-
-const useCrumbs = (pages: SiteMapPage[]) => {
-  const { asPath } = useRouter();
-
-  return useMemo(() => {
-    const breadCrumbPages = pages.filter(({ title }) =>
-      ["Specification", "Documentation"].includes(title),
-    );
-
-    for (const page of breadCrumbPages) {
-      const maybeCrumbs = findCrumbs({ asPath, item: page });
-      if (maybeCrumbs) {
-        return maybeCrumbs;
-      }
-    }
-    return [];
-  }, [asPath, pages]);
 };
 
 const useMobileNavVisible = (canDisplayMobileNav: boolean) => {
@@ -231,10 +165,15 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
 
   const navbarHeight = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
-  const crumbs = useCrumbs(pages);
+  const crumbs = useCrumbs(pages, asPath);
+
   const displayBreadcrumbs = !md && !mobileNavVisible && crumbs.length > 0;
   const neighbourOffset =
     navbarHeight + (displayBreadcrumbs ? BREAD_CRUMBS_HEIGHT : 0);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileNavVisible ? "hidden" : "auto";
+  }, [mobileNavVisible]);
 
   return (
     <Box
@@ -333,6 +272,8 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
             <Box display="flex" alignItems="center">
               {md ? (
                 <>
+                  <SearchNavButton />
+
                   {pages.map(({ title, href }) => (
                     <Link
                       href={href}
@@ -438,7 +379,9 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
         >
           <Box
             sx={{
-              overflow: "auto",
+              overflowY: "auto",
+              overflowX: "hidden",
+              overscrollBehavior: "contain",
             }}
           >
             <MobileNavItems onClose={() => setMobileNavVisible(false)} />

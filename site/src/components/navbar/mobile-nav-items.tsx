@@ -273,11 +273,9 @@ export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
 
   return (
     <List>
-      {(asPath.startsWith("/spec") || asPath.startsWith("/docs")) && (
-        <Box m={2}>
-          <Search variant="mobile" closeDrawer={onClose} />
-        </Box>
-      )}
+      <Box m={2}>
+        <Search variant="mobile" />
+      </Box>
 
       {pages.map((page) => (
         <Fragment key={page.href}>
