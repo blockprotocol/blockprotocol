@@ -2558,10 +2558,10 @@ As mentioned in a few sections, this design basically defines a way for communit
 [unresolved-questions]: #unresolved-questions
 
 1.  Are there further impacts on block schemas?
-1.  Do we permit spaces in type names
+1.  Do we permit spaces in type names?
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
-    As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`
-1.  Should we further constrain allowed URIs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema
+    As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`?
+1.  Should we further constrain allowed URIs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema?
 1.  Do we want to allow types to define a plural name that can be used when they're set to `"type": "array"`?
 1.  How would we define our custom JSON Schema keywords in a JSON Schema Vocabulary? Could our meta schemas be defined as JSON Schema Vocabularies?
 
