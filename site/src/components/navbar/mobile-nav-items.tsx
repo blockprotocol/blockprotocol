@@ -1,4 +1,5 @@
-import { faChevronDown, faHashtag } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown } from "@fortawesome/free-solid-svg-icons/faChevronDown";
+import { faHashtag } from "@fortawesome/free-solid-svg-icons/faHashtag";
 import {
   Box,
   Collapse,

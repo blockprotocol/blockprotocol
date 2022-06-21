@@ -1,4 +1,4 @@
-import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
+import { faBookOpen } from "@fortawesome/free-solid-svg-icons/faBookOpen";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { BlockHubIcon, FontAwesomeIcon, SpecificationIcon } from "../icons";

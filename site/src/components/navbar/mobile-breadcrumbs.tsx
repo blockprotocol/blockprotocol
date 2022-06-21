@@ -1,4 +1,4 @@
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons/faChevronRight";
 import { Breadcrumbs, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { VFC } from "react";

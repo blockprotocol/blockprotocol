@@ -1,4 +1,4 @@
-import { faLink } from "@fortawesome/free-solid-svg-icons";
+import { faLink } from "@fortawesome/free-solid-svg-icons/faLink";
 import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
   Children,

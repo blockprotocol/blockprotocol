@@ -1,4 +1,5 @@
-import { faKey, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faKey } from "@fortawesome/free-solid-svg-icons/faKey";
+import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";
 import { Box, Container, Typography } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";

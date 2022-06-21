@@ -1,4 +1,4 @@
-import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
+import { faBookOpen } from "@fortawesome/free-solid-svg-icons/faBookOpen";
 import { Box, Divider, useTheme } from "@mui/material";
 import React, { useMemo } from "react";
 

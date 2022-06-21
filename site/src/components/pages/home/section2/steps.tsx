@@ -1,9 +1,7 @@
-import {
-  faCheckCircle,
-  faCheckSquare,
-  faFileAlt,
-  faPencil,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons/faCheckCircle";
+import { faCheckSquare } from "@fortawesome/free-solid-svg-icons/faCheckSquare";
+import { faFileAlt } from "@fortawesome/free-solid-svg-icons/faFileAlt";
+import { faPencil } from "@fortawesome/free-solid-svg-icons/faPencil";
 import { Box, Fade } from "@mui/material";
 import {
   FC,

@@ -1,4 +1,4 @@
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Box, BoxProps, Link, Typography } from "@mui/material";
 import { FC, VoidFunctionComponent } from "react";
 

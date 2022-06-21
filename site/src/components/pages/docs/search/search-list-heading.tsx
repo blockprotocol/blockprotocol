@@ -1,4 +1,4 @@
-import { faHashtag } from "@fortawesome/free-solid-svg-icons";
+import { faHashtag } from "@fortawesome/free-solid-svg-icons/faHashtag";
 import { svgIconClasses, useTheme } from "@mui/material";
 import React from "react";
 

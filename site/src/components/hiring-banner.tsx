@@ -1,8 +1,6 @@
-import {
-  faArrowRight,
-  faArrowsLeftRight,
-  faBullhorn,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons/faArrowRight";
+import { faArrowsLeftRight } from "@fortawesome/free-solid-svg-icons/faArrowsLeftRight";
+import { faBullhorn } from "@fortawesome/free-solid-svg-icons/faBullhorn";
 import { Box, Container, Typography } from "@mui/material";
 
 import { FontAwesomeIcon } from "./icons";

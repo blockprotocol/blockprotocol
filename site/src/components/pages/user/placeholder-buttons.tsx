@@ -1,4 +1,4 @@
-import { faHammer } from "@fortawesome/free-solid-svg-icons";
+import { faHammer } from "@fortawesome/free-solid-svg-icons/faHammer";
 import { VoidFunctionComponent } from "react";
 
 import { Button } from "../../button";

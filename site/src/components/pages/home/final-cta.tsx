@@ -1,4 +1,4 @@
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
 import { Box, Fade, Paper, Typography } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";

@@ -1,4 +1,5 @@
-import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons/faArrowLeft";
+import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 import { Box, Fade, Modal, ModalProps, Paper } from "@mui/material";
 import React, { useEffect, useState, VFC } from "react";
 

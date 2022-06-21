@@ -1,9 +1,7 @@
-import {
-  faDiscord,
-  faGithub,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faDiscord } from "@fortawesome/free-brands-svg-icons/faDiscord";
+import { faGithub } from "@fortawesome/free-brands-svg-icons/faGithub";
+import { faTwitter } from "@fortawesome/free-brands-svg-icons/faTwitter";
+import { faStar } from "@fortawesome/free-solid-svg-icons/faStar";
 import {
   Box,
   BoxProps,

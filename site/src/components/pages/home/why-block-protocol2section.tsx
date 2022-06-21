@@ -1,4 +1,5 @@
-import { faCheckCircle, faPencil } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons/faCheckCircle";
+import { faPencil } from "@fortawesome/free-solid-svg-icons/faPencil";
 import {
   Box,
   Container,
