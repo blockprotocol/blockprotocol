@@ -26,11 +26,7 @@ const script = async () => {
 
   const publishablePackages: { name: string; path: string }[] = [];
 
-  const packageParentFolders = [
-    "packages",
-    "packages/block-template/templates",
-    "packages/@blockprotocol",
-  ];
+  const packageParentFolders = ["packages", "packages/@blockprotocol"];
 
   const packagePaths = (
     await Promise.all(
@@ -41,8 +37,6 @@ const script = async () => {
       ),
     )
   ).flat();
-
-  console.log({ packagePaths });
 
   for (const packagePath of packagePaths) {
     try {
