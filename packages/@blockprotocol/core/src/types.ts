@@ -200,3 +200,20 @@ export type ResponseSettlersByRequestIdMap = Map<
     reject: PromiseRejecter;
   }
 >;
+
+export type ServiceMessageDefinition = {
+  messageName: string;
+  description: string;
+  source: "embedder" | "block";
+  data: Record<string, unknown>;
+  sentOnInitialization?: boolean;
+  errorCodes?: string[];
+  respondedToBy?: string | null;
+};
+
+export type ServiceDefinition = {
+  name: string;
+  version: string;
+  coreVersion: string;
+  messages: ServiceMessageDefinition[];
+};

@@ -69,7 +69,7 @@ export class GraphBlockHandler
     const expectedMessageSource = "embedder";
     const messageJsonDefinition = serviceJsonDefinition.messages.find(
       (message) =>
-        message.name === messageName &&
+        message.messageName === messageName &&
         message.source === expectedMessageSource,
     );
     if (!messageJsonDefinition) {

@@ -384,6 +384,7 @@ The JSON schema requires that a service specification is a JSON object which
   - `description`
   - `messages`
   - `version`
+  - `coreVersion`
 
 If there are any discrepancies between the requirements listed above and the requirements in the JSON schema, the JSON schema takes precedence.
 
@@ -412,7 +413,7 @@ An entry in `messages` MUST specify:
 
 An entry in `messages` MAY specify:
 
-- `respondedToByMessage`: a `string`, which names another entry in `messages`. The presence of this indicates this message is part of a request/response pair
+- `respondedToBy`: a `string`, which names another entry in `messages`. The presence of this indicates this message is part of a request/response pair
 - `sentOnInitialization`: whether this message will be sent immediately when the block is initialized, in response to the `"initRequest"` message (and provided as properties synchronously to blocks which support it). Note that such messages may also be sent after intialization, e.g. if their data changes
 - <span id="messages-error-codes">`errorCodes`</span>: valid codes for any
   errors encountered in producing the message data. this may appear alongside or
@@ -454,6 +455,10 @@ An entry in `messages` MAY specify:
     "version": {
       "type": "string",
       "description": "The semantic version of this service specification"
+    },
+    "coreVersion": {
+      "type": "string",
+      "description": "The version (or version range) of the core specification this is compatible with"
     }
    },
    "required": ["description", "messages", "name", "version"]

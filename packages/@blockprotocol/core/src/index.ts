@@ -16,5 +16,7 @@ export type {
   MessageCallback,
   MessageData,
   MessageError,
+  ServiceDefinition,
+  ServiceMessageDefinition,
   UnknownRecord,
 } from "./types";
