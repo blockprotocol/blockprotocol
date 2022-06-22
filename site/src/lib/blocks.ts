@@ -52,12 +52,12 @@ const generateBlockFileUrl = (
 const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
   commit: string,
-  hubInfoDirectoryPath: string | undefined,
+  hubInfoDirPath: string | undefined,
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
       .fromUrl(repository)
-      ?.browse(hubInfoDirectoryPath ?? "", { committish: commit });
+      ?.browse(hubInfoDirPath ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -71,7 +71,7 @@ const getRepositoryUrl = (
   if (url) {
     const repositoryUrl = hostedGitInfo
       .fromUrl(url)
-      ?.browse(hubInfoDirectoryPath ?? directory ?? "", { committish: commit });
+      ?.browse(hubInfoDirPath ?? directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -114,9 +114,7 @@ export const readBlocksFromDisk = async (): Promise<
 
     const storedBlockInfo: StoredBlockInfo = await fs.readJson(
       path.resolve(process.cwd(), `../hub/${packagePath}.json`),
-      {
-        encoding: "utf8",
-      },
+      { encoding: "utf8" },
     );
 
     const repository = getRepositoryUrl(
