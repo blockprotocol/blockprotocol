@@ -1,12 +1,6 @@
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
 import algoliasearch from "algoliasearch";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
@@ -20,6 +14,7 @@ import React, {
 } from "react";
 
 import { Link } from "../../../link";
+import { TextField } from "../../../text-field";
 import SearchList from "./search-list";
 import SearchSuggestedLinks from "./search-suggested-links";
 
@@ -57,7 +52,6 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
   closeModal,
 }) => {
   const router = useRouter();
-  const theme = useTheme();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [searchText, setSearchText] = useState("");
@@ -91,8 +85,8 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
             // @todo use logger later
             // eslint-disable-next-line no-console
             console.error(err);
-            setSearchLoading(false);
             setSearchState("failed");
+            setSearchLoading(false);
           });
       }, 500),
     [],
@@ -140,28 +134,20 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
     setTimeout(() => inputRef.current?.focus(), 50);
   });
 
+  const helperText =
+    searchState !== "normal" ? (
+      <>
+        {searchState === "noresults"
+          ? `No results found for your search term - please try another term`
+          : `We couldn't reach our servers - please try again`}
+        , or <Link href="/contact">contact us</Link>.
+      </>
+    ) : undefined;
+
   return (
-    <Box position="relative">
-      <Box
-        component="input"
-        ref={inputRef}
-        sx={{
-          color: theme.palette.gray[90],
-          fill: theme.palette.gray[50],
-          fontSize: 15,
-          paddingY: 1.5,
-          paddingRight: 0.5,
-          paddingLeft: 6,
-          boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-          marginRight: 3,
-          width: 1,
-          borderColor: theme.palette.gray[30],
-          borderWidth: 1,
-          borderRadius: 1.5,
-          "&::placeholder": {
-            color: theme.palette.gray[50],
-          },
-        }}
+    <>
+      <TextField
+        inputRef={inputRef}
         onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
           if (searchResults.length > 0) {
             if (event.key === "ArrowUp") {
@@ -191,85 +177,53 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
         }
         placeholder="Search…"
         required
+        InputProps={{
+          sx: {
+            width: "100%",
+          },
+          startAdornment: (
+            <SearchIcon
+              sx={({ palette }) => ({
+                fill: palette.gray[50],
+              })}
+            />
+          ),
+          endAdornment: searchLoading ? (
+            <Box p={1} display="inherit">
+              <CircularProgress size={20} sx={{ color: "#c3c3c3" }} />
+            </Box>
+          ) : searchText.length > 0 ? (
+            <IconButton onClick={() => setSearchText("")}>
+              <CloseIcon
+                sx={({ palette }) => ({
+                  height: 20,
+                  width: 20,
+                  fill: palette.gray[50],
+                })}
+              />
+            </IconButton>
+          ) : undefined,
+        }}
+        helperText={helperText}
       />
-      <SearchIcon
-        sx={({ palette }) => ({
-          fill: palette.gray[50],
-          position: "absolute",
-          top: 10,
-          left: 8,
-        })}
-      />
 
-      {searchLoading && (
-        <Box
-          sx={{
-            top: 14,
-            right: 14,
-            position: "absolute",
-            cursor: "pointer",
-            height: 20,
-          }}
-        >
-          <CircularProgress
-            style={{ height: 20, width: 20, color: "#c3c3c3" }}
-          />
-        </Box>
-      )}
-
-      {!searchLoading && !!searchText.length && (
-        <IconButton
-          onClick={() => setSearchText("")}
-          sx={{
-            top: 16,
-            right: 16,
-            position: "absolute",
-          }}
-        >
-          <CloseIcon
-            sx={({ palette }) => ({
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              fill: palette.gray[50],
-            })}
-          />
-        </IconButton>
-      )}
-
-      {variant === "desktop" &&
-        !searchResults.length &&
-        searchState === "normal" && (
+      <Collapse in={helperText === undefined}>
+        {searchResults.length > 0 ? (
+          <Box
+            sx={({ palette }) => ({ backgroundColor: palette.common.white })}
+          >
+            <SearchList
+              searchResults={searchResults}
+              variant={variant}
+              getHighlight={getHighlight}
+              closeModal={closeModal}
+            />
+          </Box>
+        ) : variant === "desktop" ? (
           <SearchSuggestedLinks closeModal={closeModal} />
-        )}
-
-      {searchResults.length > 0 && (
-        <Box sx={({ palette }) => ({ backgroundColor: palette.common.white })}>
-          <SearchList
-            searchResults={searchResults}
-            variant={variant}
-            getHighlight={getHighlight}
-            closeModal={closeModal}
-          />
-        </Box>
-      )}
-
-      {searchState !== "normal" && !searchLoading && (
-        <Box
-          sx={({ palette }) => ({
-            padding: 1.5,
-            backgroundColor: palette.common.white,
-          })}
-        >
-          <Typography variant="bpSmallCopy">
-            {searchState === "noresults"
-              ? `No results found for your search term - please try another term`
-              : `We couldn't reach our servers - please try again`}
-            , or <Link href="/contact">contact us</Link>.
-          </Typography>
-        </Box>
-      )}
-    </Box>
+        ) : null}
+      </Collapse>
+    </>
   );
 };
 
