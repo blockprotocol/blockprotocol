@@ -19,6 +19,7 @@ const SearchListHeading: React.VoidFunctionComponent<
 
   return (
     <LinkButton
+      className="searchItem"
       sx={{
         width: 1,
         fontSize: 16,

@@ -130,10 +130,16 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
   };
 
   useEffect(() => {
-    if (variant === "desktop") {
+    const items = document.querySelectorAll(
+      ".searchItem",
+    ) as NodeListOf<HTMLButtonElement>;
+
+    if (activeResult >= items.length) {
       setTimeout(() => inputRef.current?.focus(), 50);
+    } else {
+      items?.[activeResult]?.focus();
     }
-  });
+  }, [activeResult]);
 
   const helperText =
     searchState !== "normal" ? (
@@ -146,32 +152,30 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
     ) : undefined;
 
   return (
-    <>
+    <Box
+      onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+        if (searchResults.length > 0) {
+          if (
+            event.key === "ArrowUp" ||
+            (event.shiftKey && event.key === "Tab")
+          ) {
+            event.preventDefault();
+            return setActiveResult(
+              activeResult === 0 ? searchResults.length - 1 : activeResult - 1,
+            );
+          }
+
+          if (event.key === "ArrowDown" || event.key === "Tab") {
+            event.preventDefault();
+            return setActiveResult(
+              activeResult > searchResults.length - 1 ? 0 : activeResult + 1,
+            );
+          }
+        }
+      }}
+    >
       <TextField
         inputRef={inputRef}
-        onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
-          if (searchResults.length > 0) {
-            if (event.key === "ArrowUp") {
-              event.preventDefault();
-
-              if (activeResult === 0) {
-                return setActiveResult(searchResults.length - 1);
-              }
-
-              setActiveResult(activeResult - 1);
-            }
-
-            if (event.key === "ArrowDown") {
-              event.preventDefault();
-
-              if (activeResult > searchResults.length - 1) {
-                return setActiveResult(0);
-              }
-
-              setActiveResult(activeResult + 1);
-            }
-          }
-        }}
         value={searchText}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           setSearchText(event.target.value)
@@ -232,6 +236,6 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
             </Collapse>
           )}
       </TransitionGroup>
-    </>
+    </Box>
   );
 };

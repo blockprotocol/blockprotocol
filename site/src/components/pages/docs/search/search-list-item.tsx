@@ -28,6 +28,7 @@ const SearchListItem: React.VoidFunctionComponent<SearchItemProps> = ({
 
   return (
     <LinkButton
+      className="searchItem"
       sx={{
         width: 1,
         justifyContent: "start",
