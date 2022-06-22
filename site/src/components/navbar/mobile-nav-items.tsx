@@ -25,7 +25,7 @@ import SiteMapContext from "../../context/site-map-context";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
-import Search from "../pages/docs/search";
+import { Search } from "../pages/docs/search";
 import { generatePathWithoutParams } from "../shared";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
