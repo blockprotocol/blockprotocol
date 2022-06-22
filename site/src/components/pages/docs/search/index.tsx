@@ -116,7 +116,10 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
     const slicedArray = cleanContent?.slice(0, characterLimit).split(" ");
 
     const searchRegExp = new RegExp(
-      currentSearchedText.split(" ").join("|"),
+      currentSearchedText
+        .replace(/[^a-zA-Z0-9 ]/g, "")
+        .split(" ")
+        .join("|"),
       "ig",
     );
 
