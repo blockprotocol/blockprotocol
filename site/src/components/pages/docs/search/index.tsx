@@ -132,6 +132,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
   useEffect(() => {
     const items = document.querySelectorAll(
       ".searchItem",
+      // eslint-disable-next-line no-undef
     ) as NodeListOf<HTMLButtonElement>;
 
     if (activeResult >= items.length) {
