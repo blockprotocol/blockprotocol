@@ -64,7 +64,7 @@ export class GraphEmbedderHandler
     const expectedMessageSource = "block";
     const messageJsonDefinition = serviceJsonDefinition.messages.find(
       (message) =>
-        message.name === messageName &&
+        message.messageName === messageName &&
         message.source === expectedMessageSource,
     );
     if (!messageJsonDefinition) {

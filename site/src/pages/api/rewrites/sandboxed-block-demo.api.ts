@@ -140,15 +140,18 @@ const handler: NextApiHandler = async (req, res) => {
       }").then((response) => response.text()).then(source => {
           clearTimeout(timeout);
       
+          const entryPoint = blockType.entryPoint.toLocaleLowerCase();
+          
           const rawBlockSource = source;
-          const blockExport = blockType.entryPoint === "html" ? rawBlockSource : findBlockExport(loadCjsFromSource(rawBlockSource));
+          const blockExport = entryPoint === "html" ? rawBlockSource : findBlockExport(loadCjsFromSource(rawBlockSource));
+          
           const blockDefinition = {
-            ReactComponent: blockType.entryPoint === "react" ? blockExport : undefined,
-            customElement: blockType.entryPoint === "custom-element" ? {
+            ReactComponent: entryPoint === "react" ? blockExport : undefined,
+            customElement: entryPoint === "custom-element" ? {
               elementClass: blockExport,
               tagName: blockType.tagName
             } : undefined,
-            htmlString: blockType.entryPoint === "html" ? blockExport : undefined
+            htmlString: entryPoint === "html" ? blockExport : undefined
           }
           
           const mockBlockDockInitialData = ${JSON.stringify(

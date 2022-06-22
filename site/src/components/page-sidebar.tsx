@@ -304,7 +304,6 @@ const SidebarPage: VFC<SidebarPageProps> = ({
 type SidebarProps = {
   pages: SiteMapPage[];
   appendices?: SiteMapPage[];
-  header?: React.ReactNode;
 } & BoxProps;
 
 const findSectionPath = (
@@ -367,7 +366,6 @@ const getInitialOpenedPages = (params: {
 export const Sidebar: VFC<SidebarProps> = ({
   appendices,
   pages,
-  header,
   ...boxProps
 }) => {
   const theme = useTheme();
@@ -441,9 +439,6 @@ export const Sidebar: VFC<SidebarProps> = ({
         borderRightWidth: 1,
       }}
     >
-      <Box position="sticky" top={0} bgcolor="white" zIndex={3} p={1.5} pb={0}>
-        {header}
-      </Box>
       <Box
         sx={{
           p: 1.5,

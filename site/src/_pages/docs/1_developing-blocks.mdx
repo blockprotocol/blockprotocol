@@ -22,7 +22,19 @@ We provide three templates which allow you to define the entry point for your bl
 
 To create a new block, run `npx create-block-app block-name --template template`, replacing `block-name` with the name to give your block, and `template` with one of the template names listed above.
 
-These templates also allow you [to use other technologies](#i-want-to-use-a-different-technology).
+### I want to use a different technology
+
+If you want to write blocks **using other technologies or frameworks**, you have several options:
+
+1.  use a `custom-element` template and use different approaches when constructing the element-i.e. use a custom element as a wrapper for anything else you like.
+1.  use an `html` template and import and use your additional libraries inside the `<script>` tag.
+1.  use a language which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React, you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
+
+### I don’t want to use TypeScript
+
+You can write your block in regular JavaScript using the methods described above - just rename your files from `*.tsx/*.ts` to `*.jsx/*.js`, remove the types, and get coding.
+
+Bear in mind that a block schema will not be automatically generated as part of the build process – you can write your own `block-schema.json` file at the root of your block’s folder, giving the type of props your App component accepts in [JSON Schema format](https://json-schema.org/).
 
 ## Creating a block
 
@@ -82,7 +94,7 @@ The starter blocks created by `create-block-app` implement a simple example of t
 
 The Graph Service describes how entities can be created, queried, updated, and linked together, including the block entity. It enables your block to create, read, update, and delete data in the embedding application.
 
-The Graph Service is available via the `graphService` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](/spec/graph-service-specification).
+The Graph Service is available via the `graphService` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](/docs/spec/graph-service-specification).
 
 Using these methods in combination, you can create complex graphs from within a block without having to know anything about the implementation details of the application embedding it.
 
@@ -145,7 +157,7 @@ Any entities linked to the block will appear in the `linkedEntities` property, w
 
 If you are using TypeScript, the types for methods available on `graphService` (as defined in the `@blockprotocol/graph` package) should help you understand what methods are available and how they operate.
 
-You can also review the messages defined in the graph specification [here](/spec/graph-service-specification). If you do so, bear in mind the following:
+You can also review the messages defined in the graph specification [here](/docs/spec/graph-service-specification). If you do so, bear in mind the following:
 
 - only the ones marked as `source: "block"` are available as methods to your block.
 - any message marked as `sentOnInitialization` with `source: "embeder"` will be passed to your block as soon as it’s loaded. Remember that `custom-element` and `react`-type blocks receive these messages as properties under a `graph` object, whereas `html` blocks can register callbacks for each message.
@@ -208,19 +220,3 @@ We assume that running `yarn install && yarn build` will build your block (after
 The specified `distDir` will be relative to the workspace directory or folder, if provided.
 
 </InfoCard>
-
-## Q&A
-
-### I want to use a different technology
-
-If you want to write blocks **using other technologies or frameworks**, you have several options:
-
-1.  use a `custom-element` template and use different approaches when constructing the element-i.e. use a custom element as a wrapper for anything else you like.
-1.  use an `html` template and import and use your additional libraries inside the `<script>` tag.
-1.  use a language which can be transpiled to JavaScript. As an example, see [this blog post](https://hash.dev/blog/build-blocks-in-any-language) on writing a block using F#. This block uses React, you can use transpiled JavaScript in blocks defined as HTML files or custom elements too.
-
-### I don’t want to use TypeScript
-
-You can write your block in regular JavaScript using the methods described above - just rename your files from `*.tsx/*.ts` to `*.jsx/*.js`, remove the types, and get coding.
-
-Bear in mind that the block schema will not be automatically generated as part of the build process – you can write your own `block-schema.json` file at the root of your block’s folder, giving the type of props your App component accepts in [JSON Schema format](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).

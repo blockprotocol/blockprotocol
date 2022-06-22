@@ -1,11 +1,11 @@
+import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   CircularProgress,
   IconButton,
-  SxProps,
-  Theme,
   Typography,
+  useTheme,
 } from "@mui/material";
 import algoliasearch from "algoliasearch";
 import debounce from "lodash/debounce";
@@ -21,31 +21,46 @@ import React, {
 import { useMousetrap } from "use-mousetrap";
 
 import { Link } from "../../../link";
-import SearchItem, {
-  AlgoliaHighlightResult,
-  AlgoliaResult,
-  SearchVariants,
-} from "./search-item";
+import SearchList from "./search-list";
+import SearchSuggestedLinks from "./search-suggested-links";
 
 const client = algoliasearch("POOWZ64DSV", "96dc0442fd27b903440955dc03e5e60e");
 const index = client.initIndex("blockprotocol");
 
+export type AlgoliaPageType = "docs" | "spec";
+
+export type SearchVariants = "mobile" | "desktop";
+
+export type AlgoliaResult = {
+  objectID: string;
+  title: string;
+  description: string;
+  content: string;
+  slug: string;
+  type: AlgoliaPageType;
+  _highlightResult: AlgoliaHighlightResult;
+};
+
+export type AlgoliaHighlightResult = Record<
+  keyof AlgoliaResult,
+  { value: string; matchLevel: "none" | "full" }
+>;
 interface SearchProps {
   variant: SearchVariants;
-  closeDrawer?: () => void;
+  closeModal?: () => void;
 }
 
 const MAX_SEARCH_RESULTS = 10;
 
-const Search: React.VoidFunctionComponent<SearchProps> = ({
-  variant,
-  closeDrawer,
+const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
+  variant = "desktop",
+  closeModal,
 }) => {
   const router = useRouter();
+  const theme = useTheme();
 
   const [searchText, setSearchText] = useState("");
   const [currentSearchedText, setCurrentSearchedText] = useState("");
-  const [searchFocus, setSearchFocus] = useState(false);
   const [searchResults, setSearchResults] = useState<Array<AlgoliaResult>>([]);
   const [activeResult, setActiveResult] = useState(MAX_SEARCH_RESULTS);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -54,22 +69,7 @@ const Search: React.VoidFunctionComponent<SearchProps> = ({
     "normal" | "noresults" | "failed"
   >("normal");
 
-  const closeResultsMenu = () => setSearchFocus(false);
-
-  const outerNode = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (outerNode.current) {
-        if (!outerNode.current.contains(event.target as Node)) {
-          closeResultsMenu();
-        }
-      }
-    };
-
-    document.addEventListener("mousedown", handleClick, false);
-    return () => document.removeEventListener("mousedown", handleClick, false);
-  }, []);
+  const form = useRef<HTMLFormElement>(null);
 
   const searchOnlineDebounce = useMemo(
     () =>
@@ -135,7 +135,10 @@ const Search: React.VoidFunctionComponent<SearchProps> = ({
   });
 
   const getHighlight = (highlight: AlgoliaHighlightResult) => {
-    const cleanContent = highlight?.content?.value
+    const content = highlight.content.value;
+
+    const cleanContent = content
+      .replace(/^#.*$/gm, "")
       .replace(/<(.*?)>|\*|#|`|\\|\((.*?)\)|\[|\]/g, "")
       .replace(/<|>/g, "");
 
@@ -168,169 +171,145 @@ const Search: React.VoidFunctionComponent<SearchProps> = ({
     }
   };
 
-  const searchResultContainerStyles: SxProps<Theme> = {
-    width: variant === "desktop" ? "275px" : "100%",
-    maxHeight: "60vh",
-    position: "absolute",
-    overflow: "auto",
-    border: "1px solid #d6d6d6",
-    borderRadius: 1,
-    zIndex: "1",
-  };
-
   return (
     <Box
-      ref={outerNode}
       sx={{
         position: "relative",
       }}
       className={`search-bar ${variant ?? ""}`}
     >
-      <form onSubmit={searchFormSubmit}>
-        <Box
-          component="input"
-          sx={{
-            background: "white",
-            border: "1px solid #d6d6d6",
-            borderRadius: 2,
-            px: 1.5,
-            py: 1,
-            paddingRight: "36px",
-            width: "100%",
-            ":focus-visible": {
-              borderColor: (theme) => theme.palette.purple[700],
-            },
-          }}
-          onFocus={() => {
-            setSearchFocus(true);
-          }}
-          onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
-            if (searchResults.length > 0) {
-              if (event.key === "ArrowUp") {
-                event.preventDefault();
+      <form ref={form} onSubmit={searchFormSubmit}>
+        <Box>
+          <Box
+            component="input"
+            sx={{
+              color: theme.palette.gray[90],
+              fill: theme.palette.gray[50],
+              fontSize: 15,
+              paddingY: 1.5,
+              paddingRight: 0.5,
+              paddingLeft: 6,
+              boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+              marginRight: 3,
+              width: 1,
+              borderColor: theme.palette.gray[30],
+              borderWidth: 1,
+              borderRadius: 1.5,
+              "&::placeholder": {
+                color: theme.palette.gray[50],
+              },
+            }}
+            onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+              if (searchResults.length > 0) {
+                if (event.key === "ArrowUp") {
+                  event.preventDefault();
 
-                if (activeResult === 0) {
-                  return setActiveResult(searchResults.length - 1);
+                  if (activeResult === 0) {
+                    return setActiveResult(searchResults.length - 1);
+                  }
+
+                  setActiveResult(activeResult - 1);
                 }
 
-                setActiveResult(activeResult - 1);
-              }
+                if (event.key === "ArrowDown") {
+                  event.preventDefault();
 
-              if (event.key === "ArrowDown") {
-                event.preventDefault();
+                  if (activeResult > searchResults.length - 1) {
+                    return setActiveResult(0);
+                  }
 
-                if (activeResult > searchResults.length - 1) {
-                  return setActiveResult(0);
+                  setActiveResult(activeResult + 1);
                 }
-
-                setActiveResult(activeResult + 1);
               }
+            }}
+            value={searchText}
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setSearchText(event.target.value)
             }
-          }}
-          value={searchText}
-          onChange={(event: ChangeEvent<HTMLInputElement>) =>
-            setSearchText(event.target.value)
-          }
-          placeholder="Search..."
-          required
-        />
+            placeholder="Search…"
+            required
+          />
+          <SearchIcon
+            sx={({ palette }) => ({
+              fill: palette.gray[50],
+              position: "absolute",
+              top: 10,
+              left: 8,
+            })}
+          />
+        </Box>
 
-        {searchLoading ? (
+        {searchLoading && (
           <Box
             sx={{
-              top: "0.65em",
-              right: "14px",
+              top: 14,
+              right: 14,
               position: "absolute",
               cursor: "pointer",
-              height: "20px",
+              height: 20,
             }}
           >
             <CircularProgress
-              style={{ height: "20px", width: "20px", color: "#c3c3c3" }}
+              style={{ height: 20, width: 20, color: "#c3c3c3" }}
             />
           </Box>
-        ) : (
-          <Box
+        )}
+
+        {!searchLoading && !!searchText.length && (
+          <IconButton
+            onClick={() => setSearchText("")}
             sx={{
-              top: "0.35em",
-              right: "10px",
+              top: 16,
+              right: 16,
               position: "absolute",
-              cursor: "pointer",
-              height: "20px",
             }}
           >
-            <IconButton
-              type="submit"
-              sx={{
-                height: "20px",
-                width: "20px",
-                padding: 0,
-                marginTop: "2px",
-                display: "inline-block",
-                verticalAlign: "middle",
-                position: "relative",
-              }}
-            >
-              <SearchIcon
-                sx={{
-                  left: 0,
-                  top: 0,
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  verticalAlign: "middle",
-                }}
-              />
-            </IconButton>
-          </Box>
+            <CloseIcon
+              sx={({ palette }) => ({
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                fill: palette.gray[50],
+              })}
+            />
+          </IconButton>
         )}
       </form>
 
-      {searchResults.length > 0 && searchFocus && (
-        <Box sx={searchResultContainerStyles}>
-          <Box sx={{ backgroundColor: "white" }}>
-            {searchResults.map((searchResult, searchResultIndex) => (
-              <SearchItem
-                variant={variant}
-                searchResult={searchResult}
-                key={searchResult.objectID}
-                closeDrawer={closeDrawer}
-                index={searchResultIndex}
-                activeResult={activeResult}
-                setActiveResult={setActiveResult}
-                getHighlight={getHighlight}
-                closeResultsMenu={closeResultsMenu}
-                sx={{
-                  borderBottom:
-                    searchResultIndex < searchResults.length - 1
-                      ? "1px solid #f1f3f6"
-                      : undefined,
-                }}
-              />
-            ))}
-          </Box>
+      {variant === "desktop" &&
+        !searchResults.length &&
+        searchState === "normal" && (
+          <SearchSuggestedLinks closeModal={closeModal} />
+        )}
+
+      {searchResults.length > 0 && (
+        <Box sx={({ palette }) => ({ backgroundColor: palette.common.white })}>
+          <SearchList
+            searchResults={searchResults}
+            variant={variant}
+            getHighlight={getHighlight}
+            closeModal={closeModal}
+          />
         </Box>
       )}
 
-      {searchState !== "normal" && searchFocus && !searchLoading && (
-        <Box sx={searchResultContainerStyles}>
-          <Box
-            sx={{
-              padding: "1em",
-              backgroundColor: "white",
-            }}
-          >
-            <Typography variant="bpSmallCopy">
-              {searchState === "noresults"
-                ? `No results found for your search term - please try another term`
-                : `We couldn't reach our servers - please try again`}
-              , or <Link href="/contact">contact us</Link>.
-            </Typography>
-          </Box>
+      {searchState !== "normal" && !searchLoading && (
+        <Box
+          sx={({ palette }) => ({
+            padding: 1.5,
+            backgroundColor: palette.common.white,
+          })}
+        >
+          <Typography variant="bpSmallCopy">
+            {searchState === "noresults"
+              ? `No results found for your search term - please try another term`
+              : `We couldn't reach our servers - please try again`}
+            , or <Link href="/contact">contact us</Link>.
+          </Typography>
         </Box>
       )}
     </Box>
   );
 };
 
-export default Search;
+export default ModalSearch;
