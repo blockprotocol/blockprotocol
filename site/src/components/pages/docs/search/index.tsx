@@ -18,7 +18,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useMousetrap } from "use-mousetrap";
 
 import { Link } from "../../../link";
 import SearchList from "./search-list";
@@ -71,8 +70,6 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
     "normal" | "noresults" | "failed"
   >("normal");
 
-  const form = useRef<HTMLFormElement>(null);
-
   const searchOnlineDebounce = useMemo(
     () =>
       debounce((newSearchText: string) => {
@@ -101,12 +98,6 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
     [],
   );
 
-  const searchOnlineFunction = () => {
-    inputRef.current?.focus();
-
-    searchOnlineDebounce(searchText);
-  };
-
   useEffect(() => {
     if (searchText.trim() && searchText.length > 2) {
       searchOnlineDebounce(searchText);
@@ -121,14 +112,6 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
   useEffect(() => {
     setSearchText("");
   }, [router.asPath]);
-
-  // mousetrap is only registered for a key once, so the function needs to account for all cases
-  useMousetrap("/", (event) => {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-
-    inputRef.current?.focus();
-  });
 
   const getHighlight = (highlight: AlgoliaHighlightResult) => {
     const content = highlight.content.value;
@@ -153,129 +136,106 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
       .replace(searchRegExp, `<span class="highlight-text">$&</span>`);
   };
 
-  const searchFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (searchResults.length > 0 && searchResults[activeResult]) {
-      const { slug } = searchResults[activeResult]!;
-
-      inputRef.current?.blur();
-
-      return router.push(slug);
-    } else {
-      searchOnlineFunction();
-    }
-  };
-
   useEffect(() => {
     setTimeout(() => inputRef.current?.focus(), 50);
   });
 
   return (
-    <Box
-      sx={{
-        position: "relative",
-      }}
-      className={`search-bar ${variant ?? ""}`}
-    >
-      <form ref={form} onSubmit={searchFormSubmit}>
-        <Box>
-          <Box
-            component="input"
-            ref={inputRef}
-            sx={{
-              color: theme.palette.gray[90],
-              fill: theme.palette.gray[50],
-              fontSize: 15,
-              paddingY: 1.5,
-              paddingRight: 0.5,
-              paddingLeft: 6,
-              boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-              marginRight: 3,
-              width: 1,
-              borderColor: theme.palette.gray[30],
-              borderWidth: 1,
-              borderRadius: 1.5,
-              "&::placeholder": {
-                color: theme.palette.gray[50],
-              },
-            }}
-            onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
-              if (searchResults.length > 0) {
-                if (event.key === "ArrowUp") {
-                  event.preventDefault();
+    <Box position="relative">
+      <Box
+        component="input"
+        ref={inputRef}
+        sx={{
+          color: theme.palette.gray[90],
+          fill: theme.palette.gray[50],
+          fontSize: 15,
+          paddingY: 1.5,
+          paddingRight: 0.5,
+          paddingLeft: 6,
+          boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+          marginRight: 3,
+          width: 1,
+          borderColor: theme.palette.gray[30],
+          borderWidth: 1,
+          borderRadius: 1.5,
+          "&::placeholder": {
+            color: theme.palette.gray[50],
+          },
+        }}
+        onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+          if (searchResults.length > 0) {
+            if (event.key === "ArrowUp") {
+              event.preventDefault();
 
-                  if (activeResult === 0) {
-                    return setActiveResult(searchResults.length - 1);
-                  }
-
-                  setActiveResult(activeResult - 1);
-                }
-
-                if (event.key === "ArrowDown") {
-                  event.preventDefault();
-
-                  if (activeResult > searchResults.length - 1) {
-                    return setActiveResult(0);
-                  }
-
-                  setActiveResult(activeResult + 1);
-                }
+              if (activeResult === 0) {
+                return setActiveResult(searchResults.length - 1);
               }
-            }}
-            value={searchText}
-            onChange={(event: ChangeEvent<HTMLInputElement>) =>
-              setSearchText(event.target.value)
+
+              setActiveResult(activeResult - 1);
             }
-            placeholder="Search…"
-            required
-          />
-          <SearchIcon
-            sx={({ palette }) => ({
-              fill: palette.gray[50],
-              position: "absolute",
-              top: 10,
-              left: 8,
-            })}
+
+            if (event.key === "ArrowDown") {
+              event.preventDefault();
+
+              if (activeResult > searchResults.length - 1) {
+                return setActiveResult(0);
+              }
+
+              setActiveResult(activeResult + 1);
+            }
+          }
+        }}
+        value={searchText}
+        onChange={(event: ChangeEvent<HTMLInputElement>) =>
+          setSearchText(event.target.value)
+        }
+        placeholder="Search…"
+        required
+      />
+      <SearchIcon
+        sx={({ palette }) => ({
+          fill: palette.gray[50],
+          position: "absolute",
+          top: 10,
+          left: 8,
+        })}
+      />
+
+      {searchLoading && (
+        <Box
+          sx={{
+            top: 14,
+            right: 14,
+            position: "absolute",
+            cursor: "pointer",
+            height: 20,
+          }}
+        >
+          <CircularProgress
+            style={{ height: 20, width: 20, color: "#c3c3c3" }}
           />
         </Box>
+      )}
 
-        {searchLoading && (
-          <Box
-            sx={{
-              top: 14,
-              right: 14,
+      {!searchLoading && !!searchText.length && (
+        <IconButton
+          onClick={() => setSearchText("")}
+          sx={{
+            top: 16,
+            right: 16,
+            position: "absolute",
+          }}
+        >
+          <CloseIcon
+            sx={({ palette }) => ({
               position: "absolute",
-              cursor: "pointer",
-              height: 20,
-            }}
-          >
-            <CircularProgress
-              style={{ height: 20, width: 20, color: "#c3c3c3" }}
-            />
-          </Box>
-        )}
-
-        {!searchLoading && !!searchText.length && (
-          <IconButton
-            onClick={() => setSearchText("")}
-            sx={{
-              top: 16,
-              right: 16,
-              position: "absolute",
-            }}
-          >
-            <CloseIcon
-              sx={({ palette }) => ({
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                fill: palette.gray[50],
-              })}
-            />
-          </IconButton>
-        )}
-      </form>
+              width: "100%",
+              height: "100%",
+              fill: palette.gray[50],
+            })}
+          />
+        </IconButton>
+      )}
 
       {variant === "desktop" &&
         !searchResults.length &&
