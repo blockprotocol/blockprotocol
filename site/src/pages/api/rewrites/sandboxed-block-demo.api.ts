@@ -56,6 +56,7 @@ const handler: NextApiHandler = async (req, res) => {
   const { exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
+  const graphVersion = packageJson.dependencies["@blockprotocol/graph"];
 
   const reactVersion =
     blockMetadata.externals?.react ?? packageJson.dependencies.react;
@@ -142,8 +143,11 @@ const handler: NextApiHandler = async (req, res) => {
       
           const entryPoint = blockType.entryPoint.toLocaleLowerCase();
           
-          const rawBlockSource = source;
-          const blockExport = entryPoint === "html" ? rawBlockSource : findBlockExport(loadCjsFromSource(rawBlockSource));
+          let blockExport = findBlockExport(loadCjsFromSource(source));
+          // @todo make this unnecessary
+          if (entryPoint === "html") {
+            blockExport = blockExport.replace(/(import.*?from.*?)@blockprotocol\\/graph/g, "$1https://esm.sh/@blockprotocol/graph@${graphVersion}")
+          }
           
           const blockDefinition = {
             ReactComponent: entryPoint === "react" ? blockExport : undefined,

@@ -7,7 +7,7 @@
   "schema": "block-schema.json",
   "variants": [],
   "blockType": {
-    "blockType": "html"
+    "entryPoint": "html"
   },
   "protocol": "0.2",
   "displayName": "Template",
