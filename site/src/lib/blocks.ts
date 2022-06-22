@@ -2,8 +2,7 @@ import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
-// eslint-disable-next-line unicorn/prefer-node-protocol -- Replace "path" with "node:path" after upgrading next from 12.1.6 https://github.com/vercel/nft/issues/293
-import path from "path";
+import path from "node:path";
 
 import { FRONTEND_URL } from "./config";
 
