@@ -1,5 +1,6 @@
-import { Box, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Collapse, Grid, Typography, useTheme } from "@mui/material";
 import React, { useMemo } from "react";
+import { TransitionGroup } from "react-transition-group";
 
 import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
 import SearchHeading from "./search-list-heading";
@@ -56,20 +57,26 @@ const SearchListCategory: React.VoidFunctionComponent<
         </Box>
 
         <Grid container spacing={0.5}>
-          {sections.map((res) => (
-            <Grid item sx={{ width: 1 }} key={res.objectID}>
-              <SearchHeading searchResult={res} closeModal={closeModal} />
-            </Grid>
-          ))}
-          {items.map((res) => (
-            <Grid item sx={{ width: 1 }} key={res.objectID}>
-              <SearchItem
-                searchResult={res}
-                getHighlight={getHighlight}
-                closeModal={closeModal}
-              />
-            </Grid>
-          ))}
+          <TransitionGroup>
+            {sections.map((res) => (
+              <Collapse key={res.objectID}>
+                <Grid item sx={{ width: 1 }}>
+                  <SearchHeading searchResult={res} closeModal={closeModal} />
+                </Grid>
+              </Collapse>
+            ))}
+            {items.map((res) => (
+              <Collapse key={res.objectID}>
+                <Grid item sx={{ width: 1 }}>
+                  <SearchItem
+                    searchResult={res}
+                    getHighlight={getHighlight}
+                    closeModal={closeModal}
+                  />
+                </Grid>
+              </Collapse>
+            ))}
+          </TransitionGroup>
         </Grid>
       </Box>
     </Box>

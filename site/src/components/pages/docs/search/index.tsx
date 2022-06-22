@@ -12,6 +12,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { TransitionGroup } from "react-transition-group";
 
 import { Link } from "../../../link";
 import { TextField } from "../../../text-field";
@@ -211,22 +212,30 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
         helperText={helperText}
       />
 
-      <Collapse in={helperText === undefined}>
-        {searchResults.length > 0 ? (
-          <Box
-            sx={({ palette }) => ({ backgroundColor: palette.common.white })}
-          >
-            <SearchList
-              searchResults={searchResults}
-              variant={variant}
-              getHighlight={getHighlight}
-              closeModal={closeModal}
-            />
-          </Box>
-        ) : variant === "desktop" ? (
-          <SearchSuggestedLinks closeModal={closeModal} />
-        ) : null}
-      </Collapse>
+      <TransitionGroup>
+        {searchResults.length > 0 && (
+          <Collapse>
+            <Box
+              sx={({ palette }) => ({ backgroundColor: palette.common.white })}
+            >
+              <SearchList
+                searchResults={searchResults}
+                variant={variant}
+                getHighlight={getHighlight}
+                closeModal={closeModal}
+              />
+            </Box>
+          </Collapse>
+        )}
+
+        {variant === "desktop" &&
+          helperText === undefined &&
+          searchResults.length <= 0 && (
+            <Collapse>
+              <SearchSuggestedLinks closeModal={closeModal} />
+            </Collapse>
+          )}
+      </TransitionGroup>
     </>
   );
 };
