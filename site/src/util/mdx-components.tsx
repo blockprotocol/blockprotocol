@@ -1,8 +1,11 @@
 import { faLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
 import {
+  Children,
+  FunctionComponent,
   HTMLAttributes,
   HTMLProps,
+  isValidElement,
   ReactNode,
   useContext,
   useEffect,
@@ -12,6 +15,7 @@ import {
 import slugify from "slugify";
 
 import PageHeadingsContext from "../components/context/page-headings-context";
+import { GraphServiceMessageList } from "../components/graph-service-message-list";
 import { FontAwesomeIcon } from "../components/icons";
 import { InfoCard } from "../components/info-card/info-card";
 import { InfoCardWrapper } from "../components/info-card/info-card-wrapper";
@@ -54,11 +58,11 @@ const usePageHeading = (props: { anchor: string }) => {
   return { headingRef };
 };
 
-const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 }> = ({
+const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 | 5 }> = ({
   depth,
   anchor,
 }) => {
-  const size = depth === 1 ? 28 : depth === 2 ? 24 : 20;
+  const size = depth === 1 ? 28 : depth === 2 ? 24 : depth === 3 ? 20 : 16;
   return (
     <Link
       href={`#${anchor}`}
@@ -100,15 +104,24 @@ const HEADING_MARGIN_TOP = {
   H2: 8,
   H3: 6,
   H4: 6,
+  H5: 6,
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, ReactNode> = {
+export const mdxComponents: Record<string, FunctionComponent<any>> = {
   Box,
   Paper,
   Typography,
   InfoCardWrapper,
   InfoCard,
+  GraphServiceMessageList,
+  Hidden: (({ children }) => {
+    return (
+      <span aria-hidden style={{ display: "none" }}>
+        {children}
+      </span>
+    );
+  }) as FunctionComponent,
   h1: (props: TypographyProps) => {
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const { headingRef } = usePageHeading({ anchor: "" });
@@ -167,14 +180,26 @@ export const mdxComponents: Record<string, ReactNode> = {
       </Heading>
     );
   },
-  h4: (props: TypographyProps) => (
-    <Heading
-      mt={HEADING_MARGIN_TOP.H4}
-      mb={HEADING_MARGIN_BOTTOM}
-      variant="bpHeading4"
-      {...props}
-    />
-  ),
+  h4: (props: TypographyProps) => {
+    return (
+      <Heading
+        mt={HEADING_MARGIN_TOP.H5}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading5"
+        {...props}
+      />
+    );
+  },
+  h5: (props: TypographyProps) => {
+    return (
+      <Heading
+        mt={HEADING_MARGIN_TOP.H5}
+        mb={HEADING_MARGIN_BOTTOM}
+        variant="bpHeading5"
+        {...props}
+      />
+    );
+  },
   p: (props: TypographyProps) => (
     <Typography mb={2} variant="bpBodyCopy" {...props} />
   ),
@@ -189,19 +214,29 @@ export const mdxComponents: Record<string, ReactNode> = {
   },
   table: ({ children, ref: _ref, ...props }: HTMLProps<HTMLTableElement>) => (
     <Box
-      component="table"
       sx={{
-        "td, th": {
-          border: ({ palette }) => `1px solid ${palette.gray[30]}`,
-          paddingY: 1,
-          paddingX: 3,
-          typography: "bpSmallCopy",
-        },
-        marginBottom: 2,
+        overflow: "auto",
+        maxWidth: "100%",
       }}
-      {...props}
     >
-      {children}
+      <Box
+        component="table"
+        sx={{
+          "td, th": {
+            border: ({ palette }) => `1px solid ${palette.gray[30]}`,
+            paddingY: 1,
+            paddingX: 3,
+            typography: "bpSmallCopy",
+          },
+          th: {
+            backgroundColor: ({ palette }) => palette.gray[10],
+          },
+          marginBottom: 2,
+        }}
+        {...props}
+      >
+        {children}
+      </Box>
     </Box>
   ),
 
@@ -257,7 +292,7 @@ export const mdxComponents: Record<string, ReactNode> = {
       sx={(theme) => ({
         marginBottom: theme.spacing(2),
         paddingLeft: theme.spacing(4),
-        listStyle: "unset",
+        listStyle: "initial",
       })}
       {...props}
     />
@@ -269,7 +304,8 @@ export const mdxComponents: Record<string, ReactNode> = {
       </Typography>
     </Box>
   ),
-  inlineCode: (props: HTMLAttributes<HTMLElement>) => (
+  // inline code (`)
+  code: (props: HTMLAttributes<HTMLElement>) => (
     <Box
       component="code"
       sx={(theme) => ({
@@ -285,53 +321,63 @@ export const mdxComponents: Record<string, ReactNode> = {
       {...props}
     />
   ),
-  pre: (props: HTMLAttributes<HTMLElement>) => {
-    // Delegate full control to code for more styling options
-    return props.children;
-  },
-  code: (props: HTMLAttributes<HTMLElement>) => {
-    const isLanguageBlockFunction =
-      props.className === "language-block-function";
-    if (isLanguageBlockFunction) {
-      const anchor = `${props.children}`.match(/^[\w]+/)?.[0] ?? "";
+  // block code (```) - consists of <pre><code>...</code></pre>
+  pre: ({ children, ...rest }: HTMLAttributes<HTMLElement>) => {
+    const [child, ...otherChildren] = Children.toArray(children);
+    if (
+      isValidElement(child) &&
+      child.type === mdxComponents.code &&
+      !otherChildren.length
+    ) {
+      const childProps = child.props;
+      const isLanguageBlockFunction =
+        childProps.className === "language-block-function";
+
+      if (isLanguageBlockFunction) {
+        const anchor = `${childProps.children}`.match(/^[\w]+/)?.[0] ?? "";
+        return (
+          <Box
+            id={anchor}
+            component="code"
+            sx={{
+              fontWeight: "bold",
+              color: "#d18d5b",
+              display: "block",
+              marginTop: 4,
+            }}
+          >
+            <Link href={`#${anchor}`}>{childProps.children}</Link>
+          </Box>
+        );
+      }
+
       return (
         <Box
-          id={anchor}
-          component="code"
-          sx={{
-            fontWeight: "bold",
-            color: "#d18d5b",
+          component="pre"
+          sx={(theme) => ({
+            overflow: "auto",
             display: "block",
-            marginTop: 4,
-          }}
+            fontSize: "90%",
+            color: theme.palette.purple[400],
+            background: "#161a1f",
+            padding: theme.spacing(3),
+            borderWidth: 1,
+            borderStyle: "solid",
+            borderRadius: "8px",
+            textShadow: "none",
+            marginBottom: 2,
+            maxWidth: "72ch",
+          })}
         >
-          <Link href={`#${anchor}`}>{props.children}</Link>
+          <Snippet
+            source={`${childProps.children}`}
+            language={childProps.className?.replace("language-", "") ?? ""}
+          />
         </Box>
       );
     }
-    return (
-      <Box
-        component="pre"
-        sx={(theme) => ({
-          overflow: "auto",
-          display: "block",
-          fontSize: "90%",
-          color: theme.palette.purple[400],
-          background: "#161a1f",
-          padding: theme.spacing(3),
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderRadius: "8px",
-          textShadow: "none",
-          marginBottom: 2,
-          maxWidth: "72ch",
-        })}
-      >
-        <Snippet
-          source={`${props.children}`}
-          language={props.className?.replace("language-", "") ?? ""}
-        />
-      </Box>
-    );
+
+    // fallback
+    return <pre {...rest}>{children}</pre>;
   },
 };

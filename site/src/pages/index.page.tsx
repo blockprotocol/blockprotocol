@@ -1,17 +1,22 @@
 import { GetStaticProps } from "next";
 import { VFC } from "react";
 
+import { AnyFramework } from "../components/pages/home/anyframework";
+import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
+import { ConfinedBlocks } from "../components/pages/home/confined-blocks";
+import { FinalCTA } from "../components/pages/home/final-cta";
 import { Header } from "../components/pages/home/header";
-import { IntroSection } from "../components/pages/home/intro-section";
+import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
 import { RegistrySection } from "../components/pages/home/registry-section";
-import { Section2 } from "../components/pages/home/section2";
-import { WhyBlockProtocolSection } from "../components/pages/home/why-block-protocol-section";
+import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
+import { useUser } from "../context/user-context";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlocksFromDisk,
 } from "../lib/blocks";
 
+// @todo how does this magic number work?
 export const HOME_PAGE_HEADER_HEIGHT = 750;
 
 interface PageProps {
@@ -25,13 +30,17 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const HomePage: VFC<PageProps> = ({ catalog }) => {
+  const { user } = useUser();
   return (
     <>
       <Header />
-      <IntroSection />
-      <Section2 />
-      <WhyBlockProtocolSection />
+      <WhatAreBlocks />
+      <ConfinedBlocks />
+      <InteroperableBlocks />
+      <AnyFramework />
+      <ComposableInterfaces />
       <RegistrySection catalog={catalog} />
+      {!user && <FinalCTA />}
     </>
   );
 };

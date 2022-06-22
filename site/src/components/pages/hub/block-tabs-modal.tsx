@@ -4,7 +4,7 @@ import { VoidFunctionComponent } from "react";
 import { BlockDataTabPanels } from "./block-data-tab-panels";
 import { BlockDataTabs } from "./block-data-tabs";
 import { BlockModalButton } from "./block-modal-button";
-import { BlockSchema } from "./hub-utils";
+import { BlockExampleGraph, BlockSchema } from "./hub-utils";
 
 interface BlockTabsModalProps {
   open: boolean;
@@ -14,6 +14,7 @@ interface BlockTabsModalProps {
   schema: BlockSchema;
   text: string;
   setText: (newValue: string) => void;
+  exampleGraph: BlockExampleGraph | null;
 }
 
 export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
@@ -24,6 +25,7 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
   schema,
   text,
   setText,
+  exampleGraph,
 }) => {
   return (
     <Modal
@@ -52,10 +54,12 @@ export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
             blockDataTab={blockDataTab}
             setBlockDataTab={setBlockDataTab}
             modalOpen
+            showExampleGraphTab={!!exampleGraph}
           />
           <BlockDataTabPanels
             blockDataTab={blockDataTab}
             schema={schema}
+            exampleGraph={exampleGraph}
             text={text}
             setText={setText}
             modalOpen

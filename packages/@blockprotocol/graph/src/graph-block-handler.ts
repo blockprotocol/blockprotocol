@@ -53,6 +53,7 @@ export class GraphBlockHandler
     if (callbacks) {
       this.registerCallbacks(callbacks);
     }
+    this.coreHandler.initialize();
   }
 
   getInitPayload(): Record<string, any> {
@@ -68,7 +69,7 @@ export class GraphBlockHandler
     const expectedMessageSource = "embedder";
     const messageJsonDefinition = serviceJsonDefinition.messages.find(
       (message) =>
-        message.name === messageName &&
+        message.messageName === messageName &&
         message.source === expectedMessageSource,
     );
     if (!messageJsonDefinition) {

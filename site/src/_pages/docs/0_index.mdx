@@ -1,29 +1,17 @@
+# Introduction
+
 ## Overview
 
-The Block Protocol is a global standard for building **interactive blocks** connected to **structured data**.
+The Block Protocol is an open standard for building block-based interfaces. It enables applications to make their interfaces extensible with interoperable components: blocks.
 
 The following pages provide a practical introduction for developers who want to:
 
-- [develop blocks](https://blockprotocol.org/docs/developing-blocks) and publish them to the block registry
-- [embed blocks](https://blockprotocol.org/docs/embedding-blocks) within an application or allow an app's users to dynamically do the same
+- [develop blocks](/docs/developing-blocks) and publish them to the block registry
+- [embed blocks](/docs/embedding-blocks) within an application
 
-For the full technical details, read [the Block Protocol specification](https://blockprotocol.org/spec).
+If you have any questions, [please open or contribute to a discussion](https://github.com/blockprotocol/blockprotocol/discussions). You can also [chat to us on Discord](/discord).
 
-If you have any questions, [please open or contribute to a discussion](https://github.com/blockprotocol/blockprotocol/discussions). You can also [chat to us on Discord](https://blockprotocol.org/discord).
-
-### Why is structured data useful?
-
-Structured data makes it much easier for computers to understand the information we give them.
-
-Most of the data on the web is unstructured. When we write webpages in HTML, it's easily readable by humans, but not by computers. The computer only knows you've added a bunch of `<p>` tags to a page, but doesn't understand the contents or shape of what you've written inside (at least without any fancy natural language processing).
-
-Unlike plain HTML, blocks created with the Block Protocol have **types**, such as _Person_, _Company_, and _Date_ that help computers understand what they actually contain.
-
-Imagine you are creating a webpage to announce a book signing event with a well-known author. You could add an _Author_ block, a _Location_ block, and a _Time_ block to this page. Instead of being some mystery HTML, your information is now readable by computers. It would be much easier to automatically pass this information to other websites and applications, such as a calendar application, or the author's personal website.
-
-We are trying to fulfil the vision of the Semantic Web (aka. the OG Web3, before all the NFTs took over!), transforming the web's randomly formatted, human-readable pages into structured troves of connected knowledge, improving both user and developer experiences as we go.
-
-### What is a block?
+## What is a block?
 
 Blocks are the basic units we use to build pages on the modern web. They are rectangular sections that contain a set of features and functions. They are sometimes also called _components_ or _widgets_.
 
@@ -35,18 +23,12 @@ Blocks can be added to webpages using plain HTML and/or JavaScript. Some modern 
 
 From a developer perspective, blocks encapsulate a set of specific functionality. Building a block is no different to writing a React, Vue, or [Web Component](https://en.wikipedia.org/wiki/Web_Components) – in fact, these are all ways you might implement a block. They are reusable elements that expect certain data to be passed to them (what we refer to as a block’s ‘schema’). For example, an image block might only accept an image URL in its `src` property, not a number.
 
-### What is a Block Protocol block?
+## What is a Block Protocol block?
 
-Any block can become a Block Protocol block by meeting the requirements defined in the BP [specification](https://blockprotocol.org/spec). These requirements define what data a block can accept and how they're allowed to edit that data.
+Any block can become a Block Protocol block by meeting the requirements defined in the specification. These requirements define what data a block can accept and how they're allowed to edit that data.
 
 Following these requirements allows BP blocks to do more than regular web blocks. This standardized way of handling data makes it possible to embed BP blocks across different web applications. BP blocks can read and write data to the applications they're embedded within without any extra setup or custom integrations (as long as both the block and embedding application adhere to the specification).
 
-BP blocks can also be published to the [Block Hub](https://blockprotocol.org/hub) – an open-source registry where anyone can publish their blocks for other people to discover and use.
+BP blocks can also be published to the [Block Hub](/hub) – an open-source registry where anyone can publish their blocks for other people to discover and use.
 
-Any application can accept BP blocks, as long as they follow the [requirements for embedding applications](https://blockprotocol.org/spec/embedding-applications).
-
-## Demo applications
-
-You can find [the source code for one example embedding application, HASH, on GitHub](https://github.com/hashintel/hash/tree/main/packages/hash). This is a work-in-progress environment which illustrates how both blocks and an application using them can be implemented.
-
-If you support the Block Protocol in your open-source application, [contact us](https://blockprotocol.org/contact) to appear here.
+Any application can accept BP blocks, as long as they follow the [requirements for embedding applications](/docs/spec/embedding-applications).

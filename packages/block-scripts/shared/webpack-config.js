@@ -53,7 +53,7 @@ const generateBaseWebpackConfig = async (mode) => {
       filename: mode === "production" ? "[name].[contenthash].js" : "[name].js",
     },
     externals: Object.fromEntries(
-      Object.keys(peerDependencies).map((key) => [key, key]),
+      Object.keys(peerDependencies ?? {}).map((key) => [key, key]),
     ),
     mode,
     module: {
@@ -107,7 +107,7 @@ export const generateBuildWebpackConfig = async (mode) => {
   return {
     ...baseWebpackConfig,
     watch: mode === "development",
-    devtool: "inline-source-map",
+    devtool: mode === "development" ? "inline-source-map" : "source-map",
     plugins: [
       ...baseWebpackConfig.plugins,
       ...(mode === "production" ? [new BlockAssetsPlugin()] : []),

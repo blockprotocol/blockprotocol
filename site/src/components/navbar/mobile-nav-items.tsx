@@ -24,7 +24,8 @@ import SiteMapContext from "../../context/site-map-context";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
-import Search from "../pages/docs/search";
+import { Search } from "../pages/docs/search";
+import { generatePathWithoutParams } from "../shared";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
@@ -48,6 +49,8 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
 }: MobileNavNestedPageProps<T>) => {
   const router = useRouter();
   const { asPath } = router;
+  const pathWithoutParams = generatePathWithoutParams(asPath);
+
   const { title } = item;
 
   const isRoot = depth === 0;
@@ -56,7 +59,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
     ? item.href
     : `${parentPageHref}#${item.anchor}`;
 
-  const isSelected = asPath === href;
+  const isSelected = pathWithoutParams === href;
 
   const hasChildren = itemIsPage(item)
     ? item.subPages.length > 0 || item.sections.length > 0
@@ -111,9 +114,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
           <ListItemText
             primary={title}
             sx={{
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
+              wordBreak: "break-word",
               "> .MuiListItemText-primary": {
                 display: "inline",
               },
@@ -207,6 +208,8 @@ const getInitialExpandedItems = ({
   item: SiteMapPage | SiteMapPageSection;
   depth?: number;
 }): { href: string; depth: number }[] => {
+  const pathWithoutParams = generatePathWithoutParams(asPath);
+
   const expandedChildren = [
     ...(itemIsPage(item)
       ? item.subPages
@@ -229,7 +232,7 @@ const getInitialExpandedItems = ({
 
   const href = itemIsPage(item) ? item.href : `${parentHref}#${item.anchor}`;
 
-  const isExpanded = asPath === href || expandedChildren.length > 0;
+  const isExpanded = pathWithoutParams === href || expandedChildren.length > 0;
 
   return isExpanded
     ? [
@@ -270,11 +273,9 @@ export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
 
   return (
     <List>
-      {(asPath.startsWith("/spec") || asPath.startsWith("/docs")) && (
-        <Box m={2}>
-          <Search variant="mobile" closeDrawer={onClose} />
-        </Box>
-      )}
+      <Box m={2}>
+        <Search variant="mobile" />
+      </Box>
 
       {pages.map((page) => (
         <Fragment key={page.href}>

@@ -1,7 +1,7 @@
 {
   "name": "@blockprotocol/graph",
-  "version": "0.0.2",
-  "description": "Implementation of the Block Protocol Graph services specification for blocks and embedding applications",
+  "version": "0.0.9",
+  "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
     "blocks",
@@ -28,7 +28,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean; yarn build:cjs; yarn build:esm",
+    "build": "yarn clean && yarn build:cjs && yarn build:esm",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs ",
     "build:esm": "tsc",
     "clean": "rimraf ./dist/",
@@ -36,7 +36,8 @@
     "prepare": "yarn build"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.2",
+    "@blockprotocol/core": "0.0.7",
+    "lit": "^2.2.5",
     "react": "^17.0.2"
   },
   "devDependencies": {

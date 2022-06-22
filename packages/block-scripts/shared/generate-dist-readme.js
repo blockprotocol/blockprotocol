@@ -10,7 +10,7 @@ export const generateDistReadme = async () => {
   if (await fs.pathExists(readmeInRootFilePath)) {
     const readme = await fs.readFile(readmeInRootFilePath, "utf8");
 
-    if (!readme.startsWith("# Block template\n")) {
+    if (!readme.startsWith("# Block template")) {
       await fs.writeFile(readmeInDistFilePath, readme, "utf8");
     }
   }

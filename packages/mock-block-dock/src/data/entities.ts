@@ -1,39 +1,43 @@
-import { BlockProtocolEntity } from "blockprotocol";
+import { Entity } from "@blockprotocol/graph";
 
 import { companyNames, personNames } from "./words";
 
-const entities: BlockProtocolEntity[] = [];
+const entities: Entity[] = [];
 
 const NUMBER_OF_ENTITIES_TO_CREATE = Math.min(
   personNames.length,
   companyNames.length,
 );
 
-const createPerson = (entityId: number): BlockProtocolEntity => {
+const createPerson = (entityId: number): Entity => {
   const now = new Date();
   const name = personNames[entityId];
   return {
     entityId: `person-${entityId.toString()}`,
     entityTypeId: "Person",
-    createdAt: now,
-    updatedAt: now,
-    age: Math.ceil(Math.random() * 100),
-    email: `${name}@example.com`,
-    name,
-    username: name.toLowerCase(),
+    properties: {
+      createdAt: now,
+      updatedAt: now,
+      age: Math.ceil(Math.random() * 100),
+      email: `${name}@example.com`,
+      name,
+      username: name.toLowerCase(),
+    },
   };
 };
 
-const createCompany = (entityId: number): BlockProtocolEntity => {
+const createCompany = (entityId: number): Entity => {
   const now = new Date();
   const name = companyNames[entityId];
   return {
     entityId: `company-${entityId.toString()}`,
     entityTypeId: "Company",
-    createdAt: now,
-    updatedAt: now,
-    employees: Math.ceil(Math.random() * 10_000),
-    name,
+    properties: {
+      createdAt: now,
+      updatedAt: now,
+      employees: Math.ceil(Math.random() * 10_000),
+      name,
+    },
   };
 };
 

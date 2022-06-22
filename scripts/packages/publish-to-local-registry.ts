@@ -24,14 +24,26 @@ const defaultExecaOptions = {
 const script = async () => {
   console.log(chalk.bold("Publishing to local registry..."));
 
-  const publishablePackageNames: string[] = [];
-  for (const packageName of await fs.readdir("packages")) {
+  const publishablePackages: { name: string; path: string }[] = [];
+
+  const packageParentFolders = ["packages", "packages/@blockprotocol"];
+
+  const packagePaths = (
+    await Promise.all(
+      packageParentFolders.map((parent) =>
+        fs
+          .readdir(parent)
+          .then((children) => children.map((child) => `${parent}/${child}`)),
+      ),
+    )
+  ).flat();
+
+  for (const packagePath of packagePaths) {
     try {
-      const packageJson = await fs.readJson(
-        `packages/${packageName}/package.json`,
-      );
+      const packageJson = await fs.readJson(`${packagePath}/package.json`);
+      const packageName = packageJson.name;
       if (packageJson.private !== true) {
-        publishablePackageNames.push(packageName);
+        publishablePackages.push({ name: packageName, path: packagePath });
       }
     } catch {
       // noop (packages/* is a file or does not contain package.json)
@@ -39,9 +51,10 @@ const script = async () => {
   }
 
   console.log(
-    `Publishable package names: ${["", ...publishablePackageNames].join(
-      "\n- ",
-    )}`,
+    `Publishable package names: ${[
+      "",
+      ...publishablePackages.map(({ name }) => name),
+    ].join("\n- ")}`,
   );
 
   logStepStart("Login into local registry");
@@ -75,28 +88,28 @@ const script = async () => {
 
   await execa("yarn", ["build"], {
     ...defaultExecaOptions,
-    cwd: path.resolve(`packages/block-template`),
+    cwd: path.resolve(`packages/block-template/templates/react`),
   });
 
   logStepEnd();
 
-  for (const packageName of publishablePackageNames) {
-    const packageDirPath = path.resolve(`packages/${packageName}`);
-
-    logStepStart(`Unpublish ${packageName} from local registry (if present)`);
+  for (const publishablePackage of publishablePackages) {
+    logStepStart(
+      `Unpublish ${publishablePackage.name} from local registry (if present)`,
+    );
 
     await execa("npm", ["unpublish", "--force"], {
       ...defaultExecaOptions,
-      cwd: packageDirPath,
+      cwd: publishablePackage.path,
       reject: false,
     });
 
     logStepEnd();
-    logStepStart(`Publish ${packageName} to local registry`);
+    logStepStart(`Publish ${publishablePackage.name} to local registry`);
 
     await execa("npm", ["publish", "--force"], {
       ...defaultExecaOptions,
-      cwd: packageDirPath,
+      cwd: publishablePackage.path,
     });
 
     logStepEnd();

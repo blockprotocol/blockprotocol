@@ -1,4 +1,4 @@
-import { BlockMetadata, BlockMetadataRepository } from "blockprotocol";
+import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
@@ -18,6 +18,8 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // repository is passed down as a string upon expansion
   repository?: string;
   schema?: string | null;
+  exampleGraph: string | null;
+  unstable_hubInfo?: Record<string, string>;
 };
 
 export interface StoredBlockInfo {
@@ -50,11 +52,12 @@ const generateBlockFileUrl = (
 const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
   commit: string,
+  hubInfoDirectoryPath: string | undefined,
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
       .fromUrl(repository)
-      ?.browse("", { committish: commit });
+      ?.browse(hubInfoDirectoryPath ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -68,7 +71,7 @@ const getRepositoryUrl = (
   if (url) {
     const repositoryUrl = hostedGitInfo
       .fromUrl(url)
-      ?.browse(directory ?? "", { committish: commit });
+      ?.browse(hubInfoDirectoryPath ?? directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -96,11 +99,17 @@ export const readBlocksFromDisk = async (): Promise<
       .slice(-3, -1)
       .join("/");
 
+    const partialMetadata = await fs.readJson(blockMetadataFilePath, {
+      encoding: "utf8",
+    });
+
     const metadata: ExpandedBlockMetadata = {
       // @todo should be redundant to block's package.json#name
       componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
       packagePath,
-      ...(await fs.readJson(blockMetadataFilePath, { encoding: "utf8" })),
+      // fallback while not all blocks have blockType defined
+      blockType: partialMetadata.blockType ?? { entryPoint: "react" },
+      ...partialMetadata,
     };
 
     const storedBlockInfo: StoredBlockInfo = await fs.readJson(
@@ -113,6 +122,7 @@ export const readBlocksFromDisk = async (): Promise<
     const repository = getRepositoryUrl(
       metadata.repository ?? storedBlockInfo.repository,
       storedBlockInfo.commit,
+      metadata.unstable_hubInfo?.directory,
     )?.replace(/\/$/, "");
 
     result.push({
@@ -130,6 +140,10 @@ export const readBlocksFromDisk = async (): Promise<
       schema: generateBlockFileUrl(metadata.schema, metadata.packagePath)!,
       repository,
       blockPackagePath: `/${metadata.packagePath.split("/").join("/blocks/")}`,
+      exampleGraph: generateBlockFileUrl(
+        metadata.exampleGraph,
+        metadata.packagePath,
+      ),
       lastUpdated: null, // TODO: derive from block data when provided by the hub
     });
   }
@@ -137,6 +151,7 @@ export const readBlocksFromDisk = async (): Promise<
   return result;
 };
 
+// Blocks which are currently not compliant with the spec, and are thus misleading examples
 const blocksToHide = [
   "@hash/callout",
   "@hash/embed",
@@ -149,7 +164,8 @@ export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
-    ({ packagePath }) => !blocksToHide.includes(packagePath),
+    ({ packagePath, protocol }) =>
+      !blocksToHide.includes(packagePath) && parseFloat(protocol) >= 0.2,
   );
 };
 
@@ -157,6 +173,7 @@ export const readBlockDataFromDisk = async ({
   packagePath,
   schema: metadataSchema,
   source: metadataSource,
+  exampleGraph: metadataExampleGraph,
 }: ExpandedBlockMetadata) => {
   // @todo update to also return the metadata information
   // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
@@ -187,8 +204,39 @@ export const readBlockDataFromDisk = async ({
       )
     : await fetch(metadataSource).then((response) => response.text());
 
+  let exampleGraph = null;
+
+  if (metadataExampleGraph) {
+    exampleGraph = metadataExampleGraph.startsWith(FRONTEND_URL)
+      ? JSON.parse(
+          fs.readFileSync(
+            `${process.cwd()}/public/blocks/${packagePath}/${metadataExampleGraph.substring(
+              metadataExampleGraph.lastIndexOf("/") + 1,
+            )}`,
+            { encoding: "utf8" },
+          ),
+        )
+      : await fetch(metadataExampleGraph).then((response) => response.json());
+  }
+
   return {
     schema,
     source,
+    exampleGraph,
   };
+};
+
+export const readBlockReadmeFromDisk = async (
+  blockMetadata: ExpandedBlockMetadata,
+): Promise<string | undefined> => {
+  try {
+    return fs.readFileSync(
+      `${process.cwd()}/public/blocks/${
+        blockMetadata.packagePath
+      }/README.vercel-hack.md`,
+      "utf8",
+    );
+  } catch {
+    return undefined;
+  }
 };

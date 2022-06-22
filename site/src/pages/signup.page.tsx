@@ -121,7 +121,7 @@ const SignupPage: NextPage = () => {
     >
       <Container
         sx={{
-          py: 8,
+          py: { xs: 8, md: 14 },
           display: "flex",
           alignItems: {
             xs: "center",

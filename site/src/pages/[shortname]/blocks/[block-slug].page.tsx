@@ -11,27 +11,42 @@ import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { MDXRemote } from "next-mdx-remote";
+import { serialize } from "next-mdx-remote/serialize";
 import React, { VoidFunctionComponent } from "react";
+import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
 import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
-import { BlockSchema } from "../../../components/pages/hub/hub-utils";
+import {
+  BlockExampleGraph,
+  BlockSchema,
+} from "../../../components/pages/hub/hub-utils";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   readBlockDataFromDisk,
+  readBlockReadmeFromDisk,
   readBlocksFromDisk,
 } from "../../../lib/blocks";
 import { isProduction } from "../../../lib/config";
+import { mdxComponents } from "../../../util/mdx-components";
+
+// Exclude <FooBar />, but keep <h1 />, <ul />, etc.
+const markdownComponents = Object.fromEntries(
+  Object.entries(mdxComponents).filter(
+    ([key]) => key[0]?.toLowerCase() === key[0],
+  ),
+);
 
 /**
  * We want a different origin for the iFrame to the parent window
  * so that it can't use cookies issued to the user in the main app.
  *
- * The PRODUCTION origin will be blockprotocol.org, so we can use
- * the unique Vercel deployment URL as the origin in production.
+ * The PRODUCTION origin will be blockprotocol.org, and we can use
+ * a custom domain or the unique Vercel deployment URL as the origin .
  *
  * In STAGING, we will mostly be visiting unique deployment URLs
  * for testing, so we can use the unique branch URL as the origin.
@@ -65,7 +80,10 @@ const generateSandboxBaseUrl = (): string => {
   }
 
   // @see https://vercel.com/docs/concepts/deployments/automatic-urls
-  const slugifiedBranch = branch.toLowerCase().replace(/[^\w-]+/g, "-");
+  const slugifiedBranch = branch
+    .toLowerCase()
+    .replace(/\./g, "")
+    .replace(/[^\w-]+/g, "-");
   const branchPrefix = `blockprotocol-git-${slugifiedBranch}-hashintel`.slice(
     0,
     64,
@@ -82,10 +100,12 @@ const Bullet: VoidFunctionComponent = () => {
 };
 
 type BlockPageProps = {
+  compiledReadme?: string;
   blockMetadata: BlockMetadata;
   sandboxBaseUrl: string;
   schema: BlockSchema;
   sliderItems: BlockMetadata[];
+  exampleGraph: BlockExampleGraph | null; // todo fix typing
 };
 
 type BlockPageQueryParams = {
@@ -163,26 +183,45 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const { schema } = await readBlockDataFromDisk(blockMetadata);
+  const { schema, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
+
+  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
+
+  const compiledReadme = readmeMd
+    ? (
+        await serialize(readmeMd, {
+          mdxOptions: {
+            format: "md",
+            remarkPlugins: [
+              remarkGfm, // GitHub-flavoured markdown (includes automatic detection of URLs)
+            ],
+          },
+        })
+      ).compiledSource
+    : undefined;
 
   return {
     props: {
       blockMetadata,
+      ...(compiledReadme ? { compiledReadme } : {}), // https://github.com/vercel/next.js/discussions/11209
       sliderItems: excludeHiddenBlocks(catalog).filter(
         ({ name }) => name !== blockMetadata.name,
       ),
       sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
+      exampleGraph,
     },
     revalidate: 1800,
   };
 };
 
 const BlockPage: NextPage<BlockPageProps> = ({
+  compiledReadme,
   blockMetadata,
   sandboxBaseUrl,
   schema,
   sliderItems,
+  exampleGraph,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
@@ -314,74 +353,76 @@ const BlockPage: NextPage<BlockPageProps> = ({
             metadata={blockMetadata}
             schema={schema}
             sandboxBaseUrl={sandboxBaseUrl}
+            exampleGraph={exampleGraph}
           />
         </Box>
 
-        {blockMetadata.repository && (
+        {(blockMetadata.repository || compiledReadme) && (
           <Box
             mb={10}
             sx={{
               display: "grid",
-              gridTemplateColumns: { xs: "1fr", md: "60% 40%" },
+              gridTemplateColumns: { xs: "1fr", md: "1fr 40%" },
+              gridGap: { md: 60 },
+              marginBottom: 10,
             }}
           >
-            <Box />
-            <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
-              <Typography
-                variant="bpLargeText"
+            {compiledReadme ? (
+              <Box
                 sx={{
-                  fontWeight: "bold",
-                  color: theme.palette.gray[80],
-                  marginBottom: 2,
+                  "& > h1:first-child": {
+                    marginTop: 0,
+                  },
                 }}
+                mb={{ xs: 2, md: 0 }}
               >
-                Repository
-              </Typography>
-              <Box sx={{ display: "flex" }}>
-                <Box
-                  component="img"
-                  alt="GitHub Link"
-                  sx={{ marginRight: 1.5 }}
-                  src="/assets/link.svg"
-                />{" "}
-                <Typography
-                  variant="bpSmallCopy"
-                  sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                >
-                  <Link href={blockMetadata.repository}>
-                    {repositoryDisplayUrl}
-                  </Link>
-                </Typography>
+                <MDXRemote
+                  compiledSource={compiledReadme}
+                  components={markdownComponents}
+                />
               </Box>
-            </Box>
+            ) : (
+              <div />
+            )}
+            {blockMetadata.repository ? (
+              <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
+                <Typography
+                  variant="bpLargeText"
+                  sx={{
+                    fontWeight: "bold",
+                    color: theme.palette.gray[80],
+                    marginBottom: 2,
+                  }}
+                >
+                  Repository
+                </Typography>
+                <Box sx={{ display: "flex" }}>
+                  <Box
+                    component="img"
+                    alt="GitHub Link"
+                    sx={{ marginRight: 1.5 }}
+                    src="/assets/link.svg"
+                  />{" "}
+                  <Typography
+                    variant="bpSmallCopy"
+                    sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
+                  >
+                    <Link href={blockMetadata.repository}>
+                      {repositoryDisplayUrl}
+                    </Link>
+                  </Typography>
+                </Box>
+              </Box>
+            ) : null}
           </Box>
         )}
-
-        {/* <div
-        style={{ display: "grid", gridTemplateColumns: "60% 40%" }}
-        className=" mb-10"
-      >
-        <div>
-          <b>About</b>
-          <p>
-            Store information in rows and columns in a classic table layout.
-            Longer description talking about parameters and how to use like a
-            readme goes in here. Tables have filters, search, ability to add and
-            remove columns and rows, multiple views. Tables have filters,
-            search, ability to add and remove columns and rows, multiple views.
-            Tables have filters, search, ability to add and remove columns and
-            rows, multiple views. Tables have filters, search, ability to add
-            and remove columns and rows, multiple views.
-          </p>
-        </div>
-        
-      </div> */}
-
-        <Typography textAlign="center" variant="bpHeading2" mb={3}>
+      </Container>
+      <Box my={4}>
+        <Typography textAlign="center" variant="bpHeading3" mb={2}>
           Explore more blocks
         </Typography>
-      </Container>
-      <BlocksSlider catalog={sliderItems} />
+        <BlocksSlider catalog={sliderItems} />
+      </Box>
     </>
   );
 };

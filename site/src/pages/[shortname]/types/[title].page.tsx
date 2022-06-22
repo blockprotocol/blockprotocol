@@ -1,8 +1,5 @@
+import { EmbedderGraphMessageCallbacks } from "@blockprotocol/graph";
 import { Box, Container, Typography } from "@mui/material";
-import {
-  BlockProtocolAggregateEntityTypesFunction,
-  BlockProtocolUpdateEntityTypesFunction,
-} from "blockprotocol";
 import { NextPage } from "next";
 import NextError from "next/error";
 import Head from "next/head";
@@ -51,7 +48,7 @@ const EntityTypePage: NextPage = () => {
       .finally(() => setIsLoading(false));
   }, [shortnameWithoutLeadingAt, title, setEntityType]);
 
-  const aggregateEntityTypes: BlockProtocolAggregateEntityTypesFunction =
+  const aggregateEntityTypes: EmbedderGraphMessageCallbacks["aggregateEntityTypes"] =
     () => {
       if (!shortnameWithoutLeadingAt) {
         throw new Error(
@@ -62,32 +59,41 @@ const EntityTypePage: NextPage = () => {
         .getUserEntityTypes({ shortname: shortnameWithoutLeadingAt })
         .then(({ data }) => {
           return {
-            results: data?.entityTypes.map((type) => type.schema) ?? [],
-            operation: {
-              pageNumber: 1,
-              itemsPerPage: 100,
+            data: {
+              results: data?.entityTypes ?? [],
+              operation: {
+                pageNumber: 1,
+                itemsPerPage: 100,
+              },
             },
           };
         });
     };
 
-  const updateEntityTypes: BlockProtocolUpdateEntityTypesFunction = (
-    actions,
+  const updateEntityType: EmbedderGraphMessageCallbacks["updateEntityType"] = (
+    args,
   ) => {
-    if (actions.length !== 1) {
-      throw new Error(
-        `Current implementation of updateEntityTypes supports only one action, ${actions.length} given.`,
-      );
+    if (!args.data) {
+      throw new Error("No data supplied to updateEntityType request");
     }
-    const { entityTypeId, schema } = actions[0]!;
+    const { entityTypeId, schema } = args.data;
 
     return apiClient
       .updateEntityType({ schema: JSON.stringify(schema) }, entityTypeId)
       .then(({ data }) => {
         if (data) {
-          return [data.entityType.schema];
+          return {
+            data: data.entityType,
+          };
         }
-        throw new Error("Could not update entity type");
+        return {
+          errors: [
+            {
+              code: "INVALID_INPUT",
+              message: "Could not update entity type",
+            },
+          ],
+        };
       });
   };
 
@@ -152,7 +158,7 @@ const EntityTypePage: NextPage = () => {
             aggregateEntityTypes={aggregateEntityTypes}
             entityTypeId={entityType.entityTypeId}
             schema={entityType.schema}
-            updateEntityTypes={userCanEdit ? updateEntityTypes : undefined}
+            updateEntityType={userCanEdit ? updateEntityType : undefined}
           />
         </main>
 
