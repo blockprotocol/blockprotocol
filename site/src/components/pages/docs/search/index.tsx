@@ -45,19 +45,21 @@ export type AlgoliaHighlightResult = Record<
   keyof AlgoliaResult,
   { value: string; matchLevel: "none" | "full" }
 >;
-interface SearchProps {
+
+type ModalSearchProps = {
   variant: SearchVariants;
   closeModal?: () => void;
-}
+};
 
 const MAX_SEARCH_RESULTS = 10;
 
-const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
+const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
   variant = "desktop",
   closeModal,
 }) => {
   const router = useRouter();
   const theme = useTheme();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [searchText, setSearchText] = useState("");
   const [currentSearchedText, setCurrentSearchedText] = useState("");
@@ -100,7 +102,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
   );
 
   const searchOnlineFunction = () => {
-    (document.querySelector(`.search-bar input`) as HTMLElement).focus();
+    inputRef.current?.focus();
 
     searchOnlineDebounce(searchText);
   };
@@ -125,13 +127,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    const desktopSearchSelector = document.querySelector(
-      `.search-bar.desktop input`,
-    ) as HTMLElement;
-
-    if (desktopSearchSelector) {
-      desktopSearchSelector.focus();
-    }
+    inputRef.current?.focus();
   });
 
   const getHighlight = (highlight: AlgoliaHighlightResult) => {
@@ -163,13 +159,17 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
     if (searchResults.length > 0 && searchResults[activeResult]) {
       const { slug } = searchResults[activeResult]!;
 
-      (document.querySelector(".search-bar input") as HTMLElement).blur();
+      inputRef.current?.blur();
 
       return router.push(slug);
     } else {
       searchOnlineFunction();
     }
   };
+
+  useEffect(() => {
+    setTimeout(() => inputRef.current?.focus(), 50);
+  });
 
   return (
     <Box
@@ -182,6 +182,7 @@ const ModalSearch: React.VoidFunctionComponent<SearchProps> = ({
         <Box>
           <Box
             component="input"
+            ref={inputRef}
             sx={{
               color: theme.palette.gray[90],
               fill: theme.palette.gray[50],
