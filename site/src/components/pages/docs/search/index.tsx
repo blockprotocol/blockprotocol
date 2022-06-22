@@ -127,7 +127,9 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
   };
 
   useEffect(() => {
-    setTimeout(() => inputRef.current?.focus(), 50);
+    if (variant === "desktop") {
+      setTimeout(() => inputRef.current?.focus(), 50);
+    }
   });
 
   const helperText =
