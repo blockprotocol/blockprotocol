@@ -33,6 +33,7 @@ export const generateDistBlockMetadata = async (extra) => {
     license,
     externals: peerDependencies,
     schema: "block-schema.json",
+    exampleGraph: "example-graph.json",
     variants,
     ...blockprotocol,
     ...extra,
