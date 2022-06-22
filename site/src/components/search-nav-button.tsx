@@ -13,14 +13,14 @@ export const SearchNavButton = () => {
   useEffect(() => {
     const onKeyDown = ({ key }: KeyboardEvent) => {
       if (key === "/") {
-        setDisplayModal(!displayModal);
+        setDisplayModal((prev) => !prev);
       }
     };
 
     window.addEventListener("keydown", onKeyDown);
 
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [displayModal]);
+  }, []);
 
   return (
     <>
