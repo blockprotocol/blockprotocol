@@ -67,15 +67,11 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
   const searchOnlineDebounce = useMemo(
     () =>
       debounce((newSearchText: string) => {
-        setSearchState("normal");
         setSearchLoading(true);
         index
           .search<AlgoliaResult>(newSearchText)
           .then(({ hits }) => {
-            if (hits.length === 0) {
-              setSearchState("noresults");
-            }
-
+            setSearchState(hits.length === 0 ? "noresults" : "normal");
             setSearchResults(hits.slice(0, MAX_SEARCH_RESULTS));
             setActiveResult(MAX_SEARCH_RESULTS);
             setCurrentSearchedText(newSearchText);
