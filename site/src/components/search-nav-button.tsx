@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "./button";
 import { Modal } from "./modal/modal";
-import Search from "./pages/docs/search";
+import { Search } from "./pages/docs/search";
 
 export const SearchNavButton = () => {
   const [displayModal, setDisplayModal] = useState(false);

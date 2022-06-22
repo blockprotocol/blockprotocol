@@ -40,14 +40,14 @@ export type AlgoliaHighlightResult = Record<
   { value: string; matchLevel: "none" | "full" }
 >;
 
-type ModalSearchProps = {
+type SearchProps = {
   variant: SearchVariants;
   closeModal?: () => void;
 };
 
 const MAX_SEARCH_RESULTS = 10;
 
-const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
+export const Search: React.VoidFunctionComponent<SearchProps> = ({
   variant = "desktop",
   closeModal,
 }) => {
@@ -224,5 +224,3 @@ const ModalSearch: React.VoidFunctionComponent<ModalSearchProps> = ({
     </>
   );
 };
-
-export default ModalSearch;
