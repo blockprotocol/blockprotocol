@@ -64,36 +64,39 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
     "normal" | "noresults" | "failed"
   >("normal");
 
-  const searchOnlineDebounce = useMemo(
-    () =>
-      debounce((newSearchText: string) => {
-        setSearchLoading(true);
-        index
-          .search<AlgoliaResult>(newSearchText)
-          .then(({ hits }) => {
-            setSearchState(hits.length === 0 ? "noresults" : "normal");
-            setSearchResults(hits.slice(0, MAX_SEARCH_RESULTS));
-            setActiveResult(MAX_SEARCH_RESULTS);
-            setCurrentSearchedText(newSearchText);
-            setSearchLoading(false);
-          })
-          .catch((err) => {
-            // @todo use logger later
-            // eslint-disable-next-line no-console
-            console.error(err);
-            setSearchState("failed");
-            setSearchLoading(false);
-          });
-      }, 500),
-    [],
+  const searchOnlineDebounce = useRef(
+    useMemo(
+      () =>
+        debounce((newSearchText: string) => {
+          setSearchLoading(true);
+          index
+            .search<AlgoliaResult>(newSearchText)
+            .then(({ hits }) => {
+              setSearchState(hits.length === 0 ? "noresults" : "normal");
+              setSearchResults(hits.slice(0, MAX_SEARCH_RESULTS));
+              setActiveResult(MAX_SEARCH_RESULTS);
+              setCurrentSearchedText(newSearchText);
+              setSearchLoading(false);
+            })
+            .catch((err) => {
+              // @todo use logger later
+              // eslint-disable-next-line no-console
+              console.error(err);
+              setSearchState("failed");
+              setSearchLoading(false);
+            });
+        }, 500),
+      [],
+    ),
   );
 
   useEffect(() => {
     if (searchText.trim() && searchText.length > 2) {
-      searchOnlineDebounce(searchText);
+      searchOnlineDebounce.current(searchText);
     }
 
     if (!searchText.trim()) {
+      searchOnlineDebounce.current?.cancel();
       setSearchState("normal");
       setSearchResults([]);
     }
