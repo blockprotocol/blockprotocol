@@ -17,9 +17,6 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
-  "main": "dist/main.js",
-  "module": "dist/module.js",
-  "source": "src/index.js",
   "scripts": {
     "build": "parcel build && cp block-schema.json ./dist/block-schema.json && cp block-metadata.json ./dist/block-metadata.json && cp -R public dist/public",
     "dev": "parcel src/dev.html",
@@ -27,7 +24,6 @@
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.9",
-    "@parcel/transformer-inline-string": "^2.6.0",
     "mock-block-dock": "0.0.15",
     "parcel": "^2.6.0",
     "process": "^0.11.10",

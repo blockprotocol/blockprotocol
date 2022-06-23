@@ -16,7 +16,7 @@ Other templates are available. See `npx create-block-app --help`
 
 1.  Write your block starting in `app.html`. To test it during development:
 
-    - edit `dev.js` to give your block starting properties
+    - edit `dev.html` to give your block starting properties
 
     - run the dev server with `yarn dev`
 
