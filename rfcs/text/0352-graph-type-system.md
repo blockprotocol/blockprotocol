@@ -694,6 +694,7 @@ A **Data Type** is a JSON schema that satisfies the following JSON meta-schema:
 {
   "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/data-type",
   "description": "Specifies the structure of a Data Type",
+  "type": "object",
   "properties": {
     "kind": {
       "const": "dataType"
@@ -796,44 +797,66 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
 {
   "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/property-type",
   "description": "Specifies the structure of a Property Type",
+  "type": "object",
   "properties": {
-    "kind": { "const": "propertyType" },
+    "kind": {
+      "const": "propertyType"
+    },
     "$id": {
       "type": "string",
       "format": "uri"
     },
-    "name": { "type": "string" },
-    "description": { "type": "string" },
-    "$ref": "#/$defs/propertyValues"
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "oneOf": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/propertyValues"
+      }
+    }
   },
-  "required": ["kind", "$id", "name"],
-
+  "required": ["kind", "$id", "name", "oneOf"],
   "$defs": {
     "propertyValues": {
       "$comment": "The definition of potential property values, made up of a `oneOf` keyword which has a list of options of either references to Data Types, or objects made up of more Property Types",
       "oneOf": [
         {
-          "properties": {
-            "oneOf": {
-              "type": "array",
-              "minItems": 1,
-              "items": {
-                "oneOf": [
-                  { "$ref": "#/$defs/propertyTypeObject" },
-                  { "$ref": "#/$defs/dataTypeReference" },
-                  { "$ref": "#/$defs/propertyValues" }
-                ]
-              }
-            }
-          },
-          "required": ["oneOf"]
+          "$ref": "#/$defs/propertyTypeObject"
         },
         {
+          "$ref": "#/$defs/dataTypeReference"
+        },
+        {
+          "type": "object",
           "properties": {
-            "type": { "const": "array" },
-            "items": { "$ref": "#/$defs/propertyValues" },
-            "minItems": { "type": "number" },
-            "maxItems": { "type": "number" }
+            "type": {
+              "const": "array"
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "oneOf": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/propertyValues"
+                  },
+                  "minItems": 1
+                }
+              },
+              "additionalProperties": false
+            },
+            "minItems": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxItems": {
+              "type": "integer",
+              "minimum": 0
+            }
           },
           "required": ["type", "items"]
         }
@@ -841,9 +864,10 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
     },
     "propertyTypeObject": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
-        "type": { "const": "object" },
+        "type": {
+          "const": "object"
+        },
         "properties": {
           "type": "object",
           "propertyNames": {
@@ -854,31 +878,47 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
           "patternProperties": {
             ".*": {
               "oneOf": [
-                { "$ref": "#/$defs/propertyTypeReference" },
+                {
+                  "$ref": "#/$defs/propertyTypeReference"
+                },
                 {
                   "type": "object",
                   "properties": {
-                    "type": { "const": "array" },
-                    "items": { "$ref": "#/$defs/propertyTypeReference" },
-                    "minItems": { "type": "number" },
-                    "maxItems": { "type": "number" }
+                    "type": {
+                      "const": "array"
+                    },
+                    "items": {
+                      "$ref": "#/$defs/propertyTypeReference"
+                    },
+                    "minItems": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "maxItems": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
                   },
                   "required": ["type", "items"],
                   "additionalProperties": false
                 }
               ]
             }
-          }
+          },
+          "minimumProperties": 1
         },
         "required": {
           "type": "array",
-          "items": "string"
+          "items": { 
+            "type": "string",
+            "format": "uri"
+          }
         }
-      }
+      },
+      "additionalProperties": false
     },
     "propertyTypeReference": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "$ref": {
           "$comment": "Property Object values must be defined through references to the same valid URI to a Property Type",
@@ -886,17 +926,18 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
           "format": "uri"
         }
       },
+      "additionalProperties": false,
       "required": ["$ref"]
     },
     "dataTypeReference": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "$ref": {
           "type": "string",
           "format": "uri"
         }
       },
+      "additionalProperties": false,
       "required": ["$ref"]
     }
   }
@@ -1218,6 +1259,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
 {
   "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/entity-type",
   "description": "Specifies the structure of an Entity Type",
+  "type": "object",
   "properties": {
     "kind": {
       "const": "entityType"
@@ -1231,7 +1273,10 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
     "properties": { "$ref": "#/$defs/propertyTypeObject" },
     "required": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": { 
+        "type": "string",
+        "format": "uri
+      }
     },
     "requiredLinks": {
       "$comment": "A list of link-types which are required. This is a separate field to 'required' to avoid breaking standard JSON schema validation",
@@ -1268,7 +1313,6 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
   "$defs": {
     "propertyTypeObject": {
       "type": "object",
-      "additionalProperties": false,
       "properties": {
         "type": {
           "const": "object"
@@ -1289,16 +1333,26 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
                 {
                   "type": "object",
                   "properties": {
-                    "type": { "const": "array" },
-                    "items": { "$ref": "#/$defs/propertyTypeReference" },
+                    "type": {
+                      "const": "array"
+                    },
+                    "items": {
+                      "$ref": "#/$defs/propertyTypeReference"
+                    },
                     "minItems": {
-                      "type": "number"
+                      "type": "integer",
+                      "minimum": 0
                     },
                     "maxItems": {
-                      "type": "number"
-                    },
-                    "additionalProperties": false
-                  }
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "items"
+                  ],
+                  "additionalProperties": false
                 }
               ]
             }
@@ -1306,9 +1360,17 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
         },
         "required": {
           "type": "array",
-          "items": "string"
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
         }
-      }
+      },
+      "required": [
+        "type",
+        "properties"
+      ],
+      "additionalProperties": false
     },
     "propertyTypeReference": {
       "type": "object",
