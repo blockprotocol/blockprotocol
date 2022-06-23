@@ -1275,7 +1275,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "type": "array",
       "items": { 
         "type": "string",
-        "format": "uri
+        "format": "uri"
       }
     },
     "requiredLinks": {
