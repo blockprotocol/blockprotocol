@@ -14,13 +14,13 @@ import {
 } from "react";
 import slugify from "slugify";
 
-import PageHeadingsContext from "../components/context/page-headings-context";
-import { GraphServiceMessageList } from "../components/graph-service-message-list";
-import { FontAwesomeIcon } from "../components/icons";
-import { InfoCard } from "../components/info-card/info-card";
-import { InfoCardWrapper } from "../components/info-card/info-card-wrapper";
-import { Link } from "../components/link";
-import { Snippet } from "../components/snippet";
+import PageHeadingsContext from "../context/page-headings-context";
+import { FontAwesomeIcon } from "../icons";
+import { Link } from "../link";
+import { Snippet } from "../snippet";
+import { GraphServiceMessageList } from "./graph-service-message-list";
+import { InfoCard } from "./info-card/info-card";
+import { InfoCardWrapper } from "./info-card/info-card-wrapper";
 
 const Heading = styled(Typography)(({ theme }) => ({
   "svg.link-icon": {

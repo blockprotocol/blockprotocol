@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { useEffect, useMemo, useRef, useState, VFC } from "react";
 
-import { mdxComponents } from "../util/mdx-components";
 import PageHeadingsContext, { Heading } from "./context/page-headings-context";
+import { mdxComponents } from "./mdx/mdx-components";
 
 export const MDX_TEXT_CONTENT_MAX_WIDTH = 680;
 
