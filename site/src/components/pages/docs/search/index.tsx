@@ -162,7 +162,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
           ) {
             event.preventDefault();
             return setActiveResult(
-              activeResult === 0 ? searchResults.length - 1 : activeResult - 1,
+              activeResult === 0 ? searchResults.length : activeResult - 1,
             );
           }
 
