@@ -72,9 +72,10 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
         index
           .search<AlgoliaResult>(newSearchText)
           .then(({ hits }) => {
+            const slicedHits = hits.slice(0, MAX_SEARCH_RESULTS);
             setSearchState(hits.length === 0 ? "noresults" : "normal");
-            setSearchResults(hits.slice(0, MAX_SEARCH_RESULTS));
-            setActiveResult(MAX_SEARCH_RESULTS);
+            setSearchResults(slicedHits);
+            setActiveResult(slicedHits.length);
             setCurrentSearchedText(newSearchText);
             setSearchLoading(false);
           })
