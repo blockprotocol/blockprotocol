@@ -54,6 +54,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
 }) => {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchListItemsRef = useRef<HTMLButtonElement[]>([]);
 
   const [searchText, setSearchText] = useState("");
   const [currentSearchedText, setCurrentSearchedText] = useState("");
@@ -78,6 +79,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
             setActiveResult(slicedHits.length);
             setCurrentSearchedText(newSearchText);
             setSearchLoading(false);
+            searchListItemsRef.current = [];
           })
           .catch((err) => {
             // @todo use logger later
@@ -131,10 +133,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
   };
 
   useEffect(() => {
-    const items = document.querySelectorAll(
-      ".searchItem",
-      // eslint-disable-next-line no-undef
-    ) as NodeListOf<HTMLButtonElement>;
+    const items = searchListItemsRef.current;
 
     if (activeResult >= items.length) {
       setTimeout(() => inputRef.current?.focus(), 50);
@@ -222,6 +221,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
             >
               <SearchList
                 searchResults={searchResults}
+                ref={searchListItemsRef}
                 variant={variant}
                 getHighlight={getHighlight}
                 closeModal={closeModal}

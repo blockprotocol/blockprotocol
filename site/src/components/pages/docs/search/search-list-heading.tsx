@@ -1,6 +1,6 @@
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { svgIconClasses, useTheme } from "@mui/material";
-import React from "react";
+import React, { forwardRef } from "react";
 
 import { FontAwesomeIcon } from "../../../icons";
 import { LinkButton } from "../../../link-button";
@@ -11,15 +11,25 @@ interface SearchItemHeadingProps {
   closeModal?: () => void;
 }
 
-const SearchListHeading: React.VoidFunctionComponent<
+const SearchListHeading = forwardRef<
+  HTMLButtonElement[],
   SearchItemHeadingProps
-> = ({ searchResult, closeModal }) => {
+>(({ searchResult, closeModal }, searchListItemsRef) => {
   const theme = useTheme();
   const { title, slug } = searchResult;
 
   return (
     <LinkButton
-      className="searchItem"
+      ref={(item) => {
+        if (
+          item &&
+          typeof searchListItemsRef !== "function" &&
+          searchListItemsRef?.current &&
+          !searchListItemsRef?.current?.includes(item)
+        ) {
+          searchListItemsRef.current.push(item);
+        }
+      }}
       sx={{
         width: 1,
         fontSize: 16,
@@ -54,6 +64,6 @@ const SearchListHeading: React.VoidFunctionComponent<
       {title}
     </LinkButton>
   );
-};
+});
 
 export default SearchListHeading;
