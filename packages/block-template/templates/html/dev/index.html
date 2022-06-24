@@ -7,27 +7,14 @@ This file is not bundled with the block during the build process.
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script type="importmap">
-  {
-    "imports": {
-      "htm": "https://esm.sh/htm?dev&deps=react@17.0.2,react-dom@17.0.2",
-      "mock-block-dock": "https://esm.sh/mock-block-dock?dev&deps=react@17.0.2,react-dom@17.0.2",
-      "react": "https://esm.sh/react@17.0.2?dev&deps=react@17.0.2,react-dom@17.0.2",
-      "react-dom": "https://esm.sh/react-dom@17.0.2?dev&deps=react@17.0.2,react-dom@17.0.2",
-      "@blockprotocol/graph": "https://esm.sh/@blockprotocol/graph?dev&deps=react@17.0.2,react-dom@17.0.2",
-      "@blockprotocol/core": "https://esm.sh/@blockprotocol/core?dev&deps=react@17.0.2,react-dom@17.0.2"
-    }
-  }
-  </script>
-  <script async src="https://unpkg.com/es-module-shims"></script>
 </head>
 <body>
 <div id="app"></div>
 <script type="module">
-  import htm from "htm";
-  import { MockBlockDock } from "mock-block-dock";
-  import React, { useEffect, useState, createElement } from "react";
-  import ReactDOM from "react-dom";
+  import htm from "https://esm.sh/htm?dev&deps=react@17.0.2,react-dom@17.0.2";
+  import { MockBlockDock } from "https://esm.sh/mock-block-dock?dev&deps=react@17.0.2,react-dom@17.0.2";
+  import React, { useEffect, useState, createElement } from "https://esm.sh/react@17.0.2?dev&deps=react@17.0.2,react-dom@17.0.2";
+  import ReactDOM from "https://esm.sh/react-dom@17.0.2?dev&deps=react@17.0.2,react-dom@17.0.2";
 
   const html = htm.bind(createElement);
   const node = document.getElementById("app");
@@ -37,7 +24,7 @@ This file is not bundled with the block during the build process.
 
     useEffect(() => {
       const controller = new AbortController();
-      fetch(new URL("./app.html", import.meta.url), { signal: controller.signal })
+      fetch(new URL("./src/app.html", import.meta.url), { signal: controller.signal })
         .then((resp) => resp.text())
         .then((html) => {
           setHtmlString(html);

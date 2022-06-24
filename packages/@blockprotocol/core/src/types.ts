@@ -50,7 +50,8 @@ export type BlockMetadata = {
    */
   blockType: BlockType;
   /**
-   * The default data used as the block's properties on first load - must comply with its schema
+   * The default data used as the block's properties on first load - must
+   * comply with its schema
    */
   default?: JsonObject | null;
   /**
@@ -58,7 +59,8 @@ export type BlockMetadata = {
    */
   description?: string | null;
   /**
-   * URL of a web socket that reports updates in locally developed blocks. To be used by EAs to auto reload.
+   * URL of a web socket that reports updates in locally developed blocks. To
+   * be used by EAs to auto reload.
    */
   devReloadEndpoint?: string | null;
   /**
@@ -70,15 +72,20 @@ export type BlockMetadata = {
    */
   examples?: JsonObject[] | null;
   /**
-   * The dependencies a block relies on but expects the embedding application to provide, e.g. { "react": "^17.0.2" }
+   * The dependencies a block relies on but expects the embedding application
+   * to provide, e.g. { "react": "^17.0.2" }
    */
   externals?: JsonObject;
   /**
-   * An icon for the block, to be displayed when the user is selecting from available blocks (as well as elsewhere as appropriate, e.g. in a website listing the block).
+   * An icon for the block, to be displayed when the user is selecting from
+   * available blocks (as well as elsewhere as appropriate, e.g. in a website
+   * listing the block).
    */
   icon?: string | null;
   /**
-   * A preview image of the block for users to see it in action before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x1170px.
+   * A preview image of the block for users to see it in action before using
+   * it. This would ideally have a 3:2 width:height ratio and be a minimum of
+   * 900x1170px.
    */
   image?: string | null;
   /**
@@ -94,7 +101,9 @@ export type BlockMetadata = {
    */
   protocol: string;
   /**
-   * Specify the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development.
+   * Specify the place where your block's code lives. This is helpful for
+   * people who want to explore the source, or contribute to your block's
+   * development.
    */
   repository?: BlockMetadataRepository | null;
   /**
@@ -106,11 +115,13 @@ export type BlockMetadata = {
    */
   source: string;
   /**
-   * A list which represents different variants of the block that the user can create.
+   * A list which represents different variants of the block that the user can
+   * create.
    */
   variants?: BlockVariant[] | null;
   /**
-   * The version of the block, which should use semantic versioning (@see https://semver.org/).
+   * The version of the block, which should use semantic versioning (@see
+   * https://semver.org/).
    */
   version: string;
 };
@@ -217,3 +228,12 @@ export type ServiceDefinition = {
   coreVersion: string;
   messages: ServiceMessageDefinition[];
 };
+
+export type HtmlBlockDefinition =
+  | {
+      source: string;
+      baseUrl?: string;
+    }
+  | {
+      url: string;
+    };

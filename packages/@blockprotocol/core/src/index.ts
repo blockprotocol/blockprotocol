@@ -2,7 +2,8 @@ export { CoreBlockHandler } from "./core-block-handler";
 export { CoreEmbedderHandler } from "./core-embedder-handler";
 export {
   assignBlockprotocolGlobals,
-  blockprotocolGlobals,
+  markBlockScripts,
+  renderHtmlBlock,
   teardownBlockprotocol,
 } from "./html";
 export { ServiceHandler } from "./service-handler";
@@ -10,6 +11,7 @@ export type {
   BlockMetadata,
   BlockMetadataRepository,
   BlockVariant,
+  HtmlBlockDefinition,
   JsonArray,
   JsonObject,
   JsonValue,

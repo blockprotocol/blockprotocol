@@ -3,6 +3,8 @@ import * as ReactDOM from "react-dom";
 
 import { MockBlockDock } from "../src";
 import { TestCustomElementBlock } from "./test-custom-element-block";
+// eslint-disable-next-line import/no-unresolved,import/no-webpack-loader-syntax
+import testBlockString from "./test-html-block/block.html?raw";
 import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
@@ -55,6 +57,31 @@ const DevApp = () => {
             customElement: {
               elementClass: TestCustomElementBlock,
               tagName: "test-custom-element-block",
+            },
+          }}
+          blockEntity={blockEntity}
+        />
+      </div>
+      <h2>HTML at URL</h2>
+      <div style={{ border: "1px solid black", padding: 15 }}>
+        <MockBlockDock
+          debug
+          blockDefinition={{
+            html: {
+              url: "./test-html-block/block.html",
+            },
+          }}
+          blockEntity={blockEntity}
+        />
+      </div>
+      <h2>HTML as string</h2>
+      <div style={{ border: "1px solid black", padding: 15 }}>
+        <MockBlockDock
+          debug
+          blockDefinition={{
+            html: {
+              source: testBlockString,
+              baseUrl: "./test-html-block/",
             },
           }}
           blockEntity={blockEntity}

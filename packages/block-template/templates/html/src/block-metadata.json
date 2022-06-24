@@ -14,5 +14,5 @@
   "examples": [{ "name": "World" }],
   "icon": "public/omega.svg",
   "image": "public/block-preview.svg",
-  "source": "main.js"
+  "source": "app.html"
 }

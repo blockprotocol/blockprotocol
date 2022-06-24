@@ -1,8 +1,11 @@
 import { v4 as uuid } from "uuid";
 
+import { HtmlBlockDefinition } from "./types";
+
 type ScriptRef = { src: string };
 
 let blocks = new Map<string, HTMLElement>();
+let blockUrls = new Map<string, string>();
 let scripts = new WeakMap<ScriptRef, string>();
 
 export type BlockIdentifier =
@@ -55,6 +58,17 @@ export const getBlockContainer = (ref?: BlockIdentifier) => {
   return container;
 };
 
+export const getBlockUrl = (ref?: BlockIdentifier) => {
+  const blockId = getIdForRef(ref);
+  const url = blockUrls.get(blockId);
+
+  if (!url) {
+    throw new Error("Cannot find element");
+  }
+
+  return url;
+};
+
 export const markScript = (script: HTMLScriptElement, ref: BlockIdentifier) => {
   const blockId = getIdForRef(ref);
 
@@ -70,7 +84,8 @@ export const markScript = (script: HTMLScriptElement, ref: BlockIdentifier) => {
       const blockprotocol = {
         ...window.blockprotocol,
         getBlockContainer: () => window.blockprotocol.getBlockContainer({ blockId: "${blockId}" }),
-        markScript: (script) => window.blockprotocol.markScript(script, { blockId: "${blockId}" })
+        getBlockUrl: () => window.blockprotocol.getBlockUrl({ blockId: "${blockId}" }),
+        markScript: (script) => window.blockprotocol.markScript(script, { blockId: "${blockId}" }),
       };
 
       ${script.innerHTML};
@@ -84,20 +99,67 @@ export const markScript = (script: HTMLScriptElement, ref: BlockIdentifier) => {
 export const resetBlocks = () => {
   blocks = new Map();
   scripts = new WeakMap();
+  blockUrls = new Map();
 };
 
-export const markBlockScripts = (block: HTMLElement) => {
+export const markBlockScripts = (
+  block: HTMLElement,
+  blockUrl: URL | string,
+) => {
   const blockId = uuid();
 
   blocks.set(blockId, block);
+  blockUrls.set(blockId, blockUrl.toString());
 
   for (const script of Array.from(block.querySelectorAll("script"))) {
+    const src = script.getAttribute("src");
+    if (src) {
+      const resolvedSrc = new URL(src, blockUrl).toString();
+
+      if (resolvedSrc !== script.src) {
+        script.src = resolvedSrc;
+      }
+    }
+
     markScript(script, { blockId });
   }
 };
 
+export const renderHtmlBlock = async (
+  node: HTMLElement,
+  definition: HtmlBlockDefinition,
+  signal?: AbortSignal,
+) => {
+  const baseUrl = new URL(
+    "url" in definition
+      ? definition.url
+      : definition.baseUrl ?? window.location.toString(),
+    window.location.toString(),
+  );
+
+  const htmlString =
+    "source" in definition
+      ? definition.source
+      : await fetch(definition.url, { signal }).then((resp) => resp.text());
+
+  const range = document.createRange();
+
+  range.selectNodeContents(node);
+
+  const frag = range.createContextualFragment(htmlString);
+  const parent = document.createElement("div");
+  parent.append(frag);
+
+  markBlockScripts(parent, baseUrl);
+
+  // eslint-disable-next-line @typescript-eslint/no-use-before-define
+  assignBlockprotocolGlobals();
+  node.appendChild(parent);
+};
+
 export const blockprotocolGlobals = {
   getBlockContainer,
+  getBlockUrl,
   markScript,
   markBlockScripts,
   getIdForRef,

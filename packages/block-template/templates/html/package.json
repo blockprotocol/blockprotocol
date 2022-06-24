@@ -18,16 +18,15 @@
     "url": "https://hash.ai"
   },
   "scripts": {
-    "build": "parcel build && cp block-schema.json ./dist/block-schema.json && cp block-metadata.json ./dist/block-metadata.json && cp -R public dist/public",
-    "dev": "parcel src/dev.html",
-    "lint:tsc": "echo \"Skipping: TypeScript not configured\""
+    "build": "parcel build && cp src/block-schema.json ./dist/block-schema.json && cp src/block-metadata.json ./dist/block-metadata.json && cp -R public dist/public",
+    "dev": "echo \"Serving at http://localhost:63212\"; http-server -p 63212 ./dev",
+    "lint:tsc": "echo \"Skipping: TypeScript not configured\"",
+    "prepare": "rimraf ./dev/src; lnk -f ./src ./dev"
   },
-  "dependencies": {
-    "@blockprotocol/graph": "0.0.9",
-    "mock-block-dock": "0.0.15",
-    "parcel": "^2.6.0",
-    "process": "^0.11.10",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+  "dependencies": {},
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "lnk-cli": "^1.0.1",
+    "rimraf": "^3.0.2"
   }
 }
