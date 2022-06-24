@@ -45,7 +45,7 @@ const SearchList: FC<SearchListProps> = ({
     },
   };
 
-  const isActive = !!docResults.length || !!specResults.length;
+  const isActive = docResults.length > 0 || specResults.length > 0;
 
   return (
     <Box
