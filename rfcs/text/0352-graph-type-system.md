@@ -847,6 +847,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
                   "minItems": 1
                 }
               },
+              "required": ["oneOf"],
               "additionalProperties": false
             },
             "minItems": {
