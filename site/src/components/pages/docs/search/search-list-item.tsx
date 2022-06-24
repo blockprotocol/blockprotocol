@@ -15,8 +15,8 @@ interface SearchItemProps {
   closeModal?: () => void;
 }
 
-const SearchListItem = forwardRef<HTMLButtonElement[], SearchItemProps>(
-  ({ searchResult, getHighlight, closeModal }, searchListItemsRef) => {
+const SearchListItem = forwardRef<HTMLButtonElement, SearchItemProps>(
+  ({ searchResult, getHighlight, closeModal }, ref) => {
     const theme = useTheme();
     const { _highlightResult, slug } = searchResult;
 
@@ -25,16 +25,7 @@ const SearchListItem = forwardRef<HTMLButtonElement[], SearchItemProps>(
 
     return (
       <LinkButton
-        ref={(item) => {
-          if (
-            item &&
-            typeof searchListItemsRef !== "function" &&
-            searchListItemsRef?.current &&
-            !searchListItemsRef?.current?.includes(item)
-          ) {
-            searchListItemsRef.current.push(item);
-          }
-        }}
+        ref={ref}
         sx={{
           width: 1,
           justifyContent: "start",
