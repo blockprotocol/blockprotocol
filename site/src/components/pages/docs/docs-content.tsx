@@ -68,6 +68,7 @@ export const DocsContent: VFC<DocsPageProps> = ({
           margin: 0,
           marginTop: { xs: 5, md: 8 },
           width: "inherit",
+          maxWidth: "100%",
         }}
       >
         {title ? (

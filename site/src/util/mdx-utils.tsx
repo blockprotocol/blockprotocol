@@ -23,7 +23,7 @@ type TextNode = {
 const isTextNode = (node: Node): node is TextNode => "value" in node;
 
 type Parent = {
-  children: Node[];
+  children: (TextNode | Node)[];
 } & Node;
 
 const isParent = (node: Node): node is Parent => "children" in node;
@@ -34,6 +34,19 @@ type Heading = {
 } & Parent;
 
 const isHeading = (node: Node): node is Heading => node.type === "heading";
+
+type FAQAccordion = {
+  type: "mdxJsxFlowElement";
+  name: "FAQAccordion";
+  attributes: {
+    type: "mdxJsxAttribute";
+    name: "question" | string;
+    value: string;
+  }[];
+} & Parent;
+
+const isFAQAccordion = (node: Node): node is FAQAccordion =>
+  node.type === "mdxJsxFlowElement" && node.name === "FAQAccordion";
 
 type ParsedAST = {
   type: "root";
@@ -47,15 +60,26 @@ const parseAST = (mdxFileContent: string) =>
 const getHeadingsFromParent = (parent: Parent): Heading[] =>
   parent.children
     .map((child) => {
+      const subHeadings = isParent(child) ? getHeadingsFromParent(child) : [];
       if (isHeading(child)) {
         return [child];
-      } else if (isParent(child)) {
-        return child.children
-          .filter(isParent)
-          .map(getHeadingsFromParent)
-          .flat();
+      } else if (isFAQAccordion(child)) {
+        const heading: Heading = {
+          type: "heading",
+          /** @todo: don't assume that FAQ accordions are always headings at depth 3 */
+          depth: 3,
+          children: [
+            {
+              type: "text",
+              value:
+                child.attributes.find(({ name }) => name === "question")
+                  ?.value ?? "Unknown",
+            },
+          ],
+        };
+        return [heading, ...subHeadings];
       }
-      return [];
+      return subHeadings;
     })
     .flat();
 
