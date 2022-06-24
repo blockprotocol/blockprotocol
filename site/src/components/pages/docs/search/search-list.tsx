@@ -80,7 +80,7 @@ const SearchList: FC<SearchListProps> = ({
           </Collapse>
         )}
 
-        {!!docResults.length && !!specResults.length && (
+        {docResults.length > 0 && specResults.length > 0 && (
           <Collapse>
             <Divider sx={{ marginY: 2.5 }} />
           </Collapse>
