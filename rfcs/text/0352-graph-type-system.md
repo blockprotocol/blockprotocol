@@ -915,6 +915,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
           }
         }
       },
+      "required": ["type", "properties"],
       "additionalProperties": false
     },
     "propertyTypeReference": {
@@ -1348,28 +1349,23 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
                       "minimum": 0
                     }
                   },
-                  "required": [
-                    "type",
-                    "items"
-                  ],
+                  "required": ["type", "items"],
                   "additionalProperties": false
                 }
               ]
             }
-          }
+          },
+          "minimumProperties": 1
         },
         "required": {
           "type": "array",
-          "items": {
+          "items": { 
             "type": "string",
             "format": "uri"
           }
         }
       },
-      "required": [
-        "type",
-        "properties"
-      ],
+      "required": ["type", "properties"],
       "additionalProperties": false
     },
     "propertyTypeReference": {
