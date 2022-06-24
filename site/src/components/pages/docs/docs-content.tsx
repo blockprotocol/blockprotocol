@@ -12,7 +12,7 @@ import { SiteMapPage } from "../../../lib/sitemap";
 import {
   MDX_TEXT_CONTENT_MAX_WIDTH,
   MdxPageContent,
-} from "../../mdx-page-content";
+} from "../../mdx/mdx-page-content";
 import { PageNavLinks } from "../../page-nav-links";
 import { Sidebar } from "../../page-sidebar";
 

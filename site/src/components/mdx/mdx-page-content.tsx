@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { useEffect, useMemo, useRef, useState, VFC } from "react";
 
-import PageHeadingsContext, { Heading } from "./context/page-headings-context";
-import { mdxComponents } from "./mdx/mdx-components";
+import PageHeadingsContext, { Heading } from "../context/page-headings-context";
+import { mdxComponents } from "./mdx-components";
 
 export const MDX_TEXT_CONTENT_MAX_WIDTH = 680;
 
@@ -88,8 +88,11 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         currentHeading.current = headingWithCurrentAnchor;
         setDetectHeadingFromScroll(false);
 
+        const { y: yPosition } =
+          headingWithCurrentAnchor.element.getBoundingClientRect();
+
         window.scrollTo({
-          top: headingWithCurrentAnchor.element.offsetTop - 100,
+          top: yPosition + window.scrollY - 100,
         });
 
         if (detectHeadingFromScrollTimer) {
