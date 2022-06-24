@@ -35,7 +35,7 @@ const SearchList: FC<SearchListProps> = ({
 
   const listWrapperStyles = {
     desktop: {
-      maxHeight: 800,
+      maxHeight: "calc(80vh - 100px)",
       overflowY: "auto",
       paddingX: 1.25,
       marginX: -1.25,
