@@ -140,18 +140,13 @@ export const markBlockScripts = (
         (imp) => !(imp.d > -1) && imp.n?.startsWith("."),
       );
 
-      script.innerHTML = relevantImports.reduce((_nextSource, imp, idx) => {
-        let nextSource = _nextSource;
+      script.innerHTML = relevantImports.reduce((prevSource, imp, idx) => {
+        let nextSource = prevSource;
 
-        if (idx === 0) {
-          if (imp.s > 0) {
-            nextSource += html.substring(0, imp.ss);
-          }
-        } else {
-          const previousEnd = relevantImports[idx - 1].se;
-
-          nextSource += html.substring(previousEnd, imp.ss);
-        }
+        nextSource += html.substring(
+          idx === 0 ? 0 : relevantImports[idx - 1].se,
+          imp.ss,
+        );
 
         const statement = html.substring(imp.ss, imp.se);
         const specifierStart = imp.s - imp.ss;
