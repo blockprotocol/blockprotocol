@@ -28,7 +28,7 @@
   "dependencies": {
     "@blockprotocol/graph": "0.0.9",
     "@parcel/transformer-inline-string": "^2.6.0",
-    "mock-block-dock": "0.0.15",
+    "mock-block-dock": "0.0.16",
     "parcel": "^2.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"

@@ -1,21 +1,31 @@
-import { Box, Grid, Typography, useTheme } from "@mui/material";
-import React, { useMemo } from "react";
+import { Box, Collapse, Grid, Typography, useTheme } from "@mui/material";
+import React, { FC, useMemo } from "react";
+import { TransitionGroup } from "react-transition-group";
 
 import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
-import SearchHeading from "./search-list-heading";
-import SearchItem from "./search-list-item";
+import SearchListHeading from "./search-list-heading";
+import SearchListItem from "./search-list-item";
 
-interface SearchItemCategoryProps {
+type SearchListCategoryProps = {
   title: string;
   icon: JSX.Element;
   searchResults: AlgoliaResult[];
   getHighlight: (highlight: AlgoliaHighlightResult) => string;
   closeModal?: () => void;
-}
+  registerSearchListItemRef: (
+    element: HTMLButtonElement,
+    index: number,
+  ) => void;
+};
 
-const SearchListCategory: React.VoidFunctionComponent<
-  SearchItemCategoryProps
-> = ({ title, icon, searchResults, getHighlight, closeModal }) => {
+const SearchListCategory: FC<SearchListCategoryProps> = ({
+  title,
+  icon,
+  searchResults,
+  getHighlight,
+  closeModal,
+  registerSearchListItemRef,
+}) => {
   const theme = useTheme();
 
   const [sections, items] = useMemo(
@@ -56,20 +66,39 @@ const SearchListCategory: React.VoidFunctionComponent<
         </Box>
 
         <Grid container spacing={0.5}>
-          {sections.map((res) => (
-            <Grid item sx={{ width: 1 }} key={res.objectID}>
-              <SearchHeading searchResult={res} closeModal={closeModal} />
-            </Grid>
-          ))}
-          {items.map((res) => (
-            <Grid item sx={{ width: 1 }} key={res.objectID}>
-              <SearchItem
-                searchResult={res}
-                getHighlight={getHighlight}
-                closeModal={closeModal}
-              />
-            </Grid>
-          ))}
+          <TransitionGroup>
+            {sections.map((res, i) => (
+              <Collapse key={res.objectID}>
+                <Grid item sx={{ width: 1 }}>
+                  <SearchListHeading
+                    searchResult={res}
+                    ref={(element) => {
+                      if (element) {
+                        registerSearchListItemRef(element, i);
+                      }
+                    }}
+                    closeModal={closeModal}
+                  />
+                </Grid>
+              </Collapse>
+            ))}
+            {items.map((res, i) => (
+              <Collapse key={res.objectID}>
+                <Grid item sx={{ width: 1 }}>
+                  <SearchListItem
+                    searchResult={res}
+                    ref={(element) => {
+                      if (element) {
+                        registerSearchListItemRef(element, sections.length + i);
+                      }
+                    }}
+                    getHighlight={getHighlight}
+                    closeModal={closeModal}
+                  />
+                </Grid>
+              </Collapse>
+            ))}
+          </TransitionGroup>
         </Grid>
       </Box>
     </Box>

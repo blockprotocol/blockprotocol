@@ -40,7 +40,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
 
   useEffect(() => {
     if (headings.length) {
-      const anchor = router.asPath.match(/(?<=#)(.*?)(?:\?|$)/)?.[1] ?? "";
+      const anchor = router.asPath.match(/(?:#)(.*?)(?:\?|$)/)?.[1] ?? "";
 
       const headingWithCurrentAnchor = headings.find(
         (heading) => heading.anchor === anchor,
