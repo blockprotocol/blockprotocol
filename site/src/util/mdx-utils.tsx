@@ -35,9 +35,9 @@ type Heading = {
 
 const isHeading = (node: Node): node is Heading => node.type === "heading";
 
-type FAQAccordion = {
+type FAQ = {
   type: "mdxJsxFlowElement";
-  name: "FAQAccordion";
+  name: "FAQ";
   attributes: {
     type: "mdxJsxAttribute";
     name: "question" | string;
@@ -45,8 +45,8 @@ type FAQAccordion = {
   }[];
 } & Parent;
 
-const isFAQAccordion = (node: Node): node is FAQAccordion =>
-  node.type === "mdxJsxFlowElement" && node.name === "FAQAccordion";
+const isFAQ = (node: Node): node is FAQ =>
+  node.type === "mdxJsxFlowElement" && node.name === "FAQ";
 
 type ParsedAST = {
   type: "root";
@@ -63,7 +63,7 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
       const subHeadings = isParent(child) ? getHeadingsFromParent(child) : [];
       if (isHeading(child)) {
         return [child];
-      } else if (isFAQAccordion(child)) {
+      } else if (isFAQ(child)) {
         const heading: Heading = {
           type: "heading",
           /** @todo: don't assume that FAQ accordions are always headings at depth 3 */
