@@ -43,22 +43,17 @@ type MockBlockDockProps = {
 };
 
 /**
- * A component which acts as a mock embedding application for Blcok Protocol
- * blocks. It provides the functionality specified in the Block Protocol, and
- * mock data which can be customized via props. See README.md for usage
- * instructions.
- * @param [blockDefinition] the source for the block and any additional
- *   metadata required
+ * A component which acts as a mock embedding application for Block Protocol blocks.
+ * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
+ * See README.md for usage instructions.
+ * @param [blockDefinition] the source for the block and any additional metadata required
  * @param [blockEntity] the starting properties for the block entity
  * @param [blockSchema] the schema for the block entity
  * @param [debug=false] display debugging information
- * @param [initialEntities] the entities to include in the data store (NOT the
- *   block entity, which is always provided)
- * @param [initialEntityTypes] the entity types to include in the data store
- *   (NOT the block's type, which is always provided)
+ * @param [initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
  * @param [initialLinks] the links to include in the data store
- * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to
- *   include in the data store (results will be resolved automatically)
+ * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @para
  */
 export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
