@@ -5,8 +5,7 @@ import { HtmlBlockDefinition } from "./types";
 
 type ScriptRef = { src: string };
 
-let blocks = new Map<string, HTMLElement>();
-let blockUrls = new Map<string, string>();
+let blocks = new Map<string, { container: HTMLElement; url: string }>();
 let scripts = new WeakMap<ScriptRef, string>();
 
 export type BlockIdentifier =
@@ -50,7 +49,7 @@ export const getIdForRef = (ref?: BlockIdentifier) => {
 
 export const getBlockContainer = (ref?: BlockIdentifier) => {
   const blockId = getIdForRef(ref);
-  const container = blocks.get(blockId);
+  const container = blocks.get(blockId)?.container;
 
   if (!container) {
     throw new Error("Cannot find element");
@@ -61,7 +60,7 @@ export const getBlockContainer = (ref?: BlockIdentifier) => {
 
 export const getBlockUrl = (ref?: BlockIdentifier) => {
   const blockId = getIdForRef(ref);
-  const url = blockUrls.get(blockId);
+  const url = blocks.get(blockId)?.url;
 
   if (!url) {
     throw new Error("Cannot find element");
@@ -100,7 +99,6 @@ export const markScript = (script: HTMLScriptElement, ref: BlockIdentifier) => {
 export const resetBlocks = () => {
   blocks = new Map();
   scripts = new WeakMap();
-  blockUrls = new Map();
 };
 
 const replaceBetween = (
@@ -111,19 +109,15 @@ const replaceBetween = (
 ) =>
   `${origin.substring(0, startIndex)}${insertion}${origin.substring(endIndex)}`;
 
-export const markBlockScripts = (
-  block: HTMLElement,
-  blockUrl: URL | string,
-) => {
+export const markBlockScripts = (container: HTMLElement, url: URL | string) => {
   const blockId = uuid();
 
-  blocks.set(blockId, block);
-  blockUrls.set(blockId, blockUrl.toString());
+  blocks.set(blockId, { container, url: url.toString() });
 
-  for (const script of Array.from(block.querySelectorAll("script"))) {
+  for (const script of Array.from(container.querySelectorAll("script"))) {
     const src = script.getAttribute("src");
     if (src) {
-      const resolvedSrc = new URL(src, blockUrl).toString();
+      const resolvedSrc = new URL(src, url).toString();
 
       if (resolvedSrc !== script.src) {
         script.src = resolvedSrc;
@@ -156,7 +150,7 @@ export const markBlockScripts = (
           statement,
           specifierStart,
           specifierEnd,
-          new URL(imp.n!, blockUrl).toString(),
+          new URL(imp.n!, url).toString(),
         );
 
         if (idx === relevantImports.length - 1) {
