@@ -56,12 +56,20 @@ const handler: NextApiHandler = async (req, res) => {
   const { exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
-  const graphVersion = packageJson.dependencies["@blockprotocol/graph"];
 
   const reactVersion =
     blockMetadata.externals?.react ?? packageJson.dependencies.react;
 
   const externalUrlLookup: Record<string, string> = {};
+
+  if (
+    Object.keys(blockMetadata.externals ?? {}).length > 0 &&
+    blockMetadata.blockType.entryPoint === "html"
+  ) {
+    throw new Error(
+      "Block Protocol does not support externals with HTML blocks",
+    );
+  }
 
   const externals = hotfixExternals(blockMetadata.externals);
 
