@@ -14,7 +14,7 @@ import slugify from "slugify";
 import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
 import { Snippet } from "../snippet";
-import { FAQAccordion } from "./faq-accordion";
+import { FAQ } from "./faq";
 import { GraphServiceMessageList } from "./graph-service-message-list";
 import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
@@ -83,7 +83,7 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
   Typography,
   InfoCardWrapper,
   InfoCard,
-  FAQAccordion,
+  FAQ,
   GraphServiceMessageList,
   Hidden: (({ children }) => {
     return (

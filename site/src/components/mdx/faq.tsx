@@ -12,11 +12,11 @@ import { Link } from "../link";
 import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
 
-type FAQAccordionProps = {
+type FAQProps = {
   question: ReactNode;
 };
 
-export const FAQAccordion: FC<FAQAccordionProps> = ({ question, children }) => {
+export const FAQ: FC<FAQProps> = ({ question, children }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
   const anchor = slugify(stringifyChildren(question), {
