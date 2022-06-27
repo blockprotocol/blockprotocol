@@ -1968,38 +1968,6 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@blockprotocol/core@0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.5.tgz#1e9979d14fa5a6ae0c59fca819164e8bec103c6f"
-  integrity sha512-miiyq07AUPgy+kollS8bQLfxKJw0JvJvdQ+4xiy4oZrMNn8P9N2vZppNU6Q5k7a2lh187zXYeHwwFWwI1aCh6w==
-  dependencies:
-    uuid "^8.3.2"
-
-"@blockprotocol/core@0.0.6":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.6.tgz#702a4a763a0afc4dd0b1eb57f82a6db40b98f0cc"
-  integrity sha512-DwtNRZhC49SFGIOrsfDal6Ba/RQ1ZVoN4W+GU/ZgmFPzxQGBW33d6wN8zPJRnwGOrnf68tHAh20q9r3+jUHIkw==
-  dependencies:
-    uuid "^8.3.2"
-
-"@blockprotocol/graph@0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.7.tgz#dcf218d0a5a5ba2c048972db0885e7675afdcc12"
-  integrity sha512-BDFDHmIKcNBRw3vm/2JuZaFSXd+aTTrPBpzGJsNcTK53fSWnEzm1rGfUHrugHLPma+2o75C5VEaU4C+3ntvbCA==
-  dependencies:
-    "@blockprotocol/core" "0.0.5"
-    lit "^2.2.5"
-    react "^17.0.2"
-
-"@blockprotocol/graph@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.8.tgz#27b28c6cb18168fc02b71df7b6a24b3fb494b413"
-  integrity sha512-G7bx4H9ttydUYeQLvsBOmnGaDLkpNmqLJkAwr2TCtxyRlUPIvIi+cEVi7m+Q/BkkXcDIhYZvjQhF/2gJy5Dd6Q==
-  dependencies:
-    "@blockprotocol/core" "0.0.6"
-    lit "^2.2.5"
-    react "^17.0.2"
-
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -7910,29 +7878,6 @@ mock-block-dock@0.0.10:
     lodash "^4.17.21"
     uuid "^8.3.2"
 
-mock-block-dock@0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.14.tgz#af563425414ef7eca865f0f6639ac85495561533"
-  integrity sha512-zafcaTg7XhJFru47jIl/ukFCvYm3KecHu/br3Oe2Al4L2EQMrlzZlw4wBfnQFJPwX3LwtDI+QDVKbCtcDekZKw==
-  dependencies:
-    "@blockprotocol/graph" "0.0.7"
-    "@lit-labs/react" "^1.0.4"
-    lodash "^4.17.21"
-    react-json-view "^1.21.3"
-    uuid "^8.3.2"
-
-mock-block-dock@0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.15.tgz#8a29aab676ebc81dd12f2d4264129f606246ec99"
-  integrity sha512-tGjV5niAjjUSmHxLokwgHogjavTF/HfTEvOOjnx04ssdnLeOKYrbocExrtgNc8uH2Oe6Oz6NpkrPSn/2zwx07A==
-  dependencies:
-    "@blockprotocol/core" "0.0.6"
-    "@blockprotocol/graph" "0.0.8"
-    "@lit-labs/react" "^1.0.4"
-    lodash "^4.17.21"
-    react-json-view "^1.21.3"
-    uuid "^8.3.2"
-
 mongodb-connection-string-url@^2.3.2:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/mongodb-connection-string-url/-/mongodb-connection-string-url-2.4.1.tgz#6b3c6c40133a0ad059fe9a0abda64b2a1cb4e8b4"
@@ -8929,9 +8874,9 @@ qs@6.9.7:
   integrity sha512-IhMFgUmuNpyRfxA90umL7ByLlgRXu6tIfKPpF5TmcfRLlLCckfP/g3IQmju6jjpu+Hh8rA+2p6A27ZSPOOHdKw==
 
 qs@^6.4.0:
-  version "6.10.5"
-  resolved "https://registry.yarnpkg.com/qs/-/qs-6.10.5.tgz#974715920a80ff6a262264acd2c7e6c2a53282b4"
-  integrity sha512-O5RlPh0VFtR78y79rgcgKK4wbAI0C5zGVLztOIdpWX6ep368q5Hv6XRxDvXuZ9q3C6v+e3n8UfZZJw7IIG27eQ==
+  version "6.11.0"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
+  integrity sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==
   dependencies:
     side-channel "^1.0.4"
 
