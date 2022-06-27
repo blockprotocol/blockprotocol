@@ -142,12 +142,7 @@ const handler: NextApiHandler = async (req, res) => {
           clearTimeout(timeout);
       
           const entryPoint = blockType.entryPoint.toLocaleLowerCase();
-          
-          let blockExport = findBlockExport(loadCjsFromSource(source));
-          // @todo make this unnecessary
-          if (entryPoint === "html") {
-            blockExport = blockExport.replace(/(import.*?from.*?)@blockprotocol\\/graph/g, "$1https://esm.sh/@blockprotocol/graph@${graphVersion}")
-          }
+          const blockExport = entryPoint === "html" ? source : findBlockExport(loadCjsFromSource(source));
           
           const blockDefinition = {
             ReactComponent: entryPoint === "react" ? blockExport : undefined,
@@ -155,7 +150,10 @@ const handler: NextApiHandler = async (req, res) => {
               elementClass: blockExport,
               tagName: blockType.tagName
             } : undefined,
-            htmlString: entryPoint === "html" ? blockExport : undefined
+            html: entryPoint === "html" ? {
+              source: blockExport,
+              baseUrl: "${blockMetadata.source}"
+            } : undefined
           }
           
           const mockBlockDockInitialData = ${JSON.stringify(
