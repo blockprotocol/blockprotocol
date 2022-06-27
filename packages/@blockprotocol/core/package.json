@@ -36,6 +36,7 @@
     "prepare": "yarn build"
   },
   "dependencies": {
+    "es-module-lexer": "^0.10.5",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

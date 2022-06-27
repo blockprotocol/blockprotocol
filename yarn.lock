@@ -1975,12 +1975,28 @@
   dependencies:
     uuid "^8.3.2"
 
+"@blockprotocol/core@0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.6.tgz#702a4a763a0afc4dd0b1eb57f82a6db40b98f0cc"
+  integrity sha512-DwtNRZhC49SFGIOrsfDal6Ba/RQ1ZVoN4W+GU/ZgmFPzxQGBW33d6wN8zPJRnwGOrnf68tHAh20q9r3+jUHIkw==
+  dependencies:
+    uuid "^8.3.2"
+
 "@blockprotocol/graph@0.0.7":
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.7.tgz#dcf218d0a5a5ba2c048972db0885e7675afdcc12"
   integrity sha512-BDFDHmIKcNBRw3vm/2JuZaFSXd+aTTrPBpzGJsNcTK53fSWnEzm1rGfUHrugHLPma+2o75C5VEaU4C+3ntvbCA==
   dependencies:
     "@blockprotocol/core" "0.0.5"
+    lit "^2.2.5"
+    react "^17.0.2"
+
+"@blockprotocol/graph@0.0.8":
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.8.tgz#27b28c6cb18168fc02b71df7b6a24b3fb494b413"
+  integrity sha512-G7bx4H9ttydUYeQLvsBOmnGaDLkpNmqLJkAwr2TCtxyRlUPIvIi+cEVi7m+Q/BkkXcDIhYZvjQhF/2gJy5Dd6Q==
+  dependencies:
+    "@blockprotocol/core" "0.0.6"
     lit "^2.2.5"
     react "^17.0.2"
 
@@ -4947,6 +4963,11 @@ es-abstract@^1.19.0, es-abstract@^1.19.1:
     string.prototype.trimstart "^1.0.4"
     unbox-primitive "^1.0.1"
 
+es-module-lexer@^0.10.5:
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.10.5.tgz#06f76d51fa53b1f78e3bd8bb36dd275eda2fdd53"
+  integrity sha512-+7IwY/kiGAacQfY+YBhKMvEmyAJnw5grTUgjG85Pe7vcUI/6b7pZjZG8nQ7+48YhzEAEqrEgD2dCz/JIK+AYvw==
+
 es-module-lexer@^0.9.0:
   version "0.9.3"
   resolved "https://registry.yarnpkg.com/es-module-lexer/-/es-module-lexer-0.9.3.tgz#6f13db00cc38417137daf74366f535c8eb438f19"
@@ -7895,6 +7916,18 @@ mock-block-dock@0.0.14:
   integrity sha512-zafcaTg7XhJFru47jIl/ukFCvYm3KecHu/br3Oe2Al4L2EQMrlzZlw4wBfnQFJPwX3LwtDI+QDVKbCtcDekZKw==
   dependencies:
     "@blockprotocol/graph" "0.0.7"
+    "@lit-labs/react" "^1.0.4"
+    lodash "^4.17.21"
+    react-json-view "^1.21.3"
+    uuid "^8.3.2"
+
+mock-block-dock@0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.15.tgz#8a29aab676ebc81dd12f2d4264129f606246ec99"
+  integrity sha512-tGjV5niAjjUSmHxLokwgHogjavTF/HfTEvOOjnx04ssdnLeOKYrbocExrtgNc8uH2Oe6Oz6NpkrPSn/2zwx07A==
+  dependencies:
+    "@blockprotocol/core" "0.0.6"
+    "@blockprotocol/graph" "0.0.8"
     "@lit-labs/react" "^1.0.4"
     lodash "^4.17.21"
     react-json-view "^1.21.3"

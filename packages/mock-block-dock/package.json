@@ -35,7 +35,7 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.7",
+    "@blockprotocol/core": "0.0.8",
     "@blockprotocol/graph": "0.0.9",
     "@lit-labs/react": "^1.0.4",
     "lodash": "^4.17.21",

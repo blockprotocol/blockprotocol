@@ -1,3 +1,4 @@
+import { parse as parseModules } from "es-module-lexer";
 import { v4 as uuid } from "uuid";
 
 import { HtmlBlockDefinition } from "./types";
@@ -102,6 +103,14 @@ export const resetBlocks = () => {
   blockUrls = new Map();
 };
 
+const replaceBetween = (
+  origin: string,
+  startIndex: number,
+  endIndex: number,
+  insertion: string,
+) =>
+  `${origin.substring(0, startIndex)}${insertion}${origin.substring(endIndex)}`;
+
 export const markBlockScripts = (
   block: HTMLElement,
   blockUrl: URL | string,
@@ -122,6 +131,48 @@ export const markBlockScripts = (
     }
 
     markScript(script, { blockId });
+
+    const html = script.innerHTML;
+    if (html) {
+      const [imports] = parseModules(html);
+
+      const relevantImports = imports.filter(
+        (imp) => !(imp.d > -1) && imp.n?.startsWith("."),
+      );
+
+      script.innerHTML = relevantImports.reduce((_nextSource, imp, idx) => {
+        let nextSource = _nextSource;
+
+        if (idx === 0) {
+          if (imp.s > 0) {
+            nextSource += html.substring(0, imp.ss);
+          }
+        } else {
+          const previousEnd = relevantImports[idx - 1].se;
+
+          nextSource += html.substring(previousEnd, imp.ss);
+        }
+
+        const statement = html.substring(imp.ss, imp.se);
+        const specifierStart = imp.s - imp.ss;
+        const specifierEnd = imp.e - imp.ss;
+
+        const nextStatement = replaceBetween(
+          statement,
+          specifierStart,
+          specifierEnd,
+          new URL(imp.n!, blockUrl).toString(),
+        );
+
+        nextSource += nextStatement;
+
+        if (idx === relevantImports.length - 1) {
+          nextSource += html.substring(imp.se);
+        }
+
+        return nextSource;
+      }, "");
+    }
   }
 };
 
