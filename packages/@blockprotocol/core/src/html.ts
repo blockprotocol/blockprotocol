@@ -52,7 +52,7 @@ export const getBlockContainer = (ref?: BlockIdentifier) => {
   const container = blocks.get(blockId)?.container;
 
   if (!container) {
-    throw new Error("Cannot find element");
+    throw new Error("Cannot find block container");
   }
 
   return container;
@@ -63,7 +63,7 @@ export const getBlockUrl = (ref?: BlockIdentifier) => {
   const url = blocks.get(blockId)?.url;
 
   if (!url) {
-    throw new Error("Cannot find element");
+    throw new Error("Cannot find block url");
   }
 
   return url;
