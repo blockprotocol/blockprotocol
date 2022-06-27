@@ -152,14 +152,12 @@ export const markBlockScripts = (
         const specifierStart = imp.s - imp.ss;
         const specifierEnd = imp.e - imp.ss;
 
-        const nextStatement = replaceBetween(
+        nextSource += replaceBetween(
           statement,
           specifierStart,
           specifierEnd,
           new URL(imp.n!, blockUrl).toString(),
         );
-
-        nextSource += nextStatement;
 
         if (idx === relevantImports.length - 1) {
           nextSource += html.substring(imp.se);
