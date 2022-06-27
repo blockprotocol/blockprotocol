@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
-import { Box, Collapse, Divider, useTheme } from "@mui/material";
+import { Box, Collapse, Divider } from "@mui/material";
 import React, { FC, useMemo } from "react";
 import { TransitionGroup } from "react-transition-group";
 
@@ -23,8 +23,6 @@ const SearchList: FC<SearchListProps> = ({
   closeModal,
   searchListItemsRefs,
 }) => {
-  const theme = useTheme();
-
   const [docResults, specResults] = useMemo(
     () => [
       searchResults.filter((result) => result.type === "docs"),
@@ -63,11 +61,11 @@ const SearchList: FC<SearchListProps> = ({
               icon={
                 <FontAwesomeIcon
                   icon={faBookOpen}
-                  sx={{
+                  sx={({ palette }) => ({
                     fontSize: 16,
-                    fill: theme.palette.gray[70],
+                    fill: palette.gray[70],
                     marginRight: 1.5,
-                  }}
+                  })}
                 />
               }
               searchResults={docResults}
@@ -92,11 +90,11 @@ const SearchList: FC<SearchListProps> = ({
               title="SPECIFICATION"
               icon={
                 <SpecificationIcon
-                  sx={{
+                  sx={({ palette }) => ({
                     fontSize: 16,
-                    color: theme.palette.gray[70],
+                    color: palette.gray[70],
                     marginRight: 1.5,
-                  }}
+                  })}
                 />
               }
               searchResults={specResults}

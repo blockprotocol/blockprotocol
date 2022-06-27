@@ -118,6 +118,7 @@ export const TabPanel: FC<TabPanelProps> = ({
   activeTab,
   index,
   children,
+  sx = [],
   ...boxProps
 }) => {
   return (
@@ -126,7 +127,7 @@ export const TabPanel: FC<TabPanelProps> = ({
       hidden={value !== activeTab}
       id={`profile-tabpanel-${index}`}
       aria-labelledby={`profile-tab-${index}`}
-      sx={{ height: "100%", ...boxProps.sx }}
+      sx={[{ height: "100%" }, ...(Array.isArray(sx) ? sx : [sx])]}
       {...boxProps}
     >
       {value === activeTab ? children : null}
