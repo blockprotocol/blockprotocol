@@ -16,7 +16,7 @@ Other templates are available. See `npx create-block-app --help`
 
 1.  Write your block starting in `app.html`. To test it during development:
 
-    - edit `dev.html` to give your block starting properties
+    - edit `dev/index.html` to give your block starting properties
 
     - run the dev server with `yarn dev`
 
@@ -38,7 +38,9 @@ Head over to [blockprotocol.org](https://blockprotocol.org/docs/developing-block
 
 ## External Dependencies
 
-The Block Component is self contained with all of its dependencies bundled with webpack. Any dependencies that will be provided by the embedding app should be added to `devDependencies` in package.json so they're available during development, and in `peerDependencies` if the component is to be made available as a library for importing via npm.
+This template assumes there is no bundling process. You will need to reference external dependencies using ES Modules. Tools like [esm.sh](https://esm.sh) or [unpkg.com](https://unpkg.com) can make this much easier.
+
+The Block Protocol does not currently support `externals` when using HTML blocks.
 
 ## Debugging
 
