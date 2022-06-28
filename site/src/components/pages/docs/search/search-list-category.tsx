@@ -1,4 +1,4 @@
-import { Box, Collapse, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Collapse, Grid, Typography } from "@mui/material";
 import React, { FC, useMemo } from "react";
 import { TransitionGroup } from "react-transition-group";
 
@@ -26,8 +26,6 @@ const SearchListCategory: FC<SearchListCategoryProps> = ({
   closeModal,
   registerSearchListItemRef,
 }) => {
-  const theme = useTheme();
-
   const [sections, items] = useMemo(
     () => [
       searchResults.filter(
@@ -54,12 +52,12 @@ const SearchListCategory: FC<SearchListCategoryProps> = ({
           {icon}
 
           <Typography
-            sx={{
-              color: theme.palette.gray[80],
+            sx={({ palette }) => ({
+              color: palette.gray[80],
               fontWeight: 600,
               fontSize: 13,
               letterSpacing: "0.05em",
-            }}
+            })}
           >
             {title}
           </Typography>

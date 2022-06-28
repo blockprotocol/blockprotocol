@@ -80,19 +80,20 @@ export type ButtonProps = {
 // probably rename to BPButton?
 // @todo implement loading
 export const Button: FC<ButtonProps> = forwardRef(
-  ({ children, squared, loading, ...props }, ref) => {
+  ({ children, squared, loading, sx = [], ...props }, ref) => {
     return (
       <MuiButton
         {...props}
-        sx={{
-          borderRadius: squared ? "6px" : undefined,
-          /** @todo: figure out how to properly merge this object with `props.sx` */
-          ...props.sx,
-          lineHeight: "1.5",
-          ...(squared
-            ? { ":focus-visible:after": { borderRadius: 3 } }
-            : undefined),
-        }}
+        sx={[
+          {
+            borderRadius: squared ? "6px" : undefined,
+            lineHeight: "1.5",
+            ...(squared
+              ? { ":focus-visible:after": { borderRadius: 3 } }
+              : undefined),
+          },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
         ref={ref}
       >
         {loading ? loadingAnimation : children}
