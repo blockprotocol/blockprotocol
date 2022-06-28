@@ -160,7 +160,7 @@ const handler: NextApiHandler = async (req, res) => {
             } : undefined,
             html: entryPoint === "html" ? {
               source: blockExport,
-              baseUrl: "${blockMetadata.source}"
+              url: "${blockMetadata.source}"
             } : undefined
           }
           

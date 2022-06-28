@@ -81,7 +81,10 @@ const DevApp = () => {
           blockDefinition={{
             html: {
               source: testBlockString,
-              baseUrl: "./test-html-block/",
+              url: new URL(
+                "./test-html-block/block.html",
+                window.location.toString(),
+              ).toString(),
             },
           }}
           blockEntity={blockEntity}

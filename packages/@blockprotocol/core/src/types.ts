@@ -218,11 +218,7 @@ export type ServiceDefinition = {
   messages: ServiceMessageDefinition[];
 };
 
-export type HtmlBlockDefinition =
-  | {
-      source: string;
-      baseUrl?: string;
-    }
-  | {
-      url: string;
-    };
+export type HtmlBlockDefinition = {
+  url: string;
+  source?: string;
+};

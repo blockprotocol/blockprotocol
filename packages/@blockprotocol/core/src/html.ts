@@ -169,14 +169,12 @@ export const renderHtmlBlock = async (
   signal?: AbortSignal,
 ) => {
   const baseUrl = new URL(
-    "url" in definition
-      ? definition.url
-      : definition.baseUrl ?? window.location.toString(),
+    definition.url ?? window.location.toString(),
     window.location.toString(),
   );
 
   const htmlString =
-    "source" in definition
+    "source" in definition && definition.source
       ? definition.source
       : await fetch(definition.url, { signal }).then((resp) => resp.text());
 
