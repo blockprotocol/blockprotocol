@@ -122,10 +122,10 @@ Embedding applications which load ANY block of `kind: "html"` MUST provide a `bl
 
 - MUST contain a `getBlockContainer` key where the value is a function, which the HTML block can call to obtain a reference to the container element for that specific block:
   - this MUST accept a single argument, which MUST be either a single script element, or a URL string, and may be omitted
-  - the implementation of these functions relies on embedding applications attaching ids to script tags when loading blocks by which they can be later identified (or when the block provides additional scripts via `markScripts`).
+  - the implementation of these functions relies on embedding applications attaching ids to script tags when loading blocks by which they can be later identified (or when the block provides additional scripts via `markScript`).
 - MUST contain a `getBlockUrl` key where the value is a function, which the HTML block can call to obtain the URL at which the HTML source of the block is hosted:
   - this MUST accept a single argument, which MUST be either a single script element, or a URL string, and may be omitted.
-- MUST contain a `markScripts` key where the value is a function, which is used to attach ids to dynamically script tags so that they can be identified when calling `getBlockContainer`
+- MUST contain a `markScript` key where the value is a function, which is used to attach ids to dynamically script tags so that they can be identified when calling `getBlockContainer`
   - This MUST accept TWO arguments:
     - the first MUST be the script source
     - the second MUST be either a single script element, or a URL string.
@@ -186,7 +186,7 @@ Blocks of `kind: "html"` MAY call `getBlockUrl` from within any script they load
   </tbody>
 </table>
 
-If blocks generate any scripts dynamically at runtime, they MUST call `markScripts` in order to have the script marked by the embedding application. As with static scripts, they MUST call `getBlockContainer` within any dynamically generated script in order to obtain a reference to the element containing the block.
+If blocks generate any scripts dynamically at runtime, they MUST call `markScript` in order to have the script marked by the embedding application. As with static scripts, they MUST call `getBlockContainer` within any dynamically generated script in order to obtain a reference to the element containing the block.
 
 <table>
   <thead>
