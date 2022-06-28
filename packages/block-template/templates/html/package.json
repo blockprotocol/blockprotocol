@@ -29,6 +29,6 @@
     "block-scripts": "0.0.13",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
-    "rimraf": "3.0.2"
+    "rimraf": "^3.0.2"
   }
 }

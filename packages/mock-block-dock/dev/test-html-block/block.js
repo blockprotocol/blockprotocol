@@ -1,3 +1,4 @@
+/* global blockprotocol */
 import { GraphBlockHandler } from "https://esm.sh/@blockprotocol/graph@0.0.9";
 
 const element = blockprotocol.getBlockContainer(import.meta.url);

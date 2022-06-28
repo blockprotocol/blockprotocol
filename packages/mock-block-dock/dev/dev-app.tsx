@@ -3,7 +3,7 @@ import * as ReactDOM from "react-dom";
 
 import { MockBlockDock } from "../src";
 import { TestCustomElementBlock } from "./test-custom-element-block";
-// eslint-disable-next-line import/no-unresolved,import/no-webpack-loader-syntax
+// eslint-disable-next-line import/no-unresolved
 import testBlockString from "./test-html-block/block.html?raw";
 import { TestReactBlock } from "./test-react-block";
 
