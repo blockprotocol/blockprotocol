@@ -13,15 +13,18 @@ import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
 
 type FAQProps = {
+  anchor?: string;
   question: ReactNode;
 };
 
-export const FAQ: FC<FAQProps> = ({ question, children }) => {
+export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const anchor = slugify(stringifyChildren(question), {
-    lower: true,
-  });
+  const anchor =
+    props.anchor ??
+    slugify(stringifyChildren(question), {
+      lower: true,
+    });
 
   const { headingRef } = usePageHeading({ anchor });
 

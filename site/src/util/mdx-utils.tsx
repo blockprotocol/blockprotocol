@@ -72,8 +72,9 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
             {
               type: "text",
               value:
-                child.attributes.find(({ name }) => name === "question")
-                  ?.value ?? "Unknown",
+                child.attributes.find(
+                  ({ name }) => name === "anchor" || name === "question",
+                )?.value ?? "Unknown",
             },
           ],
         };
