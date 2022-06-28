@@ -1,7 +1,7 @@
 - Feature Name: versioning-types
 - Start Date: 2022-06-28
-- RFC PR: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/pull/0000)
-- Block Protocol Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
+- RFC PR: [blockprotocol/blockprotocol#408](https://github.com/blockprotocol/blockprotocol/pull/408)
+- Block Protocol Discussion: [blockprotocol/blockprotocol#408](https://github.com/blockprotocol/blockprotocol/discussions/408)
 
 # Summary
 
