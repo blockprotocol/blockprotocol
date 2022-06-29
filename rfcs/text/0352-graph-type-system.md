@@ -424,16 +424,23 @@ Entity Types can also express the types of relationships they have with other th
       // Person entity
       {
         "entityId": 111,
-        "name": "Herbert George Wells",
-        ...
+        "properties": {
+          "name": "Herbert George Wells",
+          ...
+        }
       },
       // Book Entity
       {
         "entityId": 112,
-        "name": "The Time Machine",
-        "publishedOn": "1895-05",
-        "blurb": ...,
-        "writtenBy": 111 // referring to the Person entity ID
+        "properties": {
+          "name": "The Time Machine",
+          "publishedOn": "1895-05",
+          "blurb": "brulb",
+          ...
+        },
+        "links": {
+          "writtenBy": 111 // referring to the Person entity ID
+        }
       }
     ]
     ```
@@ -449,23 +456,31 @@ Entity Types can also express the types of relationships they have with other th
       // UK Address entity
       {
         "entityId": 113,
-        "addressLine1": "Buckingham Palace",
-        "postcode": "SW1A 1AA",
-        "city": "London",
-        ...
+        "properties": {
+          "addressLine1": "Buckingham Palace",
+          "postcode": "SW1A 1AA",
+          "city": "London",
+          ...
+        }
       },
       // Organization entity
       {
         "entityId": 114,
-        "name": "HASH, Ltd.",
-        ...
+        "properties": {
+          "name": "HASH, Ltd.",
+          ...
+        }
       }
       // Building entity
       {
         "entityId": 115,
-        "address": 113, // referring to the UK Address entity ID
-        "tenant": 114, // referring to the Organization entity ID
-        ...
+        "properties": {
+          ...
+        },
+        "links": {
+          "address": 113, // referring to the UK Address entity ID
+          "tenant": 114 // referring to the Organization entity ID
+        }
       }
     ]
     ```
@@ -482,14 +497,20 @@ Entity Types can also express the types of relationships they have with other th
       // Bank entity
       {
         "entityId": 211,
-        "name": "Iron Bank of Braavos"
+        "properties": {
+          "name": "Iron Bank of Braavos"
+        }
       },
       // Bank Account entity
       {
         "entityId": 212,
-        "sortCode": 100000,
-        "accountNumber": 31510604,
-        "maintainedBy": 211
+        "properties": {
+          "sortCode": 100000,
+          "accountNumber": 31510604
+        },
+        "links": {
+          "maintainedBy": 211
+        }
       }
     ]
     ```
@@ -507,16 +528,24 @@ Entity Types can also express the types of relationships they have with other th
       // Person entities
       {
         "entityId": 311,
-        "name": "Alice",
+        "properties": {
+          "name": "Alice"
+        }
       },
       {
         "entityId": 312,
-        "name": "Bob",
+        "properties": {
+          "name": "Bob"
+        }
       }
       {
         "entityId": 313,
-        "name": "Charlie",
-        "friendOf": [311, 312] // referring to the Person entity IDs, where the array ordering is unstable
+        "properties": {
+          "name": "Charlie"
+        },
+        "links": {
+          "friendOf": [311, 312] // referring to the Person entity IDs, where the array ordering is unstable
+        }
       }
     ]
     ```
@@ -534,32 +563,40 @@ Entity Types can also express the types of relationships they have with other th
       // Songs
       {
         "entityId": 412,
-        "name": "Rocket Man",
-        ...
+        "properties": {
+          "name": "Rocket Man",
+          ...
+        }
       },
       {
         "entityId": 413,
-        "name": "Du Hast",
-        ...
+        "properties": {
+          "name": "Du Hast",
+          ...
+        }
       },
       {
         "entityId": 414,
-        "name": "Valley of the Shadows",
-        ...
+        "properties": {
+          "name": "Valley of the Shadows",
+          ...
+        }
       },
       // Playlist
       {
         "entityId": 415,
-        "name": "Favorite Songs",
-        "contains": [412, 414, 413] // referring to the song entity IDs, ordering is intentional and stable
-        ...
+        "properties": {
+          "name": "Favorite Songs",
+          "contains": [412, 414, 413], // referring to the song entity IDs, ordering is intentional and stable
+          ...
+        }
       }
     ]
     ```
 
-    **Example 2**
+  **Example 2**
 
-    The `Page` Entity Type could contain some Property Types, a `Written By` link, and an _ordered_ list of `Contains` links
+  The `Page` Entity Type could contain some Property Types, a `Written By` link, and an _ordered_ list of `Contains` links
 
   - Sample (simplified) data
 
@@ -568,34 +605,46 @@ Entity Types can also express the types of relationships they have with other th
       // Paragraph Entity
       {
         "entityId": 416,
-        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas.",
-        ...
+        "properties": {
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas.",
+          ...
+        }
       },
       // Heading Entity
       {
         "entityId": 417,
-        "name": "Duo Reges: constructio interrete.",
-        ...
+        "properties": {
+          "name": "Duo Reges: constructio interrete.",
+          ...
+        }
       },
       // Divider Entity
       {
         "entityId": 418,
-        "width": "full",
-        ...
+        "properties": {
+          "width": "full",
+          ...
+        }
       },
       // User Entity
       {
         "entityId": 419,
-        "name": "Alice",
-        ...
+        "properties": {
+          "name": "Alice",
+          ...
+        }
       }
       // Page Entity
       {
         "entityId": 420,
-        "name": "Lorum Ipsum",
-        "writtenBy": 419 // referring to the User entity ID
-        "contains": [417, 416, 418] // referring to IDs of the various types of page contents above
-        ...
+        "properties": {
+          "name": "Lorum Ipsum",
+          "writtenBy": 419, // referring to the User entity ID
+          ...
+        },
+        "links": {
+          "contains": [417, 416, 418] // referring to IDs of the various types of page contents above
+        }
       }
     ]
     ```
@@ -1582,17 +1631,23 @@ This would accept Entity instances with the following shape
 [
   // Person entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 111,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
-    ...
+    "entityId": 111,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+      ...
+    }
   },
   // Book Entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 112,
-    "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-    "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-    "https://blockprotocol.org/types/@alice/property-type/blurb": ...,
-    "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+    "entityId": 112,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
+      "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
+      "https://blockprotocol.org/types/@alice/property-type/blurb": "brulb"
+    },
+    "links": {
+      "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+    }
   }
 ]
 ```
@@ -1664,21 +1719,27 @@ This would accept Entity instances with the following shape
 [
   // UK Address entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 113,
-    "https://blockprotocol.org/types/@alice/property-type/address-line-1": "Buckingham Palace",
-    "https://blockprotocol.org/types/@alice/property-type/postcode": "SW1A 1AA",
-    "https://blockprotocol.org/types/@alice/property-type/city": "London"
+    "entityId": 113,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/address-line-1": "Buckingham Palace",
+      "https://blockprotocol.org/types/@alice/property-type/postcode": "SW1A 1AA",
+      "https://blockprotocol.org/types/@alice/property-type/city": "London"
+    }
   },
   // Organization entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 114,
-    "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+    "entityId": 114,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+    }
   }
   // Building entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 115,
-    "https://blockprotocol.org/types/@alice/property-type/located-at": 113, // referring to the UK Address entity ID
-    "https://blockprotocol.org/types/@alice/property-type/tenant": 114, // referring to the Organization entity ID
+    "entityId": 115,
+    "links": {
+      "https://blockprotocol.org/types/@alice/property-type/located-at": 113, // referring to the UK Address entity ID
+      "https://blockprotocol.org/types/@alice/property-type/tenant": 114 // referring to the Organization entity ID
+    }
   }
 ]
 ```
@@ -1727,17 +1788,23 @@ This would accept Entity instances with the following shape
 [
   // Person entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 111,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
-    ...
+    "entityId": 111,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Herbert George Wells",
+      ...
+    }
   },
   // Book Entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 112,
-    "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
-    "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
-    "https://blockprotocol.org/types/@alice/property-type/blurb": ...,
-    "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+    "entityId": 112,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "The Time Machine",
+      "https://blockprotocol.org/types/@alice/property-type/published-on": "1895-05",
+      "https://blockprotocol.org/types/@alice/property-type/blurb": ...
+    },
+    "links": {
+      "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+    }
   }
 ]
 ```
@@ -1776,17 +1843,27 @@ This would accept Entity instances with the following shape
 [
   // Person entities
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 211,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+    "entityId": 211,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+    }
   },
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 212,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Bob"
+    "entityId": 212,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Bob"
+    }
   },
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 213,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Charlie",
-    "https://blockprotocol.org/types/@alice/property-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
+    "entityId": 213,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Charlie"
+    },
+    "links": {
+      "https://blockprotocol.org/types/@alice/property-type/friend-of": [
+        211, 212
+      ] // referring to the Person entity IDs, where the array ordering is unstable
+    }
   }
 ]
 ```
@@ -1841,24 +1918,34 @@ This would accept Entity instances with the following shape
 [
   // Songs
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 312,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Rocket Man"
+    "entityId": 312,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Rocket Man"
+    }
   },
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 313,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Du Hast"
+    "entityId": 313,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Du Hast"
+    }
   },
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 314,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Valley of the Shadows"
+    "entityId": 314,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Valley of the Shadows"
+    }
   },
   // Playlist
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 315,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Favorite Songs",
-    "https://blockprotocol.org/types/@alice/property-type/contains": [
-      312, 314, 313
-    ] // referring to the song entity IDs, ordering is intentional and stable
+    "entityId": 315,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Favorite Songs"
+    },
+    "links": {
+      "https://blockprotocol.org/types/@alice/property-type/contains": [
+        312, 314, 313
+      ] // referring to the song entity IDs, ordering is intentional and stable
+    }
   }
 ]
 ```
@@ -1896,32 +1983,44 @@ This would accept Entity instances with the following shape
 [
   // Paragraph Entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 316,
-    "https://blockprotocol.org/types/@alice/property-type/text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas."
+    "entityId": 316,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas."
+    }
   },
   // Heading Entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 317,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Duo Reges: constructio interrete."
+    "entityId": 317,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Duo Reges: constructio interrete."
+    }
   },
   // Divider Entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 318,
-    "https://blockprotocol.org/types/@alice/property-type/width": "full"
+    "entityId": 318,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/width": "full"
+    }
   },
   // User Entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 319,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+    "entityId": 319,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Alice"
+    }
   },
   // Page Entity
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 320,
-    "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum",
-    "https://blockprotocol.org/types/@alice/property-type/written-by": 319, // referring to the User entity ID
-    "https://blockprotocol.org/types/@alice/property-type/contains": [
-      317, 316, 318
-    ] // referring to IDs of the various types of page contents above
+    "entityId": 320,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum"
+    },
+    "links": {
+      "https://blockprotocol.org/types/@alice/property-type/written-by": 319, // referring to the User entity ID
+      "https://blockprotocol.org/types/@alice/property-type/contains": [
+        317, 316, 318
+      ] // referring to IDs above, ordering is intentional and stable
+    }
   }
 ]
 ```
@@ -1976,6 +2075,8 @@ For the most part, we're using existing JSON Schema keywords, but it would be pr
 
 Using the proposed type system for Block Protocol imposes changes on the Graph Service and how Block Schemas are defined.
 
+While the examples so far have shown `properties` and `links` side by side in the Entity instances, the Block Protocol would treat these two concepts separately.
+
 Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service-specification).
 
 ### Interfacing with properties on Entities
@@ -2000,11 +2101,13 @@ A key change for allowing the proposed type system to work is moving away from a
 
 ```json
 {
-  "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 111,
-  "https://blockprotocol.org/types/@alice/property-type/name": "Arthur Philip Dent",
-  "https://blockprotocol.org/types/@alice/property-type/age": 30,
-  "https://blockprotocol.org/types/@alice/property-type/planet-of-origin": "Earth",
-  "https://blockprotocol.org/types/@alice/property-type/occupation": "Intergalactic Traveler"
+  "entityId": 111,
+  "properties": {
+    "https://blockprotocol.org/types/@alice/property-type/name": "Arthur Philip Dent",
+    "https://blockprotocol.org/types/@alice/property-type/age": 30,
+    "https://blockprotocol.org/types/@alice/property-type/planet-of-origin": "Earth",
+    "https://blockprotocol.org/types/@alice/property-type/occupation": "Intergalactic Traveler"
+  }
 }
 ```
 
@@ -2087,8 +2190,10 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
 ```json
 [
   {
-    "https://blockprotocol.org/types/@blockprotocol/property-type/entity-id": 222,
-    "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+    "entityId": 222,
+    "properties": {
+      "https://blockprotocol.org/types/@alice/property-type/name": "HASH, Ltd."
+    }
   }
 ]
 ```
