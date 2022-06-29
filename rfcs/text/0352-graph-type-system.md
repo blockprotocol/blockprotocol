@@ -662,7 +662,11 @@ The `kind` keyword will be used to identify the kind of the schema being describ
 
 The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
 
-Additionally, some keywords may have a slightly different meaning in the type schemas, such as `description` which adds semantic meaning to Link Types.
+Some existing JSON Schema keywords have been repurposed with slightly different meaning:
+
+The `description` keyword for Link Types add semantic meaning to a link (which could be encapsulated in a vocabulary specification for the meta schemas).
+
+The `name` keyword acts the same way `title` does in conventional JSON Schemas.
 
 ## Using the Types in the Block Protocol
 
@@ -2068,6 +2072,14 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
         "additionalProperties": false
       }
     }
+  },
+  // Description is repurposed when used with Link Types
+  "description": {
+    "type": "string"
+  },
+  // Name is equivalent to title
+  "name": {
+    "type": "string"
   }
 }
 ```
@@ -2076,7 +2088,11 @@ The `kind` can only take on values that specify the types of the proposed type s
 
 The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
 
-`description` for Link Types add semantic meaning to a link, which could be encapsulated in a vocabulary specification for the meta schemas.
+Some existing JSON Schema keywords have been repurposed with slightly different meaning:
+
+The `description` keyword for Link Types add semantic meaning to a link (which could be encapsulated in a vocabulary specification for the meta schemas).
+
+The `name` keyword acts the same way `title` does in conventional JSON Schemas.
 
 For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
 
