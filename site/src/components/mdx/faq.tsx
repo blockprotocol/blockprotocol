@@ -4,6 +4,7 @@ import {
   AccordionDetails,
   AccordionSummary,
   Typography,
+  typographyClasses,
 } from "@mui/material";
 import { FC, ReactNode, useState } from "react";
 import slugify from "slugify";
@@ -33,9 +34,22 @@ export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
       expanded={expanded}
       sx={{
         boxShadow: "none",
+        "&:first-child": {
+          marginTop: -2,
+        },
       }}
     >
-      <Link href={`#${anchor}`}>
+      <Link
+        href={`#${anchor}`}
+        sx={(theme) => ({
+          transition: theme.transitions.create("color"),
+          ":hover": {
+            [`.${typographyClasses.root}`]: {
+              color: theme.palette.purple[600],
+            },
+          },
+        })}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           onClick={(event) => {
@@ -46,12 +60,12 @@ export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
           }}
           sx={{ padding: 0 }}
         >
-          <Typography ref={headingRef} variant="bpHeading4" component="h3">
-            {question}
+          <Typography ref={headingRef}>
+            <strong>{question}</strong>
           </Typography>
         </AccordionSummary>
       </Link>
-      <AccordionDetails sx={{ padding: 0, marginTop: 1, marginBottom: 2 }}>
+      <AccordionDetails sx={{ padding: 0, marginTop: 1, marginBottom: 4 }}>
         {children}
       </AccordionDetails>
     </Accordion>
