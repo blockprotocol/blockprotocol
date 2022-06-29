@@ -77,7 +77,7 @@ This is an example of a lack of **consensus**, where two parties don't agree on 
 - introduces a large maintenance burden
 - is generally not reusable, possibly leading to similar bespoke logic being defined in multiple places, with possible subtle but incompatible variations
 
-Thus the main reason for following RFC:
+Thus the main reason for the following RFC:
 
 > 💬 Removing some flexibility to establish a stronger contract between the block developer, embedding application, and end-user, allows for more powerful run-time inference and general confidence of all parties. Furthermore, creating a well-defined hierarchy of types, that are reusable and discoverable, encourages emergent standardization and, in turn, leads to higher-quality interoperable parts.
 
