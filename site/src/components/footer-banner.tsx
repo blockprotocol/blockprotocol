@@ -37,39 +37,41 @@ const BackgroundRainbow: FC = () => {
 };
 
 const BannerCard: FC<BannerCardProps> = ({
-  sx,
+  sx = [],
   contents,
   buttonHref,
   buttonText,
 }) => (
   <Paper
-    sx={{
-      transition: (theme) => theme.transitions.create("padding"),
-      padding: { xs: 4, md: 6 },
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",
-      alignItems: "flex-start",
-      position: "relative",
-      "&::before": {
-        pointerEvents: "none",
-        position: "absolute",
-        top: 0,
-        right: 0,
-        left: 0,
-        bottom: 0,
-        content: `""`,
-        /** @todo: figure out IE compatibility? (https://caniuse.com/mdn-css_properties_mix-blend-mode) */
-        mixBlendMode: "multiply",
-        boxShadow: [
-          "0px 4.46px 3px 0px #7F8FAB1F",
-          "0px 14.97px 16px 0px #7F8FAB33",
-          "0px 67px 60px 0px #7F8FAB4D",
-        ].join(","),
+    sx={[
+      {
+        transition: (theme) => theme.transitions.create("padding"),
+        padding: { xs: 4, md: 6 },
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: "flex-start",
+        position: "relative",
+        "&::before": {
+          pointerEvents: "none",
+          position: "absolute",
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+          content: `""`,
+          /** @todo: figure out IE compatibility? (https://caniuse.com/mdn-css_properties_mix-blend-mode) */
+          mixBlendMode: "multiply",
+          boxShadow: [
+            "0px 4.46px 3px 0px #7F8FAB1F",
+            "0px 14.97px 16px 0px #7F8FAB33",
+            "0px 67px 60px 0px #7F8FAB4D",
+          ].join(","),
+        },
       },
-      ...sx,
-    }}
+      ...(Array.isArray(sx) ? sx : [sx]),
+    ]}
   >
     <Box mb={2}>{contents}</Box>
     <LinkButton

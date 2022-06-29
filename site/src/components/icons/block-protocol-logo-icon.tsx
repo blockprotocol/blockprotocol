@@ -2,13 +2,16 @@ import { SvgIcon, SvgIconProps } from "@mui/material";
 import { FC } from "react";
 
 export const BlockProtocolLogoIcon: FC<SvgIconProps> = ({
-  sx,
+  sx = [],
   ...remainingProps
 }) => {
   return (
     <SvgIcon
       {...remainingProps}
-      sx={{ width: "unset", height: "unset", ...sx }}
+      sx={[
+        { width: "unset", height: "unset" },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
       width="168"
       height="18"
       viewBox="0 0 168 18"
