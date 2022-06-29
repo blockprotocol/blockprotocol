@@ -134,6 +134,7 @@ A **Data Type** describes a space of possible valid _values_. For instance, the 
 A Data Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the Data Type's definition can be accessed (in most cases this will be a URL)
+- a **required** `kind` that should be set to `"dataType"`, to specify the kind of type being defined
 - a **required** `name`, which should generally be a non-pluralized short description of the Data Type (for example: "Number" not "Numbers")
 - **optionally** a `description` to further explain the semantic meaning of the Data Type
 - a **required** definition of its possible value
@@ -159,6 +160,7 @@ Due to the size of this RFC, creating new data-types has been deemed out-of-scop
 A **Property Type** is a description of a named piece of data, including its possible values. A Property Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the Property Type's definition can be accessed (in most cases this will be a URL)
+- a **required** `kind` that should be set to `"propertyType"`, to specify the kind of type being defined
 - a **required** `name`, which should generally be a non-pluralized description of the property (for example: "Address" not "Addresses")
 - **optionally** a `description` to further explain the semantic meaning of the Property Type
 - a **required** definition of its possible values
@@ -305,6 +307,7 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 A **Link Type** is a description of a _directional_ relationship between two things. A Link Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the Property Type's definition can be accessed (in most cases this will be a URL)
+- a **required** `kind` that should be set to `"linkType"`, to specify the kind of type being defined
 - a **required** `name`, which should be a non-pluralized description of the relationship (for example: "Friend" not "Friends")
 - a **required** `description` to further explain the semantic meaning of the relationship
 - a **possible** `relatedKeywords`, which is a list of terms that are related to the link type
@@ -324,6 +327,7 @@ There could be a `Submitted By` link type with a `description` of "Suggested, pr
 An Entity Type is a description of a particular "thing", made up of identifiable pieces of data. An Entity Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the Entity Type's definition can be accessed (in most cases this will be a URL)
+- a **required** `kind` that should be set to `"entityType"`, to specify the kind of type being defined
 - a **required** `name`, which should generally be a non-pluralized description of the thing
 - **optionally** a `description` to further explain the semantic meaning of the Entity Type
 - a **required** definition of its possible properties and links.
@@ -910,7 +914,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
         },
         "required": {
           "type": "array",
-          "items": { 
+          "items": {
             "type": "string",
             "format": "uri"
           }
@@ -1275,7 +1279,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
     "properties": { "$ref": "#/$defs/propertyTypeObject" },
     "required": {
       "type": "array",
-      "items": { 
+      "items": {
         "type": "string",
         "format": "uri"
       }
@@ -1360,7 +1364,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
         },
         "required": {
           "type": "array",
-          "items": { 
+          "items": {
             "type": "string",
             "format": "uri"
           }
