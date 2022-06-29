@@ -1352,7 +1352,15 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
             {
               "properties": {
                 "ordered": { "type": "boolean", "default": false },
-                "type": { "const": "array" }
+                "type": { "const": "array" },
+                "minItems": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "maxItems": {
+                  "type": "integer",
+                  "minimum": 0
+                }
               },
               "required": ["ordered", "type"]
             },
@@ -1811,7 +1819,8 @@ This would accept Entity instances with the following shape
 
 #### Specifying there is a List of Links
 
-The Entity Type can also express that it can have multiple outgoing links of the same type
+The Entity Type can also express that it can have multiple outgoing links of the same type.
+Furthermore list of links can be constrainted with `minItems` and `maxItems`.
 
 **Example 1**
 
