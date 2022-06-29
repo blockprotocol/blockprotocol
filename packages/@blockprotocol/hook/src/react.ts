@@ -1,6 +1,7 @@
 import {
   RefObject,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   VoidFunctionComponent,
@@ -81,6 +82,33 @@ export const useHookBlockService = (
     constructorArgs,
     ref,
   });
+};
+
+export const useHookRef = (
+  handler: HookBlockHandler,
+  value?: unknown,
+  onError?: (...args: any[]) => unknown,
+) => {
+  const currentValue = useRef(value);
+  const currentOnError = useRef(onError);
+  const currentNode = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    currentValue.current = value;
+    currentOnError.current = onError;
+  });
+
+  useLayoutEffect(() => {
+    const node = currentNode.current;
+
+    if (node && handler) {
+      handler.node(currentValue.current, node).catch((err) => {
+        currentOnError.current?.(err);
+      });
+    }
+  }, [handler, value]);
+
+  return currentNode;
 };
 
 /**

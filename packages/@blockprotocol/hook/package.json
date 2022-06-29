@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "@blockprotocol/core": "0.0.7",
-    "lit": "^2.2.5",
     "react": "^17.0.2"
   },
   "devDependencies": {

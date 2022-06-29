@@ -2,7 +2,6 @@ import { ServiceHandler } from "@blockprotocol/core";
 
 import serviceJsonDefinition from "./hook-service.json";
 import { BlockHookMessageCallbacks, BlockHookMessages } from "./types";
-
 /**
  * Creates a handler for the graph service for the block.
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the embedder.
@@ -54,13 +53,15 @@ export class HookBlockHandler
     });
   }
 
-  async node(value: HTMLElement) {
-    this.sendMessage({
-      message: {
-        messageName: "node",
-        data: value,
-      },
-    });
+  async node(value: unknown, node: HTMLElement | null) {
+    if (node) {
+      await this.sendMessage({
+        message: {
+          messageName: "node",
+          data: { node, value },
+        },
+      });
+    }
   }
 
   async render(value: unknown) {

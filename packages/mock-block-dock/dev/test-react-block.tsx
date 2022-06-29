@@ -1,5 +1,5 @@
 import { BlockComponent, useGraphBlockService } from "@blockprotocol/graph";
-import { useHookBlockService } from "@blockprotocol/hook";
+import { useHookBlockService, useHookRef } from "@blockprotocol/hook";
 import * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
 
@@ -16,53 +16,8 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
 
   const { graphService } = useGraphBlockService(blockRef);
   const { hookService } = useHookBlockService(blockRef);
-  const nodeRef = useRef<HTMLHeadingElement>(null);
 
-  const callHookService = useCallback(
-    (node: HTMLElement | null) => {
-      if (node && hookService) {
-        console.log(node, hookService);
-        hookService.node(node).catch((err: unknown) => {
-          console.error(err);
-        });
-      }
-    },
-    [hookService],
-  );
-
-  // @todo aborting?
-  useEffect(() => {
-    if (hookService) {
-      let nodeToRemove: HTMLElement | null = null;
-
-      callHookService(nodeRef.current);
-
-      hookService
-        .render(entityId)
-        .then((node) => {
-          nodeToRemove?.remove();
-          // @todo why isn't node typed properly
-          nodeToRemove = node as any;
-          blockRef.current!.appendChild(nodeToRemove!);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-
-      return () => {
-        nodeToRemove?.remove();
-      };
-    }
-  }, [hookService, entityId, callHookService]);
-
-  const callHookServiceLater = useCallback(
-    (node: HTMLElement | null) => {
-      queueMicrotask(() => {
-        callHookService(node);
-      });
-    },
-    [callHookService],
-  );
+  const ref = useHookRef(hookService, properties.name);
 
   return (
     <div ref={blockRef}>
@@ -70,7 +25,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
         Hello {properties.name}! The id of this block is {entityId}
       </h1>
       {/* eslint-disable-next-line jsx-a11y/heading-has-content */}
-      <h2 ref={callHookServiceLater} />
+      <h2 ref={ref} />
       <input
         type="text"
         placeholder="This block's entity's 'name' property"
