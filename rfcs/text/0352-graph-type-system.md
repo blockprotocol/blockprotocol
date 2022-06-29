@@ -2152,13 +2152,13 @@ Link groups and Linked entities in the Graph Service are currently supplied outs
 
 ```json
 {
-  "sourceEntityId": 111,
+  "sourceEntityId": "user1",
   "linkType": "https://blockprotocol.org/types/@alice/link-type/company",
   "ordered": false,
   "links": [
     {
-      "sourceEntityId": 111,
-      "destinationEntityId": 222,
+      "sourceEntityId": "user1",
+      "destinationEntityId": "company1",
       "linkType": "https://blockprotocol.org/types/@alice/link-type/company"
     }
   ]
