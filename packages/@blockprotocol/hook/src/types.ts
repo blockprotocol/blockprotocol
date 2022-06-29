@@ -170,6 +170,7 @@ export type RenderData = unknown;
  */
 export type EmbedderHookMessageCallbacks = {
   render: MessageCallback<RenderData, null, HTMLElement, null>;
+  node: MessageCallback<HTMLElement, null>;
 
   // @todo type the error here
   // createEntity: MessageCallback<

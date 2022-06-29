@@ -54,6 +54,15 @@ export class HookBlockHandler
     });
   }
 
+  async node(value: HTMLElement) {
+    this.sendMessage({
+      message: {
+        messageName: "node",
+        data: value,
+      },
+    });
+  }
+
   async render(value: unknown) {
     const result = await this.sendMessage({
       message: {

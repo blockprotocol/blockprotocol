@@ -122,7 +122,11 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
           new HookEmbedderHandler({
             element: wrapperRef.current,
             callbacks: {
-              render: async ({ data }) => {
+              node: (msg: { data: HTMLElement }) => {
+                // eslint-disable-next-line no-param-reassign
+                msg.data.innerHTML = "Set by parent";
+              },
+              render: async ({ data }: any) => {
                 const node = document.createElement("h1");
 
                 node.innerText = `The value passed is "${(
