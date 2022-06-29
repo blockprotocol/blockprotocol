@@ -60,9 +60,7 @@ export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
           }}
           sx={{ padding: 0 }}
         >
-          <Typography ref={headingRef}>
-            <strong>{question}</strong>
-          </Typography>
+          <Typography ref={headingRef}>{question}</Typography>
         </AccordionSummary>
       </Link>
       <AccordionDetails sx={{ padding: 0, marginTop: 1, marginBottom: 4 }}>
