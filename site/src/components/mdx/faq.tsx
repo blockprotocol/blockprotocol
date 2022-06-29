@@ -3,6 +3,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  accordionSummaryClasses,
   Typography,
   typographyClasses,
 } from "@mui/material";
@@ -58,7 +59,13 @@ export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
             }
             setExpanded(!expanded);
           }}
-          sx={{ padding: 0 }}
+          sx={{
+            padding: 0,
+            [`&.${accordionSummaryClasses.expanded} .${typographyClasses.root}`]:
+              {
+                color: ({ palette }) => palette.purple[600],
+              },
+          }}
         >
           <Typography ref={headingRef}>{question}</Typography>
         </AccordionSummary>
