@@ -407,7 +407,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
 Entity Types can also express the types of relationships they have with other things.
 
-- **Specifying an Entity Type has outgoing Links** - The links going _from_ an Entity are described a set of Link Types
+- **Specifying an Entity Type has outgoing Links** - The links going _from_ an Entity are described as a set of Link Types
 
   **Example 1**
 
