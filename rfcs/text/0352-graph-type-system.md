@@ -781,7 +781,7 @@ This RFC defines the following primitive top-level Data Types
     "name": "Empty List",
     "description": "An Empty List",
     "type": "array",
-    "maxItems": 0
+    "const": []
   }
   ```
 
@@ -1681,7 +1681,7 @@ This would accept Entity instances with the following shape
 
 #### Specifying that a Link is required
 
-The Entity Type can also define that some of its links are **required**, _note: links are **optional** by default_
+The Entity Type can also define that some of its links are **required**, _note: as with properties, links are **optional** by default_
 
 **Example 1**
 
@@ -1960,11 +1960,11 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
 }
 ```
 
-The `kind` can as explained in the Guide-Level explanation only take on values that specify the types of the proposed type system.
+The `kind` can only take on values that specify the types of the proposed type system.
 
 The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
 
-As mentioned in the Guide-Level explanation, `description` for Link Types add semantic meaning to a link, which could be encapsulated in a vocabulary specification for the meta schemas.
+`description` for Link Types add semantic meaning to a link, which could be encapsulated in a vocabulary specification for the meta schemas.
 
 For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
 
@@ -1972,7 +1972,7 @@ For the most part, we're using existing JSON Schema keywords, but it would be pr
 
 Using the proposed type system for Block Protocol imposes changes on the Graph Service and how Block Schemas are defined.
 
-The Graph Service is currently specified as [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json).
+Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service-specification).
 
 ### Interfacing with properties on Entities
 
@@ -2235,7 +2235,7 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
 }
 ```
 
-> 💡 As the syntax and validations of Block Schemas are closely related to Entity Types, they have the same `kind` for now. We would likely have a distinct `"blockSchema"` kind to make the distinction clear and to allow the two kinds of schemas to diverge.
+> 💡 As the syntax and validations of Block Schemas are closely related to Entity Types, they have the same `kind` for now. We would introduce a distinct `"blockSchema"` kind to make the distinction clear if there were a need for the two kinds of schemas to diverge.
 
 One clear difference in the new system is that properties are no longer named arbitrarily.
 Every Block Schema property must be a Property Type URI, which means semantic meaning is attached to every key.
@@ -2453,7 +2453,7 @@ A potential negative side-effect of building an open ecosystem is introducing mo
 
 ## Ergonomics of manually writing schemas
 
-This RFC greatly decreases the ergonomics of writing block schemas **by hand**. The verbosity of schemas is significantly increased, as well as the general complexity of their expression due to them being composed of other schemas that need to be referred to.
+This RFC greatly decreases the ergonomics of writing block schemas **by hand**. The verbosity of schemas is significantly increased, as well as the general complexity of their expression due to them being composed of other schemas that need to be referred to, and which need to be addressable at some unique location at the point of production use.
 
 This has the potential to increase the barrier-to-entry, and dissuade people from picking up the Protocol if its capabilities prove to be too complicated for their use cases.
 
@@ -2465,7 +2465,7 @@ This type system is designed around reusable types, where people can share and b
 
 ## Versioning Considerations
 
-A version control model will likely be developed in tandem to the implementation of this type system. As such, there are potential complications to how dependencies are managed and the ramifications of having a large-connected system. Some of these are explored in detail in the [RFC about constraining Links](https://github.com/blockprotocol/blockprotocol/pull/354). The major drawback here is that this greatly increases cognitive load, and reasoning about changes within the ecosystem will become more involved.
+A version control model will likely be developed in tandem to the implementation of this type system. As such, there are potential complications to how dependencies are managed, how types are addressed, and the ramifications of having a large-connected system. Some of these are explored in detail in the [RFC about constraining Links](https://github.com/blockprotocol/blockprotocol/pull/354). The major drawback here is that this greatly increases cognitive load, and reasoning about changes within the ecosystem will become more involved.
 
 A more immediately apparent concern is if schemas are versioned, but their use isn't pinned to a version, then they might implicitly change if their dependencies are updated. More verbosely, if we have a Property Type `Age` on version `1.1`, and an Entity Type `Person` which simply refers to `Age`, if `Age` is updated then the Entity Type implicitly changes.
 
@@ -2627,7 +2627,7 @@ As mentioned in a few sections, this design basically defines a way for communit
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
     As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`?
 1.  Should we further constrain allowed URIs (for example to force the end of the path to be `/property-type/foo`) and if so should we encode that in the JSON schema?
-1.  Do we want to allow types to define a plural name that can be used when they're set to `"type": "array"`?
+1.  Do we want to allow types to define a separate plural name that can be used when they're set to `"type": "array"`?
 1.  How would we define our custom JSON Schema keywords in a JSON Schema Vocabulary? Could our meta schemas be defined as JSON Schema Vocabularies?
 
 # Future possibilities
