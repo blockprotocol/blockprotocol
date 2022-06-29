@@ -7,6 +7,7 @@ import {
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
+import { HookEmbedderHandler } from "@blockprotocol/hook";
 import React, {
   ComponentType,
   useEffect,
@@ -85,6 +86,9 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
     null,
   );
+  const [hookService, setHookService] = useState<HookEmbedderHandler | null>(
+    null,
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const propsToInject: BlockGraphProperties<any> = {
@@ -101,22 +105,45 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
       throw new Error(
         "No reference to wrapping element – cannot listen for messages from block",
       );
-    } else if (!graphService) {
-      setGraphService(
-        new GraphEmbedderHandler({
-          blockGraph,
-          blockEntity,
-          linkedAggregations,
-          callbacks: graphServiceCallbacks,
-          element: wrapperRef.current,
-        }),
-      );
+    } else {
+      if (!graphService) {
+        setGraphService(
+          new GraphEmbedderHandler({
+            blockGraph,
+            blockEntity,
+            linkedAggregations,
+            callbacks: graphServiceCallbacks,
+            element: wrapperRef.current,
+          }),
+        );
+      }
+      if (!hookService) {
+        setHookService(
+          new HookEmbedderHandler({
+            element: wrapperRef.current,
+            callbacks: {
+              render: async ({ data }) => {
+                const node = document.createElement("h1");
+
+                node.innerText = `The value passed is "${(
+                  data?.value as any
+                )?.toString?.()}"`;
+
+                return {
+                  data: node,
+                };
+              },
+            },
+          }),
+        );
+      }
     }
   }, [
     blockEntity,
     blockGraph,
     graphService,
     graphServiceCallbacks,
+    hookService,
     linkedAggregations,
   ]);
 

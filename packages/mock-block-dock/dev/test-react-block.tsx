@@ -1,6 +1,7 @@
 import { BlockComponent, useGraphBlockService } from "@blockprotocol/graph";
+import { useHookBlockService } from "@blockprotocol/hook";
 import * as React from "react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type AppProps = {
   name: string;
@@ -13,6 +14,30 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
   const blockRef = useRef<HTMLDivElement>(null);
 
   const { graphService } = useGraphBlockService(blockRef);
+  const { hookService } = useHookBlockService(blockRef);
+
+  // @todo aborting?
+  useEffect(() => {
+    if (hookService) {
+      let nodeToRemove: HTMLElement | null = null;
+
+      hookService
+        .render(entityId)
+        .then((node) => {
+          nodeToRemove?.remove();
+          // @todo why isn't node typed properly
+          nodeToRemove = node as any;
+          blockRef.current!.appendChild(nodeToRemove!);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
+      return () => {
+        nodeToRemove?.remove();
+      };
+    }
+  }, [hookService, entityId]);
 
   return (
     <div ref={blockRef}>

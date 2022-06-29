@@ -54,6 +54,18 @@ export class HookBlockHandler
     });
   }
 
+  async render(value: unknown) {
+    const result = await this.sendMessage({
+      message: {
+        messageName: "render",
+        data: { value },
+      },
+      respondedToBy: "renderResponse",
+    });
+
+    return result.data;
+  }
+
   // @todo automate creation of these methods from graph-service.json and types.ts
   //
   // createEntity({ data }: { data?: CreateEntityData }) {

@@ -1,4 +1,4 @@
-import { UnknownRecord } from "@blockprotocol/core";
+import { MessageCallback, UnknownRecord } from "@blockprotocol/core";
 
 // ----------------------------- ENTITIES ----------------------------- //
 
@@ -163,10 +163,15 @@ export type EmbedderHookMessages<
   // >;
 };
 
+export type RenderData = unknown;
+
 /**
  * @todo Generate these types from the JSON definition, to avoid manually keeping the JSON and types in sync
  */
 export type EmbedderHookMessageCallbacks = {
+  render: MessageCallback<RenderData, null, HTMLElement, null>;
+
+  // @todo type the error here
   // createEntity: MessageCallback<
   //   CreateEntityData,
   //   null,

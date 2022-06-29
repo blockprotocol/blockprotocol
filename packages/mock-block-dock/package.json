@@ -37,6 +37,7 @@
   "dependencies": {
     "@blockprotocol/core": "0.0.8",
     "@blockprotocol/graph": "0.0.10",
+    "@blockprotocol/hook": "0.0.0-next.0",
     "@lit-labs/react": "^1.0.4",
     "lodash": "^4.17.21",
     "react-json-view": "^1.21.3",
