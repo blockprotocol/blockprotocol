@@ -34,7 +34,7 @@ Other templates are available. See `npx create-block-app --help`
         - `image`: a preview image showing your block in action
         - `icon`: an icon to be associated with your block
       - lists the `externals` - libraries the block expects the host app to provide
-    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/spec).
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/docs/spec).
 
 Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-blocks)
 for help in creating and updating data from your block.
