@@ -201,11 +201,9 @@ const SidebarPage: VFC<SidebarPageProps> = ({
   const { href, title, sections, subPages } = page;
 
   const isSelected =
-    (pathWithoutParams === href || pathWithoutParams === `${href}#`) &&
-    !subPages?.length;
-  const pageKey = subPages.length ? `page${href}` : href;
+    pathWithoutParams === href || pathWithoutParams === `${href}#`;
 
-  const isOpen = openedPages.includes(pageKey);
+  const isOpen = openedPages.includes(href);
   const hasChildren = (sections?.length ?? 0) + (subPages?.length ?? 0) > 0;
 
   return (
@@ -243,11 +241,11 @@ const SidebarPage: VFC<SidebarPageProps> = ({
                 await router.push(href);
               }
               setOpenedPages((prev) =>
-                prev.includes(pageKey)
-                  ? prev.filter((prevHref) => prevHref !== pageKey)
+                prev.includes(href)
+                  ? prev.filter((prevHref) => prevHref !== href)
                   : depth === 0
-                  ? [pageKey]
-                  : [...prev, pageKey],
+                  ? [href]
+                  : [...prev, href],
               );
             }}
             sx={(theme) => ({
@@ -342,24 +340,25 @@ const getInitialOpenedPages = (params: {
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
   for (const page of pages) {
-    const hasSubPages = page.subPages?.length;
-    const subPages = hasSubPages ? page.subPages : [page];
+    const { href, sections, subPages } = page;
+    if (pathWithoutParams === href || pathWithoutParams === `${href}#`) {
+      return [href];
+    }
+    const sectionPath = findSectionPath(href, sections, pathWithoutParams);
 
-    for (const subPage of subPages) {
-      const { href, sections } = subPage;
-      const onThisPage = hasSubPages ? [`page${page.href}`, href] : [href];
+    if (sectionPath) {
+      return [href, ...sectionPath];
+    }
 
-      if (pathWithoutParams === href || pathWithoutParams === `${href}#`) {
-        return onThisPage;
-      } else if (sections) {
-        const sectionPath = findSectionPath(href, sections, pathWithoutParams);
-        if (sectionPath) {
-          return [...onThisPage, ...sectionPath];
-        }
-      }
+    const openSubPages = getInitialOpenedPages({
+      pages: subPages,
+      asPath: pathWithoutParams,
+    });
+
+    if (openSubPages.length > 0) {
+      return [href, ...openSubPages];
     }
   }
-
   return [];
 };
 
@@ -462,31 +461,16 @@ export const Sidebar: VFC<SidebarProps> = ({
             opacity: 0,
           }}
         />
-        {pages.length > 1
-          ? pages.map((page) => (
-              <SidebarPage
-                key={page.href}
-                page={page}
-                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
-            ))
-          : pages.length === 1
-          ? pages[0]!.sections.map((section, i) => (
-              <SidebarPageSection
-                isSelectedByDefault={i === 0}
-                key={section.anchor}
-                pageHref={pages[0]!.href}
-                section={section}
-                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-                setSelectedAnchorElement={setSelectedAnchorElement}
-                openedPages={openedPages}
-                setOpenedPages={setOpenedPages}
-              />
-            ))
-          : null}
+        {pages.map((page) => (
+          <SidebarPage
+            page={page}
+            key={page.href}
+            maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+            setSelectedAnchorElement={setSelectedAnchorElement}
+            openedPages={openedPages}
+            setOpenedPages={setOpenedPages}
+          />
+        ))}
         {appendices && appendices.length > 0 ? (
           <>
             <Divider sx={{ marginBottom: 2 }} />
