@@ -181,7 +181,7 @@ The `Favorite Quote` Property Type could define its value as being an instance o
 
   ```json
   {
-    "favoriteQuote": "He who controls the spice controls the universe"
+    "http://.../favorite-quote": "He who controls the spice controls the universe"
   }
   ```
 
@@ -193,7 +193,7 @@ The `Age` Property Type could define its value as being an instance of the `Numb
 
   ```json
   {
-    "age": 67
+    "http://.../age": 67
   }
   ```
 
@@ -216,9 +216,9 @@ The `Contact Information` Property Type could define its value as being an objec
 
   ```json
   {
-    "contactInformation": {
-      "email": "leto.atreides@example.com",
-      "phoneNumber": "020-7946-0999"
+    "http://.../contact-information": {
+      "http://.../email": "leto.atreides@example.com",
+      "http://.../phone-number": "020-7946-0999"
     }
     ...
   }
@@ -234,10 +234,10 @@ The `Interests` Property Type could define its value as being an object which ha
 
   ```json
   {
-    "interests": {
-      "favoriteFilm": "Dune (2021)",
-      "favoriteSong": "Rocket Man - Elton John",
-      "hobby": [
+    "http://.../interest": {
+      "http://.../favorite-film": "Dune (2021)",
+      "http://.../favorite-song": "Rocket Man - Elton John",
+      "http://.../hobby": [
         "Extreme Ironing",
         "Stone Skipping",
         ...
@@ -267,7 +267,7 @@ The `User ID` Property Type could define its value as being _either_ an instance
 
   ```json
   {
-    "userId": 42088130893
+    "http://.../user-id": 42088130893
   }
   ```
 
@@ -275,7 +275,7 @@ The `User ID` Property Type could define its value as being _either_ an instance
 
   ```json
   {
-    "userId": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
+    "http://.../user-id": "c09b1839-8084-4a2d-9713-5d074c9c6ce2"
   }
   ```
 
@@ -289,7 +289,7 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 
   ```json
   {
-    "contrivedProperty": 32
+    "http://.../contrived-property": 32
   }
   ```
 
@@ -297,8 +297,8 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 
   ```json
   {
-    "contrivedProperty": {
-      "foo": ["one", "two"]
+    "http://.../contrived-property": {
+      "http://.../foo": ["one", "two"]
     },
     ...
   }
@@ -348,9 +348,9 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
     ```json
     {
-      "name": "The Time Machine",
-      "publishedOn": "1895-05",
-      "blurb": ...
+      "http://.../name": "The Time Machine",
+      "http://.../published-on": "1895-05",
+      "http://.../blurb": "brulb"
     }
     ```
 
@@ -366,10 +366,10 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
     ```json
     {
-      "title": "Making the web better. With blocks!",
-      "author": "Joel Spolsky",
-      "contents": ..., // omitted for brevity
-      "category": "News"
+      "http://.../title": "Making the web better. With blocks!",
+      "http://.../author": "Joel Spolsky",
+      "http://.../contents": ..., // omitted for brevity
+      "http://.../category": "News"
     }
     ```
 
@@ -377,9 +377,9 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
     ```json
     {
-      "title": "The non-negotiable principle",
-      "author": "David Wilkinson",
-      "contents": ..., // omitted for brevity
+      "http://.../title": "The non-negotiable principle",
+      "http://.../author": "David Wilkinson",
+      "http://.../contents": ..., // omitted for brevity
     }
     ```
 
@@ -401,11 +401,11 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
     ```json
     {
-      "make": "Mercedes-Benz",
-      "model": "300 SL",
-      "year": "1957",
-      "brake_horsepower": 222,
-      "extra_trim": ["Leather Seats", "Cream and Red"]
+      "http://.../make": "Mercedes-Benz",
+      "http://.../model": "300 SL",
+      "http://.../year": "1957",
+      "http://.../brake-horsepower": 222,
+      "http://.../extra-trim": ["Leather Seats", "Cream and Red"]
     }
     ```
 
@@ -427,7 +427,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 111,
         "properties": {
-          "name": "Herbert George Wells",
+          "http://.../name": "Herbert George Wells",
           ...
         }
       },
@@ -435,13 +435,13 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 112,
         "properties": {
-          "name": "The Time Machine",
-          "publishedOn": "1895-05",
-          "blurb": "brulb",
+          "http://.../name": "The Time Machine",
+          "http://.../published-on": "1895-05",
+          "http://.../blurb": "brulb",
           ...
         },
         "links": {
-          "writtenBy": 111 // referring to the Person entity ID
+          "http://.../written-by": 111 // referring to the Person entity ID
         }
       }
     ]
@@ -459,9 +459,9 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 113,
         "properties": {
-          "addressLine1": "Buckingham Palace",
-          "postcode": "SW1A 1AA",
-          "city": "London",
+          "http://.../address-line-1": "Buckingham Palace",
+          "http://.../postcode": "SW1A 1AA",
+          "http://.../city": "London",
           ...
         }
       },
@@ -469,7 +469,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 114,
         "properties": {
-          "name": "HASH, Ltd.",
+          "http://.../name": "HASH, Ltd.",
           ...
         }
       }
@@ -480,8 +480,8 @@ Entity Types can also express the types of relationships they have with other th
           ...
         },
         "links": {
-          "address": 113, // referring to the UK Address entity ID
-          "tenant": 114 // referring to the Organization entity ID
+          "http://.../address": 113, // referring to the UK Address entity ID
+          "http://.../tenant": 114 // referring to the Organization entity ID
         }
       }
     ]
@@ -500,18 +500,18 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 211,
         "properties": {
-          "name": "Iron Bank of Braavos"
+          "http://.../name": "Iron Bank of Braavos"
         }
       },
       // Bank Account entity
       {
         "entityId": 212,
         "properties": {
-          "sortCode": 100000,
-          "accountNumber": 31510604
+          "http://.../sortCode": 100000,
+          "http://.../accountNumber": 31510604
         },
         "links": {
-          "maintainedBy": 211
+          "http://.../maintainedBy": 211
         }
       }
     ]
@@ -531,22 +531,22 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 311,
         "properties": {
-          "name": "Alice"
+          "http://.../name": "Alice"
         }
       },
       {
         "entityId": 312,
         "properties": {
-          "name": "Bob"
+          "http://.../name": "Bob"
         }
       }
       {
         "entityId": 313,
         "properties": {
-          "name": "Charlie"
+          "http://.../name": "Charlie"
         },
         "links": {
-          "friendOf": [311, 312] // referring to the Person entity IDs, where the array ordering is unstable
+          "http://.../friend-of": [311, 312] // referring to the Person entity IDs, where the array ordering is unstable
         }
       }
     ]
@@ -566,21 +566,21 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 412,
         "properties": {
-          "name": "Rocket Man",
+          "http://.../name": "Rocket Man",
           ...
         }
       },
       {
         "entityId": 413,
         "properties": {
-          "name": "Du Hast",
+          "http://.../name": "Du Hast",
           ...
         }
       },
       {
         "entityId": 414,
         "properties": {
-          "name": "Valley of the Shadows",
+          "http://.../name": "Valley of the Shadows",
           ...
         }
       },
@@ -588,8 +588,10 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 415,
         "properties": {
-          "name": "Favorite Songs",
-          "contains": [412, 414, 413], // referring to the song entity IDs, ordering is intentional and stable
+          "http://.../name": "Favorite Songs",
+        },
+        "links:": {
+          "http://.../contains": [412, 414, 413], // referring to the song entity IDs, ordering is intentional and stable
           ...
         }
       }
@@ -608,7 +610,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 416,
         "properties": {
-          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas.",
+          "http://.../text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit nisl et velit porta, eget cursus nulla fermentum. Aenean in faucibus velit, at cursus quam. Proin scelerisque quam id erat semper egestas.",
           ...
         }
       },
@@ -616,7 +618,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 417,
         "properties": {
-          "name": "Duo Reges: constructio interrete.",
+          "http://.../name": "Duo Reges: constructio interrete.",
           ...
         }
       },
@@ -624,7 +626,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 418,
         "properties": {
-          "width": "full",
+          "http://.../width": "full",
           ...
         }
       },
@@ -632,7 +634,7 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 419,
         "properties": {
-          "name": "Alice",
+          "http://.../name": "Alice",
           ...
         }
       }
@@ -640,12 +642,12 @@ Entity Types can also express the types of relationships they have with other th
       {
         "entityId": 420,
         "properties": {
-          "name": "Lorum Ipsum",
-          "writtenBy": 419, // referring to the User entity ID
+          "http://.../name": "Lorum Ipsum",
           ...
         },
         "links": {
-          "contains": [417, 416, 418] // referring to IDs of the various types of page contents above
+          "http://.../written-by": 419, // referring to the User entity ID
+          "http://.../contains": [417, 416, 418] // referring to IDs of the various types of page contents above
         }
       }
     ]
@@ -663,6 +665,8 @@ The `kind` keyword will be used to identify the kind of the schema being describ
 - `linkType`
 
 The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
+
+The `requiredLinks` keyword will be used to specify which links are required to be present for a given Entity Type. It is a list of URIs.
 
 In JSON Schema `title` and `description` are described as follows: "Both of these keywords can be used to decorate a user interface with information about the data produced by this user interface".
 We repurpose these with slightly different meanings:
@@ -2076,6 +2080,14 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
       }
     }
   },
+  // requiredLinks specifies what links are required to exist on an Entity
+  "requiredLinks": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "format": "uri"
+    }
+  }
   // Description is repurposed when used with Link Types
   "description": {
     "type": "string"
@@ -2090,6 +2102,8 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
 The `kind` can only take on values that specify the types of the proposed type system.
 
 The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
+
+The `requiredLinks` keyword specifies what links are to be considered required for instances of an Entity Type.
 
 As mentioned in the Guide-Level explanation, the following JSON Schema keywords are repurposed:
 
