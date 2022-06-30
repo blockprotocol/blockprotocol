@@ -81,16 +81,16 @@ Thus the main reason for the following RFC:
 
 > 💬 Removing some flexibility to establish a stronger contract between the block developer, embedding application, and end-user, allows for more powerful run-time inference and general confidence of all parties. Furthermore, creating a well-defined hierarchy of types, that are reusable and discoverable, encourages emergent standardization and, in turn, leads to higher-quality interoperable parts.
 
-In the following document we outline an approach to being more specific about the types that describe data. Through the following definitions of types, the community will be able to **gradually converge** upon a **consensus** of how to describe information.
+In the following document we outline an approach to being more specific about the types that describe data. Through the following definitions of types, the community will be able and more likely to **gradually converge** upon a **consensus** of how to describe information.
 
 ## Motivating implications
 
-**embedding applications:**
+**embedding applications**, where types are shared with blocks, and property types shared across entity types:
 
 - are required to do less guesswork about what the block is asking for
 - require less user intervention (or hard-coded logic/guesses) to map X to Y
 
-**blocks:**
+**blocks**, where they share types with embedding applications:
 
 - have greater confidence that the data passed to them is correct and useable
 - are able to be more specific about their requirements and more easily express the function of the data
