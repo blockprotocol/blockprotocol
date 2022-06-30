@@ -81,9 +81,8 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
 
   const { subPages } = allPages.find(({ title }) => title === "Documentation")!;
 
-  const flatSubPages = subPages.flatMap((page) =>
-    page.subPages?.length ? page.subPages : [page],
-  );
+  const flatSubPages = subPages.flatMap((page) => [page, ...page.subPages]);
+
   const currentPage = flatSubPages.find(
     ({ href }) =>
       pathWithoutParams === href || pathWithoutParams?.startsWith(`${href}#`),
