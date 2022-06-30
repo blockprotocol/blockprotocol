@@ -116,7 +116,9 @@ The embedding application MUST pass the data of [`"initResponse"`](#initResponse
 
 Blocks of kind `"html"` require special handling in order that they can identify elements within them – since they may share their scope with other blocks, including identical blocks, they cannot rely on finding elements by id or other selectors.
 
-The `@blockprotocol/core` package exports a `renderHtmlBlock` function which does the below for embedding applications.
+The `@blockprotocol/core` package exports for embedding applications' convenience:
+- a `renderHtmlBlock` function which handles both assigning an implementation of the `blockprotocol` object described below to the global scope, and rendering the block within a provided node
+- an `assignBlockProtocolGlobals` function, which simply assigns the `blockprotocol` object to the global scope, in case the embedding application wishes to handle rendering the block separately.
 
 Embedding applications which load ANY block of `kind: "html"` MUST provide a `blockprotocol` object on the global scope (i.e. `globalThis.blockprotocol` / `window.blockprotocol`), which:
 
@@ -130,7 +132,6 @@ Embedding applications which load ANY block of `kind: "html"` MUST provide a `bl
     - the first MUST be the script source
     - the second MUST be either a single script element, or a URL string.
 
-The `@blockprotocol/core` package exports a `assignBlockprotocolGlobals` object which assign an object implementing these functions to the `blockprotocol` global variable.
 
 Blocks of `kind: "html"` MUST call `getBlockContainer` from within any script they load, with different strategies depending on whether the script is:
 
@@ -210,7 +211,7 @@ If blocks generate any scripts dynamically at runtime, they MUST call `markScrip
   </tbody>
 </table>
 
-Embedding applications MUST update any relative static imports (or script tag src attributes) contained within a block's HTML source to ensure the URLs are relative to the block's source, and not the page the HTML is hosted on. The `@blockprotocol/core` package exports `markBlockScripts` which can be used to do this.
+Embedding applications MUST update any relative static imports (or script tag src attributes) contained within a block's HTML source to ensure the URLs are relative to the block's source, and not the page the HTML is hosted on. The `@blockprotocol/core` package exports `markBlockScripts` which can be used to do this for scripts (not e.g. an `img` with a relative `src`).
 
 An example HTML block is available via `npx create-block-app your-block-name --template html`
 
