@@ -24,6 +24,8 @@ The structure of these types are defined by (and can be validated against) their
 
 By using the proposed types, blocks, embedding applications, and end-users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities. Reusability of descriptions of data should decrease developmental overhead over time, with all members of the ecosystem benefiting from emergent standardization.
 
+The benefits of emergent standardization are, however, greatly dependent on participating members within the ecosystem. Members sharing types and structural requirements (i.e. when creating blocks) enable the full potential of the proposed type system. Allowing proper reusability of descriptions of data is thus gated by the progression of the ecosystem through participation and sharing.
+
 # Motivation
 
 [motivation]: #motivation
