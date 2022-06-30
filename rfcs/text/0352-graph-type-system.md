@@ -2713,7 +2713,7 @@ Requires something like
 
 ### Including an `Empty List` Data Type
 
-Similarly, the `Empty List` Data Type is required to be able to programmatically map unknown JSON data into the system. Given an incoming entity like:
+Similarly, the `Empty List` Data Type is required to be able to programmatically map unknown JSON data into the system without typing it as an unconstrained list. Given an incoming entity like:
 
 ```json
 {
