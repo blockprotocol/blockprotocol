@@ -16,6 +16,7 @@ import { Link } from "../link";
 import { Snippet } from "../snippet";
 import { FAQ } from "./faq";
 import { GraphServiceMessageList } from "./graph-service-message-list";
+import { GitHubInfoCard } from "./info-card/github-info-card";
 import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
 import { usePageHeading } from "./shared/use-page-heading";
@@ -82,9 +83,29 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
   Paper,
   Typography,
   InfoCardWrapper,
+  GitHubInfoCard,
   InfoCard,
   FAQ,
   GraphServiceMessageList,
+  SubTitle: (({ children }) => (
+    <Typography
+      variant="bpSubtitle"
+      maxWidth={750}
+      sx={{
+        marginBottom: 6,
+      }}
+    >
+      {Array.isArray(children)
+        ? children.map((child) =>
+            child && typeof child === "object" && "props" in child
+              ? child.props.children
+              : child,
+          )
+        : children && typeof children === "object" && "props" in children
+        ? children.props?.children
+        : null}
+    </Typography>
+  )) as FunctionComponent,
   Hidden: (({ children }) => {
     return (
       <span aria-hidden style={{ display: "none" }}>
