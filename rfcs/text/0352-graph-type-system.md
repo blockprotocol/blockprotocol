@@ -675,7 +675,7 @@ The `description` keyword for Link Types adds semantic meaning to a link (which 
 
 The `title` keyword refers to the name of the Type it is describing.
 
-The `$ref` keyword when used in the context of Entity Types, Property Types, Data Types, and Link Types URIs to specify references across the different kinds of types, the `$ref` will always need to be equal the key of the object which it is defined under. If the `$ref` is within an array definition, the URI should equal the nearest JSON Schema property name which is a URI.
+The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URIs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URI should equal the nearest JSON Schema property name which is a URI. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
 
 ## Using the Types in the Block Protocol
 
@@ -2113,7 +2113,7 @@ The `description` keyword for Link Types add semantic meaning to a link (which c
 
 The `title` keyword refers to the name of the Type it is describing.
 
-The `$ref` keyword when used in the context of Entity Types, Property Types, Data Types, and Link Types URIs to specify references across the different kinds of types, the `$ref` will always need to be equal the key of the object which it is defined under. If the `$ref` is within an array definition, the URI should equal the nearest JSON Schema property name which is a URI.
+The `$ref` keyword when used to refer to Property Types, Data Types, and Link Types URIs will always need to be equal to the key of the object which it is defined under (and vice versa). If the `$ref` is within an array's `items` definition, the URI should equal the nearest JSON Schema property name which is a URI. This is so that the property, data, or link type can be identified from an instance conforming to it (which it could not if the key, i.e. the property name, were different from the `$ref`).
 
 This _is_ valid
 
