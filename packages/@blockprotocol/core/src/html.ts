@@ -189,11 +189,11 @@ export const renderHtmlBlock = async (
   markBlockScripts(parent, baseUrl);
 
   // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  assignBlockprotocolGlobals();
+  assignBlockProtocolGlobals();
   node.appendChild(parent);
 };
 
-export const blockprotocolGlobals = {
+export const blockProtocolGlobals = {
   getBlockContainer,
   getBlockUrl,
   markScript,
@@ -201,23 +201,23 @@ export const blockprotocolGlobals = {
   getIdForRef,
 };
 
-export const teardownBlockprotocol = () => {
+export const teardownBlockProtocol = () => {
   delete window.blockprotocol;
   resetBlocks();
 };
 
 declare global {
   interface Window {
-    blockprotocol?: typeof blockprotocolGlobals;
+    blockprotocol?: typeof blockProtocolGlobals;
   }
 }
 
-export const assignBlockprotocolGlobals = () => {
+export const assignBlockProtocolGlobals = () => {
   if (typeof window === "undefined") {
     throw new Error(
       "Can only call assignBlockProtocolGlobals in browser environments",
     );
   }
 
-  window.blockprotocol = blockprotocolGlobals;
+  window.blockprotocol = blockProtocolGlobals;
 };

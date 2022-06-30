@@ -1,10 +1,10 @@
 export { CoreBlockHandler } from "./core-block-handler";
 export { CoreEmbedderHandler } from "./core-embedder-handler";
 export {
-  assignBlockprotocolGlobals,
+  assignBlockProtocolGlobals,
   markBlockScripts,
   renderHtmlBlock,
-  teardownBlockprotocol,
+  teardownBlockProtocol,
 } from "./html";
 export { ServiceHandler } from "./service-handler";
 export type {
