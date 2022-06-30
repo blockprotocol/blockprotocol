@@ -33,7 +33,7 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
   variant = "info",
   title,
   children,
-  sx,
+  sx = [],
 }) => {
   const paperVariant = mapInfoCardVariantToPaperVariant(variant);
 
@@ -70,14 +70,16 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
   return (
     <Paper
       variant={paperVariant}
-      sx={{
-        marginBottom: 3,
-        padding: {
-          xs: 2,
-          sm: 3,
+      sx={[
+        {
+          marginBottom: 3,
+          padding: {
+            xs: 2,
+            sm: 3,
+          },
         },
-        ...sx,
-      }}
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <Typography
         variant="bpLargeText"

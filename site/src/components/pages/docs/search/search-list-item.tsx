@@ -1,5 +1,5 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { Box, Typography, typographyClasses, useTheme } from "@mui/material";
+import { Box, Typography, typographyClasses } from "@mui/material";
 import React, { forwardRef, useContext } from "react";
 
 import SiteMapContext from "../../../../context/site-map-context";
@@ -17,7 +17,6 @@ interface SearchItemProps {
 
 const SearchListItem = forwardRef<HTMLButtonElement, SearchItemProps>(
   ({ searchResult, getHighlight, closeModal }, ref) => {
-    const theme = useTheme();
     const { _highlightResult, slug } = searchResult;
 
     const { pages } = useContext(SiteMapContext);
@@ -26,24 +25,24 @@ const SearchListItem = forwardRef<HTMLButtonElement, SearchItemProps>(
     return (
       <LinkButton
         ref={ref}
-        sx={{
+        sx={({ palette }) => ({
           width: 1,
           justifyContent: "start",
           fontSize: 15,
-          color: theme.palette.gray[90],
+          color: palette.gray[90],
           paddingY: 1,
           paddingX: 6,
           "&:hover, :focus-visible": {
-            color: theme.palette.purple[800],
-            background: theme.palette.purple[100],
+            color: palette.purple[800],
+            background: palette.purple[100],
             [`& .${typographyClasses.root}`]: {
-              color: theme.palette.purple[800],
+              color: palette.purple[800],
             },
           },
           "&::before": {
             display: "none",
           },
-        }}
+        })}
         variant="transparent"
         href={slug}
         onClick={() => closeModal?.()}

@@ -67,7 +67,7 @@ export const Carousel = <T,>({
   itemKey,
   settings = {},
   edgeBackground,
-  sx,
+  sx = [],
 }: CarouselProps<T>): ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -102,113 +102,115 @@ export const Carousel = <T,>({
 
   return (
     <Box
-      sx={{
-        overflow: "hidden",
-        width: "100%",
-        position: "relative",
-        zIndex: 2,
-        py: 4,
+      sx={[
+        {
+          overflow: "hidden",
+          width: "100%",
+          position: "relative",
+          zIndex: 2,
+          py: 4,
 
-        // this gives the carousel an initial left padding to match the design
-        "& .slick-track": {
-          marginLeft: {
-            xs: 0,
-            lg: "4rem",
-            xl: "12rem",
+          // this gives the carousel an initial left padding to match the design
+          "& .slick-track": {
+            marginLeft: {
+              xs: 0,
+              lg: "4rem",
+              xl: "12rem",
+            },
+            display: "flex",
           },
-          display: "flex",
-        },
 
-        // this group of styles ensures consistent item height, which aligns focus outlines
-        "& .slick-list": {
-          display: { xs: "block", md: "flex" },
-          flexDirection: "row",
-          margin: "-10px 0 10px",
-          padding: "10px 0",
-        },
-        "& .slick-slide, & .slick-slide > div": {
-          display: { xs: "block", md: "flex" },
-        },
-        ".slick-slide": {
-          minWidth: { xs: "unset", md: "350px" },
-          maxWidth: { xs: "280px", md: "unset" },
-          mx: 1,
-        },
+          // this group of styles ensures consistent item height, which aligns focus outlines
+          "& .slick-list": {
+            display: { xs: "block", md: "flex" },
+            flexDirection: "row",
+            margin: "-10px 0 10px",
+            padding: "10px 0",
+          },
+          "& .slick-slide, & .slick-slide > div": {
+            display: { xs: "block", md: "flex" },
+          },
+          ".slick-slide": {
+            minWidth: { xs: "unset", md: "350px" },
+            maxWidth: { xs: "280px", md: "unset" },
+            mx: 1,
+          },
 
-        "& .slick-dots": {
-          bottom: "unset",
-          li: {
-            margin: "0 3px",
+          "& .slick-dots": {
+            bottom: "unset",
+            li: {
+              margin: "0 3px",
+            },
+            "li div": {
+              backgroundColor: ({ palette }) => palette.gray[30],
+              transition: "all 0.3s ease",
+            },
+            "li.slick-active div": {
+              backgroundColor: ({ palette }) => palette.purple[700],
+            },
           },
-          "li div": {
-            backgroundColor: ({ palette }) => palette.gray[30],
-            transition: "all 0.3s ease",
-          },
-          "li.slick-active div": {
-            backgroundColor: ({ palette }) => palette.purple[700],
-          },
-        },
 
-        // this is responsible for the fade effect on the left/right of the carousel
-        "& .slick-slider.slick-initialized": {
-          ":before": {
-            display: { xs: "none", md: "block" },
-            content: `""`,
+          // this is responsible for the fade effect on the left/right of the carousel
+          "& .slick-slider.slick-initialized": {
+            ":before": {
+              display: { xs: "none", md: "block" },
+              content: `""`,
+              position: "absolute",
+              top: "-30%",
+              bottom: "-30%",
+              left: 0,
+              width: 150,
+              zIndex: 2,
+              ...(edgeBackground
+                ? { background: edgeBackground.left }
+                : {
+                    background: `linear-gradient(88.02deg, rgba(247, 250, 252, 0.952) 0%, rgba(247, 250, 252, 0) 40%)`,
+                  }),
+            },
+            ":after": {
+              display: { xs: "none", md: "block" },
+              content: `""`,
+              position: "absolute",
+              top: "-30%",
+              bottom: "-30%", // temp fix for https://github.com/blockprotocol/blockprotocol/pull/42#discussion_r774474152
+              right: 0,
+              width: 150,
+              zIndex: 2,
+              ...(edgeBackground
+                ? { background: edgeBackground.right }
+                : {
+                    background: `linear-gradient(272.02deg, #F7FAFC 1.67%, rgba(247, 250, 252, 0) 98.26%)`,
+                  }),
+            },
+          },
+
+          "& .slick-arrow": {
             position: "absolute",
-            top: "-30%",
-            bottom: "-30%",
-            left: 0,
-            width: 150,
-            zIndex: 2,
-            ...(edgeBackground
-              ? { background: edgeBackground.left }
-              : {
-                  background: `linear-gradient(88.02deg, rgba(247, 250, 252, 0.952) 0%, rgba(247, 250, 252, 0) 40%)`,
-                }),
-          },
-          ":after": {
-            display: { xs: "none", md: "block" },
-            content: `""`,
-            position: "absolute",
-            top: "-30%",
-            bottom: "-30%", // temp fix for https://github.com/blockprotocol/blockprotocol/pull/42#discussion_r774474152
-            right: 0,
-            width: 150,
-            zIndex: 2,
-            ...(edgeBackground
-              ? { background: edgeBackground.right }
-              : {
-                  background: `linear-gradient(272.02deg, #F7FAFC 1.67%, rgba(247, 250, 252, 0) 98.26%)`,
-                }),
+            display: { xs: "none", md: "flex" },
+            alignItems: "center",
+            justifyContent: "center",
+            top: "50%",
+            transform: "translateY(-50%)",
+            zIndex: 10,
+
+            "&:before": {
+              display: "none",
+            },
+
+            "&.slick-disabled": {
+              display: "none",
+            },
+
+            "&.slick-prev": {
+              left: 36,
+            },
+            "&.slick-next": {
+              right: 36,
+            },
           },
         },
-
-        "& .slick-arrow": {
-          position: "absolute",
-          display: { xs: "none", md: "flex" },
-          alignItems: "center",
-          justifyContent: "center",
-          top: "50%",
-          transform: "translateY(-50%)",
-          zIndex: 10,
-
-          "&:before": {
-            display: "none",
-          },
-
-          "&.slick-disabled": {
-            display: "none",
-          },
-
-          "&.slick-prev": {
-            left: 36,
-          },
-          "&.slick-next": {
-            right: 36,
-          },
-        },
-        ...sx,
-      }}
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <Slider
         ref={(node) => {
