@@ -29,7 +29,7 @@ We welcome [contributions](#contributing) to this repository. Within it you will
 
 1.  `site`: the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-    - the [Block Protocol specification](https://blockprotocol.org/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/spec)
+    - the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
     - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
 
 1.  `packages`: utility packages for constructing Block Protocol blocks. These are all available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
