@@ -2200,7 +2200,7 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 **For block authors** this impacts:
 
 - how Block Schemas are defined
-- reusability of properties (the need for some kind of type discovery)
+- the reusability of properties and data types (and the increased need for type discovery to facilitate this)
 
 > 💡 Notice that `entityId`s are replaced by a Property Type URI that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
 
