@@ -120,7 +120,7 @@ The `@blockprotocol/core` package exports for embedding applications' convenienc
 
 If an embedding application wishes to handle rendering separately, the package also exports (which `renderHtmlBlock` makes use of):
 
-- an `assignBlockProtocolGlobals` function, which simply assigns an implementation of the `blockprotocol` API described below to the global scope.
+- an `assignBlockProtocolGlobals` function, which simply assigns an implementation of the `blockprotocol` API described below to the global scope. The package also exports a corresponding `teardownBlockProtocol` function to reset this.
 - a `markBlockScripts` function. Embedding applications MUST call this when rendering a block if they wish to use the implementation of the `blockprotocol` API provided by `assignBlockProtocolGlobals`, as this ensures those APIs know which block is calling them.
 
 Embedding applications which load ANY block of `kind: "html"` MUST provide a `blockprotocol` object on the global scope (i.e. `globalThis.blockprotocol` / `window.blockprotocol`), which:

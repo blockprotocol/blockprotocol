@@ -5,17 +5,17 @@ import { HtmlBlockDefinition } from "./types";
 
 type ScriptRef = { src: string };
 
-let blocks = new Map<string, { container: HTMLElement; url: string }>();
-let scripts = new WeakMap<ScriptRef, string>();
-
-export type BlockIdentifier =
+type BlockIdentifier =
   | string
   | { blockId: string }
   | ScriptRef
   | null
   | undefined;
 
-export const getIdForScriptRef = (ref: ScriptRef) => {
+let blocks = new Map<string, { container: HTMLElement; url: string }>();
+let scripts = new WeakMap<ScriptRef, string>();
+
+const getIdForScriptRef = (ref: ScriptRef) => {
   if (scripts.has(ref)) {
     return scripts.get(ref)!;
   }
@@ -23,7 +23,7 @@ export const getIdForScriptRef = (ref: ScriptRef) => {
   return new URL(ref.src).searchParams.get("blockId");
 };
 
-export const getOptionalIdForRef = (ref?: BlockIdentifier) => {
+const getOptionalIdForRef = (ref?: BlockIdentifier) => {
   if (ref) {
     if (typeof ref === "string") {
       return getIdForScriptRef({ src: ref });
@@ -37,7 +37,7 @@ export const getOptionalIdForRef = (ref?: BlockIdentifier) => {
   }
 };
 
-export const getIdForRef = (ref?: BlockIdentifier) => {
+const getIdForRef = (ref?: BlockIdentifier) => {
   const id = getOptionalIdForRef(ref);
 
   if (!id) {
@@ -94,11 +94,6 @@ export const markScript = (script: HTMLScriptElement, ref: BlockIdentifier) => {
   } else {
     scripts.set(script, blockId);
   }
-};
-
-export const resetBlocks = () => {
-  blocks = new Map();
-  scripts = new WeakMap();
 };
 
 const replaceBetween = (
@@ -188,20 +183,30 @@ export const renderHtmlBlock = async (
 
   markBlockScripts(parent, baseUrl);
 
-  // eslint-disable-next-line @typescript-eslint/no-use-before-define
-  assignBlockProtocolGlobals();
+  if (!window.blockprotocol) {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    assignBlockProtocolGlobals();
+  }
+
   node.appendChild(parent);
 };
 
-export const blockProtocolGlobals = {
+const blockProtocolGlobals = {
   getBlockContainer,
   getBlockUrl,
   markScript,
-  markBlockScripts,
-  getIdForRef,
+};
+
+const resetBlocks = () => {
+  blocks = new Map();
+  scripts = new WeakMap();
 };
 
 export const teardownBlockProtocol = () => {
+  if (!window.blockprotocol) {
+    throw new Error("Block Protocol is not installed");
+  }
+
   delete window.blockprotocol;
   resetBlocks();
 };
@@ -219,5 +224,10 @@ export const assignBlockProtocolGlobals = () => {
     );
   }
 
+  if (window.blockprotocol) {
+    throw new Error("Block Protocol globals have already been assigned");
+  }
+
+  resetBlocks();
   window.blockprotocol = blockProtocolGlobals;
 };
