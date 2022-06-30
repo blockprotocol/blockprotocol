@@ -137,7 +137,7 @@ A Data Type is composed of the following:
 
 - a **required** `$id`, which is a globally unique identifier, where the Data Type's definition can be accessed (in most cases this will be a URL)
 - a **required** `kind` that should be set to `"dataType"`, to specify the kind of type being defined
-- a **required** `name`, which should generally be a non-pluralized short description of the Data Type (for example: "Number" not "Numbers")
+- a **required** `title`, which should generally be a non-pluralized short description of the Data Type (for example: "Number" not "Numbers")
 - **optionally** a `description` to further explain the semantic meaning of the Data Type
 - a **required** definition of its possible value
 
@@ -163,7 +163,7 @@ A **Property Type** is a description of a named piece of data, including its pos
 
 - a **required** `$id`, which is a globally unique identifier, where the Property Type's definition can be accessed (in most cases this will be a URL)
 - a **required** `kind` that should be set to `"propertyType"`, to specify the kind of type being defined
-- a **required** `name`, which should generally be a non-pluralized description of the property (for example: "Address" not "Addresses")
+- a **required** `title`, which should generally be a non-pluralized description of the property (for example: "Address" not "Addresses")
 - **optionally** a `description` to further explain the semantic meaning of the Property Type
 - a **required** definition of its possible values
 
@@ -310,7 +310,7 @@ A **Link Type** is a description of a _directional_ relationship between two thi
 
 - a **required** `$id`, which is a globally unique identifier, where the Property Type's definition can be accessed (in most cases this will be a URL)
 - a **required** `kind` that should be set to `"linkType"`, to specify the kind of type being defined
-- a **required** `name`, which should be a non-pluralized description of the relationship (for example: "Friend" not "Friends")
+- a **required** `title`, which should be a non-pluralized description of the relationship (for example: "Friend" not "Friends")
 - a **required** `description` to further explain the semantic meaning of the relationship
 - a **possible** `relatedKeywords`, which is a list of terms that are related to the link type
 
@@ -330,7 +330,7 @@ An Entity Type is a description of a particular "thing", made up of identifiable
 
 - a **required** `$id`, which is a globally unique identifier, where the Entity Type's definition can be accessed (in most cases this will be a URL)
 - a **required** `kind` that should be set to `"entityType"`, to specify the kind of type being defined
-- a **required** `name`, which should generally be a non-pluralized description of the thing
+- a **required** `title`, which should generally be a non-pluralized description of the thing
 - **optionally** a `description` to further explain the semantic meaning of the Entity Type
 - a **required** definition of its possible properties and links.
 
@@ -664,11 +664,12 @@ The `kind` keyword will be used to identify the kind of the schema being describ
 
 The `links` keyword will be used to allow Entity Type schemas to define links. The value of `links` is an object, whose keys are URIs (that point to Link Types). Values of `links` are also objects, which can optionally define extra constraints on the link (for more information see the [Reference-Level explanation](#reference-level-explanation)).
 
-Some existing JSON Schema keywords have been repurposed with slightly different meaning:
+In JSON Schema `title` and `description` are described as follows: "Both of these keywords can be used to decorate a user interface with information about the data produced by this user interface".
+We repurpose these with slightly different meanings:
 
-The `description` keyword for Link Types add semantic meaning to a link (which could be encapsulated in a vocabulary specification for the meta schemas).
+The `description` keyword for Link Types adds semantic meaning to a link (which could be encapsulated in a custom vocabulary specification for the meta schemas).
 
-The `name` keyword acts the same way `title` does in conventional JSON Schemas.
+The `title` keyword refers to the name of the Type it is describing.
 
 ## Using the Types in the Block Protocol
 
@@ -676,7 +677,7 @@ The `name` keyword acts the same way `title` does in conventional JSON Schemas.
 
 ### Interfacing with properties on Entities
 
-As the `name` of a Property Type is not guaranteed to be globally unique, the representation of entities is likely going to need to change, especially with regards to changing the keys to be the Property Type URIs:
+As the `title` of a Property Type is not guaranteed to be globally unique, the representation of entities is likely going to need to change, especially with regards to changing the keys to be the Property Type URIs:
 
 **An example of an entity in the current system:**
 
@@ -759,11 +760,11 @@ A **Data Type** is a JSON schema that satisfies the following JSON meta-schema:
       "const": "dataType"
     },
     "$id": { "type": "string", "format": "uri" },
-    "name": { "type": "string" },
+    "title": { "type": "string" },
     "description": { "type": "string" },
     "type": { "type": "string" }
   },
-  "required": ["kind", "$id", "name", "type"]
+  "required": ["kind", "$id", "title", "type"]
 }
 ```
 
@@ -777,7 +778,7 @@ This RFC defines the following primitive top-level Data Types
   {
     "kind": "dataType",
     "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/text",
-    "name": "Text",
+    "title": "Text",
     "description": "An ordered sequence of characters",
     "type": "string"
   }
@@ -789,7 +790,7 @@ This RFC defines the following primitive top-level Data Types
   {
     "kind": "dataType",
     "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/number",
-    "name": "Number",
+    "title": "Number",
     "description": "An arithmetical value (in the Real number system)",
     "type": "number"
   }
@@ -801,7 +802,7 @@ This RFC defines the following primitive top-level Data Types
   {
     "kind": "dataType",
     "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/boolean",
-    "name": "Boolean",
+    "title": "Boolean",
     "description": "A True or False value",
     "type": "boolean"
   }
@@ -813,7 +814,7 @@ This RFC defines the following primitive top-level Data Types
   {
     "kind": "dataType",
     "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/null",
-    "name": "Null",
+    "title": "Null",
     "description": "A placeholder value representing 'nothing'",
     "type": "null"
   }
@@ -825,7 +826,7 @@ This RFC defines the following primitive top-level Data Types
   {
     "kind": "dataType",
     "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/object",
-    "name": "Object",
+    "title": "Object",
     "description": "A plain JSON object with no pre-defined structure",
     "type": "object"
   }
@@ -837,7 +838,7 @@ This RFC defines the following primitive top-level Data Types
   {
     "kind": "dataType",
     "$id": "https://blockprotocol.org/types/@blockprotocol/data-type/empty-list",
-    "name": "Empty List",
+    "title": "Empty List",
     "description": "An Empty List",
     "type": "array",
     "const": []
@@ -865,7 +866,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
       "type": "string",
       "format": "uri"
     },
-    "name": {
+    "title": {
       "type": "string"
     },
     "description": {
@@ -878,7 +879,7 @@ A **Property Type** is a JSON schema that satisfies the following JSON meta-sche
       }
     }
   },
-  "required": ["kind", "$id", "name", "oneOf"],
+  "required": ["kind", "$id", "title", "oneOf"],
   "$defs": {
     "propertyValues": {
       "$comment": "The definition of potential property values, made up of a `oneOf` keyword which has a list of options of either references to Data Types, or objects made up of more Property Types",
@@ -1019,7 +1020,7 @@ The `Favorite Quote` Property Type could define its value as being an instance o
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/favorite-quote",
-  "name": "Favorite Quote",
+  "title": "Favorite Quote",
   "oneOf": [
     { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" }
   ]
@@ -1034,7 +1035,7 @@ The `Age` Property Type could define its value as being an instance of the `Numb
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/age",
-  "name": "Age",
+  "title": "Age",
   "oneOf": [
     {
       "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/Number"
@@ -1051,7 +1052,7 @@ The `User ID` Property Type could define its value as being _either_ an instance
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
-  "name": "User ID",
+  "title": "User ID",
   "oneOf": [
     { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
     {
@@ -1080,7 +1081,7 @@ The `Contact Information` Property Type could define its value as being an objec
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/contact-information",
-  "name": "Contact Information",
+  "title": "Contact Information",
   "oneOf": [
     {
       "type": "object",
@@ -1108,7 +1109,7 @@ The `Interests` Property Type could define its value as being an object which ha
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/interests",
-  "name": "Interests",
+  "title": "Interests",
   "oneOf": [
     {
       "type": "object",
@@ -1151,7 +1152,7 @@ For example if it is a strong requirement to model a grid of numbers, it can be 
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/numbers",
-  "name": "Numbers",
+  "title": "Numbers",
   "oneOf": [
     {
       "type": "array",
@@ -1185,7 +1186,7 @@ The `User ID` Property Type could define its value as being _either_ an instance
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/user-id",
-  "name": "User ID",
+  "title": "User ID",
   "oneOf": [
     { "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text" },
     {
@@ -1219,7 +1220,7 @@ The `Contrived Property` Property Type could define its value as being _either_ 
 {
   "kind": "propertyType",
   "$id": "https://blockprotocol.org/types/@alice/property-type/contrived-property",
-  "name": "Contrived Property",
+  "title": "Contrived Property",
   "oneOf": [
     {
       "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/number"
@@ -1276,7 +1277,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
       "type": "string",
       "format": "uri"
     },
-    "name": { "type": "string" },
+    "title": { "type": "string" },
     "description": { "type": "string" },
     "relatedKeywords": {
       "type": "array",
@@ -1284,7 +1285,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
     }
   },
   "additionalProperties": false,
-  "required": ["kind", "$id", "name", "description"]
+  "required": ["kind", "$id", "title", "description"]
 }
 ```
 
@@ -1296,7 +1297,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 {
   "kind": "linkType",
   "$id": "https://blockprotocol.org/types/@alice/link-type/owns",
-  "name": "Owns",
+  "title": "Owns",
   "description": "Have (something) as one's own; possess"
 }
 ```
@@ -1307,7 +1308,7 @@ A **Link Type** is a JSON schema that satisfies the following JSON meta-schema:
 {
   "kind": "linkType",
   "$id": "https://blockprotocol.org/types/@alice/link-type/submitted-by",
-  "name": "Submitted By",
+  "title": "Submitted By",
   "description": "Suggested, proposed, or presented by"
 }
 ```
@@ -1329,7 +1330,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
       "type": "string",
       "format": "uri"
     },
-    "name": { "type": "string" },
+    "title": { "type": "string" },
     "description": { "type": "string" },
     "properties": { "$ref": "#/$defs/propertyTypeObject" },
     "required": {
@@ -1378,7 +1379,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
     }
   },
   "additionalProperties": false,
-  "required": ["kind", "$id", "name", "properties"],
+  "required": ["kind", "$id", "title", "properties"],
   "$defs": {
     "propertyTypeObject": {
       "type": "object",
@@ -1471,7 +1472,7 @@ Assuming that:
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
   "type": "object",
-  "name": "Book",
+  "title": "Book",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1516,7 +1517,7 @@ Assuming that:
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/car",
   "type": "object",
-  "name": "Car",
+  "title": "Car",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/make": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/make"
@@ -1571,7 +1572,7 @@ Assuming that:
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/product",
   "type": "object",
-  "name": "Product",
+  "title": "Product",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/tag": {
       "type": "array",
@@ -1621,7 +1622,7 @@ Assuming that:
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
   "type": "object",
-  "name": "Book",
+  "title": "Book",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1675,7 +1676,7 @@ The `UK Address` Entity Type could contain Property Types `address-line-1`, `pos
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/uk-address",
   "type": "object",
-  "name": "UK Address",
+  "title": "UK Address",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/address-line-1": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/address-line-1"
@@ -1702,7 +1703,7 @@ The `Organization` Entity Type could contain the Property Type `Name`
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/organization",
   "type": "object",
-  "name": "Organization",
+  "title": "Organization",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1718,7 +1719,7 @@ The `Building` Entity Type could contain a `Located At` link, and a `Tenant` lin
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/building",
   "type": "object",
-  "name": "Bulding",
+  "title": "Bulding",
   "properties": {},
   "links": {
     "https://blockprotocol.org/types/@alice/property-type/located-at": {},
@@ -1775,7 +1776,7 @@ Assuming that:
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/book",
   "type": "object",
-  "name": "Book",
+  "title": "Book",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1837,7 +1838,7 @@ The `Person` Entity Type could contain some Property Types, and multiple `Friend
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/person",
   "type": "object",
-  "name": "Person",
+  "title": "Person",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1896,7 +1897,7 @@ The `Playlist` Entity Type could contain some Property Types, and an _ordered_ l
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/playlist",
   "type": "object",
-  "name": "Playlist",
+  "title": "Playlist",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1918,7 +1919,7 @@ The `Song` Entity Type could contain some Property Types.
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/Song",
   "type": "object",
-  "name": "Song",
+  "title": "Song",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -1974,7 +1975,7 @@ The `Page` Entity Type could contain some Property Types, a `Written By` link, a
   "kind": "entityType",
   "$id": "https://blockprotocol.org/types/@alice/entity-type/page",
   "type": "object",
-  "name": "Page",
+  "title": "Page",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/text": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/text"
@@ -2079,8 +2080,8 @@ We can define the new JSON Schema keywords that the system uses through JSON Sch
   "description": {
     "type": "string"
   },
-  // Name is equivalent to title
-  "name": {
+  // Title is the name of the schema
+  "title": {
     "type": "string"
   }
 }
@@ -2090,11 +2091,11 @@ The `kind` can only take on values that specify the types of the proposed type s
 
 The `links` keyword specifically allows constraints in the case of having a set of links. Here the link set can be ordered or unordered (default).
 
-Some existing JSON Schema keywords have been repurposed with slightly different meaning:
+As mentioned in the Guide-Level explanation, the following JSON Schema keywords are repurposed:
 
-The `description` keyword for Link Types add semantic meaning to a link (which could be encapsulated in a vocabulary specification for the meta schemas).
+The `description` keyword for Link Types add semantic meaning to a link (which could be encapsulated in a custom vocabulary specification for the meta schemas).
 
-The `name` keyword acts the same way `title` does in conventional JSON Schemas.
+The `title` keyword refers to the name of the Type it is describing.
 
 For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
 
@@ -2349,7 +2350,7 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
 {
   "type": "object",
   "kind": "entityType",
-  "name": "Person Card",
+  "title": "Person Card",
   "properties": {
     "https://blockprotocol.org/types/@alice/property-type/name": {
       "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -2467,7 +2468,7 @@ Link Types do not contain further structural data, which make them semantically 
   "schema": {
     "type": "object",
     "kind": "entityType",
-    "name": "Person",
+    "title": "Person",
     "properties": {
       "https://blockprotocol.org/types/@alice/property-type/name": {
         "$ref": "https://blockprotocol.org/types/@alice/property-type/name"
@@ -2513,7 +2514,7 @@ Property Types do not exist.
   // createPropertyType message
   "schema": {
     "kind": "propertyType",
-    "name": "User ID",
+    "title": "User ID",
     "oneOf": [
       {
         "$ref": "https://blockprotocol.org/types/@blockprotocol/data-type/text"
@@ -2551,7 +2552,7 @@ Link Types do not exist.
   // createLinkType message
   "schema": {
     "kind": "LinkType",
-    "name": "Friend of",
+    "title": "Friend of",
     "description": "Being friends with"
   }
 }
@@ -2683,7 +2684,7 @@ To be able to represent this object, a Property Type would need to be created th
 
 ```json
 {
-  "name": "someProperty",
+  "title": "someProperty",
   "oneOf": [{ "$ref": "data-type/number" }, { "$ref": "data-type/text" }]
 }
 ```
@@ -2700,7 +2701,7 @@ Requires something like
 
 ```json
 {
-  "name": "someProperty",
+  "title": "someProperty",
   "oneOf": [
     {
       "type": "object",
