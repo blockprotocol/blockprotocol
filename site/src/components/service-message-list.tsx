@@ -6,7 +6,7 @@ import { Box, Typography } from "@mui/material";
 import * as React from "react";
 
 import { JsonSchema } from "../lib/json-schema";
-import { mdxComponents } from "../util/mdx-components";
+import { mdxComponents } from "./mdx/mdx-components";
 
 const DataType: React.VoidFunctionComponent<{ propertySchema: JsonSchema }> = ({
   propertySchema,
