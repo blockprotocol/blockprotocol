@@ -219,6 +219,18 @@ export type ServiceDefinition = {
 };
 
 export type HtmlBlockDefinition = {
+  /**
+   * This is used as the base to resolve relative URLs in scripts/imports, and
+   * is made available to blocks through `blockprotocol.getBlockUrl`. It is also
+   * used by `renderHtmlBlock` to fetch the block's HTML source (the entry point),
+   * if this is not provided.
+   */
   url: string;
+  /**
+   * If `source` is provided, `renderHtmlBlock` doesn't need to fetch the HTML
+   * source, which can save time if you already have it available. `url` will
+   * still be used to resolve relative URLs, and `source` should be equivalent
+   * to the file hosted at `url`.
+   */
   source?: string;
 };
