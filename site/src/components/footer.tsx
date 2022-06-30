@@ -157,7 +157,7 @@ const Socials = (
 
 type FooterProps = {} & BoxProps;
 
-export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
+export const Footer: FC<FooterProps> = ({ sx = [], ...boxProps }) => {
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
@@ -165,10 +165,12 @@ export const Footer: FC<FooterProps> = ({ ...boxProps }) => {
   return (
     <Box
       {...boxProps}
-      sx={{
-        backgroundColor: ({ palette }) => palette.gray[90],
-        ...boxProps.sx,
-      }}
+      sx={[
+        {
+          backgroundColor: ({ palette }) => palette.gray[90],
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <Container
         sx={{

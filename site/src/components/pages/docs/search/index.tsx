@@ -12,6 +12,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { TransitionGroup } from "react-transition-group";
 
 import { Link } from "../../../link";
 import { TextField } from "../../../text-field";
@@ -53,6 +54,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
 }) => {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const searchListItemsRefs = useRef<HTMLButtonElement[]>([]);
 
   const [searchText, setSearchText] = useState("");
   const [currentSearchedText, setCurrentSearchedText] = useState("");
@@ -71,11 +73,13 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
         index
           .search<AlgoliaResult>(newSearchText)
           .then(({ hits }) => {
+            const slicedHits = hits.slice(0, MAX_SEARCH_RESULTS);
             setSearchState(hits.length === 0 ? "noresults" : "normal");
-            setSearchResults(hits.slice(0, MAX_SEARCH_RESULTS));
-            setActiveResult(MAX_SEARCH_RESULTS);
+            setSearchResults(slicedHits);
+            setActiveResult(slicedHits.length);
             setCurrentSearchedText(newSearchText);
             setSearchLoading(false);
+            searchListItemsRefs.current = [];
           })
           .catch((err) => {
             // @todo use logger later
@@ -91,9 +95,8 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
   useEffect(() => {
     if (searchText.trim() && searchText.length > 2) {
       searchOnlineDebounce(searchText);
-    }
-
-    if (!searchText.trim()) {
+    } else {
+      searchOnlineDebounce.cancel();
       setSearchState("normal");
       setSearchResults([]);
     }
@@ -116,7 +119,10 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
     const slicedArray = cleanContent?.slice(0, characterLimit).split(" ");
 
     const searchRegExp = new RegExp(
-      currentSearchedText.split(" ").join("|"),
+      currentSearchedText
+        .replace(/[^a-zA-Z0-9 ]/g, "")
+        .split(" ")
+        .join("|"),
       "ig",
     );
 
@@ -127,10 +133,14 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
   };
 
   useEffect(() => {
-    if (variant === "desktop") {
+    const items = searchListItemsRefs.current;
+
+    if (activeResult >= items.length) {
       setTimeout(() => inputRef.current?.focus(), 50);
+    } else {
+      items[activeResult]?.focus();
     }
-  });
+  }, [activeResult]);
 
   const helperText =
     searchState !== "normal" ? (
@@ -143,32 +153,30 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
     ) : undefined;
 
   return (
-    <>
+    <Box
+      onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
+        if (searchResults.length > 0) {
+          if (
+            event.key === "ArrowUp" ||
+            (event.shiftKey && event.key === "Tab")
+          ) {
+            event.preventDefault();
+            return setActiveResult(
+              activeResult === 0 ? searchResults.length : activeResult - 1,
+            );
+          }
+
+          if (event.key === "ArrowDown" || event.key === "Tab") {
+            event.preventDefault();
+            return setActiveResult(
+              activeResult > searchResults.length - 1 ? 0 : activeResult + 1,
+            );
+          }
+        }
+      }}
+    >
       <TextField
         inputRef={inputRef}
-        onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
-          if (searchResults.length > 0) {
-            if (event.key === "ArrowUp") {
-              event.preventDefault();
-
-              if (activeResult === 0) {
-                return setActiveResult(searchResults.length - 1);
-              }
-
-              setActiveResult(activeResult - 1);
-            }
-
-            if (event.key === "ArrowDown") {
-              event.preventDefault();
-
-              if (activeResult > searchResults.length - 1) {
-                return setActiveResult(0);
-              }
-
-              setActiveResult(activeResult + 1);
-            }
-          }
-        }}
         value={searchText}
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           setSearchText(event.target.value)
@@ -205,22 +213,31 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
         helperText={helperText}
       />
 
-      <Collapse in={helperText === undefined}>
-        {searchResults.length > 0 ? (
-          <Box
-            sx={({ palette }) => ({ backgroundColor: palette.common.white })}
-          >
-            <SearchList
-              searchResults={searchResults}
-              variant={variant}
-              getHighlight={getHighlight}
-              closeModal={closeModal}
-            />
-          </Box>
-        ) : variant === "desktop" ? (
-          <SearchSuggestedLinks closeModal={closeModal} />
-        ) : null}
-      </Collapse>
-    </>
+      <TransitionGroup>
+        {searchResults.length > 0 && (
+          <Collapse>
+            <Box
+              sx={({ palette }) => ({ backgroundColor: palette.common.white })}
+            >
+              <SearchList
+                searchResults={searchResults}
+                searchListItemsRefs={searchListItemsRefs}
+                variant={variant}
+                getHighlight={getHighlight}
+                closeModal={closeModal}
+              />
+            </Box>
+          </Collapse>
+        )}
+
+        {variant === "desktop" &&
+          helperText === undefined &&
+          searchResults.length <= 0 && (
+            <Collapse>
+              <SearchSuggestedLinks closeModal={closeModal} />
+            </Collapse>
+          )}
+      </TransitionGroup>
+    </Box>
   );
 };
