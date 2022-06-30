@@ -675,6 +675,8 @@ The `description` keyword for Link Types adds semantic meaning to a link (which 
 
 The `title` keyword refers to the name of the Type it is describing.
 
+The `$ref` keyword when used in the context of Entity Types, Property Types, Data Types, and Link Types URIs to specify references across the different kinds of types, the `$ref` will always need to be equal the key of the object which it is defined under. If the `$ref` is within an array definition, the URI should equal the nearest JSON Schema property name which is a URI.
+
 ## Using the Types in the Block Protocol
 
 > 💭 This section has been kept purposefully brief, as in-depth discussion of implications has been reserved for the Reference-Level Explanation due to heavy reliance on technical details
@@ -2110,6 +2112,40 @@ As mentioned in the Guide-Level explanation, the following JSON Schema keywords 
 The `description` keyword for Link Types add semantic meaning to a link (which could be encapsulated in a custom vocabulary specification for the meta schemas).
 
 The `title` keyword refers to the name of the Type it is describing.
+
+The `$ref` keyword when used in the context of Entity Types, Property Types, Data Types, and Link Types URIs to specify references across the different kinds of types, the `$ref` will always need to be equal the key of the object which it is defined under. If the `$ref` is within an array definition, the URI should equal the nearest JSON Schema property name which is a URI.
+
+This _is_ valid
+
+```json
+{
+  "http://example.com/uri": {
+    "$ref": "http://example.com/uri"
+  },
+  "http://example.com/uri2": {
+    "type": "array",
+    "items": {
+      "$ref": "http://example.com/uri2"
+    }
+  }
+}
+```
+
+This _is not_ valid
+
+```json
+{
+  "http://example.com/uri": {
+    "$ref": "http://example.com/cat" // should be `uri`
+  },
+  "http://example.com/uri2": {
+    "type": "array",
+    "items": {
+      "$ref": "http://example.com/cats" // should be `uri2`
+    }
+  }
+}
+```
 
 For the most part, we're using existing JSON Schema keywords, but it would be preferable to look into defining these additions as Vocabularies or otherwise integrate them into a JSON Schema validator used for the proposed system.
 
