@@ -116,9 +116,12 @@ The embedding application MUST pass the data of [`"initResponse"`](#initResponse
 
 Blocks of kind `"html"` require special handling in order that they can identify elements within them – since they may share their scope with other blocks, including identical blocks, they cannot rely on finding elements by id or other selectors.
 
-The `@blockprotocol/core` package exports for embedding applications' convenience:
-- a `renderHtmlBlock` function which handles both assigning an implementation of the `blockprotocol` object described below to the global scope, and rendering the block within a provided node
-- an `assignBlockProtocolGlobals` function, which simply assigns the `blockprotocol` object to the global scope, in case the embedding application wishes to handle rendering the block separately.
+The `@blockprotocol/core` package exports for embedding applications' convenience a `renderHtmlBlock` function which handles both assigning an implementation of the `blockprotocol` API described below to the global scope, and rendering the block within a provided node.
+
+If an embedding application wishes to handle rendering separately, the package also exports (which `renderHtmlBlock` makes use of):
+
+- an `assignBlockProtocolGlobals` function, which simply assigns an implementation of the `blockprotocol` API described below to the global scope.
+- a `markBlockScripts` function. Embedding applications MUST call this when rendering a block if they wish to use the implementation of the `blockprotocol` API provided by `assignBlockProtocolGlobals`, as this ensures those APIs know which block is calling them.
 
 Embedding applications which load ANY block of `kind: "html"` MUST provide a `blockprotocol` object on the global scope (i.e. `globalThis.blockprotocol` / `window.blockprotocol`), which:
 
@@ -131,7 +134,6 @@ Embedding applications which load ANY block of `kind: "html"` MUST provide a `bl
   - This MUST accept TWO arguments:
     - the first MUST be the script source
     - the second MUST be either a single script element, or a URL string.
-
 
 Blocks of `kind: "html"` MUST call `getBlockContainer` from within any script they load, with different strategies depending on whether the script is:
 
