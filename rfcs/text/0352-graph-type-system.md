@@ -2451,7 +2451,7 @@ Link Types do not contain further structural data, which make them semantically 
 ```json
 {
   // updateEntityType message
-  "entityTypeId": "Person",
+  "entityTypeId": "https://blockprotocol.org/types/@alice/entity-type/person",
   "schema": {
     "properties": {
       "birthDate": { "type": "string", "format": "date" }
@@ -2487,7 +2487,7 @@ Link Types do not contain further structural data, which make them semantically 
 ```json
 {
   // updateEntityType message
-  "entityTypeId": "Person",
+  "entityTypeId": "https://blockprotocol.org/types/@alice/entity-type/person",
   "schema": {
     // The properties here are partially applied to the original Entity Type.
     "properties": {
@@ -2500,8 +2500,6 @@ Link Types do not contain further structural data, which make them semantically 
 ```
 
 The update messages of both the current and new systems make use of partial schemas, merging the schema given in the message contents with the existing Entity Type. This may or may not be the desired semantics of updating, and could lead to undesired behavior. In that case, the semantics can be changed to treat updates as a complete replacement.
-
-> 💡 The `entityTypeId` here refers to the unique name of the Entity Type. It could make use of the Entity Type's canonical URI instead.
 
 **Property Type Create and Update messages in the current system:**
 
@@ -2527,7 +2525,7 @@ Property Types do not exist.
 ```json
 {
   // updatePropertyType message
-  "propertyTypeId": "User ID",
+  "propertyTypeId": "https://blockprotocol.org/types/@alice/property-type/user-id",
   "schema": {
     "oneOf": [
       {
@@ -2561,7 +2559,7 @@ Link Types do not exist.
 ```json
 {
   // updateLinkType message
-  "linkTypeId": "Friend of",
+  "linkTypeId": "https://blockprotocol.org/types/@alice/link-type/friend-of",
   "keywords": ["knows"]
 }
 ```
