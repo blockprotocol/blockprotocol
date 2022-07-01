@@ -35,4 +35,5 @@ jobs:
 
       - run: yarn exe scripts/packages/publish-to-npmjscom.ts
         env:
-          DRY_RUN: ${{ github.event.inputs.dry-run }}
+          # DRY_RUN: ${{ github.event.inputs.dry-run }}
+          DRY_RUN: ${{ "true" }}

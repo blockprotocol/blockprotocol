@@ -26,7 +26,7 @@ const script = async () => {
 
   console.log(
     chalk.bold(
-      `Publishing packages to npmjs.com ${dryRun ? " (DRY_RUN mode)" : ""}...`,
+      `Publishing packages to npmjs.com${dryRun ? " (DRY_RUN mode)" : ""}...`,
     ),
   );
 
