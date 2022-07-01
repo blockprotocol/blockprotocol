@@ -1,0 +1,7 @@
+{
+  "repository": "https://github.com/blockprotocol/blockprotocol.git",
+  "commit": "[toreplace]",
+
+  "workspace": "html-block",
+  "distDir": "dist"
+}
