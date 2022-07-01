@@ -18,7 +18,7 @@ on:
 jobs:
   publish:
     name: Publish
-    if: ${{ github.event.inputs.confirmation }}
+    # if: ${{ github.event.inputs.confirmation }}
     runs-on: ubuntu-20.04
     steps:
       - run: echo "https://registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
