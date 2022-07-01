@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/blockprotocol/blockprotocol.git",
-  "commit": "[toreplace]",
+  "commit": "d286c660d124f79db4d3450a2449fd3ab7b27ce9",
 
   "workspace": "html-block",
   "distDir": "dist"

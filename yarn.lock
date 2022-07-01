@@ -1968,6 +1968,22 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
+"@blockprotocol/core@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.7.tgz#22f42a7aa4792c0ff9668cbabf20953df5eab5b3"
+  integrity sha512-7i6gogO6fNXGXqxLeUdDTZFmnHyfZPZvjwYOuNMT5coOI1gsZqdCWjpT6lV4B3HwZTdJY651JhQvM4CsegoDZw==
+  dependencies:
+    uuid "^8.3.2"
+
+"@blockprotocol/graph@0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/graph/-/graph-0.0.9.tgz#f401cb233a20f13a46317ac05b4e023e7d6fe16b"
+  integrity sha512-j8yDaV8M5kDBqfOu40E0SamZ6sryIU7WoxiLmXShIDY2SsRxgR+RvAVv3dUFaC7hFxmnczL9NEUwZmhfy2z6XA==
+  dependencies:
+    "@blockprotocol/core" "0.0.7"
+    lit "^2.2.5"
+    react "^17.0.2"
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
