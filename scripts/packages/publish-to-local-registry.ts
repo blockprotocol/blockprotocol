@@ -1,10 +1,10 @@
 import chalk from "chalk";
 import execa from "execa";
-import fs from "fs-extra";
 import path from "node:path";
 import sleep from "sleep-promise";
 
 import { logStepEnd, logStepStart } from "../shared/logging";
+import { listPublishablePackages } from "./shared/list-publishable-packages";
 
 // These variables are hardcoded on purpose. We don’t want to publish to a real registry by mistake.
 const npmRegistry = "http://localhost:4873";
@@ -24,38 +24,7 @@ const defaultExecaOptions = {
 const script = async () => {
   console.log(chalk.bold("Publishing packages to local registry..."));
 
-  const publishablePackages: { name: string; path: string }[] = [];
-
-  const packageParentFolders = ["packages", "packages/@blockprotocol"];
-
-  const packagePaths = (
-    await Promise.all(
-      packageParentFolders.map((parent) =>
-        fs
-          .readdir(parent)
-          .then((children) => children.map((child) => `${parent}/${child}`)),
-      ),
-    )
-  ).flat();
-
-  for (const packagePath of packagePaths) {
-    try {
-      const packageJson = await fs.readJson(`${packagePath}/package.json`);
-      const packageName = packageJson.name;
-      if (packageJson.private !== true) {
-        publishablePackages.push({ name: packageName, path: packagePath });
-      }
-    } catch {
-      // noop (packages/* is a file or does not contain package.json)
-    }
-  }
-
-  console.log(
-    `Publishable package names: ${[
-      "",
-      ...publishablePackages.map(({ name }) => name),
-    ].join("\n- ")}`,
-  );
+  const publishablePackages = await listPublishablePackages();
 
   logStepStart("Login into local registry");
 
