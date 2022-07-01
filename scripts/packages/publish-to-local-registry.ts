@@ -22,7 +22,7 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
-  console.log(chalk.bold("Publishing to local registry..."));
+  console.log(chalk.bold("Publishing packages to local registry..."));
 
   const publishablePackages: { name: string; path: string }[] = [];
 
