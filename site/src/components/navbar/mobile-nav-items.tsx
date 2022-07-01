@@ -155,21 +155,6 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
       {hasChildren ? (
         <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {itemIsPage(item) ? (
-              <>
-                {item.subPages.map((subPage) => (
-                  <MobileNavNestedPage<SiteMapPage>
-                    key={subPage.href}
-                    depth={depth + 1}
-                    item={subPage}
-                    parentPageHref={undefined}
-                    expandedItems={expandedItems}
-                    setExpandedItems={setExpandedItems}
-                    onClose={onClose}
-                  />
-                ))}
-              </>
-            ) : null}
             {(itemIsPage(item) ? item.sections : item.subSections).map(
               (subSection) => (
                 <MobileNavNestedPage<SiteMapPageSection>
@@ -185,6 +170,21 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
                 />
               ),
             )}
+            {itemIsPage(item) ? (
+              <>
+                {item.subPages.map((subPage) => (
+                  <MobileNavNestedPage<SiteMapPage>
+                    key={subPage.href}
+                    depth={depth + 1}
+                    item={subPage}
+                    parentPageHref={undefined}
+                    expandedItems={expandedItems}
+                    setExpandedItems={setExpandedItems}
+                    onClose={onClose}
+                  />
+                ))}
+              </>
+            ) : null}
           </List>
           {depth === 0 ? <Divider /> : null}
         </Collapse>
