@@ -221,12 +221,12 @@ export const renderHtmlBlock = async (
   const parent = document.createElement("div");
   parent.append(frag);
 
-  markBlockScripts(parent, baseUrl);
-
   if (!window.blockprotocol) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     assignBlockProtocolGlobals();
   }
+
+  markBlockScripts(parent, baseUrl);
 
   node.appendChild(parent);
 };
