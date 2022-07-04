@@ -24,12 +24,12 @@
     "serve": "node_modules/.bin/block-scripts serve"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.9",
+    "@blockprotocol/graph": "0.0.9-canary.2",
     "lit": "^2.2.5"
   },
   "devDependencies": {
     "block-scripts": "0.0.13",
-    "mock-block-dock": "0.0.17-canary.2",
+    "mock-block-dock": "0.0.17-canary.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
