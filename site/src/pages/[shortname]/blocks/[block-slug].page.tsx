@@ -28,6 +28,7 @@ import {
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
+  isUnsupportedBlock,
   readBlockDataFromDisk,
   readBlockReadmeFromDisk,
   readBlocksFromDisk,
@@ -354,6 +355,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             schema={schema}
             sandboxBaseUrl={sandboxBaseUrl}
             exampleGraph={exampleGraph}
+            isUnsupportedBlock={isUnsupportedBlock(blockMetadata)}
           />
         </Box>
 

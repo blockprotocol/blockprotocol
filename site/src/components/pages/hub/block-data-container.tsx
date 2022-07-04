@@ -36,13 +36,20 @@ type BlockDataContainerProps = {
   schema: BlockSchema;
   sandboxBaseUrl: string;
   exampleGraph: BlockExampleGraph | null;
+  isUnsupportedBlock?: boolean;
 };
 
 const validator = new Validator();
 
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
-> = ({ metadata, schema, exampleGraph, sandboxBaseUrl }) => {
+> = ({
+  metadata,
+  schema,
+  exampleGraph,
+  sandboxBaseUrl,
+  isUnsupportedBlock,
+}) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
@@ -230,11 +237,19 @@ export const BlockDataContainer: VoidFunctionComponent<
                   position: "relative",
                 }}
               >
-                <SandboxedBlockDemo
-                  metadata={metadata}
-                  props={props}
-                  sandboxBaseUrl={sandboxBaseUrl}
-                />
+                {isUnsupportedBlock ? (
+                  <>
+                    This block was written for an earlier version of the Block
+                    Protocol specification and cannot currently be displayed in
+                    the Hub.
+                  </>
+                ) : (
+                  <SandboxedBlockDemo
+                    metadata={metadata}
+                    props={props}
+                    sandboxBaseUrl={sandboxBaseUrl}
+                  />
+                )}
               </Box>
             </Box>
           </Box>
