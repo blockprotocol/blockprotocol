@@ -24,7 +24,7 @@
     "serve": "node_modules/.bin/block-scripts serve"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.9",
+    "@blockprotocol/graph": "0.0.10",
     "lit": "^2.2.5"
   },
   "devDependencies": {
