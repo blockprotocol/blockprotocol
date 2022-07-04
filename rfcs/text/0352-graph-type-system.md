@@ -1347,7 +1347,7 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
         "format": "uri"
       }
     },
-    "example": {
+    "examples": {
       "$comment": "Example Entity instances",
       "type": "array",
       "items": {
