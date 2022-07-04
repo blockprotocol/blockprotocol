@@ -2830,7 +2830,10 @@ As mentioned in a few sections, this design basically defines a way for communit
 [unresolved-questions]: #unresolved-questions
 
 1.  Are there further impacts on block schemas?
-1.  Do we permit spaces in type names?
+1.  ~~Do we permit spaces in type titles?~~
+
+    - Yes we do, for now. We are treating the type titles as display names until we find a good reason not to.
+
 1.  Is there a way to specify in JSON schema that the key of a property is equal to the the thing it's a `$ref` to?
     As in can we specify a constraint that you have to have equal URIs in `"someUri": { "$ref": "someUri" }`?
     The reason why we want this, is such that our JSON Schemas can be validated through conventional means, without special-casing a custom check with the `$ref` and property name.
