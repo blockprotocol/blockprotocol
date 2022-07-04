@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import fs from "fs-extra";
-import glob from "glob";
+import { globby } from "globby";
 
 const script = async () => {
   console.log(
@@ -17,7 +17,7 @@ const script = async () => {
   // were hitting auth wall, possibly due to how internal Vercel security is implemented.
   // Details (internal): https://hashintel.slack.com/archives/C02TWBTT3ED/p1654895161511879
 
-  const readmeFilePaths = glob.sync(
+  const readmeFilePaths = await globby(
     `${process.cwd()}/public/blocks/**/README.md`,
     { absolute: true },
   );

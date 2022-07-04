@@ -11,7 +11,7 @@ A component which loads a [Block Protocol](https://blockprotocol.org) block from
 `yarn install "react-block-loader"`
 
 Pass RemoteBlock (at a minimum) a source url (`sourceUrl`), the properties the block expects (`blockProperties`),
-and functions for it to call (`blockProtocolFunctions`), as set out in [the specification](https://blockprotocol.org/spec).
+and functions for it to call (`blockProtocolFunctions`), as set out in [the specification](https://blockprotocol.org/docs/spec).
 
 ```jsx
 import { RemoteBlock } from "react-block-loader";
@@ -63,20 +63,20 @@ const BlockLoader = ({ blockSourceFolder: string }) => {
 
 ## Props
 
-| name                     | type           | required | default                 | description                                                                                                                                  |
-| ------------------------ | -------------- | -------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `blockMetadata`          | `object`       | no       |                         | the block's [block-metadata.json](https://blockprotocol.org/spec/block-types). Will be used to determine Web Component tag names (TBD soon). |
-| `blockProperties`        | `object`       | yes      |                         | the block's own properties, and BP-specified properties (e.g. entityId, linkGroups)                                                          |
-| `crossFrame`             | `boolean`      | no       | `false`                 | whether this block should make requests to [the parent window](#inside-iframes) for block source                                             |
-| `blockProtocolFunctions` | `object`       | yes      |                         | the [functions provided to blocks](https://blockprotocol.org/spec/block-types#entity-functions) for reading and editing entity and link data |
-| `externalDependencies`   | `object`       | no       |                         | [libraries](#external-dependencies) which the block depends on but does not include in its package                                           |
-| `LoadingIndicator`       | `ReactElement` | no       | `<div>Loading...</div>` | an element to display while the block is loading                                                                                             |
-| `onBlockLoaded`          | `function`     | no       |                         | a callback, called when the block has been successfully parsed and loaded                                                                    |
-| `sourceUrl`              | `string`       | yes      |                         | the URL to the entry source file for the block                                                                                               |
+| name                     | type           | required | default                 | description                                                                                                                                                                           |
+| ------------------------ | -------------- | -------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `blockMetadata`          | `object`       | no       |                         | the block's [block-metadata.json](https://blockprotocol.org/docs/spec/core-specification#types-of-block). Will be used to determine Web Component tag names (TBD soon).               |
+| `blockProperties`        | `object`       | yes      |                         | the block's own properties, and BP-specified properties (e.g. entityId, linkGroups)                                                                                                   |
+| `crossFrame`             | `boolean`      | no       | `false`                 | whether this block should make requests to [the parent window](#inside-iframes) for block source                                                                                      |
+| `blockProtocolFunctions` | `object`       | yes      |                         | the functions provided to blocks for reading and editing entity and link data (replaced by [graph service in Þ 0.2](https://blockprotocol.org/docs/spec/graph-service-specification)) |
+| `externalDependencies`   | `object`       | no       |                         | [libraries](#external-dependencies) which the block depends on but does not include in its package                                                                                    |
+| `LoadingIndicator`       | `ReactElement` | no       | `<div>Loading...</div>` | an element to display while the block is loading                                                                                                                                      |
+| `onBlockLoaded`          | `function`     | no       |                         | a callback, called when the block has been successfully parsed and loaded                                                                                                             |
+| `sourceUrl`              | `string`       | yes      |                         | the URL to the entry source file for the block                                                                                                                                        |
 
 ## External dependencies
 
-A block may indicate `externals` in `block-metadata.json` ([docs](https://blockprotocol.org/spec/block-types)).
+A block may indicate `externals` in `block-metadata.json` ([docs](https://blockprotocol.org/docs/spec/core-specification#defining-blocks)).
 
 These are libraries the blocks expects the embedding application to supply it.
 For example, a block may rely on React, but assume that the embedding application will provide it, to save loading it multiple times on a page.

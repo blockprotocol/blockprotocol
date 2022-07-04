@@ -42,7 +42,10 @@ const generateCustomElementName = (blockName: BlockNameWithNamespace) => {
 
 /**
  * The Block Protocol functions in event form
- * @see https://blockprotocol.org/spec/block-types#entity-functions
+ *
+ * Replaced by graph service in Þ 0.2
+ * @see https://blockprotocol.org/docs/spec/graph-service-specification
+ * @todo refactor this package
  */
 type BpEventData<
   Operation extends keyof BlockProtocolFunctions = keyof BlockProtocolFunctions,
