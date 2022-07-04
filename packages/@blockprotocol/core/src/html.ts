@@ -47,6 +47,15 @@ const getIdForRef = (ref?: BlockIdentifier) => {
   return id;
 };
 
+/**
+ * Retrieve the HTML containing node the block is being rendered within, which
+ * can be used by a block to identify itself on the page and apply dynamic
+ * behaviours to its elements.
+ * @param ref Used to identify the block on the page. Usually `import.meta.url`
+ *            or `document.currentScript` depending on if executing a module or
+ *            a script. Should be omitted for inline modules
+ *            (`<script type="module">...</script>`)
+ */
 export const getBlockContainer = (ref?: BlockIdentifier) => {
   const blockId = getIdForRef(ref);
   const container = blocks.get(blockId)?.container;
@@ -58,6 +67,14 @@ export const getBlockContainer = (ref?: BlockIdentifier) => {
   return container;
 };
 
+/**
+ * Retrieve the URL for the HTML entry point, in order to resolve relative
+ * URLs to assets within the block.
+ * @param ref Used to identify the block on the page. Usually `import.meta.url`
+ *            or `document.currentScript` depending on if executing a module or
+ *            a script. Should be omitted for inline modules
+ *            (`<script type="module">...</script>`)
+ */
 export const getBlockUrl = (ref?: BlockIdentifier) => {
   const blockId = getIdForRef(ref);
   const url = blocks.get(blockId)?.url;
@@ -69,6 +86,15 @@ export const getBlockUrl = (ref?: BlockIdentifier) => {
   return url;
 };
 
+/**
+ * Used to mark dynamically inserted script tags as belonging to a certain block,
+ * identified by `ref`.
+ * @param script The script you want to mark as belonging to a block
+ * @param ref Used to identify the block on the page. Usually `import.meta.url`
+ *            or `document.currentScript` depending on if executing a module or
+ *            a script. Should be omitted for inline modules
+ *            (`<script type="module">...</script>`)
+ */
 export const markScript = (script: HTMLScriptElement, ref: BlockIdentifier) => {
   const blockId = getIdForRef(ref);
 
@@ -104,6 +130,14 @@ const replaceBetween = (
 ) =>
   `${origin.substring(0, startIndex)}${insertion}${origin.substring(endIndex)}`;
 
+/**
+ * Used to mark all the scripts within a block's containing node as belonging
+ * to that block. It should only be used once per block. It will also resolve
+ * any relative URLs in import statements for inline scripts, and in the src
+ * parameter.
+ * @param container The containing node the block is being rendered into
+ * @param url The HTML entry point for the block
+ */
 export const markBlockScripts = (container: HTMLElement, url: URL | string) => {
   const blockId = uuid();
 
@@ -158,6 +192,12 @@ export const markBlockScripts = (container: HTMLElement, url: URL | string) => {
   }
 };
 
+/**
+ * Render an HTML block into a specified target node.
+ * @param node The containing node to render the HTML block into
+ * @param definition The description of where to find the HTML block
+ * @param signal Used to abort the fetch of a block
+ */
 export const renderHtmlBlock = async (
   node: HTMLElement,
   definition: HtmlBlockDefinition,
@@ -202,6 +242,10 @@ const resetBlocks = () => {
   scripts = new WeakMap();
 };
 
+/**
+ * Reset the global state and forget any registered blocks. Useful when about
+ * to change page in a single page app.
+ */
 export const teardownBlockProtocol = () => {
   if (!window.blockprotocol) {
     throw new Error("Block Protocol is not installed");
@@ -217,6 +261,9 @@ declare global {
   }
 }
 
+/**
+ * Assign the required blockprotocol APIs for HTML blocks to the global context.
+ */
 export const assignBlockProtocolGlobals = () => {
   if (typeof window === "undefined") {
     throw new Error(
