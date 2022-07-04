@@ -1338,6 +1338,27 @@ An **Entity Type** is a JSON schema that satisfies the following JSON meta-schem
     },
     "title": { "type": "string" },
     "description": { "type": "string" },
+    "default": {
+      "$comment": "Default Entity instance",
+      "type": "object",
+      "propertyNames": {
+        "$comment": "Property names must be a valid URI to a Property Type",
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "example": {
+      "$comment": "Example Entity instances",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "propertyNames": {
+          "$comment": "Property names must be a valid URI to a Property Type",
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
     "properties": { "$ref": "#/$defs/propertyTypeObject" },
     "required": {
       "type": "array",
