@@ -7,12 +7,12 @@
   "schema": "block-schema.json",
   "variants": [],
   "blockType": {
-    "blockType": "html"
+    "entryPoint": "html"
   },
   "protocol": "0.2",
   "displayName": "Template",
   "examples": [{ "name": "World" }],
   "icon": "public/omega.svg",
   "image": "public/block-preview.svg",
-  "source": "main.js"
+  "source": "app.html"
 }
