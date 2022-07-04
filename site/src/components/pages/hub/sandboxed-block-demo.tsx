@@ -13,10 +13,13 @@ export const SandboxedBlockDemo: VoidFunctionComponent<SandboxedBlockProps> = ({
   props,
   sandboxBaseUrl,
 }) => {
+  const loadedRef = useRef(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const postBlockProps = useCallback(() => {
-    iframeRef.current?.contentWindow?.postMessage(JSON.stringify(props), "*");
+    if (loadedRef.current) {
+      iframeRef.current?.contentWindow?.postMessage(JSON.stringify(props), "*");
+    }
   }, [props]);
 
   useEffect(() => {
@@ -36,6 +39,7 @@ export const SandboxedBlockDemo: VoidFunctionComponent<SandboxedBlockProps> = ({
       sandbox="allow-forms allow-scripts allow-same-origin"
       allow="clipboard-write"
       onLoad={() => {
+        loadedRef.current = true;
         postBlockProps();
       }}
       // todo: remove 100% after implementing viewport negotiation

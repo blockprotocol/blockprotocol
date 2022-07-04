@@ -1,3 +1,4 @@
+import { HtmlBlockDefinition } from "@blockprotocol/core";
 import React, { ComponentType, VoidFunctionComponent } from "react";
 
 import { CustomElementLoader } from "./block-renderer/custom-element";
@@ -8,14 +9,14 @@ type BlockRendererProps = {
     elementClass: typeof HTMLElement;
     tagName: string;
   };
-  htmlString?: string;
+  html?: HtmlBlockDefinition;
   properties: Record<string, unknown>;
   ReactComponent?: ComponentType;
 };
 
 export const BlockRenderer: VoidFunctionComponent<BlockRendererProps> = ({
   customElement,
-  htmlString,
+  html,
   properties,
   ReactComponent,
 }) => {
@@ -23,10 +24,10 @@ export const BlockRenderer: VoidFunctionComponent<BlockRendererProps> = ({
     return <ReactComponent {...properties} />;
   } else if (customElement) {
     return <CustomElementLoader properties={properties} {...customElement} />;
-  } else if (htmlString) {
-    return <HtmlLoader htmlString={htmlString} />;
+  } else if (html) {
+    return <HtmlLoader html={html} />;
   }
   throw new Error(
-    "One of reactElement, customElement or htmlString must be provided.",
+    "One of reactElement, customElement or html must be provided.",
   );
 };
