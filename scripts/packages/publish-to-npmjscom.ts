@@ -52,7 +52,9 @@ const script = async () => {
       execaArgs.push("--dry-run");
     }
 
-    const distTag = publishablePackage.version.match(/(?:^\d+\.\d+\.\d+)-(.+)\./)?.[1];
+    const distTag = publishablePackage.version.match(
+      /^\d+\.\d+\.\d+-(\w+)\./,
+    )?.[1];
     if (distTag) {
       console.log(`Publishing with tag '${distTag}'`);
       execaArgs.push("--tag", distTag);
