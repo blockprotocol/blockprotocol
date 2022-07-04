@@ -22,7 +22,7 @@ These elements are used in combination to improve reusability of, and better def
 
 The structure of these types are defined by (and can be validated against) their meta-schemas, which can be found in the [reference-level explanation](#reference-level-explanation).
 
-By using the proposed types, blocks, embedding applications, and end-users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities. Reusability of descriptions of data should decrease developmental overhead over time, with all members of the ecosystem benefiting from emergent standardization.
+By using the proposed types, blocks, embedding applications, and end-users can all have greater confidence in each other's roles and functionalities, and hopefully will allow them all to benefit from better computational inference and capabilities. Reusability through sharing of descriptions of data should decrease developmental overhead over time, with all members of the ecosystem benefiting from emergent standardization. It's essential for reusability that _sharing_ occurs between users of the Block Protocol - if these types are defined in isolation, it's not possible to facilitate reusability.
 
 The benefits of emergent standardization are, however, greatly dependent on participating members within the ecosystem. Members sharing types and structural requirements (i.e. when creating blocks) enable the full potential of the proposed type system. Allowing proper reusability of descriptions of data is thus gated by the progression of the ecosystem through participation and sharing.
 
@@ -251,7 +251,7 @@ The `Interests` Property Type could define its value as being an object which ha
 
 A Property Type can also express that it has a list of things as its value.
 
-> ⚠️ It's important to note that in **most circumstances a Property Type should be expressed as a singular item** as this encourages reusability and allows the parent object to define whether there is a collection or not.
+> ⚠️ It's important to note that in **most circumstances a Property Type should be expressed as a singular item** as this encourages reusability when sharing and allows the parent object to define whether there is a collection or not.
 >
 > As such, examples are not provided in this section, refer to the Reference-Level description for more information.
 
@@ -2201,6 +2201,7 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 - how Block Schemas are defined
 - the reusability of properties and data types (and the increased need for type discovery to facilitate this)
+  - block authors can share and use types through URIs explicitly
 
 > 💡 Notice that `entityId`s are replaced by a Property Type URI that resides in the `/@blockprotocol` namespace. This is an implementation detail, and not something that is strictly dictated by the proposal.
 
@@ -2675,7 +2676,7 @@ There is an incredibly diverse number of domains in which the Block Protocol cou
 
 Across the domains, data will vary to the point that it's completely infeasible to define one perfect description of it (an _ontology_), there will simply be too much disagreement about what a certain "thing" looks like, i.e. there will be a lack of consensus. It's also worth mentioning that this is not just due to differences in domains, but also in data-quality, where misconfigured data must still be _able_ to be represented in the system, which is a lot less likely with one global view of the world.
 
-As such, the key identified benefit of this type system is that _continues_ to allow for **partial-consensus**, where different domains can create and utilize different subsets of the wider ecosystem. It allows for **divergence** of definitions of "things" (Bob can define "Person" differently to Alice), but _encourages_ **gradual convergence** through reusability and further standardization.
+As such, the key identified benefit of this type system is that _continues_ to allow for **partial-consensus**, where different domains can create and utilize different subsets of the wider ecosystem. It allows for **divergence** of definitions of "things" (Bob can define "Person" differently to Alice), but _encourages_ **gradual convergence** through reusability, sharing, and further standardization.
 
 #### Reusability
 
@@ -2686,9 +2687,9 @@ This is rectified through the following:
 - Allow people to describe the individual pieces of data _within_ "things"
 - Make it possible to reuse those descriptions
 
-The system proposed in the RFC creates another vector of communication, the description of the data is no longer _necessarily_ as autonomous, people describing data can benefit from existing descriptions. This gives a route for **convergence** of descriptions, because as a block developer I can _discover_ an existing Property Type for `Timestamp` and reuse it, mitigating some of the risks of instead describing it as "time". This is less one-sided because a producer of data is also able to discover descriptions which they can use to create their data.
+The system proposed in the RFC creates another vector of communication, the description of the data is no longer _necessarily_ as autonomous, people describing data can benefit from existing, shared descriptions. This gives a route for **convergence** of descriptions, because as a block developer I can _discover_ an existing Property Type for `Timestamp` and reuse it, mitigating some of the risks of instead describing it as "time". This is less one-sided because a producer of data is also able to discover descriptions that they can use to create their data.
 
-That's not to say this will be perfect or that it will happen most of the time, but it's a possibility that's opened up by the system, and which future tooling and processes can leverage and guide people towards. This is beneficial for a number of reasons, one of which is that reusability of descriptions leads to emergent standardization.
+That's not to say this will be perfect or that it will happen most of the time, but it's a possibility that's opened up by the system, and which future tooling and processes can leverage and guide people towards. This is beneficial for a number of reasons, one of which is that reusing shared descriptions of data leads to emergent standardization.
 
 #### Emergent standardization
 
@@ -2832,7 +2833,7 @@ In this RFC Data Types are limited to a set of primitive ones. There's potential
 
 ## Discoverability
 
-Reusability has been mentioned as a large benefit of the Type System. These benefits will be limited if types aren't easily discoverable. A potential solution to this would be establishing a standard for a Type Repository. This standard could potentially be written to work like Linux (or npm, pip, etc.) package repositories.
+Reusability through sharing has been mentioned as a large benefit of the Type System. These benefits will be limited if types aren't easily discoverable. A potential solution to this would be establishing a standard for a Type Repository. This standard could potentially be written to work like Linux (or npm, pip, etc.) package repositories.
 
 It should therefore be possible to allow for a decentralized system, while also providing centralized ecosystem (or multiple) for those who wish to benefit from it, likely having a blockprotocol.org Type Repository.
 
