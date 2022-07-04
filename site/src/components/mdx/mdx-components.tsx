@@ -1,5 +1,12 @@
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
+import {
+  Box,
+  Paper,
+  styled,
+  Typography,
+  typographyClasses,
+  TypographyProps,
+} from "@mui/material";
 import {
   Children,
   FunctionComponent,
@@ -88,23 +95,17 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
   FAQ,
   GraphServiceMessageList,
   SubTitle: (({ children }) => (
-    <Typography
-      variant="bpSubtitle"
+    <Box
       maxWidth={750}
       sx={{
         marginBottom: 6,
+        // override the styling of any nested typography component
+        [`> .${typographyClasses.root}`]: ({ typography }) =>
+          typography.bpSubtitle,
       }}
     >
-      {Array.isArray(children)
-        ? children.map((child) =>
-            child && typeof child === "object" && "props" in child
-              ? child.props.children
-              : child,
-          )
-        : children && typeof children === "object" && "props" in children
-        ? children.props?.children
-        : null}
-    </Typography>
+      {children}
+    </Box>
   )) as FunctionComponent,
   Hidden: (({ children }) => {
     return (
