@@ -461,7 +461,7 @@ An entry in `messages` MAY specify:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/spec/service-meta",
+  "$id": "https://blockprotocol.org/types/core/service-meta",
   "type": "object",
   "properties": {
     "description": {
@@ -479,26 +479,44 @@ An entry in `messages` MAY specify:
       "items": {
         "type": "object",
         "properties": {
-          "description": { "type": "string" },
-          "messageName": { "type": "string" },
-          "source": { "type": "string", "enum": ["block", "embedder"] },
-          "data": { "type": "object" },
-          "errorCodes": { "type": "array", "items": { "type": "string" },
-          "sentOnInitialization": { "type": "boolean" },
-          "respondedToBy": { "type": "string" }
-        },
-        "required": ["description", "messageName", "source", "data"]
+          "description": {
+            "type": "string"
+          },
+          "messageName": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["block", "embedder"]
+          },
+          "data": {
+            "type": "object"
+          },
+          "errorCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "sentOnInitialization": {
+              "type": "boolean"
+            },
+            "respondedToBy": {
+              "type": "string"
+            }
+          },
+          "required": ["description", "messageName", "source", "data"]
+        }
+      },
+      "version": {
+        "type": "string",
+        "description": "The semantic version of this service specification"
+      },
+      "coreVersion": {
+        "type": "string",
+        "description": "The version (or version range) of the core specification this is compatible with"
       }
     },
-    "version": {
-      "type": "string",
-      "description": "The semantic version of this service specification"
-    },
-    "coreVersion": {
-      "type": "string",
-      "description": "The version (or version range) of the core specification this is compatible with"
-    }
-   },
-   "required": ["description", "messages", "name", "version"]
+    "required": ["description", "messages", "name", "version"]
+  }
 }
 ```
