@@ -19,6 +19,7 @@ import remarkGfm from "remark-gfm";
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
+import { mdxComponents } from "../../../components/mdx/mdx-components";
 import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
 import {
   BlockExampleGraph,
@@ -32,7 +33,6 @@ import {
   readBlocksFromDisk,
 } from "../../../lib/blocks";
 import { isProduction } from "../../../lib/config";
-import { mdxComponents } from "../../../util/mdx-components";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(

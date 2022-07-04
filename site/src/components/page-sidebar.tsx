@@ -366,6 +366,7 @@ const getInitialOpenedPages = (params: {
 export const Sidebar: VFC<SidebarProps> = ({
   appendices,
   pages,
+  sx = [],
   ...boxProps
 }) => {
   const theme = useTheme();
@@ -432,12 +433,14 @@ export const Sidebar: VFC<SidebarProps> = ({
       width={SIDEBAR_WIDTH}
       top={`${height}px`}
       height={`calc(100vh - ${height}px)`}
-      sx={{
-        ...boxProps.sx,
-        borderRightColor: theme.palette.gray[30],
-        borderRightStyle: "solid",
-        borderRightWidth: 1,
-      }}
+      sx={[
+        {
+          borderRightColor: theme.palette.gray[30],
+          borderRightStyle: "solid",
+          borderRightWidth: 1,
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <Box
         sx={{

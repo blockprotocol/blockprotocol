@@ -64,6 +64,8 @@ A block package MUST contain:
     - `image`: a path to the preview image of the block to help users visualize it before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x600px
     - `license`: the name of the license the block is made available under (e.g. MIT), or the URL of a license
     - `repository`: specifies the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development
+  - MUST NOT specify under certain conditions:
+    - `externals`: must not be specified when `blockType.entryPoint` is specified as `"html"`. Block Protocol does not currently support embedding applications injecting dependencies for HTML blocks. This is a technical limitation of ES Modules.
 
 ### Types of block
 
@@ -114,17 +116,24 @@ The embedding application MUST pass the data of [`"initResponse"`](#initResponse
 
 Blocks of kind `"html"` require special handling in order that they can identify elements within them – since they may share their scope with other blocks, including identical blocks, they cannot rely on finding elements by id or other selectors.
 
+The `@blockprotocol/core` package exports for embedding applications' convenience a `renderHtmlBlock` function which handles both assigning an implementation of the `blockprotocol` API described below to the global scope, and rendering the block within a provided node.
+
+If an embedding application wishes to handle rendering separately, the package also exports (which `renderHtmlBlock` makes use of):
+
+- an `assignBlockProtocolGlobals` function, which simply assigns an implementation of the `blockprotocol` API described below to the global scope. The package also exports a corresponding `teardownBlockProtocol` function to reset this.
+- a `markBlockScripts` function. Embedding applications MUST call this when rendering a block if they wish to use the implementation of the `blockprotocol` API provided by `assignBlockProtocolGlobals`, as this ensures those APIs know which block is calling them.
+
 Embedding applications which load ANY block of `kind: "html"` MUST provide a `blockprotocol` object on the global scope (i.e. `globalThis.blockprotocol` / `window.blockprotocol`), which:
 
 - MUST contain a `getBlockContainer` key where the value is a function, which the HTML block can call to obtain a reference to the container element for that specific block:
-  - this MUST accept a single argument, which MUST be either a single script element, or a URL, and may be omitted
-  - the implementation of these functions relies on embedding applications attaching ids to script tags when loading blocks by which they can be later identified (or when the block provides additional scripts via `markScripts`).
-- MUST contain a `markScripts` key where the value is a function, which is used to attach ids to dynamically script tags so that they can be identified when calling `getBlockContainer`
+  - this MUST accept a single argument, which MUST be either a single script element, or a URL string, and may be omitted
+  - the implementation of these functions relies on embedding applications attaching ids to script tags when loading blocks by which they can be later identified (or when the block provides additional scripts via `markScript`).
+- MUST contain a `getBlockUrl` key where the value is a function, which the HTML block can call to obtain the URL at which the HTML source of the block is hosted:
+  - this MUST accept a single argument, which MUST be either a single script element, or a URL string, and may be omitted.
+- MUST contain a `markScript` key where the value is a function, which is used to attach ids to dynamically script tags so that they can be identified when calling `getBlockContainer`
   - This MUST accept TWO arguments:
     - the first MUST be the script source
-    - the second MUST be either a single script element, or a URL.
-
-The `@blockprotocol/core` package exports a `blockprotocolGlobals` object which implements these functions.
+    - the second MUST be either a single script element, or a URL string.
 
 Blocks of `kind: "html"` MUST call `getBlockContainer` from within any script they load, with different strategies depending on whether the script is:
 
@@ -153,7 +162,34 @@ Blocks of `kind: "html"` MUST call `getBlockContainer` from within any script th
   </tbody>
 </table>
 
-If blocks generate any scripts dynamically at runtime, they MUST call `markScripts` in order to have the script marked by the embedding application. As with static scripts, they MUST call `getBlockContainer` within any dynamically generated script in order to obtain a reference to the element containing the block.
+Blocks of `kind: "html"` MAY call `getBlockUrl` from within any script they load, with different strategies depending on whether the script is:
+
+- **inline** (written directly in the `<script>` tag) or **remote** (a file loaded via the `src` property of a `<script>` tag)
+- **`type="module"`** or **not**
+
+<table>
+  <thead>
+    <tr>
+      <th>`getBlockUrl -> HTMLElement`</th>
+      <th>Inline</th>
+      <th>Remote</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Module</td>
+      <td>```js getBlockUrl() ```</td>
+      <td>```js getBlockUrl( import.meta.url ) ```</td>
+    </tr>
+    <tr>
+      <td>Script</td>
+      <td>```js getBlockUrl( document.currentScript ) ```</td>
+      <td>```js getBlockUrl( document.currentScript ) ```</td>
+    </tr>
+  </tbody>
+</table>
+
+If blocks generate any scripts dynamically at runtime, they MUST call `markScript` in order to have the script marked by the embedding application. As with static scripts, they MUST call `getBlockContainer` within any dynamically generated script in order to obtain a reference to the element containing the block.
 
 <table>
   <thead>
@@ -176,6 +212,8 @@ If blocks generate any scripts dynamically at runtime, they MUST call `markScrip
     </tr>
   </tbody>
 </table>
+
+Embedding applications MUST update any relative static imports (or script tag src attributes) contained within a block's HTML source to ensure the URLs are relative to the block's source, and not the page the HTML is hosted on. The `@blockprotocol/core` package exports `markBlockScripts` which can be used to do this for scripts (not e.g. an `img` with a relative `src`).
 
 An example HTML block is available via `npx create-block-app your-block-name --template html`
 
@@ -423,7 +461,7 @@ An entry in `messages` MAY specify:
 
 ```json
 {
-  "$id": "https://blockprotocol.org/spec/service-meta",
+  "$id": "https://blockprotocol.org/types/core/service-meta",
   "type": "object",
   "properties": {
     "description": {
@@ -441,26 +479,44 @@ An entry in `messages` MAY specify:
       "items": {
         "type": "object",
         "properties": {
-          "description": { "type": "string" },
-          "messageName": { "type": "string" },
-          "source": { "type": "string", "enum": ["block", "embedder"] },
-          "data": { "type": "object" },
-          "errorCodes": { "type": "array", "items": { "type": "string" },
-          "sentOnInitialization": { "type": "boolean" },
-          "respondedToBy": { "type": "string" }
-        },
-        "required": ["description", "messageName", "source", "data"]
+          "description": {
+            "type": "string"
+          },
+          "messageName": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["block", "embedder"]
+          },
+          "data": {
+            "type": "object"
+          },
+          "errorCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "sentOnInitialization": {
+              "type": "boolean"
+            },
+            "respondedToBy": {
+              "type": "string"
+            }
+          },
+          "required": ["description", "messageName", "source", "data"]
+        }
+      },
+      "version": {
+        "type": "string",
+        "description": "The semantic version of this service specification"
+      },
+      "coreVersion": {
+        "type": "string",
+        "description": "The version (or version range) of the core specification this is compatible with"
       }
     },
-    "version": {
-      "type": "string",
-      "description": "The semantic version of this service specification"
-    },
-    "coreVersion": {
-      "type": "string",
-      "description": "The version (or version range) of the core specification this is compatible with"
-    }
-   },
-   "required": ["description", "messages", "name", "version"]
+    "required": ["description", "messages", "name", "version"]
+  }
 }
 ```

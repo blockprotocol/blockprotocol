@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "./button";
 import { Modal } from "./modal/modal";
-import Search from "./pages/docs/search";
+import { Search } from "./pages/docs/search";
 
 export const SearchNavButton = () => {
   const [displayModal, setDisplayModal] = useState(false);
@@ -13,14 +13,14 @@ export const SearchNavButton = () => {
   useEffect(() => {
     const onKeyDown = ({ key }: KeyboardEvent) => {
       if (key === "/") {
-        setDisplayModal(!displayModal);
+        setDisplayModal((prev) => !prev);
       }
     };
 
     window.addEventListener("keydown", onKeyDown);
 
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [displayModal]);
+  }, []);
 
   return (
     <>

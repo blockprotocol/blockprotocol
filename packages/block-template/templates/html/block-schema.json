@@ -3,8 +3,7 @@
   "type": "object",
   "properties": {
     "name": {
-      "type": "string",
-      "enum": ["string"]
+      "type": "string"
     }
   },
   "required": ["name"],

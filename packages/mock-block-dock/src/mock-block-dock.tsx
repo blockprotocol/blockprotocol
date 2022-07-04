@@ -1,3 +1,4 @@
+import { HtmlBlockDefinition } from "@blockprotocol/core";
 import {
   BlockGraphProperties,
   Entity,
@@ -26,7 +27,9 @@ type BlockDefinition =
         tagName: string;
       };
     }
-  | { htmlString: string };
+  | {
+      html: HtmlBlockDefinition;
+    };
 
 type MockBlockDockProps = {
   blockDefinition: BlockDefinition;
@@ -40,7 +43,7 @@ type MockBlockDockProps = {
 };
 
 /**
- * A component which acts as a mock embedding application for Blcok Protocol blocks.
+ * A component which acts as a mock embedding application for Block Protocol blocks.
  * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
  * @param [blockDefinition] the source for the block and any additional metadata required
@@ -151,11 +154,7 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
                 ? blockDefinition.customElement
                 : undefined
             }
-            htmlString={
-              "htmlString" in blockDefinition
-                ? blockDefinition.htmlString
-                : undefined
-            }
+            html={"html" in blockDefinition ? blockDefinition.html : undefined}
             properties={propsToInject}
             ReactComponent={
               "ReactComponent" in blockDefinition
@@ -181,10 +180,8 @@ export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
                     ? blockDefinition.customElement
                     : undefined
                 }
-                htmlString={
-                  "htmlString" in blockDefinition
-                    ? blockDefinition.htmlString
-                    : undefined
+                html={
+                  "html" in blockDefinition ? blockDefinition.html : undefined
                 }
                 properties={propsToInject}
                 ReactComponent={

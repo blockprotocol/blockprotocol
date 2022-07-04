@@ -24,6 +24,10 @@ module.exports = {
           loader: "babel-loader",
         },
       },
+      {
+        resourceQuery: /raw/,
+        type: "asset/source",
+      },
     ],
   },
   devServer: {
