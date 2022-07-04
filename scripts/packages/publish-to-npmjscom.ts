@@ -52,8 +52,10 @@ const script = async () => {
       execaArgs.push("--dry-run");
     }
 
-    if (!publishablePackage.version.match(/^\d+\.\d+\.\d+$/)) {
-      execaArgs.push("--tag", "canary");
+    const distTag = publishablePackage.version.match(/(?:^\d+\.\d+\.\d+)-(.+)\./)?.[1];
+    if (distTag) {
+      console.log(`Publishing with tag '${distTag}'`);
+      execaArgs.push("--tag", distTag);
     }
 
     await execa("npm", execaArgs, {
