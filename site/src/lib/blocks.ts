@@ -1,8 +1,8 @@
 import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
-// eslint-disable-next-line no-restricted-imports,unicorn/prefer-node-protocol -- https://github.com/vercel/nft/issues/293
-import fs from "fs";
-import glob from "glob";
+import fs from "fs-extra";
+import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
+import path from "node:path";
 
 import { FRONTEND_URL } from "./config";
 
@@ -51,12 +51,12 @@ const generateBlockFileUrl = (
 const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
   commit: string,
-  path: string | undefined,
+  hubInfoDirPath: string | undefined,
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
       .fromUrl(repository)
-      ?.browse(path ?? "", { committish: commit });
+      ?.browse(hubInfoDirPath ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -70,7 +70,7 @@ const getRepositoryUrl = (
   if (url) {
     const repositoryUrl = hostedGitInfo
       .fromUrl(url)
-      ?.browse(path ?? directory ?? "", { committish: commit });
+      ?.browse(hubInfoDirPath ?? directory ?? "", { committish: commit });
 
     if (repositoryUrl) {
       return repositoryUrl;
@@ -87,60 +87,65 @@ const getRepositoryUrl = (
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
 > => {
-  return glob
-    .sync(`${process.cwd()}/public/blocks/**/block-metadata.json`)
-    .map((path: string): ExpandedBlockMetadata => {
-      const packagePath = path.split("/").slice(-3, -1).join("/");
+  const blockMetadataFilePaths = await globby(
+    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`),
+  );
 
-      const partialMetadata = JSON.parse(
-        fs.readFileSync(path, { encoding: "utf8" }),
-      );
+  const result: ExpandedBlockMetadata[] = [];
+  for (const blockMetadataFilePath of blockMetadataFilePaths) {
+    const packagePath = blockMetadataFilePath
+      .split("/")
+      .slice(-3, -1)
+      .join("/");
 
-      const metadata: ExpandedBlockMetadata = {
-        // @todo should be redundant to block's package.json#name
-        componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
-        packagePath,
-        // fallback while not all blocks have blockType defined
-        blockType: partialMetadata.blockType ?? { entryPoint: "react" },
-        ...partialMetadata,
-      };
-
-      const storedBlockInfo: StoredBlockInfo = JSON.parse(
-        fs.readFileSync(`${process.cwd()}/../hub/${packagePath}.json`, {
-          encoding: "utf8",
-        }),
-      );
-
-      const repository = getRepositoryUrl(
-        metadata.repository ?? storedBlockInfo.repository,
-        storedBlockInfo.commit,
-        metadata.unstable_hubInfo?.directory,
-      )?.replace(/\/$/, "");
-
-      return {
-        ...metadata,
-        author: metadata.packagePath.split("/")[0]!.replace(/^@/, ""),
-        icon: generateBlockFileUrl(metadata.icon, metadata.packagePath),
-        image: generateBlockFileUrl(metadata.image, metadata.packagePath),
-        source: generateBlockFileUrl(metadata.source, metadata.packagePath)!,
-        variants: metadata.variants?.length
-          ? metadata.variants?.map((variant) => ({
-              ...variant,
-              icon: generateBlockFileUrl(variant.icon, metadata.packagePath)!,
-            }))
-          : null,
-        schema: generateBlockFileUrl(metadata.schema, metadata.packagePath)!,
-        repository,
-        blockPackagePath: `/${metadata.packagePath
-          .split("/")
-          .join("/blocks/")}`,
-        exampleGraph: generateBlockFileUrl(
-          metadata.exampleGraph,
-          metadata.packagePath,
-        ),
-        lastUpdated: null, // TODO: derive from block data when provided by the hub
-      };
+    const partialMetadata = await fs.readJson(blockMetadataFilePath, {
+      encoding: "utf8",
     });
+
+    const metadata: ExpandedBlockMetadata = {
+      // @todo should be redundant to block's package.json#name
+      componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
+      packagePath,
+      // fallback while not all blocks have blockType defined
+      blockType: partialMetadata.blockType ?? { entryPoint: "react" },
+      ...partialMetadata,
+    };
+
+    const storedBlockInfo: StoredBlockInfo = await fs.readJson(
+      path.resolve(process.cwd(), `../hub/${packagePath}.json`),
+      { encoding: "utf8" },
+    );
+
+    const repository = getRepositoryUrl(
+      metadata.repository ?? storedBlockInfo.repository,
+      storedBlockInfo.commit,
+      metadata.unstable_hubInfo?.directory,
+    )?.replace(/\/$/, "");
+
+    result.push({
+      ...metadata,
+      author: metadata.packagePath.split("/")[0]!.replace(/^@/, ""),
+      icon: generateBlockFileUrl(metadata.icon, metadata.packagePath),
+      image: generateBlockFileUrl(metadata.image, metadata.packagePath),
+      source: generateBlockFileUrl(metadata.source, metadata.packagePath)!,
+      variants: metadata.variants?.length
+        ? metadata.variants?.map((variant) => ({
+            ...variant,
+            icon: generateBlockFileUrl(variant.icon, metadata.packagePath)!,
+          }))
+        : null,
+      schema: generateBlockFileUrl(metadata.schema, metadata.packagePath)!,
+      repository,
+      blockPackagePath: `/${metadata.packagePath.split("/").join("/blocks/")}`,
+      exampleGraph: generateBlockFileUrl(
+        metadata.exampleGraph,
+        metadata.packagePath,
+      ),
+      lastUpdated: null, // TODO: derive from block data when provided by the hub
+    });
+  }
+
+  return result;
 };
 
 // Blocks which are currently not compliant with the spec, and are thus misleading examples
@@ -172,20 +177,26 @@ export const readBlockDataFromDisk = async ({
 
   const schema = metadataSchema.startsWith(FRONTEND_URL)
     ? JSON.parse(
-        fs.readFileSync(
-          `${process.cwd()}/public/blocks/${packagePath}/${metadataSchema.substring(
-            metadataSchema.lastIndexOf("/") + 1,
-          )}`,
+        await fs.readFile(
+          path.resolve(
+            process.cwd(),
+            `public/blocks/${packagePath}/${metadataSchema.substring(
+              metadataSchema.lastIndexOf("/") + 1,
+            )}`,
+          ),
           { encoding: "utf8" },
         ),
       )
     : await fetch(metadataSchema).then((response) => response.json());
 
   const source = metadataSource.startsWith(FRONTEND_URL)
-    ? fs.readFileSync(
-        `${process.cwd()}/public/blocks/${packagePath}/${metadataSource.substring(
-          metadataSource.lastIndexOf("/") + 1,
-        )}`,
+    ? await fs.readFile(
+        path.resolve(
+          process.cwd(),
+          `public/blocks/${packagePath}/${metadataSource.substring(
+            metadataSource.lastIndexOf("/") + 1,
+          )}`,
+        ),
         { encoding: "utf8" },
       )
     : await fetch(metadataSource).then((response) => response.text());

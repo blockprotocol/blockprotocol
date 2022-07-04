@@ -23,7 +23,7 @@ Other templates are available. See `npx create-block-app --help`
 1.  When finished, run `yarn build`, which:
 
     - Bundles the component into a single source file
-    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/spec).
+    - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/docs/spec).
 
 Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-blocks)
 for help in creating and updating data from your block.

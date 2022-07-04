@@ -16,20 +16,22 @@ type AvatarProps = {
 export const Avatar: VFC<AvatarProps> = ({
   size = 250,
   name = "A",
-  ...boxProps
+  sx = [],
 }) => {
   return (
     <Box
-      sx={{
-        height: size,
-        width: size,
-        background: `linear-gradient(359.31deg, #7158FF 0.28%, #7F68FF 99.11%)`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "6px",
-        ...boxProps.sx,
-      }}
+      sx={[
+        {
+          height: size,
+          width: size,
+          background: `linear-gradient(359.31deg, #7158FF 0.28%, #7F68FF 99.11%)`,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: "6px",
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       <Typography
         sx={{
