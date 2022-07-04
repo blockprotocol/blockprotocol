@@ -461,16 +461,46 @@ export const Sidebar: VFC<SidebarProps> = ({
             opacity: 0,
           }}
         />
-        {pages.map((page) => (
-          <SidebarPage
-            page={page}
-            key={page.href}
-            maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
-            setSelectedAnchorElement={setSelectedAnchorElement}
-            openedPages={openedPages}
-            setOpenedPages={setOpenedPages}
-          />
-        ))}
+        {pages.length > 1 ? (
+          pages.map((page) => (
+            <SidebarPage
+              key={page.href}
+              page={page}
+              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+              setSelectedAnchorElement={setSelectedAnchorElement}
+              openedPages={openedPages}
+              setOpenedPages={setOpenedPages}
+            />
+          ))
+        ) : pages.length === 1 ? (
+          <>
+            {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
+            {pages[0]!.sections.map((section, i) => (
+              <SidebarPageSection
+                key={section.anchor}
+                isSelectedByDefault={i === 0}
+                depth={0}
+                pageHref={pages[0]!.href}
+                section={section}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))}
+            {pages[0]!.subPages.map((subpage) => (
+              <SidebarPage
+                key={subpage.href}
+                depth={0}
+                page={subpage}
+                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
+                setSelectedAnchorElement={setSelectedAnchorElement}
+                openedPages={openedPages}
+                setOpenedPages={setOpenedPages}
+              />
+            ))}
+          </>
+        ) : null}
         {appendices && appendices.length > 0 ? (
           <>
             <Divider sx={{ marginBottom: 2 }} />
