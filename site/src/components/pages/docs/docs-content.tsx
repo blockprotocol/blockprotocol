@@ -24,7 +24,6 @@ import { Sidebar } from "../../page-sidebar";
 type DocsPageProps = {
   title?: ReactNode;
   subtitle?: ReactNode;
-  hero?: ReactNode;
   content: MDXRemoteSerializeResult<Record<string, unknown>>;
   pages: SiteMapPage[];
   flatPages?: SiteMapPage[];
