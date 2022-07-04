@@ -7,86 +7,338 @@
 
 [summary]: #summary
 
-One paragraph explanation of the feature.
+The Type System outlined in [RFC 0352](https://github.com/blockprotocol/blockprotocol/blob/am/rfc-graph-type-system/rfcs/text/0352-graph-type-system.md) introduced classes of types that are used to describe the data used and produced by blocks and embedding applications. The types are possibly (ideally often) publicly accessible, and their hierarchy allows for them to be composed together into new types. Due to this, changes in a type can affect the structure of another one. This RFC defines how types are versioned, to mitigate potential problems that would arise without versioning.
 
 # Motivation
 
 [motivation]: #motivation
 
-Why are we doing this? What use cases does it support? What is the expected outcome?
+The Type System is intended to allow for **reusable and shared** descriptions of data. As such, a version of a block should be able to tie itself to a _specific_ description of the structure of the data it requires as if types are able to be updated independently of blocks then this would cause problems. Additionally, if someone (Alice) creates an entity type that refers to someone else's (Bob's) "address" property type, we do not want Bob to be able to change what Alice meant in her entity type by arbitrarily and implicitly updating it.
+
+Being able to refer to specific, immutable versions of types should mitigate or solve the majority of the issues stemming from this.
+
+This RFC proposes that every Type (i.e. Data Type, Property Type, Entity Type, or Link Type) should be associated with a unique version number. This version number will be part of the URI that is used to uniquely identify the specific instance of the Type, to access the Type's schema, and to refer to the Type from other Types.
+
+We also outline a method to compare compatibility between types, and use this in the [Rationale and Alternatives](#rationale-and-alternatives) section to explain how this replaces the need for some other versioning scheme such as semantic versioning.
 
 # Guide-level explanation
 
 [guide-level-explanation]: #guide-level-explanation
 
-Explain the proposal as if it was already included in the protocol and you were teaching it to another Block Protocol implementor. That generally means:
+## Type Versions
 
-- Introducing new named concepts.
-- Explaining the feature largely in terms of examples.
-- Explaining how Block Protocol implementors and users should _think_ about the feature, and how it should impact the way they use the protocol. It should explain the impact as concretely as possible.
-- If applicable, provide sample error messages, deprecation warnings, or migration guidance.
-- If applicable, describe the differences between teaching this to existing and new Block Protocol users.
+The _version number_ of a type is an incrementing positive integer that increases by 1 with each new version, starting from 1.
 
-For implementation-oriented RFCs, this section should focus on how Block Protocol implementors should think about the change, and give examples of its concrete impact. For policy RFCs, this section should provide an example-driven introduction to the policy, and explain its impact in concrete terms.
+## Type URIs
+
+The _base URI_ of a type is a _unique_ identifier for the type irrespective of its version.
+
+The _versioned URI_ of a type is made up of:
+
+```js
+"${base_uri}/v/${version_number}";
+```
+
+We opt not to constrain the format of the `base_uri` to enable flexibility in non-public use-cases or in domains with constraints that we cannot predict. Despite this, we _suggest_ that the base URIs should have a consistent format for all types hosted on your domain, and should generally be humanly readable in a way that describes your type. For example, one may pick:
+
+```js
+"http://yourdomain/namespace/property-type/type_name";
+```
+
+as the identifier (assuming that the domain decides that type names are unique across a namespace).
+
+Where it's possible to guarantee, this URI should be valid indefinitely.
+
+> ⚠️ New iterations and changes to the type must occur under new version numbers, components of the Block Protocol ecosystem will certainly implement caching and local-persistence logic, and the spec consciously makes no recommendation that these caches are updated.
+>
+> **As such, a specific version of a Type is to be treated as an immutable record**.
 
 # Reference-level explanation
 
-[reference-level-explanation]: #reference-level-explanation
+## What is a "version" of a Type
 
-This is the technical portion of the RFC. Explain the design in sufficient detail that:
+Any published (accessible) iteration of a Type can be considered a "version" of the Type. Once a specific iteration of a type is made accessible via a URI, it should be considered immutable.
 
-- Its interaction with other features is clear.
-- It is reasonably clear how the feature would be implemented.
-- Corner cases are dissected by example.
+- This means that any change made to the Type (for example changing the description, adding a field, etc) constitutes reason for a new version.
+- If multiple changes are made prior to making it accessible (i.e. batching the changes), then a separate version is not needed for each individual change, but they can all be 'released' together.
 
-The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
+## URI Format and Version Numbers
+
+Type URIs, and their version numbers are defined as outlined in the [Guide-level explanation](#guide-level-explanation).
+
+### Schemas
+
+1.  The `"$id"` field of a Type should be equal to the Type's _versioned URI_.
+1.  When referencing another Type using `"$ref"`, the reference should be equal to the Type's _versioned URI_.
+1.  When used as the key of a property, the _base URI_ should be used.
+
+Example:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/types/entity-type/book",
+  "type": "object",
+  "title": "Book",
+  "properties": {
+    "https://blockprotocol.org/@alice/types/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/types/property-type/name/v/3121"
+    },
+    "https://blockprotocol.org/@alice/types/property-type/published-on": {
+      "$ref": "https://blockprotocol.org/@alice/types/property-type/published-on/v/1290"
+    },
+    "https://blockprotocol.org/@alice/types/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/types/property-type/blurb/v/808259"
+    }
+  },
+  "required": ["https://blockprotocol.org/@alice/types/property-type/name"]
+}
+```
+
+```json
+{
+  "https://blockprotocol.org/@alice/types/property-type/name": "The Time Machine",
+  "https://blockprotocol.org/@alice/types/property-type/published-on": "1895-05",
+  "https://blockprotocol.org/@alice/types/property-type/blurb": ...
+}
+```
+
+## Determining Type Compatibility
+
+A key part of the reasoning for picking this approach depends on the ability to determine compatibility between various types.
+
+For the purposes of this section, the following assumptions are applied:
+
+- Any given Schema X is _compatible with_ another schema Y if all possible values that satisfy Schema X also satisfy schema Y (note the directionality)
+- Any given Schema X is _equivalent to_ another Schema Y iff X is _compatible with_ Y _and_ Y is _compatible with_ X
+- All Type schemas have `additionalProperties: false` unless otherwise stated
+- 'Constraints' refer to all JSON schema keywords which affect the validation of data in the Block Protocol, these include (but are not limited to) `type`, `properties`, `minItems`, `maxItems`, `minimum`, `maximum`
+- 'Semantic Annotations' refer to all JSON schema keywords which do not affect the validation of data in the Block Protocol, these include (but are not limited to) `title`, `description`, `examples`, `default`
+- The ordering of constraints does not affect the compatibility of schemas
+
+### Data Types
+
+At the present Data Types represent completely disjoint value spaces, and the base primitive types are all **incompatible** with one another. As the [Non-Primitive Data Types RFC](https://github.com/blockprotocol/blockprotocol/pull/355) continues to be specified, it should comment on how checking compatibility will be affected.
+
+### Property Types
+
+1.  Due to how Property Types are used, they implicitly affect the structure of the data in that they require the existence of a key that matches their URI.
+1.  Property Types define their constraints through a `oneOf` field. This `oneOf` is a collection of a number of values (greater than 1) where each value is a variant of the "Property Values" (defined below).
+
+A Property Type `A` is therefore compatible with another Property Type `B` if and only if
+
+1.  They have the same base URI (which implies they are the same property type but perhaps different versions) and,
+1.  Every element of `A`'s `oneOf` is compatible with one element of `B`'s `oneOf`
+
+The "Property Values" is a recursive definition which refers to the sub-schemas defined within the Property Types meta-schema. It defines the element as being one of the following:
+
+#### Data Type Reference
+
+A Data Type reference is an inline reference to a data-type. A Data Type reference will be compatible with another Data Type reference if the Data Types that are referred to are also compatible.
+
+> _Without_ non-primitive Data Types this implies that the references are to the same Data Type.
+
+#### Property Type Object
+
+A Property Type Object is a JSON object where
+
+1.  The keys are base URI's to a property type
+1.  The values are defined by either:
+    1.  A reference to a property type
+    1.  An array definition, where
+        1.  the items are defined by a reference to a property type
+        1.  `minItems` and/or `maxItems` are optionally defined
+1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys
+
+A Property Type Object `X` is therefore compatible with another Property Type Object `Y` if and only if
+
+1.  Each key in the `properties` of `X` is also in the `properties` of `Y`
+1.  If a property in `X` is defined as an array, then it's also defined as an array in `Y` (and therefore the same for direct references)
+1.  If a property in `X` is defined as an array with a `minItems`, then there is a `minItems` constraint on the respective property in `Y` that is equal to or larger to that in `X`
+1.  If a property in `X` is defined as an array with a `maxItems`, then there is a `maxItems` constraint on the respective property in `Y` that is less than or equal to that in `X`
+1.  Each property type referenced in `X` is compatible with the respective property type referenced in `Y`. Where respective is defined by having the same base URI (property key)
+1.  Each URI in the `required` list of `X` is also in the `required` list of `Y`
+
+#### An Array of "Property Values"
+
+Finally, the "Property Values" can be a recursive definition that infinitely nests arrays where the `items` are a `oneOf` where the options are "Property Values" variants. Because of this, compatibility is defined largely similar to above.
+
+A definition of an array of "Property Values" `X` is compatible with another definition of an array of "Property Values" `Y`, if and only if
+
+1.  Every element of `X`'s `oneOf` is compatible with at least one element of `Y`'s `oneOf`
+1.  If `X` has a `minItems` constraint specified, then there is a `minItems` constraint in `Y` that is equal to or larger to that in `X`
+1.  If `X` has a `maxItems` constraint specified, then there is a `maxItems` constraint in `Y` that is less than or equal to that in `X`
+
+### Entity Types
+
+1.  Entity Types define their constraints on the structure of an entity through their `properties`, where
+    1.  The keys are base URI's to a property type
+    1.  The values are defined by either:
+        1.  A reference to a property type
+        1.  An array definition, where
+            1.  the items are defined by a reference to a property type
+            1.  `minItems` and/or `maxItems` are optionally defined
+1.  Entity Types also define additional constraints on links from their entity through their:
+    1.  `links`, where
+        1.  The keys are _versioned URI's_ to a link type
+        1.  The values are defined by either:
+            1.  An empty object (until Link Constraints are implemented)
+            1.  An array definition, where
+                1.  the items are an empty object (until Link Constraints are implemented)
+                1.  `ordered` is optionally defined
+                1.  `minItems` and/or `maxItems` are optionally defined
+    1.  `requiredLinks` array, where the elements are _versioned URIs_, and is a subset of the keys in the `links`
+
+An Entity Type `A` is therefore compatible with another Entity Type `B` if and only if
+
+1.  Each key in the `properties` of `A` is also in the `properties` of `B`
+1.  If a property in `A` is defined as an array, then it's also defined as an array in `B` (and therefore the same for direct references)
+1.  If a property in `A` is defined as an array with a `minItems`, then there is a `minItems` constraint on the respective property in `B` that is equal to or larger to that in `A`
+1.  If a property in `A` is defined as an array with a `maxItems`, then there is a `maxItems` constraint on the respective property in `B` that is less than or equal to that in `B`
+1.  Each property type referenced in `A` is compatible with the respective property type referenced in `B`. Where respective is defined by having the same base URI (property key)
+1.  Each URI in the `required` list of `A` is also in the `required` list of `B`
+1.  Each key in the `links` of `A` is also in the `links` of `B`
+1.  If a link in `links` of `A` is defined as an array, then it's also defined as an array in `B` (and therefore the same for direct references)
+1.  If a link in `links` of `A` is defined as an array with a `minItems`, then there is a `minItems` constraint on the respective link in `B` that is equal to or larger to that in `A`
+1.  If a link in `links` of `A` is defined as an array with a `maxItems`, then there is a `maxItems` constraint on the respective link in `B` that is less than or equal to that in `B`
+1.  If a link in `links` of `A` is defined as an array with `ordered` as `true`, then there is an `ordered` as `true` on the respective link in `B`
+1.  Each URI in the `requiredLinks` list of `A` is also in the `requiredLinks` list of `B`
+
+### Link Types
+
+Link Types are only able to be changed through _semantic annotations_ and as such, any Link Type `X`, with the same Base URI as another Link Type `Y` (i.e. a different version of the same link type), are _compatible_.
+
+## When to Check Compatibility of Types
+
+Block schemas, and other uses of types (for example graph service methods), can request data from the embedding application by referencing types. Not relying on the version to ensure compatibility means that if a block, or data (associated with a versioned type) in an embedding application, is "outdated", the compatibility can be checked by comparing the two schemas. Data blobs can continue to be validated against the relevant schema.
+
+This should allow a bit more flexibility within the system when it comes to compatibility of data requirements.
 
 # Drawbacks
 
 [drawbacks]: #drawbacks
 
-Why should we _not_ do this?
+- This proposal makes the active decision to not embed compatibility information within the version identifier. This contrasts with approaches like semantic versioning, which is explored more in the [Rationale and alternatives](#rationale-and-alternatives) section.
+- The versioning approach does not encapsulate information about the scale of the change, fixing a typo causes a new version in the same way that completely rewriting the constraints does.
+- When compared to an approach like semantic versioning, there is some _further_ implementation overhead to determining compatibility between versions of the same type. However in most cases this overhead would be present in both approaches regardless.
 
 # Rationale and alternatives
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-- Why is this design the best in the space of possible designs?
-- What other designs have been considered and what is the rationale for not choosing them?
-- What is the impact of not doing this?
+There were a number of strategies evaluated as part of this proposal:
+
+## No Versioning
+
+Not having _some sense of_ versioning has been ruled out largely for the reasoning outlined in the [Summary](#summary) and [Motivation](#motivation).
+
+- If a block uses a definition of the type, and has hard-coded logic that depends on the guarantees of the type, then if that type can change without the Block author intending it to, the block can break.
+- A block could mitigate this by "vendoring in" a specific instance of the type and then providing it alongside its source (note: this proposal doesn't actually make suggestions for or against this), but if that iteration of the type is not persisted, identifiable (by some form of version number..), and addressable, then this greatly reduces the reusability of types and would make it easy to lose a specific iteration.
+- This also could cause a lot of problems for the composability of types. Entity types could have their definitions implicitly affected by a property or data type being modified, etc.
+
+## Semantic Versioning
+
+This section is going to largely refer to _semantic versioning_ as defined by [semver.org](https://semver.org/), although it should be noted that it doesn't perfectly map to the ways types operate.
+
+### Effects of versioning on Blocks and Embedding Applications
+
+The Types sit in the middle of producers and consumers of data, and unfortunately various types of changes has differing effects on the compatibility for either side.
+
+Importantly, the data in an embedding application can be matched to a type that is ahead of, or behind, the type used by a Block. This means that we are interested in the two following questions:
+
+1.  Can old data fit in the new Type (trying to upgrade version of Entity, or trying to read old entities in a new Block) [backwards compatible]
+1.  Can new data fit in the old Type (new block trying to read old data, or block creating new data to fit into old type?) [forwards compatible]
+
+Semantic versioning encapsulates the following:
+
+Major Version - No guarantees about compatibility with previous versions (_generally_ assumed to be incompatible)
+Minor Version - Guarantees about backwards compatibility with previous versions (_generally_ assumed to **not** be forwards compatible)
+Patch Version - Guarantees about forwards _and_ backwards compatibility with previous versions
+
+This causes an issue when we look at some of the updates we allow on Types, we explore a specific example:
+
+---
+
+#### Adding an Optional Field
+
+Adding an optional field on the type will mean that
+
+- Blocks using the old type **will _not_ be compatible** with new data because the new field will break `additionalProperties: false`. Thus it is a **major change**
+  - (There is a separate discussion about only passing the fields to the Block that it requests, but that muddies the waters of this discussion and this case is the simpler way to understand the way compatibility depends on directionality)
+- Data using the old type **will be compatible** with the new type, as they will just hit the empty branch of the Option. Thus it is a **minor change**
+
+Thus, adding an optional field is "backwards compatible" but not "forwards compatible". (In the standard way of viewing semver this would be a **minor change**)
+
+#### Removing an Optional Field
+
+Removing an optional field on the type will mean that
+
+- Blocks using the old type **will be compatible** with new data because the new data will just hit the empty branch of the Option. Thus it is a **minor change**
+- Data using the old type **will _not_ be compatible** with the new type because the new type does not validate against data where it was _not_ the empty branch of the Option. Thus it is a **major** change.
+
+Thus removing an optional field is "forwards compatible" but not "backwards compatible". (In the standard way of viewing semver, the only option would be to mark this as a **major change**)
+
+---
+
+The two cases above highlight a weakness of using semver in our environment, as we care about identifying forward but not backwards compatible changes, and the semantic version does not traditionally capture this. As such we explored a potential solution by tracking two versions.
+
+### Combined Versions
+
+A potential solution to the problems caused by the above is to store a pair of semantic versions. If we specify type versions as the _ordered_ pair `(P, C)`, where `P` is the semantic version according to the producer, and `C` is the semantic version according to the consumer then both sides are able to track compatibility.
+
+Example:
+
+A new type:
+
+```json
+{
+  "P": "1.0.0",
+  "C": "1.0.0"
+}
+```
+
+An optional field is added to the Type
+
+```json
+{
+  "P": "1.1.0",
+  "C": "2.0.0"
+}
+```
+
+An optional field is removed from the Type
+
+```json
+{
+  "P": "2.0.0",
+  "C": "2.1.0"
+}
+```
+
+This allows us to compare the versions depending on the circumstance outlined above, where we're trying to track forwards or backwards compatibility. In addition to being a rather unituitive and confusing solution, this still has a few large problems.
+
+### Other Problems
+
+- As outlined above, we start with a type, add an optional field, and then remove an optional field. This _should_ theoretically be the same type as the previous one (outside of versioning info), although semver tells us that there was a major change between them, and as such we are not able to infer compatibility from the versioning information. _Because of this, we'll almost always need to check compatibility regardless_
+- Updating a **major** version of a deeply nested type, for instance a data type, will require **major** version changes to all types using it (if they wish to update). This is deeply in contrast to most uses of semver like versioning libraries. In those cases, major versions of sub-dependencies often cause the need to update some internal logic, but these breaking changes to not propagate up the dependency chain. If we used semver for types, we'd sometimes see propagating major version changes, causing very large major versions in the higher-level types with lots of dependencies. This is a problem because the major appeal of semantic versioning would be the assumptions an implementation could make about compatibility in non-major version differences.
 
 # Prior art
 
 [prior-art]: #prior-art
 
-Discuss prior art, both the good and the bad, in relation to this proposal.
-A few examples of what this can include are:
-
-- For implementation proposals: Does this feature exist in other technologies, and what experience have their community had?
-- For community proposals: Is this done by some other community and what were their experiences with it?
-- For other teams: What lessons can we learn from what other communities have done here?
-- Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
-
-This section is intended to encourage you as an author to think about the lessons from other solutions, provide readers of your RFC with a fuller picture. If there is no prior art, that is fine - your ideas are interesting to us whether they are brand new or if it is an adaptation from other languages.
-
-Note that while precedent set by other technologies is some motivation, it does not on its own motivate an RFC. Please also take into consideration that the Block Protocol sometimes intentionally diverges from other approaches.
+- [Semantic Versioning](https://semver.org)
 
 # Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
 
-- What parts of the design do you expect to resolve through the RFC process before this gets merged?
-- What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
-- What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
+- How should we constrain valid URI formats
+  - How should the version pair be formatted? Should we use query parameters?
+  - Should it be possible to go to a URI _without_ expressing a version, if so should returning the latest version be the expected behavior
+- Do we want to reserve some suffix such as `/latest`
 
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
 
-Think about what the natural extension and evolution of your proposal would be and how it would affect the project and ecosystem as a whole in a holistic way. Try to use this section as a tool to more fully consider all possible interactions with the project and ecosystem in your proposal. Also consider how this all fits into the roadmap for the project and of the relevant sub-team.
-
-This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related.
-
-If you have tried and cannot think of any future possibilities, you may simply state that you cannot think of anything.
-
-Note that having something written down in the future-possibilities section is not a reason to accept the current or a future RFC; such notes should be in the section on motivation or rationale in this or subsequent RFCs. The section merely provides additional information.
+- We can publish a Block Protocol package (or many) for validation of Types
