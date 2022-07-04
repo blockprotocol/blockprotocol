@@ -225,39 +225,39 @@ export const getPage = (params: {
 // Get the structure of a all MDX files in a given directory
 export const getAllPages = (params: {
   pathToDirectory: string;
+  filterIndexPage?: boolean;
 }): SiteMapPage[] => {
-  const { pathToDirectory } = params;
+  const { pathToDirectory, filterIndexPage = false } = params;
 
-  const fileNames = fs
+  const directoryItems = fs
     .readdirSync(path.join(process.cwd(), `src/_pages/${pathToDirectory}`))
-    .filter((name) => name !== "title.txt");
+    .filter((item) => !filterIndexPage || item !== "0_index.mdx");
 
-  return fileNames.flatMap((fileName) => {
+  return directoryItems.flatMap((directoryItem) => {
     if (
-      fs.lstatSync(`src/_pages/${pathToDirectory}/${fileName}`).isDirectory()
+      fs
+        .lstatSync(`src/_pages/${pathToDirectory}/${directoryItem}`)
+        .isDirectory()
     ) {
-      const href = `/${pathToDirectory}/${fileName.replace(/\d+_/g, "")}`;
-
-      const subPages = getAllPages({
-        pathToDirectory: `${pathToDirectory}/${fileName}`,
+      const indexPage = getPage({
+        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+        fileName: "0_index.mdx",
       });
 
-      const title = fs.readFileSync(
-        `src/_pages/${pathToDirectory}/${fileName}/title.txt`,
-        "utf8",
-      );
+      const subPages = getAllPages({
+        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+        filterIndexPage: true,
+      });
 
       return {
-        title,
-        href,
+        ...indexPage,
         subPages,
-        sections: [],
       };
     }
 
     return getPage({
       pathToDirectory,
-      fileName,
+      fileName: directoryItem,
     });
   });
 };
