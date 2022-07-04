@@ -69,6 +69,10 @@ const nextConfig = {
         source: "/types/services/:servicename/:typename",
         destination: "/types/services/:servicename/:typename.json",
       },
+      {
+        source: "/types/core/:typename",
+        destination: "/types/core/:typename.json",
+      },
     ];
   },
 };
