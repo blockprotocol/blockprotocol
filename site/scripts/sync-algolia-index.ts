@@ -6,58 +6,12 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import siteMap from "../site-map.json" assert { type: "json" };
+import { SiteMapPage } from "../src/lib/sitemap";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
   "../..",
 );
-
-type DocsFrontMatter = {
-  content: string;
-  data: Record<string, string>;
-};
-
-type BlockProtocolFileTypes = "spec" | "docs";
-
-type FileTypeAndPaths = {
-  inputPath: string;
-  outputPath: string;
-  type: BlockProtocolFileTypes;
-};
-
-const getFileInfos = (
-  dirPath: string,
-  arrayOfFiles: Array<{
-    inputPath: string;
-    outputPath: string;
-    type: BlockProtocolFileTypes;
-  }>,
-  type: BlockProtocolFileTypes,
-): FileTypeAndPaths[] => {
-  const files = fs.readdirSync(dirPath);
-
-  const newArrayOfFiles: FileTypeAndPaths[] = [];
-
-  files.forEach((file) => {
-    if (fs.statSync(`${dirPath}/${file}`).isDirectory()) {
-      // the only subfolder, 3_spec, is indexed as a different type
-      return;
-    }
-
-    const inputPath = path.join(dirPath, "/", file);
-    const outputPath = `.\\output\\${path.join(
-      "./output/",
-      dirPath,
-      "/",
-      file,
-    )}`;
-    if (inputPath.endsWith(".md") || inputPath.endsWith(".mdx")) {
-      newArrayOfFiles.push({ inputPath, outputPath, type });
-    }
-  });
-
-  return newArrayOfFiles;
-};
 
 type AlgoliaRecord = {
   content: string;
@@ -69,79 +23,20 @@ type AlgoliaRecord = {
   tags?: Array<string>;
 };
 
-const generateAlgoliaRecords: () => AlgoliaRecord[] = () => {
-  const getFormattedData = (
-    matterData: DocsFrontMatter,
-    type: BlockProtocolFileTypes,
-    fileIndex: number,
-  ): AlgoliaRecord => {
-    const docsRoot = siteMap.pages.find((page) => {
-      return page.href === "/docs";
-    });
-    if (!docsRoot) {
-      throw new Error("Cannot find /docs root page in sitemap");
-    }
+const flattenSitemapPages = (pages: SiteMapPage[]): SiteMapPage[] => {
+  const result: SiteMapPage[] = [];
 
-    const siteMapData =
-      type === "docs"
-        ? docsRoot
-        : docsRoot.subPages.find((subPage) => subPage.href === "/docs/spec");
+  for (const page of pages) {
+    result.push(page, ...flattenSitemapPages(page.subPages));
+  }
 
-    if (!siteMapData) {
-      throw new Error("Unexpected empty siteMapData");
-    }
-
-    const subPageData = siteMapData.subPages[fileIndex]!;
-
-    const appendData = {
-      ...matterData.data,
-      content: matterData.content,
-      objectID: `${type}/${subPageData.href}`,
-      title: subPageData.title,
-      slug: subPageData.href,
-      type,
-    };
-
-    return appendData;
-  };
-
-  const specFiles = getFileInfos(
-    path.resolve(monorepoRoot, "site/src/_pages/docs/3_spec"),
-    [],
-    "spec",
-  );
-  const docsFiles = getFileInfos(
-    path.resolve(monorepoRoot, "site/src/_pages/docs"),
-    [],
-    "docs",
-  );
-
-  const specData = specFiles.map((filePath, fileIndex) => {
-    const file = fs.readFileSync(filePath.inputPath, "utf8");
-
-    const grayMatterData = matter(file) as unknown as DocsFrontMatter;
-
-    return getFormattedData(grayMatterData, filePath.type, fileIndex);
-  });
-
-  const docsData = docsFiles
-    .map((filePath, fileIndex) => {
-      const file = fs.readFileSync(filePath.inputPath, "utf8");
-
-      const grayMatterData = matter(file) as unknown as DocsFrontMatter;
-
-      const data = getFormattedData(grayMatterData, filePath.type, fileIndex);
-
-      if (filePath.type === "docs" && data.slug === "/docs/spec") {
-        // avoid double counting the spec root, which will be indexed as a 'spec' type
-        return null;
-      }
-      return data;
-    })
-    .filter((file): file is AlgoliaRecord => !!file);
-
-  return [...specData, ...docsData];
+  return result;
 };
+
+const markdownPageInfos = flattenSitemapPages(siteMap.pages).filter(
+  (page): page is SiteMapPage & { markdownFilePath: string } =>
+    Boolean(page.markdownFilePath),
+);
 
 const script = async () => {
   console.log("Syncing Algolia index");
@@ -172,7 +67,32 @@ const script = async () => {
     },
   });
 
-  const indexObjects: AlgoliaRecord[] = generateAlgoliaRecords();
+  const indexObjects: AlgoliaRecord[] = [];
+
+  for (const markdownPageInfo of markdownPageInfos) {
+    const markdown = await fs.readFile(
+      path.resolve(monorepoRoot, "site", markdownPageInfo.markdownFilePath),
+      "utf8",
+    );
+
+    const matterData = matter(markdown) as {
+      content: string;
+      data: Record<string, string>;
+    };
+
+    const type = markdownPageInfo.href.startsWith("/docs/spec")
+      ? "spec"
+      : "docs";
+
+    indexObjects.push({
+      ...matterData.data,
+      content: matterData.content,
+      objectID: `${type}/${markdownPageInfo.href}`,
+      title: markdownPageInfo.title,
+      slug: markdownPageInfo.href,
+      type,
+    });
+  }
 
   const indexObjectLookup: Record<string, AlgoliaRecord> = {};
 

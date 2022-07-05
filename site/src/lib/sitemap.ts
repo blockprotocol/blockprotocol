@@ -9,6 +9,7 @@ export type SiteMapPageSection = {
 export type SiteMapPage = {
   title: string;
   href: string;
+  markdownFilePath?: string;
   subPages: SiteMapPage[];
   sections: SiteMapPageSection[];
 };
