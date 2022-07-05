@@ -40,6 +40,11 @@ type BlockDataContainerProps = {
 
 const validator = new Validator();
 
+/** Blocks that aren't compliant with BP V0.2  */
+export const checkIsUnsupportedBlock = ({ protocol }: BlockMetadata) => {
+  return !(parseFloat(protocol) >= 0.2);
+};
+
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
 > = ({ metadata, schema, exampleGraph, sandboxBaseUrl }) => {
@@ -230,8 +235,7 @@ export const BlockDataContainer: VoidFunctionComponent<
                   position: "relative",
                 }}
               >
-                {!(parseFloat(metadata.protocol) >= 0.2) ? (
-                  // Blocks that aren't compliant with BP V0.2
+                {checkIsUnsupportedBlock(metadata.protocol) ? (
                   <>
                     This block was written for an earlier version of the Block
                     Protocol specification and cannot currently be displayed in
