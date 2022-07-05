@@ -1,5 +1,12 @@
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
+import {
+  Box,
+  Paper,
+  styled,
+  Typography,
+  typographyClasses,
+  TypographyProps,
+} from "@mui/material";
 import {
   Children,
   FunctionComponent,
@@ -16,6 +23,7 @@ import { Link } from "../link";
 import { Snippet } from "../snippet";
 import { FAQ } from "./faq";
 import { GraphServiceMessageList } from "./graph-service-message-list";
+import { GitHubInfoCard } from "./info-card/github-info-card";
 import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
 import { usePageHeading } from "./shared/use-page-heading";
@@ -82,9 +90,23 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
   Paper,
   Typography,
   InfoCardWrapper,
+  GitHubInfoCard,
   InfoCard,
   FAQ,
   GraphServiceMessageList,
+  SubTitle: (({ children }) => (
+    <Box
+      maxWidth={750}
+      sx={{
+        marginBottom: 6,
+        // override the styling of any nested typography component
+        [`> .${typographyClasses.root}`]: ({ typography }) =>
+          typography.bpSubtitle,
+      }}
+    >
+      {children}
+    </Box>
+  )) as FunctionComponent,
   Hidden: (({ children }) => {
     return (
       <span aria-hidden style={{ display: "none" }}>
