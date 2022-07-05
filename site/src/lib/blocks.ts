@@ -161,8 +161,7 @@ export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
-    ({ packagePath, protocol }) =>
-      !blocksToHide.includes(packagePath) && parseFloat(protocol) >= 0.2,
+    ({ packagePath }) => !blocksToHide.includes(packagePath),
   );
 };
 

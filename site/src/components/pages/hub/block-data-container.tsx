@@ -40,6 +40,10 @@ type BlockDataContainerProps = {
 
 const validator = new Validator();
 
+/** Blocks that aren't compliant with BP V0.2  */
+const checkIfBlockIsSupported = ({ protocol }: BlockMetadata) =>
+  protocol === "0.2";
+
 export const BlockDataContainer: VoidFunctionComponent<
   BlockDataContainerProps
 > = ({ metadata, schema, exampleGraph, sandboxBaseUrl }) => {
@@ -230,11 +234,19 @@ export const BlockDataContainer: VoidFunctionComponent<
                   position: "relative",
                 }}
               >
-                <SandboxedBlockDemo
-                  metadata={metadata}
-                  props={props}
-                  sandboxBaseUrl={sandboxBaseUrl}
-                />
+                {!checkIfBlockIsSupported(metadata) ? (
+                  <>
+                    This block was written for an earlier version of the Block
+                    Protocol specification and cannot currently be displayed in
+                    the Hub.
+                  </>
+                ) : (
+                  <SandboxedBlockDemo
+                    metadata={metadata}
+                    props={props}
+                    sandboxBaseUrl={sandboxBaseUrl}
+                  />
+                )}
               </Box>
             </Box>
           </Box>
