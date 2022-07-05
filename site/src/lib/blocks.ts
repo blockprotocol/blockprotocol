@@ -165,7 +165,8 @@ export const excludeHiddenBlocks = (
   );
 };
 
-export const isUnsupportedBlock = ({ protocol }: ExpandedBlockMetadata) => {
+/** Blocks that aren't compliant with BP V0.2  */
+export const isNonV0_2Block = ({ protocol }: ExpandedBlockMetadata) => {
   return !(parseFloat(protocol) >= 0.2);
 };
 

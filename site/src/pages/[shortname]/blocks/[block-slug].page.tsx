@@ -28,7 +28,7 @@ import {
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  isUnsupportedBlock,
+  isNonV0_2Block,
   readBlockDataFromDisk,
   readBlockReadmeFromDisk,
   readBlocksFromDisk,
@@ -107,6 +107,7 @@ type BlockPageProps = {
   schema: BlockSchema;
   sliderItems: BlockMetadata[];
   exampleGraph: BlockExampleGraph | null; // todo fix typing
+  isUnsupportedBlock: boolean;
 };
 
 type BlockPageQueryParams = {
@@ -211,6 +212,7 @@ export const getStaticProps: GetStaticProps<
       sandboxBaseUrl: generateSandboxBaseUrl(),
       schema,
       exampleGraph,
+      isUnsupportedBlock: isNonV0_2Block(blockMetadata),
     },
     revalidate: 1800,
   };
@@ -223,6 +225,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
   schema,
   sliderItems,
   exampleGraph,
+  isUnsupportedBlock,
 }) => {
   const { query } = useRouter();
   const { shortname } = parseQueryParams(query || {});
@@ -355,7 +358,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             schema={schema}
             sandboxBaseUrl={sandboxBaseUrl}
             exampleGraph={exampleGraph}
-            isUnsupportedBlock={isUnsupportedBlock(blockMetadata)}
+            isUnsupportedBlock={isUnsupportedBlock}
           />
         </Box>
 
