@@ -165,11 +165,6 @@ export const excludeHiddenBlocks = (
   );
 };
 
-/** Blocks that aren't compliant with BP V0.2  */
-export const isNonV0_2Block = ({ protocol }: ExpandedBlockMetadata) => {
-  return !(parseFloat(protocol) >= 0.2);
-};
-
 export const readBlockDataFromDisk = async ({
   packagePath,
   schema: metadataSchema,
