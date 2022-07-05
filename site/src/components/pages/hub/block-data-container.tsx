@@ -234,7 +234,7 @@ export const BlockDataContainer: VoidFunctionComponent<
                   position: "relative",
                 }}
               >
-                {checkIfBlockIsSupported(metadata) ? (
+                {!checkIfBlockIsSupported(metadata) ? (
                   <>
                     This block was written for an earlier version of the Block
                     Protocol specification and cannot currently be displayed in
