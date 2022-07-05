@@ -59,7 +59,12 @@ module.exports = {
     "import/newline-after-import": "error",
     "import/no-cycle": "error",
     "import/no-duplicates": "error",
-    "import/no-unresolved": "error",
+    "import/no-unresolved": [
+      "error",
+      {
+        ignore: ["^https?://"],
+      },
+    ],
     "import/prefer-default-export": "off",
     "no-console": "error",
     "no-dupe-class-members": "off",
