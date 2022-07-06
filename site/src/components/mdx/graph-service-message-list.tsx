@@ -1,5 +1,5 @@
 import { ServiceDefinition } from "@blockprotocol/core";
-import graphServiceJson from "@blockprotocol/graph/src/graph-service.json";
+import GraphServiceJson from "@blockprotocol/graph/service-json";
 
 import { ServiceMessageList } from "../service-message-list";
 
@@ -7,6 +7,6 @@ import { ServiceMessageList } from "../service-message-list";
 // e.g. pass a URL from the MDX component which is fetched at build time
 export const GraphServiceMessageList = () => (
   <ServiceMessageList
-    serviceDefinition={graphServiceJson as ServiceDefinition}
+    serviceDefinition={GraphServiceJson as ServiceDefinition}
   />
 );

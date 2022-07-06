@@ -1,6 +1,6 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
-import serviceJsonDefinition from "./graph-service.json";
+import GraphServiceJson from "./graph-service.json";
 import {
   BlockGraph,
   EmbedderGraphMessageCallbacks,
@@ -8,7 +8,7 @@ import {
   Entity,
   EntityType,
   LinkedAggregations,
-} from "./types";
+} from "./types.js";
 
 /**
  * Creates a handler for the graph service for the embedder.
@@ -62,7 +62,7 @@ export class GraphEmbedderHandler
     handlerFunction: NonNullable<EmbedderGraphMessageCallbacks[K]>,
   ) {
     const expectedMessageSource = "block";
-    const messageJsonDefinition = serviceJsonDefinition.messages.find(
+    const messageJsonDefinition = GraphServiceJson.messages.find(
       (message) =>
         message.messageName === messageName &&
         message.source === expectedMessageSource,

@@ -1,6 +1,8 @@
-import { BlockComponent, useGraphBlockService } from "@blockprotocol/graph";
+import {
+  BlockComponent,
+  useGraphBlockService,
+} from "@blockprotocol/graph/react";
 import * as React from "react";
-import { useCallback, useRef } from "react";
 
 import styles from "./base.module.scss";
 
@@ -13,10 +15,10 @@ export const App: BlockComponent<BlockEntityProperties> = ({
     blockEntity: { entityId, properties },
   },
 }) => {
-  const blockRootRef = useRef<HTMLDivElement>(null);
+  const blockRootRef = React.useRef<HTMLDivElement>(null);
   const { graphService } = useGraphBlockService(blockRootRef);
 
-  const updateSelf = useCallback(
+  const updateSelf = React.useCallback(
     (newProperties: Partial<BlockEntityProperties>) =>
       graphService?.updateEntity({
         data: { properties: newProperties, entityId },

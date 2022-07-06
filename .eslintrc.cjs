@@ -62,7 +62,7 @@ module.exports = {
     "import/no-unresolved": [
       "error",
       {
-        ignore: ["^https?://"],
+        ignore: ["^https?://", "^@blockprotocol/graph"],
       },
     ],
     "import/prefer-default-export": "off",
@@ -207,6 +207,12 @@ module.exports = {
         babelOptions: {
           presets: ["@babel/preset-react"], // allows jsx
         },
+      },
+    },
+    {
+      files: ["packages/@blockprotocol/graph/**"],
+      rules: {
+        "import/no-unresolved": "off",
       },
     },
     {
