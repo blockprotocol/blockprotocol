@@ -373,8 +373,8 @@ export const Sidebar: VFC<SidebarProps> = ({
 
     setSelectedAnchorElementTimeout.current = setTimeout(() => {
       const parent = node.offsetParent as HTMLElement;
-      const min = parent!.scrollTop;
-      const max = min + parent!.offsetHeight - 100;
+      const min = parent.scrollTop;
+      const max = min + parent.offsetHeight - 100;
       const pos = node.offsetTop;
 
       if (pos <= min || pos >= max) {
