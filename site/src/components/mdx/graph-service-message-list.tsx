@@ -7,6 +7,6 @@ import { ServiceMessageList } from "../service-message-list";
 // e.g. pass a URL from the MDX component which is fetched at build time
 export const GraphServiceMessageList = () => (
   <ServiceMessageList
-    serviceDefinition={graphServiceJson as ServiceDefinition}
+    serviceDefinition={GraphServiceJson as ServiceDefinition}
   />
 );

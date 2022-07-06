@@ -15,10 +15,10 @@ export const App: BlockComponent<BlockEntityProperties> = ({
     blockEntity: { entityId, properties },
   },
 }) => {
-  const blockRootRef = useRef<HTMLDivElement>(null);
+  const blockRootRef = React.useRef<HTMLDivElement>(null);
   const { graphService } = useGraphBlockService(blockRootRef);
 
-  const updateSelf = useCallback(
+  const updateSelf = React.useCallback(
     (newProperties: Partial<BlockEntityProperties>) =>
       graphService?.updateEntity({
         data: { properties: newProperties, entityId },
