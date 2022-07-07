@@ -1,6 +1,6 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
-import GraphServiceJson from "./graph-service.json";
+import GraphServiceJson from "./graph-service.js";
 import {
   BlockGraph,
   EmbedderGraphMessageCallbacks,
