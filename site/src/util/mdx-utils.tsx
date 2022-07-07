@@ -170,9 +170,8 @@ export const getPage = (params: {
 }): SiteMapPage => {
   const { pathToDirectory, fileName } = params;
 
-  const source = fs.readFileSync(
-    path.join(process.cwd(), `src/_pages/${pathToDirectory}/${fileName}`),
-  );
+  const markdownFilePath = `src/_pages/${pathToDirectory}/${fileName}`;
+  const source = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
 
   const { content } = matter(source);
 
@@ -191,6 +190,7 @@ export const getPage = (params: {
     href: `/${pathToDirectory.replace(/\d+_/g, "")}${
       name === "index" ? "" : `/${slugify(name, { lower: true })}`
     }`,
+    markdownFilePath,
     sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
       const newSection = {
         title: getVisibleText(currentHeading),
