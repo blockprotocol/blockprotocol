@@ -35,14 +35,14 @@ The _base URI_ of a type is a _unique_ identifier for the type irrespective of i
 
 The _versioned URI_ of a type is made up of:
 
-```js
-"${base_uri}/v/${version_number}";
+```json
+"${base_uri}/v/${version_number}"
 ```
 
 We opt not to constrain the format of the `base_uri` to enable flexibility in non-public use-cases or in domains with constraints that we cannot predict. Despite this, we _suggest_ that the base URIs should have a consistent format for all types hosted on your domain, and should generally be humanly readable in a way that describes your type. For example, one may pick:
 
-```js
-"http://yourdomain/namespace/property-type/type_name";
+```json
+"http://yourdomain/namespace/property-type/type_name"
 ```
 
 as the identifier (assuming that the domain decides that type names are unique across a namespace).
@@ -82,13 +82,13 @@ Example:
   "title": "Book",
   "properties": {
     "https://blockprotocol.org/@alice/types/property-type/name": {
-      "$ref": "https://blockprotocol.org/@alice/types/property-type/name/v/3121"
+      "$ref": "https://blockprotocol.org/@alice/types/property-type/name/v/13"
     },
     "https://blockprotocol.org/@alice/types/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/@alice/types/property-type/published-on/v/1290"
+      "$ref": "https://blockprotocol.org/@alice/types/property-type/published-on/v/23"
     },
     "https://blockprotocol.org/@alice/types/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/@alice/types/property-type/blurb/v/808259"
+      "$ref": "https://blockprotocol.org/@alice/types/property-type/blurb/v/4"
     }
   },
   "required": ["https://blockprotocol.org/@alice/types/property-type/name"]
@@ -246,14 +246,14 @@ The Types sit in the middle of producers and consumers of data, and unfortunatel
 
 Importantly, the data in an embedding application can be matched to a type that is ahead of, or behind, the type used by a Block. This means that we are interested in the two following questions:
 
-1.  Can old data fit in the new Type (trying to upgrade version of Entity, or trying to read old entities in a new Block) [backwards compatible]
-1.  Can new data fit in the old Type (new block trying to read old data, or block creating new data to fit into old type?) [forwards compatible]
+1.  [**Backwards compatible**] Can old data fit in the new Type (trying to upgrade version of Entity, or trying to read old entities in a new Block)
+1.  [**Forwards compatible**] Can new data fit in the old Type (new block trying to read old data, or block creating new data to fit into old type?)
 
 Semantic versioning encapsulates the following:
 
-Major Version - No guarantees about compatibility with previous versions (_generally_ assumed to be incompatible)
-Minor Version - Guarantees about backwards compatibility with previous versions (_generally_ assumed to **not** be forwards compatible)
-Patch Version - Guarantees about forwards _and_ backwards compatibility with previous versions
+- Major Version - No guarantees about compatibility with previous versions (_generally_ assumed to be incompatible)
+- Minor Version - Guarantees about backwards compatibility with previous versions (_generally_ assumed to **not** be forwards compatible)
+- Patch Version - Guarantees about forwards _and_ backwards compatibility with previous versions
 
 This causes an issue when we look at some of the updates we allow on Types, we explore a specific example:
 
