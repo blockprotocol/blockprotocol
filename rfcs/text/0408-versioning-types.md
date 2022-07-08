@@ -144,13 +144,13 @@ A data type reference is an inline reference to a data-type. A data type referen
 
 A poperty type object is JSON object defining a schema which is used as `oneOf` the permitted values for a property type, where the schema is of `type: "object`, and within its own `properties` definition:
 
-1.  The keys are base URI's to a property type
+1.  The keys are base URIs to a property type
 1.  The values are defined by either:
     1.  A reference to a property type
     1.  An array definition, where
         1.  the `items` are defined by a reference to a property type
         1.  `minItems` and/or `maxItems` are optionally defined
-1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys
+1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys in the `properties`
 
 A property type Object `X` is therefore compatible with another property type Object `Y` if and only if
 
@@ -174,15 +174,16 @@ A definition of an array of "Property Values" `X` is compatible with another def
 ### Entity Types
 
 1.  Entity types define their constraints on the structure of an entity through their `properties`, where
-    1.  The keys are base URI's to a property type
+    1.  The keys are base URIs to a property type
     1.  The values are defined by either:
         1.  A reference to a property type
         1.  An array definition, where
             1.  the `items` are defined by a reference to a property type
             1.  `minItems` and/or `maxItems` are optionally defined
+1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys in the `properties`
 1.  Entity types also define additional constraints on links from their entity through their:
     1.  `links`, where
-        1.  The keys are _versioned URI's_ to a link type
+        1.  The keys are _versioned URIs_ to a link type
         1.  The values are defined by either:
             1.  An empty object (until Link Constraints are implemented)
             1.  An array definition, where
