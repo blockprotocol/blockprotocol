@@ -39,10 +39,10 @@ The _versioned URI_ of a type is made up of:
 "${base_uri}/v/${version_number}"
 ```
 
-We opt not to constrain the format of the `base_uri` to enable flexibility in non-public use-cases or in domains with constraints that we cannot predict. Despite this, we _suggest_ that the base URIs should have a consistent format for all types hosted on your domain, and should generally be humanly readable in a way that describes your type. For example, one may pick:
+We opt not to constrain the format of the `base_uri` to enable flexibility in non-public use-cases or in domains with constraints that we cannot predict. Despite this, we _suggest_ that the base URIs should have a consistent format for all types hosted on your domain, and should generally be humanly readable in a way that describes your type. For example, one could choose:
 
-```json
-"http://yourdomain/namespace/property-type/type_name"
+```jsonc
+"http://example.com/${namespace}/${type_class}/${type_name}" // where type_class is "data-type", "property-type", "entity-type", or "link-type"
 ```
 
 as the identifier (assuming that the domain decides that type names are unique across a namespace).
@@ -77,21 +77,21 @@ Example Type schema:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/@alice/types/entity-type/book/v/4",
+  "$id": "https://example.com/@alice/entity-type/book/v/4",
   "type": "object",
   "title": "Book",
   "properties": {
-    "https://blockprotocol.org/@alice/types/property-type/name": {
-      "$ref": "https://blockprotocol.org/@alice/types/property-type/name/v/13"
+    "https://example.com/@alice/property-type/name": {
+      "$ref": "https://example.com/@alice/property-type/name/v/13"
     },
-    "https://blockprotocol.org/@alice/types/property-type/published-on": {
-      "$ref": "https://blockprotocol.org/@alice/types/property-type/published-on/v/23"
+    "https://example.com/@alice/property-type/published-on": {
+      "$ref": "https://example.com/@alice/property-type/published-on/v/23"
     },
-    "https://blockprotocol.org/@alice/types/property-type/blurb": {
-      "$ref": "https://blockprotocol.org/@alice/types/property-type/blurb/v/4"
+    "https://example.com/@alice/property-type/blurb": {
+      "$ref": "https://example.com/@alice/property-type/blurb/v/4"
     }
   },
-  "required": ["https://blockprotocol.org/@alice/types/property-type/name"]
+  "required": ["https://example.com/@alice/property-type/name"]
 }
 ```
 
@@ -99,9 +99,9 @@ Example `properties` object conforming to the above schema:
 
 ```json
 {
-  "https://blockprotocol.org/@alice/types/property-type/name": "The Time Machine",
-  "https://blockprotocol.org/@alice/types/property-type/published-on": "1895-05",
-  "https://blockprotocol.org/@alice/types/property-type/blurb": ...
+  "https://example.com/@alice/property-type/name": "The Time Machine",
+  "https://example.com/@alice/property-type/published-on": "1895-05",
+  "https://example.com/@alice/property-type/blurb": ...
 }
 ```
 
