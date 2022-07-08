@@ -324,6 +324,15 @@ This allows us to compare the versions depending on the circumstance outlined ab
 - As outlined above, we start with a type, add an optional field, and then remove an optional field. This _should_ theoretically be the same type as the previous one (outside of versioning info), although semver tells us that there was a major change between them, and as such we are not able to infer compatibility from the versioning information. _Because of this, we'll almost always need to check compatibility regardless_
 - Updating a **major** version of a deeply nested type, for instance a data type, will require **major** version changes to all types using it (if they wish to update). This is deeply in contrast to most uses of semver like versioning libraries. In those cases, major versions of sub-dependencies often cause the need to update some internal logic, but these breaking changes to not propagate up the dependency chain. If we used semver for types, we'd sometimes see propagating major version changes, causing very large major versions in the higher-level types with lots of dependencies. This is a problem because the major appeal of semantic versioning would be the assumptions an implementation could make about compatibility in non-major version differences.
 
+## Other Decisions
+
+### Versioned vs Base URIs in Types
+
+- `$schema` needs to be versioned as it uniquely identifies the instance of the schema and makes it referenceable
+- Similarly, uses of `$ref` need to use versioned URIs to they can reference a specific iteration of the schema
+- Properties inside objects use _base_ URIs because otherwise _any_ version of an entity type would always be incompatible with another version of an entity type, as the keys in the underlying possible entities wouldn't match
+- The items in `links` are _versioned_ URIs because they do _not_ affect the underlying data structure of an entity. Furthermore the format of `links`, and the associated constraints, don't actually use `$ref` at the moment, so using a _base_ URI would link the entity type to some undetermined version of the link type. This could cause problems if a new version of a link type majorly changes the semantic meaning.
+
 # Prior art
 
 [prior-art]: #prior-art
