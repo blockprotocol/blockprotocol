@@ -12,7 +12,7 @@ Please refer to the [Block Protocol documentation](https://blockprotocol.org/doc
 
 ## Usage
 
-[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an example embedding application that makes use of the Block Protocol to enable users to insert arbitrary blocks from the Block Hub at runtime. Neither the blocks nor the application have any special knowledge of one another. Both simply conform to the protocol.
+[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an example embedding application that uses the Block Protocol to enable users to insert arbitrary blocks from the Block Hub at runtime. Neither the blocks nor the application have any special knowledge of one another. Both simply conform to the protocol.
 
 For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub).
 
