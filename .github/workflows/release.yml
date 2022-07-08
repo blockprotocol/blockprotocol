@@ -19,7 +19,7 @@ jobs:
         uses: bahmutov/npm-install@v1
 
       - name: Create Release Pull Request or Publish to npm
-        uses: changesets/action@1.3.0
+        uses: changesets/action@v1.3.0
         with:
           publish: yarn changesets publish
         env:
