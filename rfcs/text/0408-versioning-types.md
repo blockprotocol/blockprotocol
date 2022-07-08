@@ -13,13 +13,13 @@ The Type System outlined in [RFC 0352](https://github.com/blockprotocol/blockpro
 
 [motivation]: #motivation
 
-The Type System is intended to allow for **reusable and shared** descriptions of data. As such, a version of a block should be able to tie itself to a _specific_ description of the structure of the data it requires as if types are able to be updated independently of blocks then this would cause problems. Additionally, if someone (Alice) creates an entity type that refers to someone else's (Bob's) "address" property type, we do not want Bob to be able to change what Alice meant in her entity type by arbitrarily and implicitly updating it.
+The Type System is intended to allow for **reusable and shared** descriptions of data. As such, a version of a block should be able to tie itself to a _specific_ description of the structure of the data it requires, because if a type depended on by a block was updated without the block's knowledge or intervention then this could cause problems. Additionally, if someone (Alice) creates an entity type that refers to someone else's (Bob's) "address" property type, we do not want Bob to be able to change what Alice meant in her entity type by arbitrarily and implicitly updating it (via updating his property type).
 
-Being able to refer to specific, immutable versions of types should mitigate or solve the majority of the issues stemming from this.
+Being able to refer to specific, immutable versions of types should mitigate or solve the majority of the issues stemming from changes to types that are relied on by blocks or other types.
 
-This RFC proposes that every Type (i.e. data type, property type, entity type, or link type) should be associated with a unique version number. This version number will be part of the URI that is used to uniquely identify the specific instance of the Type, to access the Type's schema, and to refer to the Type from other Types.
+This RFC proposes that every iteration of every Type (i.e. data type, property type, entity type, or link type) should be associated with a unique version number. This version number will be part of the URI that is used to uniquely identify the specific instance of the Type, to access the Type's schema, and to refer to the Type from other Types.
 
-We also outline a method to compare compatibility between types, and use this in the [Rationale and Alternatives](#rationale-and-alternatives) section to explain how this replaces the need for some other versioning scheme such as semantic versioning.
+We also outline a method to determine compatibility between types, and use this in the [Rationale and Alternatives](#rationale-and-alternatives) section to explain how it replaces the need for, and is preferable over, some other versioning scheme such as semantic versioning.
 
 # Guide-level explanation
 
@@ -49,7 +49,7 @@ as the identifier (assuming that the domain decides that type names are unique a
 
 Where it's possible to guarantee, this URI should be valid indefinitely.
 
-> ⚠️ New iterations and changes to the type must occur under new version numbers, components of the Block Protocol ecosystem will certainly implement caching and local-persistence logic, and the spec consciously makes no recommendation that these caches are updated.
+> ⚠️ New iterations and changes to the type _must occur_ under new version numbers. An important reason for this, in addition to the ones outlined above, is that components of the Block Protocol ecosystem will certainly implement caching and local-persistence logic, and the spec consciously makes no recommendation that they look for updates, or that these caches are updated.
 >
 > **As such, a specific version of a Type is to be treated as an immutable record**.
 
@@ -70,9 +70,9 @@ Type URIs, and their version numbers are defined as outlined in the [Guide-level
 
 1.  The `"$id"` field of a Type should be equal to the Type's _versioned URI_.
 1.  When referencing another Type using `"$ref"`, the reference should be equal to the Type's _versioned URI_.
-1.  When used as the key of a property, the _base URI_ should be used.
+1.  When used as the key of a property, the _base URI_ should be used (and consequently only a single version of a type may be used in any given property object).
 
-Example:
+Example Type schema:
 
 ```json
 {
@@ -94,6 +94,8 @@ Example:
   "required": ["https://blockprotocol.org/@alice/types/property-type/name"]
 }
 ```
+
+Example `properties` object conforming to the above schema:
 
 ```json
 {
@@ -122,7 +124,7 @@ At the present data types represent completely disjoint value spaces, and the ba
 
 ### Property Types
 
-1.  Due to how property types are used, they implicitly affect the structure of the data in that they require the existence of a key that matches their URI.
+1.  Due to how property types are used, they implicitly affect the structure of the data in that they require the existence of a key that matches their base URI.
 1.  Property types define their constraints through a `oneOf` field. This `oneOf` is a collection of one or more values where each value is a variant of the "Property Values" (defined below).
 
 A property type `A` is therefore compatible with another property type `B` if and only if
@@ -140,13 +142,13 @@ A data type reference is an inline reference to a data-type. A data type referen
 
 #### Property Type Object
 
-A property type Object is a JSON object where
+A poperty type object is JSON object defining a schema which is used as `oneOf` the permitted values for a property type, where the schema is of `type: "object`, and within its own `properties` definition:
 
 1.  The keys are base URI's to a property type
 1.  The values are defined by either:
     1.  A reference to a property type
     1.  An array definition, where
-        1.  the items are defined by a reference to a property type
+        1.  the `items` are defined by a reference to a property type
         1.  `minItems` and/or `maxItems` are optionally defined
 1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys
 
@@ -176,7 +178,7 @@ A definition of an array of "Property Values" `X` is compatible with another def
     1.  The values are defined by either:
         1.  A reference to a property type
         1.  An array definition, where
-            1.  the items are defined by a reference to a property type
+            1.  the `items` are defined by a reference to a property type
             1.  `minItems` and/or `maxItems` are optionally defined
 1.  Entity types also define additional constraints on links from their entity through their:
     1.  `links`, where
@@ -184,7 +186,7 @@ A definition of an array of "Property Values" `X` is compatible with another def
         1.  The values are defined by either:
             1.  An empty object (until Link Constraints are implemented)
             1.  An array definition, where
-                1.  the items are an empty object (until Link Constraints are implemented)
+                1.  the `items` are an empty object (until Link Constraints are implemented)
                 1.  `ordered` is optionally defined
                 1.  `minItems` and/or `maxItems` are optionally defined
     1.  `requiredLinks` array, where the elements are _versioned URIs_, and is a subset of the keys in the `links`
@@ -206,11 +208,11 @@ An entity type `A` is therefore compatible with another entity type `B` if and o
 
 ### Link Types
 
-Link types are only able to be changed through _semantic annotations_ and as such, any link type `X`, with the same Base URI as another link type `Y` (i.e. a different version of the same link type), are _compatible_.
+Link types are only able to be changed through _semantic annotations_ and as such, any link type `X`, with the same Base URI as another link type `Y` (i.e. a different version of the same link type), are _compatible_ (this is likely to change in the near future).
 
 ## When to Check Compatibility of Types
 
-Block schemas, and other uses of types (for example graph service methods), can request data from the embedding application by referencing types. Not relying on the version to ensure compatibility means that if a block, or data (associated with a versioned type) in an embedding application, is "outdated", the compatibility can be checked by comparing the two schemas. Data blobs can continue to be validated against the relevant schema.
+Block schemas, and other uses of types (for example graph service methods), can request particular data structures from the embedding application by referencing types. Not relying on the version of a type to ensure compatibility means that if a block or data (associated with a versioned type) in an embedding application is associated with a different version of a type – or different types altogether – the compatibility of the data can still be checked by comparing the two schemas. Data blobs can continue to be validated against the relevant schema.
 
 This should allow a bit more flexibility within the system when it comes to compatibility of data requirements.
 
