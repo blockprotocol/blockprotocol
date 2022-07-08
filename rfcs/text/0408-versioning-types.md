@@ -17,7 +17,7 @@ The Type System is intended to allow for **reusable and shared** descriptions of
 
 Being able to refer to specific, immutable versions of types should mitigate or solve the majority of the issues stemming from this.
 
-This RFC proposes that every Type (i.e. Data Type, Property Type, Entity Type, or Link Type) should be associated with a unique version number. This version number will be part of the URI that is used to uniquely identify the specific instance of the Type, to access the Type's schema, and to refer to the Type from other Types.
+This RFC proposes that every Type (i.e. data type, property type, entity type, or link type) should be associated with a unique version number. This version number will be part of the URI that is used to uniquely identify the specific instance of the Type, to access the Type's schema, and to refer to the Type from other Types.
 
 We also outline a method to compare compatibility between types, and use this in the [Rationale and Alternatives](#rationale-and-alternatives) section to explain how this replaces the need for some other versioning scheme such as semantic versioning.
 
@@ -77,7 +77,7 @@ Example:
 ```json
 {
   "kind": "entityType",
-  "$id": "https://blockprotocol.org/@alice/types/entity-type/book",
+  "$id": "https://blockprotocol.org/@alice/types/entity-type/book/v/4",
   "type": "object",
   "title": "Book",
   "properties": {
@@ -109,8 +109,8 @@ A key part of the reasoning for picking this approach depends on the ability to 
 
 For the purposes of this section, the following assumptions are applied:
 
-- Any given Schema X is _compatible with_ another schema Y if all possible values that satisfy Schema X also satisfy schema Y (note the directionality)
-- Any given Schema X is _equivalent to_ another Schema Y iff X is _compatible with_ Y _and_ Y is _compatible with_ X
+- Any given Schema X is _compatible with_ another schema Y if and only if all possible values that satisfy Schema X also satisfy schema Y (note the directionality)
+- Any given Schema X is _equivalent to_ another Schema Y if and only if X is _compatible with_ Y _and_ Y is _compatible with_ X
 - All Type schemas have `additionalProperties: false` unless otherwise stated
 - 'Constraints' refer to all JSON schema keywords which affect the validation of data in the Block Protocol, these include (but are not limited to) `type`, `properties`, `minItems`, `maxItems`, `minimum`, `maximum`
 - 'Semantic Annotations' refer to all JSON schema keywords which do not affect the validation of data in the Block Protocol, these include (but are not limited to) `title`, `description`, `examples`, `default`
@@ -118,29 +118,29 @@ For the purposes of this section, the following assumptions are applied:
 
 ### Data Types
 
-At the present Data Types represent completely disjoint value spaces, and the base primitive types are all **incompatible** with one another. As the [Non-Primitive Data Types RFC](https://github.com/blockprotocol/blockprotocol/pull/355) continues to be specified, it should comment on how checking compatibility will be affected.
+At the present data types represent completely disjoint value spaces, and the base primitive types are all **incompatible** with one another. As the [Non-Primitive Data Types RFC](https://github.com/blockprotocol/blockprotocol/pull/355) continues to be specified, it should comment on how checking compatibility will be affected.
 
 ### Property Types
 
-1.  Due to how Property Types are used, they implicitly affect the structure of the data in that they require the existence of a key that matches their URI.
-1.  Property Types define their constraints through a `oneOf` field. This `oneOf` is a collection of a number of values (greater than 1) where each value is a variant of the "Property Values" (defined below).
+1.  Due to how property types are used, they implicitly affect the structure of the data in that they require the existence of a key that matches their URI.
+1.  Property types define their constraints through a `oneOf` field. This `oneOf` is a collection of one or more values where each value is a variant of the "Property Values" (defined below).
 
-A Property Type `A` is therefore compatible with another Property Type `B` if and only if
+A property type `A` is therefore compatible with another property type `B` if and only if
 
-1.  They have the same base URI (which implies they are the same property type but perhaps different versions) and,
-1.  Every element of `A`'s `oneOf` is compatible with one element of `B`'s `oneOf`
+1.  they have the same base URI (which implies they are the same property type but perhaps different versions) and,
+1.  every element of `A`'s `oneOf` is compatible with one element of `B`'s `oneOf`
 
-The "Property Values" is a recursive definition which refers to the sub-schemas defined within the Property Types meta-schema. It defines the element as being one of the following:
+The "Property Values" is a recursive definition which refers to the sub-schemas defined within the [property types meta-schema](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md#property-types-1). It defines the element as being one of the following:
 
 #### Data Type Reference
 
-A Data Type reference is an inline reference to a data-type. A Data Type reference will be compatible with another Data Type reference if the Data Types that are referred to are also compatible.
+A data type reference is an inline reference to a data-type. A data type reference will be compatible with another data type reference if the data types that are referred to are also compatible.
 
-> _Without_ non-primitive Data Types this implies that the references are to the same Data Type.
+> _Without_ non-primitive data types this implies that the references are to the same data type.
 
 #### Property Type Object
 
-A Property Type Object is a JSON object where
+A property type Object is a JSON object where
 
 1.  The keys are base URI's to a property type
 1.  The values are defined by either:
@@ -150,7 +150,7 @@ A Property Type Object is a JSON object where
         1.  `minItems` and/or `maxItems` are optionally defined
 1.  The required fields are defined by a `required` list where the elements are base URIs that are a subset of the keys
 
-A Property Type Object `X` is therefore compatible with another Property Type Object `Y` if and only if
+A property type Object `X` is therefore compatible with another property type Object `Y` if and only if
 
 1.  Each key in the `properties` of `X` is also in the `properties` of `Y`
 1.  If a property in `X` is defined as an array, then it's also defined as an array in `Y` (and therefore the same for direct references)
@@ -171,14 +171,14 @@ A definition of an array of "Property Values" `X` is compatible with another def
 
 ### Entity Types
 
-1.  Entity Types define their constraints on the structure of an entity through their `properties`, where
+1.  Entity types define their constraints on the structure of an entity through their `properties`, where
     1.  The keys are base URI's to a property type
     1.  The values are defined by either:
         1.  A reference to a property type
         1.  An array definition, where
             1.  the items are defined by a reference to a property type
             1.  `minItems` and/or `maxItems` are optionally defined
-1.  Entity Types also define additional constraints on links from their entity through their:
+1.  Entity types also define additional constraints on links from their entity through their:
     1.  `links`, where
         1.  The keys are _versioned URI's_ to a link type
         1.  The values are defined by either:
@@ -189,7 +189,7 @@ A definition of an array of "Property Values" `X` is compatible with another def
                 1.  `minItems` and/or `maxItems` are optionally defined
     1.  `requiredLinks` array, where the elements are _versioned URIs_, and is a subset of the keys in the `links`
 
-An Entity Type `A` is therefore compatible with another Entity Type `B` if and only if
+An entity type `A` is therefore compatible with another entity type `B` if and only if:
 
 1.  Each key in the `properties` of `A` is also in the `properties` of `B`
 1.  If a property in `A` is defined as an array, then it's also defined as an array in `B` (and therefore the same for direct references)
@@ -206,7 +206,7 @@ An Entity Type `A` is therefore compatible with another Entity Type `B` if and o
 
 ### Link Types
 
-Link Types are only able to be changed through _semantic annotations_ and as such, any Link Type `X`, with the same Base URI as another Link Type `Y` (i.e. a different version of the same link type), are _compatible_.
+Link types are only able to be changed through _semantic annotations_ and as such, any link type `X`, with the same Base URI as another link type `Y` (i.e. a different version of the same link type), are _compatible_.
 
 ## When to Check Compatibility of Types
 
@@ -242,7 +242,7 @@ This section is going to largely refer to _semantic versioning_ as defined by [s
 
 ### Effects of versioning on Blocks and Embedding Applications
 
-The Types sit in the middle of producers and consumers of data, and unfortunately various types of changes has differing effects on the compatibility for either side.
+The Types sit in the middle of producers and consumers of data, and unfortunately various types of changes have differing effects on the compatibility for either side.
 
 Importantly, the data in an embedding application can be matched to a type that is ahead of, or behind, the type used by a Block. This means that we are interested in the two following questions:
 
