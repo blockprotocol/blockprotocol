@@ -129,7 +129,7 @@ At the present data types represent completely disjoint value spaces, and the ba
 
 A property type `A` is therefore compatible with another property type `B` if and only if
 
-1.  they have the same base URI (which implies they are the same property type but perhaps different versions) and,
+1.  they have the same base URI (which implies they are the same property type but perhaps different versions), and
 1.  every element of `A`'s `oneOf` is compatible with one element of `B`'s `oneOf`
 
 The "Property Values" is a recursive definition which refers to the sub-schemas defined within the [property types meta-schema](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md#property-types-1). It defines the element as being one of the following:
