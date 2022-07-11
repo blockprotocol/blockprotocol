@@ -1,6 +1,6 @@
 - Feature Name: extending-types
 - Start Date: 2022-07-11
-- RFC PR: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/pull/0000)
+- RFC PR: [blockprotocol/blockprotocol#428](https://github.com/blockprotocol/blockprotocol/pull/428)
 - Block Protocol Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
 
 # Summary
