@@ -113,7 +113,7 @@ For the purposes of this section, the following assumptions are applied:
 
 - Any given Schema X is _compatible with_ another schema Y if and only if all possible values that satisfy Schema X also satisfy schema Y (note the directionality)
 - Any given Schema X is _equivalent to_ another Schema Y if and only if X is _compatible with_ Y _and_ Y is _compatible with_ X
-- All Type schemas have `additionalProperties: false` unless otherwise stated
+- All Type schemas have `additionalProperties: false` unless otherwise stated (future RFCs may change this to allow for schemas to 'inherit' from other schemas via `allOf`')
 - 'Constraints' refer to all JSON schema keywords which affect the validation of data in the Block Protocol, these include (but are not limited to) `type`, `properties`, `minItems`, `maxItems`, `minimum`, `maximum`
 - 'Semantic Annotations' refer to all JSON schema keywords which do not affect the validation of data in the Block Protocol, these include (but are not limited to) `title`, `description`, `examples`, `default`
 - The ordering of constraints does not affect the compatibility of schemas
