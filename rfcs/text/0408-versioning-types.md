@@ -47,7 +47,7 @@ We opt not to constrain the format of the `base_uri` to enable flexibility in no
 
 as the identifier (assuming that the domain decides that type names are unique across a namespace).
 
-Where it's possible to guarantee, this URI should be valid indefinitely.
+Where it's possible to guarantee, the _versioned_ URI should be valid, and refer to the same iteration of the type, indefinitely.
 
 > ⚠️ New iterations and changes to the type _must occur_ under new version numbers. An important reason for this, in addition to the ones outlined above, is that components of the Block Protocol ecosystem will certainly implement caching and local-persistence logic, and the spec consciously makes no recommendation that they look for updates, or that these caches are updated.
 >
