@@ -1,7 +1,7 @@
 - Feature Name: `hook-service`
-- Start Date: (fill me in with today's date, YYYY-MM-DD)
-- RFC PR: [blockprotocol/blockprotocol#????](https://github.com/blockprotocol/blockprotocol/pull/????)
-- Block Protocol Discussion: [blockprotocol/blockprotocol#????](https://github.com/blockprotocol/blockprotocol/discussions/????)
+- Start Date: (fill me in with today's date, 2022-07-12)
+- RFC PR: [blockprotocol/blockprotocol#430](https://github.com/blockprotocol/blockprotocol/pull/430)
+- Block Protocol Discussion: N/A
 
 # Summary
 
@@ -20,8 +20,6 @@ It is not uncommon for embedding applications to want to provide a consistent 'l
 # Guide-level explanation
 
 [guide-level-explanation]: #guide-level-explanation
-
-IN PROGRESS:
 
 A 'hook' is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a path to data provided by the graph service's `blockEntity` property. 
 
