@@ -66,6 +66,19 @@ Any published (accessible) iteration of a Type can be considered a "version" of 
 
 Type URIs, and their version numbers are defined as outlined in the [Guide-level explanation](#guide-level-explanation).
 
+### Support for 'Canonical URIs'
+
+Other systems often allow for "canonical" URLs which can extend a versioned URL scheme with some more functionality. [W3C recommends](https://www.w3.org/2005/05/tr-versions) the use of:
+
+- `/latest` for retrieving the most recent "stabilized" version of the document
+- `/upcoming` for retrieving the most recent version of the document which is under progress but not stabilized
+
+and some other canonical URLs. This scheme is relatively consistent with other systems such as Git.
+
+> \*\*We recommend that schema hosts support `${base_uri}/v/latest`, redirecting to (or directly serving) the most recent published version of a type.
+
+Outside of that recommendation we opt to not provision for other canonical URIs at this time.
+
 ### Schemas
 
 1.  The `"$id"` field of a Type should be equal to the Type's _versioned URI_.
@@ -344,13 +357,14 @@ This allows us to compare the versions depending on the circumstance outlined ab
 
 [unresolved-questions]: #unresolved-questions
 
-- How should we constrain valid URI formats
-  - How should the version pair be formatted? Should we use query parameters?
-  - Should it be possible to go to a URI _without_ expressing a version, if so should returning the latest version be the expected behavior
-- Do we want to reserve some suffix such as `/latest`
+- [x] How should we constrain valid URI formats
+  - [x] How should the version be formatted? Should we use query parameters?
+  - [x] Should it be possible to go to a URI _without_ expressing a version, if so should returning the latest version be the expected behavior
+  - [x] Do we want to reserve some suffix such as `/latest`
 
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
 
 - We can publish a Block Protocol package (or many) for validation of Types
+- We can update the specification to provision for working drafts of Types, perhaps allowing for tagged versions that encapsulate Alpha/Beta/Unstable releases, etc.
