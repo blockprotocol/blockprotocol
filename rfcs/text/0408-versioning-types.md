@@ -149,7 +149,7 @@ The "Property Values" is a recursive definition which refers to the sub-schemas 
 
 #### Data Type Reference
 
-A data type reference is an inline reference to a data-type. A data type reference will be compatible with another data type reference if the data types that are referred to are also compatible.
+A data type reference will be compatible with another data type reference if the data types that are referred to are also compatible.
 
 > _Without_ non-primitive data types this implies that the references are to the same data type.
 
