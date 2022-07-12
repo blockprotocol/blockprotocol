@@ -7,7 +7,7 @@
 
 [summary]: #summary
 
-The Type System outlined in [RFC 0352](https://github.com/blockprotocol/blockprotocol/blob/am/rfc-graph-type-system/rfcs/text/0352-graph-type-system.md) introduced classes of types that are used to describe the data used and produced by blocks and embedding applications. The types are possibly (ideally often) publicly accessible, and their hierarchy allows for them to be composed together into new types. Due to this, changes in a type can affect the structure of another one. This RFC defines how types are versioned, to mitigate potential problems that would arise without versioning.
+The Type System outlined in [RFC 0352](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0352-graph-type-system.md) introduced classes of types that are used to describe the data used and produced by blocks and embedding applications. The types are possibly (ideally often) publicly accessible, and their hierarchy allows for them to be composed together into new types. Due to this, changes in a type can affect the structure of another one. This RFC defines how types are versioned, to mitigate potential problems that would arise without versioning.
 
 # Motivation
 
@@ -155,7 +155,7 @@ A data type reference will be compatible with another data type reference if the
 
 #### Property Type Object
 
-A poperty type object is JSON object defining a schema which is used as `oneOf` the permitted values for a property type, where the schema is of `type: "object`, and within its own `properties` definition:
+A property type object is JSON object defining a schema which is used as `oneOf` the permitted values for a property type, where the schema is of `type: "object`, and within its own `properties` definition:
 
 1.  The keys are base URIs to a property type
 1.  The values are defined by either:
@@ -331,7 +331,7 @@ An optional field is removed from the Type
 }
 ```
 
-This allows us to compare the versions depending on the circumstance outlined above, where we're trying to track forwards or backwards compatibility. In addition to being a rather unituitive and confusing solution, this still has a few large problems.
+This allows us to compare the versions depending on the circumstance outlined above, where we're trying to track forwards or backwards compatibility. In addition to being a rather unintuitive and confusing solution, this still has a few large problems.
 
 ### Other Problems
 
@@ -343,7 +343,7 @@ This allows us to compare the versions depending on the circumstance outlined ab
 ### Versioned vs Base URIs in Types
 
 - `$schema` needs to be versioned as it uniquely identifies the instance of the schema and makes it referenceable
-- Similarly, uses of `$ref` need to use versioned URIs to they can reference a specific iteration of the schema
+- Similarly, uses of `$ref` need to use versioned URIs so they can reference a specific iteration of the schema
 - Properties inside objects use _base_ URIs because otherwise _any_ version of an entity type would always be incompatible with another version of an entity type, as the keys in the underlying possible entities wouldn't match
 - The items in `links` are _versioned_ URIs because they do _not_ affect the underlying data structure of an entity. Furthermore the format of `links`, and the associated constraints, don't actually use `$ref` at the moment, so using a _base_ URI would link the entity type to some undetermined version of the link type. This could cause problems if a new version of a link type majorly changes the semantic meaning.
 
