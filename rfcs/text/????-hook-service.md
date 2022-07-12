@@ -15,9 +15,7 @@ In order to enable direct manipulation, this service is likely to be difficult o
 
 [motivation]: #motivation
 
-It is not uncommon for embedding applications to want to provide a consistent 'look and feel' across distinct blocks which implement similar features – i.e, rich text editing. Additionally, the implementation of these features may require integrating with systems bespoke to the embedding application. We don't want blocks to have to 'know' about the implementation of this functionality, or necessarily the shape of the data involved in providing this functionality.
-
-This service will allow a block to 'call out' to the embedding application to ask it to render or modify views associated with specified data, provided by the graph service.
+It is not uncommon for embedding applications to want to provide a consistent 'look and feel' across distinct blocks which implement similar features – i.e, rich text or image editing. Additionally, the implementation of these features may require integrating with systems bespoke to the embedding application. We don't want blocks to have to 'know' about the implementation of this functionality, or necessarily the shape of the data involved in providing this functionality. Therefore, the embedding application needs to be responsible for providing this functionality, but this depends on co-operation by block authors. 
 
 # Guide-level explanation
 
@@ -25,26 +23,26 @@ This service will allow a block to 'call out' to the embedding application to as
 
 IN PROGRESS:
 
-The hook service can be used by a block to allow the embedding application, should they wish, to provide functionality not provided by the block, associated with a specified value on the `blockEntity` property provided by the graph service. 
+A 'hook' is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a path to data provided by the graph service's `blockEntity` property. 
 
-The 'should they wish' here is key. Blocks cannot require embedding applications to implement a response to 
+The 'optionally' here is key. Blocks cannot require embedding applications to implement a handler for any specific 'hook'. Therefore, each 'hook' must specify a fallback rendering strategy which embedding applications implementing the hook service can use instead of implementing the hook themselves.   
 
-A classical example would be rich text editing. In this case, you may not want to provide the underlying data storing the formatted text, as this may be bespoke to your embedding application. But you may still want to provide the plain text value for the block to make use of – i.e, if the block provides a word count feature.  
+A classical example would be rich text editing. In this case, you may not want to provide the underlying data storing the formatted text, as this may be bespoke to your embedding application. But you may still want to provide the plain text value for the block to make use of – i.e, if the block provides a word count feature.
 
-This example is an illustration that you shouldn't think of the hook service as a way of directly coupling a block and the embed
+A block implements a hook by sending a `hook` message to the embedding application, with five pieces of information:
+- `node: HTMLElement | null`: The DOM node the embedding application will render a view into, or modifying an already rendered view. 
+- `type: "text" | "image" | "video" | string`: The type of view for the hook. While this can be any string as a fallback must be passed if `type` is not implemented, we believe `text`, `image`, and `video` will be commonly used. Straying from these commonly used types will make your block less portable between different embedding applications, particularly those designed to support all blocks.  
+- `path: string`: The path to the property on the graph service's `blockEntity` property associated with the hook
+- `fallback: (node: HTMLElement, type: "text" | "image" | "video" | string, path: string) => void`: The fallback rendering method which will be used if the embedding application does not implement this particular hook
+- `hookId: string | null`: The ID of the hook as provided in the response when first sending a `hook` message. This should be `null` on first call.  
 
-a block will send a `render` message with three pieces of information:
-- `node`: The DOM node to give control to the embedding application. We use direct manipulation of the DOM node, rather than the embedding application providing the
+The embedding application must respond with a `hookResponse` message specifying a `hookId: string` property, which will be provided in future `hook` messages to establish that the hook is simply being updated, and not installed. 
 
-Explain the proposal as if it was already included in the protocol and you were teaching it to another Block Protocol implementor. That generally means:
+This `hook` message should be sent every time any one of these pieces of information changes (but not, importantly, if the value `path` refers to changes – embedding applications can handle this). In this way, you can think of the message as setting up the hook.
 
-- Introducing new named concepts.
-- Explaining the feature largely in terms of examples.
-- Explaining how Block Protocol implementors and users should _think_ about the feature, and how it should impact the way they use the protocol. It should explain the impact as concretely as possible.
-- If applicable, provide sample error messages, deprecation warnings, or migration guidance.
-- If applicable, describe the differences between teaching this to existing and new Block Protocol users.
+An embedding application receiving a `hook` message should use this to directly manipulate `node` in order to render the `type` view for the specified `path`. Any embedding application implementing the hook service *must* call the `fallback` for any hooks it does not wish to implement. 
 
-For implementation-oriented RFCs, this section should focus on how Block Protocol implementors should think about the change, and give examples of its concrete impact. For policy RFCs, this section should provide an example-driven introduction to the policy, and explain its impact in concrete terms.
+When receiving `null` for the `node`, the embedding application should tear down any and all subscriptions made in association with this hook. 
 
 # Reference-level explanation
 
@@ -64,9 +62,8 @@ The section should return to the examples given in the previous section, and exp
 
 [drawbacks]: #drawbacks
 
-TODO:
-
-Why should we _not_ do this?
+- There is the possibility for explosion in values used in `type`, or for blocks to use it to tie their block to a specific embedding application, or set of embedding applications. 
+- The core service which other services build on does not allow sync communication – which may be an issue when it comes to rendering UI. 
 
 # Rationale and alternatives
 
@@ -116,6 +113,7 @@ This proposal fixes all of these problems.
   - plugin service
   - DOM service
   - extension service
+- Is the name 'hook' too tied into React and therefore confusing? 
 - Is there any functionality expected to be enabled by this service where an embedding application would need to know statically that the service is being used – i.e, does this need to show up in the schema. If so, how does this work with dynamic properties (i.e, a property on a value in a list)
 - Is the use of property paths to indicate the relevant value problematic? Do we need to make it easy to generate these property paths (possible using a proxy)?
 - Will blocks want to pass up data which is not present on `blockEntity` (i.e, on a linked entity or aggregation) or not provided by the block service at all
