@@ -1,5 +1,8 @@
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
+  Breadcrumbs,
+  Collapse,
   Container,
   Typography,
   useMediaQuery,
@@ -9,17 +12,18 @@ import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { ReactNode, VFC } from "react";
 
 import { SiteMapPage } from "../../../lib/sitemap";
+import { FontAwesomeIcon } from "../../icons";
+import { Link } from "../../link";
 import {
   MDX_TEXT_CONTENT_MAX_WIDTH,
   MdxPageContent,
-} from "../../mdx-page-content";
+} from "../../mdx/mdx-page-content";
 import { PageNavLinks } from "../../page-nav-links";
 import { Sidebar } from "../../page-sidebar";
 
 type DocsPageProps = {
   title?: ReactNode;
   subtitle?: ReactNode;
-  hero?: ReactNode;
   content: MDXRemoteSerializeResult<Record<string, unknown>>;
   pages: SiteMapPage[];
   flatPages?: SiteMapPage[];
@@ -27,10 +31,25 @@ type DocsPageProps = {
   currentPage?: SiteMapPage | undefined;
 };
 
+const getParentPages = (
+  pages: SiteMapPage[],
+  currentPage: SiteMapPage,
+): SiteMapPage[] | null => {
+  for (const page of pages) {
+    if (page.href === currentPage.href) {
+      return [];
+    }
+    const subParents = getParentPages(page.subPages, currentPage);
+    if (subParents) {
+      return [page, ...subParents];
+    }
+  }
+  return null;
+};
+
 export const DocsContent: VFC<DocsPageProps> = ({
   title,
   subtitle,
-  hero,
   content,
   pages,
   flatPages = pages,
@@ -53,6 +72,8 @@ export const DocsContent: VFC<DocsPageProps> = ({
 
   const hasMultiplePages = allPages.length > 0;
 
+  const parents = currentPage ? getParentPages(pages, currentPage) : null;
+
   return (
     <Box display="flex" alignItems="flex-start">
       {md ? (
@@ -68,6 +89,7 @@ export const DocsContent: VFC<DocsPageProps> = ({
           margin: 0,
           marginTop: { xs: 5, md: 8 },
           width: "inherit",
+          maxWidth: "100%",
         }}
       >
         {title ? (
@@ -91,7 +113,47 @@ export const DocsContent: VFC<DocsPageProps> = ({
             {subtitle}
           </Typography>
         ) : null}
-        {hero}
+        {parents ? (
+          <Collapse in={md && !!parents && parents.length > 0}>
+            <Breadcrumbs
+              separator={
+                <FontAwesomeIcon
+                  sx={{
+                    fontSize: 14,
+                    color: ({ palette }) => palette.gray[40],
+                  }}
+                  icon={faChevronRight}
+                />
+              }
+              sx={{ marginBottom: 2, marginLeft: 0.25 }}
+            >
+              {parents.map(({ href, title: parentTitle }, i, all) => (
+                <Link
+                  key={href}
+                  href={href}
+                  sx={{
+                    textTransform: "uppercase",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  {parentTitle}
+                  {i === all.length - 1 ? (
+                    <FontAwesomeIcon
+                      sx={{
+                        fontSize: 14,
+                        color: ({ palette }) => palette.gray[40],
+                        marginLeft: 1,
+                      }}
+                      icon={faChevronRight}
+                    />
+                  ) : null}
+                </Link>
+              ))}
+            </Breadcrumbs>
+          </Collapse>
+        ) : null}
+
         <Box mb={hasMultiplePages ? 4 : 0}>
           <MdxPageContent flexGrow={1} serializedPage={content} />
         </Box>

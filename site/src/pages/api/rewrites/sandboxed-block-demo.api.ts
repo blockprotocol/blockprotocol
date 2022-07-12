@@ -62,6 +62,15 @@ const handler: NextApiHandler = async (req, res) => {
 
   const externalUrlLookup: Record<string, string> = {};
 
+  if (
+    Object.keys(blockMetadata.externals ?? {}).length > 0 &&
+    blockMetadata.blockType.entryPoint === "html"
+  ) {
+    throw new Error(
+      "Block Protocol does not support externals with HTML blocks",
+    );
+  }
+
   const externals = hotfixExternals(blockMetadata.externals);
 
   for (const [packageName, packageVersion] of Object.entries(externals)) {
@@ -141,9 +150,7 @@ const handler: NextApiHandler = async (req, res) => {
           clearTimeout(timeout);
       
           const entryPoint = blockType.entryPoint.toLocaleLowerCase();
-          
-          const rawBlockSource = source;
-          const blockExport = entryPoint === "html" ? rawBlockSource : findBlockExport(loadCjsFromSource(rawBlockSource));
+          const blockExport = entryPoint === "html" ? source : findBlockExport(loadCjsFromSource(source));
           
           const blockDefinition = {
             ReactComponent: entryPoint === "react" ? blockExport : undefined,
@@ -151,7 +158,10 @@ const handler: NextApiHandler = async (req, res) => {
               elementClass: blockExport,
               tagName: blockType.tagName
             } : undefined,
-            htmlString: entryPoint === "html" ? blockExport : undefined
+            html: entryPoint === "html" ? {
+              source: blockExport,
+              url: "${blockMetadata.source}"
+            } : undefined
           }
           
           const mockBlockDockInitialData = ${JSON.stringify(

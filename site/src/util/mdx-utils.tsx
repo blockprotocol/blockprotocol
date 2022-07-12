@@ -23,7 +23,7 @@ type TextNode = {
 const isTextNode = (node: Node): node is TextNode => "value" in node;
 
 type Parent = {
-  children: Node[];
+  children: (TextNode | Node)[];
 } & Node;
 
 const isParent = (node: Node): node is Parent => "children" in node;
@@ -34,6 +34,19 @@ type Heading = {
 } & Parent;
 
 const isHeading = (node: Node): node is Heading => node.type === "heading";
+
+type FAQ = {
+  type: "mdxJsxFlowElement";
+  name: "FAQ";
+  attributes: {
+    type: "mdxJsxAttribute";
+    name: "question" | string;
+    value: string;
+  }[];
+} & Parent;
+
+const isFAQ = (node: Node): node is FAQ =>
+  node.type === "mdxJsxFlowElement" && node.name === "FAQ";
 
 type ParsedAST = {
   type: "root";
@@ -47,15 +60,27 @@ const parseAST = (mdxFileContent: string) =>
 const getHeadingsFromParent = (parent: Parent): Heading[] =>
   parent.children
     .map((child) => {
+      const subHeadings = isParent(child) ? getHeadingsFromParent(child) : [];
       if (isHeading(child)) {
         return [child];
-      } else if (isParent(child)) {
-        return child.children
-          .filter(isParent)
-          .map(getHeadingsFromParent)
-          .flat();
+      } else if (isFAQ(child)) {
+        const heading: Heading = {
+          type: "heading",
+          /** @todo: don't assume that FAQ accordions are always headings at depth 3 */
+          depth: 3,
+          children: [
+            {
+              type: "text",
+              value:
+                child.attributes.find(
+                  ({ name }) => name === "anchor" || name === "question",
+                )?.value ?? "Unknown",
+            },
+          ],
+        };
+        return [heading, ...subHeadings];
       }
-      return [];
+      return subHeadings;
     })
     .flat();
 
@@ -145,9 +170,8 @@ export const getPage = (params: {
 }): SiteMapPage => {
   const { pathToDirectory, fileName } = params;
 
-  const source = fs.readFileSync(
-    path.join(process.cwd(), `src/_pages/${pathToDirectory}/${fileName}`),
-  );
+  const markdownFilePath = `src/_pages/${pathToDirectory}/${fileName}`;
+  const source = fs.readFileSync(path.join(process.cwd(), markdownFilePath));
 
   const { content } = matter(source);
 
@@ -166,6 +190,7 @@ export const getPage = (params: {
     href: `/${pathToDirectory.replace(/\d+_/g, "")}${
       name === "index" ? "" : `/${slugify(name, { lower: true })}`
     }`,
+    markdownFilePath,
     sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
       const newSection = {
         title: getVisibleText(currentHeading),
@@ -200,39 +225,39 @@ export const getPage = (params: {
 // Get the structure of a all MDX files in a given directory
 export const getAllPages = (params: {
   pathToDirectory: string;
+  filterIndexPage?: boolean;
 }): SiteMapPage[] => {
-  const { pathToDirectory } = params;
+  const { pathToDirectory, filterIndexPage = false } = params;
 
-  const fileNames = fs
+  const directoryItems = fs
     .readdirSync(path.join(process.cwd(), `src/_pages/${pathToDirectory}`))
-    .filter((name) => name !== "title.txt");
+    .filter((item) => !filterIndexPage || item !== "0_index.mdx");
 
-  return fileNames.flatMap((fileName) => {
+  return directoryItems.flatMap((directoryItem) => {
     if (
-      fs.lstatSync(`src/_pages/${pathToDirectory}/${fileName}`).isDirectory()
+      fs
+        .lstatSync(`src/_pages/${pathToDirectory}/${directoryItem}`)
+        .isDirectory()
     ) {
-      const href = `/${pathToDirectory}/${fileName.replace(/\d+_/g, "")}`;
-
-      const subPages = getAllPages({
-        pathToDirectory: `${pathToDirectory}/${fileName}`,
+      const indexPage = getPage({
+        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+        fileName: "0_index.mdx",
       });
 
-      const title = fs.readFileSync(
-        `src/_pages/${pathToDirectory}/${fileName}/title.txt`,
-        "utf8",
-      );
+      const subPages = getAllPages({
+        pathToDirectory: `${pathToDirectory}/${directoryItem}`,
+        filterIndexPage: true,
+      });
 
       return {
-        title,
-        href,
+        ...indexPage,
         subPages,
-        sections: [],
       };
     }
 
     return getPage({
       pathToDirectory,
-      fileName,
+      fileName: directoryItem,
     });
   });
 };

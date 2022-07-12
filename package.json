@@ -29,7 +29,7 @@
     "dev": "yarn workspace @blockprotocol/site dev",
     "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
     "dev:db": "yarn workspace @blockprotocol/site dev:db",
-    "prepare": "patch-package && husky install && yarn workspace @blockprotocol/core run prepare && yarn workspace @blockprotocol/graph run prepare && yarn workspace mock-block-dock run prepare && yarn workspace @blockprotocol/site run prepare"
+    "prepare": "patch-package && husky install && yarn workspace html-block run prepare && yarn workspace @blockprotocol/core run prepare && yarn workspace @blockprotocol/graph run prepare && yarn workspace mock-block-dock run prepare && yarn workspace @blockprotocol/site run prepare"
   },
   "lint-staged": {
     "**/*": [
@@ -41,11 +41,14 @@
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-react": "^7.16.7",
+    "@changesets/changelog-github": "^0.4.5",
+    "@changesets/cli": "^2.23.1",
     "@types/fs-extra": "^9.0.13",
     "@types/wait-on": "5.3.1",
     "@typescript-eslint/eslint-plugin": "5.21.0",
     "@typescript-eslint/parser": "5.21.0",
     "algoliasearch": "4.12.1",
+    "axios": "^0.24.0",
     "chalk": "5.0.1",
     "check-dependency-version-consistency": "2.0.0",
     "concurrently": "^7.0.0",

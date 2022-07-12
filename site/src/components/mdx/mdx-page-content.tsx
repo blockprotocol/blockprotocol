@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { useEffect, useMemo, useRef, useState, VFC } from "react";
 
-import { mdxComponents } from "../util/mdx-components";
-import PageHeadingsContext, { Heading } from "./context/page-headings-context";
+import PageHeadingsContext, { Heading } from "../context/page-headings-context";
+import { mdxComponents } from "./mdx-components";
 
 export const MDX_TEXT_CONTENT_MAX_WIDTH = 680;
 
@@ -88,8 +88,11 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         currentHeading.current = headingWithCurrentAnchor;
         setDetectHeadingFromScroll(false);
 
+        const { y: yPosition } =
+          headingWithCurrentAnchor.element.getBoundingClientRect();
+
         window.scrollTo({
-          top: headingWithCurrentAnchor.element.offsetTop - 100,
+          top: yPosition + window.scrollY - 100,
         });
 
         if (detectHeadingFromScrollTimer) {
@@ -162,16 +165,18 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         sx={{
           width: "100%",
           overflow: "auto",
-          "& > :not(.info-card-wrapper), > a:not(.info-card-wrapper) > *": {
-            maxWidth: {
-              xs: "100%",
-              sm: MDX_TEXT_CONTENT_MAX_WIDTH,
+          "& > :not(.info-card-wrapper, .github-info-card), > a:not(.info-card-wrapper) > *":
+            {
+              maxWidth: {
+                xs: "100%",
+                sm: MDX_TEXT_CONTENT_MAX_WIDTH,
+              },
             },
-          },
           /** Headers that come after headers shouldn't have a top margin */
-          "& h1 + h2, h1 + h3, h1 + h4, h2 + h3, h2 + h4, h3 + h4": {
-            marginTop: 0,
-          },
+          "& h1 + h2, h1 + h3, h1 + h4, h1 + h5, h2 + h3, h2 + h4, h2 + h5, h3 + h4, h3 + h5, h4 + h5":
+            {
+              marginTop: 0,
+            },
           "& > :first-child": {
             marginTop: 0,
           },

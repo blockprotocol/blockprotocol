@@ -1,12 +1,18 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 import { FC } from "react";
 
-export const HASHLogoIcon: FC<SvgIconProps> = ({ sx, ...remainingProps }) => {
+export const HASHLogoIcon: FC<SvgIconProps> = ({
+  sx = [],
+  ...remainingProps
+}) => {
   return (
     <SvgIcon
       width="73"
       height="13"
-      sx={{ width: "unset", height: "unset", ...sx }}
+      sx={[
+        { width: "unset", height: "unset" },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
       {...remainingProps}
       viewBox="0 0 73 13"
     >

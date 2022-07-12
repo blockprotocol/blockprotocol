@@ -1,5 +1,12 @@
 import { faLink } from "@fortawesome/free-solid-svg-icons";
-import { Box, Paper, styled, Typography, TypographyProps } from "@mui/material";
+import {
+  Box,
+  Paper,
+  styled,
+  Typography,
+  typographyClasses,
+  TypographyProps,
+} from "@mui/material";
 import {
   Children,
   FunctionComponent,
@@ -7,20 +14,20 @@ import {
   HTMLProps,
   isValidElement,
   ReactNode,
-  useContext,
-  useEffect,
-  useRef,
   VFC,
 } from "react";
 import slugify from "slugify";
 
-import PageHeadingsContext from "../components/context/page-headings-context";
-import { GraphServiceMessageList } from "../components/graph-service-message-list";
-import { FontAwesomeIcon } from "../components/icons";
-import { InfoCard } from "../components/info-card/info-card";
-import { InfoCardWrapper } from "../components/info-card/info-card-wrapper";
-import { Link } from "../components/link";
-import { Snippet } from "../components/snippet";
+import { FontAwesomeIcon } from "../icons";
+import { Link } from "../link";
+import { Snippet } from "../snippet";
+import { FAQ } from "./faq";
+import { GraphServiceMessageList } from "./graph-service-message-list";
+import { GitHubInfoCard } from "./info-card/github-info-card";
+import { InfoCard } from "./info-card/info-card";
+import { InfoCardWrapper } from "./info-card/info-card-wrapper";
+import { usePageHeading } from "./shared/use-page-heading";
+import { stringifyChildren } from "./shared/util";
 
 const Heading = styled(Typography)(({ theme }) => ({
   "svg.link-icon": {
@@ -38,25 +45,6 @@ const Heading = styled(Typography)(({ theme }) => ({
     },
   },
 }));
-
-const usePageHeading = (props: { anchor: string }) => {
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const { headings, setHeadings } = useContext(PageHeadingsContext);
-
-  const { anchor } = props;
-
-  useEffect(() => {
-    if (
-      headingRef.current &&
-      headings.find((heading) => heading.anchor === anchor) === undefined
-    ) {
-      const element = headingRef.current;
-      setHeadings((prev) => [...prev, { anchor, element }]);
-    }
-  }, [anchor, headingRef, headings, setHeadings]);
-
-  return { headingRef };
-};
 
 const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 | 5 }> = ({
   depth,
@@ -88,17 +76,6 @@ const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 | 5 }> = ({
   );
 };
 
-const stringifyChildren = (node: ReactNode): string => {
-  if (typeof node === "string") {
-    return node;
-  } else if (Array.isArray(node)) {
-    return node.map(stringifyChildren).join("");
-  } else if (!!node && typeof node === "object" && "props" in node) {
-    return stringifyChildren(node.props.children);
-  }
-  return "";
-};
-
 const HEADING_MARGIN_TOP = {
   H1: 8,
   H2: 8,
@@ -113,8 +90,23 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
   Paper,
   Typography,
   InfoCardWrapper,
+  GitHubInfoCard,
   InfoCard,
+  FAQ,
   GraphServiceMessageList,
+  SubTitle: (({ children }) => (
+    <Box
+      maxWidth={750}
+      sx={{
+        marginBottom: 6,
+        // override the styling of any nested typography component
+        [`> .${typographyClasses.root}`]: ({ typography }) =>
+          typography.bpSubtitle,
+      }}
+    >
+      {children}
+    </Box>
+  )) as FunctionComponent,
   Hidden: (({ children }) => {
     return (
       <span aria-hidden style={{ display: "none" }}>
