@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { FC, ReactNode } from "react";
 
-import { BlockProtocolLogoIcon, FontAwesomeIcon, HASHLogoIcon } from "./icons";
+import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { LinkButton } from "./link-button";
 
