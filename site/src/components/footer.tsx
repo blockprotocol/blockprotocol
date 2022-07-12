@@ -217,59 +217,6 @@ export const Footer: FC<FooterProps> = ({ sx = [], ...boxProps }) => {
             {FooterNavigationLinks}
             {md ? null : Socials}
           </Grid>
-          <Grid
-            item
-            xs={12}
-            md={4}
-            display="flex"
-            alignItems="flex-end"
-            sx={{
-              justifyContent: {
-                xs: "flex-start",
-                md: "flex-end",
-              },
-            }}
-          >
-            <Typography
-              component="p"
-              sx={{
-                color: ({ palette }) => palette.gray[50],
-                fontWeight: 400,
-                display: "flex",
-                "> a": {
-                  borderBottomWidth: 0,
-                  transition: theme.transitions.create(
-                    ["color", "borderColor"],
-                    {
-                      duration: 150,
-                    },
-                  ),
-                  ":hover": {
-                    color: ({ palette }) => palette.gray[30],
-                  },
-                  ":active": {
-                    color: ({ palette }) => palette.common.white,
-                  },
-                  ":focus-visible": {
-                    outline: ({ palette }) => `1px solid ${palette.gray[50]}`,
-                  },
-                },
-              }}
-              variant="bpSmallCopy"
-            >
-              Supported by{" "}
-              <Link
-                href="https://hash.ai"
-                sx={{
-                  position: "relative",
-                  top: -1,
-                  marginLeft: 1,
-                }}
-              >
-                <HASHLogoIcon />
-              </Link>
-            </Typography>
-          </Grid>
         </Grid>
       </Container>
     </Box>
