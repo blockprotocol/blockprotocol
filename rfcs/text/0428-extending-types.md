@@ -7,19 +7,66 @@
 
 [summary]: #summary
 
-As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended and duplicated.
+As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended and duplicated to enhance reusability while giving more control to users (both block authors and users of embedding applications).
 
 # Motivation
 
 [motivation]: #motivation
 
-Why are we doing this? What use cases does it support? What is the expected outcome?
+Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain fields to make the type usable for their use case, they would have to recreate the type themself in the current system.
+
+Allowing for types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain.
+
+This RFC introduces a way for types to be extended in a way where the reusability and sharing aspects of the Block Protocol are maintained
 
 # Guide-level explanation
 
 [guide-level-explanation]: #guide-level-explanation
 
-Explain the proposal as if it was already included in the protocol and you were teaching it to another Block Protocol implementor. That generally means:
+Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
+Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may not be modified.
+
+For example, an `Employee` entity type can be an extended version of `Person`. This `Employee` type could contain domain-specific fields, making it more concrete while keeping compatibility with `Person`.
+
+If the `Person` entity type contains required properties `Name` and `Age`, the `Employee` entity type would inherit these properties and perhaps add a `Occupation` property. `Employee` would _not_ be able to overwrite any of the properties given by `Person` e.g. it's not possible to turn `Name` into an array or make it optional. This restriction is important as disabling overwriting enables `Employee` instances to be valid `Person` instances i.e. compatibility with `Person` is kept.
+
+The immediate problems that arise from this definition:
+
+- How do we ensure that `Employee` instances can, in fact, be used in place of `Person` entities in practice?
+- Do multiple super-types impose constraints on extending types?
+- How does having `additionalProperties` in existing schemas influence extended types?
+  - If we specify `{ "additionalProperties": false }` in a type, using conventional JSON Schema `allOf`, composition is not possible.
+
+## Subtyping
+
+Compatibility between extended types is the ability to use the subtype in place of a supertype. [Prior art](https://en.wikipedia.org/wiki/Subtyping#Coercions) calls this `coercive subtyping` when it can happen implicitly.
+To make the process of judging whether or not a subtype can be used in place of supertype, using _composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited fields, we are sure that the supertype fields are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
+
+Although we can make guarantees about supertype fields not being touched on a subtype, selecting a subset of fields that match super-type fields isn't a cheap operation when all fields are part of the same Entity instance.
+
+For example, an `Employee` instance looks as follows (simplified):
+
+```json
+{
+  "name": "Charles",
+  "age": 35,
+  "occupation": "Merchant"
+}
+```
+
+And the fields would have the following relation to `Employee`:
+
+```json
+      name─┐
+           ├───Person─────Employee
+       age─┘              │
+                          │
+occupation────────────────┘
+```
+
+---
+
+Explain the proposal as if it was already included in the protocol and you were teaching it to another Block Protocol implementer. That generally means:
 
 - Introducing new named concepts.
 - Explaining the feature largely in terms of examples.
