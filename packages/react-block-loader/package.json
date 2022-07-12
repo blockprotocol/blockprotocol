@@ -38,8 +38,8 @@
   "dependencies": {
     "@lit-labs/react": "^1.0.4",
     "blockprotocol": "0.0.11",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -66,7 +66,7 @@
     "webpack-dev-server": "^4.8.1"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   }
 }

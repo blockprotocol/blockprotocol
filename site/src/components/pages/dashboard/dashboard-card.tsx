@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Box, BoxProps, Link, Typography } from "@mui/material";
-import { FC, VoidFunctionComponent } from "react";
+import { FC, ReactNode, VoidFunctionComponent } from "react";
 
 import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
 
@@ -18,8 +18,9 @@ export type DashboardCardProps = {
 };
 
 type CardWrapperProps = {
-  onClick?: () => void;
+  children?: ReactNode;
   href?: string;
+  onClick?: () => void;
 };
 
 const sharedStyles: BoxProps["sx"] = {

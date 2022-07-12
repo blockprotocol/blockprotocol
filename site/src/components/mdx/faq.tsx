@@ -15,8 +15,9 @@ import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
 
 type FAQProps = {
+  children?: ReactNode;
   anchor?: string;
-  question: ReactNode;
+  question?: ReactNode;
 };
 
 export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
