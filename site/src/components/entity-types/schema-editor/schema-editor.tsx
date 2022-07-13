@@ -154,7 +154,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
    * Generate a link for an absolute URI to a schema (or part of a schema), for a given value for $ref
    */
   const generateAbsoluteSchemaLink = useCallback(
-    ($ref) => {
+    ($ref: string) => {
       const baseUrl = schema$id?.startsWith("http")
         ? new URL(schema$id).origin
         : undefined;
