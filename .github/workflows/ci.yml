@@ -198,8 +198,9 @@ jobs:
 
       - run: yarn install
 
-      - name: Create site/.env.local
+      - name: Create temp files and folders
         run: |
+          mkdir -p var/logs
           cat << EOF > site/.env.local
           SESSION_SECRET=dev-session-secret
           HASHING_SECRET=dev-hashing-secret
