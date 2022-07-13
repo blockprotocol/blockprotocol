@@ -13,7 +13,7 @@ jobs:
     ## containers for new deployments and keeps them up by fetching affected URLs every 10 minutes.
     ## Context: https://github.com/orgs/vercel/discussions/496
     name: Warm up Vercel
-    if: github.event_name == 'schedule' || github.event.deployment_status.state == 'success'
+    if: github.event.deployment_status.state == 'success' || github.event_name == 'schedule'
     runs-on: ubuntu-20.04
     steps:
       - name: Fetch URLs that use AWS Lambda
@@ -34,7 +34,8 @@ jobs:
 
   smoke_tests:
     name: Smoke tests
-    if: github.event.schedule == '0 4 * * *' || github.event.deployment_status.state == 'success'
+    needs: [test-packages]
+    if: github.event.deployment_status.state == 'success' || github.event.schedule == '0 4 * * *'
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
