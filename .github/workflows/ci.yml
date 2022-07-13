@@ -212,7 +212,7 @@ jobs:
         if: ${{ success() || failure() }}
         run: |
           yarn dev:db 2>&1 | tee var/logs/db.log & ## ampersand enables background mode
-          yarn wait-on --timeout 30000 http://0.0.0.0:27017
+          yarn wait-on --timeout 30000 tcp:0.0.0.0:27017
 
       - name: Seed DB
         if: ${{ success() || failure() }}
