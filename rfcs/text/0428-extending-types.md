@@ -40,7 +40,7 @@ The immediate problems that arise from this definition:
 ## Subtyping
 
 Compatibility between extended types is the ability to use the subtype in place of a supertype. [Prior art](https://en.wikipedia.org/wiki/Subtyping#Coercions) calls this `coercive subtyping` when it can happen implicitly.
-To make the process of judging whether or not a subtype can be used in place of supertype, using _composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited fields, we are sure that the supertype fields are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
+_Composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited fields, we are sure that the supertype fields are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
 
 Although we can make guarantees about supertype fields not being touched on a subtype, selecting a subset of fields that match super-type fields isn't a cheap operation when all fields are part of the same Entity instance.
 
@@ -56,12 +56,12 @@ For example, an `Employee` instance looks as follows (simplified):
 
 And the fields would have the following relation to `Employee`:
 
-```json
-      name─┐
+```
+      name◄┐
            ├───Person─────Employee
-       age─┘              │
+       age◄┘              │
                           │
-occupation────────────────┘
+occupation◄───────────────┘
 ```
 
 ---
