@@ -1,4 +1,4 @@
-name: Check codebase
+name: CI
 on: pull_request
 
 jobs:
@@ -6,9 +6,9 @@ jobs:
     name: Linting
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: yarn
@@ -134,9 +134,9 @@ jobs:
       BLOCK_DIR_PATH: ~/test-block
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
           node-version: 16
           cache: yarn
