@@ -1,0 +1,26 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.repository == 'blockprotocol/blockprotocol'
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+
+      - run: yarn install
+
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@v1.3.0
+        with:
+          publish: yarn changesets publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
