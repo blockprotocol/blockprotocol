@@ -157,7 +157,8 @@ const ensureRepositorySnapshot = async ({
   // "Could not write file /tmp/..." "ENOSPC: no space left on device"
   // Preventing workshop folder from growing indefinitely reduces the chances of failure.
   // See details in https://github.com/blockprotocol/blockprotocol/pull/327
-  if (process.env.VERCEL) {
+  // The same may happen in GitHub Workflows (integration tests) as the number of blocks grow.
+  if (process.env.CI) {
     await fs.emptyDir(workshopDirPath);
   }
 
