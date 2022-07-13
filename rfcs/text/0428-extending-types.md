@@ -42,8 +42,6 @@ The immediate problems that arise from this definition:
 Compatibility between extended types is the ability to use the subtype in place of a supertype. [Prior art](https://en.wikipedia.org/wiki/Subtyping#Coercions) calls this `coercive subtyping` when it can happen implicitly.
 _Composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited fields, we are sure that the supertype fields are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
 
-Although we can make guarantees about supertype fields not being touched on a subtype, selecting a subset of fields that match super-type fields isn't a cheap operation when all fields are part of the same Entity instance.
-
 For example, an `Employee` instance looks as follows (simplified):
 
 ```json
@@ -57,12 +55,40 @@ For example, an `Employee` instance looks as follows (simplified):
 And the fields would have the following relation to `Employee`:
 
 ```
-      name◄┐
-           ├───Person─────Employee
-       age◄┘              │
-                          │
-occupation◄───────────────┘
+      name◄┐ (supertype)    (subtype)
+           ├───Person───────Employee
+       age◄┘                │
+                            │
+occupation◄─────────────────┘
 ```
+
+We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` fields but exclude the `occupation` field.
+Assuming that we are able to project/select the fields of a type that are defined through the supertype, coercive subtyping is attainable for any subtype.
+
+## Multiple supertypes
+
+A type must allow extending multiple super-types if and only if the supertypes can coexist. For supertypes to be able to coexist, their fields should either be disjoint, or overlap in a compatible manner.
+
+An example of disjoint fields:
+
+- Supertype `Person` contains required fields `Name` and `Age`
+- Supertype `Superhero` contains the field `Superpower`
+
+In this example, there is no overlap between fields
+
+An example of compatible, overlapping fields:
+
+- Supertype `Person` contains the required fields `Name` and `Age`
+- Supertype `Superhero` contains the required fields `Superpower` and `Name`
+
+In this example, `Name` overlaps as a required field in both supertypes.
+
+An example of _incompatible_, overlapping fields:
+
+- Supertype `Person` contains the required fields `Name` and `Age`
+- Supertype `Superhero` contains the required field `Superpower` and an array of `Name`s
+
+In this example, the array of `Name`s on the `Superhero` type would not be compatible with the required `Name` field of `Person`, which means that the two types cannot be supertypes together.
 
 ---
 
