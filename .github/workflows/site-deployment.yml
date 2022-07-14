@@ -55,7 +55,6 @@ jobs:
       - run: yarn playwright install-deps chrome
 
       - name: Run Playwright tests
-        run: |
-          yarn workspace @blockprotocol/site playwright test --project=smoke
+        run: yarn workspace @blockprotocol/site playwright test --project=smoke
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
