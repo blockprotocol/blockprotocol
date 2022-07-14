@@ -181,6 +181,8 @@ jobs:
   site-integration-tests:
     name: "Site integration tests"
     runs-on: ubuntu-latest
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: false
     steps:
       - uses: actions/checkout@v3
 
@@ -218,8 +220,7 @@ jobs:
 
       - name: Seed DB
         if: ${{ success() || failure() }}
-        run: |
-          yarn dev:seed-db
+        run: yarn dev:seed-db
 
       - name: Build and launch frontend
         if: ${{ success() || failure() }}
@@ -233,8 +234,7 @@ jobs:
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: |
-          yarn workspace @blockprotocol/site playwright test --project=integration
+        run: yarn workspace @blockprotocol/site playwright test --project=integration
 
       - name: Show DB logs
         if: ${{ success() || failure() }}
