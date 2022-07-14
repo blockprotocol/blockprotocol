@@ -25,7 +25,7 @@ A 'hook' is an injection point blocks provide to embedding applications to allow
 
 The 'optionally' here is key. Blocks cannot require embedding applications to implement a handler for any specific 'hook'. Therefore, each 'hook' must specify a fallback rendering strategy which embedding applications implementing the hook service can use instead of implementing the hook themselves.   
 
-A classical example would be rich text editing. In this case, you may not want to provide the underlying data storing the formatted text, as this may be bespoke to your embedding application. But you may still want to provide the plain text value for the block to make use of – i.e, if the block provides a word count feature.
+A classical example would be rich text editing. In this case, you may not want to provide the underlying data storing the formatted text, as this may be bespoke to your embedding application. But you may still want to provide the plain text value for the block to make use of – e.g., if the block provides a word count feature.
 
 A block implements a hook by sending a `hook` message to the embedding application, with five pieces of information:
 - `node: HTMLElement | null`: The DOM node the embedding application will render a view into, or modifying an already rendered view. 
