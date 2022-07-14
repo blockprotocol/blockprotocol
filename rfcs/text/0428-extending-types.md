@@ -13,7 +13,7 @@ As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this
 
 [motivation]: #motivation
 
-Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain fields to make the type usable for their use case, they would have to recreate the type themself in the current system.
+Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain properties to make the type usable for their use case, they would have to recreate the type themself in the current system.
 
 Allowing for types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain.
 
@@ -26,7 +26,7 @@ This RFC introduces a way for types to be extended in a way where the reusabilit
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
 Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may not be modified.
 
-For example, an `Employee` entity type can be an extended version of `Person`. This `Employee` type could contain domain-specific fields, making it more concrete while keeping compatibility with `Person`.
+For example, an `Employee` entity type can be an extended version of `Person`. This `Employee` type could contain domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
 If the `Person` entity type contains required properties `Name` and `Age`, the `Employee` entity type would inherit these properties and perhaps add a `Occupation` property. `Employee` would _not_ be able to overwrite any of the properties given by `Person` e.g. it's not possible to turn `Name` into an array or make it optional. This restriction is important as disabling overwriting enables `Employee` instances to be valid `Person` instances i.e. compatibility with `Person` is kept.
 
@@ -36,11 +36,12 @@ The immediate problems that arise from this definition:
 - Do multiple super-types impose constraints on extending types?
 - How does having `additionalProperties` in existing schemas influence extended types?
   - If we specify `{ "additionalProperties": false }` in a type, using conventional JSON Schema `allOf`, composition is not possible.
+- How do we define extended types within the BP Type System?
 
 ## Subtyping
 
 Compatibility between extended types is the ability to use the subtype in place of a supertype. [Prior art](https://en.wikipedia.org/wiki/Subtyping#Coercions) calls this `coercive subtyping` when it can happen implicitly.
-_Composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited fields, we are sure that the supertype fields are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
+_Composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited properties, we are sure that the supertype properties are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
 
 For example, an `Employee` instance looks as follows (simplified):
 
@@ -52,7 +53,7 @@ For example, an `Employee` instance looks as follows (simplified):
 }
 ```
 
-And the fields would have the following relation to `Employee`:
+And the properties would have the following relation to `Employee`:
 
 ```
       name◄┐ (supertype)    (subtype)
@@ -62,33 +63,61 @@ And the fields would have the following relation to `Employee`:
 occupation◄─────────────────┘
 ```
 
-We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` fields but exclude the `occupation` field.
-Assuming that we are able to project/select the fields of a type that are defined through the supertype, coercive subtyping is attainable for any subtype.
+We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` field.
+Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype.
 
 ## Multiple supertypes
 
-A type must allow extending multiple super-types if and only if the supertypes can coexist. For supertypes to be able to coexist, their fields should either be disjoint, or overlap in a compatible manner.
+A type must allow extending multiple super-types if and only if the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
 
-An example of disjoint fields:
+**An example of _disjoint_ properties**:
 
-- Supertype `Person` contains required fields `Name` and `Age`
+- Supertype `Person` contains required properties `Name` and `Age`
 - Supertype `Superhero` contains the field `Superpower`
 
-In this example, there is no overlap between fields
+In this example, there is no overlap between properties, so an `Employee` type could have `Person` and `Superhero` as supertypes
 
-An example of compatible, overlapping fields:
+```
+              (supertypes)
+superpower◄────Superhero──┐
+                          │
+      name◄┐              │
+           ├───Person─────Employee (subtype)
+       age◄┘              │
+                          │
+occupation◄───────────────┘
+```
 
-- Supertype `Person` contains the required fields `Name` and `Age`
-- Supertype `Superhero` contains the required fields `Superpower` and `Name`
+**An example of _compatible_, overlapping properties**:
+
+- Supertype `Person` contains the required properties `Name` and `Age`
+- Supertype `Superhero` contains the required properties `Superpower` and `Name`
 
 In this example, `Name` overlaps as a required field in both supertypes.
 
-An example of _incompatible_, overlapping fields:
+```
+              (supertypes)
+superpower◄────Superhero──┐
+               │          │
+      name◄────┤          │
+               │          │
+       age◄────Person─────Employee (subtype)
+                          │
+occupation◄───────────────┘
+
+
+```
+
+**An example of _incompatible_, overlapping fields**:
 
 - Supertype `Person` contains the required fields `Name` and `Age`
 - Supertype `Superhero` contains the required field `Superpower` and an array of `Name`s
 
 In this example, the array of `Name`s on the `Superhero` type would not be compatible with the required `Name` field of `Person`, which means that the two types cannot be supertypes together.
+
+## Additional properties on types
+
+## Defining extended types
 
 ---
 
