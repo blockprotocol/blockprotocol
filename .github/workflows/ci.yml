@@ -213,7 +213,7 @@ jobs:
         if: ${{ success() || failure() }}
         run: |
           yarn dev:db 2>&1 | tee var/logs/db.log & ## ampersand enables background mode
-          yarn wait-on --timeout 30000 tcp:0.0.0.0:27017
+          yarn wait-on --timeout 60000 tcp:0.0.0.0:27017
 
       - name: Seed DB
         if: ${{ success() || failure() }}
@@ -225,7 +225,7 @@ jobs:
         run: |
           yarn workspace @blockprotocol/site build
           yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
-          yarn wait-on --timeout 30000 http://0.0.0.0:3000
+          yarn wait-on --timeout 10000 http://0.0.0.0:3000
 
       - run: yarn playwright install-deps chrome
         if: ${{ success() || failure() }}
