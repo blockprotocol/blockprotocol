@@ -57,4 +57,4 @@ jobs:
       - name: Run Playwright tests
         run: yarn workspace @blockprotocol/site playwright test --project=smoke
         env:
-          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.target_url }}
+          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
