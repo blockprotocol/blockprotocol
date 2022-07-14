@@ -37,9 +37,9 @@ dist
 # workspace specific
 site/blocks-data.json
 site/playwright-report
-site/test-results
 site/public/blocks
 site/public/schemas
 site/site-map.json
+site/test-results
 
 var
