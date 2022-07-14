@@ -83,7 +83,7 @@ TODO:
 
 The first exploration of this space was the introduction of `editableRef` in the HASH app, currently powering the rich text blocks.
 
-This was designed to avoid blocks being coupled to the particular rich text editing solution implemented in HASH, and in that it succeed.
+This was designed to avoid blocks being coupled to the particular rich text editing solution implemented in HASH, and in that it succeeded.
 
 `editableRef` is a function provided by the embedding application which a block can call with a DOM node rendered by the block, which they wish the embedding application to render rich text present on the `text` field on the block entity into.
 
