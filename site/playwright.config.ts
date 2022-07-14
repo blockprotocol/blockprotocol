@@ -5,8 +5,8 @@ const ci = process.env.CI === "true";
 const config: PlaywrightTestConfig = {
   forbidOnly: ci,
   projects: [
-    { name: "integration", testMatch: "**/integration/**" },
-    { name: "smoke", testMatch: "**/smoke/**" },
+    { name: "integration", testMatch: "**/{integration,universal}/**" },
+    { name: "smoke", testMatch: "**/{smoke,universal}/**" },
   ],
   reporter: [
     [ci ? "github" : "list"],
