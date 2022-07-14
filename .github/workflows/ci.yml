@@ -1,6 +1,9 @@
 name: CI
 on: pull_request
 
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
+
 jobs:
   linting:
     name: Linting
