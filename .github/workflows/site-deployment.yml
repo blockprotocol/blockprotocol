@@ -4,7 +4,7 @@ on:
   deployment_status:
   schedule:
     - cron: "*/10 * * * *" ## Every 10 minutes
-    - cron: "0 4 * * *" ## Every night (UTC time)
+    - cron: "0 4 * * *" ## Around 4am every night (UTC time)
 
 env:
   PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
