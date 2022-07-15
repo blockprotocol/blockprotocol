@@ -147,8 +147,6 @@ For implementation-oriented RFCs, this section should focus on how Block Protoco
 
 [reference-level-explanation]: #reference-level-explanation
 
-## Additional properties on types
-
 ## Defining extended types
 
 In the BP, we will allow type extension through the `allOf` JSON Schema keyword. This keyword specifies an array of schemas that will have to validate together.
@@ -359,6 +357,10 @@ As described in the [Guide-level explanation](#multiple-supertypes), when extend
 # Drawbacks
 
 [drawbacks]: #drawbacks
+
+- The way this proposal adds type extension means that we must implement some version of property selection/projection for types, which comes with non-trivial implementation details for embedding applications.
+
+---
 
 Why should we _not_ do this?
 
