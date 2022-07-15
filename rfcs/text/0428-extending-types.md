@@ -63,7 +63,7 @@ occupation◄─────────────────┘
 ```
 
 We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` property.
-Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype.
+Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types.
 
 ## Multiple supertypes
 
@@ -118,7 +118,11 @@ In this example, the array of `Name`s on the `Superhero` type would not be compa
 
 In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility, which means that any supertype will not validate against a subtype that adds properties if it receives all properties of a subtype instance. For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `Occupation` property is not present on `Person`).
 
-The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping `{ "additionalProperties": false }` in schemas (thus making schemas more strict).
+The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas, but breaks when validating `{ "additionalProperties": false }` for subtypes.
+
+Unfortunately, specifying `{ "unevaluatedProperties": false }` does not behave as expected when composing types together in JSON Schema either, which means we will have to redefine how `{ "additionalProperties": true }` or `{ "unevaluatedProperties": false }` behaves within our type extension system to make supertypes keep strictness while allowing composition.
+
+Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#additional-properties-on-types-1)
 
 ## Defining extended types
 
@@ -142,6 +146,233 @@ For implementation-oriented RFCs, this section should focus on how Block Protoco
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
+
+## Additional properties on types
+
+JSON Schema validation breaks when introducing `{ "additionalProperties": false }` or `{ "unevaluatedProperties": false }` in schema composition.
+
+When composing schemas that all contain `{ "additionalProperties": false }`, each schema will disallow any other properties which they do not define:
+
+```json
+{
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "city": { "type": "string" }
+      },
+      "required": ["city"],
+      "additionalProperties": false
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "type": { "name": "string" }
+  },
+  "additionalProperties": false
+}
+```
+
+Here trying to validate against
+
+```json
+{
+  "city": "Copenhagen",
+  "name": "Charles"
+}
+```
+
+results in validation errors such as `Property 'type' has not been defined and the schema does not allow additional properties`.
+
+Changing from `additionalProperties` to `unevaluatedProperties` results in errors `Property 'type' has not been successfully evaluated and the schema does not allow unevaluated properties`.
+
+Both of these solutions for strict schemas would not be suitable for the type of expressiveness we want for type extension, unfortunately.
+
+## Defining extended types
+
+In the BP, we will allow type extension through the `allOf` JSON Schema keyword. This keyword specifies an array of schemas that will have to validate together.
+
+We'll add the following fields to the existing Entity Type meta schema definition:
+
+```json
+{
+  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/entity-type",
+  "type": "object",
+  ...,
+  "properties": {
+    ...,
+    "allOf": {
+      "type": "array",
+      "items": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "$comment": "Valid references to existing Entity Types",
+          "type": "string",
+          "format": "uri"
+        },
+        "additionalProperties": false
+      }
+    }
+    }
+
+  }
+}
+```
+
+### A concrete example of extended types
+
+**An example of _disjoint_ properties**:
+
+Given a _supertype_ `Person`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
+  "type": "object",
+  "title": "Person",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/age": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/age"
+  ]
+}
+```
+
+and a _subtype_ `Employee`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
+  "type": "object",
+  "title": "Employee",
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/1" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/occupation": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
+    }
+  },
+  "required": ["https://blockprotocol.org/@alice/property-type/occupation"]
+}
+```
+
+The two types do not share any properties, which establishes compatibility. It is possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+For example, we may have the following `Employee` instance:
+
+```json
+{
+  "entityId": 111,
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age": 35,
+    "https://blockprotocol.org/@alice/property-type/occupation": "Merchant"
+  }
+}
+```
+
+which can be coerced into the following `Person` instance:
+
+```json
+{
+  "entityId": 111,
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age": 35
+  }
+}
+```
+
+Notice how we are keeping the same `entityId` for this entity instance, but simply coercing the entity instance by selecting the fields of interest for the given type.
+
+**An example of _compatible_, overlapping properties**:
+
+Given a _supertype_ `Person`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
+  "type": "object",
+  "title": "Person",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/age": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/age"
+  ]
+}
+```
+
+and a _subtype_ `Employee`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
+  "type": "object",
+  "title": "Employee",
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/occupation": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/occupation"
+  ]
+}
+```
+
+The two types do share the `name` property, but the property definitions are compatible (even using the same version). It's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+For example, we may have the following `Employee` instance:
+
+```json
+{
+  "entityId": 112,
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age": 35,
+    "https://blockprotocol.org/@alice/property-type/occupation": "Merchant"
+  }
+}
+```
+
+which can be coerced into the following `Person` instance:
+
+```json
+{
+  "entityId": 112,
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": "Charles",
+    "https://blockprotocol.org/@alice/property-type/age": 35
+  }
+}
+```
+
+---
 
 This is the technical portion of the RFC. Explain the design in sufficient detail that:
 
@@ -184,6 +415,10 @@ Note that while precedent set by other technologies is some motivation, it does 
 # Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
+
+- Given we made the assumption that we are able to project/select fields of a supertype from a subtype instance, we haven't specified how this is possible. It is an open quesiton how we actually pick out the exact fields of a subtype to provide a valid supertype instance.
+
+---
 
 - What parts of the design do you expect to resolve through the RFC process before this gets merged?
 - What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
