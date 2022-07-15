@@ -149,45 +149,6 @@ For implementation-oriented RFCs, this section should focus on how Block Protoco
 
 ## Additional properties on types
 
-JSON Schema validation breaks when introducing `{ "additionalProperties": false }` or `{ "unevaluatedProperties": false }` in schema composition.
-
-When composing schemas that all contain `{ "additionalProperties": false }`, each schema will disallow any other properties which they do not define:
-
-```json
-{
-  "allOf": [
-    {
-      "type": "object",
-      "properties": {
-        "city": { "type": "string" }
-      },
-      "required": ["city"],
-      "additionalProperties": false
-    }
-  ],
-  "type": "object",
-  "properties": {
-    "type": { "name": "string" }
-  },
-  "additionalProperties": false
-}
-```
-
-Here trying to validate against
-
-```json
-{
-  "city": "Copenhagen",
-  "name": "Charles"
-}
-```
-
-results in validation errors such as `Property 'type' has not been defined and the schema does not allow additional properties`.
-
-Changing from `additionalProperties` to `unevaluatedProperties` results in errors `Property 'type' has not been successfully evaluated and the schema does not allow unevaluated properties`.
-
-Both of these solutions for strict schemas would not be suitable for the type of expressiveness we want for type extension, unfortunately.
-
 ## Defining extended types
 
 In the BP, we will allow type extension through the `allOf` JSON Schema keyword. This keyword specifies an array of schemas that will have to validate together.
@@ -220,7 +181,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
 }
 ```
 
-### A concrete example of extended types
+### Concrete examples of extended types
 
 **An example of _disjoint_ properties**:
 
@@ -382,6 +343,19 @@ This is the technical portion of the RFC. Explain the design in sufficient detai
 
 The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
 
+## Multiple supertypes - checking compatibility
+
+As described in the [Guide-level explanation](#multiple-supertypes), when extending multiple entity types, they must be able to coexist in a "compatible manner", which means that the entity types' `properties` and `links` comply with the following:
+
+- For each property (base URI on the top level of `properties`) that exists in multiple entity types:
+
+  - all entity types refer to the same versioned URI of the property **or** compatible versions of the property (through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible')
+  - none of the entity types define the property as an array **or** all define the property as an array with the _exact same_ cardinality constraints.
+
+- For each link (versioned URI on the top level of `links`) that exists in multiple entity types:
+
+  - none of the entity types define the link as an array **or** all define the property as an array with the _exact same_ cardinality constraints (including `order`).
+
 # Drawbacks
 
 [drawbacks]: #drawbacks
@@ -392,6 +366,53 @@ Why should we _not_ do this?
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
+The general rationale for this way of handling extended types (which we may also call type inheritance) is that we want to keep supertypes and subtypes compatible with one another. Constraining the way type inheritance functions makes it so that we can implicitly have "same as" relations across type inheritance trees. It also allows extending multiple supertypes which can lead to more expressive domain models.
+
+## Problems and alternatives
+
+`unevaluatedProperties` _almost_ provides the functionality we're after, but unfortunately it just barely misses. If supertypes themselves specify `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error out as soon as they see properties that is not part of the supertype itself.
+
+When composing schemas that all contain `{ "unevaluatedProperties": false }`, each schema will disallow any other properties which they do not define. Using the following JSON Schema as an example:
+
+```json
+{
+  "allOf": [
+    {
+      "type": "object",
+      "properties": {
+        "city": { "type": "string" }
+      },
+      "required": ["city"],
+      "unevaluatedProperties": false
+    }
+  ],
+  "type": "object",
+  "properties": {
+    "type": { "name": "string" }
+  },
+  "unevaluatedProperties": false
+}
+```
+
+and trying to validate against
+
+```json
+{
+  "city": "Copenhagen",
+  "name": "Charles"
+}
+```
+
+results in validations errors such as `Property 'name' has not been successfully evaluated and the schema does not allow unevaluated properties`.
+
+Changing from `unevaluatedProperties` to `additionalProperties` results in errors `Property 'name' has not been defined and the schema does not allow additional properties`.
+
+Both of these solutions for strict schemas would not be suitable for the type of expressiveness we want for type extension, unfortunately.
+
+The behavior we're after is that `unevaluatedProperties` should only validate at the top level of a type. This would allow supertypes to still validate `unevaluatedProperties`, but defer checking if they're used within in subtype.
+
+---
+
 - Why is this design the best in the space of possible designs?
 - What other designs have been considered and what is the rationale for not choosing them?
 - What is the impact of not doing this?
@@ -399,6 +420,8 @@ Why should we _not_ do this?
 # Prior art
 
 [prior-art]: #prior-art
+
+- [JSON Schema composition](https://json-schema.org/understanding-json-schema/reference/combining.html) and [`unevaluatedProperties`](https://json-schema.org/understanding-json-schema/reference/object.html#unevaluated-properties)
 
 Discuss prior art, both the good and the bad, in relation to this proposal.
 A few examples of what this can include are:
@@ -416,7 +439,7 @@ Note that while precedent set by other technologies is some motivation, it does 
 
 [unresolved-questions]: #unresolved-questions
 
-- Given we made the assumption that we are able to project/select fields of a supertype from a subtype instance, we haven't specified how this is possible. It is an open quesiton how we actually pick out the exact fields of a subtype to provide a valid supertype instance.
+- Given we made the assumption that we are able to project/select fields of a supertype from a subtype instance, we haven't specified how this is possible. It is an open question how we actually pick out the exact fields of a subtype to provide a valid supertype instance.
 
 ---
 
