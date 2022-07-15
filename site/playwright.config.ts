@@ -5,14 +5,21 @@ const ci = process.env.CI === "true";
 const config: PlaywrightTestConfig = {
   forbidOnly: ci,
   projects: [
-    { name: "integration", testMatch: "**/{integration,universal}/**" },
-    { name: "smoke", testMatch: "**/{smoke,universal}/**" },
+    {
+      name: "integration",
+      retries: 1,
+      testMatch: "**/{integration,universal}/**",
+    },
+    {
+      name: "smoke",
+      retries: 0,
+      testMatch: "**/{smoke,universal}/**",
+    },
   ],
   reporter: [
     [ci ? "github" : "list"],
     ["html", { open: !ci ? "on-failure" : "never" }],
   ],
-  retries: 0,
   testDir: "tests",
   use: {
     baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL ?? "http://localhost:3000",
