@@ -1,6 +1,6 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
-import GraphServiceJson from "./graph-service.js";
+import { graphServiceJson } from "./graph-service-json.js";
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
@@ -67,7 +67,7 @@ export class GraphBlockHandler
     handlerFunction: BlockGraphMessageCallbacks[K],
   ) {
     const expectedMessageSource = "embedder";
-    const messageJsonDefinition = GraphServiceJson.messages.find(
+    const messageJsonDefinition = graphServiceJson.messages.find(
       (message) =>
         message.messageName === messageName &&
         message.source === expectedMessageSource,

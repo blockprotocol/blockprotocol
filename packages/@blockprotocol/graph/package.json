@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/graph",
-  "version": "0.0.11-canary.9",
+  "version": "0.0.11-canary.21",
   "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -26,7 +26,7 @@
     ".": "./dist/index.js",
     "./react": "./dist/react.js",
     "./custom-element": "./dist/custom-element.js",
-    "./service-json": "./dist/graph-service.json"
+    "./graph-service-json": "./dist/graph-service-json.js"
   },
   "types": "./dist/index.d.ts",
   "typesVersions": {
@@ -40,8 +40,8 @@
       "custom-element": [
         "./dist/custom-element.d.ts"
       ],
-      "service-json": [
-        "./dist/graph-service.d.ts"
+      "graph-service-json": [
+        "./dist/graph-service-json.d.ts"
       ]
     }
   },
