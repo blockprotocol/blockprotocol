@@ -2,8 +2,8 @@
 
 This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-    - the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
-    - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
+- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
+- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
 
 ## Local development
 
