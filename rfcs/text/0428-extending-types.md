@@ -35,7 +35,6 @@ The immediate problems that arise from this definition:
 - How do we ensure that `Employee` instances can, in fact, be used in place of `Person` entities in practice?
 - Do multiple super-types impose constraints on extending types?
 - How does having `additionalProperties` in existing schemas influence extended types?
-  - If we specify `{ "additionalProperties": false }` in a type, using conventional JSON Schema `allOf`, composition is not possible.
 - How do we define extended types within the BP Type System?
 
 ## Subtyping
@@ -63,7 +62,7 @@ And the properties would have the following relation to `Employee`:
 occupation◄─────────────────┘
 ```
 
-We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` field.
+We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` property.
 Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype.
 
 ## Multiple supertypes
@@ -73,7 +72,7 @@ A type must allow extending multiple super-types if and only if the supertypes c
 **An example of _disjoint_ properties**:
 
 - Supertype `Person` contains required properties `Name` and `Age`
-- Supertype `Superhero` contains the field `Superpower`
+- Supertype `Superhero` contains the property `Superpower`
 
 In this example, there is no overlap between properties, so an `Employee` type could have `Person` and `Superhero` as supertypes
 
@@ -93,7 +92,7 @@ occupation◄───────────────┘
 - Supertype `Person` contains the required properties `Name` and `Age`
 - Supertype `Superhero` contains the required properties `Superpower` and `Name`
 
-In this example, `Name` overlaps as a required field in both supertypes.
+In this example, `Name` overlaps as a required property in both supertypes.
 
 ```
               (supertypes)
@@ -108,16 +107,25 @@ occupation◄───────────────┘
 
 ```
 
-**An example of _incompatible_, overlapping fields**:
+**An example of _incompatible_, overlapping properties**:
 
-- Supertype `Person` contains the required fields `Name` and `Age`
-- Supertype `Superhero` contains the required field `Superpower` and an array of `Name`s
+- Supertype `Person` contains the required properties `Name` and `Age`
+- Supertype `Superhero` contains the required property `Superpower` and an array of `Name`s
 
-In this example, the array of `Name`s on the `Superhero` type would not be compatible with the required `Name` field of `Person`, which means that the two types cannot be supertypes together.
+In this example, the array of `Name`s on the `Superhero` type would not be compatible with the required `Name` property of `Person`, which means that the two types cannot be supertypes together.
 
 ## Additional properties on types
 
+In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility, which means that any supertype will not validate against a subtype that adds properties if it receives all properties of a subtype instance. For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `Occupation` property is not present on `Person`).
+
+The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping `{ "additionalProperties": false }` in schemas (thus making schemas more strict).
+
 ## Defining extended types
+
+Extended types will be defined with conventional JSON Schema syntax, the `allOf` keyword. When creating a new entity type it's possible to extend another entity type by adding an entry to `allOf` value with a versioned URI reference.
+Using a versioned URI makes it so that subtypes aren't automatically updated when the supertype is.
+
+As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it could lead to hard to reason about types and unpredictability.
 
 ---
 
