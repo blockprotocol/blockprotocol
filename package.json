@@ -41,6 +41,8 @@
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-react": "^7.16.7",
+    "@changesets/changelog-github": "^0.4.5",
+    "@changesets/cli": "^2.23.1",
     "@types/fs-extra": "^9.0.13",
     "@types/wait-on": "5.3.1",
     "@typescript-eslint/eslint-plugin": "5.21.0",
@@ -82,7 +84,7 @@
     "ts-node": "10.8.0",
     "untildify": "4.0.0",
     "uuid": "^8.3.2",
-    "wait-on": "6.0.0",
+    "wait-on": "6.0.1",
     "yarn-deduplicate": "3.1.0"
   },
   "engines": {

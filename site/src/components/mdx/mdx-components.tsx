@@ -85,7 +85,10 @@ const HEADING_MARGIN_TOP = {
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, FunctionComponent<any>> = {
+export const mdxComponents: Record<
+  string,
+  FunctionComponent<{ children?: ReactNode; [rest: string]: unknown }>
+> = {
   Box,
   Paper,
   Typography,
@@ -94,7 +97,7 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
   InfoCard,
   FAQ,
   GraphServiceMessageList,
-  SubTitle: (({ children }) => (
+  SubTitle: (({ children }: { children?: ReactNode }) => (
     <Box
       maxWidth={750}
       sx={{
@@ -107,7 +110,7 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
       {children}
     </Box>
   )) as FunctionComponent,
-  Hidden: (({ children }) => {
+  Hidden: (({ children }: { children?: ReactNode }) => {
     return (
       <span aria-hidden style={{ display: "none" }}>
         {children}
