@@ -133,6 +133,14 @@ Using a versioned URI makes it so that subtypes aren't automatically updated whe
 
 As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it could lead to hard to reason about types and unpredictability.
 
+## Addressing previous considerations
+
+In the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1), we made the following statement:
+
+> The update messages of both the current and new systems make use of partial schemas, merging the schema given in the message contents with the existing Entity Type. This may or may not be the desired semantics of updating, and could lead to undesired behavior. In that case, the semantics can be changed to treat updates as a complete replacement. This is to be decided and can be considered out of scope for this RFC as it touches on inheritance/forking concepts.
+
+As the new Block Protocol type system doesn't require a delta-based storage approach for its schemas, it's unclear what the advantages of partial schemas for update requests are. We propose that we should treat type updates as complete replacements, so implementation is much more straightforward for embedding applications. Partial schema updates also add some level of indirection, and that may obfuscate error sources and error reasons. Therefore, updates to types must be complete replacements rather than partial schema updates.
+
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
@@ -340,12 +348,92 @@ As described in the [Guide-level explanation](#multiple-supertypes), when extend
 
   - none of the entity types define the link as an array **or** all define the property as an array with the _exact same_ cardinality constraints (including `order`).
 
+## Block Protocol implications
+
+As mentioned [here](#addressing-previous-considerations), we want to make use of complete schemas for updates instead of partial schemas. In practice for the Block Protocol this makes it so the following update request using a partial schema:
+
+```json
+{
+  // Old, partial updateEntityType message
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
+  "schema": {
+    // The properties here are partially applied to the original Entity Type.
+    "properties": {
+      "https://blockprotocol.org/@alice/property-type/birth-date": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date/v/1"
+      }
+    }
+  }
+}
+```
+
+must instead use a complete schema
+
+```json
+{
+  // New, complete updateEntityType message
+  "entityTypeId": "https://blockprotocol.org/@alice/entity-type/person",
+  "schema": {
+    "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
+    "type": "object",
+    "kind": "entityType",
+    "title": "Person",
+    "properties": {
+      "https://blockprotocol.org/@alice/property-type/name/": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+      },
+      "https://blockprotocol.org/@alice/property-type/email": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/email/v/1"
+      },
+      "https://blockprotocol.org/@alice/property-type/phone-number": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/phone-number/v/1"
+      },
+      // The update is inlined in the existing schema
+      "https://blockprotocol.org/@alice/property-type/birth-date": {
+        "$ref": "https://blockprotocol.org/@alice/property-type/birth-date/v/1"
+      }
+    }
+  }
+}
+```
+
+given that the original schema was created as follows
+
+```json
+{
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
+  "type": "object",
+  "kind": "entityType",
+  "title": "Person",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/email": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/email/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/phone-number": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/phone-number/v/1"
+    }
+  }
+}
+```
+
+The above change applies to these existing BP operations:
+
+- `updateEntityType`
+- `updatePropertyType`
+- `updateLinkType`
+
+which must all make use of complete schemas in place of partial ones.
+(These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1))
+
 # Drawbacks
 
 [drawbacks]: #drawbacks
 
 - The way this proposal adds type extension means that we must implement some version of property selection/projection for types, which comes with non-trivial implementation details for embedding applications.
-- This introduces further drift from JSON Schema by introducing different meaning to `additionalProperties`.
+- This drifts further away from JSON Schema by introducing a different meaning to the `additionalProperties` keyword.
 
 ---
 
