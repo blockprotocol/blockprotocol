@@ -1,11 +1,9 @@
 # blockprotocol.org website
 
-The public-facing [blockprotocol.org](https://blockprotocol.org) website serves the following endpoints:
+This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-- `/gallery` shows the catalog of available blocks
-- `/api/blocks` returns a JSON response w/ a list of available blocks
-- `/blocks/<organisation>/<blockname>` is the CDN base-URL of an individual block (e.g. `/blocks/@hash/code`)
-- `/partners` provides a temporary signup form to collect pre-release registrations of interest from potential adopters
+- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
+- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
 
 ## Local development
 
