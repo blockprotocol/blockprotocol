@@ -64,10 +64,6 @@ test("Home page should contain key elements", async ({ page }) => {
   await expect(
     finalCTA.locator("text=Read the embedding app guide"),
   ).toHaveAttribute("href", links.embeddingBlocks);
-  await expect(finalCTA.locator("text=Log in")).toHaveAttribute(
-    "href",
-    links.embeddingBlocks,
-  );
 
   await expect(finalCTA.locator("text=Log in")).toHaveAttribute(
     "href",
@@ -75,21 +71,36 @@ test("Home page should contain key elements", async ({ page }) => {
   );
 });
 
-test("Home page key interactions", async ({ page }) => {
+test("Home page key interactions work", async ({ page }) => {
   await page.goto("/");
 
   const searchModalLocator = page.locator('[data-testid="bp-search-modal"]');
-
+  await expect(searchModalLocator).not.toBeVisible();
   await page.keyboard.press("/");
+  await expect(
+    searchModalLocator,
+    "Pressing '/' should trigger search modal",
+  ).toBeVisible();
+  await expect(
+    searchModalLocator.locator('[placeholder="Search..."]'),
+    "Input should be focused when search modal is opened",
+  ).toBeFocused();
 
-  await expect(searchModalLocator).toBeVisible();
+  await searchModalLocator.locator(".MuiBackdrop-root").click();
+
+  await page.locator("header >> button", { hasText: "Search" }).click();
+
+  await expect(
+    searchModalLocator,
+    "Clicking on search nav button should bring up search modal",
+  ).toBeVisible();
 });
 
 // Registry section
-// Explore all blocks, check it has the right url
-// Start building it today, check it has the right url
+// Explore all blocks => url
+// Start building it today => url
 // Check footer links, confirm they are correct
 
-// Pressing / should bring up algolia
+// Pressing / should bring up search modal
 
 // authenticated user should not see signup form (comes before footer)
