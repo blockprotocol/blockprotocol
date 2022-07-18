@@ -7,7 +7,9 @@
 
 [summary]: #summary
 
-As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended and duplicated to enhance reusability while giving more control to users (both block authors and users of embedding applications).
+As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended and duplicated to enhance reusability while giving more control to users (both block authors and users of embedding applications). Extending types can be considered the same as "type inheritance", but there are some important nuances that make these concepts different.
+
+This RFC is not set out to solve duplicating types or "forking", and this will be considered an unresolved problem in this RFC.
 
 # Motivation
 
@@ -469,7 +471,8 @@ Note that while precedent set by other technologies is some motivation, it does 
 
 [unresolved-questions]: #unresolved-questions
 
-- Given we made the assumption that we are able to project/select fields of a supertype from a subtype instance, we haven't specified how this is possible. It is an open question how we actually pick out the exact fields of a subtype to provide a valid supertype instance.
+- We haven't specified how projecting/selecting fields of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact fields of a subtype to provide a valid supertype instance.
+- Duplicating types of "forking" is not solved by this RFC.
 
 ---
 
