@@ -79,6 +79,7 @@ export const SearchNavButton = () => {
       </Button>
 
       <Modal
+        data-testid="bp-search-modal"
         sx={{
           [`& .${modalClasses.root}`]: {
             maxWidth: 600,

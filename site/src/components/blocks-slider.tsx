@@ -12,6 +12,7 @@ type BlocksSliderProps = {
 export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
   return (
     <Carousel
+      data-testid="block-slider"
       data={catalog}
       itemKey={({ name }) => name!}
       renderItem={({ displayName, name, image, blockPackagePath }) => {
