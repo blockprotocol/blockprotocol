@@ -1,9 +1,6 @@
 name: CI
 on: pull_request
 
-env:
-  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: true
-
 jobs:
   linting:
     name: Linting
@@ -11,12 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: yarn
-
-      - run: yarn install
+      - uses: ./.github/actions/warm-up-repo
 
       - name: Run yarn lint:dependency-version-consistency
         if: ${{ success() || failure() }}
@@ -137,17 +129,10 @@ jobs:
       BLOCK_DIR_PATH: ~/test-block
 
     steps:
-      - uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: yarn
+      - uses: ./.github/actions/warm-up-repo
 
       - name: Downgrade global NPM version
         run: npm install --global npm@8.4.1 ## https://github.com/blockprotocol/blockprotocol/pull/281
-
-      - run: yarn install
 
       - name: Run local registry
         run: |
@@ -181,8 +166,6 @@ jobs:
   site-integration-tests:
     name: "Site integration tests"
     runs-on: ubuntu-latest
-    env:
-      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: false
     steps:
       - uses: actions/checkout@v3
 
@@ -194,12 +177,9 @@ jobs:
             ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-
             ${{ runner.os }}-site-next-cache
 
-      - uses: actions/setup-node@v3
+      - uses: ./.github/actions/warm-up-repo
         with:
-          node-version: 16
-          cache: yarn
-
-      - run: yarn install
+          playwright-deps: chrome firefox safari
 
       - name: Create temp files and folders
         run: |
