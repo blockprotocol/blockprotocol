@@ -425,19 +425,16 @@ The above change applies to these existing BP operations:
 - `updatePropertyType`
 - `updateLinkType`
 
-which must all make use of complete schemas in place of partial ones.
-(These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1))
+which must all make use of complete schemas in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
+
+While not explained in detail in the Type System RFC the `aggregateEntities` operation would need to change behavior slightly. The types returned from aggregating on a specific entity type could now also be implicitly coerced instances of entities (supertypes projected from subtype instances).
 
 # Drawbacks
 
 [drawbacks]: #drawbacks
 
 - The way this proposal adds type extension means that we must implement some version of property selection/projection for types, which comes with non-trivial implementation details for embedding applications.
-- This drifts further away from JSON Schema by introducing a different meaning to the `additionalProperties` keyword.
-
----
-
-Why should we _not_ do this?
+- This drifts further away from JSON Schema by introducing a different meaning to the `unevaluatedProperties` keyword and uses it implicitly for our schemas.
 
 # Rationale and alternatives
 
@@ -541,20 +538,6 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 - [JSON Schema composition](https://json-schema.org/understanding-json-schema/reference/combining.html) and [`unevaluatedProperties`](https://json-schema.org/understanding-json-schema/reference/object.html#unevaluated-properties)
 - [Programming languages subtyping](https://en.wikipedia.org/wiki/Subtyping)
 
----
-
-Discuss prior art, both the good and the bad, in relation to this proposal.
-A few examples of what this can include are:
-
-- For implementation proposals: Does this feature exist in other technologies, and what experience have their community had?
-- For community proposals: Is this done by some other community and what were their experiences with it?
-- For other teams: What lessons can we learn from what other communities have done here?
-- Papers: Are there any published papers or great posts that discuss this? If you have some relevant papers to refer to, this can serve as a more detailed theoretical background.
-
-This section is intended to encourage you as an author to think about the lessons from other solutions, provide readers of your RFC with a fuller picture. If there is no prior art, that is fine - your ideas are interesting to us whether they are brand new or if it is an adaptation from other languages.
-
-Note that while precedent set by other technologies is some motivation, it does not on its own motivate an RFC. Please also take into consideration that the Block Protocol sometimes intentionally diverges from other approaches.
-
 # Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
@@ -562,20 +545,9 @@ Note that while precedent set by other technologies is some motivation, it does 
 - We haven't specified how projecting/selecting fields of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact fields of a subtype to provide a valid supertype instance.
 - Duplicating types of "forking" is not solved by this RFC.
 
----
-
-- What parts of the design do you expect to resolve through the RFC process before this gets merged?
-- What parts of the design do you expect to resolve through the implementation of this feature before stabilization?
-- What related issues do you consider out of scope for this RFC that could be addressed in the future independently of the solution that comes out of this RFC?
-
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
 
-Think about what the natural extension and evolution of your proposal would be and how it would affect the project and ecosystem as a whole in a holistic way. Try to use this section as a tool to more fully consider all possible interactions with the project and ecosystem in your proposal. Also consider how this all fits into the roadmap for the project and of the relevant sub-team.
-
-This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related.
-
-If you have tried and cannot think of any future possibilities, you may simply state that you cannot think of anything.
-
-Note that having something written down in the future-possibilities section is not a reason to accept the current or a future RFC; such notes should be in the section on motivation or rationale in this or subsequent RFCs. The section merely provides additional information.
+- The conservative way type extension is introduced in this PR allows for future work in the "data mapping" space to apply to type inheritance as well. Being able to map between entity types could enable a shared mapping for otherwise incompatible (as supertypes) entity types.
+- Implementations of the upcoming "Structure-based Queries" RFC could benefit from some of the groud-work set out by this RFC, as the selection/projection of supertypes could be the basis of structure-based queries.
