@@ -337,6 +337,15 @@ module.exports = {
       },
     },
     {
+      files: ["site/playwright.config.ts", "site/tests/**"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
+    {
       files: ["**/scripts/**"],
       rules: {
         "import/no-extraneous-dependencies": [
