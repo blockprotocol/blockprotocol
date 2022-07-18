@@ -13,12 +13,12 @@ import { useRouter } from "next/router";
 import {
   Dispatch,
   Fragment,
+  FunctionComponent,
   SetStateAction,
   useCallback,
   useEffect,
   useRef,
   useState,
-  VFC,
 } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
@@ -62,7 +62,7 @@ const highlightSection = (isSectionSelected: boolean) => ({
   }`,
 });
 
-const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
+const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
   depth = 1,
   isSelectedByDefault = false,
   pageHref,
@@ -186,7 +186,7 @@ type SidebarPageProps = {
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
 };
 
-const SidebarPage: VFC<SidebarPageProps> = ({
+const SidebarPage: FunctionComponent<SidebarPageProps> = ({
   depth = 0,
   page,
   maybeUpdateSelectedOffsetTop,
@@ -362,7 +362,7 @@ const getInitialOpenedPages = (params: {
   return [];
 };
 
-export const Sidebar: VFC<SidebarProps> = ({
+export const Sidebar: FunctionComponent<SidebarProps> = ({
   appendices,
   pages,
   sx = [],

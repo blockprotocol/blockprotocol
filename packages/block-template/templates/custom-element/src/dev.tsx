@@ -3,7 +3,6 @@
  * This file is not bundled with the block during the build process.
  */
 import { MockBlockDock } from "mock-block-dock";
-import React from "react";
 import ReactDOM from "react-dom";
 
 import packageJson from "../package.json";

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../lib/api/model/user.model";
 
@@ -7,7 +7,7 @@ interface UserAvatarProps {
   user: SerializedUser;
 }
 
-export const UserAvatar: VFC<UserAvatarProps> = ({ user }) => {
+export const UserAvatar: FunctionComponent<UserAvatarProps> = ({ user }) => {
   const { preferredName } = user || {};
 
   return (

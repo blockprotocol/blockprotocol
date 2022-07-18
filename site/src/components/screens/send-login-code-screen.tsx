@@ -1,5 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import React, { ReactNode, useEffect, useRef, useState, VFC } from "react";
+import {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "../../lib/api-client";
 import { Button } from "../button";
@@ -18,11 +24,9 @@ type SendLoginCodeScreenProps = {
   onClose?: () => void;
 };
 
-export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
-  initialEmail,
-  onLoginCodeSent,
-  onClose,
-}) => {
+export const SendLoginCodeScreen: FunctionComponent<
+  SendLoginCodeScreenProps
+> = ({ initialEmail, onLoginCodeSent, onClose }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

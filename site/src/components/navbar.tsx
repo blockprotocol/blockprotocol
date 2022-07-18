@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState, VFC } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import SiteMapContext from "../context/site-map-context";
@@ -144,7 +144,7 @@ const useScrollingNavbar = (
 };
 
 // @todo remove asPath from Navbar
-export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
+export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
   const theme = useTheme();
   const { asPath, pathname } = useRouter();
   const { pages } = useContext(SiteMapContext);

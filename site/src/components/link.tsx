@@ -3,7 +3,7 @@ import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import * as React from "react";
+import { forwardRef, isValidElement } from "react";
 
 import { BaseLink, BaseLinkProps } from "./base-link";
 import { Button } from "./button";
@@ -18,7 +18,7 @@ const Anchor = styled("a")({});
 type PlainLinkWithAnchorProps = BaseLinkProps &
   Omit<MuiLinkProps, "href" | "color">;
 
-export const BaseLinkWithAnchor = React.forwardRef<
+export const BaseLinkWithAnchor = forwardRef<
   HTMLAnchorElement,
   PlainLinkWithAnchorProps
 >((props, ref) => {
@@ -48,8 +48,11 @@ export type LinkProps = {
 
 // A styled version of the Next.js Link component:
 // https://nextjs.org/docs/api-reference/next/link
-export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
-  (props, ref) => {
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
+  (
+    props,
+    ref, // https://github.com/prettier/prettier/issues/11923
+  ) => {
     const {
       activeClassName = "active",
       as: linkAs,
@@ -67,7 +70,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(
 
     if (process.env.NODE_ENV !== "production") {
       const { children } = rest;
-      if (React.isValidElement(children) && children.type === Button) {
+      if (isValidElement(children) && children.type === Button) {
         throw new Error(
           "Please use <LinkButton /> instead of <Link><Button /></Link>",
         );

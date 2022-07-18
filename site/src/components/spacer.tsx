@@ -1,12 +1,12 @@
 import { Box } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
 type SpacerProps = {
   height?: number;
   width?: number;
 };
 
-export const Spacer: FC<SpacerProps> = ({ height, width }) => {
+export const Spacer: FunctionComponent<SpacerProps> = ({ height, width }) => {
   return (
     <Box
       sx={{

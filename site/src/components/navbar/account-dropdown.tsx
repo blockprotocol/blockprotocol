@@ -1,5 +1,5 @@
 import { Box, Divider, ListItemButton, Typography } from "@mui/material";
-import { useRef, useState, VFC } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
@@ -8,7 +8,7 @@ import { Link } from "../link";
 import { Popover } from "../popover";
 import { UserAvatar } from "../user-avatar";
 
-export const AccountDropdown: VFC = () => {
+export const AccountDropdown: FunctionComponent = () => {
   const { user, setUser } = useUser();
 
   const buttonRef = useRef<HTMLButtonElement>(null);

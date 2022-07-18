@@ -2,7 +2,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { Box, BoxProps, useMediaQuery, useTheme } from "@mui/material";
-import React, { ReactElement, useMemo, useRef, VFC } from "react";
+import {
+  Fragment,
+  FunctionComponent,
+  ReactElement,
+  useMemo,
+  useRef,
+} from "react";
 import Slider, { Settings } from "react-slick";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
@@ -22,7 +28,11 @@ type ArrowProps = {
   arrowType: "prev" | "next";
 };
 
-const Arrow: VFC<ArrowProps> = ({ className, onClick, arrowType }) => {
+const Arrow: FunctionComponent<ArrowProps> = ({
+  className,
+  onClick,
+  arrowType,
+}) => {
   return (
     <Box
       className={className}
@@ -221,9 +231,7 @@ export const Carousel = <T,>({
         {...sliderSettings}
       >
         {data.map((item) => (
-          <React.Fragment key={itemKey(item)}>
-            {renderItem(item)}
-          </React.Fragment>
+          <Fragment key={itemKey(item)}>{renderItem(item)}</Fragment>
         ))}
       </Slider>
     </Box>

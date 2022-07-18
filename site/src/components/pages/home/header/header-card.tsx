@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { gsap } from "gsap";
-import React, { useEffect, VFC } from "react";
+import { FunctionComponent, useEffect } from "react";
 
 import { HeaderCardSvg } from "./header-card-svg";
 
@@ -22,7 +22,9 @@ const lineDrawAnimationProps = {
   } as gsap.AttrVars,
 };
 
-export const HeaderCard: VFC<HeaderCardProps> = ({ hideGradient }) => {
+export const HeaderCard: FunctionComponent<HeaderCardProps> = ({
+  hideGradient,
+}) => {
   useEffect(() => {
     const tl = gsap
       .timeline({ repeat: -1, repeatDelay: 2 })

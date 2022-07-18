@@ -59,8 +59,6 @@ const graphService = new GraphEmbedderHandler({
 For React embedding applications, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
 
 ```javascript
-import React from "react";
-
 import { useGraphEmbedderService } from "@blockprotocol/graph";
 
 export const App = () => {

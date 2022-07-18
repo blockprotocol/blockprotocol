@@ -16,14 +16,13 @@ import "prismjs/components/prism-json5";
 
 import { Box, BoxProps } from "@mui/material";
 import Prism from "prismjs";
-import React from "react";
 
 type SnippetProps = {
   source: string;
   language: string;
 } & BoxProps;
 
-export const Snippet: React.VFC<SnippetProps> = ({
+export const Snippet: React.FunctionComponent<SnippetProps> = ({
   source,
   language,
   ...boxProps

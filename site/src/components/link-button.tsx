@@ -1,4 +1,4 @@
-import { forwardRef, VoidFunctionComponent } from "react";
+import { forwardRef, FunctionComponent } from "react";
 
 import { BaseLink, BaseLinkProps } from "./base-link";
 import { Button, ButtonProps } from "./button";
@@ -9,7 +9,7 @@ export interface LinkButtonProps
   children: React.ReactNode;
 }
 
-export const LinkButton: VoidFunctionComponent<LinkButtonProps> = forwardRef(
+export const LinkButton: FunctionComponent<LinkButtonProps> = forwardRef(
   ({ href, ...rest }, ref) => {
     return (
       <BaseLink href={href}>

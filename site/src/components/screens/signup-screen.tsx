@@ -1,5 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import React, { ReactNode, useEffect, useRef, useState, VFC } from "react";
+import {
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "../../lib/api-client";
 import { Button } from "../button";
@@ -19,7 +25,7 @@ type SignupScreenProps = {
   onClose?: () => void;
 };
 
-export const SignupScreen: VFC<SignupScreenProps> = ({
+export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
   autoFocus = true,
   initialEmail,
   onSignup,

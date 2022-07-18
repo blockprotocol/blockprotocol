@@ -13,11 +13,11 @@ import { useRouter } from "next/router";
 import {
   Dispatch,
   Fragment,
+  FunctionComponent,
   SetStateAction,
   useContext,
   useEffect,
   useState,
-  VFC,
 } from "react";
 
 import SiteMapContext from "../../context/site-map-context";
@@ -245,7 +245,9 @@ const getInitialExpandedItems = ({
     : [];
 };
 
-export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
+export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
+  onClose,
+}) => {
   const { asPath } = useRouter();
   const { pages } = useContext(SiteMapContext);
 

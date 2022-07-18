@@ -1,5 +1,5 @@
 import { HtmlBlockDefinition } from "@blockprotocol/core";
-import React, { ComponentType, VoidFunctionComponent } from "react";
+import { ComponentType, FunctionComponent } from "react";
 
 import { CustomElementLoader } from "./block-renderer/custom-element";
 import { HtmlLoader } from "./block-renderer/html";
@@ -14,7 +14,7 @@ type BlockRendererProps = {
   ReactComponent?: ComponentType;
 };
 
-export const BlockRenderer: VoidFunctionComponent<BlockRendererProps> = ({
+export const BlockRenderer: FunctionComponent<BlockRendererProps> = ({
   customElement,
   html,
   properties,

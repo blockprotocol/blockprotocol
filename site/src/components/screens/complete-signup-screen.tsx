@@ -1,5 +1,5 @@
 import { Box, Collapse, FormHelperText, Typography } from "@mui/material";
-import { ReactNode, useRef, useState, VFC } from "react";
+import { FunctionComponent, ReactNode, useRef, useState } from "react";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
@@ -16,9 +16,9 @@ type CompleteSignupScreenProps = {
   email: string;
 };
 
-export const CompleteSignupScreen: VFC<CompleteSignupScreenProps> = ({
-  email,
-}) => {
+export const CompleteSignupScreen: FunctionComponent<
+  CompleteSignupScreenProps
+> = ({ email }) => {
   const { setUser } = useUser();
 
   const shortnameInputRef = useRef<HTMLInputElement>(null);

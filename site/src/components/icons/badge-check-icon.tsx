@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
-export const BadgeCheckIcon: FC<SvgIconProps> = (props) => {
+export const BadgeCheckIcon: FunctionComponent<SvgIconProps> = (props) => {
   const { sx = [], ...otherProps } = props;
   return (
     <SvgIcon

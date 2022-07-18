@@ -3,7 +3,7 @@ import {
   BlockProtocolFunctions,
   BlockProtocolProps,
 } from "blockprotocol";
-import React, { ReactElement, VoidFunctionComponent } from "react";
+import { FunctionComponent, ReactElement } from "react";
 
 import { HtmlBlock } from "./html-block";
 import { BlockNameWithNamespace, UnknownBlock } from "./shared";
@@ -21,7 +21,7 @@ export type RemoteBlockProps = {
   sourceUrl: string;
 };
 
-export const FallbackLoadingIndicator: VoidFunctionComponent = () => (
+export const FallbackLoadingIndicator: FunctionComponent = () => (
   <div>Loading...</div>
 );
 
@@ -45,7 +45,7 @@ const isHtmlElement = (
  * @param {function} [onBlockLoaded] a callback, called when the block has been successfully parsed and loaded
  * @param {string} sourceUrl the URL to the entry source file for the block
  */
-export const RemoteBlock: VoidFunctionComponent<RemoteBlockProps> = ({
+export const RemoteBlock: FunctionComponent<RemoteBlockProps> = ({
   blockMetadata,
   blockProperties,
   blockProtocolFunctions,

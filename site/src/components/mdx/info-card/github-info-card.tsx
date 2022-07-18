@@ -1,13 +1,13 @@
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, Typography } from "@mui/material";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
-export const GitHubInfoCard: VFC = () => (
+export const GitHubInfoCard: FunctionComponent = () => (
   <Paper
     variant="teal"
     className="github-info-card"

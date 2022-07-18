@@ -3,12 +3,12 @@ import {
   ServiceMessageDefinition,
 } from "@blockprotocol/core";
 import { Box, Typography } from "@mui/material";
-import * as React from "react";
+import { Fragment } from "react";
 
 import { JsonSchema } from "../lib/json-schema";
 import { mdxComponents } from "./mdx/mdx-components";
 
-const DataType: React.VoidFunctionComponent<{ propertySchema: JsonSchema }> = ({
+const DataType: React.FunctionComponent<{ propertySchema: JsonSchema }> = ({
   propertySchema,
 }) => {
   const MdxA = mdxComponents.a!;
@@ -31,7 +31,7 @@ const DataType: React.VoidFunctionComponent<{ propertySchema: JsonSchema }> = ({
   );
 };
 
-const ServiceMessageData: React.VoidFunctionComponent<{
+const ServiceMessageData: React.FunctionComponent<{
   data: ServiceMessageDefinition["data"];
 }> = ({ data }) => {
   const MdxCode = mdxComponents.code!;
@@ -100,7 +100,7 @@ const ServiceMessageData: React.VoidFunctionComponent<{
   );
 };
 
-const ServiceMessage: React.VoidFunctionComponent<{
+const ServiceMessage: React.FunctionComponent<{
   message: ServiceMessageDefinition;
 }> = ({ message }) => {
   const MdxCode = mdxComponents.code!;
@@ -141,10 +141,10 @@ const ServiceMessage: React.VoidFunctionComponent<{
           <Typography variant="bpSmallCopy">
             {errorCodes && errorCodes.length > 0
               ? errorCodes.map((code, index) => (
-                  <React.Fragment key={code}>
+                  <Fragment key={code}>
                     {index > 0 ? ", " : ""}
                     <MdxCode>{code}</MdxCode>
-                  </React.Fragment>
+                  </Fragment>
                 ))
               : "none"}
           </Typography>
@@ -169,7 +169,7 @@ const ServiceMessage: React.VoidFunctionComponent<{
   );
 };
 
-export const ServiceMessageList: React.VoidFunctionComponent<{
+export const ServiceMessageList: React.FunctionComponent<{
   serviceDefinition: ServiceDefinition;
 }> = ({ serviceDefinition }) => {
   return (
