@@ -180,7 +180,7 @@ export const mdxComponents: Record<
       <Heading
         mt={HEADING_MARGIN_TOP.H5}
         mb={HEADING_MARGIN_BOTTOM}
-        variant="bpHeading5"
+        variant="bpHeading4"
         {...props}
       />
     );
