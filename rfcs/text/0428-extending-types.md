@@ -19,14 +19,14 @@ Reusing public types in the type system comes with the potential disadvantage of
 
 Allowing for types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain.
 
-This RFC introduces a way for types to be extended in a way where the reusability and sharing aspects of the Block Protocol are maintained
+This RFC introduces a way for types to be extended in a way where the reusability and sharing aspects of the Block Protocol are maintained.
 
 # Guide-level explanation
 
 [guide-level-explanation]: #guide-level-explanation
 
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
-Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may not be modified.
+Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified.
 
 For example, an `Employee` entity type can be an extended version of `Person`. This `Employee` type could contain domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
@@ -120,9 +120,9 @@ In this example, the array of `Name`s on the `Superhero` type would not be compa
 
 In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility, which means that any supertype will not validate against a subtype that adds properties if it receives all properties of a subtype instance. For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `Occupation` property is not present on `Person`).
 
-The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas, but breaks when validating `{ "additionalProperties": false }` for subtypes.
+The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas.
 
-Unfortunately, specifying `{ "unevaluatedProperties": false }` does not behave as expected when composing types together in JSON Schema either, which means we will have to redefine how `{ "additionalProperties": true }` or `{ "unevaluatedProperties": false }` behaves within our type extension system to make supertypes keep strictness while allowing composition.
+And unfortunately, specifying `{ "unevaluatedProperties": false }` does not behave as expected when composing types together in JSON Schema either, which means we will have to redefine how `{ "additionalProperties": true }` or `{ "unevaluatedProperties": false }` behaves within our type extension system to make supertypes keep strictness while allowing composition.
 
 Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#additional-properties-on-types-1)
 
@@ -144,12 +144,6 @@ As the new Block Protocol type system doesn't require a delta-based storage appr
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
-
-## Subtyping
-
-We're already implicitly defining `{ "additionalProperties": false }` in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) for all schemas, this RFC will piggyback on that, and change the existing, implicit `additionalProperties` usage to `unevaluatedProperties` and slightly change its [vocabulary definition](https://json-schema.org/draft/2020-12/json-schema-core.html#name-unevaluatedproperties).
-
-The vocabulary change is that the `unevaluatedProperties` keyword will only be applicable at top-level schemas (i.e. subtypes or schemas that don't specify `allOf`), and ignored when present on a schema that resides in the `allOf` array. Instead of the default value being `{ "unevaluatedProperties": {} }`, the default value will be `{ "unevaluatedProperties": false }`. Together this makes it so that all supertypes will be able to compose, as their individual, implicit `unevaluatedProperties` values won't have any effect on validation and defer evaluation to the extending type (the subtype).
 
 ## Defining extended types
 
@@ -256,7 +250,7 @@ which can be coerced into the following `Person` instance:
 }
 ```
 
-Notice how we are keeping the same `entityId` for this entity instance, but simply coercing the entity instance by selecting the fields of interest for the given type.
+Notice how we are keeping the same `entityId` for this entity instance, but simply coercing the entity instance by selecting the properties of interest for the given type.
 
 **An example of _compatible_, overlapping properties**:
 
@@ -334,6 +328,134 @@ which can be coerced into the following `Person` instance:
   }
 }
 ```
+
+## Subtyping
+
+We're already implicitly defining `{ "additionalProperties": false }` in the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) for all schemas, this RFC will piggyback on that, and change the existing, implicit `additionalProperties` usage to `unevaluatedProperties` and slightly change its [vocabulary definition](https://json-schema.org/draft/2020-12/json-schema-core.html#name-unevaluatedproperties).
+
+The vocabulary change is that the `unevaluatedProperties` keyword will only be applicable at top-level schemas (i.e. subtypes or schemas that don't specify `allOf`), and ignored when present on a schema that resides in the `allOf` array. Instead of the default value being `{ "unevaluatedProperties": {} }`, the default value will be `{ "unevaluatedProperties": false }`. Together this makes it so that all supertypes will be able to compose, as their individual, implicit `unevaluatedProperties` values won't have any effect on validation and defer evaluation to the extending type (the subtype).
+
+Concretely, this means that for a free-standing type that doesn't extend any other type such as this `Person` type:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/2",
+  "type": "object",
+  "title": "Person",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/age": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/age"
+  ]
+}
+```
+
+would implicitly have `{ "unevaluatedProperties": false }` set. In the case of the `Employee` type:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/2",
+  "type": "object",
+  "title": "Employee",
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/occupation": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/occupation"
+  ]
+}
+```
+
+the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }` set. but the top-level entity type would have `{ "unevaluatedProperties": false }` set.
+
+## Detecting cycles
+
+> 💭 Because of versioning mechanics in the type system added in the [versioning RFC](./0408-versioning-types.md), type versions are not able to make out proper dependency cyles, and would not allow cyclic type hierachy to exist in the literal sense as updates to types would always result in a new version identifier. Instead cycles in the below explanation is more about indirection and obfuscation of types.
+
+An extension cycle happens when a part of an inheritance tree revisits a base URI it has already seen. As a contrived example, an entity type `Country` could be the supertype of `Region`, which in turn could be a supertype of the same `Country` entity type.
+
+First entity type version of `Country` without supertype:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/country/v/1",
+  "type": "object",
+  "title": "Country",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    }
+  },
+  "required": ["https://blockprotocol.org/@alice/property-type/name"]
+}
+```
+
+Entity type `Region` with `Country` as a supertype
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/region/v/1",
+  "type": "object",
+  "title": "Region",
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/country/v/1" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/blurb": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/blurb/v/1"
+    }
+  },
+  "required": ["https://blockprotocol.org/@alice/property-type/blurb"]
+}
+```
+
+The second, cyclic version of the `Country` entity type
+
+```json
+{
+  "kind": "entityType",
+  // Because of versioning, we can not change this version to /v/1 and create a "proper" cycle.
+  "$id": "https://blockprotocol.org/@alice/entity-type/country/v/2",
+  "type": "object",
+  "title": "Region",
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/region/v/1" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/location": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/location/v/1"
+    }
+  },
+  "required": ["https://blockprotocol.org/@alice/property-type/name"]
+}
+```
+
+This sort of type hierarchy should _not_ be accepted within the type extension system, as the circular dependencies lead to hard to reason about types. While the type hierarchy might be completely valid (as it would be in this case), we should safeguard users from making redundant type structures that look like the above.
+
+In this specific contrived example, creating a new entity type based on `Region` instead of a new version of `Country` might even encode semantic meaning better than re-defining `Country`.
 
 ## Multiple supertypes - checking compatibility
 
@@ -434,7 +556,8 @@ While not explained in detail in the Type System RFC the `aggregateEntities` ope
 [drawbacks]: #drawbacks
 
 - The way this proposal adds type extension means that we must implement some version of property selection/projection for types, which comes with non-trivial implementation details for embedding applications.
-- This drifts further away from JSON Schema by introducing a different meaning to the `unevaluatedProperties` keyword and uses it implicitly for our schemas.
+- This drifts further away from JSON Schema by introducing a different meaning to the `unevaluatedProperties` keyword and using it implicitly for our schemas.
+- The way compatibility is defined could result in newer versions of supertypes becoming incompatible over time. This is not unique to extending types and can be an "issue" in many parts of the type system as different versions of property types become incompatible.
 
 # Rationale and alternatives
 
@@ -542,8 +665,9 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 
 [unresolved-questions]: #unresolved-questions
 
-- We haven't specified how projecting/selecting fields of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact fields of a subtype to provide a valid supertype instance.
+- We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
 - Duplicating types of "forking" is not solved by this RFC.
+- The current argument for not allowing cyclic type hierarchies mostly build on a feeling that type hierarchies shouldn't be too indirect/obfuscated, but there could be stronger arguments for allowing/not allowing it.
 
 # Future possibilities
 
