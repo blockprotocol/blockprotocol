@@ -54,7 +54,7 @@ For example, an `Employee` instance looks as follows (simplified):
 
 And the properties would have the following relation to `Employee`:
 
-```
+```txt
       name◄┐ (supertype)    (subtype)
            ├───Person───────Employee
        age◄┘                │
@@ -76,7 +76,7 @@ A type must allow extending multiple super-types if and only if the supertypes c
 
 In this example, there is no overlap between properties, so an `Employee` type could have `Person` and `Superhero` as supertypes
 
-```
+```txt
               (supertypes)
 superpower◄────Superhero──┐
                           │
@@ -94,7 +94,7 @@ occupation◄───────────────┘
 
 In this example, `Name` overlaps as a required property in both supertypes.
 
-```
+```txt
               (supertypes)
 superpower◄────Superhero──┐
                │          │
