@@ -129,6 +129,8 @@ jobs:
       BLOCK_DIR_PATH: ~/test-block
 
     steps:
+      - uses: actions/checkout@v3
+
       - uses: ./.github/actions/warm-up-repo
 
       - name: Downgrade global NPM version
