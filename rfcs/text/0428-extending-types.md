@@ -166,7 +166,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
       "type": "object",
       "properties": {
         "$ref": {
-          "$comment": "Valid references to existing Entity Types",
+          "$comment": "Valid references to existing Entity Typee versions",
           "type": "string",
           "format": "uri"
         },
@@ -331,16 +331,6 @@ which can be coerced into the following `Person` instance:
 }
 ```
 
----
-
-This is the technical portion of the RFC. Explain the design in sufficient detail that:
-
-- Its interaction with other features is clear.
-- It is reasonably clear how the feature would be implemented.
-- Corner cases are dissected by example.
-
-The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
-
 ## Multiple supertypes - checking compatibility
 
 As described in the [Guide-level explanation](#multiple-supertypes), when extending multiple entity types, they must be able to coexist in a "compatible manner", which means that the entity types' `properties` and `links` comply with the following:
@@ -353,6 +343,16 @@ As described in the [Guide-level explanation](#multiple-supertypes), when extend
 - For each link (versioned URI on the top level of `links`) that exists in multiple entity types:
 
   - none of the entity types define the link as an array **or** all define the property as an array with the _exact same_ cardinality constraints (including `order`).
+
+---
+
+This is the technical portion of the RFC. Explain the design in sufficient detail that:
+
+- Its interaction with other features is clear.
+- It is reasonably clear how the feature would be implemented.
+- Corner cases are dissected by example.
+
+The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
 
 # Drawbacks
 
@@ -368,7 +368,7 @@ Why should we _not_ do this?
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-The general rationale for this way of handling extended types (which we may also call type inheritance) is that we want to keep supertypes and subtypes compatible with one another. Constraining the way type inheritance functions makes it so that we can implicitly have "same as" relations across type inheritance trees. It also allows extending multiple supertypes which can lead to more expressive domain models.
+The general rationale for this way of handling extended types (which we may also call type inheritance) is that we want to keep supertypes and subtypes compatible with one another. Constraining the way type inheritance works makes it so that we can implicitly have "same as" relations across type inheritance trees. It also allows extending multiple supertypes which can lead to more expressive domain models.
 
 ## Problems and alternatives
 
@@ -413,17 +413,60 @@ Both of these solutions for strict schemas would not be suitable for the type of
 
 The behavior we're after is that `unevaluatedProperties` should only validate at the top level of a type. This would allow supertypes to still validate `unevaluatedProperties`, but defer checking if they're used within in subtype.
 
----
+### Alternative through open/closed schemas
 
-- Why is this design the best in the space of possible designs?
-- What other designs have been considered and what is the rationale for not choosing them?
-- What is the impact of not doing this?
+A proposed way to deal with conditional `unevaluatedProperties` is to use custom `$defs` definitions for open and closed variations of entity types.
+**Open by default schema**:
+
+```json
+{
+  "$id": "https://example.com/schema",
+
+  // ... schema contents  ...
+
+  "$defs": {
+    "closed": {
+      "$anchor": "closed",
+      "$ref": "#",
+      "unevaluatedProperties": false
+    }
+  }
+}
+```
+
+Here, referencing `https://example.com/schema` in a `$ref` will result in an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#closed` results in retrieving a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`.
+
+**Closed by default schema**:
+
+```json
+{
+  "$id": "https://example.com/schema",
+  "$ref": "#open",
+  "unevaluatedProperties": false,
+
+  "$defs": {
+    "schema": {
+      "$anchor": "open"
+      // ... schema contents ...
+    }
+  }
+}
+```
+
+Here, referencing `https://example.com/schema` in a `$ref` will result in a _closed schema_ that _does_ specify `{ "unevaluatedProperties": false }`. Referencing `https://example.com/schema#open` results in retrieving an _open schema_ that _does not_ specify `{ "unevaluatedProperties": false }`.
+
+(Thanks Jason Desrosiers for the suggestions!)
+
+Using the above setup would mean that we need to specify `#open` at the end of type URIs when URIs appear in `allOf`. We would also need to serve type schemas with one of the above structures, such that they conform with JSON Schema. Although this does add some ceremony around extending types, we would end up with a type extension system that would conform to JSON Schema without implicitness or redefining keywords.
 
 # Prior art
 
 [prior-art]: #prior-art
 
 - [JSON Schema composition](https://json-schema.org/understanding-json-schema/reference/combining.html) and [`unevaluatedProperties`](https://json-schema.org/understanding-json-schema/reference/object.html#unevaluated-properties)
+- [Programming languages subtyping](https://en.wikipedia.org/wiki/Subtyping)
+
+---
 
 Discuss prior art, both the good and the bad, in relation to this proposal.
 A few examples of what this can include are:
