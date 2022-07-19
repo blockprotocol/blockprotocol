@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("links and interactions in page header should work", async ({ page }) => {
+test("page header navigation works", async ({ page }) => {
   await page.goto("/");
 
   await page.locator("header >> text=Block Hub").click();
@@ -36,6 +36,10 @@ test("links and interactions in page header should work", async ({ page }) => {
   await expect(
     page.locator("text=The open standard for building block-based interfaces"),
   ).toBeVisible();
+});
+
+test("triggers for search modal work", async ({ page }) => {
+  await page.goto("/");
 
   const searchModalLocator = page.locator('[data-testid="bp-search-modal"]');
 

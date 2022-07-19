@@ -14,7 +14,7 @@ type CarouselProps<T> = {
   edgeBackground?: { left: string; right: string };
   settings?: Partial<Settings>;
   sx?: BoxProps["sx"];
-  "data-testid": string;
+  "data-testid"?: string;
 };
 
 type ArrowProps = {

@@ -1,12 +1,5 @@
 import { expect, test } from "@playwright/test";
 
-const links = {
-  exploreAllBlocks: "/hub",
-  developingBlocks: "/docs/developing-blocks",
-  embeddingBlocks: "/docs/embedding-blocks",
-  login: "/login",
-};
-
 test("Home page should contain key elements", async ({ page }) => {
   await page.goto("/");
 
@@ -36,12 +29,12 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(page.locator("text=Explore all Blocks")).toHaveAttribute(
     "href",
-    links.exploreAllBlocks,
+    "/hub",
   );
 
   await expect(page.locator("text=start building it today")).toHaveAttribute(
     "href",
-    links.developingBlocks,
+    "/docs/developing-blocks",
   );
 
   // Block slider
@@ -59,14 +52,14 @@ test("Home page should contain key elements", async ({ page }) => {
 
   await expect(
     finalCTA.locator("text=Read the block builder guide"),
-  ).toHaveAttribute("href", links.developingBlocks);
+  ).toHaveAttribute("href", "/docs/developing-blocks");
 
   await expect(
     finalCTA.locator("text=Read the embedding app guide"),
-  ).toHaveAttribute("href", links.embeddingBlocks);
+  ).toHaveAttribute("href", "/docs/embedding-blocks");
 
   await expect(finalCTA.locator("text=Log in")).toHaveAttribute(
     "href",
-    links.login,
+    "/login",
   );
 });
