@@ -37,3 +37,37 @@ test("page header navigation works", async ({ page }) => {
     page.locator("text=The open standard for building block-based interfaces"),
   ).toBeVisible();
 });
+
+test("triggers for search modal work", async ({ page }) => {
+  await page.goto("/");
+
+  const searchModalLocator = page.locator('[data-testid="bp-search-modal"]');
+
+  await expect(searchModalLocator).not.toBeVisible();
+  await page.keyboard.press("/");
+  await expect(
+    searchModalLocator,
+    "Pressing '/' should trigger search modal",
+  ).toBeVisible();
+  await expect(
+    searchModalLocator.locator('[placeholder="Search…"]'),
+    "Input should be focused when search modal is opened",
+  ).toBeFocused();
+
+  // close modal
+  await searchModalLocator.locator(".MuiBackdrop-root").click({
+    position: {
+      x: 32,
+      y: 32,
+    },
+  });
+
+  await page.locator("header >> button", { hasText: "Search" }).click();
+  await expect(
+    searchModalLocator,
+    "Clicking on search nav button should bring up search modal",
+  ).toBeVisible();
+});
+
+// @todo: Add tests for authenticated flow
+// @todo: Add mobile tests - Drawer
