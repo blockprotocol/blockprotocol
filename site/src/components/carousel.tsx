@@ -20,6 +20,7 @@ type CarouselProps<T> = {
   edgeBackground?: { left: string; right: string };
   settings?: Partial<Settings>;
   sx?: BoxProps["sx"];
+  "data-testid"?: string;
 };
 
 type ArrowProps = {
@@ -78,6 +79,7 @@ export const Carousel = <T,>({
   settings = {},
   edgeBackground,
   sx = [],
+  ...props
 }: CarouselProps<T>): ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -112,6 +114,7 @@ export const Carousel = <T,>({
 
   return (
     <Box
+      data-testid={props["data-testid"]}
       sx={[
         {
           overflow: "hidden",

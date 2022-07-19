@@ -14,6 +14,7 @@ export const BlocksSlider: FunctionComponent<BlocksSliderProps> = ({
 }) => {
   return (
     <Carousel
+      data-testid="block-slider"
       data={catalog}
       itemKey={({ name }) => name!}
       renderItem={({ displayName, name, image, blockPackagePath }) => {
