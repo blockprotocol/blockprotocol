@@ -164,6 +164,7 @@ export const Footer: FC<FooterProps> = ({ sx = [], ...boxProps }) => {
 
   return (
     <Box
+      component="footer"
       {...boxProps}
       sx={[
         {

@@ -141,10 +141,8 @@ export const BANNERS: Banner[] = [
             >
               Anyone can create blocks and contribute to this growing,
               open-source registry of blocks. Read our{" "}
-              <Link href="/docs/developing-blocks">
-                <a>Quickstart guide</a>
-              </Link>{" "}
-              to start building your own blocks.
+              <Link href="/docs/developing-blocks">Quickstart guide</Link> to
+              start building your own blocks.
             </Typography>
           </Box>
         }
@@ -255,10 +253,8 @@ export const BANNERS: Banner[] = [
             >
               Anyone can create blocks and contribute to this growing,
               open-source registry of blocks. Read our{" "}
-              <Link href="/docs/developing-blocks">
-                <a>Quickstart guide</a>
-              </Link>{" "}
-              to start building your own blocks.
+              <Link href="/docs/developing-blocks">Quickstart guide</Link> to
+              start building your own blocks.
             </Typography>
           </Box>
         }
