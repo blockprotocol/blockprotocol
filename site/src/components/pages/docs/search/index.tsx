@@ -181,7 +181,7 @@ export const Search: React.VoidFunctionComponent<SearchProps> = ({
         onChange={(event: ChangeEvent<HTMLInputElement>) =>
           setSearchText(event.target.value)
         }
-        placeholder="Search..."
+        placeholder="Search…"
         required
         InputProps={{
           sx: {
