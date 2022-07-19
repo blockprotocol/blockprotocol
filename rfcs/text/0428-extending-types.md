@@ -94,7 +94,7 @@ occupation◄───────────────┘
 - Supertype `Person` contains the required properties `name` and `age`
 - Supertype `Superhero` contains the required properties `superpower` and `name`
 
-In this example, `name` overlaps as a required property in both supertypes.
+In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible'.
 
 ```txt
               (supertypes)
