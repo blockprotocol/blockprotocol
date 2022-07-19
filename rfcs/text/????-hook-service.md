@@ -7,7 +7,7 @@
 
 [summary]: #summary
 
-This service standardises the communication between blocks and the embedding application necessary to enable embedding applications to 'take over' the rendering of parts of a block to extend functionality, while ensuring block can remain uncoupled from the embedding application, even where these are implemented by the same organisation.
+This service standardizes the communication necessary between blocks and embedding applications, allowing the latter to 'take over' rendering one or more parts of a block. This allows functionality to be extended, while ensuring blocks can remain uncoupled from embedding applications.
 
 In order to enable direct manipulation, this service is likely to be difficult or impossible to implement in Embedding Applications which use common ‘sandboxing’ techniques including `iframe`s.
 
@@ -15,15 +15,15 @@ In order to enable direct manipulation, this service is likely to be difficult o
 
 [motivation]: #motivation
 
-It is not uncommon for embedding applications to want to provide a consistent 'look and feel' across distinct blocks which implement similar features – i.e, rich text or image editing. Additionally, the implementation of these features may require integrating with systems bespoke to the embedding application. We don't want blocks to have to 'know' about the implementation of this functionality, or necessarily the shape of the data involved in providing this functionality. Therefore, the embedding application needs to be responsible for providing this functionality, but this depends on co-operation by block authors. 
+It is not uncommon for embedding applications to want to provide a consistent 'look and feel' across distinct blocks which implement similar features – i.e, rich text or image editing. Additionally, the implementation of these features may require integrating with systems bespoke to the embedding application. We don't want blocks to have to 'know' about the implementation of this functionality, or necessarily the shape of the data involved in providing this functionality. Therefore, the embedding application needs to be responsible for providing this functionality, but this depends on cooperation by block authors. 
 
 # Guide-level explanation
 
 [guide-level-explanation]: #guide-level-explanation
 
-A 'hook' is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a path to data provided by the graph service's `blockEntity` property. 
+A **hook** is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a path to data provided by the graph service's `blockEntity` property. 
 
-The 'optionally' here is key. Blocks cannot require embedding applications to implement a handler for any specific 'hook'. Therefore, each 'hook' must specify a fallback rendering strategy which embedding applications implementing the hook service can use instead of implementing the hook themselves.   
+**Note: the word 'optionally' here is key.** Blocks cannot today _require_ embedding applications to implement a handler for any specific 'hook'. Therefore, each 'hook' must specify a fallback rendering strategy which embedding applications implementing the hook service can use instead of implementing the hook themselves.
 
 A classical example would be rich text editing. In this case, you may not want to provide the underlying data storing the formatted text, as this may be bespoke to your embedding application. But you may still want to provide the plain text value for the block to make use of – e.g., if the block provides a word count feature.
 
@@ -81,7 +81,7 @@ TODO:
 
 [editableRef]: #editableref
 
-The first exploration of this space was the introduction of `editableRef` in the HASH app, currently powering the rich text blocks.
+A solution similar to the hooks service was first explored in a temporary implementation called `editableRef` within the [HASH](https://hash.ai) embedding application, enabling its _rich text_ blocks.
 
 This was designed to avoid blocks being coupled to the particular rich text editing solution implemented in HASH, and in that it succeeded.
 
@@ -89,14 +89,14 @@ This was designed to avoid blocks being coupled to the particular rich text edit
 
 It was also used by the embedding application (HASH) to know that any particular block had an editable text section within it. The particular solution HASH uses for rich text editing needs (or needed) to know at the time blocks are loaded that a user can edit text within them. This worked because a block would use `editableRef` by reading it from the properties passed to it, which means the `editableRef` key would be in the block's schema.
 
-`editableRef` is an unsuitable candidate for standardisation for a number of reasons:
+`editableRef` is an unsuitable candidate for standardization for a number of reasons:
 - It does not indicate which block entity property on which to store the rich text data
 - It means that the type of the value in the `text` field is unknown to the block, and may not match the value in the block's schema
-- It has a one time use – you cannot use it to make multiple editable islands within a block (think a blockquote with a caption)
-- The requirement for the use of the feature to show up in the block's schema can make certain kinds of blocks impossible (i.e, blocks that may or may not have editable sections depending on their current state).
-- An embedding application can only provide one implementation for `editableRef`, which means there may be a mismatch between the implementation provided by the embedding application and the feature expected by the block. I.e, an embedding application may use `editableRef` to provide image editing features, whereas the block may expect it to be used to provide rich text editing features. 
+- It has a one-time use – you cannot use it to make multiple editable islands within a block (e.g. a blockquote _with_ a caption)
+- The requirement for the use of the feature to show up in the block's schema can make certain kinds of blocks impossible (i.e., blocks that may or may not have editable sections depending on their current state).
+- An embedding application can only provide one implementation for `editableRef`, which means there may be a mismatch between the implementation provided by the embedding application and the feature expected by the block. I.e., an embedding application may use `editableRef` to provide image editing features, whereas the block may expect it to be used to provide rich text editing features. 
 
-Another minor reason is its naming is tied into React – i.e, "editableRef". 
+Another minor reason is its naming is tied into React – i.e., "editableRef". 
 
 This proposal fixes all of these problems.
 
@@ -104,7 +104,7 @@ This proposal fixes all of these problems.
 
 [unresolved-questions]: #unresolved-questions
 
-- Is hook the best name for this service? Other options include (not exhaustive):
+- Is _hook_ the best name for this service? Other possible options include (not exhaustive):
   - editable/editing/editor service
   - view service
   - UI service
@@ -112,12 +112,12 @@ This proposal fixes all of these problems.
   - DOM service
   - extension service
 - Is the name 'hook' too tied into React and therefore confusing? 
-- Is there any functionality expected to be enabled by this service where an embedding application would need to know statically that the service is being used – i.e, does this need to show up in the schema. If so, how does this work with dynamic properties (i.e, a property on a value in a list)
+- Is there any functionality expected to be enabled by this service where an embedding application would need to know statically that the service is being used – i.e., does this need to show up in the schema? If so, how does this work with dynamic properties (i.e., a property on a value in a list)?
 - Is the use of property paths to indicate the relevant value problematic? Do we need to make it easy to generate these property paths (possible using a proxy)?
 - Will blocks want to pass up data which is not present on `blockEntity` (i.e, on a linked entity or aggregation) or not provided by the block service at all
 - Do we want to standardize the "types" of hook available or do we want it to be any arbitrary string? Should we 'special-case' the recommended types by providing specific message types for those, or should all uses of the service use the same message type? 
 - Is the recommended list of types of hook sufficient?
-- How do we formalise the relationship between the hook service and the graph service?
+- How do we formalize the relationship between the hook service and the graph service?
 
 # Future possibilities
 
