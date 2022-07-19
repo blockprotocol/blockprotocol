@@ -210,8 +210,8 @@ module.exports = {
       },
     },
     {
-      // top-level config files
-      files: ["*.config.{c,m,}js", "*rc.{c,m,}js"],
+      // config files and type declarations
+      files: ["*.config.{c,m,}js", "*rc.{c,m,}js", "*.d.ts"],
       rules: {
         "import/no-extraneous-dependencies": "off",
         "global-require": "off",
