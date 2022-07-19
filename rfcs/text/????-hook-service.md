@@ -111,7 +111,6 @@ This proposal fixes all of these problems.
   - plugin service
   - DOM service
   - extension service
-- Is the name 'hook' too tied into React and therefore confusing? 
 - Is there any functionality expected to be enabled by this service where an embedding application would need to know statically that the service is being used – i.e., does this need to show up in the schema? If so, how does this work with dynamic properties (i.e., a property on a value in a list)?
 - Is the use of property paths to indicate the relevant value problematic? Do we need to make it easy to generate these property paths (possible using a proxy)?
 - Will blocks want to pass up data which is not present on `blockEntity` (i.e, on a linked entity or aggregation) or not provided by the block service at all
