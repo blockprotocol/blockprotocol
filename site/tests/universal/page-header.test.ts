@@ -1,9 +1,33 @@
 import { expect, test } from "@playwright/test";
+import type { Page } from "playwright";
 
-test("page header navigation works", async ({ page }) => {
+const openMobileNav = async (page: Page) => {
+  if (await page.locator("[data-testid='mobile-nav']").isVisible()) {
+    return;
+  }
+  await expect(
+    page.locator("[data-testid='mobile-nav-trigger']"),
+  ).toBeVisible();
+  await page.locator("[data-testid='mobile-nav-trigger']").click();
+  await expect(page.locator("[data-testid='mobile-nav']")).toBeVisible();
+};
+
+test("page header navigation works", async ({ page, isMobile }) => {
+  if (isMobile) {
+    test.skip();
+  }
+
   await page.goto("/");
 
-  await page.locator("header >> text=Block Hub").click();
+  const navSelector = page.locator(
+    isMobile ? "[data-testid='mobile-nav']" : "header",
+  );
+
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await navSelector.locator("text=Block Hub").click();
   await expect(page).toHaveURL("/hub");
 
   await expect(
@@ -12,11 +36,19 @@ test("page header navigation works", async ({ page }) => {
     ),
   ).toBeVisible();
 
-  await page.locator("header >> text=Documentation").click();
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await navSelector.locator("text=Documentation").click();
   await expect(page).toHaveURL("/docs");
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
-  await page.locator("header >> text=Log In").click();
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await navSelector.locator("text=Log In").click();
   await expect(page).toHaveURL("/docs");
   await expect(page.locator("text=Sign in to theBlock Protocol")).toBeVisible();
 
@@ -24,7 +56,12 @@ test("page header navigation works", async ({ page }) => {
   await expect(page).toHaveURL("/docs");
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
-  await page.locator("header >> text=Sign Up").click();
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  // @todo: fix error mobile nav isn't visible at this point
+  await navSelector.locator("text=Sign Up").click();
   await expect(page).toHaveURL("/signup");
   await expect(
     page.locator("text=Create your Block Protocol account"),
@@ -38,7 +75,11 @@ test("page header navigation works", async ({ page }) => {
   ).toBeVisible();
 });
 
-test("triggers for search modal work", async ({ page }) => {
+test("triggers for search modal work", async ({ page, isMobile }) => {
+  if (isMobile) {
+    test.skip();
+  }
+
   await page.goto("/");
 
   const searchModalLocator = page.locator('[data-testid="bp-search-modal"]');
@@ -70,4 +111,3 @@ test("triggers for search modal work", async ({ page }) => {
 });
 
 // @todo: Add tests for authenticated flow
-// @todo: Add mobile tests - Drawer

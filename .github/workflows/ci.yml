@@ -216,7 +216,7 @@ jobs:
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=integration
+        run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
 
       - name: Show DB logs
         if: ${{ success() || failure() }}
