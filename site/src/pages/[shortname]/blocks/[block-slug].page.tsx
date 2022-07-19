@@ -80,12 +80,12 @@ const generateSandboxBaseUrl = (): string => {
   }
 
   // @see https://vercel.com/docs/concepts/deployments/automatic-urls
-  const slugifiedBranch = branch
+  const branchSlug = branch
     .toLowerCase()
     .replace(/\./g, "")
     .replace(/[^\w-]+/g, "-");
-  const branchPrefix = `blockprotocol-git-${slugifiedBranch}`.slice(0, 64);
-  return `https://${branchPrefix}.stage.hash.ai`;
+  const branchSubdomain = `blockprotocol-git-${branchSlug}`.slice(0, 63);
+  return `https://${branchSubdomain}.stage.hash.ai`;
 };
 
 const Bullet: VoidFunctionComponent = () => {
