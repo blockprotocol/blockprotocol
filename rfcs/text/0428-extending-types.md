@@ -30,7 +30,7 @@ Using `SubType` in place of `Type` must be possible when extending a type, which
 
 For example, an `Employee` entity type could be an extended version of `Person`. This `Employee` type could contain all of the properties of `Person` as well as having _additional_ domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
-If the `Person` entity type contains required properties `Name` and `Age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `Occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `Name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
+If the `Person` entity type contains required properties `name` and `age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
 
 As a consequence of the above definition, these questions arise:
 
@@ -73,8 +73,8 @@ A type must allow extending multiple supertypes if and only if the supertypes ca
 
 **An example of _disjoint_ properties**:
 
-- Supertype `Person` contains required properties `Name` and `Age`
-- Supertype `Superhero` contains the property `Superpower`
+- Supertype `Person` contains required properties `name` and `age`
+- Supertype `Superhero` contains the property `superpower`
 
 In this example, there is no overlap between properties, so an `Employee` type could have `Person` and `Superhero` as supertypes
 
@@ -91,10 +91,10 @@ occupation◄───────────────┘
 
 **An example of _compatible_, overlapping properties**:
 
-- Supertype `Person` contains the required properties `Name` and `Age`
-- Supertype `Superhero` contains the required properties `Superpower` and `Name`
+- Supertype `Person` contains the required properties `name` and `age`
+- Supertype `Superhero` contains the required properties `superpower` and `name`
 
-In this example, `Name` overlaps as a required property in both supertypes.
+In this example, `name` overlaps as a required property in both supertypes.
 
 ```txt
               (supertypes)
@@ -111,14 +111,14 @@ occupation◄───────────────┘
 
 **An example of _incompatible_, overlapping properties**:
 
-- Supertype `Person` contains the required properties `Name` and `Age`
-- Supertype `Superhero` contains the required property `Superpower` and an array of `Name`s
+- Supertype `Person` contains the required properties `name` and `age`
+- Supertype `Superhero` contains the required property `superpower` and an array of `name`s
 
-In this example, the array of `Name`s on the `Superhero` type would not be compatible with the required `Name` property of `Person`, which means that the two types cannot be supertypes together.
+In this example, the array of `name`s on the `Superhero` type would not be compatible with the required `name` property of `Person`, which means that the two types cannot be supertypes together.
 
 ## Additional properties on types
 
-In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility, which means that any supertype will not validate against a subtype that adds properties if it receives all properties of a subtype instance. For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `Occupation` property is not present on `Person`).
+In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility, which means that any supertype will not validate against a subtype that adds properties if it receives all properties of a subtype instance. For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `occupation` property is not present on `Person`).
 
 The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas.
 
