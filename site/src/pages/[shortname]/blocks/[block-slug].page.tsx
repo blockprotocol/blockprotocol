@@ -84,11 +84,8 @@ const generateSandboxBaseUrl = (): string => {
     .toLowerCase()
     .replace(/\./g, "")
     .replace(/[^\w-]+/g, "-");
-  const branchPrefix = `blockprotocol-git-${slugifiedBranch}-hashintel`.slice(
-    0,
-    64,
-  );
-  return `https://${branchPrefix}.vercel.app`;
+  const branchPrefix = `blockprotocol-git-${slugifiedBranch}`.slice(0, 64);
+  return `https://${branchPrefix}.stage.hash.ai`;
 };
 
 const Bullet: VoidFunctionComponent = () => {
