@@ -13,6 +13,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import crypto from "node:crypto";
 import React, { VoidFunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
@@ -32,7 +33,7 @@ import {
   readBlockReadmeFromDisk,
   readBlocksFromDisk,
 } from "../../../lib/blocks";
-import { isProduction } from "../../../lib/config";
+import { isFork, isProduction } from "../../../lib/config";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(
@@ -79,12 +80,26 @@ const generateSandboxBaseUrl = (): string => {
     return "";
   }
 
-  // @see https://vercel.com/docs/concepts/deployments/automatic-urls
+  // @see https://vercel.com/docs/concepts/deployments/generated-urls
+  // @see https://vercel.com/docs/concepts/deployments/generated-urls#url-components
   const branchSlug = branch
     .toLowerCase()
     .replace(/\./g, "")
     .replace(/[^\w-]+/g, "-");
-  const branchSubdomain = `blockprotocol-git-${branchSlug}`.slice(0, 63);
+
+  const projectName = "blockprotocol";
+  const prefix = isFork ? "git-fork-" : "git-";
+  const rawBranchSubdomain = `${projectName}-${prefix}-${branchSlug}`;
+
+  const branchSubdomain =
+    rawBranchSubdomain.length > 63
+      ? `${rawBranchSubdomain.slice(0, 56)}-${crypto
+          .createHash("sha256")
+          .update(prefix + branch + projectName)
+          .digest("hex")
+          .slice(0, 6)}`
+      : rawBranchSubdomain;
+
   return `https://${branchSubdomain}.stage.hash.ai`;
 };
 
