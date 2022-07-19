@@ -32,12 +32,12 @@ For example, an `Employee` entity type could be an extended version of `Person`.
 
 If the `Person` entity type contains required properties `Name` and `Age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `Occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `Name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
 
-The immediate problems that arise from this definition:
+As a consequence of the above definition, these questions arise:
 
 - How do we ensure that `Employee` instances can, in fact, be used in place of `Person` instances in practice?
 - Do multiple supertypes impose constraints on extending types?
 - How does having `additionalProperties` in existing schemas influence extended types?
-- How do we define extended types within the BP Type System?
+- How should the Block Protocol type system support extending types?
 
 ## Subtyping
 
