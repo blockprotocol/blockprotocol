@@ -7,7 +7,7 @@
 
 [summary]: #summary
 
-As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended and duplicated to enhance reusability while giving more control to users (both block authors and users of embedding applications). Extending types can be considered the same as "type inheritance", but there are some important nuances that make these concepts different.
+As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended to enhance reusability while giving more control to users (both block authors and users of embedding applications). Extending types can be considered the same as "type inheritance", but there are some important nuances that make these concepts different.
 
 This RFC is not set out to solve duplicating types or "forking", and this will be considered an unresolved problem in this RFC.
 
@@ -15,7 +15,7 @@ This RFC is not set out to solve duplicating types or "forking", and this will b
 
 [motivation]: #motivation
 
-Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain properties to make the type usable for their use case, they would have to recreate the type themself in the current system.
+Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain additional properties to make the type usable for their use case, they would have to recreate the type themself in the current system.
 
 Allowing for types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain.
 
@@ -28,14 +28,14 @@ This RFC introduces a way for types to be extended in a way where the reusabilit
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
 Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified.
 
-For example, an `Employee` entity type can be an extended version of `Person`. This `Employee` type could contain domain-specific properties, making it more concrete while keeping compatibility with `Person`.
+For example, an `Employee` entity type could be an extended version of `Person`. This `Employee` type could contain all of the properties of `Person` as well as having _additional_  domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
-If the `Person` entity type contains required properties `Name` and `Age`, the `Employee` entity type would inherit these properties and perhaps add a `Occupation` property. `Employee` would _not_ be able to overwrite any of the properties given by `Person` e.g. it's not possible to turn `Name` into an array or make it optional. This restriction is important as disabling overwriting enables `Employee` instances to be valid `Person` instances i.e. compatibility with `Person` is kept.
+If the `Person` entity type contains required properties `Name` and `Age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `Occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `Name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
 
 The immediate problems that arise from this definition:
 
-- How do we ensure that `Employee` instances can, in fact, be used in place of `Person` entities in practice?
-- Do multiple super-types impose constraints on extending types?
+- How do we ensure that `Employee` instances can, in fact, be used in place of `Person` instances in practice?
+- Do multiple supertypes impose constraints on extending types?
 - How does having `additionalProperties` in existing schemas influence extended types?
 - How do we define extended types within the BP Type System?
 
@@ -69,7 +69,7 @@ Assuming that we are able to project/select the properties of a type that are de
 
 ## Multiple supertypes
 
-A type must allow extending multiple super-types if and only if the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
+A type must allow extending multiple supertypes if and only if the supertypes can coexist. For supertypes to be able to coexist, their properties should either be disjoint, or overlap in a compatible manner.
 
 **An example of _disjoint_ properties**:
 
@@ -122,20 +122,20 @@ In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system
 
 The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas.
 
-And unfortunately, specifying `{ "unevaluatedProperties": false }` does not behave as expected when composing types together in JSON Schema either, which means we will have to redefine how `{ "additionalProperties": true }` or `{ "unevaluatedProperties": false }` behaves within our type extension system to make supertypes keep strictness while allowing composition.
+We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` behave and may be used within our type extension system to make supertypes keep strictness while allowing composition.
 
 Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#additional-properties-on-types-1)
 
 ## Defining extended types
 
-Extended types will be defined with conventional JSON Schema syntax, the `allOf` keyword. When creating a new entity type it's possible to extend another entity type by adding an entry to `allOf` value with a versioned URI reference.
-Using a versioned URI makes it so that subtypes aren't automatically updated when the supertype is.
+Extended types will be defined with conventional JSON Schema syntax, the `allOf` keyword. An entity type can extend another entity type by adding an entry to `allOf` value with a versioned URI reference.
+Using a [versioned URI](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) makes it so that subtypes aren't automatically updated when the supertype is.
 
-As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it could lead to hard to reason about types and unpredictability.
+As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about, and could lead to unpredictable behaviour.
 
 ## Addressing previous considerations
 
-In the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1), we made the following statement:
+In the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1) the following statement was made:
 
 > The update messages of both the current and new systems make use of partial schemas, merging the schema given in the message contents with the existing Entity Type. This may or may not be the desired semantics of updating, and could lead to undesired behavior. In that case, the semantics can be changed to treat updates as a complete replacement. This is to be decided and can be considered out of scope for this RFC as it touches on inheritance/forking concepts.
 
@@ -147,7 +147,7 @@ As the new Block Protocol type system doesn't require a delta-based storage appr
 
 ## Defining extended types
 
-In the BP, we will allow type extension through the `allOf` JSON Schema keyword. This keyword specifies an array of schemas that will have to validate together.
+In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which specifies an array of schemas that will have to validate together.
 
 We'll add the following fields to the existing Entity Type meta schema definition:
 
@@ -164,7 +164,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
       "type": "object",
       "properties": {
         "$ref": {
-          "$comment": "Valid references to existing Entity Typee versions",
+          "$comment": "Valid reference to an existing Entity Type version",
           "type": "string",
           "format": "uri"
         },
@@ -384,7 +384,7 @@ would implicitly have `{ "unevaluatedProperties": false }` set. In the case of t
 }
 ```
 
-the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }` set. but the top-level entity type would have `{ "unevaluatedProperties": false }` set.
+the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }` set, whereas the top-level entity type itself would have `{ "unevaluatedProperties": false }` set.
 
 ## Detecting cycles
 
@@ -434,7 +434,7 @@ The second, cyclic version of the `Country` entity type
 ```json
 {
   "kind": "entityType",
-  // Because of versioning, we can not change this version to /v/1 and create a "proper" cycle.
+  // Because of versioning, we cannot change this version to /v/1 and create a "proper" cycle.
   "$id": "https://blockprotocol.org/@alice/entity-type/country/v/2",
   "type": "object",
   "title": "Region",
@@ -453,7 +453,7 @@ The second, cyclic version of the `Country` entity type
 }
 ```
 
-This sort of type hierarchy should _not_ be accepted within the type extension system, as the circular dependencies lead to hard to reason about types. While the type hierarchy might be completely valid (as it would be in this case), we should safeguard users from making redundant type structures that look like the above.
+This sort of type hierarchy should _not_ be accepted within the type extension system, as the circular dependencies make types difficult to resolve/reason about. While the type hierarchy might be completely valid (as it would be in this case), we should safeguard users from making redundant type structures that look like the above.
 
 In this specific contrived example, creating a new entity type based on `Region` instead of a new version of `Country` might even encode semantic meaning better than re-defining `Country`.
 
@@ -541,7 +541,7 @@ given that the original schema was created as follows
 }
 ```
 
-The above change applies to these existing BP operations:
+The above change applies to these BP operations (`updateEntityType` having already been implemented, and the others proposed in accepted RFCs):
 
 - `updateEntityType`
 - `updatePropertyType`
@@ -606,11 +606,12 @@ Changing from `unevaluatedProperties` to `additionalProperties` results in error
 
 Both of these solutions for strict schemas would not be suitable for the type of expressiveness we want for type extension, unfortunately.
 
-The behavior we're after is that `unevaluatedProperties` should only validate at the top level of a type. This would allow supertypes to still validate `unevaluatedProperties`, but defer checking if they're used within in subtype.
+The required behavior is that `unevaluatedProperties` should only validate at the top level of a type, allowing supertypes to validate `unevaluatedProperties` but defer checking if they're used within in subtype.
 
 ### Alternative through open/closed schemas
 
 A proposed way to deal with conditional `unevaluatedProperties` is to use custom `$defs` definitions for open and closed variations of entity types.
+
 **Open by default schema**:
 
 ```json
@@ -667,7 +668,7 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
 - Duplicating types of "forking" is not solved by this RFC.
-- The current argument for not allowing cyclic type hierarchies mostly build on a feeling that type hierarchies shouldn't be too indirect/obfuscated, but there could be stronger arguments for allowing/not allowing it.
+- The current argument for not allowing cyclic type hierarchies mostly build on a feeling that type hierarchies shouldn't be too indirect/obfuscated, but there could be stronger arguments for allowing/disallowing it.
 
 # Future possibilities
 
