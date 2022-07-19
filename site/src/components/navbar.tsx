@@ -335,6 +335,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                 </>
               ) : (
                 <IconButton
+                  data-testid="mobile-nav-trigger"
                   onClick={() => setMobileNavVisible(!mobileNavVisible)}
                 >
                   <FontAwesomeIcon
@@ -354,6 +355,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
         </Container>
       </Box>
       <Slide
+        data-testid="mobile-nav"
         in={mobileNavVisible}
         direction="right"
         timeout={400}

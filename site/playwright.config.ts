@@ -3,23 +3,39 @@ import { devices } from "@playwright/test";
 
 const ci = process.env.CI === "true";
 
-const devicesToUse = [
-  "Desktop Chrome",
-  "Desktop Firefox",
-  "Desktop Safari",
-  "iPhone 11 Pro",
-  "Pixel 5",
-];
+const integrationTestsBaseConfig = {
+  retries: 1,
+  testMatch: "**/{integration,universal}/**",
+};
 
 const config: PlaywrightTestConfig = {
   forbidOnly: ci,
   projects: [
-    ...devicesToUse.map((deviceName) => ({
-      name: `integration - ${deviceName}`,
-      retries: 1,
-      testMatch: "**/{integration,universal}/**",
-      use: { ...devices[deviceName] },
-    })),
+    {
+      name: "integration-chrome",
+      ...integrationTestsBaseConfig,
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "integration-firefox",
+      ...integrationTestsBaseConfig,
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "integration-safari",
+      ...integrationTestsBaseConfig,
+      use: { ...devices["Desktop Safari"] },
+    },
+    {
+      name: "integration-iphone",
+      ...integrationTestsBaseConfig,
+      use: { ...devices["iPhone 11 Pro"] },
+    },
+    {
+      name: "integration-pixel",
+      ...integrationTestsBaseConfig,
+      use: { ...devices["Pixel 5"] },
+    },
     {
       name: "smoke",
       retries: 0,
