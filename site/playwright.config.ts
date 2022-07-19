@@ -1,19 +1,29 @@
-import type { PlaywrightTestConfig } from "@playwright/test";
+import { devices, PlaywrightTestConfig } from "@playwright/test";
 
 const ci = process.env.CI === "true";
+
+const devicesToUse = [
+  "Desktop Chrome",
+  "Desktop Firefox",
+  "Desktop Safari",
+  "iPhone 11 Pro",
+  "Pixel 5",
+];
 
 const config: PlaywrightTestConfig = {
   forbidOnly: ci,
   projects: [
-    {
+    ...devicesToUse.map((deviceName) => ({
       name: "integration",
       retries: 1,
       testMatch: "**/{integration,universal}/**",
-    },
+      use: { ...devices[deviceName] },
+    })),
     {
       name: "smoke",
       retries: 0,
       testMatch: "**/{smoke,universal}/**",
+      use: { ...devices["Desktop Chrome"] },
     },
   ],
   reporter: [
