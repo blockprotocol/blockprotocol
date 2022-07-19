@@ -4,7 +4,7 @@ import execa from "execa";
 const script = async () => {
   console.log(chalk.bold("Building..."));
 
-  if (process.env.VERCEL) {
+  if (process.env.CI) {
     await import("./copy-blocks-from-ci-cache");
   }
 
@@ -22,7 +22,7 @@ const script = async () => {
 
   await execa("next", ["build"], { stdio: "inherit" });
 
-  if (process.env.VERCEL) {
+  if (process.env.CI) {
     await import("./copy-blocks-to-ci-cache");
   }
 };

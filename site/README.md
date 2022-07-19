@@ -1,11 +1,9 @@
 # blockprotocol.org website
 
-The public-facing [blockprotocol.org](https://blockprotocol.org) website serves the following endpoints:
+This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-- `/gallery` shows the catalog of available blocks
-- `/api/blocks` returns a JSON response w/ a list of available blocks
-- `/blocks/<organisation>/<blockname>` is the CDN base-URL of an individual block (e.g. `/blocks/@hash/code`)
-- `/partners` provides a temporary signup form to collect pre-release registrations of interest from potential adopters
+- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
+- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
 
 ## Local development
 
@@ -306,3 +304,47 @@ If all of the optional params are missing, the result will contain all of the bl
 
 - Request Response:
   - `results`: the results of the search: an array of block metadata JSON files
+
+## Testing
+
+[blockprotocol.org](https://blockprotocol.org) is covered by browser-based tests written with [Playwright](https://playwright.dev).
+These tests are located in the `site/tests` folder.
+They are grouped into:
+
+- integration tests
+- smoke tests
+- universal tests (those that belong to both categories)
+
+### [Integration tests](https://en.wikipedia.org/wiki/Integration_testing)
+
+These tests are designed to extensively cover the functionality of the app.
+They require a local database and the ability to write data to it.
+Integration tests are offline, i.e. they do not depend on any third-party services to avoid performance bottlenecks.
+We run these tests in CI together with other checks ([ci.yml](https://github.com/blockprotocol/blockprotocol/actions/workflows/ci.yml)).
+
+To run integration tests locally, prepare the blocks, launch the database and start the Next.js app as you would do this for local development.
+Then run this command in a separate terminal:
+
+```sh
+yarn workspace @blockprotocol/site playwright test --project integration
+```
+
+Note that local app data will be modified by the tests.
+
+### [Smoke tests](<https://en.wikipedia.org/wiki/Smoke_testing_(software)>)
+
+Smoke tests are end-to-end tests which are designed to run against Vercel deployments.
+Their goal is to supplement integration tests to sense-check deployed instances of the website.
+Smoke tests are read-only, which helps avoid data corruption in production and reduces execution time.
+We automatically run smoke tests for all new Vercel deployments and on schedule to spot potential regressions ([site-deployment.yml](https://github.com/blockprotocol/blockprotocol/actions/workflows/site-deployment.yml)).
+
+To run smoke test locally, use this command:
+
+```sh
+export PLAYWRIGHT_TEST_BASE_URL=https://blockprotocol.org
+
+yarn workspace @blockprotocol/site playwright test --project smoke
+```
+
+Omitting `PLAYWRIGHT_TEST_BASE_URL` will launch smoke tests for a locally running Þ instance.
+This is helpful for debugging.

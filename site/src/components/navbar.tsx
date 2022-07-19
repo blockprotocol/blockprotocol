@@ -248,6 +248,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
         ]}
       >
         <Container
+          component="header"
           sx={[
             isDocs && { width: "100% !important", maxWidth: "100% !important" },
           ]}

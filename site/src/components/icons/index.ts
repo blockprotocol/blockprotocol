@@ -13,7 +13,6 @@ export * from "./copy-icon";
 export * from "./envelope-dot-icon";
 export * from "./expand-icon";
 export * from "./font-awesome-icon";
-export * from "./hashlogo-icon";
 export * from "./pull-request-icon";
 export * from "./specification-icon";
 export * from "./sync-icon";
