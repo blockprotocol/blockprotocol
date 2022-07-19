@@ -115,7 +115,7 @@ This proposal fixes all of these problems.
 - Is there any functionality expected to be enabled by this service where an embedding application would need to know statically that the service is being used – i.e, does this need to show up in the schema. If so, how does this work with dynamic properties (i.e, a property on a value in a list)
 - Is the use of property paths to indicate the relevant value problematic? Do we need to make it easy to generate these property paths (possible using a proxy)?
 - Will blocks want to pass up data which is not present on `blockEntity` (i.e, on a linked entity or aggregation) or not provided by the block service at all
-- Do we want to standardise the "types" of hook available or do we want it to be any arbitrary string? Should we 'special-case' the recommended types by providing specific message types for those, or should all uses of the service use the same message type? 
+- Do we want to standardize the "types" of hook available or do we want it to be any arbitrary string? Should we 'special-case' the recommended types by providing specific message types for those, or should all uses of the service use the same message type? 
 - Is the recommended list of types of hook sufficient?
 - How do we formalise the relationship between the hook service and the graph service?
 
