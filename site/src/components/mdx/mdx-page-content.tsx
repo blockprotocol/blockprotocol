@@ -108,7 +108,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
 
   useEffect(() => {
     const onScroll = () => {
-      if (!detectHeadingFromScroll) return;
+      if (!detectHeadingFromScroll || headings.length === 0) return;
 
       let headingAtScrollPosition: Heading = headings[0]!;
 
