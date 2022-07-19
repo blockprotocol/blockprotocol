@@ -25,12 +25,7 @@ jobs:
 
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: yarn
-
-      - run: yarn install
+      - uses: ./.github/actions/warm-up-repo
 
       - run: yarn exe scripts/packages/publish-to-npmjscom.ts
         env:
