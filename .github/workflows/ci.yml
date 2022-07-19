@@ -195,10 +195,6 @@ jobs:
           MONGODB_DB_NAME=local
           EOF
 
-          cat << EOF > site/babel.config.json
-          { "presets": ["next/babel"], "plugins": ["istanbul"] }
-          EOF
-
       - name: Launch DB
         if: ${{ success() || failure() }}
         run: |
@@ -213,8 +209,10 @@ jobs:
         if: ${{ success() || failure() }}
         run: |
           yarn workspace @blockprotocol/site build
-          yarn workspace @blockprotocol/site nyc next start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
+          yarn workspace @blockprotocol/site nyc --clean=false next start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
+        env:
+          INSTRUMENT_COVERAGE: true
 
       - run: yarn playwright install-deps chrome
         if: ${{ success() || failure() }}
@@ -225,7 +223,7 @@ jobs:
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site nyc report --reporter=text --reporter=lcov
+        run: yarn workspace @blockprotocol/site nyc report --reporter=lcov --reporter=text
 
       - name: Show DB logs
         if: ${{ success() || failure() }}

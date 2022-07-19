@@ -1,4 +1,5 @@
 {
   "all": true,
-  "exclude": [".next/**/*", "public/blocks", "tests/**"]
+  "silent": true,
+  "exclude": [".next/**/*", "coverage/**", "public/blocks", "tests/**"]
 }

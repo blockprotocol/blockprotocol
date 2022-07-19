@@ -22,9 +22,18 @@ const script = async () => {
 
   await import("./create-db-indexes");
 
-  if (await fs.pathExists(path.resolve(process.cwd(), "babel.config.json"))) {
+  const babelConfigPath = path.resolve(process.cwd(), "babel.config.json");
+  if (process.env.INSTRUMENT_COVERAGE) {
+    await fs.writeJson(babelConfigPath, {
+      presets: ["next/babel"],
+      plugins: ["istanbul"],
+    });
     await execa("nyc", ["next", "build"], { stdio: "inherit" });
+    await fs.remove(babelConfigPath);
   } else {
+    if (await fs.pathExists(babelConfigPath)) {
+      await fs.remove(babelConfigPath);
+    }
     await execa("next", ["build"], { stdio: "inherit" });
   }
 
