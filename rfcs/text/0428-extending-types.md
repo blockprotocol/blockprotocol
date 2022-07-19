@@ -124,7 +124,7 @@ The assumption that we can select/project parts of a subtype that make up a supe
 
 We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` behave and may be used within our type extension system to make supertypes keep strictness while allowing composition.
 
-Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#additional-properties-on-types-1)
+Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#problems-with-unevaluatedproperties)
 
 ## Defining extended types
 
