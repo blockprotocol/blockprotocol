@@ -303,7 +303,7 @@ and a _subtype_ `Employee`:
 }
 ```
 
-The two types do share the `name` property, but the property definitions are compatible (even using the same version). It's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible.
+The two types do share the `name` property, but the property definitions are compatible (even using the same version). It's possible to coerce an instance of `Employee` into an instance of `Person` as the properties compose and are compatible. Checking compatibility is described in the [Reference-level explanation](#multiple-supertypes---checking-compatibility).
 For example, we may have the following `Employee` instance:
 
 ```json
