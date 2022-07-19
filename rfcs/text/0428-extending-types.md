@@ -552,7 +552,7 @@ The above change applies to these BP operations (`updateEntityType` having alrea
 
 which must all make use of complete schemas in place of partial ones. These examples originate from the [Type System RFC](./0352-graph-type-system.md#interfacing-with-types-1).
 
-While not explained in detail in the Type System RFC the `aggregateEntities` operation would need to change behavior slightly. The types returned from aggregating on a specific entity type could now also be implicitly coerced instances of entities (supertypes projected from subtype instances).
+While not explained in detail in the Type System RFC the `aggregateEntities` operation would need to change behavior slightly. When calling `aggregateEntities` for a specific entity type, entities that are returned might be of that entity type or subtypes of it. This is because the entities of the subtype will be able to be coerced to the requested entity type.
 
 # Drawbacks
 
