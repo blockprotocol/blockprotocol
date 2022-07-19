@@ -12,8 +12,8 @@ export const SearchNavButton = () => {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (evt.key === "/") {
-        evt.preventDefault();
+      if (event.key === "/") {
+        event.preventDefault();
         setDisplayModal((prev) => !prev);
       }
     };
