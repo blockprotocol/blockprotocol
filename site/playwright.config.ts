@@ -15,7 +15,7 @@ const config: PlaywrightTestConfig = {
   forbidOnly: ci,
   projects: [
     ...devicesToUse.map((deviceName) => ({
-      name: "integration",
+      name: `integration - ${deviceName}`,
       retries: 1,
       testMatch: "**/{integration,universal}/**",
       use: { ...devices[deviceName] },
