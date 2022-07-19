@@ -89,7 +89,7 @@ const generateSandboxBaseUrl = (): string => {
 
   const projectName = "blockprotocol";
   const prefix = isFork ? "git-fork-" : "git-";
-  const rawBranchSubdomain = `${projectName}-${prefix}-${branchSlug}`;
+  const rawBranchSubdomain = `${projectName}-${prefix}${branchSlug}`;
 
   const branchSubdomain =
     rawBranchSubdomain.length > 63
