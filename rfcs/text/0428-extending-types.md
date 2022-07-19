@@ -28,7 +28,7 @@ This RFC introduces a way for types to be extended in a way where the reusabilit
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
 Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified.
 
-For example, an `Employee` entity type could be an extended version of `Person`. This `Employee` type could contain all of the properties of `Person` as well as having _additional_  domain-specific properties, making it more concrete while keeping compatibility with `Person`.
+For example, an `Employee` entity type could be an extended version of `Person`. This `Employee` type could contain all of the properties of `Person` as well as having _additional_ domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
 If the `Person` entity type contains required properties `Name` and `Age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `Occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `Name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
 
@@ -386,6 +386,10 @@ would implicitly have `{ "unevaluatedProperties": false }` set. In the case of t
 
 the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }` would _not_ have `{ "unevaluatedProperties": false }` set, whereas the top-level entity type itself would have `{ "unevaluatedProperties": false }` set.
 
+### Liskov substitution principle
+
+Subtypes in the system can be used in place of the supertypes that they extend, similarly to what is expected in the Liskov substitution principle. Although our entity types do not contain behavior, the semantic meaning of individual properties on an entity type is captured on the property type definitions they refer to, which enables the ability to use the subtype in place of its supertype(s) "without altering any of the desirable properties of that program" [[source](https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle)].
+
 ## Detecting cycles
 
 > 💭 Because of versioning mechanics in the type system added in the [versioning RFC](./0408-versioning-types.md), type versions are not able to make out proper dependency cyles, and would not allow cyclic type hierachy to exist in the literal sense as updates to types would always result in a new version identifier. Instead cycles in the below explanation is more about indirection and obfuscation of types.
@@ -661,6 +665,7 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 
 - [JSON Schema composition](https://json-schema.org/understanding-json-schema/reference/combining.html) and [`unevaluatedProperties`](https://json-schema.org/understanding-json-schema/reference/object.html#unevaluated-properties)
 - [Programming languages subtyping](https://en.wikipedia.org/wiki/Subtyping)
+- [Liskov substitution principle](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
 
 # Unresolved questions
 
