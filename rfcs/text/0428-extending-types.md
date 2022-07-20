@@ -17,7 +17,9 @@ Type duplication allows for modifying a type completely without restrictions on 
 
 Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain additional properties to make the type usable for their use case, they would have to recreate the type themself in the current system.
 
-Allowing for entity types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain. As an alternative to extending, type duplication (or type forking) is a less compatible way to make use of existing public types, without a direct data mapping strategy.
+The types in the type systems all specify JSON Schema's `{ "additionalProperties": false }` which has implications for how the schemas can be composed together, which will be addressed in this proposal.
+
+Allowing for entity types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain. As an alternative to extending types, type duplication (or type forking) is a less compatible way to make use of existing public types, without a direct data mapping strategy.
 
 This RFC introduces a way for types to be extended in a way where the reusability and sharing aspects of the Block Protocol are maintained, and a way for types to be duplicated in case extending types is insufficient.
 
