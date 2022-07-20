@@ -6,6 +6,7 @@ import {
   cloneElement,
   FunctionComponent,
   isValidElement,
+  ReactElement,
 } from "react";
 
 import { FRONTEND_URL } from "../lib/config";
@@ -17,7 +18,7 @@ export const isHrefExternal = (href: string | UrlObject) =>
   !href.startsWith(FRONTEND_URL);
 
 export interface BaseLinkProps extends Omit<NextLinkProps, "passHref"> {
-  children: React.ReactChild;
+  children: ReactElement | string | number;
 }
 
 /**

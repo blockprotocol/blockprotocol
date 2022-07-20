@@ -3,7 +3,7 @@ import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
 import { styled } from "@mui/material/styles";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { forwardRef, isValidElement } from "react";
+import { forwardRef, isValidElement, ReactNode } from "react";
 
 import { BaseLink, BaseLinkProps } from "./base-link";
 import { Button } from "./button";
@@ -42,7 +42,7 @@ export const BaseLinkWithAnchor = forwardRef<
 
 export type LinkProps = {
   activeClassName?: string;
-  children?: React.ReactNode;
+  children?: ReactNode;
 } & Omit<BaseLinkProps, "children" | "passHref"> &
   Omit<MuiLinkProps, "href" | "color">;
 

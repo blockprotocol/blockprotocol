@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import {
   ClipboardEventHandler,
+  FormEvent,
   FunctionComponent,
   ReactNode,
   useCallback,
@@ -225,7 +226,7 @@ export const VerificationCodeScreen: FunctionComponent<
       <Box
         width="100%"
         component="form"
-        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+        onSubmit={(event: FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           void handleSubmit(verificationCode);
         }}

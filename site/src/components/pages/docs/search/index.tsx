@@ -6,6 +6,7 @@ import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
 import {
   ChangeEvent,
+  FunctionComponent,
   KeyboardEvent,
   useEffect,
   useMemo,
@@ -48,7 +49,7 @@ type SearchProps = {
 
 const MAX_SEARCH_RESULTS = 10;
 
-export const Search: React.FunctionComponent<SearchProps> = ({
+export const Search: FunctionComponent<SearchProps> = ({
   variant = "desktop",
   closeModal,
 }) => {

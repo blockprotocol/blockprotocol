@@ -3,12 +3,12 @@ import {
   ServiceMessageDefinition,
 } from "@blockprotocol/core";
 import { Box, Typography } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, FunctionComponent } from "react";
 
 import { JsonSchema } from "../lib/json-schema";
 import { mdxComponents } from "./mdx/mdx-components";
 
-const DataType: React.FunctionComponent<{ propertySchema: JsonSchema }> = ({
+const DataType: FunctionComponent<{ propertySchema: JsonSchema }> = ({
   propertySchema,
 }) => {
   const MdxA = mdxComponents.a!;
@@ -31,7 +31,7 @@ const DataType: React.FunctionComponent<{ propertySchema: JsonSchema }> = ({
   );
 };
 
-const ServiceMessageData: React.FunctionComponent<{
+const ServiceMessageData: FunctionComponent<{
   data: ServiceMessageDefinition["data"];
 }> = ({ data }) => {
   const MdxCode = mdxComponents.code!;
@@ -100,7 +100,7 @@ const ServiceMessageData: React.FunctionComponent<{
   );
 };
 
-const ServiceMessage: React.FunctionComponent<{
+const ServiceMessage: FunctionComponent<{
   message: ServiceMessageDefinition;
 }> = ({ message }) => {
   const MdxCode = mdxComponents.code!;
@@ -169,7 +169,7 @@ const ServiceMessage: React.FunctionComponent<{
   );
 };
 
-export const ServiceMessageList: React.FunctionComponent<{
+export const ServiceMessageList: FunctionComponent<{
   serviceDefinition: ServiceDefinition;
 }> = ({ serviceDefinition }) => {
   return (

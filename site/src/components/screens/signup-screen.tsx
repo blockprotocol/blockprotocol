@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import {
+  FormEvent,
   FunctionComponent,
   ReactNode,
   useEffect,
@@ -50,7 +51,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
   const [signingUp, setSigningUp] = useState<boolean>(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setApiErrorMessage(undefined);
     setTouchedEmailInput(true);

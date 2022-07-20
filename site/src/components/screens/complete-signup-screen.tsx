@@ -1,5 +1,11 @@
 import { Box, Collapse, FormHelperText, Typography } from "@mui/material";
-import { FunctionComponent, ReactNode, useRef, useState } from "react";
+import {
+  FormEvent,
+  FunctionComponent,
+  ReactNode,
+  useRef,
+  useState,
+} from "react";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
@@ -46,7 +52,7 @@ export const CompleteSignupScreen: FunctionComponent<
     ? "You must choose a preferred name"
     : undefined;
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isShortnameValid && isPreferredNameValid) {
       setCompletingSignup(true);
