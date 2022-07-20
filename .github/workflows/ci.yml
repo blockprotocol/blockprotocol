@@ -223,7 +223,7 @@ jobs:
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site nyc report --reporter=lcov --reporter=text
+        run: yarn workspace @blockprotocol/site nyc report --reporter=json --reporter=text
 
       - name: Show DB logs
         if: ${{ success() || failure() }}
@@ -233,12 +233,11 @@ jobs:
         if: ${{ success() || failure() }}
         run: cat var/logs/frontend.log
 
-      - name: Upload artifact coverage
-        if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+      - uses: codecov/codecov-action@v3
         with:
-          name: site-integration-tests-coverage
-          path: site/coverage
+          files: site/coverage/coverage-final.json
+          fail_ci_if_error: true
+          verbose: true
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
