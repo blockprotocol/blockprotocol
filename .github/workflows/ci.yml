@@ -237,7 +237,6 @@ jobs:
         with:
           files: site/coverage/coverage-final.json
           fail_ci_if_error: true
-          verbose: true
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
