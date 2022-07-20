@@ -235,9 +235,10 @@ jobs:
 
       - uses: codecov/codecov-action@v3
         with:
-          root_dir: site
-          files: site/coverage/lcov.info
           fail_ci_if_error: true
+          files: coverage/lcov.info
+          root_dir: site
+          verbose: true
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
