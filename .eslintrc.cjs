@@ -38,8 +38,6 @@ module.exports = {
   ignorePatterns: ["**/*.gen.*"],
   globals: {
     NodeJS: true,
-    React: true,
-    JSX: true,
     FixMeLater: "readonly",
     globalThis: "readonly",
   },
