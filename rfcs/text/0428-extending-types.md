@@ -38,7 +38,7 @@ If the `Person` entity type contains required properties `name` and `age`, the `
 
 Type duplication can be seen as a literal copy of an entity type's contents, providing full control over any properties present on the source entity type. If a user wants to use the `Employee` entity type from above, removing the `occupation` property and adding a `tenure` in its place, it would have to be through duplication, as we are talking about overriding properties from `Employee`.
 
-Duplication can behave in different ways for extended types, such as acting on an "expanded" verison of an extended type where the duplicated type would inherit all properties from the type hierarchy and be able to change any of them **or** duplication could act on only an immediate (sub)type, and reuse any extended type declarations. Alternatively, a hybrid version of the two ways to duplicate could be used where materialization could happen up to a certain part of the type hierarchy before reusing extended type declarations.
+Duplication can behave in different ways for extended types, such as acting on an "expanded" verison of an extended type where the duplicated type would inherit all properties from the type hierarchy and be able to change any of them **or** duplication could act on only an immediate (sub)type, and reuse any extended type declarations. Alternatively, a hybrid version of the two ways to duplicate could be used where materialization could happen up to a certain part of the type hierarchy before reusing extended type declarations such that we empower partial consensus as outlined in the [Type System RFC](./0352-graph-type-system.md##convergence-and-divergence-of-consensus).
 
 As a consequence of the above definition, these questions arise:
 
