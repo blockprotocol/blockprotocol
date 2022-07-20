@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 
-test("Home page should contain key elements", async ({ page }) => {
+test("Home page should contain key elements", async ({ page, isMobile }) => {
   await page.goto("/");
 
   await expect(
@@ -45,21 +45,23 @@ test("Home page should contain key elements", async ({ page }) => {
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
   ).toBeGreaterThan(5);
 
-  const finalCTA = page.locator('[data-testid="final-cta"]');
+  if (!isMobile) {
+    const finalCTA = page.locator('[data-testid="final-cta"]');
 
-  // @todo: Add tests to handle authenticated users, they shouldn't see this section
-  await expect(finalCTA).toBeVisible();
+    // @todo: Add tests to handle authenticated users, they shouldn't see this section
+    await expect(finalCTA).toBeVisible();
 
-  await expect(
-    finalCTA.locator("text=Read the block builder guide"),
-  ).toHaveAttribute("href", "/docs/developing-blocks");
+    await expect(
+      finalCTA.locator("text=Read the block builder guide"),
+    ).toHaveAttribute("href", "/docs/developing-blocks");
 
-  await expect(
-    finalCTA.locator("text=Read the embedding app guide"),
-  ).toHaveAttribute("href", "/docs/embedding-blocks");
+    await expect(
+      finalCTA.locator("text=Read the embedding app guide"),
+    ).toHaveAttribute("href", "/docs/embedding-blocks");
 
-  await expect(finalCTA.locator("text=Log in")).toHaveAttribute(
-    "href",
-    "/login",
-  );
+    await expect(finalCTA.locator("text=Log in")).toHaveAttribute(
+      "href",
+      "/login",
+    );
+  }
 });
