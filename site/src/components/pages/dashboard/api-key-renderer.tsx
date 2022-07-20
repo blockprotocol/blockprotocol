@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useState, VoidFunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 import { Button } from "../../button";
 import { ApiKeyGeneratedIcon, CopyIcon } from "../../icons";
@@ -11,7 +11,7 @@ type ApiKeyRendererProps = {
   keyName: string;
 };
 
-export const ApiKeyRenderer: VoidFunctionComponent<ApiKeyRendererProps> = ({
+export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
   apiKey,
   closeModal,
   regenerate,

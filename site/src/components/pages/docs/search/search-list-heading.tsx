@@ -1,6 +1,6 @@
 import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { svgIconClasses } from "@mui/material";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 
 import { FontAwesomeIcon } from "../../../icons";
 import { LinkButton } from "../../../link-button";

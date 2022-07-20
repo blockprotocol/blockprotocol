@@ -1,5 +1,5 @@
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
-import { useState, VoidFunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
@@ -20,7 +20,7 @@ export interface TabPanelContentsWithOverviewProps {
   user: SerializedUser;
 }
 
-export const TabPanelContentsWithOverview: VoidFunctionComponent<
+export const TabPanelContentsWithOverview: FunctionComponent<
   TabPanelContentsWithOverviewProps
 > = ({ blocks, entityTypes, user }) => {
   const theme = useTheme();

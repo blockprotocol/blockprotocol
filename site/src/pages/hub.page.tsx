@@ -1,7 +1,6 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
-import { GetStaticProps } from "next";
+import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
-import { VFC } from "react";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import {
@@ -23,7 +22,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
   };
 };
 
-const HubPage: VFC<PageProps> = ({ catalog }) => {
+const HubPage: NextPage<PageProps> = ({ catalog }) => {
   return (
     <>
       <Head>

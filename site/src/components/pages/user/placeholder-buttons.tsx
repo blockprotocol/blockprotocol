@@ -1,11 +1,11 @@
 import { faHammer } from "@fortawesome/free-solid-svg-icons";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import { Button } from "../../button";
 import { FontAwesomeIcon, TableTreeIcon } from "../../icons";
 import { LinkButton } from "../../link-button";
 
-export const BuildBlockButton: VoidFunctionComponent = () => {
+export const BuildBlockButton: FunctionComponent = () => {
   return (
     <LinkButton
       variant="secondary"
@@ -18,7 +18,7 @@ export const BuildBlockButton: VoidFunctionComponent = () => {
   );
 };
 
-export const CreateSchemaButton: VoidFunctionComponent<{
+export const CreateSchemaButton: FunctionComponent<{
   onClick: () => void;
 }> = ({ onClick }) => {
   return (
@@ -33,7 +33,7 @@ export const CreateSchemaButton: VoidFunctionComponent<{
   );
 };
 
-export const BrowseHubButton: VoidFunctionComponent = () => {
+export const BrowseHubButton: FunctionComponent = () => {
   return (
     <LinkButton variant="secondary" href="/hub" sx={{ margin: 1 }}>
       Browse the Block Hub

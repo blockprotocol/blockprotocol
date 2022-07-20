@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { ReactNode, VoidFunctionComponent } from "react";
+import { FunctionComponent, ReactNode } from "react";
 
 export interface PlaceholderProps {
   header: ReactNode;
@@ -7,7 +7,7 @@ export interface PlaceholderProps {
   actions: ReactNode;
 }
 
-export const Placeholder: VoidFunctionComponent<PlaceholderProps> = ({
+export const Placeholder: FunctionComponent<PlaceholderProps> = ({
   header,
   tip,
   actions,

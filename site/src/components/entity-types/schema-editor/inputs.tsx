@@ -1,10 +1,10 @@
 import { Typography } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
-import { ChangeEvent, useEffect, useState, VoidFunctionComponent } from "react";
+import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 
 import { TextField } from "../../text-field";
 
-export const TextInputOrDisplay: VoidFunctionComponent<{
+export const TextInputOrDisplay: FunctionComponent<{
   clearOnUpdate?: boolean;
   placeholder?: string;
   readonly: boolean;
@@ -83,7 +83,7 @@ export const TextInputOrDisplay: VoidFunctionComponent<{
   );
 };
 
-export const ToggleInputOrDisplay: VoidFunctionComponent<{
+export const ToggleInputOrDisplay: FunctionComponent<{
   checked: boolean;
   onChange: (value: boolean) => void;
   readonly: boolean;
