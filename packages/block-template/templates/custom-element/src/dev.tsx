@@ -3,7 +3,7 @@
  * This file is not bundled with the block during the build process.
  */
 import { MockBlockDock } from "mock-block-dock";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 
 import packageJson from "../package.json";
 import ElementClass from "./index";
@@ -35,4 +35,4 @@ const DevApp = () => {
   );
 };
 
-ReactDOM.render(<DevApp />, node);
+render(<DevApp />, node);

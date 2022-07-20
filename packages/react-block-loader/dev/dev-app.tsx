@@ -5,7 +5,7 @@ import {
 } from "blockprotocol";
 import { MockBlockDock } from "mock-block-dock";
 import { FunctionComponent, useEffect, useState } from "react";
-import * as ReactDOM from "react-dom";
+import { render } from "react-dom";
 
 import { RemoteBlock, RemoteBlockProps } from "../src/remote-block";
 
@@ -118,4 +118,4 @@ const DevApp = () => {
   );
 };
 
-ReactDOM.render(<DevApp />, node);
+render(<DevApp />, node);

@@ -113,6 +113,7 @@ module.exports = {
       {
         styles: {
           react: { named: true },
+          "react-dom": { named: true },
         },
       },
     ],

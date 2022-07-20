@@ -1,5 +1,5 @@
 import { FunctionComponent, useState } from "react";
-import * as ReactDOM from "react-dom";
+import { render } from "react-dom";
 
 import { MockBlockDock } from "../src";
 import { TestCustomElementBlock } from "./test-custom-element-block";
@@ -94,4 +94,4 @@ const DevApp: FunctionComponent = () => {
   );
 };
 
-ReactDOM.render(<DevApp />, node);
+render(<DevApp />, node);
