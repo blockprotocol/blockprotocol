@@ -48,7 +48,7 @@ As a consequence of the above definition, these questions arise:
 
 ## Subtyping
 
-Compatibility between extended types is the ability to use the subtype in place of a supertype. [Prior art](https://en.wikipedia.org/wiki/Subtyping#Coercions) calls this `coercive subtyping` when it can happen implicitly.
+Compatibility between extended types is the ability to use the subtype in place of a supertype. [In academia](https://en.wikipedia.org/wiki/Subtyping#Coercions), this is `coercive subtyping` when it can happen implicitly.
 _Composition_ rather than inheritance allows us to have more guarantees about the relationship between subtypes and supertypes. If a subtype never modifies a supertype's inherited properties, we are sure that the supertype properties are left untouched, which eliminates the need for evaluating compatibility (i.e. no need for [`subsumption`](https://en.wikipedia.org/wiki/Subtyping#Subsumption), the concept of finding out whether or not a supertype is a supertype of a subtype or not).
 
 For example, an `Employee` instance looks as follows (simplified):
