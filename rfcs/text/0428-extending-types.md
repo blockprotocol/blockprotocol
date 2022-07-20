@@ -721,12 +721,12 @@ As described in the [Guide-level explanation](#multiple-supertypes), when extend
 
 - For each property (base URI on the top level of `properties`) that exists in multiple entity types:
 
-  - all entity types refer to the same versioned URI of the property **or** compatible versions of the property (through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible')
-  - none of the entity types define the property as an array **or** all define the property as an array with the _exact same_ cardinality constraints.
+  - all entity types refer to the same versioned URI of the property type **or** compatible versions of the property type (through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible')
+  - none of the entity types define the property type as an array **or** all define the property type as an array with the _exact same_ cardinality constraints.
 
 - For each link (versioned URI on the top level of `links`) that exists in multiple entity types:
 
-  - none of the entity types define the link as an array **or** all define the property as an array with the _exact same_ cardinality constraints (including `order`).
+  - none of the entity types define the link as an array **or** all define the property type as an array with the _exact same_ cardinality constraints (including `order`).
 
 ## Block Protocol implications
 
