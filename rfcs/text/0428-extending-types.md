@@ -1,4 +1,4 @@
-- Feature Name: extending-types
+- Feature Name: extending-and-duplicating-types
 - Start Date: 2022-07-11
 - RFC PR: [blockprotocol/blockprotocol#428](https://github.com/blockprotocol/blockprotocol/pull/428)
 - Block Protocol Discussion: [blockprotocol/blockprotocol#439](https://github.com/blockprotocol/blockprotocol/discussions/439)
@@ -7,9 +7,9 @@
 
 [summary]: #summary
 
-As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended to enhance reusability while giving more control to users (both block authors and users of embedding applications). Extending types can be considered the same as "type inheritance", but there are some important nuances that make these concepts different.
+As a follow-up to the [Graph type system RFC](./0352-graph-type-system.md), this RFC will describe the behavior of which types in the type system can be extended and duplicated to enhance reusability while giving more control to users (both block authors and users of embedding applications). Extending types can be considered the same as "type inheritance", but there are some important nuances that make these concepts different.
 
-This RFC is not set out to solve duplicating types or "forking", and this will be considered an unresolved problem in this RFC.
+Type duplication allows for modifying a type completely without restrictions on how, at the expense of the guarantees that can be made for type extension. Duplication can be considered the same as "forking".
 
 # Motivation
 
@@ -17,9 +17,9 @@ This RFC is not set out to solve duplicating types or "forking", and this will b
 
 Reusing public types in the type system comes with the potential disadvantage of not fully conforming to a user's intention. If a user is interested in a public type but needs certain additional properties to make the type usable for their use case, they would have to recreate the type themself in the current system.
 
-Allowing for types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain.
+Allowing for entity types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain. As an alternative to extending, type duplication (or type forking) is a less compatible way to make use of existing public types, without a direct data mapping strategy.
 
-This RFC introduces a way for types to be extended in a way where the reusability and sharing aspects of the Block Protocol are maintained.
+This RFC introduces a way for types to be extended in a way where the reusability and sharing aspects of the Block Protocol are maintained, and a way for types to be duplicated in case extending types is insufficient.
 
 # Guide-level explanation
 
@@ -32,12 +32,17 @@ For example, an `Employee` entity type could be an extended version of `Person`.
 
 If the `Person` entity type contains required properties `name` and `age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
 
+Type duplication can be seen as a literal copy of an entity type's contents, providing full control over any properties present on the source entity type. If a user wants to use the `Employee` entity type from above, removing the `occupation` property and adding a `tenure` in its place, it would have to be through duplication, as we are talking about overriding properties from `Employee`.
+
+Duplication can behave in different ways for extended types, such as acting on an "expanded" verison of an extended type where the duplicated type would inherit all properties from the type hierarchy and be able to change any of them **or** duplication could act on only an immediate (sub)type, and reuse any extended type declarations. Alternatively, a hybrid version of the two ways to duplicate could be used where materialization could happen up to a certain part of the type hierarchy before reusing extended type declarations.
+
 As a consequence of the above definition, these questions arise:
 
 - How do we ensure that `Employee` instances can, in fact, be used in place of `Person` instances in practice?
 - Do multiple supertypes impose constraints on extending types?
 - How does having `additionalProperties` in existing schemas influence extended types?
 - How should the Block Protocol type system support extending types?
+- What type duplication strategy should the Block Protocol support?
 
 ## Subtyping
 
@@ -131,7 +136,40 @@ Concrete examples of how JSON Schema breaks with these validation constraints ar
 Extended types will be defined with conventional JSON Schema syntax, the `allOf` keyword. An entity type can extend another entity type by adding an entry to `allOf` value with a versioned URI reference.
 Using a [versioned URI](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) makes it so that subtypes aren't automatically updated when the supertype is.
 
-As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about, and could lead to unpredictable behaviour.
+As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about, and could lead to unpredictable behavior.
+
+## Defining type duplication
+
+When looking for public types, if extending an entity type is not sufficient for a given situation, an alternative is to duplicate the type, such that individual properties can be overridden. Duplicated types become new complete, standalone types.
+
+Type duplication, unlike extended types, will not allow for direct substitution, as the types may be incompatible, thus requiring some sort of mapping (which is yet to be defined within the type system).
+
+Because of the behavior of type duplication, the Block Protocol wouldn't have to change much to support duplicating entity types, as it can be considered literal copying. Although having more explicit metadata about type duplication does, however, enable provenance for duplicated types. As such, any duplicated type should specify what origin entity type they are duplicates of through a new `forkedFrom` keyword. This keyword is added to the new entity type schema as duplication takes place and will be a URI reference to the exact type version being duplicated.
+
+### Duplication strategy
+
+As outlined in the beginning, duplication can take place in many different ways for entity types. Since entity types can extend other entity types in this proposal, duplication can happen at different conceptual locations. As an example, if a user wanted to redefine an `Employee` that has the following type hierarchy:
+
+```txt
+name◄─────Being───┐
+                  │
+          age◄────Person─────Employee
+                             │
+   occupation◄───────────────┘
+```
+
+where `Employee` is a subtype of `Person` which in turn is a subtype of `Being`. The three properties `name`, `age` and `occupation` would be present on `Employee` and considered all properties for `Employee`.
+The user wants to change the `age` property to a `tenure` property through duplication. They would have to create a new subtype of `Being` with the desired changes:
+
+```txt
+name◄─────Being───┐
+                  │
+       tenure◄────MyEmployee
+                  │
+   occupation◄────┘
+```
+
+From the perspective of the user duplicating a type, the `Person` and `Employee` entity types were squashed together or "expanded" in order for duplication to have the desired effect. The `Being` supertype relation is still kept, while changing a property on the `Employee`. But in the process, the entity type loses the ability to trivially be treated as a `Person`, as there is no subtyping relation with `Person` on the new `MyEmployee` duplicated type. `MyEmployee` would also have a `forkedFrom` reference to `Employee` for sake of provenance.
 
 ## Addressing previous considerations
 
@@ -328,8 +366,6 @@ which can be coerced into the following `Person` instance:
 }
 ```
 
-## Subtyping
-
 ### Problems with `unevaluatedProperties`
 
 `unevaluatedProperties` _almost_ provides the functionality we're after, but unfortunately it just barely misses. If supertypes themselves specify `{ "unevaluatedProperties": false }`, they are not able to be part of an `allOf` validator, as they will error out as soon as they see properties that are not part of the supertype itself.
@@ -433,6 +469,176 @@ the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/ent
 ### Liskov substitution principle
 
 Subtypes in the system can be used in place of the supertypes that they extend, similarly to what is expected in the Liskov substitution principle. Although our entity types do not contain behavior, the semantic meaning of individual properties on an entity type is captured on the property type definitions they refer to, which enables the ability to use the subtype in place of its supertype(s) "without altering any of the desirable properties of that program" [[source](https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle)].
+
+## Defining type duplication
+
+The Block Protocol meta schemas don't need to change to support type duplication, but to enable provenance the following addition is made for the Entity Type meta schema:
+
+```json
+{
+  "$id": "https://blockprotocol.org/type-system/0.2/schema/meta/entity-type",
+  "type": "object",
+  ...,
+  "properties": {
+    ...,
+    "forkedFrom": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "$comment": "Valid reference to an existing Entity Type version",
+          "type": "string",
+          "format": "uri"
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
+```
+
+When duplicating a type, the new type will have an entirely different URI and potentially a new `title`. The new type can be modified without any restrictions but will have a `forkedFrom` field added to its schema.
+
+As outlined in the [Guide-level explanation](#duplication-strategy), there may be different locations where type duplication can take effect. To maximize reusability, embedding applications should maximize supertype reuse and only duplicate parts of type hierarchies that are necessary to resolve property changes.
+
+### Examples of type duplications
+
+Given a _supertype_ `Person`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/person/v/1",
+  "type": "object",
+  "title": "Person",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/age": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/age"
+  ]
+}
+```
+
+and a _subtype_ `Employee`:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
+  "type": "object",
+  "title": "Employee",
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/occupation": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/occupation"
+  ]
+}
+```
+
+a user, Bob, wishes to use Alice's `Employee` entity type but must change the `occupation` property, turning it into a `tenure` property such that it suits their use case. Bob can duplicate the `Employee` type, and make the change as follows:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/1",
+  "type": "object",
+  "title": "Employee",
+  "forkedFrom": {
+    "$ref": "https://blockprotocol.org/@alice/entity-type/employee/v/1"
+  },
+  "allOf": [
+    { "$ref": "https://blockprotocol.org/@alice/entity-type/person/v/2" }
+  ],
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@bob/property-type/tenure": {
+      "$ref": "https://blockprotocol.org/@bob/property-type/tenure/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/tenure"
+  ]
+}
+```
+
+Bob can make a change to `Employee` (removing `occupation`) such that it is no longer compatible with Alice's `Employee` through type duplication. The new, duplicated `Employee` type still extends `Person` from the original type, allowing either `Employee` type to be used in place of (substituted with) the `Person` type.
+
+If a user wants to duplicate `Employee` but update a property present on `Person`, the entity type they're modifying acts like an entity type with all properties expanded. It is no longer possible for the user to subtype `Person` and instead they are creating a completely new type with no given `allOf` entries.
+
+The original, conceptually expanded `Employee` entity type:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@alice/entity-type/employee/v/1",
+  "type": "object",
+  "title": "Employee",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/age": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/age/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/occupation": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/age"
+    "https://blockprotocol.org/@alice/property-type/occupation"
+  ]
+}
+```
+
+This expanded entity is equivalent to the original `Employee` entity type, but without any extended type declaration. If Bob wanted to change the `age` property instead of `occupation`, that would be possible by duplicating this intermediate representation of `Employee` as follows:
+
+```json
+{
+  "kind": "entityType",
+  "$id": "https://blockprotocol.org/@bob/entity-type/employee/v/2",
+  "type": "object",
+  "title": "Employee",
+  "properties": {
+    "https://blockprotocol.org/@alice/property-type/name": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/name/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/tenure": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/tenure/v/1"
+    },
+    "https://blockprotocol.org/@alice/property-type/occupation": {
+      "$ref": "https://blockprotocol.org/@alice/property-type/occupation/v/1"
+    }
+  },
+  "required": [
+    "https://blockprotocol.org/@alice/property-type/name",
+    "https://blockprotocol.org/@alice/property-type/tenure"
+    "https://blockprotocol.org/@alice/property-type/occupation"
+  ]
+}
+```
+
+As the intermediate, expanded entity type does not declare any supertypes, we are unable to trivially substitute this version of Bob's `Employee` in place of `Person`.
 
 ## Detecting cycles
 
