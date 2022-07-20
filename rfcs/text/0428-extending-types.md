@@ -26,7 +26,7 @@ This RFC introduces a way for types to be extended in a way where the reusabilit
 [guide-level-explanation]: #guide-level-explanation
 
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
-Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified.
+Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified. This property of extended types is an explicit design decision, as types are still considered "reused" when they are extended. Extending types further empowers the idea of gradual convergence, as users can reuse publicly-available types they are not satisfied with.
 
 For example, an `Employee` entity type could be an extended version of `Person`. This `Employee` type could contain all of the properties of `Person` as well as having _additional_ domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
@@ -611,7 +611,7 @@ While not explained in detail in the Type System RFC the `aggregateEntities` ope
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-The general rationale for this way of handling extended types (which we may also call type inheritance) is that we want to keep supertypes and subtypes compatible with one another. Constraining the way type inheritance works makes it so that we can implicitly have "same as" relations across type inheritance trees. It also allows extending multiple supertypes which can lead to more expressive domain models.
+The general rationale for this way of handling extended types (which we may also call type inheritance) is that we want to keep supertypes and subtypes compatible with one another. Constraining the way type inheritance works makes it so that we can implicitly have "same as" relations across type inheritance trees. It also allows extending multiple supertypes which can lead to more expressive domain models. Furthermore, the proposed additions empower users to reuse publicly-available types in places where they would need to add properties to fit their domain.
 
 ## Problems and alternatives
 
@@ -677,6 +677,7 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 - We haven't specified how projecting/selecting properties of a supertype from a subtype instance is possible. It is an open question how we actually pick out the exact properties of a subtype to provide a valid supertype instance in embedding applications.
 - Duplicating types of "forking" is not solved by this RFC.
 - The current argument for not allowing cyclic type hierarchies mostly build on a feeling that type hierarchies shouldn't be too indirect/obfuscated, but there could be stronger arguments for allowing/disallowing it.
+- The decision to have type substitution between subtype and supertype does mean the extended types are restrictive in that they do not allow for removing/changing existing properties. Without a way to transform data between types, allowing overrides is not possible while keeping compatibility.
 
 # Future possibilities
 
