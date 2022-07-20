@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useContext, useState, VoidFunctionComponent } from "react";
+import { FunctionComponent, useContext, useState } from "react";
 import { tw } from "twind";
 
 import { JsonSchema } from "../../../lib/json-schema";
@@ -28,7 +28,7 @@ type AlertState = {
  * Currently unused
  * @todo use or remove this
  */
-export const SubSchemaItem: VoidFunctionComponent<SubSchemaItemProps> = ({
+export const SubSchemaItem: FunctionComponent<SubSchemaItemProps> = ({
   dispatchSchemaUpdate,
   subSchema,
   subSchemaReference,

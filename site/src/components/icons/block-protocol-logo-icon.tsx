@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
-export const BlockProtocolLogoIcon: FC<SvgIconProps> = ({
+export const BlockProtocolLogoIcon: FunctionComponent<SvgIconProps> = ({
   sx = [],
   ...remainingProps
 }) => {

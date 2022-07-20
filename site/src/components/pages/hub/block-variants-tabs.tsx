@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 type BlockVariantsTabsProps = {
   blockVariantsTab: number;
@@ -15,9 +15,11 @@ type BlockVariantsTabsProps = {
   setBlockVariantsTab: (newValue: number) => void;
 };
 
-export const BlockVariantsTabs: VoidFunctionComponent<
-  BlockVariantsTabsProps
-> = ({ blockVariantsTab, metadata, setBlockVariantsTab }) => {
+export const BlockVariantsTabs: FunctionComponent<BlockVariantsTabsProps> = ({
+  blockVariantsTab,
+  metadata,
+  setBlockVariantsTab,
+}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 

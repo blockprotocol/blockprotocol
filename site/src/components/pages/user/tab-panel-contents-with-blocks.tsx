@@ -1,4 +1,4 @@
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
@@ -12,7 +12,7 @@ export interface TabPanelContentsWithBlocksProps {
   user: SerializedUser;
 }
 
-export const TabPanelContentsWithBlocks: VoidFunctionComponent<
+export const TabPanelContentsWithBlocks: FunctionComponent<
   TabPanelContentsWithBlocksProps
 > = ({ blocks, user }) => {
   const userStatus = useUserStatus(user);

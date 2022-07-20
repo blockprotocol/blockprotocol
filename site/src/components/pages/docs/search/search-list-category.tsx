@@ -1,5 +1,5 @@
 import { Box, Collapse, Grid, Typography } from "@mui/material";
-import React, { FC, useMemo } from "react";
+import { FunctionComponent, ReactElement, useMemo } from "react";
 import { TransitionGroup } from "react-transition-group";
 
 import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
@@ -8,7 +8,7 @@ import SearchListItem from "./search-list-item";
 
 type SearchListCategoryProps = {
   title: string;
-  icon: JSX.Element;
+  icon: ReactElement;
   searchResults: AlgoliaResult[];
   getHighlight: (highlight: AlgoliaHighlightResult) => string;
   closeModal?: () => void;
@@ -18,7 +18,7 @@ type SearchListCategoryProps = {
   ) => void;
 };
 
-const SearchListCategory: FC<SearchListCategoryProps> = ({
+const SearchListCategory: FunctionComponent<SearchListCategoryProps> = ({
   title,
   icon,
   searchResults,

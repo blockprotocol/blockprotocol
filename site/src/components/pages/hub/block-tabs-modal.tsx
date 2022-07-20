@@ -1,5 +1,5 @@
 import { alpha, Box, Modal } from "@mui/material";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import { BlockDataTabPanels } from "./block-data-tab-panels";
 import { BlockDataTabs } from "./block-data-tabs";
@@ -17,7 +17,7 @@ interface BlockTabsModalProps {
   exampleGraph: BlockExampleGraph | null;
 }
 
-export const BlockTabsModal: VoidFunctionComponent<BlockTabsModalProps> = ({
+export const BlockTabsModal: FunctionComponent<BlockTabsModalProps> = ({
   open,
   setOpen,
   blockDataTab,

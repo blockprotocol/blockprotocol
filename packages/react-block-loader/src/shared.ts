@@ -1,9 +1,11 @@
+import { ReactElement } from "react";
+
 export type BlockNameWithNamespace = `@${string}/${string}`;
 
 export type UnknownBlock =
   | string
   | typeof HTMLElement
-  | ((...props: any[]) => JSX.Element);
+  | ((...props: any[]) => ReactElement);
 
 const textFromUrlRequestMessageType = "requestTextFromUrl";
 

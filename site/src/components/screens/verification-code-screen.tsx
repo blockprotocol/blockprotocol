@@ -1,12 +1,13 @@
 import { Box, Typography } from "@mui/material";
-import React, {
+import {
   ClipboardEventHandler,
+  FormEvent,
+  FunctionComponent,
   ReactNode,
   useCallback,
   useEffect,
   useRef,
   useState,
-  VFC,
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
@@ -49,7 +50,9 @@ type VerificationCodeScreenProps = {
 const parseVerificationCodeInput = (inputCode: string) =>
   inputCode.replace(/\s/g, "");
 
-export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
+export const VerificationCodeScreen: FunctionComponent<
+  VerificationCodeScreenProps
+> = ({
   verificationCodeInfo,
   email,
   initialVerificationCode,
@@ -223,7 +226,7 @@ export const VerificationCodeScreen: VFC<VerificationCodeScreenProps> = ({
       <Box
         width="100%"
         component="form"
-        onSubmit={(event: React.FormEvent<HTMLFormElement>) => {
+        onSubmit={(event: FormEvent<HTMLFormElement>) => {
           event.preventDefault();
           void handleSubmit(verificationCode);
         }}

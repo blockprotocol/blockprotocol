@@ -1,11 +1,13 @@
 import { HtmlBlockDefinition, renderHtmlBlock } from "@blockprotocol/core";
-import React, { useEffect, useRef, VFC } from "react";
+import { FunctionComponent, useEffect, useRef } from "react";
 
 type HtmlElementLoaderProps = {
   html: HtmlBlockDefinition;
 };
 
-export const HtmlLoader: VFC<HtmlElementLoaderProps> = ({ html }) => {
+export const HtmlLoader: FunctionComponent<HtmlElementLoaderProps> = ({
+  html,
+}) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const jsonDefinition = JSON.stringify(html);
