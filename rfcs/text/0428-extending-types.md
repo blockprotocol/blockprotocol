@@ -72,7 +72,7 @@ occupation◄─────────────────┘
 ```
 
 We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` property.
-Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types.
+Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types. The reason for selection/projection of properties being important for coercive subtyping will be explained in more detail in the coming sections, specifically in the [`additionalProperties` problem explanation section](#the-additionalproperties-problem).
 
 ## Multiple supertypes
 
@@ -123,7 +123,7 @@ occupation◄───────────────┘
 
 In this example, the array of `name`s on the `Superhero` type would not be compatible with the required `name` property of `Person`, which means that the two types cannot be supertypes together.
 
-## Additional properties on types
+## The `additionalProperties` problem
 
 In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system, having `{ "additionalProperties": false }` for all schemas is an assumption made for determining type compatibility, which means that any supertype will not validate against a subtype that adds properties if it receives all properties of a subtype instance. For example, if we supply the `Employee` instance from above to a `Person`, it will receive properties that are considered `additionalProperties` (the `occupation` property is not present on `Person`).
 
