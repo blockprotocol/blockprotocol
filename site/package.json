@@ -14,7 +14,7 @@
     "generate-blockmetadata-schema": "typescript-json-schema ../packages/@blockprotocol/core/dist/esm/types.d.ts BlockMetadata --required true --out public/schemas/block-metadata.json",
     "lint:tsc": "tsc --noEmit",
     "prepare": "patch-package && yarn exe scripts/prepare.ts",
-    "start": "next start"
+    "start": "yarn exe scripts/start.ts"
   },
   "dependencies": {
     "@aws-crypto/sha256-js": "2.0.1",

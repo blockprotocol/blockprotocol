@@ -22,8 +22,10 @@ const script = async () => {
 
   await import("./create-db-indexes");
 
+  // @todo Remove babel.config.json when next.config.js supports swcInstrumentCoverage
+  // https://github.com/vercel/next.js/pull/36692
   const babelConfigPath = path.resolve(process.cwd(), "babel.config.json");
-  if (process.env.INSTRUMENT_COVERAGE) {
+  if (process.env.CODE_COVERAGE) {
     await fs.writeJson(babelConfigPath, {
       presets: ["next/babel"],
       plugins: ["istanbul"],
