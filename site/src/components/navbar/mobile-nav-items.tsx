@@ -14,6 +14,7 @@ import {
   Dispatch,
   Fragment,
   FunctionComponent,
+  ReactElement,
   SetStateAction,
   useContext,
   useEffect,
@@ -29,7 +30,7 @@ import { generatePathWithoutParams } from "../shared";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
-  icon?: JSX.Element;
+  icon?: ReactElement;
   item: T;
   parentPageHref: T extends SiteMapPageSection ? string : undefined;
   depth?: number;
