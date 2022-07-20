@@ -315,10 +315,11 @@ const BlockPage: NextPage<BlockPageProps> = ({
               )}
               {blockMetadata.displayName}
             </Typography>
-            <Typography variant="bpBodyCopy">
-              <Box sx={{ color: theme.palette.gray[80] }}>
-                {blockMetadata.description}
-              </Box>
+            <Typography
+              variant="bpBodyCopy"
+              sx={{ color: theme.palette.gray[80] }}
+            >
+              {blockMetadata.description}
             </Typography>
             <Typography
               variant="bpSmallCopy"
@@ -387,6 +388,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   },
                 }}
                 mb={{ xs: 2, md: 0 }}
+                component="article"
               >
                 <MDXRemote
                   compiledSource={compiledReadme}
@@ -400,6 +402,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
                 <Typography
                   variant="bpLargeText"
+                  component="h2"
                   sx={{
                     fontWeight: "bold",
                     color: theme.palette.gray[80],
@@ -415,14 +418,18 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     sx={{ marginRight: 1.5 }}
                     src="/assets/link.svg"
                   />{" "}
-                  <Typography
-                    variant="bpSmallCopy"
-                    sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                  >
-                    <Link href={blockMetadata.repository}>
+                  <Link href={blockMetadata.repository}>
+                    <Typography
+                      variant="bpSmallCopy"
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        borderBottom: `2px solid currentColor`,
+                      }}
+                    >
                       {repositoryDisplayUrl}
-                    </Link>
-                  </Typography>
+                    </Typography>
+                  </Link>
                 </Box>
               </Box>
             ) : null}
