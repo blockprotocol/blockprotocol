@@ -1,9 +1,14 @@
 name: CI
-on: pull_request
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   linting:
     name: Linting
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -123,6 +128,7 @@ jobs:
 
   packages:
     name: NPM Packages
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
     env:
       BLOCK_NAME: test-block
@@ -167,6 +173,7 @@ jobs:
 
   site-integration-tests:
     name: "Site integration tests"
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
