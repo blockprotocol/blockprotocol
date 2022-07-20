@@ -223,7 +223,7 @@ jobs:
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site nyc report --reporter=json --reporter=text
+        run: yarn workspace @blockprotocol/site nyc report --reporter=lcovonly --reporter=text
 
       - name: Show DB logs
         if: ${{ success() || failure() }}
@@ -235,7 +235,8 @@ jobs:
 
       - uses: codecov/codecov-action@v3
         with:
-          files: site/coverage/coverage-final.json
+          root_dir: site
+          files: site/coverage/lcov.info
           fail_ci_if_error: true
 
       - name: Upload artifact playwright-report
