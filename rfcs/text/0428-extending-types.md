@@ -27,6 +27,8 @@ This RFC introduces a way for types to be extended in a way where the reusabilit
 
 [guide-level-explanation]: #guide-level-explanation
 
+> ⭐ The use of 'types' throughout this RFC, it can be assume to refer to _entity types_ specifically unless stated otherwise.
+
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
 Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified. This property of extended types is an explicit design decision, as types are still considered "reused" when they are extended. Extending types further empowers the idea of gradual convergence, as users can reuse publicly-available types they are not satisfied with.
 
@@ -133,14 +135,14 @@ We propose slight modifications to how `{ "additionalProperties": true }` and `{
 
 Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#problems-with-unevaluatedproperties)
 
-## Defining extended types
+## Defining extended entity types
 
 Extended types will be defined with conventional JSON Schema syntax, the `allOf` keyword. An entity type can extend another entity type by adding an entry to `allOf` value with a versioned URI reference.
 Using a [versioned URI](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) makes it so that subtypes aren't automatically updated when the supertype is.
 
 As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about, and could lead to unpredictable behavior.
 
-## Defining type duplication
+## Defining entity type duplication
 
 When looking for public types, if extending an entity type is not sufficient for a given situation, an alternative is to duplicate the type, such that individual properties can be overridden. Duplicated types become new complete, standalone types.
 
@@ -185,7 +187,7 @@ As the new Block Protocol type system doesn't require a delta-based storage appr
 
 [reference-level-explanation]: #reference-level-explanation
 
-## Defining extended types
+## Defining extended entity types
 
 In the Block Protocol, we will allow type extension through the `allOf` JSON Schema keyword which specifies an array of schemas that will have to validate together.
 
@@ -216,7 +218,7 @@ We'll add the following fields to the existing Entity Type meta schema definitio
 }
 ```
 
-### Concrete examples of extended types
+### Concrete examples of extended entity types
 
 **An example of _disjoint_ properties**:
 
@@ -472,7 +474,7 @@ the resolved schema residing at `{ "$ref": "https://blockprotocol.org/@alice/ent
 
 Subtypes in the system can be used in place of the supertypes that they extend, similarly to what is expected in the Liskov substitution principle. Although our entity types do not contain behavior, the semantic meaning of individual properties on an entity type is captured on the property type definitions they refer to, which enables the ability to use the subtype in place of its supertype(s) "without altering any of the desirable properties of that program" [[source](https://en.wikipedia.org/wiki/Liskov_substitution_principle#Principle)].
 
-## Defining type duplication
+## Defining entity type duplication
 
 The Block Protocol meta schemas don't need to change to support type duplication, but to enable provenance the following addition is made for the Entity Type meta schema:
 
