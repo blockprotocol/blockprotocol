@@ -1,5 +1,5 @@
 import { GetStaticProps } from "next";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { AnyFramework } from "../components/pages/home/anyframework";
 import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
@@ -29,7 +29,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
   };
 };
 
-const HomePage: VFC<PageProps> = ({ catalog }) => {
+const HomePage: FunctionComponent<PageProps> = ({ catalog }) => {
   const { user } = useUser();
   return (
     <>

@@ -58,13 +58,12 @@ const graphService = new GraphEmbedderHandler({
 
 For React embedding applications, we provide a `useGraphEmbedderService` hook, which accepts a `ref` to an element, and optionally any additional constructor arguments you wish to pass.
 
-```javascript
-import React from "react";
-
+```tsx
 import { useGraphEmbedderService } from "@blockprotocol/graph";
+import { useRef } from "react";
 
 export const App = () => {
-  const wrappingRef = React.useRef < HTMLDivElement > null;
+  const wrappingRef = useRef<HTMLDivElement>(null);
 
   const blockEntity = { entityId: "123", properties: { name: "Bob" } };
 

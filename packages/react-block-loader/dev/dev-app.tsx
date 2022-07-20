@@ -4,8 +4,8 @@ import {
   BlockProtocolProps,
 } from "blockprotocol";
 import { MockBlockDock } from "mock-block-dock";
-import React, { useEffect, useState, VoidFunctionComponent } from "react";
-import * as ReactDOM from "react-dom";
+import { FunctionComponent, useEffect, useState } from "react";
+import { render } from "react-dom";
 
 import { RemoteBlock, RemoteBlockProps } from "../src/remote-block";
 
@@ -42,7 +42,7 @@ const blockDependencies: Record<string, any> = {
   /* eslint-enable global-require */
 };
 
-const MockBlockToRemoteBlock: VoidFunctionComponent<
+const MockBlockToRemoteBlock: FunctionComponent<
   BlockProtocolProps & { componentId: string }
 > = ({ componentId, ...props }) => {
   const [blockMetadata, setBlockMetadata] = useState<BlockMetadata | null>(
@@ -118,4 +118,4 @@ const DevApp = () => {
   );
 };
 
-ReactDOM.render(<DevApp />, node);
+render(<DevApp />, node);

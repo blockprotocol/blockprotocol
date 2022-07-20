@@ -38,6 +38,9 @@
       "suppress-exit-code prettier --write"
     ]
   },
+  "resolutions": {
+    "@types/react": "^18.0.0"
+  },
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-react": "^7.16.7",

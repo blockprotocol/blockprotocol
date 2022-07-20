@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, VoidFunctionComponent } from "react";
+import { FunctionComponent, useCallback, useEffect, useRef } from "react";
 
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 
@@ -8,7 +8,7 @@ export interface SandboxedBlockProps {
   sandboxBaseUrl: string;
 }
 
-export const SandboxedBlockDemo: VoidFunctionComponent<SandboxedBlockProps> = ({
+export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
   metadata,
   props,
   sandboxBaseUrl,

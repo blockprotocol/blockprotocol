@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, VoidFunctionComponent } from "react";
+import { FormEvent, FunctionComponent, useState } from "react";
 import { tw } from "twind";
 
 import { JsonSchema } from "../../../lib/json-schema";
@@ -19,7 +19,7 @@ const thClasses = tw`sticky first:rounded-tl-2xl last:rounded-tr-2xl ${cellPaddi
 export const trClasses = tw`border border-gray-100 rounded-2xl odd:bg-gray-50 even:bg-gray-100`;
 export const tdClasses = tw`${cellPadding}`;
 
-export const SchemaPropertiesTable: VoidFunctionComponent<
+export const SchemaPropertiesTable: FunctionComponent<
   SchemaPropertiesTableProps
 > = ({ readonly, selectedSchema, dispatchSchemaUpdate }) => {
   const { properties, required } = selectedSchema;

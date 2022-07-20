@@ -1,10 +1,5 @@
 import { Paper, PaperProps, Typography } from "@mui/material";
-import {
-  Children,
-  isValidElement,
-  ReactNode,
-  VoidFunctionComponent,
-} from "react";
+import { Children, FunctionComponent, isValidElement, ReactNode } from "react";
 
 export type InfoCardVariant = "info" | "warning";
 
@@ -26,7 +21,7 @@ type InfoCardProps = {
   sx?: PaperProps["sx"];
 };
 
-export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
+export const InfoCard: FunctionComponent<InfoCardProps> = ({
   variant = "info",
   title,
   children,

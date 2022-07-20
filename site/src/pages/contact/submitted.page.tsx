@@ -1,6 +1,5 @@
 import { Container, Typography } from "@mui/material";
 import { NextPage } from "next";
-import React from "react";
 import { tw } from "twind";
 
 import { Button } from "../../components/button";

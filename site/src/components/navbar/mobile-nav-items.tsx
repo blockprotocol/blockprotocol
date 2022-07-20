@@ -13,11 +13,12 @@ import { useRouter } from "next/router";
 import {
   Dispatch,
   Fragment,
+  FunctionComponent,
+  ReactElement,
   SetStateAction,
   useContext,
   useEffect,
   useState,
-  VFC,
 } from "react";
 
 import SiteMapContext from "../../context/site-map-context";
@@ -29,7 +30,7 @@ import { generatePathWithoutParams } from "../shared";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
-  icon?: JSX.Element;
+  icon?: ReactElement;
   item: T;
   parentPageHref: T extends SiteMapPageSection ? string : undefined;
   depth?: number;
@@ -245,7 +246,9 @@ const getInitialExpandedItems = ({
     : [];
 };
 
-export const MobileNavItems: VFC<MobileNavItemsProps> = ({ onClose }) => {
+export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
+  onClose,
+}) => {
   const { asPath } = useRouter();
   const { pages } = useContext(SiteMapContext);
 

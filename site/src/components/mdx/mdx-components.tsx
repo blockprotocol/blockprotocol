@@ -14,7 +14,6 @@ import {
   HTMLProps,
   isValidElement,
   ReactNode,
-  VFC,
 } from "react";
 import slugify from "slugify";
 
@@ -46,10 +45,10 @@ const Heading = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 | 5 }> = ({
-  depth,
-  anchor,
-}) => {
+const HeadingAnchor: FunctionComponent<{
+  anchor: string;
+  depth: 1 | 2 | 3 | 4 | 5;
+}> = ({ depth, anchor }) => {
   const size = depth === 1 ? 28 : depth === 2 ? 24 : depth === 3 ? 20 : 16;
   return (
     <Link

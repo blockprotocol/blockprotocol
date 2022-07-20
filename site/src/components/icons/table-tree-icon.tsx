@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
-export const TableTreeIcon: FC<SvgIconProps> = (props) => {
+export const TableTreeIcon: FunctionComponent<SvgIconProps> = (props) => {
   return (
     <SvgIcon width="1em" height="1em" {...props} viewBox="0 0 24 24">
       <path

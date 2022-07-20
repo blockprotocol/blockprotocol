@@ -1,6 +1,6 @@
 import { MenuItem } from "@mui/material";
 import Select from "@mui/material/Select";
-import { ReactNode, useContext, useMemo, VoidFunctionComponent } from "react";
+import { FunctionComponent, ReactNode, useContext, useMemo } from "react";
 import { tw } from "twind";
 
 import { JsonSchema } from "../../../lib/json-schema";
@@ -23,7 +23,7 @@ type SchemaPropertyTypeListProps = {
   updatePermittedType?: (newType: string) => void; // @todo support selecting multiple types
 };
 
-const PropertyTypeDisplay: VoidFunctionComponent<
+const PropertyTypeDisplay: FunctionComponent<
   Omit<SchemaPropertyTypeListProps, "readonly" | "updatePermittedType">
 > = ({ $ref, hasSubSchema, propertyName, type }) => {
   const { generateAbsoluteSchemaLink } = useContext(SchemaOptionsContext) ?? {};
@@ -53,7 +53,7 @@ const PropertyTypeDisplay: VoidFunctionComponent<
   );
 };
 
-const PropertyTypeSelect: VoidFunctionComponent<
+const PropertyTypeSelect: FunctionComponent<
   Omit<
     SchemaPropertyTypeListProps,
     "hasSubSchema" | "GoToSchemaElement" | "propertyName" | "readonly"
@@ -127,7 +127,7 @@ const PropertyTypeSelect: VoidFunctionComponent<
   );
 };
 
-export const SchemaPropertyTypeList: VoidFunctionComponent<
+export const SchemaPropertyTypeList: FunctionComponent<
   SchemaPropertyTypeListProps
 > = ({ readonly, ...props }) => {
   if (!readonly) {
