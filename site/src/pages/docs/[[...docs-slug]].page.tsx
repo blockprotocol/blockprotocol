@@ -46,7 +46,7 @@ export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
 export const getStaticProps: GetStaticProps<
   DocsPageProps,
   DocsPageQueryParams
-> = async ({ params }) => {
+> = async ({ params, locale = "en-US" }) => {
   const docsSlug = (params || {})["docs-slug"];
 
   // As of Jan 2022, { fallback: false } in getStaticPaths does not prevent Vercel
@@ -64,6 +64,9 @@ export const getStaticProps: GetStaticProps<
     return {
       props: {
         serializedPage,
+        messages: {
+          ...(await import(`../../locales/${locale}/common.json`)).default,
+        },
       },
     };
   } catch {

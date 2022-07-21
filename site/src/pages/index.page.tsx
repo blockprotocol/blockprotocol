@@ -23,9 +23,17 @@ interface PageProps {
   catalog: BlockMetadata[];
 }
 
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
+export const getStaticProps: GetStaticProps<PageProps> = async ({
+  locale = "en",
+}) => {
   return {
-    props: { catalog: excludeHiddenBlocks(await readBlocksFromDisk()) },
+    props: {
+      catalog: excludeHiddenBlocks(await readBlocksFromDisk()),
+      messages: {
+        ...(await import(`../locales/${locale}/index.json`)).default,
+        ...(await import(`../locales/${locale}/common.json`)).default,
+      },
+    },
   };
 };
 

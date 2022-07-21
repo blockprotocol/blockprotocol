@@ -8,6 +8,7 @@ import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { Router, useRouter } from "next/router";
+import { NextIntlProvider } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TagManager from "react-gtm-module";
 
@@ -98,28 +99,30 @@ const MyApp = ({
   );
 
   return (
-    <UserContext.Provider value={userContextValue}>
-      <SiteMapContext.Provider value={siteMap}>
-        <CacheProvider value={emotionCache}>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <PageLayout>
-              <Head>
-                <title>
-                  Block Protocol - an open standard for data-driven blocks
-                </title>
-                <meta itemProp="name" content="Block Protocol" />
-                <meta
-                  itemProp="description"
-                  content="An open standard for data-driven blocks"
-                />
-              </Head>
-              <Component {...pageProps} />
-            </PageLayout>
-          </ThemeProvider>
-        </CacheProvider>
-      </SiteMapContext.Provider>
-    </UserContext.Provider>
+    <NextIntlProvider messages={pageProps.messages}>
+      <UserContext.Provider value={userContextValue}>
+        <SiteMapContext.Provider value={siteMap}>
+          <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <PageLayout>
+                <Head>
+                  <title>
+                    Block Protocol - an open standard for data-driven blocks
+                  </title>
+                  <meta itemProp="name" content="Block Protocol" />
+                  <meta
+                    itemProp="description"
+                    content="An open standard for data-driven blocks"
+                  />
+                </Head>
+                <Component {...pageProps} />
+              </PageLayout>
+            </ThemeProvider>
+          </CacheProvider>
+        </SiteMapContext.Provider>
+      </UserContext.Provider>
+    </NextIntlProvider>
   );
 };
 

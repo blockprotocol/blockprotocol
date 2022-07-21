@@ -192,5 +192,16 @@ const LoginPage: NextPage = () => {
     </Box>
   );
 };
-
+/**
+ * used to create an index of all available blocks, the catalog
+ */
+export const getStaticProps = async ({ locale = "en-US" }) => {
+  return {
+    props: {
+      messages: {
+        ...(await import(`../locales/${locale}/common.json`)).default,
+      },
+    },
+  };
+};
 export default LoginPage;

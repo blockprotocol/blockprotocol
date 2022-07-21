@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
+import { useTranslations } from "next-intl";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
@@ -146,6 +147,7 @@ const useScrollingNavbar = (
 // @todo remove asPath from Navbar
 export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
   const theme = useTheme();
+  const translate = useTranslations("auth");
   const { asPath, pathname } = useRouter();
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
@@ -323,13 +325,13 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                           color: "currentColor",
                         }}
                       >
-                        Log In
+                        {translate("login")}
                       </Typography>
                     </Link>
                   )}
                   {user !== "loading" && !user?.isSignedUp ? (
                     <LinkButton href="/signup" size="small" variant="primary">
-                      Sign Up
+                      {translate("signup")}
                     </LinkButton>
                   ) : null}
                 </>
