@@ -1,5 +1,7 @@
 import { expect, test } from "@playwright/test";
 
+import blocksData from "../../blocks-data.json";
+
 test("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
 
@@ -17,11 +19,6 @@ test("Hub page should contain key elements", async ({ page }) => {
     await page.locator('[data-testid="block-card"]').count(),
   ).toBeGreaterThan(5);
 
-  await expect(page.locator("text=build your own blocks")).toHaveAttribute(
-    "href",
-    "/docs/developing-blocks",
-  );
-
   await expect(page.locator("text=Quickstart guide")).toHaveAttribute(
     "href",
     "/docs/developing-blocks",
@@ -31,4 +28,45 @@ test("Hub page should contain key elements", async ({ page }) => {
     "href",
     "/docs/developing-blocks",
   );
+});
+
+const codeBlock = blocksData.find(
+  ({ name }) => name === "@hashintel/block-code",
+);
+
+test("Block Card should contain key elements", async ({ page }) => {
+  expect(
+    codeBlock,
+    "Code block should be prepared before this test",
+  ).toBeDefined();
+
+  if (!codeBlock) {
+    return;
+  }
+
+  await page.goto("/hub");
+
+  const codeBlockLocator = page.locator('[data-testid="block-card"]', {
+    hasText: codeBlock.displayName,
+  });
+
+  await expect(codeBlockLocator).toHaveAttribute(
+    "href",
+    codeBlock.blockPackagePath,
+  );
+
+  // there should be 2 images present => icon and preview image
+  await expect(codeBlockLocator.locator("img")).toHaveCount(2);
+
+  await expect(
+    codeBlockLocator.locator(`text=${codeBlock.description}`),
+  ).toBeVisible();
+
+  await expect(
+    codeBlockLocator.locator(`text=@${codeBlock.author}`),
+  ).toBeVisible();
+
+  await expect(
+    codeBlockLocator.locator(`text=${codeBlock.version}`),
+  ).toBeVisible();
 });
