@@ -2,21 +2,11 @@ import type { Page } from "playwright";
 import { expect, test } from "playwright-test-coverage";
 
 const openMobileNav = async (page: Page) => {
-  if (await page.locator("[data-testid='mobile-nav']").isVisible()) {
-    return;
-  }
-  await expect(
-    page.locator("[data-testid='mobile-nav-trigger']"),
-  ).toBeVisible();
   await page.locator("[data-testid='mobile-nav-trigger']").click();
   await expect(page.locator("[data-testid='mobile-nav']")).toBeVisible();
 };
 
 test("page header navigation works", async ({ page, isMobile }) => {
-  if (isMobile) {
-    test.skip();
-  }
-
   await page.goto("/");
 
   const navSelector = page.locator(
@@ -29,7 +19,6 @@ test("page header navigation works", async ({ page, isMobile }) => {
 
   await navSelector.locator("text=Block Hub").click();
   await expect(page).toHaveURL("/hub");
-
   await expect(
     page.locator(
       'h1:has-text("Interactive, data-driven blocks to use in your projects")',
@@ -44,38 +33,34 @@ test("page header navigation works", async ({ page, isMobile }) => {
   await expect(page).toHaveURL("/docs");
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
-  if (isMobile) {
-    await openMobileNav(page);
-  }
-
-  await navSelector.locator("text=Log In").click();
-  await expect(page).toHaveURL("/docs");
-  await expect(page.locator("text=Sign in to theBlock Protocol")).toBeVisible();
-
-  await page.locator("text=Close").click();
-  await expect(page).toHaveURL("/docs");
-  await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
-
-  if (isMobile) {
-    await openMobileNav(page);
-  }
-
-  // @todo: fix error mobile nav isn't visible at this point
-  await navSelector.locator("text=Sign Up").click();
-  await expect(page).toHaveURL("/signup");
-  await expect(
-    page.locator("text=Create your Block Protocol account"),
-  ).toBeVisible();
-
   // TODO: Add alt to BP logo, ensure that the logo is not clickable from /
   await page.locator("header svg").first().click();
   await expect(page).toHaveURL("/");
   await expect(
     page.locator("text=The open standard for building block-based interfaces"),
   ).toBeVisible();
+
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await navSelector.locator("text=Sign Up").click();
+  await expect(page).toHaveURL("/signup");
+  await expect(
+    page.locator("text=Create your Block Protocol account"),
+  ).toBeVisible();
+
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await navSelector.locator("text=Log In").click();
+  await expect(page.locator("text=Sign in to theBlock Protocol")).toBeVisible();
+  await expect(page).toHaveURL("/signup");
 });
 
 test("triggers for search modal work", async ({ page, isMobile }) => {
+  // this flow doesn't exist on mobile
   if (isMobile) {
     test.skip();
   }

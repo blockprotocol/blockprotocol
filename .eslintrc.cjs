@@ -356,7 +356,7 @@ module.exports = {
       },
     },
     {
-      files: ["site/playwright.config.ts", "site/tests/**"],
+      files: ["site/playwright.config.ts"],
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
@@ -375,17 +375,9 @@ module.exports = {
       },
     },
     {
-      files: ["**/__mocks__/*", "*.test.ts", "*.test.tsx"],
-      env: {
-        "jest/globals": true,
-      },
+      files: ["site/tests/**"],
       rules: {
-        "import/no-extraneous-dependencies": [
-          "error",
-          {
-            devDependencies: true,
-          },
-        ],
+        "import/no-extraneous-dependencies": "off",
       },
     },
     {
