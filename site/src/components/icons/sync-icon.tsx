@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
-export const SyncIcon: VFC<SvgIconProps> = (props) => {
+export const SyncIcon: FunctionComponent<SvgIconProps> = (props) => {
   return (
     <SvgIcon {...props} width="44" height="44" viewBox="0 0 44 44" fill="none">
       <path

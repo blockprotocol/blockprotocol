@@ -1,5 +1,5 @@
 import { Box, BoxProps, experimental_sx as sx, styled } from "@mui/material";
-import { ChangeEvent, VoidFunctionComponent } from "react";
+import { ChangeEvent, FunctionComponent } from "react";
 
 import { Snippet } from "../../snippet";
 import { BlockSchema } from "./hub-utils";
@@ -46,9 +46,14 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
 
 export const blockPreviewAndDataHeight = 500;
 
-export const BlockDataTabPanels: VoidFunctionComponent<
-  BlockDataTabPanelProps
-> = ({ blockDataTab, schema, exampleGraph, text, setText, modalOpen }) => {
+export const BlockDataTabPanels: FunctionComponent<BlockDataTabPanelProps> = ({
+  blockDataTab,
+  schema,
+  exampleGraph,
+  text,
+  setText,
+  modalOpen,
+}) => {
   const modalHeight = modalOpen ? "60vh" : blockPreviewAndDataHeight;
 
   return (

@@ -1,4 +1,4 @@
-import { forwardRef, VoidFunctionComponent } from "react";
+import { forwardRef, FunctionComponent, ReactNode } from "react";
 
 import { BaseLink, BaseLinkProps } from "./base-link";
 import { Button, ButtonProps } from "./button";
@@ -6,10 +6,10 @@ import { Button, ButtonProps } from "./button";
 export interface LinkButtonProps
   extends Omit<ButtonProps, "href">,
     Omit<BaseLinkProps, "children" | "onClick" | "onMouseEnter"> {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const LinkButton: VoidFunctionComponent<LinkButtonProps> = forwardRef(
+export const LinkButton: FunctionComponent<LinkButtonProps> = forwardRef(
   ({ href, ...rest }, ref) => {
     return (
       <BaseLink href={href}>

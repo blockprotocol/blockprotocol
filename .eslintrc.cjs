@@ -38,8 +38,6 @@ module.exports = {
   ignorePatterns: ["**/*.gen.*"],
   globals: {
     NodeJS: true,
-    React: true,
-    JSX: true,
     FixMeLater: "readonly",
     globalThis: "readonly",
   },
@@ -110,6 +108,15 @@ module.exports = {
     "jsx-a11y/no-autofocus": "off",
     "no-plusplus": "off",
     "unicorn/filename-case": "error",
+    "unicorn/import-style": [
+      "error",
+      {
+        styles: {
+          react: { named: true },
+          "react-dom": { named: true },
+        },
+      },
+    ],
     "prefer-destructuring": "off",
     "no-else-return": "off",
     "arrow-body-style": "off",
@@ -279,6 +286,11 @@ module.exports = {
             ...sharedNoRestrictedImportsConfig,
             paths: [
               ...sharedNoRestrictedImportsConfig.paths,
+              {
+                name: "react",
+                importNames: ["FC", "VFC", "VoidFunctionComponent"],
+                message: "Please use FunctionComponent instead.",
+              },
               {
                 name: "@mui/material",
                 importNames: ["Link"],

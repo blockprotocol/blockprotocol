@@ -1,5 +1,5 @@
 import { Box, BoxProps, Tab, Tabs, Typography } from "@mui/material";
-import { FC, VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { BaseLink } from "../../base-link";
 
@@ -29,7 +29,7 @@ type TabHeaderProps = {
   userShortname: string;
 };
 
-export const TabHeader: VFC<TabHeaderProps> = ({
+export const TabHeader: FunctionComponent<TabHeaderProps> = ({
   activeTab,
   tabItemsCount,
   userShortname,
@@ -113,7 +113,7 @@ type TabPanelProps = {
   activeTab: string;
 } & BoxProps;
 
-export const TabPanel: FC<TabPanelProps> = ({
+export const TabPanel: FunctionComponent<TabPanelProps> = ({
   value,
   activeTab,
   index,

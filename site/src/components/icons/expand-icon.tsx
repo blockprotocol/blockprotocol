@@ -1,7 +1,9 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
-export const ExpandIcon: FC<SvgIconProps> = ({ ...svgProps }) => {
+export const ExpandIcon: FunctionComponent<SvgIconProps> = ({
+  ...svgProps
+}) => {
   return (
     <SvgIcon
       width="32"
