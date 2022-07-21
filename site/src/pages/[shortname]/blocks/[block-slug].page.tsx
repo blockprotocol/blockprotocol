@@ -299,8 +299,8 @@ const BlockPage: NextPage<BlockPageProps> = ({
                 <Box
                   sx={{
                     display: "inline-block",
-                    height: "1em",
-                    width: "1em",
+                    height: 44,
+                    width: 44,
                     mr: 2,
                   }}
                   component="img"
@@ -310,7 +310,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
               <Typography
                 sx={{ display: { xs: "flex", md: "unset" } }}
                 variant="bpHeading1"
-                mt={2}
               >
                 {blockMetadata.displayName}
               </Typography>

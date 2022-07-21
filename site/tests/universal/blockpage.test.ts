@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 import blocksData from "../../blocks-data.json";
+import { sleep } from "../shared/sleep";
 
 const codeBlock = blocksData.find(
   ({ name }) => name === "@hashintel/block-code",
@@ -10,7 +11,7 @@ const unsupportedBlock = blocksData.find(
   ({ name }) => name === "@hashintel/block-embed",
 );
 
-test("Block page should contain key elements", async ({ page }) => {
+test("Block page should contain key elements", async ({ page, isMobile }) => {
   test.skip();
   expect(
     codeBlock,
@@ -36,24 +37,45 @@ test("Block page should contain key elements", async ({ page }) => {
   );
   await expect(page.locator(`text=V${codeBlock.version}`)).toBeVisible();
 
-  await expect(
-    page.locator(".MuiTabs-root >> text=Block Properties"),
-  ).toBeVisible();
+  const blockExample = codeBlock.examples[0] as Record<string, string>;
 
-  await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
-    JSON.stringify(codeBlock.examples[0], null, 2),
-  );
+  if (isMobile) {
+    //
+    await expect(page.locator("text=Source Code")).toBeVisible();
+    await page.locator("text=Source Code").click();
+    await expect(page.locator("text=Data Source")).toBeVisible();
+    await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
+      JSON.stringify(blockExample, null, 2),
+    );
 
-  // sandboxed block should be visible
-  await expect(page.locator("iframe[title='block']")).toBeVisible(); // perhaps use waitFor?
-  await expect(
-    page.locator(
-      `iframe[title='block'] >> text=${codeBlock.examples[0]!.caption}`,
-    ),
-  );
+    await page.locator("text=Data Source").click();
+    await page.locator("text=Block Schema").click();
 
-  await page.locator(".MuiTabs-root >> text=Block Schema").click();
-  await expect(page.locator("#simple-tabpanel-1")).toBeVisible();
+    await expect(page.locator("#simple-tabpanel-1")).toBeVisible();
+
+    await page.locator("text=Preview").click();
+
+    await expect(page.locator("iframe[title='block']")).toBeVisible();
+
+    await expect(
+      page
+        .locator(`iframe[title='block'] >> text=${blockExample.caption}`)
+        .toHaveValue(blockExample.caption!),
+    );
+  } else {
+    await expect(page.locator("text=Block Properties")).toBeVisible();
+    await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
+      JSON.stringify(blockExample, null, 2),
+    );
+
+    await page.locator("text=Block Schema").click();
+    await expect(page.locator("#simple-tabpanel-1")).toBeVisible();
+
+    await expect(page.locator("iframe[title='block']")).toBeVisible();
+    await expect(
+      page.frameLocator("iframe[title='block']").locator("input"),
+    ).toHaveValue(blockExample.caption!);
+  }
 
   // check if readme was displayed
   await expect(page.locator("article")).toBeVisible();
@@ -77,6 +99,7 @@ test("Block page should contain key elements", async ({ page }) => {
 
 test("updating block properties should update block preview", async ({
   page,
+  isMobile,
 }) => {
   expect(
     codeBlock,
@@ -88,34 +111,45 @@ test("updating block properties should update block preview", async ({
 
   await page.goto(codeBlock.blockPackagePath);
 
-  await expect(
-    page.locator(".MuiTabs-root >> text=Block Properties"),
-  ).toBeVisible();
-
   await expect(page.locator("iframe[title='block']")).toBeVisible();
 
   const blockExample = codeBlock.examples[0] as Record<string, string>;
+
+  const blockFrameLocator = page.frameLocator("iframe[title='block']");
+
+  if (isMobile) {
+    // hack to ensure block is loaded in iframe before the next step on mobile
+    // @todo figure a better way to do this
+    await sleep(1000);
+  }
+
+  await expect(blockFrameLocator.locator("input")).toHaveValue(
+    blockExample.caption!,
+  );
+
+  if (isMobile) {
+    await page.locator(".MuiTabs-root >> text=Source Code").click();
+  }
 
   // confirm block properties tab contains example data
   await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
     JSON.stringify(blockExample, null, 2),
   );
 
-  const blockFrameLocator = page.frameLocator("iframe[title='block']");
-
-  await expect(blockFrameLocator.locator("input")).toHaveValue(
-    blockExample.caption!,
-  );
-
   await page
     .locator("#simple-tabpanel-0 >> textarea")
     .fill(JSON.stringify({ ...blockExample, caption: "New caption" }));
+
+  if (isMobile) {
+    await page.locator(".MuiTabs-root >> text=Preview").click();
+  }
 
   await expect(blockFrameLocator.locator("input")).toHaveValue("New caption");
 });
 
 test("should show an error message if an unsupported block is rendered", async ({
   page,
+  isMobile,
 }) => {
   expect(
     unsupportedBlock,
@@ -129,10 +163,18 @@ test("should show an error message if an unsupported block is rendered", async (
 
   const blockExample = unsupportedBlock.examples[0] as Record<string, string>;
 
+  if (isMobile) {
+    await page.locator(".MuiTabs-root >> text=Source Code").click();
+  }
+
   // confirm block properties tab contains example data
   await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
     JSON.stringify(blockExample, null, 2),
   );
+
+  if (isMobile) {
+    await page.locator(".MuiTabs-root >> text=Preview").click();
+  }
 
   await expect(
     page.locator(
