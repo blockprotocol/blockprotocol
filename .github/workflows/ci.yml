@@ -221,9 +221,6 @@ jobs:
         env:
           CODE_COVERAGE: true
 
-      - run: yarn playwright install-deps chrome
-        if: ${{ success() || failure() }}
-
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
         run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
