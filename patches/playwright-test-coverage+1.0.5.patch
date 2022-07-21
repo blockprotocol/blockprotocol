@@ -1,0 +1,9 @@
+diff --git a/node_modules/playwright-test-coverage/index.d.ts b/node_modules/playwright-test-coverage/index.d.ts
+index 694bae7..810ce80 100644
+--- a/node_modules/playwright-test-coverage/index.d.ts
++++ b/node_modules/playwright-test-coverage/index.d.ts
+@@ -1,3 +1,3 @@
+ declare module "playwright-test-coverage" {
+-  export * from "@playwright/test";
++  export { expect, test } from "@playwright/test";
+ }
