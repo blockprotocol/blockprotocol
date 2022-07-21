@@ -1,6 +1,6 @@
 import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Box, Fade, Modal, ModalProps, Paper } from "@mui/material";
-import React, { useEffect, useState, VFC } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 
 import { useUser } from "../../context/user-context";
 import { SerializedUser } from "../../lib/api/model/user.model";
@@ -20,7 +20,7 @@ type LoginModalProps = {
 
 type LoginModalPage = "Email" | "VerificationCode";
 
-export const LoginModal: VFC<LoginModalProps> = ({
+export const LoginModal: FunctionComponent<LoginModalProps> = ({
   onClose,
   disableScrollLock = false,
   ...modalProps

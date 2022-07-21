@@ -6,7 +6,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Head from "next/head";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
@@ -26,7 +26,7 @@ export type UserPageProps = {
   user: SerializedUser;
 };
 
-export const UserPageComponent: VoidFunctionComponent<UserPageProps> = ({
+export const UserPageComponent: FunctionComponent<UserPageProps> = ({
   blocks,
   entityTypes,
   activeTab,

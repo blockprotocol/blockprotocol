@@ -7,7 +7,7 @@ import {
   TextFieldProps as MuiTextFieldProps,
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
-import { ReactNode, useEffect, useState, VFC } from "react";
+import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "./icons";
 
@@ -15,7 +15,7 @@ type TextFieldProps = {
   displayErrorOnTouched?: boolean;
 } & MuiTextFieldProps;
 
-export const TextField: VFC<TextFieldProps> = ({
+export const TextField: FunctionComponent<TextFieldProps> = ({
   helperText,
   sx,
   ...textFieldProps

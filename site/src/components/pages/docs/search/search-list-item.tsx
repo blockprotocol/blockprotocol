@@ -1,6 +1,6 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography, typographyClasses } from "@mui/material";
-import React, { forwardRef, useContext } from "react";
+import { forwardRef, useContext } from "react";
 
 import SiteMapContext from "../../../../context/site-map-context";
 import { parseHTML } from "../../../../util/html-utils";

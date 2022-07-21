@@ -1,5 +1,5 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { FunctionComponent, useState } from "react";
+import { render } from "react-dom";
 
 import { MockBlockDock } from "../src";
 import { TestCustomElementBlock } from "./test-custom-element-block";
@@ -9,9 +9,9 @@ import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
 
-const DevApp = () => {
-  const [entityId, setEntityId] = React.useState(1);
-  const [name, setName] = React.useState("World");
+const DevApp: FunctionComponent = () => {
+  const [entityId, setEntityId] = useState(1);
+  const [name, setName] = useState("World");
 
   const blockEntity = {
     entityId: `test-entity-${entityId}`,
@@ -94,4 +94,4 @@ const DevApp = () => {
   );
 };
 
-ReactDOM.render(<DevApp />, node);
+render(<DevApp />, node);

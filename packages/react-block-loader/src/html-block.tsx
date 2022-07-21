@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, VoidFunctionComponent } from "react";
+import { FunctionComponent, useEffect, useRef } from "react";
 
 type HtmlBlockProps = {
   html: string;
@@ -8,7 +8,7 @@ type HtmlBlockProps = {
 /**
  * Creates an element from a given HTML string, including script tags.
  */
-export const HtmlBlock: VoidFunctionComponent<HtmlBlockProps> = ({
+export const HtmlBlock: FunctionComponent<HtmlBlockProps> = ({
   html,
   ...props
 }) => {

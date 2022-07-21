@@ -14,7 +14,7 @@ import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import crypto from "node:crypto";
-import React, { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
@@ -103,7 +103,7 @@ const generateSandboxBaseUrl = (): string => {
   return `https://${branchSubdomain}.stage.hash.ai`;
 };
 
-const Bullet: VoidFunctionComponent = () => {
+const Bullet: FunctionComponent = () => {
   return (
     <Box component="span" mx={1.5} sx={{ color: "#DDE7F0" }}>
       •

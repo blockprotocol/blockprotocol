@@ -1,5 +1,5 @@
 import { Box, buttonClasses, Typography, useTheme } from "@mui/material";
-import React from "react";
+import { FunctionComponent } from "react";
 
 import { SpecificationIcon } from "../../../icons";
 import { LinkButton } from "../../../link-button";
@@ -32,9 +32,9 @@ const SUGGESTED_LINKS: SuggestedLink[] = [
   },
 ];
 
-const SearchSuggestedLinks: React.VoidFunctionComponent<
-  SearchSuggestedLinksProps
-> = ({ closeModal }) => {
+const SearchSuggestedLinks: FunctionComponent<SearchSuggestedLinksProps> = ({
+  closeModal,
+}) => {
   const theme = useTheme();
 
   return (

@@ -1,4 +1,4 @@
-import { useContext, VoidFunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 
 import { JsonSchema } from "../../../lib/json-schema";
 import { Button } from "../../button";
@@ -16,9 +16,13 @@ type SchemaPropertyRowProps = {
   required: boolean;
 };
 
-export const SchemaPropertyRow: VoidFunctionComponent<
-  SchemaPropertyRowProps
-> = ({ dispatchSchemaUpdate, name, property, readonly, required }) => {
+export const SchemaPropertyRow: FunctionComponent<SchemaPropertyRowProps> = ({
+  dispatchSchemaUpdate,
+  name,
+  property,
+  readonly,
+  required,
+}) => {
   const { selectedSchema } = useContext(SchemaOptionsContext) ?? {};
 
   const isArray = property.type === "array";

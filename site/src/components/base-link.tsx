@@ -1,7 +1,13 @@
 // eslint-disable-next-line no-restricted-imports
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
 import { UrlObject } from "node:url";
-import React, { VoidFunctionComponent } from "react";
+import {
+  Children,
+  cloneElement,
+  FunctionComponent,
+  isValidElement,
+  ReactElement,
+} from "react";
 
 import { FRONTEND_URL } from "../lib/config";
 
@@ -12,7 +18,7 @@ export const isHrefExternal = (href: string | UrlObject) =>
   !href.startsWith(FRONTEND_URL);
 
 export interface BaseLinkProps extends Omit<NextLinkProps, "passHref"> {
-  children: React.ReactChild;
+  children: ReactElement | string | number;
 }
 
 /**
@@ -20,16 +26,16 @@ export interface BaseLinkProps extends Omit<NextLinkProps, "passHref"> {
  * It makes sure that all external links are opened in a new tab.
  * @see Link, LinkButton
  */
-export const BaseLink: VoidFunctionComponent<BaseLinkProps> = ({
+export const BaseLink: FunctionComponent<BaseLinkProps> = ({
   href,
   children,
   ...rest
 }) => {
-  const child = React.Children.only(children);
+  const child = Children.only(children);
 
   const fixedChild =
-    React.isValidElement(child) && isHrefExternal(href)
-      ? React.cloneElement(child, { rel: "noopener", target: "_blank" })
+    isValidElement(child) && isHrefExternal(href)
+      ? cloneElement(child, { rel: "noopener", target: "_blank" })
       : child;
 
   return (

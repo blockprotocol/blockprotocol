@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { useState, VoidFunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 
 import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
@@ -15,7 +15,7 @@ export interface TabPanelContentsWithSchemasProps {
   user: SerializedUser;
 }
 
-export const TabPanelContentsWithSchemas: VoidFunctionComponent<
+export const TabPanelContentsWithSchemas: FunctionComponent<
   TabPanelContentsWithSchemasProps
 > = ({ user, entityTypes }) => {
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);

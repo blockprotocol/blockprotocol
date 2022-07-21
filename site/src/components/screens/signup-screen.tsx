@@ -1,5 +1,12 @@
 import { Box, Typography } from "@mui/material";
-import React, { ReactNode, useEffect, useRef, useState, VFC } from "react";
+import {
+  FormEvent,
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "../../lib/api-client";
 import { Button } from "../button";
@@ -19,7 +26,7 @@ type SignupScreenProps = {
   onClose?: () => void;
 };
 
-export const SignupScreen: VFC<SignupScreenProps> = ({
+export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
   autoFocus = true,
   initialEmail,
   onSignup,
@@ -44,7 +51,7 @@ export const SignupScreen: VFC<SignupScreenProps> = ({
   const [signingUp, setSigningUp] = useState<boolean>(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setApiErrorMessage(undefined);
     setTouchedEmailInput(true);

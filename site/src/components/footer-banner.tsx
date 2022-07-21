@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import Image from "next/image";
-import { FC, ReactNode } from "react";
+import { FunctionComponent, ReactNode } from "react";
 
 import { BoltIcon } from "./icons";
 import { Link } from "./link";
@@ -26,7 +26,7 @@ type BannerCardProps = {
   buttonText: ReactNode;
 };
 
-const BackgroundRainbow: FC = () => {
+const BackgroundRainbow: FunctionComponent = () => {
   return (
     <Image
       width={350}
@@ -36,7 +36,7 @@ const BackgroundRainbow: FC = () => {
   );
 };
 
-const BannerCard: FC<BannerCardProps> = ({
+const BannerCard: FunctionComponent<BannerCardProps> = ({
   sx = [],
   contents,
   buttonHref,
@@ -269,7 +269,9 @@ type FooterBannerProps = {
   banner: Banner;
 };
 
-export const FooterBanner: FC<FooterBannerProps> = ({ banner }) => (
+export const FooterBanner: FunctionComponent<FooterBannerProps> = ({
+  banner,
+}) => (
   <Box
     sx={{
       paddingTop: banner.overlapsFooter ? 0 : 8,

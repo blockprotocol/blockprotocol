@@ -1,12 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { TableTreeIcon } from "../../icons";
 import { Link } from "../../link";
 import { shy } from "./utils";
 
 type ListViewCardProps = {
+  // eslint-disable-next-line react/no-unused-prop-types -- @todo remove prop or use it in the component body
   type: "block" | "schema";
   title: string;
   description?: string | null;
@@ -15,7 +16,7 @@ type ListViewCardProps = {
   url: string;
 };
 
-export const ListViewCard: VFC<ListViewCardProps> = ({
+export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
   title,
   description,
   icon,
