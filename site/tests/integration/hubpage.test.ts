@@ -3,6 +3,14 @@ import { expect, test } from "@playwright/test";
 import blocksData from "../../blocks-data.json";
 import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 
+const codeBlockMetadata = (blocksData as ExpandedBlockMetadata[]).find(
+  ({ name }) => name === "@hashintel/block-code",
+);
+
+if (!codeBlockMetadata) {
+  throw new Error("Code block should be prepared before tests are run");
+}
+
 test("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
 
@@ -31,29 +39,16 @@ test("Hub page should contain key elements", async ({ page }) => {
   );
 });
 
-const codeBlock = blocksData.find(
-  ({ name }) => name === "@hashintel/block-code",
-) as ExpandedBlockMetadata | null;
-
 test("Block Card should contain key elements", async ({ page }) => {
-  expect(
-    codeBlock,
-    "Code block should be prepared before this test",
-  ).toBeDefined();
-
-  if (!codeBlock) {
-    return;
-  }
-
   await page.goto("/hub");
 
   const codeBlockLocator = page.locator('[data-testid="block-card"]', {
-    hasText: codeBlock.displayName,
+    hasText: codeBlockMetadata.displayName!,
   });
 
   await expect(codeBlockLocator).toHaveAttribute(
     "href",
-    codeBlock.blockPackagePath,
+    codeBlockMetadata.blockPackagePath!,
   );
 
   // there should be 2 images present => icon and preview image
@@ -61,23 +56,23 @@ test("Block Card should contain key elements", async ({ page }) => {
 
   await expect(codeBlockLocator.locator("img").first()).toHaveAttribute(
     "src",
-    codeBlock.image,
+    codeBlockMetadata.image!,
   );
 
   await expect(codeBlockLocator.locator("img").nth(1)).toHaveAttribute(
     "src",
-    codeBlock.icon,
+    codeBlockMetadata.icon!,
   );
 
   await expect(
-    codeBlockLocator.locator(`text=${codeBlock.description}`),
+    codeBlockLocator.locator(`text=${codeBlockMetadata.description}`),
   ).toBeVisible();
 
   await expect(
-    codeBlockLocator.locator(`text=@${codeBlock.author}`),
+    codeBlockLocator.locator(`text=@${codeBlockMetadata.author}`),
   ).toBeVisible();
 
   await expect(
-    codeBlockLocator.locator(`text=${codeBlock.version}`),
+    codeBlockLocator.locator(`text=${codeBlockMetadata.version}`),
   ).toBeVisible();
 });
