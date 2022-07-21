@@ -71,6 +71,7 @@
     "fs-extra": "^10.1.0",
     "gray-matter": "^4.0.3",
     "husky": "7.0.4",
+    "kill-port": "^2.0.1",
     "lint-staged": "12.3.3",
     "lockfile-lint": "4.6.2",
     "markdownlint-cli": "0.31.1",

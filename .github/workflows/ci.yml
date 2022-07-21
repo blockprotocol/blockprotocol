@@ -228,6 +228,10 @@ jobs:
         if: ${{ success() || failure() }}
         run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
 
+      - name: Stop frontend ## Updates .nyc_output
+        if: ${{ success() || failure() }}
+        run: yarn kill-port 3000
+
       - name: Generate coverage report
         if: ${{ success() || failure() }}
         run: yarn nyc report --reporter=lcovonly --reporter=text
