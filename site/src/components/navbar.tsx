@@ -417,7 +417,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
             >
               <Button
                 variant="secondary"
-                onClick={(event) => {
+                onClick={() => {
                   setMobileNavVisible(false);
                   openLoginModal();
                 }}
