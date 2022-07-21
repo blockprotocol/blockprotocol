@@ -1,0 +1,31 @@
+diff --git a/node_modules/playwright-test-coverage/index.d.ts b/node_modules/playwright-test-coverage/index.d.ts
+new file mode 100644
+index 0000000..810ce80
+--- /dev/null
++++ b/node_modules/playwright-test-coverage/index.d.ts
+@@ -0,0 +1,3 @@
++declare module "playwright-test-coverage" {
++  export { expect, test } from "@playwright/test";
++}
+diff --git a/node_modules/playwright-test-coverage/package.json b/node_modules/playwright-test-coverage/package.json
+index ae4b970..32430e0 100644
+--- a/node_modules/playwright-test-coverage/package.json
++++ b/node_modules/playwright-test-coverage/package.json
+@@ -3,7 +3,8 @@
+   "version": "1.0.5",
+   "main": "index.js",
+   "files": [
+-    "index.js"
++    "index.js",
++    "index.d.ts"
+   ],
+   "keywords": [
+     "playwright",
+@@ -14,6 +15,7 @@
+   "author": "Anish Karandikar <anishkny@gmail.com>",
+   "license": "MIT",
+   "description": "Extends Playwright test to measure code coverage",
++  "types": "index.d.ts",
+   "peerDependencies": {
+     "@playwright/test": "^1.14.1"
+   },

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "playwright-test-coverage";
 
 test("example integration test", async ({ page }) => {
   await page.goto("./");

@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
-export const EnvelopeDotIcon: FC<SvgIconProps> = (props) => {
+export const EnvelopeDotIcon: FunctionComponent<SvgIconProps> = (props) => {
   const { sx = [], ...otherProps } = props;
   return (
     <SvgIcon

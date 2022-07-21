@@ -6,7 +6,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Carousel } from "../../carousel";
 

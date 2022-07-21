@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { TableTreeIcon } from "../../icons";
 import { Link } from "../../link";
@@ -19,7 +19,7 @@ type OverviewCardProps = {
   hideImage?: boolean;
 };
 
-export const OverviewCard: VFC<OverviewCardProps> = ({
+export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
   image,
   type,
   title,

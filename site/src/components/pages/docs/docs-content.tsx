@@ -9,7 +9,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
-import { ReactNode, VFC } from "react";
+import { FunctionComponent, ReactNode } from "react";
 
 import { SiteMapPage } from "../../../lib/sitemap";
 import { FontAwesomeIcon } from "../../icons";
@@ -47,7 +47,7 @@ const getParentPages = (
   return null;
 };
 
-export const DocsContent: VFC<DocsPageProps> = ({
+export const DocsContent: FunctionComponent<DocsPageProps> = ({
   title,
   subtitle,
   content,

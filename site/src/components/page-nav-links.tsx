@@ -7,7 +7,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { SiteMapPage } from "../lib/sitemap";
 import { FontAwesomeIcon } from "./icons";
@@ -27,7 +27,7 @@ type PageNavLinksProps = {
   nextPage?: SiteMapPage;
 } & BoxProps;
 
-export const PageNavLinks: VFC<PageNavLinksProps> = ({
+export const PageNavLinks: FunctionComponent<PageNavLinksProps> = ({
   prevPage,
   nextPage,
   ...boxProps

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { Carousel } from "./carousel";
@@ -9,7 +9,9 @@ type BlocksSliderProps = {
   catalog: BlockMetadata[];
 };
 
-export const BlocksSlider: VFC<BlocksSliderProps> = ({ catalog }) => {
+export const BlocksSlider: FunctionComponent<BlocksSliderProps> = ({
+  catalog,
+}) => {
   return (
     <Carousel
       data-testid="block-slider"

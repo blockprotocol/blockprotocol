@@ -6,15 +6,15 @@ import {
 import { Box, Typography } from "@mui/material";
 import debounce from "lodash/debounce";
 import get from "lodash/get";
-import React, {
+import {
   createContext,
+  FunctionComponent,
   ReactElement,
   useCallback,
   useEffect,
   useMemo,
   useReducer,
   useState,
-  VoidFunctionComponent,
 } from "react";
 import { tw } from "twind";
 
@@ -45,7 +45,7 @@ type JsonSchemaEditorProps = {
 } & Pick<EmbedderGraphMessageCallbacks, "aggregateEntityTypes"> &
   Partial<Pick<EmbedderGraphMessageCallbacks, "updateEntityType">>;
 
-export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
+export const SchemaEditor: FunctionComponent<JsonSchemaEditorProps> = ({
   aggregateEntityTypes,
   entityTypeId,
   schema: possiblyStaleDbSchema,

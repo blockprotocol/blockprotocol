@@ -13,7 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { FC, ReactNode } from "react";
+import { FunctionComponent, ReactNode } from "react";
 
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
@@ -105,6 +105,7 @@ const Socials = (
     alignItems="center"
     flexWrap="wrap"
     sx={{ gridGap: "1rem" }}
+    data-testid="footer-social-links"
   >
     <Box flexShrink={0}>
       {SOCIALS.map(({ href, icon }, index) => (
@@ -157,13 +158,17 @@ const Socials = (
 
 type FooterProps = {} & BoxProps;
 
-export const Footer: FC<FooterProps> = ({ sx = [], ...boxProps }) => {
+export const Footer: FunctionComponent<FooterProps> = ({
+  sx = [],
+  ...boxProps
+}) => {
   const theme = useTheme();
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <Box
+      component="footer"
       {...boxProps}
       sx={[
         {

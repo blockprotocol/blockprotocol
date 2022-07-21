@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlocksSlider } from "../../blocks-slider";
@@ -11,7 +11,9 @@ type RegistrySectionProps = {
   catalog: BlockMetadata[];
 };
 
-export const RegistrySection: VFC<RegistrySectionProps> = ({ catalog }) => {
+export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
+  catalog,
+}) => {
   return (
     <Box
       sx={{

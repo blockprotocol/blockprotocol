@@ -4,7 +4,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { ReactNode, VoidFunctionComponent } from "react";
+import { FunctionComponent, ReactNode } from "react";
 
 export type TableRows = ReactNode[][];
 
@@ -13,7 +13,7 @@ type TableProps = {
   rows: TableRows;
 };
 
-export const Table: VoidFunctionComponent<TableProps> = ({ header, rows }) => {
+export const Table: FunctionComponent<TableProps> = ({ header, rows }) => {
   return (
     <TableContainer>
       <MuiTable sx={{ minWidth: 650 }} aria-label="simple table">
