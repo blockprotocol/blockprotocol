@@ -6,6 +6,10 @@ const codeBlock = blocksData.find(
   ({ name }) => name === "@hashintel/block-code",
 );
 
+const unsupportedBlock = blocksData.find(
+  ({ name }) => name === "@hashintel/block-embed",
+);
+
 test("Block page should contain key elements", async ({ page }) => {
   test.skip();
   expect(
@@ -71,8 +75,6 @@ test("Block page should contain key elements", async ({ page }) => {
   ).toBeGreaterThan(5);
 });
 
-// @todo add tests for BlockDataContainer
-
 test("updating block properties should update block preview", async ({
   page,
 }) => {
@@ -92,25 +94,51 @@ test("updating block properties should update block preview", async ({
 
   await expect(page.locator("iframe[title='block']")).toBeVisible();
 
-  const codeBlockExample = codeBlock.examples[0];
+  const blockExample = codeBlock.examples[0] as Record<string, string>;
 
+  // confirm block properties tab contains example data
   await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
-    JSON.stringify(codeBlockExample, null, 2),
+    JSON.stringify(blockExample, null, 2),
   );
 
-  await expect(
-    page
-      .frameLocator("iframe[title='block']")
-      .locator(`text=${codeBlockExample.caption}`),
-  ).toBeVisible();
+  const blockFrameLocator = page.frameLocator("iframe[title='block']");
+
+  await expect(blockFrameLocator.locator("input")).toHaveValue(
+    blockExample.caption!,
+  );
 
   await page
     .locator("#simple-tabpanel-0 >> textarea")
-    .fill(JSON.stringify({ ...codeBlockExample, caption: "New caption" }));
+    .fill(JSON.stringify({ ...blockExample, caption: "New caption" }));
+
+  await expect(blockFrameLocator.locator("input")).toHaveValue("New caption");
+});
+
+test("should show an error message if an unsupported block is rendered", async ({
+  page,
+}) => {
+  expect(
+    unsupportedBlock,
+    `An unsupported block should be prepared before this test`,
+  ).toBeDefined();
+  if (!unsupportedBlock) {
+    return;
+  }
+
+  await page.goto(unsupportedBlock.blockPackagePath);
+
+  const blockExample = unsupportedBlock.examples[0] as Record<string, string>;
+
+  // confirm block properties tab contains example data
+  await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
+    JSON.stringify(blockExample, null, 2),
+  );
 
   await expect(
-    page.frameLocator("iframe[title='block']").locator(`text=New caption`),
+    page.locator(
+      "text=This block was written for an earlier version of the Block Protocol specification and cannot currently be displayed in the Hub.",
+    ),
   ).toBeVisible();
 });
 
-// test("should show an error message if an unsupported block is rendered", () => {});
+// @todo: Add tests for a text-based block

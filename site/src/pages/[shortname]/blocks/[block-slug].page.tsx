@@ -281,26 +281,20 @@ const BlockPage: NextPage<BlockPageProps> = ({
           sx={{ display: "flex", pt: { xs: 4, md: 10 }, mb: { xs: 6, md: 12 } }}
         >
           {isDesktopSize ? (
-            <Typography variant="bpHeading1">
-              <Box
-                sx={{
-                  display: "inline-block",
-                  mr: 3,
-                  height: "2em",
-                  width: "2em",
-                }}
-                component="img"
-                src={blockMetadata.icon ?? undefined}
-              />
-            </Typography>
+            <Box
+              sx={{
+                display: "inline-block",
+                mr: 3,
+                height: 108,
+                width: 108,
+              }}
+              component="img"
+              src={blockMetadata.icon ?? undefined}
+            />
           ) : null}
 
           <Box>
-            <Typography
-              sx={{ display: { xs: "flex", md: "unset" } }}
-              variant="bpHeading1"
-              mt={2}
-            >
+            <Box sx={{ mt: 2, display: { xs: "flex", md: "unset" } }}>
               {!isDesktopSize && (
                 <Box
                   sx={{
@@ -313,8 +307,15 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   src={blockMetadata.icon ?? undefined}
                 />
               )}
-              {blockMetadata.displayName}
-            </Typography>
+              <Typography
+                sx={{ display: { xs: "flex", md: "unset" } }}
+                variant="bpHeading1"
+                mt={2}
+              >
+                {blockMetadata.displayName}
+              </Typography>
+            </Box>
+
             <Typography
               variant="bpBodyCopy"
               sx={{ color: theme.palette.gray[80] }}
