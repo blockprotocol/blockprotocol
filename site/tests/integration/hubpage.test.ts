@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 import blocksData from "../../blocks-data.json";
-import { ExpandedBlockMetadata } from "../../src/lib/blocks";
+import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 
 test("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
