@@ -228,6 +228,11 @@ jobs:
         if: ${{ success() || failure() }}
         run: yarn kill-port 3000
 
+      - name: Copy .nyc_output files from site to root
+        ## https://github.com/anishkny/playwright-test-coverage/issues/59
+        if: ${{ success() || failure() }}
+        run: mv site/.nyc_output/* .nyc_output
+
       - name: Generate coverage report
         if: ${{ success() || failure() }}
         run: yarn nyc report --reporter=lcovonly --reporter=text

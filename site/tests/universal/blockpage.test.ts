@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "playwright-test-coverage";
 
 import blocksData from "../../blocks-data.json";
 import { sleep } from "../shared/sleep";
@@ -58,10 +58,8 @@ test("Block page should contain key elements", async ({ page, isMobile }) => {
     await expect(page.locator("iframe[title='block']")).toBeVisible();
 
     await expect(
-      page
-        .locator(`iframe[title='block'] >> text=${blockExample.caption}`)
-        .toHaveValue(blockExample.caption!),
-    );
+      page.locator(`iframe[title='block'] >> text=${blockExample.caption}`),
+    ).toHaveValue(blockExample.caption!);
   } else {
     await expect(page.locator("text=Block Properties")).toBeVisible();
     await expect(page.locator("#simple-tabpanel-0 >> textarea")).toHaveValue(
