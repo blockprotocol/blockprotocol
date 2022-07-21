@@ -287,6 +287,7 @@ module.exports = {
             paths: [
               ...sharedNoRestrictedImportsConfig.paths,
               {
+                // @todo Remove playwright-test-coverage when https://github.com/microsoft/playwright/issues/7030 is resolved
                 name: "@playwright/test",
                 importNames: ["test"],
                 message:
