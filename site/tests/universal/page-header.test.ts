@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
 import type { Page } from "playwright";
+import { expect, test } from "playwright-test-coverage";
 
 const openMobileNav = async (page: Page) => {
   await page.locator("[data-testid='mobile-nav-trigger']").click();
@@ -21,7 +21,7 @@ test("page header navigation works", async ({ page, isMobile }) => {
   await expect(page).toHaveURL("/hub");
   await expect(
     page.locator(
-      "h1 >> text=Interactive, data-driven blocks to use in your projects",
+      'h1:has-text("Interactive, data-driven blocks to use in your projects")',
     ),
   ).toBeVisible();
 

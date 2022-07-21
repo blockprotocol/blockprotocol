@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "playwright-test-coverage";
 
 test("Home page should contain key elements", async ({ page, isMobile }) => {
   await page.goto("/");
