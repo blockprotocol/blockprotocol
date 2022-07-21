@@ -58,6 +58,16 @@ test("Block Card should contain key elements", async ({ page }) => {
   // there should be 2 images present => icon and preview image
   await expect(codeBlockLocator.locator("img")).toHaveCount(2);
 
+  await expect(codeBlockLocator.locator("img").first()).toHaveAttribute(
+    "src",
+    codeBlock.image,
+  );
+
+  await expect(codeBlockLocator.locator("img").nth(1)).toHaveAttribute(
+    "src",
+    codeBlock.icon,
+  );
+
   await expect(
     codeBlockLocator.locator(`text=${codeBlock.description}`),
   ).toBeVisible();
