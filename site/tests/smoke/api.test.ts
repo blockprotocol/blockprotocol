@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "playwright-test-coverage";
 
 test("/api/me should respond with HTTP 401", async ({ request }) => {
   // This test helps check DB connection. If the endpoint returns 500,

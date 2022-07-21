@@ -217,8 +217,8 @@ module.exports = {
       },
     },
     {
-      // top-level config files
-      files: ["*.config.{c,m,}js", "*rc.{c,m,}js"],
+      // config files and type declarations
+      files: ["*.config.{c,m,}js", "*rc.{c,m,}js", "*.d.ts"],
       rules: {
         "import/no-extraneous-dependencies": "off",
         "global-require": "off",
@@ -286,6 +286,13 @@ module.exports = {
             ...sharedNoRestrictedImportsConfig,
             paths: [
               ...sharedNoRestrictedImportsConfig.paths,
+              {
+                // @todo Remove playwright-test-coverage when https://github.com/microsoft/playwright/issues/7030 is resolved
+                name: "@playwright/test",
+                importNames: ["test"],
+                message:
+                  'Please import "expect" and "test" from "playwright-test-coverage".',
+              },
               {
                 name: "react",
                 importNames: ["FC", "VFC", "VoidFunctionComponent"],
