@@ -1,10 +1,6 @@
 {
   "all": true,
   "silent": true,
-  "exclude": [
-    "coverage/**",
-    "site/.next/**/*",
-    "site/public/blocks",
-    "site/tests/**"
-  ]
+  "include": "site",
+  "exclude": ["site/.next", "site/public/blocks", "site/tests"]
 }
