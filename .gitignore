@@ -34,6 +34,10 @@ dist
 # vercel
 .vercel
 
+# Testing
+.nyc_output
+coverage
+
 # workspace specific
 site/blocks-data.json
 site/playwright-report

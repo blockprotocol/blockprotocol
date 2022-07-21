@@ -1,9 +1,14 @@
 name: CI
-on: pull_request
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   linting:
     name: Linting
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
@@ -123,6 +128,7 @@ jobs:
 
   packages:
     name: NPM Packages
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
     env:
       BLOCK_NAME: test-block
@@ -186,6 +192,7 @@ jobs:
       - name: Create temp files and folders
         run: |
           mkdir -p var/logs
+
           cat << EOF > site/.env.local
           SESSION_SECRET=dev-session-secret
           HASHING_SECRET=dev-hashing-secret
@@ -210,13 +217,27 @@ jobs:
           yarn workspace @blockprotocol/site build
           yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
-
-      - run: yarn playwright install-deps chrome
-        if: ${{ success() || failure() }}
+        env:
+          CODE_COVERAGE: true
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
         run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
+
+      - name: Stop frontend ## Updates .nyc_output
+        if: ${{ success() || failure() }}
+        run: yarn kill-port 3000
+
+      - name: Generate coverage report
+        if: ${{ success() || failure() }}
+        run: yarn nyc report --reporter=lcovonly --reporter=text
+
+      - uses: codecov/codecov-action@v3
+        name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
+        with:
+          fail_ci_if_error: true
+          flags: site-integration
+          files: coverage/lcov.info
 
       - name: Show DB logs
         if: ${{ success() || failure() }}
