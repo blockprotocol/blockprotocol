@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "playwright-test-coverage";
 
 import blocksData from "../../blocks-data.json";
 import type { ExpandedBlockMetadata } from "../../src/lib/blocks";

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "playwright-test-coverage";
 
 test("page footer navigation works", async ({ page }) => {
   await page.goto("/");
