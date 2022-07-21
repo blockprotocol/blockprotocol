@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 import blocksData from "../../blocks-data.json";
+import { ExpandedBlockMetadata } from "../../src/lib/blocks";
 
 test("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
@@ -32,7 +33,7 @@ test("Hub page should contain key elements", async ({ page }) => {
 
 const codeBlock = blocksData.find(
   ({ name }) => name === "@hashintel/block-code",
-);
+) as ExpandedBlockMetadata | null;
 
 test("Block Card should contain key elements", async ({ page }) => {
   expect(
