@@ -8,7 +8,11 @@ import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
 import { ExpandedBlockMetadata } from "../../blocks";
-import { FRONTEND_URL, isProduction } from "../../config";
+import {
+  FRONTEND_URL,
+  isProduction,
+  shouldUseDummyEmailService,
+} from "../../config";
 import { sendMail } from "../aws-ses";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 import { ApiKey } from "./api-key.model";
@@ -336,7 +340,7 @@ export class User {
       magicLinkQueryParams,
     ).toString()}`;
 
-    if (process.env.NODE_ENV === "development") {
+    if (shouldUseDummyEmailService) {
       // eslint-disable-next-line no-console
       console.log("Email verification code: ", loginCode.code);
       // eslint-disable-next-line no-console
@@ -393,7 +397,7 @@ export class User {
       magicLinkQueryParams,
     ).toString()}`;
 
-    if (process.env.NODE_ENV === "development") {
+    if (shouldUseDummyEmailService) {
       // eslint-disable-next-line no-console
       console.log("Email verification code: ", emailVerificationCode.code);
       // eslint-disable-next-line no-console

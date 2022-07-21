@@ -71,6 +71,7 @@ export const LoginModal: FunctionComponent<LoginModalProps> = ({
 
   return (
     <Modal
+      data-testid="login-modal"
       closeAfterTransition
       BackdropProps={{
         sx: {
