@@ -9639,10 +9639,9 @@ playwright-core@1.23.3:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.23.3.tgz#f27ad80fbf0ba9b53d142d94f052b010eaa0527b"
   integrity sha512-x35yzsXDyo0BIXYimLnUFNyb42c//NadUNH6IPGOteZm96oTGA1kn4Hq6qJTI1/f9wEc1F9O1DsznXIgXMil7A==
 
-playwright-test-coverage@^1.0.5:
+playwright-test-coverage@anishkny/playwright-test-coverage#feat/add-typings:
   version "1.0.5"
-  resolved "https://registry.yarnpkg.com/playwright-test-coverage/-/playwright-test-coverage-1.0.5.tgz#86a691bd54014695f25402b4e826462bf6db106d"
-  integrity sha512-e2iwE+H82w9P/jD4lr2b2gP0vwfxTNy6fn113zpVNmBwUhWkE5sZjBGN85yuIIfeAZCLcgnGyclQeFukfYzdtA==
+  resolved "https://codeload.github.com/anishkny/playwright-test-coverage/tar.gz/25f13f1dbc9700b733142875935c0fab21f29b75"
 
 playwright@^1.23.3:
   version "1.23.3"

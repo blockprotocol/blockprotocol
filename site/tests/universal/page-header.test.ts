@@ -1,5 +1,5 @@
-import { expect, test } from "@playwright/test";
 import type { Page } from "playwright";
+import { expect, test } from "playwright-test-coverage";
 
 const openMobileNav = async (page: Page) => {
   if (await page.locator("[data-testid='mobile-nav']").isVisible()) {

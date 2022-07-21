@@ -119,7 +119,7 @@
     "execa": "^5.1.1",
     "micromatch": "^4.0.4",
     "playwright": "^1.23.3",
-    "playwright-test-coverage": "^1.0.5",
+    "playwright-test-coverage": "anishkny/playwright-test-coverage#feat/add-typings",
     "rimraf": "^3.0.2",
     "ts-node": "10.8.0",
     "typescript": "4.7.2"

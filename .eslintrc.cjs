@@ -287,6 +287,12 @@ module.exports = {
             paths: [
               ...sharedNoRestrictedImportsConfig.paths,
               {
+                name: "@playwright/test",
+                importNames: ["test"],
+                message:
+                  'Please import "expect" and "test" from "playwright-test-coverage".',
+              },
+              {
                 name: "react",
                 importNames: ["FC", "VFC", "VoidFunctionComponent"],
                 message: "Please use FunctionComponent instead.",
