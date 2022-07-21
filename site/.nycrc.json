@@ -1,5 +1,0 @@
-{
-  "all": true,
-  "silent": true,
-  "exclude": [".next/**/*", "coverage/**", "public/blocks", "tests/**"]
-}

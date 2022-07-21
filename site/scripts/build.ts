@@ -30,7 +30,7 @@ const script = async () => {
       presets: ["next/babel"],
       plugins: ["istanbul"],
     });
-    await execa("nyc", ["next", "build"], { stdio: "inherit" });
+    await execa("nyc", ["--cwd=..", "next", "build"], { stdio: "inherit" });
     await fs.remove(babelConfigPath);
   } else {
     if (await fs.pathExists(babelConfigPath)) {
