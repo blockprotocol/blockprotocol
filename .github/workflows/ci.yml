@@ -232,6 +232,13 @@ jobs:
         if: ${{ success() || failure() }}
         run: yarn nyc report --reporter=lcovonly --reporter=text
 
+      - uses: codecov/codecov-action@v3
+        name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
+        with:
+          fail_ci_if_error: true
+          flags: site-integration
+          files: coverage/lcov.info
+
       - name: Show DB logs
         if: ${{ success() || failure() }}
         run: cat var/logs/db.log
@@ -239,12 +246,6 @@ jobs:
       - name: Show frontend logs
         if: ${{ success() || failure() }}
         run: cat var/logs/frontend.log
-
-      - uses: codecov/codecov-action@v3
-        with:
-          fail_ci_if_error: true
-          files: coverage/lcov.info
-          verbose: true
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
