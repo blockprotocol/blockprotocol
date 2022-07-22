@@ -205,9 +205,10 @@ test("Login page redirects logged in users to home page", async ({ page }) => {
   await login({ page });
   expect(page.url()).toMatch(/\/docs$/);
 
-  await page.goto("/login");
-
-  await page.waitForNavigation({
-    url: (url) => url.pathname === "/",
-  });
+  await Promise.all([
+    page.goto("/login"),
+    page.waitForNavigation({
+      url: (url) => url.pathname === "/",
+    }),
+  ]);
 });

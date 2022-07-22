@@ -92,7 +92,6 @@ test("API key page should generate and show a key", async ({
 
   await page.locator("text=Copy to Clipboard").click();
   await expect(page.locator("text=✓ Copied")).toBeVisible();
-
   await expect(page.locator("text=my first key regenerated")).toBeVisible();
   await page.locator("text=Go back").click();
 

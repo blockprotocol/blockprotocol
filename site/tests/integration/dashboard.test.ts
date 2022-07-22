@@ -4,11 +4,12 @@ import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 
 test("dashboard page should not be accessible to guests", async ({ page }) => {
-  await page.goto("/dashboard");
-
-  await page.waitForNavigation({
-    url: (url) => url.pathname === "/login",
-  });
+  await Promise.all([
+    page.goto("/dashboard"),
+    page.waitForNavigation({
+      url: (url) => url.pathname === "/login",
+    }),
+  ]);
 });
 
 test("dashboard page should contain key elements", async ({ page }) => {

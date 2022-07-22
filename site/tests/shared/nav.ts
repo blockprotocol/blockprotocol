@@ -55,6 +55,7 @@ export const login = async ({
   });
 
   await page.reload();
+  await page.waitForLoadState("networkidle");
 
   await expect(
     page.locator('[data-testid="account-dropdown-button"]'),
