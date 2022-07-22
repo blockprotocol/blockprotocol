@@ -140,14 +140,10 @@ test("login modal screen 1 correctly handles interactions", async ({
 
   // @todo Remove when Safari bug is fixed
   // (main page scrolls down when modal is closed, navbar disappears)
-  if (browserName === "webkit") {
-    test.info().annotations.push({
-      type: "issue",
-      description:
-        "https://app.asana.com/0/1202542409311090/1202629133807661/f (internal)",
-    });
-    return;
-  }
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202542409311090/1202629133807661/f (internal)",
+  );
 
   await openLoginModal({ page, isMobile });
   await expect(loginModal).toBeVisible();
