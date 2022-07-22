@@ -1,10 +1,6 @@
-import type { Page } from "playwright";
 import { expect, test } from "playwright-test-coverage";
 
-const openMobileNav = async (page: Page) => {
-  await page.locator("[data-testid='mobile-nav-trigger']").click();
-  await expect(page.locator("[data-testid='mobile-nav']")).toBeVisible();
-};
+import { openLoginModal, openMobileNav } from "../shared/nav";
 
 test("page header navigation works", async ({
   page,
@@ -58,12 +54,7 @@ test("page header navigation works", async ({
     page.locator("text=Create your Block Protocol account"),
   ).toBeVisible();
 
-  if (isMobile) {
-    await openMobileNav(page);
-  }
-
-  await navSelector.locator("text=Log In").click();
-  await expect(page.locator("text=Sign in to theBlock Protocol")).toBeVisible();
+  await openLoginModal({ page, isMobile });
   await expect(page).toHaveURL("/signup");
 });
 
