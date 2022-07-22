@@ -14,6 +14,7 @@ import {
   shouldUseDummyEmailService,
 } from "../../config";
 import { sendMail } from "../aws-ses";
+import { sendDummyEmail } from "../dummy-emails";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 import { ApiKey } from "./api-key.model";
 import { EntityType } from "./entity-type.model";
@@ -341,10 +342,10 @@ export class User {
     ).toString()}`;
 
     if (shouldUseDummyEmailService) {
-      // eslint-disable-next-line no-console
-      console.log("Email verification code: ", loginCode.code);
-      // eslint-disable-next-line no-console
-      console.log("Magic Link: ", magicLink);
+      await sendDummyEmail([
+        `Email verification code: ${loginCode.code}`,
+        `Magic Link: ${magicLink}`,
+      ]);
     } else {
       await sendMail({
         to: this.email,
@@ -398,10 +399,10 @@ export class User {
     ).toString()}`;
 
     if (shouldUseDummyEmailService) {
-      // eslint-disable-next-line no-console
-      console.log("Email verification code: ", emailVerificationCode.code);
-      // eslint-disable-next-line no-console
-      console.log("Magic Link: ", magicLink);
+      await sendDummyEmail([
+        `Email verification code: ${emailVerificationCode.code}`,
+        `Magic Link: ${magicLink}`,
+      ]);
     } else {
       await sendMail({
         to: this.email,

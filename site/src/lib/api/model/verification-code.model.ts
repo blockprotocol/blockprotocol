@@ -49,8 +49,6 @@ export class VerificationCode {
   static PRUNE_AGE_MS = 1000 * 60 * 60 * 24 * 7;
 
   private static generateCode() {
-    return "dummy-token-to-replace";
-
     return (rword.generate(4) as string[]).join("-");
   }
 

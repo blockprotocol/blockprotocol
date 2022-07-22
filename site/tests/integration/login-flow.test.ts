@@ -1,8 +1,8 @@
 import execa from "execa";
 import { expect, test } from "playwright-test-coverage";
 
+import { readValueFromRecentDummyEmail } from "../shared/dummy-emails";
 import { openLoginModal } from "../shared/nav";
-import { readRecentValueFromNextStdout } from "../shared/nextjs-stdout";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
@@ -30,7 +30,7 @@ test("login works for an existing user (via verification code)", async ({
   );
 
   await verificationCodeInput.fill(
-    await readRecentValueFromNextStdout("Email verification code: "),
+    await readValueFromRecentDummyEmail("Email verification code: "),
   );
   await verificationCodeInput.press("Enter");
 
