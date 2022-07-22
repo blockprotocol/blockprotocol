@@ -1,0 +1,13 @@
+diff --git a/node_modules/playwright-core/lib/server/fetch.js b/node_modules/playwright-core/lib/server/fetch.js
+index 13cd767..10178c0 100644
+--- a/node_modules/playwright-core/lib/server/fetch.js
++++ b/node_modules/playwright-core/lib/server/fetch.js
+@@ -187,7 +187,7 @@ class APIRequestContext extends _instrumentation.SdkObject {
+       const cookie = parseCookie(header);
+       if (!cookie) continue; // https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.3
+ 
+-      if (!cookie.domain) cookie.domain = url.hostname;else (0, _utils.assert)(cookie.domain.startsWith('.'));
++      if (!cookie.domain) cookie.domain = url.hostname;else cookie.domain = cookie.domain.replace(/^./, '');
+       if (!(0, _cookieStore.domainMatches)(url.hostname, cookie.domain)) continue; // https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.4
+ 
+       if (!cookie.path || !cookie.path.startsWith('/')) cookie.path = defaultPath;
