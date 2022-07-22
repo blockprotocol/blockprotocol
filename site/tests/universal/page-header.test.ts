@@ -1,12 +1,16 @@
-import type { Page } from "playwright";
 import { expect, test } from "playwright-test-coverage";
 
-const openMobileNav = async (page: Page) => {
-  await page.locator("[data-testid='mobile-nav-trigger']").click();
-  await expect(page.locator("[data-testid='mobile-nav']")).toBeVisible();
-};
+import { openLoginModal, openMobileNav } from "../shared/nav";
 
-test("page header navigation works", async ({ page, isMobile }) => {
+test("page header navigation works", async ({
+  page,
+  isMobile,
+  browserName,
+}) => {
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202542409311090/1202651551651725",
+  );
   await page.goto("/");
 
   const navSelector = page.locator(
@@ -50,20 +54,12 @@ test("page header navigation works", async ({ page, isMobile }) => {
     page.locator("text=Create your Block Protocol account"),
   ).toBeVisible();
 
-  if (isMobile) {
-    await openMobileNav(page);
-  }
-
-  await navSelector.locator("text=Log In").click();
-  await expect(page.locator("text=Sign in to theBlock Protocol")).toBeVisible();
+  await openLoginModal({ page, isMobile });
   await expect(page).toHaveURL("/signup");
 });
 
 test("triggers for search modal work", async ({ page, isMobile }) => {
-  // this flow doesn't exist on mobile
-  if (isMobile) {
-    test.skip();
-  }
+  test.skip(!!isMobile, "This feature does not exist on mobile");
 
   await page.goto("/");
 

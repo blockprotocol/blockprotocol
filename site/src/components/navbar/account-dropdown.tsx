@@ -40,6 +40,7 @@ export const AccountDropdown: FunctionComponent = () => {
   return (
     <Box>
       <Button
+        data-testid="account-dropdown-button"
         variant="transparent"
         aria-describedby={id}
         onClick={handleClick}
@@ -61,6 +62,8 @@ export const AccountDropdown: FunctionComponent = () => {
           horizontal: "right",
         }}
         PaperProps={{
+          // @ts-expect-error -- https://github.com/microsoft/TypeScript/issues/28960
+          "data-testid": "account-dropdown-popover",
           elevation: 4,
           sx: {
             width: 225,
