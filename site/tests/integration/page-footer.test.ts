@@ -3,7 +3,7 @@ import { expect, test } from "playwright-test-coverage";
 test("page footer navigation works", async ({ page }) => {
   await page.goto("/");
 
-  await page.locator("footer >> text=Block Hub").click();
+  await page.locator("footer >> a:has-text('Block Hub')").click();
   await expect(page).toHaveURL("/hub");
 
   //   uncomment when https://app.asana.com/0/1202542409311090/1202629493068301 is done
@@ -23,17 +23,17 @@ test("page footer navigation works", async ({ page }) => {
     "[data-testid='footer-social-links']",
   );
 
-  await expect(socialLinksSelector.locator("a >> nth=0")).toHaveAttribute(
+  await expect(socialLinksSelector.locator("a").first()).toHaveAttribute(
     "href",
     "https://twitter.com/blockprotocol",
   );
 
-  await expect(socialLinksSelector.locator("a >> nth=1")).toHaveAttribute(
+  await expect(socialLinksSelector.locator("a").nth(1)).toHaveAttribute(
     "href",
     "/discord",
   );
 
-  await expect(socialLinksSelector.locator("a >> nth=2")).toHaveAttribute(
+  await expect(socialLinksSelector.locator("a").nth(2)).toHaveAttribute(
     "href",
     "https://github.com/blockprotocol/blockprotocol",
   );
