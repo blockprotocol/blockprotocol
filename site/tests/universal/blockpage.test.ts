@@ -5,12 +5,11 @@ const codeBlockUrl = "/@hash/blocks/code";
 test("Updating block properties should update block preview", async ({
   page,
   isMobile,
-}, workerInfo) => {
-  // @todo: remove when unescaped string bug with safari is fixed
+  browserName,
+}) => {
   test.skip(
-    ["integration-safari", "integration-iphone"].includes(
-      workerInfo.project.name,
-    ),
+    browserName === "webkit",
+    "https://app.asana.com/0/1202542409311090/1202651551651719 (internal)",
   );
 
   await page.goto("/hub");
@@ -25,10 +24,7 @@ test("Updating block properties should update block preview", async ({
 
   const blockFrameLocator = page.frameLocator("iframe[title='block']");
 
-  // wait till block is rendered
-  await expect(blockFrameLocator.locator("input")).toBeVisible({
-    timeout: 10000,
-  });
+  await expect(blockFrameLocator.locator("input")).toBeVisible();
 
   const jsonEditor = page.locator(
     "[data-testid='block-properties-tabpanel'] >> textarea",

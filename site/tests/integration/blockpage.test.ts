@@ -17,7 +17,11 @@ if (!codeBlock || !unsupportedBlock) {
   throw new Error("Code and Embed blocks need to be prepared before tests run");
 }
 
-test("Block page should contain key elements", async ({ page, isMobile }) => {
+test("Block page should contain key elements", async ({
+  page,
+  isMobile,
+  browserName,
+}) => {
   await page.goto(codeBlock.blockPackagePath);
 
   await expect(
@@ -64,12 +68,14 @@ test("Block page should contain key elements", async ({ page, isMobile }) => {
     await page.locator("text=Preview").click();
   }
 
-  await expect(
-    page.frameLocator("iframe[title='block']").locator("input"),
-  ).toBeVisible({ timeout: 10000 });
-  await expect(
-    page.frameLocator("iframe[title='block']").locator("input"),
-  ).toHaveValue(blockExample.caption!);
+  if (browserName !== "webkit") {
+    await expect(
+      page.frameLocator("iframe[title='block']").locator("input"),
+    ).toBeVisible();
+    await expect(
+      page.frameLocator("iframe[title='block']").locator("input"),
+    ).toHaveValue(blockExample.caption!);
+  }
 
   // check if readme was displayed
   await expect(page.locator("article")).toBeVisible();
@@ -119,3 +125,4 @@ test("should show an error message if an unsupported block is rendered", async (
 });
 
 // @todo: Add tests for a text-based block
+// @todo: Add tests for a block with example-graph

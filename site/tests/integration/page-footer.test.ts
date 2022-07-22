@@ -1,6 +1,10 @@
 import { expect, test } from "playwright-test-coverage";
 
-test("page footer navigation works", async ({ page }) => {
+test("page footer navigation works", async ({ page, browserName }) => {
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202542409311090/1202651551651725",
+  );
   await page.goto("/");
 
   await page.locator("footer").scrollIntoViewIfNeeded();
