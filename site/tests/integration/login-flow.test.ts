@@ -1,3 +1,4 @@
+import execa from "execa";
 import { expect, test } from "playwright-test-coverage";
 
 import { openLoginModal } from "../shared/nav";
@@ -11,6 +12,8 @@ test("login works for an existing user (via verification code)", async ({
   page,
   isMobile,
 }) => {
+  await execa("yarn", ["exe", "scripts/seed-db.ts"]);
+
   await page.goto("/");
   const loginModal = await openLoginModal({ page, isMobile });
 
