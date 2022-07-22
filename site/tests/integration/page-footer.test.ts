@@ -16,8 +16,12 @@ test("page footer navigation works", async ({ page }) => {
   //   await page.locator("footer>> a:has-text('Publish a Block')").click();
   //   await page.waitForURL("/docs/developing-blocks#publish");
 
+  await page.locator("footer").scrollIntoViewIfNeeded();
+
   await page.locator("footer >> a:has-text('Contact Us')").click();
   await expect(page).toHaveURL("/contact");
+
+  await page.locator("footer").scrollIntoViewIfNeeded();
 
   const socialLinksSelector = page.locator(
     "[data-testid='footer-social-links']",
