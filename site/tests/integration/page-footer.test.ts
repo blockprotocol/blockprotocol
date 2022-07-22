@@ -28,21 +28,25 @@ test("page footer navigation works", async ({ page, browserName }) => {
     socialLinksSelector.locator("text=Star us on Github"),
   ).toHaveAttribute("href", "https://github.com/blockprotocol/blockprotocol");
 
-  await page.locator("footer >> a:has-text('Contact Us')").click();
-  await expect(page).toHaveURL("/contact");
+  await expect(
+    page.locator("footer >> a:has-text('Contact Us')"),
+  ).toHaveAttribute("href", "/contact");
 
   await page.locator("footer").scrollIntoViewIfNeeded();
 
-  await page.locator("footer >> a:has-text('Block Hub')").click();
-  await expect(page).toHaveURL("/hub");
+  await expect(
+    page.locator("footer >> a:has-text('Block Hub')"),
+  ).toHaveAttribute("href", "/hub");
 
-  //   uncomment when https://app.asana.com/0/1202542409311090/1202629493068301 is done
-  //   await page.locator("footer >> a:has-text('Documentation')").click();
-  //   await page.waitForURL("/docs");
+  await expect(
+    page.locator("footer >> a:has-text('Documentation')"),
+  ).toHaveAttribute("href", "/docs");
 
-  //   await page.locator("footer >> a:has-text('Specification')").click();
-  //   await page.waitForURL("/docs/spec");
+  await expect(
+    page.locator("footer >> a:has-text('Specification')"),
+  ).toHaveAttribute("href", "/docs/spec");
 
-  //   await page.locator("footer>> a:has-text('Publish a Block')").click();
-  //   await page.waitForURL("/docs/developing-blocks#publish");
+  await expect(
+    page.locator("footer >> a:has-text('Publish a Block')"),
+  ).toHaveAttribute("href", "/docs/developing-blocks#publish");
 });

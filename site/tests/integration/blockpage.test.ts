@@ -68,6 +68,7 @@ test("Block page should contain key elements", async ({
     await page.locator("text=Preview").click();
   }
 
+  // @todo: remove conditional when https://app.asana.com/0/1202542409311090/1202651551651719 is fixed
   if (browserName !== "webkit") {
     await expect(
       page.frameLocator("iframe[title='block']").locator("input"),
