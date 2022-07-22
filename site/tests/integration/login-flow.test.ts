@@ -190,63 +190,6 @@ test("login modal screen 1 correctly handles interactions", async ({
   await expect(emailInput).toBeFocused();
 });
 
-test.skip("login modal screen 2 correctly handles interactions", async ({
-  page,
-  isMobile,
-}) => {
-  // @todo uncomment
-  //
-  await expect(
-    loginModal.locator(
-      "text=We’ve sent an email with a verification code to alice@example.com.",
-    ),
-  ).toBeVisible();
-
-  // Incorrect verification code (empty)
-  await verificationCodeInput.click();
-  await verificationCodeInput.fill("");
-  await verificationCodeInput.press("Enter");
-  await expect(
-    page.locator("text=Please enter a valid verification code"),
-  ).toBeVisible();
-  // @todo hide error status when a user starts typing
-  // Incorrect verification code (wrong format)
-  await verificationCodeInput.fill("oops");
-  await verificationCodeInput.press("Enter");
-  await expect(
-    page.locator("text=Please enter a valid verification code"),
-  ).toBeVisible();
-  await verificationCodeInput.fill("oops");
-  await verificationCodeInput.press("Enter");
-  await expect(
-    page.locator("text=Please enter a valid verification code"),
-  ).toBeVisible();
-  // Click div[role="presentation"] >> text=Back
-  await page.locator('div[role="presentation"] >> text=Back').click();
-  // Click div[role="presentation"] >> text=Log In
-  await page.locator('div[role="presentation"] >> text=Log In').click();
-  // Click text=Use a different email address
-  await page.locator("text=Use a different email address").click();
-  // Click [aria-label="Close"]
-  await page.locator('[aria-label="Close"]').click();
-  // Click text=Create an account
-  await page.locator("text=Create an account").click();
-  await expect(page).toHaveURL("/");
-  // Click header >> text=Log In
-  await page.locator("header >> text=Log In").click();
-  await expect(page).toHaveURL("/");
-  // Click div[role="presentation"] >> text=Log In
-  await page.locator('div[role="presentation"] >> text=Log In').click();
-  // Click text=Use a different email address
-  await page.locator("text=Use a different email address").click();
-  // Click [aria-label="Close"]
-  await page.locator('[aria-label="Close"]').click();
-  // Click div[role="presentation"] >> text=Log In
-  await page.locator('div[role="presentation"] >> text=Log In').click();
-  // Click text=Resend Email
-  await page.locator("text=Resend Email").click();
-  // Click [placeholder="your-verification-code"]
-  await verificationCodeInput.click();
-
-  // verification code input vs paste
+test.skip("login modal screen 2 correctly handles interactions", () => {
+  // @todo write after finishing signup flow
 });
