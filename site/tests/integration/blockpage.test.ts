@@ -3,13 +3,15 @@ import { expect, test } from "playwright-test-coverage";
 import blocksData from "../../blocks-data.json";
 import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 
-const codeBlock = blocksData.find(
-  ({ name }) => name === "@hashintel/block-code",
-) as ExpandedBlockMetadata | null;
+const typedBlocksData = blocksData as ExpandedBlockMetadata[];
 
-const unsupportedBlock = blocksData.find(
+const codeBlock = typedBlocksData.find(
+  ({ name }) => name === "@hashintel/block-code",
+);
+
+const unsupportedBlock = typedBlocksData.find(
   ({ name }) => name === "@hashintel/block-embed",
-) as ExpandedBlockMetadata | null;
+);
 
 if (!codeBlock || !unsupportedBlock) {
   throw new Error("Code and Embed blocks need to be prepared before tests run");
