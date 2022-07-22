@@ -37,6 +37,7 @@ export const login = async ({
   email?: string;
   page: Page;
 }) => {
+  await page.waitForLoadState("networkidle");
   const response1 = await page.request.post("/api/send-login-code", {
     data: { email },
     failOnStatusCode: true,
