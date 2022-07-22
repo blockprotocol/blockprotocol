@@ -76,6 +76,7 @@ test.skip("login works for an existing user (via magic link)", async ({
 });
 
 test("login modal screen 1 correctly handles interactions", async ({
+  browserName,
   page,
   isMobile,
 }) => {
@@ -137,13 +138,21 @@ test("login modal screen 1 correctly handles interactions", async ({
   await loginModal.locator("text=Close").click();
   await expect(loginModal).toBeHidden();
 
-  // @todo Uncomment when Safari bug is fixed
+  // @todo Remove when Safari bug is fixed
   // (main page scrolls down when modal is closed, navbar disappears)
-  // https://app.asana.com/0/1202542409311090/1202629133807661/f
-  // await openLoginModal({ page, isMobile });
-  // await expect(loginModal).toBeVisible();
-  // await expect(emailInput).toBeEmpty();
-  // await expect(emailInput).toBeFocused();
+  if (browserName === "webkit") {
+    test.info().annotations.push({
+      type: "issue",
+      description:
+        "https://app.asana.com/0/1202542409311090/1202629133807661/f (internal)",
+    });
+    return;
+  }
+
+  await openLoginModal({ page, isMobile });
+  await expect(loginModal).toBeVisible();
+  await expect(emailInput).toBeEmpty();
+  await expect(emailInput).toBeFocused();
 });
 
 test.skip("login modal screen 2 correctly handles interactions", async ({
