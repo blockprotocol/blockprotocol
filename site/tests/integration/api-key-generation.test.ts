@@ -3,7 +3,10 @@ import { expect, test } from "playwright-test-coverage";
 import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 
-test("API key generation UI works", async ({ page, browserName }) => {
+test("API key page should generate and show a key", async ({
+  page,
+  browserName,
+}) => {
   await resetDb();
 
   await page.goto("/");
