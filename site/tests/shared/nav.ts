@@ -1,5 +1,7 @@
-import { Locator, Page } from "playwright";
+import type { Locator, Page } from "playwright";
 import { expect } from "playwright-test-coverage";
+
+import { readValueFromRecentDummyEmail } from "./dummy-emails";
 
 export const openMobileNav = async (page: Page) => {
   await page.locator("[data-testid='mobile-nav-trigger']").click();
@@ -23,4 +25,38 @@ export const openLoginModal = async ({
   const loginModal = page.locator('[data-testid="login-modal"]');
   await expect(loginModal).toBeVisible();
   return loginModal;
+};
+
+/**
+ * Provides a quick way to login using direct API calls instead of UI
+ */
+export const login = async ({
+  email = "alice@example.com",
+  page,
+}: {
+  email?: string;
+  page: Page;
+}) => {
+  const response1 = await page.request.post("/api/send-login-code", {
+    data: { email },
+    failOnStatusCode: true,
+  });
+
+  const { userId, verificationCodeId } = (await response1.json()) as {
+    userId: string;
+    verificationCodeId: string;
+  };
+
+  const code = await readValueFromRecentDummyEmail("Email verification code: ");
+
+  await page.request.post("/api/login-with-login-code", {
+    data: { code, userId, verificationCodeId },
+    failOnStatusCode: true,
+  });
+
+  await page.reload();
+
+  await expect(
+    page.locator('[data-testid="account-dropdown-button"]'),
+  ).toBeVisible();
 };

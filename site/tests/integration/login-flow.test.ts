@@ -1,20 +1,22 @@
-import execa from "execa";
 import { expect, test } from "playwright-test-coverage";
 
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails";
-import { openLoginModal } from "../shared/nav";
+import { resetDb } from "../shared/fixtures";
+import { login, openLoginModal } from "../shared/nav";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
 const verificationCodeInputSelector = '[placeholder="your-verification-code"]';
 const accountDropdownButtonSelector = '[data-testid="account-dropdown-button"]';
 
+test.beforeEach(async () => {
+  await resetDb();
+});
+
 test("login works for an existing user (via verification code)", async ({
   page,
   isMobile,
 }) => {
-  await execa("yarn", ["exe", "scripts/seed-db.ts"]);
-
   await page.goto("/");
   const loginModal = await openLoginModal({ page, isMobile });
 
@@ -79,8 +81,6 @@ test("login works for an existing user (via magic link)", async ({
     browserName === "webkit",
     "https://app.asana.com/0/1202542409311090/1202652399221616",
   );
-
-  await execa("yarn", ["exe", "scripts/seed-db.ts"]);
 
   await page.goto("/");
   const loginModal = await openLoginModal({ page, isMobile });
@@ -198,4 +198,16 @@ test("login modal screen 1 correctly handles interactions", async ({
 
 test.skip("login modal screen 2 correctly handles interactions", () => {
   // @todo write after finishing signup flow
+});
+
+test("Login page redirects logged in users to home page", async ({ page }) => {
+  await page.goto("/docs");
+  await login({ page });
+  expect(page.url()).toMatch(/\/docs$/);
+
+  await page.goto("/login");
+
+  await page.waitForNavigation({
+    url: (url) => url.pathname === "/",
+  });
 });
