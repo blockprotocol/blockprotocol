@@ -151,8 +151,8 @@ jobs:
       - name: Publish NPM packages to local registry
         run: yarn exe scripts/packages/publish-to-local-registry.ts
 
-      - name: Smoke-test create-block-app
-        run: yarn exe scripts/packages/smoke-test-create-block-app.ts
+      - name: e2e-test create-block-app
+        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
         env:
           NPM_CONFIG_REGISTRY: http://localhost:4873
 

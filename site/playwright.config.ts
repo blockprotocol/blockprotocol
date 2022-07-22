@@ -40,9 +40,9 @@ const config: PlaywrightTestConfig = {
       use: { ...devices["Pixel 5"] },
     },
     {
-      name: "smoke",
+      name: "e2e",
       retries: 0,
-      testMatch: "**/{smoke,universal}/**",
+      testMatch: "**/{e2e,universal}/**",
       use: { ...devices["Desktop Chrome"] },
     },
   ],
