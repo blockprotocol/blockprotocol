@@ -5,7 +5,14 @@ const codeBlockUrl = "/@hash/blocks/code";
 test("Updating block properties should update block preview", async ({
   page,
   isMobile,
-}) => {
+}, workerInfo) => {
+  // @todo: remove when unescaped string bug with safari is fixed
+  test.skip(
+    ["integration-safari", "integration-iphone"].includes(
+      workerInfo.project.name,
+    ),
+  );
+
   await page.goto("/hub");
 
   await expect(
@@ -16,17 +23,16 @@ test("Updating block properties should update block preview", async ({
 
   await page.goto(codeBlockUrl);
 
-  await expect(page.locator("iframe[title='block']")).toBeVisible();
-
   const blockFrameLocator = page.frameLocator("iframe[title='block']");
 
   // wait till block is rendered
-  // @todo figure out why this doesn't come up on safari
   await expect(blockFrameLocator.locator("input")).toBeVisible({
     timeout: 10000,
   });
 
-  const jsonEditor = page.locator("#simple-tabpanel-0 >> textarea");
+  const jsonEditor = page.locator(
+    "[data-testid='block-properties-tabpanel'] >> textarea",
+  );
 
   await expect(jsonEditor).not.toBeEmpty();
 
@@ -37,15 +43,15 @@ test("Updating block properties should update block preview", async ({
   );
 
   if (isMobile) {
-    await page.locator(".MuiTabs-root >> text=Source Code").click();
+    await page.locator("text=Source Code").click();
   }
 
   await page
-    .locator("#simple-tabpanel-0 >> textarea")
+    .locator("[data-testid='block-properties-tabpanel'] >> textarea")
     .fill(JSON.stringify({ ...blockProperties, caption: "New caption" }));
 
   if (isMobile) {
-    await page.locator(".MuiTabs-root >> text=Preview").click();
+    await page.locator("text=Preview").click();
   }
 
   await expect(blockFrameLocator.locator("input")).toHaveValue("New caption");
