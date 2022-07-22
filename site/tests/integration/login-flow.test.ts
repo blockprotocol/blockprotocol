@@ -39,9 +39,8 @@ test("login works for an existing user (via verification code)", async ({
 
   const accountDropdownButton = page.locator(accountDropdownButtonSelector);
   await expect(accountDropdownButton).toBeVisible();
-
-  await accountDropdownButton.click();
   await expect(accountDropdownButton).toHaveText("A");
+  await accountDropdownButton.click();
 
   const accountDropdownPopover = page.locator(
     '[data-testid="account-dropdown-popover"]',
@@ -114,8 +113,9 @@ test("login works for an existing user (via magic link)", async ({
   await expect(accountDropdownPopover).toContainText("Alice@alice");
   await accountDropdownPopover.locator(`span:has-text("Log Out")`).click();
 
+  // If we are able to open login modal, are logged out
   await openLoginModal({ page, isMobile });
-
+  // Same for another page (after a reload)
   await page2.reload();
   await openLoginModal({ page: page2, isMobile });
 });
