@@ -7,6 +7,7 @@ import { openLoginModal } from "../shared/nav";
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
 const verificationCodeInputSelector = '[placeholder="your-verification-code"]';
+const accountDropdownButtonSelector = '[data-testid="account-dropdown-button"]';
 
 test("login works for an existing user (via verification code)", async ({
   page,
@@ -34,9 +35,9 @@ test("login works for an existing user (via verification code)", async ({
   );
   await verificationCodeInput.press("Enter");
 
-  const accountDropdownButton = page.locator(
-    '[data-testid="account-dropdown-button"]',
-  );
+  const accountDropdownButton = page.locator(accountDropdownButtonSelector);
+  await expect(accountDropdownButton).toBeVisible();
+
   await accountDropdownButton.click();
   await expect(accountDropdownButton).toHaveText("A");
 
@@ -68,11 +69,49 @@ test("login works for an existing user (via verification code)", async ({
   await openLoginModal({ page, isMobile });
 });
 
-test.skip("login works for an existing user (via magic link)", async ({
+test("login works for an existing user (via magic link)", async ({
   page,
+  context,
   isMobile,
 }) => {
-  // @todo copy from above, open new page instead
+  await execa("yarn", ["exe", "scripts/seed-db.ts"]);
+
+  await page.goto("/");
+  const loginModal = await openLoginModal({ page, isMobile });
+
+  const emailInput = loginModal.locator(emailInputSelector);
+
+  await emailInput.fill("alice@example.com");
+  await emailInput.press("Enter");
+
+  await expect(loginModal.locator("text=Check your inbox")).toBeVisible();
+
+  const magicLink = await readValueFromRecentDummyEmail("Magic Link: ");
+
+  const page2 = await context.newPage();
+  await page2.goto(magicLink);
+
+  const accountDropdownButton2 = page2.locator(accountDropdownButtonSelector);
+  await expect(accountDropdownButton2).toBeVisible();
+  await expect(accountDropdownButton2).toHaveText("A");
+
+  await page.reload();
+  const accountDropdownButton = page.locator(accountDropdownButtonSelector);
+  await expect(accountDropdownButton).toHaveText("A");
+  await accountDropdownButton.click();
+
+  const accountDropdownPopover = page.locator(
+    '[data-testid="account-dropdown-popover"]',
+  );
+
+  await expect(accountDropdownPopover).toBeVisible();
+  await expect(accountDropdownPopover).toContainText("Alice@alice");
+  await accountDropdownPopover.locator(`span:has-text("Log Out")`).click();
+
+  await openLoginModal({ page, isMobile });
+
+  await page2.reload();
+  await openLoginModal({ page: page2, isMobile });
 });
 
 test("login modal screen 1 correctly handles interactions", async ({
