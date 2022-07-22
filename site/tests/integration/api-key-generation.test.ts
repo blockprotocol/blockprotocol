@@ -49,7 +49,10 @@ test("API key page should generate and show a key", async ({
     (await page.locator('[data-testid="api-key-value"]').textContent()) ?? "";
 
   await page.locator("text=Copy to Clipboard").click();
-  await expect(page.locator("text=✓ Copied")).toBeVisible();
+  if (browserName !== "webkit") {
+    // ”Copy to Clipboard” does not work in Webkit on Linux
+    await expect(page.locator("text=✓ Copied")).toBeVisible();
+  }
   await page.locator("text=Go back").click();
 
   expect(apiKeyValue).toMatch(
@@ -91,7 +94,10 @@ test("API key page should generate and show a key", async ({
   expect(publicKeyId).not.toEqual(publicKeyId2);
 
   await page.locator("text=Copy to Clipboard").click();
-  await expect(page.locator("text=✓ Copied")).toBeVisible();
+  if (browserName !== "webkit") {
+    // ”Copy to Clipboard” does not work in Webkit on Linux
+    await expect(page.locator("text=✓ Copied")).toBeVisible();
+  }
   await expect(page.locator("text=my first key regenerated")).toBeVisible();
   await page.locator("text=Go back").click();
 
