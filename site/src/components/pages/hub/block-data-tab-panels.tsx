@@ -58,7 +58,11 @@ export const BlockDataTabPanels: FunctionComponent<BlockDataTabPanelProps> = ({
 
   return (
     <>
-      <TabPanel value={blockDataTab} index={0}>
+      <TabPanel
+        data-testid="block-properties-tabpanel"
+        value={blockDataTab}
+        index={0}
+      >
         <Box sx={{ height: modalHeight, fontSize: 14, width: "100%" }}>
           <Box
             component="textarea"
@@ -90,7 +94,11 @@ export const BlockDataTabPanels: FunctionComponent<BlockDataTabPanelProps> = ({
           />
         </Box>
       </TabPanel>
-      <TabPanel value={blockDataTab} index={1}>
+      <TabPanel
+        data-testid="block-schema-tabpanel"
+        value={blockDataTab}
+        index={1}
+      >
         <SnippetContainer height={modalHeight}>
           <Snippet
             className="snippet"

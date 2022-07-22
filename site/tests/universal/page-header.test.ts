@@ -2,7 +2,15 @@ import { expect, test } from "playwright-test-coverage";
 
 import { openLoginModal, openMobileNav } from "../shared/nav";
 
-test("page header navigation works", async ({ page, isMobile }) => {
+test("page header navigation works", async ({
+  page,
+  isMobile,
+  browserName,
+}) => {
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202542409311090/1202651551651725",
+  );
   await page.goto("/");
 
   const navSelector = page.locator(
@@ -51,10 +59,7 @@ test("page header navigation works", async ({ page, isMobile }) => {
 });
 
 test("triggers for search modal work", async ({ page, isMobile }) => {
-  // this flow doesn't exist on mobile
-  if (isMobile) {
-    test.skip();
-  }
+  test.skip(!!isMobile, "This feature does not exist on mobile");
 
   await page.goto("/");
 
