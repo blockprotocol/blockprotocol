@@ -1,20 +1,25 @@
 import { expect, test } from "playwright-test-coverage";
 
+import { closeMobileNav, openMobileNav } from "../shared/nav";
+
 test("Docs page should contain key elements and interactions should work well", async ({
   page,
   isMobile,
 }) => {
-  // @todo add mobile tests
-  test.skip(!!isMobile);
-
-  // Go to http://localhost:3000/docs
   await page.goto("http://localhost:3000/docs");
-
-  await expect(page.locator("aside")).toBeVisible();
 
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
-  // confirm all top nav links are visible in sidebar
+  const sidebarSelector = page.locator(
+    isMobile ? "[data-testid='mobile-nav']" : "aside",
+  );
+
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await expect(sidebarSelector).toBeVisible();
+
   for (const [name, href] of [
     ["Introduction", "/docs"],
     ["Developing Blocks", "/docs/developing-blocks"],
@@ -22,38 +27,45 @@ test("Docs page should contain key elements and interactions should work well", 
     ["Specification", "/docs/spec"],
     ["FAQs", "/docs/faq"],
   ] as const) {
-    const item = page.locator(`aside >> text="${name}"`).first();
+    const item = sidebarSelector.locator(`a:has-text("${name}")`).first();
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute("href", href);
   }
 
-  // confirm toggle works
-  await page
-    .locator('aside >> a:has-text("Introduction") + button')
+  // confirm expand button works
+  await sidebarSelector
+    .locator(':has-text("Introduction") + button')
     .first()
     .click();
   await expect(
-    page.locator('aside >> a:has-text("Overview")').first(),
+    sidebarSelector.locator('a:has-text("Overview")').first(),
   ).not.toBeVisible();
-  await page
-    .locator('aside >> a:has-text("Introduction") + button')
+  await sidebarSelector
+    .locator(':has-text("Introduction") + button')
     .first()
     .click();
   await expect(
-    page.locator('aside >> a:has-text("Overview")').first(),
+    sidebarSelector.locator('a:has-text("Overview")').first(),
   ).toBeVisible();
 
-  //  check if clicking on header text updates url
-  await page.locator('aside >> a:has-text("Overview")').first().click();
+  if (isMobile) {
+    await closeMobileNav(page);
+  }
+
+  await page.locator('h2:has-text("Overview") >> a').click();
   await expect(page).toHaveURL("http://localhost:3000/docs#overview");
   await expect(page.locator('h2:has-text("Overview")')).toBeVisible();
 
-  //  navigate to spec page
-  await page.locator("aside >> a:has-text('Specification')").first().click();
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  // navigate to spec page
+  await sidebarSelector.locator("a:has-text('Specification')").first().click();
   await expect(page).toHaveURL("http://localhost:3000/docs/spec");
   await expect(page.locator('h1:has-text("Specification")')).toBeVisible();
 
-  //  confirm github card is rendered and urls are correct
+  // confirm github card is rendered and urls are correct
   await expect(page.locator("[data-testid='github-info-card']")).toBeVisible();
   await expect(
     page.locator(
@@ -84,8 +96,13 @@ test("Docs page should contain key elements and interactions should work well", 
     page.locator("text=NextCore Specification 0.2 >> a"),
   ).toHaveAttribute("href", "/docs/spec/core-specification");
 
-  await page.locator("aside >> a:has-text('FAQs')").click();
-  await page.locator('h1:has-text("FAQs")').click();
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await sidebarSelector.locator("a:has-text('FAQs')").click();
+
+  await expect(page.locator('h1:has-text("FAQs")')).toBeVisible();
 
   await expect(
     page.locator(
@@ -95,8 +112,9 @@ test("Docs page should contain key elements and interactions should work well", 
 
   await page
     .locator(
-      'div[role="button"]:has-text("What’s the point of the Block Protocol?")',
+      '[data-testid="ExpandMoreIcon"]:near(:has-text("What’s the point of the Block Protocol?"))',
     )
+    .first()
     .click();
 
   await expect(
