@@ -233,6 +233,7 @@ jobs:
         run: yarn nyc report --reporter=lcovonly --reporter=text
 
       - uses: codecov/codecov-action@v3
+        if: ${{ success() || failure() }}
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true

@@ -1,20 +1,22 @@
-import execa from "execa";
 import { expect, test } from "playwright-test-coverage";
 
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails";
-import { openLoginModal } from "../shared/nav";
+import { resetDb } from "../shared/fixtures";
+import { login, openLoginModal } from "../shared/nav";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
 const verificationCodeInputSelector = '[placeholder="your-verification-code"]';
 const accountDropdownButtonSelector = '[data-testid="account-dropdown-button"]';
 
+test.beforeEach(async () => {
+  await resetDb();
+});
+
 test("login works for an existing user (via verification code)", async ({
   page,
   isMobile,
 }) => {
-  await execa("yarn", ["exe", "scripts/seed-db.ts"]);
-
   await page.goto("/");
   const loginModal = await openLoginModal({ page, isMobile });
 
@@ -37,9 +39,8 @@ test("login works for an existing user (via verification code)", async ({
 
   const accountDropdownButton = page.locator(accountDropdownButtonSelector);
   await expect(accountDropdownButton).toBeVisible();
-
-  await accountDropdownButton.click();
   await expect(accountDropdownButton).toHaveText("A");
+  await accountDropdownButton.click();
 
   const accountDropdownPopover = page.locator(
     '[data-testid="account-dropdown-popover"]',
@@ -80,8 +81,6 @@ test("login works for an existing user (via magic link)", async ({
     "https://app.asana.com/0/1202542409311090/1202652399221616",
   );
 
-  await execa("yarn", ["exe", "scripts/seed-db.ts"]);
-
   await page.goto("/");
   const loginModal = await openLoginModal({ page, isMobile });
 
@@ -114,8 +113,9 @@ test("login works for an existing user (via magic link)", async ({
   await expect(accountDropdownPopover).toContainText("Alice@alice");
   await accountDropdownPopover.locator(`span:has-text("Log Out")`).click();
 
+  // If we are able to open login modal, are logged out
   await openLoginModal({ page, isMobile });
-
+  // Same for another page (after a reload)
   await page2.reload();
   await openLoginModal({ page: page2, isMobile });
 });
@@ -198,4 +198,25 @@ test("login modal screen 1 correctly handles interactions", async ({
 
 test.skip("login modal screen 2 correctly handles interactions", () => {
   // @todo write after finishing signup flow
+});
+
+test("Login page redirects logged in users to home page", async ({
+  browserName,
+  page,
+}) => {
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202538466812818/1202652337622563/f",
+  );
+
+  await page.goto("/docs");
+  await login({ page });
+  expect(page.url()).toMatch(/\/docs$/);
+
+  await Promise.all([
+    page.goto("/login"),
+    page.waitForNavigation({
+      url: (url) => url.pathname === "/",
+    }),
+  ]);
 });
