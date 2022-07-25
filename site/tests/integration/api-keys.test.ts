@@ -117,9 +117,7 @@ test("API key page should generate a valid key", async ({
   });
 
   const response2 = await request.get("/api/blocks", {
-    headers: {
-      "x-api-key": apiKeyValue,
-    },
+    headers: { "x-api-key": apiKeyValue },
   });
   expect(response2.status()).toBe(401);
   expect(await response2.json()).toEqual({
@@ -127,9 +125,7 @@ test("API key page should generate a valid key", async ({
   });
 
   const response3 = await request.get("/api/blocks", {
-    headers: {
-      "x-api-key": apiKeyValue.replace(/\d{4}$/, "0000"),
-    },
+    headers: { "x-api-key": apiKeyValue.replace(/\d{4}$/, "0000") },
   });
   expect(response3.status()).toBe(401);
   expect(await response3.json()).toEqual({
@@ -137,9 +133,7 @@ test("API key page should generate a valid key", async ({
   });
 
   const response4 = await request.get("/api/blocks", {
-    headers: {
-      "x-api-key": apiKeyValue2,
-    },
+    headers: { "x-api-key": apiKeyValue2 },
   });
   expect(response4.status()).toBe(200);
   const blocks = await response4.json();
