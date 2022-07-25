@@ -27,7 +27,7 @@ A **hook** is an injection point blocks provide to embedding applications to all
 
 **Note: the word 'optionally' here is key.** Blocks cannot today _require_ embedding applications to implement a handler for any specific 'hook'. Instead, they should implement a fallback in the event the embedding application does not implement a hook (see the Errors section below)
 
-A classical example would be rich text editing. In this case, you may not want to provide the underlying data storing the formatted text, as this may be bespoke to your embedding application. But you may still want to provide the plain text value for the block to make use of – e.g., if the block provides a word count feature.
+A classical example would be rich text editing. In this case, the data structure for formatted text may be bespoke to the embedding application, and impossible for the block to predictably parse or generate. The expected text editing experience may involve custom formatting controls, or special inline actions or commands. By injecting its own rich text editing input, an embedding application can provide all this.
 
 A block implements a hook by sending a `hook` message to the embedding application, with five pieces of information:
 
