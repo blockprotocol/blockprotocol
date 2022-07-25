@@ -125,18 +125,31 @@ test("API key page should generate a valid key", async ({
   });
 
   const response3 = await request.get("/api/blocks", {
-    headers: { "x-api-key": apiKeyValue.replace(/\d{4}$/, "0000") },
+    headers: {
+      "x-api-key": "oops",
+    },
   });
   expect(response3.status()).toBe(401);
   expect(await response3.json()).toEqual({
-    errors: [{ msg: "API key has been revoked." }],
+    errors: [{ msg: "API key does not match the expected format." }],
   });
 
   const response4 = await request.get("/api/blocks", {
+    headers: {
+      "x-api-key":
+        "b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000",
+    },
+  });
+  expect(response4.status()).toBe(401);
+  expect(await response4.json()).toEqual({
+    errors: [{ msg: "Invalid API key." }],
+  });
+
+  const response5 = await request.get("/api/blocks", {
     headers: { "x-api-key": apiKeyValue2 },
   });
-  expect(response4.status()).toBe(200);
-  const blocks = await response4.json();
+  expect(response5.status()).toBe(200);
+  const blocks = await response5.json();
   expect(blocks.errors).toBeUndefined();
   expect(Array.isArray(blocks.results)).toBeTruthy();
   expect(blocks.results[0].author).not.toBeUndefined();
