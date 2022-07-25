@@ -11,6 +11,7 @@ export const GitHubInfoCard: FunctionComponent = () => (
   <Paper
     variant="teal"
     className="github-info-card"
+    data-testid="github-info-card"
     sx={{
       marginBottom: {
         xs: 3,

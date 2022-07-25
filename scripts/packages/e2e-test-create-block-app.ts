@@ -37,7 +37,7 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
-  console.log(chalk.bold("Smoke-testing create-block-app..."));
+  console.log(chalk.bold("E2E-testing create-block-app..."));
 
   const tmpNodeCacheDir = await tmp.dir({ unsafeCleanup: true });
 
