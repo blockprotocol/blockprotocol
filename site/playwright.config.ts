@@ -17,7 +17,11 @@ const config: PlaywrightTestConfig = {
     {
       name: "integration-chrome",
       ...integrationTestsBaseConfig,
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        // https://github.com/microsoft/playwright/issues/13037#issuecomment-1184698467
+        contextOptions: { permissions: ["clipboard-read", "clipboard-write"] },
+      },
     },
     {
       name: "integration-firefox",
@@ -37,7 +41,11 @@ const config: PlaywrightTestConfig = {
     {
       name: "integration-pixel",
       ...integrationTestsBaseConfig,
-      use: { ...devices["Pixel 5"] },
+      use: {
+        ...devices["Pixel 5"],
+        // https://github.com/microsoft/playwright/issues/13037#issuecomment-1184698467
+        contextOptions: { permissions: ["clipboard-read", "clipboard-write"] },
+      },
     },
     {
       name: "e2e",

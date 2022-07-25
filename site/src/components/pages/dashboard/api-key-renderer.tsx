@@ -75,6 +75,7 @@ export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
         }}
       >
         <Box
+          data-testid="api-key-value"
           sx={{
             overflowWrap: "anywhere",
             textAlign: "left",
