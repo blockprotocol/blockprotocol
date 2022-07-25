@@ -312,7 +312,7 @@ These tests are located in the `site/tests` folder.
 They are grouped into:
 
 - integration tests
-- smoke tests
+- e2e tests
 - universal tests (those that belong to both categories)
 
 ### [Integration tests](https://en.wikipedia.org/wiki/Integration_testing)
@@ -331,20 +331,20 @@ yarn workspace @blockprotocol/site playwright test --project integration
 
 Note that local app data will be modified by the tests.
 
-### [Smoke tests](<https://en.wikipedia.org/wiki/Smoke_testing_(software)>)
+### [E2Etests](https://www.browserstack.com/guide/end-to-end-testing)
 
-Smoke tests are end-to-end tests which are designed to run against Vercel deployments.
+e2e tests are end-to-end tests which are designed to run against Vercel deployments.
 Their goal is to supplement integration tests to sense-check deployed instances of the website.
-Smoke tests are read-only, which helps avoid data corruption in production and reduces execution time.
-We automatically run smoke tests for all new Vercel deployments and on schedule to spot potential regressions ([site-deployment.yml](https://github.com/blockprotocol/blockprotocol/actions/workflows/site-deployment.yml)).
+e2e tests are read-only, which helps avoid data corruption in production and reduces execution time.
+We automatically run e2e tests for all new Vercel deployments and on schedule to spot potential regressions ([site-deployment.yml](https://github.com/blockprotocol/blockprotocol/actions/workflows/site-deployment.yml)).
 
-To run smoke test locally, use this command:
+To run e2e test locally, use this command:
 
 ```sh
 export PLAYWRIGHT_TEST_BASE_URL=https://blockprotocol.org
 
-yarn workspace @blockprotocol/site playwright test --project smoke
+yarn workspace @blockprotocol/site playwright test --project e2e
 ```
 
-Omitting `PLAYWRIGHT_TEST_BASE_URL` will launch smoke tests for a locally running Þ instance.
+Omitting `PLAYWRIGHT_TEST_BASE_URL` will launch e2e tests for a locally running Þ instance.
 This is helpful for debugging.
