@@ -2,7 +2,7 @@ import { expect, test } from "playwright-test-coverage";
 
 import { closeMobileNav, openMobileNav } from "../shared/nav";
 
-test("Docs page should contain key elements and interactions should work well", async ({
+test("Docs page should contain key elements and interactions should work", async ({
   page,
   isMobile,
 }) => {
@@ -37,13 +37,16 @@ test("Docs page should contain key elements and interactions should work well", 
     .locator(':has-text("Introduction") + button')
     .first()
     .click();
+
   await expect(
     sidebarSelector.locator('a:has-text("Overview")').first(),
   ).not.toBeVisible();
+
   await sidebarSelector
     .locator(':has-text("Introduction") + button')
     .first()
     .click();
+
   await expect(
     sidebarSelector.locator('a:has-text("Overview")').first(),
   ).toBeVisible();
@@ -53,7 +56,9 @@ test("Docs page should contain key elements and interactions should work well", 
   }
 
   await page.locator('h2:has-text("Overview") >> a').click();
+
   await expect(page).toHaveURL("http://localhost:3000/docs#overview");
+
   await expect(page.locator('h2:has-text("Overview")')).toBeVisible();
 
   if (isMobile) {
@@ -62,16 +67,20 @@ test("Docs page should contain key elements and interactions should work well", 
 
   // navigate to spec page
   await sidebarSelector.locator("a:has-text('Specification')").first().click();
+
   await expect(page).toHaveURL("http://localhost:3000/docs/spec");
+
   await expect(page.locator('h1:has-text("Specification")')).toBeVisible();
 
   // confirm github card is rendered and urls are correct
   await expect(page.locator("[data-testid='github-info-card']")).toBeVisible();
+
   await expect(
     page.locator(
       "[data-testid='github-info-card'] >> a:has-text('our GitHub repo')",
     ),
   ).toHaveAttribute("href", "https://github.com/blockprotocol/blockprotocol");
+
   await expect(
     page.locator(
       "[data-testid='github-info-card'] >> a:has-text('View the spec on GitHub')",
@@ -85,6 +94,7 @@ test("Docs page should contain key elements and interactions should work well", 
   await expect(
     page.locator("text=PreviousEmbedding Blocks >> a"),
   ).toBeVisible();
+
   await expect(
     page.locator("text=PreviousEmbedding Blocks >> a"),
   ).toHaveAttribute("href", "/docs/embedding-blocks");
@@ -92,6 +102,7 @@ test("Docs page should contain key elements and interactions should work well", 
   await expect(
     page.locator("text=NextCore Specification 0.2 >> a"),
   ).toBeVisible();
+
   await expect(
     page.locator("text=NextCore Specification 0.2 >> a"),
   ).toHaveAttribute("href", "/docs/spec/core-specification");
