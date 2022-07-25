@@ -66,9 +66,7 @@ test("user should be able to create schema", async ({ page }) => {
 
   await schemaModal.locator('button:has-text("Create")').click();
 
-  await expect(page).toHaveURL(
-    `http://localhost:3000/@alice/types/${schemaName2}`,
-  );
+  await expect(page).toHaveURL(`/@alice/types/${schemaName2}`);
 
   await expect(page.locator(`text=${schemaName2} Schema`)).toBeVisible();
 

@@ -14,7 +14,7 @@ test("key elements should be present when user views their account page", async 
 }) => {
   await page.goto("/@alice");
 
-  await expect(page).toHaveURL("http://localhost:3000/@alice");
+  await expect(page).toHaveURL("/@alice");
 
   await login({ page });
 
@@ -35,7 +35,7 @@ test("key elements should be present when user views their account page", async 
   // Overview tab tests
   await page.locator("[data-testid='profile-page-overview-tab']").click();
 
-  await expect(page).toHaveURL("http://localhost:3000/@alice");
+  await expect(page).toHaveURL("/@alice");
 
   await expect(
     page.locator("text=You haven’t created any blocks or schemas yet"),
@@ -57,7 +57,7 @@ test("key elements should be present when user views their account page", async 
   // Blocks tab tests
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
 
-  await expect(page).toHaveURL("http://localhost:3000/@alice/blocks");
+  await expect(page).toHaveURL("/@alice/blocks");
 
   await page.locator("text=You haven’t created any blocks yet").click();
 
@@ -98,7 +98,7 @@ test("key elements should be present when guest user views account page", async 
   page,
   isMobile,
 }) => {
-  await page.goto("http://localhost:3000/@hash");
+  await page.goto("/@hash");
   await expect(page.locator('h3:has-text("HASH")')).toBeVisible();
   await expect(page.locator("text=@hash")).toBeVisible();
 
@@ -154,7 +154,7 @@ test("key elements should be present when guest user views account page", async 
 
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
 
-  await expect(page).toHaveURL("http://localhost:3000/@hash/blocks");
+  await expect(page).toHaveURL("/@hash/blocks");
 
   const blocksCount = await page
     .locator("[data-testid='list-view-card']")
@@ -184,7 +184,7 @@ test("key elements should be present when guest user views account page", async 
 
   await page.locator("[data-testid='profile-page-schemas-tab']").click();
 
-  await expect(page).toHaveURL("http://localhost:3000/@hash/schemas");
+  await expect(page).toHaveURL("/@hash/schemas");
 
   await expect(
     page.locator("text=@hash hasn’t published any schemas yet"),
@@ -203,7 +203,7 @@ test("key elements should be present when guest user views account page", async 
 });
 
 test("navigation to invalid account page", async ({ page }) => {
-  await page.goto("http://localhost:3000/@non-existent-user");
+  await page.goto("/@non-existent-user");
   await expect(page.locator("text=404")).toBeVisible();
   await expect(
     page.locator("text=This page could not be found."),
