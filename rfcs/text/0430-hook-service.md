@@ -55,6 +55,7 @@ Where an embedding application has not implemented a hook, it must respond with 
 ### Notes
 
 - This RFC makes no changes to the Graph Service's requirements that an embedding application implementing the Graph Service must provide data in the format specified by a block's schema.
+- The embedding application remains in control of data, as specified in the Graph Service, and should continue to indicate whether the block is in a readonly state as specified in that service. The implementation of the Hook Service should mirror this state.
 
 ## Core Specification changes
 
