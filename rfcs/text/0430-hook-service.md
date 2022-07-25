@@ -36,7 +36,7 @@ A block implements a hook by sending a `hook` message to the embedding applicati
 - `path: string`: A path (expressed as a [JSON path](https://goessner.net/articles/JsonPath/)) to a property present in the block's [schema](https://blockprotocol.org/docs/spec/graph-service-specification#block-package), which the embedding application can use to render the view for this hook
 - `hookId: string | null`: The ID of the hook as provided in the response when first sending a `hook` message. This should be `null` on first call.
 
-The embedding application must respond with a `hookResponse` message specifying a `hookId: string` property, which will be provided in future `hook` messages to establish that the hook is simply being updated, and not installed.
+The embedding application must respond with a `hookResponse` message specifying a `hookId: string` property, which will be provided in future `hook` messages to establish that the hook is simply being updated, and not set up for the first time.
 
 This `hook` message should be sent every time any one of these pieces of information changes (but not, importantly, if the value `path` refers to changes – embedding applications can handle this). In this way, you can think of the message as setting up the hook.
 
