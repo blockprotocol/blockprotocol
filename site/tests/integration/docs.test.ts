@@ -5,7 +5,13 @@ import { closeMobileNav, openMobileNav } from "../shared/nav";
 test("Docs page should contain key elements and interactions should work", async ({
   page,
   isMobile,
+  browserName,
 }) => {
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202538466812818/1202659098334456",
+  );
+
   await page.goto("/docs");
 
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
