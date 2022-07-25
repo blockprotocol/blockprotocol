@@ -32,8 +32,8 @@ jobs:
           BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
           NODE_OPTIONS: --no-deprecation ## https://github.com/tirsen/retry-cli/issues/7
 
-  smoke_tests:
-    name: Smoke tests
+  e2e_tests:
+    name: E2E tests
     needs: [warm_up_vercel]
     if: github.event.deployment_status.state == 'success' || github.event.schedule == '0 4 * * *'
     runs-on: ubuntu-20.04
@@ -47,7 +47,7 @@ jobs:
       - run: yarn playwright install-deps chrome
 
       - name: Run Playwright tests
-        run: yarn workspace @blockprotocol/site playwright test --project=smoke
+        run: yarn workspace @blockprotocol/site playwright test --project=e2e
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
 
@@ -55,5 +55,5 @@ jobs:
         if: ${{ success() || failure() }}
         uses: actions/upload-artifact@v2
         with:
-          name: site-smoke-tests-playwright-report
+          name: site-e2e-tests-playwright-report
           path: site/playwright-report
