@@ -46,7 +46,7 @@ Where a hook makes use of data, the embedding application should normally read t
 
 When receiving `null` for the `node`, the embedding application should tear down any and all subscriptions made in association with this hook.
 
-In order to enable this direct manipulation, the Graph Service is likely to be difficult or impossible to implement in Embedding Applications which use common ‘sandboxing’ techniques including `iframe`s.
+As this service relies on the embedding application directly manipulating DOM nodes, it will not be possible to implement this where block's 'proxy' the Block Protocol using `postMessage` (i.e, where a block includes an `iframe`). This service requires that the embedding application implementation of the service share the global environment (commonly referred to as a 'scope' or 'realm') with the DOM node passed by the block in the `hook` message.
 
 ### Errors
 
