@@ -3,9 +3,10 @@ import { expect, test } from "playwright-test-coverage";
 import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 
-test("API key page should generate and show a key", async ({
+test("API key page should generate a valid key", async ({
   page,
   browserName,
+  request,
 }) => {
   await resetDb();
 
@@ -103,4 +104,47 @@ test("API key page should generate and show a key", async ({
 
   await expect(page.locator(`text=${publicKeyId2}`)).toBeVisible();
   await expect(page.locator(`text=${publicKeyId}`)).not.toBeVisible();
+
+  // @todo Consider moving to a separate test
+  // (requires another run of API key generation logic, perhaps without UI)
+
+  const response1 = await request.get("/api/blocks");
+  expect(response1.status()).toBe(401);
+  expect(await response1.json()).toEqual({
+    errors: [
+      { msg: "A valid API key must be provided in a 'x-api-key' header." },
+    ],
+  });
+
+  const response2 = await request.get("/api/blocks", {
+    headers: {
+      "x-api-key": apiKeyValue,
+    },
+  });
+  expect(response2.status()).toBe(401);
+  expect(await response2.json()).toEqual({
+    errors: [{ msg: "API key has been revoked." }],
+  });
+
+  const response3 = await request.get("/api/blocks", {
+    headers: {
+      "x-api-key": apiKeyValue.replace(/\d{4}$/, "0000"),
+    },
+  });
+  expect(response3.status()).toBe(401);
+  expect(await response3.json()).toEqual({
+    errors: [{ msg: "API key has been revoked." }],
+  });
+
+  const response4 = await request.get("/api/blocks", {
+    headers: {
+      "x-api-key": apiKeyValue2,
+    },
+  });
+  expect(response4.status()).toBe(200);
+  const blocks = await response4.json();
+  expect(blocks.errors).toBeUndefined();
+  expect(Array.isArray(blocks.results)).toBeTruthy();
+  expect(blocks.results[0].author).not.toBeUndefined();
+  expect(blocks.results[0].displayName).not.toBeUndefined();
 });
