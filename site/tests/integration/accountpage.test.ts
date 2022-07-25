@@ -110,7 +110,6 @@ test("key elements should be present when guest user views account page", async 
 
   const overviewCards = page.locator("[data-testid='overview-card']");
   let overviewCardCount = 0;
-
   await expect
     .poll(async () => {
       overviewCardCount = await overviewCards.count();
@@ -161,14 +160,12 @@ test("key elements should be present when guest user views account page", async 
   const listViewCards = page.locator("[data-testid='list-view-card']");
 
   let blocksCount = 0;
-
   await expect
     .poll(async () => {
       blocksCount = await listViewCards.count();
       return blocksCount;
     })
     .toBeGreaterThan(3);
-
   await expect(page.locator(`text=Blocks${blocksCount}`)).toBeVisible();
 
   const codeBlockListViewCard = page.locator("[data-testid='list-view-card']", {
