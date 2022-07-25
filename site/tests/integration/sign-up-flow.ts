@@ -2,12 +2,20 @@ import { expect, test } from "playwright-test-coverage";
 
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails";
 import { resetDb } from "../shared/fixtures";
+import { login, openMobileNav } from "../shared/nav";
 
-test("sign up flow works", async ({ page }) => {
+test("sign up flow works", async ({ isMobile, page }) => {
   await resetDb();
   await page.goto("/");
 
-  await page.locator("header >> text=Sign Up").click();
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  await page
+    .locator(isMobile ? "a:has-text('Sign Up')" : "header >> text=Sign Up")
+    .click();
+
   await expect(page).toHaveURL("/signup");
 
   await expect(
