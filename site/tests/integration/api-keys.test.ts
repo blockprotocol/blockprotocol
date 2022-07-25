@@ -125,9 +125,7 @@ test("API key page should generate a valid key", async ({
   });
 
   const response3 = await request.get("/api/blocks", {
-    headers: {
-      "x-api-key": "oops",
-    },
+    headers: { "x-api-key": "oops" },
   });
   expect(response3.status()).toBe(401);
   expect(await response3.json()).toEqual({
