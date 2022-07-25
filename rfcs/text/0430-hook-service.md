@@ -7,9 +7,9 @@
 
 [summary]: #summary
 
-This service standardizes the communication necessary between blocks and embedding applications, allowing the latter to 'take over' rendering one or more parts of a block. This allows functionality to be extended, while ensuring blocks can remain uncoupled from embedding applications.
+This RFC introduces a Hook Service which standardizes the communication necessary between blocks and embedding applications, allowing the latter to 'take over' rendering one or more parts of a block. This allows functionality to be extended, while ensuring blocks can remain uncoupled from embedding applications.
 
-In order to enable direct manipulation, this service is likely to be difficult or impossible to implement in Embedding Applications which use common ‘sandboxing’ techniques including `iframe`s.
+It also extends the Core Specification so that embedding applications must respond with a `NOT_IMPLEMENTED` error for messages to any Block Protocol services it does not implement. It is our stated intention to release an update to the `@blockprotocol/core` package which will do this for embedding applications.
 
 # Motivation
 
@@ -21,27 +21,38 @@ It is not uncommon for embedding applications to want to provide a consistent 'l
 
 [guide-level-explanation]: #guide-level-explanation
 
+## Hook Service
+
 A **hook** is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a Graph Service property in the block's schema.
 
-**Note: the word 'optionally' here is key.** Blocks cannot today _require_ embedding applications to implement a handler for any specific 'hook'. Therefore, each 'hook' must specify a fallback rendering strategy which embedding applications implementing the hook service can use instead of implementing the hook themselves.
+**Note: the word 'optionally' here is key.** Blocks cannot today _require_ embedding applications to implement a handler for any specific 'hook'. Instead, they should implement a fallback in the event the embedding application does not implement a hook (see the Errors section below)
 
 A classical example would be rich text editing. In this case, you may not want to provide the underlying data storing the formatted text, as this may be bespoke to your embedding application. But you may still want to provide the plain text value for the block to make use of – e.g., if the block provides a word count feature.
 
 A block implements a hook by sending a `hook` message to the embedding application, with five pieces of information:
 
 - `node: HTMLElement | null`: The DOM node the embedding application will render a view into, or modifying an already rendered view.
-- `type: "text" | "image" | "video" | string`: The type of view for the hook. While this can be any string as a fallback must be passed if `type` is not implemented, we believe `text`, `image`, and `video` will be commonly used. Straying from these commonly used types will make your block less portable between different embedding applications, particularly those designed to support all blocks.
+- `type: "text" | "image" | "video" | string`: The type of view for the hook. While this can be any string, we believe `text`, `image`, and `video` will be commonly used. Straying from these commonly used types could make your block less portable between different embedding applications, particularly those designed to support all blocks.
 - `path: string`: A path (expressed as a [JSON path](https://goessner.net/articles/JsonPath/)) to a property present in the block's [schema](https://blockprotocol.org/docs/spec/graph-service-specification#block-package), which the embedding application can use to render the view for this hook
-- `fallback: (node: HTMLElement, type: "text" | "image" | "video" | string, path: string) => void`: The fallback rendering method which will be used if the embedding application does not implement this particular hook
 - `hookId: string | null`: The ID of the hook as provided in the response when first sending a `hook` message. This should be `null` on first call.
 
 The embedding application must respond with a `hookResponse` message specifying a `hookId: string` property, which will be provided in future `hook` messages to establish that the hook is simply being updated, and not installed.
 
 This `hook` message should be sent every time any one of these pieces of information changes (but not, importantly, if the value `path` refers to changes – embedding applications can handle this). In this way, you can think of the message as setting up the hook.
 
-An embedding application receiving a `hook` message should use this to directly manipulate `node` in order to render the `type` view for the specified `path`. Any embedding application implementing the hook service _must_ call the `fallback` for any hooks it does not wish to implement.
+An embedding application receiving a `hook` message should use this to directly manipulate `node` in order to render the `type` view for the specified `path`.
 
 When receiving `null` for the `node`, the embedding application should tear down any and all subscriptions made in association with this hook.
+
+In order to enable this direct manipulation, the Graph Service is likely to be difficult or impossible to implement in Embedding Applications which use common ‘sandboxing’ techniques including `iframe`s.
+
+### Errors
+
+Where an embedding application has not implemented a hook, it must respond with a `NOT_IMPLEMENTED` error, which will allow blocks to implement a fallback. This error must include the `node`, `type`, `path` and `hookId` properties passed in the original `hook` message.
+
+## Core Specification changes
+
+When an embedding application receives a message from a block where it does the implement the `service` specified in the message, it must respond with a `NOT_IMPLEMENTED` error, so that blocks can respond appropriately.
 
 # Reference-level explanation
 
@@ -62,7 +73,7 @@ The section should return to the examples given in the previous section, and exp
 [drawbacks]: #drawbacks
 
 - There is the possibility for explosion in values used in `type`, or for blocks to use it to tie their block to a specific embedding application, or set of embedding applications.
-- The core service which other services build on does not allow sync communication – which may be an issue when it comes to rendering UI.
+- The core specification which services build on does not allow sync communication – which may be an issue when it comes to rendering UI. This RFC does not propose changing this at this time as we can investigate in the implementation of the Hook Service if this becomes a problem.
 
 # Rationale and alternatives
 
