@@ -8,6 +8,11 @@ export const openMobileNav = async (page: Page) => {
   await expect(page.locator("[data-testid='mobile-nav']")).toBeVisible();
 };
 
+export const closeMobileNav = async (page: Page) => {
+  await page.locator("[data-testid='mobile-nav-trigger']").click();
+  await expect(page.locator("[data-testid='mobile-nav']")).not.toBeVisible();
+};
+
 export const openLoginModal = async ({
   isMobile,
   page,

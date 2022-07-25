@@ -75,7 +75,14 @@ export const FAQ: FunctionComponent<FAQProps> = ({
           <Typography ref={headingRef}>{question}</Typography>
         </AccordionSummary>
       </Link>
-      <AccordionDetails sx={{ padding: 0, marginTop: 1, marginBottom: 4 }}>
+      <AccordionDetails
+        sx={{
+          padding: 0,
+          marginTop: 1,
+          marginBottom: 4,
+          "& > *": { visibility: "inherit" },
+        }}
+      >
         {children}
       </AccordionDetails>
     </Accordion>

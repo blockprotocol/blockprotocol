@@ -95,6 +95,7 @@ const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
+        visibility="inherit"
         bgcolor={
           isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
         }
@@ -405,6 +406,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   return (
     <Box
       {...boxProps}
+      component="aside"
       position="sticky"
       overflow="auto"
       width={SIDEBAR_WIDTH}
