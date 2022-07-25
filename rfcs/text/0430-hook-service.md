@@ -52,6 +52,10 @@ In order to enable this direct manipulation, the Graph Service is likely to be d
 
 Where an embedding application has not implemented a hook, it must respond with a `NOT_IMPLEMENTED` error, which will allow blocks to implement a fallback. This error must include the `node`, `type`, `path` and `hookId` properties passed in the original `hook` message.
 
+### Notes
+
+- This RFC makes no changes to the Graph Service's requirements that an embedding application implementing the Graph Service must provide data in the format specified by a block's schema.
+
 ## Core Specification changes
 
 When an embedding application receives a message from a block where it does the implement the `service` specified in the message, it must respond with a `NOT_IMPLEMENTED` error, so that blocks can respond appropriately.
