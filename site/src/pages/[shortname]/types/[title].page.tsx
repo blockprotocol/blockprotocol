@@ -132,10 +132,8 @@ const EntityTypePage: NextPage = () => {
       >
         <header className={tw`mb-8`}>
           <Link href={`/${shortname}`}>
-            <a>
-              {shortname}
-              {" >"}
-            </a>
+            {shortname}
+            {" >"}
           </Link>
           <Typography variant="bpHeading3" component="h1">
             <strong>{title ?? "Unnamed"}</strong> Schema
