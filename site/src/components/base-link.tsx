@@ -19,6 +19,7 @@ export const isHrefExternal = (href: string | UrlObject) =>
 
 export interface BaseLinkProps extends Omit<NextLinkProps, "passHref"> {
   children: ReactElement | string | number;
+  "data-testid"?: string;
 }
 
 /**
@@ -33,10 +34,17 @@ export const BaseLink: FunctionComponent<BaseLinkProps> = ({
 }) => {
   const child = Children.only(children);
 
-  const fixedChild =
-    isValidElement(child) && isHrefExternal(href)
-      ? cloneElement(child, { rel: "noopener", target: "_blank" })
-      : child;
+  const properties = {
+    "data-testid": rest["data-testid"],
+    ...(isHrefExternal(href) && {
+      rel: "noopener",
+      target: "_blank",
+    }),
+  };
+
+  const fixedChild = isValidElement(child)
+    ? cloneElement(child, properties)
+    : child;
 
   return (
     <NextLink {...rest} passHref href={href}>

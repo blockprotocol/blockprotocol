@@ -49,6 +49,7 @@ export const TabHeader: FunctionComponent<TabHeaderProps> = ({
 
         return (
           <BaseLink
+            data-testid={`profile-page-${value}-tab`}
             href={`/@${userShortname}${slug ? `/${slug}` : ""}`}
             shallow
             key={value}
