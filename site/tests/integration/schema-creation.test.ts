@@ -13,11 +13,11 @@ test("user should be able to create schema", async ({ page }) => {
 
   await page.goto("/dashboard");
 
-  const schemaName1 = "Testing";
-  const schemaName2 = "Testing2";
+  const existingSchemaName = "Testing";
+  const newSchemaName = "Testing2";
 
   await createSchema({
-    title: schemaName1,
+    title: existingSchemaName,
     page,
   });
 
@@ -48,7 +48,7 @@ test("user should be able to create schema", async ({ page }) => {
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeDisabled();
 
-  await schemaModal.locator("input").fill(schemaName1);
+  await schemaModal.locator("input").fill(existingSchemaName);
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 
@@ -56,19 +56,19 @@ test("user should be able to create schema", async ({ page }) => {
 
   await page
     .locator(
-      `text=Invalid schema: User already has a schema with title ${schemaName1}`,
+      `text=Invalid schema: User already has a schema with title ${existingSchemaName}`,
     )
     .click();
 
-  await schemaModal.locator("input").fill(schemaName2);
+  await schemaModal.locator("input").fill(newSchemaName);
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeEnabled();
 
   await schemaModal.locator('button:has-text("Create")').click();
 
-  await expect(page).toHaveURL(`/@alice/types/${schemaName2}`);
+  await expect(page).toHaveURL(`/@alice/types/${newSchemaName}`);
 
-  await expect(page.locator(`text=${schemaName2} Schema`)).toBeVisible();
+  await expect(page.locator(`text=${newSchemaName} Schema`)).toBeVisible();
 
   await expect(page.locator("text=@alice >")).toBeVisible();
 });
