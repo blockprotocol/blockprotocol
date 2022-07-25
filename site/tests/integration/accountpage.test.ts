@@ -5,18 +5,18 @@ import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 
+test.beforeEach(async () => {
+  await resetDb();
+});
+
 test("key elements should be present when user views their account page", async ({
   page,
 }) => {
-  await resetDb();
-
-  await page.goto("/");
-
-  await login({ page });
-
   await page.goto("/@alice");
 
   await expect(page).toHaveURL("http://localhost:3000/@alice");
+
+  await login({ page });
 
   await expect(page.locator('h3:has-text("Alice")')).toBeVisible();
 
