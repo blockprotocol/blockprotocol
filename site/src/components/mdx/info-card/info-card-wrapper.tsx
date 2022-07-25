@@ -2,10 +2,10 @@ import { Box } from "@mui/material";
 import {
   Children,
   cloneElement,
+  FunctionComponent,
   isValidElement,
   ReactElement,
   ReactNode,
-  VoidFunctionComponent,
 } from "react";
 
 import { InfoCard } from "./info-card";
@@ -16,7 +16,7 @@ type InfoCardWrapperProps = {
 
 export const INFO_CARD_WIDTH = 275;
 
-export const InfoCardWrapper: VoidFunctionComponent<InfoCardWrapperProps> = ({
+export const InfoCardWrapper: FunctionComponent<InfoCardWrapperProps> = ({
   children,
 }) => {
   const childrenAsArray = Children.toArray(children);

@@ -1,5 +1,12 @@
 import { Box, Typography } from "@mui/material";
-import React, { ReactNode, useEffect, useRef, useState, VFC } from "react";
+import {
+  FormEvent,
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "../../lib/api-client";
 import { Button } from "../button";
@@ -18,11 +25,9 @@ type SendLoginCodeScreenProps = {
   onClose?: () => void;
 };
 
-export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
-  initialEmail,
-  onLoginCodeSent,
-  onClose,
-}) => {
+export const SendLoginCodeScreen: FunctionComponent<
+  SendLoginCodeScreenProps
+> = ({ initialEmail, onLoginCodeSent, onClose }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -42,7 +47,7 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
   const [sendingLoginCode, setSendingLoginCode] = useState<boolean>(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setApiErrorMessage(undefined);
     setTouchedEmailInput(true);

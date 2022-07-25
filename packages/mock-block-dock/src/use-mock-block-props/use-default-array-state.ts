@@ -17,7 +17,7 @@ export const useDefaultArrayState = <T extends any[]>(
     setNextValue(defaultStateValue);
   }
 
-  const setState = useCallback((value) => {
+  const setState = useCallback((value: T | SetStateAction<T>) => {
     setNextValue((prevValue) => {
       const nextValue =
         typeof value === "function" ? value(prevValue.currentValue) : value;

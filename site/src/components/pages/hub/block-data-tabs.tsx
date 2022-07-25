@@ -8,7 +8,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 const DesktopTabs = styled(
   ({ children, ...props }: TabsProps & { modalOpen?: boolean }) => (
@@ -55,7 +55,7 @@ type BlockDataTabsProps = {
   showExampleGraphTab?: boolean;
 };
 
-export const BlockDataTabs: VoidFunctionComponent<BlockDataTabsProps> = ({
+export const BlockDataTabs: FunctionComponent<BlockDataTabsProps> = ({
   blockDataTab,
   setBlockDataTab,
   modalOpen,

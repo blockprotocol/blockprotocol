@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import { useRouter } from "next/router";
-import { FC, useMemo, useState } from "react";
+import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 
 import { Footer } from "./footer";
 import { BANNERS, FooterBanner } from "./footer-banner";
@@ -8,9 +8,13 @@ import { HiringBanner } from "./hiring-banner";
 import { LoginModal } from "./modal/login-modal";
 import { Navbar } from "./navbar";
 
-type PageLayoutProps = {};
+type PageLayoutProps = {
+  children?: ReactNode;
+};
 
-export const PageLayout: FC<PageLayoutProps> = ({ children }) => {
+export const PageLayout: FunctionComponent<PageLayoutProps> = ({
+  children,
+}) => {
   const { pathname } = useRouter();
 
   const [displayLoginModal, setDisplayLoginModal] = useState(false);

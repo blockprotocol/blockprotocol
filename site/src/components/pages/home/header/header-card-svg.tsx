@@ -1,4 +1,4 @@
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 /**
  * Ids needed for the animation
@@ -15,7 +15,7 @@ import { VFC } from "react";
  * #hcard_image_circle => group representing the concentric circles around #hcard_image
  */
 
-export const HeaderCardSvg: VFC<{ hideGradient: boolean }> = ({
+export const HeaderCardSvg: FunctionComponent<{ hideGradient: boolean }> = ({
   hideGradient,
 }) => {
   return (

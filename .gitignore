@@ -34,10 +34,16 @@ dist
 # vercel
 .vercel
 
+# Testing
+.nyc_output
+coverage
+
 # workspace specific
 site/blocks-data.json
+site/playwright-report
 site/public/blocks
 site/public/schemas
 site/site-map.json
+site/test-results
 
-.parcel-cache
+var

@@ -1,6 +1,7 @@
 import { createComponent, EventName } from "@lit-labs/react";
 import { BlockProtocolFunctions, BlockProtocolProps } from "blockprotocol";
-import React, { useCallback, VFC } from "react";
+// eslint-disable-next-line unicorn/import-style -- React is used in createComponent()
+import React, { FunctionComponent, useCallback } from "react";
 
 import { BlockNameWithNamespace } from "./shared";
 
@@ -89,7 +90,7 @@ type WebComponentBlockProps = {
  * Registers (if not already registered) and loads a custom element.
  * Listens for events matching Block Protocol functions and calls the relevant function.
  */
-export const WebComponentBlock: VFC<WebComponentBlockProps> = ({
+export const WebComponentBlock: FunctionComponent<WebComponentBlockProps> = ({
   elementClass,
   functions,
   name,

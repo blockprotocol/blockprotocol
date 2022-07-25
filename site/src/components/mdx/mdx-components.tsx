@@ -14,7 +14,6 @@ import {
   HTMLProps,
   isValidElement,
   ReactNode,
-  VFC,
 } from "react";
 import slugify from "slugify";
 
@@ -46,10 +45,10 @@ const Heading = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const HeadingAnchor: VFC<{ anchor: string; depth: 1 | 2 | 3 | 4 | 5 }> = ({
-  depth,
-  anchor,
-}) => {
+const HeadingAnchor: FunctionComponent<{
+  anchor: string;
+  depth: 1 | 2 | 3 | 4 | 5;
+}> = ({ depth, anchor }) => {
   const size = depth === 1 ? 28 : depth === 2 ? 24 : depth === 3 ? 20 : 16;
   return (
     <Link
@@ -85,7 +84,10 @@ const HEADING_MARGIN_TOP = {
 };
 const HEADING_MARGIN_BOTTOM = 2;
 
-export const mdxComponents: Record<string, FunctionComponent<any>> = {
+export const mdxComponents: Record<
+  string,
+  FunctionComponent<{ children?: ReactNode; [rest: string]: unknown }>
+> = {
   Box,
   Paper,
   Typography,
@@ -94,7 +96,7 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
   InfoCard,
   FAQ,
   GraphServiceMessageList,
-  SubTitle: (({ children }) => (
+  SubTitle: (({ children }: { children?: ReactNode }) => (
     <Box
       maxWidth={750}
       sx={{
@@ -107,7 +109,7 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
       {children}
     </Box>
   )) as FunctionComponent,
-  Hidden: (({ children }) => {
+  Hidden: (({ children }: { children?: ReactNode }) => {
     return (
       <span aria-hidden style={{ display: "none" }}>
         {children}
@@ -177,7 +179,7 @@ export const mdxComponents: Record<string, FunctionComponent<any>> = {
       <Heading
         mt={HEADING_MARGIN_TOP.H5}
         mb={HEADING_MARGIN_BOTTOM}
-        variant="bpHeading5"
+        variant="bpHeading4"
         {...props}
       />
     );

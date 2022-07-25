@@ -6,13 +6,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { Box, Fade } from "@mui/material";
 import {
-  FC,
+  FunctionComponent,
   ReactElement,
   useEffect,
   useMemo,
   useRef,
   useState,
-  VFC,
 } from "react";
 
 import { FontAwesomeIcon } from "../../../icons";
@@ -31,7 +30,7 @@ type TextBlockProps = {
   noBoxShadow?: boolean;
 } & BlockProps;
 
-const TextBlock: VFC<TextBlockProps> = ({
+const TextBlock: FunctionComponent<TextBlockProps> = ({
   noBoxShadow,
   withTitle,
   titleLocation = "top",
@@ -100,7 +99,7 @@ type ChecklistBlockProps = {
   direction?: "column" | "row";
 };
 
-const ChecklistBlock: VFC<ChecklistBlockProps> = ({
+const ChecklistBlock: FunctionComponent<ChecklistBlockProps> = ({
   noBoxShadow,
   withTitle,
   titleLocation = "top",
@@ -245,7 +244,7 @@ const ChecklistBlock: VFC<ChecklistBlockProps> = ({
 
 type ImageBlockProps = {} & BlockProps;
 
-const ImageBlock: VFC<ImageBlockProps> = ({
+const ImageBlock: FunctionComponent<ImageBlockProps> = ({
   withTitle,
   titleLocation = "top",
   active,
@@ -334,7 +333,7 @@ type SchemaBlockProps = {
   titleLocation?: "top" | "bottom";
 };
 
-const SchemaBlock: VFC<SchemaBlockProps> = ({
+const SchemaBlock: FunctionComponent<SchemaBlockProps> = ({
   name,
   withTitle,
   titleLocation = "top",
@@ -419,7 +418,7 @@ type AppProps = {
   block: ReactElement;
 };
 
-const App: FC<AppProps> = ({ name, block }) => {
+const App: FunctionComponent<AppProps> = ({ name, block }) => {
   const { icon, title } = useMemo(() => {
     switch (name) {
       case "docs":
@@ -520,10 +519,10 @@ const LayoutBg = () => {
   );
 };
 
-const Layout: VFC<{ blocks: ReactElement[]; withBg?: boolean }> = ({
-  blocks,
-  withBg,
-}) => {
+const Layout: FunctionComponent<{
+  blocks: ReactElement[];
+  withBg?: boolean;
+}> = ({ blocks, withBg }) => {
   return (
     <Box sx={{ p: 1, position: "relative" }}>
       <Box
@@ -570,10 +569,11 @@ const Layout: VFC<{ blocks: ReactElement[]; withBg?: boolean }> = ({
 
 type StepProps = {
   isMobile: boolean;
+  // eslint-disable-next-line react/no-unused-prop-types -- @todo remove prop or use it in the component body
   isActive?: boolean;
 };
 
-export const Step1: VFC<StepProps> = ({ isMobile }) => {
+export const Step1: FunctionComponent<StepProps> = ({ isMobile }) => {
   if (isMobile) {
     return <ChecklistBlock withTitle />;
   }
@@ -589,7 +589,7 @@ export const Step1: VFC<StepProps> = ({ isMobile }) => {
   );
 };
 
-export const Step2: VFC<StepProps> = ({ isMobile }) => {
+export const Step2: FunctionComponent<StepProps> = ({ isMobile }) => {
   if (isMobile) {
     return <App name="todo" block={<ChecklistBlock />} />;
   }
@@ -605,7 +605,7 @@ export const Step2: VFC<StepProps> = ({ isMobile }) => {
   );
 };
 
-export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
+export const Step3: FunctionComponent<StepProps> = ({ isMobile, isActive }) => {
   const [titles, setTitles] = useState<
     [AppProps["name"], AppProps["name"], AppProps["name"]]
   >(["todo", "docs", "notes"]);
@@ -652,7 +652,7 @@ export const Step3: VFC<StepProps> = ({ isMobile, isActive }) => {
   );
 };
 
-export const Step4: VFC<StepProps> = ({ isMobile }) => {
+export const Step4: FunctionComponent<StepProps> = ({ isMobile }) => {
   if (isMobile) {
     return <SchemaBlock name="itemList" withTitle titleLocation="bottom" />;
   }

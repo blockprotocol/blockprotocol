@@ -62,7 +62,7 @@ export type BlockMetadata = {
    */
   examples?: JSONObject[] | null;
   /**
-   * The dependencies a block relies on but expects the embedding application to provide, e.g. { "react": "^17.0.2" }
+   * The dependencies a block relies on but expects the embedding application to provide, e.g. { "react": "^18.0.0" }
    */
   externals?: JSONObject;
   /**

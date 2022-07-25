@@ -1,7 +1,7 @@
 import Box, { BoxProps } from "@mui/material/Box";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { useEffect, useMemo, useRef, useState, VFC } from "react";
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import PageHeadingsContext, { Heading } from "../context/page-headings-context";
 import { mdxComponents } from "./mdx-components";
@@ -14,7 +14,7 @@ type MdxPageContentProps = {
 
 let detectHeadingFromScrollTimer: NodeJS.Timeout | undefined = undefined;
 
-export const MdxPageContent: VFC<MdxPageContentProps> = ({
+export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
   serializedPage,
   ...boxProps
 }) => {
@@ -108,7 +108,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
 
   useEffect(() => {
     const onScroll = () => {
-      if (!detectHeadingFromScroll) return;
+      if (!detectHeadingFromScroll || headings.length === 0) return;
 
       let headingAtScrollPosition: Heading = headings[0]!;
 

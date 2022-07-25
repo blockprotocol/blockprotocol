@@ -7,7 +7,7 @@ import {
   Typography,
   typographyClasses,
 } from "@mui/material";
-import { FC, ReactNode, useState } from "react";
+import { FunctionComponent, ReactNode, useState } from "react";
 import slugify from "slugify";
 
 import { Link } from "../link";
@@ -15,11 +15,16 @@ import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
 
 type FAQProps = {
+  children?: ReactNode;
   anchor?: string;
-  question: ReactNode;
+  question?: ReactNode;
 };
 
-export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
+export const FAQ: FunctionComponent<FAQProps> = ({
+  question,
+  children,
+  ...props
+}) => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
   const anchor =

@@ -23,14 +23,9 @@ jobs:
       - run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
         name: Configure NPM token
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          cache: yarn
-
-      - run: yarn install
+      - uses: ./.github/actions/warm-up-repo
 
       - run: yarn exe scripts/packages/publish-to-npmjscom.ts
         env:

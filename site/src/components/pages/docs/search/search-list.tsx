@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { Box, Collapse, Divider } from "@mui/material";
-import React, { FC, useMemo } from "react";
+import { FunctionComponent, MutableRefObject, useMemo } from "react";
 import { TransitionGroup } from "react-transition-group";
 
 import { FontAwesomeIcon, SpecificationIcon } from "../../../icons";
@@ -10,13 +10,13 @@ import SearchListCategory from "./search-list-category";
 
 type SearchListProps = {
   searchResults: AlgoliaResult[];
-  searchListItemsRefs: React.MutableRefObject<HTMLButtonElement[]>;
+  searchListItemsRefs: MutableRefObject<HTMLButtonElement[]>;
   variant?: SearchVariants;
   getHighlight: (highlight: AlgoliaHighlightResult) => string;
   closeModal?: () => void;
 };
 
-const SearchList: FC<SearchListProps> = ({
+const SearchList: FunctionComponent<SearchListProps> = ({
   searchResults,
   variant = "desktop",
   getHighlight,

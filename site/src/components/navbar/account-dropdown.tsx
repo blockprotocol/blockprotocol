@@ -1,5 +1,5 @@
 import { Box, Divider, ListItemButton, Typography } from "@mui/material";
-import { useRef, useState, VFC } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
@@ -8,7 +8,7 @@ import { Link } from "../link";
 import { Popover } from "../popover";
 import { UserAvatar } from "../user-avatar";
 
-export const AccountDropdown: VFC = () => {
+export const AccountDropdown: FunctionComponent = () => {
   const { user, setUser } = useUser();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -40,6 +40,7 @@ export const AccountDropdown: VFC = () => {
   return (
     <Box>
       <Button
+        data-testid="account-dropdown-button"
         variant="transparent"
         aria-describedby={id}
         onClick={handleClick}
@@ -61,6 +62,8 @@ export const AccountDropdown: VFC = () => {
           horizontal: "right",
         }}
         PaperProps={{
+          // @ts-expect-error -- https://github.com/microsoft/TypeScript/issues/28960
+          "data-testid": "account-dropdown-popover",
           elevation: 4,
           sx: {
             width: 225,

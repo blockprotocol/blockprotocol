@@ -1,5 +1,5 @@
 import { Box, BoxProps, Typography } from "@mui/material";
-import React, { VFC } from "react";
+import { FunctionComponent } from "react";
 
 const getInitial = (name: string) => {
   if (name.length > 0) {
@@ -13,7 +13,7 @@ type AvatarProps = {
   name?: string;
 } & BoxProps;
 
-export const Avatar: VFC<AvatarProps> = ({
+export const Avatar: FunctionComponent<AvatarProps> = ({
   size = 250,
   name = "A",
   sx = [],

@@ -38,8 +38,6 @@ module.exports = {
   ignorePatterns: ["**/*.gen.*"],
   globals: {
     NodeJS: true,
-    React: true,
-    JSX: true,
     FixMeLater: "readonly",
     globalThis: "readonly",
   },
@@ -110,6 +108,15 @@ module.exports = {
     "jsx-a11y/no-autofocus": "off",
     "no-plusplus": "off",
     "unicorn/filename-case": "error",
+    "unicorn/import-style": [
+      "error",
+      {
+        styles: {
+          react: { named: true },
+          "react-dom": { named: true },
+        },
+      },
+    ],
     "prefer-destructuring": "off",
     "no-else-return": "off",
     "arrow-body-style": "off",
@@ -210,8 +217,8 @@ module.exports = {
       },
     },
     {
-      // top-level config files
-      files: ["*.config.{c,m,}js", "*rc.{c,m,}js"],
+      // config files and type declarations
+      files: ["*.config.{c,m,}js", "*rc.{c,m,}js", "*.d.ts"],
       rules: {
         "import/no-extraneous-dependencies": "off",
         "global-require": "off",
@@ -280,6 +287,18 @@ module.exports = {
             paths: [
               ...sharedNoRestrictedImportsConfig.paths,
               {
+                // @todo Remove playwright-test-coverage when https://github.com/microsoft/playwright/issues/7030 is resolved
+                name: "@playwright/test",
+                importNames: ["test"],
+                message:
+                  'Please import "expect" and "test" from "playwright-test-coverage".',
+              },
+              {
+                name: "react",
+                importNames: ["FC", "VFC", "VoidFunctionComponent"],
+                message: "Please use FunctionComponent instead.",
+              },
+              {
                 name: "@mui/material",
                 importNames: ["Link"],
                 message:
@@ -337,6 +356,15 @@ module.exports = {
       },
     },
     {
+      files: ["site/playwright.config.ts"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
+    {
       files: ["**/scripts/**"],
       rules: {
         "import/no-extraneous-dependencies": [
@@ -347,17 +375,9 @@ module.exports = {
       },
     },
     {
-      files: ["**/__mocks__/*", "*.test.ts", "*.test.tsx"],
-      env: {
-        "jest/globals": true,
-      },
+      files: ["site/tests/**"],
       rules: {
-        "import/no-extraneous-dependencies": [
-          "error",
-          {
-            devDependencies: true,
-          },
-        ],
+        "import/no-extraneous-dependencies": "off",
       },
     },
     {

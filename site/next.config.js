@@ -7,6 +7,7 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
+  productionBrowserSourceMaps: true,
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.

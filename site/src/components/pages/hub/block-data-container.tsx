@@ -11,13 +11,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { Validator } from "jsonschema";
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  VoidFunctionComponent,
-} from "react";
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import {
@@ -44,9 +38,12 @@ const validator = new Validator();
 const checkIfBlockIsSupported = ({ protocol }: BlockMetadata) =>
   protocol === "0.2";
 
-export const BlockDataContainer: VoidFunctionComponent<
-  BlockDataContainerProps
-> = ({ metadata, schema, exampleGraph, sandboxBaseUrl }) => {
+export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
+  metadata,
+  schema,
+  exampleGraph,
+  sandboxBaseUrl,
+}) => {
   const [blockDataTab, setBlockDataTab] = useState(0);
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
