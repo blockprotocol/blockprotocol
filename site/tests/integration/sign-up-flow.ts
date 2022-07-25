@@ -84,3 +84,24 @@ test("sign up flow works", async ({ isMobile, page }) => {
     page.locator('[data-testid="account-dropdown-button"]'),
   ).toBeVisible();
 });
+
+test("Sign Up page redirects logged in users to home page", async ({
+  browserName,
+  page,
+}) => {
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202538466812818/1202652337622563/f",
+  );
+
+  await page.goto("/docs");
+  await login({ page });
+  expect(page.url()).toMatch(/\/docs$/);
+
+  await Promise.all([
+    page.goto("/signup"),
+    page.waitForNavigation({
+      url: (url) => url.pathname === "/",
+    }),
+  ]);
+});
