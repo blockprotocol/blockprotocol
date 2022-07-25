@@ -130,17 +130,11 @@ This proposal fixes all of these problems.
 - Do we want to standardize the "types" of hook available or do we want it to be any arbitrary string? Should we 'special-case' the recommended types by providing specific message types for those, or should all uses of the service use the same message type?
 - Is the recommended list of types of hook sufficient?
 - How do we formalize the relationship between the hook service and the graph service?
+- Whether there’s some way of blocks requesting that a node is ONLY for displaying the relevant data, or editing the relevant data, rather than it being up to the embedding application.
 
 # Future possibilities
 
-TODO:
-
 [future-possibilities]: #future-possibilities
 
-Think about what the natural extension and evolution of your proposal would be and how it would affect the project and ecosystem as a whole in a holistic way. Try to use this section as a tool to more fully consider all possible interactions with the project and ecosystem in your proposal. Also consider how this all fits into the roadmap for the project and of the relevant sub-team.
-
-This is also a good place to "dump ideas", if they are out of scope for the RFC you are writing but otherwise related.
-
-If you have tried and cannot think of any future possibilities, you may simply state that you cannot think of anything.
-
-Note that having something written down in the future-possibilities section is not a reason to accept the current or a future RFC; such notes should be in the section on motivation or rationale in this or subsequent RFCs. The section merely provides additional information.
+- We will want a way for an embedding application to ask to take over rendering for a specific property path, essentially an inversion of the process specified in this RFC. This will enable blocks which are generic entity editors, and don't necessarily know much about the data they're editing – i.e, an Entity Editor block.
+- The Core specification should be extended so a block can know ahead of time what services / parts of services an embedding application implements. This will make some of the fallback behaviour specified in this RFC simpler.
