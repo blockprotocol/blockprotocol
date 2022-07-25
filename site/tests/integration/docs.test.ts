@@ -6,7 +6,7 @@ test("Docs page should contain key elements and interactions should work", async
   page,
   isMobile,
 }) => {
-  await page.goto("http://localhost:3000/docs");
+  await page.goto("/docs");
 
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
@@ -57,7 +57,7 @@ test("Docs page should contain key elements and interactions should work", async
 
   await page.locator('h2:has-text("Overview") >> a').click();
 
-  await expect(page).toHaveURL("http://localhost:3000/docs#overview");
+  await expect(page).toHaveURL("/docs#overview");
 
   await expect(page.locator('h2:has-text("Overview")')).toBeVisible();
 
@@ -68,7 +68,7 @@ test("Docs page should contain key elements and interactions should work", async
   // navigate to spec page
   await sidebarSelector.locator("a:has-text('Specification')").first().click();
 
-  await expect(page).toHaveURL("http://localhost:3000/docs/spec");
+  await expect(page).toHaveURL("/docs/spec");
 
   await expect(page.locator('h1:has-text("Specification")')).toBeVisible();
 
