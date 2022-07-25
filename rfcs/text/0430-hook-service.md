@@ -42,6 +42,8 @@ This `hook` message should be sent every time any one of these pieces of informa
 
 An embedding application receiving a `hook` message should use this to directly manipulate `node` in order to render the `type` view for the specified `path`.
 
+Where a hook makes use of data, the embedding application should normally read this from the `path` specified in the hook, and ensure the data available at this `path` is updated as changes are made. It may be that the hook stores data in a different format that the block's schema specifies. In this case, the embedding application should still, where possible, ensure a valid representation (i.e, fits the type specified in the block's schema) of this data is available at the relevant `path`.
+
 When receiving `null` for the `node`, the embedding application should tear down any and all subscriptions made in association with this hook.
 
 In order to enable this direct manipulation, the Graph Service is likely to be difficult or impossible to implement in Embedding Applications which use common ‘sandboxing’ techniques including `iframe`s.
