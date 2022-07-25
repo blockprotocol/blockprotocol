@@ -1,0 +1,6 @@
+{
+  "all": true,
+  "silent": true,
+  "include": "site",
+  "exclude": ["site/.next", "site/public/blocks", "site/tests"]
+}

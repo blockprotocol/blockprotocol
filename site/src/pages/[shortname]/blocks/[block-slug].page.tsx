@@ -281,44 +281,45 @@ const BlockPage: NextPage<BlockPageProps> = ({
           sx={{ display: "flex", pt: { xs: 4, md: 10 }, mb: { xs: 6, md: 12 } }}
         >
           {isDesktopSize ? (
-            <Typography variant="bpHeading1">
-              <Box
-                sx={{
-                  display: "inline-block",
-                  mr: 3,
-                  height: "2em",
-                  width: "2em",
-                }}
-                component="img"
-                src={blockMetadata.icon ?? undefined}
-              />
-            </Typography>
+            <Box
+              sx={{
+                display: "inline-block",
+                mr: 3,
+                height: 108,
+                width: 108,
+              }}
+              component="img"
+              src={blockMetadata.icon ?? undefined}
+            />
           ) : null}
 
           <Box>
-            <Typography
-              sx={{ display: { xs: "flex", md: "unset" } }}
-              variant="bpHeading1"
-              mt={2}
-            >
+            <Box sx={{ mt: 2, display: { xs: "flex", md: "unset" } }}>
               {!isDesktopSize && (
                 <Box
                   sx={{
                     display: "inline-block",
-                    height: "1em",
-                    width: "1em",
+                    height: 44,
+                    width: 44,
                     mr: 2,
                   }}
                   component="img"
                   src={blockMetadata.icon ?? undefined}
                 />
               )}
-              {blockMetadata.displayName}
-            </Typography>
-            <Typography variant="bpBodyCopy">
-              <Box sx={{ color: theme.palette.gray[80] }}>
-                {blockMetadata.description}
-              </Box>
+              <Typography
+                sx={{ display: { xs: "flex", md: "unset" } }}
+                variant="bpHeading1"
+              >
+                {blockMetadata.displayName}
+              </Typography>
+            </Box>
+
+            <Typography
+              variant="bpBodyCopy"
+              sx={{ color: theme.palette.gray[80] }}
+            >
+              {blockMetadata.description}
             </Typography>
             <Typography
               variant="bpSmallCopy"
@@ -387,6 +388,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   },
                 }}
                 mb={{ xs: 2, md: 0 }}
+                component="article"
               >
                 <MDXRemote
                   compiledSource={compiledReadme}
@@ -400,6 +402,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               <Box sx={{ overflow: "hidden" }} pl={{ xs: 0, md: 2 }}>
                 <Typography
                   variant="bpLargeText"
+                  component="h2"
                   sx={{
                     fontWeight: "bold",
                     color: theme.palette.gray[80],
@@ -415,14 +418,18 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     sx={{ marginRight: 1.5 }}
                     src="/assets/link.svg"
                   />{" "}
-                  <Typography
-                    variant="bpSmallCopy"
-                    sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
-                  >
-                    <Link href={blockMetadata.repository}>
+                  <Link href={blockMetadata.repository}>
+                    <Typography
+                      variant="bpSmallCopy"
+                      sx={{
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        borderBottom: `2px solid currentColor`,
+                      }}
+                    >
                       {repositoryDisplayUrl}
-                    </Link>
-                  </Typography>
+                    </Typography>
+                  </Link>
                 </Box>
               </Box>
             ) : null}

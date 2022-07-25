@@ -105,6 +105,7 @@ const Socials = (
     alignItems="center"
     flexWrap="wrap"
     sx={{ gridGap: "1rem" }}
+    data-testid="footer-social-links"
   >
     <Box flexShrink={0}>
       {SOCIALS.map(({ href, icon }, index) => (
@@ -167,6 +168,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
 
   return (
     <Box
+      component="footer"
       {...boxProps}
       sx={[
         {
