@@ -4,7 +4,7 @@ import { readValueFromRecentDummyEmail } from "../shared/dummy-emails";
 import { resetDb } from "../shared/fixtures";
 import { login, openMobileNav } from "../shared/nav";
 
-test("sign up flow works", async ({ isMobile, page }) => {
+test("sign up flow works", async ({ browserName, isMobile, page }) => {
   await resetDb();
   await page.goto("/");
 
@@ -77,6 +77,13 @@ test("sign up flow works", async ({ isMobile, page }) => {
   ).not.toBeVisible();
 
   await preferredNameInput.fill("Alice");
+
+  // @todo Remove when Safari bug is fixed
+  // (main page scrolls down when modal is closed, navbar disappears)
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202542409311090/1202629133807661/f (internal)",
+  );
 
   await continueButton.click();
   await expect(page).toHaveURL("/");
