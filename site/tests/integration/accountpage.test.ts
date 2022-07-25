@@ -14,8 +14,6 @@ test("key elements should be present when user views their account page", async 
 }) => {
   await page.goto("/@alice");
 
-  await expect(page).toHaveURL("/@alice");
-
   await login({ page });
 
   await expect(page.locator('h3:has-text("Alice")')).toBeVisible();
@@ -23,19 +21,17 @@ test("key elements should be present when user views their account page", async 
   await expect(page.locator("text=@alice")).toBeVisible();
 
   for (const [testId, href] of [
-    ["overview", "/@alice"],
-    ["blocks", "/@alice/blocks"],
-    ["schemas", "/@alice/schemas"],
+    ["profile-page-overview-tab", "/@alice"],
+    ["profile-page-blocks-tab", "/@alice/blocks"],
+    ["profile-page-schemas-tab", "/@alice/schemas"],
   ] as const) {
-    const item = page.locator(`[data-testid='profile-page-${testId}-tab']`);
+    const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute("href", href);
   }
 
   // Overview tab tests
   await page.locator("[data-testid='profile-page-overview-tab']").click();
-
-  await expect(page).toHaveURL("/@alice");
 
   await expect(
     page.locator("text=You haven’t created any blocks or schemas yet"),
@@ -103,18 +99,24 @@ test("key elements should be present when guest user views account page", async 
   await expect(page.locator("text=@hash")).toBeVisible();
 
   for (const [testId, href] of [
-    ["overview", "/@hash"],
-    ["blocks", "/@hash/blocks"],
-    ["schemas", "/@hash/schemas"],
+    ["profile-page-overview-tab", "/@hash"],
+    ["profile-page-blocks-tab", "/@hash/blocks"],
+    ["profile-page-schemas-tab", "/@hash/schemas"],
   ] as const) {
-    const item = page.locator(`[data-testid='profile-page-${testId}-tab']`);
+    const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute("href", href);
   }
 
-  expect(
-    await page.locator("[data-testid='overview-card']").count(),
-  ).toBeGreaterThan(3);
+  const overviewCards = page.locator("[data-testid='overview-card']");
+  let overviewCardCount = 0;
+
+  await expect
+    .poll(async () => {
+      overviewCardCount = await overviewCards.count();
+      return overviewCardCount;
+    })
+    .toBeGreaterThan(3);
 
   const codeBlockOverviewCard = page.locator("[data-testid='overview-card']", {
     hasText: codeBlockMetadata.displayName!,
@@ -156,11 +158,16 @@ test("key elements should be present when guest user views account page", async 
 
   await expect(page).toHaveURL("/@hash/blocks");
 
-  const blocksCount = await page
-    .locator("[data-testid='list-view-card']")
-    .count();
+  const listViewCards = page.locator("[data-testid='list-view-card']");
 
-  expect(blocksCount).toBeGreaterThan(3);
+  let blocksCount = 0;
+
+  await expect
+    .poll(async () => {
+      blocksCount = await listViewCards.count();
+      return blocksCount;
+    })
+    .toBeGreaterThan(3);
 
   await expect(page.locator(`text=Blocks${blocksCount}`)).toBeVisible();
 
