@@ -5,7 +5,7 @@ import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 
-test("viewing account page as authenticated user should have key elements", async ({
+test("key elements should be present when user views their account page", async ({
   page,
 }) => {
   await resetDb();
@@ -94,7 +94,7 @@ if (!codeBlockMetadata) {
   throw new Error("Code block should be prepared before tests are run");
 }
 
-test("Viewing an account page as a guest user should contain key elements", async ({
+test("key elements should be present when guest user views account page", async ({
   page,
   isMobile,
 }) => {
@@ -152,7 +152,6 @@ test("Viewing an account page as a guest user should contain key elements", asyn
     codeBlockOverviewCard.locator(`text=${codeBlockMetadata.version}`),
   ).toBeVisible();
 
-  // Click text=Overview
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
 
   await expect(page).toHaveURL("http://localhost:3000/@hash/blocks");
@@ -203,7 +202,7 @@ test("Viewing an account page as a guest user should contain key elements", asyn
   );
 });
 
-test("viewing in invalid account should 404", async ({ page }) => {
+test("navigation to invalid account page", async ({ page }) => {
   await page.goto("http://localhost:3000/@non-existent-user");
   await expect(page.locator("text=404")).toBeVisible();
   await expect(

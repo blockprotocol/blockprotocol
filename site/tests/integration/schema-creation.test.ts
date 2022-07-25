@@ -4,11 +4,6 @@ import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 import { createSchema } from "../shared/schemas";
 
-// split this into 2?
-// - schema creation
-// - show error ---> creating schema that already exists
-// - viewing entity type page
-
 test("user should be able to create schema", async ({ page }) => {
   await resetDb();
 
@@ -50,8 +45,6 @@ test("user should be able to create schema", async ({ page }) => {
       "text=Invalid schema: Schema 'title' must start with an uppercase letter, and contain ",
     ),
   ).toBeVisible();
-
-  //   @todo test if error displays when user inputs an existing schema
 
   await expect(schemaModal.locator('button:has-text("Create")')).toBeDisabled();
 
