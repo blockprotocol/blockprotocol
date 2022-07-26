@@ -140,10 +140,6 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
               ? `#${headingAtScrollPosition.anchor}`
               : ""
           }`,
-          undefined,
-          {
-            scroll: false,
-          },
         );
       }
     };
