@@ -143,7 +143,7 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
       }
     };
 
-    window.addEventListener("scroll", onScroll);
+    setTimeout(() => window.addEventListener("scroll", onScroll), 500);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
