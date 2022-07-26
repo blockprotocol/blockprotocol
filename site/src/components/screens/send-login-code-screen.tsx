@@ -17,6 +17,7 @@ import { TextField } from "../text-field";
 import { VerificationCodeInfo } from "./verification-code-screen";
 
 type SendLoginCodeScreenProps = {
+  disabled?: boolean;
   initialEmail?: string;
   onLoginCodeSent: (params: {
     verificationCodeInfo: VerificationCodeInfo;
@@ -27,14 +28,14 @@ type SendLoginCodeScreenProps = {
 
 export const SendLoginCodeScreen: FunctionComponent<
   SendLoginCodeScreenProps
-> = ({ initialEmail, onLoginCodeSent, onClose }) => {
+> = ({ disabled, initialEmail, onLoginCodeSent, onClose }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (emailInputRef.current) {
+    if (emailInputRef.current && !disabled) {
       emailInputRef.current.select();
     }
-  }, [emailInputRef]);
+  }, [emailInputRef, disabled]);
 
   const {
     emailValue,
@@ -118,6 +119,7 @@ export const SendLoginCodeScreen: FunctionComponent<
           placeholder="claude@example.com"
           variant="outlined"
           value={emailValue}
+          disabled={disabled}
           onChange={({ target }) => {
             if (apiErrorMessage) setApiErrorMessage(undefined);
             setEmailValue(target.value);
