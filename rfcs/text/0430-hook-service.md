@@ -29,6 +29,12 @@ A **hook** is an injection point blocks provide to embedding applications to all
 
 A classical example would be rich text editing. In this case, the data structure for formatted text may be bespoke to the embedding application, and impossible for the block to predictably parse or generate. The expected text editing experience may involve custom formatting controls, or special inline actions or commands. By injecting its own rich text editing input, an embedding application can provide all this.
 
+In the rich text example, a block would send a message under the service specifying a type of `"text"`, a DOM node in which to inject the rich text editing input, and the property path the data should be stored under. Any data created by the input can be stored by the embedding application in its own format. The block need not receive this data, since it won't understand it anyway. Instead, the application should send the block a value for the property which matches what the block expects in its schema. In the case of rich text, this is likely to be `"string"`, and the application may choose to supply a plain text representation of the rich text created.
+
+# Reference-level explanation
+
+[reference-level-explanation]: #reference-level-explanation
+
 A block implements a hook by sending a `hook` message to the embedding application, with five pieces of information:
 
 - `node: HTMLElement | null`: The DOM node the embedding application will render a view into, or modifying an already rendered view.
@@ -61,20 +67,6 @@ Where an embedding application has not implemented a hook, it must respond with 
 
 When an embedding application receives a message from a block where it does the implement the `service` specified in the message, it must respond with a `NOT_IMPLEMENTED` error, so that blocks can respond appropriately.
 
-# Reference-level explanation
-
-[reference-level-explanation]: #reference-level-explanation
-
-TODO:
-
-This is the technical portion of the RFC. Explain the design in sufficient detail that:
-
-- Its interaction with other features is clear.
-- It is reasonably clear how the feature would be implemented.
-- Corner cases are dissected by example.
-
-The section should return to the examples given in the previous section, and explain more fully how the detailed proposal makes those examples work.
-
 # Drawbacks
 
 [drawbacks]: #drawbacks
@@ -86,15 +78,6 @@ The section should return to the examples given in the previous section, and exp
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-TODO:
-
-- Why is this design the best in the space of possible designs?
-- What other designs have been considered and what is the rationale for not choosing them?
-- What is the impact of not doing this?
-
-# Prior art
-
-[prior-art]: #prior-art
 
 ## `editableRef`
 
