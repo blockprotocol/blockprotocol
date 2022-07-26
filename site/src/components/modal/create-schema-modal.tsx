@@ -93,6 +93,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       contentStyle={{
         top: "40%",
       }}
+      data-testid="create-schema-modal"
     >
       <Box>
         <Typography
