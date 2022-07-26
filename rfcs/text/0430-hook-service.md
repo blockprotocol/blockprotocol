@@ -21,8 +21,6 @@ It is not uncommon for embedding applications to want to provide a consistent 'l
 
 [guide-level-explanation]: #guide-level-explanation
 
-## Hook Service
-
 A **hook** is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a Graph Service property in the block's schema.
 
 **Note: the word 'optionally' here is key.** Blocks cannot today _require_ embedding applications to implement a handler for any specific 'hook'. Instead, they should implement a fallback in the event the embedding application does not implement a hook (see the Errors section below)
@@ -34,6 +32,8 @@ In the rich text example, a block would send a message under the service specify
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
+
+## Hook Service
 
 A block implements a hook by sending a `hook` message to the embedding application, with five pieces of information:
 
