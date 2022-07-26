@@ -8,16 +8,19 @@ export const TABS = [
     title: "Overview",
     value: "overview",
     slug: "",
+    testId: "profile-page-overview-tab",
   },
   {
     title: "Blocks",
     value: "blocks",
     slug: "blocks",
+    testId: "profile-page-blocks-tab",
   },
   {
     title: "Schemas",
     value: "schemas",
     slug: "schemas",
+    testId: "profile-page-schemas-tab",
   },
 ] as const;
 
@@ -43,12 +46,13 @@ export const TabHeader: FunctionComponent<TabHeaderProps> = ({
         mb: 4,
       }}
     >
-      {TABS.map(({ title, value, slug }, index) => {
+      {TABS.map(({ title, value, slug, testId }, index) => {
         const itemCount = tabItemsCount[value];
         const tabIsActive = value === activeTab;
 
         return (
           <BaseLink
+            data-testid={testId}
             href={`/@${userShortname}${slug ? `/${slug}` : ""}`}
             shallow
             key={value}
