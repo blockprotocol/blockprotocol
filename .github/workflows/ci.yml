@@ -226,7 +226,10 @@ jobs:
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
-        run: yarn kill-port 3000
+        run: kill -2 $(lsof -t -i:3000)
+        ## TODO: Replace with kill-port when SIGINT is supported as an argument
+        ## https://github.com/tiaanduplessis/kill-port/issues/48
+        # run: yarn kill-port 3000
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
