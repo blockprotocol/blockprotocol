@@ -48,6 +48,7 @@ export const SchemaPropertiesTable: FunctionComponent<
     <table
       className={tw`max-w-full w-full text-sm text-left border-separate border border-gray-100 rounded-2xl`}
       style={{ borderSpacing: 0 }}
+      data-testid="schema-properties-table"
     >
       <thead>
         <tr>

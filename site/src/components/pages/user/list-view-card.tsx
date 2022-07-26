@@ -24,7 +24,7 @@ export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
   url,
 }) => {
   return (
-    <Link href={url}>
+    <Link data-testid="list-view-card" href={url}>
       <Box
         sx={{
           display: "flex",
