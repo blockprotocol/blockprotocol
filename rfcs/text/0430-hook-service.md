@@ -78,7 +78,6 @@ When an embedding application receives a message from a block where it does the 
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-
 ## `editableRef`
 
 [editableref]: #editableref
@@ -119,7 +118,6 @@ This proposal fixes all of these problems.
 - Is the use of property paths to indicate the relevant value problematic? Do we need to make it easy to generate these property paths (possible using a proxy)?
 - Will blocks want to pass up data which is not present on their schema (i.e, on a linked entity or aggregation) or not provided by the graph service at all
 - Do we want to standardize the "types" of hook available or do we want it to be any arbitrary string? Should we 'special-case' the recommended types by providing specific message types for those, or should all uses of the service use the same message type?
-- Is the recommended list of types of hook sufficient?
 - How do we formalize the relationship between the hook service and the graph service?
 - Whether there’s some way of blocks requesting that a node is ONLY for displaying the relevant data, or editing the relevant data, rather than it being up to the embedding application.
 
