@@ -161,6 +161,7 @@ export const LoginModal: FunctionComponent<LoginModalProps> = ({
                 <SendLoginCodeScreen
                   initialEmail={email}
                   onLoginCodeSent={handleLoginCodeSent}
+                  disabled={!modalProps.open}
                   onClose={handleClose}
                 />
               ) : null}
