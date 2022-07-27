@@ -17,10 +17,11 @@ type Node = {
 };
 
 type TextNode = {
-  value: string;
+  value: string | TextNode;
 } & Node;
 
-const isTextNode = (node: Node): node is TextNode => "value" in node;
+const isTextNode = (node: Node | string): node is TextNode =>
+  typeof node !== "string" && "value" in node;
 
 type Parent = {
   children: (TextNode | Node)[];
@@ -31,6 +32,7 @@ const isParent = (node: Node): node is Parent => "children" in node;
 type Heading = {
   type: "heading";
   depth: number;
+  anchor?: string;
 } & Parent;
 
 const isHeading = (node: Node): node is Heading => node.type === "heading";
@@ -68,13 +70,13 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
           type: "heading",
           /** @todo: don't assume that FAQ accordions are always headings at depth 3 */
           depth: 3,
+          anchor: child.attributes.find(({ name }) => name === "anchor")?.value,
           children: [
             {
               type: "text",
               value:
-                child.attributes.find(
-                  ({ name }) => name === "anchor" || name === "question",
-                )?.value ?? "Unknown",
+                child.attributes.find(({ name }) => name === "question")
+                  ?.value ?? "Unknown",
             },
           ],
         };
@@ -149,14 +151,22 @@ export const getSerializedPage = async (params: {
 // Recursively construct the text from leaf text nodes in an MDX AST
 const getFullText = (node: Node): string =>
   [
-    isTextNode(node) ? node.value : "",
+    isTextNode(node)
+      ? isTextNode(node.value)
+        ? node.value.value
+        : node.value
+      : "",
     ...(isParent(node) ? node.children.map(getFullText) : []),
   ].join("");
 
 // Recursively construct the text from leaf text nodes in an MDX AST
 const getVisibleText = (node: Node): string =>
   [
-    isTextNode(node) ? node.value : "",
+    isTextNode(node)
+      ? isTextNode(node.value)
+        ? node.value.value
+        : node.value
+      : "",
     ...(isParent(node) &&
     (node.type !== "mdxJsxTextElement" || node.name !== "Hidden")
       ? node.children.map(getVisibleText)
@@ -194,9 +204,11 @@ export const getPage = (params: {
     sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
       const newSection = {
         title: getVisibleText(currentHeading),
-        anchor: slugify(getFullText(currentHeading), {
-          lower: true,
-        }),
+        anchor:
+          currentHeading.anchor ||
+          slugify(getFullText(currentHeading), {
+            lower: true,
+          }),
         subSections: [],
       };
 
