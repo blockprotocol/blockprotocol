@@ -58,18 +58,18 @@ const MyApp = ({
     void refetchUser();
   }, [refetchUser]);
 
-  const updatePreviousRoute = (url: string) => {
-    // routeChangeStart also runs on initial load,
-    // so this condition prevents the initial URL being added to sessionStorage
-    if (!document.location.href.includes(url)) {
-      sessionStorage.setItem("previousRoute", document.location.href);
-    }
-  };
-
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
       TagManager.initialize({ gtmId: "GTM-5DRD4LS" });
     }
+
+    const updatePreviousRoute = (url: string) => {
+      // routeChangeStart also runs on initial load,
+      // so this condition prevents the initial URL being added to sessionStorage
+      if (document && !document.location.href.includes(url)) {
+        sessionStorage.setItem("previousRoute", document.location.href);
+      }
+    };
 
     Router.events.on("routeChangeStart", updatePreviousRoute);
 
