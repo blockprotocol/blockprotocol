@@ -218,7 +218,7 @@ jobs:
           yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
         env:
-          CODE_COVERAGE: true
+          TEST_COVERAGE: true
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
