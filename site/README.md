@@ -327,14 +327,16 @@ To run integration tests locally, prepare the blocks, launch the database and st
 Then run this command in a separate terminal:
 
 ```sh
-yarn workspace @blockprotocol/site playwright test --project integration
+yarn workspace @blockprotocol/site playwright test --project integration-chrome
 ```
+
+You can pick a different [Playwright project](./playwright.config.ts) (e.g. `--project=integration-iphone`) or limit the tests you want to run (e.g. `--grep="My test title"`).
 
 Note that local app data will be modified by the tests.
 
 ### [E2E tests](https://www.browserstack.com/guide/end-to-end-testing)
 
-End-to-end (E2E) tests are end-to-end tests which are designed to run against Vercel deployments.
+End-to-end (E2E) are designed to run against Vercel deployments.
 Their goal is to supplement integration tests to sense-check deployed instances of the website.
 E2E tests are read-only, which helps avoid data corruption in production and reduces execution time.
 We automatically run E2E tests for all new Vercel deployments and on schedule to spot potential regressions ([site-deployment.yml](https://github.com/blockprotocol/blockprotocol/actions/workflows/site-deployment.yml)).
@@ -355,18 +357,18 @@ This is helpful for debugging.
 When running site integration tests in CI, we collect test coverage and report it to [codecov.io](https://codecov.io) (https://app.codecov.io/gh/blockprotocol/blockprotocol).
 This helps us detect parts of the site that are potentially more prone to bugs.
 
-Resulting coverage report includes source files in the `site` folder.
+The resulting coverage report includes source files in the `site` folder.
 A statement is marked as covered if it has been invoked during either `next build` or `next start` (both on the Node.js side and in the browser).
 
-E2E tests do not report coverage as they run against a production-like environment.
+E2E tests do not report coverage as they run against a production-like server environment and are designed to only sense-check the deployment.
 If we add unit tests in the future, we can generate two or more coverage reports independently and they will be merged by [codecov.io](https://codecov.io).
 
-We use [`babel-plugin-istanbul`](https://www.npmjs.com/package/babel-plugin-istanbul) to instrument the source code with coverage reporting.
+We use [`babel-plugin-istanbul`](https://www.npmjs.com/package/babel-plugin-istanbul) to instrument source code with coverage reporting.
 [`nyc`](https://www.npmjs.com/package/nyc) collects coverage on the Node.js side during `next build` and `next start` phases.
-Client-side test coverage is collected via [`playwright-test-coverage`](https://www.npmjs.com/package/playwright-test-coverage) which we use inside Playwright tests.
+Client-side test coverage is collected via [`playwright-test-coverage`](https://www.npmjs.com/package/playwright-test-coverage) which we import in Playwright tests.
 
 The easiest way to explore test coverage is to submit a pull request and wait for integration tests to complete in CI.
-You will then see a comment by [**@codecov**](https://github.com/marketplace/codecov) with a coverage summary.
+You will then see a PR comment by [**@codecov**](https://github.com/marketplace/codecov) with a coverage summary.
 
 If you want to explore test coverage locally, follow the steps below.
 All commands are executed from the repo root dir.
@@ -374,7 +376,11 @@ All commands are executed from the repo root dir.
 1.  Set `TEST_COVERAGE` environment variable in your terminal:
 
     ```sh
+    ## posix terminals
     export TEST_COVERAGE=true
+    
+    ## cmd.exe & PowerShell
+    set TEST_COVERAGE=true
     ```
 
 1.  Build the site:
