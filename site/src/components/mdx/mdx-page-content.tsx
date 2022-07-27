@@ -1,5 +1,5 @@
 import Box, { BoxProps } from "@mui/material/Box";
-import _ from "lodash";
+import throttle from "lodash/throttle";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
@@ -156,7 +156,7 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
       }
     };
 
-    const throttledOnScroll = _.throttle(onScroll, 1000);
+    const throttledOnScroll = throttle(onScroll, 1000);
 
     window.addEventListener("scroll", throttledOnScroll);
 
