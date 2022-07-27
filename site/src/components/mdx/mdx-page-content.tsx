@@ -1,4 +1,5 @@
 import Box, { BoxProps } from "@mui/material/Box";
+import _ from "lodash";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
@@ -25,6 +26,8 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
   const detectHeadingFromScroll = useRef<boolean>(true);
 
   const currentHeading = useRef<Heading | undefined>(undefined);
+
+  const headingsRef = useRef<Heading[]>([]);
 
   useEffect(() => {
     setHeadings([]);
@@ -108,12 +111,21 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
   }, [headings, router.asPath]);
 
   useEffect(() => {
+    headingsRef.current = headings;
+  }, [headings]);
+
+  useEffect(() => {
     const onScroll = () => {
-      if (!detectHeadingFromScroll.current || headings.length === 0) return;
+      if (
+        !detectHeadingFromScroll.current ||
+        headingsRef.current.length === 0
+      ) {
+        return;
+      }
 
-      let headingAtScrollPosition: Heading = headings[0]!;
+      let headingAtScrollPosition: Heading = headingsRef.current[0]!;
 
-      for (const heading of headings.slice(1)) {
+      for (const heading of headingsRef.current.slice(1)) {
         const { element } = heading;
 
         const { top } = element.getBoundingClientRect();
@@ -144,14 +156,14 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
       }
     };
 
-    setTimeout(() => {
-      window.addEventListener("scroll", onScroll);
-    }, 500);
+    const throttledOnScroll = _.throttle(onScroll, 1000);
+
+    window.addEventListener("scroll", throttledOnScroll);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", throttledOnScroll);
     };
-  }, [router, headings]);
+  }, [router]);
 
   const contextValue = useMemo(
     () => ({
