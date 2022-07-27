@@ -33,7 +33,7 @@ export const SendLoginCodeScreen: FunctionComponent<
 
   useEffect(() => {
     if (emailInputRef.current && !disabled) {
-      emailInputRef.current.select();
+      emailInputRef.current.focus();
     }
   }, [emailInputRef, disabled]);
 
