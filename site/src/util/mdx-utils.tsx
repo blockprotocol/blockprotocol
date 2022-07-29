@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import matter from "gray-matter";
+import { htmlToText } from "html-to-text";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import path from "node:path";
@@ -153,7 +154,7 @@ const getFullText = (node: Node): string =>
   [
     isTextNode(node)
       ? isTextNode(node.value)
-        ? node.value.value
+        ? htmlToText(node.value.value as string)
         : node.value
       : "",
     ...(isParent(node) ? node.children.map(getFullText) : []),
