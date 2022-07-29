@@ -16,22 +16,15 @@ import { stringifyChildren } from "./shared/util";
 
 type FAQProps = {
   children?: ReactNode;
-  anchor?: string;
   question?: ReactNode;
 };
 
-export const FAQ: FunctionComponent<FAQProps> = ({
-  question,
-  children,
-  ...props
-}) => {
+export const FAQ: FunctionComponent<FAQProps> = ({ question, children }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const anchor =
-    props.anchor ??
-    slugify(stringifyChildren(question), {
-      lower: true,
-    });
+  const anchor = slugify(stringifyChildren(question), {
+    lower: true,
+  });
 
   const { headingRef } = usePageHeading({ anchor });
 

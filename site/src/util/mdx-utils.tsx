@@ -33,7 +33,6 @@ const isParent = (node: Node): node is Parent => "children" in node;
 type Heading = {
   type: "heading";
   depth: number;
-  anchor?: string;
 } & Parent;
 
 const isHeading = (node: Node): node is Heading => node.type === "heading";
@@ -71,7 +70,6 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
           type: "heading",
           /** @todo: don't assume that FAQ accordions are always headings at depth 3 */
           depth: 3,
-          anchor: child.attributes.find(({ name }) => name === "anchor")?.value,
           children: [
             {
               type: "text",
@@ -205,11 +203,9 @@ export const getPage = (params: {
     sections: headings.reduce<SiteMapPageSection[]>((prev, currentHeading) => {
       const newSection = {
         title: getVisibleText(currentHeading),
-        anchor:
-          currentHeading.anchor ||
-          slugify(getFullText(currentHeading), {
-            lower: true,
-          }),
+        anchor: slugify(getFullText(currentHeading), {
+          lower: true,
+        }),
         subSections: [],
       };
 
