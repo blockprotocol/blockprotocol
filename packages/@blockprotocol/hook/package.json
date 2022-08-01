@@ -5,7 +5,7 @@
   "keywords": [
     "blockprotocol",
     "blocks",
-    "graph"
+    "hook"
   ],
   "homepage": "https://blockprotocol.org",
   "bugs": {
@@ -14,7 +14,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:blockprotocol/blockprotocol.git",
-    "directory": "packages/@blockprotocol/graph"
+    "directory": "packages/@blockprotocol/hook"
   },
   "license": "MIT",
   "author": {
