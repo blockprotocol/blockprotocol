@@ -1,7 +1,6 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
 // @todo restore this when an issue with module resolution has been resolved
-
 // import graphServiceJson from "./graph-service.json" assert { type: "json" };
 import {
   BlockGraph,
