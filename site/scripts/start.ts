@@ -2,9 +2,9 @@ import chalk from "chalk";
 import execa from "execa";
 
 const script = async () => {
-  if (process.env.CODE_COVERAGE) {
+  if (process.env.TEST_COVERAGE) {
     console.log(
-      chalk.bold("Launching site in prod mode with enabled CODE_COVERAGE..."),
+      chalk.bold("Launching site in prod mode with enabled TEST_COVERAGE..."),
     );
     await execa("nyc", ["--cwd=..", "--clean=false", "next", "start"], {
       stdio: "inherit",
