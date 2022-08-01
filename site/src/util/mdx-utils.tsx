@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import matter from "gray-matter";
+import { htmlToText } from "html-to-text";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import path from "node:path";
@@ -17,10 +18,11 @@ type Node = {
 };
 
 type TextNode = {
-  value: string;
+  value: string | TextNode;
 } & Node;
 
-const isTextNode = (node: Node): node is TextNode => "value" in node;
+const isTextNode = (node: Node | string): node is TextNode =>
+  typeof node !== "string" && "value" in node;
 
 type Parent = {
   children: (TextNode | Node)[];
@@ -72,9 +74,8 @@ const getHeadingsFromParent = (parent: Parent): Heading[] =>
             {
               type: "text",
               value:
-                child.attributes.find(
-                  ({ name }) => name === "anchor" || name === "question",
-                )?.value ?? "Unknown",
+                child.attributes.find(({ name }) => name === "question")
+                  ?.value ?? "Unknown",
             },
           ],
         };
@@ -149,14 +150,22 @@ export const getSerializedPage = async (params: {
 // Recursively construct the text from leaf text nodes in an MDX AST
 const getFullText = (node: Node): string =>
   [
-    isTextNode(node) ? node.value : "",
+    isTextNode(node)
+      ? isTextNode(node.value)
+        ? htmlToText(node.value.value as string)
+        : node.value
+      : "",
     ...(isParent(node) ? node.children.map(getFullText) : []),
   ].join("");
 
 // Recursively construct the text from leaf text nodes in an MDX AST
 const getVisibleText = (node: Node): string =>
   [
-    isTextNode(node) ? node.value : "",
+    isTextNode(node)
+      ? isTextNode(node.value)
+        ? node.value.value
+        : node.value
+      : "",
     ...(isParent(node) &&
     (node.type !== "mdxJsxTextElement" || node.name !== "Hidden")
       ? node.children.map(getVisibleText)

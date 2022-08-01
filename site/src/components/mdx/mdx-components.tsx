@@ -311,6 +311,7 @@ export const mdxComponents: Record<
         borderWidth: 1,
         borderStyle: "solid",
         borderRadius: "4px",
+        wordBreak: "break-word",
       })}
       {...props}
     />
