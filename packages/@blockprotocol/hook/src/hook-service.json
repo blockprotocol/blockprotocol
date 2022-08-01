@@ -1,0 +1,57 @@
+{
+  "name": "hook",
+  "version": "0.2",
+  "coreVersion": "0.2",
+  "messages": [
+    {
+      "messageName": "hook",
+      "description": "Allow an embedding application to take over part of the block",
+      "source": "block",
+      "respondedToBy": "hookResponse",
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "node": {
+            "description": "The HTML node to provide to the embedding application",
+            "type": ["HTMLElement", "null"]
+          },
+          "type": {
+            "description": "The type of hook to create",
+            "type": "string"
+          },
+          "path": {
+            "description": "The property on the block's schema to use with the hook",
+            "type": "string"
+          },
+          "hookId": {
+            "description": "The ID provided when creating the hook, for use when updating the hook",
+            "type": ["string", "null"]
+          }
+        },
+        "required": ["node", "type", "path"]
+      },
+      "errorCodes": [
+        "NOT_IMPLEMENTED"
+      ]
+    },
+    {
+      "messageName": "hookResponse",
+      "description": "The response to a request to create a hook",
+      "source": "embedder",
+      "respondedToBy": null,
+      "sentOnInitialization": false,
+      "data": {
+        "type": "object",
+        "properties": {
+          "hookId": {
+            "description": "The ID of the hook, to identify it later",
+            "type": "string"
+          }
+        },
+        "required": ["hookId"]
+      },
+      "errorCodes": ["NOT_IMPLEMENTED"]
+    }
+  ]
+}
