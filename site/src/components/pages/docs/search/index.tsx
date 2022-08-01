@@ -4,8 +4,9 @@ import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
 import algoliasearch from "algoliasearch";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
-import React, {
+import {
   ChangeEvent,
+  FunctionComponent,
   KeyboardEvent,
   useEffect,
   useMemo,
@@ -48,7 +49,7 @@ type SearchProps = {
 
 const MAX_SEARCH_RESULTS = 10;
 
-export const Search: React.VoidFunctionComponent<SearchProps> = ({
+export const Search: FunctionComponent<SearchProps> = ({
   variant = "desktop",
   closeModal,
 }) => {

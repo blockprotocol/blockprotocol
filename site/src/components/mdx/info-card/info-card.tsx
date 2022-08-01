@@ -1,13 +1,5 @@
 import { Paper, PaperProps, Typography } from "@mui/material";
-import {
-  Children,
-  isValidElement,
-  ReactElement,
-  ReactFragment,
-  ReactNode,
-  ReactPortal,
-  VoidFunctionComponent,
-} from "react";
+import { Children, FunctionComponent, isValidElement, ReactNode } from "react";
 
 export type InfoCardVariant = "info" | "warning";
 
@@ -29,7 +21,7 @@ type InfoCardProps = {
   sx?: PaperProps["sx"];
 };
 
-export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
+export const InfoCard: FunctionComponent<InfoCardProps> = ({
   variant = "info",
   title,
   children,
@@ -38,7 +30,7 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
   const paperVariant = mapInfoCardVariantToPaperVariant(variant);
 
   const ensureChildIsWrappedInTypography = (
-    child: ReactElement | ReactFragment | ReactPortal,
+    child: ReactNode,
     index: number,
   ) => {
     return (
@@ -91,7 +83,9 @@ export const InfoCard: VoidFunctionComponent<InfoCardProps> = ({
       >
         {title}
       </Typography>
-      {Children.toArray(children).map(ensureChildIsWrappedInTypography)}
+      {Children.toArray(children).map((child, index) =>
+        ensureChildIsWrappedInTypography(child, index),
+      )}
     </Paper>
   );
 };

@@ -7,7 +7,7 @@ import {
   Typography,
   typographyClasses,
 } from "@mui/material";
-import { FC, ReactNode, useState } from "react";
+import { FunctionComponent, ReactNode, useState } from "react";
 import slugify from "slugify";
 
 import { Link } from "../link";
@@ -15,18 +15,16 @@ import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
 
 type FAQProps = {
-  anchor?: string;
-  question: ReactNode;
+  children?: ReactNode;
+  question?: ReactNode;
 };
 
-export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
+export const FAQ: FunctionComponent<FAQProps> = ({ question, children }) => {
   const [expanded, setExpanded] = useState<boolean>(false);
 
-  const anchor =
-    props.anchor ??
-    slugify(stringifyChildren(question), {
-      lower: true,
-    });
+  const anchor = slugify(stringifyChildren(question), {
+    lower: true,
+  });
 
   const { headingRef } = usePageHeading({ anchor });
 
@@ -70,7 +68,14 @@ export const FAQ: FC<FAQProps> = ({ question, children, ...props }) => {
           <Typography ref={headingRef}>{question}</Typography>
         </AccordionSummary>
       </Link>
-      <AccordionDetails sx={{ padding: 0, marginTop: 1, marginBottom: 4 }}>
+      <AccordionDetails
+        sx={{
+          padding: 0,
+          marginTop: 1,
+          marginBottom: 4,
+          "& > *": { visibility: "inherit" },
+        }}
+      >
         {children}
       </AccordionDetails>
     </Accordion>

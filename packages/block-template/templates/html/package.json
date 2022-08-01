@@ -1,6 +1,7 @@
 {
   "name": "html-block",
   "version": "0.0.0",
+  "private": true,
   "description": "Block Protocol block template for an html-based block",
   "keywords": [
     "blockprotocol",
@@ -26,7 +27,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "block-scripts": "0.0.13",
+    "block-scripts": "0.0.14",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
     "rimraf": "^3.0.2"

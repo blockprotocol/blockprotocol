@@ -1,7 +1,7 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumbs, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { FontAwesomeIcon } from "../icons";
@@ -12,7 +12,9 @@ type MobileBreadcrumbsProps = {
   crumbs: (SiteMapPage | SiteMapPageSection)[];
 };
 
-export const MobileBreadcrumbs: VFC<MobileBreadcrumbsProps> = ({ crumbs }) => {
+export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
+  crumbs,
+}) => {
   const { asPath } = useRouter();
 
   return (

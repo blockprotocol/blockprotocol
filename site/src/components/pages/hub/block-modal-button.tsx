@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import { CollapseIcon, ExpandIcon } from "../../icons";
 
@@ -8,7 +8,7 @@ type BlockModalButtonProps = {
   modalOpen?: boolean;
 };
 
-export const BlockModalButton: VoidFunctionComponent<BlockModalButtonProps> = ({
+export const BlockModalButton: FunctionComponent<BlockModalButtonProps> = ({
   setBlockModalOpen,
   modalOpen,
 }) => {

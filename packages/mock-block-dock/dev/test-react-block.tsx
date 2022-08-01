@@ -1,8 +1,4 @@
-import {
-  BlockComponent,
-  useGraphBlockService,
-} from "@blockprotocol/graph/react";
-import * as React from "react";
+import { BlockComponent, useGraphBlockService } from "@blockprotocol/graph";
 import { useRef } from "react";
 
 type AppProps = {

@@ -2,7 +2,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import { Box, BoxProps, useMediaQuery, useTheme } from "@mui/material";
-import React, { ReactElement, useMemo, useRef, VFC } from "react";
+import {
+  Fragment,
+  FunctionComponent,
+  ReactElement,
+  useMemo,
+  useRef,
+} from "react";
 import Slider, { Settings } from "react-slick";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
@@ -14,6 +20,7 @@ type CarouselProps<T> = {
   edgeBackground?: { left: string; right: string };
   settings?: Partial<Settings>;
   sx?: BoxProps["sx"];
+  "data-testid"?: string;
 };
 
 type ArrowProps = {
@@ -22,7 +29,11 @@ type ArrowProps = {
   arrowType: "prev" | "next";
 };
 
-const Arrow: VFC<ArrowProps> = ({ className, onClick, arrowType }) => {
+const Arrow: FunctionComponent<ArrowProps> = ({
+  className,
+  onClick,
+  arrowType,
+}) => {
   return (
     <Box
       className={className}
@@ -68,6 +79,7 @@ export const Carousel = <T,>({
   settings = {},
   edgeBackground,
   sx = [],
+  ...props
 }: CarouselProps<T>): ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -102,6 +114,7 @@ export const Carousel = <T,>({
 
   return (
     <Box
+      data-testid={props["data-testid"]}
       sx={[
         {
           overflow: "hidden",
@@ -221,9 +234,7 @@ export const Carousel = <T,>({
         {...sliderSettings}
       >
         {data.map((item) => (
-          <React.Fragment key={itemKey(item)}>
-            {renderItem(item)}
-          </React.Fragment>
+          <Fragment key={itemKey(item)}>{renderItem(item)}</Fragment>
         ))}
       </Slider>
     </Box>

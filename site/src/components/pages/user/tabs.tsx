@@ -1,5 +1,5 @@
 import { Box, BoxProps, Tab, Tabs, Typography } from "@mui/material";
-import { FC, VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { BaseLink } from "../../base-link";
 
@@ -8,16 +8,19 @@ export const TABS = [
     title: "Overview",
     value: "overview",
     slug: "",
+    testId: "profile-page-overview-tab",
   },
   {
     title: "Blocks",
     value: "blocks",
     slug: "blocks",
+    testId: "profile-page-blocks-tab",
   },
   {
     title: "Schemas",
     value: "schemas",
     slug: "schemas",
+    testId: "profile-page-schemas-tab",
   },
 ] as const;
 
@@ -29,7 +32,7 @@ type TabHeaderProps = {
   userShortname: string;
 };
 
-export const TabHeader: VFC<TabHeaderProps> = ({
+export const TabHeader: FunctionComponent<TabHeaderProps> = ({
   activeTab,
   tabItemsCount,
   userShortname,
@@ -43,12 +46,13 @@ export const TabHeader: VFC<TabHeaderProps> = ({
         mb: 4,
       }}
     >
-      {TABS.map(({ title, value, slug }, index) => {
+      {TABS.map(({ title, value, slug, testId }, index) => {
         const itemCount = tabItemsCount[value];
         const tabIsActive = value === activeTab;
 
         return (
           <BaseLink
+            data-testid={testId}
             href={`/@${userShortname}${slug ? `/${slug}` : ""}`}
             shallow
             key={value}
@@ -113,7 +117,7 @@ type TabPanelProps = {
   activeTab: string;
 } & BoxProps;
 
-export const TabPanel: FC<TabPanelProps> = ({
+export const TabPanel: FunctionComponent<TabPanelProps> = ({
   value,
   activeTab,
   index,

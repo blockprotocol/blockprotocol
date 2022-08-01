@@ -12,12 +12,13 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useState, VFC } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import SiteMapContext from "../context/site-map-context";
 import { useUser } from "../context/user-context";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
+import { Button } from "./button";
 import { useCrumbs } from "./hooks/use-crumbs";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
@@ -144,7 +145,7 @@ const useScrollingNavbar = (
 };
 
 // @todo remove asPath from Navbar
-export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
+export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
   const theme = useTheme();
   const { asPath, pathname } = useRouter();
   const { pages } = useContext(SiteMapContext);
@@ -248,6 +249,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
         ]}
       >
         <Container
+          component="header"
           sx={[
             isDocs && { width: "100% !important", maxWidth: "100% !important" },
           ]}
@@ -334,6 +336,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                 </>
               ) : (
                 <IconButton
+                  data-testid="mobile-nav-trigger"
                   onClick={() => setMobileNavVisible(!mobileNavVisible)}
                 >
                   <FontAwesomeIcon
@@ -353,6 +356,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
         </Container>
       </Box>
       <Slide
+        data-testid="mobile-nav"
         in={mobileNavVisible}
         direction="right"
         timeout={400}
@@ -411,13 +415,11 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                 },
               }}
             >
-              <LinkButton
-                href="#"
+              <Button
                 variant="secondary"
-                onClick={(event) => {
+                onClick={() => {
                   setMobileNavVisible(false);
                   openLoginModal();
-                  event?.preventDefault();
                 }}
                 sx={{
                   fontSize: 18,
@@ -425,7 +427,7 @@ export const Navbar: VFC<NavbarProps> = ({ openLoginModal }) => {
                 }}
               >
                 Log in
-              </LinkButton>
+              </Button>
 
               <LinkButton
                 href="/signup"

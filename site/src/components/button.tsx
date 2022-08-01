@@ -4,7 +4,7 @@ import {
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
 } from "@mui/material";
-import { FC, forwardRef } from "react";
+import { forwardRef, FunctionComponent } from "react";
 
 // inspired by https://github.com/loadingio/css-spinner/blob/master/src/ellipsis/index.styl
 const loadingAnimation = (
@@ -79,7 +79,7 @@ export type ButtonProps = {
 
 // probably rename to BPButton?
 // @todo implement loading
-export const Button: FC<ButtonProps> = forwardRef(
+export const Button: FunctionComponent<ButtonProps> = forwardRef(
   ({ children, squared, loading, sx = [], ...props }, ref) => {
     return (
       <MuiButton

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { Avatar } from "./avatar";
@@ -9,7 +9,10 @@ type SidebarProps = {
   user: SerializedUser;
 };
 
-export const Sidebar: VFC<SidebarProps> = ({ isMobile, user }) => {
+export const Sidebar: FunctionComponent<SidebarProps> = ({
+  isMobile,
+  user,
+}) => {
   return (
     <Box
       sx={{

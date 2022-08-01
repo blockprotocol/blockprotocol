@@ -1,11 +1,9 @@
 # blockprotocol.org website
 
-The public-facing [blockprotocol.org](https://blockprotocol.org) website serves the following endpoints:
+This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-- `/gallery` shows the catalog of available blocks
-- `/api/blocks` returns a JSON response w/ a list of available blocks
-- `/blocks/<organisation>/<blockname>` is the CDN base-URL of an individual block (e.g. `/blocks/@hash/code`)
-- `/partners` provides a temporary signup form to collect pre-release registrations of interest from potential adopters
+- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
+- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
 
 ## Local development
 
@@ -306,3 +304,113 @@ If all of the optional params are missing, the result will contain all of the bl
 
 - Request Response:
   - `results`: the results of the search: an array of block metadata JSON files
+
+## Testing
+
+[blockprotocol.org](https://blockprotocol.org) is covered by browser-based tests written with [Playwright](https://playwright.dev).
+These tests are located in the `site/tests` folder.
+They are grouped into:
+
+- integration tests
+- end-to-end (E2E) tests
+- universal tests, i.e those that belong to both categories
+
+### [Integration tests](https://en.wikipedia.org/wiki/Integration_testing)
+
+These tests are designed to extensively cover the functionality of the app.
+They require a local database and the ability to write data to it.
+Integration tests do not depend on any third-party services to avoid performance bottlenecks.
+Requests to online resources (except CDNs) should be blocked or mocked.
+Integration tests are a part of CI together with other checks ([ci.yml](https://github.com/blockprotocol/blockprotocol/actions/workflows/ci.yml)).
+
+To run integration tests locally, prepare the blocks, launch the database and start the Next.js app as you would do this for local development.
+Then run this command in a separate terminal:
+
+```sh
+yarn workspace @blockprotocol/site playwright test --project integration-chrome
+```
+
+You can pick a different [Playwright project](./playwright.config.ts) (e.g. `--project=integration-iphone`) or limit the tests you want to run (e.g. `--grep="My test title"`).
+
+Note that local app data will be modified by the tests.
+
+### [E2E tests](https://www.browserstack.com/guide/end-to-end-testing)
+
+End-to-end (E2E) are designed to run against Vercel deployments.
+Their goal is to supplement integration tests to sense-check deployed instances of the website.
+E2E tests are read-only, which helps avoid data corruption in production and reduces execution time.
+We automatically run E2E tests for all new Vercel deployments and on schedule to spot potential regressions ([site-deployment.yml](https://github.com/blockprotocol/blockprotocol/actions/workflows/site-deployment.yml)).
+
+To run E2E test locally, use this command:
+
+```sh
+export PLAYWRIGHT_TEST_BASE_URL=https://blockprotocol.org
+
+yarn workspace @blockprotocol/site playwright test --project e2e
+```
+
+Omitting `PLAYWRIGHT_TEST_BASE_URL` will launch E2E tests for a locally running Þ instance.
+This is helpful for debugging.
+
+### Test coverage
+
+When running site integration tests in CI, we collect test coverage and report it to [codecov.io](https://codecov.io) (https://app.codecov.io/gh/blockprotocol/blockprotocol).
+This helps us detect parts of the site that are potentially more prone to bugs.
+
+The resulting coverage report includes source files in the `site` folder.
+A statement is marked as covered if it has been invoked during either `next build` or `next start` (both on the Node.js side and in the browser).
+
+E2E tests do not report coverage as they run against a production-like server environment and are designed to only sense-check the deployment.
+If we add unit tests in the future, we can generate two or more coverage reports independently and they will be merged by [codecov.io](https://codecov.io).
+
+We use [`babel-plugin-istanbul`](https://www.npmjs.com/package/babel-plugin-istanbul) to instrument source code with coverage reporting.
+[`nyc`](https://www.npmjs.com/package/nyc) collects coverage on the Node.js side during `next build` and `next start` phases.
+Client-side test coverage is collected via [`playwright-test-coverage`](https://www.npmjs.com/package/playwright-test-coverage) which we import in Playwright tests.
+
+The easiest way to explore test coverage is to submit a pull request and wait for integration tests to complete in CI.
+You will then see a PR comment by [**@codecov**](https://github.com/marketplace/codecov) with a coverage summary.
+
+If you want to explore test coverage locally, follow the steps below.
+All commands are executed from the repo root dir.
+
+1.  Set `TEST_COVERAGE` environment variable in your terminal:
+
+    ```sh
+    ## posix terminals
+    export TEST_COVERAGE=true
+    
+    ## cmd.exe & PowerShell
+    set TEST_COVERAGE=true
+    ```
+
+1.  Build the site:
+
+    ```sh
+    yarn workspace @blockprotocol/site build
+    ```
+
+1.  Start the site:
+
+    ```sh
+    yarn workspace @blockprotocol/site start
+    ```
+
+1.  Open another terminal and run integration tests, e.g.:
+
+    ```sh
+    yarn workspace @blockprotocol/site playwright test --project=integration-chrome
+    ```
+
+    You can pick a different [Playwright project](./playwright.config.ts) (e.g. `--project=integration-iphone`) or limit the tests you want to run (e.g. `--grep="My test title"`).
+
+1.  Stop the site by pressing `ctrl+c` (`SIGINT`) in the first terminal.
+
+    The above steps will generate raw coverage data in the repo’s `.nyc_output` directory.
+
+1.  Generate coverage report from the raw data:
+
+    ```sh
+    yarn nyc report --reporter=lcov --reporter=text
+    ```
+
+    This command will show coverage stats in the terminal and also create `coverage/lcov-report/index.html` which you can explore locally.

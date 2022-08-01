@@ -1,7 +1,8 @@
 import Box, { BoxProps } from "@mui/material/Box";
+import throttle from "lodash/throttle";
 import { useRouter } from "next/router";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { useEffect, useMemo, useRef, useState, VFC } from "react";
+import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import PageHeadingsContext, { Heading } from "../context/page-headings-context";
 import { mdxComponents } from "./mdx-components";
@@ -14,7 +15,7 @@ type MdxPageContentProps = {
 
 let detectHeadingFromScrollTimer: NodeJS.Timeout | undefined = undefined;
 
-export const MdxPageContent: VFC<MdxPageContentProps> = ({
+export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
   serializedPage,
   ...boxProps
 }) => {
@@ -22,10 +23,11 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
 
   const [headings, setHeadings] = useState<Heading[]>([]);
 
-  const [detectHeadingFromScroll, setDetectHeadingFromScroll] =
-    useState<boolean>(true);
+  const detectHeadingFromScroll = useRef<boolean>(true);
 
   const currentHeading = useRef<Heading | undefined>(undefined);
+
+  const headingsRef = useRef<Heading[]>([]);
 
   useEffect(() => {
     setHeadings([]);
@@ -54,9 +56,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         // if anchor is not empty, always allow scroll
         anchor !== "" ||
         // OR if previous path is either a docs or spec page
-        (previousRoute?.includes("/docs") &&
-          router.asPath?.includes("/docs")) ||
-        (previousRoute?.includes("/spec") && router.asPath?.includes("/spec"));
+        (previousRoute?.includes("/docs") && router.asPath?.includes("/docs"));
 
       if (!scrolledOnce.current) {
         scrolledOnce.current = true;
@@ -64,7 +64,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
 
       if (anchor === "" && shouldScrollToAnchor) {
         currentHeading.current = headings[0]!;
-        setDetectHeadingFromScroll(false);
+        detectHeadingFromScroll.current = false;
 
         window.scrollTo({
           top: 0,
@@ -73,10 +73,9 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         if (detectHeadingFromScrollTimer) {
           clearTimeout(detectHeadingFromScrollTimer);
         }
-        detectHeadingFromScrollTimer = setTimeout(
-          () => setDetectHeadingFromScroll(true),
-          1500,
-        );
+        detectHeadingFromScrollTimer = setTimeout(() => {
+          detectHeadingFromScroll.current = true;
+        }, 1500);
       } else if (
         headingWithCurrentAnchor &&
         shouldScrollToAnchor &&
@@ -86,7 +85,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         document.body.contains(headingWithCurrentAnchor.element)
       ) {
         currentHeading.current = headingWithCurrentAnchor;
-        setDetectHeadingFromScroll(false);
+        detectHeadingFromScroll.current = false;
 
         const { y: yPosition } =
           headingWithCurrentAnchor.element.getBoundingClientRect();
@@ -98,21 +97,35 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
         if (detectHeadingFromScrollTimer) {
           clearTimeout(detectHeadingFromScrollTimer);
         }
-        detectHeadingFromScrollTimer = setTimeout(
-          () => setDetectHeadingFromScroll(true),
-          1500,
-        );
+        detectHeadingFromScrollTimer = setTimeout(() => {
+          detectHeadingFromScroll.current = true;
+        }, 1500);
       }
     }
+
+    return () => {
+      if (detectHeadingFromScrollTimer) {
+        clearTimeout(detectHeadingFromScrollTimer);
+      }
+    };
   }, [headings, router.asPath]);
 
   useEffect(() => {
+    headingsRef.current = headings;
+  }, [headings]);
+
+  useEffect(() => {
     const onScroll = () => {
-      if (!detectHeadingFromScroll) return;
+      if (
+        !detectHeadingFromScroll.current ||
+        headingsRef.current.length === 0
+      ) {
+        return;
+      }
 
-      let headingAtScrollPosition: Heading = headings[0]!;
+      let headingAtScrollPosition: Heading = headingsRef.current[0]!;
 
-      for (const heading of headings.slice(1)) {
+      for (const heading of headingsRef.current.slice(1)) {
         const { element } = heading;
 
         const { top } = element.getBoundingClientRect();
@@ -143,12 +156,14 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
       }
     };
 
-    window.addEventListener("scroll", onScroll);
+    const throttledOnScroll = throttle(onScroll, 1000);
+
+    window.addEventListener("scroll", throttledOnScroll);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("scroll", throttledOnScroll);
     };
-  }, [router, headings, detectHeadingFromScroll]);
+  }, [router]);
 
   const contextValue = useMemo(
     () => ({
@@ -177,7 +192,7 @@ export const MdxPageContent: VFC<MdxPageContentProps> = ({
             {
               marginTop: 0,
             },
-          "& > :first-child": {
+          "& > h1:first-of-type": {
             marginTop: 0,
           },
         }}

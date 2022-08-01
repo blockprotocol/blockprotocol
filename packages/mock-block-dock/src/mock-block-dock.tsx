@@ -7,12 +7,12 @@ import {
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import React, {
+import {
   ComponentType,
+  FunctionComponent,
   useEffect,
   useRef,
   useState,
-  VoidFunctionComponent,
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
@@ -56,7 +56,7 @@ type MockBlockDockProps = {
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @para
  */
-export const MockBlockDock: VoidFunctionComponent<MockBlockDockProps> = ({
+export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
   blockEntity: initialBlockEntity,
   blockSchema,

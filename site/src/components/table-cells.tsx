@@ -1,8 +1,8 @@
 import { Box, TableCell } from "@mui/material";
 import { formatDistance, formatRelative } from "date-fns";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
-export const DateTimeCell: VoidFunctionComponent<{
+export const DateTimeCell: FunctionComponent<{
   timestamp: Date | string;
 }> = ({ timestamp }) => {
   return (

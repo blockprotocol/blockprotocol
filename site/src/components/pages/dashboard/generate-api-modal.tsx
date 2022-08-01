@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { ChangeEvent, FormEvent, useState, VoidFunctionComponent } from "react";
+import { ChangeEvent, FormEvent, FunctionComponent, useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { Button } from "../../button";
@@ -13,7 +13,7 @@ type GenerateApiModalProps = {
   refetchKeyList: () => void;
 };
 
-export const GenerateApiModal: VoidFunctionComponent<GenerateApiModalProps> = ({
+export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
   close,
   keyNameToRegenerate,
   refetchKeyList,

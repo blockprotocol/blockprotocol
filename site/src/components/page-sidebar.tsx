@@ -13,16 +13,17 @@ import { useRouter } from "next/router";
 import {
   Dispatch,
   Fragment,
+  FunctionComponent,
   SetStateAction,
   useCallback,
   useEffect,
   useRef,
   useState,
-  VFC,
 } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { theme as themeImport } from "../theme";
+import { parseHTML } from "../util/html-utils";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
@@ -50,7 +51,6 @@ type SidebarPageSectionProps = {
   isSelectedByDefault?: boolean;
   pageHref: string;
   section: SiteMapPageSection;
-  maybeUpdateSelectedOffsetTop: () => void;
   setSelectedAnchorElement: (element: HTMLAnchorElement) => void;
   openedPages: string[];
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
@@ -62,12 +62,11 @@ const highlightSection = (isSectionSelected: boolean) => ({
   }`,
 });
 
-const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
+const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
   depth = 1,
   isSelectedByDefault = false,
   pageHref,
   section,
-  maybeUpdateSelectedOffsetTop,
   setSelectedAnchorElement,
   openedPages,
   setOpenedPages,
@@ -97,6 +96,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
+        visibility="inherit"
         bgcolor={
           isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
         }
@@ -118,7 +118,7 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
             ...highlightSection(isSectionSelected),
           })}
         >
-          {sectionTitle}
+          {parseHTML(sectionTitle)}
         </SidebarLink>
         {subSections && subSections.length > 0 ? (
           <IconButton
@@ -154,18 +154,13 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
         ) : null}
       </Box>
       {subSections && subSections.length > 0 ? (
-        <Collapse
-          in={isSectionOpen}
-          onEntered={maybeUpdateSelectedOffsetTop}
-          onExited={maybeUpdateSelectedOffsetTop}
-        >
+        <Collapse in={isSectionOpen}>
           {subSections.map((subSection) => (
             <SidebarPageSection
               depth={depth + 1}
               key={subSection.anchor}
               pageHref={pageHref}
               section={subSection}
-              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
               setSelectedAnchorElement={setSelectedAnchorElement}
               openedPages={openedPages}
               setOpenedPages={setOpenedPages}
@@ -180,16 +175,14 @@ const SidebarPageSection: VFC<SidebarPageSectionProps> = ({
 type SidebarPageProps = {
   depth?: number;
   page: SiteMapPage;
-  maybeUpdateSelectedOffsetTop: () => void;
   setSelectedAnchorElement: (element: HTMLAnchorElement) => void;
   openedPages: string[];
   setOpenedPages: Dispatch<SetStateAction<string[]>>;
 };
 
-const SidebarPage: VFC<SidebarPageProps> = ({
+const SidebarPage: FunctionComponent<SidebarPageProps> = ({
   depth = 0,
   page,
-  maybeUpdateSelectedOffsetTop,
   setSelectedAnchorElement,
   openedPages,
   setOpenedPages,
@@ -265,18 +258,13 @@ const SidebarPage: VFC<SidebarPageProps> = ({
         ) : null}
       </Box>
       {hasChildren ? (
-        <Collapse
-          in={isOpen}
-          onEntered={maybeUpdateSelectedOffsetTop}
-          onExited={maybeUpdateSelectedOffsetTop}
-        >
+        <Collapse in={isOpen}>
           {sections.map((section) => (
             <SidebarPageSection
               depth={depth + 1}
               key={section.anchor}
               pageHref={href}
               section={section}
-              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
               setSelectedAnchorElement={setSelectedAnchorElement}
               openedPages={openedPages}
               setOpenedPages={setOpenedPages}
@@ -287,7 +275,6 @@ const SidebarPage: VFC<SidebarPageProps> = ({
               key={subpage.href}
               depth={depth + 1}
               page={subpage}
-              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
               setSelectedAnchorElement={setSelectedAnchorElement}
               openedPages={openedPages}
               setOpenedPages={setOpenedPages}
@@ -362,7 +349,7 @@ const getInitialOpenedPages = (params: {
   return [];
 };
 
-export const Sidebar: VFC<SidebarProps> = ({
+export const Sidebar: FunctionComponent<SidebarProps> = ({
   appendices,
   pages,
   sx = [],
@@ -373,25 +360,38 @@ export const Sidebar: VFC<SidebarProps> = ({
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
-  const [selectedAnchorElement, setSelectedAnchorElement] =
-    useState<HTMLAnchorElement>();
-  const [selectedOffsetTop, setSelectedOffsetTop] = useState<number>();
   const [openedPages, setOpenedPages] = useState<string[]>(
     getInitialOpenedPages({ pages, asPath }),
   );
 
-  const maybeUpdateSelectedOffsetTop = useCallback(() => {
-    if (
-      selectedAnchorElement &&
-      selectedOffsetTop !== selectedAnchorElement.offsetTop
-    ) {
-      setSelectedOffsetTop(selectedAnchorElement.offsetTop);
+  const setSelectedAnchorElementTimeout = useRef<ReturnType<
+    typeof setTimeout
+  > | null>(null);
+
+  const setSelectedAnchorElement = useCallback((node: HTMLAnchorElement) => {
+    if (setSelectedAnchorElementTimeout.current) {
+      clearTimeout(setSelectedAnchorElementTimeout.current);
     }
-  }, [selectedOffsetTop, selectedAnchorElement]);
+
+    setSelectedAnchorElementTimeout.current = setTimeout(() => {
+      const parent = node.offsetParent as HTMLElement;
+      const min = parent.scrollTop;
+      const max = min + parent.offsetHeight - 100;
+      const pos = node.offsetTop;
+
+      if (pos <= min || pos >= max) {
+        parent!.scrollTop += pos - max;
+      }
+    }, 100);
+  }, []);
 
   useEffect(() => {
-    maybeUpdateSelectedOffsetTop();
-  }, [maybeUpdateSelectedOffsetTop]);
+    return () => {
+      if (setSelectedAnchorElementTimeout.current) {
+        clearTimeout(setSelectedAnchorElementTimeout.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     setOpenedPages((prev) => [
@@ -402,31 +402,12 @@ export const Sidebar: VFC<SidebarProps> = ({
     ]);
   }, [asPath, pages]);
 
-  const indicator = useRef<HTMLElement>(null);
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (selectedOffsetTop && indicator.current) {
-        const parent = indicator.current.offsetParent as HTMLElement;
-        const min = parent!.scrollTop;
-        const max = min + parent!.offsetHeight - 100;
-        const pos = indicator.current.offsetTop;
-
-        if (pos <= min || pos >= max) {
-          parent!.scrollTop += pos - max;
-        }
-      }
-    }, 100);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [selectedOffsetTop]);
-
   const height = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
   return (
     <Box
       {...boxProps}
+      component="aside"
       position="sticky"
       overflow="auto"
       width={SIDEBAR_WIDTH}
@@ -453,20 +434,11 @@ export const Sidebar: VFC<SidebarProps> = ({
           wordBreak: "break-word",
         }}
       >
-        <Box
-          ref={indicator}
-          sx={{
-            position: "absolute",
-            top: selectedOffsetTop === undefined ? 0 : selectedOffsetTop,
-            opacity: 0,
-          }}
-        />
         {pages.length > 1 ? (
           pages.map((page) => (
             <SidebarPage
               key={page.href}
               page={page}
-              maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
               setSelectedAnchorElement={setSelectedAnchorElement}
               openedPages={openedPages}
               setOpenedPages={setOpenedPages}
@@ -482,7 +454,6 @@ export const Sidebar: VFC<SidebarProps> = ({
                 depth={0}
                 pageHref={pages[0]!.href}
                 section={section}
-                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
                 setSelectedAnchorElement={setSelectedAnchorElement}
                 openedPages={openedPages}
                 setOpenedPages={setOpenedPages}
@@ -493,7 +464,6 @@ export const Sidebar: VFC<SidebarProps> = ({
                 key={subpage.href}
                 depth={0}
                 page={subpage}
-                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
                 setSelectedAnchorElement={setSelectedAnchorElement}
                 openedPages={openedPages}
                 setOpenedPages={setOpenedPages}
@@ -508,7 +478,6 @@ export const Sidebar: VFC<SidebarProps> = ({
               <SidebarPage
                 key={page.href}
                 page={page}
-                maybeUpdateSelectedOffsetTop={maybeUpdateSelectedOffsetTop}
                 setSelectedAnchorElement={setSelectedAnchorElement}
                 openedPages={openedPages}
                 setOpenedPages={setOpenedPages}

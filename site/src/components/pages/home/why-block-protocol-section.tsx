@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import React, { Fragment, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useLayoutEffect, useRef, useState } from "react";
 
 import { Spacer } from "../../spacer";
 import { WhyBlockProtocol2Section } from "./why-block-protocol2section";

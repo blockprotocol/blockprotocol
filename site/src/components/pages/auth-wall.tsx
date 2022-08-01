@@ -1,6 +1,6 @@
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { VoidFunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import { useUser } from "../../context/user-context";
 import { SerializedUser } from "../../lib/api/model/user.model";
@@ -9,10 +9,9 @@ export interface AuthWallPageContentProps {
   user: SerializedUser;
 }
 
-export type AuthWallPageContent =
-  VoidFunctionComponent<AuthWallPageContentProps>;
+export type AuthWallPageContent = FunctionComponent<AuthWallPageContentProps>;
 
-const AuthWallWrapper: VoidFunctionComponent<{
+const AuthWallWrapper: FunctionComponent<{
   Content: AuthWallPageContent;
 }> = ({ Content }) => {
   const router = useRouter();

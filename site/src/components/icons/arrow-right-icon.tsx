@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
-export const ArrowRightIcon: FC<SvgIconProps> = (props) => {
+export const ArrowRightIcon: FunctionComponent<SvgIconProps> = (props) => {
   return (
     <SvgIcon {...props} width="24" height="24" viewBox="0 0 24 24">
       <path

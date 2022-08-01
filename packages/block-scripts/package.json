@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
