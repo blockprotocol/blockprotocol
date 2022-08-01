@@ -1,5 +1,5 @@
 /* global blockprotocol */
-import { GraphBlockHandler } from "https://esm.sh/@blockprotocol/graph@0.0.11-canary.24";
+import { GraphBlockHandler } from "https://esm.sh/@blockprotocol/graph@0.0.11";
 
 const element = blockprotocol.getBlockContainer(import.meta.url);
 
