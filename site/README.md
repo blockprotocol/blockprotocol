@@ -414,3 +414,21 @@ All commands are executed from the repo root dir.
     ```
 
     This command will show coverage stats in the terminal and also create `coverage/lcov-report/index.html` which you can explore locally.
+
+## Telemetry
+
+### Sentry
+
+Runtime errors in Vercel deployments are reported to [sentry.io](https://sentry.io) via [@sentry/nextjs](https://www.npmjs.com/package/@sentry/nextjs).
+`NEXT_PUBLIC_VERCEL_ENV` is used internally to distinguish between `"preview"` and `"production"` environments.
+
+Sentry is disabled by default for local development.
+To experiment with Sentry events, define `NEXT_PUBLIC_SENTRY_DSN` in your terminal before launching the dev command.
+If you are a HASH team member, you will find the value at https://sentry.io/settings/hashintel/projects/blockprotocol-site/keys/.
+Otherwise, consider creating your own Sentry project to report the events to.
+You should avoid setting `NEXT_PUBLIC_VERCEL_ENV` to `"preview"` or `"production"` as this will clutter the reports.
+
+### Google Tag Manager
+
+We monitor site usage via [react-gtm-module](https://www.npmjs.com/package/react-gtm-module).
+Google Tag Manager is only enabled for production deployments (i.e. when `NEXT_PUBLIC_VERCEL_ENV` is equal to `"production"`).
