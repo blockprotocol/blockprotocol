@@ -1,8 +1,7 @@
 {
-  "name": "block-template-react",
+  "name": "block-template-custom-element",
   "version": "0.0.0",
-  "private": true,
-  "description": "Block Protocol template for a React-based block",
+  "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
     "blocks"
@@ -25,7 +24,8 @@
     "serve": "node_modules/.bin/block-scripts serve"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.10"
+    "@blockprotocol/graph": "0.0.10",
+    "lit": "^2.2.5"
   },
   "devDependencies": {
     "block-scripts": "0.0.14",
@@ -33,16 +33,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  },
   "block-scripts": {
     "port": 63212
   },
   "blockprotocol": {
     "blockType": {
-      "entryPoint": "react"
+      "entryPoint": "custom-element",
+      "tagName": "my-block"
     },
     "displayName": "Template",
     "examples": [
