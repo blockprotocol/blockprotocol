@@ -80,6 +80,7 @@ const nextConfig = {
   },
 };
 
+/** @type {Partial<import("@sentry/nextjs").SentryWebpackPluginOptions>} */
 const sentryWebpackPluginOptions = {
   dryRun: !process.env.SENTRY_AUTH_TOKEN,
   silent: true,
