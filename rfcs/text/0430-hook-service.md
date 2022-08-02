@@ -1,7 +1,7 @@
 - Feature Name: `hook-service`
-- Start Date: (fill me in with today's date, 2022-07-12)
+- Start Date: 2022-07-12
 - RFC PR: [blockprotocol/blockprotocol#430](https://github.com/blockprotocol/blockprotocol/pull/430)
-- Block Protocol Discussion: N/A
+- Block Protocol Discussion: [blockprotocol/blockprotocol#475](https://github.com/blockprotocol/blockprotocol/discussions/475)
 
 # Summary
 
