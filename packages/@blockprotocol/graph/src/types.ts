@@ -220,6 +220,7 @@ export type BlockGraphProperties<
     blockGraph?: BlockGraph;
     entityTypes?: EntityType[];
     linkedAggregations?: LinkedAggregations;
+    readonly?: boolean;
   } & (BlockEntityProperties extends null
     ? { blockEntity?: Entity }
     : { blockEntity: Entity<BlockEntityProperties> });
