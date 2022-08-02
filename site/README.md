@@ -417,6 +417,11 @@ All commands are executed from the repo root dir.
 
 ## Telemetry
 
+### Google Tag Manager
+
+We monitor site usage via [react-gtm-module](https://www.npmjs.com/package/react-gtm-module).
+Google Tag Manager is only enabled for production deployments (i.e. when `NEXT_PUBLIC_VERCEL_ENV` is equal to `"production"`).
+
 ### Sentry
 
 Runtime errors in Vercel deployments are reported to [sentry.io](https://sentry.io) via [@sentry/nextjs](https://www.npmjs.com/package/@sentry/nextjs).
@@ -428,7 +433,7 @@ If you are a HASH team member, you will find the value at https://sentry.io/sett
 Otherwise, consider creating your own Sentry project to report the events to.
 You should avoid setting `NEXT_PUBLIC_VERCEL_ENV` to `"preview"` or `"production"` as this will clutter the reports.
 
-### Google Tag Manager
+## Vercel Analytics
 
-We monitor site usage via [react-gtm-module](https://www.npmjs.com/package/react-gtm-module).
-Google Tag Manager is only enabled for production deployments (i.e. when `NEXT_PUBLIC_VERCEL_ENV` is equal to `"production"`).
+We use [Vercel Analytics](https://vercel.com/analytics) to measure [web vitals](https://web.dev/learn-web-vitals/) in production.
+It is configured automatically and the dashboard can be accessed internally at https://vercel.com/hashintel/blockprotocol/analytics.
