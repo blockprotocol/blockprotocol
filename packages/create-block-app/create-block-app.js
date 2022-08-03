@@ -96,6 +96,15 @@ const usage = commandLineUsage(helpSections);
   fs.copySync(path.resolve(tempExtractionDir), path.resolve(resolvedBlockPath));
   fs.rm(tempExtractionDir, { recursive: true });
 
+  try {
+    fs.renameSync(
+      path.resolve(resolvedBlockPath, ".gitignore.dist"),
+      path.resolve(resolvedBlockPath, ".gitignore"),
+    );
+  } catch {
+    // noop (template is missing .gitignore.dist)
+  }
+
   console.log("Writing metadata...");
 
   const packageJsonPath = `${resolvedBlockPath}/package.json`;
