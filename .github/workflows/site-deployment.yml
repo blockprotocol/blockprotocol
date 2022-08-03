@@ -47,7 +47,7 @@ jobs:
       - run: yarn playwright install-deps chrome
 
       - name: Run Playwright tests
-        run: yarn workspace @blockprotocol/site playwright test --project=e2e
+        run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --grep="block preview" --workers=2 --repeat-each 50 --retries=0
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
 
