@@ -331,5 +331,13 @@ const SignupPage: NextPage = () => {
     </Box>
   );
 };
-
+export const getStaticProps = async ({ locale = "en-US" }) => {
+  return {
+    props: {
+      messages: {
+        ...(await import(`../locales/${locale}/common.json`)).default,
+      },
+    },
+  };
+};
 export default SignupPage;

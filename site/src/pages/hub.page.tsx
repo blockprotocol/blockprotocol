@@ -16,9 +16,16 @@ interface PageProps {
 /**
  * used to create an index of all available blocks, the catalog
  */
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
+export const getStaticProps: GetStaticProps<PageProps> = async ({
+  locale = "en-US",
+}) => {
   return {
-    props: { catalog: excludeHiddenBlocks(await readBlocksFromDisk()) },
+    props: {
+      catalog: excludeHiddenBlocks(await readBlocksFromDisk()),
+      messages: {
+        ...(await import(`../locales/${locale}/common.json`)).default,
+      },
+    },
   };
 };
 

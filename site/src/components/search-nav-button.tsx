@@ -1,5 +1,6 @@
 import SearchIcon from "@mui/icons-material/Search";
 import { Chip, chipClasses, modalClasses, useTheme } from "@mui/material";
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 import { Button } from "./button";
@@ -9,6 +10,7 @@ import { Search } from "./pages/docs/search";
 export const SearchNavButton = () => {
   const [displayModal, setDisplayModal] = useState(false);
   const theme = useTheme();
+  const translate = useTranslations();
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -61,7 +63,7 @@ export const SearchNavButton = () => {
         squared
         onClick={() => setDisplayModal(true)}
       >
-        Search
+        {translate("Search")}
         <Chip
           label="/"
           sx={({ palette }) => ({

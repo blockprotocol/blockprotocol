@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
+import { useTranslations } from "next-intl";
 
 export const WhatAreBlocks = () => {
+  const translate = useTranslations();
   return (
     <Box
       sx={{
@@ -47,7 +49,7 @@ export const WhatAreBlocks = () => {
                 textAlign: { xs: "center", md: "left" },
               }}
             >
-              What are blocks?
+              {translate("block_q")}
             </Typography>
             <Typography
               variant="bpBodyCopy"
@@ -57,9 +59,7 @@ export const WhatAreBlocks = () => {
               }}
               maxWidth="52ch"
             >
-              Blocks are individual front-end components that display data. They
-              allow regular users to edit their contents without needing to
-              write code.
+              {translate("block_desc_1")}
             </Typography>
             <Typography
               variant="bpBodyCopy"
@@ -69,8 +69,7 @@ export const WhatAreBlocks = () => {
               }}
               maxWidth="52ch"
             >
-              Blocks can be simple and static, like an image or a text block, or
-              they can be more complex, like a checklist or chart block.
+              {translate("block_desc_2")}
             </Typography>
           </Box>
           <Box
@@ -161,7 +160,7 @@ export const WhatAreBlocks = () => {
               maxWidth: { xs: "20ch", md: "100%" },
             }}
           >
-            Users typically select blocks from a list
+            {translate("user_typical_select")}
           </Typography>
           <Box
             sx={{
@@ -181,9 +180,7 @@ export const WhatAreBlocks = () => {
             }}
             mb={{ xs: 3, md: 6 }}
           >
-            Users select the type of block they want, then add it to their page,
-            dashboard, or canvas. They can add content to the block, edit it, or
-            manipulate it to do what they need.
+            {translate("user_typical_select_desc")}
           </Typography>
           <Box
             component="img"

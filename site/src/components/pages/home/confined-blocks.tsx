@@ -1,9 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import darkBoxImage from "../../../../public/assets/new-home/dark-box-min.png";
 
 export const ConfinedBlocks = () => {
+  const translate = useTranslations();
   return (
     <Box
       sx={{
@@ -41,7 +43,7 @@ export const ConfinedBlocks = () => {
             }}
             variant="bpHeading2"
           >
-            Today, blocks are confined to single apps and websites
+            {translate("confine_block_title")}
           </Typography>
           <Box
             sx={{
@@ -64,36 +66,33 @@ export const ConfinedBlocks = () => {
             mb={2}
             variant="bpBodyCopy"
           >
-            Every app has to build all of their own blocks. This means
-            developers are rebuilding the same block types over and over.
+            {translate("confine_block_text_1")}
           </Typography>
           <Typography
             sx={{
               color: "#c2cedf",
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
-              margin: "1rem auto",
+              margin: "1rem 0",
               lineHeight: 1.5,
             }}
             mb={2}
             variant="bpBodyCopy"
           >
-            Open source components can save some time, but still need to be
-            individually integrated.
+            {translate("confine_block_text_2")}
           </Typography>
           <Typography
             sx={{
               color: "#c2cedf",
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
-              margin: "1rem auto",
+              margin: "1rem 0",
               lineHeight: 1.5,
             }}
             mb={2}
             variant="bpBodyCopy"
           >
-            This also limits how many blocks users have access to in any single
-            application.
+            {translate("confine_block_text_3")}
           </Typography>
         </Box>
         <Box sx={{ width: { xs: "90%", md: "55%" } }}>
