@@ -56,7 +56,7 @@ const script = async () => {
     name.match(/^block-template/),
   )) {
     logStepStart(
-      `Run yarn build in ${blockTemplatePackage.name} (to check if dist files are published)`,
+      `Run yarn build in ${blockTemplatePackage.name} (to check if temp files are published)`,
     );
 
     await execa("yarn", ["build"], {
