@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
