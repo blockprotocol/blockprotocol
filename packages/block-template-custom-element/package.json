@@ -18,10 +18,10 @@
     "url": "https://hash.ai"
   },
   "scripts": {
-    "build": "node_modules/.bin/block-scripts build",
-    "dev": "node_modules/.bin/block-scripts dev",
+    "build": "block-scripts build",
+    "dev": "block-scripts dev",
     "lint:tsc": "tsc --noEmit",
-    "serve": "node_modules/.bin/block-scripts serve"
+    "serve": "block-scripts serve"
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.11",
