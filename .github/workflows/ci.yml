@@ -222,7 +222,7 @@ jobs:
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test tests/universal/blockpage.test.ts --project=integration-chrome --project=integration-firefox --project=integration-safari --workers=2 --retries=0 --repeat-each 50
+        run: yarn workspace @blockprotocol/site playwright test tests/universal/blockpage.test.ts --project=integration-chrome --project=integration-firefox --project=integration-safari --workers=2 --retries=0 --repeat-each 100
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
