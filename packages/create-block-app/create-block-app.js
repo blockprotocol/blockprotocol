@@ -20,8 +20,6 @@ const {
 
 const exec = promisify(child_process.exec);
 
-const templatePackageName = "block-template";
-
 const usage = commandLineUsage(helpSections);
 
 (async () => {
@@ -86,25 +84,23 @@ const usage = commandLineUsage(helpSections);
 
   const tempExtractionDir = path.join(resolvedBlockPath, "tmp");
 
-  console.log("Downloading template...");
+  const candidateTemplatePackageNames = [
+    `block-template-${template}`,
+    template,
+  ];
+
+  // @todo Loop over candidates and check existence, exit if not found.
+  const templatePackageName = candidateTemplatePackageNames[0];
+
+  console.log(`Downloading package ${templatePackageName}...`);
 
   await pacote.extract(templatePackageName, tempExtractionDir, {
     registry: process.env.NPM_CONFIG_REGISTRY,
   });
 
-  const templatePath = path.join(tempExtractionDir, "templates", template);
-  try {
-    fs.statSync(templatePath);
-  } catch {
-    console.error(
-      `Template '${template}' is missing – please raise an issue at https://github.com/blockprotocol/blockprotocol/issues`,
-    );
-    process.exit();
-  }
-
   console.log("Updating files...");
 
-  fs.copySync(path.resolve(templatePath), path.resolve(resolvedBlockPath));
+  fs.copySync(path.resolve(tempExtractionDir), path.resolve(resolvedBlockPath));
   fs.rm(tempExtractionDir, { recursive: true });
 
   console.log("Writing metadata...");
