@@ -4,7 +4,7 @@ import {
   BlockGraphProperties,
   GraphBlockHandler,
   UpdateEntityData,
-} from "./index";
+} from "./index.js";
 
 export interface BlockElementBase<
   BlockEntityProperties extends Record<string, unknown> | null,

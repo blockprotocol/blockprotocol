@@ -1,3 +1,5 @@
+const { withSentryConfig } = await import("@sentry/nextjs");
+
 const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
   enabled: ["true", "1"].includes(process.env.ANALYZE),
 });
@@ -78,4 +80,13 @@ const nextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+/** @type {Partial<import("@sentry/nextjs").SentryWebpackPluginOptions>} */
+const sentryWebpackPluginOptions = {
+  dryRun: !process.env.SENTRY_AUTH_TOKEN,
+  silent: true,
+};
+
+export default withSentryConfig(
+  withBundleAnalyzer(nextConfig),
+  sentryWebpackPluginOptions,
+);

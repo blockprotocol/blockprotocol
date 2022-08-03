@@ -1,5 +1,5 @@
 import { ServiceDefinition } from "@blockprotocol/core";
-import graphServiceJson from "@blockprotocol/graph/src/graph-service.json";
+import { graphServiceJson } from "@blockprotocol/graph/graph-service-json";
 
 import { ServiceMessageList } from "../service-message-list";
 
