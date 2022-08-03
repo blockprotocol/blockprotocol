@@ -24,6 +24,7 @@ export class GraphEmbedderHandler
   private _blockGraph?: BlockGraph;
   private _entityTypes?: EntityType[];
   private _linkedAggregations?: LinkedAggregations;
+  private _readonly?: boolean;
 
   constructor({
     blockEntity,
@@ -32,6 +33,7 @@ export class GraphEmbedderHandler
     element,
     entityTypes,
     linkedAggregations,
+    readonly,
   }: {
     blockEntity?: Entity;
     blockGraph?: BlockGraph;
@@ -39,12 +41,14 @@ export class GraphEmbedderHandler
     element: HTMLElement;
     entityTypes?: EntityType[];
     linkedAggregations?: LinkedAggregations;
+    readonly?: boolean;
   }) {
     super({ element, serviceName: "graph", sourceType: "embedder" });
     this._blockEntity = blockEntity;
     this._blockGraph = blockGraph;
     this._entityTypes = entityTypes;
     this._linkedAggregations = linkedAggregations;
+    this._readonly = readonly;
 
     if (callbacks) {
       this.registerCallbacks(callbacks);
@@ -86,6 +90,7 @@ export class GraphEmbedderHandler
       blockEntity: this._blockEntity,
       blockGraph: this._blockGraph,
       linkedAggregations: this._linkedAggregations,
+      readonly: this._readonly,
     };
   }
 
@@ -125,6 +130,16 @@ export class GraphEmbedderHandler
       message: {
         messageName: "linkedAggregations",
         data: this._linkedAggregations,
+      },
+    });
+  }
+
+  readonly({ data }: { data?: boolean }) {
+    this._readonly = !!data;
+    this.sendMessage({
+      message: {
+        messageName: "readonly",
+        data: this._readonly,
       },
     });
   }
