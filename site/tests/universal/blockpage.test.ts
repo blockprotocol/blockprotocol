@@ -8,7 +8,7 @@ test("Updating block properties should update block preview", async ({
   const blockFrameLocator = page.frameLocator("iframe[title='block']");
 
   await expect(blockFrameLocator.locator("input")).toBeVisible({
-    timeout: 30000, // @todo Remove after re-engineering block sandbox
+    timeout: 10000,
   });
 
   const jsonEditor = page.locator(
