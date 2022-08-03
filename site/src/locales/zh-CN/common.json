@@ -2,5 +2,23 @@
   "auth": {
     "login": "登录",
     "signup": "注册"
-  }
+  },
+  "Search": "搜索",
+  "Block Hub": "区块中心",
+  "Documentation": "文档",
+  "Specification": "标准",
+  "Publish a Block": "发布一个区块",
+  "Contact Us": "联系我们",
+  "page_header_text": "为开发者提供一个强大的新协议",
+  "page_header_title": "构建基于区块的界面的开放标准",
+  "page_header_desc": "块协议使应用程序能够通过被称为块的可互操作组件使其界面无限扩展。",
+  "block_q": "什么是区块？",
+  "block_desc_1": "区块是显示数据的独立前端组件。它们允许普通用户编辑其内容而不需要编写代码。",
+  "block_desc_2": "区块可以是简单的、静态的，如图片或文本块，也可以是更复杂的，如检查表或图表块。",
+  "user_typical_select": "用户通常从一个列表中选择区块",
+  "user_typical_select_desc": "用户选择他们想要的块的类型，然后将其添加到他们的页面、仪表板或画布上。他们可以向该块添加内容，编辑它，或操纵它，以实现他们的需求。",
+  "confine_block_title": "今天，区块被限制在单一的应用程序和网站中",
+  "confine_block_text_1": "每个应用程序都必须建立自己的所有块。这意味着开发人员正在重复重建相同的块类型。",
+  "confine_block_text_2": "开源组件可以节省一些时间，但仍然需要单独集成。",
+  "confine_block_text_3": "这也限制了用户在任何单一应用中可以访问的块的数量。"
 }

@@ -13,6 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useTranslations } from "next-intl";
 import { FunctionComponent, ReactNode } from "react";
 
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
@@ -42,41 +43,53 @@ const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   },
 ];
 
-const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
-  <Typography
-    component="p"
-    variant="bpSmallCopy"
-    key={href}
-    sx={(theme) => ({
-      color: theme.palette.gray[50],
-      marginLeft: { xs: 0, md: 4 },
-      "&:first-of-type": {
-        marginTop: {
-          xs: 2,
-          md: 0,
-        },
-      },
-      "&:not(:first-of-type)": {
-        marginTop: 1.5,
-      },
-      "> a": {
-        borderBottomWidth: 0,
-        transition: theme.transitions.create("color", { duration: 150 }),
-        ":hover": {
-          color: theme.palette.gray[20],
-        },
-        ":active": {
-          color: theme.palette.common.white,
-        },
-        ":focus-visible": {
-          outlineColor: theme.palette.gray[40],
-        },
-      },
-    })}
-  >
-    <Link href={href}>{name}</Link>
-  </Typography>
-));
+const FooterNavigationLinks: FunctionComponent = () => {
+  const translate = useTranslations();
+
+  return (
+    <>
+      {FOOTER_NAVIGATION_LINKS.map(({ href, name }) => {
+        return (
+          <Typography
+            component="p"
+            variant="bpSmallCopy"
+            key={href}
+            sx={(theme) => ({
+              color: theme.palette.gray[50],
+              marginLeft: { xs: 0, md: 4 },
+              "&:first-of-type": {
+                marginTop: {
+                  xs: 2,
+                  md: 0,
+                },
+              },
+              "&:not(:first-of-type)": {
+                marginTop: 1.5,
+              },
+              "> a": {
+                borderBottomWidth: 0,
+                transition: theme.transitions.create("color", {
+                  duration: 150,
+                }),
+                ":hover": {
+                  color: theme.palette.gray[20],
+                },
+                ":active": {
+                  color: theme.palette.common.white,
+                },
+                ":focus-visible": {
+                  outlineColor: theme.palette.gray[40],
+                },
+              },
+            })}
+          >
+            <Link href={href}>{translate(name)}</Link>
+          </Typography>
+        );
+      })}
+    </>
+  );
+};
 
 const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
@@ -217,7 +230,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
             ) : null}
           </Grid>
           <Grid item xs={12} md={3} lg={4}>
-            {FooterNavigationLinks}
+            <FooterNavigationLinks />
             {md ? null : Socials}
           </Grid>
         </Grid>

@@ -1,10 +1,12 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 import primaryHelixImage from "../../../../../public/assets/new-home/primary-helix-min.png";
 
 export const Header = () => {
   const theme = useTheme();
+  const translate = useTranslations();
 
   return (
     <Box
@@ -37,10 +39,7 @@ export const Header = () => {
           textAlign="center"
           variant="bpSmallCaps"
         >
-          A powerful{" "}
-          <span style={{ display: "inline-block" }}>
-            new protocol for developers
-          </span>
+          {translate("page_header_text")}
         </Typography>
         <Typography
           variant="bpHeading1"
@@ -53,7 +52,7 @@ export const Header = () => {
             fontSize: "clamp(3rem, 5vw, 7rem)",
           }}
         >
-          The open standard for building block-based interfaces
+          {translate("page_header_title")}
         </Typography>
         <Typography
           variant="bpBodyCopy"
@@ -66,8 +65,7 @@ export const Header = () => {
             fontSize: { xs: "1.25rem", md: "1.45rem" },
           }}
         >
-          The Block Protocol enables applications to make their interfaces
-          infinitely extensible with interoperable components called blocks.
+          {translate("page_header_desc")}
         </Typography>
       </Container>
       <Image layout="responsive" src={primaryHelixImage} />

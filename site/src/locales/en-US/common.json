@@ -2,5 +2,23 @@
   "auth": {
     "login": "Log In",
     "signup": "Sign Up"
-  }
+  },
+  "Search": "Search",
+  "Block Hub": "Block Hub",
+  "Documentation": "Documentation",
+  "Specification": "Specification",
+  "Publish a Block": "Publish a Block",
+  "Contact Us": "Contact Us",
+  "page_header_text": "A POWERFUL NEW PROTOCOL FOR DEVELOPERS",
+  "page_header_title": "The open standard for building block-based interface",
+  "page_header_desc": "The Block Protocol enables applications to make their interfaces infinitely extensible with interoperable components called blocks.",
+  "block_q": "What is block?",
+  "block_desc_1": "Blocks are individual front-end components that display data. They allow regular users to edit their contents without needing to write code.",
+  "block_desc_2": "Blocks can be simple and static, like an image or a text block, or they can be more complex, like a checklist or chart block.",
+  "user_typical_select": "Users typically select blocks from a list",
+  "user_typical_select_desc": "Users select the type of block they want, then add it to their page, dashboard, or canvas. They can add content to the block, edit it, or manipulate it to do what they need.",
+  "confine_block_title": "Today, blocks are confined to single apps and websites",
+  "confine_block_text_1": "Every app has to build all of their own blocks. This means developers are rebuilding the same block types over and over.",
+  "confine_block_text_2": "Open source components can save some time, but still need to be individually integrated.",
+  "confine_block_text_3": "This also limits how many blocks users have access to in any single application."
 }
