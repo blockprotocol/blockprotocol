@@ -42,6 +42,7 @@ const script = async () => {
   const tmpNodeCacheDir = await tmp.dir({ unsafeCleanup: true });
 
   const blockName = process.env.BLOCK_NAME ?? "test-block";
+  const blockTemplate = process.env.BLOCK_TEMPLATE;
   const userDefinedBlockDirPath = process.env.BLOCK_DIR_PATH;
 
   const tmpBlockParentDir = userDefinedBlockDirPath
@@ -65,7 +66,7 @@ const script = async () => {
   try {
     logStepStart("Create Block App");
 
-    await execa(
+    const result = await execa(
       "npx",
       [
         "--cache",
@@ -74,17 +75,30 @@ const script = async () => {
         blockName,
         "--path",
         blockDirPath,
+        ...(blockTemplate ? [`--template=${blockTemplate}`] : []),
       ],
       {
         ...defaultExecaOptions,
+        reject: false,
         cwd: os.tmpdir(),
       },
     );
 
+    if (
+      !blockTemplate ||
+      ["custom-element", "html", "react"].includes(blockTemplate)
+    ) {
+      if (result.exitCode) {
+        throw new Error(`Unexpected exit code ${result.exitCode}`);
+      }
+    } else if (!result.exitCode) {
+      throw new Error(`Expected non-zero exit code`);
+    }
+
     logStepEnd();
     logStepStart("Check folder structure");
 
-    for (const relativePath of [".npmignore", "dist"]) {
+    for (const relativePath of [".npmignore", "dist", "dev"]) {
       if (
         await fs.pathExists(path.resolve(resolvedBlockDirPath, relativePath))
       ) {

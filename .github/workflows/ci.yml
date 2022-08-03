@@ -151,9 +151,38 @@ jobs:
       - name: Publish NPM packages to local registry
         run: yarn exe scripts/packages/publish-to-local-registry.ts
 
-      - name: e2e-test create-block-app
+      - name: e2e-test create-block-app (default template)
+        if: ${{ success() || failure() }}
         run: yarn exe scripts/packages/e2e-test-create-block-app.ts
         env:
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: e2e-test create-block-app (custom-element template)
+        if: ${{ success() || failure() }}
+        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        env:
+          BLOCK_TEMPLATE: custom-element
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: e2e-test create-block-app (html template)
+        if: ${{ success() || failure() }}
+        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        env:
+          BLOCK_TEMPLATE: html
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: e2e-test create-block-app (react template)
+        if: ${{ success() || failure() }}
+        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        env:
+          BLOCK_TEMPLATE: react
+          NPM_CONFIG_REGISTRY: http://localhost:4873
+
+      - name: e2e-test create-block-app (unknown template)
+        if: ${{ success() || failure() }}
+        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        env:
+          BLOCK_TEMPLATE: unknown
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
       - name: Show local registry logs and stop it
