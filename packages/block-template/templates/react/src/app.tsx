@@ -1,4 +1,7 @@
-import { BlockComponent, useGraphBlockService } from "@blockprotocol/graph";
+import {
+  BlockComponent,
+  useGraphBlockService,
+} from "@blockprotocol/graph/react";
 import { useCallback, useRef } from "react";
 
 import styles from "./base.module.scss";

@@ -10,7 +10,7 @@ import {
   BlockGraphProperties,
   GraphBlockHandler,
   GraphEmbedderHandler,
-} from "./index";
+} from "./index.js";
 
 export type BlockComponent<
   Properties extends Record<string, unknown> | null = null,
