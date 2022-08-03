@@ -1,4 +1,4 @@
-import { BlockElementBase } from "@blockprotocol/graph";
+import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { html } from "lit";
 
