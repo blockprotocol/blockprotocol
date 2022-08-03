@@ -53,7 +53,7 @@ const script = async () => {
   logStepEnd();
 
   for (const blockTemplatePackage of publishablePackages.filter(({ name }) =>
-    name.match(/^block-template/),
+    name.match(/^block-template-/),
   )) {
     logStepStart(
       `Run yarn build in ${blockTemplatePackage.name} (to check if temp files are published)`,
