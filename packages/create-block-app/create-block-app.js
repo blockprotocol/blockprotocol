@@ -64,7 +64,7 @@ const usage = commandLineUsage(helpSections);
         ", ",
       )}`,
     );
-    process.exit();
+    process.exit(1);
   }
 
   // @todo: replace with `path ?? name` after dropping Node 12 support
