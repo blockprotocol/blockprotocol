@@ -84,14 +84,7 @@ const usage = commandLineUsage(helpSections);
 
   const tempExtractionDir = path.join(resolvedBlockPath, "tmp");
 
-  const candidateTemplatePackageNames = [
-    `block-template-${template}`,
-    template,
-  ];
-
-  // @todo Loop over candidates and check existence, exit if not found.
-  const templatePackageName = candidateTemplatePackageNames[0];
-
+  const templatePackageName = `block-template-${template}`;
   console.log(`Downloading package ${templatePackageName}...`);
 
   await pacote.extract(templatePackageName, tempExtractionDir, {
