@@ -91,8 +91,11 @@ const script = async () => {
       if (result.exitCode) {
         throw new Error(`Unexpected exit code ${result.exitCode}`);
       }
-    } else if (!result.exitCode) {
-      throw new Error(`Expected non-zero exit code`);
+    } else {
+      if (!result.exitCode) {
+        throw new Error(`Expected non-zero exit code`);
+      }
+      return;
     }
 
     logStepEnd();
