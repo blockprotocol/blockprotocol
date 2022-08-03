@@ -3,6 +3,7 @@ import "../styles/prism.css";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
+import * as Sentry from "@sentry/nextjs";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -44,11 +45,17 @@ const MyApp = ({
 
     if (error) {
       if (error.response?.status === 401) {
+        Sentry.configureScope((scope) => {
+          scope.clear();
+        });
         setUser(undefined);
       } else {
         throw error;
       }
     } else if (data) {
+      Sentry.configureScope((scope) => {
+        scope.setUser({ id: data.user.id });
+      });
       setUser(data.user);
     }
   }, []);
