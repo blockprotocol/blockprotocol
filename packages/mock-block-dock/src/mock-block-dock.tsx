@@ -40,6 +40,7 @@ type MockBlockDockProps = {
   initialEntityTypes?: EntityType[];
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
+  readonly?: boolean;
 };
 
 /**
@@ -65,6 +66,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
+  readonly,
 }) => {
   const {
     blockEntity,
@@ -80,6 +82,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialEntityTypes,
     initialLinks,
     initialLinkedAggregations,
+    readonly,
   });
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
@@ -89,6 +92,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   const propsToInject: BlockGraphProperties<any> = {
     graph: {
+      readonly,
       blockEntity,
       blockGraph,
       entityTypes,
@@ -143,6 +147,12 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       graphService.linkedAggregations({ data: linkedAggregations });
     }
   }, [linkedAggregations, graphService]);
+
+  useEffect(() => {
+    if (graphService) {
+      graphService.readonly({ data: readonly });
+    }
+  }, [readonly, graphService]);
 
   if (!debug) {
     return (

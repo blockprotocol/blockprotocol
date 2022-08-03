@@ -30,6 +30,7 @@ export const useMockDatastore = (
     linkedAggregationDefinitions: [],
     entityTypes: [],
   },
+  readonly?: boolean,
 ): MockDataStore => {
   const [entities, setEntities] = useDefaultArrayState<
     MockDataStore["entities"]
@@ -66,6 +67,17 @@ export const useMockDatastore = (
   const createEntity: EmbedderGraphMessageCallbacks["createEntity"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -93,7 +105,7 @@ export const useMockDatastore = (
         setLinks((currentLinks) => [...currentLinks, ...linksToCreate]);
         return { data: newEntity };
       },
-      [setEntities, setLinks],
+      [setEntities, setLinks, readonly],
     );
 
   const getEntity: EmbedderGraphMessageCallbacks["getEntity"] = useCallback(
@@ -129,6 +141,17 @@ export const useMockDatastore = (
   const updateEntity: EmbedderGraphMessageCallbacks["updateEntity"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -174,12 +197,23 @@ export const useMockDatastore = (
           });
         });
       },
-      [setEntities],
+      [setEntities, readonly],
     );
 
   const deleteEntity: EmbedderGraphMessageCallbacks["deleteEntity"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -217,12 +251,23 @@ export const useMockDatastore = (
           });
         });
       },
-      [setEntities],
+      [setEntities, readonly],
     );
 
   const createEntityType: EmbedderGraphMessageCallbacks["createEntityType"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -246,7 +291,7 @@ export const useMockDatastore = (
         ]);
         return { data: newEntityType };
       },
-      [setEntityTypes],
+      [setEntityTypes, readonly],
     );
 
   const getEntityType: EmbedderGraphMessageCallbacks["getEntityType"] =
@@ -283,6 +328,17 @@ export const useMockDatastore = (
   const updateEntityType: EmbedderGraphMessageCallbacks["updateEntityType"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -328,12 +384,23 @@ export const useMockDatastore = (
           });
         });
       },
-      [setEntityTypes],
+      [setEntityTypes, readonly],
     );
 
   const deleteEntityType: EmbedderGraphMessageCallbacks["deleteEntityType"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -371,11 +438,22 @@ export const useMockDatastore = (
           });
         });
       },
-      [setEntityTypes],
+      [setEntityTypes, readonly],
     );
 
   const createLink: EmbedderGraphMessageCallbacks["createLink"] = useCallback(
     async ({ data }) => {
+      if (readonly) {
+        return {
+          errors: [
+            {
+              code: "FORBIDDEN",
+              message: "Operation can't be carried out in readonly mode",
+            },
+          ],
+        };
+      }
+
       if (!data) {
         return {
           errors: [
@@ -393,7 +471,7 @@ export const useMockDatastore = (
       setLinks((currentLinks) => [...currentLinks, newLink]);
       return { data: newLink };
     },
-    [setLinks],
+    [setLinks, readonly],
   );
 
   const getLink: EmbedderGraphMessageCallbacks["getLink"] = useCallback(
@@ -426,6 +504,17 @@ export const useMockDatastore = (
 
   const updateLink: EmbedderGraphMessageCallbacks["updateLink"] = useCallback(
     async ({ data }) => {
+      if (readonly) {
+        return {
+          errors: [
+            {
+              code: "FORBIDDEN",
+              message: "Operation can't be carried out in readonly mode",
+            },
+          ],
+        };
+      }
+
       if (!data) {
         return {
           errors: [
@@ -463,11 +552,22 @@ export const useMockDatastore = (
         });
       });
     },
-    [setLinks],
+    [setLinks, readonly],
   );
 
   const deleteLink: EmbedderGraphMessageCallbacks["deleteLink"] = useCallback(
     async ({ data }) => {
+      if (readonly) {
+        return {
+          errors: [
+            {
+              code: "FORBIDDEN",
+              message: "Operation can't be carried out in readonly mode",
+            },
+          ],
+        };
+      }
+
       if (!data) {
         return {
           errors: [
@@ -501,12 +601,23 @@ export const useMockDatastore = (
         });
       });
     },
-    [setLinks],
+    [setLinks, readonly],
   );
 
   const createLinkedAggregation: EmbedderGraphMessageCallbacks["createLinkedAggregation"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -527,7 +638,7 @@ export const useMockDatastore = (
         ]);
         return { data: newLinkedAggregation };
       },
-      [setLinkedAggregations],
+      [setLinkedAggregations, readonly],
     );
 
   const getLinkedAggregation: EmbedderGraphMessageCallbacks["getLinkedAggregation"] =
@@ -570,6 +681,17 @@ export const useMockDatastore = (
   const updateLinkedAggregation: EmbedderGraphMessageCallbacks["updateLinkedAggregation"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -611,12 +733,23 @@ export const useMockDatastore = (
           });
         });
       },
-      [setLinkedAggregations],
+      [setLinkedAggregations, readonly],
     );
 
   const deleteLinkedAggregation: EmbedderGraphMessageCallbacks["deleteLinkedAggregation"] =
     useCallback(
       async ({ data }) => {
+        if (readonly) {
+          return {
+            errors: [
+              {
+                code: "FORBIDDEN",
+                message: "Operation can't be carried out in readonly mode",
+              },
+            ],
+          };
+        }
+
         if (!data) {
           return {
             errors: [
@@ -654,11 +787,22 @@ export const useMockDatastore = (
           });
         });
       },
-      [setLinkedAggregations],
+      [setLinkedAggregations, readonly],
     );
 
   const uploadFile: EmbedderGraphMessageCallbacks["uploadFile"] = useCallback(
     async ({ data }) => {
+      if (readonly) {
+        return {
+          errors: [
+            {
+              code: "FORBIDDEN",
+              message: "Operation can't be carried out in readonly mode",
+            },
+          ],
+        };
+      }
+
       if (!data) {
         return {
           errors: [
@@ -751,7 +895,7 @@ export const useMockDatastore = (
       }
       throw new Error("Unreachable.");
     },
-    [createEntity],
+    [createEntity, readonly],
   );
 
   return {
