@@ -413,14 +413,7 @@ export const useMockDatastore = (
   const createLink: EmbedderGraphMessageCallbacks["createLink"] = useCallback(
     async ({ data }) => {
       if (readonly) {
-        return {
-          errors: [
-            {
-              code: "FORBIDDEN",
-              message: "Operation can't be carried out in readonly mode",
-            },
-          ],
-        };
+        return readonlyErrorReturn;
       }
 
       if (!data) {
@@ -474,14 +467,7 @@ export const useMockDatastore = (
   const updateLink: EmbedderGraphMessageCallbacks["updateLink"] = useCallback(
     async ({ data }) => {
       if (readonly) {
-        return {
-          errors: [
-            {
-              code: "FORBIDDEN",
-              message: "Operation can't be carried out in readonly mode",
-            },
-          ],
-        };
+        return readonlyErrorReturn;
       }
 
       if (!data) {
@@ -527,14 +513,7 @@ export const useMockDatastore = (
   const deleteLink: EmbedderGraphMessageCallbacks["deleteLink"] = useCallback(
     async ({ data }) => {
       if (readonly) {
-        return {
-          errors: [
-            {
-              code: "FORBIDDEN",
-              message: "Operation can't be carried out in readonly mode",
-            },
-          ],
-        };
+        return readonlyErrorReturn;
       }
 
       if (!data) {
@@ -741,14 +720,7 @@ export const useMockDatastore = (
   const uploadFile: EmbedderGraphMessageCallbacks["uploadFile"] = useCallback(
     async ({ data }) => {
       if (readonly) {
-        return {
-          errors: [
-            {
-              code: "FORBIDDEN",
-              message: "Operation can't be carried out in readonly mode",
-            },
-          ],
-        };
+        return readonlyErrorReturn;
       }
 
       if (!data) {
