@@ -101,7 +101,7 @@ const script = async () => {
     logStepEnd();
     logStepStart("Check folder structure");
 
-    for (const relativePath of [".npmignore", "dist", "dev"]) {
+    for (const relativePath of [".npmignore", "dist", "dev/src"]) {
       if (
         await fs.pathExists(path.resolve(resolvedBlockDirPath, relativePath))
       ) {
