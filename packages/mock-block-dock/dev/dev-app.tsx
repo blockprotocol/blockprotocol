@@ -83,6 +83,7 @@ const DevApp: FunctionComponent = () => {
             },
           }}
           blockEntity={blockEntity}
+          readonly={readonly}
         />
       </div>
       <h2>HTML as string</h2>
@@ -99,6 +100,7 @@ const DevApp: FunctionComponent = () => {
             },
           }}
           blockEntity={blockEntity}
+          readonly={readonly}
         />
       </div>
     </div>
