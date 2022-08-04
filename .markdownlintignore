@@ -51,7 +51,10 @@ dist
 .vercel
 
 # workspace specific
+packages/block-template-html/dev/src
 site/blocks-data.json
+site/playwright-report
 site/public/blocks
 site/public/schemas
 site/site-map.json
+site/test-results
