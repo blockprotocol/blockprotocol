@@ -29,7 +29,7 @@ const readonlyErrorReturn: {
   errors: [
     {
       code: "FORBIDDEN",
-      message: "Operation can't be carried out in readonly mode",
+      message: "Operation can't be carried out in read-only mode",
     },
   ],
 };
