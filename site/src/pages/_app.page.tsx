@@ -1,4 +1,3 @@
-/** @sync ../components/Snippet.tsx */
 import "../styles/prism.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
