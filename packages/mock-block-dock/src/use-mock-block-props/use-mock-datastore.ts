@@ -23,6 +23,17 @@ type MockDataStore = MockData & {
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
 };
 
+const readonlyErrorReturn: {
+  errors: [{ code: "FORBIDDEN"; message: string }];
+} = {
+  errors: [
+    {
+      code: "FORBIDDEN",
+      message: "Operation can't be carried out in readonly mode",
+    },
+  ],
+};
+
 export const useMockDatastore = (
   initialData: MockData = {
     entities: [],
@@ -68,14 +79,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -142,14 +146,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -204,14 +201,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -258,14 +248,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -329,14 +312,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -391,14 +367,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -608,14 +577,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -682,14 +644,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
@@ -740,14 +695,7 @@ export const useMockDatastore = (
     useCallback(
       async ({ data }) => {
         if (readonly) {
-          return {
-            errors: [
-              {
-                code: "FORBIDDEN",
-                message: "Operation can't be carried out in readonly mode",
-              },
-            ],
-          };
+          return readonlyErrorReturn;
         }
 
         if (!data) {
