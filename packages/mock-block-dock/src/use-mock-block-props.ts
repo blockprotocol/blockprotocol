@@ -34,6 +34,7 @@ export const useMockBlockProps = ({
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
+  readonly,
 }: {
   blockEntity?: Entity;
   blockSchema?: Partial<EntityType>;
@@ -41,6 +42,7 @@ export const useMockBlockProps = ({
   initialEntityTypes?: EntityType[];
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
+  readonly?: boolean;
 }): {
   blockEntity: Entity;
   blockGraph: BlockGraph;
@@ -101,7 +103,7 @@ export const useMockBlockProps = ({
     initialLinkedAggregations,
   ]);
 
-  const datastore = useMockDatastore(mockData);
+  const datastore = useMockDatastore(mockData, readonly);
 
   const {
     entities,
