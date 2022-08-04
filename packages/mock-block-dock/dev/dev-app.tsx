@@ -33,8 +33,9 @@ const DevApp: FunctionComponent = () => {
           Increment Entity ID
         </button>
 
-        <label style={{ marginLeft: 20 }}>
+        <label htmlFor="reaodnly-input" style={{ marginLeft: 20 }}>
           <input
+            id="readonly-input"
             type="checkbox"
             onChange={(evt) => setReadonly(evt.target.checked)}
           />
