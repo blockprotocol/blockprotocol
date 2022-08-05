@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
-import { FC } from "react";
+import { FunctionComponent } from "react";
 
-export const CollapseIcon: FC<SvgIconProps> = (props) => {
+export const CollapseIcon: FunctionComponent<SvgIconProps> = (props) => {
   return (
     <SvgIcon
       {...props}

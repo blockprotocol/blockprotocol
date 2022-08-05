@@ -1,5 +1,6 @@
 import { createComponent } from "@lit-labs/react";
-import React, { useMemo, VFC } from "react";
+// eslint-disable-next-line unicorn/import-style -- React is used in createComponent()
+import React, { FunctionComponent, useMemo } from "react";
 
 type CustomElementLoaderProps = {
   elementClass: typeof HTMLElement;
@@ -10,11 +11,9 @@ type CustomElementLoaderProps = {
 /**
  * Registers (if not already registered) and loads a custom element.
  */
-export const CustomElementLoader: VFC<CustomElementLoaderProps> = ({
-  elementClass,
-  properties,
-  tagName,
-}) => {
+export const CustomElementLoader: FunctionComponent<
+  CustomElementLoaderProps
+> = ({ elementClass, properties, tagName }) => {
   /**
    * Register the element with the CustomElementsRegistry, if not already registered.
    */

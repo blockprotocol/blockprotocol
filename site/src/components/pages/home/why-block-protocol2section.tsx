@@ -6,16 +6,16 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React from "react";
+import { FunctionComponent, Ref } from "react";
 
 import { FontAwesomeIcon, SyncIcon } from "../../icons";
 import { LinkButton } from "../../link-button";
 
 type WhyBlockProtocol2SectionProps = {
-  fadeRef: React.Ref<HTMLDivElement>;
+  fadeRef: Ref<HTMLDivElement>;
 };
 
-export const WhyBlockProtocol2Section: React.FC<
+export const WhyBlockProtocol2Section: FunctionComponent<
   WhyBlockProtocol2SectionProps
 > = ({ fadeRef }) => {
   const theme = useTheme();

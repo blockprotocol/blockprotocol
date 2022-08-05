@@ -4,7 +4,7 @@ import { NextPage } from "next";
 import NextError from "next/error";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { tw } from "twind";
 
 import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor";
@@ -132,10 +132,8 @@ const EntityTypePage: NextPage = () => {
       >
         <header className={tw`mb-8`}>
           <Link href={`/${shortname}`}>
-            <a>
-              {shortname}
-              {" >"}
-            </a>
+            {shortname}
+            {" >"}
           </Link>
           <Typography variant="bpHeading3" component="h1">
             <strong>{title ?? "Unnamed"}</strong> Schema

@@ -1,4 +1,4 @@
-import { BlockElementBase } from "@blockprotocol/graph";
+import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { css, html } from "lit";
 
 /**

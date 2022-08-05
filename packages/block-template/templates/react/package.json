@@ -1,6 +1,7 @@
 {
   "name": "block-template-react",
   "version": "0.0.0",
+  "private": true,
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -24,17 +25,17 @@
     "serve": "node_modules/.bin/block-scripts serve"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.10"
+    "@blockprotocol/graph": "0.0.12"
   },
   "devDependencies": {
-    "block-scripts": "0.0.13",
-    "mock-block-dock": "0.0.17",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "block-scripts": "0.0.14",
+    "mock-block-dock": "0.0.18",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "block-scripts": {
     "port": 63212

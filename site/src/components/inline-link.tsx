@@ -1,11 +1,11 @@
 import { Box, BoxProps, Fade, Popper, Typography } from "@mui/material";
-import { FC, useRef, useState } from "react";
+import { FunctionComponent, useRef, useState } from "react";
 
 type InlineLinkProps = {
   popperInfo?: { title?: string; content?: string };
 } & BoxProps;
 
-export const InlineLink: FC<InlineLinkProps> = ({
+export const InlineLink: FunctionComponent<InlineLinkProps> = ({
   children,
   popperInfo,
   sx = [],

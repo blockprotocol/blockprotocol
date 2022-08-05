@@ -1,9 +1,9 @@
-/** @sync ../components/Snippet.tsx */
 import "../styles/prism.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
+import * as Sentry from "@sentry/nextjs";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
 import Head from "next/head";
@@ -45,11 +45,17 @@ const MyApp = ({
 
     if (error) {
       if (error.response?.status === 401) {
+        Sentry.configureScope((scope) => {
+          scope.clear();
+        });
         setUser(undefined);
       } else {
         throw error;
       }
     } else if (data) {
+      Sentry.configureScope((scope) => {
+        scope.setUser({ id: data.user.id });
+      });
       setUser(data.user);
     }
   }, []);
@@ -58,18 +64,18 @@ const MyApp = ({
     void refetchUser();
   }, [refetchUser]);
 
-  const updatePreviousRoute = (url: string) => {
-    // routeChangeStart also runs on initial load,
-    // so this condition prevents the initial URL being added to sessionStorage
-    if (!document.location.href.includes(url)) {
-      sessionStorage.setItem("previousRoute", document.location.href);
-    }
-  };
-
   useEffect(() => {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV === "production") {
       TagManager.initialize({ gtmId: "GTM-5DRD4LS" });
     }
+
+    const updatePreviousRoute = (url: string) => {
+      // routeChangeStart also runs on initial load,
+      // so this condition prevents the initial URL being added to sessionStorage
+      if (document && !document.location.href.includes(url)) {
+        sessionStorage.setItem("previousRoute", document.location.href);
+      }
+    };
 
     Router.events.on("routeChangeStart", updatePreviousRoute);
 

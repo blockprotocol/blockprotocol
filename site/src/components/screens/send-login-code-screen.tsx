@@ -1,5 +1,12 @@
 import { Box, Typography } from "@mui/material";
-import React, { ReactNode, useEffect, useRef, useState, VFC } from "react";
+import {
+  FormEvent,
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "../../lib/api-client";
 import { Button } from "../button";
@@ -10,6 +17,7 @@ import { TextField } from "../text-field";
 import { VerificationCodeInfo } from "./verification-code-screen";
 
 type SendLoginCodeScreenProps = {
+  disabled?: boolean;
   initialEmail?: string;
   onLoginCodeSent: (params: {
     verificationCodeInfo: VerificationCodeInfo;
@@ -18,18 +26,16 @@ type SendLoginCodeScreenProps = {
   onClose?: () => void;
 };
 
-export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
-  initialEmail,
-  onLoginCodeSent,
-  onClose,
-}) => {
+export const SendLoginCodeScreen: FunctionComponent<
+  SendLoginCodeScreenProps
+> = ({ disabled, initialEmail, onLoginCodeSent, onClose }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (emailInputRef.current) {
-      emailInputRef.current.select();
+    if (emailInputRef.current && !disabled) {
+      emailInputRef.current.focus();
     }
-  }, [emailInputRef]);
+  }, [emailInputRef, disabled]);
 
   const {
     emailValue,
@@ -42,7 +48,7 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
   const [sendingLoginCode, setSendingLoginCode] = useState<boolean>(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>();
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setApiErrorMessage(undefined);
     setTouchedEmailInput(true);
@@ -113,6 +119,7 @@ export const SendLoginCodeScreen: VFC<SendLoginCodeScreenProps> = ({
           placeholder="claude@example.com"
           variant="outlined"
           value={emailValue}
+          disabled={disabled}
           onChange={({ target }) => {
             if (apiErrorMessage) setApiErrorMessage(undefined);
             setEmailValue(target.value);

@@ -1,6 +1,3 @@
-export { BlockElementBase } from "./custom-element";
-export { GraphBlockHandler } from "./graph-block-handler";
-export { GraphEmbedderHandler } from "./graph-embedder-handler";
-export type { BlockComponent } from "./react";
-export { useGraphBlockService, useGraphEmbedderService } from "./react";
-export * from "./types";
+export { GraphBlockHandler } from "./graph-block-handler.js";
+export { GraphEmbedderHandler } from "./graph-embedder-handler.js";
+export * from "./types.js";

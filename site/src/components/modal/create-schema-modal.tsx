@@ -1,6 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
-import { FC, FormEvent, ReactNode, useCallback, useState } from "react";
+import {
+  FormEvent,
+  FunctionComponent,
+  ReactNode,
+  useCallback,
+  useState,
+} from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { useUser } from "../../context/user-context";
@@ -14,7 +20,7 @@ type CreateSchemaModalProps = {
   onClose: () => void;
 };
 
-export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
+export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   open,
   onClose,
 }) => {
@@ -87,6 +93,7 @@ export const CreateSchemaModal: FC<CreateSchemaModalProps> = ({
       contentStyle={{
         top: "40%",
       }}
+      data-testid="create-schema-modal"
     >
       <Box>
         <Typography

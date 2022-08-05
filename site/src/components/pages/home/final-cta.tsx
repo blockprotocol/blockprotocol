@@ -104,6 +104,7 @@ export const FinalCTA: NextPage = () => {
 
   return (
     <Box
+      data-testid="final-cta"
       sx={{
         background:
           "radial-gradient(60% 100% at 50% 110%, #FFB172 -10%, #9482FF 40%, #84e0ff 110%) ",

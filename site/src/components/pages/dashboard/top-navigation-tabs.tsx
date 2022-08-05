@@ -1,6 +1,6 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import { useRouter } from "next/router";
-import { MouseEvent, VoidFunctionComponent } from "react";
+import { FunctionComponent, MouseEvent } from "react";
 
 import { dashboardPages } from "./utils";
 
@@ -9,7 +9,7 @@ const a11yProps = (index: number) => ({
   "aria-controls": `simple-tabpanel-${index}`,
 });
 
-export const TopNavigationTabs: VoidFunctionComponent = () => {
+export const TopNavigationTabs: FunctionComponent = () => {
   const router = useRouter();
 
   return (

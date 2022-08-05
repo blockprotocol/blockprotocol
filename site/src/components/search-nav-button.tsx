@@ -11,8 +11,9 @@ export const SearchNavButton = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    const onKeyDown = ({ key }: KeyboardEvent) => {
-      if (key === "/") {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "/") {
+        event.preventDefault();
         setDisplayModal((prev) => !prev);
       }
     };
@@ -79,6 +80,7 @@ export const SearchNavButton = () => {
       </Button>
 
       <Modal
+        data-testid="bp-search-modal"
         sx={{
           [`& .${modalClasses.root}`]: {
             maxWidth: 600,

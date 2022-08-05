@@ -6,15 +6,15 @@ import {
 import { Box, Typography } from "@mui/material";
 import debounce from "lodash/debounce";
 import get from "lodash/get";
-import React, {
+import {
   createContext,
+  FunctionComponent,
   ReactElement,
   useCallback,
   useEffect,
   useMemo,
   useReducer,
   useState,
-  VoidFunctionComponent,
 } from "react";
 import { tw } from "twind";
 
@@ -45,7 +45,7 @@ type JsonSchemaEditorProps = {
 } & Pick<EmbedderGraphMessageCallbacks, "aggregateEntityTypes"> &
   Partial<Pick<EmbedderGraphMessageCallbacks, "updateEntityType">>;
 
-export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
+export const SchemaEditor: FunctionComponent<JsonSchemaEditorProps> = ({
   aggregateEntityTypes,
   entityTypeId,
   schema: possiblyStaleDbSchema,
@@ -154,7 +154,7 @@ export const SchemaEditor: VoidFunctionComponent<JsonSchemaEditorProps> = ({
    * Generate a link for an absolute URI to a schema (or part of a schema), for a given value for $ref
    */
   const generateAbsoluteSchemaLink = useCallback(
-    ($ref) => {
+    ($ref: string) => {
       const baseUrl = schema$id?.startsWith("http")
         ? new URL(schema$id).origin
         : undefined;

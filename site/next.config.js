@@ -1,3 +1,5 @@
+const { withSentryConfig } = await import("@sentry/nextjs");
+
 const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
   enabled: ["true", "1"].includes(process.env.ANALYZE),
 });
@@ -7,6 +9,7 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
+  productionBrowserSourceMaps: true,
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
@@ -77,4 +80,13 @@ const nextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+/** @type {Partial<import("@sentry/nextjs").SentryWebpackPluginOptions>} */
+const sentryWebpackPluginOptions = {
+  dryRun: !process.env.SENTRY_AUTH_TOKEN,
+  silent: true,
+};
+
+export default withSentryConfig(
+  withBundleAnalyzer(nextConfig),
+  sentryWebpackPluginOptions,
+);

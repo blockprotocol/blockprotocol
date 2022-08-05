@@ -1,6 +1,6 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Box, BoxProps, Link, Typography } from "@mui/material";
-import { FC, VoidFunctionComponent } from "react";
+import { FunctionComponent, ReactNode } from "react";
 
 import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
 
@@ -18,8 +18,9 @@ export type DashboardCardProps = {
 };
 
 type CardWrapperProps = {
-  onClick?: () => void;
+  children?: ReactNode;
   href?: string;
+  onClick?: () => void;
 };
 
 const sharedStyles: BoxProps["sx"] = {
@@ -53,7 +54,11 @@ const sharedStyles: BoxProps["sx"] = {
   },
 };
 
-const CardWrapper: FC<CardWrapperProps> = ({ children, onClick, href }) => {
+const CardWrapper: FunctionComponent<CardWrapperProps> = ({
+  children,
+  onClick,
+  href,
+}) => {
   if (onClick) {
     return (
       <Box component="button" sx={sharedStyles} onClick={onClick}>
@@ -69,7 +74,7 @@ const CardWrapper: FC<CardWrapperProps> = ({ children, onClick, href }) => {
   );
 };
 
-export const DashboardCardSecondary: VoidFunctionComponent<
+export const DashboardCardSecondary: FunctionComponent<
   Pick<DashboardCardProps, "title" | "link" | "description" | "icon">
 > = ({ link, title, description, icon }) => {
   return (
@@ -137,7 +142,7 @@ export const DashboardCardSecondary: VoidFunctionComponent<
   );
 };
 
-export const DashboardCard: VoidFunctionComponent<DashboardCardProps> = ({
+export const DashboardCard: FunctionComponent<DashboardCardProps> = ({
   title,
   colorGradient,
   description,

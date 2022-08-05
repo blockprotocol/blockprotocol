@@ -1,3 +1,5 @@
+import { CSSProperties } from "react";
+
 declare module "@mui/material/styles" {
   interface Palette {
     purple: {
@@ -54,32 +56,32 @@ declare module "@mui/material/styles" {
   }
 
   interface TypographyVariants {
-    bpTitle: React.CSSProperties;
-    bpSubtitle: React.CSSProperties;
-    bpHeading1: React.CSSProperties;
-    bpHeading2: React.CSSProperties;
-    bpHeading3: React.CSSProperties;
-    bpHeading4: React.CSSProperties;
-    bpHeading5: React.CSSProperties;
-    bpLargeText: React.CSSProperties;
-    bpBodyCopy: React.CSSProperties;
-    bpSmallCopy: React.CSSProperties;
-    bpMicroCopy: React.CSSProperties;
+    bpTitle: CSSProperties;
+    bpSubtitle: CSSProperties;
+    bpHeading1: CSSProperties;
+    bpHeading2: CSSProperties;
+    bpHeading3: CSSProperties;
+    bpHeading4: CSSProperties;
+    bpHeading5: CSSProperties;
+    bpLargeText: CSSProperties;
+    bpBodyCopy: CSSProperties;
+    bpSmallCopy: CSSProperties;
+    bpMicroCopy: CSSProperties;
   }
 
   interface TypographyVariantsOptions {
-    bpTitle?: React.CSSProperties;
-    bpSubtitle?: React.CSSProperties;
-    bpHeading1?: React.CSSProperties;
-    bpHeading2?: React.CSSProperties;
-    bpHeading3?: React.CSSProperties;
-    bpHeading4?: React.CSSProperties;
-    bpHeading5?: React.CSSProperties;
-    bpSmallCaps?: React.CSSProperties;
-    bpLargeText?: React.CSSProperties;
-    bpBodyCopy?: React.CSSProperties;
-    bpSmallCopy?: React.CSSProperties;
-    bpMicroCopy?: React.CSSProperties;
+    bpTitle?: CSSProperties;
+    bpSubtitle?: CSSProperties;
+    bpHeading1?: CSSProperties;
+    bpHeading2?: CSSProperties;
+    bpHeading3?: CSSProperties;
+    bpHeading4?: CSSProperties;
+    bpHeading5?: CSSProperties;
+    bpSmallCaps?: CSSProperties;
+    bpLargeText?: CSSProperties;
+    bpBodyCopy?: CSSProperties;
+    bpSmallCopy?: CSSProperties;
+    bpMicroCopy?: CSSProperties;
   }
 }
 

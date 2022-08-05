@@ -1,6 +1,6 @@
 import { Box, Skeleton, Typography } from "@mui/material";
 import { formatDistance } from "date-fns";
-import { VFC } from "react";
+import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { BlockProtocolLogoIcon } from "./icons";
@@ -64,7 +64,10 @@ const BlockCardLoading = () => {
   );
 };
 
-export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
+export const BlockCard: FunctionComponent<BlockCardProps> = ({
+  loading,
+  data,
+}) => {
   if (loading) {
     return <BlockCardLoading />;
   }
@@ -85,7 +88,7 @@ export const BlockCard: VFC<BlockCardProps> = ({ loading, data }) => {
   } = data;
 
   return (
-    <Link href={blockPackagePath}>
+    <Link data-testid="block-card" href={blockPackagePath}>
       <Box
         sx={{
           ...blockWidthStyles,
