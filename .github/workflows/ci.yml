@@ -173,7 +173,7 @@ jobs:
 
   site-integration-tests:
     name: "Site integration tests"
-    runs-on: windows-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
 
