@@ -173,10 +173,7 @@ jobs:
 
   site-integration-tests:
     name: "Site integration tests"
-    runs-on: windows-2022
-    defaults:
-      run:
-        shell: bash
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
 
@@ -191,6 +188,8 @@ jobs:
       - uses: ./.github/actions/warm-up-repo
         with:
           playwright-deps: chrome firefox webkit
+
+      - uses: docker-practice/actions-setup-docker@1.0.11
 
       - name: Create temp files and folders
         run: |
@@ -209,7 +208,6 @@ jobs:
         run: |
           yarn dev:db 2>&1 | tee var/logs/db.log & ## ampersand enables background mode
           yarn wait-on --timeout 60000 tcp:0.0.0.0:27017
-        shell: powershell
 
       - name: Seed DB
         if: ${{ success() || failure() }}
