@@ -1,6 +1,7 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
-import serviceJsonDefinition from "./graph-service.json";
+// @todo restore this when an issue with module resolution has been resolved
+// import graphServiceJson from "./graph-service.json" assert { type: "json" };
 import {
   BlockGraph,
   EmbedderGraphMessageCallbacks,
@@ -8,7 +9,7 @@ import {
   Entity,
   EntityType,
   LinkedAggregations,
-} from "./types";
+} from "./types.js";
 
 /**
  * Creates a handler for the graph service for the embedder.
@@ -23,6 +24,7 @@ export class GraphEmbedderHandler
   private _blockGraph?: BlockGraph;
   private _entityTypes?: EntityType[];
   private _linkedAggregations?: LinkedAggregations;
+  private _readonly?: boolean;
 
   constructor({
     blockEntity,
@@ -31,6 +33,7 @@ export class GraphEmbedderHandler
     element,
     entityTypes,
     linkedAggregations,
+    readonly,
   }: {
     blockEntity?: Entity;
     blockGraph?: BlockGraph;
@@ -38,12 +41,14 @@ export class GraphEmbedderHandler
     element: HTMLElement;
     entityTypes?: EntityType[];
     linkedAggregations?: LinkedAggregations;
+    readonly?: boolean;
   }) {
     super({ element, serviceName: "graph", sourceType: "embedder" });
     this._blockEntity = blockEntity;
     this._blockGraph = blockGraph;
     this._entityTypes = entityTypes;
     this._linkedAggregations = linkedAggregations;
+    this._readonly = readonly;
 
     if (callbacks) {
       this.registerCallbacks(callbacks);
@@ -61,17 +66,19 @@ export class GraphEmbedderHandler
     messageName: K,
     handlerFunction: NonNullable<EmbedderGraphMessageCallbacks[K]>,
   ) {
-    const expectedMessageSource = "block";
-    const messageJsonDefinition = serviceJsonDefinition.messages.find(
-      (message) =>
-        message.messageName === messageName &&
-        message.source === expectedMessageSource,
-    );
-    if (!messageJsonDefinition) {
-      throw new Error(
-        `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
-      );
-    }
+    // @todo restore this when module resolution issue resolved
+    // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
+    // const expectedMessageSource = "block";
+    // const messageJsonDefinition = graphServiceJson.messages.find(
+    //   (message) =>
+    //     message.messageName === messageName &&
+    //     message.source === expectedMessageSource,
+    // );
+    // if (!messageJsonDefinition) {
+    //   throw new Error(
+    //     `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
+    //   );
+    // }
     this.registerCallback({
       callback: handlerFunction,
       messageName,
@@ -83,6 +90,7 @@ export class GraphEmbedderHandler
       blockEntity: this._blockEntity,
       blockGraph: this._blockGraph,
       linkedAggregations: this._linkedAggregations,
+      readonly: this._readonly,
     };
   }
 
@@ -122,6 +130,16 @@ export class GraphEmbedderHandler
       message: {
         messageName: "linkedAggregations",
         data: this._linkedAggregations,
+      },
+    });
+  }
+
+  readonly({ data }: { data?: boolean }) {
+    this._readonly = !!data;
+    this.sendMessage({
+      message: {
+        messageName: "readonly",
+        data: this._readonly,
       },
     });
   }

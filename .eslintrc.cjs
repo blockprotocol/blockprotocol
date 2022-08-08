@@ -60,7 +60,8 @@ module.exports = {
     "import/no-unresolved": [
       "error",
       {
-        ignore: ["^https?://"],
+        // graph uses 'exports' field in package.json https://github.com/import-js/eslint-plugin-import/issues/1810
+        ignore: ["^https?://", "^@blockprotocol/graph"],
       },
     ],
     "import/prefer-default-export": "off",
@@ -214,6 +215,14 @@ module.exports = {
         babelOptions: {
           presets: ["@babel/preset-react"], // allows jsx
         },
+      },
+    },
+    {
+      // plugin does not support .js file extensions in .ts files, which ESM TS projects require
+      // https://github.com/import-js/eslint-plugin-import/issues/2446
+      files: ["packages/@blockprotocol/graph/**"],
+      rules: {
+        "import/no-unresolved": "off",
       },
     },
     {

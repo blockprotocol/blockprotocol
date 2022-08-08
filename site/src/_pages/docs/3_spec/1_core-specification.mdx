@@ -231,7 +231,7 @@ As blocks may not sandboxed, messages to or from them must be scoped to their lo
 
 Blocks:
 
-- MUST send messages via dispatching a `[CustomEvent](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent)` named `"blockprotocolmessage"`, where the event matches the structure described in [message content](#message-content)
+- MUST send messages via dispatching a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) named `"blockprotocolmessage"`, where the event matches the structure described in [message content](#message-content)
 - MUST dispatch events from an element located within the component, ideally the root, which MUST not change across the lifetime of the block instance
 - MUST listen for messages of type `"blockprotocolmessage"` sent from the embedder on the SAME ELEMENT from which they dispatch events
 

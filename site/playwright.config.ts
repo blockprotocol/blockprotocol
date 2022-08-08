@@ -48,9 +48,9 @@ const config: PlaywrightTestConfig = {
       },
     },
     {
-      name: "smoke",
+      name: "e2e",
       retries: 0,
-      testMatch: "**/{smoke,universal}/**",
+      testMatch: "**/{e2e,universal}/**",
       use: { ...devices["Desktop Chrome"] },
     },
   ],

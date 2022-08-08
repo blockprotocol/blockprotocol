@@ -34,6 +34,7 @@ export const BaseLinkWithAnchor = forwardRef<
       scroll={scroll}
       shallow={shallow}
       locale={locale}
+      data-testid={other["data-testid"]}
     >
       <Anchor ref={ref} {...other} />
     </BaseLink>

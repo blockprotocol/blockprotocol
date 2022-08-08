@@ -23,6 +23,7 @@ import {
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
 import { theme as themeImport } from "../theme";
+import { parseHTML } from "../util/html-utils";
 import { FontAwesomeIcon } from "./icons";
 import { Link } from "./link";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
@@ -95,6 +96,7 @@ const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
+        visibility="inherit"
         bgcolor={
           isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
         }
@@ -116,7 +118,7 @@ const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
             ...highlightSection(isSectionSelected),
           })}
         >
-          {sectionTitle}
+          {parseHTML(sectionTitle)}
         </SidebarLink>
         {subSections && subSections.length > 0 ? (
           <IconButton
@@ -405,6 +407,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
   return (
     <Box
       {...boxProps}
+      component="aside"
       position="sticky"
       overflow="auto"
       width={SIDEBAR_WIDTH}

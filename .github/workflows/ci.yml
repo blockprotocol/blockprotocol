@@ -151,8 +151,8 @@ jobs:
       - name: Publish NPM packages to local registry
         run: yarn exe scripts/packages/publish-to-local-registry.ts
 
-      - name: Smoke-test create-block-app
-        run: yarn exe scripts/packages/smoke-test-create-block-app.ts
+      - name: e2e-test create-block-app
+        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
         env:
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
@@ -218,7 +218,7 @@ jobs:
           yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
         env:
-          CODE_COVERAGE: true
+          TEST_COVERAGE: true
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
@@ -226,7 +226,10 @@ jobs:
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
-        run: yarn kill-port 3000
+        run: kill -2 $(lsof -t -i:3000)
+        ## TODO: Replace with kill-port when SIGINT is supported as an argument
+        ## https://github.com/tiaanduplessis/kill-port/issues/48
+        # run: yarn kill-port 3000
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}

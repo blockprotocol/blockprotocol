@@ -47,3 +47,6 @@ site/site-map.json
 site/test-results
 
 var
+
+# Sentry
+.sentryclirc
