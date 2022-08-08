@@ -21,16 +21,16 @@ The types in the type systems all specify JSON Schema's `{ "additionalProperties
 
 Allowing for entity types to be extended in the Block Protocol means that a user could still make use of public types when they want to define types for their domain. As an alternative to extending types, type duplication (or type forking) is a less compatible way to make use of existing public types, without a direct data mapping strategy.
 
-This RFC introduces a way for types to be extended in a way where the reusability and sharing aspects of the Block Protocol are maintained, and a way for types to be duplicated in case extending types is insufficient.
+This RFC introduces a way for types to be extended in a way where the reusability and sharing design philosophies of the Block Protocol are maintained, and a way for types to be duplicated for use-cases where extending types is insufficient.
 
 # Guide-level explanation
 
 [guide-level-explanation]: #guide-level-explanation
 
-> ⭐ The use of 'types' throughout this RFC, it can be assume to refer to _entity types_ specifically unless stated otherwise.
+> ⭐ Usage of the word "types" in this RFC can be assumed to refer to _entity types_ unless stated otherwise.
 
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
-Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified. This property of extended types is an explicit design decision, as types are still considered "reused" when they are extended. Extending types further empowers the idea of gradual convergence, as users can reuse publicly-available types they are not satisfied with.
+Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified. This property of extended types is an explicit design decision, as types are considered "reused" when they are extended, _not_ "modified". Extending types further empowers the idea of gradual convergence, as users can reuse publicly-available types they are not fully satisfied with.
 
 For example, an `Employee` entity type could be an extended version of `Person`. This `Employee` type could contain all of the properties of `Person` as well as having _additional_ domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
@@ -74,7 +74,7 @@ occupation◄─────────────────┘
 ```
 
 We can visually see how selecting `Person` in the type hierarchy would provide `name` and `age` properties but exclude the `occupation` property.
-Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types. The reason for selection/projection of properties being important for coercive subtyping will be explained in more detail in the coming sections, specifically in the [`additionalProperties` problem explanation section](#the-additionalproperties-problem).
+Assuming that we are able to project/select the properties of a type that are defined through the supertype, coercive subtyping is attainable for any subtype. This is a somewhat strong assumption to make, but it unlocks expressing how to extend types. The reason the selection/projection of properties is important for coercive subtyping will be explained in more detail in the coming sections, specifically in the [`additionalProperties` problem explanation section](#the-additionalproperties-problem).
 
 ## Multiple supertypes
 
@@ -103,7 +103,7 @@ occupation◄───────────────┘
 - Supertype `Person` contains the required properties `name` and `age`
 - Supertype `Superhero` contains the required properties `superpower` and `name`
 
-In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible'.
+In this example, `name` overlaps as a required property in both supertypes. Compatibility of overlapping properties is defined in the [versioning RFC's definition of "compatible"](./0408-versioning-types.md#determining-type-compatibility) .
 
 ```txt
               (supertypes)
@@ -131,20 +131,20 @@ In the proposed [Versioning RFC](./0408-versioning-types.md) for the type system
 
 The assumption that we can select/project parts of a subtype that make up a supertype is essential for keeping strictness in JSON Schemas.
 
-We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` behave and may be used within our type extension system to make supertypes keep strictness while allowing composition.
+We propose slight modifications to how `{ "additionalProperties": true }` and `{ "unevaluatedProperties": false }` behave and may be used within our type extension system to let supertypes keep strictness while allowing composition.
 
-Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#problems-with-unevaluatedproperties)
+Concrete examples of how JSON Schema breaks with these validation constraints are shown in the [Reference-level explanation](#problems-with-unevaluatedproperties).
 
 ## Defining extended entity types
 
-Extended types will be defined with conventional JSON Schema syntax, the `allOf` keyword. An entity type can extend another entity type by adding an entry to `allOf` value with a versioned URI reference.
-Using a [versioned URI](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) makes it so that subtypes aren't automatically updated when the supertype is.
+Extended types will be defined with conventional JSON Schema syntax: the `allOf` keyword. An entity type can extend another entity type by adding a versioned URI reference to the root-level `allOf` array.
+A [versioned URI](https://github.com/blockprotocol/blockprotocol/blob/main/rfcs/text/0408-versioning-types.md#type-uris) is used so that subtypes aren't automatically updated (and potentially invalidated) when the supertype is updated.
 
-As extended types can extend other extended types, we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about, and could lead to unpredictable behavior.
+As extended types can extend other extended types we must also make sure that there are no cycles within the type hierarchy, as it makes types difficult to resolve/reason about and could lead to unpredictable behavior.
 
 ## Defining entity type duplication
 
-When looking for public types, if extending an entity type is not sufficient for a given situation, an alternative is to duplicate the type, such that individual properties can be overridden. Duplicated types become new complete, standalone types.
+When looking for public types, if extending an entity type is insufficient, an alternative is to duplicate the type so that individual properties can be removed or overridden. Duplicated types become new complete, standalone types.
 
 Type duplication, unlike extended types, will not allow for direct substitution, as the types may be incompatible, thus requiring some sort of mapping (which is yet to be defined within the type system).
 
@@ -642,7 +642,7 @@ This expanded entity is equivalent to the original `Employee` entity type, but w
 }
 ```
 
-As the intermediate, expanded entity type does not declare any supertypes, we are unable to trivially substitute this version of Bob's `Employee` in place of `Person`.
+As the intermediate expanded entity type does not declare any supertypes, we are unable to trivially substitute this version of Bob's `Employee` in place of `Person`.
 
 ## Detecting cycles
 
@@ -799,7 +799,7 @@ given that the original schema was created as follows
 }
 ```
 
-The above change applies to these BP operations (`updateEntityType` having already been implemented, and the others proposed in accepted RFCs):
+The above change applies to these Block Protocol operations (`updateEntityType` having already been implemented, and the others proposed in accepted RFCs):
 
 - `updateEntityType`
 - `updatePropertyType`
