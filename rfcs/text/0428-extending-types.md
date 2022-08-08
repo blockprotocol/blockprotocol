@@ -32,7 +32,7 @@ This RFC introduces a way for types to be extended in a way where the reusabilit
 Type extension can be seen as the concept of adding properties to an existing entity type `Type` by creating a new type `SubType` that has a specific relation to `Type`.
 Using `SubType` in place of `Type` must be possible when extending a type, which means that existing properties and links may _not_ be modified. This property of extended types is an explicit design decision, as types are considered "reused" when they are extended, _not_ "modified". Extending types further empowers the idea of gradual convergence, as users can reuse publicly-available types they are not fully satisfied with.
 
-For example, an `Employee` entity type could be an extended version of `Person`. This `Employee` type could contain all of the properties of `Person` as well as having _additional_ domain-specific properties, making it more concrete while keeping compatibility with `Person`.
+For example, an `Employee` entity type could extend `Person`. This `Employee` type would then inherit the properties of `Person` as well as having _additional_ domain-specific properties, making it more concrete while keeping compatibility with `Person`.
 
 If the `Person` entity type contains required properties `name` and `age`, the `Employee` entity type would inherit these properties and could add other properties (e.g. an `occupation` property). `Employee` would _not_ be able to override any of the properties inherited from `Person` (e.g. it's not possible to turn `name` into an array or make it optional) to ensure that instances of `Employee` are also valid instances of `Person` (i.e. compatibility with `Person` is preserved).
 
