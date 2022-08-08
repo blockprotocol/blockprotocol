@@ -194,7 +194,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       <div style={{ marginBottom: 30 }}>
         <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
         <label
-          htmlFor="reaodnly-input"
+          htmlFor="readonly-input"
           style={{ display: "block", marginBottom: 10 }}
         >
           <input
