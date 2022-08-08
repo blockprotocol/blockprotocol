@@ -725,11 +725,36 @@ As described in the [Guide-level explanation](#multiple-supertypes), when extend
 - For each property (base URI on the top level of `properties`) that exists in multiple entity types:
 
   - all entity types refer to the same versioned URI of the property type **or** compatible versions of the property type (through the [versioning RFC](./0408-versioning-types.md#determining-type-compatibility) definition of 'compatible')
-  - none of the entity types define the property type as an array **or** all define the property type as an array with the _exact same_ cardinality constraints.
+  - none of the entity types define the property type as an array **or** all define the property type as an array with compatible cardinality constraints.
 
 - For each link (versioned URI on the top level of `links`) that exists in multiple entity types:
 
-  - none of the entity types define the link as an array **or** all define the property type as an array with the _exact same_ cardinality constraints (including `order`).
+  - none of the entity types define the link as an array **or** all define the link as an array with compatible cardinality constraints (and same `order` value).
+
+**Compatible cardinality constraints** can be defined as follows:
+
+For a subtype with many supertypes describing the same array cardinality constraint, all cardinality constraints must overlap.
+In the case the subtype does not constrain the given array cardinality, the supertypes will impose an implicit constraint on the subtype with the overlap shared by all supertypes.
+
+To illustrate what this means, given we have a subtype `C` that extends supertypes `A` and `B`, the following two examples can be given:
+
+1.  Example of multiple cardinality constraints on property `x` without subtype constraint on the property
+
+    - Supertype `A` has constraint `x: [0, 3]`
+    - Supertype `B` has constraint `x: [-1, 2]`
+    - Here the subtype `C` does not define a cardinality constraint on property `x`.
+
+      This imposes an implicit constraint `x: [0, 2]` on the subtype `C` as it extends both `A` and `C`.
+      The above constraints are considered valid, as an overlapping constraint can be found.
+
+2.  Example of multiple cardinality constraints on property `x` with subtype constraint on the property
+
+    - Supertype `A` has constraint `x: [0, 3]`
+    - Supertype `B` has constraint `x: [-1, 2]`
+    - Subtype `C` has constraint `x: [0, 1]`
+
+    - Here subtype `C` imposes its own constraint on `x` which is within the overlapping constraints given by `A` and `B` on `x`.
+      The above constraints are also considered valid.
 
 ## Block Protocol implications
 
