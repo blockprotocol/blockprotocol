@@ -173,7 +173,7 @@ jobs:
 
   site-integration-tests:
     name: "Site integration tests"
-    runs-on: ubuntu-latest
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
 
@@ -188,6 +188,8 @@ jobs:
       - uses: ./.github/actions/warm-up-repo
         with:
           playwright-deps: chrome firefox webkit
+
+      - uses: docker-practice/actions-setup-docker@1.0.8
 
       - name: Create temp files and folders
         run: |
