@@ -209,6 +209,7 @@ jobs:
         run: |
           yarn dev:db 2>&1 | tee var/logs/db.log & ## ampersand enables background mode
           yarn wait-on --timeout 60000 tcp:0.0.0.0:27017
+        shell: powershell
 
       - name: Seed DB
         if: ${{ success() || failure() }}
