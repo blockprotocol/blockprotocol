@@ -146,7 +146,7 @@ As extended types can extend other extended types we must also make sure that th
 
 When looking for public types, if extending an entity type is insufficient, an alternative is to duplicate the type so that individual properties can be removed or overridden. Duplicated types become new complete, standalone types.
 
-Type duplication, unlike extended types, will not allow for direct substitution, as the types may be incompatible, thus requiring some sort of mapping (which is yet to be defined within the type system).
+Type duplication, unlike extended types, does not imply that instances of the original type can be substituted by instances of the duplicated type because the types may be incompatible. A mapping may be used to persist some of of compatibility (which is yet to be defined within the type system).
 
 Because of the behavior of type duplication, the Block Protocol wouldn't have to change much to support duplicating entity types, as it can be considered literal copying. Although having more explicit metadata about type duplication does, however, enable provenance for duplicated types. As such, any duplicated type should specify what origin entity type they are duplicates of through a new `forkedFrom` keyword. This keyword is used in the duplicated entity type schema as a versioned URI reference to the type which was duplicated.
 
