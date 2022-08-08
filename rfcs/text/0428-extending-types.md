@@ -624,7 +624,7 @@ This expanded entity is equivalent to the original `Employee` entity type, but w
   "type": "object",
   "title": "Employee",
   "forkedFrom": {
-    "$ref": "https://blockprotocol.org/@bob/entity-type/employee/v/1"
+    "$ref": "https://blockprotocol.org/@alice/entity-type/employee/v/1"
   },
   "properties": {
     "https://blockprotocol.org/@alice/property-type/name": {
