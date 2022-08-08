@@ -193,12 +193,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     <div style={{ fontFamily: "sans-serif" }}>
       <div style={{ marginBottom: 30 }}>
         <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
-        <label
-          htmlFor="readonly-input"
-          style={{ display: "block", marginBottom: 10 }}
-        >
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label style={{ display: "block", marginBottom: 10 }}>
           <input
-            id="readonly-input"
             type="checkbox"
             checked={debugReadonly}
             onChange={(evt) => setDebugReadonly(evt.target.checked)}

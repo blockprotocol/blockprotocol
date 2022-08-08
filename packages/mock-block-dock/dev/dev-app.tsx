@@ -32,10 +32,9 @@ const DevApp: FunctionComponent = () => {
         <button type="button" onClick={() => setEntityId(entityId + 1)}>
           Increment Entity ID
         </button>
-
-        <label htmlFor="external-readonly-input" style={{ marginLeft: 20 }}>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        <label style={{ marginLeft: 20 }}>
           <input
-            id="external-readonly-input"
             type="checkbox"
             onChange={(evt) => setReadonly(evt.target.checked)}
           />
