@@ -152,7 +152,6 @@ const handler: NextApiHandler = async (req, res) => {
       
           const render = (props) => {
             const { readonly, ...blockEntityProps } = props;
-            console.log({ readonly, blockEntityProps});
             const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData, readonly  };
             
             document.getElementById("loading-indicator")?.remove();
