@@ -90,7 +90,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   );
   const [debugReadonly, setDebugReadonly] = useState<boolean>(!!readonly);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const prevReadonly = useRef<boolean>(!!readonly);
+  const prevReadonly = useRef<boolean | undefined>(readonly);
 
   const propsToInject: BlockGraphProperties<any> = {
     graph: {
@@ -103,7 +103,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   };
 
   useEffect(() => {
-    prevReadonly.current = !!readonly;
+    prevReadonly.current = readonly;
   }, [readonly]);
 
   useEffect(() => {
