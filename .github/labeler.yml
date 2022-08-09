@@ -49,11 +49,23 @@
   - "packages/block-scripts/**/*"
   - "packages/block-scripts/**/.*"
 
-"package: block-template":
-  - "packages/block-template/*"
-  - "packages/block-template/.*"
-  - "packages/block-template/**/*"
-  - "packages/block-template/**/.*"
+"package: block-template-custom-element":
+  - "packages/block-template-custom-element/*"
+  - "packages/block-template-custom-element/.*"
+  - "packages/block-template-custom-element/**/*"
+  - "packages/block-template-custom-element/**/.*"
+
+"package: block-template-html":
+  - "packages/block-template-html/*"
+  - "packages/block-template-html/.*"
+  - "packages/block-template-html/**/*"
+  - "packages/block-template-html/**/.*"
+
+"package: block-template-react":
+  - "packages/block-template-react/*"
+  - "packages/block-template-react/.*"
+  - "packages/block-template-react/**/*"
+  - "packages/block-template-react/**/.*"
 
 "package: blockprotocol":
   - "packages/blockprotocol/*"
