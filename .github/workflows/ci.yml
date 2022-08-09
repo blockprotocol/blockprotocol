@@ -220,7 +220,14 @@ jobs:
         with:
           playwright-deps: chrome firefox webkit
 
-      - uses: docker-practice/actions-setup-docker@82cea5df5890f0098e297b5f6f6c8d424ca406f6
+      - name: Setup Docker on macOS
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
+
+      - name: Create temp files and folders
+        run: |
+          brew install docker-compose
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: 1
 
       - name: Create temp files and folders
         run: |
