@@ -20,8 +20,6 @@ const {
 
 const exec = promisify(child_process.exec);
 
-const templatePackageName = "block-template";
-
 const usage = commandLineUsage(helpSections);
 
 (async () => {
@@ -66,7 +64,7 @@ const usage = commandLineUsage(helpSections);
         ", ",
       )}`,
     );
-    process.exit();
+    process.exit(1);
   }
 
   // @todo: replace with `path ?? name` after dropping Node 12 support
@@ -75,42 +73,45 @@ const usage = commandLineUsage(helpSections);
   const resolvedBlockPath = path.resolve(untildify(folderPath));
 
   try {
-    fs.statSync(resolvedBlockPath);
+    await fs.stat(resolvedBlockPath);
     console.error(
       `${resolvedBlockPath} already exists, please specify another path!`,
     );
     process.exit();
   } catch {
-    // noop (we expect statSync to fail)
+    // noop (we expect stat to fail)
   }
 
   const tempExtractionDir = path.join(resolvedBlockPath, "tmp");
 
-  console.log("Downloading template...");
+  const templatePackageName = `block-template-${template}`;
+  console.log(`Downloading package ${templatePackageName}...`);
 
   await pacote.extract(templatePackageName, tempExtractionDir, {
     registry: process.env.NPM_CONFIG_REGISTRY,
   });
 
-  const templatePath = path.join(tempExtractionDir, "templates", template);
-  try {
-    fs.statSync(templatePath);
-  } catch {
-    console.error(
-      `Template '${template}' is missing – please raise an issue at https://github.com/blockprotocol/blockprotocol/issues`,
-    );
-    process.exit();
-  }
-
   console.log("Updating files...");
 
-  fs.copySync(path.resolve(templatePath), path.resolve(resolvedBlockPath));
-  fs.rm(tempExtractionDir, { recursive: true });
+  await fs.copy(
+    path.resolve(tempExtractionDir),
+    path.resolve(resolvedBlockPath),
+  );
+  await fs.rm(tempExtractionDir, { recursive: true });
+
+  try {
+    await fs.rename(
+      path.resolve(resolvedBlockPath, ".gitignore.dist"),
+      path.resolve(resolvedBlockPath, ".gitignore"),
+    );
+  } catch {
+    // noop (template is missing .gitignore.dist)
+  }
 
   console.log("Writing metadata...");
 
   const packageJsonPath = `${resolvedBlockPath}/package.json`;
-  const packageJson = JSON.parse(fs.readFileSync(packageJsonPath));
+  const packageJson = await fs.readJson(packageJsonPath);
 
   packageJson.name = slugifiedBlockName;
   packageJson.version = "0.0.0";
@@ -118,9 +119,7 @@ const usage = commandLineUsage(helpSections);
 
   const blockMetadataPath = `${resolvedBlockPath}/block-metadata.json`;
   const blockMetadata =
-    template === "html"
-      ? JSON.parse(fs.readFileSync(blockMetadataPath))
-      : undefined;
+    template === "html" ? await fs.readJson(blockMetadataPath) : undefined;
 
   if (template === "html") {
     blockMetadata.displayName = blockName;
@@ -152,12 +151,10 @@ const usage = commandLineUsage(helpSections);
     }
   }
 
-  fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, undefined, 2));
+  await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+
   if (template === "html") {
-    fs.writeFileSync(
-      blockMetadataPath,
-      JSON.stringify(blockMetadata, undefined, 2),
-    );
+    await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
   }
 
   console.log(

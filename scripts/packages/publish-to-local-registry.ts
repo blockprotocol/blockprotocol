@@ -51,16 +51,21 @@ const script = async () => {
   await addUserProcess;
 
   logStepEnd();
-  logStepStart(
-    `Run yarn build in block-template (to check if dist files are published)`,
-  );
 
-  await execa("yarn", ["build"], {
-    ...defaultExecaOptions,
-    cwd: path.resolve(`packages/block-template/templates/react`),
-  });
+  for (const blockTemplatePackage of publishablePackages.filter(({ name }) =>
+    name.match(/^block-template-/),
+  )) {
+    logStepStart(
+      `Run yarn build in ${blockTemplatePackage.name} (to check if temp files are published)`,
+    );
 
-  logStepEnd();
+    await execa("yarn", ["build"], {
+      ...defaultExecaOptions,
+      cwd: path.resolve(blockTemplatePackage.path),
+    });
+
+    logStepEnd();
+  }
 
   for (const publishablePackage of publishablePackages) {
     logStepStart(
