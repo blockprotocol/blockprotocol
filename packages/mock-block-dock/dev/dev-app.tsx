@@ -32,7 +32,7 @@ const DevApp: FunctionComponent = () => {
         <button type="button" onClick={() => setEntityId(entityId + 1)}>
           Increment Entity ID
         </button>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/869 */}
         <label style={{ marginLeft: 20 }}>
           <input
             type="checkbox"
