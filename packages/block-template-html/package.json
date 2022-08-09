@@ -1,7 +1,6 @@
 {
-  "name": "html-block",
-  "version": "0.0.0",
-  "private": true,
+  "name": "block-template-html",
+  "version": "0.1.0",
   "description": "Block Protocol block template for an html-based block",
   "keywords": [
     "blockprotocol",
@@ -11,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:blockprotocol/blockprotocol.git",
-    "directory": "packages/block-template"
+    "directory": "packages/block-template-html"
   },
   "license": "MIT",
   "author": {
@@ -23,7 +22,7 @@
     "dev": "echo \"Serving at http://localhost:63212\"; http-server -p 63212 ./dev",
     "lint:tsc": "echo \"Skipping: TypeScript not configured\"",
     "prepare": "rimraf ./dev/src; lnk -f ./src ./dev",
-    "serve": "node_modules/.bin/block-scripts serve"
+    "serve": "block-scripts serve"
   },
   "dependencies": {},
   "devDependencies": {
