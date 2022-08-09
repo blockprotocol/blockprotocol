@@ -220,7 +220,7 @@ jobs:
         with:
           playwright-deps: chrome firefox webkit
 
-      - uses: docker-practice/actions-setup-docker@82cea5d
+      - uses: docker-practice/actions-setup-docker@82cea5df5890f0098e297b5f6f6c8d424ca406f6
 
       - name: Create temp files and folders
         run: |
