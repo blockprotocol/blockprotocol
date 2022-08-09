@@ -193,7 +193,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     <div style={{ fontFamily: "sans-serif" }}>
       <div style={{ marginBottom: 30 }}>
         <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/869  */}
         <label style={{ display: "block", marginBottom: 10 }}>
           <input
             type="checkbox"
