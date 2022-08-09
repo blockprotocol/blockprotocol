@@ -224,10 +224,7 @@ jobs:
         uses: douglascamata/setup-docker-macos-action@v1-alpha
 
       - name: Create temp files and folders
-        run: |
-          brew install docker-compose
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: 1
+        run: HOMEBREW_NO_AUTO_UPDATE=1 brew install docker-compose
 
       - name: Create temp files and folders
         run: |
