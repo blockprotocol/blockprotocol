@@ -204,7 +204,7 @@ jobs:
 
   site-integration-tests:
     name: "Site integration tests"
-    runs-on: macos-12
+    runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
 
@@ -219,12 +219,6 @@ jobs:
       - uses: ./.github/actions/warm-up-repo
         with:
           playwright-deps: chrome firefox webkit
-
-      - name: Setup Docker on macOS
-        uses: douglascamata/setup-docker-macos-action@v1-alpha
-
-      - name: Install docker-compose
-        run: HOMEBREW_NO_AUTO_UPDATE=1 brew install docker-compose
 
       - name: Create temp files and folders
         run: |
