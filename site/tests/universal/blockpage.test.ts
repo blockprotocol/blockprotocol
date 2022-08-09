@@ -11,6 +11,7 @@ test("Updating block properties should update block preview", async ({
     browserName === "webkit",
     "https://app.asana.com/0/1202542409311090/1202651551651719 (internal)",
   );
+  test.slow(); // @todo Remove after re-engineering block sandbox
 
   await page.goto("/hub");
 
