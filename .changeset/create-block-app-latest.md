@@ -1,5 +1,5 @@
 ---
-"@blockprotocol/latest": patch
+"@blockprotocol/graph": patch
 block-template-custom-element: patch
 block-template-html: patch
 block-template-react: patch
