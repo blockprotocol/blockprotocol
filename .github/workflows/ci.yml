@@ -220,7 +220,8 @@ jobs:
         with:
           playwright-deps: chrome firefox webkit
 
-      - uses: docker-practice/actions-setup-docker@82cea5d
+      - name: Setup Docker on macOS
+        uses: douglascamata/setup-docker-macos-action@v1-alpha
 
       - name: Create temp files and folders
         run: |
