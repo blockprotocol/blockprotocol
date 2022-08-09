@@ -241,13 +241,19 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-template/*"],
+      files: ["packages/block-template-custom-element/*"],
       parserOptions: {
-        project: ["packages/block-template/tsconfig.json"],
+        project: ["packages/block-template-custom-element/tsconfig.json"],
       },
     },
     {
-      files: ["packages/block-template/**/dev.tsx"],
+      files: ["packages/block-template-react/*"],
+      parserOptions: {
+        project: ["packages/block-template-react/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/block-template-*/**/dev.tsx"],
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
@@ -256,7 +262,7 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-template/templates/custom-element/src/app.ts"],
+      files: ["packages/block-template-custom-element/src/app.ts"],
       rules: {
         "no-console": "off",
       },

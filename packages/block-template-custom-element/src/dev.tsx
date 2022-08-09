@@ -3,7 +3,7 @@
  * This file is not bundled with the block during the build process.
  */
 import { MockBlockDock } from "mock-block-dock";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
 import ElementClass from "./index";
@@ -35,4 +35,4 @@ const DevApp = () => {
   );
 };
 
-render(<DevApp />, node);
+createRoot(node).render(<DevApp />);

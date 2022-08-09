@@ -39,6 +39,7 @@ dist
 coverage
 
 # workspace specific
+packages/block-template-html/dev/src
 site/blocks-data.json
 site/playwright-report
 site/public/blocks

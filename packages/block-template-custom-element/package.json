@@ -1,8 +1,7 @@
 {
-  "name": "block-template-react",
-  "version": "0.0.0",
-  "private": true,
-  "description": "Block Protocol template for a React-based block",
+  "name": "block-template-custom-element",
+  "version": "0.1.0",
+  "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
     "blocks"
@@ -11,7 +10,7 @@
   "repository": {
     "type": "git",
     "url": "git@github.com:blockprotocol/blockprotocol.git",
-    "directory": "packages/block-template"
+    "directory": "packages/block-template-custom-element"
   },
   "license": "MIT",
   "author": {
@@ -19,13 +18,14 @@
     "url": "https://hash.ai"
   },
   "scripts": {
-    "build": "node_modules/.bin/block-scripts build",
-    "dev": "node_modules/.bin/block-scripts dev",
+    "build": "block-scripts build",
+    "dev": "block-scripts dev",
     "lint:tsc": "tsc --noEmit",
-    "serve": "node_modules/.bin/block-scripts serve"
+    "serve": "block-scripts serve"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.12"
+    "@blockprotocol/graph": "0.0.12",
+    "lit": "^2.2.5"
   },
   "devDependencies": {
     "block-scripts": "0.0.14",
@@ -33,16 +33,13 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
-  "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
-  },
   "block-scripts": {
     "port": 63212
   },
   "blockprotocol": {
     "blockType": {
-      "entryPoint": "react"
+      "entryPoint": "custom-element",
+      "tagName": "my-block"
     },
     "displayName": "Template",
     "examples": [
