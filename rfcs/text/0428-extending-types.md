@@ -922,4 +922,4 @@ Using the above setup would mean that we need to specify `#open` at the end of t
 [future-possibilities]: #future-possibilities
 
 - The conservative way type extension is introduced in this PR allows for future work in the "data mapping" space to apply to type inheritance as well. Being able to map between entity types could enable a shared mapping for otherwise incompatible (as supertypes) entity types.
-- Implementations of the upcoming "Structure-based Queries" RFC could benefit from some of the groud-work set out by this RFC, as the selection/projection of supertypes could be the basis of structure-based queries.
+- Implementations of the upcoming "Structure-based Queries" RFC could benefit from some of the ground-work set out by this RFC, as the selection/projection of supertypes could be the basis of structure-based queries.
