@@ -206,7 +206,9 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
           }}
         >
           <Box
-            sx={{ height: blockPreviewAndDataHeight, backgroundColor: "white" }}
+            sx={{
+              height: blockPreviewAndDataHeight,
+            }}
           >
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
@@ -217,7 +219,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
               sx={{
                 overflow: "auto",
                 padding: theme.spacing(4, 4),
-                height: "calc(100% - 40px)",
+                height: "100%",
                 backgroundColor: "#F7FAFC",
                 borderRadius: {
                   xs: 3,
@@ -250,7 +252,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                 )}
               </Box>
             </Box>
-            <Box height={40}>
+            {checkIfBlockIsSupported(metadata) && (
               <FormControlLabel
                 control={
                   <Switch
@@ -261,7 +263,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                 }
                 label="Read-only mode"
               />
-            </Box>
+            )}
           </Box>
         </Box>
         <Box
