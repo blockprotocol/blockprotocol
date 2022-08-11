@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { itemIsPage } from "../navbar/util";
@@ -53,18 +53,27 @@ const findCrumbs = (params: {
   return null;
 };
 
-export const useCrumbs = (pages: SiteMapPage[], asPath: string) =>
-  useMemo(() => {
+export const useCrumbs = (pages: SiteMapPage[], asPath: string) => {
+  const [ssr, setSsr] = useState(true);
+
+  useEffect(() => {
+    setSsr(false);
+  }, []);
+
+  const fixedAsPath = ssr ? asPath.split("#", 1)[0]! : asPath;
+
+  return useMemo(() => {
     const breadCrumbPages = pages.filter(({ title }) =>
       ["Specification", "Documentation"].includes(title),
     );
 
     for (const page of breadCrumbPages) {
-      const maybeCrumbs = findCrumbs({ asPath, item: page });
+      const maybeCrumbs = findCrumbs({ asPath: fixedAsPath, item: page });
 
       if (maybeCrumbs) {
         return maybeCrumbs;
       }
     }
     return [];
-  }, [asPath, pages]);
+  }, [fixedAsPath, pages]);
+};

@@ -50,7 +50,15 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
 }: MobileNavNestedPageProps<T>) => {
   const router = useRouter();
   const { asPath } = router;
-  const pathWithoutParams = generatePathWithoutParams(asPath);
+  const [ssr, setSsr] = useState(true);
+
+  useEffect(() => {
+    setSsr(false);
+  }, []);
+
+  const fixedAsPath = ssr ? asPath.split("#", 1)[0]! : asPath;
+
+  const pathWithoutParams = generatePathWithoutParams(fixedAsPath);
 
   const { title } = item;
 
@@ -250,19 +258,33 @@ export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
   onClose,
 }) => {
   const { asPath } = useRouter();
+  const [ssr, setSsr] = useState(true);
+
+  useEffect(() => {
+    setSsr(false);
+  }, []);
+
+  const fixedAsPath = ssr ? asPath.split("#", 1)[0]! : asPath;
+
   const { pages } = useContext(SiteMapContext);
 
   const [expandedItems, setExpandedItems] = useState<
     { href: string; depth: number }[]
   >(
-    pages.map((page) => getInitialExpandedItems({ asPath, item: page })).flat(),
+    pages
+      .map((page) =>
+        getInitialExpandedItems({ asPath: fixedAsPath, item: page }),
+      )
+      .flat(),
   );
 
   useEffect(() => {
     setExpandedItems((prev) => [
       ...prev,
       ...pages
-        .map((page) => getInitialExpandedItems({ asPath, item: page }))
+        .map((page) =>
+          getInitialExpandedItems({ asPath: fixedAsPath, item: page }),
+        )
         .flat()
         .filter(
           (expanded) =>
@@ -272,7 +294,7 @@ export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
             ) === undefined,
         ),
     ]);
-  }, [asPath, pages]);
+  }, [fixedAsPath, pages]);
 
   return (
     <List>
