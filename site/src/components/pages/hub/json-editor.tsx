@@ -99,22 +99,16 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
         },
         borderBottomLeftRadius: 6,
         borderBottomRightRadius: 6,
-        pre: {
-          background: "transparent",
-          padding: "32px !important",
-        },
-        textarea: {
-          padding: "32px",
-        },
       })}
     >
       <pre
         style={{
-          marginTop: 0,
           borderRadius: 0,
           outline: "none",
           height: "100%",
-          padding: "32px",
+          background: "transparent",
+          padding: "32px 0",
+          margin: "0 32px",
         }}
         ref={highlightedElementRef}
       >
@@ -124,7 +118,8 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
       </pre>
       <Box
         sx={(theme) => ({
-          padding: "32px",
+          padding: "32px 0",
+          margin: "0 32px",
           resize: "none",
           outline: "none",
           caretColor: theme.palette.common.white,
