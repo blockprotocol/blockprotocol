@@ -43,8 +43,8 @@
   "devDependencies": {
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-react": "^7.16.7",
-    "@changesets/changelog-github": "^0.4.5",
-    "@changesets/cli": "^2.23.1",
+    "@changesets/changelog-github": "^0.4.6",
+    "@changesets/cli": "^2.24.2",
     "@types/fs-extra": "^9.0.13",
     "@types/wait-on": "5.3.1",
     "@typescript-eslint/eslint-plugin": "5.21.0",

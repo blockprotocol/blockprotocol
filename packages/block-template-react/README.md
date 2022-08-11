@@ -4,9 +4,9 @@
 
 See https://blockprotocol.org/docs/developing-blocks
 
-**TL;DR:** Run `npx create-block-app [your-block-name]`
+**TL;DR:** Run `npx create-block-app@latest [your-block-name]`
 
-Other templates are available. See `npx create-block-app --help`
+Other templates are available. See `npx create-block-app@latest --help`
 
 ## Step two: write and build a component
 

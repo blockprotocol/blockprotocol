@@ -4,7 +4,7 @@ This package implements the Block Protocol Graph service for blocks and embeddin
 
 If you are a block author, we have several templates available to get you started:
 
-`npx create-block-app --help`
+`npx create-block-app@latest --help`
 
 If you want to roll your own, to get started:
 
@@ -19,14 +19,14 @@ To create a GraphBlockHandler, pass the constructor an element in your block, al
 
 For React, we provide a `useGraphBlockService` hook, which accepts a `ref` to an element, and optionally any `callbacks` you wish to provide on initialization.
 
-See `npx create-block-app my-block --template react` for an example.
+See `npx create-block-app@latest my-block --template react` for an example.
 
 ### Custom elements
 
 For custom elements, this package exports a `BlockElementBase` class
 which uses the [Lit](https://lit.dev/) framework, and sets `graphService` on the instance.
 
-See `npx create-block-app my-block --template custom-element` for an example.
+See `npx create-block-app@latest my-block --template custom-element` for an example.
 
 ## Embedding applications
 
