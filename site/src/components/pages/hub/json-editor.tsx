@@ -130,8 +130,8 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
           tabSize: 2,
           fontFamily: `Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace`,
           fontSize: "1em",
-          whiteSpace: "nowrap",
         })}
+        wrap="off"
         component="textarea"
         ref={textAreaRef}
         onChange={handleChange}
