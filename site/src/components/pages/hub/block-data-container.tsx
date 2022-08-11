@@ -217,7 +217,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
               sx={{
                 overflow: "auto",
                 padding: theme.spacing(4, 4),
-                height: "100%",
+                height: "calc(100% - 40px)",
                 backgroundColor: "#F7FAFC",
                 borderRadius: {
                   xs: 3,
@@ -250,15 +250,18 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                 )}
               </Box>
             </Box>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={readonly}
-                  onChange={(event) => setReadonly(event.target.checked)}
-                />
-              }
-              label="Read only mode"
-            />
+            <Box height={40}>
+              <FormControlLabel
+                control={
+                  <Switch
+                    data-testid="readonly-toggle"
+                    checked={readonly}
+                    onChange={(event) => setReadonly(event.target.checked)}
+                  />
+                }
+                label="Read-only mode"
+              />
+            </Box>
           </Box>
         </Box>
         <Box

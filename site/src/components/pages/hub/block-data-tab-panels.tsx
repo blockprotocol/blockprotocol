@@ -44,7 +44,7 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
   }),
 );
 
-export const blockPreviewAndDataHeight = 500;
+export const blockPreviewAndDataHeight = 540;
 
 export const BlockDataTabPanels: FunctionComponent<BlockDataTabPanelProps> = ({
   blockDataTab,
