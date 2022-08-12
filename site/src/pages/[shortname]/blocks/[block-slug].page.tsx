@@ -251,7 +251,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
     <>
       <Head>
         <title>
-          Block Protocol - {blockMetadata.displayName} Block by {shortname}
+          {`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
         </title>
       </Head>
       <Container>

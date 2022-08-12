@@ -15,7 +15,7 @@ const Partners: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Block Protocol - Contact</title>
+        <title>Block Protocol – Contact</title>
       </Head>
       <Container
         sx={{
