@@ -9,7 +9,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { useRouter } from "next/router";
 import {
   Dispatch,
   Fragment,
@@ -26,7 +25,10 @@ import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
 import { FontAwesomeIcon } from "../icons";
 import { Link } from "../link";
 import { Search } from "../pages/docs/search";
-import { generatePathWithoutParams } from "../shared";
+import {
+  generatePathWithoutParams,
+  useHydrationFriendlyAsPath,
+} from "../shared";
 import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
@@ -48,8 +50,8 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
   item,
   onClose,
 }: MobileNavNestedPageProps<T>) => {
-  const router = useRouter();
-  const { asPath } = router;
+  const asPath = useHydrationFriendlyAsPath();
+
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
   const { title } = item;
@@ -249,7 +251,8 @@ const getInitialExpandedItems = ({
 export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
   onClose,
 }) => {
-  const { asPath } = useRouter();
+  const asPath = useHydrationFriendlyAsPath();
+
   const { pages } = useContext(SiteMapContext);
 
   const [expandedItems, setExpandedItems] = useState<
