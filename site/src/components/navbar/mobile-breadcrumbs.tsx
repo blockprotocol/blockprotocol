@@ -15,7 +15,7 @@ type MobileBreadcrumbsProps = {
 export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
   crumbs,
 }) => {
-  const { asPath, isReady } = useRouter();
+  const { asPath } = useRouter();
 
   return (
     <Breadcrumbs
@@ -29,32 +29,26 @@ export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
         />
       }
     >
-      {isReady
-        ? crumbs.map((item, i) =>
-            i < crumbs.length - 1 ? (
-              <Link
-                key={item.title}
-                href={
-                  itemIsPage(item)
-                    ? asPath.startsWith(`${item.href}#`)
-                      ? "#"
-                      : item.href
-                    : `#${item.anchor}`
-                }
-              >
-                {item.title}
-              </Link>
-            ) : (
-              <Typography
-                key={item.title}
-                variant="bpSmallCopy"
-                color="inherit"
-              >
-                {item.title}
-              </Typography>
-            ),
-          )
-        : undefined}
+      {crumbs.map((item, i) =>
+        i < crumbs.length - 1 ? (
+          <Link
+            key={item.title}
+            href={
+              itemIsPage(item)
+                ? asPath.startsWith(`${item.href}#`)
+                  ? "#"
+                  : item.href
+                : `#${item.anchor}`
+            }
+          >
+            {item.title}
+          </Link>
+        ) : (
+          <Typography key={item.title} variant="bpSmallCopy" color="inherit">
+            {item.title}
+          </Typography>
+        ),
+      )}
     </Breadcrumbs>
   );
 };
