@@ -3,7 +3,9 @@ import { Entity } from "@blockprotocol/graph";
 import {
   Alert,
   Box,
+  FormControlLabel,
   Snackbar,
+  Switch,
   Tab,
   Tabs,
   Typography,
@@ -48,6 +50,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   const [blockVariantsTab, setBlockVariantsTab] = useState(0);
   const [blockModalOpen, setBlockModalOpen] = useState(false);
   const [alertSnackBarOpen, setAlertSnackBarOpen] = useState(false);
+  const [readonly, setReadonly] = useState(false);
 
   const [text, setText] = useState("{}");
 
@@ -127,6 +130,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       accountId: `test-account-${metadata.name}`,
       entityId: `test-entity-${metadata.name}`,
       properties: {},
+      readonly,
     };
 
     try {
@@ -145,7 +149,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       );
 
     return [result, errorMessages];
-  }, [text, schema, metadata.name]);
+  }, [text, schema, metadata.name, readonly]);
 
   return (
     <>
@@ -202,7 +206,9 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
           }}
         >
           <Box
-            sx={{ height: blockPreviewAndDataHeight, backgroundColor: "white" }}
+            sx={{
+              height: blockPreviewAndDataHeight,
+            }}
           >
             <BlockVariantsTabs
               blockVariantsTab={blockVariantsTab}
@@ -246,6 +252,18 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                 )}
               </Box>
             </Box>
+            {checkIfBlockIsSupported(metadata) && (
+              <FormControlLabel
+                control={
+                  <Switch
+                    data-testid="readonly-toggle"
+                    checked={readonly}
+                    onChange={(event) => setReadonly(event.target.checked)}
+                  />
+                }
+                label="Read-only mode"
+              />
+            )}
           </Box>
         </Box>
         <Box

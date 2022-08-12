@@ -54,4 +54,13 @@ test("Updating block properties should update block preview", async ({
   }
 
   await expect(blockFrameLocator.locator("input")).toHaveValue("New caption");
+
+  // Readonly mode test
+  await expect(
+    blockFrameLocator.locator("button", { hasText: "Caption" }),
+  ).toBeVisible();
+  await page.locator("[data-testid='readonly-toggle']").click();
+  await expect(
+    blockFrameLocator.locator("button", { hasText: "Caption" }),
+  ).not.toBeVisible();
 });

@@ -94,7 +94,7 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
     <>
       <Head>
         <title>
-          Block Protocol - {isSpec ? "Specification" : "Documentation"}
+          {`Block Protocol - ${isSpec ? "Specification" : "Documentation"}`}
         </title>
       </Head>
       <DocsContent
