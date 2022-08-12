@@ -112,7 +112,7 @@ const MyApp = ({
             <PageLayout>
               <Head>
                 <title>
-                  Block Protocol - an open standard for data-driven blocks
+                  Block Protocol – an open standard for data-driven blocks
                 </title>
                 <meta itemProp="name" content="Block Protocol" />
                 <meta
