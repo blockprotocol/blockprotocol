@@ -118,15 +118,23 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
       </pre>
       <Box
         sx={(theme) => ({
+          position: "absolute",
+          inset: 0,
+          /**
+           * firefox does not work with inset:0 to adjust the width of `textarea` element width `position: absolute`
+           * and we cannot use `100%` as `width`, because that does not respect to horizontal margin
+           * `-moz-available` works as expected on firefox
+           */
+          width: "-moz-available",
+          height: "100%",
           padding: "32px 0",
           margin: "0 32px",
           resize: "none",
-          outline: "none",
+          // to override focus outline on firefox
+          outline: "none !important",
           caretColor: theme.palette.common.white,
           background: "transparent",
           color: "transparent",
-          position: "absolute",
-          inset: 0,
           tabSize: 2,
           fontFamily: `Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace`,
           fontSize: "1em",
