@@ -5,6 +5,7 @@
   "workspaces": [
     "packages/*",
     "packages/@blockprotocol/*",
+    "packages/type-system/ts/*",
     "site"
   ],
   "scripts": {
