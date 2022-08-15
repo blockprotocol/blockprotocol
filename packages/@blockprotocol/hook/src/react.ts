@@ -143,6 +143,8 @@ export const useHookRef = <T extends HTMLElement>(
                 console.error(response.errors);
                 throw new Error("Unknown error in hook");
               }
+            } else if (response.data) {
+              hookId.current = response.data.hookId;
             }
           }
         })
