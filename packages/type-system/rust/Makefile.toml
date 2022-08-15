@@ -47,18 +47,29 @@ dependencies = ["install-cargo-hack"]
 private = true
 command = "yarn"
 
+[tasks.wasm-pack]
+private = true
+command = "wasm-pack"
+dependencies = ["install-wasm-pack"]
+
 ################################################################################
 ## Build                                                                      ##
 ################################################################################
 
 [tasks.build]
 category = "Build"
-description = "Builds the crate"
-run_task = { name = "build-task" }
+description = "Builds the packages"
+run_task = { name = ["cargo-build-task", "wasm-pack-build-task"] }
 
-[tasks.build-task]
+[tasks.cargo-build-task]
 extend = "cargo"
 args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUILD_FLAGS, )", "${@}"]
+
+# TODO: add profile
+# TODO: modify package.json to add additional fields
+[tasks.wasm-pack-build-task]
+extend = "wasm-pack"
+args = ["build", "--target", "web", "--out-dir", "../ts/type-system", "--scope", "blockprotocol", "${@}"]
 
 ################################################################################
 ## Lints                                                                      ##
@@ -164,3 +175,7 @@ install_crate = { crate_name = "cargo-hack", version = "0.5.15", binary = "cargo
 [tasks.install-cargo-nextest]
 private = true
 install_crate = { crate_name = "cargo-nextest", version = "0.9.28", binary = "cargo", test_arg = ["nextest", "--version"] }
+
+[tasks.install-wasm-pack]
+private = true
+install_crate = { crate_name = "wasm-pack", version = "0.10.3", binary = "wasm-pack", test_arg = ["--version"] }
