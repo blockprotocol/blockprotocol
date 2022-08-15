@@ -28,7 +28,10 @@ import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
 import { MobileNavItems } from "./navbar/mobile-nav-items";
 import { NAVBAR_LINK_ICONS } from "./navbar/util";
 import { SearchNavButton } from "./search-nav-button";
-import { generatePathWithoutParams } from "./shared";
+import {
+  generatePathWithoutParams,
+  useHydrationFriendlyAsPath,
+} from "./shared";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -147,7 +150,8 @@ const useScrollingNavbar = (
 // @todo remove asPath from Navbar
 export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
   const theme = useTheme();
-  const { asPath, pathname } = useRouter();
+  const { pathname } = useRouter();
+  const asPath = useHydrationFriendlyAsPath();
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
 

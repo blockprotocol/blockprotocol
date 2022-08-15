@@ -146,13 +146,20 @@ export const MdxPageContent: FunctionComponent<MdxPageContentProps> = ({
       ) {
         currentHeading.current = headingAtScrollPosition;
 
-        void router.replace(
-          `${asPath.split("#")[0]}${
-            headingAtScrollPosition.anchor
-              ? `#${headingAtScrollPosition.anchor}`
-              : ""
-          }`,
-        );
+        void router
+          .replace(
+            `${asPath.split("#")[0]}${
+              headingAtScrollPosition.anchor
+                ? `#${headingAtScrollPosition.anchor}`
+                : ""
+            }`,
+            undefined,
+            { shallow: true },
+          )
+          .catch(() => {
+            // Prevents unhandled "Cancel rendering route" error
+            // Happens during fast scrolling between page sections
+          });
       }
     };
 

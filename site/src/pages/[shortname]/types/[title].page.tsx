@@ -114,9 +114,7 @@ const EntityTypePage: NextPage = () => {
   return (
     <>
       <Head>
-        <title>
-          Block Protocol - {shortname}/{title} Schema
-        </title>
+        <title>{`Block Protocol – ${shortname}/${title} Schema`}</title>
       </Head>
       <Container
         sx={{
