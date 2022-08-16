@@ -1,20 +1,16 @@
-import { TextDecoder, TextEncoder } from 'node:util';
-import fetch from "node-fetch";
-
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-export default {
+module.exports = {
+  testEnvironment: "node",
+  extensionsToTreatAsEsm: ['.ts'],
   globals: {
-    TextDecoder,
-    TextEncoder,
-    fetch
+    'ts-jest': {
+      useESM: true,
+    },
   },
-  preset: "ts-jest",
-  testEnvironment: "jsdom",
   transformIgnorePatterns: [
-    "/node_modules/(?!(@blockprotocol/type-system)/)", "/type-system/ts/type-system/"
+    "/node_modules/", ".*\.wasm"
   ],
   transform: {
     '^.+\\.ts?$': 'ts-jest',
-    "^.+\\.(js|jsx)$": "babel-jest"
   },
 };

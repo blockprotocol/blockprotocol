@@ -69,7 +69,7 @@ args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUIL
 # TODO: modify package.json to add additional fields
 [tasks.wasm-pack-build-task]
 extend = "wasm-pack"
-args = ["build", "--target", "web", "--out-dir", "../ts/type-system", "--out-name", "index", "--scope", "blockprotocol", "${@}"]
+args = ["build", "--target", "bundler", "--out-dir", "../ts/type-system", "--out-name", "index", "--scope", "blockprotocol", "${@}"]
 
 ################################################################################
 ## Lints                                                                      ##
