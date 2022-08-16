@@ -49,7 +49,7 @@ impl FromStr for VersionedUri {
 
         // TODO: better error handling
         Self::new(
-            BaseUri::new(base_uri.to_owned()).map_err(|_| ParseVersionedUriError {})?,
+            &BaseUri::new(&base_uri).map_err(|_| ParseVersionedUriError {})?,
             version
                 .parse().map_err(|_| ParseVersionedUriError {})?,
         ).map_err(|_| ParseVersionedUriError {})
