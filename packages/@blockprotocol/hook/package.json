@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/hook",
-  "version": "0.0.1-canary.2",
+  "version": "0.0.1-canary.4",
   "description": "Implementation of the Block Protocol Hook service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
