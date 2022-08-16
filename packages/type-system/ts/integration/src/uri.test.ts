@@ -1,4 +1,4 @@
-import { BaseUri } from "@blockprotocol/type-system-node";
+import { BaseUri, VersionedUri } from "@blockprotocol/type-system-node";
 
 describe("BaseURI Class", () => {
   const testBaseUri = (input: string, expected: string) => {
@@ -43,6 +43,30 @@ describe("BaseURI Class", () => {
 
     expect(() => {
       new BaseUri("http://[www.example.com]/");
+    }).toThrow();
+  });
+});
+
+describe("VersionedUri Class", () => {
+  const baseUri = new BaseUri("http://example.com/");
+
+  const testVersionedUri = (version: number, expected: string) => {
+    let uri = new VersionedUri(baseUri, version);
+
+    expect(uri.toString()).toBe(expected);
+    expect(uri.toJSON()).toBe(expected);
+  };
+
+  test("succeeds on valid version number", () => {
+    testVersionedUri(0, "http://example.com//v/0"); // TODO - fix this
+    testVersionedUri(1, "http://example.com//v/1");
+    testVersionedUri(20.0, "http://example.com//v/20");
+    testVersionedUri(0.2, "http://example.com//v/20");
+  });
+
+  test("errors on invalid URIs", () => {
+    expect(() => {
+      new VersionedUri(baseUri, 0.2);
     }).toThrow();
   });
 });
