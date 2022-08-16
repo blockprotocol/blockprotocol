@@ -11,6 +11,7 @@ test("Updating block properties should update block preview", async ({
     browserName === "webkit",
     "https://app.asana.com/0/1202542409311090/1202651551651719 (internal)",
   );
+  test.slow(); // @todo Remove after re-engineering block sandbox
 
   await page.goto("/hub");
 
@@ -25,7 +26,7 @@ test("Updating block properties should update block preview", async ({
   const blockFrameLocator = page.frameLocator("iframe[title='block']");
 
   await expect(blockFrameLocator.locator("input")).toBeVisible({
-    timeout: 10000,
+    timeout: 30000, // @todo Remove after re-engineering block sandbox
   });
 
   const jsonEditor = page.locator(
@@ -53,4 +54,13 @@ test("Updating block properties should update block preview", async ({
   }
 
   await expect(blockFrameLocator.locator("input")).toHaveValue("New caption");
+
+  // Readonly mode test
+  await expect(
+    blockFrameLocator.locator("button", { hasText: "Caption" }),
+  ).toBeVisible();
+  await page.locator("[data-testid='readonly-toggle']").click();
+  await expect(
+    blockFrameLocator.locator("button", { hasText: "Caption" }),
+  ).not.toBeVisible();
 });

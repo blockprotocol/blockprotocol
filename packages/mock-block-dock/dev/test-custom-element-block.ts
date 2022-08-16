@@ -1,4 +1,4 @@
-import { BlockElementBase } from "@blockprotocol/graph";
+import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { html } from "lit";
 
@@ -23,7 +23,11 @@ export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperti
         The entityId of this block is ${this.blockEntity?.entityId}. Use it to
         update its data when calling updateEntities.
       </p>
+      <p style="display: ${this.graph.readonly ? "block" : "none"}">
+        ${this.blockEntity?.properties.name}
+      </p>
       <input
+        style="display: ${this.graph.readonly ? "none" : "block"}"
         @change=${this.handleInput}
         value=${this.blockEntity?.properties.name}
       />`;

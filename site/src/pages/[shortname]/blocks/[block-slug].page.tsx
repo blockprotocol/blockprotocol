@@ -251,7 +251,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
     <>
       <Head>
         <title>
-          Block Protocol - {blockMetadata.displayName} Block by {shortname}
+          {`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
         </title>
       </Head>
       <Container>
@@ -278,7 +278,11 @@ const BlockPage: NextPage<BlockPageProps> = ({
         )}
 
         <Box
-          sx={{ display: "flex", pt: { xs: 4, md: 10 }, mb: { xs: 6, md: 12 } }}
+          sx={{
+            display: "flex",
+            pt: { xs: 4, md: 10 },
+            mb: { xs: 10, md: 12 },
+          }}
         >
           {isDesktopSize ? (
             <Box
@@ -361,7 +365,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           </Box>
         </Box>
 
-        <Box sx={{ mb: 10 }}>
+        <Box sx={{ mb: { xs: 16, md: 10 } }}>
           <BlockDataContainer
             metadata={blockMetadata}
             schema={schema}

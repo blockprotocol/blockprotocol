@@ -71,7 +71,7 @@ const ApiKeys: AuthWallPageContent = () => {
   return (
     <>
       <Head>
-        <title>Block Protocol - Dashboard</title>
+        <title>Block Protocol – Dashboard</title>
       </Head>
 
       <TopNavigationTabs />

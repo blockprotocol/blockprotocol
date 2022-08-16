@@ -1,24 +1,7 @@
-import { JsonObject } from "@blockprotocol/core";
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
 import { readBlockDataFromDisk, readBlocksFromDisk } from "../../../lib/blocks";
-
-/**
- * @todo remove after fixing
- * - https://blockprotocol.org/@jmackie/blocks/quote
- * - https://blockprotocol.org/@shinypb/blocks/emoji-trading-cards
- * - https://blockprotocol.org/@kickstartds/blocks/button
- */
-const hotfixExternals = (externals: JsonObject | undefined): JsonObject => {
-  return (
-    externals ?? {
-      react: packageJson.dependencies.react,
-      lodash: packageJson.dependencies.lodash,
-      twind: packageJson.dependencies.twind,
-    }
-  );
-};
 
 /**
  * @todo potentially remove after building blocks to ESM
@@ -62,16 +45,15 @@ const handler: NextApiHandler = async (req, res) => {
 
   const externalUrlLookup: Record<string, string> = {};
 
+  const externals = blockMetadata.externals ?? {};
   if (
-    Object.keys(blockMetadata.externals ?? {}).length > 0 &&
+    Object.keys(externals).length > 0 &&
     blockMetadata.blockType.entryPoint === "html"
   ) {
     throw new Error(
       "Block Protocol does not support externals with HTML blocks",
     );
   }
-
-  const externals = hotfixExternals(blockMetadata.externals);
 
   for (const [packageName, packageVersion] of Object.entries(externals)) {
     externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
@@ -168,8 +150,9 @@ const handler: NextApiHandler = async (req, res) => {
             mockBlockDockInitialData,
           )}
       
-          const render = (blockEntityProps) => {
-            const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData  };
+          const render = (props) => {
+            const { readonly, ...blockEntityProps } = props;
+            const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData, readonly  };
             
             document.getElementById("loading-indicator")?.remove();
           

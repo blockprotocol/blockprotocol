@@ -26,7 +26,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
   return (
     <>
       <Head>
-        <title>Block Protocol - Block Hub</title>
+        <title>Block Protocol – Block Hub</title>
         <meta itemProp="name" content="Block Hub" />
         <meta
           itemProp="description"

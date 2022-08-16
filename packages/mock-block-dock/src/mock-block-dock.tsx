@@ -40,6 +40,7 @@ type MockBlockDockProps = {
   initialEntityTypes?: EntityType[];
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
+  readonly?: boolean;
 };
 
 /**
@@ -65,6 +66,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
+  readonly,
 }) => {
   const {
     blockEntity,
@@ -80,21 +82,29 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialEntityTypes,
     initialLinks,
     initialLinkedAggregations,
+    readonly,
   });
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
     null,
   );
+  const [debugReadonly, setDebugReadonly] = useState<boolean>(!!readonly);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const prevReadonly = useRef<boolean | undefined>(readonly);
 
   const propsToInject: BlockGraphProperties<any> = {
     graph: {
+      readonly: debugReadonly,
       blockEntity,
       blockGraph,
       entityTypes,
       linkedAggregations,
     },
   };
+
+  useEffect(() => {
+    prevReadonly.current = readonly;
+  }, [readonly]);
 
   useEffect(() => {
     if (!wrapperRef.current) {
@@ -109,6 +119,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           linkedAggregations,
           callbacks: graphServiceCallbacks,
           element: wrapperRef.current,
+          readonly: debugReadonly,
         }),
       );
     }
@@ -118,6 +129,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphService,
     graphServiceCallbacks,
     linkedAggregations,
+    debugReadonly,
   ]);
 
   useEffect(() => {
@@ -143,6 +155,16 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       graphService.linkedAggregations({ data: linkedAggregations });
     }
   }, [linkedAggregations, graphService]);
+
+  useEffect(() => {
+    if (graphService) {
+      graphService.readonly({ data: debugReadonly });
+    }
+  }, [debugReadonly, graphService]);
+
+  if (readonly !== prevReadonly.current && readonly !== debugReadonly) {
+    setDebugReadonly(!!readonly);
+  }
 
   if (!debug) {
     return (
@@ -171,6 +193,15 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     <div style={{ fontFamily: "sans-serif" }}>
       <div style={{ marginBottom: 30 }}>
         <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
+        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/869  */}
+        <label style={{ display: "block", marginBottom: 10 }}>
+          <input
+            type="checkbox"
+            checked={debugReadonly}
+            onChange={(evt) => setDebugReadonly(evt.target.checked)}
+          />
+          Read only mode
+        </label>
         <div style={{ padding: 15, border: "1px dashed black" }}>
           <div ref={wrapperRef}>
             {graphService ? (
