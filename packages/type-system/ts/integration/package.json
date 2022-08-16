@@ -4,10 +4,10 @@
   "private": true,
   "description": "Integration tests for the Type System package",
   "scripts": {
-    "test": "node  --experimental-wasm-modules --experimental-vm-modules ../../../../node_modules/jest/bin/jest.js"
+    "test": "jest"
   },
   "dependencies": {
-    "@blockprotocol/type-system": "file:../type-system"
+    "@blockprotocol/type-system-node": "0.0.0"
   },
   "devDependencies": {
     "@types/jest": "28.1.4",
