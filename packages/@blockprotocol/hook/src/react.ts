@@ -1,11 +1,4 @@
-import {
-  RefObject,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
 
