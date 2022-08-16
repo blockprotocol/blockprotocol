@@ -47,10 +47,6 @@ dependencies = ["install-cargo-hack"]
 private = true
 command = "yarn"
 
-[tasks.wasm-pack]
-private = true
-command = "wasm-pack"
-dependencies = ["install-wasm-pack"]
 
 ################################################################################
 ## Build                                                                      ##
@@ -59,17 +55,17 @@ dependencies = ["install-wasm-pack"]
 [tasks.build]
 category = "Build"
 description = "Builds the packages"
-run_task = { name = ["cargo-build-task", "wasm-pack-build-task"] }
+run_task = { name = ["cargo-build-task", "wasm-pack-build"] }
 
 [tasks.cargo-build-task]
 extend = "cargo"
 args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUILD_FLAGS, )", "${@}"]
 
 # TODO: add profile
-# TODO: modify package.json to add additional fields
 [tasks.wasm-pack-build-task]
-extend = "wasm-pack"
-args = ["build", "--target", "bundler", "--out-dir", "../ts/type-system", "--out-name", "index", "--scope", "blockprotocol", "${@}"]
+command = "python3"
+args = ["-m", "build-wasm"]
+dependencies = ["install-wasm-pack"]
 
 ################################################################################
 ## Lints                                                                      ##
