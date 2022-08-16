@@ -100,8 +100,6 @@ export const useHookEmbedderService = (
   });
 };
 
-const initialMessageQueue = Promise.resolve();
-
 type Hook<T extends HTMLElement> = {
   id: string | null;
   teardown: (() => Promise<void>) | null;
@@ -122,7 +120,6 @@ export const useHook = <T extends HTMLElement>(
 ) => {
   const hookRef = useRef<null | Hook<T>>(null);
   const [, setError] = useState();
-  const messageQueue = useRef(initialMessageQueue);
 
   const fallbackRef = useRef(fallback);
 
@@ -132,15 +129,11 @@ export const useHook = <T extends HTMLElement>(
 
   useLayoutEffect(() => {
     return () => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      messageQueue.current = messageQueue.current
-        .catch()
-        .then(() => hookRef.current?.teardown?.().then(() => {}))
-        .catch((err) => {
-          setError(() => {
-            throw err;
-          });
+      hookRef.current?.teardown?.().catch((err) => {
+        setError(() => {
+          throw err;
         });
+      });
     };
   }, []);
 
@@ -148,20 +141,18 @@ export const useHook = <T extends HTMLElement>(
     const existingHook = hookRef.current?.params;
     const node = ref.current;
 
-    if (existingHook) {
-      if (
-        existingHook.service === service &&
-        existingHook.node === node &&
-        existingHook.path === path &&
-        existingHook.type === type
-      ) {
-        return;
-      }
+    if (
+      existingHook &&
+      existingHook.service === service &&
+      existingHook.node === node &&
+      existingHook.path === path &&
+      existingHook.type === type
+    ) {
+      return;
     }
 
-    const teardownPromise = messageQueue.current
-      .catch()
-      .then(() => hookRef.current?.teardown?.().catch());
+    const teardownPromise =
+      hookRef.current?.teardown?.().catch() ?? Promise.resolve();
 
     if (node && service) {
       const controller = new AbortController();
@@ -182,64 +173,79 @@ export const useHook = <T extends HTMLElement>(
         },
         teardown: async () => {
           controller.abort();
-          try {
-            await service.hook({
-              data: {
-                hookId: hook.id,
-                path,
-                type,
-                node: null,
-              },
-            });
-          } catch (err) {
-            setError(() => {
-              throw err;
-            });
+
+          if (hook.id) {
+            try {
+              hook.id = null;
+              if (hookRef.current === hook) {
+                hookRef.current = null;
+              }
+
+              if (!service.destroyed) {
+                await service.hook({
+                  data: {
+                    hookId: hook.id,
+                    path,
+                    type,
+                    node: null,
+                  },
+                });
+              }
+            } catch (err) {
+              setError(() => {
+                throw err;
+              });
+            }
           }
         },
       };
 
       hookRef.current = hook;
 
-      messageQueue.current = teardownPromise.then(() => {
-        return service
-          .hook({
-            data: {
-              hookId: hook.id,
-              node,
-              type,
-              path,
-            },
-          })
-          .then((response) => {
-            if (!controller.signal.aborted) {
-              if (response.errors) {
-                if (
-                  response.errors.length === 1 &&
-                  response.errors[0].code === "NOT_IMPLEMENTED"
-                ) {
-                  const teardown = fallbackRef.current(node);
+      teardownPromise
+        .then(() => {
+          if (service.destroyed) {
+            return;
+          }
 
-                  hook.teardown = async () => {
-                    controller.abort();
-                    await teardown?.();
-                  };
-                } else {
-                  // eslint-disable-next-line no-console
-                  console.error(response.errors);
-                  throw new Error("Unknown error in hook");
+          return service
+            .hook({
+              data: {
+                hookId: hook.id,
+                node,
+                type,
+                path,
+              },
+            })
+            .then((response) => {
+              if (!controller.signal.aborted) {
+                if (response.errors) {
+                  if (
+                    response.errors.length === 1 &&
+                    response.errors[0]?.code === "NOT_IMPLEMENTED"
+                  ) {
+                    const teardown = fallbackRef.current(node);
+
+                    hook.teardown = async () => {
+                      controller.abort();
+                      teardown?.();
+                    };
+                  } else {
+                    // eslint-disable-next-line no-console
+                    console.error(response.errors);
+                    throw new Error("Unknown error in hook");
+                  }
+                } else if (response.data) {
+                  hook.id = response.data.hookId;
                 }
-              } else if (response.data) {
-                hook.id = response.data.hookId;
               }
-            }
-          })
-          .catch((err) => {
-            setError(() => {
-              throw err;
             });
+        })
+        .catch((err) => {
+          setError(() => {
+            throw err;
           });
-      });
+        });
     } else {
       hookRef.current = null;
     }
