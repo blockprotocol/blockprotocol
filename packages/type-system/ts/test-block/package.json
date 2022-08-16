@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.12",
-    "@blockprotocol/type-system": "../type-system"
+    "@blockprotocol/type-system-web": "0.0.0"
   },
   "devDependencies": {
     "block-scripts": "0.0.14",
