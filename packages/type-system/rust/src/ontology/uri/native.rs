@@ -4,6 +4,10 @@ use crate::ontology::uri::{error::ParseBaseUriError, BaseUri, VersionedUri};
 
 impl BaseUri {
     pub fn new(uri: String) -> Result<BaseUri, ParseBaseUriError> {
+        // TODO: Propagate more useful errors
+        // TODO: This attempts to parse the string _into_ a valid URL. Perhaps we want to enforce
+        //  that the string is valid (by checking the output is equal to the input). An example:
+        //  "file://loc%61lhost/" is turned into "file:///"
         let url = Url::parse(&uri).map_err(|_| ParseBaseUriError {})?;
         Ok(Self(url.into()))
     }
