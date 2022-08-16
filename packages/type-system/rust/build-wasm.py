@@ -7,7 +7,7 @@ import logging
 
 def run_wasm_pack(target, out_dir: Path):
     logging.debug("Running wasm-pack, targeting %s, for %s", target, out_dir)
-    subprocess.run(["wasm-pack", "build", "--target", target, "--out-dir", str(out_dir), "--out-name", "index", "--scope", "blockprotocol"])
+    subprocess.run(["wasm-pack", "build", "--target", target, "--out-dir", str(out_dir), "--out-name", "index", "--scope", "blockprotocol"], check=True)
 
 
 def patch_package_json(file: Path, unique_patch: Dict):
@@ -37,7 +37,7 @@ def patch_package_json(file: Path, unique_patch: Dict):
 
 def run_prettier(path: Path):
     logging.debug("Running prettier on %s", path)
-    subprocess.run(["yarn", "prettier", "--write", str(path)])
+    subprocess.run(["yarn", "prettier", "--write", str(path)], check=True)
 
 
 def build_package(path: Path, target: str, patch: Dict):
