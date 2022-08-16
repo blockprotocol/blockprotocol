@@ -199,6 +199,8 @@ export const useHook = <T extends HTMLElement>(
         },
       };
 
+      hookRef.current = hook;
+
       messageQueue.current = teardownPromise.then(() => {
         return service
           .hook({
