@@ -1,13 +1,14 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
-import serviceJsonDefinition from "./hook-service.json";
+// @todo restore this when module resolution issue resolved
+// import hookServiceDefinition from "./hook-service.json";
 import {
   BlockHookMessageCallbacks,
   BlockHookMessages,
   HookData,
   HookError,
   HookResponse,
-} from "./types";
+} from "./types.js";
 
 /**
  * Creates a handler for the hook service for the block.
@@ -44,17 +45,19 @@ export class HookBlockHandler
     messageName: K,
     handlerFunction: BlockHookMessageCallbacks[K],
   ) {
-    const expectedMessageSource = "embedder";
-    const messageJsonDefinition = serviceJsonDefinition.messages.find(
-      (message) =>
-        message.messageName === messageName &&
-        message.source === expectedMessageSource,
-    );
-    if (!messageJsonDefinition) {
-      throw new Error(
-        `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
-      );
-    }
+    // @todo restore this when module resolution issue resolved
+    // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
+    // const expectedMessageSource = "embedder";
+    // const messageJsonDefinition = hookServiceDefinition.messages.find(
+    //   (message) =>
+    //     message.messageName === messageName &&
+    //     message.source === expectedMessageSource,
+    // );
+    // if (!messageJsonDefinition) {
+    //   throw new Error(
+    //     `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
+    //   );
+    // }
     this.registerCallback({
       callback: handlerFunction,
       messageName,

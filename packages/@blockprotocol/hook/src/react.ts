@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { HookBlockHandler, HookEmbedderHandler } from "./index";
+import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
 
 const useHookServiceConstructor = <
   T extends typeof HookBlockHandler | typeof HookEmbedderHandler,
