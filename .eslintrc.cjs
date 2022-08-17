@@ -61,7 +61,7 @@ module.exports = {
       "error",
       {
         // graph uses 'exports' field in package.json https://github.com/import-js/eslint-plugin-import/issues/1810
-        ignore: ["^https?://", "^@blockprotocol/graph"],
+        ignore: ["^https?://", "^@blockprotocol/graph", "^@blockprotocol/hook"],
       },
     ],
     "import/prefer-default-export": "off",
@@ -220,7 +220,10 @@ module.exports = {
     {
       // plugin does not support .js file extensions in .ts files, which ESM TS projects require
       // https://github.com/import-js/eslint-plugin-import/issues/2446
-      files: ["packages/@blockprotocol/graph/**"],
+      files: [
+        "packages/@blockprotocol/graph/**",
+        "packages/@blockprotocol/hook/**",
+      ],
       rules: {
         "import/no-unresolved": "off",
       },
