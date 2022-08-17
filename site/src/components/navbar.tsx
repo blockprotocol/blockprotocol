@@ -371,7 +371,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
           </Box>
           <Collapse in={displayBreadcrumbs}>
             <MobileBreadcrumbs
-              asPath={hydrationFriendlyAsPath}
+              hydrationFriendlyAsPath={hydrationFriendlyAsPath}
               crumbs={crumbs}
             />
           </Collapse>

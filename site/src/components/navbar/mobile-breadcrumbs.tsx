@@ -8,12 +8,12 @@ import { Link } from "../link";
 import { itemIsPage } from "./util";
 
 type MobileBreadcrumbsProps = {
-  asPath: string;
+  hydrationFriendlyAsPath: string;
   crumbs: (SiteMapPage | SiteMapPageSection)[];
 };
 
 export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
-  asPath,
+  hydrationFriendlyAsPath,
   crumbs,
 }) => {
   return (
@@ -34,7 +34,7 @@ export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
             key={item.title}
             href={
               itemIsPage(item)
-                ? asPath.startsWith(`${item.href}#`)
+                ? hydrationFriendlyAsPath.startsWith(`${item.href}#`)
                   ? "#"
                   : item.href
                 : `#${item.anchor}`
