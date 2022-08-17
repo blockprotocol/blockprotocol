@@ -72,7 +72,7 @@ export const useHookBlockService = (
 };
 
 /**
- * Create a HookBlockHandler instance, using a reference to an element in the
+ * Create a HookEmbedderHandler instance, using a reference to an element around the
  * block.
  *
  * The hookService will only be reconstructed if the element reference changes.
