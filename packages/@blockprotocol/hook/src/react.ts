@@ -72,8 +72,8 @@ export const useHookBlockService = (
 };
 
 /**
- * Create a HookEmbedderHandler instance, using a reference to an element around the
- * block.
+ * Create a HookEmbedderHandler instance, using a reference to an element
+ * around the block.
  *
  * The hookService will only be reconstructed if the element reference changes.
  * Updates to any callbacks after first constructing should be made by
@@ -209,7 +209,11 @@ export const useHook = <T extends HTMLElement>(
           path,
           node,
         },
-        teardown: async () => {
+        async teardown() {
+          if (controller.signal.aborted) {
+            return;
+          }
+
           controller.abort();
 
           if (hook.id) {
@@ -242,7 +246,7 @@ export const useHook = <T extends HTMLElement>(
 
       teardownPromise
         .then(() => {
-          if (service.destroyed) {
+          if (service.destroyed || controller.signal.aborted) {
             return;
           }
 
