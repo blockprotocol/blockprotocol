@@ -47,6 +47,9 @@ dependencies = ["install-cargo-hack"]
 private = true
 command = "yarn"
 
+[tasks.node]
+private = true
+command = "node"
 
 ################################################################################
 ## Build                                                                      ##
@@ -55,7 +58,7 @@ command = "yarn"
 [tasks.build]
 category = "Build"
 description = "Builds the packages"
-run_task = { name = ["cargo-build-task", "wasm-pack-build"] }
+run_task = { name = ["cargo-build-task", "wasm-pack-build-task"] }
 
 [tasks.cargo-build-task]
 extend = "cargo"
@@ -63,8 +66,8 @@ args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUIL
 
 # TODO: add profile
 [tasks.wasm-pack-build-task]
-command = "python3"
-args = ["-m", "build-wasm"]
+extend = "node"
+args = ["--loader", "ts-node/esm", "./build-wasm.ts"]
 dependencies = ["install-wasm-pack"]
 
 ################################################################################
