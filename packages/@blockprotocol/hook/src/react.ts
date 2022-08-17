@@ -104,6 +104,20 @@ type Hook<T extends HTMLElement> = {
   };
 };
 
+/**
+ * Pass a node by ref to the embedding application's hook service.
+ *
+ * @param service The hook service returned by {@link useHookBlockService}
+ * @param ref A React ref containing the DOM node. This hook will ensure the
+ *            embedding application is notified when the underlying DOM node
+ *            inside the ref changes
+ * @param type The type of hook – i.e, "text"
+ * @param path The path to the data associated with the hook
+ * @param fallback A fallback to be called if the embedding application doesn't
+ *                 implement the hook service, or doesn't implement this
+ *                 specific type of hook. Return a function to "teardown" your
+ *                 fallback (i.e, remove any event listeners).
+ */
 export const useHook = <T extends HTMLElement>(
   service: HookBlockHandler | null,
   ref: RefObject<T | null | void>,
@@ -111,19 +125,36 @@ export const useHook = <T extends HTMLElement>(
   path: string,
   fallback: (node: T) => void | (() => void),
 ) => {
-  const hookRef = useRef<null | Hook<T>>(null);
-  const [, setError] = useState();
+  /**
+   * React can't catch async errors to handle them within ErrorBoundary's, etc,
+   * but if you throw it inside the callback for a setState function, it can.
+   *
+   * @see https://github.com/facebook/react/issues/14981#issuecomment-468460187
+   */
+  const [, catchError] = useState();
 
+  /**
+   * The fallback may change in between the hook message being sent, and the
+   * not implemented error being received. This allows to ensure we call the
+   * latest fallback, with no chance of calling a stale closure
+   */
   const fallbackRef = useRef(fallback);
-
   useLayoutEffect(() => {
     fallbackRef.current = fallback;
   });
 
+  const hookRef = useRef<null | Hook<T>>(null);
+
+  /**
+   * We can't use the normal effect teardown to trigger the hook teardown, as
+   * in order to detect changes to the node underlying the ref, we run our main
+   * effect on every render. Therefore, we create a "mount" effect and trigger
+   * the teardown in the mount effect teardown.
+   */
   useLayoutEffect(() => {
     return () => {
       hookRef.current?.teardown?.().catch((err) => {
-        setError(() => {
+        catchError(() => {
           throw err;
         });
       });
@@ -134,6 +165,15 @@ export const useHook = <T extends HTMLElement>(
     const existingHook = hookRef.current?.params;
     const node = ref.current;
 
+    /**
+     * We cannot use the dependency array for the effect, as refs aren't updated
+     * during render, so the value passed into the dependency array for the ref
+     * won't have updated and therefore updates to the underlying node wouldn't
+     * trigger this effect, and embedding applications wouldn't be notified.
+     *
+     * Instead, we run the effect on every render and do our own change
+     * detection.
+     */
     if (
       existingHook &&
       existingHook.service === service &&
@@ -150,6 +190,11 @@ export const useHook = <T extends HTMLElement>(
     if (node && service) {
       const controller = new AbortController();
 
+      /**
+       * Is this an update to the existing hook, or is it a whole new hook? The
+       * only param to the hook which can change without creating a new hook is
+       * the node. Any other change will result in a new hook being created
+       */
       const reuseId =
         existingHook &&
         existingHook.service === service &&
@@ -185,7 +230,7 @@ export const useHook = <T extends HTMLElement>(
                 });
               }
             } catch (err) {
-              setError(() => {
+              catchError(() => {
                 throw err;
               });
             }
@@ -235,7 +280,7 @@ export const useHook = <T extends HTMLElement>(
             });
         })
         .catch((err) => {
-          setError(() => {
+          catchError(() => {
             throw err;
           });
         });
