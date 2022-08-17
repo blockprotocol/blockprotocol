@@ -1,0 +1,33 @@
+{
+  "name": "@blockprotocol/type-system-node",
+  "version": "0.0.0",
+  "description": "Definitions of types within the Block Protocol Type System",
+  "homepage": "https://blockprotocol.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index_bg.wasm",
+    "index.js",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "28.1.4",
+    "jest": "28.1.2",
+    "ts-jest": "28.0.5"
+  },
+  "collaborators": [
+    "HASH"
+  ]
+}
