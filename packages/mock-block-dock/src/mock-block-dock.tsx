@@ -19,6 +19,7 @@ import {
 import { BlockRenderer } from "./block-renderer";
 import { BottomView } from "./bottom-view";
 import { JsonView } from "./json-view";
+import { Layout } from "./layout";
 import { useMockBlockProps } from "./use-mock-block-props";
 
 type BlockDefinition =
@@ -194,76 +195,45 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   }
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Box sx={{ height: "100vh", display: "flex" }}>
-        <Box
-          sx={({ palette }) => ({ width: 250, background: palette.grey[100] })}
-        >
-          {/*  */}
-        </Box>
-        <Box
-          sx={{
-            flex: 1,
-            overflowY: "scroll",
-            position: "relative",
-          }}
-        >
-          <Box
-            component="header"
-            height={50}
-            boxShadow={1}
-            position="sticky"
-            top={0}
-            zIndex={5}
-            sx={{
-              background: "white",
-            }}
-            display="flex"
-            alignItems="center"
-          >
-            Header
-          </Box>
-          <Box>
-            <div style={{ fontFamily: "sans-serif" }}>
-              <div style={{ padding: 30 }}>
-                <div style={{ padding: 15, border: "1px dashed black" }}>
-                  <div ref={wrapperRef}>
-                    {graphService ? (
-                      <BlockRenderer
-                        customElement={
-                          "customElement" in blockDefinition
-                            ? blockDefinition.customElement
-                            : undefined
-                        }
-                        html={
-                          "html" in blockDefinition
-                            ? blockDefinition.html
-                            : undefined
-                        }
-                        properties={propsToInject}
-                        ReactComponent={
-                          "ReactComponent" in blockDefinition
-                            ? blockDefinition.ReactComponent
-                            : undefined
-                        }
-                      />
-                    ) : null}
-                  </div>
-                </div>
+    <Layout>
+      <Box>
+        <div style={{ fontFamily: "sans-serif" }}>
+          <div style={{ padding: 30 }}>
+            <div style={{ padding: 15, border: "1px dashed black" }}>
+              <div ref={wrapperRef}>
+                {graphService ? (
+                  <BlockRenderer
+                    customElement={
+                      "customElement" in blockDefinition
+                        ? blockDefinition.customElement
+                        : undefined
+                    }
+                    html={
+                      "html" in blockDefinition
+                        ? blockDefinition.html
+                        : undefined
+                    }
+                    properties={propsToInject}
+                    ReactComponent={
+                      "ReactComponent" in blockDefinition
+                        ? blockDefinition.ReactComponent
+                        : undefined
+                    }
+                  />
+                ) : null}
               </div>
             </div>
-            <Box height={400} />
-          </Box>
-
-          <BottomView
-            propsToInject={propsToInject}
-            datastore={datastore}
-            readonly={debugReadonly}
-            setReadonly={setDebugReadonly}
-          />
-        </Box>
+          </div>
+        </div>
+        <Box height={400} />
       </Box>
-    </ThemeProvider>
+
+      <BottomView
+        propsToInject={propsToInject}
+        datastore={datastore}
+        readonly={debugReadonly}
+        setReadonly={setDebugReadonly}
+      />
+    </Layout>
   );
 };

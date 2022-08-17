@@ -1,9 +1,11 @@
 // @todo rename
 
-import { Box, Tab, Tabs, Typography } from "@mui/material";
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
+import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 
+import { LogsView } from "./bottom-view/logs-view";
 import { JsonView } from "./json-view";
+import { SIDEBAR_WIDTH } from "./layout";
 
 interface TabPanelProps {
   children?: ReactNode;
@@ -50,13 +52,14 @@ export const BottomView = ({
   const containerRef = useRef<HTMLElement>();
   const [logs, setLogs] = useState([]);
   const [activeLog, setActiveLog] = useState({});
+  const [scrolled, setScrolled] = useState(true);
+  const logsContainerRef = useRef<HTMLElement>();
 
   useEffect(() => {
     const handler = (stuff) => {
-      console.log(stuff);
       setLogs((prev) => [
         ...prev,
-        { ...stuff.detail, timeStamp: stuff.timeStamp },
+        { ...stuff.detail, timestamp: new Date().toISOString() },
       ]);
     };
 
@@ -68,13 +71,28 @@ export const BottomView = ({
     };
   }, []);
 
+  useLayoutEffect(() => {
+    if (!logsContainerRef.current) {
+      return;
+    }
+    const { offsetHeight, scrollTop, scrollHeight } = logsContainerRef.current;
+
+    if (scrollHeight === offsetHeight + scrollTop) {
+      return;
+    }
+
+    if (scrolled && scrollHeight > offsetHeight + scrollTop && logs.length) {
+      setScrolled(false);
+    }
+  }, [logs, scrolled]);
+
   return (
     <Box
       ref={containerRef}
       sx={{
         position: "fixed",
         height: 500,
-        left: 250,
+        left: SIDEBAR_WIDTH,
         right: 0,
         bottom: 0,
         zIndex: 10,
@@ -83,7 +101,14 @@ export const BottomView = ({
         overflowY: "scroll",
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          zIndex: 5,
+          backgroundColor: "white",
+        }}
+      >
         <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
           <Tab
             disableRipple
@@ -128,8 +153,6 @@ export const BottomView = ({
         />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <Box height={30} />
-        Datastore
         <JsonView
           collapseKeys={[
             "entities",
@@ -147,76 +170,7 @@ export const BottomView = ({
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <Box display="flex">
-          <Box
-            sx={{
-              backgroundColor: "black",
-              height: 400,
-              overflowY: "auto",
-              p: 3,
-              flex: 1,
-            }}
-          >
-            {logs.map((log) => (
-              <Box
-                key={log.requestId}
-                color="white"
-                mb={1}
-                onClick={() => setActiveLog(log)}
-                sx={{
-                  cursor: "pointer",
-                }}
-              >
-                {/* {log.timeStamp ? new Date(log.timeStamp).toISOString(): ""} ==> {log.messageName} => {JSON.stringify({
-                    service: log.service,
-                    messageName: log.messageName,
-                    source: log.source
-                })}
-                <br/> */}
-                <Box>
-                  [{log.timeStamp ? new Date(log.timeStamp).toISOString() : ""}]
-                  -{" "}
-                  <Box
-                    component="span"
-                    sx={({ palette }) => ({
-                      color:
-                        log.service === "core"
-                          ? palette.primary.main
-                          : palette.secondary.main,
-                    })}
-                  >
-                    [{log.service}]
-                  </Box>{" "}
-                  - [{log.source}] - {log.messageName} - [
-                  {log.requestId.slice(0, 4)}]
-                </Box>
-              </Box>
-            ))}
-          </Box>
-          <Box
-            color="black"
-            border="1px solid black"
-            ml={3}
-            width={400}
-            display="flex"
-            sx={{
-              "& > div": {
-                flex: 1,
-                width: "100%",
-                maxHeight: 400,
-                overflowY: "scroll",
-              },
-            }}
-          >
-            <JsonView
-              collapseKeys={[]}
-              rootName={activeLog.requestId ?? "activeLog"}
-              src={activeLog ?? {}}
-            />
-          </Box>
-        </Box>
-
-        {/* Logs */}
+        <LogsView />
       </TabPanel>
     </Box>
   );

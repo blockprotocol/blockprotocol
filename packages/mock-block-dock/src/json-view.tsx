@@ -8,7 +8,7 @@ export const JsonView = ({
 }: {
   collapseKeys: string[];
   rootName: string;
-  src: Record<string, unknown>;
+  src: Record<string, unknown> | object;
 }) => (
   <div
     style={{
