@@ -1,8 +1,9 @@
 import { Box, BoxProps, experimental_sx as sx, styled } from "@mui/material";
-import { ChangeEvent, FunctionComponent } from "react";
+import { FunctionComponent } from "react";
 
 import { Snippet } from "../../snippet";
 import { BlockSchema } from "./hub-utils";
+import { JsonEditor } from "./json-editor";
 import { TabPanel } from "./tab-panel";
 
 type BlockDataTabPanelProps = {
@@ -63,36 +64,7 @@ export const BlockDataTabPanels: FunctionComponent<BlockDataTabPanelProps> = ({
         value={blockDataTab}
         index={0}
       >
-        <Box sx={{ height: modalHeight, fontSize: 14, width: "100%" }}>
-          <Box
-            component="textarea"
-            value={text}
-            onChange={(event: ChangeEvent<HTMLTextAreaElement>) =>
-              setText(event.target.value)
-            }
-            sx={(theme) => ({
-              minHeight: "100%",
-              backgroundColor: theme.palette.gray[90],
-              color: "white",
-              borderTopLeftRadius: {
-                xs: 6,
-                md: 0,
-              },
-              borderTopRightRadius: {
-                xs: 6,
-                md: 0,
-              },
-              borderBottomLeftRadius: 6,
-              borderBottomRightRadius: 6,
-              fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
-              resize: "none",
-              width: "100%",
-              overflow: "auto",
-            })}
-            p={2}
-            placeholder="Your block input goes here..."
-          />
-        </Box>
+        <JsonEditor height={modalHeight} value={text} onChange={setText} />
       </TabPanel>
       <TabPanel
         data-testid="block-schema-tabpanel"
