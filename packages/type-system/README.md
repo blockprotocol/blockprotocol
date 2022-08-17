@@ -1,9 +1,13 @@
-# WIP
+# Type-System
 
-Generally it’s
-* `cargo make build` in `packages/type-system/rust`
-* `yarn install` in the root of the repo
-* `yarn test` inside packages/type-system/ts/type-system-integration
+This folder contains the definitions of the BlockProtocol type system packages. 
+These packages are created through various mechanisms from a source definition written in [Rust](./rust).
 
-* Also current experiment: `node --loader ts-node/esm  --experimental-wasm-modules src/test.mts` does just work
-* And there's a `test-block` where I'm trying to load the bundler version but we probably need to modify the webpack setup
+## Development
+
+### Changes
+Changes to the implementation should be made within the Rust project, consult the [README](./rust/README.md) for more details.
+
+### Testing
+- The Rust package contains unit and integration tests as outlined within the [README](./rust/README.md#Testing)
+- The generated NodeJS and Web NPM packages are found within the [ts](./ts) folder, accompanied by tests as outlined within its respective [README](./ts/README.md#Testing)
