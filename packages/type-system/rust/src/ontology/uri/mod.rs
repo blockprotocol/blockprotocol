@@ -8,13 +8,13 @@ use std::{fmt, result::Result, str::FromStr};
 
 use error::ParseVersionedUriError;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+use url::Url;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[derive(Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(transparent)]
-pub struct BaseUri(String);
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub struct BaseUri(Url);
 
 impl fmt::Debug for BaseUri {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -35,9 +35,17 @@ pub struct VersionedUri {
     version: u32,
 }
 
+impl VersionedUri {
+    fn as_url(&self) -> Url {
+        self.base_uri.0
+            .join(&format!("v/{}", self.version))
+            .expect("failed to add version path to BaseURI")
+    }
+}
+
 impl fmt::Display for VersionedUri {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        write!(fmt, "{}/v/{}", self.base_uri.0, self.version)
+        write!(fmt, "{}", self.as_url().as_str())
     }
 }
 

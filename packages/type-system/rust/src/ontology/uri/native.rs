@@ -9,7 +9,7 @@ impl BaseUri {
         //  that the string is valid (by checking the output is equal to the input). An example:
         //  "file://loc%61lhost/" is turned into "file:///"
         let url = Url::parse(&uri).map_err(|_| ParseBaseUriError {})?;
-        Ok(Self(url.into()))
+        Ok(Self(url))
     }
 }
 

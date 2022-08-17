@@ -12,7 +12,7 @@ impl BaseUri {
         //  that the string is valid (by checking the output is equal to the input). An example:
         //  "file://loc%61lhost/" is turned into "file:///"
         let url = Url::parse(uri).map_err(|_| ParseBaseUriError {})?;
-        Ok(Self(url.into()))
+        Ok(Self(url))
     }
 
     // TODO: is there another way around this
@@ -27,7 +27,7 @@ impl BaseUri {
 
     #[wasm_bindgen(js_name = toJSON)]
     pub fn to_json(&self) -> JsValue {
-        JsValue::from_serde(self).unwrap()
+        JsValue::from_str(&format!("{}", self))
     }
 }
 
