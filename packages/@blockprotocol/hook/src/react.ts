@@ -216,7 +216,9 @@ export const useHook = <T extends HTMLElement>(
 
           controller.abort();
 
-          if (hook.id) {
+          const hookId = hook.id;
+
+          if (hookId) {
             try {
               hook.id = null;
               if (hookRef.current === hook) {
@@ -226,7 +228,7 @@ export const useHook = <T extends HTMLElement>(
               if (!service.destroyed) {
                 await service.hook({
                   data: {
-                    hookId: hook.id,
+                    hookId,
                     path,
                     type,
                     node: null,
