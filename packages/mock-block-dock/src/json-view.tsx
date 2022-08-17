@@ -4,6 +4,7 @@ export const JsonView = ({
   collapseKeys,
   rootName,
   src,
+  ...props
 }: {
   collapseKeys: string[];
   rootName: string;
@@ -21,6 +22,7 @@ export const JsonView = ({
       name={rootName}
       src={src}
       theme="colors"
+      {...props}
     />
   </div>
 );
