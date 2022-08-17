@@ -31,38 +31,6 @@ const runWasmPack = (target: string) => {
   }
 };
 
-const patchPackageJson = (filePath: string, uniquePatch: object) => {
-  console.log(`Patching ${filePath}`);
-
-  let patch = {
-    homepage: "https://blockprotocol.org",
-    repository: {
-      type: "git",
-      url: "git@github.com:blockprotocol/blockprotocol.git",
-    },
-    license: "MIT",
-    author: {
-      name: "HASH",
-      url: "https://hash.ai",
-    },
-    ...uniquePatch,
-  };
-
-  const contents = JSON.parse(fs.readFileSync(filePath, "utf8"));
-  fs.writeFileSync(filePath, JSON.stringify({ ...contents, ...patch }));
-};
-
-const runPrettier = (filePath: string) => {
-  const { error } = child_process.spawnSync("yarn", [
-    "prettier",
-    "--write",
-    filePath,
-  ]);
-  if (error) {
-    throw error;
-  }
-};
-
 const moveSrcFiles = (packagePath: PathObject, packageName: string) => {
   const destinationPath = path.resolve(
     __dirname,
@@ -94,16 +62,8 @@ const cleanUp = (packagePath: PathObject) => {
   fs.rmSync(path.format(packagePath), { recursive: true });
 };
 
-const buildWasmPackage = (
-  packageName: string,
-  target: string,
-  patch: object,
-) => {
+const buildWasmPackage = (packageName: string, target: string) => {
   runWasmPack(target);
-
-  const packageJsonPath = path.resolve(path.join("pkg", "package.json"));
-  patchPackageJson(packageJsonPath, patch);
-  runPrettier(packageJsonPath);
 
   const pkgFolderPath = path.parse(path.resolve("./pkg/"));
 
@@ -112,31 +72,8 @@ const buildWasmPackage = (
 };
 
 const buildPackages = () => {
-  const webName = "type-system-web";
-  const webPatch = {
-    name: `@blockprotocol/${webName}`,
-    module: "src/index.js",
-    types: "src/index.d.ts",
-    files: ["src/index_bg.wasm", "src/index.js", "src/index.d.ts"],
-  };
-  buildWasmPackage(webName, "web", webPatch);
-
-  const nodeName = "type-system-node";
-  const nodePatch = {
-    name: `@blockprotocol/${nodeName}`,
-    scripts: {
-      test: "jest",
-    },
-    devDependencies: {
-      "@types/jest": "28.1.4",
-      jest: "28.1.2",
-      "ts-jest": "28.0.5",
-    },
-    module: "src/index.js",
-    types: "src/index.d.ts",
-    files: ["src/index_bg.wasm", "src/index.js", "src/index.d.ts"],
-  };
-  buildWasmPackage(nodeName, "nodejs", nodePatch);
+  buildWasmPackage("type-system-web", "web");
+  buildWasmPackage("type-system-node", "nodejs");
 };
 
 buildPackages();
