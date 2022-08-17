@@ -143,7 +143,7 @@ export const useHook = <T extends HTMLElement>(
     fallbackRef.current = fallback;
   });
 
-  const hookRef = useRef<null | Hook<T>>(null);
+  const existingHookRef = useRef<null | Hook<T>>(null);
 
   /**
    * We can't use the normal effect teardown to trigger the hook teardown, as
@@ -153,7 +153,7 @@ export const useHook = <T extends HTMLElement>(
    */
   useLayoutEffect(() => {
     return () => {
-      hookRef.current?.teardown?.().catch((err) => {
+      existingHookRef.current?.teardown?.().catch((err) => {
         catchError(() => {
           throw err;
         });
@@ -162,7 +162,7 @@ export const useHook = <T extends HTMLElement>(
   }, []);
 
   useLayoutEffect(() => {
-    const existingHook = hookRef.current?.params;
+    const existingHook = existingHookRef.current?.params;
     const node = ref.current;
 
     /**
@@ -185,7 +185,7 @@ export const useHook = <T extends HTMLElement>(
     }
 
     const teardownPromise =
-      hookRef.current?.teardown?.().catch() ?? Promise.resolve();
+      existingHookRef.current?.teardown?.().catch() ?? Promise.resolve();
 
     if (node && service) {
       const controller = new AbortController();
@@ -202,7 +202,7 @@ export const useHook = <T extends HTMLElement>(
         existingHook.type === type;
 
       const hook: Hook<T> = {
-        id: reuseId ? hookRef.current?.id ?? null : null,
+        id: reuseId ? existingHookRef.current?.id ?? null : null,
         params: {
           service,
           type,
@@ -221,8 +221,8 @@ export const useHook = <T extends HTMLElement>(
           if (hookId) {
             try {
               hook.id = null;
-              if (hookRef.current === hook) {
-                hookRef.current = null;
+              if (existingHookRef.current === hook) {
+                existingHookRef.current = null;
               }
 
               if (!service.destroyed) {
@@ -244,7 +244,7 @@ export const useHook = <T extends HTMLElement>(
         },
       };
 
-      hookRef.current = hook;
+      existingHookRef.current = hook;
 
       teardownPromise
         .then(() => {
@@ -291,7 +291,7 @@ export const useHook = <T extends HTMLElement>(
           });
         });
     } else {
-      hookRef.current = null;
+      existingHookRef.current = null;
     }
   });
 };
