@@ -1,67 +1,46 @@
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system-node";
 
 describe("BaseURI Class", () => {
-  const testBaseUri = (input: string, expected: string) => {
+  test.each([
+    ["http://example.com/", "http://example.com/"],
+    ["http://example.com", "http://example.com/"],
+    ["file://localhost/documents/myfile", "file:///documents/myfile"],
+    ["file://localhost/documents/myfile", "file:///documents/myfile"],
+    ["ftp://rms@example.com", "ftp://rms@example.com/"],
+    ["https://////example.com///", "https://example.com///"],
+    ["file://loc%61lhost/", "file:///"],
+  ])("`new BaseUri(%s)` succeeds", (input, expected) => {
     const uri = new BaseUri(input);
 
     expect(uri.toString()).toBe(expected);
     expect(uri.toJSON()).toBe(expected);
-  };
-
-  test("succeeds on valid URIs", () => {
-    testBaseUri("http://example.com/", "http://example.com/");
-    testBaseUri("http://example.com", "http://example.com/");
-    testBaseUri(
-      "file://localhost/documents/myfile",
-      "file:///documents/myfile",
-    );
-    testBaseUri(
-      "file://localhost/documents/myfile",
-      "file:///documents/myfile",
-    );
-    testBaseUri("ftp://rms@example.com", "ftp://rms@example.com/");
-    testBaseUri("https://////example.com///", "https://example.com///");
-    testBaseUri("file://loc%61lhost/", "file:///");
   });
 
-  test("errors on invalid URIs", () => {
-    expect(() => {
-      new BaseUri("\\example\\..\\demo/.\\");
-    }).toThrow();
-
-    expect(() => {
-      new BaseUri("https://ex ample.org/");
-    }).toThrow();
-
-    expect(() => {
-      new BaseUri("example");
-    }).toThrow();
-
-    expect(() => {
-      new BaseUri("https://example.com:demo");
-    }).toThrow();
-
-    expect(() => {
-      new BaseUri("http://[www.example.com]/");
-    }).toThrow();
-  });
+  test.each([
+    "\\example\\..\\demo/.\\",
+    "https://ex ample.org/",
+    "example",
+    "https://example.com:demo",
+    "http://[www.example.com]/",
+  ])("`new BaseUri(%s)` errors", (input) => {});
 });
 
 describe("VersionedUri Class", () => {
   const baseUri = new BaseUri("http://example.com/");
 
-  const testVersionedUri = (version: number, expected: string) => {
-    let uri = new VersionedUri(baseUri, version);
+  test.each([
+    [0, "http://example.com/v/0"],
+    [1, "http://example.com/v/1"],
+    [20.0, "http://example.com/v/20"],
+  ])(
+    '`new VersionedUri("http://example.com/", %i)` succeeds',
+    (version, expected) => {
+      const uri = new VersionedUri(baseUri, version);
 
-    expect(uri.toString()).toBe(expected);
-    expect(uri.toJSON()).toBe(expected);
-  };
-
-  test("succeeds on valid version number", () => {
-    testVersionedUri(0, "http://example.com/v/0");
-    testVersionedUri(1, "http://example.com/v/1");
-    testVersionedUri(20.0, "http://example.com/v/20");
-  });
+      expect(uri.toString()).toBe(expected);
+      expect(uri.toJSON()).toBe(expected);
+    },
+  );
 
   // @todo: this test ideally should fail, but currently the number is Math.floored into an integer silently
   test.skip("errors on invalid URIs", () => {
