@@ -7,6 +7,7 @@ import {
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
+import { Box, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import {
   ComponentType,
   FunctionComponent,
@@ -16,6 +17,7 @@ import {
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
+import { BottomView } from "./bottom-view";
 import { JsonView } from "./json-view";
 import { useMockBlockProps } from "./use-mock-block-props";
 
@@ -42,6 +44,8 @@ type MockBlockDockProps = {
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
 };
+
+const theme = createTheme();
 
 /**
  * A component which acts as a mock embedding application for Block Protocol blocks.
@@ -190,69 +194,76 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   }
 
   return (
-    <div style={{ fontFamily: "sans-serif" }}>
-      <div style={{ marginBottom: 30 }}>
-        <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/869  */}
-        <label style={{ display: "block", marginBottom: 10 }}>
-          <input
-            type="checkbox"
-            checked={debugReadonly}
-            onChange={(evt) => setDebugReadonly(evt.target.checked)}
-          />
-          Read only mode
-        </label>
-        <div style={{ padding: 15, border: "1px dashed black" }}>
-          <div ref={wrapperRef}>
-            {graphService ? (
-              <BlockRenderer
-                customElement={
-                  "customElement" in blockDefinition
-                    ? blockDefinition.customElement
-                    : undefined
-                }
-                html={
-                  "html" in blockDefinition ? blockDefinition.html : undefined
-                }
-                properties={propsToInject}
-                ReactComponent={
-                  "ReactComponent" in blockDefinition
-                    ? blockDefinition.ReactComponent
-                    : undefined
-                }
-              />
-            ) : null}
-          </div>
-        </div>
-      </div>
-
-      <div style={{ marginBottom: 30 }}>
-        <h3 style={{ marginBottom: 4 }}>Block Properties</h3>
-        <JsonView
-          collapseKeys={["graph"]}
-          rootName="props"
-          src={propsToInject}
-        />
-      </div>
-
-      <div style={{ marginBottom: 30 }}>
-        <h3 style={{ marginBottom: 4 }}>Datastore</h3>
-        <JsonView
-          collapseKeys={[
-            "entities",
-            "entityTypes",
-            "links",
-            "linkedAggregations",
-          ]}
-          rootName="datastore"
-          src={{
-            entities: datastore.entities,
-            entityTypes: datastore.entityTypes,
-            links: datastore.links,
-            linkedAggregations: datastore.linkedAggregationDefinitions,
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Box sx={{ height: "100vh", display: "flex" }}>
+        <Box
+          sx={({ palette }) => ({ width: 250, background: palette.grey[100] })}
+        >
+          {/*  */}
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+            overflowY: "scroll",
+            position: "relative",
           }}
-        />
-      </div>
-    </div>
+        >
+          <Box
+            component="header"
+            height={50}
+            boxShadow={1}
+            position="sticky"
+            top={0}
+            zIndex={5}
+            sx={{
+              background: "white",
+            }}
+            display="flex"
+            alignItems="center"
+          >
+            Header
+          </Box>
+          <Box>
+            <div style={{ fontFamily: "sans-serif" }}>
+              <div style={{ padding: 30 }}>
+                <div style={{ padding: 15, border: "1px dashed black" }}>
+                  <div ref={wrapperRef}>
+                    {graphService ? (
+                      <BlockRenderer
+                        customElement={
+                          "customElement" in blockDefinition
+                            ? blockDefinition.customElement
+                            : undefined
+                        }
+                        html={
+                          "html" in blockDefinition
+                            ? blockDefinition.html
+                            : undefined
+                        }
+                        properties={propsToInject}
+                        ReactComponent={
+                          "ReactComponent" in blockDefinition
+                            ? blockDefinition.ReactComponent
+                            : undefined
+                        }
+                      />
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Box height={400} />
+          </Box>
+
+          <BottomView
+            propsToInject={propsToInject}
+            datastore={datastore}
+            readonly={debugReadonly}
+            setReadonly={setDebugReadonly}
+          />
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 };

@@ -21,6 +21,15 @@ const DevApp: FunctionComponent = () => {
   };
 
   return (
+    <MockBlockDock
+      debug
+      blockDefinition={{ ReactComponent: TestReactBlock }}
+      blockEntity={blockEntity}
+      readonly={readonly}
+    />
+  );
+
+  return (
     <div style={{ fontFamily: "sans-serif" }}>
       <div
         style={{
@@ -59,7 +68,7 @@ const DevApp: FunctionComponent = () => {
           readonly={readonly}
         />
       </div>
-      <h2>Custom Element</h2>
+      {/* <h2>Custom Element</h2>
       <div style={{ border: "1px solid black", padding: 15 }}>
         <MockBlockDock
           debug
@@ -102,7 +111,7 @@ const DevApp: FunctionComponent = () => {
           blockEntity={blockEntity}
           readonly={readonly}
         />
-      </div>
+      </div> */}
     </div>
   );
 };
