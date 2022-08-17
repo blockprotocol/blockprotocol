@@ -39,7 +39,7 @@ impl VersionedUri {
     fn as_url(&self) -> Url {
         self.base_uri.0
             .join(&format!("v/{}", self.version))
-            .expect("failed to add version path to BaseURI")
+            .expect("failed to add version path to Base URI")
     }
 }
 

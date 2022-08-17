@@ -17,8 +17,7 @@ def patch_package_json(file: Path, unique_patch: Dict):
         "homepage": "https://blockprotocol.org",
         "repository": {
             "type": "git",
-            "url": "git@github.com:blockprotocol/blockprotocol.git",
-            "directory": "packages/react-block-loader"
+            "url": "git@github.com:blockprotocol/blockprotocol.git"
         },
         "license": "MIT",
         "author": {

@@ -20,6 +20,6 @@ pub struct ParseVersionedUriError;
 
 impl fmt::Display for ParseVersionedUriError {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt.write_str("provided string does not contain a valid version")
+        fmt.write_str("provided string is not a valid versioned URI")
     }
 }
