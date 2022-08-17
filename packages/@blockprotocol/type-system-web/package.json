@@ -12,15 +12,9 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
-
   "sideEffects": false,
   "module": "src/index.js",
   "types": "src/index.d.ts",
-  "files": [
-    "src/index_bg.wasm",
-    "src/index.js",
-    "src/index.d.ts"
-  ],
   "collaborators": [
     "HASH"
   ]

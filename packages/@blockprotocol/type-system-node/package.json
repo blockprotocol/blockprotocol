@@ -12,13 +12,8 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
-  "main": "index.js",
-  "types": "index.d.ts",
-  "files": [
-    "index_bg.wasm",
-    "index.js",
-    "index.d.ts"
-  ],
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "test": "jest"
   },
