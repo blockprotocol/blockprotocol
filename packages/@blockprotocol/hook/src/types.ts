@@ -8,7 +8,7 @@ export type HookData = {
   node: HTMLElement | null;
   type: string;
   path: string;
-  hookId?: string | null;
+  hookId: string | null;
 };
 
 export type BlockHookMessageCallbacks = {};
