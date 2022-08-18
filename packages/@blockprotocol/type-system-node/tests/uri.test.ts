@@ -1,6 +1,6 @@
-import { BaseUri, VersionedUri } from "..";
+import { isValidVersionedUri, parseBaseUri } from "..";
 
-describe("BaseURI Class", () => {
+describe("isValidBaseUri", () => {
   test.each([
     ["http://example.com/", "http://example.com/"],
     ["http://example.com", "http://example.com/"],
@@ -9,11 +9,8 @@ describe("BaseURI Class", () => {
     ["ftp://rms@example.com", "ftp://rms@example.com/"],
     ["https://////example.com///", "https://example.com///"],
     ["file://loc%61lhost/", "file:///"],
-  ])("`new BaseUri(%s)` succeeds", (input, expected) => {
-    const uri = new BaseUri(input);
-
-    expect(uri.toString()).toBe(expected);
-    expect(uri.toJSON()).toBe(expected);
+  ])("`parseBaseUri(%s)` succeeds", (input, expected) => {
+    expect(parseBaseUri(input)).toBe(expected);
   });
 
   test.each([
@@ -22,34 +19,32 @@ describe("BaseURI Class", () => {
     "example",
     "https://example.com:demo",
     "http://[www.example.com]/",
-  ])("`new BaseUri(%s)` errors", (input) => {
+  ])("`parseBaseUri(%s)` errors", (input) => {
     expect(() => {
-      const _ = new BaseUri(input);
+      const _ = parseBaseUri(input);
     }).toThrow();
   });
 });
 
-describe("VersionedUri Class", () => {
-  const baseUri = new BaseUri("http://example.com/");
+describe("isValidVersionedUri", () => {
+  test.each([
+    ["http://example.com/v/0"],
+    ["http://example.com/v/1"],
+    ["http://example.com/v/20"],
+  ])("`isValidVersionedUri(%i)` succeeds", (input) => {
+    isValidVersionedUri(input);
+  });
 
   test.each([
-    [0, "http://example.com/v/0"],
-    [1, "http://example.com/v/1"],
-    [20.0, "http://example.com/v/20"],
-  ])(
-    '`new VersionedUri("http://example.com/", %i)` succeeds',
-    (version, expected) => {
-      const uri = new VersionedUri(baseUri, version);
-
-      expect(uri.toString()).toBe(expected);
-      expect(uri.toJSON()).toBe(expected);
-    },
-  );
-
-  // @todo: this test ideally should fail, but currently the number is Math.floored into an integer silently
-  test.skip("errors on invalid URIs", () => {
+    ["http://example.com"],
+    ["http://example.com/v/"],
+    ["http://example.com/v/0.2"],
+    ["http://example.com/v//20"],
+    ["http://example.com/v/30/1"],
+    ["http://example.com/v/foo"],
+  ])("isValidVersionedUri(%s) errors", (input) => {
     expect(() => {
-      const _ = new VersionedUri(baseUri, 0.2);
+      isValidVersionedUri(input);
     }).toThrow();
   });
 });

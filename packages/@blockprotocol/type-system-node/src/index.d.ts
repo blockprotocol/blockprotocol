@@ -1,22 +1,14 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
+* @param {string} uri
+* @returns {string}
 */
-export class BaseUri {
-  free(): void;
+export function parseBaseUri(uri: string): string;
 /**
 * @param {string} uri
 */
-  constructor(uri: string);
-/**
-* @returns {string}
-*/
-  toString(): string;
-/**
-* @returns {any}
-*/
-  toJSON(): any;
-}
+export function isValidVersionedUri(uri: string): void;
 /**
 */
 export class ParseBaseUriError {
@@ -26,29 +18,4 @@ export class ParseBaseUriError {
 */
 export class ParseVersionedUriError {
   free(): void;
-}
-/**
-*/
-export class VersionedUri {
-  free(): void;
-/**
-* Creates a new `VersionedUri` from the given `base_uri` and `version`.
-* @param {BaseUri} base_uri
-* @param {number} version
-*/
-  constructor(base_uri: BaseUri, version: number);
-/**
-* @returns {string}
-*/
-  toString(): string;
-/**
-* @returns {any}
-*/
-  toJSON(): any;
-/**
-*/
-  readonly baseUri: BaseUri;
-/**
-*/
-  readonly version: number;
 }

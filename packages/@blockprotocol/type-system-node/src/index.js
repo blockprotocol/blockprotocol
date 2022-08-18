@@ -112,79 +112,52 @@ function takeObject(idx) {
     dropObject(idx);
     return ret;
 }
-
-function _assertClass(instance, klass) {
-    if (!(instance instanceof klass)) {
-        throw new Error(`expected instance of ${klass.name}`);
-    }
-    return instance.ptr;
-}
 /**
+* @param {string} uri
+* @returns {string}
 */
-class BaseUri {
-
-    static __wrap(ptr) {
-        const obj = Object.create(BaseUri.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_baseuri_free(ptr);
-    }
-    /**
-    * @param {string} uri
-    */
-    constructor(uri) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-            const len0 = WASM_VECTOR_LEN;
-            wasm.baseuri_new(retptr, ptr0, len0);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return BaseUri.__wrap(r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
+module.exports.parseBaseUri = function(uri) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.parseBaseUri(retptr, ptr0, len0);
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        var r2 = getInt32Memory0()[retptr / 4 + 2];
+        var r3 = getInt32Memory0()[retptr / 4 + 3];
+        var ptr1 = r0;
+        var len1 = r1;
+        if (r3) {
+            ptr1 = 0; len1 = 0;
+            throw takeObject(r2);
         }
+        return getStringFromWasm0(ptr1, len1);
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        wasm.__wbindgen_free(ptr1, len1);
     }
-    /**
-    * @returns {string}
-    */
-    toString() {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.baseuri_toString(retptr, this.ptr);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            return getStringFromWasm0(r0, r1);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-            wasm.__wbindgen_free(r0, r1);
+};
+
+/**
+* @param {string} uri
+*/
+module.exports.isValidVersionedUri = function(uri) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.isValidVersionedUri(retptr, ptr0, len0);
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        if (r1) {
+            throw takeObject(r0);
         }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
     }
-    /**
-    * @returns {any}
-    */
-    toJSON() {
-        const ret = wasm.baseuri_toJSON(this.ptr);
-        return takeObject(ret);
-    }
-}
-module.exports.BaseUri = BaseUri;
+};
+
 /**
 */
 class ParseBaseUriError {
@@ -213,25 +186,8 @@ module.exports.ParseBaseUriError = ParseBaseUriError;
 */
 class ParseVersionedUriError {
 
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_parseversionedurierror_free(ptr);
-    }
-}
-module.exports.ParseVersionedUriError = ParseVersionedUriError;
-/**
-*/
-class VersionedUri {
-
     static __wrap(ptr) {
-        const obj = Object.create(VersionedUri.prototype);
+        const obj = Object.create(ParseVersionedUriError.prototype);
         obj.ptr = ptr;
 
         return obj;
@@ -246,80 +202,18 @@ class VersionedUri {
 
     free() {
         const ptr = this.__destroy_into_raw();
-        wasm.__wbg_versioneduri_free(ptr);
-    }
-    /**
-    * Creates a new `VersionedUri` from the given `base_uri` and `version`.
-    * @param {BaseUri} base_uri
-    * @param {number} version
-    */
-    constructor(base_uri, version) {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            _assertClass(base_uri, BaseUri);
-            wasm.versioneduri_new(retptr, base_uri.ptr, version);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            var r2 = getInt32Memory0()[retptr / 4 + 2];
-            if (r2) {
-                throw takeObject(r1);
-            }
-            return VersionedUri.__wrap(r0);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-        }
-    }
-    /**
-    * @returns {BaseUri}
-    */
-    get baseUri() {
-        const ret = wasm.versioneduri_base_uri(this.ptr);
-        return BaseUri.__wrap(ret);
-    }
-    /**
-    * @returns {number}
-    */
-    get version() {
-        const ret = wasm.versioneduri_version(this.ptr);
-        return ret >>> 0;
-    }
-    /**
-    * @returns {string}
-    */
-    toString() {
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.versioneduri_toString(retptr, this.ptr);
-            var r0 = getInt32Memory0()[retptr / 4 + 0];
-            var r1 = getInt32Memory0()[retptr / 4 + 1];
-            return getStringFromWasm0(r0, r1);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-            wasm.__wbindgen_free(r0, r1);
-        }
-    }
-    /**
-    * @returns {any}
-    */
-    toJSON() {
-        const ret = wasm.versioneduri_toJSON(this.ptr);
-        return takeObject(ret);
+        wasm.__wbg_parseversionedurierror_free(ptr);
     }
 }
-module.exports.VersionedUri = VersionedUri;
+module.exports.ParseVersionedUriError = ParseVersionedUriError;
 
 module.exports.__wbg_parsebaseurierror_new = function(arg0) {
     const ret = ParseBaseUriError.__wrap(arg0);
     return addHeapObject(ret);
 };
 
-module.exports.__wbindgen_string_new = function(arg0, arg1) {
-    const ret = getStringFromWasm0(arg0, arg1);
-    return addHeapObject(ret);
-};
-
-module.exports.__wbindgen_json_parse = function(arg0, arg1) {
-    const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
+module.exports.__wbg_parseversionedurierror_new = function(arg0) {
+    const ret = ParseVersionedUriError.__wrap(arg0);
     return addHeapObject(ret);
 };
 
