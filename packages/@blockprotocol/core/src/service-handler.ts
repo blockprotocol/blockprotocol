@@ -112,7 +112,7 @@ export abstract class ServiceHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreHandler.registerCallback({dd ch
+    this.coreHandler.registerCallback({
       callback,
       messageName,
       serviceName: this.serviceName,
