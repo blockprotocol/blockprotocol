@@ -200,6 +200,7 @@ export abstract class CoreHandler {
       respondedToBy: "respondedToBy" in args ? args.respondedToBy : undefined,
       service: sender.serviceName,
       source: this.sourceType,
+      timestamp: new Date().toISOString(),
     };
 
     const event = new CustomEvent(CoreHandler.customEventName, {
