@@ -12,12 +12,12 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
-  "scripts": {
-    "lint:tsc": "tsc --noEmit"
-  },
   "sideEffects": false,
   "module": "src/index.js",
   "types": "src/index.d.ts",
+  "scripts": {
+    "lint:tsc": "tsc --noEmit"
+  },
   "collaborators": [
     "HASH"
   ]

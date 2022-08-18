@@ -15,8 +15,8 @@
   "main": "src/index.js",
   "types": "src/index.d.ts",
   "scripts": {
-    "test": "jest",
-    "lint:tsc": "tsc --noEmit"
+    "lint:tsc": "tsc --noEmit",
+    "test": "jest"
   },
   "devDependencies": {
     "@types/jest": "28.1.4",
