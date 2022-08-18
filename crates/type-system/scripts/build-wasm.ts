@@ -36,6 +36,7 @@ const moveSrcFiles = (packagePath: PathObject, packageName: string) => {
     __dirname,
     "..",
     "..",
+    "..",
     "packages",
     "@blockprotocol",
     packageName,
