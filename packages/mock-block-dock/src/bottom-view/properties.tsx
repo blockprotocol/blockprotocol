@@ -16,7 +16,7 @@ export const PropertiesView = ({ properties, setReadonly }: Props) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={3} textAlign="right" alignSelf="center">
-        Read only mode
+        Read-only mode
       </Grid>
       <Grid item xs={9}>
         <Switch

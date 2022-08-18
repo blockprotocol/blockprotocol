@@ -90,7 +90,7 @@ export const BottomView = ({
   setReadonly
 }: BottomViewProps) => {
   const [value, setValue] = useState(0);
-  const containerRef = useRef<HTMLDivElement>();
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const [logs, setLogs] = useState<Log[]>([]);
   const [minimized, setMinimized] = useState(false);
 
@@ -119,21 +119,19 @@ export const BottomView = ({
       }}
     >
       <Box
-        sx={({ palette }) => ({
-          //   position: "sticky",
+        sx={{
           top: 0,
           zIndex: 5,
-          //   backgroundColor: palette.background.paper,
           display: "flex",
           justifyContent: "space-between",
           height: 50
-        })}
+        }}
       >
         <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
           <Tab
             disableRipple
             disableTouchRipple
-            label="Block Properties"
+            label="Properties"
             {...a11yProps(0)}
           />
           <Tab
