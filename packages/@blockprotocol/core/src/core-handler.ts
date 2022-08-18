@@ -270,7 +270,6 @@ export abstract class CoreHandler {
           },
           requestId,
           sender: serviceHandler,
-          timestamp: new Date().toISOString(),
         });
       } catch (err) {
         throw new Error(
