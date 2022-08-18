@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/hook",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Implementation of the Block Protocol Hook service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -51,7 +51,7 @@
     "prepare": "yarn build"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.8"
+    "@blockprotocol/core": "0.0.9"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
