@@ -138,7 +138,6 @@ const enhanceBlockMetadata = (
     blockType: metadata.blockType ?? { entryPoint: "react" },
     // @todo figure out what we're going to use for the unique block Ids
     componentId: `${blockDistributionFolderUrl}/blocks/${packagePath}`,
-    // @todo should be redundant to block's package.json#name
     icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
     image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),
     packagePath,
