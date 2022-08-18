@@ -26,7 +26,9 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
-import { apiClient } from "../../../lib/api-client";
+import { Block } from "../../../lib/api/model/block.model";
+import { User } from "../../../lib/api/model/user.model";
+import { connectToDatabase } from "../../../lib/api/mongodb";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -182,16 +184,24 @@ export const getStaticProps: GetStaticProps<
   }
   const packagePath = `${shortname}/${blockSlug}`;
 
+  const { db } = await connectToDatabase();
+
   // This API endpoint relies on the user existing in the db, and it will not work when the JSON files in hub/
   // are associated with users that haven't been created in your local db
   // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' method on a new Block model
-  const { data } = await apiClient.getUserBlocks({
-    shortname: shortname.replace(/^@/, ""),
-  });
+  const bareShortname = shortname.replace(/^@/, "");
+  const user = await User.getByShortname(db, { shortname: bareShortname });
 
-  const catalog = data?.blocks ?? [];
+  if (!user) {
+    return {
+      notFound: true,
+    };
+  }
 
-  const blockMetadata = catalog.find(
+  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' method on a new Block model
+  const blocks = await Block.getAllByUser(db, { user });
+
+  const blockMetadata = blocks.find(
     (metadata) => metadata.packagePath === packagePath,
   );
 
@@ -223,7 +233,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       blockMetadata,
       ...(compiledReadme ? { compiledReadme } : {}), // https://github.com/vercel/next.js/discussions/11209
-      sliderItems: excludeHiddenBlocks(catalog).filter(
+      sliderItems: excludeHiddenBlocks(blocks).filter(
         ({ name }) => name !== blockMetadata.name,
       ),
       sandboxBaseUrl: generateSandboxBaseUrl(),

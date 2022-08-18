@@ -10,7 +10,8 @@ import { InteroperableBlocks } from "../components/pages/home/interoperable-bloc
 import { RegistrySection } from "../components/pages/home/registry-section";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import { useUser } from "../context/user-context";
-import { apiClient } from "../lib/api-client";
+import { Block } from "../lib/api/model/block.model";
+import { connectToDatabase } from "../lib/api/mongodb";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -24,17 +25,11 @@ interface PageProps {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  // @todo replace with direct call to block model, when it exists
-  const { data, error } = await apiClient.getBlocks();
-  if (error) {
-    // eslint-disable-next-line no-console -- server-side log. TODO: consider using logger
-    console.error(`Error getting static props for home page: ${error.message}`);
-    throw error;
-  }
-  const catalog = data?.results ?? [];
+  const { db } = await connectToDatabase();
+  const blocks = await Block.getAll(db);
 
   return {
-    props: { catalog: excludeHiddenBlocks(catalog) },
+    props: { catalog: excludeHiddenBlocks(blocks) },
   };
 };
 

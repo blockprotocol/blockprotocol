@@ -3,7 +3,7 @@ import { query as queryValidator } from "express-validator";
 import cloneDeep from "lodash/cloneDeep";
 
 import blocksData from "../../../blocks-data.json" assert { type: "json" };
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
+import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
 import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
@@ -21,8 +21,7 @@ export type ApiBlockSearchResponse = {
   results: ExpandedBlockMetadata[];
 };
 
-// @todo restore createApiRequiredKeyHandler
-export default createBaseHandler<null, ApiBlockSearchResponse>()
+export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
   .use(queryValidator("author").isString().toLowerCase())
   .use(queryValidator("license").isString().toLowerCase())
   .use(queryValidator("name").isString().toLowerCase())
@@ -38,8 +37,6 @@ export default createBaseHandler<null, ApiBlockSearchResponse>()
     } = req.query as ApiBlockSearchQuery;
 
     let data: ExpandedBlockMetadata[] = blocksData as ExpandedBlockMetadata[];
-
-    console.log({ data });
 
     if (authorQuery) {
       data = data.filter(({ author }) =>
@@ -116,8 +113,6 @@ export default createBaseHandler<null, ApiBlockSearchResponse>()
     }
 
     // @todo paginate response
-
-    console.log("Response", data);
 
     res.status(200).json({
       results: data,

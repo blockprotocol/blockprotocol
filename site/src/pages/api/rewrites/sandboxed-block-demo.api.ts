@@ -1,8 +1,11 @@
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
-import { apiClient } from "../../../lib/api-client";
+import { Block } from "../../../lib/api/model/block.model";
+import { User } from "../../../lib/api/model/user.model";
+import { connectToDatabase } from "../../../lib/api/mongodb";
 import { retrieveBlockFileContent } from "../../../lib/blocks";
+import { formatErrors } from "../../../util/api";
 
 /**
  * @todo potentially remove after building blocks to ESM
@@ -22,11 +25,24 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
+  const { db } = await connectToDatabase();
+
+  const shortname = (req.query.shortname as string).replace(/^@/, "");
+  const user = await User.getByShortname(db, { shortname });
+
+  if (!user) {
+    return res.status(404).json(
+      formatErrors({
+        msg: "Could not find user with the provided shortname",
+        param: "shortname",
+        value: shortname,
+      }),
+    );
+  }
+
   // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' method on a new Block model
-  const { data } = await apiClient.getUserBlocks({
-    shortname: (req.query.shortname as string).replace(/^@/, ""),
-  });
-  const catalog = data?.blocks ?? [];
+  const blocks = await Block.getAllByUser(db, { user });
+  const catalog = blocks ?? [];
 
   const packagePath = `${req.query.shortname}/${req.query.blockslug}`;
 
