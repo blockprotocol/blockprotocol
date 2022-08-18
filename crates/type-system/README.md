@@ -1,8 +1,9 @@
 # The Block Protocol Type-System
 
-[//]: # (TODO: Introduction)
+[//]: # "TODO: Introduction"
 
 ## Requirements
+
 - [Rust](https://www.rust-lang.org/tools/install)
 - [cargo-make](https://github.com/sagiegurari/cargo-make#installation)
 
@@ -16,4 +17,4 @@ For more granular task control look at `cargo make --list-all-steps`
 
 ## Running tests
 
-- `cargo make test` - Runs the unit tests and headless WASM integration tests found in the [./src/test](./src/test) directory.  
+- `cargo make test` - Runs the unit tests and headless WASM integration tests found in the [./src/tests](./src/tests) directory.
