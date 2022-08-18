@@ -39,6 +39,8 @@ export default createBaseHandler<null, ApiBlockSearchResponse>()
 
     let data: ExpandedBlockMetadata[] = blocksData as ExpandedBlockMetadata[];
 
+    console.log({ data });
+
     if (authorQuery) {
       data = data.filter(({ author }) =>
         author?.toLowerCase().includes(authorQuery),
@@ -114,6 +116,8 @@ export default createBaseHandler<null, ApiBlockSearchResponse>()
     }
 
     // @todo paginate response
+
+    console.log("Response", data);
 
     res.status(200).json({
       results: data,
