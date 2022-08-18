@@ -1,11 +1,31 @@
 // @todo rename
 
 import { Message } from "@blockprotocol/core/dist/esm/types";
-import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
-import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  KeyboardDoubleArrowDown,
+  KeyboardDoubleArrowUp
+} from "@mui/icons-material";
+import {
+  Box,
+  IconButton,
+  Paper,
+  styled,
+  Tab,
+  Tabs,
+  Typography
+} from "@mui/material";
+import {
+  Dispatch,
+  ReactNode,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
+import { DataStoreView } from "./bottom-view/datastore-view";
 import { Log, LogsView } from "./bottom-view/logs-view";
-import { JsonView } from "./json-view";
+import { PropertiesView } from "./bottom-view/properties";
 import { SIDEBAR_WIDTH } from "./layout";
 
 interface TabPanelProps {
@@ -37,29 +57,49 @@ const TabPanel = (props: TabPanelProps) => {
 const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`
   };
 };
 
-// @todo add resize functionality
 // @todo consider using context
+
+const Container = styled(Paper)(({ theme }) => ({
+  position: "fixed",
+  height: 500,
+  left: SIDEBAR_WIDTH,
+  right: 0,
+  bottom: 0,
+  zIndex: 10,
+  boxShadow: theme.shadows[4],
+  transition: theme.transitions.create("height"),
+  display: "flex",
+  flexDirection: "column"
+}));
+
+// @todo: fix types
+type BottomViewProps = {
+  propsToInject: any;
+  datastore: any;
+  readonly: boolean;
+  setReadonly: Dispatch<SetStateAction<boolean>>;
+};
 
 export const BottomView = ({
   propsToInject,
   datastore,
-  readonly,
-  setReadonly,
-}) => {
-  const [value, setValue] = useState(2);
-  const containerRef = useRef<HTMLElement>();
+  setReadonly
+}: BottomViewProps) => {
+  const [value, setValue] = useState(0);
+  const containerRef = useRef<HTMLDivElement>();
   const [logs, setLogs] = useState<Log[]>([]);
+  const [minimized, setMinimized] = useState(false);
 
   useEffect(() => {
     const handler = (event: Event) => {
       const detail = (event as CustomEvent<Message>).detail;
-      setLogs((prev) => [
+      setLogs(prev => [
         ...prev,
-        { ...detail, timestamp: new Date().toISOString() },
+        { ...detail, timestamp: new Date().toISOString() }
       ]);
     };
 
@@ -72,27 +112,22 @@ export const BottomView = ({
   }, []);
 
   return (
-    <Box
+    <Container
       ref={containerRef}
       sx={{
-        position: "fixed",
-        height: 500,
-        left: SIDEBAR_WIDTH,
-        right: 0,
-        bottom: 0,
-        zIndex: 10,
-        boxShadow: 4,
-        backgroundColor: "white",
-        overflowY: "scroll",
+        ...(minimized && { height: 50 })
       }}
     >
       <Box
-        sx={{
-          position: "sticky",
+        sx={({ palette }) => ({
+          //   position: "sticky",
           top: 0,
           zIndex: 5,
-          backgroundColor: "white",
-        }}
+          //   backgroundColor: palette.background.paper,
+          display: "flex",
+          justifyContent: "space-between",
+          height: 50
+        })}
       >
         <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
           <Tab
@@ -114,49 +149,34 @@ export const BottomView = ({
             {...a11yProps(2)}
           />
         </Tabs>
-      </Box>{" "}
-      <TabPanel value={value} index={0}>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/869  */}
-        <label style={{ display: "block", marginBottom: 10 }}>
-          <input
-            type="checkbox"
-            checked={readonly}
-            onChange={(evt) => setReadonly(evt.target.checked)}
+
+        <IconButton
+          onClick={() => {
+            setMinimized(prev => !prev);
+          }}
+        >
+          {minimized ? <KeyboardDoubleArrowUp /> : <KeyboardDoubleArrowDown />}
+        </IconButton>
+      </Box>
+      <Box
+        sx={{
+          flex: 1,
+          overflowY: "scroll"
+        }}
+      >
+        <TabPanel value={value} index={0}>
+          <PropertiesView
+            properties={propsToInject.graph}
+            setReadonly={setReadonly}
           />
-          Read only mode
-        </label>
-        <Box height={20} />
-        Block Properties
-        <JsonView
-          collapseKeys={["graph"]}
-          rootName="props"
-          src={propsToInject}
-          onEdit={() => {
-            return true;
-          }}
-          onAdd={() => {}}
-        />
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <JsonView
-          collapseKeys={[
-            "entities",
-            "entityTypes",
-            "links",
-            "linkedAggregations",
-          ]}
-          rootName="datastore"
-          src={{
-            entities: datastore.entities,
-            entityTypes: datastore.entityTypes,
-            links: datastore.links,
-            linkedAggregations: datastore.linkedAggregationDefinitions,
-          }}
-        />
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        <LogsView logs={logs} setLogs={setLogs} />
-      </TabPanel>
-    </Box>
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <DataStoreView datastore={datastore} />
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          <LogsView logs={logs} setLogs={setLogs} />
+        </TabPanel>
+      </Box>
+    </Container>
   );
 };
