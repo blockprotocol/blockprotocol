@@ -1,3 +1,4 @@
+import { Box, useTheme } from "@mui/material";
 import ReactJson from "react-json-view";
 
 export const JsonView = ({
@@ -9,20 +10,24 @@ export const JsonView = ({
   collapseKeys: string[];
   rootName: string;
   src: Record<string, unknown> | object;
-}) => (
-  <div
-    style={{
-      backgroundColor: "rgb(17, 17, 17)",
-      padding: 15,
-      border: "1px dashed black",
-    }}
-  >
-    <ReactJson
-      shouldCollapse={({ name }) => !!name && collapseKeys.includes(name)}
-      name={rootName}
-      src={src}
-      theme="colors"
-      {...props}
-    />
-  </div>
-);
+}) => {
+  const theme = useTheme();
+  return (
+    <Box
+      sx={({ palette }) => ({
+        backgroundColor: palette.background.default,
+        padding: 2,
+        border: `1px solid ${palette.divider}`,
+        width: "100%"
+      })}
+    >
+      <ReactJson
+        shouldCollapse={({ name }) => !!name && collapseKeys.includes(name)}
+        name={rootName}
+        src={src}
+        theme={theme.palette.mode === "light" ? "rjv-default" : "colors"}
+        {...props}
+      />
+    </Box>
+  );
+};
