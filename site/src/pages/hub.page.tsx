@@ -3,10 +3,10 @@ import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
+import { apiClient } from "../lib/api-client";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  readBlocksFromDisk,
 } from "../lib/blocks";
 
 interface PageProps {
@@ -17,8 +17,19 @@ interface PageProps {
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
+  // @todo replace with direct call to block model, when it exists
+  const { data, error } = await apiClient.getBlocks();
+  if (error) {
+    // eslint-disable-next-line no-console -- server-side log. TODO: consider using logger
+    console.error(
+      `Error getting static props for hub index page: ${error.message}`,
+    );
+    throw error;
+  }
+  const catalog = data?.results ?? [];
+
   return {
-    props: { catalog: excludeHiddenBlocks(await readBlocksFromDisk()) },
+    props: { catalog: excludeHiddenBlocks(catalog) },
   };
 };
 

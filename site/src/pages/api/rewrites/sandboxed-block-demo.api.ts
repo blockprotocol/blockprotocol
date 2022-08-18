@@ -1,7 +1,8 @@
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
-import { readBlockDataFromDisk, readBlocksFromDisk } from "../../../lib/blocks";
+import { apiClient } from "../../../lib/api-client";
+import { retrieveBlockFileContent } from "../../../lib/blocks";
 
 /**
  * @todo potentially remove after building blocks to ESM
@@ -21,11 +22,15 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const catalog = await readBlocksFromDisk();
+  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' API endpoint
+  const { data } = await apiClient.getUserBlocks({
+    shortname: (req.query.shortname as string).replace(/^@/, ""),
+  });
+  const catalog = data?.blocks ?? [];
 
   const packagePath = `${req.query.shortname}/${req.query.blockslug}`;
 
-  const blockMetadata = catalog.find(
+  const blockMetadata = catalog?.find(
     (metadata) => metadata.packagePath === packagePath,
   );
 
@@ -36,7 +41,7 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { exampleGraph } = await readBlockDataFromDisk(blockMetadata);
+  const { exampleGraph } = await retrieveBlockFileContent(blockMetadata);
 
   const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 

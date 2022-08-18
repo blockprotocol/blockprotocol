@@ -46,7 +46,7 @@ export const TabPanelContentsWithBlocks: FunctionComponent<
           icon,
           lastUpdated,
           name,
-          blockPackagePath,
+          blockSitePath,
         }) => (
           <ListViewCard
             key={name}
@@ -55,7 +55,7 @@ export const TabPanelContentsWithBlocks: FunctionComponent<
             title={displayName!}
             description={description}
             lastUpdated={lastUpdated}
-            url={blockPackagePath}
+            url={blockSitePath}
           />
         ),
       )}

@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ValidationError } from "express-validator";
 
+import { ApiBlockSearchResponse } from "../pages/api/blocks.api";
 import {
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse,
@@ -127,6 +128,7 @@ export const apiClient = {
       "me/generate-api-key",
       requestData,
     ),
+  getBlocks: () => apiClient.get<ApiBlockSearchResponse>("/blocks"),
   getUserApiKeys: () => apiClient.get<ApiKeysResponse>("me/api-keys"),
   getUser: ({ shortname }: { shortname: string }) =>
     apiClient.get<ApiUserByShortnameResponse>(`users/${shortname}`),

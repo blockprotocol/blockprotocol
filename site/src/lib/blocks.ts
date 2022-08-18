@@ -1,4 +1,8 @@
-import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
+import {
+  BlockMetadata,
+  BlockMetadataRepository,
+  JsonObject,
+} from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
@@ -9,18 +13,40 @@ import { FRONTEND_URL } from "./config";
 /** @todo type as JSON object */
 export type BlockProps = object;
 
-export type ExpandedBlockMetadata = BlockMetadata & {
-  blockPackagePath: string;
-  componentId: string;
-  lastUpdated?: string | null;
-  packagePath: string;
-  // repository is passed down as a string upon expansion
-  repository?: string;
-  schema?: string | null;
-  exampleGraph: string | null;
-  unstable_hubInfo?: Record<string, string>;
+/**
+ * This represents the block metadata created when blocks are built from source and served from the NextJS app
+ */
+export type BlockMetadataOnDisk = BlockMetadata & {
+  unstable_hubInfo: {
+    directory: string;
+    checksum: string;
+    commit: string;
+    preparedAt: string;
+  };
 };
 
+/**
+ * This is the expanded block metadata that is served via the API
+ * Relative file URLs are rewritten to be absolute, and other fields are added
+ */
+export type ExpandedBlockMetadata = BlockMetadata & {
+  // the block's URL on blockprotocol.org
+  blockSitePath: string;
+  // the folder where the block's assets are stored, currently doubling up as a unique identifier for the block
+  // @todo this needs rethinking when we introduce versions, as there will be multiple asset folders
+  componentId: string;
+  // an absolute URL to example-graph.json, if it exists
+  exampleGraph?: string | null;
+  lastUpdated?: string | null;
+  // @[namespace]/[block-path] - unique identifier per block (across all versions)
+  packagePath: string;
+  // the repository URL as a string (including commit and folder info where appropriate)
+  repository?: string;
+  // metadata.schema rewritten to be an absolute URL
+  schema?: string | null;
+};
+
+// The contents of the JSON file users provide when adding a block via PR, stored in the hub/ folder
 export interface StoredBlockInfo {
   repository: string;
   commit: string;
@@ -29,9 +55,10 @@ export interface StoredBlockInfo {
   workspace?: string;
 }
 
+// Generate an absolute url to a block file
 const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
-  packagePath: string,
+  blockDistributionFolderUrl: string,
 ): string | null => {
   if (!mediaPath) {
     return null;
@@ -41,10 +68,7 @@ const generateBlockFileUrl = (
     return mediaPath;
   }
 
-  return `${FRONTEND_URL}/blocks/${packagePath}/${mediaPath.replace(
-    /^\//,
-    "",
-  )}`;
+  return `${blockDistributionFolderUrl}/${mediaPath.replace(/^\//, "")}`;
 };
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
@@ -80,9 +104,61 @@ const getRepositoryUrl = (
   return undefined;
 };
 
+const enhanceBlockMetadata = (
+  metadata: BlockMetadata,
+  source: {
+    blockDistributionFolderUrl: string;
+    packagePath: string;
+    repoUrl: string;
+    repoCommit: string;
+    repoDirectory?: string;
+  },
+  lastUpdated: string,
+  includesExampleGraph: boolean,
+): ExpandedBlockMetadata => {
+  const {
+    blockDistributionFolderUrl,
+    packagePath,
+    repoUrl,
+    repoCommit,
+    repoDirectory,
+  } = source;
+
+  const repository = getRepositoryUrl(
+    repoUrl,
+    repoCommit,
+    repoDirectory,
+  )?.replace(/\/$/, "");
+
+  return {
+    ...metadata,
+    author: packagePath.split("/")[0]!.replace(/^@/, ""),
+    blockSitePath: `/${packagePath.split("/").join("/blocks/")}`,
+    // fallback while not all blocks have blockType defined
+    blockType: metadata.blockType ?? { entryPoint: "react" },
+    componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
+    // @todo should be redundant to block's package.json#name
+    icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
+    image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),
+    packagePath,
+    repository,
+    schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
+    source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
+    variants: metadata.variants?.length
+      ? metadata.variants?.map((variant) => ({
+          ...variant,
+          icon: generateBlockFileUrl(variant.icon, blockDistributionFolderUrl)!,
+        }))
+      : null,
+    exampleGraph: generateBlockFileUrl(
+      includesExampleGraph ? "example-graph.json" : null,
+      blockDistributionFolderUrl,
+    ),
+  };
+};
+
 /**
- * used to read block metadata from disk.
- *
+ * used to read and enhance block metadata from disk.
  */
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
@@ -98,51 +174,41 @@ export const readBlocksFromDisk = async (): Promise<
       .slice(-3, -1)
       .join("/");
 
-    const partialMetadata = await fs.readJson(blockMetadataFilePath, {
-      encoding: "utf8",
-    });
-
-    const metadata: ExpandedBlockMetadata = {
-      // @todo should be redundant to block's package.json#name
-      componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
-      packagePath,
-      // fallback while not all blocks have blockType defined
-      blockType: partialMetadata.blockType ?? { entryPoint: "react" },
-      ...partialMetadata,
-    };
+    const partialMetadata: BlockMetadataOnDisk = await fs.readJson(
+      blockMetadataFilePath,
+      {
+        encoding: "utf8",
+      },
+    );
 
     const storedBlockInfo: StoredBlockInfo = await fs.readJson(
       path.resolve(process.cwd(), `../hub/${packagePath}.json`),
       { encoding: "utf8" },
     );
 
-    const repository = getRepositoryUrl(
-      metadata.repository ?? storedBlockInfo.repository,
-      storedBlockInfo.commit,
-      metadata.unstable_hubInfo?.directory,
-    )?.replace(/\/$/, "");
-
-    result.push({
-      ...metadata,
-      author: metadata.packagePath.split("/")[0]!.replace(/^@/, ""),
-      icon: generateBlockFileUrl(metadata.icon, metadata.packagePath),
-      image: generateBlockFileUrl(metadata.image, metadata.packagePath),
-      source: generateBlockFileUrl(metadata.source, metadata.packagePath)!,
-      variants: metadata.variants?.length
-        ? metadata.variants?.map((variant) => ({
-            ...variant,
-            icon: generateBlockFileUrl(variant.icon, metadata.packagePath)!,
-          }))
-        : null,
-      schema: generateBlockFileUrl(metadata.schema, metadata.packagePath)!,
-      repository,
-      blockPackagePath: `/${metadata.packagePath.split("/").join("/blocks/")}`,
-      exampleGraph: generateBlockFileUrl(
-        metadata.exampleGraph,
-        metadata.packagePath,
+    const exampleGraphFileExists = await fs.pathExists(
+      blockMetadataFilePath.replace(
+        "block-metadata.json",
+        "example-graph.json",
       ),
-      lastUpdated: null, // TODO: derive from block data when provided by the hub
-    });
+    );
+
+    const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${packagePath}`;
+
+    const expandedMetadata: ExpandedBlockMetadata = enhanceBlockMetadata(
+      partialMetadata,
+      {
+        blockDistributionFolderUrl,
+        packagePath,
+        repoCommit: storedBlockInfo.commit,
+        repoDirectory: partialMetadata.unstable_hubInfo?.directory,
+        repoUrl: storedBlockInfo.repository,
+      },
+      partialMetadata.unstable_hubInfo.preparedAt,
+      exampleGraphFileExists,
+    );
+
+    result.push(expandedMetadata);
   }
 
   return result;
@@ -165,54 +231,57 @@ export const excludeHiddenBlocks = (
   );
 };
 
-export const readBlockDataFromDisk = async ({
+export const retrieveBlockFileContent = async ({
   packagePath,
-  schema: metadataSchema,
-  source: metadataSource,
-  exampleGraph: metadataExampleGraph,
-}: ExpandedBlockMetadata) => {
-  // @todo update to also return the metadata information
-  // @see https://github.com/blockprotocol/blockprotocol/pull/66#discussion_r784070161
-
-  const schema = metadataSchema.startsWith(FRONTEND_URL)
+  schema: metadataSchemaUrl,
+  source: metadataSourceUrl,
+  exampleGraph: metadataExampleGraphUrl,
+}: ExpandedBlockMetadata): Promise<{
+  schema: JsonObject;
+  source: string;
+  exampleGraph: JsonObject | null;
+}> => {
+  const schema = metadataSchemaUrl.startsWith(FRONTEND_URL)
     ? JSON.parse(
         await fs.readFile(
           path.resolve(
             process.cwd(),
-            `public/blocks/${packagePath}/${metadataSchema.substring(
-              metadataSchema.lastIndexOf("/") + 1,
+            `public/blocks/${packagePath}/${metadataSchemaUrl.substring(
+              metadataSchemaUrl.lastIndexOf("/") + 1,
             )}`,
           ),
           { encoding: "utf8" },
         ),
       )
-    : await fetch(metadataSchema).then((response) => response.json());
+    : await fetch(metadataSchemaUrl).then((response) => response.json());
 
-  const source = metadataSource.startsWith(FRONTEND_URL)
+  const source = metadataSourceUrl.startsWith(FRONTEND_URL)
     ? await fs.readFile(
         path.resolve(
           process.cwd(),
-          `public/blocks/${packagePath}/${metadataSource.substring(
-            metadataSource.lastIndexOf("/") + 1,
+          `public/blocks/${packagePath}/${metadataSourceUrl.substring(
+            metadataSourceUrl.lastIndexOf("/") + 1,
           )}`,
         ),
         { encoding: "utf8" },
       )
-    : await fetch(metadataSource).then((response) => response.text());
+    : await fetch(metadataSourceUrl).then((response) => response.text());
 
   let exampleGraph = null;
 
-  if (metadataExampleGraph) {
-    exampleGraph = metadataExampleGraph.startsWith(FRONTEND_URL)
+  if (metadataExampleGraphUrl) {
+    exampleGraph = metadataExampleGraphUrl.startsWith(FRONTEND_URL)
       ? JSON.parse(
           fs.readFileSync(
-            `${process.cwd()}/public/blocks/${packagePath}/${metadataExampleGraph.substring(
-              metadataExampleGraph.lastIndexOf("/") + 1,
+            `${process.cwd()}/public/blocks/${packagePath}/${metadataExampleGraphUrl.substring(
+              metadataExampleGraphUrl.lastIndexOf("/") + 1,
             )}`,
             { encoding: "utf8" },
           ),
         )
-      : await fetch(metadataExampleGraph).then((response) => response.json());
+      : await fetch(metadataExampleGraphUrl).then((response) =>
+          response.json(),
+        );
   }
 
   return {

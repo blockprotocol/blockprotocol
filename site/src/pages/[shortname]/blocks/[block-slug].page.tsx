@@ -26,12 +26,12 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
+import { apiClient } from "../../../lib/api-client";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  readBlockDataFromDisk,
   readBlockReadmeFromDisk,
-  readBlocksFromDisk,
+  retrieveBlockFileContent,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
 
@@ -129,9 +129,7 @@ export const getStaticPaths: GetStaticPaths<
   BlockPageQueryParams
 > = async () => {
   return {
-    paths: (await readBlocksFromDisk()).map(
-      (metadata) => metadata.blockPackagePath,
-    ),
+    paths: [],
     fallback: "blocking",
   };
 };
@@ -182,9 +180,16 @@ export const getStaticProps: GetStaticProps<
   if (!shortname.startsWith("@")) {
     return { notFound: true };
   }
-
   const packagePath = `${shortname}/${blockSlug}`;
-  const catalog = await readBlocksFromDisk();
+
+  // This API endpoint relies on the user existing in the db, and it will not work when the JSON files in hub/
+  // are associated with users that haven't been created in your local db
+  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' API endpoint
+  const { data } = await apiClient.getUserBlocks({
+    shortname: shortname.replace(/^@/, ""),
+  });
+
+  const catalog = data?.blocks ?? [];
 
   const blockMetadata = catalog.find(
     (metadata) => metadata.packagePath === packagePath,
@@ -195,7 +200,9 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const { schema, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
+  const { schema, exampleGraph } = await retrieveBlockFileContent(
+    blockMetadata,
+  );
 
   const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
 

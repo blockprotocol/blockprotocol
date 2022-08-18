@@ -83,12 +83,12 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
     author,
     version,
     lastUpdated,
-    blockPackagePath,
+    blockSitePath,
     icon,
   } = data;
 
   return (
-    <Link data-testid="block-card" href={blockPackagePath}>
+    <Link data-testid="block-card" href={blockSitePath}>
       <Box
         sx={{
           ...blockWidthStyles,

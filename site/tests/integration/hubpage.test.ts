@@ -48,7 +48,7 @@ test("Block Card should contain key elements", async ({ page }) => {
 
   await expect(codeBlockLocator).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockPackagePath!,
+    codeBlockMetadata.blockSitePath!,
   );
 
   // there should be 2 images present => icon and preview image

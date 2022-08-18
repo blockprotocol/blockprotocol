@@ -22,7 +22,7 @@ test("Block page should contain key elements", async ({
   isMobile,
   browserName,
 }) => {
-  await page.goto(codeBlock.blockPackagePath);
+  await page.goto(codeBlock.blockSitePath);
 
   await expect(
     page.locator(`h1:has-text("${codeBlock.displayName!}")`),
@@ -113,7 +113,7 @@ test("should show an error message if an unsupported block is rendered", async (
   page,
   isMobile,
 }) => {
-  await page.goto(unsupportedBlock.blockPackagePath);
+  await page.goto(unsupportedBlock.blockSitePath);
 
   const blockExample = unsupportedBlock.examples![0] as Record<string, string>;
 
