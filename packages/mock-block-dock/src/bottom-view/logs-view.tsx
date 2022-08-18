@@ -5,7 +5,7 @@ import {
   MenuItem,
   Select,
   styled,
-  Typography,
+  Typography
 } from "@mui/material";
 import {
   Dispatch,
@@ -14,7 +14,7 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from "react";
 
 import { JsonView } from "../json-view";
@@ -31,16 +31,16 @@ type Props = {
 type LogItemProps = {
   onClick: (activeLog: Log) => void;
   log: Log;
+  isActive: boolean;
 };
 
-const LogItem = ({ onClick, log }: LogItemProps) => {
+const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
   return (
     <Box
       sx={{
-        color: "white",
         mb: 0.5,
         display: "flex",
-        whiteSpace: "nowrap",
+        whiteSpace: "nowrap"
       }}
     >
       [{log.timestamp}]
@@ -52,7 +52,7 @@ const LogItem = ({ onClick, log }: LogItemProps) => {
           color:
             log.service === "core"
               ? palette.primary.main
-              : palette.secondary.main,
+              : palette.secondary.main
         })}
       >
         [{log.service}]
@@ -61,10 +61,11 @@ const LogItem = ({ onClick, log }: LogItemProps) => {
       <Box
         component="span"
         onClick={() => onClick(log)}
-        sx={{
+        sx={({ palette }) => ({
           textDecoration: "underline",
           cursor: "pointer",
-        }}
+          ...(isActive && { color: palette.primary.main })
+        })}
       >
         [{log.requestId.slice(0, 4)}]
       </Box>
@@ -73,47 +74,48 @@ const LogItem = ({ onClick, log }: LogItemProps) => {
 };
 
 const LogsContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: "black",
+  backgroundColor: theme.palette.background.default,
+  border: `1px solid ${theme.palette.divider}`,
   height: 350,
   overflowY: "auto",
   padding: theme.spacing(3),
   flex: 1,
-  position: "relative",
+  position: "relative"
 }));
 
 const ScrollToEndBtn = styled(Box)(() => ({
   position: "absolute",
-  color: "white",
   bottom: 8,
-  right: 8,
+  right: 8
 }));
 
 const ActiveLogsContainer = styled(Box)(({ theme }) => ({
-  color: "black",
   marginLeft: theme.spacing(3),
   width: 500,
   display: "flex",
   flexDirection: "column",
+  backgroundColor: theme.palette.background.default,
+  border: `1px solid ${theme.palette.divider}`,
 
   "& > div": {
     flex: 1,
     width: "100%",
     maxHeight: 400,
-    overflowY: "scroll",
-  },
+    overflowY: "scroll"
+  }
 }));
 
 export const LogsView = ({ logs, setLogs }: Props) => {
   const [activeLog, setActiveLog] = useState<Log>();
   const [filters, setFilters] = useState({
     source: "all",
-    service: "all",
+    service: "all"
   });
   const [scrolled, setScrolled] = useState(true);
   const logsContainerRef = useRef<HTMLElement>();
 
   const filteredLogs = useMemo(() => {
-    return logs.filter((log) => {
+    return logs.filter(log => {
       const hasSource =
         filters.source === "all" ? true : log.source === filters.source;
       const hasService =
@@ -164,7 +166,7 @@ export const LogsView = ({ logs, setLogs }: Props) => {
   const scrollToLogContainerEnd = () => {
     logsContainerRef.current?.scrollTo(
       0,
-      logsContainerRef.current?.scrollHeight,
+      logsContainerRef.current?.scrollHeight
     );
     setScrolled(false);
   };
@@ -181,8 +183,8 @@ export const LogsView = ({ logs, setLogs }: Props) => {
             size="small"
             value={filters.service}
             sx={{ mr: 1 }}
-            onChange={(evt) =>
-              setFilters((prev) => ({ ...prev, service: evt.target.value }))
+            onChange={evt =>
+              setFilters(prev => ({ ...prev, service: evt.target.value }))
             }
           >
             <MenuItem value="all">---</MenuItem>
@@ -195,8 +197,8 @@ export const LogsView = ({ logs, setLogs }: Props) => {
           <Select
             size="small"
             value={filters.source}
-            onChange={(evt) =>
-              setFilters((prev) => ({ ...prev, source: evt.target.value }))
+            onChange={evt =>
+              setFilters(prev => ({ ...prev, source: evt.target.value }))
             }
           >
             <MenuItem value="all">---</MenuItem>
@@ -209,11 +211,15 @@ export const LogsView = ({ logs, setLogs }: Props) => {
       <Box display="flex" mb={3}>
         <LogsContainer ref={logsContainerRef}>
           <Box>
-            {filteredLogs.map((log) => (
+            {filteredLogs.map(log => (
               <LogItem
                 key={`${log.requestId}_${log.source}`}
                 log={log}
                 onClick={setActiveLog}
+                isActive={
+                  log.requestId === activeLog?.requestId &&
+                  log.source === activeLog.source
+                }
               />
             ))}
           </Box>
@@ -227,11 +233,17 @@ export const LogsView = ({ logs, setLogs }: Props) => {
         </LogsContainer>
 
         <ActiveLogsContainer>
-          <JsonView
-            collapseKeys={["data"]}
-            rootName={activeLog?.requestId ?? "activeLog"}
-            src={activeLog ?? {}}
-          />
+          {activeLog ? (
+            <JsonView
+              collapseKeys={["data"]}
+              rootName={activeLog?.requestId ?? "activeLog"}
+              src={activeLog ?? {}}
+            />
+          ) : (
+            <Typography component="em" p={3}>
+              Select a request id to view the full details
+            </Typography>
+          )}
         </ActiveLogsContainer>
       </Box>
 
