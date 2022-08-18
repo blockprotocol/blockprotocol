@@ -136,7 +136,8 @@ const enhanceBlockMetadata = (
     blockSitePath: `/${packagePath.split("/").join("/blocks/")}`,
     // fallback while not all blocks have blockType defined
     blockType: metadata.blockType ?? { entryPoint: "react" },
-    componentId: `${FRONTEND_URL}/blocks/${packagePath}`,
+    // @todo figure out what we're going to use for the unique block Ids
+    componentId: `${blockDistributionFolderUrl}/blocks/${packagePath}`,
     // @todo should be redundant to block's package.json#name
     icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
     image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),

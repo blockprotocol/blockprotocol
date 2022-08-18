@@ -22,7 +22,7 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' API endpoint
+  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' method on a new Block model
   const { data } = await apiClient.getUserBlocks({
     shortname: (req.query.shortname as string).replace(/^@/, ""),
   });

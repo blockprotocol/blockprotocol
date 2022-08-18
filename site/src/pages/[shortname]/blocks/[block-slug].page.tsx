@@ -184,7 +184,7 @@ export const getStaticProps: GetStaticProps<
 
   // This API endpoint relies on the user existing in the db, and it will not work when the JSON files in hub/
   // are associated with users that haven't been created in your local db
-  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' API endpoint
+  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' method on a new Block model
   const { data } = await apiClient.getUserBlocks({
     shortname: shortname.replace(/^@/, ""),
   });
