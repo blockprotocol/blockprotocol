@@ -51,3 +51,11 @@ var
 
 # Sentry
 .sentryclirc
+
+# Rust specific
+crates/**/target
+crates/**/*.rs.bk
+crates/**/Cargo.lock
+crates/**/bin/
+crates/**/pkg/
+crates/**/wasm-pack.log
