@@ -35,7 +35,7 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.8",
+    "@blockprotocol/core": "0.0.9-canary.1",
     "@blockprotocol/graph": "0.0.12",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",

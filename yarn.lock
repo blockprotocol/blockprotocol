@@ -1968,6 +1968,14 @@
     "@babel/helper-validator-identifier" "^7.18.6"
     to-fast-properties "^2.0.0"
 
+"@blockprotocol/core@0.0.9-canary.1":
+  version "0.0.9-canary.1"
+  resolved "https://registry.yarnpkg.com/@blockprotocol/core/-/core-0.0.9-canary.1.tgz#99c6b5c61b7a72cba87622ea262229b080be8a50"
+  integrity sha512-5Jp0rT7inHmjjogdTqNQUa3n10REV5TCjCREc98+movtHOdOctRvh8p672okTIehlD+Dkrep5wagunDi4b5b+Q==
+  dependencies:
+    es-module-lexer "^0.10.5"
+    uuid "^8.3.2"
+
 "@changesets/apply-release-plan@^6.0.4":
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/@changesets/apply-release-plan/-/apply-release-plan-6.0.4.tgz#c08628cf5381be1aad3de69e255c68f658b4ca1a"
@@ -3478,19 +3486,10 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=16", "@types/react@^18.0.15":
+"@types/react@*", "@types/react@>=16", "@types/react@^17.0.39", "@types/react@^18.0.0", "@types/react@^18.0.15":
   version "18.0.17"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.17.tgz#4583d9c322d67efe4b39a935d223edcc7050ccf4"
   integrity sha512-38ETy4tL+rn4uQQi7mB81G7V1g0u2ryquNmsVIOKUAEIDK+3CUjZ6rSRpdvS99dNBnkLFL83qfmtLacGOTIhwQ==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
-"@types/react@^17.0.39":
-  version "17.0.48"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.48.tgz#a4532a8b91d7b27b8768b6fc0c3bccb760d15a6c"
-  integrity sha512-zJ6IYlJ8cYYxiJfUaZOQee4lh99mFihBoqkOSEGV+dFi9leROW6+PgstzQ+w3gWTnUfskALtQPGHK6dYmPj+2A==
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"

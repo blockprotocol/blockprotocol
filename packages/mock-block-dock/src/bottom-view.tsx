@@ -3,7 +3,7 @@
 import { Message } from "@blockprotocol/core/dist/esm/types";
 import {
   KeyboardDoubleArrowDown,
-  KeyboardDoubleArrowUp
+  KeyboardDoubleArrowUp,
 } from "@mui/icons-material";
 import {
   Box,
@@ -12,7 +12,7 @@ import {
   styled,
   Tab,
   Tabs,
-  Typography
+  Typography,
 } from "@mui/material";
 import {
   Dispatch,
@@ -20,7 +20,7 @@ import {
   SetStateAction,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 
 import { DataStoreView } from "./bottom-view/datastore-view";
@@ -57,7 +57,7 @@ const TabPanel = (props: TabPanelProps) => {
 const a11yProps = (index: number) => {
   return {
     id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 };
 
@@ -73,7 +73,7 @@ const Container = styled(Paper)(({ theme }) => ({
   boxShadow: theme.shadows[4],
   transition: theme.transitions.create("height"),
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 }));
 
 // @todo: fix types
@@ -87,7 +87,7 @@ type BottomViewProps = {
 export const BottomView = ({
   propsToInject,
   datastore,
-  setReadonly
+  setReadonly,
 }: BottomViewProps) => {
   const [value, setValue] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -97,10 +97,7 @@ export const BottomView = ({
   useEffect(() => {
     const handler = (event: Event) => {
       const detail = (event as CustomEvent<Message>).detail;
-      setLogs(prev => [
-        ...prev,
-        { ...detail, timestamp: new Date().toISOString() }
-      ]);
+      setLogs((prev) => [...prev, { ...detail }]);
     };
 
     // @todo store event name in constant or pull from CoreHandler
@@ -115,7 +112,7 @@ export const BottomView = ({
     <Container
       ref={containerRef}
       sx={{
-        ...(minimized && { height: 50 })
+        ...(minimized && { height: 50 }),
       }}
     >
       <Box
@@ -124,7 +121,7 @@ export const BottomView = ({
           zIndex: 5,
           display: "flex",
           justifyContent: "space-between",
-          height: 50
+          height: 50,
         }}
       >
         <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
@@ -150,7 +147,7 @@ export const BottomView = ({
 
         <IconButton
           onClick={() => {
-            setMinimized(prev => !prev);
+            setMinimized((prev) => !prev);
           }}
         >
           {minimized ? <KeyboardDoubleArrowUp /> : <KeyboardDoubleArrowDown />}
@@ -159,7 +156,7 @@ export const BottomView = ({
       <Box
         sx={{
           flex: 1,
-          overflowY: "scroll"
+          overflowY: "scroll",
         }}
       >
         <TabPanel value={value} index={0}>

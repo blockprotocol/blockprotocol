@@ -55,7 +55,7 @@
     "prepare": "yarn build"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.8",
+    "@blockprotocol/core": "0.0.9-canary.1",
     "lit": "^2.2.5"
   },
   "devDependencies": {
