@@ -1,9 +1,10 @@
 // @todo rename
 
+import { Message } from "@blockprotocol/core/dist/esm/types";
 import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
 import { ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { LogsView } from "./bottom-view/logs-view";
+import { Log, LogsView } from "./bottom-view/logs-view";
 import { JsonView } from "./json-view";
 import { SIDEBAR_WIDTH } from "./layout";
 
@@ -41,6 +42,7 @@ const a11yProps = (index: number) => {
 };
 
 // @todo add resize functionality
+// @todo consider using context
 
 export const BottomView = ({
   propsToInject,
@@ -50,16 +52,14 @@ export const BottomView = ({
 }) => {
   const [value, setValue] = useState(2);
   const containerRef = useRef<HTMLElement>();
-  const [logs, setLogs] = useState([]);
-  const [activeLog, setActiveLog] = useState({});
-  const [scrolled, setScrolled] = useState(true);
-  const logsContainerRef = useRef<HTMLElement>();
+  const [logs, setLogs] = useState<Log[]>([]);
 
   useEffect(() => {
-    const handler = (stuff) => {
+    const handler = (event: Event) => {
+      const detail = (event as CustomEvent<Message>).detail;
       setLogs((prev) => [
         ...prev,
-        { ...stuff.detail, timestamp: new Date().toISOString() },
+        { ...detail, timestamp: new Date().toISOString() },
       ]);
     };
 
@@ -70,21 +70,6 @@ export const BottomView = ({
       window.removeEventListener("blockprotocolmessage", handler);
     };
   }, []);
-
-  useLayoutEffect(() => {
-    if (!logsContainerRef.current) {
-      return;
-    }
-    const { offsetHeight, scrollTop, scrollHeight } = logsContainerRef.current;
-
-    if (scrollHeight === offsetHeight + scrollTop) {
-      return;
-    }
-
-    if (scrolled && scrollHeight > offsetHeight + scrollTop && logs.length) {
-      setScrolled(false);
-    }
-  }, [logs, scrolled]);
 
   return (
     <Box
@@ -170,7 +155,7 @@ export const BottomView = ({
         />
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <LogsView />
+        <LogsView logs={logs} setLogs={setLogs} />
       </TabPanel>
     </Box>
   );

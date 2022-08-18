@@ -7,7 +7,7 @@ import {
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { Box, createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   ComponentType,
   FunctionComponent,
@@ -18,7 +18,6 @@ import {
 
 import { BlockRenderer } from "./block-renderer";
 import { BottomView } from "./bottom-view";
-import { JsonView } from "./json-view";
 import { Layout } from "./layout";
 import { useMockBlockProps } from "./use-mock-block-props";
 
@@ -45,8 +44,6 @@ type MockBlockDockProps = {
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
 };
-
-const theme = createTheme();
 
 /**
  * A component which acts as a mock embedding application for Block Protocol blocks.
@@ -94,6 +91,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     null,
   );
   const [debugReadonly, setDebugReadonly] = useState<boolean>(!!readonly);
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const prevReadonly = useRef<boolean | undefined>(readonly);
 
@@ -197,35 +195,28 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   return (
     <Layout>
       <Box>
-        <div style={{ fontFamily: "sans-serif" }}>
-          <div style={{ padding: 30 }}>
-            <div style={{ padding: 15, border: "1px dashed black" }}>
-              <div ref={wrapperRef}>
-                {graphService ? (
-                  <BlockRenderer
-                    customElement={
-                      "customElement" in blockDefinition
-                        ? blockDefinition.customElement
-                        : undefined
-                    }
-                    html={
-                      "html" in blockDefinition
-                        ? blockDefinition.html
-                        : undefined
-                    }
-                    properties={propsToInject}
-                    ReactComponent={
-                      "ReactComponent" in blockDefinition
-                        ? blockDefinition.ReactComponent
-                        : undefined
-                    }
-                  />
-                ) : null}
-              </div>
-            </div>
+        <Box padding={3.75}>
+          <div ref={wrapperRef}>
+            {graphService ? (
+              <BlockRenderer
+                customElement={
+                  "customElement" in blockDefinition
+                    ? blockDefinition.customElement
+                    : undefined
+                }
+                html={
+                  "html" in blockDefinition ? blockDefinition.html : undefined
+                }
+                properties={propsToInject}
+                ReactComponent={
+                  "ReactComponent" in blockDefinition
+                    ? blockDefinition.ReactComponent
+                    : undefined
+                }
+              />
+            ) : null}
           </div>
-        </div>
-        <Box height={400} />
+        </Box>
       </Box>
 
       <BottomView

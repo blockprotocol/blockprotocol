@@ -6,7 +6,6 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material";
-import { palette } from "@mui/system";
 import { ReactNode } from "react";
 
 const theme = createTheme();
