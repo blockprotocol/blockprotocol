@@ -100,21 +100,25 @@ export class Block {
     return new Block({ _id, ...block });
   }
 
-  static async getAll(db: Db): Promise<ExpandedBlockMetadata[]> {
-    const blocksFromDb = await db
-      .collection<BlockDbProperties>(this.COLLECTION_NAME)
-      .find({})
-      .toArray()
-      .then((docs) => docs.map((doc) => new Block(doc)));
+  static async getAll(_db: Db): Promise<ExpandedBlockMetadata[]> {
+    // const blocksFromDb = await db
+    //   .collection<BlockDbProperties>(this.COLLECTION_NAME)
+    //   .find({})
+    //   .toArray()
+    //   .then((docs) => docs.map((doc) => new Block(doc)));
 
-    return [...localBlocks, ...blocksFromDb];
+    // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
+    return localBlocks as ExpandedBlockMetadata[];
   }
 
   static async getAllByUser(
     db: Db,
     params: { user: User },
   ): Promise<ExpandedBlockMetadata[]> {
-    return localBlocks.filter(({ author }) => author === params.user.shortname);
+    // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
+    return localBlocks.filter(
+      ({ author }) => author === params.user.shortname,
+    ) as ExpandedBlockMetadata[];
 
     // return await db
     //   .collection<Block>(this.COLLECTION_NAME)
@@ -138,9 +142,10 @@ export class Block {
       name,
       user: { shortname },
     } = params;
-    return localBlocks.filter(
+    // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
+    return (localBlocks.filter(
       ({ packagePath }) => packagePath === `@${shortname}/${name}`,
-    );
+    )?.[0] ?? null) as ExpandedBlockMetadata | null;
 
     // const block = await db
     //   .collection<BlockDbProperties>(this.COLLECTION_NAME)
