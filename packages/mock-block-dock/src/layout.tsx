@@ -1,14 +1,16 @@
+import { DarkMode, LightMode } from "@mui/icons-material";
 import {
   Box,
   createTheme,
   CssBaseline,
+  Drawer,
+  IconButton,
   styled,
+  Switch,
   ThemeProvider,
-  Typography,
+  Typography
 } from "@mui/material";
-import { ReactNode } from "react";
-
-const theme = createTheme();
+import { ReactNode, useState } from "react";
 
 type LayoutProps = {
   children: ReactNode;
@@ -21,17 +23,11 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
   position: "sticky",
   top: 0,
   zIndex: 5,
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.background.default,
   display: "flex",
   alignItems: "center",
   paddingLeft: theme.spacing(3),
-  // @todo:  confirm if box shadow is needed
-  boxShadow: theme.shadows[1],
-}));
-
-const SidebarContainer = styled(Box)(({ theme }) => ({
-  width: SIDEBAR_WIDTH,
-  background: theme.palette.grey[100],
+  borderBottom: `1px solid ${theme.palette.divider}`
 }));
 
 export const MainContainer = styled(Box)(() => ({
@@ -40,20 +36,48 @@ export const MainContainer = styled(Box)(() => ({
   flex: 1,
   overflowY: "scroll",
   position: "relative",
+  marginLeft: SIDEBAR_WIDTH
 }));
 
+const darkTheme = createTheme({
+  palette: {
+    mode: "dark"
+  }
+});
+
+const lightTheme = createTheme({
+  palette: {
+    mode: "light"
+  }
+});
+
 export const Layout = ({ children }: LayoutProps) => {
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={!darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Box height="100vh" display="flex">
-        <SidebarContainer>
+        <Drawer
+          variant="persistent"
+          open
+          PaperProps={{
+            sx: {
+              width: SIDEBAR_WIDTH
+            }
+          }}
+        >
           <Typography mt={4} pl={2}>
             Mock Block Dock
           </Typography>
-        </SidebarContainer>
+        </Drawer>
         <MainContainer component="main">
-          <HeaderContainer>Header</HeaderContainer>
+          <HeaderContainer>
+            <IconButton onClick={() => setDarkMode(prev => !prev)}>
+              {darkMode ? <LightMode /> : <DarkMode />}
+            </IconButton>
+            {/* zoom */}
+          </HeaderContainer>
           <Box flex={1}>{children}</Box>
         </MainContainer>
       </Box>
