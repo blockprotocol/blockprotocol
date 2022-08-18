@@ -112,7 +112,6 @@ const Socials = (
         <Link
           href={href}
           key={href}
-          prefetch={false}
           sx={{
             padding: 1.5,
             ...(index === 0 && { paddingLeft: 0 }),

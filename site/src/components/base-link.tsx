@@ -13,9 +13,9 @@ import { FRONTEND_URL } from "../lib/config";
 
 export const isHrefExternal = (href: string | UrlObject) =>
   typeof href === "string" &&
-  (href === "/discord" ||
-    !/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href)) &&
-  !href.startsWith(FRONTEND_URL);
+  (href.endsWith("/discord") ||
+    (!/^(mailto:|#|\/|https:\/\/blockprotocol\.org)/.test(href) &&
+      !href.startsWith(FRONTEND_URL)));
 
 export interface BaseLinkProps extends Omit<NextLinkProps, "passHref"> {
   children: ReactElement | string | number;
@@ -34,9 +34,10 @@ export const BaseLink: FunctionComponent<BaseLinkProps> = ({
 }) => {
   const child = Children.only(children);
 
+  const external = isHrefExternal(href);
   const properties = {
     "data-testid": rest["data-testid"],
-    ...(isHrefExternal(href) && {
+    ...(external && {
       rel: "noopener",
       target: "_blank",
     }),
@@ -47,7 +48,13 @@ export const BaseLink: FunctionComponent<BaseLinkProps> = ({
     : child;
 
   return (
-    <NextLink {...rest} passHref href={href}>
+    <NextLink
+      {...rest}
+      // Setting to true triggers Next.js warning: https://nextjs.org/docs/messages/prefetch-true-deprecated
+      prefetch={external ? false : undefined}
+      passHref
+      href={href}
+    >
       {fixedChild}
     </NextLink>
   );
