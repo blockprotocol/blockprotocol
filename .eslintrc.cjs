@@ -218,6 +218,13 @@ module.exports = {
       },
     },
     {
+      files: ["packages/**/*.test.{j,t}s{x,}"],
+      env: {
+        jest: true,
+        node: true,
+      },
+    },
+    {
       // plugin does not support .js file extensions in .ts files, which ESM TS projects require
       // https://github.com/import-js/eslint-plugin-import/issues/2446
       files: ["packages/@blockprotocol/graph/**"],

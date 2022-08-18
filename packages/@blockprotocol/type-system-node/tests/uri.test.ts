@@ -1,4 +1,4 @@
-import { BaseUri, VersionedUri } from "@blockprotocol/type-system-node";
+import { BaseUri, VersionedUri } from "..";
 
 describe("BaseURI Class", () => {
   test.each([
@@ -22,7 +22,11 @@ describe("BaseURI Class", () => {
     "example",
     "https://example.com:demo",
     "http://[www.example.com]/",
-  ])("`new BaseUri(%s)` errors", (input) => {});
+  ])("`new BaseUri(%s)` errors", (input) => {
+    expect(() => {
+      const _ = new BaseUri(input);
+    }).toThrow();
+  });
 });
 
 describe("VersionedUri Class", () => {
@@ -45,7 +49,7 @@ describe("VersionedUri Class", () => {
   // @todo: this test ideally should fail, but currently the number is Math.floored into an integer silently
   test.skip("errors on invalid URIs", () => {
     expect(() => {
-      new VersionedUri(baseUri, 0.2);
+      const _ = new VersionedUri(baseUri, 0.2);
     }).toThrow();
   });
 });
