@@ -387,7 +387,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
             {compiledReadme ? (
               <Box
                 sx={{
-                  "& > h1:first-child": {
+                  "& > h1:first-of-type": {
                     marginTop: 0,
                   },
                 }}
