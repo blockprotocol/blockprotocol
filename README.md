@@ -75,3 +75,5 @@ Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
 - [Ciaran Morinan](https://github.com/CiaranMn) - HASH ([profile](https://hash.ai/@ciaran))
 - [Joel Spolsky](https://github.com/jspolsky) - HASH ([profile](https://hash.ai/@spolsky))
+
+.
