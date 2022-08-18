@@ -1,5 +1,5 @@
 {
-  "name": "@blockprotocol/type-system",
+  "name": "@blockprotocol/type-system-web",
   "version": "0.0.0",
   "description": "Definitions of types within the Block Protocol Type System",
   "homepage": "https://blockprotocol.org",
@@ -11,6 +11,9 @@
   "author": {
     "name": "HASH",
     "url": "https://hash.ai"
+  },
+  "scripts": {
+    "lint:tsc": "tsc --noEmit"
   },
   "sideEffects": false,
   "module": "src/index.js",
