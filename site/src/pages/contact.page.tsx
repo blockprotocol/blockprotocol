@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control -- the lint rule requires <input/> fields to be children of their associated <label/>s */
-
 import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import Head from "next/head";
