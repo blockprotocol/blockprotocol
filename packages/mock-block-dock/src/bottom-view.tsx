@@ -121,6 +121,7 @@ export const BottomView = ({
           zIndex: 5,
           display: "flex",
           justifyContent: "space-between",
+          alignItems: "center",
           height: 50,
         }}
       >

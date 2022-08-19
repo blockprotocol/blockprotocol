@@ -102,7 +102,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       ? "custom-element"
       : "html" in blockDefinition
       ? "html"
-      : null;
+      : undefined;
 
   const propsToInject: BlockGraphProperties<any> = {
     graph: {

@@ -18,7 +18,7 @@ export const JsonView = ({
         backgroundColor: palette.background.default,
         padding: 2,
         border: `1px solid ${palette.divider}`,
-        width: "100%"
+        width: "100%",
       })}
     >
       <ReactJson

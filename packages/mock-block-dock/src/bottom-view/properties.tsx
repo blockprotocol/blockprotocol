@@ -21,7 +21,7 @@ export const PropertiesView = ({ properties, setReadonly }: Props) => {
       <Grid item xs={9}>
         <Switch
           checked={properties.readonly}
-          onChange={evt => setReadonly(evt.target.checked)}
+          onChange={(evt) => setReadonly(evt.target.checked)}
         />
       </Grid>
       <Grid item xs={3} textAlign="right">

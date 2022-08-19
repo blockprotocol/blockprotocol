@@ -47,7 +47,7 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
       <Box
         component="span"
         sx={({ palette }) => ({
-          ml: 1,
+          ml: 1.5,
           mr: 1,
           color:
             log.service === "core"
