@@ -1,79 +1,10 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { Box, BoxProps, Link, Typography } from "@mui/material";
-import { FunctionComponent, ReactNode } from "react";
+import { Box, BoxProps, Typography } from "@mui/material";
+import { FunctionComponent } from "react";
 
-import { ArrowRightIcon, FontAwesomeIcon } from "../../../icons";
-
-// Link Wrapper
-interface LinkWrapperProps {
-  title: string;
-  bold?: boolean;
-}
-
-export const LinkWrapper = ({ title, bold }: LinkWrapperProps) => {
-  return (
-    <Box
-      sx={{
-        color: ({ palette }) => palette.purple[700],
-        fontWeight: bold ? 600 : 400,
-        path: {
-          fill: "currentColor",
-        },
-        display: "flex",
-        alignItems: "center",
-        mt: "auto",
-      }}
-    >
-      <Box component="span" paddingRight={1}>
-        {title}
-      </Box>
-      <ArrowRightIcon
-        className="arrow-right-icon"
-        sx={(theme) => ({
-          width: "auto",
-          height: "0.8em",
-          transition: theme.transitions.create("transform"),
-        })}
-      />
-    </Box>
-  );
-};
-
-// Card Wrapper
-
-const focusOutlineStyle: BoxProps["sx"] = {
-  "&:focus-visible": {
-    outline: ({ palette }) => `1px solid ${palette.purple[700]}`,
-  },
-};
-
-type CardWrapperProps = {
-  children?: ReactNode;
-  href?: string;
-  onClick?: () => void;
-};
-
-export const CardWrapper: FunctionComponent<CardWrapperProps> = ({
-  children,
-  onClick,
-  href,
-}) => {
-  if (onClick) {
-    return (
-      <Box component="button" onClick={onClick} sx={focusOutlineStyle}>
-        {children}
-      </Box>
-    );
-  }
-
-  return (
-    <Link href={href} sx={focusOutlineStyle}>
-      {children}
-    </Link>
-  );
-};
-
-// Dashboard Card
+import { FontAwesomeIcon } from "../../../icons";
+import { CardWrapper } from "./card-wrapper";
+import { LinkWrapper } from "./link-wrapper";
 
 const cardContainerSharedStyles: BoxProps["sx"] = {
   display: "flex",
