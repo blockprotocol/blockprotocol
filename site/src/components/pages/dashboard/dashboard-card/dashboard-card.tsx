@@ -35,6 +35,12 @@ const cardContainerSharedStyles: BoxProps["sx"] = {
   },
 };
 
+const iconStyle: SvgIconProps["sx"] = {
+  fontSize: 32,
+  mr: 3,
+  color: ({ palette }) => palette.gray[40],
+};
+
 export type DashboardCardProps = {
   title: string;
   colorGradient?: string;
@@ -48,12 +54,6 @@ export type DashboardCardProps = {
   icon?: IconDefinition;
   CustomIcon?: FunctionComponent<SvgIconProps>;
   variant?: "primary" | "secondary";
-};
-
-const iconStyle: SvgIconProps["sx"] = {
-  fontSize: 32,
-  mr: 3,
-  color: ({ palette }) => palette.gray[40],
 };
 
 const DashboardCardSecondary: FunctionComponent<
