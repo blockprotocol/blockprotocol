@@ -30,6 +30,7 @@ export type BlockMetadataOnDisk = BlockMetadata & {
  * Relative file URLs are rewritten to be absolute, and other fields are added
  */
 export type ExpandedBlockMetadata = BlockMetadata & {
+  createdAt?: Date;
   // the block's URL on blockprotocol.org
   blockSitePath: string;
   // the folder where the block's assets are stored, currently doubling up as a unique identifier for the block
@@ -38,8 +39,9 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // an absolute URL to example-graph.json, if it exists
   exampleGraph?: string | null;
   lastUpdated?: string | null;
+  npmPackageName?: string | null;
   // @[namespace]/[block-path] - unique identifier per block (across all versions)
-  packagePath: string;
+  pathWithNamespace: string;
   // the repository URL as a string (including commit and folder info where appropriate)
   repository?: string;
   // metadata.schema rewritten to be an absolute URL
@@ -108,7 +110,7 @@ const enhanceBlockMetadata = (
   metadata: BlockMetadata,
   source: {
     blockDistributionFolderUrl: string;
-    packagePath: string;
+    pathWithNamespace: string;
     repoUrl: string;
     repoCommit: string;
     repoDirectory?: string;
@@ -118,7 +120,7 @@ const enhanceBlockMetadata = (
 ): ExpandedBlockMetadata => {
   const {
     blockDistributionFolderUrl,
-    packagePath,
+    pathWithNamespace,
     repoUrl,
     repoCommit,
     repoDirectory,
@@ -130,17 +132,24 @@ const enhanceBlockMetadata = (
     repoDirectory,
   )?.replace(/\/$/, "");
 
+  const [namespace, name] = pathWithNamespace.split("/");
+
+  if (!namespace || !name) {
+    throw new Error(`Malformed pathWithNamespace ${pathWithNamespace}`);
+  }
+
   return {
     ...metadata,
-    author: packagePath.split("/")[0]!.replace(/^@/, ""),
-    blockSitePath: `/${packagePath.split("/").join("/blocks/")}`,
+    author: namespace.replace(/^@/, ""),
+    name,
+    blockSitePath: `/ ${namespace}/blocks/${name}`,
     // fallback while not all blocks have blockType defined
     blockType: metadata.blockType ?? { entryPoint: "react" },
     // @todo figure out what we're going to use for the unique block Ids
-    componentId: `${blockDistributionFolderUrl}/blocks/${packagePath}`,
+    componentId: `${blockDistributionFolderUrl}/blocks/${pathWithNamespace}`,
     icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
     image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),
-    packagePath,
+    pathWithNamespace,
     repository,
     schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
@@ -158,7 +167,7 @@ const enhanceBlockMetadata = (
 };
 
 /**
- * used to read and enhance block metadata from disk.
+ * used  to read and enhance block metadata from disk.
  */
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
@@ -169,7 +178,7 @@ export const readBlocksFromDisk = async (): Promise<
 
   const result: ExpandedBlockMetadata[] = [];
   for (const blockMetadataFilePath of blockMetadataFilePaths) {
-    const packagePath = blockMetadataFilePath
+    const pathWithNamespace = blockMetadataFilePath
       .split("/")
       .slice(-3, -1)
       .join("/");
@@ -182,7 +191,7 @@ export const readBlocksFromDisk = async (): Promise<
     );
 
     const storedBlockInfo: StoredBlockInfo = await fs.readJson(
-      path.resolve(process.cwd(), `../hub/${packagePath}.json`),
+      path.resolve(process.cwd(), `../hub/${pathWithNamespace}.json`),
       { encoding: "utf8" },
     );
 
@@ -193,13 +202,13 @@ export const readBlocksFromDisk = async (): Promise<
       ),
     );
 
-    const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${packagePath}`;
+    const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${pathWithNamespace}`;
 
     const expandedMetadata: ExpandedBlockMetadata = enhanceBlockMetadata(
       partialMetadata,
       {
         blockDistributionFolderUrl,
-        packagePath,
+        pathWithNamespace,
         repoCommit: storedBlockInfo.commit,
         repoDirectory: partialMetadata.unstable_hubInfo?.directory,
         repoUrl: storedBlockInfo.repository,
@@ -216,23 +225,23 @@ export const readBlocksFromDisk = async (): Promise<
 
 // Blocks which are currently not compliant with the spec, and are thus misleading examples
 const blocksToHide = [
-  "@hash/callout",
+  "@hash/ callout",
   "@hash/embed",
   "@hash/header",
   "@hash/paragraph",
 ];
 
-/** Helps consistently hide certain blocks from the hub and user profile pages */
+/** Hel ps consistently hide certain blocks from the hub and user profile pages */
 export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
-    ({ packagePath }) => !blocksToHide.includes(packagePath),
+    ({ pathWithNamespace }) => !blocksToHide.includes(pathWithNamespace),
   );
 };
 
 export const retrieveBlockFileContent = async ({
-  packagePath,
+  pathWithNamespace,
   schema: metadataSchemaUrl,
   source: metadataSourceUrl,
   exampleGraph: metadataExampleGraphUrl,
@@ -246,7 +255,7 @@ export const retrieveBlockFileContent = async ({
         await fs.readFile(
           path.resolve(
             process.cwd(),
-            `public/blocks/${packagePath}/${metadataSchemaUrl.substring(
+            `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
               metadataSchemaUrl.lastIndexOf("/") + 1,
             )}`,
           ),
@@ -259,7 +268,7 @@ export const retrieveBlockFileContent = async ({
     ? await fs.readFile(
         path.resolve(
           process.cwd(),
-          `public/blocks/${packagePath}/${metadataSourceUrl.substring(
+          `public/blocks/${pathWithNamespace}/${metadataSourceUrl.substring(
             metadataSourceUrl.lastIndexOf("/") + 1,
           )}`,
         ),
@@ -273,7 +282,7 @@ export const retrieveBlockFileContent = async ({
     exampleGraph = metadataExampleGraphUrl.startsWith(FRONTEND_URL)
       ? JSON.parse(
           fs.readFileSync(
-            `${process.cwd()}/public/blocks/${packagePath}/${metadataExampleGraphUrl.substring(
+            `${process.cwd()}/public/blocks/${pathWithNamespace}/${metadataExampleGraphUrl.substring(
               metadataExampleGraphUrl.lastIndexOf("/") + 1,
             )}`,
             { encoding: "utf8" },
@@ -297,7 +306,7 @@ export const readBlockReadmeFromDisk = async (
   try {
     return fs.readFileSync(
       `${process.cwd()}/public/blocks/${
-        blockMetadata.packagePath
+        blockMetadata.pathWithNamespace
       }/README.vercel-hack.md`,
       "utf8",
     );

@@ -1,103 +1,64 @@
-import { Db, ObjectId, WithId } from "mongodb";
+import { BlockVariant, JsonObject } from "@blockprotocol/core";
+import { BlockType } from "@blockprotocol/core/dist/esm/types";
+import { Db } from "mongodb";
 
 import localBlocks from "../../../../blocks-data.json" assert { type: "json" };
 import { ExpandedBlockMetadata } from "../../blocks";
 import { User } from "./user.model";
 
-const BUCKET_BASE_URL =
-  "https://c6499786332a3d2fb35419a7803ab7aa.r2.cloudflarestorage.com/blocks";
-
-type BlockSourceProperties = {
-  registry: "npm";
-  repository: string;
-};
-
-type BlockDbProperties = {
-  assetFolderPath: string;
-  blockName: string;
-  blockNamespace: string;
-  createdAt: Date;
-  lastBuiltAt: Date | null;
-  metadata?: ExpandedBlockMetadata | null;
-  source: BlockSourceProperties;
-  updatedAt: Date;
-};
-
-export class Block {
-  _id: ObjectId;
-  assetFolderPath: string;
-  blockName: string;
-  blockNamespace: string;
-  metadata?: ExpandedBlockMetadata | null;
-  createdAt: Date;
-  lastBuiltAt: Date | null;
-  source: BlockSourceProperties;
-  updatedAt: Date;
+export class Block implements ExpandedBlockMetadata {
+  author?: string | null;
+  blockType: BlockType;
+  blockSitePath: string;
+  componentId: string;
+  default?: JsonObject | null;
+  description?: string | null;
+  displayName?: string | null;
+  examples?: JsonObject[] | null;
+  exampleGraph?: string | null;
+  externals?: JsonObject;
+  icon?: string | null;
+  image?: string | null;
+  lastUpdated?: string | null;
+  license?: string | null;
+  name: string;
+  npmPackageName?: string | null;
+  pathWithNamespace: string;
+  protocol: string;
+  repository?: string;
+  schema: string;
+  source: string;
+  variants?: BlockVariant[] | null;
+  version: string;
+  createdAt?: Date;
 
   static readonly COLLECTION_NAME = "bp-blocks";
 
-  private constructor({
-    _id,
-    assetFolderPath,
-    blockName,
-    blockNamespace,
-    metadata,
-    lastBuiltAt,
-    createdAt,
-    updatedAt,
-    source,
-  }: WithId<BlockDbProperties>) {
-    this._id = _id;
-    this.blockName = blockName;
-    this.blockNamespace = blockNamespace;
-    this.source = source;
-
-    this.assetFolderPath = assetFolderPath;
-    this.metadata = metadata;
-    this.lastBuiltAt = lastBuiltAt;
-
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
-  static async create(
-    db: Db,
-    params: {
-      blockName: string;
-      source: BlockSourceProperties;
-      user: User;
-    },
-  ): Promise<Block> {
-    const { blockName, source, user } = params;
-
-    if (!user.shortname) {
-      throw new Error(
-        "User does not have a shortname. Cannot create block for user.",
-      );
-    }
-
-    const blockNamespace = user.shortname;
-
-    const assetFolderPath = `${BUCKET_BASE_URL}/${blockNamespace}/${blockName}`;
-
-    const now = new Date();
-    const block = {
-      assetFolderPath,
-      blockName,
-      blockNamespace,
-      cachedFileContent: null,
-      buildStatus: "not_built" as "not_built",
-      lastBuiltAt: null,
-      createdAt: now,
-      updatedAt: now,
-      source,
-    };
-
-    const { insertedId: _id } = await db
-      .collection<BlockDbProperties>(this.COLLECTION_NAME)
-      .insertOne(block);
-
-    return new Block({ _id, ...block });
+  private constructor(metadata: ExpandedBlockMetadata) {
+    this.author = metadata.author;
+    this.blockType = metadata.blockType;
+    this.blockSitePath = metadata.blockSitePath;
+    this.componentId = metadata.componentId;
+    this.default = metadata.default;
+    this.description = metadata.description;
+    this.displayName = metadata.displayName;
+    this.examples = metadata.examples;
+    this.exampleGraph = metadata.exampleGraph;
+    this.externals = metadata.externals;
+    this.icon = metadata.icon;
+    this.image = metadata.image;
+    this.lastUpdated = metadata.lastUpdated;
+    this.license = metadata.license;
+    this.name = metadata.name;
+    this.npmPackageName = metadata.npmPackageName;
+    this.pathWithNamespace = metadata.pathWithNamespace;
+    this.protocol = metadata.protocol;
+    this.repository = metadata.repository;
+    this.schema = metadata.schema;
+    this.source = metadata.source;
+    this.variants = metadata.variants;
+    this.version = metadata.version;
+    this.createdAt = metadata.createdAt;
   }
 
   static async getAll(_db: Db): Promise<ExpandedBlockMetadata[]> {
@@ -144,50 +105,20 @@ export class Block {
     } = params;
     // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
     return (localBlocks.filter(
-      ({ packagePath }) => packagePath === `@${shortname}/${name}`,
+      ({ pathWithNamespace }) => pathWithNamespace === `@${shortname}/${name}`,
     )?.[0] ?? null) as ExpandedBlockMetadata | null;
 
-    // const block = await db
-    //   .collection<BlockDbProperties>(this.COLLECTION_NAME)
-    //   .findOne(
-    //     { blockName: params.name, blockNamespace: params.user.shortname },
+    // const block = awa it db
+    //   .collection<BlockDbProperties>(this.COLLECTION_ NAME)
+    //   .fin dOne(
+    //     { blockName: params.name, blockNamespace: params.user.shortna me },
     //     {
-    //       projection: {
-    //         _id: 0,
+    //       projecti on: {
+    //         _i d: 0,
     //       },
     //     },
     //   );
     //
     // return block ? new Block(block) : null;
-  }
-
-  async update(
-    db: Db,
-    params: { source?: BlockSourceProperties },
-  ): Promise<Block> {
-    const { source } = params;
-
-    const now = new Date();
-
-    const { value: updatedBlock } = await db
-      .collection<Block>(Block.COLLECTION_NAME)
-      .findOneAndUpdate(
-        { blockName: this.blockName, blockNamespace: this.blockNamespace },
-        {
-          $set: {
-            source: source ?? undefined,
-            updatedAt: now,
-          },
-        },
-        { returnDocument: "after" },
-      );
-
-    if (!updatedBlock) {
-      throw new Error(
-        "Critical: could not find record of Block instance in database.",
-      );
-    }
-
-    return new Block(updatedBlock);
   }
 }

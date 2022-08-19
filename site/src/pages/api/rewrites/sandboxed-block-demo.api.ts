@@ -44,10 +44,10 @@ const handler: NextApiHandler = async (req, res) => {
   const blocks = await Block.getAllByUser(db, { user });
   const catalog = blocks ?? [];
 
-  const packagePath = `${req.query.shortname}/${req.query.blockslug}`;
+  const pathWithNamespace = `${req.query.shortname}/${req.query.blockslug}`;
 
   const blockMetadata = catalog?.find(
-    (metadata) => metadata.packagePath === packagePath,
+    (metadata) => metadata.pathWithNamespace === pathWithNamespace,
   );
 
   if (!blockMetadata) {

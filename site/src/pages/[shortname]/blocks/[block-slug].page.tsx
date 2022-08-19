@@ -182,7 +182,7 @@ export const getStaticProps: GetStaticProps<
   if (!shortname.startsWith("@")) {
     return { notFound: true };
   }
-  const packagePath = `${shortname}/${blockSlug}`;
+  const pathWithNamespace = `${shortname}/${blockSlug}`;
 
   const { db } = await connectToDatabase();
 
@@ -202,7 +202,7 @@ export const getStaticProps: GetStaticProps<
   const blocks = await Block.getAllByUser(db, { user });
 
   const blockMetadata = blocks.find(
-    (metadata) => metadata.packagePath === packagePath,
+    (metadata) => metadata.pathWithNamespace === pathWithNamespace,
   );
 
   if (!blockMetadata) {

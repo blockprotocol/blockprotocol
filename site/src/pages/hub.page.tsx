@@ -98,7 +98,13 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
           >
             {catalog
               ? catalog.map((block) => (
-                  <Grid key={block.packagePath} item xs={12} sm={6} lg={4}>
+                  <Grid
+                    key={block.pathWithNamespace}
+                    item
+                    xs={12}
+                    sm={6}
+                    lg={4}
+                  >
                     <BlockCard data={block} />
                   </Grid>
                 ))
