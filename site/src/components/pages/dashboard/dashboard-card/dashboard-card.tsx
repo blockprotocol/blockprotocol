@@ -4,9 +4,110 @@ import { FunctionComponent, ReactNode } from "react";
 
 import { ArrowRightIcon, FontAwesomeIcon } from "../../../icons";
 
+// Link Wrapper
+interface LinkWrapperProps {
+  title: string;
+  bold?: boolean;
+}
+
+export const LinkWrapper = ({ title, bold }: LinkWrapperProps) => {
+  return (
+    <Box
+      sx={{
+        color: ({ palette }) => palette.purple[700],
+        fontWeight: bold ? 600 : 400,
+        path: {
+          fill: "currentColor",
+        },
+        display: "flex",
+        alignItems: "center",
+        mt: "auto",
+      }}
+    >
+      <Box component="span" paddingRight={1}>
+        {title}
+      </Box>
+      <ArrowRightIcon
+        className="arrow-right-icon"
+        sx={(theme) => ({
+          width: "auto",
+          height: "0.8em",
+          transition: theme.transitions.create("transform"),
+        })}
+      />
+    </Box>
+  );
+};
+
+// Card Wrapper
+
+const focusOutlineStyle: BoxProps["sx"] = {
+  "&:focus-visible": {
+    outline: ({ palette }) => `1px solid ${palette.purple[700]}`,
+  },
+};
+
+type CardWrapperProps = {
+  children?: ReactNode;
+  href?: string;
+  onClick?: () => void;
+};
+
+export const CardWrapper: FunctionComponent<CardWrapperProps> = ({
+  children,
+  onClick,
+  href,
+}) => {
+  if (onClick) {
+    return (
+      <Box component="button" onClick={onClick} sx={focusOutlineStyle}>
+        {children}
+      </Box>
+    );
+  }
+
+  return (
+    <Link href={href} sx={focusOutlineStyle}>
+      {children}
+    </Link>
+  );
+};
+
+// Dashboard Card
+
+const cardContainerSharedStyles: BoxProps["sx"] = {
+  display: "flex",
+  position: "relative",
+  height: "100%",
+  textAlign: "left",
+
+  "&::after": {
+    content: `""`,
+    position: "absolute",
+    zIndex: -1,
+    top: 0,
+    left: 0,
+    height: "100%",
+    width: "100%",
+    boxShadow: 1,
+    borderRadius: "inherit",
+    opacity: 0,
+    transition: ({ transitions }) => transitions.create("opacity"),
+  },
+
+  "&:hover::after": {
+    opacity: 1,
+  },
+
+  "&:hover .arrow-right-icon": {
+    transform: "translateX(4px)",
+  },
+};
+
 export type DashboardCardProps = {
   title: string;
   colorGradient?: string;
+  colorGradientOnHover?: string;
   description: string;
   link: {
     title: string;
@@ -17,75 +118,20 @@ export type DashboardCardProps = {
   variant?: "primary" | "secondary";
 };
 
-type CardWrapperProps = {
-  children?: ReactNode;
-  href?: string;
-  onClick?: () => void;
-};
-
-const sharedStyles: BoxProps["sx"] = {
-  position: "relative",
-  height: "100%",
-  textAlign: "left",
-
-  "& > *": {
-    height: "100%",
-  },
-
-  "&::after": {
-    content: `""`,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    height: "100%",
-    width: "100%",
-    boxShadow: 1,
-    opacity: 0,
-    transition: ({ transitions }) =>
-      transitions.create("opacity", { duration: 300 }),
-  },
-
-  "&:hover::after": {
-    opacity: 1,
-  },
-
-  "&:focus-visible": {
-    outline: ({ palette }) => `1px solid ${palette.purple[700]}`,
-  },
-};
-
-const CardWrapper: FunctionComponent<CardWrapperProps> = ({
-  children,
-  onClick,
-  href,
-}) => {
-  if (onClick) {
-    return (
-      <Box component="button" sx={sharedStyles} onClick={onClick}>
-        {children}
-      </Box>
-    );
-  }
-
-  return (
-    <Link href={href} sx={sharedStyles}>
-      {children}
-    </Link>
-  );
-};
-
-export const DashboardCardSecondary: FunctionComponent<
+const DashboardCardSecondary: FunctionComponent<
   Pick<DashboardCardProps, "title" | "link" | "description" | "icon">
 > = ({ link, title, description, icon }) => {
   return (
     <CardWrapper href={link.href} onClick={link.onClick}>
       <Box
-        sx={{
-          display: "flex",
-          border: ({ palette }) => `1px solid ${palette.gray[30]}`,
-          borderRadius: "4px",
-          p: 3,
-        }}
+        sx={[
+          cardContainerSharedStyles,
+          {
+            border: ({ palette }) => `1px solid ${palette.gray[30]}`,
+            borderRadius: 1,
+            p: 3,
+          },
+        ]}
       >
         {icon ? (
           <FontAwesomeIcon
@@ -114,28 +160,7 @@ export const DashboardCardSecondary: FunctionComponent<
             {title}
           </Typography>
           <Typography sx={{ mb: 2 }}>{description}</Typography>
-          <Box
-            sx={{
-              color: ({ palette }) => palette.purple[700],
-              fontWeight: 400,
-              path: {
-                fill: "currentColor",
-              },
-              display: "flex",
-              alignItems: "center",
-              mt: "auto",
-            }}
-          >
-            <Box component="span" paddingRight={1}>
-              {link.title}
-            </Box>
-            <ArrowRightIcon
-              sx={{
-                width: "auto",
-                height: "0.8em",
-              }}
-            />
-          </Box>
+          <LinkWrapper title={link.title} />
         </Box>
       </Box>
     </CardWrapper>
@@ -145,6 +170,7 @@ export const DashboardCardSecondary: FunctionComponent<
 export const DashboardCard: FunctionComponent<DashboardCardProps> = ({
   title,
   colorGradient,
+  colorGradientOnHover,
   description,
   link,
   variant,
@@ -158,39 +184,49 @@ export const DashboardCard: FunctionComponent<DashboardCardProps> = ({
   return (
     <CardWrapper href={link.href} onClick={link.onClick}>
       <Box
-        sx={{
-          // @todo update theme config to include microShadow
-          boxShadow:
-            "0px 4px 11px rgba(39, 50, 86, 0.02), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.04), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
-          borderRadius: 2,
-          position: "relative",
-          display: "flex",
-          flexDirection: "column",
+        sx={[
+          cardContainerSharedStyles,
+          (theme) => ({
+            // @todo update theme config to include microShadow
+            boxShadow:
+              "0px 4px 11px rgba(39, 50, 86, 0.02), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.04), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
+            borderRadius: 2,
+            flexDirection: "column",
+            border: `1px solid ${theme.palette.gray[20]}`,
+            transition: theme.transitions.create("border-color"),
 
-          "&::after": {
-            content: `""`,
-            position: "absolute",
-            zIndex: -1,
-            top: 0,
-            left: 0,
-            height: "100%",
-            width: "100%",
-            boxShadow: 2,
-            opacity: 0,
-            transition: ({ transitions }) =>
-              transitions.create("opacity", { duration: 300 }),
-          },
+            "&:hover": {
+              borderColor: theme.palette.gray[30],
 
-          "&:hover::after": {
-            opacity: 1,
-          },
-        }}
+              ".gradient:after": {
+                opacity: 1,
+              },
+            },
+
+            "&::after": {
+              boxShadow: 2,
+            },
+          }),
+        ]}
       >
         <Box
+          className="gradient"
           sx={{
             background: colorGradient,
-            borderTopLeftRadius: 2,
-            borderTopRightRadius: 2,
+            borderRadius: 2,
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+            position: "relative",
+
+            "&::after": {
+              content: `""`,
+              position: "absolute",
+              inset: 0,
+              borderRadius: "inherit",
+              background: colorGradientOnHover,
+              opacity: 0,
+              transition: ({ transitions }) => transitions.create("opacity"),
+            },
           }}
           height={8}
         />
@@ -216,28 +252,7 @@ export const DashboardCard: FunctionComponent<DashboardCardProps> = ({
           <Typography mb={2} color="#4D5C6C">
             {description}
           </Typography>
-          <Box
-            sx={{
-              color: "#6048E5",
-              fontWeight: 600,
-              path: {
-                fill: "currentColor",
-              },
-              display: "flex",
-              alignItems: "center",
-              mt: "auto",
-            }}
-          >
-            <Box component="span" paddingRight={1}>
-              {link.title}
-            </Box>
-            <ArrowRightIcon
-              sx={{
-                width: "auto",
-                height: "0.8em",
-              }}
-            />
-          </Box>
+          <LinkWrapper bold title={link.title} />
         </Box>
       </Box>
     </CardWrapper>

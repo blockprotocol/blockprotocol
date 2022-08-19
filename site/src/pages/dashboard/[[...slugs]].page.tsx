@@ -22,6 +22,8 @@ const getDashboardPrimaryCardData = (
     title: "Read our quick start guide to building blocks",
     colorGradient:
       "linear-gradient(291.34deg, #FFB172 -4.12%, #D082DE 53.49%, #9482FF 91.74%, #84E6FF 151.68%)",
+    colorGradientOnHover:
+      "linear-gradient(292.67deg, #FFB172 44.38%, #D082DE 83.44%, #9482FF 109.38%, #84E6FF 150.02%)",
     description:
       "Learn how to build blocks that can integrate with the block protocol and be published to the registry.",
     link: {
@@ -33,6 +35,8 @@ const getDashboardPrimaryCardData = (
     title: "Test out blocks in the playground",
     colorGradient:
       "linear-gradient(310.17deg, #FFB172 -167.67%, #9482FF 13.54%, #84E6FF 126.83%)",
+    colorGradientOnHover:
+      "linear-gradient(304.41deg, #FFB172 -167.57%, #9482FF -22.66%, #84E6FF 53.07%)",
     description:
       "Try out our most popular blocks to learn how they consume and render different data structures",
     link: {
@@ -44,6 +48,8 @@ const getDashboardPrimaryCardData = (
     title: "Create a Schema",
     colorGradient:
       "linear-gradient(91.21deg, #FFB172 -84.62%, #9482FF 62.56%, #84E6FF 154.58%)",
+    colorGradientOnHover:
+      "linear-gradient(91.21deg, #FFB172 -84.54%, #9482FF 27.8%, #84E6FF 98.03%)",
     description:
       "Schemas are a formal way to describe data – they define the expected properties of things like People, Companies, and Books",
     link: {
