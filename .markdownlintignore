@@ -58,3 +58,13 @@ site/public/blocks
 site/public/schemas
 site/site-map.json
 site/test-results
+packages/@blockprotocol/type-system-node/src
+packages/@blockprotocol/type-system-web/src
+
+# Rust specific
+crates/**/target
+crates/**/*.rs.bk
+crates/**/Cargo.lock
+crates/**/bin/
+crates/**/pkg/
+crates/**/wasm-pack.log
