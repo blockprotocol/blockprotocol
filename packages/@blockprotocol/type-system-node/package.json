@@ -12,8 +12,8 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "lint:tsc": "tsc --noEmit",
     "test": "jest"

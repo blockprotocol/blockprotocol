@@ -13,8 +13,8 @@
     "url": "https://hash.ai"
   },
   "sideEffects": false,
-  "module": "src/index.js",
-  "types": "src/index.d.ts",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "lint:tsc": "tsc --noEmit"
   },

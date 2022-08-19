@@ -40,7 +40,7 @@ const moveSrcFiles = (packagePath: PathObject, packageName: string) => {
     "packages",
     "@blockprotocol",
     packageName,
-    "src",
+    "dist",
   );
 
   console.log(
