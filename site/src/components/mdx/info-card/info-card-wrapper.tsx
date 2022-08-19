@@ -48,7 +48,7 @@ export const InfoCardWrapper: FunctionComponent<InfoCardWrapperProps> = ({
     >
       <Box
         sx={{
-          "& > :first-child": {
+          "& > :first-of-type": {
             marginTop: 0,
           },
         }}
