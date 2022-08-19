@@ -1,4 +1,7 @@
-#![expect(clippy::drop_non_drop, reason = "This seems to be a bug with wasm_bindgen")]
+#![expect(
+    clippy::drop_non_drop,
+    reason = "This seems to be a bug with wasm_bindgen"
+)]
 
 use std::fmt;
 

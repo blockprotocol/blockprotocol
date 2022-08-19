@@ -29,10 +29,10 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly __wbg_parsebaseurierror_free: (a: number) => void;
-  readonly __wbg_parseversionedurierror_free: (a: number) => void;
   readonly parseBaseUri: (a: number, b: number, c: number) => void;
   readonly isValidVersionedUri: (a: number, b: number, c: number) => void;
+  readonly __wbg_parsebaseurierror_free: (a: number) => void;
+  readonly __wbg_parseversionedurierror_free: (a: number) => void;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;

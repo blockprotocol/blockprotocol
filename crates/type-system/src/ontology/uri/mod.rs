@@ -36,7 +36,6 @@ impl BaseUri {
     }
 }
 
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct VersionedUri {
     base_uri: BaseUri,
@@ -64,12 +63,12 @@ impl VersionedUri {
 
     #[must_use]
     fn as_url(&self) -> Url {
-        self.base_uri.0
+        self.base_uri
+            .0
             .join(&format!("v/{}", self.version))
             .expect("failed to add version path to Base URI")
     }
 }
-
 
 impl fmt::Display for VersionedUri {
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
@@ -86,16 +85,16 @@ impl FromStr for VersionedUri {
         // TODO: better error handling
         Self::new(
             &BaseUri::new(base_uri).map_err(|_| ParseVersionedUriError {})?,
-            version
-                .parse().map_err(|_| ParseVersionedUriError {})?,
-        ).map_err(|_| ParseVersionedUriError {})
+            version.parse().map_err(|_| ParseVersionedUriError {})?,
+        )
+        .map_err(|_| ParseVersionedUriError {})
     }
 }
 
 impl Serialize for VersionedUri {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: Serializer,
+    where
+        S: Serializer,
     {
         self.to_string().serialize(serializer)
     }
@@ -103,8 +102,8 @@ impl Serialize for VersionedUri {
 
 impl<'de> Deserialize<'de> for VersionedUri {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
     {
         String::deserialize(deserializer)?
             .parse()
