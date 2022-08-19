@@ -1,10 +1,10 @@
 import fs from "fs-extra";
+// @todo consider using execa
 import * as child_process from "node:child_process";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export const packageDirPath = path.dirname(fileURLToPath(import.meta.url));
 
 // The PathObject definition in Node's path package
 type PathObject = {
@@ -33,7 +33,7 @@ const runWasmPack = (target: string) => {
 
 const moveSrcFiles = (packagePath: PathObject, packageName: string) => {
   const destinationPath = path.resolve(
-    __dirname,
+    packageDirPath,
     "..",
     "..",
     "..",
