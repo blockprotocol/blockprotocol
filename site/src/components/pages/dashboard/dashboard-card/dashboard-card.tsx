@@ -148,6 +148,7 @@ export const DashboardCard: FunctionComponent<DashboardCardProps> = ({
             borderBottomLeftRadius: 0,
             borderBottomRightRadius: 0,
             position: "relative",
+            transform: "scaleX(-1)",
 
             "&::after": {
               content: `""`,
