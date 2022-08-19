@@ -12,7 +12,7 @@ import {
 import {
   DashboardCard,
   DashboardCardProps,
-} from "../../components/pages/dashboard/dashboard-card";
+} from "../../components/pages/dashboard/dashboard-card/dashboard-card";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 
 const getDashboardPrimaryCardData = (

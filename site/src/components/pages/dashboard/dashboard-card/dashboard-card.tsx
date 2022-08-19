@@ -2,7 +2,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Box, BoxProps, Link, Typography } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
-import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
+import { ArrowRightIcon, FontAwesomeIcon } from "../../../icons";
 
 export type DashboardCardProps = {
   title: string;
