@@ -1,9 +1,13 @@
 
 let wasm;
 
-const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+const heap = new Array(32).fill(undefined);
 
-cachedTextDecoder.decode();
+heap.push(undefined, null, true, false);
+
+function getObject(idx) { return heap[idx]; }
+
+let WASM_VECTOR_LEN = 0;
 
 let cachedUint8Memory0 = new Uint8Array();
 
@@ -13,12 +17,6 @@ function getUint8Memory0() {
     }
     return cachedUint8Memory0;
 }
-
-function getStringFromWasm0(ptr, len) {
-    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-}
-
-let WASM_VECTOR_LEN = 0;
 
 const cachedTextEncoder = new TextEncoder('utf-8');
 
@@ -82,11 +80,13 @@ function getInt32Memory0() {
     return cachedInt32Memory0;
 }
 
-const heap = new Array(32).fill(undefined);
+const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
-heap.push(undefined, null, true, false);
+cachedTextDecoder.decode();
 
-function getObject(idx) { return heap[idx]; }
+function getStringFromWasm0(ptr, len) {
+    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
+}
 
 let heap_next = heap.length;
 
@@ -103,6 +103,8 @@ function takeObject(idx) {
 }
 /**
 * Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
+*
+* @throws {ParseBaseUriError} if the given string is not a valid base URI
 * @param {string} uri
 * @returns {string}
 */
@@ -132,8 +134,7 @@ export function parseBaseUri(uri) {
 /**
 * Checks if a given URL string is a Block Protocol compliant Versioned URI.
 *
-* If the URL is valid this function returns nothing, otherwise it throws a
-* `ParseVersionedUriError`
+* @throws {ParseVersionedUriError} if the versioned URI is invalid
 * @param {string} uri
 */
 export function isValidVersionedUri(uri) {
@@ -152,6 +153,34 @@ export function isValidVersionedUri(uri) {
     }
 }
 
+let stack_pointer = 32;
+
+function addBorrowedObject(obj) {
+    if (stack_pointer == 1) throw new Error('out of js stack');
+    heap[--stack_pointer] = obj;
+    return stack_pointer;
+}
+/**
+* Checks if a given {DataType} is valid
+*
+* @throws {MalformedDataTypeError} if the data type is malformed
+* @param {DataType} dataTypeObj
+*/
+export function isValidDataType(dataTypeObj) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.isValidDataType(retptr, addBorrowedObject(dataTypeObj));
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        heap[stack_pointer++] = undefined;
+    }
+}
+
 function addHeapObject(obj) {
     if (heap_next === heap.length) heap.push(heap.length + 1);
     const idx = heap_next;
@@ -159,6 +188,29 @@ function addHeapObject(obj) {
 
     heap[idx] = obj;
     return idx;
+}
+/**
+*/
+export class MalformedDataTypeError {
+
+    static __wrap(ptr) {
+        const obj = Object.create(MalformedDataTypeError.prototype);
+        obj.ptr = ptr;
+
+        return obj;
+    }
+
+    __destroy_into_raw() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_malformeddatatypeerror_free(ptr);
+    }
 }
 /**
 */
@@ -247,6 +299,18 @@ function getImports() {
     };
     imports.wbg.__wbg_parseversionedurierror_new = function(arg0) {
         const ret = ParseVersionedUriError.__wrap(arg0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbindgen_json_serialize = function(arg0, arg1) {
+        const obj = getObject(arg1);
+        const ret = JSON.stringify(obj === undefined ? null : obj);
+        const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len0;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    };
+    imports.wbg.__wbg_malformeddatatypeerror_new = function(arg0) {
+        const ret = MalformedDataTypeError.__wrap(arg0);
         return addHeapObject(ret);
     };
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
