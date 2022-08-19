@@ -4,6 +4,7 @@ import { FunctionComponent } from "react";
 
 import { FontAwesomeIcon } from "../../../icons";
 import { CardWrapper } from "./card-wrapper";
+import { DashboardCardLoading } from "./dashboard-card-loading";
 import { LinkWrapper } from "./link-wrapper";
 
 const cardContainerSharedStyles: BoxProps["sx"] = {
@@ -41,6 +42,8 @@ const iconStyle: SvgIconProps["sx"] = {
   color: ({ palette }) => palette.gray[40],
 };
 
+export type CardVariant = "primary" | "secondary";
+
 export type DashboardCardProps = {
   title: string;
   colorGradient?: string;
@@ -53,8 +56,11 @@ export type DashboardCardProps = {
   };
   icon?: IconDefinition;
   CustomIcon?: FunctionComponent<SvgIconProps>;
-  variant?: "primary" | "secondary";
+  variant?: CardVariant;
+  loading?: never;
 };
+
+type LoadingCardProps = { variant?: CardVariant; loading: true };
 
 const DashboardCardSecondary: FunctionComponent<
   Pick<
@@ -104,16 +110,24 @@ const DashboardCardSecondary: FunctionComponent<
   );
 };
 
-export const DashboardCard: FunctionComponent<DashboardCardProps> = ({
-  title,
-  colorGradient,
-  colorGradientOnHover,
-  description,
-  link,
-  variant,
-  icon,
-  CustomIcon,
-}) => {
+export const DashboardCard: FunctionComponent<
+  DashboardCardProps | LoadingCardProps
+> = (props) => {
+  const { loading, variant = "primary" } = props;
+  if (loading) {
+    return <DashboardCardLoading variant={variant} />;
+  }
+
+  const {
+    title,
+    colorGradient,
+    colorGradientOnHover,
+    description,
+    link,
+    icon,
+    CustomIcon,
+  } = props;
+
   if (variant === "secondary") {
     const secondaryCardProps = {
       title,
