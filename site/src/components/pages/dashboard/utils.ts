@@ -24,6 +24,7 @@ export type DashboardSection = "create" | "manage" | "explore";
 export const getDashboardSectionCards = (props: {
   openCreateSchemaModal: () => void;
   profileLink: string;
+  userHasApiKey?: boolean;
 }): Record<DashboardSection, DashboardCardProps[]> => {
   return {
     create: [
@@ -69,8 +70,9 @@ export const getDashboardSectionCards = (props: {
     ],
     manage: [
       {
-        /** @todo show "Create your first API key" if there is no API keys created */
-        title: "Create and manage API keys",
+        title: props.userHasApiKey
+          ? "Create and manage API keys"
+          : "Create your first API key",
         description:
           "Your API key will allow you to search for and blocks by name, author, or compatible data structure",
         link: {

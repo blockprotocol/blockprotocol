@@ -57,7 +57,7 @@ export type DashboardCardProps = {
   icon?: IconDefinition;
   CustomIcon?: FunctionComponent<SvgIconProps>;
   variant?: CardVariant;
-  loading?: never;
+  loading?: false;
 };
 
 type LoadingCardProps = { variant?: CardVariant; loading: true };

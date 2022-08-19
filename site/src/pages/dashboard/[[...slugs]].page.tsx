@@ -17,11 +17,25 @@ import {
   DashboardSection,
   getDashboardSectionCards,
 } from "../../components/pages/dashboard/utils";
+import { apiClient } from "../../lib/api-client";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};
   const [schemaModalOpen, setSchemaModalOpen] = useState(false);
+  const [userHasApiKey, setUserHasApiKey] = useState<boolean | undefined>(
+    undefined,
+  );
   const router = useRouter();
+
+  useEffect(() => {
+    void apiClient
+      .getUserApiKeys()
+      .then(({ data }) =>
+        setUserHasApiKey(
+          !!data?.apiKeysMetadata.filter((key) => !key.revokedAt).length,
+        ),
+      );
+  }, []);
 
   useEffect(() => {
     if (router.query?.slugs?.includes("create-schema")) {
@@ -36,11 +50,14 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
   const dashboardCards = getDashboardSectionCards({
     profileLink: `/@${shortname}`,
     openCreateSchemaModal: openSchemaModal,
+    userHasApiKey,
   });
+
+  const isLoading = userHasApiKey === undefined;
 
   const renderDashboardCards = (section: DashboardSection) =>
     dashboardCards[section].map((card) => (
-      <DashboardCard key={card.title} {...card} />
+      <DashboardCard key={card.title} {...card} loading={isLoading} />
     ));
 
   return (
