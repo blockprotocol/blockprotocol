@@ -1,5 +1,5 @@
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-import { Box, BoxProps, Typography } from "@mui/material";
+import { Box, BoxProps, SvgIconProps, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { FontAwesomeIcon } from "../../../icons";
@@ -46,12 +46,22 @@ export type DashboardCardProps = {
     onClick?: () => void;
   };
   icon?: IconDefinition;
+  CustomIcon?: FunctionComponent<SvgIconProps>;
   variant?: "primary" | "secondary";
 };
 
+const iconStyle: SvgIconProps["sx"] = {
+  fontSize: 32,
+  mr: 3,
+  color: ({ palette }) => palette.gray[40],
+};
+
 const DashboardCardSecondary: FunctionComponent<
-  Pick<DashboardCardProps, "title" | "link" | "description" | "icon">
-> = ({ link, title, description, icon }) => {
+  Pick<
+    DashboardCardProps,
+    "title" | "link" | "description" | "icon" | "CustomIcon"
+  >
+> = ({ link, title, description, icon, CustomIcon }) => {
   return (
     <CardWrapper href={link.href} onClick={link.onClick}>
       <Box
@@ -64,16 +74,12 @@ const DashboardCardSecondary: FunctionComponent<
           },
         ]}
       >
-        {icon ? (
-          <FontAwesomeIcon
-            sx={{
-              fontSize: 32,
-              mr: 3,
-              color: ({ palette }) => palette.gray[40],
-            }}
-            icon={icon}
-          />
+        {CustomIcon ? (
+          <CustomIcon sx={iconStyle} />
+        ) : icon ? (
+          <FontAwesomeIcon sx={iconStyle} icon={icon} />
         ) : null}
+
         <Box
           sx={{
             display: "flex",
@@ -106,9 +112,17 @@ export const DashboardCard: FunctionComponent<DashboardCardProps> = ({
   link,
   variant,
   icon,
+  CustomIcon,
 }) => {
   if (variant === "secondary") {
-    const secondaryCardProps = { title, description, link, variant, icon };
+    const secondaryCardProps = {
+      title,
+      description,
+      link,
+      variant,
+      icon,
+      CustomIcon,
+    };
     return <DashboardCardSecondary {...secondaryCardProps} />;
   }
 
