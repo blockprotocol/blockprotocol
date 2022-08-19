@@ -1,5 +1,12 @@
 # @blockprotocol/graph
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies [[`6b6fa34`](https://github.com/blockprotocol/blockprotocol/commit/6b6fa3475aa2c8d52daa03244d6b8b9babbcc06e)]:
+  - @blockprotocol/core@0.0.10
+
 ## 0.0.13
 
 ### Patch Changes

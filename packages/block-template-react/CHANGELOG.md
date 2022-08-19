@@ -1,5 +1,12 @@
 # block-template-react
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @blockprotocol/graph@0.0.14
+
 ## 0.1.3
 
 ### Patch Changes

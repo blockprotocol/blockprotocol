@@ -1,5 +1,11 @@
 # @blockprotocol/core
 
+## 0.0.10
+
+### Patch Changes
+
+- [#507](https://github.com/blockprotocol/blockprotocol/pull/507) [`6b6fa34`](https://github.com/blockprotocol/blockprotocol/commit/6b6fa3475aa2c8d52daa03244d6b8b9babbcc06e) Thanks [@teenoh](https://github.com/teenoh)! - export `Message` type
+
 ## 0.0.9
 
 ### Patch Changes
