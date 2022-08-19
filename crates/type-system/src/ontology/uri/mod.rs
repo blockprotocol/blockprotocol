@@ -26,13 +26,17 @@ impl fmt::Display for BaseUri {
 }
 
 impl BaseUri {
+    /// Creates a new [`BaseUri`] from a given URI string
+    ///
+    /// # Errors
+    /// - `ParseBaseUriError` if the given URI string is invalid
     pub fn new(uri: &str) -> Result<BaseUri, ParseBaseUriError> {
         // TODO: Propagate more useful errors
         // TODO: This attempts to parse the string _into_ a valid URL. Perhaps we want to enforce
         //  that the string is valid (by checking the output is equal to the input). An example:
         //  "file://loc%61lhost/" is turned into "file:///"
-        let url = Url::parse(uri).map_err(|_| ParseBaseUriError {})?;
-        Ok(Self(url))
+        let parsed_url = Url::parse(uri).map_err(|_| ParseBaseUriError {})?;
+        Ok(Self(parsed_url))
     }
 }
 
@@ -43,7 +47,10 @@ pub struct VersionedUri {
 }
 
 impl VersionedUri {
-    /// Creates a new `VersionedUri` from the given `base_uri` and `version`.
+    /// Creates a new [`VersionedUri`] from the given `base_uri` and `version`.
+    ///
+    /// # Errors
+    /// - `ParseBaseUriError` if the given URI string is invalid
     pub fn new(base_uri: &BaseUri, version: u32) -> Result<VersionedUri, ParseBaseUriError> {
         Ok(Self {
             base_uri: base_uri.clone(),

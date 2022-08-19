@@ -10,11 +10,11 @@ use crate::{
 /// Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
 #[wasm_bindgen(js_name = parseBaseUri)]
 pub fn parse_base_uri(uri: &str) -> Result<String, ParseBaseUriError> {
-    let url = BaseUri::new(uri)?;
-    if url.0.cannot_be_a_base() {
+    let base_uri = BaseUri::new(uri)?;
+    if base_uri.0.cannot_be_a_base() {
         return Err(ParseBaseUriError {});
     }
-    Ok(url.to_string())
+    Ok(base_uri.to_string())
 }
 
 /// Checks if a given URL string is a Block Protocol compliant Versioned URI.
@@ -23,6 +23,6 @@ pub fn parse_base_uri(uri: &str) -> Result<String, ParseBaseUriError> {
 /// `ParseVersionedUriError`
 #[wasm_bindgen(js_name = isValidVersionedUri)]
 pub fn is_valid_versioned_uri(uri: &str) -> Result<(), ParseVersionedUriError> {
-    let _ = VersionedUri::from_str(uri)?;
+    VersionedUri::from_str(uri)?;
     Ok(())
 }

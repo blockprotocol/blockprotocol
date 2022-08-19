@@ -30,6 +30,7 @@
     clippy::use_debug,
     clippy::verbose_file_reads
 )]
+#![allow(clippy::use_self, reason = "Too many false positives")]
 #![allow(
     clippy::module_name_repetitions,
     reason = "This encourages importing `as` which breaks IDEs"
