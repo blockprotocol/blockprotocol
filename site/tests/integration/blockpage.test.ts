@@ -5,12 +5,10 @@ import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 
 const typedBlocksData = blocksData as ExpandedBlockMetadata[];
 
-const codeBlock = typedBlocksData.find(
-  ({ name }) => name === "@hashintel/block-code",
-);
+const codeBlock = typedBlocksData.find(({ name }) => name === "@hash/code");
 
 const unsupportedBlock = typedBlocksData.find(
-  ({ name }) => name === "@hashintel/block-embed",
+  ({ name }) => name === "@hash/embed",
 );
 
 if (!codeBlock || !unsupportedBlock) {
