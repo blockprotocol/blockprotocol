@@ -1,6 +1,7 @@
 // @todo rename
 
 import { Message } from "@blockprotocol/core/dist/esm/types";
+import { BlockGraphProperties } from "@blockprotocol/graph/.";
 import {
   KeyboardDoubleArrowDown,
   KeyboardDoubleArrowUp,
@@ -9,63 +10,25 @@ import {
   Box,
   IconButton,
   Paper,
+  PaperProps,
   styled,
   Tab,
   Tabs,
-  Typography,
 } from "@mui/material";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 
 import { DataStoreView } from "./bottom-view/datastore-view";
 import { Log, LogsView } from "./bottom-view/logs-view";
 import { PropertiesView } from "./bottom-view/properties";
+import { a11yProps, TabPanel } from "./bottom-view/tab-panel";
 import { SIDEBAR_WIDTH } from "./layout";
+import { MockData } from "./use-mock-block-props/use-mock-datastore";
 
-interface TabPanelProps {
-  children?: ReactNode;
-  index: number;
-  value: number;
-}
-
-const TabPanel = (props: TabPanelProps) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
-};
-
-const a11yProps = (index: number) => {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-};
-
-// @todo consider using context
-
-const Container = styled(Paper)(({ theme }) => ({
+const Container = styled((props: PaperProps & { minimized: boolean }) => (
+  <Paper {...props} />
+))(({ theme, minimized }) => ({
   position: "fixed",
-  height: 500,
+  height: minimized ? 50 : 500,
   left: SIDEBAR_WIDTH,
   right: 0,
   bottom: 0,
@@ -76,20 +39,30 @@ const Container = styled(Paper)(({ theme }) => ({
   flexDirection: "column",
 }));
 
-// @todo: fix types
+const Header = styled(Box)(({ theme }) => ({
+  top: 0,
+  zIndex: 5,
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
+  height: 50,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}));
+
 type BottomViewProps = {
-  propsToInject: any;
-  datastore: any;
+  graphProperties: BlockGraphProperties<any>;
+  datastore: MockData;
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
 };
 
 export const BottomView = ({
-  propsToInject,
+  graphProperties,
   datastore,
+  readonly,
   setReadonly,
 }: BottomViewProps) => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(2);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [logs, setLogs] = useState<Log[]>([]);
   const [minimized, setMinimized] = useState(false);
@@ -109,22 +82,8 @@ export const BottomView = ({
   }, []);
 
   return (
-    <Container
-      ref={containerRef}
-      sx={{
-        ...(minimized && { height: 50 }),
-      }}
-    >
-      <Box
-        sx={{
-          top: 0,
-          zIndex: 5,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          height: 50,
-        }}
-      >
+    <Container ref={containerRef} minimized={minimized}>
+      <Header>
         <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
           <Tab
             disableRipple
@@ -153,16 +112,12 @@ export const BottomView = ({
         >
           {minimized ? <KeyboardDoubleArrowUp /> : <KeyboardDoubleArrowDown />}
         </IconButton>
-      </Box>
-      <Box
-        sx={{
-          flex: 1,
-          overflowY: "scroll",
-        }}
-      >
+      </Header>
+      <Box flex={1} overflow="scroll">
         <TabPanel value={value} index={0}>
           <PropertiesView
-            properties={propsToInject.graph}
+            blockEntity={graphProperties.graph.blockEntity}
+            readonly={readonly}
             setReadonly={setReadonly}
           />
         </TabPanel>

@@ -229,7 +229,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       </Box>
 
       <BottomView
-        propsToInject={propsToInject}
+        graphProperties={propsToInject}
         datastore={datastore}
         readonly={debugReadonly}
         setReadonly={setDebugReadonly}

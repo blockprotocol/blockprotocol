@@ -1,18 +1,20 @@
+import { BlockGraphProperties } from "@blockprotocol/graph";
 import { Box, Grid, Switch } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
 import { JsonView } from "../json-view";
 
-// @todo fix types... Types should be similar to mock-block-dock
 type Props = {
-  properties: {
-    readonly: boolean;
-    blockEntity: any;
-  };
+  blockEntity?: BlockGraphProperties<any>["graph"]["blockEntity"];
+  readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
 };
 
-export const PropertiesView = ({ properties, setReadonly }: Props) => {
+export const PropertiesView = ({
+  readonly,
+  blockEntity,
+  setReadonly,
+}: Props) => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={3} textAlign="right" alignSelf="center">
@@ -20,7 +22,7 @@ export const PropertiesView = ({ properties, setReadonly }: Props) => {
       </Grid>
       <Grid item xs={9}>
         <Switch
-          checked={properties.readonly}
+          checked={readonly}
           onChange={(evt) => setReadonly(evt.target.checked)}
         />
       </Grid>
@@ -32,11 +34,7 @@ export const PropertiesView = ({ properties, setReadonly }: Props) => {
           <JsonView
             collapseKeys={["graph"]}
             rootName="blockEntity"
-            src={properties.blockEntity}
-            //   onEdit={() => {
-            //     return true;
-            //   }}
-            //   onAdd={() => {}}
+            src={blockEntity ?? {}}
           />
         </Box>
       </Grid>

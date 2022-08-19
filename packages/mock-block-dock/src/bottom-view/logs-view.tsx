@@ -19,9 +19,7 @@ import {
 
 import { JsonView } from "../json-view";
 
-export type Log = Message & {
-  timestamp: string;
-};
+export type Log = Message;
 
 type Props = {
   logs: Log[];
@@ -106,7 +104,7 @@ const ActiveLogsContainer = styled(Box)(({ theme }) => ({
 }));
 
 export const LogsView = ({ logs, setLogs }: Props) => {
-  const [activeLog, setActiveLog] = useState<Log>();
+  const [activeLog, setActiveLog] = useState<Message>();
   const [filters, setFilters] = useState({
     source: "all",
     service: "all",
@@ -141,7 +139,6 @@ export const LogsView = ({ logs, setLogs }: Props) => {
       if (scrollHeight === offsetHeight + scrollTop) {
         setScrolled(true);
       }
-
       if (scrollHeight > offsetHeight + scrollTop) {
         setScrolled(false);
       }
@@ -253,7 +250,8 @@ export const LogsView = ({ logs, setLogs }: Props) => {
         </ActiveLogsContainer>
       </Box>
 
-      <Button onClick={() => setLogs([])} variant="contained">
+      {/* @todo make more visible by positioning absolutely to top of container  */}
+      <Button size="small" onClick={() => setLogs([])} variant="contained">
         Clear Logs
       </Button>
     </Box>
