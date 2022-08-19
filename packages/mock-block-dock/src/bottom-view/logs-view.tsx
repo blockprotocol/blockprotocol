@@ -5,7 +5,7 @@ import {
   MenuItem,
   Select,
   styled,
-  Typography
+  Typography,
 } from "@mui/material";
 import {
   Dispatch,
@@ -14,7 +14,7 @@ import {
   useLayoutEffect,
   useMemo,
   useRef,
-  useState
+  useState,
 } from "react";
 
 import { JsonView } from "../json-view";
@@ -40,7 +40,7 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
       sx={{
         mb: 0.5,
         display: "flex",
-        whiteSpace: "nowrap"
+        whiteSpace: "nowrap",
       }}
     >
       [{log.timestamp}]
@@ -52,7 +52,7 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
           color:
             log.service === "core"
               ? palette.primary.main
-              : palette.secondary.main
+              : palette.secondary.main,
         })}
       >
         [{log.service}]
@@ -64,7 +64,7 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
         sx={({ palette }) => ({
           textDecoration: "underline",
           cursor: "pointer",
-          ...(isActive && { color: palette.primary.main })
+          ...(isActive && { color: palette.primary.main }),
         })}
       >
         [{log.requestId.slice(0, 4)}]
@@ -80,13 +80,13 @@ const LogsContainer = styled(Box)(({ theme }) => ({
   overflowY: "auto",
   padding: theme.spacing(3),
   flex: 1,
-  position: "relative"
+  position: "relative",
 }));
 
 const ScrollToEndBtn = styled(Box)(() => ({
   position: "absolute",
   bottom: 8,
-  right: 8
+  right: 8,
 }));
 
 const ActiveLogsContainer = styled(Box)(({ theme }) => ({
@@ -101,28 +101,34 @@ const ActiveLogsContainer = styled(Box)(({ theme }) => ({
     flex: 1,
     width: "100%",
     maxHeight: 400,
-    overflowY: "scroll"
-  }
+    overflowY: "scroll",
+  },
 }));
 
 export const LogsView = ({ logs, setLogs }: Props) => {
   const [activeLog, setActiveLog] = useState<Log>();
   const [filters, setFilters] = useState({
     source: "all",
-    service: "all"
+    service: "all",
   });
   const [scrolled, setScrolled] = useState(true);
   const logsContainerRef = useRef<HTMLElement>();
 
   const filteredLogs = useMemo(() => {
-    return logs.filter(log => {
-      const hasSource =
-        filters.source === "all" ? true : log.source === filters.source;
-      const hasService =
-        filters.service === "all" ? true : log.service === filters.service;
+    return logs
+      .filter((log) => {
+        const hasSource =
+          filters.source === "all" ? true : log.source === filters.source;
+        const hasService =
+          filters.service === "all" ? true : log.service === filters.service;
 
-      return hasSource && hasService;
-    });
+        return hasSource && hasService;
+      })
+      .sort((a, b) =>
+        new Date(a.timestamp).getTime() > new Date(b.timestamp).getTime()
+          ? 1
+          : -1,
+      );
   }, [logs, filters]);
 
   useEffect(() => {
@@ -166,7 +172,7 @@ export const LogsView = ({ logs, setLogs }: Props) => {
   const scrollToLogContainerEnd = () => {
     logsContainerRef.current?.scrollTo(
       0,
-      logsContainerRef.current?.scrollHeight
+      logsContainerRef.current?.scrollHeight,
     );
     setScrolled(false);
   };
@@ -183,8 +189,8 @@ export const LogsView = ({ logs, setLogs }: Props) => {
             size="small"
             value={filters.service}
             sx={{ mr: 1 }}
-            onChange={evt =>
-              setFilters(prev => ({ ...prev, service: evt.target.value }))
+            onChange={(evt) =>
+              setFilters((prev) => ({ ...prev, service: evt.target.value }))
             }
           >
             <MenuItem value="all">---</MenuItem>
@@ -197,8 +203,8 @@ export const LogsView = ({ logs, setLogs }: Props) => {
           <Select
             size="small"
             value={filters.source}
-            onChange={evt =>
-              setFilters(prev => ({ ...prev, source: evt.target.value }))
+            onChange={(evt) =>
+              setFilters((prev) => ({ ...prev, source: evt.target.value }))
             }
           >
             <MenuItem value="all">---</MenuItem>
@@ -211,7 +217,7 @@ export const LogsView = ({ logs, setLogs }: Props) => {
       <Box display="flex" mb={3}>
         <LogsContainer ref={logsContainerRef}>
           <Box>
-            {filteredLogs.map(log => (
+            {filteredLogs.map((log) => (
               <LogItem
                 key={`${log.requestId}_${log.source}`}
                 log={log}
