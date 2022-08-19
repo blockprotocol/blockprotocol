@@ -11,7 +11,7 @@ const packageParentFolders = ["packages", "packages/@blockprotocol"];
 export const listPublishablePackages = async (): Promise<PackageInfo[]> => {
   const result: PackageInfo[] = [];
 
-  const pathWithNamespaces = (
+  const pathsWithNamespace = (
     await Promise.all(
       packageParentFolders.map((parent) =>
         fs
@@ -21,7 +21,7 @@ export const listPublishablePackages = async (): Promise<PackageInfo[]> => {
     )
   ).flat();
 
-  for (const pathWithNamespace of pathWithNamespaces) {
+  for (const pathWithNamespace of pathsWithNamespace) {
     try {
       const packageJson = await fs.readJson(
         `${pathWithNamespace}/package.json`,

@@ -225,13 +225,13 @@ export const readBlocksFromDisk = async (): Promise<
 
 // Blocks which are currently not compliant with the spec, and are thus misleading examples
 const blocksToHide = [
-  "@hash/ callout",
+  "@hash/callout",
   "@hash/embed",
   "@hash/header",
   "@hash/paragraph",
 ];
 
-/** Hel ps consistently hide certain blocks from the hub and user profile pages */
+/** Helps consistently hide certain blocks from the hub and user profile pages */
 export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {

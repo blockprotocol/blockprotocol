@@ -108,7 +108,7 @@ export class Block implements ExpandedBlockMetadata {
       ({ pathWithNamespace }) => pathWithNamespace === `@${shortname}/${name}`,
     )?.[0] ?? null) as ExpandedBlockMetadata | null;
 
-    // const block = awa it db
+    // const block = await db
     //   .collection<BlockDbProperties>(this.COLLECTION_ NAME)
     //   .fin dOne(
     //     { blockName: params.name, blockNamespace: params.user.shortna me },
