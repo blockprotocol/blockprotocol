@@ -83,7 +83,7 @@ test("key elements should be present when user views their account page", async 
 });
 
 const codeBlockMetadata = (blocksData as ExpandedBlockMetadata[]).find(
-  ({ name }) => name === "@hashintel/block-code",
+  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
 );
 
 if (!codeBlockMetadata) {

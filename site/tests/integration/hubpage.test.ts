@@ -4,7 +4,7 @@ import blocksData from "../../blocks-data.json";
 import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 
 const codeBlockMetadata = (blocksData as ExpandedBlockMetadata[]).find(
-  ({ name }) => name === "@hashintel/block-code",
+  ({ name }) => name === "block-code",
 );
 
 if (!codeBlockMetadata) {
