@@ -95,6 +95,15 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const prevReadonly = useRef<boolean | undefined>(readonly);
 
+  const blockType =
+    "ReactComponent" in blockDefinition
+      ? "react"
+      : "customElement" in blockDefinition
+      ? "custom-element"
+      : "html" in blockDefinition
+      ? "html"
+      : null;
+
   const propsToInject: BlockGraphProperties<any> = {
     graph: {
       readonly: debugReadonly,
@@ -193,7 +202,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   }
 
   return (
-    <Layout>
+    <Layout blockType={blockType}>
       <Box>
         <Box padding={3.75}>
           <div ref={wrapperRef}>

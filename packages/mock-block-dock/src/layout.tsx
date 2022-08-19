@@ -1,22 +1,23 @@
 import { DarkMode, LightMode } from "@mui/icons-material";
 import {
   Box,
+  Chip,
   createTheme,
   CssBaseline,
   Drawer,
   IconButton,
   styled,
-  Switch,
   ThemeProvider,
-  Typography
+  Typography,
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 
 type LayoutProps = {
   children: ReactNode;
+  blockType?: "html" | "react" | "custom-element";
 };
 
-export const SIDEBAR_WIDTH = 250;
+export const SIDEBAR_WIDTH = 200;
 
 const HeaderContainer = styled(Box)(({ theme }) => ({
   height: 50,
@@ -27,7 +28,7 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   paddingLeft: theme.spacing(3),
-  borderBottom: `1px solid ${theme.palette.divider}`
+  borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
 export const MainContainer = styled(Box)(() => ({
@@ -36,26 +37,38 @@ export const MainContainer = styled(Box)(() => ({
   flex: 1,
   overflowY: "scroll",
   position: "relative",
-  marginLeft: SIDEBAR_WIDTH
+  marginLeft: SIDEBAR_WIDTH,
 }));
+
+const chipInfo = {
+  html: {
+    color: "info",
+    label: "HTML Block",
+  },
+  "custom-element": {
+    label: "Custom Element Block",
+    color: "warning",
+  },
+  react: { label: "React Block", color: "secondary" },
+} as const;
 
 const darkTheme = createTheme({
   palette: {
-    mode: "dark"
-  }
+    mode: "dark",
+  },
 });
 
 const lightTheme = createTheme({
   palette: {
-    mode: "light"
-  }
+    mode: "light",
+  },
 });
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children, blockType }: LayoutProps) => {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <ThemeProvider theme={!darkMode ? darkTheme : lightTheme}>
+    <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Box height="100vh" display="flex">
         <Drawer
@@ -63,20 +76,31 @@ export const Layout = ({ children }: LayoutProps) => {
           open
           PaperProps={{
             sx: {
-              width: SIDEBAR_WIDTH
-            }
+              width: SIDEBAR_WIDTH,
+            },
           }}
         >
-          <Typography mt={4} pl={2}>
+          <Typography variant="h6" mt={4} pl={2}>
             Mock Block Dock
           </Typography>
         </Drawer>
         <MainContainer component="main">
           <HeaderContainer>
-            <IconButton onClick={() => setDarkMode(prev => !prev)}>
+            <IconButton
+              sx={{ mr: 1 }}
+              onClick={() => setDarkMode((prev) => !prev)}
+            >
               {darkMode ? <LightMode /> : <DarkMode />}
             </IconButton>
-            {/* zoom */}
+            {blockType && (
+              <Chip
+                size="small"
+                label={chipInfo[blockType].label}
+                color={chipInfo[blockType].color}
+              />
+            )}
+
+            {/* @todo add zoom functionality */}
           </HeaderContainer>
           <Box flex={1}>{children}</Box>
         </MainContainer>

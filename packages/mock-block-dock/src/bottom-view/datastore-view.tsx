@@ -13,7 +13,7 @@ export const DataStoreView = ({ datastore }: Props) => {
         entities: datastore.entities,
         entityTypes: datastore.entityTypes,
         links: datastore.links,
-        linkedAggregations: datastore.linkedAggregationDefinitions
+        linkedAggregations: datastore.linkedAggregationDefinitions,
       }}
     />
   );
