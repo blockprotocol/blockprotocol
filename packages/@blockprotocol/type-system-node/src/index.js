@@ -113,6 +113,7 @@ function takeObject(idx) {
     return ret;
 }
 /**
+* Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
 * @param {string} uri
 * @returns {string}
 */
@@ -140,6 +141,10 @@ module.exports.parseBaseUri = function(uri) {
 };
 
 /**
+* Checks if a given URL string is a Block Protocol compliant Versioned URI.
+*
+* If the URL is valid this function returns nothing, otherwise it throws a
+* `ParseVersionedUriError`
 * @param {string} uri
 */
 module.exports.isValidVersionedUri = function(uri) {

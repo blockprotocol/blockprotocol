@@ -1,11 +1,11 @@
 import { isValidVersionedUri, parseBaseUri } from "..";
 
-describe("isValidBaseUri", () => {
+describe("parseBaseUri", () => {
   test.each([
     ["http://example.com/", "http://example.com/"],
     ["http://example.com", "http://example.com/"],
-    ["file://localhost/documents/myfile", "file:///documents/myfile"],
-    ["file://localhost/documents/myfile", "file:///documents/myfile"],
+    ["file://localhost/documents/myfolder", "file:///documents/myfolder"],
+    ["file://localhost/documents/myfolder", "file:///documents/myfolder"],
     ["ftp://rms@example.com", "ftp://rms@example.com/"],
     ["https://////example.com///", "https://example.com///"],
     ["file://loc%61lhost/", "file:///"],
@@ -19,6 +19,7 @@ describe("isValidBaseUri", () => {
     "example",
     "https://example.com:demo",
     "http://[www.example.com]/",
+    "data:text/plain,Hello?World#",
   ])("`parseBaseUri(%s)` errors", (input) => {
     expect(() => {
       const _ = parseBaseUri(input);
