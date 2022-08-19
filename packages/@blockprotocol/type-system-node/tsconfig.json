@@ -21,7 +21,9 @@
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "./dev/**/*.ts",
-    "./dev/**/*.tsx"
+    "./dev/**/*.tsx",
+    "./dist/**/*.ts",
+    "./dist/**/*.tsx"
   ],
-  "exclude": ["dist", "node_modules"]
+  "exclude": ["node_modules"]
 }
