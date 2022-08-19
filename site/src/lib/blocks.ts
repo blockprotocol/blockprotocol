@@ -142,7 +142,7 @@ const enhanceBlockMetadata = (
     ...metadata,
     author: namespace.replace(/^@/, ""),
     name,
-    blockSitePath: `/ ${namespace}/blocks/${name}`,
+    blockSitePath: `/${namespace}/blocks/${name}`,
     // fallback while not all blocks have blockType defined
     blockType: metadata.blockType ?? { entryPoint: "react" },
     // @todo figure out what we're going to use for the unique block Ids
