@@ -66,7 +66,6 @@ const DevApp: FunctionComponent = () => {
   return (
     <>
       <div style={{ position: "absolute", right: 16, top: 16, zIndex: 100 }}>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/869  */}
         <label>
           <span style={{ fontSize: 14, marginRight: 8 }}>
             Select test block

@@ -70,6 +70,12 @@ module.exports = {
     "react/prop-types": "off",
     // because we are using typescript this is redundant
     "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        assert: "either",
+      },
+    ],
     "no-restricted-imports": ["error", sharedNoRestrictedImportsConfig],
     "react/function-component-definition": [
       "error",
