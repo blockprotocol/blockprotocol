@@ -87,8 +87,7 @@ impl FromStr for VersionedUri {
     type Err = ParseVersionedUriError;
 
     fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
-        let (base_uri, version) = uri.rsplit_once("/v/").ok_or(ParseVersionedUriError)?;
-
+        let (base_uri, version) = uri.rsplit_once("v/").ok_or(ParseVersionedUriError)?;
         // TODO: better error handling
         Self::new(
             &BaseUri::new(base_uri).map_err(|_| ParseVersionedUriError {})?,
@@ -115,5 +114,19 @@ impl<'de> Deserialize<'de> for VersionedUri {
         String::deserialize(deserializer)?
             .parse()
             .map_err(de::Error::custom)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // TODO: add some unit tests for base URI
+
+    #[test]
+    fn versioned_uri() {
+        let input_str = "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1";
+        let uri = VersionedUri::from_str(input_str).expect("Parsing versioned URI failed");
+        assert_eq!(&uri.to_string(), input_str);
     }
 }

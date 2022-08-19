@@ -45,3 +45,7 @@ mod utils;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 pub use ontology::{data_type::DataType, uri};
+
+#[cfg(test)]
+#[path = "../tests/data/lib.rs"]
+mod test_data;

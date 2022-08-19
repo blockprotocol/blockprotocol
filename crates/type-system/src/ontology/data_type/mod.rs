@@ -89,3 +89,51 @@ impl DataType {
         &mut self.additional_properties
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{test_data, utils::tests::serialize_is_idempotent};
+
+    #[test]
+    fn text() {
+        serialize_is_idempotent::<DataType>(
+            serde_json::from_str(test_data::data_type::TEXT_V1).expect("invalid json"),
+        );
+    }
+
+    #[test]
+    fn number() {
+        serialize_is_idempotent::<DataType>(
+            serde_json::from_str(test_data::data_type::NUMBER_V1).expect("invalid json"),
+        );
+    }
+
+    #[test]
+    fn boolean() {
+        serialize_is_idempotent::<DataType>(
+            serde_json::from_str(test_data::data_type::BOOLEAN_V1).expect("invalid json"),
+        );
+    }
+
+    #[test]
+    fn null() {
+        serialize_is_idempotent::<DataType>(
+            serde_json::from_str(test_data::data_type::NULL_V1).expect("invalid json"),
+        );
+    }
+
+    #[test]
+    fn object() {
+        serialize_is_idempotent::<DataType>(
+            serde_json::from_str(test_data::data_type::OBJECT_V1).expect("invalid json"),
+        );
+    }
+
+    #[test]
+    fn empty_list() {
+        serialize_is_idempotent::<DataType>(
+            serde_json::from_str(test_data::data_type::EMPTY_LIST_V1).expect("invalid json"),
+        );
+    }
+}
