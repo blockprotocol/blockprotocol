@@ -33,7 +33,7 @@ export const FAQ: FunctionComponent<FAQProps> = ({ question, children }) => {
       expanded={expanded}
       sx={{
         boxShadow: "none",
-        "&:first-child": {
+        "&:first-of-type": {
           marginTop: -2,
         },
       }}

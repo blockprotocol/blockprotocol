@@ -149,6 +149,8 @@ export interface Message extends MessageContents {
   service: string;
   // the source of the message
   source: "block" | "embedder";
+  // when the message was sent
+  timestamp: string;
 }
 
 export type MessageCallback<
