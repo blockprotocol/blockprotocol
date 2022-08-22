@@ -25,7 +25,7 @@ test("dashboard page should contain key elements", async ({ page }) => {
     ["Publish a block", "/@alice/blocks"],
     ["Build a block", "/docs/developing-blocks"],
     ["Create a Type", null],
-    ["Create your first API key", "/settings/api-keys"],
+    ["Create and manage API keys", "/settings/api-keys"],
     ["View your public profile", "/@alice"],
     ["Manage blocks", "/@alice/blocks"],
     ["Manage types", "/@alice/schemas"],
