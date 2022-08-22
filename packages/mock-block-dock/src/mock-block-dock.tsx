@@ -17,7 +17,7 @@ import {
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
-import { BottomView } from "./bottom-view";
+import { DevTools } from "./dev-tools";
 import { Layout } from "./layout";
 import { useMockBlockProps } from "./use-mock-block-props";
 
@@ -61,7 +61,7 @@ type MockBlockDockProps = {
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
-  blockEntity: initialBlockEntity,
+  blockEntity: initialBlockEntity1,
   blockSchema,
   debug,
   initialEntities,
@@ -70,6 +70,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialLinkedAggregations,
   readonly,
 }) => {
+  const [initialBlockEntity, setInitialBlockEntity] =
+    useState(initialBlockEntity1);
   const {
     blockEntity,
     blockGraph,
@@ -91,6 +93,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     null,
   );
   const [debugReadonly, setDebugReadonly] = useState<boolean>(!!readonly);
+  const [debugMode, setDebugMode] = useState(debug);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const prevReadonly = useRef<boolean | undefined>(readonly);
@@ -178,31 +181,40 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     setDebugReadonly(!!readonly);
   }
 
-  if (!debug) {
+  if (!debugMode) {
     return (
-      <div ref={wrapperRef}>
-        {graphService ? (
-          <BlockRenderer
-            customElement={
-              "customElement" in blockDefinition
-                ? blockDefinition.customElement
-                : undefined
-            }
-            html={"html" in blockDefinition ? blockDefinition.html : undefined}
-            properties={propsToInject}
-            ReactComponent={
-              "ReactComponent" in blockDefinition
-                ? blockDefinition.ReactComponent
-                : undefined
-            }
-          />
-        ) : null}
-      </div>
+      <>
+        <div ref={wrapperRef}>
+          {graphService ? (
+            <BlockRenderer
+              customElement={
+                "customElement" in blockDefinition
+                  ? blockDefinition.customElement
+                  : undefined
+              }
+              html={
+                "html" in blockDefinition ? blockDefinition.html : undefined
+              }
+              properties={propsToInject}
+              ReactComponent={
+                "ReactComponent" in blockDefinition
+                  ? blockDefinition.ReactComponent
+                  : undefined
+              }
+            />
+          ) : null}
+        </div>
+        <div style={{ position: "fixed", bottom: 16, right: 16 }}>
+          <button type="button" onClick={() => setDebugMode(true)}>
+            Toggle Debug Mode
+          </button>
+        </div>
+      </>
     );
   }
 
   return (
-    <Layout blockType={blockType}>
+    <Layout blockType={blockType} exitDebugMode={() => setDebugMode(false)}>
       <Box>
         <Box padding={3.75}>
           <div ref={wrapperRef}>
@@ -228,11 +240,12 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
         </Box>
       </Box>
 
-      <BottomView
+      <DevTools
         graphProperties={propsToInject}
         datastore={datastore}
         readonly={debugReadonly}
         setReadonly={setDebugReadonly}
+        setBlockEntity={setInitialBlockEntity}
       />
     </Layout>
   );

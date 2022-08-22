@@ -1,7 +1,8 @@
 // @todo rename
 
 import { Message } from "@blockprotocol/core/dist/esm/types";
-import { BlockGraphProperties } from "@blockprotocol/graph/.";
+import { BlockGraphProperties } from "@blockprotocol/graph";
+import { Entity } from "@blockprotocol/graph/.";
 import {
   KeyboardDoubleArrowDown,
   KeyboardDoubleArrowUp,
@@ -54,13 +55,15 @@ type BottomViewProps = {
   datastore: MockData;
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
+  setBlockEntity: (entity: Entity) => void;
 };
 
-export const BottomView = ({
+export const DevTools = ({
   graphProperties,
   datastore,
   readonly,
   setReadonly,
+  setBlockEntity,
 }: BottomViewProps) => {
   const [value, setValue] = useState(2);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -119,6 +122,7 @@ export const BottomView = ({
             blockEntity={graphProperties.graph.blockEntity}
             readonly={readonly}
             setReadonly={setReadonly}
+            setBlockEntity={setBlockEntity}
           />
         </TabPanel>
         <TabPanel value={value} index={1}>
