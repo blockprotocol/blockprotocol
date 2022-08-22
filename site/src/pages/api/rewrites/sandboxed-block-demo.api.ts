@@ -26,7 +26,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const blockMetadata = getBlockByUserAndName({
     shortname,
-    name: req.query.blockSlug as string,
+    name: req.query.blockslug as string,
   });
 
   if (!blockMetadata) {
