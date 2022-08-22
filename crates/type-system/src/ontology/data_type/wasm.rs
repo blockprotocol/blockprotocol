@@ -1,6 +1,6 @@
 #![allow(
     non_snake_case,
-    reason = "We want camelCase types in TS, and this module is WASM only"
+    reason = "We want camelCase names (variables, functions, args) in TS, and this module is WASM only"
 )]
 use wasm_bindgen::prelude::*;
 
