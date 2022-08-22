@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 
 use crate::{
     ontology::repr_shared::validate::{ValidateUri, ValidationError},
@@ -13,13 +15,17 @@ enum ArrayTypeTag {
     Array,
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Array<T> {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "'array'"))]
     r#type: ArrayTypeTag,
     items: T,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     min_items: Option<usize>,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     max_items: Option<usize>,
 }
@@ -51,6 +57,7 @@ impl<T> Array<T> {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum ValueOrArray<T> {

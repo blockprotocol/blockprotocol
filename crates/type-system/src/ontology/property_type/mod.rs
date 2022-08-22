@@ -1,6 +1,11 @@
+#[cfg(target_arch = "wasm32")]
+mod wasm;
+
 use std::collections::HashSet;
 
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
     ontology::data_type::DataTypeReference,
@@ -8,10 +13,11 @@ use crate::{
     Array, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PropertyTypeReference {
-    // TODO: Test if the URI is an actual property type
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$ref")]
     uri: VersionedUri,
 }
@@ -42,13 +48,19 @@ impl ValidateUri for PropertyTypeReference {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged)]
 #[allow(clippy::enum_variant_names)]
 pub enum PropertyValues {
     DataTypeReference(DataTypeReference),
     PropertyTypeObject(Object<ValueOrArray<PropertyTypeReference>, 1>),
-    ArrayOfPropertyValues(Array<OneOf<Self>>),
+    ArrayOfPropertyValues(
+        // This is a hack, currently recursive enums seem to break tsify
+        // https://github.com/madonoharu/tsify/issues/5
+        #[cfg_attr(target_arch = "wasm32", tsify(type = "Array<OneOf<PropertyValues>>"))]
+        Array<OneOf<PropertyValues>>,
+    ),
 }
 
 impl PropertyValues {
@@ -96,13 +108,17 @@ enum PropertyTypeTag {
     PropertyType,
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct PropertyType {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
     kind: PropertyTypeTag,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$id")]
     id: VersionedUri,
     title: String,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]

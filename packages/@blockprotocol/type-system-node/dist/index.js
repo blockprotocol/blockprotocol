@@ -90,16 +90,15 @@ function getStringFromWasm0(ptr, len) {
     return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
 }
 
-let heap_next = heap.length;
+let stack_pointer = 32;
 
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
-    return idx;
+function addBorrowedObject(obj) {
+    if (stack_pointer == 1) throw new Error('out of js stack');
+    heap[--stack_pointer] = obj;
+    return stack_pointer;
 }
+
+let heap_next = heap.length;
 
 function dropObject(idx) {
     if (idx < 36) return;
@@ -112,6 +111,56 @@ function takeObject(idx) {
     dropObject(idx);
     return ret;
 }
+/**
+* Checks if a given {DataType} is valid
+*
+* @throws {MalformedDataTypeError} if the data type is malformed
+* @param {DataType} dataTypeObj
+*/
+module.exports.isValidDataType = function(dataTypeObj) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.isValidDataType(retptr, addBorrowedObject(dataTypeObj));
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        heap[stack_pointer++] = undefined;
+    }
+};
+
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
+/**
+* Checks if a given {PropertyType} is valid
+*
+* @throws {ValidationError} if the property type is malformed
+* @param {PropertyType} propertyTypeObj
+*/
+module.exports.isValidPropertyType = function(propertyTypeObj) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        heap[stack_pointer++] = undefined;
+    }
+};
+
 /**
 * Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
 *
@@ -161,34 +210,6 @@ module.exports.isValidVersionedUri = function(uri) {
         }
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
-    }
-};
-
-let stack_pointer = 32;
-
-function addBorrowedObject(obj) {
-    if (stack_pointer == 1) throw new Error('out of js stack');
-    heap[--stack_pointer] = obj;
-    return stack_pointer;
-}
-/**
-* Checks if a given {DataType} is valid
-*
-* @throws {MalformedDataTypeError} if the data type is malformed
-* @param {DataType} dataTypeObj
-*/
-module.exports.isValidDataType = function(dataTypeObj) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.isValidDataType(retptr, addBorrowedObject(dataTypeObj));
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        heap[stack_pointer++] = undefined;
     }
 };
 
@@ -264,16 +285,30 @@ class ParseVersionedUriError {
     }
 }
 module.exports.ParseVersionedUriError = ParseVersionedUriError;
+/**
+*/
+class TempError {
 
-module.exports.__wbg_parsebaseurierror_new = function(arg0) {
-    const ret = ParseBaseUriError.__wrap(arg0);
-    return addHeapObject(ret);
-};
+    static __wrap(ptr) {
+        const obj = Object.create(TempError.prototype);
+        obj.ptr = ptr;
 
-module.exports.__wbg_parseversionedurierror_new = function(arg0) {
-    const ret = ParseVersionedUriError.__wrap(arg0);
-    return addHeapObject(ret);
-};
+        return obj;
+    }
+
+    __destroy_into_raw() {
+        const ptr = this.ptr;
+        this.ptr = 0;
+
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_temperror_free(ptr);
+    }
+}
+module.exports.TempError = TempError;
 
 module.exports.__wbg_malformeddatatypeerror_new = function(arg0) {
     const ret = MalformedDataTypeError.__wrap(arg0);
@@ -287,6 +322,21 @@ module.exports.__wbindgen_json_serialize = function(arg0, arg1) {
     const len0 = WASM_VECTOR_LEN;
     getInt32Memory0()[arg0 / 4 + 1] = len0;
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+};
+
+module.exports.__wbg_temperror_new = function(arg0) {
+    const ret = TempError.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_parsebaseurierror_new = function(arg0) {
+    const ret = ParseBaseUriError.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbg_parseversionedurierror_new = function(arg0) {
+    const ret = ParseVersionedUriError.__wrap(arg0);
+    return addHeapObject(ret);
 };
 
 module.exports.__wbindgen_throw = function(arg0, arg1) {

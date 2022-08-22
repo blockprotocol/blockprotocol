@@ -1,18 +1,20 @@
 mod error;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
-
 use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
 use error::ParseVersionedUriError;
 use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 use url::Url;
 
 use crate::uri::error::ParseBaseUriError;
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Clone, PartialEq, Eq, Hash)]
-pub struct BaseUri(Url);
+pub struct BaseUri(#[cfg_attr(target_arch = "wasm32", tsify(type = "string"))] Url);
 
 impl fmt::Debug for BaseUri {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -41,6 +43,7 @@ impl BaseUri {
     }
 }
 
+// TODO: can we impl Tsify to turn this into a type: template string
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct VersionedUri {
     base_uri: BaseUri,

@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
 use serde::{de, Deserialize, Deserializer, Serialize};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 
 use crate::{
     ontology::repr_shared::validate::{ValidateUri, ValidationError},
@@ -14,15 +16,18 @@ enum ObjectTypeTag {
     Object,
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 struct ObjectRepr<V> {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
     r#type: ObjectTypeTag,
     properties: HashMap<BaseUri, V>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required: Vec<BaseUri>,
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct Object<V, const MIN: usize = 0> {
     #[serde(flatten)]

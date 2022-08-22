@@ -7,7 +7,7 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use serde_json;
 #[cfg(target_arch = "wasm32")]
-use {tsify::Tsify, wasm_bindgen::prelude::*};
+use tsify::Tsify;
 
 use crate::{
     uri::{BaseUri, VersionedUri},
@@ -27,9 +27,11 @@ enum DataTypeTag {
 pub struct DataType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'dataType'"))]
     kind: DataTypeTag,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$id")]
     id: VersionedUri,
     title: String,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(rename = "type")]
@@ -93,9 +95,11 @@ impl DataType {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DataTypeReference {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$ref")]
     uri: VersionedUri,
 }

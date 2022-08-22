@@ -1,13 +1,20 @@
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::ontology::repr_shared::validate::ValidationError;
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct OneOfRepr<T> {
+    // TODO: tsify doesn't seem to let us override the type of this without losing the generic
+    //  see https://github.com/madonoharu/tsify/issues/4
+    //  we want something like #[cfg_attr(target_arch = "wasm32", tsify(type = "[T, ...T[]]"))]
     one_of: Vec<T>,
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(try_from = "OneOfRepr<T>")]
 pub struct OneOf<T> {
