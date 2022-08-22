@@ -34,7 +34,8 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
         setUserHasApiKey(
           !!data?.apiKeysMetadata.filter((key) => !key.revokedAt).length,
         ),
-      );
+      )
+      .catch(() => setUserHasApiKey(false));
   }, []);
 
   useEffect(() => {
