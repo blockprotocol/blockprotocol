@@ -9,3 +9,4 @@
 // TODO: reconsider calling these URIs in the spec, it seems to be a redundant term nowadays and
 //  we should probably just go with URL
 pub mod uri;
+pub mod data_type;
