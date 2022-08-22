@@ -1,4 +1,4 @@
-import { FunctionComponent, useState } from "react";
+import { ChangeEvent, FunctionComponent, useState } from "react";
 import { render } from "react-dom";
 
 import { MockBlockDock } from "../src";
@@ -9,102 +9,87 @@ import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
 
+type TestBlockType =
+  | "react"
+  | "custom-element"
+  | "html-at-url"
+  | "html-as-string";
+
 const DevApp: FunctionComponent = () => {
-  const [entityId, setEntityId] = useState(1);
-  const [name, setName] = useState("World");
-  const [readonly, setReadonly] = useState(false);
+  const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
 
   const blockEntity = {
-    entityId: `test-entity-${entityId}`,
+    entityId: `test-entity-1`,
     entityTypeId: "test-type-1",
-    properties: { name },
+    properties: { name: "World" },
   };
 
-  return (
-    <div style={{ fontFamily: "sans-serif" }}>
-      <div
-        style={{
-          border: "1px solid black",
-          padding: 15,
-        }}
-      >
-        <h2>Update component props from outside the block</h2>
-        <button type="button" onClick={() => setEntityId(entityId + 1)}>
-          Increment Entity ID
-        </button>
+  let blockDefinition;
 
-        <label htmlFor="reaodnly-input" style={{ marginLeft: 20 }}>
-          <input
-            id="readonly-input"
-            type="checkbox"
-            onChange={(evt) => setReadonly(evt.target.checked)}
-          />
-          Read only mode
+  switch (testBlockType) {
+    case "custom-element":
+      blockDefinition = {
+        customElement: {
+          elementClass: TestCustomElementBlock,
+          tagName: "test-custom-element-block",
+        },
+      };
+      break;
+
+    case "html-at-url":
+      blockDefinition = {
+        html: {
+          url: "./test-html-block/block.html",
+        },
+      };
+      break;
+
+    case "html-as-string":
+      blockDefinition = {
+        html: {
+          source: testBlockString,
+          url: new URL(
+            "./test-html-block/block.html",
+            window.location.toString(),
+          ).toString(),
+        },
+      };
+      break;
+
+    case "react":
+    default:
+      blockDefinition = {
+        ReactComponent: TestReactBlock,
+      };
+  }
+
+  return (
+    <>
+      <div style={{ position: "absolute", right: 16, top: 16, zIndex: 100 }}>
+        <label>
+          <span style={{ fontSize: 14, marginRight: 8 }}>
+            Select test block
+          </span>
+          <select
+            value={testBlockType}
+            onChange={(evt: ChangeEvent<HTMLSelectElement>) =>
+              setTestBlockType(evt.target.value as TestBlockType)
+            }
+          >
+            <option value="react">React</option>
+            <option value="custom-element">Custom Element</option>
+            <option value="html-at-url">HTML at URL</option>
+            <option value="html-as-string">HTML as string</option>
+          </select>
         </label>
-        <br />
-        <br />
-        <input
-          type="text"
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder={"blockEntity's name property"}
-        />
       </div>
-      <br />
-      <h2>React</h2>
-      <div style={{ border: "1px solid black", padding: 15 }}>
-        <MockBlockDock
-          debug
-          blockDefinition={{ ReactComponent: TestReactBlock }}
-          blockEntity={blockEntity}
-          readonly={readonly}
-        />
-      </div>
-      <h2>Custom Element</h2>
-      <div style={{ border: "1px solid black", padding: 15 }}>
-        <MockBlockDock
-          debug
-          blockDefinition={{
-            customElement: {
-              elementClass: TestCustomElementBlock,
-              tagName: "test-custom-element-block",
-            },
-          }}
-          blockEntity={blockEntity}
-          readonly={readonly}
-        />
-      </div>
-      <h2>HTML at URL</h2>
-      <div style={{ border: "1px solid black", padding: 15 }}>
-        <MockBlockDock
-          debug
-          blockDefinition={{
-            html: {
-              url: "./test-html-block/block.html",
-            },
-          }}
-          blockEntity={blockEntity}
-          readonly={readonly}
-        />
-      </div>
-      <h2>HTML as string</h2>
-      <div style={{ border: "1px solid black", padding: 15 }}>
-        <MockBlockDock
-          debug
-          blockDefinition={{
-            html: {
-              source: testBlockString,
-              url: new URL(
-                "./test-html-block/block.html",
-                window.location.toString(),
-              ).toString(),
-            },
-          }}
-          blockEntity={blockEntity}
-          readonly={readonly}
-        />
-      </div>
-    </div>
+
+      <MockBlockDock
+        debug
+        blockDefinition={blockDefinition}
+        blockEntity={blockEntity}
+      />
+    </>
   );
 };
 

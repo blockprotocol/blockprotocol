@@ -215,7 +215,7 @@ If blocks generate any scripts dynamically at runtime, they MUST call `markScrip
 
 Embedding applications MUST update any relative static imports (or script tag src attributes) contained within a block's HTML source to ensure the URLs are relative to the block's source, and not the page the HTML is hosted on. The `@blockprotocol/core` package exports `markBlockScripts` which can be used to do this for scripts (not e.g. an `img` with a relative `src`).
 
-An example HTML block is available via `npx create-block-app your-block-name --template html`
+An example HTML block is available via `npx create-block-app@latest your-block-name --template html`
 
 ## Block-application communication
 

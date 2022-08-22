@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useEffect } from "react";
 
 export const parseIntFromPixelString = (pixelString: string): number => {
   if (!pixelString.endsWith("px")) {
@@ -16,7 +16,7 @@ export const parseIntFromPixelString = (pixelString: string): number => {
  * components modal, drawer, menu, popover, dialog.
  */
 export const useScrollLock = (active: boolean) =>
-  useLayoutEffect(() => {
+  useEffect(() => {
     document.documentElement.style.cssText = active
       ? "position: fixed; overflow-y: scroll; width: 100%"
       : "";

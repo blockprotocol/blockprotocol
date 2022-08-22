@@ -61,7 +61,7 @@ module.exports = {
       "error",
       {
         // graph uses 'exports' field in package.json https://github.com/import-js/eslint-plugin-import/issues/1810
-        ignore: ["^https?://", "^@blockprotocol/graph"],
+        ignore: ["^https?://", "^@blockprotocol/graph", "^@blockprotocol/hook"],
       },
     ],
     "import/prefer-default-export": "off",
@@ -70,6 +70,12 @@ module.exports = {
     "react/prop-types": "off",
     // because we are using typescript this is redundant
     "jsx-a11y/anchor-is-valid": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        assert: "either",
+      },
+    ],
     "no-restricted-imports": ["error", sharedNoRestrictedImportsConfig],
     "react/function-component-definition": [
       "error",
@@ -218,9 +224,19 @@ module.exports = {
       },
     },
     {
+      files: ["packages/**/*.test.{j,t}s{x,}"],
+      env: {
+        jest: true,
+        node: true,
+      },
+    },
+    {
       // plugin does not support .js file extensions in .ts files, which ESM TS projects require
       // https://github.com/import-js/eslint-plugin-import/issues/2446
-      files: ["packages/@blockprotocol/graph/**"],
+      files: [
+        "packages/@blockprotocol/graph/**",
+        "packages/@blockprotocol/hook/**",
+      ],
       rules: {
         "import/no-unresolved": "off",
       },
@@ -241,13 +257,19 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-template/*"],
+      files: ["packages/block-template-custom-element/*"],
       parserOptions: {
-        project: ["packages/block-template/tsconfig.json"],
+        project: ["packages/block-template-custom-element/tsconfig.json"],
       },
     },
     {
-      files: ["packages/block-template/**/dev.tsx"],
+      files: ["packages/block-template-react/*"],
+      parserOptions: {
+        project: ["packages/block-template-react/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/block-template-*/**/dev.tsx"],
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
@@ -256,7 +278,7 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-template/templates/custom-element/src/app.ts"],
+      files: ["packages/block-template-custom-element/src/app.ts"],
       rules: {
         "no-console": "off",
       },

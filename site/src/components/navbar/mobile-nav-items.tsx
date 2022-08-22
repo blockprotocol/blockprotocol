@@ -9,7 +9,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { useRouter } from "next/router";
 import {
   Dispatch,
   Fragment,
@@ -32,6 +31,7 @@ import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: ReactElement;
   item: T;
+  hydrationFriendlyAsPath: string;
   parentPageHref: T extends SiteMapPageSection ? string : undefined;
   depth?: number;
   expandedItems: { href: string; depth: number }[];
@@ -47,10 +47,9 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
   setExpandedItems,
   item,
   onClose,
+  hydrationFriendlyAsPath,
 }: MobileNavNestedPageProps<T>) => {
-  const router = useRouter();
-  const { asPath } = router;
-  const pathWithoutParams = generatePathWithoutParams(asPath);
+  const pathWithoutParams = generatePathWithoutParams(hydrationFriendlyAsPath);
 
   const { title } = item;
 
@@ -159,6 +158,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
             {(itemIsPage(item) ? item.sections : item.subSections).map(
               (subSection) => (
                 <MobileNavNestedPage<SiteMapPageSection>
+                  hydrationFriendlyAsPath={hydrationFriendlyAsPath}
                   key={subSection.anchor}
                   depth={depth + 1}
                   parentPageHref={
@@ -175,6 +175,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
               <>
                 {item.subPages.map((subPage) => (
                   <MobileNavNestedPage<SiteMapPage>
+                    hydrationFriendlyAsPath={hydrationFriendlyAsPath}
                     key={subPage.href}
                     depth={depth + 1}
                     item={subPage}
@@ -195,27 +196,32 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
 };
 
 type MobileNavItemsProps = {
+  hydrationFriendlyAsPath: string;
   onClose: () => void;
 };
 
 const getInitialExpandedItems = ({
-  asPath,
+  hydrationFriendlyAsPath,
   parentHref,
   item,
   depth = 0,
 }: {
-  asPath: string;
+  hydrationFriendlyAsPath: string;
   parentHref?: string;
   item: SiteMapPage | SiteMapPageSection;
   depth?: number;
 }): { href: string; depth: number }[] => {
-  const pathWithoutParams = generatePathWithoutParams(asPath);
+  const pathWithoutParams = generatePathWithoutParams(hydrationFriendlyAsPath);
 
   const expandedChildren = [
     ...(itemIsPage(item)
       ? item.subPages
           .map((page) =>
-            getInitialExpandedItems({ item: page, asPath, depth: depth + 1 }),
+            getInitialExpandedItems({
+              item: page,
+              hydrationFriendlyAsPath,
+              depth: depth + 1,
+            }),
           )
           .flat()
       : []),
@@ -223,7 +229,7 @@ const getInitialExpandedItems = ({
       .map((section) =>
         getInitialExpandedItems({
           item: section,
-          asPath,
+          hydrationFriendlyAsPath,
           depth: depth + 1,
           parentHref: itemIsPage(item) ? item.href : parentHref,
         }),
@@ -248,21 +254,27 @@ const getInitialExpandedItems = ({
 
 export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
   onClose,
+  hydrationFriendlyAsPath,
 }) => {
-  const { asPath } = useRouter();
   const { pages } = useContext(SiteMapContext);
 
   const [expandedItems, setExpandedItems] = useState<
     { href: string; depth: number }[]
   >(
-    pages.map((page) => getInitialExpandedItems({ asPath, item: page })).flat(),
+    pages
+      .map((page) =>
+        getInitialExpandedItems({ hydrationFriendlyAsPath, item: page }),
+      )
+      .flat(),
   );
 
   useEffect(() => {
     setExpandedItems((prev) => [
       ...prev,
       ...pages
-        .map((page) => getInitialExpandedItems({ asPath, item: page }))
+        .map((page) =>
+          getInitialExpandedItems({ hydrationFriendlyAsPath, item: page }),
+        )
         .flat()
         .filter(
           (expanded) =>
@@ -272,7 +284,7 @@ export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
             ) === undefined,
         ),
     ]);
-  }, [asPath, pages]);
+  }, [hydrationFriendlyAsPath, pages]);
 
   return (
     <List>
@@ -283,6 +295,7 @@ export const MobileNavItems: FunctionComponent<MobileNavItemsProps> = ({
       {pages.map((page) => (
         <Fragment key={page.href}>
           <MobileNavNestedPage<SiteMapPage>
+            hydrationFriendlyAsPath={hydrationFriendlyAsPath}
             key={page.href}
             icon={NAVBAR_LINK_ICONS[page.title]}
             item={page}

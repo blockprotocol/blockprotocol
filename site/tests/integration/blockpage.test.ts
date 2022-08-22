@@ -47,9 +47,21 @@ test("Block page should contain key elements", async ({
   } else {
     await expect(page.locator("text=Block Properties")).toBeVisible();
   }
+
+  const stringifiedJson = JSON.stringify(blockExample, null, 2);
+
   await expect(
     page.locator("[data-testid='block-properties-tabpanel'] >> textarea"),
-  ).toHaveValue(JSON.stringify(blockExample, null, 2));
+  ).toHaveValue(stringifiedJson);
+
+  await page
+    .locator("[data-testid='block-properties-tabpanel'] >> textarea")
+    .press("Tab");
+
+  // when tab key is pressed, it should insert '\t' to textarea instead of switching focus
+  await expect(
+    page.locator("[data-testid='block-properties-tabpanel'] >> textarea"),
+  ).toHaveValue(`${stringifiedJson}\t`);
 
   if (isMobile) {
     await page.locator("text=Data Source").click();

@@ -1,6 +1,5 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumbs, Typography } from "@mui/material";
-import { useRouter } from "next/router";
 import { FunctionComponent } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
@@ -9,14 +8,14 @@ import { Link } from "../link";
 import { itemIsPage } from "./util";
 
 type MobileBreadcrumbsProps = {
+  hydrationFriendlyAsPath: string;
   crumbs: (SiteMapPage | SiteMapPageSection)[];
 };
 
 export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
+  hydrationFriendlyAsPath,
   crumbs,
 }) => {
-  const { asPath } = useRouter();
-
   return (
     <Breadcrumbs
       sx={{
@@ -35,7 +34,7 @@ export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
             key={item.title}
             href={
               itemIsPage(item)
-                ? asPath.startsWith(`${item.href}#`)
+                ? hydrationFriendlyAsPath.startsWith(`${item.href}#`)
                   ? "#"
                   : item.href
                 : `#${item.anchor}`

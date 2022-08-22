@@ -38,7 +38,9 @@ const handler: NextApiHandler = async (req, res) => {
 
   const { exampleGraph } = await readBlockDataFromDisk(blockMetadata);
 
-  const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
+  // @todo revert; context: https://hashintel.slack.com/archives/C02LG39FJAU/p1661170257710909
+  // const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
+  const mockBlockDockVersion = "0.0.20";
 
   const reactVersion =
     blockMetadata.externals?.react ?? packageJson.dependencies.react;
@@ -150,8 +152,9 @@ const handler: NextApiHandler = async (req, res) => {
             mockBlockDockInitialData,
           )}
       
-          const render = (blockEntityProps) => {
-            const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData  };
+          const render = (props) => {
+            const { readonly, ...blockEntityProps } = props;
+            const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData, readonly  };
             
             document.getElementById("loading-indicator")?.remove();
           

@@ -12,7 +12,14 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import {
+  FunctionComponent,
+  MouseEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import SiteMapContext from "../context/site-map-context";
@@ -28,7 +35,10 @@ import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
 import { MobileNavItems } from "./navbar/mobile-nav-items";
 import { NAVBAR_LINK_ICONS } from "./navbar/util";
 import { SearchNavButton } from "./search-nav-button";
-import { generatePathWithoutParams } from "./shared";
+import {
+  generatePathWithoutParams,
+  useHydrationFriendlyAsPath,
+} from "./shared";
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 
@@ -147,12 +157,13 @@ const useScrollingNavbar = (
 // @todo remove asPath from Navbar
 export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
   const theme = useTheme();
-  const { asPath, pathname } = useRouter();
+  const { pathname } = useRouter();
+  const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
 
-  const isHomePage = generatePathWithoutParams(asPath) === "/";
-  const isDocs = asPath.startsWith("/docs");
+  const isHomePage = generatePathWithoutParams(hydrationFriendlyAsPath) === "/";
+  const isDocs = hydrationFriendlyAsPath.startsWith("/docs");
 
   const md = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -166,7 +177,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
 
   const navbarHeight = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
-  const crumbs = useCrumbs(pages, asPath);
+  const crumbs = useCrumbs(pages, hydrationFriendlyAsPath);
 
   const displayBreadcrumbs = !md && !mobileNavVisible && crumbs.length > 0;
   const neighbourOffset =
@@ -175,6 +186,14 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
   useEffect(() => {
     document.body.style.overflow = mobileNavVisible ? "hidden" : "auto";
   }, [mobileNavVisible]);
+
+  const handleLoginButtonClick = useCallback<MouseEventHandler>(
+    (event) => {
+      openLoginModal();
+      event.preventDefault();
+    },
+    [openLoginModal],
+  );
 
   return (
     <Box
@@ -289,7 +308,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                           display: "flex",
                           alignItems: "center",
                         },
-                        asPath.startsWith(href) && {
+                        hydrationFriendlyAsPath.startsWith(href) && {
                           color: theme.palette.purple[600],
                         },
                       ]}
@@ -310,7 +329,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                   {user || pathname === "/login" ? null : (
                     <Link
                       href="#"
-                      onClick={openLoginModal}
+                      onClick={handleLoginButtonClick}
                       className={clsx(
                         navbarClasses.link,
                         navbarClasses.interactiveLink,
@@ -351,7 +370,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>
-            <MobileBreadcrumbs crumbs={crumbs} />
+            <MobileBreadcrumbs
+              hydrationFriendlyAsPath={hydrationFriendlyAsPath}
+              crumbs={crumbs}
+            />
           </Collapse>
         </Container>
       </Box>
@@ -388,7 +410,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
               overscrollBehavior: "contain",
             }}
           >
-            <MobileNavItems onClose={() => setMobileNavVisible(false)} />
+            <MobileNavItems
+              hydrationFriendlyAsPath={hydrationFriendlyAsPath}
+              onClose={() => setMobileNavVisible(false)}
+            />
           </Box>
 
           {user ? null : (

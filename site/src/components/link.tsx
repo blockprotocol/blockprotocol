@@ -22,13 +22,11 @@ export const BaseLinkWithAnchor = forwardRef<
   HTMLAnchorElement,
   PlainLinkWithAnchorProps
 >((props, ref) => {
-  const { as, href, replace, scroll, shallow, prefetch, locale, ...other } =
-    props;
+  const { as, href, replace, scroll, shallow, locale, ...other } = props;
 
   return (
     <BaseLink
       href={href}
-      prefetch={prefetch}
       as={as}
       replace={replace}
       scroll={scroll}
