@@ -10,10 +10,10 @@ import { InteroperableBlocks } from "../components/pages/home/interoperable-bloc
 import { RegistrySection } from "../components/pages/home/registry-section";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import { useUser } from "../context/user-context";
-import { getAllBlocks } from "../lib/api/blocks";
+import { getAllBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
-  ExpandedBlockMetadata as BlockMetadata,
+  ExpandedBlockMetadata as BlockMetadata
 } from "../lib/blocks";
 
 // @todo how does this magic number work?
@@ -24,10 +24,10 @@ interface PageProps {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const blocks = getAllBlocks();
+  const blocks = await getAllBlocks();
 
   return {
-    props: { catalog: excludeHiddenBlocks(blocks) },
+    props: { catalog: excludeHiddenBlocks(blocks) }
   };
 };
 

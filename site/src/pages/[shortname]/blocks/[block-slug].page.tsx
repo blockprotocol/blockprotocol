@@ -26,7 +26,7 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
-import { getAllBlocks } from "../../../lib/api/blocks";
+import { getAllBlocks } from "../../../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -182,7 +182,7 @@ export const getStaticProps: GetStaticProps<
   }
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const blocks = getAllBlocks();
+  const blocks = await getAllBlocks();
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,

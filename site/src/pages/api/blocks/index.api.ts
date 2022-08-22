@@ -2,12 +2,13 @@ import Ajv from "ajv";
 import { query as queryValidator } from "express-validator";
 import cloneDeep from "lodash/cloneDeep";
 
-import blocksData from "../../../blocks-data.json" assert { type: "json" };
-import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
+import blocksData from "../../../../blocks-data.json" assert { type: "json" };
+import { getAllBlocks } from "../../../lib/api/blocks/get";
+import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler";
 import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
-} from "../../lib/blocks";
+} from "../../../lib/blocks";
 
 export type ApiBlockSearchQuery = {
   author?: string;
@@ -36,7 +37,7 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
       json: jsonText,
     } = req.query as ApiBlockSearchQuery;
 
-    let data: ExpandedBlockMetadata[] = blocksData as ExpandedBlockMetadata[];
+    let data: ExpandedBlockMetadata[] = await getAllBlocks();
 
     if (authorQuery) {
       data = data.filter(({ author }) =>

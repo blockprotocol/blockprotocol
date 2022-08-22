@@ -1,7 +1,7 @@
 import {
   BlockMetadata,
   BlockMetadataRepository,
-  JsonObject,
+  JsonObject
 } from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
@@ -30,7 +30,7 @@ export type BlockMetadataOnDisk = BlockMetadata & {
  * Relative file URLs are rewritten to be absolute, and other fields are added
  */
 export type ExpandedBlockMetadata = BlockMetadata & {
-  createdAt?: Date;
+  createdAt?: string | null;
   // the block's URL on blockprotocol.org
   blockSitePath: string;
   // the folder where the block's assets are stored, currently doubling up as a unique identifier for the block
@@ -60,7 +60,7 @@ export interface StoredBlockInfo {
 // Generate an absolute url to a block file
 const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
-  blockDistributionFolderUrl: string,
+  blockDistributionFolderUrl: string
 ): string | null => {
   if (!mediaPath) {
     return null;
@@ -74,10 +74,10 @@ const generateBlockFileUrl = (
 };
 
 // this only runs on the server-side because hosted-git-info uses some nodejs dependencies
-const getRepositoryUrl = (
+export const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
-  commit: string,
-  hubInfoDirPath: string | undefined,
+  commit?: string | undefined,
+  hubInfoDirPath?: string | undefined
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
@@ -106,30 +106,35 @@ const getRepositoryUrl = (
   return undefined;
 };
 
-const enhanceBlockMetadata = (
-  metadata: BlockMetadata,
+export const enhanceBlockMetadata = ({
+  timestamps,
+  includesExampleGraph,
+  metadata,
+  source
+}: {
+  metadata: BlockMetadata;
   source: {
     blockDistributionFolderUrl: string;
     pathWithNamespace: string;
-    repoUrl: string;
-    repoCommit: string;
+    repository?: BlockMetadataRepository | undefined;
+    repoCommit?: string;
     repoDirectory?: string;
-  },
-  lastUpdated: string,
-  includesExampleGraph: boolean,
-): ExpandedBlockMetadata => {
+  };
+  timestamps: { createdAt?: string; lastUpdated: string };
+  includesExampleGraph: boolean;
+}): ExpandedBlockMetadata => {
   const {
     blockDistributionFolderUrl,
     pathWithNamespace,
-    repoUrl,
+    repository,
     repoCommit,
-    repoDirectory,
+    repoDirectory
   } = source;
 
-  const repository = getRepositoryUrl(
-    repoUrl,
+  const repositoryUrl = getRepositoryUrl(
+    repository,
     repoCommit,
-    repoDirectory,
+    repoDirectory
   )?.replace(/\/$/, "");
 
   const [namespace, name] = pathWithNamespace.split("/");
@@ -147,33 +152,34 @@ const enhanceBlockMetadata = (
     blockType: metadata.blockType ?? { entryPoint: "react" },
     // @todo figure out what we're going to use for the unique block Ids
     componentId: `${blockDistributionFolderUrl}/blocks/${pathWithNamespace}`,
+    createdAt: timestamps.createdAt,
+    displayName: metadata.displayName ?? name,
     icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
     image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),
+    lastUpdated: timestamps.lastUpdated,
     pathWithNamespace,
-    repository,
+    repository: repositoryUrl,
     schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
     variants: metadata.variants?.length
-      ? metadata.variants?.map((variant) => ({
+      ? metadata.variants?.map(variant => ({
           ...variant,
-          icon: generateBlockFileUrl(variant.icon, blockDistributionFolderUrl)!,
+          icon: generateBlockFileUrl(variant.icon, blockDistributionFolderUrl)!
         }))
       : null,
     exampleGraph: generateBlockFileUrl(
       includesExampleGraph ? "example-graph.json" : null,
-      blockDistributionFolderUrl,
-    ),
+      blockDistributionFolderUrl
+    )
   };
 };
 
 /**
  * used  to read and enhance block metadata from disk.
  */
-export const readBlocksFromDisk = async (): Promise<
-  ExpandedBlockMetadata[]
-> => {
+export const readBlocksFromDisk = async (): Promise<ExpandedBlockMetadata[]> => {
   const blockMetadataFilePaths = await globby(
-    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`),
+    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`)
   );
 
   const result: ExpandedBlockMetadata[] = [];
@@ -186,36 +192,33 @@ export const readBlocksFromDisk = async (): Promise<
     const partialMetadata: BlockMetadataOnDisk = await fs.readJson(
       blockMetadataFilePath,
       {
-        encoding: "utf8",
-      },
+        encoding: "utf8"
+      }
     );
 
     const storedBlockInfo: StoredBlockInfo = await fs.readJson(
       path.resolve(process.cwd(), `../hub/${pathWithNamespace}.json`),
-      { encoding: "utf8" },
+      { encoding: "utf8" }
     );
 
     const exampleGraphFileExists = await fs.pathExists(
-      blockMetadataFilePath.replace(
-        "block-metadata.json",
-        "example-graph.json",
-      ),
+      blockMetadataFilePath.replace("block-metadata.json", "example-graph.json")
     );
 
     const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${pathWithNamespace}`;
 
-    const expandedMetadata: ExpandedBlockMetadata = enhanceBlockMetadata(
-      partialMetadata,
-      {
+    const expandedMetadata: ExpandedBlockMetadata = enhanceBlockMetadata({
+      metadata: partialMetadata,
+      source: {
         blockDistributionFolderUrl,
         pathWithNamespace,
         repoCommit: storedBlockInfo.commit,
         repoDirectory: partialMetadata.unstable_hubInfo?.directory,
-        repoUrl: storedBlockInfo.repository,
+        repository: storedBlockInfo.repository
       },
-      partialMetadata.unstable_hubInfo.preparedAt,
-      exampleGraphFileExists,
-    );
+      timestamps: { lastUpdated: partialMetadata.unstable_hubInfo.preparedAt },
+      includesExampleGraph: exampleGraphFileExists
+    });
 
     result.push(expandedMetadata);
   }
@@ -228,15 +231,15 @@ const blocksToHide = [
   "@hash/callout",
   "@hash/embed",
   "@hash/header",
-  "@hash/paragraph",
+  "@hash/paragraph"
 ];
 
 /** Helps consistently hide certain blocks from the hub and user profile pages */
 export const excludeHiddenBlocks = (
-  blocks: ExpandedBlockMetadata[],
+  blocks: ExpandedBlockMetadata[]
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
-    ({ pathWithNamespace }) => !blocksToHide.includes(pathWithNamespace),
+    ({ pathWithNamespace }) => !blocksToHide.includes(pathWithNamespace)
   );
 };
 
@@ -244,7 +247,7 @@ export const retrieveBlockFileContent = async ({
   pathWithNamespace,
   schema: metadataSchemaUrl,
   source: metadataSourceUrl,
-  exampleGraph: metadataExampleGraphUrl,
+  exampleGraph: metadataExampleGraphUrl
 }: ExpandedBlockMetadata): Promise<{
   schema: JsonObject;
   source: string;
@@ -256,25 +259,25 @@ export const retrieveBlockFileContent = async ({
           path.resolve(
             process.cwd(),
             `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
-              metadataSchemaUrl.lastIndexOf("/") + 1,
-            )}`,
+              metadataSchemaUrl.lastIndexOf("/") + 1
+            )}`
           ),
-          { encoding: "utf8" },
-        ),
+          { encoding: "utf8" }
+        )
       )
-    : await fetch(metadataSchemaUrl).then((response) => response.json());
+    : await fetch(metadataSchemaUrl).then(response => response.json());
 
   const source = metadataSourceUrl.startsWith(FRONTEND_URL)
     ? await fs.readFile(
         path.resolve(
           process.cwd(),
           `public/blocks/${pathWithNamespace}/${metadataSourceUrl.substring(
-            metadataSourceUrl.lastIndexOf("/") + 1,
-          )}`,
+            metadataSourceUrl.lastIndexOf("/") + 1
+          )}`
         ),
-        { encoding: "utf8" },
+        { encoding: "utf8" }
       )
-    : await fetch(metadataSourceUrl).then((response) => response.text());
+    : await fetch(metadataSourceUrl).then(response => response.text());
 
   let exampleGraph = null;
 
@@ -283,32 +286,30 @@ export const retrieveBlockFileContent = async ({
       ? JSON.parse(
           fs.readFileSync(
             `${process.cwd()}/public/blocks/${pathWithNamespace}/${metadataExampleGraphUrl.substring(
-              metadataExampleGraphUrl.lastIndexOf("/") + 1,
+              metadataExampleGraphUrl.lastIndexOf("/") + 1
             )}`,
-            { encoding: "utf8" },
-          ),
+            { encoding: "utf8" }
+          )
         )
-      : await fetch(metadataExampleGraphUrl).then((response) =>
-          response.json(),
-        );
+      : await fetch(metadataExampleGraphUrl).then(response => response.json());
   }
 
   return {
     schema,
     source,
-    exampleGraph,
+    exampleGraph
   };
 };
 
 export const readBlockReadmeFromDisk = async (
-  blockMetadata: ExpandedBlockMetadata,
+  blockMetadata: ExpandedBlockMetadata
 ): Promise<string | undefined> => {
   try {
     return fs.readFileSync(
       `${process.cwd()}/public/blocks/${
         blockMetadata.pathWithNamespace
       }/README.vercel-hack.md`,
-      "utf8",
+      "utf8"
     );
   } catch {
     return undefined;

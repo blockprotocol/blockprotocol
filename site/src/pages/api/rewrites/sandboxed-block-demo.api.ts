@@ -1,7 +1,7 @@
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
-import { getBlockByUserAndName } from "../../../lib/api/blocks";
+import { getBlockByUserAndName } from "../../../lib/api/blocks/get";
 import { retrieveBlockFileContent } from "../../../lib/blocks";
 
 /**
@@ -24,9 +24,9 @@ const handler: NextApiHandler = async (req, res) => {
 
   const shortname = (req.query.shortname as string).replace(/^@/, "");
 
-  const blockMetadata = getBlockByUserAndName({
+  const blockMetadata = await getBlockByUserAndName({
     shortname,
-    name: req.query.blockslug as string,
+    name: req.query.blockslug as string
   });
 
   if (!blockMetadata) {
@@ -53,13 +53,13 @@ const handler: NextApiHandler = async (req, res) => {
     blockMetadata.blockType.entryPoint === "html"
   ) {
     throw new Error(
-      "Block Protocol does not support externals with HTML blocks",
+      "Block Protocol does not support externals with HTML blocks"
     );
   }
 
   for (const [packageName, packageVersion] of Object.entries(externals)) {
     externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
-      packageName,
+      packageName
     )}@${packageVersion}`;
   }
 
@@ -67,7 +67,7 @@ const handler: NextApiHandler = async (req, res) => {
     initialEntities: exampleGraph?.entities,
     initialEntityTypes: exampleGraph?.entityTypes,
     initialLinks: exampleGraph?.links,
-    initialLinkedAggregations: exampleGraph?.linkedAggregations,
+    initialLinkedAggregations: exampleGraph?.linkedAggregations
   };
 
   const html = `
@@ -97,7 +97,7 @@ const handler: NextApiHandler = async (req, res) => {
         ${Object.entries(externalUrlLookup)
           .map(
             ([packageName, packageUrl]) =>
-              `"${packageName}": await import("${packageUrl}")`,
+              `"${packageName}": await import("${packageUrl}")`
           )
           .join(",")}
       }
@@ -149,7 +149,7 @@ const handler: NextApiHandler = async (req, res) => {
           }
           
           const mockBlockDockInitialData = ${JSON.stringify(
-            mockBlockDockInitialData,
+            mockBlockDockInitialData
           )}
       
           const render = (props) => {
