@@ -10,8 +10,8 @@ use serde_json;
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
-    ontology::repr_shared::validate::{ValidateUri, ValidationError},
     uri::{BaseUri, VersionedUri},
+    ValidateUri, ValidationError,
 };
 
 /// Will serialize as a constant value `"dataType"`
@@ -115,33 +115,38 @@ impl DataTypeReference {
 
 impl ValidateUri for DataTypeReference {
     fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
-        if !(base_uri == self.uri().base_uri()) {
+        if base_uri == self.uri().base_uri() {
+            Ok(())
+        } else {
             Err(ValidationError::BaseUriMismatch {
                 base_uri: base_uri.clone(),
                 versioned_uri: self.uri().clone(),
             })
-        } else {
-            Ok(())
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
+
+    use serde_json::json;
+
     use super::*;
-    use crate::{test_data, utils::tests::serialize_is_idempotent};
+    use crate::{test_data, utils::tests::check_serialization};
 
     #[test]
     fn data_type_reference() {
-        let data_type = serialize_is_idempotent::<DataTypeReference>(
-            serde_json::from_str(
-                r#"
-                {
-                  "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1"
-                }
-                "#,
-            )
-            .expect("invalid json"),
+        let uri = VersionedUri::from_str(
+            "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+        )
+        .expect("Invalid Versioned URI");
+        let data_type = check_serialization::<DataTypeReference>(
+            json!(
+            {
+              "$ref": uri.to_string()
+            }),
+            Some(DataTypeReference::new(uri)),
         );
 
         data_type
@@ -149,48 +154,54 @@ mod tests {
                 &BaseUri::new("https://blockprotocol.org/@blockprotocol/types/data-type/text/")
                     .expect("Invalid Base URL"),
             )
-            .expect("Data type reference didn't validate against base URI")
+            .expect("Data type reference didn't validate against base URI");
     }
 
     #[test]
     fn text() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::TEXT_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn number() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::NUMBER_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn boolean() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::BOOLEAN_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn null() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::NULL_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn object() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::OBJECT_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn empty_list() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::EMPTY_LIST_V1).expect("invalid json"),
+            None,
         );
     }
 }
