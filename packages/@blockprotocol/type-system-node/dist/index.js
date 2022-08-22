@@ -274,11 +274,6 @@ module.exports.__wbg_parseversionedurierror_new = function(arg0) {
     return addHeapObject(ret);
 };
 
-module.exports.__wbg_malformeddatatypeerror_new = function(arg0) {
-    const ret = MalformedDataTypeError.__wrap(arg0);
-    return addHeapObject(ret);
-};
-
 module.exports.__wbindgen_json_serialize = function(arg0, arg1) {
     const obj = getObject(arg1);
     const ret = JSON.stringify(obj === undefined ? null : obj);
@@ -286,6 +281,11 @@ module.exports.__wbindgen_json_serialize = function(arg0, arg1) {
     const len0 = WASM_VECTOR_LEN;
     getInt32Memory0()[arg0 / 4 + 1] = len0;
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+};
+
+module.exports.__wbg_malformeddatatypeerror_new = function(arg0) {
+    const ret = MalformedDataTypeError.__wrap(arg0);
+    return addHeapObject(ret);
 };
 
 module.exports.__wbindgen_throw = function(arg0, arg1) {
