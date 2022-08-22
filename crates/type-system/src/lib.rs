@@ -1,5 +1,6 @@
 #![feature(lint_reasons)]
 #![feature(extern_types)]
+#![feature(once_cell)]
 #![warn(
     clippy::pedantic,
     clippy::nursery,

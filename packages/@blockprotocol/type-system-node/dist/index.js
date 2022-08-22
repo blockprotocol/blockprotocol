@@ -92,6 +92,15 @@ function getStringFromWasm0(ptr, len) {
 
 let heap_next = heap.length;
 
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
+
 function dropObject(idx) {
     if (idx < 36) return;
     heap[idx] = heap_next;
@@ -183,14 +192,6 @@ module.exports.isValidDataType = function(dataTypeObj) {
     }
 };
 
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
-    return idx;
-}
 /**
 */
 class MalformedDataTypeError {
@@ -274,6 +275,11 @@ module.exports.__wbg_parseversionedurierror_new = function(arg0) {
     return addHeapObject(ret);
 };
 
+module.exports.__wbg_malformeddatatypeerror_new = function(arg0) {
+    const ret = MalformedDataTypeError.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
 module.exports.__wbindgen_json_serialize = function(arg0, arg1) {
     const obj = getObject(arg1);
     const ret = JSON.stringify(obj === undefined ? null : obj);
@@ -281,11 +287,6 @@ module.exports.__wbindgen_json_serialize = function(arg0, arg1) {
     const len0 = WASM_VECTOR_LEN;
     getInt32Memory0()[arg0 / 4 + 1] = len0;
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
-};
-
-module.exports.__wbg_malformeddatatypeerror_new = function(arg0) {
-    const ret = MalformedDataTypeError.__wrap(arg0);
-    return addHeapObject(ret);
 };
 
 module.exports.__wbindgen_throw = function(arg0, arg1) {

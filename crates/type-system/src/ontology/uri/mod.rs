@@ -2,10 +2,9 @@ mod error;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::{fmt, result::Result, str::FromStr};
+use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
 use error::ParseVersionedUriError;
-use lazy_static::lazy_static;
 use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use url::Url;
@@ -90,9 +89,8 @@ impl FromStr for VersionedUri {
 
     fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
         // TODO: better error handling
-        lazy_static! {
-            static ref RE: Regex = Regex::new(r#"(.*/)v/(\d)*"#).expect("Regex failed to compile");
-        }
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"(.*/)v/(\d)*"#).expect("Regex failed to compile"));
         let captures = RE.captures(uri).ok_or(ParseVersionedUriError {})?;
         let base_uri = captures.get(1).ok_or(ParseVersionedUriError {})?.as_str();
         let version = captures.get(2).ok_or(ParseVersionedUriError {})?.as_str();
