@@ -1,4 +1,4 @@
-import { DarkMode, LightMode } from "@mui/icons-material";
+import { Close, DarkMode, LightMode, Logout } from "@mui/icons-material";
 import {
   Box,
   Chip,
@@ -8,6 +8,7 @@ import {
   IconButton,
   styled,
   ThemeProvider,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { ReactNode, useState } from "react";
@@ -29,6 +30,7 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   paddingLeft: theme.spacing(3),
+  paddingRight: theme.spacing(3),
   borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
@@ -78,24 +80,27 @@ export const Layout = ({ children, blockType, exitDebugMode }: LayoutProps) => {
           PaperProps={{
             sx: {
               width: SIDEBAR_WIDTH,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
             },
           }}
         >
           <Typography variant="h6" mt={4} pl={2}>
             Mock Block Dock
           </Typography>
-          <Box component="button" onClick={exitDebugMode}>
-            Exit Debug Mode
-          </Box>
         </Drawer>
         <MainContainer component="main">
           <HeaderContainer>
-            <IconButton
-              sx={{ mr: 1 }}
-              onClick={() => setDarkMode((prev) => !prev)}
-            >
-              {darkMode ? <LightMode /> : <DarkMode />}
-            </IconButton>
+            <Tooltip title={`Switch to ${darkMode ? "light" : "dark"} mode`}>
+              <IconButton
+                sx={{ mr: 1 }}
+                onClick={() => setDarkMode((prev) => !prev)}
+              >
+                {darkMode ? <LightMode /> : <DarkMode />}
+              </IconButton>
+            </Tooltip>
+
             {blockType && (
               <Chip
                 size="small"
@@ -105,6 +110,11 @@ export const Layout = ({ children, blockType, exitDebugMode }: LayoutProps) => {
             )}
 
             {/* @todo add zoom functionality */}
+            <Tooltip title="Exit Debug View">
+              <IconButton onClick={exitDebugMode} sx={{ ml: "auto" }}>
+                <Logout />
+              </IconButton>
+            </Tooltip>
           </HeaderContainer>
           <Box flex={1}>{children}</Box>
         </MainContainer>
