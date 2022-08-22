@@ -15,6 +15,7 @@ export type {
   JsonArray,
   JsonObject,
   JsonValue,
+  Message,
   MessageCallback,
   MessageData,
   MessageError,

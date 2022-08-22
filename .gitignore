@@ -47,7 +47,19 @@ site/public/schemas
 site/site-map.json
 site/test-results
 
+# we want to version control these specific build artifacts
+!packages/@blockprotocol/type-system-node/dist
+!packages/@blockprotocol/type-system-web/dist
+
 var
 
 # Sentry
 .sentryclirc
+
+# Rust specific
+crates/**/target
+crates/**/*.rs.bk
+crates/**/Cargo.lock
+crates/**/bin/
+crates/**/pkg/
+crates/**/wasm-pack.log

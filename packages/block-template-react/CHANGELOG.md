@@ -1,5 +1,21 @@
 # block-template-react
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @blockprotocol/graph@0.0.14
+
+## 0.1.3
+
+### Patch Changes
+
+- [#490](https://github.com/blockprotocol/blockprotocol/pull/490) [`fd7e3f9`](https://github.com/blockprotocol/blockprotocol/commit/fd7e3f9491110034f64f8d690e2410ca388f1620) Thanks [@kachkaev](https://github.com/kachkaev)! - Mention `npx create-block-app@latest` instead of `npx create-block-app` in README
+
+- Updated dependencies [[`fd7e3f9`](https://github.com/blockprotocol/blockprotocol/commit/fd7e3f9491110034f64f8d690e2410ca388f1620)]:
+  - @blockprotocol/graph@0.0.13
+
 ## 0.1.2
 
 ### Patch Changes
