@@ -10,7 +10,7 @@ import fs from "node:fs";
 import path from "node:path";
 import tmp from "tmp-promise";
 
-import { enhanceBlockMetadata } from "../../blocks";
+import { extendBlockMetadata } from "../../blocks";
 import { User } from "../model/user.model";
 import { insertDbBlock } from "./db";
 import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
@@ -144,7 +144,7 @@ export const publishBlockFromNpm = async (
         : undefined
   };
 
-  const extendedMetadata = enhanceBlockMetadata({
+  const extendedMetadata = extendBlockMetadata({
     metadata: metadataJson as BlockMetadata, // @todo add a comprehensive guard/validator for block-metadata.json
     source: sourceInformation,
     timestamps: { createdAt: now, lastUpdated: now },

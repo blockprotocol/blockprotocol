@@ -10,21 +10,6 @@ import path from "node:path";
 
 import { FRONTEND_URL } from "./config";
 
-/** @todo type as JSON object */
-export type BlockProps = object;
-
-/**
- * This represents the block metadata created when blocks are built from source and served from the NextJS app
- */
-export type BlockMetadataOnDisk = BlockMetadata & {
-  unstable_hubInfo: {
-    directory: string;
-    checksum: string;
-    commit: string;
-    preparedAt: string;
-  };
-};
-
 /**
  * This is the expanded block metadata that is served via the API
  * Relative file URLs are rewritten to be absolute, and other fields are added
@@ -46,6 +31,18 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   repository?: string;
   // metadata.schema rewritten to be an absolute URL
   schema?: string | null;
+};
+
+/**
+ * This represents the block metadata created when blocks are built from source and served from the NextJS app
+ */
+export type BlockMetadataOnDisk = ExpandedBlockMetadata & {
+  unstable_hubInfo: {
+    directory: string;
+    checksum: string;
+    commit: string;
+    preparedAt: string;
+  };
 };
 
 // The contents of the JSON file users provide when adding a block via PR, stored in the hub/ folder
@@ -106,7 +103,7 @@ export const getRepositoryUrl = (
   return undefined;
 };
 
-export const enhanceBlockMetadata = ({
+export const extendBlockMetadata = ({
   timestamps,
   includesExampleGraph,
   metadata,
@@ -184,43 +181,16 @@ export const readBlocksFromDisk = async (): Promise<ExpandedBlockMetadata[]> => 
 
   const result: ExpandedBlockMetadata[] = [];
   for (const blockMetadataFilePath of blockMetadataFilePaths) {
-    const pathWithNamespace = blockMetadataFilePath
-      .split("/")
-      .slice(-3, -1)
-      .join("/");
-
-    const partialMetadata: BlockMetadataOnDisk = await fs.readJson(
+    const metadata: BlockMetadataOnDisk = await fs.readJson(
       blockMetadataFilePath,
       {
         encoding: "utf8"
       }
     );
 
-    const storedBlockInfo: StoredBlockInfo = await fs.readJson(
-      path.resolve(process.cwd(), `../hub/${pathWithNamespace}.json`),
-      { encoding: "utf8" }
-    );
+    delete metadata.unstable_hubInfo;
 
-    const exampleGraphFileExists = await fs.pathExists(
-      blockMetadataFilePath.replace("block-metadata.json", "example-graph.json")
-    );
-
-    const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${pathWithNamespace}`;
-
-    const expandedMetadata: ExpandedBlockMetadata = enhanceBlockMetadata({
-      metadata: partialMetadata,
-      source: {
-        blockDistributionFolderUrl,
-        pathWithNamespace,
-        repoCommit: storedBlockInfo.commit,
-        repoDirectory: partialMetadata.unstable_hubInfo?.directory,
-        repository: storedBlockInfo.repository
-      },
-      timestamps: { lastUpdated: partialMetadata.unstable_hubInfo.preparedAt },
-      includesExampleGraph: exampleGraphFileExists
-    });
-
-    result.push(expandedMetadata);
+    result.push(metadata);
   }
 
   return result;
