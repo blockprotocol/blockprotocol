@@ -26,9 +26,7 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
-import { Block } from "../../../lib/api/model/block.model";
-import { User } from "../../../lib/api/model/user.model";
-import { connectToDatabase } from "../../../lib/api/mongodb";
+import { getAllBlocks } from "../../../lib/api/blocks";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -184,22 +182,7 @@ export const getStaticProps: GetStaticProps<
   }
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const { db } = await connectToDatabase();
-
-  // This API endpoint relies on the user existing in the db, and it will not work when the JSON files in hub/
-  // are associated with users that haven't been created in your local db
-  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' method on a new Block model
-  const bareShortname = shortname.replace(/^@/, "");
-  const user = await User.getByShortname(db, { shortname: bareShortname });
-
-  if (!user) {
-    return {
-      notFound: true,
-    };
-  }
-
-  // @todo don't read all user blocks just to retrieve a single one - add a 'getBlock' method on a new Block model
-  const blocks = await Block.getAllByUser(db, { user });
+  const blocks = getAllBlocks();
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,

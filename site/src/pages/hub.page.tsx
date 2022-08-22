@@ -3,8 +3,7 @@ import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
-import { Block } from "../lib/api/model/block.model";
-import { connectToDatabase } from "../lib/api/mongodb";
+import { getAllBlocks } from "../lib/api/blocks";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -18,8 +17,7 @@ interface PageProps {
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const { db } = await connectToDatabase();
-  const blocks = await Block.getAll(db);
+  const blocks = getAllBlocks();
 
   return {
     props: { catalog: excludeHiddenBlocks(blocks) },

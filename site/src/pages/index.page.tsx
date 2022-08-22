@@ -10,8 +10,7 @@ import { InteroperableBlocks } from "../components/pages/home/interoperable-bloc
 import { RegistrySection } from "../components/pages/home/registry-section";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import { useUser } from "../context/user-context";
-import { Block } from "../lib/api/model/block.model";
-import { connectToDatabase } from "../lib/api/mongodb";
+import { getAllBlocks } from "../lib/api/blocks";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -25,8 +24,7 @@ interface PageProps {
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const { db } = await connectToDatabase();
-  const blocks = await Block.getAll(db);
+  const blocks = getAllBlocks();
 
   return {
     props: { catalog: excludeHiddenBlocks(blocks) },

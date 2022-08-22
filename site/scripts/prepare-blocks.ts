@@ -494,6 +494,7 @@ const script = async () => {
         checksum: blockInfoChecksum,
         commit: blockInfo.commit,
         preparedAt: new Date().toISOString(),
+        name: blockInfo.name,
       };
       await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
     } catch (error) {
