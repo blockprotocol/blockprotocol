@@ -8,3 +8,18 @@ pub fn set_panic_hook() {
     // https://github.com/rustwasm/console_error_panic_hook#readme
     console_error_panic_hook::set_once();
 }
+
+#[cfg(test)]
+pub mod tests {
+    use serde::{Deserialize, Serialize};
+
+    pub fn serialize_is_idempotent<T>(input: serde_json::Value)
+    where
+        T: for<'de> Deserialize<'de> + Serialize,
+    {
+        let deserialized: T = serde_json::from_value(input.clone()).expect("failed to deserialize");
+        let reserialized = serde_json::to_value(&deserialized).expect("failed to serialize");
+
+        assert_eq!(input, reserialized);
+    }
+}
