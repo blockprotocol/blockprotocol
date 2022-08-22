@@ -5,6 +5,8 @@ mod wasm;
 use std::{fmt, result::Result, str::FromStr};
 
 use error::ParseVersionedUriError;
+use lazy_static::lazy_static;
+use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use url::Url;
 
@@ -87,8 +89,14 @@ impl FromStr for VersionedUri {
     type Err = ParseVersionedUriError;
 
     fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
-        let (base_uri, version) = uri.rsplit_once("v/").ok_or(ParseVersionedUriError)?;
         // TODO: better error handling
+        lazy_static! {
+            static ref RE: Regex = Regex::new(r#"(.*/)v/(\d)*"#).expect("Regex failed to compile");
+        }
+        let captures = RE.captures(uri).ok_or(ParseVersionedUriError {})?;
+        let base_uri = captures.get(1).ok_or(ParseVersionedUriError {})?.as_str();
+        let version = captures.get(2).ok_or(ParseVersionedUriError {})?.as_str();
+
         Self::new(
             &BaseUri::new(base_uri).map_err(|_| ParseVersionedUriError {})?,
             version.parse().map_err(|_| ParseVersionedUriError {})?,
