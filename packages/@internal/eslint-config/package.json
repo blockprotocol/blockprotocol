@@ -1,6 +1,7 @@
 {
-  "name": "@internal/eslint-config",
+  "name": "@local/eslint-config",
   "version": "0.0.0",
+  "private": true,
   "main": "index.js",
   "dependencies": {
     "@babel/eslint-parser": "7.17.0",
