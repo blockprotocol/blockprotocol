@@ -90,10 +90,18 @@ impl FromStr for VersionedUri {
     fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
         // TODO: better error handling
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"(.*/)v/(\d)*"#).expect("Regex failed to compile"));
+            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("Regex failed to compile"));
         let captures = RE.captures(uri).ok_or(ParseVersionedUriError {})?;
         let base_uri = captures.get(1).ok_or(ParseVersionedUriError {})?.as_str();
         let version = captures.get(2).ok_or(ParseVersionedUriError {})?.as_str();
+
+        // TODO: throw a better error about how base URI was valid but version component was not
+        if let Some(suffix) = captures.get(3) {
+            // Regex returns an empty string for capturing groups that don't match anything
+            if !suffix.as_str().is_empty() {
+                return Err(ParseVersionedUriError {});
+            }
+        }
 
         Self::new(
             &BaseUri::new(base_uri).map_err(|_| ParseVersionedUriError {})?,
