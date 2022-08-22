@@ -54,6 +54,10 @@ dist
 # vercel
 .vercel
 
+# Testing
+.nyc_output
+coverage
+
 # workspace specific
 packages/block-template-html/dev/src
 site/blocks-data.json
