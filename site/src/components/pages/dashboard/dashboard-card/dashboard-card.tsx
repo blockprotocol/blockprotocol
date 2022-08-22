@@ -96,7 +96,7 @@ const DashboardCardSecondary: FunctionComponent<
             variant="bpLargeText"
             sx={{
               mb: 0.75,
-              color: ({ palette }) => palette.gray[80],
+              color: ({ palette }) => palette.gray[90],
               fontWeight: 500,
             }}
           >
@@ -192,25 +192,22 @@ export const DashboardCard: FunctionComponent<
           height={8}
         />
         <Box
-          p={4}
           sx={{
             display: "flex",
             flexDirection: "column",
             flex: 1,
+            p: 4,
           }}
         >
           <Typography
-            sx={{
-              fontFamily: "Apercu Pro",
-              fontSize: "28.128px",
-              lineHeight: "120%",
-              color: "#37434F",
-              mb: 1,
-            }}
+            mb={1}
+            color={({ palette }) => palette.gray[90]}
+            fontWeight="500"
+            variant="bpHeading4"
           >
             {title}
           </Typography>
-          <Typography mb={2} color="#4D5C6C">
+          <Typography mb={2} color={({ palette }) => palette.gray[80]}>
             {description}
           </Typography>
           <LinkWrapper bold title={link.title} />

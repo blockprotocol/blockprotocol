@@ -83,8 +83,8 @@ export const getDashboardSectionCards = (props: {
         variant: "secondary",
       },
       {
-        /** @todo show "View your public profile" if user is already completed profile */
-        title: "Complete your public profile",
+        /** @todo show "Complete your public profile" when profile details are editable */
+        title: "View your public profile",
         description:
           "Your bio and links help others discover your work, and appear alongside your public types and blocks",
         link: {
