@@ -1,8 +1,10 @@
 #![feature(lint_reasons)]
+#![feature(extern_types)]
+#![feature(once_cell)]
 #![warn(
     clippy::pedantic,
     clippy::nursery,
-    // Encountering a lot of false positives appearing on things like `derive` macros. We should 
+    // Encountering a lot of false positives appearing on things like `derive` macros. We should
     // revisit periodically in case the bug gets fixed
     // clippy::allow_attributes_without_reason,
     clippy::as_underscore,
@@ -43,4 +45,8 @@ mod utils;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-pub use ontology::uri;
+pub use ontology::{data_type::DataType, uri};
+
+#[cfg(test)]
+#[path = "../tests/data/lib.rs"]
+mod test_data;
