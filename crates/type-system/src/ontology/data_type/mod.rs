@@ -9,7 +9,10 @@ use serde_json;
 #[cfg(target_arch = "wasm32")]
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
-use crate::uri::VersionedUri;
+use crate::{
+    ontology::repr_shared::validate::{ValidateUri, ValidationError},
+    uri::{BaseUri, VersionedUri},
+};
 
 /// Will serialize as a constant value `"dataType"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -90,10 +93,64 @@ impl DataType {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct DataTypeReference {
+    #[serde(rename = "$ref")]
+    uri: VersionedUri,
+}
+
+impl DataTypeReference {
+    /// Creates a new `DataTypeReference` from the given [`VersionedUri`].
+    #[must_use]
+    pub const fn new(uri: VersionedUri) -> Self {
+        Self { uri }
+    }
+
+    #[must_use]
+    pub const fn uri(&self) -> &VersionedUri {
+        &self.uri
+    }
+}
+
+impl ValidateUri for DataTypeReference {
+    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
+        if !(base_uri == self.uri().base_uri()) {
+            Err(ValidationError::BaseUriMismatch {
+                base_uri: base_uri.clone(),
+                versioned_uri: self.uri().clone(),
+            })
+        } else {
+            Ok(())
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::{test_data, utils::tests::serialize_is_idempotent};
+
+    #[test]
+    fn data_type_reference() {
+        let data_type = serialize_is_idempotent::<DataTypeReference>(
+            serde_json::from_str(
+                r#"
+                {
+                  "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1"
+                }
+                "#,
+            )
+            .expect("invalid json"),
+        );
+
+        data_type
+            .validate_uri(
+                &BaseUri::new("https://blockprotocol.org/@blockprotocol/types/data-type/text/")
+                    .expect("Invalid Base URL"),
+            )
+            .expect("Data type reference didn't validate against base URI")
+    }
 
     #[test]
     fn text() {

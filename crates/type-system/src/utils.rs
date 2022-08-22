@@ -13,7 +13,7 @@ pub fn set_panic_hook() {
 pub mod tests {
     use serde::{Deserialize, Serialize};
 
-    pub fn serialize_is_idempotent<T>(input: serde_json::Value)
+    pub fn serialize_is_idempotent<T>(input: serde_json::Value) -> T
     where
         T: for<'de> Deserialize<'de> + Serialize,
     {
@@ -21,5 +21,7 @@ pub mod tests {
         let reserialized = serde_json::to_value(&deserialized).expect("failed to serialize");
 
         assert_eq!(input, reserialized);
+        
+        deserialized
     }
 }
