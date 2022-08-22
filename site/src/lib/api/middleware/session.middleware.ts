@@ -7,6 +7,7 @@ import { promisifyStore } from "next-session/lib/compat";
 
 import { mustGetEnvVar } from "../../../util/api";
 import { FRONTEND_DOMAIN, isUsingHttps } from "../../config";
+import { SESSION_COOKIE_NAME } from "./constants";
 
 // cookie maximum age (365 days)
 const COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
@@ -31,7 +32,7 @@ const getSession = nextSession({
     sameSite: "lax",
     secure: isUsingHttps,
   },
-  name: "blockprotocol-session-id",
+  name: SESSION_COOKIE_NAME,
   decode: (raw) => signature.unsign(raw.slice(2), SESSION_SECRET) || null,
   encode: (sid) => (sid ? `s:${signature.sign(sid, SESSION_SECRET)}` : ""),
 });
