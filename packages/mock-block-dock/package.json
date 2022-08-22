@@ -41,6 +41,7 @@
     "@lit-labs/react": "^1.0.4",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.10.1",
+    "jsonschema": "^1.4.1",
     "lodash": "^4.17.21",
     "react-json-view": "^1.21.3",
     "uuid": "^8.3.2"

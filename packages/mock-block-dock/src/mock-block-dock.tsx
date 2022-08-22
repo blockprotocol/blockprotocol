@@ -19,6 +19,7 @@ import {
 import { BlockRenderer } from "./block-renderer";
 import { DevTools } from "./dev-tools";
 import { Layout } from "./layout";
+import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useMockBlockProps } from "./use-mock-block-props";
 
 type BlockDefinition =
@@ -183,7 +184,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   if (!debugMode) {
     return (
-      <>
+      <MockBlockDockProvider>
         <div ref={wrapperRef}>
           {graphService ? (
             <BlockRenderer
@@ -209,14 +210,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
             Toggle Debug Mode
           </button>
         </div>
-      </>
+      </MockBlockDockProvider>
     );
   }
 
   return (
-    <Layout blockType={blockType} exitDebugMode={() => setDebugMode(false)}>
-      <Box>
-        <Box padding={3.75}>
+    <MockBlockDockProvider>
+      {!debugMode ? (
+        <>
           <div ref={wrapperRef}>
             {graphService ? (
               <BlockRenderer
@@ -237,16 +238,50 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
               />
             ) : null}
           </div>
-        </Box>
-      </Box>
+          <div style={{ position: "fixed", bottom: 16, right: 16 }}>
+            <button type="button" onClick={() => setDebugMode(true)}>
+              Toggle Debug Mode
+            </button>
+          </div>
+        </>
+      ) : (
+        <Layout blockType={blockType} exitDebugMode={() => setDebugMode(false)}>
+          <Box>
+            <Box padding={3.75}>
+              <div ref={wrapperRef}>
+                {graphService ? (
+                  <BlockRenderer
+                    customElement={
+                      "customElement" in blockDefinition
+                        ? blockDefinition.customElement
+                        : undefined
+                    }
+                    html={
+                      "html" in blockDefinition
+                        ? blockDefinition.html
+                        : undefined
+                    }
+                    properties={propsToInject}
+                    ReactComponent={
+                      "ReactComponent" in blockDefinition
+                        ? blockDefinition.ReactComponent
+                        : undefined
+                    }
+                  />
+                ) : null}
+              </div>
+            </Box>
+          </Box>
 
-      <DevTools
-        graphProperties={propsToInject}
-        datastore={datastore}
-        readonly={debugReadonly}
-        setReadonly={setDebugReadonly}
-        setBlockEntity={setInitialBlockEntity}
-      />
-    </Layout>
+          <DevTools
+            graphProperties={propsToInject}
+            datastore={datastore}
+            readonly={debugReadonly}
+            setReadonly={setDebugReadonly}
+            setBlockEntity={setInitialBlockEntity}
+          />
+        </Layout>
+      )}
+    </MockBlockDockProvider>
   );
 };

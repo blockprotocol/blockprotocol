@@ -21,7 +21,8 @@
     "./src/**/*.ts",
     "./src/**/*.tsx",
     "./dev/**/*.ts",
-    "./dev/**/*.tsx"
+    "./dev/**/*.tsx",
+    "src/schema.jsons"
   ],
   "exclude": ["dist", "node_modules"]
 }

@@ -15,6 +15,7 @@ import { ReactNode, useState } from "react";
 type LayoutProps = {
   children: ReactNode;
   blockType?: "html" | "react" | "custom-element";
+  exitDebugMode: () => void;
 };
 
 export const SIDEBAR_WIDTH = 200;
@@ -64,7 +65,7 @@ const lightTheme = createTheme({
   },
 });
 
-export const Layout = ({ children, blockType }: LayoutProps) => {
+export const Layout = ({ children, blockType, exitDebugMode }: LayoutProps) => {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
@@ -83,6 +84,9 @@ export const Layout = ({ children, blockType }: LayoutProps) => {
           <Typography variant="h6" mt={4} pl={2}>
             Mock Block Dock
           </Typography>
+          <Box component="button" onClick={exitDebugMode}>
+            Exit Debug Mode
+          </Box>
         </Drawer>
         <MainContainer component="main">
           <HeaderContainer>
