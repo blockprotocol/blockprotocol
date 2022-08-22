@@ -1,7 +1,7 @@
 import {
   BlockMetadata,
   BlockMetadataRepository,
-  JsonObject
+  JsonObject,
 } from "@blockprotocol/core";
 import execa from "execa";
 import glob from "glob";
@@ -25,7 +25,7 @@ const stripLeadingAt = (pathWithNamespace: string) =>
  */
 const mirrorNpmPackageToR2 = async (
   npmPackageName: string,
-  pathWithNamespace: string
+  pathWithNamespace: string,
 ): Promise<{
   includesExampleGraph: boolean;
   metadataJson: JsonObject;
@@ -33,7 +33,7 @@ const mirrorNpmPackageToR2 = async (
   publicPackagePath: string;
 }> => {
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    unsafeCleanup: true
+    unsafeCleanup: true,
   });
 
   const execaOptions = { cwd: npmTarballFolder };
@@ -44,12 +44,12 @@ const mirrorNpmPackageToR2 = async (
     ({ stdout: tarballFilename } = await execa(
       "npm",
       ["pack", npmPackageName],
-      execaOptions
+      execaOptions,
     ));
     await execa("tar", ["-xf", tarballFilename], execaOptions);
   } catch {
     throw new Error(
-      `Could not retrieve npm package '${npmPackageName}'. Does it exist?`
+      `Could not retrieve npm package '${npmPackageName}'. Does it exist?`,
     );
   }
 
@@ -64,7 +64,7 @@ const mirrorNpmPackageToR2 = async (
 
   // get the block-metadata.json
   const metadataJsonPaths = glob.sync("**/block-metadata.json", {
-    cwd: packageFolder
+    cwd: packageFolder,
   });
   const metadataJsonPath = metadataJsonPaths[0];
   if (!metadataJsonPath) {
@@ -79,13 +79,13 @@ const mirrorNpmPackageToR2 = async (
     metadataJson = JSON.parse(metadataJsonString);
   } catch (err) {
     throw new Error(
-      `Could not parse block-metadata.json: ${(err as Error).message}`
+      `Could not parse block-metadata.json: ${(err as Error).message}`,
     );
   }
 
   // check if we have 'example-graph.json', which we then construct a URL for in the extended matadata
   const exampleGraphPaths = glob.sync("**/package.json", {
-    cwd: packageFolder
+    cwd: packageFolder,
   });
   const includesExampleGraph = !!exampleGraphPaths[0];
 
@@ -102,28 +102,24 @@ const mirrorNpmPackageToR2 = async (
     includesExampleGraph,
     metadataJson,
     packageJson,
-    publicPackagePath: `${publicBaseR2Url}/${remoteStoragePrefix}`
+    publicPackagePath: `${publicBaseR2Url}/${remoteStoragePrefix}`,
   };
 };
 
 export const publishBlockFromNpm = async (
   db: Db,
-  params: { name: string; npmPackageName: string; user: User }
+  params: { name: string; npmPackageName: string; user: User },
 ) => {
   const { name, npmPackageName, user } = params;
   const pathWithNamespace = `@${user.shortname}/${name}`;
-  const {
-    includesExampleGraph,
-    metadataJson,
-    packageJson,
-    publicPackagePath
-  } = await mirrorNpmPackageToR2(npmPackageName, pathWithNamespace);
+  const { includesExampleGraph, metadataJson, packageJson, publicPackagePath } =
+    await mirrorNpmPackageToR2(npmPackageName, pathWithNamespace);
 
   console.log({
     includesExampleGraph,
     metadataJson,
     packageJson,
-    publicPackagePath
+    publicPackagePath,
   });
 
   const now = new Date().toUTCString();
@@ -141,14 +137,14 @@ export const publishBlockFromNpm = async (
       "directory" in packageJson.repository &&
       typeof packageJson.repository.directory === "string"
         ? packageJson.repository?.directory
-        : undefined
+        : undefined,
   };
 
   const extendedMetadata = extendBlockMetadata({
     metadata: metadataJson as BlockMetadata, // @todo add a comprehensive guard/validator for block-metadata.json
     source: sourceInformation,
     timestamps: { createdAt: now, lastUpdated: now },
-    includesExampleGraph
+    includesExampleGraph,
   });
 
   await insertDbBlock(extendedMetadata);

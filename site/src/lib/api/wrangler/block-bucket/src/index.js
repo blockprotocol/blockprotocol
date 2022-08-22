@@ -15,15 +15,15 @@ export default {
       headers.set("etag", object.httpEtag);
 
       return new Response(object.body, {
-        headers
+        headers,
       });
     }
 
     return new Response("Method Not Allowed", {
       status: 405,
       headers: {
-        Allow: "GET"
-      }
+        Allow: "GET",
+      },
     });
-  }
+  },
 };

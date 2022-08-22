@@ -27,22 +27,22 @@ import tmp from "tmp-promise";
 import {
   ExpandedBlockMetadata,
   extendBlockMetadata,
-  StoredBlockInfo
+  StoredBlockInfo,
 } from "../src/lib/blocks";
 import { FRONTEND_URL } from "../src/lib/config";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../.."
+  "../..",
 );
 
 const defaultExecaOptions = {
   env: {
     NODE_ENV: "development",
-    PATH: process.env.PATH
+    PATH: process.env.PATH,
   },
   extendEnv: false,
-  stdio: "inherit"
+  stdio: "inherit",
 } as const;
 
 const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
@@ -53,10 +53,10 @@ const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
 
     distDir: { type: "string", nullable: true },
     folder: { type: "string", nullable: true },
-    workspace: { type: "string", nullable: true }
+    workspace: { type: "string", nullable: true },
   },
   required: ["repository", "commit"],
-  additionalProperties: false // protects against typos in field names
+  additionalProperties: false, // protects against typos in field names
 };
 
 const ajv = new Ajv();
@@ -70,7 +70,7 @@ interface BlockInfo extends StoredBlockInfo {
  * Reads and validates JSON files a given directory with block infos.
  */
 const listBlockInfos = async (
-  blockInfosDirPath: string
+  blockInfosDirPath: string,
 ): Promise<{ blockInfos: BlockInfo[]; errorMessages: string[] }> => {
   const blockInfoPaths = await globby("**/*.json", { cwd: blockInfosDirPath });
   console.log(`Block source infos found in HUB_DIR: ${blockInfoPaths.length}`);
@@ -85,24 +85,26 @@ const listBlockInfos = async (
 
       if (!blockVendorName || !blockNameWithinVendor) {
         throw new Error(
-          "Unable to derive block vendor and name. Make sure it matches `@vendor/name` and contains only alphanumeric characters of hyphens."
+          "Unable to derive block vendor and name. Make sure it matches `@vendor/name` and contains only alphanumeric characters of hyphens.",
         );
       }
 
       const storedBlockInfo = (await fs.readJSON(
-        path.resolve(blockInfosDirPath, blockInfoPath)
+        path.resolve(blockInfosDirPath, blockInfoPath),
       )) as unknown;
 
       if (validateStoredBlockInfo(storedBlockInfo)) {
         blockInfos.push({
           name: `@${blockVendorName}/${blockNameWithinVendor}`,
-          ...storedBlockInfo
+          ...storedBlockInfo,
         });
       } else {
         throw new Error(
-          `${validateStoredBlockInfo.errors
-            ?.map(error => error.message)
-            .join("\n") ?? ""}`
+          `${
+            validateStoredBlockInfo.errors
+              ?.map((error) => error.message)
+              .join("\n") ?? ""
+          }`,
         );
       }
     } catch (error) {
@@ -121,7 +123,7 @@ const listBlockInfos = async (
 const ensureRepositorySnapshot = async ({
   repositoryHref,
   commit,
-  workshopDirPath
+  workshopDirPath,
 }: {
   repositoryHref: string;
   commit: string;
@@ -133,25 +135,25 @@ const ensureRepositorySnapshot = async ({
 
   if (!tarballUrl) {
     throw new Error(
-      `Cannot get tarball for repository URL ${repositoryHref}. It needs to be a valid repository URL.`
+      `Cannot get tarball for repository URL ${repositoryHref}. It needs to be a valid repository URL.`,
     );
   }
 
   const repositorySnapshotSlug = slugify(
     tarballUrl.replace("https://", ""),
-    {}
+    {},
   );
 
   const repositorySnapshotDirPath = path.resolve(
     workshopDirPath,
-    repositorySnapshotSlug
+    repositorySnapshotSlug,
   );
 
   if (await fs.pathExists(repositorySnapshotDirPath)) {
     console.log(
       chalk.gray(
-        `Reusing existing repository snapshot in ${repositorySnapshotDirPath}`
-      )
+        `Reusing existing repository snapshot in ${repositorySnapshotDirPath}`,
+      ),
     );
     return repositorySnapshotDirPath;
   }
@@ -166,7 +168,7 @@ const ensureRepositorySnapshot = async ({
   }
 
   const { path: tarDirPath, cleanup: cleanupTarDir } = await tmp.dir({
-    unsafeCleanup: true
+    unsafeCleanup: true,
   });
 
   try {
@@ -175,7 +177,7 @@ const ensureRepositorySnapshot = async ({
     await execa(
       "curl",
       ["-sL", "-o", path.resolve(tarDirPath, `repo.tar.gz`), tarballUrl],
-      defaultExecaOptions
+      defaultExecaOptions,
     );
 
     const outputDirPath = path.resolve(tarDirPath, "repo");
@@ -190,16 +192,16 @@ const ensureRepositorySnapshot = async ({
       [
         "--extract",
         `--file=${path.resolve(tarDirPath, "repo.tar.gz")}`,
-        `--directory=${outputDirPath}`
+        `--directory=${outputDirPath}`,
       ],
-      defaultExecaOptions
+      defaultExecaOptions,
     );
 
     const innerDirName = (await fs.readdir(outputDirPath))[0]!;
 
     await fs.move(
       path.resolve(outputDirPath, innerDirName),
-      repositorySnapshotDirPath
+      repositorySnapshotDirPath,
     );
 
     console.log(`Repository snapshot ready in ${repositorySnapshotDirPath}`);
@@ -210,7 +212,7 @@ const ensureRepositorySnapshot = async ({
 };
 
 const extractFileChecksum = async (
-  filePath: string
+  filePath: string,
 ): Promise<string | undefined> => {
   try {
     // Treating file contents as its checksum is generally a bad idea.
@@ -223,11 +225,11 @@ const extractFileChecksum = async (
 
 const locateWorkspaceDirPath = async (
   workingDirPath: string,
-  workspaceName: string
+  workspaceName: string,
 ) => {
   try {
     const { stdout } = await execa("yarn", ["--silent", "workspaces", "info"], {
-      cwd: workingDirPath
+      cwd: workingDirPath,
     });
     return JSON.parse(stdout)[workspaceName].location;
   } catch {
@@ -244,7 +246,7 @@ const prepareBlock = async ({
   blockInfo,
   blockDirPath,
   workshopDirPath,
-  validateLockfile
+  validateLockfile,
 }: {
   blockInfo: BlockInfo;
   blockDirPath: string;
@@ -254,7 +256,7 @@ const prepareBlock = async ({
   const repositorySnapshotDirPath = await ensureRepositorySnapshot({
     repositoryHref: blockInfo.repository,
     commit: blockInfo.commit,
-    workshopDirPath
+    workshopDirPath,
   });
 
   const rootWorkspaceDirPath = blockInfo.folder
@@ -267,7 +269,7 @@ const prepareBlock = async ({
       .startsWith("..")
   ) {
     throw new Error(
-      `Value of "folder" is invalid: ${rootWorkspaceDirPath}. The folder must be within the repo.`
+      `Value of "folder" is invalid: ${rootWorkspaceDirPath}. The folder must be within the repo.`,
     );
   }
 
@@ -284,10 +286,10 @@ const prepareBlock = async ({
 
   const packageLockJsonPath = path.resolve(
     rootWorkspaceDirPath,
-    "package-lock.json"
+    "package-lock.json",
   );
   const packageLockJsonChecksum = await extractFileChecksum(
-    packageLockJsonPath
+    packageLockJsonPath,
   );
 
   const yarnLockPath = path.resolve(rootWorkspaceDirPath, "yarn.lock");
@@ -297,14 +299,14 @@ const prepareBlock = async ({
     throw new Error(
       `Could not find yarn.lock or package-lock.json in ${
         blockInfo.folder ? `folder ${blockInfo.folder} of ` : ""
-      }the downloaded repository archive`
+      }the downloaded repository archive`,
     );
   }
 
   const packageManager = packageLockJsonChecksum ? "npm" : "yarn";
   if (packageManager === "npm" && blockInfo.workspace) {
     throw new Error(
-      'Using "workspace" param is not compatible with npm (please remove this field from block info or delete package-lock.json from the repo)'
+      'Using "workspace" param is not compatible with npm (please remove this field from block info or delete package-lock.json from the repo)',
     );
   }
 
@@ -315,24 +317,24 @@ const prepareBlock = async ({
     // https://yarnpkg.com/cli/workspaces/focus
     await execa(packageManager, ["install"], {
       cwd: rootWorkspaceDirPath,
-      ...defaultExecaOptions
+      ...defaultExecaOptions,
     });
 
     console.log(chalk.green(`Building...`));
     if (packageManager === "yarn" && blockInfo.workspace) {
       await execa("yarn", ["workspace", blockInfo.workspace, "build"], {
         cwd: rootWorkspaceDirPath,
-        ...defaultExecaOptions
+        ...defaultExecaOptions,
       });
     } else if (packageManager === "yarn") {
       await execa("yarn", ["build"], {
         cwd: rootWorkspaceDirPath,
-        ...defaultExecaOptions
+        ...defaultExecaOptions,
       });
     } else {
       await execa("npm", ["run", "build"], {
         cwd: rootWorkspaceDirPath,
-        ...defaultExecaOptions
+        ...defaultExecaOptions,
       });
     }
   }
@@ -344,7 +346,7 @@ const prepareBlock = async ({
         (await extractFileChecksum(packageLockJsonPath))
     ) {
       throw new Error(
-        `Installing dependencies changes package-lock.json. Please install dependencies locally and commit.`
+        `Installing dependencies changes package-lock.json. Please install dependencies locally and commit.`,
       );
     }
 
@@ -353,7 +355,7 @@ const prepareBlock = async ({
       yarnLockChecksum !== (await extractFileChecksum(yarnLockPath))
     ) {
       throw new Error(
-        `Installing dependencies changes yarn.lock. Please install dependencies locally and commit.`
+        `Installing dependencies changes yarn.lock. Please install dependencies locally and commit.`,
       );
     }
   }
@@ -368,7 +370,7 @@ const prepareBlock = async ({
   console.log(chalk.green(`Done!`));
 
   return {
-    directory: workspacePath ?? blockInfo.folder
+    directory: workspacePath ?? blockInfo.folder,
   };
 };
 
@@ -379,31 +381,28 @@ const script = async () => {
     BLOCK_FILTER: envalid.str({
       desc: "Optional glob you can use to prepare specific blocks.",
       example: "@hash/paragraph or @hash/*",
-      default: ""
+      default: "",
     }),
     BLOCKS_DIR: envalid.str({
       desc: "Location of ready-to-be-served blocks",
-      default: path.resolve(monorepoRoot, "site/public/blocks")
+      default: path.resolve(monorepoRoot, "site/public/blocks"),
     }),
     BLOCK_INFOS_DIR: envalid.str({
       desc: "Location of block infos",
-      default: path.resolve(monorepoRoot, "hub")
+      default: path.resolve(monorepoRoot, "hub"),
     }),
     CACHE: envalid.bool({
-      desc:
-        "If set to false, blocks are prepared even if there is a cache hit.",
-      default: true
+      desc: "If set to false, blocks are prepared even if there is a cache hit.",
+      default: true,
     }),
     CONTINUE_ON_ERROR: envalid.bool({
-      desc:
-        "If set to true, a failure to read block info or to build does not result early exit.",
-      default: false
+      desc: "If set to true, a failure to read block info or to build does not result early exit.",
+      default: false,
     }),
     VALIDATE_LOCKFILE: envalid.bool({
-      desc:
-        "If set to true, blocks with non-existing or unstable yarn.lock / package.json will not end up in BLOCKS_DIR.",
-      default: true
-    })
+      desc: "If set to true, blocks with non-existing or unstable yarn.lock / package.json will not end up in BLOCKS_DIR.",
+      default: true,
+    }),
   });
 
   const blockInfosDirPath = path.resolve(env.BLOCK_INFOS_DIR);
@@ -427,7 +426,7 @@ const script = async () => {
 
   if (!blockInfos.length) {
     throw new Error(
-      "No valid block infos found, please make sure that HUB_DIR is correct and it contains valid JSON files."
+      "No valid block infos found, please make sure that HUB_DIR is correct and it contains valid JSON files.",
     );
   }
 
@@ -441,17 +440,15 @@ const script = async () => {
   if (numberOfBlocksThatDontMatchFilter > 0) {
     console.log(
       chalk.gray(
-        `Number of blocks skipped: ${numberOfBlocksThatDontMatchFilter} (names do not match BLOCK_FILTER=${blockFilter})`
-      )
+        `Number of blocks skipped: ${numberOfBlocksThatDontMatchFilter} (names do not match BLOCK_FILTER=${blockFilter})`,
+      ),
     );
   }
 
-  const {
-    path: workshopDirPath,
-    cleanup: cleanupWorkshopDirPath
-  } = await tmp.dir({
-    unsafeCleanup: true
-  });
+  const { path: workshopDirPath, cleanup: cleanupWorkshopDirPath } =
+    await tmp.dir({
+      unsafeCleanup: true,
+    });
 
   for (const blockInfo of filteredBlockInfos) {
     const blockName = blockInfo.name;
@@ -462,8 +459,8 @@ const script = async () => {
         ...blockInfo,
         // This will allow you to force re-preparing all blocks when the
         // format of `unstable_hubInfo` changes, by incrementing this.
-        unstableVersion: 2
-      })
+        unstableVersion: 2,
+      }),
     );
 
     if (env.CACHE) {
@@ -474,7 +471,7 @@ const script = async () => {
         ) {
           console.log("");
           console.log(
-            chalk.gray(`Block ${chalk.bold(blockName)} is up-to-date.`)
+            chalk.gray(`Block ${chalk.bold(blockName)} is up-to-date.`),
           );
 
           continue;
@@ -493,13 +490,13 @@ const script = async () => {
         blockInfo,
         blockDirPath,
         workshopDirPath,
-        validateLockfile: env.VALIDATE_LOCKFILE
+        validateLockfile: env.VALIDATE_LOCKFILE,
       });
 
       const blockMetadata = await fs.readJson(blockMetadataPath);
 
       const exampleGraphFileExists = await fs.pathExists(
-        blockMetadataPath.replace("block-metadata.json", "example-graph.json")
+        blockMetadataPath.replace("block-metadata.json", "example-graph.json"),
       );
 
       const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${hubInfo}`;
@@ -513,12 +510,12 @@ const script = async () => {
           pathWithNamespace: blockName,
           repoCommit: blockInfo.commit,
           repoDirectory: hubInfo.directory,
-          repository: hubInfo.repository
+          repository: hubInfo.repository,
         },
         timestamps: {
-          lastUpdated: now
+          lastUpdated: now,
         },
-        includesExampleGraph: exampleGraphFileExists
+        includesExampleGraph: exampleGraphFileExists,
       });
 
       blockMetadata.unstable_hubInfo = {
@@ -526,15 +523,15 @@ const script = async () => {
         checksum: blockInfoChecksum,
         commit: blockInfo.commit,
         preparedAt: now,
-        name: blockInfo.name
+        name: blockInfo.name,
       };
 
       await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
     } catch (error) {
       console.log(
         chalk.red(
-          `Block ${chalk.bold(`${blockName}`)} could not be prepared. ${error}`
-        )
+          `Block ${chalk.bold(`${blockName}`)} could not be prepared. ${error}`,
+        ),
       );
 
       if (!continueOnError) {
@@ -545,8 +542,8 @@ const script = async () => {
 
       console.log(
         chalk.yellow(
-          `Directory ${blockDirPath} was cleared to avoid broken blocks in the hub.`
-        )
+          `Directory ${blockDirPath} was cleared to avoid broken blocks in the hub.`,
+        ),
       );
     }
   }

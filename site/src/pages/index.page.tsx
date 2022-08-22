@@ -13,7 +13,7 @@ import { useUser } from "../context/user-context";
 import { getAllBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
-  ExpandedBlockMetadata as BlockMetadata
+  ExpandedBlockMetadata as BlockMetadata,
 } from "../lib/blocks";
 
 // @todo how does this magic number work?
@@ -27,7 +27,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
   const blocks = await getAllBlocks();
 
   return {
-    props: { catalog: excludeHiddenBlocks(blocks) }
+    props: { catalog: excludeHiddenBlocks(blocks) },
   };
 };
 

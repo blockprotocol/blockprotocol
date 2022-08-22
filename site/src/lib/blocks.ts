@@ -1,7 +1,7 @@
 import {
   BlockMetadata,
   BlockMetadataRepository,
-  JsonObject
+  JsonObject,
 } from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
@@ -57,7 +57,7 @@ export interface StoredBlockInfo {
 // Generate an absolute url to a block file
 const generateBlockFileUrl = (
   mediaPath: string | undefined | null,
-  blockDistributionFolderUrl: string
+  blockDistributionFolderUrl: string,
 ): string | null => {
   if (!mediaPath) {
     return null;
@@ -74,7 +74,7 @@ const generateBlockFileUrl = (
 export const getRepositoryUrl = (
   repository: BlockMetadataRepository | undefined,
   commit?: string | undefined,
-  hubInfoDirPath?: string | undefined
+  hubInfoDirPath?: string | undefined,
 ): string | undefined => {
   if (typeof repository === "string") {
     const repositoryUrl = hostedGitInfo
@@ -107,7 +107,7 @@ export const extendBlockMetadata = ({
   timestamps,
   includesExampleGraph,
   metadata,
-  source
+  source,
 }: {
   metadata: BlockMetadata;
   source: {
@@ -125,13 +125,13 @@ export const extendBlockMetadata = ({
     pathWithNamespace,
     repository,
     repoCommit,
-    repoDirectory
+    repoDirectory,
   } = source;
 
   const repositoryUrl = getRepositoryUrl(
     repository,
     repoCommit,
-    repoDirectory
+    repoDirectory,
   )?.replace(/\/$/, "");
 
   const [namespace, name] = pathWithNamespace.split("/");
@@ -159,24 +159,26 @@ export const extendBlockMetadata = ({
     schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
     variants: metadata.variants?.length
-      ? metadata.variants?.map(variant => ({
+      ? metadata.variants?.map((variant) => ({
           ...variant,
-          icon: generateBlockFileUrl(variant.icon, blockDistributionFolderUrl)!
+          icon: generateBlockFileUrl(variant.icon, blockDistributionFolderUrl)!,
         }))
       : null,
     exampleGraph: generateBlockFileUrl(
       includesExampleGraph ? "example-graph.json" : null,
-      blockDistributionFolderUrl
-    )
+      blockDistributionFolderUrl,
+    ),
   };
 };
 
 /**
  * used  to read and enhance block metadata from disk.
  */
-export const readBlocksFromDisk = async (): Promise<ExpandedBlockMetadata[]> => {
+export const readBlocksFromDisk = async (): Promise<
+  ExpandedBlockMetadata[]
+> => {
   const blockMetadataFilePaths = await globby(
-    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`)
+    path.resolve(process.cwd(), `public/blocks/**/block-metadata.json`),
   );
 
   const result: ExpandedBlockMetadata[] = [];
@@ -184,8 +186,8 @@ export const readBlocksFromDisk = async (): Promise<ExpandedBlockMetadata[]> => 
     const metadata: BlockMetadataOnDisk = await fs.readJson(
       blockMetadataFilePath,
       {
-        encoding: "utf8"
-      }
+        encoding: "utf8",
+      },
     );
 
     delete metadata.unstable_hubInfo;
@@ -201,15 +203,15 @@ const blocksToHide = [
   "@hash/callout",
   "@hash/embed",
   "@hash/header",
-  "@hash/paragraph"
+  "@hash/paragraph",
 ];
 
 /** Helps consistently hide certain blocks from the hub and user profile pages */
 export const excludeHiddenBlocks = (
-  blocks: ExpandedBlockMetadata[]
+  blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
   return blocks.filter(
-    ({ pathWithNamespace }) => !blocksToHide.includes(pathWithNamespace)
+    ({ pathWithNamespace }) => !blocksToHide.includes(pathWithNamespace),
   );
 };
 
@@ -217,7 +219,7 @@ export const retrieveBlockFileContent = async ({
   pathWithNamespace,
   schema: metadataSchemaUrl,
   source: metadataSourceUrl,
-  exampleGraph: metadataExampleGraphUrl
+  exampleGraph: metadataExampleGraphUrl,
 }: ExpandedBlockMetadata): Promise<{
   schema: JsonObject;
   source: string;
@@ -229,25 +231,25 @@ export const retrieveBlockFileContent = async ({
           path.resolve(
             process.cwd(),
             `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
-              metadataSchemaUrl.lastIndexOf("/") + 1
-            )}`
+              metadataSchemaUrl.lastIndexOf("/") + 1,
+            )}`,
           ),
-          { encoding: "utf8" }
-        )
+          { encoding: "utf8" },
+        ),
       )
-    : await fetch(metadataSchemaUrl).then(response => response.json());
+    : await fetch(metadataSchemaUrl).then((response) => response.json());
 
   const source = metadataSourceUrl.startsWith(FRONTEND_URL)
     ? await fs.readFile(
         path.resolve(
           process.cwd(),
           `public/blocks/${pathWithNamespace}/${metadataSourceUrl.substring(
-            metadataSourceUrl.lastIndexOf("/") + 1
-          )}`
+            metadataSourceUrl.lastIndexOf("/") + 1,
+          )}`,
         ),
-        { encoding: "utf8" }
+        { encoding: "utf8" },
       )
-    : await fetch(metadataSourceUrl).then(response => response.text());
+    : await fetch(metadataSourceUrl).then((response) => response.text());
 
   let exampleGraph = null;
 
@@ -256,30 +258,32 @@ export const retrieveBlockFileContent = async ({
       ? JSON.parse(
           fs.readFileSync(
             `${process.cwd()}/public/blocks/${pathWithNamespace}/${metadataExampleGraphUrl.substring(
-              metadataExampleGraphUrl.lastIndexOf("/") + 1
+              metadataExampleGraphUrl.lastIndexOf("/") + 1,
             )}`,
-            { encoding: "utf8" }
-          )
+            { encoding: "utf8" },
+          ),
         )
-      : await fetch(metadataExampleGraphUrl).then(response => response.json());
+      : await fetch(metadataExampleGraphUrl).then((response) =>
+          response.json(),
+        );
   }
 
   return {
     schema,
     source,
-    exampleGraph
+    exampleGraph,
   };
 };
 
 export const readBlockReadmeFromDisk = async (
-  blockMetadata: ExpandedBlockMetadata
+  blockMetadata: ExpandedBlockMetadata,
 ): Promise<string | undefined> => {
   try {
     return fs.readFileSync(
       `${process.cwd()}/public/blocks/${
         blockMetadata.pathWithNamespace
       }/README.vercel-hack.md`,
-      "utf8"
+      "utf8",
     );
   } catch {
     return undefined;

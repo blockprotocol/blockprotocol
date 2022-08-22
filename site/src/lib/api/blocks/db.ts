@@ -14,7 +14,7 @@ export const getDbBlocks = async (filter: { shortname?: string }) => {
 
 export const getDbBlock = async ({
   name,
-  shortname
+  shortname,
 }: {
   name: string;
   shortname: string;
@@ -44,7 +44,7 @@ export const updateDbBlock = async (block: ExpandedBlockMetadata) => {
     .findOneAndUpdate(
       { author, name },
       { $set: block },
-      { returnDocument: "after" }
+      { returnDocument: "after" },
     );
 
   return updatedBlock;

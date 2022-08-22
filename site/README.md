@@ -24,7 +24,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     ```sh
     SESSION_SECRET=dev-session-secret
     HASHING_SECRET=dev-hashing-secret
-
+    
     MONGODB_URI=mongodb://root:password@localhost:27017/
     MONGODB_DB_NAME=local
     ```
@@ -75,14 +75,14 @@ When running in development environments, avatars go to the `dev/avatars/(user.i
 
 Before serving any blocks via the Block Hub, they need to be prepared (i.e. built in most cases).
 Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn exe site/scripts/prepare-get.ts` prepares blocks.
+The build-script `yarn exe site/scripts/prepare-blocks.ts` prepares blocks.
 
 ```sh
 # prepare all blocks
-yarn exe site/scripts/prepare-get.ts
+yarn exe site/scripts/prepare-blocks.ts
 
 # prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" yarn exe site/scripts/prepare-get.ts
+BLOCK_FILTER="@hash/*" yarn exe site/scripts/prepare-blocks.ts
 ```
 
 Once the blocks are built, simply `yarn dev` and head over to
@@ -378,7 +378,7 @@ All commands are executed from the repo root dir.
     ```sh
     ## posix terminals
     export TEST_COVERAGE=true
-
+    
     ## cmd.exe & PowerShell
     set TEST_COVERAGE=true
     ```

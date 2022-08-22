@@ -6,7 +6,7 @@ import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import { getAllBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
-  ExpandedBlockMetadata as BlockMetadata
+  ExpandedBlockMetadata as BlockMetadata,
 } from "../lib/blocks";
 
 interface PageProps {
@@ -20,7 +20,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
   const blocks = await getAllBlocks();
 
   return {
-    props: { catalog: excludeHiddenBlocks(blocks) }
+    props: { catalog: excludeHiddenBlocks(blocks) },
   };
 };
 
@@ -42,7 +42,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
           backgroundImage: "url(/assets/blockhub-gradient.svg)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "30% 50%",
-          backgroundSize: "100% 100%"
+          backgroundSize: "100% 100%",
         }}
       >
         <Container sx={{ px: { xs: 1, sm: 4 } }}>
@@ -52,14 +52,14 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
               pt: 8,
               width: { xs: "100%", sm: "80%", md: "65%" },
               mx: "auto",
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             <Typography
               mb={{ xs: 2, md: 3 }}
               sx={{
                 color: ({ palette }) => palette.purple[700],
-                fontWeight: 700
+                fontWeight: 700,
               }}
               variant="bpSmallCaps"
             >
@@ -72,7 +72,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
               textAlign="center"
               sx={{
                 color: ({ palette }) => palette.gray[70],
-                maxWidth: "unset"
+                maxWidth: "unset",
               }}
             >
               All open-source and free to use
@@ -82,7 +82,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
         <Container
           sx={{
             px: "6.5%",
-            maxWidth: { md: 720, lg: 1200 }
+            maxWidth: { md: 720, lg: 1200 },
           }}
         >
           <Grid
@@ -90,12 +90,12 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
             rowSpacing={4}
             sx={{
               position: "relative",
-              zIndex: 2
+              zIndex: 2,
             }}
             container
           >
             {catalog
-              ? catalog.map(block => (
+              ? catalog.map((block) => (
                   <Grid
                     key={block.pathWithNamespace}
                     item
@@ -106,7 +106,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
                     <BlockCard data={block} />
                   </Grid>
                 ))
-              : Array.from(Array(6), (_, index) => index + 1).map(key => (
+              : Array.from(Array(6), (_, index) => index + 1).map((key) => (
                   <Grid key={key} item xs={12} sm={6} lg={4}>
                     <BlockCard loading />
                   </Grid>

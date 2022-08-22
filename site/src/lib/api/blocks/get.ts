@@ -16,7 +16,7 @@ export const getAllBlocksByUser = async (params: {
 
   // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
   const localUserBlocks = localBlocks.filter(
-    ({ author }) => author === params.shortname
+    ({ author }) => author === params.shortname,
   ) as ExpandedBlockMetadata[];
 
   const dbUserBlocks = await getDbBlocks({ shortname });
@@ -31,7 +31,7 @@ export const getBlockByUserAndName = async (params: {
   const { name, shortname } = params;
   // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
   const localBlock = (localBlocks.filter(
-    ({ pathWithNamespace }) => pathWithNamespace === `@${shortname}/${name}`
+    ({ pathWithNamespace }) => pathWithNamespace === `@${shortname}/${name}`,
   )?.[0] ?? null) as ExpandedBlockMetadata | null;
 
   if (localBlock) {

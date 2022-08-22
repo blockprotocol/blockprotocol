@@ -19,13 +19,8 @@ export default createAuthenticatedHandler<
   ApiTypeCreateResponse
 >()
   .use(
-    bodyValidator("blockName")
-      .isString()
-      .notEmpty()
-      .toLowerCase(),
-    bodyValidator("npmPackageName")
-      .isString()
-      .notEmpty()
+    bodyValidator("blockName").isString().notEmpty().toLowerCase(),
+    bodyValidator("npmPackageName").isString().notEmpty(),
   )
   .post(async (req, res) => {
     const errors = validationResult(req);
@@ -40,14 +35,14 @@ export default createAuthenticatedHandler<
       const block = await publishBlockFromNpm(db, {
         name: blockName,
         npmPackageName,
-        user
+        user,
       });
       return res.status(200).json({ block });
     } catch (err) {
       return res.status(400).json(
         formatErrors({
-          msg: err instanceof Error ? err.message : "unknown error"
-        })
+          msg: err instanceof Error ? err.message : "unknown error",
+        }),
       );
     }
   });
