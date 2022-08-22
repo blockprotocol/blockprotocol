@@ -37,7 +37,11 @@
   "dependencies": {
     "@blockprotocol/core": "0.0.9",
     "@blockprotocol/graph": "0.0.13",
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.10.1",
     "lodash": "^4.17.21",
     "react-json-view": "^1.21.3",
     "uuid": "^8.3.2"

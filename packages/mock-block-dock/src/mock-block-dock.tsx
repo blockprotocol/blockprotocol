@@ -7,6 +7,7 @@ import {
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
+import { Box } from "@mui/material";
 import {
   ComponentType,
   FunctionComponent,
@@ -16,7 +17,8 @@ import {
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
-import { JsonView } from "./json-view";
+import { BottomView } from "./bottom-view";
+import { Layout } from "./layout";
 import { useMockBlockProps } from "./use-mock-block-props";
 
 type BlockDefinition =
@@ -89,8 +91,18 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     null,
   );
   const [debugReadonly, setDebugReadonly] = useState<boolean>(!!readonly);
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const prevReadonly = useRef<boolean | undefined>(readonly);
+
+  const blockType =
+    "ReactComponent" in blockDefinition
+      ? "react"
+      : "customElement" in blockDefinition
+      ? "custom-element"
+      : "html" in blockDefinition
+      ? "html"
+      : undefined;
 
   const propsToInject: BlockGraphProperties<any> = {
     graph: {
@@ -190,19 +202,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   }
 
   return (
-    <div style={{ fontFamily: "sans-serif" }}>
-      <div style={{ marginBottom: 30 }}>
-        <h3 style={{ marginTop: 0, marginBottom: 3 }}>Block</h3>
-        {/* eslint-disable-next-line jsx-a11y/label-has-associated-control -- https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/issues/869  */}
-        <label style={{ display: "block", marginBottom: 10 }}>
-          <input
-            type="checkbox"
-            checked={debugReadonly}
-            onChange={(evt) => setDebugReadonly(evt.target.checked)}
-          />
-          Read only mode
-        </label>
-        <div style={{ padding: 15, border: "1px dashed black" }}>
+    <Layout blockType={blockType}>
+      <Box>
+        <Box padding={3.75}>
           <div ref={wrapperRef}>
             {graphService ? (
               <BlockRenderer
@@ -223,36 +225,15 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
               />
             ) : null}
           </div>
-        </div>
-      </div>
+        </Box>
+      </Box>
 
-      <div style={{ marginBottom: 30 }}>
-        <h3 style={{ marginBottom: 4 }}>Block Properties</h3>
-        <JsonView
-          collapseKeys={["graph"]}
-          rootName="props"
-          src={propsToInject}
-        />
-      </div>
-
-      <div style={{ marginBottom: 30 }}>
-        <h3 style={{ marginBottom: 4 }}>Datastore</h3>
-        <JsonView
-          collapseKeys={[
-            "entities",
-            "entityTypes",
-            "links",
-            "linkedAggregations",
-          ]}
-          rootName="datastore"
-          src={{
-            entities: datastore.entities,
-            entityTypes: datastore.entityTypes,
-            links: datastore.links,
-            linkedAggregations: datastore.linkedAggregationDefinitions,
-          }}
-        />
-      </div>
-    </div>
+      <BottomView
+        graphProperties={propsToInject}
+        datastore={datastore}
+        readonly={debugReadonly}
+        setReadonly={setDebugReadonly}
+      />
+    </Layout>
   );
 };
