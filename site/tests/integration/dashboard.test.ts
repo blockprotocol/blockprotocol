@@ -22,18 +22,21 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await expect(page.locator("text=Welcome Back, Alice!")).toBeVisible();
 
   for (const [text, url] of [
-    [
-      "Read our quick start guide to building blocks",
-      "/docs/developing-blocks",
-    ],
-    ["Test out blocks in the playground", "/hub"],
-    ["Create a Schema", null],
-    ["Generate your API key", "/settings/api-keys"],
+    ["Publish a block", "/@alice/blocks"],
+    ["Build a block", "/docs/developing-blocks"],
+    ["Create a Type", null],
+    ["Create your first API key", "/settings/api-keys"],
     ["View your public profile", "/@alice"],
+    ["Manage blocks", "/@alice/blocks"],
+    ["Manage types", "/@alice/schemas"],
+    ["Browse blocks for inspiration", "/hub"],
   ] as const) {
-    const card = page.locator(
-      url ? `a:has-text('${text}')` : `button:has-text('${text}')`,
-    );
+    const card = page.locator(`[data-testid="dashboard-card"]`).filter({
+      has: page
+        .locator(`[data-testid="dashboard-card-title"]`)
+        .filter({ hasText: text }),
+    });
+
     await expect(card).toBeVisible();
     expect(await card.getAttribute("href")).toEqual(url);
   }

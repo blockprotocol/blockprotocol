@@ -93,6 +93,7 @@ const DashboardCardSecondary: FunctionComponent<
           }}
         >
           <Typography
+            data-testid="dashboard-card-title"
             variant="bpLargeText"
             sx={{
               mb: 0.75,
@@ -200,6 +201,7 @@ export const DashboardCard: FunctionComponent<
           }}
         >
           <Typography
+            data-testid="dashboard-card-title"
             mb={1}
             color={({ palette }) => palette.gray[90]}
             fontWeight="500"

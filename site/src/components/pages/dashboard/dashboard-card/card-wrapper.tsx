@@ -20,14 +20,19 @@ export const CardWrapper: FunctionComponent<CardWrapperProps> = ({
 }) => {
   if (onClick) {
     return (
-      <Box component="button" onClick={onClick} sx={focusOutlineStyle}>
+      <Box
+        data-testid="dashboard-card"
+        component="button"
+        onClick={onClick}
+        sx={focusOutlineStyle}
+      >
         {children}
       </Box>
     );
   }
 
   return (
-    <Link href={href} sx={focusOutlineStyle}>
+    <Link data-testid="dashboard-card" href={href} sx={focusOutlineStyle}>
       {children}
     </Link>
   );
