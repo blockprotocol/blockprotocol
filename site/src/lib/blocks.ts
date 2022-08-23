@@ -143,7 +143,7 @@ export const extendBlockMetadata = ({
     throw new Error(`Malformed pathWithNamespace ${pathWithNamespace}`);
   }
 
-  // eslint-disable-next-line no-param-reassign -- alternative is constructing a new object
+  // eslint-disable-next-line no-param-reassign -- could make a new object, but would need to update for any new metadata fields
   delete metadata.devReloadEndpoint;
 
   return {
@@ -181,7 +181,7 @@ export const extendBlockMetadata = ({
 };
 
 /**
- * used to read and block metadata from disk, for blocks published via JSON in hub/ and served from the public folder
+ * used to read block metadata from disk, for blocks published via JSON in hub/ and served from the public folder
  */
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
