@@ -1,6 +1,9 @@
 import { Typography, TypographyProps } from "@mui/material";
 
-export const SectionTitle = ({ children, ...props }: TypographyProps) => {
+export const DashboardSectionTitle = ({
+  children,
+  ...props
+}: TypographyProps) => {
   return (
     <Typography
       variant="bpSmallCaps"
