@@ -28,7 +28,7 @@
     "dev": "yarn workspace @blockprotocol/site dev",
     "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
     "dev:db": "yarn workspace @blockprotocol/site dev:db",
-    "prepare": "patch-package && yarn workspace @blockprotocol/site patch-package && turbo run build \"--filter=!./site/\""
+    "prepare": "patch-package && yarn workspace @blockprotocol/site patch-package && turbo run codegen && turbo run build \"--filter=!./site/\""
   },
   "lint-staged": {
     "**/*": [
