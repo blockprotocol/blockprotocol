@@ -73,6 +73,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-gtm-module": "^2.0.11",
+    "react-hook-form": "^7.34.2",
     "react-html-parser": "^2.0.2",
     "react-slick": "^0.28.1",
     "react-transition-group": "^4.4.2",
