@@ -64,6 +64,7 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
 
 The above environment variables will also be used for S3 access for allowing user avatar uploads.
+
 The default S3 bucket name is `blockprotocol` but can optionally be customized with the following environment variable:
 
 - `BP_AWS_S3_BUCKET_NAME`: The name of the S3 bucket to store files in (e.g. user avatars)
