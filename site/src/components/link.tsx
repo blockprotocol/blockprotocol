@@ -61,13 +61,8 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(
     } = props;
 
     const router = useRouter();
-    let pathname;
-    try {
-      pathname = typeof href === "string" ? href : href.pathname ?? undefined;
-    } catch (err) {
-      throw new Error(`${linkAs}, ${href}, ${classNameProps}`);
-    }
-
+    const pathname =
+      typeof href === "string" ? href : href.pathname ?? undefined;
     const className = clsx(classNameProps, {
       [activeClassName]: router.pathname === pathname && activeClassName,
     });

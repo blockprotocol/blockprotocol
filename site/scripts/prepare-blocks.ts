@@ -460,7 +460,7 @@ const script = async () => {
         ...blockInfo,
         // This will allow you to force re-preparing all blocks when the
         // format of `unstable_hubInfo` changes, by incrementing this.
-        unstableVersion: 2,
+        unstableVersion: 3,
       }),
     );
 
