@@ -1,3 +1,7 @@
+#![allow(
+    non_snake_case,
+    reason = "We want camelCase types in TS, and this module is WASM only"
+)]
 use std::str::FromStr;
 
 use wasm_bindgen::prelude::*;
@@ -8,8 +12,10 @@ use crate::{
 };
 
 /// Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
-#[wasm_bindgen(js_name = parseBaseUri)]
-pub fn parse_base_uri(uri: &str) -> Result<String, ParseBaseUriError> {
+///
+/// @throws {ParseBaseUriError} if the given string is not a valid base URI
+#[wasm_bindgen]
+pub fn parseBaseUri(uri: &str) -> Result<String, ParseBaseUriError> {
     let base_uri = BaseUri::new(uri)?;
     if base_uri.0.cannot_be_a_base() {
         return Err(ParseBaseUriError {});
@@ -19,10 +25,9 @@ pub fn parse_base_uri(uri: &str) -> Result<String, ParseBaseUriError> {
 
 /// Checks if a given URL string is a Block Protocol compliant Versioned URI.
 ///
-/// If the URL is valid this function returns nothing, otherwise it throws a
-/// `ParseVersionedUriError`
-#[wasm_bindgen(js_name = isValidVersionedUri)]
-pub fn is_valid_versioned_uri(uri: &str) -> Result<(), ParseVersionedUriError> {
+/// @throws {ParseVersionedUriError} if the versioned URI is invalid
+#[wasm_bindgen]
+pub fn isValidVersionedUri(uri: &str) -> Result<(), ParseVersionedUriError> {
     VersionedUri::from_str(uri)?;
     Ok(())
 }

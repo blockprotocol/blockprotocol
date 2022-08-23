@@ -15,9 +15,11 @@ const sharedNoRestrictedImportsConfig = {
   ],
 };
 
+/** @type {import("eslint").Linter.Config} */
 module.exports = {
   // this is the highest config lower ones will automatically extend
   root: true,
+  reportUnusedDisableDirectives: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "tsconfig.json",
@@ -29,16 +31,10 @@ module.exports = {
     "simple-import-sort",
     "unicorn",
   ],
-  extends: [
-    "plugin:@typescript-eslint/base",
-    "airbnb",
-    "prettier",
-    // mutes eslint rules conflicting w/ prettier (requires eslint-config-prettier)
-  ],
+  extends: ["plugin:@typescript-eslint/base", "airbnb", "prettier"],
   ignorePatterns: ["**/*.gen.*"],
   globals: {
     NodeJS: true,
-    FixMeLater: "readonly",
     globalThis: "readonly",
   },
   env: {
@@ -378,12 +374,6 @@ module.exports = {
             ],
           },
         ],
-      },
-    },
-    {
-      files: ["site/**"],
-      rules: {
-        "unicorn/filename-case": "error",
       },
     },
     {
