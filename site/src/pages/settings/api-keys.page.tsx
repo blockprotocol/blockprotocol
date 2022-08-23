@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 
@@ -10,6 +10,7 @@ import {
   withAuthWall,
 } from "../../components/pages/auth-wall";
 import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal";
+import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import { Table, TableRows } from "../../components/table";
 import { DateTimeCell } from "../../components/table-cells";
@@ -76,129 +77,110 @@ const ApiKeys: AuthWallPageContent = () => {
 
       <TopNavigationTabs />
 
-      <Box
-        sx={{
-          background:
-            "linear-gradient(180deg, #FAFBFC 0%, rgba(250, 251, 252, 0) 100%)",
-        }}
-      >
-        <Container
+      <PageContainer>
+        <Typography
+          variant="bpTitle"
           sx={{
-            paddingTop: {
-              xs: 5,
-              md: 9,
-            },
-            paddingBottom: {
-              xs: 5,
-              md: 9,
-            },
+            marginBottom: 2,
           }}
         >
-          <Typography
-            variant="bpTitle"
-            sx={{
-              marginBottom: 2,
-            }}
-          >
-            Access the API
-          </Typography>
-
+          Access the API
+        </Typography>
+        <Box
+          py={4}
+          display={{ xs: "block", md: "flex" }}
+          alignItems="flex-start"
+        >
           <Box
-            py={4}
-            display={{ xs: "block", md: "flex" }}
-            alignItems="flex-start"
+            sx={{
+              boxShadow:
+                "0px 4px 11px rgba(39, 50, 86, 0.04), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.08), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
+              background: "white",
+              width: "100%",
+              borderRadius: 2,
+            }}
+            p={{ xs: 3, md: 6 }}
           >
-            <Box
+            <Typography
               sx={{
-                boxShadow:
-                  "0px 4px 11px rgba(39, 50, 86, 0.04), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.08), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
-                background: "white",
-                width: "100%",
-                borderRadius: 2,
+                typography: "bpLargeText",
+                fontWeight: "500",
               }}
-              p={{ xs: 3, md: 6 }}
             >
+              API Keys
+            </Typography>
+            <Box sx={{ my: 2 }}>
               <Typography
                 sx={{
-                  typography: "bpLargeText",
-                  fontWeight: "500",
+                  typography: "bpBodyCopy",
                 }}
               >
-                API Keys
+                These keys allow you to access the block protocol from within
+                your application.
               </Typography>
-              <Box sx={{ my: 2 }}>
-                <Typography
-                  sx={{
-                    typography: "bpBodyCopy",
-                  }}
-                >
-                  These keys allow you to access the block protocol from within
-                  your application.
-                </Typography>
-                <Typography
-                  sx={{
-                    typography: "bpBodyCopy",
-                  }}
-                >
-                  Keep them private to prevent other people from accessing your
-                  account. <br />
-                  <Link href="/docs/embedding-blocks#discovering-blocks">
-                    Learn More
-                  </Link>
-                </Typography>
-              </Box>
-              {!!tableRows.length && (
-                <Table
-                  header={["Name", "Public ID", "Last Used", "Created"]}
-                  rows={tableRows}
-                />
-              )}
+              <Typography
+                sx={{
+                  typography: "bpBodyCopy",
+                }}
+              >
+                Keep them private to prevent other people from accessing your
+                account. <br />
+                <Link href="/docs/embedding-blocks#discovering-blocks">
+                  Learn More
+                </Link>
+              </Typography>
+            </Box>
+            {!!tableRows.length && (
+              <Table
+                header={["Name", "Public ID", "Last Used", "Created"]}
+                rows={tableRows}
+              />
+            )}
 
-              <Box sx={{ paddingTop: 2 }}>
-                <Button
-                  color={activeKey ? "warning" : "gray"}
-                  onClick={() =>
-                    setGenerateStatus({
-                      showModal: true,
-                      keyToRegenerate: activeKey,
-                    })
+            <Box sx={{ paddingTop: 2 }}>
+              <Button
+                color={activeKey ? "warning" : "gray"}
+                onClick={() =>
+                  setGenerateStatus({
+                    showModal: true,
+                    keyToRegenerate: activeKey,
+                  })
+                }
+                sx={{
+                  width: {
+                    xs: "100%",
+                    md: "auto",
+                  },
+                }}
+                variant="tertiary"
+              >
+                {activeKey ? (
+                  <>
+                    <WarningIcon
+                      width="auto"
+                      height="1em"
+                      sx={{ fontSize: "1em", marginRight: 1 }}
+                    />{" "}
+                    Regenerate API Key
+                  </>
+                ) : (
+                  <>Create new key</>
+                )}
+              </Button>
+
+              {generateKeyStatus.showModal ? (
+                <GenerateApiModal
+                  close={closeGenerateModal}
+                  keyNameToRegenerate={
+                    generateKeyStatus.keyToRegenerate?.displayName
                   }
-                  sx={{
-                    width: {
-                      xs: "100%",
-                      md: "auto",
-                    },
-                  }}
-                  variant="tertiary"
-                >
-                  {activeKey ? (
-                    <>
-                      <WarningIcon
-                        width="auto"
-                        height="1em"
-                        sx={{ fontSize: "1em", marginRight: 1 }}
-                      />{" "}
-                      Regenerate API Key
-                    </>
-                  ) : (
-                    <>Create new key</>
-                  )}
-                </Button>
-
-                {generateKeyStatus.showModal ? (
-                  <GenerateApiModal
-                    close={closeGenerateModal}
-                    keyNameToRegenerate={
-                      generateKeyStatus.keyToRegenerate?.displayName
-                    }
-                    refetchKeyList={fetchAndSetApiKeys}
-                  />
-                ) : null}
-              </Box>
+                  refetchKeyList={fetchAndSetApiKeys}
+                />
+              ) : null}
             </Box>
           </Box>
-        </Container>
-      </Box>
+        </Box>
+      </PageContainer>
     </>
   );
 };
