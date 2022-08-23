@@ -89,7 +89,7 @@ const mirrorNpmPackageToR2 = async (
   );
 
   // move the readme into the block's source folder, if it exists
-  const readmePath = glob.sync("README", {
+  const readmePath = glob.sync("README.md", {
     cwd: packageFolder,
     nocase: true,
   })[0];
