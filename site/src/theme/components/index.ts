@@ -6,6 +6,7 @@ import { MuiListItemButtonThemeOptions } from "./data-display/mui-list-item-butt
 import { MuiListItemIconThemeOptions } from "./data-display/mui-list-item-icon-theme-options";
 import { MuiListItemTextThemeOptions } from "./data-display/mui-list-item-text-theme-options";
 import { MuiTypographyThemeOptions } from "./data-display/mui-typography-theme-options";
+import { MuiAlertThemeOptions } from "./feedback/mui-alert-theme-options";
 import { MuiSkeletonThemeOptions } from "./feedback/mui-skeleton-theme-options";
 import { MuiButtonThemeOptions } from "./inputs/mui-button-theme-options";
 import { MuiCheckboxThemeOptions } from "./inputs/mui-checkbox-theme-options";
@@ -54,7 +55,8 @@ export const components: ThemeOptions["components"] = {
 
   /** ===== FEEDBACK ===== */
   MuiSkeleton: MuiSkeletonThemeOptions,
+  MuiAlert: MuiAlertThemeOptions,
 
   /** ===== UTILS ===== */
-  MuiCssBaseline: MuiCssBaselineThemeOptions,
+  MuiCssBaseline: MuiCssBaselineThemeOptions
 };

@@ -15,8 +15,9 @@ export const MuiTypographyThemeOptions: Components<Theme>["MuiTypography"] = {
       bpBodyCopy: "p",
       bpSmallCopy: "span",
       bpMicroCopy: "span",
+      bpCode: "code"
     },
-    variant: "bpBodyCopy",
+    variant: "bpBodyCopy"
   },
   styleOverrides: {
     root: ({ ownerState, theme }) => ({
@@ -30,8 +31,8 @@ export const MuiTypographyThemeOptions: Components<Theme>["MuiTypography"] = {
           transition: theme.transitions.create("color"),
           ":hover": {
             color: theme.palette.purple[500],
-            borderBottomColor: theme.palette.purple[500],
-          },
+            borderBottomColor: theme.palette.purple[500]
+          }
         }),
         ...(ownerState.variant === "bpSmallCopy" && {
           color: "currentColor",
@@ -41,10 +42,10 @@ export const MuiTypographyThemeOptions: Components<Theme>["MuiTypography"] = {
           transition: theme.transitions.create("color"),
           ":hover": {
             color: theme.palette.purple[700],
-            borderBottomColor: theme.palette.purple[700],
-          },
-        }),
-      },
-    }),
-  },
+            borderBottomColor: theme.palette.purple[700]
+          }
+        })
+      }
+    })
+  }
 };

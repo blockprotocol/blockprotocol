@@ -67,6 +67,7 @@ declare module "@mui/material/styles" {
     bpBodyCopy: CSSProperties;
     bpSmallCopy: CSSProperties;
     bpMicroCopy: CSSProperties;
+    bpCode: CSSProperties;
   }
 
   interface TypographyVariantsOptions {
@@ -82,6 +83,7 @@ declare module "@mui/material/styles" {
     bpBodyCopy?: CSSProperties;
     bpSmallCopy?: CSSProperties;
     bpMicroCopy?: CSSProperties;
+    bpCode?: CSSProperties;
   }
 }
 
@@ -99,6 +101,7 @@ declare module "@mui/material/Typography" {
     bpBodyCopy: true;
     bpSmallCopy: true;
     bpMicroCopy: true;
+    bpCode: true;
   }
 }
 
