@@ -7,7 +7,7 @@ import {
   LinkedAggregation,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
 import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./use-mock-block-props/use-link-fields";
@@ -29,7 +29,7 @@ import {
  */
 export const useMockBlockProps = ({
   blockEntity,
-  blockSchema,
+  blockSchema: initialBlockSchema,
   initialEntities,
   initialEntityTypes,
   initialLinks,
@@ -46,11 +46,23 @@ export const useMockBlockProps = ({
 }): {
   blockEntity: Entity;
   blockGraph: BlockGraph;
+  blockSchema?: Partial<EntityType>;
   datastore: MockData;
   entityTypes: EntityType[];
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
   linkedAggregations: LinkedAggregation[];
+  setBlockSchema?: Dispatch<SetStateAction<Partial<EntityType>>>;
 } => {
+  // @todo rename this
+  const [blockEntity1, setBlockEntity1] = useState(blockEntity);
+  const [readonly1, setReadonly1] = useState(readonly);
+  const [initialEntities1, setInitialEntities1] = useState(initialEntities);
+  const [initialEntityTypes1, setInitialEntityTypes1] =
+    useState(initialEntityTypes);
+  const [blockSchema, setBlockSchema] =
+    useState<Partial<EntityType>>(initialBlockSchema);
+  const [initialLinks1, setInitialLinks1] = useState(initialLinks);
+
   const { initialBlockEntity, mockData } = useMemo((): {
     initialBlockEntity: Entity;
     mockData: MockData;
@@ -146,6 +158,7 @@ export const useMockBlockProps = ({
       ),
     [entityTypes, latestBlockEntity.entityTypeId],
   );
+
   if (!latestBlockEntityType) {
     throw new Error("Cannot find block entity type. Has it been deleted?");
   }
@@ -157,5 +170,7 @@ export const useMockBlockProps = ({
     entityTypes,
     linkedAggregations,
     graphServiceCallbacks,
+    blockSchema,
+    setBlockSchema,
   };
 };

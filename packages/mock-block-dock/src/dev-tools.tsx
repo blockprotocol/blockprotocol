@@ -16,13 +16,13 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 
 import { DataStoreView } from "./bottom-view/datastore-view";
-import { Log, LogsView } from "./bottom-view/logs-view";
+import { LogsView } from "./bottom-view/logs-view";
 import { PropertiesView } from "./bottom-view/properties";
 import { a11yProps, TabPanel } from "./bottom-view/tab-panel";
-import { SIDEBAR_WIDTH } from "./layout";
+import { SIDEBAR_WIDTH } from "./debug-layout";
 import { MockData } from "./use-mock-block-props/use-mock-datastore";
 
 const Container = styled((props: PaperProps & { minimized: boolean }) => (
@@ -65,24 +65,9 @@ export const DevTools = ({
   setReadonly,
   setBlockEntity,
 }: BottomViewProps) => {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [logs, setLogs] = useState<Log[]>([]);
   const [minimized, setMinimized] = useState(false);
-
-  useEffect(() => {
-    const handler = (event: Event) => {
-      const detail = (event as CustomEvent<Message>).detail;
-      setLogs((prev) => [...prev, { ...detail }]);
-    };
-
-    // @todo store event name in constant or pull from CoreHandler
-    window.addEventListener("blockprotocolmessage", handler);
-
-    return () => {
-      window.removeEventListener("blockprotocolmessage", handler);
-    };
-  }, []);
 
   return (
     <Container ref={containerRef} minimized={minimized}>
@@ -120,16 +105,14 @@ export const DevTools = ({
         <TabPanel value={value} index={0}>
           <PropertiesView
             blockEntity={graphProperties.graph.blockEntity}
-            readonly={readonly}
-            setReadonly={setReadonly}
-            setBlockEntity={setBlockEntity}
+            // setBlockEntity={setBlockEntity}
           />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <DataStoreView datastore={datastore} />
         </TabPanel>
         <TabPanel value={value} index={2}>
-          <LogsView logs={logs} setLogs={setLogs} />
+          <LogsView />
         </TabPanel>
       </Box>
     </Container>

@@ -7,24 +7,12 @@ import {
   styled,
   Typography,
 } from "@mui/material";
-import {
-  Dispatch,
-  SetStateAction,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { JsonView } from "../json-view";
+import { useMockBlockDockContext } from "../mock-block-dock-context";
 
 export type Log = Message;
-
-type Props = {
-  logs: Log[];
-  setLogs: Dispatch<SetStateAction<Log[]>>;
-};
 
 type LogItemProps = {
   onClick: (activeLog: Log) => void;
@@ -103,7 +91,7 @@ const ActiveLogsContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-export const LogsView = ({ logs, setLogs }: Props) => {
+export const LogsView = () => {
   const [activeLog, setActiveLog] = useState<Message>();
   const [filters, setFilters] = useState({
     source: "all",
@@ -111,6 +99,7 @@ export const LogsView = ({ logs, setLogs }: Props) => {
   });
   const [scrolled, setScrolled] = useState(true);
   const logsContainerRef = useRef<HTMLElement>();
+  const { logs, setLogs } = useMockBlockDockContext();
 
   const filteredLogs = useMemo(() => {
     return logs

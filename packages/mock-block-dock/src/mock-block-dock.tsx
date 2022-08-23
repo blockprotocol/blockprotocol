@@ -17,8 +17,8 @@ import {
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
+import { DebugLayout } from "./debug-layout";
 import { DevTools } from "./dev-tools";
-import { Layout } from "./layout";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useMockBlockProps } from "./use-mock-block-props";
 
@@ -69,7 +69,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
-  readonly,
+  readonly: initialReadonly,
 }) => {
   const [initialBlockEntity, setInitialBlockEntity] =
     useState(initialBlockEntity1);
@@ -90,17 +90,17 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialEntityTypes,
     initialLinks,
     initialLinkedAggregations,
-    readonly,
+    readonly: initialReadonly,
   });
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
     null,
   );
-  const [debugReadonly, setDebugReadonly] = useState<boolean>(!!readonly);
-  const [debugMode, setDebugMode] = useState(debug);
+  const [readonly, setReadonly] = useState<boolean>(!!initialReadonly);
+  const [debugMode, setDebugMode] = useState(!!debug);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const prevReadonly = useRef<boolean | undefined>(readonly);
+  const prevReadonly = useRef<boolean | undefined>(initialReadonly);
 
   const blockType =
     "ReactComponent" in blockDefinition
@@ -113,7 +113,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   const propsToInject: BlockGraphProperties<any> = {
     graph: {
-      readonly: debugReadonly,
+      readonly,
       blockEntity,
       blockGraph,
       entityTypes,
@@ -122,8 +122,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   };
 
   useEffect(() => {
-    prevReadonly.current = readonly;
-  }, [readonly]);
+    prevReadonly.current = initialReadonly;
+  }, [initialReadonly]);
 
   useEffect(() => {
     if (!wrapperRef.current) {
@@ -138,7 +138,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           linkedAggregations,
           callbacks: graphServiceCallbacks,
           element: wrapperRef.current,
-          readonly: debugReadonly,
+          readonly,
         }),
       );
     }
@@ -148,7 +148,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphService,
     graphServiceCallbacks,
     linkedAggregations,
-    debugReadonly,
+    readonly,
   ]);
 
   useEffect(() => {
@@ -177,9 +177,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   useEffect(() => {
     if (graphService) {
-      graphService.readonly({ data: debugReadonly });
+      graphService.readonly({ data: readonly });
     }
-  }, [debugReadonly, graphService]);
+  }, [readonly, graphService]);
 
   const Component = (
     <div ref={wrapperRef}>
@@ -203,7 +203,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   );
 
   return (
-    <MockBlockDockProvider value={{ readonly, debugMode, setDebugMode }}>
+    <MockBlockDockProvider
+      debugMode={debugMode}
+      setDebugMode={setDebugMode}
+      readonly={readonly}
+      setReadonly={setReadonly}
+      blockSchema={blockSchema}
+      setBlockSchema={setBlockSchema}
+    >
       {!debugMode ? (
         <>
           {Component}
@@ -214,18 +221,18 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           </div>
         </>
       ) : (
-        <Layout blockType={blockType} exitDebugMode={() => setDebugMode(false)}>
+        <DebugLayout blockType={blockType}>
           <Box>
             <Box padding={3.75}>{Component}</Box>
           </Box>
           <DevTools
             graphProperties={propsToInject}
             datastore={datastore}
-            readonly={debugReadonly}
-            setReadonly={setDebugReadonly}
+            readonly={readonly}
+            setReadonly={setReadonly}
             setBlockEntity={setInitialBlockEntity}
           />
-        </Layout>
+        </DebugLayout>
       )}
     </MockBlockDockProvider>
   );
