@@ -3,12 +3,14 @@ import fs from "fs-extra";
 import mime from "mime-types";
 import path from "node:path";
 
+import { isProduction } from "../../config";
+
 const cloudflareEndpoint =
   "https://c6499786332a3d2fb35419a7803ab7aa.r2.cloudflarestorage.com";
-const bucketName = "blocks";
+const bucketName = isProduction ? "blocks" : "blocks-dev";
 const baseS3Options = { Bucket: bucketName };
 
-export const publicBaseR2Url = "https://blocks.hashai.workers.dev";
+export const publicBaseR2Url = `https://${bucketName}.hashai.workers.dev`;
 
 const s3 = new S3({
   endpoint: cloudflareEndpoint,
@@ -27,9 +29,9 @@ export const uploadBlockFilesToR2 = (
   localFolderPath: string,
   remoteStoragePrefix: string,
 ): Promise<any /** @todo fix this */>[] => {
-  if (!/.+\/.+/.test(remoteStoragePrefix)) {
+  if (!/.+\/.+\/.+/.test(remoteStoragePrefix)) {
     throw new Error(
-      `Expected prefix matching pattern [namespace]/[block-name], received '${remoteStoragePrefix}'`,
+      `Expected prefix matching pattern [namespace]/[block-name]/[version], received '${remoteStoragePrefix}'`,
     );
   }
 
@@ -57,39 +59,4 @@ export const uploadBlockFilesToR2 = (
       })
       .promise();
   });
-};
-
-/**
- * Wipes the contents of a block's distribution folder in R2
- * @param blockFolder the path to the folder, in the format [namespace]/[block-name]
- */
-export const wipeR2BlockFolder = async (blockFolder: string) => {
-  if (!/.+\/.+/.test(blockFolder)) {
-    throw new Error(
-      `Expected block folder matching pattern [namespace]/[block-name], received '${blockFolder}'`,
-    );
-  }
-  const folderContents = await s3
-    .listObjectsV2({
-      ...baseS3Options,
-      Prefix: blockFolder,
-    })
-    .promise();
-
-  if (!folderContents.Contents || folderContents.Contents.length === 0) {
-    return;
-  }
-
-  const objectsToDelete = folderContents.Contents.map(({ Key }) => ({
-    Key,
-  })).filter((identifier): identifier is { Key: string } => !!identifier.Key);
-
-  await s3
-    .deleteObjects({
-      ...baseS3Options,
-      Delete: {
-        Objects: objectsToDelete,
-      },
-    })
-    .promise();
 };

@@ -13,7 +13,7 @@ import tmp from "tmp-promise";
 import { extendBlockMetadata } from "../../blocks";
 import { User } from "../model/user.model";
 import { insertDbBlock } from "./db";
-import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
+import { publicBaseR2Url, uploadBlockFilesToR2 } from "./r2";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
@@ -140,8 +140,9 @@ const mirrorNpmPackageToR2 = async (
   }
 
   // wipe the block's remote folder and upload the latest files
-  const remoteStoragePrefix = stripLeadingAt(pathWithNamespace);
-  await wipeR2BlockFolder(remoteStoragePrefix);
+  const remoteStoragePrefix = `${stripLeadingAt(pathWithNamespace)}/${
+    packageJson.version
+  }`;
   await Promise.all(
     uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
   );
