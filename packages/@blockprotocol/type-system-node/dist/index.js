@@ -132,18 +132,7 @@ module.exports.isValidDataType = function(dataTypeObj) {
     }
 };
 
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
-    return idx;
-}
 /**
-* Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
-*
-* @throws {ParseBaseUriError} if the given string is not a valid base URI
 * @param {string} uri
 * @returns {string}
 */
@@ -171,9 +160,6 @@ module.exports.parseBaseUri = function(uri) {
 };
 
 /**
-* Checks if a given URL string is a Block Protocol compliant Versioned URI.
-*
-* @throws {ParseVersionedUriError} if the versioned URI is invalid
 * @param {string} uri
 */
 module.exports.isValidVersionedUri = function(uri) {
@@ -192,6 +178,14 @@ module.exports.isValidVersionedUri = function(uri) {
     }
 };
 
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
 /**
 * Checks if a given {PropertyType} is valid
 *

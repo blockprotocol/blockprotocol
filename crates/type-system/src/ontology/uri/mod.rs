@@ -72,6 +72,7 @@ impl<'de> Deserialize<'de> for BaseUri {
 }
 
 // TODO: can we impl Tsify to turn this into a type: template string
+//  if we can then we should delete wasm::VersionedUriPatch
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct VersionedUri {
     base_uri: BaseUri,

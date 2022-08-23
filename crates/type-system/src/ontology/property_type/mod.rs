@@ -17,7 +17,6 @@ use crate::{
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PropertyTypeReference {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$ref")]
     uri: VersionedUri,
 }
@@ -114,7 +113,6 @@ enum PropertyTypeTag {
 pub struct PropertyType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
     kind: PropertyTypeTag,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$id")]
     id: VersionedUri,
     title: String,

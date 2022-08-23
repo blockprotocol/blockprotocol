@@ -8,21 +8,6 @@
 */
 export function isValidDataType(dataTypeObj: DataType): void;
 /**
-* Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
-*
-* @throws {ParseBaseUriError} if the given string is not a valid base URI
-* @param {string} uri
-* @returns {string}
-*/
-export function parseBaseUri(uri: string): string;
-/**
-* Checks if a given URL string is a Block Protocol compliant Versioned URI.
-*
-* @throws {ParseVersionedUriError} if the versioned URI is invalid
-* @param {string} uri
-*/
-export function isValidVersionedUri(uri: string): void;
-/**
 * Checks if a given {PropertyType} is valid
 *
 * @throws {TempError} if the property type is malformed
@@ -59,21 +44,43 @@ export interface ObjectRepr<V> {
 }
 
 export interface DataTypeReference {
-    $ref: `${string}/v/${number}`;
+    $ref: VersionedUri;
 }
 
 export interface DataType extends Record<string, any> {
     kind: 'dataType';
-    $id: `${string}/v/${number}`;
+    $id: VersionedUri;
     title: string;
     description?: string;
     type: string;
 }
 
+export type VersionedUri = `${string}/v/${number}`;
+
+
+/**
+ * Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form.
+ * 
+ * @param {BaseUri} uri - The URL string.
+ * @throws {ParseBaseUriError} if the given string is not a valid base URI
+ */
+export function parseBaseUri(uri: BaseUri): BaseUri;
+
+
+
+/**
+ * Checks if a given URL string is a Block Protocol compliant Versioned URI.
+ * 
+ * @param {VersionedUri} uri - The URL string.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid
+ */
+export function isValidVersionedUri(uri: VersionedUri): void;
+
+
 export type BaseUri = string;
 
 export interface PropertyTypeReference {
-    $ref: `${string}/v/${number}`;
+    $ref: VersionedUri;
 }
 
 type __PropertyValuesDataTypeReference = DataTypeReference;
@@ -90,7 +97,7 @@ export type PropertyValues = PropertyValues.DataTypeReference | PropertyValues.P
 
 export interface PropertyType extends OneOf<PropertyValues> {
     kind: 'propertyType';
-    $id: `${string}/v/${number}`;
+    $id: VersionedUri;
     title: string;
     description?: string;
 }
@@ -123,10 +130,10 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly isValidDataType: (a: number, b: number) => void;
-  readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
-  readonly __wbg_parsebaseurierror_free: (a: number) => void;
   readonly parseBaseUri: (a: number, b: number, c: number) => void;
   readonly isValidVersionedUri: (a: number, b: number, c: number) => void;
+  readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
+  readonly __wbg_parsebaseurierror_free: (a: number) => void;
   readonly __wbg_parseversionedurierror_free: (a: number) => void;
   readonly __wbg_temperror_free: (a: number) => void;
   readonly isValidPropertyType: (a: number, b: number) => void;

@@ -27,7 +27,6 @@ enum DataTypeTag {
 pub struct DataType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'dataType'"))]
     kind: DataTypeTag,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$id")]
     id: VersionedUri,
     title: String,
@@ -99,7 +98,6 @@ impl DataType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct DataTypeReference {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "`${string}/v/${number}`"))]
     #[serde(rename = "$ref")]
     uri: VersionedUri,
 }
