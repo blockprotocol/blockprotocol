@@ -51,7 +51,7 @@ export const useMockBlockProps = ({
   entityTypes: EntityType[];
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
   linkedAggregations: LinkedAggregation[];
-  setBlockSchema?: Dispatch<SetStateAction<Partial<EntityType>>>;
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
 } => {
   // @todo rename this
   const [blockEntity1, setBlockEntity1] = useState(blockEntity);

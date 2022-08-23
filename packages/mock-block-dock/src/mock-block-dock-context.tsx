@@ -38,7 +38,7 @@ type Props = {
   setDebugMode: Dispatch<SetStateAction<boolean>>;
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
-  blockSchema: Partial<EntityType>;
+  blockSchema?: Partial<EntityType>;
   setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
 };
 

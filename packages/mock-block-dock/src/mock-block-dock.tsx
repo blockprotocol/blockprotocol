@@ -73,19 +73,19 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 }) => {
   const [initialBlockEntity, setInitialBlockEntity] =
     useState(initialBlockEntity1);
-  const [blockSchema, setBlockSchema] = useState(initialBlockSchema);
-  const [debugValues, setDebugValues] = useState({});
 
   const {
     blockEntity,
     blockGraph,
+    blockSchema,
     datastore,
     entityTypes,
     graphServiceCallbacks,
     linkedAggregations,
+    setBlockSchema,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
-    blockSchema,
+    blockSchema: initialBlockSchema,
     initialEntities,
     initialEntityTypes,
     initialLinks,

@@ -22,7 +22,6 @@ import { DataStoreView } from "./bottom-view/datastore-view";
 import { LogsView } from "./bottom-view/logs-view";
 import { PropertiesView } from "./bottom-view/properties";
 import { a11yProps, TabPanel } from "./bottom-view/tab-panel";
-import { SIDEBAR_WIDTH } from "./debug-layout";
 import { MockData } from "./use-mock-block-props/use-mock-datastore";
 
 const Container = styled((props: PaperProps & { minimized: boolean }) => (
@@ -30,10 +29,10 @@ const Container = styled((props: PaperProps & { minimized: boolean }) => (
 ))(({ theme, minimized }) => ({
   position: "fixed",
   height: minimized ? 50 : 500,
-  left: SIDEBAR_WIDTH,
+  left: 0,
   right: 0,
   bottom: 0,
-  zIndex: 10,
+  zIndex: 10000,
   boxShadow: theme.shadows[4],
   transition: theme.transitions.create("height"),
   display: "flex",

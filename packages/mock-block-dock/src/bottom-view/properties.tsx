@@ -1,5 +1,5 @@
 import { BlockGraphProperties } from "@blockprotocol/graph";
-import { Box, Collapse, Grid, Stack, Switch, Tooltip } from "@mui/material";
+import { Box, Collapse, Grid, Switch } from "@mui/material";
 import Ajv from "ajv";
 
 import { JsonView } from "../json-view";
