@@ -25,6 +25,7 @@ import slugify from "slugify";
 import tmp from "tmp-promise";
 
 import {
+  BlockMetadataOnDisk,
   ExpandedBlockMetadata,
   extendBlockMetadata,
   StoredBlockInfo,
@@ -499,7 +500,7 @@ const script = async () => {
         blockMetadataPath.replace("block-metadata.json", "example-graph.json"),
       );
 
-      const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${hubInfo}`;
+      const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${blockName}`;
 
       const now = new Date().toISOString();
 
@@ -509,8 +510,8 @@ const script = async () => {
           blockDistributionFolderUrl,
           pathWithNamespace: blockName,
           repoCommit: blockInfo.commit,
-          repoDirectory: hubInfo.directory,
-          repository: hubInfo.repository,
+          repoDirectory: blockInfo.folder,
+          repository: blockInfo.repository,
         },
         timestamps: {
           lastUpdated: now,
@@ -518,15 +519,20 @@ const script = async () => {
         includesExampleGraph: exampleGraphFileExists,
       });
 
-      blockMetadata.unstable_hubInfo = {
-        ...hubInfo,
-        checksum: blockInfoChecksum,
-        commit: blockInfo.commit,
-        preparedAt: now,
-        name: blockInfo.name,
+      const blockMetadataToWrite: BlockMetadataOnDisk = {
+        ...extendedBlockMetadata,
+        unstable_hubInfo: {
+          ...hubInfo,
+          checksum: blockInfoChecksum,
+          commit: blockInfo.commit,
+          preparedAt: now,
+          name: blockInfo.name,
+        },
       };
 
-      await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
+      await fs.writeJson(blockMetadataPath, blockMetadataToWrite, {
+        spaces: 2,
+      });
     } catch (error) {
       console.log(
         chalk.red(

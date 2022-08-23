@@ -30,8 +30,8 @@ import { getAllBlocks } from "../../../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  readBlockReadmeFromDisk,
   retrieveBlockFileContent,
+  retrieveBlockReadme,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
 
@@ -197,7 +197,7 @@ export const getStaticProps: GetStaticProps<
     blockMetadata,
   );
 
-  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
+  const readmeMd = await retrieveBlockReadme(blockMetadata);
 
   const compiledReadme = readmeMd
     ? (

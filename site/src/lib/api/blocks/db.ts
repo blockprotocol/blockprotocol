@@ -3,12 +3,14 @@ import { connectToDatabase } from "../mongodb";
 
 const collectionName = "bp-blocks";
 
+const queryOptions = { projection: { _id: 0 } };
+
 export const getDbBlocks = async (filter: { shortname?: string }) => {
   const { db } = await connectToDatabase();
 
   return db
     .collection<ExpandedBlockMetadata>(collectionName)
-    .find(filter)
+    .find(filter, queryOptions)
     .toArray();
 };
 
@@ -23,7 +25,7 @@ export const getDbBlock = async ({
 
   return db
     .collection<ExpandedBlockMetadata>(collectionName)
-    .findOne({ author: shortname, name });
+    .findOne({ author: shortname, name }, queryOptions);
 };
 
 export const insertDbBlock = async (block: ExpandedBlockMetadata) => {
@@ -44,7 +46,7 @@ export const updateDbBlock = async (block: ExpandedBlockMetadata) => {
     .findOneAndUpdate(
       { author, name },
       { $set: block },
-      { returnDocument: "after" },
+      { returnDocument: "after", ...queryOptions },
     );
 
   return updatedBlock;

@@ -4,9 +4,9 @@ import {
   JsonObject,
 } from "@blockprotocol/core";
 import execa from "execa";
+import fs from "fs-extra";
 import glob from "glob";
 import { Db } from "mongodb";
-import fs from "node:fs";
 import path from "node:path";
 import tmp from "tmp-promise";
 
@@ -19,8 +19,8 @@ const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
 
 /**
- * Uploads the
- * @param npmPackageName
+ * Unpacks and uploads an npm package to remote storage
+ * @param npmPackageName the name of the npm package to mirror
  * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  */
 const mirrorNpmPackageToR2 = async (
@@ -63,10 +63,10 @@ const mirrorNpmPackageToR2 = async (
   const packageJson = JSON.parse(packageJsonString);
 
   // get the block-metadata.json
-  const metadataJsonPaths = glob.sync("**/block-metadata.json", {
+  const metadataJsonPath = glob.sync("**/block-metadata.json", {
     cwd: packageFolder,
-  });
-  const metadataJsonPath = metadataJsonPaths[0];
+    nocase: true,
+  })[0];
   if (!metadataJsonPath) {
     throw new Error("No block-metadata.json present in package");
   }
@@ -83,18 +83,68 @@ const mirrorNpmPackageToR2 = async (
     );
   }
 
-  // check if we have 'example-graph.json', which we then construct a URL for in the extended matadata
-  const exampleGraphPaths = glob.sync("**/package.json", {
-    cwd: packageFolder,
-  });
-  const includesExampleGraph = !!exampleGraphPaths[0];
+  const blockSourceFolder = path.resolve(
+    packageFolder,
+    path.dirname(metadataJsonPath),
+  );
 
-  // check that any files referred to in block-metadata.json actually exist
+  // move the readme into the block's source folder, if it exists
+  const readmePath = glob.sync("README", {
+    cwd: packageFolder,
+    nocase: true,
+  })[0];
+  if (readmePath) {
+    fs.renameSync(
+      path.resolve(packageFolder, readmePath),
+      path.resolve(blockSourceFolder, path.basename(readmePath)),
+    );
+  }
+
+  // check if we have 'example-graph.json', which we then construct a URL for in the extended matadata
+  const includesExampleGraph = await fs.pathExists(
+    path.resolve(blockSourceFolder, "example-graph.json"),
+  );
+
+  // check block-metadata.json contains required properties
+  for (const key of ["blockType", "protocol", "schema", "source", "version"]) {
+    if (!metadataJson[key]) {
+      throw new Error(`block-metadata.json must contain a '${key}' property`);
+    }
+  }
+
+  // check that the source file actually exists
+  const sourcePath = metadataJson.source;
+  const sourceFileExists = await fs.pathExists(
+    path.resolve(blockSourceFolder, sourcePath),
+  );
+
+  if (!sourceFileExists) {
+    throw new Error(
+      `block-metadata.json 'source' path '${sourcePath}' does not exist`,
+    );
+  }
+
+  // check that the schema actually exists
+  const schemaPath = metadataJson.schema;
+  if (schemaPath.startsWith("http")) {
+    await fetch(schemaPath, { method: "HEAD" });
+  } else {
+    const schemaFileExists = await fs.pathExists(
+      path.resolve(blockSourceFolder, schemaPath),
+    );
+    if (!schemaFileExists) {
+      throw new Error(
+        `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
+      );
+    }
+  }
 
   // wipe the block's remote folder and upload the latest files
   const remoteStoragePrefix = stripLeadingAt(pathWithNamespace);
   await wipeR2BlockFolder(remoteStoragePrefix);
-  await Promise.all(uploadBlockFilesToR2(packageFolder, remoteStoragePrefix));
+  await Promise.all(
+    uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
+  );
 
   void cleanupDistFolder();
 
@@ -115,17 +165,11 @@ export const publishBlockFromNpm = async (
   const { includesExampleGraph, metadataJson, packageJson, publicPackagePath } =
     await mirrorNpmPackageToR2(npmPackageName, pathWithNamespace);
 
-  console.log({
-    includesExampleGraph,
-    metadataJson,
-    packageJson,
-    publicPackagePath,
-  });
-
   const now = new Date().toUTCString();
 
   const sourceInformation = {
     blockDistributionFolderUrl: publicPackagePath,
+    npmPackageName,
     pathWithNamespace,
     repository:
       typeof packageJson.repository === "object" && !!packageJson.repository

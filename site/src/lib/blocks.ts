@@ -41,6 +41,7 @@ export type BlockMetadataOnDisk = ExpandedBlockMetadata & {
     directory: string;
     checksum: string;
     commit: string;
+    name: string;
     preparedAt: string;
   };
 };
@@ -112,6 +113,7 @@ export const extendBlockMetadata = ({
   metadata: BlockMetadata;
   source: {
     blockDistributionFolderUrl: string;
+    npmPackageName?: string;
     pathWithNamespace: string;
     repository?: BlockMetadataRepository | undefined;
     repoCommit?: string;
@@ -122,6 +124,7 @@ export const extendBlockMetadata = ({
 }): ExpandedBlockMetadata => {
   const {
     blockDistributionFolderUrl,
+    npmPackageName,
     pathWithNamespace,
     repository,
     repoCommit,
@@ -140,21 +143,26 @@ export const extendBlockMetadata = ({
     throw new Error(`Malformed pathWithNamespace ${pathWithNamespace}`);
   }
 
+  // eslint-disable-next-line no-param-reassign -- alternative is constructing a new object
+  delete metadata.devReloadEndpoint;
+
   return {
     ...metadata,
     author: namespace.replace(/^@/, ""),
-    name,
     blockSitePath: `/${namespace}/blocks/${name}`,
     // fallback while not all blocks have blockType defined
     blockType: metadata.blockType ?? { entryPoint: "react" },
     // @todo figure out what we're going to use for the unique block Ids
-    componentId: `${blockDistributionFolderUrl}/blocks/${pathWithNamespace}`,
+    componentId: blockDistributionFolderUrl,
     createdAt: timestamps.createdAt,
     displayName: metadata.displayName ?? name,
     icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
     image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),
     lastUpdated: timestamps.lastUpdated,
+    name,
+    npmPackageName,
     pathWithNamespace,
+    protocol: metadata.protocol ?? "0.1", // assume lowest if not specified - this is a required field so should be present
     repository: repositoryUrl,
     schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
@@ -168,11 +176,12 @@ export const extendBlockMetadata = ({
       includesExampleGraph ? "example-graph.json" : null,
       blockDistributionFolderUrl,
     ),
+    version: metadata.version ?? "0.0.0",
   };
 };
 
 /**
- * used  to read and enhance block metadata from disk.
+ * used to read and block metadata from disk, for blocks published via JSON in hub/ and served from the public folder
  */
 export const readBlocksFromDisk = async (): Promise<
   ExpandedBlockMetadata[]
@@ -189,8 +198,6 @@ export const readBlocksFromDisk = async (): Promise<
         encoding: "utf8",
       },
     );
-
-    delete metadata.unstable_hubInfo;
 
     result.push(metadata);
   }
@@ -275,10 +282,16 @@ export const retrieveBlockFileContent = async ({
   };
 };
 
-export const readBlockReadmeFromDisk = async (
+// Retrieve the block's README.md, if any
+export const retrieveBlockReadme = async (
   blockMetadata: ExpandedBlockMetadata,
 ): Promise<string | undefined> => {
   try {
+    if (blockMetadata.npmPackageName) {
+      return fetch(`${blockMetadata.componentId}/README.md`).then((resp) =>
+        resp.text(),
+      );
+    }
     return fs.readFileSync(
       `${process.cwd()}/public/blocks/${
         blockMetadata.pathWithNamespace
