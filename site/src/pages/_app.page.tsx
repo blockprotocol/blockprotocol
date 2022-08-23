@@ -43,16 +43,20 @@ const MyApp = ({
   const refetchUser = useCallback(async () => {
     const { data, error } = await apiClient.get<ApiMeResponse>("me");
 
-    if (error) {
-      if (error.response?.status === 401) {
-        Sentry.configureScope((scope) => {
-          scope.clear();
-        });
-        setUser(undefined);
-      } else {
-        throw error;
-      }
-    } else if (data) {
+    if (!data) {
+      Sentry.captureException("Problem fetching /api/me", {
+        level: "warning",
+        extra: { error },
+      });
+      return;
+    }
+
+    if ("guest" in data) {
+      Sentry.configureScope((scope) => {
+        scope.clear();
+      });
+      setUser(undefined);
+    } else {
       Sentry.configureScope((scope) => {
         scope.setUser({ id: data.user.id });
       });
