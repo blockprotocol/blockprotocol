@@ -19,7 +19,7 @@ test("API key page should generate a valid key", async ({
   const tableWithKeys = page.locator("text=Public ID");
   const keyNameInput = page.locator('[placeholder="Key Name"]');
 
-  await page.locator('a:has-text("Generate your API key")').click();
+  await page.locator('a:has-text("Create and manage API keys")').click();
   await expect(page).toHaveURL("/settings/api-keys");
 
   await expect(
