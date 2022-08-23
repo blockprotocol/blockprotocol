@@ -2,13 +2,13 @@
 
 /* eslint-disable no-console */
 
-const { promisify } = require("util");
-const child_process = require("child_process");
+const { promisify } = require("node:util");
+const child_process = require("node:child_process");
 const commandLineArgs = require("command-line-args");
 const commandLineUsage = require("command-line-usage");
 const fs = require("fs-extra");
 const pacote = require("pacote");
-const path = require("path");
+const path = require("node:path");
 const slugify = require("slugify");
 const untildify = require("untildify");
 
