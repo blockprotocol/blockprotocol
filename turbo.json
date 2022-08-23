@@ -1,0 +1,15 @@
+{
+  "pipeline": {
+    "build": {
+      "outputs": ["dist/**", ".next/**", "public/dist/**"],
+      "dependsOn": ["^build"]
+    },
+    "lint:eslint": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "fix:eslint": {
+      "cache": false
+    }
+  }
+}
