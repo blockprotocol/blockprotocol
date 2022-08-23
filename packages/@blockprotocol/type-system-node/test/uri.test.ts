@@ -32,7 +32,7 @@ describe("isValidVersionedUri", () => {
     ["http://example.com/v/0"],
     ["http://example.com/v/1"],
     ["http://example.com/v/20"],
-  ])("`isValidVersionedUri(%i)` succeeds", (input) => {
+  ])("`isValidVersionedUri(%s)` succeeds", (input) => {
     isValidVersionedUri(input);
   });
 
