@@ -15,7 +15,7 @@ const script = async () => {
 
   if (
     existingCollections.find(
-      ({ collectionName }) => collectionName === User.COLLECTION_NAME
+      ({ collectionName }) => collectionName === User.COLLECTION_NAME,
     )
   ) {
     if ((await db.collection(User.COLLECTION_NAME).count()) > 50) {
@@ -33,7 +33,7 @@ const script = async () => {
 
   if (
     existingCollections.find(
-      ({ collectionName }) => collectionName === ApiKey.COLLECTION_NAME
+      ({ collectionName }) => collectionName === ApiKey.COLLECTION_NAME,
     )
   ) {
     await db.dropCollection(ApiKey.COLLECTION_NAME);
@@ -43,7 +43,7 @@ const script = async () => {
 
   if (
     existingCollections.find(
-      ({ collectionName }) => collectionName === EntityType.COLLECTION_NAME
+      ({ collectionName }) => collectionName === EntityType.COLLECTION_NAME,
     )
   ) {
     await db.dropCollection(EntityType.COLLECTION_NAME);
@@ -54,7 +54,7 @@ const script = async () => {
   if (
     existingCollections.find(
       ({ collectionName }) =>
-        collectionName === VerificationCode.COLLECTION_NAME
+        collectionName === VerificationCode.COLLECTION_NAME,
     )
   ) {
     await db.dropCollection(VerificationCode.COLLECTION_NAME);
@@ -64,7 +64,7 @@ const script = async () => {
 
   if (
     existingCollections.find(
-      ({ collectionName }) => collectionName === blocksDbCollectionName
+      ({ collectionName }) => collectionName === blocksDbCollectionName,
     )
   ) {
     await db.dropCollection(blocksDbCollectionName);
@@ -76,24 +76,24 @@ const script = async () => {
     {
       shortname: "alice",
       preferredName: "Alice",
-      email: "alice@example.com"
+      email: "alice@example.com",
     },
     {
       shortname: "bob",
       preferredName: "Bob",
-      email: "bob@example.com"
+      email: "bob@example.com",
     },
     {
       shortname: "hash",
       preferredName: "HASH",
-      email: "hash@example.com"
-    }
+      email: "hash@example.com",
+    },
   ];
 
   await Promise.all(
-    mockUsers.map(params =>
-      User.create(db, { ...params, hasVerifiedEmail: true })
-    )
+    mockUsers.map((params) =>
+      User.create(db, { ...params, hasVerifiedEmail: true }),
+    ),
   );
 
   await client.close();

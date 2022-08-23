@@ -14,7 +14,7 @@ const s3 = new S3({
   endpoint: cloudflareEndpoint,
   accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID,
   secretAccessKey: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
-  signatureVersion: "v4"
+  signatureVersion: "v4",
 });
 
 /**
@@ -25,23 +25,23 @@ const s3 = new S3({
  */
 export const uploadBlockFilesToR2 = (
   localFolderPath: string,
-  remoteStoragePrefix: string
+  remoteStoragePrefix: string,
 ): Promise<any /** @todo fix this */>[] => {
   if (!/.+\/.+/.test(remoteStoragePrefix)) {
     throw new Error(
-      `Expected prefix matching pattern [namespace]/[block-name], received '${remoteStoragePrefix}'`
+      `Expected prefix matching pattern [namespace]/[block-name], received '${remoteStoragePrefix}'`,
     );
   }
 
   const thingsInFolder = fs.readdirSync(localFolderPath);
 
-  return thingsInFolder.flatMap(thingName => {
+  return thingsInFolder.flatMap((thingName) => {
     const pathToThing = path.resolve(localFolderPath, thingName);
     const isDirectory = fs.lstatSync(pathToThing).isDirectory();
     if (isDirectory) {
       return uploadBlockFilesToR2(
         pathToThing,
-        `${remoteStoragePrefix}/${thingName}`
+        `${remoteStoragePrefix}/${thingName}`,
       );
     }
     const fileContents = fs.readFileSync(pathToThing).toString();
@@ -53,7 +53,7 @@ export const uploadBlockFilesToR2 = (
         ...baseS3Options,
         Body: fileContents,
         ContentType: contentType || undefined,
-        Key: `${remoteStoragePrefix}/${thingName}`
+        Key: `${remoteStoragePrefix}/${thingName}`,
       })
       .promise();
   });
@@ -66,13 +66,13 @@ export const uploadBlockFilesToR2 = (
 export const wipeR2BlockFolder = async (blockFolder: string) => {
   if (!/.+\/.+/.test(blockFolder)) {
     throw new Error(
-      `Expected block folder matching pattern [namespace]/[block-name], received '${blockFolder}'`
+      `Expected block folder matching pattern [namespace]/[block-name], received '${blockFolder}'`,
     );
   }
   const folderContents = await s3
     .listObjectsV2({
       ...baseS3Options,
-      Prefix: blockFolder
+      Prefix: blockFolder,
     })
     .promise();
 
@@ -81,15 +81,15 @@ export const wipeR2BlockFolder = async (blockFolder: string) => {
   }
 
   const objectsToDelete = folderContents.Contents.map(({ Key }) => ({
-    Key
+    Key,
   })).filter((identifier): identifier is { Key: string } => !!identifier.Key);
 
   await s3
     .deleteObjects({
       ...baseS3Options,
       Delete: {
-        Objects: objectsToDelete
-      }
+        Objects: objectsToDelete,
+      },
     })
     .promise();
 };
