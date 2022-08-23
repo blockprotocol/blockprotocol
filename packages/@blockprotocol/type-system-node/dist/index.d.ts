@@ -8,13 +8,6 @@
 */
 export function isValidDataType(dataTypeObj: DataType): void;
 /**
-* Checks if a given {PropertyType} is valid
-*
-* @throws {ValidationError} if the property type is malformed
-* @param {PropertyType} propertyTypeObj
-*/
-export function isValidPropertyType(propertyTypeObj: PropertyType): void;
-/**
 * Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
 *
 * @throws {ParseBaseUriError} if the given string is not a valid base URI
@@ -29,6 +22,13 @@ export function parseBaseUri(uri: string): string;
 * @param {string} uri
 */
 export function isValidVersionedUri(uri: string): void;
+/**
+* Checks if a given {PropertyType} is valid
+*
+* @throws {TempError} if the property type is malformed
+* @param {PropertyType} propertyTypeObj
+*/
+export function isValidPropertyType(propertyTypeObj: PropertyType): void;
 type __ValueOrArrayArray<A> = Array<A>;
 declare namespace ValueOrArray {
     export type Value<T> = T;
@@ -70,6 +70,8 @@ export interface DataType extends Record<string, any> {
     type: string;
 }
 
+export type BaseUri = string;
+
 export interface PropertyTypeReference {
     $ref: `${string}/v/${number}`;
 }
@@ -92,8 +94,6 @@ export interface PropertyType extends OneOf<PropertyValues> {
     title: string;
     description?: string;
 }
-
-export type BaseUri = string;
 
 export interface TempError {}
 

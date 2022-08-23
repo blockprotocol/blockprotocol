@@ -141,27 +141,6 @@ function addHeapObject(obj) {
     return idx;
 }
 /**
-* Checks if a given {PropertyType} is valid
-*
-* @throws {ValidationError} if the property type is malformed
-* @param {PropertyType} propertyTypeObj
-*/
-module.exports.isValidPropertyType = function(propertyTypeObj) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        heap[stack_pointer++] = undefined;
-    }
-};
-
-/**
 * Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form
 *
 * @throws {ParseBaseUriError} if the given string is not a valid base URI
@@ -210,6 +189,27 @@ module.exports.isValidVersionedUri = function(uri) {
         }
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+};
+
+/**
+* Checks if a given {PropertyType} is valid
+*
+* @throws {TempError} if the property type is malformed
+* @param {PropertyType} propertyTypeObj
+*/
+module.exports.isValidPropertyType = function(propertyTypeObj) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        heap[stack_pointer++] = undefined;
     }
 };
 

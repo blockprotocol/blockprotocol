@@ -43,6 +43,34 @@ impl BaseUri {
     }
 }
 
+impl FromStr for BaseUri {
+    type Err = ParseBaseUriError;
+
+    fn from_str(uri: &str) -> Result<Self, ParseBaseUriError> {
+        Self::new(uri)
+    }
+}
+
+impl Serialize for BaseUri {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        self.to_string().serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for BaseUri {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        String::deserialize(deserializer)?
+            .parse()
+            .map_err(de::Error::custom)
+    }
+}
+
 // TODO: can we impl Tsify to turn this into a type: template string
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct VersionedUri {
