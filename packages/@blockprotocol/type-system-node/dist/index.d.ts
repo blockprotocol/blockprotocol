@@ -70,11 +70,11 @@ export function parseBaseUri(uri: BaseUri): BaseUri;
 
 /**
  * Checks if a given URL string is a Block Protocol compliant Versioned URI.
- * 
- * @param {VersionedUri} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid
+ *
+ * @param {string} uri - The URL string.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
  */
-export function isValidVersionedUri(uri: VersionedUri): void;
+export function isVersionedUri(uri: string): uri is VersionedUri;
 
 
 export type BaseUri = string;

@@ -70,11 +70,11 @@ export function parseBaseUri(uri: BaseUri): BaseUri;
 
 /**
  * Checks if a given URL string is a Block Protocol compliant Versioned URI.
- * 
- * @param {VersionedUri} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid
+ *
+ * @param {string} uri - The URL string.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
  */
-export function isValidVersionedUri(uri: VersionedUri): void;
+export function isVersionedUri(uri: string): uri is VersionedUri;
 
 
 export type BaseUri = string;
@@ -131,7 +131,7 @@ export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly isValidDataType: (a: number, b: number) => void;
   readonly parseBaseUri: (a: number, b: number, c: number) => void;
-  readonly isValidVersionedUri: (a: number, b: number, c: number) => void;
+  readonly isVersionedUri: (a: number, b: number, c: number) => void;
   readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
   readonly __wbg_parsebaseurierror_free: (a: number) => void;
   readonly __wbg_parseversionedurierror_free: (a: number) => void;

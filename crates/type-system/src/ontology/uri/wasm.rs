@@ -36,14 +36,14 @@ pub fn parse_base_uri(uri: &str) -> Result<String, ParseBaseUriError> {
 const IS_VALID_VERSIONED_URI_DEF: &'static str = r#"
 /**
  * Checks if a given URL string is a Block Protocol compliant Versioned URI.
- * 
- * @param {VersionedUri} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid
+ *
+ * @param {string} uri - The URL string.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
  */
-export function isValidVersionedUri(uri: VersionedUri): void;
+export function isVersionedUri(uri: string): uri is VersionedUri;
 "#;
-#[wasm_bindgen(skip_typescript, js_name = isValidVersionedUri)]
-pub fn is_valid_versioned_uri(uri: &str) -> Result<(), ParseVersionedUriError> {
+#[wasm_bindgen(skip_typescript, js_name = isVersionedUri)]
+pub fn is_versioned_uri(uri: &str) -> Result<bool, ParseVersionedUriError> {
     crate::ontology::uri::VersionedUri::from_str(uri)?;
-    Ok(())
+    Ok(true)
 }

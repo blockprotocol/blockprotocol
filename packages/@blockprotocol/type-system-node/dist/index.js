@@ -161,18 +161,21 @@ module.exports.parseBaseUri = function(uri) {
 
 /**
 * @param {string} uri
+* @returns {boolean}
 */
-module.exports.isValidVersionedUri = function(uri) {
+module.exports.isVersionedUri = function(uri) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         const len0 = WASM_VECTOR_LEN;
-        wasm.isValidVersionedUri(retptr, ptr0, len0);
+        wasm.isVersionedUri(retptr, ptr0, len0);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
+        var r2 = getInt32Memory0()[retptr / 4 + 2];
+        if (r2) {
+            throw takeObject(r1);
         }
+        return r0 !== 0;
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
