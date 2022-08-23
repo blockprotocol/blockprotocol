@@ -12,6 +12,8 @@ const script = async () => {
   const blocksDataFilePath = path.join(process.cwd(), `blocks-data.json`);
   await fs.writeJson(blocksDataFilePath, blocksInfo, { spaces: "\t" });
 
+  console.log(blocksInfo);
+
   console.log(`✅ Blocks data generated: ${blocksDataFilePath}`);
 };
 
