@@ -1,7 +1,7 @@
 import {
   BlockMetadata,
   BlockMetadataRepository,
-  JsonObject,
+  JsonObject
 } from "@blockprotocol/core";
 import execa from "execa";
 import fs from "fs-extra";
@@ -25,7 +25,7 @@ const stripLeadingAt = (pathWithNamespace: string) =>
  */
 const mirrorNpmPackageToR2 = async (
   npmPackageName: string,
-  pathWithNamespace: string,
+  pathWithNamespace: string
 ): Promise<{
   includesExampleGraph: boolean;
   metadataJson: JsonObject;
@@ -33,7 +33,7 @@ const mirrorNpmPackageToR2 = async (
   publicPackagePath: string;
 }> => {
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    unsafeCleanup: true,
+    unsafeCleanup: true
   });
 
   const execaOptions = { cwd: npmTarballFolder };
@@ -44,12 +44,12 @@ const mirrorNpmPackageToR2 = async (
     ({ stdout: tarballFilename } = await execa(
       "npm",
       ["pack", npmPackageName],
-      execaOptions,
+      execaOptions
     ));
     await execa("tar", ["-xf", tarballFilename], execaOptions);
   } catch {
     throw new Error(
-      `Could not retrieve npm package '${npmPackageName}'. Does it exist?`,
+      `Could not retrieve npm package '${npmPackageName}'. Does it exist?`
     );
   }
 
@@ -65,7 +65,7 @@ const mirrorNpmPackageToR2 = async (
   // get the block-metadata.json
   const metadataJsonPath = glob.sync("**/block-metadata.json", {
     cwd: packageFolder,
-    nocase: true,
+    nocase: true
   })[0];
   if (!metadataJsonPath) {
     throw new Error("No block-metadata.json present in package");
@@ -79,30 +79,30 @@ const mirrorNpmPackageToR2 = async (
     metadataJson = JSON.parse(metadataJsonString);
   } catch (err) {
     throw new Error(
-      `Could not parse block-metadata.json: ${(err as Error).message}`,
+      `Could not parse block-metadata.json: ${(err as Error).message}`
     );
   }
 
   const blockSourceFolder = path.resolve(
     packageFolder,
-    path.dirname(metadataJsonPath),
+    path.dirname(metadataJsonPath)
   );
 
   // move the readme into the block's source folder, if it exists
   const readmePath = glob.sync("README.md", {
     cwd: packageFolder,
-    nocase: true,
+    nocase: true
   })[0];
   if (readmePath) {
     fs.renameSync(
       path.resolve(packageFolder, readmePath),
-      path.resolve(blockSourceFolder, path.basename(readmePath)),
+      path.resolve(blockSourceFolder, path.basename(readmePath))
     );
   }
 
   // check if we have 'example-graph.json', which we then construct a URL for in the extended matadata
   const includesExampleGraph = await fs.pathExists(
-    path.resolve(blockSourceFolder, "example-graph.json"),
+    path.resolve(blockSourceFolder, "example-graph.json")
   );
 
   // check block-metadata.json contains required properties
@@ -115,12 +115,12 @@ const mirrorNpmPackageToR2 = async (
   // check that the source file actually exists
   const sourcePath = metadataJson.source;
   const sourceFileExists = await fs.pathExists(
-    path.resolve(blockSourceFolder, sourcePath),
+    path.resolve(blockSourceFolder, sourcePath)
   );
 
   if (!sourceFileExists) {
     throw new Error(
-      `block-metadata.json 'source' path '${sourcePath}' does not exist`,
+      `block-metadata.json 'source' path '${sourcePath}' does not exist`
     );
   }
 
@@ -130,11 +130,11 @@ const mirrorNpmPackageToR2 = async (
     await fetch(schemaPath, { method: "HEAD" });
   } else {
     const schemaFileExists = await fs.pathExists(
-      path.resolve(blockSourceFolder, schemaPath),
+      path.resolve(blockSourceFolder, schemaPath)
     );
     if (!schemaFileExists) {
       throw new Error(
-        `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
+        `block-metadata.json 'schema' path '${schemaPath}' does not exist`
       );
     }
   }
@@ -143,7 +143,7 @@ const mirrorNpmPackageToR2 = async (
   const remoteStoragePrefix = stripLeadingAt(pathWithNamespace);
   await wipeR2BlockFolder(remoteStoragePrefix);
   await Promise.all(
-    uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
+    uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix)
   );
 
   void cleanupDistFolder();
@@ -152,20 +152,24 @@ const mirrorNpmPackageToR2 = async (
     includesExampleGraph,
     metadataJson,
     packageJson,
-    publicPackagePath: `${publicBaseR2Url}/${remoteStoragePrefix}`,
+    publicPackagePath: `${publicBaseR2Url}/${remoteStoragePrefix}`
   };
 };
 
 export const publishBlockFromNpm = async (
   db: Db,
-  params: { name: string; npmPackageName: string; user: User },
+  params: { name: string; npmPackageName: string; user: User }
 ) => {
   const { name, npmPackageName, user } = params;
   const pathWithNamespace = `@${user.shortname}/${name}`;
-  const { includesExampleGraph, metadataJson, packageJson, publicPackagePath } =
-    await mirrorNpmPackageToR2(npmPackageName, pathWithNamespace);
+  const {
+    includesExampleGraph,
+    metadataJson,
+    packageJson,
+    publicPackagePath
+  } = await mirrorNpmPackageToR2(npmPackageName, pathWithNamespace);
 
-  const now = new Date().toUTCString();
+  const now = new Date().toISOString();
 
   const sourceInformation = {
     blockDistributionFolderUrl: publicPackagePath,
@@ -181,14 +185,14 @@ export const publishBlockFromNpm = async (
       "directory" in packageJson.repository &&
       typeof packageJson.repository.directory === "string"
         ? packageJson.repository?.directory
-        : undefined,
+        : undefined
   };
 
   const extendedMetadata = extendBlockMetadata({
     metadata: metadataJson as BlockMetadata, // @todo add a comprehensive guard/validator for block-metadata.json
     source: sourceInformation,
     timestamps: { createdAt: now, lastUpdated: now },
-    includesExampleGraph,
+    includesExampleGraph
   });
 
   await insertDbBlock(extendedMetadata);
