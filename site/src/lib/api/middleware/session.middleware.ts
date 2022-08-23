@@ -10,7 +10,7 @@ import { FRONTEND_DOMAIN, isUsingHttps } from "../../config";
 import { SESSION_COOKIE_NAME } from "./constants";
 
 // cookie maximum age (365 days)
-const COOKIE_MAX_AGE_MS = 1000 * 60 * 60 * 24 * 365;
+const COOKIE_MAX_AGE_SEC = 60 * 60 * 24 * 365;
 const SESSION_SECRET = mustGetEnvVar("SESSION_SECRET");
 const MONGODB_URI = mustGetEnvVar("MONGODB_URI");
 const MONGODB_DB_NAME = mustGetEnvVar("MONGODB_DB_NAME");
@@ -27,7 +27,7 @@ const getSession = nextSession({
     domain: FRONTEND_DOMAIN.startsWith("localhost")
       ? "localhost"
       : FRONTEND_DOMAIN,
-    maxAge: COOKIE_MAX_AGE_MS,
+    maxAge: COOKIE_MAX_AGE_SEC,
     httpOnly: true,
     sameSite: "lax",
     secure: isUsingHttps,
