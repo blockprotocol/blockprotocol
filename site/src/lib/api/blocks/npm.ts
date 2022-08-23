@@ -1,8 +1,4 @@
-import {
-  BlockMetadata,
-  BlockMetadataRepository,
-  JsonObject,
-} from "@blockprotocol/core";
+import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
 import execa from "execa";
 import fs from "fs-extra";
 import glob from "glob";
@@ -10,9 +6,9 @@ import { Db } from "mongodb";
 import path from "node:path";
 import tmp from "tmp-promise";
 
-import { extendBlockMetadata } from "../../blocks";
+import { ExpandedBlockMetadata, extendBlockMetadata } from "../../blocks";
 import { User } from "../model/user.model";
-import { insertDbBlock } from "./db";
+import { getDbBlock, insertDbBlock } from "./db";
 import { publicBaseR2Url, uploadBlockFilesToR2 } from "./r2";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
@@ -27,10 +23,7 @@ const mirrorNpmPackageToR2 = async (
   npmPackageName: string,
   pathWithNamespace: string,
 ): Promise<{
-  includesExampleGraph: boolean;
-  metadataJson: JsonObject;
-  packageJson: JsonObject;
-  publicPackagePath: string;
+  extendedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
     unsafeCleanup: true,
@@ -139,34 +132,13 @@ const mirrorNpmPackageToR2 = async (
     }
   }
 
-  // wipe the block's remote folder and upload the latest files
+  const now = new Date().toISOString();
+
   const remoteStoragePrefix = `${stripLeadingAt(pathWithNamespace)}/${
     packageJson.version
   }`;
-  await Promise.all(
-    uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
-  );
 
-  void cleanupDistFolder();
-
-  return {
-    includesExampleGraph,
-    metadataJson,
-    packageJson,
-    publicPackagePath: `${publicBaseR2Url}/${remoteStoragePrefix}`,
-  };
-};
-
-export const publishBlockFromNpm = async (
-  db: Db,
-  params: { name: string; npmPackageName: string; user: User },
-) => {
-  const { name, npmPackageName, user } = params;
-  const pathWithNamespace = `@${user.shortname}/${name}`;
-  const { includesExampleGraph, metadataJson, packageJson, publicPackagePath } =
-    await mirrorNpmPackageToR2(npmPackageName, pathWithNamespace);
-
-  const now = new Date().toISOString();
+  const publicPackagePath = `${publicBaseR2Url}/${remoteStoragePrefix}`;
 
   const sourceInformation = {
     blockDistributionFolderUrl: publicPackagePath,
@@ -191,6 +163,44 @@ export const publishBlockFromNpm = async (
     timestamps: { createdAt: now, lastUpdated: now },
     includesExampleGraph,
   });
+
+  fs.writeFileSync(
+    path.resolve(packageFolder, metadataJsonPath),
+    JSON.stringify(extendedMetadata, undefined, 2),
+  );
+
+  await Promise.all(
+    uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
+  );
+
+  void cleanupDistFolder();
+
+  return {
+    extendedMetadata,
+  };
+};
+
+export const publishBlockFromNpm = async (
+  db: Db,
+  params: { name: string; npmPackageName: string; user: User },
+) => {
+  const { name, npmPackageName, user } = params;
+  const shortname = user.shortname;
+  if (!shortname) {
+    throw new Error("User must have completed signup to publish a block");
+  }
+
+  const pathWithNamespace = `@${shortname}/${name}`;
+
+  const existingBlock = await getDbBlock({ name, shortname });
+  if (existingBlock) {
+    throw new Error(`Block ${pathWithNamespace} already exists`);
+  }
+
+  const { extendedMetadata } = await mirrorNpmPackageToR2(
+    npmPackageName,
+    pathWithNamespace,
+  );
 
   await insertDbBlock(extendedMetadata);
 
