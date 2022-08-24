@@ -45,7 +45,13 @@ mod utils;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-pub use ontology::{data_type::DataType, uri};
+// TODO: revisit public API
+pub use ontology::{
+    data_type::{DataType, DataTypeReference},
+    property_type::{PropertyType, PropertyTypeReference, PropertyValues},
+    repr_shared::*,
+    uri,
+};
 
 #[cfg(test)]
 #[path = "../tests/data/lib.rs"]

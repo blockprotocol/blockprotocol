@@ -136,7 +136,7 @@ const script = async () => {
       },
     });
 
-    await waitOn({ resources: ["http://localhost:63212"], timeout: 20000 });
+    await waitOn({ resources: ["http://localhost:63212"], timeout: 30000 });
 
     await killProcessTree(devProcess.pid!, "SIGINT");
 
