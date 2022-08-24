@@ -119,7 +119,7 @@ export const extendBlockMetadata = ({
     repoCommit?: string;
     repoDirectory?: string;
   };
-  timestamps: { createdAt?: string; lastUpdated: string };
+  timestamps: { createdAt?: string; lastUpdated?: string };
   includesExampleGraph: boolean;
 }): ExpandedBlockMetadata => {
   const {

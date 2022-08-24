@@ -513,9 +513,7 @@ const script = async () => {
           repoDirectory: blockInfo.folder,
           repository: blockInfo.repository,
         },
-        timestamps: {
-          lastUpdated: now,
-        },
+        timestamps: {},
         includesExampleGraph: exampleGraphFileExists,
       });
 
