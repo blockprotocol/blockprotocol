@@ -1,5 +1,5 @@
 import { Message } from "@blockprotocol/core";
-import { EntityType } from "@blockprotocol/graph/.";
+import { Entity, EntityType } from "@blockprotocol/graph/.";
 import {
   createContext,
   Dispatch,
@@ -11,6 +11,8 @@ import {
   useState,
 } from "react";
 
+import { MockData } from "./use-mock-block-props/use-mock-datastore";
+
 type MockBlockDockInfo = {
   debugMode: boolean;
   setDebugMode: Dispatch<SetStateAction<boolean>>;
@@ -20,6 +22,9 @@ type MockBlockDockInfo = {
   setReadonly: Dispatch<SetStateAction<boolean>>;
   blockSchema?: Partial<EntityType>;
   setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  blockEntity?: Entity;
+  setBlockEntity: Dispatch<SetStateAction<Entity>>;
+  datastore: MockData;
 };
 
 const MockBlockDockContext = createContext<MockBlockDockInfo>({
@@ -30,6 +35,13 @@ const MockBlockDockContext = createContext<MockBlockDockInfo>({
   readonly: false,
   setReadonly: () => {},
   setBlockSchema: () => {},
+  setBlockEntity: () => {},
+  datastore: {
+    entities: [],
+    links: [],
+    linkedAggregationDefinitions: [],
+    entityTypes: [],
+  },
 });
 
 type Props = {
@@ -40,6 +52,9 @@ type Props = {
   setReadonly: Dispatch<SetStateAction<boolean>>;
   blockSchema?: Partial<EntityType>;
   setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  blockEntity?: Entity;
+  setBlockEntity?: Dispatch<SetStateAction<Entity>>;
+  datastore: MockData;
 };
 
 export const MockBlockDockProvider = ({
@@ -50,6 +65,9 @@ export const MockBlockDockProvider = ({
   setReadonly,
   blockSchema,
   setBlockSchema,
+  blockEntity,
+  setBlockEntity,
+  datastore,
 }: Props) => {
   const [logs, setLogs] = useState<Message[]>([]);
 
@@ -77,6 +95,9 @@ export const MockBlockDockProvider = ({
       setReadonly,
       blockSchema,
       setBlockSchema,
+      blockEntity,
+      setBlockEntity,
+      datastore,
     };
   }, [
     debugMode,
@@ -86,6 +107,9 @@ export const MockBlockDockProvider = ({
     setReadonly,
     blockSchema,
     setBlockSchema,
+    blockEntity,
+    setBlockEntity,
+    datastore,
   ]);
 
   return (

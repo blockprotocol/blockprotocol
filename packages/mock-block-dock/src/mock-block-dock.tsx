@@ -62,7 +62,7 @@ type MockBlockDockProps = {
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
-  blockEntity: initialBlockEntity1,
+  blockEntity: initialBlockEntity,
   blockSchema: initialBlockSchema,
   debug,
   initialEntities,
@@ -71,9 +71,6 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialLinkedAggregations,
   readonly: initialReadonly,
 }) => {
-  const [initialBlockEntity, setInitialBlockEntity] =
-    useState(initialBlockEntity1);
-
   const {
     blockEntity,
     blockGraph,
@@ -83,6 +80,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphServiceCallbacks,
     linkedAggregations,
     setBlockSchema,
+    setBlockEntity,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
     blockSchema: initialBlockSchema,
@@ -210,6 +208,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setReadonly={setReadonly}
       blockSchema={blockSchema}
       setBlockSchema={setBlockSchema}
+      blockEntity={blockEntity}
+      datastore={datastore}
     >
       {!debugMode ? (
         <>
@@ -225,13 +225,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           <Box>
             <Box padding={3.75}>{Component}</Box>
           </Box>
-          <DevTools
-            graphProperties={propsToInject}
-            datastore={datastore}
-            readonly={readonly}
-            setReadonly={setReadonly}
-            setBlockEntity={setInitialBlockEntity}
-          />
+          <DevTools datastore={datastore} />
         </DebugLayout>
       )}
     </MockBlockDockProvider>

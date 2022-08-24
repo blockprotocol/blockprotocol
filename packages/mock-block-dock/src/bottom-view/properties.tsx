@@ -1,4 +1,4 @@
-import { BlockGraphProperties } from "@blockprotocol/graph";
+import { Entity } from "@blockprotocol/graph";
 import { Box, Collapse, Grid, Switch } from "@mui/material";
 import Ajv from "ajv";
 
@@ -6,15 +6,11 @@ import { JsonView } from "../json-view";
 import { useMockBlockDockContext } from "../mock-block-dock-context";
 import { BlockSchemaView } from "./block-schema-view";
 
-type Props = {
-  blockEntity?: BlockGraphProperties<any>["graph"]["blockEntity"];
-  // setBlockEntity: (entity: Entity) => void;
-};
-
 const ajv = new Ajv();
 
-export const PropertiesView = ({ blockEntity }: Props) => {
-  const { readonly, setReadonly, blockSchema } = useMockBlockDockContext();
+export const PropertiesView = () => {
+  const { readonly, setReadonly, blockSchema, blockEntity, setBlockEntity } =
+    useMockBlockDockContext();
   const validate = ajv.compile(blockSchema ?? {});
   validate(blockEntity);
 
@@ -33,22 +29,28 @@ export const PropertiesView = ({ blockEntity }: Props) => {
                   collapseKeys={["graph"]}
                   rootName="blockEntity"
                   src={blockEntity ?? {}}
-                  // onEdit={(edit) => {
-                  //   setBlockEntity(edit.updated_src);
-                  //   console.log(edit);
-                  // }}
-                  // onAdd={(add) => {
-                  //   console.log(add);
-                  // }}
-                  // onDelete={(args) => {
-                  //   console.log(args);
-                  // }}
+                  onEdit={(args) => {
+                    setBlockEntity(
+                      args.updated_src as Entity<Record<string, unknown>>,
+                    );
+                  }}
+                  onAdd={(args) => {
+                    setBlockEntity(
+                      args.updated_src as Entity<Record<string, unknown>>,
+                    );
+                  }}
+                  onDelete={(args) => {
+                    setBlockEntity(
+                      args.updated_src as Entity<Record<string, unknown>>,
+                    );
+                  }}
+                  validationMessage={validate.errors?.[0]?.message ?? ""}
                 />
                 <Collapse in={!!validate.errors?.length}>
-                  {/* @todo display errors in collapsible manner */}
-                  {validate.errors?.map((error, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <Box key={index}>{JSON.stringify(error.message)}</Box>
+                  {validate.errors?.map((error) => (
+                    <Box key={error.message}>
+                      {JSON.stringify(error.message)}
+                    </Box>
                   ))}
                 </Collapse>
               </Box>

@@ -16,6 +16,28 @@ import {
   useMockDatastore,
 } from "./use-mock-block-props/use-mock-datastore";
 
+type Props = {
+  blockEntity?: Entity;
+  blockSchema?: Partial<EntityType>;
+  initialEntities?: Entity[];
+  initialEntityTypes?: EntityType[];
+  initialLinks?: Link[];
+  initialLinkedAggregations?: LinkedAggregationDefinition[];
+  readonly?: boolean;
+};
+
+type Result = {
+  blockEntity: Entity;
+  blockGraph: BlockGraph;
+  blockSchema?: Partial<EntityType>;
+  datastore: MockData;
+  entityTypes: EntityType[];
+  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
+  linkedAggregations: LinkedAggregation[];
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType> | undefined>>;
+  setBlockEntity: Dispatch<SetStateAction<Entity | undefined>>;
+};
+
 /**
  * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
  * The starting mock data can be customized using the initial[X] props.
@@ -28,40 +50,24 @@ import {
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockProps = ({
-  blockEntity,
+  blockEntity: blockEntity1,
   blockSchema: initialBlockSchema,
   initialEntities,
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
   readonly,
-}: {
-  blockEntity?: Entity;
-  blockSchema?: Partial<EntityType>;
-  initialEntities?: Entity[];
-  initialEntityTypes?: EntityType[];
-  initialLinks?: Link[];
-  initialLinkedAggregations?: LinkedAggregationDefinition[];
-  readonly?: boolean;
-}): {
-  blockEntity: Entity;
-  blockGraph: BlockGraph;
-  blockSchema?: Partial<EntityType>;
-  datastore: MockData;
-  entityTypes: EntityType[];
-  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
-  linkedAggregations: LinkedAggregation[];
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
-} => {
+}: Props): Result => {
   // @todo rename this
-  const [blockEntity1, setBlockEntity1] = useState(blockEntity);
-  const [readonly1, setReadonly1] = useState(readonly);
-  const [initialEntities1, setInitialEntities1] = useState(initialEntities);
-  const [initialEntityTypes1, setInitialEntityTypes1] =
-    useState(initialEntityTypes);
-  const [blockSchema, setBlockSchema] =
-    useState<Partial<EntityType>>(initialBlockSchema);
-  const [initialLinks1, setInitialLinks1] = useState(initialLinks);
+  const [blockEntity, setBlockEntity] = useState(blockEntity1);
+  const [blockSchema, setBlockSchema] = useState<
+    Partial<EntityType> | undefined
+  >(initialBlockSchema);
+  // const [readonly1, setReadonly1] = useState(readonly);
+  // const [initialEntities1, setInitialEntities1] = useState(initialEntities);
+  // const [initialEntityTypes1, setInitialEntityTypes1] =
+  //   useState(initialEntityTypes);
+  // const [initialLinks1, setInitialLinks1] = useState(initialLinks);
 
   const { initialBlockEntity, mockData } = useMemo((): {
     initialBlockEntity: Entity;
@@ -172,5 +178,6 @@ export const useMockBlockProps = ({
     graphServiceCallbacks,
     blockSchema,
     setBlockSchema,
+    setBlockEntity,
   };
 };

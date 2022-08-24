@@ -1,11 +1,8 @@
 import { JsonView } from "../json-view";
-import { MockData } from "../use-mock-block-props/use-mock-datastore";
+import { useMockBlockDockContext } from "../mock-block-dock-context";
 
-type Props = {
-  datastore: MockData;
-};
-
-export const DataStoreView = ({ datastore }: Props) => {
+export const DataStoreView = () => {
+  const { datastore } = useMockBlockDockContext();
   return (
     <JsonView
       collapseKeys={["entities", "entityTypes", "links", "linkedAggregations"]}

@@ -1,8 +1,3 @@
-// @todo rename
-
-import { Message } from "@blockprotocol/core/dist/esm/types";
-import { BlockGraphProperties } from "@blockprotocol/graph";
-import { Entity } from "@blockprotocol/graph/.";
 import {
   KeyboardDoubleArrowDown,
   KeyboardDoubleArrowUp,
@@ -16,13 +11,12 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { DataStoreView } from "./bottom-view/datastore-view";
 import { LogsView } from "./bottom-view/logs-view";
 import { PropertiesView } from "./bottom-view/properties";
 import { a11yProps, TabPanel } from "./bottom-view/tab-panel";
-import { MockData } from "./use-mock-block-props/use-mock-datastore";
 
 const Container = styled((props: PaperProps & { minimized: boolean }) => (
   <Paper {...props} />
@@ -49,21 +43,7 @@ const Header = styled(Box)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
-type BottomViewProps = {
-  graphProperties: BlockGraphProperties<any>;
-  datastore: MockData;
-  readonly: boolean;
-  setReadonly: Dispatch<SetStateAction<boolean>>;
-  setBlockEntity: (entity: Entity) => void;
-};
-
-export const DevTools = ({
-  graphProperties,
-  datastore,
-  readonly,
-  setReadonly,
-  setBlockEntity,
-}: BottomViewProps) => {
+export const DevTools = () => {
   const [value, setValue] = useState(0);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [minimized, setMinimized] = useState(false);
@@ -102,13 +82,10 @@ export const DevTools = ({
       </Header>
       <Box flex={1} overflow="scroll">
         <TabPanel value={value} index={0}>
-          <PropertiesView
-            blockEntity={graphProperties.graph.blockEntity}
-            // setBlockEntity={setBlockEntity}
-          />
+          <PropertiesView />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <DataStoreView datastore={datastore} />
+          <DataStoreView />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <LogsView />
