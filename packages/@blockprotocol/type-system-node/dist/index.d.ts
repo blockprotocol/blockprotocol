@@ -14,38 +14,6 @@ export function isValidDataType(dataTypeObj: DataType): void;
 * @param {PropertyType} propertyTypeObj
 */
 export function isValidPropertyType(propertyTypeObj: PropertyType): void;
-export type VersionedUri = `${string}/v/${number}`;
-
-
-/**
- * Checks if a given URL string is a valid base URL.
- * 
- * @param {BaseUri} uri - The URL string.
- * @throws {ParseBaseUriError} if the given string is not a valid base URI
- */
-export function isValidBaseUri(uri: string): void;
-
-
-
-/**
- * Checks if a given URL string is a Block Protocol compliant Versioned URI.
- *
- * @param {string} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
- */
-export function isVersionedUri(uri: string): uri is VersionedUri;
-
-
-
-/**
- * Extracts the base URI from a Versioned URI.
- *
- * @param {VersionedUri} uri - The versioned URI.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
- */
-export function extractBaseUri(uri: VersionedUri): BaseUri;
-
-
 type __ValueOrArrayArray<A> = Array<A>;
 declare namespace ValueOrArray {
     export type Value<T> = T;
@@ -111,6 +79,48 @@ export interface PropertyType extends OneOf<PropertyValues> {
     title: string;
     description?: string;
 }
+
+export type VersionedUri = `${string}/v/${number}`;
+
+
+/**
+ * Checks if a given URL string is a valid base URL.
+ * 
+ * @param {BaseUri} uri - The URL string.
+ * @throws {ParseBaseUriError} if the given string is not a valid base URI
+ */
+export function isValidBaseUri(uri: string): void;
+
+
+
+/**
+ * Checks if a given URL string is a Block Protocol compliant Versioned URI.
+ *
+ * @param {string} uri - The URL string.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function isVersionedUri(uri: string): uri is VersionedUri;
+
+
+
+/**
+ * Extracts the base URI from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractBaseUri(uri: VersionedUri): BaseUri;
+
+
+
+/**
+ * Extracts the version from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractVersion(uri: VersionedUri): number;
+
 
 export interface TempError {}
 

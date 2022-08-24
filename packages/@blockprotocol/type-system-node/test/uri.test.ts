@@ -1,4 +1,9 @@
-import { extractBaseUri, isValidBaseUri, isVersionedUri } from "..";
+import {
+  extractBaseUri,
+  extractVersion,
+  isValidBaseUri,
+  isVersionedUri,
+} from "..";
 
 describe("parseBaseUri", () => {
   test.each([
@@ -53,13 +58,26 @@ describe("extractBaseUri", () => {
     ["http://example.com/v/0", "http://example.com/"],
     ["http://example.com/sandwich/v/1", "http://example.com/sandwich/"],
     [
-      "file://localhost/documents/myfolder/v/0",
+      "file://localhost/documents/myfolder/v/10",
       "file://localhost/documents/myfolder/",
     ],
-    ["ftp://rms@example.com/foo/v/1", "ftp://rms@example.com/foo/"],
+    ["ftp://rms@example.com/foo/v/5", "ftp://rms@example.com/foo/"],
   ])("`extractBaseUri(%s)` succeeds", (input, expected) => {
     if (isVersionedUri(input)) {
       expect(extractBaseUri(input)).toBe(expected);
+    }
+  });
+});
+
+describe("extractVersion", () => {
+  test.each([
+    ["http://example.com/v/0", 0],
+    ["http://example.com/sandwich/v/1", 1],
+    ["file://localhost/documents/myfolder/v/10", 10],
+    ["ftp://rms@example.com/foo/v/5", 5],
+  ])("`extractVersion(%s)` succeeds", (input, expected) => {
+    if (isVersionedUri(input)) {
+      expect(extractVersion(input)).toBe(expected);
     }
   });
 });

@@ -59,3 +59,18 @@ export function extractBaseUri(uri: VersionedUri): BaseUri;
 pub fn extract_base_uri(uri: &str) -> Result<String, ParseVersionedUriError> {
     Ok(VersionedUri::from_str(uri)?.base_uri.to_string())
 }
+
+#[wasm_bindgen(typescript_custom_section)]
+const EXTRACT_VERSION_DEF: &'static str = r#"
+/**
+ * Extracts the version from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractVersion(uri: VersionedUri): number;
+"#;
+#[wasm_bindgen(skip_typescript, js_name = extractVersion)]
+pub fn extract_version(uri: &str) -> Result<u32, ParseVersionedUriError> {
+    Ok(VersionedUri::from_str(uri)?.version)
+}
