@@ -35,14 +35,6 @@ export interface OneOfRepr<T> {
 
 export interface OneOf<T> extends OneOfRepr<T> {}
 
-export interface Object<V> extends ObjectRepr<V> {}
-
-export interface ObjectRepr<V> {
-    type: 'object';
-    properties: Record<BaseUri, V>;
-    required?: BaseUri[];
-}
-
 export interface DataTypeReference {
     $ref: VersionedUri;
 }
@@ -55,27 +47,13 @@ export interface DataType extends Record<string, any> {
     type: string;
 }
 
-export type VersionedUri = `${string}/v/${number}`;
+export interface Object<V> extends ObjectRepr<V> {}
 
-
-/**
- * Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form.
- * 
- * @param {BaseUri} uri - The URL string.
- * @throws {ParseBaseUriError} if the given string is not a valid base URI
- */
-export function parseBaseUri(uri: BaseUri): BaseUri;
-
-
-
-/**
- * Checks if a given URL string is a Block Protocol compliant Versioned URI.
- *
- * @param {string} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
- */
-export function isVersionedUri(uri: string): uri is VersionedUri;
-
+export interface ObjectRepr<V> {
+    type: 'object';
+    properties: Record<BaseUri, V>;
+    required?: BaseUri[];
+}
 
 export type BaseUri = string;
 
@@ -101,6 +79,48 @@ export interface PropertyType extends OneOf<PropertyValues> {
     title: string;
     description?: string;
 }
+
+export type VersionedUri = `${string}/v/${number}`;
+
+
+/**
+ * Checks if a given URL string is a valid base URL.
+ * 
+ * @param {BaseUri} uri - The URL string.
+ * @throws {ParseBaseUriError} if the given string is not a valid base URI
+ */
+export function isValidBaseUri(uri: string): void;
+
+
+
+/**
+ * Checks if a given URL string is a Block Protocol compliant Versioned URI.
+ *
+ * @param {string} uri - The URL string.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function isVersionedUri(uri: string): uri is VersionedUri;
+
+
+
+/**
+ * Extracts the base URI from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractBaseUri(uri: VersionedUri): BaseUri;
+
+
+
+/**
+ * Extracts the version from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractVersion(uri: VersionedUri): number;
+
 
 export interface TempError {}
 
@@ -130,10 +150,12 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly isValidDataType: (a: number, b: number) => void;
-  readonly parseBaseUri: (a: number, b: number, c: number) => void;
-  readonly isVersionedUri: (a: number, b: number, c: number) => void;
   readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
   readonly __wbg_parsebaseurierror_free: (a: number) => void;
+  readonly isValidBaseUri: (a: number, b: number, c: number) => void;
+  readonly isVersionedUri: (a: number, b: number, c: number) => void;
+  readonly extractBaseUri: (a: number, b: number, c: number) => void;
+  readonly extractVersion: (a: number, b: number, c: number) => void;
   readonly __wbg_parseversionedurierror_free: (a: number) => void;
   readonly __wbg_temperror_free: (a: number) => void;
   readonly isValidPropertyType: (a: number, b: number) => void;
