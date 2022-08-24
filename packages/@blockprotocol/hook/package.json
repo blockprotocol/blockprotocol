@@ -47,8 +47,7 @@
   "scripts": {
     "build": "yarn clean && tsc",
     "clean": "rimraf ./dist/",
-    "lint:tsc": "tsc --noEmit",
-    "prepare": "yarn build"
+    "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@blockprotocol/core": "0.0.10"

@@ -104,7 +104,7 @@ export const getRepositoryUrl = (
   return undefined;
 };
 
-export const extendBlockMetadata = ({
+export const expandBlockMetadata = ({
   timestamps,
   includesExampleGraph,
   metadata,

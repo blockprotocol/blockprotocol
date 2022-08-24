@@ -7,13 +7,13 @@
   "scripts": {
     "build": "yarn exe scripts/build.ts",
     "clean": "rimraf ./.next/",
+    "codegen": "yarn exe scripts/codegen.ts",
     "dev": "yarn exe scripts/dev.ts",
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
     "dev:seed-db": "yarn exe scripts/seed-db.ts",
     "exe": "node --unhandled-rejections=strict --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require=./../scripts/suppress-experimental-warnings.cjs --require dotenv-flow/config",
     "generate-blockmetadata-schema": "typescript-json-schema ../packages/@blockprotocol/core/dist/esm/types.d.ts BlockMetadata --required true --out public/schemas/block-metadata.json",
     "lint:tsc": "tsc --noEmit",
-    "prepare": "patch-package && yarn exe scripts/prepare.ts",
     "start": "yarn exe scripts/start.ts"
   },
   "dependencies": {
