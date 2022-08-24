@@ -17,6 +17,8 @@ pub enum ValidationError {
         base_uri: BaseUri,
         versioned_uri: VersionedUri,
     },
+    /// A schema has marked a link as required but the link does not exist in the schema.
+    MissingRequiredLink(VersionedUri),
     /// At least `expected` number of properties are required, but only `actual` were provided.
     MismatchedPropertyCount { actual: usize, expected: usize },
     /// `oneOf` requires at least one element.
@@ -41,6 +43,13 @@ impl Display for ValidationError {
                     fmt,
                     "expected base URI ({base_uri}) differed from the base URI of \
                      ({versioned_uri})"
+                )
+            }
+            Self::MissingRequiredLink(link) => {
+                write!(
+                    fmt,
+                    "the schema has marked the \"{link}\" link as required, but it wasn't defined \
+                     in the `\"links\"` object"
                 )
             }
             Self::MismatchedPropertyCount { actual, expected } => {

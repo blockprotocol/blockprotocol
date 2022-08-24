@@ -45,11 +45,10 @@ mod utils;
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
-// TODO: revisit public API
 pub use ontology::{
     data_type::{DataType, DataTypeReference},
     property_type::{PropertyType, PropertyTypeReference, PropertyValues},
-    repr_shared::*,
+    repr_shared::{Array, Object, OneOf, ValidateUri, ValidationError, ValueOrArray},
     uri,
 };
 
