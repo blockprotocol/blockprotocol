@@ -2,9 +2,9 @@ import { Entity } from "@blockprotocol/graph";
 import { Box, Collapse, Grid, Switch } from "@mui/material";
 import Ajv from "ajv";
 
-import { JsonView } from "../json-view";
-import { useMockBlockDockContext } from "../mock-block-dock-context";
+import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { BlockSchemaView } from "./block-schema-view";
+import { JsonView } from "./json-view";
 
 const ajv = new Ajv();
 

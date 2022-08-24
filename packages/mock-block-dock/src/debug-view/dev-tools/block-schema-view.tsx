@@ -2,8 +2,8 @@ import { CloudUploadOutlined } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import { ChangeEvent } from "react";
 
-import { JsonView } from "../json-view";
-import { useMockBlockDockContext } from "../mock-block-dock-context";
+import { useMockBlockDockContext } from "../../mock-block-dock-context";
+import { JsonView } from "./json-view";
 
 export const BlockSchemaView = () => {
   const { blockSchema, setBlockSchema } = useMockBlockDockContext();

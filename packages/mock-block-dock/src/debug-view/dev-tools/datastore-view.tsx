@@ -1,5 +1,5 @@
-import { JsonView } from "../json-view";
-import { useMockBlockDockContext } from "../mock-block-dock-context";
+import { useMockBlockDockContext } from "../../mock-block-dock-context";
+import { JsonView } from "./json-view";
 
 export const DataStoreView = () => {
   const { datastore } = useMockBlockDockContext();

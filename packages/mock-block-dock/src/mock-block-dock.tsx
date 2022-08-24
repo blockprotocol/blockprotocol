@@ -7,7 +7,6 @@ import {
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { Box } from "@mui/material";
 import {
   ComponentType,
   FunctionComponent,
@@ -17,8 +16,7 @@ import {
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
-import { DebugLayout } from "./debug-layout";
-import { DevTools } from "./dev-tools";
+import { DebugView } from "./debug-view";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useMockBlockProps } from "./use-mock-block-props";
 
@@ -222,12 +220,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           </div>
         </>
       ) : (
-        <DebugLayout blockType={blockType}>
-          <Box>
-            <Box padding={3.75}>{Component}</Box>
-          </Box>
-          <DevTools />
-        </DebugLayout>
+        <DebugView blockType={blockType}>{Component}</DebugView>
       )}
     </MockBlockDockProvider>
   );

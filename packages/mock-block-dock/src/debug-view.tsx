@@ -2,7 +2,6 @@ import { DarkMode, LightMode, Logout } from "@mui/icons-material";
 import {
   Box,
   Chip,
-  createTheme,
   CssBaseline,
   Drawer,
   IconButton,
@@ -13,9 +12,11 @@ import {
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 
+import { DevTools } from "./debug-view/dev-tools";
+import { darkTheme, lightTheme } from "./debug-view/theme";
 import { useMockBlockDockContext } from "./mock-block-dock-context";
 
-type DebugLayoutProps = {
+type DebugViewProps = {
   children: ReactNode;
   blockType?: "html" | "react" | "custom-element";
 };
@@ -56,19 +57,7 @@ const chipInfo = {
   react: { label: "React Block", color: "secondary" },
 } as const;
 
-const darkTheme = createTheme({
-  palette: {
-    mode: "dark",
-  },
-});
-
-const lightTheme = createTheme({
-  palette: {
-    mode: "light",
-  },
-});
-
-export const DebugLayout = ({ children, blockType }: DebugLayoutProps) => {
+export const DebugView = ({ children, blockType }: DebugViewProps) => {
   const [darkMode, setDarkMode] = useState(false);
   const { setDebugMode } = useMockBlockDockContext();
 
@@ -121,7 +110,10 @@ export const DebugLayout = ({ children, blockType }: DebugLayoutProps) => {
               </IconButton>
             </Tooltip>
           </HeaderContainer>
-          <Box flex={1}>{children}</Box>
+          <Box flex={1} padding={3.75}>
+            {children}
+          </Box>
+          <DevTools />
         </MainContainer>
       </Box>
     </ThemeProvider>

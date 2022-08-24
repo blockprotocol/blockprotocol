@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { JsonView } from "../json-view";
-import { useMockBlockDockContext } from "../mock-block-dock-context";
+import { useMockBlockDockContext } from "../../mock-block-dock-context";
+import { JsonView } from "./json-view";
 
 export type Log = Message;
 

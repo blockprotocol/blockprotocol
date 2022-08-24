@@ -13,10 +13,10 @@ import {
 } from "@mui/material";
 import { useRef, useState } from "react";
 
-import { DataStoreView } from "./bottom-view/datastore-view";
-import { LogsView } from "./bottom-view/logs-view";
-import { PropertiesView } from "./bottom-view/properties";
-import { a11yProps, TabPanel } from "./bottom-view/tab-panel";
+import { DataStoreView } from "./dev-tools/datastore-view";
+import { LogsView } from "./dev-tools/logs-view";
+import { PropertiesView } from "./dev-tools/properties";
+import { a11yProps, TabPanel } from "./dev-tools/tab-panel";
 
 const Container = styled((props: PaperProps & { minimized: boolean }) => (
   <Paper {...props} />
