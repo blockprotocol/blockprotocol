@@ -142,7 +142,7 @@ mod tests {
         #[test]
         fn one() {
             let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
-                .expect("Invalid Versioned URI");
+                .expect("invalid Versioned URI");
 
             check_serialization(
                 json!({
@@ -161,9 +161,9 @@ mod tests {
         #[test]
         fn multiple() {
             let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-                .expect("Invalid Versioned URI");
+                .expect("invalid Versioned URI");
             let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-                .expect("Invalid Versioned URI");
+                .expect("invalid Versioned URI");
 
             check_serialization(
                 json!({
@@ -200,7 +200,7 @@ mod tests {
         #[test]
         fn one() {
             let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
-                .expect("Invalid Versioned URI");
+                .expect("invalid Versioned URI");
 
             check_serialization(
                 json!({
@@ -219,9 +219,9 @@ mod tests {
         #[test]
         fn multiple() {
             let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-                .expect("Invalid Versioned URI");
+                .expect("invalid Versioned URI");
             let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-                .expect("Invalid Versioned URI");
+                .expect("invalid Versioned URI");
 
             check_serialization(
                 json!({
@@ -245,9 +245,9 @@ mod tests {
     #[test]
     fn required() {
         let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-            .expect("Invalid Versioned URI");
+            .expect("invalid Versioned URI");
         let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-            .expect("Invalid Versioned URI");
+            .expect("invalid Versioned URI");
 
         check_serialization(
             json!({
