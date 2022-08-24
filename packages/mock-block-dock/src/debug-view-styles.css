@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 300;
+    src: url("./assets/inter-light.ttf") format("trueType");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 400;
+    src: url("./assets/inter-regular.ttf") format("trueType");
+}
+@font-face {
+    font-family: "Inter";
+    font-weight: 500;
+    src: url("./assets/inter-medium.ttf") format("trueType");
+}
+
+@font-face {
+    font-family: "Inter";
+    font-weight: 400;
+    src: url("./assets/inter-regular.ttf") format("trueType");
+}
+
+@font-face {
+    font-family: "Mono";
+    font-weight: 400;
+    src: url("./assets/jet-brains-mono-regular.woff2") format("woff2");
+}

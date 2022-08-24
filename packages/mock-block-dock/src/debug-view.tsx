@@ -1,3 +1,5 @@
+import "./debug-view-styles.css";
+
 import { DarkMode, LightMode, Logout } from "@mui/icons-material";
 import {
   Box,
@@ -8,7 +10,7 @@ import {
   styled,
   ThemeProvider,
   Tooltip,
-  Typography,
+  Typography
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 
@@ -33,7 +35,7 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
   alignItems: "center",
   paddingLeft: theme.spacing(3),
   paddingRight: theme.spacing(3),
-  borderBottom: `1px solid ${theme.palette.divider}`,
+  borderBottom: `1px solid ${theme.palette.divider}`
 }));
 
 export const MainContainer = styled(Box)(() => ({
@@ -42,19 +44,19 @@ export const MainContainer = styled(Box)(() => ({
   flex: 1,
   overflowY: "scroll",
   position: "relative",
-  marginLeft: SIDEBAR_WIDTH,
+  marginLeft: SIDEBAR_WIDTH
 }));
 
 const chipInfo = {
   html: {
     color: "info",
-    label: "HTML Block",
+    label: "HTML Block"
   },
   "custom-element": {
     label: "Custom Element Block",
-    color: "warning",
+    color: "warning"
   },
-  react: { label: "React Block", color: "secondary" },
+  react: { label: "React Block", color: "secondary" }
 } as const;
 
 export const DebugView = ({ children, blockType }: DebugViewProps) => {
@@ -73,8 +75,8 @@ export const DebugView = ({ children, blockType }: DebugViewProps) => {
               width: SIDEBAR_WIDTH,
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
-            },
+              justifyContent: "space-between"
+            }
           }}
         >
           <Typography variant="h6" mt={4} pl={2}>
@@ -86,7 +88,7 @@ export const DebugView = ({ children, blockType }: DebugViewProps) => {
             <Tooltip title={`Switch to ${darkMode ? "light" : "dark"} mode`}>
               <IconButton
                 sx={{ mr: 1 }}
-                onClick={() => setDarkMode((prev) => !prev)}
+                onClick={() => setDarkMode(prev => !prev)}
               >
                 {darkMode ? <LightMode /> : <DarkMode />}
               </IconButton>

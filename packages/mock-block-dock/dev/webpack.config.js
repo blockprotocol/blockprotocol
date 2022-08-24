@@ -8,12 +8,12 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: "index.html",
-      template: "./dev/index.html",
+      template: "./dev/index.html"
     }),
     new webpack.EnvironmentPlugin({
-      "process.env.NODE_ENV": process.env.NODE_ENV,
+      "process.env.NODE_ENV": process.env.NODE_ENV
     }),
-    new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ],
   module: {
     rules: [
@@ -21,14 +21,22 @@ module.exports = {
         test: /\.(t|j)sx?$/,
         exclude: /(node_modules)/,
         use: {
-          loader: "babel-loader",
-        },
+          loader: "babel-loader"
+        }
       },
       {
         resourceQuery: /raw/,
-        type: "asset/source",
+        type: "asset/source"
       },
-    ],
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"]
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: "asset/resource"
+      }
+    ]
   },
   devServer: {
     headers: {
@@ -39,17 +47,17 @@ module.exports = {
         "X-Requested-With",
         "content-type",
         "Authorization",
-        "sentry-trace",
-      ],
+        "sentry-trace"
+      ]
     },
     hot: true,
     port: 9090,
     static: {
-      directory: __dirname,
-    },
+      directory: __dirname
+    }
   },
   optimization: {
-    moduleIds: "named",
+    moduleIds: "named"
   },
   resolve: {
     extensions: [
@@ -58,7 +66,7 @@ module.exports = {
       ".js", // Preserving webpack default
       ".jsx", // Preserving webpack default
       ".json", // Preserving webpack default
-      ".css", // Preserving webpack default
-    ],
-  },
+      ".css" // Preserving webpack default
+    ]
+  }
 };
