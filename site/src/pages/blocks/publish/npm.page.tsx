@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Button } from "../../../components/button";
 import {
   AuthWallPageContent,
-  withAuthWall
+  withAuthWall,
 } from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
 import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
@@ -23,7 +23,7 @@ interface FormValues {
 
 const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const onSubmit = (data: FormValues) => {
@@ -53,7 +53,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
               gap: 8,
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start"
+              alignItems: "flex-start",
             }}
           >
             <PublishBlockInfo />
@@ -79,7 +79,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                   <>
                     e.g. blockprotocol.org/@{user.shortname}/
                     <b>{urlSlug || "[slug]"}</b>
-                  </>
+                  </>,
                 ]}
               >
                 <TextField
