@@ -4,7 +4,7 @@ import blocksData from "../../blocks-data.json";
 import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 
 const codeBlockMetadata = (blocksData as ExpandedBlockMetadata[]).find(
-  ({ name }) => name === "@hashintel/block-code",
+  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
 );
 
 if (!codeBlockMetadata) {
@@ -48,7 +48,7 @@ test("Block Card should contain key elements", async ({ page }) => {
 
   await expect(codeBlockLocator).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockPackagePath!,
+    codeBlockMetadata.blockSitePath!,
   );
 
   // there should be 2 images present => icon and preview image

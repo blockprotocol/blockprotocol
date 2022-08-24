@@ -3,10 +3,10 @@ import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
+import { getAllBlocks } from "../lib/api/blocks";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  readBlocksFromDisk,
 } from "../lib/blocks";
 
 interface PageProps {
@@ -17,8 +17,10 @@ interface PageProps {
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
+  const blocks = getAllBlocks();
+
   return {
-    props: { catalog: excludeHiddenBlocks(await readBlocksFromDisk()) },
+    props: { catalog: excludeHiddenBlocks(blocks) },
   };
 };
 
@@ -94,7 +96,13 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
           >
             {catalog
               ? catalog.map((block) => (
-                  <Grid key={block.packagePath} item xs={12} sm={6} lg={4}>
+                  <Grid
+                    key={block.pathWithNamespace}
+                    item
+                    xs={12}
+                    sm={6}
+                    lg={4}
+                  >
                     <BlockCard data={block} />
                   </Grid>
                 ))

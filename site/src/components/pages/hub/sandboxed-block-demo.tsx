@@ -26,7 +26,7 @@ export const SandboxedBlockDemo: FunctionComponent<SandboxedBlockProps> = ({
     postBlockProps();
   }, [postBlockProps]);
 
-  const sandboxedDemoUrl = `${sandboxBaseUrl}/${metadata.packagePath.replace(
+  const sandboxedDemoUrl = `${sandboxBaseUrl}/${metadata.pathWithNamespace.replace(
     "/",
     "/blocks/",
   )}/sandboxed-demo`;
