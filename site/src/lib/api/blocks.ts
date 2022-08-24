@@ -21,7 +21,7 @@ export const getBlockByUserAndName = (params: {
 }): ExpandedBlockMetadata | null => {
   const { name, shortname } = params;
   // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
-  return (localBlocks.filter(
+  return (localBlocks.find(
     ({ pathWithNamespace }) => pathWithNamespace === `@${shortname}/${name}`,
-  )?.[0] ?? null) as ExpandedBlockMetadata | null;
+  ) ?? null) as ExpandedBlockMetadata | null;
 };

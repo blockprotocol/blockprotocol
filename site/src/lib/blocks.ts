@@ -106,7 +106,7 @@ const getRepositoryUrl = (
   return undefined;
 };
 
-const enhanceBlockMetadata = (
+const expandBlockMetadata = (
   metadata: BlockMetadata,
   source: {
     blockDistributionFolderUrl: string;
@@ -204,7 +204,7 @@ export const readBlocksFromDisk = async (): Promise<
 
     const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${pathWithNamespace}`;
 
-    const expandedMetadata: ExpandedBlockMetadata = enhanceBlockMetadata(
+    const expandedMetadata = expandBlockMetadata(
       partialMetadata,
       {
         blockDistributionFolderUrl,
