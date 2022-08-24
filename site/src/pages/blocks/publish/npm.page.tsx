@@ -1,26 +1,14 @@
-import {
-  faExternalLink,
-  faInfoCircle
-} from "@fortawesome/free-solid-svg-icons";
-import {
-  Alert,
-  alertClasses,
-  Box,
-  Grid,
-  Link,
-  List,
-  ListItem,
-  Typography
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Head from "next/head";
-import { PropsWithChildren, ReactNode } from "react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
-import { FontAwesomeIcon } from "../../../components/icons";
 import { withAuthWall } from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
 import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
+import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper";
+import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block-info";
+import { RequiredLabel } from "../../../components/pages/blocks/required-label";
 import { PageContainer } from "../../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs";
 import { TextField } from "../../../components/text-field";
@@ -29,125 +17,6 @@ interface FormValues {
   npmURL: string;
   urlSlug: string;
 }
-
-const RequiredLabel = ({ children }: PropsWithChildren) => (
-  <>
-    {children}
-    <Typography
-      variant="bpMicroCopy"
-      fontWeight="700"
-      component="span"
-      color={({ palette }) => palette.purple[700]}
-      ml={1}
-    >
-      REQUIRED
-    </Typography>
-  </>
-);
-
-const FieldInfoWrapper = ({
-  children,
-  items,
-  title
-}: PropsWithChildren<{ title: string; items: ReactNode[] }>) => {
-  return (
-    <Grid container columnSpacing={4}>
-      <Grid md={6} xs={12} item>
-        {children}
-      </Grid>
-      <Grid md={6} xs={12} item mt={2}>
-        <Typography
-          variant="bpSmallCopy"
-          fontWeight={400}
-          color={({ palette }) => palette.gray[70]}
-        >
-          <List
-            dense
-            subheader={<b>{title}</b>}
-            disablePadding
-            sx={theme => ({
-              li: {
-                display: "list-item",
-                listStyleType: "disc",
-                listStylePosition: "inside",
-                p: theme.spacing(0, 1)
-              }
-            })}
-          >
-            {items.map((item, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <ListItem key={i}>{item}</ListItem>
-            ))}
-          </List>
-        </Typography>
-      </Grid>
-    </Grid>
-  );
-};
-
-const PublishBlockInfo = () => {
-  return (
-    <Alert
-      icon={<FontAwesomeIcon icon={faInfoCircle} />}
-      severity="info"
-      sx={theme => ({
-        width: "100%",
-        alignItems: "center",
-        padding: theme.spacing(3, 4),
-        background: theme.palette.purple[100],
-
-        [`.${alertClasses.icon}`]: {
-          marginRight: theme.spacing(3),
-          svg: {
-            color: theme.palette.purple[200],
-            fontSize: theme.spacing(4)
-          }
-        },
-
-        [`.${alertClasses.message}`]: {
-          flex: 1,
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 2,
-          overflow: "visible",
-          padding: 0
-        }
-      })}
-    >
-      <Box flexGrow={1}>
-        <Typography
-          variant="bpSmallCaps"
-          fontWeight={500}
-          mb={1.5}
-          color={({ palette }) => palette.gray[90]}
-        >
-          Adding a new block will make it public on the hub
-        </Typography>
-        <Typography
-          variant="bpSmallCopy"
-          color={({ palette }) => palette.gray[80]}
-        >
-          Your package must expose a valid{" "}
-          <Typography variant="bpCode">block-metadata.json</Typography> file.
-        </Typography>
-      </Box>
-
-      <Link
-        variant="bpSmallCopy"
-        alignSelf="flex-end"
-        href="/docs/developing-blocks#lifecycle-of-a-block"
-        target="_blank"
-        sx={{
-          display: "flex",
-          alignItems: "center"
-        }}
-      >
-        Learn more in the docs{" "}
-        <FontAwesomeIcon sx={{ ml: 1 }} icon={faExternalLink} />
-      </Link>
-    </Alert>
-  );
-};
 
 const PublishFromNPMPage = () => {
   const { register, handleSubmit, formState } = useForm<FormValues>({
