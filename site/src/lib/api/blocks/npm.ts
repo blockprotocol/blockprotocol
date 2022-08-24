@@ -3,13 +3,16 @@ import execa from "execa";
 import fs from "fs-extra";
 import glob from "glob";
 import { Db } from "mongodb";
+import child_process from "node:child_process";
 import path from "node:path";
+import { promisify } from "node:util";
+import slugify from "slugify";
 import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata, extendBlockMetadata } from "../../blocks";
 import { User } from "../model/user.model";
 import { getDbBlock, insertDbBlock } from "./db";
-import { publicBaseR2Url, uploadBlockFilesToR2 } from "./r2";
+import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
@@ -134,10 +137,26 @@ const mirrorNpmPackageToR2 = async (
 
   const now = new Date().toISOString();
 
-  const remoteStoragePrefix = `${stripLeadingAt(pathWithNamespace)}/${
-    packageJson.version
-  }`;
+  // for blocks developed locally, add a prefix to the storage URL - the R2 bucket is shared across all dev environments
+  let storageNamespacePrefix;
+  if (!process.env.NEXT_PUBLIC_VERCEL_ENV) {
+    const exec = promisify(child_process.exec);
 
+    const gitConfigUserNameResult = await exec("git config --get user.name");
+    const userName = gitConfigUserNameResult.stdout.trim();
+    storageNamespacePrefix = `local-dev/${slugify(userName, {
+      lower: true,
+      strict: true,
+    })}/`;
+  }
+
+  /**
+   * In future we will store each version in its own folder, and add the version to the folder path
+   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
+   */
+  const remoteStoragePrefix = `${storageNamespacePrefix}${stripLeadingAt(
+    pathWithNamespace,
+  )}`;
   const publicPackagePath = `${publicBaseR2Url}/${remoteStoragePrefix}`;
 
   const sourceInformation = {
@@ -168,6 +187,12 @@ const mirrorNpmPackageToR2 = async (
     path.resolve(packageFolder, metadataJsonPath),
     JSON.stringify(extendedMetadata, undefined, 2),
   );
+
+  /**
+   * Wipe the folder before uploading new files - we will stop doing this when we store each version in its own folder
+   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
+   */
+  await wipeR2BlockFolder(remoteStoragePrefix);
 
   await Promise.all(
     uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
