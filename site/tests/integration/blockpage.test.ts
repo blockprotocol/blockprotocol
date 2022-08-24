@@ -84,7 +84,9 @@ test("Block page should contain key elements", async ({
   if (browserName !== "webkit") {
     await expect(
       page.frameLocator("iframe[title='block']").locator("input"),
-    ).toBeVisible();
+    ).toBeVisible({
+      timeout: 30000, // @todo Remove after re-engineering block sandbox
+    });
     await expect(
       page.frameLocator("iframe[title='block']").locator("input"),
     ).toHaveValue(blockExample.caption!);

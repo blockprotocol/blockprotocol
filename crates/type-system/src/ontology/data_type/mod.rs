@@ -7,9 +7,12 @@ use std::collections::HashMap;
 use serde::{Deserialize, Serialize};
 use serde_json;
 #[cfg(target_arch = "wasm32")]
-use {tsify::Tsify, wasm_bindgen::prelude::*};
+use tsify::Tsify;
 
-use crate::uri::VersionedUri;
+use crate::{
+    uri::{BaseUri, VersionedUri},
+    ValidateUri, ValidationError,
+};
 
 /// Will serialize as a constant value `"dataType"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -27,6 +30,7 @@ pub struct DataType {
     #[serde(rename = "$id")]
     id: VersionedUri,
     title: String,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(rename = "type")]
@@ -90,50 +94,116 @@ impl DataType {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct DataTypeReference {
+    #[serde(rename = "$ref")]
+    uri: VersionedUri,
+}
+
+impl DataTypeReference {
+    /// Creates a new `DataTypeReference` from the given [`VersionedUri`].
+    #[must_use]
+    pub const fn new(uri: VersionedUri) -> Self {
+        Self { uri }
+    }
+
+    #[must_use]
+    pub const fn uri(&self) -> &VersionedUri {
+        &self.uri
+    }
+}
+
+impl ValidateUri for DataTypeReference {
+    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
+        if base_uri == self.uri().base_uri() {
+            Ok(())
+        } else {
+            Err(ValidationError::BaseUriMismatch {
+                base_uri: base_uri.clone(),
+                versioned_uri: self.uri().clone(),
+            })
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
+
+    use serde_json::json;
+
     use super::*;
-    use crate::{test_data, utils::tests::serialize_is_idempotent};
+    use crate::{test_data, utils::tests::check_serialization};
+
+    #[test]
+    fn data_type_reference() {
+        let uri = VersionedUri::from_str(
+            "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+        )
+        .expect("Invalid Versioned URI");
+        let data_type = check_serialization::<DataTypeReference>(
+            json!(
+            {
+              "$ref": uri.to_string()
+            }),
+            Some(DataTypeReference::new(uri)),
+        );
+
+        data_type
+            .validate_uri(
+                &BaseUri::new("https://blockprotocol.org/@blockprotocol/types/data-type/text/")
+                    .expect("Invalid Base URL"),
+            )
+            .expect("Data type reference didn't validate against base URI");
+    }
 
     #[test]
     fn text() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::TEXT_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn number() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::NUMBER_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn boolean() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::BOOLEAN_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn null() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::NULL_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn object() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::OBJECT_V1).expect("invalid json"),
+            None,
         );
     }
 
     #[test]
     fn empty_list() {
-        serialize_is_idempotent::<DataType>(
+        check_serialization::<DataType>(
             serde_json::from_str(test_data::data_type::EMPTY_LIST_V1).expect("invalid json"),
+            None,
         );
     }
 }
