@@ -1,4 +1,4 @@
-import { isValidBaseUri, isVersionedUri } from "..";
+import { extractBaseUri, isValidBaseUri, isVersionedUri } from "..";
 
 describe("parseBaseUri", () => {
   test.each([
@@ -45,5 +45,21 @@ describe("isValidVersionedUri", () => {
     expect(() => {
       isVersionedUri(input);
     }).toThrow();
+  });
+});
+
+describe("extractBaseUri", () => {
+  test.each([
+    ["http://example.com/v/0", "http://example.com/"],
+    ["http://example.com/sandwich/v/1", "http://example.com/sandwich/"],
+    [
+      "file://localhost/documents/myfolder/v/0",
+      "file://localhost/documents/myfolder/",
+    ],
+    ["ftp://rms@example.com/foo/v/1", "ftp://rms@example.com/foo/"],
+  ])("`extractBaseUri(%s)` succeeds", (input, expected) => {
+    if (isVersionedUri(input)) {
+      expect(extractBaseUri(input)).toBe(expected);
+    }
   });
 });

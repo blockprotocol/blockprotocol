@@ -14,49 +14,6 @@ export function isValidDataType(dataTypeObj: DataType): void;
 * @param {PropertyType} propertyTypeObj
 */
 export function isValidPropertyType(propertyTypeObj: PropertyType): void;
-type __ValueOrArrayArray<A> = Array<A>;
-declare namespace ValueOrArray {
-    export type Value<T> = T;
-    export type Array<T> = __ValueOrArrayArray<T>;
-}
-
-export type ValueOrArray<T> = ValueOrArray.Value<T> | ValueOrArray.Array<T>;
-
-export interface Array<T> {
-    type: 'array';
-    items: T;
-    minItems?: number;
-    maxItems?: number;
-}
-
-export interface Object<V> extends ObjectRepr<V> {}
-
-export interface ObjectRepr<V> {
-    type: 'object';
-    properties: Record<BaseUri, V>;
-    required?: BaseUri[];
-}
-
-export interface DataTypeReference {
-    $ref: VersionedUri;
-}
-
-export interface DataType extends Record<string, any> {
-    kind: 'dataType';
-    $id: VersionedUri;
-    title: string;
-    description?: string;
-    type: string;
-}
-
-export interface OneOfRepr<T> {
-    oneOf: T[];
-}
-
-export interface OneOf<T> extends OneOfRepr<T> {}
-
-export type BaseUri = string;
-
 export type VersionedUri = `${string}/v/${number}`;
 
 
@@ -78,6 +35,59 @@ export function isValidBaseUri(uri: string): void;
  */
 export function isVersionedUri(uri: string): uri is VersionedUri;
 
+
+
+/**
+ * Extracts the base URI from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractBaseUri(uri: VersionedUri): BaseUri;
+
+
+type __ValueOrArrayArray<A> = Array<A>;
+declare namespace ValueOrArray {
+    export type Value<T> = T;
+    export type Array<T> = __ValueOrArrayArray<T>;
+}
+
+export type ValueOrArray<T> = ValueOrArray.Value<T> | ValueOrArray.Array<T>;
+
+export interface Array<T> {
+    type: 'array';
+    items: T;
+    minItems?: number;
+    maxItems?: number;
+}
+
+export interface OneOfRepr<T> {
+    oneOf: T[];
+}
+
+export interface OneOf<T> extends OneOfRepr<T> {}
+
+export interface DataTypeReference {
+    $ref: VersionedUri;
+}
+
+export interface DataType extends Record<string, any> {
+    kind: 'dataType';
+    $id: VersionedUri;
+    title: string;
+    description?: string;
+    type: string;
+}
+
+export interface Object<V> extends ObjectRepr<V> {}
+
+export interface ObjectRepr<V> {
+    type: 'object';
+    properties: Record<BaseUri, V>;
+    required?: BaseUri[];
+}
+
+export type BaseUri = string;
 
 export interface PropertyTypeReference {
     $ref: VersionedUri;
@@ -130,9 +140,10 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
   readonly isValidDataType: (a: number, b: number) => void;
-  readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
   readonly isValidBaseUri: (a: number, b: number, c: number) => void;
   readonly isVersionedUri: (a: number, b: number, c: number) => void;
+  readonly extractBaseUri: (a: number, b: number, c: number) => void;
+  readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
   readonly __wbg_parsebaseurierror_free: (a: number) => void;
   readonly __wbg_parseversionedurierror_free: (a: number) => void;
   readonly __wbg_temperror_free: (a: number) => void;
@@ -140,6 +151,7 @@ export interface InitOutput {
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
+  readonly __wbindgen_free: (a: number, b: number) => void;
 }
 
 /**

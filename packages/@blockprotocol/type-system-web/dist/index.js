@@ -130,14 +130,6 @@ export function isValidDataType(dataTypeObj) {
     }
 }
 
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
-    return idx;
-}
 /**
 * @param {string} uri
 */
@@ -179,6 +171,41 @@ export function isVersionedUri(uri) {
     }
 }
 
+/**
+* @param {string} uri
+* @returns {string}
+*/
+export function extractBaseUri(uri) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.extractBaseUri(retptr, ptr0, len0);
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        var r2 = getInt32Memory0()[retptr / 4 + 2];
+        var r3 = getInt32Memory0()[retptr / 4 + 3];
+        var ptr1 = r0;
+        var len1 = r1;
+        if (r3) {
+            ptr1 = 0; len1 = 0;
+            throw takeObject(r2);
+        }
+        return getStringFromWasm0(ptr1, len1);
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        wasm.__wbindgen_free(ptr1, len1);
+    }
+}
+
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
 /**
 * Checks if a given {PropertyType} is valid
 *
@@ -331,6 +358,14 @@ function getImports() {
         const ret = MalformedDataTypeError.__wrap(arg0);
         return addHeapObject(ret);
     };
+    imports.wbg.__wbg_parsebaseurierror_new = function(arg0) {
+        const ret = ParseBaseUriError.__wrap(arg0);
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_parseversionedurierror_new = function(arg0) {
+        const ret = ParseVersionedUriError.__wrap(arg0);
+        return addHeapObject(ret);
+    };
     imports.wbg.__wbindgen_json_serialize = function(arg0, arg1) {
         const obj = getObject(arg1);
         const ret = JSON.stringify(obj === undefined ? null : obj);
@@ -341,14 +376,6 @@ function getImports() {
     };
     imports.wbg.__wbg_temperror_new = function(arg0) {
         const ret = TempError.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_parsebaseurierror_new = function(arg0) {
-        const ret = ParseBaseUriError.__wrap(arg0);
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbg_parseversionedurierror_new = function(arg0) {
-        const ret = ParseVersionedUriError.__wrap(arg0);
         return addHeapObject(ret);
     };
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
