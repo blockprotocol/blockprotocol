@@ -33,8 +33,7 @@ export const typography: ThemeOptions["typography"] = {
   bpHeading2: {
     fontFamily: [`"Apercu Pro"`, ...fallbackFonts].join(", "),
     fontSize: "var(--step-4)",
-    fontWeight: 600,
-    lineHeight: 1.1,
+    lineHeight: 1.2,
     color: customColors.gray[90],
   },
   bpHeading3: {
@@ -61,6 +60,7 @@ export const typography: ThemeOptions["typography"] = {
     lineHeight: 1.3,
     color: customColors.gray[80],
     textTransform: "uppercase",
+    letterSpacing: "0.05em",
   },
   bpLargeText: {
     fontSize: "var(--step-1)",

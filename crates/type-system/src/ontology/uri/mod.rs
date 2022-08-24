@@ -1,17 +1,20 @@
 mod error;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
-
-use std::{fmt, result::Result, str::FromStr};
+use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
 use error::ParseVersionedUriError;
+use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 use url::Url;
 
 use crate::uri::error::ParseBaseUriError;
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Clone, PartialEq, Eq, Hash)]
-pub struct BaseUri(Url);
+pub struct BaseUri(#[cfg_attr(target_arch = "wasm32", tsify(type = "string"))] Url);
 
 impl fmt::Debug for BaseUri {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -40,6 +43,36 @@ impl BaseUri {
     }
 }
 
+impl FromStr for BaseUri {
+    type Err = ParseBaseUriError;
+
+    fn from_str(uri: &str) -> Result<Self, ParseBaseUriError> {
+        Self::new(uri)
+    }
+}
+
+impl Serialize for BaseUri {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        self.to_string().serialize(serializer)
+    }
+}
+
+impl<'de> Deserialize<'de> for BaseUri {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        String::deserialize(deserializer)?
+            .parse()
+            .map_err(de::Error::custom)
+    }
+}
+
+// TODO: can we impl Tsify to turn this into a type: template string
+//  if we can then we should delete wasm::VersionedUriPatch
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct VersionedUri {
     base_uri: BaseUri,
@@ -87,9 +120,21 @@ impl FromStr for VersionedUri {
     type Err = ParseVersionedUriError;
 
     fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
-        let (base_uri, version) = uri.rsplit_once("/v/").ok_or(ParseVersionedUriError)?;
-
         // TODO: better error handling
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("Regex failed to compile"));
+        let captures = RE.captures(uri).ok_or(ParseVersionedUriError {})?;
+        let base_uri = captures.get(1).ok_or(ParseVersionedUriError {})?.as_str();
+        let version = captures.get(2).ok_or(ParseVersionedUriError {})?.as_str();
+
+        // TODO: throw a better error about how base URI was valid but version component was not
+        if let Some(suffix) = captures.get(3) {
+            // Regex returns an empty string for capturing groups that don't match anything
+            if !suffix.as_str().is_empty() {
+                return Err(ParseVersionedUriError {});
+            }
+        }
+
         Self::new(
             &BaseUri::new(base_uri).map_err(|_| ParseVersionedUriError {})?,
             version.parse().map_err(|_| ParseVersionedUriError {})?,
@@ -115,5 +160,19 @@ impl<'de> Deserialize<'de> for VersionedUri {
         String::deserialize(deserializer)?
             .parse()
             .map_err(de::Error::custom)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    // TODO: add some unit tests for base URI
+
+    #[test]
+    fn versioned_uri() {
+        let input_str = "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1";
+        let uri = VersionedUri::from_str(input_str).expect("Parsing versioned URI failed");
+        assert_eq!(&uri.to_string(), input_str);
     }
 }

@@ -1,4 +1,4 @@
-import { isValidVersionedUri, parseBaseUri } from "..";
+import { isVersionedUri, parseBaseUri } from "..";
 
 describe("parseBaseUri", () => {
   test.each([
@@ -32,8 +32,8 @@ describe("isValidVersionedUri", () => {
     ["http://example.com/v/0"],
     ["http://example.com/v/1"],
     ["http://example.com/v/20"],
-  ])("`isValidVersionedUri(%i)` succeeds", (input) => {
-    isValidVersionedUri(input);
+  ])("`isValidVersionedUri(%s)` succeeds", (input) => {
+    expect(isVersionedUri(input)).toBe(true);
   });
 
   test.each([
@@ -45,7 +45,7 @@ describe("isValidVersionedUri", () => {
     ["http://example.com/v/foo"],
   ])("isValidVersionedUri(%s) errors", (input) => {
     expect(() => {
-      isValidVersionedUri(input);
+      isVersionedUri(input);
     }).toThrow();
   });
 });

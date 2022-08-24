@@ -17,7 +17,7 @@ type PathObject = {
 
 const runWasmPack = (target: string) => {
   console.log(`Running wasm-pack targeting ${target}`);
-  const { error } = child_process.spawnSync("wasm-pack", [
+  const result = child_process.spawnSync("wasm-pack", [
     "build",
     "--target",
     target,
@@ -26,8 +26,11 @@ const runWasmPack = (target: string) => {
     "--scope",
     "blockprotocol",
   ]);
-  if (error) {
-    throw error;
+
+  if (result.status !== 0) {
+    console.log(result.stdout.toString());
+    console.log(result.stderr.toString());
+    throw new Error("Running wasm-pack failed");
   }
 };
 
