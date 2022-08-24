@@ -13,12 +13,16 @@
       "dependsOn": ["codegen", "^build"]
     },
     "codegen": {},
+    "fix:eslint": {
+      "cache": false
+    },
     "lint:eslint": {
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "fix:eslint": {
-      "cache": false
+    "lint:tsc": {
+      "dependsOn": ["^build"],
+      "outputs": []
     }
   }
 }
