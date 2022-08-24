@@ -209,6 +209,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       blockSchema={blockSchema}
       setBlockSchema={setBlockSchema}
       blockEntity={blockEntity}
+      setBlockEntity={setBlockEntity}
       datastore={datastore}
     >
       {!debugMode ? (
@@ -225,7 +226,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           <Box>
             <Box padding={3.75}>{Component}</Box>
           </Box>
-          <DevTools datastore={datastore} />
+          <DevTools />
         </DebugLayout>
       )}
     </MockBlockDockProvider>

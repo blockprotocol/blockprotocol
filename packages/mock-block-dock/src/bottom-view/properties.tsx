@@ -40,6 +40,16 @@ export const PropertiesView = () => {
                     );
                   }}
                   onDelete={(args) => {
+                    // entityType and entityId can be edited but should not be
+                    // deleted
+                    if (
+                      args.name &&
+                      ["entityType", "entityId", "properties"].includes(
+                        args.name,
+                      )
+                    ) {
+                      return false;
+                    }
                     setBlockEntity(
                       args.updated_src as Entity<Record<string, unknown>>,
                     );
