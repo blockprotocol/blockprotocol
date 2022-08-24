@@ -69,7 +69,6 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
       {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
         <ListViewCard
           key={entityTypeId}
-          type="schema"
           title={schema.title}
           description={schema.description as string}
           lastUpdated={updatedAt as unknown as string}

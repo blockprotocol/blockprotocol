@@ -50,7 +50,6 @@ export const TabPanelContentsWithBlocks: FunctionComponent<
         }) => (
           <ListViewCard
             key={name}
-            type="block"
             icon={icon}
             title={displayName!}
             description={description}
