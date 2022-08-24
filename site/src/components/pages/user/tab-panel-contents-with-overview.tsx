@@ -77,13 +77,13 @@ export const TabPanelContentsWithOverview: FunctionComponent<
               version,
               name,
               image,
-              blockPackagePath,
+              blockSitePath,
             },
             index,
           ) => (
             <Grid key={name} item xs={12} md={6}>
               <OverviewCard
-                url={blockPackagePath}
+                url={blockSitePath}
                 description={description!}
                 icon={icon}
                 image={image}

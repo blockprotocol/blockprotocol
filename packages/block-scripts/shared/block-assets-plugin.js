@@ -6,7 +6,7 @@ import { generateDistBlockMetadata } from "./generate-dist-block-metadata.js";
 import { generateDistBlockSchema } from "./generate-dist-block-schema.js";
 import { generateDistExampleGraph } from "./generate-dist-example-graph.js";
 import { generateDistReadme } from "./generate-dist-readme.js";
-import { blockDistDirPath, blockRootDirPath } from "./paths.js";
+import { blockDistDirPath } from "./paths.js";
 
 export class BlockAssetsPlugin {
   /**
@@ -29,14 +29,6 @@ export class BlockAssetsPlugin {
         metadataExtra.devReloadEndpoint = `ws://localhost:${await getPort(
           "development",
         )}/ws`;
-      }
-
-      const exampleGraphFileExists = await fs.pathExists(
-        path.resolve(blockRootDirPath, "example-graph.json"),
-      );
-
-      if (exampleGraphFileExists) {
-        metadataExtra.exampleGraph = "example-graph.json";
       }
 
       await Promise.all([

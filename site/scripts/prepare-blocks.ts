@@ -375,7 +375,7 @@ const script = async () => {
   const env = envalid.cleanEnv(process.env, {
     BLOCK_FILTER: envalid.str({
       desc: "Optional glob you can use to prepare specific blocks.",
-      example: "@hashintel/paragraph or @hashintel/*",
+      example: "@hash/paragraph or @hash/*",
       default: "",
     }),
     BLOCKS_DIR: envalid.str({
@@ -494,6 +494,7 @@ const script = async () => {
         checksum: blockInfoChecksum,
         commit: blockInfo.commit,
         preparedAt: new Date().toISOString(),
+        name: blockInfo.name,
       };
       await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
     } catch (error) {
