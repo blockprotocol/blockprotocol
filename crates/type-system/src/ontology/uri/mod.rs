@@ -134,7 +134,7 @@ impl FromStr for VersionedUri {
     fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
         // TODO: better error handling
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("Regex failed to compile"));
+            LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
         let captures = RE.captures(uri).ok_or(ParseVersionedUriError {})?;
         let base_uri = captures.get(1).ok_or(ParseVersionedUriError {})?.as_str();
         let version = captures.get(2).ok_or(ParseVersionedUriError {})?.as_str();
@@ -183,7 +183,7 @@ mod tests {
     #[test]
     fn versioned_uri() {
         let input_str = "https://blockprotocol.org/@blockprotocol/types/data-type/empty-list/v/1";
-        let uri = VersionedUri::from_str(input_str).expect("Parsing versioned URI failed");
+        let uri = VersionedUri::from_str(input_str).expect("parsing versioned URI failed");
         assert_eq!(&uri.to_string(), input_str);
     }
 }

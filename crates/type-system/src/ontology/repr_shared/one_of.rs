@@ -87,7 +87,7 @@ mod tests {
                 json!({
                     "oneOf": ["A"]
                 }),
-                Some(OneOf::new(["A".to_owned()]).expect("Invalid OneOf")),
+                Some(OneOf::new(["A".to_owned()]).expect("invalid OneOf")),
             );
         }
 
@@ -97,7 +97,7 @@ mod tests {
                 json!({
                     "oneOf": ["A", "B"]
                 }),
-                Some(OneOf::new(["A".to_owned(), "B".to_owned()]).expect("Invalid OneOf")),
+                Some(OneOf::new(["A".to_owned(), "B".to_owned()]).expect("invalid OneOf")),
             );
         }
 

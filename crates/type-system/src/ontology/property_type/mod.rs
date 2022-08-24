@@ -204,7 +204,7 @@ mod tests {
     ) {
         let expected_data_type_references = uris
             .into_iter()
-            .map(|uri| VersionedUri::from_str(uri).expect("Invalid URI"))
+            .map(|uri| VersionedUri::from_str(uri).expect("invalid URI"))
             .collect::<HashSet<_>>();
 
         let data_type_references = property_type
@@ -223,7 +223,7 @@ mod tests {
     ) {
         let expected_property_type_references = uris
             .into_iter()
-            .map(|uri| VersionedUri::from_str(uri).expect("Invalid URI"))
+            .map(|uri| VersionedUri::from_str(uri).expect("invalid URI"))
             .collect::<HashSet<_>>();
 
         let property_type_references = property_type

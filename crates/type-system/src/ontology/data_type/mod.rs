@@ -142,7 +142,7 @@ mod tests {
         let uri = VersionedUri::from_str(
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
         )
-        .expect("Invalid Versioned URI");
+        .expect("invalid Versioned URI");
         let data_type = check_serialization::<DataTypeReference>(
             json!(
             {
@@ -156,9 +156,9 @@ mod tests {
                 &BaseUri::new(
                     "https://blockprotocol.org/@blockprotocol/types/data-type/text/".to_owned(),
                 )
-                .expect("Invalid Base URL"),
+                .expect("invalid Base URL"),
             )
-            .expect("Data type reference didn't validate against base URI");
+            .expect("data type reference didn't validate against base URI");
     }
 
     #[test]
