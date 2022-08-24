@@ -3,7 +3,10 @@ import Head from "next/head";
 import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
-import { withAuthWall } from "../../../components/pages/auth-wall";
+import {
+  AuthWallPageContent,
+  withAuthWall
+} from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
 import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
 import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper";
@@ -18,14 +21,16 @@ interface FormValues {
   urlSlug: string;
 }
 
-const PublishFromNPMPage = () => {
-  const { register, handleSubmit, formState } = useForm<FormValues>({
+const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
+  const { register, handleSubmit, formState, watch } = useForm<FormValues>({
     mode: "onChange"
   });
 
   const onSubmit = (data: FormValues) => {
     alert(JSON.stringify(data));
   };
+
+  const urlSlug = watch("urlSlug");
 
   return (
     <>
@@ -72,7 +77,8 @@ const PublishFromNPMPage = () => {
                 items={[
                   "this will appear in the URL of your block on the Hub",
                   <>
-                    e.g. blockprotocol.org/@username/<b>[slug]</b>
+                    e.g. blockprotocol.org/@{user.shortname}/
+                    <b>{urlSlug || "[slug]"}</b>
                   </>
                 ]}
               >
