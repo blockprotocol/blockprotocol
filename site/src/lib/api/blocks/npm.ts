@@ -7,9 +7,10 @@ import child_process from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
 import slugify from "slugify";
+import tar from "tar";
 import tmp from "tmp-promise";
 
-import { ExpandedBlockMetadata, extendBlockMetadata } from "../../blocks";
+import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
 import { User } from "../model/user.model";
 import { getDbBlock, insertDbBlock } from "./db";
 import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
@@ -28,7 +29,10 @@ const mirrorNpmPackageToR2 = async (
 ): Promise<{
   extendedMetadata: ExpandedBlockMetadata;
 }> => {
+  const isRunningOnVercel = !!process.env.VERCEL;
+
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
+    tmpdir: isRunningOnVercel ? "/tmp" : undefined, // Vercel allows limited file system access
     unsafeCleanup: true,
   });
 
@@ -37,13 +41,27 @@ const mirrorNpmPackageToR2 = async (
   // download and unpack the package from npm
   let tarballFilename;
   try {
+    const npmPackArgs = [
+      "pack",
+      npmPackageName,
+      "--pack-destination",
+      npmTarballFolder,
+    ];
+    if (isRunningOnVercel) {
+      npmPackArgs.push("--cache", "/tmp/.npm");
+    }
     ({ stdout: tarballFilename } = await execa(
       "npm",
-      ["pack", npmPackageName],
+      npmPackArgs,
       execaOptions,
     ));
-    await execa("tar", ["-xf", tarballFilename], execaOptions);
-  } catch {
+
+    await tar.x({
+      // tar is not availabled on deployed lambdas
+      cwd: npmTarballFolder,
+      file: path.resolve(npmTarballFolder, tarballFilename),
+    });
+  } catch (err) {
     throw new Error(
       `Could not retrieve npm package '${npmPackageName}'. Does it exist?`,
     );
@@ -138,8 +156,8 @@ const mirrorNpmPackageToR2 = async (
   const now = new Date().toISOString();
 
   // for blocks developed locally, add a prefix to the storage URL - the R2 bucket is shared across all dev environments
-  let storageNamespacePrefix;
-  if (!process.env.NEXT_PUBLIC_VERCEL_ENV) {
+  let storageNamespacePrefix = "";
+  if (!isRunningOnVercel) {
     const exec = promisify(child_process.exec);
 
     const gitConfigUserNameResult = await exec("git config --get user.name");
@@ -176,7 +194,7 @@ const mirrorNpmPackageToR2 = async (
         : undefined,
   };
 
-  const extendedMetadata = extendBlockMetadata({
+  const extendedMetadata = expandBlockMetadata({
     metadata: metadataJson as BlockMetadata, // @todo add a comprehensive guard/validator for block-metadata.json
     source: sourceInformation,
     timestamps: { createdAt: now, lastUpdated: now },

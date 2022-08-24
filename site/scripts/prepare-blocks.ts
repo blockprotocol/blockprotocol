@@ -26,8 +26,8 @@ import tmp from "tmp-promise";
 
 import {
   BlockMetadataOnDisk,
+  expandBlockMetadata,
   ExpandedBlockMetadata,
-  extendBlockMetadata,
   StoredBlockInfo,
 } from "../src/lib/blocks";
 import { FRONTEND_URL } from "../src/lib/config";
@@ -504,7 +504,7 @@ const script = async () => {
 
       const now = new Date().toISOString();
 
-      const extendedBlockMetadata: ExpandedBlockMetadata = extendBlockMetadata({
+      const extendedBlockMetadata: ExpandedBlockMetadata = expandBlockMetadata({
         metadata: blockMetadata,
         source: {
           blockDistributionFolderUrl,
