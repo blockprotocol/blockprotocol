@@ -12,6 +12,10 @@
       ],
       "dependsOn": ["codegen", "^build"]
     },
-    "codegen": {}
+    "codegen": {},
+    "lint:tsc": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
   }
 }
