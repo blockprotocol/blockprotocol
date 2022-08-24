@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+/** @see https://github.com/vercel/next.js/issues/32608#issuecomment-1007439478 about istanbul ignore file */
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
