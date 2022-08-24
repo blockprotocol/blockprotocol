@@ -29,12 +29,6 @@ export interface Array<T> {
     maxItems?: number;
 }
 
-export interface OneOfRepr<T> {
-    oneOf: T[];
-}
-
-export interface OneOf<T> extends OneOfRepr<T> {}
-
 export interface Object<V> extends ObjectRepr<V> {}
 
 export interface ObjectRepr<V> {
@@ -55,16 +49,24 @@ export interface DataType extends Record<string, any> {
     type: string;
 }
 
+export interface OneOfRepr<T> {
+    oneOf: T[];
+}
+
+export interface OneOf<T> extends OneOfRepr<T> {}
+
+export type BaseUri = string;
+
 export type VersionedUri = `${string}/v/${number}`;
 
 
 /**
- * Takes a URL string and attempts to parse it into a valid URL, returning it in standardized form.
+ * Checks if a given URL string is a valid base URL.
  * 
  * @param {BaseUri} uri - The URL string.
  * @throws {ParseBaseUriError} if the given string is not a valid base URI
  */
-export function parseBaseUri(uri: BaseUri): BaseUri;
+export function isValidBaseUri(uri: string): void;
 
 
 
@@ -76,8 +78,6 @@ export function parseBaseUri(uri: BaseUri): BaseUri;
  */
 export function isVersionedUri(uri: string): uri is VersionedUri;
 
-
-export type BaseUri = string;
 
 export interface PropertyTypeReference {
     $ref: VersionedUri;

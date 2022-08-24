@@ -1,16 +1,14 @@
-import { isVersionedUri, parseBaseUri } from "..";
+import { isValidBaseUri, isVersionedUri } from "..";
 
 describe("parseBaseUri", () => {
   test.each([
-    ["http://example.com/", "http://example.com/"],
-    ["http://example.com", "http://example.com/"],
-    ["file://localhost/documents/myfolder", "file:///documents/myfolder"],
-    ["file://localhost/documents/myfolder", "file:///documents/myfolder"],
-    ["ftp://rms@example.com", "ftp://rms@example.com/"],
-    ["https://////example.com///", "https://example.com///"],
-    ["file://loc%61lhost/", "file:///"],
-  ])("`parseBaseUri(%s)` succeeds", (input, expected) => {
-    expect(parseBaseUri(input)).toBe(expected);
+    ["http://example.com/"],
+    ["file://localhost/documents/myfolder/"],
+    ["ftp://rms@example.com/"],
+    ["https://////example.com///"],
+    ["file://loc%61lhost/"],
+  ])("`parseBaseUri(%s)` succeeds", (input) => {
+    expect(() => isValidBaseUri(input)).not.toThrow();
   });
 
   test.each([
@@ -22,7 +20,7 @@ describe("parseBaseUri", () => {
     "data:text/plain,Hello?World#",
   ])("`parseBaseUri(%s)` errors", (input) => {
     expect(() => {
-      const _ = parseBaseUri(input);
+      isValidBaseUri(input);
     }).toThrow();
   });
 });

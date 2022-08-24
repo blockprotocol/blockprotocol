@@ -153,8 +153,10 @@ mod tests {
 
         data_type
             .validate_uri(
-                &BaseUri::new("https://blockprotocol.org/@blockprotocol/types/data-type/text/")
-                    .expect("Invalid Base URL"),
+                &BaseUri::new(
+                    "https://blockprotocol.org/@blockprotocol/types/data-type/text/".to_owned(),
+                )
+                .expect("Invalid Base URL"),
             )
             .expect("Data type reference didn't validate against base URI");
     }
