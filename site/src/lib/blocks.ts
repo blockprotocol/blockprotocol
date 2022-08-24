@@ -146,7 +146,7 @@ const expandBlockMetadata = (
     // fallback while not all blocks have blockType defined
     blockType: metadata.blockType ?? { entryPoint: "react" },
     // @todo figure out what we're going to use for the unique block Ids
-    componentId: `${blockDistributionFolderUrl}/blocks/${pathWithNamespace}`,
+    componentId: blockDistributionFolderUrl,
     icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
     image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),
     pathWithNamespace,
