@@ -1,6 +1,6 @@
 import {
   Box,
-  Paper,
+  Paper as MuiPaper,
   styled,
   Tab as MuiTab,
   tabClasses,
@@ -17,8 +17,18 @@ import { LogsView } from "./dev-tools/logs-view";
 import { PropertiesView } from "./dev-tools/properties";
 import { a11yProps, TabPanel } from "./dev-tools/tab-panel";
 
-const Container = styled(Paper)(() => ({
-  minHeight: 50,
+const Wrapper = styled(Box)(() => ({
+  position: "fixed",
+  left: 0,
+  right: 0,
+  bottom: 0,
+  zIndex: 10000
+}));
+
+const TAB_HEIGHT = 40;
+
+const Paper = styled(MuiPaper)(() => ({
+  minHeight: TAB_HEIGHT + 2, // extra addition is to make tab indicator show
   display: "flex",
   flexDirection: "column"
 }));
@@ -34,6 +44,7 @@ const Header = styled(Box)(({ theme }) => ({
 }));
 
 const Tabs = styled(MuiTabs)(({ theme }) => ({
+  minHeight: TAB_HEIGHT,
   [`.${tabsClasses.indicator}`]: {
     backgroundColor: theme.palette.text.primary
   }
@@ -43,7 +54,7 @@ const Tab = styled((props: TabProps) => (
   <MuiTab disableRipple disableTouchRipple {...props} />
 ))(({ theme }) => ({
   textTransform: "none",
-  height: 50,
+  minHeight: TAB_HEIGHT,
 
   [`&.${tabClasses.selected}, .Mui-selected`]: {
     color: theme.palette.text.primary
@@ -64,7 +75,7 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 1000
+        zIndex: 10
       })}
       {...restProps}
     />
@@ -78,7 +89,7 @@ const getHandle = (handleAxis, ref) => (
 export const DevTools = () => {
   const [value, setValue] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const paperBoxRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useLocalStorageState("mbd-dev-tools-height", {
     defaultValue: 350
   });
@@ -90,16 +101,7 @@ export const DevTools = () => {
   }, []);
 
   return (
-    <Box
-      ref={wrapperRef}
-      sx={{
-        position: "fixed",
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: 10000
-      }}
-    >
+    <Wrapper ref={wrapperRef}>
       <Resizable
         height={height}
         width={width!}
@@ -109,7 +111,7 @@ export const DevTools = () => {
           setHeight(size.height);
         }}
       >
-        <Container sx={{ height }} ref={containerRef}>
+        <Paper sx={{ height }} ref={paperBoxRef}>
           <Header>
             <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
               <Tab label="Properties" {...a11yProps(0)} />
@@ -128,8 +130,8 @@ export const DevTools = () => {
               <LogsView />
             </TabPanel>
           </Box>
-        </Container>
+        </Paper>
       </Resizable>
-    </Box>
+    </Wrapper>
   );
 };

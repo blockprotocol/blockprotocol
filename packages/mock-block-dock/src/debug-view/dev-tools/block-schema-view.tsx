@@ -1,4 +1,4 @@
-import { Box, IconButton } from "@mui/material";
+import { Box, Button, IconButton } from "@mui/material";
 import { ChangeEvent } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
@@ -36,14 +36,16 @@ export const BlockSchemaView = () => {
       />
     </Box>
   ) : (
-    <IconButton
-      color="inherit"
-      aria-label="upload picture"
+    <Button
+      variant="outlined"
+      size="small"
+      aria-label="Upload Block Schema"
       component="label"
-      sx={{ mt: -1 }}
+      sx={{ textTransform: "none" }}
+      color="inherit"
     >
       <input hidden accept=".json" type="file" onChange={handleUploadSchema} />
-      Upload block schema
-    </IconButton>
+      upload schema
+    </Button>
   );
 };
