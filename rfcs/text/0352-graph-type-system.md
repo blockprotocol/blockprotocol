@@ -2682,14 +2682,14 @@ A more immediately apparent concern is if schemas are versioned, but their use i
 
 ## The Big Picture
 
-As outlined in the [Main Motivation section](#main-motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
+As outlined in the [Motivation section](#motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
 
 - Complex use-cases (such as those that are able to dynamically load and use a block at run-time)
 - Simple use-cases (such as those that include a handful of blocks in the source code at build-time).
 
 **This RFC is heavily weighted towards facilitating useful, complex use-cases, and explicitly recognises that it likely makes the development experience worse for simpler use-cases.**
 
-This decision is guided by the thoughts outlined in the [Main Motivation section](#main-motivation), most notably the acknowledgement that a standard being prescriptive can actually lead to new functionalities. Although there are [drawbacks](#drawbacks), the system allows parties on either side of the communication channel to have greater confidence, and to be able to express themselves more comprehensively. The compromise is argued for by first understanding the concept of consensus, and then exploring its practical implications.
+This decision is guided by the thoughts outlined in the [Motivation section](#motivation), most notably the acknowledgement that a standard being prescriptive can actually lead to new functionalities. Although there are [drawbacks](#drawbacks), the system allows parties on either side of the communication channel to have greater confidence, and to be able to express themselves more comprehensively. The compromise is argued for by first understanding the concept of consensus, and then exploring its practical implications.
 
 ### Convergence and divergence of consensus
 
@@ -2701,7 +2701,7 @@ As such, the key identified benefit of this type system is that _continues_ to a
 
 #### Reusability
 
-An issue with the current system is that for each block developed, the developer needs to describe its requirements autonomously. They decide what data it needs, and importantly, decide _how to describe that data_. The toolkit they're provided with right now is to embed semantic meaning into the key of the JSON blob. But as shown in the [Main Motivation](#main-motivation), this falls short quickly in the real world as language is imperfect, and words chosen as keys can have synonyms, they can prove ambiguous, etc.
+An issue with the current system is that for each block developed, the developer needs to describe its requirements autonomously. They decide what data it needs, and importantly, decide _how to describe that data_. The toolkit they're provided with right now is to embed semantic meaning into the key of the JSON blob. But as shown in the [Motivation section](#motivation), this falls short quickly in the real world as language is imperfect, and words chosen as keys can have synonyms, they can prove ambiguous, etc.
 
 This is rectified through the following:
 
