@@ -77,7 +77,7 @@ export interface PropertyType extends OneOf<PropertyValues> {
     kind: 'propertyType';
     $id: VersionedUri;
     title: string;
-    pluralTitle: string;
+    pluralTitle?: string;
     description?: string;
 }
 
