@@ -5,11 +5,11 @@ import cloneDeep from "lodash/cloneDeep";
 import blocksData from "../../../blocks-data.json" assert { type: "json" };
 import { createApiKeyRequiredHandler } from "../../lib/api/handler/api-key-required-handler";
 import {
-  ExpandedBlockMetadata as BlockMetadata,
-  readBlockDataFromDisk,
+  ExpandedBlockMetadata,
+  retrieveBlockFileContent,
 } from "../../lib/blocks";
 
-export type ApiSearchRequestQuery = {
+export type ApiBlockSearchQuery = {
   author?: string;
   json?: string;
   license?: string;
@@ -17,11 +17,11 @@ export type ApiSearchRequestQuery = {
   q?: string;
 };
 
-export type ApiSearchResponse = {
-  results: BlockMetadata[];
+export type ApiBlockSearchResponse = {
+  results: ExpandedBlockMetadata[];
 };
 
-export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
+export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
   .use(queryValidator("author").isString().toLowerCase())
   .use(queryValidator("license").isString().toLowerCase())
   .use(queryValidator("name").isString().toLowerCase())
@@ -34,9 +34,9 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
       name: nameQuery,
       q: query,
       json: jsonText,
-    } = req.query as ApiSearchRequestQuery;
+    } = req.query as ApiBlockSearchQuery;
 
-    let data: BlockMetadata[] = blocksData as BlockMetadata[];
+    let data: ExpandedBlockMetadata[] = blocksData as ExpandedBlockMetadata[];
 
     if (authorQuery) {
       data = data.filter(({ author }) =>
@@ -81,7 +81,7 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
       data = (
         await Promise.all(
           data.map(async (block) => {
-            const schema = (await readBlockDataFromDisk(block)).schema;
+            const schema = (await retrieveBlockFileContent(block)).schema;
             const validate = ajv.compile(schema);
 
             // withoutAdditional is transformed in validate.
@@ -104,7 +104,7 @@ export default createApiKeyRequiredHandler<null, ApiSearchResponse>()
         )
       )
         .filter(
-          (blockData): blockData is [BlockMetadata, number] =>
+          (blockData): blockData is [ExpandedBlockMetadata, number] =>
             blockData !== null,
         )
         // sort by how many keys are present in the validated output after removeAdditional.

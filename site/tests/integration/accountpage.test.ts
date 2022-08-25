@@ -83,7 +83,7 @@ test("key elements should be present when user views their account page", async 
 });
 
 const codeBlockMetadata = (blocksData as ExpandedBlockMetadata[]).find(
-  ({ name }) => name === "@hashintel/block-code",
+  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
 );
 
 if (!codeBlockMetadata) {
@@ -123,7 +123,7 @@ test("key elements should be present when guest user views account page", async 
 
   await expect(codeBlockOverviewCard).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockPackagePath,
+    codeBlockMetadata.blockSitePath,
   );
 
   if (isMobile) {
@@ -174,7 +174,7 @@ test("key elements should be present when guest user views account page", async 
 
   await expect(codeBlockListViewCard).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockPackagePath,
+    codeBlockMetadata.blockSitePath,
   );
 
   await expect(codeBlockListViewCard.locator("img")).toHaveAttribute(
