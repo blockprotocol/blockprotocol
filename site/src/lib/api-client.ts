@@ -2,6 +2,10 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ValidationError } from "express-validator";
 
 import {
+  ApiBlockCreateRequest,
+  ApiBlockCreateResponse,
+} from "../pages/api/blocks/create.api";
+import {
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse,
 } from "../pages/api/login-with-login-code.api";
@@ -171,4 +175,9 @@ export const apiClient = {
       ApiLoginWithLoginCodeRequestBody,
       ApiLoginWithLoginCodeResponse
     >("login-with-login-code", requestData),
+  publishBlockFromNPM: (requestData: ApiBlockCreateRequest) =>
+    apiClient.post<ApiBlockCreateRequest, ApiBlockCreateResponse>(
+      "blocks/create",
+      requestData,
+    ),
 };

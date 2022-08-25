@@ -10,13 +10,13 @@ export type ApiBlockCreateRequest = {
   npmPackageName: string;
 };
 
-export type ApiTypeCreateResponse = {
+export type ApiBlockCreateResponse = {
   block: ExpandedBlockMetadata;
 };
 
 export default createAuthenticatedHandler<
   ApiBlockCreateRequest,
-  ApiTypeCreateResponse
+  ApiBlockCreateResponse
 >()
   .use(
     bodyValidator("blockName").isString().notEmpty().toLowerCase(),
