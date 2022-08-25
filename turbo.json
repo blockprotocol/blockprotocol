@@ -6,13 +6,13 @@
         "dist/**",
         ".next/**",
         "public/blocks/**",
-        "public/schemas/**",
-        "blocks-data.json",
-        "site-map.json"
+        "public/schemas/**"
       ],
       "dependsOn": ["codegen", "^build"]
     },
-    "codegen": {},
+    "codegen": {
+      "outputs": ["blocks-data.json", "site-map.json"]
+    },
     "fix:eslint": {
       "cache": false
     },
