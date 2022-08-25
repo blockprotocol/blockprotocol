@@ -1,4 +1,4 @@
-import localBlocks from "../../../../blocks-data.json";
+import localBlocks from "../../../../blocks-data.json" assert { type: "json" };
 import { ExpandedBlockMetadata } from "../../blocks";
 import { getDbBlock, getDbBlocks } from "./db";
 
