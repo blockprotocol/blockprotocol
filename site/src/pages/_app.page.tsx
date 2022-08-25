@@ -1,7 +1,6 @@
 import "../styles/prism.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import { Snackbar } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import * as Sentry from "@sentry/nextjs";
@@ -126,7 +125,6 @@ const MyApp = ({
                 />
               </Head>
               <Component {...pageProps} />
-              <Snackbar value="test" open />
             </PageLayout>
           </ThemeProvider>
         </CacheProvider>
