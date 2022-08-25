@@ -143,7 +143,15 @@ const script = async () => {
     logStepEnd();
     logStepStart("Linting");
 
-    await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
+    const blockPackageJson = await fs.readJson(
+      path.resolve(resolvedBlockDirPath, "package.json"),
+    );
+
+    if (blockPackageJson.scripts["lint:tsc"]) {
+      await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
+    } else {
+      console.log("Skipping (yarn lint:tsc is not configured)");
+    }
 
     logStepEnd();
     logStepStart("Build");
