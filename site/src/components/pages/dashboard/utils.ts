@@ -53,8 +53,7 @@ export const getDashboardSectionCards = (props: {
         description: "Build a block you’re ready to release on the hub?",
         link: {
           title: "Publish a block",
-          /** @todo link to block publishing flow */
-          href: `${props.profileLink}/blocks`,
+          href: "/blocks/publish",
         },
       },
       {
