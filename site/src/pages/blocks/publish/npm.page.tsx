@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
@@ -15,22 +16,31 @@ import { RequiredLabel } from "../../../components/pages/blocks/required-label";
 import { PageContainer } from "../../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs";
 import { TextField } from "../../../components/text-field";
+import { apiClient } from "../../../lib/api-client";
+import { ApiBlockCreateRequest } from "../../api/blocks/create.api";
 
-interface FormValues {
-  npmURL: string;
-  urlSlug: string;
-}
+type FormValues = ApiBlockCreateRequest;
 
 const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
+  const router = useRouter();
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
     mode: "onChange",
   });
 
-  const onSubmit = (data: FormValues) => {
-    alert(JSON.stringify(data));
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const res = await apiClient.publishBlockFromNPM(data);
+
+      if (res.error) throw res.error;
+
+      await router.push("/blocks");
+    } catch (error) {
+      /** @todo show snackbar on error */
+      alert("Oops!");
+    }
   };
 
-  const urlSlug = watch("urlSlug");
+  const blockName = watch("blockName");
 
   return (
     <>
@@ -66,7 +76,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                 <TextField
                   fullWidth
                   label={<RequiredLabel>npm package URL</RequiredLabel>}
-                  inputProps={register("npmURL", { required: true })}
+                  inputProps={register("npmPackageName", { required: true })}
                 />
               </FieldInfoWrapper>
             </BlockFormSection>
@@ -78,14 +88,14 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                   "this will appear in the URL of your block on the Hub",
                   <>
                     e.g. blockprotocol.org/@{user.shortname}/
-                    <b>{urlSlug || "[slug]"}</b>
+                    <b>{blockName || "[slug]"}</b>
                   </>,
                 ]}
               >
                 <TextField
                   fullWidth
                   label={<RequiredLabel>URL slug</RequiredLabel>}
-                  inputProps={register("urlSlug", { required: true })}
+                  inputProps={register("blockName", { required: true })}
                 />
               </FieldInfoWrapper>
             </BlockFormSection>
@@ -94,7 +104,8 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
               type="submit"
               squared
               size="small"
-              disabled={!formState.isValid}
+              disabled={!formState.isValid || formState.isSubmitting}
+              loading={formState.isSubmitting}
             >
               Publish block to hub
             </Button>
