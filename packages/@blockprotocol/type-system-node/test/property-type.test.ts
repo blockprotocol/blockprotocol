@@ -16,6 +16,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/contact-information/v/1",
     title: "Contact Information",
+    pluralTitle: "Contact Information",
     oneOf: [
       {
         type: "object",
@@ -72,6 +73,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/interests/v/1",
     title: "Interests",
+    pluralTitle: "Interests",
     oneOf: [
       {
         type: "object",
@@ -110,6 +112,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/numbers/v/1",
     title: "Numbers",
+    pluralTitle: "Numbers",
     oneOf: [
       {
         type: "array",
@@ -127,6 +130,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/text/v/1",
     title: "Text",
+    pluralTitle: "Text",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -169,6 +173,7 @@ const invalidPropertyTypes: [string, PropertyType][] = [
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       title: "Broken",
+      pluralTitle: "Broken",
       oneOf: [],
     },
   ],
@@ -178,6 +183,7 @@ const invalidPropertyTypes: [string, PropertyType][] = [
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1.4",
       title: "Broken",
+      pluralTitle: "Broken",
       oneOf: [
         {
           $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -191,6 +197,7 @@ const invalidPropertyTypes: [string, PropertyType][] = [
       kind: "propertyType",
       $id: "https://  /broken/v/1",
       title: "Broken",
+      pluralTitle: "Broken",
       oneOf: [
         {
           $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -204,6 +211,7 @@ const invalidPropertyTypes: [string, PropertyType][] = [
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       title: "Broken",
+      pluralTitle: "Broken",
       oneOf: [
         {
           $ref: "im a broken ref haha /v/1",
@@ -217,6 +225,7 @@ const invalidPropertyTypes: [string, PropertyType][] = [
       kind: "propertyType",
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       title: "Broken",
+      pluralTitle: "Broken",
       oneOf: [
         {
           type: "object",
