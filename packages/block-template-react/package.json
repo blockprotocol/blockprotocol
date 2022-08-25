@@ -27,7 +27,7 @@
     "@blockprotocol/graph": "0.0.14"
   },
   "devDependencies": {
-    "block-scripts": "0.0.14",
+    "block-scripts": "0.0.15",
     "mock-block-dock": "0.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
