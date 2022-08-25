@@ -16,6 +16,7 @@ import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block
 import { RequiredLabel } from "../../../components/pages/blocks/required-label";
 import { PageContainer } from "../../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs";
+import { shy } from "../../../components/pages/user/utils";
 import { TextField } from "../../../components/text-field";
 import { apiClient } from "../../../lib/api-client";
 import { ApiBlockCreateRequest } from "../../api/blocks/create.api";
@@ -91,7 +92,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                   "this will appear in the URL of your block on the Hub",
                   <>
                     e.g. blockprotocol.org/@{user.shortname}/
-                    <b>{blockName || "[slug]"}</b>
+                    <b>{shy(blockName || "[slug]")}</b>
                   </>,
                 ]}
               >
