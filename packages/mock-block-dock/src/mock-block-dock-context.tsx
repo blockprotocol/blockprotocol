@@ -8,7 +8,7 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useState
 } from "react";
 
 import { MockData } from "./use-mock-block-props/use-mock-datastore";
@@ -25,6 +25,7 @@ type MockBlockDockInfo = {
   blockEntity?: Entity;
   setBlockEntity: Dispatch<SetStateAction<Entity>>;
   datastore: MockData;
+  blockType?: "react" | "custom-element" | "html";
 };
 
 const MockBlockDockContext = createContext<MockBlockDockInfo>({
@@ -40,8 +41,8 @@ const MockBlockDockContext = createContext<MockBlockDockInfo>({
     entities: [],
     links: [],
     linkedAggregationDefinitions: [],
-    entityTypes: [],
-  },
+    entityTypes: []
+  }
 });
 
 type Props = {
@@ -55,6 +56,7 @@ type Props = {
   blockEntity?: Entity;
   setBlockEntity?: Dispatch<SetStateAction<Entity>>;
   datastore: MockData;
+  blockType?: "react" | "custom-element" | "html";
 };
 
 export const MockBlockDockProvider = ({
@@ -68,13 +70,14 @@ export const MockBlockDockProvider = ({
   blockEntity,
   setBlockEntity,
   datastore,
+  blockType
 }: Props) => {
   const [logs, setLogs] = useState<Message[]>([]);
 
   useEffect(() => {
     const handler = (event: Event) => {
       const detail = (event as CustomEvent<Message>).detail;
-      setLogs((prev) => [...prev, { ...detail }]);
+      setLogs(prev => [...prev, { ...detail }]);
     };
 
     // @todo store event name in constant or pull from CoreHandler
@@ -98,6 +101,7 @@ export const MockBlockDockProvider = ({
       blockEntity,
       setBlockEntity,
       datastore,
+      blockType
     };
   }, [
     debugMode,
@@ -110,6 +114,7 @@ export const MockBlockDockProvider = ({
     blockEntity,
     setBlockEntity,
     datastore,
+    blockType
   ]);
 
   return (

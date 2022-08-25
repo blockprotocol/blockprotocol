@@ -11,13 +11,21 @@ const baseTheme: ThemeOptions = {
 export const darkTheme = createTheme({
   ...baseTheme,
   palette: {
-    mode: "dark"
+    mode: "dark",
+    common: {
+      black: "#0E1114",
+      white: "#FFFFFF"
+    }
   }
 });
 
 export const lightTheme = createTheme({
   ...baseTheme,
   palette: {
-    mode: "light"
+    mode: "light",
+    common: {
+      black: "#0E1114",
+      white: "#FFFFFF"
+    }
   }
 });

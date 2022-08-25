@@ -1,22 +1,57 @@
-import { Box, Chip, IconButton, styled, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button as MuiButton,
+  ButtonProps,
+  Chip,
+  IconButton,
+  styled,
+  Tooltip,
+  Typography
+} from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
 import { useMockBlockDockContext } from "../mock-block-dock-context";
-import { Logo } from "./icons";
+import { DarkMode, LightMode, Logo } from "./icons";
+import { customColors } from "./theme/palette";
 
-export const HEADER_HEIGHT = 56;
+export const HEADER_HEIGHT = 50;
 
 const Container = styled(Box)(({ theme }) => ({
   height: HEADER_HEIGHT,
   position: "sticky",
   top: 0,
   zIndex: 2000,
-  backgroundColor: theme.palette.background.default,
+  backgroundColor:
+    theme.palette.mode === "light" ? theme.palette.common.white : "#2C2C2C",
   display: "flex",
   alignItems: "center",
   paddingLeft: theme.spacing(3),
   paddingRight: theme.spacing(3),
   borderBottom: `1px solid ${theme.palette.divider}`
+}));
+
+const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
+  <MuiButton
+    size="small"
+    disableFocusRipple
+    disableRipple
+    disableTouchRipple
+    {...props}
+    variant="outlined"
+    color="inherit"
+    sx={[
+      ({}) => ({
+        textTransform: "none"
+      }),
+      ...(Array.isArray(sx) ? sx : [sx])
+    ]}
+  >
+    {children}
+  </MuiButton>
+))(({ theme }) => ({
+  borderColor:
+    theme.palette.mode === "light" ? customColors.gray[30] : "#444444",
+  color: theme.palette.mode === "light" ? customColors.gray[90] : "#8E8E8E"
 }));
 
 const chipInfo = {
@@ -49,9 +84,37 @@ export const Header = ({ darkMode, setDarkMode, blockType }: Props) => {
           mr: "auto"
         })}
       />
+
+      <Box
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex"
+        }}
+      >
+        <Typography
+          fontWeight="medium"
+          mr={0.5}
+          variant="subtitle2"
+          sx={({ palette }) => ({
+            color:
+              palette.mode === "light"
+                ? customColors.gray[70]
+                : customColors.gray[30]
+          })}
+        >
+          Blocks /
+        </Typography>
+        <Typography variant="subtitle2" fontWeight="medium">
+          Person
+        </Typography>
+      </Box>
+
       <Tooltip title={`Switch to ${darkMode ? "light" : "dark"} mode`}>
         <IconButton sx={{ mr: 1 }} onClick={() => setDarkMode(prev => !prev)}>
-          {darkMode ? "light mode" : "dark mode"}
+          {darkMode ? <LightMode /> : <DarkMode />}
         </IconButton>
       </Tooltip>
 
@@ -63,12 +126,8 @@ export const Header = ({ darkMode, setDarkMode, blockType }: Props) => {
         />
       )}
 
-      {/* @todo add zoom functionality */}
-      <Tooltip title="Exit Debug View">
-        <IconButton onClick={() => setDebugMode(false)}>Exit</IconButton>
-      </Tooltip>
+      <Button sx={{ mr: 1 }}>Docs</Button>
+      <Button onClick={() => setDebugMode(false)}>Exit Debug</Button>
     </Container>
   );
 };
-
-// #0E1114

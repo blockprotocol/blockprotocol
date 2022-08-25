@@ -5,14 +5,14 @@ import {
   EntityType,
   GraphEmbedderHandler,
   Link,
-  LinkedAggregationDefinition,
+  LinkedAggregationDefinition
 } from "@blockprotocol/graph";
 import {
   ComponentType,
   FunctionComponent,
   useEffect,
   useRef,
-  useState,
+  useState
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
@@ -67,7 +67,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
-  readonly: initialReadonly,
+  readonly: initialReadonly
 }) => {
   const {
     blockEntity,
@@ -78,7 +78,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphServiceCallbacks,
     linkedAggregations,
     setBlockSchema,
-    setBlockEntity,
+    setBlockEntity
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
     blockSchema: initialBlockSchema,
@@ -86,11 +86,11 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialEntityTypes,
     initialLinks,
     initialLinkedAggregations,
-    readonly: initialReadonly,
+    readonly: initialReadonly
   });
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
-    null,
+    null
   );
   const [readonly, setReadonly] = useState<boolean>(!!initialReadonly);
   const [debugMode, setDebugMode] = useState(!!debug);
@@ -113,8 +113,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       blockEntity,
       blockGraph,
       entityTypes,
-      linkedAggregations,
-    },
+      linkedAggregations
+    }
   };
 
   useEffect(() => {
@@ -124,7 +124,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   useEffect(() => {
     if (!wrapperRef.current) {
       throw new Error(
-        "No reference to wrapping element – cannot listen for messages from block",
+        "No reference to wrapping element – cannot listen for messages from block"
       );
     } else if (!graphService) {
       setGraphService(
@@ -134,8 +134,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           linkedAggregations,
           callbacks: graphServiceCallbacks,
           element: wrapperRef.current,
-          readonly,
-        }),
+          readonly
+        })
       );
     }
   }, [
@@ -144,7 +144,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphService,
     graphServiceCallbacks,
     linkedAggregations,
-    readonly,
+    readonly
   ]);
 
   useEffect(() => {
@@ -209,6 +209,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       blockEntity={blockEntity}
       setBlockEntity={setBlockEntity}
       datastore={datastore}
+      blockType={blockType}
     >
       {!debugMode ? (
         <>

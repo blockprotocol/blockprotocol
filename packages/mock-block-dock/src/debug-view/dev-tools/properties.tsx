@@ -51,11 +51,16 @@ export const PropertiesView = () => {
                   );
                 }}
                 onDelete={args => {
-                  // entityType and entityId can be edited but should not be
+                  // entityType,entityTypeId and entityId can be edited but should not be
                   // deleted
                   if (
                     args.name &&
-                    ["entityType", "entityId", "properties"].includes(args.name)
+                    [
+                      "entityType",
+                      "entityTypeId",
+                      "entityId",
+                      "properties"
+                    ].includes(args.name)
                   ) {
                     return false;
                   }
@@ -63,7 +68,7 @@ export const PropertiesView = () => {
                     args.updated_src as Entity<Record<string, unknown>>
                   );
                 }}
-                validationMessage={validate.errors?.[0]?.message ?? ""}
+                validationMessage="Not allowed"
               />
               <Collapse in={!!validate.errors?.length}>
                 {validate.errors?.map(error => (
@@ -85,7 +90,6 @@ export const PropertiesView = () => {
         <Grid item xs={6}>
           <Box>
             <Typography variant="subtitle2" mb={1}>
-              {" "}
               Block Schema
             </Typography>
             <BlockSchemaView />

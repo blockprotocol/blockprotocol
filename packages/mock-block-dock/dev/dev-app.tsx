@@ -21,7 +21,7 @@ const DevApp: FunctionComponent = () => {
   const blockEntity = {
     entityId: `test-entity-1`,
     entityTypeId: "test-type-1",
-    properties: { name: "World" },
+    properties: { name: "World" }
   };
 
   let blockDefinition;
@@ -31,16 +31,16 @@ const DevApp: FunctionComponent = () => {
       blockDefinition = {
         customElement: {
           elementClass: TestCustomElementBlock,
-          tagName: "test-custom-element-block",
-        },
+          tagName: "test-custom-element-block"
+        }
       };
       break;
 
     case "html-at-url":
       blockDefinition = {
         html: {
-          url: "./test-html-block/block.html",
-        },
+          url: "./test-html-block/block.html"
+        }
       };
       break;
 
@@ -50,16 +50,16 @@ const DevApp: FunctionComponent = () => {
           source: testBlockString,
           url: new URL(
             "./test-html-block/block.html",
-            window.location.toString(),
-          ).toString(),
-        },
+            window.location.toString()
+          ).toString()
+        }
       };
       break;
 
     case "react":
     default:
       blockDefinition = {
-        ReactComponent: TestReactBlock,
+        ReactComponent: TestReactBlock
       };
   }
 
@@ -67,11 +67,12 @@ const DevApp: FunctionComponent = () => {
     <>
       <div
         style={{
-          position: "absolute",
+          position: "fixed",
           right: 40,
           top: 16,
           zIndex: 100,
           display: "none",
+          zIndex: 100000
         }}
       >
         <label>
