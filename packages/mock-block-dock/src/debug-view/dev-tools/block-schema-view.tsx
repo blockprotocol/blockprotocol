@@ -1,4 +1,3 @@
-import { CloudUploadOutlined } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import { ChangeEvent } from "react";
 
@@ -12,7 +11,7 @@ export const BlockSchemaView = () => {
     const files = event.target.files;
     if (files?.[0] && files?.[0].type === "application/json") {
       const reader = new FileReader();
-      reader.onload = (evt) => {
+      reader.onload = evt => {
         if (typeof evt.target?.result !== "string") {
           return null;
         }
@@ -44,7 +43,7 @@ export const BlockSchemaView = () => {
       sx={{ mt: -1 }}
     >
       <input hidden accept=".json" type="file" onChange={handleUploadSchema} />
-      <CloudUploadOutlined />
+      Upload block schema
     </IconButton>
   );
 };
