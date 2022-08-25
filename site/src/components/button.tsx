@@ -80,10 +80,11 @@ export type ButtonProps = {
 // probably rename to BPButton?
 // @todo implement loading
 export const Button: FunctionComponent<ButtonProps> = forwardRef(
-  ({ children, squared, loading, sx = [], ...props }, ref) => {
+  ({ children, squared, loading, disabled, sx = [], ...props }, ref) => {
     return (
       <MuiButton
         {...props}
+        disabled={disabled || loading}
         sx={[
           {
             borderRadius: squared ? "6px" : undefined,
