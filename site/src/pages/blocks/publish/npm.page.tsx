@@ -4,9 +4,10 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
+import { useSnackbar } from "../../../components/hooks/use-snackbar";
 import {
   AuthWallPageContent,
-  withAuthWall,
+  withAuthWall
 } from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
 import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
@@ -23,20 +24,22 @@ type FormValues = ApiBlockCreateRequest;
 
 const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
+  const snackbar = useSnackbar();
+
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
-    mode: "onChange",
+    mode: "onChange"
   });
 
   const onSubmit = async (data: FormValues) => {
     try {
       const res = await apiClient.publishBlockFromNPM(data);
 
-      if (res.error) throw res.error;
+      if (res.error) throw Error(res.error.message);
 
       await router.push("/blocks");
     } catch (error) {
-      /** @todo show snackbar on error */
-      alert("Oops!");
+      /** @todo I think we can improve error handling instead of using `instanceof` every time */
+      snackbar.error(error instanceof Error ? error.message : "Oops!");
     }
   };
 
@@ -63,7 +66,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
               gap: 8,
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start",
+              alignItems: "flex-start"
             }}
           >
             <PublishBlockInfo />
@@ -89,7 +92,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                   <>
                     e.g. blockprotocol.org/@{user.shortname}/
                     <b>{blockName || "[slug]"}</b>
-                  </>,
+                  </>
                 ]}
               >
                 <TextField
