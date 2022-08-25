@@ -1,6 +1,7 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "../../components/icons";
 import { LinkButton } from "../../components/link-button";
@@ -9,11 +10,29 @@ import {
   withAuthWall,
 } from "../../components/pages/auth-wall";
 import { BlockFormContainer } from "../../components/pages/blocks/block-form-container";
+import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import { ListViewCard } from "../../components/pages/user/list-view-card";
+import { apiClient } from "../../lib/api-client";
+import { ExpandedBlockMetadata } from "../../lib/blocks";
 
-const BlocksPage: AuthWallPageContent = () => {
+const BlocksPage: AuthWallPageContent = ({ user }) => {
+  const [blocks, setBlocks] = useState<ExpandedBlockMetadata[]>([]);
+
+  useEffect(() => {
+    if (user.shortname) {
+      /** @todo replace this manual fetching with `SWR` or `React Query` for better DX/UX */
+      void apiClient
+        .getUserBlocks({
+          shortname: user.shortname.replace("@", ""),
+        })
+        .then((res) => setBlocks(res.data?.blocks || []));
+    }
+  }, [user]);
+
+  const hasBlocks = !!blocks.length;
+
   return (
     <>
       <Head>
@@ -47,28 +66,35 @@ const BlocksPage: AuthWallPageContent = () => {
 
         <BlockFormContainer
           sx={{
-            py: 1,
-            pr: 4.5,
-            pl: 0,
+            ...(hasBlocks && {
+              py: 1,
+              pr: 4.5,
+              pl: 0,
 
-            "> *": {
-              pl: 5,
+              "> *": {
+                pl: 5,
 
-              "&:last-of-type": {
-                border: "none",
+                "&:last-of-type": {
+                  border: "none",
+                },
               },
-            },
+            }),
           }}
         >
-          {[1, 2, 3, 4, 5].map((item) => (
-            <ListViewCard
-              key={item}
-              title="My Block"
-              description="This is an amazing block, which is my block."
-              lastUpdated="10.04.2021"
-              url="/"
-            />
-          ))}
+          {hasBlocks ? (
+            blocks.map((block) => (
+              <ListViewCard
+                key={block.componentId}
+                icon={block.icon}
+                title={block.displayName!}
+                description={block.description}
+                lastUpdated={block.lastUpdated}
+                url={block.blockSitePath}
+              />
+            ))
+          ) : (
+            <BlockListEmptyState />
+          )}
         </BlockFormContainer>
       </PageContainer>
     </>
