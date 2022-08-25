@@ -356,7 +356,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
           )}
 
           <Snackbar
-            open={alertSnackBarOpen}
+            open
             autoHideDuration={4000}
             anchorOrigin={{
               horizontal: "right",
