@@ -8,10 +8,10 @@ use crate::{
     uri::{error::ParseVersionedUriError, VersionedUri},
 };
 
-// Generates the TypeScript alias: type VersionedUri = `${string}/v/${number}`
+// Generates the TypeScript alias: type VersionedUri = string
 #[derive(Tsify)]
 #[serde(rename = "VersionedUri")]
-pub struct VersionedUriPatch(#[tsify(type = "`${string}/v/${number}`")] String);
+pub struct VersionedUriPatch(String);
 
 #[wasm_bindgen(typescript_custom_section)]
 const PARSE_BASE_URI_DEF: &'static str = r#"

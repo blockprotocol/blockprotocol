@@ -80,7 +80,7 @@ export interface PropertyType extends OneOf<PropertyValues> {
     description?: string;
 }
 
-export type VersionedUri = `${string}/v/${number}`;
+export type VersionedUri = string;
 
 
 /**
