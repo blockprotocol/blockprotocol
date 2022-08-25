@@ -17,6 +17,10 @@ jobs:
         with:
           publish: yarn changeset publish
         env:
+          GIT_AUTHOR_EMAIL: bot@hash.ai
+          GIT_AUTHOR_NAME: GitHub Actions
+          GIT_COMMITTER_EMAIL: bot@hash.ai
+          GIT_COMMITTER_NAME: GitHub Actions
           ## Enables CI in created ‘Version Packages’ PRs
           ## https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#triggering-further-workflow-runs
           GITHUB_TOKEN: ${{ secrets.MACHINE_USER_TOKEN }}
