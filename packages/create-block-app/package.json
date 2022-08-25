@@ -20,9 +20,6 @@
     "url": "https://hash.ai"
   },
   "bin": "create-block-app.js",
-  "scripts": {
-    "lint:tsc": "echo \"Skipping: TypeScript not configured\""
-  },
   "dependencies": {
     "command-line-args": "^5.2.1",
     "command-line-usage": "^6.1.3",
