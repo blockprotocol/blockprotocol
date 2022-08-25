@@ -118,6 +118,9 @@ pub struct PropertyType {
     title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
+    plural_title: Option<String>,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
     one_of: OneOf<PropertyValues>,
@@ -129,6 +132,7 @@ impl PropertyType {
     pub const fn new(
         id: VersionedUri,
         title: String,
+        plural_title: Option<String>,
         description: Option<String>,
         one_of: OneOf<PropertyValues>,
     ) -> Self {
@@ -136,6 +140,7 @@ impl PropertyType {
             kind: PropertyTypeTag::PropertyType,
             id,
             title,
+            plural_title,
             description,
             one_of,
         }
@@ -149,6 +154,11 @@ impl PropertyType {
     #[must_use]
     pub fn title(&self) -> &str {
         &self.title
+    }
+
+    #[must_use]
+    pub fn plural_title(&self) -> Option<&str> {
+        self.plural_title.as_deref()
     }
 
     #[must_use]

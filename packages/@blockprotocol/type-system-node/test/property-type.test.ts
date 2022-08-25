@@ -5,6 +5,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/age/v/1",
     title: "Age",
+    pluralTitle: "Ages",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -38,6 +39,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/contrived-property/v/1",
     title: "Contrived Property",
+    pluralTitle: "Contrived Properties",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -59,6 +61,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/favorite-quote/v/1",
     title: "Favorite Quote",
+    pluralTitle: "Favorite Quotes",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -96,6 +99,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
     title: "Name",
+    pluralTitle: "Names",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -133,6 +137,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/user-id/v/1",
     title: "User ID",
+    pluralTitle: "User IDs",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -143,6 +148,7 @@ const propertyTypes: PropertyType[] = [
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/user-id/v/2",
     title: "User ID",
+    pluralTitle: "User IDs",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
