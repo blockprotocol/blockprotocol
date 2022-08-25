@@ -23,7 +23,7 @@
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
     "lint:markdownlint": "markdownlint \"**/*\"",
     "lint:prettier": "prettier --check --ignore-unknown \"**/*\"",
-    "lint:tsc": "yarn workspaces run lint:tsc",
+    "lint:tsc": "turbo run lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
     "dev": "yarn workspace @blockprotocol/site dev",
     "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
