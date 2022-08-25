@@ -27,7 +27,7 @@ const mirrorNpmPackageToR2 = async (
   npmPackageName: string,
   pathWithNamespace: string,
 ): Promise<{
-  extendedMetadata: ExpandedBlockMetadata;
+  expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const isRunningOnVercel = !!process.env.VERCEL;
 
@@ -194,7 +194,7 @@ const mirrorNpmPackageToR2 = async (
         : undefined,
   };
 
-  const extendedMetadata = expandBlockMetadata({
+  const expandedMetadata = expandBlockMetadata({
     metadata: metadataJson as BlockMetadata, // @todo add a comprehensive guard/validator for block-metadata.json
     source: sourceInformation,
     timestamps: { createdAt: now, lastUpdated: now },
@@ -203,7 +203,7 @@ const mirrorNpmPackageToR2 = async (
 
   fs.writeFileSync(
     path.resolve(packageFolder, metadataJsonPath),
-    JSON.stringify(extendedMetadata, undefined, 2),
+    JSON.stringify(expandedMetadata, undefined, 2),
   );
 
   /**
@@ -219,7 +219,7 @@ const mirrorNpmPackageToR2 = async (
   void cleanupDistFolder();
 
   return {
-    extendedMetadata,
+    expandedMetadata,
   };
 };
 
@@ -240,12 +240,12 @@ export const publishBlockFromNpm = async (
     throw new Error(`Block ${pathWithNamespace} already exists`);
   }
 
-  const { extendedMetadata } = await mirrorNpmPackageToR2(
+  const { expandedMetadata } = await mirrorNpmPackageToR2(
     npmPackageName,
     pathWithNamespace,
   );
 
-  await insertDbBlock(extendedMetadata);
+  await insertDbBlock(expandedMetadata);
 
-  return extendedMetadata;
+  return expandedMetadata;
 };
