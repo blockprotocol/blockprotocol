@@ -5,7 +5,7 @@ type BlockFormSectionProps = PropsWithChildren<{ title: string }>;
 
 export const BlockFormSection = ({
   children,
-  title
+  title,
 }: BlockFormSectionProps) => {
   return (
     <Box width="100%">

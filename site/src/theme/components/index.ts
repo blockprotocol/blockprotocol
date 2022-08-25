@@ -56,5 +56,5 @@ export const components: ThemeOptions["components"] = {
   MuiSkeleton: MuiSkeletonThemeOptions,
 
   /** ===== UTILS ===== */
-  MuiCssBaseline: MuiCssBaselineThemeOptions
+  MuiCssBaseline: MuiCssBaselineThemeOptions,
 };

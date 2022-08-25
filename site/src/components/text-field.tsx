@@ -4,7 +4,7 @@ import {
   Collapse,
   // eslint-disable-next-line no-restricted-imports
   TextField as MuiTextField,
-  TextFieldProps as MuiTextFieldProps
+  TextFieldProps as MuiTextFieldProps,
 } from "@mui/material";
 import FormHelperText from "@mui/material/FormHelperText";
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
@@ -49,13 +49,13 @@ export const TextField: FunctionComponent<TextFieldProps> = ({
               <FontAwesomeIcon
                 icon={faCircleExclamation}
                 sx={{
-                  fontSize: 22
+                  fontSize: 22,
                 }}
               />
             </Box>
           ) : (
             textFieldProps.InputProps?.endAdornment
-          )
+          ),
         }}
       />
       <Collapse

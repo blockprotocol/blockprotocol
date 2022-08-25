@@ -4,6 +4,6 @@ export const BlockFormContainer = styled(Paper)(() =>
   sx({
     flex: 1,
     width: "100%",
-    p: 6
-  })
+    p: 6,
+  }),
 );

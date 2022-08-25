@@ -12,7 +12,7 @@ type BlockFormLayoutProps = PropsWithChildren<{
 
 export const BlockFormLayout = ({
   children,
-  formContainerSx
+  formContainerSx,
 }: BlockFormLayoutProps) => {
   return (
     <Box
@@ -21,8 +21,8 @@ export const BlockFormLayout = ({
         gap: 4,
         alignItems: "flex-start",
         [breakpoints.down("md")]: {
-          flexDirection: "column"
-        }
+          flexDirection: "column",
+        },
       })}
     >
       <LinkButton

@@ -5,12 +5,12 @@ import {
   SnackbarMessage,
   // eslint-disable-next-line no-restricted-imports
   useSnackbar as libUseStackbar,
-  VariantType
+  VariantType,
 } from "notistack";
 
 type EnqueueWithoutVariant = (
   message: SnackbarMessage,
-  options?: Omit<OptionsObject, "variant">
+  options?: Omit<OptionsObject, "variant">,
 ) => SnackbarKey;
 
 type SnackbarVariants = Record<VariantType, EnqueueWithoutVariant>;
@@ -20,19 +20,19 @@ const variantTypes: VariantType[] = [
   "error",
   "info",
   "success",
-  "warning"
+  "warning",
 ];
 
 const generateSnackbarVariants = (
-  enqueueSnackbar: ProviderContext["enqueueSnackbar"]
+  enqueueSnackbar: ProviderContext["enqueueSnackbar"],
 ) => {
   /** @todo explain */
   const entries = variantTypes.map(
-    variant =>
+    (variant) =>
       [
         variant,
-        (message, options) => enqueueSnackbar(message, { ...options, variant })
-      ] as [VariantType, EnqueueWithoutVariant]
+        (message, options) => enqueueSnackbar(message, { ...options, variant }),
+      ] as [VariantType, EnqueueWithoutVariant],
   );
 
   /** @todo explain */

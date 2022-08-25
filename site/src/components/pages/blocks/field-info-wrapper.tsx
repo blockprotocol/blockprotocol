@@ -4,7 +4,7 @@ import { PropsWithChildren, ReactNode } from "react";
 export const FieldInfoWrapper = ({
   children,
   items,
-  title
+  title,
 }: PropsWithChildren<{ title: string; items: ReactNode[] }>) => {
   return (
     <Grid container columnSpacing={4}>
@@ -21,13 +21,13 @@ export const FieldInfoWrapper = ({
             dense
             subheader={<b>{title}</b>}
             disablePadding
-            sx={theme => ({
+            sx={(theme) => ({
               li: {
                 display: "list-item",
                 listStyleType: "disc",
                 listStylePosition: "inside",
-                p: theme.spacing(0, 1)
-              }
+                p: theme.spacing(0, 1),
+              },
             })}
           >
             {items.map((item, i) => (

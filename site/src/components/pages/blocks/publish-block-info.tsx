@@ -1,6 +1,6 @@
 import {
   faExternalLink,
-  faInfoCircle
+  faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { Alert, alertClasses, Box, Typography } from "@mui/material";
 
@@ -12,7 +12,7 @@ export const PublishBlockInfo = () => {
     <Alert
       icon={<FontAwesomeIcon icon={faInfoCircle} />}
       severity="info"
-      sx={theme => ({
+      sx={(theme) => ({
         width: "100%",
         alignItems: "center",
         padding: theme.spacing(3, 4),
@@ -22,8 +22,8 @@ export const PublishBlockInfo = () => {
           marginRight: theme.spacing(3),
           svg: {
             color: theme.palette.purple[200],
-            fontSize: theme.spacing(4)
-          }
+            fontSize: theme.spacing(4),
+          },
         },
 
         [`.${alertClasses.message}`]: {
@@ -32,8 +32,8 @@ export const PublishBlockInfo = () => {
           flexWrap: "wrap",
           gap: 2,
           overflow: "visible",
-          padding: 0
-        }
+          padding: 0,
+        },
       })}
     >
       <Box flexGrow={1}>
@@ -61,7 +61,7 @@ export const PublishBlockInfo = () => {
         target="_blank"
         sx={{
           display: "flex",
-          alignItems: "center"
+          alignItems: "center",
         }}
       >
         Learn more in the docs{" "}

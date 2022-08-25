@@ -13,11 +13,11 @@ export const PublishBlockCard = ({
   publishFrom,
   description,
   href,
-  logoSrc
+  logoSrc,
 }: PublishBlockCardProps) => {
   return (
     <Box
-      sx={theme => ({
+      sx={(theme) => ({
         display: "flex",
         alignItems: "center",
         p: theme.spacing(2.5, 3),
@@ -27,16 +27,16 @@ export const PublishBlockCard = ({
         transition: theme.transitions.create("border-color"),
 
         "&:hover": {
-          borderColor: theme.palette.purple[400]
+          borderColor: theme.palette.purple[400],
         },
         [theme.breakpoints.down("sm")]: {
           flexDirection: "column",
           alignItems: "flex-start",
 
           "& :last-child": {
-            width: "100%"
-          }
-        }
+            width: "100%",
+          },
+        },
       })}
     >
       <Box component="img" src={logoSrc} />
@@ -44,7 +44,7 @@ export const PublishBlockCard = ({
       <Box
         sx={{
           flex: 1,
-          opacity: href ? 1 : 0.5
+          opacity: href ? 1 : 0.5,
         }}
       >
         <Typography variant="bpHeading5" fontWeight={500} mb={0.5}>

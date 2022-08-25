@@ -5,7 +5,7 @@ export const DashboardSectionGrid = ({ children, ...props }: BoxProps) => (
     display="grid"
     gridTemplateColumns={{
       xs: "1fr",
-      md: "1fr 1fr"
+      md: "1fr 1fr",
     }}
     columnGap={3}
     rowGap={3}

@@ -175,5 +175,5 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
           }
 
           ${rootTypographyStyles}
-        `
+        `,
 };

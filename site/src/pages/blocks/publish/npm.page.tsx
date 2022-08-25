@@ -7,7 +7,7 @@ import { Button } from "../../../components/button";
 import { useSnackbar } from "../../../components/hooks/use-snackbar";
 import {
   AuthWallPageContent,
-  withAuthWall
+  withAuthWall,
 } from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
 import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
@@ -27,7 +27,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
   const snackbar = useSnackbar();
 
   const { register, handleSubmit, formState, watch } = useForm<FormValues>({
-    mode: "onChange"
+    mode: "onChange",
   });
 
   const onSubmit = async (data: FormValues) => {
@@ -66,7 +66,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
               gap: 8,
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start"
+              alignItems: "flex-start",
             }}
           >
             <PublishBlockInfo />
@@ -92,7 +92,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                   <>
                     e.g. blockprotocol.org/@{user.shortname}/
                     <b>{blockName || "[slug]"}</b>
-                  </>
+                  </>,
                 ]}
               >
                 <TextField

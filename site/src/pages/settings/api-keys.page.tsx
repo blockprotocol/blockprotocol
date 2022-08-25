@@ -7,7 +7,7 @@ import { WarningIcon } from "../../components/icons";
 import { Link } from "../../components/link";
 import {
   AuthWallPageContent,
-  withAuthWall
+  withAuthWall,
 } from "../../components/pages/auth-wall";
 import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
@@ -26,7 +26,7 @@ const ApiKeys: AuthWallPageContent = () => {
     showModal: boolean;
     keyToRegenerate?: UserFacingApiKeyProperties | undefined;
   }>({
-    showModal: false
+    showModal: false,
   });
 
   const fetchAndSetApiKeys = () =>
@@ -34,8 +34,10 @@ const ApiKeys: AuthWallPageContent = () => {
       .getUserApiKeys()
       .then(({ data }) =>
         data
-          ? setActiveApiKeys(data.apiKeysMetadata.filter(key => !key.revokedAt))
-          : null
+          ? setActiveApiKeys(
+              data.apiKeysMetadata.filter((key) => !key.revokedAt),
+            )
+          : null,
       );
 
   useEffect(() => {
@@ -45,7 +47,7 @@ const ApiKeys: AuthWallPageContent = () => {
 
   const tableRows: TableRows = useMemo(
     () =>
-      activeApiKeys.map(key => [
+      activeApiKeys.map((key) => [
         key.displayName,
         key.publicId,
         key.lastUsedAt ? (
@@ -53,17 +55,17 @@ const ApiKeys: AuthWallPageContent = () => {
         ) : (
           "Never"
         ),
-        <DateTimeCell key="createdAt" timestamp={key.createdAt} />
+        <DateTimeCell key="createdAt" timestamp={key.createdAt} />,
       ]),
 
-    [activeApiKeys]
+    [activeApiKeys],
   );
   const activeKey = activeApiKeys[0];
 
   const closeGenerateModal = () => {
     setGenerateStatus({
       showModal: false,
-      keyToRegenerate: undefined
+      keyToRegenerate: undefined,
     });
   };
 
@@ -90,14 +92,14 @@ const ApiKeys: AuthWallPageContent = () => {
                 "0px 4px 11px rgba(39, 50, 86, 0.04), 0px 2.59259px 6.44213px rgba(39, 50, 86, 0.08), 0px 0.5px 1px rgba(39, 50, 86, 0.15)",
               background: "white",
               width: "100%",
-              borderRadius: 2
+              borderRadius: 2,
             }}
             p={{ xs: 3, md: 6 }}
           >
             <Typography
               sx={{
                 typography: "bpLargeText",
-                fontWeight: "500"
+                fontWeight: "500",
               }}
             >
               API Keys
@@ -105,7 +107,7 @@ const ApiKeys: AuthWallPageContent = () => {
             <Box sx={{ my: 2 }}>
               <Typography
                 sx={{
-                  typography: "bpBodyCopy"
+                  typography: "bpBodyCopy",
                 }}
               >
                 These keys allow you to access the block protocol from within
@@ -113,7 +115,7 @@ const ApiKeys: AuthWallPageContent = () => {
               </Typography>
               <Typography
                 sx={{
-                  typography: "bpBodyCopy"
+                  typography: "bpBodyCopy",
                 }}
               >
                 Keep them private to prevent other people from accessing your
@@ -136,14 +138,14 @@ const ApiKeys: AuthWallPageContent = () => {
                 onClick={() =>
                   setGenerateStatus({
                     showModal: true,
-                    keyToRegenerate: activeKey
+                    keyToRegenerate: activeKey,
                   })
                 }
                 sx={{
                   width: {
                     xs: "100%",
-                    md: "auto"
-                  }
+                    md: "auto",
+                  },
                 }}
                 variant="tertiary"
               >

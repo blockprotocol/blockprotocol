@@ -1,7 +1,7 @@
 import {
   faAsterisk,
   faKey,
-  faUserPen
+  faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { BlockIcon } from "../../icons/block-icon";
@@ -11,16 +11,16 @@ import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
   {
     tabTitle: "Dashboard",
-    tabHref: "/dashboard"
+    tabHref: "/dashboard",
   },
   {
     tabTitle: "Blocks",
-    tabHref: "/blocks"
+    tabHref: "/blocks",
   },
   {
     tabTitle: "API Keys",
-    tabHref: "/settings/api-keys"
-  }
+    tabHref: "/settings/api-keys",
+  },
 ];
 
 export type DashboardSection = "create" | "manage" | "explore";
@@ -41,8 +41,8 @@ export const getDashboardSectionCards = (props: {
           "Read the quickstart guide and learn how to create and use blocks",
         link: {
           title: "Read the guide",
-          href: "/docs/developing-blocks"
-        }
+          href: "/docs/developing-blocks",
+        },
       },
       {
         title: "Publish a block",
@@ -54,8 +54,8 @@ export const getDashboardSectionCards = (props: {
         link: {
           title: "Publish a block",
           /** @todo link to block publishing flow */
-          href: `${props.profileLink}/blocks`
-        }
+          href: `${props.profileLink}/blocks`,
+        },
       },
       {
         title: "Create a Type",
@@ -67,9 +67,9 @@ export const getDashboardSectionCards = (props: {
           "Types are a formal way to describe data, links, properties and entities",
         link: {
           title: "Create a type",
-          onClick: props.openCreateSchemaModal
-        }
-      }
+          onClick: props.openCreateSchemaModal,
+        },
+      },
     ],
     manage: [
       {
@@ -78,10 +78,10 @@ export const getDashboardSectionCards = (props: {
           "Your API key will allow you to search for and blocks by name, author, or compatible data structure",
         link: {
           title: "Manage keys",
-          href: "/settings/api-keys"
+          href: "/settings/api-keys",
         },
         icon: faKey,
-        variant: "secondary"
+        variant: "secondary",
       },
       {
         /** @todo show "Complete your public profile" when profile details are editable */
@@ -90,10 +90,10 @@ export const getDashboardSectionCards = (props: {
           "Your bio and links help others discover your work, and appear alongside your public types and blocks",
         link: {
           title: "View Profile",
-          href: props.profileLink
+          href: props.profileLink,
         },
         icon: faUserPen,
-        variant: "secondary"
+        variant: "secondary",
       },
       {
         title: "Manage blocks",
@@ -101,10 +101,10 @@ export const getDashboardSectionCards = (props: {
           "View and modify the listings for blocks you’ve published to the hub",
         link: {
           title: "Manage blocks",
-          href: `${props.profileLink}/blocks`
+          href: `${props.profileLink}/blocks`,
         },
         CustomIcon: BlockIcon,
-        variant: "secondary"
+        variant: "secondary",
       },
       {
         title: "Manage types",
@@ -112,11 +112,11 @@ export const getDashboardSectionCards = (props: {
           "View and update the types you’ve created and made public on the hub",
         link: {
           title: "Manage types",
-          href: `${props.profileLink}/schemas`
+          href: `${props.profileLink}/schemas`,
         },
         icon: faAsterisk,
-        variant: "secondary"
-      }
+        variant: "secondary",
+      },
     ],
     explore: [
       {
@@ -125,11 +125,11 @@ export const getDashboardSectionCards = (props: {
           "View and test our the most popular blocks on the hub to see how they work",
         link: {
           title: "Browse blocks",
-          href: "/hub"
+          href: "/hub",
         },
         CustomIcon: SparklesIcon,
-        variant: "secondary"
-      }
+        variant: "secondary",
+      },
       /** @todo uncomment when searching types are available  */
       // {
       //   title: "Search public types",
@@ -142,6 +142,6 @@ export const getDashboardSectionCards = (props: {
       //   icon: faMagnifyingGlass,
       //   variant: "secondary",
       // },
-    ]
+    ],
   };
 };
