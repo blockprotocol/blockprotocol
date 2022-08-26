@@ -9,6 +9,7 @@ use serde_json;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
+pub use crate::ontology::data_type::error::ParseDataTypeError;
 use crate::{
     uri::{BaseUri, VersionedUri},
     ValidateUri, ValidationError,

@@ -1,19 +1,65 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
-* Checks if a given {DataType} is valid
-*
-* @throws {MalformedDataTypeError} if the data type is malformed
-* @param {DataType} dataTypeObj
-*/
-export function isValidDataType(dataTypeObj: DataType): void;
-/**
 * Checks if a given {PropertyType} is valid
 *
 * @throws {TempError} if the property type is malformed
 * @param {PropertyType} propertyTypeObj
 */
 export function isValidPropertyType(propertyTypeObj: PropertyType): void;
+export interface TempError {}
+
+export interface DataTypeReference {
+    $ref: VersionedUri;
+}
+
+export interface DataType extends Record<string, any> {
+    kind: 'dataType';
+    $id: VersionedUri;
+    title: string;
+    description?: string;
+    type: string;
+}
+
+type __ValidationErrorBaseUri = BaseUri;
+type __ValidationErrorVersionedUri = VersionedUri;
+declare namespace ValidationError {
+    export type MissingRequiredProperty = { type: "MissingRequiredProperty"; inner: __ValidationErrorBaseUri };
+    export type BaseUriMismatch = { type: "BaseUriMismatch"; inner: { base_uri: __ValidationErrorBaseUri; versioned_uri: __ValidationErrorVersionedUri } };
+    export type MissingRequiredLink = { type: "MissingRequiredLink"; inner: __ValidationErrorVersionedUri };
+    export type MismatchedPropertyCount = { type: "MismatchedPropertyCount"; inner: { actual: number; expected: number } };
+    export type EmptyOneOf = { type: "EmptyOneOf"; inner?: null };
+}
+
+export type ValidationError = ValidationError.MissingRequiredProperty | ValidationError.BaseUriMismatch | ValidationError.MissingRequiredLink | ValidationError.MismatchedPropertyCount | ValidationError.EmptyOneOf;
+
+type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
+declare namespace ParseVersionedUriError {
+    export type IncorrectFormatting = { type: "IncorrectFormatting"; inner?: null };
+    export type MissingBaseUri = { type: "MissingBaseUri"; inner?: null };
+    export type MissingVersion = { type: "MissingVersion"; inner?: null };
+    export type InvalidVersion = { type: "InvalidVersion"; inner?: null };
+    export type AdditionalEndContent = { type: "AdditionalEndContent"; inner?: null };
+    export type InvalidBaseUri = { type: "InvalidBaseUri"; inner: __ParseVersionedUriErrorParseBaseUriError };
+}
+
+export type ParseVersionedUriError = ParseVersionedUriError.IncorrectFormatting | ParseVersionedUriError.MissingBaseUri | ParseVersionedUriError.MissingVersion | ParseVersionedUriError.InvalidVersion | ParseVersionedUriError.AdditionalEndContent | ParseVersionedUriError.InvalidBaseUri;
+
+declare namespace ParseBaseUriError {
+    export type MissingTrailingSlash = { reason: "MissingTrailingSlash"; inner?: null };
+    export type UrlParseError = { reason: "UrlParseError"; inner: string };
+    export type CannotBeABase = { reason: "CannotBeABase"; inner?: null };
+}
+
+export type ParseBaseUriError = ParseBaseUriError.MissingTrailingSlash | ParseBaseUriError.UrlParseError | ParseBaseUriError.CannotBeABase;
+
+declare namespace Result {
+    export type Ok<T> = { type: "Ok"; inner: T };
+    export type Err<E> = { type: "Err"; inner: E };
+}
+
+export type Result<T, E> = Result.Ok<T> | Result.Err<E>;
+
 type __ValueOrArrayArray<A> = Array<A>;
 declare namespace ValueOrArray {
     export type Value<T> = T;
@@ -29,24 +75,6 @@ export interface Array<T> {
     maxItems?: number;
 }
 
-export interface OneOfRepr<T> {
-    oneOf: T[];
-}
-
-export interface OneOf<T> extends OneOfRepr<T> {}
-
-export interface DataTypeReference {
-    $ref: VersionedUri;
-}
-
-export interface DataType extends Record<string, any> {
-    kind: 'dataType';
-    $id: VersionedUri;
-    title: string;
-    description?: string;
-    type: string;
-}
-
 export interface Object<V> extends ObjectRepr<V> {}
 
 export interface ObjectRepr<V> {
@@ -56,6 +84,12 @@ export interface ObjectRepr<V> {
 }
 
 export type BaseUri = string;
+
+export interface OneOfRepr<T> {
+    oneOf: T[];
+}
+
+export interface OneOf<T> extends OneOfRepr<T> {}
 
 export interface PropertyTypeReference {
     $ref: VersionedUri;
@@ -88,9 +122,9 @@ export type VersionedUri = `${string}/v/${number}`;
  * Checks if a given URL string is a valid base URL.
  * 
  * @param {BaseUri} uri - The URL string.
- * @throws {ParseBaseUriError} if the given string is not a valid base URI
+ * @returns {Result} - @todo
  */
-export function isValidBaseUri(uri: string): void;
+export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>;
 
 
 
@@ -98,9 +132,9 @@ export function isValidBaseUri(uri: string): void;
  * Checks if a given URL string is a Block Protocol compliant Versioned URI.
  *
  * @param {string} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ * @returns {Result} - @todo
  */
-export function isVersionedUri(uri: string): uri is VersionedUri;
+export function validateVersionedUri(uri: string): Result<VersionedUri, ParseVersionedUriError>;
 
 
 
@@ -123,23 +157,6 @@ export function extractBaseUri(uri: VersionedUri): BaseUri;
 export function extractVersion(uri: VersionedUri): number;
 
 
-export interface TempError {}
-
-/**
-*/
-export class MalformedDataTypeError {
-  free(): void;
-}
-/**
-*/
-export class ParseBaseUriError {
-  free(): void;
-}
-/**
-*/
-export class ParseVersionedUriError {
-  free(): void;
-}
 /**
 */
 export class TempError {
@@ -150,16 +167,12 @@ export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembl
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly isValidDataType: (a: number, b: number) => void;
-  readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
-  readonly __wbg_parsebaseurierror_free: (a: number) => void;
-  readonly isValidBaseUri: (a: number, b: number, c: number) => void;
-  readonly isVersionedUri: (a: number, b: number, c: number) => void;
-  readonly extractBaseUri: (a: number, b: number, c: number) => void;
-  readonly extractVersion: (a: number, b: number, c: number) => void;
-  readonly __wbg_parseversionedurierror_free: (a: number) => void;
   readonly __wbg_temperror_free: (a: number) => void;
   readonly isValidPropertyType: (a: number, b: number) => void;
+  readonly validateBaseUri: (a: number, b: number) => number;
+  readonly validateVersionedUri: (a: number, b: number) => number;
+  readonly extractBaseUri: (a: number, b: number, c: number) => void;
+  readonly extractVersion: (a: number, b: number, c: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

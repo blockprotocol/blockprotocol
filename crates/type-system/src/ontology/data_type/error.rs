@@ -7,17 +7,26 @@
 )]
 use std::fmt;
 
-use thiserror::Error;
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
+use serde::{Deserialize, Serialize};
+
+use crate::{ontology::repr_shared::HasSerdeJsonError, uri::ParseVersionedUriError};
 
 // TODO: can we use tsify's into_wasm_abi or whatever it was
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[derive(Debug, Clone, PartialEq, Eq, Error)]
-pub struct MalformedDataTypeError;
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(untagged)]
+pub enum ParseDataTypeError {
+    VersionedUri(ParseVersionedUriError),
+    InvalidJson(String),
+}
 
-impl fmt::Display for MalformedDataTypeError {
+impl HasSerdeJsonError for ParseDataTypeError {
+    fn new_serde_json_error(contents: String) -> Self {
+        Self::InvalidJson(contents)
+    }
+}
+
+impl fmt::Display for ParseDataTypeError {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt.write_str("failed to deserialize Data Type")
+        fmt.write_str(&serde_json::to_string(self).expect("failed to deserialize Data Type"))
     }
 }

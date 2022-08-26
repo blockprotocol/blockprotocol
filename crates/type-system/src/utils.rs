@@ -1,12 +1,37 @@
 #[cfg(target_arch = "wasm32")]
-pub fn set_panic_hook() {
-    // When the `console_error_panic_hook` feature is enabled, we can call the
-    // `set_panic_hook` function at least once during initialization, and then
-    // we will get better error messages if our code ever panics.
-    //
-    // For more details see
-    // https://github.com/rustwasm/console_error_panic_hook#readme
-    console_error_panic_hook::set_once();
+pub use wasm::*;
+
+#[cfg(target_arch = "wasm32")]
+mod wasm {
+    use serde::{Deserialize, Serialize};
+    use tsify::Tsify;
+
+    pub fn set_panic_hook() {
+        // When the `console_error_panic_hook` feature is enabled, we can call the
+        // `set_panic_hook` function at least once during initialization, and then
+        // we will get better error messages if our code ever panics.
+        //
+        // For more details see
+        // https://github.com/rustwasm/console_error_panic_hook#readme
+        console_error_panic_hook::set_once();
+    }
+
+    /// TODO: Doc
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Tsify)]
+    #[serde(tag = "type", content = "inner")]
+    pub enum Result<T, E> {
+        Ok(T),
+        Err(E),
+    }
+
+    impl<T, E> From<std::result::Result<T, E>> for Result<T, E> {
+        fn from(result: std::result::Result<T, E>) -> Self {
+            match result {
+                Ok(val) => Self::Ok(val),
+                Err(err) => Self::Err(err),
+            }
+        }
+    }
 }
 
 #[cfg(test)]

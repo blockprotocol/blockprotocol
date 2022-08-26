@@ -1,4 +1,4 @@
-import { DataType, isValidDataType } from "..";
+import { DataType, validateDataType } from "..";
 
 const primitiveDataTypes: DataType[] = [
   {
@@ -73,20 +73,20 @@ const brokenTypes: any[] = [
 
 describe("isValidDataType", () => {
   test.each(primitiveDataTypes)("isValidDataType($title) succeeds", (input) => {
-    expect(() => isValidDataType(input)).not.toThrow();
+    expect(() => validateDataType(input)).not.toThrow();
   });
 
   test.each(invalidDataTypes)(
     "isValidDataType errors on invalid data type: %s",
     (input) => {
-      expect(() => isValidDataType(input)).toThrow();
+      expect(() => validateDataType(input)).not.toThrow();
     },
   );
 
   test.each(brokenTypes)(
     "isValidDataType cleanly errors on different type: %s",
     (input) => {
-      expect(() => isValidDataType(input)).toThrow();
+      expect(() => validateDataType(input)).toThrow();
     },
   );
 });

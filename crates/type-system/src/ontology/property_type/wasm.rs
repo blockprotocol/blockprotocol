@@ -4,7 +4,7 @@
 )]
 use wasm_bindgen::prelude::*;
 
-use crate::{PropertyType, ValidationError};
+use crate::PropertyType;
 
 #[wasm_bindgen]
 extern "C" {

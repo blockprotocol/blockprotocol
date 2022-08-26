@@ -3,10 +3,7 @@ use std::str::FromStr;
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
-use crate::{
-    ontology::uri::{error::ParseBaseUriError, BaseUri},
-    uri::{error::ParseVersionedUriError, VersionedUri},
-};
+use crate::{ontology::uri::BaseUri, uri::VersionedUri, utils::Result};
 
 // Generates the TypeScript alias: type VersionedUri = `${string}/v/${number}`
 #[derive(Tsify)]
@@ -14,35 +11,37 @@ use crate::{
 pub struct VersionedUriPatch(#[tsify(type = "`${string}/v/${number}`")] String);
 
 #[wasm_bindgen(typescript_custom_section)]
-const PARSE_BASE_URI_DEF: &'static str = r#"
+const VALIDATE_BASE_URI_DEF: &'static str = r#"
 /**
  * Checks if a given URL string is a valid base URL.
  * 
  * @param {BaseUri} uri - The URL string.
- * @throws {ParseBaseUriError} if the given string is not a valid base URI
+ * @returns {Result} - @todo
  */
-export function isValidBaseUri(uri: string): void;
+export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>;
 "#;
-#[wasm_bindgen(skip_typescript, js_name = isValidBaseUri)]
-pub fn is_valid_base_uri(uri: &str) -> Result<(), ParseBaseUriError> {
-    BaseUri::validate_str(uri)?;
-    Ok(())
+#[wasm_bindgen(skip_typescript, js_name = validateBaseUri)]
+pub fn validate_base_uri(uri: &str) -> JsValue {
+    let validate_result: Result<_, _> = BaseUri::validate_str(uri).into();
+
+    JsValue::from_serde(&validate_result).expect("failed to serialize result")
 }
 
 #[wasm_bindgen(typescript_custom_section)]
-const IS_VALID_VERSIONED_URI_DEF: &'static str = r#"
+const VALIDATE_VERSIONED_URI_DEF: &'static str = r#"
 /**
  * Checks if a given URL string is a Block Protocol compliant Versioned URI.
  *
  * @param {string} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ * @returns {Result} - @todo
  */
-export function isVersionedUri(uri: string): uri is VersionedUri;
+export function validateVersionedUri(uri: string): Result<VersionedUri, ParseVersionedUriError>;
 "#;
-#[wasm_bindgen(skip_typescript, js_name = isVersionedUri)]
-pub fn is_versioned_uri(uri: &str) -> Result<bool, ParseVersionedUriError> {
-    VersionedUri::from_str(uri)?;
-    Ok(true)
+#[wasm_bindgen(skip_typescript, js_name = validateVersionedUri)]
+pub fn validate_versioned_uri(uri: &str) -> JsValue {
+    let validate_result: Result<_, _> = VersionedUri::from_str(uri).into();
+
+    JsValue::from_serde(&validate_result).expect("failed to serialize result")
 }
 
 #[wasm_bindgen(typescript_custom_section)]
@@ -56,8 +55,11 @@ const EXTRACT_BASE_URI_DEF: &'static str = r#"
 export function extractBaseUri(uri: VersionedUri): BaseUri;
 "#;
 #[wasm_bindgen(skip_typescript, js_name = extractBaseUri)]
-pub fn extract_base_uri(uri: &str) -> Result<String, ParseVersionedUriError> {
-    Ok(VersionedUri::from_str(uri)?.base_uri.to_string())
+pub fn extract_base_uri(uri: &str) -> std::result::Result<String, JsValue> {
+    Ok(VersionedUri::from_str(uri)
+        .map_err(|err| JsValue::from_serde(&err).expect("failed to serialize error"))?
+        .base_uri
+        .to_string())
 }
 
 #[wasm_bindgen(typescript_custom_section)]
@@ -71,6 +73,8 @@ const EXTRACT_VERSION_DEF: &'static str = r#"
 export function extractVersion(uri: VersionedUri): number;
 "#;
 #[wasm_bindgen(skip_typescript, js_name = extractVersion)]
-pub fn extract_version(uri: &str) -> Result<u32, ParseVersionedUriError> {
-    Ok(VersionedUri::from_str(uri)?.version)
+pub fn extract_version(uri: &str) -> std::result::Result<u32, JsValue> {
+    Ok(VersionedUri::from_str(uri)
+        .map_err(|err| JsValue::from_serde(&err).expect("failed to serialize error"))?
+        .version)
 }

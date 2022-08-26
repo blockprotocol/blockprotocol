@@ -1,15 +1,11 @@
 let imports = {};
 imports['__wbindgen_placeholder__'] = module.exports;
 let wasm;
-const { TextEncoder, TextDecoder } = require(`util`);
+const { TextDecoder, TextEncoder } = require(`util`);
 
-const heap = new Array(32).fill(undefined);
+let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
-heap.push(undefined, null, true, false);
-
-function getObject(idx) { return heap[idx]; }
-
-let WASM_VECTOR_LEN = 0;
+cachedTextDecoder.decode();
 
 let cachedUint8Memory0 = new Uint8Array();
 
@@ -19,6 +15,29 @@ function getUint8Memory0() {
     }
     return cachedUint8Memory0;
 }
+
+function getStringFromWasm0(ptr, len) {
+    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
+}
+
+const heap = new Array(32).fill(undefined);
+
+heap.push(undefined, null, true, false);
+
+let heap_next = heap.length;
+
+function addHeapObject(obj) {
+    if (heap_next === heap.length) heap.push(heap.length + 1);
+    const idx = heap_next;
+    heap_next = heap[idx];
+
+    heap[idx] = obj;
+    return idx;
+}
+
+function getObject(idx) { return heap[idx]; }
+
+let WASM_VECTOR_LEN = 0;
 
 let cachedTextEncoder = new TextEncoder('utf-8');
 
@@ -82,14 +101,6 @@ function getInt32Memory0() {
     return cachedInt32Memory0;
 }
 
-let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
-
-cachedTextDecoder.decode();
-
-function getStringFromWasm0(ptr, len) {
-    return cachedTextDecoder.decode(getUint8Memory0().subarray(ptr, ptr + len));
-}
-
 let stack_pointer = 32;
 
 function addBorrowedObject(obj) {
@@ -97,8 +108,6 @@ function addBorrowedObject(obj) {
     heap[--stack_pointer] = obj;
     return stack_pointer;
 }
-
-let heap_next = heap.length;
 
 function dropObject(idx) {
     if (idx < 36) return;
@@ -112,15 +121,15 @@ function takeObject(idx) {
     return ret;
 }
 /**
-* Checks if a given {DataType} is valid
+* Checks if a given {PropertyType} is valid
 *
-* @throws {MalformedDataTypeError} if the data type is malformed
-* @param {DataType} dataTypeObj
+* @throws {TempError} if the property type is malformed
+* @param {PropertyType} propertyTypeObj
 */
-module.exports.isValidDataType = function(dataTypeObj) {
+module.exports.isValidPropertyType = function(propertyTypeObj) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.isValidDataType(retptr, addBorrowedObject(dataTypeObj));
+        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
         if (r1) {
@@ -132,53 +141,26 @@ module.exports.isValidDataType = function(dataTypeObj) {
     }
 };
 
-function addHeapObject(obj) {
-    if (heap_next === heap.length) heap.push(heap.length + 1);
-    const idx = heap_next;
-    heap_next = heap[idx];
-
-    heap[idx] = obj;
-    return idx;
-}
 /**
 * @param {string} uri
+* @returns {any}
 */
-module.exports.isValidBaseUri = function(uri) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        wasm.isValidBaseUri(retptr, ptr0, len0);
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-    }
+module.exports.validateBaseUri = function(uri) {
+    const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.validateBaseUri(ptr0, len0);
+    return takeObject(ret);
 };
 
 /**
 * @param {string} uri
-* @returns {boolean}
+* @returns {any}
 */
-module.exports.isVersionedUri = function(uri) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        wasm.isVersionedUri(retptr, ptr0, len0);
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        var r2 = getInt32Memory0()[retptr / 4 + 2];
-        if (r2) {
-            throw takeObject(r1);
-        }
-        return r0 !== 0;
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-    }
+module.exports.validateVersionedUri = function(uri) {
+    const ptr0 = passStringToWasm0(uri, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ret = wasm.validateVersionedUri(ptr0, len0);
+    return takeObject(ret);
 };
 
 /**
@@ -231,99 +213,6 @@ module.exports.extractVersion = function(uri) {
 };
 
 /**
-* Checks if a given {PropertyType} is valid
-*
-* @throws {TempError} if the property type is malformed
-* @param {PropertyType} propertyTypeObj
-*/
-module.exports.isValidPropertyType = function(propertyTypeObj) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        heap[stack_pointer++] = undefined;
-    }
-};
-
-/**
-*/
-class MalformedDataTypeError {
-
-    static __wrap(ptr) {
-        const obj = Object.create(MalformedDataTypeError.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_malformeddatatypeerror_free(ptr);
-    }
-}
-module.exports.MalformedDataTypeError = MalformedDataTypeError;
-/**
-*/
-class ParseBaseUriError {
-
-    static __wrap(ptr) {
-        const obj = Object.create(ParseBaseUriError.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_parsebaseurierror_free(ptr);
-    }
-}
-module.exports.ParseBaseUriError = ParseBaseUriError;
-/**
-*/
-class ParseVersionedUriError {
-
-    static __wrap(ptr) {
-        const obj = Object.create(ParseVersionedUriError.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_parseversionedurierror_free(ptr);
-    }
-}
-module.exports.ParseVersionedUriError = ParseVersionedUriError;
-/**
 */
 class TempError {
 
@@ -348,8 +237,13 @@ class TempError {
 }
 module.exports.TempError = TempError;
 
-module.exports.__wbg_malformeddatatypeerror_new = function(arg0) {
-    const ret = MalformedDataTypeError.__wrap(arg0);
+module.exports.__wbg_temperror_new = function(arg0) {
+    const ret = TempError.__wrap(arg0);
+    return addHeapObject(ret);
+};
+
+module.exports.__wbindgen_json_parse = function(arg0, arg1) {
+    const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
     return addHeapObject(ret);
 };
 
@@ -360,21 +254,6 @@ module.exports.__wbindgen_json_serialize = function(arg0, arg1) {
     const len0 = WASM_VECTOR_LEN;
     getInt32Memory0()[arg0 / 4 + 1] = len0;
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
-};
-
-module.exports.__wbg_temperror_new = function(arg0) {
-    const ret = TempError.__wrap(arg0);
-    return addHeapObject(ret);
-};
-
-module.exports.__wbg_parsebaseurierror_new = function(arg0) {
-    const ret = ParseBaseUriError.__wrap(arg0);
-    return addHeapObject(ret);
-};
-
-module.exports.__wbg_parseversionedurierror_new = function(arg0) {
-    const ret = ParseVersionedUriError.__wrap(arg0);
-    return addHeapObject(ret);
 };
 
 module.exports.__wbindgen_throw = function(arg0, arg1) {

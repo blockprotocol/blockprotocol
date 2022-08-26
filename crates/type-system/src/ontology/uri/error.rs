@@ -10,11 +10,16 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
+use tsify::Tsify;
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct ParseBaseUriError;
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(tag = "reason", content = "inner")]
+pub enum ParseBaseUriError {
+    MissingTrailingSlash,
+    UrlParseError(String), // TODO: can we do better than a string here
+    CannotBeABase,
+}
 
 impl fmt::Display for ParseBaseUriError {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -22,8 +27,8 @@ impl fmt::Display for ParseBaseUriError {
     }
 }
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "type", content = "inner")]
 pub enum ParseVersionedUriError {
     IncorrectFormatting,

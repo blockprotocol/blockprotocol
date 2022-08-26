@@ -12,7 +12,7 @@
     "moduleResolution": "node",
     "outDir": "dist/esm",
     // @todo: Change this and check as part of CI, we want to make sure that the generated bindings files are correct
-    "skipLibCheck": true,
+    //    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "es5"
@@ -24,7 +24,8 @@
     "./dev/**/*.ts",
     "./dev/**/*.tsx",
     "./dist/**/*.ts",
-    "./dist/**/*.tsx"
+    "./dist/**/*.tsx",
+    "./dist/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }

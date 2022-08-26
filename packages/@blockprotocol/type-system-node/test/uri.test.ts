@@ -1,11 +1,37 @@
 import {
   extractBaseUri,
   extractVersion,
-  isValidBaseUri,
-  isVersionedUri,
+  ParseBaseUriError,
+  validateBaseUri,
+  validateVersionedUri,
 } from "..";
 
-describe("parseBaseUri", () => {
+const invalidBaseUriCases: [string, ParseBaseUriError][] = [
+  ["http://example.com", { reason: "MissingTrailingSlash" }],
+  [
+    "\\example\\..\\demo/.\\/",
+    { reason: "UrlParseError", inner: "relative URL without a base" },
+  ],
+  [
+    "https://ex ample.org/",
+    { reason: "UrlParseError", inner: "invalid domain character" },
+  ],
+  [
+    "example/",
+    { reason: "UrlParseError", inner: "relative URL without a base" },
+  ],
+  [
+    "https://example.com:demo/",
+    { reason: "UrlParseError", inner: "invalid port number" },
+  ],
+  [
+    "http://[www.example.com]/",
+    { reason: "UrlParseError", inner: "invalid IPv6 address" },
+  ],
+  ["data:text/plain,Hello?World#/", { reason: "CannotBeABase" }],
+];
+
+describe("validateBaseUri", () => {
   test.each([
     ["http://example.com/"],
     ["file://localhost/documents/myfolder/"],
@@ -13,30 +39,29 @@ describe("parseBaseUri", () => {
     ["https://////example.com///"],
     ["file://loc%61lhost/"],
   ])("`parseBaseUri(%s)` succeeds", (input) => {
-    expect(() => isValidBaseUri(input)).not.toThrow();
+    expect(() => validateBaseUri(input)).not.toThrow();
   });
 
-  test.each([
-    "\\example\\..\\demo/.\\",
-    "https://ex ample.org/",
-    "example",
-    "https://example.com:demo",
-    "http://[www.example.com]/",
-    "data:text/plain,Hello?World#",
-  ])("`parseBaseUri(%s)` errors", (input) => {
-    expect(() => {
-      isValidBaseUri(input);
-    }).toThrow();
-  });
+  test.each(invalidBaseUriCases)(
+    "`parseBaseUri(%s)` errors",
+    (input, expected) => {
+      const result = validateBaseUri(input);
+      if (result.type === "Err") {
+        expect(result.inner).toEqual(expected);
+      } else {
+        throw new Error("validateBaseUri should have errored");
+      }
+    },
+  );
 });
 
-describe("isValidVersionedUri", () => {
+describe("validateVersionedUri", () => {
   test.each([
     ["http://example.com/v/0"],
     ["http://example.com/v/1"],
     ["http://example.com/v/20"],
   ])("`isValidVersionedUri(%s)` succeeds", (input) => {
-    expect(isVersionedUri(input)).toBe(true);
+    expect(validateVersionedUri(input)).toBe(true);
   });
 
   test.each([
@@ -48,7 +73,7 @@ describe("isValidVersionedUri", () => {
     ["http://example.com/v/foo"],
   ])("isValidVersionedUri(%s) errors", (input) => {
     expect(() => {
-      isVersionedUri(input);
+      validateVersionedUri(input);
     }).toThrow();
   });
 });
@@ -63,8 +88,11 @@ describe("extractBaseUri", () => {
     ],
     ["ftp://rms@example.com/foo/v/5", "ftp://rms@example.com/foo/"],
   ])("`extractBaseUri(%s)` succeeds", (input, expected) => {
-    if (isVersionedUri(input)) {
-      expect(extractBaseUri(input)).toBe(expected);
+    const result = validateVersionedUri(input);
+    if (result.type === "Ok") {
+      expect(extractBaseUri(result.inner)).toBe(expected);
+    } else {
+      throw new Error(result.inner.toString());
     }
   });
 });
@@ -76,8 +104,11 @@ describe("extractVersion", () => {
     ["file://localhost/documents/myfolder/v/10", 10],
     ["ftp://rms@example.com/foo/v/5", 5],
   ])("`extractVersion(%s)` succeeds", (input, expected) => {
-    if (isVersionedUri(input)) {
-      expect(extractVersion(input)).toBe(expected);
+    const result = validateVersionedUri(input);
+    if (result.type === "Ok") {
+      expect(extractVersion(result.inner)).toBe(expected);
+    } else {
+      throw new Error(result.inner.toString());
     }
   });
 });

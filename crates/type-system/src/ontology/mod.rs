@@ -13,3 +13,46 @@ pub mod property_type;
 pub mod uri;
 
 pub mod repr_shared;
+
+#[cfg(test)]
+mod tests {
+    use serde::{Deserialize, Serialize};
+    use tsify::Tsify;
+
+    use crate::{
+        ontology::{data_type::ParseDataTypeError, repr_shared::parse_serde_json_error},
+        DataType,
+    };
+
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Tsify)]
+    #[serde(tag = "type", content = "inner")]
+    pub enum MyResult<T, E> {
+        Ok(T),
+        Err(E),
+    }
+
+    pub fn isValidDataType(dataTypeObj: &'static str) -> MyResult<DataType, ParseDataTypeError> {
+        match serde_json::from_str::<DataType>(dataTypeObj) {
+            Ok(data_type) => MyResult::Ok(data_type),
+            Err(err) => MyResult::Err(parse_serde_json_error(&err)),
+        }
+    }
+
+    #[test]
+    fn my_test() {
+        let js = r#"{
+                "kind": "dataType",
+                "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2", // incorrectly versioned URI
+                "title": "Text",
+                "description": "An ordered sequence of characters",
+                "type": "string",08][pmpi
+              },
+              "#;
+
+        let data_type = isValidDataType(&js);
+        match data_type {
+            MyResult::Ok(data_type) => dbg!(data_type),
+            MyResult::Err(err) => panic!("{:?}", err),
+        };
+    }
+}
