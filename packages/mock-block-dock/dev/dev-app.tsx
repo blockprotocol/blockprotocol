@@ -90,7 +90,7 @@ const DevApp: FunctionComponent = () => {
             <option value="html-as-string">HTML as string</option>
           </select>
         </label>
-        <button onClick={() => setReadonly((prev) => !prev)}>
+        <button type="button" onClick={() => setReadonly((prev) => !prev)}>
           Toogle {readonly ? "off" : "on"} readonly
         </button>
       </div>

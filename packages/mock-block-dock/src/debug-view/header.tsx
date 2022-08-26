@@ -2,7 +2,6 @@ import {
   Box,
   Button as MuiButton,
   ButtonProps,
-  Chip,
   IconButton,
   styled,
   Tooltip,
@@ -40,9 +39,9 @@ const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
     variant="outlined"
     color="inherit"
     sx={[
-      ({}) => ({
+      {
         textTransform: "none",
-      }),
+      },
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >

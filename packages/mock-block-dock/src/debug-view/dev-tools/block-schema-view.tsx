@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { ChangeEvent } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
