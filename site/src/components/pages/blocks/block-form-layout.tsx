@@ -1,5 +1,5 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Box, SxProps, Theme } from "@mui/material";
+import { Box, buttonClasses, SxProps, Theme } from "@mui/material";
 import { PropsWithChildren } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
@@ -28,6 +28,11 @@ export const BlockFormLayout = ({
       <LinkButton
         href="/blocks"
         variant="transparent"
+        sx={({ palette }) => ({
+          [`.${buttonClasses.startIcon}`]: {
+            color: palette.purple[300],
+          },
+        })}
         startIcon={<FontAwesomeIcon icon={faArrowLeft} />}
       >
         Back to Blocks

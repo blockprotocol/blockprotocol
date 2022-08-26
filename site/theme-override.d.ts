@@ -3,6 +3,10 @@ import { CSSProperties } from "react";
 declare module "@mui/material/styles" {
   interface Palette {
     purple: {
+      20: string;
+      30: string;
+      40: string;
+      70: string;
       100: string;
       200: string;
       300: string;

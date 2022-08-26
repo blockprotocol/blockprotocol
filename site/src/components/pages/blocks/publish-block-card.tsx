@@ -27,7 +27,7 @@ export const PublishBlockCard = ({
         transition: theme.transitions.create("border-color"),
 
         "&:hover": {
-          borderColor: theme.palette.purple[400],
+          borderColor: theme.palette.purple[40],
         },
         [theme.breakpoints.down("sm")]: {
           flexDirection: "column",
