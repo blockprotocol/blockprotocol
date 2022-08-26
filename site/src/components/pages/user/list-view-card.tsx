@@ -1,6 +1,5 @@
 import { Box, BoxProps, Typography } from "@mui/material";
-import { formatDistance } from "date-fns";
-import { FunctionComponent } from "react";
+import { FunctionComponent, ReactNode } from "react";
 
 import { TableTreeIcon } from "../../icons";
 import { Link } from "../../link";
@@ -10,7 +9,7 @@ type ListViewCardProps = {
   title: string;
   description?: string | null;
   icon?: string | null;
-  lastUpdated?: string | null;
+  extraContent?: ReactNode;
   url: string;
   sx?: BoxProps["sx"];
 };
@@ -19,7 +18,7 @@ export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
   title,
   description,
   icon,
-  lastUpdated,
+  extraContent,
   url,
   sx = [],
 }) => {
@@ -97,12 +96,7 @@ export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
             color: ({ palette }) => palette.gray[70],
           }}
         >
-          {lastUpdated
-            ? `Updated 
-              ${formatDistance(new Date(lastUpdated), new Date(), {
-                addSuffix: true,
-              })}`
-            : ""}
+          {extraContent}
         </Typography>
       </Box>
     </Link>

@@ -2,6 +2,7 @@ import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
+import { formatUpdatedAt } from "../../../util/html-utils";
 import { ListViewCard } from "./list-view-card";
 import { Placeholder } from "./placeholder";
 import { BrowseHubButton, BuildBlockButton } from "./placeholder-buttons";
@@ -53,7 +54,7 @@ export const TabPanelContentsWithBlocks: FunctionComponent<
             icon={icon}
             title={displayName!}
             description={description}
-            lastUpdated={lastUpdated}
+            extraContent={formatUpdatedAt(lastUpdated)}
             url={blockSitePath}
           />
         ),
