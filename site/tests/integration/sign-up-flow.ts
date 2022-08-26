@@ -86,13 +86,13 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
   );
 
   await continueButton.click();
-  await expect(page).toHaveURL("/");
+  await expect(page).toHaveURL("/dashboard");
   await expect(
     page.locator('[data-testid="account-dropdown-button"]'),
   ).toBeVisible();
 });
 
-test("Sign Up page redirects logged in users to home page", async ({
+test("Sign Up page redirects logged in users to dashboard", async ({
   browserName,
   page,
 }) => {
@@ -108,7 +108,7 @@ test("Sign Up page redirects logged in users to home page", async ({
   await Promise.all([
     page.goto("/signup"),
     page.waitForNavigation({
-      url: (url) => url.pathname === "/",
+      url: (url) => url.pathname === "/dashboard",
     }),
   ]);
 });
