@@ -147,8 +147,9 @@ entity = *doc-comment *attribute entity [id] title "=" entity-value ";"
 type = "@" / "#" / ">" / "~"
 module = IDENT
 id = IDENT
+version = INTEGER
 
-variable = type? [module "/"] id 
+variable = type? [module "::"] id ["/" version] 
 ```
 
 ### Functions
