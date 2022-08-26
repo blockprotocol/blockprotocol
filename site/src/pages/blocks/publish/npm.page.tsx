@@ -32,18 +32,16 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
   });
 
   const onSubmit = async (data: FormValues) => {
-    try {
-      const res = await apiClient.publishBlockFromNPM(data);
+    const res = await apiClient.publishBlockFromNPM(data);
 
-      if (res.error) throw Error(res.error.message);
-
-      await router.push("/blocks");
-    } catch (error) {
-      /** @todo I think we can improve error handling instead of using `instanceof` every time */
-      snackbar.error(
-        error instanceof Error ? error.message : "Unexpected error",
-      );
+    if (res.error) {
+      /**  @todo depending on res.error.code, call form.setError on related field  */
+      return snackbar.error("error");
     }
+
+    snackbar.success("Block published successfully.");
+
+    await router.push("/blocks");
   };
 
   const blockName = watch("blockName");
@@ -82,7 +80,11 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                 <TextField
                   fullWidth
                   label={<RequiredLabel>npm package name</RequiredLabel>}
-                  inputProps={register("npmPackageName", { required: true })}
+                  inputProps={register("npmPackageName", {
+                    required: "Required",
+                  })}
+                  error={!!formState.errors.npmPackageName}
+                  helperText={formState.errors.npmPackageName?.message}
                 />
               </FieldInfoWrapper>
             </BlockFormSection>
@@ -101,7 +103,9 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
                 <TextField
                   fullWidth
                   label={<RequiredLabel>URL slug</RequiredLabel>}
-                  inputProps={register("blockName", { required: true })}
+                  inputProps={register("blockName", { required: "Required" })}
+                  error={!!formState.errors.blockName}
+                  helperText={formState.errors.blockName?.message}
                 />
               </FieldInfoWrapper>
             </BlockFormSection>
