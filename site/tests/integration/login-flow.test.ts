@@ -1,13 +1,32 @@
+import { Page } from "playwright";
 import { expect, test } from "playwright-test-coverage";
 
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails";
 import { resetDb } from "../shared/fixtures";
-import { login, openLoginModal } from "../shared/nav";
+import { login, openLoginModal, openMobileNav } from "../shared/nav";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
 const verificationCodeInputSelector = '[placeholder="your-verification-code"]';
 const accountDropdownButtonSelector = '[data-testid="account-dropdown-button"]';
+
+const expectSignupButton = async ({
+  page,
+  isMobile,
+}: {
+  isMobile: boolean | undefined;
+  page: Page;
+}) => {
+  if (isMobile) {
+    await openMobileNav(page);
+  }
+
+  const signupButton = page.locator(
+    isMobile ? "a:has-text('Sign Up')" : "header >> text=Sign Up",
+  );
+
+  await expect(signupButton).toBeVisible();
+};
 
 test.beforeEach(async () => {
   await resetDb();
@@ -113,11 +132,11 @@ test("login works for an existing user (via magic link)", async ({
   await expect(accountDropdownPopover).toContainText("Alice@alice");
   await accountDropdownPopover.locator(`span:has-text("Log Out")`).click();
 
-  // If we are able to open login modal, are logged out
-  await openLoginModal({ page, isMobile });
+  // If we are able to open see signup button, are logged out
+  await expectSignupButton({ page, isMobile });
   // Same for another page (after a reload)
   await page2.reload();
-  await openLoginModal({ page: page2, isMobile });
+  await expectSignupButton({ page: page2, isMobile });
 });
 
 test("login modal screen 1 correctly handles interactions", async ({
@@ -192,7 +211,7 @@ test.skip("login modal screen 2 correctly handles interactions", () => {
   // @todo write after finishing signup flow
 });
 
-test("Login page redirects logged in users to home page", async ({
+test("Login page redirects logged in users to dashboard", async ({
   browserName,
   page,
 }) => {
@@ -208,7 +227,7 @@ test("Login page redirects logged in users to home page", async ({
   await Promise.all([
     page.goto("/login"),
     page.waitForNavigation({
-      url: (url) => url.pathname === "/",
+      url: (url) => url.pathname === "/dashboard",
     }),
   ]);
 });

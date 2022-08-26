@@ -3,6 +3,7 @@ import cors from "cors";
 import { ValidationError } from "express-validator";
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
+import nextSession from "next-session";
 
 import { FRONTEND_URL } from "../../config";
 import { dbMiddleware, DbRequestExtensions } from "../middleware/db.middleware";
@@ -19,6 +20,8 @@ export type BaseApiRequest<RequestBody = unknown> = Omit<
   PassportRequestExtensions &
   DbRequestExtensions & {
     body: RequestBody;
+    // Session is not exported directly from library, so doing this instead
+    session?: Awaited<ReturnType<ReturnType<typeof nextSession>>>;
   };
 
 type ErrorResponse = {
