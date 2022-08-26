@@ -105,12 +105,11 @@ test("Docs page should contain key elements and interactions should work", async
     page.locator("text=PreviousEmbedding Blocks >> a"),
   ).toHaveAttribute("href", "/docs/embedding-blocks");
 
-  await expect(page.locator("text=NextCore Service >> a")).toBeVisible();
+  await expect(page.locator("text=NextCore Specification >> a")).toBeVisible();
 
-  await expect(page.locator("text=NextCore Service >> a")).toHaveAttribute(
-    "href",
-    "/docs/spec/core-specification",
-  );
+  await expect(
+    page.locator("text=NextCore Specification >> a"),
+  ).toHaveAttribute("href", "/docs/spec/core-specification");
 
   if (isMobile) {
     await openMobileNav(page);
