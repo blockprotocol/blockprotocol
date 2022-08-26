@@ -1,5 +1,3 @@
-import "./debug-view-styles.css";
-
 import {
   Box,
   CssBaseline,
@@ -39,8 +37,7 @@ const Drawer = styled(MuiDrawer)(({ theme }) => ({
     flexDirection: "column",
     paddingTop: `${HEADER_HEIGHT}px`,
     backgroundColor:
-      theme.palette.mode === "light" ? theme.palette.common.white : "#2C2C2C"
-    // borderColor: "#DDE7F0"  //gray-30
+      theme.palette.mode === "light" ? theme.palette.common.white : "#1E1E1E"
   }
 }));
 

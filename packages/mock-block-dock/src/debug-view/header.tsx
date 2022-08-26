@@ -54,25 +54,12 @@ const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
   color: theme.palette.mode === "light" ? customColors.gray[90] : "#8E8E8E"
 }));
 
-const chipInfo = {
-  html: {
-    color: "info",
-    label: "HTML Block"
-  },
-  "custom-element": {
-    label: "Custom Element Block",
-    color: "warning"
-  },
-  react: { label: "React Block", color: "secondary" }
-} as const;
-
 type Props = {
   darkMode: boolean;
   setDarkMode: Dispatch<SetStateAction<boolean>>;
-  blockType?: "html" | "react" | "custom-element";
 };
 
-export const Header = ({ darkMode, setDarkMode, blockType }: Props) => {
+export const Header = ({ darkMode, setDarkMode }: Props) => {
   const { setDebugMode } = useMockBlockDockContext();
 
   return (
@@ -80,7 +67,10 @@ export const Header = ({ darkMode, setDarkMode, blockType }: Props) => {
       <Logo
         sx={({ palette }) => ({
           fontSize: "3rem",
-          color: palette.mode === "light" ? "#0E1114" : palette.common.white,
+          color:
+            palette.mode === "light"
+              ? customColors.black
+              : palette.common.white,
           mr: "auto"
         })}
       />
@@ -117,14 +107,6 @@ export const Header = ({ darkMode, setDarkMode, blockType }: Props) => {
           {darkMode ? <LightMode /> : <DarkMode />}
         </IconButton>
       </Tooltip>
-
-      {blockType && (
-        <Chip
-          size="small"
-          label={chipInfo[blockType].label}
-          color={chipInfo[blockType].color}
-        />
-      )}
 
       <Button sx={{ mr: 1 }}>Docs</Button>
       <Button onClick={() => setDebugMode(false)}>Exit Debug</Button>

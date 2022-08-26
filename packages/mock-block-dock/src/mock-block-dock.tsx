@@ -1,3 +1,5 @@
+import "./debug-view-styles.css";
+
 import { HtmlBlockDefinition } from "@blockprotocol/core";
 import {
   BlockGraphProperties,
@@ -62,7 +64,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
   blockEntity: initialBlockEntity,
   blockSchema: initialBlockSchema,
-  debug,
+  debug: initialDebug,
   initialEntities,
   initialEntityTypes,
   initialLinks,
@@ -74,11 +76,15 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     blockGraph,
     blockSchema,
     datastore,
+    debugMode,
     entityTypes,
     graphServiceCallbacks,
     linkedAggregations,
+    readonly,
     setBlockSchema,
-    setBlockEntity
+    setBlockEntity,
+    setDebugMode,
+    setReadonly
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
     blockSchema: initialBlockSchema,
@@ -86,17 +92,15 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialEntityTypes,
     initialLinks,
     initialLinkedAggregations,
-    readonly: initialReadonly
+    readonly: !!initialReadonly,
+    debug: !!initialDebug
   });
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
     null
   );
-  const [readonly, setReadonly] = useState<boolean>(!!initialReadonly);
-  const [debugMode, setDebugMode] = useState(!!debug);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const prevReadonly = useRef<boolean | undefined>(initialReadonly);
 
   const blockType =
     "ReactComponent" in blockDefinition
@@ -116,10 +120,6 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       linkedAggregations
     }
   };
-
-  useEffect(() => {
-    prevReadonly.current = initialReadonly;
-  }, [initialReadonly]);
 
   useEffect(() => {
     if (!wrapperRef.current) {
@@ -214,11 +214,13 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       {!debugMode ? (
         <>
           {Component}
-          <div style={{ position: "fixed", bottom: 16, right: 16 }}>
-            <button type="button" onClick={() => setDebugMode(true)}>
-              Toggle Debug Mode
-            </button>
-          </div>
+          <button
+            className="mbd-debug-mode-toggle"
+            type="button"
+            onClick={() => setDebugMode(true)}
+          >
+            Toggle Debug Mode
+          </button>
         </>
       ) : (
         <DebugView blockType={blockType}>{Component}</DebugView>
