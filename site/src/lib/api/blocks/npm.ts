@@ -63,7 +63,8 @@ const mirrorNpmPackageToR2 = async (
     });
   } catch (err) {
     throw new Error(
-      `Could not retrieve npm package '${npmPackageName}'. Does it exist?`,
+      `Could not find package '${npmPackageName}'. Does it exist?`,
+      { cause: { code: "PACKAGE_NOT_FOUND" } },
     );
   }
 
@@ -82,7 +83,9 @@ const mirrorNpmPackageToR2 = async (
     nocase: true,
   })[0];
   if (!metadataJsonPath) {
-    throw new Error("No block-metadata.json present in package");
+    throw new Error("No block-metadata.json present in package", {
+      cause: { code: "INVALID_PACKAGE_CONTENTS" },
+    });
   }
 
   let metadataJson;
@@ -94,6 +97,9 @@ const mirrorNpmPackageToR2 = async (
   } catch (err) {
     throw new Error(
       `Could not parse block-metadata.json: ${(err as Error).message}`,
+      {
+        cause: { code: "INVALID_PACKAGE_CONTENTS" },
+      },
     );
   }
 
@@ -122,7 +128,9 @@ const mirrorNpmPackageToR2 = async (
   // check block-metadata.json contains required properties
   for (const key of ["blockType", "protocol", "schema", "source", "version"]) {
     if (!metadataJson[key]) {
-      throw new Error(`block-metadata.json must contain a '${key}' property`);
+      throw new Error(`block-metadata.json must contain a '${key}' property`, {
+        cause: { code: "INVALID_PACKAGE_CONTENTS" },
+      });
     }
   }
 
@@ -135,6 +143,9 @@ const mirrorNpmPackageToR2 = async (
   if (!sourceFileExists) {
     throw new Error(
       `block-metadata.json 'source' path '${sourcePath}' does not exist`,
+      {
+        cause: { code: "INVALID_PACKAGE_CONTENTS" },
+      },
     );
   }
 
@@ -149,6 +160,9 @@ const mirrorNpmPackageToR2 = async (
     if (!schemaFileExists) {
       throw new Error(
         `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
+        {
+          cause: { code: "INVALID_PACKAGE_CONTENTS" },
+        },
       );
     }
   }
@@ -237,7 +251,9 @@ export const publishBlockFromNpm = async (
 
   const existingBlock = await getDbBlock({ name, shortname });
   if (existingBlock) {
-    throw new Error(`Block ${pathWithNamespace} already exists`);
+    throw new Error(`Block name '${pathWithNamespace}' already exists`, {
+      cause: { code: "NAME_TAKEN" },
+    });
   }
 
   const { expandedMetadata } = await mirrorNpmPackageToR2(

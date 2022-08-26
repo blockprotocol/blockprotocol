@@ -21,8 +21,8 @@ export type BaseApiRequest<RequestBody = unknown> = Omit<
     body: RequestBody;
   };
 
-type ErrorResponse = {
-  errors: Partial<ValidationError>[];
+export type ErrorResponse = {
+  errors: Partial<ValidationError & { code?: string }>[];
 };
 
 export type BaseApiResponse<T = unknown> = NextApiResponse<T | ErrorResponse>;
