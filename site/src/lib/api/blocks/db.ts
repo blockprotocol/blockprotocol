@@ -14,18 +14,19 @@ export const getDbBlocks = async (filter: { shortname?: string }) => {
     .toArray();
 };
 
-export const getDbBlock = async ({
-  name,
-  shortname,
-}: {
-  name: string;
-  shortname: string;
-}) => {
+export const getDbBlock = async (
+  filter:
+    | {
+        author: string;
+        name: string;
+      }
+    | { npmPackageName: string },
+) => {
   const { db } = await connectToDatabase();
 
   return db
     .collection<ExpandedBlockMetadata>(blocksDbCollectionName)
-    .findOne({ author: shortname, name }, queryOptions);
+    .findOne(filter, queryOptions);
 };
 
 export const insertDbBlock = async (block: ExpandedBlockMetadata) => {

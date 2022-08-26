@@ -3,7 +3,10 @@ import { body as bodyValidator, validationResult } from "express-validator";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { formatErrors } from "../../../util/api";
+import {
+  formatErrors,
+  isErrorContainingCauseWithCode,
+} from "../../../util/api";
 
 export type ApiBlockCreateRequest = {
   blockName: string;
@@ -39,9 +42,16 @@ export default createAuthenticatedHandler<
       });
       return res.status(200).json({ block });
     } catch (err) {
+      const errIsError = err instanceof Error;
+
+      const code = isErrorContainingCauseWithCode(err)
+        ? err.cause.code
+        : undefined;
+
       return res.status(400).json(
         formatErrors({
-          msg: err instanceof Error ? err.message : "unknown error",
+          code,
+          msg: errIsError ? err.message : "unknown error",
         }),
       );
     }
