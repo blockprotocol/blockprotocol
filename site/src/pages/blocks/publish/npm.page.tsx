@@ -1,3 +1,4 @@
+import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -5,6 +6,8 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
 import { useSnackbar } from "../../../components/hooks/use-snackbar";
+import { FontAwesomeIcon } from "../../../components/icons";
+import { Link } from "../../../components/link";
 import {
   AuthWallPageContent,
   withAuthWall,
@@ -39,8 +42,20 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
       return snackbar.error("error");
     }
 
-    snackbar.success("Block published successfully.");
+    const blockHref = `@${user.shortname}/blocks/${data.blockName}`;
 
+    snackbar.success(
+      <Box sx={{ wordBreak: "break-all" }}>
+        Your block was published successfully. It can now be found at{" "}
+        <Link
+          href={blockHref}
+          sx={{ color: "inherit", textDecoration: "underline" }}
+        >
+          {`blockprotocol.org/${blockHref}`}
+          <FontAwesomeIcon sx={{ ml: 0.5 }} icon={faExternalLink} />
+        </Link>
+      </Box>,
+    );
     await router.push("/blocks");
   };
 
