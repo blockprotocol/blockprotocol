@@ -166,7 +166,7 @@ export const LogsView = () => {
 
   return (
     <Box>
-      <Box mb={2}>
+      {/* <Box mb={2}>
         <Typography mr={1}>Filters </Typography>
         <Box display="flex" alignItems="center">
           <Typography variant="body2" mr={1}>
@@ -199,7 +199,7 @@ export const LogsView = () => {
             <MenuItem value="block">Block</MenuItem>
           </Select>
         </Box>
-      </Box>
+      </Box> */}
 
       <Box display="flex" mb={3}>
         <LogsContainer ref={logsContainerRef}>

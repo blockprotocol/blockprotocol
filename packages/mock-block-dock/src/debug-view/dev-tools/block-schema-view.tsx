@@ -17,11 +17,13 @@ export const BlockSchemaView = () => {
         }
 
         const schema = JSON.parse(evt.target.result);
+
+        console.log(schema);
         // @todo validate loaded schema file
 
         // @todo consider persisting block-schema, perhaps to localstorage
         // so user doesn't have to load schema all the time
-        setBlockSchema(schema);
+        setBlockSchema(schema ?? undefined);
       };
       reader.readAsText(files[0]);
     }

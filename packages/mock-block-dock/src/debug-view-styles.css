@@ -30,8 +30,8 @@
 .mbd-debug-mode-toggle {
     font-family: Inter, "Helvetica", "Arial", sans-serif;
     position: fixed;
-    bottom: 32px;
-    left: 32px;
+    top: 8px;
+    right: 20px;
     background-color: white;
     border: 1px solid #DDE7F0;
     color: #37434e;

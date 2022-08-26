@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { ReactNode, useState } from "react";
 
-import packageInfo from "../package.json";
 import { DevTools } from "./debug-view/dev-tools";
 import { Header, HEADER_HEIGHT } from "./debug-view/header";
 import { darkTheme, lightTheme } from "./debug-view/theme";
@@ -26,7 +25,7 @@ export const MainContainer = styled(Box)(() => ({
   flex: 1,
   overflowY: "scroll",
   position: "relative",
-  marginLeft: SIDEBAR_WIDTH,
+  // marginLeft: SIDEBAR_WIDTH,
 }));
 
 const Drawer = styled(MuiDrawer)(({ theme }) => ({
@@ -49,14 +48,14 @@ export const DebugView = ({ children }: DebugViewProps) => {
       <Box height="100vh" display="flex" flexDirection="column">
         <Header darkMode={darkMode} setDarkMode={setDarkMode} />
         <Box flex={1} display="flex">
-          <Drawer variant="persistent" open>
+          {/* <Drawer variant="persistent" open>
             <Typography variant="body1" mt={4} textAlign="center">
               Mock Block Dock
             </Typography>
             <Typography variant="subtitle2" textAlign="center">
               v{packageInfo.version}
             </Typography>
-          </Drawer>
+          </Drawer> */}
           <MainContainer component="main">
             <Box flex={1} padding={3.75}>
               {children}
@@ -68,3 +67,7 @@ export const DebugView = ({ children }: DebugViewProps) => {
     </ThemeProvider>
   );
 };
+// background to main section
+// version to header
+//  maybe switch between bottom and side view for devtools
+// where it says person

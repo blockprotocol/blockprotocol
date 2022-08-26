@@ -58,21 +58,30 @@ type Props = {
   setDarkMode: Dispatch<SetStateAction<boolean>>;
 };
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const packageVersion = __VERSION__; // eslint-disable-line
+
 export const Header = ({ darkMode, setDarkMode }: Props) => {
   const { setDebugMode } = useMockBlockDockContext();
 
   return (
     <Container>
-      <Logo
-        sx={({ palette }) => ({
-          fontSize: "3rem",
-          color:
-            palette.mode === "light"
-              ? customColors.black
-              : palette.common.white,
-          mr: "auto",
-        })}
-      />
+      <Box display="flex" alignItems="center" mr="auto">
+        <Logo
+          sx={({ palette }) => ({
+            fontSize: "3rem",
+            color:
+              palette.mode === "light"
+                ? customColors.black
+                : palette.common.white,
+            mr: 1,
+          })}
+        />
+        <Typography variant="caption" color={customColors.gray[60]}>
+          {packageVersion}
+        </Typography>
+      </Box>
 
       <Box
         sx={{
@@ -107,7 +116,9 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
         </IconButton>
       </Tooltip>
 
-      <Button sx={{ mr: 1 }}>Docs</Button>
+      <Button href="https://blockprotocol.org/docs" sx={{ mr: 1 }}>
+        Docs
+      </Button>
       <Button onClick={() => setDebugMode(false)}>Exit Debug</Button>
     </Container>
   );

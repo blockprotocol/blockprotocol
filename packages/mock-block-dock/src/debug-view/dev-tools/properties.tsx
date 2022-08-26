@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import Ajv from "ajv";
+import { useEffect, useMemo } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { BlockSchemaView } from "./block-schema-view";
@@ -18,8 +19,14 @@ const ajv = new Ajv();
 export const PropertiesView = () => {
   const { readonly, setReadonly, blockSchema, blockEntity, setBlockEntity } =
     useMockBlockDockContext();
+
   const validate = ajv.compile(blockSchema ?? {});
+
   validate(blockEntity);
+
+  // useEffect(() => {
+  //   validate(blockEntity);
+  // }, [blockEntity]);
 
   return (
     <Container maxWidth="xl">
