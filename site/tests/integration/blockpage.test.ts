@@ -6,11 +6,11 @@ import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
 const typedBlocksData = blocksData as ExpandedBlockMetadata[];
 
 const codeBlock = typedBlocksData.find(
-  ({ name }) => name === "@hashintel/block-code",
+  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
 );
 
 const unsupportedBlock = typedBlocksData.find(
-  ({ name }) => name === "@hashintel/block-embed",
+  ({ pathWithNamespace }) => pathWithNamespace === "@hash/embed",
 );
 
 if (!codeBlock || !unsupportedBlock) {
@@ -22,7 +22,7 @@ test("Block page should contain key elements", async ({
   isMobile,
   browserName,
 }) => {
-  await page.goto(codeBlock.blockPackagePath);
+  await page.goto(codeBlock.blockSitePath);
 
   await expect(
     page.locator(`h1:has-text("${codeBlock.displayName!}")`),
@@ -84,7 +84,9 @@ test("Block page should contain key elements", async ({
   if (browserName !== "webkit") {
     await expect(
       page.frameLocator("iframe[title='block']").locator("input"),
-    ).toBeVisible();
+    ).toBeVisible({
+      timeout: 30000, // @todo Remove after re-engineering block sandbox
+    });
     await expect(
       page.frameLocator("iframe[title='block']").locator("input"),
     ).toHaveValue(blockExample.caption!);
@@ -113,7 +115,7 @@ test("should show an error message if an unsupported block is rendered", async (
   page,
   isMobile,
 }) => {
-  await page.goto(unsupportedBlock.blockPackagePath);
+  await page.goto(unsupportedBlock.blockSitePath);
 
   const blockExample = unsupportedBlock.examples![0] as Record<string, string>;
 

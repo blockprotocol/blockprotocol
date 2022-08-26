@@ -4,9 +4,7 @@ import execa from "execa";
 const script = async () => {
   console.log(chalk.bold("Launching site in dev mode..."));
 
-  await import("./generate-sitemap");
-
-  await import("./generate-blocks-data");
+  await import("./codegen");
 
   await import("./create-db-indexes");
 

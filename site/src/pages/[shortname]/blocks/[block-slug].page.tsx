@@ -26,12 +26,12 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
+import { getAllBlocks } from "../../../lib/api/blocks";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  readBlockDataFromDisk,
   readBlockReadmeFromDisk,
-  readBlocksFromDisk,
+  retrieveBlockFileContent,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
 
@@ -129,9 +129,7 @@ export const getStaticPaths: GetStaticPaths<
   BlockPageQueryParams
 > = async () => {
   return {
-    paths: (await readBlocksFromDisk()).map(
-      (metadata) => metadata.blockPackagePath,
-    ),
+    paths: [],
     fallback: "blocking",
   };
 };
@@ -182,12 +180,12 @@ export const getStaticProps: GetStaticProps<
   if (!shortname.startsWith("@")) {
     return { notFound: true };
   }
+  const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const packagePath = `${shortname}/${blockSlug}`;
-  const catalog = await readBlocksFromDisk();
+  const blocks = getAllBlocks();
 
-  const blockMetadata = catalog.find(
-    (metadata) => metadata.packagePath === packagePath,
+  const blockMetadata = blocks.find(
+    (metadata) => metadata.pathWithNamespace === pathWithNamespace,
   );
 
   if (!blockMetadata) {
@@ -195,7 +193,9 @@ export const getStaticProps: GetStaticProps<
     return { notFound: true };
   }
 
-  const { schema, exampleGraph } = await readBlockDataFromDisk(blockMetadata);
+  const { schema, exampleGraph } = await retrieveBlockFileContent(
+    blockMetadata,
+  );
 
   const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
 
@@ -216,7 +216,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       blockMetadata,
       ...(compiledReadme ? { compiledReadme } : {}), // https://github.com/vercel/next.js/discussions/11209
-      sliderItems: excludeHiddenBlocks(catalog).filter(
+      sliderItems: excludeHiddenBlocks(blocks).filter(
         ({ name }) => name !== blockMetadata.name,
       ),
       sandboxBaseUrl: generateSandboxBaseUrl(),

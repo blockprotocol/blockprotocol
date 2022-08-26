@@ -1,0 +1,21 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "public/blocks/**",
+        "public/schemas/**"
+      ],
+      "dependsOn": ["codegen", "^build"]
+    },
+    "codegen": {
+      "outputs": ["blocks-data.json", "site-map.json"]
+    },
+    "lint:tsc": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    }
+  }
+}

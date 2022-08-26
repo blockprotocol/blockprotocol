@@ -1,7 +1,8 @@
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
-import { readBlockDataFromDisk, readBlocksFromDisk } from "../../../lib/blocks";
+import { getBlockByUserAndName } from "../../../lib/api/blocks";
+import { retrieveBlockFileContent } from "../../../lib/blocks";
 
 /**
  * @todo potentially remove after building blocks to ESM
@@ -21,13 +22,12 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const catalog = await readBlocksFromDisk();
+  const shortname = (req.query.shortname as string).replace(/^@/, "");
 
-  const packagePath = `${req.query.shortname}/${req.query.blockslug}`;
-
-  const blockMetadata = catalog.find(
-    (metadata) => metadata.packagePath === packagePath,
-  );
+  const blockMetadata = getBlockByUserAndName({
+    shortname,
+    name: req.query.blockslug as string,
+  });
 
   if (!blockMetadata) {
     res.status(404);
@@ -36,11 +36,9 @@ const handler: NextApiHandler = async (req, res) => {
     return;
   }
 
-  const { exampleGraph } = await readBlockDataFromDisk(blockMetadata);
+  const { exampleGraph } = await retrieveBlockFileContent(blockMetadata);
 
-  // @todo revert; context: https://hashintel.slack.com/archives/C02LG39FJAU/p1661170257710909
-  // const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
-  const mockBlockDockVersion = "0.0.20";
+  const mockBlockDockVersion = packageJson.dependencies["mock-block-dock"];
 
   const reactVersion =
     blockMetadata.externals?.react ?? packageJson.dependencies.react;

@@ -16,7 +16,7 @@ test("Docs page should contain key elements and interactions should work", async
 
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
-  const sidebarSelector = page.locator(
+  const sidebarLocator = page.locator(
     isMobile ? "[data-testid='mobile-nav']" : "aside",
   );
 
@@ -24,7 +24,7 @@ test("Docs page should contain key elements and interactions should work", async
     await openMobileNav(page);
   }
 
-  await expect(sidebarSelector).toBeVisible();
+  await expect(sidebarLocator).toBeVisible();
 
   for (const [name, href] of [
     ["Introduction", "/docs"],
@@ -33,28 +33,28 @@ test("Docs page should contain key elements and interactions should work", async
     ["Specification", "/docs/spec"],
     ["FAQs", "/docs/faq"],
   ] as const) {
-    const item = sidebarSelector.locator(`a:has-text("${name}")`).first();
+    const item = sidebarLocator.locator(`a:has-text("${name}")`).first();
     await expect(item).toBeVisible();
     await expect(item).toHaveAttribute("href", href);
   }
 
   // confirm expand button works
-  await sidebarSelector
+  await sidebarLocator
     .locator(':has-text("Introduction") + button')
     .first()
     .click();
 
   await expect(
-    sidebarSelector.locator('a:has-text("Overview")').first(),
+    sidebarLocator.locator('a:has-text("Overview")').first(),
   ).not.toBeVisible();
 
-  await sidebarSelector
+  await sidebarLocator
     .locator(':has-text("Introduction") + button')
     .first()
     .click();
 
   await expect(
-    sidebarSelector.locator('a:has-text("Overview")').first(),
+    sidebarLocator.locator('a:has-text("Overview")').first(),
   ).toBeVisible();
 
   if (isMobile) {
@@ -72,7 +72,7 @@ test("Docs page should contain key elements and interactions should work", async
   }
 
   // navigate to spec page
-  await sidebarSelector.locator("a:has-text('Specification')").first().click();
+  await sidebarLocator.locator("a:has-text('Specification')").first().click();
 
   await expect(page).toHaveURL("/docs/spec");
 
@@ -116,7 +116,7 @@ test("Docs page should contain key elements and interactions should work", async
     await openMobileNav(page);
   }
 
-  await sidebarSelector.locator("a:has-text('FAQs')").click();
+  await sidebarLocator.locator("a:has-text('FAQs')").click();
 
   await expect(page.locator('h1:has-text("FAQs")')).toBeVisible();
 
