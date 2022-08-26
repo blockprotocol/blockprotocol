@@ -4163,7 +4163,7 @@ ajv@^6.10.0, ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.0.1, ajv@^8.11.0, ajv@^8.8.0:
+ajv@^8.0.0, ajv@^8.0.1, ajv@^8.8.0, ajv@^8.9.0:
   version "8.11.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.11.0.tgz#977e91dd96ca669f54a11e23e378e33b884a565f"
   integrity sha512-wGgprdCvMalC0BztXvitD2hC04YffAvtsUn93JbGXYLAtCUO4xd17mCCZQxUOItiBwZvJScWo8NIvQMQ71rdpg==
@@ -9776,6 +9776,22 @@ mock-block-dock@0.0.10:
   dependencies:
     blockprotocol "0.0.10"
     lodash "^4.17.21"
+    uuid "^8.3.2"
+
+mock-block-dock@0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.22.tgz#2dfa3dc57e67a9aebb12bd4786c6842e70d83135"
+  integrity sha512-4ouyLhyAwINgLVjuntjnI8rrVvYni0hkSXHivJrqXXeHeY+FXgrNhX2M2WQzPM1M+EeQo4k/kzHN/5iMlU5ZDg==
+  dependencies:
+    "@blockprotocol/core" "0.0.10"
+    "@blockprotocol/graph" "0.0.14"
+    "@emotion/react" "^11.10.0"
+    "@emotion/styled" "^11.10.0"
+    "@lit-labs/react" "^1.0.4"
+    "@mui/icons-material" "^5.8.4"
+    "@mui/material" "^5.10.1"
+    lodash "^4.17.21"
+    react-json-view "^1.21.3"
     uuid "^8.3.2"
 
 mongodb-connection-string-url@^2.3.2:
