@@ -85,7 +85,7 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     redirectRef.current = () => {
-      void router.push(redirectPath ?? "/");
+      void router.push(redirectPath ?? "/dashboard");
     };
   }, [router, redirectPath]);
 

@@ -20,11 +20,6 @@ const blockWidthStyles = {
   width: "100%",
 };
 
-const cardHoverTransition = {
-  duration: 300,
-  easing: "ease",
-};
-
 const BlockCardLoading = () => {
   return (
     <Box
@@ -83,19 +78,18 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
     author,
     version,
     lastUpdated,
-    blockPackagePath,
+    blockSitePath,
     icon,
   } = data;
 
   return (
-    <Link data-testid="block-card" href={blockPackagePath}>
+    <Link data-testid="block-card" href={blockSitePath}>
       <Box
         sx={{
           ...blockWidthStyles,
           position: "relative",
           borderRadius: "8px",
-          transition: ({ transitions }) =>
-            transitions.create(["transform"], cardHoverTransition),
+          transition: ({ transitions }) => transitions.create("transform"),
           backgroundColor: ({ palette }) => palette.common.white,
           cursor: "pointer",
           "&::before, &::after": {
@@ -107,8 +101,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
             height: "100%",
             pointerEvents: "none",
             borderRadius: "8px",
-            transition: ({ transitions }) =>
-              transitions.create(["opacity"], cardHoverTransition),
+            transition: ({ transitions }) => transitions.create("opacity"),
           },
           "&::before": {
             boxShadow: 1,

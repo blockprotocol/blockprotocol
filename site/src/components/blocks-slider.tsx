@@ -17,10 +17,10 @@ export const BlocksSlider: FunctionComponent<BlocksSliderProps> = ({
       data-testid="block-slider"
       data={catalog}
       itemKey={({ name }) => name!}
-      renderItem={({ displayName, name, image, blockPackagePath }) => {
+      renderItem={({ displayName, name, image, blockSitePath }) => {
         return (
           <Link
-            href={blockPackagePath}
+            href={blockSitePath}
             sx={{ display: "block", maxWidth: 500, mx: "auto" }}
           >
             <Box

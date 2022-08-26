@@ -64,7 +64,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   const prevPackage = useRef<string | undefined>(undefined);
 
   useEffect(() => {
-    if (prevPackage.current !== metadata?.packagePath) {
+    if (prevPackage.current !== metadata?.pathWithNamespace) {
       const example = {
         ...metadata?.examples?.[0],
         ...metadata?.variants?.[0]?.examples?.[0],
@@ -80,7 +80,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
 
       setBlockVariantsTab(0);
 
-      prevPackage.current = metadata.packagePath;
+      prevPackage.current = metadata.pathWithNamespace;
     }
   }, [metadata]);
 
