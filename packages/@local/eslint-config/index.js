@@ -303,7 +303,7 @@ module.exports = {
     {
       files: ["site/**"],
       parserOptions: {
-        tsconfigRootDir: `${__dirname}/site`,
+        tsconfigRootDir: `${__dirname}/../../../site`,
         project: "tsconfig.json",
       },
       rules: {
