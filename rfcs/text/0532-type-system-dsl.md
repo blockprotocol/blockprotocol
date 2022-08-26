@@ -234,6 +234,17 @@ The version is optional, and if not specified will default to the latest version
 beware that this means that implementations may update every type when the mentioned type
 was updated and the version wasn't pinned.
 
+The type prefix is optional and is inferred to a concrete one depending on the context
+used, this means `~> link` is equivalent to `~> >self::link`.
+
+#### Inference Rules
+
+* Link in entity: `~> link` inferred to `~> >self::link`
+* Key of property: `prop "Prop" = { bp::a };` inferred to `prop "Prop" = { @bp::a };`
+* Mention of reference in property: `prop "Prop" = [bp::number; ..5];` inferred
+  to `prop "Prop" = [#bp::number; ..5];`
+* Key of entity: `entity "Entity" = { a };` inferred to `entity "Entity" = { @self::a };`
+
 #### Example 1
 
 ```
