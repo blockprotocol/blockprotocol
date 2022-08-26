@@ -109,7 +109,7 @@ test("Docs page should contain key elements and interactions should work", async
 
   await expect(page.locator("text=NextCore >> a")).toHaveAttribute(
     "href",
-    "/docs/spec/core-specification",
+    "/docs/spec/core",
   );
 
   if (isMobile) {
