@@ -8,7 +8,7 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useState
+  useState,
 } from "react";
 
 import { MockData } from "./use-mock-block-props/use-mock-datastore";
@@ -21,9 +21,9 @@ type MockBlockDockInfo = {
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
   blockSchema?: Partial<EntityType>;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType> | undefined>>;
   blockEntity?: Entity;
-  setBlockEntity: Dispatch<SetStateAction<Entity>>;
+  setBlockEntity: Dispatch<SetStateAction<Entity | undefined>>;
   datastore: MockData;
   blockType?: "react" | "custom-element" | "html";
 };
@@ -41,10 +41,11 @@ const MockBlockDockContext = createContext<MockBlockDockInfo>({
     entities: [],
     links: [],
     linkedAggregationDefinitions: [],
-    entityTypes: []
-  }
+    entityTypes: [],
+  },
 });
 
+// @todo fix types
 type Props = {
   children: ReactNode;
   debugMode: boolean;
@@ -52,9 +53,9 @@ type Props = {
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
   blockSchema?: Partial<EntityType>;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType> | undefined>>;
   blockEntity?: Entity;
-  setBlockEntity?: Dispatch<SetStateAction<Entity>>;
+  setBlockEntity?: Dispatch<SetStateAction<Entity | undefined>>;
   datastore: MockData;
   blockType?: "react" | "custom-element" | "html";
 };
@@ -70,14 +71,14 @@ export const MockBlockDockProvider = ({
   blockEntity,
   setBlockEntity,
   datastore,
-  blockType
+  blockType,
 }: Props) => {
   const [logs, setLogs] = useState<Message[]>([]);
 
   useEffect(() => {
     const handler = (event: Event) => {
       const detail = (event as CustomEvent<Message>).detail;
-      setLogs(prev => [...prev, { ...detail }]);
+      setLogs((prev) => [...prev, { ...detail }]);
     };
 
     // @todo store event name in constant or pull from CoreHandler
@@ -101,7 +102,7 @@ export const MockBlockDockProvider = ({
       blockEntity,
       setBlockEntity,
       datastore,
-      blockType
+      blockType,
     };
   }, [
     debugMode,
@@ -114,10 +115,12 @@ export const MockBlockDockProvider = ({
     blockEntity,
     setBlockEntity,
     datastore,
-    blockType
+    blockType,
   ]);
 
   return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     <MockBlockDockContext.Provider value={values}>
       {children}
     </MockBlockDockContext.Provider>

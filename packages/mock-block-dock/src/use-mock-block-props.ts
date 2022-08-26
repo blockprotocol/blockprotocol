@@ -5,7 +5,7 @@ import {
   EntityType,
   Link,
   LinkedAggregation,
-  LinkedAggregationDefinition
+  LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
@@ -13,7 +13,7 @@ import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./use-mock-block-props/use-link-fields";
 import {
   MockData,
-  useMockDatastore
+  useMockDatastore,
 } from "./use-mock-block-props/use-mock-datastore";
 import { usePrevious } from "./use-previous";
 
@@ -63,15 +63,17 @@ export const useMockBlockProps = ({
   initialLinks,
   initialLinkedAggregations,
   readonly: readonly1,
-  debug: debug1
+  debug: debug1,
 }: Props): Result => {
   // @todo rename this
-  const [blockEntity, setBlockEntity] = useState(blockEntity1);
+  const [blockEntity, setBlockEntity] = useState<Entity | undefined>(
+    blockEntity1,
+  ); // @todo fix
   const [blockSchema, setBlockSchema] = useState<
     Partial<EntityType> | undefined
-  >(initialBlockSchema);
+  >(initialBlockSchema); // @todo fix types
   const [readonly, setReadonly] = useState<boolean>(readonly1);
-  const [debugMode, setDebugMode] = useState(!!debug1);
+  const [debugMode, setDebugMode] = useState<boolean>(!!debug1);
   // const [initialEntities1, setInitialEntities1] = useState(initialEntities);
   // const [initialEntityTypes1, setInitialEntityTypes1] =
   //   useState(initialEntityTypes);
@@ -93,14 +95,14 @@ export const useMockBlockProps = ({
         type: "object",
         $schema: "https://json-schema.org/draft/2019-09/schema",
         $id: "http://localhost/blockType1",
-        ...(blockSchema ?? {})
-      }
+        ...(blockSchema ?? {}),
+      },
     };
 
     const newBlockEntity: Entity = {
       entityId: "block1",
       entityTypeId,
-      properties: {}
+      properties: {},
     };
 
     if (blockEntity && Object.keys(blockEntity).length > 0) {
@@ -110,16 +112,16 @@ export const useMockBlockProps = ({
     const nextMockData: MockData = {
       entities: [
         newBlockEntity,
-        ...(initialEntities ?? initialMockData.entities)
+        ...(initialEntities ?? initialMockData.entities),
       ],
       entityTypes: [
         blockEntityType,
-        ...(initialEntityTypes ?? initialMockData.entityTypes)
+        ...(initialEntityTypes ?? initialMockData.entityTypes),
       ],
       links: initialLinks ?? initialMockData.links,
       linkedAggregationDefinitions:
         initialLinkedAggregations ??
-        initialMockData.linkedAggregationDefinitions
+        initialMockData.linkedAggregationDefinitions,
     };
 
     return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
@@ -129,7 +131,7 @@ export const useMockBlockProps = ({
     initialEntities,
     initialEntityTypes,
     initialLinks,
-    initialLinkedAggregations
+    initialLinkedAggregations,
   ]);
 
   const datastore = useMockDatastore(mockData, readonly);
@@ -139,17 +141,17 @@ export const useMockBlockProps = ({
     entityTypes,
     graphServiceCallbacks,
     links,
-    linkedAggregationDefinitions
+    linkedAggregationDefinitions,
   } = datastore;
 
   const latestBlockEntity = useMemo(() => {
     return (
       entities.find(
-        entity => entity.entityId === initialBlockEntity.entityId
+        (entity) => entity.entityId === initialBlockEntity.entityId,
       ) ??
       // fallback in case the entityId of the wrapped component is updated by updating its props
       mockData.entities.find(
-        entity => entity.entityId === initialBlockEntity.entityId
+        (entity) => entity.entityId === initialBlockEntity.entityId,
       )
     );
   }, [entities, initialBlockEntity.entityId, mockData.entities]);
@@ -163,16 +165,17 @@ export const useMockBlockProps = ({
     entities,
     links,
     linkedAggregationDefinitions,
-    startingEntity: latestBlockEntity
+    startingEntity: latestBlockEntity,
   });
 
   // @todo we don't do anything with this type except check it exists - do we need to do this?
   const latestBlockEntityType = useMemo(
     () =>
       entityTypes.find(
-        entityType => entityType.entityTypeId === latestBlockEntity.entityTypeId
+        (entityType) =>
+          entityType.entityTypeId === latestBlockEntity.entityTypeId,
       ),
-    [entityTypes, latestBlockEntity.entityTypeId]
+    [entityTypes, latestBlockEntity.entityTypeId],
   );
 
   if (!latestBlockEntityType) {
@@ -200,6 +203,6 @@ export const useMockBlockProps = ({
     setBlockEntity,
     setReadonly,
     debugMode,
-    setDebugMode
+    setDebugMode,
   };
 };

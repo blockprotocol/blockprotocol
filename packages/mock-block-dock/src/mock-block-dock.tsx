@@ -7,14 +7,14 @@ import {
   EntityType,
   GraphEmbedderHandler,
   Link,
-  LinkedAggregationDefinition
+  LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import {
   ComponentType,
   FunctionComponent,
   useEffect,
   useRef,
-  useState
+  useState,
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
@@ -58,7 +58,7 @@ type MockBlockDockProps = {
  * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
  * @param [initialLinks] the links to include in the data store
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @para
+ * @param [readonly=false]
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
@@ -69,7 +69,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
-  readonly: initialReadonly
+  readonly: initialReadonly,
 }) => {
   const {
     blockEntity,
@@ -84,7 +84,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     setBlockSchema,
     setBlockEntity,
     setDebugMode,
-    setReadonly
+    setReadonly,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
     blockSchema: initialBlockSchema,
@@ -93,11 +93,11 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialLinks,
     initialLinkedAggregations,
     readonly: !!initialReadonly,
-    debug: !!initialDebug
+    debug: !!initialDebug,
   });
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
-    null
+    null,
   );
 
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -117,14 +117,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       blockEntity,
       blockGraph,
       entityTypes,
-      linkedAggregations
-    }
+      linkedAggregations,
+    },
   };
 
   useEffect(() => {
     if (!wrapperRef.current) {
       throw new Error(
-        "No reference to wrapping element – cannot listen for messages from block"
+        "No reference to wrapping element – cannot listen for messages from block",
       );
     } else if (!graphService) {
       setGraphService(
@@ -134,8 +134,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           linkedAggregations,
           callbacks: graphServiceCallbacks,
           element: wrapperRef.current,
-          readonly
-        })
+          readonly,
+        }),
       );
     }
   }, [
@@ -144,7 +144,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphService,
     graphServiceCallbacks,
     linkedAggregations,
-    readonly
+    readonly,
   ]);
 
   useEffect(() => {
@@ -223,7 +223,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           </button>
         </>
       ) : (
-        <DebugView blockType={blockType}>{Component}</DebugView>
+        <DebugView>{Component}</DebugView>
       )}
     </MockBlockDockProvider>
   );
