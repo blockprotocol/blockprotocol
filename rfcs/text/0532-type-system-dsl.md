@@ -120,6 +120,8 @@ Resources are types, which are declared in the DSL. They have $n$ inputs and one
 The inputs to a resource are implicitly defined, and are the resources that have been used
 in the current resource. The output of a resource is its identifier.
 
+You can only reference types for which you have explicitly defined an id.
+
 There are four types of resources:
 
 * `prop` (corresponding to property-types)
@@ -173,16 +175,6 @@ prop-value = variable / prop-object / prop-array / (prop-value "|" prop-value) /
 prop = *doc-comment *attribute prop [id] title "=" prop-value ";"
 ```
 
-### Type Alias
-
-[//]: # (TODO: use alias instead of "virtual" prop)
-
-```abnf
-alias = "alias" IDENT "=" prop-value;
-```
-
--> explain virtual
-
 #### Link Type
 
 ```abnf
@@ -200,10 +192,21 @@ title = STRING
 
 entity-link-direction = "~>" / "->"
 entity-link = link-direction reference 
+entity-item = reference / entity-link-direction
 
-entity-value = "{" [*(reference / entity-link-direction ",") (reference / entity-link-direction ",")] "}"
+entity-value = "{" [*(entity-item ",") (entity-item ",")] "}"
 entity = *doc-comment *attribute entity [id] title "=" entity-value ";"
 ```
+
+### Type Alias
+
+[//]: # (TODO: use alias instead of "virtual" prop)
+
+```abnf
+alias = "alias" IDENT "=" prop-value;
+```
+
+-> explain virtual
 
 ### Variables
 
@@ -216,15 +219,76 @@ version = INTEGER
 variable = type? [module "::"] id ["/" version] 
 ```
 
+Variables are used to reference to external and local resources, each type in the block
+protocol has a specific prefix:
+
+* `@` - property-type
+* `#` - data-type
+* `>` - link-type
+* `~` - entity
+
+The module refers to the use alias created for a repository of remote types, and can be
+omitted, if omitted the module will default to `self`, which is the current repository.
+
+The version is optional, and if not specified will default to the latest version, be
+beware that this means that implementations may update every type when the mentioned type
+was updated and the version wasn't pinned.
+
+#### Example 1
+
+```
+imp std;
+
+prop age "Age" = #bp::number;
+```
+
+This means that the property `age` is of type `#bp::number` where `#` means it is a
+data-type, `bp` is the synonym for `blockprotocol` in the `std` module, pointing to the
+central repo, and `number` is a data-type that has been defined in that central repo.
+
 ### Functions
+
+This is an unstable feature. Everywhere where a value is used, one can also use a function
+call to builtin functions. The DSL is unable to specify new functions and the
+implementation must provide all functions.
+
+Functions must be pure, due to the very nature, functions are evaluated at compile time
+and can only succeed or panic (crash), instead of returning an error. Functions are
+strongly typed and support union types.
+
+**DISCLAIMER:** This is highly unstable, unimplemented and may be removed at any point.
 
 ```abnf
 arg = call / variable / VALUE;
 call = IDENT "(" [*(arg ",") arg [","]] ")"
 ```
 
--> list implemented function
--> TODO: consider removing
+| Signature                 | Description                  | Panic                               |
+|---------------------------|------------------------------|-------------------------------------|
+| `toBool(any) -> bool`     | Convert a value to a boolean | Will never panic.                   |
+| `toInt(any) -> int`       | Convert a value to an int    | Will panic if string is not integer |
+| `toFloat(any) -> float`   | Convert a value to a float   | Will panic if string is not a float |
+| `toString(any) -> string` | Convert a value to a string  | Will never panic                    |
+| `ceil(float) -> float`    | Ceil a float                 | Will never panic                    |
+| `floor(float) -> float`   | Floor a float                | Will never panic                    |
+
+#### Conversion Table
+
+| Input           | Function  | Result         |
+|-----------------|-----------|----------------|
+| `bool`          | `toBool`  | `bool`         |
+| `""`            | `toBool`  | `false`        |
+| `string`        | `toBool`  | `true`         |
+| `0`             | `toBool`  | `false`        |
+| `int`           | `toBool`  | `true`         |
+| `float`         | `toInt`   | `floor(float)` |
+| string of int   | `toInt`   | `int`          |
+| `true`          | `toInt`   | `1`            |
+| `false`         | `toInt`   | `0`            |
+| `int`           | `toFloat` | `int.0`        |
+| string of float | `toFloat` | `float`        |
+| `true`          | `toFloat` | `1.0`          |
+| `false`         | `toFloat` | `0.0`          |
 
 ### Modules
 
@@ -234,7 +298,11 @@ glob = STRING
 import = "imp" (glob / "std") ";"
 ```
 
--> TODO: explain module structure, how import works.
+Modules are files or builtin modules (like `std`), during compilation the `imp`
+statement is simply replaced with the contents of the file or module it is referencing.
+This is recursive, meaning that all `imp` files referenced are also imported.
+
+Duplicated in files are **not** removed and will lead to a compilation error.
 
 ### Configuration
 
@@ -254,6 +322,10 @@ protection of certain values, to reduce breakage in future releases.
 The namespace `impl` and `lang` are reserved and *may not* be used for user-defined
 configuration.
 
+`lang::unstable` and `impl::unstable` keys may be removed in any version but will only be
+stabilized in major versions, before any feature is added, they are first added as an
+unstable feature, and once matured will be stabilized.
+
 | Name                     | Type                          | Description                                                                                                                                          | Effect                                                       | Default  | Implemented since     |
 |--------------------------|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|----------|-----------------------|
 | `lang::transaction`      | `boolean`                     | Remote registry supports transactions                                                                                                                | If enabled, cycles which aren't self-referential are allowed | `false`  | not implemented       |
@@ -266,6 +338,8 @@ configuration.
 
 ### `std` module
 
+The std module is included in every implementation and should include the following code:
+
 ```
 use "https://blockprotocol.org/types/@blockprotocol" as bp;
 
@@ -275,7 +349,44 @@ alias bool = #bp/boolean;
 alias object = #bp/object;
 ```
 
+The module provides sane defaults, like convenient aliases.
+
 ## Language Extensibility
+
+### Reverse links
+
+Should reverse links be implemented in the graph type system they can be implemented in
+this DSL by reversing the arrows from `->` to `<-` and `~>` to `<~`.
+
+### Additional Item Information
+
+Links and properties may have additional information attached to them in the future, this
+DSL would provide support through the following extension:
+
+```abnf
+item-key-value = id "=" VALUE
+item-block = "{" [*(item-key-value ",") item-key-value [","]] "}"
+entity-item = entity-item-old [item-block]
+```
+
+#### Example 1
+
+```abnf
+prop "Title" {
+  [a]? {prop1 = 2},
+  b
+}
+```
+
+### Data Types
+
+The keyword `data` is reserved for custom `data` types in the future.
+
+### Computed Props
+
+The DSL could in theory support computed properties
+through [Additional Item Information](#additional-item-information) and a specific
+sub-language which is used to express the computation required.
 
 ## Toolbox
 
@@ -434,26 +545,42 @@ Why should we _not_ do this?
 
 [prior-art]: #prior-art
 
-Discuss prior art, both the good and the bad, in relation to this proposal.
-A few examples of what this can include are:
+## Hashicorp Configuration Language (HCL)
 
-- For implementation proposals: Does this feature exist in other technologies, and what
-  experience have their community had?
-- For community proposals: Is this done by some other community and what were their
-  experiences with it?
-- For other teams: What lessons can we learn from what other communities have done here?
-- Papers: Are there any published papers or great posts that discuss this? If you have
-  some relevant papers to refer to, this can serve as a more detailed theoretical
-  background.
+The [Hashicorp Configuration Language](https://github.com/hashicorp/hcl) is a language
+used at HashiCorp in their popular tools like [terraform](https:://terraform.io), it
+provides a simpler and easier interface for configuration.
+The community of HashiCorp has seen great success in the proliferation of the language and
+is now used in all major products. It was inspired
+by [libucl](https://github.com/vstakhov/libucl)
+and [nginx](http://nginx.org/en/docs/beginners_guide.html#conf_structure).
 
-This section is intended to encourage you as an author to think about the lessons from
-other solutions, provide readers of your RFC with a fuller picture. If there is no prior
-art, that is fine - your ideas are interesting to us whether they are brand new or if it
-is an adaptation from other languages.
+HCL was one of the major initial inspirations for this RFC.
 
-Note that while precedent set by other technologies is some motivation, it does not on its
-own motivate an RFC. Please also take into consideration that the Block Protocol sometimes
-intentionally diverges from other approaches.
+## Rust
+
+This proposal, especially the syntax of arrays, has been inspired
+by [Rust](https://www.rust-lang.org/) a programming language, which has seen wide
+adoption.
+
+## Typescript
+
+[Typescript](https://www.typescriptlang.org/), a static type system, built on top of
+Javascript is used worldwide and has seen wide adoption. It was the inspiration for union
+types.
+
+One of the problems associated with typescript, is that it is very complex with e.g.
+conditional types and can be considered turing-complete. The proposed DSL tries to
+specifically avoid these pitfalls in the type system.
+
+## JSON
+
+JSON is a data-transfer protocol and the RFC for graph type systems and versioning use it
+to express types. The main pain point with JSON is that it is very verbose and hard
+to write, read and validate for a human, with a lot of redundant information.
+
+To ease with all the associated problems, this DSL is getting proposed created to ease the
+development and modification of types.
 
 # Unresolved questions
 
