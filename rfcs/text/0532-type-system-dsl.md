@@ -57,10 +57,12 @@ IDENT = ALPHA *(ALPHA / DIGIT / "-")
 ### Primitive Types
 
 ```abnf
-INTEGER = 1*DIGIT 
+INTEGER = ["+" / "-"] 1*DIGIT
+FLOAT = INTEGER "." 1*DIGIT
+BOOLEAN = true / false;
 STRING = ... ; TODO
 COMMENT = "//" ; TODO
-VALUE = INTEGER / STRING
+VALUE = FLOAT / INTEGER / STRING / BOOLEAN
 ```
 
 ### Comments
@@ -79,15 +81,18 @@ resources.
 ### Attributes
 
 ```abnf
-attribute = "#" "[" IDENT "=" VALUE "]"
+attribute = "#" "[" IDENT "=" (VALUE / (*(IDENT "::") IDENT)) "]"
 ```
 
 Attributes are optional information about a specific resource (property-type, data-type,
 link-type, entity-type, etc.), which are used to add more detail to a resource.
 
-| Name      | Description                                                                            | Type  |
-|-----------|----------------------------------------------------------------------------------------|-------|
-| `version` | Version of a resource, if not specified will be inserted on execution, defaults to `1` | `int` |
+Attribute values may refer to previously set configuration values, depending on the
+attribute these may be forbidden.
+
+| Name      | Description                                                                            | Type  | Variable Support |
+|-----------|----------------------------------------------------------------------------------------|-------|------------------|
+| `version` | Version of a resource, if not specified will be inserted on execution, defaults to `1` | `int` | `false`          |
 
 ### Reference
 
@@ -115,7 +120,8 @@ Resources are types, which are declared in the DSL. They have $n$ inputs and one
 The inputs to a resource are implicitly defined, and are the resources that have been used
 in the current resource. The output of a resource is its identifier.
 
-There are four types of resources: 
+There are four types of resources:
+
 * `prop` (corresponding to property-types)
 * `link` (corresponding to link-types)
 * `data` (corresponding to data-types)
@@ -235,10 +241,28 @@ import = "imp" (glob / "std") ";"
 ```abnf
 id = IDENT
 
-set id "=" VALUE ";"
+set *(id "::") id "=" VALUE ";"
 ```
 
--> explain current configuration values
+Configuration is used to set values, which may be referenced later using interpolation or
+during configuration of the implementations. Configuration keys need to be unique, cannot
+be overwritten and user-defined configuration keys *may not* use built-in names.
+
+Configuration keys are dictionaries, which are partitioned using `::`, this allows the
+protection of certain values, to reduce breakage in future releases.
+
+The namespace `impl` and `lang` are reserved and *may not* be used for user-defined
+configuration.
+
+| Name                     | Type                          | Description                                                                                                                                          | Effect                                                       | Default  | Implemented since     |
+|--------------------------|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|----------|-----------------------|
+| `lang::transaction`      | `boolean`                     | Remote registry supports transactions                                                                                                                | If enabled, cycles which aren't self-referential are allowed | `false`  | not implemented       |
+| `lang::unstable`         | `boolean`                     | Enable unstable feature in language, if available.                                                                                                   | Will set every key starting with `lang::unstable` to true.   | `false`  | `0.1`                 |
+| `lang::unstable::env`    | `boolean`                     | Enable the usage of environmental variables for configuration values                                                                                 | Use of `${}` in configuration strings is possible.           | `false`  | not implemented       |
+| `lang::unstable::format` | `boolean`                     | Enable string interpolation with configuration values                                                                                                | Use of `{}` in strings to reference configuration values.    | `false`  | not implemented       |
+| `lang::unstable::func`   | `boolean`                     | Enable support for the calling of functions                                                                                                          | Enable the use of functions calls across the whole app       | `false`  | not implemented       |
+| `impl::auth`             | `enum` (`"none", "password"`) | Remote registry has a specific authentication scheme, depending on the implementation, different methods for supplying the credentials are provided. | If enabled, will use authentication to contact registry      | `"none"` | `"none"`: since `0.1` |
+| `impl::unstable`         | `boolean`                     | Enable unstable features in implementation, if available.                                                                                            | Will set every key starting with `impl::unstable` to true    | `false`  | `0.1`                 |
 
 ### `std` module
 
@@ -250,6 +274,10 @@ alias number = #bp/number;
 alias bool = #bp/boolean;
 alias object = #bp/object;
 ```
+
+## Language Extensibility
+
+## Toolbox
 
 ### Variables
 
