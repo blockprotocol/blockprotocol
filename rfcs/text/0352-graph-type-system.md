@@ -1,4 +1,4 @@
-- Feature Name: graph-type-system
+- Feature Name: `graph-type-system`
 - Start Date: 2022-06-14
 - RFC PR: [blockprotocol/blockprotocol#352](https://github.com/blockprotocol/blockprotocol/pull/352)
 - RFC Discussion: [blockprotocol/blockprotocol#418](https://github.com/blockprotocol/blockprotocol/discussions/418)
