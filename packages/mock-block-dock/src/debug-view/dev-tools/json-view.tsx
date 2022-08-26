@@ -17,8 +17,8 @@ export const JsonView = ({ collapseKeys, rootName, src, ...props }: Props) => {
         width: "100%",
 
         "& .react-json-view": {
-          fontFamily: "Mono !important"
-        }
+          fontFamily: "Mono !important",
+        },
       })}
     >
       <ReactJson

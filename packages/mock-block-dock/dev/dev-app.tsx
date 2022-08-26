@@ -22,7 +22,7 @@ const DevApp: FunctionComponent = () => {
   const blockEntity = {
     entityId: `test-entity-1`,
     entityTypeId: "test-type-1",
-    properties: { name: "World" }
+    properties: { name: "World" },
   };
 
   let blockDefinition;
@@ -32,16 +32,16 @@ const DevApp: FunctionComponent = () => {
       blockDefinition = {
         customElement: {
           elementClass: TestCustomElementBlock,
-          tagName: "test-custom-element-block"
-        }
+          tagName: "test-custom-element-block",
+        },
       };
       break;
 
     case "html-at-url":
       blockDefinition = {
         html: {
-          url: "./test-html-block/block.html"
-        }
+          url: "./test-html-block/block.html",
+        },
       };
       break;
 
@@ -51,16 +51,16 @@ const DevApp: FunctionComponent = () => {
           source: testBlockString,
           url: new URL(
             "./test-html-block/block.html",
-            window.location.toString()
-          ).toString()
-        }
+            window.location.toString(),
+          ).toString(),
+        },
       };
       break;
 
     case "react":
     default:
       blockDefinition = {
-        ReactComponent: TestReactBlock
+        ReactComponent: TestReactBlock,
       };
   }
 
@@ -71,7 +71,7 @@ const DevApp: FunctionComponent = () => {
           position: "absolute",
           right: 40,
           top: 60,
-          zIndex: 1
+          zIndex: 1,
         }}
       >
         <label>
@@ -90,7 +90,7 @@ const DevApp: FunctionComponent = () => {
             <option value="html-as-string">HTML as string</option>
           </select>
         </label>
-        <button onClick={() => setReadonly(prev => !prev)}>
+        <button onClick={() => setReadonly((prev) => !prev)}>
           Toogle {readonly ? "off" : "on"} readonly
         </button>
       </div>

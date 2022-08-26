@@ -7,7 +7,7 @@ import {
   tabClasses,
   TabProps,
   Tabs as MuiTabs,
-  tabsClasses
+  tabsClasses,
 } from "@mui/material";
 import { forwardRef, useLayoutEffect, useRef, useState } from "react";
 import { Resizable } from "react-resizable";
@@ -24,7 +24,7 @@ const Wrapper = styled(Box)(() => ({
   left: 0,
   right: 0,
   bottom: 0,
-  zIndex: 10000
+  zIndex: 10000,
 }));
 
 const TAB_HEIGHT = 40;
@@ -32,7 +32,7 @@ const TAB_HEIGHT = 40;
 const Paper = styled(MuiPaper)(() => ({
   minHeight: TAB_HEIGHT + 2, // extra addition is to make tab indicator show
   display: "flex",
-  flexDirection: "column"
+  flexDirection: "column",
 }));
 
 const Header = styled(Box)(({ theme }) => ({
@@ -43,14 +43,14 @@ const Header = styled(Box)(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "center",
   borderBottom: `1px solid ${theme.palette.divider}`,
-  paddingRight: 32
+  paddingRight: 32,
 }));
 
 const Tabs = styled(MuiTabs)(({ theme }) => ({
   minHeight: TAB_HEIGHT,
   [`.${tabsClasses.indicator}`]: {
-    backgroundColor: theme.palette.text.primary
-  }
+    backgroundColor: theme.palette.text.primary,
+  },
 }));
 
 const Tab = styled((props: TabProps) => (
@@ -60,8 +60,8 @@ const Tab = styled((props: TabProps) => (
   minHeight: TAB_HEIGHT,
 
   [`&.${tabClasses.selected}, .Mui-selected`]: {
-    color: theme.palette.text.primary
-  }
+    color: theme.palette.text.primary,
+  },
 }));
 
 const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
@@ -70,7 +70,7 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
     <Box
       ref={ref}
       className={`handle=${handleAxis}`}
-      sx={theme => ({
+      sx={(theme) => ({
         height: "1px",
         backgroundColor: theme.palette.divider,
         cursor: "ns-resize",
@@ -78,7 +78,7 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 10
+        zIndex: 10,
       })}
       {...restProps}
     />
@@ -88,13 +88,13 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
 const chipInfo = {
   html: {
     color: "info",
-    label: "HTML Block"
+    label: "HTML Block",
   },
   "custom-element": {
     label: "Custom Element Block",
-    color: "warning"
+    color: "warning",
   },
-  react: { label: "React Block", color: "secondary" }
+  react: { label: "React Block", color: "secondary" },
 } as const;
 
 export const DevTools = () => {
@@ -102,7 +102,7 @@ export const DevTools = () => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const paperBoxRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useLocalStorageState("mbd-dev-tools-height", {
-    defaultValue: 350
+    defaultValue: 350,
   });
   const [width, setWidth] = useState<number>();
   const { blockType } = useMockBlockDockContext();

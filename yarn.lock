@@ -4163,17 +4163,7 @@ ajv@^6.10.0, ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.0.1, ajv@^8.8.0, ajv@^8.9.0:
-  version "8.9.0"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.9.0.tgz#738019146638824dea25edcf299dcba1b0e7eb18"
-  integrity sha512-qOKJyNj/h+OWx7s5DePL6Zu1KeM9jPZhwBqs+7DzP6bGOvqzVCSf0xueYmVuaC/oQ/VtS2zLMLHdQFbkka+XDQ==
-  dependencies:
-    fast-deep-equal "^3.1.1"
-    json-schema-traverse "^1.0.0"
-    require-from-string "^2.0.2"
-    uri-js "^4.2.2"
-
-ajv@^8.11.0:
+ajv@^8.0.0, ajv@^8.0.1, ajv@^8.11.0, ajv@^8.8.0:
   version "8.11.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.11.0.tgz#977e91dd96ca669f54a11e23e378e33b884a565f"
   integrity sha512-wGgprdCvMalC0BztXvitD2hC04YffAvtsUn93JbGXYLAtCUO4xd17mCCZQxUOItiBwZvJScWo8NIvQMQ71rdpg==
@@ -9788,22 +9778,6 @@ mock-block-dock@0.0.10:
     lodash "^4.17.21"
     uuid "^8.3.2"
 
-mock-block-dock@0.0.22:
-  version "0.0.22"
-  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.22.tgz#2dfa3dc57e67a9aebb12bd4786c6842e70d83135"
-  integrity sha512-4ouyLhyAwINgLVjuntjnI8rrVvYni0hkSXHivJrqXXeHeY+FXgrNhX2M2WQzPM1M+EeQo4k/kzHN/5iMlU5ZDg==
-  dependencies:
-    "@blockprotocol/core" "0.0.10"
-    "@blockprotocol/graph" "0.0.14"
-    "@emotion/react" "^11.10.0"
-    "@emotion/styled" "^11.10.0"
-    "@lit-labs/react" "^1.0.4"
-    "@mui/icons-material" "^5.8.4"
-    "@mui/material" "^5.10.1"
-    lodash "^4.17.21"
-    react-json-view "^1.21.3"
-    uuid "^8.3.2"
-
 mongodb-connection-string-url@^2.3.2:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/mongodb-connection-string-url/-/mongodb-connection-string-url-2.4.1.tgz#6b3c6c40133a0ad059fe9a0abda64b2a1cb4e8b4"
@@ -10937,7 +10911,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.6.2, prop-types@^15.8.1:
+prop-types@15.x, prop-types@^15.6.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==

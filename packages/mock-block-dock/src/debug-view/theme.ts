@@ -4,8 +4,8 @@ const fallbackFonts = [`Inter`, `"Helvetica"`, `"Arial"`, "sans-serif"];
 
 const baseTheme: ThemeOptions = {
   typography: {
-    fontFamily: fallbackFonts.join(", ")
-  }
+    fontFamily: fallbackFonts.join(", "),
+  },
 };
 
 export const darkTheme = createTheme({
@@ -14,9 +14,9 @@ export const darkTheme = createTheme({
     mode: "dark",
     common: {
       black: "#0E1114",
-      white: "#FFFFFF"
-    }
-  }
+      white: "#FFFFFF",
+    },
+  },
 });
 
 export const lightTheme = createTheme({
@@ -25,7 +25,7 @@ export const lightTheme = createTheme({
     mode: "light",
     common: {
       black: "#0E1114",
-      white: "#FFFFFF"
-    }
-  }
+      white: "#FFFFFF",
+    },
+  },
 });

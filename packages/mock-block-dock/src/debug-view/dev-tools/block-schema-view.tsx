@@ -11,7 +11,7 @@ export const BlockSchemaView = () => {
     const files = event.target.files;
     if (files?.[0] && files?.[0].type === "application/json") {
       const reader = new FileReader();
-      reader.onload = evt => {
+      reader.onload = (evt) => {
         if (typeof evt.target?.result !== "string") {
           return null;
         }

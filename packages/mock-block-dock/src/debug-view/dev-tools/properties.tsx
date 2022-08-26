@@ -5,7 +5,7 @@ import {
   Container,
   Grid,
   Switch,
-  Typography
+  Typography,
 } from "@mui/material";
 import Ajv from "ajv";
 
@@ -16,13 +16,8 @@ import { JsonView } from "./json-view";
 const ajv = new Ajv();
 
 export const PropertiesView = () => {
-  const {
-    readonly,
-    setReadonly,
-    blockSchema,
-    blockEntity,
-    setBlockEntity
-  } = useMockBlockDockContext();
+  const { readonly, setReadonly, blockSchema, blockEntity, setBlockEntity } =
+    useMockBlockDockContext();
   const validate = ajv.compile(blockSchema ?? {});
   validate(blockEntity);
 
@@ -40,17 +35,17 @@ export const PropertiesView = () => {
                 collapseKeys={["graph"]}
                 rootName="blockEntity"
                 src={blockEntity ?? {}}
-                onEdit={args => {
+                onEdit={(args) => {
                   setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>
+                    args.updated_src as Entity<Record<string, unknown>>,
                   );
                 }}
-                onAdd={args => {
+                onAdd={(args) => {
                   setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>
+                    args.updated_src as Entity<Record<string, unknown>>,
                   );
                 }}
-                onDelete={args => {
+                onDelete={(args) => {
                   // entityType,entityTypeId and entityId can be edited but should not be
                   // deleted
                   if (
@@ -59,19 +54,19 @@ export const PropertiesView = () => {
                       "entityType",
                       "entityTypeId",
                       "entityId",
-                      "properties"
+                      "properties",
                     ].includes(args.name)
                   ) {
                     return false;
                   }
                   setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>
+                    args.updated_src as Entity<Record<string, unknown>>,
                   );
                 }}
                 validationMessage="Not allowed"
               />
               <Collapse in={!!validate.errors?.length}>
-                {validate.errors?.map(error => (
+                {validate.errors?.map((error) => (
                   <Box key={error.message}>{JSON.stringify(error.message)}</Box>
                 ))}
               </Collapse>
@@ -83,7 +78,7 @@ export const PropertiesView = () => {
             <Typography variant="subtitle2">Read-only mode</Typography>
             <Switch
               checked={readonly}
-              onChange={evt => setReadonly(evt.target.checked)}
+              onChange={(evt) => setReadonly(evt.target.checked)}
             />
           </Box>
         </Grid>

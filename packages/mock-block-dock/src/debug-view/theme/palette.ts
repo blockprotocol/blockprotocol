@@ -8,7 +8,7 @@ export const customColors = {
     600: "#6F59EC",
     700: "#6048E5",
     800: "#4732BA",
-    subtle: "#C3CAE7"
+    subtle: "#C3CAE7",
   },
   teal: {
     100: "#F0F9FF",
@@ -17,7 +17,7 @@ export const customColors = {
     400: "#24BDE0",
     500: "#0A9FC0",
     600: "#0081A1",
-    700: "#00586E"
+    700: "#00586E",
   },
   orange: {
     100: "#FFF6ED",
@@ -26,7 +26,7 @@ export const customColors = {
     400: "#F58C4B",
     500: "#ED6F28",
     600: "#C74E0B",
-    700: "#8F2F14"
+    700: "#8F2F14",
   },
   red: {
     100: "#FCF3F6",
@@ -36,7 +36,7 @@ export const customColors = {
     500: "#E04D82",
     600: "#D92666",
     700: "#AE1E52",
-    800: "#82173D"
+    800: "#82173D",
   },
   // should adjust to be consistent with the ones above
   gray: {
@@ -48,8 +48,8 @@ export const customColors = {
     60: "#758AA1",
     70: "#64778C",
     80: "#4D5C6C",
-    90: "#37434e"
+    90: "#37434e",
   },
   black: "#0E1114",
-  white: "#FFFFFF"
+  white: "#FFFFFF",
 } as const;

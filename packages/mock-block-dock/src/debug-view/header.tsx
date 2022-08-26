@@ -6,7 +6,7 @@ import {
   IconButton,
   styled,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
@@ -27,7 +27,7 @@ const Container = styled(Box)(({ theme }) => ({
   alignItems: "center",
   paddingLeft: theme.spacing(3),
   paddingRight: theme.spacing(3),
-  borderBottom: `1px solid ${theme.palette.divider}`
+  borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
 const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
@@ -41,9 +41,9 @@ const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
     color="inherit"
     sx={[
       ({}) => ({
-        textTransform: "none"
+        textTransform: "none",
       }),
-      ...(Array.isArray(sx) ? sx : [sx])
+      ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
     {children}
@@ -51,7 +51,7 @@ const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
 ))(({ theme }) => ({
   borderColor:
     theme.palette.mode === "light" ? customColors.gray[30] : "#444444",
-  color: theme.palette.mode === "light" ? customColors.gray[90] : "#8E8E8E"
+  color: theme.palette.mode === "light" ? customColors.gray[90] : "#8E8E8E",
 }));
 
 type Props = {
@@ -71,7 +71,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
             palette.mode === "light"
               ? customColors.black
               : palette.common.white,
-          mr: "auto"
+          mr: "auto",
         })}
       />
 
@@ -81,7 +81,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          display: "flex"
+          display: "flex",
         }}
       >
         <Typography
@@ -92,7 +92,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
             color:
               palette.mode === "light"
                 ? customColors.gray[70]
-                : customColors.gray[30]
+                : customColors.gray[30],
           })}
         >
           Blocks /
@@ -103,7 +103,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
       </Box>
 
       <Tooltip title={`Switch to ${darkMode ? "light" : "dark"} mode`}>
-        <IconButton sx={{ mr: 1 }} onClick={() => setDarkMode(prev => !prev)}>
+        <IconButton sx={{ mr: 1 }} onClick={() => setDarkMode((prev) => !prev)}>
           {darkMode ? <LightMode /> : <DarkMode />}
         </IconButton>
       </Tooltip>
