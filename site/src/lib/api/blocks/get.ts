@@ -5,8 +5,6 @@ import { getDbBlock, getDbBlocks } from "./db";
 export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
   const allDbBlocks = await getDbBlocks({});
 
-  console.l;
-
   // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
   return [...allDbBlocks, ...localBlocks] as ExpandedBlockMetadata[];
 };
