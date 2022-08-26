@@ -17,6 +17,7 @@ type TestBlockType =
 
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
+  const [readonly, setReadonly] = useState(false);
 
   const blockEntity = {
     entityId: `test-entity-1`,
@@ -67,12 +68,10 @@ const DevApp: FunctionComponent = () => {
     <>
       <div
         style={{
-          position: "fixed",
+          position: "absolute",
           right: 40,
-          top: 16,
-          zIndex: 100,
-          display: "none",
-          zIndex: 100000
+          top: 60,
+          zIndex: 1
         }}
       >
         <label>
@@ -91,6 +90,9 @@ const DevApp: FunctionComponent = () => {
             <option value="html-as-string">HTML as string</option>
           </select>
         </label>
+        <button onClick={() => setReadonly(prev => !prev)}>
+          Toogle {readonly ? "off" : "on"} readonly
+        </button>
       </div>
 
       <MockBlockDock

@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
-
 @font-face {
     font-family: "Inter";
     font-weight: 300;
@@ -27,4 +25,24 @@
     font-family: "Mono";
     font-weight: 400;
     src: url("./assets/jet-brains-mono-regular.woff2") format("woff2");
+}
+
+.mbd-debug-mode-toggle {
+    font-family: Inter, "Helvetica", "Arial", sans-serif;
+    position: fixed;
+    bottom: 32px;
+    left: 32px;
+    background-color: white;
+    border: 1px solid #DDE7F0;
+    color: #37434e;
+    background: transparent;
+    font-size: 0.8125rem;
+    line-height: 1.75;
+    padding: 3px 9px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.mbd-debug-mode-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.04);
 }
