@@ -40,7 +40,9 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
       await router.push("/blocks");
     } catch (error) {
       /** @todo I think we can improve error handling instead of using `instanceof` every time */
-      snackbar.error(error instanceof Error ? error.message : "Oops!");
+      snackbar.error(
+        error instanceof Error ? error.message : "Unexpected error",
+      );
     }
   };
 
@@ -74,12 +76,12 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
 
             <BlockFormSection title="Where is your block located?">
               <FieldInfoWrapper
-                title="Provide a link to a valid npm repository"
-                items={["supports npmjs.org URLs", "package must be public"]}
+                title="Provide the package name of a valid npm repository"
+                items={["package must be public"]}
               >
                 <TextField
                   fullWidth
-                  label={<RequiredLabel>npm package URL</RequiredLabel>}
+                  label={<RequiredLabel>npm package name</RequiredLabel>}
                   inputProps={register("npmPackageName", { required: true })}
                 />
               </FieldInfoWrapper>
