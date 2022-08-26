@@ -1,4 +1,4 @@
-- Feature Name: versioning-types
+- Feature Name: `versioning-types`
 - Start Date: 2022-06-28
 - RFC PR: [blockprotocol/blockprotocol#408](https://github.com/blockprotocol/blockprotocol/pull/408)
 - RFC Discussion: [blockprotocol/blockprotocol#433](https://github.com/blockprotocol/blockprotocol/discussions/433)
