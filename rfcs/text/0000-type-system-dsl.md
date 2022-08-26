@@ -1,9 +1,7 @@
 - Feature Name: type-system-dsl
 - Start Date: 2022-08-24
-- RFC
-  PR: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/pull/0000)
-- Block Protocol
-  Discussion: [blockprotocol/blockprotocol#0000](https://github.com/blockprotocol/blockprotocol/discussions/0000)
+- RFC PR: [blockprotocol/blockprotocol#532](https://github.com/blockprotocol/blockprotocol/pull/532)
+- RFC Discussion: [blockprotocol/blockprotocol#540](https://github.com/blockprotocol/blockprotocol/discussions/540) 
 
 # Summary
 
