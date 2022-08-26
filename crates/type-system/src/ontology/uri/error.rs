@@ -8,12 +8,12 @@
 
 use std::fmt;
 
-use thiserror::Error;
+use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[derive(Debug, Clone, PartialEq, Eq, Error)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ParseBaseUriError;
 
 impl fmt::Display for ParseBaseUriError {
@@ -23,8 +23,16 @@ impl fmt::Display for ParseBaseUriError {
 }
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[derive(Debug, Clone, PartialEq, Eq, Error)]
-pub struct ParseVersionedUriError;
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "inner")]
+pub enum ParseVersionedUriError {
+    IncorrectFormatting,
+    MissingBaseUri,
+    MissingVersion,
+    InvalidVersion,
+    AdditionalEndContent,
+    InvalidBaseUri(ParseBaseUriError),
+}
 
 impl fmt::Display for ParseVersionedUriError {
     fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
