@@ -49,7 +49,7 @@ export const PublishBlockInfo = () => {
           variant="bpSmallCopy"
           color={({ palette }) => palette.gray[80]}
         >
-          Your package must expose a valid{" "}
+          Your package must contain a valid{" "}
           <Typography variant="bpCode">block-metadata.json</Typography> file.
         </Typography>
       </Box>
