@@ -84,7 +84,7 @@ const SignupPage: NextPage = () => {
   useEffect(() => {
     if (user && user !== "loading") {
       if (user.isSignedUp) {
-        void router.push(redirectPath ?? "/");
+        void router.push(redirectPath ?? "/dashboard");
       } else if (currentScreen !== "CompleteSignup") {
         setEmail(user.email);
         setCurrentScreen("CompleteSignup");
