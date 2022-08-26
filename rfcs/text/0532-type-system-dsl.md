@@ -65,9 +65,29 @@ VALUE = INTEGER / STRING
 
 ### Comments
 
+```abnf
+COMMENT = "//" ; TODO
+doc-comment = "///" ; TODO
+```
+
+There are two types of comments: code comments and documentation comments.
+Code comments are erased during the compilation, while documentation comments are used
+as the description of resources (if they support it).
+Code comments are allowed anywhere, while documentation comments are only allowed before
+resources.
+
 ### Attributes
 
--> TODO: move abnf here
+```abnf
+attribute = "#" "[" IDENT "=" VALUE "]"
+```
+
+Attributes are optional information about a specific resource (property-type, data-type,
+link-type, entity-type, etc.), which are used to add more detail to a resource.
+
+| Name      | Description                                                                            | Type  |
+|-----------|----------------------------------------------------------------------------------------|-------|
+| `version` | Version of a resource, if not specified will be inserted on execution, defaults to `1` | `int` |
 
 ### Reference
 
@@ -90,13 +110,45 @@ use = "use" url "as" id [use-with] ";"
 
 ### Resources
 
--> inputs
--> outputs
--> visualization
+Resources are types, which are declared in the DSL. They have $n$ inputs and one output.
 
-```abnf
-doc-comment = "///" ; TODO
-attribute = "#" "[" IDENT "=" VALUE "]"
+The inputs to a resource are implicitly defined, and are the resources that have been used
+in the current resource. The output of a resource is its identifier.
+
+There are four types of resources: 
+* `prop` (corresponding to property-types)
+* `link` (corresponding to link-types)
+* `data` (corresponding to data-types)
+* `entity` (corresponding to entities)
+
+#### Example 1
+
+```
+imp std;
+
+prop age "Age" = number;
+
+prop alive "Boolean" = bool;
+
+entity person "Person" = {
+  age?,
+  alive
+};
+```
+
+```mermaid
+flowchart LR;
+  bp_number["#bp::number"]
+  bp_bool["#bp::boolean"]
+  age[Age]
+  alive[Alive]
+  person[Person]
+  
+  bp_number --> number --> age
+  bp_bool --> bool --> alive
+  
+  alive --> person
+  age --> person
 ```
 
 #### Data Type
@@ -106,15 +158,21 @@ Currently unspecified
 #### Property Type
 
 ```abnf
-modifer = "virtual"
-
 id = IDENT
 title = STRING
 
 prop-object = "{" [*(reference ",") reference [","]] "}"
 prop-array = "[" prop-value [";" range] "]"
 prop-value = variable / prop-object / prop-array / (prop-value "|" prop-value) / "(" prop-value ")"
-prop = *doc-comment *attribute [modifier] prop [id] title "=" prop-value ";"
+prop = *doc-comment *attribute prop [id] title "=" prop-value ";"
+```
+
+### Type Alias
+
+[//]: # (TODO: use alias instead of "virtual" prop)
+
+```abnf
+alias = "alias" IDENT "=" prop-value;
 ```
 
 -> explain virtual
@@ -167,7 +225,7 @@ call = IDENT "(" [*(arg ",") arg [","]] ")"
 ```abnf
 glob = STRING
 
-import = "imp" glob ";"
+import = "imp" (glob / "std") ";"
 ```
 
 -> TODO: explain module structure, how import works.
@@ -181,6 +239,17 @@ set id "=" VALUE ";"
 ```
 
 -> explain current configuration values
+
+### `std` module
+
+```
+use "https://blockprotocol.org/types/@blockprotocol" as bp;
+
+alias text = #bp/text;
+alias number = #bp/number;
+alias bool = #bp/boolean;
+alias object = #bp/object;
+```
 
 ### Variables
 
@@ -244,42 +313,6 @@ import [resource];
 
 where `[resource]` is either a local file, a URL or points to a file in a git repository.
 
-### `data` Declaration
-
-CURRENTLY UNDEFINED
-
-### `prop` Declaration
-
-```
-[doc comment]
-[attributes]
-prop [id] [title] = [prop-type];
-```
-
-// TODO: into EBNF
-
-```
-[prop-type] = [reference]
-[prop-type] = [object]
-// TODO: single prop-type does not require `()`
-[prop-type] = ([prop-type])[[range]?]
-[prop-type] = [prop-type] | [prop-type]
-
-[object] = {
-    ([reference] | [reference][],)*
-}
-
-[range] = [int]?..[int]?
-```
-
-```abnf
-
-```
-
-### `link` Declaration
-
-### `entity` Declaration
-
 This is the technical portion of the RFC. Explain the design in sufficient detail that:
 
 - Its interaction with other features is clear.
@@ -288,57 +321,6 @@ This is the technical portion of the RFC. Explain the design in sufficient detai
 
 The section should return to the examples given in the previous section, and explain more
 fully how the detailed proposal makes those examples work.
-
-### Grammar
-
-```bnf
-{
-    tokens = [
-        space='regexp:\s+'
-        comment="regexp://[^/].*?\n"
-    ]
-}
-
-root ::= (entity-stmt | link-stmt | prop-stmt | import-stmt | set-stmt | use-stmt)*
-
-doc-comment ::= "regexp://.*?\n"
-
-ident ::= "regexp:[a-z][a-z-]*"
-prefix ::= "*" | "#" | ">" | "~"
-reference ::= prefix? (ident "/")? ident ("@" integer)
-
-attribute ::= "#" "[" ident "=" (string | integer) "]"
-
-// TODO
-string ::= 'regexp:".*"'
-integer ::= 'regexp:[0-9]+'
-value ::= string
-
-key-value ::= ident "=" value
-key-value-block ::= "{" (key-value ",")* key-value "}"
-
-use-with-stmt ::= "with" key-value-block
-use-stmt ::= "use" string "as" ident use-with-stmt? ";"
-
-set-stmt ::= "set" ident "=" value ";"
-
-// string here should be either file, http or git
-import-stmt ::= "import" string ";"
-
-array ::= "[" (integer? ".." integer?)? "]"
-
-
-// TODO: prop-value "(" ")" optional on array if single
-prop-object ::= "{" ( (reference array? "?"? ",")* reference array? "?"? ","? )? "}"
-prop-value ::= ((reference | prop-object) "|" prop-value) | reference | prop-object  | ("(" prop-value ")" array)
-prop-stmt ::= doc-comment* attribute* "prop" ident string "=" prop-value ";"
-
-link-stmt ::= doc-comment* attribute* "link" ident string ";"
-
-entity-object ::= "{" ((entity-value array? "?"? ",")* entity-value array? "?"? ","?)? "}"
-entity-value ::= ((reference | entity-object) array? "?"?) | (("->" | "~>") reference array? "?"?)
-entity-stmt ::= doc-comment* attribute* "entity" ident string "=" entity-object ";"
-```
 
 ### Example
 
@@ -358,12 +340,10 @@ use "https://blockprotocol.org/types/@blockprotocol" as bp with {
     entity = "{self}/entity-type/{id}"
 };
 
-prop favorite-quote "Favorite Quote" = #blockprotocol/text@1;
+prop favorite-quote "Favorite Quote" = #bp::text/1;
 
-prop user-id "User ID" = #blockprotocol/text@1 | #blockprotocol/number@1;
+prop user-id "User ID" = #bp::text/1 | #bp::number/1;
 
-/// Contact Information
-///
 /// This is a further description of Contact Information
 #[version = 14]
 prop contact-information "Contact Information" = {
