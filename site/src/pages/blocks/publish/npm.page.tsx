@@ -1,4 +1,3 @@
-import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -6,14 +5,13 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
 import { useSnackbar } from "../../../components/hooks/use-snackbar";
-import { FontAwesomeIcon } from "../../../components/icons";
-import { Link } from "../../../components/link";
 import {
   AuthWallPageContent,
   withAuthWall,
 } from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
 import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
+import { BlockPublishedMessageContent } from "../../../components/pages/blocks/block-published-message-content";
 import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper";
 import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block-info";
 import { RequiredLabel } from "../../../components/pages/blocks/required-label";
@@ -43,19 +41,8 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
     }
 
     const blockHref = `@${user.shortname}/blocks/${data.blockName}`;
+    snackbar.success(<BlockPublishedMessageContent blockHref={blockHref} />);
 
-    snackbar.success(
-      <Box sx={{ wordBreak: "break-all" }}>
-        Your block was published successfully. It can now be found at{" "}
-        <Link
-          href={blockHref}
-          sx={{ color: "inherit", textDecoration: "underline" }}
-        >
-          {`blockprotocol.org/${blockHref}`}
-          <FontAwesomeIcon sx={{ ml: 0.5 }} icon={faExternalLink} />
-        </Link>
-      </Box>,
-    );
     await router.push("/blocks");
   };
 
