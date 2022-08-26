@@ -1,7 +1,9 @@
 - Feature Name: type-system-dsl
 - Start Date: 2022-08-24
-- RFC PR: [blockprotocol/blockprotocol#532](https://github.com/blockprotocol/blockprotocol/pull/532)
-- RFC Discussion: [blockprotocol/blockprotocol#540](https://github.com/blockprotocol/blockprotocol/discussions/540) 
+- RFC
+  PR: [blockprotocol/blockprotocol#532](https://github.com/blockprotocol/blockprotocol/pull/532)
+- RFC
+  Discussion: [blockprotocol/blockprotocol#540](https://github.com/blockprotocol/blockprotocol/discussions/540)
 
 # Summary
 
@@ -47,6 +49,137 @@ explain its impact in concrete terms.
 [reference-level-explanation]: #reference-level-explanation
 
 ## Domain-Specific-Language (DSL)
+
+```abnf
+IDENT = ALPHA *(ALPHA / DIGIT / "-")
+```
+
+### Primitive Types
+
+```abnf
+INTEGER = 1*DIGIT 
+STRING = ... ; TODO
+COMMENT = "//" ; TODO
+VALUE = INTEGER / STRING
+```
+
+### Comments
+
+### Attributes
+
+-> TODO: move abnf here
+
+### Reference
+
+```abnf
+range = [INTEGER] ".." [INTEGER]
+reference-array = "[" variable [";" range] "]"
+reference = variable / reference-array
+```
+
+```abnf
+url = STRING
+id = IDENT
+
+use-key-value = id "=" VALUE
+use-with = "with" "{" [*(use-key-value ",") use-key-value [","]] "}"
+use = "use" url "as" id [use-with] ";"
+```
+
+-> How use works, required `self`
+
+### Resources
+
+-> inputs
+-> outputs
+-> visualization
+
+```abnf
+doc-comment = "///" ; TODO
+attribute = "#" "[" IDENT "=" VALUE "]"
+```
+
+#### Data Type
+
+Currently unspecified
+
+#### Property Type
+
+```abnf
+modifer = "virtual"
+
+id = IDENT
+title = STRING
+
+prop-object = "{" [*(reference ",") reference [","]] "}"
+prop-array = "[" prop-value [";" range] "]"
+prop-value = variable / prop-object / prop-array / (prop-value "|" prop-value) / "(" prop-value ")"
+prop = *doc-comment *attribute [modifier] prop [id] title "=" prop-value ";"
+```
+
+-> explain virtual
+
+#### Link Type
+
+```abnf
+id = IDENT
+title = STRING
+
+link = *doc-comment *attribute link [id] title ";"
+```
+
+#### Entity Type
+
+```abnf
+id = IDENT
+title = STRING
+
+entity-link-direction = "~>" / "->"
+entity-link = link-direction reference 
+
+entity-value = "{" [*(reference / entity-link-direction ",") (reference / entity-link-direction ",")] "}"
+entity = *doc-comment *attribute entity [id] title "=" entity-value ";"
+```
+
+### Variables
+
+```abnf
+type = "@" / "#" / ">" / "~"
+module = IDENT
+id = IDENT
+
+variable = type? [module "/"] id 
+```
+
+### Functions
+
+```abnf
+arg = call / variable / VALUE;
+call = IDENT "(" [*(arg ",") arg [","]] ")"
+```
+
+-> list implemented function
+-> TODO: consider removing
+
+### Modules
+
+```abnf
+glob = STRING
+
+import = "imp" glob ";"
+```
+
+-> TODO: explain module structure, how import works.
+
+### Configuration
+
+```abnf
+id = IDENT
+
+set id "=" VALUE ";"
+```
+
+-> explain current configuration values
 
 ### Variables
 
@@ -123,6 +256,7 @@ prop [id] [title] = [prop-type];
 ```
 
 // TODO: into EBNF
+
 ```
 [prop-type] = [reference]
 [prop-type] = [object]
