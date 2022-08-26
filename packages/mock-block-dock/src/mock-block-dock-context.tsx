@@ -1,5 +1,4 @@
 import { Message } from "@blockprotocol/core";
-import { Entity, EntityType } from "@blockprotocol/graph/.";
 import {
   createContext,
   Dispatch,
@@ -11,22 +10,16 @@ import {
   useState,
 } from "react";
 
-import { MockData } from "./use-mock-block-props/use-mock-datastore";
+import { MockBlockHookResult } from "./use-mock-block-props";
 
 type MockBlockDockInfo = {
-  debugMode: boolean;
-  setDebugMode: Dispatch<SetStateAction<boolean>>;
+  blockType?: "react" | "custom-element" | "html";
   logs: Message[];
   setLogs: Dispatch<SetStateAction<Message[]>>;
-  readonly: boolean;
-  setReadonly: Dispatch<SetStateAction<boolean>>;
-  blockSchema?: Partial<EntityType>;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType> | undefined>>;
-  blockEntity?: Entity;
-  setBlockEntity: Dispatch<SetStateAction<Entity | undefined>>;
-  datastore: MockData;
-  blockType?: "react" | "custom-element" | "html";
-};
+} & Omit<
+  MockBlockHookResult,
+  "graphServiceCallbacks" | "blockGraph" | "linkedAggregations" | "entityTypes"
+>;
 
 const MockBlockDockContext = createContext<MockBlockDockInfo>({
   debugMode: false,
@@ -37,6 +30,11 @@ const MockBlockDockContext = createContext<MockBlockDockInfo>({
   setReadonly: () => {},
   setBlockSchema: () => {},
   setBlockEntity: () => {},
+  blockEntity: {
+    entityId: "",
+    entityTypeId: "",
+    properties: {},
+  },
   datastore: {
     entities: [],
     links: [],
@@ -46,33 +44,12 @@ const MockBlockDockContext = createContext<MockBlockDockInfo>({
 });
 
 // @todo fix types
-type Props = {
+type Props = Omit<MockBlockDockInfo, "logs" | "setLogs"> & {
   children: ReactNode;
-  debugMode: boolean;
-  setDebugMode: Dispatch<SetStateAction<boolean>>;
-  readonly: boolean;
-  setReadonly: Dispatch<SetStateAction<boolean>>;
-  blockSchema?: Partial<EntityType>;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType> | undefined>>;
-  blockEntity?: Entity;
-  setBlockEntity?: Dispatch<SetStateAction<Entity | undefined>>;
-  datastore: MockData;
   blockType?: "react" | "custom-element" | "html";
 };
 
-export const MockBlockDockProvider = ({
-  children,
-  debugMode,
-  setDebugMode,
-  readonly,
-  setReadonly,
-  blockSchema,
-  setBlockSchema,
-  blockEntity,
-  setBlockEntity,
-  datastore,
-  blockType,
-}: Props) => {
+export const MockBlockDockProvider = ({ children, ...props }: Props) => {
   const [logs, setLogs] = useState<Message[]>([]);
 
   useEffect(() => {
@@ -91,36 +68,13 @@ export const MockBlockDockProvider = ({
 
   const values = useMemo(() => {
     return {
-      debugMode,
-      setDebugMode,
+      ...props,
       logs,
       setLogs,
-      readonly,
-      setReadonly,
-      blockSchema,
-      setBlockSchema,
-      blockEntity,
-      setBlockEntity,
-      datastore,
-      blockType,
     };
-  }, [
-    debugMode,
-    setDebugMode,
-    logs,
-    readonly,
-    setReadonly,
-    blockSchema,
-    setBlockSchema,
-    blockEntity,
-    setBlockEntity,
-    datastore,
-    blockType,
-  ]);
+  }, [props, logs]);
 
   return (
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     <MockBlockDockContext.Provider value={values}>
       {children}
     </MockBlockDockContext.Provider>

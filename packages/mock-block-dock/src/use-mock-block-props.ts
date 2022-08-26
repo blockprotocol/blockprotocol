@@ -17,7 +17,7 @@ import {
 } from "./use-mock-block-props/use-mock-datastore";
 import { usePrevious } from "./use-previous";
 
-type Props = {
+export type MockBlockHookArgs = {
   blockEntity?: Entity;
   blockSchema?: Partial<EntityType>;
   initialEntities?: Entity[];
@@ -28,7 +28,7 @@ type Props = {
   debug: boolean;
 };
 
-type Result = {
+export type MockBlockHookResult = {
   blockEntity: Entity;
   blockGraph: BlockGraph;
   blockSchema?: Partial<EntityType>;
@@ -38,8 +38,8 @@ type Result = {
   linkedAggregations: LinkedAggregation[];
   readonly: boolean;
   debugMode: boolean;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType> | undefined>>;
-  setBlockEntity: Dispatch<SetStateAction<Entity | undefined>>;
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  setBlockEntity: Dispatch<SetStateAction<Entity>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
   setDebugMode: Dispatch<SetStateAction<boolean>>;
 };
@@ -64,20 +64,14 @@ export const useMockBlockProps = ({
   initialLinkedAggregations,
   readonly: readonly1,
   debug: debug1,
-}: Props): Result => {
+}: MockBlockHookArgs): MockBlockHookResult => {
   // @todo rename this
-  const [blockEntity, setBlockEntity] = useState<Entity | undefined>(
-    blockEntity1,
-  ); // @todo fix
-  const [blockSchema, setBlockSchema] = useState<
-    Partial<EntityType> | undefined
-  >(initialBlockSchema); // @todo fix types
+  const [blockEntity, setBlockEntity] = useState<Entity>(blockEntity1!); // @todo rfix types
+  const [blockSchema, setBlockSchema] = useState<Partial<EntityType>>(
+    initialBlockSchema!,
+  ); // @todo fix types
   const [readonly, setReadonly] = useState<boolean>(readonly1);
   const [debugMode, setDebugMode] = useState<boolean>(!!debug1);
-  // const [initialEntities1, setInitialEntities1] = useState(initialEntities);
-  // const [initialEntityTypes1, setInitialEntityTypes1] =
-  //   useState(initialEntityTypes);
-  // const [initialLinks1, setInitialLinks1] = useState(initialLinks);
 
   const prevReadonly = usePrevious(readonly1);
   const prevDebugMode = usePrevious(debug1);
