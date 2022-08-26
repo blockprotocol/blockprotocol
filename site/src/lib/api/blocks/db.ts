@@ -10,7 +10,7 @@ export const getDbBlocks = async (filter: { shortname?: string }) => {
 
   return db
     .collection<ExpandedBlockMetadata>(blocksDbCollectionName)
-    .find({ author: filter.shortname }, queryOptions)
+    .find(filter.shortname ? { author: filter.shortname } : {}, queryOptions)
     .toArray();
 };
 
