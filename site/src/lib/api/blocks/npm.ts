@@ -249,11 +249,22 @@ export const publishBlockFromNpm = async (
 
   const pathWithNamespace = `@${shortname}/${name}`;
 
-  const existingBlock = await getDbBlock({ name, shortname });
-  if (existingBlock) {
+  const [blockWithName, blockLinkedToPackage] = await Promise.all([
+    getDbBlock({ name, author: shortname }),
+    getDbBlock({ npmPackageName }),
+  ]);
+  if (blockWithName) {
     throw new Error(`Block name '${pathWithNamespace}' already exists`, {
       cause: { code: "NAME_TAKEN" },
     });
+  }
+  if (blockLinkedToPackage) {
+    throw new Error(
+      `npm package '${npmPackageName}' is already linked to block '${blockLinkedToPackage.pathWithNamespace}'`,
+      {
+        cause: { code: "NPM_PACKAGE_TAKEN" },
+      },
+    );
   }
 
   const { expandedMetadata } = await mirrorNpmPackageToR2(

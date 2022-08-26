@@ -38,5 +38,5 @@ export const getBlockByUserAndName = async (params: {
     return localBlock;
   }
 
-  return getDbBlock({ name, shortname });
+  return getDbBlock({ name, author: shortname });
 };
