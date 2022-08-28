@@ -10,6 +10,7 @@ import {
 import { Dispatch, SetStateAction } from "react";
 
 import { useMockBlockDockContext } from "../mock-block-dock-context";
+import { MOCK_BLOCK_DOCK_VERSION } from "../version";
 import { DarkMode, LightMode, Logo } from "./icons";
 import { customColors } from "./theme/palette";
 
@@ -58,11 +59,6 @@ type Props = {
   setDarkMode: Dispatch<SetStateAction<boolean>>;
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// const packageVersion = __VERSION__; // eslint-disable-line
-const packageVersion = "";
-
 export const Header = ({ darkMode, setDarkMode }: Props) => {
   const { setDebugMode } = useMockBlockDockContext();
 
@@ -80,7 +76,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           })}
         />
         <Typography variant="caption" color={customColors.gray[60]}>
-          {packageVersion}
+          {MOCK_BLOCK_DOCK_VERSION}
         </Typography>
       </Box>
 

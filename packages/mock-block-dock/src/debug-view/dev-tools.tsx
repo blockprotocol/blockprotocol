@@ -18,6 +18,7 @@ import { DataStoreView } from "./dev-tools/datastore-view";
 import { LogsView } from "./dev-tools/logs-view";
 import { PropertiesView } from "./dev-tools/properties";
 import { a11yProps, TabPanel } from "./dev-tools/tab-panel";
+import { HEADER_HEIGHT } from "./header";
 
 const Wrapper = styled(Box)(() => ({
   position: "fixed",
@@ -31,6 +32,7 @@ const TAB_HEIGHT = 40;
 
 const Paper = styled(MuiPaper)(() => ({
   minHeight: TAB_HEIGHT + 2, // extra addition is to make tab indicator show
+  maxHeight: `calc(100vh - ${HEADER_HEIGHT}px)`,
   display: "flex",
   flexDirection: "column",
 }));

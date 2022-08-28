@@ -1,12 +1,5 @@
-import { Message } from "@blockprotocol/core/dist/esm/types";
-import {
-  Box,
-  Button,
-  MenuItem,
-  Select,
-  styled,
-  Typography,
-} from "@mui/material";
+import { Message } from "@blockprotocol/core";
+import { Box, Button, styled, Typography } from "@mui/material";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
@@ -27,7 +20,7 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
         mb: 0.5,
         display: "flex",
         whiteSpace: "nowrap",
-        fontFamily: "Mono",
+        fontFamily: "Mono, monospace",
       }}
     >
       [{log.timestamp}]
