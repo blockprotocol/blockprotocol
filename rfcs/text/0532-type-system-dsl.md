@@ -683,6 +683,18 @@ to write, read and validate for a human, with a lot of redundant information.
 To ease with all the associated problems, this DSL is getting proposed created to ease the
 development and modification of types.
 
+## Nix Language
+
+[Nix](https://nixos.org/) is an ecosystem to create reproducible builds and deployments,
+which has a custom DSL,
+the [Nix Language](https://nixos.wiki/wiki/Overview_of_the_Nix_Language), which is a
+functional configuration language.
+This has sparked controversy, and some accredited the DSL as part as to why nix hasn't
+found widespread adoption yet, due to the fact that often a functional programming
+language isn't very suitable as a configuration language.
+This proposal learns from that "mistake" and tries to instead take a more traditional
+approach through the use of declarative paradigms instead.
+
 # Unresolved questions
 
 [unresolved-questions]: #unresolved-questions
