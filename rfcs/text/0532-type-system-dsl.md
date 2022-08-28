@@ -90,9 +90,12 @@ link-type, entity-type, etc.), which are used to add more detail to a resource.
 Attribute values may refer to previously set configuration values, depending on the
 attribute these may be forbidden.
 
-| Name      | Description                                                                            | Type  | Variable Support |
-|-----------|----------------------------------------------------------------------------------------|-------|------------------|
-| `version` | Version of a resource, if not specified will be inserted on execution, defaults to `1` | `int` | `false`          |
+| Name      | Description                                                                            | Type          | Variable Support |
+|-----------|----------------------------------------------------------------------------------------|---------------|------------------|
+| `version` | Version of a resource, if not specified will be inserted on execution, defaults to `1` | `int`         | `false`          |
+| `cfg`     | Conditionally emit code, depending if the expr evaluates to true                       | meta language | `false`          |
+
+[//]: # (TODO: should we include cfg or remove?!)
 
 ### Reference
 
@@ -120,7 +123,8 @@ Resources are types, which are declared in the DSL. They have $n$ inputs and one
 The inputs to a resource are implicitly defined, and are the resources that have been used
 in the current resource. The output of a resource is its identifier.
 
-You can only reference types for which you have explicitly defined an id.
+You can only reference types for which you have explicitly defined an id. Explicit
+identifier for resources need to unique across their type and namespace.
 
 There are four types of resources:
 
@@ -157,6 +161,42 @@ flowchart LR;
   
   alive --> person
   age --> person
+```
+
+#### Example 2
+
+```
+entity person "Person" = {
+  // ...
+}
+
+// This will fail
+entity person "Person 2" = {
+  // ...
+}
+
+// ----
+
+entity "Human" = {
+  // ...
+}
+
+// Implementation should warn (error in strict mode)
+// but this would create two unique identifier on apply.
+entity "Human" = {
+  // ...
+}
+
+
+// ----
+
+entity person "Person" = {
+  // ... 
+}
+
+// This is ok, because the link person and entity person are completely different
+// in namespace and type.
+link person "Person";
 ```
 
 #### Data Type
@@ -200,13 +240,21 @@ entity = *doc-comment *attribute entity [id] title "=" entity-value ";"
 
 ### Type Alias
 
-[//]: # (TODO: use alias instead of "virtual" prop)
-
 ```abnf
-alias = "alias" IDENT "=" prop-value;
+alias-prop = "alias" "prop" IDENT "=" prop-value ";"
+alias-data = "alias" "data" IDENT ";" ; CURRENTLY UNDEFINED
+alias-link = "alias" "link" IDENT ";" ; CURRENTLY UNDEFINED
+alias-entity = "alias" "entity" IDENT ";" ; CURRENTLY UNDEFINED
+
+alias = alias-prop / alias-entity / alias-data / alias-link;
 ```
 
--> explain virtual
+Type aliases are convenient ways to split the resource declaration (the right-hand side of
+the `=`) into multiple parts, which can be documented and reused.
+They use the same type prefix as a non-alias resource would and can be used
+interchangeably.
+Every occurrence of their identifier will be replaced with the declared value at
+compilation time.
 
 ### Variables
 
@@ -304,16 +352,81 @@ call = IDENT "(" [*(arg ",") arg [","]] ")"
 ### Modules
 
 ```abnf
-glob = STRING
+path = *(IDENT "::") IDENT
 
-import = "imp" (glob / "std") ";"
+import = "imp" path  ";"
 ```
 
-Modules are files or builtin modules (like `std`), during compilation the `imp`
-statement is simply replaced with the contents of the file or module it is referencing.
-This is recursive, meaning that all `imp` files referenced are also imported.
+Modules are files, which are either local or provided by the implemented (like `std`), the
+path of a module is separated by `::`, if the path points to a directory, a file
+named `mod.<INSERT SUFFIX HERE>` will be imported. An implementation **must** error if a
+module couldn't be found.
 
-Duplicated in files are **not** removed and will lead to a compilation error.
+Cycles of imports are not allowed, and there's no namespacing, identifiers for resources
+need to be unique across all imported files.
+
+Import resolution is done by analysing the imports of every file recursively, building a
+tree of dependencies. These dependencies are then topologically sorted and concat together
+to a single "virtual" file.
+
+#### Example 1
+
+##### Directory Structure
+
+```
+project
+|  modA
+|  |  modD.<INSERT SUFFIX HERE>
+|  \- modE.<INSERT SUFFIX HERE>
+|  modB
+|   mod.<INSERT SUFFIX HERE>
+\- modC.<INSERT SUFFIX HERE>
+```
+
+##### Code
+
+```
+imp modB; // This is valid
+imp modA; // This will not compile as there's no `mod` file in the directory `modA`
+imp modA::modD; // This is valid
+imp modA::modE; // This is valid
+```
+
+#### Example 2
+
+modA:
+
+```
+imp std;
+
+// defines prop: A, B, C
+```
+
+modB:
+
+```
+imp std;
+imp modA;
+
+// defined prop: D, E, F
+```
+
+Module resolution graph:
+
+```mermaid
+flowchart BT;
+  modA --> std
+  
+  modB --> std
+  modB --> modA
+```
+
+Topologically sorted:
+
+```mermaid
+flowchart TB;
+  std --> modA --> modB
+```
 
 ### Configuration
 
@@ -354,17 +467,17 @@ The std module is included in every implementation and should include the follow
 ```
 use "https://blockprotocol.org/types/@blockprotocol" as bp;
 
-alias text = #bp/text;
-alias number = #bp/number;
-alias bool = #bp/boolean;
-alias object = #bp/object;
+alias prop text = #bp::text;
+alias prop number = #bp::number;
+alias prop bool = #bp::boolean;
+alias prop object = #bp::object;
 ```
 
 The module provides sane defaults, like convenient aliases.
 
 ## Language Extensibility
 
-### Reverse links
+### Reverse Links
 
 Should reverse links be implemented in the graph type system they can be implemented in
 this DSL by reversing the arrows from `->` to `<-` and `~>` to `<~`.
@@ -399,82 +512,69 @@ The DSL could in theory support computed properties
 through [Additional Item Information](#additional-item-information) and a specific
 sub-language which is used to express the computation required.
 
+### Sharing Entity Structures
+
+The alias for entities, links and data are currently reserved and unused; one could
+imagine an extension of the language, which makes use of a spread syntax to share common
+properties for entities and property objects.
+
+#### Example 1
+
+```
+alias entity human = {
+  favorite-hobby/1,
+  
+  ~> friends?
+};
+
+entity "Child" = {
+  age/1,
+  ...human
+};
+
+entity "Adult" = {
+  occupation/1,
+  ...human
+};
+```
+
+### Inheritance
+
+Inheritance could be done through multiple ways: a new keyword: `extends` or implicitly
+through the spread syntax.
+
+#### Example 1
+
+```
+entity person "Person" = {
+  age/1
+};
+
+// proposal (1): allow spread syntax on entities
+entity "Child" = {
+  ...person,
+  grade/1
+}
+
+// proposal (2): use a new keyword `extends`
+entity "Adult" extends person = {
+  occupation/1
+}
+```
+
 ## Toolbox
 
-### Variables
+### `plan`
 
-Variables are used to refer to other types that have been declared remotely or locally and
-expressed through a prefix, a namespace and an identifier, and is expressed
-as `[prefix]?([namespace]/)?[identifier]`.
+### `apply`
 
-The prefix of a variable determines which type the variable it is referring
-to (`data-type`, `property-type`, etc.) and is optional in all types, if omitted a
-variable will take on the prefix of the declaration it is used in.
+### `bindings`
 
-This means that `other` is equivalent to `@other` in a `prop` declaration, and equivalent
-to `#other` in a `data` declaration.
-
-The available prefixes are: `#` for data-types, `@` for property-types, `>` for link-types
-and `~` for entities.
-
-The namespace of variable determines which URL is used to prefix the type name and can be
-omitted, if omitted the namespace will be `self`.
-
-The identifier is the unique identifier for a type in a specific namespace/URL.
-
-### Identifier
-
-### Attributes
-
-### Comments
-
-### `use` Statement
-
-The use state can be used to reference remote types and can be expressed as:
+## Example
 
 ```
-use [url] as [alias] (where {
-    data = [format],
-    prop = [format],
-    link = [format],
-    entity = [format]
-}
-)?;
-```
+imp std;
 
-The `[url]` is a string with a valid URL pointing to a repository of types where `alias`
-is a valid identifier, which is used to refer to a remote type in the DSL. The where
-clause is optional, if not defined a default will be chosen instead.
-
-`[format]` is a minimalistic format string, that uses string interpolation through `{var}`
-, supported variables are: `base` (defined `[url]`) and `id` (generated `id` for a
-specific declaration).
-
-One **must** specify a URL using the alias `self`, all declarations in a file will
-implicitly refer to the declared URL.
-
-### `set` Statement
-
-### `import` Statement
-
-```
-import [resource];
-```
-
-where `[resource]` is either a local file, a URL or points to a file in a git repository.
-
-This is the technical portion of the RFC. Explain the design in sufficient detail that:
-
-- Its interaction with other features is clear.
-- It is reasonably clear how the feature would be implemented.
-- Corner cases are dissected by example.
-
-The section should return to the examples given in the previous section, and explain more
-fully how the detailed proposal makes those examples work.
-
-### Example
-
-```
 use "https://blockprotocol.org/types/@alice" as self with {
     data = "{self}/data-type/{id}",
     prop = "{self}/property-type/{id}",
@@ -482,60 +582,50 @@ use "https://blockprotocol.org/types/@alice" as self with {
     entity = "{self}/entity-type/{id}"
 };
 
-
-use "https://blockprotocol.org/types/@blockprotocol" as bp with {
-    data = "{self}/data-type/{id}",
-    prop = "{self}/property-type/{id}",
-    link = "{self}/link-type/{id}",
-    entity = "{self}/entity-type/{id}"
-};
-
-prop favorite-quote "Favorite Quote" = #bp::text/1;
+prop favorite-quote "Favorite Quote" = text/1;
 
 prop user-id "User ID" = #bp::text/1 | #bp::number/1;
 
 /// This is a further description of Contact Information
 #[version = 14]
 prop contact-information "Contact Information" = {
-    *bp/email@1,
-    *bp/phone-number@1?
+    @bp::email/1,
+    @bp::phone-number/1?
 };
 
-/// Interests
-///
 /// This is some flavor text
 #[version = 1]
 prop interests "Interests" = {
-    favorite-song@1?,
-    favorite-film@1?,
-    hobby@1[]?
+    favorite-song/1?,
+    favorite-film/1?,
+    [hobby/1]?
 };
 
-prop contrived-property "Contrived Property" = #blockprotocol/number@1 | (#blockprotocol/number@1)[];
+prop contrived-property "Contrived Property" = #bp::number/1 | [#bp::number];
 
-// alternatives that need to be discussed:
-/// Owns
-///
 /// Have (something) as one's own; possess
 link owns "Owns";
 
 #[version = 1]
 entity book "Book" = {
-    name@1,
-    published-on@1?,
-    blurb@1,
+    name/1,
+    published-on/1?,
+    blurb/1,
 
-    -> written-by@1,
-    -> friend-of@1[],
+    -> written-by/1,
+    -> [friend-of/1],
     ~> best-friend@1?
 };
 
+alias prop some-object = {
+  name/1,
+  bp::email/1
+}
+
+alias prop property-value = text/1 | number/1 | [@some-object; ..5];
+
 #[version = 1]
-prop property-values "Property Values" = (
-    *bp/text@1
-    | *bp/number@1
-    | (some-object@1)[..5]
-)[..10];
+prop property-values "Property Values" = [@property-value; ..10];
 ```
 
 # Drawbacks
