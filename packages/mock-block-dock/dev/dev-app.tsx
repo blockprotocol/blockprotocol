@@ -17,7 +17,6 @@ type TestBlockType =
 
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
-  const [readonly, setReadonly] = useState(false);
 
   const blockEntity = {
     entityId: `test-entity-1`,

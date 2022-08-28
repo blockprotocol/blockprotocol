@@ -1,30 +1,30 @@
 @font-face {
     font-family: "Inter";
     font-weight: 300;
-    src: url("./assets/inter-light.ttf") format("trueType");
+    src: url("./inter-light.ttf") format("trueType");
 }
 
 @font-face {
     font-family: "Inter";
     font-weight: 400;
-    src: url("./assets/inter-regular.ttf") format("trueType");
+    src: url("./inter-regular.ttf") format("trueType");
 }
 @font-face {
     font-family: "Inter";
     font-weight: 500;
-    src: url("./assets/inter-medium.ttf") format("trueType");
+    src: url("./inter-medium.ttf") format("trueType");
 }
 
 @font-face {
     font-family: "Inter";
     font-weight: 400;
-    src: url("./assets/inter-regular.ttf") format("trueType");
+    src: url("./inter-regular.ttf") format("trueType");
 }
 
 @font-face {
     font-family: "Mono";
     font-weight: 400;
-    src: url("./assets/jet-brains-mono-regular.woff2") format("woff2");
+    src: url("./jet-brains-mono-regular.woff2") format("woff2");
 }
 
 .mbd-debug-mode-toggle {

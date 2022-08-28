@@ -60,7 +60,8 @@ type Props = {
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-const packageVersion = __VERSION__; // eslint-disable-line
+// const packageVersion = __VERSION__; // eslint-disable-line
+const packageVersion = "";
 
 export const Header = ({ darkMode, setDarkMode }: Props) => {
   const { setDebugMode } = useMockBlockDockContext();
