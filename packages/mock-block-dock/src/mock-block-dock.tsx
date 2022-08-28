@@ -1,5 +1,3 @@
-import "./debug-view-styles.css";
-
 import { HtmlBlockDefinition } from "@blockprotocol/core";
 import {
   BlockGraphProperties,

@@ -24,11 +24,14 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && yarn build:cjs && yarn build:esm",
-    "build:cjs": "tsc --p tsconfig.build.json --module commonjs --outDir dist/cjs ",
+    "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn copy-files",
+    "build:cjs": "tsc --p tsconfig.build.json --module commonjs --outDir dist/cjs",
     "build:dev": "yarn clean && cross-env NODE_ENV=development webpack --mode development",
     "build:esm": "tsc --p tsconfig.build.json",
     "clean": "rimraf ./dist/",
+    "copy-files": "yarn copy-files:cjs && yarn copy-files:esm",
+    "copy-files:cjs": "copyfiles -u 1 ./src/assets/* dist/cjs/",
+    "copy-files:esm": "copyfiles -u 1 ./src/assets/* dist/esm/",
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
     "lint:tsc": "tsc --noEmit",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
@@ -58,6 +61,7 @@
     "@babel/runtime": "^7.17.9",
     "@types/react-resizable": "^3.0.2",
     "babel-loader": "^8.2.4",
+    "copyfiles": "^2.4.1",
     "core-js": "^3.21.1",
     "cross-env": "^7.0.3",
     "css-loader": "^6.7.1",
