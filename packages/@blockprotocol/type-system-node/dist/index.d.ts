@@ -21,18 +21,6 @@ export interface DataType extends Record<string, any> {
     type: string;
 }
 
-type __ValidationErrorBaseUri = BaseUri;
-type __ValidationErrorVersionedUri = VersionedUri;
-declare namespace ValidationError {
-    export type MissingRequiredProperty = { type: "MissingRequiredProperty"; inner: __ValidationErrorBaseUri };
-    export type BaseUriMismatch = { type: "BaseUriMismatch"; inner: { base_uri: __ValidationErrorBaseUri; versioned_uri: __ValidationErrorVersionedUri } };
-    export type MissingRequiredLink = { type: "MissingRequiredLink"; inner: __ValidationErrorVersionedUri };
-    export type MismatchedPropertyCount = { type: "MismatchedPropertyCount"; inner: { actual: number; expected: number } };
-    export type EmptyOneOf = { type: "EmptyOneOf"; inner?: null };
-}
-
-export type ValidationError = ValidationError.MissingRequiredProperty | ValidationError.BaseUriMismatch | ValidationError.MissingRequiredLink | ValidationError.MismatchedPropertyCount | ValidationError.EmptyOneOf;
-
 type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
 declare namespace ParseVersionedUriError {
     export type IncorrectFormatting = { reason: "IncorrectFormatting"; inner?: null };
@@ -52,6 +40,18 @@ declare namespace ParseBaseUriError {
 }
 
 export type ParseBaseUriError = ParseBaseUriError.MissingTrailingSlash | ParseBaseUriError.UrlParseError | ParseBaseUriError.CannotBeABase;
+
+type __ValidationErrorBaseUri = BaseUri;
+type __ValidationErrorVersionedUri = VersionedUri;
+declare namespace ValidationError {
+    export type MissingRequiredProperty = { type: "MissingRequiredProperty"; inner: __ValidationErrorBaseUri };
+    export type BaseUriMismatch = { type: "BaseUriMismatch"; inner: { base_uri: __ValidationErrorBaseUri; versioned_uri: __ValidationErrorVersionedUri } };
+    export type MissingRequiredLink = { type: "MissingRequiredLink"; inner: __ValidationErrorVersionedUri };
+    export type MismatchedPropertyCount = { type: "MismatchedPropertyCount"; inner: { actual: number; expected: number } };
+    export type EmptyOneOf = { type: "EmptyOneOf"; inner?: null };
+}
+
+export type ValidationError = ValidationError.MissingRequiredProperty | ValidationError.BaseUriMismatch | ValidationError.MissingRequiredLink | ValidationError.MismatchedPropertyCount | ValidationError.EmptyOneOf;
 
 declare namespace Result {
     export type Ok<T> = { type: "Ok"; inner: T };
@@ -84,6 +84,12 @@ export interface ObjectRepr<V> {
 }
 
 export type BaseUri = string;
+
+export interface OneOfRepr<T> {
+    oneOf: T[];
+}
+
+export interface OneOf<T> extends OneOfRepr<T> {}
 
 export type VersionedUri = `${string}/v/${number}`;
 
@@ -126,12 +132,6 @@ export function extractBaseUri(uri: VersionedUri): BaseUri;
  */
 export function extractVersion(uri: VersionedUri): number;
 
-
-export interface OneOfRepr<T> {
-    oneOf: T[];
-}
-
-export interface OneOf<T> extends OneOfRepr<T> {}
 
 export interface PropertyTypeReference {
     $ref: VersionedUri;
