@@ -44,7 +44,7 @@ impl TryFrom<DataType> for super::DataType {
 
     fn try_from(data_type_repr: DataType) -> Result<Self, Self::Error> {
         let id = VersionedUri::from_str(&data_type_repr.id)
-            .map_err(|err| ParseDataTypeError::InvalidVersionedUri(err))?;
+            .map_err(ParseDataTypeError::InvalidVersionedUri)?;
         Ok(Self::new(
             id,
             data_type_repr.title,

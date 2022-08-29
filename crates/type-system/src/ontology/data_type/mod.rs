@@ -170,6 +170,8 @@ impl From<DataTypeReference> for serde_json::Value {
 
 #[cfg(test)]
 mod tests {
+    use serde_json::json;
+
     use super::*;
     use crate::{test_data, utils::tests::check_serialization_from_str};
 
@@ -222,5 +224,26 @@ mod tests {
     #[test]
     fn empty_list() {
         check_serialization_from_str::<DataType>(test_data::data_type::EMPTY_LIST_V1, None);
+    }
+
+    #[test]
+    fn invalid_id() {
+        let invalid_data_type = json!(
+            {
+              "kind": "dataType",
+              "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1.5",
+              "title": "Text",
+              "description": "An ordered sequence of characters",
+              "type": "string"
+            }
+        );
+
+        let result: Result<DataType, _> = invalid_data_type.try_into();
+        assert_eq!(
+            result,
+            Err(ParseDataTypeError::InvalidVersionedUri(
+                ParseVersionedUriError::AdditionalEndContent
+            ))
+        );
     }
 }

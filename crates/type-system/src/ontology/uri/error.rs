@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseBaseUriError {
     MissingTrailingSlash,
@@ -28,7 +28,7 @@ impl fmt::Display for ParseBaseUriError {
 }
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseVersionedUriError {
     IncorrectFormatting,
