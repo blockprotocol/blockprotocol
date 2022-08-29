@@ -1,19 +1,12 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Box, buttonClasses, SxProps, Theme } from "@mui/material";
+import { Box, buttonClasses } from "@mui/material";
 import { PropsWithChildren } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
 import { LinkButton } from "../../link-button";
 import { BlockFormContainer } from "./block-form-container";
 
-type BlockFormLayoutProps = PropsWithChildren<{
-  formContainerSx?: SxProps<Theme>;
-}>;
-
-export const BlockFormLayout = ({
-  children,
-  formContainerSx,
-}: BlockFormLayoutProps) => {
+export const BlockFormLayout = ({ children }: PropsWithChildren) => {
   return (
     <Box
       sx={({ breakpoints }) => ({
@@ -38,7 +31,7 @@ export const BlockFormLayout = ({
         Back to Blocks
       </LinkButton>
 
-      <BlockFormContainer sx={formContainerSx}>{children}</BlockFormContainer>
+      <BlockFormContainer>{children}</BlockFormContainer>
     </Box>
   );
 };

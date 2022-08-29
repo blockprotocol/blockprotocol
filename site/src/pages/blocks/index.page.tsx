@@ -26,7 +26,7 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
   const [blocks, setBlocks] = useState<ExpandedBlockMetadata[]>([]);
 
   useEffect(() => {
-    if (user?.shortname) {
+    if (user.shortname) {
       /** @todo replace this manual fetching with `SWR` or `React Query` for better DX/UX */
       void apiClient
         .getUserBlocks({

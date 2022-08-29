@@ -65,12 +65,10 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
           <Box
             component="form"
             onSubmit={handleSubmit(onSubmit)}
-            sx={{
-              gap: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
+            gap={8}
+            display="flex"
+            flexDirection="column"
+            alignItems="flex-start"
           >
             <PublishBlockInfo />
 

@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, experimental_sx as sx, styled, Typography } from "@mui/material";
 
 import { LinkButton } from "../../link-button";
 
@@ -9,6 +9,30 @@ interface PublishBlockCardProps {
   logoSrc: string;
 }
 
+const Wrapper = styled(Box)(({ theme }) =>
+  sx({
+    display: "flex",
+    alignItems: "center",
+    p: theme.spacing(2.5, 3),
+    gap: 3,
+    border: `1px solid ${theme.palette.gray[30]}`,
+    borderRadius: 1,
+    transition: theme.transitions.create("border-color"),
+
+    "&:hover": {
+      borderColor: theme.palette.purple[40],
+    },
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+
+      "& :last-child": {
+        width: "100%",
+      },
+    },
+  }),
+);
+
 export const PublishBlockCard = ({
   publishFrom,
   description,
@@ -16,37 +40,10 @@ export const PublishBlockCard = ({
   logoSrc,
 }: PublishBlockCardProps) => {
   return (
-    <Box
-      sx={(theme) => ({
-        display: "flex",
-        alignItems: "center",
-        p: theme.spacing(2.5, 3),
-        gap: 3,
-        border: `1px solid ${theme.palette.gray[30]}`,
-        borderRadius: 1,
-        transition: theme.transitions.create("border-color"),
-
-        "&:hover": {
-          borderColor: theme.palette.purple[40],
-        },
-        [theme.breakpoints.down("sm")]: {
-          flexDirection: "column",
-          alignItems: "flex-start",
-
-          "& :last-child": {
-            width: "100%",
-          },
-        },
-      })}
-    >
+    <Wrapper>
       <Box component="img" src={logoSrc} />
 
-      <Box
-        sx={{
-          flex: 1,
-          opacity: href ? 1 : 0.5,
-        }}
-      >
+      <Box sx={{ flex: 1, opacity: href ? 1 : 0.5 }}>
         <Typography variant="bpHeading5" fontWeight={500} mb={0.5}>
           Publish from{" "}
           <Box component="b" color={({ palette }) => palette.common.black}>
@@ -75,6 +72,6 @@ export const PublishBlockCard = ({
           Coming Soon
         </Typography>
       )}
-    </Box>
+    </Wrapper>
   );
 };

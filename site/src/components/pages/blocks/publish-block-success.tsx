@@ -14,6 +14,7 @@ export const PublishBlockSuccess = ({
 }: PublishBlockSuccessProps) => {
   return (
     <Alert
+      sx={{ mb: 3 }}
       type="success"
       title="Your block was published successfully"
       description={
@@ -35,7 +36,6 @@ export const PublishBlockSuccess = ({
           </Link>
         </>
       }
-      sx={{ mb: 3 }}
     />
   );
 };
