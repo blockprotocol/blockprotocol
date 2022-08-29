@@ -45,6 +45,59 @@ pub(in crate::ontology) mod repr {
             Self { possibilities }
         }
     }
+
+    #[cfg(test)]
+    mod tests {
+        use serde_json::json;
+
+        use super::*;
+
+        mod one_of {
+            use super::*;
+            use crate::utils::tests::{
+                check_repr_serialization_from_value, ensure_repr_failed_deserialization,
+            };
+
+            #[test]
+            fn empty() {
+                ensure_repr_failed_deserialization::<OneOf<()>>(json!({
+                    "oneOf": []
+                }));
+            }
+
+            #[test]
+            fn one() {
+                check_repr_serialization_from_value(
+                    json!({
+                        "oneOf": ["A"]
+                    }),
+                    Some(OneOf {
+                        possibilities: ["A".to_owned()].to_vec(),
+                    }),
+                );
+            }
+
+            #[test]
+            fn multiple() {
+                check_repr_serialization_from_value(
+                    json!({
+                        "oneOf": ["A", "B"]
+                    }),
+                    Some(OneOf {
+                        possibilities: ["A".to_owned(), "B".to_owned()].to_vec(),
+                    }),
+                );
+            }
+
+            #[test]
+            fn additional_properties() {
+                ensure_repr_failed_deserialization::<OneOf<()>>(json!({
+                    "oneOf": ["A", "B"],
+                    "additional": 10,
+                }));
+            }
+        }
+    }
 }
 
 use crate::ontology::shared::validate::ValidationError;
@@ -86,49 +139,7 @@ impl<T> OneOf<T> {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use serde_json::json;
-//
-//     use super::*;
-//
-//     mod one_of {
-//         use super::*;
-//         use crate::utils::tests::{check_serialization_from_value, ensure_failed_deserialization};
-//
-//         #[test]
-//         fn empty() {
-//             ensure_failed_deserialization::<OneOf<()>>(json!({
-//                 "oneOf": []
-//             }));
-//         }
-//
-//         #[test]
-//         fn one() {
-//             check_serialization_from_value(
-//                 json!({
-//                     "oneOf": ["A"]
-//                 }),
-//                 Some(OneOf::new(["A".to_owned()]).expect("invalid OneOf")),
-//             );
-//         }
-//
-//         #[test]
-//         fn multiple() {
-//             check_serialization_from_value(
-//                 json!({
-//                     "oneOf": ["A", "B"]
-//                 }),
-//                 Some(OneOf::new(["A".to_owned(), "B".to_owned()]).expect("invalid OneOf")),
-//             );
-//         }
-//
-//         #[test]
-//         fn additional_properties() {
-//             ensure_failed_deserialization::<OneOf<()>>(json!({
-//                 "oneOf": ["A", "B"],
-//                 "additional": 10,
-//             }));
-//         }
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    // TODO: validation tests
+}
