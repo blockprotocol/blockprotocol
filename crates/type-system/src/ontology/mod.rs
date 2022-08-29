@@ -12,4 +12,27 @@ pub mod property_type;
 //  we should probably just go with URL
 pub mod uri;
 
-pub mod shared;
+mod shared;
+
+pub use shared::{
+    array::{Array, ValueOrArray},
+    error::{serialize_with_delimiter, HasSerdeJsonError},
+    object::Object,
+    one_of::OneOf,
+    validate::{ValidateUri, ValidationError},
+};
+
+// Re-export the repr contents so they're nicely grouped and so that they're easier to import in
+// a non-ambiguous way where they don't get confused with their non repr counterparts.
+// For example, `import crate::ontology::repr` lets you then use `repr::DataType`
+pub mod repr {
+    pub use super::{
+        data_type::repr::{DataType, DataTypeReference},
+        property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
+        shared::{
+            array::repr::{Array, ValueOrArray},
+            object::repr::Object,
+            one_of::repr::OneOf,
+        },
+    };
+}

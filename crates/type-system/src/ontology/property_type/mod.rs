@@ -5,8 +5,9 @@ mod wasm;
 
 use std::{collections::HashSet, str::FromStr};
 
-use crate::{
-    ontology::{data_type::DataTypeReference, property_type::error::ParsePropertyTypeError},
+use crate::ontology::{
+    data_type::DataTypeReference,
+    property_type::error::ParsePropertyTypeError,
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
     Array, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };

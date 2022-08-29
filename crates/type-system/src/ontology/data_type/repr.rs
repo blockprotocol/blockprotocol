@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{
-    ontology::data_type::ParseDataTypeError,
+use crate::ontology::{
+    data_type::ParseDataTypeError,
     uri::{ParseVersionedUriError, VersionedUri},
 };
 

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use serde_json::error::Category;
 
-pub(in crate::ontology) fn serialize_with_delimiter<T>(contents: T) -> String
+pub fn serialize_with_delimiter<T>(contents: T) -> String
 where
     T: Serialize,
 {
@@ -11,7 +11,7 @@ where
     )
 }
 
-pub(in crate::ontology) trait HasSerdeJsonError {
+pub trait HasSerdeJsonError {
     fn new_serde_json_error(contents: String) -> Self;
 }
 

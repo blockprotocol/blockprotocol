@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::shared::HasSerdeJsonError;
+use crate::ontology::HasSerdeJsonError;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Serialize, Deserialize)]

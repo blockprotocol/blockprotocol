@@ -4,8 +4,8 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
-use crate::{
-    ontology::property_type::error::ParsePropertyTypeError,
+use crate::ontology::{
+    property_type::error::ParsePropertyTypeError,
     uri::{ParseVersionedUriError, VersionedUri},
 };
 
@@ -48,15 +48,13 @@ impl From<super::PropertyTypeReference> for PropertyTypeReference {
 pub enum PropertyValues {
     DataTypeReference(crate::ontology::data_type::repr::DataTypeReference),
     PropertyTypeObject(
-        crate::ontology::shared::repr::Object<
-            crate::ontology::shared::repr::ValueOrArray<PropertyTypeReference>,
-        >,
+        crate::ontology::repr::Object<crate::ontology::repr::ValueOrArray<PropertyTypeReference>>,
     ),
     ArrayOfPropertyValues(
         // This is a hack, currently recursive enums seem to break tsify
         // https://github.com/madonoharu/tsify/issues/5
         #[cfg_attr(target_arch = "wasm32", tsify(type = "Array<OneOf<PropertyValues>>"))]
-        crate::ontology::shared::repr::Array<crate::ontology::shared::repr::OneOf<PropertyValues>>,
+        crate::ontology::repr::Array<crate::ontology::repr::OneOf<PropertyValues>>,
     ),
 }
 
@@ -124,7 +122,7 @@ pub struct PropertyType {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
-    one_of: crate::ontology::shared::repr::OneOf<PropertyValues>,
+    one_of: crate::ontology::repr::OneOf<PropertyValues>,
 }
 
 impl TryFrom<PropertyType> for super::PropertyType {

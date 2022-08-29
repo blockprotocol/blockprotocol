@@ -1,9 +1,9 @@
-pub(super) mod repr;
+pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;
 
-use crate::{
-    ontology::shared::validate::{ValidateUri, ValidationError},
+use crate::ontology::{
+    shared::validate::{ValidateUri, ValidationError},
     uri::BaseUri,
 };
 
@@ -78,7 +78,7 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::PropertyTypeReference;
+    use crate::ontology::property_type::PropertyTypeReference;
 
     type Object = super::Object<PropertyTypeReference, 1>;
 

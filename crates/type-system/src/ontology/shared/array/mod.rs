@@ -1,7 +1,7 @@
-pub(super) mod repr;
+pub(in crate::ontology) mod repr;
 
-use crate::{
-    ontology::shared::validate::{ValidateUri, ValidationError},
+use crate::ontology::{
+    shared::validate::{ValidateUri, ValidationError},
     uri::BaseUri,
 };
 

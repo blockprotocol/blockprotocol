@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{uri::BaseUri, ValidateUri};
+use crate::ontology::{uri::BaseUri, ValidateUri};
 
 /// Will serialize as a constant value `"object"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -83,8 +83,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        ontology::property_type::repr::PropertyTypeReference,
-        uri::VersionedUri,
+        ontology::{property_type::repr::PropertyTypeReference, uri::VersionedUri},
         utils::tests::{check_repr_serialization_from_value, ensure_repr_failed_deserialization},
     };
 

@@ -8,7 +8,7 @@ use std::{collections::HashMap, str::FromStr};
 use serde_json;
 
 pub use crate::ontology::data_type::error::ParseDataTypeError;
-use crate::{
+use crate::ontology::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
     ValidateUri, ValidationError,
 };

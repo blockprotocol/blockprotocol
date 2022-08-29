@@ -9,8 +9,7 @@ use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use tsify::Tsify;
 use url::Url;
 
-use crate::ontology::shared::serialize_with_delimiter;
-pub use crate::uri::error::{ParseBaseUriError, ParseVersionedUriError};
+pub use crate::ontology::uri::error::{ParseBaseUriError, ParseVersionedUriError};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Clone, PartialEq, Eq, Hash)]
