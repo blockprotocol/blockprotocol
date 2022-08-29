@@ -18,12 +18,18 @@ pub struct PropertyTypeReference {
 #[allow(clippy::enum_variant_names)]
 pub enum PropertyValues {
     DataTypeReference(crate::ontology::data_type::repr::DataTypeReference),
-    PropertyTypeObject(Object<ValueOrArray<PropertyTypeReference>, 1>),
+    PropertyTypeObject(
+        crate::ontology::shared::object::repr::Object<
+            crate::ontology::shared::array::repr::ValueOrArray<PropertyTypeReference>,
+        >,
+    ),
     ArrayOfPropertyValues(
         // This is a hack, currently recursive enums seem to break tsify
         // https://github.com/madonoharu/tsify/issues/5
         #[cfg_attr(target_arch = "wasm32", tsify(type = "Array<OneOf<PropertyValues>>"))]
-        Array<OneOf<PropertyValues>>,
+        crate::ontology::shared::array::repr::Array<
+            crate::ontology::shared::one_of::repr::OneOf<PropertyValues>,
+        >,
     ),
 }
 
@@ -49,5 +55,5 @@ pub struct PropertyType {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
-    one_of: OneOf<PropertyValues>,
+    one_of: crate::ontology::shared::one_of::repr::OneOf<PropertyValues>,
 }

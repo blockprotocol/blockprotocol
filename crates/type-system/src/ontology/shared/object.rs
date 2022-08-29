@@ -5,8 +5,6 @@ pub(in crate::ontology) mod repr {
     #[cfg(target_arch = "wasm32")]
     use tsify::Tsify;
 
-    use crate::uri::BaseUri;
-
     /// Will serialize as a constant value `"object"`
     #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
@@ -17,12 +15,12 @@ pub(in crate::ontology) mod repr {
     #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
     #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase", deny_unknown_fields)]
-    struct ObjectRepr<V> {
+    pub struct Object<V> {
         #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
         r#type: ObjectTypeTag,
-        properties: HashMap<BaseUri, V>,
+        properties: HashMap<String, V>,
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
-        required: Vec<BaseUri>,
+        required: Vec<String>,
     }
 }
 
