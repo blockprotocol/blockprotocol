@@ -29,12 +29,21 @@ where
             let serde_json_err_string = err.to_string();
             let start_index = serde_json_err_string
                 .find(SERDE_DELIMITER)
-                .expect("starting delimiter was missing from error message")
+                .unwrap_or_else(|| {
+                    panic!(
+                        "starting delimiter was missing from error message: \
+                         {serde_json_err_string}"
+                    )
+                })
                 + SERDE_DELIMITER.len();
 
             let end_index = serde_json_err_string[start_index..]
                 .find(SERDE_DELIMITER)
-                .expect("ending delimiter was missing from error message")
+                .unwrap_or_else(|| {
+                    panic!(
+                        "ending delimiter was missing from error message: {serde_json_err_string}"
+                    )
+                })
                 + start_index;
 
             serde_json::from_str(&serde_json_err_string.as_str()[start_index..end_index])

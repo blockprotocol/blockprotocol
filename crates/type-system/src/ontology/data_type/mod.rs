@@ -4,7 +4,7 @@ mod wasm;
 
 use std::collections::HashMap;
 
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize};
 use serde_json;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;

@@ -44,6 +44,7 @@ describe("validateBaseUri", () => {
     if (result.type === "Ok") {
       expect(result.inner).toEqual(input);
     } else {
+      // TODO: throwing a new error here gives less helpful messages than using Jest methods
       throw new Error("validateBaseUri should have returned Ok");
     }
   });

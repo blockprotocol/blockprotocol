@@ -7,20 +7,6 @@
 * @param {PropertyType} propertyTypeObj
 */
 export function isValidPropertyType(propertyTypeObj: PropertyType): void;
-export interface TempError {}
-
-export interface DataTypeReference {
-    $ref: VersionedUri;
-}
-
-export interface DataType extends Record<string, any> {
-    kind: 'dataType';
-    $id: VersionedUri;
-    title: string;
-    description?: string;
-    type: string;
-}
-
 type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
 declare namespace ParseVersionedUriError {
     export type IncorrectFormatting = { reason: "IncorrectFormatting"; inner?: null };
@@ -40,56 +26,6 @@ declare namespace ParseBaseUriError {
 }
 
 export type ParseBaseUriError = ParseBaseUriError.MissingTrailingSlash | ParseBaseUriError.UrlParseError | ParseBaseUriError.CannotBeABase;
-
-type __ValidationErrorBaseUri = BaseUri;
-type __ValidationErrorVersionedUri = VersionedUri;
-declare namespace ValidationError {
-    export type MissingRequiredProperty = { type: "MissingRequiredProperty"; inner: __ValidationErrorBaseUri };
-    export type BaseUriMismatch = { type: "BaseUriMismatch"; inner: { base_uri: __ValidationErrorBaseUri; versioned_uri: __ValidationErrorVersionedUri } };
-    export type MissingRequiredLink = { type: "MissingRequiredLink"; inner: __ValidationErrorVersionedUri };
-    export type MismatchedPropertyCount = { type: "MismatchedPropertyCount"; inner: { actual: number; expected: number } };
-    export type EmptyOneOf = { type: "EmptyOneOf"; inner?: null };
-}
-
-export type ValidationError = ValidationError.MissingRequiredProperty | ValidationError.BaseUriMismatch | ValidationError.MissingRequiredLink | ValidationError.MismatchedPropertyCount | ValidationError.EmptyOneOf;
-
-declare namespace Result {
-    export type Ok<T> = { type: "Ok"; inner: T };
-    export type Err<E> = { type: "Err"; inner: E };
-}
-
-export type Result<T, E> = Result.Ok<T> | Result.Err<E>;
-
-type __ValueOrArrayArray<A> = Array<A>;
-declare namespace ValueOrArray {
-    export type Value<T> = T;
-    export type Array<T> = __ValueOrArrayArray<T>;
-}
-
-export type ValueOrArray<T> = ValueOrArray.Value<T> | ValueOrArray.Array<T>;
-
-export interface Array<T> {
-    type: 'array';
-    items: T;
-    minItems?: number;
-    maxItems?: number;
-}
-
-export interface Object<V> extends ObjectRepr<V> {}
-
-export interface ObjectRepr<V> {
-    type: 'object';
-    properties: Record<BaseUri, V>;
-    required?: BaseUri[];
-}
-
-export type BaseUri = string;
-
-export interface OneOfRepr<T> {
-    oneOf: T[];
-}
-
-export interface OneOf<T> extends OneOfRepr<T> {}
 
 export type VersionedUri = `${string}/v/${number}`;
 
@@ -155,6 +91,88 @@ export interface PropertyType extends OneOf<PropertyValues> {
     title: string;
     pluralTitle: string;
     description?: string;
+}
+
+export interface TempError {}
+
+declare namespace Result {
+    export type Ok<T> = { type: "Ok"; inner: T };
+    export type Err<E> = { type: "Err"; inner: E };
+}
+
+export type Result<T, E> = Result.Ok<T> | Result.Err<E>;
+
+type __ParseDataTypeErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParseDataTypeError {
+    export type InvalidVersionedUri = { reason: "InvalidVersionedUri"; inner: __ParseDataTypeErrorParseVersionedUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseDataTypeError = ParseDataTypeError.InvalidVersionedUri | ParseDataTypeError.InvalidJson;
+
+
+/**
+ * Checks if a given Data Type is correctly formed
+ *
+ * @param {DataType} dataType - The Data Type object to validate.
+ * @returns {Result} - @todo
+ */
+export function validateDataType(dataType: DataType): Result<undefined, ParseDataTypeError>;
+
+
+type __ValidationErrorBaseUri = BaseUri;
+type __ValidationErrorVersionedUri = VersionedUri;
+declare namespace ValidationError {
+    export type MissingRequiredProperty = { type: "MissingRequiredProperty"; inner: __ValidationErrorBaseUri };
+    export type BaseUriMismatch = { type: "BaseUriMismatch"; inner: { base_uri: __ValidationErrorBaseUri; versioned_uri: __ValidationErrorVersionedUri } };
+    export type MissingRequiredLink = { type: "MissingRequiredLink"; inner: __ValidationErrorVersionedUri };
+    export type MismatchedPropertyCount = { type: "MismatchedPropertyCount"; inner: { actual: number; expected: number } };
+    export type EmptyOneOf = { type: "EmptyOneOf"; inner?: null };
+}
+
+export type ValidationError = ValidationError.MissingRequiredProperty | ValidationError.BaseUriMismatch | ValidationError.MissingRequiredLink | ValidationError.MismatchedPropertyCount | ValidationError.EmptyOneOf;
+
+type __ValueOrArrayArray<A> = Array<A>;
+declare namespace ValueOrArray {
+    export type Value<T> = T;
+    export type Array<T> = __ValueOrArrayArray<T>;
+}
+
+export type ValueOrArray<T> = ValueOrArray.Value<T> | ValueOrArray.Array<T>;
+
+export interface Array<T> {
+    type: 'array';
+    items: T;
+    minItems?: number;
+    maxItems?: number;
+}
+
+export interface OneOfRepr<T> {
+    oneOf: T[];
+}
+
+export interface OneOf<T> extends OneOfRepr<T> {}
+
+export type BaseUri = string;
+
+export interface Object<V> extends ObjectRepr<V> {}
+
+export interface ObjectRepr<V> {
+    type: 'object';
+    properties: Record<BaseUri, V>;
+    required?: BaseUri[];
+}
+
+export interface DataTypeReference {
+    $ref: VersionedUri;
+}
+
+export interface DataType extends Record<string, any> {
+    kind: 'dataType';
+    $id: VersionedUri;
+    title: string;
+    description?: string;
+    type: string;
 }
 
 /**

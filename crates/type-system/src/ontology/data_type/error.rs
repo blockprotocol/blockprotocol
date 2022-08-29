@@ -8,14 +8,16 @@
 use std::fmt;
 
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 
 use crate::{ontology::repr_shared::HasSerdeJsonError, uri::ParseVersionedUriError};
 
-// TODO: can we use tsify's into_wasm_abi or whatever it was
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize)]
-#[serde(untagged)]
+#[serde(tag = "reason", content = "inner")]
 pub enum ParseDataTypeError {
-    VersionedUri(ParseVersionedUriError),
+    InvalidVersionedUri(ParseVersionedUriError),
     InvalidJson(String),
 }
 

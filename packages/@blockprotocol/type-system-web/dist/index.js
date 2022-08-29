@@ -99,14 +99,6 @@ function getInt32Memory0() {
     return cachedInt32Memory0;
 }
 
-let stack_pointer = 32;
-
-function addBorrowedObject(obj) {
-    if (stack_pointer == 1) throw new Error('out of js stack');
-    heap[--stack_pointer] = obj;
-    return stack_pointer;
-}
-
 function dropObject(idx) {
     if (idx < 36) return;
     heap[idx] = heap_next;
@@ -118,27 +110,6 @@ function takeObject(idx) {
     dropObject(idx);
     return ret;
 }
-/**
-* Checks if a given {PropertyType} is valid
-*
-* @throws {TempError} if the property type is malformed
-* @param {PropertyType} propertyTypeObj
-*/
-export function isValidPropertyType(propertyTypeObj) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        heap[stack_pointer++] = undefined;
-    }
-}
-
 /**
 * @param {string} uri
 * @returns {any}
@@ -207,6 +178,47 @@ export function extractVersion(uri) {
         return r0 >>> 0;
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
+    }
+}
+
+let stack_pointer = 32;
+
+function addBorrowedObject(obj) {
+    if (stack_pointer == 1) throw new Error('out of js stack');
+    heap[--stack_pointer] = obj;
+    return stack_pointer;
+}
+/**
+* Checks if a given {PropertyType} is valid
+*
+* @throws {TempError} if the property type is malformed
+* @param {PropertyType} propertyTypeObj
+*/
+export function isValidPropertyType(propertyTypeObj) {
+    try {
+        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
+        var r0 = getInt32Memory0()[retptr / 4 + 0];
+        var r1 = getInt32Memory0()[retptr / 4 + 1];
+        if (r1) {
+            throw takeObject(r0);
+        }
+    } finally {
+        wasm.__wbindgen_add_to_stack_pointer(16);
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+/**
+* @param {any} data_type_obj
+* @returns {any}
+*/
+export function validateDataType(data_type_obj) {
+    try {
+        const ret = wasm.validateDataType(addBorrowedObject(data_type_obj));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
     }
 }
 
@@ -283,6 +295,27 @@ function getImports() {
         const len0 = WASM_VECTOR_LEN;
         getInt32Memory0()[arg0 / 4 + 1] = len0;
         getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    };
+    imports.wbg.__wbg_new_693216e109162396 = function() {
+        const ret = new Error();
+        return addHeapObject(ret);
+    };
+    imports.wbg.__wbg_stack_0ddaca5d1abfb52f = function(arg0, arg1) {
+        const ret = getObject(arg1).stack;
+        const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        getInt32Memory0()[arg0 / 4 + 1] = len0;
+        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+    };
+    imports.wbg.__wbg_error_09919627ac0992f5 = function(arg0, arg1) {
+        try {
+            console.error(getStringFromWasm0(arg0, arg1));
+        } finally {
+            wasm.__wbindgen_free(arg0, arg1);
+        }
+    };
+    imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
+        takeObject(arg0);
     };
     imports.wbg.__wbindgen_throw = function(arg0, arg1) {
         throw new Error(getStringFromWasm0(arg0, arg1));

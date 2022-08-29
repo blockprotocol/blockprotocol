@@ -1,4 +1,8 @@
-import { DataType, validateDataType } from "..";
+import {
+  DataType,
+  ParseDataTypeError,
+  validateDataType,
+} from "..";
 
 const primitiveDataTypes: DataType[] = [
   {
@@ -48,14 +52,23 @@ const primitiveDataTypes: DataType[] = [
 
 // These are data types which satisfy the TypeScript interface but are still invalid, and demonstrate the need for the
 // validation method
-const invalidDataTypes: DataType[] = [
-  {
-    kind: "dataType",
-    $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URI
-    title: "Text",
-    description: "An ordered sequence of characters",
-    type: "string",
-  },
+const invalidDataTypes: [DataType, ParseDataTypeError][] = [
+  [
+    {
+      kind: "dataType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URI
+      title: "Text",
+      description: "An ordered sequence of characters",
+      type: "string",
+    },
+    {
+      reason: "InvalidVersionedUri",
+      inner: {
+        reason: "InvalidBaseUri",
+        inner: { reason: "UrlParseError", inner: "AdditionalEndContent" },
+      },
+    },
+  ],
 ];
 
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be
@@ -73,20 +86,25 @@ const brokenTypes: any[] = [
 
 describe("isValidDataType", () => {
   test.each(primitiveDataTypes)("isValidDataType($title) succeeds", (input) => {
-    expect(() => validateDataType(input)).not.toThrow();
+    expect(validateDataType(input)).toEqual({ type: "Ok" });
   });
 
   test.each(invalidDataTypes)(
     "isValidDataType errors on invalid data type: %s",
-    (input) => {
-      expect(() => validateDataType(input)).not.toThrow();
+    (input, expected) => {
+      const result = validateDataType(input);
+      if (result.type === "Err") {
+        expect(result.inner).toEqual(expected);
+      } else {
+        throw new Error("validateBaseUri should have returned Err");
+      }
     },
   );
 
   test.each(brokenTypes)(
     "isValidDataType cleanly errors on different type: %s",
     (input) => {
-      expect(() => validateDataType(input)).toThrow();
+      expect(validateDataType(input)).toEqual({});
     },
   );
 });
