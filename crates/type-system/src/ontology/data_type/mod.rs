@@ -1,47 +1,29 @@
 mod error;
+mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Serialize};
 use serde_json;
-#[cfg(target_arch = "wasm32")]
-use tsify::Tsify;
 
 pub use crate::ontology::data_type::error::ParseDataTypeError;
 use crate::{
-    uri::{BaseUri, VersionedUri},
+    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
     ValidateUri, ValidationError,
 };
 
-/// Will serialize as a constant value `"dataType"`
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-enum DataTypeTag {
-    DataType,
-}
-
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct DataType {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "'dataType'"))]
-    kind: DataTypeTag,
-    #[serde(rename = "$id")]
     id: VersionedUri,
     title: String,
-    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
-    #[serde(rename = "type")]
     json_type: String,
-    /// Properties, which are not strongly typed.
+    /// Properties which are not currently strongly typed.
     ///
     /// The data type meta-schema currently allows arbitrary, untyped properties. This is a
     /// catch-all field to store all non-typed data.
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<string, any>"))]
-    #[serde(flatten)]
     additional_properties: HashMap<String, serde_json::Value>,
 }
 
@@ -55,7 +37,6 @@ impl DataType {
         additional_properties: HashMap<String, serde_json::Value>,
     ) -> Self {
         Self {
-            kind: DataTypeTag::DataType,
             id,
             title,
             description,
@@ -95,11 +76,38 @@ impl DataType {
     }
 }
 
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
+impl FromStr for DataType {
+    type Err = ParseDataTypeError;
+
+    fn from_str(data_type_str: &str) -> Result<Self, Self::Err> {
+        let data_type_repr: repr::DataType = serde_json::from_str(data_type_str)
+            .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
+
+        Self::try_from(data_type_repr)
+    }
+}
+
+impl TryFrom<serde_json::Value> for DataType {
+    type Error = ParseDataTypeError;
+
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        let data_type_repr: repr::DataType = serde_json::from_value(value)
+            .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
+
+        Self::try_from(data_type_repr)
+    }
+}
+
+impl From<DataType> for serde_json::Value {
+    fn from(data_type: DataType) -> Self {
+        let data_type_repr: repr::DataType = data_type.into();
+
+        serde_json::to_value(data_type_repr).expect("Failed to deserialize Data Type repr")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub struct DataTypeReference {
-    #[serde(rename = "$ref")]
     uri: VersionedUri,
 }
 
@@ -126,6 +134,38 @@ impl ValidateUri for DataTypeReference {
                 versioned_uri: self.uri().clone(),
             })
         }
+    }
+}
+
+impl FromStr for DataTypeReference {
+    type Err = ParseVersionedUriError;
+
+    fn from_str(data_type_ref_str: &str) -> Result<Self, Self::Err> {
+        let data_type_ref_repr: repr::DataTypeReference =
+            serde_json::from_str(data_type_ref_str)
+                .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
+
+        Self::try_from(data_type_ref_repr)
+    }
+}
+
+impl TryFrom<serde_json::Value> for DataTypeReference {
+    type Error = ParseVersionedUriError;
+
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        let data_type_ref_repr: repr::DataTypeReference = serde_json::from_value(value)
+            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
+
+        Self::try_from(data_type_ref_repr)
+    }
+}
+
+impl From<DataTypeReference> for serde_json::Value {
+    fn from(data_type_ref: DataTypeReference) -> Self {
+        let data_type_ref_repr: repr::DataTypeReference = data_type_ref.into();
+
+        serde_json::to_value(data_type_ref_repr)
+            .expect("Failed to deserialize Data Type Reference repr")
     }
 }
 

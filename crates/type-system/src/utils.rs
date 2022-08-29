@@ -36,7 +36,7 @@ mod wasm {
 
 #[cfg(test)]
 pub mod tests {
-    use std::fmt::Debug;
+    use std::{fmt::Debug, str::FromStr};
 
     use serde::{Deserialize, Serialize};
 
@@ -62,10 +62,11 @@ pub mod tests {
     )]
     pub fn check_serialization<T>(input: serde_json::Value, expected_native_repr: Option<T>) -> T
     where
-        T: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
+        T: FromStr + Into<serde_json::Value> + Debug + PartialEq,
+        <T as FromStr>::Err: Debug,
     {
-        let deserialized: T = serde_json::from_value(input.clone()).expect("failed to deserialize");
-        let reserialized = serde_json::to_value(&deserialized).expect("failed to serialize");
+        let deserialized: T = T::from_str(&input.to_string()).expect("failed to deserialize");
+        let reserialized = serde_json::to_value(&deserialized.into()).expect("failed to serialize");
 
         if let Some(repr) = expected_native_repr {
             assert_eq!(deserialized, repr);
