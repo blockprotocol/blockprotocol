@@ -15,9 +15,6 @@ module.exports = {
       "process.env.NODE_ENV": process.env.NODE_ENV,
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.DefinePlugin({
-      __VERSION__: JSON.stringify(packageJSON.version),
-    }),
   ],
   module: {
     rules: [

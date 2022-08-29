@@ -56,25 +56,25 @@ export type MockBlockHookResult = {
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockProps = ({
-  blockEntity: blockEntity1,
-  blockSchema: initialBlockSchema,
+  blockEntity: externalBlockEntity,
+  blockSchema: externalBlockSchema,
   initialEntities,
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
-  readonly: readonly1,
-  debug: debug1,
+  readonly: externalReadonly,
+  debug: externalDebug,
 }: MockBlockHookArgs): MockBlockHookResult => {
-  // @todo rename this
-  const [blockEntity, setBlockEntity] = useState<Entity>(blockEntity1!); // @todo rfix types
+  const [blockEntity, setBlockEntity] = useState<Entity>(externalBlockEntity!);
   const [blockSchema, setBlockSchema] = useState<Partial<EntityType>>(
-    initialBlockSchema!,
-  ); // @todo fix types
-  const [readonly, setReadonly] = useState<boolean>(readonly1);
-  const [debugMode, setDebugMode] = useState<boolean>(!!debug1);
+    externalBlockSchema!,
+  );
+  const [readonly, setReadonly] = useState<boolean>(externalReadonly);
+  const [debugMode, setDebugMode] = useState<boolean>(!!externalDebug);
 
-  const prevReadonly = usePrevious(readonly1);
-  const prevDebugMode = usePrevious(debug1);
+  const prevExternalReadonly = usePrevious(externalReadonly);
+  const prevExternalDebug = usePrevious(externalDebug);
+  const prevExternalBlockEntity = usePrevious(externalBlockEntity);
 
   const { initialBlockEntity, mockData } = useMemo((): {
     initialBlockEntity: Entity;
@@ -176,12 +176,15 @@ export const useMockBlockProps = ({
     throw new Error("Cannot find block entity type. Has it been deleted?");
   }
 
-  if (readonly1 !== prevReadonly && readonly !== readonly1) {
-    setReadonly(readonly1);
+  if (
+    externalReadonly !== prevExternalReadonly &&
+    readonly !== externalReadonly
+  ) {
+    setReadonly(externalReadonly);
   }
 
-  if (debug1 !== prevDebugMode && debugMode !== debug1) {
-    setDebugMode(debug1);
+  if (externalDebug !== prevExternalDebug && debugMode !== externalDebug) {
+    setDebugMode(externalDebug);
   }
 
   return {

@@ -18,11 +18,9 @@ export const BlockSchemaView = () => {
 
         const schema = JSON.parse(evt.target.result);
 
-        console.log(schema);
         // @todo validate loaded schema file
-
         // @todo consider persisting block-schema, perhaps to localstorage
-        // so user doesn't have to load schema all the time
+        // so schema doesn't have to be loaded again on page refresh
         setBlockSchema(schema ?? undefined);
       };
       reader.readAsText(files[0]);

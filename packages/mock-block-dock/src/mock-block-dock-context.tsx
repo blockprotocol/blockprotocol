@@ -38,7 +38,8 @@ export const MockBlockDockProvider = ({ children, ...props }: Props) => {
       setLogs((prev) => [...prev, { ...detail }]);
     };
 
-    // @todo store event name in constant or pull from CoreHandler
+    // @todo pull event name from @blockprotocol/core package
+    // it is currently not exported from there
     window.addEventListener("blockprotocolmessage", handler);
 
     return () => {

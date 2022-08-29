@@ -88,29 +88,6 @@ const ActiveLogsContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
-// @todo this should be pulled from logs
-const services = [
-  {
-    label: "Core",
-    value: "core",
-  },
-  {
-    label: "Graph",
-    value: "graph",
-  },
-];
-
-const sources = [
-  {
-    label: "Embedder",
-    value: "embedder",
-  },
-  {
-    label: "Block",
-    value: "block",
-  },
-];
-
 export const LogsView = () => {
   const [activeLog, setActiveLog] = useState<Message>();
   const [filters, setFilters] = useState({
@@ -156,7 +133,6 @@ export const LogsView = () => {
           <Typography variant="body2" mr={1}>
             Service
           </Typography>
-          {/* @todo this should be pulled from logs */}
           <Select
             size="small"
             value={filters.service}
@@ -166,10 +142,11 @@ export const LogsView = () => {
             }
           >
             <MenuItem value="all">---</MenuItem>
+            {/* @todo this should be pulled from logs instead of manually set */}
             <MenuItem value="core">Core</MenuItem>
             <MenuItem value="graph">Graph</MenuItem>
           </Select>
-          {/* @todo this should be pulled from logs */}
+
           <Typography variant="body2" mr={1} ml={2}>
             Source
           </Typography>
