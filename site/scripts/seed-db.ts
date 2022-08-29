@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { blocksDbCollectionName } from "../src/lib/api/blocks/db";
+import { blocksDbCollectionName } from "../src/lib/api/blocks/shared";
 import { ApiKey } from "../src/lib/api/model/api-key.model";
 import { EntityType } from "../src/lib/api/model/entity-type.model";
 import { User, UserProperties } from "../src/lib/api/model/user.model";
