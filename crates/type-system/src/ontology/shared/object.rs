@@ -1,4 +1,4 @@
-pub(in crate::ontology) mod repr {
+pub(super) mod repr {
     use std::collections::HashMap;
 
     use serde::{Deserialize, Serialize};

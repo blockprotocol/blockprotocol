@@ -48,17 +48,15 @@ impl From<super::PropertyTypeReference> for PropertyTypeReference {
 pub enum PropertyValues {
     DataTypeReference(crate::ontology::data_type::repr::DataTypeReference),
     PropertyTypeObject(
-        crate::ontology::shared::object::repr::Object<
-            crate::ontology::shared::array::repr::ValueOrArray<PropertyTypeReference>,
+        crate::ontology::shared::repr::Object<
+            crate::ontology::shared::repr::ValueOrArray<PropertyTypeReference>,
         >,
     ),
     ArrayOfPropertyValues(
         // This is a hack, currently recursive enums seem to break tsify
         // https://github.com/madonoharu/tsify/issues/5
         #[cfg_attr(target_arch = "wasm32", tsify(type = "Array<OneOf<PropertyValues>>"))]
-        crate::ontology::shared::array::repr::Array<
-            crate::ontology::shared::one_of::repr::OneOf<PropertyValues>,
-        >,
+        crate::ontology::shared::repr::Array<crate::ontology::shared::repr::OneOf<PropertyValues>>,
     ),
 }
 
@@ -126,7 +124,7 @@ pub struct PropertyType {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
-    one_of: crate::ontology::shared::one_of::repr::OneOf<PropertyValues>,
+    one_of: crate::ontology::shared::repr::OneOf<PropertyValues>,
 }
 
 impl TryFrom<PropertyType> for super::PropertyType {

@@ -1,4 +1,4 @@
-pub(in crate::ontology) mod repr {
+pub(super) mod repr {
     use serde::{Deserialize, Serialize};
     #[cfg(target_arch = "wasm32")]
     use {tsify::Tsify, wasm_bindgen::prelude::*};
