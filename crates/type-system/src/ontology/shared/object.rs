@@ -75,6 +75,239 @@ pub(in crate::ontology) mod repr {
             }
         }
     }
+
+    #[cfg(test)]
+    mod tests {
+        use std::str::FromStr;
+
+        use serde_json::json;
+
+        use super::*;
+        use crate::{
+            uri::VersionedUri,
+            utils::tests::{
+                check_repr_serialization_from_value, ensure_repr_failed_deserialization,
+            },
+            PropertyTypeReference,
+        };
+
+        mod unconstrained {
+            use super::*;
+
+            type Object = super::Object<PropertyTypeReference, 0>;
+
+            #[test]
+            fn empty() {
+                check_repr_serialization_from_value(
+                    json!({
+                        "type": "object",
+                        "properties": {}
+                    }),
+                    Some(Object {
+                        r#type: ObjectTypeTag::Object,
+                        properties: HashMap::new(),
+                        required: vec![],
+                    }),
+                );
+            }
+
+            #[test]
+            fn one() {
+                let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
+                    .expect("invalid Versioned URI");
+
+                check_repr_serialization_from_value(
+                    json!({
+                        "type": "object",
+                        "properties": {
+                            "https://example.com/property_type/": { "$ref": "https://example.com/property_type/v/1" },
+                        }
+                    }),
+                    Some(Object {
+                        r#type: ObjectTypeTag::Object,
+                        properties: HashMap::from([(
+                            uri.base_uri().to_string(),
+                            PropertyTypeReference::new(uri),
+                        )]),
+                        required: vec![],
+                    }),
+                );
+            }
+
+            #[test]
+            fn multiple() {
+                let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
+                    .expect("invalid Versioned URI");
+                let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
+                    .expect("invalid Versioned URI");
+
+                check_repr_serialization_from_value(
+                    json!({
+                        "type": "object",
+                        "properties": {
+                            "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+                            "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+                        }
+                    }),
+                    Some(Object {
+                        r#type: ObjectTypeTag::Object,
+                        properties: HashMap::from([
+                            (
+                                uri_a.base_uri().to_string(),
+                                PropertyTypeReference::new(uri_a),
+                            ),
+                            (
+                                uri_b.base_uri().to_string(),
+                                PropertyTypeReference::new(uri_b),
+                            ),
+                        ]),
+                        required: vec![],
+                    }),
+                );
+            }
+        }
+
+        mod constrained {
+            use super::*;
+            use crate::utils::tests::ensure_repr_failed_deserialization;
+
+            type Object = super::Object<PropertyTypeReference>;
+
+            #[test]
+            fn empty() {
+                ensure_repr_failed_deserialization::<Object>(json!({
+                    "type": "object",
+                    "properties": {}
+                }));
+            }
+
+            #[test]
+            fn one() {
+                let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
+                    .expect("invalid Versioned URI");
+
+                check_repr_serialization_from_value(
+                    json!({
+                        "type": "object",
+                        "properties": {
+                            "https://example.com/property_type/": { "$ref": "https://example.com/property_type/v/1" },
+                        }
+                    }),
+                    Some(Object {
+                        r#type: ObjectTypeTag::Object,
+                        properties: HashMap::from([(
+                            uri.base_uri().to_string(),
+                            PropertyTypeReference::new(uri),
+                        )]),
+                        required: vec![],
+                    }),
+                );
+            }
+
+            #[test]
+            fn multiple() {
+                let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
+                    .expect("invalid Versioned URI");
+                let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
+                    .expect("invalid Versioned URI");
+
+                check_repr_serialization_from_value(
+                    json!({
+                        "type": "object",
+                        "properties": {
+                            "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+                            "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+                        }
+                    }),
+                    Some(Object {
+                        r#type: ObjectTypeTag::Object,
+                        properties: HashMap::from([
+                            (
+                                uri_a.base_uri().to_string(),
+                                PropertyTypeReference::new(uri_a),
+                            ),
+                            (
+                                uri_b.base_uri().to_string(),
+                                PropertyTypeReference::new(uri_b),
+                            ),
+                        ]),
+                        required: vec![],
+                    }),
+                );
+            }
+        }
+
+        #[test]
+        fn required() {
+            let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
+                .expect("invalid Versioned URI");
+            let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
+                .expect("invalid Versioned URI");
+
+            check_repr_serialization_from_value(
+                json!({
+                    "type": "object",
+                    "properties": {
+                        "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+                        "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+                    },
+                    "required": [
+                        "https://example.com/property_type_a/"
+                    ]
+                }),
+                Some(Object {
+                    r#type: ObjectTypeTag::Object,
+                    properties: HashMap::from([
+                        (
+                            uri_a.base_uri().to_string(),
+                            PropertyTypeReference::new(uri_a.clone()),
+                        ),
+                        (
+                            uri_b.base_uri().to_string(),
+                            PropertyTypeReference::new(uri_b),
+                        ),
+                    ]),
+                    required: vec![uri_a.base_uri().to_string()],
+                }),
+            );
+        }
+
+        #[test]
+        fn additional_properties() {
+            ensure_repr_failed_deserialization::<Object<PropertyTypeReference>>(json!({
+                "type": "object",
+                "properties": {
+                    "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+                    "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+                },
+                "additional_properties": 10
+            }));
+        }
+
+        #[test]
+        fn invalid_uri() {
+            ensure_repr_failed_deserialization::<Object<PropertyTypeReference>>(json!({
+                "type": "object",
+                "properties": {
+                    "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
+                }
+            }));
+        }
+
+        #[test]
+        fn invalid_required() {
+            ensure_repr_failed_deserialization::<Object<PropertyTypeReference>>(json!({
+                "type": "object",
+                "properties": {
+                    "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+                    "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+                },
+                "required": [
+                    "https://example.com/property_type_c/"
+                ]
+            }));
+        }
+    }
 }
 
 use std::collections::HashMap;
@@ -150,202 +383,49 @@ impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use std::str::FromStr;
-//
-//     use serde_json::json;
-//
-//     use super::*;
-//     use crate::{
-//         uri::VersionedUri,
-//         utils::tests::{check_serialization_from_value, ensure_failed_deserialization},
-//         PropertyTypeReference,
-//     };
-//
-//     mod unconstrained {
-//         use super::*;
-//
-//         type Object = super::Object<PropertyTypeReference, 0>;
-//
-//         #[test]
-//         fn empty() {
-//             check_serialization_from_value(
-//                 json!({
-//                     "type": "object",
-//                     "properties": {}
-//                 }),
-//                 Some(Object::new_unchecked(HashMap::new(), vec![])),
-//             );
-//         }
-//
-//         #[test]
-//         fn one() {
-//             let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
-//                 .expect("invalid Versioned URI");
-//
-//             check_serialization_from_value(
-//                 json!({
-//                     "type": "object",
-//                     "properties": {
-//                         "https://example.com/property_type/": { "$ref": "https://example.com/property_type/v/1" },
-//                     }
-//                 }),
-//                 Some(Object::new_unchecked(
-//                     HashMap::from([(uri.base_uri().clone(), PropertyTypeReference::new(uri))]),
-//                     vec![],
-//                 )),
-//             );
-//         }
-//
-//         #[test]
-//         fn multiple() {
-//             let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-//                 .expect("invalid Versioned URI");
-//             let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-//                 .expect("invalid Versioned URI");
-//
-//             check_serialization_from_value(
-//                 json!({
-//                     "type": "object",
-//                     "properties": {
-//                         "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-//                         "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-//                     }
-//                 }),
-//                 Some(Object::new_unchecked(
-//                     HashMap::from([
-//                         (uri_a.base_uri().clone(), PropertyTypeReference::new(uri_a)),
-//                         (uri_b.base_uri().clone(), PropertyTypeReference::new(uri_b)),
-//                     ]),
-//                     vec![],
-//                 )),
-//             );
-//         }
-//     }
-//
-//     mod constrained {
-//         use super::*;
-//
-//         type Object = super::Object<PropertyTypeReference, 1>;
-//
-//         #[test]
-//         fn empty() {
-//             ensure_failed_deserialization::<Object>(json!({
-//                 "type": "object",
-//                 "properties": {}
-//             }));
-//         }
-//
-//         #[test]
-//         fn one() {
-//             let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
-//                 .expect("invalid Versioned URI");
-//
-//             check_serialization_from_value(
-//                 json!({
-//                     "type": "object",
-//                     "properties": {
-//                         "https://example.com/property_type/": { "$ref": "https://example.com/property_type/v/1" },
-//                     }
-//                 }),
-//                 Some(Object::new_unchecked(
-//                     HashMap::from([(uri.base_uri().clone(), PropertyTypeReference::new(uri))]),
-//                     vec![],
-//                 )),
-//             );
-//         }
-//
-//         #[test]
-//         fn multiple() {
-//             let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-//                 .expect("invalid Versioned URI");
-//             let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-//                 .expect("invalid Versioned URI");
-//
-//             check_serialization_from_value(
-//                 json!({
-//                     "type": "object",
-//                     "properties": {
-//                         "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-//                         "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-//                     }
-//                 }),
-//                 Some(Object::new_unchecked(
-//                     HashMap::from([
-//                         (uri_a.base_uri().clone(), PropertyTypeReference::new(uri_a)),
-//                         (uri_b.base_uri().clone(), PropertyTypeReference::new(uri_b)),
-//                     ]),
-//                     vec![],
-//                 )),
-//             );
-//         }
-//     }
-//
-//     #[test]
-//     fn required() {
-//         let uri_a = VersionedUri::from_str("https://example.com/property_type_a/v/1")
-//             .expect("invalid Versioned URI");
-//         let uri_b = VersionedUri::from_str("https://example.com/property_type_b/v/1")
-//             .expect("invalid Versioned URI");
-//
-//         check_serialization_from_value(
-//             json!({
-//                 "type": "object",
-//                 "properties": {
-//                     "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-//                     "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-//                 },
-//                 "required": [
-//                     "https://example.com/property_type_a/"
-//                 ]
-//             }),
-//             Some(Object::<_, 0>::new_unchecked(
-//                 HashMap::from([
-//                     (
-//                         uri_a.base_uri().clone(),
-//                         PropertyTypeReference::new(uri_a.clone()),
-//                     ),
-//                     (uri_b.base_uri().clone(), PropertyTypeReference::new(uri_b)),
-//                 ]),
-//                 vec![uri_a.base_uri().clone()],
-//             )),
-//         );
-//     }
-//
-//     #[test]
-//     fn additional_properties() {
-//         ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-//             "type": "object",
-//             "properties": {
-//                 "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-//                 "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-//             },
-//             "additional_properties": 10
-//         }));
-//     }
-//
-//     #[test]
-//     fn invalid_uri() {
-//         ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-//             "type": "object",
-//             "properties": {
-//                 "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
-//             }
-//         }));
-//     }
-//
-//     #[test]
-//     fn invalid_required() {
-//         ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-//             "type": "object",
-//             "properties": {
-//                 "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-//                 "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-//             },
-//             "required": [
-//                 "https://example.com/property_type_c/"
-//             ]
-//         }));
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use super::*;
+    use crate::PropertyTypeReference;
+
+    type Object = super::Object<PropertyTypeReference, 1>;
+
+    // TODO: validation tests
+    // #[test]
+    // fn additional_properties() {
+    //     ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
+    //         "type": "object",
+    //         "properties": {
+    //             "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+    //             "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+    //         },
+    //         "additional_properties": 10
+    //     }));
+    // }
+    //
+    // #[test]
+    // fn invalid_uri() {
+    //     ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
+    //         "type": "object",
+    //         "properties": {
+    //             "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
+    //         }
+    //     }));
+    // }
+    //
+    // #[test]
+    // fn invalid_required() {
+    //     ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
+    //         "type": "object",
+    //         "properties": {
+    //             "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+    //             "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+    //         },
+    //         "required": [
+    //             "https://example.com/property_type_c/"
+    //         ]
+    //     }));
+    // }
+}
