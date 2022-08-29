@@ -163,6 +163,21 @@ You can also review the messages defined in the graph specification [here](/docs
 - any message marked as `sentOnInitialization` with `source: "embeder"` will be passed to your block as soon as it’s loaded. Remember that `custom-element` and `react`-type blocks receive these messages as properties under a `graph` object, whereas `html` blocks can register callbacks for each message.
 - if a message has `respondedToBy`, it expects a response and the `graphService` method will return a Promise which will resolve with the `{ data, errors }` object. If a message does not expect a response, the method will return void.
 
+## Testing your block in HASH
+
+[HASH](https://hash.ai) is an open-source, data-centric, all-in-one workspace built atop the Block Protocol. While it is not yet ready for production use, you can use it to test your block in a real embedding application with example data.
+
+To load your block into HASH:
+
+1.  Visit the [HASH repo](https://github.com/hashintel/hash/tree/main/packages/hash) and follow the instructions to run HASH locally.
+1.  In your block’s directory, run `yarn dev`. This will serve your block locally at a localhost URL in development mode and will reload if you make changes to your source code. Alternatively, you can run `yarn build && yarn serve` to test a production build of your block which will not automatically rebuild if you make changes to the source code.
+1.  Copy that localhost URL to your clipboard.
+1.  In HASH, create or navigate to a Page.
+1.  Find the […] menu button on the left of a block in the Page (you should see this button under the title on a new page).
+1.  Open that menu and paste the block’s localhost URL into the “Load block from URL…” input field and click "Load block".
+
+If you’re running your block in dev mode (`yarn dev`) and you make changes to the source code, your block will rebuild and HASH should automatically refresh the page. If you’re running your block in production mode, you will need to run `yarn build` from your block folder and reload your block manually in HASH by repeating steps 5-6 again.
+
 ## Build
 
 Once you’ve finished writing your block, run `yarn build`.
