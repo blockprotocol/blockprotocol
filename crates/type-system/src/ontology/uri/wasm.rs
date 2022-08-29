@@ -22,7 +22,7 @@ export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>
 "#;
 #[wasm_bindgen(skip_typescript, js_name = validateBaseUri)]
 pub fn validate_base_uri(uri: &str) -> JsValue {
-    let validate_result: Result<_, _> = BaseUri::validate_str(uri).into();
+    let validate_result: Result<_, _> = BaseUri::validate_str(uri).map(|_| uri.to_owned()).into();
 
     JsValue::from_serde(&validate_result).expect("failed to serialize result")
 }

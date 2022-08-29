@@ -29,7 +29,7 @@ impl fmt::Display for ParseBaseUriError {
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(tag = "type", content = "inner")]
+#[serde(tag = "reason", content = "inner")]
 pub enum ParseVersionedUriError {
     IncorrectFormatting,
     MissingBaseUri,

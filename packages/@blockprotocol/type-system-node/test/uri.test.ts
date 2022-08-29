@@ -2,6 +2,7 @@ import {
   extractBaseUri,
   extractVersion,
   ParseBaseUriError,
+  ParseVersionedUriError,
   validateBaseUri,
   validateVersionedUri,
 } from "..";
@@ -39,7 +40,12 @@ describe("validateBaseUri", () => {
     ["https://////example.com///"],
     ["file://loc%61lhost/"],
   ])("`parseBaseUri(%s)` succeeds", (input) => {
-    expect(() => validateBaseUri(input)).not.toThrow();
+    const result = validateBaseUri(input);
+    if (result.type === "Ok") {
+      expect(result.inner).toEqual(input);
+    } else {
+      throw new Error("validateBaseUri should have returned Ok");
+    }
   });
 
   test.each(invalidBaseUriCases)(
@@ -55,27 +61,42 @@ describe("validateBaseUri", () => {
   );
 });
 
+const invalidVersionedUriCases: [string, ParseVersionedUriError][] = [
+  [
+    "example/v/2",
+    {
+      reason: "InvalidBaseUri",
+      inner: { reason: "UrlParseError", inner: "relative URL without a base" },
+    },
+  ],
+  ["http://example.com", { reason: "IncorrectFormatting" }],
+  ["http://example.com/v/", { reason: "IncorrectFormatting" }],
+  ["http://example.com/v/0.2", { reason: "AdditionalEndContent" }],
+  ["http://example.com/v//20", { reason: "IncorrectFormatting" }],
+  ["http://example.com/v/30/1", { reason: "AdditionalEndContent" }],
+  ["http://example.com/v/foo", { reason: "IncorrectFormatting" }],
+];
+
 describe("validateVersionedUri", () => {
   test.each([
     ["http://example.com/v/0"],
     ["http://example.com/v/1"],
     ["http://example.com/v/20"],
-  ])("`isValidVersionedUri(%s)` succeeds", (input) => {
-    expect(validateVersionedUri(input)).toBe(true);
+  ])("`validateVersionedUri(%s)` succeeds", (input) => {
+    expect(validateVersionedUri(input)).toEqual({ type: "Ok", inner: input });
   });
 
-  test.each([
-    ["http://example.com"],
-    ["http://example.com/v/"],
-    ["http://example.com/v/0.2"],
-    ["http://example.com/v//20"],
-    ["http://example.com/v/30/1"],
-    ["http://example.com/v/foo"],
-  ])("isValidVersionedUri(%s) errors", (input) => {
-    expect(() => {
-      validateVersionedUri(input);
-    }).toThrow();
-  });
+  test.each(invalidVersionedUriCases)(
+    "validateVersionedUri(%s) returns errors",
+    (input, expected) => {
+      const result = validateVersionedUri(input);
+      if (result.type === "Err") {
+        expect(result.inner).toEqual(expected);
+      } else {
+        throw new Error("validateVersionedUri should have errored");
+      }
+    },
+  );
 });
 
 describe("extractBaseUri", () => {

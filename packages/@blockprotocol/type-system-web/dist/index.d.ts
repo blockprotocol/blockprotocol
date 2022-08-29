@@ -35,12 +35,12 @@ export type ValidationError = ValidationError.MissingRequiredProperty | Validati
 
 type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
 declare namespace ParseVersionedUriError {
-    export type IncorrectFormatting = { type: "IncorrectFormatting"; inner?: null };
-    export type MissingBaseUri = { type: "MissingBaseUri"; inner?: null };
-    export type MissingVersion = { type: "MissingVersion"; inner?: null };
-    export type InvalidVersion = { type: "InvalidVersion"; inner?: null };
-    export type AdditionalEndContent = { type: "AdditionalEndContent"; inner?: null };
-    export type InvalidBaseUri = { type: "InvalidBaseUri"; inner: __ParseVersionedUriErrorParseBaseUriError };
+    export type IncorrectFormatting = { reason: "IncorrectFormatting"; inner?: null };
+    export type MissingBaseUri = { reason: "MissingBaseUri"; inner?: null };
+    export type MissingVersion = { reason: "MissingVersion"; inner?: null };
+    export type InvalidVersion = { reason: "InvalidVersion"; inner?: null };
+    export type AdditionalEndContent = { reason: "AdditionalEndContent"; inner?: null };
+    export type InvalidBaseUri = { reason: "InvalidBaseUri"; inner: __ParseVersionedUriErrorParseBaseUriError };
 }
 
 export type ParseVersionedUriError = ParseVersionedUriError.IncorrectFormatting | ParseVersionedUriError.MissingBaseUri | ParseVersionedUriError.MissingVersion | ParseVersionedUriError.InvalidVersion | ParseVersionedUriError.AdditionalEndContent | ParseVersionedUriError.InvalidBaseUri;
@@ -85,36 +85,6 @@ export interface ObjectRepr<V> {
 
 export type BaseUri = string;
 
-export interface OneOfRepr<T> {
-    oneOf: T[];
-}
-
-export interface OneOf<T> extends OneOfRepr<T> {}
-
-export interface PropertyTypeReference {
-    $ref: VersionedUri;
-}
-
-type __PropertyValuesDataTypeReference = DataTypeReference;
-type __PropertyValuesObject<A> = Object<A>;
-type __PropertyValuesPropertyTypeReference = PropertyTypeReference;
-type __PropertyValuesValueOrArray<A> = ValueOrArray<A>;
-declare namespace PropertyValues {
-    export type DataTypeReference = __PropertyValuesDataTypeReference;
-    export type PropertyTypeObject = __PropertyValuesObject<__PropertyValuesValueOrArray<__PropertyValuesPropertyTypeReference>>;
-    export type ArrayOfPropertyValues = Array<OneOf<PropertyValues>>;
-}
-
-export type PropertyValues = PropertyValues.DataTypeReference | PropertyValues.PropertyTypeObject | PropertyValues.ArrayOfPropertyValues;
-
-export interface PropertyType extends OneOf<PropertyValues> {
-    kind: 'propertyType';
-    $id: VersionedUri;
-    title: string;
-    pluralTitle: string;
-    description?: string;
-}
-
 export type VersionedUri = `${string}/v/${number}`;
 
 
@@ -156,6 +126,36 @@ export function extractBaseUri(uri: VersionedUri): BaseUri;
  */
 export function extractVersion(uri: VersionedUri): number;
 
+
+export interface OneOfRepr<T> {
+    oneOf: T[];
+}
+
+export interface OneOf<T> extends OneOfRepr<T> {}
+
+export interface PropertyTypeReference {
+    $ref: VersionedUri;
+}
+
+type __PropertyValuesDataTypeReference = DataTypeReference;
+type __PropertyValuesObject<A> = Object<A>;
+type __PropertyValuesPropertyTypeReference = PropertyTypeReference;
+type __PropertyValuesValueOrArray<A> = ValueOrArray<A>;
+declare namespace PropertyValues {
+    export type DataTypeReference = __PropertyValuesDataTypeReference;
+    export type PropertyTypeObject = __PropertyValuesObject<__PropertyValuesValueOrArray<__PropertyValuesPropertyTypeReference>>;
+    export type ArrayOfPropertyValues = Array<OneOf<PropertyValues>>;
+}
+
+export type PropertyValues = PropertyValues.DataTypeReference | PropertyValues.PropertyTypeObject | PropertyValues.ArrayOfPropertyValues;
+
+export interface PropertyType extends OneOf<PropertyValues> {
+    kind: 'propertyType';
+    $id: VersionedUri;
+    title: string;
+    pluralTitle: string;
+    description?: string;
+}
 
 /**
 */

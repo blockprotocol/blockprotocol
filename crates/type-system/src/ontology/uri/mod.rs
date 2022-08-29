@@ -9,6 +9,7 @@ use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use tsify::Tsify;
 use url::Url;
 
+use crate::ontology::repr_shared::serialize_with_delimiter;
 pub use crate::uri::error::{ParseBaseUriError, ParseVersionedUriError};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
@@ -40,14 +41,14 @@ impl BaseUri {
 
     fn validate_str(uri: &str) -> Result<(), ParseBaseUriError> {
         if !uri.ends_with('/') {
-            return Err(ParseBaseUriError {});
+            return Err(ParseBaseUriError::MissingTrailingSlash);
         }
         // TODO: Propagate more useful errors
         if Url::parse(uri)
-            .map_err(|_| ParseBaseUriError {})?
+            .map_err(|err| ParseBaseUriError::UrlParseError(err.to_string()))?
             .cannot_be_a_base()
         {
-            Err(ParseBaseUriError {})
+            Err(ParseBaseUriError::CannotBeABase)
         } else {
             Ok(())
         }
@@ -175,9 +176,18 @@ impl<'de> Deserialize<'de> for VersionedUri {
     where
         D: Deserializer<'de>,
     {
-        String::deserialize(deserializer)?
-            .parse()
-            .map_err(de::Error::custom)
+        #[cfg(not(target_arch = "wasm32"))]
+        {
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(de::Error::custom)
+        }
+        #[cfg(target_arch = "wasm32")]
+        {
+            String::deserialize(deserializer)?
+                .parse()
+                .map_err(|err| de::Error::custom(serialize_with_delimiter(err)))
+        }
     }
 }
 
