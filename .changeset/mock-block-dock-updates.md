@@ -1,0 +1,7 @@
+---
+"mock-block-dock": patch
+---
+
+- Add option to switch on/off debug mode
+- Add functionality to edit and validate block properties from debug mode UI
+- Other improvements to debug mode UI
