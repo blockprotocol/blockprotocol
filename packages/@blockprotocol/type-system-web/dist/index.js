@@ -189,27 +189,6 @@ function addBorrowedObject(obj) {
     return stack_pointer;
 }
 /**
-* Checks if a given {PropertyType} is valid
-*
-* @throws {TempError} if the property type is malformed
-* @param {PropertyType} propertyTypeObj
-*/
-export function isValidPropertyType(propertyTypeObj) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
 * @param {any} data_type_obj
 * @returns {any}
 */
@@ -219,30 +198,6 @@ export function validateDataType(data_type_obj) {
         return takeObject(ret);
     } finally {
         heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
-*/
-export class TempError {
-
-    static __wrap(ptr) {
-        const obj = Object.create(TempError.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_temperror_free(ptr);
     }
 }
 
@@ -280,10 +235,6 @@ async function load(module, imports) {
 function getImports() {
     const imports = {};
     imports.wbg = {};
-    imports.wbg.__wbg_temperror_new = function(arg0) {
-        const ret = TempError.__wrap(arg0);
-        return addHeapObject(ret);
-    };
     imports.wbg.__wbindgen_json_parse = function(arg0, arg1) {
         const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
         return addHeapObject(ret);
@@ -316,9 +267,6 @@ function getImports() {
     };
     imports.wbg.__wbindgen_object_drop_ref = function(arg0) {
         takeObject(arg0);
-    };
-    imports.wbg.__wbindgen_throw = function(arg0, arg1) {
-        throw new Error(getStringFromWasm0(arg0, arg1));
     };
 
     return imports;

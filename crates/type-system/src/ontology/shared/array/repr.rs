@@ -1,9 +1,8 @@
-pub mod error;
-
-use error::ParseArrayError;
 use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
+
+use crate::ontology::shared::array::error::ParseArrayError;
 
 /// Will serialize as a constant value `"array"`
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

@@ -1,8 +1,4 @@
-import {
-  DataType,
-  ParseDataTypeError,
-  validateDataType,
-} from "..";
+import { DataType, ParseDataTypeError, validateDataType } from "..";
 
 const primitiveDataTypes: DataType[] = [
   {
@@ -64,8 +60,7 @@ const invalidDataTypes: [DataType, ParseDataTypeError][] = [
     {
       reason: "InvalidVersionedUri",
       inner: {
-        reason: "InvalidBaseUri",
-        inner: { reason: "UrlParseError", inner: "AdditionalEndContent" },
+        reason: "AdditionalEndContent",
       },
     },
   ],
@@ -74,37 +69,53 @@ const invalidDataTypes: [DataType, ParseDataTypeError][] = [
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be
 // normally possible if we don't do something silly like the use of any below. This sanity check is important because
 // it is possible for wasm to error in unusual ways that can't easily be handled, and that should be viewed as a bug.
-const brokenTypes: any[] = [
-  {},
-  { foo: "bar" },
-  {
-    kind: "dataType",
-    $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
-    title: "Text",
-  },
+const brokenTypes: [any, ParseDataTypeError][] = [
+  [
+    {},
+    {
+      reason: "InvalidJson",
+      inner: "missing field `kind` at line 1 column 2",
+    },
+  ],
+  [
+    { foo: "bar" },
+    {
+      reason: "InvalidJson",
+      inner: "missing field `kind` at line 1 column 13",
+    },
+  ],
+  [
+    {
+      kind: "dataType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+      title: "Text",
+    },
+    {
+      reason: "InvalidJson",
+      inner: "missing field `type` at line 1 column 108",
+    },
+  ],
 ];
 
-describe("isValidDataType", () => {
-  test.each(primitiveDataTypes)("isValidDataType($title) succeeds", (input) => {
-    expect(validateDataType(input)).toEqual({ type: "Ok" });
-  });
+describe("validateDataType", () => {
+  test.each(primitiveDataTypes)(
+    "validateDataType($title) succeeds",
+    (input) => {
+      expect(validateDataType(input)).toEqual({ type: "Ok", inner: null }); // TODO: this shouldn't be null
+    },
+  );
 
   test.each(invalidDataTypes)(
-    "isValidDataType errors on invalid data type: %s",
+    "validateDataType returns errors on invalid data type: %s",
     (input, expected) => {
-      const result = validateDataType(input);
-      if (result.type === "Err") {
-        expect(result.inner).toEqual(expected);
-      } else {
-        throw new Error("validateBaseUri should have returned Err");
-      }
+      expect(validateDataType(input)).toEqual({ type: "Err", inner: expected });
     },
   );
 
   test.each(brokenTypes)(
-    "isValidDataType cleanly errors on different type: %s",
-    (input) => {
-      expect(validateDataType(input)).toEqual({});
+    "validateDataType cleanly returns errors on different type: %s",
+    (input, expected) => {
+      expect(validateDataType(input)).toEqual({ type: "Err", inner: expected });
     },
   );
 });

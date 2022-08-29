@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 
 use crate::ontology::{uri::ParseBaseUriError, ValidationError};
 

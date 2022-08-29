@@ -191,27 +191,6 @@ function addBorrowedObject(obj) {
     return stack_pointer;
 }
 /**
-* Checks if a given {PropertyType} is valid
-*
-* @throws {TempError} if the property type is malformed
-* @param {PropertyType} propertyTypeObj
-*/
-module.exports.isValidPropertyType = function(propertyTypeObj) {
-    try {
-        const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-        wasm.isValidPropertyType(retptr, addBorrowedObject(propertyTypeObj));
-        var r0 = getInt32Memory0()[retptr / 4 + 0];
-        var r1 = getInt32Memory0()[retptr / 4 + 1];
-        if (r1) {
-            throw takeObject(r0);
-        }
-    } finally {
-        wasm.__wbindgen_add_to_stack_pointer(16);
-        heap[stack_pointer++] = undefined;
-    }
-};
-
-/**
 * @param {any} data_type_obj
 * @returns {any}
 */
@@ -222,36 +201,6 @@ module.exports.validateDataType = function(data_type_obj) {
     } finally {
         heap[stack_pointer++] = undefined;
     }
-};
-
-/**
-*/
-class TempError {
-
-    static __wrap(ptr) {
-        const obj = Object.create(TempError.prototype);
-        obj.ptr = ptr;
-
-        return obj;
-    }
-
-    __destroy_into_raw() {
-        const ptr = this.ptr;
-        this.ptr = 0;
-
-        return ptr;
-    }
-
-    free() {
-        const ptr = this.__destroy_into_raw();
-        wasm.__wbg_temperror_free(ptr);
-    }
-}
-module.exports.TempError = TempError;
-
-module.exports.__wbg_temperror_new = function(arg0) {
-    const ret = TempError.__wrap(arg0);
-    return addHeapObject(ret);
 };
 
 module.exports.__wbindgen_json_parse = function(arg0, arg1) {
@@ -291,10 +240,6 @@ module.exports.__wbg_error_09919627ac0992f5 = function(arg0, arg1) {
 
 module.exports.__wbindgen_object_drop_ref = function(arg0) {
     takeObject(arg0);
-};
-
-module.exports.__wbindgen_throw = function(arg0, arg1) {
-    throw new Error(getStringFromWasm0(arg0, arg1));
 };
 
 const path = require('path').join(__dirname, 'index_bg.wasm');

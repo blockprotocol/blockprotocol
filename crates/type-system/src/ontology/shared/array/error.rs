@@ -1,4 +1,6 @@
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 
 // TODO: can we think of something slightly less misleading than "ParseArray"
 #[allow(
