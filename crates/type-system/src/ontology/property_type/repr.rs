@@ -133,7 +133,10 @@ impl TryFrom<PropertyType> for super::PropertyType {
             property_type_repr.title,
             property_type_repr.plural_title,
             property_type_repr.description,
-            property_type_repr.one_of.try_into(),
+            property_type_repr
+                .one_of
+                .try_into()
+                .map_err(|err| ParsePropertyTypeError::InvalidArrayItems())?,
         ))
     }
 }
