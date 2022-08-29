@@ -1,7 +1,8 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography } from "@mui/material";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "../../components/icons";
 import { Link } from "../../components/link";
@@ -12,6 +13,7 @@ import {
 } from "../../components/pages/auth-wall";
 import { BlockListContainer } from "../../components/pages/blocks/block-list-container";
 import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state";
+import { BlockPublishedAlert } from "../../components/pages/blocks/block-published-message-content";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import { ListViewCard } from "../../components/pages/user/list-view-card";
@@ -20,10 +22,11 @@ import { ExpandedBlockMetadata } from "../../lib/blocks";
 import { formatUpdatedAt } from "../../util/html-utils";
 
 const BlocksPage: AuthWallPageContent = ({ user }) => {
+  const router = useRouter();
   const [blocks, setBlocks] = useState<ExpandedBlockMetadata[]>([]);
 
   useEffect(() => {
-    if (user.shortname) {
+    if (user?.shortname) {
       /** @todo replace this manual fetching with `SWR` or `React Query` for better DX/UX */
       void apiClient
         .getUserBlocks({
@@ -32,6 +35,11 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
         .then((res) => setBlocks(res.data?.blocks || []));
     }
   }, [user]);
+
+  const recentlyCreatedBlock = useMemo(
+    () => blocks.find((block) => block.name === router.query.createdBlock),
+    [blocks, router],
+  );
 
   const hasBlocks = !!blocks.length;
 
@@ -58,11 +66,17 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
           </LinkButton>
         </Box>
 
+        {!!recentlyCreatedBlock && (
+          <BlockPublishedAlert
+            blockHref={`@${user.shortname}/blocks/${recentlyCreatedBlock?.name}`}
+          />
+        )}
+
         <BlockListContainer hasBlocks={hasBlocks}>
           {hasBlocks ? (
             blocks.map((block) => (
               <ListViewCard
-                key={block.componentId}
+                key={block.name}
                 url={block.blockSitePath}
                 icon={block.icon}
                 title={block.displayName!}

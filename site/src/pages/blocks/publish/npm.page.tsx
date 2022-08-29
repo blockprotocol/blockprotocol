@@ -11,7 +11,6 @@ import {
 } from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
 import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
-import { BlockPublishedMessageContent } from "../../../components/pages/blocks/block-published-message-content";
 import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper";
 import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block-info";
 import { RequiredLabel } from "../../../components/pages/blocks/required-label";
@@ -37,13 +36,10 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
 
     if (res.error) {
       /**  @todo depending on res.error.code, call form.setError on related field  */
-      return snackbar.error("error");
+      return snackbar.error(res.error.message);
     }
 
-    const blockHref = `@${user.shortname}/blocks/${data.blockName}`;
-    snackbar.success(<BlockPublishedMessageContent blockHref={blockHref} />);
-
-    await router.push("/blocks");
+    await router.push(`/blocks?createdBlock=${res.data?.block.name}`);
   };
 
   const blockName = watch("blockName");
