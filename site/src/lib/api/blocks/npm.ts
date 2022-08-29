@@ -1,11 +1,9 @@
 import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
 import execa from "execa";
 import fs from "fs-extra";
-import glob from "glob";
+import { globby } from "globby";
 import { Db } from "mongodb";
-import child_process from "node:child_process";
 import path from "node:path";
-import { promisify } from "node:util";
 import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
@@ -78,10 +76,13 @@ const mirrorNpmPackageToR2 = async (
   const packageJson = JSON.parse(packageJsonString);
 
   // get the block-metadata.json
-  const metadataJsonPath = glob.sync("**/block-metadata.json", {
-    cwd: packageFolder,
-    nocase: true,
-  })[0];
+  const metadataJsonPath = (
+    await globby("**/block-metadata.json", {
+      absolute: true,
+      cwd: packageFolder,
+      caseSensitiveMatch: false,
+    })
+  )[0];
   if (!metadataJsonPath) {
     throw new Error("No block-metadata.json present in package", {
       cause: { code: "INVALID_PACKAGE_CONTENTS" },
@@ -90,9 +91,7 @@ const mirrorNpmPackageToR2 = async (
 
   let metadataJson;
   try {
-    const metadataJsonString = fs
-      .readFileSync(path.resolve(packageFolder, metadataJsonPath))
-      .toString();
+    const metadataJsonString = fs.readFileSync(metadataJsonPath).toString();
     metadataJson = JSON.parse(metadataJsonString);
   } catch (err) {
     throw new Error(
@@ -109,10 +108,13 @@ const mirrorNpmPackageToR2 = async (
   );
 
   // move the readme into the block's source folder, if it exists
-  const readmePath = glob.sync("README.md", {
-    cwd: packageFolder,
-    nocase: true,
-  })[0];
+  const readmePath = (
+    await globby("README.md", {
+      absolute: true,
+      cwd: packageFolder,
+      caseSensitiveMatch: false,
+    })
+  )[0];
   if (readmePath) {
     fs.renameSync(
       path.resolve(packageFolder, readmePath),
@@ -172,9 +174,11 @@ const mirrorNpmPackageToR2 = async (
   // for blocks developed locally, add a prefix to the storage URL - the R2 bucket is shared across all dev environments
   let storageNamespacePrefix = "";
   if (!isRunningOnVercel) {
-    const exec = promisify(child_process.exec);
-
-    const gitConfigUserNameResult = await exec("git config --get user.name");
+    const gitConfigUserNameResult = await execa("git", [
+      "config",
+      "--get",
+      "user.name",
+    ]);
     const userName = gitConfigUserNameResult.stdout.trim();
     storageNamespacePrefix = `local-dev/${slugify(userName, {
       lower: true,

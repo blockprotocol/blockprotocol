@@ -5,8 +5,7 @@ import path from "node:path";
 
 import { isProduction } from "../../config";
 
-const cloudflareEndpoint =
-  "https://c6499786332a3d2fb35419a7803ab7aa.r2.cloudflarestorage.com";
+const cloudflareEndpoint = process.env.CLOUDFLARE_R2_ENDPOINT;
 const bucketName = isProduction ? "blocks" : "blocks-dev";
 const baseS3Options = { Bucket: bucketName };
 
