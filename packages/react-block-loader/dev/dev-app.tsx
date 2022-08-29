@@ -70,12 +70,12 @@ const MockBlockToRemoteBlock: FunctionComponent<
         // eslint-disable-next-line no-param-reassign
         objectSoFar.blockProtocolFunctions[
           key as keyof BlockProtocolFunctions
-        ] = value;
+        ] = value as any; // @todo fix this
       } else {
         // eslint-disable-next-line no-param-reassign
         objectSoFar.blockProperties[
           key as keyof Omit<BlockProtocolProps, keyof BlockProtocolFunctions>
-        ] = value;
+        ] = value as any; // @todo fix this
       }
       return objectSoFar;
     },

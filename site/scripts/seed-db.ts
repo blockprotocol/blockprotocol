@@ -1,5 +1,6 @@
 import chalk from "chalk";
 
+import { blocksDbCollectionName } from "../src/lib/api/blocks/shared";
 import { ApiKey } from "../src/lib/api/model/api-key.model";
 import { EntityType } from "../src/lib/api/model/entity-type.model";
 import { User, UserProperties } from "../src/lib/api/model/user.model";
@@ -60,6 +61,16 @@ const script = async () => {
   }
 
   await db.createCollection(VerificationCode.COLLECTION_NAME);
+
+  if (
+    existingCollections.find(
+      ({ collectionName }) => collectionName === blocksDbCollectionName,
+    )
+  ) {
+    await db.dropCollection(blocksDbCollectionName);
+  }
+
+  await db.createCollection(blocksDbCollectionName);
 
   const mockUsers: UserProperties[] = [
     {

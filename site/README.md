@@ -55,6 +55,16 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     yarn dev
     ```
 
+### API block publishing configuration
+
+If you want to publish blocks via the API, you will need to configure Cloudflare R2 variables:
+
+- `CLOUDFLARE_R2_ENDPOINT`
+- `CLOUDFLARE_ACCESS_KEY_ID`
+- `CLOUDFLARE_SECRET_ACCESS_KEY`
+
+API-published blocks are uploaded to R2. This is not necessary for blocks added to the `hub/` folder in the repo.
+
 ### AWS configuration
 
 If you want to send verification codes to an email address, the following AWS environment variables have to be additionally configured:
@@ -64,6 +74,7 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
 
 The above environment variables will also be used for S3 access for allowing user avatar uploads.
+
 The default S3 bucket name is `blockprotocol` but can optionally be customized with the following environment variable:
 
 - `BP_AWS_S3_BUCKET_NAME`: The name of the S3 bucket to store files in (e.g. user avatars)

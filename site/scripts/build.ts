@@ -10,9 +10,9 @@ const script = async () => {
     await import("./copy-blocks-from-ci-cache");
   }
 
-  await import("./codegen");
-
   await import("./prepare-blocks");
+
+  await import("./codegen");
 
   await import("./make-block-assets-compatible-with-vercel-lambdas");
 
