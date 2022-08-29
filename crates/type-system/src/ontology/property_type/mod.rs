@@ -226,18 +226,10 @@ mod tests {
     use std::str::FromStr;
 
     use super::*;
-    use crate::test_data;
-
-    fn test_property_type_schema(schema: &serde_json::Value) -> PropertyType {
-        let property_type: PropertyType =
-            serde_json::from_value(schema.clone()).expect("invalid schema");
-        assert_eq!(
-            serde_json::to_value(property_type.clone()).expect("could not serialize"),
-            *schema,
-            "{property_type:#?}"
-        );
-        property_type
-    }
+    use crate::{
+        test_data,
+        utils::tests::{check_serialization_from_str, check_serialization_from_value},
+    };
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,
@@ -279,10 +271,8 @@ mod tests {
 
     #[test]
     fn favorite_quote() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::FAVORITE_QUOTE_V1)
-                .expect("invalid JSON"),
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::FAVORITE_QUOTE_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -293,11 +283,9 @@ mod tests {
 
     #[test]
     fn age() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::AGE_V1).expect(
-                "invalid
-JSON",
-            ),
+        let property_type = check_serialization_from_str(
+            serde_json::from_str(test_data::property_type::AGE_V1).expect("invalid JSON"),
+            None,
         );
 
         test_property_type_data_refs(&property_type, [
@@ -309,8 +297,9 @@ JSON",
 
     #[test]
     fn user_id() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::USER_ID_V2).expect("invalid JSON"),
+        let property_type = check_serialization_from_str(
+            serde_json::from_str(test_data::property_type::USER_ID_V2).expect("invalid JSON"),
+            None,
         );
 
         test_property_type_data_refs(&property_type, [
@@ -323,9 +312,10 @@ JSON",
 
     #[test]
     fn contact_information() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::CONTACT_INFORMATION_V1)
+        let property_type = check_serialization_from_str(
+            serde_json::from_str(test_data::property_type::CONTACT_INFORMATION_V1)
                 .expect("invalid JSON"),
+            None,
         );
 
         test_property_type_data_refs(&property_type, []);
@@ -338,8 +328,9 @@ JSON",
 
     #[test]
     fn interests() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::INTERESTS_V1).expect("invalid JSON"),
+        let property_type = check_serialization_from_str(
+            serde_json::from_str(test_data::property_type::INTERESTS_V1).expect("invalid JSON"),
+            None,
         );
 
         test_property_type_data_refs(&property_type, []);
@@ -353,8 +344,9 @@ JSON",
 
     #[test]
     fn numbers() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::NUMBERS_V1).expect("invalid JSON"),
+        let property_type = check_serialization_from_str(
+            serde_json::from_str(test_data::property_type::NUMBERS_V1).expect("invalid JSON"),
+            None,
         );
 
         test_property_type_data_refs(&property_type, [
@@ -366,9 +358,10 @@ JSON",
 
     #[test]
     fn contrived_property() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::CONTRIVED_PROPERTY_V1)
+        let property_type = check_serialization_from_str(
+            serde_json::from_str(test_data::property_type::CONTRIVED_PROPERTY_V1)
                 .expect("invalid JSON"),
+            None,
         );
 
         test_property_type_data_refs(&property_type, [

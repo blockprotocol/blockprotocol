@@ -60,13 +60,40 @@ pub mod tests {
         clippy::needless_pass_by_value,
         reason = "The value is used in the `assert_eq`, and passing by ref here is less convenient"
     )]
-    pub fn check_serialization<T>(input: serde_json::Value, expected_native_repr: Option<T>) -> T
+    pub fn check_serialization_from_str<T>(input: &str, expected_native_repr: Option<T>) -> T
     where
-        T: FromStr + Into<serde_json::Value> + Debug + PartialEq,
+        T: FromStr + Into<serde_json::Value> + Debug + Clone + PartialEq,
         <T as FromStr>::Err: Debug,
     {
-        let deserialized: T = T::from_str(&input.to_string()).expect("failed to deserialize");
-        let reserialized = serde_json::to_value(&deserialized.into()).expect("failed to serialize");
+        let deserialized: T = T::from_str(input).expect("failed to deserialize");
+        let reserialized =
+            serde_json::to_value(&deserialized.clone().into()).expect("failed to serialize");
+
+        if let Some(repr) = expected_native_repr {
+            assert_eq!(deserialized, repr);
+        }
+
+        assert_eq!(input, reserialized);
+
+        deserialized
+    }
+
+    #[expect(clippy::similar_names)]
+    #[expect(
+        clippy::needless_pass_by_value,
+        reason = "The value is used in the `assert_eq`, and passing by ref here is less convenient"
+    )]
+    pub fn check_serialization_from_value<T>(
+        input: serde_json::Value,
+        expected_native_repr: Option<T>,
+    ) -> T
+    where
+        T: TryFrom<serde_json::Value> + Into<serde_json::Value> + Debug + Clone + PartialEq,
+        <T as TryFrom<serde_json::Value>>::Error: Debug,
+    {
+        let deserialized: T = T::try_from(input.clone()).expect("failed to deserialize");
+        let reserialized =
+            serde_json::to_value(&deserialized.clone().into()).expect("failed to serialize");
 
         if let Some(repr) = expected_native_repr {
             assert_eq!(deserialized, repr);

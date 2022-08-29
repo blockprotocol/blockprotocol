@@ -175,7 +175,10 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{test_data, utils::tests::check_serialization};
+    use crate::{
+        test_data,
+        utils::tests::{check_serialization_from_str, check_serialization_from_value},
+    };
 
     #[test]
     fn data_type_reference() {
@@ -183,7 +186,7 @@ mod tests {
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
         )
         .expect("invalid Versioned URI");
-        let data_type = check_serialization::<DataTypeReference>(
+        let data_type = check_serialization_from_value::<DataTypeReference>(
             json!(
             {
               "$ref": uri.to_string()
@@ -203,49 +206,31 @@ mod tests {
 
     #[test]
     fn text() {
-        check_serialization::<DataType>(
-            serde_json::from_str(test_data::data_type::TEXT_V1).expect("invalid json"),
-            None,
-        );
+        check_serialization_from_str::<DataType>(test_data::data_type::TEXT_V1, None);
     }
 
     #[test]
     fn number() {
-        check_serialization::<DataType>(
-            serde_json::from_str(test_data::data_type::NUMBER_V1).expect("invalid json"),
-            None,
-        );
+        check_serialization_from_str::<DataType>(test_data::data_type::NUMBER_V1, None);
     }
 
     #[test]
     fn boolean() {
-        check_serialization::<DataType>(
-            serde_json::from_str(test_data::data_type::BOOLEAN_V1).expect("invalid json"),
-            None,
-        );
+        check_serialization_from_str::<DataType>(test_data::data_type::BOOLEAN_V1, None);
     }
 
     #[test]
     fn null() {
-        check_serialization::<DataType>(
-            serde_json::from_str(test_data::data_type::NULL_V1).expect("invalid json"),
-            None,
-        );
+        check_serialization_from_str::<DataType>(test_data::data_type::NULL_V1, None);
     }
 
     #[test]
     fn object() {
-        check_serialization::<DataType>(
-            serde_json::from_str(test_data::data_type::OBJECT_V1).expect("invalid json"),
-            None,
-        );
+        check_serialization_from_str::<DataType>(test_data::data_type::OBJECT_V1, None);
     }
 
     #[test]
     fn empty_list() {
-        check_serialization::<DataType>(
-            serde_json::from_str(test_data::data_type::EMPTY_LIST_V1).expect("invalid json"),
-            None,
-        );
+        check_serialization_from_str::<DataType>(test_data::data_type::EMPTY_LIST_V1, None);
     }
 }
