@@ -46,7 +46,8 @@ site/public/blocks
 site/public/schemas
 site/site-map.json
 site/test-results
-mock-block-dock/src/version.ts
+# this file is auto-generated when build or dev command is run
+packages/mock-block-dock/src/version.ts
 
 # we want to version control these specific build artifacts
 !packages/@blockprotocol/type-system-node/dist

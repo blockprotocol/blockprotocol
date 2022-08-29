@@ -9807,6 +9807,24 @@ mock-block-dock@0.0.22:
     react-json-view "^1.21.3"
     uuid "^8.3.2"
 
+mock-block-dock@0.0.23-canary.4:
+  version "0.0.23-canary.4"
+  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.23-canary.4.tgz#f9c4ddf25cd207441fb34373eaa41a6b0a3219de"
+  integrity sha512-U2uDXCtYG+R2UhmfMUylEV612Sy0BdGDReSLC8FfHUVDRwUUbWjt5lUR6VvsPAwufSwmvPZPNilmFgOFT8JyJg==
+  dependencies:
+    "@blockprotocol/core" "0.0.10"
+    "@blockprotocol/graph" "0.0.14"
+    "@emotion/react" "^11.10.0"
+    "@emotion/styled" "^11.10.0"
+    "@lit-labs/react" "^1.0.4"
+    "@mui/material" "^5.10.1"
+    ajv "^8.9.0"
+    lodash "^4.17.21"
+    react-json-view "^1.21.3"
+    react-resizable "^3.0.4"
+    use-local-storage-state "^18.1.1"
+    uuid "^8.3.2"
+
 mongodb-connection-string-url@^2.3.2:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/mongodb-connection-string-url/-/mongodb-connection-string-url-2.4.1.tgz#6b3c6c40133a0ad059fe9a0abda64b2a1cb4e8b4"
