@@ -76,13 +76,11 @@ impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
 
 #[cfg(test)]
 mod tests {
-    use serde_json::json;
-
-    use super::*;
-    use crate::ontology::property_type::PropertyTypeReference;
-
-    type Object = super::Object<PropertyTypeReference, 1>;
-
+    // use super::*;
+    // use crate::ontology::property_type::PropertyTypeReference;
+    //
+    // type Object = super::Object<PropertyTypeReference, 1>;
+    //
     // TODO: validation tests
     // #[test]
     // fn empty() {

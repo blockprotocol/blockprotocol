@@ -55,11 +55,6 @@ pub mod tests {
         r#type: StringTypeTag,
     }
 
-    #[expect(clippy::similar_names)]
-    #[expect(
-        clippy::needless_pass_by_value,
-        reason = "The value is used in the `assert_eq`, and passing by ref here is less convenient"
-    )]
     pub fn check_serialization_from_str<T>(input: &str, expected_native_repr: Option<T>) -> T
     where
         T: FromStr + Into<serde_json::Value> + Debug + Clone + PartialEq,

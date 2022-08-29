@@ -19,7 +19,7 @@ fn convert_data_type(data_type_obj: &JsValue) -> std::result::Result<DataType, P
         .into_serde::<repr::DataType>()
         .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
 
-    Ok(DataType::try_from(data_type_repr)?)
+    DataType::try_from(data_type_repr)
 }
 
 #[wasm_bindgen(typescript_custom_section)]
@@ -37,27 +37,4 @@ pub fn validate_data_type(data_type_obj: &JsValue) -> JsValue {
     set_panic_hook();
     let validate_result: Result<(), _> = convert_data_type(data_type_obj).map(|_| ()).into();
     JsValue::from_serde(&validate_result).expect("failed to serialize result")
-}
-
-#[cfg(test)]
-mod tests {
-    use wasm_bindgen::JsValue;
-
-    use super::*;
-
-    #[test]
-    fn my_test() {
-        let js = JsValue::from(
-            r#"{
-                "kind": "dataType",
-                "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URI
-                "title": "Text",
-                "description": "An ordered sequence of characters",
-                "type": "string",
-              },
-              "#,
-        );
-
-        dbg!(validate_data_type(&js));
-    }
 }

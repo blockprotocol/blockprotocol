@@ -15,7 +15,7 @@ fn convert_property_type(
         .into_serde::<repr::PropertyType>()
         .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
 
-    Ok(PropertyType::try_from(property_type_repr)?)
+    PropertyType::try_from(property_type_repr)
 }
 
 #[wasm_bindgen(typescript_custom_section)]

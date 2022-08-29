@@ -1,17 +1,12 @@
-#![cfg_attr(
-    target_arch = "wasm32",
-    expect(
-        clippy::drop_non_drop,
-        reason = "This seems to be a bug with wasm_bindgen"
-    )
-)]
 use std::fmt;
 
 use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::uri::ParseVersionedUriError;
+use crate::ontology::{
+    shared::object::error::ParsePropertyTypeObjectError, uri::ParseVersionedUriError,
+};
 
 #[allow(
     clippy::enum_variant_names,
@@ -24,7 +19,7 @@ pub enum ParsePropertyTypeError {
     InvalidVersionedUri(ParseVersionedUriError),
     InvalidDataTypeReference(ParseVersionedUriError),
     InvalidArrayItems(),
-    InvalidPropertyTypeObject(),
+    InvalidPropertyTypeObject(ParsePropertyTypeObjectError),
     InvalidJson(String),
 }
 

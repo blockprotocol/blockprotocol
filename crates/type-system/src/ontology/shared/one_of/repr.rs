@@ -27,7 +27,7 @@ where
             .map(|ele| ele.try_into().map_err(|err| ()))
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
-        Ok(Self::new(inner).map_err(|err| ())?)
+        Self::new(inner).map_err(|err| ())
     }
 }
 

@@ -1,11 +1,3 @@
-#![cfg_attr(
-    target_arch = "wasm32",
-    expect(
-        clippy::drop_non_drop,
-        reason = "This seems to be a bug with wasm_bindgen"
-    )
-)]
-
 use std::fmt;
 
 use serde::{Deserialize, Serialize};

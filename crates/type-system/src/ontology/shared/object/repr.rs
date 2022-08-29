@@ -55,8 +55,7 @@ where
             })
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
-        Ok(Self::new(properties, required)
-            .map_err(ParsePropertyTypeObjectError::ValidationError)?)
+        Self::new(properties, required).map_err(ParsePropertyTypeObjectError::ValidationError)
     }
 }
 

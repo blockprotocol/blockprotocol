@@ -72,7 +72,7 @@ impl TryFrom<PropertyValues> for super::PropertyValues {
                 Self::PropertyTypeObject(
                     property_type_object_repr
                         .try_into()
-                        .map_err(|err| ParsePropertyTypeError::InvalidPropertyTypeObject())?,
+                        .map_err(ParsePropertyTypeError::InvalidPropertyTypeObject)?,
                 )
             }
             PropertyValues::ArrayOfPropertyValues(array_repr) => Self::ArrayOfPropertyValues(
@@ -130,7 +130,7 @@ impl TryFrom<PropertyType> for super::PropertyType {
 
     fn try_from(property_type_repr: PropertyType) -> Result<Self, Self::Error> {
         let id = VersionedUri::from_str(&property_type_repr.id)
-            .map_err(|err| ParsePropertyTypeError::InvalidVersionedUri(err))?;
+            .map_err(ParsePropertyTypeError::InvalidVersionedUri)?;
         Ok(Self::new(
             id,
             property_type_repr.title,
