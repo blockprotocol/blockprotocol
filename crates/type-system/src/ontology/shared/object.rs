@@ -174,14 +174,6 @@ pub(in crate::ontology) mod repr {
             type Object = super::Object<PropertyTypeReference>;
 
             #[test]
-            fn empty() {
-                ensure_repr_failed_deserialization::<Object>(json!({
-                    "type": "object",
-                    "properties": {}
-                }));
-            }
-
-            #[test]
             fn one() {
                 let uri = VersionedUri::from_str("https://example.com/property_type/v/1")
                     .expect("invalid Versioned URI");
@@ -283,30 +275,6 @@ pub(in crate::ontology) mod repr {
                 "additional_properties": 10
             }));
         }
-
-        #[test]
-        fn invalid_uri() {
-            ensure_repr_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-                "type": "object",
-                "properties": {
-                    "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
-                }
-            }));
-        }
-
-        #[test]
-        fn invalid_required() {
-            ensure_repr_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-                "type": "object",
-                "properties": {
-                    "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-                    "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-                },
-                "required": [
-                    "https://example.com/property_type_c/"
-                ]
-            }));
-        }
     }
 }
 
@@ -394,6 +362,14 @@ mod tests {
 
     // TODO: validation tests
     // #[test]
+    // fn empty() {
+    //     ensure_repr_failed_deserialization::<Object>(json!({
+    //         "type": "object",
+    //         "properties": {}
+    //     }));
+    // }
+    //
+    // #[test]
     // fn additional_properties() {
     //     ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
     //         "type": "object",
@@ -427,5 +403,15 @@ mod tests {
     //             "https://example.com/property_type_c/"
     //         ]
     //     }));
+    // }
+    //
+    // #[test]
+    // fn invalid_uri() {
+    //     ensure_repr_failed_deserialization::<Object<PropertyTypeReference>>(json!({
+    //             "type": "object",
+    //             "properties": {
+    //                 "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
+    //             }
+    //         }));
     // }
 }

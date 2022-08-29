@@ -133,8 +133,8 @@ pub(in crate::ontology) mod repr {
                 Some(Array {
                     r#type: ArrayTypeTag::Array,
                     items: StringTypeStruct::default(),
-                    max_items: Some(10),
-                    min_items: Some(20),
+                    min_items: Some(10),
+                    max_items: Some(20),
                 }),
             );
         }
