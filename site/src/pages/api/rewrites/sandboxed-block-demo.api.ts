@@ -1,7 +1,7 @@
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
-import { getBlockByUserAndName } from "../../../lib/api/blocks";
+import { getBlockByUserAndName } from "../../../lib/api/blocks/get";
 import { retrieveBlockFileContent } from "../../../lib/blocks";
 
 /**
@@ -24,7 +24,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const shortname = (req.query.shortname as string).replace(/^@/, "");
 
-  const blockMetadata = getBlockByUserAndName({
+  const blockMetadata = await getBlockByUserAndName({
     shortname,
     name: req.query.blockslug as string,
   });

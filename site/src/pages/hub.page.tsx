@@ -3,7 +3,7 @@ import { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
-import { getAllBlocks } from "../lib/api/blocks";
+import { getAllBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -17,7 +17,7 @@ interface PageProps {
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const blocks = getAllBlocks();
+  const blocks = await getAllBlocks();
 
   return {
     props: { catalog: excludeHiddenBlocks(blocks) },

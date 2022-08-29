@@ -26,12 +26,12 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
-import { getAllBlocks } from "../../../lib/api/blocks";
+import { getAllBlocks } from "../../../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  readBlockReadmeFromDisk,
   retrieveBlockFileContent,
+  retrieveBlockReadme,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
 
@@ -182,7 +182,7 @@ export const getStaticProps: GetStaticProps<
   }
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const blocks = getAllBlocks();
+  const blocks = await getAllBlocks();
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,
@@ -197,7 +197,7 @@ export const getStaticProps: GetStaticProps<
     blockMetadata,
   );
 
-  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
+  const readmeMd = await retrieveBlockReadme(blockMetadata);
 
   const compiledReadme = readmeMd
     ? (

@@ -24,8 +24,8 @@ export type BaseApiRequest<RequestBody = unknown> = Omit<
     session?: Awaited<ReturnType<ReturnType<typeof nextSession>>>;
   };
 
-type ErrorResponse = {
-  errors: Partial<ValidationError>[];
+export type ErrorResponse = {
+  errors: Partial<ValidationError & { code?: string }>[];
 };
 
 export type BaseApiResponse<T = unknown> = NextApiResponse<T | ErrorResponse>;
