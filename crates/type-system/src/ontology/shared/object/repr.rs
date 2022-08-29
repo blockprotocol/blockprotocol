@@ -1,10 +1,12 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Debug};
 
 use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::{uri::BaseUri, ValidateUri};
+use crate::ontology::{
+    shared::object::error::ParsePropertyTypeObjectError, uri::BaseUri, ValidateUri,
+};
 
 /// Will serialize as a constant value `"object"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -27,9 +29,9 @@ pub struct Object<T> {
 impl<T, R> TryFrom<Object<R>> for super::Object<T, 1>
 where
     T: TryFrom<R> + ValidateUri,
+    <T as TryFrom<R>>::Error: Debug,
 {
-    // TODO
-    type Error = ();
+    type Error = ParsePropertyTypeObjectError;
 
     fn try_from(object_repr: Object<R>) -> Result<Self, Self::Error> {
         let properties = object_repr
@@ -37,18 +39,24 @@ where
             .into_iter()
             .map(|(base_uri, val)| {
                 Ok((
-                    BaseUri::new(base_uri).map_err(|err| ())?,
-                    val.try_into().map_err(|err| ())?,
+                    BaseUri::new(base_uri)
+                        .map_err(ParsePropertyTypeObjectError::InvalidPropertyKey)?,
+                    val.try_into().map_err(|err| {
+                        unreachable!("Rustc says this err is infallible {:?}", err)
+                    })?,
                 ))
             })
             .collect::<Result<HashMap<BaseUri, _>, Self::Error>>()?;
         let required = object_repr
             .required
             .into_iter()
-            .map(|base_uri| BaseUri::new(base_uri).map_err(|err| ()))
+            .map(|base_uri| {
+                BaseUri::new(base_uri).map_err(ParsePropertyTypeObjectError::InvalidRequiredKey)
+            })
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
-        Ok(Self::new(properties, required).map_err(|err| ())?)
+        Ok(Self::new(properties, required)
+            .map_err(ParsePropertyTypeObjectError::ValidationError)?)
     }
 }
 

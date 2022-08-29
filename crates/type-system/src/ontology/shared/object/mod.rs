@@ -1,3 +1,4 @@
+pub mod error;
 pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;

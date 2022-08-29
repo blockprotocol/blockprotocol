@@ -2,6 +2,8 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
+use crate::ontology::shared::one_of::error::ParseOneOfError;
+
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
@@ -39,7 +41,7 @@ where
         let possibilities = one_of
             .possibilities
             .into_iter()
-            .map(|ele| ele.into())
+            .map(std::convert::Into::into)
             .collect();
         Self { possibilities }
     }
