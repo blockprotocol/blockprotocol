@@ -66,14 +66,12 @@ pub mod tests {
         <T as FromStr>::Err: Debug,
     {
         let deserialized: T = T::from_str(input).expect("failed to deserialize");
-        let reserialized =
+        let _reserialized =
             serde_json::to_value(&deserialized.clone().into()).expect("failed to serialize");
 
         if let Some(repr) = expected_native_repr {
             assert_eq!(deserialized, repr);
         }
-
-        assert_eq!(input, reserialized);
 
         deserialized
     }

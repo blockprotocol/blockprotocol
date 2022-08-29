@@ -17,6 +17,13 @@ pub struct PropertyTypeReference {
     uri: String,
 }
 
+impl PropertyTypeReference {
+    #[must_use]
+    pub const fn new(uri: String) -> Self {
+        Self { uri }
+    }
+}
+
 impl TryFrom<PropertyTypeReference> for super::PropertyTypeReference {
     type Error = ParseVersionedUriError;
 

@@ -84,17 +84,17 @@ pub(in crate::ontology) mod repr {
 
         use super::*;
         use crate::{
+            ontology::property_type::repr::PropertyTypeReference,
             uri::VersionedUri,
             utils::tests::{
                 check_repr_serialization_from_value, ensure_repr_failed_deserialization,
             },
-            PropertyTypeReference,
         };
 
         mod unconstrained {
             use super::*;
 
-            type Object = super::Object<PropertyTypeReference, 0>;
+            type Object = super::Object<PropertyTypeReference>;
 
             #[test]
             fn empty() {
@@ -127,7 +127,7 @@ pub(in crate::ontology) mod repr {
                         r#type: ObjectTypeTag::Object,
                         properties: HashMap::from([(
                             uri.base_uri().to_string(),
-                            PropertyTypeReference::new(uri),
+                            PropertyTypeReference::new(uri.to_string()),
                         )]),
                         required: vec![],
                     }),
@@ -154,11 +154,11 @@ pub(in crate::ontology) mod repr {
                         properties: HashMap::from([
                             (
                                 uri_a.base_uri().to_string(),
-                                PropertyTypeReference::new(uri_a),
+                                PropertyTypeReference::new(uri_a.to_string()),
                             ),
                             (
                                 uri_b.base_uri().to_string(),
-                                PropertyTypeReference::new(uri_b),
+                                PropertyTypeReference::new(uri_b.to_string()),
                             ),
                         ]),
                         required: vec![],
@@ -197,7 +197,7 @@ pub(in crate::ontology) mod repr {
                         r#type: ObjectTypeTag::Object,
                         properties: HashMap::from([(
                             uri.base_uri().to_string(),
-                            PropertyTypeReference::new(uri),
+                            PropertyTypeReference::new(uri.to_string()),
                         )]),
                         required: vec![],
                     }),
@@ -224,11 +224,11 @@ pub(in crate::ontology) mod repr {
                         properties: HashMap::from([
                             (
                                 uri_a.base_uri().to_string(),
-                                PropertyTypeReference::new(uri_a),
+                                PropertyTypeReference::new(uri_a.to_string()),
                             ),
                             (
                                 uri_b.base_uri().to_string(),
-                                PropertyTypeReference::new(uri_b),
+                                PropertyTypeReference::new(uri_b.to_string()),
                             ),
                         ]),
                         required: vec![],
@@ -260,11 +260,11 @@ pub(in crate::ontology) mod repr {
                     properties: HashMap::from([
                         (
                             uri_a.base_uri().to_string(),
-                            PropertyTypeReference::new(uri_a.clone()),
+                            PropertyTypeReference::new(uri_a.to_string()),
                         ),
                         (
                             uri_b.base_uri().to_string(),
-                            PropertyTypeReference::new(uri_b),
+                            PropertyTypeReference::new(uri_b.to_string()),
                         ),
                     ]),
                     required: vec![uri_a.base_uri().to_string()],

@@ -1,5 +1,5 @@
 mod error;
-mod repr;
+pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
@@ -280,10 +280,7 @@ mod tests {
 
     #[test]
     fn age() {
-        let property_type = check_serialization_from_str(
-            serde_json::from_str(test_data::property_type::AGE_V1).expect("invalid JSON"),
-            None,
-        );
+        let property_type = check_serialization_from_str(test_data::property_type::AGE_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -294,10 +291,8 @@ mod tests {
 
     #[test]
     fn user_id() {
-        let property_type = check_serialization_from_str(
-            serde_json::from_str(test_data::property_type::USER_ID_V2).expect("invalid JSON"),
-            None,
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::USER_ID_V2, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -309,11 +304,8 @@ mod tests {
 
     #[test]
     fn contact_information() {
-        let property_type = check_serialization_from_str(
-            serde_json::from_str(test_data::property_type::CONTACT_INFORMATION_V1)
-                .expect("invalid JSON"),
-            None,
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::CONTACT_INFORMATION_V1, None);
 
         test_property_type_data_refs(&property_type, []);
 
@@ -325,10 +317,8 @@ mod tests {
 
     #[test]
     fn interests() {
-        let property_type = check_serialization_from_str(
-            serde_json::from_str(test_data::property_type::INTERESTS_V1).expect("invalid JSON"),
-            None,
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::INTERESTS_V1, None);
 
         test_property_type_data_refs(&property_type, []);
 
@@ -341,10 +331,8 @@ mod tests {
 
     #[test]
     fn numbers() {
-        let property_type = check_serialization_from_str(
-            serde_json::from_str(test_data::property_type::NUMBERS_V1).expect("invalid JSON"),
-            None,
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::NUMBERS_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -355,11 +343,8 @@ mod tests {
 
     #[test]
     fn contrived_property() {
-        let property_type = check_serialization_from_str(
-            serde_json::from_str(test_data::property_type::CONTRIVED_PROPERTY_V1)
-                .expect("invalid JSON"),
-            None,
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::CONTRIVED_PROPERTY_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
