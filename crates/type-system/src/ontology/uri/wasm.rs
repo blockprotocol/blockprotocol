@@ -3,7 +3,10 @@ use std::str::FromStr;
 use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
-use crate::{ontology::uri::BaseUri, uri::VersionedUri, utils::Result};
+use crate::{
+    ontology::uri::{BaseUri, VersionedUri},
+    utils::Result,
+};
 
 // Generates the TypeScript alias: type VersionedUri = `${string}/v/${number}`
 #[derive(Tsify)]

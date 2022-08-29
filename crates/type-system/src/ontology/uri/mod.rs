@@ -78,15 +78,7 @@ impl<'de> Deserialize<'de> for BaseUri {
     where
         D: Deserializer<'de>,
     {
-        #[cfg(not(target_arch = "wasm32"))]
-        {
-            Self::new(String::deserialize(deserializer)?).map_err(de::Error::custom)
-        }
-        #[cfg(target_arch = "wasm32")]
-        {
-            Self::new(String::deserialize(deserializer)?)
-                .map_err(|err| de::Error::custom(serialize_with_delimiter(err)))
-        }
+        Self::new(String::deserialize(deserializer)?).map_err(de::Error::custom)
     }
 }
 
@@ -183,18 +175,9 @@ impl<'de> Deserialize<'de> for VersionedUri {
     where
         D: Deserializer<'de>,
     {
-        #[cfg(not(target_arch = "wasm32"))]
-        {
-            String::deserialize(deserializer)?
-                .parse()
-                .map_err(de::Error::custom)
-        }
-        #[cfg(target_arch = "wasm32")]
-        {
-            String::deserialize(deserializer)? // TODO - do we need to map this too
-                .parse()
-                .map_err(|err| de::Error::custom(serialize_with_delimiter(err)))
-        }
+        String::deserialize(deserializer)?
+            .parse()
+            .map_err(de::Error::custom)
     }
 }
 

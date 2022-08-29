@@ -16,7 +16,6 @@ mod shared;
 
 pub use shared::{
     array::{Array, ValueOrArray},
-    error::{serialize_with_delimiter, HasSerdeJsonError},
     object::Object,
     one_of::OneOf,
     validate::{ValidateUri, ValidationError},

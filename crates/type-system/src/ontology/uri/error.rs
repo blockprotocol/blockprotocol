@@ -12,8 +12,6 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::HasSerdeJsonError;
-
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(tag = "reason", content = "inner")]
@@ -40,12 +38,6 @@ pub enum ParseVersionedUriError {
     AdditionalEndContent,
     InvalidBaseUri(ParseBaseUriError),
     InvalidJson(String),
-}
-
-impl HasSerdeJsonError for ParseVersionedUriError {
-    fn new_serde_json_error(contents: String) -> Self {
-        Self::InvalidJson(contents)
-    }
 }
 
 impl fmt::Display for ParseVersionedUriError {
