@@ -165,7 +165,6 @@ mod tests {
 
     mod constrained {
         use super::*;
-        use crate::utils::tests::ensure_repr_failed_deserialization;
 
         type Object = super::Object<PropertyTypeReference>;
 

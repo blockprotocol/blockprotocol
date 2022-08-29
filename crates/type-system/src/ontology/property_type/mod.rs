@@ -226,6 +226,8 @@ impl PropertyValues {
 mod tests {
     use std::str::FromStr;
 
+    use serde_json::json;
+
     use super::*;
     use crate::{test_data, utils::tests::check_serialization_from_str};
 
@@ -352,5 +354,66 @@ mod tests {
         ]);
 
         test_property_type_property_refs(&property_type, []);
+    }
+
+    #[test]
+    fn invalid_id() {
+        let invalid_property_type = json!(
+            {
+              "kind": "propertyType",
+              "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
+              "title": "Age",
+              "pluralTitle": "Ages",
+              "oneOf": [
+                {
+                  "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1"
+                }
+              ]
+            }
+        );
+
+        let result: Result<PropertyType, _> = invalid_property_type.try_into();
+        assert_eq!(
+            result,
+            Err(ParsePropertyTypeError::InvalidVersionedUri(
+                ParseVersionedUriError::AdditionalEndContent
+            ))
+        );
+    }
+
+    #[test]
+    fn empty_one_of() {
+        let invalid_property_type = json!(
+            {
+              "kind": "propertyType",
+              "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
+              "title": "Age",
+              "pluralTitle": "Ages",
+              "oneOf": []
+            }
+        );
+
+        let result: Result<PropertyType, _> = invalid_property_type.try_into();
+        assert_eq!(result, Err(ParsePropertyTypeError::InvalidArrayItems()));
+    }
+
+    #[test]
+    fn invalid_reference() {
+        let invalid_property_type = json!(
+            {
+              "kind": "propertyType",
+              "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
+              "title": "Age",
+              "pluralTitle": "Ages",
+              "oneOf": [
+                {
+                  "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
+                }
+              ]
+            }
+        );
+
+        let result: Result<PropertyType, _> = invalid_property_type.try_into();
+        assert_eq!(result, Err(ParsePropertyTypeError::InvalidArrayItems()));
     }
 }

@@ -66,7 +66,7 @@ impl TryFrom<PropertyValues> for super::PropertyValues {
             PropertyValues::DataTypeReference(data_type_ref_repr) => Self::DataTypeReference(
                 data_type_ref_repr
                     .try_into()
-                    .map_err(|err| ParsePropertyTypeError::InvalidDataTypeReference(err))?,
+                    .map_err(ParsePropertyTypeError::InvalidDataTypeReference)?,
             ),
             PropertyValues::PropertyTypeObject(property_type_object_repr) => {
                 Self::PropertyTypeObject(
