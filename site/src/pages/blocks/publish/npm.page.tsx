@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
-import { useSnackbar } from "../../../components/hooks/use-snackbar";
 import {
   AuthWallPageContent,
   withAuthWall,
@@ -25,18 +24,23 @@ type FormValues = ApiBlockCreateRequest;
 
 const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
-  const snackbar = useSnackbar();
 
-  const { register, handleSubmit, formState, watch } = useForm<FormValues>({
-    mode: "onChange",
-  });
+  const { register, handleSubmit, formState, watch, setError } =
+    useForm<FormValues>({
+      mode: "onChange",
+    });
 
   const onSubmit = async (data: FormValues) => {
     const res = await apiClient.publishBlockFromNPM(data);
 
     if (res.error) {
-      /**  @todo depending on res.error.code, call form.setError on related field  */
-      return snackbar.error(res.error.message);
+      const { message, code } = res.error;
+
+      if (code === "NAME_TAKEN") {
+        return setError("blockName", { message });
+      }
+
+      return setError("npmPackageName", { message });
     }
 
     await router.push(`/blocks?createdBlock=${res.data?.block.name}`);
