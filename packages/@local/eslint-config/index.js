@@ -377,12 +377,6 @@ module.exports = {
                 message:
                   "Please use the custom src/components/Alert component instead.",
               },
-              {
-                name: "notistack",
-                importNames: ["useSnackbar"],
-                message:
-                  "Please use the custom src/components/hooks/useSnackbar hook instead.",
-              },
             ],
           },
         ],

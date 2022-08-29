@@ -71,7 +71,6 @@
     "next-mdx-remote": "^4.0.3",
     "next-session": "^4.0.4",
     "nodemailer": "^6.7.2",
-    "notistack": "^2.0.5",
     "oembed-providers": "^1.0.20220105",
     "passport": "^0.5.2",
     "prismjs": "^1.27.0",
