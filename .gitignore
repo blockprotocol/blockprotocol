@@ -1,3 +1,7 @@
+######################
+## Shared with linters
+######################
+
 # Logs
 *.log
 npm-debug.log*
@@ -28,17 +32,17 @@ node_modules/
 # Build artifacts
 dist
 
-# vscode config
+# VScode config
 .vscode
 
-# vercel
+# Vercel
 .vercel
 
 # Testing
 .nyc_output
 coverage
 
-# workspace specific
+# Workspace specific
 packages/block-template-html/dev/src
 site/blocks-data.json
 site/playwright-report
@@ -49,10 +53,7 @@ site/test-results
 # this file is auto-generated when build or dev command is run
 packages/mock-block-dock/src/version.ts
 
-# we want to version control these specific build artifacts
-!packages/@blockprotocol/type-system-node/dist
-!packages/@blockprotocol/type-system-web/dist
-
+# Local files
 var
 
 # Sentry
@@ -65,3 +66,11 @@ crates/**/Cargo.lock
 crates/**/bin/
 crates/**/pkg/
 crates/**/wasm-pack.log
+
+##################
+## Specific to git
+##################
+
+# We want to version control these specific build artifacts
+!packages/@blockprotocol/type-system-node/dist
+!packages/@blockprotocol/type-system-web/dist
