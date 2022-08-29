@@ -1,4 +1,4 @@
-import { isValidPropertyType, PropertyType } from "..";
+import { ParsePropertyTypeError, PropertyType, validatePropertyType } from "..";
 
 const propertyTypes: PropertyType[] = [
   {
@@ -166,7 +166,7 @@ const propertyTypes: PropertyType[] = [
 
 // These are data types which satisfy the TypeScript interface but are still invalid, and demonstrate the need for the
 // validation method
-const invalidPropertyTypes: [string, PropertyType][] = [
+const invalidPropertyTypes: [string, PropertyType, any][] = [
   [
     "empty one of",
     {
@@ -175,6 +175,10 @@ const invalidPropertyTypes: [string, PropertyType][] = [
       title: "Broken",
       pluralTitle: "Broken",
       oneOf: [],
+    },
+    {
+      reason: "InvalidArrayItems",
+      inner: [],
     },
   ],
   [
@@ -190,6 +194,12 @@ const invalidPropertyTypes: [string, PropertyType][] = [
         },
       ],
     },
+    {
+      reason: "InvalidVersionedUri",
+      inner: {
+        reason: "AdditionalEndContent",
+      },
+    },
   ],
   [
     "invalid base URI",
@@ -204,6 +214,16 @@ const invalidPropertyTypes: [string, PropertyType][] = [
         },
       ],
     },
+    {
+      reason: "InvalidVersionedUri",
+      inner: {
+        reason: "InvalidBaseUri",
+        inner: {
+          reason: "UrlParseError",
+          inner: "invalid domain character",
+        },
+      },
+    },
   ],
   [
     "invalid ref",
@@ -217,6 +237,10 @@ const invalidPropertyTypes: [string, PropertyType][] = [
           $ref: "im a broken ref haha /v/1",
         },
       ],
+    },
+    {
+      reason: "InvalidArrayItems",
+      inner: [],
     },
   ],
   [
@@ -238,37 +262,65 @@ const invalidPropertyTypes: [string, PropertyType][] = [
         },
       ],
     },
+    {
+      inner: [],
+      reason: "InvalidArrayItems",
+    },
   ],
 ];
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be
 // normally possible if we don't do something silly like the use of any below. This sanity check is important because
 // it is possible for wasm to error in unusual ways that can't easily be handled, and that should be viewed as a bug.
-const brokenTypes: any[] = [
-  {},
-  { foo: "bar" },
-  {
-    kind: "propertyType",
-    $id: "https://blockprotocol.org/@blockprotocol/types/property-type/age/v/1",
-    title: "Age",
-  },
+const brokenTypes: [any, ParsePropertyTypeError][] = [
+  [
+    {},
+    {
+      reason: "InvalidJson",
+      inner: "missing field `kind` at line 1 column 2",
+    },
+  ],
+  [
+    { foo: "bar" },
+    {
+      reason: "InvalidJson",
+      inner: "missing field `kind` at line 1 column 13",
+    },
+  ],
+  [
+    {
+      kind: "propertyType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/age/v/1",
+      title: "Age",
+    },
+    {
+      reason: "InvalidJson",
+      inner: "missing field `pluralTitle` at line 1 column 114",
+    },
+  ],
 ];
 
-describe("isValidPropertyType", () => {
-  test.each(propertyTypes)("isValidPropertyType($title) succeeds", (input) => {
-    expect(() => isValidPropertyType(input)).not.toThrow();
+describe("validatePropertyType", () => {
+  test.each(propertyTypes)("validatePropertyType($title) succeeds", (input) => {
+    expect(validatePropertyType(input)).toEqual({ type: "Ok", inner: null }); // TODO: this shouldn't be null
   });
 
   test.each(invalidPropertyTypes)(
-    "isValidPropertyType errors on: %s",
-    (_, input) => {
-      expect(() => isValidPropertyType(input)).toThrow();
+    "validatePropertyType returns errors on: %s",
+    (_, input, expected) => {
+      expect(validatePropertyType(input)).toEqual({
+        type: "Err",
+        inner: expected,
+      });
     },
   );
 
   test.each(brokenTypes)(
-    "isValidPropertyType cleanly errors on different type: %s",
-    (input) => {
-      expect(() => isValidPropertyType(input)).toThrow();
+    "validatePropertyType cleanly returns errors on different type: %s",
+    (input, expected) => {
+      expect(validatePropertyType(input)).toEqual({
+        type: "Err",
+        inner: expected,
+      });
     },
   );
 });

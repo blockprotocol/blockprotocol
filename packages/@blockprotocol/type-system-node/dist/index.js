@@ -112,6 +112,40 @@ function takeObject(idx) {
     dropObject(idx);
     return ret;
 }
+
+let stack_pointer = 32;
+
+function addBorrowedObject(obj) {
+    if (stack_pointer == 1) throw new Error('out of js stack');
+    heap[--stack_pointer] = obj;
+    return stack_pointer;
+}
+/**
+* @param {any} data_type_obj
+* @returns {any}
+*/
+module.exports.validateDataType = function(data_type_obj) {
+    try {
+        const ret = wasm.validateDataType(addBorrowedObject(data_type_obj));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+};
+
+/**
+* @param {any} property_type_obj
+* @returns {any}
+*/
+module.exports.validatePropertyType = function(property_type_obj) {
+    try {
+        const ret = wasm.validatePropertyType(addBorrowedObject(property_type_obj));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+};
+
 /**
 * @param {string} uri
 * @returns {any}
@@ -180,26 +214,6 @@ module.exports.extractVersion = function(uri) {
         return r0 >>> 0;
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
-    }
-};
-
-let stack_pointer = 32;
-
-function addBorrowedObject(obj) {
-    if (stack_pointer == 1) throw new Error('out of js stack');
-    heap[--stack_pointer] = obj;
-    return stack_pointer;
-}
-/**
-* @param {any} data_type_obj
-* @returns {any}
-*/
-module.exports.validateDataType = function(data_type_obj) {
-    try {
-        const ret = wasm.validateDataType(addBorrowedObject(data_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
     }
 };
 
