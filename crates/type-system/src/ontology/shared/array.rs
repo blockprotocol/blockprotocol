@@ -31,12 +31,63 @@ pub(in crate::ontology) mod repr {
         max_items: Option<usize>,
     }
 
+    impl<T, R> TryFrom<Array<R>> for super::Array<T>
+    where
+        T: TryFrom<R>,
+    {
+        // TODO
+        type Error = ();
+
+        fn try_from(array_repr: Array<R>) -> Result<Self, Self::Error> {
+            Ok(Self {
+                items: array_repr.items.try_into().map_err(|err| ())?,
+                min_items: array_repr.min_items,
+                max_items: array_repr.max_items,
+            })
+        }
+    }
+
+    impl<T> From<super::Array<T>> for Array<T> {
+        fn from(array: super::Array<T>) -> Self {
+            Self {
+                r#type: ArrayTypeTag::Array,
+                items: array.items.into(),
+                min_items: array.min_items,
+                max_items: array.max_items,
+            }
+        }
+    }
+
     #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
     #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(untagged, deny_unknown_fields)]
     pub enum ValueOrArray<T> {
         Value(T),
         Array(Array<T>),
+    }
+
+    impl<T, R> TryFrom<ValueOrArray<R>> for super::ValueOrArray<T>
+    where
+        T: TryFrom<R>,
+    {
+        // TODO
+        type Error = ();
+
+        fn try_from(value_or_array_repr: ValueOrArray<R>) -> Result<Self, Self::Error> {
+            Ok(match value_or_array_repr {
+                ValueOrArray::Value(val) => Self::Value(val.try_into().map_err(|err| ())?),
+                ValueOrArray::Array(array) => Self::Array(array.try_into()?),
+            })
+        }
+    }
+
+    impl<T> From<super::ValueOrArray<T>> for ValueOrArray<T> {
+        fn from(value_or_array: super::ValueOrArray<T>) -> Self {
+            match value_or_array {
+                super::ValueOrArray::Value(val) => Self::Value(val.into()),
+                super::ValueOrArray::Array(array) => Self::Array(array.into()),
+            }
+        }
     }
 }
 
