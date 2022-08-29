@@ -1,31 +1,37 @@
-// #![allow(
-//     non_snake_case,
-//     reason = "We want camelCase types in TS, and this module is WASM only"
-// )]
-// use wasm_bindgen::prelude::*;
-//
-// use crate::PropertyType;
-//
-// #[wasm_bindgen]
-// extern "C" {
-//     #[wasm_bindgen(typescript_type = "PropertyType")]
-//     pub type IPropertyType;
-// }
-//
-// use tsify::Tsify;
-//
-// // TODO: this is a temporary solution, we need to figure out error handling across the WASM
-// boundary #[derive(Tsify)]
-// #[wasm_bindgen]
-// pub struct TempError {}
-//
-// /// Checks if a given {PropertyType} is valid
-// ///
-// /// @throws {TempError} if the property type is malformed
-// #[wasm_bindgen]
-// pub fn isValidPropertyType(propertyTypeObj: &IPropertyType) -> Result<(), TempError> {
-//     propertyTypeObj
-//         .into_serde::<PropertyType>()
-//         .map_err(|_| TempError {})?;
-//     Ok(())
-// }
+use wasm_bindgen::prelude::*;
+
+use crate::{
+    ontology::{
+        property_type::{error::ParsePropertyTypeError, PropertyType},
+        repr,
+    },
+    utils::{set_panic_hook, Result},
+};
+
+fn convert_property_type(
+    property_type_obj: &JsValue,
+) -> std::result::Result<PropertyType, ParsePropertyTypeError> {
+    let property_type_repr = property_type_obj
+        .into_serde::<repr::PropertyType>()
+        .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
+
+    Ok(PropertyType::try_from(property_type_repr)?)
+}
+
+#[wasm_bindgen(typescript_custom_section)]
+const VALIDATE_PROPERTY_TYPE_DEF: &'static str = r#"
+/**
+ * Checks if a given Property Type is correctly formed
+ *
+ * @param {PropertyType} propertyType - The Property Type object to validate.
+ * @returns {Result} - @todo
+ */
+export function validatePropertyType(propertyType: PropertyType): Result<undefined, ParsePropertyTypeError>;
+"#;
+#[wasm_bindgen(skip_typescript, js_name = validatePropertyType)]
+pub fn validate_property_type(property_type_obj: &JsValue) -> JsValue {
+    set_panic_hook();
+    let validate_result: Result<(), _> =
+        convert_property_type(property_type_obj).map(|_| ()).into();
+    JsValue::from_serde(&validate_result).expect("failed to serialize result")
+}

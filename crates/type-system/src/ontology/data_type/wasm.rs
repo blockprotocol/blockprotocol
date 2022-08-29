@@ -14,12 +14,6 @@ use crate::{
     utils::{set_panic_hook, Result},
 };
 
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(typescript_type = "DataType")]
-    pub type IDataType;
-}
-
 fn convert_data_type(data_type_obj: &JsValue) -> std::result::Result<DataType, ParseDataTypeError> {
     let data_type_repr = data_type_obj
         .into_serde::<repr::DataType>()
