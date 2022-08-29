@@ -27,9 +27,15 @@
     src: url("./jet-brains-mono-regular.woff2") format("woff2");
 }
 
+.mbd-non-debug-mode-wrapper {
+  padding-top: 60px; 
+  
+}
+
 .mbd-debug-mode-toggle {
     font-family: Inter, "Helvetica", "Arial", sans-serif;
     position: fixed;
+    z-index: 1000;
     top: 9px;
     right: 24px;
     background-color: white;
@@ -43,6 +49,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
+    background-color:white;
 }
 
 .mbd-debug-mode-toggle > svg {

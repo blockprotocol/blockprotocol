@@ -215,7 +215,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       blockName={blockName}
     >
       {!debugMode ? (
-        <>
+        <div className="mbd-non-debug-mode-wrapper">
           {Component}
           <button
             className="mbd-debug-mode-toggle"
@@ -225,7 +225,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
             Preview Mode
             <OffSwitch />
           </button>
-        </>
+        </div>
       ) : (
         <DebugView>{Component}</DebugView>
       )}

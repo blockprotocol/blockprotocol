@@ -22,27 +22,7 @@ type MockBlockDockInfo = {
   "graphServiceCallbacks" | "blockGraph" | "linkedAggregations" | "entityTypes"
 >;
 
-const MockBlockDockContext = createContext<MockBlockDockInfo>({
-  debugMode: false,
-  setDebugMode: () => {},
-  logs: [],
-  setLogs: () => {},
-  readonly: false,
-  setReadonly: () => {},
-  setBlockSchema: () => {},
-  setBlockEntity: () => {},
-  blockEntity: {
-    entityId: "",
-    entityTypeId: "",
-    properties: {},
-  },
-  datastore: {
-    entities: [],
-    links: [],
-    linkedAggregationDefinitions: [],
-    entityTypes: [],
-  },
-});
+const MockBlockDockContext = createContext<MockBlockDockInfo | null>(null);
 
 type Props = Omit<MockBlockDockInfo, "logs" | "setLogs"> & {
   children: ReactNode;
@@ -83,6 +63,10 @@ export const MockBlockDockProvider = ({ children, ...props }: Props) => {
 
 export const useMockBlockDockContext = () => {
   const contextValue = useContext(MockBlockDockContext);
+
+  if (!contextValue) {
+    throw new Error("no MockBlockDockContext value has been provided");
+  }
 
   return contextValue;
 };

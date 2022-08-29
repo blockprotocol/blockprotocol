@@ -1,4 +1,3 @@
-import { EntityType } from "@blockprotocol/graph/.";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { render } from "react-dom";
 
