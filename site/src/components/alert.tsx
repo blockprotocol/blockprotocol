@@ -26,7 +26,7 @@ const icons: Record<AlertColor, IconDefinition> = {
 };
 
 interface AlertProps {
-  title: string;
+  title?: string;
   description: ReactNode;
   type?: AlertColor;
   extraContent?: ReactNode;
@@ -47,14 +47,16 @@ export const Alert = ({
   return (
     <MuiAlert icon={<FontAwesomeIcon icon={icon} />} severity={type} sx={sx}>
       <Box flexGrow={1}>
-        <Typography
-          variant="bpSmallCaps"
-          fontWeight={500}
-          mb={1.5}
-          color={palette.gray[90]}
-        >
-          {title}
-        </Typography>
+        {!!title && (
+          <Typography
+            variant="bpSmallCaps"
+            fontWeight={500}
+            mb={1.5}
+            color={palette.gray[90]}
+          >
+            {title}
+          </Typography>
+        )}
         <Typography variant="bpSmallCopy" color={palette.gray[80]}>
           {description}
         </Typography>
