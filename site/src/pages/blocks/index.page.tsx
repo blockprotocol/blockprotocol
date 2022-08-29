@@ -13,7 +13,7 @@ import {
 } from "../../components/pages/auth-wall";
 import { BlockListContainer } from "../../components/pages/blocks/block-list-container";
 import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state";
-import { BlockPublishedAlert } from "../../components/pages/blocks/block-published-message-content";
+import { PublishBlockSuccess } from "../../components/pages/blocks/publish-block-success";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import { ListViewCard } from "../../components/pages/user/list-view-card";
@@ -67,7 +67,7 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
         </Box>
 
         {!!recentlyCreatedBlock && (
-          <BlockPublishedAlert
+          <PublishBlockSuccess
             blockHref={`@${user.shortname}/blocks/${recentlyCreatedBlock?.name}`}
           />
         )}

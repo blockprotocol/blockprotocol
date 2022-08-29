@@ -5,13 +5,13 @@ import { Alert } from "../../alert";
 import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
 
-interface BlockPublishedAlertProps {
+interface PublishBlockSuccessProps {
   blockHref: string;
 }
 
-export const BlockPublishedAlert = ({
+export const PublishBlockSuccess = ({
   blockHref,
-}: BlockPublishedAlertProps) => {
+}: PublishBlockSuccessProps) => {
   return (
     <Alert
       type="success"
