@@ -7,10 +7,11 @@ pub(in crate::ontology) mod repr {
     #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase", deny_unknown_fields)]
     pub struct OneOf<T> {
+        #[serde(rename = "oneOf")]
         // TODO: tsify doesn't seem to let us override the type of this without losing the generic
         //  see https://github.com/madonoharu/tsify/issues/4
         //  we want something like #[cfg_attr(target_arch = "wasm32", tsify(type = "[T, ...T[]]"))]
-        pub one_of: Vec<T>,
+        pub possibilities: Vec<T>,
     }
 
     impl<T, R> TryFrom<OneOf<R>> for super::OneOf<T>
@@ -22,7 +23,7 @@ pub(in crate::ontology) mod repr {
 
         fn try_from(one_of_repr: OneOf<R>) -> Result<Self, Self::Error> {
             let inner = one_of_repr
-                .one_of
+                .possibilities
                 .into_iter()
                 .map(|ele| ele.try_into().map_err(|err| ()))
                 .collect::<Result<Vec<_>, Self::Error>>()?;
@@ -31,11 +32,17 @@ pub(in crate::ontology) mod repr {
         }
     }
 
-    impl<T> From<super::OneOf<T>> for OneOf<T> {
+    impl<T, R> From<super::OneOf<T>> for OneOf<R>
+    where
+        R: From<T>,
+    {
         fn from(one_of: super::OneOf<T>) -> Self {
-            Self {
-                one_of: one_of.one_of,
-            }
+            let possibilities = one_of
+                .possibilities
+                .into_iter()
+                .map(|ele| ele.into())
+                .collect();
+            Self { possibilities }
         }
     }
 }
@@ -44,14 +51,14 @@ use crate::ontology::shared::validate::ValidationError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OneOf<T> {
-    one_of: Vec<T>,
+    possibilities: Vec<T>,
 }
 
 impl<T> OneOf<T> {
     /// Creates a new `OneOf` without validating.
-    pub fn new_unchecked<U: Into<Vec<T>>>(one_of: U) -> Self {
+    pub fn new_unchecked<U: Into<Vec<T>>>(possibilities: U) -> Self {
         Self {
-            one_of: one_of.into(),
+            possibilities: possibilities.into(),
         }
     }
 
@@ -68,7 +75,7 @@ impl<T> OneOf<T> {
 
     #[must_use]
     pub fn one_of(&self) -> &[T] {
-        &self.one_of
+        &self.possibilities
     }
 
     fn validate(&self) -> Result<(), ValidationError> {

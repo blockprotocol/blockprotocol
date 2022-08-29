@@ -7,7 +7,6 @@ use {tsify::Tsify, wasm_bindgen::prelude::*};
 use crate::{
     ontology::property_type::error::ParsePropertyTypeError,
     uri::{ParseVersionedUriError, VersionedUri},
-    Array, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]

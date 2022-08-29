@@ -3,10 +3,7 @@ pub(in crate::ontology) mod repr {
     #[cfg(target_arch = "wasm32")]
     use tsify::Tsify;
 
-    use crate::{
-        ontology::shared::validate::{ValidateUri, ValidationError},
-        uri::BaseUri,
-    };
+    use crate::{ontology::shared::validate::ValidationError, uri::BaseUri};
 
     /// Will serialize as a constant value `"array"`
     #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -47,7 +44,10 @@ pub(in crate::ontology) mod repr {
         }
     }
 
-    impl<T> From<super::Array<T>> for Array<T> {
+    impl<T, R> From<super::Array<T>> for Array<R>
+    where
+        R: From<T>,
+    {
         fn from(array: super::Array<T>) -> Self {
             Self {
                 r#type: ArrayTypeTag::Array,
@@ -81,7 +81,10 @@ pub(in crate::ontology) mod repr {
         }
     }
 
-    impl<T> From<super::ValueOrArray<T>> for ValueOrArray<T> {
+    impl<T, R> From<super::ValueOrArray<T>> for ValueOrArray<R>
+    where
+        R: From<T>,
+    {
         fn from(value_or_array: super::ValueOrArray<T>) -> Self {
             match value_or_array {
                 super::ValueOrArray::Value(val) => Self::Value(val.into()),

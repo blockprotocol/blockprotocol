@@ -25,7 +25,7 @@ pub(in crate::ontology) mod repr {
         required: Vec<String>,
     }
 
-    impl<T, R> TryFrom<Object<R>> for super::Object<T>
+    impl<T, R> TryFrom<Object<R>> for super::Object<T, 1>
     where
         T: TryFrom<R> + ValidateUri,
     {
@@ -53,8 +53,11 @@ pub(in crate::ontology) mod repr {
         }
     }
 
-    impl<T> From<super::Object<T>> for Object<T> {
-        fn from(object: super::Object<T>) -> Self {
+    impl<T, R> From<super::Object<T, 1>> for Object<R>
+    where
+        R: From<T>,
+    {
+        fn from(object: super::Object<T, 1>) -> Self {
             let properties = object
                 .properties
                 .into_iter()
