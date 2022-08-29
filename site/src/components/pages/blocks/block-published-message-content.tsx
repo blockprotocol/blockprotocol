@@ -1,26 +1,41 @@
-import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
-import { Box } from "@mui/material";
+import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { Typography } from "@mui/material";
 
+import { Alert } from "../../alert";
 import { FontAwesomeIcon } from "../../icons";
 import { Link } from "../../link";
 
-interface BlockPublishedMessageContentProps {
+interface BlockPublishedAlertProps {
   blockHref: string;
 }
 
-export const BlockPublishedMessageContent = ({
+export const BlockPublishedAlert = ({
   blockHref,
-}: BlockPublishedMessageContentProps) => {
+}: BlockPublishedAlertProps) => {
   return (
-    <Box sx={{ wordBreak: "break-all" }}>
-      Your block was published successfully. It can now be found at{" "}
-      <Link
-        href={blockHref}
-        sx={{ color: "inherit", textDecoration: "underline" }}
-      >
-        {`blockprotocol.org/${blockHref}`}
-        <FontAwesomeIcon sx={{ ml: 0.5 }} icon={faExternalLink} />
-      </Link>
-    </Box>
+    <Alert
+      type="success"
+      title="Your block was published successfully"
+      description={
+        <>
+          Your block is accessible at{" "}
+          <Link
+            href={blockHref}
+            sx={{ wordBreak: "break-all", border: "none !important" }}
+          >
+            <Typography variant="bpCode">{`blockprotocol.org/${blockHref}`}</Typography>
+            <FontAwesomeIcon
+              icon={faChevronRight}
+              sx={{
+                color: ({ palette }) => palette.green[70],
+                fontSize: 12,
+                ml: 0.5,
+              }}
+            />
+          </Link>
+        </>
+      }
+      sx={{ mb: 3 }}
+    />
   );
 };
