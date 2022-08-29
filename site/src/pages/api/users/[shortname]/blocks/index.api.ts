@@ -28,7 +28,7 @@ export default createBaseHandler<null, ApiBlocksByUserResponse>().get(
       );
     }
 
-    const blocks = await user.blocks();
+    const blocks = user.blocks();
 
     res.status(200).send({ blocks });
   },

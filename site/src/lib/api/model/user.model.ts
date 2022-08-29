@@ -12,7 +12,6 @@ import {
   shouldUseDummyEmailService,
 } from "../../config";
 import { sendMail } from "../aws-ses";
-import { getAllBlocksByUser } from "../blocks/get";
 import { sendDummyEmail } from "../dummy-emails";
 import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
 import { ApiKey } from "./api-key.model";
@@ -433,11 +432,10 @@ export class User {
     return await EntityType.getAllByUser(db, { user: this });
   }
 
-  blocks() {
-    if (!this.shortname) {
-      return []; // user has not completed signup
-    }
-    return getAllBlocksByUser({ shortname: this.shortname });
+  blocks(): ExpandedBlockMetadata[] {
+    return (blocksData as ExpandedBlockMetadata[]).filter(
+      (block) => block.author === this.shortname,
+    );
   }
 
   toRef(): DBRef {
