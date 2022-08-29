@@ -7028,6 +7028,18 @@ glob@^7.0.0, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@^7.1.7:
     fs.realpath "^1.0.0"
     inflight "^1.0.4"
     inherits "2"
+    minimatch "^3.0.4"
+    once "^1.3.0"
+    path-is-absolute "^1.0.0"
+
+glob@^7.0.5:
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.3.tgz#b8df0fb802bbfa8e89bd1d938b4e16578ed44f2b"
+  integrity sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==
+  dependencies:
+    fs.realpath "^1.0.0"
+    inflight "^1.0.4"
+    inherits "2"
     minimatch "^3.1.1"
     once "^1.3.0"
     path-is-absolute "^1.0.0"
@@ -9845,24 +9857,6 @@ mock-block-dock@0.0.22:
     "@mui/material" "^5.10.1"
     lodash "^4.17.21"
     react-json-view "^1.21.3"
-    uuid "^8.3.2"
-
-mock-block-dock@0.0.23-canary.4:
-  version "0.0.23-canary.4"
-  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.23-canary.4.tgz#f9c4ddf25cd207441fb34373eaa41a6b0a3219de"
-  integrity sha512-U2uDXCtYG+R2UhmfMUylEV612Sy0BdGDReSLC8FfHUVDRwUUbWjt5lUR6VvsPAwufSwmvPZPNilmFgOFT8JyJg==
-  dependencies:
-    "@blockprotocol/core" "0.0.10"
-    "@blockprotocol/graph" "0.0.14"
-    "@emotion/react" "^11.10.0"
-    "@emotion/styled" "^11.10.0"
-    "@lit-labs/react" "^1.0.4"
-    "@mui/material" "^5.10.1"
-    ajv "^8.9.0"
-    lodash "^4.17.21"
-    react-json-view "^1.21.3"
-    react-resizable "^3.0.4"
-    use-local-storage-state "^18.1.1"
     uuid "^8.3.2"
 
 mongodb-connection-string-url@^2.3.2:
