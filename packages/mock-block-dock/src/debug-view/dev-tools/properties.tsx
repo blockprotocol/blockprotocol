@@ -8,9 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import Ajv from "ajv";
-import { useEffect, useMemo } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
+import { customColors } from "../theme/palette";
 import { BlockSchemaView } from "./block-schema-view";
 import { JsonView } from "./json-view";
 
@@ -21,12 +21,8 @@ export const PropertiesView = () => {
     useMockBlockDockContext();
 
   const validate = ajv.compile(blockSchema ?? {});
-
-  validate(blockEntity);
-
-  // useEffect(() => {
-  //   validate(blockEntity);
-  // }, [blockEntity]);
+  validate(blockEntity.properties);
+  const errors = validate.errors?.map((error) => error.message);
 
   return (
     <Container maxWidth="xl">
@@ -72,9 +68,15 @@ export const PropertiesView = () => {
                 }}
                 validationMessage="Not allowed"
               />
-              <Collapse in={!!validate.errors?.length}>
-                {validate.errors?.map((error) => (
-                  <Box key={error.message}>{JSON.stringify(error.message)}</Box>
+              <Collapse in={!!errors?.length}>
+                {errors?.map((error) => (
+                  <Typography
+                    variant="subtitle2"
+                    color={customColors.red[600]}
+                    key={error}
+                  >
+                    {error}
+                  </Typography>
                 ))}
               </Collapse>
             </Box>

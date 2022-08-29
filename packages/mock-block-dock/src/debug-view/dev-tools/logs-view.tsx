@@ -1,8 +1,16 @@
 import { Message } from "@blockprotocol/core";
-import { Box, Button, styled, Typography } from "@mui/material";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  Box,
+  Button,
+  MenuItem,
+  Select,
+  styled,
+  Typography,
+} from "@mui/material";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
+import { usePrevious } from "../../use-previous";
 import { JsonView } from "./json-view";
 
 export type Log = Message;
@@ -15,10 +23,11 @@ type LogItemProps = {
 
 const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
   return (
-    <Box
+    <Typography
+      variant="subtitle2"
       sx={{
         mb: 0.5,
-        display: "flex",
+        display: "subtitle1",
         whiteSpace: "nowrap",
         fontFamily: "Mono, monospace",
       }}
@@ -49,7 +58,7 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
       >
         [{log.requestId.slice(0, 4)}]
       </Box>
-    </Box>
+    </Typography>
   );
 };
 
@@ -61,12 +70,6 @@ const LogsContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
   flex: 1,
   position: "relative",
-}));
-
-const ScrollToEndBtn = styled(Box)(() => ({
-  position: "absolute",
-  bottom: 8,
-  right: 8,
 }));
 
 const ActiveLogsContainer = styled(Box)(({ theme }) => ({
@@ -85,15 +88,38 @@ const ActiveLogsContainer = styled(Box)(({ theme }) => ({
   },
 }));
 
+// @todo this should be pulled from logs
+const services = [
+  {
+    label: "Core",
+    value: "core",
+  },
+  {
+    label: "Graph",
+    value: "graph",
+  },
+];
+
+const sources = [
+  {
+    label: "Embedder",
+    value: "embedder",
+  },
+  {
+    label: "Block",
+    value: "block",
+  },
+];
+
 export const LogsView = () => {
   const [activeLog, setActiveLog] = useState<Message>();
   const [filters, setFilters] = useState({
     source: "all",
     service: "all",
   });
-  const [scrolled, setScrolled] = useState(true);
   const logsContainerRef = useRef<HTMLElement>();
   const { logs, setLogs } = useMockBlockDockContext();
+  const prevLogs = usePrevious(logs);
 
   const filteredLogs = useMemo(() => {
     return logs
@@ -113,58 +139,24 @@ export const LogsView = () => {
   }, [logs, filters]);
 
   useEffect(() => {
-    if (!logsContainerRef.current) return;
-
-    const logsContainer = logsContainerRef.current;
-
-    const handler = () => {
-      const { offsetHeight, scrollTop, scrollHeight } = logsContainer;
-      if (scrollHeight === offsetHeight + scrollTop) {
-        setScrolled(true);
-      }
-      if (scrollHeight > offsetHeight + scrollTop) {
-        setScrolled(false);
-      }
-    };
-
-    logsContainer.addEventListener("scroll", handler);
-
-    return () => {
-      logsContainer.removeEventListener("scroll", handler);
-    };
-  }, []);
-
-  useLayoutEffect(() => {
-    if (!logsContainerRef.current) {
-      return;
+    if (prevLogs?.length !== logs.length) {
+      // scroll to end of container
+      logsContainerRef.current?.scrollTo(
+        0,
+        logsContainerRef.current?.scrollHeight,
+      );
     }
-    const { offsetHeight, scrollTop, scrollHeight } = logsContainerRef.current;
-
-    if (!scrolled && scrollHeight === offsetHeight + scrollTop) {
-      setScrolled(true);
-    }
-
-    if (scrolled && scrollHeight > offsetHeight + scrollTop) {
-      setScrolled(false);
-    }
-  }, [scrolled]);
-
-  const scrollToLogContainerEnd = () => {
-    logsContainerRef.current?.scrollTo(
-      0,
-      logsContainerRef.current?.scrollHeight,
-    );
-    setScrolled(false);
-  };
+  }, [prevLogs, logs]);
 
   return (
     <Box>
-      {/* <Box mb={2}>
+      <Box mb={2}>
         <Typography mr={1}>Filters </Typography>
         <Box display="flex" alignItems="center">
           <Typography variant="body2" mr={1}>
             Service
           </Typography>
+          {/* @todo this should be pulled from logs */}
           <Select
             size="small"
             value={filters.service}
@@ -177,6 +169,7 @@ export const LogsView = () => {
             <MenuItem value="core">Core</MenuItem>
             <MenuItem value="graph">Graph</MenuItem>
           </Select>
+          {/* @todo this should be pulled from logs */}
           <Typography variant="body2" mr={1} ml={2}>
             Source
           </Typography>
@@ -192,7 +185,7 @@ export const LogsView = () => {
             <MenuItem value="block">Block</MenuItem>
           </Select>
         </Box>
-      </Box> */}
+      </Box>
 
       <Box display="flex" mb={3}>
         <LogsContainer ref={logsContainerRef}>
@@ -209,13 +202,6 @@ export const LogsView = () => {
               />
             ))}
           </Box>
-
-          <ScrollToEndBtn
-            display={scrolled ? "none" : "block"}
-            onClick={scrollToLogContainerEnd}
-          >
-            Scroll to end
-          </ScrollToEndBtn>
         </LogsContainer>
 
         <ActiveLogsContainer>
@@ -226,7 +212,12 @@ export const LogsView = () => {
               src={activeLog ?? {}}
             />
           ) : (
-            <Typography component="em" p={3}>
+            <Typography
+              variant="subtitle2"
+              fontWeight="normal"
+              component="em"
+              p={3}
+            >
               Select a request id to view the full details
             </Typography>
           )}

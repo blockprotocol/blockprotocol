@@ -17,6 +17,7 @@ import {
 
 import { BlockRenderer } from "./block-renderer";
 import { DebugView } from "./debug-view";
+import { OffSwitch } from "./debug-view/icons";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useMockBlockProps } from "./use-mock-block-props";
 
@@ -42,6 +43,7 @@ type MockBlockDockProps = {
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
+  blockName?: string;
 };
 
 /**
@@ -57,6 +59,7 @@ type MockBlockDockProps = {
  * @param [initialLinks] the links to include in the data store
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [readonly=false]
+ * @param [blockName] - block's display name
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
@@ -68,6 +71,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialLinks,
   initialLinkedAggregations,
   readonly: initialReadonly,
+  blockName,
 }) => {
   const {
     blockEntity,
@@ -208,6 +212,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setBlockEntity={setBlockEntity}
       datastore={datastore}
       blockType={blockType}
+      blockName={blockName}
     >
       {!debugMode ? (
         <>
@@ -217,7 +222,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
             type="button"
             onClick={() => setDebugMode(true)}
           >
-            Toggle Debug Mode
+            Preview Mode
+            <OffSwitch />
           </button>
         </>
       ) : (

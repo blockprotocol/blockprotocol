@@ -14,6 +14,7 @@ import { MockBlockHookResult } from "./use-mock-block-props";
 
 type MockBlockDockInfo = {
   blockType?: "react" | "custom-element" | "html";
+  blockName?: string;
   logs: Message[];
   setLogs: Dispatch<SetStateAction<Message[]>>;
 } & Omit<
@@ -43,7 +44,6 @@ const MockBlockDockContext = createContext<MockBlockDockInfo>({
   },
 });
 
-// @todo fix types
 type Props = Omit<MockBlockDockInfo, "logs" | "setLogs"> & {
   children: ReactNode;
   blockType?: "react" | "custom-element" | "html";

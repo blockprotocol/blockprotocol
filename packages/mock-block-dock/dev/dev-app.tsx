@@ -1,3 +1,4 @@
+import { EntityType } from "@blockprotocol/graph/.";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { render } from "react-dom";
 
@@ -95,6 +96,7 @@ const DevApp: FunctionComponent = () => {
         debug
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
+        blockName="Test Block"
       />
     </>
   );

@@ -30,8 +30,8 @@
 .mbd-debug-mode-toggle {
     font-family: Inter, "Helvetica", "Arial", sans-serif;
     position: fixed;
-    top: 8px;
-    right: 20px;
+    top: 9px;
+    right: 24px;
     background-color: white;
     border: 1px solid #DDE7F0;
     color: #37434e;
@@ -41,6 +41,14 @@
     padding: 3px 9px;
     border-radius: 4px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.mbd-debug-mode-toggle > svg {
+    height: 20px;
+    width: 40px;
+    margin-left: 10px;
 }
 
 .mbd-debug-mode-toggle:hover {

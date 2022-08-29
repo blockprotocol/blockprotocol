@@ -2,16 +2,14 @@ import {
   Box,
   Button as MuiButton,
   ButtonProps,
-  IconButton,
   styled,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 
 import { useMockBlockDockContext } from "../mock-block-dock-context";
 import { MOCK_BLOCK_DOCK_VERSION } from "../version";
-import { DarkMode, LightMode, Logo } from "./icons";
+import { Logo, OffSwitch, OnSwitch } from "./icons";
 import { customColors } from "./theme/palette";
 
 export const HEADER_HEIGHT = 50;
@@ -60,7 +58,7 @@ type Props = {
 };
 
 export const Header = ({ darkMode, setDarkMode }: Props) => {
-  const { setDebugMode } = useMockBlockDockContext();
+  const { setDebugMode, blockName } = useMockBlockDockContext();
 
   return (
     <Container>
@@ -103,20 +101,27 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           Blocks /
         </Typography>
         <Typography variant="subtitle2" fontWeight="medium">
-          Person
+          {blockName}
         </Typography>
       </Box>
-
-      <Tooltip title={`Switch to ${darkMode ? "light" : "dark"} mode`}>
-        <IconButton sx={{ mr: 1 }} onClick={() => setDarkMode((prev) => !prev)}>
-          {darkMode ? <LightMode /> : <DarkMode />}
-        </IconButton>
-      </Tooltip>
 
       <Button href="https://blockprotocol.org/docs" sx={{ mr: 1 }}>
         Docs
       </Button>
-      <Button onClick={() => setDebugMode(false)}>Exit Debug</Button>
+
+      <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}>
+        Dark Mode
+        {darkMode ? (
+          <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
+        ) : (
+          <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
+        )}
+      </Button>
+
+      <Button onClick={() => setDebugMode(false)}>
+        Preview Mode
+        <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
+      </Button>
     </Container>
   );
 };
