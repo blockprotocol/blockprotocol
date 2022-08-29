@@ -170,28 +170,18 @@ impl From<DataTypeReference> for serde_json::Value {
 
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
-
-    use serde_json::json;
-
     use super::*;
-    use crate::{
-        test_data,
-        utils::tests::{check_serialization_from_str, check_serialization_from_value},
-    };
+    use crate::{test_data, utils::tests::check_serialization_from_str};
 
     #[test]
     fn data_type_reference() {
-        let uri = VersionedUri::from_str(
-            "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
-        )
-        .expect("invalid Versioned URI");
-        let data_type = check_serialization_from_value::<DataTypeReference>(
-            json!(
+        let data_type = check_serialization_from_str::<DataTypeReference>(
+            r#"
             {
-              "$ref": uri.to_string()
-            }),
-            Some(DataTypeReference::new(uri)),
+              "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1"
+             }
+            "#,
+            None,
         );
 
         data_type

@@ -226,10 +226,7 @@ mod tests {
     use std::str::FromStr;
 
     use super::*;
-    use crate::{
-        test_data,
-        utils::tests::{check_serialization_from_str, check_serialization_from_value},
-    };
+    use crate::{test_data, utils::tests::check_serialization_from_str};
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,

@@ -83,17 +83,15 @@ pub mod tests {
         clippy::needless_pass_by_value,
         reason = "The value is used in the `assert_eq`, and passing by ref here is less convenient"
     )]
-    pub fn check_serialization_from_value<T>(
+    pub fn check_repr_serialization_from_value<T>(
         input: serde_json::Value,
         expected_native_repr: Option<T>,
     ) -> T
     where
-        T: TryFrom<serde_json::Value> + Into<serde_json::Value> + Debug + Clone + PartialEq,
-        <T as TryFrom<serde_json::Value>>::Error: Debug,
+        T: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
     {
-        let deserialized: T = T::try_from(input.clone()).expect("failed to deserialize");
-        let reserialized =
-            serde_json::to_value(&deserialized.clone().into()).expect("failed to serialize");
+        let deserialized: T = serde_json::from_value(input.clone()).expect("failed to deserialize");
+        let reserialized = serde_json::to_value(&deserialized).expect("failed to serialize");
 
         if let Some(repr) = expected_native_repr {
             assert_eq!(deserialized, repr);
@@ -104,7 +102,7 @@ pub mod tests {
         deserialized
     }
 
-    pub fn ensure_failed_deserialization<T>(json: serde_json::Value)
+    pub fn ensure_repr_failed_deserialization<T>(json: serde_json::Value)
     where
         for<'de> T: Debug + Deserialize<'de>,
     {

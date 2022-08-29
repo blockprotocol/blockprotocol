@@ -3,8 +3,6 @@ pub(in crate::ontology) mod repr {
     #[cfg(target_arch = "wasm32")]
     use tsify::Tsify;
 
-    use crate::uri::BaseUri;
-
     /// Will serialize as a constant value `"array"`
     #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
@@ -92,6 +90,103 @@ pub(in crate::ontology) mod repr {
             }
         }
     }
+
+    #[cfg(test)]
+    mod tests {
+        use serde_json::json;
+
+        use super::*;
+        use crate::utils::tests::{
+            check_repr_serialization_from_value, ensure_repr_failed_deserialization,
+            StringTypeStruct,
+        };
+
+        #[test]
+        fn unconstrained() {
+            check_repr_serialization_from_value(
+                json!({
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                }),
+                Some(Array {
+                    r#type: ArrayTypeTag::Array,
+                    items: StringTypeStruct::default(),
+                    max_items: None,
+                    min_items: None,
+                }),
+            );
+        }
+
+        #[test]
+        fn constrained() {
+            check_repr_serialization_from_value(
+                json!({
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 10,
+                    "maxItems": 20,
+                }),
+                Some(Array {
+                    r#type: ArrayTypeTag::Array,
+                    items: StringTypeStruct::default(),
+                    max_items: Some(10),
+                    min_items: Some(20),
+                }),
+            );
+        }
+
+        #[test]
+        fn additional_properties() {
+            ensure_repr_failed_deserialization::<Array<StringTypeStruct>>(json!({
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "minItems": 10,
+                "maxItems": 20,
+                "additional": 30,
+            }));
+        }
+
+        mod value_or_array {
+            use serde_json::json;
+
+            use super::*;
+            use crate::utils::tests::check_repr_serialization_from_value;
+
+            #[test]
+            fn value() {
+                check_repr_serialization_from_value(
+                    json!("value"),
+                    Some(ValueOrArray::Value("value".to_owned())),
+                );
+            }
+
+            #[test]
+            fn array() {
+                let expected: Array<StringTypeStruct> = Array {
+                    r#type: ArrayTypeTag::Array,
+                    items: StringTypeStruct::default(),
+                    min_items: None,
+                    max_items: None,
+                };
+
+                check_repr_serialization_from_value(
+                    json!({
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                    }),
+                    Some(ValueOrArray::Array(expected)),
+                );
+            }
+        }
+    }
 }
 
 use crate::{
@@ -147,85 +242,7 @@ impl<T: ValidateUri> ValidateUri for ValueOrArray<T> {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use serde_json::json;
-//
-//     use super::*;
-//     use crate::utils::tests::{
-//         check_serialization_from_value, ensure_failed_deserialization, StringTypeStruct,
-//     };
-//
-//     #[test]
-//     fn unconstrained() {
-//         check_serialization_from_value(
-//             json!({
-//                 "type": "array",
-//                 "items": {
-//                     "type": "string"
-//                 },
-//             }),
-//             Some(Array::new(StringTypeStruct::default(), None, None)),
-//         );
-//     }
-//
-//     #[test]
-//     fn constrained() {
-//         check_serialization_from_value(
-//             json!({
-//                 "type": "array",
-//                 "items": {
-//                     "type": "string"
-//                 },
-//                 "minItems": 10,
-//                 "maxItems": 20,
-//             }),
-//             Some(Array::new(StringTypeStruct::default(), Some(10), Some(20))),
-//         );
-//     }
-//
-//     #[test]
-//     fn additional_properties() {
-//         ensure_failed_deserialization::<Array<StringTypeStruct>>(json!({
-//             "type": "array",
-//             "items": {
-//                 "type": "string"
-//             },
-//             "minItems": 10,
-//             "maxItems": 20,
-//             "additional": 30,
-//         }));
-//     }
-//
-//     mod value_or_array {
-//         use serde_json::json;
-//
-//         use super::*;
-//         use crate::utils::tests::check_serialization_from_value;
-//
-//         #[test]
-//         fn value() {
-//             check_serialization_from_value(
-//                 json!("value"),
-//                 Some(ValueOrArray::Value("value".to_owned())),
-//             );
-//         }
-//
-//         #[test]
-//         fn array() {
-//             check_serialization_from_value(
-//                 json!({
-//                     "type": "array",
-//                     "items": {
-//                         "type": "string"
-//                     },
-//                 }),
-//                 Some(ValueOrArray::Array(Array::new(
-//                     StringTypeStruct::default(),
-//                     None,
-//                     None,
-//                 ))),
-//             );
-//         }
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    // TODO - Test Validation
+}
