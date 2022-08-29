@@ -20,7 +20,7 @@ const Container = styled(Box)(({ theme }) => ({
   top: 0,
   zIndex: 2000,
   backgroundColor:
-    theme.palette.mode === "light" ? theme.palette.common.white : "#2C2C2C",
+    theme.palette.mode === "light" ? theme.palette.common.white : "#2C2C2C", // @todo include dark mode color in palette
   display: "flex",
   alignItems: "center",
   paddingLeft: theme.spacing(3),
@@ -48,8 +48,8 @@ const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
   </MuiButton>
 ))(({ theme }) => ({
   borderColor:
-    theme.palette.mode === "light" ? customColors.gray[30] : "#444444",
-  color: theme.palette.mode === "light" ? customColors.gray[90] : "#8E8E8E",
+    theme.palette.mode === "light" ? customColors.gray[30] : "#444444", // @todo include dark mode color in palette
+  color: theme.palette.mode === "light" ? customColors.gray[90] : "#8E8E8E", // @todo include dark mode color in palette
 }));
 
 type Props = {

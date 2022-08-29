@@ -1,4 +1,5 @@
 import {
+  alpha,
   Box,
   Chip,
   Paper as MuiPaper,
@@ -44,7 +45,7 @@ const Header = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
-  borderBottom: `1px solid ${theme.palette.divider}`,
+  borderBottom: `1px solid ${alpha(theme.palette.divider, 0.05)}`,
   paddingRight: 32,
 }));
 

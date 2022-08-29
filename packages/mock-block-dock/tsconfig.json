@@ -14,8 +14,7 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es5",
-    "resolveJsonModule": true
+    "target": "es5"
   },
   "include": [
     "assets.d.ts",

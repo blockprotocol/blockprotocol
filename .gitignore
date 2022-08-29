@@ -46,6 +46,7 @@ site/public/blocks
 site/public/schemas
 site/site-map.json
 site/test-results
+mock-block-dock/src/version.ts
 
 # we want to version control these specific build artifacts
 !packages/@blockprotocol/type-system-node/dist

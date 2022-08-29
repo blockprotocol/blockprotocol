@@ -1,3 +1,4 @@
+// Colors pulled from BP site theme
 export const customColors = {
   purple: {
     100: "#F4F3FF",
@@ -38,7 +39,6 @@ export const customColors = {
     700: "#AE1E52",
     800: "#82173D",
   },
-  // should adjust to be consistent with the ones above
   gray: {
     10: "#F7FAFC",
     20: "#EBF2F7",

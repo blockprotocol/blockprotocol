@@ -9791,6 +9791,22 @@ mock-block-dock@0.0.10:
     lodash "^4.17.21"
     uuid "^8.3.2"
 
+mock-block-dock@0.0.22:
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/mock-block-dock/-/mock-block-dock-0.0.22.tgz#2dfa3dc57e67a9aebb12bd4786c6842e70d83135"
+  integrity sha512-4ouyLhyAwINgLVjuntjnI8rrVvYni0hkSXHivJrqXXeHeY+FXgrNhX2M2WQzPM1M+EeQo4k/kzHN/5iMlU5ZDg==
+  dependencies:
+    "@blockprotocol/core" "0.0.10"
+    "@blockprotocol/graph" "0.0.14"
+    "@emotion/react" "^11.10.0"
+    "@emotion/styled" "^11.10.0"
+    "@lit-labs/react" "^1.0.4"
+    "@mui/icons-material" "^5.8.4"
+    "@mui/material" "^5.10.1"
+    lodash "^4.17.21"
+    react-json-view "^1.21.3"
+    uuid "^8.3.2"
+
 mongodb-connection-string-url@^2.3.2:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/mongodb-connection-string-url/-/mongodb-connection-string-url-2.4.1.tgz#6b3c6c40133a0ad059fe9a0abda64b2a1cb4e8b4"

@@ -13,12 +13,13 @@ type DebugViewProps = {
 
 export const SIDEBAR_WIDTH = 200;
 
-export const MainContainer = styled(Box)(() => ({
+export const MainContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   flex: 1,
   overflowY: "scroll",
   position: "relative",
+  backgroundColor: theme.palette.mode === "light" ? "#FBFCFD" : "#1E1E1E", // @todo include these in palette
 }));
 
 export const DebugView = ({ children }: DebugViewProps) => {
