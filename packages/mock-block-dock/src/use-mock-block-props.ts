@@ -74,7 +74,6 @@ export const useMockBlockProps = ({
 
   const prevExternalReadonly = usePrevious(externalReadonly);
   const prevExternalDebug = usePrevious(externalDebug);
-  const prevExternalBlockEntity = usePrevious(externalBlockEntity);
 
   const { initialBlockEntity, mockData } = useMemo((): {
     initialBlockEntity: Entity;
