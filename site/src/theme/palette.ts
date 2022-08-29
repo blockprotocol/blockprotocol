@@ -53,6 +53,18 @@ export const customColors = {
     700: "#AE1E52",
     800: "#82173D",
   },
+  green: {
+    10: "#FAFDF0",
+    20: "#F8FDD5",
+    30: "#EEF8AB",
+    40: "#DCEF87",
+    50: "#BDE170",
+    60: "#9AC952",
+    70: "#78B040",
+    80: "#42802C",
+    90: "#334D0B",
+    100: "#243804",
+  },
   // should adjust to be consistent with the ones above
   gray: {
     10: "#F7FAFC",
