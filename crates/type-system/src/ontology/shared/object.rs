@@ -5,6 +5,8 @@ pub(in crate::ontology) mod repr {
     #[cfg(target_arch = "wasm32")]
     use tsify::Tsify;
 
+    use crate::{uri::BaseUri, ValidateUri};
+
     /// Will serialize as a constant value `"object"`
     #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
@@ -15,12 +17,60 @@ pub(in crate::ontology) mod repr {
     #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
     #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase", deny_unknown_fields)]
-    pub struct Object<V> {
+    pub struct Object<T> {
         #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
         r#type: ObjectTypeTag,
-        properties: HashMap<String, V>,
+        properties: HashMap<String, T>,
         #[serde(default, skip_serializing_if = "Vec::is_empty")]
         required: Vec<String>,
+    }
+
+    impl<T, R> TryFrom<Object<R>> for super::Object<T>
+    where
+        T: TryFrom<R> + ValidateUri,
+    {
+        // TODO
+        type Error = ();
+
+        fn try_from(object_repr: Object<R>) -> Result<Self, Self::Error> {
+            let properties = object_repr
+                .properties
+                .into_iter()
+                .map(|(base_uri, val)| {
+                    Ok((
+                        BaseUri::new(base_uri).map_err(|err| ())?,
+                        val.try_into().map_err(|err| ())?,
+                    ))
+                })
+                .collect::<Result<HashMap<BaseUri, _>, Self::Error>>()?;
+            let required = object_repr
+                .required
+                .into_iter()
+                .map(|base_uri| BaseUri::new(base_uri).map_err(|err| ()))
+                .collect::<Result<Vec<_>, Self::Error>>()?;
+
+            Ok(Self::new(properties, required).map_err(|err| ())?)
+        }
+    }
+
+    impl<T> From<super::Object<T>> for Object<T> {
+        fn from(object: super::Object<T>) -> Self {
+            let properties = object
+                .properties
+                .into_iter()
+                .map(|(uri, val)| (uri.to_string(), val.into()))
+                .collect();
+            let required = object
+                .required
+                .into_iter()
+                .map(|uri| uri.to_string())
+                .collect();
+            Self {
+                r#type: ObjectTypeTag::Object,
+                properties,
+                required,
+            }
+        }
     }
 }
 
@@ -32,15 +82,15 @@ use crate::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Object<V, const MIN: usize = 0> {
-    properties: HashMap<BaseUri, V>,
+pub struct Object<T, const MIN: usize = 0> {
+    properties: HashMap<BaseUri, T>,
     required: Vec<BaseUri>,
 }
 
-impl<V: ValidateUri, const MIN: usize> Object<V, MIN> {
+impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
     /// Creates a new `Object` without validating.
     #[must_use]
-    pub fn new_unchecked(properties: HashMap<BaseUri, V>, required: Vec<BaseUri>) -> Self {
+    pub fn new_unchecked(properties: HashMap<BaseUri, T>, required: Vec<BaseUri>) -> Self {
         Self {
             properties,
             required,
@@ -56,7 +106,7 @@ impl<V: ValidateUri, const MIN: usize> Object<V, MIN> {
     /// - [`ValidationError::MismatchedPropertyCount`] if the number of properties is less than
     ///   `MIN`.
     pub fn new(
-        properties: HashMap<BaseUri, V>,
+        properties: HashMap<BaseUri, T>,
         required: Vec<BaseUri>,
     ) -> Result<Self, ValidationError> {
         let object = Self::new_unchecked(properties, required);
@@ -87,7 +137,7 @@ impl<V: ValidateUri, const MIN: usize> Object<V, MIN> {
     }
 
     #[must_use]
-    pub const fn properties(&self) -> &HashMap<BaseUri, V> {
+    pub const fn properties(&self) -> &HashMap<BaseUri, T> {
         &self.properties
     }
 
