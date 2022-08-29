@@ -1,37 +1,42 @@
-use std::collections::HashMap;
+pub(in crate::ontology) mod repr {
+    use std::collections::HashMap;
 
-use serde::{de, Deserialize, Deserializer, Serialize};
-#[cfg(target_arch = "wasm32")]
-use tsify::Tsify;
+    use serde::{Deserialize, Serialize};
+    #[cfg(target_arch = "wasm32")]
+    use tsify::Tsify;
+
+    use crate::uri::BaseUri;
+
+    /// Will serialize as a constant value `"object"`
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    enum ObjectTypeTag {
+        Object,
+    }
+
+    #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+    #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+    #[serde(rename_all = "camelCase", deny_unknown_fields)]
+    struct ObjectRepr<V> {
+        #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
+        r#type: ObjectTypeTag,
+        properties: HashMap<BaseUri, V>,
+        #[serde(default, skip_serializing_if = "Vec::is_empty")]
+        required: Vec<BaseUri>,
+    }
+}
+
+use std::collections::HashMap;
 
 use crate::{
     ontology::shared::validate::{ValidateUri, ValidationError},
     uri::BaseUri,
 };
 
-/// Will serialize as a constant value `"object"`
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-enum ObjectTypeTag {
-    Object,
-}
-
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-struct ObjectRepr<V> {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "'object'"))]
-    r#type: ObjectTypeTag,
-    properties: HashMap<BaseUri, V>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    required: Vec<BaseUri>,
-}
-
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Object<V, const MIN: usize = 0> {
-    #[serde(flatten)]
-    repr: ObjectRepr<V>,
+    properties: HashMap<BaseUri, V>,
+    required: Vec<BaseUri>,
 }
 
 impl<V: ValidateUri, const MIN: usize> Object<V, MIN> {
@@ -39,11 +44,8 @@ impl<V: ValidateUri, const MIN: usize> Object<V, MIN> {
     #[must_use]
     pub fn new_unchecked(properties: HashMap<BaseUri, V>, required: Vec<BaseUri>) -> Self {
         Self {
-            repr: ObjectRepr {
-                r#type: ObjectTypeTag::Object,
-                properties,
-                required,
-            },
+            properties,
+            required,
         }
     }
 
@@ -88,25 +90,12 @@ impl<V: ValidateUri, const MIN: usize> Object<V, MIN> {
 
     #[must_use]
     pub const fn properties(&self) -> &HashMap<BaseUri, V> {
-        &self.repr.properties
+        &self.properties
     }
 
     #[must_use]
     pub fn required(&self) -> &[BaseUri] {
-        &self.repr.required
-    }
-}
-
-impl<'de, V: ValidateUri + Deserialize<'de>, const MIN: usize> Deserialize<'de> for Object<V, MIN> {
-    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        let object = Self {
-            repr: ObjectRepr::deserialize(deserializer)?,
-        };
-        object.validate().map_err(de::Error::custom)?;
-        Ok(object)
+        &self.required
     }
 }
 
