@@ -52,7 +52,6 @@
     "express-session": "^1.17.2",
     "express-validator": "^6.14.0",
     "fs-extra": "^10.1.0",
-    "glob": "^8.0.3",
     "globby": "^13.1.2",
     "gray-matter": "^4.0.3",
     "gsap": "^3.8.0",

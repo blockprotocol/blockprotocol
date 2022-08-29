@@ -1,4 +1,4 @@
-import { BlockMetadata, BlockMetadataRepository } from "@blockprotocol/core";
+import { BlockMetadata } from "@blockprotocol/core";
 import execa from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
@@ -9,6 +9,7 @@ import tar from "tar";
 import tmp from "tmp-promise";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
+import { isProduction } from "../../config";
 import { User } from "../model/user.model";
 import { getDbBlock, insertDbBlock } from "./db";
 import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
@@ -153,19 +154,24 @@ const mirrorNpmPackageToR2 = async (
 
   // check that the schema actually exists
   const schemaPath = metadataJson.schema;
+  const missingSchemaError = new Error(
+    `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
+    {
+      cause: { code: "INVALID_PACKAGE_CONTENTS" },
+    },
+  );
   if (schemaPath.startsWith("http")) {
-    await fetch(schemaPath, { method: "HEAD" });
+    try {
+      await fetch(schemaPath, { method: "HEAD" });
+    } catch {
+      throw missingSchemaError;
+    }
   } else {
     const schemaFileExists = await fs.pathExists(
       path.resolve(blockSourceFolder, schemaPath),
     );
     if (!schemaFileExists) {
-      throw new Error(
-        `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
-        {
-          cause: { code: "INVALID_PACKAGE_CONTENTS" },
-        },
-      );
+      throw missingSchemaError;
     }
   }
 
@@ -200,8 +206,10 @@ const mirrorNpmPackageToR2 = async (
     npmPackageName,
     pathWithNamespace,
     repository:
-      typeof packageJson.repository === "object" && !!packageJson.repository
-        ? (packageJson.repository as BlockMetadataRepository)
+      !!packageJson.repository &&
+      (typeof packageJson.repository === "object" ||
+        typeof packageJson.repository === "string")
+        ? packageJson.repository
         : undefined,
     repoDirectory:
       typeof packageJson.repository === "object" &&
@@ -262,7 +270,7 @@ export const publishBlockFromNpm = async (
       cause: { code: "NAME_TAKEN" },
     });
   }
-  if (blockLinkedToPackage) {
+  if (isProduction && blockLinkedToPackage) {
     throw new Error(
       `npm package '${npmPackageName}' is already linked to block '${blockLinkedToPackage.pathWithNamespace}'`,
       {
