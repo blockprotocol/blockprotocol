@@ -5,7 +5,7 @@ use serde::{de, Deserialize, Deserializer, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    ontology::repr_shared::validate::{ValidateUri, ValidationError},
+    ontology::shared::validate::{ValidateUri, ValidationError},
     uri::BaseUri,
 };
 

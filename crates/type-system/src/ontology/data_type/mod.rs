@@ -1,11 +1,10 @@
 mod error;
-mod repr;
+pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
 use std::{collections::HashMap, str::FromStr};
 
-use serde::{Deserialize, Serialize};
 use serde_json;
 
 pub use crate::ontology::data_type::error::ParseDataTypeError;

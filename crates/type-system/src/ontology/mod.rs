@@ -12,7 +12,7 @@ pub mod property_type;
 //  we should probably just go with URL
 pub mod uri;
 
-pub mod repr_shared;
+pub mod shared;
 
 #[cfg(test)]
 mod tests {
@@ -20,7 +20,7 @@ mod tests {
     use tsify::Tsify;
 
     use crate::{
-        ontology::{data_type::ParseDataTypeError, repr_shared::parse_serde_json_error},
+        ontology::{data_type::ParseDataTypeError, shared::parse_serde_json_error},
         DataType,
     };
 

@@ -7,7 +7,7 @@
 // use wasm_bindgen::prelude::*;
 //
 // use crate::{
-//     ontology::{data_type::ParseDataTypeError, repr_shared::parse_serde_json_error},
+//     ontology::{data_type::ParseDataTypeError, shared::parse_serde_json_error},
 //     utils::{set_panic_hook, Result},
 //     DataType,
 // };
