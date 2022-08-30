@@ -1,10 +1,11 @@
 import fs from "fs-extra";
+import path from "node:path";
 
 import { ExpandedBlockMetadata } from "../../blocks";
 import { getDbBlock, getDbBlocks } from "./db";
 
 const localBlocks = fs.readJsonSync(
-  "blocks-data.json",
+  path.resolve("blocks-data.json"),
 ) as ExpandedBlockMetadata[];
 
 export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
