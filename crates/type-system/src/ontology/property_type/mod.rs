@@ -434,7 +434,7 @@ mod tests {
             VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
                 .expect("failed to parse VersionedUri");
 
-        let property_type_ref = PropertyTypeReference::new(uri_a.clone());
+        let property_type_ref = PropertyTypeReference::new(uri_a);
 
         property_type_ref
             .validate_uri(uri_b.base_uri()) // Try and validate against a different URI

@@ -35,7 +35,7 @@ mod wasm {
 }
 
 #[cfg(test)]
-pub mod tests {
+pub(crate) mod tests {
     use std::{fmt::Debug, str::FromStr};
 
     use serde::{Deserialize, Serialize};
@@ -43,7 +43,7 @@ pub mod tests {
     /// Will serialize as a constant value `"string"`
     #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase")]
-    pub enum StringTypeTag {
+    pub(crate) enum StringTypeTag {
         #[default]
         String,
     }
@@ -51,7 +51,7 @@ pub mod tests {
     // Helpful for testing minimum cases of some of the serialization primitives
     #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
     #[serde(rename_all = "camelCase", deny_unknown_fields)]
-    pub struct StringTypeStruct {
+    pub(crate) struct StringTypeStruct {
         r#type: StringTypeTag,
     }
 
@@ -59,7 +59,7 @@ pub mod tests {
     /// serialized back.
     ///
     /// Optionally checks the deserialized object against an expected value.
-    pub fn check_serialization_from_str<T>(input: &str, expected_native_repr: Option<T>) -> T
+    pub(crate) fn check_serialization_from_str<T>(input: &str, expected_native_repr: Option<T>) -> T
     where
         T: FromStr + Into<serde_json::Value> + Debug + Clone + PartialEq,
         <T as FromStr>::Err: Debug,
@@ -80,7 +80,7 @@ pub mod tests {
     /// representation.
     ///
     /// [`repr`]: crate::repr
-    pub fn ensure_failed_validation<R, T>(input: &serde_json::Value, expected_err: T::Error)
+    pub(crate) fn ensure_failed_validation<R, T>(input: &serde_json::Value, expected_err: T::Error)
     where
         R: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
         T: TryFrom<R> + Debug + PartialEq,
@@ -103,7 +103,7 @@ pub mod tests {
         clippy::needless_pass_by_value,
         reason = "The value is used in the `assert_eq`, and passing by ref here is less convenient"
     )]
-    pub fn check_repr_serialization_from_value<T>(
+    pub(crate) fn check_repr_serialization_from_value<T>(
         input: serde_json::Value,
         expected_native_repr: Option<T>,
     ) -> T
@@ -126,7 +126,7 @@ pub mod tests {
     /// [`repr`] for a type.
     ///
     /// [`repr`]: crate::repr
-    pub fn ensure_repr_failed_deserialization<T>(json: serde_json::Value)
+    pub(crate) fn ensure_repr_failed_deserialization<T>(json: serde_json::Value)
     where
         for<'de> T: Debug + Deserialize<'de>,
     {

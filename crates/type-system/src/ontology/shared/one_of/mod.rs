@@ -1,4 +1,4 @@
-pub mod error;
+pub(crate) mod error;
 pub(in crate::ontology) mod repr;
 
 use crate::ValidationError;
