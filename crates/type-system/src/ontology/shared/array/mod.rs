@@ -1,10 +1,7 @@
 pub mod error;
 pub(in crate::ontology) mod repr;
 
-use crate::ontology::{
-    shared::validate::{ValidateUri, ValidationError},
-    uri::BaseUri,
-};
+use crate::{uri::BaseUri, ValidateUri, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Array<T> {

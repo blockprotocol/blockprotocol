@@ -7,11 +7,9 @@
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    ontology::{
-        data_type::{DataType, ParseDataTypeError},
-        repr,
-    },
+    repr,
     utils::{set_panic_hook, Result},
+    DataType, ParseDataTypeError,
 };
 
 fn convert_data_type(data_type_obj: &JsValue) -> std::result::Result<DataType, ParseDataTypeError> {

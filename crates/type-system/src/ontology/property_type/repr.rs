@@ -4,10 +4,10 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
-use crate::ontology::{
-    property_type::error::ParsePropertyTypeError,
+use crate::{
     repr,
     uri::{ParseVersionedUriError, VersionedUri},
+    ParsePropertyTypeError,
 };
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]

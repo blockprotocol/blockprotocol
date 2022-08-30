@@ -8,7 +8,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::uri::{BaseUri, VersionedUri};
+use crate::uri::{BaseUri, VersionedUri};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

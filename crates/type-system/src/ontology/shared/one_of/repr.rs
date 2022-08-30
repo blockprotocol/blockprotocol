@@ -2,9 +2,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::{
-    property_type::PropertyValues, repr, shared::one_of::error::ParseOneOfError,
-};
+use crate::{repr, ParseOneOfError, PropertyValues};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

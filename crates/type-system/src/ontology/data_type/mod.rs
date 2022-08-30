@@ -5,10 +5,9 @@ mod wasm;
 
 use std::{collections::HashMap, str::FromStr};
 
-use serde_json;
+pub use error::ParseDataTypeError;
 
-pub use crate::ontology::data_type::error::ParseDataTypeError;
-use crate::ontology::{
+use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
     ValidateUri, ValidationError,
 };

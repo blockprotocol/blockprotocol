@@ -1,15 +1,15 @@
-pub mod error;
+mod error;
 pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
 use std::{collections::HashSet, str::FromStr};
 
-use crate::ontology::{
-    data_type::DataTypeReference,
-    property_type::error::ParsePropertyTypeError,
+pub use error::ParsePropertyTypeError;
+
+use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
-    Array, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
+    Array, DataTypeReference, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -229,10 +229,7 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{
-        ontology::shared::one_of::error::ParseOneOfError, test_data,
-        utils::tests::check_serialization_from_str,
-    };
+    use crate::{test_data, utils::tests::check_serialization_from_str, ParseOneOfError};
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,

@@ -1,11 +1,9 @@
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    ontology::{
-        property_type::{error::ParsePropertyTypeError, PropertyType},
-        repr,
-    },
+    repr,
     utils::{set_panic_hook, Result},
+    ParsePropertyTypeError, PropertyType,
 };
 
 fn convert_property_type(

@@ -4,7 +4,7 @@ use tsify::Tsify;
 use wasm_bindgen::prelude::*;
 
 use crate::{
-    ontology::uri::{BaseUri, VersionedUri},
+    uri::{BaseUri, VersionedUri},
     utils::Result,
 };
 

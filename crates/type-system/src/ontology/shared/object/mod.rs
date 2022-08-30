@@ -3,10 +3,7 @@ pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;
 
-use crate::ontology::{
-    shared::validate::{ValidateUri, ValidationError},
-    uri::BaseUri,
-};
+use crate::{uri::BaseUri, ValidateUri, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Object<T, const MIN: usize = 0> {

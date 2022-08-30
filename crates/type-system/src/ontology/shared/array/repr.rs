@@ -2,14 +2,9 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::{
-    property_type::{PropertyTypeReference, PropertyValues},
-    repr,
-    shared::{
-        array::error::{ParseOneOfArrayError, ParsePropertyTypeReferenceArrayError},
-        object::error::ParsePropertyTypeObjectError,
-    },
-    OneOf,
+use crate::{
+    repr, OneOf, ParseOneOfArrayError, ParsePropertyTypeObjectError,
+    ParsePropertyTypeReferenceArrayError, PropertyTypeReference, PropertyValues,
 };
 
 /// Will serialize as a constant value `"array"`

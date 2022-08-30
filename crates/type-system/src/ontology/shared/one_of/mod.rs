@@ -1,7 +1,7 @@
 pub mod error;
 pub(in crate::ontology) mod repr;
 
-use crate::ontology::shared::{one_of::error::ParseOneOfError, validate::ValidationError};
+use crate::{ParseOneOfError, ValidationError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OneOf<T> {

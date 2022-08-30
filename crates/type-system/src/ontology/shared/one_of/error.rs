@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::{property_type::error::ParsePropertyTypeError, ValidationError};
+use crate::{ParsePropertyTypeError, ValidationError};
 
 #[allow(
     clippy::enum_variant_names,

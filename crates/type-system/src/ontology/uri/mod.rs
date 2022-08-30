@@ -3,13 +3,12 @@ mod error;
 mod wasm;
 use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
+pub use error::{ParseBaseUriError, ParseVersionedUriError};
 use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 use url::Url;
-
-pub use crate::ontology::uri::error::{ParseBaseUriError, ParseVersionedUriError};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Clone, PartialEq, Eq, Hash)]
