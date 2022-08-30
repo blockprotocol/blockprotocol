@@ -31,7 +31,6 @@ export const TopNavigationTabs: FunctionComponent = () => {
               router.asPath.includes(dashboardPage.tabHref),
             )?.tabHref
           }
-          onChange={(_, newHref) => router.push(newHref)}
           aria-label="settings-tabs"
         >
           {dashboardPages.map(({ tabTitle, tabHref }, i) => (
@@ -43,6 +42,7 @@ export const TopNavigationTabs: FunctionComponent = () => {
               component="a"
               onClick={(event: MouseEvent) => {
                 event.preventDefault();
+                void router.push(tabHref);
               }}
               {...a11yProps(i)}
             />

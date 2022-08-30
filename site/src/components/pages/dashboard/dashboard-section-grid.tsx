@@ -1,6 +1,6 @@
 import { Box, BoxProps } from "@mui/material";
 
-export const SectionGrid = ({ children, ...props }: BoxProps) => (
+export const DashboardSectionGrid = ({ children, ...props }: BoxProps) => (
   <Box
     display="grid"
     gridTemplateColumns={{

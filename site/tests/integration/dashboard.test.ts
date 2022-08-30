@@ -1,5 +1,6 @@
 import { expect, test } from "playwright-test-coverage";
 
+import { shouldAllowBlockPublishing } from "../../src/lib/config";
 import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 
@@ -22,7 +23,10 @@ test("dashboard page should contain key elements", async ({ page }) => {
   await expect(page.locator("text=Welcome Back, Alice!")).toBeVisible();
 
   for (const [text, url] of [
-    ["Publish a block", "/@alice/blocks"],
+    [
+      "Publish a block",
+      shouldAllowBlockPublishing ? "/blocks/publish" : "/@alice/blocks",
+    ],
     ["Build a block", "/docs/developing-blocks"],
     ["Create a Type", null],
     ["Create and manage API keys", "/settings/api-keys"],
