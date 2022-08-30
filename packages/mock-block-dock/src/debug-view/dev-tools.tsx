@@ -15,6 +15,7 @@ import { Resizable } from "react-resizable";
 import useLocalStorageState from "use-local-storage-state";
 
 import { useMockBlockDockContext } from "../mock-block-dock-context";
+import { BlockInfoView } from "./dev-tools/block-info-view";
 import { DataStoreView } from "./dev-tools/datastore-view";
 import { LogsView } from "./dev-tools/logs-view";
 import { PropertiesView } from "./dev-tools/properties";
@@ -88,18 +89,6 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
   );
 });
 
-const chipInfo = {
-  html: {
-    color: "info",
-    label: "HTML Block",
-  },
-  "custom-element": {
-    label: "Custom Element Block",
-    color: "warning",
-  },
-  react: { label: "React Block", color: "secondary" },
-} as const;
-
 export const DevTools = () => {
   const [value, setValue] = useState(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -108,7 +97,6 @@ export const DevTools = () => {
     defaultValue: 350,
   });
   const [width, setWidth] = useState<number>();
-  const { blockType } = useMockBlockDockContext();
 
   useLayoutEffect(() => {
     if (!wrapperRef.current) return;
@@ -132,16 +120,8 @@ export const DevTools = () => {
               <Tab label="Properties" {...a11yProps(0)} />
               <Tab label="Datastore" {...a11yProps(1)} />
               <Tab label="Logs" {...a11yProps(2)} />
+              <Tab label="Block Info" {...a11yProps(3)} />
             </Tabs>
-
-            {blockType && (
-              <Chip
-                variant="outlined"
-                size="small"
-                label={chipInfo[blockType].label}
-                color={chipInfo[blockType].color}
-              />
-            )}
           </Header>
           <Box flex={1} overflow="scroll">
             <TabPanel value={value} index={0}>
@@ -152,6 +132,9 @@ export const DevTools = () => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               <LogsView />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <BlockInfoView />
             </TabPanel>
           </Box>
         </Paper>

@@ -25,6 +25,7 @@ const DevApp: FunctionComponent = () => {
   };
 
   let blockDefinition;
+  let blockType: "html" | "custom-element" | "react" | undefined;
 
   switch (testBlockType) {
     case "custom-element":
@@ -34,6 +35,7 @@ const DevApp: FunctionComponent = () => {
           tagName: "test-custom-element-block",
         },
       };
+      blockType = "custom-element";
       break;
 
     case "html-at-url":
@@ -42,6 +44,7 @@ const DevApp: FunctionComponent = () => {
           url: "./test-html-block/block.html",
         },
       };
+      blockType = "html";
       break;
 
     case "html-as-string":
@@ -54,6 +57,7 @@ const DevApp: FunctionComponent = () => {
           ).toString(),
         },
       };
+      blockType = "html";
       break;
 
     case "react":
@@ -61,6 +65,7 @@ const DevApp: FunctionComponent = () => {
       blockDefinition = {
         ReactComponent: TestReactBlock,
       };
+      blockType = "react";
   }
 
   return (
@@ -96,6 +101,15 @@ const DevApp: FunctionComponent = () => {
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
         blockName="Test Block"
+        blockInfo={{
+          displayName: "Test Block",
+          blockType: {
+            entryPoint: blockType,
+          },
+          protocol: "0.2",
+          icon: "public/icon.svg",
+          image: "public/image",
+        }}
       />
     </>
   );

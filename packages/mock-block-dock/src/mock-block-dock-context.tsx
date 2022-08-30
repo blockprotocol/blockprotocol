@@ -15,6 +15,15 @@ import { MockBlockHookResult } from "./use-mock-block-props";
 type MockBlockDockInfo = {
   blockType?: "react" | "custom-element" | "html";
   blockName?: string;
+  blockInfo: {
+    blockType: {
+      entryPoint?: "react" | "html" | "custom-element";
+    };
+    displayName?: string;
+    icon?: string;
+    image?: string;
+    protocol?: string;
+  };
   logs: Message[];
   setLogs: Dispatch<SetStateAction<Message[]>>;
 } & Omit<
