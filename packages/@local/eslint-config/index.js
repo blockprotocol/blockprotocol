@@ -123,8 +123,8 @@ module.exports = {
       "error",
       {
         styles: {
-          react: {named: true},
-          "react-dom": {named: true},
+          react: { named: true },
+          "react-dom": { named: true },
         },
       },
     ],
@@ -277,7 +277,7 @@ module.exports = {
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
-          {devDependencies: true},
+          { devDependencies: true },
         ],
       },
     },
@@ -292,7 +292,7 @@ module.exports = {
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
-          {devDependencies: true},
+          { devDependencies: true },
         ],
       },
     },
@@ -389,7 +389,7 @@ module.exports = {
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
-          {devDependencies: true},
+          { devDependencies: true },
         ],
       },
     },
@@ -398,7 +398,7 @@ module.exports = {
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
-          {devDependencies: true},
+          { devDependencies: true },
         ],
         "no-console": "off",
       },
