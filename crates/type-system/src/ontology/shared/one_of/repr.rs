@@ -25,7 +25,7 @@ impl TryFrom<OneOf<repr::PropertyValues>> for super::OneOf<PropertyValues> {
             .map(|ele| ele.try_into().map_err(ParseOneOfError::PropertyValuesError))
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
-        Self::new(inner)
+        Self::new(inner).map_err(ParseOneOfError::ValidationError)
     }
 }
 

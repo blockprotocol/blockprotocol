@@ -28,13 +28,13 @@ pub use shared::{
     validate::{ValidateUri, ValidationError},
 };
 
-#[expect(
+#[allow(
     unused_imports,
     reason = "We want to keep them here in case for the convenience of re-exporting"
 )]
 // Re-export the repr contents so they're nicely grouped and so that they're easier to import in
 // a non-ambiguous way where they don't get confused with their non repr counterparts.
-// For example, `import crate::ontology::repr` lets you then use `repr::DataType`
+// For example, `import crate::repr` lets you then use `repr::DataType`
 pub(crate) mod repr {
     pub(crate) use super::{
         data_type::repr::{DataType, DataTypeReference},

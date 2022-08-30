@@ -1,7 +1,7 @@
 pub mod error;
 pub(in crate::ontology) mod repr;
 
-use crate::{ParseOneOfError, ValidationError};
+use crate::ValidationError;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct OneOf<T> {
@@ -21,11 +21,9 @@ impl<T> OneOf<T> {
     /// # Errors
     ///
     /// - [`ValidationError`] if the object is not in a valid state.
-    pub fn new<U: Into<Vec<T>>>(one_of: U) -> Result<Self, ParseOneOfError> {
+    pub fn new<U: Into<Vec<T>>>(one_of: U) -> Result<Self, ValidationError> {
         let one_of = Self::new_unchecked(one_of);
-        one_of
-            .validate()
-            .map_err(ParseOneOfError::ValidationError)?;
+        one_of.validate()?;
         Ok(one_of)
     }
 
