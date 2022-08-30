@@ -13,6 +13,7 @@ pub use error::ParseLinkTypeError;
 pub struct LinkType {
     id: VersionedUri,
     title: String,
+    plural_title: String,
     description: String,
     related_keywords: Vec<String>,
 }
@@ -23,12 +24,14 @@ impl LinkType {
     pub const fn new(
         id: VersionedUri,
         title: String,
+        plural_title: String,
         description: String,
         related_keywords: Vec<String>,
     ) -> Self {
         Self {
             id,
             title,
+            plural_title,
             description,
             related_keywords,
         }
@@ -42,6 +45,11 @@ impl LinkType {
     #[must_use]
     pub fn title(&self) -> &str {
         &self.title
+    }
+
+    #[must_use]
+    pub fn plural_title(&self) -> &str {
+        &self.plural_title
     }
 
     #[must_use]

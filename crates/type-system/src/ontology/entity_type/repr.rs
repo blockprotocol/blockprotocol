@@ -23,6 +23,7 @@ pub struct EntityType {
     #[serde(rename = "$id")]
     id: String,
     title: String,
+    plural_title: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
@@ -80,6 +81,7 @@ impl TryFrom<EntityType> for super::EntityType {
         Ok(Self::new(
             id,
             entity_type_repr.title,
+            entity_type_repr.plural_title,
             entity_type_repr.description,
             default,
             examples,
@@ -112,6 +114,7 @@ impl From<super::EntityType> for EntityType {
             kind: EntityTypeTag::EntityType,
             id: entity_type.id.to_string(),
             title: entity_type.title,
+            plural_title: entity_type.plural_title,
             description: entity_type.description,
             default,
             examples,

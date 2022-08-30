@@ -22,6 +22,7 @@ use crate::{
 pub struct EntityType {
     id: VersionedUri,
     title: String,
+    plural_title: String,
     description: Option<String>,
     default: HashMap<VersionedUri, serde_json::Value>,
     examples: Vec<HashMap<VersionedUri, serde_json::Value>>,
@@ -36,6 +37,7 @@ impl EntityType {
     pub fn new(
         id: VersionedUri,
         title: String,
+        plural_title: String,
         description: Option<String>,
         default: HashMap<VersionedUri, serde_json::Value>,
         examples: Vec<HashMap<VersionedUri, serde_json::Value>>,
@@ -45,6 +47,7 @@ impl EntityType {
         Self {
             id,
             title,
+            plural_title,
             description,
             default,
             examples,
@@ -61,6 +64,11 @@ impl EntityType {
     #[must_use]
     pub fn title(&self) -> &str {
         &self.title
+    }
+
+    #[must_use]
+    pub fn plural_title(&self) -> &str {
+        &self.plural_title
     }
 
     #[must_use]

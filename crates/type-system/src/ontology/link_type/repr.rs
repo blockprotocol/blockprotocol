@@ -18,6 +18,7 @@ pub struct LinkType {
     #[serde(rename = "$id")]
     id: String,
     title: String,
+    plural_title: String,
     description: String,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     related_keywords: Vec<String>,
@@ -33,6 +34,7 @@ impl TryFrom<LinkType> for super::LinkType {
         Ok(Self::new(
             id,
             link_type_repr.title,
+            link_type_repr.plural_title,
             link_type_repr.description,
             link_type_repr.related_keywords,
         ))
@@ -45,6 +47,7 @@ impl From<super::LinkType> for LinkType {
             kind: LinkTypeTag::LinkType,
             id: link_type.id.to_string(),
             title: link_type.title,
+            plural_title: link_type.plural_title,
             description: link_type.description,
             related_keywords: link_type.related_keywords,
         }
