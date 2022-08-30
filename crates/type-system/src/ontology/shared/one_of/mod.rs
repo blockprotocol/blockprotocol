@@ -44,11 +44,23 @@ impl<T> OneOf<T> {
 
 #[cfg(test)]
 mod tests {
-    // TODO: validation tests
-    // #[test]
-    // fn empty() {
-    //     ensure_repr_failed_deserialization::<OneOf<()>>(json!({
-    //                 "oneOf": []
-    //             }));
-    // }
+    use serde_json::json;
+
+    use crate::{
+        repr, utils::tests::ensure_failed_validation, ParseOneOfError, PropertyValues,
+        ValidationError,
+    };
+
+    type OneOf = super::OneOf<PropertyValues>;
+    type OneOfRepr = repr::OneOf<repr::PropertyValues>;
+
+    #[test]
+    fn empty() {
+        ensure_failed_validation::<OneOfRepr, OneOf>(
+            &json!({
+                "oneOf": []
+            }),
+            ParseOneOfError::ValidationError(ValidationError::EmptyOneOf),
+        );
+    }
 }

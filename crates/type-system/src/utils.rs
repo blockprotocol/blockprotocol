@@ -73,7 +73,7 @@ pub mod tests {
     }
 
     /// TODO - DOC
-    pub fn ensure_failed_validation<R, T>(input: &serde_json::Value, expected: T::Error)
+    pub fn ensure_failed_validation<R, T>(input: &serde_json::Value, expected_err: T::Error)
     where
         R: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
         T: TryFrom<R> + Debug + PartialEq,
@@ -82,7 +82,7 @@ pub mod tests {
         let repr: R = serde_json::from_value(input.clone()).expect("failed to deserialize");
         let result = T::try_from(repr);
 
-        assert_eq!(result, Err(expected));
+        assert_eq!(result, Err(expected_err));
     }
 
     /// TODO - DOC
