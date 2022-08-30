@@ -26,7 +26,7 @@ const script = async () => {
   if (process.env.TEST_COVERAGE) {
     await fs.writeJson(babelConfigPath, {
       presets: ["next/babel"],
-      plugins: ["istanbul"],
+      plugins: ["@babel/plugin-syntax-import-assertions", "istanbul"]
     });
     await execa("nyc", ["--cwd=..", "next", "build"], { stdio: "inherit" });
     await fs.remove(babelConfigPath);
