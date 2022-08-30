@@ -140,6 +140,11 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             font-weight: 700;
             src: url("/assets/fonts/apercu-bold-pro.ttf") format("trueType");
           }
+          @font-face {
+            font-family: 'JetBrains Mono';
+            font-weight: 500;
+            src: url("/assets/fonts/jetbrains-mono-medium.ttf") format("trueType");
+          }
 
           html {
             scroll-behavior: smooth;

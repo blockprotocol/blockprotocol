@@ -1,7 +1,6 @@
 import { BlockVariant } from "@blockprotocol/core";
 import { Entity } from "@blockprotocol/graph";
 import {
-  Alert,
   Box,
   FormControlLabel,
   Snackbar,
@@ -16,6 +15,7 @@ import { Validator } from "jsonschema";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
+import { Alert } from "../../alert";
 import {
   BlockDataTabPanels,
   blockPreviewAndDataHeight,
@@ -364,9 +364,15 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
             }}
             onClose={() => setAlertSnackBarOpen(false)}
           >
-            <Alert severity="warning">
-              Please fix the errors in the <b>Data Source</b> before proceeding.{" "}
-            </Alert>
+            <Alert
+              description={
+                <>
+                  Please fix the errors in <b>Block Properties</b> before
+                  proceeding.
+                </>
+              }
+              type="warning"
+            />
           </Snackbar>
         </Box>
       </Box>
