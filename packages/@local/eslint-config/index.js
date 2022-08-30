@@ -47,6 +47,14 @@ module.exports = {
     "no-nested-ternary": "off",
     "no-restricted-syntax": "off",
     camelcase: "off",
+    "no-unused-vars": [
+      "error",
+      {
+        args: "all", // check all args, not just those after-used
+        argsIgnorePattern: "^_+",
+        varsIgnorePattern: "^_+",
+      },
+    ],
     "default-param-last": "off", // using @typescript-eslint/default-param-last instead
     "no-await-in-loop": "off",
     "import/first": "error",
@@ -410,8 +418,7 @@ module.exports = {
     {
       files: ["*.ts", "*.tsx"],
       rules: {
-        "no-unused-vars": "off",
-        // replaced by @typescript-eslint/no-unused-vars
+        "no-unused-vars": "off", // replaced by @typescript-eslint/no-unused-vars
         "@typescript-eslint/no-unused-vars": [
           "error",
           {
