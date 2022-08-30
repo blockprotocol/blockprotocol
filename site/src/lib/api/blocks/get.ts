@@ -1,6 +1,11 @@
-import localBlocks from "../../../../blocks-data.json" assert { type: "json" };
+import fs from "fs-extra";
+
 import { ExpandedBlockMetadata } from "../../blocks";
 import { getDbBlock, getDbBlocks } from "./db";
+
+const localBlocks = fs.readJsonSync(
+  "blocks-data.json",
+) as ExpandedBlockMetadata[];
 
 export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
   const allDbBlocks = await getDbBlocks({});
