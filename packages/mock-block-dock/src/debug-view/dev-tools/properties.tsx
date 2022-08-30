@@ -12,6 +12,7 @@ import Ajv from "ajv";
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { customColors } from "../theme/palette";
 import { BlockSchemaView } from "./block-schema-view";
+import { EntitySwitcher } from "./entity-switcher";
 import { JsonView } from "./json-view";
 
 const ajv = new Ajv();
@@ -30,8 +31,14 @@ export const PropertiesView = () => {
         <Grid item xs={6}>
           {/* Entity Properties row */}
           <Box mb={3}>
-            <Typography variant="subtitle2" mb={1}>
+            <Typography
+              variant="subtitle2"
+              mb={1}
+              display="flex"
+              justifyContent="space-between"
+            >
               Entity Properties
+              <EntitySwitcher />
             </Typography>
             <Box maxWidth={800}>
               <JsonView
