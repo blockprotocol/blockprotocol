@@ -45,7 +45,7 @@ impl From<super::PropertyTypeReference> for PropertyTypeReference {
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged)]
-#[allow(clippy::enum_variant_names)]
+#[expect(clippy::enum_variant_names)]
 pub enum PropertyValues {
     DataTypeReference(repr::DataTypeReference),
     PropertyTypeObject(repr::Object<repr::ValueOrArray<PropertyTypeReference>>),
@@ -102,7 +102,6 @@ impl From<super::PropertyValues> for PropertyValues {
 /// Will serialize as a constant value `"propertyType"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
-#[allow(clippy::use_self)]
 enum PropertyTypeTag {
     PropertyType,
 }

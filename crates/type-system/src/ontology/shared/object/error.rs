@@ -8,10 +8,6 @@ use crate::{
     ParsePropertyTypeReferenceArrayError, ValidationError,
 };
 
-#[allow(
-    clippy::enum_variant_names,
-    reason = "The prefix is helpful for disambiguating, especially in Typescript"
-)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]

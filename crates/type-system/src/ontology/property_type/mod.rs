@@ -178,7 +178,6 @@ impl From<PropertyTypeReference> for serde_json::Value {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-#[allow(clippy::enum_variant_names)]
 pub enum PropertyValues {
     DataTypeReference(DataTypeReference),
     PropertyTypeObject(Object<ValueOrArray<PropertyTypeReference>, 1>),
