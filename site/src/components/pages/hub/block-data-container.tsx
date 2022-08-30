@@ -367,7 +367,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
             <Alert
               description={
                 <>
-                  Please fix the errors in the <b>Data Source</b> before
+                  Please fix the errors in <b>Block Properties</b> before
                   proceeding.
                 </>
               }

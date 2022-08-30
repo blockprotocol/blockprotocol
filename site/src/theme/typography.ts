@@ -96,7 +96,7 @@ export const typography: ThemeOptions["typography"] = {
     color: customColors.gray[90],
   },
   bpCode: {
-    fontFamily: [`"JetBrains Mono"`, ...fallbackFonts].join(", "),
+    fontFamily: [`"JetBrains Mono"`, "monospace", ...fallbackFonts].join(", "),
     fontSize: "var(--step--2)",
     fontWeight: 500,
     lineHeight: 1.5,

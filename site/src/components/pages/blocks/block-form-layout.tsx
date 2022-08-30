@@ -4,7 +4,7 @@ import { PropsWithChildren } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
 import { LinkButton } from "../../link-button";
-import { BlockFormContainer } from "./block-form-container";
+import { BlockFormContainer } from "./block-form-styles";
 
 export const BlockFormLayout = ({ children }: PropsWithChildren) => {
   return (

@@ -1,6 +1,8 @@
-import { experimental_sx as sx, styled } from "@mui/material";
+import { experimental_sx as sx, Paper, styled } from "@mui/material";
 
-import { BlockFormContainer } from "./block-form-container";
+export const BlockFormContainer = styled(Paper)(
+  sx({ flex: 1, width: "100%", p: 6 }),
+);
 
 export const BlockListContainer = styled(BlockFormContainer)<{
   hasBlocks?: boolean;

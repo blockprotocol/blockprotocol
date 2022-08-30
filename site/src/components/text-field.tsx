@@ -11,9 +11,7 @@ import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "./icons";
 
-type TextFieldProps = {} & MuiTextFieldProps;
-
-export const TextField: FunctionComponent<TextFieldProps> = ({
+export const TextField: FunctionComponent<MuiTextFieldProps> = ({
   helperText,
   sx,
   ...textFieldProps

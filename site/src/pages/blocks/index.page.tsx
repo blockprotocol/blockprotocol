@@ -11,7 +11,7 @@ import {
   AuthWallPageContent,
   withAuthWall,
 } from "../../components/pages/auth-wall";
-import { BlockListContainer } from "../../components/pages/blocks/block-list-container";
+import { BlockListContainer } from "../../components/pages/blocks/block-form-styles";
 import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state";
 import { PublishBlockSuccess } from "../../components/pages/blocks/publish-block-success";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
