@@ -55,6 +55,7 @@ pub mod tests {
         r#type: StringTypeTag,
     }
 
+    /// TODO - DOC
     pub fn check_serialization_from_str<T>(input: &str, expected_native_repr: Option<T>) -> T
     where
         T: FromStr + Into<serde_json::Value> + Debug + Clone + PartialEq,
@@ -71,6 +72,20 @@ pub mod tests {
         deserialized
     }
 
+    /// TODO - DOC
+    pub fn ensure_failed_validation<R, T>(input: serde_json::Value, expected: T::Error)
+    where
+        R: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
+        T: TryFrom<R> + Debug + PartialEq,
+        <T as TryFrom<R>>::Error: Debug + PartialEq,
+    {
+        let repr: R = serde_json::from_value(input.clone()).expect("failed to deserialize");
+        let result = T::try_from(repr);
+
+        assert_eq!(result, Err(expected));
+    }
+
+    /// TODO - DOC
     #[expect(clippy::similar_names)]
     #[expect(
         clippy::needless_pass_by_value,
@@ -95,6 +110,7 @@ pub mod tests {
         deserialized
     }
 
+    /// TODO - DOC
     pub fn ensure_repr_failed_deserialization<T>(json: serde_json::Value)
     where
         for<'de> T: Debug + Deserialize<'de>,

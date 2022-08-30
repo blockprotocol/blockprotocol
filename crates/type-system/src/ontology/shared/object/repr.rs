@@ -88,7 +88,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        property_type::repr::PropertyTypeReference,
+        repr::PropertyTypeReference,
         uri::VersionedUri,
         utils::tests::{check_repr_serialization_from_value, ensure_repr_failed_deserialization},
     };

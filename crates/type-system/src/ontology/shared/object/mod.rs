@@ -73,63 +73,71 @@ impl<T: ValidateUri, const MIN: usize> Object<T, MIN> {
 
 #[cfg(test)]
 mod tests {
-    // use super::*;
-    // use crate::ontology::property_type::PropertyTypeReference;
-    //
-    // type Object = super::Object<PropertyTypeReference, 1>;
-    //
-    // TODO: validation tests
-    // #[test]
-    // fn empty() {
-    //     ensure_repr_failed_deserialization::<Object>(json!({
-    //         "type": "object",
-    //         "properties": {}
-    //     }));
-    // }
-    //
-    // #[test]
-    // fn additional_properties() {
-    //     ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-    //         "type": "object",
-    //         "properties": {
-    //             "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-    //             "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-    //         },
-    //         "additional_properties": 10
-    //     }));
-    // }
-    //
-    // #[test]
-    // fn invalid_uri() {
-    //     ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-    //         "type": "object",
-    //         "properties": {
-    //             "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
-    //         }
-    //     }));
-    // }
-    //
-    // #[test]
-    // fn invalid_required() {
-    //     ensure_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-    //         "type": "object",
-    //         "properties": {
-    //             "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
-    //             "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
-    //         },
-    //         "required": [
-    //             "https://example.com/property_type_c/"
-    //         ]
-    //     }));
-    // }
-    //
-    // #[test]
-    // fn invalid_uri() {
-    //     ensure_repr_failed_deserialization::<Object<PropertyTypeReference>>(json!({
-    //             "type": "object",
-    //             "properties": {
-    //                 "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
-    //             }
-    //         }));
-    // }
+    use std::str::FromStr;
+
+    use serde_json::json;
+
+    use super::*;
+    use crate::{
+        repr, uri::VersionedUri, utils::tests::ensure_failed_validation,
+        ParsePropertyTypeObjectError, PropertyTypeReference,
+    };
+
+    type Object = super::Object<PropertyTypeReference, 1>;
+
+    #[test]
+    fn empty() {
+        ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
+            json!({
+                "type": "object",
+                "properties": {}
+            }),
+            ParsePropertyTypeObjectError::ValidationError(
+                ValidationError::MismatchedPropertyCount {
+                    actual: 0,
+                    expected: 1,
+                },
+            ),
+        );
+    }
+
+    #[test]
+    fn invalid_uri() {
+        ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
+            json!({
+                "type": "object",
+                "properties": {
+                    "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
+                }
+            }),
+            ParsePropertyTypeObjectError::ValidationError(ValidationError::BaseUriMismatch {
+                base_uri: BaseUri::new("https://example.com/property_type_a/".to_owned())
+                    .expect("failed to create BaseURI"),
+                versioned_uri: VersionedUri::from_str("https://example.com/property_type_b/v/1")
+                    .expect("failed to create VersionedUri"),
+            }),
+        );
+    }
+
+    #[test]
+    fn invalid_required() {
+        ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
+            json!({
+                "type": "object",
+                "properties": {
+                    "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },
+                    "https://example.com/property_type_b/": { "$ref": "https://example.com/property_type_b/v/1" },
+                },
+                "required": [
+                    "https://example.com/property_type_c/"
+                ]
+            }),
+            ParsePropertyTypeObjectError::ValidationError(
+                ValidationError::MissingRequiredProperty(
+                    BaseUri::new("https://example.com/property_type_c/".to_owned())
+                        .expect("failed to create BaseURI"),
+                ),
+            ),
+        );
+    }
 }
