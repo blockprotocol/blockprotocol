@@ -17,7 +17,6 @@ use crate::{
     ValueOrMaybeOrderedArray,
 };
 
-/// Intermediate representation used during deserialization.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityType {
     id: VersionedUri,
