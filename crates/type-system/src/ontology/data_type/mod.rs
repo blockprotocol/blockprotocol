@@ -135,18 +135,6 @@ impl ValidateUri for DataTypeReference {
     }
 }
 
-impl FromStr for DataTypeReference {
-    type Err = ParseVersionedUriError;
-
-    fn from_str(data_type_ref_str: &str) -> Result<Self, Self::Err> {
-        let data_type_ref_repr: repr::DataTypeReference =
-            serde_json::from_str(data_type_ref_str)
-                .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(data_type_ref_repr)
-    }
-}
-
 impl TryFrom<serde_json::Value> for DataTypeReference {
     type Error = ParseVersionedUriError;
 
@@ -176,27 +164,6 @@ mod tests {
         test_data,
         utils::tests::{check_serialization_from_str, ensure_failed_validation},
     };
-
-    #[test]
-    fn data_type_reference() {
-        let data_type = check_serialization_from_str::<DataTypeReference>(
-            r#"
-            {
-              "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1"
-             }
-            "#,
-            None,
-        );
-
-        data_type
-            .validate_uri(
-                &BaseUri::new(
-                    "https://blockprotocol.org/@blockprotocol/types/data-type/text/".to_owned(),
-                )
-                .expect("invalid Base URL"),
-            )
-            .expect("data type reference didn't validate against base URI");
-    }
 
     #[test]
     fn text() {
@@ -242,5 +209,35 @@ mod tests {
             ),
             ParseDataTypeError::InvalidVersionedUri(ParseVersionedUriError::AdditionalEndContent),
         );
+    }
+
+    #[test]
+    fn validate_data_type_ref_valid() {
+        let uri = VersionedUri::from_str(
+            "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+        )
+        .expect("failed to create VersionedUri");
+
+        let data_type_ref = DataTypeReference::new(uri.clone());
+
+        data_type_ref
+            .validate_uri(uri.base_uri())
+            .expect("failed to validate against base URI");
+    }
+
+    #[test]
+    fn validate_data_type_ref_invalid() {
+        let uri_a =
+            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
+                .expect("failed to parse VersionedUri");
+        let uri_b =
+            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
+                .expect("failed to parse VersionedUri");
+
+        let data_type_ref = DataTypeReference::new(uri_a.clone());
+
+        data_type_ref
+            .validate_uri(uri_b.base_uri()) // Try and validate against a different URI
+            .expect_err("expected validation against base URI to fail but it didn't");
     }
 }

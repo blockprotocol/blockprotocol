@@ -10,6 +10,62 @@ use crate::{
     ParsePropertyTypeError,
 };
 
+/// Will serialize as a constant value `"propertyType"`
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+enum PropertyTypeTag {
+    PropertyType,
+}
+
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase", deny_unknown_fields)]
+pub struct PropertyType {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
+    kind: PropertyTypeTag,
+    #[serde(rename = "$id")]
+    id: String,
+    title: String,
+    plural_title: String,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    description: Option<String>,
+    #[serde(flatten)]
+    one_of: repr::OneOf<PropertyValues>,
+}
+
+impl TryFrom<PropertyType> for super::PropertyType {
+    type Error = ParsePropertyTypeError;
+
+    fn try_from(property_type_repr: PropertyType) -> Result<Self, Self::Error> {
+        let id = VersionedUri::from_str(&property_type_repr.id)
+            .map_err(ParsePropertyTypeError::InvalidVersionedUri)?;
+        Ok(Self::new(
+            id,
+            property_type_repr.title,
+            property_type_repr.plural_title,
+            property_type_repr.description,
+            property_type_repr
+                .one_of
+                .try_into()
+                .map_err(|err| ParsePropertyTypeError::InvalidOneOf(Box::new(err)))?,
+        ))
+    }
+}
+
+impl From<super::PropertyType> for PropertyType {
+    fn from(property_type: super::PropertyType) -> Self {
+        Self {
+            kind: PropertyTypeTag::PropertyType,
+            id: property_type.id.to_string(),
+            title: property_type.title,
+            plural_title: property_type.plural_title,
+            description: property_type.description,
+            one_of: property_type.one_of.into(),
+        }
+    }
+}
+
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -95,62 +151,6 @@ impl From<super::PropertyValues> for PropertyValues {
             super::PropertyValues::ArrayOfPropertyValues(array) => {
                 Self::ArrayOfPropertyValues(array.into())
             }
-        }
-    }
-}
-
-/// Will serialize as a constant value `"propertyType"`
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-enum PropertyTypeTag {
-    PropertyType,
-}
-
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct PropertyType {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
-    kind: PropertyTypeTag,
-    #[serde(rename = "$id")]
-    id: String,
-    title: String,
-    plural_title: String,
-    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    description: Option<String>,
-    #[serde(flatten)]
-    one_of: repr::OneOf<PropertyValues>,
-}
-
-impl TryFrom<PropertyType> for super::PropertyType {
-    type Error = ParsePropertyTypeError;
-
-    fn try_from(property_type_repr: PropertyType) -> Result<Self, Self::Error> {
-        let id = VersionedUri::from_str(&property_type_repr.id)
-            .map_err(ParsePropertyTypeError::InvalidVersionedUri)?;
-        Ok(Self::new(
-            id,
-            property_type_repr.title,
-            property_type_repr.plural_title,
-            property_type_repr.description,
-            property_type_repr
-                .one_of
-                .try_into()
-                .map_err(|err| ParsePropertyTypeError::InvalidOneOf(Box::new(err)))?,
-        ))
-    }
-}
-
-impl From<super::PropertyType> for PropertyType {
-    fn from(property_type: super::PropertyType) -> Self {
-        Self {
-            kind: PropertyTypeTag::PropertyType,
-            id: property_type.id.to_string(),
-            title: property_type.title,
-            plural_title: property_type.plural_title,
-            description: property_type.description,
-            one_of: property_type.one_of.into(),
         }
     }
 }

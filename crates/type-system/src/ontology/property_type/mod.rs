@@ -145,18 +145,6 @@ impl ValidateUri for PropertyTypeReference {
     }
 }
 
-impl FromStr for PropertyTypeReference {
-    type Err = ParseVersionedUriError;
-
-    fn from_str(property_type_ref_str: &str) -> Result<Self, Self::Err> {
-        let property_type_ref_repr: repr::PropertyTypeReference =
-            serde_json::from_str(property_type_ref_str)
-                .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_ref_repr)
-    }
-}
-
 impl TryFrom<serde_json::Value> for PropertyTypeReference {
     type Error = ParseVersionedUriError;
 
@@ -421,5 +409,35 @@ mod tests {
                 ),
             ))),
         );
+    }
+
+    #[test]
+    fn validate_property_type_ref_valid() {
+        let uri = VersionedUri::from_str(
+            "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+        )
+        .expect("failed to create VersionedUri");
+
+        let property_type_ref = PropertyTypeReference::new(uri.clone());
+
+        property_type_ref
+            .validate_uri(uri.base_uri())
+            .expect("failed to validate against base URI");
+    }
+
+    #[test]
+    fn validate_property_type_ref_invalid() {
+        let uri_a =
+            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
+                .expect("failed to parse VersionedUri");
+        let uri_b =
+            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
+                .expect("failed to parse VersionedUri");
+
+        let property_type_ref = PropertyTypeReference::new(uri_a.clone());
+
+        property_type_ref
+            .validate_uri(uri_b.base_uri()) // Try and validate against a different URI
+            .expect_err("expected validation against base URI to fail but it didn't");
     }
 }
