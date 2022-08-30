@@ -16,7 +16,7 @@ mod wasm {
         console_error_panic_hook::set_once();
     }
 
-    /// TODO: Doc
+    /// Represents either success (Ok) or failure (Err).
     #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Tsify)]
     #[serde(tag = "type", content = "inner")]
     pub enum Result<T, E> {
@@ -55,7 +55,10 @@ pub mod tests {
         r#type: StringTypeTag,
     }
 
-    /// TODO - DOC
+    /// Ensures a type can be deserialized from a given string, as well as being able to be
+    /// serialized back.
+    ///
+    /// Optionally checks the deserialized object against an expected value.
     pub fn check_serialization_from_str<T>(input: &str, expected_native_repr: Option<T>) -> T
     where
         T: FromStr + Into<serde_json::Value> + Debug + Clone + PartialEq,
@@ -72,7 +75,11 @@ pub mod tests {
         deserialized
     }
 
-    /// TODO - DOC
+    /// Ensures a type can be deserialized from a given string to its equivalent [`repr`], but then
+    /// checks that it fails with a given error when trying to convert it to its native
+    /// representation.
+    ///
+    /// [`repr`]: crate::repr
     pub fn ensure_failed_validation<R, T>(input: &serde_json::Value, expected_err: T::Error)
     where
         R: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
@@ -85,7 +92,12 @@ pub mod tests {
         assert_eq!(result, Err(expected_err));
     }
 
-    /// TODO - DOC
+    /// Ensures a type can be deserialized from a given [`serde_json::Value`] to its equivalent
+    /// [`repr`], as well as serializing back to a [`serde_json::Value`].
+    ///
+    /// Optionally checks the deserialized object against an expected value.
+    ///
+    /// [`repr`]: crate::repr
     #[expect(clippy::similar_names)]
     #[expect(
         clippy::needless_pass_by_value,
@@ -110,7 +122,10 @@ pub mod tests {
         deserialized
     }
 
-    /// TODO - DOC
+    /// Ensures a given [`serde_json::Value`] fails when trying to be deserialized into a given
+    /// [`repr`] for a type.
+    ///
+    /// [`repr`]: crate::repr
     pub fn ensure_repr_failed_deserialization<T>(json: serde_json::Value)
     where
         for<'de> T: Debug + Deserialize<'de>,

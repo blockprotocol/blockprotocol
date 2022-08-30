@@ -1,10 +1,12 @@
 import {
+  BaseUri,
   extractBaseUri,
   extractVersion,
   ParseBaseUriError,
   ParseVersionedUriError,
   validateBaseUri,
   validateVersionedUri,
+  VersionedUri,
 } from "..";
 
 const invalidBaseUriCases: [string, ParseBaseUriError][] = [
@@ -40,24 +42,13 @@ describe("validateBaseUri", () => {
     ["https://////example.com///"],
     ["file://loc%61lhost/"],
   ])("`parseBaseUri(%s)` succeeds", (input) => {
-    const result = validateBaseUri(input);
-    if (result.type === "Ok") {
-      expect(result.inner).toEqual(input);
-    } else {
-      // TODO: throwing a new error here gives less helpful messages than using Jest methods
-      throw new Error("validateBaseUri should have returned Ok");
-    }
+    expect(validateBaseUri(input)).toEqual({ type: "Ok", inner: input });
   });
 
   test.each(invalidBaseUriCases)(
     "`parseBaseUri(%s)` errors",
     (input, expected) => {
-      const result = validateBaseUri(input);
-      if (result.type === "Err") {
-        expect(result.inner).toEqual(expected);
-      } else {
-        throw new Error("validateBaseUri should have errored");
-      }
+      expect(validateBaseUri(input)).toEqual({ type: "Err", inner: expected });
     },
   );
 });
@@ -90,47 +81,45 @@ describe("validateVersionedUri", () => {
   test.each(invalidVersionedUriCases)(
     "validateVersionedUri(%s) returns errors",
     (input, expected) => {
-      const result = validateVersionedUri(input);
-      if (result.type === "Err") {
-        expect(result.inner).toEqual(expected);
-      } else {
-        throw new Error("validateVersionedUri should have errored");
-      }
+      expect(validateVersionedUri(input)).toEqual({
+        type: "Err",
+        inner: expected,
+      });
     },
   );
 });
 
+const extractBaseUriCases: [VersionedUri, BaseUri][] = [
+  ["http://example.com/v/0", "http://example.com/"],
+  ["http://example.com/sandwich/v/1", "http://example.com/sandwich/"],
+  [
+    "file://localhost/documents/myfolder/v/10",
+    "file://localhost/documents/myfolder/",
+  ],
+  ["ftp://rms@example.com/foo/v/5", "ftp://rms@example.com/foo/"],
+];
+
 describe("extractBaseUri", () => {
-  test.each([
-    ["http://example.com/v/0", "http://example.com/"],
-    ["http://example.com/sandwich/v/1", "http://example.com/sandwich/"],
-    [
-      "file://localhost/documents/myfolder/v/10",
-      "file://localhost/documents/myfolder/",
-    ],
-    ["ftp://rms@example.com/foo/v/5", "ftp://rms@example.com/foo/"],
-  ])("`extractBaseUri(%s)` succeeds", (input, expected) => {
-    const result = validateVersionedUri(input);
-    if (result.type === "Ok") {
-      expect(extractBaseUri(result.inner)).toBe(expected);
-    } else {
-      throw new Error(result.inner.toString());
-    }
-  });
+  test.each(extractBaseUriCases)(
+    "`extractBaseUri(%s)` succeeds",
+    (input, expected) => {
+      expect(extractBaseUri(input)).toEqual(expected);
+    },
+  );
 });
 
+const extractVersionCases: [VersionedUri, number][] = [
+  ["http://example.com/v/0", 0],
+  ["http://example.com/sandwich/v/1", 1],
+  ["file://localhost/documents/myfolder/v/10", 10],
+  ["ftp://rms@example.com/foo/v/5", 5],
+];
+
 describe("extractVersion", () => {
-  test.each([
-    ["http://example.com/v/0", 0],
-    ["http://example.com/sandwich/v/1", 1],
-    ["file://localhost/documents/myfolder/v/10", 10],
-    ["ftp://rms@example.com/foo/v/5", 5],
-  ])("`extractVersion(%s)` succeeds", (input, expected) => {
-    const result = validateVersionedUri(input);
-    if (result.type === "Ok") {
-      expect(extractVersion(result.inner)).toBe(expected);
-    } else {
-      throw new Error(result.inner.toString());
-    }
-  });
+  test.each(extractVersionCases)(
+    "`extractVersion(%s)` succeeds",
+    (input, expected) => {
+      expect(extractVersion(input)).toEqual(expected);
+    },
+  );
 });

@@ -166,7 +166,7 @@ const propertyTypes: PropertyType[] = [
 
 // These are data types which satisfy the TypeScript interface but are still invalid, and demonstrate the need for the
 // validation method
-const invalidPropertyTypes: [string, PropertyType, any][] = [
+const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
   [
     "empty one of",
     {
@@ -329,7 +329,7 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
 
 describe("validatePropertyType", () => {
   test.each(propertyTypes)("validatePropertyType($title) succeeds", (input) => {
-    expect(validatePropertyType(input)).toEqual({ type: "Ok", inner: null }); // TODO: this shouldn't be null
+    expect(validatePropertyType(input)).toEqual({ type: "Ok", inner: null });
   });
 
   test.each(invalidPropertyTypes)(

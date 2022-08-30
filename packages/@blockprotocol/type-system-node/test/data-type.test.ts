@@ -101,7 +101,7 @@ describe("validateDataType", () => {
   test.each(primitiveDataTypes)(
     "validateDataType($title) succeeds",
     (input) => {
-      expect(validateDataType(input)).toEqual({ type: "Ok", inner: null }); // TODO: this shouldn't be null
+      expect(validateDataType(input)).toEqual({ type: "Ok", inner: null });
     },
   );
 
