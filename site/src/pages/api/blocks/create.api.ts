@@ -7,6 +7,7 @@ import {
   formatErrors,
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
+import { revalidateMultiBlockPages } from "./shared";
 
 export type ApiBlockCreateRequest = {
   blockName: string;
@@ -40,6 +41,7 @@ export default createAuthenticatedHandler<
         npmPackageName,
         user,
       });
+      await revalidateMultiBlockPages(res, user.shortname!); // user is signed up and has shortname
       return res.status(200).json({ block });
     } catch (err) {
       const errIsError = err instanceof Error;
