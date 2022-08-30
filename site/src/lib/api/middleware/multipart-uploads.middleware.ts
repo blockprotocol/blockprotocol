@@ -24,11 +24,19 @@ export type Field = {
 };
 
 export type MultipartExtensions<
-  FileFieldName extends string = string,
-  PrimitiveFieldName extends string = string,
+  FileFieldName extends string | null = string,
+  PrimitiveFieldName extends string | null = string,
 > = {
-  uploads?: Record<FileFieldName, UploadedFileBuffer>;
-  fields?: Record<PrimitiveFieldName, Field>;
+  /**
+   * the [Generic] syntax here is required to avoid distributive behavior
+   * @see https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types
+   */
+  uploads?: [FileFieldName] extends [string]
+    ? { [key in FileFieldName]?: UploadedFileBuffer }
+    : undefined;
+  fields?: [PrimitiveFieldName] extends [string]
+    ? { [key in PrimitiveFieldName]?: Field }
+    : undefined;
 };
 
 const parseForm = async (

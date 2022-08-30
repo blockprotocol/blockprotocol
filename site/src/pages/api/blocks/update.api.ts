@@ -14,9 +14,7 @@ import {
 import { createPathWithNamespace, revalidateMultiBlockPages } from "./shared";
 
 // The body we expect when updating an npm-linked block
-type ApiNpmBlockUpdateRequest = {
-  blockName: string;
-};
+type ApiNpmBlockUpdateRequest = MultipartExtensions<null, "blockName">;
 
 // The body we expect when updating a directly-uploaded block
 type ApiTarballBlockUpdateRequest = MultipartExtensions<"tarball", "blockName">;
@@ -41,10 +39,7 @@ export default createAuthenticatedHandler<
     }),
   )
   .post(async (req, res) => {
-    const blockName =
-      "blockName" in req.body
-        ? req.body.blockName
-        : req.body.fields?.blockName?.value;
+    const blockName = req.body.fields?.blockName?.value;
 
     if (!blockName) {
       return res.status(400).json(
@@ -83,7 +78,7 @@ export default createAuthenticatedHandler<
       );
     }
 
-    const tarball = "uploads" in req.body && req.body.uploads?.tarball.buffer;
+    const tarball = "uploads" in req.body && req.body.uploads?.tarball?.buffer;
 
     if (existingBlock.npmPackageName && tarball) {
       return res.status(404).json(
@@ -122,7 +117,7 @@ export default createAuthenticatedHandler<
         : publishBlockFromTarball(db, {
             createdAt: existingBlock.createdAt,
             pathWithNamespace,
-            tarball: tarball as Buffer, // we return an error if neither npmPackageName nor tarball are truthy
+            tarball: tarball as Buffer, // we returned an error if neither npmPackageName nor tarball are truthy
           }));
 
       await revalidateMultiBlockPages(res, shortname);

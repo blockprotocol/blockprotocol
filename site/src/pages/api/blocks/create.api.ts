@@ -18,10 +18,10 @@ import {
 } from "./shared";
 
 // The body we expect when publishing an npm-linked block
-type ApiNpmBlockCreateRequest = {
-  blockName: string;
-  npmPackageName: string;
-};
+type ApiNpmBlockCreateRequest = MultipartExtensions<
+  null,
+  "npmPackageName" | "blockName"
+>;
 
 // The body we expect when provided a tarball of block source directly
 type ApiTarballBlockCreateRequest = MultipartExtensions<"tarball", "blockName">;
@@ -40,18 +40,24 @@ export default createAuthenticatedHandler<
 >()
   .use(
     multipartUploads({
-      fieldsLimit: 1,
+      fieldsLimit: 2,
       filesLimit: 1,
       maxFileSize: 10 * 1024 * 1024, // bytes = 10MB
     }),
   )
   .post(async (req, res) => {
-    const blockName =
-      "blockName" in req.body
-        ? req.body.blockName
-        : req.body.fields?.blockName?.value;
+    if (!req.body?.fields) {
+      return res.status(400).json(
+        formatErrors({
+          msg: "No string fields provided in body. Provide either 'blockName' (when providing a 'tarball' file), or 'blockName' and 'npmPackageName'",
+          code: "INVALID_INPUT",
+        }),
+      );
+    }
 
-    if (!blockName) {
+    const untransformedBlockName = req.body.fields.blockName?.value;
+
+    if (!untransformedBlockName) {
       return res.status(400).json(
         formatErrors({
           msg: "You must provide a blockName",
@@ -74,7 +80,7 @@ export default createAuthenticatedHandler<
       );
     }
 
-    const slugifiedBlockName = generateSlug(blockName);
+    const slugifiedBlockName = generateSlug(untransformedBlockName);
 
     const blockWithName = await getDbBlock({
       name: slugifiedBlockName,
@@ -82,36 +88,50 @@ export default createAuthenticatedHandler<
     });
 
     if (blockWithName) {
-      throw new Error(
-        `Block name '${slugifiedBlockName}' already exists in account ${shortname}`,
-        {
-          cause: { code: "NAME_TAKEN" },
-        },
+      return res.status(400).json(
+        formatErrors({
+          msg: `Block name '${slugifiedBlockName}' already exists in account ${shortname}`,
+          code: "NAME_TAKEN",
+        }),
       );
     }
 
-    const pathWithNamespace = createPathWithNamespace(blockName, shortname);
+    const pathWithNamespace = createPathWithNamespace(
+      slugifiedBlockName,
+      shortname,
+    );
 
-    if (!("npmPackageName" in req.body) && !req.body.uploads?.tarball) {
+    if (!("npmPackageName" in req.body.fields) && !req.body.uploads?.tarball) {
       return res.status(400).json(
         formatErrors({
           msg: "You must provide a 'tarball' file upload if not providing an npmPackageName",
           code: "INVALID_INPUT",
         }),
       );
+    } else if (
+      !req.body.uploads?.tarball &&
+      (!("npmPackageName" in req.body.fields) ||
+        !req.body.fields?.npmPackageName?.value)
+    ) {
+      return res.status(400).json(
+        formatErrors({
+          msg: "You must provide an 'npmPackageName' field if not providing a 'tarball' file upload",
+          code: "INVALID_INPUT",
+        }),
+      );
     }
 
     try {
-      const block = await ("npmPackageName" in req.body
+      const block = await ("npmPackageName" in req.body.fields
         ? publishBlockFromNpm(db, {
             createdAt: null,
-            npmPackageName: req.body.npmPackageName,
+            npmPackageName: req.body.fields.npmPackageName!.value, // we checked that this exists above
             pathWithNamespace,
           })
         : publishBlockFromTarball(db, {
             createdAt: null,
             pathWithNamespace,
-            tarball: req.body.uploads!.tarball.buffer,
+            tarball: req.body.uploads!.tarball!.buffer, // we checked that this exists above
           }));
       await revalidateMultiBlockPages(res, shortname);
       return res.status(200).json({ block });
