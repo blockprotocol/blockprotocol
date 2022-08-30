@@ -12,6 +12,19 @@ You can use `bodyValidator` to validate the request body.
 
 You can use `formatErrors` to format errors in a standard way.
 
+## File uploads
+
+1.  use the `multipartUploads` middleware
+1.  ensure you disable `bodyParser` by adding this to your API file:
+
+```typescript
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+```
+
 ## Environment variables
 
 Vercel environment variables in lambdas are NOT prefixed,

@@ -8,20 +8,25 @@ import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
 import { isProduction } from "../../config";
-import { User } from "../model/user.model";
-import { getDbBlock, insertDbBlock } from "./db";
+import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
 import { validateExpandAndUploadBlockFiles } from "./r2";
 import { isRunningOnVercel } from "./shared";
 
 /**
  * Unpacks and uploads an npm package to remote storage
+ * @param [createdAt] if this block was created previously, an ISO string of when it was created, otherwise null
  * @param npmPackageName the name of the npm package to mirror
  * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  */
-const mirrorNpmPackageToR2 = async (
-  npmPackageName: string,
-  pathWithNamespace: string,
-): Promise<{
+const mirrorNpmPackageToR2 = async ({
+  createdAt,
+  npmPackageName,
+  pathWithNamespace,
+}: {
+  createdAt: string | null;
+  npmPackageName: string;
+  pathWithNamespace: string;
+}): Promise<{
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
@@ -49,8 +54,8 @@ const mirrorNpmPackageToR2 = async (
       execaOptions,
     ));
 
+    // tar is not available on deployed lambdas
     await tar.x({
-      // tar is not available on deployed lambdas
       cwd: npmTarballFolder,
       file: path.resolve(npmTarballFolder, tarballFilename),
     });
@@ -98,7 +103,7 @@ const mirrorNpmPackageToR2 = async (
   }
 
   const { expandedMetadata } = await validateExpandAndUploadBlockFiles({
-    createdAt: null,
+    createdAt,
     localFolderPath: blockSourceFolder,
     npmPackageName,
     pathWithNamespace,
@@ -111,27 +116,25 @@ const mirrorNpmPackageToR2 = async (
   };
 };
 
+/**
+ * Publishes a block which is already published as an npm package
+ * @param db a database client
+ * @param params.[createdAt] if this block was created previously, an ISO string of when it was created, otherwise null
+ * @param params.pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
+ * @param params.npmPackageName the name of the npm package the block is published as
+ */
 export const publishBlockFromNpm = async (
   db: Db,
-  params: { name: string; npmPackageName: string; user: User },
+  params: {
+    createdAt: string | null;
+    npmPackageName: string;
+    pathWithNamespace: string;
+  },
 ) => {
-  const { name, npmPackageName, user } = params;
-  const shortname = user.shortname;
-  if (!shortname) {
-    throw new Error("User must have completed signup to publish a block");
-  }
+  const { createdAt, pathWithNamespace, npmPackageName } = params;
 
-  const pathWithNamespace = `@${shortname}/${name}`;
+  const blockLinkedToPackage = await getDbBlock({ npmPackageName });
 
-  const [blockWithName, blockLinkedToPackage] = await Promise.all([
-    getDbBlock({ name, author: shortname }),
-    getDbBlock({ npmPackageName }),
-  ]);
-  if (blockWithName) {
-    throw new Error(`Block name '${pathWithNamespace}' already exists`, {
-      cause: { code: "NAME_TAKEN" },
-    });
-  }
   if (isProduction && blockLinkedToPackage) {
     throw new Error(
       `npm package '${npmPackageName}' is already linked to block '${blockLinkedToPackage.pathWithNamespace}'`,
@@ -141,12 +144,15 @@ export const publishBlockFromNpm = async (
     );
   }
 
-  const { expandedMetadata } = await mirrorNpmPackageToR2(
+  const { expandedMetadata } = await mirrorNpmPackageToR2({
+    createdAt,
     npmPackageName,
     pathWithNamespace,
-  );
+  });
 
-  await insertDbBlock(expandedMetadata);
+  await (createdAt
+    ? updateDbBlock(expandedMetadata)
+    : insertDbBlock(expandedMetadata));
 
   return expandedMetadata;
 };

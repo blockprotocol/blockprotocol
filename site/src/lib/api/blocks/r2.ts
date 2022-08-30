@@ -278,9 +278,9 @@ export const validateExpandAndUploadBlockFiles = async ({
    * Wipe the folder before uploading new files - we will stop doing this when we store each version in its own folder
    * @see https://app.asana.com/0/0/1202539910143057/f (internal)
    */
-  await wipeR2BlockFolder(publicPackagePath);
+  await wipeR2BlockFolder(remoteStoragePrefix);
 
-  await Promise.all(uploadBlockFilesToR2(localFolderPath, publicPackagePath));
+  await Promise.all(uploadBlockFilesToR2(localFolderPath, remoteStoragePrefix));
 
   return { expandedMetadata };
 };

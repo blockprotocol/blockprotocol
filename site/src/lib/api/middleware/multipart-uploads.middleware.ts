@@ -23,9 +23,12 @@ export type Field = {
   value: string;
 };
 
-export type MultipartExtensions = {
-  uploads?: Record<string, UploadedFileBuffer>;
-  fields?: Record<string, Field>;
+export type MultipartExtensions<
+  FileFieldName extends string = string,
+  PrimitiveFieldName extends string = string,
+> = {
+  uploads?: Record<FileFieldName, UploadedFileBuffer>;
+  fields?: Record<PrimitiveFieldName, Field>;
 };
 
 const parseForm = async (
@@ -106,7 +109,7 @@ export const multipartUploads: (
         res.status(400).json(
           formatErrors({
             msg: error.message,
-            param: "image",
+            param: "file upload",
           }),
         );
       } else {

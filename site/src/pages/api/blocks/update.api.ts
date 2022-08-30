@@ -11,32 +11,27 @@ import {
   formatErrors,
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
-import {
-  createPathWithNamespace,
-  generateSlug,
-  revalidateMultiBlockPages,
-} from "./shared";
+import { createPathWithNamespace, revalidateMultiBlockPages } from "./shared";
 
-// The body we expect when publishing an npm-linked block
-type ApiNpmBlockCreateRequest = {
+// The body we expect when updating an npm-linked block
+type ApiNpmBlockUpdateRequest = {
   blockName: string;
-  npmPackageName: string;
 };
 
-// The body we expect when provided a tarball of block source directly
-type ApiTarballBlockCreateRequest = MultipartExtensions<"tarball", "blockName">;
+// The body we expect when updating a directly-uploaded block
+type ApiTarballBlockUpdateRequest = MultipartExtensions<"tarball", "blockName">;
 
-export type ApiBlockCreateRequest =
-  | ApiNpmBlockCreateRequest
-  | ApiTarballBlockCreateRequest;
+export type ApiBlockUpdateRequest =
+  | ApiNpmBlockUpdateRequest
+  | ApiTarballBlockUpdateRequest;
 
-export type ApiTypeCreateResponse = {
+export type ApiBlockUpdateResponse = {
   block: ExpandedBlockMetadata;
 };
 
 export default createAuthenticatedHandler<
-  ApiBlockCreateRequest,
-  ApiTypeCreateResponse
+  ApiBlockUpdateRequest,
+  ApiBlockUpdateResponse
 >()
   .use(
     multipartUploads({
@@ -74,45 +69,62 @@ export default createAuthenticatedHandler<
       );
     }
 
-    const slugifiedBlockName = generateSlug(blockName);
-
-    const blockWithName = await getDbBlock({
-      name: slugifiedBlockName,
+    const existingBlock = await getDbBlock({
+      name: blockName,
       author: shortname,
     });
 
-    if (blockWithName) {
-      throw new Error(
-        `Block name '${slugifiedBlockName}' already exists in account ${shortname}`,
-        {
-          cause: { code: "NAME_TAKEN" },
-        },
+    if (!existingBlock) {
+      return res.status(404).json(
+        formatErrors({
+          code: "NOT_FOUND",
+          msg: `Block name '${blockName}' does not exist in account ${shortname}`,
+        }),
+      );
+    }
+
+    const tarball = "uploads" in req.body && req.body.uploads?.tarball.buffer;
+
+    if (existingBlock.npmPackageName && tarball) {
+      return res.status(404).json(
+        formatErrors({
+          code: "INVALID_INPUT",
+          msg: `Block name '${blockName}' is linked to an npm package, but you provided a tarball directly.`,
+        }),
+      );
+    } else if (!existingBlock.npmPackageName && !tarball) {
+      return res.status(404).json(
+        formatErrors({
+          code: "INVALID_INPUT",
+          msg: `You must provide a tarball containing the new files for '${blockName}'.`,
+        }),
+      );
+    }
+
+    if (!existingBlock.createdAt) {
+      return res.status(500).json(
+        formatErrors({
+          code: "UNEXPECTED_STATE",
+          msg: `Block name '${blockName}' has no 'createdAt' Date set.`,
+        }),
       );
     }
 
     const pathWithNamespace = createPathWithNamespace(blockName, shortname);
 
-    if (!("npmPackageName" in req.body) && !req.body.uploads?.tarball) {
-      return res.status(400).json(
-        formatErrors({
-          msg: "You must provide a 'tarball' file upload if not providing an npmPackageName",
-          code: "INVALID_INPUT",
-        }),
-      );
-    }
-
     try {
-      const block = await ("npmPackageName" in req.body
+      const block = await (existingBlock.npmPackageName
         ? publishBlockFromNpm(db, {
-            createdAt: null,
-            npmPackageName: req.body.npmPackageName,
+            createdAt: existingBlock.createdAt,
+            npmPackageName: existingBlock.npmPackageName,
             pathWithNamespace,
           })
         : publishBlockFromTarball(db, {
-            createdAt: null,
+            createdAt: existingBlock.createdAt,
             pathWithNamespace,
-            tarball: req.body.uploads!.tarball.buffer,
+            tarball: tarball as Buffer, // we return an error if neither npmPackageName nor tarball are truthy
           }));
+
       await revalidateMultiBlockPages(res, shortname);
       return res.status(200).json({ block });
     } catch (err) {
