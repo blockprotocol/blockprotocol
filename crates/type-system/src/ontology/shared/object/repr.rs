@@ -4,7 +4,9 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{uri::BaseUri, ParsePropertyTypeObjectError, ValidateUri};
+use crate::{
+    repr, uri::BaseUri, ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
+};
 
 /// Will serialize as a constant value `"object"`
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -24,14 +26,14 @@ pub struct Object<T> {
     required: Vec<String>,
 }
 
-impl<T, R> TryFrom<Object<R>> for super::Object<T, 1>
-where
-    T: TryFrom<R> + ValidateUri,
-    <T as TryFrom<R>>::Error: Debug,
+impl TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>
+    for super::Object<ValueOrArray<PropertyTypeReference>, 1>
 {
     type Error = ParsePropertyTypeObjectError;
 
-    fn try_from(object_repr: Object<R>) -> Result<Self, Self::Error> {
+    fn try_from(
+        object_repr: Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
+    ) -> Result<Self, Self::Error> {
         let properties = object_repr
             .properties
             .into_iter()
@@ -39,12 +41,11 @@ where
                 Ok((
                     BaseUri::new(base_uri)
                         .map_err(ParsePropertyTypeObjectError::InvalidPropertyKey)?,
-                    val.try_into().map_err(|err| {
-                        unreachable!("Rustc says this err is infallible {:?}", err)
-                    })?,
+                    val.try_into()?,
                 ))
             })
-            .collect::<Result<HashMap<BaseUri, _>, Self::Error>>()?;
+            .collect::<Result<HashMap<BaseUri, ValueOrArray<PropertyTypeReference>>, Self::Error>>(
+            )?;
         let required = object_repr
             .required
             .into_iter()

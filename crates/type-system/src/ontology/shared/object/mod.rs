@@ -80,14 +80,15 @@ mod tests {
     use super::*;
     use crate::{
         repr, uri::VersionedUri, utils::tests::ensure_failed_validation,
-        ParsePropertyTypeObjectError, PropertyTypeReference,
+        ParsePropertyTypeObjectError, PropertyTypeReference, ValueOrArray,
     };
 
-    type Object = super::Object<PropertyTypeReference, 1>;
+    type ObjectRepr = repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>;
+    type Object = super::Object<ValueOrArray<PropertyTypeReference>, 1>;
 
     #[test]
     fn empty() {
-        ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
+        ensure_failed_validation::<ObjectRepr, Object>(
             &json!({
                 "type": "object",
                 "properties": {}
@@ -103,7 +104,7 @@ mod tests {
 
     #[test]
     fn invalid_uri() {
-        ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
+        ensure_failed_validation::<ObjectRepr, Object>(
             &json!({
                 "type": "object",
                 "properties": {
@@ -121,7 +122,7 @@ mod tests {
 
     #[test]
     fn invalid_required() {
-        ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
+        ensure_failed_validation::<ObjectRepr, Object>(
             &json!({
                 "type": "object",
                 "properties": {
