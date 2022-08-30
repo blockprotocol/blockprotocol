@@ -1,21 +1,17 @@
-import { BlockMetadata } from "@blockprotocol/core";
 import execa from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 import { Db } from "mongodb";
 import path from "node:path";
-import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
 
-import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
+import { ExpandedBlockMetadata } from "../../blocks";
 import { isProduction } from "../../config";
 import { User } from "../model/user.model";
 import { getDbBlock, insertDbBlock } from "./db";
-import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
-
-const stripLeadingAt = (pathWithNamespace: string) =>
-  pathWithNamespace.replace(/^@/, "");
+import { validateExpandAndUploadBlockFiles } from "./r2";
+import { isRunningOnVercel } from "./shared";
 
 /**
  * Unpacks and uploads an npm package to remote storage
@@ -28,8 +24,6 @@ const mirrorNpmPackageToR2 = async (
 ): Promise<{
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
-  const isRunningOnVercel = !!process.env.VERCEL;
-
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
     tmpdir: isRunningOnVercel ? "/tmp" : undefined, // Vercel allows limited file system access
     unsafeCleanup: true,
@@ -56,7 +50,7 @@ const mirrorNpmPackageToR2 = async (
     ));
 
     await tar.x({
-      // tar is not availabled on deployed lambdas
+      // tar is not available on deployed lambdas
       cwd: npmTarballFolder,
       file: path.resolve(npmTarballFolder, tarballFilename),
     });
@@ -67,16 +61,9 @@ const mirrorNpmPackageToR2 = async (
     );
   }
 
-  // check the package contents and retrieve useful metadata
   const packageFolder = path.resolve(npmTarballFolder, "package");
 
-  // get the package.json - we know this exists and is valid JSON, since it's an npm-published package
-  const packageJsonString = fs
-    .readFileSync(path.resolve(packageFolder, "package.json"))
-    .toString();
-  const packageJson = JSON.parse(packageJsonString);
-
-  // get the block-metadata.json
+  // Find the block's source folder by locating the block-metadata.json
   const metadataJsonPath = (
     await globby("**/block-metadata.json", {
       absolute: true,
@@ -88,19 +75,6 @@ const mirrorNpmPackageToR2 = async (
     throw new Error("No block-metadata.json present in package", {
       cause: { code: "INVALID_PACKAGE_CONTENTS" },
     });
-  }
-
-  let metadataJson;
-  try {
-    const metadataJsonString = fs.readFileSync(metadataJsonPath).toString();
-    metadataJson = JSON.parse(metadataJsonString);
-  } catch (err) {
-    throw new Error(
-      `Could not parse block-metadata.json: ${(err as Error).message}`,
-      {
-        cause: { code: "INVALID_PACKAGE_CONTENTS" },
-      },
-    );
   }
 
   const blockSourceFolder = path.resolve(
@@ -123,124 +97,12 @@ const mirrorNpmPackageToR2 = async (
     );
   }
 
-  // check if we have 'example-graph.json', which we then construct a URL for in the extended matadata
-  const includesExampleGraph = await fs.pathExists(
-    path.resolve(blockSourceFolder, "example-graph.json"),
-  );
-
-  // check block-metadata.json contains required properties
-  for (const key of ["blockType", "protocol", "schema", "source", "version"]) {
-    if (!metadataJson[key]) {
-      throw new Error(`block-metadata.json must contain a '${key}' property`, {
-        cause: { code: "INVALID_PACKAGE_CONTENTS" },
-      });
-    }
-  }
-
-  // check that the source file actually exists
-  const sourcePath = metadataJson.source;
-  const sourceFileExists = await fs.pathExists(
-    path.resolve(blockSourceFolder, sourcePath),
-  );
-
-  if (!sourceFileExists) {
-    throw new Error(
-      `block-metadata.json 'source' path '${sourcePath}' does not exist`,
-      {
-        cause: { code: "INVALID_PACKAGE_CONTENTS" },
-      },
-    );
-  }
-
-  // check that the schema actually exists
-  const schemaPath = metadataJson.schema;
-  const missingSchemaError = new Error(
-    `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
-    {
-      cause: { code: "INVALID_PACKAGE_CONTENTS" },
-    },
-  );
-  if (schemaPath.startsWith("http")) {
-    try {
-      await fetch(schemaPath, { method: "HEAD" });
-    } catch {
-      throw missingSchemaError;
-    }
-  } else {
-    const schemaFileExists = await fs.pathExists(
-      path.resolve(blockSourceFolder, schemaPath),
-    );
-    if (!schemaFileExists) {
-      throw missingSchemaError;
-    }
-  }
-
-  const now = new Date().toISOString();
-
-  // for blocks developed locally, add a prefix to the storage URL - the R2 bucket is shared across all dev environments
-  let storageNamespacePrefix = "";
-  if (!isRunningOnVercel) {
-    const gitConfigUserNameResult = await execa("git", [
-      "config",
-      "--get",
-      "user.name",
-    ]);
-    const userName = gitConfigUserNameResult.stdout.trim();
-    storageNamespacePrefix = `local-dev/${slugify(userName, {
-      lower: true,
-      strict: true,
-    })}/`;
-  }
-
-  /**
-   * In future we will store each version in its own folder, and add the version to the folder path
-   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
-   */
-  const remoteStoragePrefix = `${storageNamespacePrefix}${stripLeadingAt(
-    pathWithNamespace,
-  )}`;
-  const publicPackagePath = `${publicBaseR2Url}/${remoteStoragePrefix}`;
-
-  const sourceInformation = {
-    blockDistributionFolderUrl: publicPackagePath,
+  const { expandedMetadata } = await validateExpandAndUploadBlockFiles({
+    createdAt: null,
+    localFolderPath: blockSourceFolder,
     npmPackageName,
     pathWithNamespace,
-    repository:
-      !!packageJson.repository &&
-      (typeof packageJson.repository === "object" ||
-        typeof packageJson.repository === "string")
-        ? packageJson.repository
-        : undefined,
-    repoDirectory:
-      typeof packageJson.repository === "object" &&
-      packageJson.repository &&
-      "directory" in packageJson.repository &&
-      typeof packageJson.repository.directory === "string"
-        ? packageJson.repository?.directory
-        : undefined,
-  };
-
-  const expandedMetadata = expandBlockMetadata({
-    metadata: metadataJson as BlockMetadata, // @todo add a comprehensive guard/validator for block-metadata.json
-    source: sourceInformation,
-    timestamps: { createdAt: now, lastUpdated: now },
-    includesExampleGraph,
   });
-
-  fs.writeFileSync(
-    path.resolve(packageFolder, metadataJsonPath),
-    JSON.stringify(expandedMetadata, undefined, 2),
-  );
-
-  /**
-   * Wipe the folder before uploading new files - we will stop doing this when we store each version in its own folder
-   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
-   */
-  await wipeR2BlockFolder(remoteStoragePrefix);
-
-  await Promise.all(
-    uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
-  );
 
   void cleanupDistFolder();
 
