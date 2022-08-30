@@ -26,9 +26,13 @@
     "react.d.ts"
   ],
   "scripts": {
+    "fix:eslint": "eslint --fix \"**/*\"",
+    "lint:eslint": "eslint \"**/*\"",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@types/react": "^18.0.15"
+    "@local/eslint-config": "*",
+    "@types/react": "^18.0.15",
+    "eslint": "8.23.0"
   }
 }

@@ -16,6 +16,10 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "@local/eslint-config": "*",
+    "eslint": "8.23.0",
+    "fix:eslint": "eslint --fix \"**/*\"",
+    "lint:eslint": "eslint \"**/*\"",
     "lint:tsc": "tsc --noEmit"
   },
   "collaborators": [

@@ -1,4 +1,4 @@
-const sharedNoRestrictedImportsConfig = {
+const noRestrictedImportsConfig = {
   paths: [
     {
       name: "lodash",
@@ -80,7 +80,7 @@ module.exports = {
         assert: "either",
       },
     ],
-    "no-restricted-imports": ["error", sharedNoRestrictedImportsConfig],
+    "no-restricted-imports": ["error", noRestrictedImportsConfig],
     "react/function-component-definition": [
       "error",
       {
@@ -310,17 +310,13 @@ module.exports = {
     },
     {
       files: ["site/**"],
-      parserOptions: {
-        tsconfigRootDir: `${__dirname}/../../../site`,
-        project: "tsconfig.json",
-      },
       rules: {
         "no-restricted-imports": [
           "error",
           {
-            ...sharedNoRestrictedImportsConfig,
+            ...noRestrictedImportsConfig,
             paths: [
-              ...sharedNoRestrictedImportsConfig.paths,
+              ...noRestrictedImportsConfig.paths,
               {
                 // @todo Remove playwright-test-coverage when https://github.com/microsoft/playwright/issues/7030 is resolved
                 name: "@playwright/test",

@@ -15,11 +15,15 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "fix:eslint": "eslint --fix \"**/*\"",
+    "lint:eslint": "eslint \"**/*\"",
     "lint:tsc": "tsc --noEmit",
     "test": "jest"
   },
   "devDependencies": {
+    "@local/eslint-config": "*",
     "@types/jest": "28.1.4",
+    "eslint": "8.23.0",
     "jest": "28.1.2",
     "ts-jest": "28.0.5"
   },
