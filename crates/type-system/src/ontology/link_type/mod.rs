@@ -93,32 +93,18 @@ impl From<LinkType> for serde_json::Value {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//
-//     fn test_link_type_schema(schema: &serde_json::Value) -> LinkType {
-//         let link_type: LinkType = serde_json::from_value(schema.clone()).expect("invalid
-// schema");         assert_eq!(
-//             serde_json::to_value(link_type.clone()).expect("could not serialize"),
-//             *schema,
-//             "{link_type:#?}"
-//         );
-//         link_type
-//     }
-//
-//     #[test]
-//     fn owns() {
-//         test_link_type_schema(
-//             &serde_json::from_str(crate::test_data::link_type::OWNS_V2).expect("invalid JSON"),
-//         );
-//     }
-//
-//     #[test]
-//     fn submitted_by() {
-//         test_link_type_schema(
-//             &serde_json::from_str(crate::test_data::link_type::SUBMITTED_BY_V1)
-//                 .expect("invalid JSON"),
-//         );
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::{test_data, utils::tests::check_serialization_from_str};
+
+    #[test]
+    fn owns() {
+        check_serialization_from_str::<LinkType>(test_data::link_type::OWNS_V2, None);
+    }
+
+    #[test]
+    fn submitted_by() {
+        check_serialization_from_str::<LinkType>(test_data::link_type::SUBMITTED_BY_V1, None);
+    }
+}

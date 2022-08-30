@@ -53,33 +53,3 @@ impl From<super::LinkType> for LinkType {
         }
     }
 }
-
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-//
-//     fn test_link_type_schema(schema: &serde_json::Value) -> LinkType {
-//         let link_type: LinkType = serde_json::from_value(schema.clone()).expect("invalid
-// schema");         assert_eq!(
-//             serde_json::to_value(link_type.clone()).expect("could not serialize"),
-//             *schema,
-//             "{link_type:#?}"
-//         );
-//         link_type
-//     }
-//
-//     #[test]
-//     fn owns() {
-//         test_link_type_schema(
-//             &serde_json::from_str(crate::test_data::link_type::OWNS_V2).expect("invalid JSON"),
-//         );
-//     }
-//
-//     #[test]
-//     fn submitted_by() {
-//         test_link_type_schema(
-//             &serde_json::from_str(crate::test_data::link_type::SUBMITTED_BY_V1)
-//                 .expect("invalid JSON"),
-//         );
-//     }
-// }
