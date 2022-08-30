@@ -1,6 +1,8 @@
 use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{uri::VersionedUri, ParseLinkTypeError};
 
@@ -11,9 +13,11 @@ enum LinkTypeTag {
     LinkType,
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct LinkType {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "'linkType'"))]
     kind: LinkTypeTag,
     #[serde(rename = "$id")]
     id: String,

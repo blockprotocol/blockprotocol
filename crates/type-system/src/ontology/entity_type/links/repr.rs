@@ -1,12 +1,15 @@
 use std::{collections::HashMap, str::FromStr};
 
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
     repr, uri::VersionedUri, EntityTypeReference, ParseEntityTypeReferenceArrayError,
     ParseLinksError,
 };
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Links {
@@ -60,6 +63,7 @@ impl From<super::Links> for Links {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct MaybeOrderedArray<T> {
@@ -97,6 +101,7 @@ where
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged, deny_unknown_fields)]
 pub enum ValueOrMaybeOrderedArray<T> {

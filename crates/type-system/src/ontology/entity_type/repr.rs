@@ -1,6 +1,8 @@
 use std::{collections::HashMap, str::FromStr};
 
 use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
 
 use crate::{
     repr,
@@ -15,19 +17,24 @@ enum EntityTypeTag {
     EntityType,
 }
 
-/// Intermediate representation used during deserialization.
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct EntityType {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "'entityType'"))]
     kind: EntityTypeTag,
     #[serde(rename = "$id")]
     id: String,
     title: String,
     plural_title: String,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+    // TODO - Improve the typing of the values
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<VersionedUri, any>"))]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     default: HashMap<String, serde_json::Value>,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<VersionedUri, any>"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
@@ -124,6 +131,7 @@ impl From<super::EntityType> for EntityType {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct EntityTypeReference {

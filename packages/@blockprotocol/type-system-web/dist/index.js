@@ -119,12 +119,12 @@ function takeObject(idx) {
     return ret;
 }
 /**
-* @param {any} data_type_obj
+* @param {any} property_type_obj
 * @returns {any}
 */
-export function validateDataType(data_type_obj) {
+export function validatePropertyType(property_type_obj) {
     try {
-        const ret = wasm.validateDataType(addBorrowedObject(data_type_obj));
+        const ret = wasm.validatePropertyType(addBorrowedObject(property_type_obj));
         return takeObject(ret);
     } finally {
         heap[stack_pointer++] = undefined;
@@ -132,12 +132,12 @@ export function validateDataType(data_type_obj) {
 }
 
 /**
-* @param {any} property_type_obj
+* @param {any} data_type_obj
 * @returns {any}
 */
-export function validatePropertyType(property_type_obj) {
+export function validateDataType(data_type_obj) {
     try {
-        const ret = wasm.validatePropertyType(addBorrowedObject(property_type_obj));
+        const ret = wasm.validateDataType(addBorrowedObject(data_type_obj));
         return takeObject(ret);
     } finally {
         heap[stack_pointer++] = undefined;
