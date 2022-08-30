@@ -14,7 +14,7 @@ import { isRunningOnVercel } from "./shared";
 
 /**
  * Unpacks and uploads an npm package to remote storage
- * @param [createdAt] if this block was created previously, an ISO string of when it was created, otherwise null
+ * @param createdAt if this block was created previously, an ISO string of when it was created, otherwise null
  * @param npmPackageName the name of the npm package to mirror
  * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  */
@@ -119,7 +119,7 @@ const mirrorNpmPackageToR2 = async ({
 /**
  * Publishes a block which is already published as an npm package
  * @param db a database client
- * @param params.[createdAt] if this block was created previously, an ISO string of when it was created, otherwise null
+ * @param params.createdAt if this block was created previously, an ISO string of when it was created, otherwise null
  * @param params.pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  * @param params.npmPackageName the name of the npm package the block is published as
  */

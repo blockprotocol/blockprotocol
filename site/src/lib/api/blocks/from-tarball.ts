@@ -11,7 +11,7 @@ import { isRunningOnVercel } from "./shared";
 
 /**
  * Unpacks and uploads a tarball to remote storage
- * @param [createdAt] if this block was created previously, an ISO string of when it was created, otherwise null
+ * @param createdAt if this block was created previously, an ISO string of when it was created, otherwise null
  * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  * @param tarball the tarball containing the block's latest files
  */
@@ -62,7 +62,7 @@ const mirrorTarballToR2 = async ({
 /**
  * Publishes a block using a tarball containing its source files
  * @param db a database client
- * @param params.[createdAt] if this block was created previously, an ISO string of when it was created, otherwise null
+ * @param params.createdAt åif this block was created previously, an ISO string of when it was created, otherwise null
  * @param params.pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  * @param params.tarball the tarball containing the block's latest files
  */
