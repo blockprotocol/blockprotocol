@@ -48,12 +48,6 @@
 mod ontology;
 mod utils;
 
-// TODO - remove in follow-up PR as it has a memory leak, we shouldn't always trust the
-//  recommendations
-#[cfg(target_arch = "wasm32")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
 pub use ontology::*;
 
 #[cfg(test)]
