@@ -44,6 +44,15 @@ type MockBlockDockProps = {
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
   blockName?: string;
+  blockInfo?: {
+    blockType: {
+      entryPoint: "react" | "html" | "custom-element";
+    };
+    displayName: string;
+    icon: string;
+    image: string;
+    protocol: string;
+  };
 };
 
 /**
@@ -72,6 +81,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialLinkedAggregations,
   readonly: initialReadonly,
   blockName,
+  blockInfo,
 }) => {
   const {
     blockEntity,
@@ -213,6 +223,13 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       datastore={datastore}
       blockType={blockType}
       blockName={blockName}
+      blockInfo={
+        blockInfo ?? {
+          blockType: {
+            entryPoint: blockType,
+          },
+        }
+      }
     >
       {!debugMode ? (
         <div className="mbd-non-debug-mode-wrapper">
