@@ -24,6 +24,7 @@ pub use entity_type::{
     },
     EntityType, EntityTypeReference, ParseEntityTypeError,
 };
+pub use link_type::{LinkType, ParseLinkTypeError};
 pub use property_type::{
     ParsePropertyTypeError, PropertyType, PropertyTypeReference, PropertyValues,
 };
@@ -51,6 +52,7 @@ pub(crate) mod repr {
             links::repr::{Links, ValueOrMaybeOrderedArray},
             repr::{EntityType, EntityTypeReference},
         },
+        link_type::repr::LinkType,
         property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
         shared::{
             array::repr::{Array, ValueOrArray},
