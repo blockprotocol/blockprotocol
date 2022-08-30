@@ -19,6 +19,7 @@ import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigati
 import { ListViewCard } from "../../components/pages/user/list-view-card";
 import { apiClient } from "../../lib/api-client";
 import { ExpandedBlockMetadata } from "../../lib/blocks";
+import { shouldAllowBlockPublishing } from "../../lib/config";
 import { formatUpdatedAt } from "../../util/html-utils";
 
 const BlocksPage: AuthWallPageContent = ({ user }) => {
@@ -54,16 +55,18 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
       <PageContainer>
         <Box display="flex" alignItems="center" gap={2} flexWrap="wrap" mb={4}>
           <Typography variant="bpHeading2">Published Blocks</Typography>
-          <LinkButton
-            startIcon={<FontAwesomeIcon icon={faPlus} />}
-            size="small"
-            squared
-            variant="tertiary"
-            color="gray"
-            href="/blocks/publish"
-          >
-            Add new block
-          </LinkButton>
+          {shouldAllowBlockPublishing && (
+            <LinkButton
+              startIcon={<FontAwesomeIcon icon={faPlus} />}
+              size="small"
+              squared
+              variant="tertiary"
+              color="gray"
+              href="/blocks/publish"
+            >
+              Add new block
+            </LinkButton>
+          )}
         </Box>
 
         {!!recentlyCreatedBlock && (
