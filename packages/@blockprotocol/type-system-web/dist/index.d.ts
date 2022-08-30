@@ -1,26 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-type __ParseOneOfErrorParsePropertyTypeError = ParsePropertyTypeError;
-type __ParseOneOfErrorValidationError = ValidationError;
-declare namespace ParseOneOfError {
-    export type PropertyValuesError = { reason: "PropertyValuesError"; inner: __ParseOneOfErrorParsePropertyTypeError };
-    export type ValidationError = { reason: "ValidationError"; inner: __ParseOneOfErrorValidationError };
-}
-
-export type ParseOneOfError = ParseOneOfError.PropertyValuesError | ParseOneOfError.ValidationError;
-
-export interface DataTypeReference {
-    $ref: string;
-}
-
-export interface DataType extends Record<string, any> {
-    kind: 'dataType';
-    $id: string;
-    title: string;
-    description?: string;
-    type: string;
-}
-
 type __ValidationErrorBaseUri = BaseUri;
 type __ValidationErrorVersionedUri = VersionedUri;
 declare namespace ValidationError {
@@ -54,74 +33,17 @@ declare namespace ParseBaseUriError {
 
 export type ParseBaseUriError = ParseBaseUriError.MissingTrailingSlash | ParseBaseUriError.UrlParseError | ParseBaseUriError.CannotBeABase;
 
-declare namespace Result {
-    export type Ok<T> = { type: "Ok"; inner: T };
-    export type Err<E> = { type: "Err"; inner: E };
-}
-
-export type Result<T, E> = Result.Ok<T> | Result.Err<E>;
-
-
-/**
- * Checks if a given Data Type is correctly formed
- *
- * @param {DataType} dataType - The Data Type object to validate.
- * @returns {Result} - @todo
- */
-export function validateDataType(dataType: DataType): Result<undefined, ParseDataTypeError>;
-
-
-export interface PropertyTypeReference {
+export interface DataTypeReference {
     $ref: string;
 }
 
-type __PropertyValuesDataTypeReference = DataTypeReference;
-type __PropertyValuesObject<A> = Object<A>;
-type __PropertyValuesPropertyTypeReference = PropertyTypeReference;
-type __PropertyValuesValueOrArray<A> = ValueOrArray<A>;
-declare namespace PropertyValues {
-    export type DataTypeReference = __PropertyValuesDataTypeReference;
-    export type PropertyTypeObject = __PropertyValuesObject<__PropertyValuesValueOrArray<__PropertyValuesPropertyTypeReference>>;
-    export type ArrayOfPropertyValues = Array<OneOf<PropertyValues>>;
-}
-
-export type PropertyValues = PropertyValues.DataTypeReference | PropertyValues.PropertyTypeObject | PropertyValues.ArrayOfPropertyValues;
-
-export interface PropertyType extends OneOf<PropertyValues> {
-    kind: 'propertyType';
+export interface DataType extends Record<string, any> {
+    kind: 'dataType';
     $id: string;
     title: string;
-    pluralTitle: string;
     description?: string;
+    type: string;
 }
-
-
-/**
- * Checks if a given Property Type is correctly formed
- *
- * @param {PropertyType} propertyType - The Property Type object to validate.
- * @returns {Result} - @todo
- */
-export function validatePropertyType(propertyType: PropertyType): Result<undefined, ParsePropertyTypeError>;
-
-
-type __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError = ParseVersionedUriError;
-declare namespace ParsePropertyTypeReferenceArrayError {
-    export type MissingItems = { reason: "MissingItems"; inner?: null };
-    export type InvalidItems = { reason: "InvalidItems"; inner: __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError };
-    export type InvalidJson = { reason: "InvalidJson"; inner: string };
-}
-
-export type ParsePropertyTypeReferenceArrayError = ParsePropertyTypeReferenceArrayError.MissingItems | ParsePropertyTypeReferenceArrayError.InvalidItems | ParsePropertyTypeReferenceArrayError.InvalidJson;
-
-type __ParseOneOfArrayErrorParseOneOfError = ParseOneOfError;
-declare namespace ParseOneOfArrayError {
-    export type MissingItems = { reason: "MissingItems"; inner?: null };
-    export type InvalidItems = { reason: "InvalidItems"; inner: __ParseOneOfArrayErrorParseOneOfError };
-    export type InvalidJson = { reason: "InvalidJson"; inner: string };
-}
-
-export type ParseOneOfArrayError = ParseOneOfArrayError.MissingItems | ParseOneOfArrayError.InvalidItems | ParseOneOfArrayError.InvalidJson;
 
 type __ParsePropertyTypeObjectErrorParseBaseUriError = ParseBaseUriError;
 type __ParsePropertyTypeObjectErrorParsePropertyTypeReferenceArrayError = ParsePropertyTypeReferenceArrayError;
@@ -153,14 +75,84 @@ declare namespace ParsePropertyTypeError {
 
 export type ParsePropertyTypeError = ParsePropertyTypeError.InvalidVersionedUri | ParsePropertyTypeError.InvalidDataTypeReference | ParsePropertyTypeError.InvalidPropertyTypeObject | ParsePropertyTypeError.InvalidOneOf | ParsePropertyTypeError.InvalidArrayItems | ParsePropertyTypeError.InvalidJson;
 
-export interface OneOf<T> {
-    oneOf: T[];
+
+/**
+ * Checks if a given Property Type is correctly formed
+ *
+ * @param {PropertyType} propertyType - The Property Type object to validate.
+ * @returns {(Result.Ok|Result.Err<ParsePropertyTypeError>)} - an Ok with null inner if valid, or an Err with an inner ParsePropertyTypeError  
+ */
+export function validatePropertyType(propertyType: PropertyType): Result<undefined, ParsePropertyTypeError>;
+
+
+type __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParsePropertyTypeReferenceArrayError {
+    export type InvalidReference = { reason: "InvalidReference"; inner: __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
 }
 
-export interface Object<T> {
-    type: 'object';
-    properties: Record<string, T>;
-    required?: string[];
+export type ParsePropertyTypeReferenceArrayError = ParsePropertyTypeReferenceArrayError.InvalidReference | ParsePropertyTypeReferenceArrayError.InvalidJson;
+
+type __ParseOneOfArrayErrorParseOneOfError = ParseOneOfError;
+declare namespace ParseOneOfArrayError {
+    export type InvalidItems = { reason: "InvalidItems"; inner: __ParseOneOfArrayErrorParseOneOfError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseOneOfArrayError = ParseOneOfArrayError.InvalidItems | ParseOneOfArrayError.InvalidJson;
+
+declare namespace Result {
+    export type Ok<T> = { type: "Ok"; inner: T };
+    export type Err<E> = { type: "Err"; inner: E };
+}
+
+export type Result<T, E> = Result.Ok<T> | Result.Err<E>;
+
+type __ParseOneOfErrorParsePropertyTypeError = ParsePropertyTypeError;
+type __ParseOneOfErrorValidationError = ValidationError;
+declare namespace ParseOneOfError {
+    export type PropertyValuesError = { reason: "PropertyValuesError"; inner: __ParseOneOfErrorParsePropertyTypeError };
+    export type ValidationError = { reason: "ValidationError"; inner: __ParseOneOfErrorValidationError };
+}
+
+export type ParseOneOfError = ParseOneOfError.PropertyValuesError | ParseOneOfError.ValidationError;
+
+export interface PropertyTypeReference {
+    $ref: string;
+}
+
+type __PropertyValuesDataTypeReference = DataTypeReference;
+type __PropertyValuesObject<A> = Object<A>;
+type __PropertyValuesPropertyTypeReference = PropertyTypeReference;
+type __PropertyValuesValueOrArray<A> = ValueOrArray<A>;
+declare namespace PropertyValues {
+    export type DataTypeReference = __PropertyValuesDataTypeReference;
+    export type PropertyTypeObject = __PropertyValuesObject<__PropertyValuesValueOrArray<__PropertyValuesPropertyTypeReference>>;
+    export type ArrayOfPropertyValues = Array<OneOf<PropertyValues>>;
+}
+
+export type PropertyValues = PropertyValues.DataTypeReference | PropertyValues.PropertyTypeObject | PropertyValues.ArrayOfPropertyValues;
+
+export interface PropertyType extends OneOf<PropertyValues> {
+    kind: 'propertyType';
+    $id: string;
+    title: string;
+    pluralTitle: string;
+    description?: string;
+}
+
+
+/**
+ * Checks if a given Data Type is correctly formed
+ *
+ * @param {DataType} dataType - The Data Type object to validate.
+ * @returns {(Result.Ok|Result.Err<ParseDataTypeError>)} - an Ok with null inner if valid, or an Err with an inner ParseDataTypeError  
+ */
+export function validateDataType(dataType: DataType): Result<undefined, ParseDataTypeError>;
+
+
+export interface OneOf<T> {
+    oneOf: T[];
 }
 
 type __ValueOrArrayArray<A> = Array<A>;
@@ -178,6 +170,14 @@ export interface Array<T> {
     maxItems?: number;
 }
 
+type __ParseDataTypeErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParseDataTypeError {
+    export type InvalidVersionedUri = { reason: "InvalidVersionedUri"; inner: __ParseDataTypeErrorParseVersionedUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseDataTypeError = ParseDataTypeError.InvalidVersionedUri | ParseDataTypeError.InvalidJson;
+
 export type VersionedUri = `${string}/v/${number}`;
 
 
@@ -185,7 +185,8 @@ export type VersionedUri = `${string}/v/${number}`;
  * Checks if a given URL string is a valid base URL.
  * 
  * @param {BaseUri} uri - The URL string.
- * @returns {Result} - @todo
+ * @returns {(Result.Ok|Result.Err<ParseBaseUriError>)} - an Ok with an inner of the string as a
+ * BaseUri if valid, or an Err with an inner ParseBaseUriError  
  */
 export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>;
 
@@ -195,7 +196,8 @@ export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>
  * Checks if a given URL string is a Block Protocol compliant Versioned URI.
  *
  * @param {string} uri - The URL string.
- * @returns {Result} - @todo
+ * @returns {(Result.Ok|Result.Err<ParseVersionedUriError>)} - an Ok with an inner of the string as 
+ * a VersionedUri if valid, or an Err with an inner ParseVersionedUriError  
  */
 export function validateVersionedUri(uri: string): Result<VersionedUri, ParseVersionedUriError>;
 
@@ -220,23 +222,21 @@ export function extractBaseUri(uri: VersionedUri): BaseUri;
 export function extractVersion(uri: VersionedUri): number;
 
 
-export type BaseUri = string;
-
-type __ParseDataTypeErrorParseVersionedUriError = ParseVersionedUriError;
-declare namespace ParseDataTypeError {
-    export type InvalidVersionedUri = { reason: "InvalidVersionedUri"; inner: __ParseDataTypeErrorParseVersionedUriError };
-    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+export interface Object<T> {
+    type: 'object';
+    properties: Record<string, T>;
+    required?: string[];
 }
 
-export type ParseDataTypeError = ParseDataTypeError.InvalidVersionedUri | ParseDataTypeError.InvalidJson;
+export type BaseUri = string;
 
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly validateDataType: (a: number) => number;
   readonly validatePropertyType: (a: number) => number;
+  readonly validateDataType: (a: number) => number;
   readonly validateBaseUri: (a: number, b: number) => number;
   readonly validateVersionedUri: (a: number, b: number) => number;
   readonly extractBaseUri: (a: number, b: number, c: number) => void;

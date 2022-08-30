@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-export function validateDataType(a: number): number;
 export function validatePropertyType(a: number): number;
+export function validateDataType(a: number): number;
 export function validateBaseUri(a: number, b: number): number;
 export function validateVersionedUri(a: number, b: number): number;
 export function extractBaseUri(a: number, b: number, c: number): void;
