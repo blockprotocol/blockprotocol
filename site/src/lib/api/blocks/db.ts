@@ -1,7 +1,6 @@
 import { ExpandedBlockMetadata } from "../../blocks";
 import { connectToDatabase } from "../mongodb";
-
-export const blocksDbCollectionName = "bp-blocks";
+import { blocksDbCollectionName } from "./shared";
 
 const queryOptions = { projection: { _id: 0 } };
 
