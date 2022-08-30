@@ -229,7 +229,11 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{test_data, utils::tests::check_serialization_from_str, ParseOneOfError};
+    use crate::{
+        test_data,
+        utils::tests::{check_serialization_from_str, ensure_failed_validation},
+        ParseOneOfError,
+    };
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,
@@ -358,76 +362,65 @@ mod tests {
 
     #[test]
     fn invalid_id() {
-        let invalid_property_type = json!(
-            {
-              "kind": "propertyType",
-              "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
-              "title": "Age",
-              "pluralTitle": "Ages",
-              "oneOf": [
+        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+            json!(
                 {
-                  "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1"
+                  "kind": "propertyType",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
+                  "title": "Age",
+                  "pluralTitle": "Ages",
+                  "oneOf": [
+                    {
+                      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1"
+                    }
+                  ]
                 }
-              ]
-            }
-        );
-
-        let result: Result<PropertyType, _> = invalid_property_type.try_into();
-        assert_eq!(
-            result,
-            Err(ParsePropertyTypeError::InvalidVersionedUri(
-                ParseVersionedUriError::AdditionalEndContent
-            ))
+            ),
+            ParsePropertyTypeError::InvalidVersionedUri(
+                ParseVersionedUriError::AdditionalEndContent,
+            ),
         );
     }
 
     #[test]
     fn empty_one_of() {
-        let invalid_property_type = json!(
-            {
-              "kind": "propertyType",
-              "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
-              "title": "Age",
-              "pluralTitle": "Ages",
-              "oneOf": []
-            }
-        );
-
-        let result: Result<PropertyType, _> = invalid_property_type.try_into();
-        assert_eq!(
-            result,
-            Err(ParsePropertyTypeError::InvalidOneOf(Box::new(
-                ParseOneOfError::ValidationError(ValidationError::EmptyOneOf)
-            )))
+        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+            json!(
+                {
+                  "kind": "propertyType",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
+                  "title": "Age",
+                  "pluralTitle": "Ages",
+                  "oneOf": []
+                }
+            ),
+            ParsePropertyTypeError::InvalidOneOf(Box::new(ParseOneOfError::ValidationError(
+                ValidationError::EmptyOneOf,
+            ))),
         );
     }
 
     #[test]
     fn invalid_reference() {
-        let invalid_property_type = json!(
-            {
-              "kind": "propertyType",
-              "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
-              "title": "Age",
-              "pluralTitle": "Ages",
-              "oneOf": [
+        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+            json!(
                 {
-                  "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
+                  "kind": "propertyType",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
+                  "title": "Age",
+                  "pluralTitle": "Ages",
+                  "oneOf": [
+                    {
+                      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
+                    }
+                  ]
                 }
-              ]
-            }
-        );
-
-        let result: Result<PropertyType, _> = invalid_property_type.try_into();
-        assert_eq!(
-            result,
-            Err(ParsePropertyTypeError::InvalidOneOf(Box::new(
-                ParseOneOfError::PropertyValuesError(
-                    ParsePropertyTypeError::InvalidDataTypeReference(
-                        ParseVersionedUriError::IncorrectFormatting
-                    )
-                )
-            )))
+            ),
+            ParsePropertyTypeError::InvalidOneOf(Box::new(ParseOneOfError::PropertyValuesError(
+                ParsePropertyTypeError::InvalidDataTypeReference(
+                    ParseVersionedUriError::IncorrectFormatting,
+                ),
+            ))),
         );
     }
 }

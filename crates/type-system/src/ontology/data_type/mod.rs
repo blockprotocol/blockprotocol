@@ -172,7 +172,10 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{test_data, utils::tests::check_serialization_from_str};
+    use crate::{
+        test_data,
+        utils::tests::{check_serialization_from_str, ensure_failed_validation},
+    };
 
     #[test]
     fn data_type_reference() {
@@ -227,22 +230,17 @@ mod tests {
 
     #[test]
     fn invalid_id() {
-        let invalid_data_type = json!(
-            {
-              "kind": "dataType",
-              "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1.5",
-              "title": "Text",
-              "description": "An ordered sequence of characters",
-              "type": "string"
-            }
-        );
-
-        let result: Result<DataType, _> = invalid_data_type.try_into();
-        assert_eq!(
-            result,
-            Err(ParseDataTypeError::InvalidVersionedUri(
-                ParseVersionedUriError::AdditionalEndContent
-            ))
+        ensure_failed_validation::<repr::DataType, DataType>(
+            json!(
+                {
+                  "kind": "dataType",
+                  "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1.5",
+                  "title": "Text",
+                  "description": "An ordered sequence of characters",
+                  "type": "string"
+                }
+            ),
+            ParseDataTypeError::InvalidVersionedUri(ParseVersionedUriError::AdditionalEndContent),
         );
     }
 }
