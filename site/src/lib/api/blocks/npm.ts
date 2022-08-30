@@ -8,10 +8,14 @@ import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
 
+import {
+  npmWebhookEndpoint,
+  npmWebhookSecret,
+} from "../../../pages/api/blocks/npm-hook.api";
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
 import { isProduction } from "../../config";
 import { User } from "../model/user.model";
-import { getDbBlock, insertDbBlock } from "./db";
+import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
 import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
@@ -249,6 +253,70 @@ const mirrorNpmPackageToR2 = async (
   };
 };
 
+/**
+ * Registers an endpoint to be notified of any change to an npm package
+ * @see https://docs.npmjs.com/cli/v8/commands/npm-hook
+ */
+const registerNpmWebhook = async (npmPackageName: string) => {
+  if (!process.env.VERCEL) {
+    return;
+  }
+  if (!npmWebhookSecret) {
+    throw new Error("No NPM_WEBHOOK_SECRET present in environment");
+  }
+
+  if (!process.env.NPM_TOKEN) {
+    throw new Error("No NPM_TOKEN present in environment");
+  }
+
+  const execaOptions = { cwd: "/tmp" };
+
+  await execa("touch", [".npmrc"], execaOptions);
+  await fs.writeFile(
+    "/tmp/.npmrc",
+    `//registry.npmjs.org/:_authToken=${process.env.NPM_TOKEN}`,
+  );
+
+  /**
+   * This does not work because automation tokens are not working for calls to 'npm hook'
+   * Options:
+   * 1. Wait for it to be fixed (current approach)
+   * 2. Use an account without 2FA and therefore allow use of a 'publish' token
+   * 3. Abandon web hook and add manual 'update' button
+   * @see https://github.com/npm/cli/issues/5441
+   */
+  await execa(
+    "npm",
+    ["hook", "add", npmPackageName, npmWebhookEndpoint, npmWebhookSecret],
+    { cwd: "/tmp" },
+  );
+};
+
+export const updateBlockFromNpm = async ({
+  npmPackageName,
+  version,
+}: {
+  npmPackageName: string;
+  version: string;
+}) => {
+  const existingBlock = await getDbBlock({ npmPackageName });
+  if (!existingBlock) {
+    // @todo remove webhook (need to call `npm hook ls`, parse stdout for <id> and then `npm hook rm <id>`)
+    throw new Error(`No block linked to npm package ${npmPackageName}`);
+  }
+
+  if (existingBlock.version === version) {
+    throw new Error(`Block is already at version ${version}`);
+  }
+
+  const { expandedMetadata } = await mirrorNpmPackageToR2(
+    npmPackageName,
+    existingBlock.pathWithNamespace,
+  );
+  await updateDbBlock(expandedMetadata);
+  return { expandedMetadata };
+};
+
 export const publishBlockFromNpm = async (
   db: Db,
   params: { name: string; npmPackageName: string; user: User },
@@ -285,6 +353,13 @@ export const publishBlockFromNpm = async (
   );
 
   await insertDbBlock(expandedMetadata);
+
+  try {
+    await registerNpmWebhook(npmPackageName);
+  } catch (err) {
+    // eslint-disable-next-line no-console -- server-side, useful for debugging
+    console.error(`Could not register webhook with npm: ${err}`);
+  }
 
   return expandedMetadata;
 };
