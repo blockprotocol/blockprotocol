@@ -230,8 +230,7 @@ mod tests {
 
     use super::*;
     use crate::{
-        ontology::shared::{array::error::ParseOneOfArrayError, one_of::error::ParseOneOfError},
-        test_data,
+        ontology::shared::one_of::error::ParseOneOfError, test_data,
         utils::tests::check_serialization_from_str,
     };
 
