@@ -231,7 +231,7 @@ mod tests {
     #[test]
     fn invalid_id() {
         ensure_failed_validation::<repr::DataType, DataType>(
-            json!(
+            &json!(
                 {
                   "kind": "dataType",
                   "$id": "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1.5",

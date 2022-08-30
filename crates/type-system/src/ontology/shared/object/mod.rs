@@ -88,7 +88,7 @@ mod tests {
     #[test]
     fn empty() {
         ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
-            json!({
+            &json!({
                 "type": "object",
                 "properties": {}
             }),
@@ -104,7 +104,7 @@ mod tests {
     #[test]
     fn invalid_uri() {
         ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
-            json!({
+            &json!({
                 "type": "object",
                 "properties": {
                     "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_b/v/1" }
@@ -122,7 +122,7 @@ mod tests {
     #[test]
     fn invalid_required() {
         ensure_failed_validation::<repr::Object<repr::PropertyTypeReference>, Object>(
-            json!({
+            &json!({
                 "type": "object",
                 "properties": {
                     "https://example.com/property_type_a/": { "$ref": "https://example.com/property_type_a/v/1" },

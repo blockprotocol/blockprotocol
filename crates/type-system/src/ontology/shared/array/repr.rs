@@ -53,7 +53,7 @@ impl TryFrom<Array<repr::PropertyTypeReference>> for super::Array<PropertyTypeRe
             items: array_repr
                 .items
                 .try_into()
-                .map_err(ParsePropertyTypeReferenceArrayError::InvalidItems)?,
+                .map_err(ParsePropertyTypeReferenceArrayError::InvalidReference)?,
             min_items: array_repr.min_items,
             max_items: array_repr.max_items,
         })

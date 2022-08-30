@@ -363,7 +363,7 @@ mod tests {
     #[test]
     fn invalid_id() {
         ensure_failed_validation::<repr::PropertyType, PropertyType>(
-            json!(
+            &json!(
                 {
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
@@ -385,7 +385,7 @@ mod tests {
     #[test]
     fn empty_one_of() {
         ensure_failed_validation::<repr::PropertyType, PropertyType>(
-            json!(
+            &json!(
                 {
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
@@ -403,7 +403,7 @@ mod tests {
     #[test]
     fn invalid_reference() {
         ensure_failed_validation::<repr::PropertyType, PropertyType>(
-            json!(
+            &json!(
                 {
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",

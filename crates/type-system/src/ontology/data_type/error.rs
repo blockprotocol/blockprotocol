@@ -1,21 +1,16 @@
-use std::fmt;
-
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
 use crate::uri::ParseVersionedUriError;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseDataTypeError {
+    #[error("invalid versioned URI: `{0}`")]
     InvalidVersionedUri(ParseVersionedUriError),
+    #[error("error in JSON: `{0}`")]
     InvalidJson(String),
-}
-
-impl fmt::Display for ParseDataTypeError {
-    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt.write_str(&serde_json::to_string(self).expect("failed to deserialize Data Type"))
-    }
 }

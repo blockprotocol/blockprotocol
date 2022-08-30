@@ -73,7 +73,7 @@ pub mod tests {
     }
 
     /// TODO - DOC
-    pub fn ensure_failed_validation<R, T>(input: serde_json::Value, expected: T::Error)
+    pub fn ensure_failed_validation<R, T>(input: &serde_json::Value, expected: T::Error)
     where
         R: for<'de> Deserialize<'de> + Serialize + Debug + PartialEq,
         T: TryFrom<R> + Debug + PartialEq,
