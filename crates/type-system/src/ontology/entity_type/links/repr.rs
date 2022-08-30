@@ -136,129 +136,175 @@ where
     }
 }
 
-// impl TryFrom<LinksRepr> for Links {
-//     type Error = ValidationError;
-//
-//     fn try_from(links: LinksRepr) -> Result<Self, ValidationError> {
-//         let links = Self { repr: links };
-//         links.validate()?;
-//         Ok(links)
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
 
-//
-// #[cfg(test)]
-// mod tests {
-//     use serde_json::json;
-//
-//     use super::*;
-//     use crate::ontology::tests::{
-//         check, check_deserialization, check_invalid_json, StringTypeStruct,
-//     };
-//
-//     // TODO - write some tests for validation of Link schemas, although most testing happens on
-//     //  entity types
-//
-//     mod maybe_ordered_array {
-//
-//         use super::*;
-//
-//         #[test]
-//         fn unordered() -> Result<(), serde_json::Error> {
-//             check(
-//                 &MaybeOrderedArray::new(false, StringTypeStruct::default(), None, None),
-//                 json!({
-//                     "type": "array",
-//                     "items": {
-//                         "type": "string"
-//                     },
-//                     "ordered": false,
-//                 }),
-//             )?;
-//
-//             check_deserialization(
-//                 &MaybeOrderedArray::new(false, StringTypeStruct::default(), None, None),
-//                 json!({
-//                     "type": "array",
-//                     "items": {
-//                         "type": "string"
-//                     },
-//                 }),
-//             )?;
-//
-//             Ok(())
-//         }
-//
-//         #[test]
-//         fn ordered() -> Result<(), serde_json::Error> {
-//             check(
-//                 &MaybeOrderedArray::new(true, StringTypeStruct::default(), None, None),
-//                 json!({
-//                     "type": "array",
-//                     "items": {
-//                         "type": "string"
-//                     },
-//                     "ordered": true
-//                 }),
-//             )
-//         }
-//
-//         #[test]
-//         fn constrained() -> Result<(), serde_json::Error> {
-//             check(
-//                 &MaybeOrderedArray::new(false, StringTypeStruct::default(), Some(10), Some(20)),
-//                 json!({
-//                     "type": "array",
-//                     "items": {
-//                         "type": "string"
-//                     },
-//                     "ordered": false,
-//                     "minItems": 10,
-//                     "maxItems": 20,
-//                 }),
-//             )
-//         }
-//
-//         #[test]
-//         fn additional_properties() {
-//             check_invalid_json::<MaybeOrderedArray<StringTypeStruct>>(json!({
-//                 "type": "array",
-//                 "items": {
-//                     "type": "string"
-//                 },
-//                 "ordered": false,
-//                 "minItems": 10,
-//                 "maxItems": 20,
-//                 "additional": 30,
-//             }));
-//         }
-//     }
-//
-//     mod value_or_maybe_ordered_array {
-//         use serde_json::json;
-//
-//         use super::*;
-//
-//         #[test]
-//         fn value() -> Result<(), serde_json::Error> {
-//             check(
-//                 &ValueOrMaybeOrderedArray::Value("value".to_owned()),
-//                 json!("value"),
-//             )
-//         }
-//
-//         #[test]
-//         fn array() -> Result<(), serde_json::Error> {
-//             check(
-//                 &MaybeOrderedArray::new(false, StringTypeStruct::default(), None, None),
-//                 json!({
-//                     "type": "array",
-//                     "items": {
-//                         "type": "string"
-//                     },
-//                     "ordered": false
-//                 }),
-//             )
-//         }
-//     }
-// }
+    use super::*;
+    use crate::utils::tests::{
+        check_repr_serialization_from_value, ensure_repr_failed_deserialization, StringTypeStruct,
+    };
+
+    // TODO - write some tests for validation of Link schemas, although most testing happens on
+    //  entity types
+
+    mod maybe_ordered_array {
+        use super::*;
+
+        #[test]
+        fn unordered() {
+            let expected_inner = json!(
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            );
+
+            let as_json = json!({
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "ordered": false
+            });
+
+            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
+                .expect("failed to deserialize array to repr");
+
+            check_repr_serialization_from_value(
+                as_json,
+                Some(MaybeOrderedArray {
+                    array: inner_array,
+                    ordered: false,
+                }),
+            );
+        }
+
+        #[test]
+        fn ordered() {
+            let expected_inner = json!(
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            );
+
+            let as_json = json!({
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "ordered": true
+            });
+
+            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
+                .expect("failed to deserialize array to repr");
+
+            check_repr_serialization_from_value(
+                as_json,
+                Some(MaybeOrderedArray {
+                    array: inner_array,
+                    ordered: true,
+                }),
+            );
+        }
+
+        #[test]
+        fn constrained() {
+            let expected_inner = json!(
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "minItems": 10,
+                    "maxItems": 20
+                }
+            );
+
+            let as_json = json!({
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "ordered": false,
+                "minItems": 10,
+                "maxItems": 20,
+            });
+
+            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
+                .expect("failed to deserialize array to repr");
+
+            check_repr_serialization_from_value(
+                as_json,
+                Some(MaybeOrderedArray {
+                    array: inner_array,
+                    ordered: false,
+                }),
+            );
+        }
+
+        #[test]
+        fn additional_properties() {
+            let as_json = json!({
+                "type": "array",
+                "items": {
+                    "type": "string"
+                },
+                "ordered": false,
+                "minItems": 10,
+                "maxItems": 20,
+                "additional": 30,
+            });
+
+            ensure_repr_failed_deserialization::<MaybeOrderedArray<StringTypeStruct>>(as_json);
+        }
+    }
+
+    mod value_or_maybe_ordered_array {
+        use serde_json::json;
+
+        use super::*;
+
+        #[test]
+        fn value() {
+            check_repr_serialization_from_value(
+                json!("value"),
+                Some(ValueOrMaybeOrderedArray::Value("value".to_owned())),
+            );
+        }
+
+        #[test]
+        fn array() {
+            let expected_inner = json!(
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                }
+            );
+
+            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
+                .expect("failed to deserialize array to repr");
+
+            check_repr_serialization_from_value(
+                json!({
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "ordered": false
+                }),
+                Some(ValueOrMaybeOrderedArray::Array(MaybeOrderedArray {
+                    array: inner_array,
+                    ordered: false,
+                })),
+            );
+        }
+    }
+}

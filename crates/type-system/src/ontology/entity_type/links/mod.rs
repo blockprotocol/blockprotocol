@@ -38,9 +38,9 @@ impl Links {
         links: HashMap<VersionedUri, ValueOrMaybeOrderedArray<EntityTypeReference>>,
         required: Vec<VersionedUri>,
     ) -> Result<Self, ValidationError> {
-        let entity_type = Self::new_unchecked(links, required);
-        entity_type.validate()?;
-        Ok(entity_type)
+        let links = Self::new_unchecked(links, required);
+        links.validate()?;
+        Ok(links)
     }
 
     fn validate(&self) -> Result<(), ValidationError> {
