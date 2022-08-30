@@ -2,6 +2,10 @@
 
 You should be aware of the following:
 
+## File name
+
+You must name your file `[something].api.ts` for it to be recognised as an API endpoint.
+
 ## Input validation, error formatting
 
 You can use `bodyValidator` to validate the request body.
