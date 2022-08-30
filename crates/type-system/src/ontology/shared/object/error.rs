@@ -2,7 +2,11 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::{uri::ParseBaseUriError, ValidationError};
+use crate::ontology::{
+    shared::array::error::ParsePropertyTypeReferenceArrayError,
+    uri::{ParseBaseUriError, ParseVersionedUriError},
+    ValidationError,
+};
 
 #[allow(
     clippy::enum_variant_names,
@@ -12,6 +16,8 @@ use crate::ontology::{uri::ParseBaseUriError, ValidationError};
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParsePropertyTypeObjectError {
+    InvalidPropertyTypeReference(ParseVersionedUriError),
+    InvalidArray(ParsePropertyTypeReferenceArrayError),
     InvalidPropertyKey(ParseBaseUriError),
     InvalidRequiredKey(ParseBaseUriError),
     ValidationError(ValidationError),

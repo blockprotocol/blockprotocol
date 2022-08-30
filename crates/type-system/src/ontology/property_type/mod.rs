@@ -1,4 +1,4 @@
-mod error;
+pub mod error;
 pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
@@ -229,7 +229,11 @@ mod tests {
     use serde_json::json;
 
     use super::*;
-    use crate::{test_data, utils::tests::check_serialization_from_str};
+    use crate::{
+        ontology::shared::{array::error::ParseOneOfArrayError, one_of::error::ParseOneOfError},
+        test_data,
+        utils::tests::check_serialization_from_str,
+    };
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,
@@ -394,7 +398,12 @@ mod tests {
         );
 
         let result: Result<PropertyType, _> = invalid_property_type.try_into();
-        assert_eq!(result, Err(ParsePropertyTypeError::InvalidArrayItems()));
+        assert_eq!(
+            result,
+            Err(ParsePropertyTypeError::InvalidOneOf(Box::new(
+                ParseOneOfError::ValidationError(ValidationError::EmptyOneOf)
+            )))
+        );
     }
 
     #[test]
@@ -414,6 +423,15 @@ mod tests {
         );
 
         let result: Result<PropertyType, _> = invalid_property_type.try_into();
-        assert_eq!(result, Err(ParsePropertyTypeError::InvalidArrayItems()));
+        assert_eq!(
+            result,
+            Err(ParsePropertyTypeError::InvalidOneOf(Box::new(
+                ParseOneOfError::PropertyValuesError(
+                    ParsePropertyTypeError::InvalidDataTypeReference(
+                        ParseVersionedUriError::IncorrectFormatting
+                    )
+                )
+            )))
+        );
     }
 }

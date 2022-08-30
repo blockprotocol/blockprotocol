@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::ontology::ValidationError;
+use crate::ontology::{property_type::error::ParsePropertyTypeError, ValidationError};
 
 #[allow(
     clippy::enum_variant_names,
@@ -12,5 +12,6 @@ use crate::ontology::ValidationError;
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseOneOfError {
+    PropertyValuesError(ParsePropertyTypeError),
     ValidationError(ValidationError),
 }

@@ -5,7 +5,11 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::ontology::{
-    shared::object::error::ParsePropertyTypeObjectError, uri::ParseVersionedUriError,
+    shared::{
+        array::error::ParseOneOfArrayError, object::error::ParsePropertyTypeObjectError,
+        one_of::error::ParseOneOfError,
+    },
+    uri::ParseVersionedUriError,
 };
 
 #[allow(
@@ -18,8 +22,10 @@ use crate::ontology::{
 pub enum ParsePropertyTypeError {
     InvalidVersionedUri(ParseVersionedUriError),
     InvalidDataTypeReference(ParseVersionedUriError),
-    InvalidArrayItems(),
     InvalidPropertyTypeObject(ParsePropertyTypeObjectError),
+    // Boxes to avoid infinitely sized enum due to recursion
+    InvalidOneOf(Box<ParseOneOfError>), // TODO - better name for variant
+    InvalidArrayItems(Box<ParseOneOfArrayError>),
     InvalidJson(String),
 }
 

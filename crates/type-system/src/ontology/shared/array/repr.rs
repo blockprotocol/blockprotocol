@@ -2,6 +2,16 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
+use crate::ontology::{
+    property_type::{PropertyTypeReference, PropertyValues},
+    repr,
+    shared::{
+        array::error::{ParseOneOfArrayError, ParsePropertyTypeReferenceArrayError},
+        object::error::ParsePropertyTypeObjectError,
+    },
+    OneOf,
+};
+
 /// Will serialize as a constant value `"array"`
 #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -25,16 +35,30 @@ pub struct Array<T> {
     max_items: Option<usize>,
 }
 
-impl<T, R> TryFrom<Array<R>> for super::Array<T>
-where
-    T: TryFrom<R>,
-{
-    // TODO
-    type Error = ();
+impl TryFrom<Array<repr::OneOf<repr::PropertyValues>>> for super::Array<OneOf<PropertyValues>> {
+    type Error = ParseOneOfArrayError;
 
-    fn try_from(array_repr: Array<R>) -> Result<Self, Self::Error> {
+    fn try_from(array_repr: Array<repr::OneOf<repr::PropertyValues>>) -> Result<Self, Self::Error> {
         Ok(Self {
-            items: array_repr.items.try_into().map_err(|err| ())?,
+            items: array_repr
+                .items
+                .try_into()
+                .map_err(ParseOneOfArrayError::InvalidItems)?,
+            min_items: array_repr.min_items,
+            max_items: array_repr.max_items,
+        })
+    }
+}
+
+impl TryFrom<Array<repr::PropertyTypeReference>> for super::Array<PropertyTypeReference> {
+    type Error = ParsePropertyTypeReferenceArrayError;
+
+    fn try_from(array_repr: Array<repr::PropertyTypeReference>) -> Result<Self, Self::Error> {
+        Ok(Self {
+            items: array_repr
+                .items
+                .try_into()
+                .map_err(ParsePropertyTypeReferenceArrayError::InvalidItems)?,
             min_items: array_repr.min_items,
             max_items: array_repr.max_items,
         })
@@ -63,17 +87,24 @@ pub enum ValueOrArray<T> {
     Array(Array<T>),
 }
 
-impl<T, R> TryFrom<ValueOrArray<R>> for super::ValueOrArray<T>
-where
-    T: TryFrom<R>,
+impl TryFrom<ValueOrArray<repr::PropertyTypeReference>>
+    for super::ValueOrArray<PropertyTypeReference>
 {
-    // TODO
-    type Error = ();
+    type Error = ParsePropertyTypeObjectError;
 
-    fn try_from(value_or_array_repr: ValueOrArray<R>) -> Result<Self, Self::Error> {
+    fn try_from(
+        value_or_array_repr: ValueOrArray<repr::PropertyTypeReference>,
+    ) -> Result<Self, Self::Error> {
         Ok(match value_or_array_repr {
-            ValueOrArray::Value(val) => Self::Value(val.try_into().map_err(|err| ())?),
-            ValueOrArray::Array(array) => Self::Array(array.try_into()?),
+            ValueOrArray::Value(val) => Self::Value(
+                val.try_into()
+                    .map_err(ParsePropertyTypeObjectError::InvalidPropertyTypeReference)?,
+            ),
+            ValueOrArray::Array(array) => Self::Array(
+                array
+                    .try_into()
+                    .map_err(ParsePropertyTypeObjectError::InvalidArray)?,
+            ),
         })
     }
 }

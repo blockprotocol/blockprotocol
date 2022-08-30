@@ -2,32 +2,32 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
+use crate::ontology::{
+    property_type::PropertyValues, repr, shared::one_of::error::ParseOneOfError,
+};
+
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct OneOf<T> {
-    #[serde(rename = "oneOf")]
     // TODO: tsify doesn't seem to let us override the type of this without losing the generic
     //  see https://github.com/madonoharu/tsify/issues/4
     //  we want something like #[cfg_attr(target_arch = "wasm32", tsify(type = "[T, ...T[]]"))]
+    #[serde(rename = "oneOf")]
     pub possibilities: Vec<T>,
 }
 
-impl<T, R> TryFrom<OneOf<R>> for super::OneOf<T>
-where
-    T: TryFrom<R>,
-{
-    // TODO
-    type Error = ();
+impl TryFrom<OneOf<repr::PropertyValues>> for super::OneOf<PropertyValues> {
+    type Error = ParseOneOfError;
 
-    fn try_from(one_of_repr: OneOf<R>) -> Result<Self, Self::Error> {
+    fn try_from(one_of_repr: OneOf<repr::PropertyValues>) -> Result<Self, Self::Error> {
         let inner = one_of_repr
             .possibilities
             .into_iter()
-            .map(|ele| ele.try_into().map_err(|err| ()))
+            .map(|ele| ele.try_into().map_err(ParseOneOfError::PropertyValuesError))
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
-        Self::new(inner).map_err(|err| ())
+        Self::new(inner)
     }
 }
 
