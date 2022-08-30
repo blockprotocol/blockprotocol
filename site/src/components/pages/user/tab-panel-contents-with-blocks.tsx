@@ -2,8 +2,7 @@ import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../../../lib/api/model/user.model";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { formatUpdatedAt } from "../../../util/html-utils";
-import { ListViewCard } from "./list-view-card";
+import { BlockListItem } from "./block-list-item";
 import { Placeholder } from "./placeholder";
 import { BrowseHubButton, BuildBlockButton } from "./placeholder-buttons";
 import { useUserStatus } from "./use-user-status";
@@ -40,25 +39,9 @@ export const TabPanelContentsWithBlocks: FunctionComponent<
 
   return (
     <>
-      {blocks.map(
-        ({
-          displayName,
-          description,
-          icon,
-          lastUpdated,
-          name,
-          blockSitePath,
-        }) => (
-          <ListViewCard
-            key={name}
-            icon={icon}
-            title={displayName!}
-            description={description}
-            extraContent={formatUpdatedAt(lastUpdated)}
-            url={blockSitePath}
-          />
-        ),
-      )}
+      {blocks.map((block) => (
+        <BlockListItem key={block.name} block={block} />
+      ))}
     </>
   );
 };

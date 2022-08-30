@@ -1,11 +1,10 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "../../components/icons";
-import { Link } from "../../components/link";
 import { LinkButton } from "../../components/link-button";
 import {
   AuthWallPageContent,
@@ -16,15 +15,14 @@ import { BlockListEmptyState } from "../../components/pages/blocks/block-list-em
 import { PublishBlockSuccess } from "../../components/pages/blocks/publish-block-success";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
-import { ListViewCard } from "../../components/pages/user/list-view-card";
+import { BlockListItem } from "../../components/pages/user/block-list-item";
 import { apiClient } from "../../lib/api-client";
 import { ExpandedBlockMetadata } from "../../lib/blocks";
 import { shouldAllowBlockPublishing } from "../../lib/config";
-import { formatUpdatedAt } from "../../util/html-utils";
 
 const BlocksPage: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
-  const [blocks, setBlocks] = useState<ExpandedBlockMetadata[]>([]);
+  const [blocks, setBlocks] = useState<ExpandedBlockMetadata[] | null>(null);
 
   useEffect(() => {
     if (user.shortname) {
@@ -38,11 +36,29 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
   }, [user]);
 
   const recentlyCreatedBlock = useMemo(
-    () => blocks.find((block) => block.name === router.query.createdBlock),
+    () => blocks?.find((block) => block.name === router.query.createdBlock),
     [blocks, router],
   );
 
-  const hasBlocks = !!blocks.length;
+  const blockListContent = useMemo(() => {
+    const isLoading = blocks === null;
+
+    if (isLoading) {
+      return (
+        <Box display="flex" justifyContent="center">
+          <CircularProgress />
+        </Box>
+      );
+    }
+
+    if (!blocks?.length) {
+      return <BlockListEmptyState />;
+    }
+
+    return blocks.map((block) => (
+      <BlockListItem key={block.name} block={block} />
+    ));
+  }, [blocks]);
 
   return (
     <>
@@ -75,27 +91,8 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
           />
         )}
 
-        <BlockListContainer hasBlocks={hasBlocks}>
-          {hasBlocks ? (
-            blocks.map((block) => (
-              <ListViewCard
-                key={block.name}
-                url={block.blockSitePath}
-                icon={block.icon}
-                title={block.displayName!}
-                description={block.description}
-                extraContent={
-                  <Box display="flex" gap={1.5}>
-                    <Link href={`/@${block.author}`}>@{block.author}</Link>
-                    <span>{`V${block.version}`}</span>
-                    <span>{formatUpdatedAt(block.lastUpdated)}</span>
-                  </Box>
-                }
-              />
-            ))
-          ) : (
-            <BlockListEmptyState />
-          )}
+        <BlockListContainer hasBlocks={!!blocks?.length}>
+          {blockListContent}
         </BlockListContainer>
       </PageContainer>
     </>
