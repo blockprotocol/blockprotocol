@@ -177,8 +177,13 @@ const invalidPropertyTypes: [string, PropertyType, any][] = [
       oneOf: [],
     },
     {
-      reason: "InvalidArrayItems",
-      inner: [],
+      reason: "InvalidOneOf",
+      inner: {
+        reason: "ValidationError",
+        inner: {
+          type: "EmptyOneOf",
+        },
+      },
     },
   ],
   [
@@ -239,8 +244,20 @@ const invalidPropertyTypes: [string, PropertyType, any][] = [
       ],
     },
     {
-      reason: "InvalidArrayItems",
-      inner: [],
+      reason: "InvalidOneOf",
+      inner: {
+        reason: "PropertyValuesError",
+        inner: {
+          reason: "InvalidDataTypeReference",
+          inner: {
+            reason: "InvalidBaseUri",
+            inner: {
+              reason: "UrlParseError",
+              inner: "relative URL without a base",
+            },
+          },
+        },
+      },
     },
   ],
   [
@@ -263,8 +280,19 @@ const invalidPropertyTypes: [string, PropertyType, any][] = [
       ],
     },
     {
-      inner: [],
-      reason: "InvalidArrayItems",
+      reason: "InvalidOneOf",
+      inner: {
+        reason: "PropertyValuesError",
+        inner: {
+          reason: "InvalidPropertyTypeObject",
+          inner: {
+            reason: "InvalidPropertyKey",
+            inner: {
+              reason: "MissingTrailingSlash",
+            },
+          },
+        },
+      },
     },
   ],
 ];
