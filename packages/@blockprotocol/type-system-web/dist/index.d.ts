@@ -1,64 +1,142 @@
 /* tslint:disable */
 /* eslint-disable */
-/**
-* Checks if a given {DataType} is valid
-*
-* @throws {MalformedDataTypeError} if the data type is malformed
-* @param {DataType} dataTypeObj
-*/
-export function isValidDataType(dataTypeObj: DataType): void;
-/**
-* Checks if a given {PropertyType} is valid
-*
-* @throws {TempError} if the property type is malformed
-* @param {PropertyType} propertyTypeObj
-*/
-export function isValidPropertyType(propertyTypeObj: PropertyType): void;
-type __ValueOrArrayArray<A> = Array<A>;
-declare namespace ValueOrArray {
-    export type Value<T> = T;
-    export type Array<T> = __ValueOrArrayArray<T>;
+type __ValidationErrorBaseUri = BaseUri;
+type __ValidationErrorVersionedUri = VersionedUri;
+declare namespace ValidationError {
+    export type MissingRequiredProperty = { type: "MissingRequiredProperty"; inner: __ValidationErrorBaseUri };
+    export type BaseUriMismatch = { type: "BaseUriMismatch"; inner: { base_uri: __ValidationErrorBaseUri; versioned_uri: __ValidationErrorVersionedUri } };
+    export type MissingRequiredLink = { type: "MissingRequiredLink"; inner: __ValidationErrorVersionedUri };
+    export type MismatchedPropertyCount = { type: "MismatchedPropertyCount"; inner: { actual: number; expected: number } };
+    export type EmptyOneOf = { type: "EmptyOneOf"; inner?: null };
 }
 
-export type ValueOrArray<T> = ValueOrArray.Value<T> | ValueOrArray.Array<T>;
-
-export interface Array<T> {
-    type: 'array';
-    items: T;
-    minItems?: number;
-    maxItems?: number;
-}
-
-export interface OneOfRepr<T> {
-    oneOf: T[];
-}
-
-export interface OneOf<T> extends OneOfRepr<T> {}
+export type ValidationError = ValidationError.MissingRequiredProperty | ValidationError.BaseUriMismatch | ValidationError.MissingRequiredLink | ValidationError.MismatchedPropertyCount | ValidationError.EmptyOneOf;
 
 export interface DataTypeReference {
-    $ref: VersionedUri;
+    $ref: string;
 }
 
 export interface DataType extends Record<string, any> {
     kind: 'dataType';
-    $id: VersionedUri;
+    $id: string;
     title: string;
     description?: string;
     type: string;
 }
 
-export interface Object<V> extends ObjectRepr<V> {}
-
-export interface ObjectRepr<V> {
-    type: 'object';
-    properties: Record<BaseUri, V>;
-    required?: BaseUri[];
+type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
+declare namespace ParseVersionedUriError {
+    export type IncorrectFormatting = { reason: "IncorrectFormatting"; inner?: null };
+    export type MissingBaseUri = { reason: "MissingBaseUri"; inner?: null };
+    export type MissingVersion = { reason: "MissingVersion"; inner?: null };
+    export type InvalidVersion = { reason: "InvalidVersion"; inner?: null };
+    export type AdditionalEndContent = { reason: "AdditionalEndContent"; inner?: null };
+    export type InvalidBaseUri = { reason: "InvalidBaseUri"; inner: __ParseVersionedUriErrorParseBaseUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
 }
 
-export type BaseUri = string;
+export type ParseVersionedUriError = ParseVersionedUriError.IncorrectFormatting | ParseVersionedUriError.MissingBaseUri | ParseVersionedUriError.MissingVersion | ParseVersionedUriError.InvalidVersion | ParseVersionedUriError.AdditionalEndContent | ParseVersionedUriError.InvalidBaseUri | ParseVersionedUriError.InvalidJson;
+
+declare namespace ParseBaseUriError {
+    export type MissingTrailingSlash = { reason: "MissingTrailingSlash"; inner?: null };
+    export type UrlParseError = { reason: "UrlParseError"; inner: string };
+    export type CannotBeABase = { reason: "CannotBeABase"; inner?: null };
+}
+
+export type ParseBaseUriError = ParseBaseUriError.MissingTrailingSlash | ParseBaseUriError.UrlParseError | ParseBaseUriError.CannotBeABase;
+
+type __ParsePropertyTypeObjectErrorParseBaseUriError = ParseBaseUriError;
+type __ParsePropertyTypeObjectErrorParsePropertyTypeReferenceArrayError = ParsePropertyTypeReferenceArrayError;
+type __ParsePropertyTypeObjectErrorParseVersionedUriError = ParseVersionedUriError;
+type __ParsePropertyTypeObjectErrorValidationError = ValidationError;
+declare namespace ParsePropertyTypeObjectError {
+    export type InvalidPropertyTypeReference = { reason: "InvalidPropertyTypeReference"; inner: __ParsePropertyTypeObjectErrorParseVersionedUriError };
+    export type InvalidArray = { reason: "InvalidArray"; inner: __ParsePropertyTypeObjectErrorParsePropertyTypeReferenceArrayError };
+    export type InvalidPropertyKey = { reason: "InvalidPropertyKey"; inner: __ParsePropertyTypeObjectErrorParseBaseUriError };
+    export type InvalidRequiredKey = { reason: "InvalidRequiredKey"; inner: __ParsePropertyTypeObjectErrorParseBaseUriError };
+    export type ValidationError = { reason: "ValidationError"; inner: __ParsePropertyTypeObjectErrorValidationError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParsePropertyTypeObjectError = ParsePropertyTypeObjectError.InvalidPropertyTypeReference | ParsePropertyTypeObjectError.InvalidArray | ParsePropertyTypeObjectError.InvalidPropertyKey | ParsePropertyTypeObjectError.InvalidRequiredKey | ParsePropertyTypeObjectError.ValidationError | ParsePropertyTypeObjectError.InvalidJson;
+
+type __ParsePropertyTypeErrorParseOneOfArrayError = ParseOneOfArrayError;
+type __ParsePropertyTypeErrorParseOneOfError = ParseOneOfError;
+type __ParsePropertyTypeErrorParsePropertyTypeObjectError = ParsePropertyTypeObjectError;
+type __ParsePropertyTypeErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParsePropertyTypeError {
+    export type InvalidVersionedUri = { reason: "InvalidVersionedUri"; inner: __ParsePropertyTypeErrorParseVersionedUriError };
+    export type InvalidDataTypeReference = { reason: "InvalidDataTypeReference"; inner: __ParsePropertyTypeErrorParseVersionedUriError };
+    export type InvalidPropertyTypeObject = { reason: "InvalidPropertyTypeObject"; inner: __ParsePropertyTypeErrorParsePropertyTypeObjectError };
+    export type InvalidOneOf = { reason: "InvalidOneOf"; inner: __ParsePropertyTypeErrorParseOneOfError };
+    export type InvalidArrayItems = { reason: "InvalidArrayItems"; inner: __ParsePropertyTypeErrorParseOneOfArrayError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParsePropertyTypeError = ParsePropertyTypeError.InvalidVersionedUri | ParsePropertyTypeError.InvalidDataTypeReference | ParsePropertyTypeError.InvalidPropertyTypeObject | ParsePropertyTypeError.InvalidOneOf | ParsePropertyTypeError.InvalidArrayItems | ParsePropertyTypeError.InvalidJson;
+
+
+/**
+ * Checks if a given Data Type is correctly formed
+ *
+ * @param {DataType} dataType - The Data Type object to validate.
+ * @returns {(Result.Ok|Result.Err<ParseDataTypeError>)} - an Ok with null inner if valid, or an Err with an inner ParseDataTypeError  
+ */
+export function validateDataType(dataType: DataType): Result<undefined, ParseDataTypeError>;
+
+
+
+/**
+ * Checks if a given Property Type is correctly formed
+ *
+ * @param {PropertyType} propertyType - The Property Type object to validate.
+ * @returns {(Result.Ok|Result.Err<ParsePropertyTypeError>)} - an Ok with null inner if valid, or an Err with an inner ParsePropertyTypeError  
+ */
+export function validatePropertyType(propertyType: PropertyType): Result<undefined, ParsePropertyTypeError>;
+
+
+type __ParseOneOfErrorParsePropertyTypeError = ParsePropertyTypeError;
+type __ParseOneOfErrorValidationError = ValidationError;
+declare namespace ParseOneOfError {
+    export type PropertyValuesError = { reason: "PropertyValuesError"; inner: __ParseOneOfErrorParsePropertyTypeError };
+    export type ValidationError = { reason: "ValidationError"; inner: __ParseOneOfErrorValidationError };
+}
+
+export type ParseOneOfError = ParseOneOfError.PropertyValuesError | ParseOneOfError.ValidationError;
+
+type __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParsePropertyTypeReferenceArrayError {
+    export type InvalidReference = { reason: "InvalidReference"; inner: __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParsePropertyTypeReferenceArrayError = ParsePropertyTypeReferenceArrayError.InvalidReference | ParsePropertyTypeReferenceArrayError.InvalidJson;
+
+type __ParseOneOfArrayErrorParseOneOfError = ParseOneOfError;
+declare namespace ParseOneOfArrayError {
+    export type InvalidItems = { reason: "InvalidItems"; inner: __ParseOneOfArrayErrorParseOneOfError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseOneOfArrayError = ParseOneOfArrayError.InvalidItems | ParseOneOfArrayError.InvalidJson;
+
+declare namespace Result {
+    export type Ok<T> = { type: "Ok"; inner: T };
+    export type Err<E> = { type: "Err"; inner: E };
+}
+
+export type Result<T, E> = Result.Ok<T> | Result.Err<E>;
+
+type __ParseDataTypeErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParseDataTypeError {
+    export type InvalidVersionedUri = { reason: "InvalidVersionedUri"; inner: __ParseDataTypeErrorParseVersionedUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseDataTypeError = ParseDataTypeError.InvalidVersionedUri | ParseDataTypeError.InvalidJson;
 
 export interface PropertyTypeReference {
-    $ref: VersionedUri;
+    $ref: string;
 }
 
 type __PropertyValuesDataTypeReference = DataTypeReference;
@@ -75,10 +153,35 @@ export type PropertyValues = PropertyValues.DataTypeReference | PropertyValues.P
 
 export interface PropertyType extends OneOf<PropertyValues> {
     kind: 'propertyType';
-    $id: VersionedUri;
+    $id: string;
     title: string;
     pluralTitle: string;
     description?: string;
+}
+
+export interface OneOf<T> {
+    oneOf: T[];
+}
+
+export interface Object<T> {
+    type: 'object';
+    properties: Record<string, T>;
+    required?: string[];
+}
+
+type __ValueOrArrayArray<A> = Array<A>;
+declare namespace ValueOrArray {
+    export type Value<T> = T;
+    export type Array<T> = __ValueOrArrayArray<T>;
+}
+
+export type ValueOrArray<T> = ValueOrArray.Value<T> | ValueOrArray.Array<T>;
+
+export interface Array<T> {
+    type: 'array';
+    items: T;
+    minItems?: number;
+    maxItems?: number;
 }
 
 export type VersionedUri = `${string}/v/${number}`;
@@ -88,9 +191,10 @@ export type VersionedUri = `${string}/v/${number}`;
  * Checks if a given URL string is a valid base URL.
  * 
  * @param {BaseUri} uri - The URL string.
- * @throws {ParseBaseUriError} if the given string is not a valid base URI
+ * @returns {(Result.Ok|Result.Err<ParseBaseUriError>)} - an Ok with an inner of the string as a
+ * BaseUri if valid, or an Err with an inner ParseBaseUriError  
  */
-export function isValidBaseUri(uri: string): void;
+export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>;
 
 
 
@@ -98,9 +202,10 @@ export function isValidBaseUri(uri: string): void;
  * Checks if a given URL string is a Block Protocol compliant Versioned URI.
  *
  * @param {string} uri - The URL string.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ * @returns {(Result.Ok|Result.Err<ParseVersionedUriError>)} - an Ok with an inner of the string as 
+ * a VersionedUri if valid, or an Err with an inner ParseVersionedUriError  
  */
-export function isVersionedUri(uri: string): uri is VersionedUri;
+export function validateVersionedUri(uri: string): Result<VersionedUri, ParseVersionedUriError>;
 
 
 
@@ -123,43 +228,19 @@ export function extractBaseUri(uri: VersionedUri): BaseUri;
 export function extractVersion(uri: VersionedUri): number;
 
 
-export interface TempError {}
+export type BaseUri = string;
 
-/**
-*/
-export class MalformedDataTypeError {
-  free(): void;
-}
-/**
-*/
-export class ParseBaseUriError {
-  free(): void;
-}
-/**
-*/
-export class ParseVersionedUriError {
-  free(): void;
-}
-/**
-*/
-export class TempError {
-  free(): void;
-}
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly isValidDataType: (a: number, b: number) => void;
-  readonly __wbg_malformeddatatypeerror_free: (a: number) => void;
-  readonly __wbg_parsebaseurierror_free: (a: number) => void;
-  readonly isValidBaseUri: (a: number, b: number, c: number) => void;
-  readonly isVersionedUri: (a: number, b: number, c: number) => void;
+  readonly validateDataType: (a: number) => number;
+  readonly validatePropertyType: (a: number) => number;
+  readonly validateBaseUri: (a: number, b: number) => number;
+  readonly validateVersionedUri: (a: number, b: number) => number;
   readonly extractBaseUri: (a: number, b: number, c: number) => void;
   readonly extractVersion: (a: number, b: number, c: number) => void;
-  readonly __wbg_parseversionedurierror_free: (a: number) => void;
-  readonly __wbg_temperror_free: (a: number) => void;
-  readonly isValidPropertyType: (a: number, b: number) => void;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;

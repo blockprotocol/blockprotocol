@@ -1,25 +1,40 @@
-#![allow(
+#![expect(
     non_snake_case,
-    reason = "We want camelCase names (variables, functions, args) in TS, and this module is WASM \
+    reason = "We want camelCase names (variables, functions, args) in TS, and this module is WASM
               only"
 )]
+
 use wasm_bindgen::prelude::*;
 
-use crate::{ontology::data_type::error::MalformedDataTypeError, DataType};
+use crate::{
+    repr,
+    utils::{set_panic_hook, Result},
+    DataType, ParseDataTypeError,
+};
 
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(typescript_type = "DataType")]
-    pub type IDataType;
+fn convert_data_type(data_type_obj: &JsValue) -> std::result::Result<DataType, ParseDataTypeError> {
+    let data_type_repr = data_type_obj
+        .into_serde::<repr::DataType>()
+        .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
+
+    DataType::try_from(data_type_repr)
 }
 
-/// Checks if a given {DataType} is valid
-///
-/// @throws {MalformedDataTypeError} if the data type is malformed
-#[wasm_bindgen]
-pub fn isValidDataType(dataTypeObj: &IDataType) -> Result<(), MalformedDataTypeError> {
-    dataTypeObj
-        .into_serde::<DataType>()
-        .map_err(|_| MalformedDataTypeError {})?;
-    Ok(())
+#[wasm_bindgen(typescript_custom_section)]
+const VALIDATE_DATA_TYPE_DEF: &'static str = r#"
+/**
+ * Checks if a given Data Type is correctly formed
+ *
+ * @param {DataType} dataType - The Data Type object to validate.
+ * @returns {(Result.Ok|Result.Err<ParseDataTypeError>)} - an Ok with null inner if valid, or an Err with an inner ParseDataTypeError  
+ */
+export function validateDataType(dataType: DataType): Result<undefined, ParseDataTypeError>;
+"#;
+#[wasm_bindgen(skip_typescript, js_name = validateDataType)]
+pub fn validate_data_type(data_type_obj: &JsValue) -> JsValue {
+    #[cfg(debug_assertions)]
+    set_panic_hook();
+
+    let validate_result: Result<(), _> = convert_data_type(data_type_obj).map(|_| ()).into();
+    JsValue::from_serde(&validate_result).expect("failed to serialize result")
 }
