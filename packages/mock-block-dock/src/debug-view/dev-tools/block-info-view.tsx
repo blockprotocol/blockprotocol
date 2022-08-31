@@ -17,7 +17,9 @@ const chipInfo = {
 export const BlockInfoView = () => {
   const { blockInfo } = useMockBlockDockContext();
 
-  const blockType = blockInfo.blockType.entryPoint;
+  const blockType = blockInfo.blockType.entryPoint as
+    | keyof typeof chipInfo
+    | undefined;
 
   return (
     <Grid container spacing={2}>

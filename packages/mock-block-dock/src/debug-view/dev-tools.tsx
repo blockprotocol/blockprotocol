@@ -1,7 +1,6 @@
 import {
   alpha,
   Box,
-  Chip,
   Paper as MuiPaper,
   styled,
   Tab as MuiTab,
@@ -14,7 +13,6 @@ import { forwardRef, useLayoutEffect, useRef, useState } from "react";
 import { Resizable } from "react-resizable";
 import useLocalStorageState from "use-local-storage-state";
 
-import { useMockBlockDockContext } from "../mock-block-dock-context";
 import { BlockInfoView } from "./dev-tools/block-info-view";
 import { DataStoreView } from "./dev-tools/datastore-view";
 import { LogsView } from "./dev-tools/logs-view";

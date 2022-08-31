@@ -45,7 +45,7 @@ type MockBlockDockProps = {
   readonly?: boolean;
   blockInfo?: {
     blockType: {
-      entryPoint: "react" | "html" | "custom-element";
+      entryPoint: "react" | "html" | "custom-element" | string;
     };
     displayName: string;
     icon: string;

@@ -15,7 +15,7 @@ import { MockBlockHookResult } from "./use-mock-block-props";
 type MockBlockDockInfo = {
   blockInfo: {
     blockType: {
-      entryPoint?: "react" | "html" | "custom-element";
+      entryPoint?: "react" | "html" | "custom-element" | string;
     };
     displayName?: string;
     icon?: string;

@@ -1,3 +1,4 @@
+import { Entity } from "@blockprotocol/graph";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { render } from "react-dom";
 
@@ -27,14 +28,15 @@ const blockEntityMap = {
   },
   "html-at-url": {
     entityTypeId: "test-type-1",
+    entityId: "entity-html-as-url",
     properties: { name: "World" },
   },
   "html-as-string": {
-    entityId: "entity-html-at-url",
+    entityId: "entity-html-as-string",
     entityTypeId: "test-type-1",
     properties: { name: "World" },
   },
-};
+} as Record<string, Entity>;
 
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
