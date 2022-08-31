@@ -630,8 +630,7 @@ prop property-values "Property Values" = [@property-value; ..10];
 
 ## ABNF
 
-`<name>` is an extension of `ABNF`, which hides an implementation detail. Look at the
-reference down below for a detailed explanation for each `name`.
+`<name>` is an extension of `ABNF`, which hides an implementation detail.
 
 ```abnf
 IDENT = ALPHA *(ALPHA / DIGIT / "-")
@@ -668,7 +667,7 @@ arg = call / variable / value
 call = IDENT "(" [ *(arg ",") arg [","] ] ")"
 
 ; Use Statement
-url = <url>
+url = <http url>
 
 use-key-value = id "=" string
 use-with = "with" "{" [ *(use-key-value ",") use-key-value [","] ] "}"
