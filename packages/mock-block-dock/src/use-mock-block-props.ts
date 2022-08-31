@@ -144,8 +144,6 @@ export const useMockBlockProps = ({
     setDebugMode(externalDebug);
   }
 
-  console.log({ blockEntity, entityTypes, entities });
-
   return {
     blockEntity,
     blockGraph,
