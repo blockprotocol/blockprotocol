@@ -1,6 +1,7 @@
 import { Box, BoxProps, experimental_sx as sx, styled } from "@mui/material";
 import { FunctionComponent } from "react";
 
+import { CODE_FONT_FAMILY } from "../../../theme/typography";
 import { Snippet } from "../../snippet";
 import { BlockSchema } from "./hub-utils";
 import { JsonEditor } from "./json-editor";
@@ -37,7 +38,7 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
     width: "100%",
 
     ".snippet": {
-      fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
+      fontFamily: CODE_FONT_FAMILY,
       overflow: "auto",
       height: "100%",
       whiteSpace: "break-spaces",
