@@ -4,9 +4,15 @@ use std::{
     fmt::{Display, Formatter},
 };
 
+use serde::{Deserialize, Serialize};
+#[cfg(target_arch = "wasm32")]
+use tsify::Tsify;
+
 use crate::uri::{BaseUri, VersionedUri};
 
-#[derive(Debug)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "type", content = "inner")]
 pub enum ValidationError {
     /// A schema has marked a property with a [`BaseUri`] as required but the [`BaseUri`] does not
     /// exist in the `properties`.

@@ -24,7 +24,8 @@
     "./dev/**/*.ts",
     "./dev/**/*.tsx",
     "./dist/**/*.ts",
-    "./dist/**/*.tsx"
+    "./dist/**/*.tsx",
+    "./dist/**/*.d.ts"
   ],
   "exclude": ["node_modules"]
 }
