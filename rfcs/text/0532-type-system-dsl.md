@@ -61,37 +61,53 @@ string = <single-quoted string> / <double-quoted string>
 value = boolean / int / float / string
 ```
 
-### Comments
+### Variables
 
 ```abnf
-comment = "//" <string w/o leading '/', until EOF>
-doc-comment = "///" <chars until EOF>
+type = "@" / "#" / ">" / "~"
+module = IDENT
+version = int / "latest"
+
+variable = [type] [module "::"] IDENT ["/" version]
 ```
 
-There are two types of comments: code comments and documentation comments.
-Code comments are erased during the compilation, while documentation comments are used
-as the description of resources (if they support it).
-Code comments are allowed anywhere, while documentation comments are only allowed before
-resources.
+Variables are used to reference to external and local resources, each type in the block
+protocol has a specific prefix:
 
-### Attributes
+* `@` - property-type
+* `#` - data-type
+* `>` - link-type
+* `~` - entity
 
-```abnf
-attribute = "#" "[" IDENT "=" <tt> "]"
+The module refers to the use alias created for a repository of remote types, and can be
+omitted, if omitted the module will default to `self`, which is the current repository.
+
+The version is optional, and if not specified will default to the latest version, be
+beware that this means that implementations may update every type when the mentioned type
+was updated and the version wasn't pinned.
+
+The type prefix is optional and is inferred to a concrete one depending on the context
+used, this means `~> link` is equivalent to `~> >self::link`.
+
+#### Inference Rules
+
+* Link in entity: `~> link` inferred to `~> >self::link`
+* Key of property: `prop "Prop" = { bp::a };` inferred to `prop "Prop" = { @bp::a };`
+* Mention of reference in property: `prop "Prop" = [bp::number; ..5];` inferred
+  to `prop "Prop" = [#bp::number; ..5];`
+* Key of entity: `entity "Entity" = { a };` inferred to `entity "Entity" = { @self::a };`
+
+#### Example 1
+
+```
+imp std;
+
+prop age "Age" = #bp::number;
 ```
 
-Attributes are optional information about a specific resource (property-type, data-type,
-link-type, entity-type, etc.), which are used to add more detail to a resource.
-
-Attribute values may refer to previously set configuration values, depending on the
-attribute these may be forbidden.
-
-| Name      | Description                                                                            | Type          | Variable Support |
-|-----------|----------------------------------------------------------------------------------------|---------------|------------------|
-| `version` | Version of a resource, if not specified will be inserted on execution, defaults to `1` | `int`         | `false`          |
-| `cfg`     | Conditionally emit code, depending if the expr evaluates to true                       | meta language | `false`          |
-
-[//]: # (TODO: should we include cfg or remove?!)
+This means that the property `age` is of type `#bp::number` where `#` means it is a
+data-type, `bp` is the synonym for `blockprotocol` in the `std` module, pointing to the
+central repo, and `number` is a data-type that has been defined in that central repo.
 
 ### Reference
 
@@ -249,54 +265,6 @@ interchangeably.
 Every occurrence of their identifier will be replaced with the declared value at
 compilation time.
 
-### Variables
-
-```abnf
-type = "@" / "#" / ">" / "~"
-module = IDENT
-version = int / "latest"
-
-variable = [type] [module "::"] IDENT ["/" version]
-```
-
-Variables are used to reference to external and local resources, each type in the block
-protocol has a specific prefix:
-
-* `@` - property-type
-* `#` - data-type
-* `>` - link-type
-* `~` - entity
-
-The module refers to the use alias created for a repository of remote types, and can be
-omitted, if omitted the module will default to `self`, which is the current repository.
-
-The version is optional, and if not specified will default to the latest version, be
-beware that this means that implementations may update every type when the mentioned type
-was updated and the version wasn't pinned.
-
-The type prefix is optional and is inferred to a concrete one depending on the context
-used, this means `~> link` is equivalent to `~> >self::link`.
-
-#### Inference Rules
-
-* Link in entity: `~> link` inferred to `~> >self::link`
-* Key of property: `prop "Prop" = { bp::a };` inferred to `prop "Prop" = { @bp::a };`
-* Mention of reference in property: `prop "Prop" = [bp::number; ..5];` inferred
-  to `prop "Prop" = [#bp::number; ..5];`
-* Key of entity: `entity "Entity" = { a };` inferred to `entity "Entity" = { @self::a };`
-
-#### Example 1
-
-```
-imp std;
-
-prop age "Age" = #bp::number;
-```
-
-This means that the property `age` is of type `#bp::number` where `#` means it is a
-data-type, `bp` is the synonym for `blockprotocol` in the `std` module, pointing to the
-central repo, and `number` is a data-type that has been defined in that central repo.
-
 ### Functions
 
 This is an unstable feature. Everywhere where a value is used, one can also use a function
@@ -340,6 +308,36 @@ call = IDENT "(" [ *(arg ",") arg [","] ] ")"
 | string of float | `toFloat` | `float`        |
 | `true`          | `toFloat` | `1.0`          |
 | `false`         | `toFloat` | `0.0`          |
+
+### Configuration
+
+```abnf
+set *(IDENT "::") IDENT "=" value ";"
+```
+
+Configuration is used to set values, which may be referenced later using interpolation or
+during configuration of the implementations. Configuration keys need to be unique, cannot
+be overwritten and user-defined configuration keys *may not* use built-in names.
+
+Configuration keys are dictionaries, which are partitioned using `::`, this allows the
+protection of certain values, to reduce breakage in future releases.
+
+The namespace `impl` and `lang` are reserved and *may not* be used for user-defined
+configuration.
+
+`lang::unstable` and `impl::unstable` keys may be removed in any version but will only be
+stabilized in major versions, before any feature is added, they are first added as an
+unstable feature, and once matured will be stabilized.
+
+| Name                     | Type                          | Description                                                                                                                                          | Effect                                                       | Default  | Implemented since     |
+|--------------------------|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|----------|-----------------------|
+| `lang::transaction`      | `boolean`                     | Remote registry supports transactions                                                                                                                | If enabled, cycles which aren't self-referential are allowed | `false`  | not implemented       |
+| `lang::unstable`         | `boolean`                     | Enable unstable feature in language, if available.                                                                                                   | Will set every key starting with `lang::unstable` to true.   | `false`  | `0.1`                 |
+| `lang::unstable::env`    | `boolean`                     | Enable the usage of environmental variables for configuration values                                                                                 | Use of `${}` in configuration strings is possible.           | `false`  | not implemented       |
+| `lang::unstable::format` | `boolean`                     | Enable string interpolation with configuration values                                                                                                | Use of `{}` in strings to reference configuration values.    | `false`  | not implemented       |
+| `lang::unstable::func`   | `boolean`                     | Enable support for the calling of functions                                                                                                          | Enable the use of functions calls across the whole app       | `false`  | not implemented       |
+| `impl::auth`             | `enum` (`"none", "password"`) | Remote registry has a specific authentication scheme, depending on the implementation, different methods for supplying the credentials are provided. | If enabled, will use authentication to contact registry      | `"none"` | `"none"`: since `0.1` |
+| `impl::unstable`         | `boolean`                     | Enable unstable features in implementation, if available.                                                                                            | Will set every key starting with `impl::unstable` to true    | `false`  | `0.1`                 |
 
 ### Modules
 
@@ -420,37 +418,7 @@ flowchart TB;
   std --> modA --> modB
 ```
 
-### Configuration
-
-```abnf
-set *(IDENT "::") IDENT "=" value ";"
-```
-
-Configuration is used to set values, which may be referenced later using interpolation or
-during configuration of the implementations. Configuration keys need to be unique, cannot
-be overwritten and user-defined configuration keys *may not* use built-in names.
-
-Configuration keys are dictionaries, which are partitioned using `::`, this allows the
-protection of certain values, to reduce breakage in future releases.
-
-The namespace `impl` and `lang` are reserved and *may not* be used for user-defined
-configuration.
-
-`lang::unstable` and `impl::unstable` keys may be removed in any version but will only be
-stabilized in major versions, before any feature is added, they are first added as an
-unstable feature, and once matured will be stabilized.
-
-| Name                     | Type                          | Description                                                                                                                                          | Effect                                                       | Default  | Implemented since     |
-|--------------------------|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|----------|-----------------------|
-| `lang::transaction`      | `boolean`                     | Remote registry supports transactions                                                                                                                | If enabled, cycles which aren't self-referential are allowed | `false`  | not implemented       |
-| `lang::unstable`         | `boolean`                     | Enable unstable feature in language, if available.                                                                                                   | Will set every key starting with `lang::unstable` to true.   | `false`  | `0.1`                 |
-| `lang::unstable::env`    | `boolean`                     | Enable the usage of environmental variables for configuration values                                                                                 | Use of `${}` in configuration strings is possible.           | `false`  | not implemented       |
-| `lang::unstable::format` | `boolean`                     | Enable string interpolation with configuration values                                                                                                | Use of `{}` in strings to reference configuration values.    | `false`  | not implemented       |
-| `lang::unstable::func`   | `boolean`                     | Enable support for the calling of functions                                                                                                          | Enable the use of functions calls across the whole app       | `false`  | not implemented       |
-| `impl::auth`             | `enum` (`"none", "password"`) | Remote registry has a specific authentication scheme, depending on the implementation, different methods for supplying the credentials are provided. | If enabled, will use authentication to contact registry      | `"none"` | `"none"`: since `0.1` |
-| `impl::unstable`         | `boolean`                     | Enable unstable features in implementation, if available.                                                                                            | Will set every key starting with `impl::unstable` to true    | `false`  | `0.1`                 |
-
-### `std` module
+#### `std` module
 
 The std module is included in every implementation and should include the following code:
 
@@ -464,6 +432,38 @@ alias prop object = #bp::object;
 ```
 
 The module provides sane defaults, like convenient aliases.
+
+### Attributes
+
+```abnf
+attribute = "#" "[" IDENT "=" <tt> "]"
+```
+
+Attributes are optional information about a specific resource (property-type, data-type,
+link-type, entity-type, etc.), which are used to add more detail to a resource.
+
+Attribute values may refer to previously set configuration values, depending on the
+attribute these may be forbidden.
+
+| Name      | Description                                                                            | Type          | Variable Support |
+|-----------|----------------------------------------------------------------------------------------|---------------|------------------|
+| `version` | Version of a resource, if not specified will be inserted on execution, defaults to `1` | `int`         | `false`          |
+| `cfg`     | Conditionally emit code, depending if the expr evaluates to true                       | meta language | `false`          |
+
+[//]: # (TODO: should we include cfg or remove?!)
+
+### Comments
+
+```abnf
+comment = "//" <string w/o leading '/', until EOF>
+doc-comment = "///" <chars until EOF>
+```
+
+There are two types of comments: code comments and documentation comments.
+Code comments are erased during the compilation, while documentation comments are used
+as the description of resources (if they support it).
+Code comments are allowed anywhere, while documentation comments are only allowed before
+resources.
 
 ## Language Extensibility
 
