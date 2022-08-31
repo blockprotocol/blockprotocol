@@ -5,6 +5,7 @@
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
+import packageJSON from "../package.json";
 import Component from "./index";
 
 const node = document.getElementById("app");
@@ -17,6 +18,7 @@ const DevApp = () => {
         entityId: "test-block-1",
         properties: { name: "World" },
       }}
+      blockInfo={packageJSON.blockprotocol}
       debug
     />
   );
