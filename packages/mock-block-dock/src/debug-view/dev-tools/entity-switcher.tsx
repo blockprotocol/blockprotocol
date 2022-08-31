@@ -42,8 +42,8 @@ export const EntitySwitcher = () => {
       <Button
         size="small"
         component="button"
-        id="demo-positioned-button"
-        aria-controls={open ? "demo-positioned-menu" : undefined}
+        id="entity-switcher-trigger"
+        aria-controls={open ? "entity-switcher-popover" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
@@ -57,8 +57,8 @@ export const EntitySwitcher = () => {
         Switch Entity
       </Button>
       <Popover
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
+        id="entity-switcher-popover"
+        aria-labelledby="entity-switcher-trigger"
         anchorEl={anchorEl}
         open={open}
         onClose={closePopover}
