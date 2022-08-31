@@ -17,13 +17,13 @@ export async function middleware(request: NextRequest) {
     if (url.host === productionFrontendHost && openingBlockSandboxPage) {
       const newUrl = new URL(url);
       newUrl.host = productionSandboxHost;
-      return NextResponse.redirect(newUrl);
+      return NextResponse.redirect(newUrl, 308);
     }
 
     if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
       const newUrl = new URL(url);
       newUrl.host = productionFrontendHost;
-      return NextResponse.redirect(newUrl);
+      return NextResponse.redirect(newUrl, 308);
     }
   }
 
