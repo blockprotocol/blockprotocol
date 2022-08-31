@@ -94,7 +94,7 @@ The starter blocks created by `create-block-app` implement a simple example of t
 
 The Graph Service describes how entities can be created, queried, updated, and linked together, including the block entity. It enables your block to create, read, update, and delete data in the embedding application.
 
-The Graph Service is available via the `graphService` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](/docs/spec/graph-service-specification).
+The Graph Service is available via the `graphService` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](/docs/spec/graph-service).
 
 Using these methods in combination, you can create complex graphs from within a block without having to know anything about the implementation details of the application embedding it.
 
@@ -157,7 +157,7 @@ Any entities linked to the block will appear in the `linkedEntities` property, w
 
 If you are using TypeScript, the types for methods available on `graphService` (as defined in the `@blockprotocol/graph` package) should help you understand what methods are available and how they operate.
 
-You can also review the messages defined in the graph specification [here](/docs/spec/graph-service-specification). If you do so, bear in mind the following:
+You can also review the messages defined in the graph specification [here](/docs/spec/graph-service). If you do so, bear in mind the following:
 
 - only the ones marked as `source: "block"` are available as methods to your block.
 - any message marked as `sentOnInitialization` with `source: "embeder"` will be passed to your block as soon as it’s loaded. Remember that `custom-element` and `react`-type blocks receive these messages as properties under a `graph` object, whereas `html` blocks can register callbacks for each message.
