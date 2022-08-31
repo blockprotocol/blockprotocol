@@ -26,8 +26,8 @@ pub struct Object<T> {
     required: Vec<String>,
 }
 
-impl TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>
-    for super::Object<ValueOrArray<PropertyTypeReference>, 1>
+impl<const MIN: usize> TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>
+    for super::Object<ValueOrArray<PropertyTypeReference>, MIN>
 {
     type Error = ParsePropertyTypeObjectError;
 
@@ -44,8 +44,8 @@ impl TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>
                     val.try_into()?,
                 ))
             })
-            .collect::<Result<HashMap<BaseUri, ValueOrArray<PropertyTypeReference>>, Self::Error>>(
-            )?;
+            .collect::<Result<HashMap<_, _>, Self::Error>>()?;
+
         let required = object_repr
             .required
             .into_iter()
@@ -58,11 +58,11 @@ impl TryFrom<Object<repr::ValueOrArray<repr::PropertyTypeReference>>>
     }
 }
 
-impl<T, R> From<super::Object<T, 1>> for Object<R>
+impl<T, R, const MIN: usize> From<super::Object<T, MIN>> for Object<R>
 where
     R: From<T>,
 {
-    fn from(object: super::Object<T, 1>) -> Self {
+    fn from(object: super::Object<T, MIN>) -> Self {
         let properties = object
             .properties
             .into_iter()
