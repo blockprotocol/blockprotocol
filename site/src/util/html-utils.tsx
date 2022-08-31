@@ -1,3 +1,4 @@
+import { formatDistance } from "date-fns";
 import ReactHtmlParser, {
   convertNodeToElement,
   Transform,
@@ -28,4 +29,13 @@ export const parseHTML = (html: string) => {
     }
   };
   return ReactHtmlParser(html, { transform });
+};
+
+export const formatUpdatedAt = (date?: string | null) => {
+  return date
+    ? `Updated 
+  ${formatDistance(new Date(date), new Date(), {
+    addSuffix: true,
+  })}`
+    : "";
 };
