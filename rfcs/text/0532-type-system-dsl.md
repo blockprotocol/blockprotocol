@@ -67,6 +67,8 @@ value = boolean / int / float / string
 
 ```abnf
 list = "[" [ *(value ",") value [","] ] "]"
+; Experimental
+map = "{" [ *(IDENT "=" value ",") IDENT "=" value [","] ] "}"
 ```
 
 // TODO
@@ -594,6 +596,8 @@ value = boolean / int / float / string
 
 ; Composite Types
 list = [*value]
+; Experimental
+map = "{" [ *(IDENT "=" value ",") IDENT "=" value [","] ] "}"
 
 ; Comments
 comment = "//" <string w/o leading '/', until EOF>
