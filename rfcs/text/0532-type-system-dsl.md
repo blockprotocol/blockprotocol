@@ -467,11 +467,6 @@ resources.
 
 ## Language Extensibility
 
-### Reverse Links
-
-Should reverse links be implemented in the graph type system they can be implemented in
-this DSL by reversing the arrows from `->` to `<-` and `~>` to `<~`.
-
 ### Additional Item Information
 
 Links and properties may have additional information attached to them in the future, this
@@ -491,6 +486,11 @@ prop "Title" {
   b
 }
 ```
+
+### Reverse Links
+
+Should reverse links be implemented in the graph type system they can be implemented in
+this DSL by reversing the arrows from `->` to `<-` and `~>` to `<~`.
 
 ### Data Types
 
@@ -715,15 +715,29 @@ grammar = *( *doc-comment *attribute stmt )
 
 [drawbacks]: #drawbacks
 
-Why should we _not_ do this?
+Developing, maintaining and creating a DSL is a challenging and a potentially
+time-consuming effort; that might not pay off.
+Drawbacks are that time will need to be allocated for the development and maintenance of
+an implementation, as well as the possibility of users not adopting the language.
+
+This proposal tries to mitigate these issues, by clearly defining the language first,
+before implementing it, validating it with existing users and use-cases.
 
 # Rationale and alternatives
 
 [rationale-and-alternatives]: #rationale-and-alternatives
 
-- Why is this design the best in the space of possible designs?
-- What other designs have been considered and what is the rationale for not choosing them?
-- What is the impact of not doing this?
+This proposal tries to make the most concise declarative language possible for the DSL,
+while trying to be extensible for future features.
+The `unstable` configuration flag is here very important, it enables the language to add
+new features, that might be removed in the future, without compromising the initial
+version.
+
+[HCL](https://github.com/hashicorp/hcl) has been considered as an alternative language,
+but to reduce the API surface, as well as gain more control a custom DSL was chosen.
+
+Not doing this is completely fine, but will most probably hinder adoption by developers,
+as the existing JSON is large, clumsy and due to the very nature of JSON quite redundant.
 
 # Prior art
 
