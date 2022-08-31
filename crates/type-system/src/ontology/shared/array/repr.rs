@@ -3,8 +3,9 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::{
-    repr, OneOf, ParseOneOfArrayError, ParsePropertyTypeObjectError,
-    ParsePropertyTypeReferenceArrayError, PropertyTypeReference, PropertyValues,
+    repr, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError, ParseOneOfArrayError,
+    ParsePropertyTypeObjectError, ParsePropertyTypeReferenceArrayError, PropertyTypeReference,
+    PropertyValues,
 };
 
 /// Will serialize as a constant value `"array"`
@@ -54,6 +55,21 @@ impl TryFrom<Array<repr::PropertyTypeReference>> for super::Array<PropertyTypeRe
                 .items
                 .try_into()
                 .map_err(ParsePropertyTypeReferenceArrayError::InvalidReference)?,
+            min_items: array_repr.min_items,
+            max_items: array_repr.max_items,
+        })
+    }
+}
+
+impl TryFrom<Array<repr::EntityTypeReference>> for super::Array<EntityTypeReference> {
+    type Error = ParseEntityTypeReferenceArrayError;
+
+    fn try_from(array_repr: Array<repr::EntityTypeReference>) -> Result<Self, Self::Error> {
+        Ok(Self {
+            items: array_repr
+                .items
+                .try_into()
+                .map_err(ParseEntityTypeReferenceArrayError::InvalidReference)?,
             min_items: array_repr.min_items,
             max_items: array_repr.max_items,
         })

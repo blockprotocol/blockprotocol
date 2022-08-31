@@ -12,7 +12,7 @@ use crate::{
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParsePropertyTypeObjectError {
-    #[error("invalid property reference: `{0}`")]
+    #[error("invalid property type reference: `{0}`")]
     InvalidPropertyTypeReference(ParseVersionedUriError),
     #[error("invalid array definition: `{0}`")]
     InvalidArray(ParsePropertyTypeReferenceArrayError),

@@ -7,6 +7,8 @@
 //! submodules.
 
 mod data_type;
+mod entity_type;
+mod link_type;
 mod property_type;
 // TODO: reconsider calling these URIs in the spec, it seems to be a redundant term nowadays and
 //  we should probably just go with URL
@@ -15,6 +17,13 @@ pub mod uri;
 mod shared;
 
 pub use data_type::{DataType, DataTypeReference, ParseDataTypeError};
+pub use entity_type::{
+    links::{
+        Links, MaybeOrderedArray, ParseEntityTypeReferenceArrayError, ParseLinksError,
+        ValueOrMaybeOrderedArray,
+    },
+    EntityType, EntityTypeReference, ParseEntityTypeError,
+};
 pub use property_type::{
     ParsePropertyTypeError, PropertyType, PropertyTypeReference, PropertyValues,
 };
@@ -38,6 +47,10 @@ pub use shared::{
 pub(crate) mod repr {
     pub(crate) use super::{
         data_type::repr::{DataType, DataTypeReference},
+        entity_type::{
+            links::repr::{Links, ValueOrMaybeOrderedArray},
+            repr::{EntityType, EntityTypeReference},
+        },
         property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
         shared::{
             array::repr::{Array, ValueOrArray},
