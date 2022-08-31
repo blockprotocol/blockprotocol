@@ -853,7 +853,6 @@ export const useMockDatastore = ({
     if (entityTypeInStore) {
       // If block schema changed, update entity type
       if (JSON.stringify(blockSchema) !== JSON.stringify(prevBlockSchema)) {
-        // test this
         Object.assign(entityTypeInStore.schema, blockSchema ?? {});
         setEntityTypes(newEntityTypes);
       }
