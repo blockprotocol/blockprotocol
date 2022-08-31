@@ -31,15 +31,11 @@ export const PropertiesView = () => {
         <Grid item xs={6}>
           {/* Entity Properties row */}
           <Box mb={3}>
-            <Typography
-              variant="subtitle2"
-              mb={1}
-              display="flex"
-              justifyContent="space-between"
-            >
-              Entity Properties
+            <Box display="flex" justifyContent="space-between" mb={1}>
+              <Typography variant="subtitle2">Entity Properties</Typography>
               <EntitySwitcher />
-            </Typography>
+            </Box>
+
             <Box maxWidth={800}>
               <JsonView
                 collapseKeys={["graph"]}

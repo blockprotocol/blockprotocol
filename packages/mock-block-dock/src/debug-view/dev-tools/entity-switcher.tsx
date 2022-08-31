@@ -25,12 +25,14 @@ export const EntitySwitcher = () => {
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const closePopover = () => {
     setAnchorEl(null);
   };
 
   const handleSubmit = () => {
     setBlockEntity(selectedEntity);
+    closePopover();
   };
 
   const open = Boolean(anchorEl);
@@ -59,7 +61,7 @@ export const EntitySwitcher = () => {
         aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={closePopover}
         PaperProps={{
           sx: {
             p: 3,
