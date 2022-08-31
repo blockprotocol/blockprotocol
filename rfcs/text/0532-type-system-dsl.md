@@ -465,93 +465,6 @@ as the description of resources (if they support it).
 Code comments are allowed anywhere, while documentation comments are only allowed before
 resources.
 
-## Language Extensibility
-
-### Additional Item Information
-
-Links and properties may have additional information attached to them in the future, this
-DSL would provide support through the following extension:
-
-```abnf
-item-key-value = id "=" VALUE
-item-block = "{" [*(item-key-value ",") item-key-value [","]] "}"
-entity-item = entity-item-old [item-block]
-```
-
-#### Example 1
-
-```abnf
-prop "Title" {
-  [a]? {prop1 = 2},
-  b
-}
-```
-
-### Reverse Links
-
-Should reverse links be implemented in the graph type system they can be implemented in
-this DSL by reversing the arrows from `->` to `<-` and `~>` to `<~`.
-
-### Data Types
-
-The keyword `data` is reserved for custom `data` types in the future.
-
-### Computed Props
-
-The DSL could in theory support computed properties
-through [Additional Item Information](#additional-item-information) and a specific
-sub-language which is used to express the computation required.
-
-### Sharing Entity Structures
-
-The alias for entities, links and data are currently reserved and unused; one could
-imagine an extension of the language, which makes use of a spread syntax to share common
-properties for entities and property objects.
-
-#### Example 1
-
-```
-alias entity human = {
-  favorite-hobby/1,
-  
-  ~> friends?
-};
-
-entity "Child" = {
-  age/1,
-  ...human
-};
-
-entity "Adult" = {
-  occupation/1,
-  ...human
-};
-```
-
-### Inheritance
-
-Inheritance could be done through multiple ways: a new keyword: `extends` or implicitly
-through the spread syntax.
-
-#### Example 1
-
-```
-entity person "Person" = {
-  age/1
-};
-
-// proposal (1): allow spread syntax on entities
-entity "Child" = {
-  ...person,
-  grade/1
-}
-
-// proposal (2): use a new keyword `extends`
-entity "Adult" extends person = {
-  occupation/1
-}
-```
-
 ## Toolbox
 
 ### `plan`
@@ -796,30 +709,95 @@ approach through the use of declarative paradigms instead.
 
 [unresolved-questions]: #unresolved-questions
 
-- What parts of the design do you expect to resolve through the RFC process before this
-  gets merged?
-- What parts of the design do you expect to resolve through the implementation of this
-  feature before stabilization?
-- What related issues do you consider out of scope for this RFC that could be addressed in
-  the future independently of the solution that comes out of this RFC?
-
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
 
-Think about what the natural extension and evolution of your proposal would be and how it
-would affect the project and ecosystem as a whole in a holistic way. Try to use this
-section as a tool to more fully consider all possible interactions with the project and
-ecosystem in your proposal. Also consider how this all fits into the roadmap for the
-project and of the relevant sub-team.
+This DSL and toolbox is specifically designed to be extended by various means, this lists
+some possible future extensions, which should be added once other RFCs add new
+features to the type system.
 
-This is also a good place to "dump ideas", if they are out of scope for the RFC you are
-writing but otherwise related.
+### Additional Item Information
 
-If you have tried and cannot think of any future possibilities, you may simply state that
-you cannot think of anything.
+Links and properties may have additional information attached to them in the future, this
+DSL would provide support through the following extension:
 
-Note that having something written down in the future-possibilities section is not a
-reason to accept the current or a future RFC; such notes should be in the section on
-motivation or rationale in this or subsequent RFCs. The section merely provides additional
-information.
+```abnf
+item-key-value = id "=" VALUE
+item-block = "{" [*(item-key-value ",") item-key-value [","]] "}"
+entity-item = entity-item-old [item-block]
+```
+
+#### Example 1
+
+```abnf
+prop "Title" {
+  [a]? {prop1 = 2},
+  b
+}
+```
+
+### Reverse Links
+
+Should reverse links be implemented in the graph type system they can be implemented in
+this DSL by reversing the arrows from `->` to `<-` and `~>` to `<~`.
+
+### Data Types
+
+The keyword `data` is reserved for custom `data` types in the future.
+
+### Computed Props
+
+The DSL could in theory support computed properties
+through [Additional Item Information](#additional-item-information) and a specific
+sub-language which is used to express the computation required.
+
+### Sharing Entity Structures
+
+The alias for entities, links and data are currently reserved and unused; one could
+imagine an extension of the language, which makes use of a spread syntax to share common
+properties for entities and property objects.
+
+#### Example 1
+
+```
+alias entity human = {
+  favorite-hobby/1,
+  
+  ~> friends?
+};
+
+entity "Child" = {
+  age/1,
+  ...human
+};
+
+entity "Adult" = {
+  occupation/1,
+  ...human
+};
+```
+
+### Inheritance
+
+Inheritance could be done through multiple ways: a new keyword: `extends` or implicitly
+through the spread syntax.
+
+#### Example 1
+
+```
+entity person "Person" = {
+  age/1
+};
+
+// proposal (1): allow spread syntax on entities
+entity "Child" = {
+  ...person,
+  grade/1
+}
+
+// proposal (2): use a new keyword `extends`
+entity "Adult" extends person = {
+  occupation/1
+}
+```
