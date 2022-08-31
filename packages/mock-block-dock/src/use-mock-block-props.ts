@@ -85,12 +85,12 @@ export const useMockBlockProps = ({
     };
   };
 
-  const datastore = useMockDatastore(
-    getDefaultMockData(),
+  const datastore = useMockDatastore({
+    initialData: getDefaultMockData(),
     readonly,
     externalBlockEntity,
     blockSchema,
-  );
+  });
 
   const {
     entities,

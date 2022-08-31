@@ -43,17 +43,23 @@ export const defaultBlockEntityId = "block1";
 /** default entityTypeId assigned to the block entity if the block entity doesn't have one */
 export const defaultBlockEntityTypeId = "block-type-1";
 
-export const useMockDatastore = (
-  initialData: MockData = {
-    entities: [],
-    links: [],
-    linkedAggregationDefinitions: [],
-    entityTypes: [],
-  },
-  readonly?: boolean,
-  externalBlockEntity?: Entity,
-  blockSchema?: Partial<EntityType>,
-): MockDataStore => {
+const defaultBlockEntity = {
+  entityId: "block1",
+  entityTypeId: "block-type-1",
+  properties: {},
+};
+
+export const useMockDatastore = ({
+  initialData,
+  readonly,
+  externalBlockEntity,
+  blockSchema,
+}: {
+  initialData: MockData;
+  readonly?: boolean;
+  externalBlockEntity?: Entity;
+  blockSchema?: Partial<EntityType>;
+}): MockDataStore => {
   const [entities, setEntities] = useDefaultArrayState<
     MockDataStore["entities"]
   >(initialData.entities);
@@ -66,7 +72,9 @@ export const useMockDatastore = (
   const [linkedAggregations, setLinkedAggregations] = useDefaultArrayState<
     MockDataStore["linkedAggregationDefinitions"]
   >(initialData.linkedAggregationDefinitions);
-  const [blockEntity, setBlockEntity] = useState(externalBlockEntity);
+  const [blockEntity, setBlockEntity] = useState<Entity>(
+    externalBlockEntity ?? defaultBlockEntity,
+  );
   const prevExternalBlockEntity = usePrevious(externalBlockEntity);
   const prevBlockSchema = usePrevious(blockSchema);
 
@@ -920,7 +928,7 @@ export const useMockDatastore = (
     externalBlockEntity !== prevExternalBlockEntity &&
     JSON.stringify(blockEntity) !== JSON.stringify(externalBlockEntity)
   ) {
-    const entity = externalBlockEntity;
+    const entity = externalBlockEntity ?? ({} as Entity);
     // This handles scenarios where the passed in block entity doesn't have an
     // entityId or entityTypeId
     if (!entity.entityId) {
@@ -929,7 +937,7 @@ export const useMockDatastore = (
     if (!entity.entityTypeId) {
       entity.entityTypeId = defaultBlockEntityTypeId;
     }
-    setBlockEntity(externalBlockEntity);
+    setBlockEntity(entity);
   }
 
   return {

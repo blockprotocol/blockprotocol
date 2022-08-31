@@ -15,7 +15,9 @@ export const EntitySwitcher = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { blockEntity, setBlockEntity, datastore } = useMockBlockDockContext();
   const [entityTypeId, setEntityTypeId] = useState(blockEntity.entityTypeId);
-  const [entityId, setEntityId] = useState(blockEntity.entityId);
+  const [entityId, setEntityId] = useState<string | undefined>(
+    blockEntity.entityId,
+  );
 
   const selectedEntity = datastore.entities.find(
     (entity) =>
@@ -31,7 +33,9 @@ export const EntitySwitcher = () => {
   };
 
   const handleSubmit = () => {
-    setBlockEntity(selectedEntity);
+    if (selectedEntity) {
+      setBlockEntity(selectedEntity);
+    }
     closePopover();
   };
 
