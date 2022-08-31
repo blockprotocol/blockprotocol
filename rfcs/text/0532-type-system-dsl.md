@@ -10,9 +10,10 @@
 [summary]: #summary
 
 This RFC proposes a new system for expressing all types outlined in [RFC 0352],
-and [RFC 0408] through a domain specific language (DSL). The DSL addresses pain points
-that working with raw types using JSON brings with and includes a toolbox of programs to
-aid in development, specifically geared towards developers.
+and [RFC 0408] through a domain specific language (DSL).
+The DSL addresses pain points that working with raw types using JSON brings with and
+includes a toolbox of programs to aid in development, specifically geared towards
+developers.
 
 TODO: name? file extension?
 
@@ -50,26 +51,21 @@ explain its impact in concrete terms.
 
 ## Domain-Specific-Language (DSL)
 
-```abnf
-IDENT = ALPHA *(ALPHA / DIGIT / "-")
-```
-
 ### Primitive Types
 
 ```abnf
-INTEGER = ["+" / "-"] 1*DIGIT
-FLOAT = INTEGER "." 1*DIGIT
-BOOLEAN = true / false;
-STRING = ... ; TODO
-COMMENT = "//" ; TODO
-VALUE = FLOAT / INTEGER / STRING / BOOLEAN
+boolean = true / false
+int = ["+" / "-"] 1*DIGIT
+float = int "." 1*DIGIT
+string = <single-quoted string> / <double-quoted string>
+value = boolean / int / float / string
 ```
 
 ### Comments
 
 ```abnf
-COMMENT = "//" ; TODO
-doc-comment = "///" ; TODO
+comment = "//" <string w/o leading '/', until EOF>
+doc-comment = "///" <chars until EOF>
 ```
 
 There are two types of comments: code comments and documentation comments.
@@ -81,7 +77,7 @@ resources.
 ### Attributes
 
 ```abnf
-attribute = "#" "[" IDENT "=" (VALUE / (*(IDENT "::") IDENT)) "]"
+attribute = "#" "[" IDENT "=" <tt> "]"
 ```
 
 Attributes are optional information about a specific resource (property-type, data-type,
@@ -100,18 +96,17 @@ attribute these may be forbidden.
 ### Reference
 
 ```abnf
-range = [INTEGER] ".." [INTEGER]
+range = [int] ".." ["="] [int]
 reference-array = "[" variable [";" range] "]"
 reference = variable / reference-array
 ```
 
 ```abnf
-url = STRING
-id = IDENT
+url = <http url>
 
-use-key-value = id "=" VALUE
-use-with = "with" "{" [*(use-key-value ",") use-key-value [","]] "}"
-use = "use" url "as" id [use-with] ";"
+use-key-value = id "=" string
+use-with = "with" "{" [ *(use-key-value ",") use-key-value [","] ] "}"
+use = "use" url "as" IDENT [use-with] ";"
 ```
 
 -> How use works, required `self`
@@ -206,36 +201,34 @@ Currently unspecified
 #### Property Type
 
 ```abnf
-id = IDENT
-title = STRING
-
-prop-object = "{" [*(reference ",") reference [","]] "}"
+prop-object = "{" [ *(reference  ",") reference [","] ] "}"
 prop-array = "[" prop-value [";" range] "]"
-prop-value = variable / prop-object / prop-array / (prop-value "|" prop-value) / "(" prop-value ")"
-prop = *doc-comment *attribute prop [id] title "=" prop-value ";"
+prop-value = variable / prop-object / prop-array 
+prop-value /= prop-value "|" prop-value
+prop-value /= "(" prop-value ")"
+
+prop = "prop" [IDENT] title "=" prop-value ";"
 ```
+
+// TODO: docs
 
 #### Link Type
 
 ```abnf
-id = IDENT
-title = STRING
-
-link = *doc-comment *attribute link [id] title ";"
+link = "link" [IDENT] title ";"
 ```
+
+// TODO: docs
 
 #### Entity Type
 
 ```abnf
-id = IDENT
-title = STRING
-
 entity-link-direction = "~>" / "->"
 entity-link = link-direction reference 
-entity-item = reference / entity-link-direction
+entity-item = reference / entity-link
 
-entity-value = "{" [*(entity-item ",") (entity-item ",")] "}"
-entity = entity [id] title "=" entity-value ";"
+entity-value = "{" [ *(entity-item ",") entity-item [","] ] "}"
+entity = "entity" [IDENT] title "=" entity-value ";"
 ```
 
 ### Type Alias
@@ -246,7 +239,7 @@ alias-data = "alias" "data" IDENT ";" ; CURRENTLY UNDEFINED
 alias-link = "alias" "link" IDENT ";" ; CURRENTLY UNDEFINED
 alias-entity = "alias" "entity" IDENT ";" ; CURRENTLY UNDEFINED
 
-alias = alias-prop / alias-entity / alias-data / alias-link;
+alias = alias-prop / alias-entity / alias-data / alias-link
 ```
 
 Type aliases are convenient ways to split the resource declaration (the right-hand side of
@@ -261,10 +254,9 @@ compilation time.
 ```abnf
 type = "@" / "#" / ">" / "~"
 module = IDENT
-id = IDENT
-version = INTEGER
+version = int / "latest"
 
-variable = type? [module "::"] id ["/" version] 
+variable = [type] [module "::"] IDENT ["/" version]
 ```
 
 Variables are used to reference to external and local resources, each type in the block
@@ -318,8 +310,8 @@ strongly typed and support union types.
 **DISCLAIMER:** This is highly unstable, unimplemented and may be removed at any point.
 
 ```abnf
-arg = call / variable / VALUE;
-call = IDENT "(" [*(arg ",") arg [","]] ")"
+arg = call / variable / value
+call = IDENT "(" [ *(arg ",") arg [","] ] ")"
 ```
 
 | Signature                 | Description                  | Panic                               |
@@ -431,9 +423,7 @@ flowchart TB;
 ### Configuration
 
 ```abnf
-id = IDENT
-
-set *(id "::") id "=" VALUE ";"
+set *(IDENT "::") IDENT "=" value ";"
 ```
 
 Configuration is used to set values, which may be referenced later using interpolation or
@@ -649,7 +639,7 @@ doc-comment = "///" <chars until EOF>
 ; Attributes
 attribute = "#" "[" IDENT "=" <tt> "]"
 
-; Variable
+; Variables
 type = "@" / "#" / ">" / "~"
 module = IDENT
 version = int / "latest"
@@ -673,8 +663,13 @@ use-key-value = id "=" string
 use-with = "with" "{" [ *(use-key-value ",") use-key-value [","] ] "}"
 use = "use" url "as" IDENT [use-with] ";"
 
+; Import Statement
+path = *(IDENT "::") IDENT
+
+import = "imp" path  ";"
+
 ; Set Statement
-set *(IDENT "::") IDENT "=" value ";"
+set path "=" value ";"
 
 ; Resources
 ; Property-Type
@@ -703,7 +698,6 @@ entity-item = reference / entity-link
 entity-value = "{" [ *(entity-item ",") entity-item [","] ] "}"
 entity = "entity" [IDENT] title "=" entity-value ";"
 
-
 ; Type Aliases
 alias-prop = "alias" "prop" IDENT "=" prop-value ";"
 alias-data = "alias" "data" IDENT ";" ; CURRENTLY UNDEFINED
@@ -713,7 +707,7 @@ alias-entity = "alias" "entity" IDENT ";" ; CURRENTLY UNDEFINED
 alias = alias-prop / alias-entity / alias-data / alias-link
 
 ; Root
-stmt = alias / entity / link / data / set / use
+stmt = alias / entity / link / data / set / use / import
 grammar = *( *doc-comment *attribute stmt )
 ```
 
