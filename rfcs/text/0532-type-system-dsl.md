@@ -709,6 +709,9 @@ approach through the use of declarative paradigms instead.
 
 [unresolved-questions]: #unresolved-questions
 
+* Should we do `entity "Entity" = <block>` (consistent with `prop`)
+  or `entity "Entity" <block>`?
+
 # Future possibilities
 
 [future-possibilities]: #future-possibilities
@@ -817,25 +820,56 @@ where `= 12` is the default value for that specific property.
 
 This could be enabled for entities, properties, etc.
 
-### Examples
+### Default Entity
 
-Examples could be through the use of attribute macros, we would need to relax the 
-definition and allow them on properties.
+Default entity can be created with a new keyword combination: `with default` or through
+attributes.
 
 ```
+// proposal (1): with default
+entity "Person" = {
+  age/1
+} with default {
+  age/1 = 12
+}
+
+// proposal (2): attribute (preferred)
+#[default = {age/1 = 12}]
+entity "Person" = {
+  age/1
+}
+```
+
+### Examples
+
+Examples could be through the use of attribute macros or
+via [Additional Item Information](#additional-item-information).
+
+For the first approach, we would need to relax the definition and allow them on
+properties.
+
+```
+// proposal (1): attribute (preferred)
 #[example = {age/1 = 13}]
 #[example = {age/1 = 14}]
 entity person "Person" = {
   #[example = 12]
   age/1
 }
+
+// proposal (2): with example
+entity person "Person" = {
+  age/1 {examples = [12]}
+} with example {
+  age/1 = 13
+} with example {
+  age/1 = 14
+}
 ```
 
 ### Descriptions of Fields
 
 We relax the grammar to allow doc-comments on properties and entity field.
-
-#### Example 1
 
 ```
 entity person "Person" = {
@@ -844,3 +878,43 @@ entity person "Person" = {
 }
 ```
 
+### Link Keywords
+
+While not fully being in the spec, this is already in the type package.
+
+Keywords can be created with two proposals:
+
+1) attributes (preferred)
+2) `with keywords`
+
+```
+// proposal (1): attributes
+#[keyword = "y"]
+#[keyword = "x"]
+link "Owned By";
+
+// proposal (2): with keyword
+link "Owned By" with keywords ["y", "x"] ;
+```
+
+### Plurals
+
+Plurals are currently not in the spec, but already implemented in the type system.
+
+There are two proposals to create them:
+
+1) attributes
+2) additional property
+
+```
+// proposal (1): attribute
+#[plural = "People"]
+entity person "Person" = {
+  age/1
+}
+
+// proposal (2): additional property
+entity person "Person" "People" = {
+  age/1
+}
+```
