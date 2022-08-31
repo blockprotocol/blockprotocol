@@ -19,7 +19,7 @@ pub enum ParseOneOfArrayError {
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParsePropertyTypeReferenceArrayError {
-    #[error("invalid property reference inside items: `{0}`")]
+    #[error("invalid property type reference inside items: `{0}`")]
     InvalidReference(ParseVersionedUriError),
     #[error("error in JSON: `{0}`")]
     InvalidJson(String),
