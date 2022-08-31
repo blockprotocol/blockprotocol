@@ -40,6 +40,7 @@ export const PropertiesView = () => {
               <JsonView
                 collapseKeys={["graph"]}
                 rootName="blockEntity"
+                sortKeys
                 src={blockEntity ?? {}}
                 onEdit={(args) => {
                   setBlockEntity(
