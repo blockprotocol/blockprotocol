@@ -1,6 +1,5 @@
 import { Box, Typography } from "@mui/material";
 
-import { CODE_FONT_FAMILY } from "../../../theme/typography";
 import { Snippet } from "../../snippet";
 
 const reactDummyCode = `export const App: BlockComponent<AppProps> =({
@@ -53,10 +52,7 @@ const CodeBlock = () => {
           }}
         >
           <Snippet
-            sx={{
-              fontFamily: CODE_FONT_FAMILY,
-              whiteSpace: "break-spaces",
-            }}
+            sx={{ whiteSpace: "break-spaces" }}
             source={reactDummyCode}
             language="jsx"
           />
