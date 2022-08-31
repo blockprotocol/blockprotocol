@@ -24,16 +24,16 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && yarn generate-version-file && yarn build:cjs && yarn build:esm && yarn copy-files",
+    "build": "yarn clean && yarn codegen && yarn build:cjs && yarn build:esm && yarn copy-files",
     "build:cjs": "tsc --p tsconfig.build.json --module commonjs --outDir dist/cjs",
     "build:dev": "yarn clean && cross-env NODE_ENV=development webpack --mode development",
     "build:esm": "tsc --p tsconfig.build.json",
     "clean": "rimraf ./dist/",
+    "codegen": "node -p \"'export const MOCK_BLOCK_DOCK_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "copy-files": "yarn copy-files:cjs && yarn copy-files:esm",
     "copy-files:cjs": "copyfiles -u 1 ./src/assets/* dist/cjs/",
     "copy-files:esm": "copyfiles -u 1 ./src/assets/* dist/esm/",
-    "dev": "yarn generate-version-file && concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
-    "generate-version-file": "node -p \"'export const MOCK_BLOCK_DOCK_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
+    "dev": "yarn codegen && concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
     "lint:tsc": "tsc --noEmit",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },

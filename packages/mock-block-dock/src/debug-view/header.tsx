@@ -65,7 +65,8 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
       <Box display="flex" alignItems="center" mr="auto">
         <Logo
           sx={({ palette }) => ({
-            fontSize: "3rem",
+            height: 20,
+            width: "auto",
             color:
               palette.mode === "light"
                 ? customColors.black
@@ -73,8 +74,12 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
             mr: 1,
           })}
         />
-        <Typography variant="caption" color={customColors.gray[60]}>
-          {MOCK_BLOCK_DOCK_VERSION}
+        <Typography
+          variant="subtitle2"
+          fontWeight="normal"
+          color={customColors.gray[60]}
+        >
+          v{MOCK_BLOCK_DOCK_VERSION}
         </Typography>
       </Box>
 
