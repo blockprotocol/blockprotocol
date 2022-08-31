@@ -235,7 +235,7 @@ entity-link = link-direction reference
 entity-item = reference / entity-link-direction
 
 entity-value = "{" [*(entity-item ",") (entity-item ",")] "}"
-entity = *doc-comment *attribute entity [id] title "=" entity-value ";"
+entity = entity [id] title "=" entity-value ";"
 ```
 
 ### Type Alias
@@ -626,6 +626,96 @@ alias prop property-value = text/1 | number/1 | [@some-object; ..5];
 
 #[version = 1]
 prop property-values "Property Values" = [@property-value; ..10];
+```
+
+## ABNF
+
+`<name>` is an extension of `ABNF`, which hides an implementation detail. Look at the
+reference down below for a detailed explanation for each `name`.
+
+```abnf
+IDENT = ALPHA *(ALPHA / DIGIT / "-")
+
+; Primitive Types
+boolean = true / false
+int = ["+" / "-"] 1*DIGIT
+float = int "." 1*DIGIT
+string = <single-quoted string> / <double-quoted string>
+value = boolean / int / float / string
+
+; Comments
+comment = "//" <string w/o leading '/', until EOF>
+doc-comment = "///" <chars until EOF> 
+
+; Attributes
+attribute = "#" "[" IDENT "=" <tt> "]"
+
+; Variable
+type = "@" / "#" / ">" / "~"
+module = IDENT
+version = int / "latest"
+
+variable = [type] [module "::"] IDENT ["/" version]
+
+; References
+range = [int] ".." ["="] [int]
+reference-array = "[" variable [";" range] "]"
+reference = variable / reference-array
+
+; Functions
+; (experimental)
+arg = call / variable / value
+call = IDENT "(" [ *(arg ",") arg [","] ] ")"
+
+; Use Statement
+url = <url>
+
+use-key-value = id "=" string
+use-with = "with" "{" [ *(use-key-value ",") use-key-value [","] ] "}"
+use = "use" url "as" IDENT [use-with] ";"
+
+; Set Statement
+set *(IDENT "::") IDENT "=" value ";"
+
+; Resources
+; Property-Type
+title = string
+
+prop-object = "{" [ *(reference  ",") reference [","] ] "}"
+prop-array = "[" prop-value [";" range] "]"
+prop-value = variable / prop-object / prop-array 
+prop-value /= prop-value "|" prop-value
+prop-value /= "(" prop-value ")"
+
+prop = "prop" [IDENT] title "=" prop-value ";"
+
+; Data-Type
+; Currently undefined, `data` is reserved
+data = "data" ";"
+
+; Link-Type
+link = "link" [IDENT] title ";"
+
+; Entity
+entity-link-direction = "~>" / "->"
+entity-link = link-direction reference 
+entity-item = reference / entity-link
+
+entity-value = "{" [ *(entity-item ",") entity-item [","] ] "}"
+entity = "entity" [IDENT] title "=" entity-value ";"
+
+
+; Type Aliases
+alias-prop = "alias" "prop" IDENT "=" prop-value ";"
+alias-data = "alias" "data" IDENT ";" ; CURRENTLY UNDEFINED
+alias-link = "alias" "link" IDENT ";" ; CURRENTLY UNDEFINED
+alias-entity = "alias" "entity" IDENT ";" ; CURRENTLY UNDEFINED
+
+alias = alias-prop / alias-entity / alias-data / alias-link
+
+; Root
+stmt = alias / entity / link / data / set / use
+grammar = *( *doc-comment *attribute stmt )
 ```
 
 # Drawbacks
