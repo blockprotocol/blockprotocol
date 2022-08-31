@@ -43,7 +43,6 @@ type MockBlockDockProps = {
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
-  blockName?: string;
   blockInfo?: {
     blockType: {
       entryPoint: "react" | "html" | "custom-element";
@@ -80,7 +79,6 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialLinks,
   initialLinkedAggregations,
   readonly: initialReadonly,
-  blockName,
   blockInfo,
 }) => {
   const {
@@ -222,7 +220,6 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setBlockEntity={setBlockEntity}
       datastore={datastore}
       blockType={blockType}
-      blockName={blockName}
       blockInfo={
         blockInfo ?? {
           blockType: {

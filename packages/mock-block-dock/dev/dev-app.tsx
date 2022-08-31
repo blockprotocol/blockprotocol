@@ -15,14 +15,31 @@ type TestBlockType =
   | "html-at-url"
   | "html-as-string";
 
+const blockEntityMap = {
+  react: {
+    entityId: "entity-react",
+    entityTypeId: "test-type-1",
+    properties: { name: "World" },
+  },
+  "custom-element": {
+    entityId: "entity-custom-element",
+    properties: { name: "World" },
+  },
+  "html-at-url": {
+    entityTypeId: "test-type-1",
+    properties: { name: "World" },
+  },
+  "html-as-string": {
+    entityId: "entity-html-at-url",
+    entityTypeId: "test-type-1",
+    properties: { name: "World" },
+  },
+};
+
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
 
-  const blockEntity = {
-    entityId: `test-entity-1`,
-    ...(testBlockType === "react" && { entityTypeId: "test-type-1" }),
-    properties: { name: testBlockType === "react" ? "World" : testBlockType },
-  };
+  const blockEntity = blockEntityMap[testBlockType];
 
   let blockDefinition;
   let blockType: "html" | "custom-element" | "react" | undefined;
@@ -100,7 +117,6 @@ const DevApp: FunctionComponent = () => {
         debug
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
-        blockName="Test Block"
         blockInfo={{
           displayName: "Test Block",
           blockType: {

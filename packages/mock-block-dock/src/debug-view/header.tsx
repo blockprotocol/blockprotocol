@@ -58,7 +58,7 @@ type Props = {
 };
 
 export const Header = ({ darkMode, setDarkMode }: Props) => {
-  const { setDebugMode, blockName } = useMockBlockDockContext();
+  const { setDebugMode, blockInfo } = useMockBlockDockContext();
 
   return (
     <Container>
@@ -106,7 +106,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           Blocks /
         </Typography>
         <Typography variant="subtitle2" fontWeight="medium">
-          {blockName}
+          {blockInfo?.displayName}
         </Typography>
       </Box>
 
