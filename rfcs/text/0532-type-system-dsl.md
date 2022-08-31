@@ -61,6 +61,16 @@ string = <single-quoted string> / <double-quoted string>
 value = boolean / int / float / string
 ```
 
+// TODO
+
+### Composite Types
+
+```abnf
+list = "[" [ *(value ",") value [","] ] "]"
+```
+
+// TODO
+
 ### Variables
 
 ```abnf
@@ -111,6 +121,8 @@ central repo, and `number` is a data-type that has been defined in that central 
 
 ### Reference
 
+#### Use
+
 ```abnf
 url = <http url>
 
@@ -119,13 +131,48 @@ use-with = "with" "{" [ *(use-key-value ",") use-key-value [","] ] "}"
 use = "use" url "as" IDENT [use-with] ";"
 ```
 
+The use statement is used to reference remote repositories with types. Implementations
+must validate all types that have been referenced for a repository, except for `self`.
+
+The `self` module/repository is special, it is the only repository that is required to
+specify and is the repository an implementation will create the declared resources/types
+in.
+
+One can modify the paths generated for different resources using the `with {}` syntax,
+where key-value pairs can be specified. There are four keys available: `prop`, `data`
+, `link`, `entity`, with their value being a format string, which has 2 variables
+available: `self` and `id`, `self` is the URL specified in the statement, while `id` is
+the versioned id of the type/resource.
+
+##### Example
+
+```
+use "https://blockprotocol.org/types/@alice" as self with {
+    data = "{self}/data-type/{id}",
+    prop = "{self}/property-type/{id}",
+    link = "{self}/link-type/{id}",
+    entity = "{self}/entity-type/{id}"
+};
+```
+
+#### Reference
+
 ```abnf
 range = [int] ".." ["="] [int]
 reference-array = "[" variable [";" range] "]"
 reference = variable / reference-array
 ```
 
--> How use works, required `self`
+References are used to refer to resources that have been declared locally (through `self`)
+or exist in remote repositories, a reference can either be an array or a variable, in the
+array, one can optionally specify a desired min and max length of the references needed.
+The max in `min..max` is exclusive, while `min..=max` is inclusive to `max`, if `min`
+isn't specified, it defaults to `0`, while `max` not being specified refers to no upper
+bound.
+
+* `0..5` = `..5` = `..=4` = `min: 0, max: 5`
+* `1..3` = `1..=2` = `min: 1, max: 3`
+* `..` = `0..` = `0..=` = `min: 0, max: unlimited`
 
 ### Resources
 
@@ -544,6 +591,9 @@ int = ["+" / "-"] 1*DIGIT
 float = int "." 1*DIGIT
 string = <single-quoted string> / <double-quoted string>
 value = boolean / int / float / string
+
+; Composite Types
+list = [*value]
 
 ; Comments
 comment = "//" <string w/o leading '/', until EOF>
