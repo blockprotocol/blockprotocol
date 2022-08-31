@@ -353,7 +353,7 @@ module.exports = {
               },
               {
                 name: "@mui/material",
-                importNames: ["Button", "TextField", "Popover"],
+                importNames: ["Button", "TextField", "Popover", "Alert"],
                 message:
                   "Please use the custom wrapper component in src/component instead.",
               },
@@ -374,6 +374,12 @@ module.exports = {
                 importNames: ["default"],
                 message:
                   "Please use the custom src/components/Popover component instead.",
+              },
+              {
+                name: "@mui/material/Alert",
+                importNames: ["default"],
+                message:
+                  "Please use the custom src/components/Alert component instead.",
               },
             ],
           },

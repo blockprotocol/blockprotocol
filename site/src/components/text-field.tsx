@@ -2,7 +2,6 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Collapse,
-  // eslint-disable-next-line no-restricted-imports
   TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
 } from "@mui/material";
@@ -11,11 +10,7 @@ import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 
 import { FontAwesomeIcon } from "./icons";
 
-type TextFieldProps = {
-  displayErrorOnTouched?: boolean;
-} & MuiTextFieldProps;
-
-export const TextField: FunctionComponent<TextFieldProps> = ({
+export const TextField: FunctionComponent<MuiTextFieldProps> = ({
   helperText,
   sx,
   ...textFieldProps

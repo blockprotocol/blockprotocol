@@ -2,6 +2,19 @@ import { ThemeOptions } from "@mui/material";
 
 export const customColors = {
   purple: {
+    10: "#F7F8FF",
+    20: "#EFEBFE",
+    30: "#E4DDFD",
+    40: "#C6B7FA",
+    50: "#A690F4",
+    60: "#8D68F8",
+    70: "#7556DC",
+    80: "#5532C3",
+    90: "#4625AA",
+    /**
+     * We'll switch to 10-100 instead of 100-1000 color palette
+     * @todo add `100: "#3A2084"` when swapped the current 100's in the app with 10,
+     * when all purples below are swapped with above in the code, remove the purples below */
     100: "#F4F3FF",
     200: "#D9D6FE",
     300: "#BDB4FE",
@@ -39,6 +52,18 @@ export const customColors = {
     600: "#D92666",
     700: "#AE1E52",
     800: "#82173D",
+  },
+  green: {
+    10: "#FAFDF0",
+    20: "#F8FDD5",
+    30: "#EEF8AB",
+    40: "#DCEF87",
+    50: "#BDE170",
+    60: "#9AC952",
+    70: "#78B040",
+    80: "#42802C",
+    90: "#334D0B",
+    100: "#243804",
   },
   // should adjust to be consistent with the ones above
   gray: {

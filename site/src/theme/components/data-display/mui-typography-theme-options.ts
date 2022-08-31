@@ -15,6 +15,7 @@ export const MuiTypographyThemeOptions: Components<Theme>["MuiTypography"] = {
       bpBodyCopy: "p",
       bpSmallCopy: "span",
       bpMicroCopy: "span",
+      bpCode: "code",
     },
     variant: "bpBodyCopy",
   },

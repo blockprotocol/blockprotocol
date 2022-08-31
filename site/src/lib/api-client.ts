@@ -2,6 +2,10 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ValidationError } from "express-validator";
 
 import {
+  ApiBlockCreateRequest,
+  ApiBlockCreateResponse,
+} from "../pages/api/blocks/create.api";
+import {
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse,
 } from "../pages/api/login-with-login-code.api";
@@ -44,19 +48,21 @@ const axiosClient = axios.create({
 });
 
 export type ApiClientError = AxiosError<{
-  errors?: Partial<ValidationError>[];
+  errors?: Partial<ValidationError & { code?: string }>[];
 }>;
 
-const parseErrorMessageFromAxiosError = (error: ApiClientError): string => {
-  const firstValidationErrorMessage = error.response?.data.errors?.find(
+const parseErrorMessageAndCodeFromAxiosError = (error: ApiClientError) => {
+  const firstValidationError = error.response?.data.errors?.find(
     ({ msg }) => !!msg,
-  )?.msg;
-
-  return (
-    firstValidationErrorMessage ??
-    error.response?.statusText ??
-    "An error occurred"
   );
+
+  return {
+    message:
+      firstValidationError?.msg ??
+      error.response?.statusText ??
+      "An error occurred",
+    code: firstValidationError?.code || "CODE_NOT_PROVIDED",
+  };
 };
 
 const handleAxiosError = (
@@ -65,7 +71,7 @@ const handleAxiosError = (
   /** @todo: report unexpected server errors to sentry or equivalent */
   const error = {
     ...axiosError,
-    message: parseErrorMessageFromAxiosError(axiosError),
+    ...parseErrorMessageAndCodeFromAxiosError(axiosError),
   };
   return { error };
 };
@@ -171,4 +177,9 @@ export const apiClient = {
       ApiLoginWithLoginCodeRequestBody,
       ApiLoginWithLoginCodeResponse
     >("login-with-login-code", requestData),
+  publishBlockFromNPM: (requestData: ApiBlockCreateRequest) =>
+    apiClient.post<ApiBlockCreateRequest, ApiBlockCreateResponse>(
+      "blocks/create",
+      requestData,
+    ),
 };

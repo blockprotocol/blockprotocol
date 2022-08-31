@@ -1,6 +1,5 @@
 import {
   Box,
-  // eslint-disable-next-line no-restricted-imports
   Button as MuiButton,
   ButtonProps as MuiButtonProps,
 } from "@mui/material";
@@ -77,13 +76,12 @@ export type ButtonProps = {
   loading?: boolean;
 } & MuiButtonProps & { rel?: string; target?: string }; // MUI button renders <a /> when href is provided, but typings miss rel and target
 
-// probably rename to BPButton?
-// @todo implement loading
 export const Button: FunctionComponent<ButtonProps> = forwardRef(
-  ({ children, squared, loading, sx = [], ...props }, ref) => {
+  ({ children, squared, loading, disabled, sx = [], ...props }, ref) => {
     return (
       <MuiButton
         {...props}
+        disabled={disabled || loading}
         sx={[
           {
             borderRadius: squared ? "6px" : undefined,
