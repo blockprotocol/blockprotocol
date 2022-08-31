@@ -12,7 +12,9 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
 
   if (productionFrontendHost && productionSandboxHost) {
-    const openingBlockSandboxPage = url.pathname.endsWith("/sandboxed-demo");
+    const openingBlockSandboxPage = Boolean(
+      url.pathname.match(/^\/[@\w_-]+\/blocks\/[\w_-]+\/sandboxed-demo$/),
+    );
 
     if (url.host === productionFrontendHost && openingBlockSandboxPage) {
       const newUrl = new URL(url);
