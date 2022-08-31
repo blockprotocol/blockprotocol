@@ -112,17 +112,17 @@ central repo, and `number` is a data-type that has been defined in that central 
 ### Reference
 
 ```abnf
-range = [int] ".." ["="] [int]
-reference-array = "[" variable [";" range] "]"
-reference = variable / reference-array
-```
-
-```abnf
 url = <http url>
 
 use-key-value = id "=" string
 use-with = "with" "{" [ *(use-key-value ",") use-key-value [","] ] "}"
 use = "use" url "as" IDENT [use-with] ";"
+```
+
+```abnf
+range = [int] ".." ["="] [int]
+reference-array = "[" variable [";" range] "]"
+reference = variable / reference-array
 ```
 
 -> How use works, required `self`
@@ -134,8 +134,8 @@ Resources are types, which are declared in the DSL. They have $n$ inputs and one
 The inputs to a resource are implicitly defined, and are the resources that have been used
 in the current resource. The output of a resource is its identifier.
 
-You can only reference types for which you have explicitly defined an id. Explicit
-identifier for resources need to unique across their type and namespace.
+You can only reference types for which you have explicitly defined an id.
+Explicit identifiers for resources need to be unique across their type and namespace.
 
 There are four types of resources:
 
@@ -801,3 +801,46 @@ entity "Adult" extends person = {
   occupation/1
 }
 ```
+
+### Default Values
+
+Default values could be defined through an extension of the language, which has been
+shown/used in the `use` state. The schema would be extended to allow the following:
+
+```
+entity person "Person" = {
+  age/1 = 12
+}
+```
+
+where `= 12` is the default value for that specific property.
+
+This could be enabled for entities, properties, etc.
+
+### Examples
+
+Examples could be through the use of attribute macros, we would need to relax the 
+definition and allow them on properties.
+
+```
+#[example = {age/1 = 13}]
+#[example = {age/1 = 14}]
+entity person "Person" = {
+  #[example = 12]
+  age/1
+}
+```
+
+### Descriptions of Fields
+
+We relax the grammar to allow doc-comments on properties and entity field.
+
+#### Example 1
+
+```
+entity person "Person" = {
+  /// The age of a person
+  age/1
+}
+```
+
