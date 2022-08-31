@@ -1,121 +1,119 @@
-import { test } from "playwright-test-coverage";
+import { Page } from "playwright";
+import { expect, test } from "playwright-test-coverage";
 
-test("TODO: uncomment this file when NPM_PUBLISHING feature is released", () => {});
+import { publishBlock } from "../shared/blocks";
+import { resetDb } from "../shared/fixtures";
+import { login } from "../shared/nav";
 
-// import { Page } from "playwright";
+const fillBlockDetails = async (
+  page: Page,
+  npmPackageName: string,
+  blockName: string,
+) => {
+  await page.locator('input[name="npmPackageName"]').fill(npmPackageName);
 
-// import { publishBlock } from "../shared/blocks";
-// import { resetDb } from "../shared/fixtures";
-// import { login } from "../shared/nav";
+  await page.locator('input[name="blockName"]').fill(blockName);
+};
 
-// const fillBlockDetails = async (
-//   page: Page,
-//   npmPackageName: string,
-//   blockName: string,
-// ) => {
-//   await page.locator('input[name="npmPackageName"]').fill(npmPackageName);
+const dummyBlockName = "my-amazing-block";
+const validNpmPackage = "test-npm-block";
 
-//   await page.locator('input[name="blockName"]').fill(blockName);
-// };
+test.beforeEach(async ({ page }) => {
+  await resetDb();
 
-// const dummyBlockName = "my-amazing-block";
-// const validNpmPackage = "test-npm-block";
+  await page.goto("/");
 
-// test.beforeEach(async ({ page }) => {
-//   await resetDb();
+  await login({ page });
+});
 
-//   await page.goto("/");
+test("user should be able to publish block & see it on the list", async ({
+  page,
+}) => {
+  await page.goto("/blocks");
 
-//   await login({ page });
-// });
+  // block list empty state should be visible
+  await expect(
+    page.locator("text=You haven't published a block yet"),
+  ).toBeVisible();
 
-// test("user should be able to publish block & see it on the list", async ({
-//   page,
-// }) => {
-//   await page.goto("/blocks");
+  await page.locator("text=Add new block").click();
 
-//   // block list empty state should be visible
-//   await expect(
-//     page.locator("text=You haven't published a block yet"),
-//   ).toBeVisible();
+  // select npm
+  await page.locator("text=Continue").click();
 
-//   await page.locator("text=Add new block").click();
+  await fillBlockDetails(page, validNpmPackage, dummyBlockName);
 
-//   // select npm
-//   await page.locator("text=Continue").click();
+  // check if the block-url on the rule-list is updated with the block name
+  await expect(
+    page.locator(
+      `ul:has-text('Choose a URL slug for your block') > li:has-text('blockprotocol.org/@alice/${dummyBlockName}')`,
+    ),
+  ).toBeVisible();
 
-//   await fillBlockDetails(page, validNpmPackage, dummyBlockName);
+  // Click text=Publish block to hub
+  await page.locator("text=Publish block to hub").click();
 
-//   // check if the block-url on the rule-list is updated with the block name
-//   await expect(
-//     page.locator(
-//       `ul:has-text('Choose a URL slug for your block') > li:has-text('blockprotocol.org/@alice/${dummyBlockName}')`,
-//     ),
-//   ).toBeVisible();
+  // check success alert
+  await expect(
+    page.locator("text=your block was published successfully"),
+  ).toBeVisible();
 
-//   // Click text=Publish block to hub
-//   await page.locator("text=Publish block to hub").click();
+  await expect(page.locator("[data-testid=list-view-card]")).toBeVisible();
+  await expect(page.locator("[data-testid=list-view-card] a")).toHaveText(
+    "@alice",
+  );
+});
 
-//   // check success alert
-//   await expect(
-//     page.locator("text=your block was published successfully"),
-//   ).toBeVisible();
+test("user should not be able to publish an invalid npm-package", async ({
+  page,
+}) => {
+  await page.goto("/blocks/publish/npm");
 
-//   await expect(page.locator("[data-testid=list-view-card]")).toBeVisible();
-//   await expect(page.locator("[data-testid=list-view-card] a")).toHaveText(
-//     "@alice",
-//   );
-// });
+  await fillBlockDetails(page, "react", dummyBlockName);
 
-// test("user should not be able to publish an invalid npm-package", async ({
-//   page,
-// }) => {
-//   await page.goto("/blocks/publish/npm");
+  // Click text=Publish block to hub
+  await page.locator("text=Publish block to hub").click();
 
-//   await fillBlockDetails(page, "react", dummyBlockName);
+  await expect(page.locator("text=No block-metadata.json")).toBeVisible();
+});
 
-//   // Click text=Publish block to hub
-//   await page.locator("text=Publish block to hub").click();
+test("user should not be able to publish an already-used npm-package", async ({
+  page,
+}) => {
+  /** @todo skip this test if `isProduction === false` */
+  await publishBlock({
+    page,
+    blockName: dummyBlockName,
+    npmPackageName: validNpmPackage,
+  });
 
-//   await expect(page.locator("text=No block-metadata.json")).toBeVisible();
-// });
+  await page.goto("/blocks/publish/npm");
 
-// test("user should not be able to publish an already-used npm-package", async ({
-//   page,
-// }) => {
-//   await publishBlock({
-//     page,
-//     blockName: dummyBlockName,
-//     npmPackageName: validNpmPackage,
-//   });
+  await fillBlockDetails(page, validNpmPackage, `another-block-name`);
 
-//   await page.goto("/blocks/publish/npm");
+  await page.locator("text=Publish block to hub").click();
 
-//   await fillBlockDetails(page, validNpmPackage, `another-block-name`);
+  await expect(
+    page.locator(`text=npm package '${validNpmPackage}' is already linked`),
+  ).toBeVisible();
+});
 
-//   await page.locator("text=Publish block to hub").click();
+test("user should not be able to publish an block with already-taken name", async ({
+  page,
+}) => {
+  await publishBlock({
+    page,
+    blockName: dummyBlockName,
+    npmPackageName: validNpmPackage,
+  });
 
-//   await expect(
-//     page.locator(`text=npm package '${validNpmPackage}' is already linked`),
-//   ).toBeVisible();
-// });
+  await page.goto("/blocks/publish/npm");
 
-// test("user should not be able to publish an block with already-taken name", async ({
-//   page,
-// }) => {
-//   await publishBlock({
-//     page,
-//     blockName: dummyBlockName,
-//     npmPackageName: validNpmPackage,
-//   });
+  await fillBlockDetails(page, validNpmPackage, dummyBlockName);
 
-//   await page.goto("/blocks/publish/npm");
+  await page.locator("text=Publish block to hub").click();
 
-//   await fillBlockDetails(page, validNpmPackage, dummyBlockName);
-
-//   await page.locator("text=Publish block to hub").click();
-
-//   await expect(
-//     page.locator(`text=block name '@alice/${dummyBlockName}' already exists`),
-//   ).toBeVisible();
-// });
+  await expect(
+    page.locator(`text=block name '@alice/${dummyBlockName}' already exists`),
+  ).toBeVisible();
+});
