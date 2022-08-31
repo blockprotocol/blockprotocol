@@ -95,4 +95,15 @@ export const typography: ThemeOptions["typography"] = {
     lineHeight: 1.1,
     color: customColors.gray[90],
   },
+  bpCode: {
+    fontFamily: [`"JetBrains Mono"`, "monospace", ...fallbackFonts].join(", "),
+    fontSize: "var(--step--2)",
+    fontWeight: 500,
+    lineHeight: 1.5,
+    color: customColors.gray[80],
+    background: customColors.purple[20],
+    border: `1px solid ${customColors.purple[30]}`,
+    borderRadius: defaultTheme.shape.borderRadius,
+    padding: defaultTheme.spacing(0, 0.5),
+  },
 };
