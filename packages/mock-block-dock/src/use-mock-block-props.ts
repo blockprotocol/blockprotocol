@@ -7,7 +7,7 @@ import {
   LinkedAggregation,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./use-mock-block-props/use-link-fields";
@@ -65,7 +65,6 @@ export const useMockBlockProps = ({
   readonly: externalReadonly,
   debug: externalDebug,
 }: MockBlockHookArgs): MockBlockHookResult => {
-  const [blockEntity, setBlockEntity] = useState<Entity>(externalBlockEntity!);
   const [blockSchema, setBlockSchema] = useState<Partial<EntityType>>(
     externalBlockSchema!,
   );
@@ -74,83 +73,55 @@ export const useMockBlockProps = ({
 
   const prevExternalReadonly = usePrevious(externalReadonly);
   const prevExternalDebug = usePrevious(externalDebug);
-  const prevExternalBlockEntity = usePrevious(externalBlockEntity);
 
-  const { initialBlockEntity, mockData } = useMemo((): {
-    initialBlockEntity: Entity;
-    mockData: MockData;
-  } => {
-    const entityTypeId = blockEntity?.entityTypeId ?? "block-type-1";
-
-    const blockEntityType: EntityType = {
-      entityTypeId,
-      schema: {
-        title: "BlockType",
-        type: "object",
-        $schema: "https://json-schema.org/draft/2019-09/schema",
-        $id: "http://localhost/blockType1",
-        ...(blockSchema ?? {}),
-      },
-    };
-
-    const newBlockEntity: Entity = {
-      entityId: "block1",
-      entityTypeId,
-      properties: {},
-    };
-
-    if (blockEntity && Object.keys(blockEntity).length > 0) {
-      Object.assign(newBlockEntity, blockEntity);
-    }
-
-    const nextMockData: MockData = {
-      entities: [
-        newBlockEntity,
-        ...(initialEntities ?? initialMockData.entities),
-      ],
-      entityTypes: [
-        blockEntityType,
-        ...(initialEntityTypes ?? initialMockData.entityTypes),
-      ],
+  const getDefaultMockData = () => {
+    return {
+      entities: initialEntities ?? initialMockData.entities,
+      entityTypes: initialEntityTypes ?? initialMockData.entityTypes,
       links: initialLinks ?? initialMockData.links,
       linkedAggregationDefinitions:
         initialLinkedAggregations ??
         initialMockData.linkedAggregationDefinitions,
     };
+  };
 
-    return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
-  }, [
-    blockEntity,
+  const datastore = useMockDatastore(
+    getDefaultMockData(),
+    readonly,
+    externalBlockEntity,
     blockSchema,
-    initialEntities,
-    initialEntityTypes,
-    initialLinks,
-    initialLinkedAggregations,
-  ]);
-
-  const datastore = useMockDatastore(mockData, readonly);
+  );
 
   const {
     entities,
     entityTypes,
+    blockEntity,
+    setBlockEntity,
     graphServiceCallbacks,
     links,
     linkedAggregationDefinitions,
   } = datastore;
 
-  const latestBlockEntity = useMemo(() => {
-    return (
-      entities.find(
-        (entity) => entity.entityId === initialBlockEntity.entityId,
-      ) ??
-      // fallback in case the entityId of the wrapped component is updated by updating its props
-      mockData.entities.find(
-        (entity) => entity.entityId === initialBlockEntity.entityId,
-      )
-    );
-  }, [entities, initialBlockEntity.entityId, mockData.entities]);
+  // @todo we don't do anything with this type except check it exists - do we need to do this?
+  // const latestBlockEntityType = useMemo(
+  //   () =>
+  //     entityTypes.find(
+  //       (entityType) =>
+  //         entityType.entityTypeId === latestBlockEntity.entityTypeId,
+  //     ),
+  //   [entityTypes, latestBlockEntity.entityTypeId],
+  // );
 
-  if (!latestBlockEntity) {
+  // if (!latestBlockEntityType) {
+  //   throw new Error("Cannot find block entity type. Has it been deleted?");
+  // }
+
+  // fallback in case the entityId of the wrapped component is updated by updating its props
+  // const latestBlockEntity = useMemo(() => {
+  //   return entities.find((entity) => entity.entityId === blockEntity.entityId);
+  // }, [entities, blockEntity.entityId]);
+
+  if (!blockEntity) {
     throw new Error("Cannot find block entity. Did it delete itself?");
   }
 
@@ -159,22 +130,8 @@ export const useMockBlockProps = ({
     entities,
     links,
     linkedAggregationDefinitions,
-    startingEntity: latestBlockEntity,
+    startingEntity: blockEntity,
   });
-
-  // @todo we don't do anything with this type except check it exists - do we need to do this?
-  const latestBlockEntityType = useMemo(
-    () =>
-      entityTypes.find(
-        (entityType) =>
-          entityType.entityTypeId === latestBlockEntity.entityTypeId,
-      ),
-    [entityTypes, latestBlockEntity.entityTypeId],
-  );
-
-  if (!latestBlockEntityType) {
-    throw new Error("Cannot find block entity type. Has it been deleted?");
-  }
 
   if (
     externalReadonly !== prevExternalReadonly &&
@@ -187,15 +144,10 @@ export const useMockBlockProps = ({
     setDebugMode(externalDebug);
   }
 
-  if (
-    externalBlockEntity !== prevExternalBlockEntity &&
-    JSON.stringify(blockEntity) !== JSON.stringify(externalBlockEntity)
-  ) {
-    setBlockEntity(externalBlockEntity);
-  }
+  console.log({ blockEntity, entityTypes, entities });
 
   return {
-    blockEntity: latestBlockEntity,
+    blockEntity,
     blockGraph,
     datastore,
     entityTypes,

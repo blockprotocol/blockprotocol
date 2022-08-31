@@ -20,8 +20,8 @@ const DevApp: FunctionComponent = () => {
 
   const blockEntity = {
     entityId: `test-entity-1`,
-    entityTypeId: "test-type-1",
-    properties: { name: "World" },
+    ...(testBlockType === "react" && { entityTypeId: "test-type-1" }),
+    properties: { name: testBlockType === "react" ? "World" : testBlockType },
   };
 
   let blockDefinition;
