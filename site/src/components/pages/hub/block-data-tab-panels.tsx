@@ -37,7 +37,6 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
     width: "100%",
 
     ".snippet": {
-      fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
       overflow: "auto",
       height: "100%",
       whiteSpace: "break-spaces",
