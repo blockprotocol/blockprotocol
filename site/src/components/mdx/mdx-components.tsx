@@ -300,19 +300,12 @@ export const mdxComponents: Record<
   ),
   // inline code (`)
   code: (props: HTMLAttributes<HTMLElement>) => (
-    <Box
-      component="code"
-      sx={(theme) => ({
+    <Typography
+      variant="bpCode"
+      sx={{
         fontSize: "80%",
-        color: theme.palette.purple[700],
-        background: theme.palette.purple[100],
-        padding: theme.spacing(0.25, 0.5),
-        borderColor: theme.palette.purple[200],
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderRadius: "4px",
         wordBreak: "break-word",
-      })}
+      }}
       {...props}
     />
   ),
