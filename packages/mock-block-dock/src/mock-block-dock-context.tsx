@@ -13,7 +13,6 @@ import {
 import { MockBlockHookResult } from "./use-mock-block-props";
 
 type MockBlockDockInfo = {
-  blockType?: "react" | "custom-element" | "html";
   blockInfo: {
     blockType: {
       entryPoint?: "react" | "html" | "custom-element";
@@ -34,7 +33,6 @@ const MockBlockDockContext = createContext<MockBlockDockInfo | null>(null);
 
 type Props = Omit<MockBlockDockInfo, "logs" | "setLogs"> & {
   children: ReactNode;
-  blockType?: "react" | "custom-element" | "html";
 };
 
 export const MockBlockDockProvider = ({ children, ...props }: Props) => {

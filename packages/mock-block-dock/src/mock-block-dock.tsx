@@ -219,7 +219,6 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       blockEntity={blockEntity}
       setBlockEntity={setBlockEntity}
       datastore={datastore}
-      blockType={blockType}
       blockInfo={
         blockInfo ?? {
           blockType: {
