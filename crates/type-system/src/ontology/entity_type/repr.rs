@@ -34,7 +34,7 @@ pub struct EntityType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<VersionedUri, any>"))]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     default: HashMap<String, serde_json::Value>,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<VersionedUri, any>"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<VersionedUri, any>[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
