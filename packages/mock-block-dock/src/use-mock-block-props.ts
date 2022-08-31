@@ -102,25 +102,6 @@ export const useMockBlockProps = ({
     linkedAggregationDefinitions,
   } = datastore;
 
-  // @todo we don't do anything with this type except check it exists - do we need to do this?
-  // const latestBlockEntityType = useMemo(
-  //   () =>
-  //     entityTypes.find(
-  //       (entityType) =>
-  //         entityType.entityTypeId === latestBlockEntity.entityTypeId,
-  //     ),
-  //   [entityTypes, latestBlockEntity.entityTypeId],
-  // );
-
-  // if (!latestBlockEntityType) {
-  //   throw new Error("Cannot find block entity type. Has it been deleted?");
-  // }
-
-  // fallback in case the entityId of the wrapped component is updated by updating its props
-  // const latestBlockEntity = useMemo(() => {
-  //   return entities.find((entity) => entity.entityId === blockEntity.entityId);
-  // }, [entities, blockEntity.entityId]);
-
   if (!blockEntity) {
     throw new Error("Cannot find block entity. Did it delete itself?");
   }
