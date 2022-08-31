@@ -6,6 +6,8 @@ const defaultTheme = createTheme();
 
 const fallbackFonts = [`"Helvetica"`, `"Arial"`, "sans-serif"];
 
+export const CODE_FONT_FAMILY = `"JetBrains Mono", Monaco, monospace`;
+
 export const typography: ThemeOptions["typography"] = {
   fontFamily: [`"Inter"`, ...fallbackFonts].join(", "),
   fontSize: 16,
@@ -96,14 +98,13 @@ export const typography: ThemeOptions["typography"] = {
     color: customColors.gray[90],
   },
   bpCode: {
-    fontFamily: [`"JetBrains Mono"`, "monospace", ...fallbackFonts].join(", "),
+    fontFamily: CODE_FONT_FAMILY,
     fontSize: "var(--step--2)",
-    fontWeight: 500,
     lineHeight: 1.5,
     color: customColors.gray[80],
     background: customColors.purple[20],
     border: `1px solid ${customColors.purple[30]}`,
     borderRadius: defaultTheme.shape.borderRadius,
-    padding: defaultTheme.spacing(0, 0.5),
+    padding: defaultTheme.spacing(0.25, 0.5),
   },
 };

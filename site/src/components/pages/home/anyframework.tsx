@@ -52,10 +52,7 @@ const CodeBlock = () => {
           }}
         >
           <Snippet
-            sx={{
-              fontFamily: `ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace`,
-              whiteSpace: "break-spaces",
-            }}
+            sx={{ whiteSpace: "break-spaces" }}
             source={reactDummyCode}
             language="jsx"
           />
