@@ -34,7 +34,6 @@
     "copy-files:cjs": "copyfiles -u 1 ./src/assets/* dist/cjs/",
     "copy-files:esm": "copyfiles -u 1 ./src/assets/* dist/esm/",
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
-    "postinstall": "yarn codegen",
     "lint:tsc": "tsc --noEmit",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
