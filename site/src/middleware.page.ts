@@ -5,8 +5,12 @@ import { NextResponse } from "next/server";
 
 import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
 
-const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL;
-const productionSandboxHost = process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL;
+const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
+  ? new URL(process.env.NEXT_PUBLIC_FRONTEND_URL).host
+  : undefined;
+const productionSandboxHost = process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL
+  ? new URL(process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL).host
+  : undefined;
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
