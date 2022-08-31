@@ -36,6 +36,19 @@ const entityTypes: EntityType[] = [
       },
     },
     required: ["https://blockprotocol.org/@alice/types/property-type/name/"],
+    default: {
+      "https://blockprotocol.org/@alice/types/property-type/name/": "MyBlock",
+    },
+    examples: [
+      {
+        "https://blockprotocol.org/@alice/types/property-type/name/":
+          "MyBlock2",
+      },
+      {
+        "https://blockprotocol.org/@alice/types/property-type/name/":
+          "YourBlock",
+      },
+    ],
   },
   {
     kind: "entityType",
@@ -66,6 +79,7 @@ const entityTypes: EntityType[] = [
     requiredLinks: [
       "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
     ],
+    examples: [],
   },
   {
     kind: "entityType",
@@ -230,7 +244,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
     "invalid ref",
     {
       kind: "entityType",
-      $id: "https://  /broken/v/1",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
       pluralTitle: "Broken",
@@ -242,12 +256,15 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       },
     },
     {
-      reason: "InvalidVersionedUri",
+      reason: "InvalidPropertyTypeObject",
       inner: {
-        reason: "InvalidBaseUri",
+        reason: "InvalidPropertyTypeReference",
         inner: {
-          reason: "UrlParseError",
-          inner: "invalid domain character",
+          reason: "InvalidBaseUri",
+          inner: {
+            reason: "UrlParseError",
+            inner: "relative URL without a base",
+          },
         },
       },
     },
@@ -256,7 +273,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
     "invalid property type object",
     {
       kind: "entityType",
-      $id: "https://  /broken/v/1",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
       pluralTitle: "Broken",
@@ -268,21 +285,20 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       },
     },
     {
-      reason: "InvalidVersionedUri",
+      reason: "InvalidPropertyTypeObject",
       inner: {
-        reason: "InvalidBaseUri",
+        reason: "InvalidPropertyKey",
         inner: {
-          reason: "UrlParseError",
-          inner: "invalid domain character",
+          reason: "MissingTrailingSlash",
         },
       },
     },
   ],
   [
-    "invalid defaults",
+    "invalid default",
     {
       kind: "entityType",
-      $id: "https://  /broken/v/1",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
       pluralTitle: "Broken",
@@ -293,22 +309,84 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
           },
       },
       default: {
-        "https://blockprotocol.org/@alice/types/property-type/address-line-v-1/v/2.3":
+        "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/2.3":
           "My Address 32, My Street, Narnia",
       },
     },
-    // @todo - This error seems strange - needs investigating. How do we intend default to be used anyway?
     {
-      reason: "InvalidVersionedUri",
+      reason: "InvalidDefaultKey",
       inner: {
-        reason: "InvalidBaseUri",
-        inner: {
-          reason: "UrlParseError",
-          inner: "invalid domain character",
+        reason: "MissingTrailingSlash",
+      },
+    },
+  ],
+  [
+    "invalid link uri",
+    {
+      kind: "entityType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
+      type: "object",
+      title: "Broken",
+      pluralTitle: "Broken",
+      properties: {
+        "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1":
+          {
+            $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
+          },
+      },
+      links: {
+        "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1.3": {
+          type: "array",
+          items: {
+            $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+          },
+          ordered: false,
         },
       },
     },
-    // @todo - We need some tests for links
+    {
+      reason: "InvalidPropertyTypeObject",
+      inner: {
+        reason: "InvalidPropertyKey",
+        inner: {
+          reason: "MissingTrailingSlash",
+        },
+      },
+    },
+  ],
+  [
+    "invalid link inner ref",
+    {
+      kind: "entityType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
+      type: "object",
+      title: "Broken",
+      pluralTitle: "Broken",
+      properties: {
+        "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1":
+          {
+            $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
+          },
+      },
+      links: {
+        "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1": {
+          type: "array",
+          items: {
+            $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1.4",
+          },
+          ordered: false,
+        },
+      },
+    },
+    {
+      reason: "InvalidPropertyTypeObject",
+      inner: {
+        reason: "InvalidPropertyKey",
+        inner: {
+          reason: "MissingTrailingSlash",
+        },
+      },
+    },
   ],
 ];
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be

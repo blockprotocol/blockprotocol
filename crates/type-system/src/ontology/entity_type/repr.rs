@@ -6,7 +6,7 @@ use tsify::Tsify;
 
 use crate::{
     repr,
-    uri::{ParseVersionedUriError, VersionedUri},
+    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
     ParseEntityTypeError,
 };
 
@@ -31,10 +31,10 @@ pub struct EntityType {
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     // TODO - Improve the typing of the values
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<VersionedUri, any>"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, any>"))]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     default: HashMap<String, serde_json::Value>,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<VersionedUri, any>[]"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, any>[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
@@ -50,18 +50,19 @@ impl TryFrom<EntityType> for super::EntityType {
         let id = VersionedUri::from_str(&entity_type_repr.id)
             .map_err(ParseEntityTypeError::InvalidVersionedUri)?;
 
+        // TODO - validate default against the entity type
         let default = entity_type_repr
             .default
             .into_iter()
             .map(|(uri, val)| {
                 Ok((
-                    VersionedUri::from_str(&uri)
-                        .map_err(ParseEntityTypeError::InvalidDefaultKey)?,
+                    BaseUri::new(uri).map_err(ParseEntityTypeError::InvalidDefaultKey)?,
                     val,
                 ))
             })
             .collect::<Result<_, _>>()?;
 
+        // TODO - validate examples against the entity type
         let examples = entity_type_repr
             .examples
             .into_iter()
@@ -70,8 +71,7 @@ impl TryFrom<EntityType> for super::EntityType {
                     .into_iter()
                     .map(|(uri, val)| {
                         Ok((
-                            VersionedUri::from_str(&uri)
-                                .map_err(ParseEntityTypeError::InvalidDefaultKey)?,
+                            BaseUri::new(uri).map_err(ParseEntityTypeError::InvalidExamplesKey)?,
                             val,
                         ))
                     })
@@ -83,17 +83,21 @@ impl TryFrom<EntityType> for super::EntityType {
             .property_object
             .try_into()
             .map_err(ParseEntityTypeError::InvalidPropertyTypeObject)?;
-        let links = entity_type_repr.links.try_into().map_err(|_| todo!())?;
+
+        let links = entity_type_repr
+            .links
+            .try_into()
+            .map_err(ParseEntityTypeError::InvalidLinks)?;
 
         Ok(Self::new(
             id,
             entity_type_repr.title,
             entity_type_repr.plural_title,
             entity_type_repr.description,
-            default,
-            examples,
             property_object,
             links,
+            default,
+            examples,
         ))
     }
 }
