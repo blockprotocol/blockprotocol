@@ -1,24 +1,33 @@
 import { Box, useTheme } from "@mui/material";
-import ReactJson from "react-json-view";
+import ReactJson, { ReactJsonViewProps } from "react-json-view";
 
-export const JsonView = ({
-  collapseKeys,
-  rootName,
-  src,
-  ...props
-}: {
+type Props = {
   collapseKeys: string[];
   rootName: string;
-  src: Record<string, unknown> | object;
-}) => {
+} & ReactJsonViewProps;
+
+export const JsonView = ({ collapseKeys, rootName, src, ...props }: Props) => {
   const theme = useTheme();
   return (
     <Box
       sx={({ palette }) => ({
         backgroundColor: palette.background.default,
-        padding: 2,
         border: `1px solid ${palette.divider}`,
         width: "100%",
+        "& .react-json-view": {
+          padding: 2,
+
+          "& .pretty-json-container": {
+            fontFamily: "Mono, monospace !important",
+          },
+
+          ".validation-failure": {
+            fontSize: 12,
+            position: "absolute",
+            bottom: 8,
+            right: 8,
+          },
+        },
       })}
     >
       <ReactJson
