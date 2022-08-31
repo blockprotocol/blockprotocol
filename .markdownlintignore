@@ -56,6 +56,7 @@ coverage
 
 # Workspace specific
 packages/block-template-html/dev/src
+packages/mock-block-dock/src/version.ts
 site/blocks-data.json
 site/playwright-report
 site/public/blocks

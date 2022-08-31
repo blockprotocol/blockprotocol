@@ -7,7 +7,7 @@ import {
   LinkedAggregation,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
 import { mockData as initialMockData } from "./data";
 import { useLinkFields } from "./use-mock-block-props/use-link-fields";
@@ -15,6 +15,34 @@ import {
   MockData,
   useMockDatastore,
 } from "./use-mock-block-props/use-mock-datastore";
+import { usePrevious } from "./use-previous";
+
+export type MockBlockHookArgs = {
+  blockEntity?: Entity;
+  blockSchema?: Partial<EntityType>;
+  initialEntities?: Entity[];
+  initialEntityTypes?: EntityType[];
+  initialLinks?: Link[];
+  initialLinkedAggregations?: LinkedAggregationDefinition[];
+  readonly: boolean;
+  debug: boolean;
+};
+
+export type MockBlockHookResult = {
+  blockEntity: Entity;
+  blockGraph: BlockGraph;
+  blockSchema?: Partial<EntityType>;
+  datastore: MockData;
+  entityTypes: EntityType[];
+  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
+  linkedAggregations: LinkedAggregation[];
+  readonly: boolean;
+  debugMode: boolean;
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  setBlockEntity: Dispatch<SetStateAction<Entity>>;
+  setReadonly: Dispatch<SetStateAction<boolean>>;
+  setDebugMode: Dispatch<SetStateAction<boolean>>;
+};
 
 /**
  * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
@@ -28,29 +56,25 @@ import {
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockProps = ({
-  blockEntity,
-  blockSchema,
+  blockEntity: externalBlockEntity,
+  blockSchema: externalBlockSchema,
   initialEntities,
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
-  readonly,
-}: {
-  blockEntity?: Entity;
-  blockSchema?: Partial<EntityType>;
-  initialEntities?: Entity[];
-  initialEntityTypes?: EntityType[];
-  initialLinks?: Link[];
-  initialLinkedAggregations?: LinkedAggregationDefinition[];
-  readonly?: boolean;
-}): {
-  blockEntity: Entity;
-  blockGraph: BlockGraph;
-  datastore: MockData;
-  entityTypes: EntityType[];
-  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
-  linkedAggregations: LinkedAggregation[];
-} => {
+  readonly: externalReadonly,
+  debug: externalDebug,
+}: MockBlockHookArgs): MockBlockHookResult => {
+  const [blockEntity, setBlockEntity] = useState<Entity>(externalBlockEntity!);
+  const [blockSchema, setBlockSchema] = useState<Partial<EntityType>>(
+    externalBlockSchema!,
+  );
+  const [readonly, setReadonly] = useState<boolean>(externalReadonly);
+  const [debugMode, setDebugMode] = useState<boolean>(!!externalDebug);
+
+  const prevExternalReadonly = usePrevious(externalReadonly);
+  const prevExternalDebug = usePrevious(externalDebug);
+
   const { initialBlockEntity, mockData } = useMemo((): {
     initialBlockEntity: Entity;
     mockData: MockData;
@@ -146,8 +170,20 @@ export const useMockBlockProps = ({
       ),
     [entityTypes, latestBlockEntity.entityTypeId],
   );
+
   if (!latestBlockEntityType) {
     throw new Error("Cannot find block entity type. Has it been deleted?");
+  }
+
+  if (
+    externalReadonly !== prevExternalReadonly &&
+    readonly !== externalReadonly
+  ) {
+    setReadonly(externalReadonly);
+  }
+
+  if (externalDebug !== prevExternalDebug && debugMode !== externalDebug) {
+    setDebugMode(externalDebug);
   }
 
   return {
@@ -157,5 +193,12 @@ export const useMockBlockProps = ({
     entityTypes,
     linkedAggregations,
     graphServiceCallbacks,
+    blockSchema,
+    readonly,
+    setBlockSchema,
+    setBlockEntity,
+    setReadonly,
+    debugMode,
+    setDebugMode,
   };
 };
