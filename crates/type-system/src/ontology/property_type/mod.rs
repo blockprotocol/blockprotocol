@@ -1,126 +1,23 @@
+mod error;
+pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::collections::HashSet;
+use std::{collections::HashSet, str::FromStr};
 
-use serde::{Deserialize, Serialize};
-#[cfg(target_arch = "wasm32")]
-use {tsify::Tsify, wasm_bindgen::prelude::*};
+pub use error::ParsePropertyTypeError;
 
 use crate::{
-    ontology::data_type::DataTypeReference,
-    uri::{BaseUri, VersionedUri},
-    Array, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
+    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    Array, DataTypeReference, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };
 
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-#[serde(deny_unknown_fields)]
-pub struct PropertyTypeReference {
-    #[serde(rename = "$ref")]
-    uri: VersionedUri,
-}
-
-impl PropertyTypeReference {
-    /// Creates a new `PropertyTypeReference` from the given [`VersionedUri`].
-    #[must_use]
-    pub const fn new(uri: VersionedUri) -> Self {
-        Self { uri }
-    }
-
-    #[must_use]
-    pub const fn uri(&self) -> &VersionedUri {
-        &self.uri
-    }
-}
-
-impl ValidateUri for PropertyTypeReference {
-    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
-        if base_uri == self.uri().base_uri() {
-            Ok(())
-        } else {
-            Err(ValidationError::BaseUriMismatch {
-                base_uri: base_uri.clone(),
-                versioned_uri: self.uri().clone(),
-            })
-        }
-    }
-}
-
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(untagged)]
-#[allow(clippy::enum_variant_names)]
-pub enum PropertyValues {
-    DataTypeReference(DataTypeReference),
-    PropertyTypeObject(Object<ValueOrArray<PropertyTypeReference>, 1>),
-    ArrayOfPropertyValues(
-        // This is a hack, currently recursive enums seem to break tsify
-        // https://github.com/madonoharu/tsify/issues/5
-        #[cfg_attr(target_arch = "wasm32", tsify(type = "Array<OneOf<PropertyValues>>"))]
-        Array<OneOf<PropertyValues>>,
-    ),
-}
-
-impl PropertyValues {
-    #[must_use]
-    fn data_type_references(&self) -> Vec<&DataTypeReference> {
-        match self {
-            Self::DataTypeReference(reference) => vec![reference],
-            Self::ArrayOfPropertyValues(values) => values
-                .items()
-                .one_of()
-                .iter()
-                .flat_map(|value| value.data_type_references().into_iter())
-                .collect(),
-            Self::PropertyTypeObject(_) => vec![],
-        }
-    }
-
-    #[must_use]
-    fn property_type_references(&self) -> Vec<&PropertyTypeReference> {
-        match self {
-            Self::DataTypeReference(_) => vec![],
-            Self::ArrayOfPropertyValues(values) => values
-                .items()
-                .one_of()
-                .iter()
-                .flat_map(|value| value.property_type_references().into_iter())
-                .collect(),
-            Self::PropertyTypeObject(object) => object
-                .properties()
-                .values()
-                .map(|value| match value {
-                    ValueOrArray::Value(one) => one,
-                    ValueOrArray::Array(array) => array.items(),
-                })
-                .collect(),
-        }
-    }
-}
-
-/// Will serialize as a constant value `"propertyType"`
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-#[allow(clippy::use_self)]
-enum PropertyTypeTag {
-    PropertyType,
-}
-
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase", deny_unknown_fields)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct PropertyType {
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
-    kind: PropertyTypeTag,
-    #[serde(rename = "$id")]
     id: VersionedUri,
     title: String,
     plural_title: String,
-    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
-    #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
-    #[serde(flatten)]
     one_of: OneOf<PropertyValues>,
 }
 
@@ -135,7 +32,6 @@ impl PropertyType {
         one_of: OneOf<PropertyValues>,
     ) -> Self {
         Self {
-            kind: PropertyTypeTag::PropertyType,
             id,
             title,
             plural_title,
@@ -188,23 +84,143 @@ impl PropertyType {
     }
 }
 
+impl FromStr for PropertyType {
+    type Err = ParsePropertyTypeError;
+
+    fn from_str(property_type_str: &str) -> Result<Self, Self::Err> {
+        let property_type_repr: repr::PropertyType = serde_json::from_str(property_type_str)
+            .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
+
+        Self::try_from(property_type_repr)
+    }
+}
+
+impl TryFrom<serde_json::Value> for PropertyType {
+    type Error = ParsePropertyTypeError;
+
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        let property_type_repr: repr::PropertyType = serde_json::from_value(value)
+            .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
+
+        Self::try_from(property_type_repr)
+    }
+}
+
+impl From<PropertyType> for serde_json::Value {
+    fn from(property_type: PropertyType) -> Self {
+        let property_type_repr: repr::PropertyType = property_type.into();
+
+        serde_json::to_value(property_type_repr).expect("Failed to deserialize Property Type repr")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+pub struct PropertyTypeReference {
+    uri: VersionedUri,
+}
+
+impl PropertyTypeReference {
+    /// Creates a new `PropertyTypeReference` from the given [`VersionedUri`].
+    #[must_use]
+    pub const fn new(uri: VersionedUri) -> Self {
+        Self { uri }
+    }
+
+    #[must_use]
+    pub const fn uri(&self) -> &VersionedUri {
+        &self.uri
+    }
+}
+
+impl ValidateUri for PropertyTypeReference {
+    fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
+        if base_uri == self.uri().base_uri() {
+            Ok(())
+        } else {
+            Err(ValidationError::BaseUriMismatch {
+                base_uri: base_uri.clone(),
+                versioned_uri: self.uri().clone(),
+            })
+        }
+    }
+}
+
+impl TryFrom<serde_json::Value> for PropertyTypeReference {
+    type Error = ParseVersionedUriError;
+
+    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
+        let property_type_ref_repr: repr::PropertyTypeReference = serde_json::from_value(value)
+            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
+
+        Self::try_from(property_type_ref_repr)
+    }
+}
+
+impl From<PropertyTypeReference> for serde_json::Value {
+    fn from(property_type_ref: PropertyTypeReference) -> Self {
+        let property_type_ref_repr: repr::PropertyTypeReference = property_type_ref.into();
+
+        serde_json::to_value(property_type_ref_repr)
+            .expect("Failed to deserialize Property Type Reference repr")
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum PropertyValues {
+    DataTypeReference(DataTypeReference),
+    PropertyTypeObject(Object<ValueOrArray<PropertyTypeReference>, 1>),
+    ArrayOfPropertyValues(Array<OneOf<PropertyValues>>),
+}
+
+impl PropertyValues {
+    #[must_use]
+    fn data_type_references(&self) -> Vec<&DataTypeReference> {
+        match self {
+            Self::DataTypeReference(reference) => vec![reference],
+            Self::ArrayOfPropertyValues(values) => values
+                .items()
+                .one_of()
+                .iter()
+                .flat_map(|value| value.data_type_references().into_iter())
+                .collect(),
+            Self::PropertyTypeObject(_) => vec![],
+        }
+    }
+
+    #[must_use]
+    fn property_type_references(&self) -> Vec<&PropertyTypeReference> {
+        match self {
+            Self::DataTypeReference(_) => vec![],
+            Self::ArrayOfPropertyValues(values) => values
+                .items()
+                .one_of()
+                .iter()
+                .flat_map(|value| value.property_type_references().into_iter())
+                .collect(),
+            Self::PropertyTypeObject(object) => object
+                .properties()
+                .values()
+                .map(|value| match value {
+                    ValueOrArray::Value(one) => one,
+                    ValueOrArray::Array(array) => array.items(),
+                })
+                .collect(),
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::str::FromStr;
 
-    use super::*;
-    use crate::test_data;
+    use serde_json::json;
 
-    fn test_property_type_schema(schema: &serde_json::Value) -> PropertyType {
-        let property_type: PropertyType =
-            serde_json::from_value(schema.clone()).expect("invalid schema");
-        assert_eq!(
-            serde_json::to_value(property_type.clone()).expect("could not serialize"),
-            *schema,
-            "{property_type:#?}"
-        );
-        property_type
-    }
+    use super::*;
+    use crate::{
+        test_data,
+        utils::tests::{check_serialization_from_str, ensure_failed_validation},
+        ParseOneOfError,
+    };
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,
@@ -246,10 +262,8 @@ mod tests {
 
     #[test]
     fn favorite_quote() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::FAVORITE_QUOTE_V1)
-                .expect("invalid JSON"),
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::FAVORITE_QUOTE_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -260,12 +274,7 @@ mod tests {
 
     #[test]
     fn age() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::AGE_V1).expect(
-                "invalid
-JSON",
-            ),
-        );
+        let property_type = check_serialization_from_str(test_data::property_type::AGE_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -276,9 +285,8 @@ JSON",
 
     #[test]
     fn user_id() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::USER_ID_V2).expect("invalid JSON"),
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::USER_ID_V2, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -290,10 +298,8 @@ JSON",
 
     #[test]
     fn contact_information() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::CONTACT_INFORMATION_V1)
-                .expect("invalid JSON"),
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::CONTACT_INFORMATION_V1, None);
 
         test_property_type_data_refs(&property_type, []);
 
@@ -305,9 +311,8 @@ JSON",
 
     #[test]
     fn interests() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::INTERESTS_V1).expect("invalid JSON"),
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::INTERESTS_V1, None);
 
         test_property_type_data_refs(&property_type, []);
 
@@ -320,9 +325,8 @@ JSON",
 
     #[test]
     fn numbers() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::NUMBERS_V1).expect("invalid JSON"),
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::NUMBERS_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -333,15 +337,107 @@ JSON",
 
     #[test]
     fn contrived_property() {
-        let property_type = test_property_type_schema(
-            &serde_json::from_str(test_data::property_type::CONTRIVED_PROPERTY_V1)
-                .expect("invalid JSON"),
-        );
+        let property_type =
+            check_serialization_from_str(test_data::property_type::CONTRIVED_PROPERTY_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
         ]);
 
         test_property_type_property_refs(&property_type, []);
+    }
+
+    #[test]
+    fn invalid_id() {
+        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+            &json!(
+                {
+                  "kind": "propertyType",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
+                  "title": "Age",
+                  "pluralTitle": "Ages",
+                  "oneOf": [
+                    {
+                      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1"
+                    }
+                  ]
+                }
+            ),
+            ParsePropertyTypeError::InvalidVersionedUri(
+                ParseVersionedUriError::AdditionalEndContent,
+            ),
+        );
+    }
+
+    #[test]
+    fn empty_one_of() {
+        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+            &json!(
+                {
+                  "kind": "propertyType",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
+                  "title": "Age",
+                  "pluralTitle": "Ages",
+                  "oneOf": []
+                }
+            ),
+            ParsePropertyTypeError::InvalidOneOf(Box::new(ParseOneOfError::ValidationError(
+                ValidationError::EmptyOneOf,
+            ))),
+        );
+    }
+
+    #[test]
+    fn invalid_reference() {
+        ensure_failed_validation::<repr::PropertyType, PropertyType>(
+            &json!(
+                {
+                  "kind": "propertyType",
+                  "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
+                  "title": "Age",
+                  "pluralTitle": "Ages",
+                  "oneOf": [
+                    {
+                      "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"
+                    }
+                  ]
+                }
+            ),
+            ParsePropertyTypeError::InvalidOneOf(Box::new(ParseOneOfError::PropertyValuesError(
+                ParsePropertyTypeError::InvalidDataTypeReference(
+                    ParseVersionedUriError::IncorrectFormatting,
+                ),
+            ))),
+        );
+    }
+
+    #[test]
+    fn validate_property_type_ref_valid() {
+        let uri = VersionedUri::from_str(
+            "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+        )
+        .expect("failed to create VersionedUri");
+
+        let property_type_ref = PropertyTypeReference::new(uri.clone());
+
+        property_type_ref
+            .validate_uri(uri.base_uri())
+            .expect("failed to validate against base URI");
+    }
+
+    #[test]
+    fn validate_property_type_ref_invalid() {
+        let uri_a =
+            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/age/v/2")
+                .expect("failed to parse VersionedUri");
+        let uri_b =
+            VersionedUri::from_str("https://blockprotocol.org/@alice/types/property-type/name/v/1")
+                .expect("failed to parse VersionedUri");
+
+        let property_type_ref = PropertyTypeReference::new(uri_a);
+
+        property_type_ref
+            .validate_uri(uri_b.base_uri()) // Try and validate against a different URI
+            .expect_err("expected validation against base URI to fail but it didn't");
     }
 }
