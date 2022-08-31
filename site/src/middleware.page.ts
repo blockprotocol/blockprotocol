@@ -5,23 +5,26 @@ import { NextResponse } from "next/server";
 
 import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
 
-const productionHost = "blockprotocol.org";
-const productionSandboxHost = "www.blocksandbox.org";
+const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL;
+const productionSandboxHost = process.env.NEXT_PUBLIC_BLOCK_SANDBOX_URL;
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
-  const openingBlockSandboxPage = url.pathname.endsWith("/sandboxed-demo");
 
-  if (url.host === productionHost && openingBlockSandboxPage) {
-    const newUrl = new URL(url);
-    newUrl.host = productionSandboxHost;
-    return NextResponse.redirect(newUrl);
-  }
+  if (productionFrontendHost && productionSandboxHost) {
+    const openingBlockSandboxPage = url.pathname.endsWith("/sandboxed-demo");
 
-  if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
-    const newUrl = new URL(url);
-    newUrl.host = productionHost;
-    return NextResponse.redirect(newUrl);
+    if (url.host === productionFrontendHost && openingBlockSandboxPage) {
+      const newUrl = new URL(url);
+      newUrl.host = productionSandboxHost;
+      return NextResponse.redirect(newUrl);
+    }
+
+    if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
+      const newUrl = new URL(url);
+      newUrl.host = productionFrontendHost;
+      return NextResponse.redirect(newUrl);
+    }
   }
 
   if (url.pathname === "/") {
