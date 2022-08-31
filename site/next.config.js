@@ -51,12 +51,22 @@ const nextConfig = {
       },
       {
         source: "/docs/spec/block-types",
-        destination: "/docs/spec/core-specification",
+        destination: "/docs/spec/core",
         permanent: true,
       },
       {
         source: "/spec/block-types",
-        destination: "/docs/spec/core-specification",
+        destination: "/docs/spec/core",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/core-specification",
+        destination: "/docs/spec/core",
+        permanent: true,
+      },
+      {
+        source: "/docs/spec/graph-service-specification",
+        destination: "/docs/spec/graph-service",
         permanent: true,
       },
     ];

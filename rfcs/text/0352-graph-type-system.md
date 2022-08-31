@@ -34,7 +34,7 @@ The Block Protocol operates in-between parties that otherwise have limited to no
 
 By getting both parties to agree to a prescriptive standard, new technological possibilities become viable. The Block Protocol is an example of this, enabling a new class of applications, ones that are able to dynamically load complex front-end components at run-time which are immediately usable and functional, even if the component was previously unknown to the application.
 
-The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph service](https://blockprotocol.org/docs/spec/graph-service-specification) allow for dynamic resolution of expected input data.
+The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph service](https://blockprotocol.org/docs/spec/graph-service) allow for dynamic resolution of expected input data.
 
 ---
 
@@ -2176,7 +2176,7 @@ Using the proposed type system for Block Protocol imposes changes on the Graph S
 
 While the examples so far have shown `properties` and `links` side by side in the Entity instances, the Block Protocol would treat these two concepts separately.
 
-Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service-specification).
+Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/packages/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service).
 
 ### Interfacing with properties on Entities
 

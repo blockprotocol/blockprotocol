@@ -3,14 +3,14 @@ use thiserror::Error;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::uri::ParseVersionedUriError;
+use crate::{ParsePropertyTypeError, ValidationError};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
-pub enum ParseDataTypeError {
-    #[error("invalid versioned URI: `{0}`")]
-    InvalidVersionedUri(ParseVersionedUriError),
-    #[error("error in JSON: `{0}`")]
-    InvalidJson(String),
+pub enum ParseOneOfError {
+    #[error("invalid value definition: `{0}`")]
+    PropertyValuesError(ParsePropertyTypeError),
+    #[error("failed validation: `{0}`")]
+    ValidationError(ValidationError),
 }
