@@ -49,6 +49,7 @@
     ],
     "icon": "public/omega.svg",
     "image": "public/block-preview.svg",
+    "name": "block-template-custom-element",
     "protocol": "0.2"
   }
 }

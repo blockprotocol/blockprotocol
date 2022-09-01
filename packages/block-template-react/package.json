@@ -51,6 +51,7 @@
     ],
     "icon": "public/omega.svg",
     "image": "public/block-preview.svg",
+    "name": "block-template-react",
     "protocol": "0.2"
   }
 }

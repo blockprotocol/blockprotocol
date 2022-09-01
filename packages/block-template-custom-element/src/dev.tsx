@@ -30,6 +30,7 @@ const DevApp = () => {
         entityId: "test-block-1",
         properties: { name: "World" },
       }}
+      blockInfo={packageJson.blockprotocol}
       debug
     />
   );
