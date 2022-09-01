@@ -1,11 +1,8 @@
+import { body as bodyValidator, validationResult } from "express-validator";
+
 import { getDbBlock } from "../../../lib/api/blocks/db";
-import { publishBlockFromTarball } from "../../../lib/api/blocks/from-tarball";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
-import {
-  MultipartExtensions,
-  multipartUploads,
-} from "../../../lib/api/middleware/multipart-uploads.middleware";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import {
   formatErrors,
@@ -18,52 +15,30 @@ import {
 } from "./shared";
 
 // The body we expect when publishing an npm-linked block
-type ApiNpmBlockCreateRequest = MultipartExtensions<
-  null,
-  "npmPackageName" | "blockName"
->;
+type ApiBlockCreateRequest = {
+  npmPackageName: string;
+  blockName: string;
+};
 
-// The body we expect when provided a tarball of block source directly
-type ApiTarballBlockCreateRequest = MultipartExtensions<"tarball", "blockName">;
-
-export type ApiBlockCreateRequest =
-  | ApiNpmBlockCreateRequest
-  | ApiTarballBlockCreateRequest;
-
-export type ApiTypeCreateResponse = {
+export type ApiBlockCreateResponse = {
   block: ExpandedBlockMetadata;
 };
 
+/**
+ * Creates a block linked to an already-published npm package
+ */
 export default createAuthenticatedHandler<
   ApiBlockCreateRequest,
-  ApiTypeCreateResponse
+  ApiBlockCreateResponse
 >()
   .use(
-    multipartUploads({
-      fieldsLimit: 2,
-      filesLimit: 1,
-      maxFileSize: 10 * 1024 * 1024, // bytes = 10MB
-    }),
+    bodyValidator("blockName").isString().notEmpty().toLowerCase(),
+    bodyValidator("npmPackageName").isString().notEmpty(),
   )
   .post(async (req, res) => {
-    if (!req.body?.fields) {
-      return res.status(400).json(
-        formatErrors({
-          msg: "No string fields provided in body. Provide either 'blockName' (when providing a 'tarball' file), or 'blockName' and 'npmPackageName'",
-          code: "INVALID_INPUT",
-        }),
-      );
-    }
-
-    const untransformedBlockName = req.body.fields.blockName?.value;
-
-    if (!untransformedBlockName) {
-      return res.status(400).json(
-        formatErrors({
-          msg: "You must provide a blockName",
-          code: "INVALID_INPUT",
-        }),
-      );
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json(formatErrors(...errors.array()));
     }
 
     const {
@@ -79,6 +54,8 @@ export default createAuthenticatedHandler<
         }),
       );
     }
+
+    const { blockName: untransformedBlockName, npmPackageName } = req.body;
 
     const slugifiedBlockName = generateSlug(untransformedBlockName);
 
@@ -101,38 +78,12 @@ export default createAuthenticatedHandler<
       shortname,
     );
 
-    if (!("npmPackageName" in req.body.fields) && !req.body.uploads?.tarball) {
-      return res.status(400).json(
-        formatErrors({
-          msg: "You must provide a 'tarball' file upload if not providing an npmPackageName",
-          code: "INVALID_INPUT",
-        }),
-      );
-    } else if (
-      !req.body.uploads?.tarball &&
-      (!("npmPackageName" in req.body.fields) ||
-        !req.body.fields?.npmPackageName?.value)
-    ) {
-      return res.status(400).json(
-        formatErrors({
-          msg: "You must provide an 'npmPackageName' field if not providing a 'tarball' file upload",
-          code: "INVALID_INPUT",
-        }),
-      );
-    }
-
     try {
-      const block = await ("npmPackageName" in req.body.fields
-        ? publishBlockFromNpm(db, {
-            createdAt: null,
-            npmPackageName: req.body.fields.npmPackageName!.value, // we checked that this exists above
-            pathWithNamespace,
-          })
-        : publishBlockFromTarball(db, {
-            createdAt: null,
-            pathWithNamespace,
-            tarball: req.body.uploads!.tarball!.buffer, // we checked that this exists above
-          }));
+      const block = await publishBlockFromNpm(db, {
+        createdAt: null,
+        npmPackageName,
+        pathWithNamespace,
+      });
       await revalidateMultiBlockPages(res, shortname);
       return res.status(200).json({ block });
     } catch (err) {
@@ -150,9 +101,3 @@ export default createAuthenticatedHandler<
       );
     }
   });
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
