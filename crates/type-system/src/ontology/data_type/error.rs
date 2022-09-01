@@ -1,23 +1,16 @@
-#![cfg_attr(
-    target_arch = "wasm32",
-    expect(
-        clippy::drop_non_drop,
-        reason = "This seems to be a bug with wasm_bindgen"
-    )
-)]
-use std::fmt;
-
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 #[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
+use tsify::Tsify;
 
-// TODO: can we use tsify's into_wasm_abi or whatever it was
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[derive(Debug, Clone, PartialEq, Eq, Error)]
-pub struct MalformedDataTypeError;
+use crate::uri::ParseVersionedUriError;
 
-impl fmt::Display for MalformedDataTypeError {
-    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt.write_str("failed to deserialize Data Type")
-    }
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
+#[serde(tag = "reason", content = "inner")]
+pub enum ParseDataTypeError {
+    #[error("invalid versioned URI: `{0}`")]
+    InvalidVersionedUri(ParseVersionedUriError),
+    #[error("error in JSON: `{0}`")]
+    InvalidJson(String),
 }

@@ -7,7 +7,6 @@ import {
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { Box } from "@mui/material";
 import {
   ComponentType,
   FunctionComponent,
@@ -17,8 +16,9 @@ import {
 } from "react";
 
 import { BlockRenderer } from "./block-renderer";
-import { BottomView } from "./bottom-view";
-import { Layout } from "./layout";
+import { DebugView } from "./debug-view";
+import { OffSwitch } from "./debug-view/icons";
+import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useMockBlockProps } from "./use-mock-block-props";
 
 type BlockDefinition =
@@ -43,6 +43,7 @@ type MockBlockDockProps = {
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
+  blockName?: string;
 };
 
 /**
@@ -57,43 +58,51 @@ type MockBlockDockProps = {
  * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
  * @param [initialLinks] the links to include in the data store
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @para
+ * @param [readonly=false]
+ * @param [blockName] - block's display name
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
   blockEntity: initialBlockEntity,
-  blockSchema,
-  debug,
+  blockSchema: initialBlockSchema,
+  debug: initialDebug,
   initialEntities,
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
-  readonly,
+  readonly: initialReadonly,
+  blockName,
 }) => {
   const {
     blockEntity,
     blockGraph,
+    blockSchema,
     datastore,
+    debugMode,
     entityTypes,
     graphServiceCallbacks,
     linkedAggregations,
+    readonly,
+    setBlockSchema,
+    setBlockEntity,
+    setDebugMode,
+    setReadonly,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
-    blockSchema,
+    blockSchema: initialBlockSchema,
     initialEntities,
     initialEntityTypes,
     initialLinks,
     initialLinkedAggregations,
-    readonly,
+    readonly: !!initialReadonly,
+    debug: !!initialDebug,
   });
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
     null,
   );
-  const [debugReadonly, setDebugReadonly] = useState<boolean>(!!readonly);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const prevReadonly = useRef<boolean | undefined>(readonly);
 
   const blockType =
     "ReactComponent" in blockDefinition
@@ -106,17 +115,13 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   const propsToInject: BlockGraphProperties<any> = {
     graph: {
-      readonly: debugReadonly,
+      readonly,
       blockEntity,
       blockGraph,
       entityTypes,
       linkedAggregations,
     },
   };
-
-  useEffect(() => {
-    prevReadonly.current = readonly;
-  }, [readonly]);
 
   useEffect(() => {
     if (!wrapperRef.current) {
@@ -131,7 +136,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           linkedAggregations,
           callbacks: graphServiceCallbacks,
           element: wrapperRef.current,
-          readonly: debugReadonly,
+          readonly,
         }),
       );
     }
@@ -141,7 +146,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphService,
     graphServiceCallbacks,
     linkedAggregations,
-    debugReadonly,
+    readonly,
   ]);
 
   useEffect(() => {
@@ -170,70 +175,60 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   useEffect(() => {
     if (graphService) {
-      graphService.readonly({ data: debugReadonly });
+      graphService.readonly({ data: readonly });
     }
-  }, [debugReadonly, graphService]);
+  }, [readonly, graphService]);
 
-  if (readonly !== prevReadonly.current && readonly !== debugReadonly) {
-    setDebugReadonly(!!readonly);
-  }
-
-  if (!debug) {
-    return (
-      <div ref={wrapperRef}>
-        {graphService ? (
-          <BlockRenderer
-            customElement={
-              "customElement" in blockDefinition
-                ? blockDefinition.customElement
-                : undefined
-            }
-            html={"html" in blockDefinition ? blockDefinition.html : undefined}
-            properties={propsToInject}
-            ReactComponent={
-              "ReactComponent" in blockDefinition
-                ? blockDefinition.ReactComponent
-                : undefined
-            }
-          />
-        ) : null}
-      </div>
-    );
-  }
+  const Component = (
+    <div ref={wrapperRef}>
+      {graphService ? (
+        <BlockRenderer
+          customElement={
+            "customElement" in blockDefinition
+              ? blockDefinition.customElement
+              : undefined
+          }
+          html={"html" in blockDefinition ? blockDefinition.html : undefined}
+          properties={propsToInject}
+          ReactComponent={
+            "ReactComponent" in blockDefinition
+              ? blockDefinition.ReactComponent
+              : undefined
+          }
+        />
+      ) : null}
+    </div>
+  );
 
   return (
-    <Layout blockType={blockType}>
-      <Box>
-        <Box padding={3.75}>
-          <div ref={wrapperRef}>
-            {graphService ? (
-              <BlockRenderer
-                customElement={
-                  "customElement" in blockDefinition
-                    ? blockDefinition.customElement
-                    : undefined
-                }
-                html={
-                  "html" in blockDefinition ? blockDefinition.html : undefined
-                }
-                properties={propsToInject}
-                ReactComponent={
-                  "ReactComponent" in blockDefinition
-                    ? blockDefinition.ReactComponent
-                    : undefined
-                }
-              />
-            ) : null}
-          </div>
-        </Box>
-      </Box>
-
-      <BottomView
-        graphProperties={propsToInject}
-        datastore={datastore}
-        readonly={debugReadonly}
-        setReadonly={setDebugReadonly}
-      />
-    </Layout>
+    <MockBlockDockProvider
+      debugMode={debugMode}
+      setDebugMode={setDebugMode}
+      readonly={readonly}
+      setReadonly={setReadonly}
+      blockSchema={blockSchema}
+      setBlockSchema={setBlockSchema}
+      blockEntity={blockEntity}
+      setBlockEntity={setBlockEntity}
+      datastore={datastore}
+      blockType={blockType}
+      blockName={blockName}
+    >
+      {!debugMode ? (
+        <div className="mbd-non-debug-mode-wrapper">
+          {Component}
+          <button
+            className="mbd-debug-mode-toggle"
+            type="button"
+            onClick={() => setDebugMode(true)}
+          >
+            Preview Mode
+            <OffSwitch />
+          </button>
+        </div>
+      ) : (
+        <DebugView>{Component}</DebugView>
+      )}
+    </MockBlockDockProvider>
   );
 };

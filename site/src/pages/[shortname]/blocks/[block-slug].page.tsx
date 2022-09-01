@@ -85,6 +85,8 @@ const generateSandboxBaseUrl = (): string => {
   const branchSlug = branch
     .toLowerCase()
     .replace(/\./g, "")
+    .replace(/\//, "-")
+    .replace(/[/_]/g, "")
     .replace(/[^\w-]+/g, "-");
 
   const projectName = "blockprotocol";

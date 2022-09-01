@@ -30,13 +30,13 @@ export type ApiBlockCreateRequest =
   | ApiNpmBlockCreateRequest
   | ApiTarballBlockCreateRequest;
 
-export type ApiTypeCreateResponse = {
+export type ApiBlockCreateResponse = {
   block: ExpandedBlockMetadata;
 };
 
 export default createAuthenticatedHandler<
   ApiBlockCreateRequest,
-  ApiTypeCreateResponse
+  ApiBlockCreateResponse
 >()
   .use(
     multipartUploads({

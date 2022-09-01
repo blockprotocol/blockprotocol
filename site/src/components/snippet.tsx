@@ -18,6 +18,8 @@ import { Box, BoxProps } from "@mui/material";
 import Prism from "prismjs";
 import { FunctionComponent } from "react";
 
+import { CODE_FONT_FAMILY } from "../theme/typography";
+
 type SnippetProps = {
   source: string;
   language: string;
@@ -26,12 +28,18 @@ type SnippetProps = {
 export const Snippet: FunctionComponent<SnippetProps> = ({
   source,
   language,
+  sx = [],
   ...boxProps
 }) => {
+  const mergedSx: BoxProps["sx"] = [
+    { fontFamily: CODE_FONT_FAMILY },
+    ...(Array.isArray(sx) ? sx : [sx]),
+  ];
+
   const grammar = Prism.languages[language];
   if (!grammar) {
     return (
-      <Box component="code" {...boxProps}>
+      <Box component="code" sx={mergedSx} {...boxProps}>
         {source}
       </Box>
     );
@@ -40,6 +48,7 @@ export const Snippet: FunctionComponent<SnippetProps> = ({
   return (
     <Box
       component="code"
+      sx={mergedSx}
       {...boxProps}
       // trust prism to properly escape the source
       dangerouslySetInnerHTML={{

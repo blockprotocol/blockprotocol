@@ -65,7 +65,14 @@ const DevApp: FunctionComponent = () => {
 
   return (
     <>
-      <div style={{ position: "absolute", right: 16, top: 16, zIndex: 100 }}>
+      <div
+        style={{
+          position: "absolute",
+          right: 40,
+          top: 60,
+          zIndex: 1,
+        }}
+      >
         <label>
           <span style={{ fontSize: 14, marginRight: 8 }}>
             Select test block
@@ -88,6 +95,7 @@ const DevApp: FunctionComponent = () => {
         debug
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
+        blockName="Test Block"
       />
     </>
   );
