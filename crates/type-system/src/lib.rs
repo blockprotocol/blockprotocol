@@ -1,6 +1,8 @@
 #![feature(lint_reasons)]
 #![feature(extern_types)]
 #![feature(once_cell)]
+// This is a nuisance for wasm_bindgen which requires pub functions
+#![cfg_attr(not(target_arch = "wasm32"), warn(unreachable_pub))]
 #![warn(
     clippy::pedantic,
     clippy::nursery,
@@ -32,8 +34,13 @@
     clippy::use_debug,
     clippy::verbose_file_reads
 )]
-#![allow(clippy::use_self, reason = "Too many false positives")]
 #![allow(
+    clippy::redundant_pub_crate,
+    reason = "Conflicts with `unreachable_pub` \
+                  see <https://github.com/rust-lang/rust-clippy/issues/5369>"
+)]
+#![expect(clippy::use_self, reason = "Too many false positives")]
+#![expect(
     clippy::module_name_repetitions,
     reason = "This encourages importing `as` which breaks IDEs"
 )]
@@ -41,16 +48,7 @@
 mod ontology;
 mod utils;
 
-#[cfg(target_arch = "wasm32")]
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-
-pub use ontology::{
-    data_type::{DataType, DataTypeReference},
-    property_type::{PropertyType, PropertyTypeReference, PropertyValues},
-    repr_shared::{Array, Object, OneOf, ValidateUri, ValidationError, ValueOrArray},
-    uri,
-};
+pub use ontology::*;
 
 #[cfg(test)]
 #[path = "../tests/data/lib.rs"]

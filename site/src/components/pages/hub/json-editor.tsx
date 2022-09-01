@@ -8,6 +8,8 @@ import {
   useRef,
 } from "react";
 
+import { CODE_FONT_FAMILY } from "../../../theme/typography";
+
 interface JsonEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -136,7 +138,7 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
           background: "transparent",
           color: "transparent",
           tabSize: 2,
-          fontFamily: `Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace`,
+          fontFamily: CODE_FONT_FAMILY,
           fontSize: "1em",
         })}
         wrap="off"

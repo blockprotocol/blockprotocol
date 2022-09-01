@@ -6,10 +6,58 @@
 //! aid with the de/serialization, intermediary structs and helpers are defined across various
 //! submodules.
 
-pub mod data_type;
-pub mod property_type;
+mod data_type;
+mod entity_type;
+mod link_type;
+mod property_type;
 // TODO: reconsider calling these URIs in the spec, it seems to be a redundant term nowadays and
 //  we should probably just go with URL
 pub mod uri;
 
-pub mod repr_shared;
+mod shared;
+
+pub use data_type::{DataType, DataTypeReference, ParseDataTypeError};
+pub use entity_type::{
+    links::{
+        Links, MaybeOrderedArray, ParseEntityTypeReferenceArrayError, ParseLinksError,
+        ValueOrMaybeOrderedArray,
+    },
+    EntityType, EntityTypeReference, ParseEntityTypeError,
+};
+pub use link_type::{LinkType, ParseLinkTypeError};
+pub use property_type::{
+    ParsePropertyTypeError, PropertyType, PropertyTypeReference, PropertyValues,
+};
+pub use shared::{
+    array::{
+        error::{ParseOneOfArrayError, ParsePropertyTypeReferenceArrayError},
+        Array, ValueOrArray,
+    },
+    object::{error::ParsePropertyTypeObjectError, Object},
+    one_of::{error::ParseOneOfError, OneOf},
+    validate::{ValidateUri, ValidationError},
+};
+
+#[allow(
+    unused_imports,
+    reason = "We want to keep them here in case for the convenience of re-exporting"
+)]
+// Re-export the repr contents so they're nicely grouped and so that they're easier to import in
+// a non-ambiguous way where they don't get confused with their non repr counterparts.
+// For example, `import crate::repr` lets you then use `repr::DataType`
+pub(crate) mod repr {
+    pub(crate) use super::{
+        data_type::repr::{DataType, DataTypeReference},
+        entity_type::{
+            links::repr::{Links, ValueOrMaybeOrderedArray},
+            repr::{EntityType, EntityTypeReference},
+        },
+        link_type::repr::LinkType,
+        property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
+        shared::{
+            array::repr::{Array, ValueOrArray},
+            object::repr::Object,
+            one_of::repr::OneOf,
+        },
+    };
+}
