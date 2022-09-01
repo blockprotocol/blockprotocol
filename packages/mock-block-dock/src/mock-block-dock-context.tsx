@@ -1,4 +1,5 @@
 import { Message } from "@blockprotocol/core";
+import { Entity, EntityType } from "@blockprotocol/graph";
 import {
   createContext,
   Dispatch,
@@ -10,9 +11,11 @@ import {
   useState,
 } from "react";
 
-import { MockBlockHookResult } from "./use-mock-block-props";
+import { MockData } from "./use-mock-block-props/use-mock-datastore";
 
 type MockBlockDockInfo = {
+  blockEntity: Entity;
+  blockSchema?: Partial<EntityType>;
   blockInfo: {
     blockType: {
       entryPoint?: "react" | "html" | "custom-element" | string;
@@ -23,12 +26,16 @@ type MockBlockDockInfo = {
     name?: string;
     protocol?: string;
   };
+  datastore: MockData;
+  debugMode: boolean;
   logs: Message[];
+  readonly: boolean;
+  setBlockEntity: Dispatch<SetStateAction<Entity>>;
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  setDebugMode: Dispatch<SetStateAction<boolean>>;
   setLogs: Dispatch<SetStateAction<Message[]>>;
-} & Omit<
-  MockBlockHookResult,
-  "graphServiceCallbacks" | "blockGraph" | "linkedAggregations" | "entityTypes"
->;
+  setReadonly: Dispatch<SetStateAction<boolean>>;
+};
 
 const MockBlockDockContext = createContext<MockBlockDockInfo | null>(null);
 

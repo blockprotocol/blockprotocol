@@ -17,7 +17,7 @@ import {
 } from "./use-mock-block-props/use-mock-datastore";
 import { usePrevious } from "./use-previous";
 
-export type MockBlockHookArgs = {
+type MockBlockHookArgs = {
   blockEntity?: Entity;
   blockSchema?: Partial<EntityType>;
   initialEntities?: Entity[];
@@ -25,10 +25,9 @@ export type MockBlockHookArgs = {
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly: boolean;
-  debug: boolean;
 };
 
-export type MockBlockHookResult = {
+type MockBlockHookResult = {
   blockEntity: Entity;
   blockGraph: BlockGraph;
   blockSchema?: Partial<EntityType>;
@@ -37,11 +36,9 @@ export type MockBlockHookResult = {
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
   linkedAggregations: LinkedAggregation[];
   readonly: boolean;
-  debugMode: boolean;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
   setBlockEntity: Dispatch<SetStateAction<Entity>>;
+  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
-  setDebugMode: Dispatch<SetStateAction<boolean>>;
 };
 
 /**
@@ -63,16 +60,13 @@ export const useMockBlockProps = ({
   initialLinks,
   initialLinkedAggregations,
   readonly: externalReadonly,
-  debug: externalDebug,
 }: MockBlockHookArgs): MockBlockHookResult => {
   const [blockSchema, setBlockSchema] = useState<Partial<EntityType>>(
     externalBlockSchema!,
   );
   const [readonly, setReadonly] = useState<boolean>(externalReadonly);
-  const [debugMode, setDebugMode] = useState<boolean>(!!externalDebug);
 
   const prevExternalReadonly = usePrevious(externalReadonly);
-  const prevExternalDebug = usePrevious(externalDebug);
 
   const getDefaultMockData = () => {
     return {
@@ -121,23 +115,17 @@ export const useMockBlockProps = ({
     setReadonly(externalReadonly);
   }
 
-  if (externalDebug !== prevExternalDebug && debugMode !== externalDebug) {
-    setDebugMode(externalDebug);
-  }
-
   return {
     blockEntity,
     blockGraph,
+    blockSchema,
     datastore,
     entityTypes,
-    linkedAggregations,
     graphServiceCallbacks,
-    blockSchema,
+    linkedAggregations,
     readonly,
     setBlockSchema,
     setBlockEntity,
     setReadonly,
-    debugMode,
-    setDebugMode,
   };
 };

@@ -24,11 +24,12 @@ const blockEntityMap = {
   },
   "custom-element": {
     entityId: "entity-custom-element",
+    entityTypeId: "test-type-1",
     properties: { name: "World" },
   },
   "html-at-url": {
-    entityTypeId: "test-type-1",
     entityId: "entity-html-as-url",
+    entityTypeId: "test-type-1",
     properties: { name: "World" },
   },
   "html-as-string": {

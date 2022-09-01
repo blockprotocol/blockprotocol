@@ -20,6 +20,7 @@ import { DebugView } from "./debug-view";
 import { OffSwitch } from "./debug-view/icons";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useMockBlockProps } from "./use-mock-block-props";
+import { usePrevious } from "./use-previous";
 
 type BlockDefinition =
   | { ReactComponent: ComponentType<any> }
@@ -59,22 +60,22 @@ type MockBlockDockProps = {
  * A component which acts as a mock embedding application for Block Protocol blocks.
  * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
- * @param [blockDefinition] the source for the block and any additional metadata required
+ * @param blockDefinition the source for the block and any additional metadata required
  * @param [blockEntity] the starting properties for the block entity
  * @param [blockSchema] the schema for the block entity
- * @param [debug=false] display debugging information
+ * @param [debug = false] display debugging information
  * @param [initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
  * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
  * @param [initialLinks] the links to include in the data store
- * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @param [readonly=false]
- * @param [blockName] - block's display name
+ * @param [initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [readonly = false] whether the block should display in readonly mode or not
+ * @param [blockInfo] metadata about the block
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
   blockEntity: initialBlockEntity,
   blockSchema: initialBlockSchema,
-  debug: initialDebug,
+  debug: initialDebug = false,
   initialEntities,
   initialEntityTypes,
   initialLinks,
@@ -87,14 +88,12 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     blockGraph,
     blockSchema,
     datastore,
-    debugMode,
     entityTypes,
     graphServiceCallbacks,
     linkedAggregations,
     readonly,
     setBlockSchema,
     setBlockEntity,
-    setDebugMode,
     setReadonly,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
@@ -104,8 +103,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialLinks,
     initialLinkedAggregations,
     readonly: !!initialReadonly,
-    debug: !!initialDebug,
   });
+
+  const [debugMode, setDebugMode] = useState<boolean>(initialDebug);
+  const prevExternalDebug = usePrevious(initialDebug);
+
+  if (initialDebug !== prevExternalDebug && debugMode !== initialDebug) {
+    setDebugMode(initialDebug);
+  }
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
     null,
