@@ -124,6 +124,7 @@ const DevApp: FunctionComponent = () => {
           blockType: {
             entryPoint: blockType,
           },
+          name: "test-block",
           protocol: "0.2",
           icon: "public/icon.svg",
           image: "public/image",

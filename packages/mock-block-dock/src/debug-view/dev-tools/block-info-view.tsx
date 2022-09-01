@@ -24,9 +24,11 @@ export const BlockInfoView = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={3} textAlign="right">
-        <Typography variant="subtitle2">Block Type</Typography>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          Block Type
+        </Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={9} fontSize={14}>
         {blockType && (
           <Chip
             variant="outlined"
@@ -38,30 +40,46 @@ export const BlockInfoView = () => {
       </Grid>
       {/*  */}
       <Grid item xs={3} textAlign="right">
-        <Typography variant="subtitle2">Display Name</Typography>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          Name
+        </Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={9} fontSize={14}>
+        {blockInfo.name}
+      </Grid>
+      <Grid item xs={3} textAlign="right">
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          Display Name
+        </Typography>
+      </Grid>
+      <Grid item xs={9} fontSize={14}>
         {blockInfo.displayName}
       </Grid>
       {/*  */}
       <Grid item xs={3} textAlign="right">
-        <Typography variant="subtitle2">Block Protocol Version</Typography>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          Block Protocol Version
+        </Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={9} fontSize={14}>
         {blockInfo.protocol}
       </Grid>
       {/*  */}
       <Grid item xs={3} textAlign="right">
-        <Typography variant="subtitle2">Icon path</Typography>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          Icon path
+        </Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={9} fontSize={14}>
         {blockInfo.icon}
       </Grid>
       {/*  */}
       <Grid item xs={3} textAlign="right">
-        <Typography variant="subtitle2">Preview Image path</Typography>
+        <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+          Preview Image path
+        </Typography>
       </Grid>
-      <Grid item xs={9}>
+      <Grid item xs={9} fontSize={14}>
         {blockInfo.image}
       </Grid>
     </Grid>

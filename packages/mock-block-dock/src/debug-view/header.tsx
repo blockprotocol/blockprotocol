@@ -78,6 +78,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           variant="subtitle2"
           fontWeight="normal"
           color={customColors.gray[60]}
+          mt="2px"
         >
           v{MOCK_BLOCK_DOCK_VERSION}
         </Typography>

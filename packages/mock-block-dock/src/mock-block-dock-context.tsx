@@ -20,6 +20,7 @@ type MockBlockDockInfo = {
     displayName?: string;
     icon?: string;
     image?: string;
+    name?: string;
     protocol?: string;
   };
   logs: Message[];
