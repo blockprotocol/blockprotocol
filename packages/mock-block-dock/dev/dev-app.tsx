@@ -129,6 +129,7 @@ const DevApp: FunctionComponent = () => {
           icon: "public/icon.svg",
           image: "public/image",
         }}
+        key={testBlockType} // reset state when we switch block types to re-initialize graph service
       />
     </>
   );
