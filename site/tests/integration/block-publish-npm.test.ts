@@ -83,7 +83,7 @@ test("user should not be able to publish an already-used npm-package", async ({
   page,
 }) => {
   test.skip();
-  /** @todo skip this test if `isProduction === false` */
+  /** @todo update 'already-taken' name check so that it can be checked in these tests (e.g. by having the check activated by custom environment variable, not `isProduction`) */
   await publishBlock({
     page,
     blockName: dummyBlockName,
