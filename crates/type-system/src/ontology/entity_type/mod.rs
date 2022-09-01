@@ -23,10 +23,10 @@ pub struct EntityType {
     title: String,
     plural_title: String,
     description: Option<String>,
-    default: HashMap<VersionedUri, serde_json::Value>,
-    examples: Vec<HashMap<VersionedUri, serde_json::Value>>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
     links: Links,
+    default: HashMap<BaseUri, serde_json::Value>,
+    examples: Vec<HashMap<BaseUri, serde_json::Value>>,
 }
 
 impl EntityType {
@@ -38,10 +38,10 @@ impl EntityType {
         title: String,
         plural_title: String,
         description: Option<String>,
-        default: HashMap<VersionedUri, serde_json::Value>,
-        examples: Vec<HashMap<VersionedUri, serde_json::Value>>,
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
         links: Links,
+        default: HashMap<BaseUri, serde_json::Value>,
+        examples: Vec<HashMap<BaseUri, serde_json::Value>>,
     ) -> Self {
         Self {
             id,
@@ -76,16 +76,6 @@ impl EntityType {
     }
 
     #[must_use]
-    pub const fn default(&self) -> &HashMap<VersionedUri, serde_json::Value> {
-        &self.default
-    }
-
-    #[must_use]
-    pub const fn examples(&self) -> &Vec<HashMap<VersionedUri, serde_json::Value>> {
-        &self.examples
-    }
-
-    #[must_use]
     pub const fn properties(&self) -> &HashMap<BaseUri, ValueOrArray<PropertyTypeReference>> {
         self.property_object.properties()
     }
@@ -105,6 +95,16 @@ impl EntityType {
     #[must_use]
     pub fn required_links(&self) -> &[VersionedUri] {
         self.links.required()
+    }
+
+    #[must_use]
+    pub const fn default(&self) -> &HashMap<BaseUri, serde_json::Value> {
+        &self.default
+    }
+
+    #[must_use]
+    pub const fn examples(&self) -> &Vec<HashMap<BaseUri, serde_json::Value>> {
+        &self.examples
     }
 
     #[must_use]
