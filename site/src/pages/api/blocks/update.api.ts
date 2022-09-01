@@ -4,6 +4,7 @@ import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
+import { shouldAllowBlockPublishing } from "../../../lib/config";
 import {
   formatErrors,
   isErrorContainingCauseWithCode,
@@ -26,6 +27,12 @@ export default createAuthenticatedHandler<
 >()
   .use(bodyValidator("blockName").isString().notEmpty().toLowerCase())
   .post(async (req, res) => {
+    if (!shouldAllowBlockPublishing) {
+      return res
+        .status(501)
+        .json(formatErrors({ msg: "Publishing is not supported." }));
+    }
+
     const { blockName } = req.body;
 
     if (!blockName) {
