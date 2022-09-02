@@ -1,6 +1,6 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { GetStaticProps, NextPage } from "next";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
 import { getAllBlocks } from "../lib/api/blocks/get";
@@ -27,14 +27,12 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 const HubPage: NextPage<PageProps> = ({ catalog }) => {
   return (
     <>
-      <Head>
-        <title>Block Protocol – Block Hub</title>
-        <meta itemProp="name" content="Block Hub" />
-        <meta
-          itemProp="description"
-          content="The Block Protocol's registry of open-source blocks"
-        />
-      </Head>
+      <NextSeo
+        openGraph={{
+          description: "The Block Protocol's registry of open-source blocks",
+          title: "Block Protocol – Block Hub",
+        }}
+      />
       <Box
         sx={{
           mb: 20,
