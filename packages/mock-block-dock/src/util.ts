@@ -95,13 +95,13 @@ const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
 
   return [...entities].sort((a, b) => {
     for (const sortItem of multiSort) {
-      // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
-      const aValue = a[sortItem.field];
-      // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
-      const bValue = b[sortItem.field];
+      const aValue = get(a, sortItem.field);
+      const bValue = get(b, sortItem.field);
 
+      // @ts-expect-error -- tolerating null and undefined
       if (aValue < bValue) {
         return sortItem.desc ? 1 : -1;
+        // @ts-expect-error -- tolerating null and undefined
       } else if (aValue > bValue) {
         return sortItem.desc ? -1 : 1;
       }
