@@ -1,39 +1,36 @@
-use std::fmt;
-
 use serde::{Deserialize, Serialize};
+use thiserror::Error;
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseBaseUriError {
+    #[error("URI is missing a trailing slash")]
     MissingTrailingSlash,
+    #[error("{0}")]
     UrlParseError(String), // TODO: can we do better than a string here
+    #[error("URI cannot cannot be a base")]
     CannotBeABase,
 }
 
-impl fmt::Display for ParseBaseUriError {
-    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt.write_str("provided string is not a valid URI")
-    }
-}
-
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
 pub enum ParseVersionedUriError {
+    #[error("incorrect formatting")]
     IncorrectFormatting,
+    #[error("missing base uri")]
     MissingBaseUri,
+    #[error("missing version")]
     MissingVersion,
-    InvalidVersion,
+    #[error("invalid version: {0}")]
+    InvalidVersion(String),
+    #[error("additional end content")]
     AdditionalEndContent,
+    #[error("invalid base uri: {0}")]
     InvalidBaseUri(ParseBaseUriError),
+    #[error("invalid json: {0}")]
     InvalidJson(String),
-}
-
-impl fmt::Display for ParseVersionedUriError {
-    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> fmt::Result {
-        fmt.write_str("provided string is not a valid versioned URI")
-    }
 }
