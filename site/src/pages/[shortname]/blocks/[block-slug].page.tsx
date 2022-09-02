@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import { NextSeo } from "next-seo";
 import crypto from "node:crypto";
 import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
@@ -249,13 +249,28 @@ const BlockPage: NextPage<BlockPageProps> = ({
     ? generateRepositoryDisplayUrl(blockMetadata.repository)
     : "";
 
+  const seoTitle = `Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`;
+  const seoDesc =
+    blockMetadata.description ||
+    "Check out this open-source block on Block Hub";
+
   return (
     <>
-      <Head>
-        <title>
-          {`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
-        </title>
-      </Head>
+      <NextSeo
+        title={seoTitle}
+        description={seoDesc}
+        openGraph={{
+          title: seoTitle,
+          description: seoDesc,
+          images: [
+            {
+              url:
+                blockMetadata?.image ||
+                "https://blockprotocol.org/assets/default-block-img.svg",
+            },
+          ],
+        }}
+      />
       <Container>
         {isDesktopSize ? null : (
           <Box mb={1}>
