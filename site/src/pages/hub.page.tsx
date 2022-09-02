@@ -13,6 +13,9 @@ interface PageProps {
   catalog: BlockMetadata[];
 }
 
+const seoTitle = "Block Protocol – Block Hub";
+const seoDesc = "The Block Protocol's registry of open-source blocks";
+
 /**
  * used to create an index of all available blocks, the catalog
  */
@@ -28,9 +31,11 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
   return (
     <>
       <NextSeo
+        title={seoTitle}
+        description={seoDesc}
         openGraph={{
-          description: "The Block Protocol's registry of open-source blocks",
-          title: "Block Protocol – Block Hub",
+          description: seoDesc,
+          title: seoTitle,
         }}
       />
       <Box
