@@ -249,19 +249,15 @@ const BlockPage: NextPage<BlockPageProps> = ({
     ? generateRepositoryDisplayUrl(blockMetadata.repository)
     : "";
 
-  const seoTitle = `Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`;
-  const seoDesc =
-    blockMetadata.description ||
-    "Check out this open-source block on Block Hub";
-
   return (
     <>
       <NextSeo
-        title={seoTitle}
-        description={seoDesc}
+        title={`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
+        description={
+          blockMetadata.description ||
+          "Check out this open-source block on Block Hub"
+        }
         openGraph={{
-          title: seoTitle,
-          description: seoDesc,
           images: [
             {
               url:
