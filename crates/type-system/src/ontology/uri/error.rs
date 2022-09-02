@@ -1,3 +1,4 @@
+use std::error::Error;
 use std::fmt;
 
 use serde::{Deserialize, Serialize};
@@ -19,6 +20,8 @@ impl fmt::Display for ParseBaseUriError {
     }
 }
 
+impl Error for ParseBaseUriError {}
+
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(tag = "reason", content = "inner")]
@@ -37,3 +40,5 @@ impl fmt::Display for ParseVersionedUriError {
         fmt.write_str("provided string is not a valid versioned URI")
     }
 }
+
+impl Error for ParseVersionedUriError {}
