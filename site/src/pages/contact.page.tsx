@@ -1,6 +1,6 @@
 import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { tw } from "twind";
 
 import { Button } from "../components/button";
@@ -12,9 +12,7 @@ const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
 const Partners: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>Block Protocol – Contact</title>
-      </Head>
+      <NextSeo title="Block Protocol – Contact" />
       <Container
         sx={{
           marginTop: {

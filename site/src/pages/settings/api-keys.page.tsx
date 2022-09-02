@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "../../components/button";
@@ -71,9 +71,7 @@ const ApiKeys: AuthWallPageContent = () => {
 
   return (
     <>
-      <Head>
-        <title>Block Protocol – Dashboard</title>
-      </Head>
+      <NextSeo title="Block Protocol – Dashboard" />
 
       <TopNavigationTabs />
 

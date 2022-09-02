@@ -2,8 +2,8 @@ import { EmbedderGraphMessageCallbacks } from "@blockprotocol/graph";
 import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import NextError from "next/error";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import { tw } from "twind";
 
@@ -113,9 +113,7 @@ const EntityTypePage: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>{`Block Protocol – ${shortname}/${title} Schema`}</title>
-      </Head>
+      <NextSeo title={`Block Protocol – ${shortname}/${title} Schema`} />
       <Container
         sx={{
           marginTop: {
