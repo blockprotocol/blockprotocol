@@ -16,20 +16,22 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
 
   if (productionFrontendHost && productionSandboxHost) {
+    const changeHostAndRedirect = (newHost: string) => {
+      const newUrl = new URL(url);
+      newUrl.host = newHost;
+      return NextResponse.redirect(newUrl, 308);
+    };
+
     const openingBlockSandboxPage = Boolean(
       url.pathname.match(/^\/@[\w_-]+\/blocks\/[\w_-]+\/sandboxed-demo$/),
     );
 
     if (url.host === productionFrontendHost && openingBlockSandboxPage) {
-      const newUrl = new URL(url);
-      newUrl.host = productionSandboxHost;
-      return NextResponse.redirect(newUrl, 308);
+      return changeHostAndRedirect(productionSandboxHost);
     }
 
     if (url.host === productionSandboxHost && !openingBlockSandboxPage) {
-      const newUrl = new URL(url);
-      newUrl.host = productionFrontendHost;
-      return NextResponse.redirect(newUrl, 308);
+      return changeHostAndRedirect(productionFrontendHost);
     }
   }
 
