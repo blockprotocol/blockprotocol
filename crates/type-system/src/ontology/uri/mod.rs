@@ -153,9 +153,8 @@ impl FromStr for VersionedUri {
 
         Ok(Self::new(
             BaseUri::new(base_uri.to_owned()).map_err(ParseVersionedUriError::InvalidBaseUri)?,
-            version
-                .parse()
-                .map_err(|_| ParseVersionedUriError::InvalidVersion)?,
+            u32::from_str(version)
+                .map_err(|error| ParseVersionedUriError::InvalidVersion(error.to_string()))?,
         ))
     }
 }
