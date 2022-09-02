@@ -252,6 +252,41 @@ declare namespace ParseLinksError {
 
 export type ParseLinksError = ParseLinksError.InvalidLinkKey | ParseLinksError.InvalidEntityTypeReference | ParseLinksError.InvalidArray | ParseLinksError.InvalidRequiredKey | ParseLinksError.ValidationError | ParseLinksError.InvalidJson;
 
+type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
+declare namespace ParseVersionedUriError {
+    export type IncorrectFormatting = { reason: "IncorrectFormatting"; inner?: null };
+    export type MissingBaseUri = { reason: "MissingBaseUri"; inner?: null };
+    export type MissingVersion = { reason: "MissingVersion"; inner?: null };
+    export type InvalidVersion = { reason: "InvalidVersion"; inner: string };
+    export type AdditionalEndContent = { reason: "AdditionalEndContent"; inner?: null };
+    export type InvalidBaseUri = { reason: "InvalidBaseUri"; inner: __ParseVersionedUriErrorParseBaseUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseVersionedUriError = ParseVersionedUriError.IncorrectFormatting | ParseVersionedUriError.MissingBaseUri | ParseVersionedUriError.MissingVersion | ParseVersionedUriError.InvalidVersion | ParseVersionedUriError.AdditionalEndContent | ParseVersionedUriError.InvalidBaseUri | ParseVersionedUriError.InvalidJson;
+
+declare namespace ParseBaseUriError {
+    export type MissingTrailingSlash = { reason: "MissingTrailingSlash"; inner?: null };
+    export type UrlParseError = { reason: "UrlParseError"; inner: string };
+    export type CannotBeABase = { reason: "CannotBeABase"; inner?: null };
+}
+
+export type ParseBaseUriError = ParseBaseUriError.MissingTrailingSlash | ParseBaseUriError.UrlParseError | ParseBaseUriError.CannotBeABase;
+
+export interface EntityTypeReference {
+    $ref: string;
+}
+
+export interface EntityType extends Object<ValueOrArray<PropertyTypeReference>>, Links {
+    kind: 'entityType';
+    $id: string;
+    title: string;
+    pluralTitle: string;
+    description?: string;
+    default?: Record<BaseUri, any>;
+    examples?: Record<BaseUri, any>[];
+}
+
 export interface Links {
     links?: Record<string, ValueOrMaybeOrderedArray<EntityTypeReference>>;
     requiredLinks?: string[];
@@ -268,20 +303,6 @@ declare namespace ValueOrMaybeOrderedArray {
 }
 
 export type ValueOrMaybeOrderedArray<T> = ValueOrMaybeOrderedArray.Value<T> | ValueOrMaybeOrderedArray.Array<T>;
-
-export interface EntityTypeReference {
-    $ref: string;
-}
-
-export interface EntityType extends Object<ValueOrArray<PropertyTypeReference>>, Links {
-    kind: 'entityType';
-    $id: string;
-    title: string;
-    pluralTitle: string;
-    description?: string;
-    default?: Record<BaseUri, any>;
-    examples?: Record<BaseUri, any>[];
-}
 
 declare namespace Result {
     export type Ok<T> = { type: "Ok"; inner: T };
@@ -301,27 +322,6 @@ declare namespace ValidationError {
 }
 
 export type ValidationError = ValidationError.MissingRequiredProperty | ValidationError.BaseUriMismatch | ValidationError.MissingRequiredLink | ValidationError.MismatchedPropertyCount | ValidationError.EmptyOneOf;
-
-type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
-declare namespace ParseVersionedUriError {
-    export type IncorrectFormatting = { reason: "IncorrectFormatting"; inner?: null };
-    export type MissingBaseUri = { reason: "MissingBaseUri"; inner?: null };
-    export type MissingVersion = { reason: "MissingVersion"; inner?: null };
-    export type InvalidVersion = { reason: "InvalidVersion"; inner?: null };
-    export type AdditionalEndContent = { reason: "AdditionalEndContent"; inner?: null };
-    export type InvalidBaseUri = { reason: "InvalidBaseUri"; inner: __ParseVersionedUriErrorParseBaseUriError };
-    export type InvalidJson = { reason: "InvalidJson"; inner: string };
-}
-
-export type ParseVersionedUriError = ParseVersionedUriError.IncorrectFormatting | ParseVersionedUriError.MissingBaseUri | ParseVersionedUriError.MissingVersion | ParseVersionedUriError.InvalidVersion | ParseVersionedUriError.AdditionalEndContent | ParseVersionedUriError.InvalidBaseUri | ParseVersionedUriError.InvalidJson;
-
-declare namespace ParseBaseUriError {
-    export type MissingTrailingSlash = { reason: "MissingTrailingSlash"; inner?: null };
-    export type UrlParseError = { reason: "UrlParseError"; inner: string };
-    export type CannotBeABase = { reason: "CannotBeABase"; inner?: null };
-}
-
-export type ParseBaseUriError = ParseBaseUriError.MissingTrailingSlash | ParseBaseUriError.UrlParseError | ParseBaseUriError.CannotBeABase;
 
 export interface DataTypeReference {
     $ref: string;
