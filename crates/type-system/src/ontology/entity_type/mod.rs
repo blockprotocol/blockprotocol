@@ -48,10 +48,10 @@ impl EntityType {
             title,
             plural_title,
             description,
-            default,
-            examples,
             property_object,
             links,
+            default,
+            examples,
         }
     }
 
