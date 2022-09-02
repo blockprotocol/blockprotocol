@@ -43,16 +43,7 @@ impl EntityType {
         default: HashMap<BaseUri, serde_json::Value>,
         examples: Vec<HashMap<BaseUri, serde_json::Value>>,
     ) -> Self {
-        Self {
-            id,
-            title,
-            plural_title,
-            description,
-            default,
-            examples,
-            property_object,
-            links,
-        }
+        Self { id, title, plural_title, description, property_object, links, default, examples }
     }
 
     #[must_use]
