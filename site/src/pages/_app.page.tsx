@@ -6,8 +6,8 @@ import { ThemeProvider } from "@mui/material/styles";
 import * as Sentry from "@sentry/nextjs";
 import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
-import Head from "next/head";
 import { Router, useRouter } from "next/router";
+import { DefaultSeo } from "next-seo";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TagManager from "react-gtm-module";
 
@@ -20,6 +20,7 @@ import {
   UserContextValue,
   UserState,
 } from "../context/user-context";
+import { defaultSeoConfig } from "../default-seo-config";
 import { apiClient } from "../lib/api-client";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
@@ -114,16 +115,7 @@ const MyApp = ({
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <PageLayout>
-              <Head>
-                <title>
-                  Block Protocol – an open standard for data-driven blocks
-                </title>
-                <meta itemProp="name" content="Block Protocol" />
-                <meta
-                  itemProp="description"
-                  content="An open standard for data-driven blocks"
-                />
-              </Head>
+              <DefaultSeo {...defaultSeoConfig} />
               <Component {...pageProps} />
             </PageLayout>
           </ThemeProvider>
