@@ -1,10 +1,10 @@
 import { BlockMetadata } from "@blockprotocol/core";
+import * as envalid from "envalid";
 import execa from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 import { Db } from "mongodb";
 import path from "node:path";
-import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
 
@@ -12,7 +12,11 @@ import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
 import { isProduction } from "../../config";
 import { User } from "../model/user.model";
 import { getDbBlock, insertDbBlock } from "./db";
-import { publicBaseR2Url, uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
+import { uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
+
+const env = envalid.cleanEnv(process.env, {
+  S3_BASE_URL: envalid.str(),
+});
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
@@ -56,7 +60,7 @@ const mirrorNpmPackageToR2 = async (
     ));
 
     await tar.x({
-      // tar is not availabled on deployed lambdas
+      // tar is not available on deployed lambdas
       cwd: npmTarballFolder,
       file: path.resolve(npmTarballFolder, tarballFilename),
     });
@@ -177,29 +181,12 @@ const mirrorNpmPackageToR2 = async (
 
   const now = new Date().toISOString();
 
-  // for blocks developed locally, add a prefix to the storage URL - the R2 bucket is shared across all dev environments
-  let storageNamespacePrefix = "";
-  if (!isRunningOnVercel) {
-    const gitConfigUserNameResult = await execa("git", [
-      "config",
-      "--get",
-      "user.name",
-    ]);
-    const userName = gitConfigUserNameResult.stdout.trim();
-    storageNamespacePrefix = `local-dev/${slugify(userName, {
-      lower: true,
-      strict: true,
-    })}/`;
-  }
-
   /**
    * In future we will store each version in its own folder, and add the version to the folder path
    * @see https://app.asana.com/0/0/1202539910143057/f (internal)
    */
-  const remoteStoragePrefix = `${storageNamespacePrefix}${stripLeadingAt(
-    pathWithNamespace,
-  )}`;
-  const publicPackagePath = `${publicBaseR2Url}/${remoteStoragePrefix}`;
+  const remoteStoragePrefix = stripLeadingAt(pathWithNamespace);
+  const publicPackagePath = `${env.S3_BASE_URL}/${remoteStoragePrefix}`;
 
   const sourceInformation = {
     blockDistributionFolderUrl: publicPackagePath,

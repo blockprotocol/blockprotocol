@@ -1,20 +1,20 @@
 import S3 from "aws-sdk/clients/s3";
+import * as envalid from "envalid";
 import fs from "fs-extra";
 import mime from "mime-types";
 import path from "node:path";
 
-import { isProduction } from "../../config";
-
-const cloudflareEndpoint = process.env.CLOUDFLARE_R2_ENDPOINT;
-const bucketName = isProduction ? "blocks" : "blocks-dev";
-const baseS3Options = { Bucket: bucketName };
-
-export const publicBaseR2Url = `https://${bucketName}.hashai.workers.dev`;
+const env = envalid.cleanEnv(process.env, {
+  S3_API_ENDPOINT: envalid.str(),
+  S3_BUCKET: envalid.str(),
+  S3_ACCESS_KEY_ID: envalid.str(),
+  S3_SECRET_ACCESS_KEY: envalid.str(),
+});
 
 const s3 = new S3({
-  endpoint: cloudflareEndpoint,
-  accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID,
-  secretAccessKey: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
+  endpoint: env.S3_API_ENDPOINT,
+  accessKeyId: env.S3_ACCESS_KEY_ID,
+  secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   signatureVersion: "v4",
 });
 
@@ -51,7 +51,7 @@ export const uploadBlockFilesToR2 = (
 
     return s3
       .putObject({
-        ...baseS3Options,
+        Bucket: env.S3_BUCKET,
         Body: fileContents,
         ContentType: contentType || undefined,
         Key: `${remoteStoragePrefix}/${thingName}`,
@@ -72,7 +72,7 @@ export const wipeR2BlockFolder = async (blockFolder: string) => {
   }
   const folderContents = await s3
     .listObjectsV2({
-      ...baseS3Options,
+      Bucket: env.S3_BUCKET,
       Prefix: blockFolder,
     })
     .promise();
@@ -87,7 +87,7 @@ export const wipeR2BlockFolder = async (blockFolder: string) => {
 
   await s3
     .deleteObjects({
-      ...baseS3Options,
+      Bucket: env.S3_BUCKET,
       Delete: {
         Objects: objectsToDelete,
       },

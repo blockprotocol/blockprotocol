@@ -59,9 +59,11 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
 
 If you want to publish blocks via the API, you will need to configure Cloudflare R2 variables:
 
-- `CLOUDFLARE_R2_ENDPOINT`
-- `CLOUDFLARE_ACCESS_KEY_ID`
-- `CLOUDFLARE_SECRET_ACCESS_KEY`
+- `S3_API_ENDPOINT`
+- `S3_BUCKET_NAME`
+- `S3_ACCESS_KEY_ID`
+- `S3_SECRET_ACCESS_KEY`
+- `S3_BASE_URL`
 
 API-published blocks are uploaded to R2. This is not necessary for blocks added to the `hub/` folder in the repo.
 
