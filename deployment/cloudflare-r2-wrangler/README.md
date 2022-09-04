@@ -1,4 +1,4 @@
-# Wrangler for R2
+# Wrangler for Cloudflare R2
 
 This folder contains files defining a [wrangler](https://github.com/cloudflare/wrangler) worker to manage a Cloudflare R2 bucket.
 
