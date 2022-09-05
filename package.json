@@ -47,7 +47,7 @@
     "@changesets/cli": "^2.24.2",
     "check-dependency-version-consistency": "2.0.0",
     "dotenv-flow": "3.2.0",
-    "fs-extra": "^10.1.0",
+    "eslint": "8.22.0",
     "husky": "7.0.4",
     "kill-port": "^2.0.1",
     "lint-staged": "12.3.3",
