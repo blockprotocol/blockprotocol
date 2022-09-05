@@ -125,6 +125,7 @@
     "chalk": "5.0.1",
     "envalid": "7.2.2",
     "micromatch": "^4.0.4",
+    "nyc": "^15.1.0",
     "playwright": "^1.25.1",
     "playwright-test-coverage": "^1.1.0",
     "rimraf": "^3.0.2",
