@@ -1,4 +1,6 @@
 import fs from "fs-extra";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 export interface PackageInfo {
   name: string;
@@ -6,7 +8,15 @@ export interface PackageInfo {
   version: string;
 }
 
-const packageParentFolders = ["packages", "packages/@blockprotocol"];
+const monorepoRoot = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "../../../..",
+);
+
+const packageParentFolders = [
+  path.resolve(monorepoRoot, "packages"),
+  path.resolve(monorepoRoot, "packages/@blockprotocol"),
+];
 
 export const listPublishablePackages = async (): Promise<PackageInfo[]> => {
   const result: PackageInfo[] = [];
