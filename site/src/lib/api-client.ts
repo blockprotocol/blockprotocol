@@ -40,7 +40,7 @@ import {
 } from "../pages/api/verify-email.api";
 import { FRONTEND_URL } from "./config";
 
-const BASE_URL = `${typeof window === "undefined" ? "" : FRONTEND_URL}/api/`;
+const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
