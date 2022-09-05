@@ -66,6 +66,15 @@ export default createAuthenticatedHandler<
 
     const slugifiedBlockName = generateSlug(untransformedBlockName);
 
+    if (slugifiedBlockName !== untransformedBlockName) {
+      return res.status(400).json(
+        formatErrors({
+          msg: `Block name '${untransformedBlockName}' must be a slug. Try ${slugifiedBlockName} instead`,
+          code: "NAME_TAKEN",
+        }),
+      );
+    }
+
     const blockWithName = await getDbBlock({
       name: slugifiedBlockName,
       author: shortname,

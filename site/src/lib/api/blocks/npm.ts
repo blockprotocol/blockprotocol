@@ -54,7 +54,7 @@ const mirrorNpmPackageToR2 = async ({
       execaOptions,
     ));
 
-    // tar is not available on deployed lambdas
+    // we use a library because tar is not installed in Vercel lambdas
     await tar.x({
       cwd: npmTarballFolder,
       file: path.resolve(npmTarballFolder, tarballFilename),

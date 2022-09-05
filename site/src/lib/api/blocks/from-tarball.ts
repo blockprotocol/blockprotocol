@@ -39,7 +39,7 @@ const mirrorTarballToR2 = async ({
   await fs.ensureDir(extractionFolderPath);
 
   try {
-    // tar is not available on deployed lambdas
+    // we use a library because tar is not installed in Vercel lambdas
     await tar.x({
       cwd: extractionFolderPath,
       file: tarballPath,

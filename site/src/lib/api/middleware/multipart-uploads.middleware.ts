@@ -8,7 +8,7 @@ import { BaseApiResponse } from "../handler/base-handler";
 export type MultipartUploadsOptions = {
   fieldsLimit: number;
   filesLimit: number;
-  maxFileSize: number;
+  maxFileSize?: number;
 };
 
 export type UploadedFileBuffer = {
