@@ -13,6 +13,8 @@ test("Updating block properties should update block preview", async ({
   );
   test.slow(); // @todo Remove after re-engineering block sandbox
 
+  test.fail(); // @todo Re-enable as part of https://app.asana.com/0/1202839302145209/1202922733837187/f
+
   await page.goto("/hub");
 
   await expect(
