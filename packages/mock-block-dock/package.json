@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -45,7 +45,6 @@
     "@lit-labs/react": "^1.0.4",
     "@mui/material": "^5.10.1",
     "ajv": "^8.9.0",
-    "lodash": "^4.17.21",
     "react-json-view": "^1.21.3",
     "react-resizable": "^3.0.4",
     "use-local-storage-state": "^18.1.1",
