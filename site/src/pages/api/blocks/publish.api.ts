@@ -10,11 +10,8 @@ import {
   formatErrors,
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
-import {
-  createPathWithNamespace,
-  generateSlug,
-  revalidateMultiBlockPages,
-} from "./shared";
+import { createPathWithNamespace, generateSlug } from "./shared/naming";
+import { revalidateMultiBlockPages } from "./shared/revalidate";
 
 type ApiBlockPublishRequest = MultipartExtensions<"tarball", "blockName">;
 
@@ -66,6 +63,15 @@ export default createApiKeyRequiredHandler<
 
     const slugifiedBlockName = generateSlug(untransformedBlockName);
 
+    if (slugifiedBlockName !== untransformedBlockName) {
+      return res.status(400).json(
+        formatErrors({
+          msg: `Block name '${untransformedBlockName}' must be a slug. Try ${slugifiedBlockName} instead`,
+          code: "NAME_TAKEN",
+        }),
+      );
+    }
+
     const existingBlock = await getDbBlock({
       name: slugifiedBlockName,
       author: shortname,
@@ -89,14 +95,14 @@ export default createApiKeyRequiredHandler<
       return res.status(500).json(
         formatErrors({
           code: "UNEXPECTED_STATE",
-          msg: `Block name '${existingBlock.blockName}' has no 'createdAt' Date set.`,
+          msg: `Block name '${slugifiedBlockName}' has no 'createdAt' Date set.`,
         }),
       );
     }
 
     try {
       const block = await publishBlockFromTarball(db, {
-        createdAt: existingBlock ? existingBlock.createdAt : null,
+        createdAt: existingBlock ? existingBlock.createdAt! : null,
         pathWithNamespace,
         tarball: req.body.uploads.tarball.buffer,
       });

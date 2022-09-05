@@ -9,11 +9,8 @@ import {
   formatErrors,
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
-import {
-  createPathWithNamespace,
-  generateSlug,
-  revalidateMultiBlockPages,
-} from "./shared";
+import { createPathWithNamespace, generateSlug } from "./shared/naming";
+import { revalidateMultiBlockPages } from "./shared/revalidate";
 
 // The body we expect when publishing an npm-linked block
 export type ApiBlockCreateRequest = {

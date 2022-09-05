@@ -1,14 +1,4 @@
-import { NextApiResponse } from "next";
 import slugify from "slugify";
-
-export const revalidateMultiBlockPages = async (
-  res: NextApiResponse,
-  username: string,
-) => {
-  await res.revalidate("/");
-  await res.revalidate("/hub");
-  await res.revalidate(`/@${username}`);
-};
 
 export const generateSlug = (stringToSlugify: string) =>
   slugify(stringToSlugify, {

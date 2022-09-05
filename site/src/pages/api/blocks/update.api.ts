@@ -9,7 +9,8 @@ import {
   formatErrors,
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
-import { createPathWithNamespace, revalidateMultiBlockPages } from "./shared";
+import { createPathWithNamespace } from "./shared/naming";
+import { revalidateMultiBlockPages } from "./shared/revalidate";
 
 // The body we expect when updating an npm-linked block
 export type ApiBlockUpdateRequest = { blockName: string };
