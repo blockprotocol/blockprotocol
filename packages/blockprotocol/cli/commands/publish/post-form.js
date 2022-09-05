@@ -4,7 +4,7 @@ import { fileFromPath } from "formdata-node/file-from-path";
 import fetch from "node-fetch";
 
 /**
- * Posts to the Block Protocol API /blocks/create endpoint
+ * Posts to the Block Protocol API /blocks/publish endpoint
  * @param {string} blockProtocolSiteHost
  * @param {String} tarballFilePath
  * @param {String} blockName

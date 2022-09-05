@@ -240,7 +240,6 @@ module.exports = {
       files: [
         "packages/@blockprotocol/graph/**",
         "packages/@blockprotocol/hook/**",
-        "packages/blockprotocol/**",
       ],
       rules: {
         "import/no-unresolved": "off",

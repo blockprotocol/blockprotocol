@@ -43,9 +43,9 @@ export const findBlockFolder = async () => {
       "We look for 'block-metadata.json' in the current working directory, then from the project root. Does it exist?",
     );
     console.log(
-      `You can also specify a path with ${chalk.bold("-p")} or ${chalk.bold(
-        "--path",
-      )}`,
+      `You can also specify a path to the block's distribution folder with ${chalk.bold(
+        "-p",
+      )} or ${chalk.bold("--path")}`,
     );
     printSpacer();
     process.exit();

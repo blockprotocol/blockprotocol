@@ -1,12 +1,18 @@
 #!/usr/bin/env node
 
+import chalk from "chalk";
 import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 
 import { commands } from "./cli/commands.js";
-import { printErrorMessage } from "./cli/print-error-message.js";
+import { printSpacer } from "./cli/print-spacer.js";
 
 const availableCommands = Object.keys(commands);
+
+const printErrorMessage = (errorMessage) => {
+  console.log(chalk.red(`${errorMessage}. Please check usage.`));
+  printSpacer();
+};
 
 (async () => {
   // parse the first argument - the command
@@ -28,7 +34,7 @@ const availableCommands = Object.keys(commands);
   }
   if (!availableCommands.includes(command)) {
     printHelp();
-    printErrorMessage(`unknown command '${command ?? ""}'`);
+    printErrorMessage(`Unknown command '${command ?? ""}'`);
     process.exit();
   }
 
@@ -49,7 +55,7 @@ const availableCommands = Object.keys(commands);
   }
   if (unknownOption) {
     console.log(commandManual);
-    printErrorMessage(`unknown option '${unknownOption}'`);
+    printErrorMessage(`Unknown option '${unknownOption}'`);
     process.exit();
   }
 

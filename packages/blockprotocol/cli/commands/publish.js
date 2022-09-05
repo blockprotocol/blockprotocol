@@ -41,7 +41,7 @@ const manual = [
         type: String,
         typeLabel: "{underline string}",
         description:
-          "Specify a path to your block's distribution folder. Otherwise, the nearest block-metadata.json from the project root is used.",
+          "Specify a path to your block's distribution folder.\nDefaults to looking for a folder containing block-metadata.json, first looking (1) within the cwd and then (2) from the project root.",
       },
       {
         name: "tmp",
