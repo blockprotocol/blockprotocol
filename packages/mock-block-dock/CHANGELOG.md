@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.23
+
+### Patch Changes
+
+- [#567](https://github.com/blockprotocol/blockprotocol/pull/567) [`b8fa9fa`](https://github.com/blockprotocol/blockprotocol/commit/b8fa9fa06a632acaf388f1c654613342f6845286) Thanks [@kachkaev](https://github.com/kachkaev)! - Remove `lodash` dependency to reduce bundle size
+
 ## 0.0.22
 
 ### Patch Changes
