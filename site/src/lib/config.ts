@@ -17,5 +17,5 @@ export const isFork =
 export const shouldUseDummyEmailService =
   !process.env.BP_AWS_REGION && !process.env.VERCEL;
 
-export const shouldAllowBlockPublishing =
-  process.env.NEXT_PUBLIC_NPM_PUBLISHING === "1";
+export const shouldAllowNpmBlockPublishing =
+  !!process.env.NEXT_PUBLIC_NPM_PUBLISHING;
