@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.24
+
+### Patch Changes
+
+- [#571](https://github.com/blockprotocol/blockprotocol/pull/571) [`ab57059`](https://github.com/blockprotocol/blockprotocol/commit/ab5705954b7f245b80592a97b20440930633a140) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix responding to changes in initial props. move readonly toggle. option to disable debug toggle
+
 ## 0.0.23
 
 ### Patch Changes
