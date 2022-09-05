@@ -16,7 +16,7 @@ import {
 } from "./shared";
 
 // The body we expect when publishing an npm-linked block
-type ApiBlockCreateRequest = {
+export type ApiBlockCreateRequest = {
   npmPackageName: string;
   blockName: string;
 };

@@ -12,7 +12,7 @@ import {
 import { createPathWithNamespace, revalidateMultiBlockPages } from "./shared";
 
 // The body we expect when updating an npm-linked block
-type ApiBlockUpdateRequest = { blockName: string };
+export type ApiBlockUpdateRequest = { blockName: string };
 
 export type ApiBlockUpdateResponse = {
   block: ExpandedBlockMetadata;
