@@ -9,7 +9,6 @@
     "site"
   ],
   "scripts": {
-    "exe": "node --unhandled-rejections=strict --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require=@local/script-resources/suppress-experimental-warnings.cjs --require dotenv-flow/config",
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "@todo.1": "Remove the ignore argument below once react-block-loader is upgraded to 0.2 spec",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix . --ignore-package=react-block-loader",
@@ -44,6 +43,7 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",
     "@changesets/cli": "^2.24.2",
+    "@local/eslint-config": "*",
     "check-dependency-version-consistency": "2.0.0",
     "dotenv-flow": "3.2.0",
     "eslint": "8.22.0",
@@ -59,7 +59,6 @@
     "prettier-plugin-packagejson": "2.2.18",
     "prettier-plugin-sh": "0.12.8",
     "suppress-exit-code": "1.0.0",
-    "ts-node": "10.8.0",
     "turbo": "1.4.3",
     "yarn-deduplicate": "3.1.0"
   },
