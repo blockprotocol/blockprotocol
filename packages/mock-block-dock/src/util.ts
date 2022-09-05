@@ -7,6 +7,8 @@ import {
   MultiFilter,
   MultiSort,
 } from "@blockprotocol/graph";
+import get from "lodash/get";
+import orderBy from "lodash/orderBy";
 
 type FilterEntitiesFn = {
   (params: {
@@ -14,29 +16,6 @@ type FilterEntitiesFn = {
     entities: Entity[];
     multiFilter: MultiFilter;
   }): Entity[];
-};
-
-// Saves us from using heavy lodash dependency
-// Source: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_get
-const get = (
-  obj: unknown,
-  path: string | string[],
-  defaultValue = undefined,
-) => {
-  const travel = (regexp: RegExp) =>
-    String.prototype.split
-      .call(path, regexp)
-      .filter(Boolean)
-      .reduce(
-        (res, key) =>
-          res !== null && res !== undefined
-            ? // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
-              res[key]
-            : res,
-        obj,
-      );
-  const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
-  return result === undefined || result === obj ? defaultValue : result;
 };
 
 const filterEntities: FilterEntitiesFn = (params) => {
@@ -93,22 +72,15 @@ const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
 }): T[] => {
   const { entities, multiSort } = params;
 
-  return [...entities].sort((a, b) => {
-    for (const sortItem of multiSort) {
-      const aValue = get(a, sortItem.field);
-      const bValue = get(b, sortItem.field);
-
-      // @ts-expect-error -- tolerating null and undefined
-      if (aValue < bValue) {
-        return sortItem.desc ? 1 : -1;
-        // @ts-expect-error -- tolerating null and undefined
-      } else if (aValue > bValue) {
-        return sortItem.desc ? -1 : 1;
-      }
-    }
-
-    return 0;
-  });
+  return orderBy(
+    [...entities],
+    multiSort.map(
+      ({ field }) =>
+        (entity) =>
+          get(entity, field),
+    ),
+    multiSort.map(({ desc }) => (desc ? "desc" : "asc")),
+  );
 };
 
 const isEntityTypes = (
