@@ -1,7 +1,7 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "../../components/icons";
@@ -62,9 +62,7 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
 
   return (
     <>
-      <Head>
-        <title>Block Protocol – Published Blocks</title>
-      </Head>
+      <NextSeo title="Block Protocol – Published Blocks" />
 
       <TopNavigationTabs />
 

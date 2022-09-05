@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 import { withAuthWall } from "../../../components/pages/auth-wall";
 import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
@@ -11,9 +11,7 @@ import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navig
 const PublishPage = () => {
   return (
     <>
-      <Head>
-        <title>Block Protocol – Publish Block</title>
-      </Head>
+      <NextSeo title="Block Protocol – Publish Block" />
 
       <TopNavigationTabs />
 
