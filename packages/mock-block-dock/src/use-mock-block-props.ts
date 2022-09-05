@@ -10,7 +10,7 @@ import {
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
 import { mockData as initialMockData } from "./data";
-import { useDefaultState } from "./use-mock-block-props/use-default-array-state";
+import { useDefaultState } from "./use-default-state";
 import { useLinkFields } from "./use-mock-block-props/use-link-fields";
 import {
   MockData,
