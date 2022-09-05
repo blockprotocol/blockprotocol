@@ -1,6 +1,7 @@
+import { UnknownRecord } from "@blockprotocol/core";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
-export const useDefaultArrayState = <T extends any[]>(
+export const useDefaultState = <T extends any[] | UnknownRecord>(
   providedDefaultValue: T,
 ): [T, Dispatch<SetStateAction<T>>] => {
   const defaultStateValue = {
