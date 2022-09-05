@@ -10,6 +10,7 @@ import {
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
 import { mockData as initialMockData } from "./data";
+import { useDefaultState } from "./use-mock-block-props/use-default-array-state";
 import { useLinkFields } from "./use-mock-block-props/use-link-fields";
 import {
   MockData,
@@ -65,12 +66,14 @@ export const useMockBlockProps = ({
   readonly: externalReadonly,
   debug: externalDebug,
 }: MockBlockHookArgs): MockBlockHookResult => {
-  const [blockEntity, setBlockEntity] = useState<Entity>(externalBlockEntity!);
-  const [blockSchema, setBlockSchema] = useState<Partial<EntityType>>(
+  const [blockEntity, setBlockEntity] = useDefaultState<Entity>(
+    externalBlockEntity!,
+  );
+  const [blockSchema, setBlockSchema] = useDefaultState<Partial<EntityType>>(
     externalBlockSchema!,
   );
   const [readonly, setReadonly] = useState<boolean>(externalReadonly);
-  const [debugMode, setDebugMode] = useState<boolean>(!!externalDebug);
+  const [debugMode, setDebugMode] = useState<boolean>(externalDebug);
 
   const prevExternalReadonly = usePrevious(externalReadonly);
   const prevExternalDebug = usePrevious(externalDebug);
