@@ -6,11 +6,10 @@
     "packages/@blockprotocol/*",
     "packages/@local/*",
     "packages/*",
-    "scripts",
     "site"
   ],
   "scripts": {
-    "exe": "node --unhandled-rejections=strict --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require=./scripts/suppress-experimental-warnings.cjs --require dotenv-flow/config",
+    "exe": "node --unhandled-rejections=strict --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require=@local/script-resources/suppress-experimental-warnings.cjs --require dotenv-flow/config",
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "@todo.1": "Remove the ignore argument below once react-block-loader is upgraded to 0.2 spec",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix . --ignore-package=react-block-loader",
@@ -48,6 +47,7 @@
     "check-dependency-version-consistency": "2.0.0",
     "dotenv-flow": "3.2.0",
     "eslint": "8.22.0",
+    "fs-extra": "^10.1.0",
     "husky": "7.0.4",
     "kill-port": "^2.0.1",
     "lint-staged": "12.3.3",
