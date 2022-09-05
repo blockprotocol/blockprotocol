@@ -10,7 +10,7 @@ export interface PackageInfo {
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../../../..",
+  "../../../../..",
 );
 
 const packageParentFolders = [
