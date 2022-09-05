@@ -35,7 +35,7 @@ export default createApiKeyRequiredHandler<
     multipartUploads({
       fieldsLimit: 1,
       filesLimit: 1,
-      maxFileSize: 10 * 1024 * 1024, // bytes = 10MB
+      maxFileSize: 100 * 1024 * 1024, // bytes = 10MB
     }),
   )
   .post(async (req, res) => {
@@ -85,9 +85,18 @@ export default createApiKeyRequiredHandler<
       );
     }
 
+    if (existingBlock && !existingBlock.createdAt) {
+      return res.status(500).json(
+        formatErrors({
+          code: "UNEXPECTED_STATE",
+          msg: `Block name '${existingBlock.blockName}' has no 'createdAt' Date set.`,
+        }),
+      );
+    }
+
     try {
       const block = await publishBlockFromTarball(db, {
-        createdAt: existingBlock ? null : new Date().toISOString(),
+        createdAt: existingBlock ? existingBlock.createdAt : null,
         pathWithNamespace,
         tarball: req.body.uploads.tarball.buffer,
       });
