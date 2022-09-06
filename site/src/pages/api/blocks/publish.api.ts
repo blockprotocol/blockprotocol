@@ -32,7 +32,7 @@ export default createApiKeyRequiredHandler<
     multipartUploads({
       fieldsLimit: 1,
       filesLimit: 1,
-      maxFileSize: 100 * 1024 * 1024, // bytes = 10MB
+      maxFileSize: 100 * 1024 * 1024, // bytes = 100MB
     }),
   )
   .post(async (req, res) => {
