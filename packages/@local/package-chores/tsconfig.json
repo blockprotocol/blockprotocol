@@ -6,21 +6,16 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "node",
-    "outDir": "dist/esm",
     "skipLibCheck": true,
+    "noEmit": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es5"
+    "target": "ES2022"
   },
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./dev/**/*.ts",
-    "./dev/**/*.tsx"
-  ],
-  "exclude": ["dist", "node_modules"]
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
 }
