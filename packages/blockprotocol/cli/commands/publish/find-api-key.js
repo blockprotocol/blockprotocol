@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { findUp } from "find-up";
 import fs from "fs-extra";
 import path from "node:path";
 
@@ -49,30 +50,9 @@ export const findApiKey = async () => {
     return keyInEnvironment;
   }
 
-  // see if there's a config file in the current working directory
-  const configFilePathInCwd = path.resolve("./", configFileName);
-  const fileExistsInCwd = await fs.pathExists(configFilePathInCwd);
-  if (fileExistsInCwd) {
-    return extractKeyFromJsonFile(configFilePathInCwd);
-  }
-
-  // if not, find the project root and check for the file there
-  const projectRootPath = await findProjectRoot();
-  if (projectRootPath) {
-    const configFilePathInProjectRoot = path.resolve(
-      projectRootPath,
-      configFileName,
-    );
-    const fileExistsAtProjectRoot = await fs.pathExists(
-      configFilePathInProjectRoot,
-    );
-    if (fileExistsAtProjectRoot) {
-      return extractKeyFromJsonFile(configFilePathInProjectRoot);
-    }
-  } else {
-    console.log(
-      "Could not determine project root - no package.json found in tree above current directory.",
-    );
+  const existingConfigFilePath = await findUp(configFileName);
+  if (existingConfigFilePath) {
+    return extractKeyFromJsonFile(existingConfigFilePath);
   }
 
   printSpacer();
@@ -83,14 +63,15 @@ export const findApiKey = async () => {
     `  - create a a file named ${configFileName} at the project root with the key under '${configFileKey}'`,
   );
 
+  const projectRootPath = await findProjectRoot();
   if (projectRootPath) {
     const agreement = await doesUserAgree(
       `Would you like a ${configFileName} created at the project root?`,
     );
     if (agreement) {
-      const configFilePath = path.resolve(projectRootPath, configFileName);
-      fs.writeJsonSync(configFilePath, configFileTemplate, { spaces: 2 });
-      console.log(chalk.green("Created file:"), configFilePath);
+      const newConfigFilePath = path.resolve(projectRootPath, configFileName);
+      fs.writeJsonSync(newConfigFilePath, configFileTemplate, { spaces: 2 });
+      console.log(chalk.green("Created file:"), newConfigFilePath);
     }
   }
 
