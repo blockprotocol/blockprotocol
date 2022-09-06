@@ -1,5 +1,7 @@
 {
   "extends": "@local/tsconfig/with-dom-and-react.json",
-  "include": ["./src/**/*.ts"],
-  "exclude": ["dist", "node_modules"]
+  "compilerOptions": {
+    "outDir": "dist"
+  },
+  "include": ["src"]
 }

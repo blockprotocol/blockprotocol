@@ -1,5 +1,4 @@
 {
-  "extends": "@local/tsconfig/with-dom-and-react.json",
-  "include": ["next-env.d.ts", "theme-override.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "extends": "@local/tsconfig/next.json",
+  "include": ["next-env.d.ts", "theme-override.d.ts", "**/*.ts", "**/*.tsx"]
 }

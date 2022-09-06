@@ -25,9 +25,9 @@
   ],
   "scripts": {
     "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn copy-files",
-    "build:cjs": "tsc --p tsconfig.build.cjs.json",
+    "build:cjs": "tsc --project tsconfig.build.cjs.json",
     "build:dev": "yarn clean && cross-env NODE_ENV=development webpack --mode development",
-    "build:esm": "tsc --p tsconfig.build.esm.json",
+    "build:esm": "tsc --project tsconfig.build.esm.json",
     "clean": "rimraf ./dist/",
     "codegen": "node -p \"'export const MOCK_BLOCK_DOCK_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "copy-files": "yarn copy-files:cjs && yarn copy-files:esm",

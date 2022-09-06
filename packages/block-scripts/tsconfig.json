@@ -12,6 +12,5 @@
     "skipLibCheck": true,
     "lib": ["dom", "dom.iterable", "esnext"]
   },
-  "include": ["scripts", "shared"],
-  "exclude": ["node_modules"]
+  "include": ["scripts", "shared"]
 }

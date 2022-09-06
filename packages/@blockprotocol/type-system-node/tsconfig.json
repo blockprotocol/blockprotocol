@@ -1,3 +1,4 @@
 {
-  "extends": "@local/tsconfig/with-dom-and-react.json"
+  "extends": "@local/tsconfig/base.json",
+  "include": ["dist/*.ts", "test"]
 }
