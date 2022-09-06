@@ -2,14 +2,11 @@
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "commonjs",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "noEmit": true,
     "resolveJsonModule": true,
-    "target": "es6",
     "useDefineForClassFields": false
   },
   "include": ["src"]
