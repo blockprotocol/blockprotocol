@@ -19,9 +19,11 @@
     "test": "jest"
   },
   "devDependencies": {
+    "@local/tsconfig": "*",
     "@types/jest": "28.1.4",
     "jest": "28.1.2",
-    "ts-jest": "28.0.5"
+    "ts-jest": "28.0.5",
+    "typescript": "4.8.2"
   },
   "collaborators": [
     "HASH"

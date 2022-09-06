@@ -1,4 +1,5 @@
 {
+  "extends": "@local/tsconfig/base.json",
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "allowJs": true,

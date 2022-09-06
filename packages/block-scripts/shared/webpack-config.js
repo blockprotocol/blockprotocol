@@ -53,7 +53,7 @@ const generateBaseWebpackConfig = async (mode) => {
       filename: mode === "production" ? "[name].[contenthash].js" : "[name].js",
     },
     externals: Object.fromEntries(
-      Object.keys(peerDependencies ?? {}).map((key) => [key, key]),
+      Object.keys(peerDependencies || {}).map((key) => [key, key]),
     ),
     mode,
     module: {
@@ -100,7 +100,7 @@ export const generateBuildWebpackConfig = async (mode) => {
   const analyze =
     mode === "production" &&
     Boolean(
-      ["true", "1"].includes(process.env.ANALYZE) ||
+      ["true", "1"].includes(process.env.ANALYZE || "") ||
         (await extractBlockScriptsConfigFromPackageJson()).analyze,
     );
 
@@ -109,7 +109,7 @@ export const generateBuildWebpackConfig = async (mode) => {
     watch: mode === "development",
     devtool: mode === "development" ? "inline-source-map" : "source-map",
     plugins: [
-      ...baseWebpackConfig.plugins,
+      ...(baseWebpackConfig.plugins || []),
       ...(mode === "production" ? [new BlockAssetsPlugin()] : []),
       new CopyPlugin({
         patterns: [{ from: "./public/", to: "./public/" }],
@@ -142,7 +142,7 @@ export const generateDevWebpackConfig = async () => {
       ),
     },
     plugins: [
-      ...baseWebpackConfig.plugins,
+      ...(baseWebpackConfig.plugins || []),
       new BlockAssetsPlugin(),
       new HtmlWebpackPlugin({
         filename: "index.html",
