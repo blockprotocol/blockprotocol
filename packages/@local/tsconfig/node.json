@@ -17,6 +17,6 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "ESNext"
+    "target": "ES2020"
   }
 }
