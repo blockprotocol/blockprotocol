@@ -49,7 +49,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && tsc",
+    "build": "yarn clean && tsc --outDir dist",
     "clean": "rimraf ./dist/",
     "lint:tsc": "tsc --noEmit"
   },

@@ -1,21 +1,5 @@
 {
-  "extends": "@local/tsconfig/base.json",
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true,
-    "allowJs": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "sourceMap": true,
-    "strict": true,
-    "target": "ES2018"
-  },
+  "extends": "@local/tsconfig/with-dom-and-react.json",
   "include": [
     "assets.d.ts",
     "./src/**/*.ts",
