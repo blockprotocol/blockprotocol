@@ -35,26 +35,33 @@ export const postPublishForm = async ({
 
   // @todo when we add another command that connects to the API this should be moved to a shared location
   return fetch(url, options)
-    .then((resp) => {
-      if (resp.status !== 200) {
+    .then(async (resp) => {
+      try {
+        return await resp.json();
+      } catch (err) {
+        // if the JSON parsing failed, the user is probably trying to contact a host that doesn't implement the endpoint
+        const errorMsg =
+          resp.status !== 200
+            ? `Request to ${blockProtocolSiteHost} errored: ${resp.status} ${resp.statusText}`
+            : `Malformed JSON response: ${err.message}`; // a non-parseable 200 status response should not happen
         return {
           errors: [
             {
-              msg: `Request to ${blockProtocolSiteHost} errored: ${resp.status} ${resp.statusText}`,
+              msg: errorMsg,
             },
           ],
         };
       }
-      return resp.json();
     })
     .catch((err) => {
       if (err.code === "ENOTFOUND" || err.code === "ECONNREFUSED") {
+        // the host is not contactable at all – probably a network issue or non-running dev/staging instance
         return {
           errors: [
             { msg: `Could not connect to host ${blockProtocolSiteHost}` },
           ],
         };
       }
-      return err;
+      return err; // should be a meaningful error provided by the API about why the request failed, e.g. bad API key
     });
 };
