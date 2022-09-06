@@ -6,7 +6,9 @@
     "jsx": "preserve",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "noEmit": true,
-    "resolveJsonModule": true
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "strict": true
   },
   "include": ["src"]
 }
