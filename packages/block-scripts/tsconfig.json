@@ -1,16 +1,4 @@
 {
   "extends": "@local/tsconfig/base.json",
-  "compilerOptions": {
-    "allowJs": true,
-    "checkJs": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
-    "noEmit": true,
-    "module": "es2022",
-    "moduleResolution": "node",
-    "target": "es2018",
-    "skipLibCheck": true,
-    "lib": ["dom", "dom.iterable", "esnext"]
-  },
-  "include": ["scripts", "shared"]
+  "include": ["bin.js", "scripts", "shared"]
 }
