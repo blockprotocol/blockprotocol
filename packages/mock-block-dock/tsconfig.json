@@ -1,4 +1,4 @@
 {
-  "extends": "@local/tsconfig/with-dom-and-react.json",
+  "extends": "@local/tsconfig/dom+jsx.json",
   "include": ["assets.d.ts", "src", "dev"]
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": "./with-dom-and-react.json",
+  "extends": "./dom+jsx.json",
   "compilerOptions": {
     "noEmit": true,
     "jsx": "preserve"
