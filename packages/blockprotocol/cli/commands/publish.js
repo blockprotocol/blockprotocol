@@ -51,6 +51,13 @@ const manual = [
         description:
           "Specify a path to use for temporary file storage. If omitted, uses OS default.",
       },
+      {
+        name: "yes",
+        alias: "y",
+        type: Boolean,
+        description:
+          "Automatically publish if checks pass, without waiting for confirmation.",
+      },
     ],
   },
 ];
@@ -69,7 +76,7 @@ const options = optionsGuide.optionList;
  * @param {boolean} [providedOptions.dry]
  */
 const script = async (providedOptions) => {
-  const { path: providedPath, dry, tmp: tmpDir } = providedOptions ?? {};
+  const { path: providedPath, dry, tmp: tmpDir, yes } = providedOptions ?? {};
 
   const apiKey = await findApiKey();
 
@@ -126,11 +133,13 @@ const script = async (providedOptions) => {
     process.exit();
   }
 
-  const shouldProceed = await doesUserAgree("Continue with publishing?");
+  if (!yes) {
+    const shouldProceed = await doesUserAgree("Continue with publishing?");
 
-  if (!shouldProceed) {
-    console.log("Publishing cancelled.");
-    process.exit();
+    if (!shouldProceed) {
+      console.log("Publishing cancelled.");
+      process.exit();
+    }
   }
 
   const { path: tarballFolder, cleanup } = await tmp.dir({
@@ -149,7 +158,7 @@ const script = async (providedOptions) => {
     tarballFilePath,
     blockName,
     apiKey,
-  }).catch((err) => console.error(err));
+  });
 
   printSpacer();
 

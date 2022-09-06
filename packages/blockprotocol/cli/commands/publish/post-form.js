@@ -33,8 +33,20 @@ export const postPublishForm = async ({
     method: "POST",
   };
 
+  // @todo when we add another command that connects to the API this should be moved to a shared location
   return fetch(url, options)
-    .then((resp) => resp.json())
+    .then((resp) => {
+      if (resp.status !== 200) {
+        return {
+          errors: [
+            {
+              msg: `Request to ${blockProtocolSiteHost} errored: ${resp.status} ${resp.statusText}`,
+            },
+          ],
+        };
+      }
+      return resp.json();
+    })
     .catch((err) => {
       if (err.code === "ENOTFOUND" || err.code === "ECONNREFUSED") {
         return {
