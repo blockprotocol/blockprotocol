@@ -30,9 +30,23 @@ export const PropertiesView = () => {
         <Grid item xs={6}>
           {/* Entity Properties row */}
           <Box mb={3}>
-            <Typography variant="subtitle2" mb={1}>
-              Entity Properties
-            </Typography>
+            <Box
+              sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
+            >
+              <Typography variant="subtitle2">Entity Properties</Typography>
+              {/* Readonly toggle */}
+              <Box sx={{ display: "flex" }}>
+                <Typography variant="subtitle2" mr={1}>
+                  Read-only mode
+                </Typography>
+                <Switch
+                  checked={readonly}
+                  onChange={(evt) => setReadonly(evt.target.checked)}
+                  size="small"
+                />
+              </Box>
+            </Box>
+
             <Box maxWidth={800}>
               <JsonView
                 collapseKeys={["graph"]}
@@ -80,15 +94,6 @@ export const PropertiesView = () => {
                 ))}
               </Collapse>
             </Box>
-          </Box>
-
-          {/* Readonly row */}
-          <Box>
-            <Typography variant="subtitle2">Read-only mode</Typography>
-            <Switch
-              checked={readonly}
-              onChange={(evt) => setReadonly(evt.target.checked)}
-            />
           </Box>
         </Grid>
         <Grid item xs={6}>

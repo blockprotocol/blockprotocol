@@ -1,3 +1,4 @@
+import { logStepEnd, logStepStart } from "@local/script-resources/logging";
 import chalk from "chalk";
 import execa from "execa";
 import fs from "fs-extra";
@@ -8,8 +9,6 @@ import tmp from "tmp-promise";
 import treeKill from "tree-kill";
 import untildify from "untildify";
 import waitOn from "wait-on";
-
-import { logStepEnd, logStepStart } from "../shared/logging";
 
 /**
  * Calling `execa.kill()` does not terminate processes recursively on Ubuntu.

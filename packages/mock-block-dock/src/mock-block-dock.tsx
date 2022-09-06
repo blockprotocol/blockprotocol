@@ -38,6 +38,7 @@ type MockBlockDockProps = {
   blockEntity?: Entity;
   blockSchema?: Partial<EntityType>;
   debug?: boolean;
+  hideDebugToggle?: boolean;
   initialEntities?: Entity[];
   initialEntityTypes?: EntityType[];
   initialLinks?: Link[];
@@ -54,23 +55,25 @@ type MockBlockDockProps = {
  * @param [blockEntity] the starting properties for the block entity
  * @param [blockSchema] the schema for the block entity
  * @param [debug=false] display debugging information
+ * @param [hideDebugToggle=false] hide the ability to toggle the debug UI
  * @param [initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
  * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
  * @param [initialLinks] the links to include in the data store
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @param [readonly=false]
+ * @param [readonly=false] whether the block should be initialised in readonly mode
  * @param [blockName] - block's display name
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
   blockEntity: initialBlockEntity,
   blockSchema: initialBlockSchema,
-  debug: initialDebug,
+  debug: initialDebug = false,
+  hideDebugToggle = false,
   initialEntities,
   initialEntityTypes,
   initialLinks,
   initialLinkedAggregations,
-  readonly: initialReadonly,
+  readonly: initialReadonly = false,
   blockName,
 }) => {
   const {
@@ -217,14 +220,16 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       {!debugMode ? (
         <div className="mbd-non-debug-mode-wrapper">
           {Component}
-          <button
-            className="mbd-debug-mode-toggle"
-            type="button"
-            onClick={() => setDebugMode(true)}
-          >
-            Preview Mode
-            <OffSwitch />
-          </button>
+          {!hideDebugToggle && (
+            <button
+              className="mbd-debug-mode-toggle"
+              type="button"
+              onClick={() => setDebugMode(true)}
+            >
+              Preview Mode
+              <OffSwitch />
+            </button>
+          )}
         </div>
       ) : (
         <DebugView>{Component}</DebugView>

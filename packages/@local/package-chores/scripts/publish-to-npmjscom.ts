@@ -1,9 +1,9 @@
+import { logStepEnd, logStepStart } from "@local/script-resources/logging";
 import axios from "axios";
 import chalk from "chalk";
 import * as envalid from "envalid";
 import execa from "execa";
 
-import { logStepEnd, logStepStart } from "../shared/logging";
 import { listPublishablePackages } from "./shared/list-publishable-packages";
 
 const defaultExecaOptions = {

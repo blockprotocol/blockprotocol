@@ -1,9 +1,9 @@
+import { logStepEnd, logStepStart } from "@local/script-resources/logging";
 import chalk from "chalk";
 import execa from "execa";
 import path from "node:path";
 import sleep from "sleep-promise";
 
-import { logStepEnd, logStepStart } from "../shared/logging";
 import { listPublishablePackages } from "./shared/list-publishable-packages";
 
 // These variables are hardcoded on purpose. We don’t want to publish to a real registry by mistake.
