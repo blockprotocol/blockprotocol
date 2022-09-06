@@ -1,0 +1,7 @@
+---
+"block-template-custom-element": patch
+"block-template-html": patch
+"block-template-react": patch
+---
+
+add .bprc.json to block templates
