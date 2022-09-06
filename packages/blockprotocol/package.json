@@ -21,8 +21,7 @@
   "type": "module",
   "bin": "cli.js",
   "scripts": {
-    "dev": "BLOCK_PROTOCOL_SITE_HOST=http://localhost:3000 node cli.js",
-    "lint:tsc": "tsc --noEmit"
+    "dev": "BLOCK_PROTOCOL_SITE_HOST=http://localhost:3000 node cli.js"
   },
   "dependencies": {
     "chalk": "5.0.1",
