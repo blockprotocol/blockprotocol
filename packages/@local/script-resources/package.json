@@ -1,13 +1,13 @@
 {
   "name": "@local/script-resources",
-  "version": "0.0.0",
+  "version": "0.0.0-private",
   "private": true,
   "type": "module",
   "scripts": {
     "lint:tsc": "tsc --noEmit"
   },
   "devDependencies": {
-    "@local/tsconfig": "*",
+    "@local/tsconfig": "0.0.0-private",
     "typescript": "4.8.2"
   }
 }

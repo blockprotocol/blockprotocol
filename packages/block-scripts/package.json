@@ -56,7 +56,7 @@
     "yargs-parser": "21.0.1"
   },
   "devDependencies": {
-    "@local/tsconfig": "*",
+    "@local/tsconfig": "0.0.0-private",
     "@types/serve-handler": "^6.1.1",
     "@types/webpack-assets-manifest": "^5.1.0",
     "@types/webpack-bundle-analyzer": "^4.4.2"
