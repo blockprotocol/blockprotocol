@@ -86,14 +86,14 @@ When running in development environments, avatars go to the `dev/avatars/(user.i
 
 Before serving any blocks via the Block Hub, they need to be prepared (i.e. built in most cases).
 Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn exe site/scripts/prepare-blocks.ts` prepares blocks.
+The build-script `yarn workspace @blockprotocol/site exe prepare-blocks.ts` prepares blocks.
 
 ```sh
 # prepare all blocks
-yarn exe site/scripts/prepare-blocks.ts
+yarn workspace @blockprotocol/site exe scripts/prepare-blocks.ts
 
 # prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" yarn exe site/scripts/prepare-blocks.ts
+BLOCK_FILTER="@hash/*" workspace @blockprotocol/site exe scripts/prepare-blocks.ts
 ```
 
 Once the blocks are built, simply `yarn dev` and head over to
