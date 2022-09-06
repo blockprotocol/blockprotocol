@@ -1,4 +1,5 @@
 {
   "extends": "@local/tsconfig/base.json",
-  "include": ["dist"]
+  "include": ["dist"],
+  "exclude": ["**/*.js"]
 }
