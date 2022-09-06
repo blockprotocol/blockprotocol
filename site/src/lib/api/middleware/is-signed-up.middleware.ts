@@ -13,6 +13,7 @@ export const isSignedUpMiddleware: Middleware<
   if (!user.isSignedUp()) {
     return res.status(403).json(
       formatErrors({
+        code: "SIGNUP_INCOMPLETE",
         msg: "You must be signed up to perform this request",
       }),
     );

@@ -160,10 +160,10 @@ export class ApiKey {
       .toArray();
   }
 
-  static async validate(
+  static async validateAndGet(
     db: Db,
     params: { apiKeyString: string },
-  ): Promise<boolean> {
+  ): Promise<ApiKey> {
     const { apiKeyString } = params;
 
     if (!apiKeyString.match(this.KEY_FORMAT_REGEXP)) {
@@ -197,7 +197,7 @@ export class ApiKey {
 
     await apiKey.registerUse(db);
 
-    return true;
+    return apiKey;
   }
 
   static async revokeAll(db: Db, params: { user: User }): Promise<void> {
