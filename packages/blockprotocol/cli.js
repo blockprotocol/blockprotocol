@@ -4,10 +4,10 @@ import chalk from "chalk";
 import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 
-import { commands } from "./cli/commands.js";
+import { commandLookup } from "./cli/commands.js";
 import { printSpacer } from "./cli/print-spacer.js";
 
-const availableCommands = Object.keys(commands);
+const availableCommands = Object.keys(commandLookup);
 
 const printErrorMessage = (errorMessage) => {
   console.log(chalk.red(`${errorMessage}. Please check usage.`));
@@ -27,7 +27,7 @@ const printErrorMessage = (errorMessage) => {
   );
 
   // print help for the CLI if requested or if the command is unknown
-  const printHelp = commands.help.script;
+  const printHelp = commandLookup.help.run;
   if (command === "help" || !command) {
     printHelp();
     process.exit();
@@ -40,7 +40,7 @@ const printErrorMessage = (errorMessage) => {
 
   // parse the remaining arguments – the options
   const { _unknown: unknownOption, ...options } = commandLineArgs(
-    commands[command].options,
+    commandLookup[command].options,
     {
       argv: optionsArgv ?? [],
       stopAtFirstUnknown: true,
@@ -48,7 +48,7 @@ const printErrorMessage = (errorMessage) => {
   );
 
   // print help for the given command if requested or usage is incorrect
-  const commandManual = commandLineUsage(commands[command].manual);
+  const commandManual = commandLineUsage(commandLookup[command].manual);
   if (options.help) {
     console.log(commandManual);
     process.exit();
@@ -60,5 +60,5 @@ const printErrorMessage = (errorMessage) => {
   }
 
   // execute the requested command with the given options, if any
-  commands[command].script(options);
+  commandLookup[command].run(options);
 })();

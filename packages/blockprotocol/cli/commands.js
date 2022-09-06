@@ -1,7 +1,7 @@
 import * as help from "./commands/help.js";
 import * as publish from "./commands/publish.js";
 
-export const commands = {
+export const commandLookup = {
   help,
   publish,
 };
