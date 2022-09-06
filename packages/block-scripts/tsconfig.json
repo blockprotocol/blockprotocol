@@ -1,4 +1,4 @@
 {
-  "extends": "@local/tsconfig/base.json",
+  "extends": "@local/tsconfig/node.json",
   "include": ["bin.js", "scripts", "shared"]
 }
