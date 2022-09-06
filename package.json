@@ -3,6 +3,7 @@
   "description": "blockprotocol monorepo",
   "type": "module",
   "workspaces": [
+    "crates/*",
     "packages/*",
     "packages/@blockprotocol/*",
     "packages/@local/*",
@@ -46,7 +47,6 @@
     "check-dependency-version-consistency": "2.0.0",
     "dotenv-flow": "3.2.0",
     "eslint": "8.22.0",
-    "fs-extra": "^10.1.0",
     "husky": "7.0.4",
     "lint-staged": "12.3.3",
     "lockfile-lint": "4.6.2",

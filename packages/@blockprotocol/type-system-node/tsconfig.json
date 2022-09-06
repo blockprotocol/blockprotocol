@@ -17,16 +17,5 @@
     "sourceMap": true,
     "strict": true,
     "target": "es5"
-  },
-  "include": [
-    "assets.d.ts",
-    "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./dev/**/*.ts",
-    "./dev/**/*.tsx",
-    "./dist/**/*.ts",
-    "./dist/**/*.tsx",
-    "./dist/**/*.d.ts"
-  ],
-  "exclude": ["node_modules"]
+  }
 }

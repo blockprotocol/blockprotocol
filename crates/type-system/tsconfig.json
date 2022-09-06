@@ -1,0 +1,6 @@
+{
+  "extends": "@local/tsconfig/base.json",
+  "compilerOptions": {
+    "module": "esnext"
+  }
+}
