@@ -4,7 +4,7 @@ import {
   faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { shouldAllowBlockPublishing } from "../../../lib/config";
+import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
 import { BlockIcon } from "../../icons/block-icon";
 import { SparklesIcon } from "../../icons/sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
@@ -54,7 +54,7 @@ export const getDashboardSectionCards = (props: {
         description: "Build a block you’re ready to release on the hub?",
         link: {
           title: "Publish a block",
-          href: shouldAllowBlockPublishing
+          href: shouldAllowNpmBlockPublishing
             ? "/blocks/publish"
             : `${props.profileLink}/blocks`,
         },

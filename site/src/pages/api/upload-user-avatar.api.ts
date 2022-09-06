@@ -51,7 +51,7 @@ async function validateImage(mime: string, buffer: Buffer) {
 }
 
 export default createAuthenticatedHandler<
-  AuthenticatedApiRequest & MultipartExtensions,
+  AuthenticatedApiRequest & MultipartExtensions<"image", null>,
   Response
 >()
   .use(

@@ -1,4 +1,4 @@
-import { body as bodyValidator, validationResult } from "express-validator";
+import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
 
 import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
@@ -9,30 +9,24 @@ import {
   formatErrors,
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
-import { createPathWithNamespace, generateSlug } from "./shared/naming";
+import { createPathWithNamespace } from "./shared/naming";
 import { revalidateMultiBlockPages } from "./shared/revalidate";
 
-// The body we expect when publishing an npm-linked block
-export type ApiBlockCreateRequest = {
-  npmPackageName: string;
-  blockName: string;
-};
+// The body we expect when updating an npm-linked block
+export type ApiBlockUpdateRequest = { blockName: string };
 
-export type ApiBlockCreateResponse = {
+export type ApiBlockUpdateResponse = {
   block: ExpandedBlockMetadata;
 };
 
 /**
- * Creates a block linked to an already-published npm package
+ * Updates a block linked to an npm package, which was previously created using the 'create' endpoint
  */
 export default createAuthenticatedHandler<
-  ApiBlockCreateRequest,
-  ApiBlockCreateResponse
+  ApiBlockUpdateRequest,
+  ApiBlockUpdateResponse
 >()
-  .use(
-    bodyValidator("blockName").isString().notEmpty().toLowerCase(),
-    bodyValidator("npmPackageName").isString().notEmpty(),
-  )
+  .use(bodyValidator("blockName").isString().notEmpty().toLowerCase())
   .post(async (req, res) => {
     if (!shouldAllowNpmBlockPublishing) {
       return res
@@ -40,9 +34,15 @@ export default createAuthenticatedHandler<
         .json(formatErrors({ msg: "Publishing is not supported." }));
     }
 
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json(formatErrors(...errors.array()));
+    const { blockName } = req.body;
+
+    if (!blockName) {
+      return res.status(400).json(
+        formatErrors({
+          msg: "You must provide a blockName",
+          code: "INVALID_INPUT",
+        }),
+      );
     }
 
     const {
@@ -59,44 +59,47 @@ export default createAuthenticatedHandler<
       );
     }
 
-    const { blockName: untransformedBlockName, npmPackageName } = req.body;
-
-    const slugifiedBlockName = generateSlug(untransformedBlockName);
-
-    if (slugifiedBlockName !== untransformedBlockName) {
-      return res.status(400).json(
-        formatErrors({
-          msg: `Block name '${untransformedBlockName}' must be a slug. Try ${slugifiedBlockName} instead`,
-          code: "NAME_TAKEN",
-        }),
-      );
-    }
-
-    const blockWithName = await getDbBlock({
-      name: slugifiedBlockName,
+    const existingBlock = await getDbBlock({
+      name: blockName,
       author: shortname,
     });
 
-    if (blockWithName) {
-      return res.status(400).json(
+    if (!existingBlock) {
+      return res.status(404).json(
         formatErrors({
-          msg: `Block name '${slugifiedBlockName}' already exists in account ${shortname}`,
-          code: "NAME_TAKEN",
+          code: "NOT_FOUND",
+          msg: `Block name '${blockName}' does not exist in account ${shortname}`,
         }),
       );
     }
 
-    const pathWithNamespace = createPathWithNamespace(
-      slugifiedBlockName,
-      shortname,
-    );
+    if (!existingBlock.npmPackageName) {
+      return res.status(401).json(
+        formatErrors({
+          code: "NOT_FOUND",
+          msg: `Block '${blockName}' is not linked to an npm package. Are you looking for the /api/blocks/publish endpoint?`,
+        }),
+      );
+    }
+
+    if (!existingBlock.createdAt) {
+      return res.status(500).json(
+        formatErrors({
+          code: "UNEXPECTED_STATE",
+          msg: `Block name '${blockName}' has no 'createdAt' Date set.`,
+        }),
+      );
+    }
+
+    const pathWithNamespace = createPathWithNamespace(blockName, shortname);
 
     try {
       const block = await publishBlockFromNpm(db, {
-        createdAt: null,
-        npmPackageName,
+        createdAt: existingBlock.createdAt,
+        npmPackageName: existingBlock.npmPackageName,
         pathWithNamespace,
       });
+
       await revalidateMultiBlockPages(res, shortname);
       return res.status(200).json({ block });
     } catch (err) {
