@@ -97,12 +97,6 @@
   - "packages/mock-block-dock/**/*"
   - "packages/mock-block-dock/**/.*"
 
-"package: react-block-loader":
-  - "packages/react-block-loader/*"
-  - "packages/react-block-loader/.*"
-  - "packages/react-block-loader/**/*"
-  - "packages/react-block-loader/**/.*"
-
 "site: docs":
   - "site/src/_pages/docs/*"
   - "site/src/_pages/docs/.*"
