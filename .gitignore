@@ -28,7 +28,7 @@ node_modules/
 
 # Environment variables
 .env.local
-.bprc.json
+.bprc
 
 # Build artifacts
 dist

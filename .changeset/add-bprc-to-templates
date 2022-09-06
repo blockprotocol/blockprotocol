@@ -4,4 +4,4 @@
 "block-template-react": patch
 ---
 
-add .bprc.json to block templates
+add .bprc to block templates

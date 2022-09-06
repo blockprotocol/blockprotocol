@@ -8,38 +8,30 @@ import { doesUserAgree } from "./does-user-agree.js";
 import { findProjectRoot } from "./shared/find-project-root.js";
 
 const environmentVariableName = "BLOCK_PROTOCOL_API_KEY";
-const configFileName = ".bprc.json";
-const configFileKey = "apiKey";
-const configFileTemplate = {
-  [configFileKey]:
-    "b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000",
-};
+const configFileName = ".bprc";
+const configFileKey = "api-key";
+const configFileTemplate = `${configFileKey}=b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000`;
 
 /**
- * Retrieve an API key from a provided JSON file
+ * Retrieve an API key from a provided file of key=value lines
  * @param {string} filePath
  */
-const extractKeyFromJsonFile = (filePath) => {
-  let parsedJson;
-  try {
-    parsedJson = JSON.parse(fs.readFileSync(filePath));
-  } catch (err) {
-    console.log(`Could not parse config file: ${chalk.red(err.message)}`);
-    console.log(`Path: ${filePath}`);
-    process.exit();
-  }
-  const key = parsedJson[configFileKey];
-
-  if (!key) {
-    console.log(
-      `Config file ${chalk.red("does not contain")} '${configFileKey}' key.`,
-    );
-    console.log(`Path: ${filePath}`);
-    process.exit();
+const extractKeyFromRcFile = (filePath) => {
+  const fileContent = fs.readFileSync(filePath);
+  const lines = fileContent.toString().split("\n");
+  for (const line of lines) {
+    const [key, value] = line.split("=");
+    if (key === configFileKey) {
+      console.log(chalk.green(`Found API key in configuration file.`));
+      return value;
+    }
   }
 
-  console.log(chalk.green(`Found API key in configuration file.`));
-  return key;
+  console.log(
+    `Config file ${chalk.red("does not contain")} '${configFileKey}' key.`,
+  );
+  console.log(`Path: ${filePath}`);
+  process.exit();
 };
 
 export const findApiKey = async () => {
@@ -52,7 +44,7 @@ export const findApiKey = async () => {
 
   const existingConfigFilePath = await findUp(configFileName);
   if (existingConfigFilePath) {
-    return extractKeyFromJsonFile(existingConfigFilePath);
+    return extractKeyFromRcFile(existingConfigFilePath);
   }
 
   printSpacer();
@@ -60,7 +52,7 @@ export const findApiKey = async () => {
   console.log(
     chalk.bold("Please either:\n"),
     `  - set ${environmentVariableName} in the environment\n`,
-    `  - create a a file named ${configFileName} at the project root with the key under '${configFileKey}'`,
+    `  - create a a file named ${configFileName} at the project root containing ${configFileKey}=your-api-key`,
   );
 
   const projectRootPath = await findProjectRoot();
@@ -70,8 +62,12 @@ export const findApiKey = async () => {
     );
     if (agreement) {
       const newConfigFilePath = path.resolve(projectRootPath, configFileName);
-      fs.writeJsonSync(newConfigFilePath, configFileTemplate, { spaces: 2 });
+      fs.writeFileSync(newConfigFilePath, configFileTemplate);
       console.log(chalk.green("Created file:"), newConfigFilePath);
+      console.log(
+        chalk.red("Warning:"),
+        "you should add .bprc to your .gitignore to avoid committing your secret",
+      );
     }
   }
 
