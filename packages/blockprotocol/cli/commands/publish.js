@@ -13,6 +13,9 @@ import { postPublishForm } from "./publish/post-form.js";
 
 // ********************* MANUAL ********************* //
 
+/**
+ * @type {[{header: string, content: string},{optionList: [{name: string, alias: string, description: string, typeLabel: string, type: BooleanConstructor},{name: string, alias: string, description: string, type: BooleanConstructor},{name: string, alias: string, description: string, typeLabel: string, type: StringConstructor},{name: string, alias: string, description: string, typeLabel: string, type: StringConstructor},{name: string, alias: string, description: string, type: BooleanConstructor}], header: string}]}
+ */
 const manual = [
   {
     header: "blockprotocol publish",
@@ -23,7 +26,7 @@ const manual = [
     header: "Options",
     optionList: [
       {
-        name: "dry",
+        name: "dry-run",
         alias: "d",
         type: Boolean,
         typeLabel: "{underline string}",
@@ -67,7 +70,7 @@ const manual = [
 const optionsGuide = manual.find(({ header }) => header === "Options");
 const options = optionsGuide.optionList;
 
-// ********************* SCRIPT ********************* //
+// *********************** RUN *********************** //
 
 /**
  * Publishes to the Block Protocol hub
@@ -75,8 +78,9 @@ const options = optionsGuide.optionList;
  * @param {string} [providedOptions.path]
  * @param {boolean} [providedOptions.dry]
  */
-const script = async (providedOptions) => {
-  const { path: providedPath, dry, tmp: tmpDir, yes } = providedOptions ?? {};
+const run = async (providedOptions) => {
+  const { path: providedPath, tmp: tmpDir, yes } = providedOptions ?? {};
+  const dryRun = providedOptions["dry-run"];
 
   const apiKey = await findApiKey();
 
@@ -128,7 +132,7 @@ const script = async (providedOptions) => {
     chalk.bgYellow(`Ready to publish block '${chalk.underline(blockName)}'`),
   );
 
-  if (dry) {
+  if (dryRun) {
     console.log("Dry run, exiting.");
     process.exit();
   }
@@ -182,4 +186,4 @@ const script = async (providedOptions) => {
 
 // ********************* EXPORTS ********************* //
 
-export { manual, options, script };
+export { manual, options, run };

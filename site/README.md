@@ -299,7 +299,7 @@ Uploads a user avatar and apply it to logged in profile page.
 
 #### `POST /api/blocks/create`
 
-Creates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING === "1"`
+Creates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING` is truthy
 
 Request Body:
 
@@ -313,7 +313,7 @@ Response Body:
 
 #### `POST /api/blocks/update`
 
-Updates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING === "1"`
+Updates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING` is truthy
 
 Request Body:
 

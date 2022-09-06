@@ -2,6 +2,9 @@ import commandLineUsage from "command-line-usage";
 
 // ********************* MANUAL ********************* //
 
+/**
+ * @type {[{header: string, content: string},{header: string, content: [{summary: string, name: string},{summary: string, name: string}]}]}
+ */
 const usageGuide = [
   {
     header: "blockprotocol CLI",
@@ -17,15 +20,15 @@ const usageGuide = [
   },
 ];
 
-// ********************* SCRIPT ********************* //
+// *********************** RUN *********************** //
 
 /**
  * Print the main help guide
  */
-const script = () => {
+const run = () => {
   const usage = commandLineUsage(usageGuide);
 
   console.log(usage);
 };
 
-export { script };
+export { run };
