@@ -40,7 +40,6 @@ node_modules/
 
 # Environment variables
 .env.local
-.bprc
 
 # Build artifacts
 dist
