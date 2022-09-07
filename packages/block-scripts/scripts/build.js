@@ -16,7 +16,9 @@ const script = async () => {
   ]);
 
   if (!stats || stats.hasErrors()) {
-    console.log(stats && stats.toString());
+    if (stats) {
+      console.log(stats.toString());
+    }
     console.log(chalk.red("Errors occurred while building the block"));
 
     process.exit(1);
