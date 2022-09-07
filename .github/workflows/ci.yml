@@ -25,7 +25,7 @@ jobs:
       - name: Run yarn lint:changeset
         if: ${{ success() || failure() }}
         run: |
-          git pull -f origin main:main ## https://github.com/changesets/changesets/issues/517#issuecomment-884778604
+          git pull --force --no-tags origin main:main ## https://github.com/changesets/changesets/issues/517#issuecomment-884778604
           if ! yarn lint:changeset; then
             echo ''
             echo ''
