@@ -297,6 +297,32 @@ Uploads a user avatar and apply it to logged in profile page.
 - Response Body:
   - `avatarUrl`: Url pointing to the newly uploaded user avatar.
 
+#### `POST /api/blocks/create`
+
+Creates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING` is truthy
+
+Request Body:
+
+- `npmPackageName`: the email address to associate with the BP account
+- `blockName`: the name to give the block
+
+Response Body:
+
+- `block` the created block's metadata
+-
+
+#### `POST /api/blocks/update`
+
+Updates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING` is truthy
+
+Request Body:
+
+- `blockName`: the name of the block, previously created via `/api/blocks/create`
+
+Response Body:
+
+- `block` the created block's metadata
+
 ### API key required
 
 The following routes require a valid API key sent in an `x-api-key` header:
@@ -315,6 +341,19 @@ If all of the optional params are missing, the result will contain all of the bl
 
 - Request Response:
   - `results`: the results of the search: an array of block metadata JSON files
+
+#### `POST /api/blocks/publish`
+
+Publishes a block or republishes an existing block by providing source files.
+
+Request multi-part form:
+
+- `blockName`: the name to give the block, or the existing block if previously published
+- `tarball`: a `File`, in tarball format, containing the block distribution
+
+Response Body:
+
+- `block` the published block's metadata
 
 ## Testing
 
