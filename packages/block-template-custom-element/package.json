@@ -28,6 +28,7 @@
     "lit": "^2.2.5"
   },
   "devDependencies": {
+    "@types/react-dom": "^18.0.6",
     "block-scripts": "0.0.15",
     "mock-block-dock": "0.0.24",
     "react": "^18.2.0",
