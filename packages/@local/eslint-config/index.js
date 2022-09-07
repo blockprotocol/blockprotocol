@@ -21,9 +21,6 @@ module.exports = {
   root: true,
   reportUnusedDisableDirectives: true,
   parser: "@typescript-eslint/parser",
-  parserOptions: {
-    project: "tsconfig.json",
-  },
   plugins: [
     "@typescript-eslint",
     "react-hooks",
@@ -254,6 +251,54 @@ module.exports = {
       },
     },
     {
+      files: ["crates/type-system/**"],
+      parserOptions: {
+        project: ["crates/type-system/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/@blockprotocol/core/**"],
+      parserOptions: {
+        project: ["packages/@blockprotocol/core/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/@blockprotocol/graph/**"],
+      parserOptions: {
+        project: ["packages/@blockprotocol/graph/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/@blockprotocol/hook/**"],
+      parserOptions: {
+        project: ["packages/@blockprotocol/hook/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/@blockprotocol/type-system-node/**"],
+      parserOptions: {
+        project: ["packages/@blockprotocol/type-system-node/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/@blockprotocol/type-system-web/**"],
+      parserOptions: {
+        project: ["packages/@blockprotocol/type-system-web/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/@local/package-chores/**"],
+      parserOptions: {
+        project: ["packages/@local/package-chores/tsconfig.json"],
+      },
+    },
+    {
+      files: ["packages/@local/script-resources/**"],
+      parserOptions: {
+        project: ["packages/@local/script-resources/tsconfig.json"],
+      },
+    },
+    {
       files: ["packages/block-scripts/**", "packages/blockprotocol/**"],
       rules: {
         "no-console": "off",
@@ -261,13 +306,13 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-template-custom-element/*"],
+      files: ["packages/block-template-custom-element/**"],
       parserOptions: {
         project: ["packages/block-template-custom-element/tsconfig.json"],
       },
     },
     {
-      files: ["packages/block-template-react/*"],
+      files: ["packages/block-template-react/**"],
       parserOptions: {
         project: ["packages/block-template-react/tsconfig.json"],
       },

@@ -18,6 +18,10 @@
   "scripts": {
     "lint:tsc": "tsc --noEmit"
   },
+  "devDependencies": {
+    "@local/tsconfig": "0.0.0-private",
+    "typescript": "4.8.2"
+  },
   "collaborators": [
     "HASH"
   ]

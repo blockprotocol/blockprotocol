@@ -1,4 +1,8 @@
 /* global blockprotocol */
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck -- unable to typecheck GraphBlockHandler because of URL import
+
 import { GraphBlockHandler } from "https://esm.sh/@blockprotocol/graph@0.0.11";
 
 const element = blockprotocol.getBlockContainer(import.meta.url);
