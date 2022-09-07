@@ -254,7 +254,7 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-scripts/**"],
+      files: ["packages/block-scripts/**", "packages/blockprotocol/**"],
       rules: {
         "no-console": "off",
         "import/extensions": ["error", "always"],
@@ -285,15 +285,6 @@ module.exports = {
       files: ["packages/block-template-custom-element/src/app.ts"],
       rules: {
         "no-console": "off",
-      },
-    },
-    {
-      files: ["packages/react-block-loader/dev/*"],
-      rules: {
-        "import/no-extraneous-dependencies": [
-          "error",
-          { devDependencies: true },
-        ],
       },
     },
     {

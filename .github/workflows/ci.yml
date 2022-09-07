@@ -151,18 +151,18 @@ jobs:
           yarn wait-on --timeout 30000 http://localhost:4873
 
       - name: Publish NPM packages to local registry
-        run: yarn exe scripts/packages/publish-to-local-registry.ts
+        run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
 
       - name: e2e-test create-block-app (default template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/default
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
       - name: e2e-test create-block-app (custom-element template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/custom-element
           BLOCK_TEMPLATE: custom-element
@@ -170,7 +170,7 @@ jobs:
 
       - name: e2e-test create-block-app (html template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/html
           BLOCK_TEMPLATE: html
@@ -178,7 +178,7 @@ jobs:
 
       - name: e2e-test create-block-app (react template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/react
           BLOCK_TEMPLATE: react
@@ -186,7 +186,7 @@ jobs:
 
       - name: e2e-test create-block-app (unknown template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/unknown
           BLOCK_TEMPLATE: unknown

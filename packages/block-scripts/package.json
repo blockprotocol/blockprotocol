@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
@@ -41,7 +41,6 @@
     "fs-extra": "^10.1.0",
     "html-webpack-plugin": "^5.5.0",
     "lodash": "^4.17.21",
-    "regenerator-runtime": "^0.13.9",
     "sass": "^1.52.3",
     "sass-loader": "^12.6.0",
     "serve-handler": "^6.1.3",

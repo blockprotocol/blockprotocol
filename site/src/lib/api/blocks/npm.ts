@@ -8,7 +8,7 @@ import path from "node:path";
 import tar from "tar";
 import tmp from "tmp-promise";
 
-import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
+import { ExpandedBlockMetadata } from "../../blocks";
 import { isProduction } from "../../config";
 import { User } from "../model/user.model";
 import { getDbBlock, insertDbBlock } from "./db";
@@ -23,17 +23,21 @@ const stripLeadingAt = (pathWithNamespace: string) =>
 
 /**
  * Unpacks and uploads an npm package to remote storage
+ * @param createdAt if this block was created previously, an ISO string of when it was created, otherwise null
  * @param npmPackageName the name of the npm package to mirror
  * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  */
-const mirrorNpmPackageToR2 = async (
-  npmPackageName: string,
-  pathWithNamespace: string,
-): Promise<{
+const mirrorNpmPackageToR2 = async ({
+  createdAt,
+  npmPackageName,
+  pathWithNamespace,
+}: {
+  createdAt: string | null;
+  npmPackageName: string;
+  pathWithNamespace: string;
+}): Promise<{
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
-  const isRunningOnVercel = !!process.env.VERCEL;
-
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
     tmpdir: isRunningOnVercel ? "/tmp" : undefined, // Vercel allows limited file system access
     unsafeCleanup: true,
@@ -59,8 +63,8 @@ const mirrorNpmPackageToR2 = async (
       execaOptions,
     ));
 
+    // we use a library because tar is not installed in Vercel lambdas
     await tar.x({
-      // tar is not available on deployed lambdas
       cwd: npmTarballFolder,
       file: path.resolve(npmTarballFolder, tarballFilename),
     });
@@ -71,16 +75,9 @@ const mirrorNpmPackageToR2 = async (
     );
   }
 
-  // check the package contents and retrieve useful metadata
   const packageFolder = path.resolve(npmTarballFolder, "package");
 
-  // get the package.json - we know this exists and is valid JSON, since it's an npm-published package
-  const packageJsonString = fs
-    .readFileSync(path.resolve(packageFolder, "package.json"))
-    .toString();
-  const packageJson = JSON.parse(packageJsonString);
-
-  // get the block-metadata.json
+  // Find the block's source folder by locating the block-metadata.json
   const metadataJsonPath = (
     await globby("**/block-metadata.json", {
       absolute: true,
@@ -92,19 +89,6 @@ const mirrorNpmPackageToR2 = async (
     throw new Error("No block-metadata.json present in package", {
       cause: { code: "INVALID_PACKAGE_CONTENTS" },
     });
-  }
-
-  let metadataJson;
-  try {
-    const metadataJsonString = fs.readFileSync(metadataJsonPath).toString();
-    metadataJson = JSON.parse(metadataJsonString);
-  } catch (err) {
-    throw new Error(
-      `Could not parse block-metadata.json: ${(err as Error).message}`,
-      {
-        cause: { code: "INVALID_PACKAGE_CONTENTS" },
-      },
-    );
   }
 
   const blockSourceFolder = path.resolve(
@@ -127,107 +111,12 @@ const mirrorNpmPackageToR2 = async (
     );
   }
 
-  // check if we have 'example-graph.json', which we then construct a URL for in the extended matadata
-  const includesExampleGraph = await fs.pathExists(
-    path.resolve(blockSourceFolder, "example-graph.json"),
-  );
-
-  // check block-metadata.json contains required properties
-  for (const key of ["blockType", "protocol", "schema", "source", "version"]) {
-    if (!metadataJson[key]) {
-      throw new Error(`block-metadata.json must contain a '${key}' property`, {
-        cause: { code: "INVALID_PACKAGE_CONTENTS" },
-      });
-    }
-  }
-
-  // check that the source file actually exists
-  const sourcePath = metadataJson.source;
-  const sourceFileExists = await fs.pathExists(
-    path.resolve(blockSourceFolder, sourcePath),
-  );
-
-  if (!sourceFileExists) {
-    throw new Error(
-      `block-metadata.json 'source' path '${sourcePath}' does not exist`,
-      {
-        cause: { code: "INVALID_PACKAGE_CONTENTS" },
-      },
-    );
-  }
-
-  // check that the schema actually exists
-  const schemaPath = metadataJson.schema;
-  const missingSchemaError = new Error(
-    `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
-    {
-      cause: { code: "INVALID_PACKAGE_CONTENTS" },
-    },
-  );
-  if (schemaPath.startsWith("http")) {
-    try {
-      await fetch(schemaPath, { method: "HEAD" });
-    } catch {
-      throw missingSchemaError;
-    }
-  } else {
-    const schemaFileExists = await fs.pathExists(
-      path.resolve(blockSourceFolder, schemaPath),
-    );
-    if (!schemaFileExists) {
-      throw missingSchemaError;
-    }
-  }
-
-  const now = new Date().toISOString();
-
-  /**
-   * In future we will store each version in its own folder, and add the version to the folder path
-   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
-   */
-  const remoteStoragePrefix = stripLeadingAt(pathWithNamespace);
-  const publicPackagePath = `${env.S3_BASE_URL}/${remoteStoragePrefix}`;
-
-  const sourceInformation = {
-    blockDistributionFolderUrl: publicPackagePath,
+  const { expandedMetadata } = await validateExpandAndUploadBlockFiles({
+    createdAt,
+    localFolderPath: blockSourceFolder,
     npmPackageName,
     pathWithNamespace,
-    repository:
-      !!packageJson.repository &&
-      (typeof packageJson.repository === "object" ||
-        typeof packageJson.repository === "string")
-        ? packageJson.repository
-        : undefined,
-    repoDirectory:
-      typeof packageJson.repository === "object" &&
-      packageJson.repository &&
-      "directory" in packageJson.repository &&
-      typeof packageJson.repository.directory === "string"
-        ? packageJson.repository?.directory
-        : undefined,
-  };
-
-  const expandedMetadata = expandBlockMetadata({
-    metadata: metadataJson as BlockMetadata, // @todo add a comprehensive guard/validator for block-metadata.json
-    source: sourceInformation,
-    timestamps: { createdAt: now, lastUpdated: now },
-    includesExampleGraph,
   });
-
-  fs.writeFileSync(
-    path.resolve(packageFolder, metadataJsonPath),
-    JSON.stringify(expandedMetadata, undefined, 2),
-  );
-
-  /**
-   * Wipe the folder before uploading new files - we will stop doing this when we store each version in its own folder
-   * @see https://app.asana.com/0/0/1202539910143057/f (internal)
-   */
-  await wipeR2BlockFolder(remoteStoragePrefix);
-
-  await Promise.all(
-    uploadBlockFilesToR2(blockSourceFolder, remoteStoragePrefix),
-  );
 
   void cleanupDistFolder();
 
@@ -236,27 +125,25 @@ const mirrorNpmPackageToR2 = async (
   };
 };
 
+/**
+ * Publishes a block which is already published as an npm package
+ * @param db a database client
+ * @param params.createdAt if this block was created previously, an ISO string of when it was created, otherwise null
+ * @param params.pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
+ * @param params.npmPackageName the name of the npm package the block is published as
+ */
 export const publishBlockFromNpm = async (
   db: Db,
-  params: { name: string; npmPackageName: string; user: User },
+  params: {
+    createdAt: string | null;
+    npmPackageName: string;
+    pathWithNamespace: string;
+  },
 ) => {
-  const { name, npmPackageName, user } = params;
-  const shortname = user.shortname;
-  if (!shortname) {
-    throw new Error("User must have completed signup to publish a block");
-  }
+  const { createdAt, pathWithNamespace, npmPackageName } = params;
 
-  const pathWithNamespace = `@${shortname}/${name}`;
+  const blockLinkedToPackage = await getDbBlock({ npmPackageName });
 
-  const [blockWithName, blockLinkedToPackage] = await Promise.all([
-    getDbBlock({ name, author: shortname }),
-    getDbBlock({ npmPackageName }),
-  ]);
-  if (blockWithName) {
-    throw new Error(`Block name '${pathWithNamespace}' already exists`, {
-      cause: { code: "NAME_TAKEN" },
-    });
-  }
   if (isProduction && blockLinkedToPackage) {
     throw new Error(
       `npm package '${npmPackageName}' is already linked to block '${blockLinkedToPackage.pathWithNamespace}'`,
@@ -266,12 +153,15 @@ export const publishBlockFromNpm = async (
     );
   }
 
-  const { expandedMetadata } = await mirrorNpmPackageToR2(
+  const { expandedMetadata } = await mirrorNpmPackageToR2({
+    createdAt,
     npmPackageName,
     pathWithNamespace,
-  );
+  });
 
-  await insertDbBlock(expandedMetadata);
+  await (createdAt
+    ? updateDbBlock(expandedMetadata)
+    : insertDbBlock(expandedMetadata));
 
   return expandedMetadata;
 };

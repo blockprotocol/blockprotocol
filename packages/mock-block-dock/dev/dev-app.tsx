@@ -92,10 +92,11 @@ const DevApp: FunctionComponent = () => {
       </div>
 
       <MockBlockDock
-        debug
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
         blockName="Test Block"
+        debug
+        key={testBlockType} // completely reset the state when block type has changed
       />
     </>
   );

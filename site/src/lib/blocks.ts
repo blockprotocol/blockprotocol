@@ -15,6 +15,7 @@ import { FRONTEND_URL } from "./config";
  * Relative file URLs are rewritten to be absolute, and other fields are added
  */
 export type ExpandedBlockMetadata = BlockMetadata & {
+  author: string;
   createdAt?: string | null;
   // the block's URL on blockprotocol.org
   blockSitePath: string;

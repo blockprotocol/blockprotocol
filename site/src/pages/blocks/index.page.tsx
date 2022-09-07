@@ -18,7 +18,7 @@ import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigati
 import { BlockListItem } from "../../components/pages/user/block-list-item";
 import { apiClient } from "../../lib/api-client";
 import { ExpandedBlockMetadata } from "../../lib/blocks";
-import { shouldAllowBlockPublishing } from "../../lib/config";
+import { shouldAllowNpmBlockPublishing } from "../../lib/config";
 
 const BlocksPage: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
@@ -69,7 +69,7 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
       <PageContainer>
         <Box display="flex" alignItems="center" gap={2} flexWrap="wrap" mb={4}>
           <Typography variant="bpHeading2">Published Blocks</Typography>
-          {shouldAllowBlockPublishing && (
+          {shouldAllowNpmBlockPublishing && (
             <LinkButton
               startIcon={<FontAwesomeIcon icon={faPlus} />}
               size="small"

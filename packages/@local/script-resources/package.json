@@ -1,0 +1,12 @@
+{
+  "name": "@local/script-resources",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint:tsc": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "4.8.2"
+  }
+}

@@ -8,7 +8,7 @@ import { BaseApiResponse } from "../handler/base-handler";
 export type MultipartUploadsOptions = {
   fieldsLimit: number;
   filesLimit: number;
-  maxFileSize: number;
+  maxFileSize?: number;
 };
 
 export type UploadedFileBuffer = {
@@ -23,9 +23,20 @@ export type Field = {
   value: string;
 };
 
-export type MultipartExtensions = {
-  uploads?: Record<string, UploadedFileBuffer>;
-  fields?: Record<string, Field>;
+export type MultipartExtensions<
+  FileFieldName extends string | null = string,
+  PrimitiveFieldName extends string | null = string,
+> = {
+  /**
+   * the [Generic] syntax here is required to avoid distributive behavior
+   * @see https://www.typescriptlang.org/docs/handbook/2/conditional-types.html#distributive-conditional-types
+   */
+  uploads?: [FileFieldName] extends [string]
+    ? { [key in FileFieldName]?: UploadedFileBuffer }
+    : undefined;
+  fields?: [PrimitiveFieldName] extends [string]
+    ? { [key in PrimitiveFieldName]?: Field }
+    : undefined;
 };
 
 const parseForm = async (
@@ -106,7 +117,7 @@ export const multipartUploads: (
         res.status(400).json(
           formatErrors({
             msg: error.message,
-            param: "image",
+            param: "file upload",
           }),
         );
       } else {
