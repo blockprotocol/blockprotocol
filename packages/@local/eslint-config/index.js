@@ -299,7 +299,7 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-scripts/**"],
+      files: ["packages/block-scripts/**", "packages/blockprotocol/**"],
       rules: {
         "no-console": "off",
         "import/extensions": ["error", "always"],
