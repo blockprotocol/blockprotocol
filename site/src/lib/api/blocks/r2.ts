@@ -21,49 +21,6 @@ const s3 = new S3({
   secretAccessKey: env.S3_SECRET_ACCESS_KEY,
   signatureVersion: "v4",
 });
-    }
-  }
-
-  // check that the source file actually exists
-  const sourcePath = metadataJson.source;
-  const sourceFileExists = await fs.pathExists(
-    path.resolve(blockSourceFolder, sourcePath),
-  );
-
-  if (!sourceFileExists) {
-    throw new Error(
-      `block-metadata.json 'source' path '${sourcePath}' does not exist`,
-      {
-        cause: { code: "INVALID_PACKAGE_CONTENTS" },
-      },
-    );
-  }
-
-  // check that the schema actually exists
-  const schemaPath = metadataJson.schema;
-  const missingSchemaError = new Error(
-    `block-metadata.json 'schema' path '${schemaPath}' does not exist`,
-    {
-      cause: { code: "INVALID_PACKAGE_CONTENTS" },
-    },
-  );
-  if (schemaPath.startsWith("http")) {
-    try {
-      await fetch(schemaPath, { method: "HEAD" });
-    } catch {
-      throw missingSchemaError;
-    }
-  } else {
-    const schemaFileExists = await fs.pathExists(
-      path.resolve(blockSourceFolder, schemaPath),
-    );
-    if (!schemaFileExists) {
-      throw missingSchemaError;
-    }
-  }
-
-  return { metadataJson, metadataJsonPath, includesExampleGraph };
-};
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
