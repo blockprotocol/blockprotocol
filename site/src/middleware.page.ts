@@ -46,11 +46,3 @@ export async function middleware(request: NextRequest) {
     }
   }
 }
-
-/**
- * Exclude API routes from the middleware as it stops them accessing the raw body (needed for file uploads)
- * @see https://github.com/vercel/next.js/issues/39262
- */
-export const config = {
-  matcher: ["/", "/((?!api/).*)"],
-};
