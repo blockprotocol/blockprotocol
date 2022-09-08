@@ -29,7 +29,6 @@ test.beforeEach(async ({ page }) => {
 test("user should be able to publish block & see it on the list", async ({
   page,
 }) => {
-  test.skip();
   await page.goto("/blocks");
 
   // block list empty state should be visible
@@ -68,7 +67,6 @@ test("user should be able to publish block & see it on the list", async ({
 test("user should not be able to publish an invalid npm-package", async ({
   page,
 }) => {
-  test.skip();
   await page.goto("/blocks/publish/npm");
 
   await fillBlockDetails(page, "react", dummyBlockName);
@@ -82,7 +80,6 @@ test("user should not be able to publish an invalid npm-package", async ({
 test("user should not be able to publish an already-used npm-package", async ({
   page,
 }) => {
-  test.skip();
   /** @todo update 'already-taken' name check so that it can be checked in these tests (e.g. by having the check activated by custom environment variable, not `isProduction`) */
   await publishBlock({
     page,
@@ -104,7 +101,6 @@ test("user should not be able to publish an already-used npm-package", async ({
 test("user should not be able to publish an block with already-taken name", async ({
   page,
 }) => {
-  test.skip();
   await publishBlock({
     page,
     blockName: dummyBlockName,
