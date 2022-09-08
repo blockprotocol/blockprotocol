@@ -10,7 +10,7 @@ import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
 
 const env = envalid.cleanEnv(process.env, {
   S3_API_ENDPOINT: envalid.str(),
-  S3_BUCKET: envalid.str(),
+  S3_BUCKET_NAME: envalid.str(),
   S3_ACCESS_KEY_ID: envalid.str(),
   S3_SECRET_ACCESS_KEY: envalid.str(),
   S3_BASE_URL: envalid.str(),
@@ -148,7 +148,7 @@ const uploadBlockFilesToS3 = (
 
     return s3
       .putObject({
-        Bucket: env.S3_BUCKET,
+        Bucket: env.S3_BUCKET_NAME,
         Body: fileContents,
         ContentType: contentType || undefined,
         Key: `${remoteStoragePrefix}/${thingName}`,
@@ -169,7 +169,7 @@ const wipeS3BlockFolder = async (blockFolder: string) => {
   }
   const folderContents = await s3
     .listObjectsV2({
-      Bucket: env.S3_BUCKET,
+      Bucket: env.S3_BUCKET_NAME,
       Prefix: blockFolder,
     })
     .promise();
@@ -184,7 +184,7 @@ const wipeS3BlockFolder = async (blockFolder: string) => {
 
   await s3
     .deleteObjects({
-      Bucket: env.S3_BUCKET,
+      Bucket: env.S3_BUCKET_NAME,
       Delete: {
         Objects: objectsToDelete,
       },
