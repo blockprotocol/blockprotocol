@@ -2,6 +2,7 @@ import execa from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 import { Db } from "mongodb";
+import os from "node:os";
 import path from "node:path";
 import tar from "tar";
 import tmp from "tmp-promise";
@@ -10,7 +11,6 @@ import { ExpandedBlockMetadata } from "../../blocks";
 import { isProduction } from "../../config";
 import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
 import { validateExpandAndUploadBlockFiles } from "./s3";
-import { isRunningOnVercel } from "./shared";
 
 /**
  * Unpacks and uploads an npm package to remote storage
@@ -30,7 +30,7 @@ const mirrorNpmPackageToR2 = async ({
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    tmpdir: isRunningOnVercel ? "/tmp" : undefined, // Vercel allows limited file system access
+    tmpdir: os.tmpdir(),
     unsafeCleanup: true,
   });
 
@@ -45,9 +45,7 @@ const mirrorNpmPackageToR2 = async ({
       "--pack-destination",
       npmTarballFolder,
     ];
-    if (isRunningOnVercel) {
-      npmPackArgs.push("--cache", "/tmp/.npm");
-    }
+    npmPackArgs.push("--cache", path.resolve(os.tmpdir(), ".npm_cache"));
     ({ stdout: tarballFilename } = await execa(
       "npm",
       npmPackArgs,

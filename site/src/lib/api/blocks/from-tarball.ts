@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import { Db } from "mongodb";
+import os from "node:os";
 import path from "node:path";
 import tar from "tar";
 import tmp from "tmp-promise";
@@ -7,7 +8,6 @@ import tmp from "tmp-promise";
 import { ExpandedBlockMetadata } from "../../blocks";
 import { insertDbBlock, updateDbBlock } from "./db";
 import { validateExpandAndUploadBlockFiles } from "./s3";
-import { isRunningOnVercel } from "./shared";
 
 /**
  * Unpacks and uploads a tarball to remote storage
@@ -28,7 +28,7 @@ const mirrorTarballToS3 = async ({
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: tarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    tmpdir: isRunningOnVercel ? "/tmp" : undefined, // Vercel allows limited file system access
+    tmpdir: os.tmpdir(),
     unsafeCleanup: true,
   });
 
