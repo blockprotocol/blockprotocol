@@ -263,6 +263,8 @@ jobs:
           S3_SECRET_ACCESS_KEY=dev-secret-key
           S3_BASE_URL=http://localhost:9000/dev-bucket
 
+          NEXT_PUBLIC_NPM_PUBLISHING=true
+
           EOF
 
       - name: Launch DB
