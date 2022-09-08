@@ -2,4 +2,4 @@
 "mock-block-dock": patch
 ---
 
-create a patch release for mbd
+Add `labelProperty` to pre-defined entity types
