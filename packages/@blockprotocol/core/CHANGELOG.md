@@ -1,5 +1,13 @@
 # @blockprotocol/core
 
+## 0.0.11
+
+### Patch Changes
+
+- [#576](https://github.com/blockprotocol/blockprotocol/pull/576) [`853a00d`](https://github.com/blockprotocol/blockprotocol/commit/853a00df8468b277b8a7f73e2242d686fedc5b3d) Thanks [@CiaranMn](https://github.com/CiaranMn)! - expose registerCallbacks to users for bulk callback updating
+
+- [#577](https://github.com/blockprotocol/blockprotocol/pull/577) [`d9f6dca`](https://github.com/blockprotocol/blockprotocol/commit/d9f6dca9902867fdde9c2ad0ee93ed80889b12bc) Thanks [@kachkaev](https://github.com/kachkaev)! - Change TypeScript config and rebuild
+
 ## 0.0.10
 
 ### Patch Changes

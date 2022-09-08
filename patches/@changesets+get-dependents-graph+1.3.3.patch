@@ -1,0 +1,42 @@
+diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
+index 9bd1b9d..9e1a33d 100644
+--- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
++++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
+@@ -17,6 +17,9 @@ const getAllDependencies = config => {
+   const allDependencies = new Map();
+ 
+   for (const type of DEPENDENCY_TYPES) {
++    // https://github.com/changesets/changesets/issues/906
++    if (type === "devDependencies") continue;
++    
+     const deps = config[type];
+     if (!deps) continue;
+ 
+diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
+index b4026bb..88dc34a 100644
+--- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
++++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
+@@ -17,6 +17,9 @@ var semver__default = _interopDefault(semver), chalk__default = _interopDefault(
+ const DEPENDENCY_TYPES = [ "dependencies", "devDependencies", "peerDependencies", "optionalDependencies" ], getAllDependencies = config => {
+   const allDependencies = new Map;
+   for (const type of DEPENDENCY_TYPES) {
++    // https://github.com/changesets/changesets/issues/906
++    if (type === "devDependencies") continue;
++
+     const deps = config[type];
+     if (deps) for (const name of Object.keys(deps)) {
+       const depRange = deps[name];
+diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
+index b0eaa77..5a86537 100644
+--- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
++++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
+@@ -8,6 +8,9 @@ const getAllDependencies = config => {
+   const allDependencies = new Map();
+ 
+   for (const type of DEPENDENCY_TYPES) {
++    // https://github.com/changesets/changesets/issues/906
++    if (type === "devDependencies") continue;
++
+     const deps = config[type];
+     if (!deps) continue;
+ 
