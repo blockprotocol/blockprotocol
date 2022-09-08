@@ -182,6 +182,12 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     }
   }, [readonly, graphService]);
 
+  useEffect(() => {
+    if (graphService) {
+      graphService.registerCallbacks(graphServiceCallbacks);
+    }
+  }, [graphService, graphServiceCallbacks]);
+
   const Component = (
     <div ref={wrapperRef}>
       {graphService ? (

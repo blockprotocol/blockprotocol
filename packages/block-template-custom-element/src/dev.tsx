@@ -35,4 +35,8 @@ const DevApp = () => {
   );
 };
 
-createRoot(node).render(<DevApp />);
+if (node) {
+  createRoot(node).render(<DevApp />);
+} else {
+  throw new Error("Unable to find DOM element with id 'app'");
+}

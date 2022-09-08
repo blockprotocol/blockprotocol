@@ -1,5 +1,11 @@
 # block-template-html
 
+## 0.1.2
+
+### Patch Changes
+
+- [#581](https://github.com/blockprotocol/blockprotocol/pull/581) [`5cebfb2`](https://github.com/blockprotocol/blockprotocol/commit/5cebfb2166dd6133ec90337deee00793c54bb01a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add .bprc to block templates
+
 ## 0.1.1
 
 ### Patch Changes

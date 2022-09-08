@@ -113,7 +113,7 @@ const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
 
 const isEntityTypes = (
   entities: Entity[] | EntityType[],
-): entities is EntityType[] => "schema" in entities[0];
+): entities is EntityType[] => "schema" in (entities[0] ?? {});
 
 export function filterAndSortEntitiesOrTypes(
   entities: Entity[],

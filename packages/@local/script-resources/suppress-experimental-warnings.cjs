@@ -4,10 +4,11 @@
 
 const originalEmit = process.emit;
 
+// @ts-expect-error -- TS is unable to untangle all emit overloads
 process.emit = (name, data, ...args) => {
   if (
     name === `warning` &&
-    typeof data === `object` &&
+    data instanceof Error &&
     data.name === `ExperimentalWarning` &&
     (data.message.includes(`--experimental-loader`) ||
       data.message.includes(`Custom ESM Loaders is an experimental feature`) ||
@@ -17,5 +18,6 @@ process.emit = (name, data, ...args) => {
     return false;
   }
 
+  // @ts-expect-error -- TS is unable to untangle all emit overloads
   return originalEmit.apply(process, [name, data, ...args]);
 };

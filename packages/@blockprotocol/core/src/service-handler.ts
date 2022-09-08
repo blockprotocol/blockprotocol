@@ -90,7 +90,7 @@ export abstract class ServiceHandler {
   }
 
   /** Register callbacks with the CoreHandler to handle incoming messages of specific types */
-  protected registerCallbacks(
+  registerCallbacks(
     this: ServiceHandler,
     callbacks: Record<string, GenericMessageCallback>,
   ) {

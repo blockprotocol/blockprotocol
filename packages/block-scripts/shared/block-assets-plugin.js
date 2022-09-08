@@ -23,6 +23,7 @@ export class BlockAssetsPlugin {
         ? await fs.readJson(assetsManifestFilePath)
         : { "main.js": "main.js" };
 
+      /** @type Record<string, string> */
       const metadataExtra = { source: assetsManifest["main.js"] };
 
       if (stats.compilation.options.mode === "development") {
