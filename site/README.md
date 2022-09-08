@@ -57,7 +57,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
 
 ### API block publishing configuration
 
-If you want to publish blocks via the API, you will need to configure Cloudflare R2 variables:
+If you want to publish blocks via the API, you will need to configure S3 variables:
 
 - `S3_API_ENDPOINT`
 - `S3_BUCKET_NAME`
@@ -65,7 +65,7 @@ If you want to publish blocks via the API, you will need to configure Cloudflare
 - `S3_SECRET_ACCESS_KEY`
 - `S3_BASE_URL`
 
-API-published blocks are uploaded to R2. This is not necessary for blocks added to the `hub/` folder in the repo.
+API-published blocks are uploaded to S3 storage (e.g. R2). This is not necessary for blocks added to the `hub/` folder in the repo.
 
 ### AWS configuration
 

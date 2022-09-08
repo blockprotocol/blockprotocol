@@ -1,5 +1,3 @@
-import { BlockMetadata } from "@blockprotocol/core";
-import * as envalid from "envalid";
 import execa from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
@@ -10,16 +8,9 @@ import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
 import { isProduction } from "../../config";
-import { User } from "../model/user.model";
-import { getDbBlock, insertDbBlock } from "./db";
-import { uploadBlockFilesToR2, wipeR2BlockFolder } from "./r2";
-
-const env = envalid.cleanEnv(process.env, {
-  S3_BASE_URL: envalid.str(),
-});
-
-const stripLeadingAt = (pathWithNamespace: string) =>
-  pathWithNamespace.replace(/^@/, "");
+import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
+import { validateExpandAndUploadBlockFiles } from "./s3";
+import { isRunningOnVercel } from "./shared";
 
 /**
  * Unpacks and uploads an npm package to remote storage
