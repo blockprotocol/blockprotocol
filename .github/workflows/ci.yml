@@ -248,6 +248,7 @@ jobs:
       - name: Create temp files and folders
         run: |
           mkdir -p var/logs
+          mkdir -p var/site
 
           cat << EOF > site/.env.local
           SESSION_SECRET=dev-session-secret
