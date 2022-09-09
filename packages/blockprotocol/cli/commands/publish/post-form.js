@@ -59,12 +59,11 @@ export const postPublishForm = async ({
         };
       }
     })
-    .catch((error) => {
+    .catch((/** @type unknown */ error) => {
       if (typeof error === "object" && error) {
-        if (
-          ("code" in error && error.code === "ENOTFOUND") ||
-          error.code === "ECONNREFUSED"
-        ) {
+        // @ts-expect-error -- code can be a property on the error object
+        const errorCode = error.code;
+        if (errorCode === "ENOTFOUND" || errorCode === "ECONNREFUSED") {
           // the host is not contactable at all – probably a network issue or non-running dev/staging instance
           return {
             errors: [
@@ -72,9 +71,9 @@ export const postPublishForm = async ({
             ],
           };
         }
-        if ("msg" in error) {
+        if ("errors" in error) {
           // should be a meaningful error provided by the API about why the request failed, e.g. bad API key
-          return { errors: [{ msg: error.msg }] };
+          return error;
         }
       }
 
