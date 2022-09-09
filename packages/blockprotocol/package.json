@@ -40,6 +40,9 @@
   },
   "devDependencies": {
     "@local/tsconfig": "0.0.0-private",
+    "@types/command-line-args": "^5.2.0",
+    "@types/command-line-usage": "^5.0.2",
+    "@types/prompt": "^1.1.3",
     "@types/react": "^18.0.15",
     "typescript": "4.8.2"
   }
