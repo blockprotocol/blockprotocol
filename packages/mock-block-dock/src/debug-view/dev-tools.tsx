@@ -119,7 +119,7 @@ export const DevTools = () => {
     <Wrapper ref={wrapperRef}>
       <Resizable
         height={height}
-        width={width!}
+        width={width ?? 0}
         resizeHandles={["n"]}
         handle={<ResizeHandle />}
         onResize={(_, { size }) => {
