@@ -6,6 +6,7 @@ import {
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import {
+  // eslint-disable-next-line no-restricted-imports
   Alert as MuiAlert,
   AlertColor,
   AlertProps as MuiAlertProps,
