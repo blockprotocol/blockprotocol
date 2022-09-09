@@ -2,6 +2,7 @@ import {
   Box,
   Button as MuiButton,
   ButtonProps,
+  Link,
   styled,
   Typography,
 } from "@mui/material";
@@ -110,13 +111,13 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
         </Typography>
       </Box>
 
-      <Button
+      <Link
         href="https://blockprotocol.org/docs"
-        sx={{ mr: 1 }}
+        sx={{ mr: 1, textDecoration: "none" }}
         target="_blank"
       >
-        Docs
-      </Button>
+        <Button>Docs</Button>
+      </Link>
 
       <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}>
         Dark Mode

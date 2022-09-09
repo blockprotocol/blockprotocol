@@ -36,5 +36,5 @@ export const useSendGraphValue = ({
         sentOnce.current = true;
       }
     }
-  }, [graphService, value, valueName]);
+  }, [graphService, previousValue, value, valueName]);
 };
