@@ -173,7 +173,7 @@ export type EntityType = {
     $schema: string;
     title: string;
     type: string;
-    labelProperty: string;
+    labelProperty?: string;
     [key: string]: unknown;
   };
 };
