@@ -20,6 +20,7 @@ export const postPublishForm = async ({
 }) => {
   const url = `${blockProtocolSiteHost}/api/blocks/publish`;
 
+  /** @type {import("node-fetch").FormData} -- https://github.com/node-fetch/node-fetch/issues/900#issuecomment-716342574 */
   const form = new FormData();
 
   const file = await fileFromPath(tarballFilePath);
@@ -27,6 +28,7 @@ export const postPublishForm = async ({
   form.set("blockName", blockName);
   form.set("tarball", file, "tarball.tar.gz");
 
+  /** @type {import("node-fetch").RequestInit} */
   const options = {
     body: form,
     headers: {
