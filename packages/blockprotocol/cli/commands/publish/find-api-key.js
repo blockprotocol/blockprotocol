@@ -15,13 +15,14 @@ const configFileTemplate = `${configFileKey}=b10ck5.0000000000000000000000000000
 /**
  * Retrieve an API key from a provided file of key=value lines
  * @param {string} filePath
+ * @return {string}
  */
 const extractKeyFromRcFile = (filePath) => {
   const fileContent = fs.readFileSync(filePath);
   const lines = fileContent.toString().split("\n");
   for (const line of lines) {
     const [key, value] = line.split("=");
-    if (key === configFileKey) {
+    if (key === configFileKey && value) {
       console.log(chalk.green(`Found API key in configuration file.`));
       return value;
     }
@@ -34,6 +35,9 @@ const extractKeyFromRcFile = (filePath) => {
   process.exit();
 };
 
+/**
+ * @returns {Promise<string>}
+ */
 export const findApiKey = async () => {
   const keyInEnvironment = process.env[environmentVariableName];
 
