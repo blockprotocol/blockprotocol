@@ -24,12 +24,14 @@ type LogItemProps = {
 const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
   return (
     <Typography
+      onClick={() => onClick(log)}
       variant="subtitle2"
       sx={{
         mb: 0.5,
         display: "subtitle1",
         whiteSpace: "nowrap",
         fontFamily: "Mono, monospace",
+        cursor: "pointergit com",
       }}
     >
       [{log.timestamp}]
@@ -49,7 +51,6 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
       [{log.source}] - {log.messageName} -{" "}
       <Box
         component="span"
-        onClick={() => onClick(log)}
         sx={({ palette }) => ({
           textDecoration: "underline",
           cursor: "pointer",

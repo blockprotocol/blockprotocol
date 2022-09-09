@@ -74,13 +74,13 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
       ref={ref}
       className={`handle=${handleAxis}`}
       sx={(theme) => ({
-        borderTop: `1px solid ${theme.palette.divider}`,
+        borderBottom: `1px solid ${theme.palette.divider}`,
         cursor: "ns-resize",
         position: "absolute",
-        top: 0,
+        top: "-10px",
+        paddingBottom: "10px",
         left: 0,
         right: 0,
-        paddingY: 1,
         zIndex: 10,
       })}
       {...restProps}
