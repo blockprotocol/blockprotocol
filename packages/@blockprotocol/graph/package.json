@@ -49,7 +49,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && tsc",
+    "build": "yarn clean && tsc --skipLibCheck",
     "clean": "rimraf ./dist/",
     "fix:eslint": "eslint --fix \"**/*\"",
     "lint:eslint": "eslint \"**/*\"",

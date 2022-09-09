@@ -1,3 +1,4 @@
 {
-  "extends": "@local/tsconfig/node.json"
+  // DOM is needed for node-fetch lib-checking
+  "extends": "@local/tsconfig/dom.json"
 }
