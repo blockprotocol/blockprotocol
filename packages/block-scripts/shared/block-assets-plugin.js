@@ -23,7 +23,7 @@ export class BlockAssetsPlugin {
 
       const assetsManifest = (await fs.pathExists(assetsManifestFilePath))
         ? await fs.readJson(assetsManifestFilePath).catch(() => {
-            console.error(`Error parsing asset manifest - using default`);
+            console.error("Error parsing asset manifest - using default");
             return defaultManifest;
           })
         : defaultManifest;
