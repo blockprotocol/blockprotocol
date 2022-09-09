@@ -188,7 +188,17 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   }, [graphService, graphServiceCallbacks]);
 
   const Component = (
-    <div ref={wrapperRef}>
+    <div
+      ref={wrapperRef}
+      style={
+        debugMode
+          ? {
+              border: "1px dashed rgb(0,0,0,0.1)",
+              marginTop: 30,
+            }
+          : {}
+      }
+    >
       {graphService ? (
         <BlockRenderer
           customElement={
