@@ -43,7 +43,7 @@ test("Block page should contain key elements", async ({
 
   if (isMobile) {
     await page.locator("text=Source Code").click();
-    await expect(page.locator("text=Data Source")).toBeVisible();
+    await expect(page.locator("text=Block Properties")).toBeVisible();
   } else {
     await expect(page.locator("text=Block Properties")).toBeVisible();
   }
@@ -64,7 +64,7 @@ test("Block page should contain key elements", async ({
   ).toHaveValue(`${stringifiedJson}\t`);
 
   if (isMobile) {
-    await page.locator("text=Data Source").click();
+    await page.locator("text=Block Properties").click();
     await page.locator("text=Block Schema").click();
   } else {
     await page.locator("text=Block Schema").click();

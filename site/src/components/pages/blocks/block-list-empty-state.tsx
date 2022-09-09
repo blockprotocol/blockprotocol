@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-import { shouldAllowBlockPublishing } from "../../../lib/config";
+import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
 import { LinkButton } from "../../link-button";
 
 export const BlockListEmptyState = () => {
@@ -9,7 +9,7 @@ export const BlockListEmptyState = () => {
       <Typography variant="bpHeading4">
         You haven't published a block yet
       </Typography>
-      {shouldAllowBlockPublishing && (
+      {shouldAllowNpmBlockPublishing && (
         <LinkButton sx={{ mt: 4 }} size="small" squared href="/blocks/publish">
           Publish a block
         </LinkButton>

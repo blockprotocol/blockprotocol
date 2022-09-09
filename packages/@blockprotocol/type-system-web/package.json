@@ -16,11 +16,15 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "@local/eslint-config": "*",
+    "@local/eslint-config": "0.0.0-private",
     "eslint": "8.23.0",
     "fix:eslint": "eslint --fix \"**/*\"",
     "lint:eslint": "eslint \"**/*\"",
     "lint:tsc": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@local/tsconfig": "0.0.0-private",
+    "typescript": "4.8.2"
   },
   "collaborators": [
     "HASH"

@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/hook",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Implementation of the Block Protocol Hook service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -52,10 +52,11 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.10"
+    "@blockprotocol/core": "0.0.11"
   },
   "devDependencies": {
-    "@local/eslint-config": "*",
+    "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
     "eslint": "8.23.0",
     "rimraf": "^3.0.2",
     "typescript": "4.8.2"

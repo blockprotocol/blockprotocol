@@ -167,7 +167,7 @@ export const markBlockScripts = (container: HTMLElement, url: URL | string) => {
         let nextSource = prevSource;
 
         nextSource += html.substring(
-          idx === 0 ? 0 : relevantImports[idx - 1].se,
+          idx === 0 ? 0 : relevantImports[idx - 1]!.se,
           imp.ss,
         );
 

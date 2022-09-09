@@ -5,7 +5,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 import { FunctionComponent } from "react";
 
 import { EntityType } from "../../../lib/api/model/entity-type.model";
@@ -37,9 +37,7 @@ export const UserPageComponent: FunctionComponent<UserPageProps> = ({
 
   return (
     <>
-      <Head>
-        <title>{user.shortname}</title>
-      </Head>
+      <NextSeo title={user.shortname} />
       <Divider
         sx={{
           borderColor: ({ palette }) => palette.gray[20],

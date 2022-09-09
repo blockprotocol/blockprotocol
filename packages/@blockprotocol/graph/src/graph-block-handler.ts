@@ -68,6 +68,20 @@ export class GraphBlockHandler
     return {};
   }
 
+  /**
+   * Registers multiple callbacks at once.
+   * Useful for bulk updates to callbacks after the service is first initialised.
+   */
+  registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
+    super.registerCallbacks(callbacks);
+  }
+
+  /**
+   * Call the provided function when the named message is received, passing the data/errors object from the message.
+   * If the named message expects a response, the callback should provide the expected data/errors object as the return.
+   * @param messageName the message name to listen for
+   * @param handlerFunction the function to call when the message is received, with the message data / errors
+   */
   on<K extends keyof BlockGraphMessageCallbacks>(
     this: GraphBlockHandler,
     messageName: K,

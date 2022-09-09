@@ -65,7 +65,14 @@ const DevApp: FunctionComponent = () => {
 
   return (
     <>
-      <div style={{ position: "absolute", right: 16, top: 16, zIndex: 100 }}>
+      <div
+        style={{
+          position: "absolute",
+          right: 40,
+          top: 60,
+          zIndex: 1,
+        }}
+      >
         <label>
           <span style={{ fontSize: 14, marginRight: 8 }}>
             Select test block
@@ -85,9 +92,11 @@ const DevApp: FunctionComponent = () => {
       </div>
 
       <MockBlockDock
-        debug
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
+        blockName="Test Block"
+        debug
+        key={testBlockType} // completely reset the state when block type has changed
       />
     </>
   );

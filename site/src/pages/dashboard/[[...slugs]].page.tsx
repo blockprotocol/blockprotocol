@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
 
 import { CreateSchemaModal } from "../../components/modal/create-schema-modal";
@@ -45,9 +45,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
 
   return (
     <>
-      <Head>
-        <title>Block Protocol - Dashboard</title>
-      </Head>
+      <NextSeo title="Block Protocol - Dashboard" />
 
       <TopNavigationTabs />
 
