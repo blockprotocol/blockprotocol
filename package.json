@@ -44,13 +44,13 @@
     ]
   },
   "resolutions": {
-    "@types/react": "^18.0.0"
+    "@types/react": "^18.0.15"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",
     "@changesets/cli": "^2.24.4",
     "@local/eslint-config": "0.0.0-private",
-    "check-dependency-version-consistency": "2.0.0",
+    "check-dependency-version-consistency": "3.0.1",
     "dotenv-flow": "3.2.0",
     "eslint": "8.22.0",
     "husky": "7.0.4",
