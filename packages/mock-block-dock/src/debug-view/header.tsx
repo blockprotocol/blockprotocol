@@ -110,7 +110,11 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
         </Typography>
       </Box>
 
-      <Button href="https://blockprotocol.org/docs" sx={{ mr: 1 }}>
+      <Button
+        href="https://blockprotocol.org/docs"
+        sx={{ mr: 1 }}
+        target="_blank"
+      >
         Docs
       </Button>
 
