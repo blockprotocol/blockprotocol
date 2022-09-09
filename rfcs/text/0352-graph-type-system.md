@@ -1662,7 +1662,7 @@ Assuming that:
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/written-by": {}
+    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
   }
 }
 ```
@@ -1688,7 +1688,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/blurb": "brulb"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1749,8 +1749,8 @@ The `Building` Entity Type could contain a `Located At` link, and a `Tenant` lin
   "title": "Bulding",
   "properties": {},
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/located-at": {},
-    "https://blockprotocol.org/types/@alice/property-type/tenant": {}
+    "https://blockprotocol.org/types/@alice/link-type/located-at": {},
+    "https://blockprotocol.org/types/@alice/link-type/tenant": {}
   }
 }
 ```
@@ -1779,8 +1779,8 @@ This would accept Entity instances with the following shape
   {
     "entityId": 115,
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/located-at": 113, // referring to the UK Address entity ID
-      "https://blockprotocol.org/types/@alice/property-type/tenant": 114 // referring to the Organization entity ID
+      "https://blockprotocol.org/types/@alice/link-type/located-at": 113, // referring to the UK Address entity ID
+      "https://blockprotocol.org/types/@alice/link-type/tenant": 114 // referring to the Organization entity ID
     }
   }
 ]
@@ -1816,10 +1816,10 @@ Assuming that:
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/written-by": {}
+    "https://blockprotocol.org/types/@alice/link-type/written-by": {}
   },
   "requiredLinks": [
-    "https://blockprotocol.org/types/@alice/property-type/written-by"
+    "https://blockprotocol.org/types/@alice/link-type/written-by"
   ]
 }
 ```
@@ -1845,7 +1845,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/blurb": ...
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/written-by": 111 // referring to the Person entity ID
+      "https://blockprotocol.org/types/@alice/link-type/written-by": 111 // referring to the Person entity ID
     }
   }
 ]
@@ -1872,7 +1872,7 @@ The `Person` Entity Type could contain some Property Types, and multiple `Friend
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/friend-of": {
+    "https://blockprotocol.org/types/@alice/link-type/friend-of": {
       "type": "array",
       "ordered": false
     }
@@ -1903,9 +1903,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/name": "Charlie"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/friend-of": [
-        211, 212
-      ] // referring to the Person entity IDs, where the array ordering is unstable
+      "https://blockprotocol.org/types/@alice/link-type/friend-of": [211, 212] // referring to the Person entity IDs, where the array ordering is unstable
     }
   }
 ]
@@ -1931,7 +1929,7 @@ The `Playlist` Entity Type could contain some Property Types, and an _ordered_ l
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/contains": {
+    "https://blockprotocol.org/types/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -1985,7 +1983,7 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/name": "Favorite Songs"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/contains": [
+      "https://blockprotocol.org/types/@alice/link-type/contains": [
         312, 314, 313
       ] // referring to the song entity IDs, ordering is intentional and stable
     }
@@ -2009,8 +2007,8 @@ The `Page` Entity Type could contain some Property Types, a `Written By` link, a
     }
   },
   "links": {
-    "https://blockprotocol.org/types/@alice/property-type/written-by": {},
-    "https://blockprotocol.org/types/@alice/property-type/contains": {
+    "https://blockprotocol.org/types/@alice/link-type/written-by": {},
+    "https://blockprotocol.org/types/@alice/link-type/contains": {
       "type": "array",
       "ordered": true
     }
@@ -2059,8 +2057,8 @@ This would accept Entity instances with the following shape
       "https://blockprotocol.org/types/@alice/property-type/name": "Lorum Ipsum"
     },
     "links": {
-      "https://blockprotocol.org/types/@alice/property-type/written-by": 319, // referring to the User entity ID
-      "https://blockprotocol.org/types/@alice/property-type/contains": [
+      "https://blockprotocol.org/types/@alice/link-type/written-by": 319, // referring to the User entity ID
+      "https://blockprotocol.org/types/@alice/link-type/contains": [
         317, 316, 318
       ] // referring to IDs above, ordering is intentional and stable
     }
@@ -2439,7 +2437,7 @@ In the proposed system, Block Schemas are analogous to Entity Types. A Block Sch
   },
   "links": {
     // Employer
-    "https://blockprotocol.org/types/@alice/property-type/company": {}
+    "https://blockprotocol.org/types/@alice/link-type/company": {}
   }
 }
 ```
