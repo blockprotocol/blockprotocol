@@ -57,6 +57,7 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
       sx={{
         whiteSpace: "nowrap",
         cursor: "pointer",
+        userSelect: "none",
       }}
     >
       <Cell>[{log.timestamp}]</Cell>
