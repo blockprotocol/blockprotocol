@@ -5,10 +5,12 @@ import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 
 import { commandLookup } from "./cli/commands.js";
+import { run as printHelp } from "./cli/commands/help.js";
 import { printSpacer } from "./cli/print-spacer.js";
 
-const availableCommands = Object.keys(commandLookup);
-
+/**
+ * @param {string} errorMessage
+ */
 const printErrorMessage = (errorMessage) => {
   console.log(chalk.red(`${errorMessage}. Please check usage.`));
   printSpacer();
@@ -17,22 +19,26 @@ const printErrorMessage = (errorMessage) => {
 (async () => {
   // parse the first argument - the command
   const { _unknown: optionsArgv, command } = commandLineArgs(
-    {
-      name: "command",
-      defaultOption: true,
-    },
+    [
+      {
+        name: "command",
+        defaultOption: true,
+      },
+    ],
     {
       stopAtFirstUnknown: true,
     },
   );
 
   // print help for the CLI if requested or if the command is unknown
-  const printHelp = commandLookup.help.run;
   if (command === "help" || !command) {
     printHelp();
     process.exit();
   }
-  if (!availableCommands.includes(command)) {
+
+  const foundCommand = commandLookup[command];
+
+  if (!foundCommand) {
     printHelp();
     printErrorMessage(`Unknown command '${command ?? ""}'`);
     process.exit();
@@ -40,7 +46,7 @@ const printErrorMessage = (errorMessage) => {
 
   // parse the remaining arguments – the options
   const { _unknown: unknownOption, ...options } = commandLineArgs(
-    commandLookup[command].options,
+    foundCommand.options ?? [],
     {
       argv: optionsArgv ?? [],
       stopAtFirstUnknown: true,
@@ -48,7 +54,7 @@ const printErrorMessage = (errorMessage) => {
   );
 
   // print help for the given command if requested or usage is incorrect
-  const commandManual = commandLineUsage(commandLookup[command].manual);
+  const commandManual = commandLineUsage(foundCommand.manual ?? []);
   if (options.help) {
     console.log(commandManual);
     process.exit();
@@ -60,5 +66,5 @@ const printErrorMessage = (errorMessage) => {
   }
 
   // execute the requested command with the given options, if any
-  commandLookup[command].run(options);
+  foundCommand.run(options);
 })();
