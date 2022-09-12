@@ -62,7 +62,7 @@ export const App: BlockComponent<BlockEntityProperties> = ({
   const blockRootRef = useRef<HTMLDivElement>(null);
   const { graphService } = useGraphBlockService(blockRootRef);
 
-  /**  */
+  /** Here we extract the 'name' property from the blockEntity's properties ("object destructuring") */
   const { name } = properties;
 
   return (
