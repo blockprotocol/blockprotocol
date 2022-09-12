@@ -6,12 +6,11 @@ import {
   LinkedAggregationDefinition,
   UploadFileReturn,
 } from "@blockprotocol/graph";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
-import { usePrevious } from "../use-previous";
+import { useDefaultState } from "../use-default-state";
 import { filterAndSortEntitiesOrTypes } from "../util";
-import { useDefaultArrayState } from "./use-default-array-state";
 
 export type MockData = {
   entities: Entity[];
@@ -22,8 +21,6 @@ export type MockData = {
 
 type MockDataStore = MockData & {
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
-  blockEntity: Entity;
-  setBlockEntity: Dispatch<SetStateAction<Entity>>;
 };
 
 const readonlyErrorReturn: {
@@ -37,46 +34,27 @@ const readonlyErrorReturn: {
   ],
 };
 
-/** default entityId assigned to the block entity if the block entity doesn't have one */
-export const defaultBlockEntityId = "block1";
-
-/** default entityTypeId assigned to the block entity if the block entity doesn't have one */
-export const defaultBlockEntityTypeId = "block-type-1";
-
-const defaultBlockEntity = {
-  entityId: "block1",
-  entityTypeId: "block-type-1",
-  properties: {},
-};
-
-export const useMockDatastore = ({
-  initialData,
-  readonly,
-  externalBlockEntity,
-  blockSchema,
-}: {
-  initialData: MockData;
-  readonly?: boolean;
-  externalBlockEntity?: Entity;
-  blockSchema?: Partial<EntityType>;
-}): MockDataStore => {
-  const [entities, setEntities] = useDefaultArrayState<
-    MockDataStore["entities"]
-  >(initialData.entities);
-  const [entityTypes, setEntityTypes] = useDefaultArrayState<
+export const useMockDatastore = (
+  initialData: MockData = {
+    entities: [],
+    links: [],
+    linkedAggregationDefinitions: [],
+    entityTypes: [],
+  },
+  readonly?: boolean,
+): MockDataStore => {
+  const [entities, setEntities] = useDefaultState<MockDataStore["entities"]>(
+    initialData.entities,
+  );
+  const [entityTypes, setEntityTypes] = useDefaultState<
     MockDataStore["entityTypes"]
   >(initialData.entityTypes);
-  const [links, setLinks] = useDefaultArrayState<MockDataStore["links"]>(
+  const [links, setLinks] = useDefaultState<MockDataStore["links"]>(
     initialData.links,
   );
-  const [linkedAggregations, setLinkedAggregations] = useDefaultArrayState<
+  const [linkedAggregations, setLinkedAggregations] = useDefaultState<
     MockDataStore["linkedAggregationDefinitions"]
   >(initialData.linkedAggregationDefinitions);
-  const [blockEntity, setBlockEntity] = useState<Entity>(
-    externalBlockEntity ?? defaultBlockEntity,
-  );
-  const prevExternalBlockEntity = usePrevious(externalBlockEntity);
-  const prevBlockSchema = usePrevious(blockSchema);
 
   const aggregateEntityTypes: EmbedderGraphMessageCallbacks["aggregateEntityTypes"] =
     useCallback(
@@ -840,110 +818,9 @@ export const useMockDatastore = ({
     [createEntity, readonly],
   );
 
-  const updateStore = (newExternalBlockEntity: Entity) => {
-    const newEntityTypes = [...entityTypes];
-    const entityTypeId =
-      newExternalBlockEntity?.entityTypeId ?? defaultBlockEntityTypeId;
-    const entityId = newExternalBlockEntity?.entityId ?? defaultBlockEntityId;
-
-    const entityTypeInStore = newEntityTypes.find(
-      (entityType) => entityType.entityTypeId === entityTypeId,
-    );
-
-    if (entityTypeInStore) {
-      // If block schema changed, update entity type
-      if (JSON.stringify(blockSchema) !== JSON.stringify(prevBlockSchema)) {
-        Object.assign(entityTypeInStore.schema, blockSchema ?? {});
-        setEntityTypes(newEntityTypes);
-      }
-    } else {
-      // Create a new entity type if the block's entityTypeId isn't in datastore
-      const newBlockEntityType: EntityType = {
-        entityTypeId,
-        schema: {
-          title: "BlockType",
-          type: "object",
-          $schema: "https://json-schema.org/draft/2019-09/schema",
-          $id: `http://localhost/${entityTypeId}`,
-          ...(blockSchema ?? {}),
-        },
-      };
-      setEntityTypes([newBlockEntityType, ...entityTypes]);
-    }
-
-    const newEntities = [...entities];
-    const entityInStore = newEntities.find(
-      (entity) =>
-        entity.entityId === newExternalBlockEntity.entityId &&
-        entity.entityTypeId === newExternalBlockEntity.entityTypeId,
-    );
-
-    if (entityInStore) {
-      // if block entity exists in store and there was no change, do nothing
-      if (
-        JSON.stringify(entityInStore.properties) ===
-        JSON.stringify(newExternalBlockEntity.properties)
-      ) {
-        return;
-      }
-
-      // If the block entity already exists in the store, and
-      // was changed, update what was changed
-      Object.assign(
-        entityInStore.properties,
-        newExternalBlockEntity.properties,
-      );
-      setEntities(newEntities);
-      setBlockEntity(entityInStore);
-    } else {
-      const newBlockEntity = {
-        entityId,
-        entityTypeId,
-        properties: {},
-      };
-
-      if (blockEntity && Object.keys(blockEntity).length > 0) {
-        Object.assign(newBlockEntity.properties, blockEntity.properties);
-      }
-
-      setEntities([newBlockEntity, ...entities]);
-      setBlockEntity(newBlockEntity);
-    }
-  };
-
-  // Update datastore if block isn't in datastore
-  if (
-    !entities.find(
-      (entity) =>
-        entity.entityId === blockEntity.entityId &&
-        entity.entityTypeId === blockEntity.entityTypeId,
-    ) &&
-    [blockEntity.entityId, blockEntity.entityTypeId].every((key) => !!key)
-  ) {
-    updateStore(blockEntity);
-  }
-
-  if (
-    externalBlockEntity !== prevExternalBlockEntity &&
-    JSON.stringify(blockEntity) !== JSON.stringify(externalBlockEntity)
-  ) {
-    const entity = externalBlockEntity ?? ({} as Entity);
-    // This handles scenarios where the passed in block entity doesn't have an
-    // entityId or entityTypeId
-    if (!entity.entityId) {
-      entity.entityId = defaultBlockEntityId;
-    }
-    if (!entity.entityTypeId) {
-      entity.entityTypeId = defaultBlockEntityTypeId;
-    }
-    setBlockEntity(entity);
-  }
-
   return {
     entities,
     entityTypes,
-    blockEntity,
-    setBlockEntity,
     graphServiceCallbacks: {
       aggregateEntities,
       aggregateEntityTypes,

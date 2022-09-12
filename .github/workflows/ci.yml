@@ -17,8 +17,28 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 ## Needed for Changesets to find `main` branch
+
+        ## https://github.com/changesets/changesets/issues/517
+      - name: Create git reference to main branch (for Changesets)
+        if: ${{ github.event.pull_request.title != 'Version Packages' }}
+        run: git pull --force --no-tags origin main:main
 
       - uses: ./.github/actions/warm-up-repo
+
+      - name: Run yarn lint:changeset
+        if: ${{ (success() || failure()) && github.event.pull_request.title != 'Version Packages' }}
+        run: |
+          if ! yarn lint:changeset; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Please fix the above errors locally for the check to pass.'
+            echo 'If you don’t see them, try merging target branch into yours.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
 
       - name: Run yarn lint:dependency-version-consistency
         if: ${{ success() || failure() }}
@@ -151,18 +171,18 @@ jobs:
           yarn wait-on --timeout 30000 http://localhost:4873
 
       - name: Publish NPM packages to local registry
-        run: yarn exe scripts/packages/publish-to-local-registry.ts
+        run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
 
       - name: e2e-test create-block-app (default template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/default
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
       - name: e2e-test create-block-app (custom-element template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/custom-element
           BLOCK_TEMPLATE: custom-element
@@ -170,7 +190,7 @@ jobs:
 
       - name: e2e-test create-block-app (html template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/html
           BLOCK_TEMPLATE: html
@@ -178,7 +198,7 @@ jobs:
 
       - name: e2e-test create-block-app (react template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/react
           BLOCK_TEMPLATE: react
@@ -186,7 +206,7 @@ jobs:
 
       - name: e2e-test create-block-app (unknown template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/unknown
           BLOCK_TEMPLATE: unknown

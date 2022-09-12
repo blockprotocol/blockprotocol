@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { useForm } from "react-hook-form";
 
 import { Button } from "../../../components/button";
@@ -50,9 +50,7 @@ const PublishFromNPMPage: AuthWallPageContent = ({ user }) => {
 
   return (
     <>
-      <Head>
-        <title>Block Protocol – Publish Block</title>
-      </Head>
+      <NextSeo title="Block Protocol – Publish Block" />
 
       <TopNavigationTabs />
 

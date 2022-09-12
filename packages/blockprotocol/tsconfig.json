@@ -1,11 +1,4 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "noEmit": true,
-    "lib": ["dom", "dom.iterable", "esnext"]
-  },
-  "include": ["*.js", "*.ts"],
-  "exclude": ["node_modules"]
+  // DOM is needed for node-fetch lib-checking
+  "extends": "@local/tsconfig/dom.json"
 }

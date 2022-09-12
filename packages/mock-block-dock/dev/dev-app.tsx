@@ -117,7 +117,6 @@ const DevApp: FunctionComponent = () => {
       </div>
 
       <MockBlockDock
-        debug
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
         blockInfo={{
@@ -130,7 +129,8 @@ const DevApp: FunctionComponent = () => {
           icon: "public/icon.svg",
           image: "public/image",
         }}
-        key={testBlockType} // reset state when we switch block types to re-initialize graph service
+        debug
+        key={testBlockType} // completely reset the state when block type has changed
       />
     </>
   );

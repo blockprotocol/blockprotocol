@@ -11,7 +11,7 @@ const NUMBER_OF_ENTITIES_TO_CREATE = Math.min(
 
 const createPerson = (entityId: number): Entity => {
   const now = new Date();
-  const name = personNames[entityId];
+  const name = personNames[entityId] ?? "Unknown Person";
   return {
     entityId: `person-${entityId.toString()}`,
     entityTypeId: "Person",

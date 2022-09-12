@@ -1,10 +1,11 @@
 {
   "name": "@local/eslint-config",
-  "version": "0.0.0",
+  "version": "0.0.0-private",
   "private": true,
   "main": "index.js",
   "dependencies": {
     "@babel/eslint-parser": "7.17.0",
+    "@babel/preset-react": "^7.16.7",
     "@typescript-eslint/eslint-plugin": "5.35.1",
     "@typescript-eslint/parser": "5.35.1",
     "eslint": "8.22.0",

@@ -7,9 +7,10 @@ import {
   LinkedAggregation,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useMemo, useState } from "react";
 
 import { mockData as initialMockData } from "./data";
+import { useDefaultState } from "./use-default-state";
 import { useLinkFields } from "./use-mock-block-props/use-link-fields";
 import {
   MockData,
@@ -17,7 +18,7 @@ import {
 } from "./use-mock-block-props/use-mock-datastore";
 import { usePrevious } from "./use-previous";
 
-type MockBlockHookArgs = {
+export type MockBlockHookArgs = {
   blockEntity?: Entity;
   blockSchema?: Partial<EntityType>;
   initialEntities?: Entity[];
@@ -25,9 +26,10 @@ type MockBlockHookArgs = {
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly: boolean;
+  debug: boolean;
 };
 
-type MockBlockHookResult = {
+export type MockBlockHookResult = {
   blockEntity: Entity;
   blockGraph: BlockGraph;
   blockSchema?: Partial<EntityType>;
@@ -36,9 +38,11 @@ type MockBlockHookResult = {
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
   linkedAggregations: LinkedAggregation[];
   readonly: boolean;
-  setBlockEntity: Dispatch<SetStateAction<Entity>>;
+  debugMode: boolean;
   setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
+  setBlockEntity: Dispatch<SetStateAction<Entity>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
+  setDebugMode: Dispatch<SetStateAction<boolean>>;
 };
 
 /**
@@ -60,43 +64,95 @@ export const useMockBlockProps = ({
   initialLinks,
   initialLinkedAggregations,
   readonly: externalReadonly,
+  debug: externalDebug,
 }: MockBlockHookArgs): MockBlockHookResult => {
-  const [blockSchema, setBlockSchema] = useState<Partial<EntityType>>(
+  const [blockEntity, setBlockEntity] = useDefaultState<Entity>(
+    externalBlockEntity!,
+  );
+  const [blockSchema, setBlockSchema] = useDefaultState<Partial<EntityType>>(
     externalBlockSchema!,
   );
   const [readonly, setReadonly] = useState<boolean>(externalReadonly);
+  const [debugMode, setDebugMode] = useState<boolean>(externalDebug);
 
   const prevExternalReadonly = usePrevious(externalReadonly);
+  const prevExternalDebug = usePrevious(externalDebug);
 
-  const getDefaultMockData = () => {
-    return {
-      entities: initialEntities ?? initialMockData.entities,
-      entityTypes: initialEntityTypes ?? initialMockData.entityTypes,
+  const { initialBlockEntity, mockData } = useMemo((): {
+    initialBlockEntity: Entity;
+    mockData: MockData;
+  } => {
+    const entityTypeId = blockEntity?.entityTypeId ?? "block-type-1";
+
+    const blockEntityType: EntityType = {
+      entityTypeId,
+      schema: {
+        title: "BlockType",
+        type: "object",
+        $schema: "https://json-schema.org/draft/2019-09/schema",
+        $id: "http://localhost/blockType1",
+        ...(blockSchema ?? {}),
+      },
+    };
+
+    const newBlockEntity: Entity = {
+      entityId: "block1",
+      entityTypeId,
+      properties: {},
+    };
+
+    if (blockEntity && Object.keys(blockEntity).length > 0) {
+      Object.assign(newBlockEntity, blockEntity);
+    }
+
+    const nextMockData: MockData = {
+      entities: [
+        newBlockEntity,
+        ...(initialEntities ?? initialMockData.entities),
+      ],
+      entityTypes: [
+        blockEntityType,
+        ...(initialEntityTypes ?? initialMockData.entityTypes),
+      ],
       links: initialLinks ?? initialMockData.links,
       linkedAggregationDefinitions:
         initialLinkedAggregations ??
         initialMockData.linkedAggregationDefinitions,
     };
-  };
 
-  const datastore = useMockDatastore({
-    initialData: getDefaultMockData(),
-    readonly,
-    externalBlockEntity,
+    return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
+  }, [
+    blockEntity,
     blockSchema,
-  });
+    initialEntities,
+    initialEntityTypes,
+    initialLinks,
+    initialLinkedAggregations,
+  ]);
+
+  const datastore = useMockDatastore(mockData, readonly);
 
   const {
     entities,
     entityTypes,
-    blockEntity,
-    setBlockEntity,
     graphServiceCallbacks,
     links,
     linkedAggregationDefinitions,
   } = datastore;
 
-  if (!blockEntity) {
+  const latestBlockEntity = useMemo(() => {
+    return (
+      entities.find(
+        (entity) => entity.entityId === initialBlockEntity.entityId,
+      ) ??
+      // fallback in case the entityId of the wrapped component is updated by updating its props
+      mockData.entities.find(
+        (entity) => entity.entityId === initialBlockEntity.entityId,
+      )
+    );
+  }, [entities, initialBlockEntity.entityId, mockData.entities]);
+
+  if (!latestBlockEntity) {
     throw new Error("Cannot find block entity. Did it delete itself?");
   }
 
@@ -105,8 +161,22 @@ export const useMockBlockProps = ({
     entities,
     links,
     linkedAggregationDefinitions,
-    startingEntity: blockEntity,
+    startingEntity: latestBlockEntity,
   });
+
+  // @todo we don't do anything with this type except check it exists - do we need to do this?
+  const latestBlockEntityType = useMemo(
+    () =>
+      entityTypes.find(
+        (entityType) =>
+          entityType.entityTypeId === latestBlockEntity.entityTypeId,
+      ),
+    [entityTypes, latestBlockEntity.entityTypeId],
+  );
+
+  if (!latestBlockEntityType) {
+    throw new Error("Cannot find block entity type. Has it been deleted?");
+  }
 
   if (
     externalReadonly !== prevExternalReadonly &&
@@ -115,17 +185,23 @@ export const useMockBlockProps = ({
     setReadonly(externalReadonly);
   }
 
+  if (externalDebug !== prevExternalDebug && debugMode !== externalDebug) {
+    setDebugMode(externalDebug);
+  }
+
   return {
-    blockEntity,
+    blockEntity: latestBlockEntity,
     blockGraph,
-    blockSchema,
     datastore,
     entityTypes,
-    graphServiceCallbacks,
     linkedAggregations,
+    graphServiceCallbacks,
+    blockSchema,
     readonly,
     setBlockSchema,
     setBlockEntity,
     setReadonly,
+    debugMode,
+    setDebugMode,
   };
 };

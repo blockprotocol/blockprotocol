@@ -1,7 +1,7 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "../../components/icons";
@@ -18,7 +18,7 @@ import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigati
 import { BlockListItem } from "../../components/pages/user/block-list-item";
 import { apiClient } from "../../lib/api-client";
 import { ExpandedBlockMetadata } from "../../lib/blocks";
-import { shouldAllowBlockPublishing } from "../../lib/config";
+import { shouldAllowNpmBlockPublishing } from "../../lib/config";
 
 const BlocksPage: AuthWallPageContent = ({ user }) => {
   const router = useRouter();
@@ -62,16 +62,14 @@ const BlocksPage: AuthWallPageContent = ({ user }) => {
 
   return (
     <>
-      <Head>
-        <title>Block Protocol – Published Blocks</title>
-      </Head>
+      <NextSeo title="Block Protocol – Published Blocks" />
 
       <TopNavigationTabs />
 
       <PageContainer>
         <Box display="flex" alignItems="center" gap={2} flexWrap="wrap" mb={4}>
           <Typography variant="bpHeading2">Published Blocks</Typography>
-          {shouldAllowBlockPublishing && (
+          {shouldAllowNpmBlockPublishing && (
             <LinkButton
               startIcon={<FontAwesomeIcon icon={faPlus} />}
               size="small"

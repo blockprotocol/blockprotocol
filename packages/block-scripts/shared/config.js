@@ -4,7 +4,7 @@ import { blockPackageJsonPath, packageJsonDirPath } from "./paths.js";
 
 export const extractScriptConfig = () => {
   try {
-    return JSON.parse(process.env.SCRIPT_CONFIG);
+    return JSON.parse(process.env.SCRIPT_CONFIG || "{}");
   } catch {
     return {};
   }

@@ -1,5 +1,29 @@
 # mock-block-dock
 
+## 0.0.25
+
+### Patch Changes
+
+- [#576](https://github.com/blockprotocol/blockprotocol/pull/576) [`853a00d`](https://github.com/blockprotocol/blockprotocol/commit/853a00df8468b277b8a7f73e2242d686fedc5b3d) Thanks [@CiaranMn](https://github.com/CiaranMn)! - expose registerCallbacks to users for bulk callback updating
+
+- [#577](https://github.com/blockprotocol/blockprotocol/pull/577) [`d9f6dca`](https://github.com/blockprotocol/blockprotocol/commit/d9f6dca9902867fdde9c2ad0ee93ed80889b12bc) Thanks [@kachkaev](https://github.com/kachkaev)! - Change TypeScript config and rebuild
+
+- Updated dependencies [[`853a00d`](https://github.com/blockprotocol/blockprotocol/commit/853a00df8468b277b8a7f73e2242d686fedc5b3d), [`d9f6dca`](https://github.com/blockprotocol/blockprotocol/commit/d9f6dca9902867fdde9c2ad0ee93ed80889b12bc)]:
+  - @blockprotocol/core@0.0.11
+  - @blockprotocol/graph@0.0.15
+
+## 0.0.24
+
+### Patch Changes
+
+- [#571](https://github.com/blockprotocol/blockprotocol/pull/571) [`ab57059`](https://github.com/blockprotocol/blockprotocol/commit/ab5705954b7f245b80592a97b20440930633a140) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix responding to changes in initial props. move readonly toggle. option to disable debug toggle
+
+## 0.0.23
+
+### Patch Changes
+
+- [#567](https://github.com/blockprotocol/blockprotocol/pull/567) [`b8fa9fa`](https://github.com/blockprotocol/blockprotocol/commit/b8fa9fa06a632acaf388f1c654613342f6845286) Thanks [@kachkaev](https://github.com/kachkaev)! - Remove `lodash` dependency to reduce bundle size
+
 ## 0.0.22
 
 ### Patch Changes

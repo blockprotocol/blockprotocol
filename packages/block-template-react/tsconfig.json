@@ -4,12 +4,12 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "commonjs",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "strict": true,
     "target": "es6",
     "resolveJsonModule": true
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src"]
 }
