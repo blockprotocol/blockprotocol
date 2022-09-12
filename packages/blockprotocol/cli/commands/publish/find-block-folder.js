@@ -9,7 +9,7 @@ import { findProjectRoot } from "./shared/find-project-root.js";
  * Attempts to find block's distribution files
  * by searching for block-metadata.json with the following strategy:
  * 1. Look in the current working directory and its subfolders
- * 2. If none found, search up for a folder containing package.json, adn then search within
+ * 2. If none found, search up for a folder containing package.json, and then search within
  *
  * If multiple block-metadata.json are found, a path containing 'dist' is preferred
  * This is to accommodate templates where block-metadata.json is found both in the root
@@ -26,18 +26,16 @@ export const findBlockFolder = async () => {
 
   if (!metadataJsonPaths) {
     const projectRootPath = await findProjectRoot();
-    if (!projectRootPath) {
-      return;
+    if (projectRootPath) {
+      metadataJsonPaths = await globby("**/block-metadata.json", {
+        absolute: true,
+        cwd: projectRootPath,
+        caseSensitiveMatch: false,
+      });
     }
-
-    metadataJsonPaths = await globby("**/block-metadata.json", {
-      absolute: true,
-      cwd: projectRootPath,
-      caseSensitiveMatch: false,
-    });
   }
 
-  if (!metadataJsonPaths?.length) {
+  if (!metadataJsonPaths[0]) {
     console.log(chalk.red("Could not find block folder"));
     console.log(
       "We look for 'block-metadata.json' in the current working directory, then from the project root. Does it exist?",
