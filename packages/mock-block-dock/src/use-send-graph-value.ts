@@ -22,19 +22,18 @@ export const useSendGraphValue = ({
   value,
   valueName,
 }: UseSendGraphValueArgs) => {
-  const sentOnce = useRef(false);
-  const previousValue = usePrevious(value);
+  const sentValue = useRef(value);
+  const sentInitially = useRef(false);
 
   useEffect(() => {
     if (
       graphService &&
-      (!sentOnce.current ||
-        JSON.stringify(value) !== JSON.stringify(previousValue))
+      (!sentInitially.current ||
+        JSON.stringify(value) !== JSON.stringify(sentValue.current))
     ) {
       graphService[valueName](value as any); // @todo how to maintain the union GraphValue is initially set to?
-      if (!sentOnce.current) {
-        sentOnce.current = true;
-      }
+      sentInitially.current = true;
+      sentValue.current = value;
     }
-  }, [graphService, previousValue, value, valueName]);
+  }, [graphService, value, valueName]);
 };
