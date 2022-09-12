@@ -28,21 +28,23 @@ type LogItemProps = {
 
 const Cell = ({
   children,
-  sx,
+  sx = [],
 }: {
   children: ReactNode;
-  sx?: (theme: Theme) => any;
+  sx?: SxProps<Theme>;
 }) => (
   <TableCell
-    sx={(args) => ({
-      fontFamily: "Mono, monospace",
-      border: "none",
-      paddingBottom: 1.5,
-      paddingTop: 0,
-      paddingRight: 2,
-      paddingLeft: 0,
-      ...(sx?.(args) ?? {}),
-    })}
+    sx={[
+      {
+        fontFamily: "Mono, monospace",
+        border: "none",
+        paddingBottom: 1.5,
+        paddingTop: 0,
+        paddingRight: 2,
+        paddingLeft: 0,
+      },
+      ...(Array.isArray(sx) ? sx : [sx])
+    ]}
   >
     {children}
   </TableCell>
