@@ -7,9 +7,9 @@
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
     "strict": true,
     "target": "es6",
-    "resolveJsonModule": true
   },
   "include": ["src"]
 }
