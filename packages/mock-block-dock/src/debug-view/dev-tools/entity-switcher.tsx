@@ -13,9 +13,10 @@ import { JsonView } from "./json-view";
 
 export const EntitySwitcher = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { blockEntity, setBlockEntity, datastore } = useMockBlockDockContext();
+  const { blockEntity, setEntityIdOfEntityForBlock, datastore } =
+    useMockBlockDockContext();
   const [entityTypeId, setEntityTypeId] = useState(blockEntity.entityTypeId);
-  const [entityId, setEntityId] = useState<string | undefined>(
+  const [entityId, setEntityIdOfBlo] = useState<string | undefined>(
     blockEntity.entityId,
   );
 
@@ -34,7 +35,7 @@ export const EntitySwitcher = () => {
 
   const handleSubmit = () => {
     if (selectedEntity) {
-      setBlockEntity(selectedEntity);
+      setEntityIdOfEntityForBlock(selectedEntity.entityId);
     }
     closePopover();
   };
@@ -89,7 +90,7 @@ export const EntitySwitcher = () => {
               value={entityTypeId}
               onChange={(event) => {
                 if (event.target.value !== entityTypeId) {
-                  setEntityId(undefined);
+                  setEntityIdOfBlo(undefined);
                 }
                 setEntityTypeId(event.target.value);
               }}
@@ -119,7 +120,7 @@ export const EntitySwitcher = () => {
               value={entityId}
               placeholder="Select Entity"
               onChange={(event) => {
-                setEntityId(event.target.value);
+                setEntityIdOfBlo(event.target.value);
               }}
               sx={{
                 mb: 2,

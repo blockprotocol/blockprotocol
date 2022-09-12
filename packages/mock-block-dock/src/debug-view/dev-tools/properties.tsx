@@ -18,7 +18,7 @@ import { JsonView } from "./json-view";
 const ajv = new Ajv();
 
 export const PropertiesView = () => {
-  const { readonly, setReadonly, blockSchema, blockEntity, setBlockEntity } =
+  const { readonly, setReadonly, blockSchema, blockEntity, updateEntity } =
     useMockBlockDockContext();
 
   const validate = ajv.compile(blockSchema ?? {});
@@ -56,18 +56,30 @@ export const PropertiesView = () => {
                 sortKeys
                 src={blockEntity ?? {}}
                 onEdit={(args) => {
-                  setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>,
-                  );
+                  // These fields should not be edited
+                  if (
+                    args.name &&
+                    ["entityType", "entityTypeId", "entityId"].includes(
+                      args.name,
+                    )
+                  ) {
+                    return false;
+                  }
+                  void updateEntity({
+                    data: args.updated_src as Entity,
+                  });
                 }}
                 onAdd={(args) => {
-                  setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>,
-                  );
+                  // don't allow adding of top level fields
+                  if (args.name && !args.name.includes("properties")) {
+                    return false;
+                  }
+                  void updateEntity({
+                    data: args.updated_src as Entity,
+                  });
                 }}
                 onDelete={(args) => {
-                  // entityType,entityTypeId and entityId can be edited but should not be
-                  // deleted
+                  // These fields should not be deleted
                   if (
                     args.name &&
                     [
@@ -79,11 +91,11 @@ export const PropertiesView = () => {
                   ) {
                     return false;
                   }
-                  setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>,
-                  );
+                  void updateEntity({
+                    data: args.updated_src as Entity,
+                  });
                 }}
-                validationMessage="Not allowed"
+                validationMessage="You may only edit the properties object"
               />
               <Collapse in={!!errors?.length}>
                 {errors?.map((error) => (
@@ -100,12 +112,14 @@ export const PropertiesView = () => {
           </Box>
         </Grid>
         <Grid item xs={6}>
-          <Box>
-            <Typography variant="subtitle2" mb={1}>
-              Block Schema
-            </Typography>
-            <BlockSchemaView />
-          </Box>
+          {blockSchema && (
+            <Box>
+              <Typography variant="subtitle2" mb={1}>
+                Block Schema
+              </Typography>
+              <BlockSchemaView />
+            </Box>
+          )}
         </Grid>
       </Grid>
     </Container>

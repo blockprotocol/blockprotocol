@@ -1,5 +1,9 @@
 import { Message } from "@blockprotocol/core";
-import { Entity, EntityType } from "@blockprotocol/graph";
+import {
+  EmbedderGraphMessageCallbacks,
+  Entity,
+  EntityType,
+} from "@blockprotocol/graph";
 import {
   createContext,
   Dispatch,
@@ -30,11 +34,11 @@ type MockBlockDockInfo = {
   debugMode: boolean;
   logs: Message[];
   readonly: boolean;
-  setBlockEntity: Dispatch<SetStateAction<Entity>>;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
   setDebugMode: Dispatch<SetStateAction<boolean>>;
+  setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
   setLogs: Dispatch<SetStateAction<Message[]>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
+  updateEntity: EmbedderGraphMessageCallbacks["updateEntity"];
 };
 
 const MockBlockDockContext = createContext<MockBlockDockInfo | null>(null);

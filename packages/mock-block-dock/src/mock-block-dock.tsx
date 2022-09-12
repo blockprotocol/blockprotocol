@@ -19,8 +19,8 @@ import { BlockRenderer } from "./block-renderer";
 import { DebugView } from "./debug-view";
 import { OffSwitch } from "./debug-view/icons";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
+import { useDefaultState } from "./use-default-state";
 import { useMockBlockProps } from "./use-mock-block-props";
-import { usePrevious } from "./use-previous";
 
 type BlockDefinition =
   | { ReactComponent: ComponentType<any> }
@@ -95,8 +95,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     graphServiceCallbacks,
     linkedAggregations,
     readonly,
-    setBlockSchema,
-    setBlockEntity,
+    setEntityIdOfEntityForBlock,
     setReadonly,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
@@ -108,12 +107,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     readonly: !!initialReadonly,
   });
 
-  const [debugMode, setDebugMode] = useState<boolean>(initialDebug);
-  const prevExternalDebug = usePrevious(initialDebug);
-
-  if (initialDebug !== prevExternalDebug && debugMode !== initialDebug) {
-    setDebugMode(initialDebug);
-  }
+  const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
 
   const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
     null,
@@ -225,15 +219,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   return (
     <MockBlockDockProvider
-      debugMode={debugMode}
-      setDebugMode={setDebugMode}
-      readonly={readonly}
-      setReadonly={setReadonly}
-      blockSchema={blockSchema}
-      setBlockSchema={setBlockSchema}
       blockEntity={blockEntity}
-      setBlockEntity={setBlockEntity}
-      datastore={datastore}
       blockInfo={
         blockInfo ?? {
           blockType: {
@@ -241,6 +227,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           },
         }
       }
+      blockSchema={blockSchema}
+      datastore={datastore}
+      debugMode={debugMode}
+      readonly={readonly}
+      setReadonly={setReadonly}
+      setDebugMode={setDebugMode}
+      setEntityIdOfEntityForBlock={setEntityIdOfEntityForBlock}
+      updateEntity={graphServiceCallbacks.updateEntity}
     >
       {!debugMode ? (
         <div className="mbd-non-debug-mode-wrapper">
