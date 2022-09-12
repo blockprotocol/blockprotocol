@@ -12,8 +12,11 @@ type BlockEntityProperties = {
 
 /**
  * This is the entry point for your block – the class that embedding applications will use to register your element.
- * It is a function that takes a property object (known as "props" in React) and returns an element.
  * You should update this comment to describe what your block does, or remove the comment.
+ * This uses the Lit framework as a base - @see https://lit.dev
+ * It makes two special Block Protocol properties available:
+ * 1. 'graph': contains properties representing messages sent from the embedding application to the block, e.g. 'blockEntity'
+ * 2. 'graphService': has various methods you can use to send messages to the embedding application, e.g. 'updateEntity'
  */
 export class BlockElement extends BlockElementBase<BlockEntityProperties> {
   /** @see https://lit.dev/docs/components/styles */
