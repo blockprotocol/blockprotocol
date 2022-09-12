@@ -16,9 +16,9 @@ Other templates are available. See `npx create-block-app@latest --help`
 
     - edit `dev.tsx` to give your block starting properties
 
-    - run the dev server with `yarn dev`
+    - run the dev server with `yarn dev` (or `npm run dev`)
 
-1.  When finished, run `yarn build`, which:
+1.  When finished, run `yarn build` (or `npm run build`), which:
 
     - Bundles the component, without React, into a single source file
     - Generates a JSON schema from the `BlockEntityProperties` type representing the data interface with the block.
@@ -38,6 +38,8 @@ Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-b
 for help in reading and updating data from your block.
 
 Please see [the React docs](https://reactjs.org/docs/getting-started.html) for general help with writing React components.
+
+You can format your code using `yarn format` (or `npm run format`).
 
 N.B.
 
