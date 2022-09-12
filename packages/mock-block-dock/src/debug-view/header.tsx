@@ -113,10 +113,24 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
 
       <Link
         href="https://blockprotocol.org/docs"
-        sx={{ mr: 1, textDecoration: "none" }}
+        sx={{ color: "black", mr: 2.5, textDecoration: "none" }}
         target="_blank"
       >
-        <Button>Docs</Button>
+        <Typography
+          component="span"
+          variant="subtitle2"
+          sx={({ palette }) => ({
+            color:
+              palette.mode === "light"
+                ? customColors.gray[70]
+                : customColors.gray[30],
+            "&:hover": {
+              color: palette.mode === "light" ? "black" : "white",
+            },
+          })}
+        >
+          Docs
+        </Typography>
       </Link>
 
       <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}>

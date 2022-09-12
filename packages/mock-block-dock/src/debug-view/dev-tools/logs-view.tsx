@@ -5,6 +5,7 @@ import {
   MenuItem,
   Select,
   styled,
+  SxProps,
   TableBody,
   TableCell,
   TableHead,
@@ -43,7 +44,7 @@ const Cell = ({
         paddingRight: 2,
         paddingLeft: 0,
       },
-      ...(Array.isArray(sx) ? sx : [sx])
+      ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
     {children}
@@ -188,14 +189,9 @@ export const LogsView = () => {
         </Button>
       </Box>
 
-      <Typography
-        variant="subtitle2"
-        sx={{ pl: 3, fontFamily: "Mono, monospace" }}
-      />
-
       <Box display="flex" mb={3}>
         <LogsContainer ref={logsContainerRef}>
-          <Box sx={{ fontFamily: "Mono, monospace", display: "subtitle2" }}>
+          <table>
             <TableHead>
               <TableRow>
                 <Cell>timestamp</Cell>
@@ -218,7 +214,7 @@ export const LogsView = () => {
                 />
               ))}
             </TableBody>
-          </Box>
+          </table>
         </LogsContainer>
 
         <ActiveLogsContainer>
