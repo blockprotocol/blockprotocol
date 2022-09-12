@@ -4,8 +4,6 @@ import {
 } from "@blockprotocol/graph";
 import { useEffect, useRef } from "react";
 
-import { usePrevious } from "./use-previous";
-
 type GraphValue = {
   [Key in keyof BlockGraphMessageCallbacks]: {
     valueName: Key;
