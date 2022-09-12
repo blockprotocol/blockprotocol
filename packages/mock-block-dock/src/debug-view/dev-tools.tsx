@@ -77,6 +77,7 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
         borderBottom: `1px solid ${theme.palette.divider}`,
         cursor: "ns-resize",
         position: "absolute",
+        // extend the resize handle 10px above its visible border to make it an easier click target
         top: "-10px",
         paddingBottom: "10px",
         left: 0,
