@@ -1,5 +1,5 @@
 {
-  "extends": "@local/tsconfig/dom+jsx.json",
+  "extends": "@local/tsconfig/dom.json",
   "compilerOptions": {
     "outDir": "dist"
   },

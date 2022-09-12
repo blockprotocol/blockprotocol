@@ -14,7 +14,7 @@ import { postPublishForm } from "./publish/post-form.js";
 // ********************* MANUAL ********************* //
 
 /**
- * @type {[{header: string, content: string},{optionList: [{name: string, alias: string, description: string, typeLabel: string, type: BooleanConstructor},{name: string, alias: string, description: string, type: BooleanConstructor},{name: string, alias: string, description: string, typeLabel: string, type: StringConstructor},{name: string, alias: string, description: string, typeLabel: string, type: StringConstructor},{name: string, alias: string, description: string, type: BooleanConstructor}], header: string}]}
+ * @type {[import("command-line-usage").Content, import("command-line-usage").OptionList]}
  */
 const manual = [
   {
@@ -67,20 +67,17 @@ const manual = [
 
 // ********************* OPTIONS ********************* //
 
-const optionsGuide = manual.find(({ header }) => header === "Options");
-const options = optionsGuide.optionList;
+const options = manual[1].optionList;
 
 // *********************** RUN *********************** //
 
 /**
  * Publishes to the Block Protocol hub
- * @param {object} [providedOptions]
- * @param {string} [providedOptions.path]
- * @param {boolean} [providedOptions.dry]
+ * @param {import("command-line-args").CommandLineOptions | undefined} providedOptions
  */
 const run = async (providedOptions) => {
   const { path: providedPath, tmp: tmpDir, yes } = providedOptions ?? {};
-  const dryRun = providedOptions["dry-run"];
+  const dryRun = providedOptions?.["dry-run"];
 
   const apiKey = await findApiKey();
 
@@ -105,9 +102,11 @@ const run = async (providedOptions) => {
   let metadataJson;
   try {
     metadataJson = await fs.readJson(metadataPath);
-  } catch (err) {
+  } catch (error) {
     console.log(
-      `Could not parse block-metadata.json: ${chalk.red(err.message)}`,
+      `Could not parse block-metadata.json: ${chalk.red(
+        error instanceof Error ? error.message : error,
+      )}`,
     );
     process.exit();
   }
@@ -166,8 +165,8 @@ const run = async (providedOptions) => {
 
   printSpacer();
 
-  if (errors) {
-    const errorMsg = errors[0].msg;
+  if (errors || !block) {
+    const errorMsg = errors?.[0]?.msg;
     console.log(chalk.red(errorMsg));
     process.exit();
   }
