@@ -59,6 +59,7 @@ type MockBlockDockProps = {
  * See README.md for usage instructions.
  * @param blockDefinition the source for the block and any additional metadata required
  * @param [blockEntity] the starting properties for the block entity
+ * @param [blockInfo] metadata about the block
  * @param [blockSchema] the schema for the block entity
  * @param [debug = false] display debugging information
  * @param [hideDebugToggle = false] hide the ability to toggle the debug UI
@@ -67,7 +68,6 @@ type MockBlockDockProps = {
  * @param [initialLinks] the links to include in the data store
  * @param [initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [readonly = false] whether the block should display in readonly mode or not
- * @param [blockInfo] metadata about the block
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,

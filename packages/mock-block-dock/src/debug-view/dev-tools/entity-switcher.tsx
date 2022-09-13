@@ -11,14 +11,22 @@ import { MouseEvent, useState } from "react";
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { JsonView } from "./json-view";
 
+/**
+ * Interface to change the entity selected for loading into a block
+ * 1. Choose the entity type the user wants to look for entities from
+ * 2. Choose an entity of that type as a candidate for loading into the block
+ * 3. Confirm the choice to send the entityId of the chosen entity
+ */
 export const EntitySwitcher = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const { blockEntity, setEntityIdOfEntityForBlock, datastore } =
     useMockBlockDockContext();
+
   const [entityTypeId, setEntityTypeId] = useState(blockEntity.entityTypeId);
-  const [entityId, setEntityIdOfBlo] = useState<string | undefined>(
-    blockEntity.entityId,
-  );
+  const [entityId, setEntityIdOfProposedEntityForBlock] = useState<
+    string | undefined
+  >(blockEntity.entityId);
 
   const selectedEntity = datastore.entities.find(
     (entity) =>
@@ -90,7 +98,7 @@ export const EntitySwitcher = () => {
               value={entityTypeId}
               onChange={(event) => {
                 if (event.target.value !== entityTypeId) {
-                  setEntityIdOfBlo(undefined);
+                  setEntityIdOfProposedEntityForBlock(undefined);
                 }
                 setEntityTypeId(event.target.value);
               }}
@@ -120,7 +128,7 @@ export const EntitySwitcher = () => {
               value={entityId}
               placeholder="Select Entity"
               onChange={(event) => {
-                setEntityIdOfBlo(event.target.value);
+                setEntityIdOfProposedEntityForBlock(event.target.value);
               }}
               sx={{
                 mb: 2,
