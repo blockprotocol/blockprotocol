@@ -1,42 +1,42 @@
 diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
-index 9bd1b9d..9e1a33d 100644
+index 9bd1b9d..cbacc42 100644
 --- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
 +++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
-@@ -17,6 +17,9 @@ const getAllDependencies = config => {
-   const allDependencies = new Map();
- 
-   for (const type of DEPENDENCY_TYPES) {
-+    // https://github.com/changesets/changesets/issues/906
-+    if (type === "devDependencies") continue;
-+    
-     const deps = config[type];
-     if (!deps) continue;
+@@ -71,6 +71,9 @@ function getDependencyGraph(packages, opts) {
+     for (let [depName, depRange] of allDependencies) {
+       const match = packagesByName[depName];
+       if (!match) continue;
++      if (match.packageJson.private) {
++        continue;
++      }
+       const expected = match.packageJson.version;
+       const usesWorkspaceRange = depRange.startsWith("workspace:");
  
 diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
-index b4026bb..88dc34a 100644
+index b4026bb..ef99cd5 100644
 --- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
 +++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
-@@ -17,6 +17,9 @@ var semver__default = _interopDefault(semver), chalk__default = _interopDefault(
- const DEPENDENCY_TYPES = [ "dependencies", "devDependencies", "peerDependencies", "optionalDependencies" ], getAllDependencies = config => {
-   const allDependencies = new Map;
-   for (const type of DEPENDENCY_TYPES) {
-+    // https://github.com/changesets/changesets/issues/906
-+    if (type === "devDependencies") continue;
-+
-     const deps = config[type];
-     if (deps) for (const name of Object.keys(deps)) {
-       const depRange = deps[name];
+@@ -45,6 +45,9 @@ function getDependencyGraph(packages, opts) {
+     for (let [depName, depRange] of allDependencies) {
+       const match = packagesByName[depName];
+       if (!match) continue;
++      if (match.packageJson.private) {
++        continue;
++      }
+       const expected = match.packageJson.version;
+       if (depRange.startsWith("workspace:")) {
+         if (depRange = depRange.replace(/^workspace:/, ""), "*" === depRange || "^" === depRange || "~" === depRange) {
 diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
-index b0eaa77..5a86537 100644
+index b0eaa77..98f3526 100644
 --- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
 +++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
-@@ -8,6 +8,9 @@ const getAllDependencies = config => {
-   const allDependencies = new Map();
- 
-   for (const type of DEPENDENCY_TYPES) {
-+    // https://github.com/changesets/changesets/issues/906
-+    if (type === "devDependencies") continue;
-+
-     const deps = config[type];
-     if (!deps) continue;
+@@ -62,6 +62,9 @@ function getDependencyGraph(packages, opts) {
+     for (let [depName, depRange] of allDependencies) {
+       const match = packagesByName[depName];
+       if (!match) continue;
++      if (match.packageJson.private) {
++        continue;
++      }
+       const expected = match.packageJson.version;
+       const usesWorkspaceRange = depRange.startsWith("workspace:");
  

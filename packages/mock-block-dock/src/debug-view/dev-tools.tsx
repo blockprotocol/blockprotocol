@@ -74,11 +74,12 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
       ref={ref}
       className={`handle=${handleAxis}`}
       sx={(theme) => ({
-        height: "1px",
-        backgroundColor: theme.palette.divider,
+        borderBottom: `1px solid ${theme.palette.divider}`,
         cursor: "ns-resize",
         position: "absolute",
-        top: 0,
+        // extend the resize handle 10px above its visible border to make it an easier click target
+        top: "-10px",
+        paddingBottom: "10px",
         left: 0,
         right: 0,
         zIndex: 10,
@@ -119,7 +120,7 @@ export const DevTools = () => {
     <Wrapper ref={wrapperRef}>
       <Resizable
         height={height}
-        width={width!}
+        width={width ?? 0}
         resizeHandles={["n"]}
         handle={<ResizeHandle />}
         onResize={(_, { size }) => {
