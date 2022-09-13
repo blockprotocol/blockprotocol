@@ -1,62 +1,62 @@
 @font-face {
-    font-family: "Inter";
-    font-weight: 300;
-    src: url("./inter-light.ttf") format("trueType");
+  font-family: "Inter";
+  font-weight: 300;
+  src: url("./inter-light.ttf") format("trueType");
 }
 
 @font-face {
-    font-family: "Inter";
-    font-weight: 400;
-    src: url("./inter-regular.ttf") format("trueType");
+  font-family: "Inter";
+  font-weight: 400;
+  src: url("./inter-regular.ttf") format("trueType");
 }
 @font-face {
-    font-family: "Inter";
-    font-weight: 500;
-    src: url("./inter-medium.ttf") format("trueType");
-}
-
-@font-face {
-    font-family: "Inter";
-    font-weight: 400;
-    src: url("./inter-regular.ttf") format("trueType");
+  font-family: "Inter";
+  font-weight: 500;
+  src: url("./inter-medium.ttf") format("trueType");
 }
 
 @font-face {
-    font-family: "Mono";
-    font-weight: 400;
-    src: url("./jet-brains-mono-regular.woff2") format("woff2");
+  font-family: "Inter";
+  font-weight: 400;
+  src: url("./inter-regular.ttf") format("trueType");
+}
+
+@font-face {
+  font-family: "Mono";
+  font-weight: 400;
+  src: url("./jet-brains-mono-regular.woff2") format("woff2");
 }
 
 .mbd-non-debug-mode-wrapper {
-  padding-top: 60px; 
+  padding-top: 60px;
 }
 
 .mbd-debug-mode-toggle {
-    font-family: Inter, "Helvetica", "Arial", sans-serif;
-    position: fixed;
-    z-index: 1000;
-    top: 9px;
-    right: 24px;
-    background-color: white;
-    border: 1px solid #DDE7F0;
-    color: #37434e;
-    background: transparent;
-    font-size: 0.8125rem;
-    line-height: 1.75;
-    padding: 3px 9px;
-    border-radius: 4px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    background-color:white;
+  font-family: Inter, "Helvetica", "Arial", sans-serif;
+  position: fixed;
+  z-index: 1000;
+  top: 9px;
+  right: 24px;
+  background-color: white;
+  border: 1px solid #dde7f0;
+  color: #37434e;
+  background: transparent;
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  padding: 3px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  background-color: white;
 }
 
 .mbd-debug-mode-toggle > svg {
-    height: 20px;
-    width: 40px;
-    margin-left: 10px;
+  height: 20px;
+  width: 40px;
+  margin-left: 10px;
 }
 
 .mbd-debug-mode-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+  background-color: rgba(0, 0, 0, 0.04);
 }
