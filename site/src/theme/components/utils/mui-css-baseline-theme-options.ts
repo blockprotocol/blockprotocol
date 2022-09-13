@@ -151,9 +151,7 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
           }
 
           body {
-            overflow: auto;${
-              "" /** @todo: find a pernament solution for preventing the navbar from shifting to the right when a modal is opened on an overflowing page */
-            }
+            overflow-x: hidden !important;
           }
 
           body, p {
