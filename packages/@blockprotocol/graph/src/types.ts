@@ -217,6 +217,12 @@ export type BlockGraph = {
 export type BlockGraphProperties<
   BlockEntityProperties extends Record<string, unknown> | null,
 > = {
+  /**
+   * The 'graph' object contains messages sent under the graph service from the app to the block.
+   * They are sent on initialization and again when the application has new values to send.
+   * One such message is 'graph.blockEntity', which is a data entity fitting the block's schema (its type).
+   * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
+   */
   graph: {
     blockGraph?: BlockGraph;
     entityTypes?: EntityType[];

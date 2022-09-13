@@ -1,31 +1,31 @@
 @font-face {
-    font-family: "Inter";
-    font-weight: 300;
-    src: url("./inter-light.ttf") format("trueType");
+  font-family: "Inter";
+  font-weight: 300;
+  src: url("./inter-light.ttf") format("trueType");
 }
 
 @font-face {
-    font-family: "Inter";
-    font-weight: 400;
-    src: url("./inter-regular.ttf") format("trueType");
+  font-family: "Inter";
+  font-weight: 400;
+  src: url("./inter-regular.ttf") format("trueType");
 }
 
 @font-face {
-    font-family: "Inter";
-    font-weight: 500;
-    src: url("./inter-medium.ttf") format("trueType");
+  font-family: "Inter";
+  font-weight: 500;
+  src: url("./inter-medium.ttf") format("trueType");
 }
 
 @font-face {
-    font-family: "Inter";
-    font-weight: 400;
-    src: url("./inter-regular.ttf") format("trueType");
+  font-family: "Inter";
+  font-weight: 400;
+  src: url("./inter-regular.ttf") format("trueType");
 }
 
 @font-face {
-    font-family: "Mono";
-    font-weight: 400;
-    src: url("./jet-brains-mono-regular.woff2") format("woff2");
+  font-family: "Mono";
+  font-weight: 400;
+  src: url("./jet-brains-mono-regular.woff2") format("woff2");
 }
 
 body {
@@ -66,11 +66,11 @@ body {
 }
 
 .mbd-debug-mode-toggle > svg {
-    height: 20px;
-    width: 40px;
-    margin-left: 10px;
+  height: 20px;
+  width: 40px;
+  margin-left: 10px;
 }
 
 .mbd-debug-mode-toggle:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+  background-color: rgba(0, 0, 0, 0.04);
 }
