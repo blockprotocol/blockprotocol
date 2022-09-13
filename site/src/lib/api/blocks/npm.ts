@@ -8,7 +8,6 @@ import tar from "tar";
 import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
-import { isProduction } from "../../config";
 import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
 import { validateExpandAndUploadBlockFiles } from "./s3";
 
@@ -18,7 +17,7 @@ import { validateExpandAndUploadBlockFiles } from "./s3";
  * @param npmPackageName the name of the npm package to mirror
  * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  */
-const mirrorNpmPackageToR2 = async ({
+const mirrorNpmPackageToS3 = async ({
   createdAt,
   npmPackageName,
   pathWithNamespace,
@@ -133,7 +132,7 @@ export const publishBlockFromNpm = async (
 
   const blockLinkedToPackage = await getDbBlock({ npmPackageName });
 
-  if (isProduction && blockLinkedToPackage) {
+  if (blockLinkedToPackage) {
     throw new Error(
       `npm package '${npmPackageName}' is already linked to block '${blockLinkedToPackage.pathWithNamespace}'`,
       {
@@ -142,7 +141,7 @@ export const publishBlockFromNpm = async (
     );
   }
 
-  const { expandedMetadata } = await mirrorNpmPackageToR2({
+  const { expandedMetadata } = await mirrorNpmPackageToS3({
     createdAt,
     npmPackageName,
     pathWithNamespace,

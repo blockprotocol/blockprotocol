@@ -1,37 +1,19 @@
-import {
-  PutObjectCommand,
-  PutObjectCommandInput,
-  S3Client,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import mime from "mime-types";
 
-import { mustGetEnvVar } from "../util/api";
 import { isProduction } from "./config";
-
-export const defaultBucket =
-  process.env.BP_AWS_S3_BUCKET_NAME ?? "blockprotocol";
-
-const getClient = () => {
-  return new S3Client({
-    region: mustGetEnvVar("BP_AWS_REGION"),
-    credentials: {
-      accessKeyId: mustGetEnvVar("BP_AWS_ACCESS_KEY_ID"),
-      secretAccessKey: mustGetEnvVar("BP_AWS_SECRET_ACCESS_KEY"),
-    },
-  });
-};
+import { getS3BaseUrl, getS3BucketName, getS3Client } from "./s3";
 
 export const uploadToS3 = async (
   filenameWithoutExtension: string,
   extension: string,
   buffer: Buffer,
-  bucket?: string,
 ): Promise<{
   fullUrl: string;
   s3Key: string;
   s3Folder: string;
 }> => {
-  const client = getClient();
+  const client = getS3Client();
 
   let filename = `${filenameWithoutExtension}.${extension}`;
   if (!isProduction && !filename.startsWith("dev/")) {
@@ -49,12 +31,11 @@ export const uploadToS3 = async (
   }
   const ACL = "public-read";
 
-  const Bucket = bucket ?? defaultBucket;
   const params: PutObjectCommandInput = {
     Key: filename,
     Body: buffer,
     ACL,
-    Bucket,
+    Bucket: getS3BucketName(),
     ContentType,
     Metadata,
   };
@@ -67,18 +48,14 @@ export const uploadToS3 = async (
     // the AWS lib-storage API would do this through Upload, but even it is currently not returning the correct values.
     // see https://github.com/aws/aws-sdk-js-v3/pull/2700
     // The below URL construction is based on above PR.
-
-    const [_putResult, endpoint] = await Promise.all([
-      client.send(command),
-      client.config.endpoint(),
-    ]);
+    await client.send(command);
 
     const locationKey = params
       .Key!.split("/")
       .map((segment: string) => encodeURIComponent(segment))
       .join("/");
 
-    fullUrl = `${endpoint.protocol}//${Bucket}.${endpoint.hostname}/${locationKey}`;
+    fullUrl = `${getS3BaseUrl()}/${locationKey}`;
   } catch (error) {
     throw new Error(`Could not upload image. ${error}`);
   }

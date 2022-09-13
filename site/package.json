@@ -18,8 +18,8 @@
   },
   "dependencies": {
     "@aws-crypto/sha256-js": "2.0.1",
-    "@aws-sdk/client-s3": "3.46.0",
-    "@aws-sdk/client-ses": "3.46.0",
+    "@aws-sdk/client-s3": "3.169.0",
+    "@aws-sdk/client-ses": "3.169.0",
     "@blockprotocol/core": "0.0.11",
     "@blockprotocol/graph": "0.0.16",
     "@emotion/cache": "^11.10.0",
@@ -38,7 +38,6 @@
     "@twind/next": "^1.0.9",
     "ajv": "^8.9.0",
     "algoliasearch": "4.12.1",
-    "aws-sdk": "^2.1198.0",
     "axios": "^0.24.0",
     "busboy": "^1.4.0",
     "clsx": "^1.1.1",

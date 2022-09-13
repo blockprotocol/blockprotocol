@@ -1,27 +1,16 @@
+import {
+  DeleteObjectsCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import { BlockMetadata } from "@blockprotocol/core";
-import S3 from "aws-sdk/clients/s3";
-import * as envalid from "envalid";
 import fs from "fs-extra";
 import { globby } from "globby";
 import mime from "mime-types";
 import path from "node:path";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
-
-const env = envalid.cleanEnv(process.env, {
-  S3_API_ENDPOINT: envalid.str(),
-  S3_BUCKET_NAME: envalid.str(),
-  S3_ACCESS_KEY_ID: envalid.str(),
-  S3_SECRET_ACCESS_KEY: envalid.str(),
-  S3_BASE_URL: envalid.str(),
-});
-
-const s3 = new S3({
-  endpoint: env.S3_API_ENDPOINT,
-  accessKeyId: env.S3_ACCESS_KEY_ID,
-  secretAccessKey: env.S3_SECRET_ACCESS_KEY,
-  signatureVersion: "v4",
-});
+import { getS3BaseUrl, getS3BucketName, getS3Client } from "../../s3";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
@@ -116,10 +105,10 @@ const validateBlockFiles = async (
 };
 
 /**
- * Uploads files to the 'blocks' bucket in Cloudflare's R2 storage.
+ * Uploads files to the 'blocks' bucket in S3 storage.
  * Returns an array of the paths to the uploaded files within the bucket.
  * @param localFolderPath the path to the directory in the local file system containing the files to upload
- * @param remoteStoragePrefix the prefix to give the files in R2, in the format [namespace]/[block-name]
+ * @param remoteStoragePrefix the prefix to give the files, in the format [namespace]/[block-name]
  */
 const uploadBlockFilesToS3 = (
   localFolderPath: string,
@@ -146,14 +135,14 @@ const uploadBlockFilesToS3 = (
 
     const contentType = mime.lookup(thingName);
 
-    return s3
-      .putObject({
-        Bucket: env.S3_BUCKET_NAME,
+    return getS3Client().send(
+      new PutObjectCommand({
+        Bucket: getS3BucketName(),
         Body: fileContents,
         ContentType: contentType || undefined,
         Key: `${remoteStoragePrefix}/${thingName}`,
-      })
-      .promise();
+      }),
+    );
   });
 };
 
@@ -167,12 +156,12 @@ const wipeS3BlockFolder = async (blockFolder: string) => {
       `Expected block folder matching pattern [namespace]/[block-name], received '${blockFolder}'`,
     );
   }
-  const folderContents = await s3
-    .listObjectsV2({
-      Bucket: env.S3_BUCKET_NAME,
+  const folderContents = await getS3Client().send(
+    new ListObjectsV2Command({
+      Bucket: getS3BucketName(),
       Prefix: blockFolder,
-    })
-    .promise();
+    }),
+  );
 
   if (!folderContents.Contents || folderContents.Contents.length === 0) {
     return;
@@ -182,14 +171,14 @@ const wipeS3BlockFolder = async (blockFolder: string) => {
     Key,
   })).filter((identifier): identifier is { Key: string } => !!identifier.Key);
 
-  await s3
-    .deleteObjects({
-      Bucket: env.S3_BUCKET_NAME,
+  await getS3Client().send(
+    new DeleteObjectsCommand({
+      Bucket: getS3BucketName(),
       Delete: {
         Objects: objectsToDelete,
       },
-    })
-    .promise();
+    }),
+  );
 };
 
 /**
@@ -221,7 +210,7 @@ export const validateExpandAndUploadBlockFiles = async ({
    * @see https://app.asana.com/0/0/1202539910143057/f (internal)
    */
   const remoteStoragePrefix = stripLeadingAt(pathWithNamespace);
-  const publicPackagePath = `${env.S3_BASE_URL}/${remoteStoragePrefix}`;
+  const publicPackagePath = `${getS3BaseUrl()}/${remoteStoragePrefix}`;
 
   const sourceInformation = {
     blockDistributionFolderUrl: publicPackagePath,

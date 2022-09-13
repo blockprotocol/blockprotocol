@@ -8,7 +8,7 @@ import {
   MultipartExtensions,
   multipartUploads,
 } from "../../lib/api/middleware/multipart-uploads.middleware";
-import { uploadFileBufferToS3 } from "../../lib/aws-s3";
+import { uploadFileBufferToS3 } from "../../lib/s3-file-uploads";
 import { formatErrors } from "../../util/api";
 
 type Response = {
