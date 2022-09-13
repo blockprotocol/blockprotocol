@@ -1,5 +1,16 @@
 # mock-block-dock
 
+## 0.0.26
+
+### Patch Changes
+
+- [#593](https://github.com/blockprotocol/blockprotocol/pull/593) [`6a8b3da`](https://github.com/blockprotocol/blockprotocol/commit/6a8b3dabd1dd54badfa7612e199d0c5911b28206) Thanks [@CiaranMn](https://github.com/CiaranMn)! - improve clarity of debug UI
+
+- [#589](https://github.com/blockprotocol/blockprotocol/pull/589) [`08777c5`](https://github.com/blockprotocol/blockprotocol/commit/08777c5882227db090a912b51b1cb757821ba7c4) Thanks [@yusufkinatas](https://github.com/yusufkinatas)! - Add `labelProperty` to pre-defined entity types
+
+- Updated dependencies [[`6a8b3da`](https://github.com/blockprotocol/blockprotocol/commit/6a8b3dabd1dd54badfa7612e199d0c5911b28206), [`08777c5`](https://github.com/blockprotocol/blockprotocol/commit/08777c5882227db090a912b51b1cb757821ba7c4), [`8154e59`](https://github.com/blockprotocol/blockprotocol/commit/8154e59c29de21a2a831f6a0536a6f1ec265d10c)]:
+  - @blockprotocol/graph@0.0.16
+
 ## 0.0.25
 
 ### Patch Changes
