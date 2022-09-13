@@ -7,7 +7,7 @@ import {
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
-import { Box, Container } from "@mui/material";
+import { Box } from "@mui/material";
 import { ComponentType, FunctionComponent, useEffect, useRef } from "react";
 
 import { BlockRenderer } from "./block-renderer";
