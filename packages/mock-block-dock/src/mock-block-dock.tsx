@@ -3,17 +3,11 @@ import {
   BlockGraphProperties,
   Entity,
   EntityType,
-  GraphEmbedderHandler,
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import {
-  ComponentType,
-  FunctionComponent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useGraphEmbedderService } from "@blockprotocol/graph/react";
+import { ComponentType, FunctionComponent, useEffect, useRef } from "react";
 
 import { BlockRenderer } from "./block-renderer";
 import { DebugView } from "./debug-view";
@@ -110,10 +104,6 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
 
-  const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
-    null,
-  );
-
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const blockType =
@@ -135,33 +125,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     },
   };
 
-  useEffect(() => {
-    if (!wrapperRef.current) {
-      throw new Error(
-        "No reference to wrapping element – cannot listen for messages from block",
-      );
-    } else if (!graphService) {
-      setGraphService(
-        new GraphEmbedderHandler({
-          blockGraph,
-          blockEntity,
-          entityTypes,
-          linkedAggregations,
-          callbacks: graphServiceCallbacks,
-          element: wrapperRef.current,
-          readonly,
-        }),
-      );
-    }
-  }, [
-    blockEntity,
+  const { graphService } = useGraphEmbedderService(wrapperRef, {
     blockGraph,
+    blockEntity,
     entityTypes,
-    graphService,
-    graphServiceCallbacks,
     linkedAggregations,
+    callbacks: graphServiceCallbacks,
     readonly,
-  ]);
+  });
 
   useSendGraphValue({
     graphService,
@@ -191,7 +162,18 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   useEffect(() => {
     if (graphService) {
-      graphService.registerCallbacks(graphServiceCallbacks);
+      // The callbacks are reconstructed when the data in the store changes
+      // We need to register the updated callbacks or the data they use will be stale
+      try {
+        graphService.registerCallbacks(graphServiceCallbacks);
+      } catch {
+        /**
+         * Registration can error when the user switches between preview and debug mode.
+         * Registration is attempted with the old service, which has been destroyed.
+         * It then succeeds with the new one.
+         * @todo can we avoid this error?
+         */
+      }
     }
   }, [graphService, graphServiceCallbacks]);
 
