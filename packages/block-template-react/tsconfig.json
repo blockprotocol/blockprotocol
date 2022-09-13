@@ -8,8 +8,7 @@
     "noEmit": true,
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
-    "strict": true,
-    "target": "es6",
+    "strict": true
   },
   "include": ["src"]
 }
