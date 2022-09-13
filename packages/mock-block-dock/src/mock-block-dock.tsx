@@ -21,6 +21,7 @@ import { OffSwitch } from "./debug-view/icons";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useDefaultState } from "./use-default-state";
 import { useMockBlockProps } from "./use-mock-block-props";
+import { useSendGraphValue } from "./use-send-graph-value";
 
 type BlockDefinition =
   | { ReactComponent: ComponentType<any> }
@@ -144,6 +145,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
         new GraphEmbedderHandler({
           blockGraph,
           blockEntity,
+          entityTypes,
           linkedAggregations,
           callbacks: graphServiceCallbacks,
           element: wrapperRef.current,
@@ -154,41 +156,38 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   }, [
     blockEntity,
     blockGraph,
+    entityTypes,
     graphService,
     graphServiceCallbacks,
     linkedAggregations,
     readonly,
   ]);
 
-  useEffect(() => {
-    if (graphService) {
-      graphService.blockEntity({ data: blockEntity });
-    }
-  }, [blockEntity, graphService]);
-
-  useEffect(() => {
-    if (graphService) {
-      graphService.blockGraph({ data: blockGraph });
-    }
-  }, [blockGraph, graphService]);
-
-  useEffect(() => {
-    if (graphService) {
-      graphService.entityTypes({ data: entityTypes });
-    }
-  }, [entityTypes, graphService]);
-
-  useEffect(() => {
-    if (graphService) {
-      graphService.linkedAggregations({ data: linkedAggregations });
-    }
-  }, [linkedAggregations, graphService]);
-
-  useEffect(() => {
-    if (graphService) {
-      graphService.readonly({ data: readonly });
-    }
-  }, [readonly, graphService]);
+  useSendGraphValue({
+    graphService,
+    value: blockEntity,
+    valueName: "blockEntity",
+  });
+  useSendGraphValue({
+    graphService,
+    value: blockGraph,
+    valueName: "blockGraph",
+  });
+  useSendGraphValue({
+    graphService,
+    value: entityTypes,
+    valueName: "entityTypes",
+  });
+  useSendGraphValue({
+    graphService,
+    value: linkedAggregations,
+    valueName: "linkedAggregations",
+  });
+  useSendGraphValue({
+    graphService,
+    value: readonly,
+    valueName: "readonly",
+  });
 
   useEffect(() => {
     if (graphService) {
@@ -197,7 +196,17 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   }, [graphService, graphServiceCallbacks]);
 
   const Component = (
-    <div ref={wrapperRef}>
+    <div
+      ref={wrapperRef}
+      style={
+        debugMode
+          ? {
+              border: "1px dashed rgb(0,0,0,0.1)",
+              marginTop: 30,
+            }
+          : {}
+      }
+    >
       {graphService ? (
         <BlockRenderer
           customElement={

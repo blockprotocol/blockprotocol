@@ -1,4 +1,4 @@
-import { alpha, Box, Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { BlockDataTabPanels } from "./block-data-tab-panels";
@@ -28,15 +28,7 @@ export const BlockTabsModal: FunctionComponent<BlockTabsModalProps> = ({
   exampleGraph,
 }) => {
   return (
-    <Modal
-      open={open}
-      onClose={() => setOpen((oldValue) => !oldValue)}
-      BackdropProps={{
-        sx: {
-          backgroundColor: ({ palette }) => alpha(palette.gray[80], 0.6),
-        },
-      }}
-    >
+    <Modal open={open} onClose={() => setOpen((oldValue) => !oldValue)}>
       <Box
         sx={{
           position: "absolute",
