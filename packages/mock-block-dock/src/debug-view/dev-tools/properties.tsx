@@ -27,7 +27,7 @@ export const PropertiesView = () => {
 
   return (
     <Container maxWidth="xl">
-      <Grid container spacing={4}>
+      <Grid container>
         <Grid item xs={6}>
           {/* Entity Properties row */}
           <Box mb={3}>

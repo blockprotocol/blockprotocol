@@ -116,7 +116,7 @@ export const DevTools = () => {
         <Paper sx={{ height }} ref={paperBoxRef}>
           <Header>
             <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
-              <Tab label="Properties" {...a11yProps(0)} />
+              <Tab label="Properties" {...a11yProps(0)} sx={{ pl: 3 }} />
               <Tab label="Datastore" {...a11yProps(1)} />
               <Tab label="Logs" {...a11yProps(2)} />
               <Tab label="Block Info" {...a11yProps(3)} />

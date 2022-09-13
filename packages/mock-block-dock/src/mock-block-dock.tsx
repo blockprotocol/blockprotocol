@@ -7,6 +7,7 @@ import {
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
+import { Box, Container } from "@mui/material";
 import { ComponentType, FunctionComponent, useEffect, useRef } from "react";
 
 import { BlockRenderer } from "./block-renderer";
@@ -228,19 +229,21 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       updateEntity={graphServiceCallbacks.updateEntity}
     >
       {!debugMode ? (
-        <div className="mbd-non-debug-mode-wrapper">
-          {Component}
+        <Box>
           {!hideDebugToggle && (
-            <button
-              className="mbd-debug-mode-toggle"
-              type="button"
-              onClick={() => setDebugMode(true)}
-            >
-              Preview Mode
-              <OffSwitch />
-            </button>
+            <Box className="mbd-debug-mode-toggle-header">
+              <button
+                className="mbd-debug-mode-toggle"
+                type="button"
+                onClick={() => setDebugMode(true)}
+              >
+                Preview Mode
+                <OffSwitch />
+              </button>
+            </Box>
           )}
-        </div>
+          {Component}
+        </Box>
       ) : (
         <DebugView>{Component}</DebugView>
       )}
