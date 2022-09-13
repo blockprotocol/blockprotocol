@@ -134,6 +134,8 @@ test("user should not be able to publish an block with already-taken name", asyn
   await page.locator("text=Publish block to hub").click();
 
   await expect(
-    page.locator(`text=block name '@alice/${dummyBlockName}' already exists`),
+    page.locator(
+      `text=Block name '${dummyBlockName}' already exists in account alice`,
+    ),
   ).toBeVisible();
 });
