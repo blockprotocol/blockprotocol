@@ -25,7 +25,6 @@ type BlockEntityProperties = {
 
 /**
  * This function is to help illustrate a property being change when the button is pressed.
- * You can remove it when you remove the button below.
  */
 const supplyRandomName = () => {
   const names = ["Alice", "Bob", "Carol", "Dave", "Erin", "Frank"];
@@ -62,7 +61,7 @@ export const App: BlockComponent<BlockEntityProperties> = ({
   const blockRootRef = useRef<HTMLDivElement>(null);
   const { graphService } = useGraphBlockService(blockRootRef);
 
-  /** Here we extract the 'name' property from the blockEntity's properties ("object destructuring") */
+  /** Here we extract the 'name' property from the blockEntity's properties */
   const { name } = properties;
 
   return (
