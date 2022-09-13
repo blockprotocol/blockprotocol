@@ -30,7 +30,7 @@ test("user should be able to publish block & see it on the list", async ({
   page,
 }) => {
   test.skip(
-    !!process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
     "NEXT_PUBLIC_NPM_PUBLISHING is not set",
   );
 
@@ -73,7 +73,7 @@ test("user should not be able to publish an invalid npm-package", async ({
   page,
 }) => {
   test.skip(
-    !!process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
     "NEXT_PUBLIC_NPM_PUBLISHING is not set",
   );
 
@@ -91,7 +91,7 @@ test("user should not be able to publish an already-used npm-package", async ({
   page,
 }) => {
   test.skip(
-    !!process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
     "NEXT_PUBLIC_NPM_PUBLISHING is not set",
   );
 
@@ -117,7 +117,7 @@ test("user should not be able to publish an block with already-taken name", asyn
   page,
 }) => {
   test.skip(
-    !!process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
     "NEXT_PUBLIC_NPM_PUBLISHING is not set",
   );
 
