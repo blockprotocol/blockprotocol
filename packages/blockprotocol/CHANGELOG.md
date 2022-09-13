@@ -1,5 +1,11 @@
 # blockprotocol
 
+## 0.1.1
+
+### Patch Changes
+
+- [#584](https://github.com/blockprotocol/blockprotocol/pull/584) [`33ac788`](https://github.com/blockprotocol/blockprotocol/commit/33ac788c6f1ce38b9868e182f261e331ec118988) Thanks [@kachkaev](https://github.com/kachkaev)! - Check typings, fix potential edge case bugs
+
 ## 0.1.0
 
 ### Minor Changes
