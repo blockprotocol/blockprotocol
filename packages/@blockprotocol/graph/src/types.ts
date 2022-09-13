@@ -238,6 +238,7 @@ export type BlockGraphMessageCallbacks = {
   blockGraph: MessageCallback<BlockGraph, null>;
   entityTypes: MessageCallback<EntityType[], null>;
   linkedAggregations: MessageCallback<LinkedAggregations, null>;
+  readonly: MessageCallback<boolean, null>;
 };
 
 export type EmbedderGraphMessages<
