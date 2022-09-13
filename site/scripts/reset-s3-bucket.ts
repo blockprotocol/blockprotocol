@@ -1,4 +1,9 @@
-import { CreateBucketCommand, DeleteBucketCommand } from "@aws-sdk/client-s3";
+import {
+  CreateBucketCommand,
+  DeleteBucketCommand,
+  DeleteObjectsCommand,
+  ListObjectsV2Command,
+} from "@aws-sdk/client-s3";
 import chalk from "chalk";
 
 import { getS3BucketName, getS3Client } from "../src/lib/s3";
@@ -18,13 +23,36 @@ const script = async () => {
   }
 
   try {
+    const bucketContents = await getS3Client().send(
+      new ListObjectsV2Command({
+        Bucket: getS3BucketName(),
+      }),
+    );
+
+    const objectsToDelete = bucketContents?.Contents?.map(({ Key }) => ({
+      Key,
+    })).filter((identifier): identifier is { Key: string } => !!identifier.Key);
+
+    if (objectsToDelete) {
+      await s3Client.send(
+        new DeleteObjectsCommand({
+          Bucket: getS3BucketName(),
+          Delete: {
+            Objects: objectsToDelete,
+          },
+        }),
+      );
+    }
+
     await s3Client.send(
       new DeleteBucketCommand({
         Bucket: getS3BucketName(),
       }),
     );
-  } catch {
-    // noop (bucket doesn't exist)
+  } catch (error) {
+    if (`${error}` !== "NoSuchBucket: The specified bucket does not exist") {
+      throw error;
+    }
   }
 
   await s3Client.send(
