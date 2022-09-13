@@ -10,7 +10,7 @@ import mime from "mime-types";
 import path from "node:path";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
-import { getS3BaseUrl, getS3BucketName, getS3Client } from "../../s3";
+import { getS3BaseUrl, getS3Bucket, getS3Client } from "../../s3";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
@@ -137,7 +137,7 @@ const uploadBlockFilesToS3 = (
 
     return getS3Client().send(
       new PutObjectCommand({
-        Bucket: getS3BucketName(),
+        Bucket: getS3Bucket(),
         Body: fileContents,
         ContentType: contentType || undefined,
         Key: `${remoteStoragePrefix}/${thingName}`,
@@ -158,7 +158,7 @@ const wipeS3BlockFolder = async (blockFolder: string) => {
   }
   const folderContents = await getS3Client().send(
     new ListObjectsV2Command({
-      Bucket: getS3BucketName(),
+      Bucket: getS3Bucket(),
       Prefix: blockFolder,
     }),
   );
@@ -173,7 +173,7 @@ const wipeS3BlockFolder = async (blockFolder: string) => {
 
   await getS3Client().send(
     new DeleteObjectsCommand({
-      Bucket: getS3BucketName(),
+      Bucket: getS3Bucket(),
       Delete: {
         Objects: objectsToDelete,
       },

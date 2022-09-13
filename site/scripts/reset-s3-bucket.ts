@@ -6,9 +6,8 @@ import {
 } from "@aws-sdk/client-s3";
 import chalk from "chalk";
 
-import { getS3BucketName, getS3Client } from "../src/lib/s3";
+import { getS3Bucket, getS3Client } from "../src/lib/s3";
 
-// Actions done in the following script should be _idempotent_ as they run in dev/prod
 const script = async () => {
   console.log(chalk.bold("Resetting S3 bucket..."));
 
@@ -25,7 +24,7 @@ const script = async () => {
   try {
     const bucketContents = await getS3Client().send(
       new ListObjectsV2Command({
-        Bucket: getS3BucketName(),
+        Bucket: getS3Bucket(),
       }),
     );
 
@@ -36,7 +35,7 @@ const script = async () => {
     if (objectsToDelete) {
       await s3Client.send(
         new DeleteObjectsCommand({
-          Bucket: getS3BucketName(),
+          Bucket: getS3Bucket(),
           Delete: {
             Objects: objectsToDelete,
           },
@@ -46,7 +45,7 @@ const script = async () => {
 
     await s3Client.send(
       new DeleteBucketCommand({
-        Bucket: getS3BucketName(),
+        Bucket: getS3Bucket(),
       }),
     );
   } catch (error) {
@@ -57,7 +56,7 @@ const script = async () => {
 
   await s3Client.send(
     new CreateBucketCommand({
-      Bucket: getS3BucketName(),
+      Bucket: getS3Bucket(),
     }),
   );
 

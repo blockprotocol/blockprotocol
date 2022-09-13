@@ -7,10 +7,9 @@ export const getS3Client = (): S3Client => {
   if (!s3Client) {
     const env = envalid.cleanEnv(process.env, {
       S3_API_ENDPOINT: envalid.str(),
-      S3_BUCKET_NAME: envalid.str(),
+      S3_BUCKET: envalid.str(),
       S3_ACCESS_KEY_ID: envalid.str(),
       S3_SECRET_ACCESS_KEY: envalid.str(),
-      S3_BASE_URL: envalid.str(),
     });
 
     s3Client = new S3Client({
@@ -27,17 +26,18 @@ export const getS3Client = (): S3Client => {
   return s3Client;
 };
 
-let s3BucketName: string | undefined;
+let s3Bucket: string | undefined;
 
-export const getS3BucketName = (): string => {
-  if (!s3BucketName) {
+export const getS3Bucket = (): string => {
+  if (!s3Bucket) {
     const env = envalid.cleanEnv(process.env, {
-      S3_BUCKET_NAME: envalid.str(),
+      S3_BUCKET: envalid.str(),
     });
 
-    s3BucketName = env.S3_BUCKET_NAME;
+    s3Bucket = env.S3_BUCKET;
   }
-  return s3BucketName;
+
+  return s3Bucket;
 };
 
 let s3BaseUrl: string | undefined;
@@ -50,5 +50,6 @@ export const getS3BaseUrl = (): string => {
 
     s3BaseUrl = env.S3_BASE_URL;
   }
+
   return s3BaseUrl;
 };

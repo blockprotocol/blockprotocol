@@ -2,7 +2,7 @@ import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import mime from "mime-types";
 
 import { isProduction } from "./config";
-import { getS3BaseUrl, getS3BucketName, getS3Client } from "./s3";
+import { getS3BaseUrl, getS3Bucket, getS3Client } from "./s3";
 
 export const uploadToS3 = async (
   filenameWithoutExtension: string,
@@ -35,7 +35,7 @@ export const uploadToS3 = async (
     Key: filename,
     Body: buffer,
     ACL,
-    Bucket: getS3BucketName(),
+    Bucket: getS3Bucket(),
     ContentType,
     Metadata,
   };
