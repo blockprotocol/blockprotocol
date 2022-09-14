@@ -19,7 +19,7 @@
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
     "fix:eslint": "eslint \"**/*\" --fix",
     "fix:markdownlint": "markdownlint --fix \"**/*\"",
-    "fix:prettier": "prettier --cache --write --ignore-unknown \"**/*.*\"",
+    "fix:prettier": "prettier --cache --write --ignore-unknown \"**/*\"",
     "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
     "lint:changeset": "changeset status",
