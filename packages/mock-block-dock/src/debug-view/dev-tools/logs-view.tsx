@@ -6,6 +6,7 @@ import {
   Select,
   styled,
   SxProps,
+  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -191,7 +192,7 @@ export const LogsView = () => {
 
       <Box display="flex" mb={3}>
         <LogsContainer ref={logsContainerRef}>
-          <table>
+          <Table>
             <TableHead>
               <TableRow>
                 <Cell>timestamp</Cell>
@@ -214,7 +215,7 @@ export const LogsView = () => {
                 />
               ))}
             </TableBody>
-          </table>
+          </Table>
         </LogsContainer>
 
         <ActiveLogsContainer>
@@ -229,6 +230,7 @@ export const LogsView = () => {
               variant="subtitle2"
               fontWeight="normal"
               component="em"
+              textAlign="center"
               p={3}
             >
               Select a request id to view the full details

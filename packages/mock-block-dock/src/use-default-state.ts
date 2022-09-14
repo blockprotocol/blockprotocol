@@ -1,7 +1,9 @@
 import { UnknownRecord } from "@blockprotocol/core";
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
-export const useDefaultState = <T extends any[] | UnknownRecord>(
+export const useDefaultState = <
+  T extends any[] | UnknownRecord | boolean | string,
+>(
   providedDefaultValue: T,
 ): [T, Dispatch<SetStateAction<T>>] => {
   const defaultStateValue = {
