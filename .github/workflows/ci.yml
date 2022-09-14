@@ -305,7 +305,7 @@ jobs:
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true
-          flags: site-integration-${{ matrix.project }}
+          flags: site-integration-${{ matrix.device }}
           files: coverage/lcov.info
 
       - name: Show DB logs
@@ -320,7 +320,7 @@ jobs:
         if: ${{ success() || failure() }}
         uses: actions/upload-artifact@v3
         with:
-          name: site-integration-tests-playwright-report-${{ matrix.project }}
+          name: site-integration-tests-playwright-report-${{ matrix.device }}
           path: site/playwright-report
           retention-days: 14
 
@@ -328,6 +328,6 @@ jobs:
         uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
-          name: site-integration-tests-var-${{ matrix.project }}
+          name: site-integration-tests-var-${{ matrix.device }}
           path: var
           retention-days: 14
