@@ -34,7 +34,7 @@ const createDefaultEChartOptions = (params?: {
         edgeLength: 150,
       },
       label: {
-        fontSize: 12,
+        fontSize: 16,
       },
       edgeLabel: {
         fontSize: 10,
