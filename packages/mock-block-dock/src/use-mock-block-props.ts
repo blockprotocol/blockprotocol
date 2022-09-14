@@ -7,7 +7,7 @@ import {
   LinkedAggregation,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 
 import { mockData as initialMockData } from "./data";
 import { useDefaultState } from "./use-default-state";
@@ -16,7 +16,6 @@ import {
   MockData,
   useMockDatastore,
 } from "./use-mock-block-props/use-mock-datastore";
-import { usePrevious } from "./use-previous";
 
 export type MockBlockHookArgs = {
   blockEntity?: Entity;
@@ -26,7 +25,6 @@ export type MockBlockHookArgs = {
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly: boolean;
-  debug: boolean;
 };
 
 export type MockBlockHookResult = {
@@ -38,11 +36,8 @@ export type MockBlockHookResult = {
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
   linkedAggregations: LinkedAggregation[];
   readonly: boolean;
-  debugMode: boolean;
-  setBlockSchema: Dispatch<SetStateAction<Partial<EntityType>>>;
-  setBlockEntity: Dispatch<SetStateAction<Entity>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
-  setDebugMode: Dispatch<SetStateAction<boolean>>;
+  setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
 };
 
 /**
@@ -64,25 +59,17 @@ export const useMockBlockProps = ({
   initialLinks,
   initialLinkedAggregations,
   readonly: externalReadonly,
-  debug: externalDebug,
 }: MockBlockHookArgs): MockBlockHookResult => {
-  const [blockEntity, setBlockEntity] = useDefaultState<Entity>(
-    externalBlockEntity!,
-  );
-  const [blockSchema, setBlockSchema] = useDefaultState<Partial<EntityType>>(
-    externalBlockSchema!,
-  );
-  const [readonly, setReadonly] = useState<boolean>(externalReadonly);
-  const [debugMode, setDebugMode] = useState<boolean>(externalDebug);
+  const [entityIdOfEntityForBlock, setEntityIdOfEntityForBlock] =
+    useDefaultState<string>(externalBlockEntity?.entityId ?? "");
 
-  const prevExternalReadonly = usePrevious(externalReadonly);
-  const prevExternalDebug = usePrevious(externalDebug);
+  const [readonly, setReadonly] = useDefaultState<boolean>(externalReadonly);
 
   const { initialBlockEntity, mockData } = useMemo((): {
     initialBlockEntity: Entity;
     mockData: MockData;
   } => {
-    const entityTypeId = blockEntity?.entityTypeId ?? "block-type-1";
+    const entityTypeId = externalBlockEntity?.entityTypeId ?? "block-type-1";
 
     const blockEntityType: EntityType = {
       entityTypeId,
@@ -91,7 +78,7 @@ export const useMockBlockProps = ({
         type: "object",
         $schema: "https://json-schema.org/draft/2019-09/schema",
         $id: "http://localhost/blockType1",
-        ...(blockSchema ?? {}),
+        ...(externalBlockSchema ?? {}),
       },
     };
 
@@ -101,8 +88,8 @@ export const useMockBlockProps = ({
       properties: {},
     };
 
-    if (blockEntity && Object.keys(blockEntity).length > 0) {
-      Object.assign(newBlockEntity, blockEntity);
+    if (externalBlockEntity && Object.keys(externalBlockEntity).length > 0) {
+      Object.assign(newBlockEntity, externalBlockEntity);
     }
 
     const nextMockData: MockData = {
@@ -122,8 +109,8 @@ export const useMockBlockProps = ({
 
     return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
   }, [
-    blockEntity,
-    blockSchema,
+    externalBlockEntity,
+    externalBlockSchema,
     initialEntities,
     initialEntityTypes,
     initialLinks,
@@ -142,15 +129,18 @@ export const useMockBlockProps = ({
 
   const latestBlockEntity = useMemo(() => {
     return (
-      entities.find(
-        (entity) => entity.entityId === initialBlockEntity.entityId,
-      ) ??
+      entities.find((entity) => entity.entityId === entityIdOfEntityForBlock) ??
       // fallback in case the entityId of the wrapped component is updated by updating its props
       mockData.entities.find(
         (entity) => entity.entityId === initialBlockEntity.entityId,
       )
     );
-  }, [entities, initialBlockEntity.entityId, mockData.entities]);
+  }, [
+    entities,
+    initialBlockEntity.entityId,
+    mockData.entities,
+    entityIdOfEntityForBlock,
+  ]);
 
   if (!latestBlockEntity) {
     throw new Error("Cannot find block entity. Did it delete itself?");
@@ -178,30 +168,16 @@ export const useMockBlockProps = ({
     throw new Error("Cannot find block entity type. Has it been deleted?");
   }
 
-  if (
-    externalReadonly !== prevExternalReadonly &&
-    readonly !== externalReadonly
-  ) {
-    setReadonly(externalReadonly);
-  }
-
-  if (externalDebug !== prevExternalDebug && debugMode !== externalDebug) {
-    setDebugMode(externalDebug);
-  }
-
   return {
     blockEntity: latestBlockEntity,
     blockGraph,
+    blockSchema: externalBlockSchema,
     datastore,
     entityTypes,
-    linkedAggregations,
     graphServiceCallbacks,
-    blockSchema,
+    linkedAggregations,
     readonly,
-    setBlockSchema,
-    setBlockEntity,
+    setEntityIdOfEntityForBlock,
     setReadonly,
-    debugMode,
-    setDebugMode,
   };
 };

@@ -126,6 +126,7 @@ const usage = commandLineUsage(helpSections);
     blockMetadata.name = slugifiedBlockName;
   } else {
     packageJson.blockprotocol.displayName = blockName;
+    packageJson.blockprotocol.name = slugifiedBlockName;
   }
 
   delete packageJson.homepage;
