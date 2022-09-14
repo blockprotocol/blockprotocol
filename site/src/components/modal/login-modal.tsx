@@ -5,7 +5,6 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { useUser } from "../../context/user-context";
 import { SerializedUser } from "../../lib/api/model/user.model";
 import { apiClient } from "../../lib/api-client";
-import { useScrollLock } from "../../util/mui-utils";
 import { Button } from "../button";
 import { FontAwesomeIcon } from "../icons";
 import { SendLoginCodeScreen } from "../screens/send-login-code-screen";
@@ -22,7 +21,6 @@ type LoginModalPage = "Email" | "VerificationCode";
 
 export const LoginModal: FunctionComponent<LoginModalProps> = ({
   onClose,
-  disableScrollLock = false,
   ...modalProps
 }) => {
   const { user, setUser } = useUser();
@@ -36,8 +34,6 @@ export const LoginModal: FunctionComponent<LoginModalProps> = ({
     setCurrentPage("Email");
     setVerificationCodeInfo(undefined);
   };
-
-  useScrollLock(!disableScrollLock && modalProps.open);
 
   useEffect(() => {
     if (modalProps.open && user) {
@@ -73,18 +69,7 @@ export const LoginModal: FunctionComponent<LoginModalProps> = ({
     <Modal
       data-testid="login-modal"
       closeAfterTransition
-      BackdropProps={{
-        sx: {
-          background: `radial-gradient(${[
-            "141.84% 147.92% at 50% 122.49%",
-            "rgba(255, 177, 114, 0.75) 0%",
-            "rgba(148, 130, 255, 0.75) 32.87%",
-            "rgba(132, 230, 255, 0.75) 100%",
-          ].join(", ")})`,
-        },
-      }}
       onClose={handleClose}
-      disableScrollLock
       {...modalProps}
     >
       <Fade in={modalProps.open}>

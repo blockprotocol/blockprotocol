@@ -1,5 +1,11 @@
 # block-scripts
 
+## 0.0.16
+
+### Patch Changes
+
+- [#596](https://github.com/blockprotocol/blockprotocol/pull/596) [`e8d966f`](https://github.com/blockprotocol/blockprotocol/commit/e8d966f23da20e07b541fda55c51d71a2e8d0a5d) Thanks [@CiaranMn](https://github.com/CiaranMn)! - catch potential crash in asset plugin
+
 ## 0.0.15
 
 ### Patch Changes
