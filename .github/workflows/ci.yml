@@ -280,15 +280,15 @@ jobs:
       - name: Build and launch frontend
         if: ${{ success() || failure() }}
         run: |
-          yarn workspace @blockprotocol/site build
-          yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
+          yarn workspace @apps/site build
+          yarn workspace @apps/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
         env:
           TEST_COVERAGE: true
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=integration-${{ matrix.device }}
+        run: yarn workspace @apps/site playwright test --project=integration-${{ matrix.device }}
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}

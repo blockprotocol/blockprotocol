@@ -86,14 +86,14 @@ When running in development environments, avatars go to the `dev/avatars/(user.i
 
 Before serving any blocks via the Block Hub, they need to be prepared (i.e. built in most cases).
 Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn workspace @blockprotocol/site exe prepare-blocks.ts` prepares blocks.
+The build-script `yarn workspace @apps/site exe prepare-blocks.ts` prepares blocks.
 
 ```sh
 # prepare all blocks
-yarn workspace @blockprotocol/site exe scripts/prepare-blocks.ts
+yarn workspace @apps/site exe scripts/prepare-blocks.ts
 
 # prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" workspace @blockprotocol/site exe scripts/prepare-blocks.ts
+BLOCK_FILTER="@hash/*" workspace @apps/site exe scripts/prepare-blocks.ts
 ```
 
 Once the blocks are built, simply `yarn dev` and head over to
@@ -377,7 +377,7 @@ To run integration tests locally, prepare the blocks, launch the database and st
 Then run this command in a separate terminal:
 
 ```sh
-yarn workspace @blockprotocol/site playwright test --project integration-chrome
+yarn workspace @apps/site playwright test --project integration-chrome
 ```
 
 You can pick a different [Playwright project](./playwright.config.ts) (e.g. `--project=integration-iphone`) or limit the tests you want to run (e.g. `--grep="My test title"`).
@@ -396,7 +396,7 @@ To run E2E test locally, use this command:
 ```sh
 export PLAYWRIGHT_TEST_BASE_URL=https://blockprotocol.org
 
-yarn workspace @blockprotocol/site playwright test --project e2e
+yarn workspace @apps/site playwright test --project e2e
 ```
 
 Omitting `PLAYWRIGHT_TEST_BASE_URL` will launch E2E tests for a locally running Þ instance.
@@ -436,19 +436,19 @@ All commands are executed from the repo root dir.
 1.  Build the site:
 
     ```sh
-    yarn workspace @blockprotocol/site build
+    yarn workspace @apps/site build
     ```
 
 1.  Start the site:
 
     ```sh
-    yarn workspace @blockprotocol/site start
+    yarn workspace @apps/site start
     ```
 
 1.  Open another terminal and run integration tests, e.g.:
 
     ```sh
-    yarn workspace @blockprotocol/site playwright test --project=integration-chrome
+    yarn workspace @apps/site playwright test --project=integration-chrome
     ```
 
     You can pick a different [Playwright project](./playwright.config.ts) (e.g. `--project=integration-iphone`) or limit the tests you want to run (e.g. `--grep="My test title"`).
