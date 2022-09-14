@@ -1,4 +1,7 @@
 {
   "extends": "@local/tsconfig/dom+jsx.json",
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
   "include": ["assets.d.ts", "src", "dev"]
 }
