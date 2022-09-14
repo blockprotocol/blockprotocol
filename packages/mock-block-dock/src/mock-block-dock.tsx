@@ -10,6 +10,7 @@ import { useGraphEmbedderService } from "@blockprotocol/graph/react";
 import { Box } from "@mui/material";
 import { ComponentType, FunctionComponent, useEffect, useRef } from "react";
 
+import styles from "./assets/debug-view-styles.module.css";
 import { BlockRenderer } from "./block-renderer";
 import { DebugView } from "./debug-view";
 import { OffSwitch } from "./debug-view/icons";
@@ -231,9 +232,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       {!debugMode ? (
         <Box>
           {!hideDebugToggle && (
-            <Box className="mbd-debug-mode-toggle-header">
+            <Box className={styles["mbd-debug-mode-toggle-header"]}>
               <button
-                className="mbd-debug-mode-toggle"
+                className={styles["mbd-debug-mode-toggle"]}
                 type="button"
                 onClick={() => setDebugMode(true)}
               >

@@ -29,40 +29,33 @@
 }
 
 body {
-    margin: 0;
-}
-
-.mbd-non-debug-mode-wrapper {
-    padding-top: 60px;
+  margin: 0;
 }
 
 .mbd-debug-mode-toggle-header {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    border-bottom: 1px solid black;
-    padding-left: 24px;
-    padding-right: 24px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    height: 50px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  height: 50px;
 }
 
 .mbd-debug-mode-toggle {
-    font-family: Inter, "Helvetica", "Arial", sans-serif;
-    z-index: 1000;
-    background-color: white;
-    border: 1px solid #DDE7F0;
-    color: #37434e;
-    background: transparent;
-    font-size: 0.8125rem;
-    line-height: 1.75;
-    padding: 3px 9px;
-    border-radius: 4px;
-    cursor: pointer;
-    align-content: baseline;
-    display: flex;
-    align-items: center;
-    background-color: white;
+  font-family: Inter, "Helvetica", "Arial", sans-serif;
+  z-index: 1000;
+  border: 1px solid #dde7f0;
+  color: #37434e;
+  background: transparent;
+  font-size: 0.8125rem;
+  line-height: 1.75;
+  padding: 3px 9px;
+  border-radius: 4px;
+  cursor: pointer;
+  align-content: baseline;
+  display: flex;
+  align-items: center;
 }
 
 .mbd-debug-mode-toggle > svg {
