@@ -6,6 +6,7 @@ import { Box, Typography } from "@mui/material";
 import { Fragment, FunctionComponent } from "react";
 
 import { JsonSchema } from "../lib/json-schema";
+import { Link } from "./link";
 import { mdxComponents } from "./mdx/mdx-components";
 
 const DataType: FunctionComponent<{ propertySchema: JsonSchema }> = ({
@@ -100,6 +101,9 @@ const ServiceMessageData: FunctionComponent<{
   );
 };
 
+const generateServiceMessageAnchor = (messageName: string) =>
+  `message:${messageName}`;
+
 const ServiceMessage: FunctionComponent<{
   message: ServiceMessageDefinition;
 }> = ({ message }) => {
@@ -119,7 +123,7 @@ const ServiceMessage: FunctionComponent<{
   } = message;
 
   return (
-    <Box sx={{ mb: 4 }}>
+    <Box sx={{ mb: 4 }} id={generateServiceMessageAnchor(messageName)}>
       <MdxH5>
         <MdxCode>{messageName}</MdxCode>
       </MdxH5>
@@ -174,6 +178,21 @@ export const ServiceMessageList: FunctionComponent<{
 }> = ({ serviceDefinition }) => {
   return (
     <Box>
+      <Box>
+        {serviceDefinition.messages.map(({ messageName, source }) => (
+          <Typography key={messageName} mb={1}>
+            <Link
+              href={`#${generateServiceMessageAnchor(messageName)}`}
+              sx={{ fontWeight: 600 }}
+            >
+              {messageName}
+            </Link>
+            <Typography component="span" variant="bpSmallCopy" ml={1}>
+              [{source}]
+            </Typography>
+          </Typography>
+        ))}
+      </Box>
       {serviceDefinition.messages.map((message) => (
         <ServiceMessage key={message.messageName} message={message} />
       ))}
