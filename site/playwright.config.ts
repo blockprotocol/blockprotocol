@@ -1,7 +1,7 @@
-import "dotenv-flow/config";
-
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
+
+(await import("dotenv-flow")).config();
 
 const ci = process.env.CI === "true";
 
