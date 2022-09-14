@@ -87,7 +87,9 @@ export const useGraphBlockService = (
  * Create a GraphBlockHandler instance, using a reference to an element in the block.
  *
  * The graphService will only be reconstructed if the element reference changes.
- * Updates to any callbacks after first constructing should be made by calling graphService.on("messageName", callback);
+ * Updates to any callbacks after first constructing should be made by:
+ * 1. to register one, call graphService.on("messageName", callback);
+ * 2. to register multiple, call graphService.registerCallbacks({ [messageName]: callback });
  */
 export const useGraphEmbedderService = (
   ref: RefObject<HTMLElement>,

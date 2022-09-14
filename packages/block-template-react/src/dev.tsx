@@ -1,6 +1,7 @@
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
+import packageJSON from "../package.json";
 import Component from "./index";
 
 const node = document.getElementById("app");
@@ -25,6 +26,7 @@ const DevApp = () => {
         entityId: "my-entity-1",
         properties: { name: "World" },
       }}
+      blockInfo={packageJSON.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
