@@ -96,23 +96,6 @@ export const DatastoreGraphVisualisation = () => {
 
   const eChartWrapperRef = useRef<HTMLDivElement>(null);
 
-  const [graphWidth, setGraphWidth] = useState<number>(0);
-
-  useEffect(() => {
-    const updateGraphWidth = () => {
-      if (eChartWrapperRef.current) {
-        setGraphWidth(eChartWrapperRef.current?.clientWidth);
-      }
-    };
-
-    updateGraphWidth();
-
-    window.addEventListener("resize", updateGraphWidth);
-    return () => {
-      window.removeEventListener("resize", updateGraphWidth);
-    };
-  }, [eChartWrapperRef]);
-
   const [chart, setChart] = useState<echarts.ECharts>();
 
   const { entities, links } = datastore;
@@ -143,17 +126,13 @@ export const DatastoreGraphVisualisation = () => {
 
   useEffect(() => {
     if (chart) {
-      chart.setOption<EChartOption>({
-        series: [{ nodes: eChartNodes }],
-      });
+      chart.setOption<EChartOption>({ series: [{ nodes: eChartNodes }] });
     }
   }, [chart, eChartNodes]);
 
   useEffect(() => {
     if (chart) {
-      chart.setOption<EChartOption>({
-        series: [{ edges: eChartEdges }],
-      });
+      chart.setOption<EChartOption>({ series: [{ edges: eChartEdges }] });
     }
   }, [chart, eChartEdges]);
 
@@ -171,12 +150,7 @@ export const DatastoreGraphVisualisation = () => {
 
       const nodesWithVisibleLabelsIds = [selectedEntityId, ...neighbourIds];
 
-      setEChartEdges((prev) =>
-        prev.map((edge) => ({
-          ...edge,
-          label: { ...edge.label, show: outgoingLinkIds.includes(edge.id) },
-        })),
-      );
+      // Display the label of the selected node and neighbouring nodes
       setEChartNodes((prev) =>
         prev.map((node) => ({
           ...node,
@@ -186,27 +160,24 @@ export const DatastoreGraphVisualisation = () => {
           },
         })),
       );
+
+      // Display the label of the outgoing links of the selected node
+      setEChartEdges((prev) =>
+        prev.map((edge) => ({
+          ...edge,
+          label: { ...edge.label, show: outgoingLinkIds.includes(edge.id) },
+        })),
+      );
     }
-  }, [chart, selectedEntityId, graphWidth, links, entities]);
+  }, [chart, selectedEntityId, links, entities]);
 
   useEffect(() => {
     if (eChartWrapperRef.current) {
       const initialisedChart = echarts.init(eChartWrapperRef.current);
 
-      initialisedChart.on("click", { dataType: "node" }, ({ data: node }) => {
-        setEChartNodes((prev) => {
-          const index = prev.findIndex(
-            ({ id }) => id === (node as EChartNode).id,
-          );
-
-          return [
-            ...prev.slice(0, index),
-            { ...(prev[index] as any), label: { show: false } },
-            ...prev.slice(index + 1),
-          ];
-        });
-        setSelectedEntityId((node as EChartNode).id);
-      });
+      initialisedChart.on("click", { dataType: "node" }, ({ data: node }) =>
+        setSelectedEntityId((node as EChartNode).id),
+      );
 
       const initialOptions = createDefaultEChartOptions();
 
