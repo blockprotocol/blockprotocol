@@ -233,12 +233,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        project:
-          - integration-chrome
-          - integration-firefox
-          - integration-iphone
-          - integration-pixel
-          - integration-safari
+        device:
+          - chrome
+          - firefox
+          - iphone
+          - pixel
+          - safari
     steps:
       - uses: actions/checkout@v3
 
@@ -287,7 +287,7 @@ jobs:
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=${{ matrix.project }}
+        run: yarn workspace @blockprotocol/site playwright test --project=integration-${{ matrix.device }}
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
