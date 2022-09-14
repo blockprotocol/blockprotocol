@@ -1,3 +1,4 @@
+import { EntityType } from "@blockprotocol/graph";
 import { Entity, Link } from "@blockprotocol/graph/.";
 import { Box } from "@mui/material";
 import { GraphChart, GraphSeriesOption } from "echarts/charts";
@@ -7,10 +8,35 @@ import { useEffect, useRef, useState } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 
-const parseNameFromEntity = (entity: Entity): string =>
-  typeof entity.properties.name === "string"
-    ? entity.properties.name
-    : entity.entityId;
+const parseLabelFromEntity = (entity: Entity, type?: EntityType): string => {
+  // if the schema has a labelProperty set, prefer that
+  const labelProperty = type?.schema?.labelProperty;
+  if (
+    labelProperty &&
+    typeof entity.properties[labelProperty] === "string" &&
+    entity.properties[labelProperty]
+  ) {
+    return entity.properties[labelProperty] as string;
+  }
+
+  // fallback to some likely display name properties
+  const options = [
+    "name",
+    "preferredName",
+    "displayName",
+    "title",
+    "shortname",
+  ];
+  for (const option of options) {
+    if (typeof entity.properties[option] === "string") {
+      return entity.properties[option] as string;
+    }
+  }
+
+  const entityTypeName = type?.schema?.title ?? "Entity";
+
+  return `${entityTypeName}-${entity.entityId.slice(0, 5)}`;
+};
 
 type SeriesOption = GraphSeriesOption;
 
@@ -62,9 +88,15 @@ type EChartNode = {
   };
 };
 
-const mapEntityToEChartNode = (entity: Entity): EChartNode => ({
+const mapEntityToEChartNode = (
+  entity: Entity,
+  entityTypes: EntityType[],
+): EChartNode => ({
   id: entity.entityId,
-  name: parseNameFromEntity(entity),
+  name: parseLabelFromEntity(
+    entity,
+    entityTypes.find((type) => type.entityTypeId === entity.entityTypeId),
+  ),
   label: { show: false },
 });
 
@@ -110,10 +142,10 @@ export const DatastoreGraphVisualisation = () => {
     };
   }, [chart]);
 
-  const { entities, links } = datastore;
+  const { entities, entityTypes, links } = datastore;
 
   const [eChartNodes, setEChartNodes] = useState<EChartNode[]>(
-    entities.map(mapEntityToEChartNode),
+    entities.map((entity) => mapEntityToEChartNode(entity, entityTypes)),
   );
 
   const [eChartEdges, setEChartEdges] = useState<EChartEdge[]>(
@@ -121,8 +153,10 @@ export const DatastoreGraphVisualisation = () => {
   );
 
   useEffect(() => {
-    setEChartNodes(entities.map(mapEntityToEChartNode));
-  }, [entities]);
+    setEChartNodes(
+      entities.map((entity) => mapEntityToEChartNode(entity, entityTypes)),
+    );
+  }, [entities, entityTypes]);
 
   useEffect(() => {
     setEChartEdges(links.map(mapLinkToEChartEdge));
