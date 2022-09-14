@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../..",
+  "../../..",
 );
 
 const script = async () => {

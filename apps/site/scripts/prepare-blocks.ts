@@ -34,7 +34,7 @@ import { FRONTEND_URL } from "../src/lib/config";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../..",
+  "../../..",
 );
 
 const defaultExecaOptions = {
