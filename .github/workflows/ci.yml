@@ -259,7 +259,7 @@ jobs:
         run: |
           mkdir -p var/logs
 
-          cat << EOF > site/.env.local
+          cat << EOF > apps/site/.env.local
           SESSION_SECRET=dev-session-secret
           HASHING_SECRET=dev-hashing-secret
 
