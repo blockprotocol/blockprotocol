@@ -226,6 +226,7 @@ jobs:
           path: |
             ${{ env.BLOCK_DIR_PATH }}
             !${{ env.BLOCK_DIR_PATH }}/node_modules/**
+          retention-days: 14
 
   site-integration-tests:
     name: "Site integration tests"
@@ -321,11 +322,12 @@ jobs:
         with:
           name: site-integration-tests-playwright-report-${{ matrix.project }}
           path: site/playwright-report
+          retention-days: 14
 
       - name: Upload artifact playwright-var
         uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
           name: site-integration-tests-var-${{ matrix.project }}
-          path: |
-            var
+          path: var
+          retention-days: 14
