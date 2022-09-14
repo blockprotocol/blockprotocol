@@ -159,14 +159,20 @@ const usage = commandLineUsage(helpSections);
 
   const chalk = (await import("chalk")).default;
 
+  const relativeBlockPath = path.relative(process.cwd(), resolvedBlockPath);
+
+  const escapedPath = !/[^%+,-./:=@_0-9A-Za-z]/.test(relativeBlockPath)
+    ? relativeBlockPath
+    : `'${relativeBlockPath.replace(/'/g, `'"'`)}'`;
+
   console.log(
     chalk.bold("-".repeat(Math.min(process.stdout.columns ?? 48, 48))),
   );
   console.log(
     `Your ${chalk.bold(blockName)} block is ready to code in ${chalk.bold(
-      resolvedBlockPath,
-    )}.\n` +
-      `Run ${chalk.blue(`cd ${resolvedBlockPath}`)} and then \n` +
+      escapedPath,
+    )}\n` +
+      `Run ${chalk.blue(`cd ${escapedPath}`)} and then \n` +
       `${chalk.blue("yarn install && yarn dev")} or ${chalk.blue(
         "npm install && npm run dev",
       )} to get started`,
