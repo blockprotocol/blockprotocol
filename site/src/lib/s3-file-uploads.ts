@@ -1,12 +1,11 @@
 import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import mime from "mime-types";
+import path from "node:path";
 
-import { isProduction } from "./config";
-import { getS3BaseUrl, getS3Bucket, getS3Client } from "./s3";
+import { generateS3ResourceUrl, getS3Bucket, getS3Client } from "./s3";
 
 export const uploadToS3 = async (
-  filenameWithoutExtension: string,
-  extension: string,
+  filename: string,
   buffer: Buffer,
 ): Promise<{
   fullUrl: string;
@@ -14,11 +13,7 @@ export const uploadToS3 = async (
   s3Folder: string;
 }> => {
   const client = getS3Client();
-
-  let filename = `${filenameWithoutExtension}.${extension}`;
-  if (!isProduction && !filename.startsWith("dev/")) {
-    filename = `dev/${filename}`;
-  }
+  const extension = path.extname(filename);
 
   // AWS doesn't detect/apply SVG metadata properly
   let Metadata: any;
@@ -50,12 +45,7 @@ export const uploadToS3 = async (
     // The below URL construction is based on above PR.
     await client.send(command);
 
-    const locationKey = params
-      .Key!.split("/")
-      .map((segment: string) => encodeURIComponent(segment))
-      .join("/");
-
-    fullUrl = `${getS3BaseUrl()}/${locationKey}`;
+    fullUrl = generateS3ResourceUrl(params.Key!);
   } catch (error) {
     throw new Error(`Could not upload image. ${error}`);
   }
@@ -90,8 +80,7 @@ export const uploadFileBufferToS3 = async (
   }
 
   const { fullUrl, s3Key } = await uploadToS3(
-    `${folder}/${filename}`,
-    extension,
+    `${folder}/${filename}.${extension}`,
     fileBuffer,
   );
   return {

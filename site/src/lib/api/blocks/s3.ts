@@ -10,7 +10,12 @@ import mime from "mime-types";
 import path from "node:path";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
-import { getS3BaseUrl, getS3Bucket, getS3Client } from "../../s3";
+import {
+  generateS3ResourceUrl,
+  getS3Bucket,
+  getS3Client,
+  resolveS3ResourcePath,
+} from "../../s3";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
@@ -209,11 +214,13 @@ export const validateExpandAndUploadBlockFiles = async ({
    * In future we will store each version in its own folder, and add the version to the folder path
    * @see https://app.asana.com/0/0/1202539910143057/f (internal)
    */
-  const remoteStoragePrefix = stripLeadingAt(pathWithNamespace);
-  const publicPackagePath = `${getS3BaseUrl()}/${remoteStoragePrefix}`;
+  const remoteStoragePrefix = resolveS3ResourcePath(
+    "blocks",
+    stripLeadingAt(pathWithNamespace),
+  );
 
   const sourceInformation = {
-    blockDistributionFolderUrl: publicPackagePath,
+    blockDistributionFolderUrl: generateS3ResourceUrl(remoteStoragePrefix),
     npmPackageName,
     pathWithNamespace,
     repository:

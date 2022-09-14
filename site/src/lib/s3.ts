@@ -40,16 +40,49 @@ export const getS3Bucket = (): string => {
   return s3Bucket;
 };
 
+let s3PathPrefix: string | undefined;
+
+const getS3PathPrefix = (): string => {
+  if (!s3PathPrefix) {
+    const env = envalid.cleanEnv(process.env, {
+      NEXT_PUBLIC_VERCEL_ENV: envalid.str({ default: "" }),
+      VERCEL_GIT_COMMIT_REF: envalid.str({ default: "" }),
+    });
+
+    s3PathPrefix = `/${
+      env.NEXT_PUBLIC_VERCEL_ENV === "preview" ? env.VERCEL_GIT_COMMIT_REF : ""
+    }`;
+  }
+
+  return s3PathPrefix;
+};
+
+export const resolveS3ResourcePath = (
+  category: "blocks" | "avatars",
+  subpath: string,
+): string => {
+  return `${getS3PathPrefix()}/${category}/${subpath}`;
+};
+
 let s3BaseUrl: string | undefined;
 
-export const getS3BaseUrl = (): string => {
+const getS3BaseUrl = (): string => {
   if (!s3BaseUrl) {
     const env = envalid.cleanEnv(process.env, {
       S3_BASE_URL: envalid.str(),
     });
 
-    s3BaseUrl = env.S3_BASE_URL;
+    s3BaseUrl = env.S3_BASE_URL.replace(/\/$/, "");
   }
 
   return s3BaseUrl;
+};
+
+export const generateS3ResourceUrl = (
+  resolvedS3ResourcePath: string,
+): string => {
+  return `${getS3BaseUrl()}${resolvedS3ResourcePath
+    .split("/")
+    .map((segment: string) => encodeURIComponent(segment))
+    .join("/")}`;
 };
