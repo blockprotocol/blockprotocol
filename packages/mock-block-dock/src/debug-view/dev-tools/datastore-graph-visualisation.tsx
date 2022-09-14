@@ -87,7 +87,7 @@ const mapLinkToEChartEdge = ({
   id: linkId,
   source: sourceEntityId,
   target: destinationEntityId,
-  label: { show: false, formatter: path },
+  label: { show: false, formatter: path.replace("$.", "") },
 });
 
 export const DatastoreGraphVisualisation = () => {
