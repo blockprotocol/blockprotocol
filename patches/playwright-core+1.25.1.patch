@@ -7,7 +7,7 @@ index c6eb515..3e03fde 100644
        if (!cookie) continue; // https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.3
  
 -      if (!cookie.domain) cookie.domain = url.hostname;else (0, _utils.assert)(cookie.domain.startsWith('.'));
-+      // This hack allows setting cookies in site/tests/shared/nav.ts → login
++      // This hack allows setting cookies in apps/site/tests/shared/nav.ts → login
 +      // To be removed in https://app.asana.com/0/1202542409311090/1202652337622563/f
 +      if (!cookie.domain) cookie.domain = url.hostname;else cookie.domain = cookie.domain.replace(/^./, '');
        if (!(0, _cookieStore.domainMatches)(url.hostname, cookie.domain)) continue; // https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.4

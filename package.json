@@ -4,11 +4,11 @@
   "type": "module",
   "workspaces": {
     "packages": [
+      "apps/*",
       "crates/*",
       "packages/*",
       "packages/@blockprotocol/*",
-      "packages/@local/*",
-      "site"
+      "packages/@local/*"
     ],
     "nohoist": [
       "**/@types/prismjs"
@@ -34,7 +34,7 @@
     "dev": "yarn workspace @apps/site dev",
     "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "dev:db": "yarn workspace @apps/site dev:db",
-    "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./site/\""
+    "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./apps/site/\""
   },
   "lint-staged": {
     "**/*": [

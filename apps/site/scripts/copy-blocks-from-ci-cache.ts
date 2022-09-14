@@ -10,16 +10,16 @@ const monorepoRoot = path.resolve(
 );
 
 const script = async () => {
-  console.log(chalk.bold("Copying blocks to CI cache..."));
+  console.log(chalk.bold("Copying blocks from CI cache..."));
 
   const env = envalid.cleanEnv(process.env, {
     BLOCKS_DIR: envalid.str({
       desc: "location of built blocks that are ready to be served",
-      default: path.resolve(monorepoRoot, "site/public/blocks"),
+      default: path.resolve(monorepoRoot, "apps/site/public/blocks"),
     }),
     BLOCKS_CI_CACHE_DIR: envalid.str({
       desc: "Location of blocks in CI cache",
-      default: path.resolve(monorepoRoot, "site/.next/cache/blocks"),
+      default: path.resolve(monorepoRoot, "apps/site/.next/cache/blocks"),
     }),
   });
 
@@ -29,13 +29,22 @@ const script = async () => {
     env.BLOCKS_CI_CACHE_DIR,
   );
 
-  await fs.ensureDir(path.dirname(resolvedBlocksCiCacheDir));
+  if (!(await fs.pathExists(resolvedBlocksCiCacheDir))) {
+    console.log(
+      chalk.gray(
+        `Skipping (CI cache not found at ${resolvedBlocksCiCacheDir})`,
+      ),
+    );
+    return;
+  }
 
-  await fs.copy(resolvedBlocksDir, resolvedBlocksCiCacheDir, {
+  await fs.ensureDir(path.dirname(resolvedBlocksDir));
+
+  await fs.copy(resolvedBlocksCiCacheDir, resolvedBlocksDir, {
     recursive: true,
   });
 
-  console.log("Done.");
+  console.log(`Done.`);
 };
 
 await script();

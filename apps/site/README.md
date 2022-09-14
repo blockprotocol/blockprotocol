@@ -2,14 +2,14 @@
 
 This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
-- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
+- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec)
+- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs)
 
 ## Local development
 
 ### BP Site
 
-1.  Add a `site/.env.local` environment variable file with the following environment variables:
+1.  Add a `apps/site/.env.local` environment variable file with the following environment variables:
 
     - `HASHING_SECRET`: the secret used to hash API keys
     - `SESSION_SECRET`: the secret used to sign the session ID cookie
@@ -19,7 +19,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     - `MONGODB_PASSWORD`: the database password
     - `NEXT_PUBLIC_FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)
 
-    Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
+    Example minimal file at `apps/site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
     ```sh
     SESSION_SECRET=dev-session-secret
@@ -104,7 +104,7 @@ Once the blocks are built, simply `yarn dev` and head over to
 If no build-config is provided to the build-script, it will pick up all build-configs changed by the
 last commit. This is part of `yarn build` which is also used by the deployment platform Vercel.
 
-Vercel preserves nextjs' cache `/site/.next/cache` between builds. The build script synchronizes its
+Vercel preserves nextjs' cache `apps/site/.next/cache` between builds. The build script synchronizes its
 results with that cache and rebuilds only what has changed to speed up builds.
 
 ## API Routes
@@ -358,7 +358,7 @@ Response Body:
 ## Testing
 
 [blockprotocol.org](https://blockprotocol.org) is covered by browser-based tests written with [Playwright](https://playwright.dev).
-These tests are located in the `site/tests` folder.
+These tests are located in the `apps/site/tests` folder.
 They are grouped into:
 
 - integration tests

@@ -56,4 +56,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: site-e2e-tests-playwright-report
-          path: site/playwright-report
+          path: apps/site/playwright-report
