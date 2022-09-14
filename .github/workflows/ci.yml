@@ -219,17 +219,27 @@ jobs:
           docker stop verdaccio
 
       - name: Upload block folder as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
           name: ${{ env.BLOCK_NAME }}
           path: |
             ${{ env.BLOCK_DIR_PATH }}
             !${{ env.BLOCK_DIR_PATH }}/node_modules/**
+          retention-days: 14
 
   site-integration-tests:
     name: "Site integration tests"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - chrome
+          - firefox
+          - iphone
+          - pixel
+          - safari
     steps:
       - uses: actions/checkout@v3
 
@@ -243,7 +253,7 @@ jobs:
 
       - uses: ./.github/actions/warm-up-repo
         with:
-          playwright-deps: chrome firefox webkit
+          playwright-deps: ${{ ((matrix.device == 'iphone' || matrix.device == 'safari') && 'webkit') || (matrix.device == 'firefox' && 'firefox') || 'chrome' }}
 
       - name: Create temp files and folders
         run: |
@@ -288,7 +298,7 @@ jobs:
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
+        run: yarn workspace @blockprotocol/site playwright test --project=integration-${{ matrix.device }}
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
@@ -306,7 +316,7 @@ jobs:
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true
-          flags: site-integration
+          flags: site-integration-${{ matrix.device }}
           files: coverage/lcov.info
 
       - name: Show DB logs
@@ -319,15 +329,16 @@ jobs:
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: site-integration-tests-playwright-report
+          name: site-integration-tests-playwright-report-${{ matrix.device }}
           path: site/playwright-report
+          retention-days: 14
 
       - name: Upload artifact playwright-var
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
-          name: site-integration-tests-var
-          path: |
-            var
+          name: site-integration-tests-var-${{ matrix.device }}
+          path: var
+          retention-days: 14
