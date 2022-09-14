@@ -1,4 +1,5 @@
 import { Entity, Link } from "@blockprotocol/graph/.";
+import { Box } from "@mui/material";
 import { GraphChart, GraphSeriesOption } from "echarts/charts";
 import * as echarts from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
@@ -10,8 +11,6 @@ const parseNameFromEntity = (entity: Entity): string =>
   typeof entity.properties.name === "string"
     ? entity.properties.name
     : entity.entityId;
-
-const graphHeight = 500;
 
 type SeriesOption = GraphSeriesOption;
 
@@ -188,8 +187,14 @@ export const DatastoreGraphVisualisation = () => {
   }, [eChartWrapperRef]);
 
   return (
-    <div
-      style={{ width: "100%", height: graphHeight }}
+    <Box
+      sx={{
+        width: "100%",
+        height: {
+          xs: 500,
+          lg: "100%",
+        },
+      }}
       ref={eChartWrapperRef}
     />
   );
