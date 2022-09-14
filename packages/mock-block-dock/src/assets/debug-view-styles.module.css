@@ -9,6 +9,7 @@
   font-weight: 400;
   src: url("./inter-regular.ttf") format("trueType");
 }
+
 @font-face {
   font-family: "Inter";
   font-weight: 500;
@@ -27,17 +28,23 @@
   src: url("./jet-brains-mono-regular.woff2") format("woff2");
 }
 
-.mbd-non-debug-mode-wrapper {
-  padding-top: 60px;
+body {
+  margin: 0;
+}
+
+.mbd-debug-mode-toggle-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  height: 50px;
 }
 
 .mbd-debug-mode-toggle {
   font-family: Inter, "Helvetica", "Arial", sans-serif;
-  position: fixed;
   z-index: 1000;
-  top: 9px;
-  right: 24px;
-  background-color: white;
   border: 1px solid #dde7f0;
   color: #37434e;
   background: transparent;
@@ -46,9 +53,9 @@
   padding: 3px 9px;
   border-radius: 4px;
   cursor: pointer;
+  align-content: baseline;
   display: flex;
   align-items: center;
-  background-color: white;
 }
 
 .mbd-debug-mode-toggle > svg {
