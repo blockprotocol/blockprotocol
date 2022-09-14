@@ -104,6 +104,7 @@
     "@types/cookie-signature": "^1.0.4",
     "@types/cors": "^2.8.12",
     "@types/dedent": "^0.7.0",
+    "@types/dotenv-flow": "^3.2.0",
     "@types/express-session": "^1.17.4",
     "@types/hosted-git-info": "^3.0.2",
     "@types/html-to-text": "^8.0.1",
