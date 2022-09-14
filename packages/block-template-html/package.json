@@ -18,10 +18,10 @@
     "url": "https://hash.ai"
   },
   "scripts": {
-    "build": "rimraf dist; cp -R src dist; cp block-metadata.json dist; cp block-schema.json dist; cp -R public dist;",
-    "dev": "echo \"Serving at http://localhost:63212\"; http-server -p 63212 ./dev",
+    "build": "rimraf dist && cp -R src dist && cp block-metadata.json dist && cp block-schema.json dist && cp -R public dist",
+    "dev": "echo \"Serving at http://localhost:63212\" && http-server -p 63212 ./dev",
     "format": "prettier \"**/*\" --write --ignore-unknown",
-    "prepare": "rimraf ./dev/src; lnk -f ./src ./dev",
+    "prepare": "rimraf ./dev/src && lnk -f ./src ./dev",
     "serve": "block-scripts serve"
   },
   "prettier": {
