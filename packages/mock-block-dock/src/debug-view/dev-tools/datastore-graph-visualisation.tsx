@@ -97,6 +97,19 @@ export const DatastoreGraphVisualisation = () => {
 
   const [chart, setChart] = useState<echarts.ECharts>();
 
+  useEffect(() => {
+    const resizeChart = () => {
+      if (chart) {
+        chart.resize();
+      }
+    };
+
+    window.addEventListener("resize", resizeChart);
+    return () => {
+      window.removeEventListener("resize", resizeChart);
+    };
+  }, [chart]);
+
   const { entities, links } = datastore;
 
   const [eChartNodes, setEChartNodes] = useState<EChartNode[]>(
@@ -171,7 +184,7 @@ export const DatastoreGraphVisualisation = () => {
   }, [chart, selectedEntityId, links, entities]);
 
   useEffect(() => {
-    if (eChartWrapperRef.current) {
+    if (!chart && eChartWrapperRef.current) {
       const initialisedChart = echarts.init(eChartWrapperRef.current);
 
       initialisedChart.on("click", { dataType: "node" }, ({ data: node }) =>
@@ -184,16 +197,13 @@ export const DatastoreGraphVisualisation = () => {
 
       setChart(initialisedChart);
     }
-  }, [eChartWrapperRef]);
+  }, [chart, eChartWrapperRef]);
 
   return (
     <Box
       sx={{
         width: "100%",
-        height: {
-          xs: 500,
-          lg: "100%",
-        },
+        height: 500,
       }}
       ref={eChartWrapperRef}
     />
