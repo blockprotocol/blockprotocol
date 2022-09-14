@@ -3,22 +3,19 @@ import {
   BlockGraphProperties,
   Entity,
   EntityType,
-  GraphEmbedderHandler,
   Link,
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
-import {
-  ComponentType,
-  FunctionComponent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useGraphEmbedderService } from "@blockprotocol/graph/react";
+import { Box } from "@mui/material";
+import { ComponentType, FunctionComponent, useEffect, useRef } from "react";
 
+import styles from "./assets/debug-view-styles.module.css";
 import { BlockRenderer } from "./block-renderer";
 import { DebugView } from "./debug-view";
 import { OffSwitch } from "./debug-view/icons";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
+import { useDefaultState } from "./use-default-state";
 import { useMockBlockProps } from "./use-mock-block-props";
 import { useSendGraphValue } from "./use-send-graph-value";
 
@@ -45,29 +42,39 @@ type MockBlockDockProps = {
   initialLinks?: Link[];
   initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
-  blockName?: string;
+  blockInfo?: {
+    blockType: {
+      entryPoint: "react" | "html" | "custom-element" | string;
+    };
+    displayName: string;
+    icon: string;
+    image: string;
+    name: string;
+    protocol: string;
+  };
 };
 
 /**
  * A component which acts as a mock embedding application for Block Protocol blocks.
  * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
- * @param [blockDefinition] the source for the block and any additional metadata required
+ * @param blockDefinition the source for the block and any additional metadata required
  * @param [blockEntity] the starting properties for the block entity
+ * @param [blockInfo] metadata about the block
  * @param [blockSchema] the schema for the block entity
- * @param [debug=false] display debugging information
- * @param [hideDebugToggle=false] hide the ability to toggle the debug UI
+ * @param [debug = false] display debugging information
+ * @param [hideDebugToggle = false] hide the ability to toggle the debug UI
  * @param [initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
  * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
  * @param [initialLinks] the links to include in the data store
- * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @param [readonly=false] whether the block should be initialised in readonly mode
- * @param [blockName] - block's display name
+ * @param [initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [readonly = false] whether the block should display in readonly mode or not
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
   blockEntity: initialBlockEntity,
   blockSchema: initialBlockSchema,
+  blockInfo,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialEntities,
@@ -75,21 +82,17 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   initialLinks,
   initialLinkedAggregations,
   readonly: initialReadonly = false,
-  blockName,
 }) => {
   const {
     blockEntity,
     blockGraph,
     blockSchema,
     datastore,
-    debugMode,
     entityTypes,
     graphServiceCallbacks,
     linkedAggregations,
     readonly,
-    setBlockSchema,
-    setBlockEntity,
-    setDebugMode,
+    setEntityIdOfEntityForBlock,
     setReadonly,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
@@ -99,12 +102,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     initialLinks,
     initialLinkedAggregations,
     readonly: !!initialReadonly,
-    debug: !!initialDebug,
   });
 
-  const [graphService, setGraphService] = useState<GraphEmbedderHandler | null>(
-    null,
-  );
+  const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
@@ -127,33 +127,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     },
   };
 
-  useEffect(() => {
-    if (!wrapperRef.current) {
-      throw new Error(
-        "No reference to wrapping element – cannot listen for messages from block",
-      );
-    } else if (!graphService) {
-      setGraphService(
-        new GraphEmbedderHandler({
-          blockGraph,
-          blockEntity,
-          entityTypes,
-          linkedAggregations,
-          callbacks: graphServiceCallbacks,
-          element: wrapperRef.current,
-          readonly,
-        }),
-      );
-    }
-  }, [
-    blockEntity,
+  const { graphService } = useGraphEmbedderService(wrapperRef, {
     blockGraph,
+    blockEntity,
     entityTypes,
-    graphService,
-    graphServiceCallbacks,
     linkedAggregations,
+    callbacks: graphServiceCallbacks,
     readonly,
-  ]);
+  });
 
   useSendGraphValue({
     graphService,
@@ -183,7 +164,18 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   useEffect(() => {
     if (graphService) {
-      graphService.registerCallbacks(graphServiceCallbacks);
+      // The callbacks are reconstructed when the data in the store changes
+      // We need to register the updated callbacks or the data they use will be stale
+      try {
+        graphService.registerCallbacks(graphServiceCallbacks);
+      } catch {
+        /**
+         * Registration can error when the user switches between preview and debug mode.
+         * Registration is attempted with the old service, which has been destroyed.
+         * It then succeeds with the new one.
+         * @todo can we avoid this error?
+         */
+      }
     }
   }, [graphService, graphServiceCallbacks]);
 
@@ -220,32 +212,39 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   return (
     <MockBlockDockProvider
+      blockEntity={blockEntity}
+      blockInfo={
+        blockInfo ?? {
+          blockType: {
+            entryPoint: blockType,
+          },
+        }
+      }
+      blockSchema={blockSchema}
+      datastore={datastore}
       debugMode={debugMode}
-      setDebugMode={setDebugMode}
       readonly={readonly}
       setReadonly={setReadonly}
-      blockSchema={blockSchema}
-      setBlockSchema={setBlockSchema}
-      blockEntity={blockEntity}
-      setBlockEntity={setBlockEntity}
-      datastore={datastore}
-      blockType={blockType}
-      blockName={blockName}
+      setDebugMode={setDebugMode}
+      setEntityIdOfEntityForBlock={setEntityIdOfEntityForBlock}
+      updateEntity={graphServiceCallbacks.updateEntity}
     >
       {!debugMode ? (
-        <div className="mbd-non-debug-mode-wrapper">
-          {Component}
+        <Box>
           {!hideDebugToggle && (
-            <button
-              className="mbd-debug-mode-toggle"
-              type="button"
-              onClick={() => setDebugMode(true)}
-            >
-              Preview Mode
-              <OffSwitch />
-            </button>
+            <Box className={styles["mbd-debug-mode-toggle-header"]}>
+              <button
+                className={styles["mbd-debug-mode-toggle"]}
+                type="button"
+                onClick={() => setDebugMode(true)}
+              >
+                Preview Mode
+                <OffSwitch />
+              </button>
+            </Box>
           )}
-        </div>
+          {Component}
+        </Box>
       ) : (
         <DebugView>{Component}</DebugView>
       )}
