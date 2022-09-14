@@ -22,7 +22,6 @@
     "fix:prettier": "prettier --cache --write --ignore-unknown \"**/*.*\"",
     "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
-    "@todo.2": "Remove the ignore argument below once react-block-loader is upgraded to 0.2 spec",
     "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "eslint \"**/*\"",
