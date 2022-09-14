@@ -252,7 +252,7 @@ jobs:
 
       - uses: ./.github/actions/warm-up-repo
         with:
-          playwright-deps: ${{ ((matrix.device == 'iphone' || matrix.device == 'safari' && 'webkit') || (matrix.device == 'firefox' && 'firefox') || 'chrome' }}
+          playwright-deps: ${{ (matrix.device == 'iphone' || matrix.device == 'safari' && 'webkit') || (matrix.device == 'firefox' && 'firefox') || 'chrome' }}
 
       - name: Create temp files and folders
         run: |
