@@ -65,17 +65,17 @@ type MockBlockDockProps = {
  * A component which acts as a mock embedding application for Block Protocol blocks.
  * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
- * @param blockDefinition the source for the block and any additional metadata required
- * @param blockDefinition.blockEntity the starting properties for the block entity
- * @param blockDefinition.blockInfo metadata about the block
- * @param blockDefinition.blockSchema the schema for the block entity
- * @param blockDefinition.debug `= false` display debugging information
- * @param blockDefinition.hideDebugToggle `= false` hide the ability to toggle the debug UI
- * @param blockDefinition.initialEntities the entities to include in the data store (NOT the block entity, which is always provided)
- * @param blockDefinition.initialEntityTypes the entity types to include in the data store (NOT the block's type, which is always provided)
- * @param blockDefinition.initialLinks the links to include in the data store
- * @param blockDefinition.initialLinkedAggregations The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @param blockDefinition.readonly `= false` whether the block should display in readonly mode or not
+ * @param props.blockDefinition the source for the block and any additional metadata required
+ * @param [props.blockEntity] the starting properties for the block entity
+ * @param [props.blockInfo] metadata about the block
+ * @param [props.blockSchema] the schema for the block entity
+ * @param [props.debug=false] display debugging information
+ * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
+ * @param [props.initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [props.initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
+ * @param [props.initialLinks] the links to include in the data store
+ * @param [props.initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [props.readonly=false] whether the block should display in readonly mode or not
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
