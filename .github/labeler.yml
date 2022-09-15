@@ -9,6 +9,7 @@
   - "hub/**/*"
 
 "area: infra":
+  - ".changeset/config.json"
   - ".github/**/*"
   - ".husky/**/*"
   - "infra/**/*"
@@ -18,17 +19,30 @@
 "area: packages":
   - "packages/**/*"
 
+"area: rfcs":
+  - "rfcs/**/*"
+
 "area: site":
   - "site/**/*"
 
 "area: spec":
   - "site/src/_pages/spec/**/*"
 
-"package: Þ core":
+"package: @Þ/core":
   - "packages/@blockprotocol/core/**/*"
 
-"package: Þ graph":
+"package: @Þ/graph":
   - "packages/@blockprotocol/graph/**/*"
+
+"package: @Þ/hook":
+  - "packages/@blockprotocol/hook/**/*"
+
+"package: @Þ/type-system":
+  - "packages/@blockprotocol/type-system-node/**/*"
+  - "packages/@blockprotocol/type-system-web/**/*"
+
+"package: @local/*":
+  - "packages/@local/**/*"
 
 "package: block-scripts":
   - "packages/block-scripts/**/*"
