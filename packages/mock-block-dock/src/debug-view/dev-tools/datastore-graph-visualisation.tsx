@@ -8,35 +8,37 @@ import { useEffect, useRef, useState } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 
-const parseLabelFromEntity = (entity: Entity, type?: EntityType): string => {
-  // if the schema has a labelProperty set, prefer that
-  const labelProperty = type?.schema?.labelProperty;
-  if (
-    labelProperty &&
-    typeof entity.properties[labelProperty] === "string" &&
-    entity.properties[labelProperty]
-  ) {
-    return entity.properties[labelProperty] as string;
-  }
-
-  // fallback to some likely display name properties
-  const options = [
-    "name",
-    "preferredName",
-    "displayName",
-    "title",
-    "shortname",
-  ];
-  for (const option of options) {
-    if (typeof entity.properties[option] === "string") {
-      return entity.properties[option] as string;
+const parseLabelFromEntity =
+  (type?: EntityType) =>
+  (entity: Entity): string => {
+    // if the schema has a labelProperty set, prefer that
+    const labelProperty = type?.schema?.labelProperty;
+    if (
+      labelProperty &&
+      typeof entity.properties[labelProperty] === "string" &&
+      entity.properties[labelProperty]
+    ) {
+      return entity.properties[labelProperty] as string;
     }
-  }
 
-  const entityTypeName = type?.schema?.title ?? "Entity";
+    // fallback to some likely display name properties
+    const options = [
+      "name",
+      "preferredName",
+      "displayName",
+      "title",
+      "shortname",
+    ];
+    for (const option of options) {
+      if (typeof entity.properties[option] === "string") {
+        return entity.properties[option] as string;
+      }
+    }
 
-  return `${entityTypeName}-${entity.entityId.slice(0, 5)}`;
-};
+    const entityTypeName = type?.schema?.title ?? "Entity";
+
+    return `${entityTypeName}-${entity.entityId.slice(0, 5)}`;
+  };
 
 type SeriesOption = GraphSeriesOption;
 
@@ -88,17 +90,15 @@ type EChartNode = {
   };
 };
 
-const mapEntityToEChartNode = (
-  entity: Entity,
-  entityTypes: EntityType[],
-): EChartNode => ({
-  id: entity.entityId,
-  name: parseLabelFromEntity(
-    entity,
-    entityTypes.find((type) => type.entityTypeId === entity.entityTypeId),
-  ),
-  label: { show: false },
-});
+const mapEntityToEChartNode =
+  (entityTypes: EntityType[]) =>
+  (entity: Entity): EChartNode => ({
+    id: entity.entityId,
+    name: parseLabelFromEntity(
+      entityTypes.find((type) => type.entityTypeId === entity.entityTypeId),
+    )(entity),
+    label: { show: false },
+  });
 
 type EChartEdge = {
   id: string;
@@ -145,7 +145,7 @@ export const DatastoreGraphVisualisation = () => {
   const { entities, entityTypes, links } = datastore;
 
   const [eChartNodes, setEChartNodes] = useState<EChartNode[]>(
-    entities.map((entity) => mapEntityToEChartNode(entity, entityTypes)),
+    entities.map(mapEntityToEChartNode(entityTypes)),
   );
 
   const [eChartEdges, setEChartEdges] = useState<EChartEdge[]>(
@@ -153,9 +153,7 @@ export const DatastoreGraphVisualisation = () => {
   );
 
   useEffect(() => {
-    setEChartNodes(
-      entities.map((entity) => mapEntityToEChartNode(entity, entityTypes)),
-    );
+    setEChartNodes(entities.map(mapEntityToEChartNode(entityTypes)));
   }, [entities, entityTypes]);
 
   useEffect(() => {
