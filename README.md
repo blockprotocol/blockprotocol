@@ -27,7 +27,7 @@ Learn more on our [RFCs & Roadmap](https://blockprotocol.org/docs/spec/rfcs_and_
 
 We welcome [contributions](#contributing) to this repository. Within it you will find folders for:
 
-1.  `site`: the code for [blockprotocol.org](https://blockprotocol.org), including:
+1.  `apps/site`: the code for [blockprotocol.org](https://blockprotocol.org), including:
 
     - the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec)
     - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs)

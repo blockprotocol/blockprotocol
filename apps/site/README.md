@@ -407,7 +407,7 @@ This is helpful for debugging.
 When running site integration tests in CI, we collect test coverage and report it to [codecov.io](https://codecov.io) (https://app.codecov.io/gh/blockprotocol/blockprotocol).
 This helps us detect parts of the site that are potentially more prone to bugs.
 
-The resulting coverage report includes source files in the `site` folder.
+The resulting coverage report includes source files in the `apps/site` folder.
 A statement is marked as covered if it has been invoked during either `next build` or `next start` (both on the Node.js side and in the browser).
 
 E2E tests do not report coverage as they run against a production-like server environment and are designed to only sense-check the deployment.
