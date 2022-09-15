@@ -1,5 +1,22 @@
 # block-template-react
 
+## 0.1.7
+
+### Patch Changes
+
+- [#599](https://github.com/blockprotocol/blockprotocol/pull/599) [`cea95ed`](https://github.com/blockprotocol/blockprotocol/commit/cea95ed427c820cd9e251dc632da927b5db1f23a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add name field to blockprotocol object in package.json
+
+## 0.1.6
+
+### Patch Changes
+
+- [#598](https://github.com/blockprotocol/blockprotocol/pull/598) [`8154e59`](https://github.com/blockprotocol/blockprotocol/commit/8154e59c29de21a2a831f6a0536a6f1ec265d10c) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add explanatory comments and simplify template. add 'format' command
+
+- [#601](https://github.com/blockprotocol/blockprotocol/pull/601) [`ccc0ecc`](https://github.com/blockprotocol/blockprotocol/commit/ccc0ecc5c0523205b4724b6e5813699a2e3f0df7) Thanks [@kachkaev](https://github.com/kachkaev)! - Update `devDependencies`
+
+- Updated dependencies [[`6a8b3da`](https://github.com/blockprotocol/blockprotocol/commit/6a8b3dabd1dd54badfa7612e199d0c5911b28206), [`08777c5`](https://github.com/blockprotocol/blockprotocol/commit/08777c5882227db090a912b51b1cb757821ba7c4), [`8154e59`](https://github.com/blockprotocol/blockprotocol/commit/8154e59c29de21a2a831f6a0536a6f1ec265d10c)]:
+  - @blockprotocol/graph@0.0.16
+
 ## 0.1.5
 
 ### Patch Changes

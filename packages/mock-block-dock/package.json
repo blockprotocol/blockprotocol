@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.25",
+  "version": "0.0.27",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -41,12 +41,13 @@
   },
   "dependencies": {
     "@blockprotocol/core": "0.0.11",
-    "@blockprotocol/graph": "0.0.15",
+    "@blockprotocol/graph": "0.0.16",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
     "@mui/material": "^5.10.4",
     "ajv": "^8.9.0",
+    "echarts": "^5.3.3",
     "react-json-view": "^1.21.3",
     "react-resizable": "^3.0.4",
     "use-local-storage-state": "^18.1.1",

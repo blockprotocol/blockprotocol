@@ -1,5 +1,3 @@
-import "./assets/debug-view-styles.css";
-
 import { Box, CssBaseline, styled, ThemeProvider } from "@mui/material";
 import { ReactNode, useState } from "react";
 

@@ -1,5 +1,26 @@
 # mock-block-dock
 
+## 0.0.27
+
+### Patch Changes
+
+- [#605](https://github.com/blockprotocol/blockprotocol/pull/605) [`e476770`](https://github.com/blockprotocol/blockprotocol/commit/e4767703fd53b39208840dc46987d17db663a2f6) Thanks [@benwerner01](https://github.com/benwerner01)! - Add a graph visualisation of the local datastore
+
+- [#599](https://github.com/blockprotocol/blockprotocol/pull/599) [`cea95ed`](https://github.com/blockprotocol/blockprotocol/commit/cea95ed427c820cd9e251dc632da927b5db1f23a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - - Add functionality to edit and validate block properties from debug mode UI
+  - Add functionality to switch current block entity
+  - Display block info tab in debug UI
+
+## 0.0.26
+
+### Patch Changes
+
+- [#593](https://github.com/blockprotocol/blockprotocol/pull/593) [`6a8b3da`](https://github.com/blockprotocol/blockprotocol/commit/6a8b3dabd1dd54badfa7612e199d0c5911b28206) Thanks [@CiaranMn](https://github.com/CiaranMn)! - improve clarity of debug UI
+
+- [#589](https://github.com/blockprotocol/blockprotocol/pull/589) [`08777c5`](https://github.com/blockprotocol/blockprotocol/commit/08777c5882227db090a912b51b1cb757821ba7c4) Thanks [@yusufkinatas](https://github.com/yusufkinatas)! - Add `labelProperty` to pre-defined entity types
+
+- Updated dependencies [[`6a8b3da`](https://github.com/blockprotocol/blockprotocol/commit/6a8b3dabd1dd54badfa7612e199d0c5911b28206), [`08777c5`](https://github.com/blockprotocol/blockprotocol/commit/08777c5882227db090a912b51b1cb757821ba7c4), [`8154e59`](https://github.com/blockprotocol/blockprotocol/commit/8154e59c29de21a2a831f6a0536a6f1ec265d10c)]:
+  - @blockprotocol/graph@0.0.16
+
 ## 0.0.25
 
 ### Patch Changes

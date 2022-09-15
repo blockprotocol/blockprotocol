@@ -9,6 +9,9 @@ export const personNames = [
   "Amanda",
   "Daniel",
   "Steven",
+  "Connor",
+  "Jack",
+  "Louis",
 ];
 
 export const companyNames = [

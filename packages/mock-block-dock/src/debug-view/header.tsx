@@ -2,6 +2,7 @@ import {
   Box,
   Button as MuiButton,
   ButtonProps,
+  Link,
   styled,
   Typography,
 } from "@mui/material";
@@ -58,7 +59,7 @@ type Props = {
 };
 
 export const Header = ({ darkMode, setDarkMode }: Props) => {
-  const { setDebugMode, blockName } = useMockBlockDockContext();
+  const { setDebugMode, blockInfo } = useMockBlockDockContext();
 
   return (
     <Container>
@@ -78,6 +79,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           variant="subtitle2"
           fontWeight="normal"
           color={customColors.gray[60]}
+          mt="2px"
         >
           v{MOCK_BLOCK_DOCK_VERSION}
         </Typography>
@@ -106,13 +108,31 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           Blocks /
         </Typography>
         <Typography variant="subtitle2" fontWeight="medium">
-          {blockName}
+          {blockInfo?.displayName}
         </Typography>
       </Box>
 
-      <Button href="https://blockprotocol.org/docs" sx={{ mr: 1 }}>
-        Docs
-      </Button>
+      <Link
+        href="https://blockprotocol.org/docs"
+        sx={{ color: "black", mr: 2.5, textDecoration: "none" }}
+        target="_blank"
+      >
+        <Typography
+          component="span"
+          variant="subtitle2"
+          sx={({ palette }) => ({
+            color:
+              palette.mode === "light"
+                ? customColors.gray[70]
+                : customColors.gray[30],
+            "&:hover": {
+              color: palette.mode === "light" ? "black" : "white",
+            },
+          })}
+        >
+          Docs
+        </Typography>
+      </Link>
 
       <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}>
         Dark Mode

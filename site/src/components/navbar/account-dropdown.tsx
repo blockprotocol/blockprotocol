@@ -1,11 +1,16 @@
-import { Box, Divider, ListItemButton, Typography } from "@mui/material";
+import {
+  Box,
+  Divider,
+  ListItemButton,
+  Popover,
+  Typography,
+} from "@mui/material";
 import { FunctionComponent, useRef, useState } from "react";
 
 import { useUser } from "../../context/user-context";
 import { apiClient } from "../../lib/api-client";
 import { Button } from "../button";
 import { Link } from "../link";
-import { Popover } from "../popover";
 import { UserAvatar } from "../user-avatar";
 
 export const AccountDropdown: FunctionComponent = () => {

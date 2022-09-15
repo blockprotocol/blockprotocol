@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/graph",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",

@@ -1,5 +1,19 @@
 # block-template-html
 
+## 0.1.4
+
+### Patch Changes
+
+- [#606](https://github.com/blockprotocol/blockprotocol/pull/606) [`1b6bae6`](https://github.com/blockprotocol/blockprotocol/commit/1b6bae6ccdcb94885dcd9a73705f184d74debd17) Thanks [@luisbettencourt](https://github.com/luisbettencourt)! - Fixed package scripts to run correctly on CMD
+
+## 0.1.3
+
+### Patch Changes
+
+- [#598](https://github.com/blockprotocol/blockprotocol/pull/598) [`8154e59`](https://github.com/blockprotocol/blockprotocol/commit/8154e59c29de21a2a831f6a0536a6f1ec265d10c) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add explanatory comments and simplify template. add 'format' command
+
+- [#601](https://github.com/blockprotocol/blockprotocol/pull/601) [`ccc0ecc`](https://github.com/blockprotocol/blockprotocol/commit/ccc0ecc5c0523205b4724b6e5813699a2e3f0df7) Thanks [@kachkaev](https://github.com/kachkaev)! - Update `devDependencies`
+
 ## 0.1.2
 
 ### Patch Changes

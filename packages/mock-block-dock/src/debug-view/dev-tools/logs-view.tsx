@@ -5,9 +5,16 @@ import {
   MenuItem,
   Select,
   styled,
+  SxProps,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Theme,
   Typography,
 } from "@mui/material";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { usePrevious } from "../../use-previous";
@@ -21,23 +28,43 @@ type LogItemProps = {
   isActive: boolean;
 };
 
+const Cell = ({
+  children,
+  sx = [],
+}: {
+  children: ReactNode;
+  sx?: SxProps<Theme>;
+}) => (
+  <TableCell
+    sx={[
+      {
+        fontFamily: "Mono, monospace",
+        border: "none",
+        paddingBottom: 1.5,
+        paddingTop: 0,
+        paddingRight: 2,
+        paddingLeft: 0,
+      },
+      ...(Array.isArray(sx) ? sx : [sx]),
+    ]}
+  >
+    {children}
+  </TableCell>
+);
+
 const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
   return (
-    <Typography
-      variant="subtitle2"
+    <TableRow
+      onClick={() => onClick(log)}
       sx={{
-        mb: 0.5,
-        display: "subtitle1",
         whiteSpace: "nowrap",
-        fontFamily: "Mono, monospace",
+        cursor: "pointer",
+        userSelect: "none",
       }}
     >
-      [{log.timestamp}]
-      <Box
-        component="span"
+      <Cell>[{log.timestamp}]</Cell>
+      <Cell
         sx={({ palette }) => ({
-          ml: 1.5,
-          mr: 1,
           color:
             log.service === "core"
               ? palette.primary.main
@@ -45,20 +72,18 @@ const LogItem = ({ onClick, log, isActive }: LogItemProps) => {
         })}
       >
         [{log.service}]
-      </Box>
-      [{log.source}] - {log.messageName} -{" "}
-      <Box
-        component="span"
-        onClick={() => onClick(log)}
+      </Cell>
+      <Cell>[{log.source}]</Cell>
+      <Cell>[{log.messageName}]</Cell>
+      <Cell
         sx={({ palette }) => ({
           textDecoration: "underline",
-          cursor: "pointer",
           ...(isActive && { color: palette.primary.main }),
         })}
       >
         [{log.requestId.slice(0, 4)}]
-      </Box>
-    </Typography>
+      </Cell>
+    </TableRow>
   );
 };
 
@@ -127,58 +152,70 @@ export const LogsView = () => {
 
   return (
     <Box>
-      <Box mb={2}>
-        <Typography mr={1}>Filters </Typography>
-        <Box display="flex" alignItems="center">
-          <Typography variant="body2" mr={1}>
-            Service
-          </Typography>
-          <Select
-            size="small"
-            value={filters.service}
-            sx={{ mr: 1 }}
-            onChange={(evt) =>
-              setFilters((prev) => ({ ...prev, service: evt.target.value }))
-            }
-          >
-            <MenuItem value="all">---</MenuItem>
-            {/* @todo this should be pulled from logs instead of manually set */}
-            <MenuItem value="core">Core</MenuItem>
-            <MenuItem value="graph">Graph</MenuItem>
-          </Select>
+      <Box display="flex" alignItems="center" mb={2}>
+        <Typography variant="body2" mr={1}>
+          Service
+        </Typography>
+        <Select
+          size="small"
+          value={filters.service}
+          sx={{ mr: 1 }}
+          onChange={(evt) =>
+            setFilters((prev) => ({ ...prev, service: evt.target.value }))
+          }
+        >
+          <MenuItem value="all">All</MenuItem>
+          {/* @todo this should be pulled from logs instead of manually set */}
+          <MenuItem value="core">Core</MenuItem>
+          <MenuItem value="graph">Graph</MenuItem>
+        </Select>
 
-          <Typography variant="body2" mr={1} ml={2}>
-            Source
-          </Typography>
-          <Select
-            size="small"
-            value={filters.source}
-            onChange={(evt) =>
-              setFilters((prev) => ({ ...prev, source: evt.target.value }))
-            }
-          >
-            <MenuItem value="all">---</MenuItem>
-            <MenuItem value="embedder">Embedder</MenuItem>
-            <MenuItem value="block">Block</MenuItem>
-          </Select>
-        </Box>
+        <Typography variant="body2" mr={1} ml={2}>
+          Source
+        </Typography>
+        <Select
+          size="small"
+          value={filters.source}
+          onChange={(evt) =>
+            setFilters((prev) => ({ ...prev, source: evt.target.value }))
+          }
+          sx={{ mr: 6 }}
+        >
+          <MenuItem value="all">All</MenuItem>
+          <MenuItem value="embedder">Embedder</MenuItem>
+          <MenuItem value="block">Block</MenuItem>
+        </Select>
+        <Button size="small" onClick={() => setLogs([])} variant="contained">
+          Clear Logs
+        </Button>
       </Box>
 
       <Box display="flex" mb={3}>
         <LogsContainer ref={logsContainerRef}>
-          <Box>
-            {filteredLogs.map((log) => (
-              <LogItem
-                key={`${log.requestId}_${log.source}`}
-                log={log}
-                onClick={setActiveLog}
-                isActive={
-                  log.requestId === activeLog?.requestId &&
-                  log.source === activeLog.source
-                }
-              />
-            ))}
-          </Box>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <Cell>timestamp</Cell>
+                <Cell>service</Cell>
+                <Cell>source</Cell>
+                <Cell>name</Cell>
+                <Cell>id</Cell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredLogs.map((log) => (
+                <LogItem
+                  key={`${log.requestId}_${log.source}`}
+                  log={log}
+                  onClick={setActiveLog}
+                  isActive={
+                    log.requestId === activeLog?.requestId &&
+                    log.source === activeLog.source
+                  }
+                />
+              ))}
+            </TableBody>
+          </Table>
         </LogsContainer>
 
         <ActiveLogsContainer>
@@ -193,6 +230,7 @@ export const LogsView = () => {
               variant="subtitle2"
               fontWeight="normal"
               component="em"
+              textAlign="center"
               p={3}
             >
               Select a request id to view the full details
@@ -200,11 +238,6 @@ export const LogsView = () => {
           )}
         </ActiveLogsContainer>
       </Box>
-
-      {/* @todo make more visible by positioning absolutely to top of container  */}
-      <Button size="small" onClick={() => setLogs([])} variant="contained">
-        Clear Logs
-      </Button>
     </Box>
   );
 };
