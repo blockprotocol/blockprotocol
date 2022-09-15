@@ -26,13 +26,13 @@ const PublishPage = () => {
               <PublishBlockCard
                 publishFrom="npm"
                 logoSrc="/assets/npm-logo.svg"
-                description="Choose an existing public npm package to publish to The Hub"
+                description="Choose an existing public npm package to publish to the Hub"
                 href="/blocks/publish/npm"
               />
               <PublishBlockCard
                 publishFrom="Git"
                 logoSrc="/assets/git-logo.svg"
-                description="Point to a block within a public Git repository to publish to The Hub"
+                description="Point to a block within a public Git repository to publish to the Hub"
               />
             </Box>
           </BlockFormSection>
