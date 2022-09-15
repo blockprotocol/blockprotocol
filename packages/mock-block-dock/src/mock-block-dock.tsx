@@ -240,12 +240,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
         {hideDebugToggle && !debugMode ? (
           wrappedBlockRenderer
         ) : (
-          <MockBlockDockUi
-            debugMode={debugMode}
-            onDebugModeChange={() => setDebugMode(true)}
-          >
-            {wrappedBlockRenderer}
-          </MockBlockDockUi>
+          <MockBlockDockUi>{wrappedBlockRenderer}</MockBlockDockUi>
         )}
       </Suspense>
     </MockBlockDockProvider>

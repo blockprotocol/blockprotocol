@@ -4,18 +4,13 @@ import { FunctionComponent, ReactNode } from "react";
 import styles from "./assets/debug-view-styles.module.css";
 import { DebugView } from "./debug-view";
 import { OffSwitch } from "./debug-view/icons";
+import { useMockBlockDockContext } from "./mock-block-dock-context";
 
-export interface MockBlockDockUiProps {
-  debugMode: boolean;
-  onDebugModeChange: (debugMode: boolean) => void;
-  children: ReactNode;
-}
-
-export const MockBlockDockUi: FunctionComponent<MockBlockDockUiProps> = ({
-  debugMode,
-  onDebugModeChange,
+export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { setDebugMode, debugMode } = useMockBlockDockContext();
+
   return debugMode ? (
     <DebugView>{children}</DebugView>
   ) : (
@@ -24,7 +19,7 @@ export const MockBlockDockUi: FunctionComponent<MockBlockDockUiProps> = ({
         <button
           className={styles["mbd-debug-mode-toggle"]}
           type="button"
-          onClick={() => onDebugModeChange(true)}
+          onClick={() => setDebugMode(true)}
         >
           Preview Mode
           <OffSwitch />
