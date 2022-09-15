@@ -171,7 +171,7 @@ const usage = commandLineUsage(helpSections);
   );
   console.log(
     `Your ${chalk.bold(blockName)} block is ready to code in ${chalk.bold(
-      escapedPath,
+      resolvedBlockPath,
     )}\n` +
       `Run ${chalk.blue(`cd ${escapedPath}`)} and then \n` +
       `${chalk.blue("yarn install && yarn dev")} or ${chalk.blue(
