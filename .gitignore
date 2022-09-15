@@ -44,14 +44,14 @@ dist
 coverage
 
 # Workspace specific
-packages/block-template-html/dev/src
-packages/mock-block-dock/src/version.ts
 apps/site/blocks-data.json
 apps/site/playwright-report
 apps/site/public/blocks
 apps/site/public/schemas
 apps/site/site-map.json
 apps/site/test-results
+packages/block-template-html/dev/src
+packages/mock-block-dock/src/version.ts
 
 # Local files
 var
