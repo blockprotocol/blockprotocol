@@ -158,7 +158,24 @@ const usage = commandLineUsage(helpSections);
     await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
   }
 
+  const chalk = (await import("chalk")).default;
+
+  const relativeBlockPath = path.relative(process.cwd(), resolvedBlockPath);
+
+  const escapedPath = !/[^%+,-./:=@_0-9A-Za-z]/.test(relativeBlockPath)
+    ? relativeBlockPath
+    : `'${relativeBlockPath.replace(/'/g, `'"'`)}'`;
+
   console.log(
-    `Your ${blockName} block is ready to code in ${resolvedBlockPath}.\nRun 'yarn install && yarn dev' to get started`,
+    chalk.bold("-".repeat(Math.min(process.stdout.columns ?? 48, 48))),
+  );
+  console.log(
+    `Your ${chalk.bold(blockName)} block is ready to code in ${chalk.bold(
+      resolvedBlockPath,
+    )}\n` +
+      `Run ${chalk.blue(`cd ${escapedPath}`)} and then \n` +
+      `${chalk.blue("yarn install && yarn dev")} or ${chalk.blue(
+        "npm install && npm run dev",
+      )} to get started`,
   );
 })();
