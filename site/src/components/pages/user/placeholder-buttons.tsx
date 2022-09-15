@@ -36,7 +36,7 @@ export const CreateSchemaButton: FunctionComponent<{
 export const BrowseHubButton: FunctionComponent = () => {
   return (
     <LinkButton variant="secondary" href="/hub" sx={{ margin: 1 }}>
-      Browse the Block Hub
+      Browse the Hub
     </LinkButton>
   );
 };
