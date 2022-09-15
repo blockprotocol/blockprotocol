@@ -27,8 +27,7 @@ const DevApp = () => {
         properties: { name: "World" },
       }}
       blockInfo={packageJSON.blockprotocol}
-      debug
-      // debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
+      debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
       // initialEntityTypes={[]} <- customise the entity types in the datastore
