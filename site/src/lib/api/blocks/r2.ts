@@ -262,7 +262,7 @@ export const validateExpandAndUploadBlockFiles = async ({
 
   const now = new Date().toISOString();
 
-  const expandedMetadata = expandBlockMetadata({
+  const expandedMetadata = await expandBlockMetadata({
     metadata: metadataJson,
     source: sourceInformation,
     timestamps: { createdAt: createdAt ?? now, lastUpdated: now },
