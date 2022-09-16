@@ -1,5 +1,15 @@
 # block-template-custom-element
 
+## 0.1.9
+
+## 0.1.8
+
+## 0.1.7
+
+### Patch Changes
+
+- [#599](https://github.com/blockprotocol/blockprotocol/pull/599) [`cea95ed`](https://github.com/blockprotocol/blockprotocol/commit/cea95ed427c820cd9e251dc632da927b5db1f23a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add name field to blockprotocol object in package.json
+
 ## 0.1.6
 
 ### Patch Changes
