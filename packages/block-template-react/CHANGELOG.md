@@ -1,5 +1,15 @@
 # block-template-react
 
+## 0.1.10
+
+### Patch Changes
+
+- [#617](https://github.com/blockprotocol/blockprotocol/pull/617) [`9cd9c11`](https://github.com/blockprotocol/blockprotocol/commit/9cd9c11a1552dc96143072394baa46c5609fcdd9) Thanks [@jtewright](https://github.com/jtewright)! - Convert preview image from SVG to PNG
+
+## 0.1.9
+
+## 0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

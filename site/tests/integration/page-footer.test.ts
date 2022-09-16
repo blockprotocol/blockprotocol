@@ -34,9 +34,10 @@ test("page footer navigation works", async ({ page, browserName }) => {
 
   await page.locator("footer").scrollIntoViewIfNeeded();
 
-  await expect(
-    page.locator("footer >> a:has-text('Block Hub')"),
-  ).toHaveAttribute("href", "/hub");
+  await expect(page.locator("footer >> a:text-is('Hub')")).toHaveAttribute(
+    "href",
+    "/hub",
+  );
 
   await expect(
     page.locator("footer >> a:has-text('Documentation')"),
