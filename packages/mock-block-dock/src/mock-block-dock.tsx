@@ -186,17 +186,12 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     }
   }, [graphService, graphServiceCallbacks]);
 
-  const wrappedBlockRenderer = (
+  const blockRendererWithBorder = (
     <div
-      ref={wrapperRef}
-      style={
-        debugMode
-          ? {
-              border: "1px dashed rgb(0,0,0,0.1)",
-              marginTop: 30,
-            }
-          : {}
-      }
+      style={{
+        border: "1px dashed rgb(0,0,0,0.1)",
+        marginTop: 30,
+      }}
     >
       {graphService ? (
         <BlockRenderer
@@ -236,13 +231,15 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setEntityIdOfEntityForBlock={setEntityIdOfEntityForBlock}
       updateEntity={graphServiceCallbacks.updateEntity}
     >
-      <Suspense>
-        {hideDebugToggle && !debugMode ? (
-          wrappedBlockRenderer
-        ) : (
-          <MockBlockDockUi>{wrappedBlockRenderer}</MockBlockDockUi>
-        )}
-      </Suspense>
+      <div ref={wrapperRef}>
+        <Suspense>
+          {hideDebugToggle && !debugMode ? (
+            blockRendererWithBorder
+          ) : (
+            <MockBlockDockUi>{blockRendererWithBorder}</MockBlockDockUi>
+          )}
+        </Suspense>
+      </div>
     </MockBlockDockProvider>
   );
 };
