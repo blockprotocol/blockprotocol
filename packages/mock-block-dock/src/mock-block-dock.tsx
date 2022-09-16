@@ -187,31 +187,22 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     }
   }, [graphService, graphServiceCallbacks]);
 
-  const blockRendererWithBorder = (
-    <div
-      style={{
-        border: "1px dashed rgb(0,0,0,0.1)",
-        marginTop: 30,
-      }}
-    >
-      {graphService ? (
-        <BlockRenderer
-          customElement={
-            "customElement" in blockDefinition
-              ? blockDefinition.customElement
-              : undefined
-          }
-          html={"html" in blockDefinition ? blockDefinition.html : undefined}
-          properties={propsToInject}
-          ReactComponent={
-            "ReactComponent" in blockDefinition
-              ? blockDefinition.ReactComponent
-              : undefined
-          }
-        />
-      ) : null}
-    </div>
-  );
+  const blockRenderer = graphService ? (
+    <BlockRenderer
+      customElement={
+        "customElement" in blockDefinition
+          ? blockDefinition.customElement
+          : undefined
+      }
+      html={"html" in blockDefinition ? blockDefinition.html : undefined}
+      properties={propsToInject}
+      ReactComponent={
+        "ReactComponent" in blockDefinition
+          ? blockDefinition.ReactComponent
+          : undefined
+      }
+    />
+  ) : null;
 
   return (
     <MockBlockDockProvider
@@ -235,9 +226,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       <div ref={wrapperRef}>
         <Suspense>
           {hideDebugToggle && !debugMode ? (
-            blockRendererWithBorder
+            blockRenderer
           ) : (
-            <MockBlockDockUi>{blockRendererWithBorder}</MockBlockDockUi>
+            <MockBlockDockUi>{blockRenderer}</MockBlockDockUi>
           )}
         </Suspense>
       </div>

@@ -87,7 +87,7 @@ const handler: NextApiHandler = async (req, res) => {
       import React from "https://esm.sh/react@${reactVersion}"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}?alias=lodash:lodash-es&deps=react@${reactVersion}"
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/esm/index.js";
 
       const requireLookup = {
         "react-dom": ReactDOM,
