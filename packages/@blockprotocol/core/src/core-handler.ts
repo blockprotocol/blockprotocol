@@ -35,8 +35,18 @@ export abstract class CoreHandler {
   /** the service handlers which have been registered to receive and send messages */
   protected readonly services: Map<string, ServiceHandler> = new Map();
 
-  /** the element on which messages will be listened to, and from which they will be dispatched */
-  protected element: HTMLElement;
+  /**
+   * the element on which messages will be listened on
+   */
+  protected listeningElement: HTMLElement;
+
+  /**
+   * The element on which messages will be dispatched from.
+   * For blocks, this is always the same as the listening element.
+   * Embedding applications must wait for an event from the block and then update the dispatching element
+   * to the target of that event, so that the block can receive messages on it.
+   */
+  protected dispatchingElement: HTMLElement;
 
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
@@ -104,7 +114,7 @@ export abstract class CoreHandler {
     this.services.delete(serviceName);
     if (this.services.size === 0) {
       this.removeEventListeners();
-      CoreHandler.instanceMap.delete(this.element);
+      CoreHandler.instanceMap.delete(this.listeningElement);
     }
   }
 
@@ -115,7 +125,9 @@ export abstract class CoreHandler {
     element: HTMLElement;
     sourceType: "block" | "embedder";
   }) {
-    this.element = element;
+    this.listeningElement = element;
+    this.dispatchingElement = element;
+
     this.sourceType = sourceType;
     (this.constructor as typeof CoreHandler).instanceMap.set(element, this);
 
@@ -129,19 +141,19 @@ export abstract class CoreHandler {
   };
 
   protected attachEventListeners(this: CoreHandler) {
-    if (!this.element) {
+    if (!this.listeningElement) {
       throw new Error(
         "Cannot attach event listeners before element set on CoreHandler instance.",
       );
     }
-    this.element.addEventListener(
+    this.listeningElement.addEventListener(
       CoreHandler.customEventName,
       this.eventListener,
     );
   }
 
   protected removeEventListeners(this: CoreHandler) {
-    this.element?.removeEventListener(
+    this.listeningElement?.removeEventListener(
       CoreHandler.customEventName,
       this.eventListener,
     );
@@ -208,7 +220,7 @@ export abstract class CoreHandler {
       composed: true,
       detail: fullMessage,
     });
-    this.element.dispatchEvent(event);
+    this.dispatchingElement.dispatchEvent(event);
 
     if ("respondedToBy" in args && args.respondedToBy) {
       let resolverToStore: PromiseResolver | undefined = undefined;
