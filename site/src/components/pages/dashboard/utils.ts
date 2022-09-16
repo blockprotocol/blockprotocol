@@ -51,7 +51,7 @@ export const getDashboardSectionCards = (props: {
           "linear-gradient(310.17deg, #FFB172 -167.67%, #9482FF 13.54%, #84E6FF 126.83%)",
         colorGradientOnHover:
           "linear-gradient(304.41deg, #FFB172 -167.57%, #9482FF -22.66%, #84E6FF 53.07%)",
-        description: "Build a block you’re ready to release on the hub?",
+        description: "Build a block you’re ready to release on the Hub?",
         link: {
           title: "Publish a block",
           href: shouldAllowNpmBlockPublishing
@@ -100,7 +100,7 @@ export const getDashboardSectionCards = (props: {
       {
         title: "Manage blocks",
         description:
-          "View and modify the listings for blocks you’ve published to the hub",
+          "View and modify the listings for blocks you’ve published on the Hub",
         link: {
           title: "Manage blocks",
           href: `${props.profileLink}/blocks`,
@@ -111,7 +111,7 @@ export const getDashboardSectionCards = (props: {
       {
         title: "Manage types",
         description:
-          "View and update the types you’ve created and made public on the hub",
+          "View and update the types you’ve created and made public on the Hub",
         link: {
           title: "Manage types",
           href: `${props.profileLink}/schemas`,
@@ -124,7 +124,7 @@ export const getDashboardSectionCards = (props: {
       {
         title: "Browse blocks for inspiration",
         description:
-          "View and test our the most popular blocks on the hub to see how they work",
+          "View and test our the most popular blocks on the Hub to see how they work",
         link: {
           title: "Browse blocks",
           href: "/hub",

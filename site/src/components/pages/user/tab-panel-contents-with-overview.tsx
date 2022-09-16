@@ -53,7 +53,7 @@ export const TabPanelContentsWithOverview: FunctionComponent<
     ) : (
       <Placeholder
         header={`@${user.shortname} hasn’t published any blocks or schemas yet`}
-        tip="You can browse existing blocks and schemas on the Block Hub."
+        tip="You can browse existing blocks and schemas on the Hub."
         actions={<BrowseHubButton />}
       />
     );
