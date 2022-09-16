@@ -1,5 +1,15 @@
 # mock-block-dock
 
+## 0.0.27
+
+### Patch Changes
+
+- [#605](https://github.com/blockprotocol/blockprotocol/pull/605) [`e476770`](https://github.com/blockprotocol/blockprotocol/commit/e4767703fd53b39208840dc46987d17db663a2f6) Thanks [@benwerner01](https://github.com/benwerner01)! - Add a graph visualisation of the local datastore
+
+- [#599](https://github.com/blockprotocol/blockprotocol/pull/599) [`cea95ed`](https://github.com/blockprotocol/blockprotocol/commit/cea95ed427c820cd9e251dc632da927b5db1f23a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - - Add functionality to edit and validate block properties from debug mode UI
+  - Add functionality to switch current block entity
+  - Display block info tab in debug UI
+
 ## 0.0.26
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # block-template-html
 
+## 0.1.4
+
+### Patch Changes
+
+- [#606](https://github.com/blockprotocol/blockprotocol/pull/606) [`1b6bae6`](https://github.com/blockprotocol/blockprotocol/commit/1b6bae6ccdcb94885dcd9a73705f184d74debd17) Thanks [@luisbettencourt](https://github.com/luisbettencourt)! - Fixed package scripts to run correctly on CMD
+
 ## 0.1.3
 
 ### Patch Changes
