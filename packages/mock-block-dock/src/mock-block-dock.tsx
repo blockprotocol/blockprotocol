@@ -65,6 +65,7 @@ type MockBlockDockProps = {
  * A component which acts as a mock embedding application for Block Protocol blocks.
  * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
+ * @param props component props
  * @param props.blockDefinition the source for the block and any additional metadata required
  * @param [props.blockEntity] the starting properties for the block entity
  * @param [props.blockInfo] metadata about the block
