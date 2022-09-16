@@ -1,5 +1,10 @@
 import { Message } from "@blockprotocol/core";
 import {
+  EmbedderGraphMessageCallbacks,
+  Entity,
+  EntityType,
+} from "@blockprotocol/graph";
+import {
   createContext,
   Dispatch,
   ReactNode,
@@ -10,23 +15,36 @@ import {
   useState,
 } from "react";
 
-import { MockBlockHookResult } from "./use-mock-block-props";
+import { MockData } from "./use-mock-block-props/use-mock-datastore";
 
 type MockBlockDockInfo = {
-  blockType?: "react" | "custom-element" | "html";
-  blockName?: string;
+  blockEntity: Entity;
+  blockSchema?: Partial<EntityType>;
+  blockInfo: {
+    blockType: {
+      entryPoint?: "react" | "html" | "custom-element" | string;
+    };
+    displayName?: string;
+    icon?: string;
+    image?: string;
+    name?: string;
+    protocol?: string;
+  };
+  datastore: MockData;
+  debugMode: boolean;
   logs: Message[];
+  readonly: boolean;
+  setDebugMode: Dispatch<SetStateAction<boolean>>;
+  setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
   setLogs: Dispatch<SetStateAction<Message[]>>;
-} & Omit<
-  MockBlockHookResult,
-  "graphServiceCallbacks" | "blockGraph" | "linkedAggregations" | "entityTypes"
->;
+  setReadonly: Dispatch<SetStateAction<boolean>>;
+  updateEntity: EmbedderGraphMessageCallbacks["updateEntity"];
+};
 
 const MockBlockDockContext = createContext<MockBlockDockInfo | null>(null);
 
 type Props = Omit<MockBlockDockInfo, "logs" | "setLogs"> & {
   children: ReactNode;
-  blockType?: "react" | "custom-element" | "html";
 };
 
 export const MockBlockDockProvider = ({ children, ...props }: Props) => {
