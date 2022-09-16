@@ -11,8 +11,19 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
 }) => {
   const { setDebugMode, debugMode } = useMockBlockDockContext();
 
+  const childrenWithBorder = (
+    <div
+      style={{
+        border: "1px dashed rgb(0,0,0,0.1)",
+        marginTop: 30,
+      }}
+    >
+      {children}
+    </div>
+  );
+
   return debugMode ? (
-    <DebugView>{children}</DebugView>
+    <DebugView>{childrenWithBorder}</DebugView>
   ) : (
     <Box>
       <Box className={styles["mbd-debug-mode-toggle-header"]}>
@@ -25,7 +36,7 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
           <OffSwitch />
         </button>
       </Box>
-      {children}
+      {childrenWithBorder}
     </Box>
   );
 };
