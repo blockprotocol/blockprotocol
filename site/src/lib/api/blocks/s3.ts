@@ -110,7 +110,7 @@ const validateBlockFiles = async (
 };
 
 /**
- * Uploads files to the 'blocks' bucket in S3 storage.
+ * Uploads files to the 'blocks' bucket in S3-compatible storage.
  * Returns an array of the paths to the uploaded files within the bucket.
  * @param localFolderPath the path to the directory in the local file system containing the files to upload
  * @param remoteStoragePrefix the prefix to give the files, in the format [namespace]/[block-name]
