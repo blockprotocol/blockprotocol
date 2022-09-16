@@ -40,6 +40,9 @@ export const notifySlackAboutBlock = async (
       },
       /**
        * @todo find why image block is not working with after publishing via CLI
+       * slack api throws an error if it cannot render the image we provide, instead of not showing the image
+       * we need to find a way to solve this, otherwise blocks with invalid images (e.g. .svg files, or url below)
+       * does not notify the channel, since slack refuses to send the message with broken img url
        * example url we get when we publish local package from CLI:
        * https://blocks-dev.hashai.workers.dev/local-dev/yusuf-kinatas/yusufkniatas/yusuf-shuffleee/public/preview.png
        */
