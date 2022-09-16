@@ -2,6 +2,7 @@ import { body as bodyValidator, validationResult } from "express-validator";
 
 import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
+import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
@@ -92,12 +93,15 @@ export default createAuthenticatedHandler<
     );
 
     try {
-      const block = await publishBlockFromNpm(db, {
+      const block: ExpandedBlockMetadata = await publishBlockFromNpm(db, {
         createdAt: null,
         npmPackageName,
         pathWithNamespace,
       });
       await revalidateMultiBlockPages(res, shortname);
+
+      void notifySlackAboutBlock(block, "publish");
+
       return res.status(200).json({ block });
     } catch (err) {
       const errIsError = err instanceof Error;

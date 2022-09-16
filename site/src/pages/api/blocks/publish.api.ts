@@ -1,5 +1,6 @@
 import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromTarball } from "../../../lib/api/blocks/from-tarball";
+import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
 import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler";
 import {
   MultipartExtensions,
@@ -108,6 +109,9 @@ export default createApiKeyRequiredHandler<
       });
 
       await revalidateMultiBlockPages(res, shortname);
+
+      void notifySlackAboutBlock(block, existingBlock ? "update" : "publish");
+
       return res.status(200).json({ block });
     } catch (err) {
       const errIsError = err instanceof Error;
