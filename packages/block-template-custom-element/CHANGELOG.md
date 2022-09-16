@@ -1,5 +1,9 @@
 # block-template-custom-element
 
+## 0.1.9
+
+## 0.1.8
+
 ## 0.1.7
 
 ### Patch Changes
