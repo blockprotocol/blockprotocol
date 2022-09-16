@@ -54,8 +54,8 @@
         "name": "World"
       }
     ],
-    "icon": "public/omega.svg",
-    "image": "public/block-preview.svg",
+    "icon": "public/omega.png",
+    "image": "public/block-preview.png",
     "name": "block-template-custom-element",
     "protocol": "0.2"
   }
