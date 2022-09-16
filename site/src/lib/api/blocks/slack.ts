@@ -2,14 +2,11 @@ import axios from "axios";
 
 import { mustGetEnvVar } from "../../../util/api";
 import { ExpandedBlockMetadata } from "../../blocks";
-import { isProduction } from "../../config";
 
 export const notifySlackAboutBlock = async (
   block: ExpandedBlockMetadata,
   changeType: "publish" | "update",
 ) => {
-  if (!isProduction) return;
-
   const webhookURL = mustGetEnvVar("SLACK_BLOCK_NOTIFICATION_WEBHOOK_URL");
 
   const body = {
