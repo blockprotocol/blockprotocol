@@ -7,17 +7,24 @@ import {
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
-import { Box } from "@mui/material";
-import { ComponentType, FunctionComponent, useEffect, useRef } from "react";
+import {
+  ComponentType,
+  FunctionComponent,
+  lazy,
+  Suspense,
+  useEffect,
+  useRef,
+} from "react";
 
-import styles from "./assets/debug-view-styles.module.css";
 import { BlockRenderer } from "./block-renderer";
-import { DebugView } from "./debug-view";
-import { OffSwitch } from "./debug-view/icons";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useDefaultState } from "./use-default-state";
 import { useMockBlockProps } from "./use-mock-block-props";
 import { useSendGraphValue } from "./use-send-graph-value";
+
+const MockBlockDockUi = lazy(async () => ({
+  default: (await import("./mock-block-dock-ui")).MockBlockDockUi,
+}));
 
 type BlockDefinition =
   | { ReactComponent: ComponentType<any> }
@@ -58,17 +65,18 @@ type MockBlockDockProps = {
  * A component which acts as a mock embedding application for Block Protocol blocks.
  * It provides the functionality specified in the Block Protocol, and mock data which can be customized via props.
  * See README.md for usage instructions.
- * @param blockDefinition the source for the block and any additional metadata required
- * @param [blockEntity] the starting properties for the block entity
- * @param [blockInfo] metadata about the block
- * @param [blockSchema] the schema for the block entity
- * @param [debug = false] display debugging information
- * @param [hideDebugToggle = false] hide the ability to toggle the debug UI
- * @param [initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
- * @param [initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
- * @param [initialLinks] the links to include in the data store
- * @param [initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
- * @param [readonly = false] whether the block should display in readonly mode or not
+ * @param props component props
+ * @param props.blockDefinition the source for the block and any additional metadata required
+ * @param [props.blockEntity] the starting properties for the block entity
+ * @param [props.blockInfo] metadata about the block
+ * @param [props.blockSchema] the schema for the block entity
+ * @param [props.debug=false] display debugging information
+ * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
+ * @param [props.initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [props.initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
+ * @param [props.initialLinks] the links to include in the data store
+ * @param [props.initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ * @param [props.readonly=false] whether the block should display in readonly mode or not
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
@@ -179,17 +187,12 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     }
   }, [graphService, graphServiceCallbacks]);
 
-  const Component = (
+  const blockRendererWithBorder = (
     <div
-      ref={wrapperRef}
-      style={
-        debugMode
-          ? {
-              border: "1px dashed rgb(0,0,0,0.1)",
-              marginTop: 30,
-            }
-          : {}
-      }
+      style={{
+        border: "1px dashed rgb(0,0,0,0.1)",
+        marginTop: 30,
+      }}
     >
       {graphService ? (
         <BlockRenderer
@@ -229,25 +232,15 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setEntityIdOfEntityForBlock={setEntityIdOfEntityForBlock}
       updateEntity={graphServiceCallbacks.updateEntity}
     >
-      {!debugMode ? (
-        <Box>
-          {!hideDebugToggle && (
-            <Box className={styles["mbd-debug-mode-toggle-header"]}>
-              <button
-                className={styles["mbd-debug-mode-toggle"]}
-                type="button"
-                onClick={() => setDebugMode(true)}
-              >
-                Preview Mode
-                <OffSwitch />
-              </button>
-            </Box>
+      <div ref={wrapperRef}>
+        <Suspense>
+          {hideDebugToggle && !debugMode ? (
+            blockRendererWithBorder
+          ) : (
+            <MockBlockDockUi>{blockRendererWithBorder}</MockBlockDockUi>
           )}
-          {Component}
-        </Box>
-      ) : (
-        <DebugView>{Component}</DebugView>
-      )}
+        </Suspense>
+      </div>
     </MockBlockDockProvider>
   );
 };

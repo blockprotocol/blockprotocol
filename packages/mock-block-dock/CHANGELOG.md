@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.28
+
+### Patch Changes
+
+- [#611](https://github.com/blockprotocol/blockprotocol/pull/611) [`1954006`](https://github.com/blockprotocol/blockprotocol/commit/1954006f6f0785c55986241a7a6ba758c8d557a0) Thanks [@kachkaev](https://github.com/kachkaev)! - Use `React.lazy` in `mock-block-dock` to optimize MUI loading
+
 ## 0.0.27
 
 ### Patch Changes
