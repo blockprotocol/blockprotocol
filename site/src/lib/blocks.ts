@@ -288,16 +288,17 @@ export const retrieveBlockReadme = async (
   blockMetadata: ExpandedBlockMetadata,
 ): Promise<string | undefined> => {
   try {
-    if (blockMetadata.npmPackageName) {
-      return fetch(`${blockMetadata.componentId}/README.md`).then((resp) =>
-        resp.text(),
+    if (blockMetadata.componentId.includes(FRONTEND_URL)) {
+      return fs.readFileSync(
+        `${process.cwd()}/public/blocks/${
+          blockMetadata.pathWithNamespace
+        }/README.vercel-hack.md`,
+        "utf8",
       );
     }
-    return fs.readFileSync(
-      `${process.cwd()}/public/blocks/${
-        blockMetadata.pathWithNamespace
-      }/README.vercel-hack.md`,
-      "utf8",
+
+    return fetch(`${blockMetadata.componentId}/README.md`).then((resp) =>
+      resp.text(),
     );
   } catch {
     return undefined;
