@@ -134,18 +134,19 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
         </Typography>
       </Link>
 
-      <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}>
-        Dark Mode
-        {darkMode ? (
-          <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
-        ) : (
-          <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
-        )}
-      </Button>
+      {/* @todo restore when styling service is implemented */}
+      {/* <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}> */}
+      {/*  Dark Mode */}
+      {/*  {darkMode ? ( */}
+      {/*    <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} /> */}
+      {/*  ) : ( */}
+      {/*    <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} /> */}
+      {/*  )} */}
+      {/* </Button> */}
 
       <Button onClick={() => setDebugMode(false)}>
         Preview Mode
-        <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
+        <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
       </Button>
     </Container>
   );

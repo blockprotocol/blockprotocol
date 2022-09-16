@@ -3,7 +3,7 @@ import { FunctionComponent, ReactNode } from "react";
 
 import styles from "./assets/debug-view-styles.module.css";
 import { DebugView } from "./debug-view";
-import { OffSwitch } from "./debug-view/icons";
+import { OnSwitch } from "./debug-view/icons";
 import { useMockBlockDockContext } from "./mock-block-dock-context";
 
 export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
@@ -14,7 +14,7 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
   const childrenWithBorder = (
     <div
       style={{
-        border: "1px dashed rgb(0,0,0,0.1)",
+        border: debugMode ? "1px dashed rgb(0,0,0,0.1)" : "none",
         marginTop: 30,
       }}
     >
@@ -33,7 +33,7 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
           onClick={() => setDebugMode(true)}
         >
           Preview Mode
-          <OffSwitch />
+          <OnSwitch />
         </button>
       </Box>
       {childrenWithBorder}
