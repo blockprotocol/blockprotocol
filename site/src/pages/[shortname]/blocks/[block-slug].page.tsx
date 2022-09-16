@@ -75,7 +75,7 @@ const generateSandboxBaseUrl = (): string => {
   if (!branch) {
     // eslint-disable-next-line no-console
     console.warn(
-      "Running locally: block hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
+      "Running locally: Hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
     );
     return "";
   }
@@ -255,7 +255,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
         title={`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
         description={
           blockMetadata.description ||
-          "Check out this open-source block on Block Hub"
+          "Check out this open-source block on the Hub"
         }
         openGraph={{
           images: [
@@ -282,7 +282,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               }
             >
               <Link href="/">Home</Link>
-              <Link href="/hub">Block Hub</Link>
+              <Link href="/hub">Hub</Link>
               <Typography variant="bpSmallCopy" color="inherit">
                 {blockMetadata.displayName}
               </Typography>

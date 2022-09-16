@@ -20,7 +20,7 @@ const manual = [
   {
     header: "blockprotocol publish",
     content:
-      "Publish a block to the Block Protocol hub. See https://blockprotocol.org/docs",
+      "Publish a block on the Block Protocol Hub. See https://blockprotocol.org/docs",
   },
   {
     header: "Options",
@@ -72,7 +72,7 @@ const options = manual[1].optionList;
 // *********************** RUN *********************** //
 
 /**
- * Publishes to the Block Protocol hub
+ * Publishes on the Block Protocol hub
  * @param {import("command-line-args").CommandLineOptions | undefined} providedOptions
  */
 const run = async (providedOptions) => {
@@ -176,7 +176,7 @@ const run = async (providedOptions) => {
   console.log(
     chalk.bgGreen(`Successfully published '${chalk.underline(blockName)}'!`),
   );
-  console.log(`Visit ${chalk.underline(blockUrl)} to see it on the Block Hub`);
+  console.log(`Visit ${chalk.underline(blockUrl)} to see it on the Hub`);
 
   await cleanup();
 
