@@ -254,7 +254,7 @@ const SignupPage: NextPage = () => {
                       }}
                     />
                   ),
-                  heading: <>Publish blocks to the Hub</>,
+                  heading: <>Publish blocks on the Hub</>,
                   subHeading: (
                     <>
                       Help make open source blocks and structured data available

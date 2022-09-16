@@ -7,7 +7,7 @@ The Block Protocol is an open standard for building and using data-driven blocks
 Please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) for complete instructions on using the Block Protocol, including:
 
 - developing new blocks;
-- publishing blocks to the Hub; and
+- publishing blocks on the Hub; and
 - embedding blocks within your application.
 
 ## Usage

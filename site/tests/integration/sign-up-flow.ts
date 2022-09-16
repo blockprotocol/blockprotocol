@@ -22,7 +22,7 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
     page.locator("text=Create your Block Protocol account"),
   ).toBeVisible();
 
-  await expect(page.locator("text=Publish blocks to the Hub")).toBeVisible();
+  await expect(page.locator("text=Publish blocks on the Hub")).toBeVisible();
 
   await expect(
     page.locator("text=Take part in a growing, open source community"),

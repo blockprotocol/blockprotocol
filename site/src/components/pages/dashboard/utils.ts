@@ -100,7 +100,7 @@ export const getDashboardSectionCards = (props: {
       {
         title: "Manage blocks",
         description:
-          "View and modify the listings for blocks you’ve published to the Hub",
+          "View and modify the listings for blocks you’ve published on the Hub",
         link: {
           title: "Manage blocks",
           href: `${props.profileLink}/blocks`,
