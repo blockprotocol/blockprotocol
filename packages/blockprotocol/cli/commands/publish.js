@@ -176,7 +176,7 @@ const run = async (providedOptions) => {
   console.log(
     chalk.bgGreen(`Successfully published '${chalk.underline(blockName)}'!`),
   );
-  console.log(`Visit ${chalk.underline(blockUrl)} to see it on the Block Hub`);
+  console.log(`Visit ${chalk.underline(blockUrl)} to see it on the Hub`);
 
   await cleanup();
 
