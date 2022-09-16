@@ -1,6 +1,7 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
-import graphServiceJson from "./graph-service.json";
+// @todo restore this when an issue with module resolution has been resolved
+// import graphServiceJson from "./graph-service.json" assert { type: "json" };
 import {
   BlockGraph,
   EmbedderGraphMessageCallbacks,
@@ -73,17 +74,19 @@ export class GraphEmbedderHandler
     messageName: K,
     handlerFunction: NonNullable<EmbedderGraphMessageCallbacks[K]>,
   ) {
-    const expectedMessageSource = "block";
-    const messageJsonDefinition = graphServiceJson.messages.find(
-      (message) =>
-        message.messageName === messageName &&
-        message.source === expectedMessageSource,
-    );
-    if (!messageJsonDefinition) {
-      throw new Error(
-        `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
-      );
-    }
+    // @todo restore this when module resolution issue resolved
+    // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
+    // const expectedMessageSource = "block";
+    // const messageJsonDefinition = graphServiceJson.messages.find(
+    //   (message) =>
+    //     message.messageName === messageName &&
+    //     message.source === expectedMessageSource,
+    // );
+    // if (!messageJsonDefinition) {
+    //   throw new Error(
+    //     `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
+    //   );
+    // }
     this.registerCallback({
       callback: handlerFunction,
       messageName,

@@ -1,6 +1,13 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
-import graphServiceJson from "./graph-service.json";
+/**
+ * There's an issue when importing useGraphEmbedderService from @blockprotocol/graph/react in hashintel/hash:
+ * NextJS's output file tracing does not include graph-service.json, and yet an import statement for it is preserved.
+ * This leads to a 'module cannot be found error'. For now, commenting out the import of the JSON from this file.
+ * @todo restore this when module resolution issue resolved
+ * @see https://app.asana.com/0/1202542409311090/1202614421149286/f
+ */
+// import graphServiceJson from "./graph-service.json" assert { type: "json" };
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
@@ -80,17 +87,19 @@ export class GraphBlockHandler
     messageName: K,
     handlerFunction: BlockGraphMessageCallbacks[K],
   ) {
-    const expectedMessageSource = "embedder";
-    const messageJsonDefinition = graphServiceJson.messages.find(
-      (message) =>
-        message.messageName === messageName &&
-        message.source === expectedMessageSource,
-    );
-    if (!messageJsonDefinition) {
-      throw new Error(
-        `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
-      );
-    }
+    // @todo restore this when module resolution issue resolved
+    // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
+    // const expectedMessageSource = "embedder";
+    // const messageJsonDefinition = graphServiceJson.messages.find(
+    //   (message) =>
+    //     message.messageName === messageName &&
+    //     message.source === expectedMessageSource,
+    // );
+    // if (!messageJsonDefinition) {
+    //   throw new Error(
+    //     `No message with name '${messageName}' expected from ${expectedMessageSource}.`,
+    //   );
+    // }
     this.registerCallback({
       callback: handlerFunction,
       messageName,
