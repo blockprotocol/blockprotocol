@@ -195,12 +195,12 @@ test("key elements should be present when guest user views account page", async 
   ).toBeVisible();
 
   await expect(
-    page.locator("text=You can browse existing schemas on the Block Hub."),
+    page.locator("text=You can browse existing schemas on the Hub."),
   ).toBeVisible();
 
-  await expect(page.locator("text=Browse the Block Hub")).toBeVisible();
+  await expect(page.locator("text=Browse the Hub")).toBeVisible();
 
-  await expect(page.locator("text=Browse the Block Hub")).toHaveAttribute(
+  await expect(page.locator("text=Browse the Hub")).toHaveAttribute(
     "href",
     "/hub",
   );

@@ -90,7 +90,7 @@ export type BlockMetadataOnDisk = ExpandedBlockMetadata & {
   };
 };
 
-// The contents of the JSON file users provide when adding a block via PR, stored in the hub/ folder
+// The contents of the JSON file users provide when adding a block via PR, stored in the Hub/ folder
 export interface StoredBlockInfo {
   repository: string;
   commit: string;
@@ -277,7 +277,7 @@ const blocksToHide = [
   "@hash/paragraph",
 ];
 
-/** Helps consistently hide certain blocks from the hub and user profile pages */
+/** Helps consistently hide certain blocks from the Hub and user profile pages */
 export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {

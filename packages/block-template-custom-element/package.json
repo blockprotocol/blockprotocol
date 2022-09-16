@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
@@ -55,7 +55,7 @@
       }
     ],
     "icon": "public/omega.svg",
-    "image": "public/block-preview.svg",
+    "image": "public/block-preview.png",
     "name": "block-template-custom-element",
     "protocol": "0.2"
   }

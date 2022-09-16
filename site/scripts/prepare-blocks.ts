@@ -547,7 +547,7 @@ const script = async () => {
 
       console.log(
         chalk.yellow(
-          `Directory ${blockDirPath} was cleared to avoid broken blocks in the hub.`,
+          `Directory ${blockDirPath} was cleared to avoid broken blocks in the Hub.`,
         ),
       );
     }

@@ -28,14 +28,14 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
   return (
     <>
       <NextSeo
-        title="Block Protocol – Block Hub"
-        description="The Block Protocol's registry of open-source blocks"
+        title="Block Protocol – Hub"
+        description="The Block Protocol's registry of open-source blocks and types"
       />
       <Box
         sx={{
           mb: 20,
           position: "relative",
-          backgroundImage: "url(/assets/blockhub-gradient.svg)",
+          backgroundImage: "url(/assets/hub-gradient.svg)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "30% 50%",
           backgroundSize: "100% 100%",
@@ -59,7 +59,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
               }}
               variant="bpSmallCaps"
             >
-              Block Hub
+              Hub
             </Typography>
             <Typography mb={3} variant="bpHeading1">
               Interactive, data-driven blocks to use in your projects
