@@ -36,7 +36,7 @@ export abstract class CoreHandler {
   protected readonly services: Map<string, ServiceHandler> = new Map();
 
   /**
-   * the element on which messages will be listened on
+   * the element on which messages will be listened for
    */
   protected listeningElement: HTMLElement;
 

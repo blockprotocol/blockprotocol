@@ -17,7 +17,7 @@ import {
  */
 export class GraphEmbedderHandler
   extends ServiceHandler
-  implements Omit<EmbedderGraphMessages, `${string}Response`>
+  implements EmbedderGraphMessages
 {
   private _blockEntity?: Entity;
   private _blockGraph?: BlockGraph;
