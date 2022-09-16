@@ -6,8 +6,8 @@ import {
   styled,
   Typography,
 } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
 
-// import { Dispatch, SetStateAction } from "react";
 import { useMockBlockDockContext } from "../mock-block-dock-context";
 import { MOCK_BLOCK_DOCK_VERSION } from "../version";
 import { Logo, OffSwitch } from "./icons";
@@ -53,12 +53,12 @@ const Button = styled(({ children, sx = [], ...props }: ButtonProps) => (
   color: theme.palette.mode === "light" ? customColors.gray[90] : "#8E8E8E", // @todo include dark mode color in palette
 }));
 
-// type Props = {
-//   darkMode: boolean;
-//   setDarkMode: Dispatch<SetStateAction<boolean>>;
-// };
+type Props = {
+  darkMode: boolean;
+  setDarkMode: Dispatch<SetStateAction<boolean>>;
+};
 
-export const Header = () => {
+export const Header = ({ darkMode: _, setDarkMode: __ }: Props) => {
   const { setDebugMode, blockInfo } = useMockBlockDockContext();
 
   return (
