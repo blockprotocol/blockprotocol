@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
@@ -29,13 +29,13 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.16",
+    "@blockprotocol/graph": "0.0.17",
     "lit": "^2.2.5"
   },
   "devDependencies": {
     "@types/react-dom": "^18.0.6",
-    "block-scripts": "0.0.16",
-    "mock-block-dock": "0.0.29",
+    "block-scripts": "0.0.17",
+    "mock-block-dock": "0.0.30",
     "prettier": "2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

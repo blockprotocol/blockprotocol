@@ -1,6 +1,6 @@
 {
   "name": "block-template-html",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Block Protocol block template for an html-based block",
   "keywords": [
     "blockprotocol",
@@ -30,7 +30,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "block-scripts": "0.0.16",
+    "block-scripts": "0.0.17",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
     "prettier": "2.7.1",
