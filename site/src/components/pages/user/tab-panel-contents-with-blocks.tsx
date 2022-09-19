@@ -31,7 +31,7 @@ export const TabPanelContentsWithBlocks: FunctionComponent<
     ) : (
       <Placeholder
         header={`@${user.shortname} hasn’t published any blocks yet`}
-        tip="You can browse existing blocks on the Block Hub."
+        tip="You can browse existing blocks on the Hub."
         actions={<BrowseHubButton />}
       />
     );

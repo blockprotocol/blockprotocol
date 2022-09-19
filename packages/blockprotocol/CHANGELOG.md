@@ -1,5 +1,11 @@
 # blockprotocol
 
+## 0.1.2
+
+### Patch Changes
+
+- [#612](https://github.com/blockprotocol/blockprotocol/pull/612) [`b8e392e`](https://github.com/blockprotocol/blockprotocol/commit/b8e392ebfc6ea50e601e314ac231a3d63f6c0cb9) Thanks [@kachkaev](https://github.com/kachkaev)! - Rename Block Hub to Hub
+
 ## 0.1.1
 
 ### Patch Changes

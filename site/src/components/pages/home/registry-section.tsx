@@ -3,7 +3,7 @@ import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlocksSlider } from "../../blocks-slider";
-import { BlockHubIcon } from "../../icons";
+import { HubIcon } from "../../icons";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
@@ -72,11 +72,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
         <BlocksSlider catalog={catalog} />
       </Box>
       <Box sx={{ textAlign: "center" }}>
-        <LinkButton
-          href="/hub"
-          variant="secondary"
-          startIcon={<BlockHubIcon />}
-        >
+        <LinkButton href="/hub" variant="secondary" startIcon={<HubIcon />}>
           Explore all Blocks
         </LinkButton>
         <Box>
