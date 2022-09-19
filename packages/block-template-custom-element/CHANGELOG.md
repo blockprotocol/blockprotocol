@@ -1,5 +1,12 @@
 # block-template-custom-element
 
+## 0.1.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @blockprotocol/graph@0.0.17
+
 ## 0.1.10
 
 ### Patch Changes
