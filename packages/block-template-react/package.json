@@ -1,6 +1,6 @@
 {
   "name": "block-template-react",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -29,12 +29,12 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.16"
+    "@blockprotocol/graph": "0.0.17"
   },
   "devDependencies": {
     "@types/react-dom": "^18.0.6",
-    "block-scripts": "0.0.16",
-    "mock-block-dock": "0.0.29",
+    "block-scripts": "0.0.17",
+    "mock-block-dock": "0.0.30",
     "prettier": "2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
