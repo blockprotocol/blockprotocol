@@ -1,5 +1,11 @@
 # @blockprotocol/core
 
+## 0.0.12
+
+### Patch Changes
+
+- [#615](https://github.com/blockprotocol/blockprotocol/pull/615) [`03aa390`](https://github.com/blockprotocol/blockprotocol/commit/03aa3902540114fd341d48a8d0dfa060d27ee71f) Thanks [@CiaranMn](https://github.com/CiaranMn)! - update core spec and package to split embedder listen and dispatch elements
+
 ## 0.0.11
 
 ### Patch Changes
