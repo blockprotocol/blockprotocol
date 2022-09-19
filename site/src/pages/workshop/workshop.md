@@ -496,7 +496,7 @@ We are going to be using one such message: `updateEntity`. A full list is availa
 
 To send a message to the embedding application, we call the relevant method on `graphService`, passing the expected `data`.
 
-Here, we use the `updateEntity` method ([docs](https://blockprotocol.org/docs/spec/graph-service#message-definitions)).
+Here, we use the `updateEntity` method ([docs](https://blockprotocol.org/docs/spec/graph-service#message:updateEntity)).
 This is a request to the application to update an entity. It expects two fields:
 
 1.  the `entityId` of the entity to update

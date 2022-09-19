@@ -5,9 +5,11 @@ import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import { NextSeo } from "next-seo";
 import path from "node:path";
+import { HTMLProps } from "react";
 import remarkGfm from "remark-gfm";
 
-import { mdxComponents } from "../../components/mdx/mdx-components";
+import { Link } from "../../components/link";
+import { mdxComponents as rawMdxComponents } from "../../components/mdx/mdx-components";
 
 type WorkshopPageProps = {
   compiledMarkdown: string;
@@ -34,6 +36,18 @@ export const getStaticProps: GetStaticProps<WorkshopPageProps> = async () => {
       compiledMarkdown,
     },
   };
+};
+
+const mdxComponents = {
+  ...rawMdxComponents,
+  a: (props: HTMLProps<HTMLAnchorElement>) => {
+    const { href, ref: _ref, ...rest } = props;
+    if (!href) {
+      throw new Error("No href on link");
+    }
+
+    return <Link {...rest} href={href} target="_blank" />;
+  },
 };
 
 const WorkshopPage: NextPage<WorkshopPageProps> = ({ compiledMarkdown }) => {
