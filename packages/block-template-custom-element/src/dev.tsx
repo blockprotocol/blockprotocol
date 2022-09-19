@@ -7,7 +7,7 @@ import ElementClass from "./index";
 const node = document.getElementById("app");
 
 /**
- * This is a dummy embedding application for local development and debugging.
+ * This is an embedding application for local development and debugging.
  * It is the application loaded into the browser when you run 'yarn dev' (or 'npm run dev')
  * No data from it will be published with your block or included as part of a production build.
  *

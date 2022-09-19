@@ -69,6 +69,7 @@
     "next-mdx-remote": "^4.0.3",
     "next-seo": "^5.5.0",
     "next-session": "^4.0.4",
+    "node-fetch": "^3.2.10",
     "nodemailer": "^6.7.2",
     "oembed-providers": "^1.0.20220105",
     "passport": "^0.5.2",
