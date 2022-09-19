@@ -139,15 +139,15 @@ export const BANNERS: Banner[] = [
               variant="bpBodyCopy"
               sx={{ maxWidth: 650 }}
             >
-              Anyone can create blocks and contribute to this growing,
-              open-source registry of blocks. Read our{" "}
-              <Link href="/docs/developing-blocks">Quickstart guide</Link> to
+              Anyone can create blocks and contribute to the growing,
+              open-source Hub. Read our{" "}
+              <Link href="/docs/developing-blocks">quickstart guide</Link> to
               start building your own blocks.
             </Typography>
           </Box>
         }
         buttonHref="/docs/developing-blocks"
-        buttonText="Read the Quick Start Guide"
+        buttonText="Read the quickstart guide"
       />
     ),
   },
