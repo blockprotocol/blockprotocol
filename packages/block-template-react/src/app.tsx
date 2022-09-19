@@ -24,7 +24,7 @@ type BlockEntityProperties = {
 };
 
 /**
- * This function is to help illustrate a property being change when the button is pressed.
+ * This function is to help illustrate a property being changed when the button is pressed.
  */
 const supplyRandomName = () => {
   const names = ["Alice", "Bob", "Carol", "Dave", "Erin", "Frank"];
