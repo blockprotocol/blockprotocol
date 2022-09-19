@@ -31,6 +31,10 @@ export const Logout = ({ sx, ...props }: SvgIconProps) => {
   );
 };
 
+/**
+ * @todo replace with MUI Toggle
+ * @see https://github.com/blockprotocol/blockprotocol/pull/622#discussion_r973988550
+ */
 export const OffSwitch = ({ sx, ...props }: SvgIconProps) => {
   return (
     <SvgIcon
@@ -52,6 +56,10 @@ export const OffSwitch = ({ sx, ...props }: SvgIconProps) => {
   );
 };
 
+/**
+ * @todo replace with MUI Toggle
+ * @see https://github.com/blockprotocol/blockprotocol/pull/622#discussion_r973988550
+ */
 export const OnSwitch = ({ sx, ...props }: SvgIconProps) => {
   return (
     <SvgIcon
