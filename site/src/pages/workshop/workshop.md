@@ -716,7 +716,7 @@ The simplest way is to take the data you have used in `dev.tsx` as follows:
 }
 ```
 
-2.  Create a file called `example-graph.json` at the root of your project (alongside `package.json`).
+1.  Create a file called `example-graph.json` at the root of your project (alongside `package.json`).
     This is a file which accepts `initialEntities` and `initialLinks` – you can use the same values as in `dev.tsx`, e.g.
 
 ```json
@@ -758,4 +758,4 @@ The simplest way is to take the data you have used in `dev.tsx` as follows:
 }
 ```
 
-# That's all - happy coding
+## That's all - happy coding
