@@ -173,7 +173,7 @@ export const BANNERS: Banner[] = [
           </Box>
         }
         buttonHref="/docs/developing-blocks"
-        buttonText="Read the Quick Start Guide"
+        buttonText="Read the quickstart guide"
         buttonStartIcon={<BoltIcon />}
       />
     ),
@@ -227,7 +227,7 @@ export const BANNERS: Banner[] = [
               </Box>
             }
             buttonHref="/docs/developing-blocks"
-            buttonText="Read the Quickstart Guide"
+            buttonText="Read the quickstart guide"
             buttonStartIcon={<BoltIcon />}
           />
         </Grid>
@@ -299,7 +299,7 @@ export const BANNERS: Banner[] = [
           </Box>
         }
         buttonHref="/docs/developing-blocks"
-        buttonText="Read the Quick Start Guide"
+        buttonText="Read the quickstart guide"
         buttonStartIcon={<BoltIcon />}
       />
     ),
