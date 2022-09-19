@@ -9,12 +9,13 @@ import {
 import Image from "next/image";
 import { FunctionComponent, ReactNode } from "react";
 
-import { BoltIcon } from "./icons";
-import { Link } from "./link";
+import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
+import { ArrowRightIcon, BoltIcon } from "./icons";
+import { Link as LinkComponent, LinkProps } from "./link";
 import { LinkButton } from "./link-button";
 
 type Banner = {
-  shouldDisplay: (params: { pathname: string }) => boolean;
+  shouldDisplay: (params: { pathname: string; asPath: string }) => boolean;
   contents: ReactNode;
   overlapsFooter?: boolean;
 };
@@ -24,14 +25,29 @@ type BannerCardProps = {
   contents: ReactNode;
   buttonHref: string;
   buttonText: ReactNode;
+  buttonStartIcon?: ReactNode;
+  buttonEndIcon?: ReactNode;
 };
 
-const BackgroundRainbow: FunctionComponent = () => {
+const Link: FunctionComponent<LinkProps> = (linkProps) => (
+  <Typography
+    component="span"
+    sx={{
+      "> a": {
+        borderBottomWidth: 0,
+      },
+    }}
+  >
+    <LinkComponent {...linkProps} />
+  </Typography>
+);
+
+const BackgroundHelix: FunctionComponent = () => {
   return (
     <Image
-      width={350}
-      height={350}
-      src="/assets/background-corner-rainbow.png"
+      objectFit="contain"
+      objectPosition="right"
+      src={backgroundCornerHelix}
     />
   );
 };
@@ -41,6 +57,8 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
   contents,
   buttonHref,
   buttonText,
+  buttonStartIcon,
+  buttonEndIcon,
 }) => (
   <Paper
     sx={[
@@ -80,7 +98,8 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
         textTransform: "none",
       }}
       variant="primary"
-      startIcon={<BoltIcon />}
+      startIcon={buttonStartIcon}
+      endIcon={buttonEndIcon}
     >
       {buttonText}
     </LinkButton>
@@ -105,6 +124,7 @@ export const BANNERS: Banner[] = [
             <Box
               sx={{
                 position: "absolute",
+                height: "100%",
                 top: 0,
                 right: 0,
                 opacity: {
@@ -112,47 +132,54 @@ export const BANNERS: Banner[] = [
                   xs: 0,
                 },
                 transition: (theme) => theme.transitions.create("opacity"),
+                "> span": {
+                  maxHeight: "100%",
+                },
               }}
             >
-              <BackgroundRainbow />
+              <BackgroundHelix />
             </Box>
-            <Typography
-              component="h2"
-              variant="bpHeading2"
-              sx={{ fontWeight: 700 }}
-            >
-              Don't see the block you need?
-            </Typography>
-            <Typography
-              component="h2"
-              variant="bpHeading2"
-              sx={{
-                fontWeight: 700,
-                color: ({ palette }) => palette.gray[70],
-                mb: 2,
-              }}
-            >
-              You can build it!
-            </Typography>
-            <Typography
-              component="p"
-              variant="bpBodyCopy"
-              sx={{ maxWidth: 650 }}
-            >
-              Anyone can create blocks and contribute to this growing,
-              open-source registry of blocks. Read our{" "}
-              <Link href="/docs/developing-blocks">Quickstart guide</Link> to
-              start building your own blocks.
-            </Typography>
+
+            <Box sx={{ position: "relative", zIndex: 1 }}>
+              <Typography
+                component="h2"
+                variant="bpHeading2"
+                sx={{ fontWeight: 700 }}
+              >
+                Don't see the block you need?
+              </Typography>
+              <Typography
+                component="h2"
+                variant="bpHeading2"
+                sx={{
+                  fontWeight: 700,
+                  color: ({ palette }) => palette.gray[70],
+                  mb: 2,
+                }}
+              >
+                You can build it!
+              </Typography>
+              <Typography
+                component="p"
+                variant="bpBodyCopy"
+                sx={{ maxWidth: 650 }}
+              >
+                Anyone can create blocks and contribute to this growing,
+                open-source registry of blocks. Read our{" "}
+                <Link href="/docs/developing-blocks">quickstart guide</Link> to
+                start building your own blocks.
+              </Typography>
+            </Box>
           </Box>
         }
         buttonHref="/docs/developing-blocks"
         buttonText="Read the Quick Start Guide"
+        buttonStartIcon={<BoltIcon />}
       />
     ),
   },
   {
-    shouldDisplay: ({ pathname }) => pathname.startsWith("/spec"),
+    shouldDisplay: ({ asPath }) => asPath.startsWith("/docs/spec"),
     overlapsFooter: true,
     contents: (
       <Grid container spacing={3}>
@@ -176,7 +203,8 @@ export const BANNERS: Banner[] = [
               </Box>
             }
             buttonHref="/docs/embedding-blocks"
-            buttonText="Read the Embedding Guide"
+            buttonText="Learn more"
+            buttonEndIcon={<ArrowRightIcon />}
           />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -191,22 +219,24 @@ export const BANNERS: Banner[] = [
                   Build your own blocks
                 </Typography>
                 <Typography component="p" variant="bpBodyCopy">
-                  Any developer can build and publish blocks to the global
-                  registry for other developers to use. Create blocks that solve
-                  real-world problems, and contribute to an open source
-                  community changing the landscape of interoperable data.
+                  Any developer can build and publish blocks to the{" "}
+                  <Link href="/hub">Hub</Link> for others to use. Contribute to
+                  an open-source community building a more interoperable future
+                  web.
                 </Typography>
               </Box>
             }
             buttonHref="/docs/developing-blocks"
             buttonText="Read the Quickstart Guide"
+            buttonStartIcon={<BoltIcon />}
           />
         </Grid>
       </Grid>
     ),
   },
   {
-    shouldDisplay: ({ pathname }) => pathname === "/[org]/[block]",
+    shouldDisplay: ({ pathname }) =>
+      pathname.startsWith("/[shortname]/blocks/"),
     overlapsFooter: true,
     contents: (
       <BannerCard
@@ -221,6 +251,7 @@ export const BANNERS: Banner[] = [
             <Box
               sx={{
                 position: "absolute",
+                height: "100%",
                 top: 0,
                 right: 0,
                 opacity: {
@@ -228,38 +259,48 @@ export const BANNERS: Banner[] = [
                   xs: 0,
                 },
                 transition: (theme) => theme.transitions.create("opacity"),
+                "> span": {
+                  maxHeight: "100%",
+                },
               }}
             >
-              <BackgroundRainbow />
+              <BackgroundHelix />
             </Box>
-            <Typography
-              component="h2"
-              variant="bpHeading2"
-              sx={{ fontWeight: 700 }}
-            >
-              Ready to build your own blocks?
-            </Typography>
-            <Typography
-              component="h2"
-              variant="bpHeading2"
-              sx={{ fontWeight: 700, color: ({ palette }) => palette.gray[70] }}
-            >
-              Anyone can contribute
-            </Typography>
-            <Typography
-              component="p"
-              variant="bpBodyCopy"
-              sx={{ maxWidth: 650 }}
-            >
-              Anyone can create blocks and contribute to this growing,
-              open-source registry of blocks. Read our{" "}
-              <Link href="/docs/developing-blocks">Quickstart guide</Link> to
-              start building your own blocks.
-            </Typography>
+
+            <Box sx={{ position: "relative", zIndex: 1 }}>
+              <Typography
+                component="h2"
+                variant="bpHeading2"
+                sx={{ fontWeight: 700 }}
+              >
+                Ready to build your own blocks?
+              </Typography>
+              <Typography
+                component="h2"
+                variant="bpHeading2"
+                sx={{
+                  fontWeight: 700,
+                  color: ({ palette }) => palette.gray[70],
+                }}
+              >
+                Anyone can contribute
+              </Typography>
+              <Typography
+                component="p"
+                variant="bpBodyCopy"
+                sx={{ maxWidth: 650 }}
+              >
+                Anyone can create blocks and contribute to this growing,
+                open-source registry of blocks. Read our{" "}
+                <Link href="/docs/developing-blocks">quickstart guide</Link> to
+                start building your own blocks.
+              </Typography>
+            </Box>
           </Box>
         }
         buttonHref="/docs/developing-blocks"
         buttonText="Read the Quick Start Guide"
+        buttonStartIcon={<BoltIcon />}
       />
     ),
   },
@@ -275,12 +316,7 @@ export const FooterBanner: FunctionComponent<FooterBannerProps> = ({
   <Box
     sx={{
       paddingTop: banner.overlapsFooter ? 0 : 8,
-      background: `radial-gradient(
-              ellipse at 10% 130%,
-              #ffac67 0%,
-              #9582ff 55%,
-              #79e4ff 100%
-            )`,
+      background: `radial-gradient(ellipse at 10% 130%, #9672FF 0%, #9482FF 50.15%, #DF84FF 100%)`,
     }}
   >
     <Container

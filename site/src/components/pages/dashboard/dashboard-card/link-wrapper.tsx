@@ -29,6 +29,7 @@ export const LinkWrapper = ({ title, bold }: LinkWrapperProps) => {
         sx={(theme) => ({
           width: "auto",
           height: "0.8em",
+          color: ({palette}) => palette.gray[50],
           transition: theme.transitions.create("transform"),
         })}
       />
