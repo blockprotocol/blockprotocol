@@ -10,7 +10,7 @@ import { Dispatch, SetStateAction } from "react";
 
 import { useMockBlockDockContext } from "../mock-block-dock-context";
 import { MOCK_BLOCK_DOCK_VERSION } from "../version";
-import { Logo, OffSwitch, OnSwitch } from "./icons";
+import { Logo, OffSwitch } from "./icons";
 import { customColors } from "./theme/palette";
 
 export const HEADER_HEIGHT = 50;
@@ -58,7 +58,7 @@ type Props = {
   setDarkMode: Dispatch<SetStateAction<boolean>>;
 };
 
-export const Header = ({ darkMode, setDarkMode }: Props) => {
+export const Header = ({ darkMode: _, setDarkMode: __ }: Props) => {
   const { setDebugMode, blockInfo } = useMockBlockDockContext();
 
   return (
@@ -134,18 +134,19 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
         </Typography>
       </Link>
 
-      <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}>
-        Dark Mode
-        {darkMode ? (
-          <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
-        ) : (
-          <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
-        )}
-      </Button>
+      {/* @todo restore when styling service is implemented */}
+      {/* <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}> */}
+      {/*  Dark Mode */}
+      {/*  {darkMode ? ( */}
+      {/*    <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} /> */}
+      {/*  ) : ( */}
+      {/*    <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} /> */}
+      {/*  )} */}
+      {/* </Button> */}
 
       <Button onClick={() => setDebugMode(false)}>
         Preview Mode
-        <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
+        <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
       </Button>
     </Container>
   );
