@@ -34,13 +34,13 @@
             "type": "array",
             "items": {
               "type": "string"
-            },
-            "sentOnInitialization": {
-              "type": "boolean"
-            },
-            "respondedToBy": {
-              "type": "string"
             }
+          },
+          "sentOnInitialization": {
+            "type": "boolean"
+          },
+          "respondedToBy": {
+            "type": "string"
           },
           "required": ["description", "messageName", "source", "data"]
         }

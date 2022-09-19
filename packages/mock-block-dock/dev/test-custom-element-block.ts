@@ -18,16 +18,20 @@ export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperti
   }
 
   render() {
+    if (this.graph.readonly) {
+      return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
+        <p>
+          The entityId of this block is ${this.graph.blockEntity?.entityId}.
+        </p>
+        <p>${this.graph.blockEntity?.properties.name}</p>`;
+    }
+
     return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
       <p>
         The entityId of this block is ${this.graph.blockEntity?.entityId}. Use
         it to update its data when calling updateEntities.
       </p>
-      <p style="display: ${this.graph.readonly ? "block" : "none"}">
-        ${this.graph.blockEntity?.properties.name}
-      </p>
       <input
-        style="display: ${this.graph.readonly ? "none" : "block"}"
         @change=${this.handleInput}
         value=${this.graph.blockEntity?.properties.name}
       />`;
