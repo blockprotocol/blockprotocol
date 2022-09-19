@@ -82,8 +82,8 @@ export const HiringBanner = () => {
               })}
             >
               <Box component="span" mr="0.5ch">
-                We're hiring full-stack TypeScript/React and PHP plugin
-                developers to help grow the
+                We're hiring full-stack TypeScript/React developers to
+                build blocks full-time, and grow the
               </Box>
               <Box component="span" display="inline-flex" alignItems="center">
                 Block Protocol
@@ -91,7 +91,7 @@ export const HiringBanner = () => {
                   icon={faArrowsLeftRight}
                   sx={{ fontSize: "inherit", mx: "0.5ch" }}
                 />
-                WordPress ecosystem.
+                ecosystem.
               </Box>
             </Typography>
             <Typography
