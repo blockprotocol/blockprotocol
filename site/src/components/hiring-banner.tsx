@@ -86,12 +86,7 @@ export const HiringBanner = () => {
                 build blocks full-time, and grow the
               </Box>
               <Box component="span" display="inline-flex" alignItems="center">
-                Block Protocol
-                <FontAwesomeIcon
-                  icon={faArrowsLeftRight}
-                  sx={{ fontSize: "inherit", mx: "0.5ch" }}
-                />
-                ecosystem.
+                Block Protocol ecosystem.
               </Box>
             </Typography>
             <Typography
