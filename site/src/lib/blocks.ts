@@ -116,7 +116,7 @@ export const getRepositoryUrl = (
   return undefined;
 };
 
-export const expandBlockMetadata = async ({
+export const expandBlockMetadata = ({
   timestamps,
   includesExampleGraph,
   metadata,
@@ -133,7 +133,7 @@ export const expandBlockMetadata = async ({
   };
   timestamps: { createdAt?: string; lastUpdated?: string };
   includesExampleGraph: boolean;
-}): Promise<ExpandedBlockMetadata> => {
+}): ExpandedBlockMetadata => {
   const {
     blockDistributionFolderUrl,
     npmPackageName,

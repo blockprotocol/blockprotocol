@@ -504,19 +504,18 @@ const script = async () => {
 
       const now = new Date().toISOString();
 
-      const extendedBlockMetadata: ExpandedBlockMetadata =
-        await expandBlockMetadata({
-          metadata: blockMetadata,
-          source: {
-            blockDistributionFolderUrl,
-            pathWithNamespace: blockName,
-            repoCommit: blockInfo.commit,
-            repoDirectory: blockInfo.folder,
-            repository: blockInfo.repository,
-          },
-          timestamps: {},
-          includesExampleGraph: exampleGraphFileExists,
-        });
+      const extendedBlockMetadata: ExpandedBlockMetadata = expandBlockMetadata({
+        metadata: blockMetadata,
+        source: {
+          blockDistributionFolderUrl,
+          pathWithNamespace: blockName,
+          repoCommit: blockInfo.commit,
+          repoDirectory: blockInfo.folder,
+          repository: blockInfo.repository,
+        },
+        timestamps: {},
+        includesExampleGraph: exampleGraphFileExists,
+      });
 
       const blockMetadataToWrite: BlockMetadataOnDisk = {
         ...extendedBlockMetadata,
