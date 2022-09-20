@@ -181,10 +181,7 @@ export const useMockDatastore = (
               if (entity.entityId === data.entityId) {
                 const newEntity = {
                   ...entity,
-                  properties: {
-                    ...entity.properties,
-                    ...data.properties,
-                  },
+                  properties: data.properties,
                 };
                 resolve({ data: newEntity });
                 return newEntity;
@@ -347,10 +344,7 @@ export const useMockDatastore = (
               if (entityType.entityTypeId === data.entityTypeId) {
                 const newEntityType = {
                   ...entityType,
-                  schema: {
-                    ...entityType.schema,
-                    ...data.schema,
-                  },
+                  schema: data.schema,
                 };
                 resolve({ data: newEntityType });
                 return newEntityType;

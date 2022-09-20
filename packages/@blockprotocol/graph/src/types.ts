@@ -195,7 +195,7 @@ export type GetEntityTypeData = {
 
 export type UpdateEntityTypeData = {
   entityTypeId: string;
-  schema: Partial<EntityType["schema"]>;
+  schema: EntityType["schema"];
 };
 
 export type DeleteEntityTypeData = {

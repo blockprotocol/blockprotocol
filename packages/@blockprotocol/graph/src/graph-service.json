@@ -64,7 +64,7 @@
             "type": "string"
           },
           "properties": {
-            "description": "The properties of the entity to update, which will be merged with any other properties on the entity",
+            "description": "The new properties object to assign to the entity",
             "type": "object"
           }
         },
@@ -249,7 +249,7 @@
             "type": "string"
           },
           "schema": {
-            "description": "A partial schema to apply as an update, which will be merged with any other properties on the schema",
+            "description": "The new schema to assign to the entity type",
             "type": "object"
           }
         },
