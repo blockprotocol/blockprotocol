@@ -12,7 +12,7 @@ In your terminal:
 
 - `npm install && npm run dev` or `yarn install && yarn dev`
 
-- visit [http://localhost:63212](http://localhost:63212) – you should see ‘Hello, World!’ UI that looks like this:
+- visit [http://localhost:63212](http://localhost:63212) – you should see a ‘Hello, World!’ UI that looks like this:
 
 ![the block developer environment](/workshop/dock-ui.png)
 
@@ -549,7 +549,7 @@ You can add editing capability for as many or as few fields as you like.
 
 ### Respecting 'read only' mode
 
-If your block implements editing, it should also implement a 'read only' mode, so that it can be when editing isn't allowed.
+If your block implements editing, it should also implement a 'read only' mode, so that it can be used when editing isn't allowed.
 
 We've covered two messages that the embedding application sends the block:
 
@@ -561,7 +561,7 @@ Another is `readonly`: this is a simple boolean that tells the block whether it 
 An application might set a block to "read only" mode because it is displaying data as a static webpage,
 or because the current user doesn't have permissions to edit the entities provided to the block.
 
-If `readonly === true`, then an embedding application is likely any requests to mutate data.
+If `readonly === true`, then an embedding application is likely to reject any requests to mutate data.
 
 You can implement `readonly` mode by taking the property from the `graph` object passed to your block,
 and adjusting or disabling your block's UI depending on its status.
