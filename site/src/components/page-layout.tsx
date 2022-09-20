@@ -15,13 +15,14 @@ type PageLayoutProps = {
 export const PageLayout: FunctionComponent<PageLayoutProps> = ({
   children,
 }) => {
-  const { pathname } = useRouter();
+  const { pathname, asPath } = useRouter();
 
   const [displayLoginModal, setDisplayLoginModal] = useState(false);
 
   const banner = useMemo(
-    () => BANNERS.find(({ shouldDisplay }) => shouldDisplay({ pathname })),
-    [pathname],
+    () =>
+      BANNERS.find(({ shouldDisplay }) => shouldDisplay({ pathname, asPath })),
+    [pathname, asPath],
   );
 
   return (

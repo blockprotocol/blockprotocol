@@ -1,6 +1,6 @@
 {
   "name": "block-template-react",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
