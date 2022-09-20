@@ -318,6 +318,7 @@ export const FooterBanner: FunctionComponent<FooterBannerProps> = ({
       paddingTop: banner.overlapsFooter ? 0 : 8,
       background: `radial-gradient(ellipse at 10% 130%, #9672FF 0%, #9482FF 50.15%, #DF84FF 100%)`,
     }}
+    data-test-id="footerCTA"
   >
     <Container
       sx={{
