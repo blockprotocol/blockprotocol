@@ -717,13 +717,13 @@ The simplest way is to take the data you have used in `dev.tsx` as follows:
 ```
 
 1.  Create a file called `example-graph.json` at the root of your project (alongside `package.json`).
-    This is a file which accepts `initialEntities` and `initialLinks` – you can use the same values as in `dev.tsx`, e.g.
+    This is a file which accepts `entities` and `links` – you can use the same values as you did for your sample entities in `dev.tsx`, e.g.
 
 ```json
 // example-graph.json
 
 {
-  "initialEntities": [
+  "entities": [
     {
       "entityId": "project1",
       "properties": {
@@ -741,7 +741,7 @@ The simplest way is to take the data you have used in `dev.tsx` as follows:
       }
     }
   ],
-  "initialLinks": [
+  "links": [
     {
       "sourceEntityId": "person1",
       "destinationEntityId": "project1",
