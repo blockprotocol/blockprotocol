@@ -1,5 +1,14 @@
 # mock-block-dock
 
+## 0.0.31
+
+### Patch Changes
+
+- [#631](https://github.com/blockprotocol/blockprotocol/pull/631) [`0f0abf9`](https://github.com/blockprotocol/blockprotocol/commit/0f0abf905e0b06e27049ade5cf271df127c34bba) Thanks [@CiaranMn](https://github.com/CiaranMn)! - change entity & type updates to be by overwrite, not merge
+
+- Updated dependencies [[`0f0abf9`](https://github.com/blockprotocol/blockprotocol/commit/0f0abf905e0b06e27049ade5cf271df127c34bba)]:
+  - @blockprotocol/graph@0.0.18
+
 ## 0.0.30
 
 ### Patch Changes

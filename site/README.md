@@ -226,7 +226,7 @@ Updates an entity type belonging to the requesting user.
 
 Request Body
 
-- `schema`: a valid JSON schema object to overwrite the existing one.
+- `schema`: a valid JSON schema object, which will overwrite the existing one.
 
 Response:
 
