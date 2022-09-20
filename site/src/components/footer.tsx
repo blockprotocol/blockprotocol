@@ -210,7 +210,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
                     color: ({ palette }) => palette.gray[50],
                   }}
                 >
-                  The open-source specification and registry
+                  The open-source specification and hub
                   <br />
                   for data-driven, interactive blocks
                 </Typography>
