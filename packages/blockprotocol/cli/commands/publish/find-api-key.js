@@ -8,7 +8,7 @@ import { doesUserAgree } from "./does-user-agree.js";
 import { findProjectRoot } from "./shared/find-project-root.js";
 
 const environmentVariableName = "BLOCK_PROTOCOL_API_KEY";
-const configFileName = ".bprc";
+const configFileName = ".blockprotocolrc";
 const configFileKey = "api-key";
 const configFileTemplate = `${configFileKey}=b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000`;
 
@@ -70,7 +70,7 @@ export const findApiKey = async () => {
       console.log(chalk.green("Created file:"), newConfigFilePath);
       console.log(
         chalk.red("Warning:"),
-        "you should add .bprc to your .gitignore to avoid committing your secret",
+        "you should add .blockprotocolrc to your .gitignore to avoid committing your secret",
       );
     }
   }
