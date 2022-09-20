@@ -1,5 +1,11 @@
 # block-scripts
 
+## 0.0.17
+
+### Patch Changes
+
+- [#622](https://github.com/blockprotocol/blockprotocol/pull/622) [`bfb6db7`](https://github.com/blockprotocol/blockprotocol/commit/bfb6db7c3138c410b0003869cb15ebbb5f18ac7a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - pull repository from package.json to block-metadata.json
+
 ## 0.0.16
 
 ### Patch Changes

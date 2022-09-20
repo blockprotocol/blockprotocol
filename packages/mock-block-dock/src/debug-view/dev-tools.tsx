@@ -20,14 +20,6 @@ import { PropertiesView } from "./dev-tools/properties";
 import { a11yProps, TabPanel } from "./dev-tools/tab-panel";
 import { HEADER_HEIGHT } from "./header";
 
-const Wrapper = styled(Box)(() => ({
-  position: "fixed",
-  left: 0,
-  right: 0,
-  bottom: 0,
-  zIndex: 1000,
-}));
-
 const TAB_HEIGHT = 40;
 
 const Paper = styled(MuiPaper)(() => ({
@@ -89,7 +81,10 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
 });
 
 export const DevTools = () => {
-  const [value, setValue] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useLocalStorageState(
+    "debug-tab-index",
+    { defaultValue: 0 },
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const paperBoxRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useLocalStorageState("mbd-dev-tools-height", {
@@ -103,7 +98,7 @@ export const DevTools = () => {
   }, []);
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Box ref={wrapperRef} height={height} position="relative">
       <Resizable
         height={height}
         width={width ?? 0}
@@ -115,7 +110,10 @@ export const DevTools = () => {
       >
         <Paper sx={{ height }} ref={paperBoxRef}>
           <Header>
-            <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
+            <Tabs
+              value={selectedTabIndex}
+              onChange={(_, newVal) => setSelectedTabIndex(newVal)}
+            >
               <Tab label="Properties" {...a11yProps(0)} sx={{ pl: 3 }} />
               <Tab label="Datastore" {...a11yProps(1)} />
               <Tab label="Logs" {...a11yProps(2)} />
@@ -123,21 +121,21 @@ export const DevTools = () => {
             </Tabs>
           </Header>
           <Box flex={1} overflow="scroll">
-            <TabPanel value={value} index={0}>
+            <TabPanel value={selectedTabIndex} index={0}>
               <PropertiesView />
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={selectedTabIndex} index={1}>
               <DataStoreView />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={selectedTabIndex} index={2}>
               <LogsView />
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            <TabPanel value={selectedTabIndex} index={3}>
               <BlockInfoView />
             </TabPanel>
           </Box>
         </Paper>
       </Resizable>
-    </Wrapper>
+    </Box>
   );
 };

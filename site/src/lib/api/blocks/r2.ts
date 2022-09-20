@@ -5,6 +5,7 @@ import fs from "fs-extra";
 import { globby } from "globby";
 import mime from "mime-types";
 import path from "node:path";
+import fetch from "node-fetch";
 import slugify from "slugify";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";

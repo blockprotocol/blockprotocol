@@ -1,5 +1,15 @@
 # mock-block-dock
 
+## 0.0.30
+
+### Patch Changes
+
+- [#622](https://github.com/blockprotocol/blockprotocol/pull/622) [`bfb6db7`](https://github.com/blockprotocol/blockprotocol/commit/bfb6db7c3138c410b0003869cb15ebbb5f18ac7a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - improve debug ui layout
+
+- Updated dependencies [[`03aa390`](https://github.com/blockprotocol/blockprotocol/commit/03aa3902540114fd341d48a8d0dfa060d27ee71f)]:
+  - @blockprotocol/core@0.0.12
+  - @blockprotocol/graph@0.0.17
+
 ## 0.0.29
 
 ### Patch Changes
