@@ -1,5 +1,13 @@
 # block-template-html
 
+## 0.1.7
+
+### Patch Changes
+
+- [#629](https://github.com/blockprotocol/blockprotocol/pull/629) [`e682390`](https://github.com/blockprotocol/blockprotocol/commit/e6823904a1c63fd72c11e2fc62678eac61160ec5) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename .bprc to .blockprotocolrc
+
+## 0.1.6
+
 ## 0.1.5
 
 ### Patch Changes

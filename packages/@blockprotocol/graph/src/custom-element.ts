@@ -51,7 +51,7 @@ export abstract class BlockElementBase<
 
   /**
    * A helper method to update the properties of the entity loaded into the block, i.e. this.graph.blockEntity
-   * @param properties the properties to update, which will be merged with any others
+   * @param properties the properties object to assign to the entity, which will overwrite the existing object
    */
   protected updateSelf(properties: NonNullable<BlockEntityProperties>) {
     if (!this.graphService) {
