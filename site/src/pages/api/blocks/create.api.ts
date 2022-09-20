@@ -93,14 +93,14 @@ export default createAuthenticatedHandler<
     );
 
     try {
-      const block: ExpandedBlockMetadata = await publishBlockFromNpm(db, {
+      const block = await publishBlockFromNpm(db, {
         createdAt: null,
         npmPackageName,
         pathWithNamespace,
       });
       await revalidateMultiBlockPages(res, shortname);
 
-      void notifySlackAboutBlock(block, "publish");
+      await notifySlackAboutBlock(block, "publish");
 
       return res.status(200).json({ block });
     } catch (err) {
