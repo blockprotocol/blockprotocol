@@ -144,9 +144,22 @@ const uploadBlockFilesToR2 = (
         `${remoteStoragePrefix}/${thingName}`,
       );
     }
-    const fileContents = fs.readFileSync(pathToThing).toString();
+    const fileContents = fs.readFileSync(pathToThing);
 
     const contentType = mime.lookup(thingName);
+    if (
+      contentType &&
+      contentType.includes("svg") &&
+      fileContents
+        .toString()
+        .match(
+          /(script|entity|onerror|onload|onmouseover|onclick|onfocus|foreignObject)/i,
+        )
+    ) {
+      // don't upload this file. it'll silently be missing
+      // @todo consider throwing an error instead here
+      return Promise.resolve();
+    }
 
     return s3
       .putObject({
