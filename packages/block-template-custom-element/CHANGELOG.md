@@ -1,5 +1,12 @@
 # block-template-custom-element
 
+## 0.1.13
+
+### Patch Changes
+
+- Updated dependencies [[`0f0abf9`](https://github.com/blockprotocol/blockprotocol/commit/0f0abf905e0b06e27049ade5cf271df127c34bba)]:
+  - @blockprotocol/graph@0.0.18
+
 ## 0.1.12
 
 ### Patch Changes
