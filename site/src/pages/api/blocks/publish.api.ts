@@ -110,7 +110,7 @@ export default createApiKeyRequiredHandler<
 
       await revalidateMultiBlockPages(res, shortname);
 
-      void notifySlackAboutBlock(block, existingBlock ? "update" : "publish");
+      await notifySlackAboutBlock(block, existingBlock ? "update" : "publish");
 
       return res.status(200).json({ block });
     } catch (err) {
