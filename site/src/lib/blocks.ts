@@ -3,46 +3,14 @@ import {
   BlockMetadataRepository,
   JsonObject,
 } from "@blockprotocol/core";
-import axios from "axios";
 import fs from "fs-extra";
 import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import path from "node:path";
 import sanitize from "sanitize-html";
 
-import { publicBaseR2Url } from "./api/blocks/r2";
 import { FRONTEND_URL } from "./config";
 
-/** @todo move this to a utils file */
-const isSvgSafe = (svgContent: string) => {
-  const hasUnsafeContent = svgContent.match(
-    /(script|entity|onerror|onload|onmouseover|onclick|onfocus|foreignObject)/i,
-  );
-
-  return !hasUnsafeContent;
-};
-
-/** @todo move this to a utils file */
-const sanitizeImageUrl = async (url: string) => {
-  if (!url.includes("svg")) return url;
-
-  let svgContent = "";
-
-  try {
-    const { data } = await axios.get(url);
-    svgContent = data;
-  } catch (error) {
-    //
-  }
-
-  if (svgContent && isSvgSafe(svgContent)) {
-    return url;
-  }
-
-  return "";
-};
-
-/** @todo move this to a utils file */
 const sanitizeUrl = (url: string) => {
   const results = sanitize(`<a href="${url}" />`, {
     allowedAttributes: {
@@ -191,22 +159,6 @@ export const expandBlockMetadata = async ({
     throw new Error(`Malformed pathWithNamespace ${pathWithNamespace}`);
   }
 
-  /**
-   * check if "image" or "icon" has "publicBaseR2Url" in it, if it has, then download image,
-   * @todo I did not checked if this is actually working from CLI,
-   * just tested sanitizeImageUrl on local images & confirmed that it's working
-   * we should make sure this works as expected on a real case
-   */
-  let image = generateBlockFileUrl(metadata.image, blockDistributionFolderUrl);
-  if (image?.includes(publicBaseR2Url)) {
-    image = await sanitizeImageUrl(image);
-  }
-
-  let icon = generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl);
-  if (icon?.includes(publicBaseR2Url)) {
-    icon = await sanitizeImageUrl(icon);
-  }
-
   // eslint-disable-next-line no-param-reassign -- could make a new object, but would need to update for any new metadata fields
   delete metadata.devReloadEndpoint;
 
@@ -220,8 +172,8 @@ export const expandBlockMetadata = async ({
     componentId: blockDistributionFolderUrl,
     createdAt: timestamps.createdAt,
     displayName: metadata.displayName ?? name,
-    icon,
-    image,
+    icon: generateBlockFileUrl(metadata.icon, blockDistributionFolderUrl),
+    image: generateBlockFileUrl(metadata.image, blockDistributionFolderUrl),
     lastUpdated: timestamps.lastUpdated,
     name,
     npmPackageName,
@@ -360,9 +312,9 @@ export const retrieveBlockReadme = async (
       );
     }
 
-    return fetch(`${blockMetadata.componentId}/README.md`).then((resp) =>
-      resp.text(),
-    );
+    return fetch(`${blockMetadata.componentId}/README.md`).then((resp) => {
+      return resp.status === 200 ? resp.text() : undefined;
+    });
   } catch {
     return undefined;
   }
