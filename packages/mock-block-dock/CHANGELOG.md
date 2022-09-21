@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.32
+
+### Patch Changes
+
+- [#634](https://github.com/blockprotocol/blockprotocol/pull/634) [`76d3ffa`](https://github.com/blockprotocol/blockprotocol/commit/76d3ffa3b44e1d7e9ff74d5d5723e7ed3c4d08ed) Thanks [@CiaranMn](https://github.com/CiaranMn)! - set minheight on debug header
+
 ## 0.0.31
 
 ### Patch Changes
