@@ -375,7 +375,10 @@ export const App: BlockComponent<BlockEntityProperties> = ({
 }) => {
   ...
   // find only the entities in linkedEntities which appear as the destination of one of the projectLinks
-  const linkedProjects = linkedEntities?.filter((linkedEntity) => {
+  const 
+  
+  
+  = linkedEntities?.filter((linkedEntity) => {
     return projectLinkGroup?.links.find(
       (link) => link.destinationEntityId === linkedEntity.entityId,
     );
@@ -549,7 +552,7 @@ and be careful not to send the `blockEntity`'s by mistake:
         value={project.properties.description}
       />
     </div>
-  ));
+  ))
 }
 ```
 
