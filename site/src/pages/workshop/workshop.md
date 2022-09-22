@@ -91,7 +91,7 @@ type PersonProperties = {
 };
 
 /**
- * This is an example type for the properties on a Person entity
+ * This is an example type for the properties on a Project entity
  */
 type ProjectProperties = {
   company?: string,
@@ -154,7 +154,9 @@ export const App: BlockComponent<BlockEntityProperties> = ({ // here we use the 
 
 Whatever properties you define in the `BlockEntityProperties` type will be the ones available on `blockEntity.properties`.
 
-To provide sample values for whichever `properties` we want our `blockEntity` to have, we can update it in `dev.tsx`
+To provide sample values for whichever `properties` we want our `blockEntity` to have, we can update it in `dev.tsx`.
+
+At the same time we can update the `entityId` to something more meaningful for this entity to make the sample data easier to work with.
 
 ```js
 // src/dev.tsx
@@ -233,7 +235,7 @@ They contain:
 
 - `sourceEntityId`: the entity this link is _from_
 
-- `destinationEntityID`: the entity this link is _to_
+- `destinationEntityId`: the entity this link is _to_
 
 - `path`: you can think of this as a label or description of the relationship. It gives the relationship semantic meaning, e.g. "founder", "employer", "friend"
 
@@ -373,7 +375,10 @@ export const App: BlockComponent<BlockEntityProperties> = ({
 }) => {
   ...
   // find only the entities in linkedEntities which appear as the destination of one of the projectLinks
-  const linkedProjects = linkedEntities?.filter((linkedEntity) => {
+  const 
+  
+  
+  = linkedEntities?.filter((linkedEntity) => {
     return projectLinkGroup?.links.find(
       (link) => link.destinationEntityId === linkedEntity.entityId,
     );
@@ -527,22 +532,28 @@ We can also make individual projects editable – we must remember to use _their
 and be careful not to send the `blockEntity`'s by mistake:
 
 ```js
-<h2>Projects</h2>
-{linkedProjects?.map((project) => (
-  <div>
-  <h3>{project.properties.name}</h3>
-  <input
-    onChange={(event) =>
-      graphService?.updateEntity({
-        data: {
-          entityId: project.entityId,
-          properties: { ...project.properties, description: event.target.value },
-        },
-      })
-    }
-    value={project.properties.description}
-  />
-))};
+<h2>Projects</h2>;
+{
+  linkedProjects?.map((project) => (
+    <div>
+      <h3>{project.properties.name}</h3>
+      <input
+        onChange={(event) =>
+          graphService?.updateEntity({
+            data: {
+              entityId: project.entityId,
+              properties: {
+                ...project.properties,
+                description: event.target.value,
+              },
+            },
+          })
+        }
+        value={project.properties.description}
+      />
+    </div>
+  ))
+}
 ```
 
 You can add editing capability for as many or as few fields as you like.
@@ -574,16 +585,15 @@ For example, we might show text inside of a text input for our description if `r
     <p>{description}</p>
   ) : (
     <input
-      onChange={(event) => setDraftDescription(event.target.value)}
-      onBlur={() =>
+      onChange={(event) =>
         graphService?.updateEntity({
           data: {
             entityId, // this is `blockEntity.entityId` – we extracted it earlier
-            properties: { ...properties, description: draftDescription },
+            properties: { ...properties, description: event.target.value },
           },
         })
       }
-      value={draftDescription}
+      value={description}
     />
   );
 }
@@ -666,11 +676,11 @@ We have a Hub of blocks available at [https://blockprotocol.org/hub](https://blo
 - Sign up for an account at https://blockprotocol.org if you haven’t already
 - Create an API key and copy it: https://blockprotocol.org/settings/api-keys
 
-#### In your editor
+#### In your terminal
 
+- Run `npm run build` or `yarn build` to create a production build of your block in the `dist/` folder
 - run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file at the root of your project
 - Replace the placeholder key in that file with your API key
-- Run `npm run build` or `yarn build`
 - now run `npx blockprotocol@latest publish`
 - See your block on the Hub using the provided link!
 - Here’s an example block page: [https://blockprotocol.org/@hash/blocks/person](https://blockprotocol.org/@hash/blocks/person)
@@ -705,7 +715,9 @@ The simplest way is to take the data you have used in `dev.tsx` as follows:
   "blockprotocol": {
     ...
     "examples": [
-      {
+      "entityId": "person1",
+      "properties": {
+        "description": "Here's a new description",
         "name": "Ciaran",
         "profession": "Software developer"
       }
