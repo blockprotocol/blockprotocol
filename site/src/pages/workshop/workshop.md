@@ -675,9 +675,9 @@ We have a Hub of blocks available at [https://blockprotocol.org/hub](https://blo
 
 #### In your terminal
 
+- Run `npm run build` or `yarn build` to create a production build of your block in the `dist/` folder
 - run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file at the root of your project
 - Replace the placeholder key in that file with your API key
-- Run `npm run build` or `yarn build`
 - now run `npx blockprotocol@latest publish`
 - See your block on the Hub using the provided link!
 - Here’s an example block page: [https://blockprotocol.org/@hash/blocks/person](https://blockprotocol.org/@hash/blocks/person)
@@ -712,7 +712,9 @@ The simplest way is to take the data you have used in `dev.tsx` as follows:
   "blockprotocol": {
     ...
     "examples": [
-      {
+      "entityId": "person1",
+      "properties": {
+        "description": "Here's a new description",
         "name": "Ciaran",
         "profession": "Software developer"
       }

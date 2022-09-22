@@ -35,7 +35,7 @@ const DevApp = () => {
       }}
       blockEntity={{
         // This is the 'blockEntity' which your block will receive as part of the properties sent to it
-        entityId: "my-entity-1",
+        entityId: "peroson1",
         properties: { name: "World" },
       }}
       blockInfo={packageJson.blockprotocol}

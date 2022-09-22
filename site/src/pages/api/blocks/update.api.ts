@@ -10,7 +10,7 @@ import {
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
 import { createPathWithNamespace } from "./shared/naming";
-import { revalidateMultiBlockPages } from "./shared/revalidate";
+import { revalidateBlockPages } from "./shared/revalidate";
 
 // The body we expect when updating an npm-linked block
 export type ApiBlockUpdateRequest = { blockName: string };
@@ -100,7 +100,7 @@ export default createAuthenticatedHandler<
         pathWithNamespace,
       });
 
-      await revalidateMultiBlockPages(res, shortname);
+      await revalidateBlockPages(res, shortname, blockName);
       return res.status(200).json({ block });
     } catch (err) {
       const errIsError = err instanceof Error;
