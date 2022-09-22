@@ -154,7 +154,9 @@ export const App: BlockComponent<BlockEntityProperties> = ({ // here we use the 
 
 Whatever properties you define in the `BlockEntityProperties` type will be the ones available on `blockEntity.properties`.
 
-To provide sample values for whichever `properties` we want our `blockEntity` to have, we can update it in `dev.tsx`
+To provide sample values for whichever `properties` we want our `blockEntity` to have, we can update it in `dev.tsx`.
+
+At the same time we can update the `entityId` to something more meaningful for this entity to make the sample data easier to work with.
 
 ```js
 // src/dev.tsx
@@ -233,7 +235,7 @@ They contain:
 
 - `sourceEntityId`: the entity this link is _from_
 
-- `destinationEntityID`: the entity this link is _to_
+- `destinationEntityId`: the entity this link is _to_
 
 - `path`: you can think of this as a label or description of the relationship. It gives the relationship semantic meaning, e.g. "founder", "employer", "friend"
 
@@ -527,22 +529,28 @@ We can also make individual projects editable – we must remember to use _their
 and be careful not to send the `blockEntity`'s by mistake:
 
 ```js
-<h2>Projects</h2>
-{linkedProjects?.map((project) => (
-  <div>
-  <h3>{project.properties.name}</h3>
-  <input
-    onChange={(event) =>
-      graphService?.updateEntity({
-        data: {
-          entityId: project.entityId,
-          properties: { ...project.properties, description: event.target.value },
-        },
-      })
-    }
-    value={project.properties.description}
-  />
-))};
+<h2>Projects</h2>;
+{
+  linkedProjects?.map((project) => (
+    <div>
+      <h3>{project.properties.name}</h3>
+      <input
+        onChange={(event) =>
+          graphService?.updateEntity({
+            data: {
+              entityId: project.entityId,
+              properties: {
+                ...project.properties,
+                description: event.target.value,
+              },
+            },
+          })
+        }
+        value={project.properties.description}
+      />
+    </div>
+  ));
+}
 ```
 
 You can add editing capability for as many or as few fields as you like.
@@ -574,16 +582,15 @@ For example, we might show text inside of a text input for our description if `r
     <p>{description}</p>
   ) : (
     <input
-      onChange={(event) => setDraftDescription(event.target.value)}
-      onBlur={() =>
+      onChange={(event) =>
         graphService?.updateEntity({
           data: {
             entityId, // this is `blockEntity.entityId` – we extracted it earlier
-            properties: { ...properties, description: draftDescription },
+            properties: { ...properties, description: event.target.value },
           },
         })
       }
-      value={draftDescription}
+      value={description}
     />
   );
 }
