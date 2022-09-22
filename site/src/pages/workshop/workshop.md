@@ -91,7 +91,7 @@ type PersonProperties = {
 };
 
 /**
- * This is an example type for the properties on a Person entity
+ * This is an example type for the properties on a Project entity
  */
 type ProjectProperties = {
   company?: string,
