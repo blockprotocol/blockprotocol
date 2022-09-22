@@ -673,7 +673,7 @@ We have a Hub of blocks available at [https://blockprotocol.org/hub](https://blo
 - Sign up for an account at https://blockprotocol.org if you haven’t already
 - Create an API key and copy it: https://blockprotocol.org/settings/api-keys
 
-#### In your editor
+#### In your terminal
 
 - run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file at the root of your project
 - Replace the placeholder key in that file with your API key
