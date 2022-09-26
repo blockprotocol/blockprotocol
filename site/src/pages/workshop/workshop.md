@@ -75,32 +75,32 @@ We are going to be working with entities of type `Person` and `Project`.
 
 Here are sample types for their properties - you could pick some of these fields for your block to deal with.
 
-```js
+```tsx
 /**
  * This is an example type for the properties on a Person entity
  */
 type PersonProperties = {
-  description?: string,
-  email?: string,
-  imageUrl?: string,
-  location?: string,
-  name: string,
-  profession?: string,
-  skills?: string[],
-  url?: string,
+  description?: string;
+  email?: string;
+  imageUrl?: string;
+  location?: string;
+  name: string;
+  profession?: string;
+  skills?: string[];
+  url?: string;
 };
 
 /**
  * This is an example type for the properties on a Project entity
  */
 type ProjectProperties = {
-  company?: string,
-  date?: string,
-  description?: string,
-  imageUrl?: string,
-  keywords?: string[],
-  name: string,
-  url?: string,
+  company?: string;
+  date?: string;
+  description?: string;
+  imageUrl?: string;
+  keywords?: string[];
+  name: string;
+  url?: string;
 };
 ```
 
@@ -120,13 +120,13 @@ Each block should define the properties it expects this entity to have.
 In the template, we do this by defining a `BlockEntityProperties` type. It starts off with simply `name`, but
 let's add a couple more fields to represent a `Person`:
 
-```js
+```tsx
 // src/app.tsx
 
 type BlockEntityProperties = {
-  description?: string,
-  name: string,
-  profession: string,
+  description?: string;
+  name: string;
+  profession: string;
 };
 ```
 
@@ -140,16 +140,17 @@ property on the properties passed to the `App` function.
 The `graph` object here contains data that the application sends automatically to the block – as well as the `blockEntity`,
 this can also contain `blockGraph` and `readonly`, which we'll discuss in a little while.
 
-```js
+```tsx
 // src/app.tsx
 
-export const App: BlockComponent<BlockEntityProperties> = ({ // here we use the type
+export const App: BlockComponent<BlockEntityProperties> = ({
+  // here we use the type
   graph: {
     blockEntity: { entityId, properties }, // here is the block entity, taken from the 'graph' object
   },
 }) => {
-  ...
-}
+  // ...
+};
 ```
 
 Whatever properties you define in the `BlockEntityProperties` type will be the ones available on `blockEntity.properties`.
@@ -158,7 +159,7 @@ To provide sample values for whichever `properties` we want our `blockEntity` to
 
 At the same time we can update the `entityId` to something more meaningful for this entity to make the sample data easier to work with.
 
-```js
+```tsx
 // src/dev.tsx
 
 const DevApp = () => {
@@ -171,44 +172,48 @@ const DevApp = () => {
         properties: {
           name: "Ciaran",
           profession: "Software developer",
-        }
+        },
       }}
-      ...
+    >
+      // ...
+    </MockBlockDock>
+  );
+};
 ```
 
 Now, back in our block we can extract them from `properties`, and assign a default to any that are optional,
 in case values are not provided.
 
-```js
+```tsx
 // src/app.tsx
 
 export const App: BlockComponent<BlockEntityProperties> = ({
   graph: {
     blockEntity: { entityId, properties },
+  },
 }) => {
-  /** Here we extract the properties from the blockEntity's properties */
+  // Here we extract the properties from the blockEntity's properties
   const {
     description = "A person without a description]",
     name,
     profession,
   } = properties;
-}
+};
 ```
 
 Finally, we can show the values to the user.
 
-```js
+```tsx
 // src/app.tsx
 
-  ...
-  return (
-    <div className={styles.block} ref={blockRootRef}>
-      <h1>{name}</h1>
-      <h2>{profession}</h2>
-      <p>{description}</p>
-    </div>
-  );
-};
+// ...
+return (
+  <div className={styles.block} ref={blockRootRef}>
+    <h1>{name}</h1>
+    <h2>{profession}</h2>
+    <p>{description}</p>
+  </div>
+);
 ```
 
 ## Linked entities
@@ -265,13 +270,13 @@ when you run `yarn dev` - but we can override these by setting `initialEntities`
 I'm going to set `initialEntities` to two projects I've worked on, and `initialLinks` to link the `blockEntity`
 to the two new project entities:
 
-```js
+```tsx
 // src/dev.tsx
 
 const DevApp = () => {
   return (
     <MockBlockDock
-      ...
+      // ...
       initialEntities={[
         {
           entityId: "project1",
@@ -302,7 +307,7 @@ const DevApp = () => {
           destinationEntityId: "project2",
           linkId: "link2",
           path: "projects",
-        }
+        },
       ]}
     />
   );
@@ -317,7 +322,7 @@ To do, first we add `blockGraph` to the data that we are taking from the `graph`
 
 We can also go ahead and get references to `linkedEntities` and `linkGroups` from `blockGraph`:
 
-```js
+```tsx
 // src/app.tsx
 
 export const App: BlockComponent<BlockEntityProperties> = ({
@@ -349,7 +354,7 @@ has provided links from _other_ entities as well (it might do this if it resolve
 
 This function finds the link group which meets those two conditions:
 
-```js
+```tsx
 const projectLinkGroup = linkGroups?.find((group) => {
   return group.sourceEntityId === entityId && group.path === "projects";
 });
@@ -359,7 +364,7 @@ Now we have the links we care about, we need to find the entities which those li
 
 It'll also be useful to have a type for the properties we expect on our project entities, which we can define at the top of `src/app.tsx`
 
-```js
+```tsx
 import { Entity } from "@blockprotocol/graph";
 
 type ProjectProperties = {
@@ -370,21 +375,20 @@ type ProjectProperties = {
 
 type ProjectEntity = Entity<ProjectProperties>; // create a type for project entities
 
-export const App: BlockComponent<BlockEntityProperties> = ({
-  ...
-}) => {
-  ...
+export const App: BlockComponent<BlockEntityProperties> = (
+  {
+    // ...
+  },
+) => {
+  // ...
   // find only the entities in linkedEntities which appear as the destination of one of the projectLinks
-  const
-
-
-  = linkedEntities?.filter((linkedEntity) => {
+  const linkedProjects = linkedEntities?.filter((linkedEntity) => {
     return projectLinkGroup?.links.find(
       (link) => link.destinationEntityId === linkedEntity.entityId,
     );
   }) as ProjectEntity[] | undefined; // tell the TypeScript compiler that this will only contain ProjectEntities
-                                     // for a robust block you should instead check that the contents are as expected
-  ...
+  // for a robust block you should instead check that the contents are as expected
+  // ...
 };
 ```
 
@@ -392,23 +396,23 @@ Now we have a variable, `linkedProjects`, which contains the entities linked to 
 
 We can display them to the user, e.g. like this:
 
-```js
-<h2>Projects</h2>;
-{
-  linkedProjects?.map((project) => (
+```tsx
+<>
+  <h2>Projects</h2>
+  {linkedProjects?.map((project) => (
     <div>
       <h3>{project.properties.name}</h3>
       <p>{project.properties.description}</p>
     </div>
-  ));
-}
+  ))}
+</>
 ```
 
 ## What I have so far
 
 Here's the complete `app.tsx` after taking the previous steps
 
-```js
+```tsx
 import {
   BlockComponent,
   useGraphBlockService,
@@ -514,7 +518,7 @@ We want to update the `description`, so we pass a `properties` object which incl
 
 This sends a request to the application. If successful, the entity will be updated, and the new value for `blockEntity` sent to the block.
 
-```js
+```tsx
 <input
   onChange={(event) =>
     graphService?.updateEntity({
@@ -531,10 +535,10 @@ This sends a request to the application. If successful, the entity will be updat
 We can also make individual projects editable – we must remember to use _their_ `entityId` and `properties`,
 and be careful not to send the `blockEntity`'s by mistake:
 
-```js
-<h2>Projects</h2>;
-{
-  linkedProjects?.map((project) => (
+```tsx
+<>
+  <h2>Projects</h2>
+  {linkedProjects?.map((project) => (
     <div>
       <h3>{project.properties.name}</h3>
       <input
@@ -552,8 +556,8 @@ and be careful not to send the `blockEntity`'s by mistake:
         value={project.properties.description}
       />
     </div>
-  ));
-}
+  ))}
+</>
 ```
 
 You can add editing capability for as many or as few fields as you like.
@@ -579,7 +583,7 @@ and adjusting or disabling your block's UI depending on its status.
 
 For example, we might show text inside of a text input for our description if `readonly` mode is on.
 
-```js
+```tsx
 {
   readonly ? (
     <p>{description}</p>
@@ -617,27 +621,29 @@ to some other action that indicated the user was finished – e.g. pressing a bu
 
 Here's an implementation that uses local state:
 
-```js
+```tsx
 import { useRef, useState } from "react";
 
-...
+// ...
 
 const [draftDescription, setDraftDescription] = useState(description);
 
-...
+// ...
 
-<input
-  onChange={(event) => setDraftDescription(event.target.value)}
-  onBlur={() =>
-    graphService?.updateEntity({
-      data: {
-        entityId, // this is `blockEntity.entityId` – we extracted it earlier
-        properties: { ...properties, description: draftDescription },
-      },
-    })
-  }
-  value={draftDescription}
-/>
+<>
+  <input
+    onChange={(event) => setDraftDescription(event.target.value)}
+    onBlur={() =>
+      graphService?.updateEntity({
+        data: {
+          entityId, // this is `blockEntity.entityId` – we extracted it earlier
+          properties: { ...properties, description: draftDescription },
+        },
+      })
+    }
+    value={draftDescription}
+  />
+</>;
 ```
 
 ### Dealing with external changes
@@ -655,7 +661,7 @@ When they do so, the embedding application should send an updated `blockEntity` 
 
 It could automatically update its internal state with the new data.
 
-```js
+```tsx
 useEffect(() => {
   // do something to update local state when blockEntity changes
 }, [blockEntity]);
@@ -711,20 +717,22 @@ The simplest way is to take the data you have used in `dev.tsx` as follows:
 ```json
 // package.json
 {
-  ...
+  // ...
   "blockprotocol": {
-    ...
+    // ...
     "examples": [
-      "entityId": "person1",
-      "properties": {
-        "description": "Here's a new description",
-        "name": "Ciaran",
-        "profession": "Software developer"
+      {
+        "entityId": "person1",
+        "properties": {
+          "description": "Here's a new description",
+          "name": "Ciaran",
+          "profession": "Software developer"
+        }
       }
-    ],
-    ...
-  },
-  ...
+    ]
+    // ...
+  }
+  // ...
 }
 ```
 
