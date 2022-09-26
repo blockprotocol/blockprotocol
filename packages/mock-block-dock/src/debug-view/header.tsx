@@ -17,6 +17,7 @@ export const HEADER_HEIGHT = 50;
 
 const Container = styled(Box)(({ theme }) => ({
   height: HEADER_HEIGHT,
+  minHeight: HEADER_HEIGHT,
   position: "sticky",
   top: 0,
   zIndex: 2000,

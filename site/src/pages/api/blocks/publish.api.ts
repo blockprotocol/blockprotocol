@@ -12,7 +12,7 @@ import {
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
 import { createPathWithNamespace, generateSlug } from "./shared/naming";
-import { revalidateMultiBlockPages } from "./shared/revalidate";
+import { revalidateBlockPages } from "./shared/revalidate";
 
 type ApiBlockPublishRequest = MultipartExtensions<"tarball", "blockName">;
 
@@ -108,7 +108,7 @@ export default createApiKeyRequiredHandler<
         tarball: req.body.uploads.tarball.buffer,
       });
 
-      await revalidateMultiBlockPages(res, shortname);
+      await revalidateBlockPages(res, shortname, slugifiedBlockName);
 
       await notifySlackAboutBlock(block, existingBlock ? "update" : "publish");
 

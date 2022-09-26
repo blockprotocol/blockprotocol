@@ -10,6 +10,9 @@
   "no-alt-text": false,
   "no-bare-urls": false,
   "no-inline-html": false,
+  "no-trailing-punctuation": {
+    "punctuation": ".,;:。，；："
+  },
   "no-trailing-spaces": false,
   "ol-prefix": { "style": "one" }
 }
