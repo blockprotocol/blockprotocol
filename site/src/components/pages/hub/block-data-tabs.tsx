@@ -70,7 +70,7 @@ export const BlockDataTabs: FunctionComponent<BlockDataTabsProps> = ({
       value={blockDataTab}
       onChange={(event) => setBlockDataTab(event.target.value as number)}
     >
-      <MenuItem value={0}>Data Source</MenuItem>
+      <MenuItem value={0}>Block Properties</MenuItem>
       <MenuItem value={1}>Block Schema</MenuItem>
       {showExampleGraphTab && <MenuItem value={2}>Example Graph</MenuItem>}
     </Select>

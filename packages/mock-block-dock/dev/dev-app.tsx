@@ -1,3 +1,4 @@
+import { Entity } from "@blockprotocol/graph";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { render } from "react-dom";
 
@@ -15,16 +16,36 @@ type TestBlockType =
   | "html-at-url"
   | "html-as-string";
 
+const blockEntityMap = {
+  react: {
+    entityId: "entity-react",
+    entityTypeId: "test-type-1",
+    properties: { name: "World" },
+  },
+  "custom-element": {
+    entityId: "entity-custom-element",
+    entityTypeId: "test-type-1",
+    properties: { name: "World" },
+  },
+  "html-at-url": {
+    entityId: "entity-html-as-url",
+    entityTypeId: "test-type-1",
+    properties: { name: "World" },
+  },
+  "html-as-string": {
+    entityId: "entity-html-as-string",
+    entityTypeId: "test-type-1",
+    properties: { name: "World" },
+  },
+} as Record<string, Entity>;
+
 const DevApp: FunctionComponent = () => {
   const [testBlockType, setTestBlockType] = useState<TestBlockType>("react");
 
-  const blockEntity = {
-    entityId: `test-entity-1`,
-    entityTypeId: "test-type-1",
-    properties: { name: "World" },
-  };
+  const blockEntity = blockEntityMap[testBlockType];
 
   let blockDefinition;
+  let blockType: "html" | "custom-element" | "react" | undefined;
 
   switch (testBlockType) {
     case "custom-element":
@@ -34,6 +55,7 @@ const DevApp: FunctionComponent = () => {
           tagName: "test-custom-element-block",
         },
       };
+      blockType = "custom-element";
       break;
 
     case "html-at-url":
@@ -42,6 +64,7 @@ const DevApp: FunctionComponent = () => {
           url: "./test-html-block/block.html",
         },
       };
+      blockType = "html";
       break;
 
     case "html-as-string":
@@ -54,6 +77,7 @@ const DevApp: FunctionComponent = () => {
           ).toString(),
         },
       };
+      blockType = "html";
       break;
 
     case "react":
@@ -61,11 +85,19 @@ const DevApp: FunctionComponent = () => {
       blockDefinition = {
         ReactComponent: TestReactBlock,
       };
+      blockType = "react";
   }
 
   return (
     <>
-      <div style={{ position: "absolute", right: 16, top: 16, zIndex: 100 }}>
+      <div
+        style={{
+          position: "absolute",
+          right: 40,
+          top: 60,
+          zIndex: 1,
+        }}
+      >
         <label>
           <span style={{ fontSize: 14, marginRight: 8 }}>
             Select test block
@@ -85,9 +117,20 @@ const DevApp: FunctionComponent = () => {
       </div>
 
       <MockBlockDock
-        debug
         blockDefinition={blockDefinition}
         blockEntity={blockEntity}
+        blockInfo={{
+          displayName: "Test Block",
+          blockType: {
+            entryPoint: blockType,
+          },
+          name: "test-block",
+          protocol: "0.2",
+          icon: "public/icon.svg",
+          image: "public/image",
+        }}
+        debug
+        key={testBlockType} // completely reset the state when block type has changed
       />
     </>
   );

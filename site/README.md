@@ -47,13 +47,23 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     yarn dev:seed-db
     ```
 
-1.  **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build block hub blocks](#building-block-hub-blocks)
+1.  **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build Hub blocks](#building-hub-blocks)
 
 1.  Run the Next.js app in a separate terminal using:
 
     ```sh
     yarn dev
     ```
+
+### API block publishing configuration
+
+If you want to publish blocks via the API, you will need to configure Cloudflare R2 variables:
+
+- `CLOUDFLARE_R2_ENDPOINT`
+- `CLOUDFLARE_ACCESS_KEY_ID`
+- `CLOUDFLARE_SECRET_ACCESS_KEY`
+
+API-published blocks are uploaded to R2. This is not necessary for blocks added to the `hub/` folder in the repo.
 
 ### AWS configuration
 
@@ -64,6 +74,7 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
 
 The above environment variables will also be used for S3 access for allowing user avatar uploads.
+
 The default S3 bucket name is `blockprotocol` but can optionally be customized with the following environment variable:
 
 - `BP_AWS_S3_BUCKET_NAME`: The name of the S3 bucket to store files in (e.g. user avatars)
@@ -71,18 +82,18 @@ The default S3 bucket name is `blockprotocol` but can optionally be customized w
 Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
 When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
-### Building Block Hub blocks
+### Building Hub blocks
 
-Before serving any blocks via the Block Hub, they need to be prepared (i.e. built in most cases).
+Before serving any blocks via the Hub, they need to be prepared (i.e. built in most cases).
 Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn exe site/scripts/prepare-blocks.ts` prepares blocks.
+The build-script `yarn workspace @blockprotocol/site exe prepare-blocks.ts` prepares blocks.
 
 ```sh
 # prepare all blocks
-yarn exe site/scripts/prepare-blocks.ts
+yarn workspace @blockprotocol/site exe scripts/prepare-blocks.ts
 
 # prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" yarn exe site/scripts/prepare-blocks.ts
+BLOCK_FILTER="@hash/*" workspace @blockprotocol/site exe scripts/prepare-blocks.ts
 ```
 
 Once the blocks are built, simply `yarn dev` and head over to
@@ -215,7 +226,7 @@ Updates an entity type belonging to the requesting user.
 
 Request Body
 
-- `schema`: a valid JSON schema object to overwrite the existing one.
+- `schema`: a valid JSON schema object, which will overwrite the existing one.
 
 Response:
 
@@ -286,6 +297,32 @@ Uploads a user avatar and apply it to logged in profile page.
 - Response Body:
   - `avatarUrl`: Url pointing to the newly uploaded user avatar.
 
+#### `POST /api/blocks/create`
+
+Creates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING` is truthy
+
+Request Body:
+
+- `npmPackageName`: the email address to associate with the BP account
+- `blockName`: the name to give the block
+
+Response Body:
+
+- `block` the created block's metadata
+-
+
+#### `POST /api/blocks/update`
+
+Updates and mirrors a block published to npm. Only permitted if `process.env.NEXT_PUBLIC_NPM_PUBLISHING` is truthy
+
+Request Body:
+
+- `blockName`: the name of the block, previously created via `/api/blocks/create`
+
+Response Body:
+
+- `block` the created block's metadata
+
 ### API key required
 
 The following routes require a valid API key sent in an `x-api-key` header:
@@ -304,6 +341,19 @@ If all of the optional params are missing, the result will contain all of the bl
 
 - Request Response:
   - `results`: the results of the search: an array of block metadata JSON files
+
+#### `POST /api/blocks/publish`
+
+Publishes a block or republishes an existing block by providing source files.
+
+Request multi-part form:
+
+- `blockName`: the name to give the block, or the existing block if previously published
+- `tarball`: a `File`, in tarball format, containing the block distribution
+
+Response Body:
+
+- `block` the published block's metadata
 
 ## Testing
 

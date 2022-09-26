@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
+import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
 
 import { CreateSchemaModal } from "../../components/modal/create-schema-modal";
@@ -9,8 +9,8 @@ import {
   withAuthWall,
 } from "../../components/pages/auth-wall";
 import { DashboardCard } from "../../components/pages/dashboard/dashboard-card/dashboard-card";
-import { SectionGrid } from "../../components/pages/dashboard/dashboard-section-grid";
-import { SectionTitle } from "../../components/pages/dashboard/dashboard-section-title";
+import { DashboardSectionGrid } from "../../components/pages/dashboard/dashboard-section-grid";
+import { DashboardSectionTitle } from "../../components/pages/dashboard/dashboard-section-title";
 import { PageContainer } from "../../components/pages/dashboard/page-container";
 import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
 import {
@@ -45,9 +45,7 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
 
   return (
     <>
-      <Head>
-        <title>Block Protocol - Dashboard</title>
-      </Head>
+      <NextSeo title="Block Protocol - Dashboard" />
 
       <TopNavigationTabs />
 
@@ -56,9 +54,9 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           Welcome Back, {userName}!
         </Typography>
 
-        <SectionTitle mb={-1}>Create</SectionTitle>
+        <DashboardSectionTitle mb={-1}>Create</DashboardSectionTitle>
 
-        <SectionGrid
+        <DashboardSectionGrid
           gridTemplateColumns={{
             xs: "1fr",
             sm: "1fr 1fr",
@@ -67,15 +65,19 @@ const Dashboard: AuthWallPageContent = ({ user }) => {
           columnGap={2}
         >
           {renderDashboardCards("create")}
-        </SectionGrid>
+        </DashboardSectionGrid>
 
-        <SectionTitle>Manage</SectionTitle>
+        <DashboardSectionTitle>Manage</DashboardSectionTitle>
 
-        <SectionGrid>{renderDashboardCards("manage")}</SectionGrid>
+        <DashboardSectionGrid>
+          {renderDashboardCards("manage")}
+        </DashboardSectionGrid>
 
-        <SectionTitle>Explore</SectionTitle>
+        <DashboardSectionTitle>Explore</DashboardSectionTitle>
 
-        <SectionGrid>{renderDashboardCards("explore")}</SectionGrid>
+        <DashboardSectionGrid>
+          {renderDashboardCards("explore")}
+        </DashboardSectionGrid>
       </PageContainer>
 
       <CreateSchemaModal

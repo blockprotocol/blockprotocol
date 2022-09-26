@@ -1,6 +1,6 @@
 {
   "name": "block-template-react",
-  "version": "0.1.4",
+  "version": "0.1.14",
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -20,15 +20,22 @@
   "scripts": {
     "build": "block-scripts build",
     "dev": "block-scripts dev",
+    "format": "prettier \"**/*\" --write --ignore-unknown",
     "lint:tsc": "tsc --noEmit",
     "serve": "block-scripts serve"
   },
+  "prettier": {
+    "printWidth": 80,
+    "trailingComma": "all"
+  },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.14"
+    "@blockprotocol/graph": "0.0.18"
   },
   "devDependencies": {
-    "block-scripts": "0.0.14",
-    "mock-block-dock": "0.0.22",
+    "@types/react-dom": "^18.0.6",
+    "block-scripts": "0.0.17",
+    "mock-block-dock": "0.0.32",
+    "prettier": "2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -50,7 +57,8 @@
       }
     ],
     "icon": "public/omega.svg",
-    "image": "public/block-preview.svg",
+    "image": "public/block-preview.png",
+    "name": "block-template-react",
     "protocol": "0.2"
   }
 }

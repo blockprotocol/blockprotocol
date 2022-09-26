@@ -58,6 +58,7 @@ const Arrow: FunctionComponent<ArrowProps> = ({
           sx={{
             width: 24,
             height: 24,
+            color: ({ palette }) => palette.gray[50],
           }}
         />
       ) : (
@@ -65,6 +66,7 @@ const Arrow: FunctionComponent<ArrowProps> = ({
           sx={{
             width: 24,
             height: 24,
+            color: ({ palette }) => palette.gray[50],
           }}
         />
       )}

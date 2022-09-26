@@ -1,5 +1,7 @@
 //! Test data for testing the Type System package.
 #![expect(dead_code)]
 
-pub mod data_type;
-pub mod property_type;
+pub(crate) mod data_type;
+pub(crate) mod entity_type;
+pub(crate) mod link_type;
+pub(crate) mod property_type;

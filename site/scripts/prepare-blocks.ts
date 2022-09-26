@@ -24,7 +24,13 @@ import { fileURLToPath } from "node:url";
 import slugify from "slugify";
 import tmp from "tmp-promise";
 
-import { StoredBlockInfo } from "../src/lib/blocks";
+import {
+  BlockMetadataOnDisk,
+  expandBlockMetadata,
+  ExpandedBlockMetadata,
+  StoredBlockInfo,
+} from "../src/lib/blocks";
+import { FRONTEND_URL } from "../src/lib/config";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -454,7 +460,7 @@ const script = async () => {
         ...blockInfo,
         // This will allow you to force re-preparing all blocks when the
         // format of `unstable_hubInfo` changes, by incrementing this.
-        unstableVersion: 2,
+        unstableVersion: 3,
       }),
     );
 
@@ -489,14 +495,42 @@ const script = async () => {
       });
 
       const blockMetadata = await fs.readJson(blockMetadataPath);
-      blockMetadata.unstable_hubInfo = {
-        ...hubInfo,
-        checksum: blockInfoChecksum,
-        commit: blockInfo.commit,
-        preparedAt: new Date().toISOString(),
-        name: blockInfo.name,
+
+      const exampleGraphFileExists = await fs.pathExists(
+        blockMetadataPath.replace("block-metadata.json", "example-graph.json"),
+      );
+
+      const blockDistributionFolderUrl = `${FRONTEND_URL}/blocks/${blockName}`;
+
+      const now = new Date().toISOString();
+
+      const extendedBlockMetadata: ExpandedBlockMetadata = expandBlockMetadata({
+        metadata: blockMetadata,
+        source: {
+          blockDistributionFolderUrl,
+          pathWithNamespace: blockName,
+          repoCommit: blockInfo.commit,
+          repoDirectory: blockInfo.folder,
+          repository: blockInfo.repository,
+        },
+        timestamps: {},
+        includesExampleGraph: exampleGraphFileExists,
+      });
+
+      const blockMetadataToWrite: BlockMetadataOnDisk = {
+        ...extendedBlockMetadata,
+        unstable_hubInfo: {
+          ...hubInfo,
+          checksum: blockInfoChecksum,
+          commit: blockInfo.commit,
+          preparedAt: now,
+          name: blockInfo.name,
+        },
       };
-      await fs.writeJson(blockMetadataPath, blockMetadata, { spaces: 2 });
+
+      await fs.writeJson(blockMetadataPath, blockMetadataToWrite, {
+        spaces: 2,
+      });
     } catch (error) {
       console.log(
         chalk.red(
@@ -512,7 +546,7 @@ const script = async () => {
 
       console.log(
         chalk.yellow(
-          `Directory ${blockDirPath} was cleared to avoid broken blocks in the hub.`,
+          `Directory ${blockDirPath} was cleared to avoid broken blocks in the Hub.`,
         ),
       );
     }

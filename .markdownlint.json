@@ -5,10 +5,14 @@
     "siblings_only": true
   },
   "line-length": false,
+  "link-image-reference-definitions": false,
   "list-marker-space": { "ol_multi": 2, "ol_single": 2 },
   "no-alt-text": false,
   "no-bare-urls": false,
   "no-inline-html": false,
+  "no-trailing-punctuation": {
+    "punctuation": ".,;:。，；："
+  },
   "no-trailing-spaces": false,
   "ol-prefix": { "style": "one" }
 }

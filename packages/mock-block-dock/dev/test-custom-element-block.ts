@@ -3,7 +3,7 @@ import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { html } from "lit";
 
 type BlockEntityProperties = {
-  name: "string";
+  name: string;
 };
 
 export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperties> {
@@ -18,18 +18,22 @@ export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperti
   }
 
   render() {
-    return html`<h1>Hello, ${this.blockEntity?.properties.name}</h1>
+    if (this.graph.readonly) {
+      return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
+        <p>
+          The entityId of this block is ${this.graph.blockEntity?.entityId}.
+        </p>
+        <p>${this.graph.blockEntity?.properties.name}</p>`;
+    }
+
+    return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
       <p>
-        The entityId of this block is ${this.blockEntity?.entityId}. Use it to
-        update its data when calling updateEntities.
-      </p>
-      <p style="display: ${this.graph.readonly ? "block" : "none"}">
-        ${this.blockEntity?.properties.name}
+        The entityId of this block is ${this.graph.blockEntity?.entityId}. Use
+        it to update its data when calling updateEntities.
       </p>
       <input
-        style="display: ${this.graph.readonly ? "none" : "block"}"
         @change=${this.handleInput}
-        value=${this.blockEntity?.properties.name}
+        value=${this.graph.blockEntity?.properties.name}
       />`;
   }
 }

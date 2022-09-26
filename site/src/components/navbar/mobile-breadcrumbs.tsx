@@ -18,9 +18,7 @@ export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
 }) => {
   return (
     <Breadcrumbs
-      sx={{
-        marginTop: 2,
-      }}
+      sx={{ marginTop: 2 }}
       separator={
         <FontAwesomeIcon
           sx={{ fontSize: 14, color: ({ palette }) => palette.gray[40] }}
@@ -39,11 +37,17 @@ export const MobileBreadcrumbs: FunctionComponent<MobileBreadcrumbsProps> = ({
                   : item.href
                 : `#${item.anchor}`
             }
+            whiteSpace="normal"
           >
             {item.title}
           </Link>
         ) : (
-          <Typography key={item.title} variant="bpSmallCopy" color="inherit">
+          <Typography
+            key={item.title}
+            variant="bpSmallCopy"
+            color="inherit"
+            whiteSpace="normal"
+          >
             {item.title}
           </Typography>
         ),

@@ -10,9 +10,9 @@
 !*.md
 !*.mdx
 
-########################
-## Same as in .gitignore
-########################
+#########################
+## Shared with .gitignore
+#########################
 
 # Logs
 *.log
@@ -40,26 +40,36 @@ node_modules/
 
 # Environment variables
 .env.local
+.blockprotocolrc
 
 # Build artifacts
 dist
 
-# vscode config
+# VScode config
 .vscode
 
-# vercel
+# Vercel
 .vercel
 
-# workspace specific
+# Testing
+.nyc_output
+coverage
+
+# Workspace specific
 packages/block-template-html/dev/src
+packages/mock-block-dock/src/version.ts
 site/blocks-data.json
 site/playwright-report
 site/public/blocks
 site/public/schemas
 site/site-map.json
 site/test-results
-packages/@blockprotocol/type-system-node/src
-packages/@blockprotocol/type-system-web/src
+
+# Local files
+var
+
+# Sentry
+.sentryclirc
 
 # Rust specific
 crates/**/target

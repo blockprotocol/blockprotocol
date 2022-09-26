@@ -140,15 +140,18 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             font-weight: 700;
             src: url("/assets/fonts/apercu-bold-pro.ttf") format("trueType");
           }
+          @font-face {
+            font-family: 'JetBrains Mono';
+            font-weight: 500;
+            src: url("/assets/fonts/jetbrains-mono-medium.ttf") format("trueType");
+          }
 
           html {
             scroll-behavior: smooth;
           }
 
           body {
-            overflow: auto;${
-              "" /** @todo: find a pernament solution for preventing the navbar from shifting to the right when a modal is opened on an overflowing page */
-            }
+            overflow-x: hidden !important;
           }
 
           body, p {

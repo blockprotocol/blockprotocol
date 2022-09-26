@@ -3,14 +3,12 @@ mod error;
 mod wasm;
 use std::{fmt, result::Result, str::FromStr, sync::LazyLock};
 
-use error::ParseVersionedUriError;
+pub use error::{ParseBaseUriError, ParseVersionedUriError};
 use regex::Regex;
 use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 use url::Url;
-
-use crate::uri::error::ParseBaseUriError;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -41,14 +39,14 @@ impl BaseUri {
 
     fn validate_str(uri: &str) -> Result<(), ParseBaseUriError> {
         if !uri.ends_with('/') {
-            return Err(ParseBaseUriError {});
+            return Err(ParseBaseUriError::MissingTrailingSlash);
         }
         // TODO: Propagate more useful errors
         if Url::parse(uri)
-            .map_err(|_| ParseBaseUriError {})?
+            .map_err(|err| ParseBaseUriError::UrlParseError(err.to_string()))?
             .cannot_be_a_base()
         {
-            Err(ParseBaseUriError {})
+            Err(ParseBaseUriError::CannotBeABase)
         } else {
             Ok(())
         }
@@ -132,24 +130,31 @@ impl FromStr for VersionedUri {
     type Err = ParseVersionedUriError;
 
     fn from_str(uri: &str) -> Result<Self, ParseVersionedUriError> {
-        // TODO: better error handling
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"(.+/)v/(\d+)(.*)"#).expect("regex failed to compile"));
-        let captures = RE.captures(uri).ok_or(ParseVersionedUriError {})?;
-        let base_uri = captures.get(1).ok_or(ParseVersionedUriError {})?.as_str();
-        let version = captures.get(2).ok_or(ParseVersionedUriError {})?.as_str();
+        let captures = RE
+            .captures(uri)
+            .ok_or(ParseVersionedUriError::IncorrectFormatting)?;
+        let base_uri = captures
+            .get(1)
+            .ok_or(ParseVersionedUriError::MissingBaseUri)?
+            .as_str();
+        let version = captures
+            .get(2)
+            .ok_or(ParseVersionedUriError::MissingVersion)?
+            .as_str();
 
-        // TODO: throw a better error about how base URI was valid but version component was not
         if let Some(suffix) = captures.get(3) {
             // Regex returns an empty string for capturing groups that don't match anything
             if !suffix.as_str().is_empty() {
-                return Err(ParseVersionedUriError {});
+                return Err(ParseVersionedUriError::AdditionalEndContent);
             }
         }
 
         Ok(Self::new(
-            BaseUri::new(base_uri.to_owned()).map_err(|_| ParseVersionedUriError {})?,
-            version.parse().map_err(|_| ParseVersionedUriError {})?,
+            BaseUri::new(base_uri.to_owned()).map_err(ParseVersionedUriError::InvalidBaseUri)?,
+            u32::from_str(version)
+                .map_err(|error| ParseVersionedUriError::InvalidVersion(error.to_string()))?,
         ))
     }
 }

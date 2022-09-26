@@ -9,8 +9,8 @@ import {
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
+import { useDefaultState } from "../use-default-state";
 import { filterAndSortEntitiesOrTypes } from "../util";
-import { useDefaultArrayState } from "./use-default-array-state";
 
 export type MockData = {
   entities: Entity[];
@@ -43,16 +43,16 @@ export const useMockDatastore = (
   },
   readonly?: boolean,
 ): MockDataStore => {
-  const [entities, setEntities] = useDefaultArrayState<
-    MockDataStore["entities"]
-  >(initialData.entities);
-  const [entityTypes, setEntityTypes] = useDefaultArrayState<
+  const [entities, setEntities] = useDefaultState<MockDataStore["entities"]>(
+    initialData.entities,
+  );
+  const [entityTypes, setEntityTypes] = useDefaultState<
     MockDataStore["entityTypes"]
   >(initialData.entityTypes);
-  const [links, setLinks] = useDefaultArrayState<MockDataStore["links"]>(
+  const [links, setLinks] = useDefaultState<MockDataStore["links"]>(
     initialData.links,
   );
-  const [linkedAggregations, setLinkedAggregations] = useDefaultArrayState<
+  const [linkedAggregations, setLinkedAggregations] = useDefaultState<
     MockDataStore["linkedAggregationDefinitions"]
   >(initialData.linkedAggregationDefinitions);
 
@@ -181,10 +181,7 @@ export const useMockDatastore = (
               if (entity.entityId === data.entityId) {
                 const newEntity = {
                   ...entity,
-                  properties: {
-                    ...entity.properties,
-                    ...data.properties,
-                  },
+                  properties: data.properties,
                 };
                 resolve({ data: newEntity });
                 return newEntity;
@@ -347,10 +344,7 @@ export const useMockDatastore = (
               if (entityType.entityTypeId === data.entityTypeId) {
                 const newEntityType = {
                   ...entityType,
-                  schema: {
-                    ...entityType.schema,
-                    ...data.schema,
-                  },
+                  schema: data.schema,
                 };
                 resolve({ data: newEntityType });
                 return newEntityType;

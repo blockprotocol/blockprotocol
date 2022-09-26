@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import { NextSeo } from "next-seo";
 import { useContext } from "react";
 
 import siteMap from "../../../site-map.json";
@@ -92,11 +92,9 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
 
   return (
     <>
-      <Head>
-        <title>
-          {`Block Protocol – ${isSpec ? "Specification" : "Documentation"}`}
-        </title>
-      </Head>
+      <NextSeo
+        title={`Block Protocol – ${isSpec ? "Specification" : "Documentation"}`}
+      />
       <DocsContent
         content={serializedPage}
         pages={subPages}

@@ -17,8 +17,28 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 ## Needed for Changesets to find `main` branch
+
+        ## https://github.com/changesets/changesets/issues/517
+      - name: Create git reference to main branch (for Changesets)
+        if: ${{ github.event.pull_request.title != 'Version Packages' }}
+        run: git pull --force --no-tags origin main:main
 
       - uses: ./.github/actions/warm-up-repo
+
+      - name: Run yarn lint:changeset
+        if: ${{ (success() || failure()) && github.event.pull_request.title != 'Version Packages' }}
+        run: |
+          if ! yarn lint:changeset; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Please fix the above errors locally for the check to pass.'
+            echo 'If you don’t see them, try merging target branch into yours.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
 
       - name: Run yarn lint:dependency-version-consistency
         if: ${{ success() || failure() }}
@@ -151,18 +171,18 @@ jobs:
           yarn wait-on --timeout 30000 http://localhost:4873
 
       - name: Publish NPM packages to local registry
-        run: yarn exe scripts/packages/publish-to-local-registry.ts
+        run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
 
       - name: e2e-test create-block-app (default template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/default
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
       - name: e2e-test create-block-app (custom-element template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/custom-element
           BLOCK_TEMPLATE: custom-element
@@ -170,7 +190,7 @@ jobs:
 
       - name: e2e-test create-block-app (html template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/html
           BLOCK_TEMPLATE: html
@@ -178,7 +198,7 @@ jobs:
 
       - name: e2e-test create-block-app (react template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/react
           BLOCK_TEMPLATE: react
@@ -186,7 +206,7 @@ jobs:
 
       - name: e2e-test create-block-app (unknown template)
         if: ${{ success() || failure() }}
-        run: yarn exe scripts/packages/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/unknown
           BLOCK_TEMPLATE: unknown
@@ -199,17 +219,27 @@ jobs:
           docker stop verdaccio
 
       - name: Upload block folder as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
           name: ${{ env.BLOCK_NAME }}
           path: |
             ${{ env.BLOCK_DIR_PATH }}
             !${{ env.BLOCK_DIR_PATH }}/node_modules/**
+          retention-days: 14
 
   site-integration-tests:
     name: "Site integration tests"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - chrome
+          - firefox
+          - iphone
+          - pixel
+          - safari
     steps:
       - uses: actions/checkout@v3
 
@@ -223,7 +253,7 @@ jobs:
 
       - uses: ./.github/actions/warm-up-repo
         with:
-          playwright-deps: chrome firefox webkit
+          playwright-deps: ${{ ((matrix.device == 'iphone' || matrix.device == 'safari') && 'webkit') || (matrix.device == 'firefox' && 'firefox') || 'chrome' }}
 
       - name: Create temp files and folders
         run: |
@@ -258,7 +288,7 @@ jobs:
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
+        run: yarn workspace @blockprotocol/site playwright test --project=integration-${{ matrix.device }}
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
@@ -276,7 +306,7 @@ jobs:
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true
-          flags: site-integration
+          flags: site-integration-${{ matrix.device }}
           files: coverage/lcov.info
 
       - name: Show DB logs
@@ -289,15 +319,16 @@ jobs:
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: site-integration-tests-playwright-report
+          name: site-integration-tests-playwright-report-${{ matrix.device }}
           path: site/playwright-report
+          retention-days: 14
 
       - name: Upload artifact playwright-var
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
-          name: site-integration-tests-var
-          path: |
-            var
+          name: site-integration-tests-var-${{ matrix.device }}
+          path: var
+          retention-days: 14

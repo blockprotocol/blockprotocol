@@ -1,9 +1,9 @@
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { GetStaticProps, NextPage } from "next";
-import Head from "next/head";
+import { NextSeo } from "next-seo";
 
 import { BlockCard, BlockCardComingSoon } from "../components/block-card";
-import { getAllBlocks } from "../lib/api/blocks";
+import { getAllBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -17,7 +17,7 @@ interface PageProps {
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const blocks = getAllBlocks();
+  const blocks = await getAllBlocks();
 
   return {
     props: { catalog: excludeHiddenBlocks(blocks) },
@@ -27,19 +27,15 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 const HubPage: NextPage<PageProps> = ({ catalog }) => {
   return (
     <>
-      <Head>
-        <title>Block Protocol – Block Hub</title>
-        <meta itemProp="name" content="Block Hub" />
-        <meta
-          itemProp="description"
-          content="The Block Protocol's registry of open-source blocks"
-        />
-      </Head>
+      <NextSeo
+        title="Block Protocol – Hub"
+        description="The Block Protocol's registry of open-source blocks and types"
+      />
       <Box
         sx={{
           mb: 20,
           position: "relative",
-          backgroundImage: "url(/assets/blockhub-gradient.svg)",
+          backgroundImage: "url(/assets/hub-gradient.svg)",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "30% 50%",
           backgroundSize: "100% 100%",
@@ -63,7 +59,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
               }}
               variant="bpSmallCaps"
             >
-              Block Hub
+              Hub
             </Typography>
             <Typography mb={3} variant="bpHeading1">
               Interactive, data-driven blocks to use in your projects

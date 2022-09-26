@@ -9,10 +9,10 @@ import {
 } from "@mui/material";
 import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Head from "next/head";
 import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
+import { NextSeo } from "next-seo";
 import crypto from "node:crypto";
 import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
@@ -26,12 +26,12 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
-import { getAllBlocks } from "../../../lib/api/blocks";
+import { getAllBlocks } from "../../../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-  readBlockReadmeFromDisk,
   retrieveBlockFileContent,
+  retrieveBlockReadme,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
 
@@ -75,7 +75,7 @@ const generateSandboxBaseUrl = (): string => {
   if (!branch) {
     // eslint-disable-next-line no-console
     console.warn(
-      "Running locally: block hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
+      "Running locally: Hub iFrame has same origin as main app. Block code can make authenticated requests to main app API.",
     );
     return "";
   }
@@ -85,6 +85,8 @@ const generateSandboxBaseUrl = (): string => {
   const branchSlug = branch
     .toLowerCase()
     .replace(/\./g, "")
+    .replace(/\//, "-")
+    .replace(/[/_]/g, "")
     .replace(/[^\w-]+/g, "-");
 
   const projectName = "blockprotocol";
@@ -182,7 +184,7 @@ export const getStaticProps: GetStaticProps<
   }
   const pathWithNamespace = `${shortname}/${blockSlug}`;
 
-  const blocks = getAllBlocks();
+  const blocks = await getAllBlocks();
 
   const blockMetadata = blocks.find(
     (metadata) => metadata.pathWithNamespace === pathWithNamespace,
@@ -197,7 +199,7 @@ export const getStaticProps: GetStaticProps<
     blockMetadata,
   );
 
-  const readmeMd = await readBlockReadmeFromDisk(blockMetadata);
+  const readmeMd = await retrieveBlockReadme(blockMetadata);
 
   const compiledReadme = readmeMd
     ? (
@@ -249,11 +251,22 @@ const BlockPage: NextPage<BlockPageProps> = ({
 
   return (
     <>
-      <Head>
-        <title>
-          {`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
-        </title>
-      </Head>
+      <NextSeo
+        title={`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
+        description={
+          blockMetadata.description ||
+          "Check out this open-source block on the Hub"
+        }
+        openGraph={{
+          images: [
+            {
+              url:
+                blockMetadata?.image ||
+                "https://blockprotocol.org/assets/default-block-img.svg",
+            },
+          ],
+        }}
+      />
       <Container>
         {isDesktopSize ? null : (
           <Box mb={1}>
@@ -269,7 +282,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               }
             >
               <Link href="/">Home</Link>
-              <Link href="/hub">Block Hub</Link>
+              <Link href="/hub">Hub</Link>
               <Typography variant="bpSmallCopy" color="inherit">
                 {blockMetadata.displayName}
               </Typography>

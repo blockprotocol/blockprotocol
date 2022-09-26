@@ -128,7 +128,7 @@
 
   /* font family */
   --font-family: system-ui, "Inter", "Open Sans", "Helvetica Neue", "Arial",
-  sans-serif;
+    sans-serif;
 
   /* border radius */
   --border-radius-1: 0.25rem;
@@ -168,7 +168,7 @@
   }
 
   h1 {
-    font-size: var(--font-size-xxl);
+    font-size: var(--font-size-3xl);
     margin: var(--space-4) 0 var(--space-2);
     font-weight: 700;
     color: var(--neutral-900);

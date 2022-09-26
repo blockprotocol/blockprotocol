@@ -15,8 +15,10 @@ const script = async () => {
     await generateBuildWebpackConfig("production"),
   ]);
 
-  if (stats.hasErrors()) {
-    console.log(stats.toString());
+  if (!stats || stats.hasErrors()) {
+    if (stats) {
+      console.log(stats.toString());
+    }
     console.log(chalk.red("Errors occurred while building the block"));
 
     process.exit(1);

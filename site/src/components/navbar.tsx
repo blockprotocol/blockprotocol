@@ -18,6 +18,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
@@ -25,6 +26,7 @@ import { unstable_batchedUpdates } from "react-dom";
 import SiteMapContext from "../context/site-map-context";
 import { useUser } from "../context/user-context";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
+import { getScrollbarSize } from "../util/mui-utils";
 import { Button } from "./button";
 import { useCrumbs } from "./hooks/use-crumbs";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
@@ -55,6 +57,28 @@ type NavbarProps = {
 const navbarClasses = {
   link: "Navbar-Link",
   interactiveLink: "Navbar-InteractiveLink",
+};
+
+const useLastScrollbarSize = () => {
+  const [lastScrollbarSize, setLastScrollbarSize] = useState(0);
+  const observerRef = useRef<ResizeObserver>();
+
+  useEffect(() => {
+    observerRef.current = new ResizeObserver(() => {
+      const scrollbarSize = getScrollbarSize(document);
+      if (scrollbarSize > 0) {
+        setLastScrollbarSize(scrollbarSize);
+      }
+    });
+
+    observerRef.current.observe(document.body);
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, []);
+
+  return lastScrollbarSize;
 };
 
 const useMobileNavVisible = (canDisplayMobileNav: boolean) => {
@@ -161,6 +185,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
+  const lastScrollbarSize = useLastScrollbarSize();
 
   const isHomePage = generatePathWithoutParams(hydrationFriendlyAsPath) === "/";
   const isDocs = hydrationFriendlyAsPath.startsWith("/docs");
@@ -199,7 +224,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
     <Box
       sx={[
         {
-          width: "100%",
+          width: "100vw",
           position: "absolute",
           zIndex: ({ zIndex }) => zIndex.appBar,
         },
@@ -209,7 +234,15 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
       <Box
         sx={[
           {
-            width: "100%",
+            /**
+             * header container width is always 100vw,
+             * to keep the header alignment correct when we open/close modals,
+             * we set `paddingRight` to the last lastScrollbarSize, because scrollbar hides when modal opens,
+             * so we want to apply the scrollbarSize as padding.
+             * @see https://app.asana.com/0/1200211978612931/1202765662321717/f for the issue this change fixes
+             */
+            width: "100vw",
+            pr: `${lastScrollbarSize}px`,
             position: "fixed",
             top: isNavbarHidden ? navbarHeight * -1 : 0,
             zIndex: theme.zIndex.appBar,

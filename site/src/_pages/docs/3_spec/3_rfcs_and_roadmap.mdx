@@ -1,6 +1,6 @@
 # RFCs & Roadmap
 
-## New services
+## Planned services
 
 We will introduce the following new services to the Block Protocol to support additional functionality that requires application-block cooperation.
 
@@ -55,49 +55,11 @@ While embedding applications can handle displaying an interface for reloading bl
 
 #### Block definition
 
-##### Self-contained blocks and sandboxing
+##### Block entry point
 
-At the moment, the specification is largely silent on sandboxing, and blocks should be designed to work whether in their own scope or in the scope of a wider application, e.g. by not polluting the global scope.
+We currently provide that blocks can be exposed to applications in three different ways: as custom elements, HTML files, or React components. We may wish to reduce this to a single entry point.
 
-We also considered having **two distinct types** of block, with different rendering and message transport requirements, with the second type being _self-contained_ blocks designed to be loaded into an iframe directly. This would make it simpler to write particular types of blocks, as they would not need to load their own internal iFrame in order to use a specific origin or to own their scope:
-
-1.  **Components (current approach):**
-
-- elements rather than more complex, typically with a JavaScript entry point (though can also be HTML files which load their own scripts)
-- designed so that they can share their scope with other components, without interfering with JavaScript, styles, etc
-- require their source to be incorporated as part of a wider page by the embedding application (which may be sandboxed or not)
-- require the embedding application knowing how to render them, depending on how the block is defined
-- send messages to the embedding application by dispatching a `CustomEvent`
-- may specify `externals` – libraries they depend on but expect the embedding application to make available in their scope.
-
-1.  **Self-contained block (addition or alternative)**:
-
-- must have an HTML entry point and be designed to be loaded directly into an iFrame
-- must be sandboxed by the embedding application
-- are designed to not share their scope with any other code or styling
-- rely on communication via messages sent via and listened for in the global scope, via `postMessage`
-- include every library they depend on within their block package
-
-We seek views on whether we should introduce "self-contained" blocks either as an _alternative_ to the current component blocks, or _instead of_ them.
-
-Adding self-contained blocks as an **alternative** would provide better first-class support in the specification for blocks which wish to be guaranteed their own scope or origin, at the expense of introducing more complexity to the specification in order to handle two types of blocks.
-
-Making self-contained blocks the **only** type of block would eliminate a class of problems related to blocks sharing a scope with other code, by virtue of and at the expense of _requiring_ all blocks to be sandboxed, which may impact performance for applications that would otherwise leave trusted blocks un-sandboxed.
-
-Having **no** **self-contained blocks** (the current position) makes it more cumbersome to write blocks that own a scope or use a specific origin, as they must load their own iFrame to do so. Writing HTML blocks also involves additional steps for both the embedding application and block author, in order for the block to be able to identify itself.
-
-##### Component entry point
-
-Even within block definition as currently specified (described above as the **component** type), we allow that blocks may be defined in different ways, with an entry point specified by the `type` in their metadata. For example, a HTML file, React component, or custom element (Web Component).
-
-We might alternative specify a **single** valid entry point for blocks, in order that embedding applications do not have to deal with different rendering strategies.
-
-We believe a single valid entry point should be a native web technology. This implies either:
-
-- an HTML file, which loads its own scripts which can then call other libraries and technologies as required
-- a custom element class, which can call other libraries and technologies as required within its constructor
-
-This would reduce the burden on embedding applications imposed by having multiple possible block definitions, at the expense of the entry for blocks be written in a particular way. It would also introduce some indirection where application and blocks would otherwise use the same technology (e.g. a React application that renders only React blocks would now do so via some other intervening entry point).
+Please [see the discussion](https://github.com/blockprotocol/blockprotocol/discussions/392) for more.
 
 #### Service permissions / requirements
 

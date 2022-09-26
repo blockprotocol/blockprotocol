@@ -1,5 +1,21 @@
 # @blockprotocol/hook
 
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [[`03aa390`](https://github.com/blockprotocol/blockprotocol/commit/03aa3902540114fd341d48a8d0dfa060d27ee71f)]:
+  - @blockprotocol/core@0.0.12
+
+## 0.0.4
+
+### Patch Changes
+
+- [#577](https://github.com/blockprotocol/blockprotocol/pull/577) [`d9f6dca`](https://github.com/blockprotocol/blockprotocol/commit/d9f6dca9902867fdde9c2ad0ee93ed80889b12bc) Thanks [@kachkaev](https://github.com/kachkaev)! - Change TypeScript config and rebuild
+
+- Updated dependencies [[`853a00d`](https://github.com/blockprotocol/blockprotocol/commit/853a00df8468b277b8a7f73e2242d686fedc5b3d), [`d9f6dca`](https://github.com/blockprotocol/blockprotocol/commit/d9f6dca9902867fdde9c2ad0ee93ed80889b12bc)]:
+  - @blockprotocol/core@0.0.11
+
 ## 0.0.3
 
 ### Patch Changes

@@ -86,12 +86,6 @@ export const SearchNavButton = () => {
             maxWidth: 600,
           },
         }}
-        BackdropProps={{
-          sx: {
-            background:
-              "radial-gradient(141.84% 147.92% at 50% 122.49%, rgba(255, 177, 114, 0.75) 0%, rgba(148, 130, 255, 0.75) 32.87%, rgba(132, 230, 255, 0.75) 100%)",
-          },
-        }}
         contentStyle={{
           width: 600,
           p: {

@@ -3,6 +3,7 @@ import { FunctionComponent, useState } from "react";
 
 import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
+import { formatUpdatedAt } from "../../../util/html-utils";
 import { Button } from "../../button";
 import { CreateSchemaModal } from "../../modal/create-schema-modal";
 import { ListViewCard } from "./list-view-card";
@@ -46,7 +47,7 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
     ) : (
       <Placeholder
         header={`@${user.shortname} hasn’t published any schemas yet`}
-        tip="You can browse existing schemas on the Block Hub."
+        tip="You can browse existing schemas on the Hub."
         actions={<BrowseHubButton />}
       />
     );
@@ -69,10 +70,9 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
       {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
         <ListViewCard
           key={entityTypeId}
-          type="schema"
           title={schema.title}
           description={schema.description as string}
-          lastUpdated={updatedAt as unknown as string}
+          extraContent={formatUpdatedAt(updatedAt as unknown as string)}
           url={schema.$id}
         />
       ))}

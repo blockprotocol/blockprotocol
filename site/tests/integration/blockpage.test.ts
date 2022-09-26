@@ -43,7 +43,7 @@ test("Block page should contain key elements", async ({
 
   if (isMobile) {
     await page.locator("text=Source Code").click();
-    await expect(page.locator("text=Data Source")).toBeVisible();
+    await expect(page.locator("text=Block Properties")).toBeVisible();
   } else {
     await expect(page.locator("text=Block Properties")).toBeVisible();
   }
@@ -64,7 +64,7 @@ test("Block page should contain key elements", async ({
   ).toHaveValue(`${stringifiedJson}\t`);
 
   if (isMobile) {
-    await page.locator("text=Data Source").click();
+    await page.locator("text=Block Properties").click();
     await page.locator("text=Block Schema").click();
   } else {
     await page.locator("text=Block Schema").click();
@@ -109,6 +109,17 @@ test("Block page should contain key elements", async ({
   expect(
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
   ).toBeGreaterThan(5);
+
+  const footerCTALocator = page.locator("data-test-id=footerCTA");
+  await expect(footerCTALocator).toBeVisible();
+
+  await expect(
+    footerCTALocator.locator('text="quickstart guide"'),
+  ).toHaveAttribute("href", "/docs/developing-blocks");
+
+  await expect(
+    footerCTALocator.locator('text="Read the quickstart guide"'),
+  ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
 test("should show an error message if an unsupported block is rendered", async ({

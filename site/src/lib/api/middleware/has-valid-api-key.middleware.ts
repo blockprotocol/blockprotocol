@@ -3,6 +3,7 @@ import { Middleware } from "next-connect";
 import { formatErrors } from "../../../util/api";
 import { BaseApiRequest, BaseApiResponse } from "../handler/base-handler";
 import { ApiKey } from "../model/api-key.model";
+import { User } from "../model/user.model";
 
 export const hasValidApiKeyMiddleware: Middleware<
   BaseApiRequest,
@@ -20,7 +21,23 @@ export const hasValidApiKeyMiddleware: Middleware<
 
     const { db } = req;
 
-    await ApiKey.validate(db, { apiKeyString: apiKey });
+    const resolvedApiKey = await ApiKey.validateAndGet(db, {
+      apiKeyString: apiKey,
+    });
+
+    const user = await User.getById(db, {
+      userId: resolvedApiKey.user.oid.toString(),
+    });
+
+    if (!user) {
+      return res.status(401).send(
+        formatErrors({
+          msg: "User linked to API key does not exist.",
+        }),
+      );
+    }
+
+    req.user = user;
 
     next();
   } catch (err) {
