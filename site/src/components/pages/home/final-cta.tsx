@@ -246,7 +246,7 @@ export const FinalCTA: NextPage = () => {
             subHeading: (
               <>
                 Any registered developer can build and publish blocks to the
-                global registry for other applications to embed.
+                global Hub for other applications to embed.
               </>
             ),
             link: (

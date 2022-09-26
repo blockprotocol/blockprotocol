@@ -21,7 +21,7 @@ test("page header navigation works", async ({
     await openMobileNav(page);
   }
 
-  await navSelector.locator("text=Block Hub").click();
+  await navSelector.locator("text=Hub").click();
   await expect(page).toHaveURL("/hub");
   await expect(
     page.locator(

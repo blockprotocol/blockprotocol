@@ -1,8 +1,4 @@
-import {
-  faArrowRight,
-  faArrowsLeftRight,
-  faBullhorn,
-} from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faBullhorn } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Typography } from "@mui/material";
 
 import { FontAwesomeIcon } from "./icons";
@@ -82,16 +78,11 @@ export const HiringBanner = () => {
               })}
             >
               <Box component="span" mr="0.5ch">
-                We're hiring full-stack TypeScript/React and PHP plugin
-                developers to help grow the
+                We're hiring full-stack TypeScript/React developers to build
+                blocks full-time, and grow the
               </Box>
               <Box component="span" display="inline-flex" alignItems="center">
-                Block Protocol
-                <FontAwesomeIcon
-                  icon={faArrowsLeftRight}
-                  sx={{ fontSize: "inherit", mx: "0.5ch" }}
-                />
-                WordPress ecosystem.
+                Block Protocol ecosystem.
               </Box>
             </Typography>
             <Typography

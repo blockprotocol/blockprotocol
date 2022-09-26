@@ -28,15 +28,16 @@ test("Hub page should contain key elements", async ({ page }) => {
     await page.locator('[data-testid="block-card"]').count(),
   ).toBeGreaterThan(5);
 
-  await expect(page.locator("text=Quickstart guide")).toHaveAttribute(
-    "href",
-    "/docs/developing-blocks",
-  );
+  const footerCTALocator = page.locator("data-test-id=footerCTA");
+  await expect(footerCTALocator).toBeVisible();
 
-  await expect(page.locator("text=Read the Quick Start Guide")).toHaveAttribute(
-    "href",
-    "/docs/developing-blocks",
-  );
+  await expect(
+    footerCTALocator.locator('text="quickstart guide"'),
+  ).toHaveAttribute("href", "/docs/developing-blocks");
+
+  await expect(
+    footerCTALocator.locator('text="Read the quickstart guide"'),
+  ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
 test("Block Card should contain key elements", async ({ page }) => {

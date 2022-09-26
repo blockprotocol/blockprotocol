@@ -14,7 +14,7 @@ const usageGuide = [
   {
     header: "Commands",
     content: [
-      { name: "{bold publish}", summary: "publishes a block to the Block Hub" },
+      { name: "{bold publish}", summary: "publishes a block on the Hub" },
       { name: "{bold help}", summary: "prints this guide" },
     ],
   },
