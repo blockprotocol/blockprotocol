@@ -12,20 +12,23 @@ export class CoreEmbedderHandler extends CoreHandler {
   initialize() {}
 
   /**
-   * Update the HTML element messages are exchanged via.
-   * @param element the new element to use for dispatching and listening to messages.
+   * Update the HTML element messages are dispatched from.
+   * @param element the new element to use for dispatching messages.
    */
-  private updateElement(this: CoreEmbedderHandler, element: HTMLElement) {
+  private updateDispatchElement(
+    this: CoreEmbedderHandler,
+    element: HTMLElement,
+  ) {
     this.removeEventListeners();
-    this.element = element;
+    this.dispatchingElement = element;
     this.attachEventListeners();
   }
 
   /**
-   * Updates the element being used to exchange messages via to an event's target.
+   * Sets the element being used to dispatch messages from to an event's target.
    * @param event the event dispatched from the element to use
    */
-  private updateElementFromEvent(
+  private updateDispatchElementFromEvent(
     this: CoreEmbedderHandler,
     event: CustomEvent,
   ) {
@@ -37,7 +40,7 @@ export class CoreEmbedderHandler extends CoreHandler {
         "'blockprotocolmessage' event must be sent from an HTMLElement.",
       );
     }
-    this.updateElement(event.target);
+    this.updateDispatchElement(event.target);
   }
 
   /**
@@ -55,7 +58,7 @@ export class CoreEmbedderHandler extends CoreHandler {
       message: Message;
     },
   ) {
-    this.updateElementFromEvent(event);
+    this.updateDispatchElementFromEvent(event);
 
     // get the properties sent on initialization for any registered services
     const data: EmbedderInitMessage = {};

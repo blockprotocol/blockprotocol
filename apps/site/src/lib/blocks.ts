@@ -7,8 +7,19 @@ import fs from "fs-extra";
 import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import path from "node:path";
+import sanitize from "sanitize-html";
 
 import { FRONTEND_URL } from "./config";
+
+const sanitizeUrl = (url: string) => {
+  const results = sanitize(`<a href="${url}" />`, {
+    allowedAttributes: {
+      a: ["href"],
+    },
+    allowedSchemes: ["http", "https"],
+  });
+  return results.split('"')?.[1] || "";
+};
 
 /**
  * This is the expanded block metadata that is served via the API
@@ -47,7 +58,7 @@ export type BlockMetadataOnDisk = ExpandedBlockMetadata & {
   };
 };
 
-// The contents of the JSON file users provide when adding a block via PR, stored in the hub/ folder
+// The contents of the JSON file users provide when adding a block via PR, stored in the Hub/ folder
 export interface StoredBlockInfo {
   repository: string;
   commit: string;
@@ -132,11 +143,15 @@ export const expandBlockMetadata = ({
     repoDirectory,
   } = source;
 
-  const repositoryUrl = getRepositoryUrl(
+  let repositoryUrl = getRepositoryUrl(
     repository,
     repoCommit,
     repoDirectory,
   )?.replace(/\/$/, "");
+
+  if (repositoryUrl) {
+    repositoryUrl = sanitizeUrl(repositoryUrl);
+  }
 
   const [namespace, name] = pathWithNamespace.split("/");
 
@@ -214,7 +229,7 @@ const blocksToHide = [
   "@hash/paragraph",
 ];
 
-/** Helps consistently hide certain blocks from the hub and user profile pages */
+/** Helps consistently hide certain blocks from the Hub and user profile pages */
 export const excludeHiddenBlocks = (
   blocks: ExpandedBlockMetadata[],
 ): ExpandedBlockMetadata[] => {
@@ -288,17 +303,18 @@ export const retrieveBlockReadme = async (
   blockMetadata: ExpandedBlockMetadata,
 ): Promise<string | undefined> => {
   try {
-    if (blockMetadata.npmPackageName) {
-      return fetch(`${blockMetadata.componentId}/README.md`).then((resp) =>
-        resp.text(),
+    if (blockMetadata.componentId.includes(FRONTEND_URL)) {
+      return fs.readFileSync(
+        `${process.cwd()}/public/blocks/${
+          blockMetadata.pathWithNamespace
+        }/README.vercel-hack.md`,
+        "utf8",
       );
     }
-    return fs.readFileSync(
-      `${process.cwd()}/public/blocks/${
-        blockMetadata.pathWithNamespace
-      }/README.vercel-hack.md`,
-      "utf8",
-    );
+
+    return fetch(`${blockMetadata.componentId}/README.md`).then((resp) => {
+      return resp.status === 200 ? resp.text() : undefined;
+    });
   } catch {
     return undefined;
   }

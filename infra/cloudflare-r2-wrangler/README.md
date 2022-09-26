@@ -6,6 +6,6 @@ You need Cloudflare access to manage it.
 
 You will first need to `npm install -g wrangler && wrangler login`
 
-To redeploy the wrangler, in the `block-bucket` folder run `wrangler publish`
+To redeploy the wrangler, in the `blocks` or `blocks-dev` folder run `wrangler publish`
 
 See https://developers.cloudflare.com/r2/get-started/

@@ -50,7 +50,7 @@ node_modules/
 
 # Environment variables
 .env.local
-.bprc
+.blockprotocolrc
 
 # Build artifacts
 dist

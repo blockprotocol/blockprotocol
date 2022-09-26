@@ -129,6 +129,7 @@ const LoginPage: NextPage = () => {
           sx={{
             borderRadius: "6px",
             maxWidth: 800,
+            padding: 2.5,
           }}
         >
           <Box display="flex" justifyContent="space-between" width="100%">
@@ -156,8 +157,8 @@ const LoginPage: NextPage = () => {
             sx={(theme) => ({
               transition: theme.transitions.create("padding"),
               padding: {
-                xs: theme.spacing(6),
-                sm: theme.spacing(4, 8, 6),
+                xs: theme.spacing(3.5),
+                sm: theme.spacing(1.5, 5.5, 3.5),
               },
             })}
           >

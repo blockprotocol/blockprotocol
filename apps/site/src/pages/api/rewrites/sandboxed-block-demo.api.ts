@@ -58,7 +58,7 @@ const handler: NextApiHandler = async (req, res) => {
   for (const [packageName, packageVersion] of Object.entries(externals)) {
     externalUrlLookup[packageName] = `https://esm.sh/${hotfixPackageName(
       packageName,
-    )}@${packageVersion}`;
+    )}@${packageVersion}?target=es2021`;
   }
 
   const mockBlockDockInitialData = {
@@ -84,10 +84,10 @@ const handler: NextApiHandler = async (req, res) => {
       window.addEventListener("message", handleMessage);
     </script>
     <script type="module">
-      import React from "https://esm.sh/react@${reactVersion}"
-      import ReactDOM from "https://esm.sh/react-dom@${reactVersion}"
-      import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/esm/index.js?deps=react@${reactVersion}";
+      import React from "https://esm.sh/react@${reactVersion}?target=es2021"
+      import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
+      import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
