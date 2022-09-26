@@ -378,7 +378,7 @@ mod tests {
             ),
             (
                 "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-                "https://hash.ai/@hash/types/entity-type/block/v/1",
+                "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
             ),
         ]);
     }
