@@ -61,10 +61,14 @@ impl TryFrom<Array<repr::PropertyTypeReference>> for super::Array<PropertyTypeRe
     }
 }
 
-impl TryFrom<Array<repr::EntityTypeReference>> for super::Array<EntityTypeReference> {
+impl TryFrom<Array<repr::OneOf<repr::EntityTypeReference>>>
+    for super::Array<OneOf<EntityTypeReference>>
+{
     type Error = ParseEntityTypeReferenceArrayError;
 
-    fn try_from(array_repr: Array<repr::EntityTypeReference>) -> Result<Self, Self::Error> {
+    fn try_from(
+        array_repr: Array<repr::OneOf<repr::EntityTypeReference>>,
+    ) -> Result<Self, Self::Error> {
         Ok(Self {
             items: array_repr
                 .items
