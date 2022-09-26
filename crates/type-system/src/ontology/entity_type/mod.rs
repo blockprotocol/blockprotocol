@@ -13,7 +13,7 @@ pub use error::ParseEntityTypeError;
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
-    Links, Object, PropertyTypeReference, ValidateUri, ValidationError, ValueOrArray,
+    Links, Object, OneOf, PropertyTypeReference, ValidateUri, ValidationError, ValueOrArray,
     ValueOrMaybeOrderedArray,
 };
 
@@ -88,7 +88,7 @@ impl EntityType {
     #[must_use]
     pub const fn links(
         &self,
-    ) -> &HashMap<VersionedUri, ValueOrMaybeOrderedArray<EntityTypeReference>> {
+    ) -> &HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>> {
         self.links.links()
     }
 
@@ -119,10 +119,10 @@ impl EntityType {
     }
 
     #[must_use]
-    pub fn link_type_references(&self) -> HashMap<&VersionedUri, &EntityTypeReference> {
+    pub fn link_type_references(&self) -> HashMap<&VersionedUri, &[EntityTypeReference]> {
         self.links()
             .iter()
-            .map(|(link_type, entity_type)| (link_type, entity_type.inner()))
+            .map(|(link_type, entity_type)| (link_type, entity_type.inner().one_of()))
             .collect()
     }
 }
@@ -243,7 +243,7 @@ mod tests {
             .map(|(link_type_uri, entity_type_uri)| {
                 (
                     VersionedUri::from_str(link_type_uri).expect("invalid URI"),
-                    VersionedUri::from_str(entity_type_uri).expect("invalid URI"),
+                    vec![VersionedUri::from_str(entity_type_uri).expect("invalid URI")],
                 )
             })
             .collect::<HashMap<_, _>>();
@@ -252,7 +252,13 @@ mod tests {
             .link_type_references()
             .into_iter()
             .map(|(link_type_uri, entity_type_ref)| {
-                (link_type_uri.clone(), entity_type_ref.uri().clone())
+                (
+                    link_type_uri.clone(),
+                    entity_type_ref
+                        .iter()
+                        .map(|reference| reference.uri().clone())
+                        .collect(),
+                )
             })
             .collect::<HashMap<_, _>>();
 
@@ -372,7 +378,7 @@ mod tests {
             ),
             (
                 "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-                "https://hash.ai/@hash/types/entity-type/block/v/1",
+                "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
             ),
         ]);
     }
