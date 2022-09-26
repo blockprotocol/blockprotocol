@@ -26,7 +26,7 @@ const entityTypes: EntityType[] = [
   },
   {
     kind: "entityType",
-    $id: "https://hash.ai/@hash/types/entity-type/block/v/1",
+    $id: "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
     title: "Block",
     pluralTitle: "Blocks",
     type: "object",
@@ -73,7 +73,11 @@ const entityTypes: EntityType[] = [
     required: ["https://blockprotocol.org/@alice/types/property-type/name/"],
     links: {
       "https://blockprotocol.org/@alice/types/link-type/written-by/v/1": {
-        $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        oneOf: [
+          {
+            $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+          },
+        ],
       },
     },
     requiredLinks: [
@@ -90,10 +94,18 @@ const entityTypes: EntityType[] = [
     properties: {},
     links: {
       "https://blockprotocol.org/@alice/types/link-type/located-at/v/1": {
-        $ref: "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
+        oneOf: [
+          {
+            $ref: "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
+          },
+        ],
       },
       "https://blockprotocol.org/@alice/types/link-type/tenant/v/1": {
-        $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        oneOf: [
+          {
+            $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+          },
+        ],
       },
     },
   },
@@ -122,12 +134,20 @@ const entityTypes: EntityType[] = [
     },
     links: {
       "https://blockprotocol.org/@alice/types/link-type/written-by/v/1": {
-        $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        oneOf: [
+          {
+            $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+          },
+        ],
       },
       "https://blockprotocol.org/@alice/types/link-type/contains/v/1": {
         type: "array",
         items: {
-          $ref: "https://hash.ai/@hash/types/entity-type/block/v/1",
+          oneOf: [
+            {
+              $ref: "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
+            },
+          ],
         },
         ordered: true,
       },
@@ -148,7 +168,11 @@ const entityTypes: EntityType[] = [
       "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1": {
         type: "array",
         items: {
-          $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+          oneOf: [
+            {
+              $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+            },
+          ],
         },
         ordered: false,
       },
@@ -169,7 +193,11 @@ const entityTypes: EntityType[] = [
       "https://blockprotocol.org/@alice/types/link-type/contains/v/1": {
         type: "array",
         items: {
-          $ref: "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
+          oneOf: [
+            {
+              $ref: "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
+            },
+          ],
         },
         ordered: true,
       },
@@ -338,7 +366,11 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1.3": {
           type: "array",
           items: {
-            $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+            oneOf: [
+              {
+                $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+              },
+            ],
           },
           ordered: false,
         },
@@ -372,7 +404,11 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1": {
           type: "array",
           items: {
-            $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1.4",
+            oneOf: [
+              {
+                $ref: "https://blockprotocol.org/@alice/types/entity-type/person/v/1.4",
+              },
+            ],
           },
           ordered: false,
         },
