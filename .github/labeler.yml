@@ -1,3 +1,9 @@
+"app: site":
+  - "apps/site/**/*"
+
+"area: apps":
+  - "apps/**/*"
+
 "area: crates":
   - "crates/**/*"
 
@@ -24,9 +30,6 @@
 
 "area: rfcs":
   - "rfcs/**/*"
-
-"area: site":
-  - "apps/site/**/*"
 
 "area: spec":
   - "apps/site/src/_pages/spec/**/*"
