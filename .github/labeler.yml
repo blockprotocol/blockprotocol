@@ -5,6 +5,9 @@
   - "**/patches/**/*"
   - "**/yarn.lock"
 
+"area: docs":
+  - "apps/site/src/_pages/docs/**/*"
+
 "area: hub":
   - "hub/**/*"
 
@@ -23,13 +26,26 @@
   - "rfcs/**/*"
 
 "area: site":
-  - "site/**/*"
+  - "apps/site/**/*"
 
 "area: spec":
-  - "site/src/_pages/spec/*"
-  - "site/src/_pages/spec/.*"
-  - "site/src/_pages/spec/**/*"
-  - "site/src/_pages/spec/**/.*"
+  - "apps/site/src/_pages/spec/**/*"
+
+"package: @Þ/core":
+  - "packages/@blockprotocol/core/**/*"
+
+"package: @Þ/graph":
+  - "packages/@blockprotocol/graph/**/*"
+
+"package: @Þ/hook":
+  - "packages/@blockprotocol/hook/**/*"
+
+"package: @Þ/type-system":
+  - "packages/@blockprotocol/type-system-node/**/*"
+  - "packages/@blockprotocol/type-system-web/**/*"
+
+"package: @local/*":
+  - "packages/@local/**/*"
 
 "package: block-scripts":
   - "packages/block-scripts/**/*"
@@ -51,6 +67,3 @@
 
 "package: mock-block-dock":
   - "packages/mock-block-dock/**/*"
-
-"site: docs":
-  - "apps/site/src/_pages/docs/**/*"
