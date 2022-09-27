@@ -1,5 +1,18 @@
 # @blockprotocol/graph
 
+## 0.0.18
+
+### Patch Changes
+
+- [#631](https://github.com/blockprotocol/blockprotocol/pull/631) [`0f0abf9`](https://github.com/blockprotocol/blockprotocol/commit/0f0abf905e0b06e27049ade5cf271df127c34bba) Thanks [@CiaranMn](https://github.com/CiaranMn)! - change entity & type updates to be by overwrite, not merge
+
+## 0.0.17
+
+### Patch Changes
+
+- Updated dependencies [[`03aa390`](https://github.com/blockprotocol/blockprotocol/commit/03aa3902540114fd341d48a8d0dfa060d27ee71f)]:
+  - @blockprotocol/core@0.0.12
+
 ## 0.0.16
 
 ### Patch Changes

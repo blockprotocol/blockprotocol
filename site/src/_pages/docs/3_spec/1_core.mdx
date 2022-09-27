@@ -38,7 +38,7 @@ At a minimum, blocks consist of:
 
 We refer to the collection of files defining a block as a **block package.**
 
-A block package might be made available via a URL, package manager (e.g. [npm](https://www.npmjs.com/)), or block catalog (e.g. [the Block Hub](https://blockprotocol.org/hub)).
+A block package might be made available via a URL, package manager (e.g. [npm](https://www.npmjs.com/)), or block catalog (e.g. [the Hub](https://blockprotocol.org/hub)).
 
 #### <Hidden>Block package </Hidden>Specification
 
@@ -237,7 +237,8 @@ Blocks:
 
 Embedding applications:
 
-- MUST dispatch events via a `CustomEvent` on the SAME element the block dispatches messages from (identified via listening for [the initial `"init"` message](#core-messages) and subsequently dispatching and listening on the target of that initial event)
+- MUST listen for events of type `"blockprotocolmessage"` sent from the block on an element higher in the DOM tree than the block.
+- MUST dispatch events via a `CustomEvent` on the SAME element the block dispatches messages from – identified via listening for [the initial `"init"` message](#core-messages) and subsequently dispatching on the target of that initial event.
 
 ### Message content
 
@@ -318,10 +319,10 @@ The `data` and `errors` of any messages exchanged between applications and block
 
 The core specification defines messages which are related to the core functionality of the Block Protocol. There are currently two such messages:
 
-- `"init"`: a message a block sends on load
+- `"init"`: a message a block sends on load and whenever it changes the element it is dispatching from (e.g. destroys the previous one)
 - `"initResponse"`: a message the embedder sends in response
 
-These messages are how blocks may exchange messages which are `sentOnInitiliazation`, which might be values available immediately on load, or configuration information, or anything else the service defines as useful for blocks and embedders to exchange on initialization.
+These messages are how blocks may exchange messages which are `sentOnInitialization`, which might be values available immediately on load, or configuration information, or anything else the service defines as useful for blocks and embedders to exchange on initialization.
 
 #### <Hidden>Core messages </Hidden>Specification
 
@@ -341,11 +342,14 @@ Immediately on loading, blocks MUST send a message of the following shape:
 }
 ```
 
-Blocks MUST listen for all subsequent events on the element they dispatched this message from.
+Blocks MUST listen for subsequent message events dispatched by the embedder on the element they dispatched this message from.
 
-Embedding applications MUST listen for this event being dispatched from the block, by attaching an event listener to an element wrapping or at the root of the block.
+If the block removes this element from the DOM, the block MUST send another `init` message event from a new element,
+and listen to subsequent messages from the embedder on that element.
 
-Embedding applications MUST dispatch ALL subsequent events intended for the block on the event’s `target` element, including the `"initResponse"` message described immediately below.
+Embedding applications MUST listen for the `init` message event being dispatched from the block, by attaching an event listener to an element wrapping or at the root of the block.
+
+Embedding applications MUST dispatch ALL events intended for the block on the `init` message event’s `target` element, including the `"initResponse"` message described immediately below. It MUST update the element being listened on if a new `init` message is received.
 
 **`initResponse`**
 

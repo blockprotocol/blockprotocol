@@ -1,7 +1,7 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 import { FunctionComponent } from "react";
 
-export const BlockHubIcon: FunctionComponent<SvgIconProps> = (props) => {
+export const HubIcon: FunctionComponent<SvgIconProps> = (props) => {
   return (
     <SvgIcon {...props} width="20" height="20" viewBox="0 0 20 20">
       <path

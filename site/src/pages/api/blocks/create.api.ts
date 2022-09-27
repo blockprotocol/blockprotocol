@@ -2,6 +2,7 @@ import { body as bodyValidator, validationResult } from "express-validator";
 
 import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
+import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
@@ -10,7 +11,7 @@ import {
   isErrorContainingCauseWithCode,
 } from "../../../util/api";
 import { createPathWithNamespace, generateSlug } from "./shared/naming";
-import { revalidateMultiBlockPages } from "./shared/revalidate";
+import { revalidateBlockPages } from "./shared/revalidate";
 
 // The body we expect when publishing an npm-linked block
 export type ApiBlockCreateRequest = {
@@ -97,7 +98,9 @@ export default createAuthenticatedHandler<
         npmPackageName,
         pathWithNamespace,
       });
-      await revalidateMultiBlockPages(res, shortname);
+      await revalidateBlockPages(res, shortname, slugifiedBlockName);
+
+      await notifySlackAboutBlock(block, "publish");
       return res.status(200).json({ block });
     } catch (err) {
       const errIsError = err instanceof Error;

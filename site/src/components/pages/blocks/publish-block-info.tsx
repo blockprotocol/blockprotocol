@@ -9,7 +9,7 @@ export const PublishBlockInfo = () => {
   return (
     <Alert
       type="info"
-      title="Adding a new block will make it public on the hub"
+      title="Adding a new block will make it public on the Hub"
       description={
         <>
           Your package must contain a valid{" "}

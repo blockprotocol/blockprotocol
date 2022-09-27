@@ -24,7 +24,7 @@ export const getDocumentationSubPages = (): SiteMapPage[] =>
 export const generateSiteMap = (): SiteMap => ({
   pages: [
     {
-      title: "Block Hub",
+      title: "Hub",
       href: "/hub",
       sections: [],
       subPages: [],

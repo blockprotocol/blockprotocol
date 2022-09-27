@@ -13,7 +13,7 @@ If you want to roll your own, to get started:
 
 ## Blocks
 
-To create a GraphBlockHandler, pass the constructor an element in your block, along with any callbacks you wish to register to handle incoming messages.
+To create a `GraphBlockHandler`, pass the constructor an element in your block, along with any callbacks you wish to register to handle incoming messages.
 
 ### React example
 
@@ -30,7 +30,11 @@ See `npx create-block-app@latest my-block --template custom-element` for an exam
 
 ## Embedding applications
 
-To create a GraphEmbedderHandler, pass the constructor:
+You should construct one `GraphEmbedderHandler` per block.
+
+It is not currently possible to wrap multiple blocks with a single handler.
+
+To create a `GraphEmbedderHandler`, pass the constructor:
 
 1.  An `element` wrapping your block
 1.  `callbacks` to respond to messages from the block
