@@ -1,6 +1,5 @@
 import fs from "fs-extra";
 import { Db } from "mongodb";
-import os from "node:os";
 import path from "node:path";
 import tar from "tar";
 import tmp from "tmp-promise";
@@ -28,7 +27,6 @@ const mirrorTarballToS3 = async ({
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: tarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    tmpdir: os.tmpdir(),
     unsafeCleanup: true,
   });
 

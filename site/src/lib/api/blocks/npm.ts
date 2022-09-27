@@ -29,7 +29,6 @@ const mirrorNpmPackageToS3 = async ({
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    tmpdir: os.tmpdir(),
     unsafeCleanup: true,
   });
 
