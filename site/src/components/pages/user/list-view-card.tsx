@@ -74,6 +74,7 @@ export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
       >
         <Typography
           className="list-view__title"
+          component="span"
           sx={{
             fontWeight: 600,
             color: ({ palette }) => palette.gray[90],
