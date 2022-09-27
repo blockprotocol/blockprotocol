@@ -1,104 +1,69 @@
+"area: crates":
+  - "crates/**/*"
+
 "area: dependencies":
-  - "**/patches/*"
-  - "**/patches/.*"
   - "**/patches/**/*"
-  - "**/patches/**/.*"
   - "**/yarn.lock"
 
 "area: hub":
-  - "hub/*"
-  - "hub/.*"
   - "hub/**/*"
-  - "hub/**/.*"
 
 "area: infra":
-  - ".github/*"
-  - ".github/.*"
+  - ".changeset/config.json"
   - ".github/**/*"
-  - ".github/**/.*"
-  - ".husky/*"
-  - ".husky/.*"
-  - "scripts/*"
-  - "scripts/.*"
+  - ".husky/**/*"
+  - "infra/**/*"
   - "scripts/**/*"
-  - "scripts/**/.*"
   - "*"
-  - ".*"
 
 "area: packages":
-  - "packages/*"
-  - "packages/.*"
   - "packages/**/*"
-  - "packages/**/.*"
+
+"area: rfcs":
+  - "rfcs/**/*"
 
 "area: site":
-  - "site/*"
-  - "site/.*"
   - "site/**/*"
-  - "site/**/.*"
 
 "area: spec":
-  - "site/src/_pages/spec/*"
-  - "site/src/_pages/spec/.*"
   - "site/src/_pages/spec/**/*"
-  - "site/src/_pages/spec/**/.*"
+
+"package: @Þ/core":
+  - "packages/@blockprotocol/core/**/*"
+
+"package: @Þ/graph":
+  - "packages/@blockprotocol/graph/**/*"
+
+"package: @Þ/hook":
+  - "packages/@blockprotocol/hook/**/*"
+
+"package: @Þ/type-system":
+  - "packages/@blockprotocol/type-system-node/**/*"
+  - "packages/@blockprotocol/type-system-web/**/*"
+
+"package: @local/*":
+  - "packages/@local/**/*"
 
 "package: block-scripts":
-  - "packages/block-scripts/*"
-  - "packages/block-scripts/.*"
   - "packages/block-scripts/**/*"
-  - "packages/block-scripts/**/.*"
 
 "package: block-template-custom-element":
-  - "packages/block-template-custom-element/*"
-  - "packages/block-template-custom-element/.*"
   - "packages/block-template-custom-element/**/*"
-  - "packages/block-template-custom-element/**/.*"
 
 "package: block-template-html":
-  - "packages/block-template-html/*"
-  - "packages/block-template-html/.*"
   - "packages/block-template-html/**/*"
-  - "packages/block-template-html/**/.*"
 
 "package: block-template-react":
-  - "packages/block-template-react/*"
-  - "packages/block-template-react/.*"
   - "packages/block-template-react/**/*"
-  - "packages/block-template-react/**/.*"
 
 "package: blockprotocol":
-  - "packages/blockprotocol/*"
-  - "packages/blockprotocol/.*"
   - "packages/blockprotocol/**/*"
-  - "packages/blockprotocol/**/.*"
-
-"package: Þ core":
-  - "packages/@blockprotocol/core/*"
-  - "packages/@blockprotocol/core/.*"
-  - "packages/@blockprotocol/core/**/*"
-  - "packages/@blockprotocol/core/**/.*"
 
 "package: create-block-app":
-  - "packages/create-block-app/*"
-  - "packages/create-block-app/.*"
   - "packages/create-block-app/**/*"
-  - "packages/create-block-app/**/.*"
-
-"package: Þ graph":
-  - "packages/@blockprotocol/graph/*"
-  - "packages/@blockprotocol/graph/.*"
-  - "packages/@blockprotocol/graph/**/*"
-  - "packages/@blockprotocol/graph/**/.*"
 
 "package: mock-block-dock":
-  - "packages/mock-block-dock/*"
-  - "packages/mock-block-dock/.*"
   - "packages/mock-block-dock/**/*"
-  - "packages/mock-block-dock/**/.*"
 
 "site: docs":
-  - "site/src/_pages/docs/*"
-  - "site/src/_pages/docs/.*"
   - "site/src/_pages/docs/**/*"
-  - "site/src/_pages/docs/**/.*"

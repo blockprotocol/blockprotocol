@@ -1,6 +1,6 @@
 ## Block Protocol – Hook Service
 
-This package implements the Block Protocol Hraph service for blocks and embedding applications.
+This package implements the Block Protocol Hook service for blocks and embedding applications.
 
 To get started:
 
