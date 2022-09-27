@@ -8,6 +8,7 @@ import tar from "tar";
 import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
+import { isProduction } from "../../config";
 import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
 import { validateExpandAndUploadBlockFiles } from "./s3";
 
@@ -131,7 +132,7 @@ export const publishBlockFromNpm = async (
 
   const blockLinkedToPackage = await getDbBlock({ npmPackageName });
 
-  if (blockLinkedToPackage) {
+  if (isProduction && blockLinkedToPackage) {
     throw new Error(
       `npm package '${npmPackageName}' is already linked to block '${blockLinkedToPackage.pathWithNamespace}'`,
       {
