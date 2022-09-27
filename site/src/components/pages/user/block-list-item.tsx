@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { formatUpdatedAt } from "../../../util/html-utils";
-import { Link } from "../../link";
 import { ListViewCard } from "./list-view-card";
 
 interface BlockListItemProps {
@@ -10,6 +9,7 @@ interface BlockListItemProps {
 }
 
 export const BlockListItem = ({ block }: BlockListItemProps) => {
+  const formattedUpdatedAt = formatUpdatedAt(block.lastUpdated);
   return (
     <ListViewCard
       key={block.name}
@@ -18,10 +18,10 @@ export const BlockListItem = ({ block }: BlockListItemProps) => {
       title={block.displayName!}
       description={block.description}
       extraContent={
-        <Box display="flex" gap={1.5}>
-          <Link href={`/@${block.author}`}>@{block.author}</Link>
+        <Box display="flex" gap={1.5} component="span">
+          @{block.author}
           <span>{`V${block.version}`}</span>
-          <span>{formatUpdatedAt(block.lastUpdated)}</span>
+          {formattedUpdatedAt ? <span>{formattedUpdatedAt}</span> : null}
         </Box>
       }
     />

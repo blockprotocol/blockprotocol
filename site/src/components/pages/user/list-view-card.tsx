@@ -41,6 +41,7 @@ export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
       ]}
     >
       <Box
+        component="span"
         sx={{
           mr: 2,
           minWidth: 24, // icon width
@@ -65,6 +66,7 @@ export const ListViewCard: FunctionComponent<ListViewCardProps> = ({
         )}
       </Box>
       <Box
+        component="span"
         sx={{
           display: "flex",
           flexDirection: "column",
