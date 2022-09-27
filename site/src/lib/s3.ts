@@ -40,28 +40,11 @@ export const getS3Bucket = (): string => {
   return s3Bucket;
 };
 
-let s3PathPrefix: string | undefined;
-
-const getS3PathPrefix = (): string => {
-  if (!s3PathPrefix) {
-    const env = envalid.cleanEnv(process.env, {
-      NEXT_PUBLIC_VERCEL_ENV: envalid.str({ default: "" }),
-      VERCEL_GIT_COMMIT_REF: envalid.str({ default: "" }),
-    });
-
-    s3PathPrefix = `/${
-      env.NEXT_PUBLIC_VERCEL_ENV === "preview" ? env.VERCEL_GIT_COMMIT_REF : ""
-    }`;
-  }
-
-  return s3PathPrefix;
-};
-
 export const resolveS3ResourcePath = (
   category: "blocks" | "avatars",
   subpath: string,
 ): string => {
-  return `${getS3PathPrefix()}/${category}/${subpath}`;
+  return `/${category}/${subpath}`;
 };
 
 let s3BaseUrl: string | undefined;
