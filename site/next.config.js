@@ -11,6 +11,10 @@ const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   productionBrowserSourceMaps: true,
 
+  sentry: {
+    hideSourceMaps: false,
+  },
+
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
   // Thus, we can get Playwright test results and Preview releases for WIP PRs.
