@@ -235,28 +235,7 @@ module.exports = {
       // config files and type declarations
       files: ["*.config.{c,m,}js", "*rc.{c,m,}js", "*.d.ts"],
       rules: {
-        "import/no-extraneous-dependencies": "off",
         "global-require": "off",
-      },
-    },
-    // {
-    //   files: ["packages/block-template-*/**/dev.tsx"],
-    //   rules: {
-    //     "import/no-extraneous-dependencies": [
-    //       "error",
-    //       { devDependencies: true },
-    //     ],
-    //   },
-    // },
-    // {
-    //   files: ["packages/block-template-custom-element/src/app.ts"],
-    //   rules: {
-    //     "no-console": "off",
-    //   },
-    // },
-    {
-      files: ["**/.eslintrc.cjs"],
-      rules: {
         "import/no-extraneous-dependencies": [
           "error",
           { devDependencies: true },
@@ -264,7 +243,7 @@ module.exports = {
       },
     },
     {
-      files: ["**/scripts/**"],
+      files: ["scripts/**"],
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
@@ -286,6 +265,21 @@ module.exports = {
         ],
         "@typescript-eslint/no-floating-promises": "error",
       },
+      // {
+      //   files: ["packages/block-template-*/**/dev.tsx"],
+      //   rules: {
+      //     "import/no-extraneous-dependencies": [
+      //       "error",
+      //       { devDependencies: true },
+      //     ],
+      //   },
+      // },
+      // {
+      //   files: ["packages/block-template-custom-element/src/app.ts"],
+      //   rules: {
+      //     "no-console": "off",
+      //   },
+      // },
     },
   ],
 };
