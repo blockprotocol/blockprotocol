@@ -1,5 +1,37 @@
 # block-template-custom-element
 
+## 0.1.14
+
+## 0.1.13
+
+### Patch Changes
+
+- Updated dependencies [[`0f0abf9`](https://github.com/blockprotocol/blockprotocol/commit/0f0abf905e0b06e27049ade5cf271df127c34bba)]:
+  - @blockprotocol/graph@0.0.18
+
+## 0.1.12
+
+### Patch Changes
+
+- [#629](https://github.com/blockprotocol/blockprotocol/pull/629) [`e682390`](https://github.com/blockprotocol/blockprotocol/commit/e6823904a1c63fd72c11e2fc62678eac61160ec5) Thanks [@CiaranMn](https://github.com/CiaranMn)! - rename .bprc to .blockprotocolrc
+
+## 0.1.11
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @blockprotocol/graph@0.0.17
+
+## 0.1.10
+
+### Patch Changes
+
+- [#617](https://github.com/blockprotocol/blockprotocol/pull/617) [`9cd9c11`](https://github.com/blockprotocol/blockprotocol/commit/9cd9c11a1552dc96143072394baa46c5609fcdd9) Thanks [@jtewright](https://github.com/jtewright)! - Convert preview image from SVG to PNG
+
+## 0.1.9
+
+## 0.1.8
+
 ## 0.1.7
 
 ### Patch Changes

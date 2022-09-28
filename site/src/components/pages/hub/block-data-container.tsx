@@ -53,6 +53,9 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   const [readonly, setReadonly] = useState(false);
 
   const [text, setText] = useState("{}");
+  const [exampleEntityId, setExampleEntityId] = useState<string>(
+    `test-entity-${metadata.name}`,
+  );
 
   const previousBlockVariantsTab = useRef(-1);
   const propertiesToRemove = useRef<string[]>([]);
@@ -73,7 +76,15 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
 
       // reset data source input when switching blocks
       if (example) {
-        setText(JSON.stringify(example, undefined, 2));
+        if (typeof example.entityId === "string") {
+          setExampleEntityId(example.entityId);
+          if (example.properties && typeof example.properties === "object") {
+            setText(JSON.stringify(example.properties, undefined, 2));
+          }
+        } else {
+          setText(JSON.stringify(example, undefined, 2));
+          setExampleEntityId(`test-entity-${metadata.name}`);
+        }
       } else {
         setText("{}");
       }
@@ -127,8 +138,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
   const [props, errors] = useMemo<[Entity<any> | undefined, string[]]>(() => {
     const result = {
-      accountId: `test-account-${metadata.name}`,
-      entityId: `test-entity-${metadata.name}`,
+      entityId: exampleEntityId,
       properties: {},
       readonly,
     };
@@ -149,7 +159,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       );
 
     return [result, errorMessages];
-  }, [text, schema, metadata.name, readonly]);
+  }, [exampleEntityId, text, schema, readonly]);
 
   return (
     <>

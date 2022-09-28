@@ -109,6 +109,17 @@ test("Block page should contain key elements", async ({
   expect(
     await page.locator('[data-testid="block-slider"] >> .slick-slide').count(),
   ).toBeGreaterThan(5);
+
+  const footerCTALocator = page.locator("data-test-id=footerCTA");
+  await expect(footerCTALocator).toBeVisible();
+
+  await expect(
+    footerCTALocator.locator('text="quickstart guide"'),
+  ).toHaveAttribute("href", "/docs/developing-blocks");
+
+  await expect(
+    footerCTALocator.locator('text="Read the quickstart guide"'),
+  ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
 test("should show an error message if an unsupported block is rendered", async ({

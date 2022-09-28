@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
-    repr, uri::VersionedUri, EntityTypeReference, ParseEntityTypeReferenceArrayError,
+    repr, uri::VersionedUri, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
     ParseLinksError,
 };
 
@@ -14,7 +14,7 @@ use crate::{
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Links {
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    links: HashMap<String, ValueOrMaybeOrderedArray<repr::EntityTypeReference>>,
+    links: HashMap<String, ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required_links: Vec<String>,
 }
@@ -74,13 +74,13 @@ pub struct MaybeOrderedArray<T> {
     ordered: bool,
 }
 
-impl TryFrom<MaybeOrderedArray<repr::EntityTypeReference>>
-    for super::MaybeOrderedArray<EntityTypeReference>
+impl TryFrom<MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
+    for super::MaybeOrderedArray<OneOf<EntityTypeReference>>
 {
     type Error = ParseEntityTypeReferenceArrayError;
 
     fn try_from(
-        maybe_ordered_array_repr: MaybeOrderedArray<repr::EntityTypeReference>,
+        maybe_ordered_array_repr: MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>,
     ) -> Result<Self, Self::Error> {
         Ok(Self {
             array: maybe_ordered_array_repr.array.try_into()?,
@@ -109,13 +109,13 @@ pub enum ValueOrMaybeOrderedArray<T> {
     Array(MaybeOrderedArray<T>),
 }
 
-impl TryFrom<ValueOrMaybeOrderedArray<repr::EntityTypeReference>>
-    for super::ValueOrMaybeOrderedArray<EntityTypeReference>
+impl TryFrom<ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
+    for super::ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>
 {
     type Error = ParseLinksError;
 
     fn try_from(
-        value_or_array_repr: ValueOrMaybeOrderedArray<repr::EntityTypeReference>,
+        value_or_array_repr: ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>,
     ) -> Result<Self, Self::Error> {
         Ok(match value_or_array_repr {
             ValueOrMaybeOrderedArray::Value(val) => Self::Value(

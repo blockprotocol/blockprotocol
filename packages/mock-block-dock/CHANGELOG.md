@@ -1,5 +1,42 @@
 # mock-block-dock
 
+## 0.0.32
+
+### Patch Changes
+
+- [#634](https://github.com/blockprotocol/blockprotocol/pull/634) [`76d3ffa`](https://github.com/blockprotocol/blockprotocol/commit/76d3ffa3b44e1d7e9ff74d5d5723e7ed3c4d08ed) Thanks [@CiaranMn](https://github.com/CiaranMn)! - set minheight on debug header
+
+## 0.0.31
+
+### Patch Changes
+
+- [#631](https://github.com/blockprotocol/blockprotocol/pull/631) [`0f0abf9`](https://github.com/blockprotocol/blockprotocol/commit/0f0abf905e0b06e27049ade5cf271df127c34bba) Thanks [@CiaranMn](https://github.com/CiaranMn)! - change entity & type updates to be by overwrite, not merge
+
+- Updated dependencies [[`0f0abf9`](https://github.com/blockprotocol/blockprotocol/commit/0f0abf905e0b06e27049ade5cf271df127c34bba)]:
+  - @blockprotocol/graph@0.0.18
+
+## 0.0.30
+
+### Patch Changes
+
+- [#622](https://github.com/blockprotocol/blockprotocol/pull/622) [`bfb6db7`](https://github.com/blockprotocol/blockprotocol/commit/bfb6db7c3138c410b0003869cb15ebbb5f18ac7a) Thanks [@CiaranMn](https://github.com/CiaranMn)! - improve debug ui layout
+
+- Updated dependencies [[`03aa390`](https://github.com/blockprotocol/blockprotocol/commit/03aa3902540114fd341d48a8d0dfa060d27ee71f)]:
+  - @blockprotocol/core@0.0.12
+  - @blockprotocol/graph@0.0.17
+
+## 0.0.29
+
+### Patch Changes
+
+- [#618](https://github.com/blockprotocol/blockprotocol/pull/618) [`73a43e0`](https://github.com/blockprotocol/blockprotocol/commit/73a43e0c8484495f21837533b046a35e54e116b6) Thanks [@kachkaev](https://github.com/kachkaev)! - Hide dashed border when `hideDebugToggle`is true
+
+## 0.0.28
+
+### Patch Changes
+
+- [#611](https://github.com/blockprotocol/blockprotocol/pull/611) [`1954006`](https://github.com/blockprotocol/blockprotocol/commit/1954006f6f0785c55986241a7a6ba758c8d557a0) Thanks [@kachkaev](https://github.com/kachkaev)! - Use `React.lazy` in `mock-block-dock` to optimize MUI loading
+
 ## 0.0.27
 
 ### Patch Changes

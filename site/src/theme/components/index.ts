@@ -21,8 +21,8 @@ import { MuiLinkThemeOptions } from "./navigation/mui-link-theme-options";
 import { MuiTabThemeOptions } from "./navigation/mui-tab-theme-options";
 import { MuiTabsThemeOptions } from "./navigation/mui-tabs-theme-options";
 import { MuiPaperThemeOptions } from "./surfaces/mui-paper-theme-options";
+import { MuiBackdropThemeOptions } from "./utils/mui-backdrop-theme-options";
 import { MuiCssBaselineThemeOptions } from "./utils/mui-css-baseline-theme-options";
-import { MuiModalThemeOptions } from "./utils/mui-modal-theme-options";
 
 export const components: ThemeOptions["components"] = {
   /** ===== INPUTS ==== */
@@ -60,5 +60,5 @@ export const components: ThemeOptions["components"] = {
 
   /** ===== UTILS ===== */
   MuiCssBaseline: MuiCssBaselineThemeOptions,
-  MuiModal: MuiModalThemeOptions,
+  MuiBackdrop: MuiBackdropThemeOptions,
 };
