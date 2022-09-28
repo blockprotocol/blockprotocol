@@ -31,7 +31,7 @@
   "dependencies": {},
   "devDependencies": {
     "block-scripts": "0.0.17",
-    "eslint": "8.23.0",
+    "eslint": "8.24.0",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
     "prettier": "2.7.1",
