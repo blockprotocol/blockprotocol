@@ -49,13 +49,15 @@ var
 ## Sentry
 .sentryclirc
 
+## Rust / WASM
+*.rs.bk
+bin
+Cargo.lock
+pkg
+target
+wasm-pack.log
+
 ## Workspace-specific
-crates/**/*.rs.bk
-crates/**/bin
-crates/**/Cargo.lock
-crates/**/pkg
-crates/**/target
-crates/**/wasm-pack.log
 packages/block-template-html/dev/src
 packages/mock-block-dock/src/version.ts
 site/blocks-data.json
