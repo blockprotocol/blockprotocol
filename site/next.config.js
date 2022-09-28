@@ -10,6 +10,7 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   productionBrowserSourceMaps: true,
+  swcMinify: true,
 
   sentry: {
     hideSourceMaps: false,
