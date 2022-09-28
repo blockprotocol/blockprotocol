@@ -19,7 +19,6 @@ export const BlockListItem = ({ block }: BlockListItemProps) => {
       description={block.description}
       extraContent={
         <Box display="flex" gap={1.5} component="span">
-          @{block.author}
           <span>{`V${block.version}`}</span>
           {formattedUpdatedAt ? <span>{formattedUpdatedAt}</span> : null}
         </Box>
