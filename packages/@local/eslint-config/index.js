@@ -345,6 +345,15 @@ module.exports = {
       },
     },
     {
+      files: ["**/.eslintrc.cjs"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
+    {
       files: ["**/scripts/**"],
       rules: {
         "import/no-extraneous-dependencies": [
