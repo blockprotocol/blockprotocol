@@ -1,20 +1,3 @@
-const noRestrictedImportsConfig = {
-  paths: [
-    {
-      name: "lodash",
-      message:
-        "Please import lodash functions from lodash/functionName for CJS/ESM interop. Check if your task needs lodash at https://you-dont-need.github.io/You-Dont-Need-Lodash-Underscore/#/",
-    },
-  ],
-  patterns: [
-    {
-      group: ["fs", "fs/*"],
-      message:
-        "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
-    },
-  ],
-};
-
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   // this is the highest config lower ones will automatically extend
@@ -77,7 +60,25 @@ module.exports = {
         assert: "either",
       },
     ],
-    "no-restricted-imports": ["error", noRestrictedImportsConfig],
+    "no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          {
+            name: "lodash",
+            message:
+              "Please import lodash functions from lodash/functionName for CJS/ESM interop. Check if your task needs lodash at https://you-dont-need.github.io/You-Dont-Need-Lodash-Underscore/#/",
+          },
+        ],
+        patterns: [
+          {
+            group: ["fs", "fs/*"],
+            message:
+              "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
+          },
+        ],
+      },
+    ],
     "react/function-component-definition": [
       "error",
       {
@@ -232,7 +233,6 @@ module.exports = {
       },
     },
     {
-      // config files and type declarations
       files: ["*.config.{c,m,}js", "*rc.{c,m,}js", "*.d.ts"],
       rules: {
         "global-require": "off",
