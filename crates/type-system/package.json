@@ -4,9 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "fix:eslint": "eslint --fix \"**/*\"",
+    "lint:eslint": "eslint \"**/*\"",
     "lint:tsc": "tsc --noEmit"
   },
   "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@types/fs-extra": "^9.0.13",
     "fs-extra": "^10.1.0",

@@ -1,49 +1,65 @@
-######################
-## Shared with linters
-######################
+#########################
+## Shared between linters
+#########################
 
-# Logs
+## Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Dependency directories
+## Dependency directories
 node_modules/
 
-# TypeScript cache
+## TypeScript cache
 *.tsbuildinfo
 
-# Optional eslint cache
+## Optional eslint cache
 .eslintcache
 
-# Yarn Integrity file
+## Yarn Integrity file
 .yarn-integrity
 
-# macOS directory file
+## macOS directory file
 .DS_Store
 
-# Next.js build output
+## Next.js build output
 .next
 
-# Environment variables
+## Environment variables
 .env.local
 .blockprotocolrc
 
-# Build artifacts
+## Build artifacts
 dist
 
-# VScode config
+## VScode config
 .vscode
 
-# Vercel
+## Vercel
 .vercel
 
-# Testing
+## Testing
 .nyc_output
 coverage
 
-# Workspace specific
+## Local files
+var
+
+## Sentry
+.sentryclirc
+
+##################
+## Specific to git
+##################
+
+## Pattenrs with prefixes that cannot be picked by ESLint
+crates/**/*.rs.bk
+crates/**/bin/
+crates/**/Cargo.lock
+crates/**/pkg/
+crates/**/target
+crates/**/wasm-pack.log
 packages/block-template-html/dev/src
 packages/mock-block-dock/src/version.ts
 site/blocks-data.json
@@ -53,24 +69,6 @@ site/public/schemas
 site/site-map.json
 site/test-results
 
-# Local files
-var
-
-# Sentry
-.sentryclirc
-
-# Rust specific
-crates/**/target
-crates/**/*.rs.bk
-crates/**/Cargo.lock
-crates/**/bin/
-crates/**/pkg/
-crates/**/wasm-pack.log
-
-##################
-## Specific to git
-##################
-
-# We want to version control these specific build artifacts
+## Build artifacts that need to be version-controlled
 !packages/@blockprotocol/type-system-node/dist
 !packages/@blockprotocol/type-system-web/dist

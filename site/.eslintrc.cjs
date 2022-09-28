@@ -6,9 +6,18 @@ const noRestrictedImportsConfig = require("@local/eslint-config").rules[
 module.exports = {
   root: true,
   extends: ["@local/eslint-config"],
+  ignorePatterns: [
+    ...require("@local/eslint-config/base-ignore-patterns.cjs"),
+    "blocks-data.json",
+    "playwright-report",
+    "public/blocks",
+    "public/schemas",
+    "site-map.json",
+    "test-results",
+  ],
   parserOptions: {
     tsconfigRootDir: ".",
-    project: "tsconfig.json",
+    project: `${__dirname}/tsconfig.json`,
   },
   rules: {
     "no-restricted-imports": [
@@ -90,18 +99,18 @@ module.exports = {
         ],
       },
     ],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        devDependencies: [
-          ".eslintrc.cjs",
-          "scripts/**",
-          "playwright.config.ts",
-        ],
-      },
-    ],
   },
   overrides: [
+    {
+      // needed because of package.json in tests (for CJS)
+      files: ["**/playwright.config.ts"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
     {
       // needed because of package.json in tests (for CJS)
       files: ["tests/**"],

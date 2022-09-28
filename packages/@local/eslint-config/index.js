@@ -225,21 +225,10 @@ module.exports = {
       },
     },
     {
-      files: ["packages/**/*.test.{j,t}s{x,}"],
+      files: ["*.test.{j,t}s{x,}"],
       env: {
         jest: true,
         node: true,
-      },
-    },
-    {
-      // plugin does not support .js file extensions in .ts files, which ESM TS projects require
-      // https://github.com/import-js/eslint-plugin-import/issues/2446
-      files: [
-        "packages/@blockprotocol/graph/**",
-        "packages/@blockprotocol/hook/**",
-      ],
-      rules: {
-        "import/no-unresolved": "off",
       },
     },
     {
@@ -250,100 +239,21 @@ module.exports = {
         "global-require": "off",
       },
     },
-    {
-      files: ["crates/type-system/**"],
-      parserOptions: {
-        project: ["crates/type-system/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/core/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/core/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/graph/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/graph/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/hook/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/hook/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/type-system-node/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/type-system-node/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/type-system-web/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/type-system-web/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@local/package-chores/**"],
-      parserOptions: {
-        project: ["packages/@local/package-chores/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@local/script-resources/**"],
-      parserOptions: {
-        project: ["packages/@local/script-resources/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/block-scripts/**", "packages/blockprotocol/**"],
-      rules: {
-        "no-console": "off",
-        "import/extensions": ["error", "always"],
-      },
-    },
-    {
-      files: ["packages/block-template-custom-element/**"],
-      parserOptions: {
-        project: ["packages/block-template-custom-element/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/block-template-react/**"],
-      parserOptions: {
-        project: ["packages/block-template-react/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/block-template-*/**/dev.tsx"],
-      rules: {
-        "import/no-extraneous-dependencies": [
-          "error",
-          { devDependencies: true },
-        ],
-      },
-    },
-    {
-      files: ["packages/block-template-custom-element/src/app.ts"],
-      rules: {
-        "no-console": "off",
-      },
-    },
-    {
-      files: ["packages/blockprotocol/**"],
-      parserOptions: {
-        project: ["packages/blockprotocol/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/mock-block-dock/**"],
-      parserOptions: {
-        project: ["packages/mock-block-dock/tsconfig.json"],
-      },
-    },
+    // {
+    //   files: ["packages/block-template-*/**/dev.tsx"],
+    //   rules: {
+    //     "import/no-extraneous-dependencies": [
+    //       "error",
+    //       { devDependencies: true },
+    //     ],
+    //   },
+    // },
+    // {
+    //   files: ["packages/block-template-custom-element/src/app.ts"],
+    //   rules: {
+    //     "no-console": "off",
+    //   },
+    // },
     {
       files: ["**/.eslintrc.cjs"],
       rules: {

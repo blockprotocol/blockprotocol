@@ -2,13 +2,13 @@
 ## Specific to Prettier
 #######################
 
-# Ignore all files (but still allow sub-folder scanning)
+## Ignore all files (but still allow sub-folder scanning)
 *
 !*/
 
-# Allow certain file types
-!*.css
+## Allow certain file types
 !*.cjs
+!*.css
 !*.html
 !*.js
 !*.json
@@ -21,70 +21,52 @@
 !*.yml
 
 #########################
-## Shared with .gitignore
+## Shared between linters
 #########################
 
-# Logs
+## Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Dependency directories
+## Dependency directories
 node_modules/
 
-# TypeScript cache
+## TypeScript cache
 *.tsbuildinfo
 
-# Optional eslint cache
+## Optional eslint cache
 .eslintcache
 
-# Yarn Integrity file
+## Yarn Integrity file
 .yarn-integrity
 
-# macOS directory file
+## macOS directory file
 .DS_Store
 
-# Next.js build output
+## Next.js build output
 .next
 
-# Environment variables
+## Environment variables
 .env.local
 .blockprotocolrc
 
-# Build artifacts
+## Build artifacts
 dist
 
-# VScode config
+## VScode config
 .vscode
 
-# Vercel
+## Vercel
 .vercel
 
-# Testing
+## Testing
 .nyc_output
 coverage
 
-# Workspace specific
-packages/block-template-html/dev/src
-packages/mock-block-dock/src/version.ts
-site/blocks-data.json
-site/playwright-report
-site/public/blocks
-site/public/schemas
-site/site-map.json
-site/test-results
-
-# Local files
+## Local files
 var
 
-# Sentry
+## Sentry
 .sentryclirc
-
-# Rust specific
-crates/**/target
-crates/**/*.rs.bk
-crates/**/Cargo.lock
-crates/**/bin/
-crates/**/pkg/
-crates/**/wasm-pack.log
