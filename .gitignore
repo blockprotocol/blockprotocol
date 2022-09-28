@@ -9,7 +9,7 @@ yarn-debug.log*
 yarn-error.log*
 
 ## Dependency directories
-node_modules/
+node_modules
 
 ## TypeScript cache
 *.tsbuildinfo
@@ -49,15 +49,11 @@ var
 ## Sentry
 .sentryclirc
 
-##################
-## Specific to git
-##################
-
-## Pattenrs with prefixes that cannot be picked by ESLint
+## Workspace-specific
 crates/**/*.rs.bk
-crates/**/bin/
+crates/**/bin
 crates/**/Cargo.lock
-crates/**/pkg/
+crates/**/pkg
 crates/**/target
 crates/**/wasm-pack.log
 packages/block-template-html/dev/src
@@ -68,6 +64,10 @@ site/public/blocks
 site/public/schemas
 site/site-map.json
 site/test-results
+
+##################
+## Specific to git
+##################
 
 ## Build artifacts that need to be version-controlled
 !packages/@blockprotocol/type-system-node/dist

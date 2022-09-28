@@ -6,15 +6,9 @@ const noRestrictedImportsConfig = require("@local/eslint-config").rules[
 module.exports = {
   root: true,
   extends: ["@local/eslint-config"],
-  ignorePatterns: [
-    ...require("@local/eslint-config/base-ignore-patterns.cjs"),
-    "blocks-data.json",
-    "playwright-report",
-    "public/blocks",
-    "public/schemas",
-    "site-map.json",
-    "test-results",
-  ],
+  ignorePatterns: require("@local/eslint-config/generate-ignore-patterns.cjs")(
+    __dirname,
+  ),
   parserOptions: {
     tsconfigRootDir: ".",
     project: `${__dirname}/tsconfig.json`,

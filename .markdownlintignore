@@ -60,3 +60,19 @@ var
 
 ## Sentry
 .sentryclirc
+
+## Workspace-specific
+crates/**/*.rs.bk
+crates/**/bin/
+crates/**/Cargo.lock
+crates/**/pkg/
+crates/**/target
+crates/**/wasm-pack.log
+packages/block-template-html/dev/src
+packages/mock-block-dock/src/version.ts
+site/blocks-data.json
+site/playwright-report
+site/public/blocks
+site/public/schemas
+site/site-map.json
+site/test-results

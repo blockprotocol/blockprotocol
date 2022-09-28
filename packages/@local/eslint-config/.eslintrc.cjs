@@ -1,5 +1,5 @@
 module.exports = {
   root: true,
   extends: ["."],
-  ignorePatterns: require("./base-ignore-patterns.cjs"),
+  ignorePatterns: require("./generate-ignore-patterns.cjs")(__dirname),
 };
