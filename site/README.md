@@ -71,7 +71,7 @@ If you want to publish blocks via the API, you will need to configure S3 variabl
 - `S3_SECRET_ACCESS_KEY`
 - `S3_BASE_URL`
 
-API-published blocks are uploaded to S3 storage (e.g. R2). This is not necessary for blocks added to the `hub/` folder in the repo.
+API-published blocks are uploaded to S3-compatible storage (e.g. R2). This is not necessary for blocks added to the `hub/` folder in the repo.
 
 Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
 When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
