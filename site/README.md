@@ -73,6 +73,8 @@ If you want to publish blocks via the API, you will need to configure S3 variabl
 
 API-published blocks are uploaded to S3-compatible storage (e.g. R2). This is not necessary for blocks added to the `hub/` folder in the repo.
 
+During local development, an S3-compatible service (`minio`) is automatically started, and can be used with the environment variables listed in the local [site](#bp-site) instructions. You typically should not need to connect to remote storage during local development.
+
 Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
 When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
