@@ -4,7 +4,9 @@ export const BlockFormContainer = styled(Paper)(
   sx({ flex: 1, width: "100%", p: 6 }),
 );
 
-export const BlockListContainer = styled(BlockFormContainer)<{
+export const BlockListContainer = styled(BlockFormContainer, {
+  shouldForwardProp: (propName) => propName !== "hasBlocks",
+})<{
   hasBlocks?: boolean;
 }>(
   ({ hasBlocks }) =>
