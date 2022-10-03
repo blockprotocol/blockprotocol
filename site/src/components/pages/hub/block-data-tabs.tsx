@@ -21,6 +21,9 @@ const DesktopTabs = styled(
       {children}
     </Tabs>
   ),
+  {
+    shouldForwardProp: (propName) => propName !== "modalOpen",
+  },
 )(({ theme, modalOpen }) => ({
   "& .MuiTab-root": {
     textTransform: "none",
