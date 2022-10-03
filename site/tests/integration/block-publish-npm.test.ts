@@ -64,8 +64,8 @@ test("user should be able to publish block & see it on the list", async ({
   ).toBeVisible();
 
   await expect(page.locator("[data-testid=list-view-card]")).toBeVisible();
-  await expect(page.locator("[data-testid=list-view-card] a")).toHaveText(
-    "@alice",
+  await expect(page.locator("[data-testid=list-view-card]")).toHaveText(
+    "test-npm-block block",
   );
 });
 
