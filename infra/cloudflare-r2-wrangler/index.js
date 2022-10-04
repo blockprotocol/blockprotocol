@@ -4,7 +4,7 @@ export default {
     const key = url.pathname.slice(1);
 
     if (request.method === "GET") {
-      const object = await env.BLOCK_BUCKET.get(key); // variable named defined in wrangler.toml
+      const object = await env.BLOCKPROTOCOL_BUCKET.get(key); // variable named defined in wrangler.toml
 
       if (object === null) {
         return new Response("Object Not Found", { status: 404 });
