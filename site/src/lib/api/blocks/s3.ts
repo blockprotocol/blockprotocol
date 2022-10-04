@@ -1,29 +1,22 @@
+import {
+  DeleteObjectsCommand,
+  ListObjectsV2Command,
+  PutObjectCommand,
+} from "@aws-sdk/client-s3";
 import { BlockMetadata } from "@blockprotocol/core";
-import S3 from "aws-sdk/clients/s3";
-import execa from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 import mime from "mime-types";
 import path from "node:path";
 import fetch from "node-fetch";
-import slugify from "slugify";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
-import { isProduction } from "../../config";
-import { isRunningOnVercel } from "./shared";
-
-const cloudflareEndpoint = process.env.CLOUDFLARE_R2_ENDPOINT;
-const bucketName = isProduction ? "blocks" : "blocks-dev";
-const baseS3Options = { Bucket: bucketName };
-
-export const publicBaseR2Url = `https://${bucketName}.hashai.workers.dev`;
-
-const s3 = new S3({
-  endpoint: cloudflareEndpoint,
-  accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID,
-  secretAccessKey: process.env.CLOUDFLARE_SECRET_ACCESS_KEY,
-  signatureVersion: "v4",
-});
+import {
+  generateS3ResourceUrl,
+  getS3Bucket,
+  getS3Client,
+  resolveS3ResourceKey,
+} from "../../s3";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");
@@ -118,12 +111,12 @@ const validateBlockFiles = async (
 };
 
 /**
- * Uploads files to the 'blocks' bucket in Cloudflare's R2 storage.
+ * Uploads files to the 'blocks' bucket in S3-compatible storage.
  * Returns an array of the paths to the uploaded files within the bucket.
  * @param localFolderPath the path to the directory in the local file system containing the files to upload
- * @param remoteStoragePrefix the prefix to give the files in R2, in the format [namespace]/[block-name]
+ * @param remoteStoragePrefix the prefix to give the files, in the format [namespace]/[block-name]
  */
-const uploadBlockFilesToR2 = (
+const uploadBlockFilesToS3 = (
   localFolderPath: string,
   remoteStoragePrefix: string,
 ): Promise<any /** @todo fix this */>[] => {
@@ -139,7 +132,7 @@ const uploadBlockFilesToR2 = (
     const pathToThing = path.resolve(localFolderPath, thingName);
     const isDirectory = fs.lstatSync(pathToThing).isDirectory();
     if (isDirectory) {
-      return uploadBlockFilesToR2(
+      return uploadBlockFilesToS3(
         pathToThing,
         `${remoteStoragePrefix}/${thingName}`,
       );
@@ -161,14 +154,14 @@ const uploadBlockFilesToR2 = (
       return Promise.resolve();
     }
 
-    return s3
-      .putObject({
-        ...baseS3Options,
+    return getS3Client().send(
+      new PutObjectCommand({
+        Bucket: getS3Bucket(),
         Body: fileContents,
         ContentType: contentType || undefined,
         Key: `${remoteStoragePrefix}/${thingName}`,
-      })
-      .promise();
+      }),
+    );
   });
 };
 
@@ -176,18 +169,18 @@ const uploadBlockFilesToR2 = (
  * Wipes the contents of a block's distribution folder in R2
  * @param blockFolder the path to the folder, in the format [namespace]/[block-name]
  */
-const wipeR2BlockFolder = async (blockFolder: string) => {
+const wipeS3BlockFolder = async (blockFolder: string) => {
   if (!/.+\/.+/.test(blockFolder)) {
     throw new Error(
       `Expected block folder matching pattern [namespace]/[block-name], received '${blockFolder}'`,
     );
   }
-  const folderContents = await s3
-    .listObjectsV2({
-      ...baseS3Options,
+  const folderContents = await getS3Client().send(
+    new ListObjectsV2Command({
+      Bucket: getS3Bucket(),
       Prefix: blockFolder,
-    })
-    .promise();
+    }),
+  );
 
   if (!folderContents.Contents || folderContents.Contents.length === 0) {
     return;
@@ -197,14 +190,14 @@ const wipeR2BlockFolder = async (blockFolder: string) => {
     Key,
   })).filter((identifier): identifier is { Key: string } => !!identifier.Key);
 
-  await s3
-    .deleteObjects({
-      ...baseS3Options,
+  await getS3Client().send(
+    new DeleteObjectsCommand({
+      Bucket: getS3Bucket(),
       Delete: {
         Objects: objectsToDelete,
       },
-    })
-    .promise();
+    }),
+  );
 };
 
 /**
@@ -227,21 +220,6 @@ export const validateExpandAndUploadBlockFiles = async ({
   npmPackageName?: string;
   pathWithNamespace: string;
 }): Promise<{ expandedMetadata: ExpandedBlockMetadata }> => {
-  // for blocks developed locally, add a prefix to the storage URL - the R2 bucket is shared across all dev environments
-  let storageNamespacePrefix = "";
-  if (!isRunningOnVercel) {
-    const gitConfigUserNameResult = await execa("git", [
-      "config",
-      "--get",
-      "user.name",
-    ]);
-    const userName = gitConfigUserNameResult.stdout.trim();
-    storageNamespacePrefix = `local-dev/${slugify(userName, {
-      lower: true,
-      strict: true,
-    })}/`;
-  }
-
   // Validate the contents of the block files
   const { metadataJson, metadataJsonPath, includesExampleGraph } =
     await validateBlockFiles(localFolderPath);
@@ -250,13 +228,13 @@ export const validateExpandAndUploadBlockFiles = async ({
    * In future we will store each version in its own folder, and add the version to the folder path
    * @see https://app.asana.com/0/0/1202539910143057/f (internal)
    */
-  const remoteStoragePrefix = `${storageNamespacePrefix}${stripLeadingAt(
-    pathWithNamespace,
-  )}`;
-  const publicPackagePath = `${publicBaseR2Url}/${remoteStoragePrefix}`;
+  const remoteStoragePrefix = resolveS3ResourceKey(
+    "blocks",
+    stripLeadingAt(pathWithNamespace),
+  );
 
   const sourceInformation = {
-    blockDistributionFolderUrl: publicPackagePath,
+    blockDistributionFolderUrl: generateS3ResourceUrl(remoteStoragePrefix),
     npmPackageName,
     pathWithNamespace,
     repository:
@@ -292,9 +270,9 @@ export const validateExpandAndUploadBlockFiles = async ({
    * Wipe the folder before uploading new files - we will stop doing this when we store each version in its own folder
    * @see https://app.asana.com/0/0/1202539910143057/f (internal)
    */
-  await wipeR2BlockFolder(remoteStoragePrefix);
+  await wipeS3BlockFolder(remoteStoragePrefix);
 
-  await Promise.all(uploadBlockFilesToR2(localFolderPath, remoteStoragePrefix));
+  await Promise.all(uploadBlockFilesToS3(localFolderPath, remoteStoragePrefix));
 
   return { expandedMetadata };
 };

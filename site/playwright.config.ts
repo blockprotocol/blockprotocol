@@ -1,6 +1,8 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
 
+(await import("dotenv-flow")).config({ silent: true });
+
 const ci = process.env.CI === "true";
 
 // https://github.com/anishkny/playwright-test-coverage#options

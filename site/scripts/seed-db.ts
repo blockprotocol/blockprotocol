@@ -100,6 +100,7 @@ const script = async () => {
   console.log("✅ DB seeded");
 
   await import("./create-db-indexes");
+  await import("./reset-s3-bucket");
 };
 
 await script();
