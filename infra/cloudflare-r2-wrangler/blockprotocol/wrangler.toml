@@ -1,4 +1,4 @@
-name = "blockprotocol-production"
+name = "blockprotocol"
 main = "../index.js"
 compatibility_date = "2022-06-30"
 
