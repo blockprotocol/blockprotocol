@@ -38,6 +38,7 @@
   - "packages/@blockprotocol/hook/**/*"
 
 "package: @Þ/type-system":
+  - "packages/@blockprotocol/type-system/**/*"
   - "packages/@blockprotocol/type-system-node/**/*"
   - "packages/@blockprotocol/type-system-web/**/*"
 
