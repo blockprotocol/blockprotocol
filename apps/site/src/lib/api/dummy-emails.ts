@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import path from "node:path";
 
-const dummyEmailsFilePath = "../var/site/dummy-emails.log";
+const dummyEmailsFilePath = "../../var/site/dummy-emails.log";
 
 let firstCall = true;
 
