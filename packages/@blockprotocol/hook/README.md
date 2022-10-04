@@ -20,10 +20,11 @@ const handler = new HookBlockHandler({ element });
 
 handler.hook({
   data: {
-    blockId: "hookId",
-    node,
-    type: "text",
-    path: "$.text",
+    hookId: null, // the embedding application will provide a hookId in response to use in future messages
+    node, // a reference to the DOM node to render into
+    type: "text", // the type of hook
+    entityId: "entity1", // the id of the entity this hook will show/edit data for
+    path: "$.text", // the path in the entity's properties data will be taken from/saved to
   },
 });
 ```

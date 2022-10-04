@@ -6,16 +6,16 @@ import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
 import { insertDbBlock, updateDbBlock } from "./db";
-import { validateExpandAndUploadBlockFiles } from "./r2";
-import { isRunningOnVercel } from "./shared";
+import { validateExpandAndUploadBlockFiles } from "./s3";
 
 /**
  * Unpacks and uploads a tarball to remote storage
- * @param createdAt if this block was created previously, an ISO string of when it was created, otherwise null
- * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
- * @param tarball the tarball containing the block's latest files
+ * @param payload
+ *  - createdAt: if this block was created previously, an ISO string of when it was created, otherwise null
+ *  - pathWithNamespace: the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
+ *  - tarball: the tarball containing the block's latest files
  */
-const mirrorTarballToR2 = async ({
+const mirrorTarballToS3 = async ({
   createdAt,
   pathWithNamespace,
   tarball,
@@ -27,7 +27,6 @@ const mirrorTarballToR2 = async ({
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: tarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    tmpdir: isRunningOnVercel ? "/tmp" : undefined, // Vercel allows limited file system access
     unsafeCleanup: true,
   });
 
@@ -76,7 +75,7 @@ export const publishBlockFromTarball = async (
 ) => {
   const { createdAt, pathWithNamespace, tarball } = params;
 
-  const { expandedMetadata } = await mirrorTarballToR2({
+  const { expandedMetadata } = await mirrorTarballToS3({
     createdAt,
     pathWithNamespace,
     tarball,

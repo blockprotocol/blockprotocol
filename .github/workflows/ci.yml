@@ -173,40 +173,40 @@ jobs:
       - name: Publish NPM packages to local registry
         run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
 
-      - name: e2e-test create-block-app (default template)
+      - name: Smoke-test create-block-app (default template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/default
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (custom-element template)
+      - name: Smoke-test create-block-app (custom-element template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/custom-element
           BLOCK_TEMPLATE: custom-element
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (html template)
+      - name: Smoke-test create-block-app (html template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/html
           BLOCK_TEMPLATE: html
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (react template)
+      - name: Smoke-test create-block-app (react template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/react
           BLOCK_TEMPLATE: react
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (unknown template)
+      - name: Smoke-test create-block-app (unknown template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/unknown
           BLOCK_TEMPLATE: unknown
@@ -258,6 +258,7 @@ jobs:
       - name: Create temp files and folders
         run: |
           mkdir -p var/logs
+          mkdir -p var/site
 
           cat << EOF > apps/site/.env.local
           SESSION_SECRET=dev-session-secret
@@ -265,6 +266,15 @@ jobs:
 
           MONGODB_URI=mongodb://root:password@localhost:27017/
           MONGODB_DB_NAME=local
+
+          S3_API_ENDPOINT=http://localhost:9000
+          S3_BUCKET=dev-bucket
+          S3_ACCESS_KEY_ID=dev-access-key
+          S3_SECRET_ACCESS_KEY=dev-secret-key
+          S3_BASE_URL=http://localhost:9001/dev-bucket
+
+          NEXT_PUBLIC_NPM_PUBLISHING=true
+
           EOF
 
       - name: Launch DB

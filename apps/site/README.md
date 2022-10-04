@@ -27,6 +27,12 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     
     MONGODB_URI=mongodb://root:password@localhost:27017/
     MONGODB_DB_NAME=local
+    
+    S3_API_ENDPOINT=http://localhost:9000
+    S3_BASE_URL=http://localhost:9001/dev-bucket
+    S3_BUCKET=dev-bucket
+    S3_ACCESS_KEY_ID=dev-access-key
+    S3_SECRET_ACCESS_KEY=dev-secret-key
     ```
 
 1.  Install dependencies using:
@@ -57,13 +63,20 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
 
 ### API block publishing configuration
 
-If you want to publish blocks via the API, you will need to configure Cloudflare R2 variables:
+If you want to publish blocks via the API, you will need to configure S3 variables:
 
-- `CLOUDFLARE_R2_ENDPOINT`
-- `CLOUDFLARE_ACCESS_KEY_ID`
-- `CLOUDFLARE_SECRET_ACCESS_KEY`
+- `S3_API_ENDPOINT`
+- `S3_BUCKET`
+- `S3_ACCESS_KEY_ID`
+- `S3_SECRET_ACCESS_KEY`
+- `S3_BASE_URL`
 
-API-published blocks are uploaded to R2. This is not necessary for blocks added to the `hub/` folder in the repo.
+API-published blocks are uploaded to S3-compatible storage (e.g. R2). This is not necessary for blocks added to the `hub/` folder in the repo.
+
+During local development, an S3-compatible service (`minio`) is automatically started, and can be used with the environment variables listed in the local [site](#bp-site) instructions. You typically should not need to connect to remote storage during local development.
+
+Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
+When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
 ### AWS configuration
 
@@ -72,15 +85,6 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_REGION`: The region, eg. `us-east-1`
 - `BP_AWS_ACCESS_KEY_ID`: The AWS access key
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
-
-The above environment variables will also be used for S3 access for allowing user avatar uploads.
-
-The default S3 bucket name is `blockprotocol` but can optionally be customized with the following environment variable:
-
-- `BP_AWS_S3_BUCKET_NAME`: The name of the S3 bucket to store files in (e.g. user avatars)
-
-Avatars are uploaded to the `avatars/(user.id)` folder within the bucket root.
-When running in development environments, avatars go to the `dev/avatars/(user.id)` folder of the bucket.
 
 ### Building Hub blocks
 
