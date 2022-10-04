@@ -1,4 +1,4 @@
-name = "blocks"
+name = "blockprotocol-preview"
 main = "../index.js"
 compatibility_date = "2022-06-30"
 
@@ -6,5 +6,5 @@ account_id = "c6499786332a3d2fb35419a7803ab7aa"
 workers_dev = true
 
 [[r2_buckets]]
-binding = "BLOCK_BUCKET"
-bucket_name = "blocks"
+binding = "BLOCKPROTOCOL_BUCKET"
+bucket_name = "blockprotocol-preview"
