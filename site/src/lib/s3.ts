@@ -40,11 +40,11 @@ export const getS3Bucket = (): string => {
   return s3Bucket;
 };
 
-export const resolveS3ResourcePath = (
+export const resolveS3ResourceKey = (
   category: "blocks" | "avatars",
-  subpath: string,
+  subkey: string,
 ): string => {
-  return `${category}/${subpath}`;
+  return `${category}/${subkey}`;
 };
 
 let s3BaseUrl: string | undefined;
@@ -62,9 +62,9 @@ const getS3BaseUrl = (): string => {
 };
 
 export const generateS3ResourceUrl = (
-  resolvedS3ResourcePath: string,
+  resolvedS3ResourceKey: string,
 ): string => {
-  return `${getS3BaseUrl()}${resolvedS3ResourcePath
+  return `${getS3BaseUrl()}/${resolvedS3ResourceKey
     .split("/")
     .map((segment: string) => encodeURIComponent(segment))
     .join("/")}`;

@@ -8,7 +8,7 @@ import {
   MultipartExtensions,
   multipartUploads,
 } from "../../lib/api/middleware/multipart-uploads.middleware";
-import { resolveS3ResourcePath } from "../../lib/s3";
+import { resolveS3ResourceKey } from "../../lib/s3";
 import { uploadFileBufferToS3 } from "../../lib/s3-file-uploads";
 import { formatErrors } from "../../util/api";
 
@@ -74,7 +74,7 @@ export default createAuthenticatedHandler<
           buffer,
           mime || "",
           new Date().valueOf().toString(),
-          resolveS3ResourcePath("avatars", user.id),
+          resolveS3ResourceKey("avatars", user.id),
         );
 
         // @todo should we delete previous user avatar before replacing it?

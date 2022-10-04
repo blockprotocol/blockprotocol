@@ -15,7 +15,7 @@ import {
   generateS3ResourceUrl,
   getS3Bucket,
   getS3Client,
-  resolveS3ResourcePath,
+  resolveS3ResourceKey,
 } from "../../s3";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
@@ -228,7 +228,7 @@ export const validateExpandAndUploadBlockFiles = async ({
    * In future we will store each version in its own folder, and add the version to the folder path
    * @see https://app.asana.com/0/0/1202539910143057/f (internal)
    */
-  const remoteStoragePrefix = resolveS3ResourcePath(
+  const remoteStoragePrefix = resolveS3ResourceKey(
     "blocks",
     stripLeadingAt(pathWithNamespace),
   );
