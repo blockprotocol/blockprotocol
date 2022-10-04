@@ -44,7 +44,7 @@ export const resolveS3ResourcePath = (
   category: "blocks" | "avatars",
   subpath: string,
 ): string => {
-  return `/${category}/${subpath}`;
+  return `${category}/${subpath}`;
 };
 
 let s3BaseUrl: string | undefined;
