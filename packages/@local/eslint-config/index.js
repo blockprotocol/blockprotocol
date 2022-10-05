@@ -275,6 +275,12 @@ module.exports = {
       },
     },
     {
+      files: ["packages/@blockprotocol/type-system/**"],
+      parserOptions: {
+        project: ["packages/@blockprotocol/type-system/tsconfig.json"],
+      },
+    },
+    {
       files: ["packages/@blockprotocol/type-system-node/**"],
       parserOptions: {
         project: ["packages/@blockprotocol/type-system-node/tsconfig.json"],

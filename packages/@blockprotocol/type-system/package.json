@@ -14,8 +14,8 @@
     "url": "https://hash.ai"
   },
   "sideEffects": false,
-  "module": "index.js",
-  "types": "index.d.ts",
+  "module": "main.js",
+  "types": "main.d.ts",
   "dependencies": {
     "@blockprotocol/type-system-node": "0.0.1",
     "@blockprotocol/type-system-web": "0.0.1"
