@@ -136,6 +136,39 @@ export const DevTools = () => {
           </Box>
         </Paper>
       </Resizable>
+      <style jsx global>{`
+        @font-face {
+          font-family: "Inter";
+          font-weight: 300;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/Inter-Italic.woff2")
+            format("woff2");
+        }
+
+        @font-face {
+          font-family: "Inter";
+          font-weight: 400;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/Inter-Regular.woff2")
+            format("woff2");
+        }
+
+        @font-face {
+          font-family: "Inter";
+          font-weight: 500;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/Inter-Medium.woff2")
+            format("woff2");
+        }
+
+        @font-face {
+          font-family: "Mono";
+          font-weight: 400;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/jet-brains-mono-regular.woff2")
+            format("woff2");
+        }
+
+        body {
+          margin: 0;
+        }
+      `}</style>
     </Box>
   );
 };
