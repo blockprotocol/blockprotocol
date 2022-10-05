@@ -2,15 +2,14 @@ import execa from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 import { Db } from "mongodb";
+import os from "node:os";
 import path from "node:path";
 import tar from "tar";
 import tmp from "tmp-promise";
 
 import { ExpandedBlockMetadata } from "../../blocks";
-import { isProduction } from "../../config";
 import { getDbBlock, insertDbBlock, updateDbBlock } from "./db";
-import { validateExpandAndUploadBlockFiles } from "./r2";
-import { isRunningOnVercel } from "./shared";
+import { validateExpandAndUploadBlockFiles } from "./s3";
 
 /**
  * Unpacks and uploads an npm package to remote storage
@@ -18,7 +17,7 @@ import { isRunningOnVercel } from "./shared";
  * @param npmPackageName the name of the npm package to mirror
  * @param pathWithNamespace the block's unique path in the format '@[namespace]/[path]', e.g. '@hash/code'
  */
-const mirrorNpmPackageToR2 = async ({
+const mirrorNpmPackageToS3 = async ({
   createdAt,
   npmPackageName,
   pathWithNamespace,
@@ -30,7 +29,6 @@ const mirrorNpmPackageToR2 = async ({
   expandedMetadata: ExpandedBlockMetadata;
 }> => {
   const { path: npmTarballFolder, cleanup: cleanupDistFolder } = await tmp.dir({
-    tmpdir: isRunningOnVercel ? "/tmp" : undefined, // Vercel allows limited file system access
     unsafeCleanup: true,
   });
 
@@ -45,9 +43,7 @@ const mirrorNpmPackageToR2 = async ({
       "--pack-destination",
       npmTarballFolder,
     ];
-    if (isRunningOnVercel) {
-      npmPackArgs.push("--cache", "/tmp/.npm");
-    }
+    npmPackArgs.push("--cache", path.resolve(os.tmpdir(), ".npm_cache"));
     ({ stdout: tarballFilename } = await execa(
       "npm",
       npmPackArgs,
@@ -135,7 +131,7 @@ export const publishBlockFromNpm = async (
 
   const blockLinkedToPackage = await getDbBlock({ npmPackageName });
 
-  if (isProduction && blockLinkedToPackage) {
+  if (blockLinkedToPackage) {
     throw new Error(
       `npm package '${npmPackageName}' is already linked to block '${blockLinkedToPackage.pathWithNamespace}'`,
       {
@@ -144,7 +140,7 @@ export const publishBlockFromNpm = async (
     );
   }
 
-  const { expandedMetadata } = await mirrorNpmPackageToR2({
+  const { expandedMetadata } = await mirrorNpmPackageToS3({
     createdAt,
     npmPackageName,
     pathWithNamespace,
