@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "main": "main.js",
-  "module": "module.js",
+  "browser": "browser.mjs",
   "types": "main.d.ts",
   "scripts": {
     "test": "jest"
