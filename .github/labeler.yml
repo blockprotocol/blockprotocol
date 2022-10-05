@@ -1,70 +1,70 @@
 "area: crates":
-  - "crates/**/*"
+  - "crates/**"
 
 "area: dependencies":
-  - "**/patches/**/*"
+  - "**/patches/**"
   - "**/yarn.lock"
 
 "area: hub":
-  - "hub/**/*"
+  - "hub/**"
 
 "area: infra":
   - ".changeset/config.json"
-  - ".github/**/*"
-  - ".husky/**/*"
-  - "infra/**/*"
-  - "scripts/**/*"
+  - ".github/**"
+  - ".husky/**"
+  - "infra/**"
+  - "scripts/**"
   - "*"
 
 "area: packages":
-  - "packages/**/*"
+  - "packages/**"
 
 "area: rfcs":
-  - "rfcs/**/*"
+  - "rfcs/**"
 
 "area: site":
-  - "site/**/*"
+  - "site/**"
 
 "area: spec":
-  - "site/src/_pages/spec/**/*"
+  - "site/src/_pages/spec/**"
 
 "package: @Þ/core":
-  - "packages/@blockprotocol/core/**/*"
+  - "packages/@blockprotocol/core/**"
 
 "package: @Þ/graph":
-  - "packages/@blockprotocol/graph/**/*"
+  - "packages/@blockprotocol/graph/**"
 
 "package: @Þ/hook":
-  - "packages/@blockprotocol/hook/**/*"
+  - "packages/@blockprotocol/hook/**"
 
 "package: @Þ/type-system":
-  - "packages/@blockprotocol/type-system/**/*"
-  - "packages/@blockprotocol/type-system-node/**/*"
-  - "packages/@blockprotocol/type-system-web/**/*"
+  - "packages/@blockprotocol/type-system/**"
+  - "packages/@blockprotocol/type-system-node/**"
+  - "packages/@blockprotocol/type-system-web/**"
 
 "package: @local/*":
-  - "packages/@local/**/*"
+  - "packages/@local/**"
 
 "package: block-scripts":
-  - "packages/block-scripts/**/*"
+  - "packages/block-scripts/**"
 
 "package: block-template-custom-element":
-  - "packages/block-template-custom-element/**/*"
+  - "packages/block-template-custom-element/**"
 
 "package: block-template-html":
-  - "packages/block-template-html/**/*"
+  - "packages/block-template-html/**"
 
 "package: block-template-react":
-  - "packages/block-template-react/**/*"
+  - "packages/block-template-react/**"
 
 "package: blockprotocol":
-  - "packages/blockprotocol/**/*"
+  - "packages/blockprotocol/**"
 
 "package: create-block-app":
-  - "packages/create-block-app/**/*"
+  - "packages/create-block-app/**"
 
 "package: mock-block-dock":
-  - "packages/mock-block-dock/**/*"
+  - "packages/mock-block-dock/**"
 
 "site: docs":
-  - "site/src/_pages/docs/**/*"
+  - "site/src/_pages/docs/**"
