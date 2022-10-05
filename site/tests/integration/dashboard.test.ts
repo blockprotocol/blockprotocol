@@ -1,6 +1,5 @@
 import { expect, test } from "playwright-test-coverage";
 
-import { shouldAllowNpmBlockPublishing } from "../../src/lib/config";
 import { resetDb } from "../shared/fixtures";
 import { login } from "../shared/nav";
 
@@ -25,7 +24,9 @@ test("dashboard page should contain key elements", async ({ page }) => {
   for (const [text, url] of [
     [
       "Publish a block",
-      shouldAllowNpmBlockPublishing ? "/blocks/publish" : "/@alice/blocks",
+      process.env.NEXT_PUBLIC_NPM_PUBLISHING
+        ? "/blocks/publish"
+        : "/@alice/blocks",
     ],
     ["Build a block", "/docs/developing-blocks"],
     ["Create a Type", null],

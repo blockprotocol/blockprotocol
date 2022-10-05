@@ -8,6 +8,7 @@ import withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app";
 import { Router, useRouter } from "next/router";
 import { DefaultSeo, DefaultSeoProps } from "next-seo";
+import { SnackbarProvider } from "notistack";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TagManager from "react-gtm-module";
 
@@ -131,10 +132,12 @@ const MyApp = ({
         <CacheProvider value={emotionCache}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <PageLayout>
-              <DefaultSeo {...defaultSeoConfig} />
-              <Component {...pageProps} />
-            </PageLayout>
+            <SnackbarProvider maxSnack={3}>
+              <PageLayout>
+                <DefaultSeo {...defaultSeoConfig} />
+                <Component {...pageProps} />
+              </PageLayout>
+            </SnackbarProvider>
           </ThemeProvider>
         </CacheProvider>
       </SiteMapContext.Provider>

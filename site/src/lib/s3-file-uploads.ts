@@ -1,42 +1,19 @@
-import {
-  PutObjectCommand,
-  PutObjectCommandInput,
-  S3Client,
-} from "@aws-sdk/client-s3";
+import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import mime from "mime-types";
+import path from "node:path";
 
-import { mustGetEnvVar } from "../util/api";
-import { isProduction } from "./config";
-
-export const defaultBucket =
-  process.env.BP_AWS_S3_BUCKET_NAME ?? "blockprotocol";
-
-const getClient = () => {
-  return new S3Client({
-    region: mustGetEnvVar("BP_AWS_REGION"),
-    credentials: {
-      accessKeyId: mustGetEnvVar("BP_AWS_ACCESS_KEY_ID"),
-      secretAccessKey: mustGetEnvVar("BP_AWS_SECRET_ACCESS_KEY"),
-    },
-  });
-};
+import { generateS3ResourceUrl, getS3Bucket, getS3Client } from "./s3";
 
 export const uploadToS3 = async (
-  filenameWithoutExtension: string,
-  extension: string,
+  resourceKey: string,
   buffer: Buffer,
-  bucket?: string,
 ): Promise<{
   fullUrl: string;
   s3Key: string;
   s3Folder: string;
 }> => {
-  const client = getClient();
-
-  let filename = `${filenameWithoutExtension}.${extension}`;
-  if (!isProduction && !filename.startsWith("dev/")) {
-    filename = `dev/${filename}`;
-  }
+  const client = getS3Client();
+  const extension = path.extname(resourceKey);
 
   // AWS doesn't detect/apply SVG metadata properly
   let Metadata: any;
@@ -49,49 +26,33 @@ export const uploadToS3 = async (
   }
   const ACL = "public-read";
 
-  const Bucket = bucket ?? defaultBucket;
   const params: PutObjectCommandInput = {
-    Key: filename,
+    Key: resourceKey,
     Body: buffer,
     ACL,
-    Bucket,
+    Bucket: getS3Bucket(),
     ContentType,
     Metadata,
   };
   const command = new PutObjectCommand(params);
 
   let fullUrl;
-  const Key = filename;
   try {
     // PutObjectCommand does not return the full URL for an uploaded file.
     // the AWS lib-storage API would do this through Upload, but even it is currently not returning the correct values.
     // see https://github.com/aws/aws-sdk-js-v3/pull/2700
     // The below URL construction is based on above PR.
+    await client.send(command);
 
-    const [_putResult, endpoint] = await Promise.all([
-      client.send(command),
-      client.config.endpoint(),
-    ]);
-
-    const locationKey = params
-      .Key!.split("/")
-      .map((segment: string) => encodeURIComponent(segment))
-      .join("/");
-
-    fullUrl = `${endpoint.protocol}//${Bucket}.${endpoint.hostname}/${locationKey}`;
+    fullUrl = generateS3ResourceUrl(params.Key!);
   } catch (error) {
     throw new Error(`Could not upload image. ${error}`);
   }
 
-  const s3Folder = filename
-    .split(/(?=\/)/)
-    .slice(0, -1)
-    .join("");
-
   return {
     fullUrl,
-    s3Key: Key,
-    s3Folder,
+    s3Key: resourceKey,
+    s3Folder: path.dirname(resourceKey).replace(/\\/g, "/"),
   };
 };
 
@@ -102,7 +63,7 @@ export const uploadFileBufferToS3 = async (
   fileBuffer: Buffer,
   mimeType: string,
   filename: string,
-  folder: string,
+  keyPrefix: string,
 ): Promise<{
   fullUrl: string;
   s3Key: string;
@@ -113,8 +74,7 @@ export const uploadFileBufferToS3 = async (
   }
 
   const { fullUrl, s3Key } = await uploadToS3(
-    `${folder}/${filename}`,
-    extension,
+    `${keyPrefix}/${filename}.${extension}`,
     fileBuffer,
   );
   return {

@@ -2,6 +2,7 @@ import { body as bodyValidator, validationResult } from "express-validator";
 
 import { getDbBlock } from "../../../lib/api/blocks/db";
 import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
+import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
 import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
 import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
@@ -98,6 +99,8 @@ export default createAuthenticatedHandler<
         pathWithNamespace,
       });
       await revalidateBlockPages(res, shortname, slugifiedBlockName);
+
+      await notifySlackAboutBlock(block, "publish");
       return res.status(200).json({ block });
     } catch (err) {
       const errIsError = err instanceof Error;
