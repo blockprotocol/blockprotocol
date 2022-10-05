@@ -14,11 +14,20 @@
     "url": "https://hash.ai"
   },
   "sideEffects": false,
-  "module": "main.js",
+  "main": "main.js",
+  "module": "module.js",
   "types": "main.d.ts",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "@blockprotocol/type-system-node": "0.0.1",
     "@blockprotocol/type-system-web": "0.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "28.1.4",
+    "jest": "28.1.2",
+    "ts-jest": "28.0.5"
   },
   "collaborators": [
     "HASH"

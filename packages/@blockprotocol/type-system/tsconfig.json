@@ -1,4 +1,4 @@
 {
   "extends": "@local/tsconfig/dom.json",
-  "include": ["main.js", "main.d.ts"]
+  "include": ["main.js", "main.d.ts", "test"]
 }
