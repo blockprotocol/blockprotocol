@@ -32,7 +32,7 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
           onClick={() => setDebugMode(true)}
         >
           Preview Mode
-          <OnSwitch />
+          <OnSwitch sx={{ height: "20px", width: "40px", ml: "10px" }} />
         </button>
       </div>
       {childrenWithBorder}
@@ -95,12 +95,6 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
             align-content: baseline;
             display: flex;
             align-items: center;
-          }
-
-          :global(.mbd-debug-mode-toggle > svg) {
-            height: 20px;
-            width: 40px;
-            margin-left: 10px;
           }
 
           .mbd-debug-mode-toggle:hover {
