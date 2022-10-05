@@ -14,8 +14,19 @@
     "url": "https://hash.ai"
   },
   "sideEffects": false,
+  "exports": {
+    ".": {
+      "require": "./main.js",
+      "import": {
+        "default": "./module.mjs",
+        "types": "./module.d.ts"
+      },
+      "default": "./main.js"
+    },
+    "./package.json": "./package.json"
+  },
   "main": "main.js",
-  "browser": "browser.mjs",
+  "module": "module.mjs",
   "types": "main.d.ts",
   "scripts": {
     "test": "jest"
