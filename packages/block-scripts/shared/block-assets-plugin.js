@@ -1,5 +1,6 @@
-import fs from "fs-extra";
 import path from "node:path";
+
+import fs from "fs-extra";
 
 import { getPort } from "./config.js";
 import { generateDistBlockMetadata } from "./generate-dist-block-metadata.js";

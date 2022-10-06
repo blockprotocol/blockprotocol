@@ -48,7 +48,7 @@
     "@local/eslint-config": "0.0.0-private",
     "check-dependency-version-consistency": "3.0.1",
     "dotenv-flow": "3.2.0",
-    "eslint": "8.22.0",
+    "eslint": "8.24.0",
     "husky": "7.0.4",
     "lint-staged": "12.3.3",
     "lockfile-lint": "4.6.2",

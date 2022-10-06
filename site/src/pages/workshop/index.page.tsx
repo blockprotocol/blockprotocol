@@ -1,10 +1,11 @@
+import path from "node:path";
+
 import { Container } from "@mui/material";
 import fs from "fs-extra";
 import { GetStaticProps, NextPage } from "next";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import { NextSeo } from "next-seo";
-import path from "node:path";
 import { HTMLProps } from "react";
 import remarkGfm from "remark-gfm";
 

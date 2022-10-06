@@ -1,6 +1,7 @@
+import { UrlObject } from "node:url";
+
 // eslint-disable-next-line no-restricted-imports
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import { UrlObject } from "node:url";
 import {
   Children,
   cloneElement,
