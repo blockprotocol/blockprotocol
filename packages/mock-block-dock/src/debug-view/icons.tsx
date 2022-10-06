@@ -63,7 +63,7 @@ export const OffSwitch = ({ sx, ...props }: SvgIconProps) => {
 export const OnSwitch = ({ sx, ...props }: SvgIconProps) => {
   return (
     <SvgIcon
-      sx={sx}
+      sx={[...(Array.isArray(sx) ? sx : [sx])]}
       width="43"
       height="20"
       viewBox="0 0 43 20"
