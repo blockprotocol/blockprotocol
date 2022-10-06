@@ -1,6 +1,7 @@
-import fs from "fs-extra";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+
+import fs from "fs-extra";
 
 export interface PackageInfo {
   name: string;

@@ -1,9 +1,10 @@
+import path from "node:path";
+
 import fs from "fs-extra";
 import matter from "gray-matter";
 import { htmlToText } from "html-to-text";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
-import path from "node:path";
 import remarkMdx from "remark-mdx";
 import remarkMdxDisableExplicitJsx from "remark-mdx-disable-explicit-jsx";
 import remarkParse from "remark-parse";

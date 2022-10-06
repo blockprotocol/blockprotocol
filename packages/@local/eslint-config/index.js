@@ -68,6 +68,7 @@ module.exports = {
     "import/prefer-default-export": "off",
     "no-console": "error",
     "no-dupe-class-members": "off",
+    "react/no-unknown-property": ["error", { ignore: ["jsx", "global"] }], // <style jsx global> is valid
     "react/prop-types": "off",
     // because we are using typescript this is redundant
     "jsx-a11y/anchor-is-valid": "off",

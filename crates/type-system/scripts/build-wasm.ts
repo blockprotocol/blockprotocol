@@ -1,8 +1,9 @@
-import fs from "fs-extra";
 // @todo consider using execa
 import * as child_process from "node:child_process";
 import * as path from "node:path";
 import { fileURLToPath } from "node:url";
+
+import fs from "fs-extra";
 
 export const packageDirPath = path.dirname(fileURLToPath(import.meta.url));
 

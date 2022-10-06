@@ -1,5 +1,6 @@
-import { findUp } from "find-up";
 import path from "node:path";
+
+import { findUp } from "find-up";
 
 /**
  * Find the path to the project root, by searching upwards for the nearest package.json
