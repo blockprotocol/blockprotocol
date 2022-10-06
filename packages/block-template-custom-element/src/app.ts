@@ -41,6 +41,7 @@ export class BlockElement extends BlockElementBase<BlockEntityProperties> {
           properties: { name: (event.target as HTMLInputElement).value },
         },
       })
+      // eslint-disable-next-line no-console
       .catch((error) => console.error(`Error updating self: ${error}`));
   }
 

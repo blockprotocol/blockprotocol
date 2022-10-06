@@ -18,9 +18,13 @@
     "url": "https://hash.ai"
   },
   "scripts": {
+    "@local/eslint-config": "0.0.0-private",
     "build": "rimraf dist && cp -R src dist && cp block-metadata.json dist && cp block-schema.json dist && cp -R public dist",
     "dev": "echo \"Serving at http://localhost:63212\" && http-server -p 63212 ./dev",
+    "eslint": "8.24.0",
+    "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
+    "lint:eslint": "eslint .",
     "prepare": "rimraf ./dev/src && lnk -f ./src ./dev",
     "serve": "block-scripts serve"
   },
@@ -30,6 +34,7 @@
   },
   "dependencies": {},
   "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
     "block-scripts": "0.0.17",
     "eslint": "8.24.0",
     "http-server": "14.1.1",

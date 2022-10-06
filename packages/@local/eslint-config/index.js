@@ -266,21 +266,6 @@ module.exports = {
         ],
         "@typescript-eslint/no-floating-promises": "error",
       },
-      // {
-      //   files: ["packages/block-template-*/**/dev.tsx"],
-      //   rules: {
-      //     "import/no-extraneous-dependencies": [
-      //       "error",
-      //       { devDependencies: true },
-      //     ],
-      //   },
-      // },
-      // {
-      //   files: ["packages/block-template-custom-element/src/app.ts"],
-      //   rules: {
-      //     "no-console": "off",
-      //   },
-      // },
     },
   ],
 };
