@@ -5,8 +5,8 @@ import { devices } from "@playwright/test";
 
 const ci = process.env.CI === "true";
 
-// https://github.com/anishkny/playwright-test-coverage/issues/59
-process.env.ISTANBUL_CLI_OUTPUT = "../.nyc_output";
+// https://github.com/anishkny/playwright-test-coverage#options
+process.env.ISTANBUL_TEMP_DIR = "../.nyc_output";
 
 const integrationTestsBaseConfig = {
   retries: 1,
