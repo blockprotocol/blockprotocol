@@ -24,7 +24,11 @@ const script = async () => {
       )
     ).exitCode
   ) {
-    console.log(chalk.red("Please commit changes before running this script"));
+    console.log(
+      chalk.red(
+        "Please commit or revert changes in templates before running this script",
+      ),
+    );
     process.exit(1);
   }
 
@@ -58,19 +62,16 @@ const script = async () => {
 
     let filePathsWithEslintMentions: string[] = [];
     for (const filePath of rawFilePaths.split("\n")) {
+      const resolvedFilePath = path.resolve(
+        blockTemplatePackage.path,
+        filePath,
+      );
       if (
-        (await fs.pathExists(filePath)) &&
+        (await fs.pathExists(resolvedFilePath)) &&
         (filePath.includes("eslint") ||
-          (
-            await fs.readFile(
-              path.join(blockTemplatePackage.path, filePath),
-              "utf8",
-            )
-          ).includes("eslint"))
+          (await fs.readFile(resolvedFilePath, "utf8")).includes("eslint"))
       ) {
-        filePathsWithEslintMentions.push(
-          path.resolve(blockTemplatePackage.path, filePath),
-        );
+        filePathsWithEslintMentions.push(resolvedFilePath);
       }
     }
 
