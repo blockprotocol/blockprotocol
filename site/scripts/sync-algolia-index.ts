@@ -1,9 +1,10 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import algoliasearch from "algoliasearch";
 import * as envalid from "envalid";
 import fs from "fs-extra";
 import matter from "gray-matter";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import siteMap from "../site-map.json" assert { type: "json" };
 import { SiteMapPage } from "../src/lib/sitemap";

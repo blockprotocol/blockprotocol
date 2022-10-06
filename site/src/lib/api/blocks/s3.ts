@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import {
   DeleteObjectsCommand,
   ListObjectsV2Command,
@@ -7,7 +9,6 @@ import { BlockMetadata } from "@blockprotocol/core";
 import fs from "fs-extra";
 import { globby } from "globby";
 import mime from "mime-types";
-import path from "node:path";
 import fetch from "node-fetch";
 
 import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";

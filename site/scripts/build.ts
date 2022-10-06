@@ -1,7 +1,8 @@
+import path from "node:path";
+
 import chalk from "chalk";
 import execa from "execa";
 import fs from "fs-extra";
-import path from "node:path";
 
 const script = async () => {
   console.log(chalk.bold("Building..."));

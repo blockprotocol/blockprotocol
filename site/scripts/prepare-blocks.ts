@@ -10,6 +10,9 @@
  * We plan to separate block artifacts from the Vercel deployment in the future.
  * This script will be removed, but its parts will be recycled.
  */
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import Ajv, { JSONSchemaType } from "ajv";
 import chalk from "chalk";
 import * as envalid from "envalid";
@@ -19,8 +22,6 @@ import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import slugify from "slugify";
 import tmp from "tmp-promise";
 

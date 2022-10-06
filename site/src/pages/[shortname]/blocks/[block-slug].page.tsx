@@ -1,3 +1,5 @@
+import crypto from "node:crypto";
+
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
@@ -12,7 +14,6 @@ import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import { NextSeo } from "next-seo";
-import crypto from "node:crypto";
 import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
