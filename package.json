@@ -18,17 +18,16 @@
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
     "fix:eslint": "turbo run --continue fix:eslint",
-    "fix:markdownlint": "markdownlint --fix \"**/*\"",
-    "fix:prettier": "prettier --cache --write --ignore-unknown \"**/*.*\"",
+    "fix:markdownlint": "markdownlint --dot --fix .",
+    "fix:prettier": "prettier --cache --write --ignore-unknown .",
     "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
-    "@todo.2": "Remove the ignore argument below once react-block-loader is upgraded to 0.2 spec",
     "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "turbo run --continue lint:eslint",
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
-    "lint:markdownlint": "markdownlint \"**/*\"",
-    "lint:prettier": "prettier --cache --check --ignore-unknown \"**/*\"",
+    "lint:markdownlint": "markdownlint --dot .",
+    "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
     "dev": "yarn workspace @blockprotocol/site dev",
@@ -37,7 +36,7 @@
     "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./site/\""
   },
   "lint-staged": {
-    "**/*": [
+    "**": [
       "suppress-exit-code markdownlint --fix",
       "suppress-exit-code prettier --write"
     ]

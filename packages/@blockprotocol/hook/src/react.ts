@@ -100,6 +100,7 @@ type Hook<T extends HTMLElement> = {
     service: HookBlockHandler | null;
     node: T;
     type: string;
+    entityId: string;
     path: string;
   };
 };
@@ -112,7 +113,8 @@ type Hook<T extends HTMLElement> = {
  *            embedding application is notified when the underlying DOM node
  *            inside the ref changes
  * @param type The type of hook – i.e, "text"
- * @param path The path to the data associated with the hook
+ * @param entityId The entityId of the entity on which to store data associated with the hook
+ * @param path The path in the entity's properties to the data associated with the hook
  * @param fallback A fallback to be called if the embedding application doesn't
  *                 implement the hook service, or doesn't implement this
  *                 specific type of hook. Return a function to "teardown" your
@@ -122,6 +124,7 @@ export const useHook = <T extends HTMLElement>(
   service: HookBlockHandler | null,
   ref: RefObject<T | null | void>,
   type: string,
+  entityId: string,
   path: string,
   fallback: (node: T) => void | (() => void),
 ) => {
@@ -178,6 +181,7 @@ export const useHook = <T extends HTMLElement>(
       existingHook &&
       existingHook.service === service &&
       existingHook.node === node &&
+      existingHook.entityId === entityId &&
       existingHook.path === path &&
       existingHook.type === type
     ) {
@@ -198,6 +202,7 @@ export const useHook = <T extends HTMLElement>(
       const reuseId =
         existingHook &&
         existingHook.service === service &&
+        existingHook.entityId === entityId &&
         existingHook.path === path &&
         existingHook.type === type;
 
@@ -206,6 +211,7 @@ export const useHook = <T extends HTMLElement>(
         params: {
           service,
           type,
+          entityId,
           path,
           node,
         },
@@ -229,6 +235,7 @@ export const useHook = <T extends HTMLElement>(
                 await service.hook({
                   data: {
                     hookId,
+                    entityId,
                     path,
                     type,
                     node: null,
@@ -256,6 +263,7 @@ export const useHook = <T extends HTMLElement>(
             .hook({
               data: {
                 hookId: hook.id,
+                entityId,
                 node,
                 type,
                 path,
