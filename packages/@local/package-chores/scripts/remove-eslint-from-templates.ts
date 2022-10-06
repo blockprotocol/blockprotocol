@@ -82,7 +82,7 @@ const script = async () => {
             .map((filePath) => path.relative(monorepoRoot, filePath))
             .join(
               "\n  ",
-            )}\nPlease remove them. All custom eslint directives should be moved to .eslintrc.cjs`,
+            )}\n All ESLint traces should be removable before publish. Custom directives should be moved to .eslintrc.cjs`,
         ),
       );
       process.exit(1);

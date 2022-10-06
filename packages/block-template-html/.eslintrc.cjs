@@ -9,4 +9,12 @@ module.exports = {
     tsconfigRootDir: ".",
     project: `${__dirname}/tsconfig.json`,
   },
+  overrides: [
+    {
+      files: ["src/app.js"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+  ],
 };

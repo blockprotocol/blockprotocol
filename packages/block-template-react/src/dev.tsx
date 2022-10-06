@@ -1,4 +1,3 @@
-/* eslint import/no-extraneous-dependencies: ["error", { devDependencies: true }] */
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 

@@ -9,4 +9,15 @@ module.exports = {
     tsconfigRootDir: ".",
     project: `${__dirname}/tsconfig.json`,
   },
+  overrides: [
+    {
+      files: ["src/dev.tsx"],
+      rules: {
+        "import/no-extraneous-dependencies": [
+          "error",
+          { devDependencies: true },
+        ],
+      },
+    },
+  ],
 };
