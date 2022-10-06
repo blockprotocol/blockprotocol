@@ -59,13 +59,14 @@ const script = async () => {
     let filePathsWithEslintMentions: string[] = [];
     for (const filePath of rawFilePaths.split("\n")) {
       if (
-        filePath.includes("eslint") ||
-        (
-          await fs.readFile(
-            path.join(blockTemplatePackage.path, filePath),
-            "utf8",
-          )
-        ).includes("eslint")
+        (await fs.pathExists(filePath)) &&
+        (filePath.includes("eslint") ||
+          (
+            await fs.readFile(
+              path.join(blockTemplatePackage.path, filePath),
+              "utf8",
+            )
+          ).includes("eslint"))
       ) {
         filePathsWithEslintMentions.push(
           path.resolve(blockTemplatePackage.path, filePath),
@@ -73,7 +74,7 @@ const script = async () => {
       }
     }
 
-    if (filePathsWithEslintMentions) {
+    if (filePathsWithEslintMentions.length) {
       console.log(
         chalk.red(
           `\nThe following files in this template still mention ESLint:\n  ${filePathsWithEslintMentions
