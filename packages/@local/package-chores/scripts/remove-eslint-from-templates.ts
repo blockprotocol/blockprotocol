@@ -32,6 +32,7 @@ const script = async () => {
     );
 
     await fs.remove(path.join(blockTemplatePackage.path, ".eslintrc.cjs"));
+
     const packageJsonFilePath = path.join(
       blockTemplatePackage.path,
       "package.json",
@@ -42,10 +43,42 @@ const script = async () => {
     delete packageJson.devDependencies["eslint"];
     delete packageJson.devDependencies["@local/eslint-config"];
 
-    await fs.writeFile(
-      packageJsonFilePath,
-      format(JSON.stringify(packageJson), { filepath: "package.json" }),
-    );
+    const formattedPackageJson = format(JSON.stringify(packageJson), {
+      filepath: "package.json",
+    });
+    await fs.writeFile(packageJsonFilePath, formattedPackageJson);
+
+    const { stdout: rawFilePaths } = await execa("git", ["ls-files"], {
+      cwd: blockTemplatePackage.path,
+      reject: false,
+    });
+    console.log(rawFilePaths);
+
+    let filePathsWithEslintMentions: string[] = [];
+    for (const filePath of rawFilePaths.split("\n")) {
+      if (
+        filePath.includes("eslint") ||
+        (
+          await fs.readFile(
+            path.join(blockTemplatePackage.path, filePath),
+            "utf8",
+          )
+        ).includes("eslint")
+      ) {
+        filePathsWithEslintMentions.push(filePath);
+      }
+    }
+
+    if (filePathsWithEslintMentions) {
+      console.log(
+        chalk.red(
+          `\nThe following files in this template still mention ESLint:\n  ${filePathsWithEslintMentions.join(
+            "\n  ",
+          )}\nPlease remove them. All custom eslint directives should be moved to .eslintrc.cjs`,
+        ),
+      );
+      process.exit(1);
+    }
 
     process.stdout.write(" Done \n");
   }
