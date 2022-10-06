@@ -1,7 +1,8 @@
+import path from "node:path";
+
 import chalk from "chalk";
 import { findUp } from "find-up";
 import fs from "fs-extra";
-import path from "node:path";
 
 import { printSpacer } from "../../print-spacer.js";
 import { doesUserAgree } from "./does-user-agree.js";

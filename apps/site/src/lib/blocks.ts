@@ -1,3 +1,5 @@
+import path from "node:path";
+
 import {
   BlockMetadata,
   BlockMetadataRepository,
@@ -6,7 +8,6 @@ import {
 import fs from "fs-extra";
 import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
-import path from "node:path";
 import sanitize from "sanitize-html";
 
 import { FRONTEND_URL } from "./config";

@@ -1,6 +1,7 @@
+import path from "node:path";
+
 import fs from "fs-extra";
 import { Db } from "mongodb";
-import path from "node:path";
 import tar from "tar";
 import tmp from "tmp-promise";
 

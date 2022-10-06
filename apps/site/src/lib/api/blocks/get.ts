@@ -1,5 +1,6 @@
-import fs from "fs-extra";
 import path from "node:path";
+
+import fs from "fs-extra";
 
 import { ExpandedBlockMetadata } from "../../blocks";
 import { getDbBlock, getDbBlocks } from "./db";
