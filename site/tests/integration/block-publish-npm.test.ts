@@ -29,7 +29,11 @@ test.beforeEach(async ({ page }) => {
 test("user should be able to publish block & see it on the list", async ({
   page,
 }) => {
-  test.skip();
+  test.skip(
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    "NEXT_PUBLIC_NPM_PUBLISHING is not set",
+  );
+
   await page.goto("/blocks");
 
   // block list empty state should be visible
@@ -60,15 +64,19 @@ test("user should be able to publish block & see it on the list", async ({
   ).toBeVisible();
 
   await expect(page.locator("[data-testid=list-view-card]")).toBeVisible();
-  await expect(page.locator("[data-testid=list-view-card] a")).toHaveText(
-    "@alice",
+  await expect(page.locator("[data-testid=list-view-card]")).toContainText(
+    "test-npm-block block",
   );
 });
 
 test("user should not be able to publish an invalid npm-package", async ({
   page,
 }) => {
-  test.skip();
+  test.skip(
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    "NEXT_PUBLIC_NPM_PUBLISHING is not set",
+  );
+
   await page.goto("/blocks/publish/npm");
 
   await fillBlockDetails(page, "react", dummyBlockName);
@@ -82,7 +90,11 @@ test("user should not be able to publish an invalid npm-package", async ({
 test("user should not be able to publish an already-used npm-package", async ({
   page,
 }) => {
-  test.skip();
+  test.skip(
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    "NEXT_PUBLIC_NPM_PUBLISHING is not set",
+  );
+
   /** @todo update 'already-taken' name check so that it can be checked in these tests (e.g. by having the check activated by custom environment variable, not `isProduction`) */
   await publishBlock({
     page,
@@ -104,7 +116,11 @@ test("user should not be able to publish an already-used npm-package", async ({
 test("user should not be able to publish an block with already-taken name", async ({
   page,
 }) => {
-  test.skip();
+  test.skip(
+    !process.env.NEXT_PUBLIC_NPM_PUBLISHING,
+    "NEXT_PUBLIC_NPM_PUBLISHING is not set",
+  );
+
   await publishBlock({
     page,
     blockName: dummyBlockName,
@@ -118,6 +134,8 @@ test("user should not be able to publish an block with already-taken name", asyn
   await page.locator("text=Publish block to hub").click();
 
   await expect(
-    page.locator(`text=block name '@alice/${dummyBlockName}' already exists`),
+    page.locator(
+      `text=Block name '${dummyBlockName}' already exists in account alice`,
+    ),
   ).toBeVisible();
 });
