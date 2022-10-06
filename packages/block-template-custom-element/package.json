@@ -20,7 +20,7 @@
   "scripts": {
     "build": "block-scripts build",
     "dev": "block-scripts dev",
-    "format": "prettier \"**/*\" --write --ignore-unknown",
+    "format": "prettier --write --ignore-unknown .",
     "lint:tsc": "tsc --noEmit",
     "serve": "block-scripts serve"
   },
