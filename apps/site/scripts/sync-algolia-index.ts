@@ -72,7 +72,11 @@ const script = async () => {
 
   for (const markdownPageInfo of markdownPageInfos) {
     const markdown = await fs.readFile(
-      path.resolve(monorepoRoot, "site", markdownPageInfo.markdownFilePath),
+      path.resolve(
+        monorepoRoot,
+        "apps/site",
+        markdownPageInfo.markdownFilePath,
+      ),
       "utf8",
     );
 
