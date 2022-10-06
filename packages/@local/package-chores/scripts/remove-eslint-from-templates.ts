@@ -10,19 +10,23 @@ import { monorepoRoot } from "./shared/monorepo-root";
 const script = async () => {
   console.log(chalk.bold("Removing ESLint from templates..."));
 
+  const publishablePackages = await listPublishablePackages();
+
   if (
     (
-      await execa("git", ["diff", "--exit-code"], {
-        cwd: monorepoRoot,
-        reject: false,
-      })
+      await execa(
+        "git",
+        ["diff", "--exit-code", ...publishablePackages.map(({ path }) => path)],
+        {
+          cwd: monorepoRoot,
+          reject: false,
+        },
+      )
     ).exitCode
   ) {
     console.log(chalk.red("Please commit changes before running this script"));
     process.exit(1);
   }
-
-  const publishablePackages = await listPublishablePackages();
 
   for (const blockTemplatePackage of publishablePackages.filter(({ name }) =>
     name.match(/^block-template-/),
@@ -50,9 +54,7 @@ const script = async () => {
 
     const { stdout: rawFilePaths } = await execa("git", ["ls-files"], {
       cwd: blockTemplatePackage.path,
-      reject: false,
     });
-    console.log(rawFilePaths);
 
     let filePathsWithEslintMentions: string[] = [];
     for (const filePath of rawFilePaths.split("\n")) {
@@ -65,16 +67,20 @@ const script = async () => {
           )
         ).includes("eslint")
       ) {
-        filePathsWithEslintMentions.push(filePath);
+        filePathsWithEslintMentions.push(
+          path.resolve(blockTemplatePackage.path, filePath),
+        );
       }
     }
 
     if (filePathsWithEslintMentions) {
       console.log(
         chalk.red(
-          `\nThe following files in this template still mention ESLint:\n  ${filePathsWithEslintMentions.join(
-            "\n  ",
-          )}\nPlease remove them. All custom eslint directives should be moved to .eslintrc.cjs`,
+          `\nThe following files in this template still mention ESLint:\n  ${filePathsWithEslintMentions
+            .map((filePath) => path.relative(monorepoRoot, filePath))
+            .join(
+              "\n  ",
+            )}\nPlease remove them. All custom eslint directives should be moved to .eslintrc.cjs`,
         ),
       );
       process.exit(1);
