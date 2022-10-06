@@ -1,9 +1,9 @@
 import { Box, Skeleton, Typography } from "@mui/material";
-import { formatDistance } from "date-fns";
 import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { BlockProtocolLogoIcon } from "./icons";
+import { ClientOnlyLastUpdated } from "./last-updated";
 import { Link } from "./link";
 import { Spacer } from "./spacer";
 
@@ -239,12 +239,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
               {version}
             </Typography>
             <Typography color="gray.60" variant="bpMicroCopy">
-              {lastUpdated
-                ? `Updated 
-              ${formatDistance(new Date(lastUpdated), new Date(), {
-                addSuffix: true,
-              })}`
-                : ""}
+              <ClientOnlyLastUpdated value={lastUpdated} />
             </Typography>
           </Box>
           {/* Commenting this out since we don't currently track weekly downloads */}

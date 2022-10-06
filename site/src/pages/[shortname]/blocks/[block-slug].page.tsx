@@ -7,7 +7,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { formatDistance } from "date-fns";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { MDXRemote } from "next-mdx-remote";
@@ -34,6 +33,7 @@ import {
   retrieveBlockReadme,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
+import { formatUpdatedAt } from "../../../util/html-utils";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(
@@ -364,13 +364,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     component="span"
                     sx={{ display: { xs: "block", md: "inline-block" } }}
                   >
-                    {`Updated ${formatDistance(
-                      new Date(blockMetadata.lastUpdated),
-                      new Date(),
-                      {
-                        addSuffix: true,
-                      },
-                    )}`}
+                    {formatUpdatedAt(blockMetadata.lastUpdated)}
                   </Box>
                 </>
               ) : null}
