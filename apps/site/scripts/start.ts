@@ -6,7 +6,7 @@ const script = async () => {
     console.log(
       chalk.bold("Launching site in prod mode with enabled TEST_COVERAGE..."),
     );
-    await execa("nyc", ["--cwd=..", "--clean=false", "next", "start"], {
+    await execa("nyc", ["--cwd=../..", "--clean=false", "next", "start"], {
       stdio: "inherit",
     });
   } else {
