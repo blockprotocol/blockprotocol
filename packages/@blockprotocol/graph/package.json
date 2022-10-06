@@ -51,8 +51,8 @@
   "scripts": {
     "build": "yarn clean && tsc --skipLibCheck",
     "clean": "rimraf ./dist/",
-    "fix:eslint": "eslint --fix \"**/*\"",
-    "lint:eslint": "eslint \"**/*\"",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {

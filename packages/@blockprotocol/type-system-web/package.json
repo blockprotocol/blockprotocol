@@ -17,8 +17,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "eslint": "8.23.0",
-    "fix:eslint": "eslint --fix \"**/*\"",
-    "lint:eslint": "eslint \"**/*\"",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "devDependencies": {

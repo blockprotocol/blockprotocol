@@ -22,8 +22,8 @@
   "bin": "cli.js",
   "scripts": {
     "dev": "BLOCK_PROTOCOL_SITE_HOST=http://localhost:3000 node cli.js",
-    "fix:eslint": "eslint --fix \"**/*\"",
-    "lint:eslint": "eslint \"**/*\"",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {

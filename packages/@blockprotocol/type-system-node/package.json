@@ -15,8 +15,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "fix:eslint": "eslint --fix \"**/*\"",
-    "lint:eslint": "eslint \"**/*\"",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
     "test": "jest"
   },

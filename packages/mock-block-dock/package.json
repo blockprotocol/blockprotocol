@@ -31,8 +31,8 @@
     "clean": "rimraf ./dist/",
     "codegen": "node -p \"'export const MOCK_BLOCK_DOCK_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
     "dev": "concurrently -n webpack,webpack-dev-server -c green,cyan \"yarn build:dev --watch\" \"yarn run-dev-server\"",
-    "fix:eslint": "eslint --fix \"**/*\"",
-    "lint:eslint": "eslint \"**/*\"",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },

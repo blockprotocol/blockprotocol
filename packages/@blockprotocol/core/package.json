@@ -32,8 +32,8 @@
     "build:cjs": "tsc --skipLibCheck --project tsconfig.build.cjs.json",
     "build:esm": "tsc --skipLibCheck --project tsconfig.build.esm.json",
     "clean": "rimraf ./dist/",
-    "fix:eslint": "eslint --fix \"**/*\"",
-    "lint:eslint": "eslint \"**/*\"",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {

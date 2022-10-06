@@ -21,8 +21,8 @@
   },
   "bin": "create-block-app.js",
   "scripts": {
-    "fix:eslint": "eslint --fix \"**/*\"",
-    "lint:eslint": "eslint \"**/*\""
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint ."
   },
   "dependencies": {
     "chalk": "5.0.1",
