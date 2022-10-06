@@ -4,7 +4,10 @@ import chalk from "chalk";
 import * as envalid from "envalid";
 import execa from "execa";
 
-import { listPublishablePackages } from "./shared/list-publishable-packages";
+import {
+  listPublishablePackages,
+  printPublishablePackages,
+} from "./shared/publishable-packages";
 
 const defaultExecaOptions = {
   env: {
@@ -31,6 +34,7 @@ const script = async () => {
   );
 
   const publishablePackages = await listPublishablePackages();
+  printPublishablePackages(publishablePackages);
 
   for (const publishablePackage of publishablePackages) {
     const url = `https://registry.npmjs.com/${publishablePackage.name}/${publishablePackage.version}`;

@@ -1,5 +1,6 @@
 import fs from "fs-extra";
 import path from "node:path";
+import { WriteStream } from "node:tty";
 import { monorepoRoot } from "./monorepo-root";
 
 export interface PackageInfo {
@@ -41,11 +42,14 @@ export const listPublishablePackages = async (): Promise<PackageInfo[]> => {
     }
   }
 
-  console.log(
-    `Publishable package names: ${["", ...result.map(({ name }) => name)].join(
-      "\n- ",
-    )}`,
-  );
-
   return result;
+};
+
+export const printPublishablePackages = (packageInfos: PackageInfo[]): void => {
+  console.log(
+    `Publishable package names: ${[
+      "",
+      ...packageInfos.map(({ name }) => name),
+    ].join("\n- ")}\n`,
+  );
 };

@@ -4,7 +4,10 @@ import execa from "execa";
 import path from "node:path";
 import sleep from "sleep-promise";
 
-import { listPublishablePackages } from "./shared/list-publishable-packages";
+import {
+  listPublishablePackages,
+  printPublishablePackages,
+} from "./shared/publishable-packages";
 
 // These variables are hardcoded on purpose. We don’t want to publish to a real registry by mistake.
 const npmRegistry = "http://localhost:4873";
@@ -25,6 +28,7 @@ const script = async () => {
   console.log(chalk.bold("Publishing packages to local registry..."));
 
   const publishablePackages = await listPublishablePackages();
+  printPublishablePackages(publishablePackages);
 
   logStepStart("Login into local registry");
 

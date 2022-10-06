@@ -4,7 +4,7 @@ import chalk from "chalk";
 import execa from "execa";
 import fs from "fs-extra";
 import { format } from "prettier";
-import { listPublishablePackages } from "./shared/list-publishable-packages";
+import { listPublishablePackages } from "./shared/publishable-packages";
 import { monorepoRoot } from "./shared/monorepo-root";
 
 const script = async () => {
@@ -44,7 +44,7 @@ const script = async () => {
 
     await fs.writeFile(
       packageJsonFilePath,
-      format(JSON.stringify(packageJson), { parser: "json" }),
+      format(JSON.stringify(packageJson), { filepath: "package.json" }),
     );
 
     process.stdout.write(" Done \n");
