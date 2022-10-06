@@ -1,10 +1,11 @@
+import os from "node:os";
+import path from "node:path";
+import { promisify } from "node:util";
+
 import { logStepEnd, logStepStart } from "@local/script-resources/logging";
 import chalk from "chalk";
 import execa from "execa";
 import fs from "fs-extra";
-import os from "node:os";
-import path from "node:path";
-import { promisify } from "node:util";
 import tmp from "tmp-promise";
 import treeKill from "tree-kill";
 import untildify from "untildify";
@@ -36,7 +37,7 @@ const defaultExecaOptions = {
 } as const;
 
 const script = async () => {
-  console.log(chalk.bold("E2E-testing create-block-app..."));
+  console.log(chalk.bold("Smoke-testing create-block-app..."));
 
   const tmpNodeCacheDir = await tmp.dir({ unsafeCleanup: true });
 

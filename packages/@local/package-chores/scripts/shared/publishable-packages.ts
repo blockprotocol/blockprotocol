@@ -1,7 +1,8 @@
-import fs from "fs-extra";
 import path from "node:path";
 import { WriteStream } from "node:tty";
 import { monorepoRoot } from "./monorepo-root";
+
+import fs from "fs-extra";
 
 export interface PackageInfo {
   name: string;

@@ -1,7 +1,8 @@
+import path from "node:path";
+
 import { logStepEnd, logStepStart } from "@local/script-resources/logging";
 import chalk from "chalk";
 import execa from "execa";
-import path from "node:path";
 import sleep from "sleep-promise";
 
 import {
