@@ -1,17 +1,12 @@
 import fs from "fs-extra";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { monorepoRoot } from "./monorepo-root";
 
 export interface PackageInfo {
   name: string;
   path: string;
   version: string;
 }
-
-const monorepoRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../../../../..",
-);
 
 const packageParentFolders = [
   path.resolve(monorepoRoot, "packages"),
