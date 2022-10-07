@@ -4,6 +4,12 @@ const fs = require("node:fs");
 const monorepoRoot = path.resolve(__dirname, "../../..");
 
 /**
+ * ESlint requires .eslintignore file to be placed next to .eslintrc.cjs file.
+ * Because .*ignore files are not composable, we cannot import or otherwise reuse
+ * a top-level .eslintignore. To avoid repetition and to maintain a coherent behavior
+ * of ESLint CLI and IDE extensions, we generate ignore patterns for each workspace
+ * based from .gitignore. This is done via ignorePatterns option in ESLint config.
+ *
  * @param {string} workspaceDirPath
  * @returns {string[]}
  */
@@ -38,6 +44,7 @@ module.exports = (workspaceDirPath) => {
       if (line.startsWith(workspaceDirPrefix)) {
         return [line.replace(workspaceDirPrefix, "")];
       }
+      // Keep other patterns as is
       return [line];
     })
     .flat();
