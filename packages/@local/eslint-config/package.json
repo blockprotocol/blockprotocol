@@ -2,7 +2,7 @@
   "name": "@local/eslint-config",
   "version": "0.0.0-private",
   "private": true,
-  "main": "index.js",
+  "main": "main.js",
   "dependencies": {
     "@babel/eslint-parser": "7.19.1",
     "@babel/preset-react": "^7.16.7",
