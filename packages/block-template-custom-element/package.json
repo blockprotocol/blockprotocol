@@ -22,6 +22,7 @@
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
     "serve": "block-scripts serve"
   },
