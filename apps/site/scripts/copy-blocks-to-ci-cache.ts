@@ -7,7 +7,7 @@ import fs from "fs-extra";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../..",
+  "../../..",
 );
 
 const script = async () => {
@@ -16,11 +16,11 @@ const script = async () => {
   const env = envalid.cleanEnv(process.env, {
     BLOCKS_DIR: envalid.str({
       desc: "location of built blocks that are ready to be served",
-      default: path.resolve(monorepoRoot, "site/public/blocks"),
+      default: path.resolve(monorepoRoot, "apps/site/public/blocks"),
     }),
     BLOCKS_CI_CACHE_DIR: envalid.str({
       desc: "Location of blocks in CI cache",
-      default: path.resolve(monorepoRoot, "site/.next/cache/blocks"),
+      default: path.resolve(monorepoRoot, "apps/site/.next/cache/blocks"),
     }),
   });
 

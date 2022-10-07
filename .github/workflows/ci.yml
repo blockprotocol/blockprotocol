@@ -248,8 +248,8 @@ jobs:
 
       - uses: actions/cache@v3
         with:
-          path: site/.next/cache
-          key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('site/**') }}
+          path: apps/site/.next/cache
+          key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('apps/site/**') }}
           restore-keys: |
             ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-
             ${{ runner.os }}-site-next-cache
@@ -263,7 +263,7 @@ jobs:
           mkdir -p var/logs
           mkdir -p var/site
 
-          cat << EOF > site/.env.local
+          cat << EOF > apps/site/.env.local
           SESSION_SECRET=dev-session-secret
           HASHING_SECRET=dev-hashing-secret
 
@@ -293,15 +293,15 @@ jobs:
       - name: Build and launch frontend
         if: ${{ success() || failure() }}
         run: |
-          yarn workspace @blockprotocol/site build
-          yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
+          yarn workspace @apps/site build
+          yarn workspace @apps/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
         env:
           TEST_COVERAGE: true
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=integration-${{ matrix.device }}
+        run: yarn workspace @apps/site playwright test --project=integration-${{ matrix.device }}
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
@@ -335,7 +335,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: site-integration-tests-playwright-report-${{ matrix.device }}
-          path: site/playwright-report
+          path: apps/site/playwright-report
           retention-days: 14
 
       - name: Upload artifact playwright-var

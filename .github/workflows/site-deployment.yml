@@ -47,7 +47,7 @@ jobs:
       - run: yarn playwright install-deps chrome
 
       - name: Run Playwright tests
-        run: yarn workspace @blockprotocol/site playwright test --project=e2e
+        run: yarn workspace @apps/site playwright test --project=e2e
         env:
           PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment.environment != 'production' && github.event.deployment_status.target_url || 'https://blockprotocol.org' }}
 
@@ -56,4 +56,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: site-e2e-tests-playwright-report
-          path: site/playwright-report
+          path: apps/site/playwright-report

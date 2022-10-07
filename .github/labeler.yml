@@ -1,9 +1,18 @@
+"app: site":
+  - "apps/site/**"
+
+"area: apps":
+  - "apps/**"
+
 "area: crates":
   - "crates/**"
 
 "area: dependencies":
   - "**/patches/**"
   - "**/yarn.lock"
+
+"area: docs":
+  - "apps/site/src/_pages/docs/**"
 
 "area: hub":
   - "hub/**"
@@ -22,11 +31,8 @@
 "area: rfcs":
   - "rfcs/**"
 
-"area: site":
-  - "site/**"
-
 "area: spec":
-  - "site/src/_pages/spec/**"
+  - "apps/site/src/_pages/spec/**"
 
 "package: @Þ/core":
   - "packages/@blockprotocol/core/**"
@@ -64,6 +70,3 @@
 
 "package: mock-block-dock":
   - "packages/mock-block-dock/**"
-
-"site: docs":
-  - "site/src/_pages/docs/**"

@@ -1,6 +1,6 @@
 import fs from "fs-extra";
 
-const dummyEmailsFilePath = "../var/site/dummy-emails.log";
+const dummyEmailsFilePath = "../../var/site/dummy-emails.log";
 
 export const readValueFromRecentDummyEmail = async (
   prefix: string,

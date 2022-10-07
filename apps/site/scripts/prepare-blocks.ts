@@ -35,7 +35,7 @@ import { FRONTEND_URL } from "../src/lib/config";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../..",
+  "../../..",
 );
 
 const defaultExecaOptions = {
@@ -387,7 +387,7 @@ const script = async () => {
     }),
     BLOCKS_DIR: envalid.str({
       desc: "Location of ready-to-be-served blocks",
-      default: path.resolve(monorepoRoot, "site/public/blocks"),
+      default: path.resolve(monorepoRoot, "apps/site/public/blocks"),
     }),
     BLOCK_INFOS_DIR: envalid.str({
       desc: "Location of block infos",

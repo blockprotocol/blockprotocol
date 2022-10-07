@@ -2,14 +2,14 @@
 
 This folder contains the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
-- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
+- the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec)
+- the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs)
 
 ## Local development
 
 ### BP Site
 
-1.  Add a `site/.env.local` environment variable file with the following environment variables:
+1.  Add a `apps/site/.env.local` environment variable file with the following environment variables:
 
     - `HASHING_SECRET`: the secret used to hash API keys
     - `SESSION_SECRET`: the secret used to sign the session ID cookie
@@ -19,7 +19,7 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     - `MONGODB_PASSWORD`: the database password
     - `NEXT_PUBLIC_FRONTEND_URL` (optional): the URL where the frontend is hosted (defaults to `http://localhost:3000`)
 
-    Example minimal file at `site/.env.local` (with **zero** security) to make local development work when following the instructions below:
+    Example minimal file at `apps/site/.env.local` (with **zero** security) to make local development work when following the instructions below:
 
     ```sh
     SESSION_SECRET=dev-session-secret
@@ -90,14 +90,14 @@ If you want to send verification codes to an email address, the following AWS en
 
 Before serving any blocks via the Hub, they need to be prepared (i.e. built in most cases).
 Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn workspace @blockprotocol/site exe prepare-blocks.ts` prepares blocks.
+The build-script `yarn workspace @apps/site exe prepare-blocks.ts` prepares blocks.
 
 ```sh
 # prepare all blocks
-yarn workspace @blockprotocol/site exe scripts/prepare-blocks.ts
+yarn workspace @apps/site exe scripts/prepare-blocks.ts
 
 # prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" workspace @blockprotocol/site exe scripts/prepare-blocks.ts
+BLOCK_FILTER="@hash/*" workspace @apps/site exe scripts/prepare-blocks.ts
 ```
 
 Once the blocks are built, simply `yarn dev` and head over to
@@ -108,7 +108,7 @@ Once the blocks are built, simply `yarn dev` and head over to
 If no build-config is provided to the build-script, it will pick up all build-configs changed by the
 last commit. This is part of `yarn build` which is also used by the deployment platform Vercel.
 
-Vercel preserves nextjs' cache `/site/.next/cache` between builds. The build script synchronizes its
+Vercel preserves nextjs' cache `apps/site/.next/cache` between builds. The build script synchronizes its
 results with that cache and rebuilds only what has changed to speed up builds.
 
 ## API Routes
@@ -362,7 +362,7 @@ Response Body:
 ## Testing
 
 [blockprotocol.org](https://blockprotocol.org) is covered by browser-based tests written with [Playwright](https://playwright.dev).
-These tests are located in the `site/tests` folder.
+These tests are located in the `apps/site/tests` folder.
 They are grouped into:
 
 - integration tests
@@ -381,7 +381,7 @@ To run integration tests locally, prepare the blocks, launch the database and st
 Then run this command in a separate terminal:
 
 ```sh
-yarn workspace @blockprotocol/site playwright test --project integration-chrome
+yarn workspace @apps/site playwright test --project integration-chrome
 ```
 
 You can pick a different [Playwright project](./playwright.config.ts) (e.g. `--project=integration-iphone`) or limit the tests you want to run (e.g. `--grep="My test title"`).
@@ -400,7 +400,7 @@ To run E2E test locally, use this command:
 ```sh
 export PLAYWRIGHT_TEST_BASE_URL=https://blockprotocol.org
 
-yarn workspace @blockprotocol/site playwright test --project e2e
+yarn workspace @apps/site playwright test --project e2e
 ```
 
 Omitting `PLAYWRIGHT_TEST_BASE_URL` will launch E2E tests for a locally running Þ instance.
@@ -411,7 +411,7 @@ This is helpful for debugging.
 When running site integration tests in CI, we collect test coverage and report it to [codecov.io](https://codecov.io) (https://app.codecov.io/gh/blockprotocol/blockprotocol).
 This helps us detect parts of the site that are potentially more prone to bugs.
 
-The resulting coverage report includes source files in the `site` folder.
+The resulting coverage report includes source files in the `apps/site` folder.
 A statement is marked as covered if it has been invoked during either `next build` or `next start` (both on the Node.js side and in the browser).
 
 E2E tests do not report coverage as they run against a production-like server environment and are designed to only sense-check the deployment.
@@ -440,19 +440,19 @@ All commands are executed from the repo root dir.
 1.  Build the site:
 
     ```sh
-    yarn workspace @blockprotocol/site build
+    yarn workspace @apps/site build
     ```
 
 1.  Start the site:
 
     ```sh
-    yarn workspace @blockprotocol/site start
+    yarn workspace @apps/site start
     ```
 
 1.  Open another terminal and run integration tests, e.g.:
 
     ```sh
-    yarn workspace @blockprotocol/site playwright test --project=integration-chrome
+    yarn workspace @apps/site playwright test --project=integration-chrome
     ```
 
     You can pick a different [Playwright project](./playwright.config.ts) (e.g. `--project=integration-iphone`) or limit the tests you want to run (e.g. `--grep="My test title"`).
