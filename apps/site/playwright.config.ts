@@ -6,7 +6,7 @@ import { devices } from "@playwright/test";
 const ci = process.env.CI === "true";
 
 // https://github.com/anishkny/playwright-test-coverage#options
-process.env.ISTANBUL_TEMP_DIR = "../.nyc_output";
+process.env.ISTANBUL_TEMP_DIR = "../../.nyc_output";
 
 const integrationTestsBaseConfig = {
   retries: 1,
