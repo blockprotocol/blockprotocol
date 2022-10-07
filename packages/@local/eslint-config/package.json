@@ -3,6 +3,11 @@
   "version": "0.0.0-private",
   "private": true,
   "main": "index.js",
+  "scripts": {
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
+    "lint:tsc": "tsc --noEmit"
+  },
   "dependencies": {
     "@babel/eslint-parser": "7.19.1",
     "@babel/preset-react": "^7.16.7",
@@ -18,5 +23,8 @@
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "8.0.0",
     "eslint-plugin-unicorn": "44.0.1"
+  },
+  "devDependencies": {
+    "typescript": "4.8.2"
   }
 }
