@@ -12,7 +12,7 @@ services:
       - 9000:9000
       - 9001:9001
     volumes:
-      - ../var/site/s3:/data
+      - ../../var/site/s3:/data
   mongo:
     image: mongo
     restart: always

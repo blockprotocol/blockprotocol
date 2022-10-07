@@ -93,7 +93,7 @@ test("Docs page should contain key elements and interactions should work", async
     ),
   ).toHaveAttribute(
     "href",
-    "https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec",
+    "https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec",
   );
 
   // confirm docs footer nav have correct links

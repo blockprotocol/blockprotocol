@@ -4,11 +4,11 @@
   "type": "module",
   "workspaces": {
     "packages": [
+      "apps/*",
       "crates/*",
       "packages/*",
       "packages/@blockprotocol/*",
-      "packages/@local/*",
-      "site"
+      "packages/@local/*"
     ],
     "nohoist": [
       "**/@types/prismjs"
@@ -30,10 +30,10 @@
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
-    "dev": "yarn workspace @blockprotocol/site dev",
-    "dev:seed-db": "yarn workspace @blockprotocol/site dev:seed-db",
-    "dev:db": "yarn workspace @blockprotocol/site dev:db",
-    "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./site/\""
+    "dev": "yarn workspace @apps/site dev",
+    "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
+    "dev:db": "yarn workspace @apps/site dev:db",
+    "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./apps/*\""
   },
   "lint-staged": {
     "**": [

@@ -11,7 +11,7 @@ import { SiteMapPage } from "../src/lib/sitemap";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
-  "../..",
+  "../../..",
 );
 
 type AlgoliaRecord = {
@@ -72,7 +72,11 @@ const script = async () => {
 
   for (const markdownPageInfo of markdownPageInfos) {
     const markdown = await fs.readFile(
-      path.resolve(monorepoRoot, "site", markdownPageInfo.markdownFilePath),
+      path.resolve(
+        monorepoRoot,
+        "apps/site",
+        markdownPageInfo.markdownFilePath,
+      ),
       "utf8",
     );
 

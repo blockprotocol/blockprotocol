@@ -346,9 +346,9 @@ module.exports = {
       },
     },
     {
-      files: ["site/**"],
+      files: ["apps/site/**"],
       parserOptions: {
-        tsconfigRootDir: `${__dirname}/../../../site`,
+        tsconfigRootDir: `${__dirname}/../../../apps/site`,
         project: "tsconfig.json",
       },
       rules: {
@@ -428,7 +428,7 @@ module.exports = {
       },
     },
     {
-      files: ["site/playwright.config.ts"],
+      files: ["apps/site/playwright.config.ts"],
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
@@ -447,7 +447,7 @@ module.exports = {
       },
     },
     {
-      files: ["site/tests/**"],
+      files: ["apps/site/tests/**"],
       rules: {
         "import/no-extraneous-dependencies": "off",
       },
