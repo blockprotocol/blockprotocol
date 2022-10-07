@@ -234,7 +234,7 @@ module.exports = {
       },
     },
     {
-      files: ["*.config.{c,m,}js", "*rc.{c,m,}js", "*.d.ts"],
+      files: ["*.config.{c,m,}{j,t}s", "*.d.ts", "*rc.{c,m,}js"],
       rules: {
         "global-require": "off",
         "import/no-extraneous-dependencies": [

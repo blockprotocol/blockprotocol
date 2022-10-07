@@ -89,16 +89,6 @@ module.exports = {
   overrides: [
     {
       // needed because of package.json in tests (for CJS)
-      files: ["**/playwright.config.ts"],
-      rules: {
-        "import/no-extraneous-dependencies": [
-          "error",
-          { devDependencies: true },
-        ],
-      },
-    },
-    {
-      // needed because of package.json in tests (for CJS)
       files: ["tests/**"],
       rules: {
         "import/no-extraneous-dependencies": ["off"],
