@@ -7,6 +7,10 @@ import { format } from "prettier";
 import { listPublishablePackages } from "./shared/publishable-packages";
 import { monorepoRoot } from "./shared/monorepo-root";
 
+// We depend on @local/eslint-config in yarn workspaces to be able to run ESLint.
+// However, we don't want this dependency to appear on npm for templates, so we remove it.
+// This script is meant to be run before publishing.
+
 const script = async () => {
   console.log(chalk.bold("Removing ESLint from templates..."));
 
