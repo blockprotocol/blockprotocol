@@ -8,7 +8,7 @@ index dbc417b..112f165 100644
              throw new Error(`Keyword ${kwd} is already defined`);
 -        if (!KEYWORD_NAME.test(kwd))
 -            throw new Error(`Keyword ${kwd} has invalid name`);
-+        // commenting out to allow '@context' as a keyword - see site/src/lib/jsonSchema.ts
++        // commenting out to allow '@context' as a keyword - see apps/site/src/lib/jsonSchema.ts
 +        // @todo fix this properly
 +        // if (!KEYWORD_NAME.test(kwd))
 +        //     throw new Error(`Keyword ${kwd} has invalid name`);

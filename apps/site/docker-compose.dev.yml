@@ -1,0 +1,37 @@
+# Use root/example as user/password credentials
+version: "3.1"
+
+services:
+  minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${S3_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${S3_SECRET_ACCESS_KEY}
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - ../../var/site/s3:/data
+  mongo:
+    image: mongo
+    restart: always
+    env_file:
+      - .env.local
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD:-password}
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    env_file:
+      - .env.local
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGODB_USERNAME:-root}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGODB_PASSWORD:-password}
+      ME_CONFIG_MONGODB_URL: "mongodb://${MONGODB_USERNAME:-root}:${MONGODB_PASSWORD:-password}@mongo:27017/"

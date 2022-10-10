@@ -32,12 +32,7 @@ const script = async () => {
       directory: "dist",
     },
     port: await getPort("development"),
-    watchFiles: [
-      "block-schema.json",
-      "package.json",
-      "public/**/*",
-      "README.md",
-    ],
+    watchFiles: ["block-schema.json", "package.json", "public/**", "README.md"],
   };
 
   const buildWebpackConfig = await generateBuildWebpackConfig("development");

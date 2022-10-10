@@ -15,9 +15,12 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "typescript": "4.8.2"
   },

@@ -9,7 +9,7 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@blockprotocol/site", "@crates/*", "@local/*"],
+  "ignore": ["@apps/*", "@crates/*", "@local/*"],
   "fixed": [
     [
       "@blockprotocol/type-system",
