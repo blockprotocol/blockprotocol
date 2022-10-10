@@ -1,20 +1,3 @@
-const sharedNoRestrictedImportsConfig = {
-  paths: [
-    {
-      name: "lodash",
-      message:
-        "Please import lodash functions from lodash/functionName for CJS/ESM interop. Check if your task needs lodash at https://you-dont-need.github.io/You-Dont-Need-Lodash-Underscore/#/",
-    },
-  ],
-  patterns: [
-    {
-      group: ["fs", "fs/*"],
-      message:
-        "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
-    },
-  ],
-};
-
 /** @type {import("eslint").Linter.Config} */
 module.exports = {
   // this is the highest config lower ones will automatically extend
@@ -78,7 +61,25 @@ module.exports = {
         assert: "either",
       },
     ],
-    "no-restricted-imports": ["error", sharedNoRestrictedImportsConfig],
+    "no-restricted-imports": [
+      "error",
+      {
+        paths: [
+          {
+            name: "lodash",
+            message:
+              "Please import lodash functions from lodash/functionName for CJS/ESM interop. Check if your task needs lodash at https://you-dont-need.github.io/You-Dont-Need-Lodash-Underscore/#/",
+          },
+        ],
+        patterns: [
+          {
+            group: ["fs", "fs/*"],
+            message:
+              "Please use 'fs-extra' for promise-based API, extra methods and consistency.",
+          },
+        ],
+      },
+    ],
     "react/function-component-definition": [
       "error",
       {
@@ -226,101 +227,16 @@ module.exports = {
       },
     },
     {
-      files: ["packages/**/*.test.{j,t}s{x,}"],
+      files: ["*.test.{j,t}s{x,}"],
       env: {
         jest: true,
         node: true,
       },
     },
     {
-      // plugin does not support .js file extensions in .ts files, which ESM TS projects require
-      // https://github.com/import-js/eslint-plugin-import/issues/2446
-      files: [
-        "packages/@blockprotocol/graph/**",
-        "packages/@blockprotocol/hook/**",
-      ],
+      files: ["*.config.{c,m,}{j,t}s", "*.d.ts", "*rc.{c,m,}js"],
       rules: {
-        "import/no-unresolved": "off",
-      },
-    },
-    {
-      // config files and type declarations
-      files: ["*.config.{c,m,}js", "*rc.{c,m,}js", "*.d.ts"],
-      rules: {
-        "import/no-extraneous-dependencies": "off",
         "global-require": "off",
-      },
-    },
-    {
-      files: ["crates/type-system/**"],
-      parserOptions: {
-        project: ["crates/type-system/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/core/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/core/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/graph/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/graph/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/hook/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/hook/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/type-system-node/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/type-system-node/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@blockprotocol/type-system-web/**"],
-      parserOptions: {
-        project: ["packages/@blockprotocol/type-system-web/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@local/package-chores/**"],
-      parserOptions: {
-        project: ["packages/@local/package-chores/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/@local/script-resources/**"],
-      parserOptions: {
-        project: ["packages/@local/script-resources/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/block-scripts/**", "packages/blockprotocol/**"],
-      rules: {
-        "no-console": "off",
-        "import/extensions": ["error", "always"],
-      },
-    },
-    {
-      files: ["packages/block-template-custom-element/**"],
-      parserOptions: {
-        project: ["packages/block-template-custom-element/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/block-template-react/**"],
-      parserOptions: {
-        project: ["packages/block-template-react/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/block-template-*/**/dev.tsx"],
-      rules: {
         "import/no-extraneous-dependencies": [
           "error",
           { devDependencies: true },
@@ -328,128 +244,13 @@ module.exports = {
       },
     },
     {
-      files: ["packages/block-template-custom-element/src/app.ts"],
-      rules: {
-        "no-console": "off",
-      },
-    },
-    {
-      files: ["packages/blockprotocol/**"],
-      parserOptions: {
-        project: ["packages/blockprotocol/tsconfig.json"],
-      },
-    },
-    {
-      files: ["packages/mock-block-dock/**"],
-      parserOptions: {
-        project: ["packages/mock-block-dock/tsconfig.json"],
-      },
-    },
-    {
-      files: ["apps/site/**"],
-      parserOptions: {
-        tsconfigRootDir: `${__dirname}/../../../apps/site`,
-        project: "tsconfig.json",
-      },
-      rules: {
-        "no-restricted-imports": [
-          "error",
-          {
-            ...sharedNoRestrictedImportsConfig,
-            paths: [
-              ...sharedNoRestrictedImportsConfig.paths,
-              {
-                // @todo Remove playwright-test-coverage when https://github.com/microsoft/playwright/issues/7030 is resolved
-                name: "@playwright/test",
-                importNames: ["test"],
-                message:
-                  'Please import "expect" and "test" from "playwright-test-coverage".',
-              },
-              {
-                name: "react",
-                importNames: ["FC", "VFC", "VoidFunctionComponent"],
-                message: "Please use FunctionComponent instead.",
-              },
-              {
-                name: "@mui/material",
-                importNames: ["Link"],
-                message:
-                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-              },
-              {
-                name: "@mui/material/Link",
-                message:
-                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-              },
-              {
-                name: "next",
-                importNames: ["Link"],
-                message:
-                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-              },
-              {
-                name: "next/link",
-                message:
-                  "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-              },
-              {
-                name: "@mui/material",
-                importNames: ["Button", "TextField", "Alert"],
-                message:
-                  "Please use the custom wrapper component in src/component instead.",
-              },
-              {
-                name: "@mui/material/Button",
-                importNames: ["default"],
-                message:
-                  "Please use the custom src/components/Button component instead.",
-              },
-              {
-                name: "@mui/material/TextField",
-                importNames: ["default"],
-                message:
-                  "Please use the custom src/components/TextField component instead.",
-              },
-              {
-                name: "@mui/material/Alert",
-                importNames: ["default"],
-                message:
-                  "Please use the custom src/components/Alert component instead.",
-              },
-              {
-                name: "notistack",
-                importNames: ["useSnackbar"],
-                message:
-                  "Please use the custom src/components/hooks/useSnackbar hook instead.",
-              },
-            ],
-          },
-        ],
-      },
-    },
-    {
-      files: ["apps/site/playwright.config.ts"],
-      rules: {
-        "import/no-extraneous-dependencies": [
-          "error",
-          { devDependencies: true },
-        ],
-      },
-    },
-    {
-      files: ["**/scripts/**"],
+      files: ["scripts/**"],
       rules: {
         "import/no-extraneous-dependencies": [
           "error",
           { devDependencies: true },
         ],
         "no-console": "off",
-      },
-    },
-    {
-      files: ["apps/site/tests/**"],
-      rules: {
-        "import/no-extraneous-dependencies": "off",
       },
     },
     {

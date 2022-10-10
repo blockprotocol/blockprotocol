@@ -20,7 +20,9 @@
   "scripts": {
     "build": "block-scripts build",
     "dev": "block-scripts dev",
+    "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
     "serve": "block-scripts serve"
   },
@@ -33,8 +35,10 @@
     "lit": "^2.2.5"
   },
   "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.6",
     "block-scripts": "0.0.17",
+    "eslint": "8.24.0",
     "mock-block-dock": "0.0.32",
     "prettier": "2.7.1",
     "react": "^18.2.0",

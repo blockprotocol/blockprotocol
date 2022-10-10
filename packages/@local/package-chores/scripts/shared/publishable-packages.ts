@@ -1,5 +1,6 @@
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { WriteStream } from "node:tty";
+import { monorepoRoot } from "./monorepo-root";
 
 import fs from "fs-extra";
 
@@ -8,11 +9,6 @@ export interface PackageInfo {
   path: string;
   version: string;
 }
-
-const monorepoRoot = path.resolve(
-  path.dirname(fileURLToPath(import.meta.url)),
-  "../../../../..",
-);
 
 const packageParentFolders = [
   path.resolve(monorepoRoot, "packages"),
@@ -47,11 +43,14 @@ export const listPublishablePackages = async (): Promise<PackageInfo[]> => {
     }
   }
 
-  console.log(
-    `Publishable package names: ${["", ...result.map(({ name }) => name)].join(
-      "\n- ",
-    )}`,
-  );
-
   return result;
+};
+
+export const printPublishablePackages = (packageInfos: PackageInfo[]): void => {
+  console.log(
+    `Publishable package names: ${[
+      "",
+      ...packageInfos.map(({ name }) => name),
+    ].join("\n- ")}\n`,
+  );
 };

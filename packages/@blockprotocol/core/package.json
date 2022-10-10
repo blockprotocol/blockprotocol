@@ -32,6 +32,8 @@
     "build:cjs": "tsc --skipLibCheck --project tsconfig.build.cjs.json",
     "build:esm": "tsc --skipLibCheck --project tsconfig.build.esm.json",
     "clean": "rimraf ./dist/",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
@@ -39,7 +41,9 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
+    "eslint": "8.24.0",
     "rimraf": "^3.0.2",
     "typescript": "4.8.2"
   }

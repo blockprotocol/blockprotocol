@@ -12,7 +12,9 @@
     "dev:db": "docker-compose -f docker-compose.dev.yml --env-file .env.local up",
     "dev:seed-db": "yarn exe scripts/seed-db.ts",
     "exe": "node --unhandled-rejections=strict --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require=@local/script-resources/suppress-experimental-warnings.cjs --require dotenv-flow/config",
+    "fix:eslint": "eslint --fix .",
     "generate-blockmetadata-schema": "typescript-json-schema ../../packages/@blockprotocol/core/dist/esm/types.d.ts BlockMetadata --required true --out public/schemas/block-metadata.json",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
     "start": "yarn exe scripts/start.ts"
   },
@@ -101,6 +103,7 @@
   },
   "devDependencies": {
     "@babel/runtime": "^7.17.9",
+    "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@playwright/test": "^1.26.1",
     "@types/busboy": "^1.3.0",
@@ -131,6 +134,7 @@
     "babel-plugin-istanbul": "^6.1.1",
     "chalk": "5.0.1",
     "dotenv-flow": "3.2.0",
+    "eslint": "8.24.0",
     "micromatch": "^4.0.4",
     "nyc": "^15.1.0",
     "playwright": "^1.26.1",

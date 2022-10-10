@@ -17,14 +17,14 @@
   "scripts": {
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
-    "fix:eslint": "eslint --fix .",
+    "fix:eslint": "turbo run --continue fix:eslint",
     "fix:markdownlint": "markdownlint --dot --fix .",
     "fix:prettier": "prettier --cache --write --ignore-unknown .",
     "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
     "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "turbo run --continue lint:eslint",
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
     "lint:markdownlint": "markdownlint --dot .",
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
@@ -37,7 +37,6 @@
   },
   "lint-staged": {
     "**": [
-      "suppress-exit-code eslint --fix",
       "suppress-exit-code markdownlint --fix",
       "suppress-exit-code prettier --write"
     ]
@@ -45,10 +44,8 @@
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.6",
     "@changesets/cli": "^2.24.4",
-    "@local/eslint-config": "0.0.0-private",
     "check-dependency-version-consistency": "3.0.1",
     "dotenv-flow": "3.2.0",
-    "eslint": "8.24.0",
     "husky": "7.0.4",
     "lint-staged": "12.3.3",
     "lockfile-lint": "4.6.2",

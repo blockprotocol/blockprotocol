@@ -51,6 +51,8 @@
   "scripts": {
     "build": "yarn clean && tsc --skipLibCheck",
     "clean": "rimraf ./dist/",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
@@ -58,7 +60,9 @@
     "lit": "^2.2.5"
   },
   "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
+    "eslint": "8.24.0",
     "rimraf": "^3.0.2",
     "typescript": "4.8.2"
   },

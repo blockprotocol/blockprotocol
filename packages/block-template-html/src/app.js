@@ -47,7 +47,6 @@ input.addEventListener("change", (event) => {
         },
       })
       .catch((err) => {
-        // eslint-disable-next-line no-console
         console.error(`Error calling updateEntity: ${err}`);
       });
   }
