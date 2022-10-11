@@ -78,7 +78,9 @@ export const SendLoginCodeScreen: FunctionComponent<
 
   const handleClose = () => {
     reset();
-    if (onClose) onClose();
+    if (onClose) {
+      onClose();
+    }
   };
 
   const helperText = touchedEmailInput
@@ -121,7 +123,9 @@ export const SendLoginCodeScreen: FunctionComponent<
           value={emailValue}
           disabled={disabled}
           onChange={({ target }) => {
-            if (apiErrorMessage) setApiErrorMessage(undefined);
+            if (apiErrorMessage) {
+              setApiErrorMessage(undefined);
+            }
             setEmailValue(target.value);
           }}
         />

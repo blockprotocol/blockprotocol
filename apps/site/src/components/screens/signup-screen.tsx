@@ -80,7 +80,9 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
 
   const handleClose = () => {
     reset();
-    if (onClose) onClose();
+    if (onClose) {
+      onClose();
+    }
   };
 
   const helperText = touchedEmailInput
@@ -121,7 +123,9 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
           variant="outlined"
           value={emailValue}
           onChange={({ target }) => {
-            if (apiErrorMessage) setApiErrorMessage(undefined);
+            if (apiErrorMessage) {
+              setApiErrorMessage(undefined);
+            }
             setEmailValue(target.value);
           }}
         />

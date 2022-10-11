@@ -28,7 +28,9 @@ export const InlineLink: FunctionComponent<InlineLinkProps> = ({
       <Box
         onMouseOver={() => setOpen(true)}
         onMouseLeave={(error) => {
-          if (!popperRef.current) return;
+          if (!popperRef.current) {
+            return;
+          }
           if (!popperRef.current.contains(error.currentTarget)) {
             setOpen(false);
           }
