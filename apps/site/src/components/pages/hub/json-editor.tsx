@@ -21,7 +21,9 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (!highlightedElementRef.current) return;
+    if (!highlightedElementRef.current) {
+      return;
+    }
     Prism.highlightElement(highlightedElementRef.current.children[0]!);
   }, [value]);
 
@@ -30,7 +32,9 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
    * the textarea
    */
   const handleTextAreaScroll = useCallback(() => {
-    if (!highlightedElementRef.current || !textAreaRef.current) return;
+    if (!highlightedElementRef.current || !textAreaRef.current) {
+      return;
+    }
 
     highlightedElementRef.current.scrollLeft = textAreaRef.current.scrollLeft;
     highlightedElementRef.current.scrollTop = textAreaRef.current.scrollTop;
@@ -38,7 +42,9 @@ export const JsonEditor = ({ onChange, value, height }: JsonEditorProps) => {
 
   const handleKeyDown = useCallback(
     (evt: KeyboardEvent<HTMLTextAreaElement>) => {
-      if (!textAreaRef.current) return;
+      if (!textAreaRef.current) {
+        return;
+      }
 
       if (evt.key === "Tab") {
         evt.preventDefault();
