@@ -71,9 +71,9 @@ const buildWasmPackage = (packageName: string, target: string) => {
   runWasmPack(target);
 
   const pkgFolderPath = path.parse(path.resolve("./pkg/"));
-  // cleanUp(pkgFolderPath);
 
   moveSrcFiles(pkgFolderPath, packageName);
+  cleanUp(pkgFolderPath);
 };
 
 const buildPackages = () => {

@@ -334,32 +334,6 @@ const brokenPropertyTypes: [any, ParsePropertyTypeError][] = [
   ],
 ];
 
-// describe("validatePropertyType", () => {
-//   test.each(propertyTypes)("validatePropertyType($title) succeeds", (input) => {
-//     expect(validatePropertyType(input)).toEqual({ type: "Ok", inner: null });
-//   });
-
-//   test.each(invalidPropertyTypes)(
-//     "validatePropertyType returns errors on: %s",
-//     (_, input, expected) => {
-//       expect(validatePropertyType(input)).toEqual({
-//         type: "Err",
-//         inner: expected,
-//       });
-//     },
-//   );
-
-//   test.each(brokenTypes)(
-//     "validatePropertyType cleanly returns errors on different type: %s",
-//     (input, expected) => {
-//       expect(validatePropertyType(input)).toEqual({
-//         type: "Err",
-//         inner: expected,
-//       });
-//     },
-//   );
-// });
-
 for (const propertyType of propertyTypes) {
   test(`validatePropertyType(${propertyType.title}) succeeds`, (t) => {
     t.deepEqual(validatePropertyType(propertyType), {
