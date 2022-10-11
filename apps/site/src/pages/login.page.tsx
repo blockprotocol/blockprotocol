@@ -54,8 +54,12 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     if (Object.values(parsedQuery).filter((value) => !!value).length > 0) {
-      if (parsedQuery.email) setEmail(parsedQuery.email);
-      if (parsedQuery.redirectPath) setRedirectPath(parsedQuery.redirectPath);
+      if (parsedQuery.email) {
+        setEmail(parsedQuery.email);
+      }
+      if (parsedQuery.redirectPath) {
+        setRedirectPath(parsedQuery.redirectPath);
+      }
 
       const { userId, verificationCodeId, code } = parsedQuery;
 

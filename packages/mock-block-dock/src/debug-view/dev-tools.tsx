@@ -93,7 +93,9 @@ export const DevTools = () => {
   const [width, setWidth] = useState<number>();
 
   useLayoutEffect(() => {
-    if (!wrapperRef.current) return;
+    if (!wrapperRef.current) {
+      return;
+    }
     setWidth(wrapperRef.current.getBoundingClientRect().width);
   }, []);
 
