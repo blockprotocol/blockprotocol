@@ -45,8 +45,6 @@
 
 "package: @Þ/type-system":
   - "packages/@blockprotocol/type-system/**"
-  - "packages/@blockprotocol/type-system-node/**"
-  - "packages/@blockprotocol/type-system-web/**"
 
 "package: @local/*":
   - "packages/@local/**"

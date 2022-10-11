@@ -14,37 +14,22 @@
     "url": "https://hash.ai"
   },
   "sideEffects": false,
-  "exports": {
-    ".": {
-      "require": "./main.js",
-      "import": {
-        "default": "./module.mjs",
-        "types": "./module.d.ts"
-      },
-      "default": "./main.js"
-    },
-    "./package.json": "./package.json"
-  },
-  "main": "main.js",
-  "module": "module.mjs",
-  "types": "main.d.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
-    "test": "jest"
-  },
-  "dependencies": {
-    "@blockprotocol/type-system-node": "0.0.1",
-    "@blockprotocol/type-system-web": "0.0.1"
+    "test": "ava"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
-    "@types/jest": "28.1.4",
+    "ava": "^4.3.3",
+    "cross-env": "^7.0.3",
     "eslint": "8.24.0",
-    "jest": "28.1.2",
-    "ts-jest": "28.0.5",
+    "ts-node": "10.8.0",
     "typescript": "4.8.2"
   },
   "collaborators": [

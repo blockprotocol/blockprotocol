@@ -37,7 +37,7 @@ We welcome [contributions](#contributing) to this repository. Within it you will
     - `@blockprotocol/core`: implements the Block Protocol Core specification for blocks and embedding applications
     - `@blockprotocol/graph`: implements the Block Protocol Graph specification for blocks and embedding applications
     - `@blockprotocol/hook`: implements the Block Protocol Hook service for blocks and embedding applications
-    - `@blockprotocol/type-system-{node,web}`: implements type system (autogerated from `crates/type-system`)
+    - `@blockprotocol/type-system`: implements type system (autogerated from `crates/type-system`)
     - `@local/*`: auxiliary packages for local development and testing
     - `block-scripts`: scripts used by `block-template-*`
     - `block-template-*`: starter templates for blocks, used by `create-block-app`

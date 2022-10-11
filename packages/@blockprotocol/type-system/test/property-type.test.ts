@@ -1,4 +1,11 @@
-import { ParsePropertyTypeError, PropertyType, validatePropertyType } from "..";
+import test from "ava";
+
+import {
+  ParsePropertyTypeError,
+  PropertyType,
+  validatePropertyType,
+} from "../dist";
+import { truncate } from "./shared/truncate";
 
 const propertyTypes: PropertyType[] = [
   {
@@ -151,8 +158,8 @@ const propertyTypes: PropertyType[] = [
   {
     kind: "propertyType",
     $id: "https://blockprotocol.org/@alice/types/property-type/user-id/v/2",
-    title: "User ID",
-    pluralTitle: "User IDs",
+    title: "User ID (2)",
+    pluralTitle: "User IDs (2)",
     oneOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -299,7 +306,7 @@ const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be
 // normally possible if we don't do something silly like the use of any below. This sanity check is important because
 // it is possible for wasm to error in unusual ways that can't easily be handled, and that should be viewed as a bug.
-const brokenTypes: [any, ParsePropertyTypeError][] = [
+const brokenPropertyTypes: [any, ParsePropertyTypeError][] = [
   [
     {},
     {
@@ -327,28 +334,61 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
   ],
 ];
 
-describe("validatePropertyType", () => {
-  test.each(propertyTypes)("validatePropertyType($title) succeeds", (input) => {
-    expect(validatePropertyType(input)).toEqual({ type: "Ok", inner: null });
+// describe("validatePropertyType", () => {
+//   test.each(propertyTypes)("validatePropertyType($title) succeeds", (input) => {
+//     expect(validatePropertyType(input)).toEqual({ type: "Ok", inner: null });
+//   });
+
+//   test.each(invalidPropertyTypes)(
+//     "validatePropertyType returns errors on: %s",
+//     (_, input, expected) => {
+//       expect(validatePropertyType(input)).toEqual({
+//         type: "Err",
+//         inner: expected,
+//       });
+//     },
+//   );
+
+//   test.each(brokenTypes)(
+//     "validatePropertyType cleanly returns errors on different type: %s",
+//     (input, expected) => {
+//       expect(validatePropertyType(input)).toEqual({
+//         type: "Err",
+//         inner: expected,
+//       });
+//     },
+//   );
+// });
+
+for (const propertyType of propertyTypes) {
+  test(`validatePropertyType(${propertyType.title}) succeeds`, (t) => {
+    t.deepEqual(validatePropertyType(propertyType), {
+      type: "Ok",
+      inner: null,
+    });
   });
+}
 
-  test.each(invalidPropertyTypes)(
-    "validatePropertyType returns errors on: %s",
-    (_, input, expected) => {
-      expect(validatePropertyType(input)).toEqual({
-        type: "Err",
-        inner: expected,
-      });
-    },
-  );
+for (const [
+  description,
+  invalidPropertyType,
+  expected,
+] of invalidPropertyTypes) {
+  test(`validatePropertyType returns errors on: ${description}`, (t) => {
+    t.deepEqual(validatePropertyType(invalidPropertyType), {
+      type: "Err",
+      inner: expected,
+    });
+  });
+}
 
-  test.each(brokenTypes)(
-    "validatePropertyType cleanly returns errors on different type: %s",
-    (input, expected) => {
-      expect(validatePropertyType(input)).toEqual({
-        type: "Err",
-        inner: expected,
-      });
-    },
-  );
-});
+for (const [brokenPropertyType, expected] of brokenPropertyTypes) {
+  test(`validatePropertyType returns errors on broken type: ${truncate(
+    brokenPropertyType,
+  )}`, (t) => {
+    t.deepEqual(validatePropertyType(brokenPropertyType), {
+      type: "Err",
+      inner: expected,
+    });
+  });
+}

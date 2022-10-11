@@ -1,6 +1,9 @@
-import { DataType, ParseDataTypeError, validateDataType } from "..";
+import test from "ava";
 
-const primitiveDataTypes: DataType[] = [
+import { DataType, ParseDataTypeError, validateDataType } from "../dist";
+import { truncate } from "./shared/truncate";
+
+const dataTypes: DataType[] = [
   {
     kind: "dataType",
     $id: "https://blockprotocol.org/@blockprotocol/types/data-type/boolean/v/1",
@@ -48,11 +51,12 @@ const primitiveDataTypes: DataType[] = [
 
 // These are data types which satisfy the TypeScript interface but are still invalid, and demonstrate the need for the
 // validation method
-const invalidDataTypes: [DataType, ParseDataTypeError][] = [
+const invalidDataTypeCases: [string, DataType, ParseDataTypeError][] = [
   [
+    "incorrectly versioned URI",
     {
       kind: "dataType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3", // incorrectly versioned URI
+      $id: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/2.3",
       title: "Text",
       description: "An ordered sequence of characters",
       type: "string",
@@ -69,7 +73,7 @@ const invalidDataTypes: [DataType, ParseDataTypeError][] = [
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be
 // normally possible if we don't do something silly like the use of any below. This sanity check is important because
 // it is possible for wasm to error in unusual ways that can't easily be handled, and that should be viewed as a bug.
-const brokenTypes: [any, ParseDataTypeError][] = [
+const brokenDataTypeCases: [any, ParseDataTypeError][] = [
   [
     {},
     {
@@ -97,25 +101,31 @@ const brokenTypes: [any, ParseDataTypeError][] = [
   ],
 ];
 
-describe("validateDataType", () => {
-  test.each(primitiveDataTypes)(
-    "validateDataType($title) succeeds",
-    (input) => {
-      expect(validateDataType(input)).toEqual({ type: "Ok", inner: null });
-    },
-  );
+for (const primitiveDataType of dataTypes) {
+  test(`validateDataType(${primitiveDataType.title}) succeeds`, (t) => {
+    t.deepEqual(validateDataType(primitiveDataType), {
+      type: "Ok",
+      inner: null,
+    });
+  });
+}
 
-  test.each(invalidDataTypes)(
-    "validateDataType returns errors on invalid data type: %s",
-    (input, expected) => {
-      expect(validateDataType(input)).toEqual({ type: "Err", inner: expected });
-    },
-  );
+for (const [description, invalidDataType, expected] of invalidDataTypeCases) {
+  test(`validateDataType returns errors on: ${description}`, (t) => {
+    t.deepEqual(validateDataType(invalidDataType), {
+      type: "Err",
+      inner: expected,
+    });
+  });
+}
 
-  test.each(brokenTypes)(
-    "validateDataType cleanly returns errors on different type: %s",
-    (input, expected) => {
-      expect(validateDataType(input)).toEqual({ type: "Err", inner: expected });
-    },
-  );
-});
+for (const [brokenType, expected] of brokenDataTypeCases) {
+  test(`validateDataType returns errors on broken type: ${truncate(
+    brokenType,
+  )}`, (t) => {
+    t.deepEqual(validateDataType(brokenType), {
+      type: "Err",
+      inner: expected,
+    });
+  });
+}

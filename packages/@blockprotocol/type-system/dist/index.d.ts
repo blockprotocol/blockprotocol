@@ -40,31 +40,6 @@ export interface Object<T> {
     required?: string[];
 }
 
-type __ParseEntityTypeErrorParseBaseUriError = ParseBaseUriError;
-type __ParseEntityTypeErrorParseLinksError = ParseLinksError;
-type __ParseEntityTypeErrorParsePropertyTypeObjectError = ParsePropertyTypeObjectError;
-type __ParseEntityTypeErrorParseVersionedUriError = ParseVersionedUriError;
-declare namespace ParseEntityTypeError {
-    export type InvalidPropertyTypeObject = { reason: "InvalidPropertyTypeObject"; inner: __ParseEntityTypeErrorParsePropertyTypeObjectError };
-    export type InvalidLinks = { reason: "InvalidLinks"; inner: __ParseEntityTypeErrorParseLinksError };
-    export type InvalidDefaultKey = { reason: "InvalidDefaultKey"; inner: __ParseEntityTypeErrorParseBaseUriError };
-    export type InvalidExamplesKey = { reason: "InvalidExamplesKey"; inner: __ParseEntityTypeErrorParseBaseUriError };
-    export type InvalidVersionedUri = { reason: "InvalidVersionedUri"; inner: __ParseEntityTypeErrorParseVersionedUriError };
-    export type InvalidJson = { reason: "InvalidJson"; inner: string };
-}
-
-export type ParseEntityTypeError = ParseEntityTypeError.InvalidPropertyTypeObject | ParseEntityTypeError.InvalidLinks | ParseEntityTypeError.InvalidDefaultKey | ParseEntityTypeError.InvalidExamplesKey | ParseEntityTypeError.InvalidVersionedUri | ParseEntityTypeError.InvalidJson;
-
-
-/**
- * Checks if a given Link Type is correctly formed
- *
- * @param {LinkType} linkType - The Link Type object to validate.
- * @returns {(Result.Ok|Result.Err<ParseLinkTypeError>)} - an Ok with null inner if valid, or an Err with an inner ParseLinkTypeError  
- */
-export function validateLinkType(linkType: LinkType): Result<undefined, ParseLinkTypeError>;
-
-
 type __ValueOrArrayArray<A> = Array<A>;
 declare namespace ValueOrArray {
     export type Value<T> = T;
@@ -79,22 +54,6 @@ export interface Array<T> {
     minItems?: number;
     maxItems?: number;
 }
-
-type __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError = ParseVersionedUriError;
-declare namespace ParsePropertyTypeReferenceArrayError {
-    export type InvalidReference = { reason: "InvalidReference"; inner: __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError };
-    export type InvalidJson = { reason: "InvalidJson"; inner: string };
-}
-
-export type ParsePropertyTypeReferenceArrayError = ParsePropertyTypeReferenceArrayError.InvalidReference | ParsePropertyTypeReferenceArrayError.InvalidJson;
-
-type __ParseOneOfArrayErrorParseOneOfError = ParseOneOfError;
-declare namespace ParseOneOfArrayError {
-    export type InvalidItems = { reason: "InvalidItems"; inner: __ParseOneOfArrayErrorParseOneOfError };
-    export type InvalidJson = { reason: "InvalidJson"; inner: string };
-}
-
-export type ParseOneOfArrayError = ParseOneOfArrayError.InvalidItems | ParseOneOfArrayError.InvalidJson;
 
 
 /**
@@ -115,6 +74,47 @@ export function validateDataType(dataType: DataType): Result<undefined, ParseDat
  */
 export function validateEntityType(entityType: EntityType): Result<undefined, ParseEntityTypeError>;
 
+
+
+/**
+ * Checks if a given Link Type is correctly formed
+ *
+ * @param {LinkType} linkType - The Link Type object to validate.
+ * @returns {(Result.Ok|Result.Err<ParseLinkTypeError>)} - an Ok with null inner if valid, or an Err with an inner ParseLinkTypeError  
+ */
+export function validateLinkType(linkType: LinkType): Result<undefined, ParseLinkTypeError>;
+
+
+type __ParseEntityTypeErrorParseBaseUriError = ParseBaseUriError;
+type __ParseEntityTypeErrorParseLinksError = ParseLinksError;
+type __ParseEntityTypeErrorParsePropertyTypeObjectError = ParsePropertyTypeObjectError;
+type __ParseEntityTypeErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParseEntityTypeError {
+    export type InvalidPropertyTypeObject = { reason: "InvalidPropertyTypeObject"; inner: __ParseEntityTypeErrorParsePropertyTypeObjectError };
+    export type InvalidLinks = { reason: "InvalidLinks"; inner: __ParseEntityTypeErrorParseLinksError };
+    export type InvalidDefaultKey = { reason: "InvalidDefaultKey"; inner: __ParseEntityTypeErrorParseBaseUriError };
+    export type InvalidExamplesKey = { reason: "InvalidExamplesKey"; inner: __ParseEntityTypeErrorParseBaseUriError };
+    export type InvalidVersionedUri = { reason: "InvalidVersionedUri"; inner: __ParseEntityTypeErrorParseVersionedUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseEntityTypeError = ParseEntityTypeError.InvalidPropertyTypeObject | ParseEntityTypeError.InvalidLinks | ParseEntityTypeError.InvalidDefaultKey | ParseEntityTypeError.InvalidExamplesKey | ParseEntityTypeError.InvalidVersionedUri | ParseEntityTypeError.InvalidJson;
+
+type __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError = ParseVersionedUriError;
+declare namespace ParsePropertyTypeReferenceArrayError {
+    export type InvalidReference = { reason: "InvalidReference"; inner: __ParsePropertyTypeReferenceArrayErrorParseVersionedUriError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParsePropertyTypeReferenceArrayError = ParsePropertyTypeReferenceArrayError.InvalidReference | ParsePropertyTypeReferenceArrayError.InvalidJson;
+
+type __ParseOneOfArrayErrorParseOneOfError = ParseOneOfError;
+declare namespace ParseOneOfArrayError {
+    export type InvalidItems = { reason: "InvalidItems"; inner: __ParseOneOfArrayErrorParseOneOfError };
+    export type InvalidJson = { reason: "InvalidJson"; inner: string };
+}
+
+export type ParseOneOfArrayError = ParseOneOfArrayError.InvalidItems | ParseOneOfArrayError.InvalidJson;
 
 export interface LinkType {
     kind: 'linkType';
@@ -200,6 +200,50 @@ declare namespace ParseLinksError {
 
 export type ParseLinksError = ParseLinksError.InvalidLinkKey | ParseLinksError.InvalidEntityTypeReference | ParseLinksError.InvalidArray | ParseLinksError.InvalidRequiredKey | ParseLinksError.ValidationError | ParseLinksError.InvalidJson;
 
+export type VersionedUri = `${string}/v/${number}`;
+
+
+/**
+ * Checks if a given URL string is a valid base URL.
+ * 
+ * @param {BaseUri} uri - The URL string.
+ * @returns {(Result.Ok|Result.Err<ParseBaseUriError>)} - an Ok with an inner of the string as a
+ * BaseUri if valid, or an Err with an inner ParseBaseUriError  
+ */
+export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>;
+
+
+
+/**
+ * Checks if a given URL string is a Block Protocol compliant Versioned URI.
+ *
+ * @param {string} uri - The URL string.
+ * @returns {(Result.Ok|Result.Err<ParseVersionedUriError>)} - an Ok with an inner of the string as 
+ * a VersionedUri if valid, or an Err with an inner ParseVersionedUriError  
+ */
+export function validateVersionedUri(uri: string): Result<VersionedUri, ParseVersionedUriError>;
+
+
+
+/**
+ * Extracts the base URI from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractBaseUri(uri: VersionedUri): BaseUri;
+
+
+
+/**
+ * Extracts the version from a Versioned URI.
+ *
+ * @param {VersionedUri} uri - The versioned URI.
+ * @throws {ParseVersionedUriError} if the versioned URI is invalid.
+ */
+export function extractVersion(uri: VersionedUri): number;
+
+
 type __ParseVersionedUriErrorParseBaseUriError = ParseBaseUriError;
 declare namespace ParseVersionedUriError {
     export type IncorrectFormatting = { reason: "IncorrectFormatting"; inner?: null };
@@ -251,50 +295,6 @@ declare namespace ValueOrMaybeOrderedArray {
 }
 
 export type ValueOrMaybeOrderedArray<T> = ValueOrMaybeOrderedArray.Value<T> | ValueOrMaybeOrderedArray.Array<T>;
-
-export type VersionedUri = `${string}/v/${number}`;
-
-
-/**
- * Checks if a given URL string is a valid base URL.
- * 
- * @param {BaseUri} uri - The URL string.
- * @returns {(Result.Ok|Result.Err<ParseBaseUriError>)} - an Ok with an inner of the string as a
- * BaseUri if valid, or an Err with an inner ParseBaseUriError  
- */
-export function validateBaseUri(uri: string): Result<BaseUri, ParseBaseUriError>;
-
-
-
-/**
- * Checks if a given URL string is a Block Protocol compliant Versioned URI.
- *
- * @param {string} uri - The URL string.
- * @returns {(Result.Ok|Result.Err<ParseVersionedUriError>)} - an Ok with an inner of the string as 
- * a VersionedUri if valid, or an Err with an inner ParseVersionedUriError  
- */
-export function validateVersionedUri(uri: string): Result<VersionedUri, ParseVersionedUriError>;
-
-
-
-/**
- * Extracts the base URI from a Versioned URI.
- *
- * @param {VersionedUri} uri - The versioned URI.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
- */
-export function extractBaseUri(uri: VersionedUri): BaseUri;
-
-
-
-/**
- * Extracts the version from a Versioned URI.
- *
- * @param {VersionedUri} uri - The versioned URI.
- * @throws {ParseVersionedUriError} if the versioned URI is invalid.
- */
-export function extractVersion(uri: VersionedUri): number;
-
 
 declare namespace Result {
     export type Ok<T> = { type: "Ok"; inner: T };

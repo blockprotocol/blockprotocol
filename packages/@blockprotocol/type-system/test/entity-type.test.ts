@@ -1,4 +1,7 @@
-import { EntityType, ParseEntityTypeError, validateEntityType } from "..";
+import test from "ava";
+
+import { EntityType, ParseEntityTypeError, validateEntityType } from "../dist";
+import { truncate } from "./shared/truncate";
 
 const entityTypes: EntityType[] = [
   {
@@ -219,7 +222,7 @@ const entityTypes: EntityType[] = [
 
 // These are data types which satisfy the TypeScript interface but are still invalid, and demonstrate the need for the
 // validation method
-const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
+const invalidEntityTypeCases: [string, EntityType, ParseEntityTypeError][] = [
   [
     "non-integer version ID",
     {
@@ -428,7 +431,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be
 // normally possible if we don't do something silly like the use of any below. This sanity check is important because
 // it is possible for wasm to error in unusual ways that can't easily be handled, and that should be viewed as a bug.
-const brokenTypes: [any, ParseEntityTypeError][] = [
+const brokenEntityTypeCases: [any, ParseEntityTypeError][] = [
   [
     {},
     {
@@ -456,28 +459,32 @@ const brokenTypes: [any, ParseEntityTypeError][] = [
   ],
 ];
 
-describe("validateEntityType", () => {
-  test.each(entityTypes)("validateEntityType($title) succeeds", (input) => {
-    expect(validateEntityType(input)).toEqual({ type: "Ok", inner: null });
+for (const entityType of entityTypes) {
+  test(`validateEntityType(${entityType.title}) succeeds`, (t) => {
+    t.deepEqual(validateEntityType(entityType), { type: "Ok", inner: null });
   });
+}
 
-  test.each(invalidEntityTypes)(
-    "validateEntityType returns errors on: %s",
-    (_, input, expected) => {
-      expect(validateEntityType(input)).toEqual({
-        type: "Err",
-        inner: expected,
-      });
-    },
-  );
+for (const [
+  description,
+  invalidEntityType,
+  expected,
+] of invalidEntityTypeCases) {
+  test(`validateEntityType returns errors on: ${description}`, (t) => {
+    t.deepEqual(validateEntityType(invalidEntityType), {
+      type: "Err",
+      inner: expected,
+    });
+  });
+}
 
-  test.each(brokenTypes)(
-    "validateEntityType cleanly returns errors on different type: %s",
-    (input, expected) => {
-      expect(validateEntityType(input)).toEqual({
-        type: "Err",
-        inner: expected,
-      });
-    },
-  );
-});
+for (const [brokenEntityType, expected] of brokenEntityTypeCases) {
+  test(`validateEntityType returns errors on broken type: ${truncate(
+    brokenEntityType,
+  )}`, (t) => {
+    t.deepEqual(validateEntityType(brokenEntityType), {
+      type: "Err",
+      inner: expected,
+    });
+  });
+}

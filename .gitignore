@@ -72,5 +72,4 @@ packages/mock-block-dock/src/version.ts
 ##################
 
 ## Build artifacts that need to be version-controlled
-!packages/@blockprotocol/type-system-node/dist
-!packages/@blockprotocol/type-system-web/dist
+!packages/@blockprotocol/type-system/dist

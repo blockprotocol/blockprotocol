@@ -10,13 +10,6 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": ["@apps/*", "@crates/*", "@local/*"],
-  "fixed": [
-    [
-      "@blockprotocol/type-system",
-      "@blockprotocol/type-system-node",
-      "@blockprotocol/type-system-web"
-    ]
-  ],
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "updateInternalDependents": "always",
     "onlyUpdatePeerDependentsWhenOutOfRange": true

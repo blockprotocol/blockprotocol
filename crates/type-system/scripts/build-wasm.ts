@@ -71,14 +71,13 @@ const buildWasmPackage = (packageName: string, target: string) => {
   runWasmPack(target);
 
   const pkgFolderPath = path.parse(path.resolve("./pkg/"));
+  // cleanUp(pkgFolderPath);
 
   moveSrcFiles(pkgFolderPath, packageName);
-  cleanUp(pkgFolderPath);
 };
 
 const buildPackages = () => {
-  buildWasmPackage("type-system-web", "web");
-  buildWasmPackage("type-system-node", "nodejs");
+  buildWasmPackage("type-system", "bundler");
 };
 
 buildPackages();

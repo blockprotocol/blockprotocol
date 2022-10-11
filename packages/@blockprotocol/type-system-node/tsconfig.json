@@ -1,5 +1,0 @@
-{
-  "extends": "@local/tsconfig/dom.json",
-  "include": ["dist", "test"],
-  "exclude": ["**/*.js"]
-}
