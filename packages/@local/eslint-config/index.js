@@ -27,6 +27,7 @@ module.exports = {
     "no-nested-ternary": "off",
     "no-restricted-syntax": "off",
     camelcase: "off",
+    curly: ["error", "all"],
     "no-unused-vars": [
       "error",
       {
@@ -160,7 +161,6 @@ module.exports = {
       },
     ],
     "no-unused-expressions": "error",
-    curly: ["error", "multi-line"],
     "import/extensions": [
       "error",
       "ignorePackages",
