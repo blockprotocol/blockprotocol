@@ -1,6 +1,10 @@
+import {
+  DataType,
+  ParseDataTypeError,
+  validateDataType,
+} from "@blockprotocol/type-system";
 import test from "ava";
 
-import { DataType, ParseDataTypeError, validateDataType } from "../dist";
 import { truncate } from "./shared/truncate";
 
 const dataTypes: DataType[] = [

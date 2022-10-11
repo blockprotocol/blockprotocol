@@ -1,6 +1,10 @@
+import {
+  EntityType,
+  ParseEntityTypeError,
+  validateEntityType,
+} from "@blockprotocol/type-system";
 import test from "ava";
 
-import { EntityType, ParseEntityTypeError, validateEntityType } from "../dist";
 import { truncate } from "./shared/truncate";
 
 const entityTypes: EntityType[] = [

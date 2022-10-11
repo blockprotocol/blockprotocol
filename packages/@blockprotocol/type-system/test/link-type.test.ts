@@ -1,6 +1,10 @@
+import {
+  LinkType,
+  ParseLinkTypeError,
+  validateLinkType,
+} from "@blockprotocol/type-system";
 import test from "ava";
 
-import { LinkType, ParseLinkTypeError, validateLinkType } from "../dist";
 import { truncate } from "./shared/truncate";
 
 const linkTypes: LinkType[] = [

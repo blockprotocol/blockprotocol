@@ -1,10 +1,10 @@
-import test from "ava";
-
 import {
   ParsePropertyTypeError,
   PropertyType,
   validatePropertyType,
-} from "../dist";
+} from "@blockprotocol/type-system";
+import test from "ava";
+
 import { truncate } from "./shared/truncate";
 
 const propertyTypes: PropertyType[] = [
