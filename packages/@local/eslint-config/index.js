@@ -156,7 +156,7 @@ module.exports = {
       "error",
       {
         min: 2,
-        exceptions: ["_", "x", "y", "z", "a", "b", "i", "t"],
+        exceptions: ["_", "x", "y", "z", "a", "b", "i"],
         properties: "never",
       },
     ],
