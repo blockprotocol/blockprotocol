@@ -1,5 +1,5 @@
 diff --git a/node_modules/jest-runtime/build/index.js b/node_modules/jest-runtime/build/index.js
-index 30d7657..b0eaeb3 100644
+index 30d7657..4cba43b 100644
 --- a/node_modules/jest-runtime/build/index.js
 +++ b/node_modules/jest-runtime/build/index.js
 @@ -496,7 +496,7 @@ class Runtime {
@@ -33,36 +33,36 @@ index 30d7657..b0eaeb3 100644
    }
  
 +  async _importWasmModule(moduleName, context) {
-+    const mod = await WebAssembly.compile(fs().readFileSync(moduleName));
++    const wasmModule = await WebAssembly.compile(fs().readFileSync(moduleName));
 +
-+    const exports = WebAssembly.Module.exports(mod);
-+    const imports = WebAssembly.Module.imports(mod);
++    const exports = WebAssembly.Module.exports(wasmModule);
++    const imports = WebAssembly.Module.imports(wasmModule);
 +    
 +    const moduleLookup = {};
 +    for (const { module } of imports) {
 +      if (moduleLookup[module] === undefined) {
-+        moduleLookup[module] = await this.linkAndEvaluateModule(await this.resolveModule('./index_bg.js', moduleName, context))
++        moduleLookup[module] = await this.linkAndEvaluateModule(await this.resolveModule(module, moduleName, context))
 +      }
 +    }
 +
-+    const module = new (_vm().SyntheticModule)(exports.map(e => e.name), function() {
-+      const importsObject = {}
++    const syntheticModule = new (_vm().SyntheticModule)(exports.map(({ name }) => name), function() {
++      const importsObject = {};
 +      for (const { module, name } of imports) {
 +        if (!importsObject[module]) {
 +          importsObject[module] = {}
 +        }
 +        importsObject[module][name] = moduleLookup[module].namespace[name];
 +      }
-+      const instance = new WebAssembly.Instance(mod, importsObject);
-+      for (const e of exports) {
-+        this.setExport(e.name, instance.exports[e.name]);
++      const wasmInstance = new WebAssembly.Instance(wasmModule, importsObject);
++      for (const { name } of exports) {
++        this.setExport(name, wasmInstance.exports[name]);
 +      }
 +    }, {
 +      context,
 +      identifier: moduleName
 +    });
 +
-+    return module;
++    return syntheticModule;
 +  }
 +  
    _importCoreModule(moduleName, context) {

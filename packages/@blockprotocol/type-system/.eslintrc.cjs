@@ -13,7 +13,6 @@ module.exports = {
       files: "**.test.ts",
       rules: {
         "import/no-extraneous-dependencies": "off",
-        "import/no-unresolved": "off", // "ava" not found, possible to do with ESM exports
       },
     },
   ],
