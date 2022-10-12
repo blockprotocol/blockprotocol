@@ -7,25 +7,7 @@ import {
   validateBaseUri,
   validateVersionedUri,
   VersionedUri,
-} from "@blockprotocol/type-system";
-import test from "ava";
-
-const validateBaseUris: string[] = [
-  "http://example.com/",
-  "file://localhost/documents/myfolder/",
-  "ftp://rms@example.com/",
-  "https://////example.com///",
-  "file://loc%61lhost/",
-];
-
-for (const validBaseUri of validateBaseUris) {
-  test(`validateBaseUri("${validBaseUri}") succeeds`, (t) => {
-    t.deepEqual(validateBaseUri(validBaseUri), {
-      type: "Ok",
-      inner: validBaseUri,
-    });
-  });
-}
+} from "..";
 
 const invalidBaseUriCases: [string, ParseBaseUriError][] = [
   ["http://example.com", { reason: "MissingTrailingSlash" }],
@@ -52,26 +34,24 @@ const invalidBaseUriCases: [string, ParseBaseUriError][] = [
   ["data:text/plain,Hello?World#/", { reason: "CannotBeABase" }],
 ];
 
-for (const [invalidBaseUri, error] of invalidBaseUriCases) {
-  test(`validateBaseUri("${invalidBaseUri}") errors`, (t) => {
-    t.deepEqual(validateBaseUri(invalidBaseUri), { type: "Err", inner: error });
+describe("validateBaseUri", () => {
+  test.each([
+    ["http://example.com/"],
+    ["file://localhost/documents/myfolder/"],
+    ["ftp://rms@example.com/"],
+    ["https://////example.com///"],
+    ["file://loc%61lhost/"],
+  ])("`parseBaseUri(%s)` succeeds", (input) => {
+    expect(validateBaseUri(input)).toEqual({ type: "Ok", inner: input });
   });
-}
 
-const validVersionedUris = [
-  "http://example.com/v/0",
-  "http://example.com/v/1",
-  "http://example.com/v/20",
-];
-
-for (const validVersionedUri of validVersionedUris) {
-  test(`validateVersionedUri("${validVersionedUri}") succeeds`, (t) => {
-    t.deepEqual(validateVersionedUri(validVersionedUri), {
-      type: "Ok",
-      inner: validVersionedUri,
-    });
-  });
-}
+  test.each(invalidBaseUriCases)(
+    "`parseBaseUri(%s)` errors",
+    (input, expected) => {
+      expect(validateBaseUri(input)).toEqual({ type: "Err", inner: expected });
+    },
+  );
+});
 
 const invalidVersionedUriCases: [string, ParseVersionedUriError][] = [
   [
@@ -89,14 +69,25 @@ const invalidVersionedUriCases: [string, ParseVersionedUriError][] = [
   ["http://example.com/v/foo", { reason: "IncorrectFormatting" }],
 ];
 
-for (const [invalidVersionedUri, error] of invalidVersionedUriCases) {
-  test(`validateVersionedUri("${invalidVersionedUri}") errors`, (t) => {
-    t.deepEqual(validateVersionedUri(invalidVersionedUri), {
-      type: "Err",
-      inner: error,
-    });
+describe("validateVersionedUri", () => {
+  test.each([
+    ["http://example.com/v/0"],
+    ["http://example.com/v/1"],
+    ["http://example.com/v/20"],
+  ])("`validateVersionedUri(%s)` succeeds", (input) => {
+    expect(validateVersionedUri(input)).toEqual({ type: "Ok", inner: input });
   });
-}
+
+  test.each(invalidVersionedUriCases)(
+    "validateVersionedUri(%s) returns errors",
+    (input, expected) => {
+      expect(validateVersionedUri(input)).toEqual({
+        type: "Err",
+        inner: expected,
+      });
+    },
+  );
+});
 
 const extractBaseUriCases: [VersionedUri, BaseUri][] = [
   ["http://example.com/v/0", "http://example.com/"],
@@ -108,11 +99,14 @@ const extractBaseUriCases: [VersionedUri, BaseUri][] = [
   ["ftp://rms@example.com/foo/v/5", "ftp://rms@example.com/foo/"],
 ];
 
-for (const [versionedUri, baseUri] of extractBaseUriCases) {
-  test(`extractBaseUri("${versionedUri}") succeeds`, (t) => {
-    t.is(extractBaseUri(versionedUri), baseUri);
-  });
-}
+describe("extractBaseUri", () => {
+  test.each(extractBaseUriCases)(
+    "`extractBaseUri(%s)` succeeds",
+    (input, expected) => {
+      expect(extractBaseUri(input)).toEqual(expected);
+    },
+  );
+});
 
 const extractVersionCases: [VersionedUri, number][] = [
   ["http://example.com/v/0", 0],
@@ -121,8 +115,11 @@ const extractVersionCases: [VersionedUri, number][] = [
   ["ftp://rms@example.com/foo/v/5", 5],
 ];
 
-for (const [versionedUri, version] of extractVersionCases) {
-  test(`extractVersion("${versionedUri}") succeeds`, (t) => {
-    t.is(extractVersion(versionedUri), version);
-  });
-}
+describe("extractVersion", () => {
+  test.each(extractVersionCases)(
+    "`extractVersion(%s)` succeeds",
+    (input, expected) => {
+      expect(extractVersion(input)).toEqual(expected);
+    },
+  );
+});

@@ -1,11 +1,4 @@
-import {
-  LinkType,
-  ParseLinkTypeError,
-  validateLinkType,
-} from "@blockprotocol/type-system";
-import test from "ava";
-
-import { truncate } from "./shared/truncate";
+import { LinkType, ParseLinkTypeError, validateLinkType } from "..";
 
 const linkTypes: LinkType[] = [
   {
@@ -35,7 +28,7 @@ const linkTypes: LinkType[] = [
 
 // These are data types which satisfy the TypeScript interface but are still invalid, and demonstrate the need for the
 // validation method
-const invalidLinkTypeCases: [string, LinkType, ParseLinkTypeError][] = [
+const invalidLinkTypes: [string, LinkType, ParseLinkTypeError][] = [
   [
     "non-integer version",
     {
@@ -78,7 +71,7 @@ const invalidLinkTypeCases: [string, LinkType, ParseLinkTypeError][] = [
 // Quick sanity check that passing in a completely different object also throws an error cleanly, this shouldn't be
 // normally possible if we don't do something silly like the use of any below. This sanity check is important because
 // it is possible for wasm to error in unusual ways that can't easily be handled, and that should be viewed as a bug.
-const brokenLinkTypeCases: [any, ParseLinkTypeError][] = [
+const brokenTypes: [any, ParseLinkTypeError][] = [
   [
     {},
     {
@@ -106,31 +99,28 @@ const brokenLinkTypeCases: [any, ParseLinkTypeError][] = [
   ],
 ];
 
-for (const linkType of linkTypes) {
-  test(`validateLinkType(${linkType.title}) succeeds`, (t) => {
-    t.deepEqual(validateLinkType(linkType), {
-      type: "Ok",
-      inner: null,
-    });
+describe("validateLinkType", () => {
+  test.each(linkTypes)("validateLinkType($title) succeeds", (input) => {
+    expect(validateLinkType(input)).toEqual({ type: "Ok", inner: null });
   });
-}
 
-for (const [description, invalidDataType, expected] of invalidLinkTypeCases) {
-  test(`validateLinkType returns errors on: ${description}`, (t) => {
-    t.deepEqual(validateLinkType(invalidDataType), {
-      type: "Err",
-      inner: expected,
-    });
-  });
-}
+  test.each(invalidLinkTypes)(
+    "validateLinkType returns errors on: %s",
+    (_, input, expected) => {
+      expect(validateLinkType(input)).toEqual({
+        type: "Err",
+        inner: expected,
+      });
+    },
+  );
 
-for (const [brokenLinkType, expected] of brokenLinkTypeCases) {
-  test(`validateLinkType returns errors on broken type: ${truncate(
-    brokenLinkType,
-  )}`, (t) => {
-    t.deepEqual(validateLinkType(brokenLinkType), {
-      type: "Err",
-      inner: expected,
-    });
-  });
-}
+  test.each(brokenTypes)(
+    "validateLinkType cleanly returns errors on different type: %s",
+    (input, expected) => {
+      expect(validateLinkType(input)).toEqual({
+        type: "Err",
+        inner: expected,
+      });
+    },
+  );
+});
