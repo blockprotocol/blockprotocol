@@ -1,5 +1,5 @@
 diff --git a/node_modules/jest-runtime/build/index.js b/node_modules/jest-runtime/build/index.js
-index 30d7657..a5075af 100644
+index 30d7657..d5ec0c7 100644
 --- a/node_modules/jest-runtime/build/index.js
 +++ b/node_modules/jest-runtime/build/index.js
 @@ -534,7 +534,7 @@ class Runtime {
@@ -19,7 +19,7 @@ index 30d7657..a5075af 100644
        this.unstable_shouldLoadAsEsm(resolved)
      ) {
        return this.loadEsmModule(resolved, query);
-@@ -1717,6 +1718,37 @@ class Runtime {
+@@ -1717,6 +1718,42 @@ class Runtime {
    }
  
    _importCoreModule(moduleName, context) {
@@ -31,47 +31,34 @@ index 30d7657..a5075af 100644
 +        const exports = WebAssembly.Module.exports(mod);
 +        const imports = WebAssembly.Module.imports(mod);
 +        
-+        console.log(exports, imports)
-+        
-+        const mod2 = await this.linkAndEvaluateModule(await this.resolveModule('./index_bg.js', moduleName, context));
++        const moduleLookup = {};
++        for (const { module } of imports) {
++          if (moduleLookup[module] === undefined) {
++            moduleLookup[module] = await this.linkAndEvaluateModule(await this.resolveModule('./index_bg.js', moduleName, context))
++          }
++        }
 +
 +        const module = new (_vm().SyntheticModule)(exports.map(e => e.name), function() {
-+          const instance = new WebAssembly.Instance(mod, { 
-+            './index_bg.js': {
-+              __wbindgen_json_parse: mod2.namespace["__wbindgen_json_parse"],
-+              __wbindgen_json_serialize: mod2.namespace["__wbindgen_json_serialize"]
++          const importsObject = {}
++          for (const { module, name } of imports) {
++            if (!importsObject[module]) {
++              importsObject[module] = {}
 +            }
-+          });
++            importsObject[module][name] = moduleLookup[module].namespace[name];
++          }
++          const instance = new WebAssembly.Instance(mod, importsObject);
 +          for (const e of exports) {
-+          this.setExport(e.name, instance.exports[e.name]);
-+        }
-+      }, {
-+        context,
-+        identifier: moduleName
-+      });
++            this.setExport(e.name, instance.exports[e.name]);
++          }
++        }, {
++          context,
++          identifier: moduleName
++        });
 +
-+      return module;
++        return module;
 +      })();
 +    };
 +    
      const required = this._requireCoreModule(moduleName, true);
  
      const module = new (_vm().SyntheticModule)(
-@@ -2455,9 +2487,13 @@ function notEmpty(value) {
- }
- 
- async function evaluateSyntheticModule(module) {
--  await module.link(() => {
--    throw new Error('This should never happen');
--  });
--  await module.evaluate();
-+  if (module.link) {
-+    await module.link(() => {
-+      throw new Error('This should never happen');
-+    });
-+  }
-+  if (module.evaluate) {
-+    await module.evaluate();
-+  }
-   return module;
- }
