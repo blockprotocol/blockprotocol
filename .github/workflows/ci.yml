@@ -345,3 +345,16 @@ jobs:
           name: site-integration-tests-var-${{ matrix.device }}
           path: var
           retention-days: 14
+
+  unit-tests:
+    name: Unit tests
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ./.github/actions/warm-up-repo
+
+      - name: Run yarn test
+        if: ${{ success() || failure() }}
+        run: yarn test

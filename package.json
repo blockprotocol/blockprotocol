@@ -28,6 +28,7 @@
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
     "lint:markdownlint": "markdownlint --dot .",
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
+    "test": "turbo run --continue test",
     "lint:tsc": "turbo run --continue lint:tsc",
     "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
     "dev": "yarn workspace @apps/site dev",
