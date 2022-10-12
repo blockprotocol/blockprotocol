@@ -14,6 +14,7 @@ process.emit = (name, data, ...args) => {
       data.message.includes(`specifier resolution`) ||
       data.message.includes(`Custom ESM Loaders is an experimental feature`) ||
       data.message.includes(`The Fetch API is an experimental feature`) ||
+      data.message.includes(`VM Modules is an experimental feature`) ||
       data.message.includes(
         `Importing WebAssembly modules is an experimental feature`,
       ))
