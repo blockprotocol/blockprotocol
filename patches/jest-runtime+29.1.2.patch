@@ -1,0 +1,77 @@
+diff --git a/node_modules/jest-runtime/build/index.js b/node_modules/jest-runtime/build/index.js
+index 30d7657..a5075af 100644
+--- a/node_modules/jest-runtime/build/index.js
++++ b/node_modules/jest-runtime/build/index.js
+@@ -534,7 +534,7 @@ class Runtime {
+         'Promise initialization should be sync - please report this bug to Jest!'
+       );
+ 
+-      if (this._resolver.isCoreModule(modulePath)) {
++      if (this._resolver.isCoreModule(modulePath) || modulePath.endsWith('wasm')) {
+         const core = this._importCoreModule(modulePath, context);
+ 
+         this._esmoduleRegistry.set(cacheKey, core);
+@@ -731,6 +731,7 @@ class Runtime {
+ 
+     if (
+       this._resolver.isCoreModule(resolved) ||
++      resolved.endsWith('wasm') ||
+       this.unstable_shouldLoadAsEsm(resolved)
+     ) {
+       return this.loadEsmModule(resolved, query);
+@@ -1717,6 +1718,37 @@ class Runtime {
+   }
+ 
+   _importCoreModule(moduleName, context) {
++    if (moduleName.endsWith('wasm')) {
++      
++      return (async () => {
++        const mod = await WebAssembly.compile(fs().readFileSync(moduleName));
++
++        const exports = WebAssembly.Module.exports(mod);
++        const imports = WebAssembly.Module.imports(mod);
++        
++        console.log(exports, imports)
++        
++        const mod2 = await this.linkAndEvaluateModule(await this.resolveModule('./index_bg.js', moduleName, context));
++
++        const module = new (_vm().SyntheticModule)(exports.map(e => e.name), function() {
++          const instance = new WebAssembly.Instance(mod, { 
++            './index_bg.js': {
++              __wbindgen_json_parse: mod2.namespace["__wbindgen_json_parse"],
++              __wbindgen_json_serialize: mod2.namespace["__wbindgen_json_serialize"]
++            }
++          });
++          for (const e of exports) {
++          this.setExport(e.name, instance.exports[e.name]);
++        }
++      }, {
++        context,
++        identifier: moduleName
++      });
++
++      return module;
++      })();
++    };
++    
+     const required = this._requireCoreModule(moduleName, true);
+ 
+     const module = new (_vm().SyntheticModule)(
+@@ -2455,9 +2487,13 @@ function notEmpty(value) {
+ }
+ 
+ async function evaluateSyntheticModule(module) {
+-  await module.link(() => {
+-    throw new Error('This should never happen');
+-  });
+-  await module.evaluate();
++  if (module.link) {
++    await module.link(() => {
++      throw new Error('This should never happen');
++    });
++  }
++  if (module.evaluate) {
++    await module.evaluate();
++  }
+   return module;
+ }
