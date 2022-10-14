@@ -11,7 +11,7 @@
     },
     {
       "matchManagers": ["npm"],
-      "rangeStrategy": "auto"
+      "rangeStrategy": "bump"
     },
     {
       "enabled": true,
