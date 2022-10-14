@@ -2,8 +2,26 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "labels": ["area: dependencies"],
   "postUpdateOptions": ["yarnDedupeFewer"],
-  "enabled": false,
+  "prConcurrentLimit": 10,
   "packageRules": [
+    {
+      "enabled": false,
+      "matchPackageNames": ["**"]
+    },
+    {
+      "enabled": true,
+      "groupName": "changesets",
+      "matchPackagePrefixes": ["@changesets/"]
+    },
+    {
+      "enabled": true,
+      "groupName": "eslint",
+      "matchPackagePrefixes": ["@typescript-eslint/", "^eslint$"]
+    },
+    {
+      "enabled": true,
+      "matchPackagePrefixes": ["^eslint-config-", "^eslint-plugin-"]
+    },
     {
       "enabled": true,
       "groupName": "playwright",
@@ -15,8 +33,7 @@
     },
     {
       "enabled": true,
-      "groupName": "eslint",
-      "matchPackagePrefixes": ["@typescript-eslint/", "eslint"]
+      "matchPackageNames": ["typescript"]
     }
   ]
 }
