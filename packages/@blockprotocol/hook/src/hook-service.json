@@ -58,7 +58,16 @@
       },
       "errors": [
         {
+          "code": "INVALID_INPUT",
+          "message": {
+            "type": "string"
+          }
+        },
+        {
           "code": "NOT_IMPLEMENTED",
+          "message": {
+            "type": "string"
+          },
           "extensions": {
             "type": "object",
             "description": "The properties passed in the 'hook' message which this message is in response to",
