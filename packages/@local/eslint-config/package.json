@@ -19,7 +19,7 @@
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "27.1.1",
     "eslint-plugin-jsx-a11y": "6.6.1",
-    "eslint-plugin-react": "7.31.8",
+    "eslint-plugin-react": "7.31.10",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-simple-import-sort": "8.0.0",
     "eslint-plugin-unicorn": "44.0.2"
