@@ -1,5 +1,11 @@
 # block-template-react
 
+## 0.1.15
+
+### Patch Changes
+
+- [#637](https://github.com/blockprotocol/blockprotocol/pull/637) [`389b7a4`](https://github.com/blockprotocol/blockprotocol/commit/389b7a4c2a58ee5c5631961b5cdfc7a27f293d16) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix style variable
+
 ## 0.1.14
 
 ## 0.1.13
