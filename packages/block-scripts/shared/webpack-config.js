@@ -1,8 +1,9 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import CopyPlugin from "copy-webpack-plugin";
 import fs from "fs-extra";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import webpack from "webpack";
 import WebpackAssetsManifest from "webpack-assets-manifest";
 import { BundleAnalyzerPlugin } from "webpack-bundle-analyzer";
