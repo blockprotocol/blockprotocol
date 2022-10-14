@@ -1,22 +1,37 @@
 import { LitElement } from "lit";
 
-import {
-  BlockGraphProperties,
-  GraphBlockHandler,
-  UpdateEntityData,
-} from "./index.js";
+import { BlockGraphProperties, GraphBlockHandler } from "./index.js";
 
 export interface BlockElementBase<
   BlockEntityProperties extends Record<string, unknown> | null,
 > extends LitElement,
     BlockGraphProperties<BlockEntityProperties> {}
 
+/**
+ * A class to use as a base for implementing Block Protocol blocks as custom elements.
+ * This class handles establishing communication with the embedding application.
+ */
 export abstract class BlockElementBase<
   BlockEntityProperties extends Record<string, unknown> | null,
 > extends LitElement {
+  /**
+   * The 'graphService' is a handler for sending messages to the embedding application, e.g. 'graphService.updateEntity'
+   * It starts off undefined and will be available once the initial exchange of messages has taken place (handled internally)
+   * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list of available messages
+   */
   protected graphService?: GraphBlockHandler;
 
+  /**
+   * The properties sent to the block represent the messages sent automatically from the application to the block.
+   * All block <> application messages are split into services, and so is this property object.
+   */
   static properties = {
+    /**
+     * The 'graph' object contains messages sent under the graph service from the app to the block.
+     * They are sent on initialization and again when the application has new values to send.
+     * One such message is 'graph.blockEntity', which is a data entity fitting the block's schema (its type).
+     * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
+     */
     graph: { type: Object },
   };
 
@@ -35,19 +50,10 @@ export abstract class BlockElementBase<
   }
 
   /**
-   * Alias for this.graph.blockEntity
+   * A helper method to update the properties of the entity loaded into the block, i.e. this.graph.blockEntity
+   * @param properties the properties object to assign to the entity, which will overwrite the existing object
    */
-  protected get blockEntity():
-    | BlockGraphProperties<BlockEntityProperties>["graph"]["blockEntity"]
-    | undefined {
-    return this.graph?.blockEntity;
-  }
-
-  /**
-   * Update the properties of the entity loaded into the block, i.e. this.graph.blockEntity
-   * @param properties the properties to update, which will be merged with any others
-   */
-  protected updateSelf(properties: UpdateEntityData["properties"]) {
+  protected updateSelf(properties: NonNullable<BlockEntityProperties>) {
     if (!this.graphService) {
       throw new Error("Cannot updateSelf – graphService not yet connected.");
     }

@@ -7,14 +7,14 @@ The Block Protocol is an open standard for building and using data-driven blocks
 Please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) for complete instructions on using the Block Protocol, including:
 
 - developing new blocks;
-- publishing blocks to the Block Hub; and
+- publishing blocks on the Hub; and
 - embedding blocks within your application.
 
 ## Usage
 
-[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an example embedding application that uses the Block Protocol to enable users to insert arbitrary blocks from the Block Hub at runtime. Neither the blocks nor the application have any special knowledge of one another. Both simply conform to the protocol.
+[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an example embedding application that uses the Block Protocol to enable users to insert arbitrary blocks from the Hub at runtime. Neither the blocks nor the application have any special knowledge of one another. Both simply conform to the protocol.
 
-For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Block Hub](https://blockprotocol.org/hub).
+For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Hub](https://blockprotocol.org/hub).
 
 ## Roadmap
 
@@ -27,18 +27,25 @@ Learn more on our [RFCs & Roadmap](https://blockprotocol.org/docs/spec/rfcs_and_
 
 We welcome [contributions](#contributing) to this repository. Within it you will find folders for:
 
-1.  `site`: the code for [blockprotocol.org](https://blockprotocol.org), including:
+1.  `apps/site`: the code for [blockprotocol.org](https://blockprotocol.org), including:
 
-    - the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs/3_spec)
-    - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/site/src/_pages/docs)
+    - the [Block Protocol specification](https://blockprotocol.org/docs/spec) at [src/\_pages/spec](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/3_spec)
+    - the [explanatory documentation](https://blockprotocol.org/docs) at [src/\_pages/docs](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs)
 
 1.  `packages`: utility packages for constructing Block Protocol blocks. These are all available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
-    - `@blockprotocol/core`: implements the Block Protocol core specification for blocks and embedding applications
-    - `@blockprotocol/graph`: implements the Block Protocol graph specification for blocks and embedding applications
+
+    - `@blockprotocol/core`: implements the Block Protocol Core specification for blocks and embedding applications
+    - `@blockprotocol/graph`: implements the Block Protocol Graph specification for blocks and embedding applications
+    - `@blockprotocol/hook`: implements the Block Protocol Hook service for blocks and embedding applications
+    - `@blockprotocol/type-system-{node,web}`: implements type system (autogerated from `crates/type-system`)
+    - `@local/*`: auxiliary packages for local development and testing
     - `block-scripts`: scripts used by `block-template-*`
     - `block-template-*`: starter templates for blocks, used by `create-block-app`
+    - `blockprotocol`: command line interface for interacting with the Block Protocol API, e.g. for publishing blocks
     - `create-block-app`: a script to [create a new block](https://blockprotocol.org/docs/developing-blocks) using `block-template-*`
     - `mock-block-dock`: a mock embedding application used for developing blocks
+
+1.  `rfcs`: contains RFCs (Requests for comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project.
 
 ## Contributing
 

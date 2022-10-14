@@ -170,43 +170,46 @@ jobs:
           docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio:5
           yarn wait-on --timeout 30000 http://localhost:4873
 
+      - name: Remove ESLint from templates
+        run: yarn workspace @local/package-chores exe scripts/remove-eslint-from-templates.ts
+
       - name: Publish NPM packages to local registry
         run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
 
-      - name: e2e-test create-block-app (default template)
+      - name: Smoke-test create-block-app (default template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/default
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (custom-element template)
+      - name: Smoke-test create-block-app (custom-element template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/custom-element
           BLOCK_TEMPLATE: custom-element
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (html template)
+      - name: Smoke-test create-block-app (html template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/html
           BLOCK_TEMPLATE: html
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (react template)
+      - name: Smoke-test create-block-app (react template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/react
           BLOCK_TEMPLATE: react
           NPM_CONFIG_REGISTRY: http://localhost:4873
 
-      - name: e2e-test create-block-app (unknown template)
+      - name: Smoke-test create-block-app (unknown template)
         if: ${{ success() || failure() }}
-        run: yarn workspace @local/package-chores exe scripts/e2e-test-create-block-app.ts
+        run: yarn workspace @local/package-chores exe scripts/smoke-test-create-block-app.ts
         env:
           BLOCK_DIR_PATH: ~/test-blocks/unknown
           BLOCK_TEMPLATE: unknown
@@ -219,42 +222,62 @@ jobs:
           docker stop verdaccio
 
       - name: Upload block folder as artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
           name: ${{ env.BLOCK_NAME }}
           path: |
             ${{ env.BLOCK_DIR_PATH }}
             !${{ env.BLOCK_DIR_PATH }}/node_modules/**
+          retention-days: 14
 
   site-integration-tests:
     name: "Site integration tests"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        device:
+          - chrome
+          - firefox
+          - iphone
+          - pixel
+          - safari
     steps:
       - uses: actions/checkout@v3
 
       - uses: actions/cache@v3
         with:
-          path: site/.next/cache
-          key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('site/**') }}
+          path: apps/site/.next/cache
+          key: ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-${{ hashFiles('apps/site/**') }}
           restore-keys: |
             ${{ runner.os }}-site-next-cache-${{ hashFiles('yarn.lock') }}-
             ${{ runner.os }}-site-next-cache
 
       - uses: ./.github/actions/warm-up-repo
         with:
-          playwright-deps: chrome firefox webkit
+          playwright-deps: ${{ ((matrix.device == 'iphone' || matrix.device == 'safari') && 'webkit') || (matrix.device == 'firefox' && 'firefox') || 'chrome' }}
 
       - name: Create temp files and folders
         run: |
           mkdir -p var/logs
+          mkdir -p var/site
 
-          cat << EOF > site/.env.local
+          cat << EOF > apps/site/.env.local
           SESSION_SECRET=dev-session-secret
           HASHING_SECRET=dev-hashing-secret
 
           MONGODB_URI=mongodb://root:password@localhost:27017/
           MONGODB_DB_NAME=local
+
+          S3_API_ENDPOINT=http://localhost:9000
+          S3_BUCKET=dev-bucket
+          S3_ACCESS_KEY_ID=dev-access-key
+          S3_SECRET_ACCESS_KEY=dev-secret-key
+          S3_BASE_URL=http://localhost:9001/dev-bucket
+
+          NEXT_PUBLIC_NPM_PUBLISHING=true
+
           EOF
 
       - name: Launch DB
@@ -270,15 +293,15 @@ jobs:
       - name: Build and launch frontend
         if: ${{ success() || failure() }}
         run: |
-          yarn workspace @blockprotocol/site build
-          yarn workspace @blockprotocol/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
+          yarn workspace @apps/site build
+          yarn workspace @apps/site start 2>&1 | tee var/logs/frontend.log & ## ampersand enables background mode
           yarn wait-on --timeout 10000 http://0.0.0.0:3000
         env:
           TEST_COVERAGE: true
 
       - name: Run Playwright tests
         if: ${{ success() || failure() }}
-        run: yarn workspace @blockprotocol/site playwright test --project=integration-chrome --project=integration-firefox --project=integration-safari --project=integration-iphone --project=integration-pixel
+        run: yarn workspace @apps/site playwright test --project=integration-${{ matrix.device }}
 
       - name: Stop frontend ## Updates .nyc_output
         if: ${{ success() || failure() }}
@@ -296,7 +319,7 @@ jobs:
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true
-          flags: site-integration
+          flags: site-integration-${{ matrix.device }}
           files: coverage/lcov.info
 
       - name: Show DB logs
@@ -309,15 +332,16 @@ jobs:
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: site-integration-tests-playwright-report
-          path: site/playwright-report
+          name: site-integration-tests-playwright-report-${{ matrix.device }}
+          path: apps/site/playwright-report
+          retention-days: 14
 
       - name: Upload artifact playwright-var
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: ${{ success() || failure() }}
         with:
-          name: site-integration-tests-var
-          path: |
-            var
+          name: site-integration-tests-var-${{ matrix.device }}
+          path: var
+          retention-days: 14

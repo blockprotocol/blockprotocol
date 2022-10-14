@@ -18,9 +18,9 @@ Other templates are available. See `npx create-block-app@latest --help`
 
     - edit `dev.tsx` to give your block starting properties
 
-    - run the dev server with `yarn dev`
+    - run the dev server with `yarn dev` (or `npm run dev`)
 
-1.  When finished, run `yarn build`, which:
+1.  When finished, run `yarn build` (or `npm run build`), which:
 
     - Bundles the component into a single source file
     - Generates a JSON schema from the `BlockEntityProperties` type representing the data interface with the block.
@@ -33,6 +33,7 @@ Other templates are available. See `npx create-block-app@latest --help`
         - `examples`: an array of example data structures your block would accept and use
         - `image`: a preview image showing your block in action
         - `icon`: an icon to be associated with your block
+        - `name`: a slugified name for your block (which may differ to the package `name` in package.json)
       - lists the `externals` - libraries the block expects the host app to provide
     - Once uploaded to a remote folder, embedding applications can access `block-metadata.json` to load a block and its schema. This file is documented in full [here](https://blockprotocol.org/docs/spec).
 
@@ -40,6 +41,8 @@ Please see [the Block Protocol docs](https://blockprotocol.org/docs/developing-b
 for help in creating and updating data from your block.
 
 This template uses the Lit custom element framework. Please see [the Lit docs](https://lit.dev/) for general help in defining an element using the framework.
+
+You can format your code using `yarn format` (or `npm run format`).
 
 N.B.
 

@@ -1,5 +1,6 @@
-import fs from "fs-extra";
 import path from "node:path";
+
+import fs from "fs-extra";
 
 import { getPort } from "./config.js";
 import { generateDistBlockMetadata } from "./generate-dist-block-metadata.js";
@@ -19,9 +20,14 @@ export class BlockAssetsPlugin {
         "assets-manifest.json",
       );
 
+      const defaultManifest = { "main.js": "main.js" };
+
       const assetsManifest = (await fs.pathExists(assetsManifestFilePath))
-        ? await fs.readJson(assetsManifestFilePath)
-        : { "main.js": "main.js" };
+        ? await fs.readJson(assetsManifestFilePath).catch(() => {
+            console.error("Error parsing asset manifest - using default");
+            return defaultManifest;
+          })
+        : defaultManifest;
 
       /** @type Record<string, string> */
       const metadataExtra = { source: assetsManifest["main.js"] };

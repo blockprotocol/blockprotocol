@@ -2,6 +2,7 @@ import {
   Box,
   Button as MuiButton,
   ButtonProps,
+  Link,
   styled,
   Typography,
 } from "@mui/material";
@@ -9,13 +10,14 @@ import { Dispatch, SetStateAction } from "react";
 
 import { useMockBlockDockContext } from "../mock-block-dock-context";
 import { MOCK_BLOCK_DOCK_VERSION } from "../version";
-import { Logo, OffSwitch, OnSwitch } from "./icons";
+import { Logo, OffSwitch } from "./icons";
 import { customColors } from "./theme/palette";
 
 export const HEADER_HEIGHT = 50;
 
 const Container = styled(Box)(({ theme }) => ({
   height: HEADER_HEIGHT,
+  minHeight: HEADER_HEIGHT,
   position: "sticky",
   top: 0,
   zIndex: 2000,
@@ -57,8 +59,8 @@ type Props = {
   setDarkMode: Dispatch<SetStateAction<boolean>>;
 };
 
-export const Header = ({ darkMode, setDarkMode }: Props) => {
-  const { setDebugMode, blockName } = useMockBlockDockContext();
+export const Header = ({ darkMode: _, setDarkMode: __ }: Props) => {
+  const { setDebugMode, blockInfo } = useMockBlockDockContext();
 
   return (
     <Container>
@@ -78,6 +80,7 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           variant="subtitle2"
           fontWeight="normal"
           color={customColors.gray[60]}
+          mt="2px"
         >
           v{MOCK_BLOCK_DOCK_VERSION}
         </Typography>
@@ -106,26 +109,45 @@ export const Header = ({ darkMode, setDarkMode }: Props) => {
           Blocks /
         </Typography>
         <Typography variant="subtitle2" fontWeight="medium">
-          {blockName}
+          {blockInfo?.displayName}
         </Typography>
       </Box>
 
-      <Button href="https://blockprotocol.org/docs" sx={{ mr: 1 }}>
-        Docs
-      </Button>
+      <Link
+        href="https://blockprotocol.org/docs"
+        sx={{ color: "black", mr: 2.5, textDecoration: "none" }}
+        target="_blank"
+      >
+        <Typography
+          component="span"
+          variant="subtitle2"
+          sx={({ palette }) => ({
+            color:
+              palette.mode === "light"
+                ? customColors.gray[70]
+                : customColors.gray[30],
+            "&:hover": {
+              color: palette.mode === "light" ? "black" : "white",
+            },
+          })}
+        >
+          Docs
+        </Typography>
+      </Link>
 
-      <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}>
-        Dark Mode
-        {darkMode ? (
-          <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
-        ) : (
-          <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
-        )}
-      </Button>
+      {/* @todo restore when styling service is implemented */}
+      {/* <Button onClick={() => setDarkMode((prev) => !prev)} sx={{ mr: 1 }}> */}
+      {/*  Dark Mode */}
+      {/*  {darkMode ? ( */}
+      {/*    <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} /> */}
+      {/*  ) : ( */}
+      {/*    <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} /> */}
+      {/*  )} */}
+      {/* </Button> */}
 
       <Button onClick={() => setDebugMode(false)}>
         Preview Mode
-        <OnSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
+        <OffSwitch sx={{ height: 20, width: 40, ml: 1.25 }} />
       </Button>
     </Container>
   );

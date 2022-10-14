@@ -1,6 +1,7 @@
+import path from "node:path";
+
 import chalk from "chalk";
 import fs from "fs-extra";
-import path from "node:path";
 import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
@@ -14,13 +15,13 @@ import { postPublishForm } from "./publish/post-form.js";
 // ********************* MANUAL ********************* //
 
 /**
- * @type {[{header: string, content: string},{optionList: [{name: string, alias: string, description: string, typeLabel: string, type: BooleanConstructor},{name: string, alias: string, description: string, type: BooleanConstructor},{name: string, alias: string, description: string, typeLabel: string, type: StringConstructor},{name: string, alias: string, description: string, typeLabel: string, type: StringConstructor},{name: string, alias: string, description: string, type: BooleanConstructor}], header: string}]}
+ * @type {[import("command-line-usage").Content, import("command-line-usage").OptionList]}
  */
 const manual = [
   {
     header: "blockprotocol publish",
     content:
-      "Publish a block to the Block Protocol hub. See https://blockprotocol.org/docs",
+      "Publish a block on the Block Protocol Hub. See https://blockprotocol.org/docs",
   },
   {
     header: "Options",
@@ -67,20 +68,17 @@ const manual = [
 
 // ********************* OPTIONS ********************* //
 
-const optionsGuide = manual.find(({ header }) => header === "Options");
-const options = optionsGuide.optionList;
+const options = manual[1].optionList;
 
 // *********************** RUN *********************** //
 
 /**
- * Publishes to the Block Protocol hub
- * @param {object} [providedOptions]
- * @param {string} [providedOptions.path]
- * @param {boolean} [providedOptions.dry]
+ * Publishes on the Block Protocol hub
+ * @param {import("command-line-args").CommandLineOptions | undefined} providedOptions
  */
 const run = async (providedOptions) => {
   const { path: providedPath, tmp: tmpDir, yes } = providedOptions ?? {};
-  const dryRun = providedOptions["dry-run"];
+  const dryRun = providedOptions?.["dry-run"];
 
   const apiKey = await findApiKey();
 
@@ -105,9 +103,11 @@ const run = async (providedOptions) => {
   let metadataJson;
   try {
     metadataJson = await fs.readJson(metadataPath);
-  } catch (err) {
+  } catch (error) {
     console.log(
-      `Could not parse block-metadata.json: ${chalk.red(err.message)}`,
+      `Could not parse block-metadata.json: ${chalk.red(
+        error instanceof Error ? error.message : error,
+      )}`,
     );
     process.exit();
   }
@@ -166,8 +166,8 @@ const run = async (providedOptions) => {
 
   printSpacer();
 
-  if (errors) {
-    const errorMsg = errors[0].msg;
+  if (errors || !block) {
+    const errorMsg = errors?.[0]?.msg;
     console.log(chalk.red(errorMsg));
     process.exit();
   }
@@ -177,7 +177,7 @@ const run = async (providedOptions) => {
   console.log(
     chalk.bgGreen(`Successfully published '${chalk.underline(blockName)}'!`),
   );
-  console.log(`Visit ${chalk.underline(blockUrl)} to see it on the Block Hub`);
+  console.log(`Visit ${chalk.underline(blockUrl)} to see it on the Hub`);
 
   await cleanup();
 

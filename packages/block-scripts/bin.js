@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import chalk from "chalk";
 import { URL } from "node:url";
+
+import chalk from "chalk";
 import parser from "yargs-parser";
 
 import { listAvailableScriptNames } from "./shared/list-available-script-names.js";

@@ -1,27 +1,29 @@
+import path from "node:path";
+
 import chalk from "chalk";
 import { findUp } from "find-up";
 import fs from "fs-extra";
-import path from "node:path";
 
 import { printSpacer } from "../../print-spacer.js";
 import { doesUserAgree } from "./does-user-agree.js";
 import { findProjectRoot } from "./shared/find-project-root.js";
 
 const environmentVariableName = "BLOCK_PROTOCOL_API_KEY";
-const configFileName = ".bprc";
+const configFileName = ".blockprotocolrc";
 const configFileKey = "api-key";
 const configFileTemplate = `${configFileKey}=b10ck5.00000000000000000000000000000000.00000000-0000-0000-0000-000000000000`;
 
 /**
  * Retrieve an API key from a provided file of key=value lines
  * @param {string} filePath
+ * @return {string}
  */
 const extractKeyFromRcFile = (filePath) => {
   const fileContent = fs.readFileSync(filePath);
   const lines = fileContent.toString().split("\n");
   for (const line of lines) {
     const [key, value] = line.split("=");
-    if (key === configFileKey) {
+    if (key === configFileKey && value) {
       console.log(chalk.green(`Found API key in configuration file.`));
       return value;
     }
@@ -34,6 +36,9 @@ const extractKeyFromRcFile = (filePath) => {
   process.exit();
 };
 
+/**
+ * @returns {Promise<string>}
+ */
 export const findApiKey = async () => {
   const keyInEnvironment = process.env[environmentVariableName];
 
@@ -66,7 +71,7 @@ export const findApiKey = async () => {
       console.log(chalk.green("Created file:"), newConfigFilePath);
       console.log(
         chalk.red("Warning:"),
-        "you should add .bprc to your .gitignore to avoid committing your secret",
+        "you should add .blockprotocolrc to your .gitignore to avoid committing your secret",
       );
     }
   }

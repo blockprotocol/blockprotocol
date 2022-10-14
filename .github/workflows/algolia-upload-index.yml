@@ -18,4 +18,4 @@ jobs:
       - uses: ./.github/actions/warm-up-repo
 
       - name: Sync Algolia Index
-        run: yarn workspace @blockprotocol/site exe scripts/sync-algolia-index.ts
+        run: yarn workspace @apps/site exe scripts/sync-algolia-index.ts

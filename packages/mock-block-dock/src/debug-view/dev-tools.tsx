@@ -1,7 +1,6 @@
 import {
   alpha,
   Box,
-  Chip,
   Paper as MuiPaper,
   styled,
   Tab as MuiTab,
@@ -14,20 +13,12 @@ import { forwardRef, useLayoutEffect, useRef, useState } from "react";
 import { Resizable } from "react-resizable";
 import useLocalStorageState from "use-local-storage-state";
 
-import { useMockBlockDockContext } from "../mock-block-dock-context";
+import { BlockInfoView } from "./dev-tools/block-info-view";
 import { DataStoreView } from "./dev-tools/datastore-view";
 import { LogsView } from "./dev-tools/logs-view";
 import { PropertiesView } from "./dev-tools/properties";
 import { a11yProps, TabPanel } from "./dev-tools/tab-panel";
 import { HEADER_HEIGHT } from "./header";
-
-const Wrapper = styled(Box)(() => ({
-  position: "fixed",
-  left: 0,
-  right: 0,
-  bottom: 0,
-  zIndex: 1000,
-}));
 
 const TAB_HEIGHT = 40;
 
@@ -74,11 +65,12 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
       ref={ref}
       className={`handle=${handleAxis}`}
       sx={(theme) => ({
-        height: "1px",
-        backgroundColor: theme.palette.divider,
+        borderBottom: `1px solid ${theme.palette.divider}`,
         cursor: "ns-resize",
         position: "absolute",
-        top: 0,
+        // extend the resize handle 10px above its visible border to make it an easier click target
+        top: "-10px",
+        paddingBottom: "10px",
         left: 0,
         right: 0,
         zIndex: 10,
@@ -88,38 +80,30 @@ const ResizeHandle = forwardRef<HTMLDivElement, any>((props, ref) => {
   );
 });
 
-const chipInfo = {
-  html: {
-    color: "info",
-    label: "HTML Block",
-  },
-  "custom-element": {
-    label: "Custom Element Block",
-    color: "warning",
-  },
-  react: { label: "React Block", color: "secondary" },
-} as const;
-
 export const DevTools = () => {
-  const [value, setValue] = useState(0);
+  const [selectedTabIndex, setSelectedTabIndex] = useLocalStorageState(
+    "debug-tab-index",
+    { defaultValue: 0 },
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const paperBoxRef = useRef<HTMLDivElement | null>(null);
   const [height, setHeight] = useLocalStorageState("mbd-dev-tools-height", {
     defaultValue: 350,
   });
   const [width, setWidth] = useState<number>();
-  const { blockType } = useMockBlockDockContext();
 
   useLayoutEffect(() => {
-    if (!wrapperRef.current) return;
+    if (!wrapperRef.current) {
+      return;
+    }
     setWidth(wrapperRef.current.getBoundingClientRect().width);
   }, []);
 
   return (
-    <Wrapper ref={wrapperRef}>
+    <Box ref={wrapperRef} height={height} position="relative">
       <Resizable
         height={height}
-        width={width!}
+        width={width ?? 0}
         resizeHandles={["n"]}
         handle={<ResizeHandle />}
         onResize={(_, { size }) => {
@@ -128,34 +112,65 @@ export const DevTools = () => {
       >
         <Paper sx={{ height }} ref={paperBoxRef}>
           <Header>
-            <Tabs value={value} onChange={(_, newVal) => setValue(newVal)}>
-              <Tab label="Properties" {...a11yProps(0)} />
+            <Tabs
+              value={selectedTabIndex}
+              onChange={(_, newVal) => setSelectedTabIndex(newVal)}
+            >
+              <Tab label="Properties" {...a11yProps(0)} sx={{ pl: 3 }} />
               <Tab label="Datastore" {...a11yProps(1)} />
               <Tab label="Logs" {...a11yProps(2)} />
+              <Tab label="Block Info" {...a11yProps(3)} />
             </Tabs>
-
-            {blockType && (
-              <Chip
-                variant="outlined"
-                size="small"
-                label={chipInfo[blockType].label}
-                color={chipInfo[blockType].color}
-              />
-            )}
           </Header>
           <Box flex={1} overflow="scroll">
-            <TabPanel value={value} index={0}>
+            <TabPanel value={selectedTabIndex} index={0}>
               <PropertiesView />
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={selectedTabIndex} index={1}>
               <DataStoreView />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={selectedTabIndex} index={2}>
               <LogsView />
+            </TabPanel>
+            <TabPanel value={selectedTabIndex} index={3}>
+              <BlockInfoView />
             </TabPanel>
           </Box>
         </Paper>
       </Resizable>
-    </Wrapper>
+      <style jsx global>{`
+        @font-face {
+          font-family: "Inter";
+          font-weight: 300;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/Inter-Italic.woff2")
+            format("woff2");
+        }
+
+        @font-face {
+          font-family: "Inter";
+          font-weight: 400;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/Inter-Regular.woff2")
+            format("woff2");
+        }
+
+        @font-face {
+          font-family: "Inter";
+          font-weight: 500;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/Inter-Medium.woff2")
+            format("woff2");
+        }
+
+        @font-face {
+          font-family: "Mono";
+          font-weight: 400;
+          src: url("https://cdn-us1.hash.ai/assets/fonts/jet-brains-mono-regular.woff2")
+            format("woff2");
+        }
+
+        body {
+          margin: 0;
+        }
+      `}</style>
+    </Box>
   );
 };

@@ -1,0 +1,526 @@
+# Core
+
+This document (version 0.2) specifies how to define and use "blocks" – discrete components which can be used across multiple applications.
+
+It defines how "embedding applications" should render and communicate with blocks.
+
+It defines how "services" should be specified. Services provide functionality by describing the messages blocks and applications may exchange.
+
+You will see the following sub-headers within each section:
+
+- **Overview** introduces an informal explanation of the section, which is not part of the formal specification.
+- **Specification** introduces the formal requirements of the specification.
+
+## Glossary
+
+**Block:** a component defined according to this specification, designed to be used as part of an application.
+
+**Block instance**: a specific example of a block rendered on a page by an embedding application.
+
+**Block package**: a collection of files making a block available for use by embedding applications, including its source code and accompanying metadata.
+
+**Embedding application**: any application that can take a block and insert it in a web page according to this specification.
+
+**Message:** the unit of communication between blocks and embedding applications, transported according to this specification.
+
+**Service:** a description of the purpose and content of messages sent between blocks and applications, and any additional required metadata, defined according to this specification.
+
+## Defining blocks
+
+### Block package
+
+#### <Hidden>Block package </Hidden>Overview
+
+At a minimum, blocks consist of:
+
+1.  **source code**, and
+1.  a **metadata file** describing the block.
+
+We refer to the collection of files defining a block as a **block package.**
+
+A block package might be made available via a URL, package manager (e.g. [npm](https://www.npmjs.com/)), or block catalog (e.g. [the Hub](https://blockprotocol.org/hub)).
+
+#### <Hidden>Block package </Hidden>Specification
+
+A block package MUST contain:
+
+- **source file or files** (e.g. HTML and JavaScript files)
+  - where HTML is included, it SHOULD be valid HTML
+- **a metadata file describing the block**, in JSON format, which:
+  - MUST be called `block-metadata.json`, so that it can be reliably identified as the entry point for the block's other files
+  - MUST specify in all circumstances:
+    - `blockType`: the type of block this is, so that embedding applications know how to render it – see [Types of block](#types-of-block)).
+    - `name:` a name for the block, in slug format. This will be expected to be unique in the package manager or catalog where the block package is hosted
+    - `source`: the path or URL to the entry point source file (e.g. `index.html`, `index.js`)
+    - `version`: the version of the block in the package in question, which SHOULD use **[semantic versioning](https://semver.org/)**
+    - `protocol`: the version of this core specification the block complies with
+  - MUST specify under certain conditions:
+    - `externals`: any libraries the block expects the embedding application to supply it with, i.e. libraries which the block depends on but does not include in its package and expects to be available when it calls `import "library"`. This MAY be omitted if the block does not have any such dependencies. If defined, this MUST be an array of objects where the key is the name of the library used when importing it and the value is the expected version (or version range). For example, `"externals": [{ "react": "^18.0.0" }]`
+  - SHOULD specify:
+    - `author`: a display name for the author of the block
+    - `description`: a brief description of the block
+    - `displayName`: a display name used for the block
+    - `icon`: a path to the icon for the block, to be displayed when the user is selecting from available blocks (and elsewhere as appropriate, e.g. in a website listing the block). This should be 1:1 width:height ratio, with no padding around the icon
+    - `image`: a path to the preview image of the block to help users visualize it before using it. This would ideally have a 3:2 width:height ratio and be a minimum of 900x600px
+    - `license`: the name of the license the block is made available under (e.g. MIT), or the URL of a license
+    - `repository`: specifies the place where your block's code lives. This is helpful for people who want to explore the source, or contribute to your block's development
+  - MUST NOT specify under certain conditions:
+    - `externals`: must not be specified when `blockType.entryPoint` is specified as `"html"`. Block Protocol does not currently support embedding applications injecting dependencies for HTML blocks. This is a technical limitation of ES Modules.
+
+### Types of block
+
+#### <Hidden>Types of block </Hidden>Overview
+
+As blocks can be defined in different ways, embedding applications need to be able to render blocks defined in different ways.
+
+HTML blocks also require some special provisions in order to enable interaction with the embedding application.
+
+#### <Hidden>Types of block </Hidden>Specification
+
+The `blockType` of the block in `block-metadata.json` MUST define the type of entry point of the block, which MUST be an object, which:
+
+- MUST contain an `entryPoint` key defining what exactly the block’s source is or exports, which MUST be one of:
+  - `"custom-element"`: a user-defined [CustomElement](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements), often referred to by the broader technology [Web Component](https://developer.mozilla.org/en-US/docs/Web/Web_Components). This includes components written using libraries and exported as a custom element. Blocks of this kind MUST export the class as the default or single named export from their `source` file, and MUST specify `tagName` (see below).
+  - `"html"`: an HTML file, whether a simple `<p>` or a complicated block that loads various scripts. Blocks of this kind MUST have an `.html` file as their `source`.
+  - `"react"`: a React component. Blocks of this kind MUST export the component function as the default or single named export from their `source` file.
+- where the block `entryPoint` is `"custom-element"`, MUST also specify a `tagName` key, to specify the element tag name. This is important where the block’s code relies on the custom element being registered by the application using a specific tag.
+
+See [loading blocks](#loading-blocks) for more handling of different kinds of blocks.
+
+## Loading blocks
+
+### Rendering
+
+#### <Hidden>Rendering </Hidden>Overview
+
+Embedding applications are responsible for rendering blocks as part of their application, with different strategies depending on the type of block.
+
+#### <Hidden>Rendering </Hidden>Specification
+
+An embedding application MUST render blocks by:
+
+1.  importing the source code for the blocks it wants to display (whether at runtime or compiled along with its own source)
+1.  rendering the block as part of a webpage (whether in a sandbox or not, at the application’s discretion)
+1.  providing any external dependencies the block requires
+1.  setting up message handling as described in [block-application communication](#block-application-communication)
+
+Blocks MUST be loaded with a strategy appropriate to their declared `entryPoint`, e.g.
+
+- a `custom-element` class MUST be used to [define the element](https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define) in the `elementRegistry`, using the `tag` name provided.
+- a `react` component MUST be rendered EITHER by calling it inside another React component, or given its own React tree with `ReactDOM.render`
+- an `html` file MUST be rendered by attaching it to document, without breaking any `<script>` tags within it (e.g. by using `document.createRange().createContextualFragment(html)` rather than setting `innerHtml`, within which scripts will not work). HTML files require additional provisions as described immediately below.
+
+The embedding application MUST pass the data of [`"initResponse"`](#initResponse-initialization-data) to blocks as properties, where blocks support being passed or assigned properties, so that the data within it is made available synchronously and immediately to blocks.
+
+##### HTML blocks
+
+Blocks of kind `"html"` require special handling in order that they can identify elements within them – since they may share their scope with other blocks, including identical blocks, they cannot rely on finding elements by id or other selectors.
+
+The `@blockprotocol/core` package exports for embedding applications' convenience a `renderHtmlBlock` function which handles both assigning an implementation of the `blockprotocol` API described below to the global scope, and rendering the block within a provided node.
+
+If an embedding application wishes to handle rendering separately, the package also exports (which `renderHtmlBlock` makes use of):
+
+- an `assignBlockProtocolGlobals` function, which simply assigns an implementation of the `blockprotocol` API described below to the global scope. The package also exports a corresponding `teardownBlockProtocol` function to reset this.
+- a `markBlockScripts` function. Embedding applications MUST call this when rendering a block if they wish to use the implementation of the `blockprotocol` API provided by `assignBlockProtocolGlobals`, as this ensures those APIs know which block is calling them.
+
+Embedding applications which load ANY block of `kind: "html"` MUST provide a `blockprotocol` object on the global scope (i.e. `globalThis.blockprotocol` / `window.blockprotocol`), which:
+
+- MUST contain a `getBlockContainer` key where the value is a function, which the HTML block can call to obtain a reference to the container element for that specific block:
+  - this MUST accept a single argument, which MUST be either a single script element, or a URL string, and may be omitted
+  - the implementation of these functions relies on embedding applications attaching ids to script tags when loading blocks by which they can be later identified (or when the block provides additional scripts via `markScript`).
+- MUST contain a `getBlockUrl` key where the value is a function, which the HTML block can call to obtain the URL at which the HTML source of the block is hosted:
+  - this MUST accept a single argument, which MUST be either a single script element, or a URL string, and may be omitted.
+- MUST contain a `markScript` key where the value is a function, which is used to attach ids to dynamically script tags so that they can be identified when calling `getBlockContainer`
+  - This MUST accept TWO arguments:
+    - the first MUST be the script source
+    - the second MUST be either a single script element, or a URL string.
+
+Blocks of `kind: "html"` MUST call `getBlockContainer` from within any script they load, with different strategies depending on whether the script is:
+
+- **inline** (written directly in the `<script>` tag) or **remote** (a file loaded via the `src` property of a `<script>` tag)
+- **`type="module"`** or **not**
+
+<table>
+  <thead>
+    <tr>
+      <th>`getBlockContainer -> HTMLElement`</th>
+      <th>Inline</th>
+      <th>Remote</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Module</td>
+      <td>```js getBlockContainer() ```</td>
+      <td>```js getBlockContainer( import.meta.url ) ```</td>
+    </tr>
+    <tr>
+      <td>Script</td>
+      <td>```js getBlockContainer( document.currentScript ) ```</td>
+      <td>```js getBlockContainer( document.currentScript ) ```</td>
+    </tr>
+  </tbody>
+</table>
+
+Blocks of `kind: "html"` MAY call `getBlockUrl` from within any script they load, with different strategies depending on whether the script is:
+
+- **inline** (written directly in the `<script>` tag) or **remote** (a file loaded via the `src` property of a `<script>` tag)
+- **`type="module"`** or **not**
+
+<table>
+  <thead>
+    <tr>
+      <th>`getBlockUrl -> HTMLElement`</th>
+      <th>Inline</th>
+      <th>Remote</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Module</td>
+      <td>```js getBlockUrl() ```</td>
+      <td>```js getBlockUrl( import.meta.url ) ```</td>
+    </tr>
+    <tr>
+      <td>Script</td>
+      <td>```js getBlockUrl( document.currentScript ) ```</td>
+      <td>```js getBlockUrl( document.currentScript ) ```</td>
+    </tr>
+  </tbody>
+</table>
+
+If blocks generate any scripts dynamically at runtime, they MUST call `markScript` in order to have the script marked by the embedding application. As with static scripts, they MUST call `getBlockContainer` within any dynamically generated script in order to obtain a reference to the element containing the block.
+
+<table>
+  <thead>
+    <tr>
+      <th>`markScript`</th>
+      <th>Inline</th>
+      <th>Remote</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Module</td>
+      <td>```js markScript(script) ```</td>
+      <td>```js markScript( script, import.meta.url ) ```</td>
+    </tr>
+    <tr>
+      <td>Script</td>
+      <td>```js markScript( script, document.currentScript ) ```</td>
+      <td>```js markScript( script, document.currentScript ) ```</td>
+    </tr>
+  </tbody>
+</table>
+
+Embedding applications MUST update any relative static imports (or script tag src attributes) contained within a block's HTML source to ensure the URLs are relative to the block's source, and not the page the HTML is hosted on. The `@blockprotocol/core` package exports `markBlockScripts` which can be used to do this for scripts (not e.g. an `img` with a relative `src`).
+
+An example HTML block is available via `npx create-block-app@latest your-block-name --template html`
+
+## Block-application communication
+
+### Message transport
+
+#### <Hidden>Message transport </Hidden>Overview
+
+Communication between blocks and embedding application happens via messages transported as DOM events.
+
+As blocks may not sandboxed, messages to or from them must be scoped to their location in the document, so that their origin can be identified.
+
+#### <Hidden>Message transport </Hidden>Specification
+
+Blocks:
+
+- MUST send messages via dispatching a [`CustomEvent`](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent) named `"blockprotocolmessage"`, where the event matches the structure described in [message content](#message-content)
+- MUST dispatch events from an element located within the component, ideally the root, which MUST not change across the lifetime of the block instance
+- MUST listen for messages of type `"blockprotocolmessage"` sent from the embedder on the SAME ELEMENT from which they dispatch events
+
+Embedding applications:
+
+- MUST listen for events of type `"blockprotocolmessage"` sent from the block on an element higher in the DOM tree than the block.
+- MUST dispatch events via a `CustomEvent` on the SAME element the block dispatches messages from – identified via listening for [the initial `"init"` message](#core-messages) and subsequently dispatching on the target of that initial event.
+
+### Message content
+
+#### <Hidden>Message content </Hidden>Overview
+
+The basic structure of Block Protocol messages is defined by this specification, and involves `data` and possibly any `errors` encountered in producing the message.
+
+The content of `data` and the permissible codes under `errors` are left to service specifications to define.
+
+#### <Hidden>Message content </Hidden>Specification
+
+**Messages** MUST be transported via a `CustomEvent` which
+
+- MUST have `type: "blockprotocolmessage"`
+- MUST have a `detail` object which:
+  - MUST include a `requestId`, which MUST be a `uuid`
+    - if the message is a direct response to another message, it MUST provide the `requestId` of the original message
+    - otherwise, the dispatcher MUST generate the `requestId`
+  - MUST include the `service` this message relates to (or `"core"` for messages defined in this document)
+  - MUST include the `name` of the message, as defined in the relevant specification
+  - MUST include the `source`, which MUST be one of `"block"` or `"embedder"`
+  - MUST contain one or both of `data` and `errors`
+    - `data` may be any type of JSON value (string, object, null, etc)
+    - `errors` MUST be an array of objects, each of which MUST have a `code` and `message` – both strings – and MAY have `extensions`, an arbitrary JSON object defined by the service specification. Valid error codes are defined per message, in an `errorCodes` property in [the message definition](#messages-error-codes)
+
+Messages MUST therefore be an object which conforms to the following schema:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "const": "blockprotocolmessage"
+    },
+    "detail": {
+      "type": "object",
+      "properties": {
+        "requestId": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "service": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string",
+          "enum": ["block", "embedder"]
+        },
+        "data": {},
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "code": { "type": "string" },
+              "message": { "type": "string" },
+              "extensions": { "type": "object" }
+            },
+            "required": ["code", "message"]
+          }
+        }
+      },
+      "required": ["requestId", "name", "service", "source"]
+    }
+  },
+  "required": ["detail", "type"]
+}
+```
+
+The `data` and `errors` of any messages exchanged between applications and blocks, and not described in [Core messages](#core-messages), MUST be described in separate [service specifications](#defining-services).
+
+### Core messages
+
+#### <Hidden>Core messages </Hidden>Overview
+
+The core specification defines messages which are related to the core functionality of the Block Protocol. There are currently two such messages:
+
+- `"init"`: a message a block sends on load and whenever it changes the element it is dispatching from (e.g. destroys the previous one)
+- `"initResponse"`: a message the embedder sends in response
+
+These messages are how blocks may exchange messages which are `sentOnInitialization`, which might be values available immediately on load, or configuration information, or anything else the service defines as useful for blocks and embedders to exchange on initialization.
+
+#### <Hidden>Core messages </Hidden>Specification
+
+**`init`**
+
+Immediately on loading, blocks MUST send a message of the following shape:
+
+```json
+{
+  "type": "blockprotocolmessage",
+  "detail": {
+    "requestId": "<block-generated-uuid>",
+    "service": "core",
+    "name": "init",
+    "data": {}
+  }
+}
+```
+
+Blocks MUST listen for subsequent message events dispatched by the embedder on the element they dispatched this message from.
+
+If the block removes this element from the DOM, the block MUST send another `init` message event from a new element,
+and listen to subsequent messages from the embedder on that element.
+
+Embedding applications MUST listen for the `init` message event being dispatched from the block, by attaching an event listener to an element wrapping or at the root of the block.
+
+Embedding applications MUST dispatch ALL events intended for the block on the `init` message event’s `target` element, including the `"initResponse"` message described immediately below. It MUST update the element being listened on if a new `init` message is received.
+
+**`initResponse`**
+
+When an `"init"` message is received, embedding applications MUST send a message of the following shape:
+
+```json
+{
+  "type": "blockprotocolmessage",
+  "detail": {
+    "requestId": "<requestId-from-initRequest>",
+    "service": "core",
+    "name": "initResponse",
+    "data": {}
+  }
+}
+```
+
+<span id="initResponse-initialization-data">**Initialization data**</span>
+
+The `data` for both `"init"` and `"initResponse"` MUST be an object, where
+
+- the keys of the object MUST be the names of services
+- the values for those keys MUST be objects
+- the keys for that object MUST match the `name` of `messages` for that service which are marked as `sentOnInitialization`, with the data as described in the relevant service specification
+
+For example:
+
+```json
+{
+  "type": "blockprotocolmessage",
+  "detail": {
+    "requestId": "abcd-1234-efg0-5678",
+    "service": "core",
+    "name": "initResponse",
+    "data": {
+      "graph": {
+        "blockEntity": {
+          "//": "the block entity"
+        }
+      }
+    }
+  }
+}
+```
+
+## Defining services
+
+### Definition
+
+#### <Hidden>Definition </Hidden>Overview
+
+A service aims to provide a logical grouping of functionality and/or solve a specific problem related to block-application interaction.
+
+A service definition must set out the **messages** that a block and application will exchange as part of the service.
+
+**Messages** should be specified in a JSON file. The JSON file must conform to [the constraints defined by the Service Specification JSON Schema.](#json-schema-for-service-specification) To aid understanding, the constraints defined by the JSON schema are laid out in this section (**definition**), and a section related to **messages.**
+
+Services may also include an additional markdown file which provides further explanation and narrative, and imposes any additional requirements not captured via messages. This may, for example, specify additional metadata related to the service that can be expressed as part of a block package, whether in `block-metadata.json` or in an additional file or files.
+
+#### <Hidden>Definition </Hidden>Specification
+
+Each service:
+
+- MUST define any messages it introduces in a JSON file conforming to [this schema](#json-schema-for-service-specification)
+- MAY define an additional Markdown file which:
+  - MAY provide additional narrative and explanation on the contents of its JSON file
+  - MAY impose additional arbitrary requirements on embedding applications and blocks
+  - is OVERRULED by the JSON file in the event that there is any inconsistency between the two in how messages are defined
+
+The JSON schema requires that a service specification is a JSON object which
+
+- MUST contain:
+  - `name`
+  - `description`
+  - `messages`
+  - `version`
+  - `coreVersion`
+
+If there are any discrepancies between the requirements listed above and the requirements in the JSON schema, the JSON schema takes precedence.
+
+### Messages
+
+#### <Hidden>Messages </Hidden>Overview
+
+Messages are the means by which blocks and applications communicate.
+
+The messages a service defines should be relevant to the delivery of the service.
+
+Messages are listed under in the `messages` key of the JSON file which defines the service.
+
+#### <Hidden>Messages </Hidden>Specification
+
+A service specification SHOULD include any messages to be sent as part of the service under a `messages` key on the JSON file defining the service.
+
+The value of `messages` should be an array of JSON objects.
+
+An entry in `messages` MUST specify:
+
+- a `messageName` for the request
+- a `description`
+- a `source`: one of `block` or `embedder`
+- a `data`
+
+An entry in `messages` MAY specify:
+
+- `respondedToBy`: a `string`, which names another entry in `messages`. The presence of this indicates this message is part of a request/response pair
+- `sentOnInitialization`: whether this message will be sent immediately when the block is initialized, in response to the `"initRequest"` message (and provided as properties synchronously to blocks which support it). Note that such messages may also be sent after intialization, e.g. if their data changes
+- <span id="messages-error-codes">`errorCodes`</span>: valid codes for any
+  errors encountered in producing the message data. this may appear alongside or
+  instead of `data` in the message contents.
+
+### JSON Schema for Service Specification
+
+```json
+{
+  "$id": "https://blockprotocol.org/types/core/service-meta",
+  "type": "object",
+  "properties": {
+    "description": {
+      "type": "string",
+      "description": "A short description of the functionality the service provides and/or the problems it aims to solve. Markdown is permitted."
+    },
+    "name": {
+      "type": "string",
+      "description": "A unique name for the service, consisting of lowercase letters, numbers, and hyphens only.",
+      "pattern": "^[-a-z0-9]$"
+    },
+    "messages": {
+      "type": "array",
+      "description": "The messages that may be exchanged by blocks and embedding applications as part of the service",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "messageName": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "enum": ["block", "embedder"]
+          },
+          "data": {
+            "type": "object"
+          },
+          "errorCodes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "sentOnInitialization": {
+              "type": "boolean"
+            },
+            "respondedToBy": {
+              "type": "string"
+            }
+          },
+          "required": ["description", "messageName", "source", "data"]
+        }
+      },
+      "version": {
+        "type": "string",
+        "description": "The semantic version of this service specification"
+      },
+      "coreVersion": {
+        "type": "string",
+        "description": "The version (or version range) of the core specification this is compatible with"
+      }
+    },
+    "required": ["description", "messages", "name", "version"]
+  }
+}
+```

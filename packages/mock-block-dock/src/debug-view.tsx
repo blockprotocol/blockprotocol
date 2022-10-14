@@ -1,5 +1,3 @@
-import "./assets/debug-view-styles.css";
-
 import { Box, CssBaseline, styled, ThemeProvider } from "@mui/material";
 import { ReactNode, useState } from "react";
 
@@ -28,7 +26,12 @@ export const DebugView = ({ children }: DebugViewProps) => {
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <CssBaseline />
-      <Box height="100vh" display="flex" flexDirection="column">
+      <Box
+        height="100vh"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+      >
         <Header darkMode={darkMode} setDarkMode={setDarkMode} />
         <Box flex={1} display="flex">
           <MainContainer component="main">

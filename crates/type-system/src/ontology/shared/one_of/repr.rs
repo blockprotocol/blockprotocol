@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
-use crate::{repr, ParseOneOfError, PropertyValues};
+use crate::{repr, EntityTypeReference, ParseOneOfError, PropertyValues};
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -23,6 +23,23 @@ impl TryFrom<OneOf<repr::PropertyValues>> for super::OneOf<PropertyValues> {
             .possibilities
             .into_iter()
             .map(|ele| ele.try_into().map_err(ParseOneOfError::PropertyValuesError))
+            .collect::<Result<Vec<_>, Self::Error>>()?;
+
+        Self::new(inner).map_err(ParseOneOfError::ValidationError)
+    }
+}
+
+impl TryFrom<OneOf<repr::EntityTypeReference>> for super::OneOf<EntityTypeReference> {
+    type Error = ParseOneOfError;
+
+    fn try_from(one_of_repr: OneOf<repr::EntityTypeReference>) -> Result<Self, Self::Error> {
+        let inner = one_of_repr
+            .possibilities
+            .into_iter()
+            .map(|ele| {
+                ele.try_into()
+                    .map_err(ParseOneOfError::EntityTypeReferenceError)
+            })
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
         Self::new(inner).map_err(ParseOneOfError::ValidationError)

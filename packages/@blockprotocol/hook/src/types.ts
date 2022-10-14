@@ -9,6 +9,7 @@ export type HookData = {
   type: string;
   path: string;
   hookId: string | null;
+  entityId: string;
 };
 
 export type BlockHookMessageCallbacks = {};

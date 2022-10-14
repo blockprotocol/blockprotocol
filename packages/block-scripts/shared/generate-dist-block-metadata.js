@@ -1,5 +1,6 @@
-import fs from "fs-extra";
 import path from "node:path";
+
+import fs from "fs-extra";
 
 import { blockDistDirPath, blockRootDirPath } from "./paths.js";
 import { writeFormattedJson } from "./write-formatted-json.js";
@@ -15,6 +16,7 @@ export const generateDistBlockMetadata = async (extra) => {
     name,
     version,
     description,
+    repository,
     author,
     license,
     blockprotocol,
@@ -29,6 +31,7 @@ export const generateDistBlockMetadata = async (extra) => {
     name,
     version,
     description,
+    repository,
     author,
     license,
     externals: peerDependencies,

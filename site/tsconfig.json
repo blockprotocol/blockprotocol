@@ -1,4 +1,0 @@
-{
-  "extends": "@local/tsconfig/next.json",
-  "include": ["next-env.d.ts", "theme-override.d.ts", "**/*.ts", "**/*.tsx"]
-}

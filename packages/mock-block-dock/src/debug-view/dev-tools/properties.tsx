@@ -12,12 +12,13 @@ import Ajv from "ajv";
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { customColors } from "../theme/palette";
 import { BlockSchemaView } from "./block-schema-view";
+import { EntitySwitcher } from "./entity-switcher";
 import { JsonView } from "./json-view";
 
 const ajv = new Ajv();
 
 export const PropertiesView = () => {
-  const { readonly, setReadonly, blockSchema, blockEntity, setBlockEntity } =
+  const { readonly, setReadonly, blockSchema, blockEntity, updateEntity } =
     useMockBlockDockContext();
 
   const validate = ajv.compile(blockSchema ?? {});
@@ -26,7 +27,7 @@ export const PropertiesView = () => {
 
   return (
     <Container maxWidth="xl">
-      <Grid container spacing={4}>
+      <Grid container>
         <Grid item xs={6}>
           {/* Entity Properties row */}
           <Box mb={3}>
@@ -34,6 +35,7 @@ export const PropertiesView = () => {
               sx={{ display: "flex", justifyContent: "space-between", mb: 1 }}
             >
               <Typography variant="subtitle2">Entity Properties</Typography>
+              <EntitySwitcher />
               {/* Readonly toggle */}
               <Box sx={{ display: "flex" }}>
                 <Typography variant="subtitle2" mr={1}>
@@ -51,20 +53,33 @@ export const PropertiesView = () => {
               <JsonView
                 collapseKeys={["graph"]}
                 rootName="blockEntity"
+                sortKeys
                 src={blockEntity ?? {}}
                 onEdit={(args) => {
-                  setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>,
-                  );
+                  // These fields should not be edited
+                  if (
+                    args.name &&
+                    ["entityType", "entityTypeId", "entityId"].includes(
+                      args.name,
+                    )
+                  ) {
+                    return false;
+                  }
+                  void updateEntity({
+                    data: args.updated_src as Entity,
+                  });
                 }}
                 onAdd={(args) => {
-                  setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>,
-                  );
+                  // don't allow adding of top level fields
+                  if (args.name && !args.name.includes("properties")) {
+                    return false;
+                  }
+                  void updateEntity({
+                    data: args.updated_src as Entity,
+                  });
                 }}
                 onDelete={(args) => {
-                  // entityType,entityTypeId and entityId can be edited but should not be
-                  // deleted
+                  // These fields should not be deleted
                   if (
                     args.name &&
                     [
@@ -76,11 +91,11 @@ export const PropertiesView = () => {
                   ) {
                     return false;
                   }
-                  setBlockEntity(
-                    args.updated_src as Entity<Record<string, unknown>>,
-                  );
+                  void updateEntity({
+                    data: args.updated_src as Entity,
+                  });
                 }}
-                validationMessage="Not allowed"
+                validationMessage="You may only edit the properties object"
               />
               <Collapse in={!!errors?.length}>
                 {errors?.map((error) => (
@@ -97,12 +112,14 @@ export const PropertiesView = () => {
           </Box>
         </Grid>
         <Grid item xs={6}>
-          <Box>
-            <Typography variant="subtitle2" mb={1}>
-              Block Schema
-            </Typography>
-            <BlockSchemaView />
-          </Box>
+          {blockSchema && (
+            <Box>
+              <Typography variant="subtitle2" mb={1}>
+                Block Schema
+              </Typography>
+              <BlockSchemaView />
+            </Box>
+          )}
         </Grid>
       </Grid>
     </Container>

@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.0.15",
+  "version": "0.0.17",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
@@ -20,6 +20,8 @@
   "type": "module",
   "bin": "./bin.js",
   "scripts": {
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
@@ -56,10 +58,12 @@
     "yargs-parser": "21.0.1"
   },
   "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@types/serve-handler": "^6.1.1",
     "@types/webpack-assets-manifest": "^5.1.0",
-    "@types/webpack-bundle-analyzer": "^4.4.2"
+    "@types/webpack-bundle-analyzer": "^4.4.2",
+    "eslint": "8.24.0"
   },
   "engines": {
     "node": "^14.15.0 || >=16.13.0"

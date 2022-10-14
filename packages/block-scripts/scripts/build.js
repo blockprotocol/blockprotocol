@@ -1,5 +1,6 @@
-import chalk from "chalk";
 import { promisify } from "node:util";
+
+import chalk from "chalk";
 import webpack from "webpack";
 
 import { cleanDist } from "../shared/clean-dist.js";
