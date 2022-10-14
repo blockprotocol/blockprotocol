@@ -2,6 +2,7 @@ import {
   BlockComponent,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
+import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
 import { useRef } from "react";
 
 type AppProps = {
@@ -14,8 +15,17 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
     readonly,
   } = graph;
   const blockRef = useRef<HTMLDivElement>(null);
+  const hookRef = useRef<HTMLDivElement>(null);
 
   const { graphService } = useGraphBlockService(blockRef);
+
+  const { hookService } = useHookBlockService(blockRef);
+
+  useHook(hookService, hookRef, "text", entityId, "description", () => {
+    throw new Error(
+      "Fallback called – dock is not correctly handling text hook.",
+    );
+  });
 
   if (readonly) {
     return (
@@ -23,7 +33,10 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
         <h1>
           Hello {properties.name}! The id of this block is {entityId}
         </h1>
-        <p>{properties.name}</p>
+        <h2>Block-handled name display</h2>
+        <p style={{ marginBottom: 30 }}>{properties.name}</p>
+        <h2>Hook-handled description display</h2>
+        <div ref={hookRef} />
       </div>
     );
   }
@@ -33,6 +46,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
       <h1>
         Hello {properties.name}! The id of this block is {entityId}
       </h1>
+      <h2>Block-handled name editing</h2>
       <input
         type="text"
         placeholder="This block's entity's 'name' property"
@@ -42,7 +56,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
             const { data, errors } = await graphService!.updateEntity({
               data: {
                 entityId,
-                properties: { name: event.target.value },
+                properties: { ...properties, name: event.target.value },
               },
             });
             // eslint-disable-next-line no-console
@@ -56,6 +70,8 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
           }
         }}
       />
+      <h2>Hook-handled description editing</h2>
+      <div ref={hookRef} />
     </div>
   );
 };
