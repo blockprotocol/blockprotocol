@@ -3,10 +3,11 @@
   "labels": ["area: dependencies"],
   "postUpdateOptions": ["yarnDedupeFewer"],
   "prConcurrentLimit": 10,
+  "enabledManagers": ["npm"],
   "packageRules": [
     {
       "enabled": false,
-      "matchPackageNames": ["**"]
+      "matchPackageNames": [".*"]
     },
     {
       "enabled": true,
