@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "labels": ["area: dependencies"],
+  "postUpdateOptions": ["yarnDedupeFewer"],
+  "enabled": false,
+  "packageRules": [
+    {
+      "enabled": true,
+      "groupName": "playwright",
+      "matchPackageNames": [
+        "@playwright/",
+        "playwright-test-coverage",
+        "playwright"
+      ]
+    },
+    {
+      "enabled": true,
+      "groupName": "eslint",
+      "matchPackagePrefixes": ["@typescript-eslint/", "eslint"]
+    }
+  ]
+}
