@@ -80,7 +80,9 @@ test("login works for an existing user (via verification code)", async ({
 
   const logOutItem = accountDropdownPopover.locator(`span:has-text("Log Out")`);
   await expect(logOutItem).toBeVisible();
-  await expect(logOutItem).toHaveAttribute("href", "");
+  expect(await logOutItem.getAttribute("href")).toBeNull();
+  // @todo replace ↑ with ↓ when https://github.com/microsoft/playwright/issues/16270 is implemented
+  // await expect(logOutItem).not.hasAttribute("href");
 
   await logOutItem.click();
 
