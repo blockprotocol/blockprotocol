@@ -1,6 +1,3 @@
-## Using MACHINE_USER_TOKEN enables GitHub Workflows in ‘Version Packages’ PRs
-## https://github.com/peter-evans/create-pull-request/blob/main/docs/concepts-guidelines.md#triggering-further-workflow-runs
-
 name: Release
 on:
   push:
@@ -22,5 +19,4 @@ jobs:
         with:
           publish: yarn workspace @local/package-chores exe scripts/publish-to-npmjscom.ts
         env:
-          GITHUB_TOKEN: ${{ secrets.MACHINE_USER_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
