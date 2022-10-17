@@ -16,7 +16,7 @@ export type BlockHookMessageCallbacks = {};
 
 export type EmbedderHookMessages<> = {};
 
-export type HookError = "NOT_IMPLEMENTED";
+export type HookError = "INVALID_INPUT" | "NOT_FOUND" | "NOT_IMPLEMENTED";
 
 /**
  * @todo Generate these types from the JSON definition, to avoid manually keeping the JSON and types in sync
