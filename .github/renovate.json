@@ -3,8 +3,8 @@
   "postUpdateOptions": ["yarnDedupeFewer"],
   "prConcurrentLimit": 10,
   "enabledManagers": ["github-actions", "npm"],
-  "rebaseWhen": "never",
-  "schedule": ["every weekday before 6am"],
+  "rebaseWhen": "conflicted",
+  "schedule": ["every weekday before 5am"],
   "packageRules": [
     {
       "enabled": false,
