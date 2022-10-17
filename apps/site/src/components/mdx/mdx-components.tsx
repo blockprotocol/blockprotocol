@@ -27,6 +27,7 @@ import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
 import { usePageHeading } from "./shared/use-page-heading";
 import { stringifyChildren } from "./shared/util";
+import { HookServiceMessageList } from "./hook-service-message-list";
 
 const Heading = styled(Typography)(({ theme }) => ({
   "svg.link-icon": {
@@ -96,6 +97,7 @@ export const mdxComponents: Record<
   InfoCard,
   FAQ,
   GraphServiceMessageList,
+  HookServiceMessageList,
   SubTitle: (({ children }: { children?: ReactNode }) => (
     <Box
       maxWidth={750}

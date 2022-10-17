@@ -127,6 +127,19 @@ There is [ongoing discussion on this topic](https://github.com/blockprotocol/blo
 
 </FAQ>
 
+<FAQ question="How does text editing work in the Block Protocol?">
+
+Rich text editing is a core part of many modern block-based applications, but details often vary across applications:
+
+- how rich text is represented in existing applications varies depending on the particular approach used
+- applications often provide special functionality inside rich text fields, e.g. being able to `@mention` or search for things inline
+
+We do not believe it feasible or desirable to impose a single rich text editing experience across applications,
+and instead have introduced the [Hook Service](https://blockprotocol.org/docs/spec/hook-service) to allow embedding applications to
+inject their own rich text editing display and input, at blocks' request.
+
+</FAQ>
+
 <FAQ question="Are blocks composable?">
 
 Blocks composed of other blocks is an important feature which we believe the Block Protocol must support, and which we have begun exploring.
@@ -174,7 +187,7 @@ One way of representing entities in a machine-readable way is in [JSON-LD](https
 ```
 
 The structure of entities in the Block Protocol are described by JSON schema, and we encourage these to be
-[mapped to terms which can be used to construct a JSON-LD representation of the entity],
+mapped to terms which can be used to construct a JSON-LD representation of the entity,
 which embedding applications can include in the page's markup.
 
 </FAQ>
