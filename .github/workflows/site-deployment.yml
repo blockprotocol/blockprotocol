@@ -53,7 +53,7 @@ jobs:
 
       - name: Upload artifact playwright-report
         if: ${{ success() || failure() }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: site-e2e-tests-playwright-report
           path: apps/site/playwright-report
