@@ -38,7 +38,7 @@
     "@next/bundle-analyzer": "^12.3.1",
     "@sentry/nextjs": "^7.13.0",
     "@twind/next": "^1.0.9",
-    "ajv": "^8.9.0",
+    "ajv": "patch:ajv@npm%3A8.9.0#~/.yarn/patches/ajv-npm-8.9.0-d7480193a9.patch",
     "algoliasearch": "4.12.1",
     "axios": "^0.24.0",
     "busboy": "^1.4.0",

@@ -47,7 +47,7 @@ ajv.addKeyword({
   schemaType: "string",
 });
 /**
- * ajv has been patched as it disallows '@context' as a key (patch-package patches)
+ * ajv has been patched as it disallows '@context' as a key (.yarn/patches)
  * @todo figure out a proper way of dealing with this, might be using the wrong API
  *   only need this keyword at the root, not on properties
  */

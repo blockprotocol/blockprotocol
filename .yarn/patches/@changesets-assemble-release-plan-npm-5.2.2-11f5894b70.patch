@@ -1,7 +1,7 @@
-diff --git a/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.dev.js b/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.dev.js
-index 3a37c62..146db90 100644
---- a/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.dev.js
-+++ b/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.dev.js
+diff --git a/dist/assemble-release-plan.cjs.dev.js b/dist/assemble-release-plan.cjs.dev.js
+index 3a37c62c975518f975c22e1b4b3974d9b325a5da..146db90b2ce2a85fe26923f122df25eea964465b 100644
+--- a/dist/assemble-release-plan.cjs.dev.js
++++ b/dist/assemble-release-plan.cjs.dev.js
 @@ -145,6 +145,7 @@ function determineDependents({
            } else if ((!releases.has(dependent) || releases.get(dependent).type === "none") && (config.___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH.updateInternalDependents === "always" || !semver__default['default'].satisfies(incrementVersion(nextRelease, preInfo), versionRange))) {
              switch (depType) {
@@ -25,10 +25,10 @@ index 3a37c62..146db90 100644
              }
            }
          }
-diff --git a/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.prod.js b/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.prod.js
-index 87b4c10..ad83a16 100644
---- a/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.prod.js
-+++ b/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.cjs.prod.js
+diff --git a/dist/assemble-release-plan.cjs.prod.js b/dist/assemble-release-plan.cjs.prod.js
+index 87b4c104bf3fa53ba498ced6f81eda0ed4c86436..ad83a1648e57763fb7fd01571537fde4561303fa 100644
+--- a/dist/assemble-release-plan.cjs.prod.js
++++ b/dist/assemble-release-plan.cjs.prod.js
 @@ -80,13 +80,11 @@ function determineDependents({releases: releases, packagesByName: packagesByName
            onlyUpdatePeerDependentsWhenOutOfRange: config.___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH.onlyUpdatePeerDependentsWhenOutOfRange
          })) type = "major"; else if (!(releases.has(dependent) && "none" !== releases.get(dependent).type || "always" !== config.___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH.updateInternalDependents && semver__default.default.satisfies(incrementVersion(nextRelease, preInfo), versionRange))) switch (depType) {
@@ -44,10 +44,10 @@ index 87b4c10..ad83a16 100644
          }
        }
        return releases.has(dependent) && releases.get(dependent).type === type && (type = void 0), 
-diff --git a/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.esm.js b/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.esm.js
-index c29c008..5632dfb 100644
---- a/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.esm.js
-+++ b/node_modules/@changesets/assemble-release-plan/dist/assemble-release-plan.esm.js
+diff --git a/dist/assemble-release-plan.esm.js b/dist/assemble-release-plan.esm.js
+index c29c008dd709f07cabcb07feff86012c35a01ce5..5632dfb3b1f9d7d800c4d0213e2a73ad8507e7dd 100644
+--- a/dist/assemble-release-plan.esm.js
++++ b/dist/assemble-release-plan.esm.js
 @@ -137,6 +137,7 @@ function determineDependents({
            } else if ((!releases.has(dependent) || releases.get(dependent).type === "none") && (config.___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH.updateInternalDependents === "always" || !semver.satisfies(incrementVersion(nextRelease, preInfo), versionRange))) {
              switch (depType) {

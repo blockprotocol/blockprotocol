@@ -33,13 +33,32 @@
     "dev": "yarn workspace @apps/site dev",
     "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "dev:db": "yarn workspace @apps/site dev:db",
-    "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./apps/*\""
+    "prepare": "turbo run codegen && turbo run build \"--filter=!./apps/*\""
   },
   "lint-staged": {
     "**": [
       "suppress-exit-code markdownlint --fix",
       "suppress-exit-code prettier --write"
     ]
+  },
+  "resolutions": {
+    "@changesets/assemble-release-plan@npm:^5.2.2": "patch:@changesets/assemble-release-plan@npm%3A5.2.2#~/.yarn/patches/@changesets-assemble-release-plan-npm-5.2.2-11f5894b70.patch",
+    "@changesets/get-dependents-graph@npm:^1.3.4": "patch:@changesets/get-dependents-graph@npm%3A1.3.4#~/.yarn/patches/@changesets-get-dependents-graph-npm-1.3.4-4c02775455.patch",
+    "@changesets/git@npm:^1.5.0": "patch:@changesets/git@npm%3A1.5.0#~/.yarn/patches/@changesets-git-npm-1.5.0-2b3630ea97.patch",
+    "ajv@npm:^6.10.0": "patch:ajv@npm%3A8.9.0#~/.yarn/patches/ajv-npm-8.9.0-d7480193a9.patch",
+    "ajv@npm:^6.12.4": "patch:ajv@npm%3A8.9.0#~/.yarn/patches/ajv-npm-8.9.0-d7480193a9.patch",
+    "ajv@npm:^6.12.5": "patch:ajv@npm%3A8.9.0#~/.yarn/patches/ajv-npm-8.9.0-d7480193a9.patch",
+    "ajv@npm:^8.0.0": "patch:ajv@npm%3A8.9.0#~/.yarn/patches/ajv-npm-8.9.0-d7480193a9.patch",
+    "ajv@npm:^8.0.1": "patch:ajv@npm%3A8.9.0#~/.yarn/patches/ajv-npm-8.9.0-d7480193a9.patch",
+    "ajv@npm:^8.8.0": "patch:ajv@npm%3A8.9.0#~/.yarn/patches/ajv-npm-8.9.0-d7480193a9.patch",
+    "domhandler@npm:^2.3.0": "patch:domhandler@npm%3A4.3.1#~/.yarn/patches/domhandler-npm-4.3.1-493539c1ca.patch",
+    "domhandler@npm:^2.4.0": "patch:domhandler@npm%3A4.3.1#~/.yarn/patches/domhandler-npm-4.3.1-493539c1ca.patch",
+    "domhandler@npm:^4.0.0": "patch:domhandler@npm%3A4.3.1#~/.yarn/patches/domhandler-npm-4.3.1-493539c1ca.patch",
+    "domhandler@npm:^4.2.0": "patch:domhandler@npm%3A4.3.1#~/.yarn/patches/domhandler-npm-4.3.1-493539c1ca.patch",
+    "htmlparser2@npm:^3.9.0": "patch:htmlparser2@npm%3A6.1.0#~/.yarn/patches/htmlparser2-npm-6.1.0-4ef89ab31e.patch",
+    "htmlparser2@npm:^6.0.0": "patch:htmlparser2@npm%3A6.1.0#~/.yarn/patches/htmlparser2-npm-6.1.0-4ef89ab31e.patch",
+    "htmlparser2@npm:^6.1.0": "patch:htmlparser2@npm%3A6.1.0#~/.yarn/patches/htmlparser2-npm-6.1.0-4ef89ab31e.patch",
+    "playwright-core@npm:1.27.1": "patch:playwright-core@npm%3A1.27.1#~/.yarn/patches/playwright-core-npm-1.27.1-5f07cc4685.patch"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.7",
@@ -51,7 +70,6 @@
     "lockfile-lint": "4.9.6",
     "markdownlint-cli": "0.32.2",
     "npm-run-all": "4.1.5",
-    "patch-package": "6.4.7",
     "prettier": "2.7.1",
     "prettier-plugin-packagejson": "2.2.18",
     "prettier-plugin-sh": "0.12.8",

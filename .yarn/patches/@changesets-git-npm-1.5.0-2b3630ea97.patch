@@ -1,7 +1,7 @@
-diff --git a/node_modules/@changesets/git/dist/git.cjs.dev.js b/node_modules/@changesets/git/dist/git.cjs.dev.js
-index 40cfe7b..cce4c29 100644
---- a/node_modules/@changesets/git/dist/git.cjs.dev.js
-+++ b/node_modules/@changesets/git/dist/git.cjs.dev.js
+diff --git a/dist/git.cjs.dev.js b/dist/git.cjs.dev.js
+index 40cfe7b25d85c2adcfc6d5f984c05cdbbc3ccccd..cce4c290df751ec5c09e6227e3f6cc480d041148 100644
+--- a/dist/git.cjs.dev.js
++++ b/dist/git.cjs.dev.js
 @@ -247,6 +247,10 @@ async function getChangedPackagesSinceRef({
      const prevPkg = fileToPackage[fileName] || {
        dir: ""
@@ -13,10 +13,10 @@ index 40cfe7b..cce4c29 100644
      if (pkg.dir.length > prevPkg.dir.length) fileToPackage[fileName] = pkg;
    }));
    return Object.values(fileToPackage) // filter, so that we have only unique packages
-diff --git a/node_modules/@changesets/git/dist/git.cjs.prod.js b/node_modules/@changesets/git/dist/git.cjs.prod.js
-index 711c0cb..f7756db 100644
---- a/node_modules/@changesets/git/dist/git.cjs.prod.js
-+++ b/node_modules/@changesets/git/dist/git.cjs.prod.js
+diff --git a/dist/git.cjs.prod.js b/dist/git.cjs.prod.js
+index 711c0cbc97d8b5a2a77f0f8f773e4eab490368ca..f7756dbf68968f26e2b78d526644001de64303c6 100644
+--- a/dist/git.cjs.prod.js
++++ b/dist/git.cjs.prod.js
 @@ -139,6 +139,7 @@ async function getChangedChangesetFilesSinceRef({cwd: cwd, ref: ref}) {
  }
  
@@ -36,10 +36,10 @@ index 711c0cb..f7756db 100644
        pkg.dir.length > prevPkg.dir.length && (fileToPackage[fileName] = pkg);
      }));
      var dir;
-diff --git a/node_modules/@changesets/git/dist/git.esm.js b/node_modules/@changesets/git/dist/git.esm.js
-index 0cc847f..451ebbc 100644
---- a/node_modules/@changesets/git/dist/git.esm.js
-+++ b/node_modules/@changesets/git/dist/git.esm.js
+diff --git a/dist/git.esm.js b/dist/git.esm.js
+index 0cc847fb506155b247e7f9ea91900971cef48546..451ebbc507a3c7d0cac469c014b52f48021ef7a8 100644
+--- a/dist/git.esm.js
++++ b/dist/git.esm.js
 @@ -236,6 +236,10 @@ async function getChangedPackagesSinceRef({
      const prevPkg = fileToPackage[fileName] || {
        dir: ""

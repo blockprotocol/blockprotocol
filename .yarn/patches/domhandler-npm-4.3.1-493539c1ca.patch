@@ -1,7 +1,7 @@
-diff --git a/node_modules/domhandler/lib/index.d.ts b/node_modules/domhandler/lib/index.d.ts
-index befc7d8..88cc9b9 100644
---- a/node_modules/domhandler/lib/index.d.ts
-+++ b/node_modules/domhandler/lib/index.d.ts
+diff --git a/lib/index.d.ts b/lib/index.d.ts
+index befc7d8056b40816bd9941fbf3ac9c5551d5c580..88cc9b9159595c86a2826a9c4b3c122888413154 100644
+--- a/lib/index.d.ts
++++ b/lib/index.d.ts
 @@ -1,5 +1,7 @@
  import { Node, Element, DataNode, NodeWithChildren, Document } from "./node";
  export * from "./node";
