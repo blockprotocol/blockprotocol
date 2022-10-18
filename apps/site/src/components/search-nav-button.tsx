@@ -12,10 +12,13 @@ export const SearchNavButton = () => {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === "/" &&
-        (event.target as HTMLElement | undefined)?.nodeName !== "INPUT"
-      ) {
+      if (event.key === "/") {
+        // Do not trigger search when user is typing in an input field
+        const { nodeName } = (event.target as HTMLElement | undefined) ?? {};
+        if (nodeName === "INPUT" || nodeName === "TEXTAREA") {
+          return;
+        }
+
         event.preventDefault();
         setDisplayModal((prev) => !prev);
       }
