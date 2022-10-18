@@ -170,9 +170,6 @@ jobs:
           docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio:5
           yarn wait-on --timeout 30000 http://localhost:4873
 
-      - name: Remove ESLint from templates
-        run: yarn workspace @local/package-chores exe scripts/remove-eslint-from-templates.ts
-
       - name: Publish NPM packages to local registry
         run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
 
