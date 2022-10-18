@@ -35,7 +35,7 @@ test("is triggered by pressing / on desktop", async ({ page, isMobile }) => {
   });
 });
 
-test("is not triggered by pressing / within an input field", async ({
+test("is not triggered by pressing / within an input or a textarea", async ({
   page,
 }) => {
   const searchModal = page.locator(searchModalSelector);
@@ -47,6 +47,20 @@ test("is not triggered by pressing / within an input field", async ({
 
   await expect(
     searchModal,
-    "Search modal should not be visible on mobile",
+    "Search modal should not be visible when pressing '/' within an input",
+  ).not.toBeVisible();
+
+  await page.goto("/@hash/blocks/code");
+
+  const jsonEditor = page.locator(
+    "[data-testid='block-properties-tabpanel'] >> textarea",
+  );
+
+  await jsonEditor.focus();
+  await page.keyboard.type("te/st");
+
+  await expect(
+    searchModal,
+    "Search modal should not be visible when pressing '/' within a textarea",
   ).not.toBeVisible();
 });
