@@ -20,7 +20,7 @@
     "fix:eslint": "turbo run --continue fix:eslint",
     "fix:markdownlint": "markdownlint --dot --fix .",
     "fix:prettier": "prettier --cache --write --ignore-unknown .",
-    "fix:yarn-deduplicate": "yarn install && yarn-deduplicate --strategy=fewer && yarn install",
+    "fix:yarn-dedupe": "yarn dedupe",
     "lint": "npm-run-all --continue-on-error \"lint:*\"",
     "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
@@ -29,7 +29,7 @@
     "lint:markdownlint": "markdownlint --dot .",
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
-    "lint:yarn-deduplicate": "yarn-deduplicate --fail --list --strategy=fewer",
+    "lint:yarn-dedupe": "yarn dedupe --check",
     "dev": "yarn workspace @apps/site dev",
     "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "dev:db": "yarn workspace @apps/site dev:db",
@@ -48,7 +48,7 @@
     "dotenv-flow": "3.2.0",
     "husky": "7.0.4",
     "lint-staged": "12.3.3",
-    "lockfile-lint": "4.6.2",
+    "lockfile-lint": "4.9.6",
     "markdownlint-cli": "0.32.2",
     "npm-run-all": "4.1.5",
     "patch-package": "6.4.7",
@@ -56,9 +56,9 @@
     "prettier-plugin-packagejson": "2.2.18",
     "prettier-plugin-sh": "0.12.8",
     "suppress-exit-code": "1.0.0",
-    "turbo": "1.4.3",
-    "yarn-deduplicate": "3.1.0"
+    "turbo": "1.4.3"
   },
+  "packageManager": "yarn@4.0.0-rc.25",
   "engines": {
     "node": ">=16.14.0"
   }

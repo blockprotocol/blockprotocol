@@ -30,7 +30,6 @@
     "printWidth": 80,
     "trailingComma": "all"
   },
-  "dependencies": {},
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "block-scripts": "0.0.17",

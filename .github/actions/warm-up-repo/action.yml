@@ -15,7 +15,7 @@ runs:
         node-version: 16 ## aligned with Node version on Vercel
         cache: yarn
 
-    - run: yarn install
+    - run: yarn install --immutable
       shell: bash
       env:
         PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: ${{ inputs.playwright-deps == '' }}
