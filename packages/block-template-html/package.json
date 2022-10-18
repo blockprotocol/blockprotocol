@@ -22,8 +22,8 @@
     "dev": "echo \"Serving at http://localhost:63212\" && http-server -p 63212 ./dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
+    "postinstall": "rimraf ./dev/src && lnk -f ./src ./dev",
     "lint:eslint": "eslint .",
-    "prepare": "rimraf ./dev/src && lnk -f ./src ./dev",
     "serve": "block-scripts serve"
   },
   "prettier": {
