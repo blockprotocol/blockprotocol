@@ -166,6 +166,20 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
         }
         const { hookId, node, type } = data;
 
+        if (hookId) {
+          const existingHook = hooks.get(hookId);
+          if (!existingHook) {
+            return {
+              errors: [
+                {
+                  code: "NOT_FOUND",
+                  message: `Hook with id ${hookId} not found`,
+                },
+              ],
+            };
+          }
+        }
+
         if (node === null && hookId) {
           setHooks((currentHooks) => {
             const draftHooks = new Map(currentHooks);

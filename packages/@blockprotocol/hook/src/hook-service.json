@@ -38,7 +38,7 @@
         },
         "required": ["node", "type", "path", "hookId"]
       },
-      "errors": []
+      "errorCodes": []
     },
     {
       "messageName": "hookResponse",
@@ -56,49 +56,7 @@
         },
         "required": ["hookId"]
       },
-      "errors": [
-        {
-          "code": "INVALID_INPUT",
-          "message": {
-            "type": "string"
-          }
-        },
-        {
-          "code": "NOT_IMPLEMENTED",
-          "message": {
-            "type": "string"
-          },
-          "extensions": {
-            "type": "object",
-            "description": "The properties passed in the 'hook' message which this message is in response to",
-            "properties": {
-              "node": {
-                "type": ["object", "null"],
-                "description": "The DOM node the embedding application will render a view into, or modifying an already rendered view. If null, the view should be destroyed."
-              },
-              "type": {
-                "oneOf": [
-                  { "type": "string" },
-                  { "enum": ["text", "image", "video"] }
-                ],
-                "description": "The type of view for the hook. Technically permits any string, although we anticipate 'text', and to a lesser extent 'image' and 'video' being common."
-              },
-              "entityId": {
-                "type": "string",
-                "description": "The entityId of the entity which owns the data the hook should be rendered using. i.e. the entity which has the hook data stored in its properties in the separately provided 'path'"
-              },
-              "path": {
-                "type": "string",
-                "description": "A path expressed as a JSON path to a property present in the entity's schema, where the value used in rendering this view should be retrieved from and persisted to (if updated)"
-              },
-              "hookId": {
-                "type": ["string", "null"],
-                "description": "The ID of the hook as provided in the response when first sending a hook message. This should be null in the first 'hook' message for a given node, and use the value provided by the embedding application in 'hookResponse' on subsequent messages."
-              }
-            }
-          }
-        }
-      ]
+      "errorCodes": ["INVALID_INPUT", "NOT_FOUND", "NOT_IMPLEMENTED"]
     }
   ]
 }
