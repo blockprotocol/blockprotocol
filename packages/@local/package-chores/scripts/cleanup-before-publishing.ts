@@ -95,14 +95,16 @@ const script = async () => {
   console.log(`Package path: ${packageInfo.path}`);
   console.log("");
 
-  if (
-    (
-      await execa("git", ["diff", "--exit-code", packageDirPath], {
-        cwd: monorepoRoot,
-        reject: false,
-      })
-    ).exitCode
-  ) {
+  const gitDiffResult = await execa(
+    "git",
+    ["diff", "--exit-code", packageDirPath],
+    {
+      cwd: monorepoRoot,
+      reject: false,
+    },
+  );
+
+  if (gitDiffResult.exitCode) {
     throw new UserFriendlyError(
       `Please commit or revert changes in ${packageDirPath} before running this script`,
     );
