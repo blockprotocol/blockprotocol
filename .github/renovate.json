@@ -3,43 +3,50 @@
   "postUpdateOptions": ["yarnDedupeFewer"],
   "prConcurrentLimit": 10,
   "enabledManagers": ["github-actions", "npm"],
+  "rebaseWhen": "conflicted",
+  "schedule": ["every weekday before 5am"],
   "packageRules": [
     {
       "enabled": false,
       "matchManagers": ["npm"],
-      "matchPackagePatterns": [".*"]
-    },
-    {
-      "matchManagers": ["npm"],
-      "rangeStrategy": "bump"
+      "rangeStrategy": "bump",
+      "stabilityDays": 3
     },
     {
       "enabled": true,
-      "groupName": "changesets",
+      "matchManagers": ["npm"],
+      "matchFiles": ["package.json"]
+    },
+    {
+      "enabled": true,
+      "groupName": "Changesets",
       "matchManagers": ["npm"],
       "matchPackagePatterns": ["^@changesets/"]
     },
     {
+      "automerge": true,
       "enabled": true,
-      "groupName": "eslint",
+      "groupName": "ESLint",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@typescript-eslint/", "^eslint$"]
+      "matchPackagePatterns": [
+        "^@types/eslint",
+        "^@typescript-eslint/",
+        "^eslint-config-",
+        "^eslint-plugin-",
+        "^eslint$"
+      ]
     },
     {
       "enabled": true,
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^eslint-config-", "^eslint-plugin-"]
-    },
-    {
-      "enabled": true,
-      "groupName": "playwright",
+      "groupName": "Playwright",
       "matchManagers": ["npm"],
       "matchPackagePatterns": ["^@playwright/", "^playwright"]
     },
     {
       "enabled": true,
+      "groupName": "Prettier",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^typescript$", "^ts-node$"]
+      "matchPackagePatterns": ["^prettier"]
     }
   ]
 }
