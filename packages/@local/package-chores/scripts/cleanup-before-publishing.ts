@@ -11,33 +11,40 @@ import { UserFriendlyError } from "./shared/errors";
 
 const updateJson = async (
   jsonFilePath: any,
+  // @todo consider avoiding argument mutation and improve typings if the function is used more widely
   transform: (existingJson: any) => void,
 ) => {
-  const json = await fs.readJson(jsonFilePath);
+  const rawJson = await fs.readFile(jsonFilePath, "utf8");
+  const json = JSON.parse(rawJson);
+
   transform(json);
-  const formattedPackageJson = format(JSON.stringify(json), {
+
+  const newRawJson = format(JSON.stringify(json), {
     filepath: jsonFilePath,
   });
-  await fs.writeFile(jsonFilePath, formattedPackageJson);
+
+  if (rawJson !== newRawJson) {
+    await fs.writeFile(jsonFilePath, newRawJson);
+  }
 };
 
 const ensureTermIsNotMentioned = async ({
-  packageDirPath,
-  termToAvoid,
+  dirPath,
+  term,
   advice,
 }: {
-  packageDirPath: string;
-  termToAvoid: string;
+  dirPath: string;
+  term: string;
   advice: string;
 }) => {
-  const normalizedTermToAvoid = termToAvoid.toLowerCase();
+  const normalizedTermToAvoid = term.toLowerCase();
   const { stdout: rawFilePaths } = await execa("git", ["ls-files"], {
-    cwd: packageDirPath,
+    cwd: dirPath,
   });
 
   let filePathsWithMentions: string[] = [];
   for (const filePath of rawFilePaths.split("\n")) {
-    const resolvedFilePath = path.resolve(packageDirPath, filePath);
+    const resolvedFilePath = path.resolve(dirPath, filePath);
     if (
       (await fs.pathExists(resolvedFilePath)) &&
       (filePath.toLowerCase().includes(normalizedTermToAvoid) ||
@@ -51,11 +58,9 @@ const ensureTermIsNotMentioned = async ({
 
   if (filePathsWithMentions.length) {
     throw new UserFriendlyError(
-      `The following files in this template still mention ${termToAvoid}:\n  ${filePathsWithMentions
+      `The following files still mention ${term}:\n  ${filePathsWithMentions
         .map((filePath) => path.relative(monorepoRoot, filePath))
-        .join(
-          "\n  ",
-        )}\n All traces mentioning ${normalizedTermToAvoid} should be removable before publish. ${advice}`,
+        .join("\n  ")}${advice ? "\n" + advice : ""}`,
     );
   }
 };
@@ -118,19 +123,19 @@ const script = async () => {
   });
 
   await ensureTermIsNotMentioned({
-    packageDirPath,
-    termToAvoid: "ESLint",
+    dirPath: packageDirPath,
+    term: "ESLint",
     advice: "Custom directives should be moved to .eslintrc.cjs",
   });
 
-  process.stdout.write(" Done \n");
+  process.stdout.write(" Done\n");
 
   process.stdout.write(`Removing prepublishOnly...`);
 
   await updateJson(path.join(packageDirPath, "package.json"), (packageJson) => {
     delete packageJson.scripts["prepublishOnly"];
   });
-  process.stdout.write(" Done \n");
+  process.stdout.write(" Done\n");
 };
 
 await script();
