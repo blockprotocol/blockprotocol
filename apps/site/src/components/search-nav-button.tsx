@@ -12,7 +12,10 @@ export const SearchNavButton = () => {
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "/") {
+      if (
+        event.key === "/" &&
+        (event.target as HTMLElement | undefined)?.nodeName !== "INPUT"
+      ) {
         event.preventDefault();
         setDisplayModal((prev) => !prev);
       }
