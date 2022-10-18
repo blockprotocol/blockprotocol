@@ -74,7 +74,8 @@
     "prettier-plugin-packagejson": "2.2.18",
     "prettier-plugin-sh": "0.12.8",
     "suppress-exit-code": "1.0.0",
-    "turbo": "1.4.3"
+    "turbo": "1.4.3",
+    "wait-on": "6.0.1"
   },
   "packageManager": "yarn@4.0.0-rc.25",
   "engines": {

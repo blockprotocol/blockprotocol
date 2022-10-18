@@ -20,6 +20,6 @@ runs:
       env:
         PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: ${{ inputs.playwright-deps == '' }}
 
-    - run: yarn playwright install-deps ${{ inputs.playwright-deps }}
+    - run: yarn workspace @apps/site playwright install-deps ${{ inputs.playwright-deps }}
       if: ${{ inputs.playwright-deps != '' }}
       shell: bash
