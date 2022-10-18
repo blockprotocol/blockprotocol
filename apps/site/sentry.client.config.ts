@@ -1,16 +1,15 @@
 // Context: https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
 import * as Sentry from "@sentry/nextjs";
-import type { NextjsOptions } from "@sentry/nextjs/types/utils/nextjsOptions";
 import { Replay } from "@sentry/replay";
 
-const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
+import { sharedSentryConfig } from "./src/lib/shared-sentry-config";
 
-export const sentryConfig: NextjsOptions = {
-  dsn,
-  enabled: !!dsn,
-  environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
+Sentry.init({
+  ...sharedSentryConfig,
   integrations: [
+    // @ts-expect-error -- refactor after upgrading to TypeScript 4.3, use `satisfies` in sharedSentryConfig
+    ...sharedSentryConfig.integrations,
     new Replay({
       captureOnlyOnError: true,
       // @todo Introduce sampling in production after initial testing
@@ -19,6 +18,4 @@ export const sentryConfig: NextjsOptions = {
       stickySession: true,
     }),
   ],
-};
-
-Sentry.init(sentryConfig);
+});
