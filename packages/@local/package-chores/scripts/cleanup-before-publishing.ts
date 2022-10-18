@@ -131,12 +131,12 @@ const script = async () => {
   });
 
   process.stdout.write(" Done\n");
-
   process.stdout.write(`Removing prepublishOnly...`);
 
   await updateJson(path.join(packageDirPath, "package.json"), (packageJson) => {
     delete packageJson.scripts["prepublishOnly"];
   });
+
   process.stdout.write(" Done\n");
 };
 
