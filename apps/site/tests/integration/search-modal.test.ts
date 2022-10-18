@@ -14,6 +14,7 @@ test("is triggered by pressing / on desktop", async ({ page, isMobile }) => {
       searchModal,
       "Search modal should not be visible on mobile",
     ).not.toBeVisible();
+    return;
   }
 
   await expect(
