@@ -44,8 +44,6 @@ jobs:
         with:
           playwright-deps: chrome
 
-      - run: yarn playwright install-deps chrome
-
       - name: Run Playwright tests
         run: yarn workspace @apps/site playwright test --project=e2e
         env:
