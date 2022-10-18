@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.33
+
+### Patch Changes
+
+- [#650](https://github.com/blockprotocol/blockprotocol/pull/650) [`1311f41`](https://github.com/blockprotocol/blockprotocol/commit/1311f415802a3e8fe5b32a8f86e01c1e03c403f3) Thanks [@CiaranMn](https://github.com/CiaranMn)! - move styles from stylesheet to styled-jsx tags
+
 ## 0.0.32
 
 ### Patch Changes

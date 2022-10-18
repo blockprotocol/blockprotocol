@@ -1,5 +1,13 @@
 # @blockprotocol/hook
 
+## 0.0.6
+
+### Patch Changes
+
+- [#613](https://github.com/blockprotocol/blockprotocol/pull/613) [`0afbd33`](https://github.com/blockprotocol/blockprotocol/commit/0afbd330a674765b5c9c1c0c19c1acb8be6a45e7) Thanks [@kachkaev](https://github.com/kachkaev)! - Fix typo in README
+
+- [#647](https://github.com/blockprotocol/blockprotocol/pull/647) [`14ab891`](https://github.com/blockprotocol/blockprotocol/commit/14ab891bc1cdd10fce2b1e8651fa897323c64e15) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add entityId to @blockprotocol/hook
+
 ## 0.0.5
 
 ### Patch Changes
