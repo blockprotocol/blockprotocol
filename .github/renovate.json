@@ -1,0 +1,45 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "postUpdateOptions": ["yarnDedupeFewer"],
+  "prConcurrentLimit": 10,
+  "enabledManagers": ["github-actions", "npm"],
+  "packageRules": [
+    {
+      "enabled": false,
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": [".*"]
+    },
+    {
+      "matchManagers": ["npm"],
+      "rangeStrategy": "bump"
+    },
+    {
+      "enabled": true,
+      "groupName": "changesets",
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@changesets/"]
+    },
+    {
+      "enabled": true,
+      "groupName": "eslint",
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@typescript-eslint/", "^eslint$"]
+    },
+    {
+      "enabled": true,
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^eslint-config-", "^eslint-plugin-"]
+    },
+    {
+      "enabled": true,
+      "groupName": "playwright",
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@playwright/", "^playwright"]
+    },
+    {
+      "enabled": true,
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^typescript$", "^ts-node$"]
+    }
+  ]
+}
