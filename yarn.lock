@@ -268,6 +268,7 @@ __metadata:
     ts-node: "npm:10.9.1"
     twind: "npm:^0.16.17"
     typescript: "npm:4.8.4"
+    typescript-json-schema: "npm:^0.53.0"
     unified: "npm:^10.1.2"
     use-mousetrap: "npm:^1.0.4"
     uuid: "npm:^8.3.2"
