@@ -97,7 +97,7 @@ export const ConfinedBlocks = () => {
           </Typography>
         </Box>
         <Box sx={{ width: { xs: "90%", md: "55%" } }}>
-          <Image alt="" src={darkBoxImage} />
+          <Image src={darkBoxImage} />
         </Box>
       </Box>
     </Box>
