@@ -22,8 +22,7 @@ Sentry.init({
       ? [
           new Replay({
             captureOnlyOnError: true,
-            replaysSamplingRate:
-              process.env.NEXT_PUBLIC_VERCEL_ENV === "production" ? 0.1 : 1,
+            replaysSamplingRate,
             stickySession: true,
           }),
         ]
