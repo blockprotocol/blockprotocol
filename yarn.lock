@@ -5173,10 +5173,10 @@ charenc@0.0.2:
   resolved "https://registry.yarnpkg.com/charenc/-/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
 
-check-dependency-version-consistency@3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/check-dependency-version-consistency/-/check-dependency-version-consistency-3.0.1.tgz#55c52325ee6d09e044b6a85be9af8963bf51620d"
-  integrity sha512-K/8dFQORKAB/E+VxJvGs/y0fEGY8SjCYsczEWnA2Q1/L2tKzukK0J/H83aVWFNCfH6lA5woOFC6vdFTeZoWPqA==
+check-dependency-version-consistency@3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/check-dependency-version-consistency/-/check-dependency-version-consistency-3.0.3.tgz#8033dc1d1e64eae07a86b14414a396e4f68d1f60"
+  integrity sha512-BmCr4v9xBGCPBTUoJwqaSJV9VqWXxAR983BogbEMU/y3NqwbvFkgpUBNW9YTP79Kv9FIy8X+G/5TU79HpI8C6Q==
   dependencies:
     chalk "^5.0.1"
     commander "^9.0.0"
