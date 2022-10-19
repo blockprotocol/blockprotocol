@@ -6,7 +6,7 @@ import { ExpandedBlockMetadata } from "../../blocks";
 import { getDbBlock, getDbBlocks } from "./db";
 
 const localBlocks = fs.readJsonSync(
-  path.resolve(process.cwd(), "blocks-data.json"),
+  path.resolve("blocks-data.json"),
 ) as ExpandedBlockMetadata[];
 
 export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
