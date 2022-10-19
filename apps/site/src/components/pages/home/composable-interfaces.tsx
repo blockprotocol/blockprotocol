@@ -74,7 +74,7 @@ export const ComposableInterfaces = () => {
           marginLeft: { xs: "-40%", sm: 0 },
         }}
       >
-        <Image src={composableFullImage} />
+        <Image alt="" src={composableFullImage} />
       </Box>
     </Box>
   );

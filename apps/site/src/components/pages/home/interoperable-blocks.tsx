@@ -53,7 +53,7 @@ export const InteroperableBlocks = () => {
               zIndex: "3",
             }}
           >
-            <Image src={transparentBlocksWithCircleImage} />
+            <Image alt="" src={transparentBlocksWithCircleImage} />
           </Box>
         )}
 
