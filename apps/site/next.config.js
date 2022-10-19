@@ -6,9 +6,6 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 
 // @ts-check
 
-// https://github.com/getsentry/sentry-javascript/issues/3852
-process.env.SENTRY_IGNORE_API_RESOLUTION_ERROR = "true";
-
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
