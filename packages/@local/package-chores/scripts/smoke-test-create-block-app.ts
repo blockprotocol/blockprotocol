@@ -147,6 +147,14 @@ const script = async () => {
       path.resolve(resolvedBlockDirPath, "package.json"),
     );
 
+    for (const scriptName of ["fix:eslint", "lint:eslint", "prepublishOnly"]) {
+      if (blockPackageJson.scripts[scriptName]) {
+        throw new Error(
+          `Unexpected to find \`${scriptName}\` script in block package.json`,
+        );
+      }
+    }
+
     if (blockPackageJson.scripts["lint:tsc"]) {
       await execa("npm", ["run", "lint:tsc"], execaOptionsInBlockDir);
     } else {
