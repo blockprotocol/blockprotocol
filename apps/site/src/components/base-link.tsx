@@ -54,7 +54,6 @@ export const BaseLink: FunctionComponent<BaseLinkProps> = ({
       // Setting to true triggers Next.js warning: https://nextjs.org/docs/messages/prefetch-true-deprecated
       prefetch={external ? false : undefined}
       passHref
-      legacyBehavior
       href={href}
     >
       {fixedChild}
