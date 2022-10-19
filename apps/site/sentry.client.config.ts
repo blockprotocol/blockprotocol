@@ -10,7 +10,9 @@ Sentry.init({
   enabled: !!dsn,
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
   integrations:
+    // @todo Remove when https://github.com/getsentry/sentry-replay/issues/246#issuecomment-1284472286 is resolved
     typeof window === "undefined" ||
+    // @todo Remove when Replay is considered stable
     process.env.NEXT_PUBLIC_FEATURE_SENTRY_REPLAY !== "true"
       ? []
       : [
