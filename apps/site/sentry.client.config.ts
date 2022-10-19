@@ -5,23 +5,27 @@ import { Replay } from "@sentry/replay";
 
 const dsn = process.env.NEXT_PUBLIC_SENTRY_DSN;
 
+const replaysSamplingRate = Number.parseInt(
+  process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE || "0",
+  10,
+);
+
 Sentry.init({
   dsn,
   enabled: !!dsn,
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
   integrations:
+    replaysSamplingRate > 0 &&
+    replaysSamplingRate <= 1 &&
     // @todo Remove when https://github.com/getsentry/sentry-replay/issues/246#issuecomment-1284472286 is resolved
-    typeof window === "undefined" ||
-    // @todo Remove when Replay is considered stable
-    process.env.NEXT_PUBLIC_FEATURE_SENTRY_REPLAY !== "true"
-      ? []
-      : [
+    typeof window !== "undefined"
+      ? [
           new Replay({
             captureOnlyOnError: true,
-            // @todo Introduce sampling in production after initial testing
-            // replaysSamplingRate:
-            //   process.env.NEXT_PUBLIC_VERCEL_ENV === "production" ? 0.1 : 1,
+            replaysSamplingRate:
+              process.env.NEXT_PUBLIC_VERCEL_ENV === "production" ? 0.1 : 1,
             stickySession: true,
           }),
-        ],
+        ]
+      : [],
 });
