@@ -10,7 +10,8 @@ Sentry.init({
   enabled: !!dsn,
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
   integrations:
-    typeof window === "undefined"
+    typeof window === "undefined" ||
+    process.env.NEXT_PUBLIC_FEATURE_SENTRY_REPLAY !== "true"
       ? []
       : [
           new Replay({
