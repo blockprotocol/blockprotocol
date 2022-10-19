@@ -290,7 +290,7 @@ jobs:
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
-        run: yarn node node_modules/.bin/nyc report --reporter=lcov --reporter=text
+        run: yarn node node_modules/.bin/nyc report --reporter=lcovonly --reporter=text
 
       - uses: codecov/codecov-action@v3
         if: ${{ success() || failure() }}
