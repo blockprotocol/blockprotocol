@@ -70,7 +70,12 @@ export const Header = () => {
           infinitely extensible with interoperable components called blocks.
         </Typography>
       </Container>
-      <Image layout="responsive" src={primaryHelixImage} />
+      <Image
+        alt=""
+        style={{ width: "100%", height: "auto" }}
+        sizes="100vw"
+        src={primaryHelixImage}
+      />
     </Box>
   );
 };

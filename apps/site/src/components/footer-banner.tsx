@@ -45,8 +45,11 @@ const Link: FunctionComponent<LinkProps> = (linkProps) => (
 const BackgroundHelix: FunctionComponent = () => {
   return (
     <Image
-      objectFit="contain"
-      objectPosition="right"
+      alt=""
+      style={{
+        objectFit: "contain",
+        objectPosition: "right",
+      }}
       src={backgroundCornerHelix}
     />
   );
