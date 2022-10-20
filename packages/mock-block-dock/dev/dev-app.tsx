@@ -1,6 +1,6 @@
 import { Entity } from "@blockprotocol/graph";
 import { ChangeEvent, FunctionComponent, useState } from "react";
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import { MockBlockDock } from "../src";
 import { TestCustomElementBlock } from "./test-custom-element-block";
@@ -136,4 +136,8 @@ const DevApp: FunctionComponent = () => {
   );
 };
 
-render(<DevApp />, node);
+if (node) {
+  createRoot(node).render(<DevApp />);
+} else {
+  throw new Error("Unable to find DOM element with id 'app'");
+}
