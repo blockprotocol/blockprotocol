@@ -38,6 +38,7 @@
     "@mui/material": "^5.10.4",
     "@next/bundle-analyzer": "^12.3.1",
     "@sentry/nextjs": "^7.13.0",
+    "@sentry/replay": "0.6.4",
     "@twind/next": "^1.0.9",
     "ajv": "^8.9.0",
     "algoliasearch": "4.12.1",
