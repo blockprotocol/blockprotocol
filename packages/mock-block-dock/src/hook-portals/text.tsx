@@ -99,9 +99,10 @@ export const TextHookView = ({
     );
   }
 
-  const previousTextRef = useRef<MaybePlainOrRichText>(
-    generateComparableString(text),
-  );
+  const previousTextRef = useRef<string | null>(null);
+  if (previousTextRef.current === null) {
+    previousTextRef.current = generateComparableString(text)
+  }
 
   const nodesFromProps: Descendant[] = useMemo(
     () =>
