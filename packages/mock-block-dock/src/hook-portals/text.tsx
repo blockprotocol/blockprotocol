@@ -118,13 +118,10 @@ export const TextHookView = ({
   );
 
   useEffect(() => {
-    if (
-      generateComparableString(text) !==
-      generateComparableString(previousTextRef.current)
-    ) {
+   const comparableString = generateComparableString(text);
+    if (comparableString !== previousTextRef.current) {
+      previousTextRef.current = comparableString;
       resetNodes(editor, nodesFromProps);
-
-      previousTextRef.current = generateComparableString(text);
     }
   }, [editor, nodesFromProps, text]);
 
