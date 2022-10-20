@@ -58,7 +58,10 @@ export const set = (obj: {}, path: string | string[], value: unknown) => {
   currentObj[keys[i]!] = value;
 };
 
-export const debounce = <T extends (...args: any[]) => any>(func: T, delayMs: number) => {
+export const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  delayMs: number,
+) => {
   let timerId: NodeJS.Timeout;
 
   return (...args: Parameters<T>) => {

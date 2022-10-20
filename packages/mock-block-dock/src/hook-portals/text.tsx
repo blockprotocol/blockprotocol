@@ -1,4 +1,11 @@
-import { KeyboardEventHandler, useCallback, useMemo, useState } from "react";
+import {
+  KeyboardEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   BaseEditor,
   createEditor,
@@ -19,7 +26,6 @@ import { debounce } from "../util";
 import { Leaf } from "./text/leaf";
 import { Format, MaybePlainOrRichText, toggleMark } from "./text/shared";
 import { Toolbar } from "./text/toolbar";
-import { useDidTextChange } from "./text/use-did-text-prop-change";
 
 type CustomText = { text: string } & { [key in Format]?: boolean };
 type CustomElement = { type: "paragraph"; children: CustomText[] };
@@ -72,6 +78,9 @@ const isMaybeText = (value: unknown): value is MaybePlainOrRichText => {
   );
 };
 
+const generateComparableString = (text: MaybePlainOrRichText) =>
+  typeof text === "string" ? text : JSON.stringify(text);
+
 export const TextHookView = ({
   readonly = false,
   text = "",
@@ -90,6 +99,10 @@ export const TextHookView = ({
     );
   }
 
+  const previousTextRef = useRef<MaybePlainOrRichText>(
+    generateComparableString(text),
+  );
+
   const nodesFromProps: Descendant[] = useMemo(
     () =>
       typeof text === "string" || text == null
@@ -103,10 +116,16 @@ export const TextHookView = ({
     [text],
   );
 
-  const textHasChanged = useDidTextChange(text);
-  if (textHasChanged) {
-    resetNodes(editor, nodesFromProps);
-  }
+  useEffect(() => {
+    if (
+      generateComparableString(text) !==
+      generateComparableString(previousTextRef.current)
+    ) {
+      resetNodes(editor, nodesFromProps);
+
+      previousTextRef.current = generateComparableString(text);
+    }
+  }, [editor, nodesFromProps, text]);
 
   const onKeyDown = useCallback<KeyboardEventHandler>(
     (event) => {
