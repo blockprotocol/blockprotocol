@@ -101,7 +101,7 @@ export const TextHookView = ({
 
   const previousTextRef = useRef<string | null>(null);
   if (previousTextRef.current === null) {
-    previousTextRef.current = generateComparableString(text)
+    previousTextRef.current = generateComparableString(text);
   }
 
   const nodesFromProps: Descendant[] = useMemo(
@@ -118,7 +118,7 @@ export const TextHookView = ({
   );
 
   useEffect(() => {
-   const comparableString = generateComparableString(text);
+    const comparableString = generateComparableString(text);
     if (comparableString !== previousTextRef.current) {
       previousTextRef.current = comparableString;
       resetNodes(editor, nodesFromProps);
