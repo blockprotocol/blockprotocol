@@ -13,6 +13,7 @@ const nextConfig = {
   swcMinify: true,
 
   sentry: {
+    autoInstrumentServerFunctions: true,
     hideSourceMaps: false,
   },
 
