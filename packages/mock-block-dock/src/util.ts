@@ -18,11 +18,11 @@ type FilterEntitiesFn = {
 
 // Saves us from using heavy lodash dependency
 // Source: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_get
-const get = (
+export const get = (
   obj: unknown,
   path: string | string[],
   defaultValue = undefined,
-) => {
+): unknown => {
   const travel = (regexp: RegExp) =>
     String.prototype.split
       .call(path, regexp)
@@ -37,6 +37,37 @@ const get = (
       );
   const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
   return result === undefined || result === obj ? defaultValue : result;
+};
+
+export const set = (obj: {}, path: string | string[], value: unknown) => {
+  const keys = typeof path === "string" ? path.split(".") : path;
+
+  let currentObj = obj;
+
+  let i;
+
+  for (i = 0; i < keys.length - 1; i++) {
+    // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
+    currentObj = currentObj[keys[i]!];
+  }
+
+  if (keys[i] === "constructor" || keys[i] === "__proto__") {
+    throw new Error(`Disallowed key ${keys[i]}`);
+  }
+  // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
+  currentObj[keys[i]!] = value;
+};
+
+export const debounce = <T extends (...args: any[]) => any>(
+  func: T,
+  delayMs: number,
+) => {
+  let timerId: NodeJS.Timeout;
+
+  return (...args: Parameters<T>) => {
+    clearTimeout(timerId);
+    timerId = setTimeout(() => func(...args), delayMs);
+  };
 };
 
 const filterEntities: FilterEntitiesFn = (params) => {

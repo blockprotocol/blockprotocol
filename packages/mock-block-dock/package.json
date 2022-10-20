@@ -39,6 +39,7 @@
   "dependencies": {
     "@blockprotocol/core": "0.0.12",
     "@blockprotocol/graph": "0.0.18",
+    "@blockprotocol/hook": "0.0.6",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
@@ -47,6 +48,8 @@
     "echarts": "^5.3.3",
     "react-json-view": "^1.21.3",
     "react-resizable": "^3.0.4",
+    "slate": "^0.82.1",
+    "slate-react": "^0.83.1",
     "styled-jsx": "5.0.7",
     "use-local-storage-state": "^18.1.1",
     "uuid": "^8.3.2"
