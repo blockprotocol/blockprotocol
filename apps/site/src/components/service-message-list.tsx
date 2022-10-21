@@ -26,7 +26,7 @@ const DataType: FunctionComponent<{ propertySchema: JsonSchema }> = ({
     </MdxA>
   ) : (
     <>
-      {innerType}
+      {Array.isArray(innerType) ? innerType.join(" | ") : innerType}
       {isArray ? "[]" : ""}
     </>
   );
@@ -44,12 +44,12 @@ const ServiceMessageData: FunctionComponent<{
     return (
       <>
         <MdxCode>object</MdxCode>
-        <MdxTable>
+        <MdxTable width="100%">
           <thead>
             <tr>
-              <th>property</th>
+              <th style={{ width: "150px" }}>property</th>
               <th>type</th>
-              <th>required</th>
+              <th style={{ maxWidth: "110px" }}>required</th>
               <th>description</th>
             </tr>
           </thead>
@@ -67,7 +67,7 @@ const ServiceMessageData: FunctionComponent<{
                       <DataType propertySchema={propertySchema} />
                     </Typography>
                   </td>
-                  <td>
+                  <td style={{ maxWidth: "110px" }}>
                     {((data.required as string[]) ?? []).includes(
                       propertyName,
                     ) ? (

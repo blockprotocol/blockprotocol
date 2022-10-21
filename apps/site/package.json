@@ -24,6 +24,7 @@
     "@aws-sdk/client-ses": "3.169.0",
     "@blockprotocol/core": "0.0.12",
     "@blockprotocol/graph": "0.0.18",
+    "@blockprotocol/hook": "0.0.6",
     "@emotion/cache": "^11.10.0",
     "@emotion/react": "^11.10.0",
     "@emotion/server": "^11.10.0",

@@ -130,7 +130,7 @@ export const getSerializedPage = async (params: {
   }
 
   if ((await fs.lstat(mdxPath)).isDirectory()) {
-    mdxPath = path.join(mdxPath, "0_index.mdx");
+    mdxPath = path.join(mdxPath, "00_index.mdx");
   }
 
   const source = await fs.readFile(mdxPath);
@@ -241,7 +241,7 @@ export const getAllPages = (params: {
 
   const directoryItems = fs
     .readdirSync(path.join(process.cwd(), `src/_pages/${pathToDirectory}`))
-    .filter((item) => !filterIndexPage || item !== "0_index.mdx");
+    .filter((item) => !filterIndexPage || item !== "00_index.mdx");
 
   return directoryItems.flatMap((directoryItem) => {
     if (
@@ -251,7 +251,7 @@ export const getAllPages = (params: {
     ) {
       const indexPage = getPage({
         pathToDirectory: `${pathToDirectory}/${directoryItem}`,
-        fileName: "0_index.mdx",
+        fileName: "00_index.mdx",
       });
 
       const subPages = getAllPages({

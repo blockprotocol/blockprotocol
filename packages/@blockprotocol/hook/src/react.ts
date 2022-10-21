@@ -188,26 +188,16 @@ export const useHook = <T extends HTMLElement>(
       return;
     }
 
+    const existingHookId = existingHookRef.current?.id;
+
     const teardownPromise =
       existingHookRef.current?.teardown?.().catch() ?? Promise.resolve();
 
     if (node && service) {
       const controller = new AbortController();
 
-      /**
-       * Is this an update to the existing hook, or is it a whole new hook? The
-       * only param to the hook which can change without creating a new hook is
-       * the node. Any other change will result in a new hook being created
-       */
-      const reuseId =
-        existingHook &&
-        existingHook.service === service &&
-        existingHook.entityId === entityId &&
-        existingHook.path === path &&
-        existingHook.type === type;
-
       const hook: Hook<T> = {
-        id: reuseId ? existingHookRef.current?.id ?? null : null,
+        id: existingHookId ?? null,
         params: {
           service,
           type,
