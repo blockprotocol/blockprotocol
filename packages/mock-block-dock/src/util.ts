@@ -47,6 +47,10 @@ export const set = (obj: {}, path: string | string[], value: unknown) => {
   let i;
 
   for (i = 0; i < keys.length - 1; i++) {
+    if (i === 0 && keys[i] === "$") {
+      // ignore leading json path identifier, if present
+      continue;
+    }
     // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
     currentObj = currentObj[keys[i]!];
   }
