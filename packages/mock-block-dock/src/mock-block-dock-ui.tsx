@@ -36,7 +36,7 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
         </button>
       </div>
       {childrenWithBorder}
-      <style jsx global>{`
+      <style jsx="true" global="true">{`
         @font-face {
           font-family: "Inter";
           font-weight: 300;
@@ -69,7 +69,7 @@ export const MockBlockDockUi: FunctionComponent<{ children: ReactNode }> = ({
           margin: 0;
         }
       `}</style>
-      <style jsx>
+      <style jsx="true">
         {`
           .mbd-debug-mode-toggle-header {
             display: flex;
