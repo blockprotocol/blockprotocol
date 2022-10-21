@@ -11,6 +11,7 @@ Sentry.init({
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
   integrations:
     process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE &&
+    // @todo Remove when https://github.com/getsentry/sentry-replay/issues/246#issuecomment-1287181345 is resolved
     typeof window !== "undefined"
       ? [
           new Replay({
