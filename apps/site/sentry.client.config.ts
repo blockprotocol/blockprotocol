@@ -9,15 +9,17 @@ Sentry.init({
   dsn,
   enabled: !!dsn,
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
-  integrations: process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE
-    ? [
-        new Replay({
-          captureOnlyOnError: true,
-          replaysSamplingRate: parseFloat(
-            process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE,
-          ),
-          stickySession: true,
-        }),
-      ]
-    : [],
+  integrations:
+    process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE &&
+    typeof window !== "undefined"
+      ? [
+          new Replay({
+            captureOnlyOnError: true,
+            replaysSamplingRate: parseFloat(
+              process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE,
+            ),
+            stickySession: true,
+          }),
+        ]
+      : [],
 });
