@@ -21,7 +21,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
 
   const { hookService } = useHookBlockService(blockRef);
 
-  useHook(hookService, hookRef, "text", entityId, "description", () => {
+  useHook(hookService, hookRef, "text", entityId, "$.description", () => {
     throw new Error(
       "Fallback called – dock is not correctly handling text hook.",
     );
