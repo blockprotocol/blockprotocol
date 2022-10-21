@@ -1,5 +1,14 @@
 # mock-block-dock
 
+## 0.0.34
+
+### Patch Changes
+
+- [#656](https://github.com/blockprotocol/blockprotocol/pull/656) [`d025092`](https://github.com/blockprotocol/blockprotocol/commit/d025092b74ba79e27fcd4b28d129743a05e4fea7) Thanks [@CiaranMn](https://github.com/CiaranMn)! - implement hook service in mock block dock
+
+- Updated dependencies [[`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af)]:
+  - @blockprotocol/hook@0.0.7
+
 ## 0.0.33
 
 ### Patch Changes
