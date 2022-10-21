@@ -3243,10 +3243,10 @@
     hoist-non-react-statics "^3.3.2"
     tslib "^1.9.3"
 
-"@sentry/replay@0.6.4":
-  version "0.6.4"
-  resolved "https://registry.yarnpkg.com/@sentry/replay/-/replay-0.6.4.tgz#54913fea993cf447d22e5401c74bd4f8c5c13499"
-  integrity sha512-jsNlI9H23RfOXZFjWWGjhqh3G9F4uol16dxzvA8TUdIfkvO8R9IXe9oE9gs78/SHCt4+I+jQxk90UrmBv5MRNw==
+"@sentry/replay@0.6.5":
+  version "0.6.5"
+  resolved "https://registry.yarnpkg.com/@sentry/replay/-/replay-0.6.5.tgz#3695be67ce359c4987f34484a9f629f0fdee1445"
+  integrity sha512-3B4q7dDbh1KFZina1ExlgYC1Z+85kI1DtuT2tkk/pDM9CzXrx5Txb1j03wJeAIaY8PMlVjfNFC4sw3o1KTe68A==
   dependencies:
     "@sentry/core" "^7.7.0"
     "@sentry/types" "^7.7.0"
