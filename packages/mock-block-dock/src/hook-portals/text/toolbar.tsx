@@ -3,7 +3,12 @@ import { MarkButton } from "./mark-button";
 export const Toolbar = () => {
   return (
     <div
-      style={{ padding: "8px 12px", borderBottom: "1px solid rgba(0,0,0,0.1)" }}
+      contentEditable={false}
+      style={{
+        padding: "8px 12px",
+        borderBottom: "1px solid rgba(0,0,0,0.1)",
+        userSelect: "none", // @see https://github.com/ianstormtaylor/slate/issues/3421#issuecomment-573326794
+      }}
     >
       <MarkButton format="bold">
         <span>B</span>
