@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.35
+
+### Patch Changes
+
+- [#695](https://github.com/blockprotocol/blockprotocol/pull/695) [`e09cbb4`](https://github.com/blockprotocol/blockprotocol/commit/e09cbb4afcaccf1a8d21c7301ded77a24f1e9c78) Thanks [@CiaranMn](https://github.com/CiaranMn)! - bug fix in setting property via hook service
+
 ## 0.0.34
 
 ### Patch Changes
