@@ -11,6 +11,7 @@
       "packages/@local/*"
     ],
     "nohoist": [
+      "**/@types/css-font-loading-module",
       "**/@types/prismjs"
     ]
   },
