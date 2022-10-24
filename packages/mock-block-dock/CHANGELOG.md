@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.36
+
+### Patch Changes
+
+- [#699](https://github.com/blockprotocol/blockprotocol/pull/699) [`1c13961`](https://github.com/blockprotocol/blockprotocol/commit/1c139617c1ddc2f57842dd40e7c15c90ec6d6315) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix bug in comparing text
+
 ## 0.0.35
 
 ### Patch Changes
