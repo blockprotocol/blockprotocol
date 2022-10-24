@@ -78,7 +78,7 @@ const isMaybeText = (value: unknown): value is MaybePlainOrRichText => {
 };
 
 const serializeToPlaintext = (nodes: Descendant[]) => {
-  return nodes.map((n) => Node.string(n)).join("\n");
+  return nodes.map((node) => Node.string(node)).join("\n");
 };
 
 const generateComparableString = (text: MaybePlainOrRichText) =>
@@ -99,7 +99,7 @@ const isTextDifferent = (
   if (typeof second === "string") {
     return second !== serializeToPlaintext(first ?? []);
   }
-  // These are both rich text, so we don't convert them to plain text – we won't detect formatting differences
+  // These are both rich text, so we don't convert them to plain text – we want to detect formatting differences
   return JSON.stringify(first) !== JSON.stringify(second);
 };
 
@@ -182,6 +182,10 @@ export const TextHookView = ({
       <Slate
         editor={editor}
         onChange={(value) => {
+          /**
+           * This is not just an optimization – updating Editor content from props (via the resetNodes function)
+           * also triggers onChange, and if external updates are coming quickly, this can cause a loop.
+           */
           if (isTextDifferent(value, text)) {
             onChange(value);
           }
