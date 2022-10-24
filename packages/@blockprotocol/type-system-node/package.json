@@ -24,7 +24,7 @@
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@types/jest": "28.1.4",
-    "eslint": "8.25.0",
+    "eslint": "8.26.0",
     "jest": "28.1.2",
     "ts-jest": "28.0.5",
     "typescript": "4.8.4"
