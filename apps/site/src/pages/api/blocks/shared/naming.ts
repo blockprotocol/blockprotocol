@@ -1,6 +1,6 @@
-import rawSlugify from "slugify";
+import _slugify from "slugify";
 
-const slugify = rawSlugify as unknown as typeof rawSlugify.default;
+const slugify = _slugify as unknown as typeof _slugify.default;
 
 export const generateSlug = (stringToSlugify: string) =>
   slugify(stringToSlugify, {

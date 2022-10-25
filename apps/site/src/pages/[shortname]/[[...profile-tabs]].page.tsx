@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import RawNextError from "next/error.js";
+import _NextError from "next/error.js";
 import { useRouter } from "next/router.js";
 
 import { TABS } from "../../components/pages/user/tabs.jsx";
@@ -10,7 +10,7 @@ import {
 import { apiClient } from "../../lib/api-client.js";
 import { excludeHiddenBlocks } from "../../lib/blocks.js";
 
-const NextError = RawNextError as unknown as typeof RawNextError.default;
+const NextError = _NextError as unknown as typeof _NextError.default;
 
 type UserPageQueryParams = {
   "profile-tabs": string[];

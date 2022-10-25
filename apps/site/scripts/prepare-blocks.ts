@@ -13,7 +13,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import RawAjv, { JSONSchemaType } from "ajv";
+import _Ajv, { JSONSchemaType } from "ajv";
 import chalk from "chalk";
 import * as envalid from "envalid";
 import execa from "execa";
@@ -22,7 +22,7 @@ import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
-import rawSlugify from "slugify";
+import _slugify from "slugify";
 import tmp from "tmp-promise";
 
 import {
@@ -33,8 +33,8 @@ import {
 } from "../src/lib/blocks.js";
 import { FRONTEND_URL } from "../src/lib/config.js";
 
-const Ajv = RawAjv as unknown as typeof RawAjv.default;
-const slugify = rawSlugify as unknown as typeof rawSlugify.default;
+const Ajv = _Ajv as unknown as typeof _Ajv.default;
+const slugify = _slugify as unknown as typeof _slugify.default;
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),

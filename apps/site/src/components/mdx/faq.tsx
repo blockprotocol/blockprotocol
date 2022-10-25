@@ -1,4 +1,4 @@
-import RawExpandMoreIcon from "@mui/icons-material/ExpandMore.js";
+import _ExpandMoreIcon from "@mui/icons-material/ExpandMore.js";
 import {
   Accordion,
   AccordionDetails,
@@ -8,15 +8,15 @@ import {
   typographyClasses,
 } from "@mui/material";
 import { FunctionComponent, ReactNode, useState } from "react";
-import rawSlugify from "slugify";
+import _slugify from "slugify";
 
 import { Link } from "../link.jsx";
 import { usePageHeading } from "./shared/use-page-heading.js";
 import { stringifyChildren } from "./shared/util.js";
 
 const ExpandMoreIcon =
-  RawExpandMoreIcon as unknown as typeof RawExpandMoreIcon.default;
-const slugify = rawSlugify as unknown as typeof rawSlugify.default;
+  _ExpandMoreIcon as unknown as typeof _ExpandMoreIcon.default;
+const slugify = _slugify as unknown as typeof _slugify.default;
 
 type FAQProps = {
   children?: ReactNode;

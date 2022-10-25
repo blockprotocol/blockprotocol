@@ -1,7 +1,7 @@
 import { EmbedderGraphMessageCallbacks } from "@blockprotocol/graph";
 import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
-import RawNextError from "next/error.js";
+import _NextError from "next/error.js";
 import { useRouter } from "next/router.js";
 import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ import { useUser } from "../../../context/user-context.js";
 import { EntityType } from "../../../lib/api/model/entity-type.model.js";
 import { apiClient } from "../../../lib/api-client.js";
 
-const NextError = RawNextError as unknown as typeof RawNextError.default;
+const NextError = _NextError as unknown as typeof _NextError.default;
 
 type EntityTypePageQueryParams = {
   shortname?: string;

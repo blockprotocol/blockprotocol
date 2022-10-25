@@ -1,7 +1,7 @@
-import RawCloseIcon from "@mui/icons-material/Close.js";
-import RawSearchIcon from "@mui/icons-material/Search.js";
+import _CloseIcon from "@mui/icons-material/Close.js";
+import _SearchIcon from "@mui/icons-material/Search.js";
 import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
-import rawAlgoliasearch from "algoliasearch";
+import _algoliasearch from "algoliasearch";
 import debounce from "lodash/debounce.js";
 import { useRouter } from "next/router.js";
 import {
@@ -20,10 +20,10 @@ import { TextField } from "../../../text-field.jsx";
 import SearchList from "./search-list.jsx";
 import SearchSuggestedLinks from "./search-suggested-links.jsx";
 
-const CloseIcon = RawCloseIcon as unknown as typeof RawCloseIcon.default;
-const SearchIcon = RawSearchIcon as unknown as typeof RawSearchIcon.default;
+const CloseIcon = _CloseIcon as unknown as typeof _CloseIcon.default;
+const SearchIcon = _SearchIcon as unknown as typeof _SearchIcon.default;
 const algoliasearch =
-  rawAlgoliasearch as unknown as typeof rawAlgoliasearch.default;
+  _algoliasearch as unknown as typeof _algoliasearch.default;
 
 const client = algoliasearch("POOWZ64DSV", "96dc0442fd27b903440955dc03e5e60e");
 const index = client.initIndex("blockprotocol");

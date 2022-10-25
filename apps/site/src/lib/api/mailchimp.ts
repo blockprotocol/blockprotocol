@@ -1,10 +1,10 @@
-import rawAxios, { AxiosError, AxiosInstance } from "axios";
+import _axios, { AxiosError, AxiosInstance } from "axios";
 import md5 from "md5";
 
 import { mustGetEnvVar } from "../../util/api.js";
 import { User } from "./model/user.model.js";
 
-const axios = rawAxios as unknown as typeof rawAxios.default;
+const axios = _axios as unknown as typeof _axios.default;
 
 let cachedMailchimpApi: AxiosInstance;
 

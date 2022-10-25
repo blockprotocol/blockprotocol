@@ -3,13 +3,13 @@ import "../styles/prism.css";
 import { CacheProvider, EmotionCache } from "@emotion/react";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import * as Sentry from "@sentry/nextjs";
-import rawWithTwindApp from "@twind/next/app";
+import _withTwindApp from "@twind/next/app";
 import type { AppProps } from "next/app.js";
 import { Router, useRouter } from "next/router.js";
 import { DefaultSeo, DefaultSeoProps } from "next-seo";
 import { SnackbarProvider } from "notistack";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import RawTagManager from "react-gtm-module";
+import _TagManager from "react-gtm-module";
 
 import siteMap from "../../site-map.json";
 import twindConfig from "../../twind.config.cjs";
@@ -25,9 +25,8 @@ import { theme } from "../theme/index.js";
 import { createEmotionCache } from "../util/create-emotion-cache.js";
 import { ApiMeResponse } from "./api/me.api.js";
 
-const TagManager = RawTagManager as unknown as typeof RawTagManager.default;
-const withTwindApp =
-  rawWithTwindApp as unknown as typeof rawWithTwindApp.default;
+const TagManager = _TagManager as unknown as typeof _TagManager.default;
+const withTwindApp = _withTwindApp as unknown as typeof _withTwindApp.default;
 
 const defaultSeoConfig: DefaultSeoProps = {
   title: "Block Protocol – an open standard for data-driven blocks",

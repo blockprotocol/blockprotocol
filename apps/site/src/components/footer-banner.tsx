@@ -6,7 +6,7 @@ import {
   PaperProps,
   Typography,
 } from "@mui/material";
-import RawImage from "next/image.js";
+import _Image from "next/image.js";
 import { FunctionComponent, ReactNode } from "react";
 
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
@@ -14,7 +14,7 @@ import { ArrowRightIcon, BoltIcon } from "./icons/index.js";
 import { Link as LinkComponent, LinkProps } from "./link.jsx";
 import { LinkButton } from "./link-button.jsx";
 
-const Image = RawImage as unknown as typeof RawImage.default;
+const Image = _Image as unknown as typeof _Image.default;
 
 type Banner = {
   shouldDisplay: (params: { pathname: string; asPath: string }) => boolean;

@@ -1,7 +1,7 @@
 import { UrlObject } from "node:url";
 
 // eslint-disable-next-line no-restricted-imports
-import RawNextLink, { LinkProps as NextLinkProps } from "next/link.js";
+import _NextLink, { LinkProps as NextLinkProps } from "next/link.js";
 import {
   Children,
   cloneElement,
@@ -12,7 +12,7 @@ import {
 
 import { FRONTEND_URL } from "../lib/config.js";
 
-const NextLink = RawNextLink as unknown as typeof RawNextLink.default;
+const NextLink = _NextLink as unknown as typeof _NextLink.default;
 
 export const isHrefExternal = (href: string | UrlObject) =>
   typeof href === "string" &&

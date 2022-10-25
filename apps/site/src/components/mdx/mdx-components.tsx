@@ -15,7 +15,7 @@ import {
   isValidElement,
   ReactNode,
 } from "react";
-import rawSlugify from "slugify";
+import _slugify from "slugify";
 
 import { FontAwesomeIcon } from "../icons/index.js";
 import { Link } from "../link.jsx";
@@ -29,7 +29,7 @@ import { InfoCardWrapper } from "./info-card/info-card-wrapper.jsx";
 import { usePageHeading } from "./shared/use-page-heading.js";
 import { stringifyChildren } from "./shared/util.js";
 
-const slugify = rawSlugify as unknown as typeof rawSlugify.default;
+const slugify = _slugify as unknown as typeof _slugify.default;
 
 const Heading = styled(Typography)(({ theme }) => ({
   "svg.link-icon": {

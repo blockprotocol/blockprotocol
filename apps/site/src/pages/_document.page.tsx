@@ -1,6 +1,6 @@
-import rawCreateEmotionServer from "@emotion/server/create-instance";
-import rawWithTwindDocument from "@twind/next/document";
-import RawDocument, {
+import _createEmotionServer from "@emotion/server/create-instance";
+import _withTwindDocument from "@twind/next/document";
+import _Document, {
   DocumentContext,
   Head,
   Html,
@@ -12,11 +12,11 @@ import { Children } from "react";
 import twindConfig from "../../twind.config.cjs";
 import { createEmotionCache } from "../util/create-emotion-cache.js";
 
-const Document = RawDocument as unknown as typeof RawDocument.default;
+const Document = _Document as unknown as typeof _Document.default;
 const createEmotionServer =
-  rawCreateEmotionServer as unknown as typeof rawCreateEmotionServer.default;
+  _createEmotionServer as unknown as typeof _createEmotionServer.default;
 const withTwindDocument =
-  rawWithTwindDocument as unknown as typeof rawWithTwindDocument.default;
+  _withTwindDocument as unknown as typeof _withTwindDocument.default;
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

@@ -10,7 +10,7 @@ import {
   useScrollTrigger,
   useTheme,
 } from "@mui/material";
-import rawClsx from "clsx";
+import _clsx from "clsx";
 import { useRouter } from "next/router.js";
 import {
   FunctionComponent,
@@ -42,7 +42,7 @@ import {
   useHydrationFriendlyAsPath,
 } from "./shared.js";
 
-const clsx = rawClsx as unknown as typeof rawClsx.default;
+const clsx = _clsx as unknown as typeof _clsx.default;
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 

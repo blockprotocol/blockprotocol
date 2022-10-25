@@ -3,14 +3,14 @@ import {
   LinkProps as MuiLinkProps,
   styled,
 } from "@mui/material";
-import rawClsx from "clsx";
+import _clsx from "clsx";
 import { useRouter } from "next/router.js";
 import { forwardRef, isValidElement, ReactNode } from "react";
 
 import { BaseLink, BaseLinkProps } from "./base-link.jsx";
 import { Button } from "./button.jsx";
 
-const clsx = rawClsx as unknown as typeof rawClsx.default;
+const clsx = _clsx as unknown as typeof _clsx.default;
 
 /**
  * This component is based on https://github.com/mui-org/material-ui/blob/a5c92dfd84dfe5888a8b383a9b5fe5701a934564/examples/nextjs/src/Link.js

@@ -1,8 +1,8 @@
-import rawAxios from "axios";
+import _axios from "axios";
 
 import { ExpandedBlockMetadata } from "../../blocks.js";
 
-const axios = rawAxios as unknown as typeof rawAxios.default;
+const axios = _axios as unknown as typeof _axios.default;
 
 export const notifySlackAboutBlock = async (
   block: ExpandedBlockMetadata,

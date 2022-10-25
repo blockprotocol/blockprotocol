@@ -8,12 +8,12 @@ import { serialize } from "next-mdx-remote/serialize";
 import remarkMdx from "remark-mdx";
 import remarkMdxDisableExplicitJsx from "remark-mdx-disable-explicit-jsx";
 import remarkParse from "remark-parse";
-import rawSlugify from "slugify";
+import _slugify from "slugify";
 import { unified } from "unified";
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap.js";
 
-const slugify = rawSlugify as unknown as typeof rawSlugify.default;
+const slugify = _slugify as unknown as typeof _slugify.default;
 
 type Node = {
   type: string;
