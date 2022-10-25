@@ -1,9 +1,9 @@
-import { Page } from "playwright";
+import type { Page } from "playwright";
 import { expect, test } from "playwright-test-coverage";
 
-import { readValueFromRecentDummyEmail } from "../shared/dummy-emails";
-import { resetDb } from "../shared/fixtures";
-import { login, openLoginModal, openMobileNav } from "../shared/nav";
+import { readValueFromRecentDummyEmail } from "../shared/dummy-emails.js";
+import { resetDb } from "../shared/fixtures.js";
+import { login, openLoginModal, openMobileNav } from "../shared/nav.js";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
