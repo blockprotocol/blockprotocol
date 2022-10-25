@@ -31,11 +31,6 @@ module.exports = {
               "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
           },
           {
-            name: "@mui/material/Link",
-            message:
-              "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
-          },
-          {
             name: "next",
             importNames: ["Link"],
             message:
@@ -48,39 +43,23 @@ module.exports = {
           },
           {
             name: "@mui/material",
-            importNames: ["Button", "TextField", "Alert"],
+            importNames: ["Alert", "Button", "Popover", "TextField"],
             message:
               "Please use the custom wrapper component in src/component instead.",
-          },
-          {
-            name: "@mui/material/Button",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/Button component instead.",
-          },
-          {
-            name: "@mui/material/TextField",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/TextField component instead.",
-          },
-          {
-            name: "@mui/material/Popover",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/Popover component instead.",
-          },
-          {
-            name: "@mui/material/Alert",
-            importNames: ["default"],
-            message:
-              "Please use the custom src/components/Alert component instead.",
           },
           {
             name: "notistack",
             importNames: ["useSnackbar"],
             message:
               "Please use the custom src/components/hooks/useSnackbar hook instead.",
+          },
+        ],
+        patterns: [
+          ...noRestrictedImportsConfig.patterns,
+          {
+            group: ["@mui/material/*"],
+            message:
+              "Please import from @mui/material instead (this will be still tree-shaken).",
           },
         ],
       },
