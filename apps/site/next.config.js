@@ -94,6 +94,18 @@ const nextConfig = {
       },
     ];
   },
+
+  webpack: (config) => {
+    return {
+      ...config,
+      resolve: {
+        ...config.resolve,
+        extensionAlias: {
+          ".js": [".js", ".ts", ".tsx"],
+        },
+      },
+    };
+  },
 };
 
 /** @type {Partial<import("@sentry/nextjs").SentryWebpackPluginOptions>} */
