@@ -10,4 +10,12 @@ module.exports = (workspaceDirPath) => ({
     tsconfigRootDir: ".",
     project: `${workspaceDirPath}/tsconfig.json`,
   },
+  settings: {
+    "import/resolver": {
+      typescript: {
+        alwaysTryTypes: true,
+        project: `${__dirname}/tsconfig.json`,
+      },
+    },
+  },
 });
