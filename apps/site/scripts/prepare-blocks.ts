@@ -22,7 +22,7 @@ import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
-import _slugify from "slugify";
+import slugify from "slugify";
 import tmp from "tmp-promise";
 
 import {
@@ -32,8 +32,6 @@ import {
   StoredBlockInfo,
 } from "../src/lib/blocks.js";
 import { FRONTEND_URL } from "../src/lib/config.js";
-
-const slugify = _slugify as unknown as typeof _slugify.default;
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),

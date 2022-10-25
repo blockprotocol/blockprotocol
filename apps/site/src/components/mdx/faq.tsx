@@ -8,7 +8,7 @@ import {
   typographyClasses,
 } from "@mui/material";
 import { FunctionComponent, ReactNode, useState } from "react";
-import _slugify from "slugify";
+import slugify from "slugify";
 
 import { Link } from "../link.jsx";
 import { usePageHeading } from "./shared/use-page-heading.js";
@@ -16,7 +16,6 @@ import { stringifyChildren } from "./shared/util.js";
 
 const ExpandMoreIcon =
   _ExpandMoreIcon as unknown as typeof _ExpandMoreIcon.default;
-const slugify = _slugify as unknown as typeof _slugify.default;
 
 type FAQProps = {
   children?: ReactNode;

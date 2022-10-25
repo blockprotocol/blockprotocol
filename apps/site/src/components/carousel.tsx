@@ -9,11 +9,11 @@ import {
   useMemo,
   useRef,
 } from "react";
-import _RawSlider, { Settings } from "react-slick";
+import _Slider, { Settings } from "react-slick";
 
 import { ArrowLeftIcon, ArrowRightIcon } from "./icons/index.js";
 
-const Slider = _RawSlider as unknown as typeof _RawSlider.default;
+const Slider = _Slider as unknown as typeof _Slider.default;
 
 type CarouselProps<T> = {
   data: T[];

@@ -1,0 +1,10 @@
+diff --git a/node_modules/slugify/slugify.d.ts b/node_modules/slugify/slugify.d.ts
+index e20f795..4d0dc90 100644
+--- a/node_modules/slugify/slugify.d.ts
++++ b/node_modules/slugify/slugify.d.ts
+@@ -21,4 +21,4 @@ declare function slugify(
+ 
+ ): string;
+ 
+-export default slugify;
++export = slugify;
