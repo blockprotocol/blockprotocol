@@ -11,7 +11,7 @@ import { FunctionComponent } from "react";
 
 import { SiteMapPage } from "../lib/sitemap.js";
 import { FontAwesomeIcon } from "./icons/index.js";
-import { Link } from "./link.js";
+import { Link } from "./link.jsx";
 
 const NavArrowIcon = styled(FontAwesomeIcon)(({ theme }) => ({
   color: theme.palette.purple[300],

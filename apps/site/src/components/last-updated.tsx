@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 
-import { formatUpdatedAt } from "../util/html-utils.js";
+import { formatUpdatedAt } from "../util/html-utils.jsx";
 
 type ClientOnlyLastUpdatedProps = {
   value: string | undefined | null;

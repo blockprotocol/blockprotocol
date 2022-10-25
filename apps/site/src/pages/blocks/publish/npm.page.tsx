@@ -3,20 +3,20 @@ import { useRouter } from "next/router.js";
 import { NextSeo } from "next-seo";
 import { useForm } from "react-hook-form";
 
-import { Button } from "../../../components/button.js";
+import { Button } from "../../../components/button.jsx";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../../components/pages/auth-wall.js";
-import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout.js";
-import { BlockFormSection } from "../../../components/pages/blocks/block-form-section.js";
-import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper.js";
-import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block-info.js";
-import { RequiredLabel } from "../../../components/pages/blocks/required-label.js";
-import { PageContainer } from "../../../components/pages/dashboard/page-container.js";
-import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs.js";
+} from "../../../components/pages/auth-wall.jsx";
+import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout.jsx";
+import { BlockFormSection } from "../../../components/pages/blocks/block-form-section.jsx";
+import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper.jsx";
+import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block-info.jsx";
+import { RequiredLabel } from "../../../components/pages/blocks/required-label.jsx";
+import { PageContainer } from "../../../components/pages/dashboard/page-container.jsx";
+import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs.jsx";
 import { shy } from "../../../components/pages/user/utils.js";
-import { TextField } from "../../../components/text-field.js";
+import { TextField } from "../../../components/text-field.jsx";
 import { apiClient } from "../../../lib/api-client.js";
 import { ApiBlockCreateRequest } from "../../api/blocks/create.api.js";
 

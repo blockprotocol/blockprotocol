@@ -1,10 +1,10 @@
 import { Box, BoxProps, experimental_sx as sx, styled } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { Snippet } from "../../snippet.js";
-import { BlockSchema } from "./hub-utils.js";
-import { JsonEditor } from "./json-editor.js";
-import { TabPanel } from "./tab-panel.js";
+import { Snippet } from "../../snippet.jsx";
+import { BlockSchema } from "./hub-utils.jsx";
+import { JsonEditor } from "./json-editor.jsx";
+import { TabPanel } from "./tab-panel.jsx";
 
 type BlockDataTabPanelProps = {
   modalOpen?: boolean;

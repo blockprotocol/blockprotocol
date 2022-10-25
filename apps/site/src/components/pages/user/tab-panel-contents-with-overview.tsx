@@ -4,14 +4,14 @@ import { FunctionComponent, useState } from "react";
 import { EntityType } from "../../../lib/api/model/entity-type.model.js";
 import { SerializedUser } from "../../../lib/api/model/user.model.js";
 import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
-import { CreateSchemaModal } from "../../modal/create-schema-modal.js";
-import { OverviewCard } from "./overview-card.js";
-import { Placeholder } from "./placeholder.js";
+import { CreateSchemaModal } from "../../modal/create-schema-modal.jsx";
+import { OverviewCard } from "./overview-card.jsx";
+import { Placeholder } from "./placeholder.jsx";
 import {
   BrowseHubButton,
   BuildBlockButton,
   CreateSchemaButton,
-} from "./placeholder-buttons.js";
+} from "./placeholder-buttons.jsx";
 import { useUserStatus } from "./use-user-status.js";
 
 export interface TabPanelContentsWithOverviewProps {

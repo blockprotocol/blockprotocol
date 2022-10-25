@@ -3,9 +3,9 @@ import { FunctionComponent, useContext, useState } from "react";
 import { tw } from "twind";
 
 import { JsonSchema } from "../../../lib/json-schema.js";
-import { Button } from "../../button.js";
-import { ConfirmationAlert } from "../../confirmation-alert.js";
-import { SchemaOptionsContext } from "./schema-editor.js";
+import { Button } from "../../button.jsx";
+import { ConfirmationAlert } from "../../confirmation-alert.jsx";
+import { SchemaOptionsContext } from "./schema-editor.jsx";
 import {
   getSubschemaDependentProperties,
   SchemaEditorReducerAction,

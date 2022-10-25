@@ -11,9 +11,9 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { useUser } from "../../context/user-context.js";
 import { apiClient } from "../../lib/api-client.js";
-import { Button } from "../button.js";
-import { TextField } from "../text-field.js";
-import { Modal } from "./modal.js";
+import { Button } from "../button.jsx";
+import { TextField } from "../text-field.jsx";
+import { Modal } from "./modal.jsx";
 
 type CreateSchemaModalProps = {
   open: boolean;

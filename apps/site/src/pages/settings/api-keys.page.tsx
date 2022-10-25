@@ -2,18 +2,18 @@ import { Box, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "../../components/button.js";
+import { Button } from "../../components/button.jsx";
 import { WarningIcon } from "../../components/icons/index.js";
-import { Link } from "../../components/link.js";
+import { Link } from "../../components/link.jsx";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../components/pages/auth-wall.js";
-import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal.js";
-import { PageContainer } from "../../components/pages/dashboard/page-container.js";
-import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.js";
-import { Table, TableRows } from "../../components/table.js";
-import { DateTimeCell } from "../../components/table-cells.js";
+} from "../../components/pages/auth-wall.jsx";
+import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal.jsx";
+import { PageContainer } from "../../components/pages/dashboard/page-container.jsx";
+import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.jsx";
+import { Table, TableRows } from "../../components/table.jsx";
+import { DateTimeCell } from "../../components/table-cells.jsx";
 import { UserFacingApiKeyProperties } from "../../lib/api/model/api-key.model.js";
 import { apiClient } from "../../lib/api-client.js";
 

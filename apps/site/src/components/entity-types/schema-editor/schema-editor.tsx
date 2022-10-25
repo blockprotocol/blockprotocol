@@ -18,13 +18,13 @@ import {
 import { tw } from "twind";
 
 import { JsonSchema } from "../../../lib/json-schema.js";
-import { Link } from "../../link.js";
-import { TextInputOrDisplay } from "./inputs.js";
+import { Link } from "../../link.jsx";
+import { TextInputOrDisplay } from "./inputs.jsx";
 import {
   schemaEditorReducer,
   SchemaEditorReducerAction,
 } from "./schema-editor-reducer.js";
-import { SchemaPropertiesTable } from "./schema-properties-table.js";
+import { SchemaPropertiesTable } from "./schema-properties-table.jsx";
 
 // @todo implement subschema handling (or remove this code)
 // import { SubSchemaItem } from './sub-schema-item';

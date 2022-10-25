@@ -5,11 +5,11 @@ import { NextSeo } from "next-seo";
 import { useContext } from "react";
 
 import siteMap from "../../../site-map.json";
-import { DocsContent } from "../../components/pages/docs/docs-content.js";
+import { DocsContent } from "../../components/pages/docs/docs-content.jsx";
 import { generatePathWithoutParams } from "../../components/shared.js";
 import SiteMapContext from "../../context/site-map-context.js";
 import { SiteMap } from "../../lib/sitemap.js";
-import { getSerializedPage } from "../../util/mdx-utils.js";
+import { getSerializedPage } from "../../util/mdx-utils.jsx";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",

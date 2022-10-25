@@ -2,11 +2,11 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import RawNextError from "next/error.js";
 import { useRouter } from "next/router.js";
 
-import { TABS } from "../../components/pages/user/tabs.js";
+import { TABS } from "../../components/pages/user/tabs.jsx";
 import {
   UserPageComponent,
   UserPageProps,
-} from "../../components/pages/user/user-page-component.js";
+} from "../../components/pages/user/user-page-component.jsx";
 import { apiClient } from "../../lib/api-client.js";
 import { excludeHiddenBlocks } from "../../lib/blocks.js";
 

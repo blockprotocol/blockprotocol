@@ -3,9 +3,9 @@ import { Box, BoxProps, SvgIconProps, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { FontAwesomeIcon } from "../../../icons/index.js";
-import { CardWrapper } from "./card-wrapper.js";
-import { DashboardCardLoading } from "./dashboard-card-loading.js";
-import { LinkWrapper } from "./link-wrapper.js";
+import { CardWrapper } from "./card-wrapper.jsx";
+import { DashboardCardLoading } from "./dashboard-card-loading.jsx";
+import { LinkWrapper } from "./link-wrapper.jsx";
 
 const cardContainerSharedStyles: BoxProps["sx"] = {
   display: "flex",

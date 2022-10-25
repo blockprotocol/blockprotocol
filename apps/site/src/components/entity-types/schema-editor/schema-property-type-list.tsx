@@ -3,7 +3,7 @@ import { FunctionComponent, ReactNode, useContext, useMemo } from "react";
 import { tw } from "twind";
 
 import { JsonSchema } from "../../../lib/json-schema.js";
-import { SchemaOptionsContext } from "./schema-editor.js";
+import { SchemaOptionsContext } from "./schema-editor.jsx";
 
 const primitiveJsonTypes = [
   "boolean",

@@ -23,10 +23,10 @@ import {
 import SiteMapContext from "../../context/site-map-context.js";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap.js";
 import { FontAwesomeIcon } from "../icons/index.js";
-import { Link } from "../link.js";
-import { Search } from "../pages/docs/search/index.js";
+import { Link } from "../link.jsx";
+import { Search } from "../pages/docs/search/index.jsx";
 import { generatePathWithoutParams } from "../shared.js";
-import { itemIsPage, NAVBAR_LINK_ICONS } from "./util.js";
+import { itemIsPage, NAVBAR_LINK_ICONS } from "./util.jsx";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: ReactElement;

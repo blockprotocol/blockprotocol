@@ -3,8 +3,8 @@ import { Box, buttonClasses } from "@mui/material";
 import { PropsWithChildren } from "react";
 
 import { FontAwesomeIcon } from "../../icons/index.js";
-import { LinkButton } from "../../link-button.js";
-import { BlockFormContainer } from "./block-form-styles.js";
+import { LinkButton } from "../../link-button.jsx";
+import { BlockFormContainer } from "./block-form-styles.jsx";
 
 export const BlockFormLayout = ({ children }: PropsWithChildren) => {
   return (

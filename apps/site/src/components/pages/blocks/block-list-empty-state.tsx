@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 
 import { shouldAllowNpmBlockPublishing } from "../../../lib/config.js";
-import { LinkButton } from "../../link-button.js";
+import { LinkButton } from "../../link-button.jsx";
 
 export const BlockListEmptyState = () => {
   return (

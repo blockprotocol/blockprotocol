@@ -8,7 +8,7 @@ import {
   ReactNode,
 } from "react";
 
-import { InfoCard } from "./info-card.js";
+import { InfoCard } from "./info-card.jsx";
 
 type InfoCardWrapperProps = {
   children?: ReactNode;

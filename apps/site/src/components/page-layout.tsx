@@ -2,11 +2,11 @@ import { Box } from "@mui/material";
 import { useRouter } from "next/router.js";
 import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 
-import { Footer } from "./footer.js";
-import { BANNERS, FooterBanner } from "./footer-banner.js";
-import { HiringBanner } from "./hiring-banner.js";
-import { LoginModal } from "./modal/login-modal.js";
-import { Navbar } from "./navbar.js";
+import { Footer } from "./footer.jsx";
+import { BANNERS, FooterBanner } from "./footer-banner.jsx";
+import { HiringBanner } from "./hiring-banner.jsx";
+import { LoginModal } from "./modal/login-modal.jsx";
+import { Navbar } from "./navbar.jsx";
 
 type PageLayoutProps = {
   children?: ReactNode;

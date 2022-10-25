@@ -9,9 +9,9 @@ import { FunctionComponent, useRef, useState } from "react";
 
 import { useUser } from "../../context/user-context.js";
 import { apiClient } from "../../lib/api-client.js";
-import { Button } from "../button.js";
-import { Link } from "../link.js";
-import { UserAvatar } from "../user-avatar.js";
+import { Button } from "../button.jsx";
+import { Link } from "../link.jsx";
+import { UserAvatar } from "../user-avatar.jsx";
 
 export const AccountDropdown: FunctionComponent = () => {
   const { user, setUser } = useUser();

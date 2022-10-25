@@ -11,8 +11,8 @@ import { FunctionComponent, ReactNode } from "react";
 
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
 import { ArrowRightIcon, BoltIcon } from "./icons/index.js";
-import { Link as LinkComponent, LinkProps } from "./link.js";
-import { LinkButton } from "./link-button.js";
+import { Link as LinkComponent, LinkProps } from "./link.jsx";
+import { LinkButton } from "./link-button.jsx";
 
 const Image = RawImage as unknown as typeof RawImage.default;
 

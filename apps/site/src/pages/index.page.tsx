@@ -1,14 +1,14 @@
 import { GetStaticProps } from "next";
 import { FunctionComponent } from "react";
 
-import { AnyFramework } from "../components/pages/home/anyframework.js";
-import { ComposableInterfaces } from "../components/pages/home/composable-interfaces.js";
-import { ConfinedBlocks } from "../components/pages/home/confined-blocks.js";
-import { FinalCTA } from "../components/pages/home/final-cta.js";
-import { Header } from "../components/pages/home/header.js";
-import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks.js";
-import { RegistrySection } from "../components/pages/home/registry-section.js";
-import { WhatAreBlocks } from "../components/pages/home/what-are-blocks.js";
+import { AnyFramework } from "../components/pages/home/anyframework.jsx";
+import { ComposableInterfaces } from "../components/pages/home/composable-interfaces.jsx";
+import { ConfinedBlocks } from "../components/pages/home/confined-blocks.jsx";
+import { FinalCTA } from "../components/pages/home/final-cta.jsx";
+import { Header } from "../components/pages/home/header.jsx";
+import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks.jsx";
+import { RegistrySection } from "../components/pages/home/registry-section.jsx";
+import { WhatAreBlocks } from "../components/pages/home/what-are-blocks.jsx";
 import { useUser } from "../context/user-context.js";
 import { getAllBlocks } from "../lib/api/blocks/get.js";
 import {

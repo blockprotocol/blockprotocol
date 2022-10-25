@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap.js";
-import { itemIsPage } from "../navbar/util.js";
+import { itemIsPage } from "../navbar/util.jsx";
 import { generatePathWithoutParams } from "../shared.js";
 
 const findCrumbs = (params: {

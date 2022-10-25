@@ -7,8 +7,8 @@ import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import { tw } from "twind";
 
-import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor.js";
-import { Link } from "../../../components/link.js";
+import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor.jsx";
+import { Link } from "../../../components/link.jsx";
 import { useUser } from "../../../context/user-context.js";
 import { EntityType } from "../../../lib/api/model/entity-type.model.js";
 import { apiClient } from "../../../lib/api-client.js";

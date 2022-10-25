@@ -5,13 +5,13 @@ import { FunctionComponent, useEffect, useState } from "react";
 import { useUser } from "../../context/user-context.js";
 import { SerializedUser } from "../../lib/api/model/user.model.js";
 import { apiClient } from "../../lib/api-client.js";
-import { Button } from "../button.js";
+import { Button } from "../button.jsx";
 import { FontAwesomeIcon } from "../icons/index.js";
-import { SendLoginCodeScreen } from "../screens/send-login-code-screen.js";
+import { SendLoginCodeScreen } from "../screens/send-login-code-screen.jsx";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../screens/verification-code-screen.js";
+} from "../screens/verification-code-screen.jsx";
 
 type LoginModalProps = {
   onClose: () => void;

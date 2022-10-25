@@ -3,9 +3,9 @@ import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks.js";
 import { BlockProtocolLogoIcon } from "./icons/index.js";
-import { ClientOnlyLastUpdated } from "./last-updated.js";
-import { Link } from "./link.js";
-import { Spacer } from "./spacer.js";
+import { ClientOnlyLastUpdated } from "./last-updated.jsx";
+import { Link } from "./link.jsx";
+import { Spacer } from "./spacer.jsx";
 
 type BlockCardProps = {
   loading?: boolean;

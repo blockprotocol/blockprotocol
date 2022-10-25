@@ -9,8 +9,8 @@ import {
   AlgoliaHighlightResult,
   AlgoliaResult,
   SearchVariants,
-} from "./index.js";
-import SearchListCategory from "./search-list-category.js";
+} from "./index.jsx";
+import SearchListCategory from "./search-list-category.jsx";
 
 type SearchListProps = {
   searchResults: AlgoliaResult[];

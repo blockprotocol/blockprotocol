@@ -4,8 +4,8 @@ import { Box, Paper, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { FontAwesomeIcon } from "../../icons/index.js";
-import { Link } from "../../link.js";
-import { LinkButton } from "../../link-button.js";
+import { Link } from "../../link.jsx";
+import { LinkButton } from "../../link-button.jsx";
 
 export const GitHubInfoCard: FunctionComponent = () => (
   <Paper

@@ -15,17 +15,17 @@ import { Validator } from "jsonschema";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks.js";
-import { Alert } from "../../alert.js";
+import { Alert } from "../../alert.jsx";
 import {
   BlockDataTabPanels,
   blockPreviewAndDataHeight,
-} from "./block-data-tab-panels.js";
-import { BlockDataTabs } from "./block-data-tabs.js";
-import { BlockModalButton } from "./block-modal-button.js";
-import { BlockTabsModal } from "./block-tabs-modal.js";
-import { BlockVariantsTabs } from "./block-variants-tabs.js";
-import { BlockExampleGraph, BlockSchema } from "./hub-utils.js";
-import { SandboxedBlockDemo } from "./sandboxed-block-demo.js";
+} from "./block-data-tab-panels.jsx";
+import { BlockDataTabs } from "./block-data-tabs.jsx";
+import { BlockModalButton } from "./block-modal-button.jsx";
+import { BlockTabsModal } from "./block-tabs-modal.jsx";
+import { BlockVariantsTabs } from "./block-variants-tabs.jsx";
+import { BlockExampleGraph, BlockSchema } from "./hub-utils.jsx";
+import { SandboxedBlockDemo } from "./sandboxed-block-demo.jsx";
 
 type BlockDataContainerProps = {
   metadata: BlockMetadata;

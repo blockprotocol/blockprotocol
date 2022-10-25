@@ -13,7 +13,7 @@ import RawTagManager from "react-gtm-module";
 
 import siteMap from "../../site-map.json";
 import twindConfig from "../../twind.config.cjs";
-import { PageLayout } from "../components/page-layout.js";
+import { PageLayout } from "../components/page-layout.jsx";
 import SiteMapContext from "../context/site-map-context.js";
 import {
   UserContext,

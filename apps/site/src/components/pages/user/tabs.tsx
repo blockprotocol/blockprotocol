@@ -1,7 +1,7 @@
 import { Box, BoxProps, Tab, Tabs, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { BaseLink } from "../../base-link.js";
+import { BaseLink } from "../../base-link.jsx";
 
 export const TABS = [
   {

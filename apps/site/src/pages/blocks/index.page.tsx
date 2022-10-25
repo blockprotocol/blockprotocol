@@ -5,17 +5,17 @@ import { NextSeo } from "next-seo";
 import { useEffect, useMemo, useState } from "react";
 
 import { FontAwesomeIcon } from "../../components/icons/index.js";
-import { LinkButton } from "../../components/link-button.js";
+import { LinkButton } from "../../components/link-button.jsx";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../components/pages/auth-wall.js";
-import { BlockListContainer } from "../../components/pages/blocks/block-form-styles.js";
-import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state.js";
-import { PublishBlockSuccess } from "../../components/pages/blocks/publish-block-success.js";
-import { PageContainer } from "../../components/pages/dashboard/page-container.js";
-import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.js";
-import { BlockListItem } from "../../components/pages/user/block-list-item.js";
+} from "../../components/pages/auth-wall.jsx";
+import { BlockListContainer } from "../../components/pages/blocks/block-form-styles.jsx";
+import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state.jsx";
+import { PublishBlockSuccess } from "../../components/pages/blocks/publish-block-success.jsx";
+import { PageContainer } from "../../components/pages/dashboard/page-container.jsx";
+import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.jsx";
+import { BlockListItem } from "../../components/pages/user/block-list-item.jsx";
 import { apiClient } from "../../lib/api-client.js";
 import { ExpandedBlockMetadata } from "../../lib/blocks.js";
 import { shouldAllowNpmBlockPublishing } from "../../lib/config.js";

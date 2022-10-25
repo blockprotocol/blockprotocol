@@ -13,13 +13,13 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { SerializedUser } from "../../lib/api/model/user.model.js";
 import { ApiClientError } from "../../lib/api-client.js";
-import { Button } from "../button.js";
+import { Button } from "../button.jsx";
 import {
   isVerificationCodeFormatted,
   useVerificationCodeTextField,
 } from "../hooks/use-verification-code-text-field.js";
 import { EnvelopeDotIcon } from "../icons/index.js";
-import { TextField } from "../text-field.js";
+import { TextField } from "../text-field.jsx";
 
 export type VerificationCodeInfo = {
   userId: string;

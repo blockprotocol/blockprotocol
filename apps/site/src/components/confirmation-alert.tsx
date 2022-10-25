@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
-import { Button } from "./button.js";
+import { Button } from "./button.jsx";
 
 type ConfirmationAlertProps = {
   children: ReactNode;

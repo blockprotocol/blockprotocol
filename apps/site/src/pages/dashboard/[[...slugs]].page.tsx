@@ -3,16 +3,16 @@ import { useRouter } from "next/router.js";
 import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
 
-import { CreateSchemaModal } from "../../components/modal/create-schema-modal.js";
+import { CreateSchemaModal } from "../../components/modal/create-schema-modal.jsx";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../components/pages/auth-wall.js";
-import { DashboardCard } from "../../components/pages/dashboard/dashboard-card/dashboard-card.js";
-import { DashboardSectionGrid } from "../../components/pages/dashboard/dashboard-section-grid.js";
-import { DashboardSectionTitle } from "../../components/pages/dashboard/dashboard-section-title.js";
-import { PageContainer } from "../../components/pages/dashboard/page-container.js";
-import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.js";
+} from "../../components/pages/auth-wall.jsx";
+import { DashboardCard } from "../../components/pages/dashboard/dashboard-card/dashboard-card.jsx";
+import { DashboardSectionGrid } from "../../components/pages/dashboard/dashboard-section-grid.jsx";
+import { DashboardSectionTitle } from "../../components/pages/dashboard/dashboard-section-title.jsx";
+import { PageContainer } from "../../components/pages/dashboard/page-container.jsx";
+import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.jsx";
 import {
   DashboardSection,
   getDashboardSectionCards,

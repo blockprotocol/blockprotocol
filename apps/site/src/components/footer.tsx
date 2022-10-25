@@ -16,8 +16,8 @@ import {
 import { FunctionComponent, ReactNode } from "react";
 
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons/index.js";
-import { Link } from "./link.js";
-import { LinkButton } from "./link-button.js";
+import { Link } from "./link.jsx";
+import { LinkButton } from "./link-button.jsx";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   {

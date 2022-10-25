@@ -9,12 +9,12 @@ import {
 } from "react";
 
 import { apiClient } from "../../lib/api-client.js";
-import { Button } from "../button.js";
+import { Button } from "../button.jsx";
 import { useEmailTextField } from "../hooks/use-email-text-field.js";
 import { BlockProtocolIcon } from "../icons/index.js";
-import { Link } from "../link.js";
-import { TextField } from "../text-field.js";
-import { VerificationCodeInfo } from "./verification-code-screen.js";
+import { Link } from "../link.jsx";
+import { TextField } from "../text-field.jsx";
+import { VerificationCodeInfo } from "./verification-code-screen.jsx";
 
 type SendLoginCodeScreenProps = {
   disabled?: boolean;

@@ -3,12 +3,12 @@ import { FunctionComponent, useState } from "react";
 
 import { EntityType } from "../../../lib/api/model/entity-type.model.js";
 import { SerializedUser } from "../../../lib/api/model/user.model.js";
-import { formatUpdatedAt } from "../../../util/html-utils.js";
-import { Button } from "../../button.js";
-import { CreateSchemaModal } from "../../modal/create-schema-modal.js";
-import { ListViewCard } from "./list-view-card.js";
-import { Placeholder } from "./placeholder.js";
-import { BrowseHubButton, CreateSchemaButton } from "./placeholder-buttons.js";
+import { formatUpdatedAt } from "../../../util/html-utils.jsx";
+import { Button } from "../../button.jsx";
+import { CreateSchemaModal } from "../../modal/create-schema-modal.jsx";
+import { ListViewCard } from "./list-view-card.jsx";
+import { Placeholder } from "./placeholder.jsx";
+import { BrowseHubButton, CreateSchemaButton } from "./placeholder-buttons.jsx";
 import { useUserStatus } from "./use-user-status.js";
 
 export interface TabPanelContentsWithSchemasProps {

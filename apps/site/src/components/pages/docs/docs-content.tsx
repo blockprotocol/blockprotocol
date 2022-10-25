@@ -13,13 +13,13 @@ import { FunctionComponent, ReactNode } from "react";
 
 import { SiteMapPage } from "../../../lib/sitemap.js";
 import { FontAwesomeIcon } from "../../icons/index.js";
-import { Link } from "../../link.js";
+import { Link } from "../../link.jsx";
 import {
   MDX_TEXT_CONTENT_MAX_WIDTH,
   MdxPageContent,
-} from "../../mdx/mdx-page-content.js";
-import { PageNavLinks } from "../../page-nav-links.js";
-import { Sidebar } from "../../page-sidebar.js";
+} from "../../mdx/mdx-page-content.jsx";
+import { PageNavLinks } from "../../page-nav-links.jsx";
+import { Sidebar } from "../../page-sidebar.jsx";
 
 type DocsPageProps = {
   title?: ReactNode;

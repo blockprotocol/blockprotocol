@@ -7,8 +7,8 @@ import rawClsx from "clsx";
 import { useRouter } from "next/router.js";
 import { forwardRef, isValidElement, ReactNode } from "react";
 
-import { BaseLink, BaseLinkProps } from "./base-link.js";
-import { Button } from "./button.js";
+import { BaseLink, BaseLinkProps } from "./base-link.jsx";
+import { Button } from "./button.jsx";
 
 const clsx = rawClsx as unknown as typeof rawClsx.default;
 

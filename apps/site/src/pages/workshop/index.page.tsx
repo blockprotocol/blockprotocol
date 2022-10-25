@@ -9,8 +9,8 @@ import { NextSeo } from "next-seo";
 import { HTMLProps } from "react";
 import remarkGfm from "remark-gfm";
 
-import { Link } from "../../components/link.js";
-import { mdxComponents as rawMdxComponents } from "../../components/mdx/mdx-components.js";
+import { Link } from "../../components/link.jsx";
+import { mdxComponents as rawMdxComponents } from "../../components/mdx/mdx-components.jsx";
 
 type WorkshopPageProps = {
   compiledMarkdown: string;

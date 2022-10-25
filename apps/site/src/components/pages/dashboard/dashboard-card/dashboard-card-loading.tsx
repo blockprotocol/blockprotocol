@@ -1,7 +1,7 @@
 import { Box, Skeleton } from "@mui/material";
 
-import { Spacer } from "../../../spacer.js";
-import { CardVariant } from "./dashboard-card.js";
+import { Spacer } from "../../../spacer.jsx";
+import { CardVariant } from "./dashboard-card.jsx";
 
 interface DashboardCardLoadingProps {
   variant: CardVariant;

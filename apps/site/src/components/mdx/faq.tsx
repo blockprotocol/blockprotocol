@@ -10,7 +10,7 @@ import {
 import { FunctionComponent, ReactNode, useState } from "react";
 import rawSlugify from "slugify";
 
-import { Link } from "../link.js";
+import { Link } from "../link.jsx";
 import { usePageHeading } from "./shared/use-page-heading.js";
 import { stringifyChildren } from "./shared/util.js";
 

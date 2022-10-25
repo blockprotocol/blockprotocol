@@ -1,9 +1,9 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Typography } from "@mui/material";
 
-import { Alert } from "../../alert.js";
+import { Alert } from "../../alert.jsx";
 import { FontAwesomeIcon } from "../../icons/index.js";
-import { Link } from "../../link.js";
+import { Link } from "../../link.jsx";
 
 interface PublishBlockSuccessProps {
   blockHref: string;

@@ -1,6 +1,6 @@
 import { Box, experimental_sx as sx, styled, Typography } from "@mui/material";
 
-import { LinkButton } from "../../link-button.js";
+import { LinkButton } from "../../link-button.jsx";
 
 interface PublishBlockCardProps {
   publishFrom: string;

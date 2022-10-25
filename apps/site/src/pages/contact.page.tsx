@@ -3,9 +3,9 @@ import { NextPage } from "next";
 import { NextSeo } from "next-seo";
 import { tw } from "twind";
 
-import { Button } from "../components/button.js";
+import { Button } from "../components/button.jsx";
 import { AirplaneIcon } from "../components/icons/index.js";
-import { Link } from "../components/link.js";
+import { Link } from "../components/link.jsx";
 
 const labelSubtitleStyles = "text-gray-500 font-light block md:inline";
 

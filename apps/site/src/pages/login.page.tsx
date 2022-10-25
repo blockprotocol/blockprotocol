@@ -4,13 +4,13 @@ import { NextPage } from "next";
 import { useRouter } from "next/router.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Button } from "../components/button.js";
+import { Button } from "../components/button.jsx";
 import { FontAwesomeIcon } from "../components/icons/index.js";
-import { SendLoginCodeScreen } from "../components/screens/send-login-code-screen.js";
+import { SendLoginCodeScreen } from "../components/screens/send-login-code-screen.jsx";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../components/screens/verification-code-screen.js";
+} from "../components/screens/verification-code-screen.jsx";
 import { useUser } from "../context/user-context.js";
 import { SerializedUser } from "../lib/api/model/user.model.js";
 import { apiClient } from "../lib/api-client.js";

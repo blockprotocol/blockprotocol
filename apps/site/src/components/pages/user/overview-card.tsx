@@ -2,9 +2,9 @@ import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { TableTreeIcon } from "../../icons/index.js";
-import { ClientOnlyLastUpdated } from "../../last-updated.js";
-import { Link } from "../../link.js";
-import { Spacer } from "../../spacer.js";
+import { ClientOnlyLastUpdated } from "../../last-updated.jsx";
+import { Link } from "../../link.jsx";
+import { Spacer } from "../../spacer.jsx";
 import { shy } from "./utils.js";
 
 type OverviewCardProps = {

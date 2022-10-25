@@ -4,7 +4,7 @@ import ReactHtmlParser, {
   Transform,
 } from "react-html-parser";
 
-import { Link } from "../components/link.js";
+import { Link } from "../components/link.jsx";
 
 export const parseHTML = (html: string) => {
   const transform: Transform = (node, index) => {

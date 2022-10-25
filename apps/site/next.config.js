@@ -101,7 +101,8 @@ const nextConfig = {
       resolve: {
         ...config.resolve,
         extensionAlias: {
-          ".js": [".js", ".ts", ".tsx"],
+          ".js": [".js", ".ts"],
+          ".jsx": [".jsx", ".tsx"],
         },
       },
     };

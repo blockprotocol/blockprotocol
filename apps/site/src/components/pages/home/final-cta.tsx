@@ -8,15 +8,15 @@ import { useUser } from "../../../context/user-context.js";
 import { SerializedUser } from "../../../lib/api/model/user.model.js";
 import { apiClient } from "../../../lib/api-client.js";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api.js";
-import { Button } from "../../button.js";
+import { Button } from "../../button.jsx";
 import { FontAwesomeIcon } from "../../icons/index.js";
-import { Link } from "../../link.js";
-import { CompleteSignupScreen } from "../../screens/complete-signup-screen.js";
-import { SignupScreen } from "../../screens/signup-screen.js";
+import { Link } from "../../link.jsx";
+import { CompleteSignupScreen } from "../../screens/complete-signup-screen.jsx";
+import { SignupScreen } from "../../screens/signup-screen.jsx";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../../screens/verification-code-screen.js";
+} from "../../screens/verification-code-screen.jsx";
 
 const SIGNUP_PAGE_SCREENS = [
   "Email",

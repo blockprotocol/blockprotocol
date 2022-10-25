@@ -15,10 +15,10 @@ import {
 } from "react";
 import { TransitionGroup } from "react-transition-group";
 
-import { Link } from "../../../link.js";
-import { TextField } from "../../../text-field.js";
-import SearchList from "./search-list.js";
-import SearchSuggestedLinks from "./search-suggested-links.js";
+import { Link } from "../../../link.jsx";
+import { TextField } from "../../../text-field.jsx";
+import SearchList from "./search-list.jsx";
+import SearchSuggestedLinks from "./search-suggested-links.jsx";
 
 const CloseIcon = RawCloseIcon as unknown as typeof RawCloseIcon.default;
 const SearchIcon = RawSearchIcon as unknown as typeof RawSearchIcon.default;

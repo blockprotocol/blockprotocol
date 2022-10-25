@@ -18,14 +18,14 @@ import {
 import rawSlugify from "slugify";
 
 import { FontAwesomeIcon } from "../icons/index.js";
-import { Link } from "../link.js";
-import { Snippet } from "../snippet.js";
-import { FAQ } from "./faq.js";
-import { GraphServiceMessageList } from "./graph-service-message-list.js";
-import { HookServiceMessageList } from "./hook-service-message-list.js";
-import { GitHubInfoCard } from "./info-card/github-info-card.js";
-import { InfoCard } from "./info-card/info-card.js";
-import { InfoCardWrapper } from "./info-card/info-card-wrapper.js";
+import { Link } from "../link.jsx";
+import { Snippet } from "../snippet.jsx";
+import { FAQ } from "./faq.jsx";
+import { GraphServiceMessageList } from "./graph-service-message-list.jsx";
+import { HookServiceMessageList } from "./hook-service-message-list.jsx";
+import { GitHubInfoCard } from "./info-card/github-info-card.jsx";
+import { InfoCard } from "./info-card/info-card.jsx";
+import { InfoCardWrapper } from "./info-card/info-card-wrapper.jsx";
 import { usePageHeading } from "./shared/use-page-heading.js";
 import { stringifyChildren } from "./shared/util.js";
 

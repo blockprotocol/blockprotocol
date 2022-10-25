@@ -23,10 +23,10 @@ import {
 
 import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap.js";
 import { theme as themeImport } from "../theme/index.js";
-import { parseHTML } from "../util/html-utils.js";
+import { parseHTML } from "../util/html-utils.jsx";
 import { FontAwesomeIcon } from "./icons/index.js";
-import { Link } from "./link.js";
-import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar.js";
+import { Link } from "./link.jsx";
+import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar.jsx";
 import { generatePathWithoutParams } from "./shared.js";
 
 export const SIDEBAR_WIDTH = 300;

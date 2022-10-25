@@ -4,8 +4,8 @@ import { FunctionComponent } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap.js";
 import { FontAwesomeIcon } from "../icons/index.js";
-import { Link } from "../link.js";
-import { itemIsPage } from "./util.js";
+import { Link } from "../link.jsx";
+import { itemIsPage } from "./util.jsx";
 
 type MobileBreadcrumbsProps = {
   hydrationFriendlyAsPath: string;

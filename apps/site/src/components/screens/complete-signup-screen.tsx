@@ -13,10 +13,10 @@ import {
   ApiCompleteSignupRequestBody,
   ApiCompleteSignupResponse,
 } from "../../pages/api/complete-signup.api.js";
-import { Button } from "../button.js";
+import { Button } from "../button.jsx";
 import { useShortnameTextField } from "../hooks/use-shortname-text-field.js";
-import { BadgeCheckIcon } from "../icons/badge-check-icon.js";
-import { TextField } from "../text-field.js";
+import { BadgeCheckIcon } from "../icons/badge-check-icon.jsx";
+import { TextField } from "../text-field.jsx";
 
 type CompleteSignupScreenProps = {
   email: string;

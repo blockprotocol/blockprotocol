@@ -7,7 +7,7 @@ import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 import PageHeadingsContext, {
   Heading,
 } from "../context/page-headings-context.js";
-import { mdxComponents } from "./mdx-components.js";
+import { mdxComponents } from "./mdx-components.jsx";
 
 export const MDX_TEXT_CONTENT_MAX_WIDTH = 680;
 

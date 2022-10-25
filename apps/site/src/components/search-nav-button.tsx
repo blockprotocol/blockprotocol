@@ -2,9 +2,9 @@ import RawSearchIcon from "@mui/icons-material/Search.js";
 import { Chip, chipClasses, modalClasses, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { Button } from "./button.js";
-import { Modal } from "./modal/modal.js";
-import { Search } from "./pages/docs/search/index.js";
+import { Button } from "./button.jsx";
+import { Modal } from "./modal/modal.jsx";
+import { Search } from "./pages/docs/search/index.jsx";
 
 const SearchIcon = RawSearchIcon as unknown as typeof RawSearchIcon.default;
 

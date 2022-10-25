@@ -3,7 +3,7 @@
 
 import { Components } from "@mui/material";
 
-import { DESKTOP_NAVBAR_HEIGHT } from "../../../components/navbar.js";
+import { DESKTOP_NAVBAR_HEIGHT } from "../../../components/navbar.jsx";
 import { customColors } from "../../palette.js";
 
 // @see https://github.com/mui-org/material-ui/issues/15251

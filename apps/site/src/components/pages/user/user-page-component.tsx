@@ -11,11 +11,11 @@ import { FunctionComponent } from "react";
 import { EntityType } from "../../../lib/api/model/entity-type.model.js";
 import { SerializedUser } from "../../../lib/api/model/user.model.js";
 import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
-import { Sidebar } from "./sidebar.js";
-import { TabPanelContentsWithBlocks } from "./tab-panel-contents-with-blocks.js";
-import { TabPanelContentsWithOverview } from "./tab-panel-contents-with-overview.js";
-import { TabPanelContentsWithSchemas } from "./tab-panel-contents-with-schemas.js";
-import { TabHeader, TabPanel, TabValue } from "./tabs.js";
+import { Sidebar } from "./sidebar.jsx";
+import { TabPanelContentsWithBlocks } from "./tab-panel-contents-with-blocks.jsx";
+import { TabPanelContentsWithOverview } from "./tab-panel-contents-with-overview.jsx";
+import { TabPanelContentsWithSchemas } from "./tab-panel-contents-with-schemas.jsx";
+import { TabHeader, TabPanel, TabValue } from "./tabs.jsx";
 
 const SIDEBAR_WIDTH = 300;
 

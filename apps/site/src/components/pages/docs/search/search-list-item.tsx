@@ -3,11 +3,11 @@ import { Box, Typography, typographyClasses } from "@mui/material";
 import { forwardRef, useContext } from "react";
 
 import SiteMapContext from "../../../../context/site-map-context.js";
-import { parseHTML } from "../../../../util/html-utils.js";
+import { parseHTML } from "../../../../util/html-utils.jsx";
 import { useCrumbs } from "../../../hooks/use-crumbs.js";
 import { FontAwesomeIcon } from "../../../icons/index.js";
-import { LinkButton } from "../../../link-button.js";
-import { AlgoliaHighlightResult, AlgoliaResult } from "./index.js";
+import { LinkButton } from "../../../link-button.jsx";
+import { AlgoliaHighlightResult, AlgoliaResult } from "./index.jsx";
 
 interface SearchItemProps {
   searchResult: AlgoliaResult;

@@ -25,18 +25,18 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import SiteMapContext from "../context/site-map-context.js";
 import { useUser } from "../context/user-context.js";
-import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page.js";
-import { getScrollbarSize } from "../util/mui-utils.js";
-import { Button } from "./button.js";
+import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page.jsx";
+import { getScrollbarSize } from "../util/mui-utils.jsx";
+import { Button } from "./button.jsx";
 import { useCrumbs } from "./hooks/use-crumbs.js";
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons/index.js";
-import { Link } from "./link.js";
-import { LinkButton } from "./link-button.js";
-import { AccountDropdown } from "./navbar/account-dropdown.js";
-import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs.js";
-import { MobileNavItems } from "./navbar/mobile-nav-items.js";
-import { NAVBAR_LINK_ICONS } from "./navbar/util.js";
-import { SearchNavButton } from "./search-nav-button.js";
+import { Link } from "./link.jsx";
+import { LinkButton } from "./link-button.jsx";
+import { AccountDropdown } from "./navbar/account-dropdown.jsx";
+import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs.jsx";
+import { MobileNavItems } from "./navbar/mobile-nav-items.jsx";
+import { NAVBAR_LINK_ICONS } from "./navbar/util.jsx";
+import { SearchNavButton } from "./search-nav-button.jsx";
 import {
   generatePathWithoutParams,
   useHydrationFriendlyAsPath,

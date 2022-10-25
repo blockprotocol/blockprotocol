@@ -2,7 +2,7 @@ import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { SerializedUser } from "../../../lib/api/model/user.model.js";
-import { Avatar } from "./avatar.js";
+import { Avatar } from "./avatar.jsx";
 
 type SidebarProps = {
   isMobile: boolean;

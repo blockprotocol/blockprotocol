@@ -3,8 +3,8 @@ import { svgIconClasses } from "@mui/material";
 import { forwardRef } from "react";
 
 import { FontAwesomeIcon } from "../../../icons/index.js";
-import { LinkButton } from "../../../link-button.js";
-import { AlgoliaResult } from "./index.js";
+import { LinkButton } from "../../../link-button.jsx";
+import { AlgoliaResult } from "./index.jsx";
 
 interface SearchItemHeadingProps {
   searchResult: AlgoliaResult;

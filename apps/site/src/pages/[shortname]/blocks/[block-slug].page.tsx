@@ -17,15 +17,15 @@ import { NextSeo } from "next-seo";
 import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
-import { BlocksSlider } from "../../../components/blocks-slider.js";
+import { BlocksSlider } from "../../../components/blocks-slider.jsx";
 import { FontAwesomeIcon } from "../../../components/icons/index.js";
-import { Link } from "../../../components/link.js";
-import { mdxComponents } from "../../../components/mdx/mdx-components.js";
-import { BlockDataContainer } from "../../../components/pages/hub/block-data-container.js";
+import { Link } from "../../../components/link.jsx";
+import { mdxComponents } from "../../../components/mdx/mdx-components.jsx";
+import { BlockDataContainer } from "../../../components/pages/hub/block-data-container.jsx";
 import {
   BlockExampleGraph,
   BlockSchema,
-} from "../../../components/pages/hub/hub-utils.js";
+} from "../../../components/pages/hub/hub-utils.jsx";
 import { getAllBlocks } from "../../../lib/api/blocks/get.js";
 import {
   excludeHiddenBlocks,
@@ -34,7 +34,7 @@ import {
   retrieveBlockReadme,
 } from "../../../lib/blocks.js";
 import { isFork, isProduction } from "../../../lib/config.js";
-import { formatUpdatedAt } from "../../../util/html-utils.js";
+import { formatUpdatedAt } from "../../../util/html-utils.jsx";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(

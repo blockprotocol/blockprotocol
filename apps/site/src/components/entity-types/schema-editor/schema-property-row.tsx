@@ -1,12 +1,12 @@
 import { FunctionComponent, useContext } from "react";
 
 import { JsonSchema } from "../../../lib/json-schema.js";
-import { Button } from "../../button.js";
-import { TextInputOrDisplay, ToggleInputOrDisplay } from "./inputs.js";
-import { SchemaOptionsContext } from "./schema-editor.js";
+import { Button } from "../../button.jsx";
+import { TextInputOrDisplay, ToggleInputOrDisplay } from "./inputs.jsx";
+import { SchemaOptionsContext } from "./schema-editor.jsx";
 import { SchemaEditorDispatcher } from "./schema-editor-reducer.js";
-import { tdClasses, trClasses } from "./schema-properties-table.js";
-import { SchemaPropertyTypeList } from "./schema-property-type-list.js";
+import { tdClasses, trClasses } from "./schema-properties-table.jsx";
+import { SchemaPropertyTypeList } from "./schema-property-type-list.jsx";
 
 type SchemaPropertyRowProps = {
   dispatchSchemaUpdate: SchemaEditorDispatcher;

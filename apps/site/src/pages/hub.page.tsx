@@ -2,7 +2,7 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { GetStaticProps, NextPage } from "next";
 import { NextSeo } from "next-seo";
 
-import { BlockCard, BlockCardComingSoon } from "../components/block-card.js";
+import { BlockCard, BlockCardComingSoon } from "../components/block-card.jsx";
 import { getAllBlocks } from "../lib/api/blocks/get.js";
 import {
   excludeHiddenBlocks,
