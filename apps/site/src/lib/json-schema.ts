@@ -1,11 +1,9 @@
 import { JsonObject } from "@blockprotocol/core";
 import { EntityType as BlockProtocolEntityType } from "@blockprotocol/graph";
-import _Ajv2019 from "ajv/dist/2019.js";
+import Ajv2019 from "ajv/dist/2019.js";
 import { Schema } from "jsonschema";
 
 import { EntityType } from "./api/model/entity-type.model.js";
-
-const Ajv2019 = _Ajv2019 as unknown as typeof _Ajv2019.default;
 
 // @todo patch ajv schema type and remove additional jsonschema dep
 export type JsonSchema = Schema & {
