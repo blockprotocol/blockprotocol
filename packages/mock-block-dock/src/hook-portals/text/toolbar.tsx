@@ -56,7 +56,7 @@ export const Toolbar = () => {
           position: "absolute",
           fontWeight: 600,
           zIndex: 1,
-          marginTop: -"6px",
+          marginTop: "-6px",
           visibility: "hidden",
           borderRadius: 4,
           userSelect: "none", // @see https://github.com/ianstormtaylor/slate/issues/3421#issuecomment-573326794
