@@ -61,6 +61,6 @@
     "yarn-deduplicate": "6.0.0"
   },
   "engines": {
-    "node": ">=16.14.0"
+    "node": ">=v18.11.0"
   }
 }
