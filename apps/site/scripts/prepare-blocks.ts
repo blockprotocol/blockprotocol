@@ -64,7 +64,6 @@ const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
   additionalProperties: false, // protects against typos in field names
 };
 
-// https://github.com/ajv-validator/ajv/issues/2132
 const ajv = new Ajv();
 const validateStoredBlockInfo = ajv.compile(storedBlockInfoSchema);
 
