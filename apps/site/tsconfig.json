@@ -2,7 +2,7 @@
   "extends": "@local/tsconfig/next.json",
   "include": ["next-env.d.ts", "theme-override.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "Node16",
     "skipLibCheck": true
   }
 }
