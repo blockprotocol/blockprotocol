@@ -10,8 +10,8 @@ import {
   useScrollTrigger,
   useTheme,
 } from "@mui/material";
-import clsx from "clsx";
-import { useRouter } from "next/router";
+import rawClsx from "clsx";
+import { useRouter } from "next/router.js";
 import {
   FunctionComponent,
   MouseEventHandler,
@@ -23,24 +23,26 @@ import {
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import SiteMapContext from "../context/site-map-context";
-import { useUser } from "../context/user-context";
-import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page";
-import { getScrollbarSize } from "../util/mui-utils";
-import { Button } from "./button";
-import { useCrumbs } from "./hooks/use-crumbs";
-import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
-import { Link } from "./link";
-import { LinkButton } from "./link-button";
-import { AccountDropdown } from "./navbar/account-dropdown";
-import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs";
-import { MobileNavItems } from "./navbar/mobile-nav-items";
-import { NAVBAR_LINK_ICONS } from "./navbar/util";
-import { SearchNavButton } from "./search-nav-button";
+import SiteMapContext from "../context/site-map-context.js";
+import { useUser } from "../context/user-context.js";
+import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page.js";
+import { getScrollbarSize } from "../util/mui-utils.js";
+import { Button } from "./button.js";
+import { useCrumbs } from "./hooks/use-crumbs.js";
+import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons/index.js";
+import { Link } from "./link.js";
+import { LinkButton } from "./link-button.js";
+import { AccountDropdown } from "./navbar/account-dropdown.js";
+import { MobileBreadcrumbs } from "./navbar/mobile-breadcrumbs.js";
+import { MobileNavItems } from "./navbar/mobile-nav-items.js";
+import { NAVBAR_LINK_ICONS } from "./navbar/util.js";
+import { SearchNavButton } from "./search-nav-button.js";
 import {
   generatePathWithoutParams,
   useHydrationFriendlyAsPath,
-} from "./shared";
+} from "./shared.js";
+
+const clsx = rawClsx as unknown as typeof rawClsx.default;
 
 export const DESKTOP_NAVBAR_HEIGHT = 71.5;
 

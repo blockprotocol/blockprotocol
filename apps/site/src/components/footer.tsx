@@ -15,9 +15,9 @@ import {
 } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
-import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
-import { Link } from "./link";
-import { LinkButton } from "./link-button";
+import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons/index.js";
+import { Link } from "./link.js";
+import { LinkButton } from "./link-button.js";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   {

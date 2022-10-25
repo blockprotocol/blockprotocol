@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 
-import { ArrowRightIcon } from "../../../icons";
+import { ArrowRightIcon } from "../../../icons/index.js";
 
 interface LinkWrapperProps {
   title: string;

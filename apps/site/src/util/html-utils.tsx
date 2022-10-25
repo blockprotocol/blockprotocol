@@ -4,7 +4,7 @@ import ReactHtmlParser, {
   Transform,
 } from "react-html-parser";
 
-import { Link } from "../components/link";
+import { Link } from "../components/link.js";
 
 export const parseHTML = (html: string) => {
   const transform: Transform = (node, index) => {
@@ -28,7 +28,9 @@ export const parseHTML = (html: string) => {
       );
     }
   };
-  return ReactHtmlParser(html, { transform });
+  return (ReactHtmlParser as unknown as typeof ReactHtmlParser.default)(html, {
+    transform,
+  });
 };
 
 export const formatUpdatedAt = (date?: string | null) => {

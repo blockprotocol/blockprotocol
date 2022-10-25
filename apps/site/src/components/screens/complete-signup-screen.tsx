@@ -7,16 +7,16 @@ import {
   useState,
 } from "react";
 
-import { useUser } from "../../context/user-context";
-import { apiClient } from "../../lib/api-client";
+import { useUser } from "../../context/user-context.js";
+import { apiClient } from "../../lib/api-client.js";
 import {
   ApiCompleteSignupRequestBody,
   ApiCompleteSignupResponse,
-} from "../../pages/api/complete-signup.api";
-import { Button } from "../button";
-import { useShortnameTextField } from "../hooks/use-shortname-text-field";
-import { BadgeCheckIcon } from "../icons/badge-check-icon";
-import { TextField } from "../text-field";
+} from "../../pages/api/complete-signup.api.js";
+import { Button } from "../button.js";
+import { useShortnameTextField } from "../hooks/use-shortname-text-field.js";
+import { BadgeCheckIcon } from "../icons/badge-check-icon.js";
+import { TextField } from "../text-field.js";
 
 type CompleteSignupScreenProps = {
   email: string;

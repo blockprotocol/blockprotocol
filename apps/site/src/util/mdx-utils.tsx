@@ -3,15 +3,17 @@ import path from "node:path";
 import fs from "fs-extra";
 import matter from "gray-matter";
 import { htmlToText } from "html-to-text";
-import { MDXRemoteSerializeResult } from "next-mdx-remote";
+import type { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import remarkMdx from "remark-mdx";
 import remarkMdxDisableExplicitJsx from "remark-mdx-disable-explicit-jsx";
 import remarkParse from "remark-parse";
-import slugify from "slugify";
+import rawSlugify from "slugify";
 import { unified } from "unified";
 
-import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
+import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap.js";
+
+const slugify = rawSlugify as unknown as typeof rawSlugify.default;
 
 type Node = {
   type: string;

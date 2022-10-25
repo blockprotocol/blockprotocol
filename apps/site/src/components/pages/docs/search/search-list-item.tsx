@@ -2,12 +2,12 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography, typographyClasses } from "@mui/material";
 import { forwardRef, useContext } from "react";
 
-import SiteMapContext from "../../../../context/site-map-context";
-import { parseHTML } from "../../../../util/html-utils";
-import { useCrumbs } from "../../../hooks/use-crumbs";
-import { FontAwesomeIcon } from "../../../icons";
-import { LinkButton } from "../../../link-button";
-import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
+import SiteMapContext from "../../../../context/site-map-context.js";
+import { parseHTML } from "../../../../util/html-utils.js";
+import { useCrumbs } from "../../../hooks/use-crumbs.js";
+import { FontAwesomeIcon } from "../../../icons/index.js";
+import { LinkButton } from "../../../link-button.js";
+import { AlgoliaHighlightResult, AlgoliaResult } from "./index.js";
 
 interface SearchItemProps {
   searchResult: AlgoliaResult;

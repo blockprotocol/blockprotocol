@@ -1,9 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
-import { Carousel } from "./carousel";
-import { Link } from "./link";
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks.js";
+import { Carousel } from "./carousel.js";
+import { Link } from "./link.js";
 
 type BlocksSliderProps = {
   catalog: BlockMetadata[];

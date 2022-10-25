@@ -1,18 +1,18 @@
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import { FunctionComponent, useState } from "react";
 
-import { EntityType } from "../../../lib/api/model/entity-type.model";
-import { SerializedUser } from "../../../lib/api/model/user.model";
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { CreateSchemaModal } from "../../modal/create-schema-modal";
-import { OverviewCard } from "./overview-card";
-import { Placeholder } from "./placeholder";
+import { EntityType } from "../../../lib/api/model/entity-type.model.js";
+import { SerializedUser } from "../../../lib/api/model/user.model.js";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
+import { CreateSchemaModal } from "../../modal/create-schema-modal.js";
+import { OverviewCard } from "./overview-card.js";
+import { Placeholder } from "./placeholder.js";
 import {
   BrowseHubButton,
   BuildBlockButton,
   CreateSchemaButton,
-} from "./placeholder-buttons";
-import { useUserStatus } from "./use-user-status";
+} from "./placeholder-buttons.js";
+import { useUserStatus } from "./use-user-status.js";
 
 export interface TabPanelContentsWithOverviewProps {
   blocks: ExpandedBlockMetadata[];

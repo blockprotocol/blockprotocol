@@ -3,13 +3,13 @@ import { NextConnect } from "next-connect";
 import {
   isLoggedInMiddleware,
   IsLoggedInRequestExtensions,
-} from "../middleware/is-logged-in.middleware";
-import { isSignedUpMiddleware } from "../middleware/is-signed-up.middleware";
+} from "../middleware/is-logged-in.middleware.js";
+import { isSignedUpMiddleware } from "../middleware/is-signed-up.middleware.js";
 import {
   BaseApiRequest,
   BaseApiResponse,
   createBaseHandler,
-} from "./base-handler";
+} from "./base-handler.js";
 
 export type AuthenticatedApiRequest<RequestBody = unknown> =
   BaseApiRequest<RequestBody> & IsLoggedInRequestExtensions;

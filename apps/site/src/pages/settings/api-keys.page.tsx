@@ -2,20 +2,20 @@ import { Box, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "../../components/button";
-import { WarningIcon } from "../../components/icons";
-import { Link } from "../../components/link";
+import { Button } from "../../components/button.js";
+import { WarningIcon } from "../../components/icons/index.js";
+import { Link } from "../../components/link.js";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../components/pages/auth-wall";
-import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal";
-import { PageContainer } from "../../components/pages/dashboard/page-container";
-import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
-import { Table, TableRows } from "../../components/table";
-import { DateTimeCell } from "../../components/table-cells";
-import { UserFacingApiKeyProperties } from "../../lib/api/model/api-key.model";
-import { apiClient } from "../../lib/api-client";
+} from "../../components/pages/auth-wall.js";
+import { GenerateApiModal } from "../../components/pages/dashboard/generate-api-modal.js";
+import { PageContainer } from "../../components/pages/dashboard/page-container.js";
+import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.js";
+import { Table, TableRows } from "../../components/table.js";
+import { DateTimeCell } from "../../components/table-cells.js";
+import { UserFacingApiKeyProperties } from "../../lib/api/model/api-key.model.js";
+import { apiClient } from "../../lib/api-client.js";
 
 const ApiKeys: AuthWallPageContent = () => {
   const [activeApiKeys, setActiveApiKeys] = useState<

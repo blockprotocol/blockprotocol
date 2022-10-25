@@ -2,8 +2,8 @@ import { Db, DBRef, ObjectId, WithId } from "mongodb";
 import { NextApiResponse } from "next";
 import { rword } from "rword";
 
-import { formatErrors } from "../../../util/api";
-import { User } from "./user.model";
+import { formatErrors } from "../../../util/api.js";
+import { User } from "./user.model.js";
 
 export type VerificationCodeVariant = "login" | "email";
 

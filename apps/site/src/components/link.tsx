@@ -1,12 +1,16 @@
-// eslint-disable-next-line no-restricted-imports
-import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
-import { styled } from "@mui/material/styles";
-import clsx from "clsx";
-import { useRouter } from "next/router";
+import {
+  Link as MuiLink,
+  LinkProps as MuiLinkProps,
+  styled,
+} from "@mui/material";
+import rawClsx from "clsx";
+import { useRouter } from "next/router.js";
 import { forwardRef, isValidElement, ReactNode } from "react";
 
-import { BaseLink, BaseLinkProps } from "./base-link";
-import { Button } from "./button";
+import { BaseLink, BaseLinkProps } from "./base-link.js";
+import { Button } from "./button.js";
+
+const clsx = rawClsx as unknown as typeof rawClsx.default;
 
 /**
  * This component is based on https://github.com/mui-org/material-ui/blob/a5c92dfd84dfe5888a8b383a9b5fe5701a934564/examples/nextjs/src/Link.js

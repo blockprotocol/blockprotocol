@@ -1,24 +1,24 @@
 import { Box, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { NextSeo } from "next-seo";
 import { useForm } from "react-hook-form";
 
-import { Button } from "../../../components/button";
+import { Button } from "../../../components/button.js";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../../components/pages/auth-wall";
-import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
-import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
-import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper";
-import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block-info";
-import { RequiredLabel } from "../../../components/pages/blocks/required-label";
-import { PageContainer } from "../../../components/pages/dashboard/page-container";
-import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs";
-import { shy } from "../../../components/pages/user/utils";
-import { TextField } from "../../../components/text-field";
-import { apiClient } from "../../../lib/api-client";
-import { ApiBlockCreateRequest } from "../../api/blocks/create.api";
+} from "../../../components/pages/auth-wall.js";
+import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout.js";
+import { BlockFormSection } from "../../../components/pages/blocks/block-form-section.js";
+import { FieldInfoWrapper } from "../../../components/pages/blocks/field-info-wrapper.js";
+import { PublishBlockInfo } from "../../../components/pages/blocks/publish-block-info.js";
+import { RequiredLabel } from "../../../components/pages/blocks/required-label.js";
+import { PageContainer } from "../../../components/pages/dashboard/page-container.js";
+import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs.js";
+import { shy } from "../../../components/pages/user/utils.js";
+import { TextField } from "../../../components/text-field.js";
+import { apiClient } from "../../../lib/api-client.js";
+import { ApiBlockCreateRequest } from "../../api/blocks/create.api.js";
 
 type FormValues = ApiBlockCreateRequest;
 

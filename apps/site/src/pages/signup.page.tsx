@@ -1,25 +1,25 @@
 import { faArrowLeft, faUser } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Fade, Paper, Typography } from "@mui/material";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { useEffect, useMemo, useState } from "react";
 
-import { Button } from "../components/button";
+import { Button } from "../components/button.js";
 import {
   ArrowUpCircleIcon,
   FontAwesomeIcon,
   PullRequestIcon,
-} from "../components/icons";
-import { CompleteSignupScreen } from "../components/screens/complete-signup-screen";
-import { SignupScreen } from "../components/screens/signup-screen";
+} from "../components/icons/index.js";
+import { CompleteSignupScreen } from "../components/screens/complete-signup-screen.js";
+import { SignupScreen } from "../components/screens/signup-screen.js";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../components/screens/verification-code-screen";
-import { useUser } from "../context/user-context";
-import { SerializedUser } from "../lib/api/model/user.model";
-import { apiClient } from "../lib/api-client";
-import { ApiVerifyEmailRequestBody } from "./api/verify-email.api";
+} from "../components/screens/verification-code-screen.js";
+import { useUser } from "../context/user-context.js";
+import { SerializedUser } from "../lib/api/model/user.model.js";
+import { apiClient } from "../lib/api-client.js";
+import { ApiVerifyEmailRequestBody } from "./api/verify-email.api.js";
 
 const SIGNUP_PAGE_SCREENS = [
   "Email",

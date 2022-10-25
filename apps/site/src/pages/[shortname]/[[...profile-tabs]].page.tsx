@@ -1,14 +1,16 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import Error from "next/error";
-import { useRouter } from "next/router";
+import RawNextError from "next/error.js";
+import { useRouter } from "next/router.js";
 
-import { TABS } from "../../components/pages/user/tabs";
+import { TABS } from "../../components/pages/user/tabs.js";
 import {
   UserPageComponent,
   UserPageProps,
-} from "../../components/pages/user/user-page-component";
-import { apiClient } from "../../lib/api-client";
-import { excludeHiddenBlocks } from "../../lib/blocks";
+} from "../../components/pages/user/user-page-component.js";
+import { apiClient } from "../../lib/api-client.js";
+import { excludeHiddenBlocks } from "../../lib/blocks.js";
+
+const NextError = RawNextError as unknown as typeof RawNextError.default;
 
 type UserPageQueryParams = {
   "profile-tabs": string[];
@@ -78,7 +80,7 @@ const UserPage: NextPage<UserPageProps> = ({ user, blocks, entityTypes }) => {
 
   // Protect against unlikely client-side navigation to a non-existing profile tab
   if (!matchingTab) {
-    return <Error statusCode={404} />;
+    return <NextError statusCode={404} />;
   }
 
   return (

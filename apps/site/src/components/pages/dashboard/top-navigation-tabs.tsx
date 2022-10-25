@@ -1,8 +1,8 @@
 import { Box, Container, Tab, Tabs } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { FunctionComponent, MouseEvent } from "react";
 
-import { dashboardPages } from "./utils";
+import { dashboardPages } from "./utils.js";
 
 const a11yProps = (index: number) => ({
   id: `simple-tab-${index}`,

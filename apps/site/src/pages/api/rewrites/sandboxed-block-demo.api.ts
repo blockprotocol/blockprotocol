@@ -1,8 +1,8 @@
 import { NextApiHandler } from "next";
 
 import packageJson from "../../../../package.json";
-import { getBlockByUserAndName } from "../../../lib/api/blocks/get";
-import { retrieveBlockFileContent } from "../../../lib/blocks";
+import { getBlockByUserAndName } from "../../../lib/api/blocks/get.js";
+import { retrieveBlockFileContent } from "../../../lib/blocks.js";
 
 /**
  * @todo potentially remove after building blocks to ESM

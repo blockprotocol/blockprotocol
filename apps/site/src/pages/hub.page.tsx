@@ -2,12 +2,12 @@ import { Box, Container, Grid, Typography } from "@mui/material";
 import { GetStaticProps, NextPage } from "next";
 import { NextSeo } from "next-seo";
 
-import { BlockCard, BlockCardComingSoon } from "../components/block-card";
-import { getAllBlocks } from "../lib/api/blocks/get";
+import { BlockCard, BlockCardComingSoon } from "../components/block-card.js";
+import { getAllBlocks } from "../lib/api/blocks/get.js";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-} from "../lib/blocks";
+} from "../lib/blocks.js";
 
 interface PageProps {
   catalog: BlockMetadata[];

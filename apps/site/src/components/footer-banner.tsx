@@ -6,13 +6,15 @@ import {
   PaperProps,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
+import RawImage from "next/image.js";
 import { FunctionComponent, ReactNode } from "react";
 
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
-import { ArrowRightIcon, BoltIcon } from "./icons";
-import { Link as LinkComponent, LinkProps } from "./link";
-import { LinkButton } from "./link-button";
+import { ArrowRightIcon, BoltIcon } from "./icons/index.js";
+import { Link as LinkComponent, LinkProps } from "./link.js";
+import { LinkButton } from "./link-button.js";
+
+const Image = RawImage as unknown as typeof RawImage.default;
 
 type Banner = {
   shouldDisplay: (params: { pathname: string; asPath: string }) => boolean;

@@ -1,7 +1,7 @@
-import { createBaseHandler } from "../../../../../lib/api/handler/base-handler";
-import { User } from "../../../../../lib/api/model/user.model";
-import { ExpandedBlockMetadata } from "../../../../../lib/blocks";
-import { formatErrors } from "../../../../../util/api";
+import { createBaseHandler } from "../../../../../lib/api/handler/base-handler.js";
+import { User } from "../../../../../lib/api/model/user.model.js";
+import { ExpandedBlockMetadata } from "../../../../../lib/blocks.js";
+import { formatErrors } from "../../../../../util/api.js";
 
 export type ApiBlocksByUserResponseQueryParams = {
   shortname: string;

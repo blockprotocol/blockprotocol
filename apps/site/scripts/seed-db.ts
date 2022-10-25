@@ -1,11 +1,11 @@
 import chalk from "chalk";
 
-import { blocksDbCollectionName } from "../src/lib/api/blocks/shared";
-import { ApiKey } from "../src/lib/api/model/api-key.model";
-import { EntityType } from "../src/lib/api/model/entity-type.model";
-import { User, UserProperties } from "../src/lib/api/model/user.model";
-import { VerificationCode } from "../src/lib/api/model/verification-code.model";
-import { connectToDatabase } from "../src/lib/api/mongodb";
+import { blocksDbCollectionName } from "../src/lib/api/blocks/shared.js";
+import { ApiKey } from "../src/lib/api/model/api-key.model.js";
+import { EntityType } from "../src/lib/api/model/entity-type.model.js";
+import { User, UserProperties } from "../src/lib/api/model/user.model.js";
+import { VerificationCode } from "../src/lib/api/model/verification-code.model.js";
+import { connectToDatabase } from "../src/lib/api/mongodb.js";
 
 const script = async () => {
   console.log(chalk.bold("Seeding DB..."));
@@ -99,8 +99,8 @@ const script = async () => {
   await client.close();
   console.log("✅ DB seeded");
 
-  await import("./create-db-indexes");
-  await import("./reset-s3-bucket");
+  await import("./create-db-indexes.js");
+  await import("./reset-s3-bucket.js");
 };
 
 await script();

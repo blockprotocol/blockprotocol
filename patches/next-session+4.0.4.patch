@@ -1,0 +1,11 @@
+diff --git a/node_modules/next-session/lib/session.d.ts b/node_modules/next-session/lib/session.d.ts
+index 859be92..fa14220 100644
+--- a/node_modules/next-session/lib/session.d.ts
++++ b/node_modules/next-session/lib/session.d.ts
+@@ -1,5 +1,5 @@
+ import { IncomingMessage, ServerResponse } from "http";
+-import { Options, Session } from "./types";
++import { Options, Session } from "./types.js";
+ export default function session(options?: Options): (req: IncomingMessage & {
+     session?: Session;
+ }, res: ServerResponse) => Promise<Session>;

@@ -1,4 +1,4 @@
-import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
+import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler.js";
 
 type LogoutResponse = "SUCCESS";
 

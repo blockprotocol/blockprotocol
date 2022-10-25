@@ -1,11 +1,11 @@
 import { Box, Skeleton, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
-import { BlockProtocolLogoIcon } from "./icons";
-import { ClientOnlyLastUpdated } from "./last-updated";
-import { Link } from "./link";
-import { Spacer } from "./spacer";
+import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks.js";
+import { BlockProtocolLogoIcon } from "./icons/index.js";
+import { ClientOnlyLastUpdated } from "./last-updated.js";
+import { Link } from "./link.js";
+import { Spacer } from "./spacer.js";
 
 type BlockCardProps = {
   loading?: boolean;

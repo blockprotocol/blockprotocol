@@ -5,9 +5,9 @@ import {
 import { Box, Typography } from "@mui/material";
 import { Fragment, FunctionComponent } from "react";
 
-import { JsonSchema } from "../lib/json-schema";
-import { Link } from "./link";
-import { mdxComponents } from "./mdx/mdx-components";
+import { JsonSchema } from "../lib/json-schema.js";
+import { Link } from "./link.js";
+import { mdxComponents } from "./mdx/mdx-components.js";
 
 const DataType: FunctionComponent<{ propertySchema: JsonSchema }> = ({
   propertySchema,

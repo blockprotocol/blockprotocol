@@ -1,9 +1,9 @@
 import { NextPage } from "next";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { FunctionComponent } from "react";
 
-import { useUser } from "../../context/user-context";
-import { SerializedUser } from "../../lib/api/model/user.model";
+import { useUser } from "../../context/user-context.js";
+import { SerializedUser } from "../../lib/api/model/user.model.js";
 
 export interface AuthWallPageContentProps {
   user: SerializedUser;

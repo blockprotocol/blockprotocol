@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 
-import PageHeadingsContext from "../../context/page-headings-context";
+import PageHeadingsContext from "../../context/page-headings-context.js";
 
 export const usePageHeading = (props: { anchor: string }) => {
   const headingRef = useRef<HTMLHeadingElement>(null);

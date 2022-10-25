@@ -2,10 +2,10 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Breadcrumbs, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
-import { FontAwesomeIcon } from "../icons";
-import { Link } from "../link";
-import { itemIsPage } from "./util";
+import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap.js";
+import { FontAwesomeIcon } from "../icons/index.js";
+import { Link } from "../link.js";
+import { itemIsPage } from "./util.js";
 
 type MobileBreadcrumbsProps = {
   hydrationFriendlyAsPath: string;

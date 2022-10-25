@@ -1,9 +1,9 @@
 import { faHammer } from "@fortawesome/free-solid-svg-icons";
 import { FunctionComponent } from "react";
 
-import { Button } from "../../button";
-import { FontAwesomeIcon, TableTreeIcon } from "../../icons";
-import { LinkButton } from "../../link-button";
+import { Button } from "../../button.js";
+import { FontAwesomeIcon, TableTreeIcon } from "../../icons/index.js";
+import { LinkButton } from "../../link-button.js";
 
 export const BuildBlockButton: FunctionComponent = () => {
   return (

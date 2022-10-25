@@ -2,16 +2,16 @@ import { faArrowLeft, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Box, Fade, Modal, ModalProps, Paper } from "@mui/material";
 import { FunctionComponent, useEffect, useState } from "react";
 
-import { useUser } from "../../context/user-context";
-import { SerializedUser } from "../../lib/api/model/user.model";
-import { apiClient } from "../../lib/api-client";
-import { Button } from "../button";
-import { FontAwesomeIcon } from "../icons";
-import { SendLoginCodeScreen } from "../screens/send-login-code-screen";
+import { useUser } from "../../context/user-context.js";
+import { SerializedUser } from "../../lib/api/model/user.model.js";
+import { apiClient } from "../../lib/api-client.js";
+import { Button } from "../button.js";
+import { FontAwesomeIcon } from "../icons/index.js";
+import { SendLoginCodeScreen } from "../screens/send-login-code-screen.js";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../screens/verification-code-screen";
+} from "../screens/verification-code-screen.js";
 
 type LoginModalProps = {
   onClose: () => void;

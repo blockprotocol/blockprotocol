@@ -1,5 +1,4 @@
-import { ThemeOptions } from "@mui/material";
-import { Shadows } from "@mui/material/styles/shadows";
+import { Shadows, ThemeOptions } from "@mui/material";
 
 /** @todo: see if it's possible to use keys "sm" | "lg" instead of the array index */
 

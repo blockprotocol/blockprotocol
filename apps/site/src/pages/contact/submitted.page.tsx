@@ -2,7 +2,7 @@ import { Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import { tw } from "twind";
 
-import { Button } from "../../components/button";
+import { Button } from "../../components/button.js";
 
 const PartnersSubmitted: NextPage = () => {
   return (

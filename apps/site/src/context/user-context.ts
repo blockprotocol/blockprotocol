@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction, useContext } from "react";
 
-import { SerializedUser } from "../lib/api/model/user.model";
+import { SerializedUser } from "../lib/api/model/user.model.js";
 
 export type UserState = SerializedUser | "loading" | undefined;
 

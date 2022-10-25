@@ -1,6 +1,6 @@
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
-import { SESSION_COOKIE_NAME } from "../../lib/api/middleware/constants";
-import { SerializedUser } from "../../lib/api/model/user.model";
+import { createBaseHandler } from "../../lib/api/handler/base-handler.js";
+import { SESSION_COOKIE_NAME } from "../../lib/api/middleware/constants.js";
+import { SerializedUser } from "../../lib/api/model/user.model.js";
 
 export type ApiMeResponse = { user: SerializedUser } | { guest: true };
 

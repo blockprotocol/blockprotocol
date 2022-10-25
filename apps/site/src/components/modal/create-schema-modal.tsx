@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import {
   FormEvent,
   FunctionComponent,
@@ -9,11 +9,11 @@ import {
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { useUser } from "../../context/user-context";
-import { apiClient } from "../../lib/api-client";
-import { Button } from "../button";
-import { TextField } from "../text-field";
-import { Modal } from "./modal";
+import { useUser } from "../../context/user-context.js";
+import { apiClient } from "../../lib/api-client.js";
+import { Button } from "../button.js";
+import { TextField } from "../text-field.js";
+import { Modal } from "./modal.js";
 
 type CreateSchemaModalProps = {
   open: boolean;

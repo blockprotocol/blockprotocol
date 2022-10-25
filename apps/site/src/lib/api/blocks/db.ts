@@ -1,6 +1,6 @@
-import { ExpandedBlockMetadata } from "../../blocks";
-import { connectToDatabase } from "../mongodb";
-import { blocksDbCollectionName } from "./shared";
+import { ExpandedBlockMetadata } from "../../blocks.js";
+import { connectToDatabase } from "../mongodb.js";
+import { blocksDbCollectionName } from "./shared.js";
 
 const queryOptions = { projection: { _id: 0 } };
 

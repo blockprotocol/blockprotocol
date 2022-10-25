@@ -10,7 +10,7 @@ import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import sanitize from "sanitize-html";
 
-import { FRONTEND_URL } from "./config";
+import { FRONTEND_URL } from "./config.js";
 
 const sanitizeUrl = (url: string) => {
   const results = sanitize(`<a href="${url}" />`, {

@@ -1,9 +1,11 @@
-import produce from "immer";
+import rawProduce from "immer";
 import { Schema } from "jsonschema";
-import get from "lodash/get";
+import get from "lodash/get.js";
 import { Reducer } from "react";
 
-import { JsonSchema } from "../../../lib/json-schema";
+import { JsonSchema } from "../../../lib/json-schema.js";
+
+const produce = rawProduce as unknown as typeof rawProduce.default;
 
 type Action<S, T> = {
   type: S;

@@ -1,20 +1,20 @@
 import { GetStaticProps } from "next";
 import { FunctionComponent } from "react";
 
-import { AnyFramework } from "../components/pages/home/anyframework";
-import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
-import { ConfinedBlocks } from "../components/pages/home/confined-blocks";
-import { FinalCTA } from "../components/pages/home/final-cta";
-import { Header } from "../components/pages/home/header";
-import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
-import { RegistrySection } from "../components/pages/home/registry-section";
-import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
-import { useUser } from "../context/user-context";
-import { getAllBlocks } from "../lib/api/blocks/get";
+import { AnyFramework } from "../components/pages/home/anyframework.js";
+import { ComposableInterfaces } from "../components/pages/home/composable-interfaces.js";
+import { ConfinedBlocks } from "../components/pages/home/confined-blocks.js";
+import { FinalCTA } from "../components/pages/home/final-cta.js";
+import { Header } from "../components/pages/home/header.js";
+import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks.js";
+import { RegistrySection } from "../components/pages/home/registry-section.js";
+import { WhatAreBlocks } from "../components/pages/home/what-are-blocks.js";
+import { useUser } from "../context/user-context.js";
+import { getAllBlocks } from "../lib/api/blocks/get.js";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
-} from "../lib/blocks";
+} from "../lib/blocks.js";
 
 // @todo how does this magic number work?
 export const HOME_PAGE_HEADER_HEIGHT = 750;

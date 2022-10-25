@@ -1,8 +1,8 @@
 import { Middleware } from "next-connect";
 
-import { formatErrors } from "../../../util/api";
-import { BaseApiRequest, BaseApiResponse } from "../handler/base-handler";
-import { User } from "../model/user.model";
+import { formatErrors } from "../../../util/api.js";
+import { BaseApiRequest, BaseApiResponse } from "../handler/base-handler.js";
+import { User } from "../model/user.model.js";
 
 export type IsLoggedInRequestExtensions = {
   user: User;

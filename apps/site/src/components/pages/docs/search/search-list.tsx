@@ -4,9 +4,13 @@ import { Box, Collapse, Divider } from "@mui/material";
 import { FunctionComponent, MutableRefObject, useMemo } from "react";
 import { TransitionGroup } from "react-transition-group";
 
-import { FontAwesomeIcon, SpecificationIcon } from "../../../icons";
-import { AlgoliaHighlightResult, AlgoliaResult, SearchVariants } from "./index";
-import SearchListCategory from "./search-list-category";
+import { FontAwesomeIcon, SpecificationIcon } from "../../../icons/index.js";
+import {
+  AlgoliaHighlightResult,
+  AlgoliaResult,
+  SearchVariants,
+} from "./index.js";
+import SearchListCategory from "./search-list-category.js";
 
 type SearchListProps = {
   searchResults: AlgoliaResult[];

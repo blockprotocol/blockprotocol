@@ -1,13 +1,15 @@
-import Ajv from "ajv";
+import RawAjv from "ajv";
 import { query as queryValidator } from "express-validator";
-import cloneDeep from "lodash/cloneDeep";
+import cloneDeep from "lodash/cloneDeep.js";
 
-import { getAllBlocks } from "../../../lib/api/blocks/get";
-import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler";
+import { getAllBlocks } from "../../../lib/api/blocks/get.js";
+import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler.js";
 import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
-} from "../../../lib/blocks";
+} from "../../../lib/blocks.js";
+
+const Ajv = RawAjv as unknown as typeof RawAjv.default;
 
 export type ApiBlockSearchQuery = {
   author?: string;

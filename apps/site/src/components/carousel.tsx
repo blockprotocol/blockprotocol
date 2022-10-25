@@ -9,9 +9,11 @@ import {
   useMemo,
   useRef,
 } from "react";
-import Slider, { Settings } from "react-slick";
+import RawSlider, { Settings } from "react-slick";
 
-import { ArrowLeftIcon, ArrowRightIcon } from "./icons";
+import { ArrowLeftIcon, ArrowRightIcon } from "./icons/index.js";
+
+const Slider = RawSlider as unknown as typeof RawSlider.default;
 
 type CarouselProps<T> = {
   data: T[];
@@ -85,7 +87,7 @@ export const Carousel = <T,>({
 }: CarouselProps<T>): ReactElement => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const slider = useRef<Slider>();
+  const slider = useRef<typeof Slider.prototype>();
 
   const sliderSettings = useMemo(
     () =>

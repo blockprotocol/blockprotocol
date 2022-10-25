@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 
-import { EntityType } from "../../lib/api/model/entity-type.model";
-import { connectToDatabase } from "../../lib/api/mongodb";
+import { EntityType } from "../../lib/api/model/entity-type.model.js";
+import { connectToDatabase } from "../../lib/api/mongodb.js";
 
 const EntityTypeIdPage: NextPage = () => <div />;
 

@@ -3,8 +3,8 @@ import {
   EntityType,
 } from "@blockprotocol/graph";
 import { Box, Typography } from "@mui/material";
-import debounce from "lodash/debounce";
-import get from "lodash/get";
+import debounce from "lodash/debounce.js";
+import get from "lodash/get.js";
 import {
   createContext,
   FunctionComponent,
@@ -17,14 +17,14 @@ import {
 } from "react";
 import { tw } from "twind";
 
-import { JsonSchema } from "../../../lib/json-schema";
-import { Link } from "../../link";
-import { TextInputOrDisplay } from "./inputs";
+import { JsonSchema } from "../../../lib/json-schema.js";
+import { Link } from "../../link.js";
+import { TextInputOrDisplay } from "./inputs.js";
 import {
   schemaEditorReducer,
   SchemaEditorReducerAction,
-} from "./schema-editor-reducer";
-import { SchemaPropertiesTable } from "./schema-properties-table";
+} from "./schema-editor-reducer.js";
+import { SchemaPropertiesTable } from "./schema-properties-table.js";
 
 // @todo implement subschema handling (or remove this code)
 // import { SubSchemaItem } from './sub-schema-item';

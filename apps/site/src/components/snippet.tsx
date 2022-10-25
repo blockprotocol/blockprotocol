@@ -18,7 +18,7 @@ import { Box, BoxProps } from "@mui/material";
 import Prism from "prismjs";
 import { FunctionComponent } from "react";
 
-import { CODE_FONT_FAMILY } from "../theme/typography";
+import { CODE_FONT_FAMILY } from "../theme/typography.js";
 
 type SnippetProps = {
   source: string;

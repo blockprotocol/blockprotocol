@@ -7,11 +7,11 @@ import {
 } from "@mui/material";
 import { FunctionComponent, useRef, useState } from "react";
 
-import { useUser } from "../../context/user-context";
-import { apiClient } from "../../lib/api-client";
-import { Button } from "../button";
-import { Link } from "../link";
-import { UserAvatar } from "../user-avatar";
+import { useUser } from "../../context/user-context.js";
+import { apiClient } from "../../lib/api-client.js";
+import { Button } from "../button.js";
+import { Link } from "../link.js";
+import { UserAvatar } from "../user-avatar.js";
 
 export const AccountDropdown: FunctionComponent = () => {
   const { user, setUser } = useUser();

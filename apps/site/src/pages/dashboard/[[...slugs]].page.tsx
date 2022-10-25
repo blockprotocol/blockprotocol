@@ -1,22 +1,22 @@
 import { Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { NextSeo } from "next-seo";
 import { useCallback, useEffect, useState } from "react";
 
-import { CreateSchemaModal } from "../../components/modal/create-schema-modal";
+import { CreateSchemaModal } from "../../components/modal/create-schema-modal.js";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../components/pages/auth-wall";
-import { DashboardCard } from "../../components/pages/dashboard/dashboard-card/dashboard-card";
-import { DashboardSectionGrid } from "../../components/pages/dashboard/dashboard-section-grid";
-import { DashboardSectionTitle } from "../../components/pages/dashboard/dashboard-section-title";
-import { PageContainer } from "../../components/pages/dashboard/page-container";
-import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
+} from "../../components/pages/auth-wall.js";
+import { DashboardCard } from "../../components/pages/dashboard/dashboard-card/dashboard-card.js";
+import { DashboardSectionGrid } from "../../components/pages/dashboard/dashboard-section-grid.js";
+import { DashboardSectionTitle } from "../../components/pages/dashboard/dashboard-section-title.js";
+import { PageContainer } from "../../components/pages/dashboard/page-container.js";
+import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.js";
 import {
   DashboardSection,
   getDashboardSectionCards,
-} from "../../components/pages/dashboard/utils";
+} from "../../components/pages/dashboard/utils.js";
 
 const Dashboard: AuthWallPageContent = ({ user }) => {
   const { preferredName: userName, shortname } = user ?? {};

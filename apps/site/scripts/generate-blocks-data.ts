@@ -3,7 +3,7 @@ import path from "node:path";
 import chalk from "chalk";
 import fs from "fs-extra";
 
-import { readBlocksFromDisk } from "../src/lib/blocks";
+import { readBlocksFromDisk } from "../src/lib/blocks.js";
 
 const script = async () => {
   console.log(chalk.bold("Generating blocks data..."));

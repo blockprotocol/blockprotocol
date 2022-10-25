@@ -1,15 +1,15 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { FunctionComponent, useContext, useState } from "react";
 import { tw } from "twind";
 
-import { JsonSchema } from "../../../lib/json-schema";
-import { Button } from "../../button";
-import { ConfirmationAlert } from "../../confirmation-alert";
-import { SchemaOptionsContext } from "./schema-editor";
+import { JsonSchema } from "../../../lib/json-schema.js";
+import { Button } from "../../button.js";
+import { ConfirmationAlert } from "../../confirmation-alert.js";
+import { SchemaOptionsContext } from "./schema-editor.js";
 import {
   getSubschemaDependentProperties,
   SchemaEditorReducerAction,
-} from "./schema-editor-reducer";
+} from "./schema-editor-reducer.js";
 
 type SubSchemaItemProps = {
   dispatchSchemaUpdate: (action: SchemaEditorReducerAction) => void;

@@ -1,8 +1,8 @@
 import { JsonObject } from "@blockprotocol/core";
 
-import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
-import { EntityType } from "../../../lib/api/model/entity-type.model";
-import { formatErrors } from "../../../util/api";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler.js";
+import { EntityType } from "../../../lib/api/model/entity-type.model.js";
+import { formatErrors } from "../../../util/api.js";
 
 export type ApiTypeCreateRequest = {
   schema: string | JsonObject;

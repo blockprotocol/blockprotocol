@@ -13,7 +13,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import Ajv, { JSONSchemaType } from "ajv";
+import RawAjv, { JSONSchemaType } from "ajv";
 import chalk from "chalk";
 import * as envalid from "envalid";
 import execa from "execa";
@@ -22,7 +22,7 @@ import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
 import md5 from "md5";
 import micromatch from "micromatch";
-import slugify from "slugify";
+import rawSlugify from "slugify";
 import tmp from "tmp-promise";
 
 import {
@@ -30,8 +30,11 @@ import {
   expandBlockMetadata,
   ExpandedBlockMetadata,
   StoredBlockInfo,
-} from "../src/lib/blocks";
-import { FRONTEND_URL } from "../src/lib/config";
+} from "../src/lib/blocks.js";
+import { FRONTEND_URL } from "../src/lib/config.js";
+
+const Ajv = RawAjv as unknown as typeof RawAjv.default;
+const slugify = rawSlugify as unknown as typeof rawSlugify.default;
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -61,6 +64,7 @@ const storedBlockInfoSchema: JSONSchemaType<StoredBlockInfo> = {
   additionalProperties: false, // protects against typos in field names
 };
 
+// https://github.com/ajv-validator/ajv/issues/2132
 const ajv = new Ajv();
 const validateStoredBlockInfo = ajv.compile(storedBlockInfoSchema);
 

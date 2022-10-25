@@ -1,12 +1,12 @@
 import { JsonObject } from "@blockprotocol/core";
 import { EntityType as BlockProtocolEntityType } from "@blockprotocol/graph";
-import escapeRegExp from "lodash/escapeRegExp";
+import escapeRegExp from "lodash/escapeRegExp.js";
 import { Db, DBRef } from "mongodb";
 import { v4 as uuid } from "uuid";
 
-import { FRONTEND_URL, isProduction } from "../../config";
-import { validateAndCompleteJsonSchema } from "../../json-schema";
-import { User } from "./user.model";
+import { FRONTEND_URL, isProduction } from "../../config.js";
+import { validateAndCompleteJsonSchema } from "../../json-schema.js";
+import { User } from "./user.model.js";
 
 type EntityTypeProperties = BlockProtocolEntityType & {
   createdAt: Date;

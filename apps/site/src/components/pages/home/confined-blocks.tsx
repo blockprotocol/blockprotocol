@@ -1,7 +1,9 @@
 import { Box, Typography } from "@mui/material";
-import Image from "next/image";
+import RawImage from "next/image.js";
 
 import darkBoxImage from "../../../../public/assets/new-home/dark-box-min.png";
+
+const Image = RawImage as unknown as typeof RawImage.default;
 
 export const ConfinedBlocks = () => {
   return (

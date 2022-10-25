@@ -9,9 +9,9 @@ import {
 } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { SiteMapPage } from "../lib/sitemap";
-import { FontAwesomeIcon } from "./icons";
-import { Link } from "./link";
+import { SiteMapPage } from "../lib/sitemap.js";
+import { FontAwesomeIcon } from "./icons/index.js";
+import { Link } from "./link.js";
 
 const NavArrowIcon = styled(FontAwesomeIcon)(({ theme }) => ({
   color: theme.palette.purple[300],

@@ -3,9 +3,9 @@ import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { Box, Paper, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { FontAwesomeIcon } from "../../icons";
-import { Link } from "../../link";
-import { LinkButton } from "../../link-button";
+import { FontAwesomeIcon } from "../../icons/index.js";
+import { Link } from "../../link.js";
+import { LinkButton } from "../../link-button.js";
 
 export const GitHubInfoCard: FunctionComponent = () => (
   <Paper

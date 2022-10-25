@@ -1,11 +1,13 @@
-import Box, { BoxProps } from "@mui/material/Box";
-import throttle from "lodash/throttle";
-import { useRouter } from "next/router";
+import { Box, BoxProps } from "@mui/material";
+import throttle from "lodash/throttle.js";
+import { useRouter } from "next/router.js";
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
-import PageHeadingsContext, { Heading } from "../context/page-headings-context";
-import { mdxComponents } from "./mdx-components";
+import PageHeadingsContext, {
+  Heading,
+} from "../context/page-headings-context.js";
+import { mdxComponents } from "./mdx-components.js";
 
 export const MDX_TEXT_CONTENT_MAX_WIDTH = 680;
 

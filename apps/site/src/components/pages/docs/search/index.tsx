@@ -1,9 +1,9 @@
-import CloseIcon from "@mui/icons-material/Close";
-import SearchIcon from "@mui/icons-material/Search";
+import RawCloseIcon from "@mui/icons-material/Close.js";
+import RawSearchIcon from "@mui/icons-material/Search.js";
 import { Box, CircularProgress, Collapse, IconButton } from "@mui/material";
-import algoliasearch from "algoliasearch";
-import debounce from "lodash/debounce";
-import { useRouter } from "next/router";
+import rawAlgoliasearch from "algoliasearch";
+import debounce from "lodash/debounce.js";
+import { useRouter } from "next/router.js";
 import {
   ChangeEvent,
   FunctionComponent,
@@ -15,10 +15,15 @@ import {
 } from "react";
 import { TransitionGroup } from "react-transition-group";
 
-import { Link } from "../../../link";
-import { TextField } from "../../../text-field";
-import SearchList from "./search-list";
-import SearchSuggestedLinks from "./search-suggested-links";
+import { Link } from "../../../link.js";
+import { TextField } from "../../../text-field.js";
+import SearchList from "./search-list.js";
+import SearchSuggestedLinks from "./search-suggested-links.js";
+
+const CloseIcon = RawCloseIcon as unknown as typeof RawCloseIcon.default;
+const SearchIcon = RawSearchIcon as unknown as typeof RawSearchIcon.default;
+const algoliasearch =
+  rawAlgoliasearch as unknown as typeof rawAlgoliasearch.default;
 
 const client = algoliasearch("POOWZ64DSV", "96dc0442fd27b903440955dc03e5e60e");
 const index = client.initIndex("blockprotocol");

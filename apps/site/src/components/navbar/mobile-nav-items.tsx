@@ -20,13 +20,13 @@ import {
   useState,
 } from "react";
 
-import SiteMapContext from "../../context/site-map-context";
-import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
-import { FontAwesomeIcon } from "../icons";
-import { Link } from "../link";
-import { Search } from "../pages/docs/search";
-import { generatePathWithoutParams } from "../shared";
-import { itemIsPage, NAVBAR_LINK_ICONS } from "./util";
+import SiteMapContext from "../../context/site-map-context.js";
+import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap.js";
+import { FontAwesomeIcon } from "../icons/index.js";
+import { Link } from "../link.js";
+import { Search } from "../pages/docs/search/index.js";
+import { generatePathWithoutParams } from "../shared.js";
+import { itemIsPage, NAVBAR_LINK_ICONS } from "./util.js";
 
 type MobileNavNestedPageProps<T extends SiteMapPage | SiteMapPageSection> = {
   icon?: ReactElement;

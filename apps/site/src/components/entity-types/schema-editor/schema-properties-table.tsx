@@ -1,11 +1,11 @@
 import { FormEvent, FunctionComponent, useState } from "react";
 import { tw } from "twind";
 
-import { JsonSchema } from "../../../lib/json-schema";
-import { Button } from "../../button";
-import { TextInputOrDisplay } from "./inputs";
-import { SchemaEditorDispatcher } from "./schema-editor-reducer";
-import { SchemaPropertyRow } from "./schema-property-row";
+import { JsonSchema } from "../../../lib/json-schema.js";
+import { Button } from "../../button.js";
+import { TextInputOrDisplay } from "./inputs.js";
+import { SchemaEditorDispatcher } from "./schema-editor-reducer.js";
+import { SchemaPropertyRow } from "./schema-property-row.js";
 
 type SchemaPropertiesTableProps = {
   dispatchSchemaUpdate: SchemaEditorDispatcher;

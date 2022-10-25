@@ -2,9 +2,9 @@ import { Box, Collapse, Grid, Typography } from "@mui/material";
 import { FunctionComponent, ReactElement, useMemo } from "react";
 import { TransitionGroup } from "react-transition-group";
 
-import { AlgoliaHighlightResult, AlgoliaResult } from "./index";
-import SearchListHeading from "./search-list-heading";
-import SearchListItem from "./search-list-item";
+import { AlgoliaHighlightResult, AlgoliaResult } from "./index.js";
+import SearchListHeading from "./search-list-heading.js";
+import SearchListItem from "./search-list-item.js";
 
 type SearchListCategoryProps = {
   title: string;

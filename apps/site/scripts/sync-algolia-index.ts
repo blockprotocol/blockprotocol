@@ -7,7 +7,7 @@ import fs from "fs-extra";
 import matter from "gray-matter";
 
 import siteMap from "../site-map.json" assert { type: "json" };
-import { SiteMapPage } from "../src/lib/sitemap";
+import { SiteMapPage } from "../src/lib/sitemap.js";
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -54,7 +54,10 @@ const script = async () => {
     }),
   });
 
-  const client = algoliasearch(env.ALGOLIA_PROJECT, env.ALGOLIA_WRITE_KEY);
+  const client = (algoliasearch as unknown as typeof algoliasearch.default)(
+    env.ALGOLIA_PROJECT,
+    env.ALGOLIA_WRITE_KEY,
+  );
 
   const index = client.initIndex("blockprotocol");
 

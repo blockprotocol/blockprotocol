@@ -1,17 +1,17 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 
-import { getDbBlock } from "../../../lib/api/blocks/db";
-import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
-import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
-import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
+import { getDbBlock } from "../../../lib/api/blocks/db.js";
+import { publishBlockFromNpm } from "../../../lib/api/blocks/npm.js";
+import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack.js";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler.js";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
+import { shouldAllowNpmBlockPublishing } from "../../../lib/config.js";
 import {
   formatErrors,
   isErrorContainingCauseWithCode,
-} from "../../../util/api";
-import { createPathWithNamespace, generateSlug } from "./shared/naming";
-import { revalidateBlockPages } from "./shared/revalidate";
+} from "../../../util/api.js";
+import { createPathWithNamespace, generateSlug } from "./shared/naming.js";
+import { revalidateBlockPages } from "./shared/revalidate.js";
 
 // The body we expect when publishing an npm-linked block
 export type ApiBlockCreateRequest = {

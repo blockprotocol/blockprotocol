@@ -1,8 +1,8 @@
 import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { ReactElement } from "react";
 
-import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
-import { FontAwesomeIcon, HubIcon, SpecificationIcon } from "../icons";
+import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap.js";
+import { FontAwesomeIcon, HubIcon, SpecificationIcon } from "../icons/index.js";
 
 export const itemIsPage = (
   item: SiteMapPage | SiteMapPageSection,

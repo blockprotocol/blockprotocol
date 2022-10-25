@@ -9,7 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import {
   Dispatch,
   Fragment,
@@ -21,13 +21,13 @@ import {
   useState,
 } from "react";
 
-import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap";
-import { theme as themeImport } from "../theme";
-import { parseHTML } from "../util/html-utils";
-import { FontAwesomeIcon } from "./icons";
-import { Link } from "./link";
-import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar";
-import { generatePathWithoutParams } from "./shared";
+import { SiteMapPage, SiteMapPageSection } from "../lib/sitemap.js";
+import { theme as themeImport } from "../theme/index.js";
+import { parseHTML } from "../util/html-utils.js";
+import { FontAwesomeIcon } from "./icons/index.js";
+import { Link } from "./link.js";
+import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "./navbar.js";
+import { generatePathWithoutParams } from "./shared.js";
 
 export const SIDEBAR_WIDTH = 300;
 

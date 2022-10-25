@@ -2,10 +2,10 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Box, BoxProps, SvgIconProps, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { FontAwesomeIcon } from "../../../icons";
-import { CardWrapper } from "./card-wrapper";
-import { DashboardCardLoading } from "./dashboard-card-loading";
-import { LinkWrapper } from "./link-wrapper";
+import { FontAwesomeIcon } from "../../../icons/index.js";
+import { CardWrapper } from "./card-wrapper.js";
+import { DashboardCardLoading } from "./dashboard-card-loading.js";
+import { LinkWrapper } from "./link-wrapper.js";
 
 const cardContainerSharedStyles: BoxProps["sx"] = {
   display: "flex",

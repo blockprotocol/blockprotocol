@@ -11,13 +11,13 @@ import { globby } from "globby";
 import mime from "mime-types";
 import fetch from "node-fetch";
 
-import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks";
+import { expandBlockMetadata, ExpandedBlockMetadata } from "../../blocks.js";
 import {
   generateS3ResourceUrl,
   getS3Bucket,
   getS3Client,
   resolveS3ResourceKey,
-} from "../../s3";
+} from "../../s3.js";
 
 const stripLeadingAt = (pathWithNamespace: string) =>
   pathWithNamespace.replace(/^@/, "");

@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { ReactNode } from "react";
 
-import { FontAwesomeIcon } from "./icons";
+import { FontAwesomeIcon } from "./icons/index.js";
 
 const icons: Record<AlertColor, IconDefinition> = {
   error: faXmarkCircle,

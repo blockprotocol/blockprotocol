@@ -1,11 +1,11 @@
 import { FunctionComponent } from "react";
 
-import { SerializedUser } from "../../../lib/api/model/user.model";
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { BlockListItem } from "./block-list-item";
-import { Placeholder } from "./placeholder";
-import { BrowseHubButton, BuildBlockButton } from "./placeholder-buttons";
-import { useUserStatus } from "./use-user-status";
+import { SerializedUser } from "../../../lib/api/model/user.model.js";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
+import { BlockListItem } from "./block-list-item.js";
+import { Placeholder } from "./placeholder.js";
+import { BrowseHubButton, BuildBlockButton } from "./placeholder-buttons.js";
+import { useUserStatus } from "./use-user-status.js";
 
 export interface TabPanelContentsWithBlocksProps {
   blocks: ExpandedBlockMetadata[];

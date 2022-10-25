@@ -5,9 +5,9 @@ import { Db } from "mongodb";
 import tar from "tar";
 import tmp from "tmp-promise";
 
-import { ExpandedBlockMetadata } from "../../blocks";
-import { insertDbBlock, updateDbBlock } from "./db";
-import { validateExpandAndUploadBlockFiles } from "./s3";
+import { ExpandedBlockMetadata } from "../../blocks.js";
+import { insertDbBlock, updateDbBlock } from "./db.js";
+import { validateExpandAndUploadBlockFiles } from "./s3.js";
 
 /**
  * Unpacks and uploads a tarball to remote storage

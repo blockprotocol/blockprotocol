@@ -1,8 +1,8 @@
 import { Box } from "@mui/material";
 
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { formatUpdatedAt } from "../../../util/html-utils";
-import { ListViewCard } from "./list-view-card";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
+import { formatUpdatedAt } from "../../../util/html-utils.js";
+import { ListViewCard } from "./list-view-card.js";
 
 interface BlockListItemProps {
   block: ExpandedBlockMetadata;

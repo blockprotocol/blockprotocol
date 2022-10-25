@@ -1,44 +1,46 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import rawAxios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ValidationError } from "express-validator";
 
 import {
   ApiBlockCreateRequest,
   ApiBlockCreateResponse,
-} from "../pages/api/blocks/create.api";
+} from "../pages/api/blocks/create.api.js";
 import {
   ApiLoginWithLoginCodeRequestBody,
   ApiLoginWithLoginCodeResponse,
-} from "../pages/api/login-with-login-code.api";
-import { ApiKeysResponse } from "../pages/api/me/api-keys.api";
+} from "../pages/api/login-with-login-code.api.js";
+import { ApiKeysResponse } from "../pages/api/me/api-keys.api.js";
 import {
   ApiGenerateApiKeyBody,
   ApiGenerateApiKeyResponse,
-} from "../pages/api/me/generate-api-key.api";
+} from "../pages/api/me/generate-api-key.api.js";
 import {
   ApiSendLoginCodeRequestBody,
   ApiSendLoginCodeResponse,
-} from "../pages/api/send-login-code.api";
+} from "../pages/api/send-login-code.api.js";
 import {
   ApiSignupRequestBody,
   ApiSignupResponse,
-} from "../pages/api/signup.api";
+} from "../pages/api/signup.api.js";
 import {
   ApiTypeUpdateRequest,
   ApiTypeUpdateResponse,
-} from "../pages/api/types/[id]/update.api";
+} from "../pages/api/types/[id]/update.api.js";
 import {
   ApiTypeCreateRequest,
   ApiTypeCreateResponse,
-} from "../pages/api/types/create.api";
-import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api";
-import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api";
-import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api";
-import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api";
+} from "../pages/api/types/create.api.js";
+import { ApiUserByShortnameResponse } from "../pages/api/users/[shortname].api.js";
+import { ApiBlocksByUserResponse } from "../pages/api/users/[shortname]/blocks/index.api.js";
+import { ApiTypeByUserAndTitleResponse } from "../pages/api/users/[shortname]/types/[title].api.js";
+import { ApiTypesByUserResponse } from "../pages/api/users/[shortname]/types/index.api.js";
 import {
   ApiVerifyEmailRequestBody,
   ApiVerifyEmailResponse,
-} from "../pages/api/verify-email.api";
-import { FRONTEND_URL } from "./config";
+} from "../pages/api/verify-email.api.js";
+import { FRONTEND_URL } from "./config.js";
+
+const axios = rawAxios as unknown as typeof rawAxios.default;
 
 const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
 

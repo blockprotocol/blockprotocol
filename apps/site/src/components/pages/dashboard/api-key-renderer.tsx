@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent, useState } from "react";
 
-import { Button } from "../../button";
-import { ApiKeyGeneratedIcon, CopyIcon } from "../../icons";
+import { Button } from "../../button.js";
+import { ApiKeyGeneratedIcon, CopyIcon } from "../../icons/index.js";
 
 type ApiKeyRendererProps = {
   apiKey: string;

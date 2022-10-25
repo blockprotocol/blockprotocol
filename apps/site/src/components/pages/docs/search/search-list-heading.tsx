@@ -2,9 +2,9 @@ import { faHashtag } from "@fortawesome/free-solid-svg-icons";
 import { svgIconClasses } from "@mui/material";
 import { forwardRef } from "react";
 
-import { FontAwesomeIcon } from "../../../icons";
-import { LinkButton } from "../../../link-button";
-import { AlgoliaResult } from "./index";
+import { FontAwesomeIcon } from "../../../icons/index.js";
+import { LinkButton } from "../../../link-button.js";
+import { AlgoliaResult } from "./index.js";
 
 interface SearchItemHeadingProps {
   searchResult: AlgoliaResult;

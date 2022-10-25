@@ -3,14 +3,14 @@ import mimeType from "mime-types";
 import {
   AuthenticatedApiRequest,
   createAuthenticatedHandler,
-} from "../../lib/api/handler/authenticated-handler";
+} from "../../lib/api/handler/authenticated-handler.js";
 import {
   MultipartExtensions,
   multipartUploads,
-} from "../../lib/api/middleware/multipart-uploads.middleware";
-import { resolveS3ResourceKey } from "../../lib/s3";
-import { uploadFileBufferToS3 } from "../../lib/s3-file-uploads";
-import { formatErrors } from "../../util/api";
+} from "../../lib/api/middleware/multipart-uploads.middleware.js";
+import { resolveS3ResourceKey } from "../../lib/s3.js";
+import { uploadFileBufferToS3 } from "../../lib/s3-file-uploads.js";
+import { formatErrors } from "../../util/api.js";
 
 type Response = {
   avatarUrl: string;

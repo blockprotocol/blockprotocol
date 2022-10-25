@@ -2,8 +2,8 @@ import path from "node:path";
 
 import fs from "fs-extra";
 
-import { ExpandedBlockMetadata } from "../../blocks";
-import { getDbBlock, getDbBlocks } from "./db";
+import { ExpandedBlockMetadata } from "../../blocks.js";
+import { getDbBlock, getDbBlocks } from "./db.js";
 
 const localBlocks = fs.readJsonSync(
   path.resolve("blocks-data.json"),

@@ -1,18 +1,18 @@
-import { getDbBlock } from "../../../lib/api/blocks/db";
-import { publishBlockFromTarball } from "../../../lib/api/blocks/from-tarball";
-import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack";
-import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler";
+import { getDbBlock } from "../../../lib/api/blocks/db.js";
+import { publishBlockFromTarball } from "../../../lib/api/blocks/from-tarball.js";
+import { notifySlackAboutBlock } from "../../../lib/api/blocks/slack.js";
+import { createApiKeyRequiredHandler } from "../../../lib/api/handler/api-key-required-handler.js";
 import {
   MultipartExtensions,
   multipartUploads,
-} from "../../../lib/api/middleware/multipart-uploads.middleware";
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
+} from "../../../lib/api/middleware/multipart-uploads.middleware.js";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
 import {
   formatErrors,
   isErrorContainingCauseWithCode,
-} from "../../../util/api";
-import { createPathWithNamespace, generateSlug } from "./shared/naming";
-import { revalidateBlockPages } from "./shared/revalidate";
+} from "../../../util/api.js";
+import { createPathWithNamespace, generateSlug } from "./shared/naming.js";
+import { revalidateBlockPages } from "./shared/revalidate.js";
 
 type ApiBlockPublishRequest = MultipartExtensions<"tarball", "blockName">;
 

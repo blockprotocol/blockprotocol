@@ -1,6 +1,6 @@
-import { createBaseHandler } from "../../../../lib/api/handler/base-handler";
-import { EntityType } from "../../../../lib/api/model/entity-type.model";
-import { formatErrors } from "../../../../util/api";
+import { createBaseHandler } from "../../../../lib/api/handler/base-handler.js";
+import { EntityType } from "../../../../lib/api/model/entity-type.model.js";
+import { formatErrors } from "../../../../util/api.js";
 
 export type ApiTypeByIdRequest = {
   id: string;

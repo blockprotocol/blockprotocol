@@ -1,12 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import { NextSeo } from "next-seo";
 
-import { withAuthWall } from "../../../components/pages/auth-wall";
-import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout";
-import { BlockFormSection } from "../../../components/pages/blocks/block-form-section";
-import { PublishBlockCard } from "../../../components/pages/blocks/publish-block-card";
-import { PageContainer } from "../../../components/pages/dashboard/page-container";
-import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs";
+import { withAuthWall } from "../../../components/pages/auth-wall.js";
+import { BlockFormLayout } from "../../../components/pages/blocks/block-form-layout.js";
+import { BlockFormSection } from "../../../components/pages/blocks/block-form-section.js";
+import { PublishBlockCard } from "../../../components/pages/blocks/publish-block-card.js";
+import { PageContainer } from "../../../components/pages/dashboard/page-container.js";
+import { TopNavigationTabs } from "../../../components/pages/dashboard/top-navigation-tabs.js";
 
 const PublishPage = () => {
   return (

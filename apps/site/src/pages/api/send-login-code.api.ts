@@ -1,10 +1,10 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
-import { ensureUserIsMailchimpMember } from "../../lib/api/mailchimp";
-import { User } from "../../lib/api/model/user.model";
-import { isProduction } from "../../lib/config";
-import { formatErrors } from "../../util/api";
+import { createBaseHandler } from "../../lib/api/handler/base-handler.js";
+import { ensureUserIsMailchimpMember } from "../../lib/api/mailchimp.js";
+import { User } from "../../lib/api/model/user.model.js";
+import { isProduction } from "../../lib/config.js";
+import { formatErrors } from "../../util/api.js";
 
 export type ApiSendLoginCodeRequestBody = {
   email: string;

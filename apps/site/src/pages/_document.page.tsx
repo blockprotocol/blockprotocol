@@ -1,16 +1,22 @@
-import createEmotionServer from "@emotion/server/create-instance";
-import withTwindDocument from "@twind/next/document";
-import Document, {
+import rawCreateEmotionServer from "@emotion/server/create-instance";
+import rawWithTwindDocument from "@twind/next/document";
+import RawDocument, {
   DocumentContext,
   Head,
   Html,
   Main,
   NextScript,
-} from "next/document";
+} from "next/document.js";
 import { Children } from "react";
 
 import twindConfig from "../../twind.config.cjs";
-import { createEmotionCache } from "../util/create-emotion-cache";
+import { createEmotionCache } from "../util/create-emotion-cache.js";
+
+const Document = RawDocument as unknown as typeof RawDocument.default;
+const createEmotionServer =
+  rawCreateEmotionServer as unknown as typeof rawCreateEmotionServer.default;
+const withTwindDocument =
+  rawWithTwindDocument as unknown as typeof rawWithTwindDocument.default;
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {

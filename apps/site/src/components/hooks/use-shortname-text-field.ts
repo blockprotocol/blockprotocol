@@ -1,11 +1,11 @@
-import debounce from "lodash/debounce";
+import debounce from "lodash/debounce.js";
 import { useEffect, useMemo, useState } from "react";
 
-import { apiClient } from "../../lib/api-client";
+import { apiClient } from "../../lib/api-client.js";
 import {
   ApiIsShortnameTakenQueryParams,
   ApiIsShortnameTakenResponse,
-} from "../../pages/api/is-shortname-taken.api";
+} from "../../pages/api/is-shortname-taken.api.js";
 
 const parseShortnameInput = (input: string) =>
   input.replaceAll(/[^a-zA-Z0-9-_]/g, "").toLowerCase();

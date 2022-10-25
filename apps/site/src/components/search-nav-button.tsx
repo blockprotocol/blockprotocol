@@ -1,10 +1,12 @@
-import SearchIcon from "@mui/icons-material/Search";
+import RawSearchIcon from "@mui/icons-material/Search.js";
 import { Chip, chipClasses, modalClasses, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 
-import { Button } from "./button";
-import { Modal } from "./modal/modal";
-import { Search } from "./pages/docs/search";
+import { Button } from "./button.js";
+import { Modal } from "./modal/modal.js";
+import { Search } from "./pages/docs/search/index.js";
+
+const SearchIcon = RawSearchIcon as unknown as typeof RawSearchIcon.default;
 
 export const SearchNavButton = () => {
   const [displayModal, setDisplayModal] = useState(false);

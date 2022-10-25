@@ -1,4 +1,4 @@
-import { ErrorResponse } from "../lib/api/handler/base-handler";
+import { ErrorResponse } from "../lib/api/handler/base-handler.js";
 
 export const mustGetEnvVar = (name: string) => {
   const environmentVariable = process.env[name];

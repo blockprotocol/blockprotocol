@@ -1,8 +1,7 @@
-import { Typography } from "@mui/material";
-import Checkbox from "@mui/material/Checkbox";
+import { Checkbox, Typography } from "@mui/material";
 import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 
-import { TextField } from "../../text-field";
+import { TextField } from "../../text-field.js";
 
 export const TextInputOrDisplay: FunctionComponent<{
   clearOnUpdate?: boolean;

@@ -42,7 +42,7 @@ module.exports = {
               "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
           },
           {
-            name: "next/link",
+            name: "next/link.js",
             message:
               "Please use the custom src/components/Link component instead to ensure Next.js and MUI compatibility.",
           },
@@ -86,13 +86,12 @@ module.exports = {
       },
     ],
   },
-  overrides: [
-    {
-      // needed because of package.json in tests (for CJS)
-      files: ["tests/**"],
-      rules: {
-        "import/no-extraneous-dependencies": ["off"],
+  settings: {
+    "import/resolver": {
+      typescript: {
+        alwaysTryTypes: true,
+        project: "./tsconfig.json",
       },
     },
-  ],
+  },
 };

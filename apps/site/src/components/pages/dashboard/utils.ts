@@ -4,10 +4,10 @@ import {
   faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
-import { BlockIcon } from "../../icons/block-icon";
-import { SparklesIcon } from "../../icons/sparkles-icon";
-import { DashboardCardProps } from "./dashboard-card/dashboard-card";
+import { shouldAllowNpmBlockPublishing } from "../../../lib/config.js";
+import { BlockIcon } from "../../icons/block-icon.js";
+import { SparklesIcon } from "../../icons/sparkles-icon.js";
+import { DashboardCardProps } from "./dashboard-card/dashboard-card.js";
 
 export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
   {

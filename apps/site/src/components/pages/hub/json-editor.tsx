@@ -8,7 +8,7 @@ import {
   useRef,
 } from "react";
 
-import { CODE_FONT_FAMILY } from "../../../theme/typography";
+import { CODE_FONT_FAMILY } from "../../../theme/typography.js";
 
 interface JsonEditorProps {
   value: string;

@@ -8,13 +8,13 @@ import {
   useState,
 } from "react";
 
-import { apiClient } from "../../lib/api-client";
-import { Button } from "../button";
-import { useEmailTextField } from "../hooks/use-email-text-field";
-import { BlockProtocolIcon } from "../icons";
-import { Link } from "../link";
-import { TextField } from "../text-field";
-import { VerificationCodeInfo } from "./verification-code-screen";
+import { apiClient } from "../../lib/api-client.js";
+import { Button } from "../button.js";
+import { useEmailTextField } from "../hooks/use-email-text-field.js";
+import { BlockProtocolIcon } from "../icons/index.js";
+import { Link } from "../link.js";
+import { TextField } from "../text-field.js";
+import { VerificationCodeInfo } from "./verification-code-screen.js";
 
 type SignupScreenProps = {
   initialEmail?: string;

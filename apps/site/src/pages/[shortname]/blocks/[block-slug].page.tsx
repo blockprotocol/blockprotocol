@@ -10,31 +10,31 @@ import {
   useTheme,
 } from "@mui/material";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { MDXRemote } from "next-mdx-remote";
 import { serialize } from "next-mdx-remote/serialize";
 import { NextSeo } from "next-seo";
 import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
-import { BlocksSlider } from "../../../components/blocks-slider";
-import { FontAwesomeIcon } from "../../../components/icons";
-import { Link } from "../../../components/link";
-import { mdxComponents } from "../../../components/mdx/mdx-components";
-import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
+import { BlocksSlider } from "../../../components/blocks-slider.js";
+import { FontAwesomeIcon } from "../../../components/icons/index.js";
+import { Link } from "../../../components/link.js";
+import { mdxComponents } from "../../../components/mdx/mdx-components.js";
+import { BlockDataContainer } from "../../../components/pages/hub/block-data-container.js";
 import {
   BlockExampleGraph,
   BlockSchema,
-} from "../../../components/pages/hub/hub-utils";
-import { getAllBlocks } from "../../../lib/api/blocks/get";
+} from "../../../components/pages/hub/hub-utils.js";
+import { getAllBlocks } from "../../../lib/api/blocks/get.js";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
   retrieveBlockFileContent,
   retrieveBlockReadme,
-} from "../../../lib/blocks";
-import { isFork, isProduction } from "../../../lib/config";
-import { formatUpdatedAt } from "../../../util/html-utils";
+} from "../../../lib/blocks.js";
+import { isFork, isProduction } from "../../../lib/config.js";
+import { formatUpdatedAt } from "../../../util/html-utils.js";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(

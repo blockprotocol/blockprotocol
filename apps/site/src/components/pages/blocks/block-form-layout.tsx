@@ -2,9 +2,9 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Box, buttonClasses } from "@mui/material";
 import { PropsWithChildren } from "react";
 
-import { FontAwesomeIcon } from "../../icons";
-import { LinkButton } from "../../link-button";
-import { BlockFormContainer } from "./block-form-styles";
+import { FontAwesomeIcon } from "../../icons/index.js";
+import { LinkButton } from "../../link-button.js";
+import { BlockFormContainer } from "./block-form-styles.js";
 
 export const BlockFormLayout = ({ children }: PropsWithChildren) => {
   return (

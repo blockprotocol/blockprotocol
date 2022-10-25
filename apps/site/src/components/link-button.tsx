@@ -1,7 +1,7 @@
 import { forwardRef, FunctionComponent, ReactNode } from "react";
 
-import { BaseLink, BaseLinkProps } from "./base-link";
-import { Button, ButtonProps } from "./button";
+import { BaseLink, BaseLinkProps } from "./base-link.js";
+import { Button, ButtonProps } from "./button.js";
 
 export interface LinkButtonProps
   extends Omit<ButtonProps, "href">,

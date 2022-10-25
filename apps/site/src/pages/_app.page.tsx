@@ -1,30 +1,33 @@
 import "../styles/prism.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
-import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
+import { CssBaseline, ThemeProvider } from "@mui/material";
 import * as Sentry from "@sentry/nextjs";
-import withTwindApp from "@twind/next/app";
-import type { AppProps } from "next/app";
-import { Router, useRouter } from "next/router";
+import rawWithTwindApp from "@twind/next/app";
+import type { AppProps } from "next/app.js";
+import { Router, useRouter } from "next/router.js";
 import { DefaultSeo, DefaultSeoProps } from "next-seo";
 import { SnackbarProvider } from "notistack";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import TagManager from "react-gtm-module";
+import RawTagManager from "react-gtm-module";
 
 import siteMap from "../../site-map.json";
 import twindConfig from "../../twind.config.cjs";
-import { PageLayout } from "../components/page-layout";
-import SiteMapContext from "../context/site-map-context";
+import { PageLayout } from "../components/page-layout.js";
+import SiteMapContext from "../context/site-map-context.js";
 import {
   UserContext,
   UserContextValue,
   UserState,
-} from "../context/user-context";
-import { apiClient } from "../lib/api-client";
-import { theme } from "../theme";
-import { createEmotionCache } from "../util/create-emotion-cache";
-import { ApiMeResponse } from "./api/me.api";
+} from "../context/user-context.js";
+import { apiClient } from "../lib/api-client.js";
+import { theme } from "../theme/index.js";
+import { createEmotionCache } from "../util/create-emotion-cache.js";
+import { ApiMeResponse } from "./api/me.api.js";
+
+const TagManager = RawTagManager as unknown as typeof RawTagManager.default;
+const withTwindApp =
+  rawWithTwindApp as unknown as typeof rawWithTwindApp.default;
 
 const defaultSeoConfig: DefaultSeoProps = {
   title: "Block Protocol – an open standard for data-driven blocks",

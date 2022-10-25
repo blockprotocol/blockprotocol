@@ -234,7 +234,13 @@ module.exports = {
       },
     },
     {
-      files: ["*.config.{c,m,}{j,t}s", "*.d.ts", "*rc.{c,m,}js"],
+      files: [
+        "*.config.{c,m,}{j,t}s",
+        "*.d.ts",
+        "*rc.{c,m,}js",
+        "*.test.{j,t}s{,x}",
+        "tests/**",
+      ],
       rules: {
         "global-require": "off",
         "import/no-extraneous-dependencies": [

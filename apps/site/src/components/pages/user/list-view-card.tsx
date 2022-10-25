@@ -1,9 +1,9 @@
 import { Box, BoxProps, Typography } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
-import { TableTreeIcon } from "../../icons";
-import { Link } from "../../link";
-import { shy } from "./utils";
+import { TableTreeIcon } from "../../icons/index.js";
+import { Link } from "../../link.js";
+import { shy } from "./utils.js";
 
 type ListViewCardProps = {
   title: string;

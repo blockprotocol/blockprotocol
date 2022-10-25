@@ -8,18 +8,18 @@ const script = async () => {
   console.log(chalk.bold("Building..."));
 
   if (process.env.CI) {
-    await import("./copy-blocks-from-ci-cache");
+    await import("./copy-blocks-from-ci-cache.js");
   }
 
-  await import("./prepare-blocks");
+  await import("./prepare-blocks.js");
 
-  await import("./codegen");
+  await import("./codegen.js");
 
-  await import("./make-block-assets-compatible-with-vercel-lambdas");
+  await import("./make-block-assets-compatible-with-vercel-lambdas.js");
 
   await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
 
-  await import("./create-db-indexes");
+  await import("./create-db-indexes.js");
 
   // @todo Remove babel.config.json when next.config.js supports swcInstrumentCoverage
   // https://github.com/vercel/next.js/pull/36692
@@ -39,7 +39,7 @@ const script = async () => {
   }
 
   if (process.env.CI) {
-    await import("./copy-blocks-to-ci-cache");
+    await import("./copy-blocks-to-ci-cache.js");
   }
 };
 

@@ -1,8 +1,8 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 
-import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler";
-import { SerializedUser, User } from "../../lib/api/model/user.model";
-import { formatErrors } from "../../util/api";
+import { createAuthenticatedHandler } from "../../lib/api/handler/authenticated-handler.js";
+import { SerializedUser, User } from "../../lib/api/model/user.model.js";
+import { formatErrors } from "../../util/api.js";
 
 export type ApiCompleteSignupRequestBody = {
   shortname: string;

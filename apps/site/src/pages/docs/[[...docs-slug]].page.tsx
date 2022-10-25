@@ -1,15 +1,15 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { NextSeo } from "next-seo";
 import { useContext } from "react";
 
 import siteMap from "../../../site-map.json";
-import { DocsContent } from "../../components/pages/docs/docs-content";
-import { generatePathWithoutParams } from "../../components/shared";
-import SiteMapContext from "../../context/site-map-context";
-import { SiteMap } from "../../lib/sitemap";
-import { getSerializedPage } from "../../util/mdx-utils";
+import { DocsContent } from "../../components/pages/docs/docs-content.js";
+import { generatePathWithoutParams } from "../../components/shared.js";
+import SiteMapContext from "../../context/site-map-context.js";
+import { SiteMap } from "../../lib/sitemap.js";
+import { getSerializedPage } from "../../util/mdx-utils.js";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
   ({ title }) => title === "Documentation",

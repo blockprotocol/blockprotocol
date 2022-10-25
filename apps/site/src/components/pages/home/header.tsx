@@ -1,7 +1,9 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
-import Image from "next/image";
+import RawImage from "next/image.js";
 
 import primaryHelixImage from "../../../../public/assets/new-home/primary-helix-min.png";
+
+const Image = RawImage as unknown as typeof RawImage.default;
 
 export const Header = () => {
   const theme = useTheme();

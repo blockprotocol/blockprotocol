@@ -1,7 +1,9 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import Image from "next/image";
+import RawImage from "next/image.js";
 
 import transparentBlocksWithCircleImage from "../../../../public/assets/new-home/transparent-blocks-with-circle-min.png";
+
+const Image = RawImage as unknown as typeof RawImage.default;
 
 export const InteroperableBlocks = () => {
   const theme = useTheme();

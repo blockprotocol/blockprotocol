@@ -1,27 +1,30 @@
 import dedent from "dedent";
-import merge from "lodash/merge";
+import merge from "lodash/merge.js";
 import { Db, DBRef, ObjectId, WithId } from "mongodb";
 import { NextApiResponse } from "next";
 
-import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
-import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
-import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api";
+import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api.js";
+import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api.js";
+import { formatErrors, RESTRICTED_SHORTNAMES } from "../../../util/api.js";
 import {
   FRONTEND_URL,
   isProduction,
   shouldUseDummyEmailService,
-} from "../../config";
-import { sendMail } from "../aws-ses";
-import { getAllBlocksByUser } from "../blocks/get";
-import { sendDummyEmail } from "../dummy-emails";
-import { subscribeToMailchimp, updateMailchimpMemberInfo } from "../mailchimp";
-import { ApiKey } from "./api-key.model";
-import { EntityType } from "./entity-type.model";
+} from "../../config.js";
+import { sendMail } from "../aws-ses.js";
+import { getAllBlocksByUser } from "../blocks/get.js";
+import { sendDummyEmail } from "../dummy-emails.js";
+import {
+  subscribeToMailchimp,
+  updateMailchimpMemberInfo,
+} from "../mailchimp.js";
+import { ApiKey } from "./api-key.model.js";
+import { EntityType } from "./entity-type.model.js";
 import {
   VerificationCode,
   VerificationCodeDocument,
   VerificationCodeVariant,
-} from "./verification-code.model";
+} from "./verification-code.model.js";
 
 export const ALLOWED_SHORTNAME_CHARS = /^[a-zA-Z0-9-_]+$/;
 

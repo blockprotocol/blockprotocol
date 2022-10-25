@@ -1,6 +1,6 @@
 import { FunctionComponent, useCallback, useEffect, useRef } from "react";
 
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
 
 export interface SandboxedBlockProps {
   metadata: ExpandedBlockMetadata;

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { SerializedUser } from "../lib/api/model/user.model";
+import { SerializedUser } from "../lib/api/model/user.model.js";
 
 interface UserAvatarProps {
   user: SerializedUser;

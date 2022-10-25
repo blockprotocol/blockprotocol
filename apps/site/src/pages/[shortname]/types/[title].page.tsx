@@ -1,17 +1,19 @@
 import { EmbedderGraphMessageCallbacks } from "@blockprotocol/graph";
 import { Box, Container, Typography } from "@mui/material";
 import { NextPage } from "next";
-import NextError from "next/error";
-import { useRouter } from "next/router";
+import RawNextError from "next/error.js";
+import { useRouter } from "next/router.js";
 import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import { tw } from "twind";
 
-import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor";
-import { Link } from "../../../components/link";
-import { useUser } from "../../../context/user-context";
-import { EntityType } from "../../../lib/api/model/entity-type.model";
-import { apiClient } from "../../../lib/api-client";
+import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor.js";
+import { Link } from "../../../components/link.js";
+import { useUser } from "../../../context/user-context.js";
+import { EntityType } from "../../../lib/api/model/entity-type.model.js";
+import { apiClient } from "../../../lib/api-client.js";
+
+const NextError = RawNextError as unknown as typeof RawNextError.default;
 
 type EntityTypePageQueryParams = {
   shortname?: string;

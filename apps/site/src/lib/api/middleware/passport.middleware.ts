@@ -1,7 +1,7 @@
 import passport from "passport";
 
-import { User as UserModel } from "../model/user.model";
-import { connectToDatabase } from "../mongodb";
+import { User as UserModel } from "../model/user.model.js";
+import { connectToDatabase } from "../mongodb.js";
 
 declare global {
   namespace Express {

@@ -1,0 +1,14 @@
+diff --git a/node_modules/next-mdx-remote/index.d.ts b/node_modules/next-mdx-remote/index.d.ts
+index 9247c2a..09e9c9b 100644
+--- a/node_modules/next-mdx-remote/index.d.ts
++++ b/node_modules/next-mdx-remote/index.d.ts
+@@ -1 +1 @@
+-export * from './dist/index'
++export * from './dist/index.js'
+diff --git a/node_modules/next-mdx-remote/serialize.d.ts b/node_modules/next-mdx-remote/serialize.d.ts
+index d1c360d..477f749 100644
+--- a/node_modules/next-mdx-remote/serialize.d.ts
++++ b/node_modules/next-mdx-remote/serialize.d.ts
+@@ -1 +1 @@
+-export * from './dist/serialize'
++export * from './dist/serialize.js'

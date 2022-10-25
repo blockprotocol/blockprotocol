@@ -15,19 +15,21 @@ import {
   isValidElement,
   ReactNode,
 } from "react";
-import slugify from "slugify";
+import rawSlugify from "slugify";
 
-import { FontAwesomeIcon } from "../icons";
-import { Link } from "../link";
-import { Snippet } from "../snippet";
-import { FAQ } from "./faq";
-import { GraphServiceMessageList } from "./graph-service-message-list";
-import { HookServiceMessageList } from "./hook-service-message-list";
-import { GitHubInfoCard } from "./info-card/github-info-card";
-import { InfoCard } from "./info-card/info-card";
-import { InfoCardWrapper } from "./info-card/info-card-wrapper";
-import { usePageHeading } from "./shared/use-page-heading";
-import { stringifyChildren } from "./shared/util";
+import { FontAwesomeIcon } from "../icons/index.js";
+import { Link } from "../link.js";
+import { Snippet } from "../snippet.js";
+import { FAQ } from "./faq.js";
+import { GraphServiceMessageList } from "./graph-service-message-list.js";
+import { HookServiceMessageList } from "./hook-service-message-list.js";
+import { GitHubInfoCard } from "./info-card/github-info-card.js";
+import { InfoCard } from "./info-card/info-card.js";
+import { InfoCardWrapper } from "./info-card/info-card-wrapper.js";
+import { usePageHeading } from "./shared/use-page-heading.js";
+import { stringifyChildren } from "./shared/util.js";
+
+const slugify = rawSlugify as unknown as typeof rawSlugify.default;
 
 const Heading = styled(Typography)(({ theme }) => ({
   "svg.link-icon": {

@@ -8,14 +8,14 @@ import {
 import { NextSeo } from "next-seo";
 import { FunctionComponent } from "react";
 
-import { EntityType } from "../../../lib/api/model/entity-type.model";
-import { SerializedUser } from "../../../lib/api/model/user.model";
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { Sidebar } from "./sidebar";
-import { TabPanelContentsWithBlocks } from "./tab-panel-contents-with-blocks";
-import { TabPanelContentsWithOverview } from "./tab-panel-contents-with-overview";
-import { TabPanelContentsWithSchemas } from "./tab-panel-contents-with-schemas";
-import { TabHeader, TabPanel, TabValue } from "./tabs";
+import { EntityType } from "../../../lib/api/model/entity-type.model.js";
+import { SerializedUser } from "../../../lib/api/model/user.model.js";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
+import { Sidebar } from "./sidebar.js";
+import { TabPanelContentsWithBlocks } from "./tab-panel-contents-with-blocks.js";
+import { TabPanelContentsWithOverview } from "./tab-panel-contents-with-overview.js";
+import { TabPanelContentsWithSchemas } from "./tab-panel-contents-with-schemas.js";
+import { TabHeader, TabPanel, TabValue } from "./tabs.js";
 
 const SIDEBAR_WIDTH = 300;
 

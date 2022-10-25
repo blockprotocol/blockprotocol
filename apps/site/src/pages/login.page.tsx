@@ -1,20 +1,20 @@
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { Box, Container, Fade, Paper } from "@mui/material";
 import { NextPage } from "next";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { Button } from "../components/button";
-import { FontAwesomeIcon } from "../components/icons";
-import { SendLoginCodeScreen } from "../components/screens/send-login-code-screen";
+import { Button } from "../components/button.js";
+import { FontAwesomeIcon } from "../components/icons/index.js";
+import { SendLoginCodeScreen } from "../components/screens/send-login-code-screen.js";
 import {
   VerificationCodeInfo,
   VerificationCodeScreen,
-} from "../components/screens/verification-code-screen";
-import { useUser } from "../context/user-context";
-import { SerializedUser } from "../lib/api/model/user.model";
-import { apiClient } from "../lib/api-client";
-import { ApiLoginWithLoginCodeRequestBody } from "./api/login-with-login-code.api";
+} from "../components/screens/verification-code-screen.js";
+import { useUser } from "../context/user-context.js";
+import { SerializedUser } from "../lib/api/model/user.model.js";
+import { apiClient } from "../lib/api-client.js";
+import { ApiLoginWithLoginCodeRequestBody } from "./api/login-with-login-code.api.js";
 
 type LoginPageParsedUrlQuery = {
   redirectPath?: string;

@@ -2,14 +2,14 @@ import { faCircleExclamation } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Collapse,
+  FormHelperText,
   // eslint-disable-next-line no-restricted-imports
   TextField as MuiTextField,
   TextFieldProps as MuiTextFieldProps,
 } from "@mui/material";
-import FormHelperText from "@mui/material/FormHelperText";
 import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 
-import { FontAwesomeIcon } from "./icons";
+import { FontAwesomeIcon } from "./icons/index.js";
 
 export const TextField: FunctionComponent<MuiTextFieldProps> = ({
   helperText,

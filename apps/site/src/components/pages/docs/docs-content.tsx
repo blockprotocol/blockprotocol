@@ -11,15 +11,15 @@ import {
 import { MDXRemoteSerializeResult } from "next-mdx-remote";
 import { FunctionComponent, ReactNode } from "react";
 
-import { SiteMapPage } from "../../../lib/sitemap";
-import { FontAwesomeIcon } from "../../icons";
-import { Link } from "../../link";
+import { SiteMapPage } from "../../../lib/sitemap.js";
+import { FontAwesomeIcon } from "../../icons/index.js";
+import { Link } from "../../link.js";
 import {
   MDX_TEXT_CONTENT_MAX_WIDTH,
   MdxPageContent,
-} from "../../mdx/mdx-page-content";
-import { PageNavLinks } from "../../page-nav-links";
-import { Sidebar } from "../../page-sidebar";
+} from "../../mdx/mdx-page-content.js";
+import { PageNavLinks } from "../../page-nav-links.js";
+import { Sidebar } from "../../page-sidebar.js";
 
 type DocsPageProps = {
   title?: ReactNode;

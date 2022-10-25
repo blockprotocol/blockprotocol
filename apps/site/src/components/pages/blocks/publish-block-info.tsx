@@ -1,9 +1,9 @@
 import { faExternalLink } from "@fortawesome/free-solid-svg-icons";
 import { Typography } from "@mui/material";
 
-import { Alert } from "../../alert";
-import { FontAwesomeIcon } from "../../icons";
-import { Link } from "../../link";
+import { Alert } from "../../alert.js";
+import { FontAwesomeIcon } from "../../icons/index.js";
+import { Link } from "../../link.js";
 
 export const PublishBlockInfo = () => {
   return (

@@ -3,7 +3,7 @@ import path from "node:path";
 import chalk from "chalk";
 import fs from "fs-extra";
 
-import { generateSiteMap } from "../src/lib/sitemap";
+import { generateSiteMap } from "../src/lib/sitemap.js";
 
 const script = async () => {
   console.log(chalk.bold("Generating sitemap..."));

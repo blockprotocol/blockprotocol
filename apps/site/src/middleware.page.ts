@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 /** @see https://github.com/vercel/next.js/issues/32608#issuecomment-1007439478 about istanbul ignore file */
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server.js";
+import { NextResponse } from "next/server.js";
 
-import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
+import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants.js";
 
 const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
   ? new URL(process.env.NEXT_PUBLIC_FRONTEND_URL).host

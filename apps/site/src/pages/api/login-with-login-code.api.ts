@@ -1,8 +1,8 @@
 import { body as bodyValidator, validationResult } from "express-validator";
 
-import { createBaseHandler } from "../../lib/api/handler/base-handler";
-import { SerializedUser, User } from "../../lib/api/model/user.model";
-import { formatErrors } from "../../util/api";
+import { createBaseHandler } from "../../lib/api/handler/base-handler.js";
+import { SerializedUser, User } from "../../lib/api/model/user.model.js";
+import { formatErrors } from "../../util/api.js";
 
 export type ApiLoginWithLoginCodeRequestBody = {
   userId: string;

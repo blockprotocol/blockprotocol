@@ -1,8 +1,8 @@
 import { Box, buttonClasses, Typography, useTheme } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { SpecificationIcon } from "../../../icons";
-import { LinkButton } from "../../../link-button";
+import { SpecificationIcon } from "../../../icons/index.js";
+import { LinkButton } from "../../../link-button.js";
 
 interface SearchSuggestedLinksProps {
   closeModal?: () => void;

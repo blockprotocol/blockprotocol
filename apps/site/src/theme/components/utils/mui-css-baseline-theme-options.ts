@@ -3,8 +3,8 @@
 
 import { Components } from "@mui/material";
 
-import { DESKTOP_NAVBAR_HEIGHT } from "../../../components/navbar";
-import { customColors } from "../../palette";
+import { DESKTOP_NAVBAR_HEIGHT } from "../../../components/navbar.js";
+import { customColors } from "../../palette.js";
 
 // @see https://github.com/mui-org/material-ui/issues/15251
 const rootTypographyStyles = `

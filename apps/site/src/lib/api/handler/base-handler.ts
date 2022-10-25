@@ -5,13 +5,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import nextSession from "next-session";
 
-import { FRONTEND_URL } from "../../config";
-import { dbMiddleware, DbRequestExtensions } from "../middleware/db.middleware";
+import { FRONTEND_URL } from "../../config.js";
+import {
+  dbMiddleware,
+  DbRequestExtensions,
+} from "../middleware/db.middleware.js";
 import {
   passportMiddleware,
   PassportRequestExtensions,
-} from "../middleware/passport.middleware";
-import { sessionMiddleware } from "../middleware/session.middleware";
+} from "../middleware/passport.middleware.js";
+import { sessionMiddleware } from "../middleware/session.middleware.js";
 
 export type BaseApiRequest<RequestBody = unknown> = Omit<
   NextApiRequest,

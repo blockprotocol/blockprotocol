@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
-import { BlocksSlider } from "../../blocks-slider";
-import { HubIcon } from "../../icons";
-import { Link } from "../../link";
-import { LinkButton } from "../../link-button";
+import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks.js";
+import { BlocksSlider } from "../../blocks-slider.js";
+import { HubIcon } from "../../icons/index.js";
+import { Link } from "../../link.js";
+import { LinkButton } from "../../link-button.js";
 
 type RegistrySectionProps = {
   catalog: BlockMetadata[];

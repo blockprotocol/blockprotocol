@@ -419,7 +419,7 @@ import {
 } from "@blockprotocol/graph/react";
 import { useRef } from "react";
 
-import styles from "./base.module.scss";
+import styles from "./base.module.scss.js";
 
 import { Entity } from "@blockprotocol/graph";
 

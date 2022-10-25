@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
-import { TableTreeIcon } from "../../icons";
-import { ClientOnlyLastUpdated } from "../../last-updated";
-import { Link } from "../../link";
-import { Spacer } from "../../spacer";
-import { shy } from "./utils";
+import { TableTreeIcon } from "../../icons/index.js";
+import { ClientOnlyLastUpdated } from "../../last-updated.js";
+import { Link } from "../../link.js";
+import { Spacer } from "../../spacer.js";
+import { shy } from "./utils.js";
 
 type OverviewCardProps = {
   type: "block" | "schema";

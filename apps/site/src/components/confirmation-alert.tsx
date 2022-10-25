@@ -1,11 +1,13 @@
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
-import { Button } from "./button";
+import { Button } from "./button.js";
 
 type ConfirmationAlertProps = {
   children: ReactNode;

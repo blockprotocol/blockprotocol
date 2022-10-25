@@ -1,16 +1,16 @@
-import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders";
+import { body as bodyValidator } from "express-validator/src/middlewares/validation-chain-builders.js";
 
-import { getDbBlock } from "../../../lib/api/blocks/db";
-import { publishBlockFromNpm } from "../../../lib/api/blocks/npm";
-import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler";
-import { ExpandedBlockMetadata } from "../../../lib/blocks";
-import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
+import { getDbBlock } from "../../../lib/api/blocks/db.js";
+import { publishBlockFromNpm } from "../../../lib/api/blocks/npm.js";
+import { createAuthenticatedHandler } from "../../../lib/api/handler/authenticated-handler.js";
+import { ExpandedBlockMetadata } from "../../../lib/blocks.js";
+import { shouldAllowNpmBlockPublishing } from "../../../lib/config.js";
 import {
   formatErrors,
   isErrorContainingCauseWithCode,
-} from "../../../util/api";
-import { createPathWithNamespace } from "./shared/naming";
-import { revalidateBlockPages } from "./shared/revalidate";
+} from "../../../util/api.js";
+import { createPathWithNamespace } from "./shared/naming.js";
+import { revalidateBlockPages } from "./shared/revalidate.js";
 
 // The body we expect when updating an npm-linked block
 export type ApiBlockUpdateRequest = { blockName: string };

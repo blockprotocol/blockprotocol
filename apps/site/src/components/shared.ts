@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { useEffect, useState } from "react";
 
 export const generatePathWithoutParams = (path: string) => {

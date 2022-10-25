@@ -1,24 +1,24 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { useRouter } from "next/router.js";
 import { NextSeo } from "next-seo";
 import { useEffect, useMemo, useState } from "react";
 
-import { FontAwesomeIcon } from "../../components/icons";
-import { LinkButton } from "../../components/link-button";
+import { FontAwesomeIcon } from "../../components/icons/index.js";
+import { LinkButton } from "../../components/link-button.js";
 import {
   AuthWallPageContent,
   withAuthWall,
-} from "../../components/pages/auth-wall";
-import { BlockListContainer } from "../../components/pages/blocks/block-form-styles";
-import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state";
-import { PublishBlockSuccess } from "../../components/pages/blocks/publish-block-success";
-import { PageContainer } from "../../components/pages/dashboard/page-container";
-import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs";
-import { BlockListItem } from "../../components/pages/user/block-list-item";
-import { apiClient } from "../../lib/api-client";
-import { ExpandedBlockMetadata } from "../../lib/blocks";
-import { shouldAllowNpmBlockPublishing } from "../../lib/config";
+} from "../../components/pages/auth-wall.js";
+import { BlockListContainer } from "../../components/pages/blocks/block-form-styles.js";
+import { BlockListEmptyState } from "../../components/pages/blocks/block-list-empty-state.js";
+import { PublishBlockSuccess } from "../../components/pages/blocks/publish-block-success.js";
+import { PageContainer } from "../../components/pages/dashboard/page-container.js";
+import { TopNavigationTabs } from "../../components/pages/dashboard/top-navigation-tabs.js";
+import { BlockListItem } from "../../components/pages/user/block-list-item.js";
+import { apiClient } from "../../lib/api-client.js";
+import { ExpandedBlockMetadata } from "../../lib/blocks.js";
+import { shouldAllowNpmBlockPublishing } from "../../lib/config.js";
 
 const BlocksPage: AuthWallPageContent = ({ user }) => {
   const router = useRouter();

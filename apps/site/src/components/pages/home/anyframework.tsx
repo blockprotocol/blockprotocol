@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 
-import { Snippet } from "../../snippet";
+import { Snippet } from "../../snippet.js";
 
 const reactDummyCode = `export const App: BlockComponent<AppProps> =({
     updateEntities,

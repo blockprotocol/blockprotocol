@@ -1,5 +1,5 @@
-import { useUser } from "../../../context/user-context";
-import { SerializedUser } from "../../../lib/api/model/user.model";
+import { useUser } from "../../../context/user-context.js";
+import { SerializedUser } from "../../../lib/api/model/user.model.js";
 
 export const useUserStatus = (
   user: SerializedUser,

@@ -3,7 +3,7 @@ import path from "node:path";
 import { PutObjectCommand, PutObjectCommandInput } from "@aws-sdk/client-s3";
 import mime from "mime-types";
 
-import { generateS3ResourceUrl, getS3Bucket, getS3Client } from "./s3";
+import { generateS3ResourceUrl, getS3Bucket, getS3Client } from "./s3.js";
 
 export const uploadToS3 = async (
   resourceKey: string,

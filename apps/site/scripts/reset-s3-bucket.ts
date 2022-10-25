@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-s3";
 import chalk from "chalk";
 
-import { getS3Bucket, getS3Client } from "../src/lib/s3";
+import { getS3Bucket, getS3Client } from "../src/lib/s3.js";
 
 const script = async () => {
   console.log(chalk.bold("Resetting S3 bucket..."));
