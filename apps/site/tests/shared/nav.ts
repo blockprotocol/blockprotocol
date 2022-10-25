@@ -1,7 +1,7 @@
 import type { Locator, Page } from "playwright";
 import { expect } from "playwright-test-coverage";
 
-import { readValueFromRecentDummyEmail } from "./dummy-emails";
+import { readValueFromRecentDummyEmail } from "./dummy-emails.js";
 
 export const openMobileNav = async (page: Page) => {
   await page.locator("[data-testid='mobile-nav-trigger']").click();

@@ -1,9 +1,9 @@
-import { Page } from "playwright";
+import type { Page } from "playwright";
 import { expect, test } from "playwright-test-coverage";
 
-import { publishBlock } from "../shared/blocks";
-import { resetDb } from "../shared/fixtures";
-import { login } from "../shared/nav";
+import { publishBlock } from "../shared/blocks.js";
+import { resetDb } from "../shared/fixtures.js";
+import { login } from "../shared/nav.js";
 
 const fillBlockDetails = async (
   page: Page,
