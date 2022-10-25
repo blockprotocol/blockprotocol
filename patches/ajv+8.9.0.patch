@@ -1,34 +1,12 @@
-diff --git a/node_modules/ajv/dist/2019.d.ts b/node_modules/ajv/dist/2019.d.ts
-index 5a391dd..6c2d9ad 100644
---- a/node_modules/ajv/dist/2019.d.ts
-+++ b/node_modules/ajv/dist/2019.d.ts
-@@ -6,7 +6,7 @@ declare class Ajv2019 extends AjvCore {
-     _addDefaultMetaSchema(): void;
-     defaultMeta(): string | AnySchemaObject | undefined;
- }
--export default Ajv2019;
-+export = Ajv2019;
- export { Format, FormatDefinition, AsyncFormatDefinition, KeywordDefinition, KeywordErrorDefinition, CodeKeywordDefinition, MacroKeywordDefinition, FuncKeywordDefinition, Vocabulary, Schema, SchemaObject, AnySchemaObject, AsyncSchema, AnySchema, ValidateFunction, AsyncValidateFunction, ErrorObject, ErrorNoParams, } from "./types";
- export { Plugin, Options, CodeOptions, InstanceOptions, Logger, ErrorsTextOptions } from "./core";
- export { SchemaCxt, SchemaObjCxt } from "./compile";
 diff --git a/node_modules/ajv/dist/ajv.d.ts b/node_modules/ajv/dist/ajv.d.ts
-index ce43bbf..baa81a7 100644
+index ce43bbf..42a21eb 100644
 --- a/node_modules/ajv/dist/ajv.d.ts
 +++ b/node_modules/ajv/dist/ajv.d.ts
-@@ -5,7 +5,6 @@ declare class Ajv extends AjvCore {
-     _addDefaultMetaSchema(): void;
-     defaultMeta(): string | AnySchemaObject | undefined;
- }
--export default Ajv;
- export { Format, FormatDefinition, AsyncFormatDefinition, KeywordDefinition, KeywordErrorDefinition, CodeKeywordDefinition, MacroKeywordDefinition, FuncKeywordDefinition, Vocabulary, Schema, SchemaObject, AnySchemaObject, AsyncSchema, AnySchema, ValidateFunction, AsyncValidateFunction, SchemaValidateFunction, ErrorObject, ErrorNoParams, } from "./types";
- export { Plugin, Options, CodeOptions, InstanceOptions, Logger, ErrorsTextOptions } from "./core";
- export { SchemaCxt, SchemaObjCxt } from "./compile";
-@@ -14,3 +13,5 @@ export { DefinedError } from "./vocabularies/errors";
+@@ -14,3 +14,4 @@ export { DefinedError } from "./vocabularies/errors";
  export { JSONType } from "./compile/rules";
  export { JSONSchemaType } from "./types/json-schema";
  export { _, str, stringify, nil, Name, Code, CodeGen, CodeGenOptions } from "./compile/codegen";
 +
-+export = Ajv;
 diff --git a/node_modules/ajv/dist/core.js b/node_modules/ajv/dist/core.js
 index dbc417b..2780ed0 100644
 --- a/node_modules/ajv/dist/core.js

@@ -1,4 +1,4 @@
-import Ajv from "ajv";
+import _Ajv from "ajv";
 import { query as queryValidator } from "express-validator";
 import cloneDeep from "lodash/cloneDeep.js";
 
@@ -8,6 +8,8 @@ import {
   ExpandedBlockMetadata,
   retrieveBlockFileContent,
 } from "../../../lib/blocks.js";
+
+const Ajv = _Ajv as unknown as typeof _Ajv.default;
 
 export type ApiBlockSearchQuery = {
   author?: string;

@@ -13,7 +13,7 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import Ajv, { JSONSchemaType } from "ajv";
+import _Ajv, { JSONSchemaType } from "ajv";
 import chalk from "chalk";
 import * as envalid from "envalid";
 import execa from "execa";
@@ -32,6 +32,8 @@ import {
   StoredBlockInfo,
 } from "../src/lib/blocks.js";
 import { FRONTEND_URL } from "../src/lib/config.js";
+
+const Ajv = _Ajv as unknown as typeof _Ajv.default;
 
 const monorepoRoot = path.resolve(
   path.dirname(fileURLToPath(import.meta.url)),
