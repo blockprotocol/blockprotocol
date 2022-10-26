@@ -1,7 +1,7 @@
 import * as aws from "@aws-sdk/client-ses";
 import { convert } from "html-to-text";
 import nodemailer from "nodemailer";
-import SESTransport from "nodemailer/lib/ses-transport.js";
+import SESTransport from "nodemailer/lib/ses-transport/index.js";
 
 import { mustGetEnvVar } from "../../util/api.js";
 import { isProduction } from "../config.js";

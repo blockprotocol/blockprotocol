@@ -1,4 +1,4 @@
-import _axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import { ValidationError } from "express-validator";
 
 import {
@@ -39,8 +39,6 @@ import {
   ApiVerifyEmailResponse,
 } from "../pages/api/verify-email.api.js";
 import { FRONTEND_URL } from "./config.js";
-
-const axios = _axios as unknown as typeof _axios.default;
 
 const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
 
