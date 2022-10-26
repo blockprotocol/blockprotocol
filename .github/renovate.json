@@ -7,21 +7,32 @@
   "schedule": ["every weekday before 5am"],
   "packageRules": [
     {
-      "enabled": false,
       "matchManagers": ["npm"],
       "rangeStrategy": "bump",
       "stabilityDays": 3
     },
     {
+      "enabled": false,
+      "matchDepTypes": ["dependencies", "peerDependencies"],
+      "matchManagers": ["npm"]
+    },
+    {
       "enabled": true,
+      "groupName": "Babel",
       "matchManagers": ["npm"],
-      "matchFiles": ["package.json"]
+      "matchPackagePatterns": ["babel"]
     },
     {
       "enabled": true,
       "groupName": "Changesets",
       "matchManagers": ["npm"],
       "matchPackagePatterns": ["^@changesets/"]
+    },
+    {
+      "enabled": true,
+      "groupName": "Jest",
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@types/jest$", "^jest", "^ts-jest$"]
     },
     {
       "automerge": true,
