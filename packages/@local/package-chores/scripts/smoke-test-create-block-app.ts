@@ -4,7 +4,7 @@ import { promisify } from "node:util";
 
 import { logStepEnd, logStepStart } from "@local/script-resources/logging";
 import chalk from "chalk";
-import execa from "execa";
+import { execa } from "execa";
 import fs from "fs-extra";
 import tmp from "tmp-promise";
 import treeKill from "tree-kill";
