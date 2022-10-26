@@ -1,7 +1,7 @@
-diff --git a/dist/core.js b/dist/core.js
-index dbc417b28f09ec9d56e49633cdaa1721964a7dda..2780ed010ff7bbda98e7fedb4bad49619ef42a6d 100644
---- a/dist/core.js
-+++ b/dist/core.js
+diff --git a/node_modules/ajv/dist/core.js b/node_modules/ajv/dist/core.js
+index dbc417b..112f165 100644
+--- a/node_modules/ajv/dist/core.js
++++ b/node_modules/ajv/dist/core.js
 @@ -549,8 +549,10 @@ function checkKeyword(keyword, def) {
      (0, util_1.eachItem)(keyword, (kwd) => {
          if (RULES.keywords[kwd])

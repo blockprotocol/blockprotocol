@@ -1,7 +1,7 @@
-diff --git a/lib/server/fetch.js b/lib/server/fetch.js
-index 06ea087a8f51653e237e9ffc4ae414136baa63a9..46d4cd5231656b803b04e6358d15bbc439f8bb1b 100644
---- a/lib/server/fetch.js
-+++ b/lib/server/fetch.js
+diff --git a/node_modules/playwright-core/lib/server/fetch.js b/node_modules/playwright-core/lib/server/fetch.js
+index 06ea087..46d4cd5 100644
+--- a/node_modules/playwright-core/lib/server/fetch.js
++++ b/node_modules/playwright-core/lib/server/fetch.js
 @@ -186,7 +186,9 @@ class APIRequestContext extends _instrumentation.SdkObject {
        const cookie = parseCookie(header);
        if (!cookie) continue; // https://datatracker.ietf.org/doc/html/rfc6265#section-5.2.3

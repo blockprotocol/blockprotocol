@@ -1,7 +1,7 @@
-diff --git a/types/dist/shared.d.ts b/types/dist/shared.d.ts
-index 0d454ccc77694254d65cc50302399687da5ce6ff..52986dbf9dae7ed145eeda5c4a539747c01587c7 100644
---- a/types/dist/shared.d.ts
-+++ b/types/dist/shared.d.ts
+diff --git a/node_modules/echarts/types/dist/shared.d.ts b/node_modules/echarts/types/dist/shared.d.ts
+index 0d454cc..52986db 100644
+--- a/node_modules/echarts/types/dist/shared.d.ts
++++ b/node_modules/echarts/types/dist/shared.d.ts
 @@ -2869,7 +2869,7 @@ declare class Axis {
      calculateCategoryInterval(): ReturnType<typeof calculateCategoryInterval>;
  }

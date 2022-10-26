@@ -1,7 +1,7 @@
-diff --git a/dist/get-dependents-graph.cjs.dev.js b/dist/get-dependents-graph.cjs.dev.js
-index 9bd1b9dbb2532915f1486a29388aab1273a22ebe..cbacc42d031e4d680010540506f23a75b2ef3da5 100644
---- a/dist/get-dependents-graph.cjs.dev.js
-+++ b/dist/get-dependents-graph.cjs.dev.js
+diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
+index 9bd1b9d..cbacc42 100644
+--- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
++++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.dev.js
 @@ -71,6 +71,9 @@ function getDependencyGraph(packages, opts) {
      for (let [depName, depRange] of allDependencies) {
        const match = packagesByName[depName];
@@ -12,10 +12,10 @@ index 9bd1b9dbb2532915f1486a29388aab1273a22ebe..cbacc42d031e4d680010540506f23a75
        const expected = match.packageJson.version;
        const usesWorkspaceRange = depRange.startsWith("workspace:");
  
-diff --git a/dist/get-dependents-graph.cjs.prod.js b/dist/get-dependents-graph.cjs.prod.js
-index b4026bb27748c56940c27b2a6bc7c1b7e8311c1e..ef99cd540ec36c61d698caf11422562e8a838faf 100644
---- a/dist/get-dependents-graph.cjs.prod.js
-+++ b/dist/get-dependents-graph.cjs.prod.js
+diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
+index b4026bb..ef99cd5 100644
+--- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
++++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.cjs.prod.js
 @@ -45,6 +45,9 @@ function getDependencyGraph(packages, opts) {
      for (let [depName, depRange] of allDependencies) {
        const match = packagesByName[depName];
@@ -26,10 +26,10 @@ index b4026bb27748c56940c27b2a6bc7c1b7e8311c1e..ef99cd540ec36c61d698caf11422562e
        const expected = match.packageJson.version;
        if (depRange.startsWith("workspace:")) {
          if (depRange = depRange.replace(/^workspace:/, ""), "*" === depRange || "^" === depRange || "~" === depRange) {
-diff --git a/dist/get-dependents-graph.esm.js b/dist/get-dependents-graph.esm.js
-index b0eaa778de88007e56c13580ae25a88fc6e2b180..98f35265119fec5a540409017b5a7ade2486c8e9 100644
---- a/dist/get-dependents-graph.esm.js
-+++ b/dist/get-dependents-graph.esm.js
+diff --git a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
+index b0eaa77..98f3526 100644
+--- a/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
++++ b/node_modules/@changesets/get-dependents-graph/dist/get-dependents-graph.esm.js
 @@ -62,6 +62,9 @@ function getDependencyGraph(packages, opts) {
      for (let [depName, depRange] of allDependencies) {
        const match = packagesByName[depName];

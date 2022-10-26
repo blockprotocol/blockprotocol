@@ -1,7 +1,7 @@
-diff --git a/lib/index.d.ts b/lib/index.d.ts
-index 997c6d91d628051bec22746b16b9bac04e3e38e6..e238dfc0ea430a0dea1150c25524d47a9b79937a 100644
---- a/lib/index.d.ts
-+++ b/lib/index.d.ts
+diff --git a/node_modules/htmlparser2/lib/index.d.ts b/node_modules/htmlparser2/lib/index.d.ts
+index 997c6d9..5a1fcbf 100644
+--- a/node_modules/htmlparser2/lib/index.d.ts
++++ b/node_modules/htmlparser2/lib/index.d.ts
 @@ -36,4 +36,6 @@ export * from "./FeedHandler";
  export * as DomUtils from "domutils";
  export { DomHandler as DefaultHandler };
@@ -9,3 +9,4 @@ index 997c6d91d628051bec22746b16b9bac04e3e38e6..e238dfc0ea430a0dea1150c25524d47a
 +// @todo fix properly later
 +export type DomElement = any;
  //# sourceMappingURL=index.d.ts.map
+\ No newline at end of file
