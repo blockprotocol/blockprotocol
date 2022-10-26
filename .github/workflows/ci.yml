@@ -316,8 +316,9 @@ jobs:
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true
-          flags: site-integration-${{ matrix.device }}
           files: coverage/lcov.info
+          flags: site-integration-${{ matrix.device }}
+          token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
 
       - name: Show DB logs
         if: ${{ success() || failure() }}

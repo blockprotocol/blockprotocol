@@ -1,9 +1,8 @@
 import { expect, test } from "playwright-test-coverage";
 
-import blocksData from "../../blocks-data.json";
-import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
+import { getBlocksData } from "../shared/fixtures.js";
 
-const codeBlockMetadata = (blocksData as ExpandedBlockMetadata[]).find(
+const codeBlockMetadata = (await getBlocksData()).find(
   ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
 );
 
