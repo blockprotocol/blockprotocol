@@ -2921,6 +2921,7 @@ __metadata:
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     "@local/tsconfig": "npm:0.0.0-private"
+    eslint: "npm:8.26.0"
     typescript: "npm:4.8.4"
   languageName: unknown
   linkType: soft
