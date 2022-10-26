@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "@types/react-dom": "^18.0.6",
+    "@types/react-dom": "^18.0.7",
     "block-scripts": "0.0.17",
     "eslint": "8.26.0",
     "mock-block-dock": "0.0.36",
