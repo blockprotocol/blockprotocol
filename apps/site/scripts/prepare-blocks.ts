@@ -16,7 +16,7 @@ import { fileURLToPath } from "node:url";
 import _Ajv, { JSONSchemaType } from "ajv";
 import chalk from "chalk";
 import * as envalid from "envalid";
-import execa from "execa";
+import { execa } from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 import hostedGitInfo from "hosted-git-info";
