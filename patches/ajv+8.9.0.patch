@@ -1,14 +1,5 @@
-diff --git a/node_modules/ajv/dist/ajv.d.ts b/node_modules/ajv/dist/ajv.d.ts
-index ce43bbf..42a21eb 100644
---- a/node_modules/ajv/dist/ajv.d.ts
-+++ b/node_modules/ajv/dist/ajv.d.ts
-@@ -14,3 +14,4 @@ export { DefinedError } from "./vocabularies/errors";
- export { JSONType } from "./compile/rules";
- export { JSONSchemaType } from "./types/json-schema";
- export { _, str, stringify, nil, Name, Code, CodeGen, CodeGenOptions } from "./compile/codegen";
-+
 diff --git a/node_modules/ajv/dist/core.js b/node_modules/ajv/dist/core.js
-index dbc417b..2780ed0 100644
+index dbc417b..112f165 100644
 --- a/node_modules/ajv/dist/core.js
 +++ b/node_modules/ajv/dist/core.js
 @@ -549,8 +549,10 @@ function checkKeyword(keyword, def) {

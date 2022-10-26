@@ -1,10 +1,13 @@
 import { formatDistance } from "date-fns";
-import ReactHtmlParser, {
+import _ReactHtmlParser, {
   convertNodeToElement,
   Transform,
 } from "react-html-parser";
 
 import { Link } from "../components/link.jsx";
+
+const ReactHtmlParser =
+  _ReactHtmlParser as unknown as typeof _ReactHtmlParser.default;
 
 export const parseHTML = (html: string) => {
   const transform: Transform = (node, index) => {
@@ -28,9 +31,7 @@ export const parseHTML = (html: string) => {
       );
     }
   };
-  return (ReactHtmlParser as unknown as typeof ReactHtmlParser.default)(html, {
-    transform,
-  });
+  return ReactHtmlParser(html, { transform });
 };
 
 export const formatUpdatedAt = (date?: string | null) => {

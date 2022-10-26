@@ -1,4 +1,5 @@
-import createCache from "@emotion/cache";
+import _createCache from "@emotion/cache";
 
-export const createEmotionCache = () =>
-  (createCache as unknown as typeof createCache.default)({ key: "css" });
+const createCache = _createCache as unknown as typeof _createCache.default;
+
+export const createEmotionCache = () => createCache({ key: "css" });
