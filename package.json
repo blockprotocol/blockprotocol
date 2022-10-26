@@ -28,7 +28,7 @@
     "dev": "yarn workspace @apps/site dev",
     "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "dev:db": "yarn workspace @apps/site dev:db",
-    "postinstall": "yarn patch-package && husky install && turbo run codegen && turbo run build \"--filter=!./apps/*\" \"--filter=!./packages/block-template-*\""
+    "postinstall": "yarn patch-package && husky install && turbo run codegen && turbo run build \"--filter=!./apps/*\""
   },
   "lint-staged": {
     "**": [
