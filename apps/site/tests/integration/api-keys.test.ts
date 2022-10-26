@@ -1,7 +1,7 @@
 import { expect, test } from "playwright-test-coverage";
 
-import { resetDb } from "../shared/fixtures";
-import { login } from "../shared/nav";
+import { resetDb } from "../shared/fixtures.js";
+import { login } from "../shared/nav.js";
 
 test("API key page should generate a valid key", async ({
   page,
@@ -49,9 +49,9 @@ test("API key page should generate a valid key", async ({
   const apiKeyValue =
     (await page.locator('[data-testid="api-key-value"]').textContent()) ?? "";
 
-  await page.locator("text=Copy to Clipboard").click();
+  // ”Copy to Clipboard” does not work in Webkit on Linux
   if (browserName !== "webkit") {
-    // ”Copy to Clipboard” does not work in Webkit on Linux
+    await page.locator("text=Copy to Clipboard").click();
     await expect(page.locator("text=✓ Copied")).toBeVisible();
   }
   await page.locator("text=Go back").click();
@@ -94,9 +94,9 @@ test("API key page should generate a valid key", async ({
   expect(apiKeyValue).not.toEqual(apiKeyValue2);
   expect(publicKeyId).not.toEqual(publicKeyId2);
 
-  await page.locator("text=Copy to Clipboard").click();
+  // ”Copy to Clipboard” does not work in Webkit on Linux
   if (browserName !== "webkit") {
-    // ”Copy to Clipboard” does not work in Webkit on Linux
+    await page.locator("text=Copy to Clipboard").click();
     await expect(page.locator("text=✓ Copied")).toBeVisible();
   }
   await expect(page.locator("text=my first key regenerated")).toBeVisible();

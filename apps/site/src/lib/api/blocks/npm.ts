@@ -1,7 +1,7 @@
 import os from "node:os";
 import path from "node:path";
 
-import execa from "execa";
+import { execa } from "execa";
 import fs from "fs-extra";
 import { globby } from "globby";
 import { Db } from "mongodb";
