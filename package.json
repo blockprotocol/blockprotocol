@@ -2,19 +2,13 @@
   "private": true,
   "description": "blockprotocol monorepo",
   "type": "module",
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "crates/*",
-      "packages/*",
-      "packages/@blockprotocol/*",
-      "packages/@local/*"
-    ],
-    "nohoist": [
-      "**/@types/css-font-loading-module",
-      "**/@types/prismjs"
-    ]
-  },
+  "workspaces": [
+    "apps/*",
+    "crates/*",
+    "packages/*",
+    "packages/@blockprotocol/*",
+    "packages/@local/*"
+  ],
   "scripts": {
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
     "fix:dependency-version-consistency": "check-dependency-version-consistency --fix .",
