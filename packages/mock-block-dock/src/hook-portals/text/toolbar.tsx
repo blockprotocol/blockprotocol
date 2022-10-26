@@ -1,13 +1,9 @@
-import { ReactElement, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { Editor, Range } from "slate";
 import { useFocused, useSlate } from "slate-react";
 
 import { MarkButton } from "./mark-button";
-
-const Portal = ({ children }: { children: ReactElement }) => {
-  return createPortal(children, document.body);
-};
 
 // @see https://github.com/ianstormtaylor/slate/blob/main/site/examples/hovering-toolbar.tsx
 export const Toolbar = () => {
