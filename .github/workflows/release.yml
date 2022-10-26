@@ -20,7 +20,7 @@ jobs:
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1.3.0
         with:
-          publish: yarn workspace @local/package-chores exe scripts/publish-to-npmjscom.ts
+          publish: yarn changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.MACHINE_USER_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

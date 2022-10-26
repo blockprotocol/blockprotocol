@@ -1,6 +1,6 @@
 import { expect, test } from "playwright-test-coverage";
 
-import { closeMobileNav, openMobileNav } from "../shared/nav";
+import { closeMobileNav, openMobileNav } from "../shared/nav.js";
 
 test("Docs page should contain key elements and interactions should work", async ({
   page,
