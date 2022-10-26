@@ -20,7 +20,7 @@ import {
   useState,
 } from "react";
 
-import SiteMapContext from "../../context/site-map-context.js";
+import { SiteMapContext } from "../../context/site-map-context.js";
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap.js";
 import { FontAwesomeIcon } from "../icons/index.js";
 import { Link } from "../link.jsx";

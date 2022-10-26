@@ -7,7 +7,7 @@ import { useContext } from "react";
 import siteMap from "../../../site-map.json";
 import { DocsContent } from "../../components/pages/docs/docs-content.jsx";
 import { generatePathWithoutParams } from "../../components/shared.js";
-import SiteMapContext from "../../context/site-map-context.js";
+import { SiteMapContext } from "../../context/site-map-context.js";
 import { SiteMap } from "../../lib/sitemap.js";
 import { getSerializedPage } from "../../util/mdx-utils.jsx";
 
