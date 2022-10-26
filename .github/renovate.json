@@ -18,6 +18,20 @@
     },
     {
       "enabled": true,
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": [
+        "^axios$",
+        "^chalk$",
+        "^core-js$",
+        "^envalid$",
+        "^execa$",
+        "^lit$",
+        "^webpack-cli$"
+        "^webpack-dev-server$"
+      ]
+    },
+    {
+      "enabled": true,
       "groupName": "Babel",
       "matchManagers": ["npm"],
       "matchPackagePatterns": ["babel"]
