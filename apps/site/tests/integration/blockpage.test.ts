@@ -1,15 +1,14 @@
 import { expect, test } from "playwright-test-coverage";
 
-import blocksData from "../../blocks-data.json";
-import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
+import { getBlocksData } from "../shared/fixtures.js";
 
-const typedBlocksData = blocksData as ExpandedBlockMetadata[];
+const blocksData = await getBlocksData();
 
-const codeBlock = typedBlocksData.find(
+const codeBlock = blocksData.find(
   ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
 );
 
-const unsupportedBlock = typedBlocksData.find(
+const unsupportedBlock = blocksData.find(
   ({ pathWithNamespace }) => pathWithNamespace === "@hash/embed",
 );
 
