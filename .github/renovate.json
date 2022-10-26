@@ -34,7 +34,7 @@
       "enabled": true,
       "groupName": "Babel",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["babel"]
+      "matchPackagePatterns": ["^@babel/", "^babel-", "^babel$"]
     },
     {
       "enabled": true,
