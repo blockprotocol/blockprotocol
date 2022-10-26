@@ -47,31 +47,30 @@ export const Toolbar = () => {
     }px`;
   });
 
-  return (
-    <Portal>
-      <div
-        contentEditable={false}
-        ref={ref}
-        style={{
-          position: "absolute",
-          fontWeight: 600,
-          zIndex: 1,
-          marginTop: "-6px",
-          visibility: "hidden",
-          borderRadius: 4,
-          userSelect: "none", // @see https://github.com/ianstormtaylor/slate/issues/3421#issuecomment-573326794
-        }}
-      >
-        <MarkButton format="bold">
-          <span>B</span>
-        </MarkButton>
-        <MarkButton format="italic">
-          <span style={{ fontStyle: "italic" }}>I</span>
-        </MarkButton>
-        <MarkButton format="underline">
-          <span style={{ textDecoration: "underline" }}>U</span>
-        </MarkButton>
-      </div>
-    </Portal>
+  return createPortal(
+    <div
+      contentEditable={false}
+      ref={ref}
+      style={{
+        position: "absolute",
+        fontWeight: 600,
+        zIndex: 1,
+        marginTop: "-6px",
+        visibility: "hidden",
+        borderRadius: 4,
+        userSelect: "none", // @see https://github.com/ianstormtaylor/slate/issues/3421#issuecomment-573326794
+      }}
+    >
+      <MarkButton format="bold">
+        <span>B</span>
+      </MarkButton>
+      <MarkButton format="italic">
+        <span style={{ fontStyle: "italic" }}>I</span>
+      </MarkButton>
+      <MarkButton format="underline">
+        <span style={{ textDecoration: "underline" }}>U</span>
+      </MarkButton>
+    </div>,
+    document.body,
   );
 };

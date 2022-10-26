@@ -95,6 +95,7 @@ export const useHookEmbedderService = (
 
 type Hook<T extends HTMLElement> = {
   id: string | null;
+  cancel: () => void;
   teardown: (() => Promise<void>) | null;
   params: {
     service: HookBlockHandler | null;
@@ -190,6 +191,8 @@ export const useHook = <T extends HTMLElement>(
 
     const existingHookId = existingHookRef.current?.id;
 
+    existingHookRef.current?.cancel();
+
     if (node && service) {
       const controller = new AbortController();
 
@@ -201,6 +204,9 @@ export const useHook = <T extends HTMLElement>(
           entityId,
           path,
           node,
+        },
+        cancel() {
+          controller.abort();
         },
         async teardown() {
           if (controller.signal.aborted) {
@@ -240,7 +246,7 @@ export const useHook = <T extends HTMLElement>(
 
       existingHookRef.current = hook;
 
-      void service
+      service
         .hook({
           data: {
             hookId: hook.id,
@@ -279,6 +285,11 @@ export const useHook = <T extends HTMLElement>(
               hook.id = response.data.hookId;
             }
           }
+        })
+        .catch((err) => {
+          catchError(() => {
+            throw err;
+          });
         });
     } else {
       existingHookRef.current = null;
