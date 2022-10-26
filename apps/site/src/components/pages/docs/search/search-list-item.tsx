@@ -2,7 +2,7 @@ import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography, typographyClasses } from "@mui/material";
 import { forwardRef, useContext } from "react";
 
-import SiteMapContext from "../../../../context/site-map-context.js";
+import { SiteMapContext } from "../../../../context/site-map-context.js";
 import { parseHTML } from "../../../../util/html-utils.jsx";
 import { useCrumbs } from "../../../hooks/use-crumbs.js";
 import { FontAwesomeIcon } from "../../../icons/index.js";

@@ -23,7 +23,7 @@ import {
 } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import SiteMapContext from "../context/site-map-context.js";
+import { SiteMapContext } from "../context/site-map-context.js";
 import { useUser } from "../context/user-context.js";
 import { HOME_PAGE_HEADER_HEIGHT } from "../pages/index.page.jsx";
 import { getScrollbarSize } from "../util/mui-utils.jsx";
