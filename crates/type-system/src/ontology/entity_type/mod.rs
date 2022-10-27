@@ -258,7 +258,23 @@ mod tests {
         assert_eq!(property_type_references, expected_property_type_references);
     }
 
-    // TODO test_entity_type_references
+    fn test_referenced_entity_types(
+        entity_type: &EntityType,
+        uris: impl IntoIterator<Item = &'static str>,
+    ) {
+        let expected_entity_type_references = uris
+            .into_iter()
+            .map(|uri| VersionedUri::from_str(uri).expect("invalid URI"))
+            .collect::<HashSet<_>>();
+
+        let entity_type_references = entity_type
+            .referenced_entity_types()
+            .into_iter()
+            .cloned()
+            .collect::<HashSet<_>>();
+
+        assert_eq!(entity_type_references, expected_entity_type_references);
+    }
 
     #[test]
     fn book() {
@@ -270,10 +286,10 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/published-on/v/1",
         ]);
 
-        // test_link_type_references(&entity_type, [(
-        //     "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
-        //     "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        // )]);
+        test_referenced_entity_types(&entity_type, [
+            "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        ]);
     }
 
     #[test]
@@ -286,7 +302,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/city/v/1",
         ]);
 
-        // test_link_type_references(&entity_type, []);
+        test_referenced_entity_types(&entity_type, []);
     }
 
     #[test]
@@ -298,7 +314,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        // test_link_type_references(&entity_type, []);
+        test_referenced_entity_types(&entity_type, []);
     }
 
     #[test]
@@ -307,16 +323,12 @@ mod tests {
 
         test_property_type_references(&entity_type, []);
 
-        // test_link_type_references(&entity_type, [
-        //     (
-        //         "https://blockprotocol.org/@alice/types/link-type/located-at/v/1",
-        //         "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
-        //     ),
-        //     (
-        //         "https://blockprotocol.org/@alice/types/link-type/tenant/v/1",
-        //         "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        //     ),
-        // ]);
+        test_referenced_entity_types(&entity_type, [
+            "https://blockprotocol.org/@alice/types/entity-type/located-at/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/tenant/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        ]);
     }
 
     #[test]
@@ -327,10 +339,10 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        // test_link_type_references(&entity_type, [(
-        //     "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1",
-        //     "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        // )]);
+        test_referenced_entity_types(&entity_type, [
+            "https://blockprotocol.org/@alice/types/entity-type/friend-of/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        ]);
     }
 
     #[test]
@@ -341,10 +353,10 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        // test_link_type_references(&entity_type, [(
-        //     "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-        //     "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
-        // )]);
+        test_referenced_entity_types(&entity_type, [
+            "https://blockprotocol.org/@alice/types/entity-type/contains/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
+        ]);
     }
 
     #[test]
@@ -355,7 +367,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        // test_link_type_references(&entity_type, []);
+        test_referenced_entity_types(&entity_type, []);
     }
 
     #[test]
@@ -366,15 +378,11 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/text/v/1",
         ]);
 
-        // test_link_type_references(&entity_type, [
-        //     (
-        //         "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
-        //         "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        //     ),
-        //     (
-        //         "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-        //         "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
-        //     ),
-        // ]);
+        test_referenced_entity_types(&entity_type, [
+            "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/contains/v/1",
+            "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
+        ]);
     }
 }
