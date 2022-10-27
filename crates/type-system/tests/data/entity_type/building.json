@@ -5,7 +5,7 @@
   "title": "Building",
   "pluralTitle": "Buildings",
   "properties": {},
-  "links": {
+  "relationships": {
     "https://blockprotocol.org/@alice/types/link-type/located-at/v/1": {
       "oneOf": [
         {

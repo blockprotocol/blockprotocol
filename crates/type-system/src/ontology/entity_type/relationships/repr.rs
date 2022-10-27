@@ -6,59 +6,64 @@ use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
     repr, uri::VersionedUri, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
-    ParseLinksError,
+    ParseRelationshipsError,
 };
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
-pub struct Links {
+pub struct Relationships {
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    links: HashMap<String, ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>,
+    relationships:
+        HashMap<String, ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    required_links: Vec<String>,
+    required_relationships: Vec<String>,
 }
 
-impl TryFrom<Links> for super::Links {
-    type Error = ParseLinksError;
+impl TryFrom<Relationships> for super::Relationships {
+    type Error = ParseRelationshipsError;
 
-    fn try_from(links_repr: Links) -> Result<Self, Self::Error> {
-        let links = links_repr
-            .links
+    fn try_from(relationships_repr: Relationships) -> Result<Self, Self::Error> {
+        let relationships = relationships_repr
+            .relationships
             .into_iter()
             .map(|(uri, val)| {
                 Ok((
-                    VersionedUri::from_str(&uri).map_err(ParseLinksError::InvalidLinkKey)?,
+                    VersionedUri::from_str(&uri)
+                        .map_err(ParseRelationshipsError::InvalidRelationshipKey)?,
                     val.try_into()?,
                 ))
             })
             .collect::<Result<HashMap<_, _>, Self::Error>>()?;
 
-        let required_links = links_repr
-            .required_links
+        let required_relationships = relationships_repr
+            .required_relationships
             .into_iter()
-            .map(|uri| VersionedUri::from_str(&uri).map_err(ParseLinksError::InvalidRequiredKey))
+            .map(|uri| {
+                VersionedUri::from_str(&uri).map_err(ParseRelationshipsError::InvalidRequiredKey)
+            })
             .collect::<Result<Vec<_>, Self::Error>>()?;
 
-        Self::new(links, required_links).map_err(ParseLinksError::ValidationError)
+        Self::new(relationships, required_relationships)
+            .map_err(ParseRelationshipsError::ValidationError)
     }
 }
 
-impl From<super::Links> for Links {
-    fn from(object: super::Links) -> Self {
-        let links = object
-            .links
+impl From<super::Relationships> for Relationships {
+    fn from(object: super::Relationships) -> Self {
+        let relationships = object
+            .relationships
             .into_iter()
             .map(|(uri, val)| (uri.to_string(), val.into()))
             .collect();
-        let required_links = object
-            .required_links
+        let required_relationships = object
+            .required_relationships
             .into_iter()
             .map(|uri| uri.to_string())
             .collect();
         Self {
-            links,
-            required_links,
+            relationships,
+            required_relationships,
         }
     }
 }
@@ -112,7 +117,7 @@ pub enum ValueOrMaybeOrderedArray<T> {
 impl TryFrom<ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
     for super::ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>
 {
-    type Error = ParseLinksError;
+    type Error = ParseRelationshipsError;
 
     fn try_from(
         value_or_array_repr: ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>,
@@ -120,11 +125,13 @@ impl TryFrom<ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
         Ok(match value_or_array_repr {
             ValueOrMaybeOrderedArray::Value(val) => Self::Value(
                 val.try_into()
-                    .map_err(ParseLinksError::InvalidEntityTypeReference)?,
+                    .map_err(ParseRelationshipsError::InvalidEntityTypeReference)?,
             ),
-            ValueOrMaybeOrderedArray::Array(array) => {
-                Self::Array(array.try_into().map_err(ParseLinksError::InvalidArray)?)
-            }
+            ValueOrMaybeOrderedArray::Array(array) => Self::Array(
+                array
+                    .try_into()
+                    .map_err(ParseRelationshipsError::InvalidArray)?,
+            ),
         })
     }
 }
@@ -150,8 +157,8 @@ mod tests {
         check_repr_serialization_from_value, ensure_repr_failed_deserialization, StringTypeStruct,
     };
 
-    // TODO - write some tests for validation of Link schemas, although most testing happens on
-    //  entity types
+    // TODO - write some tests for validation of Relationship schemas, although most testing happens
+    // on  entity types
 
     mod maybe_ordered_array {
         use super::*;

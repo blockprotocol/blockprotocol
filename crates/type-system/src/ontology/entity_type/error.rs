@@ -5,7 +5,7 @@ use tsify::Tsify;
 
 use crate::{
     uri::{ParseBaseUriError, ParseVersionedUriError},
-    ParseAllOfError, ParseLinksError, ParsePropertyTypeObjectError,
+    ParseAllOfError, ParsePropertyTypeObjectError, ParseRelationshipsError,
 };
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
@@ -16,8 +16,8 @@ pub enum ParseEntityTypeError {
     InvalidPropertyTypeObject(ParsePropertyTypeObjectError),
     #[error("invalid all of field: `{0}`")]
     InvalidAllOf(ParseAllOfError),
-    #[error("invalid links: `{0}`")]
-    InvalidLinks(ParseLinksError),
+    #[error("invalid relationships: `{0}`")]
+    InvalidRelationships(ParseRelationshipsError),
     #[error("invalid key in default: `{0}`")]
     InvalidDefaultKey(ParseBaseUriError),
     #[error("invalid key in examples list: `{0}`")]

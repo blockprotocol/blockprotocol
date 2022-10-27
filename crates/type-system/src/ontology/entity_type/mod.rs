@@ -1,5 +1,5 @@
 mod error;
-pub(in crate::ontology) mod links;
+pub(in crate::ontology) mod relationships;
 pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
@@ -13,8 +13,8 @@ pub use error::ParseEntityTypeError;
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
-    AllOf, Links, Object, OneOf, PropertyTypeReference, ValidateUri, ValidationError, ValueOrArray,
-    ValueOrMaybeOrderedArray,
+    AllOf, Object, OneOf, PropertyTypeReference, Relationships, ValidateUri, ValidationError,
+    ValueOrArray, ValueOrMaybeOrderedArray,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -25,7 +25,7 @@ pub struct EntityType {
     description: Option<String>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
     inherits_from: AllOf<EntityTypeReference>,
-    links: Links,
+    relationships: Relationships,
     default: HashMap<BaseUri, serde_json::Value>,
     examples: Vec<HashMap<BaseUri, serde_json::Value>>,
 }
@@ -41,7 +41,7 @@ impl EntityType {
         description: Option<String>,
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
         inherits_from: AllOf<EntityTypeReference>,
-        links: Links,
+        relationships: Relationships,
         default: HashMap<BaseUri, serde_json::Value>,
         examples: Vec<HashMap<BaseUri, serde_json::Value>>,
     ) -> Self {
@@ -52,7 +52,7 @@ impl EntityType {
             description,
             property_object,
             inherits_from,
-            links,
+            relationships,
             default,
             examples,
         }
@@ -94,15 +94,15 @@ impl EntityType {
     }
 
     #[must_use]
-    pub const fn links(
+    pub const fn relationships(
         &self,
     ) -> &HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>> {
-        self.links.links()
+        self.relationships.relationships()
     }
 
     #[must_use]
-    pub fn required_links(&self) -> &[VersionedUri] {
-        self.links.required()
+    pub fn required_relationships(&self) -> &[VersionedUri] {
+        self.relationships.required()
     }
 
     #[must_use]
@@ -128,7 +128,7 @@ impl EntityType {
 
     #[must_use]
     pub fn link_type_references(&self) -> HashMap<&VersionedUri, &[EntityTypeReference]> {
-        self.links()
+        self.relationships()
             .iter()
             .map(|(link_type, entity_type)| (link_type, entity_type.inner().one_of()))
             .collect()
@@ -244,9 +244,9 @@ mod tests {
 
     fn test_link_type_references(
         entity_type: &EntityType,
-        links: impl IntoIterator<Item = (&'static str, &'static str)>,
+        relationships: impl IntoIterator<Item = (&'static str, &'static str)>,
     ) {
-        let expected_link_type_references = links
+        let expected_link_type_references = relationships
             .into_iter()
             .map(|(link_type_uri, entity_type_uri)| {
                 (
