@@ -190,48 +190,33 @@ You now have a block package that you can provide to apps to use, by **publishin
 
 ## Publish
 
-Once you've built a block, you can add it to the [Hub](/hub), so that:
+Once you've built a block, you can add it to the [Hub](/hub), so that your block will have an instant online demo playground,
+and will be searchable via our block API.
 
-- your block will have an instant online demo playground
-- your block will be searchable via our block API
-- you can claim your namespace in blockprotocol.org
+To publish a block on the Hub take the following steps.
 
-To publish a block on the Hub, the initial process is as follows:
+### In your browser
 
-1.  Have your block source code available in a GitHub repository
-1.  Claim your username by signing up at [https://blockprotocol.org](/)
-1.  Fork the [`blockprotocol` repository](https://github.com/blockprotocol/blockprotocol)
-1.  Add a JSON file to the [hub folder](https://github.com/blockprotocol/blockprotocol/tree/main/hub), in a subfolder matching the username you registered in step one, preceded by the `@` symbol (e.g. `@myusername`)
-1.  [Create a pull request](https://github.com/blockprotocol/blockprotocol/compare) from your fork
+- Sign up for an account on this site if you haven’t already – click 'sign up' in the top right
+- [Create an API key](https://blockprotocol.org/settings/api-keys and copy it
 
-The JSON metadata file should look like this:
+### In your terminal
 
-```json5
-{
-  // REQUIRED - path to the repository with your block's source code
-  repository: "https://github.com/hashintel/hash.git",
-  // REQUIRED - commit hash (pins block to a specific version)
-  commit: "adb915bf8fc4f84e33a2cd21f217225e50c3d7fa",
+- Run `npm run build` or `yarn build` to create a production build of your block (it will appear in the `dist/` folder)
+- run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file when prompted
+- Replace the placeholder key in that file with your API key
+- now run `npx blockprotocol@latest publish` again
+- See your block on the Hub!
 
-  // IF NEEDED - see below
-  distDir: "dist",
-  folder: "blocks/block-embed",
-  workspace: "@hashintel/block-embed",
-}
-```
+### Updating your block
 
-### My block source is in a subfolder
+You can update your published block at any time by running
+`npm run build && npx blockprotocol@latest publish` or `yarn build && npx blockprotocol@latest publish`
 
-- If it’s in a yarn workspace, please provide `workspace`
-- If it’s not in a yarn workspace, please provide its `folder` path
+### Changing the Hub preview
 
-### My block requires building from its source
-
-- please provide the `distDir` where the build artifacts will appear
-
-<InfoCard variant="info" title="Note">
-
-We assume that running `yarn install && yarn build` will build your block (after switching to the relevant folder/workspace, if provided).
-The specified `distDir` will be relative to the workspace directory or folder, if provided.
-
-</InfoCard>
+- Take a screenshot of your block in action and replace `public/block-preview.png`
+- update the `description` in package.json
+- add an icon to `public/` and update `blockprotocol.icon` in `package.json`
+- update your block’s `README.md` – it will appear below your block on its hub page
+- update the example object in `blockprotocol.examples` in `package.json`
