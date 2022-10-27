@@ -3,7 +3,7 @@ pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;
 
-pub use error::{ParseEntityTypeReferenceArrayError, ParseRelationshipsError};
+pub use error::ParseRelationshipsError;
 
 use crate::{
     uri::{BaseUri, VersionedUri},
@@ -12,7 +12,7 @@ use crate::{
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Relationships {
-    relationships: HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>>,
+    relationships: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
     required_relationships: Vec<VersionedUri>,
 }
 
@@ -20,7 +20,7 @@ impl Relationships {
     /// Creates a new `Relationships` without validating.
     #[must_use]
     pub const fn new_unchecked(
-        relationships: HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>>,
+        relationships: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
         required: Vec<VersionedUri>,
     ) -> Self {
         Self {
@@ -36,7 +36,7 @@ impl Relationships {
     /// - [`ValidationError::MissingRequiredRelationship`] if a required link is not a key in
     ///   `relationships`.
     pub fn new(
-        relationships: HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>>,
+        relationships: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
         required: Vec<VersionedUri>,
     ) -> Result<Self, ValidationError> {
         let relationships = Self::new_unchecked(relationships, required);
@@ -56,7 +56,7 @@ impl Relationships {
     #[must_use]
     pub const fn relationships(
         &self,
-    ) -> &HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>> {
+    ) -> &HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>> {
         &self.relationships
     }
 
@@ -97,30 +97,14 @@ impl<T> MaybeOrderedArray<T> {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub enum ValueOrMaybeOrderedArray<T> {
-    Value(T),
-    Array(MaybeOrderedArray<T>),
-}
-
-impl<T> ValueOrMaybeOrderedArray<T> {
-    #[must_use]
-    pub const fn inner(&self) -> &T {
-        match self {
-            Self::Value(value) => value,
-            Self::Array(array) => array.array().items(),
-        }
-    }
-}
-
-impl<T: ValidateUri> ValidateUri for ValueOrMaybeOrderedArray<T> {
+impl<T: ValidateUri> ValidateUri for MaybeOrderedArray<T> {
     fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
-        match self {
-            Self::Value(value) => value.validate_uri(base_uri),
-            Self::Array(array) => array.array().items().validate_uri(base_uri),
-        }
+        self.array().items().validate_uri(base_uri)
     }
 }
+
+// TODO - write some tests for validation of Relationship schemas, although most testing
+//   happens on entity types
 
 // #[cfg(test)]
 // mod tests {
@@ -131,8 +115,6 @@ impl<T: ValidateUri> ValidateUri for ValueOrMaybeOrderedArray<T> {
 //         check, check_deserialization, check_invalid_json, StringTypeStruct,
 //     };
 //
-//     // TODO - write some tests for validation of Relationship schemas, although most testing
-// happens on     //  entity types
 //
 //     mod maybe_ordered_array {
 //

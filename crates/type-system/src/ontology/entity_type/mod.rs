@@ -13,8 +13,8 @@ pub use error::ParseEntityTypeError;
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
-    AllOf, Object, OneOf, PropertyTypeReference, Relationships, ValidateUri, ValidationError,
-    ValueOrArray, ValueOrMaybeOrderedArray,
+    AllOf, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, Relationships, ValidateUri,
+    ValidationError, ValueOrArray,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -96,7 +96,7 @@ impl EntityType {
     #[must_use]
     pub const fn relationships(
         &self,
-    ) -> &HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>> {
+    ) -> &HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>> {
         self.relationships.relationships()
     }
 
@@ -126,11 +126,27 @@ impl EntityType {
             .collect()
     }
 
+    // TODO can't easily return `EntityTypeReference` because some of the URIs are refs
+    /// Gets the `VersionedUri` of all `EntityType`s that were referenced within the schema
     #[must_use]
-    pub fn link_type_references(&self) -> HashMap<&VersionedUri, &[EntityTypeReference]> {
-        self.relationships()
+    pub fn referenced_entity_types(&self) -> HashSet<&VersionedUri> {
+        self.inherits_from
+            .all_of()
             .iter()
-            .map(|(link_type, entity_type)| (link_type, entity_type.inner().one_of()))
+            .map(EntityTypeReference::uri)
+            .chain(self.relationships().keys())
+            .chain(
+                self.relationships()
+                    .values()
+                    .flat_map(|maybe_ordered_array| {
+                        maybe_ordered_array
+                            .array()
+                            .items()
+                            .one_of()
+                            .iter()
+                            .map(EntityTypeReference::uri)
+                    }),
+            )
             .collect()
     }
 }
@@ -242,36 +258,7 @@ mod tests {
         assert_eq!(property_type_references, expected_property_type_references);
     }
 
-    fn test_link_type_references(
-        entity_type: &EntityType,
-        relationships: impl IntoIterator<Item = (&'static str, &'static str)>,
-    ) {
-        let expected_link_type_references = relationships
-            .into_iter()
-            .map(|(link_type_uri, entity_type_uri)| {
-                (
-                    VersionedUri::from_str(link_type_uri).expect("invalid URI"),
-                    vec![VersionedUri::from_str(entity_type_uri).expect("invalid URI")],
-                )
-            })
-            .collect::<HashMap<_, _>>();
-
-        let link_type_references = entity_type
-            .link_type_references()
-            .into_iter()
-            .map(|(link_type_uri, entity_type_ref)| {
-                (
-                    link_type_uri.clone(),
-                    entity_type_ref
-                        .iter()
-                        .map(|reference| reference.uri().clone())
-                        .collect(),
-                )
-            })
-            .collect::<HashMap<_, _>>();
-
-        assert_eq!(link_type_references, expected_link_type_references);
-    }
+    // TODO test_entity_type_references
 
     #[test]
     fn book() {
@@ -283,10 +270,10 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/published-on/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [(
-            "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        )]);
+        // test_link_type_references(&entity_type, [(
+        //     "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
+        //     "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        // )]);
     }
 
     #[test]
@@ -299,7 +286,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/city/v/1",
         ]);
 
-        test_link_type_references(&entity_type, []);
+        // test_link_type_references(&entity_type, []);
     }
 
     #[test]
@@ -311,7 +298,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, []);
+        // test_link_type_references(&entity_type, []);
     }
 
     #[test]
@@ -320,16 +307,16 @@ mod tests {
 
         test_property_type_references(&entity_type, []);
 
-        test_link_type_references(&entity_type, [
-            (
-                "https://blockprotocol.org/@alice/types/link-type/located-at/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
-            ),
-            (
-                "https://blockprotocol.org/@alice/types/link-type/tenant/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-            ),
-        ]);
+        // test_link_type_references(&entity_type, [
+        //     (
+        //         "https://blockprotocol.org/@alice/types/link-type/located-at/v/1",
+        //         "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
+        //     ),
+        //     (
+        //         "https://blockprotocol.org/@alice/types/link-type/tenant/v/1",
+        //         "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        //     ),
+        // ]);
     }
 
     #[test]
@@ -340,10 +327,10 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [(
-            "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        )]);
+        // test_link_type_references(&entity_type, [(
+        //     "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1",
+        //     "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        // )]);
     }
 
     #[test]
@@ -354,10 +341,10 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [(
-            "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
-        )]);
+        // test_link_type_references(&entity_type, [(
+        //     "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
+        //     "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
+        // )]);
     }
 
     #[test]
@@ -368,7 +355,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, []);
+        // test_link_type_references(&entity_type, []);
     }
 
     #[test]
@@ -379,15 +366,15 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/text/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [
-            (
-                "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-            ),
-            (
-                "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
-            ),
-        ]);
+        // test_link_type_references(&entity_type, [
+        //     (
+        //         "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
+        //         "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        //     ),
+        //     (
+        //         "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
+        //         "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
+        //     ),
+        // ]);
     }
 }

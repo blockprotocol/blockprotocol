@@ -14,8 +14,7 @@ use crate::{
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Relationships {
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    relationships:
-        HashMap<String, ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>,
+    relationships: HashMap<String, MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required_relationships: Vec<String>,
 }
@@ -31,7 +30,8 @@ impl TryFrom<Relationships> for super::Relationships {
                 Ok((
                     VersionedUri::from_str(&uri)
                         .map_err(ParseRelationshipsError::InvalidRelationshipKey)?,
-                    val.try_into()?,
+                    val.try_into()
+                        .map_err(ParseRelationshipsError::InvalidArray)?,
                 ))
             })
             .collect::<Result<HashMap<_, _>, Self::Error>>()?;
@@ -102,48 +102,6 @@ where
         Self {
             array: maybe_ordered_array.array.into(),
             ordered: maybe_ordered_array.ordered,
-        }
-    }
-}
-
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(untagged, deny_unknown_fields)]
-pub enum ValueOrMaybeOrderedArray<T> {
-    Value(T),
-    Array(MaybeOrderedArray<T>),
-}
-
-impl TryFrom<ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
-    for super::ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>
-{
-    type Error = ParseRelationshipsError;
-
-    fn try_from(
-        value_or_array_repr: ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>,
-    ) -> Result<Self, Self::Error> {
-        Ok(match value_or_array_repr {
-            ValueOrMaybeOrderedArray::Value(val) => Self::Value(
-                val.try_into()
-                    .map_err(ParseRelationshipsError::InvalidEntityTypeReference)?,
-            ),
-            ValueOrMaybeOrderedArray::Array(array) => Self::Array(
-                array
-                    .try_into()
-                    .map_err(ParseRelationshipsError::InvalidArray)?,
-            ),
-        })
-    }
-}
-
-impl<T, R> From<super::ValueOrMaybeOrderedArray<T>> for ValueOrMaybeOrderedArray<R>
-where
-    R: From<T>,
-{
-    fn from(value_or_array: super::ValueOrMaybeOrderedArray<T>) -> Self {
-        match value_or_array {
-            super::ValueOrMaybeOrderedArray::Value(val) => Self::Value(val.into()),
-            super::ValueOrMaybeOrderedArray::Array(array) => Self::Array(array.into()),
         }
     }
 }
@@ -274,49 +232,6 @@ mod tests {
             });
 
             ensure_repr_failed_deserialization::<MaybeOrderedArray<StringTypeStruct>>(as_json);
-        }
-    }
-
-    mod value_or_maybe_ordered_array {
-        use serde_json::json;
-
-        use super::*;
-
-        #[test]
-        fn value() {
-            check_repr_serialization_from_value(
-                json!("value"),
-                Some(ValueOrMaybeOrderedArray::Value("value".to_owned())),
-            );
-        }
-
-        #[test]
-        fn array() {
-            let expected_inner = json!(
-                {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                }
-            );
-
-            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
-                .expect("failed to deserialize array to repr");
-
-            check_repr_serialization_from_value(
-                json!({
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "ordered": false
-                }),
-                Some(ValueOrMaybeOrderedArray::Array(MaybeOrderedArray {
-                    array: inner_array,
-                    ordered: false,
-                })),
-            );
         }
     }
 }

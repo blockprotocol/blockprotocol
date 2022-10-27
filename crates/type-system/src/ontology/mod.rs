@@ -18,10 +18,7 @@ mod shared;
 
 pub use data_type::{DataType, DataTypeReference, ParseDataTypeError};
 pub use entity_type::{
-    relationships::{
-        MaybeOrderedArray, ParseEntityTypeReferenceArrayError, ParseRelationshipsError,
-        Relationships, ValueOrMaybeOrderedArray,
-    },
+    relationships::{MaybeOrderedArray, ParseRelationshipsError, Relationships},
     EntityType, EntityTypeReference, ParseEntityTypeError,
 };
 pub use link_type::{LinkType, ParseLinkTypeError};
@@ -31,7 +28,10 @@ pub use property_type::{
 pub use shared::{
     all_of::{error::ParseAllOfError, AllOf},
     array::{
-        error::{ParseOneOfArrayError, ParsePropertyTypeReferenceArrayError},
+        error::{
+            ParseEntityTypeReferenceArrayError, ParseOneOfArrayError,
+            ParsePropertyTypeReferenceArrayError,
+        },
         Array, ValueOrArray,
     },
     object::{error::ParsePropertyTypeObjectError, Object},
@@ -50,7 +50,7 @@ pub(crate) mod repr {
     pub(crate) use super::{
         data_type::repr::{DataType, DataTypeReference},
         entity_type::{
-            relationships::repr::{Relationships, ValueOrMaybeOrderedArray},
+            relationships::repr::Relationships,
             repr::{EntityType, EntityTypeReference},
         },
         link_type::repr::LinkType,
