@@ -66,7 +66,7 @@ const config: PlaywrightTestConfig = {
 
     // Playwright docs recommend "on-first-retry" as it is slightly more resource-efficient.
     // We can switch to this option when we have more tests and most of them are stable.
-    trace: "on",
+    trace: "retain-on-failure",
   },
 
   workers: 1, // Concurrent tests break login
