@@ -10,14 +10,16 @@ const getFileTimestamp = async (filePath: string) => {
 };
 
 /**
- * Playwright tests may occasionally fail due to browser flakiness (mostly happens on Webkit).
- * Before an integration test is re-run, the database is reset and data like user ids is regenerated.
- * When tests revisit a page with getStaticProps, `next start` may return cached HTML or JSON.
- * The responses may contain field values that are no longer valid, which in turn may produce broken DOM.
- * To avoid this, we delete cached results of `getStaticProps` after seeding the database.
+ * Playwright tests may occasionally fail due to browser flakiness (mostly
+ * happens on Webkit). Before an integration test is re-run, the database is
+ * reset and data like user ids is regenerated. When tests revisit a page with
+ * getStaticProps, `next start` may return cached HTML or JSON. Server responses
+ * may contain field values that are no longer valid, which in turn may produce
+ * broken DOM. To avoid this, we delete cached results of `getStaticProps` after
+ * seeding the database.
  *
- * For this trick to work, `next.config.js` → `experimental` → `isrMemoryCacheSize`
- * needs to be set to zero. This value should not affect Vercel deployments. See docs:
+ * For this trick to work, `next.config.js → experimental → isrMemoryCacheSize`
+ * needs to be set to zero. This value should not affect Vercel deployments. Docs:
  * https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration#self-hosting-isr
  */
 const deleteIsrFilesCreatedAfterNextBuild = async () => {
@@ -40,5 +42,3 @@ export const resetSite = async () => {
 export const getBlocksData = async (): Promise<ExpandedBlockMetadata[]> => {
   return await fs.readJson("./blocks-data.json");
 };
-
-await deleteIsrFilesCreatedAfterNextBuild();

@@ -65,10 +65,7 @@ export const getStaticProps: GetStaticProps<
     props: {
       blocks: excludeHiddenBlocks(blocksResponse.data?.blocks || []),
       entityTypes: entityTypesResponse.data?.entityTypes || [],
-      user: {
-        ...userResponse.data.user,
-        shortname: `${userResponse.data.user.shortname} | ${+new Date()}`,
-      },
+      user: userResponse.data.user,
     },
     revalidate: 60,
   };
