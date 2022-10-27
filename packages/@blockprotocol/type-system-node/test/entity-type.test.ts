@@ -123,6 +123,19 @@ const entityTypes: EntityType[] = [
   },
   {
     kind: "entityType",
+    $id: "https://blockprotocol.org/@alice/types/entity-type/organization/v/1",
+    type: "object",
+    title: "Organization",
+    pluralTitle: "Organizations",
+    allOf: [],
+    properties: {
+      "https://blockprotocol.org/@alice/types/property-type/name/": {
+        $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
+      },
+    },
+  },
+  {
+    kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/page/v/2",
     type: "object",
     title: "Page",
@@ -214,6 +227,19 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
+  },
+  {
+    kind: "entityType",
+    $id: "https://blockprotocol.org/@alice/types/entity-type/knows/v/1",
+    type: "object",
+    title: "Knows",
+    pluralTitle: "Knows",
+    allOf: [
+      {
+        $ref: "https://blockprotocol.org/@blockprotocol/types/entity-type/relationship/v/1",
+      },
+    ],
+    properties: {},
   },
 ];
 
@@ -420,6 +446,31 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         reason: "InvalidPropertyKey",
         inner: {
           reason: "MissingTrailingSlash",
+        },
+      },
+    },
+  ],
+  [
+    "Broken ref in inheritance",
+    {
+      kind: "entityType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
+      type: "object",
+      title: "Broken",
+      pluralTitle: "Broken",
+      allOf: [
+        {
+          $ref: "https://blockprotocol.org/@alice/types/property-type/relationship/v/1.2",
+        },
+      ],
+      properties: {},
+    },
+    {
+      reason: "InvalidAllOf",
+      inner: {
+        reason: "EntityTypeReferenceError",
+        inner: {
+          reason: "AdditionalEndContent",
         },
       },
     },

@@ -30,6 +30,8 @@ pub struct EntityType {
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
+    #[serde(flatten)]
+    all_of: repr::AllOf<EntityTypeReference>,
     // TODO - Improve the typing of the values
     #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, any>"))]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
@@ -84,6 +86,11 @@ impl TryFrom<EntityType> for super::EntityType {
             .try_into()
             .map_err(ParseEntityTypeError::InvalidPropertyTypeObject)?;
 
+        let inherits_from = entity_type_repr
+            .all_of
+            .try_into()
+            .map_err(ParseEntityTypeError::InvalidAllOf)?;
+
         let links = entity_type_repr
             .links
             .try_into()
@@ -95,6 +102,7 @@ impl TryFrom<EntityType> for super::EntityType {
             entity_type_repr.plural_title,
             entity_type_repr.description,
             property_object,
+            inherits_from,
             links,
             default,
             examples,
@@ -127,9 +135,10 @@ impl From<super::EntityType> for EntityType {
             title: entity_type.title,
             plural_title: entity_type.plural_title,
             description: entity_type.description,
+            property_object: entity_type.property_object.into(),
+            all_of: entity_type.inherits_from.into(),
             default,
             examples,
-            property_object: entity_type.property_object.into(),
             links: entity_type.links.into(),
         }
     }
