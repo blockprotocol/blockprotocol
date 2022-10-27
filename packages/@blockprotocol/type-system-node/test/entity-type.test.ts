@@ -71,7 +71,7 @@ const entityTypes: EntityType[] = [
       },
     },
     required: ["https://blockprotocol.org/@alice/types/property-type/name/"],
-    relationships: {
+    links: {
       "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1": {
         type: "array",
         items: {
@@ -83,7 +83,7 @@ const entityTypes: EntityType[] = [
         },
       },
     },
-    requiredRelationships: [
+    requiredLinks: [
       "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
     ],
     examples: [],
@@ -95,7 +95,7 @@ const entityTypes: EntityType[] = [
     title: "Building",
     pluralTitle: "Buildings",
     properties: {},
-    relationships: {
+    links: {
       "https://blockprotocol.org/@alice/types/entity-type/located-at/v/1": {
         type: "array",
         items: {
@@ -154,7 +154,7 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/text/v/1",
       },
     },
-    relationships: {
+    links: {
       "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1": {
         type: "array",
         items: {
@@ -189,7 +189,7 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
-    relationships: {
+    links: {
       "https://blockprotocol.org/@alice/types/entity-type/friend-of/v/1": {
         type: "array",
         items: {
@@ -214,7 +214,7 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
-    relationships: {
+    links: {
       "https://blockprotocol.org/@alice/types/entity-type/contains/v/1": {
         type: "array",
         items: {
@@ -248,7 +248,7 @@ const entityTypes: EntityType[] = [
     pluralTitle: "Knows",
     allOf: [
       {
-        $ref: "https://blockprotocol.org/@blockprotocol/types/entity-type/relationship/v/1",
+        $ref: "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1",
       },
     ],
     properties: {},
@@ -400,7 +400,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
-      relationships: {
+      links: {
         "https://blockprotocol.org/@alice/types/entity-type/friend-of/v/1.3": {
           type: "array",
           items: {
@@ -438,7 +438,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
-      relationships: {
+      links: {
         "https://blockprotocol.org/@alice/types/entity-type/friend-of/v/1": {
           type: "array",
           items: {
@@ -472,7 +472,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       pluralTitle: "Broken",
       allOf: [
         {
-          $ref: "https://blockprotocol.org/@alice/types/property-type/relationship/v/1.2",
+          $ref: "https://blockprotocol.org/@alice/types/property-type/link/v/1.2",
         },
       ],
       properties: {},

@@ -1,5 +1,5 @@
 mod error;
-pub(in crate::ontology) mod relationships;
+pub(in crate::ontology) mod links;
 pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
@@ -13,7 +13,7 @@ pub use error::ParseEntityTypeError;
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
-    AllOf, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, Relationships, ValidateUri,
+    AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUri,
     ValidationError, ValueOrArray,
 };
 
@@ -25,7 +25,7 @@ pub struct EntityType {
     description: Option<String>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
     inherits_from: AllOf<EntityTypeReference>,
-    relationships: Relationships,
+    links: Links,
     default: HashMap<BaseUri, serde_json::Value>,
     examples: Vec<HashMap<BaseUri, serde_json::Value>>,
 }
@@ -41,7 +41,7 @@ impl EntityType {
         description: Option<String>,
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
         inherits_from: AllOf<EntityTypeReference>,
-        relationships: Relationships,
+        links: Links,
         default: HashMap<BaseUri, serde_json::Value>,
         examples: Vec<HashMap<BaseUri, serde_json::Value>>,
     ) -> Self {
@@ -52,7 +52,7 @@ impl EntityType {
             description,
             property_object,
             inherits_from,
-            relationships,
+            links,
             default,
             examples,
         }
@@ -94,15 +94,15 @@ impl EntityType {
     }
 
     #[must_use]
-    pub const fn relationships(
+    pub const fn links(
         &self,
     ) -> &HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>> {
-        self.relationships.relationships()
+        self.links.links()
     }
 
     #[must_use]
-    pub fn required_relationships(&self) -> &[VersionedUri] {
-        self.relationships.required()
+    pub fn required_links(&self) -> &[VersionedUri] {
+        self.links.required()
     }
 
     #[must_use]
@@ -134,19 +134,15 @@ impl EntityType {
             .all_of()
             .iter()
             .map(EntityTypeReference::uri)
-            .chain(self.relationships().keys())
-            .chain(
-                self.relationships()
-                    .values()
-                    .flat_map(|maybe_ordered_array| {
-                        maybe_ordered_array
-                            .array()
-                            .items()
-                            .one_of()
-                            .iter()
-                            .map(EntityTypeReference::uri)
-                    }),
-            )
+            .chain(self.links().keys())
+            .chain(self.links().values().flat_map(|maybe_ordered_array| {
+                maybe_ordered_array
+                    .array()
+                    .items()
+                    .one_of()
+                    .iter()
+                    .map(EntityTypeReference::uri)
+            }))
             .collect()
     }
 }

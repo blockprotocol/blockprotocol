@@ -18,7 +18,7 @@ mod shared;
 
 pub use data_type::{DataType, DataTypeReference, ParseDataTypeError};
 pub use entity_type::{
-    relationships::{MaybeOrderedArray, ParseRelationshipsError, Relationships},
+    links::{Links, MaybeOrderedArray, ParseLinksError},
     EntityType, EntityTypeReference, ParseEntityTypeError,
 };
 pub use link_type::{LinkType, ParseLinkTypeError};
@@ -50,7 +50,7 @@ pub(crate) mod repr {
     pub(crate) use super::{
         data_type::repr::{DataType, DataTypeReference},
         entity_type::{
-            relationships::repr::Relationships,
+            links::repr::Links,
             repr::{EntityType, EntityTypeReference},
         },
         link_type::repr::LinkType,

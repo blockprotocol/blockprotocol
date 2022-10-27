@@ -19,7 +19,7 @@
     }
   },
   "required": ["https://blockprotocol.org/@alice/types/property-type/name/"],
-  "relationships": {
+  "links": {
     "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1": {
       "type": "array",
       "items": {
@@ -31,7 +31,7 @@
       }
     }
   },
-  "requiredRelationships": [
+  "requiredLinks": [
     "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1"
   ]
 }

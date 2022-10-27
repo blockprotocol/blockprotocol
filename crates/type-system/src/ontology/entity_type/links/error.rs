@@ -8,9 +8,9 @@ use crate::{uri::ParseVersionedUriError, ParseEntityTypeReferenceArrayError, Val
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
-pub enum ParseRelationshipsError {
+pub enum ParseLinksError {
     #[error("invalid link key: `{0}`")]
-    InvalidRelationshipKey(ParseVersionedUriError),
+    InvalidLinkKey(ParseVersionedUriError),
     #[error("invalid array definition: `{0}`")]
     InvalidArray(ParseEntityTypeReferenceArrayError),
     #[error("invalid key inside required: `{0}`")]

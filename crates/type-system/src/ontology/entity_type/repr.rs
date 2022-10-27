@@ -42,7 +42,7 @@ pub struct EntityType {
     #[serde(flatten)]
     property_object: repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
     #[serde(flatten)]
-    relationships: repr::Relationships,
+    links: repr::Links,
 }
 
 impl TryFrom<EntityType> for super::EntityType {
@@ -91,10 +91,10 @@ impl TryFrom<EntityType> for super::EntityType {
             .try_into()
             .map_err(ParseEntityTypeError::InvalidAllOf)?;
 
-        let relationships = entity_type_repr
-            .relationships
+        let links = entity_type_repr
+            .links
             .try_into()
-            .map_err(ParseEntityTypeError::InvalidRelationships)?;
+            .map_err(ParseEntityTypeError::InvalidLinks)?;
 
         Ok(Self::new(
             id,
@@ -103,7 +103,7 @@ impl TryFrom<EntityType> for super::EntityType {
             entity_type_repr.description,
             property_object,
             inherits_from,
-            relationships,
+            links,
             default,
             examples,
         ))
@@ -139,7 +139,7 @@ impl From<super::EntityType> for EntityType {
             all_of: entity_type.inherits_from.into(),
             default,
             examples,
-            relationships: entity_type.relationships.into(),
+            links: entity_type.links.into(),
         }
     }
 }

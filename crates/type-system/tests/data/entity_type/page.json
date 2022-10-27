@@ -9,7 +9,7 @@
       "$ref": "https://blockprotocol.org/@alice/types/property-type/text/v/1"
     }
   },
-  "relationships": {
+  "links": {
     "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1": {
       "type": "array",
       "items": {

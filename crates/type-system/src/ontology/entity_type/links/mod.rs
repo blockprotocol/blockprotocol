@@ -3,7 +3,7 @@ pub(in crate::ontology) mod repr;
 
 use std::collections::HashMap;
 
-pub use error::ParseRelationshipsError;
+pub use error::ParseLinksError;
 
 use crate::{
     uri::{BaseUri, VersionedUri},
@@ -11,58 +11,57 @@ use crate::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Relationships {
-    relationships: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
-    required_relationships: Vec<VersionedUri>,
+pub struct Links {
+    links: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
+    required_links: Vec<VersionedUri>,
 }
 
-impl Relationships {
-    /// Creates a new `Relationships` without validating.
+impl Links {
+    /// Creates a new `Links` without validating.
     #[must_use]
     pub const fn new_unchecked(
-        relationships: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
+        links: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
         required: Vec<VersionedUri>,
     ) -> Self {
         Self {
-            relationships,
-            required_relationships: required,
+            links,
+            required_links: required,
         }
     }
 
-    /// Creates a new `Relationships`.
+    /// Creates a new `Links`.
     ///
     /// # Errors
     ///
-    /// - [`ValidationError::MissingRequiredRelationship`] if a required link is not a key in
-    ///   `relationships`.
+    /// - [`ValidationError::MissingRequiredLink`] if a required link is not a key in `links`.
     pub fn new(
-        relationships: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
+        links: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
         required: Vec<VersionedUri>,
     ) -> Result<Self, ValidationError> {
-        let relationships = Self::new_unchecked(relationships, required);
-        relationships.validate()?;
-        Ok(relationships)
+        let links = Self::new_unchecked(links, required);
+        links.validate()?;
+        Ok(links)
     }
 
     fn validate(&self) -> Result<(), ValidationError> {
         for link in self.required() {
-            if !self.relationships().contains_key(link) {
-                return Err(ValidationError::MissingRequiredRelationship(link.clone()));
+            if !self.links().contains_key(link) {
+                return Err(ValidationError::MissingRequiredLink(link.clone()));
             }
         }
         Ok(())
     }
 
     #[must_use]
-    pub const fn relationships(
+    pub const fn links(
         &self,
     ) -> &HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>> {
-        &self.relationships
+        &self.links
     }
 
     #[must_use]
     pub fn required(&self) -> &[VersionedUri] {
-        &self.required_relationships
+        &self.required_links
     }
 }
 
@@ -103,7 +102,7 @@ impl<T: ValidateUri> ValidateUri for MaybeOrderedArray<T> {
     }
 }
 
-// TODO - write some tests for validation of Relationship schemas, although most testing
+// TODO - write some tests for validation of Link schemas, although most testing
 //   happens on entity types
 
 // #[cfg(test)]
