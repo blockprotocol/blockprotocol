@@ -13,7 +13,7 @@ pub use error::ParseEntityTypeError;
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
-    Links, Object, OneOf, PropertyTypeReference, ValidateUri, ValidationError, ValueOrArray,
+    AllOf, Links, Object, OneOf, PropertyTypeReference, ValidateUri, ValidationError, ValueOrArray,
     ValueOrMaybeOrderedArray,
 };
 
@@ -24,6 +24,7 @@ pub struct EntityType {
     plural_title: String,
     description: Option<String>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
+    inherits_from: AllOf<EntityTypeReference>,
     links: Links,
     default: HashMap<BaseUri, serde_json::Value>,
     examples: Vec<HashMap<BaseUri, serde_json::Value>>,
@@ -39,6 +40,7 @@ impl EntityType {
         plural_title: String,
         description: Option<String>,
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
+        inherits_from: AllOf<EntityTypeReference>,
         links: Links,
         default: HashMap<BaseUri, serde_json::Value>,
         examples: Vec<HashMap<BaseUri, serde_json::Value>>,
@@ -49,6 +51,7 @@ impl EntityType {
             plural_title,
             description,
             property_object,
+            inherits_from,
             links,
             default,
             examples,
@@ -73,6 +76,11 @@ impl EntityType {
     #[must_use]
     pub fn description(&self) -> Option<&str> {
         self.description.as_deref()
+    }
+
+    #[must_use]
+    pub const fn inherits_from(&self) -> &AllOf<EntityTypeReference> {
+        &self.inherits_from
     }
 
     #[must_use]
