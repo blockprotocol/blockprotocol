@@ -94,7 +94,7 @@ The starter blocks created by `create-block-app` implement a simple example of t
 
 The Graph Service describes how entities can be created, queried, updated, and linked together, including the block entity. It enables your block to create, read, update, and delete data in the embedding application.
 
-The Graph Service is available via the `graphService` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](/docs/spec/graph-service).
+The Graph Service is available via the `graphService` property in each starter template. It has a number of methods corresponding to the messages defined in the [specification](https://blockprotocol.org/docs/spec/graph-service).
 
 Using these methods in combination, you can create complex graphs from within a block without having to know anything about the implementation details of the application embedding it.
 
@@ -157,7 +157,7 @@ Any entities linked to the block will appear in the `linkedEntities` property, w
 
 If you are using TypeScript, the types for methods available on `graphService` (as defined in the `@blockprotocol/graph` package) should help you understand what methods are available and how they operate.
 
-You can also review the messages defined in the graph specification [here](/docs/spec/graph-service). If you do so, bear in mind the following:
+You can also review the messages defined in the graph specification [here](https://blockprotocol.org/docs/spec/graph-service). If you do so, bear in mind the following:
 
 - only the ones marked as `source: "block"` are available as methods to your block.
 - any message marked as `sentOnInitialization` with `source: "embeder"` will be passed to your block as soon as it’s loaded. Remember that `custom-element` and `react`-type blocks receive these messages as properties under a `graph` object, whereas `html` blocks can register callbacks for each message.
@@ -190,7 +190,7 @@ You now have a block package that you can provide to apps to use, by **publishin
 
 ## Publish
 
-Once you've built a block, you can add it to the [Hub](/hub), so that your block will have an instant online demo playground,
+Once you've built a block, you can add it to the [Hub](https://blockprotocol.org/hub), so that your block will have an instant online demo playground,
 and will be searchable via our block API.
 
 To publish a block on the Hub take the following steps.
@@ -198,7 +198,7 @@ To publish a block on the Hub take the following steps.
 ### In your browser
 
 - Sign up for an account on this site if you haven’t already – click 'sign up' in the top right
-- [Create an API key](https://blockprotocol.org/settings/api-keys and copy it
+- [Create an API key](https://blockprotocol.org/settings/api-keys) and copy it
 
 ### In your terminal
 
