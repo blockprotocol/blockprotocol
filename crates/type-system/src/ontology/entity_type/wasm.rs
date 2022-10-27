@@ -17,7 +17,7 @@ fn convert_entity_type(
 }
 
 #[wasm_bindgen(typescript_custom_section)]
-const VALIDATE_LINK_TYPE_DEF: &'static str = r#"
+const VALIDATE_ENTITY_TYPE_DEF: &'static str = r#"
 /**
  * Checks if a given Entity Type is correctly formed
  *

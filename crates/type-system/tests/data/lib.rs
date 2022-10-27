@@ -3,5 +3,4 @@
 
 pub(crate) mod data_type;
 pub(crate) mod entity_type;
-pub(crate) mod link_type;
 pub(crate) mod property_type;
