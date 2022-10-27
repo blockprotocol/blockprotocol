@@ -119,32 +119,6 @@ function takeObject(idx) {
     return ret;
 }
 /**
-* @param {any} data_type_obj
-* @returns {any}
-*/
-export function validateDataType(data_type_obj) {
-    try {
-        const ret = wasm.validateDataType(addBorrowedObject(data_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
-* @param {any} entity_type_obj
-* @returns {any}
-*/
-export function validateEntityType(entity_type_obj) {
-    try {
-        const ret = wasm.validateEntityType(addBorrowedObject(entity_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
 * @param {any} link_type_obj
 * @returns {any}
 */
@@ -164,6 +138,32 @@ export function validateLinkType(link_type_obj) {
 export function validatePropertyType(property_type_obj) {
     try {
         const ret = wasm.validatePropertyType(addBorrowedObject(property_type_obj));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+/**
+* @param {any} data_type_obj
+* @returns {any}
+*/
+export function validateDataType(data_type_obj) {
+    try {
+        const ret = wasm.validateDataType(addBorrowedObject(data_type_obj));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+/**
+* @param {any} entity_type_obj
+* @returns {any}
+*/
+export function validateEntityType(entity_type_obj) {
+    try {
+        const ret = wasm.validateEntityType(addBorrowedObject(entity_type_obj));
         return takeObject(ret);
     } finally {
         heap[stack_pointer++] = undefined;
