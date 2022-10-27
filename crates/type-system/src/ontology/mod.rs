@@ -29,6 +29,7 @@ pub use property_type::{
     ParsePropertyTypeError, PropertyType, PropertyTypeReference, PropertyValues,
 };
 pub use shared::{
+    all_of::{error::ParseAllOfError, AllOf},
     array::{
         error::{ParseOneOfArrayError, ParsePropertyTypeReferenceArrayError},
         Array, ValueOrArray,
@@ -55,6 +56,7 @@ pub(crate) mod repr {
         link_type::repr::LinkType,
         property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
         shared::{
+            all_of::repr::AllOf,
             array::repr::{Array, ValueOrArray},
             object::repr::Object,
             one_of::repr::OneOf,
