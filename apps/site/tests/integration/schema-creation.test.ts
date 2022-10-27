@@ -1,11 +1,11 @@
 import { expect, test } from "playwright-test-coverage";
 
-import { resetDb } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
 import { createSchema } from "../shared/schemas.js";
 
 test("user should be able to create schema", async ({ page }) => {
-  await resetDb();
+  await resetSite();
 
   await page.goto("/");
 
