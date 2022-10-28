@@ -1,11 +1,11 @@
 import { expect, test } from "playwright-test-coverage";
 
-import { resetDb } from "../shared/fixtures";
-import { login } from "../shared/nav";
-import { createSchema } from "../shared/schemas";
+import { resetSite } from "../shared/fixtures.js";
+import { login } from "../shared/nav.js";
+import { createSchema } from "../shared/schemas.js";
 
 test.beforeEach(async () => {
-  await resetDb();
+  await resetSite();
 });
 
 test("schema page should contain key elements", async ({ page }) => {

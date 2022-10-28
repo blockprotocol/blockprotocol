@@ -66,7 +66,7 @@ pub(crate) mod tests {
     {
         let deserialized: T = T::from_str(input).expect("failed to deserialize");
         let _reserialized =
-            serde_json::to_value(&deserialized.clone().into()).expect("failed to serialize");
+            serde_json::to_value(deserialized.clone().into()).expect("failed to serialize");
 
         if let Some(repr) = expected_native_repr {
             assert_eq!(deserialized, repr);

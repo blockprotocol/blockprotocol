@@ -10,7 +10,7 @@ The Block Protocol provides a specification for the interaction between web bloc
 
 Its ultimate goal in doing so is to enable any blocks to be usable by any web application without any configuration, once both are compliant with the Protocol.
 
-More information on the motivation can be found in [the specification overview.](/docs/spec)
+More information on the motivation can be found in [the specification overview.](https://blockprotocol.org/docs/spec)
 
 </FAQ>
 
@@ -83,7 +83,7 @@ The Block Protocol advances HASH’s mission by encouraging both data itself and
 
 <FAQ question="Where can users host block and entity data?">
 
-Blocks can be [published on the Hub](/docs/developing-blocks#publishing) to make them browsable on [blockprotocol.org](/hub), and to make their metadata and source code available via our API.
+Blocks can be [published on the Hub](https://blockprotocol.org/docs/developing-blocks#publishing) to make them browsable on [blockprotocol.org](https://blockprotocol.org/hub), and to make their metadata and source code available via our API.
 
 Entity data can be hosted in any application which implements the Block Protocol (e.g. [HASH](https://hash.ai/platform/hash)). _If you are developing an embedding application you would like listed here, please get in touch._
 
@@ -93,7 +93,7 @@ Entity data can be hosted in any application which implements the Block Protocol
 
 Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
 
-We believe the best blocks will communicate data back and forth with the embedding application, making use of the [operations defined in the spec](/docs/spec/graph-service).
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-service).
 
 For example, a mapping block which persists a user’s choices about map positioning or styling back to the application – all without the application having to know anything about the block, or the block having to know anything about the application.
 
@@ -105,7 +105,7 @@ One aim of the Block Protocol is that blocks can store and retrieve data in an a
 
 Blocks can have their own local state - they might use this to allow users to explore data or draft changes, without saving anything.
 
-To save data beyond the session, blocks should make use of the [operations defined in the spec](/docs/spec/graph-service) to send updates to the embedding application.
+To save data beyond the session, blocks should make use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-service) to send updates to the embedding application.
 
 </FAQ>
 
@@ -196,7 +196,7 @@ No, and _for the most part_ the Block Protocol itself does not define the struct
 
 The Block Protocol specifies that [JSON Schema](https://json-schema.org/) should be used to describe the properties of an entity and expected types of property values - not what those properties should be.
 
-You can use existing [schema.org](https://schema.org) schemas, or can create new schemas through the [Block Protocol](/) website, once logged in. The schema creator on the Block Protocol website aims to make it easier for users to define the different types of data structures that their blocks will work with.
+You can use existing [schema.org](https://schema.org) schemas, or can create new schemas through the [Block Protocol](https://blockprotocol.org/) website, once logged in. The schema creator on the Block Protocol website aims to make it easier for users to define the different types of data structures that their blocks will work with.
 
 We don’t prescribe canonical types for any _thing_, but do recommend that users link their schemas and properties to [schema.org](https://schema.org) types and properties where possible, to help in making the pages that use their schemas machine-readable. We have included a way of doing so in our schema editor. Mapping different schemas and their properties to one another is a process known as ‘crosswalking’.
 
@@ -255,7 +255,7 @@ All schemas created on the Block Protocol website are currently public. In futur
 [schema.org](https://schema.org) provides a great base ontology for defining lots of types of ‘things’ out there in the world.
 
 1.  Many times, certain ‘properties’ or data won’t be relevant to your use case, resulting in bloated entity type definitions.
-1.  On other occasions you’ll want to store information differently than how it’s set out in the [Schema.org](http://schema.org) definition. For example, [schema.org/Person](http://schema.org/Person) defines a person as having a `givenName` and a `familyName` and yet in various cultures this isn’t guaranteed. HASH uses `preferredName` and `legalName` instead - in communications and billing contexts respectively. You can view the HASH ‘Person’ schema at [https://blockprotocol.org/@hash/types/Person](/@hash/types/Person) and see how it crosswalks with the canonical definition of a person provided by Schema.org. This is just one example of how custom schemas can be made to relate back to the core ontology provided by Schema.org.
+1.  On other occasions you’ll want to store information differently than how it’s set out in the [Schema.org](http://schema.org) definition. For example, [schema.org/Person](http://schema.org/Person) defines a person as having a `givenName` and a `familyName` and yet in various cultures this isn’t guaranteed. HASH uses `preferredName` and `legalName` instead - in communications and billing contexts respectively. You can view the HASH ‘Person’ schema at [https://blockprotocol.org/@hash/types/Person](https://blockprotocol.org/@hash/types/Person) and see how it crosswalks with the canonical definition of a person provided by Schema.org. This is just one example of how custom schemas can be made to relate back to the core ontology provided by Schema.org.
 1.  The [Schema.org](https://schema.org) ontology is slow to change. This is by design, similar to how most standards organizations operate. And while it can move fast when clear universal impetus exists (evidenced by its excellent response to COVID) it ultimately represents a pseudo-centralized model of maintaining a schema registry. The Block Protocol provides the permissionless ability to build atop and extend [Schema.org](https://schema.org), unbounded by the processing constraints and imagination of any single working group or organization.
 1.  Not everything is included in the [Schema.org](https://schema.org) ontology. For example, although _animal shelters_ and _pet stores_ exist, _animals_ and _pets_ themselves are missing entirely. This arguably reflects the priorities of schema.org’s maintainers (notably corporates, and search engines at that).
 
@@ -283,7 +283,7 @@ We expect to have to add custom keywords to cover relationships which JSON Schem
 
 We encourage applications to include JSON-LD describing entities on their public pages to make them machine-readable.
 
-In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](/docs/spec/graph-service). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
+In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/docs/spec/graph-service). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
 
 </FAQ>
 

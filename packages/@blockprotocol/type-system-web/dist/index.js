@@ -119,19 +119,6 @@ function takeObject(idx) {
     return ret;
 }
 /**
-* @param {any} link_type_obj
-* @returns {any}
-*/
-export function validateLinkType(link_type_obj) {
-    try {
-        const ret = wasm.validateLinkType(addBorrowedObject(link_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
 * @param {any} data_type_obj
 * @returns {any}
 */
@@ -287,6 +274,9 @@ function getImports() {
         getInt32Memory0()[arg0 / 4 + 1] = len0;
         getInt32Memory0()[arg0 / 4 + 0] = ptr0;
     };
+    imports.wbg.__wbindgen_throw = function(arg0, arg1) {
+        throw new Error(getStringFromWasm0(arg0, arg1));
+    };
 
     return imports;
 }
@@ -305,12 +295,15 @@ function finalizeInit(instance, module) {
     return wasm;
 }
 
-function initSync(bytes) {
+function initSync(module) {
     const imports = getImports();
 
     initMemory(imports);
 
-    const module = new WebAssembly.Module(bytes);
+    if (!(module instanceof WebAssembly.Module)) {
+        module = new WebAssembly.Module(module);
+    }
+
     const instance = new WebAssembly.Instance(module, imports);
 
     return finalizeInit(instance, module);

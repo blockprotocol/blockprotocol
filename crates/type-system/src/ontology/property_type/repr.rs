@@ -23,10 +23,10 @@ enum PropertyTypeTag {
 pub struct PropertyType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
     kind: PropertyTypeTag,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
-    plural_title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
@@ -43,7 +43,6 @@ impl TryFrom<PropertyType> for super::PropertyType {
         Ok(Self::new(
             id,
             property_type_repr.title,
-            property_type_repr.plural_title,
             property_type_repr.description,
             property_type_repr
                 .one_of
@@ -59,7 +58,6 @@ impl From<super::PropertyType> for PropertyType {
             kind: PropertyTypeTag::PropertyType,
             id: property_type.id.to_string(),
             title: property_type.title,
-            plural_title: property_type.plural_title,
             description: property_type.description,
             one_of: property_type.one_of.into(),
         }
@@ -70,6 +68,7 @@ impl From<super::PropertyType> for PropertyType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PropertyTypeReference {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$ref")]
     uri: String,
 }

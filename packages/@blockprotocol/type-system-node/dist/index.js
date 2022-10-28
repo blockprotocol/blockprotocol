@@ -121,19 +121,6 @@ function takeObject(idx) {
     return ret;
 }
 /**
-* @param {any} link_type_obj
-* @returns {any}
-*/
-module.exports.validateLinkType = function(link_type_obj) {
-    try {
-        const ret = wasm.validateLinkType(addBorrowedObject(link_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
-    }
-};
-
-/**
 * @param {any} data_type_obj
 * @returns {any}
 */
@@ -255,6 +242,10 @@ module.exports.__wbindgen_json_serialize = function(arg0, arg1) {
     const len0 = WASM_VECTOR_LEN;
     getInt32Memory0()[arg0 / 4 + 1] = len0;
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+};
+
+module.exports.__wbindgen_throw = function(arg0, arg1) {
+    throw new Error(getStringFromWasm0(arg0, arg1));
 };
 
 const path = require('path').join(__dirname, 'index_bg.wasm');

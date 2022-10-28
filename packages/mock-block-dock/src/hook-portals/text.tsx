@@ -4,7 +4,6 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
 } from "react";
 import {
   BaseEditor,
@@ -78,15 +77,40 @@ const isMaybeText = (value: unknown): value is MaybePlainOrRichText => {
   );
 };
 
+const serializeToPlaintext = (nodes: Descendant[]) => {
+  return nodes.map((node) => Node.string(node)).join("\n");
+};
+
 const generateComparableString = (text: MaybePlainOrRichText) =>
-  typeof text === "string" ? text : JSON.stringify(text);
+  typeof text === "string" ? text : serializeToPlaintext(text ?? []);
+
+/**
+ * Compare two texts to see if they differ either
+ * - in plain text (if at least one is a string), or
+ * - in text and/or formatting (if both are rich text)
+ */
+const isTextDifferent = (
+  first: MaybePlainOrRichText,
+  second: MaybePlainOrRichText,
+) => {
+  if (typeof first === "string") {
+    return first !== generateComparableString(second);
+  }
+  if (typeof second === "string") {
+    return second !== serializeToPlaintext(first ?? []);
+  }
+  // These are both rich text, so we don't convert them to plain text – we want to detect formatting differences
+  return JSON.stringify(first) !== JSON.stringify(second);
+};
 
 export const TextHookView = ({
   readonly = false,
   text = "",
   updateText,
 }: TextHookViewProps) => {
-  const [editor] = useState(() => withReact(createEditor()));
+  const editor = useMemo(() => {
+    return withReact(createEditor());
+  }, []);
 
   const renderLeaf = useCallback(
     (props: RenderLeafProps) => <Leaf {...props} />,
@@ -99,9 +123,9 @@ export const TextHookView = ({
     );
   }
 
-  const previousTextRef = useRef<string | null>(null);
+  const previousTextRef = useRef<MaybePlainOrRichText>(null);
   if (previousTextRef.current === null) {
-    previousTextRef.current = generateComparableString(text);
+    previousTextRef.current = text;
   }
 
   const nodesFromProps: Descendant[] = useMemo(
@@ -118,9 +142,8 @@ export const TextHookView = ({
   );
 
   useEffect(() => {
-    const comparableString = generateComparableString(text);
-    if (comparableString !== previousTextRef.current) {
-      previousTextRef.current = comparableString;
+    if (isTextDifferent(text, previousTextRef.current)) {
+      previousTextRef.current = text;
       resetNodes(editor, nodesFromProps);
     }
   }, [editor, nodesFromProps, text]);
@@ -155,8 +178,20 @@ export const TextHookView = ({
   }, 200);
 
   return (
-    <div style={{ border: "1px solid rgba(0,0,0,0.5)" }}>
-      <Slate editor={editor} onChange={onChange} value={nodesFromProps}>
+    <div style={{ position: "relative" }}>
+      <Slate
+        editor={editor}
+        onChange={(value) => {
+          /**
+           * This is not just an optimization – updating Editor content from props (via the resetNodes function)
+           * also triggers onChange, and if external updates are coming quickly, this can cause a loop.
+           */
+          if (isTextDifferent(value, text)) {
+            onChange(value);
+          }
+        }}
+        value={nodesFromProps}
+      >
         <Toolbar />
         <Editable
           style={{ padding: "12px" }}
