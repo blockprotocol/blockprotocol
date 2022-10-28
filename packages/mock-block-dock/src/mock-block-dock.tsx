@@ -7,13 +7,16 @@ import {
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
-import { HookData } from "@blockprotocol/hook/.";
+import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
 import { useHookEmbedderService } from "@blockprotocol/hook/react";
 import {
   ComponentType,
+  Dispatch,
   FunctionComponent,
   lazy,
+  SetStateAction,
   Suspense,
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -151,70 +154,81 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     readonly,
   });
 
-  useHookEmbedderService(wrapperRef, {
-    callbacks: {
-      hook: async ({ data }) => {
-        if (!data) {
+  const hookCallback = useCallback<EmbedderHookMessageCallbacks["hook"]>(
+    async ({ data }) => {
+      if (!data) {
+        return {
+          errors: [
+            {
+              code: "INVALID_INPUT",
+              message: "Data is required with hook",
+            },
+          ],
+        };
+      }
+      const { hookId, node, type } = data;
+
+      if (hookId) {
+        const existingHook = hooks.get(hookId);
+        if (!existingHook) {
           return {
             errors: [
               {
-                code: "INVALID_INPUT",
-                message: "Data is required with hook",
+                code: "NOT_FOUND",
+                message: `Hook with id ${hookId} not found`,
               },
             ],
           };
         }
-        const { hookId, node, type } = data;
+      }
 
-        if (hookId) {
-          const existingHook = hooks.get(hookId);
-          if (!existingHook) {
-            return {
-              errors: [
-                {
-                  code: "NOT_FOUND",
-                  message: `Hook with id ${hookId} not found`,
-                },
-              ],
-            };
-          }
-        }
+      if (node === null && hookId) {
+        setHooks((currentHooks) => {
+          const draftHooks = new Map(currentHooks);
+          draftHooks.delete(hookId);
+          return draftHooks;
+        });
+        return { data: { hookId } };
+      }
 
-        if (node === null && hookId) {
-          setHooks((currentHooks) => {
-            const draftHooks = new Map(currentHooks);
-            draftHooks.delete(hookId);
-            return draftHooks;
+      if (data?.type === "text") {
+        const hookIdForReturn = hookId ?? uuid();
+
+        setHooks((currentHooks) => {
+          const draftHooks = new Map(currentHooks);
+          draftHooks.set(hookIdForReturn, {
+            ...data,
+            hookId: hookIdForReturn,
           });
-          return { data: { hookId } };
-        }
+          return draftHooks;
+        });
 
-        if (data?.type === "text") {
-          const hookIdForReturn = hookId ?? uuid();
+        return { data: { hookId: hookIdForReturn } };
+      }
 
-          setHooks((currentHooks) => {
-            const draftHooks = new Map(currentHooks);
-            draftHooks.set(hookIdForReturn, {
-              ...data,
-              hookId: hookIdForReturn,
-            });
-            return draftHooks;
-          });
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `Hook type ${type} not supported`,
+          },
+        ],
+      };
+    },
+    [hooks, setHooks],
+  );
 
-          return { data: { hookId: hookIdForReturn } };
-        }
-
-        return {
-          errors: [
-            {
-              code: "NOT_IMPLEMENTED",
-              message: `Hook type ${type} not supported`,
-            },
-          ],
-        };
-      },
+  const { hookService } = useHookEmbedderService(wrapperRef, {
+    callbacks: {
+      hook: hookCallback,
     },
   });
+
+  useEffect(() => {
+    if (hookService) {
+      hookService.on("hook", hookCallback);
+    }
+  }, [hookCallback, hookService]);
 
   useSendGraphValue({
     graphService,
