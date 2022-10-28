@@ -201,6 +201,11 @@ const entityTypes: EntityType[] = [
         },
         ordered: false,
       },
+      "https://blockprotocol.org/@alice/types/entity-type/owns/v/1": {
+        type: "array",
+        items: {},
+        ordered: false,
+      },
     },
   },
   {

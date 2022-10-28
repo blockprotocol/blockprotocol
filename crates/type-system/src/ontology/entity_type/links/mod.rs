@@ -1,5 +1,7 @@
 mod error;
 pub(in crate::ontology) mod repr;
+#[cfg(target_arch = "wasm32")]
+mod wasm;
 
 use std::collections::HashMap;
 
@@ -12,7 +14,7 @@ use crate::{
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Links {
-    links: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
+    links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
     required_links: Vec<VersionedUri>,
 }
 
@@ -20,7 +22,7 @@ impl Links {
     /// Creates a new `Links` without validating.
     #[must_use]
     pub const fn new_unchecked(
-        links: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
+        links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
         required: Vec<VersionedUri>,
     ) -> Self {
         Self {
@@ -35,7 +37,7 @@ impl Links {
     ///
     /// - [`ValidationError::MissingRequiredLink`] if a required link is not a key in `links`.
     pub fn new(
-        links: HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>,
+        links: HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>,
         required: Vec<VersionedUri>,
     ) -> Result<Self, ValidationError> {
         let links = Self::new_unchecked(links, required);
@@ -55,7 +57,7 @@ impl Links {
     #[must_use]
     pub const fn links(
         &self,
-    ) -> &HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>> {
+    ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
         &self.links
     }
 

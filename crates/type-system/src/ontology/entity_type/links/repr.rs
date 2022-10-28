@@ -6,7 +6,7 @@ use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
     repr, uri::VersionedUri, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
-    ParseLinksError,
+    ParseLinksError, ParseOneOfError,
 };
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
@@ -14,7 +14,7 @@ use crate::{
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Links {
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    links: HashMap<String, MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>,
+    links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required_links: Vec<String>,
 }
@@ -51,11 +51,13 @@ impl From<super::Links> for Links {
             .into_iter()
             .map(|(uri, val)| (uri.to_string(), val.into()))
             .collect();
+
         let required_links = object
             .required_links
             .into_iter()
             .map(|uri| uri.to_string())
             .collect();
+
         Self {
             links,
             required_links,
@@ -74,13 +76,13 @@ pub struct MaybeOrderedArray<T> {
     ordered: bool,
 }
 
-impl TryFrom<MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
-    for super::MaybeOrderedArray<OneOf<EntityTypeReference>>
+impl TryFrom<MaybeOrderedArray<MaybeOneOfEntityTypeReference>>
+    for super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>
 {
     type Error = ParseEntityTypeReferenceArrayError;
 
     fn try_from(
-        maybe_ordered_array_repr: MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>,
+        maybe_ordered_array_repr: MaybeOrderedArray<MaybeOneOfEntityTypeReference>,
     ) -> Result<Self, Self::Error> {
         Ok(Self {
             array: maybe_ordered_array_repr.array.try_into()?,
@@ -89,15 +91,59 @@ impl TryFrom<MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
     }
 }
 
-impl<T, R> From<super::MaybeOrderedArray<T>> for MaybeOrderedArray<R>
-where
-    R: From<T>,
+impl From<super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>
+    for MaybeOrderedArray<MaybeOneOfEntityTypeReference>
 {
-    fn from(maybe_ordered_array: super::MaybeOrderedArray<T>) -> Self {
+    fn from(
+        maybe_ordered_array: super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>,
+    ) -> Self {
         Self {
             array: maybe_ordered_array.array.into(),
             ordered: maybe_ordered_array.ordered,
         }
+    }
+}
+
+// TODO: tsify can't handle a flattened optional on `MaybeOneOfEntityTypeReference`, so we have to
+//  manually define the type, see wasm::MaybeOneOfEntityTypeReferencePatch
+//  https://github.com/madonoharu/tsify/issues/10
+
+// This struct is needed because its used inside generic parameters of other structs like `Array`.
+// Those structs can't apply serde's `default` or `skip_serializing_if` which means the option
+// doesn't de/serialize as required unless wrapped in an intermediary struct.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct MaybeOneOfEntityTypeReference {
+    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
+    inner: Option<repr::OneOf<repr::EntityTypeReference>>,
+}
+
+impl MaybeOneOfEntityTypeReference {
+    #[expect(
+        clippy::missing_const_for_fn,
+        reason = "constant functions cannot evaluate destructors"
+    )]
+    #[must_use]
+    pub fn into_inner(self) -> Option<repr::OneOf<repr::EntityTypeReference>> {
+        self.inner
+    }
+}
+
+impl From<Option<OneOf<EntityTypeReference>>> for MaybeOneOfEntityTypeReference {
+    fn from(option: Option<OneOf<EntityTypeReference>>) -> Self {
+        Self {
+            inner: option.map(std::convert::Into::into),
+        }
+    }
+}
+
+impl TryFrom<MaybeOneOfEntityTypeReference> for Option<OneOf<EntityTypeReference>> {
+    type Error = ParseOneOfError;
+
+    fn try_from(value: MaybeOneOfEntityTypeReference) -> Result<Self, Self::Error> {
+        value
+            .into_inner()
+            .map(std::convert::TryInto::try_into)
+            .transpose()
     }
 }
 
