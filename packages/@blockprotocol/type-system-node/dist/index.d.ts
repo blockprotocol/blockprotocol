@@ -1,9 +1,13 @@
 /* tslint:disable */
 /* eslint-disable */
-export type Result<T, E> = { type: "Ok"; inner: T } | { type: "Err"; inner: E };
-
 export interface OneOf<T> {
     oneOf: [T, ...T[]];
+}
+
+export interface Object<T> {
+    type: 'object';
+    properties: Record<string, T>;
+    required?: string[];
 }
 
 export type ValueOrArray<T> = T | Array<T>;
@@ -16,20 +20,6 @@ export interface Array<T> {
 }
 
 export type ParseLinksError = { reason: "InvalidLinkKey"; inner: ParseVersionedUriError } | { reason: "InvalidArray"; inner: ParseEntityTypeReferenceArrayError } | { reason: "InvalidRequiredKey"; inner: ParseVersionedUriError } | { reason: "ValidationError"; inner: ValidationError } | { reason: "InvalidJson"; inner: string };
-
-export interface PropertyType extends OneOf<PropertyValues> {
-    kind: 'propertyType';
-    $id: string;
-    title: string;
-    pluralTitle: string;
-    description?: string;
-}
-
-export interface PropertyTypeReference {
-    $ref: string;
-}
-
-export type PropertyValues = DataTypeReference | Object<ValueOrArray<PropertyTypeReference>> | Array<OneOf<PropertyValues>>;
 
 
 /**
@@ -51,6 +41,20 @@ export function validateDataType(dataType: DataType): Result<undefined, ParseDat
 export function validateEntityType(entityType: EntityType): Result<undefined, ParseEntityTypeError>;
 
 
+export interface PropertyType extends OneOf<PropertyValues> {
+    kind: 'propertyType';
+    $id: string;
+    title: string;
+    pluralTitle: string;
+    description?: string;
+}
+
+export interface PropertyTypeReference {
+    $ref: string;
+}
+
+export type PropertyValues = DataTypeReference | Object<ValueOrArray<PropertyTypeReference>> | Array<OneOf<PropertyValues>>;
+
 
 /**
  * Checks if a given Property Type is correctly formed
@@ -61,23 +65,7 @@ export function validateEntityType(entityType: EntityType): Result<undefined, Pa
 export function validatePropertyType(propertyType: PropertyType): Result<undefined, ParsePropertyTypeError>;
 
 
-export type MaybeOneOfEntityTypeReference = OneOf<EntityTypeReference> | {}};
-
 export type ParseDataTypeError = { reason: "InvalidVersionedUri"; inner: ParseVersionedUriError } | { reason: "InvalidJson"; inner: string };
-
-export interface EntityTypeReference {
-    $ref: string;
-}
-
-export interface EntityType extends AllOf<EntityTypeReference>, Object<ValueOrArray<PropertyTypeReference>>, Links {
-    kind: 'entityType';
-    $id: string;
-    title: string;
-    pluralTitle: string;
-    description?: string;
-    default?: Record<BaseUri, any>;
-    examples?: Record<BaseUri, any>[];
-}
 
 export type VersionedUri = `${string}/v/${number}`;
 
@@ -125,9 +113,21 @@ export function extractVersion(uri: VersionedUri): number;
 
 export type BaseUri = string;
 
-export interface AllOf<T> {
-    allOf?: T[];
+export interface EntityTypeReference {
+    $ref: string;
 }
+
+export interface EntityType extends AllOf<EntityTypeReference>, Object<ValueOrArray<PropertyTypeReference>>, Links {
+    kind: 'entityType';
+    $id: string;
+    title: string;
+    pluralTitle: string;
+    description?: string;
+    default?: Record<BaseUri, any>;
+    examples?: Record<BaseUri, any>[];
+}
+
+export type MaybeOneOfEntityTypeReference = OneOf<EntityTypeReference> | {};
 
 export type ParseVersionedUriError = { reason: "IncorrectFormatting" } | { reason: "MissingBaseUri" } | { reason: "MissingVersion" } | { reason: "InvalidVersion"; inner: string } | { reason: "AdditionalEndContent" } | { reason: "InvalidBaseUri"; inner: ParseBaseUriError } | { reason: "InvalidJson"; inner: string };
 
@@ -148,6 +148,10 @@ export type ParsePropertyTypeReferenceArrayError = { reason: "InvalidReference";
 
 export type ParseOneOfArrayError = { reason: "InvalidItems"; inner: ParseOneOfError } | { reason: "InvalidJson"; inner: string };
 
+export interface AllOf<T> {
+    allOf?: T[];
+}
+
 export type ValidationError = { type: "MissingRequiredProperty"; inner: BaseUri } | { type: "BaseUriMismatch"; inner: { base_uri: BaseUri; versioned_uri: VersionedUri } } | { type: "MissingRequiredLink"; inner: VersionedUri } | { type: "MismatchedPropertyCount"; inner: { actual: number; expected: number } } | { type: "EmptyOneOf" };
 
 export type ParseOneOfError = { reason: "EntityTypeReferenceError"; inner: ParseVersionedUriError } | { reason: "PropertyValuesError"; inner: ParsePropertyTypeError } | { reason: "ValidationError"; inner: ValidationError };
@@ -166,11 +170,7 @@ export interface DataType extends Record<string, any> {
     type: string;
 }
 
-export interface Object<T> {
-    type: 'object';
-    properties: Record<string, T>;
-    required?: string[];
-}
+export type Result<T, E> = { type: "Ok"; inner: T } | { type: "Err"; inner: E };
 
 export type ParsePropertyTypeObjectError = { reason: "InvalidPropertyTypeReference"; inner: ParseVersionedUriError } | { reason: "InvalidArray"; inner: ParsePropertyTypeReferenceArrayError } | { reason: "InvalidPropertyKey"; inner: ParseBaseUriError } | { reason: "InvalidRequiredKey"; inner: ParseBaseUriError } | { reason: "ValidationError"; inner: ValidationError } | { reason: "InvalidJson"; inner: string };
 
