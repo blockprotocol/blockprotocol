@@ -21,7 +21,6 @@ use crate::{
 pub struct EntityType {
     id: VersionedUri,
     title: String,
-    plural_title: String,
     description: Option<String>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
     inherits_from: AllOf<EntityTypeReference>,
@@ -37,7 +36,6 @@ impl EntityType {
     pub fn new(
         id: VersionedUri,
         title: String,
-        plural_title: String,
         description: Option<String>,
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
         inherits_from: AllOf<EntityTypeReference>,
@@ -48,7 +46,6 @@ impl EntityType {
         Self {
             id,
             title,
-            plural_title,
             description,
             property_object,
             inherits_from,
@@ -66,11 +63,6 @@ impl EntityType {
     #[must_use]
     pub fn title(&self) -> &str {
         &self.title
-    }
-
-    #[must_use]
-    pub fn plural_title(&self) -> &str {
-        &self.plural_title
     }
 
     #[must_use]
