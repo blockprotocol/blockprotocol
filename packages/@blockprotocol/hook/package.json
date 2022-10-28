@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/hook",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Implementation of the Block Protocol Hook service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
