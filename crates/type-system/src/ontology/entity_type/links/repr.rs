@@ -104,11 +104,15 @@ impl From<super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>
     }
 }
 
-// TODO explain the need for this
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+// TODO: tsify can't handle a flattened optional on `MaybeOneOfEntityTypeReference`, so we have to
+//  manually define the type, see wasm::MaybeOneOfEntityTypeReferencePatch
+//  https://github.com/madonoharu/tsify/issues/10
+
+// This struct is needed because its used inside generic parameters of other structs like `Array`.
+// Those structs can't apply serde's `default` or `skip_serializing_if` which means the option
+// doesn't de/serialize as required unless wrapped in an intermediary struct.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MaybeOneOfEntityTypeReference {
-    #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
     inner: Option<repr::OneOf<repr::EntityTypeReference>>,
 }

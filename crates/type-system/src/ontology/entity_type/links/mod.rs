@@ -1,5 +1,7 @@
 mod error;
 pub(in crate::ontology) mod repr;
+#[cfg(target_arch = "wasm32")]
+mod wasm;
 
 use std::collections::HashMap;
 
