@@ -26,7 +26,6 @@ pub struct EntityType {
     #[serde(rename = "$id")]
     id: String,
     title: String,
-    plural_title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
@@ -99,7 +98,6 @@ impl TryFrom<EntityType> for super::EntityType {
         Ok(Self::new(
             id,
             entity_type_repr.title,
-            entity_type_repr.plural_title,
             entity_type_repr.description,
             property_object,
             inherits_from,
@@ -133,7 +131,6 @@ impl From<super::EntityType> for EntityType {
             kind: EntityTypeTag::EntityType,
             id: entity_type.id.to_string(),
             title: entity_type.title,
-            plural_title: entity_type.plural_title,
             description: entity_type.description,
             property_object: entity_type.property_object.into(),
             all_of: entity_type.inherits_from.into(),
