@@ -14,11 +14,11 @@ export const Leaf = ({ attributes, children, leaf }: LeafProps) => {
   }
 
   if (leaf.italic) {
-    formattedChildren = <em>{children}</em>;
+    formattedChildren = <em>{formattedChildren}</em>;
   }
 
   if (leaf.underline) {
-    formattedChildren = <u>{children}</u>;
+    formattedChildren = <u>{formattedChildren}</u>;
   }
 
   return <span {...attributes}>{formattedChildren}</span>;
