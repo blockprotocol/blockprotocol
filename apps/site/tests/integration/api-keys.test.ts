@@ -1,6 +1,6 @@
 import { expect, test } from "playwright-test-coverage";
 
-import { resetDb } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
 
 test("API key page should generate a valid key", async ({
@@ -8,7 +8,7 @@ test("API key page should generate a valid key", async ({
   browserName,
   request,
 }) => {
-  await resetDb();
+  await resetSite();
 
   await page.goto("/");
 

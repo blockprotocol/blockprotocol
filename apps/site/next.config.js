@@ -8,6 +8,10 @@ const withBundleAnalyzer = (await import("@next/bundle-analyzer")).default({
 
 /** @type {import("next").NextConfig} */
 const nextConfig = {
+  experimental: {
+    // @see `deleteIsrFilesCreatedAfterNextBuild()` for rationale
+    isrMemoryCacheSize: 0,
+  },
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   productionBrowserSourceMaps: true,
   swcMinify: true,

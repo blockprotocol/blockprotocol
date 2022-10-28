@@ -1,7 +1,8 @@
+import * as wasm from './index_bg.wasm';
 
-let wasm;
+const lTextDecoder = typeof TextDecoder === 'undefined' ? (0, module.require)('util').TextDecoder : TextDecoder;
 
-const cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+let cachedTextDecoder = new lTextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
 cachedTextDecoder.decode();
 
@@ -37,7 +38,9 @@ function getObject(idx) { return heap[idx]; }
 
 let WASM_VECTOR_LEN = 0;
 
-const cachedTextEncoder = new TextEncoder('utf-8');
+const lTextEncoder = typeof TextEncoder === 'undefined' ? (0, module.require)('util').TextEncoder : TextEncoder;
+
+let cachedTextEncoder = new lTextEncoder('utf-8');
 
 const encodeString = (typeof cachedTextEncoder.encodeInto === 'function'
     ? function (arg, view) {
@@ -119,6 +122,19 @@ function takeObject(idx) {
     return ret;
 }
 /**
+* @param {any} link_type_obj
+* @returns {any}
+*/
+export function validateLinkType(link_type_obj) {
+    try {
+        const ret = wasm.validateLinkType(addBorrowedObject(link_type_obj));
+        return takeObject(ret);
+    } finally {
+        heap[stack_pointer++] = undefined;
+    }
+}
+
+/**
 * @param {any} data_type_obj
 * @returns {any}
 */
@@ -138,19 +154,6 @@ export function validateDataType(data_type_obj) {
 export function validateEntityType(entity_type_obj) {
     try {
         const ret = wasm.validateEntityType(addBorrowedObject(entity_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
-* @param {any} link_type_obj
-* @returns {any}
-*/
-export function validateLinkType(link_type_obj) {
-    try {
-        const ret = wasm.validateLinkType(addBorrowedObject(link_type_obj));
         return takeObject(ret);
     } finally {
         heap[stack_pointer++] = undefined;
@@ -241,100 +244,17 @@ export function extractVersion(uri) {
     }
 }
 
-async function load(module, imports) {
-    if (typeof Response === 'function' && module instanceof Response) {
-        if (typeof WebAssembly.instantiateStreaming === 'function') {
-            try {
-                return await WebAssembly.instantiateStreaming(module, imports);
+export function __wbindgen_json_parse(arg0, arg1) {
+    const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
+    return addHeapObject(ret);
+};
 
-            } catch (e) {
-                if (module.headers.get('Content-Type') != 'application/wasm') {
-                    console.warn("`WebAssembly.instantiateStreaming` failed because your server does not serve wasm with `application/wasm` MIME type. Falling back to `WebAssembly.instantiate` which is slower. Original error:\n", e);
+export function __wbindgen_json_serialize(arg0, arg1) {
+    const obj = getObject(arg1);
+    const ret = JSON.stringify(obj === undefined ? null : obj);
+    const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    const len0 = WASM_VECTOR_LEN;
+    getInt32Memory0()[arg0 / 4 + 1] = len0;
+    getInt32Memory0()[arg0 / 4 + 0] = ptr0;
+};
 
-                } else {
-                    throw e;
-                }
-            }
-        }
-
-        const bytes = await module.arrayBuffer();
-        return await WebAssembly.instantiate(bytes, imports);
-
-    } else {
-        const instance = await WebAssembly.instantiate(module, imports);
-
-        if (instance instanceof WebAssembly.Instance) {
-            return { instance, module };
-
-        } else {
-            return instance;
-        }
-    }
-}
-
-function getImports() {
-    const imports = {};
-    imports.wbg = {};
-    imports.wbg.__wbindgen_json_parse = function(arg0, arg1) {
-        const ret = JSON.parse(getStringFromWasm0(arg0, arg1));
-        return addHeapObject(ret);
-    };
-    imports.wbg.__wbindgen_json_serialize = function(arg0, arg1) {
-        const obj = getObject(arg1);
-        const ret = JSON.stringify(obj === undefined ? null : obj);
-        const ptr0 = passStringToWasm0(ret, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
-        const len0 = WASM_VECTOR_LEN;
-        getInt32Memory0()[arg0 / 4 + 1] = len0;
-        getInt32Memory0()[arg0 / 4 + 0] = ptr0;
-    };
-
-    return imports;
-}
-
-function initMemory(imports, maybe_memory) {
-
-}
-
-function finalizeInit(instance, module) {
-    wasm = instance.exports;
-    init.__wbindgen_wasm_module = module;
-    cachedInt32Memory0 = new Int32Array();
-    cachedUint8Memory0 = new Uint8Array();
-
-
-    return wasm;
-}
-
-function initSync(module) {
-    const imports = getImports();
-
-    initMemory(imports);
-
-    if (!(module instanceof WebAssembly.Module)) {
-        module = new WebAssembly.Module(module);
-    }
-
-    const instance = new WebAssembly.Instance(module, imports);
-
-    return finalizeInit(instance, module);
-}
-
-async function init(input) {
-    if (typeof input === 'undefined') {
-        input = new URL('index_bg.wasm', import.meta.url);
-    }
-    const imports = getImports();
-
-    if (typeof input === 'string' || (typeof Request === 'function' && input instanceof Request) || (typeof URL === 'function' && input instanceof URL)) {
-        input = fetch(input);
-    }
-
-    initMemory(imports);
-
-    const { instance, module } = await load(await input, imports);
-
-    return finalizeInit(instance, module);
-}
-
-export { initSync }
-export default init;
