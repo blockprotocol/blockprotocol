@@ -67,6 +67,7 @@ impl From<super::PropertyType> for PropertyType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct PropertyTypeReference {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$ref")]
     uri: String,
 }
