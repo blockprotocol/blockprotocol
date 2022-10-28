@@ -22,6 +22,7 @@ enum DataTypeTag {
 pub struct DataType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'dataType'"))]
     kind: DataTypeTag,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,

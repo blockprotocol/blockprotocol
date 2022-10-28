@@ -23,6 +23,7 @@ enum PropertyTypeTag {
 pub struct PropertyType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'propertyType'"))]
     kind: PropertyTypeTag,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
