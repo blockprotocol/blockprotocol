@@ -138,7 +138,7 @@ export const DevTools = () => {
           </Box>
         </Paper>
       </Resizable>
-      <style jsx global>{`
+      <style jsx="true" global="true">{`
         @font-face {
           font-family: "Inter";
           font-weight: 300;

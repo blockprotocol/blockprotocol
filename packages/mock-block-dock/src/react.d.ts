@@ -5,7 +5,7 @@ declare module "react" {
   // eslint-disable-next-line no-undef -- this is okay in this definition file
   interface StyleHTMLAttributes<T> extends React.HTMLAttributes<T> {
     // needed for use of <style jsx> | <styled jsx global>
-    jsx?: boolean;
-    global?: boolean;
+    jsx?: boolean | string;
+    global?: boolean | string;
   }
 }
