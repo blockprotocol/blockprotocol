@@ -105,6 +105,7 @@ impl From<super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>
 }
 
 // TODO explain the need for this
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct MaybeOneOfEntityTypeReference {
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
