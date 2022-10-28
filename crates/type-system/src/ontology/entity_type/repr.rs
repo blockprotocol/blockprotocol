@@ -23,6 +23,7 @@ enum EntityTypeTag {
 pub struct EntityType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'entityType'"))]
     kind: EntityTypeTag,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
@@ -32,10 +33,13 @@ pub struct EntityType {
     #[serde(flatten)]
     all_of: repr::AllOf<EntityTypeReference>,
     // TODO - Improve the typing of the values
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, any>"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "Record<BaseUri, any>"))]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     default: HashMap<String, serde_json::Value>,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, any>[]"))]
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(optional, type = "Record<BaseUri, any>[]")
+    )]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
@@ -145,6 +149,7 @@ impl From<super::EntityType> for EntityType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct EntityTypeReference {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$ref")]
     uri: String,
 }

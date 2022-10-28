@@ -6,8 +6,8 @@ export interface OneOf<T> {
 
 export interface Object<T> {
     type: 'object';
-    properties: Record<string, T>;
-    required?: string[];
+    properties: Record<BaseUri, T>;
+    required?: BaseUri[];
 }
 
 export type ValueOrArray<T> = T | Array<T>;
@@ -55,13 +55,13 @@ export type ParseDataTypeError = { reason: "InvalidVersionedUri"; inner: ParseVe
 
 export interface PropertyType extends OneOf<PropertyValues> {
     kind: 'propertyType';
-    $id: string;
+    $id: VersionedUri;
     title: string;
     description?: string;
 }
 
 export interface PropertyTypeReference {
-    $ref: string;
+    $ref: VersionedUri;
 }
 
 export type PropertyValues = DataTypeReference | Object<ValueOrArray<PropertyTypeReference>> | Array<OneOf<PropertyValues>>;
@@ -119,12 +119,12 @@ export type ParseVersionedUriError = { reason: "IncorrectFormatting" } | { reaso
 export type ParseBaseUriError = { reason: "MissingTrailingSlash" } | { reason: "UrlParseError"; inner: string } | { reason: "CannotBeABase" };
 
 export interface EntityTypeReference {
-    $ref: string;
+    $ref: VersionedUri;
 }
 
 export interface EntityType extends AllOf<EntityTypeReference>, Object<ValueOrArray<PropertyTypeReference>>, Links {
     kind: 'entityType';
-    $id: string;
+    $id: VersionedUri;
     title: string;
     description?: string;
     default?: Record<BaseUri, any>;
@@ -132,8 +132,8 @@ export interface EntityType extends AllOf<EntityTypeReference>, Object<ValueOrAr
 }
 
 export interface Links {
-    links?: Record<string, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>;
-    requiredLinks?: string[];
+    links?: Record<VersionedUri, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>;
+    requiredLinks?: VersionedUri[];
 }
 
 export interface MaybeOrderedArray<T> extends Array<T> {
@@ -157,12 +157,12 @@ export type ParseOneOfError = { reason: "EntityTypeReferenceError"; inner: Parse
 export type ParseEntityTypeError = { reason: "InvalidPropertyTypeObject"; inner: ParsePropertyTypeObjectError } | { reason: "InvalidAllOf"; inner: ParseAllOfError } | { reason: "InvalidLinks"; inner: ParseLinksError } | { reason: "InvalidDefaultKey"; inner: ParseBaseUriError } | { reason: "InvalidExamplesKey"; inner: ParseBaseUriError } | { reason: "InvalidVersionedUri"; inner: ParseVersionedUriError } | { reason: "InvalidJson"; inner: string };
 
 export interface DataTypeReference {
-    $ref: string;
+    $ref: VersionedUri;
 }
 
 export interface DataType extends Record<string, any> {
     kind: 'dataType';
-    $id: string;
+    $id: VersionedUri;
     title: string;
     description?: string;
     type: string;
