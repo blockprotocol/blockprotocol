@@ -132,7 +132,7 @@ export interface EntityType extends AllOf<EntityTypeReference>, Object<ValueOrAr
 }
 
 export interface Links {
-    links?: Record<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>;
+    links?: Record<VersionedUri, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>;
     requiredLinks?: VersionedUri[];
 }
 
