@@ -1,5 +1,12 @@
 # block-template-custom-element
 
+## 0.1.20
+
+### Patch Changes
+
+- Updated dependencies [[`f085d4a`](https://github.com/blockprotocol/blockprotocol/commit/f085d4a913837befdb2231a0921e96e6c7f84977)]:
+  - mock-block-dock@0.0.38
+
 ## 0.1.19
 
 ### Patch Changes
