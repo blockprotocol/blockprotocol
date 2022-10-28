@@ -13,7 +13,9 @@
             "$ref": "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1"
           }
         ]
-      }
+      },
+      "maxItems": 1,
+      "ordered": false
     },
     "https://blockprotocol.org/@alice/types/entity-type/tenant/v/1": {
       "type": "array",
@@ -23,7 +25,8 @@
             "$ref": "https://blockprotocol.org/@alice/types/entity-type/person/v/1"
           }
         ]
-      }
+      },
+      "ordered": false
     }
   }
 }
