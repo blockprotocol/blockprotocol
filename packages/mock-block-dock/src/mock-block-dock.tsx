@@ -11,10 +11,8 @@ import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
 import { useHookEmbedderService } from "@blockprotocol/hook/react";
 import {
   ComponentType,
-  Dispatch,
   FunctionComponent,
   lazy,
-  SetStateAction,
   Suspense,
   useCallback,
   useEffect,
