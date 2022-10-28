@@ -168,25 +168,6 @@ const propertyTypes: PropertyType[] = [
 // validation method
 const invalidPropertyTypes: [string, PropertyType, ParsePropertyTypeError][] = [
   [
-    "empty one of",
-    {
-      kind: "propertyType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
-      title: "Broken",
-      pluralTitle: "Broken",
-      oneOf: [],
-    },
-    {
-      reason: "InvalidOneOf",
-      inner: {
-        reason: "ValidationError",
-        inner: {
-          type: "EmptyOneOf",
-        },
-      },
-    },
-  ],
-  [
     "non-integer version",
     {
       kind: "propertyType",
@@ -323,6 +304,24 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
     {
       reason: "InvalidJson",
       inner: "missing field `pluralTitle` at line 1 column 114",
+    },
+  ],
+  [
+    {
+      kind: "propertyType",
+      $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
+      title: "Broken",
+      pluralTitle: "Broken",
+      oneOf: [],
+    },
+    {
+      reason: "InvalidOneOf",
+      inner: {
+        reason: "ValidationError",
+        inner: {
+          type: "EmptyOneOf",
+        },
+      },
     },
   ],
 ];
