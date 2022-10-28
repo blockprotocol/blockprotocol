@@ -10,7 +10,7 @@
     }
   },
   "links": {
-    "https://blockprotocol.org/@alice/types/link-type/contains/v/1": {
+    "https://blockprotocol.org/@alice/types/entity-type/contains/v/1": {
       "type": "array",
       "items": {
         "oneOf": [
