@@ -6,7 +6,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
     type: "object",
     title: "UK Address",
-    pluralTitle: "UK Addresses",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/address-line-1/": {
         $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
@@ -28,7 +27,6 @@ const entityTypes: EntityType[] = [
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
     title: "Block",
-    pluralTitle: "Blocks",
     type: "object",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/name/": {
@@ -54,7 +52,6 @@ const entityTypes: EntityType[] = [
     kind: "entityType",
     $id: "https://blockprotocol.org/@alice/types/entity-type/book/v/1",
     title: "Book",
-    pluralTitle: "Books",
     type: "object",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/name/": {
@@ -81,6 +78,7 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        ordered: false,
       },
     },
     requiredLinks: [
@@ -93,7 +91,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/building/v/1",
     type: "object",
     title: "Building",
-    pluralTitle: "Buildings",
     properties: {},
     links: {
       "https://blockprotocol.org/@alice/types/entity-type/located-at/v/1": {
@@ -105,6 +102,8 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        maxItems: 1,
+        ordered: false,
       },
       "https://blockprotocol.org/@alice/types/entity-type/tenant/v/1": {
         type: "array",
@@ -115,6 +114,7 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        ordered: false,
       },
     },
   },
@@ -123,7 +123,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/organization/v/1",
     type: "object",
     title: "Organization",
-    pluralTitle: "Organizations",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/name/": {
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -135,7 +134,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/organization/v/1",
     type: "object",
     title: "Organization",
-    pluralTitle: "Organizations",
     allOf: [],
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/name/": {
@@ -148,7 +146,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/page/v/2",
     type: "object",
     title: "Page",
-    pluralTitle: "Pages",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/text/": {
         $ref: "https://blockprotocol.org/@alice/types/property-type/text/v/1",
@@ -164,6 +161,7 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        ordered: false,
       },
       "https://blockprotocol.org/@alice/types/entity-type/contains/v/1": {
         type: "array",
@@ -183,7 +181,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
     type: "object",
     title: "Person",
-    pluralTitle: "People",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/name/": {
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -213,7 +210,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/playlist/v/1",
     type: "object",
     title: "Playlist",
-    pluralTitle: "Playlists",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/name/": {
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -238,7 +234,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
     type: "object",
     title: "Song",
-    pluralTitle: "Songs",
     properties: {
       "https://blockprotocol.org/@alice/types/property-type/name/": {
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -250,7 +245,6 @@ const entityTypes: EntityType[] = [
     $id: "https://blockprotocol.org/@alice/types/entity-type/knows/v/1",
     type: "object",
     title: "Knows",
-    pluralTitle: "Knows",
     allOf: [
       {
         $ref: "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1",
@@ -270,7 +264,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1.2",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       properties: {
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/":
           {
@@ -292,7 +285,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://  /broken/v/1",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       properties: {
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/":
           {
@@ -318,7 +310,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       properties: {
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/":
           {
@@ -347,7 +338,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       properties: {
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1":
           {
@@ -372,7 +362,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       properties: {
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1":
           {
@@ -398,7 +387,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       properties: {
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1":
           {
@@ -436,7 +424,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       properties: {
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1":
           {
@@ -474,7 +461,6 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
       $id: "https://blockprotocol.org/@blockprotocol/types/property-type/broken/v/1",
       type: "object",
       title: "Broken",
-      pluralTitle: "Broken",
       allOf: [
         {
           $ref: "https://blockprotocol.org/@alice/types/property-type/link/v/1.2",
@@ -509,17 +495,6 @@ const brokenTypes: [any, ParseEntityTypeError][] = [
     {
       reason: "InvalidJson",
       inner: "missing field `kind` at line 1 column 13",
-    },
-  ],
-  [
-    {
-      kind: "entityType",
-      $id: "https://blockprotocol.org/@blockprotocol/types/entity-type/broken/v/1",
-      title: "Broken",
-    },
-    {
-      reason: "InvalidJson",
-      inner: "missing field `pluralTitle` at line 1 column 116",
     },
   ],
 ];

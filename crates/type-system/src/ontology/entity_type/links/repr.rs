@@ -13,8 +13,16 @@ use crate::{
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Links {
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(
+            optional,
+            type = "Record<VersionedUri, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>"
+        )
+    )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "VersionedUri[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required_links: Vec<String>,
 }
@@ -71,8 +79,6 @@ impl From<super::Links> for Links {
 pub struct MaybeOrderedArray<T> {
     #[serde(flatten)]
     array: repr::Array<T>,
-    // By default, this will not be ordered.
-    #[serde(default)]
     ordered: bool,
 }
 

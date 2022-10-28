@@ -23,20 +23,23 @@ enum EntityTypeTag {
 pub struct EntityType {
     #[cfg_attr(target_arch = "wasm32", tsify(type = "'entityType'"))]
     kind: EntityTypeTag,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$id")]
     id: String,
     title: String,
-    plural_title: String,
     #[cfg_attr(target_arch = "wasm32", tsify(optional))]
     #[serde(skip_serializing_if = "Option::is_none")]
     description: Option<String>,
     #[serde(flatten)]
     all_of: repr::AllOf<EntityTypeReference>,
     // TODO - Improve the typing of the values
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, any>"))]
+    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "Record<BaseUri, any>"))]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     default: HashMap<String, serde_json::Value>,
-    #[cfg_attr(target_arch = "wasm32", tsify(type = "Record<BaseUri, any>[]"))]
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(optional, type = "Record<BaseUri, any>[]")
+    )]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     examples: Vec<HashMap<String, serde_json::Value>>,
     #[serde(flatten)]
@@ -99,7 +102,6 @@ impl TryFrom<EntityType> for super::EntityType {
         Ok(Self::new(
             id,
             entity_type_repr.title,
-            entity_type_repr.plural_title,
             entity_type_repr.description,
             property_object,
             inherits_from,
@@ -133,7 +135,6 @@ impl From<super::EntityType> for EntityType {
             kind: EntityTypeTag::EntityType,
             id: entity_type.id.to_string(),
             title: entity_type.title,
-            plural_title: entity_type.plural_title,
             description: entity_type.description,
             property_object: entity_type.property_object.into(),
             all_of: entity_type.inherits_from.into(),
@@ -148,6 +149,7 @@ impl From<super::EntityType> for EntityType {
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct EntityTypeReference {
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "VersionedUri"))]
     #[serde(rename = "$ref")]
     uri: String,
 }
