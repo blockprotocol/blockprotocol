@@ -115,6 +115,7 @@ impl From<PropertyType> for serde_json::Value {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[repr(transparent)]
 pub struct PropertyTypeReference {
     uri: VersionedUri,
 }
@@ -129,6 +130,13 @@ impl PropertyTypeReference {
     #[must_use]
     pub const fn uri(&self) -> &VersionedUri {
         &self.uri
+    }
+}
+
+impl From<&VersionedUri> for &PropertyTypeReference {
+    fn from(uri: &VersionedUri) -> Self {
+        // SAFETY: Self is `repr(transparent)`
+        unsafe { &*(uri as *const VersionedUri).cast::<PropertyTypeReference>() }
     }
 }
 

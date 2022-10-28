@@ -178,6 +178,7 @@ impl From<EntityType> for serde_json::Value {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[repr(transparent)]
 pub struct EntityTypeReference {
     uri: VersionedUri,
 }
@@ -192,6 +193,13 @@ impl EntityTypeReference {
     #[must_use]
     pub const fn uri(&self) -> &VersionedUri {
         &self.uri
+    }
+}
+
+impl From<&VersionedUri> for &EntityTypeReference {
+    fn from(uri: &VersionedUri) -> Self {
+        // SAFETY: Self is `repr(transparent)`
+        unsafe { &*(uri as *const VersionedUri).cast::<EntityTypeReference>() }
     }
 }
 
