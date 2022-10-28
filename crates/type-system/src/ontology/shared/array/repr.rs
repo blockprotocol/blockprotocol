@@ -61,19 +61,25 @@ impl TryFrom<Array<repr::PropertyTypeReference>> for super::Array<PropertyTypeRe
     }
 }
 
-impl TryFrom<Array<repr::OneOf<repr::EntityTypeReference>>>
-    for super::Array<OneOf<EntityTypeReference>>
+impl TryFrom<Array<repr::MaybeOneOfEntityTypeReference>>
+    for super::Array<Option<OneOf<EntityTypeReference>>>
 {
     type Error = ParseEntityTypeReferenceArrayError;
 
     fn try_from(
-        array_repr: Array<repr::OneOf<repr::EntityTypeReference>>,
+        array_repr: Array<repr::MaybeOneOfEntityTypeReference>,
     ) -> Result<Self, Self::Error> {
+        let items = match array_repr.items.into_inner() {
+            None => None,
+            Some(one_of) => Some(
+                one_of
+                    .try_into()
+                    .map_err(ParseEntityTypeReferenceArrayError::InvalidReference)?,
+            ),
+        };
+
         Ok(Self {
-            items: array_repr
-                .items
-                .try_into()
-                .map_err(ParseEntityTypeReferenceArrayError::InvalidReference)?,
+            items,
             min_items: array_repr.min_items,
             max_items: array_repr.max_items,
         })
@@ -127,6 +133,7 @@ impl TryFrom<ValueOrArray<repr::PropertyTypeReference>>
 impl<T, R> From<super::ValueOrArray<T>> for ValueOrArray<R>
 where
     R: From<T>,
+    Array<R>: From<super::Array<T>>,
 {
     fn from(value_or_array: super::ValueOrArray<T>) -> Self {
         match value_or_array {

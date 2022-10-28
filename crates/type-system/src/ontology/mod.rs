@@ -47,7 +47,7 @@ pub(crate) mod repr {
     pub(crate) use super::{
         data_type::repr::{DataType, DataTypeReference},
         entity_type::{
-            links::repr::Links,
+            links::repr::{Links, MaybeOneOfEntityTypeReference},
             repr::{EntityType, EntityTypeReference},
         },
         property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},

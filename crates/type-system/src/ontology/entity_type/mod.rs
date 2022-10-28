@@ -96,7 +96,7 @@ impl EntityType {
     #[must_use]
     pub const fn links(
         &self,
-    ) -> &HashMap<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>> {
+    ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
         self.links.links()
     }
 
@@ -127,13 +127,17 @@ impl EntityType {
     }
 
     #[must_use]
-    pub fn link_mappings(&self) -> HashMap<&EntityTypeReference, &[EntityTypeReference]> {
+    pub fn link_mappings(&self) -> HashMap<&EntityTypeReference, Option<&[EntityTypeReference]>> {
         self.links()
             .iter()
             .map(|(link_entity_type, destination_constraint_entity_types)| {
                 (
                     <&EntityTypeReference>::from(link_entity_type),
-                    destination_constraint_entity_types.array().items().one_of(),
+                    destination_constraint_entity_types
+                        .array()
+                        .items()
+                        .as_ref()
+                        .map(OneOf::one_of),
                 )
             })
             .collect()
@@ -257,14 +261,19 @@ mod tests {
 
     fn test_link_mappings(
         entity_type: &EntityType,
-        links: impl IntoIterator<Item = (&'static str, &'static str)>,
+        links: impl IntoIterator<Item = (&'static str, Vec<&'static str>)>,
     ) {
         let expected_link_entity_type_references = links
             .into_iter()
-            .map(|(link_entity_type_uri, entity_type_uri)| {
+            .map(|(link_entity_type_uri, entity_type_uris)| {
                 (
                     VersionedUri::from_str(link_entity_type_uri).expect("invalid URI"),
-                    vec![VersionedUri::from_str(entity_type_uri).expect("invalid URI")],
+                    entity_type_uris
+                        .into_iter()
+                        .map(|entity_type_uri| {
+                            VersionedUri::from_str(entity_type_uri).expect("invalid URI")
+                        })
+                        .collect::<Vec<_>>(),
                 )
             })
             .collect::<HashMap<_, _>>();
@@ -275,10 +284,12 @@ mod tests {
             .map(|(link_entity_type_uri, entity_type_ref)| {
                 (
                     link_entity_type_uri.uri().clone(),
-                    entity_type_ref
-                        .iter()
-                        .map(|reference| reference.uri().clone())
-                        .collect(),
+                    entity_type_ref.map_or(vec![], |inner| {
+                        inner
+                            .iter()
+                            .map(|reference| reference.uri().clone())
+                            .collect()
+                    }),
                 )
             })
             .collect::<HashMap<_, _>>();
@@ -301,7 +312,7 @@ mod tests {
 
         test_link_mappings(&entity_type, [(
             "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+            vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
         )]);
     }
 
@@ -339,11 +350,11 @@ mod tests {
         test_link_mappings(&entity_type, [
             (
                 "https://blockprotocol.org/@alice/types/entity-type/located-at/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1"],
             ),
             (
                 "https://blockprotocol.org/@alice/types/entity-type/tenant/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
             ),
         ]);
     }
@@ -356,10 +367,16 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_mappings(&entity_type, [(
-            "https://blockprotocol.org/@alice/types/entity-type/friend-of/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        )]);
+        test_link_mappings(&entity_type, [
+            (
+                "https://blockprotocol.org/@alice/types/entity-type/friend-of/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
+            ),
+            (
+                "https://blockprotocol.org/@alice/types/entity-type/owns/v/1",
+                vec![],
+            ),
+        ]);
     }
 
     #[test]
@@ -372,7 +389,7 @@ mod tests {
 
         test_link_mappings(&entity_type, [(
             "https://blockprotocol.org/@alice/types/entity-type/contains/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
+            vec!["https://blockprotocol.org/@alice/types/entity-type/song/v/1"],
         )]);
     }
 
@@ -398,11 +415,11 @@ mod tests {
         test_link_mappings(&entity_type, [
             (
                 "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
             ),
             (
                 "https://blockprotocol.org/@alice/types/entity-type/contains/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/block/v/1"],
             ),
         ]);
     }
