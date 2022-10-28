@@ -1,5 +1,11 @@
 # mock-block-dock
 
+## 0.0.38
+
+### Patch Changes
+
+- [#726](https://github.com/blockprotocol/blockprotocol/pull/726) [`f085d4a`](https://github.com/blockprotocol/blockprotocol/commit/f085d4a913837befdb2231a0921e96e6c7f84977) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix stale hook callbacks. fix dom warnings.
+
 ## 0.0.37
 
 ### Patch Changes

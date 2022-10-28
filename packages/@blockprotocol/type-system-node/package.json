@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/type-system-node",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Definitions of types within the Block Protocol Type System",
   "homepage": "https://blockprotocol.org",
   "repository": {
