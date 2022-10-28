@@ -2,4 +2,4 @@
 "mock-block-dock": patch
 ---
 
-pass string, not boolean, to jsx tags
+fix stale hook callbacks. fix dom warnings.
