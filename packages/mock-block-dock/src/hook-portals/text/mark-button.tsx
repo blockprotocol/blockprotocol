@@ -17,12 +17,18 @@ export const MarkButton = ({
       onClick={() => {
         toggleMark(editor, format);
       }}
+      onMouseDown={(event) =>
+        // don't take focus from editor
+        event.preventDefault()
+      }
       style={{
-        opacity: isMarkActive(editor, format) ? 1 : 0.4,
+        color: isMarkActive(editor, format) ? "dodgerblue" : "gray",
         fontWeight: 600,
+        opacity: 1,
         width: 30,
         height: 25,
         fontSize: "1rem",
+        background: "white",
       }}
       type="button"
     >
