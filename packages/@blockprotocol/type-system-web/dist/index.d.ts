@@ -137,7 +137,7 @@ export interface Links {
 }
 
 export interface MaybeOrderedArray<T> extends Array<T> {
-    ordered?: boolean;
+    ordered: boolean;
 }
 
 export type ParseEntityTypeReferenceArrayError = { reason: "InvalidReference"; inner: ParseOneOfError } | { reason: "InvalidJson"; inner: string };

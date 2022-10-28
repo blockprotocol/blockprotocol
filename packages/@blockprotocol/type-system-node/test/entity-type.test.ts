@@ -78,6 +78,7 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        ordered: false,
       },
     },
     requiredLinks: [
@@ -101,6 +102,8 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        maxItems: 1,
+        ordered: false,
       },
       "https://blockprotocol.org/@alice/types/entity-type/tenant/v/1": {
         type: "array",
@@ -111,6 +114,7 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        ordered: false,
       },
     },
   },
@@ -157,6 +161,7 @@ const entityTypes: EntityType[] = [
             },
           ],
         },
+        ordered: false,
       },
       "https://blockprotocol.org/@alice/types/entity-type/contains/v/1": {
         type: "array",

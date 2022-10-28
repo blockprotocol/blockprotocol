@@ -71,8 +71,6 @@ impl From<super::Links> for Links {
 pub struct MaybeOrderedArray<T> {
     #[serde(flatten)]
     array: repr::Array<T>,
-    // By default, this will not be ordered.
-    #[serde(default)]
     ordered: bool,
 }
 
