@@ -19,8 +19,6 @@ export interface Array<T> {
     maxItems?: number;
 }
 
-export type ParseLinksError = { reason: "InvalidLinkKey"; inner: ParseVersionedUriError } | { reason: "InvalidArray"; inner: ParseEntityTypeReferenceArrayError } | { reason: "InvalidRequiredKey"; inner: ParseVersionedUriError } | { reason: "ValidationError"; inner: ValidationError } | { reason: "InvalidJson"; inner: string };
-
 
 /**
  * Checks if a given Data Type is correctly formed
@@ -41,20 +39,6 @@ export function validateDataType(dataType: DataType): Result<undefined, ParseDat
 export function validateEntityType(entityType: EntityType): Result<undefined, ParseEntityTypeError>;
 
 
-export interface PropertyType extends OneOf<PropertyValues> {
-    kind: 'propertyType';
-    $id: string;
-    title: string;
-    pluralTitle: string;
-    description?: string;
-}
-
-export interface PropertyTypeReference {
-    $ref: string;
-}
-
-export type PropertyValues = DataTypeReference | Object<ValueOrArray<PropertyTypeReference>> | Array<OneOf<PropertyValues>>;
-
 
 /**
  * Checks if a given Property Type is correctly formed
@@ -65,7 +49,22 @@ export type PropertyValues = DataTypeReference | Object<ValueOrArray<PropertyTyp
 export function validatePropertyType(propertyType: PropertyType): Result<undefined, ParsePropertyTypeError>;
 
 
+export type ParseLinksError = { reason: "InvalidLinkKey"; inner: ParseVersionedUriError } | { reason: "InvalidArray"; inner: ParseEntityTypeReferenceArrayError } | { reason: "InvalidRequiredKey"; inner: ParseVersionedUriError } | { reason: "ValidationError"; inner: ValidationError } | { reason: "InvalidJson"; inner: string };
+
 export type ParseDataTypeError = { reason: "InvalidVersionedUri"; inner: ParseVersionedUriError } | { reason: "InvalidJson"; inner: string };
+
+export interface PropertyType extends OneOf<PropertyValues> {
+    kind: 'propertyType';
+    $id: string;
+    title: string;
+    description?: string;
+}
+
+export interface PropertyTypeReference {
+    $ref: string;
+}
+
+export type PropertyValues = DataTypeReference | Object<ValueOrArray<PropertyTypeReference>> | Array<OneOf<PropertyValues>>;
 
 export type VersionedUri = `${string}/v/${number}`;
 
@@ -111,7 +110,13 @@ export function extractBaseUri(uri: VersionedUri): BaseUri;
 export function extractVersion(uri: VersionedUri): number;
 
 
+export type MaybeOneOfEntityTypeReference = OneOf<EntityTypeReference> | {};
+
 export type BaseUri = string;
+
+export type ParseVersionedUriError = { reason: "IncorrectFormatting" } | { reason: "MissingBaseUri" } | { reason: "MissingVersion" } | { reason: "InvalidVersion"; inner: string } | { reason: "AdditionalEndContent" } | { reason: "InvalidBaseUri"; inner: ParseBaseUriError } | { reason: "InvalidJson"; inner: string };
+
+export type ParseBaseUriError = { reason: "MissingTrailingSlash" } | { reason: "UrlParseError"; inner: string } | { reason: "CannotBeABase" };
 
 export interface EntityTypeReference {
     $ref: string;
@@ -121,17 +126,10 @@ export interface EntityType extends AllOf<EntityTypeReference>, Object<ValueOrAr
     kind: 'entityType';
     $id: string;
     title: string;
-    pluralTitle: string;
     description?: string;
     default?: Record<BaseUri, any>;
     examples?: Record<BaseUri, any>[];
 }
-
-export type MaybeOneOfEntityTypeReference = OneOf<EntityTypeReference> | {};
-
-export type ParseVersionedUriError = { reason: "IncorrectFormatting" } | { reason: "MissingBaseUri" } | { reason: "MissingVersion" } | { reason: "InvalidVersion"; inner: string } | { reason: "AdditionalEndContent" } | { reason: "InvalidBaseUri"; inner: ParseBaseUriError } | { reason: "InvalidJson"; inner: string };
-
-export type ParseBaseUriError = { reason: "MissingTrailingSlash" } | { reason: "UrlParseError"; inner: string } | { reason: "CannotBeABase" };
 
 export interface Links {
     links?: Record<string, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>;
