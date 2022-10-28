@@ -17,7 +17,7 @@ pub struct Links {
         target_arch = "wasm32",
         tsify(
             optional,
-            type = "Record<VersionedUri, MaybeOrderedArray<OneOf<EntityTypeReference>>>"
+            type = "Record<VersionedUri, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>"
         )
     )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
