@@ -1,0 +1,42 @@
+diff --git a/node_modules/@changesets/cli/dist/cli.cjs.dev.js b/node_modules/@changesets/cli/dist/cli.cjs.dev.js
+index e903107..1e7fc8e 100644
+--- a/node_modules/@changesets/cli/dist/cli.cjs.dev.js
++++ b/node_modules/@changesets/cli/dist/cli.cjs.dev.js
+@@ -1164,7 +1164,8 @@ async function getStatus(cwd, {
+     ref: sinceBranch || config.baseBranch
+   });
+ 
+-  if (changedPackages.length > 0 && changesets.length === 0) {
++  // Adding `false` prevents CI failures in Renovate PRs that immedeately follow ‘Version Packages’
++  if (false && changedPackages.length > 0 && changesets.length === 0) {
+     logger.error("Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error.");
+     logger.error("If this change doesn't need a release, run `changeset add --empty`.");
+     process.exit(1);
+diff --git a/node_modules/@changesets/cli/dist/cli.cjs.prod.js b/node_modules/@changesets/cli/dist/cli.cjs.prod.js
+index fe411b2..9f748a0 100644
+--- a/node_modules/@changesets/cli/dist/cli.cjs.prod.js
++++ b/node_modules/@changesets/cli/dist/cli.cjs.prod.js
+@@ -625,7 +625,8 @@ async function getStatus(cwd, {sinceMaster: sinceMaster, since: since, verbose:
+   sinceMaster && (logger.warn("--sinceMaster is deprecated and will be removed in a future major version"), 
+   logger.warn("Use --since=master instead"));
+   const sinceBranch = void 0 === since ? sinceMaster ? "master" : void 0 : since, releasePlan = await getReleasePlan__default.default(cwd, sinceBranch, config), {changesets: changesets, releases: releases} = releasePlan;
+-  if ((await git.getChangedPackagesSinceRef({
++  // Adding `false` prevents CI failures in Renovate PRs that immedeately follow ‘Version Packages’
++  if (false && (await git.getChangedPackagesSinceRef({
+     cwd: cwd,
+     ref: sinceBranch || config.baseBranch
+   })).length > 0 && 0 === changesets.length && (logger.error("Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error."), 
+diff --git a/node_modules/@changesets/cli/dist/cli.esm.js b/node_modules/@changesets/cli/dist/cli.esm.js
+index ffd9f1b..07acb23 100644
+--- a/node_modules/@changesets/cli/dist/cli.esm.js
++++ b/node_modules/@changesets/cli/dist/cli.esm.js
+@@ -1141,7 +1141,8 @@ async function getStatus(cwd, {
+     ref: sinceBranch || config.baseBranch
+   });
+ 
+-  if (changedPackages.length > 0 && changesets.length === 0) {
++  // Adding `false` prevents CI failures in Renovate PRs that immedeately follow ‘Version Packages’
++  if (false && changedPackages.length > 0 && changesets.length === 0) {
+     error("Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error.");
+     error("If this change doesn't need a release, run `changeset add --empty`.");
+     process.exit(1);
