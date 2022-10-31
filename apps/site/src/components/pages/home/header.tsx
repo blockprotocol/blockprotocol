@@ -1,5 +1,5 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 import primaryHelixImage from "../../../../public/assets/new-home/primary-helix-min.png";
 
@@ -70,12 +70,7 @@ export const Header = () => {
           infinitely extensible with interoperable components called blocks.
         </Typography>
       </Container>
-      <Image
-        alt=""
-        style={{ width: "100%", height: "auto" }}
-        sizes="100vw"
-        src={primaryHelixImage}
-      />
+      <Image layout="responsive" src={primaryHelixImage} />
     </Box>
   );
 };

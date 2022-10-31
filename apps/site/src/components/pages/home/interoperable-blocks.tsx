@@ -1,5 +1,5 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 import transparentBlocksWithCircleImage from "../../../../public/assets/new-home/transparent-blocks-with-circle-min.png";
 
@@ -53,7 +53,7 @@ export const InteroperableBlocks = () => {
               zIndex: "3",
             }}
           >
-            <Image alt="" src={transparentBlocksWithCircleImage} />
+            <Image src={transparentBlocksWithCircleImage} />
           </Box>
         )}
 

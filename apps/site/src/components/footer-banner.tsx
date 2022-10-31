@@ -6,7 +6,7 @@ import {
   PaperProps,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
@@ -45,11 +45,8 @@ const Link: FunctionComponent<LinkProps> = (linkProps) => (
 const BackgroundHelix: FunctionComponent = () => {
   return (
     <Image
-      alt=""
-      style={{
-        objectFit: "contain",
-        objectPosition: "right",
-      }}
+      objectFit="contain"
+      objectPosition="right"
       src={backgroundCornerHelix}
     />
   );

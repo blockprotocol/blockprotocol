@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 import composableFullImage from "../../../../public/assets/new-home/composable-full-min.png";
 
@@ -74,7 +74,7 @@ export const ComposableInterfaces = () => {
           marginLeft: { xs: "-40%", sm: 0 },
         }}
       >
-        <Image alt="" src={composableFullImage} />
+        <Image src={composableFullImage} />
       </Box>
     </Box>
   );
