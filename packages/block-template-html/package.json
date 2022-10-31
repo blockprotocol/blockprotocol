@@ -24,6 +24,7 @@
     "format": "prettier --write --ignore-unknown .",
     "lint:eslint": "eslint .",
     "prepare": "rimraf ./dev/src && lnk -f ./src ./dev",
+    "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
     "serve": "block-scripts serve"
   },
   "prettier": {
@@ -34,7 +35,7 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "block-scripts": "0.0.17",
-    "eslint": "8.25.0",
+    "eslint": "8.26.0",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
     "prettier": "2.7.1",

@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.1.15",
+  "version": "0.1.20",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
@@ -24,6 +24,7 @@
     "format": "prettier --write --ignore-unknown .",
     "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
+    "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
     "serve": "block-scripts serve"
   },
   "prettier": {
@@ -32,14 +33,14 @@
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.18",
-    "lit": "^2.2.5"
+    "lit": "^2.4.0"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "@types/react-dom": "^18.0.6",
+    "@types/react-dom": "^18.0.8",
     "block-scripts": "0.0.17",
-    "eslint": "8.25.0",
-    "mock-block-dock": "0.0.33",
+    "eslint": "8.26.0",
+    "mock-block-dock": "0.0.38",
     "prettier": "2.7.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

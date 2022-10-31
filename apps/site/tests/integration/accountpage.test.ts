@@ -1,12 +1,10 @@
 import { expect, test } from "playwright-test-coverage";
 
-import blocksData from "../../blocks-data.json";
-import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
-import { resetDb } from "../shared/fixtures";
-import { login } from "../shared/nav";
+import { getBlocksData, resetSite } from "../shared/fixtures.js";
+import { login } from "../shared/nav.js";
 
 test.beforeEach(async () => {
-  await resetDb();
+  await resetSite();
 });
 
 test("key elements should be present when user views their account page", async ({
@@ -82,7 +80,7 @@ test("key elements should be present when user views their account page", async 
   await expect(page.locator("text=Create a schema")).toBeVisible();
 });
 
-const codeBlockMetadata = (blocksData as ExpandedBlockMetadata[]).find(
+const codeBlockMetadata = (await getBlocksData()).find(
   ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
 );
 

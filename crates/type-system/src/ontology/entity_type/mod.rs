@@ -13,17 +13,17 @@ pub use error::ParseEntityTypeError;
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
-    Links, Object, OneOf, PropertyTypeReference, ValidateUri, ValidationError, ValueOrArray,
-    ValueOrMaybeOrderedArray,
+    AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUri,
+    ValidationError, ValueOrArray,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct EntityType {
     id: VersionedUri,
     title: String,
-    plural_title: String,
     description: Option<String>,
     property_object: Object<ValueOrArray<PropertyTypeReference>>,
+    inherits_from: AllOf<EntityTypeReference>,
     links: Links,
     default: HashMap<BaseUri, serde_json::Value>,
     examples: Vec<HashMap<BaseUri, serde_json::Value>>,
@@ -36,9 +36,9 @@ impl EntityType {
     pub fn new(
         id: VersionedUri,
         title: String,
-        plural_title: String,
         description: Option<String>,
         property_object: Object<ValueOrArray<PropertyTypeReference>>,
+        inherits_from: AllOf<EntityTypeReference>,
         links: Links,
         default: HashMap<BaseUri, serde_json::Value>,
         examples: Vec<HashMap<BaseUri, serde_json::Value>>,
@@ -46,9 +46,9 @@ impl EntityType {
         Self {
             id,
             title,
-            plural_title,
             description,
             property_object,
+            inherits_from,
             links,
             default,
             examples,
@@ -66,13 +66,13 @@ impl EntityType {
     }
 
     #[must_use]
-    pub fn plural_title(&self) -> &str {
-        &self.plural_title
+    pub fn description(&self) -> Option<&str> {
+        self.description.as_deref()
     }
 
     #[must_use]
-    pub fn description(&self) -> Option<&str> {
-        self.description.as_deref()
+    pub const fn inherits_from(&self) -> &AllOf<EntityTypeReference> {
+        &self.inherits_from
     }
 
     #[must_use]
@@ -88,7 +88,7 @@ impl EntityType {
     #[must_use]
     pub const fn links(
         &self,
-    ) -> &HashMap<VersionedUri, ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>> {
+    ) -> &HashMap<VersionedUri, MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>> {
         self.links.links()
     }
 
@@ -119,10 +119,19 @@ impl EntityType {
     }
 
     #[must_use]
-    pub fn link_type_references(&self) -> HashMap<&VersionedUri, &[EntityTypeReference]> {
+    pub fn link_mappings(&self) -> HashMap<&EntityTypeReference, Option<&[EntityTypeReference]>> {
         self.links()
             .iter()
-            .map(|(link_type, entity_type)| (link_type, entity_type.inner().one_of()))
+            .map(|(link_entity_type, destination_constraint_entity_types)| {
+                (
+                    <&EntityTypeReference>::from(link_entity_type),
+                    destination_constraint_entity_types
+                        .array()
+                        .items()
+                        .as_ref()
+                        .map(OneOf::one_of),
+                )
+            })
             .collect()
     }
 }
@@ -158,6 +167,7 @@ impl From<EntityType> for serde_json::Value {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[repr(transparent)]
 pub struct EntityTypeReference {
     uri: VersionedUri,
 }
@@ -172,6 +182,13 @@ impl EntityTypeReference {
     #[must_use]
     pub const fn uri(&self) -> &VersionedUri {
         &self.uri
+    }
+}
+
+impl From<&VersionedUri> for &EntityTypeReference {
+    fn from(uri: &VersionedUri) -> Self {
+        // SAFETY: Self is `repr(transparent)`
+        unsafe { &*(uri as *const VersionedUri).cast::<EntityTypeReference>() }
     }
 }
 
@@ -234,35 +251,45 @@ mod tests {
         assert_eq!(property_type_references, expected_property_type_references);
     }
 
-    fn test_link_type_references(
+    fn test_link_mappings(
         entity_type: &EntityType,
-        links: impl IntoIterator<Item = (&'static str, &'static str)>,
+        links: impl IntoIterator<Item = (&'static str, Vec<&'static str>)>,
     ) {
-        let expected_link_type_references = links
+        let expected_link_entity_type_references = links
             .into_iter()
-            .map(|(link_type_uri, entity_type_uri)| {
+            .map(|(link_entity_type_uri, entity_type_uris)| {
                 (
-                    VersionedUri::from_str(link_type_uri).expect("invalid URI"),
-                    vec![VersionedUri::from_str(entity_type_uri).expect("invalid URI")],
+                    VersionedUri::from_str(link_entity_type_uri).expect("invalid URI"),
+                    entity_type_uris
+                        .into_iter()
+                        .map(|entity_type_uri| {
+                            VersionedUri::from_str(entity_type_uri).expect("invalid URI")
+                        })
+                        .collect::<Vec<_>>(),
                 )
             })
             .collect::<HashMap<_, _>>();
 
-        let link_type_references = entity_type
-            .link_type_references()
+        let link_entity_type_references = entity_type
+            .link_mappings()
             .into_iter()
-            .map(|(link_type_uri, entity_type_ref)| {
+            .map(|(link_entity_type_uri, entity_type_ref)| {
                 (
-                    link_type_uri.clone(),
-                    entity_type_ref
-                        .iter()
-                        .map(|reference| reference.uri().clone())
-                        .collect(),
+                    link_entity_type_uri.uri().clone(),
+                    entity_type_ref.map_or(vec![], |inner| {
+                        inner
+                            .iter()
+                            .map(|reference| reference.uri().clone())
+                            .collect()
+                    }),
                 )
             })
             .collect::<HashMap<_, _>>();
 
-        assert_eq!(link_type_references, expected_link_type_references);
+        assert_eq!(
+            link_entity_type_references,
+            expected_link_entity_type_references
+        );
     }
 
     #[test]
@@ -275,9 +302,9 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/published-on/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [(
-            "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+        test_link_mappings(&entity_type, [(
+            "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
+            vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
         )]);
     }
 
@@ -291,7 +318,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/city/v/1",
         ]);
 
-        test_link_type_references(&entity_type, []);
+        test_link_mappings(&entity_type, []);
     }
 
     #[test]
@@ -303,7 +330,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, []);
+        test_link_mappings(&entity_type, []);
     }
 
     #[test]
@@ -312,14 +339,14 @@ mod tests {
 
         test_property_type_references(&entity_type, []);
 
-        test_link_type_references(&entity_type, [
+        test_link_mappings(&entity_type, [
             (
-                "https://blockprotocol.org/@alice/types/link-type/located-at/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1",
+                "https://blockprotocol.org/@alice/types/entity-type/located-at/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/uk-address/v/1"],
             ),
             (
-                "https://blockprotocol.org/@alice/types/link-type/tenant/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+                "https://blockprotocol.org/@alice/types/entity-type/tenant/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
             ),
         ]);
     }
@@ -332,10 +359,16 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [(
-            "https://blockprotocol.org/@alice/types/link-type/friend-of/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
-        )]);
+        test_link_mappings(&entity_type, [
+            (
+                "https://blockprotocol.org/@alice/types/entity-type/friend-of/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
+            ),
+            (
+                "https://blockprotocol.org/@alice/types/entity-type/owns/v/1",
+                vec![],
+            ),
+        ]);
     }
 
     #[test]
@@ -346,9 +379,9 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [(
-            "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-            "https://blockprotocol.org/@alice/types/entity-type/song/v/1",
+        test_link_mappings(&entity_type, [(
+            "https://blockprotocol.org/@alice/types/entity-type/contains/v/1",
+            vec!["https://blockprotocol.org/@alice/types/entity-type/song/v/1"],
         )]);
     }
 
@@ -360,7 +393,7 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
         ]);
 
-        test_link_type_references(&entity_type, []);
+        test_link_mappings(&entity_type, []);
     }
 
     #[test]
@@ -371,14 +404,14 @@ mod tests {
             "https://blockprotocol.org/@alice/types/property-type/text/v/1",
         ]);
 
-        test_link_type_references(&entity_type, [
+        test_link_mappings(&entity_type, [
             (
-                "https://blockprotocol.org/@alice/types/link-type/written-by/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/person/v/1",
+                "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/person/v/1"],
             ),
             (
-                "https://blockprotocol.org/@alice/types/link-type/contains/v/1",
-                "https://blockprotocol.org/@alice/types/entity-type/block/v/1",
+                "https://blockprotocol.org/@alice/types/entity-type/contains/v/1",
+                vec!["https://blockprotocol.org/@alice/types/entity-type/block/v/1"],
             ),
         ]);
     }

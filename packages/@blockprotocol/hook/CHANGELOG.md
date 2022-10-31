@@ -1,5 +1,17 @@
 # @blockprotocol/hook
 
+## 0.0.8
+
+### Patch Changes
+
+- [#707](https://github.com/blockprotocol/blockprotocol/pull/707) [`62396fa`](https://github.com/blockprotocol/blockprotocol/commit/62396fa3cc77bb1e70c5501079fe0f9b2cf4ef23) Thanks [@CiaranMn](https://github.com/CiaranMn)! - handle hook NOT_FOUND error. don't tear down when updating hook
+
+## 0.0.7
+
+### Patch Changes
+
+- [#676](https://github.com/blockprotocol/blockprotocol/pull/676) [`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af) Thanks [@CiaranMn](https://github.com/CiaranMn)! - export hook-service.json. add error codes. bug fix in useHook
+
 ## 0.0.6
 
 ### Patch Changes

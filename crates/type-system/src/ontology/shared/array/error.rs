@@ -24,3 +24,13 @@ pub enum ParsePropertyTypeReferenceArrayError {
     #[error("error in JSON: `{0}`")]
     InvalidJson(String),
 }
+
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
+#[serde(tag = "reason", content = "inner")]
+pub enum ParseEntityTypeReferenceArrayError {
+    #[error("invalid OneOf entity type reference inside items: `{0}`")]
+    InvalidReference(ParseOneOfError),
+    #[error("error in JSON: `{0}`")]
+    InvalidJson(String),
+}

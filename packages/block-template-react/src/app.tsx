@@ -1,5 +1,5 @@
 import {
-  BlockComponent,
+  type BlockComponent,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
 import { useRef } from "react";

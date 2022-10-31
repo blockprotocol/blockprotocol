@@ -1,5 +1,41 @@
 # mock-block-dock
 
+## 0.0.38
+
+### Patch Changes
+
+- [#726](https://github.com/blockprotocol/blockprotocol/pull/726) [`f085d4a`](https://github.com/blockprotocol/blockprotocol/commit/f085d4a913837befdb2231a0921e96e6c7f84977) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix stale hook callbacks. fix dom warnings.
+
+## 0.0.37
+
+### Patch Changes
+
+- [#707](https://github.com/blockprotocol/blockprotocol/pull/707) [`62396fa`](https://github.com/blockprotocol/blockprotocol/commit/62396fa3cc77bb1e70c5501079fe0f9b2cf4ef23) Thanks [@CiaranMn](https://github.com/CiaranMn)! - improve rich text styling + make toolbar appear on hover
+
+- Updated dependencies [[`62396fa`](https://github.com/blockprotocol/blockprotocol/commit/62396fa3cc77bb1e70c5501079fe0f9b2cf4ef23)]:
+  - @blockprotocol/hook@0.0.8
+
+## 0.0.36
+
+### Patch Changes
+
+- [#699](https://github.com/blockprotocol/blockprotocol/pull/699) [`1c13961`](https://github.com/blockprotocol/blockprotocol/commit/1c139617c1ddc2f57842dd40e7c15c90ec6d6315) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix bug in comparing text
+
+## 0.0.35
+
+### Patch Changes
+
+- [#695](https://github.com/blockprotocol/blockprotocol/pull/695) [`e09cbb4`](https://github.com/blockprotocol/blockprotocol/commit/e09cbb4afcaccf1a8d21c7301ded77a24f1e9c78) Thanks [@CiaranMn](https://github.com/CiaranMn)! - bug fix in setting property via hook service
+
+## 0.0.34
+
+### Patch Changes
+
+- [#656](https://github.com/blockprotocol/blockprotocol/pull/656) [`d025092`](https://github.com/blockprotocol/blockprotocol/commit/d025092b74ba79e27fcd4b28d129743a05e4fea7) Thanks [@CiaranMn](https://github.com/CiaranMn)! - implement hook service in mock block dock
+
+- Updated dependencies [[`97d8751`](https://github.com/blockprotocol/blockprotocol/commit/97d8751a8e700293869d86c6062db9e88c1e24af)]:
+  - @blockprotocol/hook@0.0.7
+
 ## 0.0.33
 
 ### Patch Changes
