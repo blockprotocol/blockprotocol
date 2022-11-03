@@ -1,8 +1,8 @@
 diff --git a/node_modules/@changesets/cli/dist/cli.cjs.dev.js b/node_modules/@changesets/cli/dist/cli.cjs.dev.js
-index e903107..eb48efb 100644
+index 5b0a45b..9c4d853 100644
 --- a/node_modules/@changesets/cli/dist/cli.cjs.dev.js
 +++ b/node_modules/@changesets/cli/dist/cli.cjs.dev.js
-@@ -1167,7 +1167,8 @@ async function getStatus(cwd, {
+@@ -1173,7 +1173,8 @@ async function getStatus(cwd, {
    if (changedPackages.length > 0 && changesets.length === 0) {
      logger.error("Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error.");
      logger.error("If this change doesn't need a release, run `changeset add --empty`.");
@@ -13,13 +13,13 @@ index e903107..eb48efb 100644
  
    if (output) {
 diff --git a/node_modules/@changesets/cli/dist/cli.cjs.prod.js b/node_modules/@changesets/cli/dist/cli.cjs.prod.js
-index fe411b2..85aafb3 100644
+index ba1899b..4138f00 100644
 --- a/node_modules/@changesets/cli/dist/cli.cjs.prod.js
 +++ b/node_modules/@changesets/cli/dist/cli.cjs.prod.js
-@@ -630,7 +630,8 @@ async function getStatus(cwd, {sinceMaster: sinceMaster, since: since, verbose:
+@@ -632,7 +632,8 @@ async function getStatus(cwd, {sinceMaster: sinceMaster, since: since, verbose:
      ref: sinceBranch || config.baseBranch
    })).length > 0 && 0 === changesets.length && (logger.error("Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error."), 
-   logger.error("If this change doesn't need a release, run `changeset add --empty`."),
+   logger.error("If this change doesn't need a release, run `changeset add --empty`."), 
 -  process.exit(1)), output) return void await fs__default.default.writeFile(path__default.default.join(cwd, output), JSON.stringify(releasePlan, void 0, 2));
 +  // Prevent CI failures in Renovate PRs that immedeately follow ‘Version Packages’
 +  /* process.exit(1) */ false), output) return void await fs__default.default.writeFile(path__default.default.join(cwd, output), JSON.stringify(releasePlan, void 0, 2));
@@ -27,10 +27,10 @@ index fe411b2..85aafb3 100644
    return print("patch", releases), logger.log("---"), print("minor", releases), logger.log("---"), 
    print("major", releases), releasePlan;
 diff --git a/node_modules/@changesets/cli/dist/cli.esm.js b/node_modules/@changesets/cli/dist/cli.esm.js
-index ffd9f1b..aa03f1c 100644
+index 5eca136..630028b 100644
 --- a/node_modules/@changesets/cli/dist/cli.esm.js
 +++ b/node_modules/@changesets/cli/dist/cli.esm.js
-@@ -1144,7 +1144,8 @@ async function getStatus(cwd, {
+@@ -1150,7 +1150,8 @@ async function getStatus(cwd, {
    if (changedPackages.length > 0 && changesets.length === 0) {
      error("Some packages have been changed but no changesets were found. Run `changeset add` to resolve this error.");
      error("If this change doesn't need a release, run `changeset add --empty`.");
