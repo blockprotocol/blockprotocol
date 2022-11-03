@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/hashintel/hash.git",
-  "commit": "24c75a922739c69dbe66ee1fadad39f9651da55d",
+  "commit": "1920790836bfd0fadb3991a95a672d8a51fff258",
 
   "workspace": "@hashintel/block-video",
   "distDir": "dist"
