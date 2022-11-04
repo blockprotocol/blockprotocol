@@ -34,7 +34,7 @@
     "dev": "yarn workspace @apps/site dev",
     "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "dev:db": "yarn workspace @apps/site dev:db",
-    "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./apps/*\""
+    "prepare": "patch-package --error-on-warn && turbo run codegen && turbo run build \"--filter=!./apps/*\""
   },
   "lint-staged": {
     "**": [
