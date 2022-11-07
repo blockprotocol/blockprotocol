@@ -9011,10 +9011,10 @@ lit-html@^2.2.0, lit-html@^2.4.0:
   dependencies:
     "@types/trusted-types" "^2.0.2"
 
-lit@^2.4.0:
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/lit/-/lit-2.4.0.tgz#e33a0f463e17408f6e7f71464e6a266e60a5bb77"
-  integrity sha512-fdgzxEtLrZFQU/BqTtxFQCLwlZd9bdat+ltzSFjvWkZrs7eBmeX0L5MHUMb3kYIkuS8Xlfnii/iI5klirF8/Xg==
+lit@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/lit/-/lit-2.4.1.tgz#21251ac14eb1ec8ca7cd15c9ac3564359809f7b5"
+  integrity sha512-qohSgLiyN1cFnJG26dIiY03S4F49857A0AHQfnS0zYtnUVnD2MFvx+UT52rtXsIuNFQrnUupX+zyGSATlk1f/A==
   dependencies:
     "@lit/reactive-element" "^1.4.0"
     lit-element "^3.2.0"
