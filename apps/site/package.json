@@ -104,7 +104,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.20.0",
+    "@babel/runtime": "^7.20.1",
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@playwright/test": "^1.27.1",
@@ -116,7 +116,7 @@
     "@types/express-session": "^1.17.5",
     "@types/hosted-git-info": "^3.0.2",
     "@types/html-to-text": "^8.1.1",
-    "@types/lodash": "4.14.186",
+    "@types/lodash": "4.14.188",
     "@types/md5": "^2.3.2",
     "@types/micromatch": "^4.0.2",
     "@types/mime-types": "^2.1.1",
