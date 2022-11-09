@@ -122,22 +122,6 @@ function takeObject(idx) {
     return ret;
 }
 /**
-<<<<<<< HEAD:packages/@blockprotocol/type-system/dist/index_bg.js
-=======
-* @param {any} link_type_obj
-* @returns {any}
-*/
-export function validateLinkType(link_type_obj) {
-    try {
-        const ret = wasm.validateLinkType(addBorrowedObject(link_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
->>>>>>> origin/main:packages/@blockprotocol/type-system-web/dist/index_bg.js
 * @param {any} data_type_obj
 * @returns {any}
 */
@@ -164,22 +148,6 @@ export function validateEntityType(entity_type_obj) {
 }
 
 /**
-<<<<<<< HEAD:packages/@blockprotocol/type-system/dist/index_bg.js
-* @param {any} link_type_obj
-* @returns {any}
-*/
-export function validateLinkType(link_type_obj) {
-    try {
-        const ret = wasm.validateLinkType(addBorrowedObject(link_type_obj));
-        return takeObject(ret);
-    } finally {
-        heap[stack_pointer++] = undefined;
-    }
-}
-
-/**
-=======
->>>>>>> origin/main:packages/@blockprotocol/type-system-web/dist/index_bg.js
 * @param {any} property_type_obj
 * @returns {any}
 */
@@ -277,21 +245,7 @@ export function __wbindgen_json_serialize(arg0, arg1) {
     getInt32Memory0()[arg0 / 4 + 0] = ptr0;
 };
 
-<<<<<<< HEAD:packages/@blockprotocol/type-system/dist/index_bg.js
-<<<<<<<< HEAD:packages/@blockprotocol/type-system/dist/index_bg.js
-========
-module.exports.__wbindgen_throw = function(arg0, arg1) {
+export function __wbindgen_throw(arg0, arg1) {
     throw new Error(getStringFromWasm0(arg0, arg1));
 };
 
-const path = require('path').join(__dirname, 'index_bg.wasm');
-const bytes = require('fs').readFileSync(path);
-
-const wasmModule = new WebAssembly.Module(bytes);
-const wasmInstance = new WebAssembly.Instance(wasmModule, imports);
-wasm = wasmInstance.exports;
-module.exports.__wasm = wasm;
-
->>>>>>>> origin/main:packages/@blockprotocol/type-system-node/dist/index.js
-=======
->>>>>>> origin/main:packages/@blockprotocol/type-system-web/dist/index_bg.js
