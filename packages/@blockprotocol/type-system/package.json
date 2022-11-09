@@ -21,12 +21,12 @@
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
-    "test": "node --require=@local/script-resources/suppress-experimental-warnings.cjs --loader=ts-node/esm/transpile-only --experimental-modules --experimental-wasm-modules --experimental-vm-modules --experimental-specifier-resolution=node ./node_modules/.bin/jest"
+    "test": "node --require=@local/script-resources/suppress-experimental-warnings.cjs --loader=ts-node/esm/transpile-only --experimental-modules --experimental-wasm-modules --experimental-vm-modules --experimental-specifier-resolution=node $(yarn bin jest)"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
-    "@types/jest": "29.1.2",
+    "@types/jest": "29.2.2",
     "eslint": "8.26.0",
     "jest": "29.3.1",
     "ts-jest": "29.0.3",
