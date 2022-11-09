@@ -16,7 +16,6 @@ use crate::{
 pub struct PropertyType {
     id: VersionedUri,
     title: String,
-    plural_title: String,
     description: Option<String>,
     one_of: OneOf<PropertyValues>,
 }
@@ -27,14 +26,12 @@ impl PropertyType {
     pub const fn new(
         id: VersionedUri,
         title: String,
-        plural_title: String,
         description: Option<String>,
         one_of: OneOf<PropertyValues>,
     ) -> Self {
         Self {
             id,
             title,
-            plural_title,
             description,
             one_of,
         }
@@ -48,11 +45,6 @@ impl PropertyType {
     #[must_use]
     pub fn title(&self) -> &str {
         &self.title
-    }
-
-    #[must_use]
-    pub fn plural_title(&self) -> &str {
-        &self.plural_title
     }
 
     #[must_use]
@@ -115,6 +107,7 @@ impl From<PropertyType> for serde_json::Value {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[repr(transparent)]
 pub struct PropertyTypeReference {
     uri: VersionedUri,
 }
@@ -129,6 +122,13 @@ impl PropertyTypeReference {
     #[must_use]
     pub const fn uri(&self) -> &VersionedUri {
         &self.uri
+    }
+}
+
+impl From<&VersionedUri> for &PropertyTypeReference {
+    fn from(uri: &VersionedUri) -> Self {
+        // SAFETY: Self is `repr(transparent)`
+        unsafe { &*(uri as *const VersionedUri).cast::<PropertyTypeReference>() }
     }
 }
 
@@ -355,7 +355,6 @@ mod tests {
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1.2",
                   "title": "Age",
-                  "pluralTitle": "Ages",
                   "oneOf": [
                     {
                       "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1"
@@ -377,7 +376,6 @@ mod tests {
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
                   "title": "Age",
-                  "pluralTitle": "Ages",
                   "oneOf": []
                 }
             ),
@@ -395,7 +393,6 @@ mod tests {
                   "kind": "propertyType",
                   "$id": "https://blockprotocol.org/@alice/types/property-type/age/v/1",
                   "title": "Age",
-                  "pluralTitle": "Ages",
                   "oneOf": [
                     {
                       "$ref": "https://blockprotocol.org/@blockprotocol/types/data-type/number"

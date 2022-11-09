@@ -15,6 +15,7 @@ jobs:
     name: Linting
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
+
     steps:
       - uses: actions/checkout@v3
         with:
@@ -155,6 +156,7 @@ jobs:
     name: NPM Packages
     if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-20.04
+    timeout-minutes: 30 ## https://github.com/actions/upload-artifact/issues/358
 
     steps:
       - uses: actions/checkout@v3
@@ -169,9 +171,6 @@ jobs:
           docker pull verdaccio/verdaccio:5
           docker run -it --detach --rm --name verdaccio -p 4873:4873  verdaccio/verdaccio:5
           yarn wait-on --timeout 30000 http://localhost:4873
-
-      - name: Remove ESLint from templates
-        run: yarn workspace @local/package-chores exe scripts/remove-eslint-from-templates.ts
 
       - name: Publish NPM packages to local registry
         run: yarn workspace @local/package-chores exe scripts/publish-to-local-registry.ts
@@ -243,6 +242,8 @@ jobs:
           - iphone
           - pixel
           - safari
+    timeout-minutes: 30 ## https://github.com/actions/upload-artifact/issues/358
+
     steps:
       - uses: actions/checkout@v3
 
@@ -319,8 +320,9 @@ jobs:
         name: Upload coverage to https://app.codecov.io/gh/blockprotocol/blockprotocol
         with:
           fail_ci_if_error: true
-          flags: site-integration-${{ matrix.device }}
           files: coverage/lcov.info
+          flags: site-integration-${{ matrix.device }}
+          token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
 
       - name: Show DB logs
         if: ${{ success() || failure() }}

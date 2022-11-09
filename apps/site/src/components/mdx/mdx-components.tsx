@@ -22,6 +22,7 @@ import { Link } from "../link";
 import { Snippet } from "../snippet";
 import { FAQ } from "./faq";
 import { GraphServiceMessageList } from "./graph-service-message-list";
+import { HookServiceMessageList } from "./hook-service-message-list";
 import { GitHubInfoCard } from "./info-card/github-info-card";
 import { InfoCard } from "./info-card/info-card";
 import { InfoCardWrapper } from "./info-card/info-card-wrapper";
@@ -96,6 +97,7 @@ export const mdxComponents: Record<
   InfoCard,
   FAQ,
   GraphServiceMessageList,
+  HookServiceMessageList,
   SubTitle: (({ children }: { children?: ReactNode }) => (
     <Box
       maxWidth={750}

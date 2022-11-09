@@ -1,5 +1,31 @@
 # block-template-react
 
+## 0.1.20
+
+### Patch Changes
+
+- Updated dependencies [[`f085d4a`](https://github.com/blockprotocol/blockprotocol/commit/f085d4a913837befdb2231a0921e96e6c7f84977)]:
+  - mock-block-dock@0.0.38
+
+## 0.1.19
+
+### Patch Changes
+
+- Updated dependencies [[`62396fa`](https://github.com/blockprotocol/blockprotocol/commit/62396fa3cc77bb1e70c5501079fe0f9b2cf4ef23)]:
+  - mock-block-dock@0.0.37
+
+## 0.1.18
+
+## 0.1.17
+
+## 0.1.16
+
+## 0.1.15
+
+### Patch Changes
+
+- [#637](https://github.com/blockprotocol/blockprotocol/pull/637) [`389b7a4`](https://github.com/blockprotocol/blockprotocol/commit/389b7a4c2a58ee5c5631961b5cdfc7a27f293d16) Thanks [@CiaranMn](https://github.com/CiaranMn)! - fix style variable
+
 ## 0.1.14
 
 ## 0.1.13

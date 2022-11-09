@@ -15,8 +15,7 @@ regex = "1.6.0"
 serde = { version = "1.0.137", features = ["derive"] }
 serde_json = "1.0.83"
 thiserror = "1.0.32"
-# TODO - Update this once the upstream issue is resolved https://github.com/madonoharu/tsify/issues/6
-tsify = { git = "https://github.com/hashdeps/tsify", branch = "am/undefined-test" }
+tsify = "0.4.2"
 url = "2.2.2"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

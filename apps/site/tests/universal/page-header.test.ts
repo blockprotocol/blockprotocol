@@ -1,6 +1,6 @@
 import { expect, test } from "playwright-test-coverage";
 
-import { openLoginModal, openMobileNav } from "../shared/nav";
+import { openLoginModal, openMobileNav } from "../shared/nav.js";
 
 test("page header navigation works", async ({
   page,
@@ -58,35 +58,23 @@ test("page header navigation works", async ({
   await expect(page).toHaveURL("/signup");
 });
 
-test("triggers for search modal work", async ({ page, isMobile }) => {
-  test.skip(!!isMobile, "This feature does not exist on mobile");
-
+test("search modal is triggered by button press on desktop", async ({
+  page,
+  isMobile,
+}) => {
   await page.goto("/");
 
-  const searchModalLocator = page.locator('[data-testid="bp-search-modal"]');
-
-  await expect(searchModalLocator).not.toBeVisible();
-  await page.keyboard.press("/");
-  await expect(
-    searchModalLocator,
-    "Pressing '/' should trigger search modal",
-  ).toBeVisible();
-  await expect(
-    searchModalLocator.locator('[placeholder="Search…"]'),
-    "Input should be focused when search modal is opened",
-  ).toBeFocused();
-
-  // close modal
-  await searchModalLocator.locator(".MuiBackdrop-root").click({
-    position: {
-      x: 32,
-      y: 32,
-    },
-  });
+  if (isMobile) {
+    await expect(
+      page.locator("header >> button", { hasText: "Search" }),
+      "Search button should not exist on mobile",
+    ).not.toBeVisible();
+    return;
+  }
 
   await page.locator("header >> button", { hasText: "Search" }).click();
   await expect(
-    searchModalLocator,
+    page.locator('[data-testid="bp-search-modal"]'),
     "Clicking on search nav button should bring up search modal",
   ).toBeVisible();
 });

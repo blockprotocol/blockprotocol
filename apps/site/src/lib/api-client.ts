@@ -58,10 +58,9 @@ const parseErrorMessageAndCodeFromAxiosError = (error: ApiClientError) => {
 
   return {
     message:
-      firstValidationError?.msg ??
-      error.response?.statusText ??
-      "An error occurred",
-    code: firstValidationError?.code || "CODE_NOT_PROVIDED",
+      firstValidationError?.msg ?? error.response?.statusText ?? error.message,
+    code:
+      firstValidationError?.code ?? error.code ?? `${error.response?.status}`,
   };
 };
 

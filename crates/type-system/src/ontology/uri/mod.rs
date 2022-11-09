@@ -11,7 +11,7 @@ use tsify::Tsify;
 use url::Url;
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
-#[derive(Clone, PartialEq, Eq, Hash)]
+#[derive(Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
 pub struct BaseUri(String);
 
 impl fmt::Debug for BaseUri {
@@ -83,7 +83,7 @@ impl<'de> Deserialize<'de> for BaseUri {
 
 // TODO: can we impl Tsify to turn this into a type: template string
 //  if we can then we should delete wasm::VersionedUriPatch
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
 pub struct VersionedUri {
     base_uri: BaseUri,
     version: u32,

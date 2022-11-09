@@ -7,16 +7,22 @@ import {
   LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
+import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
+import { useHookEmbedderService } from "@blockprotocol/hook/react";
 import {
   ComponentType,
   FunctionComponent,
   lazy,
   Suspense,
+  useCallback,
   useEffect,
   useRef,
+  useState,
 } from "react";
+import { v4 as uuid } from "uuid";
 
 import { BlockRenderer } from "./block-renderer";
+import { HookPortals } from "./hook-portals";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useDefaultState } from "./use-default-state";
 import { useMockBlockProps } from "./use-mock-block-props";
@@ -114,6 +120,8 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   const [debugMode, setDebugMode] = useDefaultState<boolean>(initialDebug);
 
+  const [hooks, setHooks] = useState<Map<string, HookData>>(new Map());
+
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const blockType =
@@ -143,6 +151,82 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     callbacks: graphServiceCallbacks,
     readonly,
   });
+
+  const hookCallback = useCallback<EmbedderHookMessageCallbacks["hook"]>(
+    async ({ data }) => {
+      if (!data) {
+        return {
+          errors: [
+            {
+              code: "INVALID_INPUT",
+              message: "Data is required with hook",
+            },
+          ],
+        };
+      }
+      const { hookId, node, type } = data;
+
+      if (hookId) {
+        const existingHook = hooks.get(hookId);
+        if (!existingHook) {
+          return {
+            errors: [
+              {
+                code: "NOT_FOUND",
+                message: `Hook with id ${hookId} not found`,
+              },
+            ],
+          };
+        }
+      }
+
+      if (node === null && hookId) {
+        setHooks((currentHooks) => {
+          const draftHooks = new Map(currentHooks);
+          draftHooks.delete(hookId);
+          return draftHooks;
+        });
+        return { data: { hookId } };
+      }
+
+      if (data?.type === "text") {
+        const hookIdForReturn = hookId ?? uuid();
+
+        setHooks((currentHooks) => {
+          const draftHooks = new Map(currentHooks);
+          draftHooks.set(hookIdForReturn, {
+            ...data,
+            hookId: hookIdForReturn,
+          });
+          return draftHooks;
+        });
+
+        return { data: { hookId: hookIdForReturn } };
+      }
+
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `Hook type ${type} not supported`,
+          },
+        ],
+      };
+    },
+    [hooks, setHooks],
+  );
+
+  const { hookService } = useHookEmbedderService(wrapperRef, {
+    callbacks: {
+      hook: hookCallback,
+    },
+  });
+
+  useEffect(() => {
+    if (hookService) {
+      hookService.on("hook", hookCallback);
+    }
+  }, [hookCallback, hookService]);
 
   useSendGraphValue({
     graphService,
@@ -223,6 +307,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setEntityIdOfEntityForBlock={setEntityIdOfEntityForBlock}
       updateEntity={graphServiceCallbacks.updateEntity}
     >
+      <HookPortals hooks={hooks} />
       <div ref={wrapperRef}>
         <Suspense>
           {hideDebugToggle && !debugMode ? (
