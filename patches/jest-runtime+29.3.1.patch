@@ -1,0 +1,13 @@
+diff --git a/node_modules/jest-runtime/build/index.js b/node_modules/jest-runtime/build/index.js
+index 9906023..d8458dd 100644
+--- a/node_modules/jest-runtime/build/index.js
++++ b/node_modules/jest-runtime/build/index.js
+@@ -1509,7 +1509,7 @@ class Runtime {
+     const moduleLookup = {};
+     for (const {module} of imports) {
+       if (moduleLookup[module] === undefined) {
+-        moduleLookup[module] = await this.loadEsmModule(
++        moduleLookup[module] = await this.linkAndEvaluateModule(
+           await this.resolveModule(module, identifier, context)
+         );
+       }
