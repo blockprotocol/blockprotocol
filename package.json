@@ -34,7 +34,7 @@
     "dev": "yarn workspace @apps/site dev",
     "dev:seed-db": "yarn workspace @apps/site dev:seed-db",
     "dev:db": "yarn workspace @apps/site dev:db",
-    "prepare": "patch-package && turbo run codegen && turbo run build \"--filter=!./apps/*\""
+    "prepare": "patch-package --error-on-warn && turbo run codegen && turbo run build \"--filter=!./apps/*\""
   },
   "lint-staged": {
     "**": [
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.4.7",
-    "@changesets/cli": "^2.25.0",
+    "@changesets/cli": "^2.25.2",
     "check-dependency-version-consistency": "3.0.3",
     "dotenv-flow": "3.2.0",
     "husky": "8.0.1",
@@ -57,7 +57,7 @@
     "prettier-plugin-packagejson": "2.3.0",
     "prettier-plugin-sh": "0.12.8",
     "suppress-exit-code": "3.1.0",
-    "turbo": "1.6.1",
+    "turbo": "1.6.3",
     "yarn-deduplicate": "6.0.0"
   },
   "engines": {
