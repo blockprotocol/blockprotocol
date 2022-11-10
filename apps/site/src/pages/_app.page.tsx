@@ -62,11 +62,14 @@ const MyApp = ({
   const refetchUser = useCallback(async () => {
     const { data, error } = await apiClient.get<ApiMeResponse>("me", {
       "axios-retry": {
-        retries: 2,
-        onRetry: (retryCount, retryError) => {
+        onRetry: (retryCount, axiosError) => {
           Sentry.captureMessage("Retrying /api/me", {
-            extra: { retryCount, retryError },
+            extra: { retryCount, axiosError },
           });
+        },
+        retries: 2,
+        retryCondition: (axiosError) => {
+          return axiosError.response?.status !== 200;
         },
       },
     });
