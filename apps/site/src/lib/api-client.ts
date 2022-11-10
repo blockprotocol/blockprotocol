@@ -47,7 +47,7 @@ const axiosClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
-axiosRetry(axiosClient);
+axiosRetry(axiosClient, { retries: 0 });
 
 export type ApiClientError = AxiosError<{
   errors?: Partial<ValidationError & { code?: string }>[];
