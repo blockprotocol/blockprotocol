@@ -80,19 +80,26 @@ test("search modal is triggered by button press on desktop", async ({
 });
 
 test("/api/me is retried twice", async ({ page, isMobile }) => {
-  let apiMeRetryCount = 0;
+  let requestCount = 0;
   await page.route("/api/me", async (route) => {
-    if (apiMeRetryCount !== 2) {
-      apiMeRetryCount += 1;
+    requestCount += 1;
+
+    if (requestCount === 1) {
       await route.abort();
-    } else {
-      await route.fallback();
+      return;
     }
+
+    if (requestCount === 2) {
+      await route.fulfill({ status: 500, body: "Internal Server Error" });
+      return;
+    }
+
+    await route.fallback();
   });
 
   await page.goto("/");
   await openLoginModal({ page, isMobile });
-  expect(apiMeRetryCount).toBe(2);
+  expect(requestCount).toBe(3);
 });
 
 // @todo: Add tests for authenticated flow
