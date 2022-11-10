@@ -213,15 +213,7 @@ test.skip("login modal screen 2 correctly handles interactions", () => {
   // @todo write after finishing signup flow
 });
 
-test("Login page redirects logged in users to dashboard", async ({
-  browserName,
-  page,
-}) => {
-  test.skip(
-    browserName === "webkit",
-    "https://app.asana.com/0/1202538466812818/1202652337622563/f",
-  );
-
+test("Login page redirects logged in users to dashboard", async ({ page }) => {
   await page.goto("/docs");
   await login({ page });
   expect(page.url()).toMatch(/\/docs$/);

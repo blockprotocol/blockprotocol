@@ -91,14 +91,8 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
 });
 
 test("Sign Up page redirects logged in users to dashboard", async ({
-  browserName,
   page,
 }) => {
-  test.skip(
-    browserName === "webkit",
-    "https://app.asana.com/0/1202538466812818/1202652337622563/f",
-  );
-
   await page.goto("/docs");
   await login({ page });
   expect(page.url()).toMatch(/\/docs$/);
