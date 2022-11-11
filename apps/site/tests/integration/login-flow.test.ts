@@ -233,3 +233,26 @@ test("Login page redirects logged in users to dashboard", async ({
     }),
   ]);
 });
+
+test("/api/me is retried twice", async ({ page, isMobile }) => {
+  let requestCount = 0;
+  await page.route("/api/me", async (route) => {
+    requestCount += 1;
+
+    if (requestCount === 1) {
+      await route.abort();
+      return;
+    }
+
+    if (requestCount === 2) {
+      await route.fulfill({ status: 500, body: "Internal Server Error" });
+      return;
+    }
+
+    await route.fallback();
+  });
+
+  await page.goto("/");
+  await openLoginModal({ page, isMobile });
+  expect(requestCount).toBe(3);
+});
