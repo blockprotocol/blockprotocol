@@ -69,7 +69,7 @@ const MyApp = ({
         },
         retries: 2,
         retryCondition: (axiosError) => {
-          return axiosError.response?.status !== 200;
+          return ![200, 304].includes(axiosError.response?.status ?? 0);
         },
       },
     });
