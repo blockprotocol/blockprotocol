@@ -256,5 +256,3 @@ test("/api/me is retried twice", async ({ page, isMobile }) => {
   await openLoginModal({ page, isMobile });
   expect(requestCount).toBe(3);
 });
-
-// @todo: Add tests for authenticated flow

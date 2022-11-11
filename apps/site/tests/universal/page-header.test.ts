@@ -78,3 +78,5 @@ test("search modal is triggered by button press on desktop", async ({
     "Clicking on search nav button should bring up search modal",
   ).toBeVisible();
 });
+
+// @todo: Add tests for authenticated flow
