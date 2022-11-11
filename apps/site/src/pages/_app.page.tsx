@@ -60,7 +60,18 @@ const MyApp = ({
   const [user, setUser] = useState<UserState>("loading");
 
   const refetchUser = useCallback(async () => {
-    const { data, error } = await apiClient.get<ApiMeResponse>("me");
+    const { data, error } = await apiClient.get<ApiMeResponse>("me", {
+      "axios-retry": {
+        onRetry: (retryCount, axiosError) => {
+          Sentry.captureMessage("Retrying /api/me", {
+            extra: { retryCount, axiosError },
+          });
+        },
+        retries: 2,
+        retryCondition: (axiosError) =>
+          ![200, 304].includes(axiosError.response?.status ?? 0),
+      },
+    });
 
     if (!data) {
       Sentry.captureException("Problem fetching /api/me", {

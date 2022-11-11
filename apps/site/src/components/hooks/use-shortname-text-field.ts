@@ -34,7 +34,7 @@ export const useShortnameTextField = ({
         const { data: isShortnameTaken, error } = await apiClient.get<
           ApiIsShortnameTakenResponse,
           ApiIsShortnameTakenQueryParams
-        >("is-shortname-taken", params);
+        >("is-shortname-taken", { params });
 
         if (error) {
           throw error;
