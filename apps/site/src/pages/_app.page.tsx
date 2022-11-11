@@ -68,9 +68,8 @@ const MyApp = ({
           });
         },
         retries: 2,
-        retryCondition: (axiosError) => {
-          return ![200, 304].includes(axiosError.response?.status ?? 0);
-        },
+        retryCondition: (axiosError) =>
+          ![200, 304].includes(axiosError.response?.status ?? 0),
       },
     });
 
