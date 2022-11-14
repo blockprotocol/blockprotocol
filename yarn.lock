@@ -11245,10 +11245,10 @@ playwright-core@1.27.1:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.27.1.tgz#840ef662e55a3ed759d8b5d3d00a5f885a7184f4"
   integrity sha512-9EmeXDncC2Pmp/z+teoVYlvmPWUC6ejSSYZUln7YaP89Z6lpAaiaAnqroUt/BoLo8tn7WYShcfaCh+xofZa44Q==
 
-playwright-test-coverage@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/playwright-test-coverage/-/playwright-test-coverage-1.2.3.tgz#1fc5d68e772847027528b0d2dd6e1e894f2fb422"
-  integrity sha512-FGTwz6WCo1JOlQXwOjO214ueytSoX+1MprSosf1x6bgEmaD5e/UHL+6IUb1xguex8bkU6+O8jO1zUeG5rbronw==
+playwright-test-coverage@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/playwright-test-coverage/-/playwright-test-coverage-1.2.5.tgz#aa38b4130cd64208495d4e191197aa1570f63517"
+  integrity sha512-knngGRyc1fZ/xymdRbTve8GahXm5ysiqU61a6rbUffIQfPUSBk0/USXKEZw5ZIBPkks8d+NZnTPIDc0EVLTrrQ==
 
 playwright@^1.27.1:
   version "1.27.1"
