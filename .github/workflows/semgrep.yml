@@ -6,8 +6,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - .github/workflows/semgrep.yml
   schedule:
     - cron: '0 0 * * 0'
 jobs:
