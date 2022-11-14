@@ -50,7 +50,7 @@
     "react-resizable": "^3.0.4",
     "slate": "^0.82.1",
     "slate-react": "^0.83.1",
-    "styled-jsx": "5.0.7",
+    "styled-jsx": "^5.0.7",
     "use-local-storage-state": "^18.1.1",
     "uuid": "^8.3.2"
   },
