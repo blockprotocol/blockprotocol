@@ -12,7 +12,8 @@ on:
 jobs:
   semgrep:
     name: Scan
-    runs-on: ubuntu-20.04
+    # Change this in the event of future self-hosting of Action runner:
+    runs-on: ubuntu-latest
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
