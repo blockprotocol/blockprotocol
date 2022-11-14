@@ -17,6 +17,7 @@ jobs:
     env:
       SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
     container:
+      # A Docker image with Semgrep installed:
       image: returntocorp/semgrep
     if: (github.actor != 'dependabot[bot]')
     steps:
