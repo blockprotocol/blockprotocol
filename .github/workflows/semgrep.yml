@@ -1,0 +1,33 @@
+name: Semgrep
+
+on:
+  # Scan changed files in PRs (diff-aware scanning):
+  pull_request: {}
+  # Scan mainline branches and report all findings:
+  push:
+    branches:
+      - main
+  # Schedule the CI job (this method uses cron syntax):
+  schedule:
+    - cron: "30 0 1,15 * *" # scheduled for 00:30 UTC on both the 1st and 15th of the month
+
+jobs:
+  semgrep:
+    name: Scan
+
+    # Change this in the event of future self-hosting of Action runner:
+    runs-on: ubuntu-latest
+
+    env:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+
+    container:
+      # A Docker image with Semgrep installed:
+      image: returntocorp/semgrep
+
+    # Skip any PR created by dependabot to avoid permission issues:
+    if: (github.actor != 'dependabot[bot]')
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: semgrep ci
