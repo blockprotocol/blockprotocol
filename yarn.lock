@@ -3122,13 +3122,13 @@
     tiny-glob "^0.2.9"
     tslib "^2.4.0"
 
-"@playwright/test@1.28.0-alpha-nov-10-2022":
-  version "1.28.0-alpha-nov-10-2022"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.28.0-alpha-nov-10-2022.tgz#763be8edb7a2851e9a93faf0a34809da7086baa0"
-  integrity sha512-uN5qObwIifEoaOC8w+1r4PMhY4O0f2CVUxxoqzxbvQsfNsU/+M0XyKaczZ8KJ5JpCmY3Fwdqco7pU9kj3geGSQ==
+"@playwright/test@1.28.0":
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.28.0.tgz#8de83f9d2291bba3f37883e33431b325661720d9"
+  integrity sha512-vrHs5DFTPwYox5SGKq/7TDn/S4q6RA1zArd7uhO6EyP9hj3XgZBBM12ktMbnDQNxh/fL1IUKsTNLxihmsU38lQ==
   dependencies:
     "@types/node" "*"
-    playwright-core "1.28.0-alpha-nov-10-2022"
+    playwright-core "1.28.0"
 
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.21"
@@ -11247,22 +11247,22 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.28.0-alpha-nov-10-2022:
-  version "1.28.0-alpha-nov-10-2022"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.28.0-alpha-nov-10-2022.tgz#594457fc68858b993f468c97ae8fba65e67217da"
-  integrity sha512-LkhsqJDFOrH2JOVDDCFBcVBPqrBqWvbRtEYCg7ul8ymU4YoD49smhQbPCGT0LEV/dW7g1U7AIMNcVKyvt0gzuA==
+playwright-core@1.28.0:
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.28.0.tgz#61df5c714f45139cca07095eccb4891e520e06f2"
+  integrity sha512-nJLknd28kPBiCNTbqpu6Wmkrh63OEqJSFw9xOfL9qxfNwody7h6/L3O2dZoWQ6Oxcm0VOHjWmGiCUGkc0X3VZA==
 
 playwright-test-coverage@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/playwright-test-coverage/-/playwright-test-coverage-1.2.5.tgz#aa38b4130cd64208495d4e191197aa1570f63517"
   integrity sha512-knngGRyc1fZ/xymdRbTve8GahXm5ysiqU61a6rbUffIQfPUSBk0/USXKEZw5ZIBPkks8d+NZnTPIDc0EVLTrrQ==
 
-playwright@1.28.0-alpha-nov-10-2022:
-  version "1.28.0-alpha-nov-10-2022"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.28.0-alpha-nov-10-2022.tgz#33e1505fafcab71d047ae282be0fedb2c43cba3a"
-  integrity sha512-AW1ufHTNIoCPbjzQOZwWGilW/LOqMebtHfEHHm1vvMlA45rPfzo0uiQ+kpymH1cYV6bsDkK7Bcaq8iQXh1p5mw==
+playwright@1.28.0:
+  version "1.28.0"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.28.0.tgz#eaec2e607858bd4c0bd7434ac01042720e6a39e3"
+  integrity sha512-kyOXGc5y1mgi+hgEcCIyE1P1+JumLrxS09nFHo5sdJNzrucxPRAGwM4A2X3u3SDOfdgJqx61yIoR6Av+5plJPg==
   dependencies:
-    playwright-core "1.28.0-alpha-nov-10-2022"
+    playwright-core "1.28.0"
 
 pluralize@^8.0.0:
   version "8.0.0"
