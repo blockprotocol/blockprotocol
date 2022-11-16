@@ -6,7 +6,7 @@ import {
   PaperProps,
   Typography,
 } from "@mui/material";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";

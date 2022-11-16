@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import axiosRetry from "axios-retry";
 import { ValidationError } from "express-validator";
 
 import {
@@ -46,6 +47,7 @@ const axiosClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
 });
+axiosRetry(axiosClient, { retries: 0 });
 
 export type ApiClientError = AxiosError<{
   errors?: Partial<ValidationError & { code?: string }>[];
@@ -77,15 +79,13 @@ const handleAxiosError = (
 
 const get = <ResponseData = any, RequestParams = any>(
   url: string,
-  requestParams?: RequestParams,
+  config: AxiosRequestConfig<RequestParams> = {},
 ): Promise<{
   data?: ResponseData;
   error?: ApiClientError;
 }> =>
   axiosClient
-    .get<ResponseData>(url, {
-      params: requestParams,
-    })
+    .get<ResponseData>(url, config)
     .then(({ data }) => ({ data }))
     .catch(handleAxiosError);
 

@@ -1,5 +1,5 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
-import Image from "next/image";
+import Image from "next/legacy/image";
 
 import primaryHelixImage from "../../../../public/assets/new-home/primary-helix-min.png";
 
