@@ -9,13 +9,12 @@ Sentry.init({
   dsn,
   enabled: !!dsn,
   environment: process.env.NEXT_PUBLIC_VERCEL_ENV ?? "unset",
-  integrations: process.env.NEXT_PUBLIC_SENTRY_REPLAY_SESSION_SAMPLING_RATE
+  integrations: process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE
     ? [
         new Replay({
           captureOnlyOnError: true,
-          errorSampleRate: 1,
-          sessionSampleRate: parseFloat(
-            process.env.NEXT_PUBLIC_SENTRY_REPLAY_SESSION_SAMPLING_RATE,
+          replaysSamplingRate: parseFloat(
+            process.env.NEXT_PUBLIC_SENTRY_REPLAYS_SAMPLING_RATE,
           ),
           stickySession: true,
         }),
