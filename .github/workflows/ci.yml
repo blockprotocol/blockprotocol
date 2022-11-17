@@ -324,6 +324,10 @@ jobs:
           flags: site-integration-${{ matrix.device }}
           token: ${{ secrets.CODECOV_TOKEN }} ## not required for public repos, can be removed when https://github.com/codecov/codecov-action/issues/837 is resolved
 
+      - name: Stop DB
+        if: ${{ success() || failure() }}
+        run: docker-compose -f docker-compose.dev.yml down
+
       - name: Show DB logs
         if: ${{ success() || failure() }}
         run: cat var/logs/db.log
