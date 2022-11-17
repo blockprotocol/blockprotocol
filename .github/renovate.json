@@ -4,7 +4,7 @@
   "prConcurrentLimit": 10,
   "enabledManagers": ["github-actions", "npm"],
   "rebaseWhen": "conflicted",
-  "schedule": ["monday before 5am", "thursday before 5am"],
+  "schedule": ["before 5am on Monday", "before 5am on Thursday"],
   "packageRules": [
     {
       "matchManagers": ["npm"],
