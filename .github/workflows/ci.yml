@@ -311,6 +311,10 @@ jobs:
         ## https://github.com/tiaanduplessis/kill-port/issues/48
         # run: yarn kill-port 3000
 
+      - name: Stop DB
+        if: ${{ success() || failure() }}
+        run: docker-compose -f apps/site/docker-compose.dev.yml down
+
       - name: Generate coverage report
         if: ${{ success() || failure() }}
         run: yarn nyc report --reporter=lcovonly --reporter=text
