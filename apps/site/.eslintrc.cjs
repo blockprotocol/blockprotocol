@@ -19,7 +19,7 @@ module.exports = {
               "playwright-test-coverage",
             ],
             message:
-              "Please import Playwright resources from `[site]/tests/shared/runtime/runtime.js`",
+              "Please import Playwright resources from `[site]/tests/shared/runtime/wrapped-playwright.js`",
           },
         ],
         paths: [

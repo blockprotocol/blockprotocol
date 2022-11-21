@@ -1,5 +1,5 @@
-import type { PlaywrightTestConfig } from "./tests/shared/runtime.js";
-import { devices } from "./tests/shared/runtime.js";
+import type { PlaywrightTestConfig } from "./tests/shared/wrapped-playwright.js";
+import { devices } from "./tests/shared/wrapped-playwright.js";
 
 (await import("dotenv-flow")).config({ silent: true });
 

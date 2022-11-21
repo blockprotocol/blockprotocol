@@ -1,6 +1,6 @@
 import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
-import { expect, test } from "../shared/runtime.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("API key page should generate a valid key", async ({
   page,

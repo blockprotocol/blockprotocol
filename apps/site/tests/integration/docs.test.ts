@@ -1,5 +1,5 @@
 import { closeMobileNav, openMobileNav } from "../shared/nav.js";
-import { expect, test } from "../shared/runtime.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("Docs page should contain key elements and interactions should work", async ({
   page,

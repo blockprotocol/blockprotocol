@@ -1,8 +1,8 @@
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails.js";
 import { resetSite } from "../shared/fixtures.js";
 import { login, openLoginModal, openMobileNav } from "../shared/nav.js";
-import type { Page } from "../shared/runtime.js";
-import { expect, test } from "../shared/runtime.js";
+import type { Page } from "../shared/wrapped-playwright.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";

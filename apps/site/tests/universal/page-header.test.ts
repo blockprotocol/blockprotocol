@@ -1,5 +1,5 @@
 import { openLoginModal, openMobileNav } from "../shared/nav.js";
-import { expect, test } from "../shared/runtime.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("page header navigation works", async ({
   page,

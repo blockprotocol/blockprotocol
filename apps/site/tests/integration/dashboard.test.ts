@@ -1,6 +1,6 @@
 import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
-import { expect, test } from "../shared/runtime.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("dashboard page should not be accessible to guests", async ({ page }) => {
   await Promise.all([

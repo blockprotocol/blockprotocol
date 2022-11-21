@@ -1,5 +1,5 @@
 import { getBlocksData } from "../shared/fixtures.js";
-import { expect, test } from "../shared/runtime.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 const codeBlockMetadata = (await getBlocksData()).find(
   ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",

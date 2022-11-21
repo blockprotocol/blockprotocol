@@ -1,4 +1,4 @@
-import { expect, test } from "../shared/runtime.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 const codeBlockUrl = "/@hash/blocks/code";
 
