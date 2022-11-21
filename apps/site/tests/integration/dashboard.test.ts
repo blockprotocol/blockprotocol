@@ -1,7 +1,6 @@
-import { expect, test } from "playwright-test-coverage";
-
 import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
+import { expect, test } from "../shared/runtime.js";
 
 test("dashboard page should not be accessible to guests", async ({ page }) => {
   await Promise.all([

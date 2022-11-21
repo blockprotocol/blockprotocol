@@ -1,9 +1,8 @@
-import type { Page } from "playwright";
-import { expect, test } from "playwright-test-coverage";
-
 import { publishBlock } from "../shared/blocks.js";
 import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
+import type { Page } from "../shared/runtime.js";
+import { expect, test } from "../shared/runtime.js";
 
 const fillBlockDetails = async (
   page: Page,

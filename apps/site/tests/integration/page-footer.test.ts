@@ -1,4 +1,4 @@
-import { expect, test } from "playwright-test-coverage";
+import { expect, test } from "../shared/runtime.js";
 
 test("page footer navigation works", async ({ page, browserName }) => {
   test.skip(

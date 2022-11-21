@@ -1,6 +1,5 @@
-import { expect, test } from "playwright-test-coverage";
-
 import { closeMobileNav, openMobileNav } from "../shared/nav.js";
+import { expect, test } from "../shared/runtime.js";
 
 test("Docs page should contain key elements and interactions should work", async ({
   page,
@@ -159,7 +158,7 @@ test("Docs page should contain key elements and interactions should work", async
   ).toHaveAttribute("href", "/docs/developing-blocks");
 });
 
-test("invalid docs page should redirect to 4040", async ({ page }) => {
+test("invalid docs page should redirect to 404", async ({ page }) => {
   await page.goto("/docs/non/existing/page");
 
   await expect(

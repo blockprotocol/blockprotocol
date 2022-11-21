@@ -1,7 +1,6 @@
-import { expect, test } from "playwright-test-coverage";
-
 import { getBlocksData, resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
+import { expect, test } from "../shared/runtime.js";
 
 test.beforeEach(async () => {
   await resetSite();

@@ -1,7 +1,6 @@
-import type { Page } from "playwright";
-import { expect } from "playwright-test-coverage";
-
 import type { ExpandedBlockMetadata } from "../../src/lib/blocks";
+import type { Page } from "./runtime.js";
+import { expect } from "./runtime.js";
 
 /**
  * Provides a quick way to publish blocks using direct API calls instead of UI

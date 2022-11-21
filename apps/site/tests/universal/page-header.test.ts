@@ -1,6 +1,5 @@
-import { expect, test } from "playwright-test-coverage";
-
 import { openLoginModal, openMobileNav } from "../shared/nav.js";
+import { expect, test } from "../shared/runtime.js";
 
 test("page header navigation works", async ({
   page,

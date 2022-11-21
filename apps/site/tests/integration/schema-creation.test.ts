@@ -1,7 +1,6 @@
-import { expect, test } from "playwright-test-coverage";
-
 import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
+import { expect, test } from "../shared/runtime.js";
 import { createSchema } from "../shared/schemas.js";
 
 test("user should be able to create schema", async ({ page }) => {
