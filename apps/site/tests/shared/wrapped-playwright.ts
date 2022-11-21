@@ -11,12 +11,13 @@ const tolerableConsoleMessageMatches: RegExp[] = [
   /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
 
   // You can add temporarily add more RegExps, but please track their removal
+  // If a message only shows in few tests, please use setCustomTolerableConsoleMessageMatches([...])
+
   // @todo: Triage initial messages detected below https://app.asana.com/0/1203312852763953/1203414492513784/f
   /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
   /Failed to load resource: net::ERR_FAILED/,
   /Failed to load resource: the server responded with a status of 400 \(Bad Request\)/,
   /Failed to load resource: the server responded with a status of 404 \(Not Found\)/,
-  /Failed to load resource: the server responded with a status of 500 \(Internal Server Error\)/,
   /Warning: Each child in a list should have a unique "key" prop/,
   /Warning: Extra attributes from the server: ([\w%]+ )?class,tabindex/,
   /Warning: validateDOMNesting\(\.\.\.\): [\w%<>]+ cannot appear as a descendant of/,
@@ -45,6 +46,12 @@ const tolerableConsoleMessageMatches: RegExp[] = [
   /Failed to load resource: the server responded with a status of 401 \(Unauthorized\)/,
 ];
 
+let customTolerableConsoleMessageMatches: RegExp[] = [];
+
+export const setCustomTolerableConsoleMessageMatches = (matches: RegExp[]) => {
+  customTolerableConsoleMessageMatches = matches;
+};
+
 /**
  * This is a wrapper around the Playwright test function that adds checks for console messages.
  * @see https://github.com/microsoft/playwright/discussions/11690#discussioncomment-2060397
@@ -54,7 +61,12 @@ export const test = base.extend({
     const messages: string[] = [];
     page.on("console", (msg) => {
       const message = `[${msg.type()}] ${msg.text()}`;
-      if (tolerableConsoleMessageMatches.some((match) => match.test(message))) {
+      if (
+        [
+          ...tolerableConsoleMessageMatches,
+          ...customTolerableConsoleMessageMatches,
+        ].some((match) => match.test(message))
+      ) {
         return;
       }
       messages.push(message);
@@ -62,4 +74,8 @@ export const test = base.extend({
     await use(page);
     expect(messages).toStrictEqual([]);
   },
+});
+
+test.beforeAll(() => {
+  customTolerableConsoleMessageMatches = [];
 });

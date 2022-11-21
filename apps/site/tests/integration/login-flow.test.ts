@@ -1,8 +1,12 @@
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails.js";
 import { resetSite } from "../shared/fixtures.js";
 import { login, openLoginModal, openMobileNav } from "../shared/nav.js";
-import type { Page } from "../shared/wrapped-playwright.js";
-import { expect, test } from "../shared/wrapped-playwright.js";
+import {
+  expect,
+  Page,
+  setCustomTolerableConsoleMessageMatches,
+  test,
+} from "../shared/wrapped-playwright.js";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
@@ -234,6 +238,10 @@ test("Login page redirects logged in users to dashboard", async ({
 });
 
 test("/api/me is retried twice", async ({ page, isMobile }) => {
+  setCustomTolerableConsoleMessageMatches([
+    /Failed to load resource: the server responded with a status of 500 \(Internal Server Error\)/,
+  ]);
+
   let requestCount = 0;
   await page.route("/api/me", async (route) => {
     requestCount += 1;
