@@ -1,9 +1,9 @@
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails.js";
 import { resetSite } from "../shared/fixtures.js";
 import { login, openLoginModal, openMobileNav } from "../shared/nav.js";
+import type { Page } from "../shared/wrapped-playwright";
 import {
   expect,
-  Page,
   setCustomTolerableConsoleMessageMatches,
   test,
 } from "../shared/wrapped-playwright.js";
