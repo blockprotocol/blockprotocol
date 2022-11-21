@@ -4,12 +4,14 @@ import { expect, test as base } from "playwright-test-coverage";
 // eslint-disable-next-line no-restricted-imports
 export * from "@playwright/test";
 
+// Some messages only show up in `yarn dev` or `yarn start`. They should be checked in both modes before removing.
 const tolerableConsoleMessageMatches: RegExp[] = [
   /Download the Apollo DevTools for a better development experience/,
   /Download the React DevTools for a better development experience/,
   /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
 
   // You can add temporarily add more RegExps, but please track their removal
+  // @todo: Triage initial messages detected below https://app.asana.com/0/1203312852763953/1203414492513784/f
   /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
   /Failed to load resource: net::ERR_FAILED/,
   /Failed to load resource: the server responded with a status of 400 \(Bad Request\)/,
@@ -18,6 +20,7 @@ const tolerableConsoleMessageMatches: RegExp[] = [
   /Warning: Each child in a list should have a unique "key" prop/,
   /Warning: Extra attributes from the server: ([\w%]+ )?class,tabindex/,
   /Warning: validateDOMNesting\(\.\.\.\): [\w%<>]+ cannot appear as a descendant of/,
+  /Error: Abort fetching component for route: "\/dashboard\/\[\[...slugs\]\]"/,
 
   // FF
   /Cookie “blockprotocol-session-id” has been rejected because it is already expired/,
@@ -39,6 +42,7 @@ const tolerableConsoleMessageMatches: RegExp[] = [
   // Safari
   /Error: Abort fetching component for route: "\/login"/,
   /Web Inspector blocked http:\/\/localhost:\d+\/api\/me from loading/,
+  /Failed to load resource: the server responded with a status of 401 \(Unauthorized\)/,
 ];
 
 /**
