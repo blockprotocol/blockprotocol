@@ -4,8 +4,8 @@ import { login, openLoginModal, openMobileNav } from "../shared/nav.js";
 import type { Page } from "../shared/wrapped-playwright";
 import {
   expect,
-  setCustomTolerableConsoleMessageMatches,
   test,
+  tolerateCustomConsoleMessages,
 } from "../shared/wrapped-playwright.js";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
@@ -238,7 +238,7 @@ test("Login page redirects logged in users to dashboard", async ({
 });
 
 test("/api/me is retried twice", async ({ page, isMobile }) => {
-  setCustomTolerableConsoleMessageMatches([
+  tolerateCustomConsoleMessages([
     /Failed to load resource: the server responded with a status of 500 \(Internal Server Error\)/,
   ]);
 

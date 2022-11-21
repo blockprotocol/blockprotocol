@@ -11,7 +11,7 @@ const tolerableConsoleMessageMatches: RegExp[] = [
   /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
 
   // You can add temporarily add more RegExps, but please track their removal
-  // If a message only shows in few tests, please use setCustomTolerableConsoleMessageMatches([...])
+  // If a message only shows in few tests, please use tolerateCustomConsoleMessages([...])
 
   // @todo: Triage initial messages detected below https://app.asana.com/0/1203312852763953/1203414492513784/f
   /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
@@ -48,7 +48,7 @@ const tolerableConsoleMessageMatches: RegExp[] = [
 
 let customTolerableConsoleMessageMatches: RegExp[] = [];
 
-export const setCustomTolerableConsoleMessageMatches = (matches: RegExp[]) => {
+export const tolerateCustomConsoleMessages = (matches: RegExp[]) => {
   customTolerableConsoleMessageMatches = matches;
 };
 
@@ -76,6 +76,6 @@ export const test = base.extend({
   },
 });
 
-test.beforeAll(() => {
+test.beforeEach(() => {
   customTolerableConsoleMessageMatches = [];
 });
