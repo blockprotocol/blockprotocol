@@ -51,6 +51,7 @@ const tolerableConsoleMessageMatches: RegExp[] = [
 let customTolerableConsoleMessageMatches: RegExp[] = [];
 
 export const tolerateCustomConsoleMessages = (matches: RegExp[]) => {
+  console.log("Tolerating custom console messages:", matches);
   customTolerableConsoleMessageMatches = matches;
 };
 
