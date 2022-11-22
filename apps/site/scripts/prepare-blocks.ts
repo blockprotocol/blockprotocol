@@ -473,6 +473,21 @@ const script = async () => {
     });
 
     if (env.CACHE) {
+      for (const dirPath of [
+        path.dirname(path.dirname(path.dirname(path.dirname(blockDirPath)))),
+        path.dirname(path.dirname(path.dirname(blockDirPath))),
+        path.dirname(path.dirname(blockDirPath)),
+        path.dirname(blockDirPath),
+        blockDirPath,
+      ]) {
+        try {
+          console.log({ dirPath });
+          console.log(await fs.readdir(dirPath));
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
       try {
         const existingBlockMetadata = await fs.readJson(blockMetadataPath);
         console.log({ existingBlockMetadata });
