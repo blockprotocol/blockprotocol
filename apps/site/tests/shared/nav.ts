@@ -1,6 +1,5 @@
 import { readValueFromRecentDummyEmail } from "./dummy-emails.js";
-import type { Locator, Page } from "./wrapped-playwright.js";
-import { expect } from "./wrapped-playwright.js";
+import { type Locator, type Page, expect } from "./wrapped-playwright.js";
 
 export const openMobileNav = async (page: Page) => {
   await page.locator("[data-testid='mobile-nav-trigger']").click();

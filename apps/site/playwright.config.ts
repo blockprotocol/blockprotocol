@@ -1,7 +1,5 @@
-/* eslint-disable no-restricted-imports -- not importing from "./tests/shared/wrapped-playwright.js" to avoid test.before(All|Each) in config file (which is not allowed) */
-import type { PlaywrightTestConfig } from "@playwright/test";
-import { devices } from "@playwright/test";
-/* eslint-enable no-restricted-imports */
+// eslint-disable-next-line no-restricted-imports -- not importing from "./tests/shared/wrapped-playwright.js" to avoid test.before(All|Each) in config file (which is not allowed)
+import { type PlaywrightTestConfig, devices } from "@playwright/test";
 
 (await import("dotenv-flow")).config({ silent: true });
 
