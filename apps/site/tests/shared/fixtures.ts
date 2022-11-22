@@ -25,10 +25,16 @@ const getFileTimestamp = async (filePath: string) => {
 const deleteIsrFilesCreatedAfterNextBuild = async () => {
   const buildTimestamp = await getFileTimestamp(".next/trace"); // last file created by `next build`
 
-  const files = await globby(".next");
+  const files = await globby(".next", {
+    ignore: [
+      ".next/cache/blocks/*", // See scripts named copy-blocks-from-ci-cache and copy-blocks-to-ci-cache
+    ],
+  });
+
   for (const file of files) {
     const timestamp = await getFileTimestamp(file);
     if (timestamp > buildTimestamp) {
+      console.log(`Deleting ${file}`);
       await fs.remove(file);
     }
   }
