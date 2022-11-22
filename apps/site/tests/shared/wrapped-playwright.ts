@@ -80,5 +80,6 @@ export const test = base.extend({
 });
 
 test.beforeEach(() => {
-  customTolerableConsoleMessageMatches = [];
+  // Allows setting custom tolerable console messages inside a single test
+  tolerateCustomConsoleMessages([]);
 });
