@@ -238,10 +238,10 @@ jobs:
       matrix:
         device:
           - chrome
-          # - firefox
-          # - iphone
-          # - pixel
-          # - safari
+          - firefox
+          - iphone
+          - pixel
+          - safari
     timeout-minutes: 30 ## https://github.com/actions/upload-artifact/issues/358
 
     steps:

@@ -465,32 +465,9 @@ const script = async () => {
       }),
     );
 
-    console.log({
-      blockInfo,
-      blockInfoChecksum,
-      c: env.CACHE,
-      blockMetadataPath,
-    });
-
     if (env.CACHE) {
-      for (const dirPath of [
-        path.dirname(path.dirname(path.dirname(path.dirname(blockDirPath)))),
-        path.dirname(path.dirname(path.dirname(blockDirPath))),
-        path.dirname(path.dirname(blockDirPath)),
-        path.dirname(blockDirPath),
-        blockDirPath,
-      ]) {
-        try {
-          console.log({ dirPath });
-          console.log(await fs.readdir(dirPath));
-        } catch (error) {
-          console.log(error);
-        }
-      }
-
       try {
         const existingBlockMetadata = await fs.readJson(blockMetadataPath);
-        console.log({ existingBlockMetadata });
         if (
           blockInfoChecksum === existingBlockMetadata.unstable_hubInfo.checksum
         ) {
@@ -501,8 +478,7 @@ const script = async () => {
 
           continue;
         }
-      } catch (error) {
-        console.log(error);
+      } catch {
         // noop (if checksum matching failed, we prepare the block)
       }
     }

@@ -34,7 +34,6 @@ const deleteIsrFilesCreatedAfterNextBuild = async () => {
   for (const file of files) {
     const timestamp = await getFileTimestamp(file);
     if (timestamp > buildTimestamp) {
-      console.log(`Deleting ${file}`);
       await fs.remove(file);
     }
   }
