@@ -10,6 +10,8 @@ const monorepoRoot = path.resolve(
   "../../..",
 );
 
+console.log(monorepoRoot);
+
 const script = async () => {
   console.log(chalk.bold("Copying blocks to CI cache..."));
 

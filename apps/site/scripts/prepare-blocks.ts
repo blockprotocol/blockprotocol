@@ -465,9 +465,17 @@ const script = async () => {
       }),
     );
 
+    console.log({
+      blockInfo,
+      blockInfoChecksum,
+      c: env.CACHE,
+      blockMetadataPath,
+    });
+
     if (env.CACHE) {
       try {
         const existingBlockMetadata = await fs.readJson(blockMetadataPath);
+        console.log({ existingBlockMetadata, c: existingBlockMetadata });
         if (
           blockInfoChecksum === existingBlockMetadata.unstable_hubInfo.checksum
         ) {
