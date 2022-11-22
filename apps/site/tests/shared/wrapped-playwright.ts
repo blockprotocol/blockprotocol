@@ -6,45 +6,46 @@ export * from "@playwright/test";
 
 // Some messages only show up in `yarn dev` or `yarn start`. They should be checked in both modes before removing.
 const tolerableConsoleMessageMatches: RegExp[] = [
+  /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
   /Download the Apollo DevTools for a better development experience/,
   /Download the React DevTools for a better development experience/,
-  /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
 
   // You can add temporarily add more RegExps, but please track their removal
   // If a message only shows in few tests, please use tolerateCustomConsoleMessages([...])
 
   // @todo: Triage initial messages detected below https://app.asana.com/0/1203312852763953/1203414492513784/f
   // All browsers / Chrome only
-  /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
+  /Error: Abort fetching component for route: "\/dashboard\/\[\[...slugs\]\]"/,
   /Failed to load resource: net::ERR_FAILED/,
   /Failed to load resource: the server responded with a status of 400 \(Bad Request\)/,
   /Failed to load resource: the server responded with a status of 404 \(Not Found\)/,
+  /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
+  /Loading failed for the <script> with source “http:\/\/localhost:\d+\/_next\/static\/chunks\/pages\/[\w-]+\.js/,
   /Warning: Each child in a list should have a unique "key" prop/,
   /Warning: Extra attributes from the server: ([\w%]+ )?class,tabindex/,
   /Warning: validateDOMNesting\(\.\.\.\): [\w%<>]+ cannot appear as a descendant of/,
-  /Error: Abort fetching component for route: "\/dashboard\/\[\[...slugs\]\]"/,
 
   // FF
-  /Cookie “blockprotocol-session-id” has been rejected because it is already expired/,
-  /Cookie “blockprotocol-session-id” does not have a proper “SameSite” attribute value/,
-  /Ignoring unsupported entryTypes: largest-contentful-paint/,
-  /XML Parsing Error: syntax error/, // Location: http://localhost:3000/api/logout
-  /Warning: Extra attributes from the server: __playwright_target__/,
-  /Feature Policy: Skipping unsupported feature name “clipboard-write”/,
+  /^\[error\] Error$/,
   /An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can remove its sandboxing/,
-  /InstallTrigger is deprecated and will be removed in the future./,
-  /onmozfullscreenchange is deprecated./,
-  /onmozfullscreenerror is deprecated./,
-  /Failed to fetch devPagesManifest: Error/,
+  /Cookie “blockprotocol-session-id” does not have a proper “SameSite” attribute value/,
+  /Cookie “blockprotocol-session-id” has been rejected because it is already expired/,
   /downloadable font: download failed \(font-family: "Inter"/,
   /downloadable font: download failed \(font-family: "JetBrains Mono"/,
-  /^\[error\] Error$/,
+  /Failed to fetch devPagesManifest: Error/,
+  /Feature Policy: Skipping unsupported feature name “clipboard-write”/,
+  /Ignoring unsupported entryTypes: largest-contentful-paint/,
+  /InstallTrigger is deprecated and will be removed in the future./,
   /Layout was forced before the page was fully loaded. If stylesheets are not yet loaded this may cause a flash of unstyled content/,
+  /onmozfullscreenchange is deprecated./,
+  /onmozfullscreenerror is deprecated./,
+  /Warning: Extra attributes from the server: __playwright_target__/,
+  /XML Parsing Error: syntax error/, // Location: http://localhost:3000/api/logout
 
   // Safari
   /Error: Abort fetching component for route: "\/login"/,
-  /Web Inspector blocked http:\/\/localhost:\d+\/api\/me from loading/,
   /Failed to load resource: the server responded with a status of 401 \(Unauthorized\)/,
+  /Web Inspector blocked http:\/\/localhost:\d+\/api\/me from loading/,
 ];
 
 let customTolerableConsoleMessageMatches: RegExp[] = [];

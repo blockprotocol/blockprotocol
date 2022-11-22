@@ -35,7 +35,7 @@ test.beforeEach(async ({ browserName }) => {
   // @todo triage: https://app.asana.com/0/1203312852763953/1203414492513784/f
   if (browserName === "webkit") {
     tolerateCustomConsoleMessages([
-      /The resource http:\/\/localhost:\d+\/_next\/static\/css\/\w+.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it wasn't preloaded for nothing./,
+      /The resource http:\/\/localhost:\d+\/_next\/static\/css\/\w+\.css was preloaded using link preload but not used within a few seconds from the window's load event. Please make sure it wasn't preloaded for nothing./,
     ]);
   }
   await resetSite();
