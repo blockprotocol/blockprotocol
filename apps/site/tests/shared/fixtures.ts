@@ -27,7 +27,7 @@ const deleteIsrFilesCreatedAfterNextBuild = async () => {
 
   const files = await globby(".next", {
     ignore: [
-      ".next/cache/blocks/*", // See scripts named copy-blocks-from-ci-cache and copy-blocks-to-ci-cache
+      ".next/cache/blocks", // See scripts named copy-blocks-from-ci-cache and copy-blocks-to-ci-cache
     ],
   });
 
