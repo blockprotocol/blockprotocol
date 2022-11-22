@@ -10,7 +10,7 @@ process.env.ISTANBUL_TEMP_DIR = "../../.nyc_output";
 
 const integrationTestsBaseConfig = {
   retries: 2,
-  testMatch: "**/{integration,universal}/**",
+  testMatch: "**/{integration,universal}/**/*.test.ts",
 };
 
 const config: PlaywrightTestConfig = {
@@ -52,7 +52,7 @@ const config: PlaywrightTestConfig = {
     {
       name: "e2e",
       retries: 1,
-      testMatch: "**/{e2e,universal}/**",
+      testMatch: "**/{e2e,universal}/**/*.test.ts",
       use: { ...devices["Desktop Chrome"] },
     },
   ],
