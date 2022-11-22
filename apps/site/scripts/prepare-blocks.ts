@@ -475,7 +475,7 @@ const script = async () => {
     if (env.CACHE) {
       try {
         const existingBlockMetadata = await fs.readJson(blockMetadataPath);
-        console.log({ existingBlockMetadata, c: existingBlockMetadata });
+        console.log({ existingBlockMetadata });
         if (
           blockInfoChecksum === existingBlockMetadata.unstable_hubInfo.checksum
         ) {
@@ -486,7 +486,8 @@ const script = async () => {
 
           continue;
         }
-      } catch {
+      } catch (error) {
+        console.log(error);
         // noop (if checksum matching failed, we prepare the block)
       }
     }
