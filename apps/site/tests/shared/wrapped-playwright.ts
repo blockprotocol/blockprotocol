@@ -5,7 +5,7 @@ import { expect, test as base } from "playwright-test-coverage";
 export * from "@playwright/test";
 
 // Some messages only show up in `yarn dev` or `yarn start`. They should be checked in both modes before removing.
-const tolerableConsoleMessageMatches: RegExp[] = [
+const tolerableConsoleMessageSharedMatches: RegExp[] = [
   /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
   /Download the Apollo DevTools for a better development experience/,
   /Download the React DevTools for a better development experience/,
@@ -48,11 +48,17 @@ const tolerableConsoleMessageMatches: RegExp[] = [
   /Web Inspector blocked http:\/\/localhost:\d+\/api\/me from loading/,
 ];
 
-let customTolerableConsoleMessageMatches: RegExp[] = [];
+let tolerableConsoleMessageCustomMatches: RegExp[] = [];
 
-export const tolerateCustomConsoleMessages = (matches: RegExp[]) => {
-  console.log("Tolerating custom console messages:", matches);
-  customTolerableConsoleMessageMatches = matches;
+export const tolerateCustomConsoleMessages = (
+  customMatches:
+    | RegExp[]
+    | ((existingCustomMatches: readonly RegExp[]) => RegExp[]),
+) => {
+  tolerableConsoleMessageCustomMatches =
+    typeof customMatches === "function"
+      ? customMatches(tolerableConsoleMessageCustomMatches)
+      : customMatches;
 };
 
 /**
@@ -66,8 +72,8 @@ export const test = base.extend({
       const message = `[${msg.type()}] ${msg.text()}`;
       if (
         [
-          ...tolerableConsoleMessageMatches,
-          ...customTolerableConsoleMessageMatches,
+          ...tolerableConsoleMessageSharedMatches,
+          ...tolerableConsoleMessageCustomMatches,
         ].some((match) => match.test(message))
       ) {
         return;
@@ -80,6 +86,5 @@ export const test = base.extend({
 });
 
 test.beforeEach(() => {
-  // Allows setting custom tolerable console messages inside a single test
   tolerateCustomConsoleMessages([]);
 });

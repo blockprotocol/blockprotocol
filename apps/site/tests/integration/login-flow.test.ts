@@ -245,7 +245,8 @@ test("Login page redirects logged in users to dashboard", async ({
 });
 
 test("/api/me is retried twice", async ({ page, isMobile }) => {
-  tolerateCustomConsoleMessages([
+  tolerateCustomConsoleMessages((existingCustomMatches) => [
+    ...existingCustomMatches,
     /Failed to load resource: the server responded with a status of 500 \(Internal Server Error\)/,
   ]);
 
