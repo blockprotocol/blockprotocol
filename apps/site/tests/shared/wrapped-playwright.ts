@@ -5,7 +5,7 @@ import { expect, test as base } from "playwright-test-coverage";
 export * from "@playwright/test";
 
 // Some messages only show up in `yarn dev` or `yarn start`. They should be checked in both modes before removing.
-const tolerableConsoleMessageSharedMatches: RegExp[] = [
+const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /\[Fast Refresh\]/, // Next.js dev server (for local test runs)
   /Download the Apollo DevTools for a better development experience/,
   /Download the React DevTools for a better development experience/,
@@ -20,7 +20,7 @@ const tolerableConsoleMessageSharedMatches: RegExp[] = [
   /Failed to load resource: the server responded with a status of 400 \(Bad Request\)/,
   /Failed to load resource: the server responded with a status of 404 \(Not Found\)/,
   /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
-  /Loading failed for the <script> with source “http:\/\/localhost:\d+\/_next\/static\/chunks\/pages\/[\w-]+\.js/,
+  /Loading failed for the <script> with source “http:\/\/localhost:\d+\/_next\/static\/chunks/,
   /Warning: Each child in a list should have a unique "key" prop/,
   /Warning: Extra attributes from the server: ([\w%]+ )?class,tabindex/,
   /Warning: validateDOMNesting\(\.\.\.\): [\w%<>]+ cannot appear as a descendant of/,
@@ -48,16 +48,16 @@ const tolerableConsoleMessageSharedMatches: RegExp[] = [
   /Web Inspector blocked http:\/\/localhost:\d+\/api\/me from loading/,
 ];
 
-let tolerableConsoleMessageCustomMatches: RegExp[] = [];
+let tolerableCustomConsoleMessageMatches: RegExp[] = [];
 
 export const tolerateCustomConsoleMessages = (
   customMatches:
     | RegExp[]
     | ((existingCustomMatches: readonly RegExp[]) => RegExp[]),
 ) => {
-  tolerableConsoleMessageCustomMatches =
+  tolerableCustomConsoleMessageMatches =
     typeof customMatches === "function"
-      ? customMatches(tolerableConsoleMessageCustomMatches)
+      ? customMatches(tolerableCustomConsoleMessageMatches)
       : customMatches;
 };
 
@@ -67,21 +67,21 @@ export const tolerateCustomConsoleMessages = (
  */
 export const test = base.extend({
   page: async ({ page }, use) => {
-    const messages: string[] = [];
-    page.on("console", (msg) => {
-      const message = `[${msg.type()}] ${msg.text()}`;
+    const stringifiedMessages: string[] = [];
+    page.on("console", (consoleMessage) => {
+      const stringifiedMessage = `[${consoleMessage.type()}] ${consoleMessage.text()}`;
       if (
         [
-          ...tolerableConsoleMessageSharedMatches,
-          ...tolerableConsoleMessageCustomMatches,
-        ].some((match) => match.test(message))
+          ...tolerableSharedConsoleMessageMatches,
+          ...tolerableCustomConsoleMessageMatches,
+        ].some((match) => match.test(stringifiedMessage))
       ) {
         return;
       }
-      messages.push(message);
+      stringifiedMessages.push(stringifiedMessage);
     });
     await use(page);
-    expect(messages).toStrictEqual([]);
+    expect(stringifiedMessages).toStrictEqual([]);
   },
 });
 
