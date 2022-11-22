@@ -14,6 +14,7 @@ const tolerableConsoleMessageMatches: RegExp[] = [
   // If a message only shows in few tests, please use tolerateCustomConsoleMessages([...])
 
   // @todo: Triage initial messages detected below https://app.asana.com/0/1203312852763953/1203414492513784/f
+  // All browsers / Chrome only
   /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
   /Failed to load resource: net::ERR_FAILED/,
   /Failed to load resource: the server responded with a status of 400 \(Bad Request\)/,
