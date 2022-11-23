@@ -1,6 +1,5 @@
-import { expect, test } from "playwright-test-coverage";
-
 import { getBlocksData } from "../shared/fixtures.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 const blocksData = await getBlocksData();
 

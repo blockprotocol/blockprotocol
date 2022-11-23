@@ -10,15 +10,20 @@ module.exports = {
       "error",
       {
         ...noRestrictedImportsConfig,
+        patterns: [
+          ...noRestrictedImportsConfig.patterns,
+          {
+            group: [
+              "playwright",
+              "@playwright/test",
+              "playwright-test-coverage",
+            ],
+            message:
+              "Please import Playwright resources from `[site]/tests/shared/runtime/wrapped-playwright.js`",
+          },
+        ],
         paths: [
           ...noRestrictedImportsConfig.paths,
-          {
-            // @todo Remove playwright-test-coverage when https://github.com/microsoft/playwright/issues/7030 is resolved
-            name: "@playwright/test",
-            importNames: ["test"],
-            message:
-              'Please import "expect" and "test" from "playwright-test-coverage".',
-          },
           {
             name: "react",
             importNames: ["FC", "VFC", "VoidFunctionComponent"],
