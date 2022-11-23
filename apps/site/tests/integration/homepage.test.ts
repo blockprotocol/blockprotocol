@@ -1,4 +1,4 @@
-import { expect, test } from "playwright-test-coverage";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("Home page should contain key elements", async ({ page, isMobile }) => {
   await page.goto("/");

@@ -1,7 +1,5 @@
-import type { Page } from "playwright";
-import { expect } from "playwright-test-coverage";
-
 import type { EntityType } from "../../src/lib/api/model/entity-type.model";
+import { type Page, expect } from "./wrapped-playwright.js";
 
 /**
  * Provides a quick way to create entity types using direct API calls instead of UI

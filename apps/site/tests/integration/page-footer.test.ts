@@ -1,4 +1,4 @@
-import { expect, test } from "playwright-test-coverage";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("page footer navigation works", async ({ page, browserName }) => {
   test.skip(
