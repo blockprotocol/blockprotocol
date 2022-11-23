@@ -45,7 +45,7 @@ const PropertyTypeDisplay: FunctionComponent<
           permittedType === "object" && hasSubSchema ? (
             SchemaLink
           ) : (
-            <span>{permittedType}</span>
+            <span key={permittedType}>{permittedType}</span>
           ),
         )
         .reduce((prev, curr) => [prev, ", ", curr])}

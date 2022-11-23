@@ -40,8 +40,13 @@ export const Table: FunctionComponent<TableProps> = ({ header, rows }) => {
               key={`row-${rowIndex}`}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              {row.map((cell) =>
-                typeof cell === "string" ? <TableCell>{cell}</TableCell> : cell,
+              {row.map((cell, colIndex) =>
+                typeof cell === "string" ? (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <TableCell key={`col-${colIndex}`}>{cell}</TableCell>
+                ) : (
+                  cell
+                ),
               )}
             </TableRow>
           ))}
