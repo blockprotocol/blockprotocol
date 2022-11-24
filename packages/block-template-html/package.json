@@ -35,10 +35,10 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "block-scripts": "0.0.17",
-    "eslint": "8.27.0",
+    "eslint": "8.28.0",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
-    "prettier": "2.7.1",
+    "prettier": "2.8.0",
     "rimraf": "^3.0.2"
   }
 }
