@@ -118,7 +118,7 @@
     "@types/express-session": "^1.17.5",
     "@types/hosted-git-info": "^3.0.2",
     "@types/html-to-text": "^8.1.1",
-    "@types/lodash": "4.14.189",
+    "@types/lodash": "4.14.190",
     "@types/md5": "^2.3.2",
     "@types/micromatch": "^4.0.2",
     "@types/mime-types": "^2.1.1",
