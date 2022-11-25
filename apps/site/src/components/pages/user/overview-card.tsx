@@ -111,7 +111,7 @@ export const OverviewCard: FunctionComponent<OverviewCardProps> = ({
               <Box
                 sx={{ mr: 1.5, width: 24, height: 24 }}
                 component="img"
-                src={icon ?? undefined}
+                src={icon}
               />
             ) : (
               <TableTreeIcon
