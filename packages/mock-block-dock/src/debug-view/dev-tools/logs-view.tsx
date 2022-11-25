@@ -223,7 +223,7 @@ export const LogsView = () => {
             <JsonView
               collapseKeys={["data"]}
               rootName={activeLog?.requestId ?? "activeLog"}
-              src={activeLog ?? {}}
+              src={activeLog}
             />
           ) : (
             <Typography

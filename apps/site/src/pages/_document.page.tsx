@@ -1,23 +1,12 @@
 import createEmotionServer from "@emotion/server/create-instance";
 import withTwindDocument from "@twind/next/document";
-import Document, {
-  DocumentContext,
-  Head,
-  Html,
-  Main,
-  NextScript,
-} from "next/document";
+import Document, { Head, Html, Main, NextScript } from "next/document";
 import { Children } from "react";
 
 import twindConfig from "../../twind.config.cjs";
 import { createEmotionCache } from "../util/create-emotion-cache";
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx: DocumentContext) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
-  }
-
   render() {
     return (
       <Html>
