@@ -69,7 +69,9 @@ const LoginPage: NextPage = () => {
         setCurrentScreen("VerificationCode");
       }
 
-      void router.replace(router.pathname, undefined, { shallow: true });
+      void router.replace({ pathname: router.pathname }, undefined, {
+        shallow: true,
+      });
     }
   }, [parsedQuery, router]);
 
@@ -89,7 +91,7 @@ const LoginPage: NextPage = () => {
 
   useEffect(() => {
     redirectRef.current = () => {
-      void router.push(redirectPath ?? "/dashboard");
+      void router.push({ pathname: redirectPath ?? "/dashboard" });
     };
   }, [router, redirectPath]);
 
