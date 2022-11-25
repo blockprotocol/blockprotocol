@@ -54,7 +54,7 @@
     "turbo": "1.6.3",
     "wait-on": "6.0.1"
   },
-  "packageManager": "yarn@4.0.0-rc.26",
+  "packageManager": "yarn@4.0.0-rc.31",
   "engines": {
     "node": ">=16.14.0"
   }
