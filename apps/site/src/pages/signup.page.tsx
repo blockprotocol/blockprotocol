@@ -81,14 +81,16 @@ const SignupPage: NextPage = () => {
         setCurrentScreen("VerificationCode");
       }
 
-      void router.replace(router.route, undefined, { shallow: true });
+      void router.replace({ pathname: router.pathname }, undefined, {
+        shallow: true,
+      });
     }
   }, [parsedQuery, router]);
 
   useEffect(() => {
     if (user && user !== "loading") {
       if (user.isSignedUp) {
-        void router.push(redirectPath ?? "/dashboard");
+        void router.push({ pathname: redirectPath ?? "/dashboard" });
       } else if (currentScreen !== "CompleteSignup") {
         setEmail(user.email);
         setCurrentScreen("CompleteSignup");
