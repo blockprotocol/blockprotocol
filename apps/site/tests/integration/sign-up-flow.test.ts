@@ -1,11 +1,10 @@
-import { expect, test } from "playwright-test-coverage";
-
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails.js";
-import { resetDb } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login, openMobileNav } from "../shared/nav.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("sign up flow works", async ({ browserName, isMobile, page }) => {
-  await resetDb();
+  await resetSite();
   await page.goto("/");
 
   if (isMobile) {

@@ -1,9 +1,12 @@
-import type { Page } from "playwright";
-import { expect, test } from "playwright-test-coverage";
-
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails.js";
-import { resetDb } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login, openLoginModal, openMobileNav } from "../shared/nav.js";
+import {
+  type Page,
+  expect,
+  test,
+  tolerateCustomConsoleMessages,
+} from "../shared/wrapped-playwright.js";
 
 const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
@@ -28,8 +31,15 @@ const expectSignupButton = async ({
   await expect(signupButton).toBeVisible();
 };
 
-test.beforeEach(async () => {
-  await resetDb();
+test.beforeEach(async ({ browserName }) => {
+  await resetSite();
+
+  // @todo triage: https://app.asana.com/0/1203312852763953/1203414492513784/f
+  if (browserName === "webkit") {
+    tolerateCustomConsoleMessages([
+      /The resource http:\/\/localhost:\d+\/_next\/static\/css\/\w+\.css was preloaded using link preload but not used within a few seconds from the window's load event./,
+    ]);
+  }
 });
 
 test("login works for an existing user (via verification code)", async ({
@@ -232,4 +242,32 @@ test("Login page redirects logged in users to dashboard", async ({
       url: (url) => url.pathname === "/dashboard",
     }),
   ]);
+});
+
+test("/api/me is retried twice", async ({ page, isMobile }) => {
+  tolerateCustomConsoleMessages((existingCustomMatches) => [
+    ...existingCustomMatches,
+    /Failed to load resource: the server responded with a status of 500 \(Internal Server Error\)/,
+  ]);
+
+  let requestCount = 0;
+  await page.route("/api/me", async (route) => {
+    requestCount += 1;
+
+    if (requestCount === 1) {
+      await route.abort();
+      return;
+    }
+
+    if (requestCount === 2) {
+      await route.fulfill({ status: 500, body: "Internal Server Error" });
+      return;
+    }
+
+    await route.fallback();
+  });
+
+  await page.goto("/");
+  await openLoginModal({ page, isMobile });
+  expect(requestCount).toBe(3);
 });

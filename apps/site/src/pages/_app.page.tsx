@@ -1,3 +1,4 @@
+import "../styles/nprogress.css";
 import "../styles/prism.css";
 
 import { CacheProvider, EmotionCache } from "@emotion/react";
@@ -9,6 +10,7 @@ import type { AppProps } from "next/app";
 import { Router, useRouter } from "next/router";
 import { DefaultSeo, DefaultSeoProps } from "next-seo";
 import { SnackbarProvider } from "notistack";
+import NProgress from "nprogress";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TagManager from "react-gtm-module";
 
@@ -25,6 +27,8 @@ import { apiClient } from "../lib/api-client";
 import { theme } from "../theme";
 import { createEmotionCache } from "../util/create-emotion-cache";
 import { ApiMeResponse } from "./api/me.api";
+
+NProgress.configure({ showSpinner: false });
 
 const defaultSeoConfig: DefaultSeoProps = {
   title: "Block Protocol – an open standard for data-driven blocks",
@@ -57,10 +61,41 @@ const MyApp = ({
 }: MyAppProps) => {
   const router = useRouter();
 
+  useEffect(() => {
+    const handleStart = () => {
+      NProgress.start();
+    };
+
+    const handleStop = () => {
+      NProgress.done();
+    };
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleStop);
+    router.events.on("routeChangeError", handleStop);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleStop);
+      router.events.off("routeChangeError", handleStop);
+    };
+  }, [router]);
+
   const [user, setUser] = useState<UserState>("loading");
 
   const refetchUser = useCallback(async () => {
-    const { data, error } = await apiClient.get<ApiMeResponse>("me");
+    const { data, error } = await apiClient.get<ApiMeResponse>("me", {
+      "axios-retry": {
+        onRetry: (retryCount, axiosError) => {
+          Sentry.captureMessage("Retrying /api/me", {
+            extra: { retryCount, axiosError },
+          });
+        },
+        retries: 2,
+        retryCondition: (axiosError) =>
+          ![200, 304].includes(axiosError.response?.status ?? 0),
+      },
+    });
 
     if (!data) {
       Sentry.captureException("Problem fetching /api/me", {

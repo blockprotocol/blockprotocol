@@ -1,15 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "postUpdateOptions": ["yarnDedupeFewer"],
-  "prConcurrentLimit": 10,
+  "automerge": true,
+  "dependencyDashboard": true,
+  "dependencyDashboardApproval": true,
   "enabledManagers": ["github-actions", "npm"],
+  "postUpdateOptions": ["yarnDedupeFewer"],
   "rebaseWhen": "conflicted",
-  "schedule": ["every weekday before 5am"],
   "packageRules": [
     {
       "matchManagers": ["npm"],
-      "rangeStrategy": "bump",
-      "stabilityDays": 3
+      "rangeStrategy": "bump"
     },
     {
       "enabled": false,
@@ -26,6 +26,7 @@
         "^envalid$",
         "^execa$",
         "^lit$",
+        "^webpack$",
         "^webpack-cli$",
         "^webpack-dev-server$"
       ]
@@ -49,7 +50,6 @@
       "matchPackagePatterns": ["^@types/jest$", "^jest", "^ts-jest$"]
     },
     {
-      "automerge": true,
       "enabled": true,
       "groupName": "ESLint",
       "matchManagers": ["npm"],

@@ -105,6 +105,7 @@ impl From<DataType> for serde_json::Value {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[repr(transparent)]
 pub struct DataTypeReference {
     uri: VersionedUri,
 }
@@ -119,6 +120,13 @@ impl DataTypeReference {
     #[must_use]
     pub const fn uri(&self) -> &VersionedUri {
         &self.uri
+    }
+}
+
+impl From<&VersionedUri> for &DataTypeReference {
+    fn from(uri: &VersionedUri) -> Self {
+        // SAFETY: Self is `repr(transparent)`
+        unsafe { &*(uri as *const VersionedUri).cast::<DataTypeReference>() }
     }
 }
 

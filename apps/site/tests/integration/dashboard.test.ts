@@ -1,7 +1,6 @@
-import { expect, test } from "playwright-test-coverage";
-
-import { resetDb } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test("dashboard page should not be accessible to guests", async ({ page }) => {
   await Promise.all([
@@ -13,7 +12,7 @@ test("dashboard page should not be accessible to guests", async ({ page }) => {
 });
 
 test("dashboard page should contain key elements", async ({ page }) => {
-  await resetDb();
+  await resetSite();
 
   await page.goto("/");
   await login({ page });

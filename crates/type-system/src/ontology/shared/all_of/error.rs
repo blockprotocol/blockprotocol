@@ -8,9 +8,7 @@ use crate::uri::ParseVersionedUriError;
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Deserialize, Serialize, PartialEq, Eq, Error)]
 #[serde(tag = "reason", content = "inner")]
-pub enum ParseLinkTypeError {
-    #[error("invalid versioned URI: `{0}`")]
-    InvalidVersionedUri(ParseVersionedUriError),
-    #[error("error in JSON: `{0}`")]
-    InvalidJson(String),
+pub enum ParseAllOfError {
+    #[error("invalid entity type reference: `{0}`")]
+    EntityTypeReferenceError(ParseVersionedUriError),
 }

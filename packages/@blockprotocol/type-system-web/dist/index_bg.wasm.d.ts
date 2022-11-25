@@ -1,7 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-export function validateLinkType(a: number): number;
 export function validateDataType(a: number): number;
 export function validateEntityType(a: number): number;
 export function validatePropertyType(a: number): number;

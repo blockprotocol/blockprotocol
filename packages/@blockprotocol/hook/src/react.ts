@@ -95,6 +95,7 @@ export const useHookEmbedderService = (
 
 type Hook<T extends HTMLElement> = {
   id: string | null;
+  cancel: () => void;
   teardown: (() => Promise<void>) | null;
   params: {
     service: HookBlockHandler | null;
@@ -190,8 +191,7 @@ export const useHook = <T extends HTMLElement>(
 
     const existingHookId = existingHookRef.current?.id;
 
-    const teardownPromise =
-      existingHookRef.current?.teardown?.().catch() ?? Promise.resolve();
+    existingHookRef.current?.cancel();
 
     if (node && service) {
       const controller = new AbortController();
@@ -204,6 +204,9 @@ export const useHook = <T extends HTMLElement>(
           entityId,
           path,
           node,
+        },
+        cancel() {
+          controller.abort();
         },
         async teardown() {
           if (controller.signal.aborted) {
@@ -243,45 +246,45 @@ export const useHook = <T extends HTMLElement>(
 
       existingHookRef.current = hook;
 
-      teardownPromise
-        .then(() => {
-          if (service.destroyed || controller.signal.aborted) {
-            return;
-          }
+      service
+        .hook({
+          data: {
+            hookId: hook.id,
+            entityId,
+            node,
+            type,
+            path,
+          },
+        })
+        .then((response) => {
+          if (!controller.signal.aborted) {
+            if (response.errors) {
+              const firstError = response.errors[0];
+              if (firstError?.code === "NOT_IMPLEMENTED") {
+                const teardown = fallbackRef.current(node);
 
-          return service
-            .hook({
-              data: {
-                hookId: hook.id,
-                entityId,
-                node,
-                type,
-                path,
-              },
-            })
-            .then((response) => {
-              if (!controller.signal.aborted) {
-                if (response.errors) {
-                  if (
-                    response.errors.length === 1 &&
-                    response.errors[0]?.code === "NOT_IMPLEMENTED"
-                  ) {
-                    const teardown = fallbackRef.current(node);
-
-                    hook.teardown = async () => {
-                      controller.abort();
-                      teardown?.();
-                    };
-                  } else {
-                    // eslint-disable-next-line no-console
-                    console.error(response.errors);
-                    throw new Error("Unknown error in hook");
-                  }
-                } else if (response.data) {
-                  hook.id = response.data.hookId;
+                hook.teardown = async () => {
+                  controller.abort();
+                  teardown?.();
+                };
+              } else if (firstError?.code === "NOT_FOUND") {
+                const errMsg = `Hook with id ${hook.id} was not found by embedding application`;
+                if (node === null) {
+                  // don't throw if the request was for hook deletion – the embedding app can't find the hook, things can continue
+                  // eslint-disable-next-line no-console -- useful for debugging
+                  console.warn(`${errMsg} – no hook to remove`);
+                } else {
+                  throw new Error(errMsg);
                 }
+              } else {
+                // eslint-disable-next-line no-console
+                console.error(response.errors);
+                throw new Error("Unknown error in hook");
               }
-            });
+            } else if (response.data) {
+              hook.id = response.data.hookId;
+            }
+          }
         })
         .catch((err) => {
           catchError(() => {

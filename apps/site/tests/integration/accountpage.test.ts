@@ -1,10 +1,9 @@
-import { expect, test } from "playwright-test-coverage";
-
-import { getBlocksData, resetDb } from "../shared/fixtures.js";
+import { getBlocksData, resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
+import { expect, test } from "../shared/wrapped-playwright.js";
 
 test.beforeEach(async () => {
-  await resetDb();
+  await resetSite();
 });
 
 test("key elements should be present when user views their account page", async ({

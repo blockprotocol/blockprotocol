@@ -178,7 +178,7 @@ export const TextHookView = ({
   }, 200);
 
   return (
-    <div style={{ border: "1px solid rgba(0,0,0,0.5)" }}>
+    <div style={{ position: "relative" }}>
       <Slate
         editor={editor}
         onChange={(value) => {

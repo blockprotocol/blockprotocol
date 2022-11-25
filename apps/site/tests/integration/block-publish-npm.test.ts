@@ -1,9 +1,12 @@
-import type { Page } from "playwright";
-import { expect, test } from "playwright-test-coverage";
-
 import { publishBlock } from "../shared/blocks.js";
-import { resetDb } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
+import {
+  type Page,
+  expect,
+  test,
+  tolerateCustomConsoleMessages,
+} from "../shared/wrapped-playwright.js";
 
 const fillBlockDetails = async (
   page: Page,
@@ -19,9 +22,14 @@ const dummyBlockName = "my-amazing-block";
 const validNpmPackage = "test-npm-block";
 
 test.beforeEach(async ({ page }) => {
-  await resetDb();
+  await resetSite();
 
   await page.goto("/");
+
+  // @todo triage: https://app.asana.com/0/1203312852763953/1203414492513784/f
+  tolerateCustomConsoleMessages([
+    /Failed to load resource: the server responded with a status of 500 \(Internal Server Error\)/,
+  ]);
 
   await login({ page });
 });

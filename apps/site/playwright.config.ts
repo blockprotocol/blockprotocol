@@ -1,5 +1,5 @@
-import type { PlaywrightTestConfig } from "@playwright/test";
-import { devices } from "@playwright/test";
+// eslint-disable-next-line no-restricted-imports -- not importing from "./tests/shared/wrapped-playwright.js" to avoid test.before(All|Each) in config file (which is not allowed)
+import { type PlaywrightTestConfig, devices } from "@playwright/test";
 
 (await import("dotenv-flow")).config({ silent: true });
 
@@ -9,8 +9,8 @@ const ci = process.env.CI === "true";
 process.env.ISTANBUL_TEMP_DIR = "../../.nyc_output";
 
 const integrationTestsBaseConfig = {
-  retries: 1,
-  testMatch: "**/{integration,universal}/**",
+  retries: 2,
+  testMatch: "**/{integration,universal}/**/*.test.ts",
 };
 
 const config: PlaywrightTestConfig = {
@@ -51,8 +51,8 @@ const config: PlaywrightTestConfig = {
     },
     {
       name: "e2e",
-      retries: 0,
-      testMatch: "**/{e2e,universal}/**",
+      retries: 1,
+      testMatch: "**/{e2e,universal}/**/*.test.ts",
       use: { ...devices["Desktop Chrome"] },
     },
   ],

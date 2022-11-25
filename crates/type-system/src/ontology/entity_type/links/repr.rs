@@ -6,15 +6,23 @@ use {tsify::Tsify, wasm_bindgen::prelude::*};
 
 use crate::{
     repr, uri::VersionedUri, EntityTypeReference, OneOf, ParseEntityTypeReferenceArrayError,
-    ParseLinksError,
+    ParseLinksError, ParseOneOfError,
 };
 
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase", deny_unknown_fields)]
 pub struct Links {
+    #[cfg_attr(
+        target_arch = "wasm32",
+        tsify(
+            optional,
+            type = "Record<VersionedUri, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>"
+        )
+    )]
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
-    links: HashMap<String, ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>,
+    links: HashMap<String, MaybeOrderedArray<MaybeOneOfEntityTypeReference>>,
+    #[cfg_attr(target_arch = "wasm32", tsify(optional, type = "VersionedUri[]"))]
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     required_links: Vec<String>,
 }
@@ -29,7 +37,7 @@ impl TryFrom<Links> for super::Links {
             .map(|(uri, val)| {
                 Ok((
                     VersionedUri::from_str(&uri).map_err(ParseLinksError::InvalidLinkKey)?,
-                    val.try_into()?,
+                    val.try_into().map_err(ParseLinksError::InvalidArray)?,
                 ))
             })
             .collect::<Result<HashMap<_, _>, Self::Error>>()?;
@@ -51,11 +59,13 @@ impl From<super::Links> for Links {
             .into_iter()
             .map(|(uri, val)| (uri.to_string(), val.into()))
             .collect();
+
         let required_links = object
             .required_links
             .into_iter()
             .map(|uri| uri.to_string())
             .collect();
+
         Self {
             links,
             required_links,
@@ -69,18 +79,16 @@ impl From<super::Links> for Links {
 pub struct MaybeOrderedArray<T> {
     #[serde(flatten)]
     array: repr::Array<T>,
-    // By default, this will not be ordered.
-    #[serde(default)]
     ordered: bool,
 }
 
-impl TryFrom<MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
-    for super::MaybeOrderedArray<OneOf<EntityTypeReference>>
+impl TryFrom<MaybeOrderedArray<MaybeOneOfEntityTypeReference>>
+    for super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>
 {
     type Error = ParseEntityTypeReferenceArrayError;
 
     fn try_from(
-        maybe_ordered_array_repr: MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>,
+        maybe_ordered_array_repr: MaybeOrderedArray<MaybeOneOfEntityTypeReference>,
     ) -> Result<Self, Self::Error> {
         Ok(Self {
             array: maybe_ordered_array_repr.array.try_into()?,
@@ -89,11 +97,12 @@ impl TryFrom<MaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
     }
 }
 
-impl<T, R> From<super::MaybeOrderedArray<T>> for MaybeOrderedArray<R>
-where
-    R: From<T>,
+impl From<super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>>
+    for MaybeOrderedArray<MaybeOneOfEntityTypeReference>
 {
-    fn from(maybe_ordered_array: super::MaybeOrderedArray<T>) -> Self {
+    fn from(
+        maybe_ordered_array: super::MaybeOrderedArray<Option<OneOf<EntityTypeReference>>>,
+    ) -> Self {
         Self {
             array: maybe_ordered_array.array.into(),
             ordered: maybe_ordered_array.ordered,
@@ -101,43 +110,46 @@ where
     }
 }
 
-#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+// TODO: tsify can't handle a flattened optional on `MaybeOneOfEntityTypeReference`, so we have to
+//  manually define the type, see wasm::MaybeOneOfEntityTypeReferencePatch
+//  https://github.com/madonoharu/tsify/issues/10
+
+// This struct is needed because its used inside generic parameters of other structs like `Array`.
+// Those structs can't apply serde's `default` or `skip_serializing_if` which means the option
+// doesn't de/serialize as required unless wrapped in an intermediary struct.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-#[serde(untagged, deny_unknown_fields)]
-pub enum ValueOrMaybeOrderedArray<T> {
-    Value(T),
-    Array(MaybeOrderedArray<T>),
+pub struct MaybeOneOfEntityTypeReference {
+    #[serde(flatten, default, skip_serializing_if = "Option::is_none")]
+    inner: Option<repr::OneOf<repr::EntityTypeReference>>,
 }
 
-impl TryFrom<ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>>
-    for super::ValueOrMaybeOrderedArray<OneOf<EntityTypeReference>>
-{
-    type Error = ParseLinksError;
-
-    fn try_from(
-        value_or_array_repr: ValueOrMaybeOrderedArray<repr::OneOf<repr::EntityTypeReference>>,
-    ) -> Result<Self, Self::Error> {
-        Ok(match value_or_array_repr {
-            ValueOrMaybeOrderedArray::Value(val) => Self::Value(
-                val.try_into()
-                    .map_err(ParseLinksError::InvalidEntityTypeReference)?,
-            ),
-            ValueOrMaybeOrderedArray::Array(array) => {
-                Self::Array(array.try_into().map_err(ParseLinksError::InvalidArray)?)
-            }
-        })
+impl MaybeOneOfEntityTypeReference {
+    #[expect(
+        clippy::missing_const_for_fn,
+        reason = "constant functions cannot evaluate destructors"
+    )]
+    #[must_use]
+    pub fn into_inner(self) -> Option<repr::OneOf<repr::EntityTypeReference>> {
+        self.inner
     }
 }
 
-impl<T, R> From<super::ValueOrMaybeOrderedArray<T>> for ValueOrMaybeOrderedArray<R>
-where
-    R: From<T>,
-{
-    fn from(value_or_array: super::ValueOrMaybeOrderedArray<T>) -> Self {
-        match value_or_array {
-            super::ValueOrMaybeOrderedArray::Value(val) => Self::Value(val.into()),
-            super::ValueOrMaybeOrderedArray::Array(array) => Self::Array(array.into()),
+impl From<Option<OneOf<EntityTypeReference>>> for MaybeOneOfEntityTypeReference {
+    fn from(option: Option<OneOf<EntityTypeReference>>) -> Self {
+        Self {
+            inner: option.map(std::convert::Into::into),
         }
+    }
+}
+
+impl TryFrom<MaybeOneOfEntityTypeReference> for Option<OneOf<EntityTypeReference>> {
+    type Error = ParseOneOfError;
+
+    fn try_from(value: MaybeOneOfEntityTypeReference) -> Result<Self, Self::Error> {
+        value
+            .into_inner()
+            .map(std::convert::TryInto::try_into)
+            .transpose()
     }
 }
 
@@ -267,49 +279,6 @@ mod tests {
             });
 
             ensure_repr_failed_deserialization::<MaybeOrderedArray<StringTypeStruct>>(as_json);
-        }
-    }
-
-    mod value_or_maybe_ordered_array {
-        use serde_json::json;
-
-        use super::*;
-
-        #[test]
-        fn value() {
-            check_repr_serialization_from_value(
-                json!("value"),
-                Some(ValueOrMaybeOrderedArray::Value("value".to_owned())),
-            );
-        }
-
-        #[test]
-        fn array() {
-            let expected_inner = json!(
-                {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                }
-            );
-
-            let inner_array: repr::Array<StringTypeStruct> = serde_json::from_value(expected_inner)
-                .expect("failed to deserialize array to repr");
-
-            check_repr_serialization_from_value(
-                json!({
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    },
-                    "ordered": false
-                }),
-                Some(ValueOrMaybeOrderedArray::Array(MaybeOrderedArray {
-                    array: inner_array,
-                    ordered: false,
-                })),
-            );
         }
     }
 }
