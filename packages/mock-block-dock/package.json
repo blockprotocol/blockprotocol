@@ -67,7 +67,7 @@
     "@local/tsconfig": "0.0.0-private",
     "@types/react-resizable": "^3.0.3",
     "babel-loader": "^9.1.0",
-    "concurrently": "^7.5.0",
+    "concurrently": "^7.6.0",
     "copyfiles": "^2.4.1",
     "core-js": "^3.26.1",
     "cross-env": "^7.0.3",
