@@ -81,7 +81,7 @@ const SignupPage: NextPage = () => {
         setCurrentScreen("VerificationCode");
       }
 
-      void router.replace(router.route, undefined, { shallow: true });
+      void router.replace(router.pathname, undefined, { shallow: true });
     }
   }, [parsedQuery, router]);
 
