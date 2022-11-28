@@ -1,5 +1,4 @@
 import { FormData } from "formdata-node";
-// eslint-disable-next-line -- import/no-unresolved and import/extensions do not support sub-paths defined
 import { fileFromPath } from "formdata-node/file-from-path";
 import fetch from "node-fetch";
 

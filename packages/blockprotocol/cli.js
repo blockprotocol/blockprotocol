@@ -1,20 +1,10 @@
 #!/usr/bin/env node
 
-import chalk from "chalk";
 import commandLineArgs from "command-line-args";
 import commandLineUsage from "command-line-usage";
 
 import { commandLookup } from "./cli/commands.js";
-import { run as printHelp } from "./cli/commands/help.js";
-import { printSpacer } from "./cli/print-spacer.js";
-
-/**
- * @param {string} errorMessage
- */
-const printErrorMessage = (errorMessage) => {
-  console.log(chalk.red(`${errorMessage}. Please check usage.`));
-  printSpacer();
-};
+import { printErrorMessage } from "./cli/print-error-message.js";
 
 (async () => {
   // parse the first argument - the command
@@ -29,6 +19,9 @@ const printErrorMessage = (errorMessage) => {
       stopAtFirstUnknown: true,
     },
   );
+
+  // @ts-expect-error -- replace commandLookup type with satisfies to guaranteed that help is defined
+  const printHelp = commandLookup.help.run;
 
   // print help for the CLI if requested or if the command is unknown
   if (command === "help" || !command) {
