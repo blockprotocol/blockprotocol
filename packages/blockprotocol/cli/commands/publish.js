@@ -6,7 +6,7 @@ import slugify from "slugify";
 import tar from "tar";
 import tmp from "tmp-promise";
 
-import { printSpacer } from "../print-spacer.js";
+import { printSpacer } from "../shared/print-spacer.js";
 import { doesUserAgree } from "./publish/does-user-agree.js";
 import { findApiKey } from "./publish/find-api-key.js";
 import { findBlockFolder } from "./publish/find-block-folder.js";
