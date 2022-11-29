@@ -72,6 +72,12 @@
       "groupName": "Prettier",
       "matchManagers": ["npm"],
       "matchPackagePatterns": ["^prettier"]
+    },
+    {
+      "enabled": true,
+      "groupName": "Sentry",
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@sentry/"]
     }
   ]
 }
