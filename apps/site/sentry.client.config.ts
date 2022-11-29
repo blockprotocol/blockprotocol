@@ -12,7 +12,6 @@ Sentry.init({
   integrations: process.env.NEXT_PUBLIC_SENTRY_REPLAY_SESSION_SAMPLE_RATE
     ? [
         new Replay({
-          captureOnlyOnError: true,
           errorSampleRate: 1,
           sessionSampleRate: parseFloat(
             process.env.NEXT_PUBLIC_SENTRY_REPLAY_SESSION_SAMPLE_RATE,
