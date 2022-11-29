@@ -74,7 +74,9 @@ export const postPublishForm = async ({
         }
         if ("errors" in error) {
           // should be a meaningful error provided by the API about why the request failed, e.g. bad API key
-          return error;
+          return /** @type {{ errors: { msg: string; }[] | undefined }} */ (
+            error
+          );
         }
       }
 

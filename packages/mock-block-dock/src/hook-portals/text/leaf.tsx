@@ -3,7 +3,7 @@ import { Text } from "slate";
 
 type LeafProps = {
   children: ReactElement;
-  attributes: HTMLAttributes<HTMLSpanElement>;
+  attributes: HTMLAttributes<HTMLSpanElement> & { "data-slate-leaf": true }; // needed for compatibility with RenderLeafProps#attributes from `slate-react`
   leaf: Text;
 };
 
