@@ -26,6 +26,7 @@
         "^envalid$",
         "^execa$",
         "^lit$",
+        "^typescript$",
         "^webpack$",
         "^webpack-cli$",
         "^webpack-dev-server$"
@@ -78,6 +79,11 @@
       "groupName": "Sentry",
       "matchManagers": ["npm"],
       "matchPackagePatterns": ["^@sentry/"]
+    },
+    {
+      "enabled": true,
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@playwright/", "^playwright"]
     }
   ]
 }
