@@ -79,11 +79,6 @@
       "groupName": "Sentry",
       "matchManagers": ["npm"],
       "matchPackagePatterns": ["^@sentry/"]
-    },
-    {
-      "enabled": true,
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@playwright/", "^playwright"]
     }
   ]
 }
