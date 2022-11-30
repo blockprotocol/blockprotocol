@@ -62,7 +62,7 @@
     "gsap": "^3.8.0",
     "hosted-git-info": "^4.1.0",
     "html-to-text": "^8.2.0",
-    "immer": "^9.0.12",
+    "immer": "^9.0.16",
     "jsonschema": "^1.4.0",
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
