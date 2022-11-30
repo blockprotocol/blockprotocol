@@ -93,7 +93,7 @@
     "remark-mdx": "^2.1.1",
     "remark-mdx-disable-explicit-jsx": "^0.1.0",
     "remark-parse": "^10.0.1",
-    "rword": "^3.2.0",
+    "rword": "^3.2.1",
     "sanitize-html": "^2.7.2",
     "sharp": "^0.30.7",
     "slick-carousel": "^1.8.1",

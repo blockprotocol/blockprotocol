@@ -12218,10 +12218,10 @@ run-parallel@^1.1.9:
   dependencies:
     queue-microtask "^1.2.2"
 
-rword@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/rword/-/rword-3.2.0.tgz#7939afd3353b17f508cb6d0c3938c7da7f86eca2"
-  integrity sha512-xiILth3F87txuixWxRo0YYVzuE14UlPZM3l9xaBLNT5BbSwoNDalna6RUKEgbAUbpCFjlLAzYf0DL/7TiVifIQ==
+rword@^3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/rword/-/rword-3.2.1.tgz#21bcd4f63e9a175c807f072a1886abaa147e5750"
+  integrity sha512-E1PhzHCM8enXQJoVv0ZKvqMNojkbRqMsv66pD0P4mRl1imb+0g+3Q19CtXobZIqOhi3zNZi1br//U87vc/s6OA==
 
 rxjs@^7.0.0, rxjs@^7.5.4, rxjs@^7.5.7:
   version "7.5.7"
