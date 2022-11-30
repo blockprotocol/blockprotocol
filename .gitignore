@@ -66,6 +66,7 @@ apps/site/site-map.json
 apps/site/test-results
 packages/block-template-html/dev/src
 packages/mock-block-dock/src/version.ts
+packages/@blockprotocol/type-system/.rollup.cache
 
 ##################
 ## Specific to git

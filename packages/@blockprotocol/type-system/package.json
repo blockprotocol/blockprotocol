@@ -1,0 +1,63 @@
+{
+  "name": "@blockprotocol/type-system",
+  "version": "0.0.0-local",
+  "description": "Definitions of types within the Block Protocol Type System",
+  "homepage": "https://blockprotocol.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/cjs/index.d.ts",
+      "node": "./dist/node/index.cjs",
+      "import": "./dist/es/index.js",
+      "default": "./dist/cjs/index.cjs"
+    },
+    "./slim": {
+      "types": "./dist/cjs-slim/index-slim.d.ts",
+      "node": "./dist/node/index.cjs",
+      "import": "./dist/es-slim/index-slim.js",
+      "default": "./dist/cjs-slim/index-slim.cjs"
+    },
+    "./type-system.wasm": "./dist/type-system.wasm",
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/umd/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./dist/umd/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rm -rf dist/ && yarn build:wasm && yarn optimize && yarn build:bundle",
+    "build:bundle": "rollup -c --bundleConfigAsCjs",
+    "build:wasm": "(cd ../../../crates/type-system && cargo make build)",
+    "compressed-size": "yarn build && find dist -iname '*.js' -exec npx terser@latest --compress --mangle --output {} -- {} \\;",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint .",
+    "lint:tsc": "tsc --noEmit",
+    "optimize": "wasm-opt -Os src/wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm src/wasm/type-system_bg.wasm",
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
+    "@rollup/plugin-typescript": "^9.0.1",
+    "@rollup/plugin-wasm": "^6.0.0",
+    "@types/node": "^18.8.4",
+    "eslint": "8.28.0",
+    "rollup": "^3.1.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.9.3"
+  },
+  "collaborators": [
+    "HASH"
+  ]
+}
