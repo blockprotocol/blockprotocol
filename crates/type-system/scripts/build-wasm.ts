@@ -45,7 +45,6 @@ const moveSrcFiles = (packagePath: PathObject) => {
     "packages",
     "@blockprotocol",
     "type-system",
-    "src",
     "wasm",
   );
 

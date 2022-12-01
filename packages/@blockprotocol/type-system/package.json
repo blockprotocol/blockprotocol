@@ -21,7 +21,7 @@
       "import": "./dist/es/index.js",
       "default": "./dist/cjs/index.cjs"
     },
-    "./type-system.wasm": "./dist/type-system.wasm",
+    "./type-system.wasm": "./dist/wasm/type-system.wasm",
     "./package.json": "./package.json"
   },
   "main": "./dist/umd/index.js",
@@ -39,7 +39,7 @@
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
-    "optimize": "wasm-opt -Os src/wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm src/wasm/type-system_bg.wasm",
+    "optimize": "wasm-opt -Os wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm wasm/type-system_bg.wasm",
     "prepublishOnly": "yarn build:wasm && yarn test && yarn optimize && yarn build:bundle",
     "test": "jest"
   },

@@ -46,26 +46,26 @@ const rolls = (fmt, env) => ({
       // an empty string. This will error at runtime.
       resolveImportMeta: () => `""`,
       generateBundle() {
-        const dir = outdir(fmt, env);
-        fs.mkdirSync(path.resolve(`${dir}/wasm`), { recursive: true });
+        fs.mkdirSync(path.resolve(`dist/wasm`), { recursive: true });
 
         /** @todo - Can we copy these to a top-level folder that's shared between the targets, and then rewrite the
          *    imports? That should decrease the package size a lot as they're all duplicated at the moment
          */
+
         fs.copyFileSync(
-          "./src/wasm/type-system_bg.wasm",
-          `${dir}/wasm/type-system.wasm`,
+          "./wasm/type-system_bg.wasm",
+          `dist/wasm/type-system.wasm`,
         );
         // copy the typescript definitions that wasm-bindgen creates into the
         // distribution so that downstream users can benefit from documentation
         // on the rust code
         fs.copyFileSync(
-          "./src/wasm/type-system_bg.wasm.d.ts",
-          `${dir}/wasm/type-system.wasm.d.ts`,
+          "./wasm/type-system_bg.wasm.d.ts",
+          `dist/wasm/type-system.wasm.d.ts`,
         );
         fs.copyFileSync(
-          path.resolve("./src/wasm/type-system.d.ts"),
-          path.resolve(`${dir}/wasm/type-system.d.ts`),
+          path.resolve("./wasm/type-system.d.ts"),
+          path.resolve(`dist/wasm/type-system.d.ts`),
         );
       },
     },

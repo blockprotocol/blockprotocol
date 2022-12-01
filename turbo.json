@@ -31,7 +31,7 @@
     },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
-      "outputs": ["dist/**", "src/wasm/**"]
+      "outputs": ["dist/**", "wasm/**"]
     },
     "@blockprotocol/type-system#fix:eslint": {
       "dependsOn": ["build"],

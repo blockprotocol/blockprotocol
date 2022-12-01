@@ -1,4 +1,4 @@
-import init from "./wasm/type-system";
+import init from "../wasm/type-system";
 
 export type InitInput =
   | RequestInfo
