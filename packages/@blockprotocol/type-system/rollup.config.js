@@ -27,6 +27,8 @@ const rolls = (fmt, env) => ({
     // We want to inline our wasm bundle as base64 on non-slim builds.
     env !== "slim" ? wasm({ targetEnv: "auto-inline" }) : undefined,
     typescript({
+      declaration: true,
+      declarationDir: outdir(fmt, env),
       outDir: outdir(fmt, env),
       rootDir: "src",
       sourceMap: !production,
@@ -60,6 +62,10 @@ const rolls = (fmt, env) => ({
         fs.copyFileSync(
           "./src/wasm/type-system_bg.wasm.d.ts",
           `${dir}/wasm/type-system.wasm.d.ts`,
+        );
+        fs.copyFileSync(
+          path.resolve("./src/wasm/type-system.d.ts"),
+          path.resolve(`${dir}/wasm/type-system.d.ts`),
         );
       },
     },
