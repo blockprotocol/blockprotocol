@@ -1,7 +1,8 @@
 import path from "node:path";
-import { monorepoRoot } from "./monorepo-root";
 
 import fs from "fs-extra";
+
+import { monorepoRoot } from "./monorepo-root";
 
 export interface PackageInfo {
   name: string;

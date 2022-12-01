@@ -1,13 +1,14 @@
 import path from "node:path";
 
 import chalk from "chalk";
+import * as envalid from "envalid";
 import { execa } from "execa";
 import fs from "fs-extra";
 import { format } from "prettier";
-import { listPublishablePackages } from "./shared/publishable-packages";
-import { monorepoRoot } from "./shared/monorepo-root";
-import * as envalid from "envalid";
+
 import { UserFriendlyError } from "./shared/errors";
+import { monorepoRoot } from "./shared/monorepo-root";
+import { listPublishablePackages } from "./shared/publishable-packages";
 
 const updateJson = async (
   jsonFilePath: any,
@@ -42,7 +43,7 @@ const ensureTermIsNotMentioned = async ({
     cwd: dirPath,
   });
 
-  let filePathsWithMentions: string[] = [];
+  const filePathsWithMentions: string[] = [];
   for (const filePath of rawFilePaths.split("\n")) {
     const resolvedFilePath = path.resolve(dirPath, filePath);
     if (
@@ -60,7 +61,7 @@ const ensureTermIsNotMentioned = async ({
     throw new UserFriendlyError(
       `The following files still mention ${term}:\n  ${filePathsWithMentions
         .map((filePath) => path.relative(monorepoRoot, filePath))
-        .join("\n  ")}${advice ? "\n" + advice : ""}`,
+        .join("\n  ")}${advice ? `\n${advice}` : ""}`,
     );
   }
 };
@@ -82,7 +83,7 @@ const script = async () => {
 
   const publishablePackageInfos = await listPublishablePackages();
   const packageInfo = publishablePackageInfos.find(
-    (packageInfo) => packageInfo.path === packageDirPath,
+    (currentPackageInfo) => currentPackageInfo.path === packageDirPath,
   );
 
   if (!packageInfo) {
@@ -118,10 +119,12 @@ const script = async () => {
   await fs.remove(path.join(packageDirPath, ".eslintrc.cjs"));
 
   await updateJson(path.join(packageDirPath, "package.json"), (packageJson) => {
+    /* eslint-disable no-param-reassign -- see comment on updateJson() for potential improvement */
     delete packageJson.scripts["lint:eslint"];
     delete packageJson.scripts["fix:eslint"];
-    delete packageJson.devDependencies["eslint"];
+    delete packageJson.devDependencies.eslint;
     delete packageJson.devDependencies["@local/eslint-config"];
+    /* eslint-enable no-param-reassign */
   });
 
   await ensureTermIsNotMentioned({
@@ -134,7 +137,8 @@ const script = async () => {
   process.stdout.write(`Removing prepublishOnly...`);
 
   await updateJson(path.join(packageDirPath, "package.json"), (packageJson) => {
-    delete packageJson.scripts["prepublishOnly"];
+    // eslint-disable-next-line no-param-reassign -- see comment on updateJson() for potential improvement
+    delete packageJson.scripts.prepublishOnly;
   });
 
   process.stdout.write(" Done\n");
