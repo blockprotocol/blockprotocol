@@ -77,7 +77,6 @@ export default [
   rolls("es", "fat"),
   rolls("cjs", "fat"),
   rolls("cjs", "node"),
-  /** @todo - re-enable these when we figure out the issues with `can't resolve "wbg"` */
-  // rolls("es", "slim"),
-  // rolls("cjs", "slim"),
+  rolls("es", "slim"),
+  rolls("cjs", "slim"),
 ];
