@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/type-system",
-  "version": "0.0.0-local",
+  "version": "0.0.1",
   "description": "Definitions of types within the Block Protocol Type System",
   "homepage": "https://blockprotocol.org",
   "repository": {
@@ -37,16 +37,17 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist/ && yarn build:wasm && yarn optimize && yarn build:bundle",
+    "build": "yarn clean && yarn build:wasm && yarn optimize && yarn build:bundle",
     "build:bundle": "rollup -c --bundleConfigAsCjs",
     "build:wasm": "(cd ../../../crates/type-system && cargo make build)",
+    "clean": "rimraf ./dist/",
     "compressed-size": "yarn build && find dist -iname '*.js' -exec npx terser@latest --compress --mangle --output {} -- {} \\;",
-    "test": "jest",
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint .",
     "lint:tsc": "tsc --noEmit",
     "optimize": "wasm-opt -Os src/wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm src/wasm/type-system_bg.wasm",
-    "prepublishOnly": "yarn build:wasm && yarn test && yarn optimize && yarn build:bundle"
+    "prepublishOnly": "yarn build:wasm && yarn test && yarn optimize && yarn build:bundle",
+    "test": "jest"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
