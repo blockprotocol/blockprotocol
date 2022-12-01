@@ -41,7 +41,6 @@ run_task = { name = ["build", "lint", "test"] }
 [tasks.cargo]
 private = true
 command = "cargo"
-dependencies = ["install-cargo-hack"]
 
 [tasks.yarn]
 private = true
@@ -169,10 +168,6 @@ install_crate = { rustup_component_name = "clippy" }
 [tasks.install-rustfmt]
 private = true
 install_crate = { rustup_component_name = "rustfmt" }
-
-[tasks.install-cargo-hack]
-private = true
-install_crate = { crate_name = "cargo-hack", version = "0.5.15", binary = "cargo", test_arg = ["hack", "--version"] }
 
 [tasks.install-cargo-nextest]
 private = true
