@@ -29,20 +29,24 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "@blockprotocol/type-system#build": {
+      "dependsOn": [],
+      "outputs": ["dist/**", "src/wasm/**"]
+    },
     "@blockprotocol/type-system#fix:eslint": {
-      "dependsOn": ["^build", "build"],
+      "dependsOn": ["build"],
       "outputs": []
     },
     "@blockprotocol/type-system#lint:eslint": {
-      "dependsOn": ["^build", "build"],
+      "dependsOn": ["build"],
       "outputs": []
     },
     "@blockprotocol/type-system#lint:tsc": {
-      "dependsOn": ["^build", "build"],
+      "dependsOn": ["build"],
       "outputs": []
     },
     "@blockprotocol/type-system#test": {
-      "dependsOn": ["^build", "build"],
+      "dependsOn": ["build"],
       "outputs": []
     }
   }
