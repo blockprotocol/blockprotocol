@@ -21,12 +21,6 @@
       "import": "./dist/es/index.js",
       "default": "./dist/cjs/index.cjs"
     },
-    "./slim": {
-      "types": "./dist/cjs-slim/index-slim.d.ts",
-      "node": "./dist/node/index.cjs",
-      "import": "./dist/es-slim/index-slim.js",
-      "default": "./dist/cjs-slim/index-slim.cjs"
-    },
     "./type-system.wasm": "./dist/type-system.wasm",
     "./package.json": "./package.json"
   },
