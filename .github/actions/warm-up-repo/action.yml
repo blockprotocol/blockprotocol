@@ -11,11 +11,6 @@ runs:
   using: composite
 
   steps:
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 16 ## aligned with Node version on Vercel
-        cache: yarn
-
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@v2
       with:
@@ -26,6 +21,11 @@ runs:
       run: |
         cargo install cargo-quickinstall
         cargo quickinstall cargo-make --version 0.35.15
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16 ## aligned with Node version on Vercel
+        cache: yarn
 
     - run: yarn install --immutable
       shell: bash
