@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
@@ -38,7 +38,7 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
-    "block-scripts": "0.0.17",
+    "block-scripts": "0.0.18",
     "eslint": "8.28.0",
     "mock-block-dock": "0.0.38",
     "prettier": "2.8.0",

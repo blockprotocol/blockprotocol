@@ -1,5 +1,11 @@
 # block-scripts
 
+## 0.0.18
+
+### Patch Changes
+
+- [#794](https://github.com/blockprotocol/blockprotocol/pull/794) [`562bc47`](https://github.com/blockprotocol/blockprotocol/commit/562bc477fdc35b8d3b94dc6c4b2207b9bd2cd057) Thanks [@kachkaev](https://github.com/kachkaev)! - Cleanup folder structure
+
 ## 0.0.17
 
 ### Patch Changes
