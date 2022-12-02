@@ -10,7 +10,7 @@ import {
   useScrollTrigger,
   useTheme,
 } from "@mui/material";
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { useRouter } from "next/router";
 import {
   FunctionComponent,

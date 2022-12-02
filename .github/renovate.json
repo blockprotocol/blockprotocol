@@ -1,47 +1,36 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base"],
+
   "automerge": true,
   "dependencyDashboard": true,
   "dependencyDashboardApproval": true,
-  "enabledManagers": ["github-actions", "npm"],
   "postUpdateOptions": ["yarnDedupeFewer"],
+  "rangeStrategy": "bump",
   "rebaseWhen": "conflicted",
   "packageRules": [
     {
-      "matchManagers": ["npm"],
-      "rangeStrategy": "bump"
-    },
-    {
-      "enabled": false,
-      "matchDepTypes": ["dependencies", "peerDependencies"],
-      "matchManagers": ["npm"]
-    },
-    {
       "enabled": true,
+      "groupName": "ESLint",
       "matchManagers": ["npm"],
       "matchPackagePatterns": [
-        "^axios$",
-        "^chalk$",
-        "^core-js$",
-        "^envalid$",
-        "^execa$",
-        "^lit$",
-        "^webpack$",
-        "^webpack-cli$",
-        "^webpack-dev-server$"
+        "^@types/eslint",
+        "^@typescript-eslint/",
+        "^eslint-",
+        "^eslint$"
       ]
     },
     {
       "enabled": true,
-      "groupName": "Babel",
+      "groupName": "Jest",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@babel/", "^babel-", "^babel$"]
+      "matchPackagePatterns": ["^@types/jest$", "^jest", "^ts-jest$", "^jest-"]
     },
     {
       "enabled": true,
-      "groupName": "Changesets",
+      "groupName": "Playwright",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@changesets/"]
+      "matchPackagePatterns": ["^@playwright/", "^playwright$", "^playwright-"]
     },
     {
       "enabled": true,
@@ -51,27 +40,9 @@
     },
     {
       "enabled": true,
-      "groupName": "ESLint",
+      "groupName": "Sentry",
       "matchManagers": ["npm"],
-      "matchPackagePatterns": [
-        "^@types/eslint",
-        "^@typescript-eslint/",
-        "^eslint-config-",
-        "^eslint-plugin-",
-        "^eslint$"
-      ]
-    },
-    {
-      "enabled": true,
-      "groupName": "Playwright",
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@playwright/", "^playwright"]
-    },
-    {
-      "enabled": true,
-      "groupName": "Prettier",
-      "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^prettier"]
+      "matchPackagePatterns": ["^@sentry/"]
     }
   ]
 }

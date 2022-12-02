@@ -1,5 +1,4 @@
 import { FormData } from "formdata-node";
-// eslint-disable-next-line -- import/no-unresolved and import/extensions do not support sub-paths defined
 import { fileFromPath } from "formdata-node/file-from-path";
 import fetch from "node-fetch";
 
@@ -75,7 +74,9 @@ export const postPublishForm = async ({
         }
         if ("errors" in error) {
           // should be a meaningful error provided by the API about why the request failed, e.g. bad API key
-          return error;
+          return /** @type {{ errors: { msg: string; }[] | undefined }} */ (
+            error
+          );
         }
       }
 

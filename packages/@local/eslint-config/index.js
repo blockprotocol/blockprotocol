@@ -123,6 +123,7 @@ module.exports = {
       "error",
       {
         styles: {
+          clsx: { named: true },
           react: { named: true },
           "react-dom": { named: true },
         },

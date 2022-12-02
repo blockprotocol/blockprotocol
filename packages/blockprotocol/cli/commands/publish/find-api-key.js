@@ -4,7 +4,7 @@ import chalk from "chalk";
 import { findUp } from "find-up";
 import fs from "fs-extra";
 
-import { printSpacer } from "../../print-spacer.js";
+import { printSpacer } from "../../shared/print-spacer.js";
 import { doesUserAgree } from "./does-user-agree.js";
 import { findProjectRoot } from "./shared/find-project-root.js";
 

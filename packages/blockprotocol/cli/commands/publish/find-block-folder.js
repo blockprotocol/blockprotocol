@@ -3,7 +3,7 @@ import path from "node:path";
 import chalk from "chalk";
 import { globby } from "globby";
 
-import { printSpacer } from "../../print-spacer.js";
+import { printSpacer } from "../../shared/print-spacer.js";
 import { findProjectRoot } from "./shared/find-project-root.js";
 
 /**
