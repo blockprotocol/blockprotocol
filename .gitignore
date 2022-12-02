@@ -70,11 +70,9 @@ apps/site/site-map.json
 apps/site/test-results
 packages/block-template-html/dev/src
 packages/mock-block-dock/src/version.ts
+packages/@blockprotocol/type-system/.rollup.cache
+packages/@blockprotocol/type-system/wasm
 
 ##################
 ## Specific to git
 ##################
-
-## Build artifacts that need to be version-controlled
-!packages/@blockprotocol/type-system-node/dist
-!packages/@blockprotocol/type-system-web/dist

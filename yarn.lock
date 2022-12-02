@@ -2904,27 +2904,21 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@blockprotocol/type-system-node@workspace:packages/@blockprotocol/type-system-node":
+"@blockprotocol/type-system@workspace:packages/@blockprotocol/type-system":
   version: 0.0.0-use.local
-  resolution: "@blockprotocol/type-system-node@workspace:packages/@blockprotocol/type-system-node"
+  resolution: "@blockprotocol/type-system@workspace:packages/@blockprotocol/type-system"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     "@local/tsconfig": "npm:0.0.0-private"
+    "@rollup/plugin-typescript": "npm:9.0.2"
+    "@rollup/plugin-wasm": "npm:6.0.1"
     "@types/jest": "npm:29.2.3"
+    "@types/node": "npm:18.11.10"
     eslint: "npm:8.28.0"
     jest: "npm:29.3.1"
+    rollup: "npm:3.5.1"
     ts-jest: "npm:29.0.3"
-    typescript: "npm:4.9.3"
-  languageName: unknown
-  linkType: soft
-
-"@blockprotocol/type-system-web@workspace:packages/@blockprotocol/type-system-web":
-  version: 0.0.0-use.local
-  resolution: "@blockprotocol/type-system-web@workspace:packages/@blockprotocol/type-system-web"
-  dependencies:
-    "@local/eslint-config": "npm:0.0.0-private"
-    "@local/tsconfig": "npm:0.0.0-private"
-    eslint: "npm:8.28.0"
+    tslib: "npm:2.4.1"
     typescript: "npm:4.9.3"
   languageName: unknown
   linkType: soft
@@ -4451,6 +4445,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-typescript@npm:9.0.2":
+  version: 9.0.2
+  resolution: "@rollup/plugin-typescript@npm:9.0.2"
+  dependencies:
+    "@rollup/pluginutils": "npm:^5.0.1"
+    resolve: "npm:^1.22.1"
+  peerDependencies:
+    rollup: ^2.14.0||^3.0.0
+    tslib: "*"
+    typescript: ">=3.7.0"
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+    tslib:
+      optional: true
+  checksum: 9d0507585fb9289a6e835f75b69606a38ea99a8071520a617bed5bca6febb5f11e4769d876f19058bed5d72667cd086c125fac52e16b79208144c0594b18f67f
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-virtual@npm:3.0.0":
   version: 3.0.0
   resolution: "@rollup/plugin-virtual@npm:3.0.0"
@@ -4463,6 +4476,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-wasm@npm:6.0.1":
+  version: 6.0.1
+  resolution: "@rollup/plugin-wasm@npm:6.0.1"
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0||^3.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: a6aa0aa7ca897df18c18bbc8458bc78839c1f5882a650ccd069a974bec4abac102741c2c93ac71fccbd32e26be2db6df314111cf7ce7c0cd57d67daeaaa13840
+  languageName: node
+  linkType: hard
+
 "@rollup/pluginutils@npm:^4.1.1":
   version: 4.2.1
   resolution: "@rollup/pluginutils@npm:4.2.1"
@@ -4470,6 +4495,22 @@ __metadata:
     estree-walker: "npm:^2.0.1"
     picomatch: "npm:^2.2.2"
   checksum: 96f7c2ec2ca7f20178c65a6634a1d612fc3ff6d4a70ff18468d1a909218d491f0164c320dbf195fbbf932059e71c21cfa31b64813d7922f14c83e773527f8b8e
+  languageName: node
+  linkType: hard
+
+"@rollup/pluginutils@npm:^5.0.1":
+  version: 5.0.2
+  resolution: "@rollup/pluginutils@npm:5.0.2"
+  dependencies:
+    "@types/estree": "npm:^1.0.0"
+    estree-walker: "npm:^2.0.2"
+    picomatch: "npm:^2.3.1"
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0||^3.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: c8e01caaf5d63c23f82ad6a1402cd8878718b298c29e09e57592dfffa18e01c389242610c41cb608f429828d13ef0848ff83fa474bbfe568966a9a8b2e93d25a
   languageName: node
   linkType: hard
 
@@ -4980,6 +5021,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/estree@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@types/estree@npm:1.0.0"
+  checksum: 474df434e3a469cb7a68d44c8b7ac3a21bca344fa3b49651c3451d0f3662ff0c3b2ba52149cbc5b9c9a9f3f1ac37958c163ef29b65a8b36fccb5ccb2acfc9b08
+  languageName: node
+  linkType: hard
+
 "@types/express-serve-static-core@npm:*, @types/express-serve-static-core@npm:^4.17.18":
   version: 4.17.28
   resolution: "@types/express-serve-static-core@npm:4.17.28"
@@ -5271,6 +5319,13 @@ __metadata:
   version: 16.18.3
   resolution: "@types/node@npm:16.18.3"
   checksum: af50539b260f956c2f4bb0207ddc46f6bf929bbf70230ec25252a38d43f9935c82c0a9d1c4e2c2056b6115e2fa283f6996aab699c1fa035937c07584c368ca8c
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:18.11.10":
+  version: 18.11.10
+  resolution: "@types/node@npm:18.11.10"
+  checksum: 0d8720580234f3a2fcb22779d4ccf9b7b7b778cfcf6fd7f2a9ea778bb2d943354111913d41b3142a82731305c525777d01f5f3982bbdd690ad53dffaa01a7529
   languageName: node
   linkType: hard
 
@@ -9405,7 +9460,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"estree-walker@npm:^2.0.1":
+"estree-walker@npm:^2.0.1, estree-walker@npm:^2.0.2":
   version: 2.0.2
   resolution: "estree-walker@npm:2.0.2"
   checksum: 6fd7656e20b3c8f1fa74cd3d922e09d2cc9815ba5ea2d4cc0d5f16870b00e4c40d9aaae5efeb26299ea684a89b8e64868f42ecdddd45e8d18283f47098c9943a
@@ -16631,7 +16686,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@npm:^1.10.0, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.0, resolve@npm:^1.9.0":
+"resolve@npm:^1.10.0, resolve@npm:^1.14.2, resolve@npm:^1.19.0, resolve@npm:^1.20.0, resolve@npm:^1.22.0, resolve@npm:^1.22.1, resolve@npm:^1.9.0":
   version: 1.22.1
   resolution: "resolve@npm:1.22.1"
   dependencies:
@@ -16654,7 +16709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.14.2#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.19.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.9.0#optional!builtin<compat/resolve>":
+"resolve@patch:resolve@npm%3A^1.10.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.14.2#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.19.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.20.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.0#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.22.1#optional!builtin<compat/resolve>, resolve@patch:resolve@npm%3A^1.9.0#optional!builtin<compat/resolve>":
   version: 1.22.1
   resolution: "resolve@patch:resolve@npm%3A1.22.1#optional!builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
@@ -16762,6 +16817,20 @@ __metadata:
   bin:
     rollup: dist/bin/rollup
   checksum: da6c3262d99417b096aaeb437ccd5de01010e683c5f725ec11053d3fb3e0fd33568d2af343c7319200d00adb7f21568492818e487a5b3fe3ecec5892956f992d
+  languageName: node
+  linkType: hard
+
+"rollup@npm:3.5.1":
+  version: 3.5.1
+  resolution: "rollup@npm:3.5.1"
+  dependencies:
+    fsevents: "npm:~2.3.2"
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    rollup: dist/bin/rollup
+  checksum: c2b114dddc60b5e01a6f1f08acae55d9d4c858bcdf64931724e354c51ddaeb782d36257ff5b83b66f12f7494a2f69cae1276febb1fb8ed02dce773cc65117b03
   languageName: node
   linkType: hard
 
@@ -18649,6 +18718,13 @@ __metadata:
   version: 2.3.1
   resolution: "tslib@npm:2.3.1"
   checksum: 78b00432027abb82405d5986a091fa593c6ef6589d0104d20ecdcaf24f2b02be428d9a38e7cd5304e5d64544cddb83210e326dac4fea9b2b83128a869c825d19
+  languageName: node
+  linkType: hard
+
+"tslib@npm:2.4.1":
+  version: 2.4.1
+  resolution: "tslib@npm:2.4.1"
+  checksum: a739a21e3ff059e62c7c3c0845333fbc9c081bcc91e015f2d246a31eeaf1fb0e29b10c0913c7d22f692b3203bb469fd60ca5288aa4f27d351a969df2d0714899
   languageName: node
   linkType: hard
 
