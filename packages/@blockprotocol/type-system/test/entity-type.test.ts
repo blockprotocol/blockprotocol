@@ -1,4 +1,9 @@
-import { EntityType, ParseEntityTypeError, validateEntityType } from "..";
+import {
+  EntityType,
+  ParseEntityTypeError,
+  TypeSystemInitializer,
+  validateEntityType,
+} from "..";
 
 const entityTypes: EntityType[] = [
   {
@@ -498,6 +503,10 @@ const brokenTypes: [any, ParseEntityTypeError][] = [
     },
   ],
 ];
+
+beforeAll(async () => {
+  await TypeSystemInitializer.initialize();
+});
 
 describe("validateEntityType", () => {
   test.each(entityTypes)("validateEntityType($title) succeeds", (input) => {

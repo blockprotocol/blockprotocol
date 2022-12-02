@@ -24,6 +24,30 @@
     "lint:tsc": {
       "dependsOn": ["^build"],
       "outputs": []
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#build": {
+      "dependsOn": [],
+      "outputs": ["dist/**", "wasm/**"]
+    },
+    "@blockprotocol/type-system#fix:eslint": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#lint:eslint": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#lint:tsc": {
+      "dependsOn": ["build"],
+      "outputs": []
+    },
+    "@blockprotocol/type-system#test": {
+      "dependsOn": ["build"],
+      "outputs": []
     }
   }
 }

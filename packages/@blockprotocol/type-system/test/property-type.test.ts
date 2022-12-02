@@ -1,4 +1,9 @@
-import { ParsePropertyTypeError, PropertyType, validatePropertyType } from "..";
+import {
+  ParsePropertyTypeError,
+  PropertyType,
+  TypeSystemInitializer,
+  validatePropertyType,
+} from "..";
 
 const propertyTypes: PropertyType[] = [
   {
@@ -299,6 +304,10 @@ const brokenTypes: [any, ParsePropertyTypeError][] = [
     },
   ],
 ];
+
+beforeAll(async () => {
+  await TypeSystemInitializer.initialize();
+});
 
 describe("validatePropertyType", () => {
   test.each(propertyTypes)("validatePropertyType($title) succeeds", (input) => {

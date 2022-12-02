@@ -16,16 +16,17 @@ type PathObject = {
   ext: string;
 };
 
-const runWasmPack = (target: string) => {
-  console.log(`Running wasm-pack targeting ${target}`);
+const runWasmPack = () => {
+  console.log(`Running wasm-pack targeting "web"`);
   const result = child_process.spawnSync("wasm-pack", [
     "build",
     "--target",
-    target,
+    "web",
     "--out-name",
-    "index",
+    "type-system",
     "--scope",
     "blockprotocol",
+    "--release",
   ]);
 
   if (result.status !== 0) {
@@ -35,7 +36,7 @@ const runWasmPack = (target: string) => {
   }
 };
 
-const moveSrcFiles = (packagePath: PathObject, packageName: string) => {
+const moveSrcFiles = (packagePath: PathObject) => {
   const destinationPath = path.resolve(
     packageDirPath,
     "..",
@@ -43,8 +44,8 @@ const moveSrcFiles = (packagePath: PathObject, packageName: string) => {
     "..",
     "packages",
     "@blockprotocol",
-    packageName,
-    "dist",
+    "type-system",
+    "wasm",
   );
 
   console.log(
@@ -67,18 +68,13 @@ const cleanUp = (packagePath: PathObject) => {
   fs.rmSync(path.format(packagePath), { recursive: true });
 };
 
-const buildWasmPackage = (packageName: string, target: string) => {
-  runWasmPack(target);
+const buildWasmPackage = () => {
+  runWasmPack();
 
   const pkgFolderPath = path.parse(path.resolve("./pkg/"));
 
-  moveSrcFiles(pkgFolderPath, packageName);
+  moveSrcFiles(pkgFolderPath);
   cleanUp(pkgFolderPath);
 };
 
-const buildPackages = () => {
-  buildWasmPackage("type-system-web", "web");
-  buildWasmPackage("type-system-node", "nodejs");
-};
-
-buildPackages();
+buildWasmPackage();
