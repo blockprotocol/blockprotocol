@@ -2916,6 +2916,7 @@ __metadata:
     "@types/node": "npm:18.11.10"
     eslint: "npm:8.28.0"
     jest: "npm:29.3.1"
+    rimraf: "npm:^3.0.2"
     rollup: "npm:3.5.1"
     ts-jest: "npm:29.0.3"
     tslib: "npm:2.4.1"
@@ -6893,7 +6894,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"block-scripts@npm:0.0.17, block-scripts@workspace:packages/block-scripts":
+"block-scripts@npm:0.0.18, block-scripts@workspace:packages/block-scripts":
   version: 0.0.0-use.local
   resolution: "block-scripts@workspace:packages/block-scripts"
   dependencies:
@@ -6946,7 +6947,7 @@ __metadata:
     "@blockprotocol/graph": "npm:0.0.18"
     "@local/eslint-config": "npm:0.0.0-private"
     "@types/react-dom": "npm:^18.0.9"
-    block-scripts: "npm:0.0.17"
+    block-scripts: "npm:0.0.18"
     eslint: "npm:8.28.0"
     lit: "npm:^2.4.1"
     mock-block-dock: "npm:0.0.38"
@@ -6961,7 +6962,7 @@ __metadata:
   resolution: "block-template-html@workspace:packages/block-template-html"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
-    block-scripts: "npm:0.0.17"
+    block-scripts: "npm:0.0.18"
     eslint: "npm:8.28.0"
     http-server: "npm:14.1.1"
     lnk-cli: "npm:1.0.1"
@@ -6977,7 +6978,7 @@ __metadata:
     "@blockprotocol/graph": "npm:0.0.18"
     "@local/eslint-config": "npm:0.0.0-private"
     "@types/react-dom": "npm:^18.0.9"
-    block-scripts: "npm:0.0.17"
+    block-scripts: "npm:0.0.18"
     eslint: "npm:8.28.0"
     mock-block-dock: "npm:0.0.38"
     prettier: "npm:2.8.0"
