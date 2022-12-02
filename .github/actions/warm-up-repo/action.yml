@@ -21,7 +21,7 @@ runs:
       with:
         workspaces: crates/type-system
 
-    - name: Install tools
+    - name: Install Cargo-Make
       shell: bash
       run: |
         cargo install cargo-quickinstall

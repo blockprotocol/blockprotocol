@@ -5,7 +5,8 @@
   "homepage": "https://blockprotocol.org",
   "repository": {
     "type": "git",
-    "url": "git@github.com:blockprotocol/blockprotocol.git"
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "packages/@blockprotocol/type-system"
   },
   "license": "MIT",
   "author": {
@@ -62,8 +63,5 @@
     "ts-jest": "29.0.3",
     "tslib": "2.4.1",
     "typescript": "4.9.3"
-  },
-  "collaborators": [
-    "HASH"
-  ]
+  }
 }
