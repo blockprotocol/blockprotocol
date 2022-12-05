@@ -125,7 +125,6 @@ jobs:
             echo 'Some dependencies can be deduplicated, which will make node_modules'
             echo 'lighter and potentially save us from unexplainable bugs.'
             echo 'Please run `yarn fix:yarn-dedupe` locally and commit yarn.lock.'
-            echo 'You may need to run the command 2-3 times in some rare cases.'
             echo 'ℹ️ ℹ️ ℹ️'
             exit 1
           fi
