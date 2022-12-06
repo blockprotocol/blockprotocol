@@ -22,7 +22,7 @@
   "bin": "create-block-app.js",
   "scripts": {
     "fix:eslint": "eslint --fix .",
-    "lint:eslint": "eslint ."
+    "lint:eslint": "eslint --report-unused-disable-directives ."
   },
   "dependencies": {
     "chalk": "5.1.2",

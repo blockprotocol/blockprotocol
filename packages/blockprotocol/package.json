@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "BLOCK_PROTOCOL_SITE_HOST=http://localhost:3000 node cli.js",
     "fix:eslint": "eslint --fix .",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {

@@ -44,7 +44,7 @@
     "clean": "rimraf ./dist/",
     "compressed-size": "yarn build && find dist -iname '*.js' -exec npx terser@latest --compress --mangle --output {} -- {} \\;",
     "fix:eslint": "eslint --fix .",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "optimize": "wasm-opt -Os wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm wasm/type-system_bg.wasm",
     "prepublishOnly": "yarn build:wasm && yarn test && yarn optimize && yarn build:bundle",
