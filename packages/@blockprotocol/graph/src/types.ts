@@ -3,13 +3,20 @@ import { MessageCallback } from "@blockprotocol/core";
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
-  AggregateOperationInput,
   CreateEntityData,
   DeleteEntityData,
   Entity,
   GetEntityData,
   UpdateEntityData,
 } from "./types/entity";
+import {
+  AggregateEntityTypesData,
+  CreateEntityTypeData,
+  DeleteEntityTypeData,
+  EntityType,
+  GetEntityTypeData,
+  UpdateEntityTypeData,
+} from "./types/entity-type";
 import { UploadFileData, UploadFileReturn } from "./types/file";
 import {
   CreateLinkData,
@@ -29,47 +36,10 @@ import {
 } from "./types/linked-aggregation";
 
 export * from "./types/entity";
+export * from "./types/entity-type";
 export * from "./types/file";
 export * from "./types/link";
 export * from "./types/linked-aggregation";
-
-// ------------------------- ENTITY TYPES ----------------------------- //
-
-export type EntityType = {
-  entityTypeId: string; // @todo consider removing this and just using $id, the URI
-  schema: {
-    $id: string;
-    $schema: string;
-    title: string;
-    type: string;
-    labelProperty?: string;
-    [key: string]: unknown;
-  };
-};
-
-export type CreateEntityTypeData = {
-  schema: EntityType["schema"];
-};
-
-export type AggregateEntityTypesData = {
-  // @todo mention in spec or remove
-  // include entities that are used by, but don't belong to, the specified account
-  includeOtherTypesInUse?: boolean | null;
-  operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
-};
-
-export type GetEntityTypeData = {
-  entityTypeId: string;
-};
-
-export type UpdateEntityTypeData = {
-  entityTypeId: string;
-  schema: EntityType["schema"];
-};
-
-export type DeleteEntityTypeData = {
-  entityTypeId: string;
-};
 
 // -------------------------- BLOCK GRAPH -------------------------- //
 
