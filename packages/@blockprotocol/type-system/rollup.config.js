@@ -48,10 +48,6 @@ const rolls = (fmt, env) => ({
       generateBundle() {
         fs.mkdirSync(path.resolve(`dist/wasm`), { recursive: true });
 
-        /** @todo - Can we copy these to a top-level folder that's shared between the targets, and then rewrite the
-         *    imports? That should decrease the package size a lot as they're all duplicated at the moment
-         */
-
         fs.copyFileSync(
           "./wasm/type-system_bg.wasm",
           `dist/wasm/type-system.wasm`,
