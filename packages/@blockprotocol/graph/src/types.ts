@@ -11,40 +11,18 @@ import {
   UpdateEntityData,
 } from "./types/entity";
 import { UploadFileData, UploadFileReturn } from "./types/file";
+import {
+  CreateLinkData,
+  DeleteLinkData,
+  GetLinkData,
+  Link,
+  LinkGroup,
+  UpdateLinkData,
+} from "./types/link";
 
 export * from "./types/entity";
 export * from "./types/file";
-
-// ----------------------------- LINKS -------------------------------- //
-
-export type Link = {
-  linkId: string;
-  sourceEntityId: string;
-  destinationEntityId: string;
-  index?: number | null;
-  path: string;
-};
-
-export type LinkGroup = {
-  sourceEntityId: string;
-  path: string;
-  links: Link[];
-};
-
-export type GetLinkData = {
-  linkId: string;
-};
-
-export type CreateLinkData = Omit<Link, "linkId">;
-
-export type UpdateLinkData = {
-  linkId: string;
-  data: Pick<Link, "index">;
-};
-
-export type DeleteLinkData = {
-  linkId: string;
-};
+export * from "./types/link";
 
 // ---------------------- LINKED AGGREGATIONS ------------------------- //
 
