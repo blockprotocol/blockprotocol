@@ -10,24 +10,10 @@ import {
   GetEntityData,
   UpdateEntityData,
 } from "./types/entity";
+import { UploadFileData, UploadFileReturn } from "./types/file";
 
 export * from "./types/entity";
-
-// ------------------------ OTHER FUNCTIONS --------------------------- //
-
-export type FileMediaType = "image" | "video";
-
-export type UploadFileData = {
-  file?: File | null;
-  url?: string | null;
-  mediaType: FileMediaType;
-};
-
-export type UploadFileReturn = {
-  entityId: string;
-  url: string;
-  mediaType: FileMediaType;
-};
+export * from "./types/file";
 
 // ----------------------------- LINKS -------------------------------- //
 
