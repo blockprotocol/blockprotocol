@@ -19,7 +19,6 @@
     "start": "yarn exe scripts/start.ts"
   },
   "dependencies": {
-    "@aws-crypto/sha256-js": "2.0.1",
     "@aws-sdk/client-s3": "3.169.0",
     "@aws-sdk/client-ses": "3.169.0",
     "@blockprotocol/core": "0.0.12",
@@ -51,7 +50,6 @@
     "cors": "^2.8.5",
     "date-fns": "^2.27.0",
     "dedent": "^0.7.0",
-    "dotenv": "^10.0.0",
     "envalid": "7.3.1",
     "execa": "^6.1.0",
     "express-session": "^1.17.2",
@@ -59,7 +57,6 @@
     "fs-extra": "^10.1.0",
     "globby": "^13.1.2",
     "gray-matter": "^4.0.3",
-    "gsap": "^3.8.0",
     "hosted-git-info": "^4.1.0",
     "html-to-text": "^8.2.0",
     "immer": "^9.0.16",
@@ -78,7 +75,6 @@
     "nodemailer": "^6.7.2",
     "notistack": "^2.0.5",
     "nprogress": "^0.2.0",
-    "oembed-providers": "^1.0.20220105",
     "passport": "^0.5.2",
     "prismjs": "^1.27.0",
     "react": "^18.2.0",
@@ -88,7 +84,6 @@
     "react-html-parser": "^2.0.2",
     "react-slick": "^0.28.1",
     "react-transition-group": "^4.4.2",
-    "react-use": "^17.3.2",
     "remark-gfm": "^3.0.1",
     "remark-mdx": "^2.1.5",
     "remark-mdx-disable-explicit-jsx": "^0.1.0",
@@ -102,11 +97,9 @@
     "tmp-promise": "3.0.3",
     "twind": "^0.16.17",
     "unified": "^10.1.2",
-    "use-mousetrap": "^1.0.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.20.6",
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
     "@playwright/test": "^1.27.1",
