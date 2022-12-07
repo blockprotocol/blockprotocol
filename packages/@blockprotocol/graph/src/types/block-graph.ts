@@ -10,11 +10,6 @@ import {
   GetEntityData,
   UpdateEntityData,
 } from "./entity";
-import {
-  AggregateEntityTypesData,
-  EntityType,
-  GetEntityTypeData,
-} from "./entity-type";
 import { UploadFileData, UploadFileReturn } from "./file";
 import {
   CreateLinkData,
@@ -32,6 +27,11 @@ import {
   LinkedAggregationDefinition,
   UpdateLinkedAggregationData,
 } from "./linked-aggregation";
+import {
+  AggregateEntityTypesData,
+  EntityType,
+  GetEntityTypeData,
+} from "./ontology/entity-type";
 
 export type LinkedAggregations = LinkedAggregation[];
 export type LinkedEntities = Entity[];

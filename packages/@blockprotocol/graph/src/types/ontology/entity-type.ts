@@ -1,6 +1,6 @@
 import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { AggregateOperationInput } from "./entity";
+import { AggregateOperationInput } from "../entity";
 
 export type { EntityType };
 
