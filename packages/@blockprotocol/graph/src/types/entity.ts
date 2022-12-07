@@ -1,4 +1,5 @@
 import { UnknownRecord } from "@blockprotocol/core";
+import { VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { CreateLinkData, EntityType } from "../types";
 
@@ -6,11 +7,11 @@ export type Entity<
   Properties extends Record<string, unknown> | null = Record<string, unknown>,
 > = {
   entityId: string;
-  entityTypeId?: string;
+  entityTypeId?: VersionedUri;
 } & (Properties extends null ? {} : { properties: Properties });
 
 export type CreateEntityData = {
-  entityTypeId: string;
+  entityTypeId: VersionedUri;
   properties: UnknownRecord;
   links?: Omit<
     CreateLinkData,
@@ -67,7 +68,7 @@ export type Sort = {
 export type MultiSort = Sort[];
 
 export type AggregateOperationInput = {
-  entityTypeId?: string | null;
+  entityTypeId?: VersionedUri | null;
   pageNumber?: number | null;
   itemsPerPage?: number | null;
   multiSort?: MultiSort | null;

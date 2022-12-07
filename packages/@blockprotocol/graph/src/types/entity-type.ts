@@ -1,19 +1,11 @@
+import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
+
 import { AggregateOperationInput } from "./entity";
 
-export type EntityType = {
-  entityTypeId: string; // @todo consider removing this and just using $id, the URI
-  schema: {
-    $id: string;
-    $schema: string;
-    title: string;
-    type: string;
-    labelProperty?: string;
-    [key: string]: unknown;
-  };
-};
+export type { EntityType };
 
 export type CreateEntityTypeData = {
-  schema: EntityType["schema"];
+  entityType: EntityType;
 };
 
 export type AggregateEntityTypesData = {
@@ -24,14 +16,14 @@ export type AggregateEntityTypesData = {
 };
 
 export type GetEntityTypeData = {
-  entityTypeId: string;
+  entityTypeId: VersionedUri;
 };
 
 export type UpdateEntityTypeData = {
-  entityTypeId: string;
-  schema: EntityType["schema"];
+  entityTypeId: VersionedUri;
+  entityType: Omit<EntityType, "$id">;
 };
 
 export type DeleteEntityTypeData = {
-  entityTypeId: string;
+  entityTypeId: VersionedUri;
 };
