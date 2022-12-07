@@ -11,11 +11,8 @@ import {
 } from "./entity";
 import {
   AggregateEntityTypesData,
-  CreateEntityTypeData,
-  DeleteEntityTypeData,
   EntityType,
   GetEntityTypeData,
-  UpdateEntityTypeData,
 } from "./entity-type";
 import { UploadFileData, UploadFileReturn } from "./file";
 import {
@@ -123,24 +120,25 @@ export type EmbedderGraphMessageCallbacks = {
     AggregateEntitiesResult<Entity>,
     ReadOrModifyResourceError
   >;
-  createEntityType: MessageCallback<
-    CreateEntityTypeData,
-    null,
-    EntityType,
-    CreateResourceError
-  >;
-  updateEntityType: MessageCallback<
-    UpdateEntityTypeData,
-    null,
-    EntityType,
-    ReadOrModifyResourceError
-  >;
-  deleteEntityType: MessageCallback<
-    DeleteEntityTypeData,
-    null,
-    true,
-    ReadOrModifyResourceError
-  >;
+  /** @todo - Add Type System mutation methods */
+  // createEntityType: MessageCallback<
+  //   CreateEntityTypeData,
+  //   null,
+  //   EntityType,
+  //   CreateResourceError
+  // >;
+  // updateEntityType: MessageCallback<
+  //   UpdateEntityTypeData,
+  //   null,
+  //   EntityType,
+  //   ReadOrModifyResourceError
+  // >;
+  // deleteEntityType: MessageCallback<
+  //   DeleteEntityTypeData,
+  //   null,
+  //   true,
+  //   ReadOrModifyResourceError
+  // >;
   getEntityType: MessageCallback<
     GetEntityTypeData,
     null,

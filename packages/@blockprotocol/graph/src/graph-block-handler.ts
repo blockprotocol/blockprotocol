@@ -15,12 +15,10 @@ import {
   BlockGraphMessageCallbacks,
   BlockGraphMessages,
   CreateEntityData,
-  CreateEntityTypeData,
   CreateLinkData,
   CreateLinkedAggregationData,
   CreateResourceError,
   DeleteEntityData,
-  DeleteEntityTypeData,
   DeleteLinkData,
   DeleteLinkedAggregationData,
   Entity,
@@ -33,7 +31,6 @@ import {
   LinkedAggregation,
   ReadOrModifyResourceError,
   UpdateEntityData,
-  UpdateEntityTypeData,
   UpdateLinkData,
   UpdateLinkedAggregationData,
   UploadFileData,
@@ -162,36 +159,37 @@ export class GraphBlockHandler
     });
   }
 
-  createEntityType({ data }: { data?: CreateEntityTypeData }) {
-    return this.sendMessage<EntityType, CreateResourceError>({
-      message: {
-        messageName: "createEntityType",
-        data,
-      },
-      respondedToBy: "createEntityTypeResponse", // @todo get this from graph-service.json
-    });
-  }
-
-  updateEntityType({ data }: { data?: UpdateEntityTypeData }) {
-    return this.sendMessage<EntityType, ReadOrModifyResourceError>({
-      message: {
-        messageName: "updateEntityType",
-        data,
-      },
-      respondedToBy: "updateEntityTypeResponse",
-    });
-  }
-
-  deleteEntityType({ data }: { data?: DeleteEntityTypeData }) {
-    // @todo fix this 'any'
-    return this.sendMessage<any, ReadOrModifyResourceError>({
-      message: {
-        messageName: "deleteEntityType",
-        data,
-      },
-      respondedToBy: "deleteEntityTypeResponse",
-    });
-  }
+  /** @todo - Add Type System mutation methods */
+  // createEntityType({ data }: { data?: CreateEntityTypeData }) {
+  //   return this.sendMessage<EntityType, CreateResourceError>({
+  //     message: {
+  //       messageName: "createEntityType",
+  //       data,
+  //     },
+  //     respondedToBy: "createEntityTypeResponse", // @todo get this from graph-service.json
+  //   });
+  // }
+  //
+  // updateEntityType({ data }: { data?: UpdateEntityTypeData }) {
+  //   return this.sendMessage<EntityType, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "updateEntityType",
+  //       data,
+  //     },
+  //     respondedToBy: "updateEntityTypeResponse",
+  //   });
+  // }
+  //
+  // deleteEntityType({ data }: { data?: DeleteEntityTypeData }) {
+  //   // @todo fix this 'any'
+  //   return this.sendMessage<any, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "deleteEntityType",
+  //       data,
+  //     },
+  //     respondedToBy: "deleteEntityTypeResponse",
+  //   });
+  // }
 
   getEntityType({ data }: { data?: GetEntityTypeData }) {
     return this.sendMessage<EntityType, ReadOrModifyResourceError>({
