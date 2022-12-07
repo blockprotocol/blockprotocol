@@ -1,4 +1,5 @@
 import { MessageCallback } from "@blockprotocol/core";
+import { EntityId } from "@blockprotocol/graph";
 
 export type HookResponse = {
   hookId: string;
@@ -9,7 +10,7 @@ export type HookData = {
   type: string;
   path: string;
   hookId: string | null;
-  entityId: string;
+  entityId: EntityId;
 };
 
 export type BlockHookMessageCallbacks = {};

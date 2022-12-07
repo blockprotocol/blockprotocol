@@ -3,10 +3,13 @@ import { VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { CreateLinkData, EntityType } from "../types";
 
+/** @todo - Consider branding this */
+export type EntityId = string;
+
 export type Entity<
   Properties extends Record<string, unknown> | null = Record<string, unknown>,
 > = {
-  entityId: string;
+  entityId: EntityId;
   entityTypeId?: VersionedUri;
 } & (Properties extends null ? {} : { properties: Properties });
 
@@ -20,16 +23,16 @@ export type CreateEntityData = {
 };
 
 export type GetEntityData = {
-  entityId: string;
+  entityId: EntityId;
 };
 
 export type UpdateEntityData = {
-  entityId: string;
+  entityId: EntityId;
   properties: UnknownRecord;
 };
 
 export type DeleteEntityData = {
-  entityId: string;
+  entityId: EntityId;
 };
 
 export type FilterOperatorType =

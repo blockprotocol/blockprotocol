@@ -1,3 +1,5 @@
+import { EntityId } from "./entity";
+
 export type FileMediaType = "image" | "video";
 
 export type UploadFileData = {
@@ -7,7 +9,7 @@ export type UploadFileData = {
 };
 
 export type UploadFileReturn = {
-  entityId: string;
+  entityId: EntityId;
   url: string;
   mediaType: FileMediaType;
 };
