@@ -6,6 +6,7 @@ import {
   CreateEntityData,
   DeleteEntityData,
   Entity,
+  EntityPropertiesObject,
   GetEntityData,
   UpdateEntityData,
 } from "./entity";
@@ -43,7 +44,7 @@ export type BlockGraph = {
 };
 
 export type BlockGraphProperties<
-  BlockEntityProperties extends Record<string, unknown> | null,
+  BlockEntityProperties extends EntityPropertiesObject | null,
 > = {
   /**
    * The 'graph' object contains messages sent under the graph service from the app to the block.

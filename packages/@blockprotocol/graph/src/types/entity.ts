@@ -1,21 +1,37 @@
-import { UnknownRecord } from "@blockprotocol/core";
-import { VersionedUri } from "@blockprotocol/type-system/slim";
+import { JsonValue } from "@blockprotocol/core";
+import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { CreateLinkData, EntityType } from "../types";
 
 /** @todo - Consider branding this */
 export type EntityId = string;
 
-export type Entity<
-  Properties extends Record<string, unknown> | null = Record<string, unknown>,
-> = {
+/**
+ * Entity Properties are JSON objects with `BaseUri`s as keys, _except_ when there is a Data Type of primitive type
+ * `object` in which case the nested objects become plain `JsonObject`s
+ */
+export type EntityPropertyValue = JsonValue | EntityPropertiesObject;
+export type EntityPropertiesObject = {
+  [_: BaseUri]: EntityPropertyValue;
+};
+
+export type EntityMetadata = {
   entityId: EntityId;
-  entityTypeId?: VersionedUri;
+  entityTypeId: VersionedUri;
+};
+
+export type Entity<
+  Properties extends EntityPropertiesObject | null = Record<
+    BaseUri,
+    EntityPropertyValue
+  >,
+> = {
+  metadata: EntityMetadata;
 } & (Properties extends null ? {} : { properties: Properties });
 
 export type CreateEntityData = {
   entityTypeId: VersionedUri;
-  properties: UnknownRecord;
+  properties: EntityPropertiesObject;
   links?: Omit<
     CreateLinkData,
     "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
@@ -28,7 +44,7 @@ export type GetEntityData = {
 
 export type UpdateEntityData = {
   entityId: EntityId;
-  properties: UnknownRecord;
+  properties: EntityPropertiesObject;
 };
 
 export type DeleteEntityData = {
