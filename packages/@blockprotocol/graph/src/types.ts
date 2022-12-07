@@ -19,40 +19,19 @@ import {
   LinkGroup,
   UpdateLinkData,
 } from "./types/link";
+import {
+  CreateLinkedAggregationData,
+  DeleteLinkedAggregationData,
+  GetLinkedAggregationData,
+  LinkedAggregation,
+  LinkedAggregationDefinition,
+  UpdateLinkedAggregationData,
+} from "./types/linked-aggregation";
 
 export * from "./types/entity";
 export * from "./types/file";
 export * from "./types/link";
-
-// ---------------------- LINKED AGGREGATIONS ------------------------- //
-
-export type LinkedAggregationDefinition = {
-  aggregationId: string;
-  sourceEntityId: string;
-  path: string;
-  operation: AggregateOperationInput;
-};
-
-export type LinkedAggregation = Omit<LinkedAggregationDefinition, "operation"> &
-  AggregateEntitiesResult<Entity>;
-
-export type GetLinkedAggregationData = {
-  aggregationId: string;
-};
-
-export type CreateLinkedAggregationData = Omit<
-  LinkedAggregationDefinition,
-  "aggregationId"
->;
-
-export type UpdateLinkedAggregationData = {
-  aggregationId: string;
-  operation: LinkedAggregationDefinition["operation"];
-};
-
-export type DeleteLinkedAggregationData = {
-  aggregationId: string;
-};
+export * from "./types/linked-aggregation";
 
 // ------------------------- ENTITY TYPES ----------------------------- //
 
