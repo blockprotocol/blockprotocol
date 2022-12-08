@@ -1,9 +1,19 @@
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
 import { Entity, EntityId, EntityVersion } from "../entity";
+import { DataTypeWithMetadata } from "../ontology/data-type";
 import { EntityTypeWithMetadata } from "../ontology/entity-type";
+import { PropertyTypeWithMetadata } from "../ontology/property-type";
 
-/** @todo - Add the remaining Ontology type vertices */
+export type DataTypeVertex = {
+  kind: "dataType";
+  inner: DataTypeWithMetadata;
+};
+
+export type PropertyTypeVertex = {
+  kind: "propertyType";
+  inner: PropertyTypeWithMetadata;
+};
 
 export type EntityTypeVertex = {
   kind: "entityType";
@@ -12,11 +22,24 @@ export type EntityTypeVertex = {
 
 export type EntityVertex = { kind: "entity"; inner: Entity };
 
-export type OntologyVertex = EntityTypeVertex;
+export type OntologyVertex =
+  | DataTypeVertex
+  | PropertyTypeVertex
+  | EntityTypeVertex;
 
 export type KnowledgeGraphVertex = EntityVertex;
 
 export type Vertex = OntologyVertex | KnowledgeGraphVertex;
+
+export const isDataTypeVertex = (vertex: Vertex): vertex is DataTypeVertex => {
+  return vertex.kind === "dataType";
+};
+
+export const isPropertyTypeVertex = (
+  vertex: Vertex,
+): vertex is PropertyTypeVertex => {
+  return vertex.kind === "propertyType";
+};
 
 export const isEntityTypeVertex = (
   vertex: Vertex,
