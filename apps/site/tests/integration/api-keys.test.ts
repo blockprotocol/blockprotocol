@@ -7,6 +7,14 @@ test("API key page should generate a valid key", async ({
   browserName,
   request,
 }) => {
+  if (browserName === "webkit") {
+    // Some locator actions take 3 seconds instead of a few milliseconds,
+    // so this long test often takes more than 30 seconds to run.
+    // We can try switching back to the default timeout after updating Playwright.
+    // See details in ??
+    test.setTimeout(60000);
+  }
+
   await resetSite();
 
   await page.goto("/");
