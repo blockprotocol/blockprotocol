@@ -11,7 +11,7 @@ test("API key page should generate a valid key", async ({
     // Some locator actions take 3 seconds instead of a few milliseconds,
     // so this long test often takes more than 30 seconds to run.
     // We can try switching back to the default timeout after updating Playwright.
-    // See details in ??
+    // See details in https://github.com/blockprotocol/blockprotocol/pull/821
     test.setTimeout(60000);
   }
 
