@@ -1,4 +1,5 @@
 import { BaseUri } from "@blockprotocol/type-system/dist/cjs-slim/index-slim";
+import { validateBaseUri } from "@blockprotocol/type-system/wasm/type-system";
 
 export * from "./ontology/entity-type";
 /** @todo - Add documentation */
@@ -11,4 +12,19 @@ export * from "./ontology/entity-type";
 export type OntologyTypeEditionId = {
   baseId: BaseUri;
   versionId: number;
+};
+
+export const isOntologyTypeEditionId = (
+  editionId: unknown,
+): editionId is OntologyTypeEditionId => {
+  return (
+    editionId != null &&
+    typeof editionId === "object" &&
+    "baseId" in editionId &&
+    typeof editionId.baseId === "string" &&
+    /** @todo - This means we need to have initialized the type system */
+    validateBaseUri(editionId.baseId).type === "Ok" &&
+    "versionId" in editionId &&
+    typeof editionId.versionId === "number"
+  );
 };

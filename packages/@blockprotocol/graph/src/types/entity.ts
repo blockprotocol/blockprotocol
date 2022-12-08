@@ -1,7 +1,7 @@
 import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { CreateLinkData, EntityType } from "../types";
+import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
@@ -10,6 +10,21 @@ export type EntityVersion = string;
 export type EntityEditionId = {
   baseId: EntityId;
   versionId: EntityVersion;
+};
+
+export const isEntityEditionId = (
+  editionId: unknown,
+): editionId is EntityEditionId => {
+  return (
+    editionId != null &&
+    typeof editionId === "object" &&
+    "baseId" in editionId &&
+    "versionId" in editionId &&
+    /** @todo - is it fine to just check that versionId is string, maybe timestamp if we want to lock it into being a
+     *    timestamp?
+     */
+    !isOntologyTypeEditionId(editionId)
+  );
 };
 
 /**

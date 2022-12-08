@@ -1,9 +1,17 @@
+import { BaseUri } from "@blockprotocol/type-system/slim";
+
 import { EntityId } from "../entity";
-import { KnowledgeGraphOutwardEdge } from "./edges/outward-edge";
+import {
+  KnowledgeGraphOutwardEdge,
+  OntologyOutwardEdge,
+} from "./edges/outward-edge";
 import { Timestamp } from "./time";
 
-/** @todo - Add ontology edges here */
 export type Edges = {
+  [_: BaseUri]: {
+    [_: number]: OntologyOutwardEdge[];
+  };
+} & {
   [_: EntityId]: {
     [_: Timestamp]: KnowledgeGraphOutwardEdge[];
   };
