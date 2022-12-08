@@ -8,12 +8,13 @@ import {
 
 import {
   BlockGraphProperties,
+  EntityPropertiesObject,
   GraphBlockHandler,
   GraphEmbedderHandler,
 } from "./index.js";
 
 export type BlockComponent<
-  Properties extends Record<string, unknown> | null = null,
+  Properties extends EntityPropertiesObject | null = null,
 > = VoidFunctionComponent<BlockGraphProperties<Properties>>;
 
 const useGraphServiceConstructor = <

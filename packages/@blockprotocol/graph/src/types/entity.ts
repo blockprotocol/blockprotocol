@@ -1,0 +1,108 @@
+import { JsonValue } from "@blockprotocol/core";
+import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
+
+import { CreateLinkData, EntityType } from "../types";
+
+/** @todo - Consider branding this */
+export type EntityId = string;
+
+/**
+ * Entity Properties are JSON objects with `BaseUri`s as keys, _except_ when there is a Data Type of primitive type
+ * `object` in which case the nested objects become plain `JsonObject`s
+ */
+export type EntityPropertyValue = JsonValue | EntityPropertiesObject;
+export type EntityPropertiesObject = {
+  [_: BaseUri]: EntityPropertyValue;
+};
+
+export type EntityMetadata = {
+  entityId: EntityId;
+  entityTypeId: VersionedUri;
+};
+
+export type Entity<
+  Properties extends EntityPropertiesObject | null = Record<
+    BaseUri,
+    EntityPropertyValue
+  >,
+> = {
+  metadata: EntityMetadata;
+} & (Properties extends null ? {} : { properties: Properties });
+
+export type CreateEntityData = {
+  entityTypeId: VersionedUri;
+  properties: EntityPropertiesObject;
+  links?: Omit<
+    CreateLinkData,
+    "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
+  >[];
+};
+
+export type GetEntityData = {
+  entityId: EntityId;
+};
+
+export type UpdateEntityData = {
+  entityId: EntityId;
+  properties: EntityPropertiesObject;
+};
+
+export type DeleteEntityData = {
+  entityId: EntityId;
+};
+
+export type FilterOperatorType =
+  | FilterOperatorRequiringValue
+  | FilterOperatorWithoutValue;
+
+export type FilterOperatorWithoutValue = "IS_EMPTY" | "IS_NOT_EMPTY";
+
+export type FilterOperatorRequiringValue =
+  | "CONTAINS"
+  | "DOES_NOT_CONTAIN"
+  | "IS"
+  | "IS_NOT"
+  | "STARTS_WITH"
+  | "ENDS_WITH";
+
+export type MultiFilterOperatorType = "AND" | "OR";
+
+export type MultiFilter = {
+  filters: (
+    | {
+        field: string;
+        operator: FilterOperatorRequiringValue;
+        value: string;
+      }
+    | { field: string; operator: FilterOperatorWithoutValue }
+  )[];
+  operator: MultiFilterOperatorType;
+};
+
+export type Sort = {
+  field: string;
+  desc?: boolean | undefined | null;
+};
+
+export type MultiSort = Sort[];
+
+export type AggregateOperationInput = {
+  entityTypeId?: VersionedUri | null;
+  pageNumber?: number | null;
+  itemsPerPage?: number | null;
+  multiSort?: MultiSort | null;
+  multiFilter?: MultiFilter | null;
+};
+
+export type AggregateEntitiesData = {
+  operation: AggregateOperationInput;
+};
+
+export type AggregateEntitiesResult<T extends Entity | EntityType> = {
+  results: T[];
+  operation: AggregateOperationInput &
+    Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
+      pageCount?: number | null;
+      totalCount?: number | null;
+    };
+};

@@ -1,9 +1,13 @@
 import { LitElement } from "lit";
 
-import { BlockGraphProperties, GraphBlockHandler } from "./index.js";
+import {
+  BlockGraphProperties,
+  EntityPropertiesObject,
+  GraphBlockHandler,
+} from "./index.js";
 
 export interface BlockElementBase<
-  BlockEntityProperties extends Record<string, unknown> | null,
+  BlockEntityProperties extends EntityPropertiesObject | null,
 > extends LitElement,
     BlockGraphProperties<BlockEntityProperties> {}
 
@@ -12,7 +16,7 @@ export interface BlockElementBase<
  * This class handles establishing communication with the embedding application.
  */
 export abstract class BlockElementBase<
-  BlockEntityProperties extends Record<string, unknown> | null,
+  BlockEntityProperties extends EntityPropertiesObject | null,
 > extends LitElement {
   /**
    * The 'graphService' is a handler for sending messages to the embedding application, e.g. 'graphService.updateEntity'
@@ -65,14 +69,14 @@ export abstract class BlockElementBase<
       throw new Error(
         "Cannot update self: no 'blockEntity' on 'graph' object passed to block",
       );
-    } else if (!this.graph.blockEntity.entityId) {
+    } else if (!this.graph.blockEntity.metadata.entityId) {
       throw new Error(
-        "Cannot update self: no 'entityId' on graph.blockEntity passed to block",
+        "Cannot update self: no 'entityId' on graph.blockEntity.metadata passed to block",
       );
     }
 
     return this.graphService.updateEntity({
-      data: { entityId: this.graph.blockEntity.entityId, properties },
+      data: { entityId: this.graph.blockEntity.metadata.entityId, properties },
     });
   }
 }

@@ -1,3 +1,4 @@
+import { EntityId } from "@blockprotocol/graph";
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
@@ -101,7 +102,7 @@ type Hook<T extends HTMLElement> = {
     service: HookBlockHandler | null;
     node: T;
     type: string;
-    entityId: string;
+    entityId: EntityId;
     path: string;
   };
 };
@@ -125,7 +126,7 @@ export const useHook = <T extends HTMLElement>(
   service: HookBlockHandler | null,
   ref: RefObject<T | null | void>,
   type: string,
-  entityId: string,
+  entityId: EntityId,
   path: string,
   fallback: (node: T) => void | (() => void),
 ) => {
