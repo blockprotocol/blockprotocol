@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 let currentMarkEndOfStep: (() => void) | undefined = undefined;
 
 export const logStepStart = (phaseName: string) => {
