@@ -26,7 +26,7 @@
   "scripts": {
     "build": "yarn clean && yarn build:cjs && yarn build:esm",
     "build:cjs": "tsc --skipLibCheck --project tsconfig.build.cjs.json",
-    "build:dev": "yarn clean && cross-env NODE_ENV=development webpack --mode development",
+    "build:dev": "yarn clean && cross-env NODE_ENV=development webpack --mode development --config=dev/webpack.config.js",
     "build:esm": "tsc --skipLibCheck --project tsconfig.build.esm.json",
     "clean": "rimraf ./dist/",
     "codegen": "node -p \"'export const MOCK_BLOCK_DOCK_VERSION = ' + JSON.stringify(require('./package.json').version) + ';'\" > src/version.ts",
