@@ -8,7 +8,7 @@ import {
 import { Vertex } from "../../types/subgraph/vertices";
 import { mustBeDefined } from "../must-be-defined";
 import { getDataTypeByEditionId } from "./element/data-type";
-import { getEntityByEditionId } from "./element/entity";
+import { getEntity } from "./element/entity";
 import { getEntityTypeByEditionId } from "./element/entity-type";
 import { getPropertyTypeByEditionId } from "./element/property-type";
 
@@ -141,7 +141,7 @@ export const isEntityRootedSubgraph = (
     }
 
     mustBeDefined(
-      getEntityByEditionId(subgraph, rootEditionId),
+      getEntity(subgraph, rootEditionId.baseId, rootEditionId.versionId),
       `roots should have corresponding vertices but ${JSON.stringify(
         rootEditionId,
       )} was missing`,
