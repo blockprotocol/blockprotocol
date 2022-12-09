@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/hashintel/hash.git",
-  "commit": "735cb5a67016d77a73044cfb1deb5995c2f1832d",
+  "commit": "d067f2fec5013cfac4b385a274977bb532263849",
 
   "workspace": "@blocks/paragraph",
   "distDir": "dist"
