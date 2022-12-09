@@ -3,13 +3,10 @@ import { ServiceHandler } from "@blockprotocol/core";
 // @todo restore this when an issue with module resolution has been resolved
 // import graphServiceJson from "./graph-service.json" assert { type: "json" };
 import {
-  BlockGraph,
   EmbedderGraphMessageCallbacks,
   EmbedderGraphMessages,
-  Entity,
-  EntityType,
-  LinkedAggregations,
 } from "./types.js";
+import { Subgraph, SubgraphRootTypes } from "./types/subgraph";
 
 /**
  * Creates a handler for the graph service for the embedder.
@@ -20,34 +17,26 @@ export class GraphEmbedderHandler
   extends ServiceHandler
   implements EmbedderGraphMessages
 {
-  private _blockEntity?: Entity;
-  private _blockGraph?: BlockGraph;
-  private _entityTypes?: EntityType[];
-  private _linkedAggregations?: LinkedAggregations;
+  private _blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
+  // private _linkedAggregations?: LinkedAggregations;
   private _readonly?: boolean;
 
   constructor({
-    blockEntity,
-    blockGraph,
+    blockEntitySubgraph,
     callbacks,
     element,
-    entityTypes,
-    linkedAggregations,
+    // linkedAggregations,
     readonly,
   }: {
-    blockEntity?: Entity;
-    blockGraph?: BlockGraph;
+    blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
     callbacks?: Partial<EmbedderGraphMessageCallbacks>;
     element: HTMLElement;
-    entityTypes?: EntityType[];
-    linkedAggregations?: LinkedAggregations;
+    // linkedAggregations?: LinkedAggregations;
     readonly?: boolean;
   }) {
     super({ element, serviceName: "graph", sourceType: "embedder" });
-    this._blockEntity = blockEntity;
-    this._blockGraph = blockGraph;
-    this._entityTypes = entityTypes;
-    this._linkedAggregations = linkedAggregations;
+    this._blockEntitySubgraph = blockEntitySubgraph;
+    // this._linkedAggregations = linkedAggregations;
     this._readonly = readonly;
 
     if (callbacks) {
@@ -95,55 +84,38 @@ export class GraphEmbedderHandler
 
   getInitPayload(this: GraphEmbedderHandler): Record<string, any> {
     return {
-      blockEntity: this._blockEntity,
-      blockGraph: this._blockGraph,
-      linkedAggregations: this._linkedAggregations,
+      blockEntitySubgraph: this._blockEntitySubgraph,
+      // linkedAggregations: this._linkedAggregations,
       readonly: this._readonly,
     };
   }
 
-  blockEntity({ data }: { data?: Entity }) {
-    this._blockEntity = data;
+  blockEntitySubgraph({
+    data,
+  }: {
+    data?: Subgraph<SubgraphRootTypes["entity"]>;
+  }) {
+    this._blockEntitySubgraph = data;
     this.sendMessage({
       message: {
-        messageName: "blockEntity",
-        data: this._blockEntity,
+        messageName: "blockEntitySubgraph",
+        data: this._blockEntitySubgraph,
       },
     });
   }
 
-  blockGraph({ data }: { data?: BlockGraph }) {
-    this._blockGraph = data;
-    this.sendMessage({
-      message: {
-        messageName: "blockGraph",
-        data: this._blockGraph,
-      },
-    });
-  }
-
-  entityTypes({ data }: { data?: EntityType[] }) {
-    this._entityTypes = data;
-    this.sendMessage({
-      message: {
-        messageName: "entityTypes",
-        data: this._entityTypes,
-      },
-    });
-  }
-
-  linkedAggregations({ data }: { data?: LinkedAggregations }) {
-    this._linkedAggregations = data;
-    this.sendMessage({
-      message: {
-        messageName: "linkedAggregations",
-        data: this._linkedAggregations,
-      },
-    });
-  }
+  // linkedAggregations({ data }: { data?: LinkedAggregations }) {
+  //   this._linkedAggregations = data;
+  //   this.sendMessage({
+  //     message: {
+  //       messageName: "linkedAggregations",
+  //       data: this._linkedAggregations,
+  //     },
+  //   });
+  // }
 
   readonly({ data }: { data?: boolean }) {
-    this._readonly = !!data;
+    this._readonly = data;
     this.sendMessage({
       message: {
         messageName: "readonly",
