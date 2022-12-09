@@ -4,3 +4,4 @@ export * from "./types/file";
 export * from "./types/link";
 export * from "./types/linked-aggregation";
 export * from "./types/ontology";
+export * from "./types/subgraph";
