@@ -31,7 +31,7 @@ const nextConfig = {
     return [
       {
         source: "/discord",
-        destination: "https://discord.gg/PefPteFe5j",
+        destination: "https://discord.gg/fnQ3qGcGQJ",
         permanent: true,
       },
       {
