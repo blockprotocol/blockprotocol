@@ -6,7 +6,6 @@ import {
   CreateEntityData,
   DeleteEntityData,
   Entity,
-  EntityPropertiesObject,
   GetEntityData,
   UpdateEntityData,
 } from "./entity";
@@ -14,21 +13,11 @@ import { UploadFileData, UploadFileReturn } from "./file";
 import {
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
-  EntityType,
   GetEntityTypeData,
 } from "./ontology/entity-type";
 import { Subgraph, SubgraphRootTypes } from "./subgraph";
 
-export type LinkedEntities = Entity[];
-
-export type BlockGraph = {
-  depth: number;
-  linkedEntities: LinkedEntities;
-};
-
-export type BlockGraphProperties<
-  BlockEntityProperties extends EntityPropertiesObject | null,
-> = {
+export type BlockGraphProperties = {
   /**
    * The 'graph' object contains messages sent under the graph service from the app to the block.
    * They are sent on initialization and again when the application has new values to send.
@@ -36,18 +25,16 @@ export type BlockGraphProperties<
    * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
    */
   graph: {
-    blockGraph?: BlockGraph;
-    entityTypes?: EntityType[];
+    blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
     readonly?: boolean;
-  } & (BlockEntityProperties extends null
-    ? { blockEntity?: Entity }
-    : { blockEntity: Entity<BlockEntityProperties> });
+  };
 };
 
 export type BlockGraphMessageCallbacks = {
-  blockEntity: MessageCallback<Entity, null>;
-  blockGraph: MessageCallback<BlockGraph, null>;
-  entityTypes: MessageCallback<EntityType[], null>;
+  blockEntitySubgraph: MessageCallback<
+    Subgraph<SubgraphRootTypes["entity"]>,
+    null
+  >;
   readonly: MessageCallback<boolean, null>;
 };
 
