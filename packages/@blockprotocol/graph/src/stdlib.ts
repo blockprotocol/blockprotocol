@@ -44,3 +44,5 @@ export const getEntity = (subgraph: Subgraph, entityId: EntityId) => {
 export const getEntities = (subgraph: Subgraph) => {
   getEntitiesTemporal(subgraph, true);
 };
+
+/** @todo - Add stdlib methods around links */
