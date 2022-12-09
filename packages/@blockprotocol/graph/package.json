@@ -26,7 +26,10 @@
     ".": "./dist/index.js",
     "./react": "./dist/react.js",
     "./custom-element": "./dist/custom-element.js",
-    "./graph-service-json": "./dist/graph-service-json.js"
+    "./graph-service-json": "./dist/graph-service-json.js",
+    "./stdlib": [
+      "./dist/stdlib.js"
+    ]
   },
   "types": "./dist/index.d.ts",
   "typesVersions": {
@@ -42,6 +45,9 @@
       ],
       "graph-service-json": [
         "./dist/graph-service-json.d.ts"
+      ],
+      "stdlib": [
+        "./dist/stdlib.d.ts"
       ]
     }
   },
