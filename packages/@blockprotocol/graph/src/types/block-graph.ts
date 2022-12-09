@@ -12,14 +12,6 @@ import {
 } from "./entity";
 import { UploadFileData, UploadFileReturn } from "./file";
 import {
-  CreateLinkData,
-  DeleteLinkData,
-  GetLinkData,
-  Link,
-  LinkGroup,
-  UpdateLinkData,
-} from "./link";
-import {
   CreateLinkedAggregationData,
   DeleteLinkedAggregationData,
   GetLinkedAggregationData,
