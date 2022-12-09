@@ -1,21 +1,14 @@
 import {
+  FunctionComponent,
   RefObject,
   useEffect,
   useRef,
   useState,
-  VoidFunctionComponent,
 } from "react";
 
-import {
-  BlockGraphProperties,
-  EntityPropertiesObject,
-  GraphBlockHandler,
-  GraphEmbedderHandler,
-} from "./index.js";
+import { GraphBlockHandler, GraphEmbedderHandler } from "./index.js";
 
-export type BlockComponent<
-  Properties extends EntityPropertiesObject | null = null,
-> = VoidFunctionComponent<BlockGraphProperties<Properties>>;
+export type BlockComponent = FunctionComponent;
 
 const useGraphServiceConstructor = <
   T extends typeof GraphBlockHandler | typeof GraphEmbedderHandler,
