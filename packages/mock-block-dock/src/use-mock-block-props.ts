@@ -2,10 +2,6 @@ import {
   BlockGraph,
   EmbedderGraphMessageCallbacks,
   Entity,
-  EntityType,
-  Link,
-  LinkedAggregation,
-  LinkedAggregationDefinition,
 } from "@blockprotocol/graph";
 import { Dispatch, SetStateAction, useMemo } from "react";
 
@@ -19,22 +15,16 @@ import {
 
 export type MockBlockHookArgs = {
   blockEntity?: Entity;
-  blockSchema?: Partial<EntityType>;
   initialEntities?: Entity[];
-  initialEntityTypes?: EntityType[];
-  initialLinks?: Link[];
-  initialLinkedAggregations?: LinkedAggregationDefinition[];
+  // initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly: boolean;
 };
 
 export type MockBlockHookResult = {
   blockEntity: Entity;
   blockGraph: BlockGraph;
-  blockSchema?: Partial<EntityType>;
   datastore: MockData;
-  entityTypes: EntityType[];
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
-  linkedAggregations: LinkedAggregation[];
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
   setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
@@ -53,11 +43,8 @@ export type MockBlockHookResult = {
  */
 export const useMockBlockProps = ({
   blockEntity: externalBlockEntity,
-  blockSchema: externalBlockSchema,
   initialEntities,
-  initialEntityTypes,
-  initialLinks,
-  initialLinkedAggregations,
+  // initialLinkedAggregations,
   readonly: externalReadonly,
 }: MockBlockHookArgs): MockBlockHookResult => {
   const [entityIdOfEntityForBlock, setEntityIdOfEntityForBlock] =
@@ -70,17 +57,6 @@ export const useMockBlockProps = ({
     mockData: MockData;
   } => {
     const entityTypeId = externalBlockEntity?.entityTypeId ?? "block-type-1";
-
-    const blockEntityType: EntityType = {
-      entityTypeId,
-      schema: {
-        title: "BlockType",
-        type: "object",
-        $schema: "https://json-schema.org/draft/2019-09/schema",
-        $id: "http://localhost/blockType1",
-        ...(externalBlockSchema ?? {}),
-      },
-    };
 
     const newBlockEntity: Entity = {
       entityId: "block1",
@@ -97,34 +73,24 @@ export const useMockBlockProps = ({
         newBlockEntity,
         ...(initialEntities ?? initialMockData.entities),
       ],
-      entityTypes: [
-        blockEntityType,
-        ...(initialEntityTypes ?? initialMockData.entityTypes),
-      ],
-      links: initialLinks ?? initialMockData.links,
-      linkedAggregationDefinitions:
-        initialLinkedAggregations ??
-        initialMockData.linkedAggregationDefinitions,
+      // linkedAggregationDefinitions:
+      //   initialLinkedAggregations ??
+      //   initialMockData.linkedAggregationDefinitions,
     };
 
     return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
   }, [
     externalBlockEntity,
-    externalBlockSchema,
     initialEntities,
-    initialEntityTypes,
-    initialLinks,
-    initialLinkedAggregations,
+    // initialLinkedAggregations,
   ]);
 
   const datastore = useMockDatastore(mockData, readonly);
 
   const {
     entities,
-    entityTypes,
     graphServiceCallbacks,
-    links,
-    linkedAggregationDefinitions,
+    // linkedAggregationDefinitions,
   } = datastore;
 
   const latestBlockEntity = useMemo(() => {
@@ -149,33 +115,16 @@ export const useMockBlockProps = ({
   // construct BP-specified link fields from the links and linkedAggregations in the datastore
   const { blockGraph, linkedAggregations } = useLinkFields({
     entities,
-    links,
-    linkedAggregationDefinitions,
+    // linkedAggregationDefinitions,
     startingEntity: latestBlockEntity,
   });
-
-  // @todo we don't do anything with this type except check it exists - do we need to do this?
-  const latestBlockEntityType = useMemo(
-    () =>
-      entityTypes.find(
-        (entityType) =>
-          entityType.entityTypeId === latestBlockEntity.entityTypeId,
-      ),
-    [entityTypes, latestBlockEntity.entityTypeId],
-  );
-
-  if (!latestBlockEntityType) {
-    throw new Error("Cannot find block entity type. Has it been deleted?");
-  }
 
   return {
     blockEntity: latestBlockEntity,
     blockGraph,
-    blockSchema: externalBlockSchema,
     datastore,
-    entityTypes,
     graphServiceCallbacks,
-    linkedAggregations,
+    // linkedAggregations,
     readonly,
     setEntityIdOfEntityForBlock,
     setReadonly,

@@ -1,11 +1,5 @@
 import { HtmlBlockDefinition } from "@blockprotocol/core";
-import {
-  BlockGraphProperties,
-  Entity,
-  EntityType,
-  Link,
-  LinkedAggregationDefinition,
-} from "@blockprotocol/graph";
+import { BlockGraphProperties, Entity } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
 import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
 import { useHookEmbedderService } from "@blockprotocol/hook/react";
@@ -47,13 +41,10 @@ type BlockDefinition =
 type MockBlockDockProps = {
   blockDefinition: BlockDefinition;
   blockEntity?: Entity;
-  blockSchema?: Partial<EntityType>;
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialEntities?: Entity[];
-  initialEntityTypes?: EntityType[];
-  initialLinks?: Link[];
-  initialLinkedAggregations?: LinkedAggregationDefinition[];
+  // initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
   blockInfo?: {
     blockType: {
@@ -75,46 +66,35 @@ type MockBlockDockProps = {
  * @param props.blockDefinition the source for the block and any additional metadata required
  * @param [props.blockEntity] the starting properties for the block entity
  * @param [props.blockInfo] metadata about the block
- * @param [props.blockSchema] the schema for the block entity
  * @param [props.debug=false] display debugging information
  * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
  * @param [props.initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
- * @param [props.initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
- * @param [props.initialLinks] the links to include in the data store
  * @param [props.initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
   blockEntity: initialBlockEntity,
-  blockSchema: initialBlockSchema,
   blockInfo,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialEntities,
-  initialEntityTypes,
-  initialLinks,
-  initialLinkedAggregations,
+  // initialLinkedAggregations,
   readonly: initialReadonly = false,
 }) => {
   const {
     blockEntity,
     blockGraph,
-    blockSchema,
     datastore,
-    entityTypes,
     graphServiceCallbacks,
-    linkedAggregations,
+    // linkedAggregations,
     readonly,
     setEntityIdOfEntityForBlock,
     setReadonly,
   } = useMockBlockProps({
     blockEntity: initialBlockEntity,
-    blockSchema: initialBlockSchema,
     initialEntities,
-    initialEntityTypes,
-    initialLinks,
-    initialLinkedAggregations,
+    // initialLinkedAggregations,
     readonly: !!initialReadonly,
   });
 
@@ -138,16 +118,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       readonly,
       blockEntity,
       blockGraph,
-      entityTypes,
-      linkedAggregations,
+      // linkedAggregations,
     },
   };
 
   const { graphService } = useGraphEmbedderService(wrapperRef, {
     blockGraph,
     blockEntity,
-    entityTypes,
-    linkedAggregations,
+    // linkedAggregations,
     callbacks: graphServiceCallbacks,
     readonly,
   });
@@ -238,16 +216,11 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     value: blockGraph,
     valueName: "blockGraph",
   });
-  useSendGraphValue({
-    graphService,
-    value: entityTypes,
-    valueName: "entityTypes",
-  });
-  useSendGraphValue({
-    graphService,
-    value: linkedAggregations,
-    valueName: "linkedAggregations",
-  });
+  // useSendGraphValue({
+  //   graphService,
+  //   value: linkedAggregations,
+  //   valueName: "linkedAggregations",
+  // });
   useSendGraphValue({
     graphService,
     value: readonly,
@@ -298,7 +271,6 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           },
         }
       }
-      blockSchema={blockSchema}
       datastore={datastore}
       debugMode={debugMode}
       readonly={readonly}
