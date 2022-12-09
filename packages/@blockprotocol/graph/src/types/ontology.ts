@@ -1,7 +1,11 @@
 import { BaseUri } from "@blockprotocol/type-system/dist/cjs-slim/index-slim";
 import { validateBaseUri } from "@blockprotocol/type-system/wasm/type-system";
 
+export * from "./ontology/data-type";
 export * from "./ontology/entity-type";
+export * from "./ontology/metadata";
+export * from "./ontology/property-type";
+
 /** @todo - Add documentation */
 /**
  *  @todo - Do we want to introduce "ontology" into code? Alternatives:

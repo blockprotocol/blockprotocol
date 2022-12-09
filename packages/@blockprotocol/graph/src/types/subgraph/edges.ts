@@ -7,6 +7,9 @@ import {
 } from "./edges/outward-edge";
 import { Timestamp } from "./time";
 
+export * from "./edges/kind";
+export * from "./edges/outward-edge";
+
 export type OntologyRootedEdges = {
   [typeBaseUri: BaseUri]: {
     [typeVersion: number]: OntologyOutwardEdge[];
