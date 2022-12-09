@@ -7,6 +7,12 @@ import { Edges } from "./subgraph/edges";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths";
 import { Vertices } from "./subgraph/vertices";
 
+export * from "./ontology";
+export * from "./subgraph/edges";
+export * from "./subgraph/graph-resolve-depths";
+export * from "./subgraph/time";
+export * from "./subgraph/vertices";
+
 export type SubgraphRootTypes = {
   dataType: {
     editionId: OntologyTypeEditionId;
