@@ -3,6 +3,8 @@ import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { isOntologyTypeEditionId } from "../types";
 import { Subgraph, SubgraphRootTypes } from "./subgraph";
+import { GraphResolveDepths } from "./subgraph/graph-resolve-depths";
+import { Timestamp } from "./subgraph/time";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
@@ -63,6 +65,8 @@ export type CreateEntityData = {
 
 export type GetEntityData = {
   entityId: EntityId;
+  atTimestamp?: Timestamp;
+  graphResolveDepths?: GraphResolveDepths;
 };
 
 export type UpdateEntityData = {
@@ -119,6 +123,7 @@ export type AggregateOperationInput = {
 
 export type AggregateEntitiesData = {
   operation: AggregateOperationInput;
+  graphResolveDepths?: GraphResolveDepths;
 };
 
 export type AggregateEntitiesResult<
