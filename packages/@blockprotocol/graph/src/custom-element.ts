@@ -5,19 +5,15 @@ import {
   EntityPropertiesObject,
   GraphBlockHandler,
 } from "./index.js";
+import { getRoots } from "./stdlib/subgraph/roots";
 
-export interface BlockElementBase<
-  BlockEntityProperties extends EntityPropertiesObject | null,
-> extends LitElement,
-    BlockGraphProperties<BlockEntityProperties> {}
+export interface BlockElementBase extends LitElement, BlockGraphProperties {}
 
 /**
  * A class to use as a base for implementing Block Protocol blocks as custom elements.
  * This class handles establishing communication with the embedding application.
  */
-export abstract class BlockElementBase<
-  BlockEntityProperties extends EntityPropertiesObject | null,
-> extends LitElement {
+export abstract class BlockElementBase extends LitElement {
   /**
    * The 'graphService' is a handler for sending messages to the embedding application, e.g. 'graphService.updateEntity'
    * It starts off undefined and will be available once the initial exchange of messages has taken place (handled internally)
@@ -57,7 +53,7 @@ export abstract class BlockElementBase<
    * A helper method to update the properties of the entity loaded into the block, i.e. this.graph.blockEntity
    * @param properties the properties object to assign to the entity, which will overwrite the existing object
    */
-  protected updateSelf(properties: NonNullable<BlockEntityProperties>) {
+  protected updateSelf(properties: EntityPropertiesObject) {
     if (!this.graphService) {
       throw new Error("Cannot updateSelf – graphService not yet connected.");
     }
@@ -65,19 +61,22 @@ export abstract class BlockElementBase<
       throw new Error(
         "Cannot update self: no 'graph' property object passed to block.",
       );
-    } else if (!this.graph.blockEntity) {
+    } else if (!this.graph.blockEntitySubgraph) {
       throw new Error(
-        "Cannot update self: no 'blockEntity' on 'graph' object passed to block",
+        "Cannot update self: no 'blockEntitySubgraph' on 'graph' object passed to block",
       );
-    } else if (!this.graph.blockEntity.metadata) {
+    }
+
+    const blockEntity = getRoots(this.graph.blockEntitySubgraph)[0];
+    if (!blockEntity) {
       throw new Error(
-        "Cannot update self: no 'metadata' on graph.blockEntity passed to block",
+        "Cannot update self: no root entity on graph.blockEntitySubgraph passed to block",
       );
     }
 
     return this.graphService.updateEntity({
       data: {
-        entityId: this.graph.blockEntity.metadata.editionId.baseId,
+        entityId: blockEntity.metadata.editionId.baseId,
         properties,
       },
     });
