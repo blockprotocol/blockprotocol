@@ -16,18 +16,13 @@ import {
   BlockGraphMessageCallbacks,
   BlockGraphMessages,
   CreateEntityData,
-  CreateLinkedAggregationData,
   CreateResourceError,
   DeleteEntityData,
-  DeleteLinkedAggregationData,
   Entity,
   GetEntityData,
   GetEntityTypeData,
-  GetLinkedAggregationData,
-  LinkedAggregation,
   ReadOrModifyResourceError,
   UpdateEntityData,
-  UpdateLinkedAggregationData,
   UploadFileData,
   UploadFileReturn,
 } from "./types.js";
@@ -216,46 +211,47 @@ export class GraphBlockHandler
     });
   }
 
-  createLinkedAggregation({ data }: { data?: CreateLinkedAggregationData }) {
-    return this.sendMessage<LinkedAggregation, CreateResourceError>({
-      message: {
-        messageName: "createLinkedAggregation",
-        data,
-      },
-      respondedToBy: "createLinkedAggregationResponse",
-    });
-  }
-
-  updateLinkedAggregation({ data }: { data?: UpdateLinkedAggregationData }) {
-    return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
-      message: {
-        messageName: "updateLinkedAggregation",
-        data,
-      },
-      respondedToBy: "updateLinkedAggregationResponse",
-    });
-  }
-
-  deleteLinkedAggregation({ data }: { data?: DeleteLinkedAggregationData }) {
-    // @todo fix this 'any'
-    return this.sendMessage<any, ReadOrModifyResourceError>({
-      message: {
-        messageName: "deleteLinkedAggregation",
-        data,
-      },
-      respondedToBy: "deleteLinkedAggregationResponse",
-    });
-  }
-
-  getLinkedAggregation({ data }: { data?: GetLinkedAggregationData }) {
-    return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
-      message: {
-        messageName: "getLinkedAggregation",
-        data,
-      },
-      respondedToBy: "getLinkedAggregationResponse",
-    });
-  }
+  /** @todo - Reimplement linked aggregations */
+  // createLinkedAggregation({ data }: { data?: CreateLinkedAggregationData }) {
+  //   return this.sendMessage<LinkedAggregation, CreateResourceError>({
+  //     message: {
+  //       messageName: "createLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "createLinkedAggregationResponse",
+  //   });
+  // }
+  //
+  // updateLinkedAggregation({ data }: { data?: UpdateLinkedAggregationData }) {
+  //   return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "updateLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "updateLinkedAggregationResponse",
+  //   });
+  // }
+  //
+  // deleteLinkedAggregation({ data }: { data?: DeleteLinkedAggregationData }) {
+  //   // @todo fix this 'any'
+  //   return this.sendMessage<any, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "deleteLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "deleteLinkedAggregationResponse",
+  //   });
+  // }
+  //
+  // getLinkedAggregation({ data }: { data?: GetLinkedAggregationData }) {
+  //   return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "getLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "getLinkedAggregationResponse",
+  //   });
+  // }
 
   uploadFile({ data }: { data?: UploadFileData }) {
     return this.sendMessage<UploadFileReturn, CreateResourceError>({

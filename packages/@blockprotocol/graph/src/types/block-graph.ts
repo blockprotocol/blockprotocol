@@ -12,14 +12,6 @@ import {
 } from "./entity";
 import { UploadFileData, UploadFileReturn } from "./file";
 import {
-  CreateLinkedAggregationData,
-  DeleteLinkedAggregationData,
-  GetLinkedAggregationData,
-  LinkedAggregation,
-  LinkedAggregationDefinition,
-  UpdateLinkedAggregationData,
-} from "./linked-aggregation";
-import {
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
   EntityType,
@@ -27,7 +19,6 @@ import {
 } from "./ontology/entity-type";
 import { Subgraph, SubgraphRootTypes } from "./subgraph";
 
-export type LinkedAggregations = LinkedAggregation[];
 export type LinkedEntities = Entity[];
 
 export type BlockGraph = {
@@ -47,7 +38,6 @@ export type BlockGraphProperties<
   graph: {
     blockGraph?: BlockGraph;
     entityTypes?: EntityType[];
-    linkedAggregations?: LinkedAggregations;
     readonly?: boolean;
   } & (BlockEntityProperties extends null
     ? { blockEntity?: Entity }
@@ -58,7 +48,6 @@ export type BlockGraphMessageCallbacks = {
   blockEntity: MessageCallback<Entity, null>;
   blockGraph: MessageCallback<BlockGraph, null>;
   entityTypes: MessageCallback<EntityType[], null>;
-  linkedAggregations: MessageCallback<LinkedAggregations, null>;
   readonly: MessageCallback<boolean, null>;
 };
 
@@ -144,30 +133,31 @@ export type EmbedderGraphMessageCallbacks = {
     AggregateEntityTypesResult<Subgraph<SubgraphRootTypes["entityType"]>>,
     ReadOrModifyResourceError
   >;
-  createLinkedAggregation: MessageCallback<
-    CreateLinkedAggregationData,
-    null,
-    LinkedAggregationDefinition,
-    CreateResourceError
-  >;
-  updateLinkedAggregation: MessageCallback<
-    UpdateLinkedAggregationData,
-    null,
-    LinkedAggregationDefinition,
-    ReadOrModifyResourceError
-  >;
-  deleteLinkedAggregation: MessageCallback<
-    DeleteLinkedAggregationData,
-    null,
-    true,
-    ReadOrModifyResourceError
-  >;
-  getLinkedAggregation: MessageCallback<
-    GetLinkedAggregationData,
-    null,
-    LinkedAggregationDefinition,
-    ReadOrModifyResourceError
-  >;
+  /** @todo - Reimplement linked aggregations */
+  // createLinkedAggregation: MessageCallback<
+  //   CreateLinkedAggregationData,
+  //   null,
+  //   LinkedAggregationDefinition,
+  //   CreateResourceError
+  // >;
+  // updateLinkedAggregation: MessageCallback<
+  //   UpdateLinkedAggregationData,
+  //   null,
+  //   LinkedAggregationDefinition,
+  //   ReadOrModifyResourceError
+  // >;
+  // deleteLinkedAggregation: MessageCallback<
+  //   DeleteLinkedAggregationData,
+  //   null,
+  //   true,
+  //   ReadOrModifyResourceError
+  // >;
+  // getLinkedAggregation: MessageCallback<
+  //   GetLinkedAggregationData,
+  //   null,
+  //   LinkedAggregationDefinition,
+  //   ReadOrModifyResourceError
+  // >;
   uploadFile: MessageCallback<
     UploadFileData,
     null,
