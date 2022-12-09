@@ -1,42 +1,99 @@
-import { Entity, EntityEditionId, EntityId } from "../../../types/entity";
+import { Entity, EntityId, EntityVersion } from "../../../types/entity";
 import { Subgraph } from "../../../types/subgraph";
+import { Timestamp } from "../../../types/subgraph/time";
 import { isEntityVertex } from "../../../types/subgraph/vertices";
 
 /**
- * Returns all `Entity`s within the vertices of the subgraph
+ * Returns all `Entity`s within the vertices of the subgraph, optionally filtering to only get their latest editions.
  *
  * @param subgraph
+ * @param latest - whether or not to only return the latest editions of each entity
  */
-export const getEntities = (subgraph: Subgraph): Entity[] => {
+export const getEntities = (
+  subgraph: Subgraph,
+  latest: boolean = false,
+): Entity[] => {
   return Object.values(
-    Object.values(subgraph.vertices).flatMap((versionObject) =>
-      Object.values(versionObject)
-        .filter(isEntityVertex)
-        .map((vertex) => vertex.inner),
-    ),
+    Object.values(subgraph.vertices).flatMap((versionObject) => {
+      const entityEditionVertices = latest
+        ? Object.keys(versionObject)
+            .sort()
+            .slice(-1)
+            .map((latestVersion) => versionObject[latestVersion]!)
+            .filter(isEntityVertex)
+        : Object.values(versionObject).filter(isEntityVertex);
+
+      return entityEditionVertices.map((vertex) => vertex.inner);
+    }),
   );
 };
 
 /**
- * Gets an `Entity` by its `EntityEditionId` from within the vertices of the subgraph. Returns `undefined`
- * if the entity couldn't be found.
+ * Gets an `Entity` by its `EntityId` from within the vertices of the subgraph. If `targetEditionInformation` is not passed,
+ * then the latest version of the `Entity` will be returned.
+ *
+ * Returns `undefined` if the entity couldn't be found.
  *
  * @param subgraph
- * @param entityEditionId
+ * @param {EntityId} entityId - The `EntityId` of the entity to get.
+ * @param {EntityVersion|Timestamp} [targetEditionInformation] - Optional information needed to uniquely identify an edition of
+ *     an entity either by an explicit `EntityVersion`, or by a given `Timestamp` where the entity whose lifespan
+ *     overlaps the given timestamp will be returned.
  * @throws if the vertex isn't an `EntityVertex`
  */
-export const getEntityByEditionId = (
+export const getEntity = (
   subgraph: Subgraph,
-  entityEditionId: EntityEditionId,
+  entityId: EntityId,
+  targetEditionInformation?: EntityVersion | Timestamp,
 ): Entity | undefined => {
-  const { baseId: entityId, versionId } = entityEditionId;
-  const vertex = subgraph.vertices[entityId]?.[versionId];
+  const entityEditions = subgraph.vertices[entityId];
 
-  if (!vertex) {
+  if (entityEditions === undefined) {
     return undefined;
   }
 
-  return vertex.inner;
+  const editionVersions = Object.keys(entityEditions).sort();
+
+  let entityEdition: Entity | undefined;
+
+  // Short circuit for efficiency, just take the latest
+  if (targetEditionInformation === undefined) {
+    [entityEdition] = editionVersions
+      .slice(-1)
+      .map((latestVersion) => entityEditions[latestVersion]!.inner);
+  } else {
+    let targetVersion: EntityVersion | undefined;
+    for (let idx = 0; idx < editionVersions.length; idx++) {
+      /** @todo - If we expose endTimes we can do an interval check here per edition, rather than needing to infer it */
+      // Rolling window: we've sorted, so for each edition's version check if the given timestamp is in between the
+      // start of this edition and the next one (lower-bound-inclusive)
+      const [editionVersion, nextEditionVersion] = editionVersions.slice(
+        idx,
+        idx + 1,
+      ) as [EntityVersion, EntityVersion | undefined];
+
+      // Last element in the array (latest version), so we assume an half-closed interval (unbounded on the upper-bound)
+      if (nextEditionVersion === undefined) {
+        if (editionVersion <= targetEditionInformation) {
+          targetVersion = editionVersion;
+        }
+        break;
+      } else if (
+        editionVersion <= targetEditionInformation &&
+        targetEditionInformation < nextEditionVersion
+      ) {
+        targetVersion = editionVersion;
+        break;
+      }
+    }
+
+    entityEdition =
+      targetVersion !== undefined
+        ? entityEditions[targetVersion]!.inner
+        : undefined;
+  }
+
+  return entityEdition;
 };
 
 /**
