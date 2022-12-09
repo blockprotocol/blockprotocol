@@ -51,12 +51,16 @@ export const isEntityVertex = (vertex: Vertex): vertex is EntityVertex => {
   return vertex.kind === "entity";
 };
 
-export type Vertices = {
+export type OntologyVertices = {
   [_: BaseUri]: {
     [_: number]: OntologyVertex;
   };
-} & {
+};
+
+export type KnowledgeGraphVertices = {
   [_: EntityId]: {
     [_: EntityVersion]: KnowledgeGraphVertex;
   };
 };
+
+export type Vertices = OntologyVertices & KnowledgeGraphVertices;
