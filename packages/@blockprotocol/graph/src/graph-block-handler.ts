@@ -16,22 +16,17 @@ import {
   BlockGraphMessageCallbacks,
   BlockGraphMessages,
   CreateEntityData,
-  CreateLinkData,
   CreateLinkedAggregationData,
   CreateResourceError,
   DeleteEntityData,
-  DeleteLinkData,
   DeleteLinkedAggregationData,
   Entity,
   GetEntityData,
   GetEntityTypeData,
-  GetLinkData,
   GetLinkedAggregationData,
-  Link,
   LinkedAggregation,
   ReadOrModifyResourceError,
   UpdateEntityData,
-  UpdateLinkData,
   UpdateLinkedAggregationData,
   UploadFileData,
   UploadFileReturn,
@@ -218,47 +213,6 @@ export class GraphBlockHandler
         data,
       },
       respondedToBy: "aggregateEntityTypesResponse",
-    });
-  }
-
-  createLink({ data }: { data?: CreateLinkData }) {
-    return this.sendMessage<Link, CreateResourceError>({
-      message: {
-        messageName: "createLink",
-        data,
-      },
-      respondedToBy: "createLinkResponse",
-    });
-  }
-
-  updateLink({ data }: { data?: UpdateLinkData }) {
-    return this.sendMessage<Link, ReadOrModifyResourceError>({
-      message: {
-        messageName: "updateLink",
-        data,
-      },
-      respondedToBy: "updateLinkResponse",
-    });
-  }
-
-  deleteLink({ data }: { data?: DeleteLinkData }) {
-    // @todo fix this 'any'
-    return this.sendMessage<any, ReadOrModifyResourceError>({
-      message: {
-        messageName: "deleteLink",
-        data,
-      },
-      respondedToBy: "deleteLinkResponse",
-    });
-  }
-
-  getLink({ data }: { data?: GetLinkData }) {
-    return this.sendMessage<Link, ReadOrModifyResourceError>({
-      message: {
-        messageName: "getLink",
-        data,
-      },
-      respondedToBy: "getLinkResponse",
     });
   }
 

@@ -12,14 +12,6 @@ import {
 } from "./entity";
 import { UploadFileData, UploadFileReturn } from "./file";
 import {
-  CreateLinkData,
-  DeleteLinkData,
-  GetLinkData,
-  Link,
-  LinkGroup,
-  UpdateLinkData,
-} from "./link";
-import {
   CreateLinkedAggregationData,
   DeleteLinkedAggregationData,
   GetLinkedAggregationData,
@@ -37,12 +29,10 @@ import { Subgraph, SubgraphRootTypes } from "./subgraph";
 
 export type LinkedAggregations = LinkedAggregation[];
 export type LinkedEntities = Entity[];
-export type LinkGroups = LinkGroup[];
 
 export type BlockGraph = {
   depth: number;
   linkedEntities: LinkedEntities;
-  linkGroups: LinkGroups;
 };
 
 export type BlockGraphProperties<
@@ -154,20 +144,6 @@ export type EmbedderGraphMessageCallbacks = {
     AggregateEntityTypesResult<Subgraph<SubgraphRootTypes["entityType"]>>,
     ReadOrModifyResourceError
   >;
-  createLink: MessageCallback<CreateLinkData, null, Link, CreateResourceError>;
-  updateLink: MessageCallback<
-    UpdateLinkData,
-    null,
-    Link,
-    ReadOrModifyResourceError
-  >;
-  deleteLink: MessageCallback<
-    DeleteLinkData,
-    null,
-    true,
-    ReadOrModifyResourceError
-  >;
-  getLink: MessageCallback<GetLinkData, null, Link, ReadOrModifyResourceError>;
   createLinkedAggregation: MessageCallback<
     CreateLinkedAggregationData,
     null,

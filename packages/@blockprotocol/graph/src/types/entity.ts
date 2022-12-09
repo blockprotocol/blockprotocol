@@ -1,7 +1,7 @@
 import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types";
+import { isOntologyTypeEditionId } from "../types";
 import { Subgraph, SubgraphRootTypes } from "./subgraph";
 
 /** @todo - Consider branding these */
@@ -54,10 +54,11 @@ export type Entity<
 export type CreateEntityData = {
   entityTypeId: VersionedUri;
   properties: EntityPropertiesObject;
-  links?: Omit<
-    CreateLinkData,
-    "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
-  >[];
+  /** @todo - Support creation of linked entities */
+  // links?: Omit<
+  //   CreateLinkData,
+  //   "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
+  // >[];
 };
 
 export type GetEntityData = {
