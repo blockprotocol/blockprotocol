@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/type-system",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Definitions of types within the Block Protocol Type System",
   "homepage": "https://blockprotocol.org",
   "repository": {
@@ -34,6 +34,13 @@
   "main": "./dist/umd/index.js",
   "module": "./dist/es/index.js",
   "types": "./dist/umd/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "slim": [
+        "./dist/cjs-slim/index-slim.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
@@ -44,7 +51,7 @@
     "clean": "rimraf ./dist/",
     "compressed-size": "yarn build && find dist -iname '*.js' -exec npx terser@latest --compress --mangle --output {} -- {} \\;",
     "fix:eslint": "eslint --fix .",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "optimize": "wasm-opt -Os wasm/type-system_bg.wasm -o tmp.wasm && mv tmp.wasm wasm/type-system_bg.wasm",
     "prepublishOnly": "yarn build:wasm && yarn test && yarn optimize && yarn build:bundle",
@@ -57,12 +64,12 @@
     "@rollup/plugin-wasm": "6.0.1",
     "@types/jest": "29.2.3",
     "@types/node": "18.11.10",
-    "eslint": "8.28.0",
+    "eslint": "8.29.0",
     "jest": "29.3.1",
     "rimraf": "^3.0.2",
     "rollup": "3.5.1",
     "ts-jest": "29.0.3",
     "tslib": "2.4.1",
-    "typescript": "4.9.3"
+    "typescript": "4.9.4"
   }
 }

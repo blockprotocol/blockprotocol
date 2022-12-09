@@ -23,7 +23,7 @@
   "scripts": {
     "dev": "BLOCK_PROTOCOL_SITE_HOST=http://localhost:3000 node cli.js",
     "fix:eslint": "eslint --fix .",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
@@ -47,7 +47,7 @@
     "@types/command-line-usage": "^5.0.2",
     "@types/prompt": "^1.1.4",
     "@types/react": "^18.0.25",
-    "eslint": "8.28.0",
-    "typescript": "4.9.3"
+    "eslint": "8.29.0",
+    "typescript": "4.9.4"
   }
 }
