@@ -29,9 +29,11 @@ import {
 } from "./linked-aggregation";
 import {
   AggregateEntityTypesData,
+  AggregateEntityTypesResult,
   EntityType,
   GetEntityTypeData,
 } from "./ontology/entity-type";
+import { Subgraph, SubgraphRootTypes } from "./subgraph";
 
 export type LinkedAggregations = LinkedAggregation[];
 export type LinkedEntities = Entity[];
@@ -112,13 +114,13 @@ export type EmbedderGraphMessageCallbacks = {
   getEntity: MessageCallback<
     GetEntityData,
     null,
-    Entity,
+    Subgraph<SubgraphRootTypes["entity"]>,
     ReadOrModifyResourceError
   >;
   aggregateEntities: MessageCallback<
     AggregateEntitiesData,
     null,
-    AggregateEntitiesResult<Entity>,
+    AggregateEntitiesResult<Subgraph<SubgraphRootTypes["entity"]>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Add Type System mutation methods */
@@ -143,13 +145,13 @@ export type EmbedderGraphMessageCallbacks = {
   getEntityType: MessageCallback<
     GetEntityTypeData,
     null,
-    EntityType,
+    Subgraph<SubgraphRootTypes["entityType"]>,
     ReadOrModifyResourceError
   >;
   aggregateEntityTypes: MessageCallback<
     AggregateEntityTypesData,
     null,
-    AggregateEntitiesResult<EntityType>,
+    AggregateEntityTypesResult<Subgraph<SubgraphRootTypes["entityType"]>>,
     ReadOrModifyResourceError
   >;
   createLink: MessageCallback<CreateLinkData, null, Link, CreateResourceError>;

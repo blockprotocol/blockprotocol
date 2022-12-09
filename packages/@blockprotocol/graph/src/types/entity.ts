@@ -2,6 +2,7 @@ import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types";
+import { Subgraph, SubgraphRootTypes } from "./subgraph";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
@@ -119,7 +120,9 @@ export type AggregateEntitiesData = {
   operation: AggregateOperationInput;
 };
 
-export type AggregateEntitiesResult<T extends Entity | EntityType> = {
+export type AggregateEntitiesResult<
+  T extends Subgraph<SubgraphRootTypes["entity"]>,
+> = {
   results: T[];
   operation: AggregateOperationInput &
     Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {

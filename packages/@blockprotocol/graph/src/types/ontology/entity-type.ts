@@ -1,6 +1,7 @@
 import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { AggregateOperationInput } from "../entity";
+import { Subgraph, SubgraphRootTypes } from "../subgraph";
 import { OntologyElementMetadata } from "./metadata";
 
 /**
@@ -19,6 +20,17 @@ export type AggregateEntityTypesData = {
   // include entities that are used by, but don't belong to, the specified account
   includeOtherTypesInUse?: boolean | null;
   operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
+};
+
+export type AggregateEntityTypesResult<
+  T extends Subgraph<SubgraphRootTypes["entityType"]>,
+> = {
+  results: T[];
+  operation: AggregateOperationInput &
+    Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
+      pageCount?: number | null;
+      totalCount?: number | null;
+    };
 };
 
 export type GetEntityTypeData = {
