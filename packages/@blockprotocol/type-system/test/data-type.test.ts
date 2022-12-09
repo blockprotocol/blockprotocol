@@ -1,4 +1,9 @@
-import { DataType, ParseDataTypeError, validateDataType } from "..";
+import {
+  DataType,
+  ParseDataTypeError,
+  TypeSystemInitializer,
+  validateDataType,
+} from "..";
 
 const primitiveDataTypes: DataType[] = [
   {
@@ -96,6 +101,10 @@ const brokenTypes: [any, ParseDataTypeError][] = [
     },
   ],
 ];
+
+beforeAll(async () => {
+  await TypeSystemInitializer.initialize();
+});
 
 describe("validateDataType", () => {
   test.each(primitiveDataTypes)(

@@ -1,6 +1,6 @@
 {
   "name": "block-template-react",
-  "version": "0.1.20",
+  "version": "0.1.21",
   "description": "Block Protocol template for a React-based block",
   "keywords": [
     "blockprotocol",
@@ -22,7 +22,7 @@
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
     "serve": "block-scripts serve"
@@ -37,8 +37,8 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
-    "block-scripts": "0.0.17",
-    "eslint": "8.28.0",
+    "block-scripts": "0.0.18",
+    "eslint": "8.29.0",
     "mock-block-dock": "0.0.38",
     "prettier": "2.8.0",
     "react": "^18.2.0",

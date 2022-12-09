@@ -4,6 +4,7 @@ import {
   extractVersion,
   ParseBaseUriError,
   ParseVersionedUriError,
+  TypeSystemInitializer,
   validateBaseUri,
   validateVersionedUri,
   VersionedUri,
@@ -114,6 +115,10 @@ const extractVersionCases: [VersionedUri, number][] = [
   ["file://localhost/documents/myfolder/v/10", 10],
   ["ftp://rms@example.com/foo/v/5", 5],
 ];
+
+beforeAll(async () => {
+  await TypeSystemInitializer.initialize();
+});
 
 describe("extractVersion", () => {
   test.each(extractVersionCases)(
