@@ -49,11 +49,15 @@ export type EmbedderGraphMessages<
   >;
 };
 
-export type CreateResourceError = "FORBIDDEN" | "INVALID_INPUT";
+export type CreateResourceError =
+  | "FORBIDDEN"
+  | "INVALID_INPUT"
+  | "NOT_IMPLEMENTED";
 export type ReadOrModifyResourceError =
   | "FORBIDDEN"
   | "INVALID_INPUT"
-  | "NOT_FOUND";
+  | "NOT_FOUND"
+  | "NOT_IMPLEMENTED";
 
 /**
  * @todo Generate these types from the JSON definition, to avoid manually keeping the JSON and types in sync
