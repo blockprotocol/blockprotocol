@@ -8,14 +8,14 @@ import {
 import { Timestamp } from "./time";
 
 export type OntologyRootedEdges = {
-  [_: BaseUri]: {
-    [_: number]: OntologyOutwardEdge[];
+  [typeBaseUri: BaseUri]: {
+    [typeVersion: number]: OntologyOutwardEdge[];
   };
 };
 
 export type KnowledgeGraphRootedEdges = {
-  [_: EntityId]: {
-    [_: Timestamp]: KnowledgeGraphOutwardEdge[];
+  [entityId: EntityId]: {
+    [edgeFirstCreatedAt: Timestamp]: KnowledgeGraphOutwardEdge[];
   };
 };
 
