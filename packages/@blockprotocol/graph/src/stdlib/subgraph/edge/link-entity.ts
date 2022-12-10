@@ -4,8 +4,8 @@ import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,
   isIncomingLinkEdge,
-  isOutwardLinkEdge,
-  OutwardLinkEdge,
+  isOutgoingLinkEdge,
+  OutgoingLinkEdge,
 } from "../../../types/subgraph/edges/outward-edge-alias";
 import { mustBeDefined } from "../../must-be-defined";
 import { getEntity } from "../element/entity";
@@ -66,7 +66,7 @@ export const getOutgoingLinksForEntity = (
       // Extract the link `EntityEditionId`s from the endpoints of the link edges
       .flatMap(([_, outwardEdges]) => {
         return (outwardEdges as OutwardEdge[])
-          .filter(isOutwardLinkEdge)
+          .filter(isOutgoingLinkEdge)
           .map((edge) => {
             return edge.rightEndpoint;
           });
@@ -115,7 +115,7 @@ export const getIncomingLinksForEntity = (
       .filter(([edgeTimestamp, _]) => edgeTimestamp <= timestampString)
       // Extract the link `EntityEditionId`s from the endpoints of the link edges
       .flatMap(([_, outwardEdges]) => {
-        return (outwardEdges as OutwardLinkEdge[])
+        return (outwardEdges as OutgoingLinkEdge[])
           .filter(isIncomingLinkEdge)
           .map((edge) => {
             return edge.rightEndpoint;
