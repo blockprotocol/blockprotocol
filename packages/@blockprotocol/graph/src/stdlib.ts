@@ -1,4 +1,3 @@
-/** @todo - Add `stdlib-temporal.ts` */
 import {
   getEntities as getEntitiesTemporal,
   getEntity as getEntityTemporal,
