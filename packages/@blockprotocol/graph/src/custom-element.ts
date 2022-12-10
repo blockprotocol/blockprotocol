@@ -77,7 +77,10 @@ export abstract class BlockElementBase extends LitElement {
     return this.graphService.updateEntity({
       data: {
         entityId: blockEntity.metadata.editionId.baseId,
+        entityTypeId: blockEntity.metadata.entityTypeId,
         properties,
+        leftToRightOrder: blockEntity.linkData?.leftToRightOrder,
+        rightToLeftOrder: blockEntity.linkData?.rightToLeftOrder,
       },
     });
   }

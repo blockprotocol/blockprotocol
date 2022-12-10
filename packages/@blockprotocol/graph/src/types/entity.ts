@@ -64,11 +64,7 @@ export type Entity<
 export type CreateEntityData = {
   entityTypeId: VersionedUri;
   properties: EntityPropertiesObject;
-  /** @todo - Support creation of linked entities */
-  // links?: Omit<
-  //   CreateLinkData,
-  //   "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
-  // >[];
+  linkData?: LinkData;
 };
 
 export type GetEntityData = {
@@ -79,8 +75,9 @@ export type GetEntityData = {
 
 export type UpdateEntityData = {
   entityId: EntityId;
+  entityTypeId: VersionedUri;
   properties: EntityPropertiesObject;
-};
+} & Pick<LinkData, "leftToRightOrder" | "rightToLeftOrder">;
 
 export type DeleteEntityData = {
   entityId: EntityId;
