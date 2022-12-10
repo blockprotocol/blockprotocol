@@ -10,6 +10,17 @@ import {
 import { mustBeDefined } from "../../must-be-defined";
 import { getEntity } from "../element/entity";
 
+const convertTimeToStringWithDefault = (
+  timestamp?: Date | string,
+  defaultConstructor = () => new Date().toISOString(),
+) => {
+  return timestamp === undefined
+    ? defaultConstructor()
+    : typeof timestamp === "string"
+    ? timestamp
+    : timestamp.toISOString();
+};
+
 const getUniqueEntitiesFilter = () => {
   const set = new Set();
   return (entity: Entity) => {
@@ -23,20 +34,22 @@ const getUniqueEntitiesFilter = () => {
   };
 };
 
+/** @todo - Update these methods to take intervals instead of timestamps */
+
 /**
  * For a given moment in time, get all outgoing link entities from a given entity.
  *
  * @param subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
- * @param {Date | string} timestamp - A `Date` or an ISO-formatted datetime string of the moment to search for
+ * @param {Date | string} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to search
+ *    for, if not supplied it defaults to the current time
  */
-export const getOutgoingLinksForEntityAtMoment = (
+export const getOutgoingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-  timestamp: Date | string,
+  timestamp?: Date | string,
 ): Entity[] => {
-  const timestampString =
-    typeof timestamp === "string" ? timestamp : timestamp.toISOString();
+  const timestampString = convertTimeToStringWithDefault(timestamp);
 
   const entityEdges = subgraph.edges[entityId];
 
@@ -78,15 +91,15 @@ export const getOutgoingLinksForEntityAtMoment = (
  *
  * @param subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
- * @param {Date | string} timestamp - A `Date` or an ISO-formatted datetime string of the moment to search for
+ * @param {Date | string} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to search
+ *    for, if not supplied it defaults to the current time
  */
-export const getIncomingLinksForEntityAtMoment = (
+export const getIncomingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-  timestamp: Date | string,
+  timestamp?: Date | string,
 ): Entity[] => {
-  const timestampString =
-    typeof timestamp === "string" ? timestamp : timestamp.toISOString();
+  const timestampString = convertTimeToStringWithDefault(timestamp);
 
   const entityEdges = subgraph.edges[entityId];
 
@@ -128,12 +141,13 @@ export const getIncomingLinksForEntityAtMoment = (
  *
  * @param subgraph
  * @param {EntityId} entityId - The ID of the link entity
- * @param {Date | string} timestamp - A `Date` or an ISO-formatted datetime string of the moment to search for
+ * @param {Date | string} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to search
+ *    for, if not supplied it defaults to the current time
  */
-export const getLeftEntityForLinkEntityAtMoment = (
+export const getLeftEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-  timestamp: Date | string,
+  timestamp?: Date | string,
 ): Entity => {
   const linkEntityEdges = mustBeDefined(
     subgraph.edges[entityId],
@@ -157,12 +171,13 @@ export const getLeftEntityForLinkEntityAtMoment = (
  *
  * @param subgraph
  * @param {EntityId} entityId - The ID of the link entity
- * @param {Date | string} timestamp - A `Date` or an ISO-formatted datetime string of the moment to search for
+ * @param {Date | string} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to search
+ *    for, if not supplied it defaults to the current time
  */
-export const getRightEntityForLinkEntityAtMoment = (
+export const getRightEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-  timestamp: Date | string,
+  timestamp?: Date | string,
 ): Entity => {
   const linkEntityEdges = mustBeDefined(
     subgraph.edges[entityId],
@@ -186,18 +201,19 @@ export const getRightEntityForLinkEntityAtMoment = (
  *
  * @param subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
- * @param {Date | string} timestamp - A `Date` or an ISO-formatted datetime string of the moment to search for
+ * @param {Date | string} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to search
+ *    for, if not supplied it defaults to the current time
  */
-export const getOutgoingLinkAndTargetEntitiesAtMoment = (
+export const getOutgoingLinkAndTargetEntities = (
   subgraph: Subgraph,
   entityId: EntityId,
-  timestamp: Date | string,
+  timestamp?: Date | string,
 ): { linkEntity: Entity; rightEntity: Entity }[] => {
-  return getOutgoingLinksForEntityAtMoment(subgraph, entityId, timestamp).map(
+  return getOutgoingLinksForEntity(subgraph, entityId, timestamp).map(
     (linkEntity) => {
       return {
         linkEntity,
-        rightEntity: getRightEntityForLinkEntityAtMoment(
+        rightEntity: getRightEntityForLinkEntity(
           subgraph,
           linkEntity.metadata.editionId.baseId,
           timestamp,

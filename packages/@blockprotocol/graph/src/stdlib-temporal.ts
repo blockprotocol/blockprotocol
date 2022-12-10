@@ -1,9 +1,9 @@
 export {
-  getIncomingLinksForEntityAtMoment,
-  getLeftEntityForLinkEntityAtMoment,
-  getOutgoingLinkAndTargetEntitiesAtMoment,
-  getOutgoingLinksForEntityAtMoment,
-  getRightEntityForLinkEntityAtMoment,
+  getIncomingLinksForEntity,
+  getLeftEntityForLinkEntity,
+  getOutgoingLinkAndTargetEntities,
+  getOutgoingLinksForEntity,
+  getRightEntityForLinkEntity,
 } from "./stdlib/subgraph/edge/link-entity";
 export {
   getDataTypeById,
