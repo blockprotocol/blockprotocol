@@ -1,8 +1,15 @@
 import {
+  getIncomingLinksForEntity as getIncomingLinksForEntityTemporal,
+  getLeftEntityForLinkEntity as getLeftEntityForLinkEntityTemporal,
+  getOutgoingLinkAndTargetEntities as getOutgoingLinkAndTargetEntitiesTemporal,
+  getOutgoingLinksForEntity as getOutgoingLinksForEntityTemporal,
+  getRightEntityForLinkEntity as getRightEntityForLinkEntityTemporal,
+} from "./stdlib/subgraph/edge/link-entity";
+import {
   getEntities as getEntitiesTemporal,
   getEntity as getEntityTemporal,
 } from "./stdlib/subgraph/element/entity";
-import { EntityId } from "./types/entity";
+import { Entity, EntityId } from "./types/entity";
 import { Subgraph } from "./types/subgraph";
 
 export {
@@ -30,18 +37,65 @@ export {
  * @param {EntityId} entityId - The `EntityId` of the entity to get.
  * @throws if the vertex isn't an `EntityVertex`
  */
-export const getEntity = (subgraph: Subgraph, entityId: EntityId) => {
+export const getEntity = (subgraph: Subgraph, entityId: EntityId) =>
   getEntityTemporal(subgraph, entityId);
-};
 
 /**
- * Returns all `Entity`s within the vertices of the subgraph, optionally filtering to only get their latest editions.
+ * Returns all `Entity`s within the vertices of the subgraph.
  *
  * @param subgraph
- * @param latest - whether or not to only return the latest editions of each entity
  */
-export const getEntities = (subgraph: Subgraph) => {
+export const getEntities = (subgraph: Subgraph) =>
   getEntitiesTemporal(subgraph, true);
-};
 
-/** @todo - Add stdlib methods around links */
+/**
+ * Gets all outgoing link entities from a given entity.
+ *
+ * @param subgraph
+ * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
+ */
+export const getOutgoingLinksForEntity = (
+  subgraph: Subgraph,
+  entityId: EntityId,
+): Entity[] => getOutgoingLinksForEntityTemporal(subgraph, entityId);
+/**
+ * Gets all incoming link entities from a given entity.
+ *
+ * @param subgraph
+ * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
+ */
+export const getIncomingLinksForEntity = (
+  subgraph: Subgraph,
+  entityId: EntityId,
+): Entity[] => getIncomingLinksForEntityTemporal(subgraph, entityId);
+/**
+ * Gets the "left entity" (by default this is the "source") of a given link entity.
+ *
+ * @param subgraph
+ * @param {EntityId} entityId - The ID of the link entity
+ */
+export const getLeftEntityForLinkEntity = (
+  subgraph: Subgraph,
+  entityId: EntityId,
+): Entity => getLeftEntityForLinkEntityTemporal(subgraph, entityId);
+/**
+ * Gets the "right entity" (by default this is the "destination") of a given link entity.
+ *
+ * @param subgraph
+ * @param {EntityId} entityId - The ID of the link entity
+ */
+export const getRightEntityForLinkEntity = (
+  subgraph: Subgraph,
+  entityId: EntityId,
+): Entity => getRightEntityForLinkEntityTemporal(subgraph, entityId);
+/**
+ * Gets all outgoing link entities, and their right entities, from a given entity.
+ *
+ * @param subgraph
+ * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
+ */
+export const getOutgoingLinkAndTargetEntities = (
+  subgraph: Subgraph,
+  entityId: EntityId,
+): { linkEntity: Entity; rightEntity: Entity }[] =>
+  getOutgoingLinkAndTargetEntitiesTemporal(subgraph, entityId);
