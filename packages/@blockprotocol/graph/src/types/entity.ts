@@ -137,7 +137,7 @@ export type AggregateEntitiesData = {
 export type AggregateEntitiesResult<
   T extends Subgraph<SubgraphRootTypes["entity"]>,
 > = {
-  results: T[];
+  results: T;
   operation: AggregateOperationInput &
     Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
       pageCount?: number | null;
