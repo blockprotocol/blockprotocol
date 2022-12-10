@@ -44,7 +44,7 @@ export const getEntities = (
 export const getEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-  targetEditionInformation?: EntityVersion | Timestamp,
+  targetEditionInformation?: EntityVersion | Timestamp | Date,
 ): Entity | undefined => {
   const entityEditions = subgraph.vertices[entityId];
 
@@ -62,6 +62,11 @@ export const getEntity = (
       .slice(-1)
       .map((latestVersion) => entityEditions[latestVersion]!.inner);
   } else {
+    const targetTime =
+      typeof targetEditionInformation === "string"
+        ? targetEditionInformation
+        : targetEditionInformation.toISOString();
+
     let targetVersion: EntityVersion | undefined;
     for (let idx = 0; idx < editionVersions.length; idx++) {
       /** @todo - If we expose endTimes we can do an interval check here per edition, rather than needing to infer it */
@@ -74,13 +79,13 @@ export const getEntity = (
 
       // Last element in the array (latest version), so we assume an half-closed interval (unbounded on the upper-bound)
       if (nextEditionVersion === undefined) {
-        if (editionVersion <= targetEditionInformation) {
+        if (editionVersion <= targetTime) {
           targetVersion = editionVersion;
         }
         break;
       } else if (
-        editionVersion <= targetEditionInformation &&
-        targetEditionInformation < nextEditionVersion
+        editionVersion <= targetTime &&
+        targetTime < nextEditionVersion
       ) {
         targetVersion = editionVersion;
         break;

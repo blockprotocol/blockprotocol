@@ -20,18 +20,17 @@ type GenericOutwardEdge<K, E> = {
   rightEndpoint: E;
 };
 
+export type EntityIdAndTimestamp = {
+  baseId: EntityId;
+  timestamp: Timestamp;
+};
+
 export type OntologyOutwardEdge =
   | GenericOutwardEdge<OntologyEdgeKind, OntologyTypeEditionId>
   | GenericOutwardEdge<SharedEdgeKind, EntityEditionId>;
 
 export type KnowledgeGraphOutwardEdge =
-  | GenericOutwardEdge<
-      KnowledgeGraphEdgeKind,
-      {
-        baseId: EntityId;
-        timestamp: Timestamp;
-      }
-    >
+  | GenericOutwardEdge<KnowledgeGraphEdgeKind, EntityIdAndTimestamp>
   | GenericOutwardEdge<SharedEdgeKind, OntologyTypeEditionId>;
 
 export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;
