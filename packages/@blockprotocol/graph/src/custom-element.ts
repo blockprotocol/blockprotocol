@@ -69,14 +69,17 @@ export abstract class BlockElementBase<
       throw new Error(
         "Cannot update self: no 'blockEntity' on 'graph' object passed to block",
       );
-    } else if (!this.graph.blockEntity.metadata.entityId) {
+    } else if (!this.graph.blockEntity.metadata) {
       throw new Error(
-        "Cannot update self: no 'entityId' on graph.blockEntity.metadata passed to block",
+        "Cannot update self: no 'metadata' on graph.blockEntity passed to block",
       );
     }
 
     return this.graphService.updateEntity({
-      data: { entityId: this.graph.blockEntity.metadata.entityId, properties },
+      data: {
+        entityId: this.graph.blockEntity.metadata.editionId.baseId,
+        properties,
+      },
     });
   }
 }

@@ -1,8 +1,18 @@
 import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { AggregateOperationInput } from "./entity";
+import { AggregateOperationInput } from "../entity";
+import { OntologyElementMetadata } from "./metadata";
 
+/**
+ * @todo - Should we re-export this? Should the type-system package be an implementation detail of the graph service?
+ *   Or should consumers import it directly? Also raises the question of if we should be re-exporting the functions.
+ */
 export type { EntityType };
+
+export type EntityTypeWithMetadata = {
+  schema: EntityType;
+  metadata: OntologyElementMetadata;
+};
 
 export type AggregateEntityTypesData = {
   // @todo mention in spec or remove
