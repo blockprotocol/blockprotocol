@@ -22,11 +22,12 @@ import {
   GetEntityData,
   GetEntityTypeData,
   ReadOrModifyResourceError,
+  Subgraph,
+  SubgraphRootTypes,
   UpdateEntityData,
   UploadFileData,
   UploadFileReturn,
 } from "./types.js";
-import { Subgraph, SubgraphRootTypes } from "./types/subgraph";
 
 /**
  * Creates a handler for the graph service for the block.

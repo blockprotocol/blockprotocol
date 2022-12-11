@@ -1,10 +1,9 @@
-import { BaseUri } from "@blockprotocol/type-system/dist/cjs-slim/index-slim";
-import { validateBaseUri } from "@blockprotocol/type-system/wasm/type-system";
+import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
 
-export * from "./ontology/data-type";
-export * from "./ontology/entity-type";
-export * from "./ontology/metadata";
-export * from "./ontology/property-type";
+export * from "./ontology/data-type.js";
+export * from "./ontology/entity-type.js";
+export * from "./ontology/metadata.js";
+export * from "./ontology/property-type.js";
 
 /** @todo - Add documentation */
 /**

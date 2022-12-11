@@ -1,10 +1,10 @@
 import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { isOntologyTypeEditionId } from "../types";
-import { Subgraph, SubgraphRootTypes } from "./subgraph";
-import { GraphResolveDepths } from "./subgraph/graph-resolve-depths";
-import { Timestamp } from "./subgraph/time";
+import { isOntologyTypeEditionId } from "../types.js";
+import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
+import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
+import { Timestamp } from "./subgraph/time.js";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */

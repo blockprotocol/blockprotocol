@@ -8,14 +8,14 @@ import {
   Entity,
   GetEntityData,
   UpdateEntityData,
-} from "./entity";
-import { UploadFileData, UploadFileReturn } from "./file";
+} from "./entity.js";
+import { UploadFileData, UploadFileReturn } from "./file.js";
 import {
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
   GetEntityTypeData,
-} from "./ontology/entity-type";
-import { Subgraph, SubgraphRootTypes } from "./subgraph";
+} from "./ontology/entity-type.js";
+import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
 
 export type BlockGraphProperties = {
   /**

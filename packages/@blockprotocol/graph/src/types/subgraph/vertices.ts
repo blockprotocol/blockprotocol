@@ -1,9 +1,9 @@
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
-import { Entity, EntityId, EntityVersion } from "../entity";
-import { DataTypeWithMetadata } from "../ontology/data-type";
-import { EntityTypeWithMetadata } from "../ontology/entity-type";
-import { PropertyTypeWithMetadata } from "../ontology/property-type";
+import { Entity, EntityId, EntityVersion } from "../entity.js";
+import { DataTypeWithMetadata } from "../ontology/data-type.js";
+import { EntityTypeWithMetadata } from "../ontology/entity-type.js";
+import { PropertyTypeWithMetadata } from "../ontology/property-type.js";
 
 export type DataTypeVertex = {
   kind: "dataType";

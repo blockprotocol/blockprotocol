@@ -5,7 +5,7 @@ import {
   EntityPropertiesObject,
   GraphBlockHandler,
 } from "./index.js";
-import { getRoots } from "./stdlib/subgraph/roots";
+import { getRoots } from "./stdlib/subgraph/roots.js";
 
 export interface BlockElementBase extends LitElement, BlockGraphProperties {}
 

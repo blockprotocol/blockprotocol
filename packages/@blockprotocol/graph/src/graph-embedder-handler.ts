@@ -5,8 +5,9 @@ import { ServiceHandler } from "@blockprotocol/core";
 import {
   EmbedderGraphMessageCallbacks,
   EmbedderGraphMessages,
+  Subgraph,
+  SubgraphRootTypes,
 } from "./types.js";
-import { Subgraph, SubgraphRootTypes } from "./types/subgraph";
 
 /**
  * Creates a handler for the graph service for the embedder.

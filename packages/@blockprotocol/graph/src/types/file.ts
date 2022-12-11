@@ -1,4 +1,4 @@
-import { EntityId } from "./entity";
+import { EntityId } from "./entity.js";
 
 export type FileMediaType = "image" | "video";
 

@@ -3,12 +3,12 @@ import {
   extractBaseUri,
   extractVersion,
   VersionedUri,
-} from "@blockprotocol/type-system";
+} from "@blockprotocol/type-system/slim";
 
-import { OntologyTypeEditionId } from "../../../types/ontology";
-import { PropertyTypeWithMetadata } from "../../../types/ontology/property-type";
-import { Subgraph } from "../../../types/subgraph";
-import { isPropertyTypeVertex } from "../../../types/subgraph/vertices";
+import { OntologyTypeEditionId } from "../../../types/ontology.js";
+import { PropertyTypeWithMetadata } from "../../../types/ontology/property-type.js";
+import { Subgraph } from "../../../types/subgraph.js";
+import { isPropertyTypeVertex } from "../../../types/subgraph/vertices.js";
 
 /**
  * Returns all `PropertyTypeWithMetadata`s within the vertices of the subgraph

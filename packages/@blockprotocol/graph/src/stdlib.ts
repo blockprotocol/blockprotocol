@@ -16,17 +16,17 @@ export {
   getDataTypeById,
   getDataTypes,
   getDataTypesByBaseUri,
-} from "./stdlib/subgraph/element/data-type";
+} from "./stdlib/subgraph/element/data-type.js";
 export {
   getEntityTypeById,
   getEntityTypes,
   getEntityTypesByBaseUri,
-} from "./stdlib/subgraph/element/entity-type";
+} from "./stdlib/subgraph/element/entity-type.js";
 export {
   getPropertyTypeById,
   getPropertyTypes,
   getPropertyTypesByBaseUri,
-} from "./stdlib/subgraph/element/property-type";
+} from "./stdlib/subgraph/element/property-type.js";
 
 /**
  * Gets an `Entity` by its `EntityId` from within the vertices of the subgraph.

@@ -1,14 +1,14 @@
-import { Entity, EntityId } from "../../../types/entity";
-import { OutwardEdge, Subgraph } from "../../../types/subgraph";
+import { Entity, EntityId } from "../../../types/entity.js";
+import { OutwardEdge, Subgraph } from "../../../types/subgraph.js";
 import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,
   isIncomingLinkEdge,
   isOutgoingLinkEdge,
   OutgoingLinkEdge,
-} from "../../../types/subgraph/edges/outward-edge-alias";
-import { mustBeDefined } from "../../must-be-defined";
-import { getEntity } from "../element/entity";
+} from "../../../types/subgraph/edges/outward-edge-alias.js";
+import { mustBeDefined } from "../../must-be-defined.js";
+import { getEntity } from "../element/entity.js";
 
 const convertTimeToStringWithDefault = (
   timestamp?: Date | string,

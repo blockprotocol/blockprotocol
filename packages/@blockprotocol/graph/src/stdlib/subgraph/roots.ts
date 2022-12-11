@@ -1,16 +1,16 @@
-import { isEntityEditionId } from "../../types/entity";
-import { isOntologyTypeEditionId } from "../../types/ontology";
+import { isEntityEditionId } from "../../types/entity.js";
+import { isOntologyTypeEditionId } from "../../types/ontology.js";
 import {
   Subgraph,
   SubgraphRootType,
   SubgraphRootTypes,
-} from "../../types/subgraph";
-import { Vertex } from "../../types/subgraph/vertices";
-import { mustBeDefined } from "../must-be-defined";
-import { getDataTypeByEditionId } from "./element/data-type";
-import { getEntity } from "./element/entity";
-import { getEntityTypeByEditionId } from "./element/entity-type";
-import { getPropertyTypeByEditionId } from "./element/property-type";
+} from "../../types/subgraph.js";
+import { Vertex } from "../../types/subgraph/vertices.js";
+import { mustBeDefined } from "../must-be-defined.js";
+import { getDataTypeByEditionId } from "./element/data-type.js";
+import { getEntity } from "./element/entity.js";
+import { getEntityTypeByEditionId } from "./element/entity-type.js";
+import { getPropertyTypeByEditionId } from "./element/property-type.js";
 
 /**
  * Returns all root elements.
