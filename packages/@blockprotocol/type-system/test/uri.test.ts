@@ -10,6 +10,8 @@ import {
   VersionedUri,
 } from "..";
 
+/** @todo - update these tests */
+
 const invalidBaseUriCases: [string, ParseBaseUriError][] = [
   ["http://example.com", { reason: "MissingTrailingSlash" }],
   [
