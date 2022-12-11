@@ -1,4 +1,11 @@
 import {
+  getEntities,
+  getEntity,
+  getEntityTypes,
+  getRoots,
+} from "@blockprotocol/graph/stdlib";
+import { VersionedUri } from "@blockprotocol/type-system/slim";
+import {
   Box,
   Button,
   MenuItem,
@@ -6,7 +13,7 @@ import {
   Select,
   Typography,
 } from "@mui/material";
-import { MouseEvent, useState } from "react";
+import { MouseEvent, useMemo, useState } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { JsonView } from "./json-view";
@@ -20,17 +27,24 @@ import { JsonView } from "./json-view";
 export const EntitySwitcher = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const { blockEntity, setEntityIdOfEntityForBlock, datastore } =
+  const { blockEntitySubgraph, setEntityEditionIdOfEntityForBlock, graph } =
     useMockBlockDockContext();
 
-  const [entityTypeId, setEntityTypeId] = useState(blockEntity.entityTypeId);
+  const blockEntity = useMemo(
+    () => getRoots(blockEntitySubgraph)[0]!,
+    [blockEntitySubgraph],
+  );
+
+  const [entityTypeId, setEntityTypeId] = useState(
+    blockEntity.metadata.entityTypeId,
+  );
   const [entityId, setEntityIdOfProposedEntityForBlock] = useState<
     string | undefined
-  >(blockEntity.entityId);
+  >(blockEntity.metadata.editionId.baseId);
 
-  const selectedEntity = datastore.entities.find(
-    (entity) =>
-      entity.entityId === entityId && entity.entityTypeId === entityTypeId,
+  const selectedEntity = useMemo(
+    () => (entityId ? getEntity(graph, entityId)! : blockEntity),
+    [graph, blockEntity, entityId],
   );
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
@@ -43,7 +57,7 @@ export const EntitySwitcher = () => {
 
   const handleSubmit = () => {
     if (selectedEntity) {
-      setEntityIdOfEntityForBlock(selectedEntity.entityId);
+      setEntityEditionIdOfEntityForBlock(selectedEntity.metadata.editionId);
     }
     closePopover();
   };
@@ -100,14 +114,14 @@ export const EntitySwitcher = () => {
                 if (event.target.value !== entityTypeId) {
                   setEntityIdOfProposedEntityForBlock(undefined);
                 }
-                setEntityTypeId(event.target.value);
+                setEntityTypeId(event.target.value as VersionedUri);
               }}
               sx={{ mb: 2 }}
               fullWidth
             >
-              {datastore.entityTypes.map((type) => (
-                <MenuItem key={type.entityTypeId} value={type.entityTypeId}>
-                  {type.entityTypeId}
+              {getEntityTypes(graph).map(({ schema: entityType }) => (
+                <MenuItem key={entityType.$id} value={entityType.$id}>
+                  {entityType.$id}
                 </MenuItem>
               ))}
             </Select>
@@ -135,11 +149,16 @@ export const EntitySwitcher = () => {
               }}
               fullWidth
             >
-              {datastore.entities
-                .filter((entity) => entity.entityTypeId === entityTypeId)
+              {getEntities(graph)
+                .filter(
+                  (entity) => entity.metadata.entityTypeId === entityTypeId,
+                )
                 .map((entity) => (
-                  <MenuItem key={entity.entityId} value={entity.entityId}>
-                    {entity.entityId}
+                  <MenuItem
+                    key={entity.metadata.editionId.baseId}
+                    value={entity.metadata.editionId.baseId}
+                  >
+                    {entity.metadata.editionId.baseId}
                   </MenuItem>
                 ))}
             </Select>
@@ -167,7 +186,7 @@ export const EntitySwitcher = () => {
           <JsonView
             rootName="properties"
             collapseKeys={[]}
-            src={selectedEntity?.properties ?? {}}
+            src={blockEntity?.properties ?? {}}
             enableClipboard={false}
             quotesOnKeys={false}
             displayObjectSize={false}

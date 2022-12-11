@@ -5,7 +5,7 @@ import { DatastoreGraphVisualisation } from "./datastore-graph-visualisation";
 import { JsonView } from "./json-view";
 
 export const DataStoreView = () => {
-  const { datastore } = useMockBlockDockContext();
+  const { graph } = useMockBlockDockContext();
   return (
     <Box
       sx={{
@@ -18,18 +18,11 @@ export const DataStoreView = () => {
       }}
     >
       <JsonView
-        collapseKeys={[
-          "entities",
-          "entityTypes",
-          "links",
-          "linkedAggregations",
-        ]}
+        collapseKeys={["vertices", "edges"]}
         rootName="datastore"
         src={{
-          entities: datastore.entities,
-          entityTypes: datastore.entityTypes,
-          links: datastore.links,
-          linkedAggregations: datastore.linkedAggregationDefinitions,
+          vertices: graph.vertices,
+          edges: graph.edges,
         }}
       />
       <DatastoreGraphVisualisation />
