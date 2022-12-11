@@ -8,6 +8,7 @@ import {
   Subgraph,
   Timestamp,
 } from "@blockprotocol/graph";
+import isEqual from "lodash/isEqual";
 
 /** @todo - clean up the assertions here */
 export const addKnowledgeGraphEdge = (
@@ -25,8 +26,18 @@ export const addKnowledgeGraphEdge = (
   } else if (!subgraph.edges[sourceEntityId]![atTime]) {
     subgraph.edges[sourceEntityId]![atTime] = [outwardEdge];
   } else {
-    /** @todo - Deduplicate edges here */
-    subgraph.edges[sourceEntityId]![atTime]!.push(outwardEdge);
+    const outwardEdgesAtTime = subgraph.edges[sourceEntityId]![atTime]!;
+    /**
+     * @todo - Q for PR review: Added a lodash dependency for this, equality of the outward edge is actually complicated
+     *    fine to keep?
+     */
+    if (
+      !outwardEdgesAtTime.find((otherOutwardEdge) =>
+        isEqual(otherOutwardEdge, outwardEdge),
+      )
+    ) {
+      outwardEdgesAtTime.push(outwardEdge);
+    }
   }
 
   /* eslint-enable no-param-reassign */
