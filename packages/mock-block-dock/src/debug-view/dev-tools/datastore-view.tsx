@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
-import { DatastoreGraphVisualisation } from "./datastore-graph-visualisation";
+import { DatastoreGraphVisualization } from "./datastore-graph-visualization";
 import { JsonView } from "./json-view";
 
 export const DataStoreView = () => {
@@ -25,7 +25,7 @@ export const DataStoreView = () => {
           edges: graph.edges,
         }}
       />
-      <DatastoreGraphVisualisation />
+      <DatastoreGraphVisualization />
     </Box>
   );
 };

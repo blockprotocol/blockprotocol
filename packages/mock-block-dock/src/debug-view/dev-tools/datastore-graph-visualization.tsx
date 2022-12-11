@@ -21,8 +21,6 @@ import { useEffect, useRef, useState } from "react";
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { typedEntries } from "../../util";
 
-/** @todo - rename this file to visualization */
-
 const parseLabelFromEntity = (entityToLabel: Entity, subgraph: Subgraph) => {
   const getFallbackLabel = () => {
     // fallback to the entity type and a few characters of the entityUuid
@@ -243,7 +241,7 @@ const getSubgraphEdgesAsEChartEdges = (subgraph: Subgraph): EChartEdge[] =>
     });
   });
 
-export const DatastoreGraphVisualisation = () => {
+export const DatastoreGraphVisualization = () => {
   const { graph } = useMockBlockDockContext();
 
   const eChartWrapperRef = useRef<HTMLDivElement>(null);
