@@ -17,8 +17,7 @@ export type MockData = {
   // linkedAggregationDefinitions: LinkedAggregationDefinition[];
 };
 
-/** @todo - rename this to MockDatastore for consistency */
-export type MockDataStore = {
+export type MockDatastore = {
   graph: Subgraph;
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
 };
@@ -40,7 +39,7 @@ export const useMockDatastore = (
     // linkedAggregationDefinitions: [],
   },
   readonly?: boolean,
-): MockDataStore => {
+): MockDatastore => {
   const [graph, setGraph] = useState(mockDataToSubgraph(initialData));
 
   // const [linkedAggregations, setLinkedAggregations] = useDefaultState<

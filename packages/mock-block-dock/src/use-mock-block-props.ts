@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction, useMemo } from "react";
 import { mockData as initialMockData } from "./data";
 import {
   MockData,
-  MockDataStore,
+  MockDatastore,
   useMockDatastore,
 } from "./datastore/use-mock-datastore";
 import { useDefaultState } from "./use-default-state";
@@ -18,7 +18,7 @@ export type MockBlockHookArgs = {
 
 export type MockBlockHookResult = {
   blockEntityEditionId: EntityEditionId;
-  mockDatastore: MockDataStore;
+  mockDatastore: MockDatastore;
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
   setEntityEditionIdOfEntityForBlock: Dispatch<SetStateAction<EntityEditionId>>;
