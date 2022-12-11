@@ -1,7 +1,12 @@
 import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types.js";
+import {
+  GraphResolveDepths,
+  isOntologyTypeEditionId,
+  Subgraph,
+  SubgraphRootTypes,
+} from "../types.js";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
@@ -125,10 +130,13 @@ export type AggregateOperationInput = {
 
 export type AggregateEntitiesData = {
   operation: AggregateOperationInput;
+  graphResolveDepths?: GraphResolveDepths;
 };
 
-export type AggregateEntitiesResult<T extends Entity | EntityType> = {
-  results: T[];
+export type AggregateEntitiesResult<
+  T extends Subgraph<SubgraphRootTypes["entity"]>,
+> = {
+  results: T;
   operation: AggregateOperationInput &
     Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
       pageCount?: number | null;
