@@ -1,132 +1,107 @@
-import {
-  BlockGraph,
-  EmbedderGraphMessageCallbacks,
-  Entity,
-} from "@blockprotocol/graph";
+import { Entity, EntityEditionId } from "@blockprotocol/graph";
 import { Dispatch, SetStateAction, useMemo } from "react";
 
 import { mockData as initialMockData } from "./data";
-import { useDefaultState } from "./use-default-state";
-import { useLinkFields } from "./use-mock-block-props/use-link-fields";
 import {
   MockData,
+  MockDataStore,
   useMockDatastore,
 } from "./datastore/use-mock-datastore";
+import { useDefaultState } from "./use-default-state";
 
 export type MockBlockHookArgs = {
-  blockEntity?: Entity;
+  blockEntityEditionId?: EntityEditionId;
   initialEntities?: Entity[];
   // initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly: boolean;
 };
 
 export type MockBlockHookResult = {
-  blockEntity: Entity;
-  blockGraph: BlockGraph;
-  datastore: MockData;
-  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
+  blockEntityEditionId: EntityEditionId;
+  mockDatastore: MockDataStore;
   readonly: boolean;
   setReadonly: Dispatch<SetStateAction<boolean>>;
-  setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
+  setEntityEditionIdOfEntityForBlock: Dispatch<SetStateAction<EntityEditionId>>;
 };
 
 /**
  * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
  * The starting mock data can be customized using the initial[X] props.
  * See README.md for usage instructions.
- * @param [blockEntity] the block's own starting properties, if any
- * @param [blockSchema] - The schema for the block entity
+ * @param [blockEntityEditionId] the `EntityEditionId` of the block's own starting entity, if any
  * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
- * @param [initialEntityTypes] - The entity types to include in the data store (NOT the block's type, which is always provided)
- * @param [initialLinks] - The links to include in the data store
  * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockProps = ({
-  blockEntity: externalBlockEntity,
+  blockEntityEditionId: externalBlockEntityEditionId,
   initialEntities,
   // initialLinkedAggregations,
   readonly: externalReadonly,
 }: MockBlockHookArgs): MockBlockHookResult => {
-  const [entityIdOfEntityForBlock, setEntityIdOfEntityForBlock] =
-    useDefaultState<string>(externalBlockEntity?.entityId ?? "");
+  const [entityEditionIdOfEntityForBlock, setEntityEditionIdOfEntityForBlock] =
+    useDefaultState<EntityEditionId>(
+      externalBlockEntityEditionId ?? {
+        baseId: "",
+        versionId: new Date().toISOString(),
+      },
+    );
 
   const [readonly, setReadonly] = useDefaultState<boolean>(externalReadonly);
 
-  const { initialBlockEntity, mockData } = useMemo((): {
-    initialBlockEntity: Entity;
+  const { mockData } = useMemo((): {
     mockData: MockData;
   } => {
-    const entityTypeId = externalBlockEntity?.entityTypeId ?? "block-type-1";
-
-    const newBlockEntity: Entity = {
-      entityId: "block1",
-      entityTypeId,
-      properties: {},
-    };
-
-    if (externalBlockEntity && Object.keys(externalBlockEntity).length > 0) {
-      Object.assign(newBlockEntity, externalBlockEntity);
-    }
-
     const nextMockData: MockData = {
-      entities: [
-        newBlockEntity,
-        ...(initialEntities ?? initialMockData.entities),
-      ],
+      entities: [...(initialEntities ?? initialMockData.entities)],
       // linkedAggregationDefinitions:
       //   initialLinkedAggregations ??
       //   initialMockData.linkedAggregationDefinitions,
     };
 
-    return { initialBlockEntity: newBlockEntity, mockData: nextMockData };
+    if (nextMockData.entities.length === 0) {
+      throw new Error(
+        `Mock data didn't contain any entities, it has to at least contain the block entity`,
+      );
+    }
+
+    let blockEntity;
+    if (externalBlockEntityEditionId) {
+      blockEntity = nextMockData.entities.find(
+        (entity) =>
+          entity.metadata.editionId.baseId ===
+            externalBlockEntityEditionId.baseId &&
+          entity.metadata.editionId.versionId ===
+            externalBlockEntityEditionId.versionId,
+      );
+
+      if (blockEntity === undefined) {
+        throw new Error(
+          `Mock data didn't contain the given block entity edition ID: ${JSON.stringify(
+            externalBlockEntityEditionId,
+          )}`,
+        );
+      }
+    } else {
+      blockEntity = nextMockData.entities[0]!;
+      setEntityEditionIdOfEntityForBlock(blockEntity.metadata.editionId);
+    }
+
+    return { mockData: nextMockData };
   }, [
-    externalBlockEntity,
+    externalBlockEntityEditionId,
     initialEntities,
+    setEntityEditionIdOfEntityForBlock,
     // initialLinkedAggregations,
   ]);
 
-  const datastore = useMockDatastore(mockData, readonly);
-
-  const {
-    entities,
-    graphServiceCallbacks,
-    // linkedAggregationDefinitions,
-  } = datastore;
-
-  const latestBlockEntity = useMemo(() => {
-    return (
-      entities.find((entity) => entity.entityId === entityIdOfEntityForBlock) ??
-      // fallback in case the entityId of the wrapped component is updated by updating its props
-      mockData.entities.find(
-        (entity) => entity.entityId === initialBlockEntity.entityId,
-      )
-    );
-  }, [
-    entities,
-    initialBlockEntity.entityId,
-    mockData.entities,
-    entityIdOfEntityForBlock,
-  ]);
-
-  if (!latestBlockEntity) {
-    throw new Error("Cannot find block entity. Did it delete itself?");
-  }
-
-  // construct BP-specified link fields from the links and linkedAggregations in the datastore
-  const { blockGraph, linkedAggregations } = useLinkFields({
-    entities,
-    // linkedAggregationDefinitions,
-    startingEntity: latestBlockEntity,
-  });
+  const mockDatastore = useMockDatastore(mockData, readonly);
 
   return {
-    blockEntity: latestBlockEntity,
-    blockGraph,
-    datastore,
-    graphServiceCallbacks,
+    blockEntityEditionId: entityEditionIdOfEntityForBlock,
+    mockDatastore,
     // linkedAggregations,
     readonly,
-    setEntityIdOfEntityForBlock,
+    setEntityEditionIdOfEntityForBlock,
     setReadonly,
   };
 };
