@@ -6,9 +6,13 @@ import {
   useState,
 } from "react";
 
-import { GraphBlockHandler, GraphEmbedderHandler } from "./index.js";
+import {
+  BlockGraphProperties,
+  GraphBlockHandler,
+  GraphEmbedderHandler,
+} from "./index.js";
 
-export type BlockComponent = FunctionComponent;
+export type BlockComponent = FunctionComponent<BlockGraphProperties>;
 
 const useGraphServiceConstructor = <
   T extends typeof GraphBlockHandler | typeof GraphEmbedderHandler,

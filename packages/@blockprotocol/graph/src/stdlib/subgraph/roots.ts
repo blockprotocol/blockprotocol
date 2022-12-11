@@ -32,8 +32,7 @@ export const getRoots = <RootType extends SubgraphRootType>(
         // We could use type-guards here to convince TS that it's safe, but that would be slower, it's currently not
         // smart enough to realise this can produce a value of type `Vertex` as it struggles with discriminating
         // `EntityId` and `BaseUri`
-
-        (rootEditionId as any).version
+        rootEditionId.versionId
       ] as Vertex,
       `roots should have corresponding vertices but ${JSON.stringify(
         rootEditionId,
