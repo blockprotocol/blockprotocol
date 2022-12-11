@@ -6,38 +6,18 @@ import {
   CreateEntityData,
   DeleteEntityData,
   Entity,
-  EntityPropertiesObject,
   GetEntityData,
   UpdateEntityData,
-} from "./entity";
-import { UploadFileData, UploadFileReturn } from "./file";
-import {
-  CreateLinkedAggregationData,
-  DeleteLinkedAggregationData,
-  GetLinkedAggregationData,
-  LinkedAggregation,
-  LinkedAggregationDefinition,
-  UpdateLinkedAggregationData,
-} from "./linked-aggregation";
+} from "./entity.js";
+import { UploadFileData, UploadFileReturn } from "./file.js";
 import {
   AggregateEntityTypesData,
-  EntityType,
+  AggregateEntityTypesResult,
   GetEntityTypeData,
-} from "./ontology/entity-type";
+} from "./ontology/entity-type.js";
+import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
 
-export type LinkedAggregations = LinkedAggregation[];
-export type LinkedEntities = Entity[];
-export type LinkGroups = LinkGroup[];
-
-export type BlockGraph = {
-  depth: number;
-  linkedEntities: LinkedEntities;
-  linkGroups: LinkGroups;
-};
-
-export type BlockGraphProperties<
-  BlockEntityProperties extends EntityPropertiesObject | null,
-> = {
+export type BlockGraphProperties = {
   /**
    * The 'graph' object contains messages sent under the graph service from the app to the block.
    * They are sent on initialization and again when the application has new values to send.
@@ -45,20 +25,16 @@ export type BlockGraphProperties<
    * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
    */
   graph: {
-    blockGraph?: BlockGraph;
-    entityTypes?: EntityType[];
-    linkedAggregations?: LinkedAggregations;
+    blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
     readonly?: boolean;
-  } & (BlockEntityProperties extends null
-    ? { blockEntity?: Entity }
-    : { blockEntity: Entity<BlockEntityProperties> });
+  };
 };
 
 export type BlockGraphMessageCallbacks = {
-  blockEntity: MessageCallback<Entity, null>;
-  blockGraph: MessageCallback<BlockGraph, null>;
-  entityTypes: MessageCallback<EntityType[], null>;
-  linkedAggregations: MessageCallback<LinkedAggregations, null>;
+  blockEntitySubgraph: MessageCallback<
+    Subgraph<SubgraphRootTypes["entity"]>,
+    null
+  >;
   readonly: MessageCallback<boolean, null>;
 };
 
@@ -73,11 +49,15 @@ export type EmbedderGraphMessages<
   >;
 };
 
-export type CreateResourceError = "FORBIDDEN" | "INVALID_INPUT";
+export type CreateResourceError =
+  | "FORBIDDEN"
+  | "INVALID_INPUT"
+  | "NOT_IMPLEMENTED";
 export type ReadOrModifyResourceError =
   | "FORBIDDEN"
   | "INVALID_INPUT"
-  | "NOT_FOUND";
+  | "NOT_FOUND"
+  | "NOT_IMPLEMENTED";
 
 /**
  * @todo Generate these types from the JSON definition, to avoid manually keeping the JSON and types in sync
@@ -104,13 +84,13 @@ export type EmbedderGraphMessageCallbacks = {
   getEntity: MessageCallback<
     GetEntityData,
     null,
-    Entity,
+    Subgraph<SubgraphRootTypes["entity"]>,
     ReadOrModifyResourceError
   >;
   aggregateEntities: MessageCallback<
     AggregateEntitiesData,
     null,
-    AggregateEntitiesResult<Entity>,
+    AggregateEntitiesResult<Subgraph<SubgraphRootTypes["entity"]>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Add Type System mutation methods */
@@ -135,53 +115,40 @@ export type EmbedderGraphMessageCallbacks = {
   getEntityType: MessageCallback<
     GetEntityTypeData,
     null,
-    EntityType,
+    Subgraph<SubgraphRootTypes["entityType"]>,
     ReadOrModifyResourceError
   >;
   aggregateEntityTypes: MessageCallback<
     AggregateEntityTypesData,
     null,
-    AggregateEntitiesResult<EntityType>,
+    AggregateEntityTypesResult<Subgraph<SubgraphRootTypes["entityType"]>>,
     ReadOrModifyResourceError
   >;
-  createLink: MessageCallback<CreateLinkData, null, Link, CreateResourceError>;
-  updateLink: MessageCallback<
-    UpdateLinkData,
-    null,
-    Link,
-    ReadOrModifyResourceError
-  >;
-  deleteLink: MessageCallback<
-    DeleteLinkData,
-    null,
-    true,
-    ReadOrModifyResourceError
-  >;
-  getLink: MessageCallback<GetLinkData, null, Link, ReadOrModifyResourceError>;
-  createLinkedAggregation: MessageCallback<
-    CreateLinkedAggregationData,
-    null,
-    LinkedAggregationDefinition,
-    CreateResourceError
-  >;
-  updateLinkedAggregation: MessageCallback<
-    UpdateLinkedAggregationData,
-    null,
-    LinkedAggregationDefinition,
-    ReadOrModifyResourceError
-  >;
-  deleteLinkedAggregation: MessageCallback<
-    DeleteLinkedAggregationData,
-    null,
-    true,
-    ReadOrModifyResourceError
-  >;
-  getLinkedAggregation: MessageCallback<
-    GetLinkedAggregationData,
-    null,
-    LinkedAggregationDefinition,
-    ReadOrModifyResourceError
-  >;
+  /** @todo - Reimplement linked aggregations */
+  // createLinkedAggregation: MessageCallback<
+  //   CreateLinkedAggregationData,
+  //   null,
+  //   LinkedAggregationDefinition,
+  //   CreateResourceError
+  // >;
+  // updateLinkedAggregation: MessageCallback<
+  //   UpdateLinkedAggregationData,
+  //   null,
+  //   LinkedAggregationDefinition,
+  //   ReadOrModifyResourceError
+  // >;
+  // deleteLinkedAggregation: MessageCallback<
+  //   DeleteLinkedAggregationData,
+  //   null,
+  //   true,
+  //   ReadOrModifyResourceError
+  // >;
+  // getLinkedAggregation: MessageCallback<
+  //   GetLinkedAggregationData,
+  //   null,
+  //   LinkedAggregationDefinition,
+  //   ReadOrModifyResourceError
+  // >;
   uploadFile: MessageCallback<
     UploadFileData,
     null,
