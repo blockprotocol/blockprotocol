@@ -4,6 +4,7 @@ pub(in crate::ontology) mod repr;
 mod wasm;
 
 use std::{collections::HashMap, str::FromStr};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 pub use error::ParseDataTypeError;
 
@@ -96,11 +97,29 @@ impl TryFrom<serde_json::Value> for DataType {
     }
 }
 
+impl<'de> Deserialize<'de> for DataType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        Self::try_from(repr::DataType::deserialize(deserializer)?).map_err(serde::de::Error::custom)
+    }
+}
+
 impl From<DataType> for serde_json::Value {
     fn from(data_type: DataType) -> Self {
         let data_type_repr: repr::DataType = data_type.into();
 
         serde_json::to_value(data_type_repr).expect("Failed to deserialize Data Type repr")
+    }
+}
+
+impl Serialize for DataType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        repr::DataType::from(self.clone()).serialize(serializer)
     }
 }
 

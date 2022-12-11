@@ -4,6 +4,7 @@ pub(in crate::ontology) mod repr;
 mod wasm;
 
 use std::{collections::HashSet, str::FromStr};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 pub use error::ParsePropertyTypeError;
 
@@ -98,11 +99,29 @@ impl TryFrom<serde_json::Value> for PropertyType {
     }
 }
 
+impl<'de> Deserialize<'de> for PropertyType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: Deserializer<'de>,
+    {
+        Self::try_from(repr::PropertyType::deserialize(deserializer)?).map_err(serde::de::Error::custom)
+    }
+}
+
 impl From<PropertyType> for serde_json::Value {
     fn from(property_type: PropertyType) -> Self {
         let property_type_repr: repr::PropertyType = property_type.into();
 
         serde_json::to_value(property_type_repr).expect("Failed to deserialize Property Type repr")
+    }
+}
+
+impl Serialize for PropertyType {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: Serializer,
+    {
+        repr::PropertyType::from(self.clone()).serialize(serializer)
     }
 }
 
