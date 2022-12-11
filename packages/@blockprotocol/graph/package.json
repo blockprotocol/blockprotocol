@@ -52,7 +52,7 @@
       "stdlib": [
         "./dist/stdlib.d.ts"
       ],
-      "./stdlib-temporal": [
+      "stdlib-temporal": [
         "./dist/stdlib-temporal.d.ts"
       ]
     }
