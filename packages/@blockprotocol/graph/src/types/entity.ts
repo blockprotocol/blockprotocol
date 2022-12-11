@@ -1,7 +1,7 @@
 import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types";
+import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types.js";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */

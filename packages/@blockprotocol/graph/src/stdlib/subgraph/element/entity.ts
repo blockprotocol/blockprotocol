@@ -1,7 +1,7 @@
-import { Entity, EntityId, EntityVersion } from "../../../types/entity";
-import { Subgraph } from "../../../types/subgraph";
-import { Timestamp } from "../../../types/subgraph/time";
-import { isEntityVertex } from "../../../types/subgraph/vertices";
+import { Entity, EntityId, EntityVersion } from "../../../types/entity.js";
+import { Subgraph } from "../../../types/subgraph.js";
+import { Timestamp } from "../../../types/subgraph/time.js";
+import { isEntityVertex } from "../../../types/subgraph/vertices.js";
 
 /**
  * Returns all `Entity`s within the vertices of the subgraph, optionally filtering to only get their latest editions.

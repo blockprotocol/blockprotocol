@@ -1,6 +1,9 @@
-import { EntityEditionId, EntityId, isEntityEditionId } from "../../entity";
-import { isOntologyTypeEditionId, OntologyTypeEditionId } from "../../ontology";
-import { Timestamp } from "../time";
+import { EntityEditionId, EntityId, isEntityEditionId } from "../../entity.js";
+import {
+  isOntologyTypeEditionId,
+  OntologyTypeEditionId,
+} from "../../ontology.js";
+import { Timestamp } from "../time.js";
 import {
   isKnowledgeGraphEdgeKind,
   isOntologyEdgeKind,
@@ -8,7 +11,7 @@ import {
   KnowledgeGraphEdgeKind,
   OntologyEdgeKind,
   SharedEdgeKind,
-} from "./kind";
+} from "./kind.js";
 
 /**
  * A "partial" definition of an edge which is complete when joined with the missing left-endpoint (usually the source

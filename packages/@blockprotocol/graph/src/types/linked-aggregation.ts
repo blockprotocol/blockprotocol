@@ -2,7 +2,7 @@ import {
   AggregateEntitiesResult,
   AggregateOperationInput,
   Entity,
-} from "./entity";
+} from "./entity.js";
 
 export type LinkedAggregationDefinition = {
   aggregationId: string;
