@@ -21,3 +21,4 @@ export {
   getPropertyTypes,
   getPropertyTypesByBaseUri,
 } from "./stdlib/subgraph/element/property-type.js";
+export { getRoots } from "./stdlib/subgraph/roots.js";

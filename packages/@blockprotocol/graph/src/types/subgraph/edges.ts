@@ -9,6 +9,7 @@ import { Timestamp } from "./time.js";
 
 export * from "./edges/kind.js";
 export * from "./edges/outward-edge.js";
+export * from "./edges/outward-edge-alias.js";
 
 export type OntologyRootedEdges = {
   [typeBaseUri: BaseUri]: {
