@@ -2,10 +2,13 @@ import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
   AggregateEntityTypesData,
+  AggregateEntityTypesResult,
   Entity,
   EntityType,
   MultiFilter,
   MultiSort,
+  Subgraph,
+  SubgraphRootTypes,
 } from "@blockprotocol/graph";
 
 type TupleEntry<
@@ -108,7 +111,7 @@ const filterEntities: FilterEntitiesFn = (params) => {
   const { entityTypeId, entities, multiFilter } = params;
 
   return entities.filter((entity) => {
-    if (entityTypeId && entityTypeId !== entity.entityTypeId) {
+    if (entityTypeId && entityTypeId !== entity.metadata.entityTypeId) {
       return false;
     }
 
@@ -180,18 +183,30 @@ const isEntityTypes = (
   entities: Entity[] | EntityType[],
 ): entities is EntityType[] => "schema" in (entities[0] ?? {});
 
+export type FilterResult<T extends Entity | EntityType = Entity | EntityType> =
+  {
+    results: T[];
+    operation:
+      | AggregateEntitiesResult<
+          Subgraph<SubgraphRootTypes["entity"]>
+        >["operation"]
+      | AggregateEntityTypesResult<
+          Subgraph<SubgraphRootTypes["entityType"]>
+        >["operation"];
+  };
+
 export function filterAndSortEntitiesOrTypes(
   entities: Entity[],
   payload: AggregateEntitiesData,
-): AggregateEntitiesResult<Entity>;
+): FilterResult<Entity>;
 export function filterAndSortEntitiesOrTypes(
   entities: EntityType[],
   payload: AggregateEntityTypesData,
-): AggregateEntitiesResult<EntityType>;
+): FilterResult<EntityType>;
 export function filterAndSortEntitiesOrTypes(
   entities: Entity[] | EntityType[],
-  payload: AggregateEntitiesResult<EntityType> | AggregateEntityTypesData,
-): AggregateEntitiesResult<Entity> | AggregateEntitiesResult<EntityType> {
+  payload: AggregateEntitiesData | AggregateEntityTypesData,
+): FilterResult {
   const { operation } = payload;
 
   const pageNumber = operation?.pageNumber || 1;
@@ -241,7 +256,7 @@ export function filterAndSortEntitiesOrTypes(
       : undefined;
   if (entityTypeIdFilter) {
     results = results.filter(
-      (entity) => entity.entityTypeId === entityTypeIdFilter,
+      (entity) => entity.metadata.entityTypeId === entityTypeIdFilter,
     );
   }
 
