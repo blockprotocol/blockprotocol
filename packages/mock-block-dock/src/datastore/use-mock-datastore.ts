@@ -1,20 +1,25 @@
 import {
   EmbedderGraphMessageCallbacks,
   Entity,
-  UploadFileReturn,
+  Subgraph,
 } from "@blockprotocol/graph";
-import { useCallback } from "react";
+import { getEntity as getEntityFromSubgraph } from "@blockprotocol/graph/stdlib";
+import { useCallback, useState } from "react";
 import { v4 as uuid } from "uuid";
 
-import { useDefaultState } from "../use-default-state";
-import { filterAndSortEntitiesOrTypes } from "../util";
+import { aggregateEntities as aggregateEntitiesImpl } from "./hook-implementations/entity/aggregate-entities";
+import { getEntity as getEntityImpl } from "./hook-implementations/entity/get-entity";
+import { mockDataToSubgraph } from "./mock-data-to-subgraph";
+import { addEntitiesToSubgraph } from "./mutate-subgraph";
 
 export type MockData = {
   entities: Entity[];
   // linkedAggregationDefinitions: LinkedAggregationDefinition[];
 };
 
-type MockDataStore = MockData & {
+/** @todo - rename this to MockDatastore for consistency */
+export type MockDataStore = {
+  graph: Subgraph;
   graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks>;
 };
 
@@ -36,9 +41,7 @@ export const useMockDatastore = (
   },
   readonly?: boolean,
 ): MockDataStore => {
-  const [entities, setEntities] = useDefaultState<MockDataStore["entities"]>(
-    initialData.entities,
-  );
+  const [graph, setGraph] = useState(mockDataToSubgraph(initialData));
 
   // const [linkedAggregations, setLinkedAggregations] = useDefaultState<
   //   MockDataStore["linkedAggregationDefinitions"]
@@ -46,13 +49,21 @@ export const useMockDatastore = (
 
   const aggregateEntities: EmbedderGraphMessageCallbacks["aggregateEntities"] =
     useCallback(
-      async (payload) => ({
-        data: filterAndSortEntitiesOrTypes(
-          entities,
-          payload.data ?? { operation: {} },
-        ),
-      }),
-      [entities],
+      async ({ data }) => {
+        if (!data) {
+          return {
+            errors: [
+              {
+                code: "INVALID_INPUT",
+                message: "aggregateEntities requires 'data' input",
+              },
+            ],
+          };
+        }
+
+        return { data: aggregateEntitiesImpl(data, graph) };
+      },
+      [graph],
     );
 
   const createEntity: EmbedderGraphMessageCallbacks["createEntity"] =
@@ -73,23 +84,30 @@ export const useMockDatastore = (
           };
         }
         const entityId = uuid();
-        const { entityTypeId, links: newLinks, properties } = data;
+        const { entityTypeId, properties, linkData } = data;
         const newEntity: Entity = {
-          entityId,
-          entityTypeId,
+          metadata: {
+            editionId: {
+              baseId: entityId,
+              versionId: new Date().toISOString(),
+            },
+            entityTypeId,
+          },
           properties,
+          linkData,
         };
-        const linksToCreate = (newLinks ?? []).map((link) => ({
-          linkId: uuid(),
-          sourceEntityId: entityId,
-          ...link,
-        }));
 
-        setEntities((currentEntities) => [...currentEntities, newEntity]);
-        setLinks((currentLinks) => [...currentLinks, ...linksToCreate]);
+        setGraph((currentGraph) => {
+          // A shallow copy should be enough to trigger a re-render
+          const newSubgraph = {
+            ...currentGraph,
+          };
+          addEntitiesToSubgraph(newSubgraph, [newEntity]);
+          return newSubgraph;
+        });
         return { data: newEntity };
       },
-      [setEntities, setLinks, readonly],
+      [readonly, setGraph],
     );
 
   const getEntity: EmbedderGraphMessageCallbacks["getEntity"] = useCallback(
@@ -104,10 +122,10 @@ export const useMockDatastore = (
           ],
         };
       }
-      const foundEntity = entities.find(
-        (entity) => entity.entityId === data.entityId,
-      );
-      if (!foundEntity) {
+
+      const entitySubgraph = getEntityImpl(data, graph);
+
+      if (!entitySubgraph) {
         return {
           errors: [
             {
@@ -117,9 +135,9 @@ export const useMockDatastore = (
           ],
         };
       }
-      return { data: foundEntity };
+      return { data: entitySubgraph };
     },
-    [entities],
+    [graph],
   );
 
   const updateEntity: EmbedderGraphMessageCallbacks["updateEntity"] =
@@ -141,12 +159,17 @@ export const useMockDatastore = (
         }
 
         return new Promise((resolve) => {
-          setEntities((currentEntities) => {
-            if (
-              !currentEntities.find(
-                ({ entityId }) => entityId === data.entityId,
-              )
-            ) {
+          setGraph((currentGraph) => {
+            const {
+              entityId,
+              entityTypeId,
+              properties,
+              leftToRightOrder,
+              rightToLeftOrder,
+            } = data;
+            const currentEntity = getEntityFromSubgraph(currentGraph, entityId);
+
+            if (currentEntity === undefined) {
               resolve({
                 errors: [
                   {
@@ -155,28 +178,86 @@ export const useMockDatastore = (
                   },
                 ],
               });
-              return currentEntities;
+              return currentGraph;
             }
-            return currentEntities.map((entity) => {
-              if (entity.entityId === data.entityId) {
-                const newEntity = {
-                  ...entity,
-                  properties: data.properties,
-                };
-                resolve({ data: newEntity });
-                return newEntity;
-              }
-              return entity;
-            });
+
+            /**
+             * @todo - This assumes that once an entity is a link, it's always a link, and its endpoints can't be changed
+             *   however we don't enforce this currently. We should probably check the given entityType here
+             */
+            if (
+              (leftToRightOrder || rightToLeftOrder) &&
+              !(
+                currentEntity.linkData?.leftEntityId &&
+                currentEntity.linkData?.rightEntityId
+              )
+            ) {
+              resolve({
+                errors: [
+                  {
+                    code: "INVALID_INPUT",
+                    message:
+                      "Could not update non-link entity with link metadata (order)",
+                  },
+                ],
+              });
+              return currentGraph;
+            }
+
+            /**
+             * @todo - This assumes that an entity cannot become a link if it didn't start off as one, however we don't
+             *    enforce this currently. We should probably check the given entityType here
+             */
+            const linkData =
+              currentEntity.linkData?.leftEntityId &&
+              currentEntity.linkData?.rightEntityId
+                ? {
+                    leftEntityId: currentEntity.linkData.leftEntityId,
+                    rightEntityId: currentEntity.linkData.rightEntityId,
+                    leftToRightOrder,
+                    rightToLeftOrder,
+                  }
+                : undefined;
+
+            const updatedEntity: Entity = {
+              metadata: {
+                editionId: {
+                  baseId: entityId,
+                  versionId: new Date().toISOString(),
+                },
+                entityTypeId,
+              },
+              properties,
+              linkData,
+            };
+
+            // A shallow copy should be enough to trigger a re-render
+            const newSubgraph = {
+              ...currentGraph,
+            };
+            resolve({ data: updatedEntity });
+            addEntitiesToSubgraph(newSubgraph, [updatedEntity]);
+            return newSubgraph;
           });
         });
       },
-      [setEntities, readonly],
+      [readonly, setGraph],
     );
 
   const deleteEntity: EmbedderGraphMessageCallbacks["deleteEntity"] =
     useCallback(
       async ({ data }) => {
+        return {
+          errors: [
+            {
+              code: "NOT_IMPLEMENTED",
+              message: `Entity deletion is not currently supported`,
+            },
+          ],
+        };
+
+        /** @todo - implement entity deletion */
+        // eslint-disable-next-line no-unreachable -- currently unimplemented
         if (readonly) {
           return readonlyErrorReturn;
         }
@@ -191,66 +272,53 @@ export const useMockDatastore = (
             ],
           };
         }
-        return new Promise((resolve) => {
-          setEntities((currentEntities) => {
-            if (
-              !currentEntities.find(
-                ({ entityId }) => entityId === data.entityId,
-              )
-            ) {
-              resolve({
-                errors: [
-                  {
-                    code: "NOT_FOUND",
-                    message: `Could not find entity with entityId '${data.entityId}'`,
-                  },
-                ],
-              });
-              return currentEntities;
-            }
-            return currentEntities.filter((entity) => {
-              if (entity.entityId === data.entityId) {
-                resolve({ data: true });
-                return false;
-              }
-              return true;
-            });
+        return new Promise((_resolve) => {
+          setGraph((currentGraph) => {
+            // resolve();
+            return currentGraph;
           });
         });
       },
-      [setEntities, readonly],
+      [setGraph, readonly],
     );
 
+  const aggregateEntityTypes: EmbedderGraphMessageCallbacks["aggregateEntityTypes"] =
+    useCallback(async ({ data: _ }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `aggregateEntityTypes is not currently supported`,
+          },
+        ],
+      };
+    }, []);
+
   const getEntityType: EmbedderGraphMessageCallbacks["getEntityType"] =
-    useCallback(
-      async ({ data }) => {
-        if (!data) {
-          return {
-            errors: [
-              {
-                code: "INVALID_INPUT",
-                message: "getEntityType requires 'data' input",
-              },
-            ],
-          };
-        }
-        const foundEntityType = entityTypes.find(
-          (entityType) => entityType.entityTypeId === data.entityTypeId,
-        );
-        if (!foundEntityType) {
-          return {
-            errors: [
-              {
-                code: "NOT_FOUND",
-                message: `Could not find entity type with entityTypeId '${data.entityTypeId}'`,
-              },
-            ],
-          };
-        }
-        return { data: foundEntityType };
-      },
-      [entityTypes],
-    );
+    useCallback(async ({ data }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `Retrieving Entity Types is not currently supported`,
+          },
+        ],
+      };
+
+      /** @todo - interim solution: retrieve entity type from URL */
+      /** @todo - implement entity type resolution */
+      // eslint-disable-next-line no-unreachable -- currently unimplemented
+      if (!data) {
+        return {
+          errors: [
+            {
+              code: "INVALID_INPUT",
+              message: "getEntityType requires 'data' input",
+            },
+          ],
+        };
+      }
+    }, []);
 
   /** @todo - Reimplement linkedAggregations */
   // const createLinkedAggregation: EmbedderGraphMessageCallbacks["createLinkedAggregation"] =
@@ -420,6 +488,17 @@ export const useMockDatastore = (
 
   const uploadFile: EmbedderGraphMessageCallbacks["uploadFile"] = useCallback(
     async ({ data }) => {
+      return {
+        errors: [
+          {
+            code: "NOT_IMPLEMENTED",
+            message: `Uploading files is not currently supported`,
+          },
+        ],
+      };
+
+      /** @todo - create the file entity-type and re-enable file uploading */
+      // eslint-disable-next-line no-unreachable -- currently unimplemented
       if (readonly) {
         return readonlyErrorReturn;
       }
@@ -434,99 +513,100 @@ export const useMockDatastore = (
           ],
         };
       }
-      const { file, url, mediaType } = data;
-      if (!file && !url?.trim()) {
-        throw new Error(
-          `Please enter a valid ${mediaType} URL or select a file below`,
-        );
-      }
-
-      if (url?.trim()) {
-        const resp = await createEntity({
-          data: {
-            entityTypeId: "file1",
-            properties: {
-              url,
-              mediaType,
-            },
-          },
-        });
-        if (resp.errors || !resp.data) {
-          return {
-            errors: resp.errors ?? [
-              {
-                code: "INVALID_INPUT",
-                message: "Could not create File entity ",
-              },
-            ],
-          };
-        }
-        const returnData: UploadFileReturn = {
-          entityId: resp.data.entityId,
-          mediaType,
-          url,
-        };
-        return Promise.resolve({ data: returnData });
-      } else if (file) {
-        const result = await new Promise<FileReader["result"] | null>(
-          (resolve, reject) => {
-            const reader = new FileReader();
-
-            reader.onload = (event) => {
-              resolve(event.target?.result ?? null);
-            };
-
-            reader.onerror = (event) => {
-              reject(event);
-            };
-
-            reader.readAsDataURL(file);
-          },
-        );
-
-        if (result) {
-          const resp = await createEntity({
-            data: {
-              entityTypeId: "file1",
-              properties: {
-                url: result.toString(),
-                mediaType,
-              },
-            },
-          });
-          if (resp.errors || !resp.data) {
-            return {
-              errors: resp.errors ?? [
-                {
-                  code: "INVALID_INPUT",
-                  message: "Could not create File entity ",
-                },
-              ],
-            };
-          }
-          const returnData: UploadFileReturn = {
-            entityId: resp.data.entityId,
-            mediaType,
-            url: result.toString(),
-          };
-          return Promise.resolve({ data: returnData });
-        }
-
-        throw new Error("Couldn't read your file");
-      }
-      throw new Error("Unreachable.");
+      // const { file, url, mediaType } = data;
+      // if (!file && !url?.trim()) {
+      //   throw new Error(
+      //     `Please enter a valid ${mediaType} URL or select a file below`,
+      //   );
+      // }
+      //
+      // if (url?.trim()) {
+      //   const resp = await createEntity({
+      //     data: {
+      //       entityTypeId: "file1",
+      //       properties: {
+      //         url,
+      //         mediaType,
+      //       },
+      //     },
+      //   });
+      //   if (resp.errors || !resp.data) {
+      //     return {
+      //       errors: resp.errors ?? [
+      //         {
+      //           code: "INVALID_INPUT",
+      //           message: "Could not create File entity ",
+      //         },
+      //       ],
+      //     };
+      //   }
+      //   const returnData: UploadFileReturn = {
+      //     entityId: resp.data.entityId,
+      //     mediaType,
+      //     url,
+      //   };
+      //   return Promise.resolve({ data: returnData });
+      // } else if (file) {
+      //   const result = await new Promise<FileReader["result"] | null>(
+      //     (resolve, reject) => {
+      //       const reader = new FileReader();
+      //
+      //       reader.onload = (event) => {
+      //         resolve(event.target?.result ?? null);
+      //       };
+      //
+      //       reader.onerror = (event) => {
+      //         reject(event);
+      //       };
+      //
+      //       reader.readAsDataURL(file);
+      //     },
+      //   );
+      //
+      //   if (result) {
+      //     const resp = await createEntity({
+      //       data: {
+      //         entityTypeId: "file1",
+      //         properties: {
+      //           url: result.toString(),
+      //           mediaType,
+      //         },
+      //       },
+      //     });
+      //     if (resp.errors || !resp.data) {
+      //       return {
+      //         errors: resp.errors ?? [
+      //           {
+      //             code: "INVALID_INPUT",
+      //             message: "Could not create File entity ",
+      //           },
+      //         ],
+      //       };
+      //     }
+      //     const returnData: UploadFileReturn = {
+      //       entityId: resp.data.entityId,
+      //       mediaType,
+      //       url: result.toString(),
+      //     };
+      //     return Promise.resolve({ data: returnData });
+      //   }
+      //
+      //   throw new Error("Couldn't read your file");
+      // }
+      // throw new Error("Unreachable.");
     },
-    [createEntity, readonly],
+    [readonly],
   );
 
   return {
-    entities,
+    graph,
     graphServiceCallbacks: {
       aggregateEntities,
       getEntity,
       createEntity,
       deleteEntity,
       updateEntity,
+      aggregateEntityTypes,
       getEntityType,
       // getLinkedAggregation,
       // createLinkedAggregation,
