@@ -1,49 +1,130 @@
 import { Entity } from "@blockprotocol/graph";
+import { extractBaseUri } from "@blockprotocol/type-system/slim";
 
+import { entityTypes } from "./entity-types";
+import { propertyTypes } from "./property-types";
 import { companyNames, personNames } from "./words";
 
-const entities: Entity[] = [];
-
-const NUMBER_OF_ENTITIES_TO_CREATE = Math.min(
-  personNames.length,
-  companyNames.length,
-);
-
 const createPerson = (entityId: number): Entity => {
-  const now = new Date();
   const name = personNames[entityId] ?? "Unknown Person";
   return {
-    entityId: `person-${entityId.toString()}`,
-    entityTypeId: "Person",
+    metadata: {
+      editionId: {
+        baseId: `person-${entityId.toString()}`,
+        versionId: new Date().toISOString(),
+      },
+      entityTypeId: entityTypes.person.$id,
+    },
     properties: {
-      createdAt: now,
-      updatedAt: now,
-      age: Math.ceil(Math.random() * 100),
-      email: `${name}@example.com`,
-      name,
-      username: name.toLowerCase(),
+      [extractBaseUri(propertyTypes.age.$id)]: Math.ceil(Math.random() * 100),
+      [extractBaseUri(propertyTypes.email.$id)]: `${name}@example.com`,
+      [extractBaseUri(propertyTypes.name.$id)]: name,
+      [extractBaseUri(propertyTypes.username.$id)]: name.toLowerCase(),
     },
   };
 };
 
 const createCompany = (entityId: number): Entity => {
-  const now = new Date();
-  const name = companyNames[entityId];
+  const name = companyNames[entityId] ?? "Unknown Company";
   return {
-    entityId: `company-${entityId.toString()}`,
-    entityTypeId: "Company",
+    metadata: {
+      editionId: {
+        baseId: `company-${entityId.toString()}`,
+        versionId: new Date().toISOString(),
+      },
+      entityTypeId: entityTypes.company.$id,
+    },
     properties: {
-      createdAt: now,
-      updatedAt: now,
-      employees: Math.ceil(Math.random() * 10_000),
-      name,
+      [extractBaseUri(propertyTypes.numberOfEmployees.$id)]: Math.ceil(
+        Math.random() * 10_000,
+      ),
+      [extractBaseUri(propertyTypes.name.$id)]: name,
     },
   };
 };
 
-for (let id = 0; id < NUMBER_OF_ENTITIES_TO_CREATE; id++) {
-  entities.push(createCompany(id));
-  entities.push(createPerson(id));
-}
+const createWorksForLink = (
+  sourceEntityId: string,
+  destinationEntityId: string,
+): Entity => {
+  return {
+    metadata: {
+      editionId: {
+        baseId: `${sourceEntityId}-works-for-${destinationEntityId}`,
+        versionId: new Date().toISOString(),
+      },
+      entityTypeId: entityTypes.worksFor.$id,
+    },
+    properties: {},
+    linkData: {
+      leftEntityId: sourceEntityId,
+      rightEntityId: destinationEntityId,
+    },
+  };
+};
+
+const createFounderOfLink = (
+  sourceEntityId: string,
+  destinationEntityId: string,
+): Entity => {
+  return {
+    metadata: {
+      editionId: {
+        baseId: `${sourceEntityId}-founder-of-${destinationEntityId}`,
+        versionId: new Date().toISOString(),
+      },
+      entityTypeId: entityTypes.founderOf.$id,
+    },
+    properties: {},
+    linkData: {
+      leftEntityId: sourceEntityId,
+      rightEntityId: destinationEntityId,
+    },
+  };
+};
+
+const createEntities = (): Entity[] => {
+  // First create people and companies in separate lists
+  const people = [];
+  const companies = [];
+
+  for (let idx = 0; idx < personNames.length; idx++) {
+    people.push(createPerson(idx));
+  }
+  for (let idx = 0; idx < companyNames.length; idx++) {
+    companies.push(createCompany(idx));
+  }
+
+  const entities = [];
+
+  // For each company, `pop` (to avoid double selection in the next step) a person to be the founder, and start building
+  // the final entities list
+  for (const company of companies) {
+    const founder = people.pop();
+
+    if (founder) {
+      entities.push(
+        createFounderOfLink(
+          founder.metadata.editionId.baseId,
+          company.metadata.editionId.baseId,
+        ),
+      );
+      entities.push(founder);
+    }
+  }
+  for (const person of people) {
+    entities.push(
+      createWorksForLink(
+        person.metadata.editionId.baseId,
+        companies[Math.floor(Math.random() * companies.length)]!.metadata
+          .editionId.baseId,
+      ),
+    );
+  }
+
+  return [...entities, ...people, ...companies];
+};
+
+const entities = createEntities();
 
 export { entities };
