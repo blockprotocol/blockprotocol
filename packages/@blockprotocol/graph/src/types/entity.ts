@@ -69,6 +69,7 @@ export type CreateEntityData = {
 
 export type GetEntityData = {
   entityId: EntityId;
+  graphResolveDepths?: GraphResolveDepths;
 };
 
 export type UpdateEntityData = {
