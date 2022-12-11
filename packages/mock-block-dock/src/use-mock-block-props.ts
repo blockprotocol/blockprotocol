@@ -11,7 +11,7 @@ import { useLinkFields } from "./use-mock-block-props/use-link-fields";
 import {
   MockData,
   useMockDatastore,
-} from "./use-mock-block-props/use-mock-datastore";
+} from "./datastore/use-mock-datastore";
 
 export type MockBlockHookArgs = {
   blockEntity?: Entity;
