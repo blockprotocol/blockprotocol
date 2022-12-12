@@ -2,7 +2,7 @@
  * A collection of 'aliases' which describe various variants of outward edges in more accessible-forms
  */
 
-import { EntityIdAndTimestamp, OutwardEdge } from "./outward-edge";
+import { EntityIdAndTimestamp, OutwardEdge } from "./outward-edge.js";
 
 /** @todo - is there a way to have TS force us to make this always satisfy `KnowledgeGraphOutwardEdge`? */
 export type OutgoingLinkEdge = {
