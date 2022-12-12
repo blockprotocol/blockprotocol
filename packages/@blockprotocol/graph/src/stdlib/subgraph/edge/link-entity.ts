@@ -78,7 +78,6 @@ export const getOutgoingLinksForEntity = (
           ),
         );
       })
-      .filter((x): x is Entity => x !== undefined)
       .filter(uniqueEntitiesFilter)
   );
 };
@@ -128,7 +127,6 @@ export const getIncomingLinksForEntity = (
           ),
         );
       })
-      .filter((x): x is Entity => x !== undefined)
       .filter(uniqueEntitiesFilter)
   );
 };
