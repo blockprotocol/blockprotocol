@@ -15,7 +15,7 @@ import { getPropertyTypeByEditionId } from "./element/property-type.js";
 /**
  * Returns all root elements.
  *
- * The type of this can be constrained by using some of the helper type-guards:
+ * For a narrower return type, first narrow the type of `subgraph` by using one of the helper type-guards:
  * - isDataTypeRootedSubgraph
  * - isPropertyTypeRootedSubgraph
  * - isEntityTypeRootedSubgraph
