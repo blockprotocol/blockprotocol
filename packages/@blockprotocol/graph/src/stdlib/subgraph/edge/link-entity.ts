@@ -10,12 +10,9 @@ import {
 import { mustBeDefined } from "../../must-be-defined.js";
 import { getEntity } from "../element/entity.js";
 
-const convertTimeToStringWithDefault = (
-  timestamp?: Date | string,
-  defaultConstructor = () => new Date().toISOString(),
-) => {
+const convertTimeToStringWithDefault = (timestamp?: Date | string) => {
   return timestamp === undefined
-    ? defaultConstructor()
+    ? new Date().toISOString()
     : typeof timestamp === "string"
     ? timestamp
     : timestamp.toISOString();
