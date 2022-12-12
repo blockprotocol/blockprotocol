@@ -59,16 +59,18 @@ export const getOutgoingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
 ): Entity[] => getOutgoingLinksForEntityTemporal(subgraph, entityId);
+
 /**
  * Gets all incoming link entities from a given entity.
  *
  * @param subgraph
- * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
+ * @param {EntityId} entityId - The ID of the source entity to search for incoming links to
  */
 export const getIncomingLinksForEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
 ): Entity[] => getIncomingLinksForEntityTemporal(subgraph, entityId);
+
 /**
  * Gets the "left entity" (by default this is the "source") of a given link entity.
  *
@@ -79,6 +81,7 @@ export const getLeftEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
 ): Entity => getLeftEntityForLinkEntityTemporal(subgraph, entityId);
+
 /**
  * Gets the "right entity" (by default this is the "destination") of a given link entity.
  *
@@ -89,6 +92,7 @@ export const getRightEntityForLinkEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
 ): Entity => getRightEntityForLinkEntityTemporal(subgraph, entityId);
+
 /**
  * Gets all outgoing link entities, and their right entities, from a given entity.
  *

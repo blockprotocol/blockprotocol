@@ -90,7 +90,7 @@ export const getOutgoingLinksForEntity = (
  * For a given moment in time, get all incoming link entities from a given entity.
  *
  * @param subgraph
- * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
+ * @param {EntityId} entityId - The ID of the source entity to search for incoming links to
  * @param {Date | string} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to search
  *    for, if not supplied it defaults to the current time
  */
