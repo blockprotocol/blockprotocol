@@ -77,6 +77,11 @@ export const getEntity = (
         idx + 1,
       ) as [EntityVersion, EntityVersion | undefined];
 
+      // The list is sorted so if this is beyond the target time then all of the ones after are too
+      if (editionVersion > targetTime) {
+        break;
+      }
+
       // Last element in the array (latest version), so we assume an half-closed interval (unbounded on the upper-bound)
       if (nextEditionVersion === undefined) {
         if (editionVersion <= targetTime) {
