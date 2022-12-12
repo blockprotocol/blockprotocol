@@ -1,3 +1,6 @@
+/**
+ * The extended standard library of functions for interacting with a `Subgraph`, with support for temporal versioning.
+ */
 export {
   getIncomingLinksForEntity,
   getLeftEntityForLinkEntity,

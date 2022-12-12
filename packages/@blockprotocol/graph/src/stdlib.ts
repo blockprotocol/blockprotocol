@@ -1,3 +1,6 @@
+/**
+ * The base standard library of functions for interacting with a `Subgraph`.
+ */
 import {
   getIncomingLinksForEntity as getIncomingLinksForEntityTemporal,
   getLeftEntityForLinkEntity as getLeftEntityForLinkEntityTemporal,
