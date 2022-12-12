@@ -8,9 +8,9 @@ use std::{
     collections::{HashMap, HashSet},
     str::FromStr,
 };
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 pub use error::ParseEntityTypeError;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
@@ -161,10 +161,11 @@ impl TryFrom<serde_json::Value> for EntityType {
 
 impl<'de> Deserialize<'de> for EntityType {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
     {
-        Self::try_from(repr::EntityType::deserialize(deserializer)?).map_err(serde::de::Error::custom)
+        Self::try_from(repr::EntityType::deserialize(deserializer)?)
+            .map_err(serde::de::Error::custom)
     }
 }
 
@@ -172,14 +173,14 @@ impl From<EntityType> for serde_json::Value {
     fn from(property_type: EntityType) -> Self {
         let entity_type_repr: repr::EntityType = property_type.into();
 
-        serde_json::to_value(entity_type_repr).expect("Failed to deserialize Entity Type repr")
+        serde_json::to_value(entity_type_repr).expect("Failed to serialize Entity Type repr")
     }
 }
 
 impl Serialize for EntityType {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: Serializer,
+    where
+        S: Serializer,
     {
         repr::EntityType::from(self.clone()).serialize(serializer)
     }
@@ -240,7 +241,7 @@ impl From<EntityTypeReference> for serde_json::Value {
         let entity_type_ref_repr: repr::EntityTypeReference = entity_type_ref.into();
 
         serde_json::to_value(entity_type_ref_repr)
-            .expect("Failed to deserialize Entity Type Reference repr")
+            .expect("Failed to serialize Entity Type Reference repr")
     }
 }
 

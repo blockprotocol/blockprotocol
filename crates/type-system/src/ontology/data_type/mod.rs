@@ -4,9 +4,9 @@ pub(in crate::ontology) mod repr;
 mod wasm;
 
 use std::{collections::HashMap, str::FromStr};
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 pub use error::ParseDataTypeError;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::{
     uri::{BaseUri, ParseVersionedUriError, VersionedUri},
@@ -110,7 +110,7 @@ impl From<DataType> for serde_json::Value {
     fn from(data_type: DataType) -> Self {
         let data_type_repr: repr::DataType = data_type.into();
 
-        serde_json::to_value(data_type_repr).expect("Failed to deserialize Data Type repr")
+        serde_json::to_value(data_type_repr).expect("Failed to serialize Data Type repr")
     }
 }
 
@@ -178,7 +178,7 @@ impl From<DataTypeReference> for serde_json::Value {
         let data_type_ref_repr: repr::DataTypeReference = data_type_ref.into();
 
         serde_json::to_value(data_type_ref_repr)
-            .expect("Failed to deserialize Data Type Reference repr")
+            .expect("Failed to serialize Data Type Reference repr")
     }
 }
 
