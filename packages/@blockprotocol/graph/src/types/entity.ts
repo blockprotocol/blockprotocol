@@ -1,7 +1,7 @@
 import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types";
+import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types.js";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
@@ -41,6 +41,13 @@ export type EntityMetadata = {
   entityTypeId: VersionedUri;
 };
 
+export type LinkData = {
+  leftToRightOrder?: number;
+  rightToLeftOrder?: number;
+  leftEntityId: EntityId;
+  rightEntityId: EntityId;
+};
+
 export type Entity<
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
@@ -48,6 +55,7 @@ export type Entity<
   >,
 > = {
   metadata: EntityMetadata;
+  linkData?: LinkData;
 } & (Properties extends null ? {} : { properties: Properties });
 
 export type CreateEntityData = {

@@ -1,6 +1,6 @@
 import { DataType } from "@blockprotocol/type-system/slim";
 
-import { OntologyElementMetadata } from "./metadata";
+import { OntologyElementMetadata } from "./metadata.js";
 
 /**
  * @todo - Should we re-export this? Should the type-system package be an implementation detail of the graph service?

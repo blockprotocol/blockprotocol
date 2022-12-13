@@ -1,11 +1,27 @@
-import { Entity, EntityEditionId } from "./entity";
-import { OntologyTypeEditionId } from "./ontology";
-import { EntityTypeWithMetadata } from "./ontology/entity-type";
-import { Edges } from "./subgraph/edges";
-import { GraphResolveDepths } from "./subgraph/graph-resolve-depths";
-import { Vertices } from "./subgraph/vertices";
+import { Entity, EntityEditionId } from "./entity.js";
+import { OntologyTypeEditionId } from "./ontology.js";
+import { DataTypeWithMetadata } from "./ontology/data-type.js";
+import { EntityTypeWithMetadata } from "./ontology/entity-type.js";
+import { PropertyTypeWithMetadata } from "./ontology/property-type.js";
+import { Edges } from "./subgraph/edges.js";
+import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
+import { Vertices } from "./subgraph/vertices.js";
+
+export * from "./ontology.js";
+export * from "./subgraph/edges.js";
+export * from "./subgraph/graph-resolve-depths.js";
+export * from "./subgraph/time.js";
+export * from "./subgraph/vertices.js";
 
 export type SubgraphRootTypes = {
+  dataType: {
+    editionId: OntologyTypeEditionId;
+    element: DataTypeWithMetadata;
+  };
+  propertyType: {
+    editionId: OntologyTypeEditionId;
+    element: PropertyTypeWithMetadata;
+  };
   entityType: {
     editionId: OntologyTypeEditionId;
     element: EntityTypeWithMetadata;
