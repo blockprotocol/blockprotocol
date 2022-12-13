@@ -3,13 +3,12 @@ pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::{collections::HashMap, str::FromStr};
+use std::collections::HashMap;
 
 pub use error::ParseDataTypeError;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::{
-    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    uri::{BaseUri, VersionedUri},
     ValidateUri, ValidationError,
 };
 
@@ -75,54 +74,6 @@ impl DataType {
     }
 }
 
-impl FromStr for DataType {
-    type Err = ParseDataTypeError;
-
-    fn from_str(data_type_str: &str) -> Result<Self, Self::Err> {
-        let data_type_repr: repr::DataType = serde_json::from_str(data_type_str)
-            .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(data_type_repr)
-    }
-}
-
-impl TryFrom<serde_json::Value> for DataType {
-    type Error = ParseDataTypeError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let data_type_repr: repr::DataType = serde_json::from_value(value)
-            .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(data_type_repr)
-    }
-}
-
-impl<'de> Deserialize<'de> for DataType {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        Self::try_from(repr::DataType::deserialize(deserializer)?).map_err(serde::de::Error::custom)
-    }
-}
-
-impl From<DataType> for serde_json::Value {
-    fn from(data_type: DataType) -> Self {
-        let data_type_repr: repr::DataType = data_type.into();
-
-        serde_json::to_value(data_type_repr).expect("Failed to serialize Data Type repr")
-    }
-}
-
-impl Serialize for DataType {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        repr::DataType::from(self.clone()).serialize(serializer)
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct DataTypeReference {
@@ -159,26 +110,6 @@ impl ValidateUri for DataTypeReference {
                 versioned_uri: self.uri().clone(),
             })
         }
-    }
-}
-
-impl TryFrom<serde_json::Value> for DataTypeReference {
-    type Error = ParseVersionedUriError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let data_type_ref_repr: repr::DataTypeReference = serde_json::from_value(value)
-            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(data_type_ref_repr)
-    }
-}
-
-impl From<DataTypeReference> for serde_json::Value {
-    fn from(data_type_ref: DataTypeReference) -> Self {
-        let data_type_ref_repr: repr::DataTypeReference = data_type_ref.into();
-
-        serde_json::to_value(data_type_ref_repr)
-            .expect("Failed to serialize Data Type Reference repr")
     }
 }
 

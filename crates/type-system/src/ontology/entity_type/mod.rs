@@ -4,16 +4,12 @@ pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::{
-    collections::{HashMap, HashSet},
-    str::FromStr,
-};
+use std::collections::{HashMap, HashSet};
 
 pub use error::ParseEntityTypeError;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::{
-    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    uri::{BaseUri, VersionedUri},
     AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUri,
     ValidationError, ValueOrArray,
 };
@@ -137,55 +133,6 @@ impl EntityType {
     }
 }
 
-impl FromStr for EntityType {
-    type Err = ParseEntityTypeError;
-
-    fn from_str(entity_type_str: &str) -> Result<Self, Self::Err> {
-        let property_type_repr: repr::EntityType = serde_json::from_str(entity_type_str)
-            .map_err(|err| ParseEntityTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_repr)
-    }
-}
-
-impl TryFrom<serde_json::Value> for EntityType {
-    type Error = ParseEntityTypeError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let entity_type_repr: repr::EntityType = serde_json::from_value(value)
-            .map_err(|err| ParseEntityTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(entity_type_repr)
-    }
-}
-
-impl<'de> Deserialize<'de> for EntityType {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        Self::try_from(repr::EntityType::deserialize(deserializer)?)
-            .map_err(serde::de::Error::custom)
-    }
-}
-
-impl From<EntityType> for serde_json::Value {
-    fn from(property_type: EntityType) -> Self {
-        let entity_type_repr: repr::EntityType = property_type.into();
-
-        serde_json::to_value(entity_type_repr).expect("Failed to serialize Entity Type repr")
-    }
-}
-
-impl Serialize for EntityType {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        repr::EntityType::from(self.clone()).serialize(serializer)
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct EntityTypeReference {
@@ -222,26 +169,6 @@ impl ValidateUri for EntityTypeReference {
                 versioned_uri: self.uri().clone(),
             })
         }
-    }
-}
-
-impl TryFrom<serde_json::Value> for EntityTypeReference {
-    type Error = ParseVersionedUriError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let entity_type_ref_repr: repr::EntityTypeReference = serde_json::from_value(value)
-            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(entity_type_ref_repr)
-    }
-}
-
-impl From<EntityTypeReference> for serde_json::Value {
-    fn from(entity_type_ref: EntityTypeReference) -> Self {
-        let entity_type_ref_repr: repr::EntityTypeReference = entity_type_ref.into();
-
-        serde_json::to_value(entity_type_ref_repr)
-            .expect("Failed to serialize Entity Type Reference repr")
     }
 }
 

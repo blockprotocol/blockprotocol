@@ -36,21 +36,20 @@ pub use shared::{
     validate::{ValidateUri, ValidationError},
 };
 
-#[allow(
-    unused_imports,
-    reason = "We want to keep them here in case for the convenience of re-exporting"
-)]
 // Re-export the repr contents so they're nicely grouped and so that they're easier to import in
 // a non-ambiguous way where they don't get confused with their non repr counterparts.
 // For example, `import crate::repr` lets you then use `repr::DataType`
-pub(crate) mod repr {
+pub mod repr {
+    pub use super::{
+        data_type::repr::DataType, entity_type::repr::EntityType, property_type::repr::PropertyType,
+    };
     pub(crate) use super::{
-        data_type::repr::{DataType, DataTypeReference},
+        data_type::repr::DataTypeReference,
         entity_type::{
             links::repr::{Links, MaybeOneOfEntityTypeReference},
-            repr::{EntityType, EntityTypeReference},
+            repr::EntityTypeReference,
         },
-        property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
+        property_type::repr::{PropertyTypeReference, PropertyValues},
         shared::{
             all_of::repr::AllOf,
             array::repr::{Array, ValueOrArray},

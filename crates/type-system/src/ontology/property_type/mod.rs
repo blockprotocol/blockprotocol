@@ -3,13 +3,12 @@ pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::{collections::HashSet, str::FromStr};
+use std::collections::HashSet;
 
 pub use error::ParsePropertyTypeError;
-use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::{
-    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    uri::{BaseUri, VersionedUri},
     Array, DataTypeReference, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };
 
@@ -77,55 +76,6 @@ impl PropertyType {
     }
 }
 
-impl FromStr for PropertyType {
-    type Err = ParsePropertyTypeError;
-
-    fn from_str(property_type_str: &str) -> Result<Self, Self::Err> {
-        let property_type_repr: repr::PropertyType = serde_json::from_str(property_type_str)
-            .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_repr)
-    }
-}
-
-impl TryFrom<serde_json::Value> for PropertyType {
-    type Error = ParsePropertyTypeError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let property_type_repr: repr::PropertyType = serde_json::from_value(value)
-            .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_repr)
-    }
-}
-
-impl<'de> Deserialize<'de> for PropertyType {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where
-        D: Deserializer<'de>,
-    {
-        Self::try_from(repr::PropertyType::deserialize(deserializer)?)
-            .map_err(serde::de::Error::custom)
-    }
-}
-
-impl From<PropertyType> for serde_json::Value {
-    fn from(property_type: PropertyType) -> Self {
-        let property_type_repr: repr::PropertyType = property_type.into();
-
-        serde_json::to_value(property_type_repr).expect("Failed to serialize Property Type repr")
-    }
-}
-
-impl Serialize for PropertyType {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer,
-    {
-        repr::PropertyType::from(self.clone()).serialize(serializer)
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct PropertyTypeReference {
@@ -162,26 +112,6 @@ impl ValidateUri for PropertyTypeReference {
                 versioned_uri: self.uri().clone(),
             })
         }
-    }
-}
-
-impl TryFrom<serde_json::Value> for PropertyTypeReference {
-    type Error = ParseVersionedUriError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let property_type_ref_repr: repr::PropertyTypeReference = serde_json::from_value(value)
-            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_ref_repr)
-    }
-}
-
-impl From<PropertyTypeReference> for serde_json::Value {
-    fn from(property_type_ref: PropertyTypeReference) -> Self {
-        let property_type_ref_repr: repr::PropertyTypeReference = property_type_ref.into();
-
-        serde_json::to_value(property_type_ref_repr)
-            .expect("Failed to serialize Property Type Reference repr")
     }
 }
 
