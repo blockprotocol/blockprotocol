@@ -64,14 +64,15 @@ pub(crate) mod tests {
         expected_native_repr: Option<R>,
     ) -> T
     where
-        T: TryFrom<R> + Clone + Debug,
+        T: Debug + Clone + TryFrom<R>,
         T::Error: Debug,
-        R: From<T> + PartialEq + Debug + Serialize + DeserializeOwned,
+        R: Debug + PartialEq + Clone + From<T> + Serialize + DeserializeOwned,
     {
         let deserialized_repr: R = serde_json::from_str(input).expect("failed to deserialize");
-        let value: T = deserialized_repr.try_into().expect("failed to convert");
+        let value: T = deserialized_repr.clone().try_into().expect("failed to convert");
         let re_serialized_repr: R = value.clone().into();
 
+        assert_eq!(deserialized_repr, re_serialized_repr);
         if let Some(repr) = expected_native_repr {
             assert_eq!(re_serialized_repr, repr);
         }
