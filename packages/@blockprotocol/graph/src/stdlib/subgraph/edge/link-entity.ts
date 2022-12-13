@@ -59,9 +59,11 @@ export const getOutgoingLinksForEntity = (
   return (
     Object.entries(entityEdges)
       // Only look at outgoing edges that were created before or at the timestamp
-      .filter(([edgeTimestamp, _]) => edgeTimestamp <= timestampString)
+      .filter(
+        ([edgeTimestamp, _outwardEdges]) => edgeTimestamp <= timestampString,
+      )
       // Extract the link `EntityEditionId`s from the endpoints of the link edges
-      .flatMap(([_, outwardEdges]) => {
+      .flatMap(([_edgeTimestamp, outwardEdges]) => {
         return (outwardEdges as OutwardEdge[])
           .filter(isOutgoingLinkEdge)
           .map((edge) => {
@@ -108,9 +110,11 @@ export const getIncomingLinksForEntity = (
   return (
     Object.entries(entityEdges)
       // Only look at edges that were created before or at the timestamp
-      .filter(([edgeTimestamp, _]) => edgeTimestamp <= timestampString)
+      .filter(
+        ([edgeTimestamp, _outwardEdges]) => edgeTimestamp <= timestampString,
+      )
       // Extract the link `EntityEditionId`s from the endpoints of the link edges
-      .flatMap(([_, outwardEdges]) => {
+      .flatMap(([_edgeTimestamp, outwardEdges]) => {
         return (outwardEdges as OutgoingLinkEdge[])
           .filter(isIncomingLinkEdge)
           .map((edge) => {
