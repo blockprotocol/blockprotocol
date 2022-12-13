@@ -1,7 +1,6 @@
 export * from "./types/block-graph.js";
 export * from "./types/entity.js";
 export * from "./types/file.js";
-export * from "./types/link.js";
 export * from "./types/linked-aggregation.js";
 export * from "./types/ontology.js";
 export * from "./types/subgraph.js";

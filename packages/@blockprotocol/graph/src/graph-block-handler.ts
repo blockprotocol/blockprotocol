@@ -12,27 +12,19 @@ import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
   AggregateEntityTypesData,
+  AggregateEntityTypesResult,
   BlockGraphMessageCallbacks,
   BlockGraphMessages,
   CreateEntityData,
-  CreateLinkData,
-  CreateLinkedAggregationData,
   CreateResourceError,
   DeleteEntityData,
-  DeleteLinkData,
-  DeleteLinkedAggregationData,
   Entity,
-  EntityType,
   GetEntityData,
   GetEntityTypeData,
-  GetLinkData,
-  GetLinkedAggregationData,
-  Link,
-  LinkedAggregation,
   ReadOrModifyResourceError,
+  Subgraph,
+  SubgraphRootTypes,
   UpdateEntityData,
-  UpdateLinkData,
-  UpdateLinkedAggregationData,
   UploadFileData,
   UploadFileReturn,
 } from "./types.js";
@@ -137,7 +129,10 @@ export class GraphBlockHandler
   }
 
   getEntity({ data }: { data?: GetEntityData }) {
-    return this.sendMessage<Entity, ReadOrModifyResourceError>({
+    return this.sendMessage<
+      Subgraph<SubgraphRootTypes["entity"]>,
+      ReadOrModifyResourceError
+    >({
       message: {
         messageName: "getEntity",
         data,
@@ -148,7 +143,7 @@ export class GraphBlockHandler
 
   aggregateEntities({ data }: { data?: AggregateEntitiesData }) {
     return this.sendMessage<
-      AggregateEntitiesResult<Entity>,
+      AggregateEntitiesResult<Subgraph<SubgraphRootTypes["entity"]>>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -192,7 +187,10 @@ export class GraphBlockHandler
   // }
 
   getEntityType({ data }: { data?: GetEntityTypeData }) {
-    return this.sendMessage<EntityType, ReadOrModifyResourceError>({
+    return this.sendMessage<
+      Subgraph<SubgraphRootTypes["entityType"]>,
+      ReadOrModifyResourceError
+    >({
       message: {
         messageName: "getEntityType",
         data,
@@ -203,7 +201,7 @@ export class GraphBlockHandler
 
   aggregateEntityTypes({ data }: { data?: AggregateEntityTypesData }) {
     return this.sendMessage<
-      AggregateEntitiesResult<EntityType>,
+      AggregateEntityTypesResult<Subgraph<SubgraphRootTypes["entityType"]>>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -214,87 +212,47 @@ export class GraphBlockHandler
     });
   }
 
-  createLink({ data }: { data?: CreateLinkData }) {
-    return this.sendMessage<Link, CreateResourceError>({
-      message: {
-        messageName: "createLink",
-        data,
-      },
-      respondedToBy: "createLinkResponse",
-    });
-  }
-
-  updateLink({ data }: { data?: UpdateLinkData }) {
-    return this.sendMessage<Link, ReadOrModifyResourceError>({
-      message: {
-        messageName: "updateLink",
-        data,
-      },
-      respondedToBy: "updateLinkResponse",
-    });
-  }
-
-  deleteLink({ data }: { data?: DeleteLinkData }) {
-    // @todo fix this 'any'
-    return this.sendMessage<any, ReadOrModifyResourceError>({
-      message: {
-        messageName: "deleteLink",
-        data,
-      },
-      respondedToBy: "deleteLinkResponse",
-    });
-  }
-
-  getLink({ data }: { data?: GetLinkData }) {
-    return this.sendMessage<Link, ReadOrModifyResourceError>({
-      message: {
-        messageName: "getLink",
-        data,
-      },
-      respondedToBy: "getLinkResponse",
-    });
-  }
-
-  createLinkedAggregation({ data }: { data?: CreateLinkedAggregationData }) {
-    return this.sendMessage<LinkedAggregation, CreateResourceError>({
-      message: {
-        messageName: "createLinkedAggregation",
-        data,
-      },
-      respondedToBy: "createLinkedAggregationResponse",
-    });
-  }
-
-  updateLinkedAggregation({ data }: { data?: UpdateLinkedAggregationData }) {
-    return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
-      message: {
-        messageName: "updateLinkedAggregation",
-        data,
-      },
-      respondedToBy: "updateLinkedAggregationResponse",
-    });
-  }
-
-  deleteLinkedAggregation({ data }: { data?: DeleteLinkedAggregationData }) {
-    // @todo fix this 'any'
-    return this.sendMessage<any, ReadOrModifyResourceError>({
-      message: {
-        messageName: "deleteLinkedAggregation",
-        data,
-      },
-      respondedToBy: "deleteLinkedAggregationResponse",
-    });
-  }
-
-  getLinkedAggregation({ data }: { data?: GetLinkedAggregationData }) {
-    return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
-      message: {
-        messageName: "getLinkedAggregation",
-        data,
-      },
-      respondedToBy: "getLinkedAggregationResponse",
-    });
-  }
+  /** @todo - Reimplement linked aggregations */
+  // createLinkedAggregation({ data }: { data?: CreateLinkedAggregationData }) {
+  //   return this.sendMessage<LinkedAggregation, CreateResourceError>({
+  //     message: {
+  //       messageName: "createLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "createLinkedAggregationResponse",
+  //   });
+  // }
+  //
+  // updateLinkedAggregation({ data }: { data?: UpdateLinkedAggregationData }) {
+  //   return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "updateLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "updateLinkedAggregationResponse",
+  //   });
+  // }
+  //
+  // deleteLinkedAggregation({ data }: { data?: DeleteLinkedAggregationData }) {
+  //   // @todo fix this 'any'
+  //   return this.sendMessage<any, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "deleteLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "deleteLinkedAggregationResponse",
+  //   });
+  // }
+  //
+  // getLinkedAggregation({ data }: { data?: GetLinkedAggregationData }) {
+  //   return this.sendMessage<LinkedAggregation, ReadOrModifyResourceError>({
+  //     message: {
+  //       messageName: "getLinkedAggregation",
+  //       data,
+  //     },
+  //     respondedToBy: "getLinkedAggregationResponse",
+  //   });
+  // }
 
   uploadFile({ data }: { data?: UploadFileData }) {
     return this.sendMessage<UploadFileReturn, CreateResourceError>({

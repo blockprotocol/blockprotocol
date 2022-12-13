@@ -1,7 +1,10 @@
 import { JsonValue } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { CreateLinkData, EntityType, isOntologyTypeEditionId } from "../types.js";
+import { isOntologyTypeEditionId } from "../types.js";
+import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
+import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
+import { Timestamp } from "./subgraph/time.js";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
@@ -61,20 +64,19 @@ export type Entity<
 export type CreateEntityData = {
   entityTypeId: VersionedUri;
   properties: EntityPropertiesObject;
-  links?: Omit<
-    CreateLinkData,
-    "sourceAccountId" | "sourceEntityId" | "sourceEntityTypeId"
-  >[];
+  linkData?: LinkData;
 };
 
 export type GetEntityData = {
   entityId: EntityId;
+  graphResolveDepths?: GraphResolveDepths;
 };
 
 export type UpdateEntityData = {
   entityId: EntityId;
+  entityTypeId: VersionedUri;
   properties: EntityPropertiesObject;
-};
+} & Pick<LinkData, "leftToRightOrder" | "rightToLeftOrder">;
 
 export type DeleteEntityData = {
   entityId: EntityId;
@@ -125,10 +127,13 @@ export type AggregateOperationInput = {
 
 export type AggregateEntitiesData = {
   operation: AggregateOperationInput;
+  graphResolveDepths?: GraphResolveDepths;
 };
 
-export type AggregateEntitiesResult<T extends Entity | EntityType> = {
-  results: T[];
+export type AggregateEntitiesResult<
+  T extends Subgraph<SubgraphRootTypes["entity"]>,
+> = {
+  results: T;
   operation: AggregateOperationInput &
     Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
       pageCount?: number | null;
