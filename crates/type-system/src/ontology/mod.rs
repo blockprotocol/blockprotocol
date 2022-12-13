@@ -41,15 +41,12 @@ pub use shared::{
 // For example, `import crate::repr` lets you then use `repr::DataType`
 pub mod repr {
     pub use super::{
-        data_type::repr::DataType, entity_type::repr::EntityType, property_type::repr::PropertyType,
-    };
-    pub(crate) use super::{
-        data_type::repr::DataTypeReference,
+        data_type::repr::{DataType, DataTypeReference},
         entity_type::{
             links::repr::{Links, MaybeOneOfEntityTypeReference},
-            repr::EntityTypeReference,
+            repr::{EntityType, EntityTypeReference},
         },
-        property_type::repr::{PropertyTypeReference, PropertyValues},
+        property_type::repr::{PropertyType, PropertyTypeReference, PropertyValues},
         shared::{
             all_of::repr::AllOf,
             array::repr::{Array, ValueOrArray},

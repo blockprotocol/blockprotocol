@@ -241,7 +241,10 @@ mod tests {
 
     #[test]
     fn book() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::BOOK_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::BOOK_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -257,7 +260,10 @@ mod tests {
 
     #[test]
     fn address() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::ADDRESS_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::ADDRESS_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
@@ -270,8 +276,10 @@ mod tests {
 
     #[test]
     fn organization() {
-        let entity_type =
-            check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::ORGANIZATION_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::ORGANIZATION_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -282,7 +290,10 @@ mod tests {
 
     #[test]
     fn building() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::BUILDING_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::BUILDING_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, []);
 
@@ -300,7 +311,10 @@ mod tests {
 
     #[test]
     fn person() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::PERSON_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::PERSON_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -320,7 +334,10 @@ mod tests {
 
     #[test]
     fn playlist() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::PLAYLIST_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::PLAYLIST_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -334,7 +351,10 @@ mod tests {
 
     #[test]
     fn song() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::SONG_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::SONG_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -345,7 +365,10 @@ mod tests {
 
     #[test]
     fn page() {
-        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(test_data::entity_type::PAGE, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::PAGE,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/text/v/1",

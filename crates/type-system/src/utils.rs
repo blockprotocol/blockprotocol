@@ -36,10 +36,9 @@ mod wasm {
 
 #[cfg(test)]
 pub(crate) mod tests {
-    use std::{fmt::Debug};
+    use std::fmt::Debug;
 
-    use serde::{Deserialize, Serialize};
-    use serde::de::DeserializeOwned;
+    use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
     /// Will serialize as a constant value `"string"`
     #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -60,7 +59,10 @@ pub(crate) mod tests {
     /// serialized back.
     ///
     /// Optionally checks the deserialized object against an expected value.
-    pub(crate) fn check_serialization_from_str<T, R>(input: &str, expected_native_repr: Option<R>) -> T
+    pub(crate) fn check_serialization_from_str<T, R>(
+        input: &str,
+        expected_native_repr: Option<R>,
+    ) -> T
     where
         T: TryFrom<R> + Clone + Debug,
         T::Error: Debug,
