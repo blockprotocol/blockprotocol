@@ -53,9 +53,11 @@ export abstract class BlockElementBase extends LitElement {
    * A helper method to update the properties of the entity loaded into the block, i.e. this.graph.blockEntity
    * @param properties the properties object to assign to the entity, which will overwrite the existing object
    */
-  protected updateSelf(properties: EntityPropertiesObject) {
+  protected updateSelfProperties(properties: EntityPropertiesObject) {
     if (!this.graphService) {
-      throw new Error("Cannot updateSelf – graphService not yet connected.");
+      throw new Error(
+        "Cannot updateSelfProperties – graphService not yet connected.",
+      );
     }
     if (!this.graph) {
       throw new Error(

@@ -8,7 +8,9 @@ type BlockEntityProperties = {
 
 export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperties> {
   private handleInput(event: Event) {
-    this.updateSelf({ name: (event.target as HTMLInputElement).value })
+    this.updateSelfProperties({
+      name: (event.target as HTMLInputElement).value,
+    })
       // eslint-disable-next-line no-console -- intentional debugging tool
       .then(console.log)
       .catch(
