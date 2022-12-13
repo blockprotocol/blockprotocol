@@ -36,9 +36,10 @@ mod wasm {
 
 #[cfg(test)]
 pub(crate) mod tests {
-    use std::{fmt::Debug, str::FromStr};
+    use std::{fmt::Debug};
 
     use serde::{Deserialize, Serialize};
+    use serde::de::DeserializeOwned;
 
     /// Will serialize as a constant value `"string"`
     #[derive(Default, Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -59,20 +60,24 @@ pub(crate) mod tests {
     /// serialized back.
     ///
     /// Optionally checks the deserialized object against an expected value.
-    pub(crate) fn check_serialization_from_str<T>(input: &str, expected_native_repr: Option<T>) -> T
+    pub(crate) fn check_serialization_from_str<T, R>(input: &str, expected_native_repr: Option<R>) -> T
     where
-        T: FromStr + Into<serde_json::Value> + Debug + Clone + PartialEq,
-        <T as FromStr>::Err: Debug,
+        T: TryFrom<R> + Clone + Debug,
+        T::Error: Debug,
+        R: From<T> + PartialEq + Debug + Serialize + DeserializeOwned,
     {
-        let deserialized: T = T::from_str(input).expect("failed to deserialize");
-        let _reserialized =
-            serde_json::to_value(deserialized.clone().into()).expect("failed to serialize");
+        let deserialized_repr: R = serde_json::from_str(input).expect("failed to deserialize");
+        let value: T = deserialized_repr.try_into().expect("failed to convert");
+        let re_serialized_repr: R = value.clone().into();
 
         if let Some(repr) = expected_native_repr {
-            assert_eq!(deserialized, repr);
+            assert_eq!(re_serialized_repr, repr);
         }
 
-        deserialized
+        let _re_serialized_value =
+            serde_json::to_value(re_serialized_repr).expect("failed to serialize");
+
+        value
     }
 
     /// Ensures a type can be deserialized from a given string to its equivalent [`repr`], but then

@@ -171,6 +171,7 @@ mod tests {
         utils::tests::{check_serialization_from_str, ensure_failed_validation},
         ParseOneOfError,
     };
+    use crate::uri::ParseVersionedUriError;
 
     fn test_property_type_data_refs(
         property_type: &PropertyType,
@@ -213,7 +214,7 @@ mod tests {
     #[test]
     fn favorite_quote() {
         let property_type =
-            check_serialization_from_str(test_data::property_type::FAVORITE_QUOTE_V1, None);
+            check_serialization_from_str::<PropertyType, repr::PropertyType>(test_data::property_type::FAVORITE_QUOTE_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -224,7 +225,7 @@ mod tests {
 
     #[test]
     fn age() {
-        let property_type = check_serialization_from_str(test_data::property_type::AGE_V1, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(test_data::property_type::AGE_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -236,7 +237,7 @@ mod tests {
     #[test]
     fn user_id() {
         let property_type =
-            check_serialization_from_str(test_data::property_type::USER_ID_V2, None);
+            check_serialization_from_str::<PropertyType, repr::PropertyType>(test_data::property_type::USER_ID_V2, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -249,7 +250,7 @@ mod tests {
     #[test]
     fn contact_information() {
         let property_type =
-            check_serialization_from_str(test_data::property_type::CONTACT_INFORMATION_V1, None);
+            check_serialization_from_str::<PropertyType, repr::PropertyType>(test_data::property_type::CONTACT_INFORMATION_V1, None);
 
         test_property_type_data_refs(&property_type, []);
 
@@ -262,7 +263,7 @@ mod tests {
     #[test]
     fn interests() {
         let property_type =
-            check_serialization_from_str(test_data::property_type::INTERESTS_V1, None);
+            check_serialization_from_str::<PropertyType, repr::PropertyType>(test_data::property_type::INTERESTS_V1, None);
 
         test_property_type_data_refs(&property_type, []);
 
@@ -276,7 +277,7 @@ mod tests {
     #[test]
     fn numbers() {
         let property_type =
-            check_serialization_from_str(test_data::property_type::NUMBERS_V1, None);
+            check_serialization_from_str::<PropertyType, repr::PropertyType>(test_data::property_type::NUMBERS_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -288,7 +289,7 @@ mod tests {
     #[test]
     fn contrived_property() {
         let property_type =
-            check_serialization_from_str(test_data::property_type::CONTRIVED_PROPERTY_V1, None);
+            check_serialization_from_str::<PropertyType, repr::PropertyType>(test_data::property_type::CONTRIVED_PROPERTY_V1, None);
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",

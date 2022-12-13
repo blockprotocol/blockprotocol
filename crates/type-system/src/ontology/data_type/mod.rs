@@ -115,6 +115,7 @@ impl ValidateUri for DataTypeReference {
 
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
     use serde_json::json;
 
     use super::*;
@@ -122,35 +123,36 @@ mod tests {
         test_data,
         utils::tests::{check_serialization_from_str, ensure_failed_validation},
     };
+    use crate::uri::ParseVersionedUriError;
 
     #[test]
     fn text() {
-        check_serialization_from_str::<DataType>(test_data::data_type::TEXT_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(test_data::data_type::TEXT_V1, None);
     }
 
     #[test]
     fn number() {
-        check_serialization_from_str::<DataType>(test_data::data_type::NUMBER_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(test_data::data_type::NUMBER_V1, None);
     }
 
     #[test]
     fn boolean() {
-        check_serialization_from_str::<DataType>(test_data::data_type::BOOLEAN_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(test_data::data_type::BOOLEAN_V1, None);
     }
 
     #[test]
     fn null() {
-        check_serialization_from_str::<DataType>(test_data::data_type::NULL_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(test_data::data_type::NULL_V1, None);
     }
 
     #[test]
     fn object() {
-        check_serialization_from_str::<DataType>(test_data::data_type::OBJECT_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(test_data::data_type::OBJECT_V1, None);
     }
 
     #[test]
     fn empty_list() {
-        check_serialization_from_str::<DataType>(test_data::data_type::EMPTY_LIST_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(test_data::data_type::EMPTY_LIST_V1, None);
     }
 
     #[test]
