@@ -74,9 +74,10 @@ export const PropertiesView = () => {
                   // These fields should not be edited
                   if (
                     args.name &&
-                    !args.name.includes("editionId") &&
-                    !args.name.includes("leftEntityId") &&
-                    !args.name.includes("rightEntityId")
+                    (args.name.includes("versionId") ||
+                      args.name.includes("baseId") ||
+                      args.name.includes("leftEntityId") ||
+                      args.name.includes("rightEntityId"))
                   ) {
                     return false;
                   }
@@ -93,7 +94,7 @@ export const PropertiesView = () => {
                 }}
                 onAdd={(args) => {
                   // don't allow adding of top level fields
-                  if (args.name && !args.name.includes("properties")) {
+                  if (!args.namespace.includes("properties")) {
                     return false;
                   }
                   const entity = args.updated_src as Entity;
@@ -109,11 +110,7 @@ export const PropertiesView = () => {
                 }}
                 onDelete={(args) => {
                   // don't allow deleting of top level fields
-                  if (
-                    args.name &&
-                    args.name !== "properties" &&
-                    args.name.includes("properties")
-                  ) {
+                  if (!args.namespace.includes("properties")) {
                     return false;
                   }
                   const entity = args.updated_src as Entity;
