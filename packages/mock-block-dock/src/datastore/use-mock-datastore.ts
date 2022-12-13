@@ -4,13 +4,14 @@ import {
   Subgraph,
 } from "@blockprotocol/graph";
 import { getEntity as getEntityFromSubgraph } from "@blockprotocol/graph/stdlib";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
+import { useDefaultState } from "../use-default-state";
 import { aggregateEntities as aggregateEntitiesImpl } from "./hook-implementations/entity/aggregate-entities";
 import { getEntity as getEntityImpl } from "./hook-implementations/entity/get-entity";
-import { mockDataToSubgraph } from "./mock-data-to-subgraph";
 import { addEntitiesToSubgraph } from "./mutate-subgraph";
+import { useMockDataToSubgraph } from "./use-mock-data-to-subgraph";
 
 export type MockData = {
   entities: Entity[];
@@ -40,7 +41,8 @@ export const useMockDatastore = (
   },
   readonly?: boolean,
 ): MockDatastore => {
-  const [graph, setGraph] = useState(mockDataToSubgraph(initialData));
+  const mockDataSubgraph = useMockDataToSubgraph(initialData);
+  const [graph, setGraph] = useDefaultState(mockDataSubgraph);
 
   // const [linkedAggregations, setLinkedAggregations] = useDefaultState<
   //   MockDataStore["linkedAggregationDefinitions"]
