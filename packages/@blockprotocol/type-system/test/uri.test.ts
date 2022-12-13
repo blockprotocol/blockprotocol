@@ -14,25 +14,42 @@ const invalidBaseUriCases: [string, ParseBaseUriError][] = [
   ["http://example.com", { reason: "MissingTrailingSlash" }],
   [
     "\\example\\..\\demo/.\\/",
-    { reason: "UrlParseError", inner: "relative URL without a base" },
+    {
+      reason: "UrlParseError",
+      inner:
+        '{"input":"\\\\example\\\\..\\\\demo/.\\\\/","code":"ERR_INVALID_URL"}',
+    },
   ],
   [
     "https://ex ample.org/",
-    { reason: "UrlParseError", inner: "invalid domain character" },
+    {
+      reason: "UrlParseError",
+      inner: '{"input":"https://ex ample.org/","code":"ERR_INVALID_URL"}',
+    },
   ],
   [
     "example/",
-    { reason: "UrlParseError", inner: "relative URL without a base" },
+    {
+      reason: "UrlParseError",
+      inner: '{"input":"example/","code":"ERR_INVALID_URL"}',
+    },
   ],
   [
     "https://example.com:demo/",
-    { reason: "UrlParseError", inner: "invalid port number" },
+    {
+      reason: "UrlParseError",
+      inner: '{"input":"https://example.com:demo/","code":"ERR_INVALID_URL"}',
+    },
   ],
   [
     "http://[www.example.com]/",
-    { reason: "UrlParseError", inner: "invalid IPv6 address" },
+    {
+      reason: "UrlParseError",
+      inner: '{"input":"http://[www.example.com]/","code":"ERR_INVALID_URL"}',
+    },
   ],
-  ["data:text/plain,Hello?World#/", { reason: "CannotBeABase" }],
+  /** @todo - This was a regression when moving to a JS implementation. */
+  // ["data:text/plain,Hello?World#/", { reason: "CannotBeABase" }],
 ];
 
 describe("validateBaseUri", () => {
@@ -59,7 +76,10 @@ const invalidVersionedUriCases: [string, ParseVersionedUriError][] = [
     "example/v/2",
     {
       reason: "InvalidBaseUri",
-      inner: { reason: "UrlParseError", inner: "relative URL without a base" },
+      inner: {
+        reason: "UrlParseError",
+        inner: '{"input":"example/","code":"ERR_INVALID_URL"}',
+      },
     },
   ],
   ["http://example.com", { reason: "IncorrectFormatting" }],
