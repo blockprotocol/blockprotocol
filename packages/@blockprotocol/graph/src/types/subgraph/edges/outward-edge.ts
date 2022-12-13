@@ -17,10 +17,14 @@ import {
  * A "partial" definition of an edge which is complete when joined with the missing left-endpoint (usually the source
  * of the edge)
  */
-type GenericOutwardEdge<K, E> = {
-  kind: K;
-  reversed: boolean;
-  rightEndpoint: E;
+type GenericOutwardEdge<
+  EdgeKind extends KnowledgeGraphEdgeKind | OntologyEdgeKind | SharedEdgeKind,
+  Endpoint,
+  Reversed extends boolean = boolean,
+> = {
+  kind: EdgeKind;
+  reversed: Reversed;
+  rightEndpoint: Endpoint;
 };
 
 export type EntityIdAndTimestamp = {
@@ -30,11 +34,11 @@ export type EntityIdAndTimestamp = {
 
 export type OntologyOutwardEdge =
   | GenericOutwardEdge<OntologyEdgeKind, OntologyTypeEditionId>
-  | GenericOutwardEdge<SharedEdgeKind, EntityEditionId>;
+  | GenericOutwardEdge<SharedEdgeKind, EntityEditionId, true>;
 
 export type KnowledgeGraphOutwardEdge =
   | GenericOutwardEdge<KnowledgeGraphEdgeKind, EntityIdAndTimestamp>
-  | GenericOutwardEdge<SharedEdgeKind, OntologyTypeEditionId>;
+  | GenericOutwardEdge<SharedEdgeKind, OntologyTypeEditionId, false>;
 
 export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;
 
