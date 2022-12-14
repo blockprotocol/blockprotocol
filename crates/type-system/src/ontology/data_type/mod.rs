@@ -3,12 +3,12 @@ pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::{collections::HashMap, str::FromStr};
+use std::collections::HashMap;
 
 pub use error::ParseDataTypeError;
 
 use crate::{
-    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    uri::{BaseUri, VersionedUri},
     ValidateUri, ValidationError,
 };
 
@@ -74,36 +74,6 @@ impl DataType {
     }
 }
 
-impl FromStr for DataType {
-    type Err = ParseDataTypeError;
-
-    fn from_str(data_type_str: &str) -> Result<Self, Self::Err> {
-        let data_type_repr: repr::DataType = serde_json::from_str(data_type_str)
-            .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(data_type_repr)
-    }
-}
-
-impl TryFrom<serde_json::Value> for DataType {
-    type Error = ParseDataTypeError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let data_type_repr: repr::DataType = serde_json::from_value(value)
-            .map_err(|err| ParseDataTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(data_type_repr)
-    }
-}
-
-impl From<DataType> for serde_json::Value {
-    fn from(data_type: DataType) -> Self {
-        let data_type_repr: repr::DataType = data_type.into();
-
-        serde_json::to_value(data_type_repr).expect("Failed to deserialize Data Type repr")
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct DataTypeReference {
@@ -143,64 +113,65 @@ impl ValidateUri for DataTypeReference {
     }
 }
 
-impl TryFrom<serde_json::Value> for DataTypeReference {
-    type Error = ParseVersionedUriError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let data_type_ref_repr: repr::DataTypeReference = serde_json::from_value(value)
-            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(data_type_ref_repr)
-    }
-}
-
-impl From<DataTypeReference> for serde_json::Value {
-    fn from(data_type_ref: DataTypeReference) -> Self {
-        let data_type_ref_repr: repr::DataTypeReference = data_type_ref.into();
-
-        serde_json::to_value(data_type_ref_repr)
-            .expect("Failed to deserialize Data Type Reference repr")
-    }
-}
-
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
+
     use serde_json::json;
 
     use super::*;
     use crate::{
         test_data,
+        uri::ParseVersionedUriError,
         utils::tests::{check_serialization_from_str, ensure_failed_validation},
     };
 
     #[test]
     fn text() {
-        check_serialization_from_str::<DataType>(test_data::data_type::TEXT_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(
+            test_data::data_type::TEXT_V1,
+            None,
+        );
     }
 
     #[test]
     fn number() {
-        check_serialization_from_str::<DataType>(test_data::data_type::NUMBER_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(
+            test_data::data_type::NUMBER_V1,
+            None,
+        );
     }
 
     #[test]
     fn boolean() {
-        check_serialization_from_str::<DataType>(test_data::data_type::BOOLEAN_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(
+            test_data::data_type::BOOLEAN_V1,
+            None,
+        );
     }
 
     #[test]
     fn null() {
-        check_serialization_from_str::<DataType>(test_data::data_type::NULL_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(
+            test_data::data_type::NULL_V1,
+            None,
+        );
     }
 
     #[test]
     fn object() {
-        check_serialization_from_str::<DataType>(test_data::data_type::OBJECT_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(
+            test_data::data_type::OBJECT_V1,
+            None,
+        );
     }
 
     #[test]
     fn empty_list() {
-        check_serialization_from_str::<DataType>(test_data::data_type::EMPTY_LIST_V1, None);
+        check_serialization_from_str::<DataType, repr::DataType>(
+            test_data::data_type::EMPTY_LIST_V1,
+            None,
+        );
     }
 
     #[test]
