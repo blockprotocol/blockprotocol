@@ -30,24 +30,28 @@ export const WhyDevelop = () => {
 
       <Box
         sx={{
-          maxWidth: "1100px",
-          background:
-            "linear-gradient(181.4deg, rgba(255, 255, 255, 0.65) 50%, #FDFCFE 94.38%)",
-          border: "2px solid white",
-          borderRadius: "8px",
-          boxShadow:
-            "0px 2.8px 2.2px rgba(166, 142, 187, 0.15), 0px 6.7px 5.3px rgba(166, 142, 187, 0.08), 0px 12.5px 10px rgba(166, 142, 187, 0.05), 0px 22.3px 17.9px rgba(166, 142, 187, 0.09), 0px 41.8px 33.4px rgba(166, 142, 187, 0.1), 0px 100px 80px rgba(166, 142, 187, 0.1)",
-          pt: { xs: 3, md: 8.25 },
-          px: { xs: 2, md: 10 },
-          pb: 10,
-          margin: { xs: "-11rem 1rem 0", lg: "-11rem auto 0" },
-          position: "relative",
+          margin: "auto",
+          width: "calc(100% - 2rem)",
+          position: "absolute",
+          bottom: "100%",
+          left: "1rem",
           zIndex: 1,
         }}
       >
         <Box
           sx={({ breakpoints }) => ({
-            pb: 4.5,
+            background:
+              "linear-gradient(181.4deg, rgba(255, 255, 255, 0.65) 50%, #FDFCFE 94.38%)",
+            border: "2px solid white",
+            borderBottomWidth: "1px",
+            borderBottomColor: "transparent",
+            borderTopLeftRadius: "8px",
+            borderTopRightRadius: "8px",
+            maxWidth: "1100px",
+            margin: "auto",
+            pb: { xs: 2, md: 4.5 },
+            pt: { xs: 3, md: 8.25 },
+            px: { xs: 2, md: 10 },
             [breakpoints.down("lg")]: {
               textAlign: "center",
             },
@@ -69,16 +73,35 @@ export const WhyDevelop = () => {
             Developing <strong>Þ</strong> blocks has a number of benefits...
           </Typography>
         </Box>
+      </Box>
 
+      <Box
+        sx={{
+          width: "calc(100% - 2rem)",
+          maxWidth: "1100px",
+          background:
+            "linear-gradient(181.4deg, rgba(255, 255, 255, 0.65) 50%, #FDFCFE 94.38%)",
+          border: "2px solid white",
+          borderBottomLeftRadius: "8px",
+          borderBottomRightRadius: "8px",
+          boxShadow:
+            "0px 2.8px 2.2px rgba(166, 142, 187, 0.15), 0px 6.7px 5.3px rgba(166, 142, 187, 0.08), 0px 12.5px 10px rgba(166, 142, 187, 0.05), 0px 22.3px 17.9px rgba(166, 142, 187, 0.09), 0px 41.8px 33.4px rgba(166, 142, 187, 0.1), 0px 100px 80px rgba(166, 142, 187, 0.1)",
+          pt: { xs: 3, md: 8.25 },
+          px: { xs: 2, md: 10 },
+          pb: 10,
+          position: "relative",
+          zIndex: 1,
+          margin: "auto",
+        }}
+      >
         <Grid
           container
           sx={({ breakpoints }) => ({
-            width: "100% !important",
             pt: 7.25,
+            margin: "1rem",
             [breakpoints.down("lg")]: {
               pt: 3,
               maxWidth: 500,
-              margin: "auto",
             },
           })}
           spacing={{ xs: 3, lg: 5.5 }}
