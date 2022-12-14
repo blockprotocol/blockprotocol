@@ -88,7 +88,7 @@ export const WhyDevelop = () => {
             "0px 2.8px 2.2px rgba(166, 142, 187, 0.15), 0px 6.7px 5.3px rgba(166, 142, 187, 0.08), 0px 12.5px 10px rgba(166, 142, 187, 0.05), 0px 22.3px 17.9px rgba(166, 142, 187, 0.09), 0px 41.8px 33.4px rgba(166, 142, 187, 0.1), 0px 100px 80px rgba(166, 142, 187, 0.1)",
           pt: { xs: 3, md: 8.25 },
           px: { xs: 2, md: 10 },
-          pb: 10,
+          pb: { xs: 4, md: 10 },
           position: "relative",
           zIndex: 1,
           margin: "auto",
