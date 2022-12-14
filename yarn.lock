@@ -2279,6 +2279,11 @@
     human-id "^1.0.2"
     prettier "^2.7.1"
 
+"@cloudflare/stream-react@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@cloudflare/stream-react/-/stream-react-1.8.0.tgz#b858b5aeb473a3c217043f9609ea11389053b24d"
+  integrity sha512-Kxt4s1xA/Nf4oSAeLvWrkeUftXNhykY+Up6dFH881vrAKCJUeSKSqSGgn5gi0BV0UvjwriOxHRa1Fu0cyuOS3w==
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"

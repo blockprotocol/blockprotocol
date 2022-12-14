@@ -24,6 +24,7 @@
     "@blockprotocol/core": "0.0.12",
     "@blockprotocol/graph": "0.0.18",
     "@blockprotocol/hook": "0.0.8",
+    "@cloudflare/stream-react": "^1.8.0",
     "@emotion/cache": "^11.10.0",
     "@emotion/react": "^11.10.0",
     "@emotion/server": "^11.10.0",

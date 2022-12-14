@@ -3,6 +3,7 @@ import Image from "next/legacy/image";
 import wpHelixImage from "../../../../public/assets/new-home/wp-helix.png";
 import { BpWpIcons } from "./bp-wp-icons";
 import { EarlyAccessCTA } from "./early-access-cta";
+import { Stream } from "@cloudflare/stream-react";
 
 export const Header = () => {
   const theme = useTheme();
@@ -120,7 +121,29 @@ export const Header = () => {
         </Box>
       </Container>
 
-      <Image layout="responsive" src={wpHelixImage} />
+      <Box sx={{ width: "100vw", position: "relative" }}>
+        <Image layout="responsive" src={wpHelixImage} />
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: "50%",
+            transform: "translateX(-50%)",
+            maxWidth: { xs: "95%", md: "75%", lg: "60%" },
+            width: "100%",
+            div: {
+              width: "100%",
+              height: "100%",
+            },
+          }}
+        >
+          <Stream
+            controls
+            src=""
+            // src="b236bde30eb07b9d01318940e5fc3eda"
+          />
+        </Box>
+      </Box>
     </Box>
   );
 };
