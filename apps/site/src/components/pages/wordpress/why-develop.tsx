@@ -1,5 +1,5 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { ReactNode } from "react";
+
 import { AtomSimpleIcon, CityIcon, WandMagicSparklesIcon } from "../../icons";
 import { IconSection } from "./icon-section";
 

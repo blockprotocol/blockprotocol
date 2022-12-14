@@ -1,6 +1,6 @@
 import {
-  BlockProtocolIcon,
   ArrowsLeftRightIcon,
+  BlockProtocolIcon,
   WordPressIcon,
 } from "../../icons";
 

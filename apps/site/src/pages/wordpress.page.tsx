@@ -1,8 +1,9 @@
 import { FunctionComponent } from "react";
-import { Header } from "../components/pages/wordpress/header";
-import { WhyInstall } from "../components/pages/wordpress/why-install";
-import { WhyDevelop } from "../components/pages/wordpress/why-develop";
+
 import { Availability } from "../components/pages/wordpress/availability";
+import { Header } from "../components/pages/wordpress/header";
+import { WhyDevelop } from "../components/pages/wordpress/why-develop";
+import { WhyInstall } from "../components/pages/wordpress/why-install";
 
 const WordPressPage: FunctionComponent = () => (
   <>

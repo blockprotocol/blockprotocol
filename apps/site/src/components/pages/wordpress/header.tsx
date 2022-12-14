@@ -1,9 +1,10 @@
+import { Stream } from "@cloudflare/stream-react";
 import { Box, Container, Typography, useTheme } from "@mui/material";
 import Image from "next/legacy/image";
+
 import wpHelixImage from "../../../../public/assets/new-home/wp-helix.png";
 import { BpWpIcons } from "./bp-wp-icons";
 import { EarlyAccessCTA } from "./early-access-cta";
-import { Stream } from "@cloudflare/stream-react";
 
 export const Header = () => {
   const theme = useTheme();
