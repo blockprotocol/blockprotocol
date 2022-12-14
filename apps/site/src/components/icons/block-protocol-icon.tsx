@@ -28,8 +28,8 @@ export const BlockProtocolIcon: FunctionComponent<
           y2="45.5"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#523ADF" />
-          <stop offset="1" stop-color="#8974FF" />
+          <stop stopColor="#523ADF" />
+          <stop offset="1" stopColor="#8974FF" />
         </linearGradient>
       </defs>
     </SvgIcon>

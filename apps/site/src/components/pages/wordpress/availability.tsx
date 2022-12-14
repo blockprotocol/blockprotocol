@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, List, ListItem, Typography } from "@mui/material";
 import { RoadIcon } from "../../icons";
 import { BpWpIcons } from "./bp-wp-icons";
 import { EarlyAccessCTA } from "./early-access-cta";
@@ -19,6 +19,7 @@ export const Availability = () => {
       </Typography>
 
       <Typography
+        component="div"
         sx={{
           fontSize: "2rem",
           lineHeight: 1,
@@ -52,29 +53,31 @@ export const Availability = () => {
             builds on almost a year of community consultation and block
             development.
           </Typography>
-          <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pb: 2.25 }}>
+
+          <Typography sx={{ lineHeight: 1.2, maxWidth: "unset" }}>
             <strong>Our Þ 0.3 update includes:</strong>
-            <ul>
-              <li style={{ paddingLeft: 8 }}>
-                &#x2022;
-                <span style={{ paddingLeft: 8 }}>
-                  A major overhaul of the Core and Graph Service specifications
-                </span>
-              </li>
-              <li style={{ paddingLeft: 8 }}>
-                &#x2022;
-                <span style={{ paddingLeft: 8 }}>
-                  A more composable and powerful type system
-                </span>
-              </li>
-              <li style={{ paddingLeft: 8 }}>
-                &#x2022;
-                <span style={{ paddingLeft: 8 }}>
-                  The ability to attach metadata to link between entities
-                </span>
-              </li>
-            </ul>
           </Typography>
+          <List sx={{ p: 0, pb: 2.25 }}>
+            <ListItem sx={{ p: 0, pl: 1 }}>
+              &#x2022;
+              <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pl: 1 }}>
+                A major overhaul of the Core and Graph Service specifications
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ p: 0, pl: 1 }}>
+              &#x2022;
+              <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pl: 1 }}>
+                A more composable and powerful type system
+              </Typography>
+            </ListItem>
+            <ListItem sx={{ p: 0, pl: 1 }}>
+              &#x2022;
+              <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pl: 1 }}>
+                The ability to attach metadata to link between entities
+              </Typography>
+            </ListItem>
+          </List>
+
           <Typography sx={{ lineHeight: 1.2, maxWidth: "unset" }}>
             <strong>
               We&#8217;re now onboarding beta testers to use the Þ WordPress
