@@ -1,10 +1,7 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
 import Image from "next/legacy/image";
-
 import wpHelixImage from "../../../../public/assets/new-home/wp-helix.png";
-import { BlockProtocolIcon } from "../../icons";
-import { ArrowsLeftRightIcon } from "../../icons/arrows-left-right-icon";
-import { WordPressIcon } from "../../icons/wordpress-icon";
+import { BpWpIcons } from "./bp-wp-icons";
 import { EarlyAccessCTA } from "./early-access-cta";
 
 export const Header = () => {
@@ -69,15 +66,7 @@ export const Header = () => {
               },
             })}
           >
-            <BlockProtocolIcon gradient sx={{ fontSize: "1em" }} />
-            <ArrowsLeftRightIcon
-              sx={{
-                color: ({ palette }) => palette.purple[200],
-                mx: 0.75,
-                fontSize: "0.75em",
-              }}
-            />
-            <WordPressIcon sx={{ fontSize: "1em" }} />
+            <BpWpIcons />
           </Box>
 
           <Typography
@@ -86,7 +75,6 @@ export const Header = () => {
             sx={{
               lineHeight: 1,
               color: ({ palette }) => palette.gray[90],
-              // @todo font-size should match design system
               fontSize: "1em",
             }}
           >

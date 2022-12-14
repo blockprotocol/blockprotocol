@@ -26,24 +26,14 @@ export const EarlyAccessCTA = () => {
     setTouchedEmailInput(true);
 
     if (isEmailInputValid) {
-      // setSendingLoginCode(true);
-      // const { data: verificationCodeInfo, error } =
-      //   await apiClient.sendLoginCode({
-      //     email: emailValue,
-      //   });
-      // setSendingLoginCode(false);
-      // if (error) {
-      //   setApiErrorMessage(error.message);
-      // } else if (verificationCodeInfo) {
-      //   onLoginCodeSent({ verificationCodeInfo, email: emailValue });
-      // }
+      // ADD TO MAILCHIMP EMAIL LIST
     }
   };
 
   return (
     <>
       <TextField
-        sx={{ marginBottom: 2 }}
+        sx={{ marginBottom: 2, maxWidth: 480 }}
         required
         type="email"
         error={displayError}
@@ -63,7 +53,8 @@ export const EarlyAccessCTA = () => {
                 zIndex: 1,
                 whiteSpace: "nowrap",
                 minWidth: "unset",
-                fontSize: "1rem",
+                fontSize: 15,
+                paddingLeft: 3,
                 ...(displayError
                   ? {
                       background: ({ palette }) =>
@@ -86,7 +77,7 @@ export const EarlyAccessCTA = () => {
             </Button>
           ),
           sx: {
-            fontSize: "1rem",
+            fontSize: 15,
             borderRadius: 34,
             pr: 0,
           },

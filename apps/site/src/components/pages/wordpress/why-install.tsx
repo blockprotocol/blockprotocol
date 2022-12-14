@@ -1,68 +1,13 @@
-import { Box, Container, Grid, Typography, useTheme } from "@mui/material";
-import { FunctionComponent, ReactNode } from "react";
-import { BlockProtocolIcon } from "../../icons";
-import { BinaryIcon } from "../../icons/binary-icon";
-import { GlobeIcon } from "../../icons/globe-icon";
-import { LayerPlusIcon } from "../../icons/layer-plus-icon";
-import { RocketIcon } from "../../icons/rocket-icon";
+import { Box, Container, Grid, Typography } from "@mui/material";
+import {
+  BinaryIcon,
+  BlockProtocolIcon,
+  GlobeIcon,
+  LayerPlusIcon,
+  RocketIcon,
+} from "../../icons";
 import { EarlyAccessCTA } from "./early-access-cta";
-
-interface SectionProps {
-  color: string;
-  icon: ReactNode;
-  title: ReactNode;
-  grayTitle?: ReactNode;
-  description: ReactNode;
-}
-
-const Section: FunctionComponent<SectionProps> = ({
-  color,
-  icon,
-  title,
-  grayTitle,
-  description,
-}) => {
-  const theme = useTheme();
-
-  return (
-    <Grid
-      item
-      xs={12}
-      lg={6}
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          maxWidth: "500px !important",
-          color,
-        }}
-      >
-        <Box sx={{ mb: 1.5 }}>{icon}</Box>
-        <Typography
-          sx={{ color, mb: 1 }}
-          variant="bpLargeText"
-          fontWeight={700}
-        >
-          {title}
-          {grayTitle ? (
-            <span style={{ color: theme.palette.gray[50] }}>{grayTitle}</span>
-          ) : null}
-        </Typography>
-        <Typography
-          variant="bpSmallCopy"
-          sx={{ fontWeight: 400, lineHeight: 1.2 }}
-        >
-          {description}
-        </Typography>
-      </Box>
-    </Grid>
-  );
-};
+import { IconSection } from "./icon-section";
 
 export const WhyInstall = () => {
   return (
@@ -70,14 +15,14 @@ export const WhyInstall = () => {
       sx={{
         background:
           "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%)",
-        pb: { xs: 20, md: 28 },
+        pb: "11rem",
         borderBottom: `1px solid #edeaf1`,
         position: "relative",
       }}
     >
       <Container
         sx={{
-          mb: { xs: 6, md: 10 },
+          mb: 10,
           maxWidth: { xs: "95%", md: "75%", lg: "60%" },
           display: "flex",
           flexDirection: "column",
@@ -86,32 +31,37 @@ export const WhyInstall = () => {
         }}
       >
         <Typography
-          variant="bpHeading3"
-          fontWeight={900}
-          sx={{ fontFamily: "inherit", textAlign: "center" }}
+          sx={{ fontSize: "2rem", lineHeight: 1, fontWeight: 900, mb: 1 }}
         >
-          Why install the Block Protocol plugin?
+          Why develop Block Protocol blocks?
         </Typography>
         <Typography
-          variant="bpHeading3"
           sx={{
-            color: ({ palette }) => palette.purple[70],
-            fontFamily: "inherit",
-            textAlign: "center",
+            fontSize: "2rem",
+            lineHeight: 1,
+            color: ({ palette }) => palette.gray[50],
           }}
         >
-          Do more with a supercharged WordPress...
+          Developing <strong>Þ</strong> blocks has a number of benefits...
         </Typography>
 
         <Grid
           container
-          sx={{ pt: 7.25 }}
-          columnSpacing={10}
+          sx={({ breakpoints }) => ({
+            pt: 7.25,
+            [breakpoints.down("lg")]: {
+              maxWidth: 500,
+              margin: "auto",
+            },
+          })}
+          columnSpacing={{ xs: 0, lg: 10 }}
           rowSpacing={{ xs: 3, lg: 6.875 }}
         >
-          <Section
+          <IconSection
+            xs={12}
+            lg={6}
             color="#A700A0"
-            icon={<GlobeIcon />}
+            icon={<GlobeIcon sx={{ fontSize: 32 }} />}
             title="Access an open, growing ecosystem of high-quality blocks"
             description={
               <>
@@ -122,9 +72,11 @@ export const WhyInstall = () => {
             }
           />
 
-          <Section
+          <IconSection
+            xs={12}
+            lg={6}
             color="#CC3AC6"
-            icon={<LayerPlusIcon />}
+            icon={<LayerPlusIcon sx={{ fontSize: 32 }} />}
             title="Find new blocks at the point of need"
             description={
               <>
@@ -137,17 +89,21 @@ export const WhyInstall = () => {
             }
           />
 
-          <Section
+          <IconSection
+            xs={12}
+            lg={6}
             color="#810A7C"
-            icon={<BinaryIcon />}
+            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
             title="Structured data made easier than unstructured"
             grayTitle=" ...a benefit not a chore"
             description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"
           />
 
-          <Section
+          <IconSection
+            xs={12}
+            lg={6}
             color="#CF51CA"
-            icon={<RocketIcon />}
+            icon={<RocketIcon sx={{ fontSize: 32 }} />}
             title="More powerful blocks"
             grayTitle=" including OpenAI-powered blocks"
             description={
@@ -163,9 +119,9 @@ export const WhyInstall = () => {
         </Grid>
 
         <Typography
-          variant="bpHeading3"
           sx={{
-            fontFamily: "inherit",
+            fontSize: "1.75rem",
+            lineHeight: 1,
             letterSpacing: "-0.02em",
             mt: 13.75,
             fontWeight: 900,
@@ -179,14 +135,12 @@ export const WhyInstall = () => {
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               backgroundClip: "text",
-              marginLeft: 8,
-              marginRight: 8,
             }}
           >
             early access
           </span>{" "}
-          to the <BlockProtocolIcon gradient sx={{ marginX: 1, mb: 0.5 }} />{" "}
-          WordPress Plugin
+          to the <BlockProtocolIcon gradient sx={{ mb: 0.5 }} /> WordPress
+          Plugin
         </Typography>
 
         <Box sx={{ maxWidth: 450, mt: 5 }}>
