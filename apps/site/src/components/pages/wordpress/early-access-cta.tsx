@@ -1,3 +1,4 @@
+import { inputBaseClasses } from "@mui/material";
 // Our custom TextField hides the 'endAdornment' when the 'error' prop is true
 // eslint-disable-next-line no-restricted-imports
 import TextField from "@mui/material/TextField";
@@ -56,8 +57,6 @@ export const EarlyAccessCTA = () => {
               zIndex: 1,
               whiteSpace: "nowrap",
               minWidth: "unset",
-              fontSize: 15,
-              paddingLeft: 3,
               ...(displayError
                 ? {
                     background: ({ palette }) =>
@@ -79,9 +78,12 @@ export const EarlyAccessCTA = () => {
           </Button>
         ),
         sx: {
-          fontSize: 15,
           borderRadius: 34,
           pr: 0,
+          [`.${inputBaseClasses.input}`]: {
+            fontSize: 15,
+            pl: 3,
+          },
         },
       }}
     />
