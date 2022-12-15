@@ -11,7 +11,7 @@ import { useEmailTextField } from "../../hooks/use-email-text-field";
 import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
 import { useEmailSubmitted } from "./email-submitted-context";
 
-const submittedEmailText = "You’re already on the waitlist as";
+const submittedEmailText = "You’re on the waitlist as";
 const submitErrorText = "There was an error submitting your email";
 
 export const EarlyAccessCTA = () => {
