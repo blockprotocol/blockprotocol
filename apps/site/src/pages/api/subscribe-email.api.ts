@@ -15,11 +15,11 @@ export default createBaseHandler<
   SubscribeEmailRequestBody,
   SubscribeEmailResponse
 >().put(async (req, res) => {
-  try {
-    await subscribeToMailchimp(req.body);
-  } catch (err) {
-    return res.status(400).send({ error: true });
-  }
-
-  return res.json({ success: true });
+  return await subscribeToMailchimp(req.body)
+    .then(() => {
+      return res.json({ success: true });
+    })
+    .catch(() => {
+      return res.status(400).send({ error: true });
+    });
 });

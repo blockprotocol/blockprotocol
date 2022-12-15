@@ -37,16 +37,10 @@ export const subscribeToMailchimp = async (params: {
 
   const memberID = md5(email);
 
-  await mailchimpApi
-    .put(`members/${memberID}`, {
+  return await mailchimpApi.put(`members/${memberID}`, {
       email_address: email,
       status: "subscribed",
       merge_fields,
-    })
-    .catch(async (error: AxiosError) => {
-      /** @todo: properly log error */
-      // eslint-disable-next-line no-console
-      console.log(error);
     });
 };
 

@@ -9,6 +9,8 @@ import { Button } from "../../button";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
 import { ArrowRightIcon } from "../../icons";
 
+const submitErrorText = "There was an error submitting your email";
+
 export const EarlyAccessCTA = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -23,6 +25,9 @@ export const EarlyAccessCTA = () => {
     emailHelperText,
   } = useEmailTextField({});
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<boolean>(false);
   const [touchedEmailInput, setTouchedEmailInput] = useState<boolean>(false);
 
   const helperText = touchedEmailInput ? emailHelperText : undefined;
@@ -38,7 +43,17 @@ export const EarlyAccessCTA = () => {
     setTouchedEmailInput(true);
 
     if (isEmailInputValid) {
-      await apiClient.subscribeEmailWP(emailValue);
+      setLoading(true);
+      await apiClient.subscribeEmailWP(emailValue).then(({ data }) => {
+        setSubmitError(false);
+        setLoading(false);
+
+        if (data?.success) {
+          setSubmitted(true);
+        } else {
+          setSubmitError(true);
+        }
+      });
     }
   };
 
@@ -47,19 +62,21 @@ export const EarlyAccessCTA = () => {
       sx={{ marginBottom: 2, maxWidth: 480 }}
       required
       type="email"
-      error={displayError}
-      helperText={helperText}
+      error={displayError || submitError}
+      helperText={submitError ? submitErrorText : helperText}
       inputRef={emailInputRef}
       fullWidth
       placeholder={isSmall ? "Your email..." : "Enter your email address..."}
       variant="outlined"
       value={emailValue}
       onChange={({ target }) => {
+        setSubmitError(false);
         setEmailValue(target.value);
       }}
       InputProps={{
         endAdornment: (
           <Button
+            disabled={displayError || loading || submitted}
             sx={({ breakpoints }) => ({
               zIndex: 1,
               whiteSpace: "nowrap",
@@ -83,11 +100,11 @@ export const EarlyAccessCTA = () => {
                 }}
               />
             }
-            disabled={displayError}
             onClick={handleSubmit}
             onTouchStart={handleSubmit}
+            loading={loading}
           >
-            Get early access
+            {submitted ? "Submitted" : "Get early access"}
           </Button>
         ),
         sx: {
