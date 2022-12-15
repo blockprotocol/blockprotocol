@@ -227,8 +227,8 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
           width: "100vw",
           position: "absolute",
           zIndex: ({ zIndex }) => zIndex.appBar,
+          "+ *": { paddingTop: `${neighbourOffset}px` },
         },
-        !isHomePage && { "+ *": { paddingTop: `${neighbourOffset}px` } },
       ]}
     >
       <Box
