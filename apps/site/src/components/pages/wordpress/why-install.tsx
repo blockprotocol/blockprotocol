@@ -43,7 +43,7 @@ export const WhyInstall = () => {
             color: ({ palette }) => palette.gray[50],
           }}
         >
-          Developing <strong>Þ</strong> blocks has a number of benefits...
+          Do more with a supercharged WordPress...
         </Typography>
 
         <Grid
