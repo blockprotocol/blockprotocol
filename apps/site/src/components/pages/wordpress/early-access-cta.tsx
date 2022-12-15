@@ -1,3 +1,4 @@
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { inputBaseClasses, Theme, useMediaQuery } from "@mui/material";
 // Our custom TextField hides the 'endAdornment' when the 'error' prop is true
 // eslint-disable-next-line no-restricted-imports
@@ -7,7 +8,7 @@ import { MouseEvent, TouchEvent, useRef, useState } from "react";
 import { apiClient } from "../../../lib/api-client";
 import { Button } from "../../button";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
-import { ArrowRightIcon } from "../../icons";
+import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
 
 const submitErrorText = "There was an error submitting your email";
 
@@ -59,6 +60,7 @@ export const EarlyAccessCTA = () => {
 
   return (
     <TextField
+      disabled={loading || submitted}
       sx={{ marginBottom: 2, maxWidth: 480 }}
       required
       type="email"
@@ -89,16 +91,27 @@ export const EarlyAccessCTA = () => {
                       `${palette.red[600]} !important`,
                   }
                 : {}),
+              ...(submitted
+                ? {
+                    background: ({ palette }) =>
+                      `${palette.green[80]} !important`,
+                  }
+                : {}),
               [breakpoints.down("sm")]: {
                 px: 2.5,
               },
             })}
             endIcon={
-              <ArrowRightIcon
-                sx={{
-                  color: ({ palette }) => `${palette.common.white} !important`,
-                }}
-              />
+              submitted ? (
+                <FontAwesomeIcon icon={faCheck} />
+              ) : (
+                <ArrowRightIcon
+                  sx={{
+                    color: ({ palette }) =>
+                      `${palette.common.white} !important`,
+                  }}
+                />
+              )
             }
             onClick={handleSubmit}
             onTouchStart={handleSubmit}
