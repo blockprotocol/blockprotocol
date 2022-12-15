@@ -1,8 +1,8 @@
-import { inputBaseClasses } from "@mui/material";
+import { inputBaseClasses, Theme, useMediaQuery } from "@mui/material";
 // Our custom TextField hides the 'endAdornment' when the 'error' prop is true
 // eslint-disable-next-line no-restricted-imports
 import TextField from "@mui/material/TextField";
-import { MouseEvent, useRef, useState } from "react";
+import { MouseEvent, TouchEvent, useRef, useState } from "react";
 
 import { Button } from "../../button";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
@@ -10,6 +10,10 @@ import { ArrowRightIcon } from "../../icons";
 
 export const EarlyAccessCTA = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
+
+  const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.down("sm"),
+  );
 
   const {
     emailValue,
@@ -26,7 +30,9 @@ export const EarlyAccessCTA = () => {
 
   const displayError = touchedEmailInput && isEmailInvalid;
 
-  const handleSubmit = async (event: MouseEvent<HTMLButtonElement>) => {
+  const handleSubmit = async (
+    event: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>,
+  ) => {
     event.preventDefault();
     setTouchedEmailInput(true);
 
@@ -44,7 +50,7 @@ export const EarlyAccessCTA = () => {
       helperText={helperText}
       inputRef={emailInputRef}
       fullWidth
-      placeholder="Enter your email address..."
+      placeholder={isSmall ? "Your email..." : "Enter your email address..."}
       variant="outlined"
       value={emailValue}
       onChange={({ target }) => {
@@ -53,17 +59,22 @@ export const EarlyAccessCTA = () => {
       InputProps={{
         endAdornment: (
           <Button
-            sx={{
+            sx={({ breakpoints }) => ({
               zIndex: 1,
               whiteSpace: "nowrap",
               minWidth: "unset",
+              height: 1,
+              fontSize: 15,
               ...(displayError
                 ? {
                     background: ({ palette }) =>
                       `${palette.red[600]} !important`,
                   }
                 : {}),
-            }}
+              [breakpoints.down("sm")]: {
+                px: 2.5,
+              },
+            })}
             endIcon={
               <ArrowRightIcon
                 sx={{
@@ -73,6 +84,7 @@ export const EarlyAccessCTA = () => {
             }
             disabled={displayError}
             onClick={handleSubmit}
+            onTouchStart={handleSubmit}
           >
             Get early access
           </Button>
@@ -81,7 +93,10 @@ export const EarlyAccessCTA = () => {
           borderRadius: 34,
           pr: 0,
           [`.${inputBaseClasses.input}`]: {
+            boxSizing: "border-box",
+            height: 46,
             fontSize: 15,
+            lineHeight: 1.5,
             pl: 3,
           },
         },
