@@ -5,7 +5,6 @@ import { FunctionComponent, ReactNode, useMemo, useState } from "react";
 import { ComingSoonBanner } from "./coming-soon-banner";
 import { Footer } from "./footer";
 import { BANNERS, FooterBanner } from "./footer-banner";
-import { HiringBanner } from "./hiring-banner";
 import { LoginModal } from "./modal/login-modal";
 import { Navbar } from "./navbar";
 import {
