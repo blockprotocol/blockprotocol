@@ -40,7 +40,7 @@ export const Header = () => {
           textAlign="center"
           variant="bpSmallCaps"
         >
-          EARLY ACCESS
+          Early access
         </Typography>
 
         <Box
