@@ -40,7 +40,7 @@ export const WhyInstall = () => {
           sx={{
             fontSize: "2rem",
             lineHeight: 1,
-            color: ({ palette }) => palette.gray[50],
+            color: ({ palette }) => palette.purple[70],
           }}
         >
           Do more with a supercharged WordPress...
