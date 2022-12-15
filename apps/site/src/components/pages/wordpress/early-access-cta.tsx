@@ -4,6 +4,7 @@ import { inputBaseClasses, Theme, useMediaQuery } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { MouseEvent, TouchEvent, useRef, useState } from "react";
 
+import { apiClient } from "../../../lib/api-client";
 import { Button } from "../../button";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
 import { ArrowRightIcon } from "../../icons";
@@ -37,7 +38,7 @@ export const EarlyAccessCTA = () => {
     setTouchedEmailInput(true);
 
     if (isEmailInputValid) {
-      // ADD TO MAILCHIMP EMAIL LIST
+      await apiClient.subscribeEmailWP(emailValue);
     }
   };
 

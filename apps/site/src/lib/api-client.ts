@@ -181,4 +181,11 @@ export const apiClient = {
       "blocks/create",
       requestData,
     ),
+  subscribeEmailWP: (email: string) =>
+    apiClient.put("subscribe-email", {
+      email,
+      merge_fields: {
+        ECO_WP: "Yes",
+      },
+    }),
 };
