@@ -34,7 +34,7 @@ export const WhyInstall = () => {
         <Typography
           sx={{ fontSize: "2rem", lineHeight: 1, fontWeight: 900, mb: 1 }}
         >
-          Why develop Block Protocol blocks?
+          Why install the Block Protocol plugin?
         </Typography>
         <Typography
           sx={{
