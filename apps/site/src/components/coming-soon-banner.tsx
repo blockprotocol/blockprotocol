@@ -6,7 +6,7 @@ import { Link } from "./link";
 
 export const ComingSoonBanner = () => {
   return (
-    <Link href="/wordpress" rel="noopener">
+    <Link href="/wordpress#availability" rel="noopener">
       <Box
         sx={({ transitions }) => ({
           position: "relative",

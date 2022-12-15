@@ -24,8 +24,9 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
   const [displayLoginModal, setDisplayLoginModal] = useState(false);
 
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
-  const isWordPressPage =
-    generatePathWithoutParams(hydrationFriendlyAsPath) === "/wordpress";
+  const isWordPressPage = generatePathWithoutParams(
+    hydrationFriendlyAsPath,
+  ).startsWith("/wordpress");
 
   const banner = useMemo(
     () =>

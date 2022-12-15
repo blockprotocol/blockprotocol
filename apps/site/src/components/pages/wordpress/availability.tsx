@@ -7,6 +7,7 @@ import { EarlyAccessCTA } from "./early-access-cta";
 export const Availability = () => {
   return (
     <Container
+      id="availability"
       sx={{
         mb: 10,
         maxWidth: { xs: "95%", md: "75%", lg: "60%" },
