@@ -38,10 +38,10 @@ export const subscribeToMailchimp = async (params: {
   const memberID = md5(email);
 
   return await mailchimpApi.put(`members/${memberID}`, {
-      email_address: email,
-      status: "subscribed",
-      merge_fields,
-    });
+    email_address: email,
+    status: "subscribed",
+    merge_fields,
+  });
 };
 
 export const ensureUserIsMailchimpMember = async (params: {
