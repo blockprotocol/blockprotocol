@@ -20,7 +20,7 @@ export const Header = () => {
         sx={{
           position: "relative",
           zIndex: 3,
-          pt: { xs: 16, md: 20 },
+          pt: { xs: 7, md: 8.75 },
           mb: { xs: 6, md: 10 },
           maxWidth: { xs: "95%", md: "75%", lg: "60%" },
           display: "flex",
