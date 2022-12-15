@@ -11,7 +11,7 @@ export const ComingSoonBanner = () => {
         sx={({ transitions }) => ({
           position: "relative",
           borderTop: "1px solid #80ABFF",
-          py: 3.25,
+          py: 2.375,
           transition: transitions.create("opacity"),
           cursor: "pointer",
           background: {
