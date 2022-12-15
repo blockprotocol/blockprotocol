@@ -3,16 +3,20 @@ import { inputBaseClasses, Theme, useMediaQuery } from "@mui/material";
 // Our custom TextField hides the 'endAdornment' when the 'error' prop is true
 // eslint-disable-next-line no-restricted-imports
 import TextField from "@mui/material/TextField";
-import { MouseEvent, TouchEvent, useRef, useState } from "react";
+import { MouseEvent, TouchEvent, useMemo, useRef, useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { Button } from "../../button";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
 import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
+import { useEmailSubmitted } from "./email-submitted-context";
 
+const submittedEmailText = "You’re already on the waitlist as";
 const submitErrorText = "There was an error submitting your email";
 
 export const EarlyAccessCTA = () => {
+  const { submittedEmail, setSubmittedEmail } = useEmailSubmitted();
+
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
@@ -51,6 +55,7 @@ export const EarlyAccessCTA = () => {
 
         if (data?.success) {
           setSubmitted(true);
+          setSubmittedEmail(emailValue);
         } else {
           setSubmitError(true);
         }
@@ -58,14 +63,27 @@ export const EarlyAccessCTA = () => {
     }
   };
 
+  const textFieldHelperText = useMemo(() => {
+    if (submittedEmail) {
+      return `${submittedEmailText} ${submittedEmail}`;
+    } else if (submitError) {
+      return submitErrorText;
+    }
+
+    return helperText;
+  }, [submittedEmail, submitError, helperText]);
+
   return (
     <TextField
-      disabled={loading || submitted}
-      sx={{ marginBottom: 2, maxWidth: 480 }}
+      disabled={loading || submitted || !!submittedEmail}
+      sx={{
+        marginBottom: 2,
+        maxWidth: 480,
+      }}
       required
       type="email"
       error={displayError || submitError}
-      helperText={submitError ? submitErrorText : helperText}
+      helperText={textFieldHelperText}
       inputRef={emailInputRef}
       fullWidth
       placeholder={isSmall ? "Your email..." : "Enter your email address..."}
@@ -78,7 +96,7 @@ export const EarlyAccessCTA = () => {
       InputProps={{
         endAdornment: (
           <Button
-            disabled={displayError || loading || submitted}
+            disabled={displayError || loading || submitted || !!submittedEmail}
             sx={({ breakpoints }) => ({
               zIndex: 1,
               whiteSpace: "nowrap",
@@ -99,6 +117,9 @@ export const EarlyAccessCTA = () => {
                 : {}),
               [breakpoints.down("sm")]: {
                 px: 2.5,
+              },
+              "&.Mui-disabled": {
+                borderColor: "#DDE7F0 !important",
               },
             })}
             endIcon={
@@ -129,6 +150,9 @@ export const EarlyAccessCTA = () => {
             fontSize: 15,
             lineHeight: 1.5,
             pl: 3,
+          },
+          [`&.${inputBaseClasses.disabled} .MuiOutlinedInput-notchedOutline`]: {
+            borderColor: "#DDE7F0 !important",
           },
         },
       }}
