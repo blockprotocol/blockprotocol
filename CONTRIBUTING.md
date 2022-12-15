@@ -6,4 +6,4 @@ We have a community [Discord server](https://blockprotocol.org/discord) where yo
 
 ## Block Protocol monorepo
 
-This repository is the Block Protocol's public monorepo. It is being released by HASH fully under the open-source [MIT license](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE.md).
+This repository is the Block Protocol's public monorepo. Its contents are primarily dual-licensed under the [Apache License, Version 2.0](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE-APACHE.md) and [MIT License](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE-MIT.md). Please see the top-level [LICENSE](https://github.com/blockprotocol/blockprotocol/blob/main/LICENSE.md) file for an enumerated list of exceptions.
