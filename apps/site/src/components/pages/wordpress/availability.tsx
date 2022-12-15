@@ -31,7 +31,7 @@ export const Availability = () => {
         <Box sx={{ display: "inline-block", whiteSpace: "nowrap" }}>
           <BpWpIcons />
         </Box>{" "}
-        <strong>plugin</strong> will ship in early 2023
+        <strong>plugin</strong> will ship in February 2023
       </Typography>
 
       <Box
