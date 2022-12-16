@@ -110,7 +110,8 @@ test("Sign Up page redirects logged in users to dashboard", async ({
   await login({ page });
   expect(page.url()).toMatch(/\/docs$/);
 
-  tolerateCustomConsoleMessages([
+  tolerateCustomConsoleMessages((existingCustomMatches) => [
+    ...existingCustomMatches,
     /Error: Abort fetching component for route: "\/dashboard\/\[\[...slugs\]\]"/,
   ]);
 
