@@ -32,13 +32,13 @@ test("API key page should generate a valid key", async ({
   await expect(
     page.locator("text=These keys allow you to access the block protocol"),
   ).toBeVisible();
-  await expect(page.locator("text=Learn More").first()).toHaveAttribute(
+  await expect(page.locator("data-test-id=apiKeyLink").first()).toHaveAttribute(
     "href",
     "/docs/embedding-blocks#discovering-blocks",
   );
   await expect(tableWithKeys).not.toBeVisible();
 
-  await page.locator("text=Create new key").click();
+  await page.locator("a >> text=Create new key").click();
 
   await keyNameInput.click();
   await keyNameInput.press("Enter");
