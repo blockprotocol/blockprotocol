@@ -1,22 +1,30 @@
-import { Theme, useMediaQuery } from "@mui/material";
-import { MouseEvent, TouchEvent, useMemo, useRef, useState } from "react";
+import {
+  FunctionComponent,
+  MouseEvent,
+  TouchEvent,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
-import { useEmailSubmitted } from "./email-submitted-context";
 import { Input } from "./input";
+import { ApplicationIds } from "./request-another-application";
 
-const submittedEmailText = "You’re already on the waitlist as";
 const submitErrorText = "There was an error submitting your email";
 
-export const EarlyAccessCTA = () => {
-  const { submittedEmail, setSubmittedEmail } = useEmailSubmitted();
+export interface VoteEmailInputProps {
+  applicationId: ApplicationIds;
+  other: string | null;
+  onSubmit: () => void;
+}
 
+export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
+  applicationId,
+  other,
+  onSubmit,
+}) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
-
-  const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.down("sm"),
-  );
 
   const {
     emailValue,
@@ -26,7 +34,6 @@ export const EarlyAccessCTA = () => {
   } = useEmailTextField({});
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<boolean>(false);
   const [touchedEmailInput, setTouchedEmailInput] = useState<boolean>(false);
 
@@ -45,14 +52,17 @@ export const EarlyAccessCTA = () => {
     if (isEmailInputValid) {
       setLoading(true);
       await apiClient
-        .subscribeEmailWP({ email: emailValue })
+        .submitApplicationVote({
+          email: emailValue,
+          vote: applicationId,
+          other,
+        })
         .then(({ data }) => {
           setSubmitError(false);
           setLoading(false);
 
           if (data?.success) {
-            setSubmitted(true);
-            setSubmittedEmail(emailValue);
+            onSubmit();
           } else {
             setSubmitError(true);
           }
@@ -60,31 +70,20 @@ export const EarlyAccessCTA = () => {
     }
   };
 
-  const textFieldHelperText = useMemo(() => {
-    if (submittedEmail) {
-      return `${submittedEmailText} ${submittedEmail}`;
-    } else if (submitError) {
-      return submitErrorText;
-    }
-
-    return helperText;
-  }, [submittedEmail, submitError, helperText]);
-
   return (
     <Input
-      disabled={loading || submitted || !!submittedEmail}
+      disabled={loading}
       displayError={displayError}
       error={displayError || submitError}
-      success={submitted}
-      helperText={textFieldHelperText}
+      helperText={submitError ? submitErrorText : helperText}
       inputRef={emailInputRef}
-      placeholder={isSmall ? "Your email..." : "Enter your email address..."}
+      placeholder="name@example.com"
       value={emailValue}
       onChange={({ target }) => {
         setSubmitError(false);
         setEmailValue(target.value);
       }}
-      buttonLabel={submitted ? "Submitted" : "Get early access"}
+      buttonLabel="Submit vote"
       handleSubmit={handleSubmit}
       loading={loading}
     />

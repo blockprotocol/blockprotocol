@@ -1,4 +1,5 @@
 import { FunctionComponent } from "react";
+import { FooterBanner } from "../components/footer-banner";
 
 import { Availability } from "../components/pages/wordpress/availability";
 import { EmailSubmittedProvider } from "../components/pages/wordpress/email-submitted-context";
@@ -12,6 +13,7 @@ const WordPressPage: FunctionComponent = () => (
     <WhyInstall />
     <WhyDevelop />
     <Availability />
+    {/* <FooterBanner /> */}
   </EmailSubmittedProvider>
 );
 
