@@ -74,7 +74,7 @@ export const EarlyAccessCTA = () => {
   }, [submittedEmail, submitError, helperText]);
 
   return (
-    <Box component="form" onSubmit={handleSubmit}>
+    <Box component="form" onSubmit={handleSubmit} width={1}>
       <TextField
         disabled={loading || !!submittedEmail}
         sx={{
