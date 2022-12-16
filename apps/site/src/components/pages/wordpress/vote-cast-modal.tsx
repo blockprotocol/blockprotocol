@@ -167,7 +167,7 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
                 fontWeight: 600,
                 color: ({ palette }) => palette.gray[50],
                 letterSpacing: "0.05em",
-                lineHeight: 1.3,
+                lineHeight: 1,
               }}
             >
               Vote successfully cast 🎉
