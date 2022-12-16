@@ -18,8 +18,6 @@ const WordPressPage: FunctionComponent = () => (
         images: [
           { url: "https://blockprotocol.org/assets/wp_bp_og_cover.png" },
         ],
-        site_name: "Block Protocol",
-        type: "website",
         url: "https://blockprotocol.org/wordpress",
       }}
     />
