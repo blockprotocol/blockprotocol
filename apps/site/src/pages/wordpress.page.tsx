@@ -13,7 +13,6 @@ const WordPressPage: FunctionComponent = () => (
     <WhyInstall />
     <WhyDevelop />
     <Availability />
-    {/* <FooterBanner /> */}
   </EmailSubmittedProvider>
 );
 
