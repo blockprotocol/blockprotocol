@@ -20,7 +20,7 @@ export const EarlyAccessCTA = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.down("sm"),
+    breakpoints.down("md"),
   );
 
   const {
