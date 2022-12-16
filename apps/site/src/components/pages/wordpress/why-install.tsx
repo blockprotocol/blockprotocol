@@ -76,6 +76,16 @@ export const WhyInstall = () => {
           <IconSection
             xs={12}
             lg={6}
+            color="#810A7C"
+            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
+            title="Structured data made easier than unstructured"
+            grayTitle=" ...a benefit not a chore"
+            description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"
+          />
+
+          <IconSection
+            xs={12}
+            lg={6}
             color="#CC3AC6"
             icon={<LayerPlusIcon sx={{ fontSize: 32 }} />}
             title="Find new blocks at the point of need"
@@ -88,16 +98,6 @@ export const WhyInstall = () => {
                 updated blocks as soon as they&#8217;re published
               </>
             }
-          />
-
-          <IconSection
-            xs={12}
-            lg={6}
-            color="#810A7C"
-            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
-            title="Structured data made easier than unstructured"
-            grayTitle=" ...a benefit not a chore"
-            description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"
           />
 
           <IconSection
