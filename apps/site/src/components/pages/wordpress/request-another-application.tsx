@@ -1,11 +1,5 @@
-import { Box, modalClasses, Typography } from "@mui/material";
-import {
-  cloneElement,
-  FunctionComponent,
-  ReactElement,
-  ReactNode,
-  useState,
-} from "react";
+import { Box, Typography } from "@mui/material";
+import { cloneElement, FunctionComponent, ReactElement, useState } from "react";
 
 import { Button } from "../../button";
 import {
@@ -18,7 +12,6 @@ import {
   StrapiIcon,
   WordPressIcon,
 } from "../../icons";
-import { Modal } from "../../modal/modal";
 import { Input } from "./input";
 import { VoteCastModal } from "./vote-cast-modal";
 import { VoteEmailInput } from "./vote-email-input";
@@ -110,7 +103,7 @@ export const RequestAnotherApplication = () => {
   const [selectedApplication, setSelectedApplication] =
     useState<Application | null>(null);
   const [otherEA, setOtherEA] = useState<string | null>(null);
-  const [displayModal, setDisplayModal] = useState(true);
+  const [displayModal, setDisplayModal] = useState(false);
 
   const resetFlow = () => {
     setSelectedApplication(null);

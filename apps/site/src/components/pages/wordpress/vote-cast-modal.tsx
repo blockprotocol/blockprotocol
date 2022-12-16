@@ -1,22 +1,108 @@
-import { faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faDiscord, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import {
   faCircleCheck,
+  faComment,
   faTimes,
   faZap,
+  IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
-import { Box, IconButton, modalClasses, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  modalClasses,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
 import { Button } from "../../button";
-import { FontAwesomeIcon } from "../../icons";
+import { EnvelopeIcon, FontAwesomeIcon, GithubIcon } from "../../icons";
 import { Modal } from "../../modal/modal";
+
+export interface CTASectionProps {
+  title: string;
+  subtitle: string;
+  icon: IconDefinition;
+  textColor: string;
+  backgroundColor: string;
+  borderColor: string;
+  children: ReactNode;
+}
+
+export const CTASection: FunctionComponent<CTASectionProps> = ({
+  title,
+  subtitle,
+  icon,
+  textColor,
+  backgroundColor,
+  borderColor,
+  children,
+}) => (
+  <Box
+    sx={{
+      background: backgroundColor,
+      alignItems: "start",
+      padding: "12px 16px",
+      borderRadius: 1,
+      width: 1,
+      justifyContent: "start",
+      marginTop: 1.25,
+      border: `1px solid ${borderColor}`,
+    }}
+  >
+    <Box display="flex" gap={2}>
+      <FontAwesomeIcon
+        icon={icon}
+        sx={{
+          fontSize: 16,
+          color: textColor,
+          mt: 0.75,
+        }}
+      />
+
+      <Box>
+        <Typography
+          variant="bpBodyCopy"
+          sx={{
+            color: textColor,
+            fontWeight: 500,
+            fontSize: 15,
+            textAlign: "start",
+            line: 1.5,
+          }}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant="bpBodyCopy"
+          sx={{
+            fontWeight: 400,
+            fontSize: 15,
+            textAlign: "start",
+            line: 1.5,
+            mb: 1.5,
+          }}
+        >
+          {subtitle}
+        </Typography>
+
+        <Box display="flex" gap={1.5}>
+          {children}
+        </Box>
+      </Box>
+    </Box>
+  </Box>
+);
 
 export interface ActionButtonProps {
   label: string;
   icon: ReactNode;
 }
 
-export const ActionButton = ({ label, icon }) => (
+export const ActionButton: FunctionComponent<ActionButtonProps> = ({
+  label,
+  icon,
+}) => (
   <Button
     squared
     variant="tertiary"
@@ -25,7 +111,7 @@ export const ActionButton = ({ label, icon }) => (
       borderColor: "#DEF4FD",
       fontSize: 15,
       fontWeight: 700,
-      background,
+      color: ({ palette }) => palette.gray[90],
     }}
   >
     {label}
@@ -41,6 +127,8 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
   open,
   onClose,
 }) => {
+  const theme = useTheme();
+
   return (
     <Modal
       data-testid="wp-vote-cast"
@@ -60,90 +148,94 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
       onClose={onClose}
     >
       <>
-        <Typography>Vote successfully cast 🎉</Typography>
-
-        <IconButton onClick={onClose}>
-          <FontAwesomeIcon icon={faTimes} sx={{ fontSize: 16 }} />
-        </IconButton>
-
-        <Box>
-          <FontAwesomeIcon icon={faCircleCheck} sx={{ fontSize: 32 }} />
-          <Typography>
-            <strong>
-              Thanks! Your vote has now been verified and counted towards the
-              total.
-            </strong>{" "}
-            We’ll let you know when work begins on your chosen app.
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            background: "#FBF7FF",
-            alignItems: "start",
-            padding: "12px 16px",
-            borderRadius: 1,
-            width: 1,
-            justifyContent: "start",
-            marginTop: 1.5,
-          }}
-        >
-          <Box display="flex" gap={2}>
-            <FontAwesomeIcon
-              icon={faZap}
+        <Box sx={{ px: 2 }}>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            mb={2}
+          >
+            <Typography
+              variant="bpSmallCaps"
               sx={{
-                fontSize: 16,
-                color: ({ palette }) => palette.purple[70],
-                mt: 0.75,
+                fontSize: 13,
+                fontWeight: 600,
+                color: ({ palette }) => palette.gray[50],
+                letterSpacing: "0.05em",
+                lineHeight: 1.3,
               }}
-            />
-            <Box>
-              <Typography
-                variant="bpBodyCopy"
-                sx={{
-                  color: ({ palette }) => palette.purple[70],
-                  fontWeight: 500,
-                  fontSize: 15,
-                  textAlign: "start",
-                  line: 1.5,
-                }}
-              >
-                Speed up how quickly we get to your app
-              </Typography>
-              <Typography
-                variant="bpBodyCopy"
-                sx={{
-                  fontWeight: 400,
-                  fontSize: 15,
-                  textAlign: "start",
-                  line: 1.5,
-                }}
-              >
-                The more votes apps receive, the sooner we’ll prioritize their
-                support. Consider letting others you think might be interested
-                know.
-              </Typography>
-            </Box>
+            >
+              Vote successfully cast 🎉
+            </Typography>
+
+            <IconButton onClick={onClose}>
+              <FontAwesomeIcon
+                icon={faTimes}
+                sx={{ fontSize: 16, fill: ({ palette }) => palette.gray[50] }}
+              />
+            </IconButton>
           </Box>
 
+          <Box display="flex" gap={2.625} alignItems="center" mb={3.5}>
+            <FontAwesomeIcon
+              icon={faCircleCheck}
+              sx={{ fontSize: 32, color: "#0775E3" }}
+            />
+            <Typography sx={{ fontSize: 15, lineHeight: 1.5 }}>
+              <strong>
+                Thanks! Your vote has now been verified and counted towards the
+                total.
+              </strong>{" "}
+              We’ll let you know when work begins on your chosen app.
+            </Typography>
+          </Box>
+        </Box>
 
-                <ActionButton label="Compose a tweet" icon={ <FontAwesomeIcon icon={faTwitter} sx={{ color: "#1DA1F2" }}/>}
-          <Button
-            squared
-            variant="tertiary"
-            startIcon={
+        <CTASection
+          title="Speed up how quickly we get to your app"
+          subtitle="The more votes apps receive, the sooner we’ll prioritize their
+        support. Consider letting others you think might be interested
+        know."
+          icon={faZap}
+          textColor={theme.palette.purple[70]}
+          backgroundColor="#FBF7FF"
+          borderColor="#EFEBFE"
+        >
+          <ActionButton
+            label="Compose a tweet"
+            icon={
               <FontAwesomeIcon icon={faTwitter} sx={{ color: "#1DA1F2" }} />
             }
-            sx={{
-              borderColor: "#DEF4FD",
-              color: ({ palette }) => palette.gray[90],
-              fontSize: 15,
-              fontWeight: 700,
-            }}
-          >
-            Compose a tweet
-          </Button>
-        </Box>
+          />
+          <ActionButton
+            label="Send an email"
+            icon={
+              <EnvelopeIcon sx={{ color: ({ palette }) => palette.gray[50] }} />
+            }
+          />
+        </CTASection>
+
+        <CTASection
+          title="Join the Þ community"
+          subtitle="You can also join our Discord server, or watch and star us on GitHub."
+          icon={faComment}
+          textColor="#0089B4"
+          backgroundColor={theme.palette.teal[200]}
+          borderColor="#F0F9FF"
+        >
+          <ActionButton
+            label="Join our Discord"
+            icon={
+              <FontAwesomeIcon icon={faDiscord} sx={{ color: "#7289DA" }} />
+            }
+          />
+          <ActionButton
+            label="View on GitHub"
+            icon={
+              <GithubIcon sx={{ color: ({ palette }) => palette.gray[90] }} />
+            }
+          />
+        </CTASection>
       </>
     </Modal>
   );

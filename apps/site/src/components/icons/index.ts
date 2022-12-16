@@ -17,6 +17,7 @@ export * from "./comment-dots-icon";
 export * from "./contentful-icon";
 export * from "./copy-icon";
 export * from "./envelope-dot-icon";
+export * from "./envelope-icon";
 export * from "./expand-icon";
 export * from "./font-awesome-icon";
 export * from "./github-icon";
