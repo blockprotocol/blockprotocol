@@ -1,6 +1,7 @@
 import { Stream } from "@cloudflare/stream-react";
-import { Box, Container, Typography, useTheme } from "@mui/material";
+import { Box, Container, Skeleton, Typography, useTheme } from "@mui/material";
 import Image from "next/legacy/image";
+import { useState } from "react";
 
 import wpHelixImage from "../../../../public/assets/new-home/wp-helix.png";
 import { BpWpIcons } from "./bp-wp-icons";
@@ -9,10 +10,12 @@ import { EarlyAccessCTA } from "./early-access-cta";
 export const Header = () => {
   const theme = useTheme();
 
+  const [loading, setLoading] = useState(true);
+
   return (
     <Box
       sx={{
-        pb: { xs: 20, md: 28 },
+        pb: { xs: 11.5, md: 16 },
         position: "relative",
       }}
     >
@@ -20,9 +23,9 @@ export const Header = () => {
         sx={{
           position: "relative",
           zIndex: 3,
-          pt: { xs: 16, md: 20 },
-          mb: { xs: 6, md: 10 },
-          maxWidth: { xs: "95%", md: "75%", lg: "60%" },
+          pt: { xs: 7, md: 8.75 },
+          mb: { xs: 4, md: 6.25 },
+          width: { xs: "95%", md: "75%", lg: "60%" },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -114,6 +117,7 @@ export const Header = () => {
           sx={{
             marginTop: 6.25,
             maxWidth: 500,
+            width: 1,
             display: "flex",
             justifyContent: "center",
           }}
@@ -122,26 +126,44 @@ export const Header = () => {
         </Box>
       </Container>
 
-      <Box sx={{ width: "100vw", position: "relative" }}>
-        <Image layout="responsive" src={wpHelixImage} />
+      <Box sx={{ width: "100%", position: "relative" }}>
         <Box
           sx={{
-            position: "absolute",
-            top: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            maxWidth: { xs: "95%", md: "75%", lg: "60%" },
-            width: "100%",
+            width: 1,
+            position: "absolute !important",
+            top: "50%",
+            left: 0,
+            transform: "translateY(-50%)",
+          }}
+        >
+          <Image layout="responsive" src={wpHelixImage} />
+        </Box>
+        <Box
+          sx={{
+            width: { xs: "95%", md: "75%", lg: "60%" },
+            maxWidth: 1200,
             div: {
               width: "100%",
               height: "100%",
+              display: loading ? "none" : "block",
             },
+            aspectRatio: "16/9",
+            margin: "auto",
           }}
         >
+          {loading ? (
+            <Skeleton
+              sx={{
+                width: "100%",
+                height: "100%",
+                transform: "unset",
+              }}
+            />
+          ) : null}
           <Stream
             controls
-            src=""
-            // src="b236bde30eb07b9d01318940e5fc3eda"
+            src="3331bb25754e7e47a457cbaad3c7fdb1"
+            onCanPlay={() => setLoading(false)}
           />
         </Box>
       </Box>

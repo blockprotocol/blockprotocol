@@ -1,18 +1,26 @@
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { inputBaseClasses, Theme, useMediaQuery } from "@mui/material";
 // Our custom TextField hides the 'endAdornment' when the 'error' prop is true
 // eslint-disable-next-line no-restricted-imports
 import TextField from "@mui/material/TextField";
-import { MouseEvent, TouchEvent, useRef, useState } from "react";
+import { MouseEvent, TouchEvent, useMemo, useRef, useState } from "react";
 
+import { apiClient } from "../../../lib/api-client";
 import { Button } from "../../button";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
-import { ArrowRightIcon } from "../../icons";
+import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
+import { useEmailSubmitted } from "./email-submitted-context";
+
+const submittedEmailText = "You’re on the waitlist as";
+const submitErrorText = "There was an error submitting your email";
 
 export const EarlyAccessCTA = () => {
+  const { submittedEmail, setSubmittedEmail } = useEmailSubmitted();
+
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.down("sm"),
+    breakpoints.down("md"),
   );
 
   const {
@@ -22,6 +30,8 @@ export const EarlyAccessCTA = () => {
     emailHelperText,
   } = useEmailTextField({});
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [submitError, setSubmitError] = useState<boolean>(false);
   const [touchedEmailInput, setTouchedEmailInput] = useState<boolean>(false);
 
   const helperText = touchedEmailInput ? emailHelperText : undefined;
@@ -37,28 +47,54 @@ export const EarlyAccessCTA = () => {
     setTouchedEmailInput(true);
 
     if (isEmailInputValid) {
-      // ADD TO MAILCHIMP EMAIL LIST
+      setLoading(true);
+      await apiClient.subscribeEmailWP(emailValue).then(({ data }) => {
+        setSubmitError(false);
+        setLoading(false);
+
+        if (data?.success) {
+          setSubmittedEmail(emailValue);
+        } else {
+          setSubmitError(true);
+        }
+      });
     }
   };
 
+  const textFieldHelperText = useMemo(() => {
+    if (submittedEmail) {
+      return `${submittedEmailText} ${submittedEmail}`;
+    } else if (submitError) {
+      return submitErrorText;
+    }
+
+    return helperText;
+  }, [submittedEmail, submitError, helperText]);
+
   return (
     <TextField
-      sx={{ marginBottom: 2, maxWidth: 480 }}
+      disabled={loading || !!submittedEmail}
+      sx={{
+        marginBottom: 2,
+        maxWidth: 500,
+      }}
       required
       type="email"
-      error={displayError}
-      helperText={helperText}
+      error={displayError || submitError}
+      helperText={textFieldHelperText}
       inputRef={emailInputRef}
       fullWidth
       placeholder={isSmall ? "Your email..." : "Enter your email address..."}
       variant="outlined"
       value={emailValue}
       onChange={({ target }) => {
+        setSubmitError(false);
         setEmailValue(target.value);
       }}
       InputProps={{
         endAdornment: (
           <Button
+            disabled={displayError || loading || !!submittedEmail}
             sx={({ breakpoints }) => ({
               zIndex: 1,
               whiteSpace: "nowrap",
@@ -71,22 +107,36 @@ export const EarlyAccessCTA = () => {
                       `${palette.red[600]} !important`,
                   }
                 : {}),
+              ...(submittedEmail
+                ? {
+                    background: ({ palette }) =>
+                      `${palette.green[80]} !important`,
+                  }
+                : {}),
               [breakpoints.down("sm")]: {
                 px: 2.5,
               },
+              "&.Mui-disabled": {
+                borderColor: "#DDE7F0 !important",
+              },
             })}
             endIcon={
-              <ArrowRightIcon
-                sx={{
-                  color: ({ palette }) => `${palette.common.white} !important`,
-                }}
-              />
+              submittedEmail ? (
+                <FontAwesomeIcon icon={faCheck} />
+              ) : (
+                <ArrowRightIcon
+                  sx={{
+                    color: ({ palette }) =>
+                      `${palette.common.white} !important`,
+                  }}
+                />
+              )
             }
-            disabled={displayError}
             onClick={handleSubmit}
             onTouchStart={handleSubmit}
+            loading={loading}
           >
-            Get early access
+            {submittedEmail ? "Submitted" : "Get early access"}
           </Button>
         ),
         sx: {
@@ -98,6 +148,9 @@ export const EarlyAccessCTA = () => {
             fontSize: 15,
             lineHeight: 1.5,
             pl: 3,
+          },
+          [`&.${inputBaseClasses.disabled} .MuiOutlinedInput-notchedOutline`]: {
+            borderColor: "#DDE7F0 !important",
           },
         },
       }}

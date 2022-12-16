@@ -24,6 +24,10 @@ import {
   ApiSignupResponse,
 } from "../pages/api/signup.api";
 import {
+  SubscribeEmailRequestBody,
+  SubscribeEmailResponse,
+} from "../pages/api/subscribe-email.api";
+import {
   ApiTypeUpdateRequest,
   ApiTypeUpdateResponse,
 } from "../pages/api/types/[id]/update.api";
@@ -180,5 +184,15 @@ export const apiClient = {
     apiClient.post<ApiBlockCreateRequest, ApiBlockCreateResponse>(
       "blocks/create",
       requestData,
+    ),
+  subscribeEmailWP: (email: string) =>
+    apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(
+      "subscribe-email",
+      {
+        email,
+        merge_fields: {
+          ECO_WP: "Yes",
+        },
+      },
     ),
 };

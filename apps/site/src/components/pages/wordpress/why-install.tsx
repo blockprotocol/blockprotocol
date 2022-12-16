@@ -24,7 +24,7 @@ export const WhyInstall = () => {
       <Container
         sx={{
           mb: 10,
-          maxWidth: { xs: "95%", md: "75%", lg: "60%" },
+          width: { xs: "95%", md: "75%", lg: "60%" },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -34,16 +34,16 @@ export const WhyInstall = () => {
         <Typography
           sx={{ fontSize: "2rem", lineHeight: 1, fontWeight: 900, mb: 1 }}
         >
-          Why develop Block Protocol blocks?
+          Why install the Block Protocol plugin?
         </Typography>
         <Typography
           sx={{
             fontSize: "2rem",
             lineHeight: 1,
-            color: ({ palette }) => palette.gray[50],
+            color: ({ palette }) => palette.purple[70],
           }}
         >
-          Developing <strong>Þ</strong> blocks has a number of benefits...
+          Do more with a supercharged WordPress...
         </Typography>
 
         <Grid
@@ -76,6 +76,16 @@ export const WhyInstall = () => {
           <IconSection
             xs={12}
             lg={6}
+            color="#810A7C"
+            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
+            title="Structured data made easier than unstructured"
+            grayTitle=" ...a benefit not a chore"
+            description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"
+          />
+
+          <IconSection
+            xs={12}
+            lg={6}
             color="#CC3AC6"
             icon={<LayerPlusIcon sx={{ fontSize: 32 }} />}
             title="Find new blocks at the point of need"
@@ -93,23 +103,13 @@ export const WhyInstall = () => {
           <IconSection
             xs={12}
             lg={6}
-            color="#810A7C"
-            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
-            title="Structured data made easier than unstructured"
-            grayTitle=" ...a benefit not a chore"
-            description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"
-          />
-
-          <IconSection
-            xs={12}
-            lg={6}
             color="#CF51CA"
             icon={<RocketIcon sx={{ fontSize: 32 }} />}
             title="More powerful blocks"
             grayTitle=" including OpenAI-powered blocks"
             description={
               <>
-                Directly access powerful third-party tool such as those from
+                Directly access powerful third-party tools such as those from
                 Mapbox and OpenAI without needing to sign up for your own
                 account with dozens of different services or install any
                 additional WordPress plugins&#65293;the <strong>Þ</strong>{" "}
@@ -144,7 +144,7 @@ export const WhyInstall = () => {
           Plugin
         </Typography>
 
-        <Box sx={{ maxWidth: 450, mt: 5 }}>
+        <Box sx={{ maxWidth: 500, width: 1, mt: 5 }}>
           <EarlyAccessCTA />
         </Box>
       </Container>

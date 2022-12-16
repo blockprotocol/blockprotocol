@@ -10,7 +10,7 @@ export const Availability = () => {
       id="availability"
       sx={{
         mb: 10,
-        maxWidth: { xs: "95%", md: "75%", lg: "60%" },
+        width: { xs: "95%", md: "75%", lg: "60%" },
         fontFamily: "Inter",
       }}
     >
@@ -51,7 +51,7 @@ export const Availability = () => {
           <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pb: 2.25 }}>
             The <strong>Þ WordPress plugin</strong> will be launched alongside{" "}
             <strong>version 0.3</strong> of the
-            <strong>Þ</strong> specification, our largest-ever update that
+            <strong> Þ</strong> specification, our largest-ever update that
             builds on almost a year of community consultation and block
             development.
           </Typography>
@@ -75,7 +75,7 @@ export const Availability = () => {
             <ListItem sx={{ p: 0, pl: 1 }}>
               &#x2022;
               <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pl: 1 }}>
-                The ability to attach metadata to link between entities
+                The ability to attach metadata to links between entities
               </Typography>
             </ListItem>
           </List>
