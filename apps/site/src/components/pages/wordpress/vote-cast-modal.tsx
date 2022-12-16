@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
 
-import { Button } from "../../button";
 import { EnvelopeIcon, FontAwesomeIcon, GithubIcon } from "../../icons";
+import { LinkButton } from "../../link-button";
 import { Modal } from "../../modal/modal";
 
 export interface CTASectionProps {
@@ -97,14 +97,17 @@ export const CTASection: FunctionComponent<CTASectionProps> = ({
 export interface ActionButtonProps {
   label: string;
   icon: ReactNode;
+  href: string;
 }
 
 export const ActionButton: FunctionComponent<ActionButtonProps> = ({
   label,
   icon,
+  href,
 }) => (
-  <Button
+  <LinkButton
     squared
+    href={href}
     variant="tertiary"
     startIcon={icon}
     sx={{
@@ -115,17 +118,19 @@ export const ActionButton: FunctionComponent<ActionButtonProps> = ({
     }}
   >
     {label}
-  </Button>
+  </LinkButton>
 );
 
 export interface VoteCastModalProps {
   open: boolean;
   onClose: () => void;
+  twitterButtonHref?: string;
 }
 
 export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
   open,
   onClose,
+  twitterButtonHref,
 }) => {
   const theme = useTheme();
 
@@ -202,12 +207,14 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
           borderColor="#EFEBFE"
         >
           <ActionButton
+            href={twitterButtonHref ?? ""}
             label="Compose a tweet"
             icon={
               <FontAwesomeIcon icon={faTwitter} sx={{ color: "#1DA1F2" }} />
             }
           />
           <ActionButton
+            href="https://blockprotocol.org/contact"
             label="Send an email"
             icon={
               <EnvelopeIcon sx={{ color: ({ palette }) => palette.gray[50] }} />
@@ -224,12 +231,14 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
           borderColor="#F0F9FF"
         >
           <ActionButton
+            href="https://blockprotocol.org/discord"
             label="Join our Discord"
             icon={
               <FontAwesomeIcon icon={faDiscord} sx={{ color: "#7289DA" }} />
             }
           />
           <ActionButton
+            href="https://github.com/blockprotocol/blockprotocol"
             label="View on GitHub"
             icon={
               <GithubIcon sx={{ color: ({ palette }) => palette.gray[90] }} />
