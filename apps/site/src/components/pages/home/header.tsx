@@ -1,10 +1,20 @@
-import { Box, Container, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Image from "next/legacy/image";
 
 import primaryHelixImage from "../../../../public/assets/new-home/primary-helix-min.png";
+import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "../../navbar";
 
 export const Header = () => {
   const theme = useTheme();
+
+  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const height = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
   return (
     <Box
@@ -20,7 +30,10 @@ export const Header = () => {
         sx={{
           position: "relative",
           zIndex: 3,
-          pt: { xs: 16, md: 20 },
+          pt: {
+            xs: `calc(128px - ${height}px)`,
+            md: `calc(160px - ${height}px)`,
+          },
           mb: { xs: 6, md: 10 },
           maxWidth: { xs: "95%", md: "75%", lg: "60%" },
         }}
