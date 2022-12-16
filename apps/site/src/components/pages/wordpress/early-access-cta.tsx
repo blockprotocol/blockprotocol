@@ -1,5 +1,5 @@
 import { Theme, useMediaQuery } from "@mui/material";
-import { MouseEvent, TouchEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useMemo, useRef, useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
@@ -35,10 +35,12 @@ export const EarlyAccessCTA = () => {
 
   const displayError = touchedEmailInput && isEmailInvalid;
 
-  const handleSubmit = async (
-    event: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>,
-  ) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (displayError || loading || !!submittedEmail) {
+      return;
+    }
+
     setTouchedEmailInput(true);
 
     if (isEmailInputValid) {
