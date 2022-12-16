@@ -76,7 +76,6 @@ export const EarlyAccessCTA = () => {
       disabled={loading || !!submittedEmail}
       sx={{
         marginBottom: 2,
-        maxWidth: 480,
       }}
       required
       type="email"
