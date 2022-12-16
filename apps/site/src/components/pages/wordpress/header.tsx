@@ -161,7 +161,7 @@ export const Header = () => {
           ) : null}
           <Stream
             controls
-            src="b236bde30eb07b9d01318940e5fc3eda"
+            src="3331bb25754e7e47a457cbaad3c7fdb1"
             onCanPlay={() => setLoading(false)}
           />
         </Box>
