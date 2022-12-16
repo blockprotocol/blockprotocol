@@ -211,7 +211,7 @@ export const apiClient = {
         email,
         merge_fields: {
           [vote]: "Yes",
-          ...(other ? { ECO_EA: other } : {}),
+          ...(other ? { WISH_EA: other } : {}),
         },
       },
     ),
