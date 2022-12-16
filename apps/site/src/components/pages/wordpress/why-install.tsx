@@ -76,6 +76,16 @@ export const WhyInstall = () => {
           <IconSection
             xs={12}
             lg={6}
+            color="#810A7C"
+            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
+            title="Structured data made easier than unstructured"
+            grayTitle=" ...a benefit not a chore"
+            description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"
+          />
+
+          <IconSection
+            xs={12}
+            lg={6}
             color="#CC3AC6"
             icon={<LayerPlusIcon sx={{ fontSize: 32 }} />}
             title="Find new blocks at the point of need"
@@ -93,23 +103,13 @@ export const WhyInstall = () => {
           <IconSection
             xs={12}
             lg={6}
-            color="#810A7C"
-            icon={<BinaryIcon sx={{ fontSize: 32 }} />}
-            title="Structured data made easier than unstructured"
-            grayTitle=" ...a benefit not a chore"
-            description="Quickly capture information in a typed fashion, and import structured data such as maps, weather, flight info, product reviews, and media details into your own WordPress database"
-          />
-
-          <IconSection
-            xs={12}
-            lg={6}
             color="#CF51CA"
             icon={<RocketIcon sx={{ fontSize: 32 }} />}
             title="More powerful blocks"
             grayTitle=" including OpenAI-powered blocks"
             description={
               <>
-                Directly access powerful third-party tool such as those from
+                Directly access powerful third-party tools such as those from
                 Mapbox and OpenAI without needing to sign up for your own
                 account with dozens of different services or install any
                 additional WordPress plugins&#65293;the <strong>Þ</strong>{" "}
@@ -144,7 +144,7 @@ export const WhyInstall = () => {
           Plugin
         </Typography>
 
-        <Box sx={{ maxWidth: 450, mt: 5 }}>
+        <Box sx={{ maxWidth: 500, width: 1, mt: 5 }}>
           <EarlyAccessCTA />
         </Box>
       </Container>
