@@ -25,12 +25,11 @@ export const Input: FunctionComponent<Partial<TextFieldProps> & InputProps> = ({
   ...props
 }) => {
   return (
-    <Box component="form" onSubmit={handleSubmit}>
+    <Box component="form" onSubmit={handleSubmit} width={1}>
       <TextField
         {...props}
         sx={{
           marginBottom: 2,
-          maxWidth: 480,
         }}
         required
         type="email"
