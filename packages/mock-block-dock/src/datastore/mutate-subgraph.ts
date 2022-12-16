@@ -8,7 +8,8 @@ import {
   Subgraph,
   Timestamp,
 } from "@blockprotocol/graph";
-import isEqual from "lodash/isEqual";
+
+import { isEqual } from "../util";
 
 /** @todo - clean up the assertions here */
 export const addKnowledgeGraphEdge = (

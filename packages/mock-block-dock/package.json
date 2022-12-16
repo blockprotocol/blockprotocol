@@ -47,7 +47,6 @@
     "@mui/material": "^5.10.4",
     "ajv": "^8.9.0",
     "echarts": "^5.3.3",
-    "lodash": "4.17.21",
     "react-json-view": "^1.21.3",
     "react-resizable": "^3.0.4",
     "slate": "^0.82.1",
