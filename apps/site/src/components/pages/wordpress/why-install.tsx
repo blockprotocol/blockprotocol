@@ -109,7 +109,7 @@ export const WhyInstall = () => {
             grayTitle=" including OpenAI-powered blocks"
             description={
               <>
-                Directly access powerful third-party tool such as those from
+                Directly access powerful third-party tools such as those from
                 Mapbox and OpenAI without needing to sign up for your own
                 account with dozens of different services or install any
                 additional WordPress plugins&#65293;the <strong>Þ</strong>{" "}
