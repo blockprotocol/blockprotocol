@@ -98,19 +98,7 @@ export const Header = () => {
           }}
         >
           Block Protocol blocks work across all Þ supporting applications
-        </Typography>
-        <Typography
-          variant="bpBodyCopy"
-          lineHeight={1.4}
-          color={theme.palette.gray[80]}
-          textAlign="center"
-          sx={{
-            margin: "0 auto",
-            fontWeight: 700,
-            fontSize: { xs: "1.25rem", md: "1.45rem" },
-          }}
-        >
-          ...now including WordPress, powering 43% of the web
+          <strong> ...now including WordPress, powering 43% of the web</strong>
         </Typography>
 
         <Box
