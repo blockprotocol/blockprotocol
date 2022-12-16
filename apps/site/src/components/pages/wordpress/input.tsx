@@ -1,7 +1,6 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { inputBaseClasses } from "@mui/material";
-// Our custom TextField hides the 'endAdornment' when the 'error' prop is true
-// eslint-disable-next-line no-restricted-imports
+// eslint-disable-next-line no-restricted-imports -- our custom TextField hides the 'endAdornment' when the 'error' prop is true
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { FunctionComponent, MouseEvent, TouchEvent } from "react";
 
