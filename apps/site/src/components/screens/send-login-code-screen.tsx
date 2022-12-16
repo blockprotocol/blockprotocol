@@ -94,7 +94,11 @@ export const SendLoginCodeScreen: FunctionComponent<
   return (
     <>
       <BlockProtocolIcon
-        sx={{ color: (theme) => theme.palette.purple[700], marginBottom: 3 }}
+        sx={{
+          color: (theme) => theme.palette.purple[700],
+          marginBottom: 3,
+          height: "unset",
+        }}
       />
       <Typography
         mb={3}
