@@ -12,7 +12,7 @@ const WordPressPage: FunctionComponent = () => (
     <NextSeo
       title="Block Protocol WordPress Plugin"
       openGraph={{
-        title: "Þ plugin for WordPress",
+        title: "Block Protocol plugin for WordPress",
         description:
           "The Block Protocol is a standard for building web blocks that work across applications. Use them in WordPress, or vote for another app",
         images: [
