@@ -25,7 +25,7 @@ export const Input: FunctionComponent<Partial<TextFieldProps> & InputProps> = ({
   ...props
 }) => {
   return (
-    <Box component="form" onSubmit={handleSubmit} width={1}>
+    <Box component="form" onSubmit={handleSubmit} width={1} maxWidth={500}>
       <TextField
         {...props}
         sx={{

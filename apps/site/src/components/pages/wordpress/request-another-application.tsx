@@ -21,6 +21,7 @@ import {
   StrapiIcon,
   WordPressIcon,
 } from "../../icons";
+import { Link } from "../../link";
 import { Input } from "./input";
 import { VoteCastModal } from "./vote-cast-modal";
 import { VoteEmailInput } from "./vote-email-input";
@@ -267,7 +268,9 @@ export const RequestAnotherApplication = () => {
               transition: ({ transitions }) => transitions.create("opacity"),
             }}
           >
-            <ApplicationBadge icon={<HashIcon />} name="HASH" />
+            <Link href="https://hash.ai">
+              <ApplicationBadge icon={<HashIcon />} name="HASH" />
+            </Link>
             <ApplicationBadge icon={<WordPressIcon />} name="Wordpress" />
           </Box>
         </Box>
