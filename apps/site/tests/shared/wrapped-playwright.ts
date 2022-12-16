@@ -14,20 +14,19 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /Failed to load resource: the server responded with a status of 401 \(Unauthorized\)/,
   /Failed to load resource: the server responded with a status of 404 \(Not Found\)/,
 
-  // To triage: Firefox
+  // Firefox
+  /An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can remove its sandboxing/,
   /Cookie “blockprotocol-session-id” does not have a proper “SameSite” attribute value/,
   /Cookie “blockprotocol-session-id” has been rejected because it is already expired/,
   /Feature Policy: Skipping unsupported feature name “clipboard-write”/,
   /Ignoring unsupported entryTypes: largest-contentful-paint/,
+  /Layout was forced before the page was fully loaded. If stylesheets are not yet loaded this may cause a flash of unstyled content/,
   /Loading failed for the <script> with source “http:\/\/localhost:\d+\/_next\/static\/chunks/,
 
-  // /An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can remove its sandboxing/,
-  // /Failed to fetch devPagesManifest: Error/,
-  // /InstallTrigger is deprecated and will be removed in the future./,
-  // /Layout was forced before the page was fully loaded. If stylesheets are not yet loaded this may cause a flash of unstyled content/,
-  // /onmozfullscreenchange is deprecated./,
-  // /onmozfullscreenerror is deprecated./,
-  // /XML Parsing Error: syntax error/, // Location: http://localhost:3000/api/logout
+  // Firefox - sandboxed iframe → esm.sh lodash
+  /InstallTrigger is deprecated and will be removed in the future./,
+  /onmozfullscreenchange is deprecated./,
+  /onmozfullscreenerror is deprecated./,
 ];
 
 // Messages that only show up in `yarn dev` (not CI)

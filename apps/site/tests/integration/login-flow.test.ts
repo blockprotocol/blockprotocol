@@ -45,7 +45,13 @@ test.beforeEach(async ({ browserName }) => {
 test("login works for an existing user (via verification code)", async ({
   page,
   isMobile,
+  browserName,
 }) => {
+  if (browserName === "firefox") {
+    tolerateCustomConsoleMessages([
+      /XML Parsing Error: syntax error/, // Location: http://localhost:3000/api/logout
+    ]);
+  }
   await page.goto("/");
   const loginModal = await openLoginModal({ page, isMobile });
 
@@ -107,6 +113,12 @@ test("login works for an existing user (via magic link)", async ({
   isMobile,
   page,
 }) => {
+  if (browserName === "firefox") {
+    tolerateCustomConsoleMessages([
+      /XML Parsing Error: syntax error/, // Location: http://localhost:3000/api/logout
+    ]);
+  }
+
   test.skip(
     browserName === "webkit",
     "https://app.asana.com/0/1202542409311090/1202652399221616",
