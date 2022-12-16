@@ -47,7 +47,7 @@ export const WhyDevelop = () => {
             borderBottomColor: "transparent",
             borderTopLeftRadius: "8px",
             borderTopRightRadius: "8px",
-            maxWidth: "1100px",
+            maxWidth: "1200px",
             margin: "auto",
             pb: { xs: 2, md: 4.5 },
             pt: { xs: 3, md: 8.25 },
@@ -78,7 +78,7 @@ export const WhyDevelop = () => {
       <Box
         sx={{
           width: "calc(100% - 2rem)",
-          maxWidth: "1100px",
+          maxWidth: "1200px",
           background:
             "linear-gradient(181.4deg, rgba(255, 255, 255, 0.65) 50%, #FDFCFE 94.38%)",
           border: "2px solid white",

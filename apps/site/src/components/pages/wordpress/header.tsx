@@ -15,7 +15,7 @@ export const Header = () => {
   return (
     <Box
       sx={{
-        pb: { xs: 20, md: 28 },
+        pb: { xs: 11.5, md: 16 },
         position: "relative",
       }}
     >
@@ -24,8 +24,8 @@ export const Header = () => {
           position: "relative",
           zIndex: 3,
           pt: { xs: 7, md: 8.75 },
-          mb: { xs: 6, md: 10 },
-          maxWidth: { xs: "95%", md: "75%", lg: "60%" },
+          mb: { xs: 4, md: 6.25 },
+          width: { xs: "95%", md: "75%", lg: "60%" },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -126,29 +126,33 @@ export const Header = () => {
       </Container>
 
       <Box sx={{ width: "100vw", position: "relative" }}>
-        <Image layout="responsive" src={wpHelixImage} />
         <Box
           sx={{
-            position: "absolute",
-            top: 0,
-            left: "50%",
-            transform: "translateX(-50%)",
-            maxWidth: { xs: "95%", md: "75%", lg: "60%" },
-            width: "100%",
+            width: 1,
+            position: "absolute !important",
+            top: "50%",
+            left: 0,
+            transform: "translateY(-50%)",
+          }}
+        >
+          <Image layout="responsive" src={wpHelixImage} />
+        </Box>
+        <Box
+          sx={{
+            width: { xs: "95%", md: "75%", lg: "60%" },
+            maxWidth: 1200,
             div: {
               width: "100%",
               height: "100%",
               display: loading ? "none" : "block",
             },
             aspectRatio: "16/9",
+            margin: "auto",
           }}
         >
           {loading ? (
             <Skeleton
               sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
                 width: "100%",
                 height: "100%",
                 transform: "unset",
