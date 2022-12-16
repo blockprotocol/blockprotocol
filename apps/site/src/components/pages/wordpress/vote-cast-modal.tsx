@@ -37,62 +37,64 @@ export const CTASection: FunctionComponent<CTASectionProps> = ({
   backgroundColor,
   borderColor,
   children,
-}) => (
-  <Box
-    sx={{
-      background: backgroundColor,
-      alignItems: "start",
-      padding: "12px 16px",
-      borderRadius: 1,
-      width: 1,
-      justifyContent: "start",
-      marginTop: 1.25,
-      border: `1px solid ${borderColor}`,
-    }}
-  >
-    <Box display="flex" gap={2}>
-      <FontAwesomeIcon
-        icon={icon}
-        sx={{
-          fontSize: 16,
-          color: textColor,
-          mt: 0.75,
-        }}
-      />
-
-      <Box>
-        <Typography
-          variant="bpBodyCopy"
+}) => {
+  return (
+    <Box
+      sx={{
+        background: backgroundColor,
+        alignItems: "start",
+        padding: "12px 16px",
+        borderRadius: 1,
+        width: 1,
+        justifyContent: "start",
+        marginTop: 1.25,
+        border: `1px solid ${borderColor}`,
+      }}
+    >
+      <Box display="flex" gap={2}>
+        <FontAwesomeIcon
+          icon={icon}
           sx={{
+            fontSize: 16,
             color: textColor,
-            fontWeight: 500,
-            fontSize: 15,
-            textAlign: "start",
-            line: 1.5,
+            mt: 0.75,
           }}
-        >
-          {title}
-        </Typography>
-        <Typography
-          variant="bpBodyCopy"
-          sx={{
-            fontWeight: 400,
-            fontSize: 15,
-            textAlign: "start",
-            line: 1.5,
-            mb: 1.5,
-          }}
-        >
-          {subtitle}
-        </Typography>
+        />
 
-        <Box display="flex" gap={1.5}>
-          {children}
+        <Box>
+          <Typography
+            variant="bpBodyCopy"
+            sx={{
+              color: textColor,
+              fontWeight: 500,
+              fontSize: 15,
+              textAlign: "start",
+              line: 1.5,
+            }}
+          >
+            {title}
+          </Typography>
+          <Typography
+            variant="bpBodyCopy"
+            sx={{
+              fontWeight: 400,
+              fontSize: 15,
+              textAlign: "start",
+              line: 1.5,
+              mb: 1.5,
+            }}
+          >
+            {subtitle}
+          </Typography>
+
+          <Box display="flex" gap={1.5}>
+            {children}
+          </Box>
         </Box>
       </Box>
     </Box>
-  </Box>
-);
+  );
+};
 
 export interface ActionButtonProps {
   label: string;
@@ -104,22 +106,24 @@ export const ActionButton: FunctionComponent<ActionButtonProps> = ({
   label,
   icon,
   href,
-}) => (
-  <LinkButton
-    squared
-    href={href}
-    variant="tertiary"
-    startIcon={icon}
-    sx={{
-      borderColor: "#DEF4FD",
-      fontSize: 15,
-      fontWeight: 700,
-      color: ({ palette }) => palette.gray[90],
-    }}
-  >
-    {label}
-  </LinkButton>
-);
+}) => {
+  return (
+    <LinkButton
+      squared
+      href={href}
+      variant="tertiary"
+      startIcon={icon}
+      sx={{
+        borderColor: "#DEF4FD",
+        fontSize: 15,
+        fontWeight: 700,
+        color: ({ palette }) => palette.gray[90],
+      }}
+    >
+      {label}
+    </LinkButton>
+  );
+};
 
 export interface VoteCastModalProps {
   open: boolean;
