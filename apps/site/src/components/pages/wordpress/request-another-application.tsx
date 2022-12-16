@@ -167,6 +167,7 @@ export const applications: Application[] = [
 export const RequestAnotherApplication = () => {
   const [selectedApplication, setSelectedApplication] =
     useState<Application | null>(null);
+  const [modalTwitterHref, setModalTwitterHref] = useState("");
   const [otherEA, setOtherEA] = useState<string | null>(null);
   const [displayModal, setDisplayModal] = useState(false);
   const [votes, setVotes] = useState<ApplicationIds[]>([]);
@@ -488,6 +489,9 @@ export const RequestAnotherApplication = () => {
                     applicationId={selectedApplication.id}
                     other={otherEA}
                     onSubmit={() => {
+                      setModalTwitterHref(
+                        selectedApplication.twitterHref ?? "",
+                      );
                       setDisplayModal(true);
                       const newVotes = [...votes, selectedApplication.id];
                       setVotes(newVotes);
@@ -564,7 +568,7 @@ export const RequestAnotherApplication = () => {
       <VoteCastModal
         open={displayModal}
         onClose={() => setDisplayModal(false)}
-        twitterButtonHref={selectedApplication?.twitterHref}
+        twitterButtonHref={modalTwitterHref}
       />
     </Box>
   );
