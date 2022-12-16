@@ -21,10 +21,6 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /Failed to load resource: the server responded with a status of 401 \(Unauthorized\)/,
   /Failed to load resource: the server responded with a status of 404 \(Not Found\)/,
 
-  // To triage: All browsers
-  // /Error: Abort fetching component for route: "\/dashboard\/\[\[...slugs\]\]"/,
-  // /Error: Abort fetching component for route: "\/login"/,
-
   // To triage: Firefox
   /Cookie “blockprotocol-session-id” does not have a proper “SameSite” attribute value/,
   /Cookie “blockprotocol-session-id” has been rejected because it is already expired/,
