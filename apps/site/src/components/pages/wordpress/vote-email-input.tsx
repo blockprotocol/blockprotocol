@@ -1,22 +1,24 @@
-import { Theme, useMediaQuery } from "@mui/material";
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, FunctionComponent, useRef, useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
-import { useEmailSubmitted } from "./email-submitted-context";
 import { Input } from "./input";
+import { ApplicationIds } from "./request-another-application";
 
-const submittedEmailText = "You’re on the waitlist as";
 const submitErrorText = "There was an error submitting your email";
 
-export const EarlyAccessCTA = () => {
-  const { submittedEmail, setSubmittedEmail } = useEmailSubmitted();
+export interface VoteEmailInputProps {
+  applicationId: ApplicationIds;
+  other: string | null;
+  onSubmit: () => void;
+}
 
+export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
+  applicationId,
+  other,
+  onSubmit,
+}) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
-
-  const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
-    breakpoints.down("md"),
-  );
 
   const {
     emailValue,
@@ -37,22 +39,22 @@ export const EarlyAccessCTA = () => {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    if (displayError || loading || !!submittedEmail) {
-      return;
-    }
-
     setTouchedEmailInput(true);
 
     if (isEmailInputValid) {
       setLoading(true);
       await apiClient
-        .subscribeEmailWP({ email: emailValue })
+        .submitApplicationVote({
+          email: emailValue,
+          vote: applicationId,
+          other,
+        })
         .then(({ data }) => {
           setSubmitError(false);
           setLoading(false);
 
           if (data?.success) {
-            setSubmittedEmail(emailValue);
+            onSubmit();
           } else {
             setSubmitError(true);
           }
@@ -60,31 +62,20 @@ export const EarlyAccessCTA = () => {
     }
   };
 
-  const textFieldHelperText = useMemo(() => {
-    if (submittedEmail) {
-      return `${submittedEmailText} ${submittedEmail}`;
-    } else if (submitError) {
-      return submitErrorText;
-    }
-
-    return helperText;
-  }, [submittedEmail, submitError, helperText]);
-
   return (
     <Input
-      disabled={loading || !!submittedEmail}
+      disabled={loading}
       displayError={displayError}
       error={displayError || submitError}
-      success={!!submittedEmail}
-      helperText={textFieldHelperText}
+      helperText={submitError ? submitErrorText : helperText}
       inputRef={emailInputRef}
-      placeholder={isSmall ? "Your email..." : "Enter your email address..."}
+      placeholder="name@example.com"
       value={emailValue}
       onChange={({ target }) => {
         setSubmitError(false);
         setEmailValue(target.value);
       }}
-      buttonLabel={submittedEmail ? "Submitted" : "Get early access"}
+      buttonLabel="Submit vote"
       handleSubmit={handleSubmit}
       loading={loading}
     />
