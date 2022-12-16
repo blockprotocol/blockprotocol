@@ -125,7 +125,7 @@ export const Header = () => {
         </Box>
       </Container>
 
-      <Box sx={{ width: "100vw", position: "relative" }}>
+      <Box sx={{ width: "100%", position: "relative" }}>
         <Box
           sx={{
             width: 1,
