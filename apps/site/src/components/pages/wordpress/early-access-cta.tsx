@@ -6,7 +6,7 @@ import { useEmailTextField } from "../../hooks/use-email-text-field";
 import { useEmailSubmitted } from "./email-submitted-context";
 import { Input } from "./input";
 
-const submittedEmailText = "You’re already on the waitlist as";
+const submittedEmailText = "You’re on the waitlist as";
 const submitErrorText = "There was an error submitting your email";
 
 export const EarlyAccessCTA = () => {
@@ -26,7 +26,6 @@ export const EarlyAccessCTA = () => {
   } = useEmailTextField({});
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<boolean>(false);
   const [touchedEmailInput, setTouchedEmailInput] = useState<boolean>(false);
 
@@ -51,7 +50,6 @@ export const EarlyAccessCTA = () => {
           setLoading(false);
 
           if (data?.success) {
-            setSubmitted(true);
             setSubmittedEmail(emailValue);
           } else {
             setSubmitError(true);
@@ -72,10 +70,10 @@ export const EarlyAccessCTA = () => {
 
   return (
     <Input
-      disabled={loading || submitted || !!submittedEmail}
+      disabled={loading || !!submittedEmail}
       displayError={displayError}
       error={displayError || submitError}
-      success={submitted}
+      success={!!submittedEmail}
       helperText={textFieldHelperText}
       inputRef={emailInputRef}
       placeholder={isSmall ? "Your email..." : "Enter your email address..."}
@@ -84,7 +82,7 @@ export const EarlyAccessCTA = () => {
         setSubmitError(false);
         setEmailValue(target.value);
       }}
-      buttonLabel={submitted ? "Submitted" : "Get early access"}
+      buttonLabel={submittedEmail ? "Submitted" : "Get early access"}
       handleSubmit={handleSubmit}
       loading={loading}
     />

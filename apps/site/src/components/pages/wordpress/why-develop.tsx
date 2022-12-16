@@ -47,7 +47,7 @@ export const WhyDevelop = () => {
             borderBottomColor: "transparent",
             borderTopLeftRadius: "8px",
             borderTopRightRadius: "8px",
-            maxWidth: "1100px",
+            maxWidth: "1200px",
             margin: "auto",
             pb: { xs: 2, md: 4.5 },
             pt: { xs: 3, md: 8.25 },
@@ -78,7 +78,7 @@ export const WhyDevelop = () => {
       <Box
         sx={{
           width: "calc(100% - 2rem)",
-          maxWidth: "1100px",
+          maxWidth: "1200px",
           background:
             "linear-gradient(181.4deg, rgba(255, 255, 255, 0.65) 50%, #FDFCFE 94.38%)",
           border: "2px solid white",
@@ -86,9 +86,9 @@ export const WhyDevelop = () => {
           borderBottomRightRadius: "8px",
           boxShadow:
             "0px 2.8px 2.2px rgba(166, 142, 187, 0.15), 0px 6.7px 5.3px rgba(166, 142, 187, 0.08), 0px 12.5px 10px rgba(166, 142, 187, 0.05), 0px 22.3px 17.9px rgba(166, 142, 187, 0.09), 0px 41.8px 33.4px rgba(166, 142, 187, 0.1), 0px 100px 80px rgba(166, 142, 187, 0.1)",
-          pt: { xs: 3, md: 8.25 },
-          px: { xs: 2, md: 10 },
-          pb: { xs: 4, md: 10 },
+          pt: { xs: 3, lg: 8.25 },
+          px: { xs: 2, lg: 10 },
+          pb: { xs: 7, lg: 10 },
           position: "relative",
           zIndex: 1,
           margin: "auto",
@@ -97,11 +97,11 @@ export const WhyDevelop = () => {
         <Grid
           container
           sx={({ breakpoints }) => ({
-            pt: 7.25,
+            pt: 0,
             margin: "1rem",
             [breakpoints.down("lg")]: {
-              pt: 3,
               maxWidth: 500,
+              margin: "auto",
             },
           })}
           spacing={{ xs: 3, lg: 5.5 }}

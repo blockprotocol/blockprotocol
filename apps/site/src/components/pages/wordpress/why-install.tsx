@@ -24,7 +24,7 @@ export const WhyInstall = () => {
       <Container
         sx={{
           mb: 10,
-          maxWidth: { xs: "95%", md: "75%", lg: "60%" },
+          width: { xs: "95%", md: "75%", lg: "60%" },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
