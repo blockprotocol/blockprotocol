@@ -92,19 +92,22 @@ export const WhyDevelop = () => {
           position: "relative",
           zIndex: 1,
           margin: "auto",
+          display: "flex",
+          justifyContent: "center",
         }}
       >
         <Grid
           container
           sx={({ breakpoints }) => ({
+            width: "100% !important",
             pt: 0,
             margin: "1rem",
             [breakpoints.down("lg")]: {
               maxWidth: 500,
-              margin: "auto",
             },
           })}
-          spacing={{ xs: 3, lg: 5.5 }}
+          rowSpacing={{ xs: 3, lg: 5.5 }}
+          columnSpacing={{ xs: 0, lg: 5.5 }}
         >
           <IconSection
             xs={12}
