@@ -295,7 +295,14 @@ export const RequestAnotherApplication = () => {
                 Vote for What’s Next
               </Typography>
 
-              <Box sx={{ display: "inline-flex", gap: 2 }}>
+              <Box
+                sx={{
+                  display: "inline-flex",
+                  gap: 2,
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                }}
+              >
                 {applications.map((application) => (
                   <ApplicationBadgeButton
                     key={application.id}
