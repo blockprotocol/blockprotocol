@@ -117,6 +117,7 @@ export const Header = () => {
           sx={{
             marginTop: 6.25,
             maxWidth: 500,
+            width: 1,
             display: "flex",
             justifyContent: "center",
           }}

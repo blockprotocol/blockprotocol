@@ -144,7 +144,7 @@ export const WhyInstall = () => {
           Plugin
         </Typography>
 
-        <Box sx={{ maxWidth: 450, mt: 5 }}>
+        <Box sx={{ maxWidth: 500, width: 1, mt: 5 }}>
           <EarlyAccessCTA />
         </Box>
       </Container>
