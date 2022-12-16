@@ -16,7 +16,7 @@ const WordPressPage: FunctionComponent = () => (
         description:
           "The Block Protocol is a standard for building web blocks that work across applications. Use them in WordPress, or vote for another app",
         images: [
-          { url: "https://blockprotocol.org/assets/wp_bp_og_cover.png" },
+          { url: "https://blockprotocol.org/assets/wp_bp_og_cover.jpg" },
         ],
         url: "https://blockprotocol.org/wordpress",
       }}
