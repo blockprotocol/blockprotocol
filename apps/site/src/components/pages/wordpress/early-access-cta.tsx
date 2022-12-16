@@ -31,7 +31,6 @@ export const EarlyAccessCTA = () => {
   } = useEmailTextField({});
 
   const [loading, setLoading] = useState<boolean>(false);
-  const [submitted, setSubmitted] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<boolean>(false);
   const [touchedEmailInput, setTouchedEmailInput] = useState<boolean>(false);
 
@@ -54,7 +53,6 @@ export const EarlyAccessCTA = () => {
         setLoading(false);
 
         if (data?.success) {
-          setSubmitted(true);
           setSubmittedEmail(emailValue);
         } else {
           setSubmitError(true);
@@ -75,7 +73,7 @@ export const EarlyAccessCTA = () => {
 
   return (
     <TextField
-      disabled={loading || submitted || !!submittedEmail}
+      disabled={loading || !!submittedEmail}
       sx={{
         marginBottom: 2,
         maxWidth: 480,
@@ -96,7 +94,7 @@ export const EarlyAccessCTA = () => {
       InputProps={{
         endAdornment: (
           <Button
-            disabled={displayError || loading || submitted || !!submittedEmail}
+            disabled={displayError || loading || !!submittedEmail}
             sx={({ breakpoints }) => ({
               zIndex: 1,
               whiteSpace: "nowrap",
@@ -109,7 +107,7 @@ export const EarlyAccessCTA = () => {
                       `${palette.red[600]} !important`,
                   }
                 : {}),
-              ...(submitted
+              ...(submittedEmail
                 ? {
                     background: ({ palette }) =>
                       `${palette.green[80]} !important`,
@@ -123,7 +121,7 @@ export const EarlyAccessCTA = () => {
               },
             })}
             endIcon={
-              submitted ? (
+              submittedEmail ? (
                 <FontAwesomeIcon icon={faCheck} />
               ) : (
                 <ArrowRightIcon
@@ -138,7 +136,7 @@ export const EarlyAccessCTA = () => {
             onTouchStart={handleSubmit}
             loading={loading}
           >
-            {submitted ? "Submitted" : "Get early access"}
+            {submittedEmail ? "Submitted" : "Get early access"}
           </Button>
         ),
         sx: {
