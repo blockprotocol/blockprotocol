@@ -97,8 +97,18 @@ export const Header = () => {
             fontSize: { xs: "1.25rem", md: "1.45rem" },
           }}
         >
-          Block Protocol blocks work across all Þ supporting applications
-          <strong> ...now including WordPress, powering 43% of the web</strong>
+          Block Protocol blocks work across all Þ supporting applications{" "}
+          <Box
+            component="strong"
+            sx={({ breakpoints }) => ({
+              display: "block",
+              [breakpoints.down("lg")]: {
+                display: "inline",
+              },
+            })}
+          >
+            ...now including WordPress, powering 43% of the web
+          </Box>
         </Typography>
 
         <Box
