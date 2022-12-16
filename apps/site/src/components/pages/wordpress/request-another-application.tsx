@@ -244,11 +244,13 @@ export const RequestAnotherApplication = () => {
           })}
         >
           <Typography
-            variant="bpSmallCaps"
             sx={({ palette, breakpoints }) => ({
+              fontSize: 16,
               color: palette.gray[90],
               mb: 3,
+              lineHeight: 1,
               fontWeight: 900,
+              textTransform: "uppercase",
               [breakpoints.up("lg")]: {
                 textAlign: "left",
               },
@@ -282,12 +284,13 @@ export const RequestAnotherApplication = () => {
           {!selectedApplication && otherEA === null ? (
             <>
               <Typography
-                variant="bpSmallCaps"
                 sx={({ palette, breakpoints }) => ({
+                  fontSize: 16,
                   color: palette.gray[90],
                   mb: 3,
+                  lineHeight: 1,
                   fontWeight: 900,
-
+                  textTransform: "uppercase",
                   [breakpoints.up("lg")]: {
                     textAlign: "left",
                   },
