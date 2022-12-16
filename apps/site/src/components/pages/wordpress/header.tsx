@@ -1,6 +1,7 @@
 import { Stream } from "@cloudflare/stream-react";
-import { Box, Container, Typography, useTheme } from "@mui/material";
+import { Box, Container, Skeleton, Typography, useTheme } from "@mui/material";
 import Image from "next/legacy/image";
+import { useState } from "react";
 
 import wpHelixImage from "../../../../public/assets/new-home/wp-helix.png";
 import { BpWpIcons } from "./bp-wp-icons";
@@ -8,6 +9,8 @@ import { EarlyAccessCTA } from "./early-access-cta";
 
 export const Header = () => {
   const theme = useTheme();
+
+  const [loading, setLoading] = useState(true);
 
   return (
     <Box
@@ -135,12 +138,27 @@ export const Header = () => {
             div: {
               width: "100%",
               height: "100%",
+              display: loading ? "none" : "block",
             },
+            aspectRatio: "16/9",
           }}
         >
+          {loading ? (
+            <Skeleton
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                transform: "unset",
+              }}
+            />
+          ) : null}
           <Stream
             controls
-            src="3331bb25754e7e47a457cbaad3c7fdb1"
+            src="b236bde30eb07b9d01318940e5fc3eda"
+            onCanPlay={() => setLoading(false)}
           />
         </Box>
       </Box>
