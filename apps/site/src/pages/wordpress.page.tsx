@@ -23,7 +23,6 @@ const WordPressPage: FunctionComponent = () => (
         url: "https://blockprotocol.org/wordpress",
       }}
     />
-    <meta title="og:social" content="public.jpg" />
 
     <EmailSubmittedProvider>
       <Header />
