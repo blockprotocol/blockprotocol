@@ -93,7 +93,7 @@ export const applications: Application[] = [
   },
   {
     id: ApplicationIds.Github,
-    name: "Github",
+    name: "GitHub",
     icon: <GithubIcon />,
   },
   otherApplication,
