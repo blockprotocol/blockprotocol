@@ -1,10 +1,4 @@
-import {
-  FunctionComponent,
-  MouseEvent,
-  TouchEvent,
-  useRef,
-  useState,
-} from "react";
+import { FormEvent, FunctionComponent, useRef, useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
@@ -43,9 +37,7 @@ export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
 
   const displayError = touchedEmailInput && isEmailInvalid;
 
-  const handleSubmit = async (
-    event: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>,
-  ) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setTouchedEmailInput(true);
 
