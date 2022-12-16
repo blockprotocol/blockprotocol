@@ -162,6 +162,8 @@ export const Header = () => {
             controls
             src="3331bb25754e7e47a457cbaad3c7fdb1"
             onCanPlay={() => setLoading(false)}
+            primaryColor="#7963F5"
+            letterboxColor="transparent"
           />
         </Box>
       </Box>
