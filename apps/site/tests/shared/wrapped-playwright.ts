@@ -9,10 +9,10 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /Download the Apollo DevTools for a better development experience/,
   /Download the React DevTools for a better development experience/,
 
-  // Messages that only show up in `yarn dev` (to be addressed and removed)
+  // To triage: Messages that only show up in `yarn dev`
   /Image with src "\/_next\/static\/media\/primary-helix-min\.\w+\.png" was detected as the Largest Contentful Paint \(LCP\)\. Please add the "priority" property if this image is above the fold\./, // https://nextjs.org/docs/api-reference/next/legacy/image#priority
-  /Warning: Extra attributes from the server: __playwright_target__/,
   /Warning: Each child in a list should have a unique "key" prop/,
+  /Warning: Extra attributes from the server: __playwright_target__/,
   /Warning: Extra attributes from the server: ([\w%]+ )?class,tabindex/,
   /Warning: validateDOMNesting\(\.\.\.\): [\w%<>]+ cannot appear as a descendant of/,
 
@@ -21,29 +21,26 @@ const tolerableSharedConsoleMessageMatches: RegExp[] = [
   /Failed to load resource: the server responded with a status of 401 \(Unauthorized\)/,
   /Failed to load resource: the server responded with a status of 404 \(Not Found\)/,
 
-  // All browsers / Chrome only
+  // To triage: All browsers
   // /Error: Abort fetching component for route: "\/dashboard\/\[\[...slugs\]\]"/,
   // /Error: Abort fetching component for route: "\/login"/,
 
-  // /Loading failed for the <script> with source “http:\/\/localhost:\d+\/_next\/static\/chunks/,
+  // To triage: Firefox
+  /Cookie “blockprotocol-session-id” does not have a proper “SameSite” attribute value/,
+  /Cookie “blockprotocol-session-id” has been rejected because it is already expired/,
+  /Ignoring unsupported entryTypes: largest-contentful-paint/,
 
-  // // FF
-  // /^\[error\] Error$/,
+  // /Loading failed for the <script> with source “http:\/\/localhost:\d+\/_next\/static\/chunks/,
   // /An iframe which has both allow-scripts and allow-same-origin for its sandbox attribute can remove its sandboxing/,
-  // /Cookie “blockprotocol-session-id” does not have a proper “SameSite” attribute value/,
-  // /Cookie “blockprotocol-session-id” has been rejected because it is already expired/,
   // /downloadable font: download failed \(font-family: "Inter"/,
   // /downloadable font: download failed \(font-family: "JetBrains Mono"/,
   // /Failed to fetch devPagesManifest: Error/,
   // /Feature Policy: Skipping unsupported feature name “clipboard-write”/,
-  // /Ignoring unsupported entryTypes: largest-contentful-paint/,
   // /InstallTrigger is deprecated and will be removed in the future./,
   // /Layout was forced before the page was fully loaded. If stylesheets are not yet loaded this may cause a flash of unstyled content/,
   // /onmozfullscreenchange is deprecated./,
   // /onmozfullscreenerror is deprecated./,
   // /XML Parsing Error: syntax error/, // Location: http://localhost:3000/api/logout
-
-  // // Safari
 ];
 
 let tolerableCustomConsoleMessageMatches: RegExp[] = [];
