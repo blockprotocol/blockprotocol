@@ -1,7 +1,11 @@
 import { readValueFromRecentDummyEmail } from "../shared/dummy-emails.js";
 import { resetSite } from "../shared/fixtures.js";
 import { login, openMobileNav } from "../shared/nav.js";
-import { expect, test } from "../shared/wrapped-playwright.js";
+import {
+  expect,
+  test,
+  tolerateCustomConsoleMessages,
+} from "../shared/wrapped-playwright.js";
 
 test("sign up flow works", async ({ browserName, isMobile, page }) => {
   await resetSite();
@@ -93,6 +97,10 @@ test("Sign Up page redirects logged in users to dashboard", async ({
   browserName,
   page,
 }) => {
+  if (browserName === "firefox") {
+    tolerateCustomConsoleMessages([/\[error\] Error$/]);
+  }
+
   test.skip(
     browserName === "webkit",
     "https://app.asana.com/0/1202538466812818/1202652337622563/f",
@@ -101,6 +109,11 @@ test("Sign Up page redirects logged in users to dashboard", async ({
   await page.goto("/docs");
   await login({ page });
   expect(page.url()).toMatch(/\/docs$/);
+
+  tolerateCustomConsoleMessages((existingCustomMatches) => [
+    ...existingCustomMatches,
+    /Error: Abort fetching component for route: "\/dashboard\/\[\[...slugs\]\]"/,
+  ]);
 
   await Promise.all([
     page.goto("/signup"),
