@@ -76,8 +76,8 @@ export const ComingSoonBanner = () => {
               })}
             >
               <Box component="span" mr="0.5ch">
-                BP 0.2 is about to be deprecated. Learn more about about the
-                forthcoming 0.3 specification, arriving early 2023.
+                The current version of the &THORN; spec is about to be
+                deprecated. Learn more about v0.3, arriving February 2023.
               </Box>
             </Typography>
             <Typography
