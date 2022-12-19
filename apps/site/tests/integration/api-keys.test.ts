@@ -38,7 +38,7 @@ test("API key page should generate a valid key", async ({
   );
   await expect(tableWithKeys).not.toBeVisible();
 
-  await page.locator("a >> text=Create new key").click();
+  await page.locator("button >> text=Create new key").click();
 
   await keyNameInput.click();
   await keyNameInput.press("Enter");
@@ -46,7 +46,7 @@ test("API key page should generate a valid key", async ({
   await keyNameInput.fill("oops");
   await page.locator("text=Cancel").click();
 
-  await page.locator("text=Create new key").click();
+  await page.locator("button >> text=Create new key").click();
   await expect(keyNameInput).toHaveValue("");
 
   await keyNameInput.click();

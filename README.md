@@ -1,3 +1,5 @@
+![github_banner](https://user-images.githubusercontent.com/6226576/208439875-08d49948-e1de-418a-9a79-1df1f864c64e.png)
+
 # Block Protocol
 
 The Block Protocol is an open standard for building and using data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines.
