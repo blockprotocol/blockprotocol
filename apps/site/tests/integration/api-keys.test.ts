@@ -38,9 +38,6 @@ test("API key page should generate a valid key", async ({
   );
   await expect(tableWithKeys).not.toBeVisible();
 
-  /* eslint-disable no-unreachable -- @todo Revert before merging, see https://github.com/blockprotocol/blockprotocol/pull/838#issuecomment-1355727658 */
-  return;
-
   await page.locator("a >> text=Create new key").click();
 
   await keyNameInput.click();
