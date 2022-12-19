@@ -1,15 +1,17 @@
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
+import { getRoots } from "@blockprotocol/graph/stdlib";
+import { extractBaseUri } from "@blockprotocol/type-system/slim";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { html } from "lit";
 
-type BlockEntityProperties = {
-  name: string;
-};
+import { propertyTypes } from "../src/data/property-types";
 
-export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperties> {
+export class TestCustomElementBlock extends BlockElementBase {
   private handleInput(event: Event) {
     this.updateSelfProperties({
-      name: (event.target as HTMLInputElement).value,
+      [extractBaseUri(propertyTypes.name.$id)]: (
+        event.target as HTMLInputElement
+      ).value,
     })
       // eslint-disable-next-line no-console -- intentional debugging tool
       .then(console.log)
@@ -20,22 +22,34 @@ export class TestCustomElementBlock extends BlockElementBase<BlockEntityProperti
   }
 
   render() {
+    const blockEntity = this.graph?.blockEntitySubgraph
+      ? getRoots(this.graph.blockEntitySubgraph)[0]!
+      : undefined;
     if (this.graph.readonly) {
-      return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
+      return html`<h1>
+          Hello,
+          ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
+        </h1>
         <p>
-          The entityId of this block is ${this.graph.blockEntity?.entityId}.
+          The entityId of this block is
+          ${blockEntity?.metadata.editionId.baseId}.
         </p>
-        <p>${this.graph.blockEntity?.properties.name}</p>`;
+        <p>
+          ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
+        </p>`;
     }
 
-    return html`<h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
+    return html`<h1>
+        Hello,
+        ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
+      </h1>
       <p>
-        The entityId of this block is ${this.graph.blockEntity?.entityId}. Use
-        it to update its data when calling updateEntities.
+        The entityId of this block is ${blockEntity?.metadata.editionId.baseId}.
+        Use it to update its data when calling updateEntities.
       </p>
       <input
         @change=${this.handleInput}
-        value=${this.graph.blockEntity?.properties.name}
+        value=${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
       />`;
   }
 }

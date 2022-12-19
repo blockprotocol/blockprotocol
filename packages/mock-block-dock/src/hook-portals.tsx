@@ -1,3 +1,4 @@
+import { getEntity } from "@blockprotocol/graph/stdlib";
 import { HookData } from "@blockprotocol/hook";
 import { useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
@@ -7,12 +8,10 @@ import { useMockBlockDockContext } from "./mock-block-dock-context";
 import { get, set } from "./util";
 
 const HookPortal = ({ entityId, path, type }: HookData) => {
-  const { datastore, readonly, updateEntity } = useMockBlockDockContext();
+  const { graph, readonly, updateEntity } = useMockBlockDockContext();
 
   const { entity, value } = useMemo(() => {
-    const foundEntity = datastore.entities.find(
-      (currentEntity) => currentEntity.entityId === entityId,
-    );
+    const foundEntity = getEntity(graph, entityId);
 
     if (!foundEntity) {
       throw new Error(
@@ -27,7 +26,7 @@ const HookPortal = ({ entityId, path, type }: HookData) => {
     );
 
     return { entity: foundEntity, value: foundValue };
-  }, [datastore.entities, entityId, path]);
+  }, [graph, entityId, path]);
 
   const updateValue = useCallback(
     async (newValue: unknown) => {
@@ -36,7 +35,13 @@ const HookPortal = ({ entityId, path, type }: HookData) => {
       set(newProperties, path, newValue);
 
       return updateEntity({
-        data: { entityId, properties: newProperties },
+        data: {
+          entityId,
+          entityTypeId: entity.metadata.entityTypeId,
+          properties: newProperties,
+          leftToRightOrder: entity.linkData?.leftToRightOrder,
+          rightToLeftOrder: entity.linkData?.rightToLeftOrder,
+        },
       });
     },
     [entity, entityId, path, updateEntity],

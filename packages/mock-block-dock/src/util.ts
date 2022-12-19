@@ -2,11 +2,44 @@ import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
   AggregateEntityTypesData,
+  AggregateEntityTypesResult,
   Entity,
   EntityType,
   MultiFilter,
   MultiSort,
+  Subgraph,
+  SubgraphRootTypes,
 } from "@blockprotocol/graph";
+
+type TupleEntry<
+  T extends readonly unknown[],
+  I extends unknown[] = [],
+  R = never,
+> = T extends readonly [infer Head, ...infer Tail]
+  ? TupleEntry<Tail, [...I, unknown], R | [`${I["length"]}`, Head]>
+  : R;
+
+type ObjectEntry<T extends {}> = T extends object
+  ? { [K in keyof T]: [K, Required<T>[K]] }[keyof T] extends infer E
+    ? E extends [infer K, infer V]
+      ? K extends string | number
+        ? [`${K}`, V]
+        : never
+      : never
+    : never
+  : never;
+
+// Source: https://dev.to/harry0000/a-bit-convenient-typescript-type-definitions-for-objectentries-d6g
+export type Entry<T extends {}> = T extends readonly [unknown, ...unknown[]]
+  ? TupleEntry<T>
+  : T extends ReadonlyArray<infer U>
+  ? [`${number}`, U]
+  : ObjectEntry<T>;
+
+/** `Object.entries` analogue which returns a well-typed array */
+export function typedEntries<T extends {}>(object: T): ReadonlyArray<Entry<T>> {
+  return Object.entries(object) as unknown as ReadonlyArray<Entry<T>>;
+}
 
 type FilterEntitiesFn = {
   (params: {
@@ -62,6 +95,74 @@ export const set = (obj: {}, path: string | string[], value: unknown) => {
   currentObj[keys[i]!] = value;
 };
 
+export const isEqual = (first: any, second: any): boolean => {
+  if (first === second) {
+    return true;
+  }
+  if (
+    (first === undefined ||
+      second === undefined ||
+      first === null ||
+      second === null) &&
+    (first || second)
+  ) {
+    return false;
+  }
+  const firstType = first?.constructor.name;
+  const secondType = second?.constructor.name;
+  if (firstType !== secondType) {
+    return false;
+  }
+  if (firstType === "Array") {
+    if (first.length !== second.length) {
+      return false;
+    }
+    let equal = true;
+    for (let i = 0; i < first.length; i++) {
+      if (!isEqual(first[i], second[i])) {
+        equal = false;
+        break;
+      }
+    }
+    return equal;
+  }
+  if (firstType === "Object") {
+    let equal = true;
+    const fKeys = Object.keys(first);
+    const sKeys = Object.keys(second);
+    if (fKeys.length !== sKeys.length) {
+      return false;
+    }
+    for (let i = 0; i < fKeys.length; i++) {
+      const firstField = first[fKeys[i]!];
+      const secondField = second[fKeys[i]!];
+      if (firstField && secondField) {
+        if (firstField === secondField) {
+          continue;
+        }
+        if (
+          firstField &&
+          (firstField.constructor.name === "Array" ||
+            firstField.constructor.name === "Object")
+        ) {
+          equal = isEqual(firstField, secondField);
+          if (!equal) {
+            break;
+          }
+        } else if (firstField !== secondField) {
+          equal = false;
+          break;
+        }
+      } else if ((firstField && !secondField) || (!firstField && secondField)) {
+        equal = false;
+        break;
+      }
+    }
+    return equal;
+  }
+  return first === second;
+};
+
 export const debounce = <T extends (...args: any[]) => any>(
   func: T,
   delayMs: number,
@@ -78,7 +179,7 @@ const filterEntities: FilterEntitiesFn = (params) => {
   const { entityTypeId, entities, multiFilter } = params;
 
   return entities.filter((entity) => {
-    if (entityTypeId && entityTypeId !== entity.entityTypeId) {
+    if (entityTypeId && entityTypeId !== entity.metadata.entityTypeId) {
       return false;
     }
 
@@ -150,18 +251,30 @@ const isEntityTypes = (
   entities: Entity[] | EntityType[],
 ): entities is EntityType[] => "schema" in (entities[0] ?? {});
 
+export type FilterResult<T extends Entity | EntityType = Entity | EntityType> =
+  {
+    results: T[];
+    operation:
+      | AggregateEntitiesResult<
+          Subgraph<SubgraphRootTypes["entity"]>
+        >["operation"]
+      | AggregateEntityTypesResult<
+          Subgraph<SubgraphRootTypes["entityType"]>
+        >["operation"];
+  };
+
 export function filterAndSortEntitiesOrTypes(
   entities: Entity[],
   payload: AggregateEntitiesData,
-): AggregateEntitiesResult<Entity>;
+): FilterResult<Entity>;
 export function filterAndSortEntitiesOrTypes(
   entities: EntityType[],
   payload: AggregateEntityTypesData,
-): AggregateEntitiesResult<EntityType>;
+): FilterResult<EntityType>;
 export function filterAndSortEntitiesOrTypes(
   entities: Entity[] | EntityType[],
-  payload: AggregateEntitiesResult<EntityType> | AggregateEntityTypesData,
-): AggregateEntitiesResult<Entity> | AggregateEntitiesResult<EntityType> {
+  payload: AggregateEntitiesData | AggregateEntityTypesData,
+): FilterResult {
   const { operation } = payload;
 
   const pageNumber = operation?.pageNumber || 1;
@@ -211,7 +324,7 @@ export function filterAndSortEntitiesOrTypes(
       : undefined;
   if (entityTypeIdFilter) {
     results = results.filter(
-      (entity) => entity.entityTypeId === entityTypeIdFilter,
+      (entity) => entity.metadata.entityTypeId === entityTypeIdFilter,
     );
   }
 

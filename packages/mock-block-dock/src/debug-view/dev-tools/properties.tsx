@@ -1,4 +1,5 @@
 import { Entity } from "@blockprotocol/graph";
+import { getEntityTypeById, getRoots } from "@blockprotocol/graph/stdlib";
 import {
   Box,
   Collapse,
@@ -7,7 +8,7 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-import Ajv from "ajv";
+import { useMemo } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { customColors } from "../theme/palette";
@@ -15,15 +16,29 @@ import { BlockSchemaView } from "./block-schema-view";
 import { EntitySwitcher } from "./entity-switcher";
 import { JsonView } from "./json-view";
 
-const ajv = new Ajv();
+// const ajv = new Ajv();
 
 export const PropertiesView = () => {
-  const { readonly, setReadonly, blockSchema, blockEntity, updateEntity } =
+  const { readonly, setReadonly, blockEntitySubgraph, updateEntity, graph } =
     useMockBlockDockContext();
 
-  const validate = ajv.compile(blockSchema ?? {});
-  validate(blockEntity.properties);
-  const errors = validate.errors?.map((error) => error.message);
+  const blockEntity = useMemo(
+    () => getRoots(blockEntitySubgraph)[0]!,
+    [blockEntitySubgraph],
+  );
+
+  const blockEntityType = useMemo(
+    () => getEntityTypeById(graph, blockEntity.metadata.entityTypeId),
+    [graph, blockEntity],
+  );
+
+  /** @todo - reimplement validation */
+
+  // const validate = ajv.compile(blockSchema ?? {});
+  // validate(blockEntity.properties);
+  // const errors = validate.errors?.map((error) => error.message);
+
+  const errors: never[] = [];
 
   return (
     <Container maxWidth="xl">
@@ -59,40 +74,54 @@ export const PropertiesView = () => {
                   // These fields should not be edited
                   if (
                     args.name &&
-                    ["entityType", "entityTypeId", "entityId"].includes(
-                      args.name,
-                    )
+                    (args.name.includes("versionId") ||
+                      args.name.includes("baseId") ||
+                      args.name.includes("leftEntityId") ||
+                      args.name.includes("rightEntityId"))
                   ) {
                     return false;
                   }
+                  const entity = args.updated_src as Entity;
                   void updateEntity({
-                    data: args.updated_src as Entity,
+                    data: {
+                      entityId: entity.metadata.editionId.baseId,
+                      entityTypeId: entity.metadata.entityTypeId,
+                      properties: entity.properties,
+                      leftToRightOrder: entity.linkData?.leftToRightOrder,
+                      rightToLeftOrder: entity.linkData?.rightToLeftOrder,
+                    },
                   });
                 }}
                 onAdd={(args) => {
                   // don't allow adding of top level fields
-                  if (args.name && !args.name.includes("properties")) {
+                  if (!args.namespace.includes("properties")) {
                     return false;
                   }
+                  const entity = args.updated_src as Entity;
                   void updateEntity({
-                    data: args.updated_src as Entity,
+                    data: {
+                      entityId: entity.metadata.editionId.baseId,
+                      entityTypeId: entity.metadata.entityTypeId,
+                      properties: entity.properties,
+                      leftToRightOrder: entity.linkData?.leftToRightOrder,
+                      rightToLeftOrder: entity.linkData?.rightToLeftOrder,
+                    },
                   });
                 }}
                 onDelete={(args) => {
-                  // These fields should not be deleted
-                  if (
-                    args.name &&
-                    [
-                      "entityType",
-                      "entityTypeId",
-                      "entityId",
-                      "properties",
-                    ].includes(args.name)
-                  ) {
+                  // don't allow deleting of top level fields
+                  if (!args.namespace.includes("properties")) {
                     return false;
                   }
+                  const entity = args.updated_src as Entity;
                   void updateEntity({
-                    data: args.updated_src as Entity,
+                    data: {
+                      entityId: entity.metadata.editionId.baseId,
+                      entityTypeId: entity.metadata.entityTypeId,
+                      properties: entity.properties,
+                      leftToRightOrder: entity.linkData?.leftToRightOrder,
+                      rightToLeftOrder: entity.linkData?.rightToLeftOrder,
+                    },
                   });
                 }}
                 validationMessage="You may only edit the properties object"
@@ -112,12 +141,12 @@ export const PropertiesView = () => {
           </Box>
         </Grid>
         <Grid item xs={6}>
-          {blockSchema && (
+          {blockEntityType && (
             <Box>
               <Typography variant="subtitle2" mb={1}>
                 Block Schema
               </Typography>
-              <BlockSchemaView />
+              <BlockSchemaView entityType={blockEntityType.schema} />
             </Box>
           )}
         </Grid>

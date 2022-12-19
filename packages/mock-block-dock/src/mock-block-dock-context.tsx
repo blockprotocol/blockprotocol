@@ -1,8 +1,9 @@
 import { Message } from "@blockprotocol/core";
 import {
   EmbedderGraphMessageCallbacks,
-  Entity,
-  EntityType,
+  EntityEditionId,
+  Subgraph,
+  SubgraphRootTypes,
 } from "@blockprotocol/graph";
 import {
   createContext,
@@ -15,11 +16,8 @@ import {
   useState,
 } from "react";
 
-import { MockData } from "./use-mock-block-props/use-mock-datastore";
-
 type MockBlockDockInfo = {
-  blockEntity: Entity;
-  blockSchema?: Partial<EntityType>;
+  blockEntitySubgraph: Subgraph<SubgraphRootTypes["entity"]>;
   blockInfo: {
     blockType: {
       entryPoint?: "react" | "html" | "custom-element" | string;
@@ -30,12 +28,12 @@ type MockBlockDockInfo = {
     name?: string;
     protocol?: string;
   };
-  datastore: MockData;
+  graph: Subgraph;
   debugMode: boolean;
   logs: Message[];
   readonly: boolean;
   setDebugMode: Dispatch<SetStateAction<boolean>>;
-  setEntityIdOfEntityForBlock: Dispatch<SetStateAction<string>>;
+  setEntityEditionIdOfEntityForBlock: Dispatch<SetStateAction<EntityEditionId>>;
   setLogs: Dispatch<SetStateAction<Message[]>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
   updateEntity: EmbedderGraphMessageCallbacks["updateEntity"];

@@ -2,9 +2,7 @@ import { HtmlBlockDefinition } from "@blockprotocol/core";
 import {
   BlockGraphProperties,
   Entity,
-  EntityType,
-  Link,
-  LinkedAggregationDefinition,
+  EntityEditionId,
 } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
 import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
@@ -22,6 +20,7 @@ import {
 import { v4 as uuid } from "uuid";
 
 import { BlockRenderer } from "./block-renderer";
+import { getEntity } from "./datastore/hook-implementations/entity/get-entity";
 import { HookPortals } from "./hook-portals";
 import { MockBlockDockProvider } from "./mock-block-dock-context";
 import { useDefaultState } from "./use-default-state";
@@ -46,14 +45,11 @@ type BlockDefinition =
 
 type MockBlockDockProps = {
   blockDefinition: BlockDefinition;
-  blockEntity?: Entity;
-  blockSchema?: Partial<EntityType>;
+  blockEntityEditionId?: EntityEditionId;
   debug?: boolean;
   hideDebugToggle?: boolean;
   initialEntities?: Entity[];
-  initialEntityTypes?: EntityType[];
-  initialLinks?: Link[];
-  initialLinkedAggregations?: LinkedAggregationDefinition[];
+  // initialLinkedAggregations?: LinkedAggregationDefinition[];
   readonly?: boolean;
   blockInfo?: {
     blockType: {
@@ -73,48 +69,35 @@ type MockBlockDockProps = {
  * See README.md for usage instructions.
  * @param props component props
  * @param props.blockDefinition the source for the block and any additional metadata required
- * @param [props.blockEntity] the starting properties for the block entity
+ * @param [props.blockEntityEditionId] the `EntityEditionId` of the starting block entity
  * @param [props.blockInfo] metadata about the block
- * @param [props.blockSchema] the schema for the block entity
  * @param [props.debug=false] display debugging information
  * @param [props.hideDebugToggle=false] hide the ability to toggle the debug UI
  * @param [props.initialEntities] the entities to include in the data store (NOT the block entity, which is always provided)
- * @param [props.initialEntityTypes] the entity types to include in the data store (NOT the block's type, which is always provided)
- * @param [props.initialLinks] the links to include in the data store
  * @param [props.initialLinkedAggregations] The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  * @param [props.readonly=false] whether the block should display in readonly mode or not
  */
 export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   blockDefinition,
-  blockEntity: initialBlockEntity,
-  blockSchema: initialBlockSchema,
+  blockEntityEditionId: initialBlockEntityEditionId,
   blockInfo,
   debug: initialDebug = false,
   hideDebugToggle = false,
   initialEntities,
-  initialEntityTypes,
-  initialLinks,
-  initialLinkedAggregations,
+  // initialLinkedAggregations,
   readonly: initialReadonly = false,
 }) => {
   const {
-    blockEntity,
-    blockGraph,
-    blockSchema,
-    datastore,
-    entityTypes,
-    graphServiceCallbacks,
-    linkedAggregations,
+    blockEntityEditionId,
+    mockDatastore,
+    // linkedAggregations,
     readonly,
-    setEntityIdOfEntityForBlock,
+    setEntityEditionIdOfEntityForBlock,
     setReadonly,
   } = useMockBlockProps({
-    blockEntity: initialBlockEntity,
-    blockSchema: initialBlockSchema,
+    blockEntityEditionId: initialBlockEntityEditionId,
     initialEntities,
-    initialEntityTypes,
-    initialLinks,
-    initialLinkedAggregations,
+    // initialLinkedAggregations,
     readonly: !!initialReadonly,
   });
 
@@ -123,6 +106,21 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
   const [hooks, setHooks] = useState<Map<string, HookData>>(new Map());
 
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  const blockEntitySubgraph = getEntity(
+    {
+      entityId: blockEntityEditionId.baseId,
+      graphResolveDepths: {
+        hasLeftEntity: { incoming: 2, outgoing: 2 },
+        hasRightEntity: { incoming: 2, outgoing: 2 },
+      },
+    },
+    mockDatastore.graph,
+  );
+
+  if (!blockEntitySubgraph) {
+    throw new Error(`Failed to get subgraph for block entity`);
+  }
 
   const blockType =
     "ReactComponent" in blockDefinition
@@ -133,21 +131,19 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       ? "html"
       : undefined;
 
-  const propsToInject: BlockGraphProperties<any> = {
+  const propsToInject: BlockGraphProperties = {
     graph: {
+      blockEntitySubgraph,
       readonly,
-      blockEntity,
-      blockGraph,
-      entityTypes,
-      linkedAggregations,
+      // linkedAggregations,
     },
   };
 
+  const { graphServiceCallbacks } = mockDatastore;
+
   const { graphService } = useGraphEmbedderService(wrapperRef, {
-    blockGraph,
-    blockEntity,
-    entityTypes,
-    linkedAggregations,
+    blockEntitySubgraph,
+    // linkedAggregations,
     callbacks: graphServiceCallbacks,
     readonly,
   });
@@ -230,24 +226,14 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   useSendGraphValue({
     graphService,
-    value: blockEntity,
-    valueName: "blockEntity",
+    value: blockEntitySubgraph,
+    valueName: "blockEntitySubgraph",
   });
-  useSendGraphValue({
-    graphService,
-    value: blockGraph,
-    valueName: "blockGraph",
-  });
-  useSendGraphValue({
-    graphService,
-    value: entityTypes,
-    valueName: "entityTypes",
-  });
-  useSendGraphValue({
-    graphService,
-    value: linkedAggregations,
-    valueName: "linkedAggregations",
-  });
+  // useSendGraphValue({
+  //   graphService,
+  //   value: linkedAggregations,
+  //   valueName: "linkedAggregations",
+  // });
   useSendGraphValue({
     graphService,
     value: readonly,
@@ -290,7 +276,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   return (
     <MockBlockDockProvider
-      blockEntity={blockEntity}
+      blockEntitySubgraph={blockEntitySubgraph}
       blockInfo={
         blockInfo ?? {
           blockType: {
@@ -298,13 +284,12 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           },
         }
       }
-      blockSchema={blockSchema}
-      datastore={datastore}
+      graph={mockDatastore.graph}
       debugMode={debugMode}
       readonly={readonly}
       setReadonly={setReadonly}
       setDebugMode={setDebugMode}
-      setEntityIdOfEntityForBlock={setEntityIdOfEntityForBlock}
+      setEntityEditionIdOfEntityForBlock={setEntityEditionIdOfEntityForBlock}
       updateEntity={graphServiceCallbacks.updateEntity}
     >
       <HookPortals hooks={hooks} />

@@ -40,6 +40,7 @@
     "@blockprotocol/core": "0.0.12",
     "@blockprotocol/graph": "0.0.18",
     "@blockprotocol/hook": "0.0.8",
+    "@blockprotocol/type-system": "0.0.2",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
