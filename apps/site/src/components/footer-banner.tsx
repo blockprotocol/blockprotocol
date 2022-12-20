@@ -13,6 +13,7 @@ import backgroundCornerHelix from "../../public/assets/background-corner-helix.p
 import { ArrowRightIcon, BoltIcon } from "./icons";
 import { Link as LinkComponent, LinkProps } from "./link";
 import { LinkButton } from "./link-button";
+import { RequestAnotherApplication } from "./pages/wordpress/request-another-application";
 
 type Banner = {
   shouldDisplay: (params: { pathname: string; asPath: string }) => boolean;
@@ -23,10 +24,11 @@ type Banner = {
 type BannerCardProps = {
   sx?: PaperProps["sx"];
   contents: ReactNode;
-  buttonHref: string;
-  buttonText: ReactNode;
+  buttonHref?: string;
+  buttonText?: ReactNode;
   buttonStartIcon?: ReactNode;
   buttonEndIcon?: ReactNode;
+  fullWidth?: boolean;
 };
 
 const Link: FunctionComponent<LinkProps> = (linkProps) => (
@@ -59,6 +61,7 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
   buttonText,
   buttonStartIcon,
   buttonEndIcon,
+  fullWidth,
 }) => (
   <Paper
     sx={[
@@ -91,18 +94,22 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
-    <Box mb={2}>{contents}</Box>
-    <LinkButton
-      href={buttonHref}
-      sx={{
-        textTransform: "none",
-      }}
-      variant="primary"
-      startIcon={buttonStartIcon}
-      endIcon={buttonEndIcon}
-    >
-      {buttonText}
-    </LinkButton>
+    <Box mb={2} width={fullWidth ? 1 : "auto"}>
+      {contents}
+    </Box>
+    {buttonHref ? (
+      <LinkButton
+        href={buttonHref}
+        sx={{
+          textTransform: "none",
+        }}
+        variant="primary"
+        startIcon={buttonStartIcon}
+        endIcon={buttonEndIcon}
+      >
+        {buttonText}
+      </LinkButton>
+    ) : null}
   </Paper>
 );
 
@@ -301,6 +308,30 @@ export const BANNERS: Banner[] = [
         buttonHref="/docs/developing-blocks"
         buttonText="Read the quickstart guide"
         buttonStartIcon={<BoltIcon />}
+      />
+    ),
+  },
+  {
+    shouldDisplay: ({ pathname }) => pathname.startsWith("/wordpress"),
+    overlapsFooter: true,
+    contents: (
+      <BannerCard
+        sx={{
+          py: (theme) => ({
+            xs: theme.spacing(3),
+            md: theme.spacing(6),
+          }),
+          px: (theme) => ({
+            xs: theme.spacing(4),
+            md: theme.spacing(9.5),
+          }),
+        }}
+        contents={
+          <Box mb={2} width={1}>
+            <RequestAnotherApplication />
+          </Box>
+        }
+        fullWidth
       />
     ),
   },

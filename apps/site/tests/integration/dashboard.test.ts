@@ -1,8 +1,16 @@
 import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
-import { expect, test } from "../shared/wrapped-playwright.js";
+import {
+  expect,
+  test,
+  tolerateCustomConsoleMessages,
+} from "../shared/wrapped-playwright.js";
 
 test("dashboard page should not be accessible to guests", async ({ page }) => {
+  tolerateCustomConsoleMessages([
+    /Error: Abort fetching component for route: "\/login"/,
+  ]);
+
   await Promise.all([
     page.goto("/dashboard"),
     page.waitForNavigation({

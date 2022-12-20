@@ -19,6 +19,7 @@ import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
 import { FontAwesomeIcon } from "../../../components/icons";
+import { ClientOnlyLastUpdated } from "../../../components/last-updated";
 import { Link } from "../../../components/link";
 import { mdxComponents } from "../../../components/mdx/mdx-components";
 import { BlockDataContainer } from "../../../components/pages/hub/block-data-container";
@@ -34,7 +35,6 @@ import {
   retrieveBlockReadme,
 } from "../../../lib/blocks";
 import { isFork, isProduction } from "../../../lib/config";
-import { formatUpdatedAt } from "../../../util/html-utils";
 
 // Exclude <FooBar />, but keep <h1 />, <ul />, etc.
 const markdownComponents = Object.fromEntries(
@@ -365,7 +365,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
                     component="span"
                     sx={{ display: { xs: "block", md: "inline-block" } }}
                   >
-                    {formatUpdatedAt(blockMetadata.lastUpdated)}
+                    <ClientOnlyLastUpdated value={blockMetadata.lastUpdated} />
                   </Box>
                 </>
               ) : null}
