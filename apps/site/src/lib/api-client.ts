@@ -206,7 +206,7 @@ export const apiClient = {
     other: string | null;
   }) =>
     apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(
-      "subscribe-email",
+      "vote-application",
       {
         email,
         merge_fields: {
