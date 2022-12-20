@@ -4,7 +4,7 @@
 
 [![github_banner](https://user-images.githubusercontent.com/6226576/208439875-08d49948-e1de-418a-9a79-1df1f864c64e.png)][github_banner]
 
-[![discord](https://img.shields.io/discord/1050770647564943402)][discord] [![github_star](https://img.shields.io/github/stars/hashintel/hash?label=Star%20on%20GitHub&style=social)][github_star]
+[![discord](https://img.shields.io/discord/1050770647564943402)][discord] [![github_star](https://img.shields.io/github/stars/blockprotocol/blockprotocol?label=Star%20on%20GitHub&style=social)][github_star]
 
 # Block Protocol
 
