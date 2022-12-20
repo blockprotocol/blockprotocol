@@ -1,7 +1,7 @@
 [github_banner]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
-![github_banner](https://user-images.githubusercontent.com/6226576/208439875-08d49948-e1de-418a-9a79-1df1f864c64e.png)
+[![github_banner](https://user-images.githubusercontent.com/6226576/208439875-08d49948-e1de-418a-9a79-1df1f864c64e.png)][github_banner]
 
 [![discord](https://img.shields.io/discord/1050770647564943402)][discord]
 
