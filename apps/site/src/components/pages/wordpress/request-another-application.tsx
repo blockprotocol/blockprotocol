@@ -145,6 +145,7 @@ export const RequestAnotherApplication = () => {
                   </>
                 }
                 selectedApplication={selectedApplication}
+                suggestionName={suggestionName}
                 sumbitHandler={() => {
                   setModalTwitterHref(selectedApplication.twitterHref ?? "");
                   setDisplayModal(true);

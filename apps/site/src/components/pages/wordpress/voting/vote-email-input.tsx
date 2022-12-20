@@ -9,13 +9,13 @@ const submitErrorText = "There was an error submitting your email";
 
 export interface VoteEmailInputProps {
   applicationId: ApplicationIds;
-  other: string | null;
+  suggestionName?: string;
   onSubmit: () => void;
 }
 
 export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
   applicationId,
-  other,
+  suggestionName,
   onSubmit,
 }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -47,7 +47,7 @@ export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
         .submitApplicationVote({
           email: emailValue,
           vote: applicationId,
-          other,
+          other: suggestionName,
         })
         .then(({ data }) => {
           setSubmitError(false);

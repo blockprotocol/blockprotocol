@@ -7,6 +7,7 @@ import { VoteEmailInput } from "./vote-email-input";
 export interface EnterEmailScreenProps {
   title: ReactNode;
   selectedApplication: Application;
+  suggestionName?: string;
   sumbitHandler: () => void;
   goBackHandler: () => void;
 }
@@ -14,6 +15,7 @@ export interface EnterEmailScreenProps {
 export const EnterEmailScreen: FunctionComponent<EnterEmailScreenProps> = ({
   title,
   selectedApplication,
+  suggestionName,
   sumbitHandler,
   goBackHandler,
 }) => {
@@ -77,7 +79,7 @@ export const EnterEmailScreen: FunctionComponent<EnterEmailScreenProps> = ({
       <VoteEmailInput
         applicationId={selectedApplication.id}
         onSubmit={sumbitHandler}
-        other={null}
+        suggestionName={suggestionName}
       />
 
       <Typography

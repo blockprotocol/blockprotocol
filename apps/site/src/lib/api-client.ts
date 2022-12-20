@@ -203,7 +203,7 @@ export const apiClient = {
   }: {
     email: string;
     vote: ApplicationIds;
-    other: string | null;
+    other?: string;
   }) =>
     apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(
       "vote-application",
