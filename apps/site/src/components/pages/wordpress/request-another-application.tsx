@@ -225,25 +225,13 @@ export const RequestAnotherApplication = () => {
         sx={({ breakpoints }) => ({
           display: "inline-flex",
           width: 1,
+          minHeight: 250,
           [breakpoints.down("lg")]: {
             flexDirection: "column",
           },
         })}
       >
-        <Box
-          sx={({ breakpoints }) => ({
-            pr: 4.875,
-            borderRight: ({ palette }) => `1px solid ${palette.gray[30]}`,
-
-            [breakpoints.down("lg")]: {
-              pr: 0,
-              pb: 1.5,
-              mb: 3,
-              borderRightWidth: 0,
-              borderBottom: ({ palette }) => `1px solid ${palette.gray[30]}`,
-            },
-          })}
-        >
+        <Box>
           <Typography
             sx={({ palette, breakpoints }) => ({
               fontSize: 16,
@@ -252,6 +240,7 @@ export const RequestAnotherApplication = () => {
               lineHeight: 1,
               fontWeight: 900,
               textTransform: "uppercase",
+              maxWidth: "unset",
               [breakpoints.up("lg")]: {
                 textAlign: "left",
               },
@@ -261,12 +250,23 @@ export const RequestAnotherApplication = () => {
           </Typography>
 
           <Box
-            sx={{
+            sx={({ breakpoints }) => ({
               display: "inline-flex",
               gap: 2,
               opacity: selectedApplication || otherEA !== null ? 0.4 : 1,
               transition: ({ transitions }) => transitions.create("opacity"),
-            }}
+
+              pr: 4.875,
+              borderRight: ({ palette }) => `1px solid ${palette.gray[30]}`,
+
+              [breakpoints.down("lg")]: {
+                pr: 0,
+                pb: 1.5,
+                mb: 5,
+                borderRightWidth: 0,
+                borderBottom: ({ palette }) => `1px solid ${palette.gray[30]}`,
+              },
+            })}
           >
             <Link href="https://hash.ai">
               <ApplicationBadge icon={<HashIcon />} name="HASH" />
@@ -294,6 +294,7 @@ export const RequestAnotherApplication = () => {
                   lineHeight: 1,
                   fontWeight: 900,
                   textTransform: "uppercase",
+                  maxWidth: "unset",
                   [breakpoints.up("lg")]: {
                     textAlign: "left",
                   },
@@ -348,6 +349,7 @@ export const RequestAnotherApplication = () => {
                   fontWeight: 900,
                   lineHeight: 1,
                   textTransform: "uppercase",
+                  textAlign: "center",
                   [breakpoints.up("lg")]: {
                     textAlign: "left",
                   },
@@ -406,7 +408,9 @@ export const RequestAnotherApplication = () => {
                 textAlign: "left",
                 flex: 1,
                 [breakpoints.down("lg")]: {
-                  display: "inline-flex",
+                  display: "flex",
+                  alignItems: "center",
+                  mb: 2,
                 },
               })}
             >
@@ -419,6 +423,7 @@ export const RequestAnotherApplication = () => {
                   fontWeight: 900,
                   lineHeight: 1,
                   textTransform: "uppercase",
+                  textAlign: "center",
                   [breakpoints.up("lg")]: {
                     textAlign: "left",
                   },
