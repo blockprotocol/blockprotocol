@@ -27,7 +27,7 @@ export const EnterEmailScreen: FunctionComponent<EnterEmailScreenProps> = ({
         textAlign: "left",
         flex: 1,
         [breakpoints.down("lg")]: {
-          display: "flex",
+          display: "inline-block",
           alignItems: "center",
           mb: 2,
         },
