@@ -24,9 +24,10 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
   const [displayLoginModal, setDisplayLoginModal] = useState(false);
 
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
-  const isWordPressPage = generatePathWithoutParams(
-    hydrationFriendlyAsPath,
-  ).startsWith("/wordpress");
+  const pathWithoutParams = generatePathWithoutParams(hydrationFriendlyAsPath);
+  const showBanner =
+    !pathWithoutParams.startsWith("/wordpress") &&
+    !pathWithoutParams.startsWith("/signup");
 
   const banner = useMemo(
     () =>
@@ -42,7 +43,7 @@ export const PageLayout: FunctionComponent<PageLayoutProps> = ({
       />
       <Box display="flex" flexDirection="column" sx={{ minHeight: "100vh" }}>
         <Navbar openLoginModal={() => setDisplayLoginModal(true)} />
-        {!isWordPressPage ? <ComingSoonBanner /> : null}
+        {showBanner ? <ComingSoonBanner /> : null}
         <Box flexGrow={1} display="flex" flexDirection="column">
           {children}
         </Box>
