@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { cloneElement, FunctionComponent } from "react";
+
 import { ArrowRightIcon } from "../../../icons";
 import { Application } from "./applications";
 

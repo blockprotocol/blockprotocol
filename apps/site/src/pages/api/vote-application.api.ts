@@ -16,10 +16,10 @@ export default createBaseHandler<
   VoteApplicationResponse
 >().put(async (req, res) => {
   const member = await getMember({ email: req.body.email })
-    .then((res) => ({
-      id: res.id,
-      email: res.email_address,
-      merge_fields: res.merge_fields,
+    .then((mailchimpMember) => ({
+      id: mailchimpMember.id,
+      email: mailchimpMember.email_address,
+      merge_fields: mailchimpMember.merge_fields,
     }))
     .catch(() => {
       return res.status(400).send({ error: true });

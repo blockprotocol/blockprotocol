@@ -3,7 +3,7 @@ import { FormEvent, FunctionComponent, useRef, useState } from "react";
 import { apiClient } from "../../../../lib/api-client";
 import { useEmailTextField } from "../../../hooks/use-email-text-field";
 import { Input } from "../input";
-import { ApplicationId } from "../voting/applications";
+import { ApplicationId } from "./applications";
 
 const submitErrorText = "There was an error submitting your email";
 

@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import axiosRetry from "axios-retry";
 import { ValidationError } from "express-validator";
 
+import { ApplicationId } from "../components/pages/wordpress/voting/applications";
 import {
   ApiBlockCreateRequest,
   ApiBlockCreateResponse,
@@ -44,7 +45,6 @@ import {
   ApiVerifyEmailResponse,
 } from "../pages/api/verify-email.api";
 import { FRONTEND_URL } from "./config";
-import { ApplicationId } from "../components/pages/wordpress/voting/applications";
 
 const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
 

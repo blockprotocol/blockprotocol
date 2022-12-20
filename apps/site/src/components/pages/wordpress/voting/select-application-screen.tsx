@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
+
 import { ApplicationBadgeButton } from "./application-button";
 import { Application, applications } from "./applications";
 

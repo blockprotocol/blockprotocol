@@ -1,6 +1,7 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography } from "@mui/material";
-import { FunctionComponent, ReactElement, cloneElement } from "react";
+import { cloneElement, FunctionComponent, ReactElement } from "react";
+
 import { FontAwesomeIcon } from "../../../icons";
 
 export interface ApplicationBadgeProps {

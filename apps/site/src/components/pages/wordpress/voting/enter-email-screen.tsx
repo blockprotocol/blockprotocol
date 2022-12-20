@@ -1,5 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent, ReactNode } from "react";
+
 import { ArrowLeftIcon } from "../../../icons";
 import { Application } from "./applications";
 import { VoteEmailInput } from "./vote-email-input";

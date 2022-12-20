@@ -1,10 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
+
 import { HashIcon, WordPressIcon } from "../../../icons";
 import { Link } from "../../../link";
 import { ApplicationBadge } from "./application-badge";
-import { ApplicationBadgeButton } from "./application-button";
-import { Application, applications } from "./applications";
 
 export interface NowInBetaProps {
   faded: boolean;

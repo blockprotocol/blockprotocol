@@ -1,9 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { FunctionComponent, useState } from "react";
+
 import { ArrowLeftIcon } from "../../../icons";
 import { Input } from "../input";
-import { ApplicationBadgeButton } from "./application-button";
-import { Application, applications } from "./applications";
 
 export interface SuggestAnotherApplicationScreenProps {
   submitHandler: (applicationName: string) => void;
