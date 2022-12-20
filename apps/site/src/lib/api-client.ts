@@ -44,7 +44,7 @@ import {
   ApiVerifyEmailResponse,
 } from "../pages/api/verify-email.api";
 import { FRONTEND_URL } from "./config";
-import { ApplicationIds } from "../components/pages/wordpress/voting/applications";
+import { ApplicationId } from "../components/pages/wordpress/voting/applications";
 
 const BASE_URL = `${typeof window !== "undefined" ? "" : FRONTEND_URL}/api/`;
 
@@ -202,7 +202,7 @@ export const apiClient = {
     other,
   }: {
     email: string;
-    vote: ApplicationIds;
+    vote: ApplicationId;
     other?: string;
   }) =>
     apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(

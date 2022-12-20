@@ -3,12 +3,12 @@ import { FormEvent, FunctionComponent, useRef, useState } from "react";
 import { apiClient } from "../../../../lib/api-client";
 import { useEmailTextField } from "../../../hooks/use-email-text-field";
 import { Input } from "../input";
-import { ApplicationIds } from "../voting/applications";
+import { ApplicationId } from "../voting/applications";
 
 const submitErrorText = "There was an error submitting your email";
 
 export interface VoteEmailInputProps {
-  applicationId: ApplicationIds;
+  applicationId: ApplicationId;
   suggestionName?: string;
   onSubmit: () => void;
 }

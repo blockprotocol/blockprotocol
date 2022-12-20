@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { VoteCastModal } from "./vote-cast-modal";
 import { AlreadyVotedScreen } from "./voting/already-voted-screen";
-import { Application, ApplicationIds } from "./voting/applications";
+import { Application, ApplicationId } from "./voting/applications";
 import { EnterEmailScreen } from "./voting/enter-email-screen";
 import { NowInBeta } from "./voting/now-in-beta";
 import { SelectApplicationScreen } from "./voting/select-application-screen";
@@ -15,7 +15,7 @@ export const RequestAnotherApplication = () => {
   const [modalTwitterHref, setModalTwitterHref] = useState("");
   const [suggestionName, setSuggestionName] = useState<string>("");
   const [displayModal, setDisplayModal] = useState(false);
-  const [votes, setVotes] = useState<ApplicationIds[]>([]);
+  const [votes, setVotes] = useState<ApplicationId[]>([]);
 
   const resetFlow = () => {
     setSelectedApplication(null);
@@ -30,7 +30,7 @@ export const RequestAnotherApplication = () => {
   }, []);
 
   const isSuggesting =
-    selectedApplication && selectedApplication.id === ApplicationIds.Other;
+    selectedApplication && selectedApplication.id === "ECO_OTHER";
   const alreadyVotedForApplication =
     !isSuggesting &&
     selectedApplication &&

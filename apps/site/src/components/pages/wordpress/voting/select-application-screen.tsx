@@ -38,7 +38,7 @@ export const SelectApplicationScreen: FunctionComponent<
           justifyContent: "center",
         }}
       >
-        {applications.map((application) => (
+        {Object.values(applications).map((application) => (
           <ApplicationBadgeButton
             key={application.id}
             name={application.name}
