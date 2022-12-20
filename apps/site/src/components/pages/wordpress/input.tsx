@@ -31,6 +31,7 @@ export const Input: FunctionComponent<Partial<TextFieldProps> & InputProps> = ({
         sx={{
           marginBottom: 2,
         }}
+        autoFocus
         required
         type="email"
         fullWidth

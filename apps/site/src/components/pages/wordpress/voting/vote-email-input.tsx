@@ -1,21 +1,21 @@
 import { FormEvent, FunctionComponent, useRef, useState } from "react";
 
-import { apiClient } from "../../../lib/api-client";
-import { useEmailTextField } from "../../hooks/use-email-text-field";
-import { Input } from "./input";
-import { ApplicationIds } from "./request-another-application";
+import { apiClient } from "../../../../lib/api-client";
+import { useEmailTextField } from "../../../hooks/use-email-text-field";
+import { Input } from "../input";
+import { ApplicationId } from "./applications";
 
 const submitErrorText = "There was an error submitting your email";
 
 export interface VoteEmailInputProps {
-  applicationId: ApplicationIds;
-  other: string | null;
+  applicationId: ApplicationId;
+  suggestionName?: string;
   onSubmit: () => void;
 }
 
 export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
   applicationId,
-  other,
+  suggestionName,
   onSubmit,
 }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -47,7 +47,7 @@ export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
         .submitApplicationVote({
           email: emailValue,
           vote: applicationId,
-          other,
+          other: suggestionName,
         })
         .then(({ data }) => {
           setSubmitError(false);

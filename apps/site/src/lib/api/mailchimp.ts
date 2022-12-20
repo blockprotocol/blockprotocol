@@ -6,6 +6,14 @@ import { User } from "./model/user.model";
 
 let cachedMailchimpApi: AxiosInstance;
 
+export interface MailchimpMember {
+  id: string;
+  email_address: string;
+  merge_fields: {
+    [k: string]: string;
+  };
+}
+
 const getMailchimpApi = (): AxiosInstance => {
   const mailchimpListID = mustGetEnvVar("MAILCHIMP_LIST_ID");
   const username = mustGetEnvVar("MAILCHIMP_API_USER");
@@ -70,6 +78,17 @@ export const ensureUserIsMailchimpMember = async (params: {
         console.log(error);
       }
     });
+};
+
+export const getMember = async (params: {
+  email: string;
+}): Promise<MailchimpMember> => {
+  const { email } = params;
+  const memberID = md5(email);
+
+  return await getMailchimpApi()
+    .get(`members/${memberID}`)
+    .then((res) => res.data);
 };
 
 export const updateMailchimpMemberInfo = async (params: {
