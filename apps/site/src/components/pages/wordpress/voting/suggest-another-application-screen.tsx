@@ -58,7 +58,8 @@ export const SuggestAnotherApplicationScreen: FunctionComponent<
           color: ({ palette }) => palette.common.black,
         }}
       >
-        What application would you like to use the Þ in? 👀
+        What {isSmall ? "app" : "application"} would you like to use the Þ in?
+        👀
       </Typography>
 
       <Input
