@@ -17,7 +17,9 @@ import {
 } from "./ontology/entity-type.js";
 import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
 
-export type BlockGraphProperties = {
+export type BlockGraphProperties<
+  RootType extends SubgraphRootTypes["entity"] = SubgraphRootTypes["entity"],
+> = {
   /**
    * The 'graph' object contains messages sent under the graph service from the app to the block.
    * They are sent on initialization and again when the application has new values to send.
@@ -25,7 +27,7 @@ export type BlockGraphProperties = {
    * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
    */
   graph: {
-    blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
+    blockEntitySubgraph?: Subgraph<RootType>;
     readonly?: boolean;
   };
 };

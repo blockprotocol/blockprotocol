@@ -2,7 +2,8 @@ import {
   type BlockComponent,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
-import { useRef } from "react";
+import { getRoots } from "@blockprotocol/graph/stdlib";
+import { useMemo, useRef } from "react";
 
 /**
  * The file referenced here provides some base styling for your block.
@@ -13,22 +14,14 @@ import { useRef } from "react";
  * any of these ensure that your styling does not affect anything outside your block.
  */
 import styles from "./base.module.scss";
-
-/**
- * This defines the properties of the entity your block expects to be sent.
- * This entity is available to your block on props.graph.blockEntity.
- * To change the structure of the entity your block expects, change this type.
- */
-type BlockEntityProperties = {
-  name: string;
-};
+import { RootType } from "./types.gen";
 
 /**
  * This function is to help illustrate a property being changed when the button is pressed.
  */
 const supplyRandomName = () => {
   const names = ["Alice", "Bob", "Carol", "Dave", "Erin", "Frank"];
-  return names[Math.floor(Math.random() * names.length)];
+  return names[Math.floor(Math.random() * names.length)]!;
 };
 
 /**
@@ -36,7 +29,7 @@ const supplyRandomName = () => {
  * It is a function that takes a property object (known as "props" in React) and returns an element.
  * You should update this comment to describe what your block does, or remove the comment.
  */
-export const App: BlockComponent<BlockEntityProperties> = ({
+export const App: BlockComponent<RootType> = ({
   graph: {
     /**
      * The properties sent to the block represent the messages sent automatically from the application to the block.
@@ -45,7 +38,7 @@ export const App: BlockComponent<BlockEntityProperties> = ({
      * – and then taking a single message from it, 'blockEntity'
      * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for other such messages
      */
-    blockEntity: { entityId, properties },
+    blockEntitySubgraph,
   },
 }) => {
   /**
@@ -61,8 +54,23 @@ export const App: BlockComponent<BlockEntityProperties> = ({
   const blockRootRef = useRef<HTMLDivElement>(null);
   const { graphService } = useGraphBlockService(blockRootRef);
 
-  /** Here we extract the 'name' property from the blockEntity's properties */
-  const { name } = properties;
+  if (!blockEntitySubgraph) {
+    throw new Error("No blockEntitySubgraph provided");
+  }
+
+  const rootEntity = useMemo(() => {
+    const root = getRoots<RootType>(blockEntitySubgraph)[0];
+    if (!root) {
+      throw new Error("Root entity not present in subgraph");
+    }
+    return root;
+  }, [blockEntitySubgraph]);
+
+  const entityId = rootEntity.metadata.editionId.baseId;
+  const title =
+    rootEntity.properties[
+      "https://alpha.hash.ai/@hash/types/property-type/title/"
+    ];
 
   return (
     /**
@@ -73,7 +81,7 @@ export const App: BlockComponent<BlockEntityProperties> = ({
      *   - our service helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
-      <h1>Hello, {name}!</h1>
+      <h1>Hello, {title}!</h1>
       <p>
         The entityId of this block is {entityId}. Use it to update its data,
         e.g. by calling <code>updateEntity</code>.
@@ -92,7 +100,8 @@ export const App: BlockComponent<BlockEntityProperties> = ({
           graphService?.updateEntity({
             data: {
               entityId,
-              properties: { name: supplyRandomName() },
+              entityTypeId: rootEntity.metadata.entityTypeId,
+              properties: { title: supplyRandomName() },
             },
           })
         }

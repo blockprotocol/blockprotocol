@@ -10,9 +10,12 @@ import {
   BlockGraphProperties,
   GraphBlockHandler,
   GraphEmbedderHandler,
+  SubgraphRootTypes,
 } from "./index.js";
 
-export type BlockComponent = FunctionComponent<BlockGraphProperties>;
+export type BlockComponent<
+  RootType extends SubgraphRootTypes["entity"] = SubgraphRootTypes["entity"],
+> = FunctionComponent<BlockGraphProperties<RootType>>;
 
 const useGraphServiceConstructor = <
   T extends typeof GraphBlockHandler | typeof GraphEmbedderHandler,
