@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { VoteCastModal } from "./vote-cast-modal";
 import { AlreadyVotedScreen } from "./voting/already-voted-screen";
@@ -17,9 +17,18 @@ export const RequestAnotherApplication = () => {
   const [displayModal, setDisplayModal] = useState(false);
   const [votes, setVotes] = useState<ApplicationId[]>([]);
 
+  const votingScreenRef = useRef<HTMLDivElement | null>();
+  const [votingScreenHeight, setVotingScreenHeight] = useState(0);
+
   const resetFlow = () => {
     setSelectedApplication(null);
     setSuggestionName("");
+  };
+
+  const resizeVotingScreen = () => {
+    if (votingScreenRef.current) {
+      setVotingScreenHeight(votingScreenRef.current.offsetHeight);
+    }
   };
 
   useEffect(() => {
@@ -27,7 +36,16 @@ export const RequestAnotherApplication = () => {
       ? JSON.parse(localStorage.getItem("WP_Application_votes") ?? "")
       : [];
     setVotes(localVotes);
+
+    window.addEventListener("resize", resizeVotingScreen);
+    return () => {
+      window.removeEventListener("resize", resizeVotingScreen);
+    };
   }, []);
+
+  useLayoutEffect(() => {
+    resizeVotingScreen();
+  });
 
   const isSuggesting =
     selectedApplication && selectedApplication.id === "ECO_OTHER";
@@ -42,6 +60,7 @@ export const RequestAnotherApplication = () => {
         fontFamily: "Inter",
         textAlign: "center",
         width: 1,
+        overflow: "hidden",
       }}
     >
       <Box mb={6}>
@@ -67,7 +86,6 @@ export const RequestAnotherApplication = () => {
         sx={({ breakpoints }) => ({
           display: "inline-flex",
           width: 1,
-          minHeight: 250,
           [breakpoints.down("lg")]: {
             flexDirection: "column",
           },
@@ -76,86 +94,94 @@ export const RequestAnotherApplication = () => {
         <NowInBeta faded={!!selectedApplication} />
 
         <Box
-          sx={({ breakpoints }) => ({
-            pl: 4.875,
-            width: 1,
-            [breakpoints.down("lg")]: {
-              pl: 0,
-            },
+          sx={({ transitions }) => ({
+            height: votingScreenHeight,
+            transition: transitions.create("height"),
           })}
         >
-          {!selectedApplication ? (
-            <SelectApplicationScreen
-              votes={votes}
-              onSelect={(application: Application) =>
-                setSelectedApplication(application)
-              }
-            />
-          ) : null}
-
-          {selectedApplication && !isSuggesting ? (
-            !alreadyVotedForApplication ? (
-              <EnterEmailScreen
-                title="Make your vote count"
-                selectedApplication={selectedApplication}
-                sumbitHandler={() => {
-                  setModalTwitterHref(selectedApplication.twitterHref ?? "");
-                  setDisplayModal(true);
-                  const newVotes = [...votes, selectedApplication.id];
-                  setVotes(newVotes);
-                  localStorage.setItem(
-                    "WP_Application_votes",
-                    JSON.stringify(newVotes),
-                  );
-
-                  resetFlow();
-                }}
-                goBackHandler={resetFlow}
-              />
-            ) : (
-              <AlreadyVotedScreen
-                selectedApplication={selectedApplication}
-                goBackHandler={resetFlow}
-              />
-            )
-          ) : null}
-
-          {selectedApplication && isSuggesting ? (
-            !suggestionName ? (
-              <SuggestAnotherApplicationScreen
-                submitHandler={(applicationName: string) =>
-                  setSuggestionName(applicationName)
+          <Box
+            ref={votingScreenRef}
+            sx={({ breakpoints }) => ({
+              pl: 4.875,
+              width: 1,
+              [breakpoints.down("lg")]: {
+                pl: 0,
+              },
+            })}
+          >
+            {!selectedApplication ? (
+              <SelectApplicationScreen
+                votes={votes}
+                onSelect={(application: Application) =>
+                  setSelectedApplication(application)
                 }
-                goBackHandler={resetFlow}
               />
-            ) : (
-              <EnterEmailScreen
-                title={
-                  <>
-                    <Box
-                      component="span"
-                      sx={{
-                        fontWeight: 500,
-                        color: ({ palette }) => palette.gray[50],
-                      }}
-                    >
-                      You are suggesting
-                    </Box>{" "}
-                    {suggestionName}
-                  </>
-                }
-                selectedApplication={selectedApplication}
-                suggestionName={suggestionName}
-                sumbitHandler={() => {
-                  setModalTwitterHref(selectedApplication.twitterHref ?? "");
-                  setDisplayModal(true);
+            ) : null}
 
-                  resetFlow();
-                }}
-                goBackHandler={resetFlow}
-              />
-            )
-          ) : null}
+            {selectedApplication && !isSuggesting ? (
+              !alreadyVotedForApplication ? (
+                <EnterEmailScreen
+                  title="Make your vote count"
+                  selectedApplication={selectedApplication}
+                  sumbitHandler={() => {
+                    setModalTwitterHref(selectedApplication.twitterHref ?? "");
+                    setDisplayModal(true);
+                    const newVotes = [...votes, selectedApplication.id];
+                    setVotes(newVotes);
+                    localStorage.setItem(
+                      "WP_Application_votes",
+                      JSON.stringify(newVotes),
+                    );
+
+                    resetFlow();
+                  }}
+                  goBackHandler={resetFlow}
+                />
+              ) : (
+                <AlreadyVotedScreen
+                  selectedApplication={selectedApplication}
+                  goBackHandler={resetFlow}
+                />
+              )
+            ) : null}
+
+            {selectedApplication && isSuggesting ? (
+              !suggestionName ? (
+                <SuggestAnotherApplicationScreen
+                  submitHandler={(applicationName: string) =>
+                    setSuggestionName(applicationName)
+                  }
+                  goBackHandler={resetFlow}
+                />
+              ) : (
+                <EnterEmailScreen
+                  title={
+                    <>
+                      <Box
+                        component="span"
+                        sx={{
+                          fontWeight: 500,
+                          color: ({ palette }) => palette.gray[50],
+                        }}
+                      >
+                        You are suggesting
+                      </Box>{" "}
+                      {suggestionName}
+                    </>
+                  }
+                  selectedApplication={selectedApplication}
+                  suggestionName={suggestionName}
+                  sumbitHandler={() => {
+                    setModalTwitterHref(selectedApplication.twitterHref ?? "");
+                    setDisplayModal(true);
+
+                    resetFlow();
+                  }}
+                  goBackHandler={resetFlow}
+                />
+              )
+            ) : null}
+          </Box>
         </Box>
       </Box>
 
