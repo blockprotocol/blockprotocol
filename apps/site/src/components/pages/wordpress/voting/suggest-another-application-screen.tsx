@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Theme, Typography, useMediaQuery } from "@mui/material";
 import { FunctionComponent, useState } from "react";
 
 import { ArrowLeftIcon } from "../../../icons";
@@ -13,6 +13,10 @@ export const SuggestAnotherApplicationScreen: FunctionComponent<
   SuggestAnotherApplicationScreenProps
 > = ({ submitHandler, goBackHandler }) => {
   const [applicationName, setApplicationName] = useState("");
+
+  const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.down("md"),
+  );
 
   return (
     <Box
@@ -58,7 +62,7 @@ export const SuggestAnotherApplicationScreen: FunctionComponent<
       </Typography>
 
       <Input
-        placeholder="Enter the app’s name here"
+        placeholder={isSmall ? "App name" : "Enter the app’s name here"}
         value={applicationName}
         onChange={({ target }) => {
           setApplicationName(target.value);
