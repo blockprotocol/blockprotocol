@@ -69,6 +69,9 @@ packages/mock-block-dock/src/version.ts
 packages/@blockprotocol/type-system/.rollup.cache
 packages/@blockprotocol/type-system/wasm
 
+## Auto-generated files
+*.gen.ts
+
 ##################
 ## Specific to git
 ##################
