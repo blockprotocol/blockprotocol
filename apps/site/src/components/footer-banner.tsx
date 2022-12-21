@@ -327,7 +327,7 @@ export const BANNERS: Banner[] = [
           }),
         }}
         contents={
-          <Box mb={2} width={1}>
+          <Box width={1}>
             <RequestAnotherApplication />
           </Box>
         }
