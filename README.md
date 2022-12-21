@@ -1,22 +1,28 @@
-![github_banner](https://user-images.githubusercontent.com/6226576/208439875-08d49948-e1de-418a-9a79-1df1f864c64e.png)
+[github_banner]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[github_star]: https://github.com/blockprotocol/blockprotocol#
+[discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+
+[![github_banner](https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/f8b0bf95-88ea-47ea-cac2-49cb2851b700/github)][github_banner]
+
+[![discord](https://img.shields.io/discord/1050770647564943402)][discord] [![github_star](https://img.shields.io/github/stars/blockprotocol/blockprotocol?label=Star%20on%20GitHub&style=social)][github_star]
 
 # Block Protocol
 
-The Block Protocol is an open standard for building and using data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines.
+The Block Protocol is an open standard for building and using data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines. Neither blocks nor the applications that embed them require any knowledge of each other's existence. Both need only conform to the protocol.
 
 ## Getting Started
 
 Please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) for complete instructions on using the Block Protocol, including:
 
-- developing new blocks;
-- publishing blocks on the Hub; and
-- embedding blocks within your application.
+- [developing blocks](https://blockprotocol.org/docs/developing-blocks) and publishing them to the [Þ Hub](https://blockprotocol.org/hub)
+- [using blocks](https://blockprotocol.org/docs/using-blocks) inside other applications
+- [becoming an embedder](https://blockprotocol.org/docs/embedding-blocks) so that others can use blocks within your application or framework
 
-## Usage
+## Examples
 
-[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an example embedding application that uses the Block Protocol to enable users to insert arbitrary blocks from the Hub at runtime. Neither the blocks nor the application have any special knowledge of one another. Both simply conform to the protocol.
+[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an embedding application that supports the Block Protocol, enabling its users to insert arbitrary blocks from the [Þ Hub](https://blockprotocol.org/hub) at runtime.
 
-For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Hub](https://blockprotocol.org/hub).
+For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Þ Hub](https://blockprotocol.org/hub).
 
 ## Roadmap
 
