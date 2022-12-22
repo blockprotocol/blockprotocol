@@ -294,7 +294,8 @@ jobs:
 
       - name: Generate coverage report
         if: ${{ success() || failure() }}
-        run: yarn exec "nyc report --reporter=lcovonly --reporter=text"
+        ## JS binary is resolvable from a workspace with a dependency; we avoid polluting root package.json
+        run: yarn workspace @apps/site exec "cd ../..; nyc report --reporter=lcovonly --reporter=text"
 
       - uses: codecov/codecov-action@v3
         if: ${{ success() || failure() }}
