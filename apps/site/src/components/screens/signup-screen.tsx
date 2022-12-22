@@ -96,7 +96,11 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
   return (
     <>
       <BlockProtocolIcon
-        sx={{ color: (theme) => theme.palette.purple[700], marginBottom: 4 }}
+        sx={{
+          color: (theme) => theme.palette.purple[700],
+          marginBottom: 4,
+          height: "unset",
+        }}
       />
       <Typography
         mb={3}

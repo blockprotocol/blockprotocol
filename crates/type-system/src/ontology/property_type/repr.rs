@@ -100,7 +100,6 @@ impl From<super::PropertyTypeReference> for PropertyTypeReference {
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(untagged)]
-#[expect(clippy::enum_variant_names)]
 pub enum PropertyValues {
     DataTypeReference(repr::DataTypeReference),
     PropertyTypeObject(repr::Object<repr::ValueOrArray<PropertyTypeReference>>),

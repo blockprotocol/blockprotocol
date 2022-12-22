@@ -3,12 +3,12 @@ pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::{collections::HashSet, str::FromStr};
+use std::collections::HashSet;
 
 pub use error::ParsePropertyTypeError;
 
 use crate::{
-    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    uri::{BaseUri, VersionedUri},
     Array, DataTypeReference, Object, OneOf, ValidateUri, ValidationError, ValueOrArray,
 };
 
@@ -76,36 +76,6 @@ impl PropertyType {
     }
 }
 
-impl FromStr for PropertyType {
-    type Err = ParsePropertyTypeError;
-
-    fn from_str(property_type_str: &str) -> Result<Self, Self::Err> {
-        let property_type_repr: repr::PropertyType = serde_json::from_str(property_type_str)
-            .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_repr)
-    }
-}
-
-impl TryFrom<serde_json::Value> for PropertyType {
-    type Error = ParsePropertyTypeError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let property_type_repr: repr::PropertyType = serde_json::from_value(value)
-            .map_err(|err| ParsePropertyTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_repr)
-    }
-}
-
-impl From<PropertyType> for serde_json::Value {
-    fn from(property_type: PropertyType) -> Self {
-        let property_type_repr: repr::PropertyType = property_type.into();
-
-        serde_json::to_value(property_type_repr).expect("Failed to deserialize Property Type repr")
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct PropertyTypeReference {
@@ -142,26 +112,6 @@ impl ValidateUri for PropertyTypeReference {
                 versioned_uri: self.uri().clone(),
             })
         }
-    }
-}
-
-impl TryFrom<serde_json::Value> for PropertyTypeReference {
-    type Error = ParseVersionedUriError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let property_type_ref_repr: repr::PropertyTypeReference = serde_json::from_value(value)
-            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_ref_repr)
-    }
-}
-
-impl From<PropertyTypeReference> for serde_json::Value {
-    fn from(property_type_ref: PropertyTypeReference) -> Self {
-        let property_type_ref_repr: repr::PropertyTypeReference = property_type_ref.into();
-
-        serde_json::to_value(property_type_ref_repr)
-            .expect("Failed to deserialize Property Type Reference repr")
     }
 }
 
@@ -218,6 +168,7 @@ mod tests {
     use super::*;
     use crate::{
         test_data,
+        uri::ParseVersionedUriError,
         utils::tests::{check_serialization_from_str, ensure_failed_validation},
         ParseOneOfError,
     };
@@ -262,8 +213,10 @@ mod tests {
 
     #[test]
     fn favorite_quote() {
-        let property_type =
-            check_serialization_from_str(test_data::property_type::FAVORITE_QUOTE_V1, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+            test_data::property_type::FAVORITE_QUOTE_V1,
+            None,
+        );
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
@@ -274,7 +227,10 @@ mod tests {
 
     #[test]
     fn age() {
-        let property_type = check_serialization_from_str(test_data::property_type::AGE_V1, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+            test_data::property_type::AGE_V1,
+            None,
+        );
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -285,8 +241,10 @@ mod tests {
 
     #[test]
     fn user_id() {
-        let property_type =
-            check_serialization_from_str(test_data::property_type::USER_ID_V2, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+            test_data::property_type::USER_ID_V2,
+            None,
+        );
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -298,8 +256,10 @@ mod tests {
 
     #[test]
     fn contact_information() {
-        let property_type =
-            check_serialization_from_str(test_data::property_type::CONTACT_INFORMATION_V1, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+            test_data::property_type::CONTACT_INFORMATION_V1,
+            None,
+        );
 
         test_property_type_data_refs(&property_type, []);
 
@@ -311,8 +271,10 @@ mod tests {
 
     #[test]
     fn interests() {
-        let property_type =
-            check_serialization_from_str(test_data::property_type::INTERESTS_V1, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+            test_data::property_type::INTERESTS_V1,
+            None,
+        );
 
         test_property_type_data_refs(&property_type, []);
 
@@ -325,8 +287,10 @@ mod tests {
 
     #[test]
     fn numbers() {
-        let property_type =
-            check_serialization_from_str(test_data::property_type::NUMBERS_V1, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+            test_data::property_type::NUMBERS_V1,
+            None,
+        );
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",
@@ -337,8 +301,10 @@ mod tests {
 
     #[test]
     fn contrived_property() {
-        let property_type =
-            check_serialization_from_str(test_data::property_type::CONTRIVED_PROPERTY_V1, None);
+        let property_type = check_serialization_from_str::<PropertyType, repr::PropertyType>(
+            test_data::property_type::CONTRIVED_PROPERTY_V1,
+            None,
+        );
 
         test_property_type_data_refs(&property_type, [
             "https://blockprotocol.org/@blockprotocol/types/data-type/number/v/1",

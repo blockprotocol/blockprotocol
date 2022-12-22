@@ -1,24 +1,21 @@
-# The MIT License (MIT)
+# License Guide
 
-Copyright © 2021–, HASH
+The license for a particular work is defined with following prioritized rules:
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the “Software”), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
+1.  License information directly present in the file
+1.  `LICENSE`, `LICENSE.md` or `LICENSE.txt` file in the same directory as the work
+1.  First `LICENSE`, `LICENSE.md` or `LICENSE.txt` file found when exploring parent directories up to the project top level directory
+1.  Defaults to dual-release under the [Apache License, Version 2.0](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-APACHE.md) and [MIT License](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-MIT.md)
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+## Quick-reference
 
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+The vast majority of this repository is dual-licensed under the [Apache License, Version 2.0](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-APACHE.md) and [MIT License](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-MIT.md).
+
+The two limited exceptions to this are:
+
+- The Block Protocol WordPress plugin ([more information](https://blockprotocol.org/wordpress)), which is made available under the [Elastic License 2.0](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-ELASTIC.md)
+- A small number of vector icons used on the public-facing BlockProtocol.org website ([view site](https://blockprotocol.org/)), licensed to us directly
+
+## Questions
+
+If you have any questions please [contact us](https://blockprotocol.org/contact).

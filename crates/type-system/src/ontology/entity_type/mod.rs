@@ -4,15 +4,12 @@ pub(in crate::ontology) mod repr;
 #[cfg(target_arch = "wasm32")]
 mod wasm;
 
-use std::{
-    collections::{HashMap, HashSet},
-    str::FromStr,
-};
+use std::collections::{HashMap, HashSet};
 
 pub use error::ParseEntityTypeError;
 
 use crate::{
-    uri::{BaseUri, ParseVersionedUriError, VersionedUri},
+    uri::{BaseUri, VersionedUri},
     AllOf, Links, MaybeOrderedArray, Object, OneOf, PropertyTypeReference, ValidateUri,
     ValidationError, ValueOrArray,
 };
@@ -136,36 +133,6 @@ impl EntityType {
     }
 }
 
-impl FromStr for EntityType {
-    type Err = ParseEntityTypeError;
-
-    fn from_str(entity_type_str: &str) -> Result<Self, Self::Err> {
-        let property_type_repr: repr::EntityType = serde_json::from_str(entity_type_str)
-            .map_err(|err| ParseEntityTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(property_type_repr)
-    }
-}
-
-impl TryFrom<serde_json::Value> for EntityType {
-    type Error = ParseEntityTypeError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let entity_type_repr: repr::EntityType = serde_json::from_value(value)
-            .map_err(|err| ParseEntityTypeError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(entity_type_repr)
-    }
-}
-
-impl From<EntityType> for serde_json::Value {
-    fn from(property_type: EntityType) -> Self {
-        let entity_type_repr: repr::EntityType = property_type.into();
-
-        serde_json::to_value(entity_type_repr).expect("Failed to deserialize Entity Type repr")
-    }
-}
-
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[repr(transparent)]
 pub struct EntityTypeReference {
@@ -202,26 +169,6 @@ impl ValidateUri for EntityTypeReference {
                 versioned_uri: self.uri().clone(),
             })
         }
-    }
-}
-
-impl TryFrom<serde_json::Value> for EntityTypeReference {
-    type Error = ParseVersionedUriError;
-
-    fn try_from(value: serde_json::Value) -> Result<Self, Self::Error> {
-        let entity_type_ref_repr: repr::EntityTypeReference = serde_json::from_value(value)
-            .map_err(|err| ParseVersionedUriError::InvalidJson(err.to_string()))?;
-
-        Self::try_from(entity_type_ref_repr)
-    }
-}
-
-impl From<EntityTypeReference> for serde_json::Value {
-    fn from(entity_type_ref: EntityTypeReference) -> Self {
-        let entity_type_ref_repr: repr::EntityTypeReference = entity_type_ref.into();
-
-        serde_json::to_value(entity_type_ref_repr)
-            .expect("Failed to deserialize Entity Type Reference repr")
     }
 }
 
@@ -294,7 +241,10 @@ mod tests {
 
     #[test]
     fn book() {
-        let entity_type = check_serialization_from_str(test_data::entity_type::BOOK_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::BOOK_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -310,7 +260,10 @@ mod tests {
 
     #[test]
     fn address() {
-        let entity_type = check_serialization_from_str(test_data::entity_type::ADDRESS_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::ADDRESS_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
@@ -323,8 +276,10 @@ mod tests {
 
     #[test]
     fn organization() {
-        let entity_type =
-            check_serialization_from_str(test_data::entity_type::ORGANIZATION_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::ORGANIZATION_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -335,7 +290,10 @@ mod tests {
 
     #[test]
     fn building() {
-        let entity_type = check_serialization_from_str(test_data::entity_type::BUILDING_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::BUILDING_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, []);
 
@@ -353,7 +311,10 @@ mod tests {
 
     #[test]
     fn person() {
-        let entity_type = check_serialization_from_str(test_data::entity_type::PERSON_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::PERSON_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -373,7 +334,10 @@ mod tests {
 
     #[test]
     fn playlist() {
-        let entity_type = check_serialization_from_str(test_data::entity_type::PLAYLIST_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::PLAYLIST_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -387,7 +351,10 @@ mod tests {
 
     #[test]
     fn song() {
-        let entity_type = check_serialization_from_str(test_data::entity_type::SONG_V1, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::SONG_V1,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/name/v/1",
@@ -398,7 +365,10 @@ mod tests {
 
     #[test]
     fn page() {
-        let entity_type = check_serialization_from_str(test_data::entity_type::PAGE, None);
+        let entity_type = check_serialization_from_str::<EntityType, repr::EntityType>(
+            test_data::entity_type::PAGE,
+            None,
+        );
 
         test_property_type_references(&entity_type, [
             "https://blockprotocol.org/@alice/types/property-type/text/v/1",
