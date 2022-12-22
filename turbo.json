@@ -29,6 +29,10 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
+    "block-template-react#codegen": {
+      "dependsOn": ["@blockprotocol/graph#build"],
+      "outputs": ["src/types.gen.ts"]
+    },
     "@blockprotocol/type-system#build": {
       "dependsOn": [],
       "outputs": ["dist/**", "wasm/**"]
