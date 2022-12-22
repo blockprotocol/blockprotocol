@@ -74,7 +74,7 @@ export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
     if (touchedEmailInput && (displayError || !isEmailInputValid)) {
       onError?.();
     }
-  }, [displayError, touchedEmailInput, isEmailInputValid]);
+  }, [onError, displayError, touchedEmailInput, isEmailInputValid]);
 
   return (
     <Input
