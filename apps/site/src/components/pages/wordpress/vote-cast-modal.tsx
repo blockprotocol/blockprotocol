@@ -149,6 +149,7 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
       }}
       contentStyle={{
         width: 600,
+        outline: "none",
         p: {
           xs: 1.25,
         },
