@@ -135,6 +135,7 @@ export const RequestAnotherApplication = () => {
 
                     resetFlow();
                   }}
+                  errorHandler={resizeVotingScreen}
                   goBackHandler={resetFlow}
                 />
               ) : (
@@ -148,9 +149,10 @@ export const RequestAnotherApplication = () => {
             {selectedApplication && isSuggesting ? (
               !suggestionName ? (
                 <SuggestAnotherApplicationScreen
-                  submitHandler={(applicationName: string) =>
-                    setSuggestionName(applicationName)
-                  }
+                  submitHandler={(applicationName: string) => {
+                    setSuggestionName(applicationName);
+                    resizeVotingScreen();
+                  }}
                   goBackHandler={resetFlow}
                 />
               ) : (
@@ -177,6 +179,7 @@ export const RequestAnotherApplication = () => {
 
                     resetFlow();
                   }}
+                  errorHandler={resizeVotingScreen}
                   goBackHandler={resetFlow}
                 />
               )
