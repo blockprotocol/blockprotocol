@@ -1,10 +1,10 @@
 import { EntityEditionId } from "@blockprotocol/graph";
 import {
   type BlockComponent,
+  useEntitySubgraph,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
-import { getRoots } from "@blockprotocol/graph/stdlib";
-import { useMemo, useRef } from "react";
+import { useRef } from "react";
 
 /**
  * The file referenced here provides some base styling for your block.
@@ -59,19 +59,11 @@ export const App: BlockComponent<RootEntity> = ({
     throw new Error("No blockEntitySubgraph provided");
   }
 
-  const rootEntity = useMemo(() => {
-    const root = getRoots<{ editionId: EntityEditionId; element: RootEntity }>(
-      blockEntitySubgraph,
-    )[0];
-    if (!root) {
-      throw new Error("Root entity not present in subgraph");
-    }
-    return root;
-  }, [blockEntitySubgraph]);
+  const { rootEntity: blockEntity } = useEntitySubgraph(blockEntitySubgraph);
 
-  const entityId = rootEntity.metadata.editionId.baseId;
+  const entityId = blockEntity.metadata.editionId.baseId;
   const title =
-    rootEntity.properties[
+    blockEntity.properties[
       "https://alpha.hash.ai/@hash/types/property-type/title/"
     ];
 
@@ -103,7 +95,7 @@ export const App: BlockComponent<RootEntity> = ({
           graphService?.updateEntity({
             data: {
               entityId,
-              entityTypeId: rootEntity.metadata.entityTypeId,
+              entityTypeId: blockEntity.metadata.entityTypeId,
               properties: { title: supplyRandomName() },
             },
           })

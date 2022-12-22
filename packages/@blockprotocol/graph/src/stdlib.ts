@@ -13,7 +13,7 @@ import {
   getEntity as getEntityTemporal,
 } from "./stdlib/subgraph/element/entity.js";
 import { Entity, EntityId } from "./types/entity.js";
-import { Subgraph } from "./types/subgraph.js";
+import { LinkEntityAndRightEntity, Subgraph } from "./types/subgraph.js";
 
 export {
   getDataTypeById,
@@ -96,11 +96,6 @@ export const getRightEntityForLinkEntity = (
   entityId: EntityId,
 ): Entity => getRightEntityForLinkEntityTemporal(subgraph, entityId);
 
-type GenericLinkEntityAndRightEntity = {
-  linkEntity: Entity;
-  rightEntity: Entity;
-};
-
 /**
  * Gets all outgoing link entities, and their "target" entities (by default this is the "right entity"), from a given
  * entity.
@@ -109,12 +104,9 @@ type GenericLinkEntityAndRightEntity = {
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
  */
 export const getOutgoingLinkAndTargetEntities = <
-  LinkAndRightEntities extends GenericLinkEntityAndRightEntity[] = GenericLinkEntityAndRightEntity[],
+  LinkAndRightEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
 >(
   subgraph: Subgraph,
   entityId: EntityId,
 ): LinkAndRightEntities =>
-  getOutgoingLinkAndTargetEntitiesTemporal(
-    subgraph,
-    entityId,
-  ) as LinkAndRightEntities; // @todo add generics elsewhere
+  getOutgoingLinkAndTargetEntitiesTemporal(subgraph, entityId) as LinkAndRightEntities; // @todo add generics elsewhere

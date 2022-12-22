@@ -1,5 +1,9 @@
 import { Entity, EntityId } from "../../../types/entity.js";
-import { OutwardEdge, Subgraph } from "../../../types/subgraph.js";
+import {
+  LinkEntityAndRightEntity,
+  OutwardEdge,
+  Subgraph,
+} from "../../../types/subgraph.js";
 import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,
@@ -208,7 +212,7 @@ export const getOutgoingLinkAndTargetEntities = (
   subgraph: Subgraph,
   entityId: EntityId,
   timestamp?: Date | string,
-): { linkEntity: Entity; rightEntity: Entity }[] => {
+): LinkEntityAndRightEntity[] => {
   return getOutgoingLinksForEntity(subgraph, entityId, timestamp).map(
     (linkEntity) => {
       return {
