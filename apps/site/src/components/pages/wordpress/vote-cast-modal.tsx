@@ -149,6 +149,7 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
       }}
       contentStyle={{
         width: 600,
+        outline: "none",
         p: {
           xs: 1.25,
         },
@@ -231,8 +232,8 @@ export const VoteCastModal: FunctionComponent<VoteCastModalProps> = ({
           subtitle="You can also join our Discord server, or watch and star us on GitHub."
           icon={faComment}
           textColor="#0089B4"
-          backgroundColor={theme.palette.teal[200]}
-          borderColor="#F0F9FF"
+          backgroundColor="#F0F9FF"
+          borderColor={theme.palette.teal[200]}
         >
           <ActionButton
             href="https://blockprotocol.org/discord"

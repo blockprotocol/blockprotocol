@@ -10,6 +10,7 @@ export interface EnterEmailScreenProps {
   selectedApplication: Application;
   suggestionName?: string;
   sumbitHandler: () => void;
+  errorHandler: () => void;
   goBackHandler: () => void;
 }
 
@@ -18,6 +19,7 @@ export const EnterEmailScreen: FunctionComponent<EnterEmailScreenProps> = ({
   selectedApplication,
   suggestionName,
   sumbitHandler,
+  errorHandler,
   goBackHandler,
 }) => {
   return (
@@ -80,6 +82,7 @@ export const EnterEmailScreen: FunctionComponent<EnterEmailScreenProps> = ({
       <VoteEmailInput
         applicationId={selectedApplication.id}
         onSubmit={sumbitHandler}
+        onError={errorHandler}
         suggestionName={suggestionName}
       />
 

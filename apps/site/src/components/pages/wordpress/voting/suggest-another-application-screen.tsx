@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Theme, Typography, useMediaQuery } from "@mui/material";
 import { FunctionComponent, useState } from "react";
 
 import { ArrowLeftIcon } from "../../../icons";
@@ -13,6 +13,10 @@ export const SuggestAnotherApplicationScreen: FunctionComponent<
   SuggestAnotherApplicationScreenProps
 > = ({ submitHandler, goBackHandler }) => {
   const [applicationName, setApplicationName] = useState("");
+
+  const isSmall = useMediaQuery(({ breakpoints }: Theme) =>
+    breakpoints.down("md"),
+  );
 
   return (
     <Box
@@ -54,11 +58,12 @@ export const SuggestAnotherApplicationScreen: FunctionComponent<
           color: ({ palette }) => palette.common.black,
         }}
       >
-        What application would you like to use the Þ in? 👀
+        What {isSmall ? "app" : "application"} would you like to use the Þ in?
+        👀
       </Typography>
 
       <Input
-        placeholder="Enter the app’s name here"
+        placeholder={isSmall ? "App name" : "Enter the app’s name here"}
         value={applicationName}
         onChange={({ target }) => {
           setApplicationName(target.value);

@@ -1,4 +1,10 @@
-import { FormEvent, FunctionComponent, useRef, useState } from "react";
+import {
+  FormEvent,
+  FunctionComponent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { apiClient } from "../../../../lib/api-client";
 import { useEmailTextField } from "../../../hooks/use-email-text-field";
@@ -11,12 +17,14 @@ export interface VoteEmailInputProps {
   applicationId: ApplicationId;
   suggestionName?: string;
   onSubmit: () => void;
+  onError?: () => void;
 }
 
 export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
   applicationId,
   suggestionName,
   onSubmit,
+  onError,
 }) => {
   const emailInputRef = useRef<HTMLInputElement>(null);
 
@@ -61,6 +69,12 @@ export const VoteEmailInput: FunctionComponent<VoteEmailInputProps> = ({
         });
     }
   };
+
+  useEffect(() => {
+    if (touchedEmailInput && (displayError || !isEmailInputValid)) {
+      onError?.();
+    }
+  }, [onError, displayError, touchedEmailInput, isEmailInputValid]);
 
   return (
     <Input
