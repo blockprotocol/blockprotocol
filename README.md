@@ -100,7 +100,7 @@ Distributed under the MIT License. See `LICENSE.md` for more information.
 
 Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
-You can also join our [community Discord server](https://blockprotocol.org/discord) for quick help and support.
+You can also join our [Discord] community for quick help and support.
 
 Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
