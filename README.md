@@ -1,25 +1,20 @@
 [github_banner]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [github_star]: https://github.com/blockprotocol/blockprotocol#
 [open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
-
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-
-[HASH]: https://github.com/hashintel/hash/tree/main/packages/hash
+[hash]: https://github.com/hashintel/hash/tree/main/packages/hash
 [blockprotocol.org]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[Þ Hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-
-[Block Protocol specification]: https://blockprotocol.org/docs/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[Core specification]: https://blockprotocol.org/docs/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[Graph service]: https://blockprotocol.org/docs/spec/graph-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[Hook service]: https://blockprotocol.org/docs/spec/hook-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-
-
-[Block Protocol documentation]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[þ hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[block protocol specification]: https://blockprotocol.org/docs/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[core specification]: https://blockprotocol.org/docs/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[graph service]: https://blockprotocol.org/docs/spec/graph-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[hook service]: https://blockprotocol.org/docs/spec/hook-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[block protocol documentation]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [create a new block]: https://blockprotocol.org/docs/developing-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [developing blocks]: https://blockprotocol.org/docs/developing-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [becoming an embedder]: https://blockprotocol.org/docs/embedding-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[RFCs & Roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[rfcs & roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
 [![github_banner](https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/f8b0bf95-88ea-47ea-cac2-49cb2851b700/github)][github_banner]
 
