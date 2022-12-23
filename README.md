@@ -94,7 +94,7 @@ If you’re looking for inspiration regarding new blocks to build, or contributi
 
 ## License
 
-Distributed under the MIT License. See `LICENSE.md` for more information.
+The vast majority of this repository is dual-licensed under the Apache 2.0 and MIT licenses, at your option. See the [LICENSE](LICENSE.md) file for more information.
 
 ## Contact
 
