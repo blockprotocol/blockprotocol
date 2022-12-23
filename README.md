@@ -1,6 +1,25 @@
 [github_banner]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [github_star]: https://github.com/blockprotocol/blockprotocol#
+[open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen)
+
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+
+[HASH]: https://github.com/hashintel/hash/tree/main/packages/hash
+[blockprotocol.org]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[Þ Hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+
+[Block Protocol specification]: https://blockprotocol.org/docs/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[Core specification]: https://blockprotocol.org/docs/spec/core?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[Graph service]: https://blockprotocol.org/docs/spec/graph-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[Hook service]: https://blockprotocol.org/docs/spec/hook-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+
+
+[Block Protocol documentation]: https://blockprotocol.org/docs?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[create a new block]: https://blockprotocol.org/docs/developing-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[developing blocks]: https://blockprotocol.org/docs/developing-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[using blocks]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[becoming an embedder]: https://blockprotocol.org/docs/embedding-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[RFCs & Roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 
 [![github_banner](https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/f8b0bf95-88ea-47ea-cac2-49cb2851b700/github)][github_banner]
 
@@ -12,48 +31,48 @@ The Block Protocol is an open standard for building and using data-driven blocks
 
 ## Getting Started
 
-Please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) for complete instructions on using the Block Protocol, including:
+Please refer to the [Block Protocol documentation] for complete instructions on using the Block Protocol, including:
 
-- [developing blocks](https://blockprotocol.org/docs/developing-blocks) and publishing them to the [Þ Hub](https://blockprotocol.org/hub)
-- [using blocks](https://blockprotocol.org/docs/using-blocks) inside other applications
-- [becoming an embedder](https://blockprotocol.org/docs/embedding-blocks) so that others can use blocks within your application or framework
+- [developing blocks] and publishing them to the [Þ Hub]
+- [using blocks] inside other applications
+- [becoming an embedder] so that others can use blocks within your application or framework
 
 ## Examples
 
-[HASH](https://github.com/hashintel/hash/tree/main/packages/hash) is an embedding application that supports the Block Protocol, enabling its users to insert arbitrary blocks from the [Þ Hub](https://blockprotocol.org/hub) at runtime.
+[HASH] is an embedding application that supports the Block Protocol, enabling its users to insert arbitrary blocks from the [Þ Hub] at runtime.
 
-For more examples, please refer to the [Block Protocol documentation](https://blockprotocol.org/docs) or browse the complete [Þ Hub](https://blockprotocol.org/hub).
+For more examples, please refer to the [Block Protocol documentation] or browse the complete [Þ Hub].
 
 ## Roadmap
 
-Learn more on our [RFCs & Roadmap](https://blockprotocol.org/docs/spec/rfcs_and_roadmap) page in the docs.
+Learn more on our [RFCs & Roadmap] page in the docs.
 
 - See the [RFC category on GitHub Discussions](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc) for a list of active RFCs
-- See the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen) for a list of some other proposed features (and known issues).
+- See the [open issues] for a list of some other proposed features (and known issues).
 
 ## Repository contents
 
 We welcome [contributions](#contributing) to this repository. Within it you will find folders for:
 
-1.  `apps/site`: the code for [blockprotocol.org](https://blockprotocol.org), including:
+1.  `apps/site`: the code for [blockprotocol.org], including:
 
-    - the [Block Protocol specification](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/4_spec) ([view on the site](https://blockprotocol.org/docs/spec))
-    - the [explanatory documentation](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs) ([view on the site](https://blockprotocol.org/docs))
+    - the [Block Protocol specification] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/4_spec))
+    - the [Block Protocol documentation] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs))
 
 1.  `packages`: utility packages for constructing Block Protocol blocks. These are all available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
 
-    - `@blockprotocol/core`: implements the Block Protocol [Core specification](https://blockprotocol.org/docs/spec/core) for blocks and embedding applications
-    - `@blockprotocol/graph`: implements the Block Protocol [Graph service](https://blockprotocol.org/docs/spec/graph-service) for blocks and embedding applications
-    - `@blockprotocol/hook`: implements the Block Protocol [Hook service](https://blockprotocol.org/docs/spec/hook-service) for blocks and embedding applications
+    - `@blockprotocol/core`: implements the Block Protocol [Core specification] for blocks and embedding applications
+    - `@blockprotocol/graph`: implements the Block Protocol [Graph service] for blocks and embedding applications
+    - `@blockprotocol/hook`: implements the Block Protocol [Hook service] for blocks and embedding applications
     - `@blockprotocol/type-system`: implements the type system (with code autogenerated from `crates/type-system`)
     - `@local/*`: auxiliary packages for local development and testing
     - `block-scripts`: scripts used by `block-template-*`
     - `block-template-*`: starter templates for blocks, used by `create-block-app`
     - `blockprotocol`: command line interface for interacting with the Block Protocol API, e.g. for publishing blocks
-    - `create-block-app`: a script to [create a new block](https://blockprotocol.org/docs/developing-blocks) using `block-template-*`
+    - `create-block-app`: a script to [create a new block] using `block-template-*`
     - `mock-block-dock`: a lightweight mock embedding application that can be used to test blocks during their development
 
-1.  `rfcs`: contains RFCs (Requests for comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project.
+1.  `rfcs`: contains RFCs (Requests For Comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project.
 
 ## Contributing
 
@@ -71,7 +90,7 @@ Please feel free to fork the repo in order to create a pull request:
 1.  Push to the Branch (`git push origin feature/AmazingFeature`)
 1.  Open a Pull Request
 
-If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues](https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen).
+If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues].
 
 ## License
 
