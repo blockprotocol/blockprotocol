@@ -20,7 +20,7 @@ test("key elements should be present when user views their account page", async 
   for (const [testId, href] of [
     ["profile-page-overview-tab", "/@alice"],
     ["profile-page-blocks-tab", "/@alice/blocks"],
-    ["profile-page-schemas-tab", "/@alice/schemas"],
+    ["profile-page-types-tab", "/@alice/types"],
   ] as const) {
     const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
@@ -31,7 +31,7 @@ test("key elements should be present when user views their account page", async 
   await page.locator("[data-testid='profile-page-overview-tab']").click();
 
   await expect(
-    page.locator("text=You haven’t created any blocks or schemas yet"),
+    page.locator("text=You haven’t created any blocks or types yet"),
   ).toBeVisible();
 
   await expect(
@@ -45,7 +45,7 @@ test("key elements should be present when user views their account page", async 
     "/docs/developing-blocks",
   );
 
-  await expect(page.locator("text=Create a schema")).toBeVisible();
+  await expect(page.locator("text=Create a type")).toBeVisible();
 
   // Blocks tab tests
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
@@ -65,18 +65,18 @@ test("key elements should be present when user views their account page", async 
     "/docs/developing-blocks",
   );
 
-  // Schema tab tests
-  await page.locator("[data-testid='profile-page-schemas-tab']").click();
+  // Type tab tests
+  await page.locator("[data-testid='profile-page-types-tab']").click();
 
   await expect(
-    page.locator("text=You haven’t created any schemas yet"),
+    page.locator("text=You haven’t created any types yet"),
   ).toBeVisible();
 
   await expect(
     page.locator("text=Start building to see your creations show up here."),
   ).toBeVisible();
 
-  await expect(page.locator("text=Create a schema")).toBeVisible();
+  await expect(page.locator("text=Create a type")).toBeVisible();
 });
 
 const codeBlockMetadata = (await getBlocksData()).find(
@@ -98,7 +98,7 @@ test("key elements should be present when guest user views account page", async 
   for (const [testId, href] of [
     ["profile-page-overview-tab", "/@hash"],
     ["profile-page-blocks-tab", "/@hash/blocks"],
-    ["profile-page-schemas-tab", "/@hash/schemas"],
+    ["profile-page-types-tab", "/@hash/types"],
   ] as const) {
     const item = page.locator(`[data-testid='${testId}']`);
     await expect(item).toBeVisible();
@@ -183,16 +183,16 @@ test("key elements should be present when guest user views account page", async 
     codeBlockListViewCard.locator(`text=${codeBlockMetadata.description}`),
   ).toBeVisible();
 
-  await page.locator("[data-testid='profile-page-schemas-tab']").click();
+  await page.locator("[data-testid='profile-page-types-tab']").click();
 
-  await expect(page).toHaveURL("/@hash/schemas");
+  await expect(page).toHaveURL("/@hash/types");
 
   await expect(
-    page.locator("text=@hash hasn’t published any schemas yet"),
+    page.locator("text=@hash hasn’t published any types yet"),
   ).toBeVisible();
 
   await expect(
-    page.locator("text=You can browse existing schemas on the Hub."),
+    page.locator("text=You can browse existing types on the Hub."),
   ).toBeVisible();
 
   await expect(page.locator("text=Browse the Hub")).toBeVisible();
