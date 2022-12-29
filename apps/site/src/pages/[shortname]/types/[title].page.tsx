@@ -7,7 +7,7 @@ import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import { tw } from "twind";
 
-import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor";
+import { TypeEditor } from "../../../components/entity-types/type-editor/type-editor";
 import { Link } from "../../../components/link";
 import { useUser } from "../../../context/user-context";
 import { EntityType } from "../../../lib/api/model/entity-type.model";
@@ -76,10 +76,10 @@ const EntityTypePage: NextPage = () => {
     if (!args.data) {
       throw new Error("No data supplied to updateEntityType request");
     }
-    const { entityTypeId, schema } = args.data;
+    const { entityTypeId, type } = args.data;
 
     return apiClient
-      .updateEntityType({ schema: JSON.stringify(schema) }, entityTypeId)
+      .updateEntityType({ type: JSON.stringify(type) }, entityTypeId)
       .then(({ data }) => {
         if (data) {
           return {
@@ -109,11 +109,11 @@ const EntityTypePage: NextPage = () => {
   const userCanEdit =
     user !== "loading" && user?.shortname === shortnameWithoutLeadingAt;
 
-  const uri = entityType.schema.$id;
+  const uri = entityType.type.$id;
 
   return (
     <>
-      <NextSeo title={`Block Protocol – ${shortname}/${title} Schema`} />
+      <NextSeo title={`Block Protocol – ${shortname}/${title} Type`} />
       <Container
         sx={{
           marginTop: {
@@ -132,26 +132,25 @@ const EntityTypePage: NextPage = () => {
             {" >"}
           </Link>
           <Typography variant="bpHeading3" component="h1">
-            <strong>{title ?? "Unnamed"}</strong> Schema
+            <strong>{title ?? "Unnamed"}</strong> Type
           </Typography>
         </header>
 
         <section>
           <Typography variant="bpBodyCopy" sx={{ mb: 2 }}>
-            You can use this editor to build basic schemas, representing types
-            of entities.
+            You can use this editor to build basic entity types.
           </Typography>
           <Typography variant="bpBodyCopy" sx={{ mb: 2 }}>
-            You can use these entity types as the expected value for a property
-            in another schema.
+            These types will be deprecated in February 2023 and a new type
+            system will be introduced as part of the 0.3 specification.
           </Typography>
         </section>
 
         <main className={tw`pt-8 mb-14 w-auto`}>
-          <SchemaEditor
+          <TypeEditor
             aggregateEntityTypes={aggregateEntityTypes}
             entityTypeId={entityType.entityTypeId}
-            schema={entityType.schema}
+            type={entityType.type}
             updateEntityType={userCanEdit ? updateEntityType : undefined}
           />
         </main>
@@ -167,7 +166,7 @@ const EntityTypePage: NextPage = () => {
         </Box>
         <Box sx={{ mb: 2 }}>
           <Typography variant="bpSmallCopy" sx={{ maxWidth: "100%" }}>
-            This schema will always be available at{" "}
+            This type will always be available at{" "}
             <Link href={uri}>{uri}</Link> - this is its <strong>$id</strong>.
           </Typography>
         </Box>
