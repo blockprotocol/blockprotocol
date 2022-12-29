@@ -14,7 +14,7 @@ import { ExpandedBlockMetadata } from "../../../lib/blocks";
 import { Sidebar } from "./sidebar";
 import { TabPanelContentsWithBlocks } from "./tab-panel-contents-with-blocks";
 import { TabPanelContentsWithOverview } from "./tab-panel-contents-with-overview";
-import { TabPanelContentsWithSchemas } from "./tab-panel-contents-with-schemas";
+import { TabPanelContentsWithTypes } from "./tab-panel-contents-with-types";
 import { TabHeader, TabPanel, TabValue } from "./tabs";
 
 const SIDEBAR_WIDTH = 300;
@@ -89,7 +89,7 @@ export const UserPageComponent: FunctionComponent<UserPageProps> = ({
               activeTab={activeTab}
               tabItemsCount={{
                 blocks: blocks.length,
-                schemas: entityTypes.length,
+                types: entityTypes.length,
               }}
             />
             {/* TAB PANELS  */}
@@ -103,8 +103,8 @@ export const UserPageComponent: FunctionComponent<UserPageProps> = ({
             <TabPanel activeTab={activeTab} value="blocks" index={1}>
               <TabPanelContentsWithBlocks user={user} blocks={blocks} />
             </TabPanel>
-            <TabPanel activeTab={activeTab} value="schemas" index={2}>
-              <TabPanelContentsWithSchemas
+            <TabPanel activeTab={activeTab} value="types" index={2}>
+              <TabPanelContentsWithTypes
                 user={user}
                 entityTypes={entityTypes}
               />
