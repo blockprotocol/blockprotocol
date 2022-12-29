@@ -33,7 +33,7 @@ NProgress.configure({ showSpinner: false });
 const defaultSeoConfig: DefaultSeoProps = {
   title: "Block Protocol – an open standard for data-driven blocks",
   description:
-    "A standardized way to create blocks whose contents are mapped to schemas, which are both human and machine-readable.",
+    "A standardized way to create blocks which are both human and machine-readable, whose contents are mapped to schemas.",
 
   twitter: {
     cardType: "summary_large_image",
