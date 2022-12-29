@@ -27,7 +27,7 @@ export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
 export type DashboardSection = "create" | "manage" | "explore";
 
 export const getDashboardSectionCards = (props: {
-  openCreateSchemaModal: () => void;
+  openCreateTypeModal: () => void;
   profileLink: string;
 }): Record<DashboardSection, DashboardCardProps[]> => {
   return {
@@ -69,7 +69,7 @@ export const getDashboardSectionCards = (props: {
           "Types are a formal way to describe data, links, properties and entities",
         link: {
           title: "Create a type",
-          onClick: props.openCreateSchemaModal,
+          onClick: props.openCreateTypeModal,
         },
       },
     ],
@@ -114,7 +114,7 @@ export const getDashboardSectionCards = (props: {
           "View and update the types you’ve created and made public on the Hub",
         link: {
           title: "Manage types",
-          href: `${props.profileLink}/schemas`,
+          href: `${props.profileLink}/types`,
         },
         icon: faAsterisk,
         variant: "secondary",
