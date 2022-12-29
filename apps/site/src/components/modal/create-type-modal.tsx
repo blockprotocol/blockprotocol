@@ -15,16 +15,16 @@ import { Button } from "../button";
 import { TextField } from "../text-field";
 import { Modal } from "./modal";
 
-type CreateSchemaModalProps = {
+type CreateTypeModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
-export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
+export const CreateTypeModal: FunctionComponent<CreateTypeModalProps> = ({
   open,
   onClose,
 }) => {
-  const [newSchemaTitle, setNewSchemaTitle] = useState("");
+  const [newTypeTitle, setNewTypeTitle] = useState("");
   const [touchedInput, setTouchedInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiErrorMessage, setApiErrorMessage] = useState<ReactNode>(undefined);
@@ -33,7 +33,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
 
   // @todo might be a good idea to split this into a hook
   // @see https://github.com/blockprotocol/blockprotocol/pull/223#discussion_r808072665
-  const handleSchemaTitleChange = (value: string) => {
+  const handleTypeTitleChange = (value: string) => {
     let formattedText = value.trim();
     // replace all empty spaces
     formattedText = formattedText.replace(/\s/g, "");
@@ -44,10 +44,10 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       formattedText = firstChar.toUpperCase() + formattedText.slice(1);
     }
 
-    setNewSchemaTitle(formattedText);
+    setNewTypeTitle(formattedText);
   };
 
-  const handleCreateSchema = useCallback(
+  const handleCreateType = useCallback(
     async (evt: FormEvent) => {
       evt.preventDefault();
       if (!user || user === "loading") {
@@ -61,30 +61,30 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       });
 
       const { data, error } = await apiClient.createEntityType({
-        schema: {
-          title: newSchemaTitle,
+        type: {
+          title: newTypeTitle,
         },
       });
       setLoading(false);
       if (error) {
         setApiErrorMessage(error.message);
       } else if (data) {
-        const schemaTitle = data.entityType.schema.title;
-        void router.push(`/@${user.shortname}/types/${schemaTitle}`);
+        const typeTitle = data.entityType.type.title;
+        void router.push(`/@${user.shortname}/types/${typeTitle}`);
       }
     },
-    [user, newSchemaTitle, router],
+    [user, newTypeTitle, router],
   );
 
   // @todo introduce a library for handling forms
   const helperText = touchedInput
     ? apiErrorMessage ||
-      (newSchemaTitle === "" ? "Please enter a valid value" : undefined)
+      (newTypeTitle === "" ? "Please enter a valid value" : undefined)
     : undefined;
 
-  const isSchemaTitleInvalid = !!apiErrorMessage || newSchemaTitle === "";
+  const isTypeTitleInvalid = !!apiErrorMessage || newTypeTitle === "";
 
-  const displayError = touchedInput && isSchemaTitleInvalid;
+  const displayError = touchedInput && isTypeTitleInvalid;
 
   return (
     <Modal
@@ -93,7 +93,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       contentStyle={{
         top: "40%",
       }}
-      data-testid="create-schema-modal"
+      data-testid="create-type-modal"
     >
       <Box>
         <Typography
@@ -103,7 +103,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             display: "block",
           }}
         >
-          Create New <strong>Schema</strong>
+          Create New <strong>Type</strong>
         </Typography>
         <Typography
           sx={{
@@ -113,29 +113,29 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
             width: { xs: "90%", md: "85%" },
           }}
         >
-          Schemas are used to define the structure of entities - in other words,
+          Types are used to define the structure of entities - in other words,
           define a ‘type’ of entity
         </Typography>
-        <Box component="form" onSubmit={handleCreateSchema}>
+        <Box component="form" onSubmit={handleCreateType}>
           <TextField
             sx={{ mb: 3 }}
             autoFocus
-            label="Schema Title"
+            label="Type Title"
             fullWidth
             helperText={helperText}
-            value={newSchemaTitle}
+            value={newTypeTitle}
             onChange={(evt) => {
               if (apiErrorMessage) {
                 setApiErrorMessage(undefined);
               }
-              handleSchemaTitleChange(evt.target.value);
+              handleTypeTitleChange(evt.target.value);
             }}
             required
             error={displayError}
           />
 
           <Button
-            disabled={isSchemaTitleInvalid}
+            disabled={isTypeTitleInvalid}
             loading={loading}
             size="small"
             squared
