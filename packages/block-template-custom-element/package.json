@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@blockprotocol/graph": "0.0.18",
+    "@blockprotocol/type-system": "^0.0.2",
     "lit": "^2.4.1"
   },
   "devDependencies": {

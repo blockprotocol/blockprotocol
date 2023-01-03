@@ -139,3 +139,19 @@ export type AggregateEntitiesResult<
       totalCount?: number | null;
     };
 };
+
+type BeforeTrailingLast<
+  CurrentString extends string,
+  Separator extends string,
+  PreviouslyExtractedSegment extends string = never,
+> = CurrentString extends `${string}${Separator}${infer Segment}${Separator}`
+  ? BeforeTrailingLast<`${Segment}${Separator}`, Separator, Segment>
+  : PreviouslyExtractedSegment;
+
+export type WithSimpleAccessors<Properties extends EntityPropertiesObject> =
+  Properties & {
+    [Key in keyof Properties as BeforeTrailingLast<
+      Extract<Key, string>,
+      "/"
+    >]: Properties[Key];
+  };

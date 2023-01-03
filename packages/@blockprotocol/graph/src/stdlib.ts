@@ -12,7 +12,12 @@ import {
   getEntities as getEntitiesTemporal,
   getEntity as getEntityTemporal,
 } from "./stdlib/subgraph/element/entity.js";
-import { Entity, EntityId } from "./types/entity.js";
+import {
+  Entity,
+  EntityId,
+  EntityPropertiesObject,
+  WithSimpleAccessors,
+} from "./types/entity.js";
 import { LinkEntityAndRightEntity, Subgraph } from "./types/subgraph.js";
 
 export {
@@ -110,3 +115,25 @@ export const getOutgoingLinkAndTargetEntities = <
   entityId: EntityId,
 ): LinkAndRightEntities =>
   getOutgoingLinkAndTargetEntitiesTemporal(subgraph, entityId) as LinkAndRightEntities; // @todo add generics elsewhere
+
+/**
+ * Adds simple property access to an entity, MUTATING the object passed in.
+ * The simple accessors are the last path segment before the trailing slash of a base URI
+ * e.g. if there is a key "https://example.com/my-type/" then a "my-type" key is added
+ */
+export const addSimpleAccessors = <
+  Properties extends EntityPropertiesObject = EntityPropertiesObject,
+>(
+  entity: Entity<Properties>,
+) => {
+  for (const [key, value] of Object.entries(entity.properties)) {
+    const [simpleAccessor, trailingSlash] = key.split("/").slice(-2);
+    if (trailingSlash !== "/" || !simpleAccessor) {
+      throw new Error(`Property key ${key} is not a valid base URI.`);
+    }
+    // eslint-disable-next-line no-param-reassign -- intentional mutation
+    entity.properties[simpleAccessor] = value;
+  }
+
+  return entity as Entity<WithSimpleAccessors<Properties>>;
+};
