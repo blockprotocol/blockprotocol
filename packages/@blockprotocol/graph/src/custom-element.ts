@@ -2,7 +2,6 @@ import { LitElement } from "lit";
 
 import {
   BlockGraphProperties,
-  Entity,
   EntityPropertiesObject,
   GraphBlockHandler,
   LinkEntityAndRightEntity,
@@ -13,7 +12,7 @@ import { getRoots } from "./stdlib/subgraph/roots.js";
 
 export interface BlockElementBase<
   RootType extends SubgraphRootTypes["entity"] = SubgraphRootTypes["entity"],
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO fix this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- this is used in the class definition
   RootEntityLinkedEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
 > extends LitElement,
     BlockGraphProperties<RootType> {}
@@ -32,7 +31,7 @@ export abstract class BlockElementBase<
    * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list of available messages
    */
   protected graphService?: GraphBlockHandler;
-  protected blockEntity?: Entity;
+  protected blockEntity?: RootType["element"];
   protected linkedEntities?: LinkEntityAndRightEntity[];
 
   /**

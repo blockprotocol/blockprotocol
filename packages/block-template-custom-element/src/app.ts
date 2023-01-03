@@ -43,7 +43,12 @@ export class BlockElement extends BlockElementBase<RootType> {
 
   /** @see https://lit.dev/docs/components/rendering */
   render() {
-    return html` <h1>Hello, ${this.blockEntity?.properties.name}</h1>
+    return html` <h1>
+        Hello,
+        ${this.blockEntity?.properties[
+          "https://alpha.hash.ai/@hash/types/property-type/title/"
+        ]}
+      </h1>
       <p>
         The entityId of this block is
         ${this.blockEntity?.metadata.editionId.baseId}. Use it to update its
@@ -52,7 +57,9 @@ export class BlockElement extends BlockElementBase<RootType> {
       <!-- @see https://lit.dev/docs/components/events -->
       <input
         @change=${this.handleInput}
-        value=${this.blockEntity?.properties.name}
+        value=${this.blockEntity?.properties[
+          "https://alpha.hash.ai/@hash/types/property-type/title/"
+        ]}
       />`;
   }
 }
