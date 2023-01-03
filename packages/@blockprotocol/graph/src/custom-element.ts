@@ -7,7 +7,7 @@ import {
   LinkEntityAndRightEntity,
   SubgraphRootTypes,
 } from "./index.js";
-import { getOutgoingLinkAndTargetEntities } from "./stdlib";
+import { getOutgoingLinkAndTargetEntities } from "./stdlib.js";
 import { getRoots } from "./stdlib/subgraph/roots.js";
 
 export interface BlockElementBase<
