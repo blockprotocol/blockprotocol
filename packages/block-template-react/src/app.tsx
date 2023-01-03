@@ -3,6 +3,7 @@ import {
   useEntitySubgraph,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
+import { addSimpleAccessors } from "@blockprotocol/graph/stdlib";
 import { useRef } from "react";
 
 /**
@@ -14,7 +15,7 @@ import { useRef } from "react";
  * any of these ensure that your styling does not affect anything outside your block.
  */
 import styles from "./base.module.scss";
-import { RootType } from "./types.gen";
+import { RootEntityLinkedEntities, RootType } from "./types.gen";
 
 /**
  * This function is to help illustrate a property being changed when the button is pressed.
@@ -58,13 +59,16 @@ export const App: BlockComponent<RootType> = ({
     throw new Error("No blockEntitySubgraph provided");
   }
 
-  const { rootEntity: blockEntity } = useEntitySubgraph(blockEntitySubgraph);
+  const { rootEntity: blockEntity } = useEntitySubgraph<
+    RootType,
+    RootEntityLinkedEntities
+  >(blockEntitySubgraph);
 
   const entityId = blockEntity.metadata.editionId.baseId;
-  const title =
-    blockEntity.properties[
-      "https://alpha.hash.ai/@hash/types/property-type/title/"
-    ];
+
+  const simpleBlockEntity = addSimpleAccessors(blockEntity);
+
+  const { title } = simpleBlockEntity.properties;
 
   return (
     /**
@@ -75,7 +79,7 @@ export const App: BlockComponent<RootType> = ({
      *   - our service helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
-      <h1>Hello, {title}!</h1>
+      <h1>{`Hello, ${title}`}</h1>
       <p>
         The entityId of this block is {entityId}. Use it to update its data,
         e.g. by calling <code>updateEntity</code>.

@@ -1,7 +1,7 @@
 import { VersionedUri } from "@blockprotocol/type-system";
 import { compile, Options } from "json-schema-to-typescript";
 
-import { fetchAndValidateEntityType } from "../type-resolver.js";
+import { fetchAndValidateEntityType } from "../codegen.js";
 import { EntityType } from "./entity-type-meta-schema.gen.js";
 import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings.js";
 import {

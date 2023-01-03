@@ -1,11 +1,16 @@
+// This file is has its own import path "@blockprotocol/graph/codegen"
+// because its dependencies hit a lot of node APIs – this is intended for CLI use.
+// we don't want users importing from other files in the package to have to evaluate it.
+// it will cause problems with e.g. webpack which would require polyfills for the node APIs
+
 import { VersionedUri } from "@blockprotocol/type-system";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-import { EntityType } from "./type-resolver/entity-type-meta-schema.gen";
-import entityTypeMetaSchema from "./type-resolver/entity-type-meta-schema.json" assert { type: "json" };
-import { entityTypeToTypescript } from "./type-resolver/entity-type-to-typescript.js";
-import { fetchTypeAsJson } from "./type-resolver/shared.js";
+import { EntityType } from "./codegen/entity-type-meta-schema.gen";
+import entityTypeMetaSchema from "./codegen/entity-type-meta-schema.json" assert { type: "json" };
+import { entityTypeToTypescript } from "./codegen/entity-type-to-typescript.js";
+import { fetchTypeAsJson } from "./codegen/shared.js";
 
 const ajv = new Ajv2020();
 addFormats(ajv);

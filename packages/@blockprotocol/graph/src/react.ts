@@ -13,10 +13,9 @@ import {
   GraphEmbedderHandler,
   LinkEntityAndRightEntity,
   Subgraph,
-  SubgraphRootType,
   SubgraphRootTypes,
 } from "./index.js";
-import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib";
+import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
 
 export type BlockComponent<
   RootType extends SubgraphRootTypes["entity"] = SubgraphRootTypes["entity"],
