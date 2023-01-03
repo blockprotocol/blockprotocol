@@ -114,12 +114,14 @@ export const getOutgoingLinkAndTargetEntities = <
   subgraph: Subgraph,
   entityId: EntityId,
 ): LinkData =>
-  getOutgoingLinkAndTargetEntitiesTemporal(subgraph, entityId) as LinkData; // @todo fix this
+  getOutgoingLinkAndTargetEntitiesTemporal<LinkData>(subgraph, entityId);
 
 /**
  * Adds simple property access to an entity, MUTATING the object passed in.
  * The simple accessors are the last path segment before the trailing slash of a base URI
  * e.g. if there is a key "https://example.com/my-type/" then a "my-type" key is added
+ * @todo is this helper actually helpful, or should people just deal with accessing by URI?
+ *    - they'll still have to deal with URIs, e.g. when sending updates
  */
 export const addSimpleAccessors = <
   Properties extends EntityPropertiesObject = EntityPropertiesObject,

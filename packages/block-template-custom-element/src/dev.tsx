@@ -7,6 +7,7 @@ import ElementClass from "./index";
 
 const node = document.getElementById("app");
 
+// @todo make type blockprotocol.org/[etc]/ExampleEntity when we can host new types there
 const testEntity = {
   metadata: {
     editionId: {
