@@ -45,7 +45,7 @@
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
     "@mui/material": "^5.10.4",
-    "ajv": "^8.9.0",
+    "ajv": "^8.11.2",
     "echarts": "^5.3.3",
     "react-json-view": "^1.21.3",
     "react-resizable": "^3.0.4",
