@@ -18,8 +18,10 @@ const testEntity: RootType["element"] = {
     entityTypeId: packageJson.blockprotocol.schema as VersionedUri,
   },
   properties: {
-    "https://alpha.hash.ai/@hash/types/property-type/title/": "World",
-    "https://alpha.hash.ai/@hash/types/property-type/index/": "0",
+    "https://alpha.hash.ai/@ciaran/types/property-type/src/":
+      "https://modelviewer.dev/shared-assets/models/NeilArmstrong.glb",
+    "https://alpha.hash.ai/@ciaran/types/property-type/alt/":
+      "Neil Armstrong's Spacesuit from the Smithsonian Digitization Programs Office and National Air and Space Museum",
   },
 } as const;
 

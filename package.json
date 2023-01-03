@@ -5,6 +5,7 @@
   "workspaces": {
     "packages": [
       "apps/*",
+      "blocks/*",
       "crates/*",
       "packages/*",
       "packages/@blockprotocol/*",
