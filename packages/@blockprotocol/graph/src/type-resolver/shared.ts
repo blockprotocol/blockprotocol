@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 import { EntityType } from "./entity-type-meta-schema.gen";
 
 export const fetchTypeAsJson = (versionedUri: string) =>
