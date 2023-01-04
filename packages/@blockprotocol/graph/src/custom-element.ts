@@ -46,15 +46,9 @@ export abstract class BlockElementBase<
      * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
      */
     graph: { type: Object },
-    rootEntity: { type: Object },
   };
 
-  connectedCallback() {
-    super.connectedCallback();
-    if (!this.graphService || this.graphService.destroyed) {
-      this.graphService = new GraphBlockHandler({ element: this });
-    }
-
+  private updateDerivedProperties() {
     const blockEntitySubgraph = this.graph?.blockEntitySubgraph;
 
     if (blockEntitySubgraph) {
@@ -69,6 +63,18 @@ export abstract class BlockElementBase<
           blockEntitySubgraph,
           rootEntity.metadata.editionId.baseId,
         );
+    }
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    if (!this.graphService || this.graphService.destroyed) {
+      this.graphService = new GraphBlockHandler({
+        callbacks: {
+          blockEntitySubgraph: () => this.updateDerivedProperties(),
+        },
+        element: this,
+      });
     }
   }
 

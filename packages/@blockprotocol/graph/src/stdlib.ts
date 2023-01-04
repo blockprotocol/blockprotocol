@@ -129,8 +129,8 @@ export const addSimpleAccessors = <
   entity: Entity<Properties>,
 ) => {
   for (const [key, value] of Object.entries(entity.properties)) {
-    const [simpleAccessor, trailingSlash] = key.split("/").slice(-2);
-    if (trailingSlash !== "/" || !simpleAccessor) {
+    const [simpleAccessor, trailingSpace] = key.split("/").slice(-2);
+    if (trailingSpace !== "" || !simpleAccessor) {
       throw new Error(`Property key ${key} is not a valid base URI.`);
     }
     // eslint-disable-next-line no-param-reassign -- intentional mutation
