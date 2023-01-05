@@ -41,7 +41,6 @@ export const fetchAndValidateEntityType = async (
  *   - 0 will generate types for the Entity Type's properties only
  *   - 1 will generate types for the links from the Entity Type and their possible destination entities
  *   - 2 will generate types for the linked entities plus _their_ links and destinations, and so on
- * @param outputDirectory
  */
 export const generateTypeScriptFromEntityType = async (
   versionedUri: VersionedUri,
