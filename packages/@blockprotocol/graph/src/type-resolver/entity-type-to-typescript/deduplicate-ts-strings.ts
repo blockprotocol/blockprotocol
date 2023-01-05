@@ -11,12 +11,16 @@ const deduplicateTypeScriptString = (
     const isLineStartingInterface = line?.startsWith("export interface");
 
     if (line && (isLineStartingType || isLineStartingInterface)) {
-      const lineOpensBrace = isLineStartingInterface || line.includes(" = {"); // @todo very long type names might break this
+      const definitionOpensBrace =
+        isLineStartingInterface ||
+        (!line.endsWith(";") && // this is not a one-line type definition
+          // type names are not wrapped, so any opening brace will be on the opening or next line
+          (line.includes("{") || textLines[i + 1]?.includes("{")));
       const indexOfLastLineDefiningType = textLines.findIndex(
         (lineToCheck, indexToCheck) =>
           (indexToCheck === i && lineToCheck.endsWith(";")) ||
           (indexToCheck >= i &&
-            lineToCheck.startsWith(lineOpensBrace ? "}" : ";")),
+            lineToCheck.trim().startsWith(definitionOpensBrace ? "}" : ";")),
       );
       const typeDefinitionString = textLines
         .slice(i, indexOfLastLineDefiningType + 1)
