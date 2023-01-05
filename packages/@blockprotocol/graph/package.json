@@ -63,9 +63,7 @@
   "scripts": {
     "build": "yarn clean && tsc --skipLibCheck",
     "clean": "rimraf ./dist/",
-    "codegen": "json2ts src/type-resolver/entity-type-meta-schema.json --output src/type-resolver/entity-type-meta-schema.gen.ts",
     "fix:eslint": "eslint --fix .",
-    "postinstall": "yarn codegen",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit"
   },
