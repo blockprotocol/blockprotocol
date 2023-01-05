@@ -195,8 +195,7 @@ const _jsonSchemaToTypescript = async (
     compiledSchema += `\n
 export type RootEntity = ${typeName};
 export type RootEntityLinkedEntities = ${linkAndRightEntitiesUnionName};
-export type RootLinkMap = ${mapTypeName};
-export type RootType = { editionId: EntityEditionId; element: ${typeName} };`;
+export type RootLinkMap = ${mapTypeName};`;
   }
 
   return {

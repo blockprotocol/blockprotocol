@@ -1,3 +1,4 @@
+import { EntityEditionId } from "@blockprotocol/graph";
 import {
   type BlockComponent,
   useGraphBlockService,
@@ -14,7 +15,7 @@ import { useMemo, useRef } from "react";
  * any of these ensure that your styling does not affect anything outside your block.
  */
 import styles from "./base.module.scss";
-import { RootType } from "./types.gen";
+import { RootEntity } from "./types.gen";
 
 /**
  * This function is to help illustrate a property being changed when the button is pressed.
@@ -29,7 +30,7 @@ const supplyRandomName = () => {
  * It is a function that takes a property object (known as "props" in React) and returns an element.
  * You should update this comment to describe what your block does, or remove the comment.
  */
-export const App: BlockComponent<RootType> = ({
+export const App: BlockComponent<RootEntity> = ({
   graph: {
     /**
      * The properties sent to the block represent the messages sent automatically from the application to the block.
@@ -59,7 +60,9 @@ export const App: BlockComponent<RootType> = ({
   }
 
   const rootEntity = useMemo(() => {
-    const root = getRoots<RootType>(blockEntitySubgraph)[0];
+    const root = getRoots<{ editionId: EntityEditionId; element: RootEntity }>(
+      blockEntitySubgraph,
+    )[0];
     if (!root) {
       throw new Error("Root entity not present in subgraph");
     }
