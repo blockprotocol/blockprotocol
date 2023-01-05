@@ -4,11 +4,12 @@ import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
 import ElementClass from "./index";
+import { RootType } from "./types.gen";
 
 const node = document.getElementById("app");
 
 // @todo make type blockprotocol.org/[etc]/ExampleEntity when we can host new types there
-const testEntity = {
+const testEntity: RootType["element"] = {
   metadata: {
     editionId: {
       baseId: "test-entity",
