@@ -209,12 +209,12 @@ export const getRightEntityForLinkEntity = (
  *    for, if not supplied it defaults to the current time
  */
 export const getOutgoingLinkAndTargetEntities = <
-  LinkData extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
+  LinkAndRightEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
 >(
   subgraph: Subgraph,
   entityId: EntityId,
   timestamp?: Date | string,
-): LinkData => {
+): LinkAndRightEntities => {
   return getOutgoingLinksForEntity(subgraph, entityId, timestamp).map(
     (linkEntity) => {
       return {
@@ -226,5 +226,5 @@ export const getOutgoingLinkAndTargetEntities = <
         ),
       };
     },
-  ) as LinkData; // @todo consider fixing generics in functions called
+  ) as LinkAndRightEntities; // @todo consider fixing generics in functions called within
 };

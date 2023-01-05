@@ -1,7 +1,7 @@
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { css, html } from "lit";
 
-import { RootType } from "./types.gen";
+import { RootEntity } from "./types.gen";
 
 /**
  * This is the entry point for your block – the class that embedding applications will use to register your element.
@@ -11,7 +11,7 @@ import { RootType } from "./types.gen";
  * 1. 'graph': contains properties representing messages sent from the embedding application to the block, e.g. 'blockEntity'
  * 2. 'graphService': has various methods you can use to send messages to the embedding application, e.g. 'updateEntity'
  */
-export class BlockElement extends BlockElementBase<RootType> {
+export class BlockElement extends BlockElementBase<RootEntity> {
   /** @see https://lit.dev/docs/components/styles */
   static styles = css`
     font-family: sans-serif;

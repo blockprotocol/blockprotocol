@@ -2,27 +2,28 @@ import { LitElement } from "lit";
 
 import {
   BlockGraphProperties,
+  Entity,
+  EntityEditionId,
   EntityPropertiesObject,
   GraphBlockHandler,
   LinkEntityAndRightEntity,
-  SubgraphRootTypes,
 } from "./index.js";
 import { getOutgoingLinkAndTargetEntities } from "./stdlib.js";
 import { getRoots } from "./stdlib/subgraph/roots.js";
 
 export interface BlockElementBase<
-  RootType extends SubgraphRootTypes["entity"] = SubgraphRootTypes["entity"],
+  RootEntity extends Entity = Entity,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- this is used in the class definition
   RootEntityLinkedEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
 > extends LitElement,
-    BlockGraphProperties<RootType> {}
+    BlockGraphProperties<RootEntity> {}
 
 /**
  * A class to use as a base for implementing Block Protocol blocks as custom elements.
  * This class handles establishing communication with the embedding application.
  */
 export abstract class BlockElementBase<
-  RootType,
+  RootEntity,
   RootEntityLinkedEntities,
 > extends LitElement {
   /**
@@ -31,7 +32,7 @@ export abstract class BlockElementBase<
    * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list of available messages
    */
   protected graphService?: GraphBlockHandler;
-  protected blockEntity?: RootType["element"];
+  protected blockEntity?: RootEntity;
   protected linkedEntities?: LinkEntityAndRightEntity[];
 
   /**
@@ -52,7 +53,10 @@ export abstract class BlockElementBase<
     const blockEntitySubgraph = this.graph?.blockEntitySubgraph;
 
     if (blockEntitySubgraph) {
-      const rootEntity = getRoots<RootType>(blockEntitySubgraph)[0];
+      const rootEntity = getRoots<{
+        editionId: EntityEditionId;
+        element: RootEntity;
+      }>(blockEntitySubgraph)[0];
       if (!rootEntity) {
         throw new Error("Root entity not present in subgraph");
       }
