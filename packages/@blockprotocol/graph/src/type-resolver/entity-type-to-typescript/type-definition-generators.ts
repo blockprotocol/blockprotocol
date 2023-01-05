@@ -6,7 +6,8 @@ export const generateImportStatements = () =>
 export const generateEntityDefinition = (
   name: string,
   propertyTypeName: string,
-) => `\nexport type ${name} = Entity<${propertyTypeName}>;\n`;
+) => `
+export type ${name} = Entity<${propertyTypeName}>;\n`;
 
 /*
  * Generate the type returned by functions which extract a link entity and its right entity from the subgraph

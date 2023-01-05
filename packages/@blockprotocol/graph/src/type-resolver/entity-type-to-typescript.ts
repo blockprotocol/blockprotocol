@@ -161,7 +161,7 @@ const _jsonSchemaToTypeScript = async (
   // keep track of the possible destination types from this entity type for each link type it includes
   const typeLinkMap: Record<string, string> = {};
 
-  for (const [linkEntityTypeUri, destinationSchema] of Object.entries(
+  for (const [linkEntityTypeId, destinationSchema] of Object.entries(
     schema.links ?? {},
   )) {
     const retrieveOrCompileSchemaFromUri = async (
@@ -180,7 +180,7 @@ const _jsonSchemaToTypeScript = async (
 
     // get the schema for the linkEntity and possible rightEntities for this link, from this entity
     const [linkEntityType, ...rightEntityTypes] = await Promise.all([
-      retrieveOrCompileSchemaFromUri(linkEntityTypeUri),
+      retrieveOrCompileSchemaFromUri(linkEntityTypeId),
       ...(destinationSchema.items.oneOf ?? []).map((option) =>
         retrieveOrCompileSchemaFromUri(option.$ref),
       ),
@@ -205,7 +205,7 @@ const _jsonSchemaToTypeScript = async (
       linkEntityTypeDefinition,
     ]);
 
-    typeLinkMap[linkEntityTypeUri] = linkTypeName;
+    typeLinkMap[linkEntityTypeId] = linkTypeName;
   }
 
   // add a map of all the link type URIs we processed -> the possible linkEntity/rightEntities they link to

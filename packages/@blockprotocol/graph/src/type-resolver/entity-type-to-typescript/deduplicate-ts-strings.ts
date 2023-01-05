@@ -33,7 +33,7 @@ const deduplicateTypeScriptString = (
 };
 
 /**
- * naive approach to remove de-deduplicate TypeScript definition strings
+ * naive approach to de-deduplicate TypeScript definition strings
  * relies on known constants in how json-schema-to-typescript generates types
  * would be more robust with proper parsing
  * @todo check this with more complex schemas
