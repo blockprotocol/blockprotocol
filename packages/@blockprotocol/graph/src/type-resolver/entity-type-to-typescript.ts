@@ -11,7 +11,7 @@ import {
   generateLinkEntityAndRightEntityDefinition,
 } from "./entity-type-to-typescript/type-definition-generators.js";
 import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
-import { fetchTypeAsJson, generateTypeNameFromSchema } from "./shared.js";
+import { fetchTypeAsJson } from "./shared.js";
 
 const bannerComment = (uri: string, depth: number) => `/* eslint-disable */
 /**
@@ -62,6 +62,27 @@ type CompiledType = {
 // A map of schema URIs to their TS type name and definition
 type UriToType = { [typeUri: string]: CompiledType };
 
+const generateTypeNameFromSchema = (
+  schema: EntityType,
+  existingTypes: UriToType,
+) => {
+  const takenNames = Object.values(existingTypes).map(
+    ({ typeName }) => typeName,
+  );
+
+  const proposedName = schema.title?.replace(/ /g, "");
+
+  if (takenNames.includes(proposedName)) {
+    // @todo use URI segments to distinguish, not a counter
+    const suffix = takenNames.filter((name) =>
+      name.startsWith(proposedName),
+    ).length;
+    return `${proposedName}${suffix}`;
+  }
+
+  return proposedName;
+};
+
 /**
  * Generates TypeScript types from a given Entity Type schema
  * If depth > 0, follows 'links' from the schema to include types for link entities and their possible destinations
@@ -81,7 +102,7 @@ const _jsonSchemaToTypeScript = async (
   // if the cache is empty, this is the schema the external caller provided. we need to know to add boilerplate up top
   const rootSchema = Object.keys(resolvedUrisToType).length === 0;
 
-  const typeName = generateTypeNameFromSchema(schema);
+  const typeName = generateTypeNameFromSchema(schema, resolvedUrisToType);
 
   if (!typeName) {
     throw new Error("Schema is missing a title");
