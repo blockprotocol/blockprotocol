@@ -73,7 +73,7 @@ const _jsonSchemaToTypeScript = async (
   schema: EntityType,
   depth: number,
   resolvedUrisToType: UriToType,
-): Promise<CompiledType & {}> => {
+): Promise<CompiledType> => {
   if (resolvedUrisToType[schema.$id]) {
     return resolvedUrisToType[schema.$id]!;
   }
