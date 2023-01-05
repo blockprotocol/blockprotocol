@@ -109,9 +109,12 @@ type GenericLinkEntityAndRightEntity = {
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
  */
 export const getOutgoingLinkAndTargetEntities = <
-  LinkData extends GenericLinkEntityAndRightEntity[] = GenericLinkEntityAndRightEntity[],
+  LinkAndRightEntities extends GenericLinkEntityAndRightEntity[] = GenericLinkEntityAndRightEntity[],
 >(
   subgraph: Subgraph,
   entityId: EntityId,
-): LinkData =>
-  getOutgoingLinkAndTargetEntitiesTemporal(subgraph, entityId) as LinkData; // @todo add generics elsewhere
+): LinkAndRightEntities =>
+  getOutgoingLinkAndTargetEntitiesTemporal(
+    subgraph,
+    entityId,
+  ) as LinkAndRightEntities; // @todo add generics elsewhere
