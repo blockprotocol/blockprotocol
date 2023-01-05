@@ -1,8 +1,12 @@
 import { VersionedUri } from "@blockprotocol/type-system";
+import {
+  EntityType,
+  extractBaseUri,
+  extractVersion,
+} from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
 import { fetchAndValidateEntityType } from "../type-resolver.js";
-import { EntityType } from "./entity-type-meta-schema.gen.js";
 import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings.js";
 import {
   generateEntityDefinition,
@@ -11,7 +15,7 @@ import {
   generateLinkEntityAndRightEntityDefinition,
 } from "./entity-type-to-typescript/type-definition-generators.js";
 import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
-import { fetchTypeAsJson } from "./shared.js";
+import { fetchTypeAsJson, typedEntries } from "./shared.js";
 
 const bannerComment = (uri: string, depth: number) => `/* eslint-disable */
 /**
@@ -60,27 +64,49 @@ type CompiledType = {
 };
 
 // A map of schema URIs to their TS type name and definition
-type UriToType = { [typeUri: string]: CompiledType };
+type UriToType = { [entityTypeId: VersionedUri]: CompiledType };
 
 const generateTypeNameFromSchema = (
   schema: EntityType,
   existingTypes: UriToType,
-) => {
-  const takenNames = Object.values(existingTypes).map(
-    ({ typeName }) => typeName,
-  );
-
+): string => {
   const proposedName = schema.title?.replace(/ /g, "");
 
-  if (takenNames.includes(proposedName)) {
-    // @todo use URI segments to distinguish, not a counter
-    const suffix = takenNames.filter((name) =>
-      name.startsWith(proposedName),
-    ).length;
-    return `${proposedName}${suffix}`;
+  let typeWithProposedName = typedEntries(existingTypes).find(
+    ([_entityTypeId, { typeName }]) => typeName === proposedName,
+  );
+
+  if (!typeWithProposedName) {
+    return proposedName;
   }
 
-  return proposedName;
+  if (extractBaseUri(typeWithProposedName[0]) === extractBaseUri(schema.$id)) {
+    // this is the same type at a different version, so we distinguish by version
+    const nameWithVersionSuffix = `${proposedName}V${extractVersion(
+      schema.$id,
+    )}`;
+    // need to check for a clash with a different, version-distinguished type
+    return generateTypeNameFromSchema(
+      {
+        ...schema,
+        title: nameWithVersionSuffix,
+      },
+      existingTypes,
+    );
+  }
+
+  // fallback to a simple counter
+  // @todo use URI segments or something else to distinguish, not a counter
+  let i = 0;
+  do {
+    i++;
+    const nameWithCounterSuffix = `${proposedName}${i}`;
+    typeWithProposedName = typedEntries(existingTypes).find(
+      ([_entityTypeId, { typeName }]) => typeName === nameWithCounterSuffix,
+    );
+  } while (typeWithProposedName);
+
+  return `${proposedName}${i}`;
 };
 
 /**
@@ -159,13 +185,13 @@ const _jsonSchemaToTypeScript = async (
   // if we're following links, we want to generate various types that can be plugged into subgraph functions
 
   // keep track of the possible destination types from this entity type for each link type it includes
-  const typeLinkMap: Record<string, string> = {};
+  const typeLinkMap: Record<VersionedUri, string> = {};
 
-  for (const [linkEntityTypeId, destinationSchema] of Object.entries(
+  for (const [linkEntityTypeId, destinationSchema] of typedEntries(
     schema.links ?? {},
   )) {
     const retrieveOrCompileSchemaFromUri = async (
-      uri: string,
+      uri: VersionedUri,
     ): Promise<CompiledType> => {
       const cachedType = resolvedUrisToType[uri];
       if (cachedType) {
@@ -181,9 +207,10 @@ const _jsonSchemaToTypeScript = async (
     // get the schema for the linkEntity and possible rightEntities for this link, from this entity
     const [linkEntityType, ...rightEntityTypes] = await Promise.all([
       retrieveOrCompileSchemaFromUri(linkEntityTypeId),
-      ...(destinationSchema.items.oneOf ?? []).map((option) =>
-        retrieveOrCompileSchemaFromUri(option.$ref),
-      ),
+      ...("oneOf" in destinationSchema.items
+        ? destinationSchema.items.oneOf
+        : []
+      ).map((option) => retrieveOrCompileSchemaFromUri(option.$ref)),
     ]);
 
     // generate the appropriate type, a narrower version of the type e.g. getOutgoingLinkAndTargetEntities returns

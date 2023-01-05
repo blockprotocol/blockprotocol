@@ -1,8 +1,7 @@
-import { VersionedUri } from "@blockprotocol/type-system";
+import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
 
-import { EntityType } from "./type-resolver/entity-type-meta-schema.gen";
 import entityTypeMetaSchema from "./type-resolver/entity-type-meta-schema.json" assert { type: "json" };
 import { entityTypeToTypeScript } from "./type-resolver/entity-type-to-typescript.js";
 import { fetchTypeAsJson } from "./type-resolver/shared.js";
