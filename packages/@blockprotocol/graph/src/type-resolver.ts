@@ -4,7 +4,7 @@ import addFormats from "ajv-formats";
 
 import { EntityType } from "./type-resolver/entity-type-meta-schema.gen";
 import entityTypeMetaSchema from "./type-resolver/entity-type-meta-schema.json" assert { type: "json" };
-import { entityTypeToTypescript } from "./type-resolver/entity-type-to-typescript.js";
+import { entityTypeToTypeScript } from "./type-resolver/entity-type-to-typescript.js";
 import { fetchTypeAsJson } from "./type-resolver/shared.js";
 
 const ajv = new Ajv2020();
@@ -49,5 +49,5 @@ export const generateTypeScriptFromEntityType = async (
 ) => {
   const entityTypeSchema = await fetchAndValidateEntityType(versionedUri);
 
-  return entityTypeToTypescript(entityTypeSchema, depth);
+  return entityTypeToTypeScript(entityTypeSchema, depth);
 };

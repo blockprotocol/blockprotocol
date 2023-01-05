@@ -69,7 +69,7 @@ type UriToType = { [typeUri: string]: CompiledType };
  * @param depth the depth to which the graph of _entity type_ schemas linked from this schema will be resolved
  * @param resolvedUrisToType a map of already-resolved schemas to skip type generation for
  */
-const _jsonSchemaToTypescript = async (
+const _jsonSchemaToTypeScript = async (
   schema: EntityType,
   depth: number,
   resolvedUrisToType: UriToType,
@@ -154,7 +154,7 @@ const _jsonSchemaToTypescript = async (
         };
       }
       const typeSchema = await fetchAndValidateEntityType(uri as VersionedUri);
-      return _jsonSchemaToTypescript(typeSchema, depth - 1, resolvedUrisToType);
+      return _jsonSchemaToTypeScript(typeSchema, depth - 1, resolvedUrisToType);
     };
 
     // get the schema for the linkEntity and possible rightEntities for this link, from this entity
@@ -209,9 +209,9 @@ export type RootLinkMap = ${mapTypeName};`;
 /**
  * @todo check with more complex types
  */
-export const entityTypeToTypescript = async (
+export const entityTypeToTypeScript = async (
   rootSchema: EntityType,
   depth = 0,
 ) => {
-  return _jsonSchemaToTypescript(rootSchema, depth, {});
+  return _jsonSchemaToTypeScript(rootSchema, depth, {});
 };
