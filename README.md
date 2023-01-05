@@ -101,5 +101,5 @@ Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
 ## Acknowledgments
 
-- [Ciaran Morinan](https://github.com/CiaranMn) - HASH ([profile](https://hash.ai/@ciaran))
-- [Joel Spolsky](https://github.com/jspolsky) - HASH ([profile](https://hash.ai/@spolsky))
+- [Ciaran Morinan](https://github.com/CiaranMn) - HASH ([profile](https://hash.ai/@ciaran?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root))
+- [Joel Spolsky](https://github.com/jspolsky) - HASH ([profile](https://hash.ai/@spolsky?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root))
