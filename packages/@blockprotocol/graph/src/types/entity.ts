@@ -4,7 +4,6 @@ import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 import { isOntologyTypeEditionId } from "../types.js";
 import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
-import { Timestamp } from "./subgraph/time.js";
 
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
