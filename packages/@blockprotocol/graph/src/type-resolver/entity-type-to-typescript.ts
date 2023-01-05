@@ -170,7 +170,9 @@ const _jsonSchemaToTypescript = async (
       generateLinkEntityAndRightEntityDefinition({
         sourceEntityTypeName: typeName,
         linkEntityTypeName: linkEntityType.typeName,
-        rightEntityTypeNames: rightEntityTypes.map((type) => type.typeName),
+        rightEntityTypeNames: (
+          rightEntityTypes ?? [{ typeName: "Entity" }]
+        ).map((type) => type.typeName),
       });
 
     compiledSchema = deduplicateTypeScriptStrings([
