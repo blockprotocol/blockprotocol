@@ -65,9 +65,9 @@ type UriToType = { [typeUri: string]: CompiledType };
 /**
  * Generates TypeScript types from a given Entity Type schema
  * If depth > 0, follows 'links' from the schema to include types for link entities and their possible destinations
- * @param schema the schema to generate types for
- * @param depth the depth to which the graph of _entity type_ schemas linked from this schema will be resolved
- * @param resolvedUrisToType a map of already-resolved schemas to skip type generation for
+ * @param schema – the schema to generate types for
+ * @param depth – the depth to which the graph of _entity type_ schemas linked from this schema will be resolved
+ * @param resolvedUrisToType – a map of already-resolved schemas to skip type generation for
  */
 const _jsonSchemaToTypeScript = async (
   schema: EntityType,

@@ -14,7 +14,7 @@ const entityTypeValidator = await ajv.compile<EntityType>(entityTypeMetaSchema);
 
 /**
  * Validates that the schema at a given URI is a valid Entity Type
- * @param versionedUri the URI / $id of the schema
+ * @param versionedUri – the URI / $id of the schema
  * @throws if there are validation errors or if the schema is unreachable
  */
 export const fetchAndValidateEntityType = async (
@@ -36,8 +36,8 @@ export const fetchAndValidateEntityType = async (
 
 /**
  * Generates a string containing TypeScript type definitions for a given Entity Type
- * @param versionedUri the URI at which the Entity Type is available
- * @param depth how many links to follow when generating types.
+ * @param versionedUri – the URI at which the Entity Type is available
+ * @param depth – how many links to follow when generating types.
  *   - 0 will generate types for the Entity Type's properties only
  *   - 1 will generate types for the links from the Entity Type and their possible destination entities
  *   - 2 will generate types for the linked entities plus _their_ links and destinations, and so on
