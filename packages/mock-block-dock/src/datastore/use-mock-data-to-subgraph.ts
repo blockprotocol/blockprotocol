@@ -8,6 +8,9 @@ export const useMockDataToSubgraph = (mockData: MockData): Subgraph => {
   return useMemo(() => {
     const { entities } = mockData;
 
-    return buildSubgraph({ entities });
+    return buildSubgraph({ entities }, [], {
+      hasLeftEntity: { incoming: 255, outgoing: 255 },
+      hasRightEntity: { incoming: 255, outgoing: 255 },
+    });
   }, [mockData]);
 };
