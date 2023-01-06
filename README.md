@@ -15,6 +15,17 @@
 [using blocks]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [becoming an embedder]: https://blockprotocol.org/docs/embedding-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [rfcs & roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+[block protocol]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
+
+[gh-what-is-the-bp]: #--what-is-the-block-protocol
+[gh-getting-started]: #--getting-started
+[gh-examples]: #--examples
+[gh-roadmap]: #--roadmap
+[gh-repo-overview]: #--repository-overview
+[gh-contributing]: #--contributing
+[gh-license]: #--license
+[gh-contact]: #--contact
+[gh-acknowledgments]: #--acknowledgments
 
 [![github_banner](https://static.blockprotocol.com/cdn-cgi/imagedelivery/EipKtqu98OotgfhvKf6Eew/f8b0bf95-88ea-47ea-cac2-49cb2851b700/github)][github_banner]
 
@@ -22,9 +33,13 @@
 
 # Block Protocol
 
+Public monorepo for the _[Block Protocol]_.
+
+## [![gh-what-is-the-bp](/.github/assets/gh_icon_what-is-the-block-protocol_20px-base.svg)][gh-what-is-the-bp] &nbsp; What is the Block Protocol?
+
 The Block Protocol is an open standard for building and using data-driven blocks. Blocks developed in accordance with the protocol allow you to make websites and applications that are both more useful to and readable by humans and machines. Neither blocks nor the applications that embed them require any knowledge of each other's existence. Both need only conform to the protocol.
 
-## Getting Started
+## [![a](/.github/assets/gh_icon_getting-started_20px-base.svg)][gh-getting-started] &nbsp; Getting Started
 
 Please refer to the [Block Protocol documentation] for complete instructions on using the Block Protocol, including:
 
@@ -32,44 +47,51 @@ Please refer to the [Block Protocol documentation] for complete instructions on 
 - [using blocks] inside other applications
 - [becoming an embedder] so that others can use blocks within your application or framework
 
-## Examples
+## [![a](/.github/assets/gh_icon_examples_20px-base.svg)][gh-examples] &nbsp; Examples
 
 [HASH] is an embedding application that supports the Block Protocol, enabling its users to insert arbitrary blocks from the [Þ Hub] at runtime.
 
 For more examples, please refer to the [Block Protocol documentation] or browse the complete [Þ Hub].
 
-## Roadmap
+## [![a](/.github/assets/gh_icon_roadmap_20px-base.svg)][gh-roadmap] &nbsp; Roadmap
 
 Learn more on our [RFCs & Roadmap] page in the docs.
 
 - See the [RFC category on GitHub Discussions](https://github.com/blockprotocol/blockprotocol/discussions/categories/rfc) for a list of active RFCs
 - See the [open issues] for a list of some other proposed features (and known issues).
 
-## Repository contents
+## [![a](/.github/assets/gh_icon_repo-overview_20px-base.svg)][gh-repo-overview] &nbsp; Repository overview
 
-We welcome [contributions](#contributing) to this repository. Within it you will find folders for:
+Finding things within a monorepo isn't always straight forward, in particular if you're an external contributor looking at a repository for the first time. We've tried to logically separate our repo into executable **applications** or tools (`apps`), and developer **libraries** including packages and crates (`libs`). As an open-source community project, we welcome [contributions](#contributing).
+
+### For block and application developers
+
+As a block developer, you probably care most about our utility libraries. All of these (listed below) are available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
+
+- `@blockprotocol/core`: implements the Block Protocol [Core specification] for blocks and embedding applications
+- `@blockprotocol/graph`: implements the Block Protocol [Graph service] for blocks and embedding applications
+- `@blockprotocol/hook`: implements the Block Protocol [Hook service] for blocks and embedding applications
+- [`@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/@blockprotocol/type-system): implements the type system as a WASM-based npm package
+- `@local/*`: auxiliary packages for local development and testing
+- `block-scripts`: scripts used by `block-template-*`
+- `block-template-*`: starter templates for blocks, used by `create-block-app`
+- `blockprotocol`: command line interface for interacting with the Block Protocol API, e.g. for publishing blocks
+- `create-block-app`: a script to [create a new block] using `block-template-*`
+- `mock-block-dock`: a lightweight mock embedding application that can be used to test blocks during their development
+
+### For spec and site contributors
 
 1.  `apps/site`: the code for [blockprotocol.org], including:
 
     - the [Block Protocol specification] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/4_spec))
     - the [Block Protocol documentation] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs))
 
-1.  `packages`: utility packages for constructing Block Protocol blocks. These are all available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
-
-    - `@blockprotocol/core`: implements the Block Protocol [Core specification] for blocks and embedding applications
-    - `@blockprotocol/graph`: implements the Block Protocol [Graph service] for blocks and embedding applications
-    - `@blockprotocol/hook`: implements the Block Protocol [Hook service] for blocks and embedding applications
-    - `@blockprotocol/type-system`: implements the type system (with code autogenerated from `crates/type-system`)
-    - `@local/*`: auxiliary packages for local development and testing
-    - `block-scripts`: scripts used by `block-template-*`
-    - `block-template-*`: starter templates for blocks, used by `create-block-app`
-    - `blockprotocol`: command line interface for interacting with the Block Protocol API, e.g. for publishing blocks
-    - `create-block-app`: a script to [create a new block] using `block-template-*`
-    - `mock-block-dock`: a lightweight mock embedding application that can be used to test blocks during their development
-
 1.  `rfcs`: contains RFCs (Requests For Comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project.
 
-## Contributing
+1. [`libs/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/type-system): Rust crate which auto-generates the `@blockprotocol/type-system` WASM-based npm package, acting as our single source of truth for type system definitions.
+
+
+## [![a](/.github/assets/gh_icon_contributing_20px-base.svg)][gh-contributing] &nbsp; Contributing
 
 The Block Protocol is an open-source standard, and community contributions are what make open-source such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
@@ -87,11 +109,11 @@ Please feel free to fork the repo in order to create a pull request:
 
 If you’re looking for inspiration regarding new blocks to build, or contributions you could make, please check the [open issues].
 
-## License
+## [![a](/.github/assets/gh_icon_license_20px-base.svg)][gh-license] &nbsp; License
 
 The vast majority of this repository is dual-licensed under the Apache 2.0 and MIT licenses, at your option. See the [LICENSE](LICENSE.md) file for more information.
 
-## Contact
+## [![a](/.github/assets/gh_icon_contact_20px-base.svg)][gh-contact] &nbsp; Contact
 
 Find us on Twitter at [@blockprotocol](https://twitter.com/blockprotocol) or email [support@blockprotocol.org](mailto:support@blockprotocol.org)
 
@@ -99,7 +121,7 @@ You can also join our [Discord] community for quick help and support.
 
 Project permalink: `https://github.com/blockprotocol/blockprotocol`
 
-## Acknowledgments
+## [![a](/.github/assets/gh_icon_acknowledgement_20px-base.svg)][gh-acknowledgments] &nbsp; Acknowledgments
 
-- [Ciaran Morinan](https://github.com/CiaranMn) - HASH ([profile](https://hash.ai/@ciaran?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root))
-- [Joel Spolsky](https://github.com/jspolsky) - HASH ([profile](https://hash.ai/@spolsky?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root))
+- [Ciaran Morinan](https://github.com/CiaranMn) - HASH ([profile](https://hash.ai/@ciaran))
+- [Joel Spolsky](https://github.com/jspolsky) - HASH ([profile](https://hash.ai/@spolsky))
