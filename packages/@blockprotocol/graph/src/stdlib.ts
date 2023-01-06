@@ -15,6 +15,7 @@ import {
 import { Entity, EntityId } from "./types/entity.js";
 import { Subgraph } from "./types/subgraph.js";
 
+export { buildSubgraph } from "./stdlib/subgraph/builder";
 export {
   getDataTypeById,
   getDataTypes,

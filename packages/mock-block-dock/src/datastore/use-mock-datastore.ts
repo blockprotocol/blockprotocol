@@ -3,6 +3,7 @@ import {
   Entity,
   Subgraph,
 } from "@blockprotocol/graph";
+import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import { getEntity as getEntityFromSubgraph } from "@blockprotocol/graph/stdlib";
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
@@ -10,7 +11,6 @@ import { v4 as uuid } from "uuid";
 import { useDefaultState } from "../use-default-state";
 import { aggregateEntities as aggregateEntitiesImpl } from "./hook-implementations/entity/aggregate-entities";
 import { getEntity as getEntityImpl } from "./hook-implementations/entity/get-entity";
-import { addEntitiesToSubgraph } from "./mutate-subgraph";
 import { useMockDataToSubgraph } from "./use-mock-data-to-subgraph";
 
 export type MockData = {
@@ -103,7 +103,7 @@ export const useMockDatastore = (
           const newSubgraph = {
             ...currentGraph,
           };
-          addEntitiesToSubgraph(newSubgraph, [newEntity]);
+          addEntitiesToSubgraphByMutation(newSubgraph, [newEntity]);
           return newSubgraph;
         });
         return { data: newEntity };
@@ -237,7 +237,7 @@ export const useMockDatastore = (
               ...currentGraph,
             };
             resolve({ data: updatedEntity });
-            addEntitiesToSubgraph(newSubgraph, [updatedEntity]);
+            addEntitiesToSubgraphByMutation(newSubgraph, [updatedEntity]);
             return newSubgraph;
           });
         });
