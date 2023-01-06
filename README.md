@@ -66,12 +66,12 @@ Finding things within a monorepo isn't always straight forward, in particular if
 
 ### For block and application developers
 
-As a block developer, you probably care most about our utility libraries. All of these (listed below) are available via `yarn add <package_name>` or `npm install <package_name>`. See the individual README files in each folder for more details.
+As a block developer, you probably care most about our utility libraries. All of those listed below are contained within the [`libs`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/) folder and are available via `yarn add <package_name>` or `npm install <package_name>`. Individual README files within each directory provide more details.
 
 - `@blockprotocol/core`: implements the Block Protocol [Core specification] for blocks and embedding applications
 - `@blockprotocol/graph`: implements the Block Protocol [Graph service] for blocks and embedding applications
 - `@blockprotocol/hook`: implements the Block Protocol [Hook service] for blocks and embedding applications
-- [`@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/@blockprotocol/type-system): implements the type system as a WASM-based npm package
+- [`@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/type-system): implements the type system as a WASM-based npm package
 - `@local/*`: auxiliary packages for local development and testing
 - `block-scripts`: scripts used by `block-template-*`
 - `block-template-*`: starter templates for blocks, used by `create-block-app`
