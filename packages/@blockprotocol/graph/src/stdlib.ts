@@ -96,6 +96,11 @@ export const getRightEntityForLinkEntity = (
   entityId: EntityId,
 ): Entity => getRightEntityForLinkEntityTemporal(subgraph, entityId);
 
+type GenericLinkEntityAndRightEntity = {
+  linkEntity: Entity;
+  rightEntity: Entity;
+};
+
 /**
  * Gets all outgoing link entities, and their "target" entities (by default this is the "right entity"), from a given
  * entity.
@@ -103,8 +108,13 @@ export const getRightEntityForLinkEntity = (
  * @param subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
  */
-export const getOutgoingLinkAndTargetEntities = (
+export const getOutgoingLinkAndTargetEntities = <
+  LinkAndRightEntities extends GenericLinkEntityAndRightEntity[] = GenericLinkEntityAndRightEntity[],
+>(
   subgraph: Subgraph,
   entityId: EntityId,
-): { linkEntity: Entity; rightEntity: Entity }[] =>
-  getOutgoingLinkAndTargetEntitiesTemporal(subgraph, entityId);
+): LinkAndRightEntities =>
+  getOutgoingLinkAndTargetEntitiesTemporal(
+    subgraph,
+    entityId,
+  ) as LinkAndRightEntities; // @todo add generics elsewhere

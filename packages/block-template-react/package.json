@@ -19,6 +19,7 @@
   },
   "scripts": {
     "build": "block-scripts build",
+    "codegen": "block-scripts codegen",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
@@ -64,6 +65,7 @@
     "icon": "public/omega.svg",
     "image": "public/block-preview.png",
     "name": "block-template-react",
-    "protocol": "0.2"
+    "protocol": "0.3",
+    "schema": "https://alpha.hash.ai/@hash/types/entity-type/page/v/1"
   }
 }
