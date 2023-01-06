@@ -7,13 +7,13 @@ import {
 } from "../../types.js";
 
 /**
- * Builds a Subgraph from a given set of entities, which may include 'link entities',
- * i.e. entities that represent relationships between other entities.
+ * Builds a Subgraph from a given set of entities, which may include 'link entities' –
+ * i.e. entities that represent relationships between other entities – or other entities.
  *
- * The set of entities should represent the result of a query on a larger graph,
+ * The set of entities should represent the result of a query on a graph,
  * and the 'roots' and 'depths' for that query provided along with the data.
  *
- * Unbounded depths can currently only be represented via very high numbers.
+ * Unbounded queries can currently only be represented via very high values for depths.
  *
  * This function does NOT verify that the provided depths are accurate for the data.
  *   – the caller is responsible for this.
@@ -32,8 +32,8 @@ import {
  *
  * @throws if the provided roots are not present in the data
  *
- * @todo add support for ontology vertices (e.g. entity types)
- * @todo support null values for depths, for the result of queries with unlimited depths
+ * @todo 1. add support for ontology vertices (e.g. entity types)
+ * @todo 2. support null values for depths, for the result of queries with unlimited depths.
  */
 export const buildSubgraph = (
   data: { entities: Entity[] },
