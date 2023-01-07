@@ -24,6 +24,7 @@
 [gh-repo-overview]: #--repository-overview
 [gh-contributing]: #--contributing
 [gh-license]: #--license
+[gh-security]: #--license
 [gh-contact]: #--contact
 [gh-acknowledgments]: #--acknowledgments
 
@@ -112,6 +113,10 @@ If you’re looking for inspiration regarding new blocks to build, or contributi
 ## [![a](/.github/assets/gh_icon_license_20px-base.svg)][gh-license] &nbsp; License
 
 The vast majority of this repository is dual-licensed under the Apache 2.0 and MIT licenses, at your option. See the [LICENSE](LICENSE.md) file for more information.
+
+## [![a](/.github/assets/gh_icon_security_20px-base.svg)][gh-security] &nbsp; Security
+
+Please see [SECURITY](SECURITY.md) for instructions around reporting issues, and details of which package versions we actively support.
 
 ## [![a](/.github/assets/gh_icon_contact_20px-base.svg)][gh-contact] &nbsp; Contact
 
