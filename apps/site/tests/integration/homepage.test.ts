@@ -14,7 +14,9 @@ test("Home page should contain key elements", async ({ page, isMobile }) => {
   ).toBeVisible();
 
   await expect(
-    page.locator("text=Today, blocks are confined to single apps and websites"),
+    page.locator(
+      "text=Until now, blocks have been confined to single apps and sites",
+    ),
   ).toBeVisible();
 
   await expect(

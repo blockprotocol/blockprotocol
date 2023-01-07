@@ -51,7 +51,7 @@ export const NowInBeta: FunctionComponent<NowInBetaProps> = ({ faded }) => {
         <Link href="https://hash.ai">
           <ApplicationBadge icon={<HashIcon />} name="HASH" />
         </Link>
-        <ApplicationBadge icon={<WordPressIcon />} name="Wordpress" />
+        <ApplicationBadge icon={<WordPressIcon />} name="WordPress" />
       </Box>
     </Box>
   );
