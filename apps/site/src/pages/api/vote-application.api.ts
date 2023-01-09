@@ -49,9 +49,7 @@ export default createBaseHandler<
   const member = await getMember({ email: req.body.email });
 
   try {
-    const payload = {
-      ...req.body,
-    };
+    const payload = { ...req.body };
 
     if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
       payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
