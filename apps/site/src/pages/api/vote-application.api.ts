@@ -20,8 +20,16 @@ export default createBaseHandler<
 
     const payload = {
       email: req.body.email,
-      merge_fields: req.body.merge_fields,
+      merge_fields: {
+        ECO_SANITY: req.body.merge_fields?.ECO_SANITY,
+        ECO_STRAPI: req.body.merge_fields?.ECO_STRAPI,
+        ECO_CONFUL: req.body.merge_fields?.ECO_CONFUL,
+        ECO_GITHUB: req.body.merge_fields?.ECO_GITHUB,
+        ECO_OTHER: req.body.merge_fields?.ECO_OTHER,
+        WISH_EA: req.body.merge_fields?.WISH_EA,
+      },
     };
+
     if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
       payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
     }
