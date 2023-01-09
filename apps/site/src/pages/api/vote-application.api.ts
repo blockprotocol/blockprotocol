@@ -23,11 +23,11 @@ const validate = ajv.compile<VoteApplicationRequestBody>({
     merge_fields: {
       type: "object",
       properties: {
-        ECO_SANITY: { type: "string" },
-        ECO_STRAPI: { type: "string" },
-        ECO_CONFUL: { type: "string" },
-        ECO_GITHUB: { type: "string" },
-        ECO_OTHER: { type: "string" },
+        ECO_SANITY: { type: "string", enum: ["Yes", "No"] },
+        ECO_STRAPI: { type: "string", enum: ["Yes", "No"] },
+        ECO_CONFUL: { type: "string", enum: ["Yes", "No"] },
+        ECO_GITHUB: { type: "string", enum: ["Yes", "No"] },
+        ECO_OTHER: { type: "string", enum: ["Yes", "No"] },
         WISH_EA: { type: "string" },
       },
       additionalProperties: false,
