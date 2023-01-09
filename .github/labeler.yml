@@ -4,9 +4,6 @@
 "area: apps":
   - "apps/**"
 
-"area: crates":
-  - "crates/**"
-
 "area: dependencies":
   - "**/patches/**"
   - "**/yarn.lock"

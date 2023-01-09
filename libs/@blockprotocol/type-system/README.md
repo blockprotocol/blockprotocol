@@ -6,7 +6,7 @@ An in-development package that provides Typescript typings and implementations f
 
 ### Building
 
-Ensure you've installed the dependencies required for the `type-system` _crate_, outlined in the respective [README](/crates/type-system/README.md).
+Ensure you've installed the dependencies required for the `type-system` _crate_, outlined in the respective [README](./crate/README.md).
 
 Run:
 
