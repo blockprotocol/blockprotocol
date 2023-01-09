@@ -11,10 +11,10 @@
 - [Rust](https://www.rust-lang.org/tools/install)
 - [cargo-make](https://github.com/sagiegurari/cargo-make#installation)
 
-## Building the Packages
+## Building the Package
 
 - `cargo make build` - Compiles the Rust crate, and generates the following WASM-based NPM package
-  - [@blockprotocol/type-system-web](../../packages/@blockprotocol/type-system)
+  - [@blockprotocol/type-system](../../libs/@blockprotocol/type-system)
 
 For more granular task control look at `cargo make --list-all-steps`
 

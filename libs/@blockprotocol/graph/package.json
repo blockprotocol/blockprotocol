@@ -1,0 +1,75 @@
+{
+  "name": "@blockprotocol/graph",
+  "version": "0.0.18",
+  "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
+  "keywords": [
+    "blockprotocol",
+    "blocks",
+    "graph"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "bugs": {
+    "url": "https://github.com/blockprotocol/blockprotocol/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "libs/@blockprotocol/graph"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./react": "./dist/react.js",
+    "./custom-element": "./dist/custom-element.js",
+    "./graph-service-json": "./dist/graph-service-json.js"
+  },
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "react": [
+        "./dist/react.d.ts"
+      ],
+      "custom-element": [
+        "./dist/custom-element.d.ts"
+      ],
+      "graph-service-json": [
+        "./dist/graph-service-json.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn clean && tsc --skipLibCheck",
+    "clean": "rimraf ./dist/",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "lint:tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@blockprotocol/core": "0.0.12",
+    "lit": "^2.4.1"
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
+    "eslint": "8.29.0",
+    "rimraf": "^3.0.2",
+    "typescript": "4.9.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "engines": {
+    "node": ">=16.15"
+  }
+}

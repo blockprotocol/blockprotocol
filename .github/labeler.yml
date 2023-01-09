@@ -25,8 +25,8 @@
   - "scripts/**"
   - "*"
 
-"area: packages":
-  - "packages/**"
+"area: libs":
+  - "libs/**"
 
 "area: rfcs":
   - "rfcs/**"
@@ -35,38 +35,38 @@
   - "apps/site/src/_pages/spec/**"
 
 "package: @Þ/core":
-  - "packages/@blockprotocol/core/**"
+  - "libs/@blockprotocol/core/**"
 
 "package: @Þ/graph":
-  - "packages/@blockprotocol/graph/**"
+  - "libs/@blockprotocol/graph/**"
 
 "package: @Þ/hook":
-  - "packages/@blockprotocol/hook/**"
+  - "libs/@blockprotocol/hook/**"
 
 "package: @Þ/type-system":
-  - "packages/@blockprotocol/type-system-node/**"
-  - "packages/@blockprotocol/type-system-web/**"
+  - "libs/@blockprotocol/type-system-node/**"
+  - "libs/@blockprotocol/type-system-web/**"
 
 "package: @local/*":
-  - "packages/@local/**"
+  - "libs/@local/**"
 
 "package: block-scripts":
-  - "packages/block-scripts/**"
+  - "libs/block-scripts/**"
 
 "package: block-template-custom-element":
-  - "packages/block-template-custom-element/**"
+  - "libs/block-template-custom-element/**"
 
 "package: block-template-html":
-  - "packages/block-template-html/**"
+  - "libs/block-template-html/**"
 
 "package: block-template-react":
-  - "packages/block-template-react/**"
+  - "libs/block-template-react/**"
 
 "package: blockprotocol":
-  - "packages/blockprotocol/**"
+  - "libs/blockprotocol/**"
 
 "package: create-block-app":
-  - "packages/create-block-app/**"
+  - "libs/create-block-app/**"
 
 "package: mock-block-dock":
-  - "packages/mock-block-dock/**"
+  - "libs/mock-block-dock/**"

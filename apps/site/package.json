@@ -13,7 +13,7 @@
     "dev:seed-db": "yarn exe scripts/seed-db.ts",
     "exe": "node --unhandled-rejections=strict --experimental-loader ts-node/esm/transpile-only --es-module-specifier-resolution=node --require=suppress-experimental-warnings --require dotenv-flow/config",
     "fix:eslint": "eslint --fix .",
-    "generate-blockmetadata-schema": "typescript-json-schema ../../packages/@blockprotocol/core/dist/esm/types.d.ts BlockMetadata --required true --out public/schemas/block-metadata.json",
+    "generate-blockmetadata-schema": "typescript-json-schema ../../libs/@blockprotocol/core/dist/esm/types.d.ts BlockMetadata --required true --out public/schemas/block-metadata.json",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "start": "yarn exe scripts/start.ts"

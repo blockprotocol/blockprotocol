@@ -56,7 +56,7 @@ command = "node"
 
 [tasks.build]
 category = "Build"
-description = "Builds the packages"
+description = "Builds the package"
 run_task = { name = ["cargo-build-task", "wasm-pack-build-task"] }
 
 [tasks.cargo-build-task]

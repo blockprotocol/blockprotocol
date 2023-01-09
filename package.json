@@ -6,9 +6,9 @@
     "packages": [
       "apps/*",
       "crates/*",
-      "packages/*",
-      "packages/@blockprotocol/*",
-      "packages/@local/*"
+      "libs/@blockprotocol/*",
+      "libs/@local/*",
+      "libs/*"
     ],
     "nohoist": [
       "**/@types/css-font-loading-module",
