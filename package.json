@@ -20,7 +20,7 @@
     "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "turbo run --continue lint:eslint",
-    "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
+    "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"npm:\" --allowed-schemes \"patch:\" --allowed-schemes \"workspace:\"",
     "lint:markdownlint": "markdownlint --dot .",
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
