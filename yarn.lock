@@ -5975,13 +5975,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@yarnpkg/parsers@npm:^3.0.0-rc.6":
-  version: 3.0.0-rc.26
-  resolution: "@yarnpkg/parsers@npm:3.0.0-rc.26"
+"@yarnpkg/parsers@npm:^3.0.0-rc.32":
+  version: 3.0.0-rc.35
+  resolution: "@yarnpkg/parsers@npm:3.0.0-rc.35"
   dependencies:
     js-yaml: "npm:^3.10.0"
     tslib: "npm:^2.4.0"
-  checksum: f3ae04560f0cb38d4b26a407130a2593b2aa24d077508b7a3b172a40e493b70de620d30531009b957e6c4a3c66b61a5ec7f805333dffc08a7c7ef88371f94f40
+  checksum: db79fec25ab46ccc8b6c5141be4cb30e858ba130b1ef74e35043ec146084de1982f59fd8f4ed48f6e3e9b4f029d3fefd0a847ac5715e41c4f525fb1876cbd148
   languageName: node
   linkType: hard
 
@@ -12411,27 +12411,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lockfile-lint-api@npm:^5.4.6":
-  version: 5.4.6
-  resolution: "lockfile-lint-api@npm:5.4.6"
+"lockfile-lint-api@npm:^5.5.0":
+  version: 5.5.0
+  resolution: "lockfile-lint-api@npm:5.5.0"
   dependencies:
-    "@yarnpkg/parsers": "npm:^3.0.0-rc.6"
+    "@yarnpkg/parsers": "npm:^3.0.0-rc.32"
     object-hash: "npm:^3.0.0"
-  checksum: 5874ce12a90f3719d0444d8c571edac82ac30d5f54b8200c2ebb8625e5be3d8f43f8d30b186babb766e4153b6367ecd69b4e8fc00aef694824057b2a3f6b5cf7
+  checksum: 34b00d8645490b5b86d209441f735910c658e9b856981a346f33c1ade2f129d016b3483e487609d8a510bb62bc11cd5b02d00a09a7985ee75a02635bdb26bd19
   languageName: node
   linkType: hard
 
-"lockfile-lint@npm:4.9.6":
-  version: 4.9.6
-  resolution: "lockfile-lint@npm:4.9.6"
+"lockfile-lint@npm:4.10.0":
+  version: 4.10.0
+  resolution: "lockfile-lint@npm:4.10.0"
   dependencies:
     cosmiconfig: "npm:^7.0.1"
     debug: "npm:^4.1.1"
-    lockfile-lint-api: "npm:^5.4.6"
+    lockfile-lint-api: "npm:^5.5.0"
     yargs: "npm:^16.0.0"
   bin:
     lockfile-lint: ./bin/lockfile-lint.js
-  checksum: 5db5d91ce25f09e1db5845f162aa0a0d7a9dcf3d6a60d3ac2c16d233c51d2cbb518407074fc064673d1fc5c478d9c26339bfcb8c39890263b49d8f8edca203c6
+  checksum: 355fe1e95dcb8677d08561413bc44e6d0bdcee664364fe752ffa856c6d87ed221cd53f48e2e3c9fcbf7f5b6a7225557b3f6623525da834f2e33e3eaeb5053f2c
   languageName: node
   linkType: hard
 
@@ -16477,7 +16477,7 @@ __metadata:
     dotenv-flow: "npm:3.2.0"
     husky: "npm:8.0.2"
     lint-staged: "npm:13.0.4"
-    lockfile-lint: "npm:4.9.6"
+    lockfile-lint: "npm:4.10.0"
     markdownlint-cli: "npm:0.32.2"
     npm-run-all: "npm:4.1.5"
     patch-package: "npm:6.5.0"
