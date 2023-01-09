@@ -69,7 +69,7 @@ args = ["build", "--profile", "${CARGO_MAKE_CARGO_PROFILE}", "@@split(CARGO_BUIL
 [tasks.wasm-pack-build-task]
 extend = "node"
 cwd = "${CARGO_MAKE_WORKSPACE_WORKING_DIRECTORY}"
-args = ["--loader", "ts-node/esm", "./scripts/build-wasm.ts"]
+args = ["--loader", "ts-node/esm", "./../scripts/build-wasm.ts"]
 dependencies = ["install-wasm-pack", "install-wasm-opt"]
 
 ################################################################################
