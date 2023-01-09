@@ -15,26 +15,24 @@ export default createBaseHandler<
   VoteApplicationRequestBody,
   VoteApplicationResponse
 >().put(async (req, res) => {
-  const member = await getMember({ email: req.body.email })
-    .then((mailchimpMember) => ({
-      id: mailchimpMember.id,
-      email: mailchimpMember.email_address,
-      merge_fields: mailchimpMember.merge_fields,
-    }))
-    .catch(() => {
-      return res.status(400).send({ error: true });
-    });
+  try {
+    const member = await getMember({ email: req.body.email }).then(
+      (mailchimpMember) => ({
+        id: mailchimpMember.id,
+        email: mailchimpMember.email_address,
+        merge_fields: mailchimpMember.merge_fields,
+      }),
+    );
 
-  const payload = { ...req.body };
-  if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
-    payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
-  }
+    const payload = { ...req.body };
+    if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
+      payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
+    }
 
-  return await subscribeToMailchimp(payload)
-    .then(() => {
+    return await subscribeToMailchimp(payload).then(() => {
       return res.json({ success: true });
-    })
-    .catch(() => {
-      return res.status(400).send({ error: true });
     });
+  } catch {
+    return res.status(400).send({ error: true });
+  }
 });
