@@ -31,39 +31,39 @@
 "area: spec":
   - "apps/site/src/_pages/spec/**"
 
-"package: @Þ/core":
+"lib: @Þ/core":
   - "libs/@blockprotocol/core/**"
 
-"package: @Þ/graph":
+"lib: @Þ/graph":
   - "libs/@blockprotocol/graph/**"
 
-"package: @Þ/hook":
+"lib: @Þ/hook":
   - "libs/@blockprotocol/hook/**"
 
-"package: @Þ/type-system":
+"lib: @Þ/type-system":
   - "libs/@blockprotocol/type-system-node/**"
   - "libs/@blockprotocol/type-system-web/**"
 
-"package: @local/*":
+"lib: @local/*":
   - "libs/@local/**"
 
-"package: block-scripts":
+"lib: block-scripts":
   - "libs/block-scripts/**"
 
-"package: block-template-custom-element":
+"lib: block-template-custom-element":
   - "libs/block-template-custom-element/**"
 
-"package: block-template-html":
+"lib: block-template-html":
   - "libs/block-template-html/**"
 
-"package: block-template-react":
+"lib: block-template-react":
   - "libs/block-template-react/**"
 
-"package: blockprotocol":
+"lib: blockprotocol":
   - "libs/blockprotocol/**"
 
-"package: create-block-app":
+"lib: create-block-app":
   - "libs/create-block-app/**"
 
-"package: mock-block-dock":
+"lib: mock-block-dock":
   - "libs/mock-block-dock/**"

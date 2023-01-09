@@ -13,8 +13,7 @@
 
 ## Building the Package
 
-- `cargo make build` - Compiles the Rust crate, and generates the following WASM-based NPM package
-  - [@blockprotocol/type-system](../../libs/@blockprotocol/type-system)
+- `cargo make build` - Compiles the Rust crate, and generates `@blockprotocol/type-system` npm package (located in parent folder)
 
 For more granular task control look at `cargo make --list-all-steps`
 

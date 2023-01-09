@@ -2,6 +2,6 @@
   "repository": "https://github.com/JMackie80/blocks.git",
   "commit": "e38dde1575c1d8b80d09815f3f9b3427869bfd0e",
 
-  "folder": "src/libs/quote",
+  "folder": "src/packages/quote",
   "distDir": "dist"
 }

@@ -2,7 +2,7 @@
 [github_star]: https://github.com/blockprotocol/blockprotocol#
 [open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
 [discord]: https://blockprotocol.org/discord?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-[hash]: https://github.com/hashintel/hash/tree/main/libs/hash
+[hash]: https://github.com/hashintel/hash/tree/main/packages/hash
 [blockprotocol.org]: https://blockprotocol.org/?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [þ hub]: https://blockprotocol.org/hub?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [block protocol specification]: https://blockprotocol.org/docs/spec?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
