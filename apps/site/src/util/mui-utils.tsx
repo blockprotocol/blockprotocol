@@ -7,7 +7,7 @@ export const parseIntFromPixelString = (pixelString: string): number => {
 };
 
 /**
- * @see https://github.com/mui/material-ui/blob/master/packages/mui-utils/src/getScrollbarSize.ts
+ * @see https://github.com/mui/material-ui/blob/master/libs/mui-utils/src/getScrollbarSize.ts
  * */
 export const getScrollbarSize = (doc: Document) => {
   const documentWidth = doc.documentElement.clientWidth;

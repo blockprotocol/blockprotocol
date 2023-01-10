@@ -10,13 +10,13 @@ import { WhyInstall } from "../components/pages/wordpress/why-install";
 const WordPressPage: FunctionComponent = () => (
   <>
     <NextSeo
-      title="Block Protocol WordPress Plugin"
+      title="The Block Protocol for WordPress Plugin"
       openGraph={{
-        title: "Block Protocol plugin for WordPress",
+        title: "The Block Protocol for WordPress",
         description:
           "The Block Protocol is a standard for building web blocks that work across applications. Use them in WordPress, or vote for another app",
         images: [
-          { url: "https://blockprotocol.org/assets/wp_bp_og_cover.png" },
+          { url: "https://blockprotocol.org/assets/wp_bp_og_cover.jpg" },
         ],
         url: "https://blockprotocol.org/wordpress",
       }}

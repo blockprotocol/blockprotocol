@@ -97,20 +97,18 @@ export const Header = () => {
             fontSize: { xs: "1.25rem", md: "1.45rem" },
           }}
         >
-          Block Protocol blocks work across all Þ supporting applications
-        </Typography>
-        <Typography
-          variant="bpBodyCopy"
-          lineHeight={1.4}
-          color={theme.palette.gray[80]}
-          textAlign="center"
-          sx={{
-            margin: "0 auto",
-            fontWeight: 700,
-            fontSize: { xs: "1.25rem", md: "1.45rem" },
-          }}
-        >
-          ...now including WordPress, powering 43% of the web
+          Block Protocol blocks work across all Þ supporting applications{" "}
+          <Box
+            component="strong"
+            sx={({ breakpoints }) => ({
+              display: "block",
+              [breakpoints.down("lg")]: {
+                display: "inline",
+              },
+            })}
+          >
+            ...now including WordPress, powering 43% of the web
+          </Box>
         </Typography>
 
         <Box
@@ -162,8 +160,10 @@ export const Header = () => {
           ) : null}
           <Stream
             controls
-            src="3331bb25754e7e47a457cbaad3c7fdb1"
+            src="17a35fcc1fb28ce771c1d3917cd51c21"
             onCanPlay={() => setLoading(false)}
+            primaryColor="#7963F5"
+            letterboxColor="transparent"
           />
         </Box>
       </Box>

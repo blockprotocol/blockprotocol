@@ -1,15 +1,10 @@
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { inputBaseClasses, Theme, useMediaQuery } from "@mui/material";
-// Our custom TextField hides the 'endAdornment' when the 'error' prop is true
-// eslint-disable-next-line no-restricted-imports
-import TextField from "@mui/material/TextField";
-import { MouseEvent, TouchEvent, useMemo, useRef, useState } from "react";
+import { Theme, useMediaQuery } from "@mui/material";
+import { FormEvent, useMemo, useRef, useState } from "react";
 
 import { apiClient } from "../../../lib/api-client";
-import { Button } from "../../button";
 import { useEmailTextField } from "../../hooks/use-email-text-field";
-import { ArrowRightIcon, FontAwesomeIcon } from "../../icons";
 import { useEmailSubmitted } from "./email-submitted-context";
+import { Input } from "./input";
 
 const submittedEmailText = "You’re on the waitlist as";
 const submitErrorText = "There was an error submitting your email";
@@ -40,24 +35,28 @@ export const EarlyAccessCTA = () => {
 
   const displayError = touchedEmailInput && isEmailInvalid;
 
-  const handleSubmit = async (
-    event: MouseEvent<HTMLButtonElement> | TouchEvent<HTMLButtonElement>,
-  ) => {
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (displayError || loading || !!submittedEmail) {
+      return;
+    }
+
     setTouchedEmailInput(true);
 
     if (isEmailInputValid) {
       setLoading(true);
-      await apiClient.subscribeEmailWP(emailValue).then(({ data }) => {
-        setSubmitError(false);
-        setLoading(false);
+      await apiClient
+        .subscribeEmailWP({ email: emailValue })
+        .then(({ data }) => {
+          setSubmitError(false);
+          setLoading(false);
 
-        if (data?.success) {
-          setSubmittedEmail(emailValue);
-        } else {
-          setSubmitError(true);
-        }
-      });
+          if (data?.success) {
+            setSubmittedEmail(emailValue);
+          } else {
+            setSubmitError(true);
+          }
+        });
     }
   };
 
@@ -72,88 +71,22 @@ export const EarlyAccessCTA = () => {
   }, [submittedEmail, submitError, helperText]);
 
   return (
-    <TextField
+    <Input
       disabled={loading || !!submittedEmail}
-      sx={{
-        marginBottom: 2,
-        maxWidth: 500,
-      }}
-      required
-      type="email"
+      displayError={displayError}
       error={displayError || submitError}
+      success={!!submittedEmail}
       helperText={textFieldHelperText}
       inputRef={emailInputRef}
-      fullWidth
       placeholder={isSmall ? "Your email..." : "Enter your email address..."}
-      variant="outlined"
       value={emailValue}
       onChange={({ target }) => {
         setSubmitError(false);
         setEmailValue(target.value);
       }}
-      InputProps={{
-        endAdornment: (
-          <Button
-            disabled={displayError || loading || !!submittedEmail}
-            sx={({ breakpoints }) => ({
-              zIndex: 1,
-              whiteSpace: "nowrap",
-              minWidth: "unset",
-              height: 1,
-              fontSize: 15,
-              ...(displayError
-                ? {
-                    background: ({ palette }) =>
-                      `${palette.red[600]} !important`,
-                  }
-                : {}),
-              ...(submittedEmail
-                ? {
-                    background: ({ palette }) =>
-                      `${palette.green[80]} !important`,
-                  }
-                : {}),
-              [breakpoints.down("sm")]: {
-                px: 2.5,
-              },
-              "&.Mui-disabled": {
-                borderColor: "#DDE7F0 !important",
-              },
-            })}
-            endIcon={
-              submittedEmail ? (
-                <FontAwesomeIcon icon={faCheck} />
-              ) : (
-                <ArrowRightIcon
-                  sx={{
-                    color: ({ palette }) =>
-                      `${palette.common.white} !important`,
-                  }}
-                />
-              )
-            }
-            onClick={handleSubmit}
-            onTouchStart={handleSubmit}
-            loading={loading}
-          >
-            {submittedEmail ? "Submitted" : "Get early access"}
-          </Button>
-        ),
-        sx: {
-          borderRadius: 34,
-          pr: 0,
-          [`.${inputBaseClasses.input}`]: {
-            boxSizing: "border-box",
-            height: 46,
-            fontSize: 15,
-            lineHeight: 1.5,
-            pl: 3,
-          },
-          [`&.${inputBaseClasses.disabled} .MuiOutlinedInput-notchedOutline`]: {
-            borderColor: "#DDE7F0 !important",
-          },
-        },
-      }}
+      buttonLabel={submittedEmail ? "Submitted" : "Get early access"}
+      handleSubmit={handleSubmit}
+      loading={loading}
     />
   );
 };
