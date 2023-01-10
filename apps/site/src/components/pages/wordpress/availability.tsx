@@ -7,6 +7,7 @@ import { EarlyAccessCTA } from "./early-access-cta";
 export const Availability = () => {
   return (
     <Container
+      id="availability"
       sx={{
         mb: 10,
         width: { xs: "95%", md: "75%", lg: "60%" },
@@ -79,13 +80,18 @@ export const Availability = () => {
             </ListItem>
           </List>
 
-          <Typography sx={{ lineHeight: 1.2, maxWidth: "unset" }}>
+          <Typography sx={{ lineHeight: 1.2, maxWidth: "unset", pb: 2.25 }}>
             <strong>
-              We&#8217;re now onboarding beta testers to use the Þ WordPress
-              plugin.
+              If you’d like to receive early access to the Þ WordPress plugin...
             </strong>{" "}
-            If you&#8217;d like to receive early access, enter your email
-            address below.
+            we’re now onboarding beta testers. Enter your email address below
+            and we’ll reach out.
+          </Typography>
+
+          <Typography sx={{ lineHeight: 1.2, maxWidth: "unset" }}>
+            <strong>Or, if you’re thinking about building a block…</strong> we
+            recommend waiting for Þ 0.3. Enter your email and we’ll let you know
+            when its ready.
           </Typography>
 
           <Box

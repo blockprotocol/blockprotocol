@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 import axiosRetry from "axios-retry";
 import { ValidationError } from "express-validator";
 
+import { ApplicationId } from "../components/pages/wordpress/voting/applications";
 import {
   ApiBlockCreateRequest,
   ApiBlockCreateResponse,
@@ -185,13 +186,32 @@ export const apiClient = {
       "blocks/create",
       requestData,
     ),
-  subscribeEmailWP: (email: string) =>
+  subscribeEmailWP: ({ email }: { email: string }) =>
     apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(
       "subscribe-email",
       {
         email,
         merge_fields: {
           ECO_WP: "Yes",
+        },
+      },
+    ),
+  submitApplicationVote: ({
+    email,
+    vote,
+    other,
+  }: {
+    email: string;
+    vote: ApplicationId;
+    other?: string;
+  }) =>
+    apiClient.put<SubscribeEmailRequestBody, SubscribeEmailResponse>(
+      "vote-application",
+      {
+        email,
+        merge_fields: {
+          [vote]: "Yes",
+          ...(other ? { WISH_EA: other } : {}),
         },
       },
     ),

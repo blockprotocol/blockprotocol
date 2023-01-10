@@ -41,7 +41,7 @@ export const ConfinedBlocks = () => {
             }}
             variant="bpHeading2"
           >
-            Today, blocks are confined to single apps and websites
+            Until now, blocks have been confined to single apps and sites
           </Typography>
           <Box
             sx={{
