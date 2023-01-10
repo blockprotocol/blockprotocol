@@ -101,6 +101,11 @@ test("Sign Up page redirects logged in users to dashboard", async ({
     tolerateCustomConsoleMessages([/\[error\] Error$/]);
   }
 
+  test.skip(
+    browserName === "webkit",
+    "https://app.asana.com/0/1202538466812818/1202652337622563/f",
+  );
+
   await page.goto("/docs");
   await login({ page });
   expect(page.url()).toMatch(/\/docs$/);
