@@ -5,7 +5,10 @@ import { fileURLToPath } from "node:url";
 
 import fs from "fs-extra";
 
-export const packageDirPath = path.dirname(fileURLToPath(import.meta.url));
+export const packageDirPath = path.resolve(
+  path.dirname(fileURLToPath(import.meta.url)),
+  "..",
+);
 
 // The PathObject definition in Node's path package
 type PathObject = {
@@ -37,17 +40,7 @@ const runWasmPack = () => {
 };
 
 const moveSrcFiles = (packagePath: PathObject) => {
-  const destinationPath = path.resolve(
-    packageDirPath,
-    "..",
-    "..",
-    "..",
-    "packages",
-    "@blockprotocol",
-    "type-system",
-    "dist",
-    "wasm",
-  );
+  const destinationPath = path.resolve(packageDirPath, "wasm");
 
   console.log(
     `Moving src files of ${path.format(packagePath)} to ${destinationPath}`,
