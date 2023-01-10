@@ -253,7 +253,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
   return (
     <>
       <NextSeo
-        title={`Block Protocol – ${blockMetadata.displayName} Block by ${shortname}`}
+        title={`${blockMetadata.displayName} Block – ${shortname} - Block Protocol`}
         description={
           blockMetadata.description ||
           "Check out this open-source block on the Hub"
