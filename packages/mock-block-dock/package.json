@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.39-canary-20230110182708",
+  "version": "0.0.38",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
