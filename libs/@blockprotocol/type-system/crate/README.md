@@ -11,7 +11,7 @@
 - [Rust](https://www.rust-lang.org/tools/install)
 - [cargo-make](https://github.com/sagiegurari/cargo-make#installation)
 
-## Building the Package
+## Building the package
 
 - `cargo make build` - Compiles the Rust crate, and generates `@blockprotocol/type-system` npm package (located in parent folder)
 
