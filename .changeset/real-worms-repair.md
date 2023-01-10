@@ -12,4 +12,4 @@
 "mock-block-dock": patch
 ---
 
-Update package metadata (rename folder)
+Update package metadata (change path to source following repo restructuring)
