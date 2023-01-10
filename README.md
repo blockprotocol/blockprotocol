@@ -12,9 +12,11 @@
 [hook service]: https://blockprotocol.org/docs/spec/hook-service?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [rfcs & roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
-
 [open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
 [hash]: https://github.com/hashintel/hash/tree/main/packages/hash
+
+<!-- markdownlint-disable link-fragments -->
+
 [github_banner]: #block-protocol
 [github_star]: https://github.com/blockprotocol/blockprotocol#
 [gh-what-is-the-bp]: #--what-is-the-block-protocol
@@ -89,7 +91,7 @@ As a block developer, you probably care most about our utility libraries. All of
 
 1.  `rfcs`: contains RFCs (Requests For Comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project.
 
-1. [`libs/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/type-system): Rust crate which auto-generates the `@blockprotocol/type-system` WASM-based npm package, acting as our single source of truth for type system definitions.
+1.  [`libs/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/type-system): Rust crate which auto-generates the `@blockprotocol/type-system` WASM-based npm package, acting as our single source of truth for type system definitions.
 
 ## [![a](/.github/assets/gh_icon_contributing_20px-base.svg)][gh-contributing] &nbsp; Contributing
 
