@@ -64,7 +64,7 @@
     "lodash": "^4.17.21",
     "md5": "^2.3.0",
     "mime-types": "^2.1.35",
-    "mock-block-dock": "0.0.38",
+    "mock-block-dock": "0.0.39-canary-20230110182708",
     "mongodb": "^4.2.2",
     "next": "13.0.3",
     "next-connect": "^0.12.1",

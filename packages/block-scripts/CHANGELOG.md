@@ -1,5 +1,11 @@
 # block-scripts
 
+## 0.0.19-canary-20230110182708
+
+### Patch Changes
+
+- [#816](https://github.com/blockprotocol/blockprotocol/pull/816) [`380b1493`](https://github.com/blockprotocol/blockprotocol/commit/380b149326450f4cf9b8300182eb199aa8f6a62f) Thanks [@kachkaev](https://github.com/kachkaev)! - Remove unused dependencies
+
 ## 0.0.18
 
 ### Patch Changes
