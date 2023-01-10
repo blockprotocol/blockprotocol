@@ -1,4 +1,5 @@
 import Ajv from "ajv";
+
 import { createBaseHandler } from "../../lib/api/handler/base-handler";
 import { getMember, subscribeToMailchimp } from "../../lib/api/mailchimp";
 
@@ -46,19 +47,19 @@ export default createBaseHandler<
   VoteApplicationRequestBody,
   VoteApplicationResponse
 >().put(async (req, res) => {
-  const member = await getMember({ email: req.body.email });
-
   try {
     const payload = { ...req.body };
-
-    if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
-      payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
-    }
 
     const valid = validate(payload);
 
     if (!valid) {
       throw new Error();
+    }
+
+    const member = await getMember({ email: payload.email });
+
+    if (member?.merge_fields?.WISH_EA && payload?.merge_fields?.WISH_EA) {
+      payload.merge_fields.WISH_EA = `${member?.merge_fields?.WISH_EA}, ${payload.merge_fields.WISH_EA}`;
     }
 
     await subscribeToMailchimp(payload);
