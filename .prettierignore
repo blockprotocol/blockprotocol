@@ -12,6 +12,7 @@
 !*.html
 !*.js
 !*.json
+!*.jsonc
 !*.md
 !*.mdx
 !*.mjs
