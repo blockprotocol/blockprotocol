@@ -1,0 +1,6 @@
+{
+  // DOM and ESNext are needed for various WASM features
+  "extends": "@local/tsconfig/dom.json",
+  "include": ["scripts", "src", "test"],
+  "exclude": ["wasm", "dist"]
+}
