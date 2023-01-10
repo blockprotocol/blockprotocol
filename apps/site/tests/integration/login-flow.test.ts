@@ -119,11 +119,6 @@ test("login works for an existing user (via magic link)", async ({
     ]);
   }
 
-  test.skip(
-    browserName === "webkit",
-    "https://app.asana.com/0/1202542409311090/1202652399221616",
-  );
-
   await page.goto("/");
   const loginModal = await openLoginModal({ page, isMobile });
 
