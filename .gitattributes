@@ -1,2 +1,2 @@
-packages/@blockprotocol/type-system-node/dist/* linguist-generated=true
-packages/@blockprotocol/type-system-web/dist/* linguist-generated=true
+libs/@blockprotocol/type-system-node/dist/* linguist-generated=true
+libs/@blockprotocol/type-system-web/dist/* linguist-generated=true
