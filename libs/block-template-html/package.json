@@ -1,0 +1,43 @@
+{
+  "name": "block-template-html",
+  "version": "0.1.8",
+  "description": "Block Protocol block template for an html-based block",
+  "keywords": [
+    "blockprotocol",
+    "blocks"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "libs/block-template-html"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "scripts": {
+    "build": "rimraf dist && cp -R src dist && cp block-metadata.json dist && cp block-schema.json dist && cp -R public dist",
+    "dev": "echo \"Serving at http://localhost:63212\" && http-server -p 63212 ./dev",
+    "fix:eslint": "eslint --fix .",
+    "format": "prettier --write --ignore-unknown .",
+    "postinstall": "rimraf ./dev/src && lnk -f ./src ./dev",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
+    "serve": "block-scripts serve"
+  },
+  "prettier": {
+    "printWidth": 80,
+    "trailingComma": "all"
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "block-scripts": "0.0.18",
+    "eslint": "8.29.0",
+    "http-server": "14.1.1",
+    "lnk-cli": "1.0.1",
+    "prettier": "2.8.1",
+    "rimraf": "^3.0.2"
+  }
+}

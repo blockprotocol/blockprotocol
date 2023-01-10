@@ -169,7 +169,7 @@ __metadata:
     "@mui/icons-material": "npm:^5.10.3"
     "@mui/material": "npm:^5.10.4"
     "@next/bundle-analyzer": "npm:13.0.7"
-    "@playwright/test": "npm:^1.27.1"
+    "@playwright/test": "npm:^1.29.2"
     "@sentry/nextjs": "npm:7.28.0"
     "@twind/next": "npm:^1.0.9"
     "@types/busboy": "npm:^1.5.0"
@@ -199,7 +199,7 @@ __metadata:
     "@types/uuid": "npm:^8.3.4"
     ajv: "npm:^8.9.0"
     algoliasearch: "npm:4.14.2"
-    axios: "npm:1.2.0-alpha.1"
+    axios: "npm:1.2.2"
     axios-retry: "npm:3.3.1"
     babel-plugin-inline-react-svg: "npm:2.0.1"
     babel-plugin-istanbul: "npm:^6.1.1"
@@ -241,8 +241,8 @@ __metadata:
     nprogress: "npm:^0.2.0"
     nyc: "npm:^15.1.0"
     passport: "npm:^0.5.2"
-    playwright: "npm:^1.27.1"
-    playwright-test-coverage: "npm:^1.2.5"
+    playwright: "npm:^1.29.2"
+    playwright-test-coverage: "npm:^1.2.8"
     prismjs: "npm:^1.27.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
@@ -2796,7 +2796,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/types@npm:^7.0.0, @babel/types@npm:^7.18.10, @babel/types@npm:^7.18.6, @babel/types@npm:^7.18.9, @babel/types@npm:^7.19.0, @babel/types@npm:^7.20.2, @babel/types@npm:^7.20.5, @babel/types@npm:^7.3.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4, @babel/types@npm:^7.8.3":
+"@babel/types@npm:^7.0.0, @babel/types@npm:^7.18.10, @babel/types@npm:^7.18.6, @babel/types@npm:^7.18.9, @babel/types@npm:^7.19.0, @babel/types@npm:^7.20.2, @babel/types@npm:^7.20.5, @babel/types@npm:^7.3.0, @babel/types@npm:^7.3.3, @babel/types@npm:^7.4.4":
+  version: 7.20.5
+  resolution: "@babel/types@npm:7.20.5"
+  dependencies:
+    "@babel/helper-string-parser": "npm:^7.19.4"
+    "@babel/helper-validator-identifier": "npm:^7.19.1"
+    to-fast-properties: "npm:^2.0.0"
+  checksum: c7f3c4ae2fa7d1c477a48094f9b0990747aea366bfdb1781095b88f66fbfdc3cd5045a23918eca0ffbc3323d84e674ce81f5f847a0efc17a97a3e268c5b8b456
+  languageName: node
+  linkType: hard
+
+"@babel/types@npm:^7.8.3":
   version: 7.20.7
   resolution: "@babel/types@npm:7.20.7"
   dependencies:
@@ -2814,9 +2825,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blockprotocol/core@npm:0.0.12, @blockprotocol/core@workspace:packages/@blockprotocol/core":
+"@blockprotocol/core@npm:0.0.12, @blockprotocol/core@workspace:libs/@blockprotocol/core":
   version: 0.0.0-use.local
-  resolution: "@blockprotocol/core@workspace:packages/@blockprotocol/core"
+  resolution: "@blockprotocol/core@workspace:libs/@blockprotocol/core"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     "@local/tsconfig": "npm:0.0.0-private"
@@ -2828,9 +2839,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@blockprotocol/graph@npm:0.0.18, @blockprotocol/graph@workspace:packages/@blockprotocol/graph":
+"@blockprotocol/graph@npm:0.0.18, @blockprotocol/graph@workspace:libs/@blockprotocol/graph":
   version: 0.0.0-use.local
-  resolution: "@blockprotocol/graph@workspace:packages/@blockprotocol/graph"
+  resolution: "@blockprotocol/graph@workspace:libs/@blockprotocol/graph"
   dependencies:
     "@blockprotocol/core": "npm:0.0.12"
     "@local/eslint-config": "npm:0.0.0-private"
@@ -2844,9 +2855,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@blockprotocol/hook@npm:0.0.8, @blockprotocol/hook@workspace:packages/@blockprotocol/hook":
+"@blockprotocol/hook@npm:0.0.8, @blockprotocol/hook@workspace:libs/@blockprotocol/hook":
   version: 0.0.0-use.local
-  resolution: "@blockprotocol/hook@workspace:packages/@blockprotocol/hook"
+  resolution: "@blockprotocol/hook@workspace:libs/@blockprotocol/hook"
   dependencies:
     "@blockprotocol/core": "npm:0.0.12"
     "@local/eslint-config": "npm:0.0.0-private"
@@ -2859,9 +2870,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@blockprotocol/type-system@workspace:packages/@blockprotocol/type-system":
+"@blockprotocol/type-system@workspace:libs/@blockprotocol/type-system":
   version: 0.0.0-use.local
-  resolution: "@blockprotocol/type-system@workspace:packages/@blockprotocol/type-system"
+  resolution: "@blockprotocol/type-system@workspace:libs/@blockprotocol/type-system"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     "@local/tsconfig": "npm:0.0.0-private"
@@ -2870,6 +2881,7 @@ __metadata:
     "@types/jest": "npm:29.2.3"
     "@types/node": "npm:18.11.10"
     eslint: "npm:8.29.0"
+    fs-extra: "npm:^10.1.0"
     jest: "npm:29.3.1"
     rimraf: "npm:^3.0.2"
     rollup: "npm:3.5.1"
@@ -3151,19 +3163,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@crates/type-system@workspace:crates/type-system":
-  version: 0.0.0-use.local
-  resolution: "@crates/type-system@workspace:crates/type-system"
-  dependencies:
-    "@local/eslint-config": "npm:0.0.0-private"
-    "@local/tsconfig": "npm:0.0.0-private"
-    "@types/fs-extra": "npm:^9.0.13"
-    eslint: "npm:8.29.0"
-    fs-extra: "npm:^10.1.0"
-    typescript: "npm:4.9.4"
-  languageName: unknown
-  linkType: soft
-
 "@cspotcode/source-map-support@npm:^0.8.0":
   version: 0.8.1
   resolution: "@cspotcode/source-map-support@npm:0.8.1"
@@ -3403,7 +3402,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gar/promisify@npm:^1.0.1, @gar/promisify@npm:^1.1.3":
+"@gar/promisify@npm:^1.0.1":
+  version: 1.1.2
+  resolution: "@gar/promisify@npm:1.1.2"
+  checksum: aa6792cfe42659321bfffa8ea42c623b0bcaed96e735a48b226417a220a1e18df0c1284d1e69bfdc263948ed926e9509843951de8d6d1b11078ba693a8b95b0f
+  languageName: node
+  linkType: hard
+
+"@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
   checksum: 3fadc40481a783ddb90397f5759f92650b57465f7a4a778056bd24b47060595012e9181a55ae547d57a893d37d9776abe9e368f1f6918e37225eb6a83f9a75f8
@@ -3795,9 +3801,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@local/eslint-config@npm:0.0.0-private, @local/eslint-config@workspace:packages/@local/eslint-config":
+"@local/eslint-config@npm:0.0.0-private, @local/eslint-config@workspace:libs/@local/eslint-config":
   version: 0.0.0-use.local
-  resolution: "@local/eslint-config@workspace:packages/@local/eslint-config"
+  resolution: "@local/eslint-config@workspace:libs/@local/eslint-config"
   dependencies:
     "@babel/eslint-parser": "npm:7.19.1"
     "@babel/preset-react": "npm:^7.18.6"
@@ -3818,9 +3824,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@local/package-chores@workspace:packages/@local/package-chores":
+"@local/package-chores@workspace:libs/@local/package-chores":
   version: 0.0.0-use.local
-  resolution: "@local/package-chores@workspace:packages/@local/package-chores"
+  resolution: "@local/package-chores@workspace:libs/@local/package-chores"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     "@local/tsconfig": "npm:0.0.0-private"
@@ -3843,9 +3849,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@local/tsconfig@npm:0.0.0-private, @local/tsconfig@workspace:packages/@local/tsconfig":
+"@local/tsconfig@npm:0.0.0-private, @local/tsconfig@workspace:libs/@local/tsconfig":
   version: 0.0.0-use.local
-  resolution: "@local/tsconfig@workspace:packages/@local/tsconfig"
+  resolution: "@local/tsconfig@workspace:libs/@local/tsconfig"
   languageName: unknown
   linkType: soft
 
@@ -4337,15 +4343,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@playwright/test@npm:^1.27.1":
-  version: 1.27.1
-  resolution: "@playwright/test@npm:1.27.1"
+"@playwright/test@npm:^1.29.2":
+  version: 1.29.2
+  resolution: "@playwright/test@npm:1.29.2"
   dependencies:
     "@types/node": "npm:*"
-    playwright-core: "npm:1.27.1"
+    playwright-core: "npm:1.29.2"
   bin:
     playwright: cli.js
-  checksum: b4e1616a963df30a5f642acffd9a691bb3ffa1c00a76fae8c260d363144c4a7d433269dbd6fee5a8b8f46db36316de3d44b4e5b31ad74b5ec0e4f8240a76d7aa
+  checksum: 7cf5f87cd1033e6b009737391fd41aec1ecec1567d8a430b960100f0c8df0334b60ba71d7b05232fe448d081977031f39a9d4c7d92bd1d8ebacb15bb9b9476d6
   languageName: node
   linkType: hard
 
@@ -6045,7 +6051,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"agentkeepalive@npm:^4.1.3, agentkeepalive@npm:^4.2.1":
+"agentkeepalive@npm:^4.1.3":
+  version: 4.2.0
+  resolution: "agentkeepalive@npm:4.2.0"
+  dependencies:
+    debug: "npm:^4.1.0"
+    depd: "npm:^1.1.2"
+    humanize-ms: "npm:^1.2.1"
+  checksum: 5d88f3f33417851e0ef74e9ead6325340c2b8f3618d82a9770080aa0516d9f8a0f267605d7838139979579a9afd68414f53797778028b0a70d3b82f53a65d37d
+  languageName: node
+  linkType: hard
+
+"agentkeepalive@npm:^4.2.1":
   version: 4.2.1
   resolution: "agentkeepalive@npm:4.2.1"
   dependencies:
@@ -6522,14 +6539,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:1.2.0-alpha.1":
-  version: 1.2.0-alpha.1
-  resolution: "axios@npm:1.2.0-alpha.1"
+"axios@npm:1.2.2":
+  version: 1.2.2
+  resolution: "axios@npm:1.2.2"
   dependencies:
     follow-redirects: "npm:^1.15.0"
     form-data: "npm:^4.0.0"
     proxy-from-env: "npm:^1.1.0"
-  checksum: 31bbd4b5ada8139ceefae48fe3eb7dddbd274f5f8dc568ba2a19182cf42cda51cb1d5ab91270ce5fcfafb1e8c3e3b7af24ae8d2e902b888ac7bfd221a4be6597
+  checksum: bedb7ca96c8cabb615658360286d635d2fc2ccc3307a0be0ac68386302a250c3df9cb321cbdae59765371cb819c81eb568c7840d584460e017b619cb1e7d1ba7
   languageName: node
   linkType: hard
 
@@ -6771,9 +6788,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"block-scripts@npm:0.0.18, block-scripts@workspace:packages/block-scripts":
+"block-scripts@npm:0.0.18, block-scripts@workspace:libs/block-scripts":
   version: 0.0.0-use.local
-  resolution: "block-scripts@workspace:packages/block-scripts"
+  resolution: "block-scripts@workspace:libs/block-scripts"
   dependencies:
     "@babel/core": "npm:^7.20.5"
     "@babel/plugin-proposal-class-properties": "npm:^7.18.6"
@@ -6812,9 +6829,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"block-template-custom-element@workspace:packages/block-template-custom-element":
+"block-template-custom-element@workspace:libs/block-template-custom-element":
   version: 0.0.0-use.local
-  resolution: "block-template-custom-element@workspace:packages/block-template-custom-element"
+  resolution: "block-template-custom-element@workspace:libs/block-template-custom-element"
   dependencies:
     "@blockprotocol/graph": "npm:0.0.18"
     "@local/eslint-config": "npm:0.0.0-private"
@@ -6829,9 +6846,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"block-template-html@workspace:packages/block-template-html":
+"block-template-html@workspace:libs/block-template-html":
   version: 0.0.0-use.local
-  resolution: "block-template-html@workspace:packages/block-template-html"
+  resolution: "block-template-html@workspace:libs/block-template-html"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     block-scripts: "npm:0.0.18"
@@ -6843,9 +6860,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"block-template-react@workspace:packages/block-template-react":
+"block-template-react@workspace:libs/block-template-react":
   version: 0.0.0-use.local
-  resolution: "block-template-react@workspace:packages/block-template-react"
+  resolution: "block-template-react@workspace:libs/block-template-react"
   dependencies:
     "@blockprotocol/graph": "npm:0.0.18"
     "@local/eslint-config": "npm:0.0.0-private"
@@ -6862,9 +6879,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"blockprotocol@workspace:packages/blockprotocol":
+"blockprotocol@workspace:libs/blockprotocol":
   version: 0.0.0-use.local
-  resolution: "blockprotocol@workspace:packages/blockprotocol"
+  resolution: "blockprotocol@workspace:libs/blockprotocol"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     "@local/tsconfig": "npm:0.0.0-private"
@@ -7920,9 +7937,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"create-block-app@workspace:packages/create-block-app":
+"create-block-app@workspace:libs/create-block-app":
   version: 0.0.0-use.local
-  resolution: "create-block-app@workspace:packages/create-block-app"
+  resolution: "create-block-app@workspace:libs/create-block-app"
   dependencies:
     "@local/eslint-config": "npm:0.0.0-private"
     "@types/pacote": "npm:11.1.5"
@@ -10899,6 +10916,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ip@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "ip@npm:1.1.5"
+  checksum: bf1e24b6571eda04959cb77e8c52f507c326a6282bf347d888c3121c80c8ca1b1b01f83b38ce413988fcd9bdac35208666db56f012e0314180a8f42ea49e591d
+  languageName: node
+  linkType: hard
+
 "ip@npm:^2.0.0":
   version: 2.0.0
   resolution: "ip@npm:2.0.0"
@@ -12046,13 +12070,13 @@ __metadata:
   linkType: hard
 
 "json5@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "json5@npm:1.0.1"
+  version: 1.0.2
+  resolution: "json5@npm:1.0.2"
   dependencies:
     minimist: "npm:^1.2.0"
   bin:
     json5: lib/cli.js
-  checksum: fd9492140ea8a1ec338c96e8527e940c9464ca3c7ef8fbf00b8bbbac1c6e60d612bf6640885e8a9108c3b71dc913f9a07a628df36f462853ea8c59bbce192e32
+  checksum: 26cc8c0cba94bd7faddd8aaad59e5270d552c04ea2a271f4c610d075f638d666c4168213062341c577597a2b973554262972ccb6637cd071d73595886133c5a0
   languageName: node
   linkType: hard
 
@@ -13676,9 +13700,9 @@ __metadata:
   linkType: hard
 
 "minimist@npm:^1.1.3, minimist@npm:^1.2.0, minimist@npm:^1.2.3, minimist@npm:^1.2.5, minimist@npm:^1.2.6, minimist@npm:~1.2.5":
-  version: 1.2.6
-  resolution: "minimist@npm:1.2.6"
-  checksum: b0286df020a110fa0173e71d8c9903748eb2cc939396d04a61bc224635393c564bc264d04a16e36d51e5489be513f98d7dbe5c2cf11598da11c91f6a18b9449e
+  version: 1.2.7
+  resolution: "minimist@npm:1.2.7"
+  checksum: 7bb50119bb59f48228a834e293a566c4b0e1b6c4648db83fb88830b4f932bfeaca72158bcdcc8a74130b339167eda92ec4cabb65faf07ab8d32542889a451676
   languageName: node
   linkType: hard
 
@@ -13758,7 +13782,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minipass@npm:^3.0.0, minipass@npm:^3.1.0, minipass@npm:^3.1.1, minipass@npm:^3.1.3, minipass@npm:^3.1.6, minipass@npm:^3.3.5":
+"minipass@npm:^3.0.0, minipass@npm:^3.1.0, minipass@npm:^3.1.1, minipass@npm:^3.1.3, minipass@npm:^3.3.5":
+  version: 3.3.5
+  resolution: "minipass@npm:3.3.5"
+  dependencies:
+    yallist: "npm:^4.0.0"
+  checksum: 54b7be3d5d111832afcb7cc2bcb9e1bd21c3701731d1cd6dd91d673b7658f0c01bd52887764cf08f5dafe9a94abd7ce8fc800a2afe2bc19207bd83daac5ee052
+  languageName: node
+  linkType: hard
+
+"minipass@npm:^3.1.6":
   version: 3.3.6
   resolution: "minipass@npm:3.3.6"
   dependencies:
@@ -13811,9 +13844,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mock-block-dock@npm:0.0.38, mock-block-dock@workspace:packages/mock-block-dock":
+"mock-block-dock@npm:0.0.38, mock-block-dock@workspace:libs/mock-block-dock":
   version: 0.0.0-use.local
-  resolution: "mock-block-dock@workspace:packages/mock-block-dock"
+  resolution: "mock-block-dock@workspace:libs/mock-block-dock"
   dependencies:
     "@babel/core": "npm:^7.20.5"
     "@babel/plugin-proposal-class-properties": "npm:^7.18.6"
@@ -15258,32 +15291,32 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.27.1":
-  version: 1.27.1
-  resolution: "playwright-core@npm:1.27.1"
+"playwright-core@npm:1.29.2":
+  version: 1.29.2
+  resolution: "playwright-core@npm:1.29.2"
   bin:
     playwright: cli.js
-  checksum: 997ebf99163243a7c6bfcdac9218f7c4b7234d65c52dce26a8eff352426f426618e0c7ad1b8b4fe6aba93fc481da219677268a2c373bdf87d1b519d90db36809
+  checksum: d16c6fad6647c38f58873ff5e48c614ca268f05b6601837804166c167dfdec13b5751d95fbcee3dc25de20ae7c9ba361ba04c44535257502bcca04c9b5c12e86
   languageName: node
   linkType: hard
 
-"playwright-test-coverage@npm:^1.2.5":
-  version: 1.2.5
-  resolution: "playwright-test-coverage@npm:1.2.5"
+"playwright-test-coverage@npm:^1.2.8":
+  version: 1.2.8
+  resolution: "playwright-test-coverage@npm:1.2.8"
   peerDependencies:
     "@playwright/test": ^1.14.1
-  checksum: dc9d0022f0f1805d9c44ad7995fae7294e901b5ee922fa0db141c1d9570c5d8da97cf5bbb07b1596f5318a1a85c376d0b69a02d32b8e378fbbc9a0f09a3efd31
+  checksum: 9819ed063bc3bfdb64fba1fa282fd378d1be8bbfda270154af20a81ec5aaa003820cbe1c5ce755f4a161cd8d477a49ef1241965aa2b54827b9cc2ce64fe5f729
   languageName: node
   linkType: hard
 
-"playwright@npm:^1.27.1":
-  version: 1.27.1
-  resolution: "playwright@npm:1.27.1"
+"playwright@npm:^1.29.2":
+  version: 1.29.2
+  resolution: "playwright@npm:1.29.2"
   dependencies:
-    playwright-core: "npm:1.27.1"
+    playwright-core: "npm:1.29.2"
   bin:
     playwright: cli.js
-  checksum: 67f6e1915c1bc68c582e974978fb26e1337d2f954e2a7f7bdbba10399184f09f172c55c85553d0d3168ce4ecc4af81697fb3d9c21de065bbe510e30919771af2
+  checksum: 4dc3a38d6d8da0c69275d1783a94c6818cce00d0027ff7f3d82bb0019a49feab7680633f1aacc85003c6d90c2ef0aedcbb66597a4ad6f6ccd3b825e64d412d53
   languageName: node
   linkType: hard
 
@@ -16538,14 +16571,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.1.2, safe-buffer@npm:~5.1.0, safe-buffer@npm:~5.1.1":
+"safe-buffer@npm:5.1.2, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:~5.1.0, safe-buffer@npm:~5.1.1":
   version: 5.1.2
   resolution: "safe-buffer@npm:5.1.2"
   checksum: 86939c6de6b62c1d39b7da860a56d5e50ede9b0ab35a91b0620bff8a96f1f798084ff910059f605087c2c500dc23dfdf77ff5bc3bcc8d4d38e3d634de2e3e426
   languageName: node
   linkType: hard
 
-"safe-buffer@npm:5.2.1, safe-buffer@npm:>=5.1.0, safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0":
+"safe-buffer@npm:5.2.1":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
   checksum: da8a21b3336a21c152eb3ba8ab41acde5772644f026d4b6e5f9fd8afa4f0cf407c113b19a362580fab9aea8beea295465432fc7684f9ff38aac559bb1b5528cd
@@ -17114,7 +17147,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"smart-buffer@npm:^4.2.0":
+"smart-buffer@npm:^4.1.0, smart-buffer@npm:^4.2.0":
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
   checksum: 898a5ce4651108164625916aa54b6f7c13e86279a31dd321737d27c4b795cfaaeb1c30417f8809029d80d20710d8a5045998afd35e0f1080b32648f5670aa99b
@@ -17170,7 +17203,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"socks@npm:^2.6.1, socks@npm:^2.6.2":
+"socks@npm:^2.6.1":
+  version: 2.6.1
+  resolution: "socks@npm:2.6.1"
+  dependencies:
+    ip: "npm:^1.1.5"
+    smart-buffer: "npm:^4.1.0"
+  checksum: 9bd84957676b7fcd88f6f70ef2a35d0d0b4f2fb4060c4fb70eac58b4629a22342daae2b9db4463283e420934c642b9357056bf71dc3181d345f1788feb9edc26
+  languageName: node
+  linkType: hard
+
+"socks@npm:^2.6.2":
   version: 2.7.1
   resolution: "socks@npm:2.7.1"
   dependencies:

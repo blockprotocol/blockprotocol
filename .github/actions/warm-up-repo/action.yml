@@ -14,7 +14,7 @@ runs:
     - name: Cache Rust dependencies
       uses: Swatinem/rust-cache@v2
       with:
-        workspaces: crates/type-system
+        workspaces: libs/@blockprotocol/type-system/crate
 
     - name: Install Cargo-Make
       shell: bash

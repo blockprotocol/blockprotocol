@@ -5,9 +5,9 @@
   "workspaces": [
     "apps/*",
     "crates/*",
-    "packages/*",
-    "packages/@blockprotocol/*",
-    "packages/@local/*"
+    "libs/@blockprotocol/*",
+    "libs/@local/*",
+    "libs/*"
   ],
   "scripts": {
     "fix": "npm-run-all --continue-on-error \"fix:*\"",
