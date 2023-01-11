@@ -88,7 +88,8 @@ export const getMember = async (params: {
 
   return await getMailchimpApi()
     .get(`members/${memberID}`)
-    .then((res) => res.data);
+    .then((res) => res.data)
+    .catch(() => undefined);
 };
 
 export const updateMailchimpMemberInfo = async (params: {
