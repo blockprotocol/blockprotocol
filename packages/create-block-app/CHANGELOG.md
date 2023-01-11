@@ -1,5 +1,11 @@
 # create-block-app
 
+## 0.1.0-canary-20230111084611
+
+### Minor Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`2e7fad22`](https://github.com/blockprotocol/blockprotocol/commit/2e7fad22890472947aee64ba54ef5aa068e46704) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
+
 ## 0.0.10
 
 ### Patch Changes
