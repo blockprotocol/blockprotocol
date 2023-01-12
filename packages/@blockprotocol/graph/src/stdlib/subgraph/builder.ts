@@ -10,8 +10,8 @@ import {
  * Builds a Subgraph from a given set of entities, some (or all) of which may be 'link entities' –
  * i.e. entities that represent relationships between other entities – or other entities.
  *
- * The set of entities should represent the result of a query on a graph,
- * and the 'roots' and 'depths' for that query provided along with the data.
+ * The set of entities should represent the result of a query on a graph.
+ * The 'roots' and 'depths' used for that query should be provided along with the data.
  *
  * Unbounded queries can currently only be represented via very high values for depths.
  *
