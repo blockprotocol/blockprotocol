@@ -24,9 +24,10 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./react": "./dist/react.js",
     "./custom-element": "./dist/custom-element.js",
     "./graph-service-json": "./dist/graph-service-json.js",
+    "./internal": "./dist/internal.js",
+    "./react": "./dist/react.js",
     "./stdlib": [
       "./dist/stdlib.js"
     ],
@@ -40,14 +41,17 @@
       ".": [
         "./dist/index.d.ts"
       ],
-      "react": [
-        "./dist/react.d.ts"
-      ],
       "custom-element": [
         "./dist/custom-element.d.ts"
       ],
       "graph-service-json": [
         "./dist/graph-service-json.d.ts"
+      ],
+      "internal": [
+        "./dist/internal.d.ts"
+      ],
+      "react": [
+        "./dist/react.d.ts"
       ],
       "stdlib": [
         "./dist/stdlib.d.ts"

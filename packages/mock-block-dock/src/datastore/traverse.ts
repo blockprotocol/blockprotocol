@@ -8,6 +8,7 @@ import {
   OutgoingLinkEdge,
   Subgraph,
 } from "@blockprotocol/graph";
+import { addKnowledgeGraphEdgeToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import {
   getIncomingLinksForEntity,
   getLeftEntityForLinkEntity,
@@ -16,7 +17,6 @@ import {
 import { getRightEntityForLinkEntity } from "@blockprotocol/graph/stdlib-temporal";
 
 import { typedEntries } from "../util";
-import { addKnowledgeGraphEdge } from "./mutate-subgraph";
 import { ResolveMap } from "./traverse/resolve-map";
 import { PartialDepths, TraversalContext } from "./traverse/traversal-context";
 
@@ -97,7 +97,7 @@ export const traverseElement = (
                 },
               };
 
-              addKnowledgeGraphEdge(
+              addKnowledgeGraphEdgeToSubgraphByMutation(
                 traversalSubgraph,
                 entityId,
                 edgeTimestamp,
@@ -135,7 +135,7 @@ export const traverseElement = (
                 },
               };
 
-              addKnowledgeGraphEdge(
+              addKnowledgeGraphEdgeToSubgraphByMutation(
                 traversalSubgraph,
                 entityId,
                 edgeTimestamp,
@@ -177,7 +177,7 @@ export const traverseElement = (
                 },
               };
 
-              addKnowledgeGraphEdge(
+              addKnowledgeGraphEdgeToSubgraphByMutation(
                 traversalSubgraph,
                 entityId,
                 edgeTimestamp,
@@ -218,7 +218,7 @@ export const traverseElement = (
                 },
               };
 
-              addKnowledgeGraphEdge(
+              addKnowledgeGraphEdgeToSubgraphByMutation(
                 traversalSubgraph,
                 entityId,
                 edgeTimestamp,
