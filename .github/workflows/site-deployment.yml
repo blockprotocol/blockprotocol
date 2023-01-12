@@ -38,7 +38,7 @@ jobs:
     needs: [warm_up_vercel]
     if: github.event.deployment_status.state == 'success' || github.event.schedule == '0 4 * * *'
     runs-on: ubuntu-20.04
-    timeout-minutes: 30 ## https://github.com/actions/upload-artifact/issues/358
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v3
