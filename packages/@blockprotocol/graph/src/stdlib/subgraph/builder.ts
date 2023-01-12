@@ -13,7 +13,7 @@ import {
  * The set of entities should represent the result of a query on a graph.
  * The 'roots' and 'depths' used for that query should be provided along with the data.
  *
- * Unbounded queries can currently only be represented via very high values for depths.
+ * The maximum value for any single depth is 255.
  *
  * This function does NOT verify that the provided depths are accurate for the data.
  *   – the caller is responsible for this.
@@ -32,15 +32,14 @@ import {
  *
  * @throws if the provided roots are not present in the data
  *
- * @todo 1. add support for ontology vertices (e.g. entity types)
- * @todo 2. support null values for depths, for the result of queries with unlimited depths.
+ * @todo add support for ontology vertices (e.g. entity types)
  */
 export const buildSubgraph = (
   data: { entities: Entity[] },
   roots: EntityEditionId[],
   depths: GraphResolveDepths,
 ) => {
-  const missingRoot = roots.find(
+  const missingRoots = roots.filter(
     ({ baseId, versionId }) =>
       !data.entities.find(
         (entity) =>
@@ -49,9 +48,14 @@ export const buildSubgraph = (
       ),
   );
 
-  if (missingRoot) {
+  if (missingRoots) {
     throw new Error(
-      `Root not present in data: ${missingRoot.baseId} at version ${missingRoot.versionId}`,
+      `Root(s) not present in data: ${missingRoots
+        .map(
+          (missingRoot) =>
+            `${missingRoot.baseId} at version ${missingRoot.versionId}`,
+        )
+        .join(", ")}`,
     );
   }
 
