@@ -4468,10 +4468,10 @@
   resolved "https://registry.yarnpkg.com/@yarnpkg/lockfile/-/lockfile-1.1.0.tgz#e77a97fbd345b76d83245edcd17d393b1b41fb31"
   integrity sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==
 
-"@yarnpkg/parsers@^3.0.0-rc.6":
-  version "3.0.0-rc.26"
-  resolved "https://registry.yarnpkg.com/@yarnpkg/parsers/-/parsers-3.0.0-rc.26.tgz#353976e2c2dff453c824724532ab246772a4f6f6"
-  integrity sha512-F52Zryoi6uSHi43A/htykDD7l1707TQjHeAHTKxNWJBTwvrEKWYvuu1w8bzSHpFVc06ig2KyrpHPfmeiuOip8Q==
+"@yarnpkg/parsers@^3.0.0-rc.32":
+  version "3.0.0-rc.35"
+  resolved "https://registry.yarnpkg.com/@yarnpkg/parsers/-/parsers-3.0.0-rc.35.tgz#5a22f2c4e9341ca991e4331de0f0c286a0fcefab"
+  integrity sha512-J6ySgEdQUqAmlttvZOoXOEsrDTAnHyR/MtEvuAG5a+gwKY/2Cc7xn4CWcpgfuwkp+0a4vXmt2BDwzacDoGDN1g==
   dependencies:
     js-yaml "^3.10.0"
     tslib "^2.4.0"
@@ -9488,22 +9488,22 @@ locate-path@^7.1.0:
   dependencies:
     p-locate "^6.0.0"
 
-lockfile-lint-api@^5.4.6:
-  version "5.4.6"
-  resolved "https://registry.yarnpkg.com/lockfile-lint-api/-/lockfile-lint-api-5.4.6.tgz#9ab5252df1e1383061dbaa58f06c94bdb19710c6"
-  integrity sha512-3Sp01oBI0LWZNvKfGQ04G03+dXkjAvEvRiAQNZsvdVmCGP6vOXPCuPEimStf+RSo8PnjApdb65RAUh6aSZXsVQ==
+lockfile-lint-api@^5.5.0:
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/lockfile-lint-api/-/lockfile-lint-api-5.5.0.tgz#9eab162f597121d8fdae13debe553abe1279c7c6"
+  integrity sha512-L/Jk109tOSmTCPHjUEQSH/bYDRt7rgT1E2NN8/p3tmAwJuKwuWplJliVzZ+bBiIRWKmtXBDcfHnXJ9yT1shevQ==
   dependencies:
-    "@yarnpkg/parsers" "^3.0.0-rc.6"
+    "@yarnpkg/parsers" "^3.0.0-rc.32"
     object-hash "^3.0.0"
 
-lockfile-lint@4.9.6:
-  version "4.9.6"
-  resolved "https://registry.yarnpkg.com/lockfile-lint/-/lockfile-lint-4.9.6.tgz#e0204b7eb9767c96fe59672c3fbb53fe9a12ca49"
-  integrity sha512-qPI3QcEflvGylCtXyxTh0anhi1oYxD12L3ZwQYaxLjxpWUI73+EbFMsl9esqcbgSKAh4wes5y6fbG8hbQTgjyg==
+lockfile-lint@4.10.0:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/lockfile-lint/-/lockfile-lint-4.10.0.tgz#388224241426dbfa6e632e96a539e4dfca088a6d"
+  integrity sha512-OM11m0txImBLFzC8DVoNx+Oca11K8jXndwQV9WLwXgMeLDJtlXGbLwRBFINjyo1YQr/STrdsx3OBth3cee+41A==
   dependencies:
     cosmiconfig "^7.0.1"
     debug "^4.1.1"
-    lockfile-lint-api "^5.4.6"
+    lockfile-lint-api "^5.5.0"
     yargs "^16.0.0"
 
 lockfile@^1.0:
