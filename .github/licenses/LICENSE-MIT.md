@@ -1,3 +1,5 @@
+<!-- markdownlint-disable -->
+
 # The MIT License (MIT)
 
 Copyright © 2021–, HASH
