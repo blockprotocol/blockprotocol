@@ -7,7 +7,7 @@ import {
 } from "../../types.js";
 
 /**
- * Builds a Subgraph from a given set of entities, which may include 'link entities' –
+ * Builds a Subgraph from a given set of entities, some (or all) of which may be 'link entities' –
  * i.e. entities that represent relationships between other entities – or other entities.
  *
  * The set of entities should represent the result of a query on a graph,
