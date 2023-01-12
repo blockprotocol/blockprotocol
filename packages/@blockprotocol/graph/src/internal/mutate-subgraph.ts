@@ -14,6 +14,8 @@ import { isEqual } from "./mutate-subgraph/is-equal.js";
  * Looking to build a subgraph? You probably want `import { buildSubgraph } from @blockprotocol/graph/stdlib`
  *
  * This MUTATES the given `Subgraph` by adding the given outwardEdge to the entity at the specified atTime.
+ * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
+ *
  * @param subgraph – the subgraph to mutate by adding the outward edge
  * @param sourceEntityId – the id of the entity the edge is coming from
  * @param atTime – the time at which the edge should be recorded as being added at
@@ -50,7 +52,8 @@ export const addKnowledgeGraphEdgeToSubgraphByMutation = (
 /**
  * Looking to build a subgraph? You probably want `import { buildSubgraph } from @blockprotocol/graph/stdlib`
  *
- * This MUTATES the given `Subgraph` by adding the given entities into the `Vertices` object, creating edges as necessary.
+ * This MUTATES the given `Subgraph` by adding the given outwardEdge to the entity at the specified atTime.
+ * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
  * *Note*: This only adds edges as implied by the given entities, if the `Subgraph` is invalid at the time of method
  * call (e.g. by missing link endpoints), this will not loop through the vertex set to finish incomplete edges.
