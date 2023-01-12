@@ -89,9 +89,9 @@ As a block developer, you probably care most about our utility libraries. All of
     - the [Block Protocol specification] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs/4_spec))
     - the [Block Protocol documentation] ([view on GitHub](https://github.com/blockprotocol/blockprotocol/tree/main/apps/site/src/_pages/docs))
 
-1.  `rfcs`: contains RFCs (Requests For Comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project.
+1.  `rfcs`: contains RFCs (Requests For Comments); this folder is intended to maintain a consistent and controlled process for new features to enter the project
 
-1.  [`libs/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/type-system): Rust crate which auto-generates the `@blockprotocol/type-system` WASM-based npm package, acting as our single source of truth for type system definitions.
+1.  [`libs/@blockprotocol/type-system`](https://github.com/blockprotocol/blockprotocol/tree/main/libs/@blockprotocol/type-system): Rust crate which auto-generates a WASM-based npm package, providing a single source of truth for type system definitions
 
 ## [![a](/.github/assets/gh_icon_contributing_20px-base.svg)][gh-contributing] &nbsp; Contributing
 
