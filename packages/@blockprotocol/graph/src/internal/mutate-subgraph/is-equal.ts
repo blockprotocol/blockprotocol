@@ -1,3 +1,4 @@
+// https://gist.github.com/jsjain/a2ba5d40f20e19f734a53c0aad937fbb
 export const isEqual = (first: any, second: any): boolean => {
   if (first === second) {
     return true;
