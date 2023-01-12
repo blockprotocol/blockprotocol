@@ -1,4 +1,4 @@
-// This file is has its own import path "@blockprotocol/graph/codegen"
+// This file has its own import path "@blockprotocol/graph/codegen"
 // because its dependencies hit a lot of node APIs – this is intended for CLI use.
 // we don't want users importing from other files in the package to have to evaluate it.
 // it will cause problems with e.g. webpack which would require polyfills for the node APIs
