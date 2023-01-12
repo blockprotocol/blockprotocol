@@ -1,0 +1,8 @@
+{
+  "extends": "@local/tsconfig/node.json",
+  "compilerOptions": {
+    "skipLibCheck": true
+  },
+  "include": ["./"],
+  "exclude": ["dist"]
+}
