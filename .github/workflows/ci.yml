@@ -65,6 +65,18 @@ jobs:
             exit 1
           fi
 
+      - name: Run yarn lint:knip
+        if: ${{ success() || failure() }}
+        run: |
+          if ! yarn lint:knip; then
+            echo ''
+            echo ''
+            echo 'ℹ️ ℹ️ ℹ️'
+            echo 'Please fix the above errors locally for the check to pass.'
+            echo 'ℹ️ ℹ️ ℹ️'
+            exit 1
+          fi
+
       - name: Run yarn lint:lockfile-lint
         if: ${{ success() || failure() }}
         run: |
