@@ -53,10 +53,7 @@ export abstract class BlockElementBase<
     const blockEntitySubgraph = this.graph?.blockEntitySubgraph;
 
     if (blockEntitySubgraph) {
-      const rootEntity = getRoots<{
-        editionId: EntityEditionId;
-        element: RootEntity;
-      }>(blockEntitySubgraph)[0];
+      const rootEntity = getRoots(blockEntitySubgraph)[0];
       if (!rootEntity) {
         throw new Error("Root entity not present in subgraph");
       }
