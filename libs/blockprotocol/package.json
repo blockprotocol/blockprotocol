@@ -45,6 +45,7 @@
     "@local/tsconfig": "0.0.0-private",
     "@types/command-line-args": "^5.2.0",
     "@types/command-line-usage": "^5.0.2",
+    "@types/node": "^18.11.18",
     "@types/prompt": "^1.1.4",
     "@types/react": "^18.0.25",
     "eslint": "8.29.0",

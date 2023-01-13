@@ -9,7 +9,8 @@
     "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
     "strict": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "skipLibCheck": true
   },
   "include": ["src"]
 }

@@ -55,6 +55,7 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
+    "@types/node": "^18.11.18",
     "@types/serve-handler": "^6.1.1",
     "@types/webpack-assets-manifest": "^5.1.0",
     "@types/webpack-bundle-analyzer": "^4.6.0",
