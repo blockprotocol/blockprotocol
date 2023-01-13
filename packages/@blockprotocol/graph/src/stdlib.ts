@@ -119,27 +119,3 @@ export const getOutgoingLinkAndTargetEntities = <
     subgraph,
     entityId,
   );
-
-/**
- * Adds simple property access to an entity, MUTATING the object passed in.
- * The simple accessors are the last path segment before the trailing slash of a base URI
- * e.g. if there is a key "https://example.com/my-type/" then a "my-type" key is added
- * @todo is this helper actually helpful, or should people just deal with accessing by URI?
- *    - they'll still have to deal with URIs, e.g. when sending updates
- */
-export const addSimpleAccessors = <
-  Properties extends EntityPropertiesObject = EntityPropertiesObject,
->(
-  entity: Entity<Properties>,
-) => {
-  for (const [key, value] of Object.entries(entity.properties)) {
-    const [simpleAccessor, trailingSpace] = key.split("/").slice(-2);
-    if (trailingSpace !== "" || !simpleAccessor) {
-      throw new Error(`Property key ${key} is not a valid base URI.`);
-    }
-    // eslint-disable-next-line no-param-reassign -- intentional mutation
-    entity.properties[simpleAccessor] = value;
-  }
-
-  return entity as Entity<WithSimpleAccessors<Properties>>;
-};
