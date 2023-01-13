@@ -20,6 +20,7 @@ import {
 } from "./types/entity.js";
 import { LinkEntityAndRightEntity, Subgraph } from "./types/subgraph.js";
 
+export { buildSubgraph } from "./stdlib/subgraph/builder.js";
 export {
   getDataTypeById,
   getDataTypes,
