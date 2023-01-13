@@ -24,6 +24,9 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
+    "./codegen": [
+      "./dist/codegen.js"
+    ],
     "./custom-element": "./dist/custom-element.js",
     "./graph-service-json": "./dist/graph-service-json.js",
     "./internal": "./dist/internal.js",
@@ -40,6 +43,9 @@
     "*": {
       ".": [
         "./dist/index.d.ts"
+      ],
+      "codegen": [
+        "./dist/codegen.d.ts"
       ],
       "custom-element": [
         "./dist/custom-element.d.ts"

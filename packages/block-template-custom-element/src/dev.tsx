@@ -1,10 +1,27 @@
+import { VersionedUri } from "@blockprotocol/type-system";
 import { MockBlockDock } from "mock-block-dock";
 import { createRoot } from "react-dom/client";
 
 import packageJson from "../package.json";
 import ElementClass from "./index";
+import { RootEntity } from "./types.gen";
 
 const node = document.getElementById("app");
+
+// @todo make type blockprotocol.org/[etc]/ExampleEntity when we can host new types there
+const testEntity: RootEntity = {
+  metadata: {
+    editionId: {
+      baseId: "test-entity",
+      versionId: new Date().toISOString(),
+    },
+    entityTypeId: packageJson.blockprotocol.schema as VersionedUri,
+  },
+  properties: {
+    "https://alpha.hash.ai/@hash/types/property-type/title/": "World",
+    "https://alpha.hash.ai/@hash/types/property-type/index/": "0",
+  },
+} as const;
 
 /**
  * This is an embedding application for local development and debugging.
@@ -33,13 +50,10 @@ const DevApp = () => {
           tagName,
         },
       }}
-      blockEntity={{
-        // This is the 'blockEntity' which your block will receive as part of the properties sent to it
-        entityId: "my-entity-1",
-        properties: { name: "World" },
-      }}
+      blockEntityEditionId={testEntity.metadata.editionId}
       blockInfo={packageJson.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
+      initialEntities={[testEntity]}
       // hideDebugToggle <- uncomment this to disable the debug UI entirely
       // initialEntities={[]} <- customise the entities in the datastore (blockEntity is always added, if you provide it)
       // initialEntityTypes={[]} <- customise the entity types in the datastore

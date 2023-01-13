@@ -2,6 +2,7 @@ import {
   FunctionComponent,
   RefObject,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -9,9 +10,13 @@ import {
 import {
   BlockGraphProperties,
   Entity,
+  EntityEditionId,
   GraphBlockHandler,
   GraphEmbedderHandler,
+  LinkEntityAndRightEntity,
+  Subgraph,
 } from "./index.js";
+import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
 
 export type BlockComponent<RootEntity extends Entity = Entity> =
   FunctionComponent<BlockGraphProperties<RootEntity>>;
@@ -103,4 +108,32 @@ export const useGraphEmbedderService = (
     ref,
     constructorArgs,
   });
+};
+
+export const useEntitySubgraph = <
+  RootEntity extends Entity,
+  RootEntityLinkedEntities extends LinkEntityAndRightEntity[],
+>(
+  entitySubgraph: Subgraph<{
+    editionId: EntityEditionId;
+    element: RootEntity;
+  }>,
+) => {
+  return useMemo(() => {
+    const rootEntity = getRoots(entitySubgraph)[0];
+    if (!rootEntity) {
+      throw new Error("Root entity not present in subgraph");
+    }
+
+    const linkedEntities =
+      getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
+        entitySubgraph,
+        rootEntity.metadata.editionId.baseId,
+      );
+
+    return {
+      rootEntity,
+      linkedEntities,
+    };
+  }, [entitySubgraph]);
 };

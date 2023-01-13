@@ -1,10 +1,10 @@
-import { EntityEditionId } from "@blockprotocol/graph";
 import {
   type BlockComponent,
+  useEntitySubgraph,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
-import { getRoots } from "@blockprotocol/graph/stdlib";
-import { useMemo, useRef } from "react";
+import { addSimpleAccessors } from "@blockprotocol/graph/stdlib";
+import { useRef } from "react";
 
 /**
  * The file referenced here provides some base styling for your block.
@@ -15,7 +15,7 @@ import { useMemo, useRef } from "react";
  * any of these ensure that your styling does not affect anything outside your block.
  */
 import styles from "./base.module.scss";
-import { RootEntity } from "./types.gen";
+import { RootEntity, RootEntityLinkedEntities } from "./types.gen";
 
 /**
  * This function is to help illustrate a property being changed when the button is pressed.
@@ -59,21 +59,16 @@ export const App: BlockComponent<RootEntity> = ({
     throw new Error("No blockEntitySubgraph provided");
   }
 
-  const rootEntity = useMemo(() => {
-    const root = getRoots<{ editionId: EntityEditionId; element: RootEntity }>(
-      blockEntitySubgraph,
-    )[0];
-    if (!root) {
-      throw new Error("Root entity not present in subgraph");
-    }
-    return root;
-  }, [blockEntitySubgraph]);
+  const { rootEntity: blockEntity } = useEntitySubgraph<
+    RootEntity,
+    RootEntityLinkedEntities
+  >(blockEntitySubgraph);
 
-  const entityId = rootEntity.metadata.editionId.baseId;
-  const title =
-    rootEntity.properties[
-      "https://alpha.hash.ai/@hash/types/property-type/title/"
-    ];
+  const entityId = blockEntity.metadata.editionId.baseId;
+
+  const simpleBlockEntity = addSimpleAccessors(blockEntity);
+
+  const { title } = simpleBlockEntity.properties;
 
   return (
     /**
@@ -84,7 +79,7 @@ export const App: BlockComponent<RootEntity> = ({
      *   - our service helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
-      <h1>Hello, {title}!</h1>
+      <h1>{`Hello, ${title}`}</h1>
       <p>
         The entityId of this block is {entityId}. Use it to update its data,
         e.g. by calling <code>updateEntity</code>.
@@ -103,7 +98,7 @@ export const App: BlockComponent<RootEntity> = ({
           graphService?.updateEntity({
             data: {
               entityId,
-              entityTypeId: rootEntity.metadata.entityTypeId,
+              entityTypeId: blockEntity.metadata.entityTypeId,
               properties: { title: supplyRandomName() },
             },
           })

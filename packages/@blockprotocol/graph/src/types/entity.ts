@@ -139,3 +139,26 @@ export type AggregateEntitiesResult<
       totalCount?: number | null;
     };
 };
+
+/**
+ * A utility type that extracts the last segment of a string delimited by a separator
+ */
+type BeforeTrailingLast<
+  CurrentString extends string,
+  Separator extends string,
+  PreviouslyExtractedSegment extends string = never,
+> = CurrentString extends `${string}${Separator}${infer Segment}${Separator}`
+  ? BeforeTrailingLast<`${Segment}${Separator}`, Separator, Segment>
+  : PreviouslyExtractedSegment;
+
+/**
+ * A properties object where the URI keys have been replaced by the last segment of the URI
+ * To experiment with in block building – might be useful in patterns to make block building easier.
+ * @todo remove this if we settle on a pattern that doesn't benefit from it
+ */
+export type SimpleProperties<Properties extends EntityPropertiesObject> = {
+  [Key in keyof Properties as BeforeTrailingLast<
+    Extract<Key, string>,
+    "/"
+  >]: Properties[Key];
+};

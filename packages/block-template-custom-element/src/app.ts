@@ -1,14 +1,7 @@
 import { BlockElementBase } from "@blockprotocol/graph/custom-element";
 import { css, html } from "lit";
 
-/**
- * This defines the properties of the entity your block expects to be sent.
- * This entity is available to your block on this.graph.blockEntity.
- * To change the structure of the entity your block expects, change this type.
- */
-type BlockEntityProperties = {
-  name: string;
-};
+import { RootEntity } from "./types.gen";
 
 /**
  * This is the entry point for your block – the class that embedding applications will use to register your element.
@@ -18,13 +11,16 @@ type BlockEntityProperties = {
  * 1. 'graph': contains properties representing messages sent from the embedding application to the block, e.g. 'blockEntity'
  * 2. 'graphService': has various methods you can use to send messages to the embedding application, e.g. 'updateEntity'
  */
-export class BlockElement extends BlockElementBase<BlockEntityProperties> {
+export class BlockElement extends BlockElementBase<RootEntity> {
   /** @see https://lit.dev/docs/components/styles */
   static styles = css`
     font-family: sans-serif;
   `;
 
   private handleInput(event: Event) {
+    if (!this.graphService || !this.blockEntity) {
+      return;
+    }
     /**
      * This is an example of using the graph service to send a message to the embedding application
      * – this particular message asks the application update an entity's properties.
@@ -35,9 +31,10 @@ export class BlockElement extends BlockElementBase<BlockEntityProperties> {
      * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions
      */
     this.graphService
-      ?.updateEntity({
+      .updateEntity({
         data: {
-          entityId: this.graph.blockEntity.entityId,
+          entityId: this.blockEntity.metadata.editionId.baseId,
+          entityTypeId: this.blockEntity.metadata.entityTypeId,
           properties: { name: (event.target as HTMLInputElement).value },
         },
       })
@@ -46,15 +43,23 @@ export class BlockElement extends BlockElementBase<BlockEntityProperties> {
 
   /** @see https://lit.dev/docs/components/rendering */
   render() {
-    return html` <h1>Hello, ${this.graph.blockEntity?.properties.name}</h1>
+    return html` <h1>
+        Hello,
+        ${this.blockEntity?.properties[
+          "https://alpha.hash.ai/@hash/types/property-type/title/"
+        ]}
+      </h1>
       <p>
-        The entityId of this block is ${this.graph.blockEntity?.entityId}. Use
-        it to update its data when calling updateEntity.
+        The entityId of this block is
+        ${this.blockEntity?.metadata.editionId.baseId}. Use it to update its
+        data when calling updateEntity.
       </p>
       <!-- @see https://lit.dev/docs/components/events -->
       <input
         @change=${this.handleInput}
-        value=${this.graph.blockEntity?.properties.name}
+        value=${this.blockEntity?.properties[
+          "https://alpha.hash.ai/@hash/types/property-type/title/"
+        ]}
       />`;
   }
 }

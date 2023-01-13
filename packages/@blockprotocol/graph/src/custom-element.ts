@@ -2,24 +2,38 @@ import { LitElement } from "lit";
 
 import {
   BlockGraphProperties,
+  Entity,
+  EntityEditionId,
   EntityPropertiesObject,
   GraphBlockHandler,
+  LinkEntityAndRightEntity,
 } from "./index.js";
+import { getOutgoingLinkAndTargetEntities } from "./stdlib.js";
 import { getRoots } from "./stdlib/subgraph/roots.js";
 
-export interface BlockElementBase extends LitElement, BlockGraphProperties {}
+export interface BlockElementBase<
+  RootEntity extends Entity = Entity,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- this is used in the class definition
+  RootEntityLinkedEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
+> extends LitElement,
+    BlockGraphProperties<RootEntity> {}
 
 /**
  * A class to use as a base for implementing Block Protocol blocks as custom elements.
  * This class handles establishing communication with the embedding application.
  */
-export abstract class BlockElementBase extends LitElement {
+export abstract class BlockElementBase<
+  RootEntity,
+  RootEntityLinkedEntities,
+> extends LitElement {
   /**
    * The 'graphService' is a handler for sending messages to the embedding application, e.g. 'graphService.updateEntity'
    * It starts off undefined and will be available once the initial exchange of messages has taken place (handled internally)
    * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list of available messages
    */
   protected graphService?: GraphBlockHandler;
+  protected blockEntity?: RootEntity;
+  protected linkedEntities?: LinkEntityAndRightEntity[];
 
   /**
    * The properties sent to the block represent the messages sent automatically from the application to the block.
@@ -35,10 +49,33 @@ export abstract class BlockElementBase extends LitElement {
     graph: { type: Object },
   };
 
+  private updateDerivedProperties() {
+    const blockEntitySubgraph = this.graph?.blockEntitySubgraph;
+
+    if (blockEntitySubgraph) {
+      const rootEntity = getRoots(blockEntitySubgraph)[0];
+      if (!rootEntity) {
+        throw new Error("Root entity not present in subgraph");
+      }
+      this.blockEntity = rootEntity;
+
+      this.linkedEntities =
+        getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
+          blockEntitySubgraph,
+          rootEntity.metadata.editionId.baseId,
+        );
+    }
+  }
+
   connectedCallback() {
     super.connectedCallback();
     if (!this.graphService || this.graphService.destroyed) {
-      this.graphService = new GraphBlockHandler({ element: this });
+      this.graphService = new GraphBlockHandler({
+        callbacks: {
+          blockEntitySubgraph: () => this.updateDerivedProperties(),
+        },
+        element: this,
+      });
     }
   }
 

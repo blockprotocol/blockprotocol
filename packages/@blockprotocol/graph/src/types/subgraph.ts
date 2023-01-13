@@ -40,3 +40,8 @@ export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> = {
   edges: Edges;
   depths: GraphResolveDepths;
 };
+
+export type LinkEntityAndRightEntity = {
+  linkEntity: Entity;
+  rightEntity: Entity;
+};

@@ -6,7 +6,7 @@ import {
 } from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
-import { fetchAndValidateEntityType } from "../type-resolver.js";
+import { fetchAndValidateEntityType } from "../codegen.js";
 import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings.js";
 import {
   generateEntityDefinition,

@@ -1,5 +1,9 @@
 import { Entity, EntityId } from "../../../types/entity.js";
-import { OutwardEdge, Subgraph } from "../../../types/subgraph.js";
+import {
+  LinkEntityAndRightEntity,
+  OutwardEdge,
+  Subgraph,
+} from "../../../types/subgraph.js";
 import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,
@@ -204,11 +208,13 @@ export const getRightEntityForLinkEntity = (
  * @param {Date | string} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to search
  *    for, if not supplied it defaults to the current time
  */
-export const getOutgoingLinkAndTargetEntities = (
+export const getOutgoingLinkAndTargetEntities = <
+  LinkAndRightEntities extends LinkEntityAndRightEntity[] = LinkEntityAndRightEntity[],
+>(
   subgraph: Subgraph,
   entityId: EntityId,
   timestamp?: Date | string,
-): { linkEntity: Entity; rightEntity: Entity }[] => {
+): LinkAndRightEntities => {
   return getOutgoingLinksForEntity(subgraph, entityId, timestamp).map(
     (linkEntity) => {
       return {
@@ -220,5 +226,5 @@ export const getOutgoingLinkAndTargetEntities = (
         ),
       };
     },
-  );
+  ) as LinkAndRightEntities; // @todo consider fixing generics in functions called within
 };
