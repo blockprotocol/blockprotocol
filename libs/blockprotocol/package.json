@@ -27,7 +27,7 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "chalk": "5.1.2",
+    "chalk": "5.2.0",
     "command-line-args": "^5.2.1",
     "command-line-usage": "^6.1.3",
     "find-up": "^6.3.0",
@@ -47,7 +47,7 @@
     "@types/command-line-usage": "^5.0.2",
     "@types/prompt": "^1.1.4",
     "@types/react": "^18.0.25",
-    "eslint": "8.29.0",
+    "eslint": "8.31.0",
     "typescript": "4.9.4"
   }
 }

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://unpkg.com/knip@1/schema.json",
+  "ignore": ["**/*.d.ts"],
+  "ignoreBinaries": ["docker-compose"],
+  "ignoreDependencies": [
+    "@local/eslint-config",
+    "eslint-import-resolver-typescript"
+  ],
+  "workspaces": {
+    ".": {
+      "ignore": "infra"
+    },
+    "apps/site": {
+      "entry": [
+        // This workspace uses the Next.js plugin including its default entry points, the rest is manual:
+        "scripts/*.ts",
+        // Currently unused files, here to stay:
+        "src/components/hiring-banner.tsx"
+      ],
+      "project": "**/*.{ts,tsx}",
+      "eslint": false
+    },
+    "crates/type-system": {
+      "entry": "scripts/build-wasm.ts",
+      "eslint": false
+    },
+    // The dynamic setup of this workspace with the usage of `require()` in `.eslintrc.cjs` is a tough cookie for Knip,
+    // thinking every workspace uses all ESLint plugins. That's why Knip's ESLint plugin is disabled everywhere else.
+    // This resulted in two false positives: eslint-import-resolver-typescript for this workspace, and
+    // @local/eslint-config for the others.
+    "packages/@local/eslint-config": {
+      "entry": [],
+      "project": [],
+      "eslint": "index.js"
+    },
+    "packages/@local/tsconfig": {
+      "typescript": ["*.json", "!package.json"]
+    },
+    "packages/@blockprotocol/core": {
+      "eslint": false
+    },
+    "packages/mock-block-dock": {
+      "entry": ["src/index.ts", "dev/dev-app.tsx"],
+      "project": "**/*.{ts,tsx}",
+      "webpack": "dev/webpack.config.js",
+      "eslint": false
+    }
+  }
+}
