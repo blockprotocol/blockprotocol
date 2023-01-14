@@ -12,12 +12,7 @@ import {
   getEntities as getEntitiesTemporal,
   getEntity as getEntityTemporal,
 } from "./stdlib/subgraph/element/entity.js";
-import {
-  Entity,
-  EntityId,
-  EntityPropertiesObject,
-  WithSimpleAccessors,
-} from "./types/entity.js";
+import { Entity, EntityId } from "./types/entity.js";
 import { LinkEntityAndRightEntity, Subgraph } from "./types/subgraph.js";
 
 export { buildSubgraph } from "./stdlib/subgraph/builder.js";
