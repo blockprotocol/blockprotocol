@@ -131,7 +131,7 @@
     "@types/uuid": "^8.3.4",
     "babel-plugin-inline-react-svg": "2.0.1",
     "babel-plugin-istanbul": "^6.1.1",
-    "chalk": "5.1.2",
+    "chalk": "5.2.0",
     "dotenv-flow": "3.2.0",
     "eslint": "8.31.0",
     "micromatch": "^4.0.5",
