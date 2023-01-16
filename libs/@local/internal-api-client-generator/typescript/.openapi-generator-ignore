@@ -24,3 +24,4 @@
 package.json
 README.md
 tsconfig.json
+git_push.sh
