@@ -20,7 +20,7 @@
   "typings": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc --outDir dist/",
-    "prepare": "npm run build"
+    "prepare": "yarn build"
   },
   "dependencies": {
     "axios": "1.2.2"

@@ -1,50 +1,20 @@
 ## internal-api-client@0.0.0-private
 
-This generator creates TypeScript/JavaScript client that utilizes [axios](https://github.com/axios/axios). The generated Node module can be used in the following environments:
-
-Environment
-
-- Node.js
-- Webpack
-- Browserify
-
-Language level
-
-- ES5 - you must have a Promises/A+ library installed
-- ES6
-
-Module system
-
-- CommonJS
-- ES6 module system
-
-It can be used in both TypeScript and JavaScript. In TypeScript, the definition should be automatically resolved via `package.json`. ([Reference](http://www.typescriptlang.org/docs/handbook/typings-for-npm-packages.html))
+This generator creates TypeScript/JavaScript client for the internal API that utilizes [axios](https://github.com/axios/axios).
 
 ### Building
 
-To build and compile the typescript sources to javascript use:
+To build and compile the typescript sources to javascript from the root of the repository, use:
 
 ```sh
-npm install
-npm run build
+yarn install
+yarn workspace @local/internal-api-client build
 ```
-
-### Publishing
-
-First build the package then run `npm publish`
 
 ### Consuming
 
-navigate to the folder of your consuming project and run one of the following commands.
-
-_published:_
+To consume the client in another yarn workspace, use:
 
 ```sh
-npm install internal-api-client@0.0.0-private --save
-```
-
-_unPublished (not recommended):_
-
-```sh
-npm install PATH_TO_GENERATED_PACKAGE --save
+yarn workspace workspace-name add @local/internal-api-client@0.0.0-private
 ```
