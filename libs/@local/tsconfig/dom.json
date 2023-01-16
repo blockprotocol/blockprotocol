@@ -2,7 +2,6 @@
   "$schema": "http://json.schemastore.org/tsconfig",
   "extends": "./node.json",
   "compilerOptions": {
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "skipLibCheck": true
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
   }
 }
