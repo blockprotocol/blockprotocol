@@ -1,7 +1,7 @@
 import httpProxyMiddleware from "next-http-proxy-middleware";
 
 import { createBaseHandler } from "../../../lib/api/handler/base-handler";
-import { isBillingFeatureFlagEnabled } from "../../../lib/feature-flag";
+import { isBillingFeatureFlagEnabled } from "../../../lib/config";
 import { formatErrors, mustGetEnvVar } from "../../../util/api";
 
 export default createBaseHandler()
