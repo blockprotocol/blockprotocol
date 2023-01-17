@@ -17,5 +17,15 @@ export const isFork =
 export const shouldUseDummyEmailService =
   !process.env.BP_AWS_REGION && !process.env.VERCEL;
 
+/**
+ * @todo: look into making feature flags more advanced
+ *
+ * @see https://app.asana.com/0/1203179076056209/1203763218224116/f
+ */
+
 export const shouldAllowNpmBlockPublishing =
   !!process.env.NEXT_PUBLIC_NPM_PUBLISHING;
+
+// Whether or not the "billing" feature flag is enabled.
+export const isBillingFeatureFlagEnabled =
+  process.env.NEXT_PUBLIC_BILLING_FEATURE_FLAG === "1";
