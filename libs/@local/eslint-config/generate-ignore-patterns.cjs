@@ -17,7 +17,7 @@ module.exports = (workspaceDirPath) => {
   const [, match] =
     fs
       .readFileSync(`${monorepoRoot}/.gitignore`, "utf8")
-      .match(/Shared between git and linters([^\0]*?)Specific to git/) ?? [];
+      .match(/Shared between git and linters([^\0]*?)$/) ?? [];
 
   if (!match) {
     throw new Error(
