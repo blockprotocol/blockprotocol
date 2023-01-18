@@ -26,7 +26,7 @@
     "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "turbo run --continue lint:eslint",
-    "lint:knip": "knip -c .knip.jsonc --no-exit-code",
+    "lint:knip": "knip --no-exit-code",
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
     "lint:markdownlint": "markdownlint --dot .",
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
