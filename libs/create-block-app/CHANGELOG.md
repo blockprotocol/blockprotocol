@@ -1,5 +1,11 @@
 # create-block-app
 
+## 0.0.11
+
+### Patch Changes
+
+- [#875](https://github.com/blockprotocol/blockprotocol/pull/875) [`a1ba0d7d`](https://github.com/blockprotocol/blockprotocol/commit/a1ba0d7d17971ee30586a673ce3d4f5bee6e65d1) Thanks [@kachkaev](https://github.com/kachkaev)! - Update package metadata (change path to source following repo restructuring)
+
 ## 0.0.10
 
 ### Patch Changes
