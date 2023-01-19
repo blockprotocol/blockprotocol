@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import Image from "next/legacy/image";
 
-import primaryHelixImage from "../../../../public/assets/new-home/primary-helix-min.png";
+import helixBoxes from "../../../../public/assets/new-home/helix-boxes.webp";
 import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "../../navbar";
 
 export const Header = () => {
@@ -21,7 +21,7 @@ export const Header = () => {
       sx={{
         background:
           "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%)",
-        pb: { xs: 20, md: 28 },
+        pb: { xs: 6, md: 10 },
         borderBottom: `1px solid #edeaf1`,
         position: "relative",
       }}
@@ -42,18 +42,14 @@ export const Header = () => {
           sx={{
             textTransform: "uppercase",
             color: ({ palette }) => palette.purple[700],
-            mb: 3,
+            mb: 2.5,
             fontWeight: 500,
-            letterSpacing: "0.06rem",
             mx: "auto",
           }}
           textAlign="center"
           variant="bpSmallCaps"
         >
-          A powerful{" "}
-          <span style={{ display: "inline-block" }}>
-            new protocol for developers
-          </span>
+          The Block Protocol
         </Typography>
         <Typography
           variant="bpHeading1"
@@ -61,12 +57,14 @@ export const Header = () => {
           sx={{
             lineHeight: 1,
             color: ({ palette }) => palette.gray[90],
-            mb: 3,
+            mb: 2.5,
             // @todo font-size should match design system
             fontSize: "clamp(3rem, 5vw, 7rem)",
+            fontStyle: "italic",
+            letterSpacing: "-0.02em",
           }}
         >
-          The open standard for building block-based interfaces
+          The open standard for block-based apps
         </Typography>
         <Typography
           variant="bpBodyCopy"
@@ -74,16 +72,27 @@ export const Header = () => {
           color={theme.palette.gray[70]}
           textAlign="center"
           sx={{
+            color: ({ palette }) => palette.gray[90],
             margin: "0 auto",
             maxWidth: "45ch",
             fontSize: { xs: "1.25rem", md: "1.45rem" },
           }}
         >
-          The Block Protocol enables applications to make their interfaces
-          infinitely extensible with interoperable components called blocks.
+          The{" "}
+          <b>
+            <Box
+              component="span"
+              sx={{ color: ({ palette }) => palette.purple[800] }}
+            >
+              Þ
+            </Box>{" "}
+            Block Protocol
+          </b>{" "}
+          enables applications to make their interfaces infinitely extensible
+          with interoperable components known as blocks
         </Typography>
       </Container>
-      <Image layout="responsive" src={primaryHelixImage} />
+      <Image layout="responsive" src={helixBoxes} style={{ zIndex: 999 }} />
     </Box>
   );
 };
