@@ -120,10 +120,7 @@ export const useEntitySubgraph = <
   }>,
 ) => {
   return useMemo(() => {
-    const rootEntity = getRoots<{
-      editionId: EntityEditionId;
-      element: RootEntity;
-    }>(entitySubgraph)[0];
+    const rootEntity = getRoots(entitySubgraph)[0];
     if (!rootEntity) {
       throw new Error("Root entity not present in subgraph");
     }

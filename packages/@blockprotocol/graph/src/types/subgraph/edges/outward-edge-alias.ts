@@ -3,9 +3,11 @@
  */
 
 import { Subtype } from "../../../util.js";
+import { OntologyTypeEditionId } from "../../ontology.js";
 import {
   EntityIdAndTimestamp,
   KnowledgeGraphOutwardEdge,
+  OntologyOutwardEdge,
   OutwardEdge,
 } from "./outward-edge.js";
 
@@ -67,4 +69,21 @@ export const isIncomingLinkEdge = (
   outwardEdge: OutwardEdge,
 ): outwardEdge is IncomingLinkEdge => {
   return outwardEdge.kind === "HAS_RIGHT_ENTITY" && outwardEdge.reversed;
+};
+
+export type ConstrainsPropertiesOnEdge = Subtype<
+  OntologyOutwardEdge,
+  {
+    reversed: false;
+    kind: "CONSTRAINS_PROPERTIES_ON";
+    rightEndpoint: OntologyTypeEditionId;
+  }
+>;
+
+export const isConstrainsPropertiesOnEdge = (
+  outwardEdge: OutwardEdge,
+): outwardEdge is ConstrainsPropertiesOnEdge => {
+  return (
+    outwardEdge.kind === "CONSTRAINS_PROPERTIES_ON" && !outwardEdge.reversed
+  );
 };
