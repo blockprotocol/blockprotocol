@@ -49,8 +49,3 @@ export type PropertyTypeRootedSubgraph = Subgraph<
 export type EntityTypeRootedSubgraph = Subgraph<
   SubgraphRootTypes["entityType"]
 >;
-
-export type LinkEntityAndRightEntity = {
-  linkEntity: Entity;
-  rightEntity: Entity;
-};

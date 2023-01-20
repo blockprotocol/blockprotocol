@@ -1,9 +1,9 @@
-import { Entity, EntityId } from "../../../types/entity.js";
 import {
+  Entity,
+  EntityId,
   LinkEntityAndRightEntity,
-  OutwardEdge,
-  Subgraph,
-} from "../../../types/subgraph.js";
+} from "../../../types/entity.js";
+import { OutwardEdge, Subgraph } from "../../../types/subgraph.js";
 import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,

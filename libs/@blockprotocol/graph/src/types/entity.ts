@@ -66,6 +66,11 @@ export type Entity<
   linkData?: LinkData;
 } & (Properties extends null ? {} : { properties: Properties });
 
+export type LinkEntityAndRightEntity = {
+  linkEntity: Entity;
+  rightEntity: Entity;
+};
+
 export type CreateEntityData = {
   entityTypeId: VersionedUri;
   properties: EntityPropertiesObject;
