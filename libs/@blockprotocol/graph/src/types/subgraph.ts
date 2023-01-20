@@ -41,6 +41,15 @@ export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> = {
   depths: GraphResolveDepths;
 };
 
+export type EntityRootedSubgraph = Subgraph<SubgraphRootTypes["entity"]>;
+export type DataTypeRootedSubgraph = Subgraph<SubgraphRootTypes["dataType"]>;
+export type PropertyTypeRootedSubgraph = Subgraph<
+  SubgraphRootTypes["propertyType"]
+>;
+export type EntityTypeRootedSubgraph = Subgraph<
+  SubgraphRootTypes["entityType"]
+>;
+
 export type LinkEntityAndRightEntity = {
   linkEntity: Entity;
   rightEntity: Entity;
