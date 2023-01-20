@@ -109,7 +109,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
 
   const blockEntitySubgraph = getEntity(
     {
-      entityId: blockEntityRecordId.baseId,
+      entityId: blockEntityRecordId.entityId,
       graphResolveDepths: {
         hasLeftEntity: { incoming: 2, outgoing: 2 },
         hasRightEntity: { incoming: 2, outgoing: 2 },

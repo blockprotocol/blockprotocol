@@ -40,7 +40,7 @@ export const EntitySwitcher = () => {
   );
   const [entityId, setEntityIdOfProposedEntityForBlock] = useState<
     string | undefined
-  >(blockEntity.metadata.recordId.baseId);
+  >(blockEntity.metadata.recordId.entityId);
 
   const selectedEntity = useMemo(
     () => (entityId ? getEntity(graph, entityId)! : blockEntity),
@@ -155,10 +155,10 @@ export const EntitySwitcher = () => {
                 )
                 .map((entity) => (
                   <MenuItem
-                    key={entity.metadata.recordId.baseId}
-                    value={entity.metadata.recordId.baseId}
+                    key={entity.metadata.recordId.entityId}
+                    value={entity.metadata.recordId.entityId}
                   >
-                    {entity.metadata.recordId.baseId}
+                    {entity.metadata.recordId.entityId}
                   </MenuItem>
                 ))}
             </Select>

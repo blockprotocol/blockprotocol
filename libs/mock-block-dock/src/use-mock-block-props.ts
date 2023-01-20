@@ -41,8 +41,8 @@ export const useMockBlockProps = ({
   const [entityRecordIdOfEntityForBlock, setEntityRecordIdOfEntityForBlock] =
     useDefaultState<EntityRecordId>(
       externalBlockEntityRecordId ?? {
-        baseId: "",
-        versionId: new Date().toISOString(),
+        entityId: "",
+        editionId: new Date().toISOString(),
       },
     );
 
@@ -68,10 +68,10 @@ export const useMockBlockProps = ({
     if (externalBlockEntityRecordId) {
       blockEntity = nextMockData.entities.find(
         (entity) =>
-          entity.metadata.recordId.baseId ===
-            externalBlockEntityRecordId.baseId &&
-          entity.metadata.recordId.versionId ===
-            externalBlockEntityRecordId.versionId,
+          entity.metadata.recordId.entityId ===
+            externalBlockEntityRecordId.entityId &&
+          entity.metadata.recordId.editionId ===
+            externalBlockEntityRecordId.editionId,
       );
 
       if (blockEntity === undefined) {

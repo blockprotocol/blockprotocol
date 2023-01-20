@@ -4,7 +4,7 @@ import type {
 } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { isOntologyTypeRecordId, Timestamp } from "../types.js";
+import { Timestamp } from "../types.js";
 import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
@@ -17,11 +17,10 @@ export type EntityId = string;
 // This isn't necessary, it just _could_ provide greater clarity that this corresponds to an exact vertex and can be
 // used in a direct lookup and not a search in the vertices
 export type EntityRevisionId = Timestamp;
-export type EntityVersion = string;
 
 export type EntityRecordId = {
-  baseId: EntityId;
-  versionId: EntityVersion;
+  entityId: EntityId;
+  editionId: string;
 };
 
 export const isEntityRecordId = (
@@ -30,12 +29,8 @@ export const isEntityRecordId = (
   return (
     recordId != null &&
     typeof recordId === "object" &&
-    "baseId" in recordId &&
-    "versionId" in recordId &&
-    /** @todo - is it fine to just check that versionId is string, maybe timestamp if we want to lock it into being a
-     *    timestamp?
-     */
-    !isOntologyTypeRecordId(recordId)
+    "entityId" in recordId &&
+    "editionId" in recordId
   );
 };
 

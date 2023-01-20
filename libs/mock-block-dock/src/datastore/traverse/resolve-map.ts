@@ -1,4 +1,8 @@
-import { EntityRecordId, OntologyTypeRecordId } from "@blockprotocol/graph";
+import {
+  EntityRecordId,
+  GraphElementVertexId,
+  OntologyTypeRecordId,
+} from "@blockprotocol/graph";
 
 import { Depths, PartialDepths } from "./traversal-context";
 
@@ -21,7 +25,7 @@ export class ResolveMap {
    * @returns {PartialDepths} - the depths which where greater or missing for the given element
    */
   insert(
-    identifier: EntityRecordId | OntologyTypeRecordId,
+    identifier: GraphElementVertexId,
     depths: PartialDepths,
   ): PartialDepths {
     const idString = JSON.stringify(identifier);

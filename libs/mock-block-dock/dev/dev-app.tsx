@@ -15,8 +15,8 @@ const blockEntityMap = {
   react: {
     metadata: {
       recordId: {
-        baseId: "entity-react",
-        versionId: new Date().toISOString(),
+        entityId: "entity-react",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },
@@ -25,8 +25,8 @@ const blockEntityMap = {
   "custom-element": {
     metadata: {
       recordId: {
-        baseId: "entity-custom-element",
-        versionId: new Date().toISOString(),
+        entityId: "entity-custom-element",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },
@@ -35,8 +35,8 @@ const blockEntityMap = {
   "html-at-url": {
     metadata: {
       recordId: {
-        baseId: "entity-html-as-url",
-        versionId: new Date().toISOString(),
+        entityId: "entity-html-as-url",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },
@@ -45,8 +45,8 @@ const blockEntityMap = {
   "html-as-string": {
     metadata: {
       recordId: {
-        baseId: "entity-html-as-string",
-        versionId: new Date().toISOString(),
+        entityId: "entity-html-as-string",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },

@@ -221,7 +221,7 @@ export const getOutgoingLinkAndTargetEntities = <
         linkEntity,
         rightEntity: getRightEntityForLinkEntity(
           subgraph,
-          linkEntity.metadata.recordId.baseId,
+          linkEntity.metadata.recordId.entityId,
           timestamp,
         ),
       };

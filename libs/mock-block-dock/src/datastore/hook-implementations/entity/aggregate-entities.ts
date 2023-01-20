@@ -30,8 +30,8 @@ export const aggregateEntities = (
   const subgraph = {
     /** @todo - This is temporary, and wrong */
     roots: results.map((entity) => ({
-      baseId: entity.metadata.recordId.baseId,
-      revisionId: entity.metadata.recordId.versionId,
+      baseId: entity.metadata.recordId.entityId,
+      revisionId: entity.metadata.recordId.editionId,
     })),
     vertices: {},
     edges: {},
@@ -43,7 +43,11 @@ export const aggregateEntities = (
   } of results) {
     traverseElement(
       subgraph,
-      recordId,
+      /** @todo - This is temporary, and wrong */
+      {
+        baseId: recordId.entityId,
+        revisionId: recordId.editionId,
+      },
       graph,
       new TraversalContext(graph),
       graphResolveDepths,

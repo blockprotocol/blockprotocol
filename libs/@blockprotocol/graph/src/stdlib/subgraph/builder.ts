@@ -40,11 +40,11 @@ export const buildSubgraph = (
   depths: GraphResolveDepths,
 ) => {
   const missingRoots = rootRecordIds.filter(
-    ({ baseId, versionId }) =>
+    ({ entityId, editionId }) =>
       !data.entities.find(
         (entity) =>
-          entity.metadata.recordId.baseId === baseId &&
-          entity.metadata.recordId.versionId === versionId,
+          entity.metadata.recordId.entityId === entityId &&
+          entity.metadata.recordId.editionId === editionId,
       ),
   );
 
@@ -53,16 +53,16 @@ export const buildSubgraph = (
       `Root(s) not present in data: ${missingRoots
         .map(
           (missingRoot) =>
-            `${missingRoot.baseId} at version ${missingRoot.versionId}`,
+            `${missingRoot.entityId} at version ${missingRoot.editionId}`,
         )
         .join(", ")}`,
     );
   }
 
   const roots = rootRecordIds.map((rootRecordId) => ({
-    baseId: rootRecordId.baseId,
+    baseId: rootRecordId.entityId,
     /** @todo - This is temporary, and wrong */
-    revisionId: rootRecordId.versionId,
+    revisionId: rootRecordId.editionId,
   }));
 
   const subgraph: Subgraph = {

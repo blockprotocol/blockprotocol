@@ -84,7 +84,7 @@ export const PropertiesView = () => {
                   const entity = args.updated_src as Entity;
                   void updateEntity({
                     data: {
-                      entityId: entity.metadata.recordId.baseId,
+                      entityId: entity.metadata.recordId.entityId,
                       entityTypeId: entity.metadata.entityTypeId,
                       properties: entity.properties,
                       leftToRightOrder: entity.linkData?.leftToRightOrder,
@@ -100,7 +100,7 @@ export const PropertiesView = () => {
                   const entity = args.updated_src as Entity;
                   void updateEntity({
                     data: {
-                      entityId: entity.metadata.recordId.baseId,
+                      entityId: entity.metadata.recordId.entityId,
                       entityTypeId: entity.metadata.entityTypeId,
                       properties: entity.properties,
                       leftToRightOrder: entity.linkData?.leftToRightOrder,
@@ -116,7 +116,7 @@ export const PropertiesView = () => {
                   const entity = args.updated_src as Entity;
                   void updateEntity({
                     data: {
-                      entityId: entity.metadata.recordId.baseId,
+                      entityId: entity.metadata.recordId.entityId,
                       entityTypeId: entity.metadata.entityTypeId,
                       properties: entity.properties,
                       leftToRightOrder: entity.linkData?.leftToRightOrder,

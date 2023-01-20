@@ -1,4 +1,4 @@
-import { Entity, EntityId, EntityVersion } from "../../../types/entity.js";
+import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
 import { Subgraph } from "../../../types/subgraph.js";
 import { Timestamp } from "../../../types/subgraph/time.js";
 import { isEntityVertex } from "../../../types/subgraph/vertices.js";
@@ -44,7 +44,7 @@ export const getEntities = (
 export const getEntity = (
   subgraph: Subgraph,
   entityId: EntityId,
-  targetRevisionInformation?: EntityVersion | Timestamp | Date,
+  targetRevisionInformation?: EntityRevisionId | Timestamp | Date,
 ): Entity | undefined => {
   const entityRevisions = subgraph.vertices[entityId];
 
@@ -67,7 +67,7 @@ export const getEntity = (
         ? targetRevisionInformation
         : targetRevisionInformation.toISOString();
 
-    let targetVersion: EntityVersion | undefined;
+    let targetVersion: EntityRevisionId | undefined;
     for (let idx = 0; idx < revisionVersions.length; idx++) {
       /** @todo - If we expose endTimes we can do an interval check here per revision, rather than needing to infer it */
       // Rolling window: we've sorted, so for each revision's version check if the given timestamp is in between the
@@ -75,7 +75,7 @@ export const getEntity = (
       const [revisionVersion, nextRevisionVersion] = revisionVersions.slice(
         idx,
         idx + 1,
-      ) as [EntityVersion, EntityVersion | undefined];
+      ) as [EntityRevisionId, EntityRevisionId | undefined];
 
       // The list is sorted so if this is beyond the target time then all of the ones after are too
       if (revisionVersion > targetTime) {
@@ -85,15 +85,19 @@ export const getEntity = (
       // Last element in the array (latest version), so we assume an half-closed interval (unbounded on the upper-bound)
       if (nextRevisionVersion === undefined) {
         if (revisionVersion <= targetTime) {
-          targetVersion = revisionVersion;
+          if (isEntityVertex(entityRevisions[revisionVersion]!)) {
+            targetVersion = revisionVersion;
+          }
         }
         break;
       } else if (
         revisionVersion <= targetTime &&
         targetTime < nextRevisionVersion
       ) {
-        targetVersion = revisionVersion;
-        break;
+        if (isEntityVertex(entityRevisions[revisionVersion]!)) {
+          targetVersion = revisionVersion;
+          break;
+        }
       }
     }
 

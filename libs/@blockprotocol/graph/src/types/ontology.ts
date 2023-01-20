@@ -13,8 +13,8 @@ export * from "./ontology/property-type.js";
  *      of the type system? Not sure the type system == ontology, it's more like the type system describes the ontology.
  */
 export type OntologyTypeRecordId = {
-  baseId: BaseUri;
-  versionId: number;
+  baseUri: BaseUri;
+  version: number;
 };
 
 export const isOntologyTypeRecordId = (
@@ -23,11 +23,11 @@ export const isOntologyTypeRecordId = (
   return (
     recordId != null &&
     typeof recordId === "object" &&
-    "baseId" in recordId &&
-    typeof recordId.baseId === "string" &&
+    "baseUri" in recordId &&
+    typeof recordId.baseUri === "string" &&
     /** @todo - This means we need to have initialized the type system */
-    validateBaseUri(recordId.baseId).type === "Ok" &&
-    "versionId" in recordId &&
-    typeof recordId.versionId === "number"
+    validateBaseUri(recordId.baseUri).type === "Ok" &&
+    "version" in recordId &&
+    typeof recordId.version === "number"
   );
 };

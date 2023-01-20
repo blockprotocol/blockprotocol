@@ -12,8 +12,8 @@ const node = document.getElementById("app");
 const testEntity: RootEntity = {
   metadata: {
     recordId: {
-      baseId: "test-entity",
-      versionId: new Date().toISOString(),
+      entityId: "test-entity",
+      editionId: new Date().toISOString(),
     },
     entityTypeId: packageJson.blockprotocol.schema as VersionedUri,
   },

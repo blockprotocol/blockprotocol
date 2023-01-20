@@ -68,7 +68,7 @@ export abstract class BlockElementBase<
       this.linkedEntities =
         getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
           blockEntitySubgraph,
-          rootEntity.metadata.recordId.baseId,
+          rootEntity.metadata.recordId.entityId,
         );
     }
   }
@@ -121,7 +121,7 @@ export abstract class BlockElementBase<
 
     return this.graphService.updateEntity({
       data: {
-        entityId: blockEntity.metadata.recordId.baseId,
+        entityId: blockEntity.metadata.recordId.entityId,
         entityTypeId: blockEntity.metadata.entityTypeId,
         properties,
         leftToRightOrder: blockEntity.linkData?.leftToRightOrder,

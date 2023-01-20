@@ -128,7 +128,7 @@ export const useEntitySubgraph = <
     const linkedEntities =
       getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
         entitySubgraph,
-        rootEntity.metadata.recordId.baseId,
+        rootEntity.metadata.recordId.entityId,
       );
 
     return {

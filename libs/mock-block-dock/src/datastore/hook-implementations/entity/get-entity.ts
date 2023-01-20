@@ -28,8 +28,8 @@ export const getEntity = (
     /** @todo - This is temporary, and wrong */
     roots: [
       {
-        baseId: entityRevision.metadata.recordId.baseId,
-        revisionId: entityRevision.metadata.recordId.versionId,
+        baseId: entityRevision.metadata.recordId.entityId,
+        revisionId: entityRevision.metadata.recordId.editionId,
       },
     ],
     vertices: {},
@@ -39,7 +39,11 @@ export const getEntity = (
 
   traverseElement(
     subgraph,
-    entityRevision.metadata.recordId,
+    /** @todo - This is temporary, and wrong */
+    {
+      baseId: entityRevision.metadata.recordId.entityId,
+      revisionId: entityRevision.metadata.recordId.editionId,
+    },
     graph,
     new TraversalContext(graph),
     graphResolveDepths,
