@@ -79,7 +79,7 @@ export const Header = () => {
           }}
         >
           The{" "}
-          <b>
+          <strong>
             <Box
               component="span"
               sx={{ color: ({ palette }) => palette.purple[800] }}
@@ -87,7 +87,7 @@ export const Header = () => {
               Þ
             </Box>{" "}
             Block Protocol
-          </b>{" "}
+          </strong>{" "}
           enables applications to make their interfaces infinitely extensible
           with interoperable components known as blocks
         </Typography>
