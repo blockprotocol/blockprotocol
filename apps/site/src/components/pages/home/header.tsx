@@ -21,7 +21,7 @@ export const Header = () => {
       sx={{
         background:
           "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%)",
-        pb: { xs: 6, md: 10 },
+        pb: { xs: 12, md: 18 },
         borderBottom: `1px solid #edeaf1`,
         position: "relative",
       }}
