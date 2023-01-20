@@ -11,6 +11,7 @@ const nextConfig = {
   experimental: {
     // @see `deleteIsrFilesCreatedAfterNextBuild()` for rationale
     isrMemoryCacheSize: 0,
+    transpilePackages: ["internal-api-repo"],
   },
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   productionBrowserSourceMaps: true,
@@ -31,7 +32,7 @@ const nextConfig = {
     return [
       {
         source: "/discord",
-        destination: "https://discord.gg/PefPteFe5j",
+        destination: "https://discord.gg/fnQ3qGcGQJ",
         permanent: true,
       },
       {

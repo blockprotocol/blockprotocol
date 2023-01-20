@@ -1,0 +1,102 @@
+{
+  "name": "@blockprotocol/graph",
+  "version": "0.0.19",
+  "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
+  "keywords": [
+    "blockprotocol",
+    "blocks",
+    "graph"
+  ],
+  "homepage": "https://blockprotocol.org",
+  "bugs": {
+    "url": "https://github.com/blockprotocol/blockprotocol/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:blockprotocol/blockprotocol.git",
+    "directory": "libs/@blockprotocol/graph"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "HASH",
+    "url": "https://hash.ai"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./codegen": [
+      "./dist/codegen.js"
+    ],
+    "./custom-element": "./dist/custom-element.js",
+    "./graph-service-json": "./dist/graph-service-json.js",
+    "./internal": "./dist/internal.js",
+    "./react": "./dist/react.js",
+    "./stdlib": [
+      "./dist/stdlib.js"
+    ],
+    "./stdlib-temporal": [
+      "./dist/stdlib-temporal.js"
+    ]
+  },
+  "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/index.d.ts"
+      ],
+      "codegen": [
+        "./dist/codegen.d.ts"
+      ],
+      "custom-element": [
+        "./dist/custom-element.d.ts"
+      ],
+      "graph-service-json": [
+        "./dist/graph-service-json.d.ts"
+      ],
+      "internal": [
+        "./dist/internal.d.ts"
+      ],
+      "react": [
+        "./dist/react.d.ts"
+      ],
+      "stdlib": [
+        "./dist/stdlib.d.ts"
+      ],
+      "stdlib-temporal": [
+        "./dist/stdlib-temporal.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "yarn clean && tsc --skipLibCheck",
+    "clean": "rimraf ./dist/",
+    "fix:eslint": "eslint --fix .",
+    "lint:eslint": "eslint --report-unused-disable-directives .",
+    "lint:tsc": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@blockprotocol/core": "0.0.13",
+    "@blockprotocol/type-system": "0.0.3",
+    "ajv": "^8.11.2",
+    "ajv-formats": "^2.1.1",
+    "json-schema-to-typescript": "^11.0.2",
+    "lit": "^2.4.1",
+    "node-fetch": "^3.3.0"
+  },
+  "devDependencies": {
+    "@local/eslint-config": "0.0.0-private",
+    "@local/tsconfig": "0.0.0-private",
+    "eslint": "8.31.0",
+    "rimraf": "^3.0.2",
+    "typescript": "4.9.4"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "engines": {
+    "node": ">=16.15"
+  }
+}

@@ -195,12 +195,12 @@ and will be searchable via our block API.
 
 To publish a block on the Hub take the following steps.
 
-### In your browser
+### Pre-requisite: obtain an API Key
 
-- Sign up for an account on this site if you haven’t already – click 'sign up' in the top right
-- [Create an API key](https://blockprotocol.org/settings/api-keys) and copy it
+- If you don't yet already have an account, click the [sign up](https://blockprotocol.org/signup) button in the top-right corner of any page on the Þ website.
+- Once signed in, [create an API key](https://blockprotocol.org/settings/api-keys) and copy it to your clipboard.
 
-### In your terminal
+### Publish from your terminal
 
 - Run `npm run build` or `yarn build` to create a production build of your block (it will appear in the `dist` folder)
 - run `npx blockprotocol@latest publish` to generate a `.blockprotocolrc` file when prompted

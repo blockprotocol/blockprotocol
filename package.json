@@ -5,10 +5,10 @@
   "workspaces": {
     "packages": [
       "apps/*",
-      "crates/*",
-      "packages/*",
-      "packages/@blockprotocol/*",
-      "packages/@local/*"
+      "libs/@blockprotocol/*",
+      "libs/@local/*",
+      "libs/@local/internal-api-client-generator/typescript",
+      "libs/*"
     ],
     "nohoist": [
       "**/@types/css-font-loading-module",
@@ -26,6 +26,7 @@
     "lint:changeset": "changeset status",
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "turbo run --continue lint:eslint",
+    "lint:knip": "knip --no-exit-code",
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"https:\"",
     "lint:markdownlint": "markdownlint --dot .",
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
@@ -47,13 +48,14 @@
     "@changesets/cli": "^2.25.2",
     "check-dependency-version-consistency": "3.0.3",
     "dotenv-flow": "3.2.0",
-    "husky": "8.0.2",
-    "lint-staged": "13.0.4",
-    "lockfile-lint": "4.9.6",
-    "markdownlint-cli": "0.32.2",
+    "husky": "8.0.3",
+    "knip": "^1.6.1",
+    "lint-staged": "13.1.0",
+    "lockfile-lint": "4.10.0",
+    "markdownlint-cli": "0.33.0",
     "npm-run-all": "4.1.5",
     "patch-package": "6.5.0",
-    "prettier": "2.8.0",
+    "prettier": "2.8.2",
     "prettier-plugin-packagejson": "2.3.0",
     "prettier-plugin-sh": "0.12.8",
     "suppress-exit-code": "3.1.0",

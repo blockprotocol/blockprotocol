@@ -147,7 +147,7 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
           }
 
           html {
-            scroll-behavior: smooth;
+            scroll-behavior: smooth !important;
           }
 
           body {

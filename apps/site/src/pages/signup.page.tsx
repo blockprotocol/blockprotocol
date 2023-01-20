@@ -27,7 +27,7 @@ const SIGNUP_PAGE_SCREENS = [
   "CompleteSignup",
 ] as const;
 
-type SignupPageScreen = typeof SIGNUP_PAGE_SCREENS[number];
+type SignupPageScreen = (typeof SIGNUP_PAGE_SCREENS)[number];
 
 type SignupPageParsedUrlQuery = {
   redirectPath?: string;
