@@ -144,6 +144,7 @@ export const BillingSettingsPanel: FunctionComponent = () => {
                   fontWeight: 400,
                 }}
               >
+                {/* @todo: implement "change payment" settings panel @see https://app.asana.com/0/0/1203781148500075/f */}
                 {currentSubscriptionTierIsPaid
                   ? "TODO - change payment method"
                   : "Unlock access to OpenAI, Mapbox and more powerful blocks"}
@@ -185,14 +186,14 @@ export const BillingSettingsPanel: FunctionComponent = () => {
       >
         Usage Limits
       </Typography>
-      <Typography>TODO</Typography>
+      {/* @todo: implement "usage limits" input @see https://app.asana.com/0/0/1203781148500077/f */}
       <Typography
         variant="bpHeading2"
         sx={{ fontSize: 28, fontWeight: 400, marginBottom: 3 }}
       >
         Payment History
       </Typography>
-      <Typography>TODO</Typography>
+      {/* @todo: implement "payment history" section of billing panel @see https://app.asana.com/0/1203543021352041/1203781148500078/f */}
     </>
   );
 };

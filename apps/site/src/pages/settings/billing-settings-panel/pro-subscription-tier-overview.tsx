@@ -154,6 +154,7 @@ export const ProSubscriptionTierOverview: FunctionComponent = () => (
     >
       <Box display="flex" alignItems="center">
         <Typography sx={{ fontSize: 28 }}>
+          {/* @todo: dynamically determine the subscription price/currency @see: https://app.asana.com/0/0/1203781148500081/f */}
           <strong>$8</strong>/month
         </Typography>
         <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>

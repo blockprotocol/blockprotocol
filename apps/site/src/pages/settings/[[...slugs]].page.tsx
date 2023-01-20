@@ -20,8 +20,12 @@ const settingsPanels = [
   },
   {
     title: "Api Keys",
-    slug: "api-keys-2",
-    panel: <>TODO</>,
+    slug: "api-keys",
+    /**
+     * @todo: refactor `/settings/api-keys` page to be a settings panel
+     * @see https://app.asana.com/0/0/1203781148500080/f
+     */
+    panel: null,
   },
 ] as const;
 
