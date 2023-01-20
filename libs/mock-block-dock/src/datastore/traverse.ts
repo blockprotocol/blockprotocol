@@ -1,10 +1,10 @@
 import {
-  EntityEditionId,
   EntityId,
+  EntityRecordId,
   HasLeftEntityEdge,
   HasRightEntityEdge,
   IncomingLinkEdge,
-  OntologyTypeEditionId,
+  OntologyTypeRecordId,
   OutgoingLinkEdge,
   Subgraph,
 } from "@blockprotocol/graph";
@@ -25,7 +25,7 @@ import { PartialDepths, TraversalContext } from "./traverse/traversal-context";
 /** @todo - Update this to handle ontology edges */
 export const traverseElement = (
   traversalSubgraph: Subgraph,
-  elementIdentifier: EntityEditionId | OntologyTypeEditionId,
+  elementIdentifier: EntityRecordId | OntologyTypeRecordId,
   datastore: Subgraph,
   traversalContext: TraversalContext,
   currentTraversalDepths: PartialDepths,
@@ -50,12 +50,12 @@ export const traverseElement = (
     );
   }
 
-  const editionsInTraversalSubgraph =
+  const revisionsInTraversalSubgraph =
     traversalSubgraph.vertices[elementIdentifier.baseId];
 
   // `any` casts here are because TypeScript wants us to narrow the Identifier type before trusting us
-  if (editionsInTraversalSubgraph) {
-    (editionsInTraversalSubgraph as any)[elementIdentifier.versionId] = element;
+  if (revisionsInTraversalSubgraph) {
+    (revisionsInTraversalSubgraph as any)[elementIdentifier.versionId] = element;
   } else {
     // eslint-disable-next-line no-param-reassign -- The point of this function is to mutate the subgraph
     (traversalSubgraph as any).vertices[elementIdentifier.baseId] = {
@@ -81,7 +81,7 @@ export const traverseElement = (
             )) {
               const {
                 metadata: {
-                  editionId: {
+                  recordId: {
                     baseId: outgoingLinkEntityId,
                     versionId: edgeTimestamp,
                   },
@@ -104,7 +104,7 @@ export const traverseElement = (
                 outgoingLinkEdge,
               );
 
-              toResolve.insert(outgoingLinkEntity.metadata.editionId, {
+              toResolve.insert(outgoingLinkEntity.metadata.recordId, {
                 [edgeKind]: { incoming: depths.incoming - 1 },
               });
             }
@@ -122,7 +122,7 @@ export const traverseElement = (
               );
               const {
                 metadata: {
-                  editionId: { baseId: leftEntityId, versionId: edgeTimestamp },
+                  recordId: { baseId: leftEntityId, versionId: edgeTimestamp },
                 },
               } = leftEntity;
 
@@ -142,7 +142,7 @@ export const traverseElement = (
                 hasLeftEntityEdge,
               );
 
-              toResolve.insert(leftEntity.metadata.editionId, {
+              toResolve.insert(leftEntity.metadata.recordId, {
                 [edgeKind]: { outgoing: depths.outgoing - 1 },
               });
             }
@@ -161,7 +161,7 @@ export const traverseElement = (
             )) {
               const {
                 metadata: {
-                  editionId: {
+                  recordId: {
                     baseId: incomingLinkEntityId,
                     versionId: edgeTimestamp,
                   },
@@ -184,7 +184,7 @@ export const traverseElement = (
                 incomingLinkEdge,
               );
 
-              toResolve.insert(incomingLinkEntity.metadata.editionId, {
+              toResolve.insert(incomingLinkEntity.metadata.recordId, {
                 [edgeKind]: { incoming: depths.incoming - 1 },
               });
             }
@@ -202,10 +202,7 @@ export const traverseElement = (
               );
               const {
                 metadata: {
-                  editionId: {
-                    baseId: rightEntityId,
-                    versionId: edgeTimestamp,
-                  },
+                  recordId: { baseId: rightEntityId, versionId: edgeTimestamp },
                 },
               } = rightEntity;
 
@@ -225,7 +222,7 @@ export const traverseElement = (
                 hasLeftEntityEdge,
               );
 
-              toResolve.insert(rightEntity.metadata.editionId, {
+              toResolve.insert(rightEntity.metadata.recordId, {
                 [edgeKind]: { outgoing: depths.outgoing - 1 },
               });
             }
@@ -242,8 +239,8 @@ export const traverseElement = (
     traverseElement(
       traversalSubgraph,
       JSON.parse(siblingElementIdentifierString) as
-        | EntityEditionId
-        | OntologyTypeEditionId,
+        | EntityRecordId
+        | OntologyTypeRecordId,
       datastore,
       traversalContext,
       depths.inner,

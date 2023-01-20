@@ -18,14 +18,14 @@ export const getEntity = (
   }: GetEntityData,
   graph: Subgraph,
 ): Subgraph<SubgraphRootTypes["entity"]> | undefined => {
-  const entityEdition = getEntityFromSubgraph(graph, entityId);
+  const entityRevision = getEntityFromSubgraph(graph, entityId);
 
-  if (entityEdition === undefined) {
+  if (entityRevision === undefined) {
     return undefined;
   }
 
   const subgraph = {
-    roots: [entityEdition.metadata.editionId],
+    roots: [entityRevision.metadata.recordId],
     vertices: {},
     edges: {},
     depths: graphResolveDepths,
@@ -33,7 +33,7 @@ export const getEntity = (
 
   traverseElement(
     subgraph,
-    entityEdition.metadata.editionId,
+    entityRevision.metadata.recordId,
     graph,
     new TraversalContext(graph),
     graphResolveDepths,

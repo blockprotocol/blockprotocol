@@ -1,6 +1,6 @@
-import { OntologyTypeEditionId } from "../ontology.js";
+import { OntologyTypeRecordId } from "../ontology.js";
 
 export interface OntologyElementMetadata {
-  editionId: OntologyTypeEditionId;
+  recordId: OntologyTypeRecordId;
   ownedById: string;
 }

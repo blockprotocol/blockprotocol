@@ -1,7 +1,7 @@
 import { Message } from "@blockprotocol/core";
 import {
   EmbedderGraphMessageCallbacks,
-  EntityEditionId,
+  EntityRecordId,
   Subgraph,
   SubgraphRootTypes,
 } from "@blockprotocol/graph";
@@ -33,7 +33,7 @@ type MockBlockDockInfo = {
   logs: Message[];
   readonly: boolean;
   setDebugMode: Dispatch<SetStateAction<boolean>>;
-  setEntityEditionIdOfEntityForBlock: Dispatch<SetStateAction<EntityEditionId>>;
+  setEntityRecordIdOfEntityForBlock: Dispatch<SetStateAction<EntityRecordId>>;
   setLogs: Dispatch<SetStateAction<Message[]>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
   updateEntity: EmbedderGraphMessageCallbacks["updateEntity"];

@@ -26,7 +26,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
     hookService,
     hookRef,
     "text",
-    blockEntity?.metadata.editionId.baseId ?? "",
+    blockEntity?.metadata.recordId.baseId ?? "",
     "$.description",
     () => {
       throw new Error(
@@ -45,7 +45,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
               | string
               | undefined
           }
-          ! The id of this block is {blockEntity?.metadata.editionId.baseId}
+          ! The id of this block is {blockEntity?.metadata.recordId.baseId}
         </h1>
         <h2>Block-handled name display</h2>
         <p style={{ marginBottom: 30 }}>
@@ -67,7 +67,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
         <>
           Hello{" "}
           {blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}! The
-          id of this block is {blockEntity?.metadata.editionId.baseId}
+          id of this block is {blockEntity?.metadata.recordId.baseId}
         </>
       </h1>
       <h2>Block-handled name editing</h2>
@@ -86,7 +86,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
           try {
             const { data, errors } = await graphService!.updateEntity({
               data: {
-                entityId: blockEntity.metadata.editionId.baseId,
+                entityId: blockEntity.metadata.recordId.baseId,
                 entityTypeId: blockEntity.metadata.entityTypeId,
                 properties: {
                   ...blockEntity.properties,

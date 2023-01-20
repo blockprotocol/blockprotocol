@@ -3,7 +3,7 @@
  */
 
 import { Subtype } from "../../../util.js";
-import { OntologyTypeEditionId } from "../../ontology.js";
+import { OntologyTypeRecordId } from "../../ontology.js";
 import {
   EntityIdAndTimestamp,
   KnowledgeGraphOutwardEdge,
@@ -76,7 +76,7 @@ export type ConstrainsPropertiesOnEdge = Subtype<
   {
     reversed: false;
     kind: "CONSTRAINS_PROPERTIES_ON";
-    rightEndpoint: OntologyTypeEditionId;
+    rightEndpoint: OntologyTypeRecordId;
   }
 >;
 

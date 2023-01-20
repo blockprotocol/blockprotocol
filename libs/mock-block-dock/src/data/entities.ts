@@ -9,7 +9,7 @@ const createPerson = (entityId: number): Entity => {
   const name = personNames[entityId] ?? "Unknown Person";
   return {
     metadata: {
-      editionId: {
+      recordId: {
         baseId: `person-${entityId.toString()}`,
         versionId: new Date().toISOString(),
       },
@@ -28,7 +28,7 @@ const createCompany = (entityId: number): Entity => {
   const name = companyNames[entityId] ?? "Unknown Company";
   return {
     metadata: {
-      editionId: {
+      recordId: {
         baseId: `company-${entityId.toString()}`,
         versionId: new Date().toISOString(),
       },
@@ -49,7 +49,7 @@ const createWorksForLink = (
 ): Entity => {
   return {
     metadata: {
-      editionId: {
+      recordId: {
         baseId: `${sourceEntityId}-works-for-${destinationEntityId}`,
         versionId: new Date().toISOString(),
       },
@@ -69,7 +69,7 @@ const createFounderOfLink = (
 ): Entity => {
   return {
     metadata: {
-      editionId: {
+      recordId: {
         baseId: `${sourceEntityId}-founder-of-${destinationEntityId}`,
         versionId: new Date().toISOString(),
       },
@@ -105,8 +105,8 @@ const createEntities = (): Entity[] => {
     if (founder) {
       entities.push(
         createFounderOfLink(
-          founder.metadata.editionId.baseId,
-          company.metadata.editionId.baseId,
+          founder.metadata.recordId.baseId,
+          company.metadata.recordId.baseId,
         ),
       );
       entities.push(founder);
@@ -115,9 +115,9 @@ const createEntities = (): Entity[] => {
   for (const person of people) {
     entities.push(
       createWorksForLink(
-        person.metadata.editionId.baseId,
+        person.metadata.recordId.baseId,
         companies[Math.floor(Math.random() * companies.length)]!.metadata
-          .editionId.baseId,
+          .recordId.baseId,
       ),
     );
   }

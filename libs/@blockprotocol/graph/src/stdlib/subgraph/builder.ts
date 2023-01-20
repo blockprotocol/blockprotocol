@@ -1,7 +1,7 @@
 import { addEntitiesToSubgraphByMutation } from "../../internal/mutate-subgraph.js";
 import {
   Entity,
-  EntityEditionId,
+  EntityRecordId,
   GraphResolveDepths,
   Subgraph,
 } from "../../types.js";
@@ -36,15 +36,15 @@ import {
  */
 export const buildSubgraph = (
   data: { entities: Entity[] },
-  roots: EntityEditionId[],
+  roots: EntityRecordId[],
   depths: GraphResolveDepths,
 ) => {
   const missingRoots = roots.filter(
     ({ baseId, versionId }) =>
       !data.entities.find(
         (entity) =>
-          entity.metadata.editionId.baseId === baseId &&
-          entity.metadata.editionId.versionId === versionId,
+          entity.metadata.recordId.baseId === baseId &&
+          entity.metadata.recordId.versionId === versionId,
       ),
   );
 

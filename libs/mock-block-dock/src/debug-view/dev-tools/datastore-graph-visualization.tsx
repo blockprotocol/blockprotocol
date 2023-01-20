@@ -1,6 +1,6 @@
 import {
   Entity,
-  EntityEditionId,
+  EntityRecordId,
   isHasRightEntityEdge,
   isOutgoingLinkEdge,
   OutwardEdge,
@@ -24,7 +24,7 @@ import { typedEntries } from "../../util";
 const parseLabelFromEntity = (entityToLabel: Entity, subgraph: Subgraph) => {
   const getFallbackLabel = () => {
     // fallback to the entity type and a few characters of the entityUuid
-    const entityId = entityToLabel.metadata.editionId.baseId;
+    const entityId = entityToLabel.metadata.recordId.baseId;
 
     const entityType = getEntityTypeById(
       subgraph,
@@ -138,7 +138,7 @@ const mapEntityToEChartNode = (
   entity: Entity,
   subgraph: Subgraph,
 ): EChartNode => ({
-  id: JSON.stringify(entity.metadata.editionId),
+  id: JSON.stringify(entity.metadata.recordId),
   name: parseLabelFromEntity(entity, subgraph),
   label: { show: false },
 });
@@ -155,16 +155,16 @@ type EChartEdge = {
 
 /** todo - render ontology-related edges */
 const mapGraphEdgeToEChartEdge = (
-  sourceEditionId: EntityEditionId,
-  targetEditionId: EntityEditionId,
+  sourceRecordId: EntityRecordId,
+  targetRecordId: EntityRecordId,
   edgeKind: OutwardEdge["kind"],
 ): EChartEdge => ({
   /** @todo - Can we do better than this, this assumes that this triple is unique, which it might not be */
-  id: `${JSON.stringify(sourceEditionId)}-${edgeKind}->${JSON.stringify(
-    targetEditionId,
+  id: `${JSON.stringify(sourceRecordId)}-${edgeKind}->${JSON.stringify(
+    targetRecordId,
   )}`,
-  source: JSON.stringify(sourceEditionId),
-  target: JSON.stringify(targetEditionId),
+  source: JSON.stringify(sourceRecordId),
+  target: JSON.stringify(targetRecordId),
   kind: edgeKind,
   label: { show: false },
 });
@@ -207,26 +207,26 @@ const getSubgraphEdgesAsEChartEdges = (subgraph: Subgraph): EChartEdge[] =>
         return sourceVersions.flatMap((sourceVersion) =>
           targetVersions
             .flatMap((targetVersion) => {
-              const sourceEditionId = {
+              const sourceRecordId = {
                 baseId: sourceBaseId,
                 versionId: sourceVersion,
               };
 
-              const targetEditionId = {
+              const targetRecordId = {
                 baseId: outwardEdge.rightEndpoint.baseId,
                 versionId: targetVersion,
               };
 
               if (isOutgoingLinkEdge(outwardEdge)) {
                 return mapGraphEdgeToEChartEdge(
-                  sourceEditionId,
-                  targetEditionId,
+                  sourceRecordId,
+                  targetRecordId,
                   outwardEdge.kind,
                 );
               } else if (isHasRightEntityEdge(outwardEdge)) {
                 return mapGraphEdgeToEChartEdge(
-                  sourceEditionId,
-                  targetEditionId,
+                  sourceRecordId,
+                  targetRecordId,
                   outwardEdge.kind,
                 );
               }
@@ -279,13 +279,13 @@ export const DatastoreGraphVisualization = () => {
     setEChartEdges(getSubgraphEdgesAsEChartEdges(graph));
   }, [graph]);
 
-  const [selectedEntityEditionIdString, setSelectedEntityEditionIdString] =
+  const [selectedEntityRecordIdString, setSelectedEntityRecordIdString] =
     useState<string>();
 
   /** @todo: un-comment if we want to display something about the currently selected entity */
   // const selectedEntity = useMemo(
-  //   () => entities.find(({ entityId }) => entityId === selectedEntityEditionIdString),
-  //   [entities, selectedEntityEditionIdString],
+  //   () => entities.find(({ entityId }) => entityId === selectedEntityRecordIdString),
+  //   [entities, selectedEntityRecordIdString],
   // );
 
   useEffect(() => {
@@ -301,21 +301,21 @@ export const DatastoreGraphVisualization = () => {
   }, [chart, eChartEdges]);
 
   useEffect(() => {
-    if (chart && selectedEntityEditionIdString) {
+    if (chart && selectedEntityRecordIdString) {
       const outgoingLinkAndTargetEntities = getOutgoingLinkAndTargetEntities(
         graph,
-        (JSON.parse(selectedEntityEditionIdString) as EntityEditionId).baseId,
+        (JSON.parse(selectedEntityRecordIdString) as EntityRecordId).baseId,
       );
 
       const neighbourIds = outgoingLinkAndTargetEntities.flatMap(
         ({ linkEntity, rightEntity }) => [
-          JSON.stringify(linkEntity.metadata.editionId),
-          JSON.stringify(rightEntity.metadata.editionId),
+          JSON.stringify(linkEntity.metadata.recordId),
+          JSON.stringify(rightEntity.metadata.recordId),
         ],
       );
 
       const nodesWithVisibleLabelsIds = [
-        selectedEntityEditionIdString,
+        selectedEntityRecordIdString,
         ...neighbourIds,
       ];
 
@@ -338,14 +338,14 @@ export const DatastoreGraphVisualization = () => {
         })),
       );
     }
-  }, [chart, graph, selectedEntityEditionIdString]);
+  }, [chart, graph, selectedEntityRecordIdString]);
 
   useEffect(() => {
     if (!chart && eChartWrapperRef.current) {
       const initialisedChart = echarts.init(eChartWrapperRef.current);
 
       initialisedChart.on("click", { dataType: "node" }, ({ data: node }) =>
-        setSelectedEntityEditionIdString((node as EChartNode).id),
+        setSelectedEntityRecordIdString((node as EChartNode).id),
       );
 
       const initialOptions = createDefaultEChartOptions();

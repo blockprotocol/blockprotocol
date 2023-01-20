@@ -1,5 +1,5 @@
-import { Entity, EntityEditionId } from "./entity.js";
-import { OntologyTypeEditionId } from "./ontology.js";
+import { Entity, EntityRecordId } from "./entity.js";
+import { OntologyTypeRecordId } from "./ontology.js";
 import { DataTypeWithMetadata } from "./ontology/data-type.js";
 import { EntityTypeWithMetadata } from "./ontology/entity-type.js";
 import { PropertyTypeWithMetadata } from "./ontology/property-type.js";
@@ -15,19 +15,19 @@ export * from "./subgraph/vertices.js";
 
 export type SubgraphRootTypes = {
   dataType: {
-    editionId: OntologyTypeEditionId;
+    recordId: OntologyTypeRecordId;
     element: DataTypeWithMetadata;
   };
   propertyType: {
-    editionId: OntologyTypeEditionId;
+    recordId: OntologyTypeRecordId;
     element: PropertyTypeWithMetadata;
   };
   entityType: {
-    editionId: OntologyTypeEditionId;
+    recordId: OntologyTypeRecordId;
     element: EntityTypeWithMetadata;
   };
   entity: {
-    editionId: EntityEditionId;
+    recordId: EntityRecordId;
     element: Entity;
   };
 };
@@ -35,7 +35,7 @@ export type SubgraphRootTypes = {
 export type SubgraphRootType = SubgraphRootTypes[keyof SubgraphRootTypes];
 
 export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> = {
-  roots: RootType["editionId"][];
+  roots: RootType["recordId"][];
   vertices: Vertices;
   edges: Edges;
   depths: GraphResolveDepths;

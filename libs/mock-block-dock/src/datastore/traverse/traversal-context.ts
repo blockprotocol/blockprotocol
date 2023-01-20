@@ -1,7 +1,7 @@
 import {
-  EntityEditionId,
+  EntityRecordId,
   GraphResolveDepths,
-  OntologyTypeEditionId,
+  OntologyTypeRecordId,
   Subgraph,
 } from "@blockprotocol/graph";
 
@@ -88,7 +88,7 @@ export class TraversalContext {
    * @returns {PartialDepths} - the depths which hadn't been fully resolved yet while traversing
    */
   insert(
-    identifier: EntityEditionId | OntologyTypeEditionId,
+    identifier: EntityRecordId | OntologyTypeRecordId,
     depths: PartialDepths,
   ): PartialDepths {
     return this.resolveMap.insert(identifier, depths);

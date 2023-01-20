@@ -25,11 +25,11 @@ const convertTimeToStringWithDefault = (timestamp?: Date | string) => {
 const getUniqueEntitiesFilter = () => {
   const set = new Set();
   return (entity: Entity) => {
-    const editionIdString = JSON.stringify(entity.metadata.editionId);
-    if (set.has(editionIdString)) {
+    const recordIdString = JSON.stringify(entity.metadata.recordId);
+    if (set.has(recordIdString)) {
       return false;
     } else {
-      set.add(editionIdString);
+      set.add(recordIdString);
       return true;
     }
   };
@@ -66,7 +66,7 @@ export const getOutgoingLinksForEntity = (
       .filter(
         ([edgeTimestamp, _outwardEdges]) => edgeTimestamp <= timestampString,
       )
-      // Extract the link `EntityEditionId`s from the endpoints of the link edges
+      // Extract the link `EntityRecordId`s from the endpoints of the link edges
       .flatMap(([_edgeTimestamp, outwardEdges]) => {
         return (outwardEdges as OutwardEdge[])
           .filter(isOutgoingLinkEdge)
@@ -74,12 +74,12 @@ export const getOutgoingLinksForEntity = (
             return edge.rightEndpoint;
           });
       })
-      .map(({ baseId: linkEntityId, timestamp: _firstEditionTimestamp }) => {
+      .map(({ baseId: linkEntityId, timestamp: _firstRevisionTimestamp }) => {
         return mustBeDefined(
           getEntity(
             subgraph,
             linkEntityId,
-            // Find the edition of the link at the given moment (not at `_firstEditionTimestamp`, the start of its history)
+            // Find the revision of the link at the given moment (not at `_firstRevisionTimestamp`, the start of its history)
             timestampString,
           ),
         );
@@ -117,7 +117,7 @@ export const getIncomingLinksForEntity = (
       .filter(
         ([edgeTimestamp, _outwardEdges]) => edgeTimestamp <= timestampString,
       )
-      // Extract the link `EntityEditionId`s from the endpoints of the link edges
+      // Extract the link `EntityRecordId`s from the endpoints of the link edges
       .flatMap(([_edgeTimestamp, outwardEdges]) => {
         return (outwardEdges as OutgoingLinkEdge[])
           .filter(isIncomingLinkEdge)
@@ -125,12 +125,12 @@ export const getIncomingLinksForEntity = (
             return edge.rightEndpoint;
           });
       })
-      .map(({ baseId: linkEntityId, timestamp: _firstEditionTimestamp }) => {
+      .map(({ baseId: linkEntityId, timestamp: _firstRevisionTimestamp }) => {
         return mustBeDefined(
           getEntity(
             subgraph,
             linkEntityId,
-            // Find the edition of the link at the given moment (not at `_firstEditionTimestamp`, the start of its history)
+            // Find the revision of the link at the given moment (not at `_firstRevisionTimestamp`, the start of its history)
             timestampString,
           ),
         );
@@ -221,7 +221,7 @@ export const getOutgoingLinkAndTargetEntities = <
         linkEntity,
         rightEntity: getRightEntityForLinkEntity(
           subgraph,
-          linkEntity.metadata.editionId.baseId,
+          linkEntity.metadata.recordId.baseId,
           timestamp,
         ),
       };

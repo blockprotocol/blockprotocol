@@ -32,7 +32,7 @@ export class TestCustomElementBlock extends BlockElementBase {
         </h1>
         <p>
           The entityId of this block is
-          ${blockEntity?.metadata.editionId.baseId}.
+          ${blockEntity?.metadata.recordId.baseId}.
         </p>
         <p>
           ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
@@ -44,7 +44,7 @@ export class TestCustomElementBlock extends BlockElementBase {
         ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
       </h1>
       <p>
-        The entityId of this block is ${blockEntity?.metadata.editionId.baseId}.
+        The entityId of this block is ${blockEntity?.metadata.recordId.baseId}.
         Use it to update its data when calling updateEntities.
       </p>
       <input

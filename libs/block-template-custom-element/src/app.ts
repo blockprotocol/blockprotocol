@@ -33,7 +33,7 @@ export class BlockElement extends BlockElementBase<RootEntity> {
     this.graphService
       .updateEntity<RootEntity["properties"]>({
         data: {
-          entityId: this.blockEntity.metadata.editionId.baseId,
+          entityId: this.blockEntity.metadata.recordId.baseId,
           entityTypeId: this.blockEntity.metadata.entityTypeId,
           properties: {
             ...this.blockEntity.properties,
@@ -56,8 +56,8 @@ export class BlockElement extends BlockElementBase<RootEntity> {
       </h1>
       <p>
         The entityId of this block is
-        ${this.blockEntity?.metadata.editionId.baseId}. Use it to update its
-        data when calling updateEntity.
+        ${this.blockEntity?.metadata.recordId.baseId}. Use it to update its data
+        when calling updateEntity.
       </p>
       <!-- @see https://lit.dev/docs/components/events -->
       <input

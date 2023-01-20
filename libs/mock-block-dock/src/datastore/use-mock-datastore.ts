@@ -88,7 +88,7 @@ export const useMockDatastore = (
         const { entityTypeId, properties, linkData } = data;
         const newEntity: Entity = {
           metadata: {
-            editionId: {
+            recordId: {
               baseId: entityId,
               versionId: new Date().toISOString(),
             },
@@ -222,7 +222,7 @@ export const useMockDatastore = (
 
             const updatedEntity: Entity = {
               metadata: {
-                editionId: {
+                recordId: {
                   baseId: entityId,
                   versionId: new Date().toISOString(),
                 },

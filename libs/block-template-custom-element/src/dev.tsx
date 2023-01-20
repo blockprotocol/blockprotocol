@@ -11,7 +11,7 @@ const node = document.getElementById("app");
 // @todo make type blockprotocol.org/[etc]/ExampleEntity when we can host new types there
 const testEntity: RootEntity = {
   metadata: {
-    editionId: {
+    recordId: {
       baseId: "test-entity",
       versionId: new Date().toISOString(),
     },
@@ -50,7 +50,7 @@ const DevApp = () => {
           tagName,
         },
       }}
-      blockEntityEditionId={testEntity.metadata.editionId}
+      blockEntityRecordId={testEntity.metadata.recordId}
       blockInfo={packageJson.blockprotocol}
       debug // remove this to start with the debug UI minimised. You can also toggle it in the UI
       initialEntities={[testEntity]}

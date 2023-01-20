@@ -6,7 +6,7 @@ import {
   CreateEntityData,
   DeleteEntityData,
   Entity,
-  EntityEditionId,
+  EntityRecordId,
   GetEntityData,
   UpdateEntityData,
 } from "./entity.js";
@@ -27,7 +27,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
    */
   graph: {
     blockEntitySubgraph?: Subgraph<{
-      editionId: EntityEditionId;
+      recordId: EntityRecordId;
       element: RootEntity;
     }>;
     readonly?: boolean;

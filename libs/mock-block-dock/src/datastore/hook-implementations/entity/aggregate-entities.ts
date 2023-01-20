@@ -28,18 +28,18 @@ export const aggregateEntities = (
   );
 
   const subgraph = {
-    roots: results.map((entity) => entity.metadata.editionId),
+    roots: results.map((entity) => entity.metadata.recordId),
     vertices: {},
     edges: {},
     depths: graphResolveDepths,
   };
 
   for (const {
-    metadata: { editionId },
+    metadata: { recordId },
   } of results) {
     traverseElement(
       subgraph,
-      editionId,
+      recordId,
       graph,
       new TraversalContext(graph),
       graphResolveDepths,

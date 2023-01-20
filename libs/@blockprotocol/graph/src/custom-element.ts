@@ -4,6 +4,7 @@ import {
   BlockGraphProperties,
   Entity,
   EntityPropertiesObject,
+  EntityRecordId,
   GraphBlockHandler,
   LinkEntityAndRightEntity,
 } from "./index.js";
@@ -68,7 +69,7 @@ export abstract class BlockElementBase<
       this.linkedEntities =
         getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
           blockEntitySubgraph,
-          rootEntity.metadata.editionId.baseId,
+          rootEntity.metadata.recordId.baseId,
         );
     }
   }
@@ -121,7 +122,7 @@ export abstract class BlockElementBase<
 
     return this.graphService.updateEntity({
       data: {
-        entityId: blockEntity.metadata.editionId.baseId,
+        entityId: blockEntity.metadata.recordId.baseId,
         entityTypeId: blockEntity.metadata.entityTypeId,
         properties,
         leftToRightOrder: blockEntity.linkData?.leftToRightOrder,
