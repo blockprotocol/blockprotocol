@@ -1,14 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/legacy/image";
 
-import darkBoxImage from "../../../../public/assets/new-home/dark-box-min.png";
+import darkBoxImage from "../../../../public/assets/new-home/dark-box.png";
 
 export const ConfinedBlocks = () => {
   return (
     <Box
       sx={{
-        background:
-          "linear-gradient(40.4deg, rgb(29, 29, 38) 63.75%, rgb(62, 62, 73) 82.21%)",
+        background: "linear-gradient(40.4deg, #130E2F 63.75%, #572181 82.21%)",
         py: { xs: 10, md: 12 },
         px: { xs: "1rem", lg: "0" },
         border: "2px solid rgb(5, 5, 7)",
@@ -32,65 +31,71 @@ export const ConfinedBlocks = () => {
             alignItems: { xs: "center", md: "flex-start" },
           }}
         >
+          <Box sx={{ mb: 3 }}>
+            <Typography
+              sx={{
+                color: ({ palette }) => palette.grey[200],
+                textAlign: { xs: "center", md: "left" },
+                maxWidth: "20ch",
+                fontWeight: 500,
+                mb: 1.75,
+              }}
+              variant="bpHeading3"
+            >
+              Today, blocks are confined to single apps and websites
+            </Typography>
+
+            <Box
+              sx={{
+                width: 74,
+                height: 3,
+                background:
+                  "linear-gradient(90deg, rgba(117, 86, 220, 0.8) 0%, rgba(117, 86, 220, 0) 100%)",
+                borderRadius: 6,
+              }}
+            />
+          </Box>
+
           <Typography
             sx={{
-              color: ({ palette }) => palette.grey[200],
-              textAlign: { xs: "center", md: "left" },
-              maxWidth: "20ch",
-              margin: "0 auto 1.5rem",
-            }}
-            variant="bpHeading2"
-          >
-            Until now, blocks have been confined to single apps and sites
-          </Typography>
-          <Box
-            sx={{
-              width: "120px",
-              height: "2px",
-              ml: "0.25rem",
-              my: 2,
-              background:
-                "linear-gradient(to right, rgb(172, 159, 255, 1), rgba(172, 159, 255, 0))",
-            }}
-          />
-          <Typography
-            sx={{
-              color: "#c2cedf",
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
-              margin: "1rem auto",
-              lineHeight: 1.5,
+              mb: 2,
+              lineHeight: 1.7,
+              fontWeight: 400,
+              color: ({ palette }) => palette.gray[40],
             }}
             mb={2}
-            variant="bpBodyCopy"
+            variant="bpSmallCopy"
           >
             Every app has to build all of their own blocks. This means
             developers are rebuilding the same block types over and over.
           </Typography>
           <Typography
             sx={{
-              color: "#c2cedf",
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
-              margin: "1rem auto",
-              lineHeight: 1.5,
+              mb: 2,
+              lineHeight: 1.7,
+              fontWeight: 400,
+              color: ({ palette }) => palette.gray[40],
             }}
             mb={2}
-            variant="bpBodyCopy"
+            variant="bpSmallCopy"
           >
             Open source components can save some time, but still need to be
             individually integrated.
           </Typography>
           <Typography
             sx={{
-              color: "#c2cedf",
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
-              margin: "1rem auto",
-              lineHeight: 1.5,
+              lineHeight: 1.7,
+              fontWeight: 400,
+              color: ({ palette }) => palette.gray[40],
             }}
             mb={2}
-            variant="bpBodyCopy"
+            variant="bpSmallCopy"
           >
             This also limits how many blocks users have access to in any single
             application.
