@@ -79,28 +79,26 @@ export const WhatAreBlocks = () => {
                 />
               </Box>
               <Typography
-                variant="bpSmallCopy"
                 sx={{
+                  fontSize: "1rem",
                   textAlign: { xs: "center", md: "left" },
+                  maxWidth: "52ch",
                   margin: "0 auto 0.75rem",
-                  lineHeight: 1.7,
-                  fontWeight: 400,
                 }}
-                maxWidth="52ch"
+                variant="bpBodyCopy"
               >
                 Blocks are individual front-end components that display data.
                 They allow regular users to edit their contents without needing
                 to write code.
               </Typography>
               <Typography
-                variant="bpSmallCopy"
                 sx={{
+                  fontSize: "1rem",
                   textAlign: { xs: "center", md: "left" },
+                  maxWidth: "52ch",
                   margin: "0 auto",
-                  lineHeight: 1.7,
-                  fontWeight: 400,
                 }}
-                maxWidth="52ch"
+                variant="bpBodyCopy"
               >
                 Blocks can be simple and static, like an image or a text block,
                 or they can be more complex, like a checklist or chart block.
@@ -212,14 +210,13 @@ export const WhatAreBlocks = () => {
             />
           </Box>
           <Typography
-            variant="bpSmallCopy"
             sx={{
-              fontWeight: 400,
-              lineHeight: 1.7,
+              fontSize: "1rem",
               textAlign: { xs: "center", md: "left" },
               maxWidth: { xs: "45ch", md: "100%" },
+              mb: { xs: 3, md: 5 },
             }}
-            mb={{ xs: 3, md: 5 }}
+            variant="bpBodyCopy"
           >
             Users select the type of block they want, then add it to their page,
             dashboard, or canvas. They can add content to the block, edit it, or

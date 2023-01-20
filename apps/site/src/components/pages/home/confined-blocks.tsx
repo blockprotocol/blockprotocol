@@ -58,44 +58,39 @@ export const ConfinedBlocks = () => {
 
           <Typography
             sx={{
+              fontSize: "1rem",
+              color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
               mb: 2,
-              lineHeight: 1.7,
-              fontWeight: 400,
-              color: ({ palette }) => palette.gray[40],
             }}
-            mb={2}
-            variant="bpSmallCopy"
+            variant="bpBodyCopy"
           >
             Every app has to build all of their own blocks. This means
             developers are rebuilding the same block types over and over.
           </Typography>
           <Typography
             sx={{
+              fontSize: "1rem",
+              color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
               mb: 2,
-              lineHeight: 1.7,
-              fontWeight: 400,
-              color: ({ palette }) => palette.gray[40],
             }}
-            mb={2}
-            variant="bpSmallCopy"
+            variant="bpBodyCopy"
           >
             Open source components can save some time, but still need to be
             individually integrated.
           </Typography>
           <Typography
             sx={{
+              fontSize: "1rem",
+              color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
-              lineHeight: 1.7,
-              fontWeight: 400,
-              color: ({ palette }) => palette.gray[40],
+              mb: 2,
             }}
-            mb={2}
-            variant="bpSmallCopy"
+            variant="bpBodyCopy"
           >
             This also limits how many blocks users have access to in any single
             application.
