@@ -5,8 +5,7 @@ import { ServiceHandler } from "@blockprotocol/core";
 import {
   EmbedderGraphMessageCallbacks,
   EmbedderGraphMessages,
-  Subgraph,
-  SubgraphRootTypes,
+  EntityRootedSubgraph,
 } from "./types.js";
 
 /**
@@ -18,7 +17,7 @@ export class GraphEmbedderHandler
   extends ServiceHandler
   implements EmbedderGraphMessages
 {
-  private _blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
+  private _blockEntitySubgraph?: EntityRootedSubgraph;
   // private _linkedAggregations?: LinkedAggregations;
   private _readonly?: boolean;
 
@@ -29,7 +28,7 @@ export class GraphEmbedderHandler
     // linkedAggregations,
     readonly,
   }: {
-    blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
+    blockEntitySubgraph?: EntityRootedSubgraph;
     callbacks?: Partial<EmbedderGraphMessageCallbacks>;
     element: HTMLElement;
     // linkedAggregations?: LinkedAggregations;
@@ -91,11 +90,7 @@ export class GraphEmbedderHandler
     };
   }
 
-  blockEntitySubgraph({
-    data,
-  }: {
-    data?: Subgraph<SubgraphRootTypes["entity"]>;
-  }) {
+  blockEntitySubgraph({ data }: { data?: EntityRootedSubgraph }) {
     this._blockEntitySubgraph = data;
     this.sendMessage({
       message: {

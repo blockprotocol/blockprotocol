@@ -1,9 +1,12 @@
 import {
+  DataTypeRootedSubgraph,
+  EntityRootedSubgraph,
+  EntityTypeRootedSubgraph,
   isEntityVertexId,
   isOntologyTypeVertexId,
+  PropertyTypeRootedSubgraph,
   Subgraph,
   SubgraphRootType,
-  SubgraphRootTypes,
 } from "../../types/subgraph.js";
 import { Vertex } from "../../types/subgraph/vertices.js";
 import { mustBeDefined } from "../must-be-defined.js";
@@ -52,7 +55,7 @@ export const getRoots = <RootType extends SubgraphRootType>(
  */
 export const isDataTypeRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["dataType"]> => {
+): subgraph is DataTypeRootedSubgraph => {
   for (const rootVertexId of subgraph.roots) {
     if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
@@ -79,7 +82,7 @@ export const isDataTypeRootedSubgraph = (
  */
 export const isPropertyTypeRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["propertyType"]> => {
+): subgraph is PropertyTypeRootedSubgraph => {
   for (const rootVertexId of subgraph.roots) {
     if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
@@ -106,7 +109,7 @@ export const isPropertyTypeRootedSubgraph = (
  */
 export const isEntityTypeRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["entityType"]> => {
+): subgraph is EntityTypeRootedSubgraph => {
   for (const rootVertexId of subgraph.roots) {
     if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
@@ -133,7 +136,7 @@ export const isEntityTypeRootedSubgraph = (
  */
 export const isEntityRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["entity"]> => {
+): subgraph is EntityRootedSubgraph => {
   for (const rootVertexId of subgraph.roots) {
     if (!isEntityVertexId(rootVertexId)) {
       return false;

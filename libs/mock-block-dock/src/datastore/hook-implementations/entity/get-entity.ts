@@ -1,7 +1,7 @@
 import {
+  EntityRootedSubgraph,
   GetEntityData,
   Subgraph,
-  SubgraphRootTypes,
 } from "@blockprotocol/graph";
 import { getEntity as getEntityFromSubgraph } from "@blockprotocol/graph/stdlib";
 
@@ -17,7 +17,7 @@ export const getEntity = (
     },
   }: GetEntityData,
   graph: Subgraph,
-): Subgraph<SubgraphRootTypes["entity"]> | undefined => {
+): EntityRootedSubgraph | undefined => {
   const entityRevision = getEntityFromSubgraph(graph, entityId);
 
   if (entityRevision === undefined) {
