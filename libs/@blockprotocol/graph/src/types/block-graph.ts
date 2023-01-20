@@ -6,7 +6,6 @@ import {
   CreateEntityData,
   DeleteEntityData,
   Entity,
-  EntityRecordId,
   GetEntityData,
   UpdateEntityData,
 } from "./entity.js";
@@ -16,7 +15,7 @@ import {
   AggregateEntityTypesResult,
   GetEntityTypeData,
 } from "./ontology/entity-type.js";
-import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
+import { EntityVertexId, Subgraph, SubgraphRootTypes } from "./subgraph.js";
 
 export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
   /**
@@ -27,7 +26,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
    */
   graph: {
     blockEntitySubgraph?: Subgraph<{
-      recordId: EntityRecordId;
+      vertexId: EntityVertexId;
       element: RootEntity;
     }>;
     readonly?: boolean;

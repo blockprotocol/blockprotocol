@@ -22,7 +22,7 @@ import {
  * @param data – the data to build the subgraph from (which becomes the vertices)
  * @param data.entities – the entities to build the subgraph from
  * @param depths – the depth values to provide in the returned subgraph
- * @param roots – the root values to provide in the returned subgraph
+ * @param rootRecordIds – the root values to provide in the returned subgraph
  *
  * @returns a Subgraph containing:
  *   - 'vertices' containing the provided entities
@@ -36,10 +36,10 @@ import {
  */
 export const buildSubgraph = (
   data: { entities: Entity[] },
-  roots: EntityRecordId[],
+  rootRecordIds: EntityRecordId[],
   depths: GraphResolveDepths,
 ) => {
-  const missingRoots = roots.filter(
+  const missingRoots = rootRecordIds.filter(
     ({ baseId, versionId }) =>
       !data.entities.find(
         (entity) =>
@@ -58,6 +58,12 @@ export const buildSubgraph = (
         .join(", ")}`,
     );
   }
+
+  const roots = rootRecordIds.map((rootRecordId) => ({
+    baseId: rootRecordId.baseId,
+    /** @todo - This is temporary, and wrong */
+    revisionId: rootRecordId.versionId,
+  }));
 
   const subgraph: Subgraph = {
     roots,

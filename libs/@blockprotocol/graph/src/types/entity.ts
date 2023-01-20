@@ -4,7 +4,7 @@ import type {
 } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { isOntologyTypeRecordId } from "../types.js";
+import { isOntologyTypeRecordId, Timestamp } from "../types.js";
 import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
@@ -14,7 +14,11 @@ export type JsonValue = CoreJsonValue;
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
 export type EntityId = string;
+// This isn't necessary, it just _could_ provide greater clarity that this corresponds to an exact vertex and can be
+// used in a direct lookup and not a search in the vertices
+export type EntityRevisionId = Timestamp;
 export type EntityVersion = string;
+
 export type EntityRecordId = {
   baseId: EntityId;
   versionId: EntityVersion;

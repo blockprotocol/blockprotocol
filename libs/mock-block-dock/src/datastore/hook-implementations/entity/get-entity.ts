@@ -25,7 +25,13 @@ export const getEntity = (
   }
 
   const subgraph = {
-    roots: [entityRevision.metadata.recordId],
+    /** @todo - This is temporary, and wrong */
+    roots: [
+      {
+        baseId: entityRevision.metadata.recordId.baseId,
+        revisionId: entityRevision.metadata.recordId.versionId,
+      },
+    ],
     vertices: {},
     edges: {},
     depths: graphResolveDepths,

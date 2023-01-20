@@ -28,7 +28,11 @@ export const aggregateEntities = (
   );
 
   const subgraph = {
-    roots: results.map((entity) => entity.metadata.recordId),
+    /** @todo - This is temporary, and wrong */
+    roots: results.map((entity) => ({
+      baseId: entity.metadata.recordId.baseId,
+      revisionId: entity.metadata.recordId.versionId,
+    })),
     vertices: {},
     edges: {},
     depths: graphResolveDepths,

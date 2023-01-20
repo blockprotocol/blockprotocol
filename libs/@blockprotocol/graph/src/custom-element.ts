@@ -4,7 +4,6 @@ import {
   BlockGraphProperties,
   Entity,
   EntityPropertiesObject,
-  EntityRecordId,
   GraphBlockHandler,
   LinkEntityAndRightEntity,
 } from "./index.js";

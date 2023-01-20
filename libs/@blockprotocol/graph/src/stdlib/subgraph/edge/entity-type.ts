@@ -7,7 +7,7 @@ import {
 
 import {
   isConstrainsPropertiesOnEdge,
-  OntologyTypeRecordId,
+  OntologyTypeVertexId,
   Subgraph,
 } from "../../../types/subgraph.js";
 
@@ -16,13 +16,13 @@ import {
  * "ConstrainsPropertiesOn" `Edge`s from the respective `Vertex` within a `Subgraph`.
  *
  * @param subgraph {Subgraph} - The `Subgraph` containing the type tree of the `EntityType`
- * @param entityTypeId {OntologyTypeRecordId | VersionedUri} - The identifier of the `EntityType` to search for
- * @returns {OntologyTypeRecordId[]} - The identifiers of the `PropertyType`s referenced from the `EntityType`
+ * @param entityTypeId {OntologyTypeVertexId | VersionedUri} - The identifier of the `EntityType` to search for
+ * @returns {OntologyTypeVertexId[]} - The identifiers of the `PropertyType`s referenced from the `EntityType`
  */
 export const getPropertyTypesReferencedByEntityType = (
   subgraph: Subgraph,
-  entityTypeId: OntologyTypeRecordId | VersionedUri,
-): OntologyTypeRecordId[] => {
+  entityTypeId: OntologyTypeVertexId | VersionedUri,
+): OntologyTypeVertexId[] => {
   let baseUri: BaseUri;
   let version: number;
 
@@ -33,7 +33,7 @@ export const getPropertyTypesReferencedByEntityType = (
     ];
   } else {
     baseUri = entityTypeId.baseId;
-    version = entityTypeId.versionId;
+    version = entityTypeId.revisionId;
   }
 
   const outwardEdges = subgraph.edges[baseUri]?.[version];
