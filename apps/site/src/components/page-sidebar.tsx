@@ -58,7 +58,7 @@ type SidebarPageSectionProps = {
 
 const highlightSection = (isSectionSelected: boolean) => ({
   borderLeft: `3px solid ${
-    isSectionSelected ? themeImport.palette.purple[700] : "white"
+    isSectionSelected ? themeImport.palette.purple[700] : "transparent"
   }`,
 });
 
@@ -98,7 +98,9 @@ const SidebarPageSection: FunctionComponent<SidebarPageSectionProps> = ({
         justifyContent="space-between"
         visibility="inherit"
         bgcolor={
-          isSectionSelected ? (theme) => theme.palette.purple[100] : "white"
+          isSectionSelected
+            ? (theme) => theme.palette.purple[100]
+            : "transparent"
         }
         pr={1}
       >
@@ -205,7 +207,9 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
         display="flex"
         alignItems="center"
         justifyContent="space-between"
-        bgcolor={isSelected ? (theme) => theme.palette.purple[100] : "white"}
+        bgcolor={
+          isSelected ? (theme) => theme.palette.purple[100] : "transparent"
+        }
         pr={1}
       >
         <SidebarLink
