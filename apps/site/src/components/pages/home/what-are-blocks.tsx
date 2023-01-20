@@ -215,6 +215,7 @@ export const WhatAreBlocks = () => {
             variant="bpSmallCopy"
             sx={{
               fontWeight: 400,
+              lineHeight: 1.7,
               textAlign: { xs: "center", md: "left" },
               maxWidth: { xs: "45ch", md: "100%" },
             }}
