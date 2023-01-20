@@ -68,19 +68,125 @@ export interface CreateSubscription200Response {
 export interface CreateSubscriptionRequest {
   /**
    *
-   * @type {string}
+   * @type {SubscriptionTier}
    * @memberof CreateSubscriptionRequest
    */
-  subscriptionTier: CreateSubscriptionRequestSubscriptionTierEnum;
+  subscriptionTier: SubscriptionTier;
 }
+/**
+ *
+ * @export
+ * @interface GetPaymentMethods200Response
+ */
+export interface GetPaymentMethods200Response {
+  /**
+   *
+   * @type {Array<StripePaymentMethod>}
+   * @memberof GetPaymentMethods200Response
+   */
+  paymentMethods?: Array<StripePaymentMethod>;
+}
+/**
+ *
+ * @export
+ * @interface GetSubscription200Response
+ */
+export interface GetSubscription200Response {
+  /**
+   *
+   * @type {StripeSubscription}
+   * @memberof GetSubscription200Response
+   */
+  subscription?: StripeSubscription;
+}
+/**
+ *
+ * @export
+ * @interface GetUpcomingInvoice200Response
+ */
+export interface GetUpcomingInvoice200Response {
+  /**
+   *
+   * @type {StripeInvoice}
+   * @memberof GetUpcomingInvoice200Response
+   */
+  upcomingInvoice?: StripeInvoice;
+}
+/**
+ *
+ * @export
+ * @interface StripeInvoice
+ */
+export interface StripeInvoice {
+  /**
+   *
+   * @type {string}
+   * @memberof StripeInvoice
+   */
+  currency: string;
+  /**
+   *
+   * @type {number}
+   * @memberof StripeInvoice
+   */
+  amount_due: number;
+}
+/**
+ *
+ * @export
+ * @interface StripePaymentMethod
+ */
+export interface StripePaymentMethod {
+  [key: string]: any;
+}
+/**
+ *
+ * @export
+ * @interface StripeSubscription
+ */
+export interface StripeSubscription {
+  [key: string]: any;
+}
+/**
+ *
+ * @export
+ * @enum {string}
+ */
 
-export const CreateSubscriptionRequestSubscriptionTierEnum = {
+export const SubscriptionTier = {
   Hobby: "hobby",
   Pro: "pro",
 } as const;
 
-export type CreateSubscriptionRequestSubscriptionTierEnum =
-  (typeof CreateSubscriptionRequestSubscriptionTierEnum)[keyof typeof CreateSubscriptionRequestSubscriptionTierEnum];
+export type SubscriptionTier =
+  (typeof SubscriptionTier)[keyof typeof SubscriptionTier];
+
+/**
+ *
+ * @export
+ * @interface UpdateSubscription200Response
+ */
+export interface UpdateSubscription200Response {
+  /**
+   *
+   * @type {StripeSubscription}
+   * @memberof UpdateSubscription200Response
+   */
+  updatedSubscription?: StripeSubscription;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSubscriptionRequest
+ */
+export interface UpdateSubscriptionRequest {
+  /**
+   *
+   * @type {SubscriptionTier}
+   * @memberof UpdateSubscriptionRequest
+   */
+  updatedSubscriptionTier: SubscriptionTier;
+}
 
 /**
  * DefaultApi - axios parameter creator
@@ -107,7 +213,7 @@ export const DefaultApiAxiosParamCreator = function (
         "createSubscriptionRequest",
         createSubscriptionRequest,
       );
-      const localVarPath = `/create-subscription`;
+      const localVarPath = `/subscription`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -135,6 +241,189 @@ export const DefaultApiAxiosParamCreator = function (
       };
       localVarRequestOptions.data = serializeDataIfNeeded(
         createSubscriptionRequest,
+        localVarRequestOptions,
+        configuration,
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Retrieve the payment methods of the BP user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPaymentMethods: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/payment-methods`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Retrieve the subscription of the BP user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSubscription: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/subscription`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice based on a new subscription tier
+     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUpcomingInvoice: async (
+      newSubscriptionTier: SubscriptionTier,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'newSubscriptionTier' is not null or undefined
+      assertParamExists(
+        "getUpcomingInvoice",
+        "newSubscriptionTier",
+        newSubscriptionTier,
+      );
+      const localVarPath = `/upcoming-invoice`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      if (newSubscriptionTier !== undefined) {
+        localVarQueryParameter["newSubscriptionTier"] = newSubscriptionTier;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Update an existing subscription
+     * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSubscription: async (
+      updateSubscriptionRequest: UpdateSubscriptionRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'updateSubscriptionRequest' is not null or undefined
+      assertParamExists(
+        "updateSubscription",
+        "updateSubscriptionRequest",
+        updateSubscriptionRequest,
+      );
+      const localVarPath = `/subscription`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateSubscriptionRequest,
         localVarRequestOptions,
         configuration,
       );
@@ -182,6 +471,109 @@ export const DefaultApiFp = function (configuration?: Configuration) {
         configuration,
       );
     },
+    /**
+     *
+     * @summary Retrieve the payment methods of the BP user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPaymentMethods(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetPaymentMethods200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPaymentMethods(options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Retrieve the subscription of the BP user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSubscription(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetSubscription200Response>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getSubscription(
+        options,
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice based on a new subscription tier
+     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getUpcomingInvoice(
+      newSubscriptionTier: SubscriptionTier,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetUpcomingInvoice200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getUpcomingInvoice(
+          newSubscriptionTier,
+          options,
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Update an existing subscription
+     * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateSubscription(
+      updateSubscriptionRequest: UpdateSubscriptionRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<UpdateSubscription200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateSubscription(
+          updateSubscriptionRequest,
+          options,
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
   };
 };
 
@@ -211,6 +603,60 @@ export const DefaultApiFactory = function (
         .createSubscription(createSubscriptionRequest, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     *
+     * @summary Retrieve the payment methods of the BP user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPaymentMethods(
+      options?: any,
+    ): AxiosPromise<GetPaymentMethods200Response> {
+      return localVarFp
+        .getPaymentMethods(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Retrieve the subscription of the BP user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSubscription(options?: any): AxiosPromise<GetSubscription200Response> {
+      return localVarFp
+        .getSubscription(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Retrieve an upcoming invoice based on a new subscription tier
+     * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUpcomingInvoice(
+      newSubscriptionTier: SubscriptionTier,
+      options?: any,
+    ): AxiosPromise<GetUpcomingInvoice200Response> {
+      return localVarFp
+        .getUpcomingInvoice(newSubscriptionTier, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Update an existing subscription
+     * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSubscription(
+      updateSubscriptionRequest: UpdateSubscriptionRequest,
+      options?: any,
+    ): AxiosPromise<UpdateSubscription200Response> {
+      return localVarFp
+        .updateSubscription(updateSubscriptionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -232,6 +678,54 @@ export interface DefaultApiInterface {
     createSubscriptionRequest: CreateSubscriptionRequest,
     options?: AxiosRequestConfig,
   ): AxiosPromise<CreateSubscription200Response>;
+
+  /**
+   *
+   * @summary Retrieve the payment methods of the BP user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getPaymentMethods(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetPaymentMethods200Response>;
+
+  /**
+   *
+   * @summary Retrieve the subscription of the BP user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getSubscription(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetSubscription200Response>;
+
+  /**
+   *
+   * @summary Retrieve an upcoming invoice based on a new subscription tier
+   * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getUpcomingInvoice(
+    newSubscriptionTier: SubscriptionTier,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetUpcomingInvoice200Response>;
+
+  /**
+   *
+   * @summary Update an existing subscription
+   * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  updateSubscription(
+    updateSubscriptionRequest: UpdateSubscriptionRequest,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<UpdateSubscription200Response>;
 }
 
 /**
@@ -255,6 +749,66 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   ) {
     return DefaultApiFp(this.configuration)
       .createSubscription(createSubscriptionRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Retrieve the payment methods of the BP user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getPaymentMethods(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getPaymentMethods(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Retrieve the subscription of the BP user
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getSubscription(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getSubscription(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Retrieve an upcoming invoice based on a new subscription tier
+   * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getUpcomingInvoice(
+    newSubscriptionTier: SubscriptionTier,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .getUpcomingInvoice(newSubscriptionTier, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Update an existing subscription
+   * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public updateSubscription(
+    updateSubscriptionRequest: UpdateSubscriptionRequest,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .updateSubscription(updateSubscriptionRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
