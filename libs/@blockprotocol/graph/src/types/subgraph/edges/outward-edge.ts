@@ -1,6 +1,6 @@
 import { EntityId, isEntityRecordId } from "../../entity.js";
 import { isOntologyTypeRecordId } from "../../ontology.js";
-import { Timestamp } from "../time.js";
+import { Timestamp } from "../../temporal-versioning.js";
 import { EntityVertexId, OntologyTypeVertexId } from "../vertices";
 import {
   isKnowledgeGraphEdgeKind,

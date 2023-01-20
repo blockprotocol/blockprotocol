@@ -1,11 +1,11 @@
 import { BaseUri } from "@blockprotocol/type-system/slim";
 
 import { EntityId } from "../entity.js";
+import { Timestamp } from "../temporal-versioning.js";
 import {
   KnowledgeGraphOutwardEdge,
   OntologyOutwardEdge,
 } from "./edges/outward-edge.js";
-import { Timestamp } from "./time.js";
 
 export * from "./edges/kind.js";
 export * from "./edges/outward-edge.js";
