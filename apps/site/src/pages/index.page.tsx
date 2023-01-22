@@ -9,6 +9,7 @@ import { Header } from "../components/pages/home/header";
 import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
 import { RegistrySection } from "../components/pages/home/registry-section";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
+import { ZeroApplicationDevelopers } from "../components/pages/home/zero-application-developers";
 import { useUser } from "../context/user-context";
 import { getAllBlocks } from "../lib/api/blocks/get";
 import {
@@ -39,6 +40,7 @@ const HomePage: FunctionComponent<PageProps> = ({ catalog }) => {
       <WhatAreBlocks />
       <ConfinedBlocks />
       <InteroperableBlocks />
+      <ZeroApplicationDevelopers />
       <AnyFramework />
       <ComposableInterfaces />
       <RegistrySection catalog={catalog} />
