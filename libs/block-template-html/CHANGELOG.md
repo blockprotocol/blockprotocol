@@ -1,5 +1,14 @@
 # block-template-html
 
+## 0.1.9
+
+### Patch Changes
+
+- [#875](https://github.com/blockprotocol/blockprotocol/pull/875) [`a1ba0d7d`](https://github.com/blockprotocol/blockprotocol/commit/a1ba0d7d17971ee30586a673ce3d4f5bee6e65d1) Thanks [@kachkaev](https://github.com/kachkaev)! - Update package metadata (change path to source following repo restructuring)
+
+- Updated dependencies [[`380b1493`](https://github.com/blockprotocol/blockprotocol/commit/380b149326450f4cf9b8300182eb199aa8f6a62f), [`a1ba0d7d`](https://github.com/blockprotocol/blockprotocol/commit/a1ba0d7d17971ee30586a673ce3d4f5bee6e65d1)]:
+  - block-scripts@0.0.19
+
 ## 0.1.8
 
 ### Patch Changes
