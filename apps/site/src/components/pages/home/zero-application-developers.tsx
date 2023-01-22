@@ -32,7 +32,8 @@ export const ZeroApplicationDevelopers = () => {
           textTransform: "uppercase",
           color: ({ palette }) => palette.purple[700],
           mb: 0.75,
-          fontWeight: 500,
+          fontWeight: 700,
+          fontSize: "1.125rem",
           mx: "auto",
         }}
         textAlign="center"
