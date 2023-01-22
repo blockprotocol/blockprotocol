@@ -1,5 +1,8 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
 
+import { SparklesIcon } from "../../icons/sparkles-icon";
+import { LinkButton } from "../../link-button";
+
 export const ZeroApplicationDevelopers = () => {
   const theme = useTheme();
 
@@ -70,7 +73,7 @@ export const ZeroApplicationDevelopers = () => {
 
       <Typography
         variant="bpBodyCopy"
-        sx={{ fontSize: "1rem", textAlign: "center" }}
+        sx={{ fontSize: "1rem", textAlign: "center", mb: 2 }}
       >
         <strong>
           Give your users access to an ever-growing library of high-quality
@@ -87,6 +90,25 @@ export const ZeroApplicationDevelopers = () => {
         is supported, blocks work out the box, and your users get access to
         powerful blocks that enable them to do more within your application.
       </Typography>
+
+      <LinkButton
+        href="/docs/embedding-blocks"
+        variant="primary"
+        sx={{ color: theme.palette.common.white }}
+      >
+        <SparklesIcon
+          sx={{
+            fontSize: 18,
+            marginRight: 1.25,
+            fill: theme.palette.common.white,
+          }}
+        />
+        Learn more about embedding{" "}
+        <Box component="strong" sx={{ mx: 0.5 }}>
+          Þ
+        </Box>{" "}
+        blocks
+      </LinkButton>
     </Container>
   );
 };
