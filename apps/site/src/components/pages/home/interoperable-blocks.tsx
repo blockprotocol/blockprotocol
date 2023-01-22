@@ -47,9 +47,9 @@ export const InteroperableBlocks = () => {
           <Box
             sx={{
               position: { sm: "relative", md: "absolute" },
-              right: 0,
               top: 0,
-              width: { md: "100%", lg: "95%", xl: "90%" },
+              width: { md: "145%", lg: "120%", xl: "100%" },
+              left: { lg: "-7.5%", xl: "0%" },
               zIndex: "3",
             }}
           >
@@ -60,43 +60,72 @@ export const InteroperableBlocks = () => {
         <Box
           sx={{
             position: { xs: "relative", md: "absolute" },
-            top: { md: "8%", lg: "10%", xl: "12%" },
-            right: { md: "16%", lg: "18%", xl: "22%" },
+            top: { md: "4%", lg: "8%", xl: "10%" },
+            right: { md: "8%", lg: "18%", xl: "26%" },
             maxWidth: { xs: "100%", sm: "100%", md: "49ch" },
             flexShrink: 1,
+            zIndex: 3,
           }}
         >
           <Typography
-            variant="bpHeading1"
+            variant="bpHeading2"
             textAlign="left"
             mt={4}
             sx={{
-              lineHeight: 1,
-              color: ({ palette }) => palette.gray[90],
-              mb: 3,
+              fontSize: "2rem",
+              fontWeight: 500,
+              mb: 1.75,
             }}
           >
             Block Protocol blocks
             <br /> are <span style={{ color: "#8b4cea" }}>interoperable</span>
           </Typography>
+
           <Box
             sx={{
-              width: "120px",
-              height: "2px",
-              ml: "0.25rem",
-              my: 3,
+              width: 74,
+              height: 3,
               background:
-                "linear-gradient(to right, rgb(149, 135, 239, 1), rgba(172, 159, 255, 0))",
+                "linear-gradient(90deg, rgba(117, 86, 220, 0.8) 0%, rgba(117, 86, 220, 0) 100%)",
+              borderRadius: 6,
+              mb: 3,
             }}
           />
-          <Typography variant="bpBodyCopy" textAlign="left" mb={1}>
-            Blocks that adhere to the Block Protocol can work in any application
-            which also uses the protocol, without any extra configuration.
+
+          <Typography
+            variant="bpBodyCopy"
+            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
+          >
+            <strong>No extra configuration required:</strong> blocks that adhere
+            to the Block Protocol work out the box in any application which also
+            uses the protocol.
           </Typography>
-          <Typography variant="bpBodyCopy" textAlign="left" mr={6}>
-            Any developer can build a world-class block for others to use.
-            Blocks can solve specific user needs that individual application
-            developers don’t have the time or expertise to build.
+
+          <Typography
+            variant="bpBodyCopy"
+            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
+          >
+            <strong>Available for instant use ecosystem-wide:</strong> any
+            developer can build a world-class block for themselves or others to
+            enjoy.
+          </Typography>
+
+          <Typography
+            variant="bpBodyCopy"
+            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
+          >
+            <strong>Specialized blocks everywhere:</strong> blocks can solve
+            specific user needs that individual application developers don’t
+            have the time, awareness or expertise to build.
+          </Typography>
+
+          <Typography
+            variant="bpBodyCopy"
+            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
+          >
+            <strong>Convergence on semantic data structures:</strong> blocks
+            make it easy to capture and work with typed data - often even more
+            convenient than inputting information in an unstructured fashion.
           </Typography>
         </Box>
       </Box>
