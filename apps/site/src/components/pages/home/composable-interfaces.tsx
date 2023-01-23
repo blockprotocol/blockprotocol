@@ -116,6 +116,7 @@ export const ComposableInterfaces = () => {
                   label="Wordpress"
                   icon={
                     <WordPressIcon
+                      dark
                       sx={{
                         fill: ({ palette }) => palette.gray[90],
                         fontSize: 54,

@@ -4,6 +4,7 @@ import { FunctionComponent } from "react";
 interface HashIconProps {
   dark?: boolean;
 }
+
 export const HashIcon: FunctionComponent<SvgIconProps & HashIconProps> = ({
   dark = false,
   ...props
