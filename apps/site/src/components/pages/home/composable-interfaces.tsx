@@ -397,7 +397,10 @@ export const ComposableInterfaces = () => {
                 <LinkButton
                   href="/hub"
                   variant="secondary"
-                  sx={{ color: ({ palette }) => palette.purple[70] }}
+                  sx={{
+                    color: ({ palette }) => palette.purple[70],
+                    background: "transparent",
+                  }}
                 >
                   <BoxesStackedIcon
                     sx={{
