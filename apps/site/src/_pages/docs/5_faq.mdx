@@ -92,7 +92,7 @@ Specific implementations of the Block Protocol in other applications may be kept
 <FAQ question="Where are blocks hosted and how are they discovered?">
 
 Blocks can be published for free [to the Þ Hub](https://blockprotocol.org/docs/developing-blocks#publishing). Publishing a block to the Þ Hub makes it discoverable to users browsing [blockprotocol.org](https://blockprotocol.org/hub), as well as embedding applications consuming the Þ API.
-  
+
 Through the Þ API, embedders can access the metadata and source code of blocks, listing blocks within their own application and serving them to users.
 
 </FAQ>
@@ -127,11 +127,12 @@ To save data beyond the session, blocks should make use of the [operations defin
 
 Similar to most programming language package managers, because anybody can publish executable code (in the form of a block), it's important you trust the block you're executing.
 
-In most applications, the users inserting new blocks generally aren't developers, which means 
+In most applications, the users inserting new blocks generally aren't developers, which means
 
 To facilitate this, we recommend that embedders implement an allowlist (or at minimum a denylist) of blocks, or provide their users the option to do the same. Today you might choose to allow/deny blocks on the basis of their authorship/origins, or based on their _verification status_.
- 
+
 In the future we plan to:
+
 - expose additional information such as block usage metadata
 - building support for managing allow/denylists linked to individual API keys directly from the blockprotocol.org website and CLI.
 
@@ -140,7 +141,7 @@ In the future we plan to:
 <FAQ question="How does block verification work?">
 
 Blocks submitted to the Þ Hub are immediately available for discovery and use. However, when blocks are published or updated, they're also added to a _review queue_.
-  
+
 We periodically review all blocks in the queue, checking for basic indicators (and contraindicators) of a block's quality, security and integrity. While this check does not represent a fully comprehensive audit of a block, the process provides a baseline level of assurance regarding a block's fitness for purpose, and all reviewed blocks which pass this review process receive the 'verified' badge.
 
 </FAQ>
@@ -185,9 +186,9 @@ Blocks which are made up of other blocks may be referred to as “compound block
 <FAQ question="How do Block Protocol blocks differ from Web Components?">
 
 Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it within an application.
-  
+
 The goal of the Block Protocol is to allow new blocks to be added to applications _without_ any case-specific configuration or requirement that either the embedder or block know about each other's existence ahead of time.
-  
+
 To do this, the Block Protocol standardizes how _data requests_ are made between a block and an embedding application.
 
 Web Components (or custom elements) are a popular way of implementing Block Protocol blocks.
