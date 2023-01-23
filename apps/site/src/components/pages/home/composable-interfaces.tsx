@@ -1,80 +1,420 @@
-import { Box, Typography } from "@mui/material";
+import { faFigma } from "@fortawesome/free-brands-svg-icons";
+import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/legacy/image";
+import { ReactNode } from "react";
 
-import composableFullImage from "../../../../public/assets/new-home/composable-full-min.png";
+import composableFullImage from "../../../../public/assets/new-home/composable-full.png";
+import {
+  FontAwesomeIcon,
+  GithubIcon,
+  HashIcon,
+  WordPressIcon,
+} from "../../icons";
+import { ArrowUpRightFromSquareIcon } from "../../icons/arrow-up-right-from-square-icon";
+import { BoxesStackedIcon } from "../../icons/boxes-stacked-icon";
+import { BrowserIcon } from "../../icons/browser-icon";
+import { Grid2PlusIcon } from "../../icons/grid-2-plus";
+import { SparklesIcon } from "../../icons/sparkles-icon";
+import { LinkButton } from "../../link-button";
+
+const IconButtonWithTooltip = ({
+  label,
+  icon,
+}: {
+  label: string;
+  icon: ReactNode;
+}) => {
+  return (
+    <Tooltip
+      title={
+        <Box display="flex" alignItems="center">
+          {label}
+          <ArrowUpRightFromSquareIcon
+            sx={{
+              fontSize: 12,
+              fill: ({ palette }) => palette.gray[50],
+              ml: 1.25,
+            }}
+          />
+        </Box>
+      }
+      placement="top"
+    >
+      <LinkButton
+        href="/docs/using-blocks"
+        color="inherit"
+        sx={{
+          borderRadius: 2.5,
+          background: "transparent",
+          p: 0,
+          minWidth: 0,
+          "&:hover": {
+            background: ({ palette }) => palette.gray[20],
+          },
+        }}
+      >
+        {icon}
+      </LinkButton>
+    </Tooltip>
+  );
+};
 
 export const ComposableInterfaces = () => {
   return (
     <Box
       sx={{
-        background:
-          "radial-gradient(116.02% 95.04% at 50% 100.79%, #F3F0F9 0%, #FFFFFF 70.54%);",
+        backgroundColor: "#FBF7FF",
         mt: 2,
-        pb: { xs: 5, sm: 8 },
+        pt: 12.5,
+        pb: { xs: 12, sm: 15 },
         borderBottom: `1px solid #eceaf1`,
         overflow: "hidden",
       }}
     >
-      <Box
+      <Container
         sx={{
-          margin: { xs: "0 auto 2rem", lg: "0 auto" },
-          maxWidth: { xs: "100%", md: "700px" },
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          px: { xs: 2, md: 0 },
+          position: "relative",
+          zIndex: 3,
+          mb: { xs: 12, md: 18 },
+          maxWidth: { xs: "95%", md: "85%", lg: 1000 },
         }}
       >
-        <Typography variant="bpHeading2" textAlign="center" my={2}>
-          The Block Protocol makes building composable interfaces easy
-        </Typography>
         <Box
           sx={{
-            width: "160px",
-            height: "2px",
-            my: 1.5,
-            background:
-              "linear-gradient(to right, rgb(149, 135, 239, 1), rgba(172, 159, 255, 0))",
-          }}
-        />
-        <Typography
-          variant="bpBodyCopy"
-          textAlign="center"
-          sx={{
-            color: ({ palette }) => palette.gray[80],
-            maxWidth: "46ch",
-            margin: "1rem auto 1rem",
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            justifyContent: "center",
+            gap: 5,
+            mb: 8,
           }}
         >
-          Applications that follow the protocol can use any Block Protocol block
-          with zero marginal implementation cost.
-        </Typography>
-        <Typography
-          variant="bpBodyCopy"
-          textAlign="center"
+          <Box>
+            <Typography
+              sx={{
+                textAlign: "center",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                color: ({ palette }) => palette.gray[90],
+                mb: 1.25,
+              }}
+              variant="bpSmallCaps"
+            >
+              <Box
+                component="span"
+                sx={{ color: ({ palette }) => palette.purple[800] }}
+              >
+                Þ
+              </Box>{" "}
+              blocks work in
+            </Typography>
+
+            <Stack gap={3.5} flexDirection="row" justifyContent="center">
+              <IconButtonWithTooltip
+                label="Wordpress"
+                icon={
+                  <WordPressIcon
+                    sx={{
+                      fill: ({ palette }) => palette.gray[90],
+                      fontSize: 54,
+                    }}
+                  />
+                }
+              />
+
+              <IconButtonWithTooltip
+                label="GitHub Blocks"
+                icon={
+                  <GithubIcon
+                    sx={{
+                      fill: ({ palette }) => palette.gray[90],
+                      fontSize: 54,
+                    }}
+                  />
+                }
+              />
+
+              <IconButtonWithTooltip
+                label="HASH"
+                icon={
+                  <HashIcon
+                    dark
+                    sx={{
+                      fill: ({ palette }) => palette.gray[90],
+                      fontSize: 54,
+                    }}
+                  />
+                }
+              />
+            </Stack>
+          </Box>
+
+          <Box
+            sx={{
+              display: { xs: "none", md: "block" },
+              width: 0,
+              minHeight: 1,
+              borderLeft: "1px solid #D9D9D9",
+            }}
+          />
+
+          <Box>
+            <Typography
+              sx={{
+                textAlign: "center",
+                textTransform: "uppercase",
+                fontWeight: 700,
+                color: ({ palette }) => palette.gray[90],
+                mb: 1.25,
+              }}
+              variant="bpSmallCaps"
+            >
+              Coming soon
+            </Typography>
+
+            <Stack gap={3.5} flexDirection="row" justifyContent="center">
+              <IconButtonWithTooltip
+                label="Figma"
+                icon={
+                  <FontAwesomeIcon
+                    icon={faFigma}
+                    sx={{
+                      fill: ({ palette }) => palette.gray[90],
+                      fontSize: 54,
+                    }}
+                  />
+                }
+              />
+              <IconButtonWithTooltip
+                label="Vote on what’s next"
+                icon={
+                  <Grid2PlusIcon
+                    sx={{
+                      fill: ({ palette }) => palette.gray[40],
+                      fontSize: 54,
+                    }}
+                  />
+                }
+              />
+            </Stack>
+          </Box>
+        </Box>
+
+        <Box
           sx={{
-            color: ({ palette }) => palette.gray[80],
-            maxWidth: "46ch",
-            margin: "0 auto",
+            display: "flex",
+            flexDirection: { xs: "column", lg: "row" },
+            textAlign: "left",
+            gap: 12.5,
           }}
         >
-          This means you can give users access to a wide variety of blocks – far
-          more than you could build yourself. Empower users to build their own
-          modular interfaces and solutions to complex problems.
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          alignItems: "center",
-          position: "relative",
-          display: "flex",
-          alignContent: "center",
-          justifyContent: "center",
-          width: { xs: "180%", sm: "100%" },
-          marginLeft: { xs: "-40%", sm: 0 },
-        }}
-      >
-        <Image src={composableFullImage} />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              textAlign: "inherit",
+              position: "relative",
+              maxWidth: 450,
+            }}
+          >
+            <Box
+              component="img"
+              src="/assets/new-home/faded-infinity.svg"
+              sx={{
+                position: "absolute",
+                right: -45,
+                top: 40,
+                zIndex: -1,
+              }}
+            />
+
+            <Typography
+              sx={{
+                textTransform: "uppercase",
+                color: ({ palette }) => palette.purple[700],
+                mb: 0.75,
+                fontWeight: 700,
+                fontSize: "1.125rem",
+                textAlign: "inherit",
+              }}
+              variant="bpSmallCaps"
+            >
+              Block developers
+            </Typography>
+
+            <Typography
+              variant="bpHeading2"
+              sx={{
+                textAlign: "inherit",
+                fontWeight: 500,
+                fontSize: "2rem",
+                mb: 1.5,
+              }}
+            >
+              Build blocks that work
+              <br /> across the web
+            </Typography>
+
+            <Box
+              sx={{
+                width: 166,
+                height: 3,
+                background:
+                  "linear-gradient(89.98deg, #6B54EF 0%, #FFFFFF 100%)",
+                borderRadius: 25,
+                mb: 3.5,
+              }}
+            />
+
+            <Typography
+              variant="bpBodyCopy"
+              sx={{
+                fontSize: "1rem",
+                mb: 2,
+                textAlign: "inherit",
+                flexGrow: 1,
+              }}
+            >
+              Rather than develop blocks separately for multiple platforms,
+              build your block once and let users access them in{" "}
+              <strong>HASH, WordPress, GitHub Blocks</strong> and{" "}
+              <strong>Figma</strong> (coming soon).
+            </Typography>
+
+            <Box>
+              <LinkButton
+                href="/docs/developing-blocks"
+                variant="primary"
+                sx={{ color: ({ palette }) => palette.common.white }}
+              >
+                <SparklesIcon
+                  sx={{
+                    fontSize: 18,
+                    marginRight: 1.25,
+                    fill: ({ palette }) => palette.common.white,
+                  }}
+                />
+                Build a block
+              </LinkButton>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              textAlign: "inherit",
+              position: "relative",
+              maxWidth: 450,
+            }}
+          >
+            <Box
+              component="img"
+              src="/assets/new-home/faded-earth.svg"
+              sx={{
+                position: "absolute",
+                right: -10,
+                top: 5,
+                zIndex: -1,
+              }}
+            />
+
+            <Typography
+              sx={{
+                textTransform: "uppercase",
+                color: ({ palette }) => palette.purple[700],
+                mb: 0.75,
+                fontWeight: 700,
+                fontSize: "1.125rem",
+                textAlign: "inherit",
+              }}
+              variant="bpSmallCaps"
+            >
+              Block Users
+            </Typography>
+
+            <Typography
+              variant="bpHeading2"
+              sx={{
+                textAlign: "inherit",
+                fontWeight: 500,
+                fontSize: "2rem",
+                mb: 1.5,
+              }}
+            >
+              Tap into blocks in any supporting application
+            </Typography>
+
+            <Box
+              sx={{
+                width: 166,
+                height: 3,
+                background:
+                  "linear-gradient(89.98deg, #6B54EF 0%, #FFFFFF 100%)",
+                borderRadius: 25,
+                mb: 3.5,
+              }}
+            />
+
+            <Typography
+              variant="bpBodyCopy"
+              sx={{
+                fontSize: "1rem",
+                mb: 2,
+                textAlign: "inherit",
+                flexGrow: 1,
+              }}
+            >
+              Access a whole world of blocks on the{" "}
+              <Box
+                component="strong"
+                sx={{ color: ({ palette }) => palette.purple[700] }}
+              >
+                Þ Hub
+              </Box>{" "}
+              to extend the functionality of the apps you use, and enjoy
+              high-quality, consistent interfaces across applications.
+            </Typography>
+
+            <Stack flexDirection="row" gap={2}>
+              <LinkButton
+                href="/docs/using-blocks"
+                variant="primary"
+                sx={{ color: ({ palette }) => palette.common.white }}
+              >
+                <BrowserIcon
+                  sx={{
+                    fontSize: 18,
+                    marginRight: 1.25,
+                    fill: ({ palette }) => palette.common.white,
+                  }}
+                />
+                Browse apps
+              </LinkButton>
+
+              <LinkButton
+                href="/hub"
+                variant="secondary"
+                sx={{ color: ({ palette }) => palette.purple[70] }}
+              >
+                <BoxesStackedIcon
+                  sx={{
+                    fontSize: 18,
+                    marginRight: 1.25,
+                    fill: ({ palette }) => palette.purple[70],
+                  }}
+                />
+                Browse apps
+              </LinkButton>
+            </Stack>
+          </Box>
+        </Box>
+      </Container>
+
+      <Box sx={{ mt: "-10%" }}>
+        <Image layout="responsive" src={composableFullImage} />
       </Box>
     </Box>
   );

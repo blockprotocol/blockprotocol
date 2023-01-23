@@ -5,6 +5,7 @@ import { MuiIconThemeOptions } from "./data-display/mui-icon-theme-options";
 import { MuiListItemButtonThemeOptions } from "./data-display/mui-list-item-button-theme-options";
 import { MuiListItemIconThemeOptions } from "./data-display/mui-list-item-icon-theme-options";
 import { MuiListItemTextThemeOptions } from "./data-display/mui-list-item-text-theme-options";
+import { MuiTooltipThemeOptions } from "./data-display/mui-tooltip-theme-options";
 import { MuiTypographyThemeOptions } from "./data-display/mui-typography-theme-options";
 import { MuiAlertThemeOptions } from "./feedback/mui-alert-theme-options";
 import { MuiSkeletonThemeOptions } from "./feedback/mui-skeleton-theme-options";
@@ -41,6 +42,7 @@ export const components: ThemeOptions["components"] = {
   MuiListItemButton: MuiListItemButtonThemeOptions,
   MuiListItemIcon: MuiListItemIconThemeOptions,
   MuiListItemText: MuiListItemTextThemeOptions,
+  MuiTooltip: MuiTooltipThemeOptions,
 
   /** ===== SURFACES ===== */
   MuiPaper: MuiPaperThemeOptions,

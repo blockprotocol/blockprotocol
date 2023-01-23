@@ -41,8 +41,8 @@ const HomePage: FunctionComponent<PageProps> = ({ catalog }) => {
       <ConfinedBlocks />
       <InteroperableBlocks />
       <ZeroApplicationDevelopers />
-      <AnyFramework />
       <ComposableInterfaces />
+      <AnyFramework />
       <RegistrySection catalog={catalog} />
       {!user && <FinalCTA />}
     </>

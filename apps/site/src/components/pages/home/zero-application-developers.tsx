@@ -1,6 +1,6 @@
 import { Box, Container, Typography, useTheme } from "@mui/material";
 
-import { SparklesIcon } from "../../icons/sparkles-icon";
+import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { LinkButton } from "../../link-button";
 
 export const ZeroApplicationDevelopers = () => {
@@ -97,7 +97,7 @@ export const ZeroApplicationDevelopers = () => {
         variant="primary"
         sx={{ color: theme.palette.common.white }}
       >
-        <SparklesIcon
+        <SolidSparklesIcon
           sx={{
             fontSize: 18,
             marginRight: 1.25,

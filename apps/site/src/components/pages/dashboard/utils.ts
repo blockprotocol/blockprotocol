@@ -6,7 +6,7 @@ import {
 
 import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
 import { BlockIcon } from "../../icons/block-icon";
-import { SparklesIcon } from "../../icons/sparkles-icon";
+import { SparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
 export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
