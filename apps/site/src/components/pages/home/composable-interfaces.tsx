@@ -288,14 +288,14 @@ export const ComposableInterfaces = () => {
                   href="/docs/developing-blocks"
                   variant="primary"
                   sx={{ color: ({ palette }) => palette.common.white }}
+                  startIcon={
+                    <SparklesIcon
+                      sx={{
+                        fontSize: 18,
+                      }}
+                    />
+                  }
                 >
-                  <SparklesIcon
-                    sx={{
-                      fontSize: 18,
-                      marginRight: 1.25,
-                      fill: ({ palette }) => palette.common.white,
-                    }}
-                  />
                   Build a block
                 </LinkButton>
               </Box>
@@ -383,14 +383,14 @@ export const ComposableInterfaces = () => {
                   href="/docs/using-blocks"
                   variant="primary"
                   sx={{ color: ({ palette }) => palette.common.white }}
+                  startIcon={
+                    <BrowserIcon
+                      sx={{
+                        fontSize: 18,
+                      }}
+                    />
+                  }
                 >
-                  <BrowserIcon
-                    sx={{
-                      fontSize: 18,
-                      marginRight: 1.25,
-                      fill: ({ palette }) => palette.common.white,
-                    }}
-                  />
                   Browse apps
                 </LinkButton>
 
@@ -401,14 +401,14 @@ export const ComposableInterfaces = () => {
                     color: ({ palette }) => palette.purple[70],
                     background: "transparent",
                   }}
+                  startIcon={
+                    <BoxesStackedIcon
+                      sx={{
+                        fontSize: 18,
+                      }}
+                    />
+                  }
                 >
-                  <BoxesStackedIcon
-                    sx={{
-                      fontSize: 18,
-                      marginRight: 1.25,
-                      fill: ({ palette }) => palette.purple[70],
-                    }}
-                  />
                   Browse apps
                 </LinkButton>
               </Stack>

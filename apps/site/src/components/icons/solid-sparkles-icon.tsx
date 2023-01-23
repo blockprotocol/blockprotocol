@@ -5,9 +5,9 @@ export const SolidSparklesIcon: FunctionComponent<SvgIconProps> = (props) => {
   return (
     <SvgIcon
       {...props}
-      width="512"
-      height="512"
-      viewBox="0 0 512 512"
+      width="32"
+      height="32"
+      viewBox="0 0 32 32"
       fill="#C1CFDE"
     >
       <path

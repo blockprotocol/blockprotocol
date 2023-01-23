@@ -96,14 +96,14 @@ export const ZeroApplicationDevelopers = () => {
         href="/docs/embedding-blocks"
         variant="primary"
         sx={{ color: theme.palette.common.white }}
+        startIcon={
+          <SolidSparklesIcon
+            sx={{
+              fontSize: 18,
+            }}
+          />
+        }
       >
-        <SolidSparklesIcon
-          sx={{
-            fontSize: 18,
-            marginRight: 1.25,
-            fill: theme.palette.common.white,
-          }}
-        />
         Learn more about embedding{" "}
         <Box component="strong" sx={{ mx: 0.5 }}>
           Þ
