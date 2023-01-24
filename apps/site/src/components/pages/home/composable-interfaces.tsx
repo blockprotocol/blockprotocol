@@ -15,6 +15,7 @@ import { BoxesStackedIcon } from "../../icons/boxes-stacked-icon";
 import { BrowserIcon } from "../../icons/browser-icon";
 import { Grid2PlusIcon } from "../../icons/grid-2-plus";
 import { SparklesIcon } from "../../icons/sparkles-icon";
+import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
 const IconButtonWithTooltip = ({
@@ -380,12 +381,18 @@ export const ComposableInterfaces = () => {
                 }}
               >
                 Access a whole world of blocks on the{" "}
-                <Box
-                  component="strong"
-                  sx={{ color: ({ palette }) => palette.purple[70] }}
+                <Link
+                  href="/hub"
+                  sx={{
+                    borderBottomColor: "transparent !important",
+                    ":hover": {
+                      borderBottomColor: ({ palette }) =>
+                        `${palette.purple[500]} !important`,
+                    },
+                  }}
                 >
                   Þ Hub
-                </Box>{" "}
+                </Link>{" "}
                 to extend the functionality of the apps you use, and enjoy
                 high-quality, consistent interfaces across applications.
               </Typography>
