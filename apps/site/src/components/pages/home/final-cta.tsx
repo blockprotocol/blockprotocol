@@ -322,7 +322,9 @@ export const FinalCTA: NextPage = () => {
                 },
               }}
             >
-              <Box lineHeight={1.3}>{icon}</Box>
+              <Box sx={{ lineHeight: "16px", position: "relative", top: 4 }}>
+                {icon}
+              </Box>
               <Box>
                 <Typography
                   variant="bpSmallCopy"
