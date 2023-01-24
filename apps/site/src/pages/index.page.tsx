@@ -4,13 +4,11 @@ import { FunctionComponent } from "react";
 import { AnyFramework } from "../components/pages/home/anyframework";
 import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
 import { ConfinedBlocks } from "../components/pages/home/confined-blocks";
-import { FinalCTA } from "../components/pages/home/final-cta";
 import { Header } from "../components/pages/home/header";
 import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
 import { RegistrySection } from "../components/pages/home/registry-section";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import { ZeroApplicationDevelopers } from "../components/pages/home/zero-application-developers";
-import { useUser } from "../context/user-context";
 import { getAllBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
@@ -33,7 +31,6 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const HomePage: FunctionComponent<PageProps> = ({ catalog }) => {
-  const { user } = useUser();
   return (
     <>
       <Header />
@@ -44,7 +41,6 @@ const HomePage: FunctionComponent<PageProps> = ({ catalog }) => {
       <ComposableInterfaces />
       <AnyFramework />
       <RegistrySection catalog={catalog} />
-      {!user && <FinalCTA />}
     </>
   );
 };
