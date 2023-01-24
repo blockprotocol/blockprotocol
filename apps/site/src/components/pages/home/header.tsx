@@ -41,7 +41,7 @@ export const Header = () => {
         <Typography
           sx={{
             textTransform: "uppercase",
-            color: ({ palette }) => palette.purple[70],
+            color: ({ palette }) => palette.purple[800],
             mb: 2.5,
             fontWeight: 500,
             mx: "auto",
