@@ -68,7 +68,7 @@ export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
               marginBottom: 2,
             }}
           >
-            {regenerate ? `Regenerate ${keyName}` : "Generate API Key"}
+            {regenerate ? "Regenerate" : "Generate"} Key
           </Typography>
           <Typography sx={{ marginBottom: 1.5 }}>
             {regenerate ? (

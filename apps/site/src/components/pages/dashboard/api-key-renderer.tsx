@@ -48,7 +48,7 @@ export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
           marginBottom: 2,
         }}
       >
-        {keyName} {regenerate ? "regenerated" : "generated"}
+        Key {regenerate ? "regenerated" : "generated"}
       </Typography>
       <Typography sx={{ marginBottom: 2 }}>
         Your key {keyName} has been {regenerate ? "regenerated" : "generated"}.
