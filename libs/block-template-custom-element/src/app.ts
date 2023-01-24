@@ -17,7 +17,7 @@ export class BlockElement extends BlockElementBase<RootEntity> {
     font-family: sans-serif;
   `;
 
-  private handleInput(event: Event) {
+  private handleInput(event: InputEvent) {
     if (!this.graphService || !this.blockEntity) {
       return;
     }
@@ -31,11 +31,16 @@ export class BlockElement extends BlockElementBase<RootEntity> {
      * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions
      */
     this.graphService
-      .updateEntity({
+      .updateEntity<RootEntity["properties"]>({
         data: {
           entityId: this.blockEntity.metadata.editionId.baseId,
           entityTypeId: this.blockEntity.metadata.entityTypeId,
-          properties: { name: (event.target as HTMLInputElement).value },
+          properties: {
+            ...this.blockEntity.properties,
+            "https://alpha.hash.ai/@hash/types/property-type/title/": (
+              event.target as HTMLInputElement
+            ).value,
+          },
         },
       })
       .catch((error) => console.error(`Error updating self: ${error}`));
@@ -43,7 +48,9 @@ export class BlockElement extends BlockElementBase<RootEntity> {
 
   /** @see https://lit.dev/docs/components/rendering */
   render() {
-    return html` <h1>
+    console.log({ this: this });
+
+    return html`<h1>
         Hello,
         ${this.blockEntity?.properties[
           "https://alpha.hash.ai/@hash/types/property-type/title/"

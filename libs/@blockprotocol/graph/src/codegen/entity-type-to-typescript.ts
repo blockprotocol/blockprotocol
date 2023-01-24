@@ -17,8 +17,7 @@ import {
 import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
 import { fetchTypeAsJson, typedEntries } from "./shared.js";
 
-const bannerComment = (uri: string, depth: number) => `/* eslint-disable */
-/**
+const bannerComment = (uri: string, depth: number) => `/**
  * This file was automatically generated – do not edit it.
  * @see ${uri} for the root JSON Schema these types were generated from
  * Types for link entities and their destination were generated to a depth of ${depth} from the root
@@ -218,8 +217,9 @@ const _jsonSchemaToTypeScript = async (
       generateLinkEntityAndRightEntityDefinition({
         sourceEntityTypeName: typeName,
         linkEntityTypeName: linkEntityType.typeName,
-        rightEntityTypeNames: (
-          rightEntityTypes ?? [{ typeName: "Entity" }]
+        rightEntityTypeNames: (rightEntityTypes.length > 0
+          ? rightEntityTypes
+          : [{ typeName: "Entity" }]
         ).map((type) => type.typeName),
       });
 
