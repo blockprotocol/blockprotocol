@@ -140,11 +140,11 @@ export const AnyFramework = () => {
               mt: 5,
             }}
           >
-            <Box component="img" src="/assets/new-home/webc-logo.svg" />
-            <Box component="img" src="/assets/new-home/react-logo.svg" />
-            <Box component="img" src="/assets/new-home/vue-logo.svg" />
-            <Box component="img" src="/assets/new-home/angular-logo.svg" />
-            <Box component="img" src="/assets/new-home/typescript-logo.svg" />
+            <Box component="img" src="/assets/logos/color/webc.svg" />
+            <Box component="img" src="/assets/logos/color/react.svg" />
+            <Box component="img" src="/assets/logos/color/vue.svg" />
+            <Box component="img" src="/assets/logos/color/angular.svg" />
+            <Box component="img" src="/assets/logos/color/typescript.svg" />
           </Box>
         </Box>
 

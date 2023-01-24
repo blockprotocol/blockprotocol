@@ -69,9 +69,9 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
           </Typography>
 
           <Stack flexDirection="row" gap={2.25} alignItems="center">
-            <Box component="img" src="/assets/new-home/open-ai-logo.svg" />
-            <Box component="img" src="/assets/new-home/mapbox-logo.svg" />
-            <Box component="img" src="/assets/new-home/hash-logo.svg" />
+            <Box component="img" src="/assets/logos/mono/openai.svg" />
+            <Box component="img" src="/assets/logos/mono/mapbox.svg" />
+            <Box component="img" src="/assets/logos/mono/hash.svg" />
 
             <Typography
               variant="bpSmallCaps"
