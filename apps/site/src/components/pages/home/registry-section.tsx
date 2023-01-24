@@ -4,7 +4,7 @@ import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlocksSlider } from "../../blocks-slider";
-import { BlockProtocolIcon, HubIcon } from "../../icons";
+import { BlockProtocolIcon } from "../../icons";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
