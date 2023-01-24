@@ -16,6 +16,7 @@ import { apiClient } from "../../../lib/api-client";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { Button } from "../../button";
 import { FontAwesomeIcon } from "../../icons";
+import { ArrowUpIcon } from "../../icons/arrow-up-icon";
 import { CompleteSignupScreen } from "../../screens/complete-signup-screen";
 import { SignupScreen } from "../../screens/signup-screen";
 import {
@@ -254,12 +255,10 @@ export const FinalCTA: NextPage = () => {
                 </>
               ),
               icon: (
-                <FontAwesomeIcon
+                <ArrowUpIcon
                   sx={{
                     fontSize: 16,
-                    fill: ({ palette }) => palette.purple[70],
                   }}
-                  icon={faArrowUp}
                 />
               ),
             },
