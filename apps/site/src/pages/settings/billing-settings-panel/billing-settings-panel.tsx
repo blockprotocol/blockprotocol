@@ -40,7 +40,9 @@ export const BillingSettingsPanel: FunctionComponent = () => {
       throw new Error("User is undefined");
     }
 
-    return user.stripeSubscriptionTier ?? "free";
+    return user.stripeSubscriptionStatus === "active"
+      ? user.stripeSubscriptionTier ?? "free"
+      : "free";
   }, [user]);
 
   const currentSubscriptionTierIsPaid = isPaidSubscriptionTier(
