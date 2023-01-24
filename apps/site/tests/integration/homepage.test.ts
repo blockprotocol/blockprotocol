@@ -38,7 +38,7 @@ test("Home page should contain key elements", async ({ page }) => {
     page.locator("text=Learn more about embedding Þ blocks"),
   ).toHaveAttribute("href", "/docs/embedding-blocks");
 
-  // Composable blocks section
+  // Composable interfaces section
   await expect(page.locator("[data-testid='Wordpress-button']")).toBeVisible();
   await page.hover(`[data-testid='Wordpress-button']`);
   await expect(page.locator("[data-testid='Wordpress-tooltip']")).toBeVisible();
