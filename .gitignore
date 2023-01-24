@@ -69,5 +69,3 @@ libs/@blockprotocol/type-system/wasm
 libs/block-template-html/dev/src
 libs/mock-block-dock/src/version.ts
 
-## Auto-generated files
-*.gen.ts

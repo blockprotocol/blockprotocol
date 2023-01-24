@@ -19,6 +19,7 @@ import {
   CreateResourceError,
   DeleteEntityData,
   Entity,
+  EntityPropertiesObject,
   GetEntityData,
   GetEntityTypeData,
   ReadOrModifyResourceError,
@@ -97,7 +98,9 @@ export class GraphBlockHandler
 
   // @todo automate creation of these methods from graph-service.json and types.ts
 
-  createEntity({ data }: { data?: CreateEntityData }) {
+  createEntity<
+    ValidProperties extends EntityPropertiesObject = EntityPropertiesObject,
+  >({ data }: { data?: CreateEntityData & { properties: ValidProperties } }) {
     return this.sendMessage<Entity, CreateResourceError>({
       message: {
         messageName: "createEntity",
@@ -107,7 +110,9 @@ export class GraphBlockHandler
     });
   }
 
-  updateEntity({ data }: { data?: UpdateEntityData }) {
+  updateEntity<
+    ValidProperties extends EntityPropertiesObject = EntityPropertiesObject,
+  >({ data }: { data?: UpdateEntityData & { properties: ValidProperties } }) {
     return this.sendMessage<Entity, ReadOrModifyResourceError>({
       message: {
         messageName: "updateEntity",

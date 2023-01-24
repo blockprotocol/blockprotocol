@@ -131,7 +131,6 @@ const usage = commandLineUsage(helpSections);
   } else {
     packageJson.blockprotocol.displayName = blockName;
     packageJson.blockprotocol.name = slugifiedBlockName;
-    packageJson.postinstall = "yarn codegen";
   }
 
   delete packageJson.homepage;

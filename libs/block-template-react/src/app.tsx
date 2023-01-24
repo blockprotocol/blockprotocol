@@ -3,7 +3,6 @@ import {
   useEntitySubgraph,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
-import { addSimpleAccessors } from "@blockprotocol/graph/stdlib";
 import { useRef } from "react";
 
 /**
@@ -66,9 +65,10 @@ export const App: BlockComponent<RootEntity> = ({
 
   const entityId = blockEntity.metadata.editionId.baseId;
 
-  const simpleBlockEntity = addSimpleAccessors(blockEntity);
+  const titleKey: keyof RootEntity["properties"] =
+    "https://alpha.hash.ai/@hash/types/property-type/title/";
 
-  const { title } = simpleBlockEntity.properties;
+  const title = blockEntity.properties[titleKey];
 
   return (
     /**
@@ -99,7 +99,7 @@ export const App: BlockComponent<RootEntity> = ({
             data: {
               entityId,
               entityTypeId: blockEntity.metadata.entityTypeId,
-              properties: { title: supplyRandomName() },
+              properties: { [titleKey]: supplyRandomName() },
             },
           })
         }

@@ -81,9 +81,6 @@ libs/@blockprotocol/type-system/wasm
 libs/block-template-html/dev/src
 libs/mock-block-dock/src/version.ts
 
-## Auto-generated files
-*.gen.ts
-
 #########################
 ## Shared between linters
 #########################
@@ -91,3 +88,6 @@ libs/mock-block-dock/src/version.ts
 # Keep license files as is
 LICENSE.md
 LICENSE-*.md
+
+## Ignore auto-generated files
+*.gen.ts

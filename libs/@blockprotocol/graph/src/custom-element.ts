@@ -3,7 +3,6 @@ import { LitElement } from "lit";
 import {
   BlockGraphProperties,
   Entity,
-  EntityEditionId,
   EntityPropertiesObject,
   GraphBlockHandler,
   LinkEntityAndRightEntity,
@@ -43,10 +42,17 @@ export abstract class BlockElementBase<
     /**
      * The 'graph' object contains messages sent under the graph service from the app to the block.
      * They are sent on initialization and again when the application has new values to send.
-     * One such message is 'graph.blockEntity', which is a data entity fitting the block's schema (its type).
+     * One such message is 'graph.blockEntitySubgraph', which is a graph rooted at the block entity.
      * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for a full list
      */
     graph: { type: Object },
+
+    /**
+     * These are properties derived from the block subgraph – the root entity, and those linked from it
+     * // @see https://lit.dev/docs/components/properties/#internal-reactive-state
+     */
+    blockEntity: { state: true },
+    linkedEntities: { state: true },
   };
 
   private updateDerivedProperties() {

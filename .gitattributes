@@ -1,2 +1,3 @@
 libs/@blockprotocol/type-system-node/dist/* linguist-generated=true
 libs/@blockprotocol/type-system-web/dist/* linguist-generated=true
+*.gen.ts linguist-generated=true
