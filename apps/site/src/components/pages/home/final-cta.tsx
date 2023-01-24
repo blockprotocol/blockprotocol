@@ -115,6 +115,7 @@ export const FinalCTA: NextPage = () => {
 
   return (
     <Box
+      data-testid="final-cta"
       sx={{
         display: "flex",
         flexDirection: { xs: "column", md: "row" },

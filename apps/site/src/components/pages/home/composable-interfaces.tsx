@@ -26,6 +26,12 @@ const IconButtonWithTooltip = ({
 }) => {
   return (
     <Tooltip
+      componentsProps={{
+        tooltip: {
+          // eslint-disable-next-line no-useless-computed-key
+          ["data-testid"]: `${label}-tooltip`,
+        } as any,
+      }}
       title={
         <Box display="flex" alignItems="center">
           {label}
@@ -41,6 +47,11 @@ const IconButtonWithTooltip = ({
       placement="top"
     >
       <LinkButton
+        linkProps={{
+          // eslint-disable-next-line no-useless-computed-key
+          ["data-testid"]: `${label}-button`,
+        }}
+        data-testid={label}
         href="/docs/using-blocks"
         color="inherit"
         sx={{
