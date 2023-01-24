@@ -239,7 +239,7 @@ export const FinalCTA: NextPage = () => {
                   Publish blocks to the{" "}
                   <Box
                     component="span"
-                    sx={{ color: ({ palette }) => palette.purple[700] }}
+                    sx={{ color: ({ palette }) => palette.purple[70] }}
                   >
                     Þ
                   </Box>{" "}
@@ -256,7 +256,7 @@ export const FinalCTA: NextPage = () => {
                 <FontAwesomeIcon
                   sx={{
                     fontSize: 16,
-                    fill: ({ palette }) => palette.purple[700],
+                    fill: ({ palette }) => palette.purple[70],
                   }}
                   icon={faArrowUp}
                 />
@@ -271,7 +271,7 @@ export const FinalCTA: NextPage = () => {
                 <FontAwesomeIcon
                   sx={{
                     fontSize: 16,
-                    fill: ({ palette }) => palette.purple[700],
+                    fill: ({ palette }) => palette.purple[70],
                   }}
                   icon={faPlus}
                 />
@@ -288,7 +288,7 @@ export const FinalCTA: NextPage = () => {
                 <FontAwesomeIcon
                   sx={{
                     fontSize: 16,
-                    fill: ({ palette }) => palette.purple[700],
+                    fill: ({ palette }) => palette.purple[70],
                   }}
                   icon={faCodePullRequest}
                 />
@@ -301,7 +301,7 @@ export const FinalCTA: NextPage = () => {
                 <FontAwesomeIcon
                   sx={{
                     fontSize: 16,
-                    fill: ({ palette }) => palette.purple[700],
+                    fill: ({ palette }) => palette.purple[70],
                   }}
                   icon={faUser}
                 />

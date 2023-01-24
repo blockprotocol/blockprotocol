@@ -30,7 +30,7 @@ export const ZeroApplicationDevelopers = () => {
       <Typography
         sx={{
           textTransform: "uppercase",
-          color: ({ palette }) => palette.purple[700],
+          color: ({ palette }) => palette.purple[70],
           mb: 0.75,
           fontWeight: 700,
           fontSize: "1.125rem",
@@ -55,7 +55,10 @@ export const ZeroApplicationDevelopers = () => {
         Add new blocks to your app with
         <br />
         <strong>
-          <Box component="span" sx={{ color: theme.palette.purple[600] }}>
+          <Box
+            component="span"
+            sx={{ color: ({ palette }) => palette.purple[600] }}
+          >
             zero
           </Box>{" "}
           marginal implementation cost
@@ -84,7 +87,7 @@ export const ZeroApplicationDevelopers = () => {
         Once the{" "}
         <Box
           component="span"
-          sx={{ fontWeight: 700, color: ({ palette }) => palette.purple[800] }}
+          sx={{ fontWeight: 700, color: ({ palette }) => palette.purple[70] }}
         >
           Þ
         </Box>{" "}

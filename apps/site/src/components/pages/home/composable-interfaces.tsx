@@ -104,7 +104,7 @@ export const ComposableInterfaces = () => {
               >
                 <Box
                   component="span"
-                  sx={{ color: ({ palette }) => palette.purple[800] }}
+                  sx={{ color: ({ palette }) => palette.purple[70] }}
                 >
                   Þ
                 </Box>{" "}
@@ -234,7 +234,7 @@ export const ComposableInterfaces = () => {
               <Typography
                 sx={{
                   textTransform: "uppercase",
-                  color: ({ palette }) => palette.purple[700],
+                  color: ({ palette }) => palette.purple[70],
                   mb: 0.75,
                   fontWeight: 700,
                   fontSize: "1.125rem",
@@ -325,7 +325,7 @@ export const ComposableInterfaces = () => {
               <Typography
                 sx={{
                   textTransform: "uppercase",
-                  color: ({ palette }) => palette.purple[700],
+                  color: ({ palette }) => palette.purple[70],
                   mb: 0.75,
                   fontWeight: 700,
                   fontSize: "1.125rem",
@@ -371,7 +371,7 @@ export const ComposableInterfaces = () => {
                 Access a whole world of blocks on the{" "}
                 <Box
                   component="strong"
-                  sx={{ color: ({ palette }) => palette.purple[700] }}
+                  sx={{ color: ({ palette }) => palette.purple[70] }}
                 >
                   Þ Hub
                 </Box>{" "}

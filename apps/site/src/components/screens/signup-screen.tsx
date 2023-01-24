@@ -98,7 +98,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
       <Box display="flex" gap={3} mb={3} alignSelf="flex-start">
         <BlockProtocolIcon
           sx={{
-            color: (theme) => theme.palette.purple[700],
+            color: (theme) => theme.palette.purple[70],
             height: "unset",
           }}
         />
@@ -127,7 +127,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
             Use{" "}
             <Box
               component="span"
-              sx={{ color: ({ palette }) => palette.purple[700] }}
+              sx={{ color: ({ palette }) => palette.purple[70] }}
             >
               Þ
             </Box>{" "}
@@ -176,7 +176,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
             query: emailValue ? { email: emailValue } : undefined,
           }}
           onClick={handleClose}
-          sx={{ color: ({ palette }) => `${palette.purple[700]} !important` }}
+          sx={{ color: ({ palette }) => `${palette.purple[70]} !important` }}
         >
           Log in
         </Link>

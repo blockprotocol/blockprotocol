@@ -41,7 +41,7 @@ export const Header = () => {
         <Typography
           sx={{
             textTransform: "uppercase",
-            color: ({ palette }) => palette.purple[700],
+            color: ({ palette }) => palette.purple[70],
             mb: 2.5,
             fontWeight: 500,
             mx: "auto",
@@ -82,7 +82,7 @@ export const Header = () => {
           <strong>
             <Box
               component="span"
-              sx={{ color: ({ palette }) => palette.purple[800] }}
+              sx={{ color: ({ palette }) => palette.purple[70] }}
             >
               Þ
             </Box>{" "}

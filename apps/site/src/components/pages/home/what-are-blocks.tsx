@@ -48,7 +48,14 @@ export const WhatAreBlocks = () => {
                 alignItems: { xs: "center", md: "start" },
               }}
             >
-              <Box sx={{ mb: 3 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: { xs: "center", md: "start" },
+                  mb: 3,
+                }}
+              >
                 <Typography
                   variant="bpHeading3"
                   sx={{
@@ -63,7 +70,7 @@ export const WhatAreBlocks = () => {
                   What are{" "}
                   <Box
                     component="span"
-                    sx={{ color: ({ palette }) => palette.purple[800] }}
+                    sx={{ color: ({ palette }) => palette.purple[70] }}
                   >
                     blocks?
                   </Box>

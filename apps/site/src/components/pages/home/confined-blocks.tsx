@@ -31,7 +31,14 @@ export const ConfinedBlocks = () => {
             alignItems: { xs: "center", md: "flex-start" },
           }}
         >
-          <Box sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: { xs: "center", md: "start" },
+              mb: 3,
+            }}
+          >
             <Typography
               sx={{
                 color: ({ palette }) => palette.grey[200],

@@ -77,7 +77,13 @@ export const InteroperableBlocks = () => {
             }}
           >
             Block Protocol blocks
-            <br /> are <span style={{ color: "#8b4cea" }}>interoperable</span>
+            <br /> are{" "}
+            <Box
+              component="span"
+              sx={{ color: ({ palette }) => palette.purple[70] }}
+            >
+              interoperable
+            </Box>
           </Typography>
 
           <Box
