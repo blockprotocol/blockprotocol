@@ -1,5 +1,16 @@
 # @blockprotocol/graph
 
+## 0.1.0-20230124234232
+
+### Minor Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`7a9e7d61`](https://github.com/blockprotocol/blockprotocol/commit/7a9e7d6152b685c0e5b95122d9415dfc1f5af1b2) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
+
+### Patch Changes
+
+- Updated dependencies [[`7a9e7d61`](https://github.com/blockprotocol/blockprotocol/commit/7a9e7d6152b685c0e5b95122d9415dfc1f5af1b2)]:
+  - @blockprotocol/type-system@0.0.4-20230124234232
+
 ## 0.0.19
 
 ### Patch Changes

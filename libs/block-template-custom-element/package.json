@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.1.22",
+  "version": "0.2.0-20230124234232",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
@@ -33,16 +33,16 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.0.19",
-    "@blockprotocol/type-system": "0.0.3",
+    "@blockprotocol/graph": "0.1.0-20230124234232",
+    "@blockprotocol/type-system": "0.0.4-20230124234232",
     "lit": "^2.4.1"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
-    "block-scripts": "0.0.19",
+    "block-scripts": "0.1.0-20230124234232",
     "eslint": "8.31.0",
-    "mock-block-dock": "0.0.39",
+    "mock-block-dock": "0.1.0-20230124234232",
     "prettier": "2.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
