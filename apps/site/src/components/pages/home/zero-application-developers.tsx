@@ -57,7 +57,7 @@ export const ZeroApplicationDevelopers = () => {
         <strong>
           <Box
             component="span"
-            sx={{ color: ({ palette }) => palette.purple[600] }}
+            sx={{ color: ({ palette }) => palette.purple[70] }}
           >
             zero
           </Box>{" "}
