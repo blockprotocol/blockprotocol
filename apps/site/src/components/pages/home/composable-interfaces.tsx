@@ -234,7 +234,7 @@ export const ComposableInterfaces = () => {
               <Typography
                 sx={{
                   textTransform: "uppercase",
-                  color: ({ palette }) => palette.purple[70],
+                  color: ({ palette }) => palette.purple[800],
                   mb: 0.75,
                   fontWeight: 700,
                   fontSize: "1.125rem",
@@ -325,7 +325,7 @@ export const ComposableInterfaces = () => {
               <Typography
                 sx={{
                   textTransform: "uppercase",
-                  color: ({ palette }) => palette.purple[70],
+                  color: ({ palette }) => palette.purple[800],
                   mb: 0.75,
                   fontWeight: 700,
                   fontSize: "1.125rem",
