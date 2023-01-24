@@ -42,7 +42,6 @@ export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
       </Box>
       <Typography
         sx={{
-          fontFamily: "Apercu Pro",
           fontSize: "35.1625px",
           lineHeight: "120%",
           color: "#37434F",

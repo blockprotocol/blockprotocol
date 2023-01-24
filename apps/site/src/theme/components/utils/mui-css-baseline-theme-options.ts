@@ -121,26 +121,6 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             src: url("/assets/fonts/inter-bold.ttf") format("trueType");
           }
           @font-face {
-            font-family: 'Apercu Pro';
-            font-weight: 300;
-            src: url("/assets/fonts/apercu-light-pro.ttf") format("trueType");
-          }
-          @font-face {
-              font-family: 'Apercu Pro';
-              font-weight: 400;
-              src: url("/assets/fonts/apercu-regular-pro.ttf") format("trueType");
-          }
-          @font-face {
-              font-family: 'Apercu Pro';
-              font-weight: 500;
-              src: url("/assets/fonts/apercu-medium-pro.ttf") format("trueType");
-          }
-          @font-face {
-            font-family: 'Apercu Pro';
-            font-weight: 700;
-            src: url("/assets/fonts/apercu-bold-pro.ttf") format("trueType");
-          }
-          @font-face {
             font-family: 'JetBrains Mono';
             font-weight: 500;
             src: url("/assets/fonts/jetbrains-mono-medium.ttf") format("trueType");
