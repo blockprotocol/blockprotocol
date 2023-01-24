@@ -40,7 +40,7 @@ test("page header navigation works", async ({
   await page.locator("header svg").first().click();
   await expect(page).toHaveURL("/");
   await expect(
-    page.locator("text=The open standard for building block-based interfaces"),
+    page.locator("text=The open standard for block-based apps"),
   ).toBeVisible();
 
   if (isMobile) {
