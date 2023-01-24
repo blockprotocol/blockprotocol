@@ -410,7 +410,7 @@ export const ComposableInterfaces = () => {
                     />
                   }
                 >
-                  Browse apps
+                  Browse blocks
                 </LinkButton>
               </Stack>
             </Box>
