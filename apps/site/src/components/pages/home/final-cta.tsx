@@ -308,8 +308,8 @@ export const FinalCTA: NextPage = () => {
               ),
             },
           ].map(({ heading, subHeading, icon }, index) => (
-            // eslint-disable-next-line react/no-array-index-key -- TODO fix this
             <Box
+              // eslint-disable-next-line react/no-array-index-key -- TODO fix this
               key={index}
               display="flex"
               alignItems="flex-start"
