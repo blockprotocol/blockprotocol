@@ -48,8 +48,6 @@ export class BlockElement extends BlockElementBase<RootEntity> {
 
   /** @see https://lit.dev/docs/components/rendering */
   render() {
-    console.log({ this: this });
-
     return html`<h1>
         Hello,
         ${this.blockEntity?.properties[
