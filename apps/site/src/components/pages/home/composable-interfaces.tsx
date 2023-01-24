@@ -3,7 +3,7 @@ import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
 import Image from "next/legacy/image";
 import { ReactNode } from "react";
 
-import composableFullImage from "../../../../public/assets/new-home/composable-full.png";
+import composableFullImage from "../../../../public/assets/new-home/composable-full-min.webp";
 import {
   FontAwesomeIcon,
   GithubIcon,

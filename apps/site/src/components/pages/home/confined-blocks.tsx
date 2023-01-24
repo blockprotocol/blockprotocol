@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/legacy/image";
 
-import darkBoxImage from "../../../../public/assets/new-home/dark-box.png";
+import darkBoxImage from "../../../../public/assets/new-home/dark-box-min.webp";
 
 export const ConfinedBlocks = () => {
   return (
