@@ -27,7 +27,6 @@ export const InteroperableBlocks = () => {
           },
           gridGap: { xs: "1rem", md: 0 },
           alignItems: { xs: "flex-end", sm: "unset" },
-          height: { md: "85vh", lg: "100vh", xl: "105vh" },
           marginLeft: { xs: "0", md: "-12rem", lg: "-8rem", xl: "1rem" },
           padding: { xs: "2rem 0 1rem 1rem", sm: "4rem 0 4rem 2rem", md: 0 },
         }}
@@ -46,10 +45,10 @@ export const InteroperableBlocks = () => {
         ) : (
           <Box
             sx={{
-              position: { sm: "relative", md: "absolute" },
+              position: "relative",
               top: 0,
-              width: { md: "145%", lg: "120%", xl: "100%" },
-              left: { lg: "-7.5%", xl: "0%" },
+              width: { md: "145%", lg: "120%", xl: "95%" },
+              left: { lg: "-7.5%", xl: "5%" },
               zIndex: "3",
             }}
           >
