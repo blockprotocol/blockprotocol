@@ -58,6 +58,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               fontWeight: 400,
               fontStyle: "italic",
               mb: 2,
+              letterSpacing: "-0.02em",
             }}
           >
             Blocks on the

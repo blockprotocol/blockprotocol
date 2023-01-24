@@ -65,6 +65,7 @@ export const WhatAreBlocks = () => {
                     margin: "2rem auto 6px",
                     maxWidth: "40ch",
                     textAlign: { xs: "center", md: "left" },
+                    letterSpacing: "-0.01em",
                   }}
                 >
                   What are{" "}
@@ -202,6 +203,7 @@ export const WhatAreBlocks = () => {
                 textAlign: { xs: "center", md: "left" },
                 maxWidth: { xs: "20ch", md: "100%" },
                 mb: 0.75,
+                letterSpacing: "-0.01em",
               }}
             >
               Users typically select blocks from a list

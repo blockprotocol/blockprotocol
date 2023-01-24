@@ -46,6 +46,7 @@ export const ConfinedBlocks = () => {
                 maxWidth: "20ch",
                 fontWeight: 500,
                 mb: 1.75,
+                letterSpacing: "-0.01em",
               }}
               variant="bpHeading3"
             >

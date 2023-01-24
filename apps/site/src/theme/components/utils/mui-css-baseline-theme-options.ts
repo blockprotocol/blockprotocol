@@ -139,6 +139,7 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             font-weight: 400;
             line-height: 1.7;
             color: ${customColors.gray[90]};
+            letter-spacing: 0;
           }
 
           pre {

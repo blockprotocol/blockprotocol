@@ -98,7 +98,13 @@ export const AnyFramework = () => {
         >
           <Typography
             variant="bpHeading2"
-            sx={{ textAlign: "left", mb: 2, fontSize: "2rem", fontWeight: 500 }}
+            sx={{
+              textAlign: "left",
+              mb: 2,
+              fontSize: "2rem",
+              fontWeight: 500,
+              letterSpacing: "-0.01em",
+            }}
           >
             Build blocks in any framework
           </Typography>

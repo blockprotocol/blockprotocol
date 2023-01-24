@@ -251,6 +251,7 @@ export const ComposableInterfaces = () => {
                   fontWeight: 700,
                   fontSize: "1.125rem",
                   textAlign: "inherit",
+                  letterSpacing: 0,
                 }}
                 variant="bpSmallCaps"
               >
@@ -264,6 +265,7 @@ export const ComposableInterfaces = () => {
                   fontWeight: 500,
                   fontSize: "2rem",
                   mb: 1.5,
+                  letterSpacing: "-0.01em",
                 }}
               >
                 Build blocks that work
@@ -342,6 +344,7 @@ export const ComposableInterfaces = () => {
                   fontWeight: 700,
                   fontSize: "1.125rem",
                   textAlign: "inherit",
+                  letterSpacing: 0,
                 }}
                 variant="bpSmallCaps"
               >
@@ -355,6 +358,7 @@ export const ComposableInterfaces = () => {
                   fontWeight: 500,
                   fontSize: "2rem",
                   mb: 1.5,
+                  letterSpacing: "-0.01em",
                 }}
               >
                 Tap into blocks in any supporting application

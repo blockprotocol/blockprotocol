@@ -35,6 +35,7 @@ export const ZeroApplicationDevelopers = () => {
           fontWeight: 700,
           fontSize: "1.125rem",
           mx: "auto",
+          letterSpacing: 0,
         }}
         textAlign="center"
         variant="bpSmallCaps"
@@ -50,6 +51,7 @@ export const ZeroApplicationDevelopers = () => {
           fontWeight: 400,
           fontStyle: "italic",
           mb: 2,
+          letterSpacing: "-0.02em",
         }}
       >
         Add new blocks to your app with

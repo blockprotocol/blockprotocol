@@ -74,6 +74,7 @@ export const InteroperableBlocks = () => {
               fontSize: "2rem",
               fontWeight: 500,
               mb: 1.75,
+              letterSpacing: "-0.01em",
             }}
           >
             Block Protocol blocks
