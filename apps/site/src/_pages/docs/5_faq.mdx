@@ -126,15 +126,17 @@ To save data beyond the session, blocks should make use of the [operations defin
 <FAQ question="What are the security considerations of blocks?">
 
 Similar to most programming language package managers, because anybody can publish executable code (in the form of a block), it's important you trust the block you're executing.
+  
+Because those inserting blocks are often non-technical end users, this isn't always practical. As such, we recommend that embedders implement both sandboxing within their environments, and allow/deny lists.
 
-In most applications, the users inserting new blocks generally aren't developers, which means
+- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/embedding-blocks).
+- **Allow/deny lists** can be used to resrict or control:
+  - which blocks users are able to discover and insert within your environment
+  - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
 
-To facilitate this, we recommend that embedders implement an allowlist (or at minimum a denylist) of blocks, or provide their users the option to do the same. Today you might choose to allow/deny blocks on the basis of their authorship/origins, or based on their _verification status_.
+Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_. In the future we also plan to expose additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists.
 
-In the future we plan to:
-
-- expose additional information such as block usage metadata
-- building support for managing allow/denylists linked to individual API keys directly from the blockprotocol.org website and CLI.
+**Real-world example:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been _verified_, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
 
 </FAQ>
   
