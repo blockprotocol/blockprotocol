@@ -12,6 +12,7 @@
 !*.html
 !*.js
 !*.json
+!*.jsonc
 !*.md
 !*.mdx
 !*.mjs
@@ -86,10 +87,18 @@ apps/site/public/blocks
 apps/site/public/schemas
 apps/site/site-map.json
 apps/site/test-results
-packages/block-template-html/dev/src
-packages/mock-block-dock/src/version.ts
-packages/@blockprotocol/type-system/.rollup.cache
-packages/@blockprotocol/type-system/wasm
+libs/@blockprotocol/type-system/.rollup.cache
+libs/@blockprotocol/type-system/wasm
+libs/block-template-html/dev/src
+libs/mock-block-dock/src/version.ts
 
-## Auto-generated files
+#########################
+## Shared between linters
+#########################
+
+# Keep license files as is
+LICENSE.md
+LICENSE-*.md
+
+## Ignore auto-generated files
 *.gen.ts

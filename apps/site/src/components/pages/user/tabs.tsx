@@ -24,7 +24,7 @@ export const TABS = [
   },
 ] as const;
 
-export type TabValue = typeof TABS[number]["value"];
+export type TabValue = (typeof TABS)[number]["value"];
 
 type TabHeaderProps = {
   activeTab: string;

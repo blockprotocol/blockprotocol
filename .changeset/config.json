@@ -9,7 +9,10 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@apps/*", "@crates/*", "@local/*"],
+  "ignore": ["@apps/*", "@local/*"],
+  "snapshot": {
+    "useCalculatedVersion": true
+  },
   "___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH": {
     "updateInternalDependents": "always",
     "onlyUpdatePeerDependentsWhenOutOfRange": true

@@ -7,6 +7,14 @@ test("API key page should generate a valid key", async ({
   browserName,
   request,
 }) => {
+  if (browserName === "webkit") {
+    // Some locator actions take 3 seconds instead of a few milliseconds,
+    // so this long test often takes more than 30 seconds to run.
+    // We can try switching back to the default timeout after updating Playwright.
+    // See details in https://github.com/blockprotocol/blockprotocol/pull/821
+    test.setTimeout(60000);
+  }
+
   await resetSite();
 
   await page.goto("/");
@@ -24,13 +32,13 @@ test("API key page should generate a valid key", async ({
   await expect(
     page.locator("text=These keys allow you to access the block protocol"),
   ).toBeVisible();
-  await expect(page.locator("text=Learn More").first()).toHaveAttribute(
+  await expect(page.locator("data-test-id=apiKeyLink").first()).toHaveAttribute(
     "href",
     "/docs/embedding-blocks#discovering-blocks",
   );
   await expect(tableWithKeys).not.toBeVisible();
 
-  await page.locator("text=Create new key").click();
+  await page.locator("button >> text=Create new key").click();
 
   await keyNameInput.click();
   await keyNameInput.press("Enter");
@@ -38,7 +46,7 @@ test("API key page should generate a valid key", async ({
   await keyNameInput.fill("oops");
   await page.locator("text=Cancel").click();
 
-  await page.locator("text=Create new key").click();
+  await page.locator("button >> text=Create new key").click();
   await expect(keyNameInput).toHaveValue("");
 
   await keyNameInput.click();
