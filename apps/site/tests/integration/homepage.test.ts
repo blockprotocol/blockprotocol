@@ -1,6 +1,6 @@
 import { expect, test } from "../shared/wrapped-playwright.js";
 
-test("Home page should contain key elements", async ({ page, isMobile }) => {
+test("Home page should contain key elements", async ({ page }) => {
   await page.goto("/");
 
   // Header section
