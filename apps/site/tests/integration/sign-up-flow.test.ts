@@ -21,9 +21,7 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
 
   await expect(page).toHaveURL("/signup");
 
-  await expect(
-    page.locator("text=Create your Block Protocol account"),
-  ).toBeVisible();
+  await expect(page.locator("text=Create an account")).toBeVisible();
 
   await expect(page.locator("text=Publish blocks on the Hub")).toBeVisible();
 

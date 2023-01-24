@@ -49,9 +49,7 @@ test("page header navigation works", async ({
 
   await navSelector.locator("text=Sign Up").click();
   await expect(page).toHaveURL("/signup");
-  await expect(
-    page.locator("text=Create your Block Protocol account"),
-  ).toBeVisible();
+  await expect(page.locator("text=Create an account")).toBeVisible();
 
   await openLoginModal({ page, isMobile });
   await expect(page).toHaveURL("/signup");
