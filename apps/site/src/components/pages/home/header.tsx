@@ -13,6 +13,7 @@ import { DESKTOP_NAVBAR_HEIGHT, MOBILE_NAVBAR_HEIGHT } from "../../navbar";
 export const Header = () => {
   const theme = useTheme();
 
+  const sm = useMediaQuery(theme.breakpoints.up("sm"));
   const md = useMediaQuery(theme.breakpoints.up("md"));
   const height = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
@@ -64,7 +65,8 @@ export const Header = () => {
             letterSpacing: "-0.02em",
           }}
         >
-          The open standard for block-based apps
+          The open standard for {sm ? <br /> : null}
+          block-based apps
         </Typography>
         <Typography
           variant="bpBodyCopy"
@@ -74,7 +76,6 @@ export const Header = () => {
           sx={{
             color: ({ palette }) => palette.gray[90],
             margin: "0 auto",
-            maxWidth: "45ch",
             fontSize: { xs: "1.25rem", md: "1.45rem" },
           }}
         >
