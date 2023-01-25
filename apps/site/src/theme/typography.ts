@@ -4,7 +4,7 @@ import { customColors } from "./palette";
 
 const defaultTheme = createTheme();
 
-const fallbackFonts = [`"Helvetica"`, `"Arial"`, "sans-serif"];
+export const fallbackFonts = [`"Helvetica"`, `"Arial"`, "sans-serif"];
 
 export const HEADING_FONT_FAMILY = `"colfax-web"`;
 export const COPY_FONT_FAMILY = `"Inter"`;
