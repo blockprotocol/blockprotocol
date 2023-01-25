@@ -192,7 +192,14 @@ export const WhatAreBlocks = () => {
             px: { xs: "1rem", md: "0" },
           }}
         >
-          <Box sx={{ mb: 3 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: { xs: "center", md: "start" },
+              mb: 3,
+            }}
+          >
             <Typography
               variant="bpHeading3"
               sx={{

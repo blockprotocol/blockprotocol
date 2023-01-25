@@ -132,7 +132,6 @@ export const FinalCTA: NextPage = () => {
         sx={(theme) => ({
           height: "100%",
           width: "100%",
-          minWidth: 400,
           maxWidth: 600,
           transition: theme.transitions.create("padding"),
           padding: {

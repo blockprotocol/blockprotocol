@@ -68,7 +68,15 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             <strong>Hub</strong>
           </Typography>
 
-          <Stack flexDirection="row" gap={2.25} alignItems="center">
+          <Stack
+            sx={{
+              flexDirection: "row",
+              gap: 2.25,
+              alignItems: "center",
+              flexWrap: "wrap",
+              justifyContent: { xs: "center", lg: "flex-start" },
+            }}
+          >
             <Box component="img" src="/assets/logos/mono/openai.svg" />
             <Box component="img" src="/assets/logos/mono/mapbox.svg" />
             <Box component="img" src="/assets/logos/mono/hash.svg" />
@@ -117,7 +125,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             <Typography
               variant="bpSmallCopy"
               sx={{
-                textAlign: "right",
+                textAlign: { xs: "center", lg: "right" },
                 lineHeight: "26px",
               }}
             >
@@ -136,7 +144,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
         </Box>
       </Container>
 
-      <Box sx={{ width: "100%" }} mb={4}>
+      <Box sx={{ width: "100%" }}>
         <BlocksSlider catalog={catalog} />
       </Box>
     </Box>
