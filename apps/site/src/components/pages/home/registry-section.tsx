@@ -36,16 +36,14 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
           justifyContent: "space-between",
           gap: { xs: 2.5, lg: 10 },
           mb: { xs: 2.5, lg: 10 },
-          maxWidth: { xs: "95%", md: "85%", lg: 1000 },
+          maxWidth: { xs: "95%", md: "85%", lg: 1100 },
         }}
       >
         <Box
           sx={{
-            mx: "auto",
-            width: { xs: "100%", md: "100%" },
-            maxWidth: { xs: "100%", md: "1100px" },
             display: "flex",
             flexDirection: "column",
+            justifyContent: "space-between",
             alignItems: { xs: "center", lg: "flex-start" },
           }}
         >
@@ -57,7 +55,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               textAlign: "center",
               fontWeight: 400,
               fontStyle: "italic",
-              mb: 2,
+              mb: 2.25,
               letterSpacing: "-0.02em",
               lineHeight: 1,
             }}
@@ -80,6 +78,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               sx={{
                 fontWeight: 500,
                 color: "#9EACBA",
+                whiteSpace: "nowrap",
               }}
             >
               And more
@@ -95,13 +94,12 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             alignItems: { xs: "center", lg: "flex-end" },
           }}
         >
-          <Box>
+          <Box mb={1.5}>
             <LinkButton
               href="/hub"
               variant="secondary"
               sx={{
                 background: "transparent",
-                mb: 1.5,
               }}
               startIcon={
                 <SearchIcon
@@ -120,6 +118,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               variant="bpSmallCopy"
               sx={{
                 textAlign: "right",
+                lineHeight: "26px",
               }}
             >
               <strong>Anyone can publish a block.</strong> If you can’t see one
