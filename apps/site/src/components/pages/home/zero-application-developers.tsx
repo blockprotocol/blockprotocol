@@ -77,10 +77,7 @@ export const ZeroApplicationDevelopers = () => {
         }}
       />
 
-      <Typography
-        variant="bpBodyCopy"
-        sx={{ fontSize: "1rem", textAlign: "center", mb: 2 }}
-      >
+      <Typography variant="bpBodyCopy" sx={{ textAlign: "center", mb: 2 }}>
         <strong>
           Give your users access to an ever-growing library of high-quality
           blocks.

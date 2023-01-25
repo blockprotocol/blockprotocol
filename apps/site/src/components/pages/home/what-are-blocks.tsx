@@ -57,15 +57,15 @@ export const WhatAreBlocks = () => {
                 }}
               >
                 <Typography
-                  variant="bpHeading3"
+                  variant="bpHeading2"
                   sx={{
+                    fontSize: "2.1875rem",
                     fontWeight: 500,
-                    lineHeight: 1,
+                    lineHeight: 1.2,
                     color: ({ palette }) => palette.gray[90],
                     margin: "2rem auto 6px",
                     maxWidth: "40ch",
                     textAlign: { xs: "center", md: "left" },
-                    letterSpacing: "-0.01em",
                   }}
                 >
                   What are{" "}
@@ -88,7 +88,6 @@ export const WhatAreBlocks = () => {
               </Box>
               <Typography
                 sx={{
-                  fontSize: "1rem",
                   textAlign: { xs: "center", md: "left" },
                   maxWidth: "52ch",
                   margin: "0 auto 0.75rem",
@@ -101,7 +100,6 @@ export const WhatAreBlocks = () => {
               </Typography>
               <Typography
                 sx={{
-                  fontSize: "1rem",
                   textAlign: { xs: "center", md: "left" },
                   maxWidth: "52ch",
                   margin: "0 auto",
@@ -204,6 +202,7 @@ export const WhatAreBlocks = () => {
                 maxWidth: { xs: "20ch", md: "100%" },
                 mb: 0.75,
                 letterSpacing: "-0.01em",
+                lineHeight: 1.2,
               }}
             >
               Users typically select blocks from a list
@@ -220,7 +219,6 @@ export const WhatAreBlocks = () => {
           </Box>
           <Typography
             sx={{
-              fontSize: "1rem",
               textAlign: { xs: "center", md: "left" },
               maxWidth: { xs: "45ch", md: "100%" },
               mb: { xs: 3, md: 5 },

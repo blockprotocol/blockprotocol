@@ -42,7 +42,6 @@ const CodeBlock = () => {
         sx={{
           background:
             "linear-gradient(181.4deg, #39444F 50%, #39444F 50%, #242D37 94.38%)",
-          fontSize: { xs: "0.875rem", md: "1rem" },
           height: "100%",
           color: ({ palette }) => palette.gray[30],
         }}
@@ -97,13 +96,14 @@ export const AnyFramework = () => {
           }}
         >
           <Typography
-            variant="bpHeading2"
+            variant="bpHeading3"
             sx={{
+              color: ({ palette }) => palette.gray[90],
               textAlign: "left",
-              mb: 2,
-              fontSize: "2rem",
               fontWeight: 500,
               letterSpacing: "-0.01em",
+              lineHeight: 1.2,
+              mb: 2,
             }}
           >
             Build blocks in any framework
@@ -113,9 +113,8 @@ export const AnyFramework = () => {
             sx={{
               color: ({ palette }) => palette.gray[80],
               maxWidth: "60ch",
-              fontSize: "1rem",
-              mb: 1.5,
               textAlign: "left",
+              mb: 1.5,
             }}
           >
             Blocks can be built with Web Components, React, Vue, TypeScript,
@@ -128,7 +127,6 @@ export const AnyFramework = () => {
             sx={{
               color: ({ palette }) => palette.gray[80],
               maxWidth: { xs: "100%", md: "60ch" },
-              fontSize: "1rem",
               textAlign: "left",
             }}
           >

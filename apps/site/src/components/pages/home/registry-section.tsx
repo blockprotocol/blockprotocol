@@ -59,6 +59,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               fontStyle: "italic",
               mb: 2,
               letterSpacing: "-0.02em",
+              lineHeight: 1,
             }}
           >
             Blocks on the
@@ -78,7 +79,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               variant="bpSmallCaps"
               sx={{
                 fontWeight: 500,
-                color: ({ palette }) => palette.gray[50],
+                color: "#9EACBA",
               }}
             >
               And more
@@ -99,7 +100,6 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               href="/hub"
               variant="secondary"
               sx={{
-                color: ({ palette }) => palette.purple[70],
                 background: "transparent",
                 mb: 1.5,
               }}
@@ -119,7 +119,6 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             <Typography
               variant="bpSmallCopy"
               sx={{
-                fontSize: "1rem",
                 textAlign: "right",
               }}
             >

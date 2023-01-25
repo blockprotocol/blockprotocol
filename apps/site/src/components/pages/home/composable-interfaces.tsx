@@ -266,13 +266,14 @@ export const ComposableInterfaces = () => {
               </Typography>
 
               <Typography
-                variant="bpHeading2"
+                variant="bpHeading3"
                 sx={{
+                  color: ({ palette }) => palette.gray[90],
                   textAlign: "inherit",
                   fontWeight: 500,
-                  fontSize: "2rem",
                   mb: 1.5,
                   letterSpacing: "-0.01em",
+                  lineHeight: 1.2,
                 }}
               >
                 Build blocks that work
@@ -293,7 +294,6 @@ export const ComposableInterfaces = () => {
               <Typography
                 variant="bpBodyCopy"
                 sx={{
-                  fontSize: "1rem",
                   mb: 2,
                   textAlign: "inherit",
                   flexGrow: 1,
@@ -359,13 +359,14 @@ export const ComposableInterfaces = () => {
               </Typography>
 
               <Typography
-                variant="bpHeading2"
+                variant="bpHeading3"
                 sx={{
+                  color: ({ palette }) => palette.gray[90],
                   textAlign: "inherit",
                   fontWeight: 500,
-                  fontSize: "2rem",
                   mb: 1.5,
                   letterSpacing: "-0.01em",
+                  lineHeight: 1.2,
                 }}
               >
                 Tap into blocks in any supporting application
@@ -385,7 +386,6 @@ export const ComposableInterfaces = () => {
               <Typography
                 variant="bpBodyCopy"
                 sx={{
-                  fontSize: "1rem",
                   mb: 2,
                   textAlign: "inherit",
                   flexGrow: 1,

@@ -105,9 +105,9 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
 
         <Box>
           <Typography
-            variant="bpHeading2"
+            variant="bpHeading3"
             sx={{
-              fontSize: "2rem",
+              color: ({ palette }) => palette.gray[90],
               fontWeight: 500,
               lineHeight: 1.7,
             }}
@@ -115,12 +115,12 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
             Create an account
           </Typography>
           <Typography
-            variant="bpHeading2"
+            variant="bpHeading3"
             sx={{
               fontWeight: 500,
               fontSize: "1rem",
               textTransform: "uppercase",
-              color: ({ palette }) => palette.gray[50],
+              color: "#9EACBA",
               lineHeight: 1.7,
             }}
           >

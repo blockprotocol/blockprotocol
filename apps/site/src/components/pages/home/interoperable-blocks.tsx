@@ -67,14 +67,15 @@ export const InteroperableBlocks = () => {
           }}
         >
           <Typography
-            variant="bpHeading2"
+            variant="bpHeading3"
             textAlign="left"
             mt={4}
             sx={{
-              fontSize: "2rem",
               fontWeight: 500,
               mb: 1.75,
               letterSpacing: "-0.01em",
+              color: ({ palette }) => palette.gray[90],
+              lineHeight: 1.2,
             }}
           >
             Block Protocol blocks
@@ -98,37 +99,25 @@ export const InteroperableBlocks = () => {
             }}
           />
 
-          <Typography
-            variant="bpBodyCopy"
-            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
-          >
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
             <strong>No extra configuration required:</strong> blocks that adhere
             to the Block Protocol work out the box in any application which also
             uses the protocol.
           </Typography>
 
-          <Typography
-            variant="bpBodyCopy"
-            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
-          >
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
             <strong>Available for instant use ecosystem-wide:</strong> any
             developer can build a world-class block for themselves or others to
             enjoy.
           </Typography>
 
-          <Typography
-            variant="bpBodyCopy"
-            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
-          >
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
             <strong>Specialized blocks everywhere:</strong> blocks can solve
             specific user needs that individual application developers don’t
             have the time, awareness or expertise to build.
           </Typography>
 
-          <Typography
-            variant="bpBodyCopy"
-            sx={{ fontSize: "1rem", textAlign: "left", mb: 1.5 }}
-          >
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
             <strong>Convergence on semantic data structures:</strong> blocks
             make it easy to capture and work with typed data - often even more
             convenient than inputting information in an unstructured fashion.

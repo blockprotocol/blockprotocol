@@ -1,6 +1,5 @@
 import {
   faArrowLeft,
-  faArrowUp,
   faCodePullRequest,
   faPlus,
   faUser,

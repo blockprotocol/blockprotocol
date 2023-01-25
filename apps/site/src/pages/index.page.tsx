@@ -1,7 +1,7 @@
 import { GetStaticProps } from "next";
 import { FunctionComponent } from "react";
 
-import { AnyFramework } from "../components/pages/home/anyframework";
+import { AnyFramework } from "../components/pages/home/any-framework";
 import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
 import { ConfinedBlocks } from "../components/pages/home/confined-blocks";
 import { Header } from "../components/pages/home/header";

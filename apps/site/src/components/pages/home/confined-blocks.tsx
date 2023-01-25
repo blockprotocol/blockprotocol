@@ -47,6 +47,7 @@ export const ConfinedBlocks = () => {
                 fontWeight: 500,
                 mb: 1.75,
                 letterSpacing: "-0.01em",
+                lineHeight: 1.2,
               }}
               variant="bpHeading3"
             >
@@ -66,7 +67,6 @@ export const ConfinedBlocks = () => {
 
           <Typography
             sx={{
-              fontSize: "1rem",
               color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
@@ -79,7 +79,6 @@ export const ConfinedBlocks = () => {
           </Typography>
           <Typography
             sx={{
-              fontSize: "1rem",
               color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
@@ -92,7 +91,6 @@ export const ConfinedBlocks = () => {
           </Typography>
           <Typography
             sx={{
-              fontSize: "1rem",
               color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
               maxWidth: "45ch",
