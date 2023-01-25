@@ -13,7 +13,7 @@
 [rfcs & roadmap]: https://blockprotocol.org/docs/spec/rfcs_and_roadmap?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [using blocks]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
-[hash]: https://github.com/hashintel/hash/tree/main/packages/hash
+[hash]: https://github.com/hashintel/hash/tree/main/apps/hash
 
 <!-- markdownlint-disable link-fragments -->
 
