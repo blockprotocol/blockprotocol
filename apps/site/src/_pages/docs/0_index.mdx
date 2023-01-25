@@ -2,20 +2,21 @@
 
 ## Overview
 
-The Block Protocol is an open standard for building block-based interfaces. It enables applications to make their interfaces extensible with interoperable components: blocks.
+The Block Protocol (**Þ**) is an open standard for building block-based interfaces. It enables applications to make their interfaces extensible with interoperable components: blocks.
 
-The following pages provide a practical introduction for developers who want to:
+The following pages provide a practical introduction for those:
 
-- [develop blocks](https://blockprotocol.org/docs/developing-blocks) and publish them to the [Hub](https://blockprotocol.org/hub)
-- [embed blocks](https://blockprotocol.org/docs/embedding-blocks) within an application
+- [using blocks](https://blockprotocol.org/docs/using-blocks) within applications that support the Block Protocol
+- [building blocks](https://blockprotocol.org/docs/developing-blocks) and publishing them to the [Þ Hub](https://blockprotocol.org/hub)
+- [building block-based applications](https://blockprotocol.org/docs/embedding-blocks) that leverage the Block Protocol
 
 If you have any questions, [please open or contribute to a discussion](https://github.com/blockprotocol/blockprotocol/discussions). You can also [chat to us on Discord](https://blockprotocol.org/discord).
 
 ## What is a block?
 
-Blocks are the basic units we use to build pages on the modern web. They are rectangular sections that contain a set of features and functions. They are sometimes also called _components_ or _widgets_.
+**Blocks** are the basic units we use to build pages on the modern web. They are rectangular sections that contain a set of features and functions. They are sometimes also called _components_ or _widgets_.
 
-Each block has a type that determines the kind of data it can display and edit. You're probably familiar with the most common block types such as _paragraph_, _header_, _image_, _list_, and _table_. Some block types have more advanced interactive features such as filtering, search, and sorting.
+Each block has a **type** that determines the kind of data it can display and edit. You're probably familiar with the most common block types such as _paragraph_, _header_, _image_, _list_, and _table_. Some block types have more advanced interactive features such as filtering, search, and sorting.
 
 There are an infinite number of possible block types. One goal of the Block Protocol is to encourage developers to build and share brand new types of blocks that haven't been seen before, and for applications to offer users far more blocks than any one team could imagine or build.
 
@@ -23,12 +24,19 @@ Blocks can be added to webpages using plain HTML and/or JavaScript. Some modern 
 
 From a developer perspective, blocks encapsulate a set of specific functionality. Building a block is no different to writing a React, Vue, or [Web Component](https://en.wikipedia.org/wiki/Web_Components) – in fact, these are all ways you might implement a block. They are reusable elements that expect certain data to be passed to them (what we refer to as a block’s ‘schema’). For example, an image block might only accept an image URL in its `src` property, not a number.
 
-## What is a Block Protocol block?
+## What is a Þ block?
 
-Any block can become a Block Protocol block by meeting the requirements defined in the specification. These requirements define what data a block can accept and how they're allowed to edit that data.
+Any block can become a Þ block by meeting the requirements defined in the specification. These requirements define what data a block can accept and how they're allowed to interact with that data. This standardized approach makes it possible to use and embed Þ blocks across any different kind of web application, provided it supports the protocol.
 
-Following these requirements allows BP blocks to do more than regular web blocks. This standardized way of handling data makes it possible to embed BP blocks across different web applications. BP blocks can read and write data to the applications they're embedded within without any extra setup or custom integrations (as long as both the block and embedding application adhere to the specification).
+Þ blocks can read and write data to the applications they're embedded inside without any extra setup or custom integrations (as long as both the block and embedding application adhere to the specification).
 
-BP blocks can also be published on the [Hub](https://blockprotocol.org/hub) – an open-source registry where anyone can publish their blocks for other people to discover and use.
+The Block Protocol is free to use, and any application can enable the use of Þ blocks by following the [requirements for embedders](https://blockprotocol.org/docs/embedding-blocks).
 
-Any application can accept BP blocks, as long as they follow the [requirements for embedding applications](https://blockprotocol.org/docs/embedding-blocks).
+## What is the Þ Hub?
+
+Blocks and types can be published and discovered on the [Þ Hub](https://blockprotocol.org/hub), an open-source registry that anybody can use. There are two ways to access it:
+
+- **in-browser** by navigating to [`blockprotocol.org/hub`](https://blockprotocol.org/hub): no account is required to browse and test blocks
+- **programmatically** from within other applications: either a user or an embedding application must create a free API key in order to query blocks from the Þ Hub via its API
+
+The Þ Hub provides a single persistent, reliable, and open-source point of reference for the discovery of new content. This means creators only need to publish once, while embedding applications can easily discover new blocks, types and endpoints, making them instantly available to their own users.
