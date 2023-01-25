@@ -1,4 +1,5 @@
 import { faCaretRight, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { SubscriptionTierPrices } from "@local/internal-api-client";
 import { Box, Grid, styled, Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 
@@ -27,7 +28,10 @@ import { TrophyIcon } from "../../../components/icons/trophy-icon";
 import { TrophyStarIcon } from "../../../components/icons/trophy-star-icon";
 import { Link } from "../../../components/link";
 import { LinkButton } from "../../../components/link-button";
-import { PaidSubscriptionTier } from "../../shared/subscription-utils";
+import {
+  PaidSubscriptionTier,
+  priceToHumanReadable,
+} from "../../shared/subscription-utils";
 import { SubscriptionFeatureList } from "./subscription-feature-list";
 import { SubscriptionFeature } from "./subscription-feature-list-item";
 
@@ -36,7 +40,10 @@ type PaidSubscription = {
   additionalFeatures: SubscriptionFeature[];
 };
 
-const paidSubscriptions: Record<PaidSubscriptionTier, PaidSubscription> = {
+export const paidSubscriptionFeatures: Record<
+  PaidSubscriptionTier,
+  PaidSubscription
+> = {
   hobby: {
     coreFeatures: [
       {
@@ -223,7 +230,8 @@ const CustomLinkButton = styled(LinkButton)(({ theme }) => ({
 
 export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
   currentSubscriptionTier: "free" | "hobby";
-}> = ({ currentSubscriptionTier }) => {
+  subscriptionTierPrices: SubscriptionTierPrices;
+}> = ({ currentSubscriptionTier, subscriptionTierPrices }) => {
   const isCurrentSubscriptionTierHobby = currentSubscriptionTier === "hobby";
 
   return (
@@ -274,8 +282,14 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         >
           <Box display="flex" alignItems="center">
             <Typography sx={{ fontSize: 28 }}>
-              {/* @todo: dynamically determine the subscription price/currency @see: https://app.asana.com/0/0/1203781148500081/f */}
-              <strong>$2</strong>/month
+              <strong>
+                {priceToHumanReadable({
+                  amountInCents: subscriptionTierPrices.hobby.unit_amount!,
+                  currency: subscriptionTierPrices.hobby.currency,
+                  decimalPlaces: 0,
+                })}
+              </strong>
+              /month
             </Typography>
             <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>
               HOBBY
@@ -293,7 +307,10 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             For casual users of blocks
           </Typography>
           <CustomLinkButton
-            href={{ pathname: "/upgrade", query: { tier: "hobby" } }}
+            href={{
+              pathname: "/settings/billing/upgrade",
+              query: { tier: "hobby" },
+            }}
             variant="primary"
             endIcon={
               isCurrentSubscriptionTierHobby ? undefined : <ArrowRightIcon />
@@ -314,7 +331,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           <SubscriptionFeatureList
             heading={<strong>Includes the following each month:</strong>}
             headingSx={({ palette }) => ({ color: palette.purple[80] })}
-            features={paidSubscriptions.hobby.coreFeatures}
+            features={paidSubscriptionFeatures.hobby.coreFeatures}
           />
           <Link href="/pricing">
             <Typography
@@ -365,7 +382,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         >
           <SubscriptionFeatureList
             heading={<strong>As well as:</strong>}
-            features={paidSubscriptions.hobby.additionalFeatures}
+            features={paidSubscriptionFeatures.hobby.additionalFeatures}
           />
           <Box
             display="flex"
@@ -374,7 +391,10 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             marginTop={4}
           >
             <CustomLinkButton
-              href={{ pathname: "/upgrade", query: { tier: "hobby" } }}
+              href={{
+                pathname: "/settings/billing/upgrade",
+                query: { tier: "hobby" },
+              }}
               size="small"
               endIcon={
                 isCurrentSubscriptionTierHobby ? (
@@ -438,8 +458,15 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         >
           <Box display="flex" alignItems="center">
             <Typography sx={{ fontSize: 28 }}>
-              {/* @todo: dynamically determine the subscription price/currency @see: https://app.asana.com/0/0/1203781148500081/f */}
-              <strong>$8</strong>/month
+              <strong>
+                {" "}
+                {priceToHumanReadable({
+                  amountInCents: subscriptionTierPrices.pro.unit_amount!,
+                  currency: subscriptionTierPrices.pro.currency,
+                  decimalPlaces: 0,
+                })}
+              </strong>
+              /month
             </Typography>
             <Typography sx={{ marginLeft: 3, fontSize: 14, fontWeight: 600 }}>
               PRO
@@ -457,7 +484,10 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             Best for embedders, devs and power-users
           </Typography>
           <LinkButton
-            href={{ pathname: "/upgrade", query: { tier: "pro" } }}
+            href={{
+              pathname: "/settings/billing/upgrade",
+              query: { tier: "pro" },
+            }}
             size="small"
             endIcon={
               <ArrowRightIcon
@@ -490,7 +520,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
                 </strong>
               </>
             }
-            features={paidSubscriptions.pro.coreFeatures}
+            features={paidSubscriptionFeatures.pro.coreFeatures}
           />
         </Box>
         <Box
@@ -509,7 +539,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         >
           <SubscriptionFeatureList
             heading={<strong>Plus you receive:</strong>}
-            features={paidSubscriptions.pro.additionalFeatures}
+            features={paidSubscriptionFeatures.pro.additionalFeatures}
           />
           <Box
             display="flex"

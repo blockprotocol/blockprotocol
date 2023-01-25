@@ -4,7 +4,12 @@ import {
 } from "@local/internal-api-client";
 import type { Stripe } from "stripe";
 
-const basePath = "/api/internal";
+import { FRONTEND_URL } from "./config";
+
+const basePath =
+  typeof window === "undefined"
+    ? `${FRONTEND_URL}/api/internal`
+    : "/api/internal";
 
 const config = new Configuration({ basePath });
 
