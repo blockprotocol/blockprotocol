@@ -19,9 +19,11 @@ import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
 const IconButtonWithTooltip = ({
+  href,
   label,
   icon,
 }: {
+  href: string;
   label: string;
   icon: ReactNode;
 }) => {
@@ -53,12 +55,12 @@ const IconButtonWithTooltip = ({
           ["data-testid"]: `${label}-button`,
         }}
         data-testid={label}
-        href="/docs/using-blocks"
+        href={href}
         color="inherit"
         sx={{
           borderRadius: 2.5,
           background: "transparent",
-          p: 0,
+          p: 0.5,
           minWidth: 0,
           "&:hover": {
             background: ({ palette }) => palette.gray[20],
@@ -123,8 +125,9 @@ export const ComposableInterfaces = () => {
                 blocks work in
               </Typography>
 
-              <Stack gap={3.5} flexDirection="row" justifyContent="center">
+              <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
+                  href="/docs/using-blocks#wordpress"
                   label="Wordpress"
                   icon={
                     <WordPressIcon
@@ -138,6 +141,7 @@ export const ComposableInterfaces = () => {
                 />
 
                 <IconButtonWithTooltip
+                  href="/docs/using-blocks#github-blocks"
                   label="GitHub Blocks"
                   icon={
                     <GithubIcon
@@ -150,6 +154,7 @@ export const ComposableInterfaces = () => {
                 />
 
                 <IconButtonWithTooltip
+                  href="/docs/using-blocks#hash"
                   label="HASH"
                   icon={
                     <HashIcon
@@ -187,8 +192,9 @@ export const ComposableInterfaces = () => {
                 Coming soon
               </Typography>
 
-              <Stack gap={3.5} flexDirection="row" justifyContent="center">
+              <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
+                  href="/docs/using-blocks#figma"
                   label="Figma"
                   icon={
                     <FontAwesomeIcon
@@ -201,6 +207,7 @@ export const ComposableInterfaces = () => {
                   }
                 />
                 <IconButtonWithTooltip
+                  href="/docs/using-blocks#other-environments"
                   label="Vote on what’s next"
                   icon={
                     <Grid2PlusIcon
