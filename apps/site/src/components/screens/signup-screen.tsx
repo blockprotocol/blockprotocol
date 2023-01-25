@@ -147,7 +147,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
           inputRef={emailInputRef}
           fullWidth
           label="Email address"
-          placeholder="claude@shannon.com"
+          placeholder="you@example.com"
           variant="outlined"
           value={emailValue}
           onChange={({ target }) => {

@@ -122,7 +122,7 @@ export const SendLoginCodeScreen: FunctionComponent<
           inputRef={emailInputRef}
           fullWidth
           label="Email address"
-          placeholder="claude@example.com"
+          placeholder="you@example.com"
           variant="outlined"
           value={emailValue}
           disabled={disabled}

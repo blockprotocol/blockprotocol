@@ -42,7 +42,7 @@ test("is not triggered by pressing / within an input or a textarea", async ({
 
   await page.goto("/");
 
-  await page.focus('input[placeholder="claude@shannon.com"]');
+  await page.focus('input[placeholder="you@example.com"]');
   await page.keyboard.press("/");
 
   await expect(
