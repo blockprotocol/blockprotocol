@@ -28,10 +28,8 @@ import { TrophyStarIcon } from "../../../components/icons/trophy-star-icon";
 import { Link } from "../../../components/link";
 import { LinkButton } from "../../../components/link-button";
 import { PaidSubscriptionTier } from "../../shared/subscription-utils";
-import {
-  SubscriptionFeature,
-  SubscriptionFeatureListItem,
-} from "./subscription-feature-list-item";
+import { SubscriptionFeatureList } from "./subscription-feature-list";
+import { SubscriptionFeature } from "./subscription-feature-list-item";
 
 type PaidSubscription = {
   coreFeatures: SubscriptionFeature[];
@@ -265,7 +263,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             padding: 4,
             backgroundColor: "#FBF7FF",
             borderBottomStyle: "solid",
-            borderBottomfontSize: 1,
+            borderBottomWidth: 1,
             borderBottomColor: ({ palette }) => palette.purple[20],
             borderTopLeftRadius: 14,
             borderTopRightRadius: {
@@ -313,23 +311,11 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             flexGrow: 1,
           })}
         >
-          <Typography
-            gutterBottom
-            component="p"
-            variant="bpSmallCopy"
-            sx={({ palette }) => ({ color: palette.purple[80] })}
-          >
-            <strong>Includes the following each month:</strong>
-          </Typography>
-          <Box component="ul">
-            {paidSubscriptions.hobby.coreFeatures.map((feature, index) => (
-              <SubscriptionFeatureListItem
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                feature={feature}
-              />
-            ))}
-          </Box>
+          <SubscriptionFeatureList
+            heading={<strong>Includes the following each month:</strong>}
+            headingSx={({ palette }) => ({ color: palette.purple[80] })}
+            features={paidSubscriptions.hobby.coreFeatures}
+          />
           <Link href="/pricing">
             <Typography
               component="p"
@@ -344,6 +330,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
                     marginLeft: 1,
                   },
                 },
+                marginTop: 2,
               })}
             >
               <strong>View full plan details</strong>
@@ -364,9 +351,9 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           sx={{
             padding: 4,
             borderStyle: "solid",
-            borderfontSize: 1,
+            borderWidth: 1,
             borderColor: ({ palette }) => palette.gray[20],
-            borderRightfontSize: {
+            borderRightWidth: {
               xs: 1,
               md: 0,
             },
@@ -376,21 +363,16 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             },
           }}
         >
-          <Typography gutterBottom component="p" variant="bpSmallCopy">
-            <strong>As well as:</strong>
-          </Typography>
-          <Box component="ul" marginBottom={4}>
-            {paidSubscriptions.hobby.additionalFeatures.map(
-              (feature, index) => (
-                <SubscriptionFeatureListItem
-                  // eslint-disable-next-line react/no-array-index-key
-                  key={index}
-                  feature={feature}
-                />
-              ),
-            )}
-          </Box>
-          <Box display="flex" alignItems="center" flexDirection="column">
+          <SubscriptionFeatureList
+            heading={<strong>As well as:</strong>}
+            features={paidSubscriptions.hobby.additionalFeatures}
+          />
+          <Box
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            marginTop={4}
+          >
             <CustomLinkButton
               href={{ pathname: "/upgrade", query: { tier: "hobby" } }}
               size="small"
@@ -446,7 +428,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             padding: 4,
             backgroundColor: palette.purple[20],
             borderBottomStyle: "solid",
-            borderBottomfontSize: 1,
+            borderBottomWidth: 1,
             borderBottomColor: palette.purple[30],
             borderTopRightRadius: {
               xs: 0,
@@ -492,35 +474,31 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             backgroundColor: palette.purple[20],
           })}
         >
-          <Typography component="p" variant="bpSmallCopy">
-            <ArrowLeftIcon sx={{ fontSize: 18, marginRight: 1 }} />
-            <strong>
-              Includes everything in{" "}
-              <Box
-                component="i"
-                sx={{ color: ({ palette }) => palette.purple[90] }}
-              >
-                Hobby
-              </Box>
-              , plus...
-            </strong>
-          </Typography>
-          <Box component="ul">
-            {paidSubscriptions.pro.coreFeatures.map((feature, index) => (
-              <SubscriptionFeatureListItem
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                feature={feature}
-              />
-            ))}
-          </Box>
+          <SubscriptionFeatureList
+            heading={
+              <>
+                <ArrowLeftIcon sx={{ fontSize: 18, marginRight: 2 }} />
+                <strong>
+                  Includes everything in{" "}
+                  <Box
+                    component="i"
+                    sx={{ color: ({ palette }) => palette.purple[90] }}
+                  >
+                    Hobby
+                  </Box>
+                  , plus...
+                </strong>
+              </>
+            }
+            features={paidSubscriptions.pro.coreFeatures}
+          />
         </Box>
         <Box
           sx={{
             padding: 4,
             backgroundColor: "#FBF7FF",
             borderStyle: "solid",
-            borderfontSize: 1,
+            borderWidth: 1,
             borderColor: ({ palette }) => palette.gray[20],
             borderBottomRightRadius: 14,
             borderBottomLeftRadius: {
@@ -529,38 +507,37 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             },
           }}
         >
-          <Typography gutterBottom component="p" variant="bpSmallCopy">
-            <strong>Plus you receive:</strong>
-          </Typography>
-          <Box component="ul" marginBottom={4}>
-            {paidSubscriptions.pro.additionalFeatures.map((feature, index) => (
-              <SubscriptionFeatureListItem
-                // eslint-disable-next-line react/no-array-index-key
-                key={index}
-                feature={feature}
-              />
-            ))}
-          </Box>
-          <LinkButton
-            href={{ pathname: "/upgrade", query: { tier: "pro" } }}
-            size="small"
-            endIcon={<BoltRegularIcon />}
+          <SubscriptionFeatureList
+            heading={<strong>Plus you receive:</strong>}
+            features={paidSubscriptions.pro.additionalFeatures}
+          />
+          <Box
+            display="flex"
+            alignItems="center"
+            flexDirection="column"
+            marginTop={4}
           >
-            <Typography
-              variant="bpSmallCopy"
-              sx={{ color: ({ palette }) => palette.common.white }}
+            <LinkButton
+              href={{ pathname: "/upgrade", query: { tier: "pro" } }}
+              size="small"
+              endIcon={<BoltRegularIcon />}
             >
-              {isCurrentSubscriptionTierHobby ? (
-                <>
-                  Upgrade to unlock <strong>PRO</strong>
-                </>
-              ) : (
-                <>
-                  Get started with <strong>PRO</strong>
-                </>
-              )}
-            </Typography>
-          </LinkButton>
+              <Typography
+                variant="bpSmallCopy"
+                sx={{ color: ({ palette }) => palette.common.white }}
+              >
+                {isCurrentSubscriptionTierHobby ? (
+                  <>
+                    Upgrade to unlock <strong>PRO</strong>
+                  </>
+                ) : (
+                  <>
+                    Get started with <strong>PRO</strong>
+                  </>
+                )}
+              </Typography>
+            </LinkButton>
+          </Box>
         </Box>
       </Grid>
     </Grid>
