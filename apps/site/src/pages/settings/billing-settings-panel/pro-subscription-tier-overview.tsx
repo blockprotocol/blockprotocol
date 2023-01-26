@@ -205,7 +205,7 @@ export const ProSubscriptionTierOverview: FunctionComponent = () => (
         gutterBottom
         sx={{ textTransform: "uppercase" }}
       >
-        <strong>Flare</strong>
+        <strong>Flair</strong>
       </Typography>
       <Box marginBottom={3}>
         {features.flair.map((feature, index) => (
