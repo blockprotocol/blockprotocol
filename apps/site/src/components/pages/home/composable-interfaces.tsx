@@ -99,7 +99,7 @@ export const ComposableInterfaces = () => {
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", md: "row" },
+              flexDirection: { xs: "column", sm: "row" },
               justifyContent: "center",
               gap: 5,
               mb: 8,
@@ -171,7 +171,7 @@ export const ComposableInterfaces = () => {
 
             <Box
               sx={{
-                display: { xs: "none", md: "block" },
+                display: { xs: "none", sm: "block" },
                 width: 0,
                 minHeight: 1,
                 borderLeft: "1px solid #D9D9D9",
@@ -236,7 +236,7 @@ export const ComposableInterfaces = () => {
                 flexDirection: "column",
                 textAlign: "inherit",
                 position: "relative",
-                maxWidth: 450,
+                maxWidth: 620,
               }}
             >
               <Box
@@ -244,7 +244,7 @@ export const ComposableInterfaces = () => {
                 src="/assets/new-home/faded-infinity.svg"
                 sx={{
                   position: "absolute",
-                  right: -45,
+                  right: { xs: -10, lg: -45 },
                   top: 40,
                   zIndex: -1,
                 }}
@@ -276,8 +276,7 @@ export const ComposableInterfaces = () => {
                   lineHeight: 1.2,
                 }}
               >
-                Build blocks that work
-                <br /> across the web
+                Build blocks that work across the web
               </Typography>
 
               <Box
@@ -329,7 +328,7 @@ export const ComposableInterfaces = () => {
                 flexDirection: "column",
                 textAlign: "inherit",
                 position: "relative",
-                maxWidth: 450,
+                maxWidth: 620,
               }}
             >
               <Box
