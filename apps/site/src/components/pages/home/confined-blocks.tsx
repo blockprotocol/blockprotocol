@@ -17,7 +17,7 @@ export const ConfinedBlocks = () => {
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
-          maxWidth: "1100px",
+          maxWidth: 1100,
           margin: "0 auto",
           gridGap: { xs: "2rem", md: "4rem" },
           alignItems: "center",
@@ -43,11 +43,11 @@ export const ConfinedBlocks = () => {
               sx={{
                 color: ({ palette }) => palette.grey[200],
                 textAlign: { xs: "center", md: "left" },
-                maxWidth: "20ch",
                 fontWeight: 500,
                 mb: 1.75,
                 letterSpacing: "-0.01em",
                 lineHeight: 1.2,
+                maxWidth: { xs: "30ch", md: "20ch" },
               }}
               variant="bpHeading3"
             >
@@ -69,8 +69,8 @@ export const ConfinedBlocks = () => {
             sx={{
               color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
-              maxWidth: "45ch",
               mb: 2,
+              maxWidth: { xs: "65ch", md: "45ch" },
             }}
             variant="bpBodyCopy"
           >
@@ -81,8 +81,8 @@ export const ConfinedBlocks = () => {
             sx={{
               color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
-              maxWidth: "45ch",
               mb: 2,
+              maxWidth: { xs: "65ch", md: "45ch" },
             }}
             variant="bpBodyCopy"
           >
@@ -93,7 +93,7 @@ export const ConfinedBlocks = () => {
             sx={{
               color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
-              maxWidth: "45ch",
+              maxWidth: { xs: "65ch", md: "45ch" },
               mb: 2,
             }}
             variant="bpBodyCopy"
@@ -102,7 +102,12 @@ export const ConfinedBlocks = () => {
             application.
           </Typography>
         </Box>
-        <Box sx={{ width: { xs: "90%", md: "55%" } }}>
+        <Box
+          sx={{
+            maxWidth: { xs: 620, md: 0 },
+            width: { xs: "100%", md: "55%" },
+          }}
+        >
           <Image src={darkBoxImage} />
         </Box>
       </Box>
