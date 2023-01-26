@@ -226,6 +226,8 @@ const CustomLinkButton = styled(LinkButton)(({ theme }) => ({
 export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
   currentSubscriptionTier: "free" | "hobby";
 }> = ({ currentSubscriptionTier }) => {
+  const isCurrentSubscriptionTierHobby = currentSubscriptionTier === "hobby";
+
   return (
     <Grid container>
       <Grid
@@ -234,7 +236,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         sm={12}
         sx={{ display: "flex", flexDirection: "column" }}
       >
-        {currentSubscriptionTier === "hobby" ? (
+        {isCurrentSubscriptionTierHobby ? (
           <Box display="flex" alignItems="center">
             <Box
               sx={({ spacing }) => ({
@@ -296,16 +298,12 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             href={{ pathname: "/upgrade", query: { tier: "hobby" } }}
             variant="primary"
             endIcon={
-              currentSubscriptionTier === "free" ? (
-                <ArrowRightIcon />
-              ) : undefined
+              isCurrentSubscriptionTierHobby ? undefined : <ArrowRightIcon />
             }
-            disabled={currentSubscriptionTier === "hobby"}
+            disabled={isCurrentSubscriptionTierHobby}
             size="small"
           >
-            {currentSubscriptionTier === "hobby"
-              ? "Your current plan"
-              : "Continue"}
+            {isCurrentSubscriptionTierHobby ? "Your current plan" : "Continue"}
           </CustomLinkButton>
         </Box>
         <Box
@@ -397,16 +395,16 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
               href={{ pathname: "/upgrade", query: { tier: "hobby" } }}
               size="small"
               endIcon={
-                currentSubscriptionTier === "hobby" ? (
+                isCurrentSubscriptionTierHobby ? (
                   <FontAwesomeIcon icon={faCheck} />
                 ) : (
                   <RocketRegularIcon />
                 )
               }
-              disabled={currentSubscriptionTier === "hobby"}
+              disabled={isCurrentSubscriptionTierHobby}
             >
               <Typography variant="bpSmallCopy">
-                {currentSubscriptionTier === "hobby" ? (
+                {isCurrentSubscriptionTierHobby ? (
                   <>Your current level of access</>
                 ) : (
                   <>
@@ -419,7 +417,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
         </Box>
       </Grid>
       <Grid item md={6} sm={12}>
-        {currentSubscriptionTier === "hobby" ? (
+        {isCurrentSubscriptionTierHobby ? (
           <Box display="flex" alignItems="center">
             <Box
               sx={({ spacing }) => ({
@@ -552,7 +550,7 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
               variant="bpSmallCopy"
               sx={{ color: ({ palette }) => palette.common.white }}
             >
-              {currentSubscriptionTier === "hobby" ? (
+              {isCurrentSubscriptionTierHobby ? (
                 <>
                   Upgrade to unlock <strong>PRO</strong>
                 </>
