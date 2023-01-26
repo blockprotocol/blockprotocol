@@ -237,13 +237,20 @@ export const FinalCTA: NextPage = () => {
               heading: (
                 <>
                   Publish blocks to the{" "}
-                  <Box
-                    component="span"
-                    sx={{ color: ({ palette }) => palette.purple[70] }}
-                  >
-                    Þ
-                  </Box>{" "}
-                  Hub
+                  <strong>
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[70] }}
+                    >
+                      Þ
+                    </Box>{" "}
+                    <Box
+                      component="span"
+                      sx={{ fontFamily: "colfax-web", fontStyle: "italic" }}
+                    >
+                      Hub
+                    </Box>
+                  </strong>
                 </>
               ),
               subHeading: (
