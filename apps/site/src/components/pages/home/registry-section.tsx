@@ -15,7 +15,7 @@ import { BlockProtocolIcon } from "../../icons";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
-const BrowseBlocksSection = () => {
+const BrowseBlocksSection = ({ isMobile = false }) => {
   return (
     <Box
       sx={{
@@ -52,8 +52,8 @@ const BrowseBlocksSection = () => {
             lineHeight: "26px",
           }}
         >
-          <strong>Anyone can publish a block.</strong> If you can’t see one you
-          want,{" "}
+          <strong>Anyone can publish a block.</strong>{" "}
+          {isMobile ? <br /> : null}If you can’t see one you want,{" "}
           <Link
             href="/docs/developing-blocks"
             sx={{
@@ -76,7 +76,8 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
   catalog,
 }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Box
@@ -121,12 +122,17 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               mb: 2.25,
               letterSpacing: "-0.02em",
               lineHeight: 1,
+              whiteSpace: "nowrap",
             }}
           >
             Blocks on the
             <BlockProtocolIcon
               gradient
-              sx={{ fontSize: "0.8em", marginBottom: "0.1em", px: 1.25 }}
+              sx={{
+                fontSize: "0.8em",
+                marginBottom: "0.1em",
+                px: { xs: 1, sm: 1.25 },
+              }}
             />
             <strong>Hub</strong>
           </Typography>
@@ -157,16 +163,16 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
           </Stack>
         </Box>
 
-        {isMobile ? null : <BrowseBlocksSection />}
+        {isSmallScreen ? null : <BrowseBlocksSection />}
       </Container>
 
       <Box sx={{ width: "100%" }}>
         <BlocksSlider catalog={catalog} />
       </Box>
 
-      {isMobile ? (
+      {isSmallScreen ? (
         <Box mb={5}>
-          <BrowseBlocksSection />
+          <BrowseBlocksSection isMobile={isMobile} />
         </Box>
       ) : null}
     </Box>
