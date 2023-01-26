@@ -2,7 +2,6 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Collapse, Typography } from "@mui/material";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { PaymentIntent, StripeCardElementChangeEvent } from "@stripe/stripe-js";
-import { useRouter } from "next/router";
 import {
   FormEvent,
   FunctionComponent,
@@ -14,17 +13,13 @@ import {
 
 import { Button } from "../../../../components/button";
 import { FontAwesomeIcon } from "../../../../components/icons";
-import { useUser } from "../../../../context/user-context";
 import { FRONTEND_URL } from "../../../../lib/config";
 import { priceToHumanReadable } from "../../../shared/subscription-utils";
 
 export const CreateSubscriptionCheckoutForm: FunctionComponent<{
   clientSecret?: string;
-}> = ({ clientSecret }) => {
-  const { refetch } = useUser();
-
-  const router = useRouter();
-
+  onCompleted?: () => void;
+}> = ({ clientSecret, onCompleted }) => {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -88,10 +83,13 @@ export const CreateSubscriptionCheckoutForm: FunctionComponent<{
         setErrorMessage(`Payment failed ${payload.error.message}`);
       } else {
         setErrorMessage(undefined);
-        void refetch().then(() => router.push("/settings/billing"));
+
+        if (onCompleted) {
+          onCompleted();
+        }
       }
     },
-    [elements, stripe, refetch, clientSecret, router],
+    [elements, stripe, clientSecret, onCompleted],
   );
 
   return (

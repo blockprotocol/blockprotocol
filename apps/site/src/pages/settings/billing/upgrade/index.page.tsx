@@ -34,6 +34,7 @@ import {
   withAuthWall,
 } from "../../../../components/pages/auth-wall";
 import { UserAvatar } from "../../../../components/user-avatar";
+import { useUser } from "../../../../context/user-context";
 import {
   getDateFromStripeDate,
   internalApi,
@@ -51,7 +52,9 @@ import { proSubscriptionFeatures } from "../../billing-settings-panel/pro-subscr
 import { SubscriptionFeatureListItem } from "../../billing-settings-panel/subscription-feature-list-item";
 import { CreateSubscriptionCheckoutForm } from "./create-subscription-form";
 
-const stripePromise = loadStripe("pk_test_6jl4TagPRkLv5jmLVeJthhPE");
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLIC_API_KEY ?? "",
+);
 
 type UpgradePageProps = {
   subscriptionTierPrices: SubscriptionTierPrices;
@@ -74,6 +77,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   subscriptionTierPrices,
 }) => {
   const router = useRouter();
+  const { setUser } = useUser();
 
   const [subscriptionId, setSubscriptionId] = useState<string>();
   const [clientSecret, setClientSecret] = useState<string>();
@@ -168,6 +172,29 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     }
   }, [currentSubscriptionTier, upgradedSubscriptionTier, subscriptionId]);
 
+  const handleUpgradedSubscription = useCallback(() => {
+    /**
+     * The BP user in the database is updated by the stripe webhook in the
+     * internal API. To reflect the updated state of the user before this
+     * db write has taken place, we can manually update the user object
+     * client-side with the anticipated values for `stripeSubscriptionStatus`
+     * and `stripeSubscriptionTier`.
+     */
+    setUser((prevUser) => {
+      if (typeof prevUser !== "object") {
+        return prevUser;
+      }
+
+      return {
+        ...prevUser,
+        stripeSubscriptionStatus: "active",
+        stripeSubscriptionTier: upgradedSubscriptionTier,
+      };
+    });
+
+    void router.push("/settings/billing");
+  }, [setUser, router, upgradedSubscriptionTier]);
+
   const upgradeSubscription = async (params: {
     tier: Exclude<PaidSubscriptionTier, "hobby">;
   }) => {
@@ -181,7 +208,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
 
     /** @todo: catch payment errors */
 
-    await router.push("/settings/billing");
+    handleUpgradedSubscription();
   };
 
   const _currentPeriodEnd = useMemo(() => {
@@ -648,6 +675,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                         options={stripeElementsOptions}
                       >
                         <CreateSubscriptionCheckoutForm
+                          onCompleted={handleUpgradedSubscription}
                           clientSecret={clientSecret}
                         />
                       </Elements>
