@@ -128,7 +128,7 @@ export const ComposableInterfaces = () => {
               <Stack gap={2.5} flexDirection="row" justifyContent="center">
                 <IconButtonWithTooltip
                   href="/docs/using-blocks#wordpress"
-                  label="Wordpress"
+                  label="WordPress"
                   icon={
                     <WordPressIcon
                       dark

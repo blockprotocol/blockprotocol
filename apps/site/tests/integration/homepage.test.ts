@@ -39,9 +39,9 @@ test("Home page should contain key elements", async ({ page }) => {
   ).toHaveAttribute("href", "/docs/embedding-blocks");
 
   // Composable interfaces section
-  await expect(page.locator("[data-testid='Wordpress-button']")).toBeVisible();
-  await page.hover(`[data-testid='Wordpress-button']`);
-  await expect(page.locator("[data-testid='Wordpress-tooltip']")).toBeVisible();
+  await expect(page.locator("[data-testid='WordPress-button']")).toBeVisible();
+  await page.hover(`[data-testid='WordPress-button']`);
+  await expect(page.locator("[data-testid='WordPress-tooltip']")).toBeVisible();
 
   await expect(
     page.locator("[data-testid='GitHub Blocks-button']"),
