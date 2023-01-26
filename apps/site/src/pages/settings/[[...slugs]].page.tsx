@@ -43,21 +43,21 @@ const Settings: AuthWallPageContent = () => {
     }
   }, [router]);
 
-  const currentSettingsPageSlug = useMemo<string | undefined>(() => {
+  const currentSettingsPanel = useMemo(() => {
     if (router.isReady) {
       const { query } = router;
+
       if (!query.slugs || typeof query.slugs === "string") {
-        return "";
+        return undefined;
       }
 
-      return query.slugs.join("/");
+      const currentSettingsPageSlug = query.slugs.join("/");
+
+      return settingsPanels.find(
+        ({ slug }) => slug === currentSettingsPageSlug,
+      );
     }
   }, [router]);
-
-  const currentSettingsPanel = useMemo(
-    () => settingsPanels.find(({ slug }) => slug === currentSettingsPageSlug),
-    [currentSettingsPageSlug],
-  );
 
   return (
     <>
