@@ -1,4 +1,4 @@
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Collapse,
@@ -348,6 +348,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                     >
                       {NAVBAR_LINK_ICONS[title]}
                       <Typography
+                        variant="bpHeading3"
                         sx={{
                           marginLeft: 1,
                           fontWeight: 500,
@@ -370,6 +371,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                       sx={{ backgroundColor: "unset" }}
                     >
                       <Typography
+                        variant="bpHeading3"
                         sx={{
                           fontWeight: 500,
                           fontSize: "var(--step--1)",
@@ -381,8 +383,17 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                     </Link>
                   )}
                   {user !== "loading" && !user?.isSignedUp ? (
-                    <LinkButton href="/signup" size="small" variant="primary">
-                      Sign Up
+                    <LinkButton
+                      href="/signup"
+                      size="small"
+                      variant="primary"
+                      endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+                      sx={{
+                        color: "#F2F5FA",
+                        background: theme.palette.purple[700],
+                      }}
+                    >
+                      Create your account
                     </LinkButton>
                   ) : null}
                 </>

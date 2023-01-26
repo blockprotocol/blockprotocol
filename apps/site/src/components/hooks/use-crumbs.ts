@@ -56,7 +56,7 @@ const findCrumbs = (params: {
 export const useCrumbs = (pages: SiteMapPage[], asPath: string) =>
   useMemo(() => {
     const breadCrumbPages = pages.filter(({ title }) =>
-      ["Specification", "Documentation"].includes(title),
+      ["Specification", "Docs"].includes(title),
     );
 
     for (const page of breadCrumbPages) {
