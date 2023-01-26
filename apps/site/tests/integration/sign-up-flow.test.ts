@@ -58,9 +58,9 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
   await expect(page.locator("text=Add your account details")).toBeVisible();
   await expect(page).toHaveURL("/signup");
 
-  const usernameInput = page.locator('[placeholder="claudeshannon"]');
+  const usernameInput = page.locator('[placeholder="e.g. alice123"]');
   await usernameInput.fill("alice");
-  await page.locator('[placeholder="claudeshannon"]').press("Tab");
+  await page.locator('[placeholder="e.g. alice123"]').press("Tab");
 
   await expect(
     page.locator("text=This user has already been taken"),
@@ -68,7 +68,7 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
 
   await usernameInput.fill("alice2");
 
-  const preferredNameInput = page.locator('[placeholder="Claude"]');
+  const preferredNameInput = page.locator('[placeholder="e.g. Alice"]');
   await preferredNameInput.click();
 
   await expect(
