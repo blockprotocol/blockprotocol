@@ -29,7 +29,7 @@ const settingsPanels = [
   },
 ] as const;
 
-const sidebarWidth = 150;
+const sidebarMaxWidth = 150;
 
 const Settings: AuthWallPageContent = () => {
   const router = useRouter();
@@ -76,7 +76,7 @@ const Settings: AuthWallPageContent = () => {
           <Sidebar
             sx={{
               minWidth: 125,
-              maxWidth: sidebarWidth,
+              maxWidth: sidebarMaxWidth,
               background: "transparent",
             }}
             pages={settingsPanels.map(({ title, slug }) => ({
