@@ -112,7 +112,7 @@ export const AnyFramework = () => {
             variant="bpBodyCopy"
             sx={{
               color: ({ palette }) => palette.gray[80],
-              maxWidth: "60ch",
+              maxWidth: "65ch",
               textAlign: "left",
               mb: 1.5,
             }}
