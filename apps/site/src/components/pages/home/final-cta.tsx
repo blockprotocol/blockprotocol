@@ -224,12 +224,13 @@ export const FinalCTA: NextPage = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            gridGap: { xs: "2rem", md: "3rem" },
+            justifyContent: "center",
+            height: 1,
             maxWidth: {
               xs: 600,
               md: 460,
             },
-            mb: 2,
+            gap: 2,
           }}
         >
           {[
