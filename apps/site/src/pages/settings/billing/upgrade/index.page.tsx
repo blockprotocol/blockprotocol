@@ -80,6 +80,8 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
 
   // State used when upgrading from an existing subscription
   const [subscription, setSubscription] = useState<Stripe.Subscription>();
+  const [isUpgradingSubscription, setIsUpgradingSubscription] =
+    useState<boolean>(false);
 
   const currentSubscriptionTier: SubscriptionTier =
     user.stripeSubscriptionStatus === "active"
@@ -169,9 +171,15 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   const upgradeSubscription = async (params: {
     tier: Exclude<PaidSubscriptionTier, "hobby">;
   }) => {
+    setIsUpgradingSubscription(true);
+
     await internalApi.updateSubscription({
       updatedSubscriptionTier: params.tier,
     });
+
+    setIsUpgradingSubscription(false);
+
+    /** @todo: catch payment errors */
 
     await router.push("/settings/billing");
   };
@@ -624,6 +632,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                             })
                           }
                           endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+                          loading={isUpgradingSubscription}
                         >
                           Upgrade my account to{" "}
                           {upgradedSubscriptionTier
