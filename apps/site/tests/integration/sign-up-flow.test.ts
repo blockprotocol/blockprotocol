@@ -31,7 +31,7 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
 
   await expect(page.locator("text=Claim your favorite username")).toBeVisible();
 
-  const emailInput = page.locator('[placeholder="claude\\@shannon\\.com"]');
+  const emailInput = page.locator('[placeholder="you\\@example\\.com"]');
   await emailInput.fill("alice@example.com");
   await emailInput.press("Enter");
 
