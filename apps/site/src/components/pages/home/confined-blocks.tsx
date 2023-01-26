@@ -104,7 +104,7 @@ export const ConfinedBlocks = () => {
         </Box>
         <Box
           sx={{
-            maxWidth: { xs: 620, md: 0 },
+            maxWidth: { xs: 620, md: "unset" },
             width: { xs: "100%", md: "55%" },
           }}
         >
