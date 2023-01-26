@@ -89,7 +89,7 @@ export const WhatAreBlocks = () => {
               <Typography
                 sx={{
                   textAlign: { xs: "center", md: "left" },
-                  maxWidth: "52ch",
+                  maxWidth: { xs: "65ch", md: "52ch" },
                   margin: "0 auto 0.75rem",
                 }}
                 variant="bpBodyCopy"
@@ -101,7 +101,7 @@ export const WhatAreBlocks = () => {
               <Typography
                 sx={{
                   textAlign: { xs: "center", md: "left" },
-                  maxWidth: "52ch",
+                  maxWidth: { xs: "65ch", md: "52ch" },
                   margin: "0 auto",
                 }}
                 variant="bpBodyCopy"
@@ -111,18 +111,32 @@ export const WhatAreBlocks = () => {
               </Typography>
             </Box>
             <Box
-              component="img"
-              src="/assets/new-home/checklist-block.svg"
               sx={{
-                borderRadius: "6px",
-                boxShadow:
-                  "0px 1px 0.629px 0px rgba(175, 155, 193, 0.081), 0px 4.237px 8.10px 0px rgba(175, 155, 193, 0.123), 0px 8px 20px 0px rgba(175, 155, 193, 0.083)",
-                margin: { xs: 1, md: "2rem 4rem 2.5rem 4rem" },
-                maxWidth: "500px",
-                alignSelf: "center",
-                justifySelf: "center",
+                display: "flex",
+                height: 1,
+                width: 1,
+                alignItems: "flex-end",
+                justifyContent: "center",
               }}
-            />
+            >
+              <Box
+                component="img"
+                src="/assets/new-home/checklist-block.svg"
+                sx={{
+                  borderRadius: "6px",
+                  boxShadow:
+                    "0px 1px 0.629px 0px rgba(175, 155, 193, 0.081), 0px 4.237px 8.10px 0px rgba(175, 155, 193, 0.123), 0px 8px 20px 0px rgba(175, 155, 193, 0.083)",
+                  margin: {
+                    xs: 1,
+                    lg: "2rem 4rem 2.5rem 4rem",
+                  },
+                  maxWidth: {
+                    xs: 500,
+                    md: 340,
+                  },
+                }}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -181,15 +195,19 @@ export const WhatAreBlocks = () => {
           flexDirection: { xs: "column-reverse", md: "row" },
           alignItems: "center",
           justifyContent: "center",
+          px: "1rem",
         }}
       >
-        <Box component="img" src="/assets/new-home/block-menu.svg" />
+        <Box
+          component="img"
+          src="/assets/new-home/block-menu.svg"
+          sx={{ mx: "-0.5rem" }}
+        />
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
             alignItems: { xs: "center", md: "flex-start" },
-            px: { xs: "1rem", md: "0" },
           }}
         >
           <Box
@@ -206,7 +224,7 @@ export const WhatAreBlocks = () => {
                 color: ({ palette }) => palette.gray[90],
                 fontWeight: 500,
                 textAlign: { xs: "center", md: "left" },
-                maxWidth: { xs: "20ch", md: "100%" },
+                maxWidth: { xs: "30ch", md: "100%" },
                 mb: 0.75,
                 letterSpacing: "-0.01em",
                 lineHeight: 1.2,
@@ -227,7 +245,7 @@ export const WhatAreBlocks = () => {
           <Typography
             sx={{
               textAlign: { xs: "center", md: "left" },
-              maxWidth: { xs: "45ch", md: "100%" },
+              maxWidth: { xs: "65ch", md: "100%" },
               mb: { xs: 3, md: 5 },
             }}
             variant="bpBodyCopy"
@@ -239,7 +257,9 @@ export const WhatAreBlocks = () => {
           <Box
             component="img"
             src="/assets/new-home/image-block-interaction.svg"
-            sx={{ display: { xs: "none", md: "block" } }}
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
           />
         </Box>
       </Box>
