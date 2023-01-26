@@ -43,3 +43,18 @@ export const dateToHumanReadable = (date: Date) => {
     month < 10 ? "0" : ""
   }${month}/${year}`;
 };
+
+const cardBrands = {
+  amex: "American Express",
+  diners: "Diners",
+  discover: "Discover",
+  jcb: "JCB",
+  mastercard: "Mastercard",
+  unionpay: "UnionPay",
+  visa: "Visa",
+} as const;
+
+type CardBrand = keyof typeof cardBrands;
+
+export const cardBrandToHumanReadable = (cardBrand: string) =>
+  cardBrands[cardBrand as CardBrand] ?? "Unknown";
