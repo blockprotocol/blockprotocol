@@ -193,7 +193,7 @@ const SidebarPage: FunctionComponent<SidebarPageProps> = ({
   const { asPath } = router;
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  const { href, title, sections, subPages } = page;
+  const { href, title, sections = [], subPages = [] } = page;
 
   const isSelected =
     pathWithoutParams === href || pathWithoutParams === `${href}#`;
@@ -335,14 +335,18 @@ const getInitialOpenedPages = (params: {
     if (pathWithoutParams === href || pathWithoutParams === `${href}#`) {
       return [href];
     }
-    const sectionPath = findSectionPath(href, sections, pathWithoutParams);
+    const sectionPath = findSectionPath(
+      href,
+      sections ?? [],
+      pathWithoutParams,
+    );
 
     if (sectionPath) {
       return [href, ...sectionPath];
     }
 
     const openSubPages = getInitialOpenedPages({
-      pages: subPages,
+      pages: subPages ?? [],
       asPath: pathWithoutParams,
     });
 
@@ -451,7 +455,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
         ) : pages.length === 1 ? (
           <>
             {/* When the sidebar is only displaying one page, we can display its sub-sections and sub-pages directly */}
-            {pages[0]!.sections.map((section, i) => (
+            {pages[0]!.sections?.map((section, i) => (
               <SidebarPageSection
                 key={section.anchor}
                 isSelectedByDefault={i === 0}
@@ -463,7 +467,7 @@ export const Sidebar: FunctionComponent<SidebarProps> = ({
                 setOpenedPages={setOpenedPages}
               />
             ))}
-            {pages[0]!.subPages.map((subpage) => (
+            {pages[0]!.subPages?.map((subpage) => (
               <SidebarPage
                 key={subpage.href}
                 depth={0}

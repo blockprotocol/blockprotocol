@@ -82,8 +82,6 @@ const Settings: AuthWallPageContent = () => {
             pages={settingsPanels.map(({ title, slug }) => ({
               title,
               href: `/settings/${slug}`,
-              subPages: [],
-              sections: [],
             }))}
           />
           <Paper sx={{ flexGrow: 1, padding: 6 }}>
