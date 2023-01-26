@@ -277,7 +277,6 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
               : {}),
 
             [`& .${navbarClasses.interactiveLink}`]: {
-              marginRight: 3,
               transition: theme.transitions.create("color", {
                 duration: 100,
               }),
@@ -303,7 +302,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
         <Container
           component="header"
           sx={[
-            isDocs && { width: "100% !important", maxWidth: "100% !important" },
+            isDocs && {
+              width: "100% !important",
+              maxWidth: "100% !important",
+            },
           ]}
         >
           <Box
@@ -323,7 +325,13 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                 sx={{ color: "inherit" }}
               />
             </Link>
-            <Box display="flex" alignItems="center">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: { xs: 2.75, md: 4 },
+              }}
+            >
               {md ? (
                 <>
                   <SearchNavButton />
