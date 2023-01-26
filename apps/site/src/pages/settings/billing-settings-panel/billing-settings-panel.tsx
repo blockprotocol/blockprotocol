@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import Stripe from "stripe";
 
 import { FontAwesomeIcon } from "../../../components/icons";
 import { MapboxIcon } from "../../../components/icons/mapbox-icon";
@@ -20,6 +21,7 @@ import {
   subscriptionTierToHumanReadable,
 } from "../../shared/subscription-utils";
 import { FreeOrHobbySubscriptionTierOverview } from "./free-or-hobby-subscription-tier-overview";
+import { PaymentMethod } from "./payment-method";
 import { ProSubscriptionTierOverview } from "./pro-subscription-tier-overview";
 
 export const BillingSettingsPanel: FunctionComponent = () => {
@@ -40,23 +42,35 @@ export const BillingSettingsPanel: FunctionComponent = () => {
     void fetchSubscriptionTierPrices();
   }, [fetchSubscriptionTierPrices]);
 
-  /**
-   * @todo: uncomment this when subscription object is required on the billing page.
-   */
-  // const [subscription, setSubscription] = useState<Stripe.Subscription>();
-  // const [loadingSubscription, setLoadingSubscription] = useState<boolean>(true);
+  const [subscription, setSubscription] = useState<Stripe.Subscription>();
 
-  // const fetchSubscription = async () => {
-  //   setLoadingSubscription(true);
-  //   const { data } = await internalApi.getSubscription({});
+  const fetchSubscription = async () => {
+    const { data } = await internalApi.getSubscription();
 
-  //   setSubscription(data.subscription);
-  //   setLoadingSubscription(false);
-  // };
+    setSubscription(data.subscription);
+  };
 
-  // useEffect(() => {
-  //   void fetchSubscription();
-  // }, []);
+  const [paymentMethods, setPaymentMethods] =
+    useState<Stripe.PaymentMethod[]>();
+
+  const fetchPaymentMethods = async () => {
+    const {
+      data: { paymentMethods: fetchedPaymentMethods },
+    } = await internalApi.getPaymentMethods();
+
+    setPaymentMethods(fetchedPaymentMethods);
+  };
+
+  useEffect(() => {
+    void fetchSubscription();
+    void fetchPaymentMethods();
+  }, []);
+
+  const defaultSubscriptionPaymentMethod = useMemo(() => {
+    return paymentMethods?.find(
+      ({ id }) => id === subscription?.default_payment_method,
+    );
+  }, [paymentMethods, subscription]);
 
   const currentSubscriptionTier = useMemo(() => {
     if (!user || user === "loading") {
@@ -136,18 +150,26 @@ export const BillingSettingsPanel: FunctionComponent = () => {
           >
             <Card
               elevation={0}
-              sx={({ spacing, palette }) => ({
+              sx={({ spacing, palette, transitions }) => ({
                 padding: spacing(2, 4),
                 backgroundColor: palette.gray[10],
                 height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                " svg": {
+                  transition: transitions.create(["color", "margin-left"]),
+                },
                 "&:hover": {
                   backgroundColor: "#FBF7FF",
-                  "& .MuiTypography-bpBodyCopy": {
+                  "& p": {
                     color: palette.purple[80],
                   },
                   "& svg": {
-                    marginLeft: 2,
                     color: palette.purple[80],
+                    "&.chevron-right": {
+                      marginLeft: 2,
+                    },
                   },
                 },
               })}
@@ -161,26 +183,32 @@ export const BillingSettingsPanel: FunctionComponent = () => {
                   </strong>
                 </Typography>
                 <FontAwesomeIcon
+                  className="chevron-right"
                   icon={faChevronRight}
-                  sx={(theme) => ({
+                  sx={{
                     marginLeft: 1,
                     fontSize: 14,
-                    transition: theme.transitions.create("margin-left"),
-                  })}
+                  }}
                 />
               </Box>
-              <Typography
-                variant="bpSmallCopy"
-                component="p"
-                sx={{
-                  fontWeight: 400,
-                }}
-              >
-                {/* @todo: implement "change payment" settings panel @see https://app.asana.com/0/0/1203781148500075/f */}
-                {currentSubscriptionTierIsPaid
-                  ? "TODO - change payment method"
-                  : "Unlock access to OpenAI, Mapbox and more powerful blocks"}
-              </Typography>
+              {/* @todo: implement "change payment" settings panel @see https://app.asana.com/0/0/1203781148500075/f */}
+              {currentSubscriptionTierIsPaid ? (
+                defaultSubscriptionPaymentMethod ? (
+                  <PaymentMethod
+                    paymentMethod={defaultSubscriptionPaymentMethod}
+                  />
+                ) : null
+              ) : (
+                <Typography
+                  variant="bpSmallCopy"
+                  component="p"
+                  sx={{
+                    fontWeight: 400,
+                  }}
+                >
+                  Unlock access to OpenAI, Mapbox and more powerful blocks
+                </Typography>
+              )}
             </Card>
           </Link>
         </Grid>
