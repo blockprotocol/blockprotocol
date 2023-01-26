@@ -21,7 +21,7 @@ import { LinkButton } from "./link-button";
 
 const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
   {
-    name: "Hub",
+    name: "Þ Hub",
     href: "/hub",
   },
   {
