@@ -28,7 +28,7 @@ export const InteroperableBlocks = () => {
           gridGap: { xs: "1rem", md: 0 },
           alignItems: { xs: "flex-end", sm: "unset" },
           marginLeft: { xs: "0", md: "-12rem", lg: "-8rem", xl: "1rem" },
-          padding: { xs: "2rem 0 1rem 1rem", sm: "4rem 0 4rem 2rem", md: 0 },
+          padding: { xs: "2rem 1rem 1rem 1rem", sm: "4rem 0 4rem 2rem", md: 0 },
         }}
       >
         {isMobile ? (
@@ -38,6 +38,7 @@ export const InteroperableBlocks = () => {
               width: { xs: "80%", sm: "40%" },
               height: "50%",
               zIndex: "3",
+              marginRight: { xs: "-1rem", sm: 0 },
             }}
             component="img"
             src="/assets/new-home/transparent-blocks-mobile.png"
