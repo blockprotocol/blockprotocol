@@ -2,11 +2,11 @@ import { GetStaticProps } from "next";
 import { FunctionComponent } from "react";
 
 import { AnyFramework } from "../components/pages/home/any-framework";
-import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
 import { ConfinedBlocks } from "../components/pages/home/confined-blocks";
 import { Header } from "../components/pages/home/header";
 import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
 import { RegistrySection } from "../components/pages/home/registry-section";
+import { SupportedApplications } from "../components/pages/home/supported-applications";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
 import { ZeroApplicationDevelopers } from "../components/pages/home/zero-application-developers";
 import { getAllBlocks } from "../lib/api/blocks/get";
@@ -38,7 +38,7 @@ const HomePage: FunctionComponent<PageProps> = ({ catalog }) => {
       <ConfinedBlocks />
       <InteroperableBlocks />
       <ZeroApplicationDevelopers />
-      <ComposableInterfaces />
+      <SupportedApplications />
       <AnyFramework />
       <RegistrySection catalog={catalog} />
     </>

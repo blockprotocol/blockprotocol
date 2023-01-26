@@ -1,9 +1,16 @@
 import { faFigma } from "@fortawesome/free-brands-svg-icons";
-import { Box, Container, Stack, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  Stack,
+  Tooltip,
+  TooltipComponentsPropsOverrides,
+  Typography,
+} from "@mui/material";
 import Image from "next/legacy/image";
 import { ReactNode } from "react";
 
-import composableFullImage from "../../../../public/assets/new-home/composable-full-min.webp";
+import supportedApplicationsFullImage from "../../../../public/assets/new-home/supported-applications-full-min.webp";
 import {
   FontAwesomeIcon,
   GithubIcon,
@@ -31,9 +38,8 @@ const IconButtonWithTooltip = ({
     <Tooltip
       componentsProps={{
         tooltip: {
-          // eslint-disable-next-line no-useless-computed-key
-          ["data-testid"]: `${label}-tooltip`,
-        } as any,
+          "data-testid": `${label}-tooltip`,
+        } as TooltipComponentsPropsOverrides,
       }}
       title={
         <Box display="flex" alignItems="center">
@@ -51,8 +57,7 @@ const IconButtonWithTooltip = ({
     >
       <LinkButton
         linkProps={{
-          // eslint-disable-next-line no-useless-computed-key
-          ["data-testid"]: `${label}-button`,
+          "data-testid": `${label}-button`,
         }}
         data-testid={label}
         href={href}
@@ -73,7 +78,7 @@ const IconButtonWithTooltip = ({
   );
 };
 
-export const ComposableInterfaces = () => {
+export const SupportedApplications = () => {
   return (
     <>
       <Box
@@ -452,7 +457,7 @@ export const ComposableInterfaces = () => {
           pb: { xs: 3, sm: 5 },
         }}
       >
-        <Image layout="responsive" src={composableFullImage} />
+        <Image layout="responsive" src={supportedApplicationsFullImage} />
       </Box>
     </>
   );
