@@ -12,7 +12,7 @@ import { SiteMap } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdx-utils";
 
 const documentationPages = (siteMap as SiteMap).pages.find(
-  ({ title }) => title === "Documentation",
+  ({ title }) => title === "Docs",
 )!.subPages;
 
 type DocsPageQueryParams = {
@@ -79,7 +79,7 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
 
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  const { subPages } = allPages.find(({ title }) => title === "Documentation")!;
+  const { subPages } = allPages.find(({ title }) => title === "Docs")!;
 
   const flatSubPages = subPages.flatMap((page) => [page, ...page.subPages]);
 
@@ -93,7 +93,7 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
   return (
     <>
       <NextSeo
-        title={`Block Protocol – ${isSpec ? "Specification" : "Documentation"}`}
+        title={`Block Protocol – ${isSpec ? "Specification" : "Docs"}`}
       />
       <DocsContent
         content={serializedPage}
