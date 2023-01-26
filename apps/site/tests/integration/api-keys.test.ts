@@ -81,7 +81,7 @@ test("API key page should generate a valid key", async ({
   await expect(page.locator(`text=${publicKeyId}`)).toBeVisible();
   await page.locator("text=Regenerate API Key").click();
 
-  await expect(page.locator("text=Regenerate my first key")).toBeVisible();
+  await expect(page.locator('button:has-text("Regenerate Key")')).toBeVisible();
   await expect(
     page.locator("text=Regenerating the my first key key will invalidate it."),
   ).toBeVisible();
@@ -90,9 +90,9 @@ test("API key page should generate a valid key", async ({
   await expect(page.locator("text=Regenerate my first key")).not.toBeVisible();
 
   await page.locator("text=Regenerate API Key").click();
-  await expect(page.locator("text=Regenerate my first key")).toBeVisible();
+  await expect(page.locator('button:has-text("Regenerate Key")')).toBeVisible();
 
-  await page.locator("text=Regenerate key").click();
+  await page.locator('button:has-text("Regenerate Key")').click();
 
   const apiKeyValue2 =
     (await page.locator('[data-testid="api-key-value"]').textContent()) ?? "";
@@ -106,7 +106,7 @@ test("API key page should generate a valid key", async ({
     await page.locator("text=Copy to Clipboard").click();
     await expect(page.locator("text=✓ Copied")).toBeVisible();
   }
-  await expect(page.locator("text=my first key regenerated")).toBeVisible();
+  await expect(page.locator("text=Key regenerated")).toBeVisible();
   await page.locator("text=Go back").click();
 
   await expect(page.locator(`text=${publicKeyId2}`)).toBeVisible();

@@ -2,25 +2,28 @@ import { Box, Typography } from "@mui/material";
 
 import { Snippet } from "../../snippet";
 
-const reactDummyCode = `export const App: BlockComponent<AppProps> =({
-    updateEntities,
-    entityId,
-    accountId,
-    ...rest
- }) => {const [ toDoList, setToDoList ] = useState(data);
-   
- return (
-     <div className="container">
-       <div className="date-title">
-         <h1>{date}</h1>
-       </div>
-       <div className=”list”>
-         {toDoList.map(todo => {`;
+const reactDummyCode = `export const App: BlockComponent<AppProps> = ({
+  updateEntities,
+  entityId,
+  accountId,
+  ...rest
+}) => { 
+  const [ toDoList, setToDoList ] = useState(data);
+
+  return (
+    <div className="container">
+      <div className="date-title">
+        <h1>{date}</h1>
+      </div>
+      <div className=”list”>
+        {toDoList.map(todo => {`;
 
 const CodeBlock = () => {
   return (
     <Box
       sx={{
+        position: "relative",
+        top: 2,
         margin: {
           xs: "2rem 1rem 0 1em",
           sm: "3rem 2rem 0 2em",
@@ -39,7 +42,6 @@ const CodeBlock = () => {
         sx={{
           background:
             "linear-gradient(181.4deg, #39444F 50%, #39444F 50%, #242D37 94.38%)",
-          fontSize: { xs: "0.875rem", md: "1rem" },
           height: "100%",
           color: ({ palette }) => palette.gray[30],
         }}
@@ -93,16 +95,26 @@ export const AnyFramework = () => {
             },
           }}
         >
-          <Typography variant="bpHeading2" textAlign="left" mb={2}>
+          <Typography
+            variant="bpHeading3"
+            sx={{
+              color: ({ palette }) => palette.gray[90],
+              textAlign: "left",
+              fontWeight: 500,
+              letterSpacing: "-0.01em",
+              lineHeight: 1.2,
+              mb: 2,
+            }}
+          >
             Build blocks in any framework
           </Typography>
           <Typography
             variant="bpBodyCopy"
-            textAlign="left"
-            mb={1}
             sx={{
               color: ({ palette }) => palette.gray[80],
-              maxWidth: "60ch",
+              maxWidth: "65ch",
+              textAlign: "left",
+              mb: 1.5,
             }}
           >
             Blocks can be built with Web Components, React, Vue, TypeScript,
@@ -112,16 +124,15 @@ export const AnyFramework = () => {
           </Typography>
           <Typography
             variant="bpBodyCopy"
-            textAlign="left"
             sx={{
               color: ({ palette }) => palette.gray[80],
               maxWidth: { xs: "100%", md: "60ch" },
+              textAlign: "left",
             }}
           >
             Build using whatever technologies you love most.
           </Typography>
           <Box
-            mt={4}
             sx={{
               display: "grid",
               gridGap: "1.5rem",
@@ -130,15 +141,17 @@ export const AnyFramework = () => {
                 xs: "repeat(3, 1fr)",
                 sm: "repeat(5, 1fr)",
               },
+              mt: 5,
             }}
           >
-            <Box component="img" src="/assets/new-home/webc-logo.svg" />
-            <Box component="img" src="/assets/new-home/react-logo.svg" />
-            <Box component="img" src="/assets/new-home/vue-logo.svg" />
-            <Box component="img" src="/assets/new-home/angular-logo.svg" />
-            <Box component="img" src="/assets/new-home/typescript-logo.svg" />
+            <Box component="img" src="/assets/logos/color/webc.svg" />
+            <Box component="img" src="/assets/logos/color/react.svg" />
+            <Box component="img" src="/assets/logos/color/vue.svg" />
+            <Box component="img" src="/assets/logos/color/angular.svg" />
+            <Box component="img" src="/assets/logos/color/typescript.svg" />
           </Box>
         </Box>
+
         <CodeBlock />
       </Box>
     </Box>

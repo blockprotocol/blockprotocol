@@ -1,29 +1,36 @@
 import { SvgIcon, SvgIconProps } from "@mui/material";
 import { FunctionComponent } from "react";
 
-export const HashIcon: FunctionComponent<SvgIconProps> = (props) => {
+interface HashIconProps {
+  dark?: boolean;
+}
+
+export const HashIcon: FunctionComponent<SvgIconProps & HashIconProps> = ({
+  dark = false,
+  ...props
+}) => {
   return (
     <SvgIcon {...props} width="89" height="88" viewBox="0 0 89 88">
       <g opacity="0.9">
         <path
           opacity="0.886277"
           d="M50.0879 88H74.5902V0H50.0879V88Z"
-          fill="url(#paint0_linear_4410_29421)"
+          fill={dark ? "inherit" : "url(#paint0_linear_4410_29421)"}
         />
         <path
           opacity="0.898345"
           d="M14.9092 88H39.4096V0H14.9092V88Z"
-          fill="url(#paint1_linear_4410_29421)"
+          fill={dark ? "inherit" : "url(#paint1_linear_4410_29421)"}
         />
         <path
           opacity="0.881278"
           d="M0.75 37.7174H88.75V13.2151H0.75V37.7174Z"
-          fill="url(#paint2_linear_4410_29421)"
+          fill={dark ? "inherit" : "url(#paint2_linear_4410_29421)"}
         />
         <path
           opacity="0.855632"
           d="M0.75 73.5259H88.75V49.0254H0.75V73.5259Z"
-          fill="url(#paint3_linear_4410_29421)"
+          fill={dark ? "inherit" : "url(#paint3_linear_4410_29421)"}
         />
       </g>
       <defs>

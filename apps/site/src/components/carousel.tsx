@@ -152,6 +152,7 @@ export const Carousel = <T,>({
           },
 
           "& .slick-dots": {
+            position: "relative",
             bottom: "unset",
             li: {
               margin: "0 3px",

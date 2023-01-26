@@ -95,23 +95,47 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
 
   return (
     <>
-      <BlockProtocolIcon
-        sx={{
-          color: (theme) => theme.palette.purple[700],
-          marginBottom: 4,
-          height: "unset",
-        }}
-      />
-      <Typography
-        mb={3}
-        variant="bpHeading3"
-        textAlign="center"
-        sx={{
-          color: ({ palette }) => palette.gray[90],
-        }}
-      >
-        Create your Block Protocol account
-      </Typography>
+      <Box display="flex" gap={3} mb={3} alignSelf="flex-start">
+        <BlockProtocolIcon
+          sx={{
+            color: (theme) => theme.palette.purple[70],
+            height: "unset",
+          }}
+        />
+
+        <Box>
+          <Typography
+            variant="bpHeading3"
+            sx={{
+              color: ({ palette }) => palette.gray[90],
+              fontWeight: 500,
+              lineHeight: 1.7,
+            }}
+          >
+            Create an account
+          </Typography>
+          <Typography
+            variant="bpHeading3"
+            sx={{
+              fontWeight: 500,
+              fontSize: "1rem",
+              textTransform: "uppercase",
+              color: "#9EACBA",
+              lineHeight: 1.7,
+            }}
+          >
+            Use{" "}
+            <Box
+              component="span"
+              sx={{ color: ({ palette }) => palette.purple[70] }}
+            >
+              Þ
+            </Box>{" "}
+            blocks now
+          </Typography>
+        </Box>
+      </Box>
+
       <Box width="100%" component="form" onSubmit={handleSubmit} noValidate>
         <TextField
           sx={{ marginBottom: 2 }}
@@ -123,7 +147,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
           inputRef={emailInputRef}
           fullWidth
           label="Email address"
-          placeholder="claude@shannon.com"
+          placeholder="you@example.com"
           variant="outlined"
           value={emailValue}
           onChange={({ target }) => {
@@ -144,14 +168,15 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
           Continue
         </Button>
       </Box>
-      <Typography textAlign="center">
-        Have an account?{" "}
+      <Typography variant="bpSmallCopy" textAlign="center">
+        Already have an account?{" "}
         <Link
           href={{
             pathname: "/login",
             query: emailValue ? { email: emailValue } : undefined,
           }}
           onClick={handleClose}
+          sx={{ color: ({ palette }) => `${palette.purple[70]} !important` }}
         >
           Log in
         </Link>
