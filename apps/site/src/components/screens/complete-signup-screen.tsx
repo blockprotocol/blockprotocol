@@ -113,7 +113,7 @@ export const CompleteSignupScreen: FunctionComponent<
           sx={{ marginBottom: 2 }}
           fullWidth
           label="Username"
-          placeholder="claudeshannon"
+          placeholder="e.g. alice123"
           variant="outlined"
           error={
             touchedShortnameInput && !isShortnameValid && !!shortnameHelperText
@@ -130,7 +130,7 @@ export const CompleteSignupScreen: FunctionComponent<
           sx={{ marginBottom: 2 }}
           fullWidth
           label="First or preferred name"
-          placeholder="Claude"
+          placeholder="e.g. Alice"
           variant="outlined"
           error={
             touchedPreferredNameInput &&
