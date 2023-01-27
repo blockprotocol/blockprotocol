@@ -416,7 +416,10 @@ export const SupportedApplications = () => {
                 <LinkButton
                   href="/docs/using-blocks"
                   variant="primary"
-                  sx={{ color: ({ palette }) => palette.common.white }}
+                  sx={{
+                    color: ({ palette }) => palette.common.white,
+                    whiteSpace: "nowrap",
+                  }}
                   startIcon={
                     <BrowserIcon
                       sx={{
@@ -434,6 +437,7 @@ export const SupportedApplications = () => {
                   sx={{
                     color: ({ palette }) => palette.purple[70],
                     background: "transparent",
+                    whiteSpace: "nowrap",
                   }}
                   startIcon={
                     <BoxesStackedIcon
