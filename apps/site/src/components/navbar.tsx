@@ -358,6 +358,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                       <Typography
                         variant="bpHeading3"
                         sx={{
+                          fontStyle: title === "Hub" ? "italic" : "normal",
                           marginLeft: 1,
                           fontWeight: 500,
                           fontSize: "var(--step--1)",
