@@ -2,7 +2,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Container,
-  Stack,
+  // Stack,
   Typography,
   useMediaQuery,
   useTheme,
@@ -22,7 +22,7 @@ const BrowseBlocksSection = ({ isMobile = false }) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        alignItems: { xs: "center", lg: "flex-end" },
+        alignItems: { xs: "center" },
       }}
     >
       <Box mb={1.5}>
@@ -96,10 +96,10 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
       <Container
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", lg: "row" },
+          flexDirection: "column",
           justifyContent: "space-between",
-          gap: { xs: 2.5, lg: 10 },
-          mb: { xs: 2.5, lg: 10 },
+          gap: { xs: 2.5, lg: 4 },
+          mb: { xs: 2.5, lg: 4 },
           maxWidth: { xs: "95%", md: "85%", lg: 1100 },
         }}
       >
@@ -108,7 +108,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            alignItems: { xs: "center", lg: "flex-start" },
+            alignItems: "center",
           }}
         >
           <Typography
@@ -119,7 +119,6 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
               textAlign: "center",
               fontWeight: 400,
               fontStyle: "italic",
-              mb: 2.25,
               letterSpacing: "-0.02em",
               lineHeight: 1,
               whiteSpace: "nowrap",
@@ -137,30 +136,30 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             <strong>Hub</strong>
           </Typography>
 
-          <Stack
-            sx={{
-              flexDirection: "row",
-              gap: 2.25,
-              alignItems: "center",
-              flexWrap: "wrap",
-              justifyContent: { xs: "center", lg: "flex-start" },
-            }}
-          >
-            <Box component="img" src="/assets/logos/mono/openai.svg" />
-            <Box component="img" src="/assets/logos/mono/mapbox.svg" />
-            <Box component="img" src="/assets/logos/mono/hash.svg" />
+          {/* <Stack */}
+          {/*  sx={{ */}
+          {/*    flexDirection: "row", */}
+          {/*    gap: 2.25, */}
+          {/*    alignItems: "center", */}
+          {/*    flexWrap: "wrap", */}
+          {/*    justifyContent: { xs: "center", lg: "flex-start" }, */}
+          {/*  }} */}
+          {/* > */}
+          {/*  <Box component="img" src="/assets/logos/mono/openai.svg" /> */}
+          {/*  <Box component="img" src="/assets/logos/mono/mapbox.svg" /> */}
+          {/*  <Box component="img" src="/assets/logos/mono/hash.svg" /> */}
 
-            <Typography
-              variant="bpSmallCaps"
-              sx={{
-                fontWeight: 500,
-                color: "#9EACBA",
-                whiteSpace: "nowrap",
-              }}
-            >
-              And more
-            </Typography>
-          </Stack>
+          {/*  <Typography */}
+          {/*    variant="bpSmallCaps" */}
+          {/*    sx={{ */}
+          {/*      fontWeight: 500, */}
+          {/*      color: "#9EACBA", */}
+          {/*      whiteSpace: "nowrap", */}
+          {/*    }} */}
+          {/*  > */}
+          {/*    And more */}
+          {/*  </Typography> */}
+          {/* </Stack> */}
         </Box>
 
         {isSmallScreen ? null : <BrowseBlocksSection />}
