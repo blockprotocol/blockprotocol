@@ -372,9 +372,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
                           fontWeight: 500,
                           fontSize: "var(--step--1)",
                           color: "currentColor",
-                          ...(title === "Hub"
-                            ? { fontStyle: "italic", fontWeight: 700 }
-                            : {}),
+                          ...(title === "Hub" ? { fontStyle: "italic" } : {}),
                         }}
                       >
                         {title}
