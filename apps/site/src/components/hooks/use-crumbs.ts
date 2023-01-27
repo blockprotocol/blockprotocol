@@ -82,9 +82,14 @@ export const useCrumbs = (
       blockMetadata?.displayName
     ) {
       return [
-        { title: "Home", href: "/" },
-        { title: "Hub", href: "/hub" },
-        { title: blockMetadata.displayName },
+        { title: "Home", href: "/", subPages: [], sections: [] },
+        { title: "Hub", href: "/hub", subPages: [], sections: [] },
+        {
+          title: blockMetadata.displayName,
+          href: asPath,
+          subPages: [],
+          sections: [],
+        },
       ];
     }
 
