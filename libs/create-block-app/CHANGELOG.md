@@ -1,15 +1,5 @@
 # create-block-app
 
-## 0.1.0-20230127104746
-
-### Minor Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`0d16ef99`](https://github.com/blockprotocol/blockprotocol/commit/0d16ef99642c0ccdaf7ee06c5a50c69afe38b614) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
-
-### Patch Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`0d16ef99`](https://github.com/blockprotocol/blockprotocol/commit/0d16ef99642c0ccdaf7ee06c5a50c69afe38b614) Thanks [@CiaranMn](https://github.com/CiaranMn)! - enable passing an npm tag when specifying template
-
 ## 0.0.11
 
 ### Patch Changes
