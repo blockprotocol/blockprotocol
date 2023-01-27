@@ -1,3 +1,5 @@
+import { BlockMetadata } from "@blockprotocol/core";
+import { NextRouter } from "next/router";
 import { useMemo } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
@@ -53,18 +55,39 @@ const findCrumbs = (params: {
   return null;
 };
 
-export const useCrumbs = (pages: SiteMapPage[], asPath: string) =>
-  useMemo(() => {
-    const breadCrumbPages = pages.filter(({ title }) =>
-      ["Specification", "Docs"].includes(title),
-    );
+export const useCrumbs = (
+  pages: SiteMapPage[],
+  asPath: string,
+  route: string = "/docs/[[...docs-slug]]",
+  blockMetadata?: BlockMetadata,
+) => {
+  return useMemo(() => {
+    // Documentation pages
+    if (route === "/docs/[[...docs-slug]]") {
+      const breadCrumbPages = pages.filter(({ title }) =>
+        ["Specification", "Docs"].includes(title),
+      );
 
-    for (const page of breadCrumbPages) {
-      const maybeCrumbs = findCrumbs({ asPath, item: page });
+      for (const page of breadCrumbPages) {
+        const maybeCrumbs = findCrumbs({ asPath, item: page });
 
-      if (maybeCrumbs) {
-        return maybeCrumbs;
+        if (maybeCrumbs) {
+          return maybeCrumbs;
+        }
       }
     }
+    // User block pages
+    else if (
+      route === "/[shortname]/blocks/[block-slug]" &&
+      blockMetadata?.displayName
+    ) {
+      return [
+        { title: "Home", href: "/" },
+        { title: "Hub", href: "/hub" },
+        { title: blockMetadata.displayName },
+      ];
+    }
+
     return [];
-  }, [asPath, pages]);
+  }, [asPath, pages, route, blockMetadata]);
+};

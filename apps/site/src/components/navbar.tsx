@@ -1,3 +1,4 @@
+import { BlockMetadata } from "@blockprotocol/core";
 import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
@@ -51,6 +52,7 @@ const BREAD_CRUMBS_HEIGHT = 36;
 const IDLE_NAVBAR_TIMEOUT_MS = 3_000;
 
 type NavbarProps = {
+  blockMetadata?: BlockMetadata;
   openLoginModal: () => void;
 };
 
@@ -179,9 +181,12 @@ const useScrollingNavbar = (
 };
 
 // @todo remove asPath from Navbar
-export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
+export const Navbar: FunctionComponent<NavbarProps> = ({
+  blockMetadata,
+  openLoginModal,
+}) => {
   const theme = useTheme();
-  const { pathname } = useRouter();
+  const { pathname, route } = useRouter();
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
@@ -202,7 +207,12 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
 
   const navbarHeight = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
-  const crumbs = useCrumbs(pages, hydrationFriendlyAsPath);
+  const crumbs = useCrumbs(
+    pages,
+    hydrationFriendlyAsPath,
+    route,
+    blockMetadata,
+  );
 
   const displayBreadcrumbs = !md && !mobileNavVisible && crumbs.length > 0;
   const neighbourOffset =

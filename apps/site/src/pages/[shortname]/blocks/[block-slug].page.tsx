@@ -269,28 +269,6 @@ const BlockPage: NextPage<BlockPageProps> = ({
         }}
       />
       <Container>
-        {isDesktopSize ? null : (
-          <Box mb={1}>
-            <Breadcrumbs
-              separator={
-                <FontAwesomeIcon
-                  icon={faChevronRight}
-                  sx={{
-                    fontSize: 14,
-                    color: ({ palette }) => palette.gray[40],
-                  }}
-                />
-              }
-            >
-              <Link href="/">Home</Link>
-              <Link href="/hub">Hub</Link>
-              <Typography variant="bpSmallCopy" color="inherit">
-                {blockMetadata.displayName}
-              </Typography>
-            </Breadcrumbs>
-          </Box>
-        )}
-
         <Box
           sx={{
             display: "flex",
