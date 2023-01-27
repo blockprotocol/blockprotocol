@@ -2,7 +2,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import {
   Box,
   Container,
-  Stack,
+  // Stack,
   Typography,
   useMediaQuery,
   useTheme,
@@ -137,30 +137,30 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
             <strong>Hub</strong>
           </Typography>
 
-          <Stack
-            sx={{
-              flexDirection: "row",
-              gap: 2.25,
-              alignItems: "center",
-              flexWrap: "wrap",
-              justifyContent: { xs: "center", lg: "flex-start" },
-            }}
-          >
-            <Box component="img" src="/assets/logos/mono/openai.svg" />
-            <Box component="img" src="/assets/logos/mono/mapbox.svg" />
-            <Box component="img" src="/assets/logos/mono/hash.svg" />
+          {/* <Stack */}
+          {/*  sx={{ */}
+          {/*    flexDirection: "row", */}
+          {/*    gap: 2.25, */}
+          {/*    alignItems: "center", */}
+          {/*    flexWrap: "wrap", */}
+          {/*    justifyContent: { xs: "center", lg: "flex-start" }, */}
+          {/*  }} */}
+          {/* > */}
+          {/*  <Box component="img" src="/assets/logos/mono/openai.svg" /> */}
+          {/*  <Box component="img" src="/assets/logos/mono/mapbox.svg" /> */}
+          {/*  <Box component="img" src="/assets/logos/mono/hash.svg" /> */}
 
-            <Typography
-              variant="bpSmallCaps"
-              sx={{
-                fontWeight: 500,
-                color: "#9EACBA",
-                whiteSpace: "nowrap",
-              }}
-            >
-              And more
-            </Typography>
-          </Stack>
+          {/*  <Typography */}
+          {/*    variant="bpSmallCaps" */}
+          {/*    sx={{ */}
+          {/*      fontWeight: 500, */}
+          {/*      color: "#9EACBA", */}
+          {/*      whiteSpace: "nowrap", */}
+          {/*    }} */}
+          {/*  > */}
+          {/*    And more */}
+          {/*  </Typography> */}
+          {/* </Stack> */}
         </Box>
 
         {isSmallScreen ? null : <BrowseBlocksSection />}
