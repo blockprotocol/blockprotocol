@@ -97,7 +97,7 @@ export const ZeroApplicationDevelopers = () => {
       <LinkButton
         href="/docs/embedding-blocks"
         variant="primary"
-        sx={{ color: theme.palette.common.white }}
+        sx={{ color: theme.palette.common.white, whiteSpace: "nowrap" }}
         startIcon={
           <SolidSparklesIcon
             sx={{
