@@ -134,9 +134,15 @@ Because those inserting blocks are often non-technical end users, this isn't alw
   - which blocks users are able to discover and insert within your environment
   - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
 
-Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_. In the future we also plan to expose additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists.
+Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_.
+  
+In the future we also plan to expose:
+- additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists;
+- permission grants for blocks and block types, that allow for users to control the level and types of access blocks have (e.g. the ability to access information created through the Graph Service outside of themselves) or access to other services (e.g. making network requests).
 
-**Real-world example:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been _verified_, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
+**Example - HASH:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been verified, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
+  
+**Example - WordPress:** The _Block Protocol for WordPress_ plugin restricts the insertion of blocks to verified blocks only. This can be turned off by WordPress administrations from the plugin settings panel, but prevents non-technical authors and editors from accidentally relying on blocks which have not been subjected to review. In the future the plugin will support sandboxing and more variable permissions, in addition.
 
 </FAQ>
   
@@ -178,13 +184,7 @@ A simple example is a `ListBlock` which is composed of a list of other blocks, a
 Blocks which are made up of other blocks may be referred to as “compound blocks”. We will be publishing example compound blocks soon.
 
 </FAQ>
-
-</Box>
-
-## Related technologies
-
-<Box>
-
+  
 <FAQ question="How do Block Protocol blocks differ from Web Components?">
 
 Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it within an application.
@@ -204,6 +204,30 @@ GraphQL provides a [“syntax and system for describing [application] data requi
 It would be possible to define the operations specified in the Block Protocol in GraphQL - e.g. `createEntity` - or to extend the GraphQL spec to include them.
 
 We do not yet believe it necessary to specify block-application requests in GraphQL syntax nor require that they be executed by the embedding application according to the GraphQL specification, although we are open to the idea. It may become more attractive as operations evolve to include more features already covered by GraphQL (e.g. subscriptions, selection sets).
+
+</FAQ>
+
+</Box>
+
+## Endpoints and APIs
+
+<Box>
+
+<FAQ question="Can blocks access external APIs?">
+
+Yes, blocks can make requests to external APIs. They can do this in one of two ways:
+- **directly:** all of the code require to access an API can be contained within a block. This is not recommended in circumstances where a service requires an API key in order to access it, as it will be impossible to keep this key secret if a block (and for a block to remain usable) once the block is published to the Þ Hub.
+- **through the Þ Hub:** in addition to blocks and types, endpoints (APIs) can also be made accessible via the Þ Hub. A limited set of endpoints will be available as of 28th February 2023, including ones providing access to _Mapbox_ and _OpenAI_.
+  
+Facilitating external API access via the Þ Hub is a new addition to the protocol, and intructions for making additional endpoints available will be added in due course. In the meantime, we're able to manually add endpoints on behalf of block developers. If there's an endpoint you'd like to use within a new or existing block, please [message us on Discord](https://blockprotocol.org/discord).
+
+</FAQ>
+  
+<FAQ question="Can blocks access external APIs while authenticating as users?">
+  
+The ability for Þ blocks to access external services while (optionally) authenticated as an individual user is a planned capability. A technical solution has been identified which will enable this securely and seamlessly across embedding environments, and we intend to introduce support in the coming months. This will enable blocks to be developed that allow for a much wider range of use-cases to be addressed.
+  
+**Example:** a block user has information synced to _Coda_ or _AirTable_ from multiple external locations. They want to display this data on their website, which uses WordPress. With the _Block Protocol for WordPress_ plugin, a user will be able to use a _Coda_ or _AirTable_ block which allows them to select information contained within their external account, and insert this information onto their page or post in WordPress, which can then automatically keep itself in sync with the original source. This allows publishing from a wide variety of external sources.
 
 </FAQ>
 
