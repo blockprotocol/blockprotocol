@@ -510,11 +510,14 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                 href="/signup"
                 sx={{
                   fontSize: 18,
+                  color: "#F2F5FA",
+                  background: theme.palette.purple[700],
                 }}
                 variant="primary"
                 onClick={() => setMobileNavVisible(false)}
+                endIcon={<FontAwesomeIcon icon={faArrowRight} />}
               >
-                Sign Up
+                Create your account
               </LinkButton>
             </Box>
           )}
