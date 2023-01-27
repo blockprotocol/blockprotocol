@@ -1,5 +1,11 @@
 # @blockprotocol/type-system
 
+## 0.0.4-20230127104746
+
+### Patch Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`0d16ef99`](https://github.com/blockprotocol/blockprotocol/commit/0d16ef99642c0ccdaf7ee06c5a50c69afe38b614) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add stdlib functions for interacting with subgraph. reorganize types
+
 ## 0.0.3
 
 ### Patch Changes

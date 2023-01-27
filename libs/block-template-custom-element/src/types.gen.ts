@@ -7,6 +7,18 @@ import { Entity } from "@blockprotocol/graph";
  */
 
 /**
+ * The (fractional) index indicating the current position of something.
+ */
+export type Index = Text;
+/**
+ * An ordered sequence of characters
+ */
+export type Text = string;
+/**
+ * The summary of the something.
+ */
+export type Summary = Text;
+/**
  * Whether or not something has been archived.
  */
 export type Archived = Boolean;
@@ -19,59 +31,19 @@ export type Boolean = boolean;
  */
 export type Title = Text;
 /**
- * An ordered sequence of characters
- */
-export type Text = string;
-/**
- * The summary of the something.
- */
-export type Summary = Text;
-/**
- * The (fractional) index indicating the current position of something.
- */
-export type Index = Text;
-/**
  * An emoji icon.
  */
 export type Icon = Text;
 
 export type PageProperties = {
+  "https://alpha.hash.ai/@hash/types/property-type/index/": Index;
+  "https://alpha.hash.ai/@hash/types/property-type/summary/"?: Summary;
   "https://alpha.hash.ai/@hash/types/property-type/archived/"?: Archived;
   "https://alpha.hash.ai/@hash/types/property-type/title/": Title;
-  "https://alpha.hash.ai/@hash/types/property-type/summary/"?: Summary;
-  "https://alpha.hash.ai/@hash/types/property-type/index/": Index;
   "https://alpha.hash.ai/@hash/types/property-type/icon/"?: Icon;
 }
 
 export type Page = Entity<PageProperties>;
-
-/**
- * The parent of something.
- */
-export type ParentProperties = ParentProperties1 & ParentProperties2;
-export type ParentProperties1 = Link;
-
-export type Link = {
-  leftEntityId?: string;
-  rightEntityId?: string;
-}
-export type ParentProperties2 = {}
-
-export type Parent = Entity<ParentProperties>;
-export type ParentLinksByLinkTypeId = {
-
-};
-
-export type ParentLinkAndRightEntities = NonNullable<
-  ParentLinksByLinkTypeId[keyof ParentLinksByLinkTypeId]
->;
-
-export type PageParentLinks = [] |
-  {
-    linkEntity: Parent;
-    rightEntity: Page;
-  }[];
-
 
 /**
  * Something containing something.
@@ -79,7 +51,10 @@ export type PageParentLinks = [] |
 export type ContainsProperties = ContainsProperties1 & ContainsProperties2;
 export type ContainsProperties1 = Link;
 
-
+export type Link = {
+  leftEntityId?: string;
+  rightEntityId?: string;
+}
 export type ContainsProperties2 = {}
 
 export type Contains = Entity<ContainsProperties>;
@@ -132,9 +107,34 @@ export type PageContainsLinks = [] |
     rightEntity: Block;
   }[];
 
+
+/**
+ * The parent of something.
+ */
+export type ParentProperties = ParentProperties1 & ParentProperties2;
+export type ParentProperties1 = Link;
+
+
+export type ParentProperties2 = {}
+
+export type Parent = Entity<ParentProperties>;
+export type ParentLinksByLinkTypeId = {
+
+};
+
+export type ParentLinkAndRightEntities = NonNullable<
+  ParentLinksByLinkTypeId[keyof ParentLinksByLinkTypeId]
+>;
+
+export type PageParentLinks = [] |
+  {
+    linkEntity: Parent;
+    rightEntity: Page;
+  }[];
+
 export type PageLinksByLinkTypeId = {
-  "https://alpha.hash.ai/@hash/types/entity-type/parent/v/1": PageParentLinks;
   "https://alpha.hash.ai/@hash/types/entity-type/contains/v/1": PageContainsLinks;
+  "https://alpha.hash.ai/@hash/types/entity-type/parent/v/1": PageParentLinks;
 };
 
 export type PageLinkAndRightEntities = NonNullable<
