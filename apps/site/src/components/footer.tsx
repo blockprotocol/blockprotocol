@@ -9,6 +9,7 @@ import {
   BoxProps,
   Container,
   Grid,
+  Stack,
   Typography,
   useMediaQuery,
   useTheme,
@@ -16,67 +17,131 @@ import {
 import { FunctionComponent, ReactNode } from "react";
 
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
+import { ArrowUpRightIcon } from "./icons/arrow-up-right-icon";
 import { Link } from "./link";
 import { LinkButton } from "./link-button";
 
-const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
-  {
-    name: "Þ Hub",
-    href: "/hub",
-  },
-  {
-    name: "Documentation",
-    href: "/docs",
-  },
-  {
-    name: "Specification",
-    href: "/docs/spec",
-  },
-  {
-    name: "Publish a Block",
-    href: "/docs/developing-blocks#publish",
-  },
-  {
-    name: "Contact Us",
-    href: "/contact",
-  },
-];
+interface NavigationSection {
+  title: string;
+  links: NavigationLink[];
+}
+interface NavigationLink {
+  href: string;
+  name: string;
+  arrow?: boolean;
+}
 
-const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
-  <Typography
-    component="p"
-    variant="bpSmallCopy"
-    key={href}
-    sx={(theme) => ({
-      color: theme.palette.gray[50],
-      marginLeft: { xs: 0, md: 4 },
-      "&:first-of-type": {
-        marginTop: {
-          xs: 2,
-          md: 0,
-        },
-      },
-      "&:not(:first-of-type)": {
-        marginTop: 1.5,
-      },
-      "> a": {
-        borderBottomWidth: 0,
-        transition: theme.transitions.create("color", { duration: 150 }),
-        ":hover": {
-          color: theme.palette.gray[20],
-        },
-        ":active": {
-          color: theme.palette.common.white,
-        },
-        ":focus-visible": {
-          outlineColor: theme.palette.gray[40],
-        },
-      },
-    })}
-  >
-    <Link href={href}>{name}</Link>
-  </Typography>
-));
+const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
+  title: "Learn more",
+  links: [
+    {
+      name: "Documentation",
+      href: "/docs",
+    },
+    {
+      name: "Specification",
+      href: "/docs/spec",
+    },
+    // {
+    //   name: "Pricing",
+    //   href: "/pricing",
+    // },
+    {
+      name: "Contact Us",
+      href: "/contact",
+    },
+  ],
+};
+
+const DISCOVER_NAVIGATION_LINKS: NavigationSection = {
+  title: "Discover",
+  links: [
+    {
+      name: "Open-source blocks",
+      href: "/hub",
+    },
+    {
+      name: "Semantic types",
+      href: "/hub",
+    },
+    {
+      name: "API endpoints",
+      href: "/hub",
+    },
+  ],
+};
+
+const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
+  title: "Publish",
+  links: [
+    {
+      name: "a block",
+      href: "/docs/developing-blocks#publish",
+      arrow: true,
+    },
+    // {
+    //   name: "Semantic types",
+    //   href: "/hub",
+    //   arrow: true,
+    // },
+    // {
+    //   name: "API endpoints",
+    //   href: "/hub",
+    //   arrow: true,
+    // },
+  ],
+};
+
+const FooterNavigationLinks: FunctionComponent<{
+  section: NavigationSection;
+}> = ({ section: { title, links } }) => (
+  <Stack gap={2}>
+    <Typography
+      component="p"
+      variant="bpSmallCopy"
+      sx={{
+        lineHeight: "18px",
+        fontWeight: 700,
+        color: "#C5D1DB",
+      }}
+    >
+      {title}
+    </Typography>
+    {links.map(({ href, name, arrow }) => (
+      <Typography
+        component="p"
+        variant="bpSmallCopy"
+        key={href}
+        sx={(theme) => ({
+          lineHeight: "18px",
+          color: "#C5D1DB",
+          "> a": {
+            borderBottomWidth: 0,
+            transition: theme.transitions.create("color", { duration: 150 }),
+            ":hover": {
+              color: theme.palette.gray[20],
+            },
+            ":active": {
+              color: theme.palette.common.white,
+            },
+            ":focus-visible": {
+              outlineColor: theme.palette.gray[40],
+            },
+          },
+        })}
+      >
+        <Link href={href} display="flex">
+          {name}
+          {arrow ? (
+            <ArrowUpRightIcon
+              sx={{ fontSize: 15, ml: 1, alignSelf: "flex-start" }}
+            />
+          ) : null}
+        </Link>
+      </Typography>
+    ))}
+  </Stack>
+);
 
 const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   {
@@ -98,8 +163,6 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
 
 const Socials = (
   <Box
-    mt={3}
-    mb={2.5}
     display="flex"
     flexDirection="row"
     alignItems="center"
@@ -164,7 +227,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
 }) => {
   const theme = useTheme();
 
-  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const lg = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
     <Box
@@ -187,19 +250,21 @@ export const Footer: FunctionComponent<FooterProps> = ({
       >
         <Grid
           container
-          spacing={2}
           sx={{
+            columnGap: 2,
+            rowGap: 3,
             margin: "0 auto",
+            mb: 2.5,
           }}
         >
-          <Grid item xs={12} md={5} lg={4}>
+          <Grid item xs={12} md={12} lg={4}>
             <BlockProtocolLogoIcon
               sx={{
                 display: "block",
                 color: theme.palette.gray[20],
               }}
             />
-            {md ? (
+            {lg ? (
               <>
                 <Typography
                   component="p"
@@ -214,13 +279,21 @@ export const Footer: FunctionComponent<FooterProps> = ({
                   <br />
                   for data-driven, interactive blocks
                 </Typography>
-                {Socials}
+                <Box mt={3}>{Socials}</Box>
               </>
             ) : null}
           </Grid>
-          <Grid item xs={12} md={3} lg={4}>
-            {FooterNavigationLinks}
-            {md ? null : Socials}
+          <Grid item xs={12} sm={3.5} md={3} lg={2}>
+            <FooterNavigationLinks section={LEARN_MORE_NAVIGATION_LINKS} />
+          </Grid>
+          <Grid item xs={12} sm={3.5} md={3} lg={2}>
+            <FooterNavigationLinks section={DISCOVER_NAVIGATION_LINKS} />
+          </Grid>
+          <Grid item xs={12} sm={3.5} md={3} lg={2}>
+            <FooterNavigationLinks section={PUBLISH_NAVIGATION_LINKS} />
+          </Grid>
+          <Grid item xs={12}>
+            {lg ? null : Socials}
           </Grid>
         </Grid>
       </Container>
