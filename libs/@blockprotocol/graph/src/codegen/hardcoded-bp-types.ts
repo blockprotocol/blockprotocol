@@ -46,4 +46,11 @@ export const hardcodedBpTypes = {
     description: "A True or False value",
     type: "boolean",
   },
+  "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1": {
+    kind: "dataType",
+    $id: "https://blockprotocol.org/@blockprotocol/types/data-type/object/v/1",
+    title: "Object",
+    description: "An opaque, untyped JSON object",
+    type: "object",
+  },
 } as const;
