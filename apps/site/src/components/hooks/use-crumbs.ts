@@ -1,5 +1,4 @@
 import { BlockMetadata } from "@blockprotocol/core";
-import { NextRouter } from "next/router";
 import { useMemo } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";

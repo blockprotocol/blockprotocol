@@ -1,9 +1,7 @@
 import crypto from "node:crypto";
 
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
-  Breadcrumbs,
   Container,
   Typography,
   useMediaQuery,
@@ -18,7 +16,6 @@ import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
-import { FontAwesomeIcon } from "../../../components/icons";
 import { ClientOnlyLastUpdated } from "../../../components/last-updated";
 import { Link } from "../../../components/link";
 import { mdxComponents } from "../../../components/mdx/mdx-components";
