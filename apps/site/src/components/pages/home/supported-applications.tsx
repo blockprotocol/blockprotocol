@@ -146,19 +146,6 @@ export const SupportedApplications = () => {
                 />
 
                 <IconButtonWithTooltip
-                  href="/docs/using-blocks#github-blocks"
-                  label="GitHub Blocks"
-                  icon={
-                    <GithubIcon
-                      sx={{
-                        fill: ({ palette }) => palette.gray[90],
-                        fontSize: 54,
-                      }}
-                    />
-                  }
-                />
-
-                <IconButtonWithTooltip
                   href="/docs/using-blocks#hash"
                   label="HASH"
                   icon={
@@ -198,6 +185,19 @@ export const SupportedApplications = () => {
               </Typography>
 
               <Stack gap={2.5} flexDirection="row" justifyContent="center">
+                <IconButtonWithTooltip
+                  href="/docs/using-blocks#github-blocks"
+                  label="GitHub Blocks"
+                  icon={
+                    <GithubIcon
+                      sx={{
+                        fill: ({ palette }) => palette.gray[90],
+                        fontSize: 54,
+                      }}
+                    />
+                  }
+                />
+
                 <IconButtonWithTooltip
                   href="/docs/using-blocks#figma"
                   label="Figma"
