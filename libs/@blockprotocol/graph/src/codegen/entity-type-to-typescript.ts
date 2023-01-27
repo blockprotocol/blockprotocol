@@ -70,7 +70,15 @@ const generateTypeNameFromSchema = (
   schema: EntityType,
   existingTypes: UriToType,
 ): string => {
-  const proposedName = schema.title?.replace(/ /g, "");
+  if (!schema.title) {
+    throw new Error("Schema must have a 'title'");
+  }
+
+  const nameToCase = schema.title.replace(/ /g, "");
+
+  const proposedName = `${nameToCase[0]!.toUpperCase()}${nameToCase.substring(
+    1,
+  )}`;
 
   let typeWithProposedName = typedEntries(existingTypes).find(
     ([_entityTypeId, { typeName }]) => typeName === proposedName,
