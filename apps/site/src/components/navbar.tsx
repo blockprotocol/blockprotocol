@@ -403,7 +403,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
                       </Typography>
                     </Link>
                   )}
-                  {user !== "loading" && !user?.isSignedUp ? (
+                  {user !== "loading" && !user?.id ? (
                     <LinkButton
                       href="/signup"
                       size="small"
@@ -431,7 +431,9 @@ export const Navbar: FunctionComponent<NavbarProps> = ({
                   />
                 </IconButton>
               )}
-              <AccountDropdown />
+              {user !== "loading" && user?.isSignedUp ? (
+                <AccountDropdown />
+              ) : null}
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>
