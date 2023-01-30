@@ -86,7 +86,7 @@ export const useGraphBlockService = (
     ConstructorParameters<typeof GraphBlockHandler>[0],
     "element"
   >,
-): { graphService: GraphBlockHandler | null } => {
+): { graphService: GraphBlockHandler } => {
   return useGraphServiceConstructor({
     Handler: GraphBlockHandler,
     constructorArgs,
@@ -108,7 +108,7 @@ export const useGraphEmbedderService = (
     ConstructorParameters<typeof GraphEmbedderHandler>[0],
     "element"
   >,
-): { graphService: GraphEmbedderHandler | null } => {
+): { graphService: GraphEmbedderHandler } => {
   return useGraphServiceConstructor({
     Handler: GraphEmbedderHandler,
     ref,
