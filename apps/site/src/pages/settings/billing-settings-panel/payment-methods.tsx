@@ -1,7 +1,9 @@
 import { faEllipsis, faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
+  Collapse,
   Divider,
+  Fade,
   IconButton,
   ListItemText,
   Menu,
@@ -22,7 +24,7 @@ import Stripe from "stripe";
 import { Button } from "../../../components/button";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { Link } from "../../../components/link";
-import { AddPaymentMethodForm } from "./add-payment-method-form";
+import { AddPaymentMethod } from "./add-payment-method-form";
 import { useBillingPageContext } from "./billing-page-context";
 import { cardDetailsPanelPageAsPath } from "./card-details-panel-page";
 import { PaymentMethod } from "./payment-method";
@@ -96,11 +98,17 @@ const PaymentMethodMenu: FunctionComponent<{
 export const PaymentMethodsPanelPage: FunctionComponent = () => {
   const [addingPaymentMethod, setAddingPaymentMethod] =
     useState<boolean>(false);
-  const { paymentMethods, subscription } = useBillingPageContext();
+  const { paymentMethods, subscription, refetchPaymentMethods } =
+    useBillingPageContext();
 
   const handleAddAnotherCardClick = useCallback(() => {
     setAddingPaymentMethod(true);
   }, []);
+
+  const handlePaymentMethodAdded = useCallback(() => {
+    setAddingPaymentMethod(false);
+    void refetchPaymentMethods?.();
+  }, [refetchPaymentMethods]);
 
   return (
     <>
@@ -136,6 +144,30 @@ export const PaymentMethodsPanelPage: FunctionComponent = () => {
             ) : null}
           </Fragment>
         ))}
+        <Collapse in={addingPaymentMethod}>
+          <Box>
+            <Divider
+              sx={{
+                borderColor: ({ palette }) => palette.gray[20],
+                marginBottom: 2,
+              }}
+            />
+            <AddPaymentMethod
+              onCancel={() => setAddingPaymentMethod(false)}
+              onPaymentMethodAdded={handlePaymentMethodAdded}
+            />
+          </Box>
+        </Collapse>
+        <Fade in={!addingPaymentMethod}>
+          <Button
+            onClick={handleAddAnotherCardClick}
+            endIcon={<FontAwesomeIcon icon={faPlus} />}
+            squared
+            size="small"
+          >
+            Add another card
+          </Button>
+        </Fade>
       </Box>
     </>
   );

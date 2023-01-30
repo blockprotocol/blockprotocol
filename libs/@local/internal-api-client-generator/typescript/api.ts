@@ -44,6 +44,19 @@ import {
 /**
  *
  * @export
+ * @interface CreateStripeSetupIntent200Response
+ */
+export interface CreateStripeSetupIntent200Response {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateStripeSetupIntent200Response
+   */
+  clientSecret: string;
+}
+/**
+ *
+ * @export
  * @interface CreateSubscription200Response
  */
 export interface CreateSubscription200Response {
@@ -236,6 +249,45 @@ export const DefaultApiAxiosParamCreator = function (
   configuration?: Configuration,
 ) {
   return {
+    /**
+     *
+     * @summary Create a stripe setup intent
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createStripeSetupIntent: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/stripe-setup-intent`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "POST",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
     /**
      *
      * @summary Create a subscription
@@ -524,6 +576,29 @@ export const DefaultApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
+     * @summary Create a stripe setup intent
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createStripeSetupIntent(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<CreateStripeSetupIntent200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createStripeSetupIntent(options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Create a subscription
      * @param {CreateSubscriptionRequest} createSubscriptionRequest
      * @param {*} [options] Override http request option.
@@ -692,6 +767,19 @@ export const DefaultApiFactory = function (
   return {
     /**
      *
+     * @summary Create a stripe setup intent
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createStripeSetupIntent(
+      options?: any,
+    ): AxiosPromise<CreateStripeSetupIntent200Response> {
+      return localVarFp
+        .createStripeSetupIntent(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Create a subscription
      * @param {CreateSubscriptionRequest} createSubscriptionRequest
      * @param {*} [options] Override http request option.
@@ -783,6 +871,17 @@ export const DefaultApiFactory = function (
 export interface DefaultApiInterface {
   /**
    *
+   * @summary Create a stripe setup intent
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  createStripeSetupIntent(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<CreateStripeSetupIntent200Response>;
+
+  /**
+   *
    * @summary Create a subscription
    * @param {CreateSubscriptionRequest} createSubscriptionRequest
    * @param {*} [options] Override http request option.
@@ -861,6 +960,19 @@ export interface DefaultApiInterface {
  * @extends {BaseAPI}
  */
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
+  /**
+   *
+   * @summary Create a stripe setup intent
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public createStripeSetupIntent(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .createStripeSetupIntent(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    *
    * @summary Create a subscription
