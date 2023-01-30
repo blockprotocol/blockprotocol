@@ -38,7 +38,7 @@ export class GraphEmbedderHandler
     blockEntity?: Entity;
     blockGraph?: BlockGraph;
     callbacks?: Partial<EmbedderGraphMessageCallbacks>;
-    element: HTMLElement;
+    element?: HTMLElement | null;
     entityTypes?: EntityType[];
     linkedAggregations?: LinkedAggregations;
     readonly?: boolean;

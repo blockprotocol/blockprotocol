@@ -1,6 +1,6 @@
 import {
   RefObject,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   VoidFunctionComponent,
@@ -28,35 +28,46 @@ const useGraphServiceConstructor = <
   ref: RefObject<HTMLElement>;
 }) => {
   const previousRef = useRef<HTMLElement | null>(null);
+  const initialisedRef = useRef(false);
 
   const [graphService, setGraphService] = useState<
-    | (T extends typeof GraphBlockHandler
+    T extends typeof GraphBlockHandler
+      ? GraphBlockHandler
+      : GraphEmbedderHandler
+  >(
+    () =>
+      new Handler({}) as T extends typeof GraphBlockHandler // @todo fix these casts
         ? GraphBlockHandler
-        : GraphEmbedderHandler)
-    | null
-  >(null);
+        : GraphEmbedderHandler,
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps -- will not loop & we don't want to reconstruct on other args
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ref.current === previousRef.current) {
       return;
     }
 
     if (previousRef.current) {
-      graphService?.destroy();
+      graphService.destroy();
     }
 
     previousRef.current = ref.current;
 
     if (ref.current) {
-      setGraphService(
-        new Handler({
-          element: ref.current,
-          ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
-        }) as T extends typeof GraphBlockHandler // @todo fix these casts
-          ? GraphBlockHandler
-          : GraphEmbedderHandler,
-      );
+      if (!initialisedRef.current) {
+        graphService.initialize(ref.current);
+      } else {
+        setGraphService(
+          new Handler({
+            element: ref.current,
+            ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
+          }) as T extends typeof GraphBlockHandler // @todo fix these casts
+            ? GraphBlockHandler
+            : GraphEmbedderHandler,
+        );
+      }
+
+      initialisedRef.current = true;
     }
   });
 

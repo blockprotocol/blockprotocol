@@ -10,9 +10,20 @@ import { GenericMessageCallback, MessageContents, MessageData } from "./types";
  */
 export abstract class ServiceHandler {
   /** the CoreHandler this service is registered with, for passing messages via */
-  readonly coreHandler: CoreHandler;
+  private _coreHandler: CoreHandler | null = null;
+
+  public get coreHandler(): CoreHandler | null {
+    return this._coreHandler;
+  }
+
   /** the element messages are sent via */
-  private readonly element: HTMLElement;
+  private element: HTMLElement | null = null;
+
+  /**
+   * we may not be able to register callbacks at the time they're registered,
+   * so we queue them
+   */
+  private coreQueue: ((handler: CoreHandler) => void)[] = [];
 
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
@@ -48,27 +59,54 @@ export abstract class ServiceHandler {
     serviceName,
     sourceType,
   }: {
-    element: HTMLElement;
+    element?: HTMLElement | null;
     serviceName: string;
     sourceType: "block" | "embedder";
   }) {
-    this.element = element ?? null;
     this.serviceName = serviceName;
     this.sourceType = sourceType;
 
+    if (element) {
+      this.registerService(element);
+    }
+  }
+
+  initialize(element: HTMLElement) {
+    this.registerService(element);
+
+    const coreHandler = this.coreHandler;
+
+    if (!coreHandler) {
+      throw new Error("Could not initialize – missing core handler");
+    }
+
+    coreHandler.initialize();
+
+    this.processCoreCallbacks();
+  }
+
+  registerService(element: HTMLElement) {
+    if (this.element) {
+      throw new Error("Already registered");
+    }
+
+    this.element = element;
+
+    this.checkIfDestroyed();
+
     if (this.sourceType === "block") {
-      this.coreHandler = CoreBlockHandler.registerService({
+      this._coreHandler = CoreBlockHandler.registerService({
         element,
         service: this,
       });
     } else if (this.sourceType === "embedder") {
-      this.coreHandler = CoreEmbedderHandler.registerService({
+      this._coreHandler = CoreEmbedderHandler.registerService({
         element,
         service: this,
       });
     } else {
       throw new Error(
-        `Provided sourceType '${sourceType}' must be one of 'block' or 'embedder'.`,
+        `Provided sourceType '${this.sourceType}' must be one of 'block' or 'embedder'.`,
       );
     }
   }
@@ -77,7 +115,7 @@ export abstract class ServiceHandler {
    * Unregister and clean up the service.
    */
   destroy() {
-    this.coreHandler.unregisterService({ service: this });
+    this._coreHandler?.unregisterService({ service: this });
     this.destroyed = true;
   }
 
@@ -112,11 +150,27 @@ export abstract class ServiceHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreHandler.registerCallback({
-      callback,
-      messageName,
-      serviceName: this.serviceName,
-    });
+    this.coreQueue.push((coreHandler) =>
+      coreHandler.registerCallback({
+        callback,
+        messageName,
+        serviceName: this.serviceName,
+      }),
+    );
+
+    this.processCoreCallbacks();
+  }
+
+  private processCoreCallbacks() {
+    const coreHandler = this._coreHandler;
+    if (coreHandler) {
+      while (this.coreQueue.length) {
+        const callback = this.coreQueue.shift();
+        if (callback) {
+          callback(coreHandler);
+        }
+      }
+    }
   }
 
   protected sendMessage(
@@ -148,19 +202,32 @@ export abstract class ServiceHandler {
     this.checkIfDestroyed();
 
     const { message } = args;
+
     if ("respondedToBy" in args) {
-      return this.coreHandler.sendMessage<
-        ExpectedResponseData,
-        ExpectedResponseErrorCodes
-      >({
-        partialMessage: message,
-        respondedToBy: args.respondedToBy,
-        sender: this,
+      return new Promise<
+        MessageData<ExpectedResponseData, ExpectedResponseErrorCodes>
+      >((resolve, reject) => {
+        this.coreQueue.push((coreHandler) => {
+          coreHandler
+            .sendMessage<ExpectedResponseData, ExpectedResponseErrorCodes>({
+              partialMessage: message,
+              respondedToBy: args.respondedToBy,
+              sender: this,
+            })
+            .then(resolve, reject);
+        });
+
+        this.processCoreCallbacks();
       });
     }
-    return this.coreHandler.sendMessage({
-      partialMessage: message,
-      sender: this,
-    });
+
+    this.coreQueue.push((coreHandler) =>
+      coreHandler.sendMessage({
+        partialMessage: message,
+        sender: this,
+      }),
+    );
+
+    this.processCoreCallbacks();
   }
 }
