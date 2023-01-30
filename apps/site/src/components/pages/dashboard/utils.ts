@@ -4,9 +4,12 @@ import {
   faUserPen,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { shouldAllowNpmBlockPublishing } from "../../../lib/config";
+import {
+  isBillingFeatureFlagEnabled,
+  shouldAllowNpmBlockPublishing,
+} from "../../../lib/config";
 import { BlockIcon } from "../../icons/block-icon";
-import { SparklesIcon } from "../../icons/sparkles-icon";
+import { SolidSparklesIcon } from "../../icons/solid-sparkles-icon";
 import { DashboardCardProps } from "./dashboard-card/dashboard-card";
 
 export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
@@ -18,10 +21,15 @@ export const dashboardPages: { tabTitle: string; tabHref: string }[] = [
     tabTitle: "Blocks",
     tabHref: "/blocks",
   },
-  {
-    tabTitle: "API Keys",
-    tabHref: "/settings/api-keys",
-  },
+  isBillingFeatureFlagEnabled
+    ? {
+        tabTitle: "Settings",
+        tabHref: "/settings",
+      }
+    : {
+        tabTitle: "API Keys",
+        tabHref: "/settings/api-keys",
+      },
 ];
 
 export type DashboardSection = "create" | "manage" | "explore";
@@ -129,7 +137,7 @@ export const getDashboardSectionCards = (props: {
           title: "Browse blocks",
           href: "/hub",
         },
-        CustomIcon: SparklesIcon,
+        CustomIcon: SolidSparklesIcon,
         variant: "secondary",
       },
       /** @todo uncomment when searching types are available  */

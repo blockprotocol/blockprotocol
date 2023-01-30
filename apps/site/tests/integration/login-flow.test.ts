@@ -8,7 +8,7 @@ import {
   tolerateCustomConsoleMessages,
 } from "../shared/wrapped-playwright.js";
 
-const emailInputSelector = '[placeholder="claude\\@example\\.com"]';
+const emailInputSelector = '[placeholder="you\\@example\\.com"]';
 const loginButtonSelector = "button[type=submit]:has-text('Log In')";
 const verificationCodeInputSelector = '[placeholder="your-verification-code"]';
 const accountDropdownButtonSelector = '[data-testid="account-dropdown-button"]';

@@ -10,8 +10,8 @@ export type SiteMapPage = {
   title: string;
   href: string;
   markdownFilePath?: string;
-  subPages: SiteMapPage[];
-  sections: SiteMapPageSection[];
+  subPages?: SiteMapPage[];
+  sections?: SiteMapPageSection[];
 };
 
 export type SiteMap = {
@@ -26,13 +26,10 @@ export const generateSiteMap = (): SiteMap => ({
     {
       title: "Hub",
       href: "/hub",
-      sections: [],
-      subPages: [],
     },
     {
       title: "Documentation",
       href: "/docs",
-      sections: [],
       subPages: getDocumentationSubPages(),
     },
   ],
