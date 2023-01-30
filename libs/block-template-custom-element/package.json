@@ -1,6 +1,6 @@
 {
   "name": "block-template-custom-element",
-  "version": "0.2.0-canary-20230130171019",
+  "version": "0.1.22",
   "description": "Block Protocol block template for a custom element-based block",
   "keywords": [
     "blockprotocol",
@@ -33,16 +33,16 @@
     "trailingComma": "all"
   },
   "dependencies": {
-    "@blockprotocol/graph": "0.1.0-canary-20230130171019",
-    "@blockprotocol/type-system": "0.0.4-canary-20230130171019",
+    "@blockprotocol/graph": "0.0.19",
+    "@blockprotocol/type-system": "0.0.3",
     "lit": "^2.4.1"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/react-dom": "^18.0.9",
-    "block-scripts": "0.1.0-canary-20230130171019",
+    "block-scripts": "0.0.19",
     "eslint": "8.33.0",
-    "mock-block-dock": "0.1.0-canary-20230130171019",
+    "mock-block-dock": "0.0.39",
     "prettier": "2.8.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
