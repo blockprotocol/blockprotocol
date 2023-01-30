@@ -3,7 +3,7 @@ import {
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
 import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type AppProps = {
   name: string;
@@ -53,7 +53,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
         value={properties.name}
         onChange={async (event) => {
           try {
-            const { data, errors } = await graphService!.updateEntity({
+            const { data, errors } = await graphService.updateEntity({
               data: {
                 entityId,
                 properties: { ...properties, name: event.target.value },

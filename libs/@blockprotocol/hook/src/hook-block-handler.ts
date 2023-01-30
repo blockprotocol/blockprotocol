@@ -25,13 +25,15 @@ export class HookBlockHandler
     element,
   }: {
     callbacks?: Partial<BlockHookMessageCallbacks>;
-    element: HTMLElement;
+    element?: HTMLElement | null;
   }) {
     super({ element, serviceName: "hook", sourceType: "block" });
     if (callbacks) {
       this.registerCallbacks(callbacks);
     }
-    this.coreHandler.initialize();
+    if (element) {
+      this.initialize(element);
+    }
   }
 
   getInitPayload(): Record<string, any> {

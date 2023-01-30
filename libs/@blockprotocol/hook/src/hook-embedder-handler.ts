@@ -19,7 +19,7 @@ export class HookEmbedderHandler
     element,
   }: {
     callbacks?: Partial<EmbedderHookMessageCallbacks>;
-    element: HTMLElement;
+    element?: HTMLElement | null;
   }) {
     super({ element, serviceName: "hook", sourceType: "embedder" });
 

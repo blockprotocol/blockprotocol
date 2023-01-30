@@ -1,7 +1,12 @@
 import { CoreBlockHandler } from "./core-block-handler";
 import { CoreEmbedderHandler } from "./core-embedder-handler";
 import { CoreHandler } from "./core-handler";
-import { GenericMessageCallback, MessageContents, MessageData } from "./types";
+import {
+  CoreHandlerCallback,
+  GenericMessageCallback,
+  MessageContents,
+  MessageData,
+} from "./types";
 
 /**
  * The base class for creating service handlers from.
@@ -20,10 +25,9 @@ export abstract class ServiceHandler {
   private element: HTMLElement | null = null;
 
   /**
-   * we may not be able to register callbacks at the time they're registered,
-   * so we queue them
+   * the core handler is not available until element is set, so we need a queue
    */
-  private coreQueue: ((handler: CoreHandler) => void)[] = [];
+  private coreQueue: CoreHandlerCallback[] = [];
 
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
@@ -72,7 +76,9 @@ export abstract class ServiceHandler {
   }
 
   initialize(element: HTMLElement) {
-    this.registerService(element);
+    if (!this.element) {
+      this.registerService(element);
+    }
 
     const coreHandler = this.coreHandler;
 
