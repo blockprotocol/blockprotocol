@@ -32,16 +32,31 @@ export const WhyInstall = () => {
         }}
       >
         <Typography
-          sx={{ fontSize: "2rem", lineHeight: 1, fontWeight: 900, mb: 1 }}
+          sx={({ breakpoints }) => ({
+            fontSize: "2rem",
+            lineHeight: 1,
+            fontWeight: 900,
+            mb: 1,
+            width: 1,
+            textAlign: "center",
+            [breakpoints.down("sm")]: {
+              textAlign: "left",
+            },
+          })}
         >
           Why install the Block Protocol plugin?
         </Typography>
         <Typography
-          sx={{
+          sx={({ breakpoints }) => ({
             fontSize: "2rem",
             lineHeight: 1,
             color: ({ palette }) => palette.purple[70],
-          }}
+            width: 1,
+            textAlign: "center",
+            [breakpoints.down("sm")]: {
+              textAlign: "left",
+            },
+          })}
         >
           Do more with a supercharged WordPress...
         </Typography>
@@ -51,6 +66,7 @@ export const WhyInstall = () => {
           sx={({ breakpoints }) => ({
             pt: 7.25,
             [breakpoints.down("lg")]: {
+              pt: 2,
               maxWidth: 500,
               margin: "auto",
             },

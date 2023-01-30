@@ -27,9 +27,8 @@ export const InteroperableBlocks = () => {
           },
           gridGap: { xs: "1rem", md: 0 },
           alignItems: { xs: "flex-end", sm: "unset" },
-          height: { md: "85vh", lg: "100vh", xl: "105vh" },
           marginLeft: { xs: "0", md: "-12rem", lg: "-8rem", xl: "1rem" },
-          padding: { xs: "2rem 0 1rem 1rem", sm: "4rem 0 4rem 2rem", md: 0 },
+          padding: { xs: "2rem 1rem 1rem 1rem", sm: "4rem 0 4rem 2rem", md: 0 },
         }}
       >
         {isMobile ? (
@@ -39,6 +38,7 @@ export const InteroperableBlocks = () => {
               width: { xs: "80%", sm: "40%" },
               height: "50%",
               zIndex: "3",
+              marginRight: { xs: "-1rem", sm: 0 },
             }}
             component="img"
             src="/assets/new-home/transparent-blocks-mobile.png"
@@ -46,10 +46,10 @@ export const InteroperableBlocks = () => {
         ) : (
           <Box
             sx={{
-              position: { sm: "relative", md: "absolute" },
-              right: 0,
+              position: "relative",
               top: 0,
-              width: { md: "100%", lg: "95%", xl: "90%" },
+              width: { md: "145%", lg: "120%", xl: "95%" },
+              left: { lg: "-7.5%", xl: "5%" },
               zIndex: "3",
             }}
           >
@@ -60,43 +60,68 @@ export const InteroperableBlocks = () => {
         <Box
           sx={{
             position: { xs: "relative", md: "absolute" },
-            top: { md: "8%", lg: "10%", xl: "12%" },
-            right: { md: "16%", lg: "18%", xl: "22%" },
+            top: { md: "4%", lg: "8%", xl: "10%" },
+            right: { md: "8%", lg: "18%", xl: "26%" },
             maxWidth: { xs: "100%", sm: "100%", md: "49ch" },
             flexShrink: 1,
+            zIndex: 3,
           }}
         >
           <Typography
-            variant="bpHeading1"
+            variant="bpHeading3"
             textAlign="left"
             mt={4}
             sx={{
-              lineHeight: 1,
+              fontWeight: 500,
+              mb: 1.75,
+              letterSpacing: "-0.01em",
               color: ({ palette }) => palette.gray[90],
-              mb: 3,
+              lineHeight: 1.2,
             }}
           >
             Block Protocol blocks
-            <br /> are <span style={{ color: "#8b4cea" }}>interoperable</span>
+            <br /> are{" "}
+            <Box
+              component="span"
+              sx={{ color: ({ palette }) => palette.purple[70] }}
+            >
+              interoperable
+            </Box>
           </Typography>
+
           <Box
             sx={{
-              width: "120px",
-              height: "2px",
-              ml: "0.25rem",
-              my: 3,
+              width: 74,
+              height: 3,
               background:
-                "linear-gradient(to right, rgb(149, 135, 239, 1), rgba(172, 159, 255, 0))",
+                "linear-gradient(90deg, rgba(117, 86, 220, 0.8) 0%, rgba(117, 86, 220, 0) 100%)",
+              borderRadius: 6,
+              mb: 3,
             }}
           />
-          <Typography variant="bpBodyCopy" textAlign="left" mb={1}>
-            Blocks that adhere to the Block Protocol can work in any application
-            which also uses the protocol, without any extra configuration.
+
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
+            <strong>No extra configuration required:</strong> blocks that adhere
+            to the Block Protocol work out the box in any application which also
+            uses the protocol.
           </Typography>
-          <Typography variant="bpBodyCopy" textAlign="left" mr={6}>
-            Any developer can build a world-class block for others to use.
-            Blocks can solve specific user needs that individual application
-            developers don’t have the time or expertise to build.
+
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
+            <strong>Available for instant use ecosystem-wide:</strong> any
+            developer can build a world-class block for themselves or others to
+            enjoy.
+          </Typography>
+
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
+            <strong>Specialized blocks everywhere:</strong> blocks can solve
+            specific user needs that individual application developers don’t
+            have the time, awareness or expertise to build.
+          </Typography>
+
+          <Typography variant="bpBodyCopy" sx={{ textAlign: "left", mb: 1.5 }}>
+            <strong>Convergence on semantic data structures:</strong> blocks
+            make it easy to capture and work with typed data - often even more
+            convenient than inputting information in an unstructured fashion.
           </Typography>
         </Box>
       </Box>

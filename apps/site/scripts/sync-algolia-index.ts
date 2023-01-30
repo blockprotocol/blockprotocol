@@ -28,7 +28,7 @@ const flattenSitemapPages = (pages: SiteMapPage[]): SiteMapPage[] => {
   const result: SiteMapPage[] = [];
 
   for (const page of pages) {
-    result.push(page, ...flattenSitemapPages(page.subPages));
+    result.push(page, ...flattenSitemapPages(page.subPages ?? []));
   }
 
   return result;

@@ -76,7 +76,7 @@ const ApiKeys: AuthWallPageContent = () => {
       <TopNavigationTabs />
 
       <PageContainer>
-        <Typography variant="bpTitle" mb={2}>
+        <Typography variant="bpHeading2" mb={2}>
           Access the API
         </Typography>
         <Box
@@ -108,8 +108,8 @@ const ApiKeys: AuthWallPageContent = () => {
                   typography: "bpBodyCopy",
                 }}
               >
-                These keys allow you to access the block protocol from within
-                your application.
+                These keys allow you to access the Block Protocol from within
+                other applications.
               </Typography>
               <Typography
                 sx={{

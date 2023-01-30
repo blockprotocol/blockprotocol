@@ -8,7 +8,7 @@ import { customColors } from "../../palette";
 
 // @see https://github.com/mui-org/material-ui/issues/15251
 const rootTypographyStyles = `
-  /* @link https://utopia.fyi/type/calculator?c=320,16,1.25,1140,18,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l */
+  /* @link https://utopia.fyi/type/calculator?c=320,14,1.25,1140,16,1.25,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
   :root {
     --fluid-min-width: 320;
@@ -42,54 +42,54 @@ const rootTypographyStyles = `
         var(--fluid-bp)
     );
 
-    --f-0-min: 16.00;
-    --f-0-max: 18.00;
+    --f-0-min: 14.00;
+    --f-0-max: 16.00;
     --step-0: calc(
       ((var(--f-0-min) / 16) * 1rem) + (var(--f-0-max) - var(--f-0-min)) *
         var(--fluid-bp)
     );
 
-    --f-1-min: 20.00;
-    --f-1-max: 22.50;
+    --f-1-min: 17.50;
+    --f-1-max: 20.00;
     --step-1: calc(
       ((var(--f-1-min) / 16) * 1rem) + (var(--f-1-max) - var(--f-1-min)) *
         var(--fluid-bp)
     );
 
-    --f-2-min: 25.00;
-    --f-2-max: 28.13;
+    --f-2-min: 21.88;
+    --f-2-max: 25.00;
     --step-2: calc(
       ((var(--f-2-min) / 16) * 1rem) + (var(--f-2-max) - var(--f-2-min)) *
         var(--fluid-bp)
     );
 
-    --f-3-min: 31.25;
-    --f-3-max: 35.16;
+    --f-3-min: 27.34;
+    --f-3-max: 31.25;
     --step-3: calc(
       ((var(--f-3-min) / 16) * 1rem) + (var(--f-3-max) - var(--f-3-min)) *
         var(--fluid-bp)
     );
 
-    --f-4-min: 39.06;
-    --f-4-max: 43.95;
+    --f-4-min: 34.18;
+    --f-4-max: 39.06; 
     --step-4: calc(
       ((var(--f-4-min) / 16) * 1rem) + (var(--f-4-max) - var(--f-4-min)) *
         var(--fluid-bp)
     );
 
-    --f-5-min: 43.95;
-    --f-5-max: 54.93;
+    --f-5-min: 42.72;
+    --f-5-max: 48.83;
     --step-5: calc(
       ((var(--f-5-min) / 16) * 1rem) + (var(--f-5-max) - var(--f-5-min)) *
         var(--fluid-bp)
     );
 
-    --f-6-min: 54.93;
-    --f-6-max: 68.66;
+    --f-6-min: 53.41;
+    --f-6-max: 61.04;
     --step-6: calc(
       ((var(--f-6-min) / 16) * 1rem) + (var(--f-6-max) - var(--f-6-min)) *
         var(--fluid-bp)
-    );
+      );
   }
 `;
 
@@ -121,26 +121,6 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             src: url("/assets/fonts/inter-bold.ttf") format("trueType");
           }
           @font-face {
-            font-family: 'Apercu Pro';
-            font-weight: 300;
-            src: url("/assets/fonts/apercu-light-pro.ttf") format("trueType");
-          }
-          @font-face {
-              font-family: 'Apercu Pro';
-              font-weight: 400;
-              src: url("/assets/fonts/apercu-regular-pro.ttf") format("trueType");
-          }
-          @font-face {
-              font-family: 'Apercu Pro';
-              font-weight: 500;
-              src: url("/assets/fonts/apercu-medium-pro.ttf") format("trueType");
-          }
-          @font-face {
-            font-family: 'Apercu Pro';
-            font-weight: 700;
-            src: url("/assets/fonts/apercu-bold-pro.ttf") format("trueType");
-          }
-          @font-face {
             font-family: 'JetBrains Mono';
             font-weight: 500;
             src: url("/assets/fonts/jetbrains-mono-medium.ttf") format("trueType");
@@ -159,6 +139,7 @@ export const MuiCssBaselineThemeOptions: Components["MuiCssBaseline"] = {
             font-weight: 400;
             line-height: 1.7;
             color: ${customColors.gray[90]};
+            letter-spacing: 0;
           }
 
           pre {

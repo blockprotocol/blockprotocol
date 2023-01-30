@@ -42,14 +42,13 @@ export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
       </Box>
       <Typography
         sx={{
-          fontFamily: "Apercu Pro",
           fontSize: "35.1625px",
           lineHeight: "120%",
           color: "#37434F",
           marginBottom: 2,
         }}
       >
-        {keyName} {regenerate ? "regenerated" : "generated"}
+        Key {regenerate ? "regenerated" : "generated"}
       </Typography>
       <Typography sx={{ marginBottom: 2 }}>
         Your key {keyName} has been {regenerate ? "regenerated" : "generated"}.

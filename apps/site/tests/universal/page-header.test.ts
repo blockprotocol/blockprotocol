@@ -40,7 +40,7 @@ test("page header navigation works", async ({
   await page.locator("header svg").first().click();
   await expect(page).toHaveURL("/");
   await expect(
-    page.locator("text=The open standard for building block-based interfaces"),
+    page.locator("text=The open standard for block-based apps"),
   ).toBeVisible();
 
   if (isMobile) {
@@ -49,9 +49,7 @@ test("page header navigation works", async ({
 
   await navSelector.locator("text=Sign Up").click();
   await expect(page).toHaveURL("/signup");
-  await expect(
-    page.locator("text=Create your Block Protocol account"),
-  ).toBeVisible();
+  await expect(page.locator("text=Create an account")).toBeVisible();
 
   await openLoginModal({ page, isMobile });
   await expect(page).toHaveURL("/signup");

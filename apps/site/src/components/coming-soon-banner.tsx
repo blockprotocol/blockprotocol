@@ -77,7 +77,8 @@ export const ComingSoonBanner = () => {
             >
               <Box component="span" mr="0.5ch">
                 The current version of the &THORN; spec is about to be
-                deprecated. Learn more about v0.3, arriving February 2023.
+                deprecated. Learn more about v0.3, arriving 28<sup>th</sup>{" "}
+                February 2023.
               </Box>
             </Typography>
             <Typography

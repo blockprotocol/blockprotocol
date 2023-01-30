@@ -1,11 +1,74 @@
-import { Box, Typography } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import {
+  Box,
+  Container,
+  // Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlocksSlider } from "../../blocks-slider";
-import { HubIcon } from "../../icons";
+import { BlockProtocolIcon } from "../../icons";
+// import { MapboxIcon } from "../../icons/mapbox-icon";
+// import { OpenAiIcon } from "../../icons/open-ai-icon";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
+
+const BrowseBlocksSection = ({ isMobile = false }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+        alignItems: { xs: "center" },
+      }}
+    >
+      <Box mb={1.5}>
+        <LinkButton
+          href="/hub"
+          variant="secondary"
+          sx={{
+            background: "transparent",
+          }}
+          startIcon={
+            <SearchIcon
+              sx={{
+                fontSize: 18,
+              }}
+            />
+          }
+        >
+          Browse all blocks
+        </LinkButton>
+      </Box>
+
+      <Box display="flex">
+        <Typography
+          variant="bpSmallCopy"
+          sx={{
+            textAlign: { xs: "center", lg: "right" },
+            lineHeight: "26px",
+          }}
+        >
+          <strong>Anyone can publish a block.</strong>{" "}
+          {isMobile ? <br /> : null}If you can’t see one you want,{" "}
+          <Link
+            href="/docs/developing-blocks"
+            sx={{
+              color: ({ palette }) => `${palette.purple[700]} !important`,
+            }}
+          >
+            build it!
+          </Link>
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
 
 type RegistrySectionProps = {
   catalog: BlockMetadata[];
@@ -14,10 +77,14 @@ type RegistrySectionProps = {
 export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
   catalog,
 }) => {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("lg"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Box
       sx={{
-        py: 12,
+        py: { xs: 4, lg: 12 },
         px: { xs: "1rem", lg: 0 },
         display: "flex",
         flexDirection: "column",
@@ -28,67 +95,87 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
         borderBottom: "1px solid #eceaf1",
       }}
     >
-      <Box
+      <Container
         sx={{
-          mx: "auto",
-          width: { xs: "100%", md: "100%" },
-          maxWidth: { xs: "100%", md: "1100px" },
           display: "flex",
           flexDirection: "column",
-          alignItems: { xs: "center", md: "flex-start" },
+          justifyContent: "space-between",
+          gap: { xs: 2.5, lg: 4 },
+          mb: { xs: 2.5, lg: 4 },
+          maxWidth: { xs: "95%", md: "85%", lg: 1100 },
         }}
       >
-        <Typography
-          variant="bpHeading2"
-          textAlign="left"
-          sx={{ width: { xs: "100%", md: "30ch" } }}
-        >
-          Tap into a global registry of interoperable blocks
-        </Typography>
         <Box
           sx={{
-            width: "120px",
-            height: "2px",
-            my: 3,
-            background:
-              "linear-gradient(to right, rgb(149, 135, 239, 1), rgba(172, 159, 255, 0))",
-          }}
-        />
-        <Typography
-          textAlign="left"
-          sx={{
-            mb: 6,
-            width: { xs: "100%", md: "50ch" },
-            lineHeight: 1.5,
-            color: ({ palette }) => palette.gray[80],
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
         >
-          As a developer, building your applications using the Block Protocol
-          will give you access to a global registry of reusable, flexible blocks
-          to embed.
-        </Typography>
-      </Box>
-      <Box sx={{ width: "100%" }} mb={4}>
-        <BlocksSlider catalog={catalog} />
-      </Box>
-      <Box sx={{ textAlign: "center" }}>
-        <LinkButton href="/hub" variant="secondary" startIcon={<HubIcon />}>
-          Explore all Blocks
-        </LinkButton>
-        <Box>
           <Typography
+            variant="bpHeading2"
             sx={{
-              width: { xs: "100%", md: "50ch" },
-              color: ({ palette }) => palette.gray[80],
-              mt: 3,
+              display: "flex",
+              alignItems: "center",
+              textAlign: "center",
+              fontWeight: 400,
+              fontStyle: "italic",
+              letterSpacing: "-0.02em",
+              lineHeight: 1,
+              whiteSpace: "nowrap",
             }}
           >
-            Anyone can build new blocks and submit them to the registry. If you
-            can’t see the block type you want,{" "}
-            <Link href="/docs/developing-blocks">start building it today.</Link>
+            Blocks on the
+            <BlockProtocolIcon
+              gradient
+              sx={{
+                fontSize: "0.8em",
+                marginBottom: "0.1em",
+                px: { xs: 1, sm: 1.25 },
+              }}
+            />
+            <strong>Hub</strong>
           </Typography>
+
+          {/* <Stack */}
+          {/*  sx={{ */}
+          {/*    flexDirection: "row", */}
+          {/*    gap: 2.25, */}
+          {/*    alignItems: "center", */}
+          {/*    flexWrap: "wrap", */}
+          {/*    justifyContent: { xs: "center", lg: "flex-start" }, */}
+          {/*  }} */}
+          {/* > */}
+          {/*  <OpenAiIcon sx={{ width: 105 }} />  */}
+          {/*  <MapboxIcon sx={{ width: 115 }} /> */}
+          {/*  <Box component="img" src="/assets/logos/mono/hash.svg" /> */}
+
+          {/*  <Typography */}
+          {/*    variant="bpSmallCaps" */}
+          {/*    sx={{ */}
+          {/*      fontWeight: 500, */}
+          {/*      color: "#9EACBA", */}
+          {/*      whiteSpace: "nowrap", */}
+          {/*    }} */}
+          {/*  > */}
+          {/*    And more */}
+          {/*  </Typography> */}
+          {/* </Stack> */}
         </Box>
+
+        {isSmallScreen ? null : <BrowseBlocksSection />}
+      </Container>
+
+      <Box sx={{ width: "100%" }}>
+        <BlocksSlider catalog={catalog} />
       </Box>
+
+      {isSmallScreen ? (
+        <Box mb={5}>
+          <BrowseBlocksSection isMobile={isMobile} />
+        </Box>
+      ) : null}
     </Box>
   );
 };
