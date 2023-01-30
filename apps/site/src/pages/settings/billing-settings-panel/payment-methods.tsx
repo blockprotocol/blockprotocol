@@ -1,17 +1,107 @@
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Box, Divider, Typography } from "@mui/material";
-import { Fragment, FunctionComponent } from "react";
+import { faEllipsis, faPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  Box,
+  Divider,
+  IconButton,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+import { bindMenu } from "material-ui-popup-state";
+import { bindTrigger, usePopupState } from "material-ui-popup-state/hooks";
+import {
+  Fragment,
+  FunctionComponent,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
+import Stripe from "stripe";
 
 import { Button } from "../../../components/button";
 import { FontAwesomeIcon } from "../../../components/icons";
+import { Link } from "../../../components/link";
+import { AddPaymentMethodForm } from "./add-payment-method-form";
 import { useBillingPageContext } from "./billing-page-context";
+import { cardDetailsPanelPageAsPath } from "./card-details-panel-page";
 import { PaymentMethod } from "./payment-method";
 
 export const paymentMethodsPanelPageAsPath =
   "/settings/billing/payment-methods";
 
+const PaymentMethodMenu: FunctionComponent<{
+  paymentMethod: Stripe.PaymentMethod;
+}> = ({ paymentMethod }) => {
+  const menuTriggerRef = useRef(null);
+
+  const popupState = usePopupState({
+    variant: "popover",
+    popupId: `payment-method-${paymentMethod.id}`,
+  });
+
+  return (
+    <Box>
+      <IconButton
+        ref={menuTriggerRef}
+        className="entity-menu-trigger"
+        {...bindTrigger(popupState)}
+        size="medium"
+        sx={({ palette }) => ({
+          padding: "4px",
+          borderRadius: "4px",
+          "&:focus-visible, &:hover": {
+            backgroundColor: palette.gray[30],
+            color: palette.gray[40],
+          },
+          "&:focus": {
+            borderRadius: "4px",
+          },
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          color: palette.gray[50],
+        })}
+      >
+        <FontAwesomeIcon icon={faEllipsis} />
+      </IconButton>
+      <Menu {...bindMenu(popupState)}>
+        <Typography
+          variant="bpMicroCopy"
+          sx={{
+            padding: 1.5,
+            color: ({ palette }) => palette.gray[50],
+            textTransform: "uppercase",
+          }}
+          padding={2}
+        >
+          Actions
+        </Typography>
+        <MenuItem>
+          <ListItemText primary="Make default method" />
+        </MenuItem>
+        <Link href={cardDetailsPanelPageAsPath}>
+          <MenuItem>
+            <ListItemText primary="Change billing address" />
+          </MenuItem>
+        </Link>
+        <MenuItem>
+          <ListItemText primary="Remove card" />
+        </MenuItem>
+      </Menu>
+    </Box>
+  );
+};
+
 export const PaymentMethodsPanelPage: FunctionComponent = () => {
-  const { paymentMethods } = useBillingPageContext();
+  const [addingPaymentMethod, setAddingPaymentMethod] =
+    useState<boolean>(false);
+  const { paymentMethods, subscription } = useBillingPageContext();
+
+  const handleAddAnotherCardClick = useCallback(() => {
+    setAddingPaymentMethod(true);
+  }, []);
+
   return (
     <>
       <Typography
@@ -23,17 +113,30 @@ export const PaymentMethodsPanelPage: FunctionComponent = () => {
       <Typography variant="bpBodyCopy" sx={{ textTransform: "uppercase" }}>
         <strong>Payment Cards</strong>
       </Typography>
-      <Box maxWidth={400}>
+      <Box maxWidth={420} marginBottom={2}>
         {paymentMethods?.map((paymentMethod, index) => (
           <Fragment key={paymentMethod.id}>
-            <PaymentMethod paymentMethod={paymentMethod} />
-            {index !== paymentMethods.length - 1 ? <Divider /> : null}
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <PaymentMethod
+                paymentMethod={paymentMethod}
+                isDefault={
+                  subscription?.default_payment_method === paymentMethod.id
+                }
+              />
+              <PaymentMethodMenu paymentMethod={paymentMethod} />
+            </Box>
+            {index !== paymentMethods.length - 1 ? (
+              <Divider
+                sx={{ borderColor: ({ palette }) => palette.gray[20] }}
+              />
+            ) : null}
           </Fragment>
         ))}
       </Box>
-      <Button endIcon={<FontAwesomeIcon icon={faPlus} />} squared>
-        Add another card
-      </Button>
     </>
   );
 };
