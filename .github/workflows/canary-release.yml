@@ -17,7 +17,9 @@ jobs:
           git push
           git checkout `git rev-parse HEAD~1`
 
-          echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> .npmrc
+          cat << EOF > "$HOME/.npmrc"
+            //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          EOF
 
           yarn changeset publish --tag canary
         env:
