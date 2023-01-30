@@ -16,6 +16,9 @@ jobs:
           git revert `git rev-parse HEAD` --no-edit
           git push
           git checkout `git rev-parse HEAD~1`
+
+          echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> .npmrc
+
           yarn changeset publish --tag canary
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
