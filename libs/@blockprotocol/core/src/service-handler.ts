@@ -92,13 +92,13 @@ export abstract class ServiceHandler {
   }
 
   registerService(element: HTMLElement) {
+    this.checkIfDestroyed();
+
     if (this.element) {
       throw new Error("Already registered");
     }
 
     this.element = element;
-
-    this.checkIfDestroyed();
 
     if (this.sourceType === "block") {
       this._coreHandler = CoreBlockHandler.registerService({
