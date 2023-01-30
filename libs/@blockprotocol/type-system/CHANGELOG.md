@@ -1,11 +1,5 @@
 # @blockprotocol/type-system
 
-## 0.0.4-canary-20230130231944
-
-### Patch Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`f987a703`](https://github.com/blockprotocol/blockprotocol/commit/f987a7031daf881e09f7ef5901ceb33d19888d19) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add stdlib functions for interacting with subgraph. reorganize types
-
 ## 0.0.3
 
 ### Patch Changes

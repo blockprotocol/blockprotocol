@@ -1,16 +1,5 @@
 # @blockprotocol/hook
 
-## 0.1.0-canary-20230130231944
-
-### Minor Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`f987a703`](https://github.com/blockprotocol/blockprotocol/commit/f987a7031daf881e09f7ef5901ceb33d19888d19) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
-
-### Patch Changes
-
-- Updated dependencies [[`f987a703`](https://github.com/blockprotocol/blockprotocol/commit/f987a7031daf881e09f7ef5901ceb33d19888d19)]:
-  - @blockprotocol/graph@0.1.0-canary-20230130231944
-
 ## 0.0.9
 
 ### Patch Changes
