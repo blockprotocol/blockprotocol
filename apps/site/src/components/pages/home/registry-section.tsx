@@ -12,6 +12,8 @@ import { FunctionComponent } from "react";
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 import { BlocksSlider } from "../../blocks-slider";
 import { BlockProtocolIcon } from "../../icons";
+// import { MapboxIcon } from "../../icons/mapbox-icon";
+// import { OpenAiIcon } from "../../icons/open-ai-icon";
 import { Link } from "../../link";
 import { LinkButton } from "../../link-button";
 
@@ -145,8 +147,8 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
           {/*    justifyContent: { xs: "center", lg: "flex-start" }, */}
           {/*  }} */}
           {/* > */}
-          {/*  <Box component="img" src="/assets/logos/mono/openai.svg" /> */}
-          {/*  <Box component="img" src="/assets/logos/mono/mapbox.svg" /> */}
+          {/*  <OpenAiIcon sx={{ width: 105 }} />  */}
+          {/*  <MapboxIcon sx={{ width: 115 }} /> */}
           {/*  <Box component="img" src="/assets/logos/mono/hash.svg" /> */}
 
           {/*  <Typography */}
