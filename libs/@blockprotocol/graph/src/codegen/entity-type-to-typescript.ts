@@ -179,6 +179,12 @@ const _jsonSchemaToTypeScript = async (
     "export type Link =",
   );
 
+  // Better type for the opaque JSON object type
+  compiledSchema = compiledSchema.replaceAll(
+    "export interface Object {}",
+    "export type Object = JsonObject;",
+  );
+
   const compiledType = { typeName, typeScriptString: compiledSchema };
 
   // add the compiled type to our map of already-resolved types in case it's encountered again when following links
