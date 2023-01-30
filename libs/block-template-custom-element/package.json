@@ -19,13 +19,13 @@
   },
   "scripts": {
     "build": "block-scripts build",
-    "codegen": "block-scripts codegen",
     "dev": "block-scripts dev",
     "fix:eslint": "eslint --fix .",
     "format": "prettier --write --ignore-unknown .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
     "lint:tsc": "tsc --noEmit",
     "prepublishOnly": "PACKAGE_DIR=$(pwd) yarn workspace @local/package-chores exe scripts/cleanup-before-publishing.ts",
+    "schema": "block-scripts codegen",
     "serve": "block-scripts serve"
   },
   "prettier": {
@@ -65,6 +65,6 @@
     "image": "public/block-preview.png",
     "name": "block-template-custom-element",
     "protocol": "0.3",
-    "schema": "https://alpha.hash.ai/@yusuf/types/entity-type/table-block/v/3"
+    "schema": "https://alpha.hash.ai/@hash/types/entity-type/page/v/1"
   }
 }
