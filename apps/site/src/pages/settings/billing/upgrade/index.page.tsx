@@ -57,30 +57,51 @@ const stripePromise = loadStripe(
 );
 
 type UpgradePageProps = {
-  subscriptionTierPrices: SubscriptionTierPrices;
+  subscriptionTierPrices: SubscriptionTierPrices | null;
 };
 
 export const getStaticProps: GetStaticProps<UpgradePageProps> = async () => {
   const {
     data: { subscriptionTierPrices },
-  } = await internalApi.getSubscriptionTierPrices();
+  } = await internalApi.getSubscriptionTierPrices().catch(() => ({
+    data: { subscriptionTierPrices: null },
+  }));
 
   return {
     props: {
       subscriptionTierPrices,
     },
+    revalidate: 10,
   };
 };
 
 const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   user,
-  subscriptionTierPrices,
+  subscriptionTierPrices: initialSubscriptionTierPrices,
 }) => {
   const router = useRouter();
   const { setUser } = useUser();
 
   const [subscriptionId, setSubscriptionId] = useState<string>();
   const [clientSecret, setClientSecret] = useState<string>();
+  const [subscriptionTierPrices, setSubscriptionTierPrices] = useState<
+    SubscriptionTierPrices | undefined
+  >(initialSubscriptionTierPrices ?? undefined);
+
+  const fetchSubscriptionTierPrices = useCallback(async () => {
+    const { data } = await internalApi.getSubscriptionTierPrices();
+    setSubscriptionTierPrices(data.subscriptionTierPrices);
+  }, []);
+
+  useEffect(() => {
+    if (!initialSubscriptionTierPrices && !subscriptionTierPrices) {
+      void fetchSubscriptionTierPrices();
+    }
+  }, [
+    initialSubscriptionTierPrices,
+    subscriptionTierPrices,
+    fetchSubscriptionTierPrices,
+  ]);
 
   // State used when upgrading from an existing subscription
   const [subscription, setSubscription] = useState<Stripe.Subscription>();
