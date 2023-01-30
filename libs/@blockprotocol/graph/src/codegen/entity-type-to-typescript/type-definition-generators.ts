@@ -1,6 +1,6 @@
 // Generate imports for types we use from elsewhere
 export const generateImportStatements = () =>
-  `import { Entity } from "@blockprotocol/graph";\n\n`;
+  `import { Entity, JsonObject } from "@blockprotocol/graph";\n\n`;
 
 // Generate a typed Entity, given the name of the type to use in its Properties generic slot
 export const generateEntityDefinition = (
