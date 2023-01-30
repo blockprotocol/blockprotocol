@@ -39,7 +39,7 @@ const getParentPages = (
     if (page.href === currentPage.href) {
       return [];
     }
-    const subParents = getParentPages(page.subPages, currentPage);
+    const subParents = getParentPages(page.subPages ?? [], currentPage);
     if (subParents) {
       return [page, ...subParents];
     }
