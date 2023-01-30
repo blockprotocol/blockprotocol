@@ -3,7 +3,7 @@ import {
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
 import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 type AppProps = {
   name: string;
