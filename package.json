@@ -8,7 +8,8 @@
       "libs/@blockprotocol/*",
       "libs/@local/*",
       "libs/@local/internal-api-client-generator/typescript",
-      "libs/*"
+      "libs/*",
+      "infra/*"
     ],
     "nohoist": [
       "**/@types/css-font-loading-module",
