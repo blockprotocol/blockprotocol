@@ -14,7 +14,8 @@ const findCrumbs = (params: {
 
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  for (const section of itemIsPage(item) ? item.sections : item.subSections) {
+  for (const section of (itemIsPage(item) ? item.sections : item.subSections) ??
+    []) {
     const crumbs = findCrumbs({
       asPath,
       item: section,
@@ -28,7 +29,7 @@ const findCrumbs = (params: {
   }
 
   if (itemIsPage(item)) {
-    for (const page of item.subPages) {
+    for (const page of item.subPages ?? []) {
       const crumbs = findCrumbs({
         asPath,
         item: page,
