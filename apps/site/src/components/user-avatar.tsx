@@ -25,7 +25,10 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({ user }) => {
         borderColor: ({ palette }) => palette.gray[30],
       }}
     >
-      <Box component="span" sx={{ color: ({ palette }) => palette.gray[70] }}>
+      <Box
+        component="span"
+        sx={{ color: ({ palette }) => palette.gray[70], lineHeight: "32px" }}
+      >
         {preferredName?.charAt(0).toUpperCase()}
       </Box>
     </Box>

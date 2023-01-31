@@ -64,7 +64,7 @@ export const GenerateApiModal: FunctionComponent<GenerateApiModalProps> = ({
             sx={{
               fontSize: "35.1625px",
               lineHeight: "120%",
-              color: "#37434F",
+              color: ({ palette }) => palette.bpGray[80],
               marginBottom: 2,
             }}
           >

@@ -168,7 +168,7 @@ const MyApp = ({
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <SnackbarProvider maxSnack={3}>
-              <PageLayout>
+              <PageLayout blockMetadata={pageProps.blockMetadata}>
                 <DefaultSeo {...defaultSeoConfig} />
                 <Component {...pageProps} />
               </PageLayout>

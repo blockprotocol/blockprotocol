@@ -230,7 +230,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
                 overflow: "auto",
                 padding: theme.spacing(4, 4),
                 height: "100%",
-                backgroundColor: "#F7FAFC",
+                backgroundColor: ({ palette }) => palette.gray[10],
                 borderRadius: {
                   xs: 3,
                   md: 0,
