@@ -1,6 +1,12 @@
 import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
 
-import { Entity, EntityId, EntityRevisionId } from "../entity.js";
+import {
+  Entity,
+  EntityId,
+  EntityPropertiesObject,
+  EntityPropertyValue,
+  EntityRevisionId,
+} from "../entity.js";
 import { isOntologyTypeRecordId } from "../ontology.js";
 import { DataTypeWithMetadata } from "../ontology/data-type.js";
 import { EntityTypeWithMetadata } from "../ontology/entity-type.js";
@@ -21,16 +27,31 @@ export type EntityTypeVertex = {
   inner: EntityTypeWithMetadata;
 };
 
-export type EntityVertex = { kind: "entity"; inner: Entity };
+export type EntityVertex<
+  Properties extends EntityPropertiesObject | null = Record<
+    BaseUri,
+    EntityPropertyValue
+  >,
+> = { kind: "entity"; inner: Entity<Properties> };
 
 export type OntologyVertex =
   | DataTypeVertex
   | PropertyTypeVertex
   | EntityTypeVertex;
 
-export type KnowledgeGraphVertex = EntityVertex;
+export type KnowledgeGraphVertex<
+  Properties extends EntityPropertiesObject | null = Record<
+    BaseUri,
+    EntityPropertyValue
+  >,
+> = EntityVertex<Properties>;
 
-export type Vertex = OntologyVertex | KnowledgeGraphVertex;
+export type Vertex<
+  Properties extends EntityPropertiesObject | null = Record<
+    BaseUri,
+    EntityPropertyValue
+  >,
+> = OntologyVertex | KnowledgeGraphVertex<Properties>;
 
 export const isDataTypeVertex = (vertex: Vertex): vertex is DataTypeVertex => {
   return vertex.kind === "dataType";
