@@ -83,11 +83,11 @@ export abstract class ServiceHandler {
    * and must be called if the service was constructed without an element.
    */
   initialize(element: HTMLElement) {
-    if (!this.element) {
-      this.registerService(element);
-    } else {
+    if (this.element) {
       throw new Error("Could not initialize – already initialized");
     }
+
+    this.registerService(element);
 
     const coreHandler = this.coreHandler;
 
