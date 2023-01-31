@@ -57,11 +57,17 @@ export const BlockModalButton: FunctionComponent<BlockModalButtonProps> = ({
       </Box>
       {modalOpen ? (
         <CollapseIcon
-          sx={{ marginLeft: (theme) => theme.spacing(1), color: "#64778C" }}
+          sx={{
+            marginLeft: (theme) => theme.spacing(1),
+            color: ({ palette }) => palette.bpGray[60],
+          }}
         />
       ) : (
         <ExpandIcon
-          sx={{ marginLeft: (theme) => theme.spacing(1), color: "#64778C" }}
+          sx={{
+            marginLeft: (theme) => theme.spacing(1),
+            color: ({ palette }) => palette.bpGray[60],
+          }}
         />
       )}
     </Box>

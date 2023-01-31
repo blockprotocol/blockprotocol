@@ -120,7 +120,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
               fontWeight: 500,
               fontSize: "1rem",
               textTransform: "uppercase",
-              color: "#9EACBA",
+              color: ({ palette }) => palette.bpGray[50],
               lineHeight: 1.7,
             }}
           >

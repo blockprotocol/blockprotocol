@@ -16,7 +16,9 @@ export const DateTimeCell: FunctionComponent<{
           },
         )}
       </Box>
-      <Box sx={{ fontSize: "0.9rem", color: "#64778C" }}>
+      <Box
+        sx={{ fontSize: "0.9rem", color: ({ palette }) => palette.bpGray[60] }}
+      >
         {formatRelative(
           typeof timestamp === "string" ? new Date(timestamp) : timestamp,
           new Date(),
