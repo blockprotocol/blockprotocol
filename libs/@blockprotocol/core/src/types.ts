@@ -237,4 +237,5 @@ export type HtmlBlockDefinition = {
    */
   source?: string;
 };
+
 export type CoreHandlerCallback = (handler: CoreHandler) => void;
