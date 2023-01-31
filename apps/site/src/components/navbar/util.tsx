@@ -1,36 +1,14 @@
-import { faBookOpen } from "@fortawesome/free-solid-svg-icons";
 import { ReactElement } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
-import { FontAwesomeIcon, HubIcon, SpecificationIcon } from "../icons";
+import { BlockProtocolIcon } from "../icons";
+import { OpenBookIcon } from "../icons/open-book-icon";
 
 export const itemIsPage = (
   item: SiteMapPage | SiteMapPageSection,
 ): item is SiteMapPage => "href" in item;
 
 export const NAVBAR_LINK_ICONS: Record<string, ReactElement> = {
-  Hub: (
-    <HubIcon
-      sx={{
-        width: 18,
-        height: 18,
-      }}
-    />
-  ),
-  Documentation: (
-    <FontAwesomeIcon
-      icon={faBookOpen}
-      sx={{
-        fontSize: 18,
-      }}
-    />
-  ),
-  Specification: (
-    <SpecificationIcon
-      sx={{
-        width: 18,
-        height: 18,
-      }}
-    />
-  ),
+  Hub: <BlockProtocolIcon sx={{ fontSize: 14 }} />,
+  Docs: <OpenBookIcon sx={{ fontSize: 16 }} />,
 };
