@@ -250,27 +250,27 @@ export const retrieveBlockFileContent = async ({
   source: string;
   exampleGraph: JsonObject | null;
 }> => {
-  const schema = metadataSchemaUrl.startsWith(FRONTEND_URL)
-    ? JSON.parse(
-        await fs.readFile(
-          path.resolve(
-            process.cwd(),
-            `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
-              metadataSchemaUrl.lastIndexOf("/") + 1,
-            )}`,
+  let schema = { title: "Unparseable schema" };
+  try {
+    schema = metadataSchemaUrl.startsWith(FRONTEND_URL)
+      ? JSON.parse(
+          await fs.readFile(
+            path.resolve(
+              process.cwd(),
+              `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
+                metadataSchemaUrl.lastIndexOf("/") + 1,
+              )}`,
+            ),
+            { encoding: "utf8" },
           ),
-          { encoding: "utf8" },
-        ),
-      )
-    : await fetch(metadataSchemaUrl)
-        .then((response) => response.json())
-        .catch((err) => {
-          // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
-          console.error(
-            `Could not fetch and parse schema at ${metadataSchemaUrl} for block ${pathWithNamespace}: ${err}`,
-          );
-          return { title: "Unparseable schema" };
-        });
+        )
+      : await (await fetch(metadataSchemaUrl)).json();
+  } catch (err) {
+    // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
+    console.error(
+      `Could not fetch and parse schema at ${metadataSchemaUrl} for block ${pathWithNamespace}: ${err}`,
+    );
+  }
 
   const source = metadataSourceUrl.startsWith(FRONTEND_URL)
     ? await fs.readFile(
