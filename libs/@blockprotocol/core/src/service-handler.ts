@@ -56,18 +56,24 @@ export abstract class ServiceHandler {
 
   protected constructor({
     element,
+    callbacks,
     serviceName,
     sourceType,
   }: {
     element?: HTMLElement | null;
+    callbacks?: Record<string, GenericMessageCallback>;
     serviceName: string;
     sourceType: "block" | "embedder";
   }) {
     this.serviceName = serviceName;
     this.sourceType = sourceType;
 
+    if (callbacks) {
+      this.registerCallbacks(callbacks);
+    }
+
     if (element) {
-      this.registerService(element);
+      this.initialize(element);
     }
   }
 

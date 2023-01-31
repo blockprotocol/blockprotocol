@@ -21,11 +21,7 @@ export class HookEmbedderHandler
     callbacks?: Partial<EmbedderHookMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
-    super({ element, serviceName: "hook", sourceType: "embedder" });
-
-    if (callbacks) {
-      this.registerCallbacks(callbacks);
-    }
+    super({ element, callbacks, serviceName: "hook", sourceType: "embedder" });
   }
 
   /**

@@ -56,15 +56,7 @@ export class GraphBlockHandler
     callbacks?: Partial<BlockGraphMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
-    super({ element, serviceName: "graph", sourceType: "block" });
-
-    if (callbacks) {
-      this.registerCallbacks(callbacks);
-    }
-
-    if (element) {
-      this.initialize(element);
-    }
+    super({ element, callbacks, serviceName: "graph", sourceType: "block" });
   }
 
   getInitPayload(): Record<string, any> {

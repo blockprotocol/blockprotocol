@@ -43,16 +43,12 @@ export class GraphEmbedderHandler
     linkedAggregations?: LinkedAggregations;
     readonly?: boolean;
   }) {
-    super({ element, serviceName: "graph", sourceType: "embedder" });
+    super({ element, callbacks, serviceName: "graph", sourceType: "embedder" });
     this._blockEntity = blockEntity;
     this._blockGraph = blockGraph;
     this._entityTypes = entityTypes;
     this._linkedAggregations = linkedAggregations;
     this._readonly = readonly;
-
-    if (callbacks) {
-      this.registerCallbacks(callbacks);
-    }
   }
 
   /**
