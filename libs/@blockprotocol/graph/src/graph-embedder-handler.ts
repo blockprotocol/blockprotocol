@@ -31,18 +31,14 @@ export class GraphEmbedderHandler
   }: {
     blockEntitySubgraph?: Subgraph<SubgraphRootTypes["entity"]>;
     callbacks?: Partial<EmbedderGraphMessageCallbacks>;
-    element: HTMLElement;
+    element?: HTMLElement | null;
     // linkedAggregations?: LinkedAggregations;
     readonly?: boolean;
   }) {
-    super({ element, serviceName: "graph", sourceType: "embedder" });
+    super({ element, callbacks, serviceName: "graph", sourceType: "embedder" });
     this._blockEntitySubgraph = blockEntitySubgraph;
     // this._linkedAggregations = linkedAggregations;
     this._readonly = readonly;
-
-    if (callbacks) {
-      this.registerCallbacks(callbacks);
-    }
   }
 
   /**

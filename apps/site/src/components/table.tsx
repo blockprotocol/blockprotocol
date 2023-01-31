@@ -23,7 +23,7 @@ export const Table: FunctionComponent<TableProps> = ({ header, rows }) => {
               <TableCell
                 key={title}
                 sx={{
-                  color: "#4D5C6C",
+                  color: ({ palette }) => palette.bpGray[70],
                   fontWeight: 500,
                   whiteSpace: "nowrap",
                 }}

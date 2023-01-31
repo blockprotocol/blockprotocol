@@ -84,7 +84,7 @@ export const TestReactBlock: BlockComponent = ({ graph }) => {
             return;
           }
           try {
-            const { data, errors } = await graphService!.updateEntity({
+            const { data, errors } = await graphService.updateEntity({
               data: {
                 entityId: blockEntity.metadata.editionId.baseId,
                 entityTypeId: blockEntity.metadata.entityTypeId,

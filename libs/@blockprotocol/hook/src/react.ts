@@ -15,13 +15,16 @@ const useHookServiceConstructor = <
   ref: RefObject<HTMLElement>;
 }) => {
   const previousRef = useRef<HTMLElement | null>(null);
+  const initialisedRef = useRef(false);
 
   const [hookService, setHookService] = useState<
-    | (T extends typeof HookBlockHandler
+    T extends typeof HookBlockHandler ? HookBlockHandler : HookEmbedderHandler
+  >(
+    () =>
+      new Handler(constructorArgs ?? {}) as T extends typeof HookBlockHandler // @todo fix these casts
         ? HookBlockHandler
-        : HookEmbedderHandler)
-    | null
-  >(null);
+        : HookEmbedderHandler,
+  );
 
   // eslint-disable-next-line react-hooks/exhaustive-deps -- will not loop & we don't want to reconstruct on other args
   useEffect(() => {
@@ -30,20 +33,26 @@ const useHookServiceConstructor = <
     }
 
     if (previousRef.current) {
-      hookService?.destroy();
+      hookService.destroy();
     }
 
     previousRef.current = ref.current;
 
     if (ref.current) {
-      setHookService(
-        new Handler({
-          element: ref.current,
-          ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
-        }) as T extends typeof HookBlockHandler // @todo fix these casts
-          ? HookBlockHandler
-          : HookEmbedderHandler,
-      );
+      if (!initialisedRef.current) {
+        hookService.initialize(ref.current);
+      } else {
+        setHookService(
+          new Handler({
+            element: ref.current,
+            ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
+          }) as T extends typeof HookBlockHandler // @todo fix these casts
+            ? HookBlockHandler
+            : HookEmbedderHandler,
+        );
+      }
+
+      initialisedRef.current = true;
     }
   });
 
@@ -64,7 +73,7 @@ export const useHookBlockService = (
     ConstructorParameters<typeof HookBlockHandler>[0],
     "element"
   >,
-): { hookService: HookBlockHandler | null } => {
+): { hookService: HookBlockHandler } => {
   return useHookServiceConstructor({
     Handler: HookBlockHandler,
     constructorArgs,
@@ -86,7 +95,7 @@ export const useHookEmbedderService = (
     ConstructorParameters<typeof HookEmbedderHandler>[0],
     "element"
   >,
-): { hookService: HookEmbedderHandler | null } => {
+): { hookService: HookEmbedderHandler } => {
   return useHookServiceConstructor({
     Handler: HookEmbedderHandler,
     ref,
@@ -123,7 +132,7 @@ type Hook<T extends HTMLElement> = {
  *                 fallback (i.e, remove any event listeners).
  */
 export const useHook = <T extends HTMLElement>(
-  service: HookBlockHandler | null,
+  service: HookBlockHandler,
   ref: RefObject<T | null | void>,
   type: string,
   entityId: EntityId,
@@ -194,7 +203,7 @@ export const useHook = <T extends HTMLElement>(
 
     existingHookRef.current?.cancel();
 
-    if (node && service) {
+    if (node) {
       const controller = new AbortController();
 
       const hook: Hook<T> = {

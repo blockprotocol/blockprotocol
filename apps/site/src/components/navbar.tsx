@@ -1,4 +1,5 @@
-import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { BlockMetadata } from "@blockprotocol/core";
+import { faArrowRight, faBars } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Collapse,
@@ -51,6 +52,7 @@ const BREAD_CRUMBS_HEIGHT = 36;
 const IDLE_NAVBAR_TIMEOUT_MS = 3_000;
 
 type NavbarProps = {
+  blockMetadata?: BlockMetadata;
   openLoginModal: () => void;
 };
 
@@ -179,9 +181,12 @@ const useScrollingNavbar = (
 };
 
 // @todo remove asPath from Navbar
-export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
+export const Navbar: FunctionComponent<NavbarProps> = ({
+  blockMetadata,
+  openLoginModal,
+}) => {
   const theme = useTheme();
-  const { pathname } = useRouter();
+  const { pathname, route } = useRouter();
   const hydrationFriendlyAsPath = useHydrationFriendlyAsPath();
   const { pages } = useContext(SiteMapContext);
   const { user } = useUser();
@@ -202,7 +207,12 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
 
   const navbarHeight = md ? DESKTOP_NAVBAR_HEIGHT : MOBILE_NAVBAR_HEIGHT;
 
-  const crumbs = useCrumbs(pages, hydrationFriendlyAsPath);
+  const crumbs = useCrumbs(
+    pages,
+    hydrationFriendlyAsPath,
+    route,
+    blockMetadata,
+  );
 
   const displayBreadcrumbs = !md && !mobileNavVisible && crumbs.length > 0;
   const neighbourOffset =
@@ -277,7 +287,6 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
               : {}),
 
             [`& .${navbarClasses.interactiveLink}`]: {
-              marginRight: 3,
               transition: theme.transitions.create("color", {
                 duration: 100,
               }),
@@ -303,7 +312,10 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
         <Container
           component="header"
           sx={[
-            isDocs && { width: "100% !important", maxWidth: "100% !important" },
+            isDocs && {
+              width: "100% !important",
+              maxWidth: "100% !important",
+            },
           ]}
         >
           <Box
@@ -323,7 +335,13 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                 sx={{ color: "inherit" }}
               />
             </Link>
-            <Box display="flex" alignItems="center">
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: { xs: 2.75, md: 4 },
+              }}
+            >
               {md ? (
                 <>
                   <SearchNavButton />
@@ -348,11 +366,13 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                     >
                       {NAVBAR_LINK_ICONS[title]}
                       <Typography
+                        variant="bpHeading3"
                         sx={{
                           marginLeft: 1,
                           fontWeight: 500,
                           fontSize: "var(--step--1)",
                           color: "currentColor",
+                          ...(title === "Hub" ? { fontStyle: "italic" } : {}),
                         }}
                       >
                         {title}
@@ -370,6 +390,7 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                       sx={{ backgroundColor: "unset" }}
                     >
                       <Typography
+                        variant="bpHeading3"
                         sx={{
                           fontWeight: 500,
                           fontSize: "var(--step--1)",
@@ -380,9 +401,18 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                       </Typography>
                     </Link>
                   )}
-                  {user !== "loading" && !user?.isSignedUp ? (
-                    <LinkButton href="/signup" size="small" variant="primary">
-                      Sign Up
+                  {user !== "loading" && !user?.id ? (
+                    <LinkButton
+                      href="/signup"
+                      size="small"
+                      variant="primary"
+                      endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+                      sx={{
+                        color: "#F2F5FA",
+                        background: theme.palette.purple[700],
+                      }}
+                    >
+                      Create your account
                     </LinkButton>
                   ) : null}
                 </>
@@ -399,7 +429,9 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                   />
                 </IconButton>
               )}
-              <AccountDropdown />
+              {user !== "loading" && user?.isSignedUp ? (
+                <AccountDropdown />
+              ) : null}
             </Box>
           </Box>
           <Collapse in={displayBreadcrumbs}>
@@ -491,11 +523,14 @@ export const Navbar: FunctionComponent<NavbarProps> = ({ openLoginModal }) => {
                 href="/signup"
                 sx={{
                   fontSize: 18,
+                  color: "#F2F5FA",
+                  background: theme.palette.purple[700],
                 }}
                 variant="primary"
                 onClick={() => setMobileNavVisible(false)}
+                endIcon={<FontAwesomeIcon icon={faArrowRight} />}
               >
-                Sign Up
+                Create your account
               </LinkButton>
             </Box>
           )}

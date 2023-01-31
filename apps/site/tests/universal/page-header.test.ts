@@ -32,7 +32,7 @@ test("page header navigation works", async ({
     await openMobileNav(page);
   }
 
-  await navSelector.locator("text=Documentation").click();
+  await navSelector.locator("text=Docs").click();
   await expect(page).toHaveURL("/docs");
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
@@ -47,7 +47,7 @@ test("page header navigation works", async ({
     await openMobileNav(page);
   }
 
-  await navSelector.locator("text=Sign Up").click();
+  await navSelector.locator("text=Create your account").click();
   await expect(page).toHaveURL("/signup");
   await expect(page.locator("text=Create an account")).toBeVisible();
 
