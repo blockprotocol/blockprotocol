@@ -3,7 +3,7 @@ import {
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
 import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 type AppProps = {
   name: string;
@@ -17,7 +17,15 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
   const blockRef = useRef<HTMLDivElement>(null);
   const hookRef = useRef<HTMLDivElement>(null);
 
-  const { graphService } = useGraphBlockService(blockRef);
+  const [count, setCount] = useState(1);
+
+  const { graphService } = useGraphBlockService(blockRef, {
+    callbacks: {
+      blockEntity(...args) {
+        console.log(count, ...args);
+      },
+    },
+  });
 
   const { hookService } = useHookBlockService(blockRef);
 
@@ -43,6 +51,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
 
   return (
     <div ref={blockRef}>
+      <button onClick={() => setCount((c) => c + 1)}>{count}</button>
       <h1>
         Hello {properties.name}! The id of this block is {entityId}
       </h1>
