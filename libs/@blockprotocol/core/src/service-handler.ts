@@ -3,7 +3,7 @@ import { CoreEmbedderHandler } from "./core-embedder-handler";
 import { CoreHandler } from "./core-handler";
 import {
   CoreHandlerCallback,
-  GenericMessageCallback,
+  GenericMessageCallbacks,
   MessageContents,
   MessageData,
 } from "./types";
@@ -13,7 +13,9 @@ import {
  * - registers the service with the CoreHandler
  * - provides methods for registering callbacks and sending messages
  */
-export abstract class ServiceHandler {
+export abstract class ServiceHandler<
+  Callbacks extends GenericMessageCallbacks = GenericMessageCallbacks,
+> {
   /** the CoreHandler this service is registered with, for passing messages via */
   private coreHandler: CoreHandler | null = null;
 
@@ -49,9 +51,9 @@ export abstract class ServiceHandler {
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  abstract on(
-    messageName: string,
-    handlerFunction: GenericMessageCallback,
+  abstract on<K extends keyof Callbacks>(
+    messageName: K,
+    handlerFunction: Callbacks[K],
   ): void;
 
   protected constructor({
@@ -141,10 +143,7 @@ export abstract class ServiceHandler {
   }
 
   /** Register callbacks with the CoreHandler to handle incoming messages of specific types */
-  registerCallbacks(
-    this: ServiceHandler,
-    callbacks: Record<string, GenericMessageCallback>,
-  ) {
+  registerCallbacks(this: ServiceHandler, callbacks: Partial<Callbacks>) {
     for (const [messageName, callback] of Object.entries(callbacks)) {
       this.registerCallback({ messageName, callback });
     }
@@ -158,7 +157,7 @@ export abstract class ServiceHandler {
       callback,
     }: {
       messageName: string;
-      callback: GenericMessageCallback;
+      callback: Callbacks[keyof Callbacks];
     },
   ) {
     this.checkIfDestroyed();

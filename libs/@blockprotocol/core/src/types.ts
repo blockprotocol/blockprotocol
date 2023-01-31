@@ -170,6 +170,8 @@ export type GenericMessageCallback =
   | MessageCallback<any, null, any>
   | MessageCallback<any, null, any, string>;
 
+export type GenericMessageCallbacks = Record<string, GenericMessageCallback>;
+
 export type MessageCallbacksByService = {
   [serviceName: string]: Map<string, GenericMessageCallback> | undefined;
 };
