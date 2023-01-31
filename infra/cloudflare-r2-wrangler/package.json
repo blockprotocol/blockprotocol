@@ -1,5 +1,5 @@
 {
-  "name": "cloudflare-r2-wrangler",
+  "name": "@infra/cloudflare-r2-wrangler",
   "version": "0.0.0-private",
   "private": true,
   "dependencies": {

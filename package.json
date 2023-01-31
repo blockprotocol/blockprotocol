@@ -5,11 +5,11 @@
   "workspaces": {
     "packages": [
       "apps/*",
+      "infra/*",
       "libs/@blockprotocol/*",
       "libs/@local/*",
       "libs/@local/internal-api-client-generator/typescript",
-      "libs/*",
-      "infra/*"
+      "libs/*"
     ],
     "nohoist": [
       "**/@types/css-font-loading-module",
