@@ -197,7 +197,7 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
           }}
         >
           <Tab label="Preview" />
-          <Tab label="Source Code" />
+          <Tab label="Block Data" />
         </Tabs>
       )}
       <Box
