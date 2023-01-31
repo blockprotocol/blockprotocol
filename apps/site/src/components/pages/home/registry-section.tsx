@@ -155,7 +155,7 @@ export const RegistrySection: FunctionComponent<RegistrySectionProps> = ({
           {/*    variant="bpSmallCaps" */}
           {/*    sx={{ */}
           {/*      fontWeight: 500, */}
-          {/*      color: "#9EACBA", */}
+          {/*      color: ({palette}) => palette.bpGray[50], */}
           {/*      whiteSpace: "nowrap", */}
           {/*    }} */}
           {/*  > */}
