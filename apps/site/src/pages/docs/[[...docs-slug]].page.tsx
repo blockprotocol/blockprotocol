@@ -11,9 +11,9 @@ import SiteMapContext from "../../context/site-map-context";
 import { SiteMap } from "../../lib/sitemap";
 import { getSerializedPage } from "../../util/mdx-utils";
 
-const documentationPages = (siteMap as SiteMap).pages.find(
-  ({ title }) => title === "Documentation",
-)!.subPages;
+const documentationPages =
+  (siteMap as SiteMap).pages.find(({ title }) => title === "Documentation")!
+    .subPages ?? [];
 
 type DocsPageQueryParams = {
   "docs-slug"?: string[];
@@ -25,7 +25,7 @@ type DocsPageProps = {
 
 export const getStaticPaths: GetStaticPaths<DocsPageQueryParams> = async () => {
   const possibleHrefs = documentationPages
-    .flatMap((page) => [page, ...page.subPages])
+    .flatMap((page) => [page, ...(page.subPages ?? [])])
     .map(({ href }) => href);
 
   const paths = possibleHrefs.map((href) => ({
@@ -79,9 +79,14 @@ const DocsPage: NextPage<DocsPageProps> = ({ serializedPage }) => {
 
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  const { subPages } = allPages.find(({ title }) => title === "Documentation")!;
+  const { subPages = [] } = allPages.find(
+    ({ title }) => title === "Documentation",
+  )!;
 
-  const flatSubPages = subPages.flatMap((page) => [page, ...page.subPages]);
+  const flatSubPages = subPages.flatMap((page) => [
+    page,
+    ...(page.subPages ?? []),
+  ]);
 
   const currentPage = flatSubPages.find(
     ({ href }) =>

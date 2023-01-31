@@ -2,6 +2,7 @@ import dedent from "dedent";
 import merge from "lodash/merge";
 import { Db, DBRef, ObjectId, WithId } from "mongodb";
 import { NextApiResponse } from "next";
+import type { Stripe } from "stripe";
 
 import { ApiLoginWithLoginCodeRequestBody } from "../../../pages/api/login-with-login-code.api";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
@@ -32,6 +33,11 @@ export type SerializedUser = {
   shortname?: string;
   preferredName?: string;
   userAvatarUrl?: string;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  stripeSubscriptionStatus?: Stripe.Subscription.Status;
+  stripeSubscriptionTier?: "hobby" | "pro";
+  canMakeApiServiceCalls?: boolean;
 };
 
 export type UserProperties = {
@@ -40,6 +46,11 @@ export type UserProperties = {
   shortname?: string;
   preferredName?: string;
   userAvatar?: UserAvatarProperties;
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  stripeSubscriptionStatus?: Stripe.Subscription.Status;
+  stripeSubscriptionTier?: "hobby" | "pro";
+  canMakeApiServiceCalls?: boolean;
 };
 
 export type UserAvatarProperties = {
@@ -66,6 +77,12 @@ export class User {
 
   userAvatar?: UserAvatarProperties;
 
+  stripeCustomerId?: string;
+  stripeSubscriptionId?: string;
+  stripeSubscriptionStatus?: Stripe.Subscription.Status;
+  stripeSubscriptionTier?: "hobby" | "pro";
+  canMakeApiServiceCalls?: boolean;
+
   static COLLECTION_NAME = "bp-users";
 
   // The period of time in milliseconds where the login code rate limit is enforced (5 minutes)
@@ -87,6 +104,12 @@ export class User {
     this.hasVerifiedEmail = args.hasVerifiedEmail ?? false;
     this.shortname = args.shortname;
     this.userAvatar = args.userAvatar;
+
+    this.stripeCustomerId = args.stripeCustomerId;
+    this.stripeSubscriptionId = args.stripeSubscriptionId;
+    this.stripeSubscriptionStatus = args.stripeSubscriptionStatus;
+    this.stripeSubscriptionTier = args.stripeSubscriptionTier;
+    this.canMakeApiServiceCalls = args.canMakeApiServiceCalls;
   }
 
   private static isShortnameReserved(shortname: string): boolean {
@@ -452,6 +475,11 @@ export class User {
       preferredName: this.preferredName,
       shortname: this.shortname,
       userAvatarUrl: this.userAvatar?.url,
+      stripeCustomerId: this.stripeCustomerId,
+      stripeSubscriptionId: this.stripeSubscriptionId,
+      stripeSubscriptionStatus: this.stripeSubscriptionStatus,
+      stripeSubscriptionTier: this.stripeSubscriptionTier,
+      canMakeApiServiceCalls: this.canMakeApiServiceCalls,
     };
   }
 }

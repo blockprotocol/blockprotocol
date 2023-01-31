@@ -36,6 +36,6 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@types/pacote": "11.1.5",
-    "eslint": "8.31.0"
+    "eslint": "8.33.0"
   }
 }
