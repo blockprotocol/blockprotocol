@@ -25,7 +25,9 @@ const expectSignupButton = async ({
   }
 
   const signupButton = page.locator(
-    isMobile ? "a:has-text('Sign Up')" : "header >> text=Sign Up",
+    isMobile
+      ? "a:has-text('Create your account')"
+      : "header >> text=Create your account",
   );
 
   await expect(signupButton).toBeVisible();
