@@ -95,7 +95,7 @@ export abstract class ServiceHandler {
 
     coreHandler.initialize();
 
-    this.processCoreCallbacks();
+    this.processCoreQueue();
   }
 
   private registerService(element: HTMLElement) {
@@ -171,10 +171,10 @@ export abstract class ServiceHandler {
       }),
     );
 
-    this.processCoreCallbacks();
+    this.processCoreQueue();
   }
 
-  private processCoreCallbacks() {
+  private processCoreQueue() {
     const coreHandler = this._coreHandler;
     if (coreHandler) {
       while (this.coreQueue.length) {
@@ -230,7 +230,7 @@ export abstract class ServiceHandler {
             .then(resolve, reject);
         });
 
-        this.processCoreCallbacks();
+        this.processCoreQueue();
       });
     }
 
@@ -241,6 +241,6 @@ export abstract class ServiceHandler {
       }),
     );
 
-    this.processCoreCallbacks();
+    this.processCoreQueue();
   }
 }
