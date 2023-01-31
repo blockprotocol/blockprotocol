@@ -101,7 +101,7 @@ const FooterNavigationLinks: FunctionComponent<{
       sx={{
         lineHeight: "18px",
         fontWeight: 700,
-        color: "#C5D1DB",
+        color: ({ palette }) => palette.bpGray[40],
       }}
     >
       {title}
@@ -111,21 +111,21 @@ const FooterNavigationLinks: FunctionComponent<{
         component="p"
         variant="bpSmallCopy"
         key={href}
-        sx={{
+        sx={({ palette }) => ({
           lineHeight: "18px",
-          color: "#9EACBA",
-          fill: "#64778C",
+          color: palette.bpGray[50],
+          fill: palette.bpGray[60],
           "> a": {
             borderBottomWidth: 0,
             ":hover": {
-              color: "#F2F5FA",
-              fill: "#9EACBA",
+              color: palette.bpGray[20],
+              fill: palette.bpGray[50],
             },
             ":focus-visible": {
-              outlineColor: "#9EACBA",
+              outlineColor: palette.bpGray[50],
             },
           },
-        }}
+        })}
       >
         <Link href={href} display="flex" alignItems="center">
           {name}
@@ -176,25 +176,24 @@ const Socials = (
         <Link
           href={href}
           key={href}
-          sx={{
+          sx={({ palette, transitions }) => ({
             padding: 1.5,
             ...(index === 0 && { paddingLeft: 0 }),
-            color: "#9EACBA",
+            color: palette.bpGray[50],
             ":hover": {
               svg: {
-                color: "#F2F5FA",
+                color: palette.bpGray[20],
               },
             },
             ":focus-visible": {
-              outlineColor: "#9EACBA",
+              outlineColor: palette.bpGray[50],
             },
             svg: {
               fontSize: 20,
-              transition: (theme) =>
-                theme.transitions.create("color", { duration: 150 }),
+              transition: transitions.create("color", { duration: 150 }),
               color: "inherit",
             },
-          }}
+          })}
         >
           {icon}
         </Link>
@@ -207,7 +206,7 @@ const Socials = (
       size="small"
       sx={{
         flexShrink: 0,
-        backgroundColor: "#9EACBA",
+        backgroundColor: ({ palette }) => palette.bpGray[50],
       }}
       startIcon={<FontAwesomeIcon icon={faStar} />}
     >
@@ -260,8 +259,8 @@ export const Footer: FunctionComponent<FooterProps> = ({
                 display: "block",
                 color: theme.palette.gray[20],
               }}
-              iconColor="#D8DFE5"
-              logoColor="#F2F5FA"
+              iconColor={theme.palette.bpGray[30]}
+              logoColor={theme.palette.bpGray[20]}
             />
             {lg ? (
               <>
@@ -271,7 +270,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
                   sx={{
                     marginTop: 2,
                     lineHeight: "20px",
-                    color: "#9EACBA",
+                    color: ({ palette }) => palette.bpGray[50],
                     fontSize: 13,
                   }}
                 >
@@ -313,18 +312,17 @@ export const Footer: FunctionComponent<FooterProps> = ({
                 key={title}
                 variant="bpSmallCaps"
                 href={href}
-                sx={{
+                sx={({ palette, transitions }) => ({
                   fontSize: 12,
                   lineHeight: 1,
                   padding: 1.25,
-                  color: "#9EACBA",
-                  transition: ({ transitions }) =>
-                    transitions.create("color", { duration: 150 }),
+                  color: palette.bpGray[50],
+                  transition: transitions.create("color", { duration: 150 }),
                   ...(index === 0 && { paddingLeft: 0 }),
                   ":hover": {
-                    color: "#F2F5FA",
+                    color: palette.bpGray[20],
                   },
-                }}
+                })}
               >
                 {title}
               </Link>
