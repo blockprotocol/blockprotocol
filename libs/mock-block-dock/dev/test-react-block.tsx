@@ -53,7 +53,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
         value={properties.name}
         onChange={async (event) => {
           try {
-            const { data, errors } = await graphService!.updateEntity({
+            const { data, errors } = await graphService.updateEntity({
               data: {
                 entityId,
                 properties: { ...properties, name: event.target.value },

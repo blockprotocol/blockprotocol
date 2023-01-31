@@ -1,7 +1,12 @@
 import { CoreBlockHandler } from "./core-block-handler";
 import { CoreEmbedderHandler } from "./core-embedder-handler";
 import { CoreHandler } from "./core-handler";
-import { GenericMessageCallback, MessageContents, MessageData } from "./types";
+import {
+  CoreHandlerCallback,
+  GenericMessageCallback,
+  MessageContents,
+  MessageData,
+} from "./types";
 
 /**
  * The base class for creating service handlers from.
@@ -10,9 +15,15 @@ import { GenericMessageCallback, MessageContents, MessageData } from "./types";
  */
 export abstract class ServiceHandler {
   /** the CoreHandler this service is registered with, for passing messages via */
-  readonly coreHandler: CoreHandler;
+  private coreHandler: CoreHandler | null = null;
+
   /** the element messages are sent via */
-  private readonly element: HTMLElement;
+  private element: HTMLElement | null = null;
+
+  /**
+   * the core handler is not available until element is set, so we need a queue
+   */
+  private coreQueue: CoreHandlerCallback[] = [];
 
   /** whether the instance of CoreHandler belongs to a block or embedding application */
   protected readonly sourceType: "block" | "embedder";
@@ -45,16 +56,62 @@ export abstract class ServiceHandler {
 
   protected constructor({
     element,
+    callbacks,
     serviceName,
     sourceType,
   }: {
-    element: HTMLElement;
+    element?: HTMLElement | null;
+    callbacks?: Record<string, GenericMessageCallback>;
     serviceName: string;
     sourceType: "block" | "embedder";
   }) {
-    this.element = element ?? null;
     this.serviceName = serviceName;
     this.sourceType = sourceType;
+
+    if (callbacks) {
+      this.registerCallbacks(callbacks);
+    }
+
+    if (element) {
+      this.initialize(element);
+    }
+  }
+
+  /**
+   * You only need to use this if you are constructing a service directly.
+   * You do not need to use it if you're using a React hook or block template.
+   *
+   * This initializes a service with the element it will listen for messages on,
+   * and must be called if the service was constructed without an element.
+   */
+  initialize(element: HTMLElement) {
+    if (!this.element) {
+      this.registerService(element);
+    } else if (element !== this.element) {
+      throw new Error(
+        "Could not initialize – already initialized with another element",
+      );
+    }
+
+    const coreHandler = this.coreHandler;
+
+    if (!coreHandler) {
+      throw new Error("Could not initialize – missing core handler");
+    }
+
+    coreHandler.initialize();
+
+    this.processCoreQueue();
+  }
+
+  private registerService(element: HTMLElement) {
+    this.checkIfDestroyed();
+
+    if (this.element) {
+      throw new Error("Already registered");
+    }
+
+    this.element = element;
 
     if (this.sourceType === "block") {
       this.coreHandler = CoreBlockHandler.registerService({
@@ -68,7 +125,7 @@ export abstract class ServiceHandler {
       });
     } else {
       throw new Error(
-        `Provided sourceType '${sourceType}' must be one of 'block' or 'embedder'.`,
+        `Provided sourceType '${this.sourceType}' must be one of 'block' or 'embedder'.`,
       );
     }
   }
@@ -77,7 +134,7 @@ export abstract class ServiceHandler {
    * Unregister and clean up the service.
    */
   destroy() {
-    this.coreHandler.unregisterService({ service: this });
+    this.coreHandler?.unregisterService({ service: this });
     this.destroyed = true;
   }
 
@@ -112,11 +169,27 @@ export abstract class ServiceHandler {
   ) {
     this.checkIfDestroyed();
 
-    this.coreHandler.registerCallback({
-      callback,
-      messageName,
-      serviceName: this.serviceName,
-    });
+    this.coreQueue.push((coreHandler) =>
+      coreHandler.registerCallback({
+        callback,
+        messageName,
+        serviceName: this.serviceName,
+      }),
+    );
+
+    this.processCoreQueue();
+  }
+
+  private processCoreQueue() {
+    const coreHandler = this.coreHandler;
+    if (coreHandler) {
+      while (this.coreQueue.length) {
+        const callback = this.coreQueue.shift();
+        if (callback) {
+          callback(coreHandler);
+        }
+      }
+    }
   }
 
   protected sendMessage(
@@ -148,19 +221,32 @@ export abstract class ServiceHandler {
     this.checkIfDestroyed();
 
     const { message } = args;
+
     if ("respondedToBy" in args) {
-      return this.coreHandler.sendMessage<
-        ExpectedResponseData,
-        ExpectedResponseErrorCodes
-      >({
-        partialMessage: message,
-        respondedToBy: args.respondedToBy,
-        sender: this,
+      return new Promise<
+        MessageData<ExpectedResponseData, ExpectedResponseErrorCodes>
+      >((resolve, reject) => {
+        this.coreQueue.push((coreHandler) => {
+          coreHandler
+            .sendMessage<ExpectedResponseData, ExpectedResponseErrorCodes>({
+              partialMessage: message,
+              respondedToBy: args.respondedToBy,
+              sender: this,
+            })
+            .then(resolve, reject);
+        });
+
+        this.processCoreQueue();
       });
     }
-    return this.coreHandler.sendMessage({
-      partialMessage: message,
-      sender: this,
-    });
+
+    this.coreQueue.push((coreHandler) =>
+      coreHandler.sendMessage({
+        partialMessage: message,
+        sender: this,
+      }),
+    );
+
+    this.processCoreQueue();
   }
 }
