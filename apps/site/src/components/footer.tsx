@@ -260,6 +260,8 @@ export const Footer: FunctionComponent<FooterProps> = ({
                 display: "block",
                 color: theme.palette.gray[20],
               }}
+              iconColor="#D8DFE5"
+              logoColor="#F2F5FA"
             />
             {lg ? (
               <>
