@@ -40,6 +40,7 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
       href: "/docs/spec",
     },
     // Uncomment when we have the pricing page
+    // Don't forget to uncomment in tests aswell
     // {
     //   name: "Pricing",
     //   href: "/pricing",
@@ -78,6 +79,7 @@ const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
       arrow: true,
     },
     // Uncomment when we have the pages to link this to
+    // Don't forget to uncomment in tests aswell
     // {
     //   name: "a type",
     //   href: "/",
@@ -110,7 +112,7 @@ const FooterNavigationLinks: FunctionComponent<{
       <Typography
         component="p"
         variant="bpSmallCopy"
-        key={href}
+        key={name}
         sx={({ palette }) => ({
           lineHeight: "18px",
           color: palette.bpGray[50],
@@ -302,11 +304,12 @@ export const Footer: FunctionComponent<FooterProps> = ({
               {Socials}
             </Grid>
           )}
-          {/* Uncomment when we have the pages to link this to */}
+          {/* Uncomment when we have the pages to link this to
+          Don't forget to uncomment in tests aswell */}
           {/* <Grid item xs={12}>
             {[
-              { title: "Terms", href: "/terms" },
-              { title: "Privacy", href: "/privacy" },
+              { title: "Terms", href: "/legal/terms" },
+              { title: "Privacy", href: "/legal/privacy" },
             ].map(({ title, href }, index) => (
               <Link
                 key={title}
