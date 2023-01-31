@@ -85,6 +85,8 @@ export abstract class ServiceHandler {
   initialize(element: HTMLElement) {
     if (!this.element) {
       this.registerService(element);
+    } else {
+      throw new Error("Could not initialize – already initialized");
     }
 
     const coreHandler = this.coreHandler;
