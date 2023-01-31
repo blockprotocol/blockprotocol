@@ -276,46 +276,54 @@ export const Footer: FunctionComponent<FooterProps> = ({
                   for data-driven, interactive blocks
                 </Typography>
                 <Box mt={2.5}>{Socials}</Box>
-                <Box mt={2.5}>
-                  {[
-                    { title: "Terms", href: "/terms" },
-                    { title: "Privacy", href: "/privacy" },
-                  ].map(({ title, href }, index) => (
-                    <Link
-                      key={title}
-                      variant="bpSmallCaps"
-                      href={href}
-                      sx={{
-                        fontSize: 12,
-                        lineHeight: 1,
-                        padding: 1.25,
-                        color: "#9EACBA",
-                        transition: ({ transitions }) =>
-                          transitions.create("color", { duration: 150 }),
-                        ...(index === 0 && { paddingLeft: 0 }),
-                        ":hover": {
-                          color: "#F2F5FA",
-                        },
-                      }}
-                    >
-                      {title}
-                    </Link>
-                  ))}
-                </Box>
               </>
             ) : null}
           </Grid>
-          <Grid item xs={12} sm={3.5} md={3} lg={2}>
+          <Grid
+            item
+            xs={12}
+            lg={6}
+            sx={{
+              display: "flex",
+              rowGap: 5,
+              columnGap: 8,
+              flexWrap: "wrap",
+            }}
+          >
             <FooterNavigationLinks section={LEARN_MORE_NAVIGATION_LINKS} />
-          </Grid>
-          <Grid item xs={12} sm={3.5} md={3} lg={2}>
             <FooterNavigationLinks section={DISCOVER_NAVIGATION_LINKS} />
-          </Grid>
-          <Grid item xs={12} sm={3.5} md={3} lg={2}>
             <FooterNavigationLinks section={PUBLISH_NAVIGATION_LINKS} />
           </Grid>
+          {lg ? null : (
+            <Grid item xs={12}>
+              {Socials}
+            </Grid>
+          )}
           <Grid item xs={12}>
-            {lg ? null : Socials}
+            {[
+              { title: "Terms", href: "/terms" },
+              { title: "Privacy", href: "/privacy" },
+            ].map(({ title, href }, index) => (
+              <Link
+                key={title}
+                variant="bpSmallCaps"
+                href={href}
+                sx={{
+                  fontSize: 12,
+                  lineHeight: 1,
+                  padding: 1.25,
+                  color: "#9EACBA",
+                  transition: ({ transitions }) =>
+                    transitions.create("color", { duration: 150 }),
+                  ...(index === 0 && { paddingLeft: 0 }),
+                  ":hover": {
+                    color: "#F2F5FA",
+                  },
+                }}
+              >
+                {title}
+              </Link>
+            ))}
           </Grid>
         </Grid>
       </Container>
