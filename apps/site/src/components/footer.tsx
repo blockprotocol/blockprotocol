@@ -39,6 +39,7 @@ const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
       name: "Specification",
       href: "/docs/spec",
     },
+    // Uncomment when we have the pricing page
     // {
     //   name: "Pricing",
     //   href: "/pricing",
@@ -76,14 +77,15 @@ const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
       href: "/docs/developing-blocks#publish",
       arrow: true,
     },
+    // Uncomment when we have the pages to link this to
     // {
-    //   name: "Semantic types",
-    //   href: "/hub",
+    //   name: "a type",
+    //   href: "/",
     //   arrow: true,
     // },
     // {
-    //   name: "API endpoints",
-    //   href: "/hub",
+    //   name: "an endpoint",
+    //   href: "/",
     //   arrow: true,
     // },
   ],
@@ -299,7 +301,8 @@ export const Footer: FunctionComponent<FooterProps> = ({
               {Socials}
             </Grid>
           )}
-          <Grid item xs={12}>
+          {/* Uncomment when we have the pages to link this to */}
+          {/* <Grid item xs={12}>
             {[
               { title: "Terms", href: "/terms" },
               { title: "Privacy", href: "/privacy" },
@@ -324,7 +327,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
                 {title}
               </Link>
             ))}
-          </Grid>
+          </Grid> */}
         </Grid>
       </Container>
     </Box>
