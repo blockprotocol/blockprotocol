@@ -129,12 +129,6 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     if (router.isReady) {
       const { query } = router;
 
-      if (query.tier) {
-        void router.replace({ pathname: router.pathname }, undefined, {
-          shallow: true,
-        });
-      }
-
       if (
         typeof query.tier === "string" &&
         isPaidSubscriptionTier(query.tier) &&
