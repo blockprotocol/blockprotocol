@@ -77,6 +77,16 @@ export const customColors = {
     80: "#4D5C6C",
     90: "#37434e",
   },
+  bpGray: {
+    10: "#FAFBFC",
+    20: "#F2F5FA",
+    30: "#D8DFE5",
+    40: "#C5D1DB",
+    50: "#9EACBA",
+    60: "#64778C",
+    70: "#4D5C6C",
+    80: "#37434F",
+  },
   black: "#0E1114",
   white: "#FFFFFF",
 } as const;
