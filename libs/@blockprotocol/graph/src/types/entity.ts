@@ -4,7 +4,16 @@ import type {
 } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { EntityRootType, Subgraph, Timestamp } from "../types.js";
+import {
+  EntityRootType,
+  ExclusiveLimitedTemporalBound,
+  InclusiveLimitedTemporalBound,
+  Subgraph,
+  TemporalAxes,
+  TimeInterval,
+  Timestamp,
+  Unbounded,
+} from "../types.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
 export type JsonObject = CoreJsonObject;
@@ -42,9 +51,22 @@ export type EntityPropertiesObject = {
   [_: BaseUri]: EntityPropertyValue;
 };
 
-export type EntityMetadata = {
+type HalfClosedInterval = TimeInterval<
+  InclusiveLimitedTemporalBound,
+  ExclusiveLimitedTemporalBound | Unbounded
+>;
+
+export type EntityTemporalVersioningMetadata = Record<
+  TemporalAxes,
+  HalfClosedInterval
+>;
+
+export type EntityMetadata<Temporal extends boolean> = {
   recordId: EntityRecordId;
   entityTypeId: VersionedUri;
+  temporalVersioning: Temporal extends true
+    ? EntityTemporalVersioningMetadata
+    : never;
 };
 
 export type LinkData = {
@@ -55,18 +77,21 @@ export type LinkData = {
 };
 
 export type Entity<
+  Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
 > = {
-  metadata: EntityMetadata;
+  metadata: EntityMetadata<Temporal>;
   linkData?: LinkData;
-} & (Properties extends null ? {} : { properties: Properties });
+  properties: Properties extends null ? never : Properties;
+};
 
-export type LinkEntityAndRightEntity = {
-  linkEntity: Entity;
-  rightEntity: Entity;
+export type LinkEntityAndRightEntity<Temporal extends boolean> = {
+  // In a temporal system there may be multiple revisions of both link entities and their right entities
+  linkEntity: Temporal extends true ? Entity<Temporal>[] : Entity<Temporal>;
+  rightEntity: Temporal extends true ? Entity<Temporal>[] : Entity<Temporal>;
 };
 
 export type CreateEntityData = {
@@ -138,7 +163,10 @@ export type AggregateEntitiesData = {
   graphResolveDepths?: GraphResolveDepths;
 };
 
-export type AggregateEntitiesResult<T extends Subgraph<EntityRootType>> = {
+export type AggregateEntitiesResult<
+  Temporal extends boolean,
+  T extends Subgraph<EntityRootType<Temporal>>,
+> = {
   results: T;
   operation: AggregateOperationInput &
     Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
