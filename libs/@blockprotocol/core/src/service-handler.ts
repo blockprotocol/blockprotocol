@@ -75,6 +75,13 @@ export abstract class ServiceHandler {
     }
   }
 
+  /**
+   * You only need to use this if you are constructing a service directly.
+   * You do not need to use it if you're using a React hook or block template.
+   *
+   * This initializes a service with the element it will listen for messages on,
+   * and must be called if the service was constructed without an element.
+   */
   initialize(element: HTMLElement) {
     if (!this.element) {
       this.registerService(element);
