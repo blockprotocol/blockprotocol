@@ -262,7 +262,15 @@ export const retrieveBlockFileContent = async ({
           { encoding: "utf8" },
         ),
       )
-    : await fetch(metadataSchemaUrl).then((response) => response.json());
+    : await fetch(metadataSchemaUrl)
+        .then((response) => response.json())
+        .catch((err) => {
+          // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
+          console.error(
+            `Could not fetch and parse schema at ${metadataSchemaUrl} for block ${pathWithNamespace}: ${err}`,
+          );
+          return { title: "Unparseable schema" };
+        });
 
   const source = metadataSourceUrl.startsWith(FRONTEND_URL)
     ? await fs.readFile(
