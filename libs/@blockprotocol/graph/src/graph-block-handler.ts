@@ -46,7 +46,7 @@ import {
  * Call the relevant methods to send messages to the embedder.
  */
 export class GraphBlockHandler
-  extends ServiceHandler<BlockGraphMessageCallbacks>
+  extends ServiceHandler
   implements BlockGraphMessages
 {
   constructor({
