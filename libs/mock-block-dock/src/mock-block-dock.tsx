@@ -152,6 +152,9 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     readonly,
   });
 
+  const [toggle, setToggle] = useState(true);
+  const [count, setCount] = useState(1);
+
   const hookCallback = useCallback<EmbedderHookMessageCallbacks["hook"]>(
     async ({ data }) => {
       if (!data) {
@@ -216,17 +219,16 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     [hooks, setHooks],
   );
 
-  const { hookService } = useHookEmbedderService(wrapperRef, {
-    callbacks: {
-      hook: hookCallback,
-    },
+  useHookEmbedderService(wrapperRef, {
+    callbacks: toggle
+      ? {
+          hook: hookCallback,
+          test: (...args) => {
+            console.log("hook-embedder", toggle, count, args);
+          },
+        }
+      : {},
   });
-
-  useEffect(() => {
-    if (hookService) {
-      hookService.on("hook", hookCallback);
-    }
-  }, [hookCallback, hookService]);
 
   useSendGraphValue({
     graphService,
@@ -307,6 +309,10 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setEntityIdOfEntityForBlock={setEntityIdOfEntityForBlock}
       updateEntity={graphServiceCallbacks.updateEntity}
     >
+      <button onClick={() => setToggle((tgl) => !tgl)}>
+        {toggle ? "TRUE" : "FALSE"}
+      </button>
+      <button onClick={() => setCount((cnt) => cnt + 1)}>{count}</button>
       <HookPortals hooks={hooks} />
       <div ref={wrapperRef}>
         <Suspense>

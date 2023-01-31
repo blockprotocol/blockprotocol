@@ -2,8 +2,9 @@ import {
   type BlockComponent,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
+import { HookError, HookResponse } from "@blockprotocol/hook";
 import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type AppProps = {
   name: string;
@@ -24,7 +25,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
     callbacks: toggle
       ? {
           blockEntity(...args) {
-            console.log(toggle, count, ...args);
+            console.log("graph-block", toggle, count, ...args);
           },
         }
       : {},
@@ -36,6 +37,16 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
     throw new Error(
       "Fallback called – dock is not correctly handling text hook.",
     );
+  });
+
+  useEffect(() => {
+    // @ts-expect-error using private API
+    hookService.sendMessage({
+      message: {
+        messageName: "test",
+        data: { toggle, count },
+      },
+    });
   });
 
   if (readonly) {
