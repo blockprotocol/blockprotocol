@@ -1,13 +1,5 @@
 # block-template-react
 
-## 0.1.23-canary-20230131114622
-
-### Patch Changes
-
-- Updated dependencies [[`f03e3538`](https://github.com/blockprotocol/blockprotocol/commit/f03e35382d006031b6764221973762ea386a7d11)]:
-  - @blockprotocol/graph@0.0.20-canary-20230131114622
-  - mock-block-dock@0.0.40-canary-20230131114622
-
 ## 0.1.22
 
 ### Patch Changes

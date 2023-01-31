@@ -1,14 +1,5 @@
 # @blockprotocol/graph
 
-## 0.0.20-canary-20230131114622
-
-### Patch Changes
-
-- [#922](https://github.com/blockprotocol/blockprotocol/pull/922) [`f03e3538`](https://github.com/blockprotocol/blockprotocol/commit/f03e35382d006031b6764221973762ea386a7d11) Thanks [@nathggns](https://github.com/nathggns)! - Allow creating services before element is available
-
-- Updated dependencies [[`f03e3538`](https://github.com/blockprotocol/blockprotocol/commit/f03e35382d006031b6764221973762ea386a7d11)]:
-  - @blockprotocol/core@0.0.14-canary-20230131114622
-
 ## 0.0.19
 
 ### Patch Changes
