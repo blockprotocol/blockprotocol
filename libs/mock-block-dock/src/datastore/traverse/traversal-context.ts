@@ -1,7 +1,6 @@
 import {
-  EntityRecordId, GraphElementVertexId,
+  GraphElementVertexId,
   GraphResolveDepths,
-  OntologyTypeRecordId,
   Subgraph,
 } from "@blockprotocol/graph";
 

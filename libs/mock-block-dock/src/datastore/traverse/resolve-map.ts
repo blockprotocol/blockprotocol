@@ -1,8 +1,4 @@
-import {
-  EntityRecordId,
-  GraphElementVertexId,
-  OntologyTypeRecordId,
-} from "@blockprotocol/graph";
+import { GraphElementVertexId } from "@blockprotocol/graph";
 
 import { Depths, PartialDepths } from "./traversal-context";
 
