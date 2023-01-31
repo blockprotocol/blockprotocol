@@ -42,7 +42,7 @@ test("Updating block properties should update block preview", async ({
   );
 
   if (isMobile) {
-    await page.locator("text=Source Code").click();
+    await page.locator("text=Block Data").click();
   }
 
   await page
