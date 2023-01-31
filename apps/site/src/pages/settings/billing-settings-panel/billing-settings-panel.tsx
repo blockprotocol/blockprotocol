@@ -105,11 +105,13 @@ export const BillingSettingsPanel: FunctionComponent = () => {
   const [subscription, setSubscription] = useState<Stripe.Subscription>();
 
   const fetchSubscription = useCallback(async () => {
-    const { data } = await internalApi
+    const {
+      data: { subscription: fetchedSubscription },
+    } = await internalApi
       .getSubscription()
       .catch(() => ({ data: { subscription: undefined } }));
 
-    setSubscription(data.subscription);
+    setSubscription(fetchedSubscription);
   }, []);
 
   const [paymentMethods, setPaymentMethods] =
@@ -160,11 +162,18 @@ export const BillingSettingsPanel: FunctionComponent = () => {
   const billingPageContextValue = useMemo<BillingPageContextValue>(
     () => ({
       subscription,
+      refetchSubscription: fetchSubscription,
       paymentMethods,
       subscriptionTierPrices,
       refetchPaymentMethods: fetchPaymentMethods,
     }),
-    [subscription, paymentMethods, subscriptionTierPrices, fetchPaymentMethods],
+    [
+      subscription,
+      paymentMethods,
+      subscriptionTierPrices,
+      fetchSubscription,
+      fetchPaymentMethods,
+    ],
   );
 
   const { PanelPage } = currentPanelPage ?? {};

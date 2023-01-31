@@ -1,5 +1,5 @@
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { Box, Typography } from "@mui/material";
+import { Box, Fade, Typography } from "@mui/material";
 import { FunctionComponent, useMemo } from "react";
 import Stripe from "stripe";
 
@@ -51,7 +51,7 @@ export const PaymentMethod: FunctionComponent<{
               ? cardBrandToHumanReadable(paymentMethod.card?.brand)
               : ""}
           </strong>
-          {isDefault ? (
+          <Fade in={isDefault}>
             <Box
               component="span"
               sx={({ palette, spacing }) => ({
@@ -70,7 +70,7 @@ export const PaymentMethod: FunctionComponent<{
               />
               <strong>Default</strong>
             </Box>
-          ) : null}
+          </Fade>
           {isExpired ? (
             <Box
               component="span"

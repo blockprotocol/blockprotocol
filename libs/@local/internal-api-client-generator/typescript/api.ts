@@ -238,7 +238,13 @@ export interface UpdateSubscriptionRequest {
    * @type {SubscriptionTier}
    * @memberof UpdateSubscriptionRequest
    */
-  updatedSubscriptionTier: SubscriptionTier;
+  updatedSubscriptionTier?: SubscriptionTier;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateSubscriptionRequest
+   */
+  updatedDefaultPaymentMethodId?: string;
 }
 
 /**

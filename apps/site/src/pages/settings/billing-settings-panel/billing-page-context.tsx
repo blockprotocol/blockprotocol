@@ -6,6 +6,7 @@ export type BillingPageContextValue = {
   paymentMethods?: Stripe.PaymentMethod[];
   refetchPaymentMethods?: () => Promise<void>;
   subscription?: Stripe.Subscription;
+  refetchSubscription?: () => Promise<void>;
   subscriptionTierPrices?: SubscriptionTierPrices;
 };
 
