@@ -36,7 +36,7 @@ const useGraphServiceConstructor = <
       : GraphEmbedderHandler
   >(
     () =>
-      new Handler({}) as T extends typeof GraphBlockHandler // @todo fix these casts
+      new Handler(constructorArgs ?? {}) as T extends typeof GraphBlockHandler // @todo fix these casts
         ? GraphBlockHandler
         : GraphEmbedderHandler,
   );
