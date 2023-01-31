@@ -15,11 +15,7 @@ import {
  */
 export abstract class ServiceHandler {
   /** the CoreHandler this service is registered with, for passing messages via */
-  private _coreHandler: CoreHandler | null = null;
-
-  public get coreHandler(): CoreHandler | null {
-    return this._coreHandler;
-  }
+  private coreHandler: CoreHandler | null = null;
 
   /** the element messages are sent via */
   private element: HTMLElement | null = null;
@@ -112,12 +108,12 @@ export abstract class ServiceHandler {
     this.element = element;
 
     if (this.sourceType === "block") {
-      this._coreHandler = CoreBlockHandler.registerService({
+      this.coreHandler = CoreBlockHandler.registerService({
         element,
         service: this,
       });
     } else if (this.sourceType === "embedder") {
-      this._coreHandler = CoreEmbedderHandler.registerService({
+      this.coreHandler = CoreEmbedderHandler.registerService({
         element,
         service: this,
       });
@@ -132,7 +128,7 @@ export abstract class ServiceHandler {
    * Unregister and clean up the service.
    */
   destroy() {
-    this._coreHandler?.unregisterService({ service: this });
+    this.coreHandler?.unregisterService({ service: this });
     this.destroyed = true;
   }
 
@@ -179,7 +175,7 @@ export abstract class ServiceHandler {
   }
 
   private processCoreQueue() {
-    const coreHandler = this._coreHandler;
+    const coreHandler = this.coreHandler;
     if (coreHandler) {
       while (this.coreQueue.length) {
         const callback = this.coreQueue.shift();
