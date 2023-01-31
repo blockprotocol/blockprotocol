@@ -1,4 +1,3 @@
-import { SubgraphRootTypes } from "@blockprotocol/graph";
 import {
   getEntities,
   getEntity,
@@ -32,10 +31,7 @@ export const EntitySwitcher = () => {
     useMockBlockDockContext();
 
   const blockEntity = useMemo(
-    /**
-     * @todo - We shouldn't need to manually pass in the generic here, `blockEntitySubgraph` is typed as an `EntityRootedSubgraph`
-     */
-    () => getRoots<SubgraphRootTypes["entity"]>(blockEntitySubgraph)[0]!,
+    () => getRoots(blockEntitySubgraph)[0]!,
     [blockEntitySubgraph],
   );
 

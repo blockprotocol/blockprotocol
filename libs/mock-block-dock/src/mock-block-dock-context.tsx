@@ -2,8 +2,8 @@ import { Message } from "@blockprotocol/core";
 import {
   EmbedderGraphMessageCallbacks,
   EntityRecordId,
-  EntityRootedSubgraph,
   Subgraph,
+  SubgraphRootTypes,
 } from "@blockprotocol/graph";
 import {
   createContext,
@@ -17,7 +17,7 @@ import {
 } from "react";
 
 type MockBlockDockInfo = {
-  blockEntitySubgraph: EntityRootedSubgraph;
+  blockEntitySubgraph: Subgraph<SubgraphRootTypes["entity"]>;
   blockInfo: {
     blockType: {
       entryPoint?: "react" | "html" | "custom-element" | string;
