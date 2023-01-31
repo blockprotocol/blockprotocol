@@ -1,4 +1,4 @@
-import { Entity } from "@blockprotocol/graph";
+import { Entity, SubgraphRootTypes } from "@blockprotocol/graph";
 import { getEntityTypeById, getRoots } from "@blockprotocol/graph/stdlib";
 import {
   Box,
@@ -23,7 +23,10 @@ export const PropertiesView = () => {
     useMockBlockDockContext();
 
   const blockEntity = useMemo(
-    () => getRoots(blockEntitySubgraph)[0]!,
+    /**
+     * @todo - We shouldn't need to manually pass in the generic here, `blockEntitySubgraph` is typed as an `EntityRootedSubgraph`
+     */
+    () => getRoots<SubgraphRootTypes["entity"]>(blockEntitySubgraph)[0]!,
     [blockEntitySubgraph],
   );
 
