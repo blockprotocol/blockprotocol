@@ -548,7 +548,10 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             marginTop={4}
           >
             <LinkButton
-              href={{ pathname: "/upgrade", query: { tier: "pro" } }}
+              href={{
+                pathname: "/settings/billing/upgrade",
+                query: { tier: "pro" },
+              }}
               size="small"
               endIcon={<BoltRegularIcon />}
             >
