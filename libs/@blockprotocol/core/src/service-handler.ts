@@ -98,7 +98,7 @@ export abstract class ServiceHandler {
     this.processCoreCallbacks();
   }
 
-  registerService(element: HTMLElement) {
+  private registerService(element: HTMLElement) {
     this.checkIfDestroyed();
 
     if (this.element) {
