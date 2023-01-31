@@ -41,6 +41,22 @@ const useGraphServiceConstructor = <
         : GraphEmbedderHandler,
   );
 
+  const previousCallbacks = useRef<
+    ConstructorParameters<T>[0]["callbacks"] | null
+  >(null);
+
+  useLayoutEffect(() => {
+    if (previousCallbacks.current) {
+      graphService.removeCallbacks(previousCallbacks.current);
+    }
+
+    previousCallbacks.current = constructorArgs?.callbacks ?? null;
+
+    if (constructorArgs?.callbacks) {
+      graphService.registerCallbacks(constructorArgs.callbacks);
+    }
+  });
+
   // eslint-disable-next-line react-hooks/exhaustive-deps -- will not loop & we don't want to reconstruct on other args
   useLayoutEffect(() => {
     if (ref.current === previousRef.current) {

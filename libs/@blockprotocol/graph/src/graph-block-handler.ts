@@ -23,6 +23,7 @@ import {
   DeleteEntityTypeData,
   DeleteLinkData,
   DeleteLinkedAggregationData,
+  EmbedderGraphMessageCallbacks,
   Entity,
   EntityType,
   GetEntityData,
@@ -70,6 +71,14 @@ export class GraphBlockHandler
    */
   registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
     super.registerCallbacks(callbacks);
+  }
+
+  /**
+   * Removes multiple callbacks at once.
+   * Useful when replacing previously registered callbacks
+   */
+  removeCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
+    super.removeCallbacks(callbacks);
   }
 
   /**
