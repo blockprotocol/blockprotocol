@@ -9,8 +9,6 @@ export const BlockProtocolLogoIcon: FunctionComponent<
   sx = [],
   ...remainingProps
 }) => {
-  console.log(iconColor);
-  console.log(logoColor);
   return (
     <SvgIcon
       {...remainingProps}
