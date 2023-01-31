@@ -7,6 +7,7 @@ import {
 import { compile, Options } from "json-schema-to-typescript";
 
 import { fetchAndValidateEntityType } from "../codegen.js";
+import { typedEntries } from "../shared.js";
 import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings.js";
 import {
   generateEntityDefinition,
@@ -15,7 +16,7 @@ import {
   generateLinkEntityAndRightEntityDefinition,
 } from "./entity-type-to-typescript/type-definition-generators.js";
 import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
-import { fetchTypeAsJson, typedEntries } from "./shared.js";
+import { fetchTypeAsJson } from "./shared.js";
 
 const bannerComment = (uri: string, depth: number) => `/**
  * This file was automatically generated – do not edit it.
