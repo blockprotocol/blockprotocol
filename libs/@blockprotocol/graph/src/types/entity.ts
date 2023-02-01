@@ -13,6 +13,7 @@ import {
   TimeInterval,
   Timestamp,
   Unbounded,
+  UnresolvedQueryTemporalAxes,
 } from "../types.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
@@ -100,9 +101,10 @@ export type CreateEntityData = {
   linkData?: LinkData;
 };
 
-export type GetEntityData = {
+export type GetEntityData<Temporal extends boolean> = {
   entityId: EntityId;
   graphResolveDepths?: GraphResolveDepths;
+  temporalAxes: Temporal extends true ? UnresolvedQueryTemporalAxes : never;
 };
 
 export type UpdateEntityData = {
@@ -158,9 +160,10 @@ export type AggregateOperationInput = {
   multiFilter?: MultiFilter | null;
 };
 
-export type AggregateEntitiesData = {
+export type AggregateEntitiesData<Temporal extends boolean> = {
   operation: AggregateOperationInput;
   graphResolveDepths?: GraphResolveDepths;
+  temporalAxes: Temporal extends true ? UnresolvedQueryTemporalAxes : never;
 };
 
 export type AggregateEntitiesResult<
