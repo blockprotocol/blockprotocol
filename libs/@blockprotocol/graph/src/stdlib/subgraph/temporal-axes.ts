@@ -1,0 +1,46 @@
+import { Subgraph } from "../../types/subgraph";
+import {
+  BoundedTimeInterval,
+  NonNullTimeInterval,
+} from "../../types/temporal-versioning";
+
+// Separated out to improve the ergonomics of the `as` cast in the function, which is required due to limitations of TS
+type LatestInstantInterval<Temporal extends boolean> = Temporal extends true
+  ? BoundedTimeInterval
+  : NonNullTimeInterval;
+
+/**
+ * For a given {@link Subgraph} that supports temporal versioning, this returns a {@link NonNullTimeInterval} that spans
+ * the instant in time which is at the end of the {@link Subgraph}'s {@link VariableTemporalAxis}. For a
+ * {@link Subgraph} that does _not_ support temporal versioning, an unbounded {@link NonNullTimeInterval} is returned
+ * that spans the whole axis.
+ *
+ * @param {Subgraph} subgraph
+ */
+export const getLatestInstantIntervalForSubgraph = <Temporal extends boolean>(
+  subgraph: Subgraph<Temporal>,
+): LatestInstantInterval<Temporal> => {
+  if (subgraph.temporalAxes !== undefined) {
+    const subgraphEndBound =
+      subgraph.temporalAxes.resolved.variable.interval.end;
+    return {
+      start: {
+        kind: "inclusive",
+        limit: subgraphEndBound.limit,
+      },
+      end: {
+        kind: "inclusive",
+        limit: subgraphEndBound.limit,
+      },
+    };
+  } else {
+    return {
+      start: {
+        kind: "unbounded",
+      },
+      end: {
+        kind: "unbounded",
+      },
+    } as LatestInstantInterval<Temporal>;
+  }
+};
