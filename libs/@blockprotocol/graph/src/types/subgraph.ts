@@ -13,7 +13,6 @@ import {
 export * from "./ontology.js";
 export * from "./subgraph/edges.js";
 export * from "./subgraph/graph-resolve-depths.js";
-export * from "./subgraph/time.js";
 export * from "./subgraph/vertices.js";
 
 export type DataTypeRootType = {
