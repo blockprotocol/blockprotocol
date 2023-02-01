@@ -35,10 +35,7 @@ import {
 } from "../../../../components/pages/auth-wall";
 import { UserAvatar } from "../../../../components/user-avatar";
 import { useUser } from "../../../../context/user-context";
-import {
-  getDateFromStripeDate,
-  internalApi,
-} from "../../../../lib/internal-api-client";
+import { internalApi } from "../../../../lib/internal-api-client";
 import {
   dateToHumanReadable,
   isPaidSubscriptionTier,
@@ -104,7 +101,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   ]);
 
   // State used when upgrading from an existing subscription
-  const [subscription, setSubscription] = useState<Stripe.Subscription>();
+  const [_subscription, setSubscription] = useState<Stripe.Subscription>();
   const [isUpgradingSubscription, setIsUpgradingSubscription] =
     useState<boolean>(false);
 
@@ -225,16 +222,6 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
 
     handleUpgradedSubscription();
   };
-
-  const _currentPeriodEnd = useMemo(() => {
-    if (!subscription || !subscription.current_period_end) {
-      return undefined;
-    }
-
-    const date = getDateFromStripeDate(subscription.current_period_end);
-
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-  }, [subscription]);
 
   return (
     <Box
