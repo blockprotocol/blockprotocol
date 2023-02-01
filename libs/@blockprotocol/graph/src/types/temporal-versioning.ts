@@ -72,7 +72,7 @@ export type BoundedTimeInterval = TimeInterval<
 export type VariableTemporalAxis<
   Axis extends TemporalAxes,
   StartBound extends TemporalBound | null,
-  EndBound extends TemporalBound | null,
+  EndBound extends TimestampLimitedTemporalBound | null,
 > = {
   axis: Axis;
   interval: TimeInterval<StartBound, EndBound>;
