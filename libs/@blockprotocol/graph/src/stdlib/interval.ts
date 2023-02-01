@@ -67,6 +67,10 @@ export const intervalContainsTimestamp = (
   interval: NonNullTimeInterval,
   timestamp: Timestamp,
 ): boolean => {
+  const timestampAsBound: TimestampLimitedTemporalBound = {
+    kind: "inclusive",
+    limit: timestamp,
+  };
   /*
    Examples            |     1     |     2     |     3     |     4
    ====================|===========|===========|===========|===========
@@ -76,18 +80,8 @@ export const intervalContainsTimestamp = (
    Contains Timestamp  |   true    |   true    |   false   |   false
    */
   return (
-    compareBounds(
-      interval.start,
-      { kind: "inclusive", limit: timestamp },
-      "start",
-      "start",
-    ) <= 0 &&
-    compareBounds(
-      interval.end,
-      { kind: "inclusive", limit: timestamp },
-      "end",
-      "end",
-    ) >= 0
+    compareBounds(interval.start, timestampAsBound, "start", "start") <= 0 &&
+    compareBounds(interval.end, timestampAsBound, "end", "end") >= 0
   );
 };
 
