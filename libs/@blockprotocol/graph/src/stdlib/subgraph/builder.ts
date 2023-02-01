@@ -1,7 +1,7 @@
 import { addEntitiesToSubgraphByMutation } from "../../internal/mutate-subgraph.js";
 import {
   Entity,
-  EntityEditionId,
+  EntityRecordId,
   GraphResolveDepths,
   Subgraph,
 } from "../../types.js";
@@ -22,7 +22,7 @@ import {
  * @param data – the data to build the subgraph from (which becomes the vertices)
  * @param data.entities – the entities to build the subgraph from
  * @param depths – the depth values to provide in the returned subgraph
- * @param roots – the root values to provide in the returned subgraph
+ * @param rootRecordIds – the root values to provide in the returned subgraph
  *
  * @returns a Subgraph containing:
  *   - 'vertices' containing the provided entities
@@ -36,15 +36,15 @@ import {
  */
 export const buildSubgraph = (
   data: { entities: Entity[] },
-  roots: EntityEditionId[],
+  rootRecordIds: EntityRecordId[],
   depths: GraphResolveDepths,
 ) => {
-  const missingRoots = roots.filter(
-    ({ baseId, versionId }) =>
+  const missingRoots = rootRecordIds.filter(
+    ({ entityId, editionId }) =>
       !data.entities.find(
         (entity) =>
-          entity.metadata.editionId.baseId === baseId &&
-          entity.metadata.editionId.versionId === versionId,
+          entity.metadata.recordId.entityId === entityId &&
+          entity.metadata.recordId.editionId === editionId,
       ),
   );
 
@@ -53,11 +53,17 @@ export const buildSubgraph = (
       `Root(s) not present in data: ${missingRoots
         .map(
           (missingRoot) =>
-            `${missingRoot.baseId} at version ${missingRoot.versionId}`,
+            `${missingRoot.entityId} at version ${missingRoot.editionId}`,
         )
         .join(", ")}`,
     );
   }
+
+  const roots = rootRecordIds.map((rootRecordId) => ({
+    baseId: rootRecordId.entityId,
+    /** @todo - This is temporary, and wrong */
+    revisionId: rootRecordId.editionId,
+  }));
 
   const subgraph: Subgraph = {
     roots,

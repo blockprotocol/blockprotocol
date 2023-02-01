@@ -14,9 +14,9 @@ const node = document.getElementById("app");
 const blockEntityMap = {
   react: {
     metadata: {
-      editionId: {
-        baseId: "entity-react",
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: "entity-react",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },
@@ -24,9 +24,9 @@ const blockEntityMap = {
   },
   "custom-element": {
     metadata: {
-      editionId: {
-        baseId: "entity-custom-element",
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: "entity-custom-element",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },
@@ -34,9 +34,9 @@ const blockEntityMap = {
   },
   "html-at-url": {
     metadata: {
-      editionId: {
-        baseId: "entity-html-as-url",
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: "entity-html-as-url",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },
@@ -44,9 +44,9 @@ const blockEntityMap = {
   },
   "html-as-string": {
     metadata: {
-      editionId: {
-        baseId: "entity-html-as-string",
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: "entity-html-as-string",
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
     },
@@ -136,7 +136,7 @@ const DevApp: FunctionComponent = () => {
 
       <MockBlockDock
         blockDefinition={blockDefinition}
-        blockEntityEditionId={blockEntity.metadata.editionId}
+        blockEntityRecordId={blockEntity.metadata.recordId}
         blockInfo={{
           displayName: "Test Block",
           blockType: {

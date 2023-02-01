@@ -1,9 +1,7 @@
-import { EntityEditionId, EntityId, isEntityEditionId } from "../../entity.js";
-import {
-  isOntologyTypeEditionId,
-  OntologyTypeEditionId,
-} from "../../ontology.js";
+import { EntityId, isEntityRecordId } from "../../entity.js";
+import { isOntologyTypeRecordId } from "../../ontology.js";
 import { Timestamp } from "../time.js";
+import { EntityVertexId, OntologyTypeVertexId } from "../vertices";
 import {
   isKnowledgeGraphEdgeKind,
   isOntologyEdgeKind,
@@ -33,12 +31,12 @@ export type EntityIdAndTimestamp = {
 };
 
 export type OntologyOutwardEdge =
-  | GenericOutwardEdge<OntologyEdgeKind, OntologyTypeEditionId>
-  | GenericOutwardEdge<SharedEdgeKind, EntityEditionId, true>;
+  | GenericOutwardEdge<OntologyEdgeKind, OntologyTypeVertexId>
+  | GenericOutwardEdge<SharedEdgeKind, EntityVertexId, true>;
 
 export type KnowledgeGraphOutwardEdge =
   | GenericOutwardEdge<KnowledgeGraphEdgeKind, EntityIdAndTimestamp>
-  | GenericOutwardEdge<SharedEdgeKind, OntologyTypeEditionId, false>;
+  | GenericOutwardEdge<SharedEdgeKind, OntologyTypeVertexId, false>;
 
 export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;
 
@@ -49,7 +47,7 @@ export const isOntologyOutwardEdge = (
 ): edge is OntologyOutwardEdge => {
   return (
     isOntologyEdgeKind(edge.kind) ||
-    (isSharedEdgeKind(edge.kind) && isEntityEditionId(edge.rightEndpoint))
+    (isSharedEdgeKind(edge.kind) && isEntityRecordId(edge.rightEndpoint))
   );
 };
 
@@ -58,6 +56,6 @@ export const isKnowledgeGraphOutwardEdge = (
 ): edge is KnowledgeGraphOutwardEdge => {
   return (
     isKnowledgeGraphEdgeKind(edge.kind) ||
-    (isSharedEdgeKind(edge.kind) && isOntologyTypeEditionId(edge.rightEndpoint))
+    (isSharedEdgeKind(edge.kind) && isOntologyTypeRecordId(edge.rightEndpoint))
   );
 };

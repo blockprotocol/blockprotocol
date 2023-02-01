@@ -9,7 +9,7 @@ import {
 import {
   BlockGraphProperties,
   Entity,
-  EntityEditionId,
+  EntityVertexId,
   GraphBlockHandler,
   GraphEmbedderHandler,
   LinkEntityAndRightEntity,
@@ -125,7 +125,7 @@ export const useEntitySubgraph = <
   RootEntityLinkedEntities extends LinkEntityAndRightEntity[],
 >(
   entitySubgraph: Subgraph<{
-    editionId: EntityEditionId;
+    vertexId: EntityVertexId;
     element: RootEntity;
   }>,
 ) => {
@@ -138,7 +138,7 @@ export const useEntitySubgraph = <
     const linkedEntities =
       getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
         entitySubgraph,
-        rootEntity.metadata.editionId.baseId,
+        rootEntity.metadata.recordId.entityId,
       );
 
     return {

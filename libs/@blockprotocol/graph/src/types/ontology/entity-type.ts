@@ -1,7 +1,7 @@
 import { EntityType, VersionedUri } from "@blockprotocol/type-system/slim";
 
 import { AggregateOperationInput } from "../entity.js";
-import { Subgraph, SubgraphRootTypes } from "../subgraph.js";
+import { EntityTypeRootType, Subgraph } from "../subgraph.js";
 import { OntologyElementMetadata } from "./metadata.js";
 
 /**
@@ -22,16 +22,15 @@ export type AggregateEntityTypesData = {
   operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
 };
 
-export type AggregateEntityTypesResult<
-  T extends Subgraph<SubgraphRootTypes["entityType"]>,
-> = {
-  results: T[];
-  operation: AggregateOperationInput &
-    Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
-      pageCount?: number | null;
-      totalCount?: number | null;
-    };
-};
+export type AggregateEntityTypesResult<T extends Subgraph<EntityTypeRootType>> =
+  {
+    results: T[];
+    operation: AggregateOperationInput &
+      Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
+        pageCount?: number | null;
+        totalCount?: number | null;
+      };
+  };
 
 export type GetEntityTypeData = {
   entityTypeId: VersionedUri;

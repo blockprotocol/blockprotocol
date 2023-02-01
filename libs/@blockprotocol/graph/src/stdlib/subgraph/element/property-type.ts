@@ -5,9 +5,8 @@ import {
   VersionedUri,
 } from "@blockprotocol/type-system/slim";
 
-import { OntologyTypeEditionId } from "../../../types/ontology.js";
 import { PropertyTypeWithMetadata } from "../../../types/ontology/property-type.js";
-import { Subgraph } from "../../../types/subgraph.js";
+import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
 import { isPropertyTypeVertex } from "../../../types/subgraph/vertices.js";
 
 /**
@@ -57,18 +56,18 @@ export const getPropertyTypeById = (
 };
 
 /**
- * Gets a `PropertyTypeWithMetadata` by its `OntologyTypeEditionId` from within the vertices of the subgraph. Returns
+ * Gets a `PropertyTypeWithMetadata` by its `OntologyTypeVertexId` from within the vertices of the subgraph. Returns
  * `undefined` if the property type couldn't be found.
  *
  * @param subgraph
- * @param editionId
+ * @param vertexId
  * @throws if the vertex isn't a `PropertyTypeVertex`
  */
-export const getPropertyTypeByEditionId = (
+export const getPropertyTypeByVertexId = (
   subgraph: Subgraph,
-  editionId: OntologyTypeEditionId,
+  vertexId: OntologyTypeVertexId,
 ): PropertyTypeWithMetadata | undefined => {
-  const vertex = subgraph.vertices[editionId.baseId]?.[editionId.versionId];
+  const vertex = subgraph.vertices[vertexId.baseId]?.[vertexId.revisionId];
 
   if (!vertex) {
     return undefined;

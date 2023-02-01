@@ -1,8 +1,4 @@
-import {
-  GetEntityData,
-  Subgraph,
-  SubgraphRootTypes,
-} from "@blockprotocol/graph";
+import { EntityRootType, GetEntityData, Subgraph } from "@blockprotocol/graph";
 import { getEntity as getEntityFromSubgraph } from "@blockprotocol/graph/stdlib";
 
 import { traverseElement } from "../../traverse";
@@ -17,15 +13,21 @@ export const getEntity = (
     },
   }: GetEntityData,
   graph: Subgraph,
-): Subgraph<SubgraphRootTypes["entity"]> | undefined => {
-  const entityEdition = getEntityFromSubgraph(graph, entityId);
+): Subgraph<EntityRootType> | undefined => {
+  const entityRevision = getEntityFromSubgraph(graph, entityId);
 
-  if (entityEdition === undefined) {
+  if (entityRevision === undefined) {
     return undefined;
   }
 
   const subgraph = {
-    roots: [entityEdition.metadata.editionId],
+    /** @todo - This is temporary, and wrong */
+    roots: [
+      {
+        baseId: entityRevision.metadata.recordId.entityId,
+        revisionId: entityRevision.metadata.recordId.editionId,
+      },
+    ],
     vertices: {},
     edges: {},
     depths: graphResolveDepths,
@@ -33,7 +35,11 @@ export const getEntity = (
 
   traverseElement(
     subgraph,
-    entityEdition.metadata.editionId,
+    /** @todo - This is temporary, and wrong */
+    {
+      baseId: entityRevision.metadata.recordId.entityId,
+      revisionId: entityRevision.metadata.recordId.editionId,
+    },
     graph,
     new TraversalContext(graph),
     graphResolveDepths,

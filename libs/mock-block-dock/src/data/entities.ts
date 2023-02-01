@@ -9,9 +9,9 @@ const createPerson = (entityId: number): Entity => {
   const name = personNames[entityId] ?? "Unknown Person";
   return {
     metadata: {
-      editionId: {
-        baseId: `person-${entityId.toString()}`,
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: `person-${entityId.toString()}`,
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.person.$id,
     },
@@ -28,9 +28,9 @@ const createCompany = (entityId: number): Entity => {
   const name = companyNames[entityId] ?? "Unknown Company";
   return {
     metadata: {
-      editionId: {
-        baseId: `company-${entityId.toString()}`,
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: `company-${entityId.toString()}`,
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.company.$id,
     },
@@ -49,9 +49,9 @@ const createWorksForLink = (
 ): Entity => {
   return {
     metadata: {
-      editionId: {
-        baseId: `${sourceEntityId}-works-for-${destinationEntityId}`,
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: `${sourceEntityId}-works-for-${destinationEntityId}`,
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.worksFor.$id,
     },
@@ -69,9 +69,9 @@ const createFounderOfLink = (
 ): Entity => {
   return {
     metadata: {
-      editionId: {
-        baseId: `${sourceEntityId}-founder-of-${destinationEntityId}`,
-        versionId: new Date().toISOString(),
+      recordId: {
+        entityId: `${sourceEntityId}-founder-of-${destinationEntityId}`,
+        editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.founderOf.$id,
     },
@@ -105,8 +105,8 @@ const createEntities = (): Entity[] => {
     if (founder) {
       entities.push(
         createFounderOfLink(
-          founder.metadata.editionId.baseId,
-          company.metadata.editionId.baseId,
+          founder.metadata.recordId.entityId,
+          company.metadata.recordId.entityId,
         ),
       );
       entities.push(founder);
@@ -115,9 +115,9 @@ const createEntities = (): Entity[] => {
   for (const person of people) {
     entities.push(
       createWorksForLink(
-        person.metadata.editionId.baseId,
+        person.metadata.recordId.entityId,
         companies[Math.floor(Math.random() * companies.length)]!.metadata
-          .editionId.baseId,
+          .recordId.entityId,
       ),
     );
   }

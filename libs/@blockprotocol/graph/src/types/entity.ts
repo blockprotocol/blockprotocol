@@ -4,8 +4,7 @@ import type {
 } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { isOntologyTypeEditionId } from "../types.js";
-import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
+import { EntityRootType, Subgraph, Timestamp } from "../types.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
 export type JsonObject = CoreJsonObject;
@@ -14,24 +13,23 @@ export type JsonValue = CoreJsonValue;
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
 export type EntityId = string;
-export type EntityVersion = string;
-export type EntityEditionId = {
-  baseId: EntityId;
-  versionId: EntityVersion;
+// This isn't necessary, it just _could_ provide greater clarity that this corresponds to an exact vertex and can be
+// used in a direct lookup and not a search in the vertices
+export type EntityRevisionId = Timestamp;
+
+export type EntityRecordId = {
+  entityId: EntityId;
+  editionId: string;
 };
 
-export const isEntityEditionId = (
-  editionId: unknown,
-): editionId is EntityEditionId => {
+export const isEntityRecordId = (
+  recordId: unknown,
+): recordId is EntityRecordId => {
   return (
-    editionId != null &&
-    typeof editionId === "object" &&
-    "baseId" in editionId &&
-    "versionId" in editionId &&
-    /** @todo - is it fine to just check that versionId is string, maybe timestamp if we want to lock it into being a
-     *    timestamp?
-     */
-    !isOntologyTypeEditionId(editionId)
+    recordId != null &&
+    typeof recordId === "object" &&
+    "entityId" in recordId &&
+    "editionId" in recordId
   );
 };
 
@@ -45,7 +43,7 @@ export type EntityPropertiesObject = {
 };
 
 export type EntityMetadata = {
-  editionId: EntityEditionId;
+  recordId: EntityRecordId;
   entityTypeId: VersionedUri;
 };
 
@@ -65,6 +63,11 @@ export type Entity<
   metadata: EntityMetadata;
   linkData?: LinkData;
 } & (Properties extends null ? {} : { properties: Properties });
+
+export type LinkEntityAndRightEntity = {
+  linkEntity: Entity;
+  rightEntity: Entity;
+};
 
 export type CreateEntityData = {
   entityTypeId: VersionedUri;
@@ -135,9 +138,7 @@ export type AggregateEntitiesData = {
   graphResolveDepths?: GraphResolveDepths;
 };
 
-export type AggregateEntitiesResult<
-  T extends Subgraph<SubgraphRootTypes["entity"]>,
-> = {
+export type AggregateEntitiesResult<T extends Subgraph<EntityRootType>> = {
   results: T;
   operation: AggregateOperationInput &
     Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {

@@ -1,8 +1,8 @@
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
+  EntityRootType,
   Subgraph,
-  SubgraphRootTypes,
 } from "@blockprotocol/graph";
 import { getEntities } from "@blockprotocol/graph/stdlib";
 
@@ -19,7 +19,7 @@ export const aggregateEntities = (
     },
   }: AggregateEntitiesData,
   graph: Subgraph,
-): AggregateEntitiesResult<Subgraph<SubgraphRootTypes["entity"]>> => {
+): AggregateEntitiesResult<Subgraph<EntityRootType>> => {
   const { results, operation: appliedOperation } = filterAndSortEntitiesOrTypes(
     getEntities(graph),
     {
@@ -28,18 +28,26 @@ export const aggregateEntities = (
   );
 
   const subgraph = {
-    roots: results.map((entity) => entity.metadata.editionId),
+    /** @todo - This is temporary, and wrong */
+    roots: results.map((entity) => ({
+      baseId: entity.metadata.recordId.entityId,
+      revisionId: entity.metadata.recordId.editionId,
+    })),
     vertices: {},
     edges: {},
     depths: graphResolveDepths,
   };
 
   for (const {
-    metadata: { editionId },
+    metadata: { recordId },
   } of results) {
     traverseElement(
       subgraph,
-      editionId,
+      /** @todo - This is temporary, and wrong */
+      {
+        baseId: recordId.entityId,
+        revisionId: recordId.editionId,
+      },
       graph,
       new TraversalContext(graph),
       graphResolveDepths,

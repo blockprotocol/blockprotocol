@@ -72,17 +72,17 @@ export const addEntitiesToSubgraphByMutation = (
   > = {};
 
   for (const entity of entities) {
-    const editionId = entity.metadata.editionId;
+    const recordId = entity.metadata.recordId;
     if (entity.linkData) {
-      const linkInfo = linkMap[editionId.baseId];
+      const linkInfo = linkMap[recordId.entityId];
       if (!linkInfo) {
-        linkMap[editionId.baseId] = {
+        linkMap[recordId.entityId] = {
           leftEntityId: entity.linkData.leftEntityId,
           rightEntityId: entity.linkData.rightEntityId,
-          earliestTime: editionId.versionId,
+          earliestTime: recordId.editionId,
         };
-      } else if (editionId.versionId < linkInfo.earliestTime) {
-        linkInfo.earliestTime = editionId.versionId;
+      } else if (recordId.editionId < linkInfo.earliestTime) {
+        linkInfo.earliestTime = recordId.editionId;
       }
     }
 
@@ -91,14 +91,14 @@ export const addEntitiesToSubgraphByMutation = (
       inner: entity,
     };
 
-    if (!subgraph.vertices[editionId.baseId]) {
+    if (!subgraph.vertices[recordId.entityId]) {
       // This is needed because ts can't differentiate between `EntityId` and `BaseUri`
-      (subgraph.vertices as KnowledgeGraphVertices)[editionId.baseId] = {
-        [editionId.versionId]: entityVertex,
+      (subgraph.vertices as KnowledgeGraphVertices)[recordId.entityId] = {
+        [recordId.editionId]: entityVertex,
       };
     } else {
-      (subgraph.vertices as KnowledgeGraphVertices)[editionId.baseId]![
-        editionId.versionId
+      (subgraph.vertices as KnowledgeGraphVertices)[recordId.entityId]![
+        recordId.editionId
       ] = entityVertex;
     }
   }

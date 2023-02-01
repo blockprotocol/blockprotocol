@@ -6,7 +6,6 @@ import {
   CreateEntityData,
   DeleteEntityData,
   Entity,
-  EntityEditionId,
   GetEntityData,
   UpdateEntityData,
 } from "./entity.js";
@@ -16,7 +15,12 @@ import {
   AggregateEntityTypesResult,
   GetEntityTypeData,
 } from "./ontology/entity-type.js";
-import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
+import {
+  EntityRootType,
+  EntityTypeRootType,
+  EntityVertexId,
+  Subgraph,
+} from "./subgraph.js";
 
 export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
   /**
@@ -27,7 +31,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
    */
   graph: {
     blockEntitySubgraph?: Subgraph<{
-      editionId: EntityEditionId;
+      vertexId: EntityVertexId;
       element: RootEntity;
     }>;
     readonly?: boolean;
@@ -35,10 +39,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
 };
 
 export type BlockGraphMessageCallbacks = {
-  blockEntitySubgraph: MessageCallback<
-    Subgraph<SubgraphRootTypes["entity"]>,
-    null
-  >;
+  blockEntitySubgraph: MessageCallback<Subgraph<EntityRootType>, null>;
   readonly: MessageCallback<boolean, null>;
 };
 
@@ -88,13 +89,13 @@ export type EmbedderGraphMessageCallbacks = {
   getEntity: MessageCallback<
     GetEntityData,
     null,
-    Subgraph<SubgraphRootTypes["entity"]>,
+    Subgraph<EntityRootType>,
     ReadOrModifyResourceError
   >;
   aggregateEntities: MessageCallback<
     AggregateEntitiesData,
     null,
-    AggregateEntitiesResult<Subgraph<SubgraphRootTypes["entity"]>>,
+    AggregateEntitiesResult<Subgraph<EntityRootType>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Add Type System mutation methods */
@@ -119,13 +120,13 @@ export type EmbedderGraphMessageCallbacks = {
   getEntityType: MessageCallback<
     GetEntityTypeData,
     null,
-    Subgraph<SubgraphRootTypes["entityType"]>,
+    Subgraph<EntityTypeRootType>,
     ReadOrModifyResourceError
   >;
   aggregateEntityTypes: MessageCallback<
     AggregateEntityTypesData,
     null,
-    AggregateEntityTypesResult<Subgraph<SubgraphRootTypes["entityType"]>>,
+    AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Reimplement linked aggregations */
