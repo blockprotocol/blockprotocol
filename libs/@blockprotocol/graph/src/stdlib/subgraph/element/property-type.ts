@@ -15,7 +15,7 @@ import { isPropertyTypeVertex } from "../../../types/subgraph/vertices.js";
  * @param subgraph
  */
 export const getPropertyTypes = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
 ): PropertyTypeWithMetadata[] => {
   return Object.values(
     Object.values(subgraph.vertices).flatMap((versionObject) =>
@@ -35,7 +35,7 @@ export const getPropertyTypes = (
  * @throws if the vertex isn't a `PropertyTypeVertex`
  */
 export const getPropertyTypeById = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
   propertyTypeId: VersionedUri,
 ): PropertyTypeWithMetadata | undefined => {
   const [baseUri, version] = [
@@ -64,7 +64,7 @@ export const getPropertyTypeById = (
  * @throws if the vertex isn't a `PropertyTypeVertex`
  */
 export const getPropertyTypeByVertexId = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
   vertexId: OntologyTypeVertexId,
 ): PropertyTypeWithMetadata | undefined => {
   const vertex = subgraph.vertices[vertexId.baseId]?.[vertexId.revisionId];
@@ -87,7 +87,7 @@ export const getPropertyTypeByVertexId = (
  * @param baseUri
  */
 export const getPropertyTypesByBaseUri = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
   baseUri: BaseUri,
 ): PropertyTypeWithMetadata[] => {
   const versionObject = subgraph.vertices[baseUri];
