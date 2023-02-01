@@ -490,11 +490,16 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
             size="small"
             endIcon={
               <ArrowRightIcon
-                sx={{ position: "relative", transform: "rotate(-45deg)" }}
+                sx={{
+                  position: "relative",
+                  transform: isCurrentSubscriptionTierHobby
+                    ? "rotate(-45deg)"
+                    : undefined,
+                }}
               />
             }
           >
-            Upgrade
+            {isCurrentSubscriptionTierHobby ? "Upgrade" : "Continue"}
           </LinkButton>
         </Box>
         <Box
