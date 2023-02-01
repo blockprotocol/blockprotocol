@@ -4,58 +4,60 @@ import {
 } from "../types/temporal-versioning.js";
 
 export const compareBounds = (
-  lhs: TemporalBound,
-  rhs: TemporalBound,
-  lhsType: keyof NonNullTimeInterval,
-  rhsType: keyof NonNullTimeInterval,
+  left: TemporalBound,
+  right: TemporalBound,
+  leftType: keyof NonNullTimeInterval,
+  rightType: keyof NonNullTimeInterval,
 ): number => {
   // If the bound values are not equal, then the bound with the lower value is less than the bound with the higher
   // value.
-  if (lhs.kind !== "unbounded" && rhs.kind !== "unbounded") {
-    if (lhs.limit !== rhs.limit) {
-      return lhs.limit.localeCompare(rhs.limit);
+  if (left.kind !== "unbounded" && right.kind !== "unbounded") {
+    if (left.limit !== right.limit) {
+      return left.limit.localeCompare(right.limit);
     }
   }
 
-  if (lhs.kind === rhs.kind && lhsType === rhsType) {
+  if (left.kind === right.kind && leftType === rightType) {
     return 0;
   }
 
   if (
-    (lhs.kind === "unbounded" && lhsType === "start") ||
-    (rhs.kind === "unbounded" && rhsType === "end") ||
-    (lhs.kind === "exclusive" &&
-      rhs.kind === "exclusive" &&
-      lhsType === "end" &&
-      rhsType === "start") ||
-    (lhs.kind === "exclusive" &&
-      rhs.kind === "inclusive" &&
-      lhsType === "end") ||
-    (lhs.kind === "inclusive" &&
-      rhs.kind === "exclusive" &&
-      rhsType === "start")
+    (left.kind === "unbounded" && leftType === "start") ||
+    (right.kind === "unbounded" && rightType === "end") ||
+    (left.kind === "exclusive" &&
+      right.kind === "exclusive" &&
+      leftType === "end" &&
+      rightType === "start") ||
+    (left.kind === "exclusive" &&
+      right.kind === "inclusive" &&
+      leftType === "end") ||
+    (left.kind === "inclusive" &&
+      right.kind === "exclusive" &&
+      rightType === "start")
   ) {
     return -1;
   }
 
   if (
-    (lhs.kind === "unbounded" && lhsType === "end") ||
-    (rhs.kind === "unbounded" && rhsType === "start") ||
-    (lhs.kind === "exclusive" &&
-      rhs.kind === "exclusive" &&
-      lhsType === "start" &&
-      rhsType === "end") ||
-    (lhs.kind === "exclusive" &&
-      rhs.kind === "inclusive" &&
-      lhsType === "start") ||
-    (lhs.kind === "inclusive" && rhs.kind === "exclusive" && rhsType === "end")
+    (left.kind === "unbounded" && leftType === "end") ||
+    (right.kind === "unbounded" && rightType === "start") ||
+    (left.kind === "exclusive" &&
+      right.kind === "exclusive" &&
+      leftType === "start" &&
+      rightType === "end") ||
+    (left.kind === "exclusive" &&
+      right.kind === "inclusive" &&
+      leftType === "start") ||
+    (left.kind === "inclusive" &&
+      right.kind === "exclusive" &&
+      rightType === "end")
   ) {
     return 1;
   }
   throw new Error(
     `Implementation error, failed to compare bounds.\nLHS: ${JSON.stringify(
-      lhs,
-    )}\nRHS: ${JSON.stringify(rhs)}`,
+      left,
+    )}\nRHS: ${JSON.stringify(right)}`,
   );
 };
 
@@ -65,18 +67,18 @@ export const compareBounds = (
  *
  * As such, two inclusive (or two exclusive) bounds with the same limit are *not* adjacent.
  *
- * @param lhs - The first bound of the comparison (order is unimportant)
- * @param rhs - The second bound of the comparison
+ * @param left - The first bound of the comparison (order is unimportant)
+ * @param right - The second bound of the comparison
  */
 export const boundIsAdjacentTo = (
-  lhs: TemporalBound,
-  rhs: TemporalBound,
+  left: TemporalBound,
+  right: TemporalBound,
 ): boolean => {
   if (
-    (lhs.kind === "inclusive" && rhs.kind === "exclusive") ||
-    (lhs.kind === "exclusive" && rhs.kind === "inclusive")
+    (left.kind === "inclusive" && right.kind === "exclusive") ||
+    (left.kind === "exclusive" && right.kind === "inclusive")
   ) {
-    return lhs.limit === rhs.limit;
+    return left.limit === right.limit;
   } else {
     return false;
   }
