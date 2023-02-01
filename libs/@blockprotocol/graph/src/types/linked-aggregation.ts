@@ -8,8 +8,14 @@ export type LinkedAggregationDefinition = {
   operation: AggregateOperationInput;
 };
 
-export type LinkedAggregation = Omit<LinkedAggregationDefinition, "operation"> &
-  AggregateEntitiesResult<Subgraph<EntityRootType>>;
+export type LinkedAggregation<Temporal extends boolean> = Omit<
+  LinkedAggregationDefinition,
+  "operation"
+> &
+  AggregateEntitiesResult<
+    Temporal,
+    Subgraph<Temporal, EntityRootType<Temporal>>
+  >;
 
 export type GetLinkedAggregationData = {
   aggregationId: string;
