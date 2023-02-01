@@ -1,3 +1,4 @@
+import { BlockMetadata } from "@blockprotocol/core";
 import { useMemo } from "react";
 
 import { SiteMapPage, SiteMapPageSection } from "../../lib/sitemap";
@@ -14,7 +15,8 @@ const findCrumbs = (params: {
 
   const pathWithoutParams = generatePathWithoutParams(asPath);
 
-  for (const section of itemIsPage(item) ? item.sections : item.subSections) {
+  for (const section of (itemIsPage(item) ? item.sections : item.subSections) ??
+    []) {
     const crumbs = findCrumbs({
       asPath,
       item: section,
@@ -28,7 +30,7 @@ const findCrumbs = (params: {
   }
 
   if (itemIsPage(item)) {
-    for (const page of item.subPages) {
+    for (const page of item.subPages ?? []) {
       const crumbs = findCrumbs({
         asPath,
         item: page,
@@ -53,18 +55,44 @@ const findCrumbs = (params: {
   return null;
 };
 
-export const useCrumbs = (pages: SiteMapPage[], asPath: string) =>
-  useMemo(() => {
-    const breadCrumbPages = pages.filter(({ title }) =>
-      ["Specification", "Documentation"].includes(title),
-    );
+export const useCrumbs = (
+  pages: SiteMapPage[],
+  asPath: string,
+  route: string = "/docs/[[...docs-slug]]",
+  blockMetadata?: BlockMetadata,
+) => {
+  return useMemo(() => {
+    // Documentation pages
+    if (route === "/docs/[[...docs-slug]]") {
+      const breadCrumbPages = pages.filter(({ title }) =>
+        ["Specification", "Docs"].includes(title),
+      );
 
-    for (const page of breadCrumbPages) {
-      const maybeCrumbs = findCrumbs({ asPath, item: page });
+      for (const page of breadCrumbPages) {
+        const maybeCrumbs = findCrumbs({ asPath, item: page });
 
-      if (maybeCrumbs) {
-        return maybeCrumbs;
+        if (maybeCrumbs) {
+          return maybeCrumbs;
+        }
       }
     }
+    // User block pages
+    else if (
+      route === "/[shortname]/blocks/[block-slug]" &&
+      blockMetadata?.displayName
+    ) {
+      return [
+        { title: "Home", href: "/", subPages: [], sections: [] },
+        { title: "Hub", href: "/hub", subPages: [], sections: [] },
+        {
+          title: blockMetadata.displayName,
+          href: asPath,
+          subPages: [],
+          sections: [],
+        },
+      ];
+    }
+
     return [];
-  }, [asPath, pages]);
+  }, [asPath, pages, route, blockMetadata]);
+};

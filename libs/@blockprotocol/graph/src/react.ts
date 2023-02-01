@@ -1,10 +1,5 @@
-import {
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-  VoidFunctionComponent,
-} from "react";
+import { useServiceConstructor } from "@blockprotocol/core/react";
+import { RefObject, VoidFunctionComponent } from "react";
 
 import {
   BlockGraphProperties,
@@ -15,53 +10,6 @@ import {
 export type BlockComponent<
   Properties extends Record<string, unknown> | null = null,
 > = VoidFunctionComponent<BlockGraphProperties<Properties>>;
-
-const useGraphServiceConstructor = <
-  T extends typeof GraphBlockHandler | typeof GraphEmbedderHandler,
->({
-  Handler,
-  constructorArgs,
-  ref,
-}: {
-  Handler: T;
-  constructorArgs?: Omit<ConstructorParameters<T>[0], "element">;
-  ref: RefObject<HTMLElement>;
-}) => {
-  const previousRef = useRef<HTMLElement | null>(null);
-
-  const [graphService, setGraphService] = useState<
-    | (T extends typeof GraphBlockHandler
-        ? GraphBlockHandler
-        : GraphEmbedderHandler)
-    | null
-  >(null);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- will not loop & we don't want to reconstruct on other args
-  useEffect(() => {
-    if (ref.current === previousRef.current) {
-      return;
-    }
-
-    if (previousRef.current) {
-      graphService?.destroy();
-    }
-
-    previousRef.current = ref.current;
-
-    if (ref.current) {
-      setGraphService(
-        new Handler({
-          element: ref.current,
-          ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
-        }) as T extends typeof GraphBlockHandler // @todo fix these casts
-          ? GraphBlockHandler
-          : GraphEmbedderHandler,
-      );
-    }
-  });
-
-  return { graphService };
-};
 
 /**
  * Create a GraphBlockHandler instance, using a reference to an element in the block.
@@ -75,13 +23,13 @@ export const useGraphBlockService = (
     ConstructorParameters<typeof GraphBlockHandler>[0],
     "element"
   >,
-): { graphService: GraphBlockHandler | null } => {
-  return useGraphServiceConstructor({
+): { graphService: GraphBlockHandler } => ({
+  graphService: useServiceConstructor({
     Handler: GraphBlockHandler,
     constructorArgs,
     ref,
-  });
-};
+  }),
+});
 
 /**
  * Create a GraphBlockHandler instance, using a reference to an element in the block.
@@ -97,10 +45,10 @@ export const useGraphEmbedderService = (
     ConstructorParameters<typeof GraphEmbedderHandler>[0],
     "element"
   >,
-): { graphService: GraphEmbedderHandler | null } => {
-  return useGraphServiceConstructor({
+): { graphService: GraphEmbedderHandler } => ({
+  graphService: useServiceConstructor({
     Handler: GraphEmbedderHandler,
     ref,
     constructorArgs,
-  });
-};
+  }),
+});

@@ -13,6 +13,7 @@ import backgroundCornerHelix from "../../public/assets/background-corner-helix.p
 import { ArrowRightIcon, BoltIcon } from "./icons";
 import { Link as LinkComponent, LinkProps } from "./link";
 import { LinkButton } from "./link-button";
+import { FinalCTA } from "./pages/home/final-cta";
 import { RequestAnotherApplication } from "./pages/wordpress/request-another-application";
 
 type Banner = {
@@ -29,6 +30,7 @@ type BannerCardProps = {
   buttonStartIcon?: ReactNode;
   buttonEndIcon?: ReactNode;
   fullWidth?: boolean;
+  fullHeight?: boolean;
 };
 
 const Link: FunctionComponent<LinkProps> = (linkProps) => (
@@ -62,6 +64,7 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
   buttonStartIcon,
   buttonEndIcon,
   fullWidth,
+  fullHeight,
 }) => (
   <Paper
     sx={[
@@ -74,6 +77,7 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
         justifyContent: "space-between",
         alignItems: "flex-start",
         position: "relative",
+        overflow: "hidden",
         "&::before": {
           pointerEvents: "none",
           position: "absolute",
@@ -94,7 +98,7 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
       ...(Array.isArray(sx) ? sx : [sx]),
     ]}
   >
-    <Box mb={2} width={fullWidth ? 1 : "auto"}>
+    <Box display="flex" mb={fullHeight ? 0 : 2} width={fullWidth ? 1 : "auto"}>
       {contents}
     </Box>
     {buttonHref ? (
@@ -114,6 +118,20 @@ const BannerCard: FunctionComponent<BannerCardProps> = ({
 );
 
 export const BANNERS: Banner[] = [
+  {
+    shouldDisplay: ({ pathname }) => pathname === "/",
+    overlapsFooter: true,
+    contents: (
+      <BannerCard
+        sx={{
+          padding: "0 !important",
+        }}
+        contents={<FinalCTA />}
+        fullHeight
+        fullWidth
+      />
+    ),
+  },
   {
     shouldDisplay: ({ pathname }) => pathname === "/hub",
     overlapsFooter: true,

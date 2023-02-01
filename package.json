@@ -4,8 +4,10 @@
   "type": "module",
   "workspaces": [
     "apps/*",
+    "infra/*",
     "libs/@blockprotocol/*",
     "libs/@local/*",
+    "libs/@local/internal-api-client-generator/typescript",
     "libs/*"
   ],
   "scripts": {
@@ -20,7 +22,7 @@
     "lint:dependency-version-consistency": "check-dependency-version-consistency .",
     "lint:eslint": "turbo run --continue lint:eslint",
     "lint:lockfile-lint": "lockfile-lint --path yarn.lock --allowed-hosts registry.yarnpkg.com --allowed-schemes \"npm:\" --allowed-schemes \"patch:\" --allowed-schemes \"workspace:\"",
-    "lint:knip": "knip -c .knip.jsonc --no-exit-code",
+    "lint:knip": "knip --no-exit-code",
     "lint:markdownlint": "markdownlint --dot .",
     "lint:prettier": "prettier --cache --check --ignore-unknown .",
     "lint:tsc": "turbo run --continue lint:tsc",
@@ -37,15 +39,15 @@
     ]
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.4.7",
-    "@changesets/cli": "^2.25.2",
+    "@changesets/changelog-github": "0.4.8",
+    "@changesets/cli": "2.26.0",
     "check-dependency-version-consistency": "3.0.3",
     "dotenv-flow": "3.2.0",
     "husky": "8.0.3",
-    "knip": "^1.0.0",
-    "lint-staged": "13.0.4",
+    "knip": "^1.6.1",
+    "lint-staged": "13.1.0",
     "lockfile-lint": "4.10.0",
-    "markdownlint-cli": "0.32.2",
+    "markdownlint-cli": "0.33.0",
     "npm-run-all": "4.1.5",
     "patch-package": "6.5.0",
     "prettier": "2.8.2",

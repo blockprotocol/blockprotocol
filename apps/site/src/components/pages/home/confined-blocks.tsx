@@ -1,14 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import Image from "next/legacy/image";
 
-import darkBoxImage from "../../../../public/assets/new-home/dark-box-min.png";
+import darkBoxImage from "../../../../public/assets/new-home/dark-box-min.webp";
 
 export const ConfinedBlocks = () => {
   return (
     <Box
       sx={{
-        background:
-          "linear-gradient(40.4deg, rgb(29, 29, 38) 63.75%, rgb(62, 62, 73) 82.21%)",
+        background: "linear-gradient(40.4deg, #130E2F 63.75%, #572181 82.21%)",
         py: { xs: 10, md: 12 },
         px: { xs: "1rem", lg: "0" },
         border: "2px solid rgb(5, 5, 7)",
@@ -18,7 +17,7 @@ export const ConfinedBlocks = () => {
         sx={{
           display: "flex",
           flexDirection: { xs: "column", md: "row" },
-          maxWidth: "1100px",
+          maxWidth: 1100,
           margin: "0 auto",
           gridGap: { xs: "2rem", md: "4rem" },
           alignItems: "center",
@@ -32,36 +31,47 @@ export const ConfinedBlocks = () => {
             alignItems: { xs: "center", md: "flex-start" },
           }}
         >
-          <Typography
-            sx={{
-              color: ({ palette }) => palette.grey[200],
-              textAlign: { xs: "center", md: "left" },
-              maxWidth: "20ch",
-              margin: "0 auto 1.5rem",
-            }}
-            variant="bpHeading2"
-          >
-            Until now, blocks have been confined to single apps and sites
-          </Typography>
           <Box
             sx={{
-              width: "120px",
-              height: "2px",
-              ml: "0.25rem",
-              my: 2,
-              background:
-                "linear-gradient(to right, rgb(172, 159, 255, 1), rgba(172, 159, 255, 0))",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: { xs: "center", md: "start" },
+              mb: 3,
             }}
-          />
+          >
+            <Typography
+              sx={{
+                color: ({ palette }) => palette.grey[200],
+                textAlign: { xs: "center", md: "left" },
+                fontWeight: 500,
+                mb: 1.75,
+                letterSpacing: "-0.01em",
+                lineHeight: 1.2,
+                maxWidth: { xs: "30ch", md: "20ch" },
+              }}
+              variant="bpHeading3"
+            >
+              Today, blocks are confined to single apps and websites
+            </Typography>
+
+            <Box
+              sx={{
+                width: 74,
+                height: 3,
+                background:
+                  "linear-gradient(90deg, rgba(117, 86, 220, 0.8) 0%, rgba(117, 86, 220, 0) 100%)",
+                borderRadius: 6,
+              }}
+            />
+          </Box>
+
           <Typography
             sx={{
-              color: "#c2cedf",
+              color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
-              maxWidth: "45ch",
-              margin: "1rem auto",
-              lineHeight: 1.5,
+              mb: 2,
+              maxWidth: { xs: "65ch", md: "45ch" },
             }}
-            mb={2}
             variant="bpBodyCopy"
           >
             Every app has to build all of their own blocks. This means
@@ -69,13 +79,11 @@ export const ConfinedBlocks = () => {
           </Typography>
           <Typography
             sx={{
-              color: "#c2cedf",
+              color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
-              maxWidth: "45ch",
-              margin: "1rem auto",
-              lineHeight: 1.5,
+              mb: 2,
+              maxWidth: { xs: "65ch", md: "45ch" },
             }}
-            mb={2}
             variant="bpBodyCopy"
           >
             Open source components can save some time, but still need to be
@@ -83,20 +91,23 @@ export const ConfinedBlocks = () => {
           </Typography>
           <Typography
             sx={{
-              color: "#c2cedf",
+              color: ({ palette }) => palette.gray[40],
               textAlign: { xs: "center", md: "left" },
-              maxWidth: "45ch",
-              margin: "1rem auto",
-              lineHeight: 1.5,
+              maxWidth: { xs: "65ch", md: "45ch" },
+              mb: 2,
             }}
-            mb={2}
             variant="bpBodyCopy"
           >
             This also limits how many blocks users have access to in any single
             application.
           </Typography>
         </Box>
-        <Box sx={{ width: { xs: "90%", md: "55%" } }}>
+        <Box
+          sx={{
+            maxWidth: { xs: 620, md: "unset" },
+            width: { xs: "100%", md: "55%" },
+          }}
+        >
           <Image src={darkBoxImage} />
         </Box>
       </Box>

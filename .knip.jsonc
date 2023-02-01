@@ -28,18 +28,23 @@
     // thinking every workspace uses all ESLint plugins. That's why Knip's ESLint plugin is disabled everywhere else.
     // This resulted in two false positives: eslint-import-resolver-typescript for this workspace, and
     // @local/eslint-config for the others.
-    "packages/@local/eslint-config": {
+    "libs/@local/eslint-config": {
       "entry": [],
       "project": [],
       "eslint": "index.js"
     },
-    "packages/@local/tsconfig": {
+    "libs/@local/tsconfig": {
       "typescript": ["*.json", "!package.json"]
     },
-    "packages/@blockprotocol/core": {
+    "libs/@local/package-chores": {
+      "entry": "scripts/*.ts",
+      "project": "scripts/**/*.ts",
       "eslint": false
     },
-    "packages/mock-block-dock": {
+    "libs/@blockprotocol/core": {
+      "eslint": false
+    },
+    "libs/mock-block-dock": {
       "entry": ["src/index.ts", "dev/dev-app.tsx"],
       "project": "**/*.{ts,tsx}",
       "webpack": "dev/webpack.config.js",

@@ -1,15 +1,14 @@
 import { GetStaticProps } from "next";
 import { FunctionComponent } from "react";
 
-import { AnyFramework } from "../components/pages/home/anyframework";
-import { ComposableInterfaces } from "../components/pages/home/composable-interfaces";
+import { AnyFramework } from "../components/pages/home/any-framework";
 import { ConfinedBlocks } from "../components/pages/home/confined-blocks";
-import { FinalCTA } from "../components/pages/home/final-cta";
 import { Header } from "../components/pages/home/header";
 import { InteroperableBlocks } from "../components/pages/home/interoperable-blocks";
 import { RegistrySection } from "../components/pages/home/registry-section";
+import { SupportedApplications } from "../components/pages/home/supported-applications";
 import { WhatAreBlocks } from "../components/pages/home/what-are-blocks";
-import { useUser } from "../context/user-context";
+import { ZeroApplicationDevelopers } from "../components/pages/home/zero-application-developers";
 import { getAllBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
@@ -32,17 +31,16 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const HomePage: FunctionComponent<PageProps> = ({ catalog }) => {
-  const { user } = useUser();
   return (
     <>
       <Header />
       <WhatAreBlocks />
       <ConfinedBlocks />
       <InteroperableBlocks />
+      <ZeroApplicationDevelopers />
+      <SupportedApplications />
       <AnyFramework />
-      <ComposableInterfaces />
       <RegistrySection catalog={catalog} />
-      {!user && <FinalCTA />}
     </>
   );
 };

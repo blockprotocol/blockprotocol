@@ -54,13 +54,9 @@ export class GraphBlockHandler
     element,
   }: {
     callbacks?: Partial<BlockGraphMessageCallbacks>;
-    element: HTMLElement;
+    element?: HTMLElement | null;
   }) {
-    super({ element, serviceName: "graph", sourceType: "block" });
-    if (callbacks) {
-      this.registerCallbacks(callbacks);
-    }
-    this.coreHandler.initialize();
+    super({ element, callbacks, serviceName: "graph", sourceType: "block" });
   }
 
   getInitPayload(): Record<string, any> {
@@ -74,6 +70,14 @@ export class GraphBlockHandler
    */
   registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
     super.registerCallbacks(callbacks);
+  }
+
+  /**
+   * Removes multiple callbacks at once.
+   * Useful when replacing previously registered callbacks
+   */
+  removeCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
+    super.removeCallbacks(callbacks);
   }
 
   /**

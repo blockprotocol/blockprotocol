@@ -34,6 +34,12 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   // the folder where the block's assets are stored, currently doubling up as a unique identifier for the block
   // @todo this needs rethinking when we introduce versions, as there will be multiple asset folders
   componentId: string;
+
+  downloads?: {
+    // minimum number of downloads of a block's source in the last 7 days (excludes cached results)
+    weekly: number;
+  };
+
   // an absolute URL to example-graph.json, if it exists
   exampleGraph?: string | null;
   lastUpdated?: string | null;
@@ -244,19 +250,27 @@ export const retrieveBlockFileContent = async ({
   source: string;
   exampleGraph: JsonObject | null;
 }> => {
-  const schema = metadataSchemaUrl.startsWith(FRONTEND_URL)
-    ? JSON.parse(
-        await fs.readFile(
-          path.resolve(
-            process.cwd(),
-            `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
-              metadataSchemaUrl.lastIndexOf("/") + 1,
-            )}`,
+  let schema = { title: "Unparseable schema" };
+  try {
+    schema = metadataSchemaUrl.startsWith(FRONTEND_URL)
+      ? JSON.parse(
+          await fs.readFile(
+            path.resolve(
+              process.cwd(),
+              `public/blocks/${pathWithNamespace}/${metadataSchemaUrl.substring(
+                metadataSchemaUrl.lastIndexOf("/") + 1,
+              )}`,
+            ),
+            { encoding: "utf8" },
           ),
-          { encoding: "utf8" },
-        ),
-      )
-    : await fetch(metadataSchemaUrl).then((response) => response.json());
+        )
+      : await (await fetch(metadataSchemaUrl)).json();
+  } catch (err) {
+    // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
+    console.error(
+      `Could not fetch and parse schema at ${metadataSchemaUrl} for block ${pathWithNamespace}: ${err}`,
+    );
+  }
 
   const source = metadataSourceUrl.startsWith(FRONTEND_URL)
     ? await fs.readFile(

@@ -1,6 +1,6 @@
 {
   "name": "block-template-html",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Block Protocol block template for an html-based block",
   "keywords": [
     "blockprotocol",
@@ -33,8 +33,8 @@
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "block-scripts": "0.0.18",
-    "eslint": "8.29.0",
+    "block-scripts": "0.0.19",
+    "eslint": "8.33.0",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
     "prettier": "2.8.2",

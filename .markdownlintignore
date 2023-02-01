@@ -80,13 +80,18 @@ apps/site/public/blocks
 apps/site/public/schemas
 apps/site/site-map.json
 apps/site/test-results
-libs/block-template-html/dev/src
-libs/mock-block-dock/src/version.ts
 libs/@blockprotocol/type-system/.rollup.cache
 libs/@blockprotocol/type-system/wasm
+libs/block-template-html/dev/src
+libs/mock-block-dock/src/version.ts
 
 #########################
 ## Shared between linters
 #########################
+
 .git/
 .yarn/
+
+# Keep license files as is
+LICENSE.md
+LICENSE-*.md

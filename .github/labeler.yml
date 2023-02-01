@@ -19,7 +19,6 @@
   - ".github/**"
   - ".husky/**"
   - "infra/**"
-  - "scripts/**"
   - "*"
 
 "area: libs":

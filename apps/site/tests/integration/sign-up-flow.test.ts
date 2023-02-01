@@ -16,14 +16,16 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
   }
 
   await page
-    .locator(isMobile ? "a:has-text('Sign Up')" : "header >> text=Sign Up")
+    .locator(
+      isMobile
+        ? "a:has-text('Create your account')"
+        : "header >> text=Create your account",
+    )
     .click();
 
   await expect(page).toHaveURL("/signup");
 
-  await expect(
-    page.locator("text=Create your Block Protocol account"),
-  ).toBeVisible();
+  await expect(page.locator("text=Create an account")).toBeVisible();
 
   await expect(page.locator("text=Publish blocks on the Hub")).toBeVisible();
 
@@ -33,7 +35,7 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
 
   await expect(page.locator("text=Claim your favorite username")).toBeVisible();
 
-  const emailInput = page.locator('[placeholder="claude\\@shannon\\.com"]');
+  const emailInput = page.locator('[placeholder="you\\@example\\.com"]');
   await emailInput.fill("alice@example.com");
   await emailInput.press("Enter");
 
@@ -60,9 +62,9 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
   await expect(page.locator("text=Add your account details")).toBeVisible();
   await expect(page).toHaveURL("/signup");
 
-  const usernameInput = page.locator('[placeholder="claudeshannon"]');
+  const usernameInput = page.locator('[placeholder="e.g. alice123"]');
   await usernameInput.fill("alice");
-  await page.locator('[placeholder="claudeshannon"]').press("Tab");
+  await page.locator('[placeholder="e.g. alice123"]').press("Tab");
 
   await expect(
     page.locator("text=This user has already been taken"),
@@ -70,7 +72,7 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
 
   await usernameInput.fill("alice2");
 
-  const preferredNameInput = page.locator('[placeholder="Claude"]');
+  const preferredNameInput = page.locator('[placeholder="e.g. Alice"]');
   await preferredNameInput.click();
 
   await expect(

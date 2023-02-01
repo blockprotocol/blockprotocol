@@ -11,6 +11,7 @@ const nextConfig = {
   experimental: {
     // @see `deleteIsrFilesCreatedAfterNextBuild()` for rationale
     isrMemoryCacheSize: 0,
+    transpilePackages: ["internal-api-repo"],
   },
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   productionBrowserSourceMaps: true,

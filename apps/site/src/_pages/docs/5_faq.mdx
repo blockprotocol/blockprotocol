@@ -1,6 +1,6 @@
 # FAQs
 
-## Motivation
+## General
 
 <Box>
 
@@ -88,24 +88,30 @@ Specific implementations of the Block Protocol in other applications may be kept
 ## Block Implementation
 
 <Box>
+  
+<FAQ question="Where are blocks hosted and how are they discovered?">
 
-<FAQ question="Where can users host block and entity data?">
+Blocks can be published for free [to the Þ Hub](https://blockprotocol.org/docs/developing-blocks#publishing). Publishing a block to the Þ Hub makes it discoverable to users browsing [blockprotocol.org](https://blockprotocol.org/hub), as well as embedding applications consuming the Þ API.
 
-Blocks can be [published on the Hub](https://blockprotocol.org/docs/developing-blocks#publishing) to make them browsable on [blockprotocol.org](https://blockprotocol.org/hub), and to make their metadata and source code available via our API.
+Through the Þ API, embedders can access the metadata and source code of blocks, listing blocks within their own application and serving them to users.
+
+</FAQ>
+
+<FAQ question="Where do blocks store their data?">
 
 Entity data can be hosted in any application which implements the Block Protocol (e.g. [HASH](https://hash.ai/platform/hash)). _If you are developing an embedding application you would like listed here, please get in touch._
 
 </FAQ>
 
-<FAQ question="Can blocks fetch their own data?">
+<FAQ question="Can blocks themselves choose where to fetch data from?">
 
-Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
+Yes. Blocks can fetch their own data from external services. For example, a map block might fetch data from a mapping service.
 
-We believe the best blocks will communicate data back and forth with the embedding application, making use of the [operations defined in the spec](https://blockprotocol.org/docs/spec/graph-service).
+We believe the best blocks will communicate data back and forth with the embedding application, making use of the operations defined in the [Graph Service specification](https://blockprotocol.org/docs/spec/graph-service).
 
-For example, a mapping block which persists a user’s choices about map positioning or styling back to the application – all without the application having to know anything about the block, or the block having to know anything about the application.
+For example: a mapping block might persist a user’s choices about map positioning or styling back to an embedding application, all without the application knowing anything about the block, or the block even being aware of which application it is being used within.
 
-One aim of the Block Protocol is that blocks can store and retrieve data in an application without awareness of how exactly the data is stored.
+The Block Protocol enables blocks to store and retrieve data in an application without awareness of how exactly the data is stored.
 
 </FAQ>
 
@@ -117,13 +123,28 @@ To save data beyond the session, blocks should make use of the [operations defin
 
 </FAQ>
 
-<FAQ question="How are Block Protocol blocks different to Web Components?">
+<FAQ question="What are the security considerations of blocks?">
 
-The Block Protocol standardizes how data requests are made between a block and an embedding application.
+Similar to most programming language package managers, because anybody can publish executable code (in the form of a block), it's important you trust the block you're executing.
 
-Web Components (or custom elements) are one way of implementing Block Protocol blocks.
+Because those inserting blocks are often non-technical end users, this isn't always practical. As such, we recommend that embedders implement both sandboxing within their environments, and allow/deny lists.
 
-Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it. The goal of the Block Protocol is to make it so that new blocks can be added to an application without any configuration or without having to learn how they handle data.
+- **Sandboxing** will be covered in depth in our [guide for embedders](https://blockprotocol.org/docs/embedding-blocks).
+- **Allow/deny lists** can be used to resrict or control:
+  - which blocks users are able to discover and insert within your environment
+  - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
+
+Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_. In the future we also plan to expose additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists.
+
+**Real-world example:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been _verified_, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
+
+</FAQ>
+  
+<FAQ question="How does block verification work?">
+
+Blocks submitted to the Þ Hub are immediately available for discovery and use. However, when blocks are published or updated, they're also added to a _review queue_.
+
+We periodically review all blocks in the queue, checking for basic indicators (and contraindicators) of a block's quality, security and integrity. While this check does not represent a fully comprehensive audit of a block, the process provides a baseline level of assurance regarding a block's fitness for purpose, and all reviewed blocks which pass this review process receive the 'verified' badge.
 
 </FAQ>
 
@@ -155,6 +176,34 @@ Blocks composed of other blocks is an important feature which we believe the Blo
 A simple example is a `ListBlock` which is composed of a list of other blocks, and for which it has placeholders within it.
 
 Blocks which are made up of other blocks may be referred to as “compound blocks”. We will be publishing example compound blocks soon.
+
+</FAQ>
+
+</Box>
+
+## Related technologies
+
+<Box>
+
+<FAQ question="How do Block Protocol blocks differ from Web Components?">
+
+Web Components can _describe_ the events they dispatch programmatically, but each one can be different. This means that you often need to know the details of how of a specific element operates in order to implement it within an application.
+
+The goal of the Block Protocol is to allow new blocks to be added to applications _without_ any case-specific configuration or requirement that either the embedder or block know about each other's existence ahead of time.
+
+To do this, the Block Protocol standardizes how _data requests_ are made between a block and an embedding application.
+
+Web Components (or custom elements) are a popular way of implementing Block Protocol blocks.
+
+</FAQ>
+  
+<FAQ question="How does the Block Protocol relate to GraphQL?">
+
+GraphQL provides a [“syntax and system for describing [application] data requirements and interactions”](https://spec.graphql.org/October2021/#sec-Overview), whereas the Block Protocol is specifying a particular set of interactions: those between a block and any application embedding it.
+
+It would be possible to define the operations specified in the Block Protocol in GraphQL - e.g. `createEntity` - or to extend the GraphQL spec to include them.
+
+We do not yet believe it necessary to specify block-application requests in GraphQL syntax nor require that they be executed by the embedding application according to the GraphQL specification, although we are open to the idea. It may become more attractive as operations evolve to include more features already covered by GraphQL (e.g. subscriptions, selection sets).
 
 </FAQ>
 
@@ -239,7 +288,7 @@ It helps machines more easily understand how new schemas fit in to existing know
 </InfoCardWrapper>
 </FAQ>
 
-<FAQ question="Why does the Block Protocol include a schema editor?">
+<FAQ question="Why does the Block Protocol include a type/schema editor?">
 
 A semantic type system is central to our vision for the Block Protocol.
 
@@ -249,9 +298,9 @@ We don’t believe that a single set of schemas provided by any one standards or
 
 The Block Protocol website includes a schema editor that provides a convenient way to define new entity types used by or with blocks and their embedding applications. These are then hosted persistently and made accessible via the same content delivery network that serves blocks from the [Block Protocol Hub](https://blockprotocol.org/hub), guaranteeing their availability and discoverability.
 
-<InfoCard variant="warning" title="Who can see my schemas?">
+<InfoCard variant="warning" title="Who can see my types/schemas?">
 
-All schemas created on the Block Protocol website are currently public. In future we’ll support the creation of private schemas as well.
+All types created on the Block Protocol website are currently public. In the future we’ll support the creation of private types as well.
 
 </InfoCard>
 
@@ -292,16 +341,6 @@ We expect to have to add custom keywords to cover relationships which JSON Schem
 We encourage applications to include JSON-LD describing entities on their public pages to make them machine-readable.
 
 In theory, the Block Protocol could use JSON-LD as the format in which entities are passed between applications and blocks. We did not pursue this because we believe it will be easier and more scalable to handle links between entities outside the JSON for the entity itself, [as described here](https://blockprotocol.org/docs/spec/graph-service). We have also taken a different approach to identifying entities, which may not have a public URI and may require a combination of fields to identify.
-
-</FAQ>
-
-<FAQ question="How does the Block Protocol relate to GraphQL?">
-
-GraphQL provides a [“syntax and system for describing [application] data requirements and interactions”](https://spec.graphql.org/October2021/#sec-Overview), whereas the Block Protocol is specifying a particular set of interactions: those between a block and any application embedding it.
-
-It would be possible to define the operations specified in the Block Protocol in GraphQL - e.g. `createEntity` - or to extend the GraphQL spec to include them.
-
-We do not yet believe it necessary to specify block-application requests in GraphQL syntax nor require that they be executed by the embedding application according to the GraphQL specification, although we are open to the idea. It may become more attractive as operations evolve to include more features already covered by GraphQL (e.g. subscriptions, selection sets).
 
 </FAQ>
 

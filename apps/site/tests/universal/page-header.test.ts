@@ -32,7 +32,7 @@ test("page header navigation works", async ({
     await openMobileNav(page);
   }
 
-  await navSelector.locator("text=Documentation").click();
+  await navSelector.locator("text=Docs").click();
   await expect(page).toHaveURL("/docs");
   await expect(page.locator('h1:has-text("Introduction")')).toBeVisible();
 
@@ -40,18 +40,16 @@ test("page header navigation works", async ({
   await page.locator("header svg").first().click();
   await expect(page).toHaveURL("/");
   await expect(
-    page.locator("text=The open standard for building block-based interfaces"),
+    page.locator("text=The open standard for block-based apps"),
   ).toBeVisible();
 
   if (isMobile) {
     await openMobileNav(page);
   }
 
-  await navSelector.locator("text=Sign Up").click();
+  await navSelector.locator("text=Create your account").click();
   await expect(page).toHaveURL("/signup");
-  await expect(
-    page.locator("text=Create your Block Protocol account"),
-  ).toBeVisible();
+  await expect(page.locator("text=Create an account")).toBeVisible();
 
   await openLoginModal({ page, isMobile });
   await expect(page).toHaveURL("/signup");
