@@ -34,7 +34,7 @@ export const UserAvatar: FunctionComponent<UserAvatarProps> = ({
         sx={{
           color: ({ palette }) => palette.gray[70],
           fontSize: size / 2,
-          lineHeight: size,
+          lineHeight: `${size}px`,
         }}
       >
         {preferredName?.charAt(0).toUpperCase()}
