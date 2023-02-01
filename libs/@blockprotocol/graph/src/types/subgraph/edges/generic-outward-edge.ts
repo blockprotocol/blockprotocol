@@ -1,3 +1,4 @@
+import { GraphElementIdentifiers } from "../element-mappings.js";
 import {
   KnowledgeGraphEdgeKind,
   OntologyEdgeKind,
@@ -14,7 +15,7 @@ export type GenericOutwardEdge<
     | OntologyEdgeKind
     | SharedEdgeKind,
   Reversed extends boolean = boolean,
-  Endpoint = unknown,
+  Endpoint extends GraphElementIdentifiers<boolean>["identifier"] = GraphElementIdentifiers<boolean>["identifier"],
 > = {
   kind: EdgeKind;
   reversed: Reversed;
