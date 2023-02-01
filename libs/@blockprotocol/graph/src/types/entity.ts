@@ -165,7 +165,7 @@ export type AggregateEntitiesData = {
 
 export type AggregateEntitiesResult<
   Temporal extends boolean,
-  T extends Subgraph<EntityRootType<Temporal>>,
+  T extends Subgraph<Temporal, EntityRootType<Temporal>>,
 > = {
   results: T;
   operation: AggregateOperationInput &
