@@ -2,12 +2,14 @@ import { addEntitiesToSubgraphByMutation } from "../../internal/mutate-subgraph.
 import {
   Entity,
   EntityRecordId,
+  EntityRootType,
   GraphResolveDepths,
+  ResolvedQueryTemporalAxes,
   Subgraph,
 } from "../../types.js";
 
 /**
- * Builds a Subgraph from a given set of entities, some (or all) of which may be 'link entities' –
+ * Builds a {@link Subgraph} from a given {@link Entity} set, some (or all) of which may be 'link entities' –
  * i.e. entities that represent relationships between other entities – or other entities.
  *
  * The set of entities should represent the result of a query on a graph.
@@ -16,29 +18,34 @@ import {
  * The maximum value for any single depth is 255.
  *
  * This function does NOT verify that the provided depths are accurate for the data.
- *   – the caller is responsible for this.
+ * This function does NOT verify if provided temporal axes are accurate for the data.
+ *   - the caller is responsible for both of the above.
  * It DOES check that the provided roots are present in the data.
  *
  * @param data – the data to build the subgraph from (which becomes the vertices)
  * @param data.entities – the entities to build the subgraph from
  * @param depths – the depth values to provide in the returned subgraph
  * @param rootRecordIds – the root values to provide in the returned subgraph
+ * @param {ResolvedQueryTemporalAxes} temporalAxes - the temporal axes that were used when originally selecting the
+ *   provided data
  *
  * @returns a Subgraph containing:
  *   - 'vertices' containing the provided entities
  *   - 'edges' calculated by the function, representing connections between vertices
  *   - 'depths' as provided by the caller
  *   - 'roots' as provided by the caller
+ *   - 'temporalAxes' where both the `initial` and `resolved` are as provided by the caller
  *
  * @throws if the provided roots are not present in the data
  *
  * @todo add support for ontology vertices (e.g. entity types)
  */
-export const buildSubgraph = (
-  data: { entities: Entity[] },
+export const buildSubgraph = <Temporal extends boolean>(
+  data: { entities: Entity<Temporal>[] },
   rootRecordIds: EntityRecordId[],
   depths: GraphResolveDepths,
-) => {
+  temporalAxes: Temporal extends true ? ResolvedQueryTemporalAxes : undefined,
+): Subgraph<Temporal, EntityRootType<Temporal>> => {
   const missingRoots = rootRecordIds.filter(
     ({ entityId, editionId }) =>
       !data.entities.find(
@@ -65,11 +72,20 @@ export const buildSubgraph = (
     revisionId: rootRecordId.editionId,
   }));
 
-  const subgraph: Subgraph = {
+  // @ts-expect-error -- @todo, how do we convince TS that we're only setting this when the generic is satisfied
+  const subgraph: Subgraph<Temporal, EntityRootType<Temporal>> = {
     roots,
     vertices: {},
     edges: {},
     depths,
+    ...(temporalAxes !== undefined
+      ? {
+          temporalAxes: {
+            initial: temporalAxes,
+            resolved: temporalAxes,
+          },
+        }
+      : {}),
   };
 
   addEntitiesToSubgraphByMutation(subgraph, data.entities);
