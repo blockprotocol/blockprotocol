@@ -1,43 +1,46 @@
+import { ServiceHandler } from "@blockprotocol/core";
+import { GenericMessageCallback } from "@blockprotocol/core/src/types";
 import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
 
-const useHookServiceConstructor = <
-  T extends typeof HookBlockHandler | typeof HookEmbedderHandler,
->({
+type ServiceConstructor<T extends ServiceHandler> = {
+  new (arg: {
+    callbacks?: Record<string, GenericMessageCallback>;
+    element?: HTMLElement | null;
+  }): T;
+};
+
+const useServiceConstructor = <T extends ServiceHandler>({
   Handler,
   constructorArgs,
   ref,
 }: {
-  Handler: T;
-  constructorArgs?: Omit<ConstructorParameters<T>[0], "element">;
+  Handler: ServiceConstructor<T>;
+  constructorArgs?: { callbacks?: Record<string, GenericMessageCallback> };
   ref: RefObject<HTMLElement>;
 }) => {
   const previousRef = useRef<HTMLElement | null>(null);
   const initialisedRef = useRef(false);
 
-  const [hookService, setHookService] = useState<
-    T extends typeof HookBlockHandler ? HookBlockHandler : HookEmbedderHandler
-  >(
-    () =>
-      new Handler(constructorArgs ?? {}) as T extends typeof HookBlockHandler // @todo fix these casts
-        ? HookBlockHandler
-        : HookEmbedderHandler,
+  const [service, setService] = useState<T>(
+    () => new Handler(constructorArgs ?? {}),
   );
 
-  const previousCallbacks = useRef<
-    ConstructorParameters<T>[0]["callbacks"] | null
-  >(null);
+  const previousCallbacks = useRef<Record<
+    string,
+    GenericMessageCallback
+  > | null>(null);
 
   useLayoutEffect(() => {
     if (previousCallbacks.current) {
-      hookService.removeCallbacks(previousCallbacks.current);
+      service.removeCallbacks(previousCallbacks.current);
     }
 
     previousCallbacks.current = constructorArgs?.callbacks ?? null;
 
     if (constructorArgs?.callbacks) {
-      hookService.registerCallbacks(constructorArgs.callbacks);
+      service.registerCallbacks(constructorArgs.callbacks);
     }
   });
 
@@ -48,22 +51,20 @@ const useHookServiceConstructor = <
     }
 
     if (previousRef.current) {
-      hookService.destroy();
+      service.destroy();
     }
 
     previousRef.current = ref.current;
 
     if (ref.current) {
       if (!initialisedRef.current) {
-        hookService.initialize(ref.current);
+        service.initialize(ref.current);
       } else {
-        setHookService(
+        setService(
           new Handler({
             element: ref.current,
-            ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
-          }) as T extends typeof HookBlockHandler // @todo fix these casts
-            ? HookBlockHandler
-            : HookEmbedderHandler,
+            ...constructorArgs,
+          }),
         );
       }
 
@@ -71,7 +72,7 @@ const useHookServiceConstructor = <
     }
   });
 
-  return { hookService };
+  return service;
 };
 
 /**
@@ -88,13 +89,13 @@ export const useHookBlockService = (
     ConstructorParameters<typeof HookBlockHandler>[0],
     "element"
   >,
-): { hookService: HookBlockHandler } => {
-  return useHookServiceConstructor({
+): { hookService: HookBlockHandler } => ({
+  hookService: useServiceConstructor({
     Handler: HookBlockHandler,
     constructorArgs,
     ref,
-  });
-};
+  }),
+});
 
 /**
  * Create a HookEmbedderHandler instance, using a reference to an element
@@ -110,13 +111,13 @@ export const useHookEmbedderService = (
     ConstructorParameters<typeof HookEmbedderHandler>[0],
     "element"
   >,
-): { hookService: HookEmbedderHandler } => {
-  return useHookServiceConstructor({
+): { hookService: HookEmbedderHandler } => ({
+  hookService: useServiceConstructor({
     Handler: HookEmbedderHandler,
     ref,
     constructorArgs,
-  });
-};
+  }),
+});
 
 type Hook<T extends HTMLElement> = {
   id: string | null;
