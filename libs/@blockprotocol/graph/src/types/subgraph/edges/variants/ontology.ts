@@ -2,7 +2,7 @@ import { Subtype } from "../../../../util.js";
 import { OntologyTypeVertexId } from "../../vertices.js";
 import { GenericOutwardEdge } from "../generic-outward-edge.js";
 import { OntologyEdgeKind, SharedEdgeKind } from "../kind.js";
-import { EntityIdAndTimestamp, OutwardEdge } from "../outward-edge.js";
+import { EntityValidInterval, OutwardEdge } from "../outward-edge.js";
 
 export type InheritsFromEdge = Subtype<
   GenericOutwardEdge,
@@ -169,7 +169,7 @@ export type IsTypeOfEdge = Subtype<
   {
     reversed: true;
     kind: "IS_OF_TYPE";
-    rightEndpoint: EntityIdAndTimestamp;
+    rightEndpoint: EntityValidInterval;
   }
 >;
 
@@ -201,5 +201,5 @@ export type OntologyOutwardEdge =
 type _CheckOntologyOutwardEdge = Subtype<
   OntologyOutwardEdge,
   | GenericOutwardEdge<OntologyEdgeKind, boolean, OntologyTypeVertexId>
-  | GenericOutwardEdge<SharedEdgeKind, true, EntityIdAndTimestamp>
+  | GenericOutwardEdge<SharedEdgeKind, true, EntityValidInterval>
 >;
