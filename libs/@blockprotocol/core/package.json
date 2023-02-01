@@ -21,9 +21,29 @@
     "name": "HASH",
     "url": "https://hash.ai"
   },
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    },
+    "./react": {
+      "import": "./dist/esm/react.js",
+      "require": "./dist/cjs/react.js"
+    }
+  },
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
   "types": "./dist/esm/index.d.ts",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/esm/index.d.ts"
+      ],
+      "react": [
+        "./dist/esm/react.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],

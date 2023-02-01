@@ -1,4 +1,4 @@
-import { useServiceConstructor } from "@blockprotocol/core/dist/esm/react.js";
+import { useServiceConstructor } from "@blockprotocol/core/react";
 import { RefObject, VoidFunctionComponent } from "react";
 
 import {

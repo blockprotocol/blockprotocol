@@ -45,8 +45,13 @@ module.exports = {
     "import/no-unresolved": [
       "error",
       {
-        // graph uses 'exports' field in package.json https://github.com/import-js/eslint-plugin-import/issues/1810
-        ignore: ["^https?://", "^@blockprotocol/graph", "^@blockprotocol/hook"],
+        ignore: [
+          "^https?://",
+          // These packages uses 'exports' field in package.json https://github.com/import-js/eslint-plugin-import/issues/1810
+          "^@blockprotocol/core",
+          "^@blockprotocol/graph",
+          "^@blockprotocol/hook",
+        ],
       },
     ],
     "import/prefer-default-export": "off",
