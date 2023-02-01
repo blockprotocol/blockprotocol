@@ -30,6 +30,8 @@ export const useServiceConstructor = <T extends ServiceHandler>({
     GenericMessageCallback
   > | null>(null);
 
+  // Using a layout effect to ensure callbacks are updated as early as possible,
+  // to avoid any potential timing bugs
   useLayoutEffect(() => {
     if (previousCallbacks.current) {
       service.removeCallbacks(previousCallbacks.current);
