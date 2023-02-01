@@ -17,21 +17,21 @@ export type TemporalAxes = "transactionTime" | "decisionTime";
 /**
  * The bound of a time-interval that is either exclusively or inclusively limited by a `Timestamp`
  */
-export type TimestampLimitedTemporalBound = {
+export type LimitedTemporalBound = {
   kind: "inclusive" | "exclusive";
   limit: Timestamp;
 };
 
-export type InclusiveTimestampLimitedTemporalBound = Subtype<
-  TimestampLimitedTemporalBound,
+export type InclusiveLimitedTemporalBound = Subtype<
+  LimitedTemporalBound,
   {
     kind: "inclusive";
     limit: Timestamp;
   }
 >;
 
-export type ExclusiveTimestampLimitedTemporalBound = Subtype<
-  TimestampLimitedTemporalBound,
+export type ExclusiveLimitedTemporalBound = Subtype<
+  LimitedTemporalBound,
   {
     kind: "exclusive";
     limit: Timestamp;
@@ -43,7 +43,7 @@ export type Unbounded = { kind: "unbounded" };
 /**
  * The bound (or explicit lack of a bound) of a time-interval
  */
-export type TemporalBound = Unbounded | TimestampLimitedTemporalBound;
+export type TemporalBound = Unbounded | LimitedTemporalBound;
 
 export type TimeInterval<
   StartBound extends TemporalBound | null,
@@ -59,8 +59,8 @@ export type NonNullTimeInterval<
 > = TimeInterval<StartBound, EndBound>;
 
 export type BoundedTimeInterval = TimeInterval<
-  TimestampLimitedTemporalBound,
-  TimestampLimitedTemporalBound
+  LimitedTemporalBound,
+  LimitedTemporalBound
 >;
 
 /**
@@ -72,7 +72,7 @@ export type BoundedTimeInterval = TimeInterval<
 export type VariableTemporalAxis<
   Axis extends TemporalAxes,
   StartBound extends TemporalBound | null,
-  EndBound extends TimestampLimitedTemporalBound | null,
+  EndBound extends LimitedTemporalBound | null,
 > = {
   axis: Axis;
   interval: TimeInterval<StartBound, EndBound>;

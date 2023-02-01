@@ -1,8 +1,8 @@
 import {
+  LimitedTemporalBound,
   NonNullTimeInterval,
   TemporalBound,
   Timestamp,
-  TimestampLimitedTemporalBound,
 } from "../types/temporal-versioning.js";
 import { boundIsAdjacentToBound, compareBounds } from "./bound.js";
 
@@ -67,7 +67,7 @@ export const intervalContainsTimestamp = (
   interval: NonNullTimeInterval,
   timestamp: Timestamp,
 ): boolean => {
-  const timestampAsBound: TimestampLimitedTemporalBound = {
+  const timestampAsBound: LimitedTemporalBound = {
     kind: "inclusive",
     limit: timestamp,
   };
@@ -125,11 +125,11 @@ type IntersectionReturn<
   NonNullTimeInterval<infer RightStartBound, infer RightEndBound>,
 ]
   ? NonNullTimeInterval<
-      LeftStartBound | RightStartBound extends TimestampLimitedTemporalBound
-        ? TimestampLimitedTemporalBound
+      LeftStartBound | RightStartBound extends LimitedTemporalBound
+        ? LimitedTemporalBound
         : TemporalBound,
-      LeftEndBound | RightEndBound extends TimestampLimitedTemporalBound
-        ? TimestampLimitedTemporalBound
+      LeftEndBound | RightEndBound extends LimitedTemporalBound
+        ? LimitedTemporalBound
         : TemporalBound
     >
   : never;
@@ -186,14 +186,14 @@ type MergeReturn<
   NonNullTimeInterval<infer RightStartBound, infer RightEndBound>,
 ]
   ? NonNullTimeInterval<
-      LeftStartBound extends TimestampLimitedTemporalBound
-        ? RightStartBound extends TimestampLimitedTemporalBound
-          ? TimestampLimitedTemporalBound
+      LeftStartBound extends LimitedTemporalBound
+        ? RightStartBound extends LimitedTemporalBound
+          ? LimitedTemporalBound
           : TemporalBound
         : TemporalBound,
-      LeftEndBound extends TimestampLimitedTemporalBound
-        ? RightEndBound extends TimestampLimitedTemporalBound
-          ? TimestampLimitedTemporalBound
+      LeftEndBound extends LimitedTemporalBound
+        ? RightEndBound extends LimitedTemporalBound
+          ? LimitedTemporalBound
           : TemporalBound
         : TemporalBound
     >
