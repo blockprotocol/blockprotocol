@@ -1,14 +1,14 @@
-import { BaseUri, VersionedUri } from "@blockprotocol/type-system";
+import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { Entity, EntityId, EntityRecordId } from "../entity";
+import { Entity, EntityId, EntityRecordId } from "../entity.js";
 import {
   DataTypeWithMetadata,
   EntityTypeWithMetadata,
   OntologyTypeRecordId,
   PropertyTypeWithMetadata,
-} from "../ontology";
-import { EntityValidInterval } from "./edges";
-import { EntityIdAndTimestamp } from "./edges/outward-edge";
+} from "../ontology.js";
+import { EntityValidInterval } from "./edges.js";
+import { EntityIdAndTimestamp } from "./edges/outward-edge.js";
 import {
   DataTypeVertex,
   EntityTypeVertex,
@@ -16,7 +16,7 @@ import {
   EntityVertexId,
   OntologyTypeVertexId,
   PropertyTypeVertex,
-} from "./vertices";
+} from "./vertices.js";
 
 /**
  * A utility type that maps various ways of identifying a single (or series of) element(s) of the graph to their
