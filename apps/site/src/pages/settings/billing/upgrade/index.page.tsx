@@ -57,15 +57,15 @@ type UpgradePageProps = {
 };
 
 export const getStaticProps: GetStaticProps<UpgradePageProps> = async () => {
-  const {
-    data: { subscriptionTierPrices },
-  } = await internalApi.getSubscriptionTierPrices().catch(() => ({
-    data: { subscriptionTierPrices: null },
+  const { data } = await internalApi.getSubscriptionTierPrices().catch(() => ({
+    data: null,
   }));
 
   return {
     props: {
-      stringifiedSubscriptionTierPrices: JSON.stringify(subscriptionTierPrices),
+      stringifiedSubscriptionTierPrices: JSON.stringify(
+        data?.subscriptionTierPrices ?? null,
+      ),
     },
     revalidate: 10,
   };
