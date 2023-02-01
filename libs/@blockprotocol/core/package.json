@@ -40,6 +40,9 @@
     "es-module-lexer": "^0.10.5",
     "uuid": "^8.3.2"
   },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",

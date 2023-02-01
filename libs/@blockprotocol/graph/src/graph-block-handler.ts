@@ -23,7 +23,6 @@ import {
   DeleteEntityTypeData,
   DeleteLinkData,
   DeleteLinkedAggregationData,
-  EmbedderGraphMessageCallbacks,
   Entity,
   EntityType,
   GetEntityData,
