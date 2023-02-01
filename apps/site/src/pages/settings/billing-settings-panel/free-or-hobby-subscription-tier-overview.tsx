@@ -459,7 +459,6 @@ export const FreeOrHobbySubscriptionTierOverview: FunctionComponent<{
           <Box display="flex" alignItems="center">
             <Typography sx={{ fontSize: 28 }}>
               <strong>
-                {" "}
                 {priceToHumanReadable({
                   amountInCents: subscriptionTierPrices.pro.unit_amount!,
                   currency: subscriptionTierPrices.pro.currency,
