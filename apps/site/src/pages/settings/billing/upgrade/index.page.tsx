@@ -17,7 +17,6 @@ import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import Stripe from "stripe";
 
 import { Button } from "../../../../components/button";
 import { FontAwesomeIcon } from "../../../../components/icons";
@@ -101,7 +100,6 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   ]);
 
   // State used when upgrading from an existing subscription
-  const [_subscription, setSubscription] = useState<Stripe.Subscription>();
   const [isUpgradingSubscription, setIsUpgradingSubscription] =
     useState<boolean>(false);
 
@@ -140,12 +138,6 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     }
   }, [router, currentSubscriptionTier]);
 
-  const fetchSubscription = useCallback(async () => {
-    const { data } = await internalApi.getSubscription({});
-
-    setSubscription(data.subscription);
-  }, []);
-
   const isUpgradingExistingPaidSubscription = useMemo<boolean>(
     () =>
       !!upgradedSubscriptionTier &&
@@ -153,12 +145,6 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
       currentSubscriptionTier !== upgradedSubscriptionTier,
     [currentSubscriptionTier, upgradedSubscriptionTier],
   );
-
-  useEffect(() => {
-    if (isUpgradingExistingPaidSubscription) {
-      void fetchSubscription();
-    }
-  }, [isUpgradingExistingPaidSubscription, fetchSubscription]);
 
   const stripeElementsOptions = useMemo<StripeElementsOptions>(
     () => ({
