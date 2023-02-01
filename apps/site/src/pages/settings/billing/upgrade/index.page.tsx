@@ -53,7 +53,7 @@ const stripePromise = loadStripe(
 );
 
 type UpgradePageProps = {
-  subscriptionTierPrices: SubscriptionTierPrices | null;
+  stringifiedSubscriptionTierPrices: string;
 };
 
 export const getStaticProps: GetStaticProps<UpgradePageProps> = async () => {
@@ -65,7 +65,7 @@ export const getStaticProps: GetStaticProps<UpgradePageProps> = async () => {
 
   return {
     props: {
-      subscriptionTierPrices,
+      stringifiedSubscriptionTierPrices: JSON.stringify(subscriptionTierPrices),
     },
     revalidate: 10,
   };
@@ -73,10 +73,18 @@ export const getStaticProps: GetStaticProps<UpgradePageProps> = async () => {
 
 const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   user,
-  subscriptionTierPrices: initialSubscriptionTierPrices,
+  stringifiedSubscriptionTierPrices,
 }) => {
   const router = useRouter();
   const { setUser } = useUser();
+
+  const initialSubscriptionTierPrices = useMemo(
+    () =>
+      (JSON.parse(
+        stringifiedSubscriptionTierPrices,
+      ) as SubscriptionTierPrices | null) ?? undefined,
+    [stringifiedSubscriptionTierPrices],
+  );
 
   const [subscriptionId, setSubscriptionId] = useState<string>();
   const [clientSecret, setClientSecret] = useState<string>();
