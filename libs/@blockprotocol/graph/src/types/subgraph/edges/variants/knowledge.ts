@@ -1,18 +1,11 @@
-/**
- * A collection of 'aliases' which describe various variants of outward edges in more accessible-forms
- */
-
-import { Subtype } from "../../../util.js";
-import { OntologyTypeVertexId } from "../vertices";
-import {
-  EntityIdAndTimestamp,
-  KnowledgeGraphOutwardEdge,
-  OntologyOutwardEdge,
-  OutwardEdge,
-} from "./outward-edge.js";
+import { Subtype } from "../../../../util.js";
+import { OntologyTypeVertexId } from "../../vertices.js";
+import { GenericOutwardEdge } from "../generic-outward-edge.js";
+import { KnowledgeGraphEdgeKind, SharedEdgeKind } from "../kind.js";
+import { EntityIdAndTimestamp, OutwardEdge } from "../outward-edge.js";
 
 export type OutgoingLinkEdge = Subtype<
-  KnowledgeGraphOutwardEdge,
+  GenericOutwardEdge,
   {
     reversed: true;
     kind: "HAS_LEFT_ENTITY";
@@ -27,7 +20,7 @@ export const isOutgoingLinkEdge = (
 };
 
 export type HasLeftEntityEdge = Subtype<
-  KnowledgeGraphOutwardEdge,
+  GenericOutwardEdge,
   {
     reversed: false;
     kind: "HAS_LEFT_ENTITY";
@@ -42,7 +35,7 @@ export const isHasLeftEntityEdge = (
 };
 
 export type HasRightEntityEdge = Subtype<
-  KnowledgeGraphOutwardEdge,
+  GenericOutwardEdge,
   {
     reversed: false;
     kind: "HAS_RIGHT_ENTITY";
@@ -57,7 +50,7 @@ export const isHasRightEntityEdge = (
 };
 
 export type IncomingLinkEdge = Subtype<
-  KnowledgeGraphOutwardEdge,
+  GenericOutwardEdge,
   {
     reversed: true;
     kind: "HAS_RIGHT_ENTITY";
@@ -71,19 +64,36 @@ export const isIncomingLinkEdge = (
   return outwardEdge.kind === "HAS_RIGHT_ENTITY" && outwardEdge.reversed;
 };
 
-export type ConstrainsPropertiesOnEdge = Subtype<
-  OntologyOutwardEdge,
+export type IsOfTypeEdge = Subtype<
+  GenericOutwardEdge,
   {
     reversed: false;
-    kind: "CONSTRAINS_PROPERTIES_ON";
+    kind: "IS_OF_TYPE";
     rightEndpoint: OntologyTypeVertexId;
   }
 >;
 
-export const isConstrainsPropertiesOnEdge = (
+export const isIsOfTypeEdge = (
   outwardEdge: OutwardEdge,
-): outwardEdge is ConstrainsPropertiesOnEdge => {
-  return (
-    outwardEdge.kind === "CONSTRAINS_PROPERTIES_ON" && !outwardEdge.reversed
-  );
+): outwardEdge is IsOfTypeEdge => {
+  return outwardEdge.kind === "IS_OF_TYPE" && !outwardEdge.reversed;
 };
+
+export type KnowledgeGraphOutwardEdge =
+  | OutgoingLinkEdge
+  | IncomingLinkEdge
+  | HasLeftEntityEdge
+  | HasRightEntityEdge
+  | IsOfTypeEdge;
+
+/**
+ * This provides a sanity check that we've fully expressed all variants for KnowledgeGraphOutward edges. Should a new
+ * variant be required (for example by the introduction of a new `SharedEdgeKind`) `tsc` will report an error.
+ *
+ * This can be affirmed by commenting out one of the edges above
+ */
+type _CheckKnowledgeGraphOutwardEdge = Subtype<
+  KnowledgeGraphOutwardEdge,
+  | GenericOutwardEdge<KnowledgeGraphEdgeKind, boolean, EntityIdAndTimestamp>
+  | GenericOutwardEdge<SharedEdgeKind, false, OntologyTypeVertexId>
+>;
