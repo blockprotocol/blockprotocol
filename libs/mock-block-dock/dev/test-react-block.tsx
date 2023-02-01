@@ -2,9 +2,8 @@ import {
   type BlockComponent,
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
-import { HookError, HookResponse } from "@blockprotocol/hook";
 import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 type AppProps = {
   name: string;
@@ -18,18 +17,7 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
   const blockRef = useRef<HTMLDivElement>(null);
   const hookRef = useRef<HTMLDivElement>(null);
 
-  const [toggle, setToggle] = useState(true);
-  const [count, setCount] = useState(1);
-
-  const { graphService } = useGraphBlockService(blockRef, {
-    callbacks: toggle
-      ? {
-          blockEntity(...args) {
-            console.log("graph-block", toggle, count, ...args);
-          },
-        }
-      : {},
-  });
+  const { graphService } = useGraphBlockService(blockRef);
 
   const { hookService } = useHookBlockService(blockRef);
 
@@ -37,16 +25,6 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
     throw new Error(
       "Fallback called – dock is not correctly handling text hook.",
     );
-  });
-
-  useEffect(() => {
-    // @ts-expect-error using private API
-    hookService.sendMessage({
-      message: {
-        messageName: "test",
-        data: { toggle, count },
-      },
-    });
   });
 
   if (readonly) {
@@ -65,10 +43,6 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
 
   return (
     <div ref={blockRef}>
-      <button onClick={() => setToggle((tgl) => !tgl)}>
-        {toggle ? "TRUE" : "FALSE"}
-      </button>
-      <button onClick={() => setCount((cnt) => cnt + 1)}>{count}</button>
       <h1>
         Hello {properties.name}! The id of this block is {entityId}
       </h1>
