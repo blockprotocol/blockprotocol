@@ -1,0 +1,8 @@
+{
+  "name": "@infra/cloudflare-r2-wrangler",
+  "version": "0.0.0-private",
+  "private": true,
+  "dependencies": {
+    "realm-web": "1.7.1"
+  }
+}
