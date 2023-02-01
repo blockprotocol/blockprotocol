@@ -22,15 +22,16 @@ export type AggregateEntityTypesData = {
   operation?: Omit<AggregateOperationInput, "entityTypeId"> | null;
 };
 
-export type AggregateEntityTypesResult<T extends Subgraph<EntityTypeRootType>> =
-  {
-    results: T[];
-    operation: AggregateOperationInput &
-      Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
-        pageCount?: number | null;
-        totalCount?: number | null;
-      };
-  };
+export type AggregateEntityTypesResult<
+  T extends Subgraph<boolean, EntityTypeRootType>,
+> = {
+  results: T[];
+  operation: AggregateOperationInput &
+    Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
+      pageCount?: number | null;
+      totalCount?: number | null;
+    };
+};
 
 export type GetEntityTypeData = {
   entityTypeId: VersionedUri;
