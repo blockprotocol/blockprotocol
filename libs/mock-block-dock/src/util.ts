@@ -4,11 +4,12 @@ import {
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
   Entity,
-  EntityRootedSubgraph,
+  EntityRootType,
   EntityType,
-  EntityTypeRootedSubgraph,
+  EntityTypeRootType,
   MultiFilter,
   MultiSort,
+  Subgraph,
 } from "@blockprotocol/graph";
 
 type TupleEntry<
@@ -187,8 +188,8 @@ export type FilterResult<T extends Entity | EntityType = Entity | EntityType> =
   {
     results: T[];
     operation:
-      | AggregateEntitiesResult<EntityRootedSubgraph>["operation"]
-      | AggregateEntityTypesResult<EntityTypeRootedSubgraph>["operation"];
+      | AggregateEntitiesResult<Subgraph<EntityRootType>>["operation"]
+      | AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>["operation"];
   };
 
 export function filterAndSortEntitiesOrTypes(

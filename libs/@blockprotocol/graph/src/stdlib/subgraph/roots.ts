@@ -1,10 +1,10 @@
 import {
-  DataTypeRootedSubgraph,
-  EntityRootedSubgraph,
-  EntityTypeRootedSubgraph,
+  DataTypeRootType,
+  EntityRootType,
+  EntityTypeRootType,
   isEntityVertexId,
   isOntologyTypeVertexId,
-  PropertyTypeRootedSubgraph,
+  PropertyTypeRootType,
   Subgraph,
   SubgraphRootType,
 } from "../../types/subgraph.js";
@@ -19,10 +19,10 @@ import { getPropertyTypeByVertexId } from "./element/property-type.js";
  * Returns all root elements.
  *
  * For a narrower return type, first narrow the type of `subgraph` by using one of the helper type-guards:
- * - isDataTypeRootedSubgraph
- * - isPropertyTypeRootedSubgraph
- * - isEntityTypeRootedSubgraph
- * - isEntityRootedSubgraph
+ * - isSubgraph<DataTypeRootType>
+ * - isSubgraph<PropertyTypeRootType>
+ * - isSubgraph<EntityTypeRootType>
+ * - isSubgraph<EntityRootType>
  *
  * @param subgraph
  */
@@ -55,7 +55,7 @@ export const getRoots = <RootType extends SubgraphRootType>(
  */
 export const isDataTypeRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is DataTypeRootedSubgraph => {
+): subgraph is Subgraph<DataTypeRootType> => {
   for (const rootVertexId of subgraph.roots) {
     if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
@@ -82,7 +82,7 @@ export const isDataTypeRootedSubgraph = (
  */
 export const isPropertyTypeRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is PropertyTypeRootedSubgraph => {
+): subgraph is Subgraph<PropertyTypeRootType> => {
   for (const rootVertexId of subgraph.roots) {
     if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
@@ -109,7 +109,7 @@ export const isPropertyTypeRootedSubgraph = (
  */
 export const isEntityTypeRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is EntityTypeRootedSubgraph => {
+): subgraph is Subgraph<EntityTypeRootType> => {
   for (const rootVertexId of subgraph.roots) {
     if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
@@ -136,7 +136,7 @@ export const isEntityTypeRootedSubgraph = (
  */
 export const isEntityRootedSubgraph = (
   subgraph: Subgraph,
-): subgraph is EntityRootedSubgraph => {
+): subgraph is Subgraph<EntityRootType> => {
   for (const rootVertexId of subgraph.roots) {
     if (!isEntityVertexId(rootVertexId)) {
       return false;

@@ -20,11 +20,12 @@ import {
   DeleteEntityData,
   Entity,
   EntityPropertiesObject,
-  EntityRootedSubgraph,
-  EntityTypeRootedSubgraph,
+  EntityRootType,
+  EntityTypeRootType,
   GetEntityData,
   GetEntityTypeData,
   ReadOrModifyResourceError,
+  Subgraph,
   UpdateEntityData,
   UploadFileData,
   UploadFileReturn,
@@ -134,7 +135,10 @@ export class GraphBlockHandler
   }
 
   getEntity({ data }: { data?: GetEntityData }) {
-    return this.sendMessage<EntityRootedSubgraph, ReadOrModifyResourceError>({
+    return this.sendMessage<
+      Subgraph<EntityRootType>,
+      ReadOrModifyResourceError
+    >({
       message: {
         messageName: "getEntity",
         data,
@@ -145,7 +149,7 @@ export class GraphBlockHandler
 
   aggregateEntities({ data }: { data?: AggregateEntitiesData }) {
     return this.sendMessage<
-      AggregateEntitiesResult<EntityRootedSubgraph>,
+      AggregateEntitiesResult<Subgraph<EntityRootType>>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -190,7 +194,7 @@ export class GraphBlockHandler
 
   getEntityType({ data }: { data?: GetEntityTypeData }) {
     return this.sendMessage<
-      EntityTypeRootedSubgraph,
+      Subgraph<EntityTypeRootType>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -203,7 +207,7 @@ export class GraphBlockHandler
 
   aggregateEntityTypes({ data }: { data?: AggregateEntityTypesData }) {
     return this.sendMessage<
-      AggregateEntityTypesResult<EntityTypeRootedSubgraph>,
+      AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>,
       ReadOrModifyResourceError
     >({
       message: {

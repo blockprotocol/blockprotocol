@@ -1,8 +1,4 @@
-import {
-  EntityRootedSubgraph,
-  GetEntityData,
-  Subgraph,
-} from "@blockprotocol/graph";
+import { EntityRootType, GetEntityData, Subgraph } from "@blockprotocol/graph";
 import { getEntity as getEntityFromSubgraph } from "@blockprotocol/graph/stdlib";
 
 import { traverseElement } from "../../traverse";
@@ -17,7 +13,7 @@ export const getEntity = (
     },
   }: GetEntityData,
   graph: Subgraph,
-): EntityRootedSubgraph | undefined => {
+): Subgraph<EntityRootType> | undefined => {
   const entityRevision = getEntityFromSubgraph(graph, entityId);
 
   if (entityRevision === undefined) {

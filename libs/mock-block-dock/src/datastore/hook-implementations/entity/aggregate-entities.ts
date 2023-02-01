@@ -1,7 +1,7 @@
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
-  EntityRootedSubgraph,
+  EntityRootType,
   Subgraph,
 } from "@blockprotocol/graph";
 import { getEntities } from "@blockprotocol/graph/stdlib";
@@ -19,7 +19,7 @@ export const aggregateEntities = (
     },
   }: AggregateEntitiesData,
   graph: Subgraph,
-): AggregateEntitiesResult<EntityRootedSubgraph> => {
+): AggregateEntitiesResult<Subgraph<EntityRootType>> => {
   const { results, operation: appliedOperation } = filterAndSortEntitiesOrTypes(
     getEntities(graph),
     {

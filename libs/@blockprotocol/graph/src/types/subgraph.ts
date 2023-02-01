@@ -16,26 +16,31 @@ export * from "./subgraph/graph-resolve-depths.js";
 export * from "./subgraph/time.js";
 export * from "./subgraph/vertices.js";
 
-export type SubgraphRootTypes = {
-  dataType: {
-    vertexId: OntologyTypeVertexId;
-    element: DataTypeWithMetadata;
-  };
-  propertyType: {
-    vertexId: OntologyTypeVertexId;
-    element: PropertyTypeWithMetadata;
-  };
-  entityType: {
-    vertexId: OntologyTypeVertexId;
-    element: EntityTypeWithMetadata;
-  };
-  entity: {
-    vertexId: EntityVertexId;
-    element: Entity;
-  };
+export type DataTypeRootType = {
+  vertexId: OntologyTypeVertexId;
+  element: DataTypeWithMetadata;
 };
 
-export type SubgraphRootType = SubgraphRootTypes[keyof SubgraphRootTypes];
+export type PropertyTypeRootType = {
+  vertexId: OntologyTypeVertexId;
+  element: PropertyTypeWithMetadata;
+};
+
+export type EntityTypeRootType = {
+  vertexId: OntologyTypeVertexId;
+  element: EntityTypeWithMetadata;
+};
+
+export type EntityRootType = {
+  vertexId: EntityVertexId;
+  element: Entity;
+};
+
+export type SubgraphRootType =
+  | DataTypeRootType
+  | PropertyTypeRootType
+  | EntityTypeRootType
+  | EntityRootType;
 
 export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> = {
   roots: RootType["vertexId"][];
@@ -43,12 +48,3 @@ export type Subgraph<RootType extends SubgraphRootType = SubgraphRootType> = {
   edges: Edges;
   depths: GraphResolveDepths;
 };
-
-export type EntityRootedSubgraph = Subgraph<SubgraphRootTypes["entity"]>;
-export type DataTypeRootedSubgraph = Subgraph<SubgraphRootTypes["dataType"]>;
-export type PropertyTypeRootedSubgraph = Subgraph<
-  SubgraphRootTypes["propertyType"]
->;
-export type EntityTypeRootedSubgraph = Subgraph<
-  SubgraphRootTypes["entityType"]
->;

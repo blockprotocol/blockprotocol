@@ -4,7 +4,7 @@ import type {
 } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { EntityRootedSubgraph, Timestamp } from "../types.js";
+import { EntityRootType, Subgraph, Timestamp } from "../types.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
 export type JsonObject = CoreJsonObject;
@@ -138,7 +138,7 @@ export type AggregateEntitiesData = {
   graphResolveDepths?: GraphResolveDepths;
 };
 
-export type AggregateEntitiesResult<T extends EntityRootedSubgraph> = {
+export type AggregateEntitiesResult<T extends Subgraph<EntityRootType>> = {
   results: T;
   operation: AggregateOperationInput &
     Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {

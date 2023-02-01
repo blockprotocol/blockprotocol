@@ -16,8 +16,8 @@ import {
   GetEntityTypeData,
 } from "./ontology/entity-type.js";
 import {
-  EntityRootedSubgraph,
-  EntityTypeRootedSubgraph,
+  EntityRootType,
+  EntityTypeRootType,
   EntityVertexId,
   Subgraph,
 } from "./subgraph.js";
@@ -39,7 +39,7 @@ export type BlockGraphProperties<RootEntity extends Entity = Entity> = {
 };
 
 export type BlockGraphMessageCallbacks = {
-  blockEntitySubgraph: MessageCallback<EntityRootedSubgraph, null>;
+  blockEntitySubgraph: MessageCallback<Subgraph<EntityRootType>, null>;
   readonly: MessageCallback<boolean, null>;
 };
 
@@ -89,13 +89,13 @@ export type EmbedderGraphMessageCallbacks = {
   getEntity: MessageCallback<
     GetEntityData,
     null,
-    EntityRootedSubgraph,
+    Subgraph<EntityRootType>,
     ReadOrModifyResourceError
   >;
   aggregateEntities: MessageCallback<
     AggregateEntitiesData,
     null,
-    AggregateEntitiesResult<EntityRootedSubgraph>,
+    AggregateEntitiesResult<Subgraph<EntityRootType>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Add Type System mutation methods */
@@ -120,13 +120,13 @@ export type EmbedderGraphMessageCallbacks = {
   getEntityType: MessageCallback<
     GetEntityTypeData,
     null,
-    EntityTypeRootedSubgraph,
+    Subgraph<EntityTypeRootType>,
     ReadOrModifyResourceError
   >;
   aggregateEntityTypes: MessageCallback<
     AggregateEntityTypesData,
     null,
-    AggregateEntityTypesResult<EntityTypeRootedSubgraph>,
+    AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>,
     ReadOrModifyResourceError
   >;
   /** @todo - Reimplement linked aggregations */
