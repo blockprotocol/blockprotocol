@@ -1,6 +1,8 @@
+import { unionOfIntervals } from "../stdlib/interval";
 import {
   Entity,
   EntityId,
+  EntityValidInterval,
   EntityVertex,
   KnowledgeGraphOutwardEdge,
   KnowledgeGraphRootedEdges,
@@ -11,18 +13,20 @@ import {
 import { isEqual } from "./mutate-subgraph/is-equal.js";
 
 /**
- * Looking to build a subgraph? You probably want `import { buildSubgraph } from @blockprotocol/graph/stdlib`
+ * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given `Subgraph` by adding the given outwardEdge to the entity at the specified atTime.
+ * This MUTATES the given {@link Subgraph}  by adding the given outwardEdge to the entity at the specified atTime.
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
- * @param subgraph – the subgraph to mutate by adding the outward edge
- * @param sourceEntityId – the id of the entity the edge is coming from
- * @param atTime – the time at which the edge should be recorded as being added at
- * @param outwardEdge – the edge itself
+ * @param {Subgraph} subgraph – the subgraph to mutate by adding the outward edge
+ * @param {EntityId} sourceEntityId – the id of the entity the edge is coming from
+ * @param {Timestamp} atTime – the time at which the edge should be recorded as being added at
+ * @param {KnowledgeGraphOutwardEdge} outwardEdge – the edge itself
  */
-export const addKnowledgeGraphEdgeToSubgraphByMutation = (
-  subgraph: Subgraph,
+export const addKnowledgeGraphEdgeToSubgraphByMutation = <
+  Temporal extends boolean,
+>(
+  subgraph: Subgraph<Temporal>,
   sourceEntityId: EntityId,
   atTime: Timestamp,
   outwardEdge: KnowledgeGraphOutwardEdge,
@@ -50,103 +54,128 @@ export const addKnowledgeGraphEdgeToSubgraphByMutation = (
 };
 
 /**
- * Looking to build a subgraph? You probably want `import { buildSubgraph } from @blockprotocol/graph/stdlib`
+ * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given `Subgraph` by adding the given outwardEdge to the entity at the specified atTime.
+ * This MUTATES the given {@link Subgraph} by adding a given list of entities to the vertices, creating any link edges
+ * that are **directly implied** by any link entities in the list (see note below).
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
- * *Note*: This only adds edges as implied by the given entities, if the `Subgraph` is invalid at the time of method
- * call (e.g. by missing link endpoints), this will not loop through the vertex set to finish incomplete edges.
+ * *Note*: This only adds edges as implied by the given entities, if the {@link Subgraph} is invalid at the time of
+ * method call (e.g. by missing link endpoints), this will not loop through the vertex set to finish incomplete edges.
  *
- * @param subgraph – the subgraph to mutate by adding the provided entities
- * @param entities – the entity to add to the provided subgraph
+ * @param {Subgraph} subgraph – the subgraph to mutate by adding the provided entities
+ * @param {Entity[]} entities – the entity to add to the provided subgraph
  */
-export const addEntitiesToSubgraphByMutation = (
-  subgraph: Subgraph,
-  entities: Entity[],
+export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
+  subgraph: Subgraph<Temporal>,
+  entities: Entity<Temporal>[],
 ) => {
+  /*
+   * @todo This assumes that the left and right entity ID of a link entity is static for its entire lifetime, that is
+   *   not necessarily going to continue being the case
+   */
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
   const linkMap: Record<
     EntityId,
-    { leftEntityId: EntityId; rightEntityId: EntityId; earliestTime: Timestamp }
+    {
+      leftEntityId: EntityId;
+      rightEntityId: EntityId;
+      validIntervals: EntityValidInterval["validInterval"][];
+    }
   > = {};
 
   for (const entity of entities) {
-    const recordId = entity.metadata.recordId;
+    const entityId = entity.metadata.recordId.entityId;
+
+    const entityRevisionValidInterval: EntityValidInterval["validInterval"] =
+      subgraph.temporalAxes !== undefined
+        ? entity.metadata.temporalVersioning[
+            subgraph.temporalAxes.resolved.pinned.axis
+          ]
+        : {
+            start: { kind: "inclusive", limit: new Date(0).toISOString() },
+            end: { kind: "unbounded" },
+          };
+
     if (entity.linkData) {
-      const linkInfo = linkMap[recordId.entityId];
+      const linkInfo = linkMap[entityId];
       if (!linkInfo) {
-        linkMap[recordId.entityId] = {
+        linkMap[entityId] = {
           leftEntityId: entity.linkData.leftEntityId,
           rightEntityId: entity.linkData.rightEntityId,
-          earliestTime: recordId.editionId,
+          validIntervals: [entityRevisionValidInterval],
         };
-      } else if (recordId.editionId < linkInfo.earliestTime) {
-        linkInfo.earliestTime = recordId.editionId;
+      } else {
+        linkInfo.validIntervals = unionOfIntervals(
+          ...linkInfo.validIntervals,
+          entityRevisionValidInterval,
+        );
       }
     }
 
-    const entityVertex: EntityVertex = {
+    const entityVertex: EntityVertex<Temporal> = {
       kind: "entity",
       inner: entity,
     };
 
-    if (!subgraph.vertices[recordId.entityId]) {
+    if (!subgraph.vertices[entityId]) {
       // This is needed because ts can't differentiate between `EntityId` and `BaseUri`
-      (subgraph.vertices as KnowledgeGraphVertices)[recordId.entityId] = {
-        [recordId.editionId]: entityVertex,
+      (subgraph.vertices as KnowledgeGraphVertices<Temporal>)[entityId] = {
+        [entityRevisionValidInterval.start.limit]: entityVertex,
       };
     } else {
-      (subgraph.vertices as KnowledgeGraphVertices)[recordId.entityId]![
-        recordId.editionId
+      (subgraph.vertices as KnowledgeGraphVertices<Temporal>)[entityId]![
+        entityRevisionValidInterval.start.limit
       ] = entityVertex;
     }
   }
 
   for (const [
     linkEntityId,
-    { leftEntityId, rightEntityId, earliestTime },
+    { leftEntityId, rightEntityId, validIntervals },
   ] of Object.entries(linkMap)) {
-    addKnowledgeGraphEdgeToSubgraphByMutation(
-      subgraph,
-      linkEntityId,
-      earliestTime,
-      {
-        kind: "HAS_LEFT_ENTITY",
-        reversed: false,
-        rightEndpoint: { baseId: leftEntityId, timestamp: earliestTime },
-      },
-    );
-    addKnowledgeGraphEdgeToSubgraphByMutation(
-      subgraph,
-      leftEntityId,
-      earliestTime,
-      {
-        kind: "HAS_LEFT_ENTITY",
-        reversed: true,
-        rightEndpoint: { baseId: linkEntityId, timestamp: earliestTime },
-      },
-    );
-    addKnowledgeGraphEdgeToSubgraphByMutation(
-      subgraph,
-      linkEntityId,
-      earliestTime,
-      {
-        kind: "HAS_RIGHT_ENTITY",
-        reversed: false,
-        rightEndpoint: { baseId: rightEntityId, timestamp: earliestTime },
-      },
-    );
-    addKnowledgeGraphEdgeToSubgraphByMutation(
-      subgraph,
-      rightEntityId,
-      earliestTime,
-      {
-        kind: "HAS_RIGHT_ENTITY",
-        reversed: true,
-        rightEndpoint: { baseId: linkEntityId, timestamp: earliestTime },
-      },
-    );
+    for (const validInterval of validIntervals) {
+      addKnowledgeGraphEdgeToSubgraphByMutation(
+        subgraph,
+        linkEntityId,
+        validInterval.start.limit,
+        {
+          kind: "HAS_LEFT_ENTITY",
+          reversed: false,
+          rightEndpoint: { entityId: leftEntityId, validInterval },
+        },
+      );
+      addKnowledgeGraphEdgeToSubgraphByMutation(
+        subgraph,
+        leftEntityId,
+        validInterval.start.limit,
+        {
+          kind: "HAS_LEFT_ENTITY",
+          reversed: true,
+          rightEndpoint: { entityId: linkEntityId, validInterval },
+        },
+      );
+      addKnowledgeGraphEdgeToSubgraphByMutation(
+        subgraph,
+        linkEntityId,
+        validInterval.start.limit,
+        {
+          kind: "HAS_RIGHT_ENTITY",
+          reversed: false,
+          rightEndpoint: { entityId: rightEntityId, validInterval },
+        },
+      );
+      addKnowledgeGraphEdgeToSubgraphByMutation(
+        subgraph,
+        rightEntityId,
+        validInterval.start.limit,
+        {
+          kind: "HAS_RIGHT_ENTITY",
+          reversed: true,
+          rightEndpoint: { entityId: linkEntityId, validInterval },
+        },
+      );
+    }
   }
   /* eslint-enable no-param-reassign */
 };
