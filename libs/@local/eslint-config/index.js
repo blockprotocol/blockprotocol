@@ -54,6 +54,8 @@ module.exports = {
         ],
       },
     ],
+    // this causes a false positive importing from @blockprotocol/core and is redundant for TypeScript code
+    "import/named": "off",
     "import/prefer-default-export": "off",
     "no-console": "error",
     "no-dupe-class-members": "off",
