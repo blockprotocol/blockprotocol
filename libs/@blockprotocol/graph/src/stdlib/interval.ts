@@ -4,7 +4,7 @@ import {
   Timestamp,
   TimestampLimitedTemporalBound,
 } from "../types/temporal-versioning.js";
-import { boundIsAdjacentTo, compareBounds } from "./bound.js";
+import { boundIsAdjacentToBound, compareBounds } from "./bound.js";
 
 /**
  * Checks whether two given {@link NonNullTimeInterval}s are adjacent to one another, where adjacency is defined as
@@ -27,8 +27,8 @@ export const intervalIsAdjacentToInterval = (
    Contains Interval  |   true    |   true    |   false   |   false   |   false
    */
   return (
-    boundIsAdjacentTo(left.end, right.start) ||
-    boundIsAdjacentTo(left.start, right.end)
+    boundIsAdjacentToBound(left.end, right.start) ||
+    boundIsAdjacentToBound(left.start, right.end)
   );
 };
 

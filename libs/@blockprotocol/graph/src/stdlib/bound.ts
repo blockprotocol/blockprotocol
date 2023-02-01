@@ -70,7 +70,7 @@ export const compareBounds = (
  * @param left - The first bound of the comparison (order is unimportant)
  * @param right - The second bound of the comparison
  */
-export const boundIsAdjacentTo = (
+export const boundIsAdjacentToBound = (
   left: TemporalBound,
   right: TemporalBound,
 ): boolean => {
