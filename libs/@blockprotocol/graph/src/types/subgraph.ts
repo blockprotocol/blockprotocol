@@ -52,3 +52,11 @@ export type Subgraph<
   edges: Edges;
   depths: GraphResolveDepths;
 } & (Temporal extends true ? { temporalAxes: SubgraphTemporalAxes } : {});
+
+export const isTemporalSubgraph = <
+  RootType extends SubgraphRootType<boolean> = SubgraphRootType<boolean>,
+>(
+  subgraph: Subgraph<boolean, RootType>,
+): subgraph is Subgraph<true, RootType> => {
+  return (subgraph as Subgraph<true>).temporalAxes !== undefined;
+};

@@ -4,6 +4,7 @@ import {
   EntityTypeRootType,
   isEntityVertexId,
   isOntologyTypeVertexId,
+  isTemporalSubgraph,
   PropertyTypeRootType,
   Subgraph,
   SubgraphRootType,
@@ -145,7 +146,7 @@ export const isEntityRootedSubgraph = <Temporal extends boolean>(
       return false;
     }
 
-    if (subgraph.temporalAxes !== undefined) {
+    if (isTemporalSubgraph(subgraph)) {
       mustBeDefined(
         getEntityRevision(
           subgraph as Subgraph<true>,

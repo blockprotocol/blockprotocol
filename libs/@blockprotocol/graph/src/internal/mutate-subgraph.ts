@@ -4,6 +4,7 @@ import {
   EntityId,
   EntityValidInterval,
   EntityVertex,
+  isTemporalSubgraph,
   KnowledgeGraphOutwardEdge,
   KnowledgeGraphRootedEdges,
   KnowledgeGraphVertices,
@@ -88,8 +89,12 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
     const entityId = entity.metadata.recordId.entityId;
 
     const entityRevisionValidInterval: EntityValidInterval["validInterval"] =
-      subgraph.temporalAxes !== undefined
-        ? entity.metadata.temporalVersioning[
+      isTemporalSubgraph(subgraph)
+        ? /*
+         these casts should be safe as we have just checked if the Subgraph has temporal information, in which case the
+         entities should too
+         */
+          (entity as Entity<true>).metadata.temporalVersioning[
             subgraph.temporalAxes.resolved.pinned.axis
           ]
         : {

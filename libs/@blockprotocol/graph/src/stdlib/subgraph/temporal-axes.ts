@@ -1,9 +1,9 @@
-import { Subgraph } from "../../types/subgraph.js";
+import { isTemporalSubgraph, Subgraph } from "../../types/subgraph.js";
 import {
   BoundedTimeInterval,
   NonNullTimeInterval,
 } from "../../types/temporal-versioning.js";
-import {intervalForTimestamp} from "../interval.js";
+import { intervalForTimestamp } from "../interval.js";
 
 // Separated out to improve the ergonomics of the `as` cast in the function, which is required due to limitations of TS
 type LatestInstantInterval<Temporal extends boolean> = Temporal extends true
@@ -21,10 +21,10 @@ type LatestInstantInterval<Temporal extends boolean> = Temporal extends true
 export const getLatestInstantIntervalForSubgraph = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
 ): LatestInstantInterval<Temporal> => {
-  if (subgraph.temporalAxes !== undefined) {
+  if (isTemporalSubgraph(subgraph)) {
     const subgraphEndBound =
       subgraph.temporalAxes.resolved.variable.interval.end;
-    return intervalForTimestamp(subgraphEndBound.limit)
+    return intervalForTimestamp(subgraphEndBound.limit);
   } else {
     return {
       start: {

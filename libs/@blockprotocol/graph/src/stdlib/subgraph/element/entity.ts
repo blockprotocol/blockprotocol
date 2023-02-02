@@ -92,8 +92,12 @@ export const getEntityRevision = <Temporal extends boolean>(
       })
       .find((entity) => {
         return intervalContainsTimestamp(
-          entity.metadata.temporalVersioning[
-            subgraph.temporalAxes.resolved.variable.axis
+          /*
+           these casts are safe as we check for `targetRevisionInformation === undefined` above and that's only ever
+           defined if `Temporal extends true`
+           */
+          (entity as Entity<true>).metadata.temporalVersioning[
+            (subgraph as Subgraph<true>).temporalAxes.resolved.variable.axis
           ],
           targetTime,
         );
@@ -137,8 +141,12 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
          */
         intervalOverlapsInterval(
           interval,
-          entity.metadata.temporalVersioning[
-            subgraph.temporalAxes.resolved.variable.axis
+          /*
+           these casts are safe as we check for `targetRevisionInformation === undefined` above and that's only ever
+           defined if `Temporal extends true`
+           */
+          (entity as Entity<true>).metadata.temporalVersioning[
+            (subgraph as Subgraph<true>).temporalAxes.resolved.variable.axis
           ],
         ),
       );

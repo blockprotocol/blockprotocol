@@ -9,6 +9,7 @@ import {
   isHasRightEntityEdge,
   isIncomingLinkEdge,
   isOutgoingLinkEdge,
+  isTemporalSubgraph,
   OutwardEdge,
   Subgraph,
 } from "../../../types/subgraph.js";
@@ -93,7 +94,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
           });
       })
       .flatMap(({ entityId: linkEntityId, validInterval }) => {
-        if (subgraph.temporalAxes !== undefined) {
+        if (isTemporalSubgraph(subgraph)) {
           // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
           const intersection = intervalIntersectionWithInterval(
             searchInterval,
@@ -169,7 +170,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
           });
       })
       .flatMap(({ entityId: linkEntityId, validInterval }) => {
-        if (subgraph.temporalAxes !== undefined) {
+        if (isTemporalSubgraph(subgraph)) {
           // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
           const intersection = intervalIntersectionWithInterval(
             searchInterval,
@@ -230,7 +231,7 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
 
   const leftEntityId = outwardEdge.rightEndpoint.entityId;
 
-  if (subgraph.temporalAxes !== undefined) {
+  if (isTemporalSubgraph(subgraph)) {
     const { validInterval } = outwardEdge.rightEndpoint;
     const intersection = intervalIntersectionWithInterval(
       searchInterval,
@@ -291,7 +292,7 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
 
   const rightEntityId = outwardEdge.rightEndpoint.entityId;
 
-  if (subgraph.temporalAxes !== undefined) {
+  if (isTemporalSubgraph(subgraph)) {
     const { validInterval } = outwardEdge.rightEndpoint;
     const intersection = intervalIntersectionWithInterval(
       searchInterval,
@@ -343,7 +344,7 @@ export const getOutgoingLinkAndTargetEntities = <
       ? intervalForTimestamp(convertTimeToStringWithDefault(timestamp))
       : getLatestInstantIntervalForSubgraph(subgraph);
 
-  if (subgraph.temporalAxes !== undefined) {
+  if (isTemporalSubgraph(subgraph)) {
     const outgoingLinkEntities = getOutgoingLinksForEntity(
       subgraph as Subgraph<true>,
       entityId,
