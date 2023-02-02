@@ -65,10 +65,9 @@ export type EntityTemporalVersioningMetadata = Record<
 export type EntityMetadata<Temporal extends boolean> = {
   recordId: EntityRecordId;
   entityTypeId: VersionedUri;
-  temporalVersioning: Temporal extends true
-    ? EntityTemporalVersioningMetadata
-    : never;
-};
+} & (Temporal extends true
+  ? { temporalVersioning: EntityTemporalVersioningMetadata }
+  : {});
 
 export type LinkData = {
   leftToRightOrder?: number;
@@ -86,8 +85,7 @@ export type Entity<
 > = {
   metadata: EntityMetadata<Temporal>;
   linkData?: LinkData;
-  properties: Properties extends null ? never : Properties;
-};
+} & (Properties extends null ? {} : { properties: Properties });
 
 export type LinkEntityAndRightEntity<Temporal extends boolean> = {
   // In a temporal system there may be multiple revisions of both link entities and their right entities
@@ -104,8 +102,9 @@ export type CreateEntityData = {
 export type GetEntityData<Temporal extends boolean> = {
   entityId: EntityId;
   graphResolveDepths?: GraphResolveDepths;
-  temporalAxes: Temporal extends true ? UnresolvedQueryTemporalAxes : never;
-};
+} & (Temporal extends true
+  ? { temporalAxes: UnresolvedQueryTemporalAxes }
+  : {});
 
 export type UpdateEntityData = {
   entityId: EntityId;
@@ -163,8 +162,9 @@ export type AggregateOperationInput = {
 export type AggregateEntitiesData<Temporal extends boolean> = {
   operation: AggregateOperationInput;
   graphResolveDepths?: GraphResolveDepths;
-  temporalAxes: Temporal extends true ? UnresolvedQueryTemporalAxes : never;
-};
+} & (Temporal extends true
+  ? { temporalAxes: UnresolvedQueryTemporalAxes }
+  : {});
 
 export type AggregateEntitiesResult<
   Temporal extends boolean,

@@ -59,7 +59,7 @@ const getUniqueEntitiesFilter = <Temporal extends boolean>() => {
 export const getOutgoingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : never,
+  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -135,7 +135,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
 export const getIncomingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : never,
+  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -211,7 +211,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
 export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : never,
+  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -272,7 +272,7 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
 export const getRightEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : never,
+  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -336,7 +336,7 @@ export const getOutgoingLinkAndTargetEntities = <
 >(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  timestamp?: Temporal extends true ? Date | Timestamp : never,
+  timestamp?: Temporal extends true ? Date | Timestamp : undefined,
 ): LinkAndRightEntities => {
   const searchInterval =
     timestamp !== undefined

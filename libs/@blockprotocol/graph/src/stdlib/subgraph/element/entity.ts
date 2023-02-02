@@ -56,7 +56,7 @@ export const getEntityRevision = <Temporal extends boolean>(
   entityId: EntityId,
   targetRevisionInformation?: Temporal extends true
     ? EntityRevisionId | Timestamp | Date
-    : never,
+    : undefined,
 ): Entity<Temporal> | undefined => {
   const entityRevisions = subgraph.vertices[entityId];
 
@@ -114,7 +114,7 @@ export const getEntityRevision = <Temporal extends boolean>(
 export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : never,
+  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const versionObject = subgraph.vertices[entityId];
 
