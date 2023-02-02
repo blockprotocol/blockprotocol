@@ -7,12 +7,6 @@ import fs from "fs-extra";
 const script = async () => {
   console.log(chalk.bold("Building..."));
 
-  if (process.env.CI) {
-    await import("./copy-blocks-from-ci-cache");
-  }
-
-  await import("./prepare-blocks");
-
   await import("./codegen");
 
   await import("./make-block-assets-compatible-with-vercel-lambdas");
@@ -36,10 +30,6 @@ const script = async () => {
       await fs.remove(babelConfigPath);
     }
     await execa("next", ["build"], { stdio: "inherit" });
-  }
-
-  if (process.env.CI) {
-    await import("./copy-blocks-to-ci-cache");
   }
 };
 

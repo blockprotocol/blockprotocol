@@ -90,23 +90,6 @@ If you want to send verification codes to an email address, the following AWS en
 - `BP_AWS_ACCESS_KEY_ID`: The AWS access key
 - `BP_AWS_SECRET_ACCESS_KEY`: The AWS secret access key
 
-### Building Hub blocks
-
-Before serving any blocks via the Hub, they need to be prepared (i.e. built in most cases).
-Blocks can be registered in the repo's `/hub` with a build-config.
-The build-script `yarn workspace @apps/site exe prepare-blocks.ts` prepares blocks.
-
-```sh
-# prepare all blocks
-yarn workspace @apps/site exe scripts/prepare-blocks.ts
-
-# prepare blocks matching a filter (in this example, any in the `hub/@hash` folder)
-BLOCK_FILTER="@hash/*" workspace @apps/site exe scripts/prepare-blocks.ts
-```
-
-Once the blocks are built, simply `yarn dev` and head over to
-`localhost:3000/hub`.
-
 ## Vercel Deployment
 
 If no build-config is provided to the build-script, it will pick up all build-configs changed by the
