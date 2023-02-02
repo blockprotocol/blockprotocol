@@ -212,7 +212,11 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
 
     setIsUpgradingSubscription(false);
 
-    /** @todo: catch payment errors */
+    /**
+     * @todo: catch payment error when upgrading existing subscription
+     *
+     * @see https://app.asana.com/0/0/1203880489778056/f
+     */
 
     handleUpgradedSubscription();
   };
@@ -557,7 +561,6 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                         )}
                       </Typography>
                     </Box>
-                    {/* @todo: figure out how to determine this programmatically */}
                     <Typography gutterBottom>
                       {upgradedSubscriptionTier && subscriptionTierPrices
                         ? priceToHumanReadable({
