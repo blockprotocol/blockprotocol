@@ -1,10 +1,34 @@
 import {
+  BoundedTimeInterval,
   LimitedTemporalBound,
   NonNullTimeInterval,
   TemporalBound,
   Timestamp,
 } from "../types/temporal-versioning.js";
 import { boundIsAdjacentToBound, compareBounds } from "./bound.js";
+
+/**
+ * Creates a {@link BoundedTimeInterval} that represents the instant of time identified by the given {@link Timestamp}.
+ *
+ * This is an interval where both bounds are `inclusive`, with limit points at the given {@link Timestamp}. Having an
+ * `exclusive` start _or_ end would result in the interval never containing anything.
+ *
+ * @param {Timestamp} timestamp
+ */
+export const intervalForTimestamp = (
+  timestamp: Timestamp,
+): BoundedTimeInterval => {
+  return {
+    start: {
+      kind: "inclusive",
+      limit: timestamp,
+    },
+    end: {
+      kind: "inclusive",
+      limit: timestamp,
+    },
+  };
+};
 
 /**
  * Checks whether two given {@link NonNullTimeInterval}s are adjacent to one another, where adjacency is defined as

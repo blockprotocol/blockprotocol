@@ -3,6 +3,7 @@ import {
   BoundedTimeInterval,
   NonNullTimeInterval,
 } from "../../types/temporal-versioning";
+import {intervalForTimestamp} from "../interval";
 
 // Separated out to improve the ergonomics of the `as` cast in the function, which is required due to limitations of TS
 type LatestInstantInterval<Temporal extends boolean> = Temporal extends true
@@ -23,16 +24,7 @@ export const getLatestInstantIntervalForSubgraph = <Temporal extends boolean>(
   if (subgraph.temporalAxes !== undefined) {
     const subgraphEndBound =
       subgraph.temporalAxes.resolved.variable.interval.end;
-    return {
-      start: {
-        kind: "inclusive",
-        limit: subgraphEndBound.limit,
-      },
-      end: {
-        kind: "inclusive",
-        limit: subgraphEndBound.limit,
-      },
-    };
+    return intervalForTimestamp(subgraphEndBound.limit)
   } else {
     return {
       start: {

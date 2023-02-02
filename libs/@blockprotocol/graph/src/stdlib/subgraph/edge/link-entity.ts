@@ -17,7 +17,10 @@ import {
   Timestamp,
 } from "../../../types/temporal-versioning";
 import { compareBounds } from "../../bound";
-import { intervalIntersectionWithInterval } from "../../interval";
+import {
+  intervalForTimestamp,
+  intervalIntersectionWithInterval,
+} from "../../interval";
 import { mustBeDefined } from "../../must-be-defined.js";
 import { getEntityRevisionsByEntityId } from "../element/entity.js";
 import { getLatestInstantIntervalForSubgraph } from "../temporal-axes";
@@ -343,16 +346,7 @@ export const getOutgoingLinkAndTargetEntities = <
 ): LinkAndRightEntities => {
   const searchInterval =
     timestamp !== undefined
-      ? ({
-          start: {
-            kind: "inclusive",
-            limit: convertTimeToStringWithDefault(timestamp),
-          },
-          end: {
-            kind: "inclusive",
-            limit: convertTimeToStringWithDefault(timestamp),
-          },
-        } as const)
+      ? intervalForTimestamp(convertTimeToStringWithDefault(timestamp))
       : getLatestInstantIntervalForSubgraph(subgraph);
 
   if (subgraph.temporalAxes !== undefined) {
