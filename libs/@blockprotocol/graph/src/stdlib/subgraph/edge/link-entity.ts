@@ -388,7 +388,7 @@ export const getOutgoingLinkAndTargetEntities = <
 
         if (rightEntityRevisions.length !== 1) {
           throw new Error(
-            `Querying a Subgraph without support for temporal versioning but there wasn't a unique revision for the right entity with ID: ${linkEntity.metadata.recordId.entityId}`,
+            `Querying a Subgraph without support for temporal versioning but there wasn't a unique revision for the right entity of the link entity with ID: ${linkEntity.metadata.recordId.entityId}`,
           );
         }
 
