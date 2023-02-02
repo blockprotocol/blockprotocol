@@ -11,12 +11,8 @@ import { v4 as uuid } from "uuid";
 import { useDefaultState } from "../use-default-state";
 import { aggregateEntities as aggregateEntitiesImpl } from "./hook-implementations/entity/aggregate-entities";
 import { getEntity as getEntityImpl } from "./hook-implementations/entity/get-entity";
+import { MockData } from "./mock-data";
 import { useMockDataToSubgraph } from "./use-mock-data-to-subgraph";
-
-export type MockData = {
-  entities: Entity[];
-  // linkedAggregationDefinitions: LinkedAggregationDefinition[];
-};
 
 export type MockDatastore = {
   graph: Subgraph;

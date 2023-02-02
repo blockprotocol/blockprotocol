@@ -2,7 +2,7 @@ import { Subgraph } from "@blockprotocol/graph";
 import { buildSubgraph } from "@blockprotocol/graph/stdlib";
 import { useMemo } from "react";
 
-import { MockData } from "./use-mock-datastore";
+import { MockData } from "./mock-data";
 
 export const useMockDataToSubgraph = (mockData: MockData): Subgraph => {
   return useMemo(() => {

@@ -1,4 +1,4 @@
-import { MockData } from "../datastore/use-mock-datastore";
+import { MockData } from "../datastore/mock-data";
 import { createEntities } from "./entities";
 import { mockDataSubgraphTemporalAxes } from "./temporal-axes";
 
