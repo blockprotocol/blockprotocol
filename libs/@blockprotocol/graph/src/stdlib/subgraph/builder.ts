@@ -4,8 +4,8 @@ import {
   EntityRecordId,
   EntityRootType,
   GraphResolveDepths,
-  ResolvedQueryTemporalAxes,
   Subgraph,
+  SubgraphTemporalAxes,
 } from "../../types.js";
 
 /**
@@ -26,8 +26,8 @@ import {
  * @param data.entities – the entities to build the subgraph from
  * @param depths – the depth values to provide in the returned subgraph
  * @param rootRecordIds – the root values to provide in the returned subgraph
- * @param {ResolvedQueryTemporalAxes} temporalAxes - the temporal axes that were used when originally selecting the
- *   provided data
+ * @param {SubgraphTemporalAxes} subgraphTemporalAxes - the sets of temporal axes that were used when originally
+ * selecting the provided data
  *
  * @returns a Subgraph containing:
  *   - 'vertices' containing the provided entities
@@ -44,7 +44,9 @@ export const buildSubgraph = <Temporal extends boolean>(
   data: { entities: Entity<Temporal>[] },
   rootRecordIds: EntityRecordId[],
   depths: GraphResolveDepths,
-  temporalAxes: Temporal extends true ? ResolvedQueryTemporalAxes : undefined,
+  subgraphTemporalAxes: Temporal extends true
+    ? SubgraphTemporalAxes
+    : undefined,
 ): Subgraph<Temporal, EntityRootType<Temporal>> => {
   const missingRoots = rootRecordIds.filter(
     ({ entityId, editionId }) =>
@@ -78,12 +80,9 @@ export const buildSubgraph = <Temporal extends boolean>(
     vertices: {},
     edges: {},
     depths,
-    ...(temporalAxes !== undefined
+    ...(subgraphTemporalAxes !== undefined
       ? {
-          temporalAxes: {
-            initial: temporalAxes,
-            resolved: temporalAxes,
-          },
+          temporalAxes: subgraphTemporalAxes,
         }
       : {}),
   };
