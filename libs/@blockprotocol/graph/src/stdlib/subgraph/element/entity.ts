@@ -10,7 +10,7 @@ import {
   intervalContainsTimestamp,
   intervalOverlapsInterval,
 } from "../../interval.js";
-import { mustBeDefined } from "../../must-be-defined";
+import { mustBeDefined } from "../../must-be-defined.js";
 
 /**
  * Returns all {@link Entity}s within the vertices of the given {@link Subgraph}, optionally filtering to only get their

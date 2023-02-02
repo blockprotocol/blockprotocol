@@ -1,4 +1,4 @@
-import { unionOfIntervals } from "../stdlib/interval";
+import { unionOfIntervals } from "../stdlib/interval.js";
 import {
   Entity,
   EntityId,
