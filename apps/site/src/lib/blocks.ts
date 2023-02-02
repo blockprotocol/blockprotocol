@@ -313,15 +313,6 @@ export const retrieveBlockReadme = async (
   blockMetadata: ExpandedBlockMetadata,
 ): Promise<string | undefined> => {
   try {
-    if (blockMetadata.componentId.includes(FRONTEND_URL)) {
-      return fs.readFileSync(
-        `${process.cwd()}/public/blocks/${
-          blockMetadata.pathWithNamespace
-        }/README.vercel-hack.md`,
-        "utf8",
-      );
-    }
-
     return fetch(`${blockMetadata.componentId}/README.md`).then((resp) => {
       return resp.status === 200 ? resp.text() : undefined;
     });

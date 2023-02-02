@@ -9,8 +9,6 @@ const script = async () => {
 
   await import("./codegen");
 
-  await import("./make-block-assets-compatible-with-vercel-lambdas");
-
   await execa("yarn", ["generate-blockmetadata-schema"], { stdio: "inherit" });
 
   await import("./create-db-indexes");
