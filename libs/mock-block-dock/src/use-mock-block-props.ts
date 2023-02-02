@@ -1,9 +1,13 @@
-import { Entity, EntityRecordId } from "@blockprotocol/graph";
+import {
+  Entity,
+  EntityRecordId,
+  QueryTemporalAxes,
+} from "@blockprotocol/graph";
 import { Dispatch, SetStateAction, useMemo } from "react";
 
 import { mockData as initialMockData } from "./data";
+import { MockData } from "./datastore/mock-data";
 import {
-  MockData,
   MockDatastore,
   useMockDatastore,
 } from "./datastore/use-mock-datastore";
@@ -11,8 +15,11 @@ import { useDefaultState } from "./use-default-state";
 
 export type MockBlockHookArgs = {
   blockEntityRecordId?: EntityRecordId;
-  initialEntities?: Entity[];
-  // initialLinkedAggregations?: LinkedAggregationDefinition[];
+  initialData?: {
+    initialTemporalAxes: QueryTemporalAxes;
+    initialEntities: Entity<true>[];
+    // initialLinkedAggregations: LinkedAggregationDefinition[];
+  };
   readonly: boolean;
 };
 
@@ -28,14 +35,17 @@ export type MockBlockHookResult = {
  * A hook to generate Block Protocol properties and callbacks for use in testing blocks.
  * The starting mock data can be customized using the initial[X] props.
  * See README.md for usage instructions.
- * @param [blockEntityRecordId] the `EntityRecordId` of the block's own starting entity, if any
- * @param [initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
- * @param [initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
+ *
+ * @param args
+ * @param [args.blockEntityRecordId] - the `EntityRecordId` of the block's own starting entity, if any
+ * @param [args.initialData] - The initial data to include in the data store, with default mock data being provided if this is omitted
+ * @param [args.initialData.initialEntities] - The entities to include in the data store (NOT the block entity, which is always provided)
+ * @param [args.initialData.initialTemporalAxes] - The temporal axes that were used in creating the initial entities
+ * @param [args.initialData.initialLinkedAggregations] - The linkedAggregation DEFINITIONS to include in the data store (results will be resolved automatically)
  */
 export const useMockBlockProps = ({
   blockEntityRecordId: externalBlockEntityRecordId,
-  initialEntities,
-  // initialLinkedAggregations,
+  initialData,
   readonly: externalReadonly,
 }: MockBlockHookArgs): MockBlockHookResult => {
   const [entityRecordIdOfEntityForBlock, setEntityRecordIdOfEntityForBlock] =
@@ -51,12 +61,22 @@ export const useMockBlockProps = ({
   const { mockData } = useMemo((): {
     mockData: MockData;
   } => {
-    const nextMockData: MockData = {
-      entities: [...(initialEntities ?? initialMockData.entities)],
-      // linkedAggregationDefinitions:
-      //   initialLinkedAggregations ??
-      //   initialMockData.linkedAggregationDefinitions,
-    };
+    const nextMockData: MockData = initialData
+      ? {
+          subgraphTemporalAxes: {
+            resolved: initialData.initialTemporalAxes,
+            initial: initialData.initialTemporalAxes,
+          },
+          entities: [...initialData.initialEntities],
+          // linkedAggregationDefinitions:
+          //   initialLinkedAggregations
+        }
+      : {
+          subgraphTemporalAxes: initialMockData.subgraphTemporalAxes,
+          entities: initialMockData.entities,
+          // linkedAggregationDefinitions:
+          //   initialMockData.linkedAggregationDefinitions,
+        };
 
     if (nextMockData.entities.length === 0) {
       throw new Error(
@@ -89,7 +109,7 @@ export const useMockBlockProps = ({
     return { mockData: nextMockData };
   }, [
     externalBlockEntityRecordId,
-    initialEntities,
+    initialData,
     setEntityRecordIdOfEntityForBlock,
     // initialLinkedAggregations,
   ]);
