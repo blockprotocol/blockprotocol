@@ -271,7 +271,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     }
   }, [graphService, graphServiceCallbacks]);
 
-  const blockRenderer = (
+  const blockRenderer = graphService ? (
     <BlockRenderer
       customElement={
         "customElement" in blockDefinition
@@ -286,11 +286,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
           : undefined
       }
     />
-  );
-
-  useEffect(() => {
-    console.log("parent");
-  });
+  ) : null;
 
   return (
     <MockBlockDockProvider
@@ -313,11 +309,13 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     >
       <HookPortals hooks={hooks} />
       <div ref={wrapperRef}>
-        {hideDebugToggle && !debugMode ? (
-          blockRenderer
-        ) : (
-          <MockBlockDockUi>{blockRenderer}</MockBlockDockUi>
-        )}
+        <Suspense>
+          {hideDebugToggle && !debugMode ? (
+            blockRenderer
+          ) : (
+            <MockBlockDockUi>{blockRenderer}</MockBlockDockUi>
+          )}
+        </Suspense>
       </div>
     </MockBlockDockProvider>
   );

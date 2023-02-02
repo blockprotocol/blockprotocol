@@ -245,11 +245,6 @@ export abstract class CoreHandler {
   ): void | Promise<
     MessageData<ExpectedResponseData, ExpectedResponseErrorCodes>
   > {
-    console.log(
-      "sending message",
-      args.partialMessage.messageName,
-      this.sourceType,
-    );
     const { partialMessage, requestId, sender } = args;
     if (!sender.serviceName) {
       throw new Error("Message sender has no serviceName set.");

@@ -60,7 +60,6 @@ export class CoreEmbedderHandler extends CoreHandler {
       message: Message;
     },
   ) {
-    console.log("received init message");
     this.updateDispatchElementFromEvent(event);
 
     // get the properties sent on initialization for any registered services
