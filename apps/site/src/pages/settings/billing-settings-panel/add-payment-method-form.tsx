@@ -15,6 +15,7 @@ import {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -152,9 +153,11 @@ export const AddPaymentMethod: FunctionComponent<{
     }
   }, [clientSecret, createStripeSetupIntent]);
 
-  const options = {
-    clientSecret,
-  };
+  const options = useMemo(() => ({ clientSecret }), [clientSecret]);
+
+  if (!options.clientSecret) {
+    return null;
+  }
 
   return (
     <Elements stripe={stripePromise} options={options}>
