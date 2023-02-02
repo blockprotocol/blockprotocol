@@ -369,12 +369,6 @@ export interface UpdatePaymentMethodRequestUpdatedBillingDetails {
   name?: string;
   /**
    *
-   * @type {string}
-   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetails
-   */
-  email?: string;
-  /**
-   *
    * @type {UpdatePaymentMethodRequestUpdatedBillingDetailsAddress}
    * @memberof UpdatePaymentMethodRequestUpdatedBillingDetails
    */
@@ -551,6 +545,57 @@ export const DefaultApiAxiosParamCreator = function (
         localVarRequestOptions,
         configuration,
       );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Detach an existing payment method from a BP user
+     * @param {string} paymentMethodId The payment method ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    detachPaymentMethod: async (
+      paymentMethodId: string,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'paymentMethodId' is not null or undefined
+      assertParamExists(
+        "detachPaymentMethod",
+        "paymentMethodId",
+        paymentMethodId,
+      );
+      const localVarPath = `/payment-method`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "DELETE",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      if (paymentMethodId !== undefined) {
+        localVarQueryParameter["paymentMethodId"] = paymentMethodId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
 
       return {
         url: toPathString(localVarUrlObj),
@@ -908,6 +953,34 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Detach an existing payment method from a BP user
+     * @param {string} paymentMethodId The payment method ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async detachPaymentMethod(
+      paymentMethodId: string,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<UpdatePaymentMethod200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.detachPaymentMethod(
+          paymentMethodId,
+          options,
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1107,6 +1180,21 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Detach an existing payment method from a BP user
+     * @param {string} paymentMethodId The payment method ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    detachPaymentMethod(
+      paymentMethodId: string,
+      options?: any,
+    ): AxiosPromise<UpdatePaymentMethod200Response> {
+      return localVarFp
+        .detachPaymentMethod(paymentMethodId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Retrieve the payment methods of the BP user
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -1228,6 +1316,19 @@ export interface DefaultApiInterface {
 
   /**
    *
+   * @summary Detach an existing payment method from a BP user
+   * @param {string} paymentMethodId The payment method ID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  detachPaymentMethod(
+    paymentMethodId: string,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<UpdatePaymentMethod200Response>;
+
+  /**
+   *
    * @summary Retrieve the payment methods of the BP user
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -1335,6 +1436,23 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   ) {
     return DefaultApiFp(this.configuration)
       .createSubscription(createSubscriptionRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Detach an existing payment method from a BP user
+   * @param {string} paymentMethodId The payment method ID
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public detachPaymentMethod(
+    paymentMethodId: string,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .detachPaymentMethod(paymentMethodId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

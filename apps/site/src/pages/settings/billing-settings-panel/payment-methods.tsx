@@ -43,7 +43,8 @@ const PaymentMethodMenu: FunctionComponent<{
 }> = ({ paymentMethod, isDefault }) => {
   const menuTriggerRef = useRef(null);
 
-  const { refetchSubscription } = useBillingPageContext();
+  const { refetchSubscription, refetchPaymentMethods } =
+    useBillingPageContext();
 
   const popupState = usePopupState({
     variant: "popover",
@@ -66,7 +67,17 @@ const PaymentMethodMenu: FunctionComponent<{
     void popupState.close();
   }, [paymentMethod, refetchSubscription, popupState]);
 
-  const handleRemovePaymentMethodClick = useCallback(async () => {}, []);
+  const handleRemovePaymentMethodClick = useCallback(async () => {
+    setIsLoading(true);
+
+    await internalApi.detachPaymentMethod(paymentMethod.id);
+
+    await refetchPaymentMethods?.();
+
+    setIsLoading(false);
+
+    void popupState.close();
+  }, [paymentMethod, refetchPaymentMethods, popupState]);
 
   const isExpired = useMemo(() => {
     const date = new Date();
