@@ -7,8 +7,8 @@ import {
   Timestamp,
 } from "../../../types/temporal-versioning.js";
 import {
-  intervalContainsInterval,
   intervalContainsTimestamp,
+  intervalOverlapsInterval,
 } from "../../interval";
 import { mustBeDefined } from "../../must-be-defined";
 
@@ -131,7 +131,11 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
       .filter(isEntityVertex)
       .map((entityVertex) => entityVertex.inner)
       .filter((entity) =>
-        intervalContainsInterval(
+        /*
+        We want to find all entities which were active _at some point_ in the search interval. This is indicated by an
+        overlap.
+         */
+        intervalOverlapsInterval(
           interval,
           entity.metadata.temporalVersioning[
             subgraph.temporalAxes.resolved.variable.axis
