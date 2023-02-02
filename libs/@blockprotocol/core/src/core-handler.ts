@@ -178,6 +178,24 @@ export abstract class CoreHandler {
     this.messageCallbacksByService[serviceName]!.set(messageName, callback);
   }
 
+  removeCallback(
+    this: CoreHandler,
+    {
+      callback,
+      messageName,
+      serviceName,
+    }: {
+      callback: GenericMessageCallback;
+      messageName: string;
+      serviceName: string;
+    },
+  ) {
+    const map = this.messageCallbacksByService[serviceName];
+    if (map?.get(messageName) === callback) {
+      map.delete(messageName);
+    }
+  }
+
   sendMessage(this: CoreHandler, args: SendMessageArgs): void;
 
   sendMessage<

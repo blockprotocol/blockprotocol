@@ -60,6 +60,14 @@ export class GraphEmbedderHandler
   }
 
   /**
+   * Removes multiple callbacks at once.
+   * Useful when replacing previously registered callbacks
+   */
+  removeCallbacks(callbacks: Partial<EmbedderGraphMessageCallbacks>) {
+    super.removeCallbacks(callbacks);
+  }
+
+  /**
    * Call the provided function when the named message is received, passing the data/errors object from the message.
    * If the named message expects a response, the callback should provide the expected data/errors object as the return.
    * @param messageName the message name to listen for
