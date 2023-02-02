@@ -67,11 +67,10 @@ export abstract class BlockElementBase<
       }
       this.blockEntity = rootEntity;
 
-      this.linkedEntities =
-        getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
-          blockEntitySubgraph,
-          rootEntity.metadata.recordId.entityId,
-        );
+      this.linkedEntities = getOutgoingLinkAndTargetEntities<
+        Temporal,
+        RootEntityLinkedEntities
+      >(blockEntitySubgraph, rootEntity.metadata.recordId.entityId);
     }
   }
 

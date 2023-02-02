@@ -143,11 +143,10 @@ export const useEntitySubgraph = <
       throw new Error("Root entity not present in subgraph");
     }
 
-    const linkedEntities =
-      getOutgoingLinkAndTargetEntities<RootEntityLinkedEntities>(
-        entitySubgraph,
-        rootEntity.metadata.recordId.entityId,
-      );
+    const linkedEntities = getOutgoingLinkAndTargetEntities<
+      Temporal,
+      RootEntityLinkedEntities
+    >(entitySubgraph, rootEntity.metadata.recordId.entityId);
 
     return {
       rootEntity,
