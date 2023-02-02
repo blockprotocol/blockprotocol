@@ -89,6 +89,31 @@ export interface CreateSubscriptionRequest {
 /**
  *
  * @export
+ * @interface ErrorInfo
+ */
+export interface ErrorInfo {
+  /**
+   *
+   * @type {string}
+   * @memberof ErrorInfo
+   */
+  reason: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ErrorInfo
+   */
+  domain: string;
+  /**
+   *
+   * @type {{ [key: string]: any; }}
+   * @memberof ErrorInfo
+   */
+  metadata: { [key: string]: any };
+}
+/**
+ *
+ * @export
  * @interface GetPaymentMethods200Response
  */
 export interface GetPaymentMethods200Response {
@@ -138,6 +163,96 @@ export interface GetUpcomingInvoice200Response {
    */
   upcomingInvoice?: StripeInvoice;
 }
+/**
+ *
+ * @export
+ * @interface ResourceInfo
+ */
+export interface ResourceInfo {
+  /**
+   *
+   * @type {string}
+   * @memberof ResourceInfo
+   */
+  resourceType: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ResourceInfo
+   */
+  resourceName: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ResourceInfo
+   */
+  owner?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ResourceInfo
+   */
+  description: string;
+}
+/**
+ *
+ * @export
+ * @interface Status
+ */
+export interface Status {
+  /**
+   *
+   * @type {StatusCode}
+   * @memberof Status
+   */
+  code: StatusCode;
+  /**
+   *
+   * @type {string}
+   * @memberof Status
+   */
+  message?: string;
+  /**
+   *
+   * @type {Array<StatusContentsInner>}
+   * @memberof Status
+   */
+  contents: Array<StatusContentsInner>;
+}
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const StatusCode = {
+  Ok: "OK",
+  Cancelled: "CANCELLED",
+  Unknown: "UNKNOWN",
+  InvalidArgument: "INVALID_ARGUMENT",
+  DeadlineExceeded: "DEADLINE_EXCEEDED",
+  NotFound: "NOT_FOUND",
+  AlreadyExists: "ALREADY_EXISTS",
+  PermissionDenied: "PERMISSION_DENIED",
+  Unauthenticated: "UNAUTHENTICATED",
+  ResourceExhausted: "RESOURCE_EXHAUSTED",
+  FailedPrecondition: "FAILED_PRECONDITION",
+  Aborted: "ABORTED",
+  OutOfRange: "OUT_OF_RANGE",
+  Unimplemented: "UNIMPLEMENTED",
+  Internal: "INTERNAL",
+  Unavailable: "UNAVAILABLE",
+  DataLoss: "DATA_LOSS",
+} as const;
+
+export type StatusCode = (typeof StatusCode)[keyof typeof StatusCode];
+
+/**
+ * @type StatusContentsInner
+ * @export
+ */
+export type StatusContentsInner = ErrorInfo | ResourceInfo;
+
 /**
  *
  * @export
@@ -217,6 +332,100 @@ export interface SubscriptionTierPrices {
 /**
  *
  * @export
+ * @interface UpdatePaymentMethod200Response
+ */
+export interface UpdatePaymentMethod200Response {
+  /**
+   *
+   * @type {StripePaymentMethod}
+   * @memberof UpdatePaymentMethod200Response
+   */
+  updatedPaymentMethod?: StripePaymentMethod;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePaymentMethodRequest
+ */
+export interface UpdatePaymentMethodRequest {
+  /**
+   *
+   * @type {UpdatePaymentMethodRequestUpdatedBillingDetails}
+   * @memberof UpdatePaymentMethodRequest
+   */
+  updatedBillingDetails: UpdatePaymentMethodRequestUpdatedBillingDetails;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePaymentMethodRequestUpdatedBillingDetails
+ */
+export interface UpdatePaymentMethodRequestUpdatedBillingDetails {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetails
+   */
+  name?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetails
+   */
+  email?: string;
+  /**
+   *
+   * @type {UpdatePaymentMethodRequestUpdatedBillingDetailsAddress}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetails
+   */
+  address?: UpdatePaymentMethodRequestUpdatedBillingDetailsAddress;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePaymentMethodRequestUpdatedBillingDetailsAddress
+ */
+export interface UpdatePaymentMethodRequestUpdatedBillingDetailsAddress {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetailsAddress
+   */
+  city?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetailsAddress
+   */
+  country?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetailsAddress
+   */
+  line1?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetailsAddress
+   */
+  line2?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetailsAddress
+   */
+  postal_code?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdatePaymentMethodRequestUpdatedBillingDetailsAddress
+   */
+  state?: string;
+}
+/**
+ *
+ * @export
  * @interface UpdateSubscription200Response
  */
 export interface UpdateSubscription200Response {
@@ -257,7 +466,7 @@ export const DefaultApiAxiosParamCreator = function (
   return {
     /**
      *
-     * @summary Create a stripe setup intent
+     * @summary Create a stripe setup intent, for the purpose of adding a new payment method.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -518,6 +727,72 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
+     * @summary Update an existing payment method of the BP user
+     * @param {string} paymentMethodId The payment method ID
+     * @param {UpdatePaymentMethodRequest} updatePaymentMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePaymentMethod: async (
+      paymentMethodId: string,
+      updatePaymentMethodRequest: UpdatePaymentMethodRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'paymentMethodId' is not null or undefined
+      assertParamExists(
+        "updatePaymentMethod",
+        "paymentMethodId",
+        paymentMethodId,
+      );
+      // verify required parameter 'updatePaymentMethodRequest' is not null or undefined
+      assertParamExists(
+        "updatePaymentMethod",
+        "updatePaymentMethodRequest",
+        updatePaymentMethodRequest,
+      );
+      const localVarPath = `/payment-method`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      if (paymentMethodId !== undefined) {
+        localVarQueryParameter["paymentMethodId"] = paymentMethodId;
+      }
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updatePaymentMethodRequest,
+        localVarRequestOptions,
+        configuration,
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
      * @summary Update an existing subscription
      * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
      * @param {*} [options] Override http request option.
@@ -582,7 +857,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
   return {
     /**
      *
-     * @summary Create a stripe setup intent
+     * @summary Create a stripe setup intent, for the purpose of adding a new payment method.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -731,6 +1006,37 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Update an existing payment method of the BP user
+     * @param {string} paymentMethodId The payment method ID
+     * @param {UpdatePaymentMethodRequest} updatePaymentMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updatePaymentMethod(
+      paymentMethodId: string,
+      updatePaymentMethodRequest: UpdatePaymentMethodRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<UpdatePaymentMethod200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updatePaymentMethod(
+          paymentMethodId,
+          updatePaymentMethodRequest,
+          options,
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Update an existing subscription
      * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
      * @param {*} [options] Override http request option.
@@ -773,7 +1079,7 @@ export const DefaultApiFactory = function (
   return {
     /**
      *
-     * @summary Create a stripe setup intent
+     * @summary Create a stripe setup intent, for the purpose of adding a new payment method.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -853,6 +1159,27 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Update an existing payment method of the BP user
+     * @param {string} paymentMethodId The payment method ID
+     * @param {UpdatePaymentMethodRequest} updatePaymentMethodRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePaymentMethod(
+      paymentMethodId: string,
+      updatePaymentMethodRequest: UpdatePaymentMethodRequest,
+      options?: any,
+    ): AxiosPromise<UpdatePaymentMethod200Response> {
+      return localVarFp
+        .updatePaymentMethod(
+          paymentMethodId,
+          updatePaymentMethodRequest,
+          options,
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Update an existing subscription
      * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
      * @param {*} [options] Override http request option.
@@ -877,7 +1204,7 @@ export const DefaultApiFactory = function (
 export interface DefaultApiInterface {
   /**
    *
-   * @summary Create a stripe setup intent
+   * @summary Create a stripe setup intent, for the purpose of adding a new payment method.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
@@ -947,6 +1274,21 @@ export interface DefaultApiInterface {
 
   /**
    *
+   * @summary Update an existing payment method of the BP user
+   * @param {string} paymentMethodId The payment method ID
+   * @param {UpdatePaymentMethodRequest} updatePaymentMethodRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  updatePaymentMethod(
+    paymentMethodId: string,
+    updatePaymentMethodRequest: UpdatePaymentMethodRequest,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<UpdatePaymentMethod200Response>;
+
+  /**
+   *
    * @summary Update an existing subscription
    * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
    * @param {*} [options] Override http request option.
@@ -968,7 +1310,7 @@ export interface DefaultApiInterface {
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   /**
    *
-   * @summary Create a stripe setup intent
+   * @summary Create a stripe setup intent, for the purpose of adding a new payment method.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
@@ -1049,6 +1391,25 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   ) {
     return DefaultApiFp(this.configuration)
       .getUpcomingInvoice(newSubscriptionTier, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Update an existing payment method of the BP user
+   * @param {string} paymentMethodId The payment method ID
+   * @param {UpdatePaymentMethodRequest} updatePaymentMethodRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public updatePaymentMethod(
+    paymentMethodId: string,
+    updatePaymentMethodRequest: UpdatePaymentMethodRequest,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .updatePaymentMethod(paymentMethodId, updatePaymentMethodRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

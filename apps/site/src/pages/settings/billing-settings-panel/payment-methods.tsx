@@ -136,7 +136,12 @@ const PaymentMethodMenu: FunctionComponent<{
             <ListItemText primary="Make default method" />
           </MenuItem>
         )}
-        <Link href={cardDetailsPanelPageAsPath}>
+        <Link
+          href={{
+            pathname: cardDetailsPanelPageAsPath,
+            query: { id: paymentMethod.id },
+          }}
+        >
           <MenuItem disabled={isLoading}>
             <ListItemText primary="Change billing address" />
           </MenuItem>

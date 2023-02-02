@@ -23,6 +23,10 @@ import {
   BillingPageContextValue,
 } from "./billing-page-context";
 import {
+  CardDetailsPanelPage,
+  cardDetailsPanelPageAsPath,
+} from "./card-details-panel-page";
+import {
   PaymentMethodsPanelPage,
   paymentMethodsPanelPageAsPath,
 } from "./payment-methods";
@@ -43,6 +47,13 @@ const billingPanelPageRoot: BillingPanelPage = {
       title: "Payment Methods",
       href: paymentMethodsPanelPageAsPath,
       PanelPage: PaymentMethodsPanelPage,
+      childPanelPages: [
+        {
+          title: "Card Payments",
+          href: cardDetailsPanelPageAsPath,
+          PanelPage: CardDetailsPanelPage,
+        },
+      ],
     },
   ],
 };
@@ -57,9 +68,16 @@ const getBillingPanelPageByHref = (params: {
     return panelPageTree;
   }
 
-  return panelPageTree.childPanelPages?.find((childPage) =>
-    getBillingPanelPageByHref({ href, panelPageTree: childPage }),
-  );
+  for (const childPage of panelPageTree.childPanelPages ?? []) {
+    const matchingChild = getBillingPanelPageByHref({
+      href,
+      panelPageTree: childPage,
+    });
+
+    if (matchingChild) {
+      return matchingChild;
+    }
+  }
 };
 
 const getBreadcrumbsOfPanelPage = (params: {
@@ -137,8 +155,10 @@ export const BillingSettingsPanel: FunctionComponent = () => {
     if (router.isReady) {
       const { asPath } = router;
 
+      const asPathWithoutQueryParams = asPath.split("?")[0]!;
+
       const matchingBillingPanelPage = getBillingPanelPageByHref({
-        href: asPath,
+        href: asPathWithoutQueryParams,
       });
 
       if (matchingBillingPanelPage) {
@@ -185,16 +205,24 @@ export const BillingSettingsPanel: FunctionComponent = () => {
         aria-label="breadcrumb"
         sx={{ marginBottom: 3 }}
       >
-        {breadCrumbs?.map(({ href, title }) => (
-          <Link key={href} href={href}>
+        {breadCrumbs?.map(({ href, title }, index) => {
+          const typography = (
             <Typography
+              key={href}
               variant="bpHeading2"
               sx={{ fontSize: 28, fontWeight: 400 }}
             >
               {title}
             </Typography>
-          </Link>
-        ))}
+          );
+          return index === breadCrumbs.length - 1 ? (
+            typography
+          ) : (
+            <Link key={href} href={href}>
+              {typography}
+            </Link>
+          );
+        })}
       </Breadcrumbs>
       <BillingPageContext.Provider value={billingPageContextValue}>
         {PanelPage ? <PanelPage /> : null}
