@@ -157,12 +157,10 @@ export type MessageCallback<
   InputData,
   InputErrorCode extends string | null,
   ReturnData extends any | null = null,
-  ReturnErrorCode extends ReturnData extends null ? null : string | null = null,
-> = {
-  (messageData: MessageData<InputData, InputErrorCode>): ReturnData extends null
-    ? void
-    : Promise<MessageData<ReturnData, ReturnErrorCode>>;
-};
+  ReturnErrorCode extends string | null = null,
+> = (
+  messageData: MessageData<InputData, InputErrorCode>,
+) => Promise<MessageData<ReturnData, ReturnErrorCode>>;
 
 export type GenericMessageCallback =
   | MessageCallback<any, string>
