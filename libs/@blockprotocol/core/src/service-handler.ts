@@ -156,6 +156,16 @@ export abstract class ServiceHandler {
     }
   }
 
+  /** Remove callbacks with the CoreHandler for incoming messages of specific types */
+  removeCallbacks(
+    this: ServiceHandler,
+    callbacks: Record<string, GenericMessageCallback>,
+  ) {
+    for (const [messageName, callback] of Object.entries(callbacks)) {
+      this.removeCallback({ messageName, callback });
+    }
+  }
+
   /** Register a callback with the CoreHandler to handle an incoming messages of a specific type */
   protected registerCallback(
     this: ServiceHandler,
@@ -171,6 +181,30 @@ export abstract class ServiceHandler {
 
     this.coreQueue.push((coreHandler) =>
       coreHandler.registerCallback({
+        callback,
+        messageName,
+        serviceName: this.serviceName,
+      }),
+    );
+
+    this.processCoreQueue();
+  }
+
+  /** Remove a callback from the CoreHandler for an incoming messages of a specific type */
+  protected removeCallback(
+    this: ServiceHandler,
+    {
+      messageName,
+      callback,
+    }: {
+      messageName: string;
+      callback: GenericMessageCallback;
+    },
+  ) {
+    this.checkIfDestroyed();
+
+    this.coreQueue.push((coreHandler) =>
+      coreHandler.removeCallback({
         callback,
         messageName,
         serviceName: this.serviceName,
