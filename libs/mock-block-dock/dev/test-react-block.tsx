@@ -3,7 +3,7 @@ import {
   useGraphBlockService,
 } from "@blockprotocol/graph/react";
 import { useHook, useHookBlockService } from "@blockprotocol/hook/react";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 type AppProps = {
   name: string;
@@ -16,6 +16,10 @@ export const TestReactBlock: BlockComponent<AppProps> = ({ graph }) => {
   } = graph;
   const blockRef = useRef<HTMLDivElement>(null);
   const hookRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    console.log("block");
+  });
 
   const { graphService } = useGraphBlockService(blockRef);
 

@@ -14,6 +14,7 @@ export class CoreBlockHandler extends CoreHandler {
    * The response will be processed in {@link processInitMessage}
    */
   initialize() {
+    console.log("sending init message");
     void this.sendMessage({
       partialMessage: { messageName: "init" },
       respondedToBy: "initResponse",
@@ -38,6 +39,7 @@ export class CoreBlockHandler extends CoreHandler {
       message: Message & { data: EmbedderInitMessage };
     },
   ) {
+    console.log("received init message response");
     const { data } = message;
     for (const serviceName of Object.keys(data)) {
       for (const messageName of Object.keys(data[serviceName])) {
