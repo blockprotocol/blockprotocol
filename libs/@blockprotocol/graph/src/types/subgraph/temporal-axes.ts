@@ -2,6 +2,7 @@ import {
   LimitedTemporalBound,
   PinnedTemporalAxis,
   TemporalBound,
+  Timestamp,
   VariableTemporalAxis,
 } from "../temporal-versioning.js";
 
@@ -19,7 +20,7 @@ export type UnresolvedQueryTemporalAxes =
         TemporalBound | null,
         LimitedTemporalBound | null
       >;
-      pinned: PinnedTemporalAxis<"transactionTime">;
+      pinned: PinnedTemporalAxis<"transactionTime", Timestamp | null>;
     }
   | {
       variable: VariableTemporalAxis<
@@ -27,7 +28,7 @@ export type UnresolvedQueryTemporalAxes =
         TemporalBound | null,
         LimitedTemporalBound | null
       >;
-      pinned: PinnedTemporalAxis<"decisionTime">;
+      pinned: PinnedTemporalAxis<"decisionTime", Timestamp | null>;
     };
 
 /**
@@ -44,7 +45,7 @@ export type ResolvedQueryTemporalAxes =
         TemporalBound,
         LimitedTemporalBound
       >;
-      pinned: PinnedTemporalAxis<"transactionTime">;
+      pinned: PinnedTemporalAxis<"transactionTime", Timestamp>;
     }
   | {
       variable: VariableTemporalAxis<
@@ -52,7 +53,7 @@ export type ResolvedQueryTemporalAxes =
         TemporalBound,
         LimitedTemporalBound
       >;
-      pinned: PinnedTemporalAxis<"decisionTime">;
+      pinned: PinnedTemporalAxis<"decisionTime", Timestamp>;
     };
 
 /**

@@ -84,12 +84,16 @@ export type VariableTemporalAxis<
 
 /**
  * A representation of a "pinned" temporal axis, used to project another temporal axis along the given
- * {@link Timestamp}.
+ * {@link Timestamp}. If the `timestamp` is set to `null`, then it will be filled in with the current time _when a query
+ * is being resolved._
  *
  * In a bitemporal system, a {@link PinnedTemporalAxis} should almost always be accompanied by a
  * {@link VariableTemporalAxis}.
  */
-export type PinnedTemporalAxis<Axis extends TemporalAxes> = {
+export type PinnedTemporalAxis<
+  Axis extends TemporalAxes,
+  PinnedTime extends Timestamp | null,
+> = {
   axis: Axis;
-  timestamp: Timestamp;
+  timestamp: PinnedTime;
 };
