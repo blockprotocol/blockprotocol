@@ -57,7 +57,7 @@ export abstract class BlockElementBase<
     linkedEntities: { state: true },
   };
 
-  private updateDerivedProperties() {
+  private async updateDerivedProperties() {
     const blockEntitySubgraph = this.graph?.blockEntitySubgraph;
 
     if (blockEntitySubgraph) {
@@ -72,6 +72,10 @@ export abstract class BlockElementBase<
         RootEntityLinkedEntities
       >(blockEntitySubgraph, rootEntity.metadata.recordId.entityId);
     }
+
+    return {
+      data: null,
+    };
   }
 
   connectedCallback() {
