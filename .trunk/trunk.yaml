@@ -24,6 +24,12 @@ runtimes:
   enabled:
     - go@1.18.3
     - node@18.12.1
+merge:
+  required_statuses:
+    - Linting
+    - NPM Packages
+    - Site integration tests (Chrome)
+    - E2E tests
 actions:
   disabled:
     - trunk-announce
