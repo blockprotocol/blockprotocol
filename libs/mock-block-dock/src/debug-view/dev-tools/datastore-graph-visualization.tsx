@@ -3,6 +3,7 @@ import {
   EntityRecordId,
   EntityVertexId,
   GraphElementVertexId,
+  isEntityVertex,
   isHasRightEntityEdge,
   isOutgoingLinkEdge,
   OutwardEdge,
@@ -13,6 +14,7 @@ import {
   getEntityTypeById,
   getOutgoingLinkAndTargetEntities,
   getPropertyTypesByBaseUri,
+  intervalOverlapsInterval,
 } from "@blockprotocol/graph/stdlib";
 import { Box } from "@mui/material";
 import { GraphChart, GraphSeriesOption } from "echarts/charts";
@@ -23,7 +25,10 @@ import { useEffect, useRef, useState } from "react";
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
 import { typedEntries } from "../../util";
 
-const parseLabelFromEntity = (entityToLabel: Entity, subgraph: Subgraph) => {
+const parseLabelFromEntity = (
+  entityToLabel: Entity<true>,
+  subgraph: Subgraph<true>,
+) => {
   const getFallbackLabel = () => {
     // fallback to the entity type and a few characters of the entityUuid
     const entityId = entityToLabel.metadata.recordId.entityId;
@@ -137,8 +142,8 @@ type EChartNode = {
 };
 
 const mapEntityToEChartNode = (
-  entity: Entity,
-  subgraph: Subgraph,
+  entity: Entity<true>,
+  subgraph: Subgraph<true>,
 ): EChartNode => ({
   id: JSON.stringify(entity.metadata.recordId),
   name: parseLabelFromEntity(entity, subgraph),
@@ -171,7 +176,9 @@ const mapGraphEdgeToEChartEdge = (
   label: { show: false },
 });
 
-const getSubgraphEntitiesAsEChartNodes = (subgraph: Subgraph): EChartNode[] => {
+const getSubgraphEntitiesAsEChartNodes = (
+  subgraph: Subgraph<true>,
+): EChartNode[] => {
   const allEntities = getEntities(subgraph);
 
   /** @todo - Render link entities differently */
@@ -185,26 +192,46 @@ const getSubgraphEntitiesAsEChartNodes = (subgraph: Subgraph): EChartNode[] => {
   return allEntities.map((entity) => mapEntityToEChartNode(entity, subgraph));
 };
 
-const getSubgraphEdgesAsEChartEdges = (subgraph: Subgraph): EChartEdge[] =>
+const getSubgraphEdgesAsEChartEdges = (
+  subgraph: Subgraph<true>,
+): EChartEdge[] =>
   typedEntries(subgraph.edges).flatMap(([sourceBaseId, inner]) => {
     return typedEntries(inner).flatMap(([revisionId, outwardEdges]) => {
       return outwardEdges.flatMap((outwardEdge) => {
-        /** @todo - This is quite hacky (and not entirely correct) at the moment, we need to consider end intervals */
         const sourceRevisions = Object.keys(
           subgraph.vertices[sourceBaseId]!,
         ).filter((sourceRevisionId) => {
           return sourceRevisionId >= revisionId;
         });
 
-        const targetVersions = Object.keys(
-          subgraph.vertices[outwardEdge.rightEndpoint.baseId]!,
-        ).filter((targetRevisionId) => {
-          const startRevisionId =
-            "revisionId" in outwardEdge.rightEndpoint
-              ? outwardEdge.rightEndpoint.revisionId
-              : outwardEdge.rightEndpoint.timestamp;
-          return targetRevisionId >= startRevisionId;
-        });
+        const targetBaseId =
+          "entityId" in outwardEdge.rightEndpoint
+            ? outwardEdge.rightEndpoint.entityId
+            : outwardEdge.rightEndpoint.baseId;
+
+        const targetVersions = typedEntries(subgraph.vertices[targetBaseId]!)
+          .filter(([targetRevisionId, vertex]) => {
+            if ("entityId" in outwardEdge.rightEndpoint) {
+              if (!isEntityVertex(vertex)) {
+                throw new Error(
+                  `Edge is supposed to point to entity vertex but found ${
+                    vertex.kind
+                  }: ${JSON.stringify(outwardEdge)}`,
+                );
+              }
+              return intervalOverlapsInterval(
+                outwardEdge.rightEndpoint.validInterval,
+                vertex.inner.metadata.temporalVersioning[
+                  subgraph.temporalAxes.resolved.variable.axis
+                ],
+              );
+            } else {
+              return (
+                Number(targetRevisionId) >= outwardEdge.rightEndpoint.revisionId
+              );
+            }
+          })
+          .map(([targetRevisionId, _vertex]) => targetRevisionId);
 
         return sourceRevisions.flatMap((sourceRevisionId) =>
           targetVersions
@@ -215,7 +242,7 @@ const getSubgraphEdgesAsEChartEdges = (subgraph: Subgraph): EChartEdge[] =>
               };
 
               const targetVertexId: GraphElementVertexId = {
-                baseId: outwardEdge.rightEndpoint.baseId,
+                baseId: targetBaseId,
                 revisionId: targetRevisionId,
               };
 
@@ -311,8 +338,14 @@ export const DatastoreGraphVisualization = () => {
 
       const neighbourIds = outgoingLinkAndTargetEntities.flatMap(
         ({ linkEntity, rightEntity }) => [
-          JSON.stringify(linkEntity.metadata.recordId),
-          JSON.stringify(rightEntity.metadata.recordId),
+          JSON.stringify(
+            (Array.isArray(linkEntity) ? linkEntity[0]! : linkEntity).metadata
+              .recordId,
+          ),
+          JSON.stringify(
+            (Array.isArray(rightEntity) ? rightEntity[0]! : rightEntity)
+              .metadata.recordId,
+          ),
         ],
       );
 
