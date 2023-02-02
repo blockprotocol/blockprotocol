@@ -102,6 +102,19 @@ export interface GetSubscription200Response {
 /**
  *
  * @export
+ * @interface GetSubscriptionTierPrices200Response
+ */
+export interface GetSubscriptionTierPrices200Response {
+  /**
+   *
+   * @type {SubscriptionTierPrices}
+   * @memberof GetSubscriptionTierPrices200Response
+   */
+  subscriptionTierPrices: SubscriptionTierPrices;
+}
+/**
+ *
+ * @export
  * @interface GetUpcomingInvoice200Response
  */
 export interface GetUpcomingInvoice200Response {
@@ -142,6 +155,14 @@ export interface StripePaymentMethod {
 /**
  *
  * @export
+ * @interface StripePrice
+ */
+export interface StripePrice {
+  [key: string]: any;
+}
+/**
+ *
+ * @export
  * @interface StripeSubscription
  */
 export interface StripeSubscription {
@@ -161,6 +182,25 @@ export const SubscriptionTier = {
 export type SubscriptionTier =
   (typeof SubscriptionTier)[keyof typeof SubscriptionTier];
 
+/**
+ *
+ * @export
+ * @interface SubscriptionTierPrices
+ */
+export interface SubscriptionTierPrices {
+  /**
+   *
+   * @type {StripePrice}
+   * @memberof SubscriptionTierPrices
+   */
+  hobby: StripePrice;
+  /**
+   *
+   * @type {StripePrice}
+   * @memberof SubscriptionTierPrices
+   */
+  pro: StripePrice;
+}
 /**
  *
  * @export
@@ -299,6 +339,45 @@ export const DefaultApiAxiosParamCreator = function (
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
       const localVarPath = `/subscription`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "GET",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Retrieve the subscription tier prices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSubscriptionTierPrices: async (
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/subscription-tier-prices`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -520,6 +599,29 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
+     * @summary Retrieve the subscription tier prices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSubscriptionTierPrices(
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<GetSubscriptionTierPrices200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSubscriptionTierPrices(options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
      * @summary Retrieve an upcoming invoice based on a new subscription tier
      * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
      * @param {*} [options] Override http request option.
@@ -629,6 +731,19 @@ export const DefaultApiFactory = function (
     },
     /**
      *
+     * @summary Retrieve the subscription tier prices
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSubscriptionTierPrices(
+      options?: any,
+    ): AxiosPromise<GetSubscriptionTierPrices200Response> {
+      return localVarFp
+        .getSubscriptionTierPrices(options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
      * @summary Retrieve an upcoming invoice based on a new subscription tier
      * @param {SubscriptionTier} newSubscriptionTier The new subscription tier
      * @param {*} [options] Override http request option.
@@ -700,6 +815,17 @@ export interface DefaultApiInterface {
   getSubscription(
     options?: AxiosRequestConfig,
   ): AxiosPromise<GetSubscription200Response>;
+
+  /**
+   *
+   * @summary Retrieve the subscription tier prices
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  getSubscriptionTierPrices(
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<GetSubscriptionTierPrices200Response>;
 
   /**
    *
@@ -775,6 +901,19 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   public getSubscription(options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
       .getSubscription(options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Retrieve the subscription tier prices
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public getSubscriptionTierPrices(options?: AxiosRequestConfig) {
+    return DefaultApiFp(this.configuration)
+      .getSubscriptionTierPrices(options)
       .then((request) => request(this.axios, this.basePath));
   }
 
