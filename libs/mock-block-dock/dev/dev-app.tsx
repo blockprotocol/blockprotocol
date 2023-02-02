@@ -1,3 +1,7 @@
+import {
+  EntityTemporalVersioningMetadata,
+  QueryTemporalAxes,
+} from "@blockprotocol/graph";
 import { extractBaseUri } from "@blockprotocol/type-system/slim";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { createRoot } from "react-dom/client";
@@ -11,14 +15,51 @@ import { TestReactBlock } from "./test-react-block";
 
 const node = document.getElementById("app");
 
+const intervalForAllTime =
+  (): EntityTemporalVersioningMetadata[keyof EntityTemporalVersioningMetadata] => {
+    return {
+      start: {
+        kind: "inclusive",
+        limit: new Date(0).toISOString(),
+      },
+      end: {
+        kind: "unbounded",
+      },
+    } as const;
+  };
+
+const entityTemporalMetadata = (): EntityTemporalVersioningMetadata => {
+  return {
+    transactionTime: intervalForAllTime(),
+    decisionTime: intervalForAllTime(),
+  };
+};
+
+const currentTime = new Date().toISOString();
+
+const temporalAxes: QueryTemporalAxes = {
+  pinned: {
+    axis: "transactionTime",
+    timestamp: currentTime,
+  },
+  variable: {
+    axis: "decisionTime",
+    interval: {
+      start: { kind: "unbounded" },
+      end: { kind: "inclusive", limit: currentTime },
+    },
+  },
+};
+
 const blockEntityMap = {
   react: {
     metadata: {
       recordId: {
         entityId: "entity-react",
-        editionId: new Date().toISOString(),
+        editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: entityTemporalMetadata(),
     },
     properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
   },
@@ -26,9 +67,10 @@ const blockEntityMap = {
     metadata: {
       recordId: {
         entityId: "entity-custom-element",
-        editionId: new Date().toISOString(),
+        editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: entityTemporalMetadata(),
     },
     properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
   },
@@ -36,9 +78,10 @@ const blockEntityMap = {
     metadata: {
       recordId: {
         entityId: "entity-html-as-url",
-        editionId: new Date().toISOString(),
+        editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: entityTemporalMetadata(),
     },
     properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
   },
@@ -46,14 +89,15 @@ const blockEntityMap = {
     metadata: {
       recordId: {
         entityId: "entity-html-as-string",
-        editionId: new Date().toISOString(),
+        editionId: new Date(0).toISOString(),
       },
       entityTypeId: entityTypes.testType.$id,
+      temporalVersioning: entityTemporalMetadata(),
     },
     properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
   },
 } as const;
-// } as const satisfies Record<string, Entity>;
+// } as const satisfies Record<string, Entity<true>>;
 
 type TestBlockType = keyof typeof blockEntityMap;
 
@@ -149,7 +193,10 @@ const DevApp: FunctionComponent = () => {
         }}
         debug
         key={testBlockType} // completely reset the state when block type has changed
-        initialEntities={Object.values(blockEntityMap)}
+        initialData={{
+          initialEntities: Object.values(blockEntityMap),
+          initialTemporalAxes: temporalAxes,
+        }}
       />
     </>
   );
