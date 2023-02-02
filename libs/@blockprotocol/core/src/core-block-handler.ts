@@ -22,7 +22,9 @@ export class CoreBlockHandler extends CoreHandler {
     if (!this.sentInitMessage) {
       console.log("sending init message");
       this.sentInitMessage = true;
-      void this.sendInitMessage();
+      void this.sendInitMessage().then(() => {
+        this.afterInitialized();
+      });
     }
   }
 

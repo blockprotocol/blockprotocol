@@ -86,5 +86,7 @@ export class CoreEmbedderHandler extends CoreHandler {
       requestId: message.requestId,
       sender: this,
     });
+
+    this.afterInitialized();
   }
 }
