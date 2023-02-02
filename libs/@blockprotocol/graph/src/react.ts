@@ -113,7 +113,7 @@ export const useGraphBlockService = <Temporal extends boolean>(
 export const useGraphEmbedderService = <Temporal extends boolean>(
   ref: RefObject<HTMLElement>,
   constructorArgs?: Omit<
-    ConstructorParameters<typeof GraphEmbedderHandler>[0],
+    ConstructorParameters<typeof GraphEmbedderHandler<Temporal>>[0],
     "element"
   >,
 ): { graphService: GraphEmbedderHandler<Temporal> } => {
