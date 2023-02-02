@@ -106,10 +106,7 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
           validIntervals: [entityRevisionValidInterval],
         };
       } else {
-        linkInfo.validIntervals = unionOfIntervals(
-          ...linkInfo.validIntervals,
-          entityRevisionValidInterval,
-        );
+        linkInfo.validIntervals.push(entityRevisionValidInterval);
       }
     }
 
@@ -134,7 +131,11 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
     linkEntityId,
     { leftEntityId, rightEntityId, validIntervals },
   ] of Object.entries(linkMap)) {
-    for (const validInterval of validIntervals) {
+    // If the list of entities is comprehensive, and link destinations cannot change, the result of this should be an
+    // array with a single interval that spans the full lifespan of the link entity.
+    const unionedIntervals = unionOfIntervals(...validIntervals);
+
+    for (const validInterval of unionedIntervals) {
       addKnowledgeGraphEdgeToSubgraphByMutation(
         subgraph,
         linkEntityId,
