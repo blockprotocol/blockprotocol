@@ -3079,7 +3079,7 @@
   dependencies:
     webpack-bundle-analyzer "4.7.0"
 
-git add "@next/env@13.1.6":
+"@next/env@13.1.6":
   version "13.1.6"
   resolved "https://registry.yarnpkg.com/@next/env/-/env-13.1.6.tgz#c4925609f16142ded1a5cb833359ab17359b7a93"
   integrity sha512-s+W9Fdqh5MFk6ECrbnVmmAOwxKQuhGMT7xXHrkYIBMBcTiOqNWhv5KbJIboKR5STXxNXl32hllnvKaffzFaWQg==
