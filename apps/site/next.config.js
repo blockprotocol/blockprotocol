@@ -11,7 +11,6 @@ const nextConfig = {
   experimental: {
     // @see `deleteIsrFilesCreatedAfterNextBuild()` for rationale
     isrMemoryCacheSize: 0,
-    transpilePackages: ["internal-api-repo"],
   },
   pageExtensions: ["page.ts", "page.tsx", "api.ts"],
   productionBrowserSourceMaps: true,
@@ -21,12 +20,38 @@ const nextConfig = {
     autoInstrumentServerFunctions: false,
     hideSourceMaps: false,
   },
+  transpilePackages: ["internal-api-repo"],
 
   // We call linters in GitHub Actions for all pull requests. By not linting
   // again during `next build`, we save CI minutes and unlock more feedback.
   // Thus, we can get Playwright test results and Preview releases for WIP PRs.
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+
+  async headers() {
+    return [
+      {
+        /**
+         * allow fetching types as JSON from anywhere
+         * @see ./src/middleware.page.ts for middleware which serves the JSON
+         */
+        source: "/:shortname/types/:path*",
+        has: [
+          {
+            type: "header",
+            key: "accept",
+            value: "(.*application/json.*)",
+          },
+        ],
+        headers: [
+          {
+            key: "access-control-allow-origin",
+            value: "*",
+          },
+        ],
+      },
+    ];
+  },
 
   redirects: () => {
     return [
