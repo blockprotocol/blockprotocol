@@ -89,7 +89,7 @@ export class GraphEmbedderHandler<Temporal extends boolean>
     };
   }
 
-  async blockEntitySubgraph({
+  blockEntitySubgraph({
     data,
   }: {
     data?: Subgraph<Temporal, EntityRootType<Temporal>>;
@@ -101,10 +101,6 @@ export class GraphEmbedderHandler<Temporal extends boolean>
         data: this._blockEntitySubgraph,
       },
     });
-
-    return {
-      data: null,
-    };
   }
 
   // linkedAggregations({ data }: { data?: LinkedAggregations }) {
@@ -117,7 +113,7 @@ export class GraphEmbedderHandler<Temporal extends boolean>
   //   });
   // }
 
-  async readonly({ data }: { data?: boolean }) {
+  readonly({ data }: { data?: boolean }) {
     this._readonly = data;
     this.sendMessage({
       message: {
@@ -125,9 +121,5 @@ export class GraphEmbedderHandler<Temporal extends boolean>
         data: this._readonly,
       },
     });
-
-    return {
-      data: null,
-    };
   }
 }
