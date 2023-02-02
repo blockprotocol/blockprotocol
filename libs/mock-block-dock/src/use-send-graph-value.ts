@@ -5,14 +5,14 @@ import {
 import { useEffect, useRef } from "react";
 
 type GraphValue = {
-  [Key in keyof BlockGraphMessageCallbacks]: {
+  [Key in keyof BlockGraphMessageCallbacks<true>]: {
     valueName: Key;
-    value: Parameters<BlockGraphMessageCallbacks[Key]>[0]["data"];
+    value: Parameters<BlockGraphMessageCallbacks<true>[Key]>[0]["data"];
   };
-}[keyof BlockGraphMessageCallbacks];
+}[keyof BlockGraphMessageCallbacks<true>];
 
 type UseSendGraphValueArgs = {
-  graphService?: GraphEmbedderHandler | null;
+  graphService?: GraphEmbedderHandler<true> | null;
 } & GraphValue;
 
 export const useSendGraphValue = ({
