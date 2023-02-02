@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 export const hardcodedTypes = {
   // @todo replace this with a type in the db when new type hosting available
   "https://blockprotocol.org/@blockprotocol/types/entity-type/link/v/1": {

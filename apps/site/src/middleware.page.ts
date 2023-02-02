@@ -7,7 +7,7 @@ import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
 import {
   returnTypeAsJson,
   versionedTypeUriRegExp,
-} from "./middleware/return-types-as-json";
+} from "./middleware.page/return-types-as-json";
 
 const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
   ? new URL(process.env.NEXT_PUBLIC_FRONTEND_URL).host
