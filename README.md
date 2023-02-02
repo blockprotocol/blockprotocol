@@ -15,6 +15,7 @@
 [using blocks]: https://blockprotocol.org/docs/using-blocks?utm_medium=organic&utm_source=github_readme_blockprotocol-repo_root
 [open issues]: https://github.com/blockprotocol/blockprotocol/issues?q=is%3Aissue+is%3Aopen
 [hash]: https://github.com/hashintel/hash/tree/main/apps/hash
+[awesome blocks]: https://github.com/blockprotocol/awesome-blocks
 
 <!-- markdownlint-disable link-fragments -->
 
@@ -58,6 +59,7 @@ Please refer to the [Block Protocol documentation] for complete instructions on 
   - The [Block Protocol for WordPress] plugin allows Þ blocks to be used within WordPress.
 - **Blocks**
   - Please view the [Þ Hub].
+  - We'll also be adding star examples to the [Awesome Blocks] repo. Feel free to open a PR to suggest an addition there.
 
 For more examples, please refer to the [Block Protocol documentation] or browse the complete [Þ Hub].
 
