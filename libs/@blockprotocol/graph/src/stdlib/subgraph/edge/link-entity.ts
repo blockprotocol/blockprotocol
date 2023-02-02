@@ -1,4 +1,4 @@
-import { typedEntries } from "../../../shared";
+import { typedEntries } from "../../../shared.js";
 import {
   Entity,
   EntityId,
@@ -15,15 +15,15 @@ import {
 import {
   NonNullTimeInterval,
   Timestamp,
-} from "../../../types/temporal-versioning";
-import { compareBounds } from "../../bound";
+} from "../../../types/temporal-versioning.js";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,
-} from "../../interval";
+  intervalIsStrictlyAfterInterval,
+} from "../../interval.js";
 import { mustBeDefined } from "../../must-be-defined.js";
 import { getEntityRevisionsByEntityId } from "../element/entity.js";
-import { getLatestInstantIntervalForSubgraph } from "../temporal-axes";
+import { getLatestInstantIntervalForSubgraph } from "../temporal-axes.js";
 
 const convertTimeToStringWithDefault = (timestamp?: Date | Timestamp) => {
   return timestamp === undefined
@@ -79,13 +79,10 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
       // Only look at outgoing edges that were created before or within the search interval
       .filter(
         ([edgeTimestamp, _outwardEdges]) =>
-          compareBounds(
-            { kind: "inclusive", limit: edgeTimestamp },
-            searchInterval.end,
-            /** @todo - should this be end */
-            "start",
-            "end",
-          ) <= 0,
+          !intervalIsStrictlyAfterInterval(
+            intervalForTimestamp(edgeTimestamp),
+            searchInterval,
+          ),
       )
       // Extract the link endpoint information
       .flatMap(([_edgeTimestamp, outwardEdges]) => {
@@ -158,13 +155,10 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
       // Only look at outgoing edges that were created before or within the search interval
       .filter(
         ([edgeTimestamp, _outwardEdges]) =>
-          compareBounds(
-            { kind: "inclusive", limit: edgeTimestamp },
-            searchInterval.end,
-            /** @todo - should this be end */
-            "start",
-            "end",
-          ) <= 0,
+          !intervalIsStrictlyAfterInterval(
+            intervalForTimestamp(edgeTimestamp),
+            searchInterval,
+          ),
       )
       // Extract the link endpoint information
       .flatMap(([_edgeTimestamp, outwardEdges]) => {

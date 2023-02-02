@@ -1,4 +1,4 @@
-import { typedEntries } from "../../../shared";
+import { typedEntries } from "../../../shared.js";
 import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
 import { Subgraph } from "../../../types/subgraph.js";
 import { isEntityVertex } from "../../../types/subgraph/vertices.js";
@@ -9,7 +9,7 @@ import {
 import {
   intervalContainsTimestamp,
   intervalOverlapsInterval,
-} from "../../interval";
+} from "../../interval.js";
 import { mustBeDefined } from "../../must-be-defined";
 
 /**

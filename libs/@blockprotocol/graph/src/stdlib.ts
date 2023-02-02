@@ -5,8 +5,11 @@ export { compareBounds } from "./stdlib/bound.js";
 export {
   intervalContainsInterval,
   intervalContainsTimestamp,
+  intervalForTimestamp,
   intervalIntersectionWithInterval,
   intervalIsAdjacentToInterval,
+  intervalIsStrictlyAfterInterval,
+  intervalIsStrictlyBeforeInterval,
   intervalMergeWithInterval,
   intervalOverlapsInterval,
   intervalUnionWithInterval,

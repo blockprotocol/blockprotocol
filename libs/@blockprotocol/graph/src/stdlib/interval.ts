@@ -35,8 +35,8 @@ export const intervalForTimestamp = (
  * being next to one another on the timeline, without any points between, *and where they are not overlapping*. Thus,
  * if adjacent, the two intervals should span another given interval.
  *
- * @param left - The first interval of the comparison (order is unimportant)
- * @param right - The second interval of the comparison
+ * @param {NonNullTimeInterval} left - The first interval of the comparison (order is unimportant)
+ * @param {NonNullTimeInterval} right - The second interval of the comparison
  */
 export const intervalIsAdjacentToInterval = (
   left: NonNullTimeInterval,
@@ -112,8 +112,8 @@ export const intervalContainsTimestamp = (
 /**
  * Checks whether there is *any* overlap between two {@link NonNullTimeInterval}
  *
- * @param left
- * @param right
+ * @param {NonNullTimeInterval} left
+ * @param {NonNullTimeInterval} right
  */
 export const intervalOverlapsInterval = (
   left: NonNullTimeInterval,
@@ -353,4 +353,34 @@ export const unionOfIntervals = <IntervalsType extends NonNullTimeInterval>(
       ];
     }
   }, [] as UnionReturn<IntervalsType, IntervalsType>[number][]);
+};
+
+/**
+ * Given two {@link NonNullTimeInterval}s, `left` and `right`, this returns `true` if the `left` interval spans a time
+ * range that is completely *before* the time range spanned by the `right` interval (which also implies they do not
+ * overlap), and false otherwise.
+ *
+ * @param {NonNullTimeInterval} left
+ * @param {NonNullTimeInterval} right
+ */
+export const intervalIsStrictlyBeforeInterval = (
+  left: NonNullTimeInterval,
+  right: NonNullTimeInterval,
+): boolean => {
+  return compareBounds(left.end, right.start, "end", "start") < 0;
+};
+
+/**
+ * Given two {@link NonNullTimeInterval}s, `left` and `right`, this returns `true` if the `left` interval spans a time
+ * range that is completely *after* the time range spanned by the `right` interval (which also implies they do not
+ * overlap), and false otherwise.
+ *
+ * @param {NonNullTimeInterval} left
+ * @param {NonNullTimeInterval} right
+ */
+export const intervalIsStrictlyAfterInterval = (
+  left: NonNullTimeInterval,
+  right: NonNullTimeInterval,
+): boolean => {
+  return compareBounds(left.start, right.end, "start", "end") > 0;
 };

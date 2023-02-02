@@ -45,6 +45,10 @@ export type Unbounded = { kind: "unbounded" };
  */
 export type TemporalBound = Unbounded | LimitedTemporalBound;
 
+/**
+ * A range of time from a given `start` {@link TemporalBound} (or lack of) to a given `end` {@link TemporalBound} (or
+ * lack of), where `start` is strictly before or equal to `end`.
+ */
 export type TimeInterval<
   StartBound extends TemporalBound | null,
   EndBound extends TemporalBound | null,
