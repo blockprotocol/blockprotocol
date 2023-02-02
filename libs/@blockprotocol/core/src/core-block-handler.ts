@@ -5,6 +5,8 @@ import { EmbedderInitMessage, Message } from "./types";
  * Implements the Block Protocol Core Specification for blocks.
  */
 export class CoreBlockHandler extends CoreHandler {
+  private sentInitMessage = false;
+
   constructor({ element }: { element: HTMLElement }) {
     super({ element, sourceType: "block" });
   }
@@ -12,13 +14,35 @@ export class CoreBlockHandler extends CoreHandler {
   /**
    * Send the init message, to which an initResponse is expected from the embedder.
    * The response will be processed in {@link processInitMessage}
+   *
+   * We send it repeatedly because the embedder may not yet have attached
+   * its listeners
    */
   initialize() {
-    console.log("sending init message");
-    void this.sendMessage({
+    if (!this.sentInitMessage) {
+      console.log("sending init message");
+      this.sentInitMessage = true;
+      void this.sendInitMessage();
+    }
+  }
+
+  private sendInitMessage(): Promise<void> {
+    const resp = this.sendMessage<EmbedderInitMessage, null>({
       partialMessage: { messageName: "init" },
       respondedToBy: "initResponse",
       sender: this,
+    });
+
+    return Promise.race([
+      resp,
+
+      new Promise<void>((resolve) => {
+        queueMicrotask(resolve);
+      }),
+    ]).then((response) => {
+      if (!response) {
+        return this.sendInitMessage();
+      }
     });
   }
 

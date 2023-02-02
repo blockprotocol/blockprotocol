@@ -238,7 +238,6 @@ export abstract class CoreHandler {
       composed: true,
       detail: fullMessage,
     });
-    this.dispatchingElement.dispatchEvent(event);
 
     if ("respondedToBy" in args && args.respondedToBy) {
       let resolverToStore: PromiseResolver | undefined = undefined;
@@ -254,8 +253,13 @@ export abstract class CoreHandler {
         resolve: resolverToStore!,
         reject: rejecterToStore!,
       });
+
+      this.dispatchingElement.dispatchEvent(event);
+
       return promise;
     }
+
+    this.dispatchingElement.dispatchEvent(event);
   }
 
   /**
@@ -348,17 +352,16 @@ export abstract class CoreHandler {
         (this.sourceType === "block" && messageName === "initResponse"))
     ) {
       this.processInitMessage({ event: messageEvent, message });
-      return;
+    } else {
+      // @todo should we await this?
+      this.callCallback({ message }).catch((err) => {
+        // eslint-disable-next-line no-console -- intentional feedback for users
+        console.error(
+          `Error calling callback for '${service}' service, for message '${messageName}: ${err}`,
+        );
+        throw err;
+      });
     }
-
-    // @todo should we await this?
-    this.callCallback({ message }).catch((err) => {
-      // eslint-disable-next-line no-console -- intentional feedback for users
-      console.error(
-        `Error calling callback for '${service}' service, for message '${messageName}: ${err}`,
-      );
-      throw err;
-    });
 
     // Check if this message is responding to another, and settle the outstanding promise
     const messageAwaitingResponse =
