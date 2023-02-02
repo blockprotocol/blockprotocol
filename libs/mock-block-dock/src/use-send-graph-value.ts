@@ -12,7 +12,7 @@ type GraphValue = {
 }[keyof BlockGraphMessageCallbacks<true>];
 
 type UseSendGraphValueArgs = {
-  graphService?: GraphEmbedderHandler<true> | null;
+  graphService: GraphEmbedderHandler<true> | null;
 } & GraphValue;
 
 export const useSendGraphValue = ({
