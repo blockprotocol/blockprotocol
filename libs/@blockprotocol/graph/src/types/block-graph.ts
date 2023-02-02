@@ -1,4 +1,4 @@
-import { MessageCallback } from "@blockprotocol/core";
+import { MessageCallback, MessageReturn } from "@blockprotocol/core";
 
 import {
   AggregateEntitiesData,
@@ -81,33 +81,35 @@ export type EmbedderGraphMessageCallbacks<Temporal extends boolean> = {
   createEntity: MessageCallback<
     CreateEntityData,
     null,
-    Entity<Temporal>,
+    MessageReturn<Entity<Temporal>>,
     CreateResourceError
   >;
   updateEntity: MessageCallback<
     UpdateEntityData,
     null,
-    Entity<Temporal>,
+    MessageReturn<Entity<Temporal>>,
     ReadOrModifyResourceError
   >;
   deleteEntity: MessageCallback<
     DeleteEntityData,
     null,
-    true,
+    MessageReturn<true>,
     ReadOrModifyResourceError
   >;
   getEntity: MessageCallback<
     GetEntityData<Temporal>,
     null,
-    Subgraph<Temporal, EntityRootType<Temporal>>,
+    MessageReturn<Subgraph<Temporal, EntityRootType<Temporal>>>,
     ReadOrModifyResourceError
   >;
   aggregateEntities: MessageCallback<
     AggregateEntitiesData<Temporal>,
     null,
-    AggregateEntitiesResult<
-      Temporal,
-      Subgraph<Temporal, EntityRootType<Temporal>>
+    MessageReturn<
+      AggregateEntitiesResult<
+        Temporal,
+        Subgraph<Temporal, EntityRootType<Temporal>>
+      >
     >,
     ReadOrModifyResourceError
   >;
@@ -133,44 +135,46 @@ export type EmbedderGraphMessageCallbacks<Temporal extends boolean> = {
   getEntityType: MessageCallback<
     GetEntityTypeData,
     null,
-    Subgraph<Temporal, EntityTypeRootType>,
+    MessageReturn<Subgraph<Temporal, EntityTypeRootType>>,
     ReadOrModifyResourceError
   >;
   aggregateEntityTypes: MessageCallback<
     AggregateEntityTypesData,
     null,
-    AggregateEntityTypesResult<Subgraph<Temporal, EntityTypeRootType>>,
+    MessageReturn<
+      AggregateEntityTypesResult<Subgraph<Temporal, EntityTypeRootType>>
+    >,
     ReadOrModifyResourceError
   >;
   /** @todo - Reimplement linked aggregations */
   // createLinkedAggregation: MessageCallback<
   //   CreateLinkedAggregationData,
   //   null,
-  //   LinkedAggregationDefinition,
+  //   MessageReturn<LinkedAggregationDefinition>,
   //   CreateResourceError
   // >;
   // updateLinkedAggregation: MessageCallback<
   //   UpdateLinkedAggregationData,
   //   null,
-  //   LinkedAggregationDefinition,
+  //   MessageReturn<LinkedAggregationDefinition>,
   //   ReadOrModifyResourceError
   // >;
   // deleteLinkedAggregation: MessageCallback<
   //   DeleteLinkedAggregationData,
   //   null,
-  //   true,
+  //   MessageReturn<true>,
   //   ReadOrModifyResourceError
   // >;
   // getLinkedAggregation: MessageCallback<
   //   GetLinkedAggregationData,
   //   null,
-  //   LinkedAggregationDefinition,
+  //   MessageReturn<LinkedAggregationDefinition>,
   //   ReadOrModifyResourceError
   // >;
   uploadFile: MessageCallback<
     UploadFileData,
     null,
-    UploadFileReturn,
+    MessageReturn<UploadFileReturn>,
     CreateResourceError
   >;
 };

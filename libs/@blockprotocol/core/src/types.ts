@@ -153,14 +153,33 @@ export interface Message extends MessageContents {
   timestamp: string;
 }
 
+export type MessageReturn<T extends any> = {
+  data: T;
+};
+
 export type MessageCallback<
   InputData,
   InputErrorCode extends string | null,
-  ReturnData extends any | null = null,
-  ReturnErrorCode extends string | null = null,
-> = (
-  messageData: MessageData<InputData, InputErrorCode>,
-) => Promise<MessageData<ReturnData, ReturnErrorCode>>;
+  ReturnData extends MessageReturn<any> | null = null,
+  ReturnErrorCode extends ReturnData extends null ? null : string | null = null,
+> = {
+  (messageData: MessageData<InputData, InputErrorCode>): ReturnData extends null
+    ? void
+    : /*
+    The `MessageReturn` type and this ternary is really strange. It seems that TypeScript breaks otherwise when you
+    pass in a type which has a conditional top-level component e.g.
+    `type Foo<T extends boolean> = T extends true ? "1" : "2"`
+
+    Wrapping the type so that there's something solid on the first level (as we do with `MessageReturn`) seems to fix
+    that. This only appears at the type level anyway as we unwrap it in the resultant type.
+     */
+      Promise<
+        MessageData<
+          (ReturnData extends null ? never : ReturnData)["data"],
+          ReturnErrorCode
+        >
+      >;
+};
 
 export type GenericMessageCallback =
   | MessageCallback<any, string>
