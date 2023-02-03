@@ -51,7 +51,7 @@ Blocks built for the Block Protocol work inside of multiple embedding applicatio
 
 Anybody with web development experience can build a block to add functionality to an application that implements the Block Protocol. That means if you're the user of a protocol-supporting application such as WordPress or HASH, [developing a Þ block](https://blockprotocol.org/docs/developing-blocks) will enable you to extend that app's capabilities, and take your work with you to other Þ environments should you wish.
 
-Blocks don't have to be open-sourced, but we strongly encourage publishing them to the [Þ Hub](https://blockprotocol.org/hub), sharing them with others. You may be motivated to do this by any of the factors that already result in  thiriving open-source software ecosystems today: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
+Blocks don't have to be open-sourced, but we strongly encourage publishing them to the [Þ Hub](https://blockprotocol.org/hub), sharing them with others. You may be motivated to do this by any of the factors that already result in thiriving open-source software ecosystems today: challenge, competition, fun, reputation, and the desire to contribute to and be part of a community.
 
 Open-sourcing blocks can also be borne of self-interest. Making your code public allows other interested users to contribute back to improving your block further, enhancing its utility and fixing any bugs that may be hiding within. Stephen Walli writes that open-sourcing code isn't always "contributing back out of altruism", but sometimes "engineering economics". It can be the right commercial call, hardening and improving the product (in this case block) that you yourself are relying upon.
 
@@ -135,13 +135,14 @@ Because those inserting blocks are often non-technical end users, this isn't alw
   - which blocks a user inserts are ultimately able to be run in either a sandboxed or unsandboxed fashion
 
 Today you might choose to allow/deny blocks on the basis of their authorship (published namespace), or based on their _verification status_.
-  
+
 In the future we also plan to expose:
+
 - additional Þ _Hub_ metadata which may prove useful in the creating and maintaining whitelists;
 - permission grants for blocks and block types, that allow for users to control the level and types of access blocks have (e.g. the ability to access information created through the Graph Service outside of themselves) or access to other services (e.g. making network requests).
 
 **Example - HASH:** [HASH](https://hash.dev/) allows first-party blocks (i.e. those developed _by HASH_ and listed under their own `@hash` namespace on the Þ _Hub_), alongside third-party blocks that have been verified, to be run in an **unsandboxed** fashion within their application, because they trust the origins and quality of those blocks. By unsandboxing blocks HASH can deliver them more efficiently to users, while providing a richer user experience. The blocks in HASH's namespace are amongst the most used within their application, providing default basic text editing functionality, and so the ability to unsandbox these and run them optimally is considered valuable. HASH allows all other blocks on the Þ _Hub_ to be discovered and inserted by its users, but delivers these in a sandbox.
-  
+
 **Example - WordPress:** The _Block Protocol for WordPress_ plugin restricts the insertion of blocks to verified blocks only. This can be turned off by WordPress administrations from the plugin settings panel, but prevents non-technical authors and editors from accidentally relying on blocks which have not been subjected to review. In the future the plugin will support sandboxing and more variable permissions, in addition.
 
 </FAQ>
@@ -216,9 +217,10 @@ We do not yet believe it necessary to specify block-application requests in Grap
 <FAQ question="Can blocks access external APIs?">
 
 Yes, blocks can make requests to external APIs. They can do this in one of two ways:
+
 - **directly:** all of the code require to access an API can be contained within a block. This is not recommended in circumstances where a service requires an API key in order to access it, as it will be impossible to keep this key secret if a block (and for a block to remain usable) once the block is published to the Þ Hub.
 - **through the Þ Hub:** in addition to blocks and types, endpoints (APIs) can also be made accessible via the Þ Hub. A limited set of endpoints will be available as of 28th February 2023, including ones providing access to _Mapbox_ and _OpenAI_.
-  
+
 Facilitating external API access via the Þ Hub is a new addition to the protocol, and intructions for making additional endpoints available will be added in due course. In the meantime, we're able to manually add endpoints on behalf of block developers. If there's an endpoint you'd like to use within a new or existing block, please [message us on Discord](https://blockprotocol.org/discord).
 
 </FAQ>
