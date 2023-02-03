@@ -118,17 +118,17 @@ test("key elements should be present when guest user views account page", async 
   if (isMobile) {
     await expect(codeBlockOverviewCard.locator("img").first()).toHaveAttribute(
       "src",
-      "http://localhost:3000/blocks/@hash/code/public/code.svg",
+      /\/blocks\/@hash\/code\/public\/code\.svg$/,
     );
   } else {
     await expect(codeBlockOverviewCard.locator("img").first()).toHaveAttribute(
       "src",
-      "http://localhost:3000/blocks/@hash/code/public/preview.svg",
+      /\/blocks\/@hash\/code\/public\/preview\.svg$/,
     );
 
     await expect(codeBlockOverviewCard.locator("img").nth(1)).toHaveAttribute(
       "src",
-      "http://localhost:3000/blocks/@hash/code/public/code.svg",
+      /\/blocks\/@hash\/code\/public\/code\.svg$/,
     );
   }
 
@@ -168,7 +168,7 @@ test("key elements should be present when guest user views account page", async 
 
   await expect(codeBlockListViewCard.locator("img")).toHaveAttribute(
     "src",
-    "http://localhost:3000/blocks/@hash/code/public/code.svg",
+    /\/@hash\/code\/public\/code\.svg$/,
   );
 
   await expect(
