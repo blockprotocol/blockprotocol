@@ -40,7 +40,7 @@ test("Block page should contain key elements", async ({
   const blockExample = codeBlock.examples?.[0] as Record<string, string>;
 
   if (isMobile) {
-    await page.locator("text=Source Code").click();
+    await page.locator("text=Block Data").click();
     await expect(page.locator("text=Block Properties")).toBeVisible();
   } else {
     await expect(page.locator("text=Block Properties")).toBeVisible();
@@ -129,7 +129,7 @@ test("should show an error message if an unsupported block is rendered", async (
   const blockExample = unsupportedBlock.examples![0] as Record<string, string>;
 
   if (isMobile) {
-    await page.locator("text=Source Code").click();
+    await page.locator("text=Block Data").click();
   }
 
   // confirm block properties tab contains example data

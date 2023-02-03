@@ -16,16 +16,16 @@ runs:
         node-version: 16 ## aligned with Node version on Vercel
         cache: yarn
 
-    - name: Cache Rust dependencies
-      uses: Swatinem/rust-cache@v2
-      with:
-        workspaces: libs/@blockprotocol/type-system/crate
-
     - name: Install Cargo-Make
       shell: bash
       run: |
         cargo install cargo-quickinstall
         cargo quickinstall cargo-make --version 0.35.15
+
+    - name: Cache Rust dependencies
+      uses: Swatinem/rust-cache@v2
+      with:
+        workspaces: libs/@blockprotocol/type-system/crate
 
     - run: yarn install
       shell: bash

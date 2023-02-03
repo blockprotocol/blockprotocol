@@ -4,7 +4,6 @@ module.exports = {
   rules: {
     "no-console": "off",
     "import/extensions": ["error", "ignorePackages"],
-    "import/named": "off", // Need to investigate this (Maximum call stack size exceeded Occurred while linting ... Rule: "import/named")
     "import/no-cycle": "off", // Need to investigate this (Maximum call stack size exceeded Occurred while linting ... Rule: "import/no-cycle")
   },
 };

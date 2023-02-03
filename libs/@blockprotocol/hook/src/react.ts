@@ -1,64 +1,8 @@
+import { useServiceConstructor } from "@blockprotocol/core/react";
 import { EntityId } from "@blockprotocol/graph";
-import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { RefObject, useLayoutEffect, useRef, useState } from "react";
 
 import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
-
-const useHookServiceConstructor = <
-  T extends typeof HookBlockHandler | typeof HookEmbedderHandler,
->({
-  Handler,
-  constructorArgs,
-  ref,
-}: {
-  Handler: T;
-  constructorArgs?: Omit<ConstructorParameters<T>[0], "element">;
-  ref: RefObject<HTMLElement>;
-}) => {
-  const previousRef = useRef<HTMLElement | null>(null);
-  const initialisedRef = useRef(false);
-
-  const [hookService, setHookService] = useState<
-    T extends typeof HookBlockHandler ? HookBlockHandler : HookEmbedderHandler
-  >(
-    () =>
-      new Handler(constructorArgs ?? {}) as T extends typeof HookBlockHandler // @todo fix these casts
-        ? HookBlockHandler
-        : HookEmbedderHandler,
-  );
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- will not loop & we don't want to reconstruct on other args
-  useEffect(() => {
-    if (ref.current === previousRef.current) {
-      return;
-    }
-
-    if (previousRef.current) {
-      hookService.destroy();
-    }
-
-    previousRef.current = ref.current;
-
-    if (ref.current) {
-      if (!initialisedRef.current) {
-        hookService.initialize(ref.current);
-      } else {
-        setHookService(
-          new Handler({
-            element: ref.current,
-            ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
-          }) as T extends typeof HookBlockHandler // @todo fix these casts
-            ? HookBlockHandler
-            : HookEmbedderHandler,
-        );
-      }
-
-      initialisedRef.current = true;
-    }
-  });
-
-  return { hookService };
-};
-
 /**
  * Create a HookBlockHandler instance, using a reference to an element in the
  * block.
@@ -73,13 +17,13 @@ export const useHookBlockService = (
     ConstructorParameters<typeof HookBlockHandler>[0],
     "element"
   >,
-): { hookService: HookBlockHandler } => {
-  return useHookServiceConstructor({
+): { hookService: HookBlockHandler } => ({
+  hookService: useServiceConstructor({
     Handler: HookBlockHandler,
     constructorArgs,
     ref,
-  });
-};
+  }),
+});
 
 /**
  * Create a HookEmbedderHandler instance, using a reference to an element
@@ -95,13 +39,13 @@ export const useHookEmbedderService = (
     ConstructorParameters<typeof HookEmbedderHandler>[0],
     "element"
   >,
-): { hookService: HookEmbedderHandler } => {
-  return useHookServiceConstructor({
+): { hookService: HookEmbedderHandler } => ({
+  hookService: useServiceConstructor({
     Handler: HookEmbedderHandler,
     ref,
     constructorArgs,
-  });
-};
+  }),
+});
 
 type Hook<T extends HTMLElement> = {
   id: string | null;
