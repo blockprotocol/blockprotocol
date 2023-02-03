@@ -3,7 +3,7 @@ import { isOntologyTypeRecordId } from "../../ontology.js";
 import {
   LimitedTemporalBound,
   TemporalBound,
-  TimeIntervalUnresolved,
+  TimeInterval,
   Timestamp,
 } from "../../temporal-versioning.js";
 import {
@@ -27,7 +27,7 @@ export type EntityIdAndTimestamp = {
 
 export type EntityValidInterval = {
   entityId: EntityId;
-  validInterval: TimeIntervalUnresolved<LimitedTemporalBound, TemporalBound>;
+  validInterval: TimeInterval<LimitedTemporalBound, TemporalBound>;
 };
 
 export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;

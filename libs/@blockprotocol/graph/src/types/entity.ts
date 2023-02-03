@@ -11,7 +11,7 @@ import {
   QueryTemporalAxesUnresolved,
   Subgraph,
   TemporalAxes,
-  TimeIntervalUnresolved,
+  TimeInterval,
   Timestamp,
   Unbounded,
 } from "../types.js";
@@ -52,7 +52,7 @@ export type EntityPropertiesObject = {
   [_: BaseUri]: EntityPropertyValue;
 };
 
-type HalfClosedInterval = TimeIntervalUnresolved<
+type HalfClosedInterval = TimeInterval<
   InclusiveLimitedTemporalBound,
   ExclusiveLimitedTemporalBound | Unbounded
 >;
