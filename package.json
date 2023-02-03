@@ -5,6 +5,7 @@
   "workspaces": {
     "packages": [
       "apps/*",
+      "infra/*",
       "libs/@blockprotocol/*",
       "libs/@local/*",
       "libs/@local/internal-api-client-generator/typescript",

@@ -1,5 +1,10 @@
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { Box, Fade, Paper, Typography } from "@mui/material";
+import {
+  faArrowLeft,
+  faCodePullRequest,
+  faPlus,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { Box, Fade, Typography } from "@mui/material";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
@@ -10,7 +15,7 @@ import { apiClient } from "../../../lib/api-client";
 import { ApiVerifyEmailRequestBody } from "../../../pages/api/verify-email.api";
 import { Button } from "../../button";
 import { FontAwesomeIcon } from "../../icons";
-import { Link } from "../../link";
+import { ArrowUpIcon } from "../../icons/arrow-up-icon";
 import { CompleteSignupScreen } from "../../screens/complete-signup-screen";
 import { SignupScreen } from "../../screens/signup-screen";
 import {
@@ -112,43 +117,29 @@ export const FinalCTA: NextPage = () => {
     <Box
       data-testid="final-cta"
       sx={{
-        background:
-          "radial-gradient(60% 100% at 50% 110%, #FFB172 -10%, #9482FF 40%, #84e0ff 110%) ",
-        py: { xs: 8, lg: 14 },
-        px: { xs: 2, lg: 0 },
         display: "flex",
-        alignItems: {
-          xs: "center",
-          md: "stretch",
-        },
-        justifyContent: "center",
-        flexDirection: {
-          xs: "column",
-          md: "row",
-        },
+        flexDirection: { xs: "column", md: "row" },
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "100%",
       }}
     >
-      <Paper
-        sx={{
-          flexShrink: 0,
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={(theme) => ({
+          height: "100%",
           width: "100%",
-          background: "white",
-          border: "2px solid white",
-          borderTopLeftRadius: "6px",
-          borderBottomLeftRadius: {
-            xs: 0,
-            md: "6px",
-          },
-          borderTopRightRadius: {
-            xs: "6px",
-            md: 0,
-          },
-          borderBottomRightRadius: 0,
-          padding: 2.5,
           maxWidth: 600,
-          boxShadow:
-            "0px 2.8px 2.2px rgba(37, 96, 184, 0.15), 0px 6.7px 5.3px rgba(37, 96, 184, 0.08), 0px 12.5px 10px rgba(37, 96, 184, 0.05), 0px 22.3px 17.9px rgba(37, 96, 184, 0.09), 0px 41.8px 33.4px rgba(37, 96, 184, 0.1), 0px 100px 80px rgba(37, 96, 184, 0.1)",
-        }}
+          transition: theme.transitions.create("padding"),
+          padding: {
+            xs: 4,
+            lg: 12.5,
+          },
+          mb: 2,
+        })}
       >
         <Box
           marginTop="-3px"
@@ -174,148 +165,199 @@ export const FinalCTA: NextPage = () => {
             </Box>
           </Fade>
         </Box>
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          sx={(theme) => ({
-            transition: theme.transitions.create("padding"),
-            padding: {
-              xs: theme.spacing(2, 0),
-              sm: 4,
-            },
-          })}
-        >
-          {currentScreen === "Email" ? (
-            <SignupScreen
-              autoFocus={false}
-              initialEmail={email}
-              onSignup={handleSignup}
-            />
-          ) : null}
-          {currentScreen === "VerificationCode" &&
-          verificationCodeInfo &&
-          email ? (
-            <VerificationCodeScreen
-              verificationCodeInfo={verificationCodeInfo}
-              email={email}
-              setVerificationCodeId={(verificationCodeId) => {
-                setVerificationCodeInfo({
-                  ...verificationCodeInfo,
-                  verificationCodeId,
-                });
-              }}
-              initialVerificationCode={initialVerificationCode}
-              onSubmit={handleVerificationCodeSubmitted}
-              onChangeEmail={() => setCurrentScreen("Email")}
-              submit={apiClient.verifyEmail}
-              resend={apiClient.signup}
-            />
-          ) : null}
-          {currentScreen === "CompleteSignup" && email ? (
-            <CompleteSignupScreen email={email} />
-          ) : null}
-        </Box>
-      </Paper>
+
+        {currentScreen === "Email" ? (
+          <SignupScreen
+            autoFocus={false}
+            initialEmail={email}
+            onSignup={handleSignup}
+          />
+        ) : null}
+        {currentScreen === "VerificationCode" &&
+        verificationCodeInfo &&
+        email ? (
+          <VerificationCodeScreen
+            verificationCodeInfo={verificationCodeInfo}
+            email={email}
+            setVerificationCodeId={(verificationCodeId) => {
+              setVerificationCodeInfo({
+                ...verificationCodeInfo,
+                verificationCodeId,
+              });
+            }}
+            initialVerificationCode={initialVerificationCode}
+            onSubmit={handleVerificationCodeSubmitted}
+            onChangeEmail={() => setCurrentScreen("Email")}
+            submit={apiClient.verifyEmail}
+            resend={apiClient.signup}
+          />
+        ) : null}
+        {currentScreen === "CompleteSignup" && email ? (
+          <CompleteSignupScreen email={email} />
+        ) : null}
+      </Box>
+
       <Box
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
         sx={{
-          maxWidth: {
-            xs: 600,
-            md: 420,
-          },
-          width: "100%",
-          borderTopRightRadius: {
-            xs: "0px",
-            md: "6px",
-          },
-          borderBottomRightRadius: "6px",
-          borderBottomLeftRadius: {
-            xs: "6px",
-            md: "0px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          height: "100%",
+          width: {
+            xs: "100%",
+            md: "auto",
           },
           padding: {
             xs: 4,
-            sm: 6,
-            md: 7,
+            lg: 8,
           },
-          gridGap: "3rem",
           background:
-            "linear-gradient(180deg, rgba(255, 255, 255, 0.91) 33.6%, rgba(250, 251, 252, 0.38) 113.46%)",
+            "linear-gradient(180.32deg, #FFFFFF 22.26%, rgba(240, 231, 255, 0.38) 99.72%), #FFFFFF",
+          borderStyle: "solid",
+          borderColor: ({ palette }) => palette.purple[100],
+          borderLeftWidth: { xs: 0, md: 1 },
+          borderTopWidth: { xs: 1, md: 0 },
+          alignItems: "center",
         }}
       >
-        {[
-          {
-            heading: <>Build your own blocks</>,
-            subHeading: (
-              <>
-                Any registered developer can build and publish blocks to the
-                global Hub for other applications to embed.
-              </>
-            ),
-            link: (
-              <Link href="/docs/developing-blocks">
-                Read the block builder guide
-              </Link>
-            ),
-          },
-          {
-            heading: <>Add blocks to your app</>,
-            subHeading: (
-              <>
-                Anyone with an existing application who wants to make their user
-                interface extensible with interoperable blocks can sign up to
-                use the protocol.
-              </>
-            ),
-            link: (
-              <Link href="/docs/embedding-blocks">
-                Read the embedding app guide
-              </Link>
-            ),
-          },
-        ].map(({ heading, subHeading, link }, index) => (
-          // eslint-disable-next-line react/no-array-index-key -- TODO fix this
-          <Box key={index} display="flex" alignItems="flex-start">
-            <Box>
-              <Typography
-                variant="bpHeading4"
-                mb={1}
-                sx={{
-                  color: ({ palette }) => palette.gray[90],
-                  fontWeight: 400,
-                  lineHeight: "1.25em",
-                }}
-              >
-                {heading}
-              </Typography>
-              <Typography
-                component="p"
-                variant="bpSmallCopy"
-                sx={{
-                  color: ({ palette }) => palette.gray[80],
-                  fontWeight: 400,
-                  lineHeight: "1.5em",
-                  marginBottom: 1,
-                }}
-              >
-                {subHeading}
-              </Typography>
-              <Typography
-                component="span"
-                sx={{
-                  lineHeight: "1.5em",
-                  textDecoration: "none",
-                  fontSize: "1rem",
-                }}
-              >
-                {link}
-              </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            height: 1,
+            maxWidth: {
+              xs: 600,
+              md: 460,
+            },
+            gap: 2,
+          }}
+        >
+          {[
+            {
+              heading: (
+                <>
+                  Publish blocks to the{" "}
+                  <strong>
+                    <Box
+                      component="span"
+                      sx={{ color: ({ palette }) => palette.purple[70] }}
+                    >
+                      Þ
+                    </Box>{" "}
+                    <Box
+                      component="span"
+                      sx={{ fontFamily: "colfax-web", fontStyle: "italic" }}
+                    >
+                      Hub
+                    </Box>
+                  </strong>
+                </>
+              ),
+              subHeading: (
+                <>
+                  Create and use blocks that work in any application that
+                  supports the protocol
+                </>
+              ),
+              icon: (
+                <ArrowUpIcon
+                  sx={{
+                    fontSize: 16,
+                  }}
+                />
+              ),
+            },
+            {
+              heading: <>Add blocks to your app</>,
+              subHeading: (
+                <>Access the open-source Hub and embed blocks you need</>
+              ),
+              icon: (
+                <FontAwesomeIcon
+                  sx={{
+                    fontSize: 16,
+                    fill: ({ palette }) => palette.purple[70],
+                  }}
+                  icon={faPlus}
+                />
+              ),
+            },
+            {
+              heading: <>Take part in a growing, open source community</>,
+              subHeading: (
+                <>
+                  Help make open source blocks avaliable to everyone on the web
+                </>
+              ),
+              icon: (
+                <FontAwesomeIcon
+                  sx={{
+                    fontSize: 16,
+                    fill: ({ palette }) => palette.purple[70],
+                  }}
+                  icon={faCodePullRequest}
+                />
+              ),
+            },
+            {
+              heading: <>Claim your favorite username</>,
+              subHeading: <>@pizza goes fast 🍕</>,
+              icon: (
+                <FontAwesomeIcon
+                  sx={{
+                    fontSize: 16,
+                    fill: ({ palette }) => palette.purple[70],
+                  }}
+                  icon={faUser}
+                />
+              ),
+            },
+          ].map(({ heading, subHeading, icon }, index) => (
+            <Box
+              // eslint-disable-next-line react/no-array-index-key -- TODO fix this
+              key={index}
+              display="flex"
+              alignItems="flex-start"
+              gap={1.5}
+              sx={{
+                maxWidth: {
+                  xs: 600,
+                  lg: 460,
+                },
+              }}
+            >
+              <Box sx={{ lineHeight: "16px", position: "relative", top: 4 }}>
+                {icon}
+              </Box>
+              <Box>
+                <Typography
+                  variant="bpSmallCopy"
+                  sx={{
+                    fontSize: "1.125rem",
+                    fontWeight: 500,
+                    lineHeight: 1.3,
+                    mb: 1,
+                  }}
+                >
+                  {heading}
+                </Typography>
+
+                <Typography
+                  variant="bpSmallCopy"
+                  component="p"
+                  sx={{
+                    color: ({ palette }) => palette.gray[70],
+                    fontWeight: 400,
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {subHeading}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        ))}
+          ))}
+        </Box>
       </Box>
     </Box>
   );

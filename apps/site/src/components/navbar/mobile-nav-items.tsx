@@ -62,7 +62,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
   const isSelected = pathWithoutParams === href;
 
   const hasChildren = itemIsPage(item)
-    ? item.subPages.length > 0 || item.sections.length > 0
+    ? (item.subPages ?? []).length > 0 || (item.sections ?? []).length > 0
     : item.subSections.length > 0;
 
   const isOpen =
@@ -155,7 +155,7 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
       {hasChildren ? (
         <Collapse in={isOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            {(itemIsPage(item) ? item.sections : item.subSections).map(
+            {(itemIsPage(item) ? item.sections : item.subSections)?.map(
               (subSection) => (
                 <MobileNavNestedPage<SiteMapPageSection>
                   hydrationFriendlyAsPath={hydrationFriendlyAsPath}
@@ -171,9 +171,8 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
                 />
               ),
             )}
-            {itemIsPage(item) ? (
-              <>
-                {item.subPages.map((subPage) => (
+            {itemIsPage(item)
+              ? item.subPages?.map((subPage) => (
                   <MobileNavNestedPage<SiteMapPage>
                     hydrationFriendlyAsPath={hydrationFriendlyAsPath}
                     key={subPage.href}
@@ -184,9 +183,8 @@ const MobileNavNestedPage = <T extends SiteMapPage | SiteMapPageSection>({
                     setExpandedItems={setExpandedItems}
                     onClose={onClose}
                   />
-                ))}
-              </>
-            ) : null}
+                ))
+              : null}
           </List>
           {depth === 0 ? <Divider /> : null}
         </Collapse>
@@ -215,7 +213,7 @@ const getInitialExpandedItems = ({
 
   const expandedChildren = [
     ...(itemIsPage(item)
-      ? item.subPages
+      ? (item.subPages ?? [])
           .map((page) =>
             getInitialExpandedItems({
               item: page,
@@ -225,7 +223,7 @@ const getInitialExpandedItems = ({
           )
           .flat()
       : []),
-    ...(itemIsPage(item) ? item.sections : item.subSections)
+    ...((itemIsPage(item) ? item.sections : item.subSections) ?? [])
       .map((section) =>
         getInitialExpandedItems({
           item: section,

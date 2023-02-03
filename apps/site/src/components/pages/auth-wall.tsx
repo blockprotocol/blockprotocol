@@ -9,11 +9,17 @@ export interface AuthWallPageContentProps {
   user: SerializedUser;
 }
 
-export type AuthWallPageContent = FunctionComponent<AuthWallPageContentProps>;
+export type AuthWallPageContent<P = {}> = FunctionComponent<
+  AuthWallPageContentProps & P
+>;
 
-const AuthWallWrapper: FunctionComponent<{
-  Content: AuthWallPageContent;
-}> = ({ Content }) => {
+const AuthWallWrapper = <P,>({
+  Content,
+  nextPageProps,
+}: {
+  Content: AuthWallPageContent<P>;
+  nextPageProps: P;
+}) => {
   const router = useRouter();
   const { user } = useUser();
 
@@ -26,7 +32,7 @@ const AuthWallWrapper: FunctionComponent<{
     return null;
   }
 
-  return <Content user={user} />;
+  return <Content user={user} {...nextPageProps} />;
 };
 
 /**
@@ -37,6 +43,10 @@ const AuthWallWrapper: FunctionComponent<{
  *
  * You can also get user object from Content props and thus avoid extra checks.
  */
-export const withAuthWall = (Content: AuthWallPageContent): NextPage => {
-  return () => <AuthWallWrapper Content={Content} />;
-};
+export function withAuthWall<P = {}>(
+  Content: AuthWallPageContent<P>,
+): NextPage<P> {
+  return (nextPageProps) => (
+    <AuthWallWrapper<P> Content={Content} nextPageProps={nextPageProps} />
+  );
+}

@@ -42,14 +42,13 @@ export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
       </Box>
       <Typography
         sx={{
-          fontFamily: "Apercu Pro",
           fontSize: "35.1625px",
           lineHeight: "120%",
-          color: "#37434F",
+          color: ({ palette }) => palette.bpGray[80],
           marginBottom: 2,
         }}
       >
-        {keyName} {regenerate ? "regenerated" : "generated"}
+        Key {regenerate ? "regenerated" : "generated"}
       </Typography>
       <Typography sx={{ marginBottom: 2 }}>
         Your key {keyName} has been {regenerate ? "regenerated" : "generated"}.
@@ -68,7 +67,7 @@ export const ApiKeyRenderer: FunctionComponent<ApiKeyRendererProps> = ({
         onMouseLeave={() => setCopied(false)}
         sx={{
           marginBottom: 2,
-          border: "1px solid #F2F5FA",
+          border: ({ palette }) => `1px solid ${palette.bpGray[20]}`,
           borderRadius: 2,
           p: 2,
           position: "relative",

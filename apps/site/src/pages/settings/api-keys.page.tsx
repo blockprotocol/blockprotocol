@@ -76,7 +76,7 @@ const ApiKeys: AuthWallPageContent = () => {
       <TopNavigationTabs />
 
       <PageContainer>
-        <Typography variant="bpTitle" mb={2}>
+        <Typography variant="bpHeading2" mb={2}>
           Access the API
         </Typography>
         <Box

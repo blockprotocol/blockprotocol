@@ -1,14 +1,11 @@
-import {
-  faDiscord,
-  faGithub,
-  faTwitter,
-} from "@fortawesome/free-brands-svg-icons";
+import { faGithub, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   BoxProps,
   Container,
   Grid,
+  Stack,
   Typography,
   useMediaQuery,
   useTheme,
@@ -16,69 +13,145 @@ import {
 import { FunctionComponent, ReactNode } from "react";
 
 import { BlockProtocolLogoIcon, FontAwesomeIcon } from "./icons";
+import { ArrowUpRightIcon } from "./icons/arrow-up-right-icon";
+import { DiscordIcon } from "./icons/discord-icon";
 import { Link } from "./link";
 import { LinkButton } from "./link-button";
 
-const FOOTER_NAVIGATION_LINKS: { href: string; name: string }[] = [
-  {
-    name: "Þ Hub",
-    href: "/hub",
-  },
-  {
-    name: "Documentation",
-    href: "/docs",
-  },
-  {
-    name: "Specification",
-    href: "/docs/spec",
-  },
-  {
-    name: "Publish a Block",
-    href: "/docs/developing-blocks#publish",
-  },
-  {
-    name: "Contact Us",
-    href: "/contact",
-  },
-];
+interface NavigationSection {
+  title: string;
+  links: NavigationLink[];
+}
+interface NavigationLink {
+  href: string;
+  name: string;
+  arrow?: boolean;
+}
 
-const FooterNavigationLinks = FOOTER_NAVIGATION_LINKS.map(({ href, name }) => (
-  <Typography
-    component="p"
-    variant="bpSmallCopy"
-    key={href}
-    sx={(theme) => ({
-      color: theme.palette.gray[50],
-      marginLeft: { xs: 0, md: 4 },
-      "&:first-of-type": {
-        marginTop: {
-          xs: 2,
-          md: 0,
-        },
-      },
-      "&:not(:first-of-type)": {
-        marginTop: 1.5,
-      },
-      "> a": {
-        borderBottomWidth: 0,
-        transition: theme.transitions.create("color", { duration: 150 }),
-        ":hover": {
-          color: theme.palette.gray[20],
-        },
-        ":active": {
-          color: theme.palette.common.white,
-        },
-        ":focus-visible": {
-          outlineColor: theme.palette.gray[40],
-        },
-      },
-    })}
-  >
-    <Link href={href}>{name}</Link>
-  </Typography>
-));
+const LEARN_MORE_NAVIGATION_LINKS: NavigationSection = {
+  title: "Learn more",
+  links: [
+    {
+      name: "Documentation",
+      href: "/docs",
+    },
+    {
+      name: "Specification",
+      href: "/docs/spec",
+    },
+    // Uncomment when we have the pricing page
+    // Don't forget to uncomment in tests aswell
+    // {
+    //   name: "Pricing",
+    //   href: "/pricing",
+    // },
+    {
+      name: "Contact Us",
+      href: "/contact",
+    },
+  ],
+};
+
+const DISCOVER_NAVIGATION_LINKS: NavigationSection = {
+  title: "Discover",
+  links: [
+    {
+      name: "Open-source blocks",
+      href: "/hub",
+    },
+    {
+      name: "Semantic types",
+      href: "/hub",
+    },
+    {
+      name: "API endpoints",
+      href: "/hub",
+    },
+  ],
+};
+
+const PUBLISH_NAVIGATION_LINKS: NavigationSection = {
+  title: "Publish...",
+  links: [
+    {
+      name: "a block",
+      href: "/docs/developing-blocks#publish",
+      arrow: true,
+    },
+    // Uncomment when we have the pages to link this to
+    // Don't forget to uncomment in tests aswell
+    // {
+    //   name: "a type",
+    //   href: "/",
+    //   arrow: true,
+    // },
+    // {
+    //   name: "an endpoint",
+    //   href: "/",
+    //   arrow: true,
+    // },
+  ],
+};
+
+const FooterNavigationLinks: FunctionComponent<{
+  section: NavigationSection;
+}> = ({ section: { title, links } }) => (
+  <Stack gap={2}>
+    <Typography
+      component="p"
+      variant="bpSmallCopy"
+      sx={{
+        lineHeight: "18px",
+        fontWeight: 700,
+        color: ({ palette }) => palette.bpGray[40],
+      }}
+    >
+      {title}
+    </Typography>
+    {links.map(({ href, name, arrow }) => (
+      <Typography
+        component="p"
+        variant="bpSmallCopy"
+        key={name}
+        sx={({ palette }) => ({
+          lineHeight: "18px",
+          color: palette.bpGray[50],
+          fill: palette.bpGray[60],
+          "> a": {
+            borderBottomWidth: 0,
+            ":hover": {
+              color: palette.bpGray[20],
+              fill: palette.bpGray[50],
+            },
+            ":focus-visible": {
+              outlineColor: palette.bpGray[50],
+            },
+          },
+        })}
+      >
+        <Link href={href} display="flex" alignItems="center">
+          {name}
+          {arrow ? (
+            <ArrowUpRightIcon
+              sx={{
+                fontSize: 15,
+                ml: 1,
+                fill: "inherit",
+              }}
+            />
+          ) : null}
+        </Link>
+      </Typography>
+    ))}
+  </Stack>
+);
 
 const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
+  {
+    name: "GitHub",
+    icon: <FontAwesomeIcon icon={faGithub} />,
+    href: "https://github.com/blockprotocol/blockprotocol",
+  },
   {
     name: "Twitter",
     icon: <FontAwesomeIcon icon={faTwitter} />,
@@ -86,25 +159,18 @@ const SOCIALS: { name: string; icon: ReactNode; href: string }[] = [
   },
   {
     name: "Discord",
-    icon: <FontAwesomeIcon icon={faDiscord} />,
+    icon: <DiscordIcon />,
     href: "/discord",
-  },
-  {
-    name: "GitHub",
-    icon: <FontAwesomeIcon icon={faGithub} />,
-    href: "https://github.com/blockprotocol/blockprotocol",
   },
 ];
 
 const Socials = (
   <Box
-    mt={3}
-    mb={2.5}
     display="flex"
     flexDirection="row"
     alignItems="center"
     flexWrap="wrap"
-    sx={{ gridGap: "1rem" }}
+    sx={{ gridGap: 12 }}
     data-testid="footer-social-links"
   >
     <Box flexShrink={0}>
@@ -112,30 +178,24 @@ const Socials = (
         <Link
           href={href}
           key={href}
-          sx={{
+          sx={({ palette, transitions }) => ({
             padding: 1.5,
             ...(index === 0 && { paddingLeft: 0 }),
-            color: (theme) => theme.palette.gray[50],
+            color: palette.bpGray[50],
             ":hover": {
               svg: {
-                color: (theme) => theme.palette.gray[30],
-              },
-            },
-            ":active": {
-              svg: {
-                color: (theme) => theme.palette.common.white,
+                color: palette.bpGray[20],
               },
             },
             ":focus-visible": {
-              outlineColor: (theme) => theme.palette.gray[50],
+              outlineColor: palette.bpGray[50],
             },
             svg: {
               fontSize: 20,
-              transition: (theme) =>
-                theme.transitions.create("color", { duration: 150 }),
+              transition: transitions.create("color", { duration: 150 }),
               color: "inherit",
             },
-          }}
+          })}
         >
           {icon}
         </Link>
@@ -148,6 +208,7 @@ const Socials = (
       size="small"
       sx={{
         flexShrink: 0,
+        backgroundColor: ({ palette }) => palette.bpGray[50],
       }}
       startIcon={<FontAwesomeIcon icon={faStar} />}
     >
@@ -164,7 +225,7 @@ export const Footer: FunctionComponent<FooterProps> = ({
 }) => {
   const theme = useTheme();
 
-  const md = useMediaQuery(theme.breakpoints.up("md"));
+  const lg = useMediaQuery(theme.breakpoints.up("lg"));
 
   return (
     <Box
@@ -187,41 +248,89 @@ export const Footer: FunctionComponent<FooterProps> = ({
       >
         <Grid
           container
-          spacing={2}
           sx={{
+            columnGap: 2,
+            rowGap: 3,
             margin: "0 auto",
+            mb: 2.5,
           }}
         >
-          <Grid item xs={12} md={5} lg={4}>
+          <Grid item xs={12} md={12} lg={4}>
             <BlockProtocolLogoIcon
               sx={{
                 display: "block",
                 color: theme.palette.gray[20],
               }}
+              iconColor={theme.palette.bpGray[30]}
+              logoColor={theme.palette.bpGray[20]}
             />
-            {md ? (
+            {lg ? (
               <>
                 <Typography
                   component="p"
                   variant="bpMicroCopy"
                   sx={{
                     marginTop: 2,
-                    lineHeight: "1.25rem",
-                    color: ({ palette }) => palette.gray[50],
+                    lineHeight: "20px",
+                    color: ({ palette }) => palette.bpGray[50],
+                    fontSize: 13,
                   }}
                 >
                   The open-source specification and hub
                   <br />
                   for data-driven, interactive blocks
                 </Typography>
-                {Socials}
+                <Box mt={2.5}>{Socials}</Box>
               </>
             ) : null}
           </Grid>
-          <Grid item xs={12} md={3} lg={4}>
-            {FooterNavigationLinks}
-            {md ? null : Socials}
+          <Grid
+            item
+            xs={12}
+            lg={6}
+            sx={{
+              display: "flex",
+              rowGap: 5,
+              columnGap: 8,
+              flexWrap: "wrap",
+            }}
+          >
+            <FooterNavigationLinks section={LEARN_MORE_NAVIGATION_LINKS} />
+            <FooterNavigationLinks section={DISCOVER_NAVIGATION_LINKS} />
+            <FooterNavigationLinks section={PUBLISH_NAVIGATION_LINKS} />
           </Grid>
+          {lg ? null : (
+            <Grid item xs={12}>
+              {Socials}
+            </Grid>
+          )}
+          {/* Uncomment when we have the pages to link this to
+          Don't forget to uncomment in tests aswell */}
+          {/* <Grid item xs={12}>
+            {[
+              { title: "Terms", href: "/legal/terms" },
+              { title: "Privacy", href: "/legal/privacy" },
+            ].map(({ title, href }, index) => (
+              <Link
+                key={title}
+                variant="bpSmallCaps"
+                href={href}
+                sx={({ palette, transitions }) => ({
+                  fontSize: 12,
+                  lineHeight: 1,
+                  padding: 1.25,
+                  color: palette.bpGray[50],
+                  transition: transitions.create("color", { duration: 150 }),
+                  ...(index === 0 && { paddingLeft: 0 }),
+                  ":hover": {
+                    color: palette.bpGray[20],
+                  },
+                })}
+              >
+                {title}
+              </Link>
+            ))}
+          </Grid> */}
         </Grid>
       </Container>
     </Box>

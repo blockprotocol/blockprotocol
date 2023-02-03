@@ -38,21 +38,17 @@ export class GraphEmbedderHandler
     blockEntity?: Entity;
     blockGraph?: BlockGraph;
     callbacks?: Partial<EmbedderGraphMessageCallbacks>;
-    element: HTMLElement;
+    element?: HTMLElement | null;
     entityTypes?: EntityType[];
     linkedAggregations?: LinkedAggregations;
     readonly?: boolean;
   }) {
-    super({ element, serviceName: "graph", sourceType: "embedder" });
+    super({ element, callbacks, serviceName: "graph", sourceType: "embedder" });
     this._blockEntity = blockEntity;
     this._blockGraph = blockGraph;
     this._entityTypes = entityTypes;
     this._linkedAggregations = linkedAggregations;
     this._readonly = readonly;
-
-    if (callbacks) {
-      this.registerCallbacks(callbacks);
-    }
   }
 
   /**
@@ -61,6 +57,14 @@ export class GraphEmbedderHandler
    */
   registerCallbacks(callbacks: Partial<EmbedderGraphMessageCallbacks>) {
     super.registerCallbacks(callbacks);
+  }
+
+  /**
+   * Removes multiple callbacks at once.
+   * Useful when replacing previously registered callbacks
+   */
+  removeCallbacks(callbacks: Partial<EmbedderGraphMessageCallbacks>) {
+    super.removeCallbacks(callbacks);
   }
 
   /**

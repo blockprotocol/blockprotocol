@@ -65,9 +65,9 @@ export const Header = () => {
               flexDirection: "row",
               alignItems: "center",
               mr: 2.25,
-              mb: 1,
               [breakpoints.down("md")]: {
                 mr: 0,
+                mb: 1,
               },
             })}
           >
@@ -81,6 +81,7 @@ export const Header = () => {
               lineHeight: 1,
               color: ({ palette }) => palette.gray[90],
               fontSize: "1em",
+              whiteSpace: "nowrap",
             }}
           >
             WordPress Plugin

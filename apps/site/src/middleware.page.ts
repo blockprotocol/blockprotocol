@@ -4,6 +4,10 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { SESSION_COOKIE_NAME } from "./lib/api/middleware/constants";
+import {
+  returnTypeAsJson,
+  versionedTypeUriRegExp,
+} from "./middleware.page/return-types-as-json";
 
 const productionFrontendHost = process.env.NEXT_PUBLIC_FRONTEND_URL
   ? new URL(process.env.NEXT_PUBLIC_FRONTEND_URL).host
@@ -44,6 +48,16 @@ export async function middleware(request: NextRequest) {
     if (isLoggedIn) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
+  }
+
+  // check if we have a request for a type as JSON
+  const openingTypePage = Boolean(url.pathname.match(versionedTypeUriRegExp));
+  const jsonRequested = request.headers
+    .get("accept")
+    ?.includes("application/json");
+
+  if (openingTypePage && jsonRequested) {
+    return returnTypeAsJson(request);
   }
 }
 
