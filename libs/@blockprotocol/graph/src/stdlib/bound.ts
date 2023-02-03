@@ -1,13 +1,10 @@
-import {
-  NonNullTimeInterval,
-  TemporalBound,
-} from "../types/temporal-versioning.js";
+import { TemporalBound, TimeInterval } from "../types/temporal-versioning.js";
 
 export const compareBounds = (
   left: TemporalBound,
   right: TemporalBound,
-  leftType: keyof NonNullTimeInterval,
-  rightType: keyof NonNullTimeInterval,
+  leftType: keyof TimeInterval,
+  rightType: keyof TimeInterval,
 ): number => {
   // If the bound values are not equal, then the bound with the lower value is less than the bound with the higher
   // value.

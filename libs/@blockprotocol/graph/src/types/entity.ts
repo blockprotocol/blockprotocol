@@ -10,7 +10,7 @@ import {
   InclusiveLimitedTemporalBound,
   Subgraph,
   TemporalAxes,
-  TimeInterval,
+  TimeIntervalUnresolved,
   Timestamp,
   Unbounded,
   UnresolvedQueryTemporalAxes,
@@ -52,7 +52,7 @@ export type EntityPropertiesObject = {
   [_: BaseUri]: EntityPropertyValue;
 };
 
-type HalfClosedInterval = TimeInterval<
+type HalfClosedInterval = TimeIntervalUnresolved<
   InclusiveLimitedTemporalBound,
   ExclusiveLimitedTemporalBound | Unbounded
 >;

@@ -1,8 +1,8 @@
 import {
   BoundedTimeInterval,
   LimitedTemporalBound,
-  NonNullTimeInterval,
   TemporalBound,
+  TimeInterval,
   Timestamp,
 } from "../types/temporal-versioning.js";
 import { boundIsAdjacentToBound, compareBounds } from "./bound.js";
@@ -31,16 +31,16 @@ export const intervalForTimestamp = (
 };
 
 /**
- * Checks whether two given {@link NonNullTimeInterval}s are adjacent to one another, where adjacency is defined as
+ * Checks whether two given {@link TimeInterval}s are adjacent to one another, where adjacency is defined as
  * being next to one another on the timeline, without any points between, *and where they are not overlapping*. Thus,
  * if adjacent, the two intervals should span another given interval.
  *
- * @param {NonNullTimeInterval} left - The first interval of the comparison (order is unimportant)
- * @param {NonNullTimeInterval} right - The second interval of the comparison
+ * @param {TimeInterval} left - The first interval of the comparison (order is unimportant)
+ * @param {TimeInterval} right - The second interval of the comparison
  */
 export const intervalIsAdjacentToInterval = (
-  left: NonNullTimeInterval,
-  right: NonNullTimeInterval,
+  left: TimeInterval,
+  right: TimeInterval,
 ): boolean => {
   /*
    Examples           |     1     |     2     |     3     |     4     |     5
@@ -57,15 +57,15 @@ export const intervalIsAdjacentToInterval = (
 };
 
 /**
- * Returns whether or not the `right` {@link NonNullTimeInterval} is *completely contained* within the `left`
- * {@link NonNullTimeInterval}.
+ * Returns whether or not the `right` {@link TimeInterval} is *completely contained* within the `left`
+ * {@link TimeInterval}.
  *
- * @param {NonNullTimeInterval} left - Checked if it contains the other
- * @param {NonNullTimeInterval} right - Checked if it's contained _within_ the other
+ * @param {TimeInterval} left - Checked if it contains the other
+ * @param {TimeInterval} right - Checked if it's contained _within_ the other
  */
 export const intervalContainsInterval = (
-  left: NonNullTimeInterval,
-  right: NonNullTimeInterval,
+  left: TimeInterval,
+  right: TimeInterval,
 ): boolean => {
   /*
    Examples           |     1     |     2     |     3     |     4     |     5     |     6
@@ -82,13 +82,13 @@ export const intervalContainsInterval = (
 };
 
 /**
- * Returns whether or not the given {@link Timestamp} falls within the span of a given {@link NonNullTimeInterval}.
+ * Returns whether or not the given {@link Timestamp} falls within the span of a given {@link TimeInterval}.
  *
- * @param {NonNullTimeInterval} interval
+ * @param {TimeInterval} interval
  * @param {Timestamp} timestamp
  */
 export const intervalContainsTimestamp = (
-  interval: NonNullTimeInterval,
+  interval: TimeInterval,
   timestamp: Timestamp,
 ): boolean => {
   const timestampAsBound: LimitedTemporalBound = {
@@ -110,14 +110,14 @@ export const intervalContainsTimestamp = (
 };
 
 /**
- * Checks whether there is *any* overlap between two {@link NonNullTimeInterval}
+ * Checks whether there is *any* overlap between two {@link TimeInterval}
  *
- * @param {NonNullTimeInterval} left
- * @param {NonNullTimeInterval} right
+ * @param {TimeInterval} left
+ * @param {TimeInterval} right
  */
 export const intervalOverlapsInterval = (
-  left: NonNullTimeInterval,
-  right: NonNullTimeInterval,
+  left: TimeInterval,
+  right: TimeInterval,
 ): boolean => {
   /*
    Examples |     1     |     2     |     3     |     4
@@ -142,13 +142,13 @@ export const intervalOverlapsInterval = (
  * be bounded, same goes for `end` {@link TemporalBound}s respectively
  */
 type IntersectionReturn<
-  LeftInterval extends NonNullTimeInterval,
-  RightInterval extends NonNullTimeInterval,
+  LeftInterval extends TimeInterval,
+  RightInterval extends TimeInterval,
 > = [LeftInterval, RightInterval] extends [
-  NonNullTimeInterval<infer LeftStartBound, infer LeftEndBound>,
-  NonNullTimeInterval<infer RightStartBound, infer RightEndBound>,
+  TimeInterval<infer LeftStartBound, infer LeftEndBound>,
+  TimeInterval<infer RightStartBound, infer RightEndBound>,
 ]
-  ? NonNullTimeInterval<
+  ? TimeInterval<
       LeftStartBound | RightStartBound extends LimitedTemporalBound
         ? LimitedTemporalBound
         : TemporalBound,
@@ -159,15 +159,15 @@ type IntersectionReturn<
   : never;
 
 /**
- * Returns the intersection (overlapping range) of two given {@link NonNullTimeInterval}s, returning `null` if there
+ * Returns the intersection (overlapping range) of two given {@link TimeInterval}s, returning `null` if there
  * isn't any.
  *
- * @param {NonNullTimeInterval} left
- * @param {NonNullTimeInterval} right
+ * @param {TimeInterval} left
+ * @param {TimeInterval} right
  */
 export const intervalIntersectionWithInterval = <
-  LeftInterval extends NonNullTimeInterval = NonNullTimeInterval,
-  RightInterval extends NonNullTimeInterval = NonNullTimeInterval,
+  LeftInterval extends TimeInterval = TimeInterval,
+  RightInterval extends TimeInterval = TimeInterval,
 >(
   left: LeftInterval,
   right: RightInterval,
@@ -203,13 +203,13 @@ export const intervalIntersectionWithInterval = <
  * bounded, same goes for end respectively
  */
 type MergeReturn<
-  LeftInterval extends NonNullTimeInterval,
-  RightInterval extends NonNullTimeInterval,
+  LeftInterval extends TimeInterval,
+  RightInterval extends TimeInterval,
 > = [LeftInterval, RightInterval] extends [
-  NonNullTimeInterval<infer LeftStartBound, infer LeftEndBound>,
-  NonNullTimeInterval<infer RightStartBound, infer RightEndBound>,
+  TimeInterval<infer LeftStartBound, infer LeftEndBound>,
+  TimeInterval<infer RightStartBound, infer RightEndBound>,
 ]
-  ? NonNullTimeInterval<
+  ? TimeInterval<
       LeftStartBound extends LimitedTemporalBound
         ? RightStartBound extends LimitedTemporalBound
           ? LimitedTemporalBound
@@ -224,18 +224,18 @@ type MergeReturn<
   : never;
 
 /**
- * Returns the {@link NonNullTimeInterval} which fully spans the space between the `start` {@link TemporalBound}s and
- * end {@link TemporalBound}s of two provided {@link NonNullTimeInterval}s.
+ * Returns the {@link TimeInterval} which fully spans the space between the `start` {@link TemporalBound}s and
+ * end {@link TemporalBound}s of two provided {@link TimeInterval}s.
  *
  * If the intervals do not overlap and are not adjacent, the resultant interval will span _more_ space than that spanned
  * by the given intervals. _This is different behavior compared to {@link intervalUnionWithInterval}._
  *
- * @param {NonNullTimeInterval} left
- * @param {NonNullTimeInterval} right
+ * @param {TimeInterval} left
+ * @param {TimeInterval} right
  */
 export const intervalMergeWithInterval = <
-  LeftInterval extends NonNullTimeInterval = NonNullTimeInterval,
-  RightInterval extends NonNullTimeInterval = NonNullTimeInterval,
+  LeftInterval extends TimeInterval = TimeInterval,
+  RightInterval extends TimeInterval = TimeInterval,
 >(
   left: LeftInterval,
   right: RightInterval,
@@ -261,26 +261,26 @@ export const intervalMergeWithInterval = <
 };
 
 type UnionReturn<
-  LeftInterval extends NonNullTimeInterval,
-  RightInterval extends NonNullTimeInterval,
+  LeftInterval extends TimeInterval,
+  RightInterval extends TimeInterval,
 > =
   | [MergeReturn<LeftInterval, RightInterval>]
   | [LeftInterval, RightInterval]
   | [RightInterval, LeftInterval];
 
 /**
- * Given two {@link NonNullTimeInterval}s, this returns a list of non-adjacent, non-overlapping
- * {@link NonNullTimeInterval}s which span the space spanned by the input intervals.
+ * Given two {@link TimeInterval}s, this returns a list of non-adjacent, non-overlapping
+ * {@link TimeInterval}s which span the space spanned by the input intervals.
  *
  * In other words, if the intervals _are_ adjacent, or overlap, then this returns the result of calling
  * {@link intervalMergeWithInterval} on the intervals, otherwise it returns the two intervals back.
  *
- * @param {NonNullTimeInterval}  left
- * @param {NonNullTimeInterval}  right
+ * @param {TimeInterval}  left
+ * @param {TimeInterval}  right
  */
 export const intervalUnionWithInterval = <
-  LeftInterval extends NonNullTimeInterval = NonNullTimeInterval,
-  RightInterval extends NonNullTimeInterval = NonNullTimeInterval,
+  LeftInterval extends TimeInterval = TimeInterval,
+  RightInterval extends TimeInterval = TimeInterval,
 >(
   left: LeftInterval,
   right: RightInterval,
@@ -306,15 +306,15 @@ export const intervalUnionWithInterval = <
 };
 
 /**
- * Given a collection of {@link NonNullTimeInterval}s, this returns a list of non-adjacent, non-overlapping
- * {@link NonNullTimeInterval}'s which span the space spanned by the input intervals.
+ * Given a collection of {@link TimeInterval}s, this returns a list of non-adjacent, non-overlapping
+ * {@link TimeInterval}'s which span the space spanned by the input intervals.
  *
  * Conceptually this recursively calls {@link intervalUnionWithInterval} pairwise until all intervals have been unioned
  * with one another. The space spanned by the result will not necessarily be contiguous (may contain gaps).
  *
- * @param {NonNullTimeInterval[]} intervals
+ * @param {TimeInterval[]} intervals
  */
-export const unionOfIntervals = <IntervalsType extends NonNullTimeInterval>(
+export const unionOfIntervals = <IntervalsType extends TimeInterval>(
   ...intervals: IntervalsType[]
 ): UnionReturn<IntervalsType, IntervalsType>[number][] => {
   /*
@@ -356,31 +356,31 @@ export const unionOfIntervals = <IntervalsType extends NonNullTimeInterval>(
 };
 
 /**
- * Given two {@link NonNullTimeInterval}s, `left` and `right`, this returns `true` if the `left` interval spans a time
+ * Given two {@link TimeInterval}s, `left` and `right`, this returns `true` if the `left` interval spans a time
  * range that is completely *before* the time range spanned by the `right` interval (which also implies they do not
  * overlap), and false otherwise.
  *
- * @param {NonNullTimeInterval} left
- * @param {NonNullTimeInterval} right
+ * @param {TimeInterval} left
+ * @param {TimeInterval} right
  */
 export const intervalIsStrictlyBeforeInterval = (
-  left: NonNullTimeInterval,
-  right: NonNullTimeInterval,
+  left: TimeInterval,
+  right: TimeInterval,
 ): boolean => {
   return compareBounds(left.end, right.start, "end", "start") < 0;
 };
 
 /**
- * Given two {@link NonNullTimeInterval}s, `left` and `right`, this returns `true` if the `left` interval spans a time
+ * Given two {@link TimeInterval}s, `left` and `right`, this returns `true` if the `left` interval spans a time
  * range that is completely *after* the time range spanned by the `right` interval (which also implies they do not
  * overlap), and false otherwise.
  *
- * @param {NonNullTimeInterval} left
- * @param {NonNullTimeInterval} right
+ * @param {TimeInterval} left
+ * @param {TimeInterval} right
  */
 export const intervalIsStrictlyAfterInterval = (
-  left: NonNullTimeInterval,
-  right: NonNullTimeInterval,
+  left: TimeInterval,
+  right: TimeInterval,
 ): boolean => {
   return compareBounds(left.start, right.end, "start", "end") > 0;
 };

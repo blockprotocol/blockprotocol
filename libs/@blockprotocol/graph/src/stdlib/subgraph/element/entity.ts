@@ -2,10 +2,7 @@ import { typedEntries } from "../../../shared.js";
 import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
 import { Subgraph } from "../../../types/subgraph.js";
 import { isEntityVertex } from "../../../types/subgraph/vertices.js";
-import {
-  NonNullTimeInterval,
-  Timestamp,
-} from "../../../types/temporal-versioning.js";
+import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
 import {
   intervalContainsTimestamp,
   intervalOverlapsInterval,
@@ -109,16 +106,16 @@ export const getEntityRevision = <Temporal extends boolean>(
  * Returns all {@link Entity} revisions within the vertices of the subgraph that match a given {@link EntityId}.
  *
  * When querying a subgraph with support for temporal versioning, it optionally constrains the search to a given
- * {@link NonNullTimeInterval}.
+ * {@link TimeInterval}.
  *
  * @param {Subgraph }subgraph
  * @param {EntityId} entityId
- * @param {NonNullTimeInterval} [interval]
+ * @param {TimeInterval} [interval]
  */
 export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
+  interval?: Temporal extends true ? TimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const versionObject = subgraph.vertices[entityId];
 

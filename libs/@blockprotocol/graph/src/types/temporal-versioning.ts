@@ -46,10 +46,14 @@ export type Unbounded = { kind: "unbounded" };
 export type TemporalBound = Unbounded | LimitedTemporalBound;
 
 /**
- * A range of time from a given `start` {@link TemporalBound} (or lack of) to a given `end` {@link TemporalBound} (or
- * lack of), where `start` is strictly before or equal to `end`.
+ * A representation of an interval of time, where the bounds of the interval may be omitted (represented by `null`) to
+ * be post-processed at a later stage.
+ *
+ * An example of how this may be useful is taking an interval that statically should refer to "the current time".
+ * Leaving a bound unspecified means that the `null` can be replaced at time of resolution with the current clock, while
+ * leaving the parameters of the query as statically defined.
  */
-export type TimeInterval<
+export type TimeIntervalUnresolved<
   StartBound extends TemporalBound | null,
   EndBound extends TemporalBound | null,
 > = {
@@ -57,18 +61,26 @@ export type TimeInterval<
   end: EndBound;
 };
 
-export type NonNullTimeInterval<
+/**
+ * A range of time from a given `start` {@link TemporalBound} to a given `end` {@link TemporalBound}, where `start` is
+ * strictly before or equal to `end`.
+ */
+export type TimeInterval<
   StartBound extends TemporalBound = TemporalBound,
   EndBound extends TemporalBound = TemporalBound,
-> = TimeInterval<StartBound, EndBound>;
+> = TimeIntervalUnresolved<StartBound, EndBound>;
 
+/**
+ * A range of time from a given `start` to a given `end` where both bounds are {@link Timestamp}s, and where `start` is
+ * strictly before or equal to `end`.
+ */
 export type BoundedTimeInterval = TimeInterval<
   LimitedTemporalBound,
   LimitedTemporalBound
 >;
 
 /**
- * A representation of a "variable" temporal axis, which is optionally bounded to a given {@link TimeInterval}.
+ * A representation of a "variable" temporal axis, which is optionally bounded to a given {@link TimeIntervalUnresolved}.
  *
  * In a bitemporal system, a {@link VariableTemporalAxis} should almost always be accompanied by a
  * {@link PinnedTemporalAxis}.
@@ -79,7 +91,7 @@ export type VariableTemporalAxis<
   EndBound extends LimitedTemporalBound | null,
 > = {
   axis: Axis;
-  interval: TimeInterval<StartBound, EndBound>;
+  interval: TimeIntervalUnresolved<StartBound, EndBound>;
 };
 
 /**

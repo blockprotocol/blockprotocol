@@ -13,10 +13,7 @@ import {
   OutwardEdge,
   Subgraph,
 } from "../../../types/subgraph.js";
-import {
-  NonNullTimeInterval,
-  Timestamp,
-} from "../../../types/temporal-versioning.js";
+import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,
@@ -52,7 +49,7 @@ const getUniqueEntitiesFilter = <Temporal extends boolean>() => {
  *
  * @param {Subgraph} subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
- * @param {NonNullTimeInterval} [interval] - An optional {@link NonNullTimeInterval} which, when provided with a
+ * @param {TimeInterval} [interval] - An optional {@link TimeInterval} which, when provided with a
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
@@ -60,7 +57,7 @@ const getUniqueEntitiesFilter = <Temporal extends boolean>() => {
 export const getOutgoingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
+  interval?: Temporal extends true ? TimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -128,7 +125,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
  *
  * @param {Subgraph} subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for incoming links to
- * @param {NonNullTimeInterval} [interval] - An optional {@link NonNullTimeInterval} which, when provided with a
+ * @param {TimeInterval} [interval] - An optional {@link TimeInterval} which, when provided with a
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
@@ -136,7 +133,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
 export const getIncomingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
+  interval?: Temporal extends true ? TimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -204,7 +201,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
  *
  * @param {Subgraph} subgraph
  * @param {EntityId} entityId - The ID of the link entity
- * @param {NonNullTimeInterval} [interval] - An optional {@link NonNullTimeInterval} which, when provided with a
+ * @param {TimeInterval} [interval] - An optional {@link TimeInterval} which, when provided with a
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
@@ -212,7 +209,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
 export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
+  interval?: Temporal extends true ? TimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
@@ -265,7 +262,7 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
  *
  * @param {Subgraph} subgraph
  * @param {EntityId} entityId - The ID of the link entity
- * @param {NonNullTimeInterval} [interval] - An optional {@link NonNullTimeInterval} which, when provided with a
+ * @param {TimeInterval} [interval] - An optional {@link TimeInterval} which, when provided with a
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
@@ -273,7 +270,7 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
 export const getRightEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  interval?: Temporal extends true ? NonNullTimeInterval : undefined,
+  interval?: Temporal extends true ? TimeInterval : undefined,
 ): Entity<Temporal>[] => {
   const searchInterval =
     interval !== undefined
