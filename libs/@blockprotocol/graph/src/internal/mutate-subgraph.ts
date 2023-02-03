@@ -95,7 +95,7 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
          entities should too
          */
           (entity as Entity<true>).metadata.temporalVersioning[
-            subgraph.temporalAxes.resolved.pinned.axis
+            subgraph.temporalAxes.resolved.variable.axis
           ]
         : {
             start: { kind: "inclusive", limit: new Date(0).toISOString() },
