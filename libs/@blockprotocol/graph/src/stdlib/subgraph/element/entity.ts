@@ -149,8 +149,8 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
           intervalOverlapsInterval(
             interval,
             /*
-             these casts are safe as we check for `targetRevisionInformation === undefined` above and that's only ever
-             defined if `Temporal extends true`
+             these casts are safe as we check for `interval !== undefined` above and that's only ever defined if
+             `Temporal extends true`
              */
             (entityVertex.inner as Entity<true>).metadata.temporalVersioning[
               (subgraph as Subgraph<true>).temporalAxes.resolved.variable.axis
