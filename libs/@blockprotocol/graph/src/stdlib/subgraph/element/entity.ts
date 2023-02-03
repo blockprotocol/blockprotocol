@@ -20,21 +20,19 @@ export const getEntities = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   latest: boolean = false,
 ): Entity<Temporal>[] => {
-  return Object.values(
-    Object.values(subgraph.vertices).flatMap((entityRevisions) => {
-      if (latest) {
-        const revisionVersions = Object.keys(entityRevisions).sort();
+  return Object.values(subgraph.vertices).flatMap((revisions) => {
+    if (latest) {
+      const revisionVersions = Object.keys(revisions).sort();
 
-        const lastIndex = revisionVersions.length - 1;
-        const vertex = entityRevisions[revisionVersions[lastIndex]!]!;
-        return isEntityVertex(vertex) ? [vertex.inner] : [];
-      } else {
-        return Object.values(entityRevisions)
-          .filter(isEntityVertex)
-          .map((vertex) => vertex.inner);
-      }
-    }),
-  );
+      const lastIndex = revisionVersions.length - 1;
+      const vertex = revisions[revisionVersions[lastIndex]!]!;
+      return isEntityVertex(vertex) ? [vertex.inner] : [];
+    } else {
+      return Object.values(revisions)
+        .filter(isEntityVertex)
+        .map((vertex) => vertex.inner);
+    }
+  });
 };
 
 /**
@@ -136,10 +134,10 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
   if (interval !== undefined) {
     const filteredEntities = [];
 
-    for (const [startTime, entityVertex] of typedEntries(versionObject)) {
+    for (const [startTime, vertex] of typedEntries(versionObject)) {
       if (
         intervalContainsTimestamp(interval, startTime) &&
-        isEntityVertex(entityVertex)
+        isEntityVertex(vertex)
       ) {
         if (
           /*
@@ -152,12 +150,12 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
              these casts are safe as we check for `interval !== undefined` above and that's only ever defined if
              `Temporal extends true`
              */
-            (entityVertex.inner as Entity<true>).metadata.temporalVersioning[
+            (vertex.inner as Entity<true>).metadata.temporalVersioning[
               (subgraph as Subgraph<true>).temporalAxes.resolved.variable.axis
             ],
           )
         ) {
-          filteredEntities.push(entityVertex.inner);
+          filteredEntities.push(vertex.inner);
         }
       }
     }
