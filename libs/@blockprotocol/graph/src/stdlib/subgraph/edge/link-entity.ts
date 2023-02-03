@@ -269,7 +269,7 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
     ) as Entity<Temporal>[];
   } else {
     return getEntityRevisionsByEntityId(
-      subgraph as Subgraph<true>,
+      subgraph as Subgraph<false>,
       leftEntityId,
     ) as Entity<Temporal>[];
   }
@@ -330,7 +330,7 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
     ) as Entity<Temporal>[];
   } else {
     return getEntityRevisionsByEntityId(
-      subgraph as Subgraph<true>,
+      subgraph as Subgraph<false>,
       rightEntityId,
     ) as Entity<Temporal>[];
   }
