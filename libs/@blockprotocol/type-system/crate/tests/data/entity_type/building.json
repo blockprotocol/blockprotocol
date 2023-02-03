@@ -28,5 +28,6 @@
       },
       "ordered": false
     }
-  }
+  },
+  "additionalProperties": false
 }

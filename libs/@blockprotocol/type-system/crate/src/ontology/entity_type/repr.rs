@@ -46,6 +46,8 @@ pub struct EntityType {
     property_object: repr::Object<repr::ValueOrArray<repr::PropertyTypeReference>>,
     #[serde(flatten)]
     links: repr::Links,
+    #[cfg_attr(target_arch = "wasm32", tsify(type = "false"))]
+    additional_properties: bool,
 }
 
 impl TryFrom<EntityType> for super::EntityType {
@@ -99,6 +101,10 @@ impl TryFrom<EntityType> for super::EntityType {
             .try_into()
             .map_err(ParseEntityTypeError::InvalidLinks)?;
 
+        if entity_type_repr.additional_properties == true {
+            return Err(ParseEntityTypeError::InvalidAdditionalPropertiesValue);
+        }
+
         Ok(Self::new(
             id,
             entity_type_repr.title,
@@ -141,6 +147,7 @@ impl From<super::EntityType> for EntityType {
             default,
             examples,
             links: entity_type.links.into(),
+            additional_properties: false,
         }
     }
 }

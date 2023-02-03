@@ -7,5 +7,5 @@ use tsify::Tsify;
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[serde(rename = "MaybeOneOfEntityTypeReference")]
 pub struct MaybeOneOfEntityTypeReferencePatch(
-    #[tsify(type = "OneOf<EntityTypeReference> | {}")] String,
+    #[tsify(type = "OneOf<EntityTypeReference> | Record<string, never>")] String,
 );
