@@ -14,6 +14,12 @@ import {
 import { KnowledgeGraphOutwardEdge } from "./variants/knowledge.js";
 import { OntologyOutwardEdge } from "./variants/ontology.js";
 
+/**
+ * A simple tuple type which identifies an {@link Entity} by its {@link EntityId}, at a given {@link Timestamp}.
+ *
+ * When using this to query a {@link Subgraph}, along its variable axis, this should identify a single unique revision
+ * of an {@link Entity} or possibly refer to nothing.
+ */
 export type EntityIdAndTimestamp = {
   baseId: EntityId;
   timestamp: Timestamp;
