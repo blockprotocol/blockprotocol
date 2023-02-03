@@ -521,6 +521,20 @@ const brokenTypes: [any, ParseEntityTypeError][] = [
       inner: "missing field `kind` at line 1 column 13",
     },
   ],
+  [
+    {
+      kind: "entityType",
+      $id: "https://blockprotocol.org/@alice/types/entity-type/foo/v/1",
+      type: "object",
+      title: "Foo",
+      allOf: [],
+      properties: {},
+      additionalProperties: true,
+    },
+    {
+      reason: "InvalidAdditionalPropertiesValue",
+    },
+  ],
 ];
 
 beforeAll(async () => {
