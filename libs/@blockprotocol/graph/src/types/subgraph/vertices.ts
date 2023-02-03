@@ -7,7 +7,7 @@ import {
   EntityPropertyValue,
   EntityRevisionId,
 } from "../entity.js";
-import { isOntologyTypeRecordId } from "../ontology.js";
+import { OntologyTypeRevisionId } from "../ontology.js";
 import { DataTypeWithMetadata } from "../ontology/data-type.js";
 import { EntityTypeWithMetadata } from "../ontology/entity-type.js";
 import { PropertyTypeWithMetadata } from "../ontology/property-type.js";
@@ -99,7 +99,7 @@ export const isOntologyTypeVertexId = (
     /** @todo - This means we need to have initialized the type system */
     validateBaseUri(vertexId.baseId).type === "Ok" &&
     "revisionId" in vertexId &&
-    typeof vertexId.revisionId === "number"
+    !Number.isNaN(Number(vertexId.revisionId))
   );
 };
 
@@ -114,7 +114,7 @@ export const isEntityVertexId = (
     /** @todo - is it fine to just check that versionId is string, maybe timestamp if we want to lock it into being a
      *    timestamp?
      */
-    !isOntologyTypeRecordId(vertexId)
+    !isOntologyTypeVertexId(vertexId)
   );
 };
 
