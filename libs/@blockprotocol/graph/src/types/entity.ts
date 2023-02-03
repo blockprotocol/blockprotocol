@@ -8,12 +8,12 @@ import {
   EntityRootType,
   ExclusiveLimitedTemporalBound,
   InclusiveLimitedTemporalBound,
+  QueryTemporalAxesUnresolved,
   Subgraph,
   TemporalAxes,
   TimeIntervalUnresolved,
   Timestamp,
   Unbounded,
-  UnresolvedQueryTemporalAxes,
 } from "../types.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
@@ -103,7 +103,7 @@ export type GetEntityData<Temporal extends boolean> = {
   entityId: EntityId;
   graphResolveDepths?: GraphResolveDepths;
 } & (Temporal extends true
-  ? { temporalAxes: UnresolvedQueryTemporalAxes }
+  ? { temporalAxes: QueryTemporalAxesUnresolved }
   : {});
 
 export type UpdateEntityData = {
@@ -163,7 +163,7 @@ export type AggregateEntitiesData<Temporal extends boolean> = {
   operation: AggregateOperationInput;
   graphResolveDepths?: GraphResolveDepths;
 } & (Temporal extends true
-  ? { temporalAxes: UnresolvedQueryTemporalAxes }
+  ? { temporalAxes: QueryTemporalAxesUnresolved }
   : {});
 
 export type AggregateEntitiesResult<

@@ -12,7 +12,7 @@ import {
  * The {@link VariableTemporalAxisUnresolved} is optionally bounded, in the absence of provided bounds an inclusive
  * bound at the timestamp at point of resolving is assumed.
  */
-export type UnresolvedQueryTemporalAxes =
+export type QueryTemporalAxesUnresolved =
   | {
       variable: VariableTemporalAxisUnresolved<"decisionTime">;
       pinned: PinnedTemporalAxisUnresolved<"transactionTime">;
@@ -28,7 +28,7 @@ export type UnresolvedQueryTemporalAxes =
  *
  * The {@link VariableTemporalAxis} is bounded according to the input of the query.
  */
-export type ResolvedQueryTemporalAxes =
+export type QueryTemporalAxes =
   | {
       variable: VariableTemporalAxisUnresolved<"decisionTime">;
       pinned: PinnedTemporalAxis<"transactionTime">;
@@ -43,11 +43,11 @@ export type ResolvedQueryTemporalAxes =
  */
 export type SubgraphTemporalAxes = {
   /**
-   * The {@link UnresolvedQueryTemporalAxes} provided in the query
+   * The {@link QueryTemporalAxesUnresolved} provided in the query
    */
-  initial: UnresolvedQueryTemporalAxes;
+  initial: QueryTemporalAxesUnresolved;
   /**
-   * The {@link ResolvedQueryTemporalAxes} used when resolving the {@link Subgraph}
+   * The {@link QueryTemporalAxes} used when resolving the {@link Subgraph}
    */
-  resolved: ResolvedQueryTemporalAxes;
+  resolved: QueryTemporalAxes;
 };
