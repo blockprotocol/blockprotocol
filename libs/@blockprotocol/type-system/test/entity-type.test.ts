@@ -27,6 +27,7 @@ const entityTypes: EntityType[] = [
       "https://blockprotocol.org/@alice/types/property-type/postcode/",
       "https://blockprotocol.org/@alice/types/property-type/city/",
     ],
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -52,6 +53,7 @@ const entityTypes: EntityType[] = [
           "YourBlock",
       },
     ],
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -90,6 +92,7 @@ const entityTypes: EntityType[] = [
       "https://blockprotocol.org/@alice/types/entity-type/written-by/v/1",
     ],
     examples: [],
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -122,6 +125,7 @@ const entityTypes: EntityType[] = [
         ordered: false,
       },
     },
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -133,6 +137,7 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -145,6 +150,7 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -180,6 +186,7 @@ const entityTypes: EntityType[] = [
         ordered: true,
       },
     },
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -209,6 +216,7 @@ const entityTypes: EntityType[] = [
         ordered: false,
       },
     },
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -233,6 +241,7 @@ const entityTypes: EntityType[] = [
         ordered: true,
       },
     },
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -244,6 +253,7 @@ const entityTypes: EntityType[] = [
         $ref: "https://blockprotocol.org/@alice/types/property-type/name/v/1",
       },
     },
+    additionalProperties: false,
   },
   {
     kind: "entityType",
@@ -256,6 +266,7 @@ const entityTypes: EntityType[] = [
       },
     ],
     properties: {},
+    additionalProperties: false,
   },
 ];
 
@@ -275,6 +286,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
+      additionalProperties: false,
     },
     {
       reason: "InvalidVersionedUri",
@@ -296,6 +308,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
+      additionalProperties: false,
     },
     {
       reason: "InvalidVersionedUri",
@@ -321,6 +334,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "im a broken ref haha /v/1",
           },
       },
+      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -349,6 +363,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
             $ref: "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/1",
           },
       },
+      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -377,6 +392,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         "https://blockprotocol.org/@alice/types/property-type/address-line-1/v/2.3":
           "My Address 32, My Street, Narnia",
       },
+      additionalProperties: false,
     },
     {
       reason: "InvalidDefaultKey",
@@ -411,6 +427,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
           ordered: false,
         },
       },
+      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -448,6 +465,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
           ordered: false,
         },
       },
+      additionalProperties: false,
     },
     {
       reason: "InvalidPropertyTypeObject",
@@ -472,6 +490,7 @@ const invalidEntityTypes: [string, EntityType, ParseEntityTypeError][] = [
         },
       ],
       properties: {},
+      additionalProperties: false,
     },
     {
       reason: "InvalidAllOf",
