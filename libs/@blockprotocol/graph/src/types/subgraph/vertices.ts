@@ -85,7 +85,7 @@ export type VertexId<BaseId, RevisionId> = {
   revisionId: RevisionId;
 };
 export type EntityVertexId = VertexId<EntityId, EntityRevisionId>;
-export type OntologyTypeVertexId = VertexId<BaseUri, number>;
+export type OntologyTypeVertexId = VertexId<BaseUri, OntologyTypeRevisionId>;
 export type GraphElementVertexId = EntityVertexId | OntologyTypeVertexId;
 
 export const isOntologyTypeVertexId = (
@@ -118,7 +118,10 @@ export const isEntityVertexId = (
   );
 };
 
-export type OntologyVertices = Record<BaseUri, Record<number, OntologyVertex>>;
+export type OntologyVertices = Record<
+  BaseUri,
+  Record<OntologyTypeRevisionId, OntologyVertex>
+>;
 
 export type KnowledgeGraphVertices<Temporal extends boolean> = Record<
   EntityId,

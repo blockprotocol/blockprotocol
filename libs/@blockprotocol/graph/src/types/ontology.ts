@@ -31,3 +31,12 @@ export const isOntologyTypeRecordId = (
     typeof recordId.version === "number"
   );
 };
+
+/**
+ * The second component of the [{@link BaseUri}, RevisionId] tuple needed to identify a specific ontology type vertex
+ * within a {@link Subgraph}. This should be the version number as a string.
+ *
+ * Although it would be possible to create a template literal type, this confuses TypeScript when traversing the
+ * {@link Subgraph} in generic contexts, whereby it then thinks any string must relate to a {@link EntityVertex}.
+ */
+export type OntologyTypeRevisionId = string; // we explicitly opt not to use `${number}`
