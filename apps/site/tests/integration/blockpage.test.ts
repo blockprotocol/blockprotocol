@@ -5,24 +5,19 @@ test("Block page should contain key elements", async ({
   isMobile,
   browserName,
 }) => {
-  await page.goto(codeBlock.blockSitePath);
+  await page.goto("/@hash/blocks/code");
+
+  await expect(page.locator(`h1:has-text("Code")`)).toBeVisible();
 
   await expect(
-    page.locator(`h1:has-text("${codeBlock.displayName!}")`),
+    page.locator(
+      `p:has-text("Write monospaced code with syntax highlighting in a range of programming and markup languages")`,
+    ),
   ).toBeVisible();
 
-  await expect(
-    page.locator(`p:has-text("${codeBlock.description!}")`),
-  ).toBeVisible();
-
-  await expect(page.locator(`text=@${codeBlock.author!}`)).toBeVisible();
-  await expect(page.locator(`text=@${codeBlock.author!}`)).toHaveAttribute(
-    "href",
-    `/@${codeBlock.author!}`,
-  );
-  await expect(page.locator(`text=V${codeBlock.version!}`)).toBeVisible();
-
-  const blockExample = codeBlock.examples?.[0] as Record<string, string>;
+  await expect(page.locator(`text=@hash`)).toBeVisible();
+  await expect(page.locator(`text=@hash`)).toHaveAttribute("href", `/@hash`);
+  await expect(page.locator(`text=V0.2.0`)).toBeVisible();
 
   if (isMobile) {
     await page.locator("text=Block Data").click();
@@ -31,7 +26,16 @@ test("Block page should contain key elements", async ({
     await expect(page.locator("text=Block Properties")).toBeVisible();
   }
 
-  const stringifiedJson = JSON.stringify(blockExample, null, 2);
+  const stringifiedJson = JSON.stringify(
+    {
+      caption: "A JavaScript code example.",
+      language: "javascript",
+      content:
+        "function debounce(func, timeout = 300){\n  let timer;\n  return (...args) => {\n    clearTimeout(timer);\n    timer = setTimeout(() => { func.apply(this, args); }, timeout);\n  };\n}",
+    },
+    null,
+    2,
+  );
 
   await expect(
     page.locator("[data-testid='block-properties-tabpanel'] >> textarea"),
@@ -72,7 +76,7 @@ test("Block page should contain key elements", async ({
     });
     await expect(
       page.frameLocator("iframe[title='block']").locator("input"),
-    ).toHaveValue(blockExample.caption!);
+    ).toHaveValue("A JavaScript code example.");
   }
 
   // check if readme was displayed
@@ -82,7 +86,10 @@ test("Block page should contain key elements", async ({
 
   await expect(
     page.locator("a:below(h2:has-text('Repository'))").first(),
-  ).toHaveAttribute("href", codeBlock.repository!);
+  ).toHaveAttribute(
+    "href",
+    /^https:\/\/github.com\/hashintel\/hash\/tree\/\w+/$,
+  );
 
   await expect(page.locator("text=Explore more blocks")).toBeVisible();
 
@@ -109,9 +116,7 @@ test("should show an error message if an unsupported block is rendered", async (
   page,
   isMobile,
 }) => {
-  await page.goto(unsupportedBlock.blockSitePath);
-
-  const blockExample = unsupportedBlock.examples![0] as Record<string, string>;
+  await page.goto("/@hash/blocks/embed");
 
   if (isMobile) {
     await page.locator("text=Block Data").click();
@@ -120,7 +125,25 @@ test("should show an error message if an unsupported block is rendered", async (
   // confirm block properties tab contains example data
   await expect(
     page.locator("[data-testid='block-properties-tabpanel'] >> textarea"),
-  ).toHaveValue(JSON.stringify(blockExample, null, 2));
+  ).toHaveValue(
+    JSON.stringify(
+      {
+        name: "Embed",
+        description: "Embed Content",
+        icon: "http://localhost:3000/blocks/@hash/embed/public/embed.svg",
+        examples: [
+          {
+            initialHtml:
+              '<iframe src="https://core.hash.ai/embed.html?project=%40hash%2Fcity-infection-model&ref=6.4.2" width="300" height="171" frameborder="0" scrolling="auto"></iframe>',
+            initialWidth: 600,
+            initialHeight: 340,
+          },
+        ],
+      },
+      null,
+      2,
+    ),
+  );
 
   if (isMobile) {
     await page.locator("text=Preview").click();

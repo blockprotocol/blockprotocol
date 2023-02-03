@@ -107,40 +107,40 @@ test("key elements should be present when guest user views account page", async 
     .toBeGreaterThan(3);
 
   const codeBlockOverviewCard = page.locator("[data-testid='overview-card']", {
-    hasText: codeBlockMetadata.displayName!,
+    hasText: "Code",
   });
 
   await expect(codeBlockOverviewCard).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockSitePath,
+    "/@hash/blocks/code",
   );
 
   if (isMobile) {
     await expect(codeBlockOverviewCard.locator("img").first()).toHaveAttribute(
       "src",
-      codeBlockMetadata.icon!,
+      "http://localhost:3000/blocks/@hash/code/public/code.svg",
     );
   } else {
     await expect(codeBlockOverviewCard.locator("img").first()).toHaveAttribute(
       "src",
-      codeBlockMetadata.image!,
+      "http://localhost:3000/blocks/@hash/code/public/preview.svg",
     );
 
     await expect(codeBlockOverviewCard.locator("img").nth(1)).toHaveAttribute(
       "src",
-      codeBlockMetadata.icon!,
+      "http://localhost:3000/blocks/@hash/code/public/code.svg",
     );
   }
 
   await expect(
-    codeBlockOverviewCard.locator(`text=${codeBlockMetadata.description}`),
+    codeBlockOverviewCard.locator(
+      `text="Write monospaced code with syntax highlighting in a range of programming and markup languages"`,
+    ),
   ).toBeVisible();
 
   await expect(codeBlockOverviewCard.locator("text=Block")).toBeVisible();
 
-  await expect(
-    codeBlockOverviewCard.locator(`text=${codeBlockMetadata.version}`),
-  ).toBeVisible();
+  await expect(codeBlockOverviewCard.locator(`text="0.2.0"`)).toBeVisible();
 
   await page.locator("[data-testid='profile-page-blocks-tab']").click();
 
@@ -158,21 +158,23 @@ test("key elements should be present when guest user views account page", async 
   await expect(page.locator(`text=Blocks${blocksCount}`)).toBeVisible();
 
   const codeBlockListViewCard = page.locator("[data-testid='list-view-card']", {
-    hasText: codeBlockMetadata.displayName!,
+    hasText: "Code",
   });
 
   await expect(codeBlockListViewCard).toHaveAttribute(
     "href",
-    codeBlockMetadata.blockSitePath,
+    "/@hash/blocks/code",
   );
 
   await expect(codeBlockListViewCard.locator("img")).toHaveAttribute(
     "src",
-    codeBlockMetadata.icon!,
+    "http://localhost:3000/blocks/@hash/code/public/code.svg",
   );
 
   await expect(
-    codeBlockListViewCard.locator(`text=${codeBlockMetadata.description}`),
+    codeBlockListViewCard.locator(
+      `text="Write monospaced code with syntax highlighting in a range of programming and markup languages"`,
+    ),
   ).toBeVisible();
 
   await page.locator("[data-testid='profile-page-schemas-tab']").click();

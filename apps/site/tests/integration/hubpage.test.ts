@@ -33,36 +33,31 @@ test("Block Card should contain key elements", async ({ page }) => {
   await page.goto("/hub");
 
   const codeBlockLocator = page.locator('[data-testid="block-card"]', {
-    hasText: codeBlockMetadata.displayName!,
+    hasText: "Code",
   });
 
-  await expect(codeBlockLocator).toHaveAttribute(
-    "href",
-    codeBlockMetadata.blockSitePath!,
-  );
+  await expect(codeBlockLocator).toHaveAttribute("href", "/@hash/blocks/code");
 
   // there should be 2 images present => icon and preview image
   await expect(codeBlockLocator.locator("img")).toHaveCount(2);
 
   await expect(codeBlockLocator.locator("img").first()).toHaveAttribute(
     "src",
-    codeBlockMetadata.image!,
+    "http://localhost:3000/blocks/@hash/code/public/preview.svg",
   );
 
   await expect(codeBlockLocator.locator("img").nth(1)).toHaveAttribute(
     "src",
-    codeBlockMetadata.icon!,
+    "http://localhost:3000/blocks/@hash/code/public/code.svg",
   );
 
   await expect(
-    codeBlockLocator.locator(`text=${codeBlockMetadata.description}`),
+    codeBlockLocator.locator(
+      `text="Write monospaced code with syntax highlighting in a range of programming and markup languages"`,
+    ),
   ).toBeVisible();
 
-  await expect(
-    codeBlockLocator.locator(`text=@${codeBlockMetadata.author}`),
-  ).toBeVisible();
+  await expect(codeBlockLocator.locator(`text=@hash`)).toBeVisible();
 
-  await expect(
-    codeBlockLocator.locator(`text=${codeBlockMetadata.version}`),
-  ).toBeVisible();
+  await expect(codeBlockLocator.locator(`text=0.2.0`)).toBeVisible();
 });
