@@ -68,7 +68,10 @@ export type TimeIntervalUnresolved<
 export type TimeInterval<
   StartBound extends TemporalBound = TemporalBound,
   EndBound extends TemporalBound = TemporalBound,
-> = TimeIntervalUnresolved<StartBound, EndBound>;
+> = {
+  start: StartBound;
+  end: EndBound;
+};
 
 /**
  * A range of time from a given `start` to a given `end` where both bounds are {@link Timestamp}s, and where `start` is
