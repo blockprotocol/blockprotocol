@@ -351,12 +351,9 @@ export const getOutgoingLinkAndTargetEntities = <
       (revisionMap, entity) => {
         const linkEntityId = entity.metadata.recordId.entityId;
 
-        if (revisionMap[linkEntityId] !== undefined) {
-          revisionMap[linkEntityId]!.push(entity);
-        } else {
-          // eslint-disable-next-line no-param-reassign
-          revisionMap[linkEntityId] = [entity];
-        }
+        // eslint-disable-next-line no-param-reassign
+        revisionMap[linkEntityId] ??= [];
+        revisionMap[linkEntityId]!.push(entity);
 
         return revisionMap;
       },

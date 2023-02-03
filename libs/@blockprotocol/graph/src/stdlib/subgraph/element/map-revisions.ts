@@ -31,12 +31,9 @@ export const mapElementsIntoRevisions = <
         ? element.metadata.recordId.entityId
         : element.metadata.recordId.baseUri;
 
-    if (revisionMap[baseId] !== undefined) {
-      revisionMap[baseId]!.push(element);
-    } else {
-      // eslint-disable-next-line no-param-reassign
-      revisionMap[baseId] = [element];
-    }
+    // eslint-disable-next-line no-param-reassign
+    revisionMap[baseId] ??= [];
+    revisionMap[baseId]!.push(element);
 
     return revisionMap;
   }, {} as BaseIdToRevisions<TemporalSupport, GraphElementType>);
