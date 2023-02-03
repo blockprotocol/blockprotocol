@@ -75,30 +75,32 @@ export const getEntityRevision = <Temporal extends boolean>(
         ? targetRevisionInformation
         : targetRevisionInformation.toISOString();
 
-    return revisionVersions
-      .filter((revisionTimestamp) => revisionTimestamp < targetTime)
-      .map((revisionTimestamp) => {
-        const vertex = mustBeDefined(entityRevisions[revisionTimestamp]);
+    for (const revisionTimestamp of revisionVersions) {
+      const vertex = mustBeDefined(entityRevisions[revisionTimestamp]);
 
-        if (!isEntityVertex(vertex)) {
-          throw new Error(
-            `Found non-entity vertex associated with EntityId: ${entityId}`,
-          );
-        }
-        return vertex.inner;
-      })
-      .find((entity) => {
-        return intervalContainsTimestamp(
+      if (!isEntityVertex(vertex)) {
+        throw new Error(
+          `Found non-entity vertex associated with EntityId: ${entityId}`,
+        );
+      }
+
+      if (
+        intervalContainsTimestamp(
           /*
-           these casts are safe as we check for `targetRevisionInformation === undefined` above and that's only ever
-           defined if `Temporal extends true`
-           */
-          (entity as Entity<true>).metadata.temporalVersioning[
+         these casts are safe as we check for `targetRevisionInformation === undefined` above and that's only ever
+         defined if `Temporal extends true`
+         */
+          (vertex.inner as Entity<true>).metadata.temporalVersioning[
             (subgraph as Subgraph<true>).temporalAxes.resolved.variable.axis
           ],
           targetTime,
-        );
-      });
+        )
+      ) {
+        return vertex.inner;
+      }
+    }
+
+    return undefined;
   }
 };
 
@@ -124,29 +126,35 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
   }
 
   if (interval !== undefined) {
-    return typedEntries(versionObject)
-      .filter(([startTime, _entityVertex]) =>
-        intervalContainsTimestamp(interval, startTime),
-      )
-      .map(([_startTime, entityVertex]) => entityVertex)
-      .filter(isEntityVertex)
-      .map((entityVertex) => entityVertex.inner)
-      .filter((entity) =>
-        /*
-        We want to find all entities which were active _at some point_ in the search interval. This is indicated by an
-        overlap.
-         */
-        intervalOverlapsInterval(
-          interval,
+    const filteredEntities = [];
+
+    for (const [startTime, entityVertex] of typedEntries(versionObject)) {
+      if (
+        intervalContainsTimestamp(interval, startTime) &&
+        isEntityVertex(entityVertex)
+      ) {
+        if (
           /*
-           these casts are safe as we check for `targetRevisionInformation === undefined` above and that's only ever
-           defined if `Temporal extends true`
+           We want to find all entities which were active _at some point_ in the search interval. This is indicated by
+           an overlap.
            */
-          (entity as Entity<true>).metadata.temporalVersioning[
-            (subgraph as Subgraph<true>).temporalAxes.resolved.variable.axis
-          ],
-        ),
-      );
+          intervalOverlapsInterval(
+            interval,
+            /*
+             these casts are safe as we check for `targetRevisionInformation === undefined` above and that's only ever
+             defined if `Temporal extends true`
+             */
+            (entityVertex.inner as Entity<true>).metadata.temporalVersioning[
+              (subgraph as Subgraph<true>).temporalAxes.resolved.variable.axis
+            ],
+          )
+        ) {
+          filteredEntities.push(entityVertex.inner);
+        }
+      }
+    }
+
+    return filteredEntities;
   } else {
     const entityVertices = Object.values(versionObject);
     return entityVertices.filter(isEntityVertex).map((vertex) => {

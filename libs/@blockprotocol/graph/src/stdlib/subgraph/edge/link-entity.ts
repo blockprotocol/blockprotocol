@@ -10,7 +10,6 @@ import {
   isIncomingLinkEdge,
   isOutgoingLinkEdge,
   isTemporalSubgraph,
-  OutwardEdge,
   Subgraph,
 } from "../../../types/subgraph.js";
 import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
@@ -72,52 +71,62 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
 
   const uniqueEntitiesFilter = getUniqueEntitiesFilter();
 
-  return (
-    Object.entries(entityEdges)
-      // Only look at outgoing edges that were created before or within the search interval
-      .filter(
-        ([edgeTimestamp, _outwardEdges]) =>
-          !intervalIsStrictlyAfterInterval(
-            intervalForTimestamp(edgeTimestamp),
-            searchInterval,
-          ),
+  const entities = [];
+
+  for (const [edgeTimestamp, outwardEdges] of typedEntries(entityEdges)) {
+    // Only look at outgoing edges that were created before or within the search interval
+    if (
+      !intervalIsStrictlyAfterInterval(
+        intervalForTimestamp(edgeTimestamp),
+        searchInterval,
       )
-      // Extract the link endpoint information
-      .flatMap(([_edgeTimestamp, outwardEdges]) => {
-        return (outwardEdges as OutwardEdge[])
-          .filter(isOutgoingLinkEdge)
-          .map((edge) => {
-            return edge.rightEndpoint;
-          });
-      })
-      .flatMap(({ entityId: linkEntityId, validInterval }) => {
-        if (isTemporalSubgraph(subgraph)) {
-          // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
-          const intersection = intervalIntersectionWithInterval(
-            searchInterval,
-            validInterval,
-          );
+    ) {
+      for (const outwardEdge of outwardEdges) {
+        if (isOutgoingLinkEdge(outwardEdge)) {
+          const { entityId: linkEntityId, validInterval } =
+            outwardEdge.rightEndpoint;
 
-          if (intersection === null) {
-            throw new Error(
-              `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                `EntityId: ${linkEntityId}\n` +
-                `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+          if (isTemporalSubgraph(subgraph)) {
+            // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
+            const intersection = intervalIntersectionWithInterval(
+              searchInterval,
+              validInterval,
             );
-          }
 
-          return getEntityRevisionsByEntityId(
-            subgraph as Subgraph<true>,
-            linkEntityId,
-            intersection,
-          ) as Entity<Temporal>[];
-        } else {
-          return getEntityRevisionsByEntityId(subgraph, linkEntityId);
+            if (intersection === null) {
+              throw new Error(
+                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
+                  `EntityId: ${linkEntityId}\n` +
+                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
+                  `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+              );
+            }
+
+            for (const entity of getEntityRevisionsByEntityId(
+              subgraph as Subgraph<true>,
+              linkEntityId,
+              intersection,
+            )) {
+              if (uniqueEntitiesFilter(entity)) {
+                entities.push(entity);
+              }
+            }
+          } else {
+            for (const entity of getEntityRevisionsByEntityId(
+              subgraph,
+              linkEntityId,
+            )) {
+              if (uniqueEntitiesFilter(entity)) {
+                entities.push(entity);
+              }
+            }
+          }
         }
-      })
-      .filter(uniqueEntitiesFilter)
-  );
+      }
+    }
+  }
+
+  return entities;
 };
 
 /**
@@ -148,52 +157,61 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
 
   const uniqueEntitiesFilter = getUniqueEntitiesFilter();
 
-  return (
-    Object.entries(entityEdges)
-      // Only look at outgoing edges that were created before or within the search interval
-      .filter(
-        ([edgeTimestamp, _outwardEdges]) =>
-          !intervalIsStrictlyAfterInterval(
-            intervalForTimestamp(edgeTimestamp),
-            searchInterval,
-          ),
+  const entities = [];
+
+  for (const [edgeTimestamp, outwardEdges] of typedEntries(entityEdges)) {
+    if (
+      !intervalIsStrictlyAfterInterval(
+        intervalForTimestamp(edgeTimestamp),
+        searchInterval,
       )
-      // Extract the link endpoint information
-      .flatMap(([_edgeTimestamp, outwardEdges]) => {
-        return (outwardEdges as OutwardEdge[])
-          .filter(isIncomingLinkEdge)
-          .map((edge) => {
-            return edge.rightEndpoint;
-          });
-      })
-      .flatMap(({ entityId: linkEntityId, validInterval }) => {
-        if (isTemporalSubgraph(subgraph)) {
-          // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
-          const intersection = intervalIntersectionWithInterval(
-            searchInterval,
-            validInterval,
-          );
+    ) {
+      for (const outwardEdge of outwardEdges) {
+        if (isIncomingLinkEdge(outwardEdge)) {
+          const { entityId: linkEntityId, validInterval } =
+            outwardEdge.rightEndpoint;
 
-          if (intersection === null) {
-            throw new Error(
-              `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
-                `EntityId: ${linkEntityId}\n` +
-                `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+          if (isTemporalSubgraph(subgraph)) {
+            // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
+            const intersection = intervalIntersectionWithInterval(
+              searchInterval,
+              validInterval,
             );
-          }
 
-          return getEntityRevisionsByEntityId(
-            subgraph as Subgraph<true>,
-            linkEntityId,
-            intersection,
-          ) as Entity<Temporal>[];
-        } else {
-          return getEntityRevisionsByEntityId(subgraph, linkEntityId);
+            if (intersection === null) {
+              throw new Error(
+                `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
+                  `EntityId: ${linkEntityId}\n` +
+                  `Search Interval: ${JSON.stringify(searchInterval)}\n` +
+                  `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+              );
+            }
+
+            for (const entity of getEntityRevisionsByEntityId(
+              subgraph as Subgraph<true>,
+              linkEntityId,
+              intersection,
+            )) {
+              if (uniqueEntitiesFilter(entity)) {
+                entities.push(entity);
+              }
+            }
+          } else {
+            for (const entity of getEntityRevisionsByEntityId(
+              subgraph,
+              linkEntityId,
+            )) {
+              if (uniqueEntitiesFilter(entity)) {
+                entities.push(entity);
+              }
+            }
+          }
         }
-      })
-      .filter(uniqueEntitiesFilter)
-  );
+      }
+    }
+  }
+
+  return entities.filter(uniqueEntitiesFilter);
 };
 
 /**
