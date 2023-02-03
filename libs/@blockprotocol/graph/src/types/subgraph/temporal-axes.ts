@@ -30,7 +30,7 @@ export type QueryTemporalAxesUnresolved =
  */
 export type QueryTemporalAxes =
   | {
-      variable: VariableTemporalAxisUnresolved<"decisionTime">;
+      variable: VariableTemporalAxis<"decisionTime">;
       pinned: PinnedTemporalAxis<"transactionTime">;
     }
   | {
