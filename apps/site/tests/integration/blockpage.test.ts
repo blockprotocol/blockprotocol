@@ -88,7 +88,7 @@ test("Block page should contain key elements", async ({
     page.locator("a:below(h2:has-text('Repository'))").first(),
   ).toHaveAttribute(
     "href",
-    /^https:\/\/github.com\/hashintel\/hash\/tree\/\w+/$,
+    /^https:\/\/github.com\/hashintel\/hash\/tree\/\w+$/,
   );
 
   await expect(page.locator("text=Explore more blocks")).toBeVisible();
