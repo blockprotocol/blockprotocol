@@ -1,4 +1,4 @@
-import { getBlocksData, resetSite } from "../shared/fixtures.js";
+import { resetSite } from "../shared/fixtures.js";
 import { login } from "../shared/nav.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
 
@@ -78,14 +78,6 @@ test("key elements should be present when user views their account page", async 
 
   await expect(page.locator("text=Create a schema")).toBeVisible();
 });
-
-const codeBlockMetadata = (await getBlocksData()).find(
-  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
-);
-
-if (!codeBlockMetadata) {
-  throw new Error("Code block should be prepared before tests are run");
-}
 
 test("key elements should be present when guest user views account page", async ({
   page,

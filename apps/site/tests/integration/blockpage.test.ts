@@ -1,19 +1,4 @@
-import { getBlocksData } from "../shared/fixtures.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
-
-const blocksData = await getBlocksData();
-
-const codeBlock = blocksData.find(
-  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
-);
-
-const unsupportedBlock = blocksData.find(
-  ({ pathWithNamespace }) => pathWithNamespace === "@hash/embed",
-);
-
-if (!codeBlock || !unsupportedBlock) {
-  throw new Error("Code and Embed blocks need to be prepared before tests run");
-}
 
 test("Block page should contain key elements", async ({
   page,

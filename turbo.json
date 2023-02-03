@@ -11,7 +11,7 @@
       "dependsOn": ["codegen", "^build"]
     },
     "codegen": {
-      "outputs": ["blocks-data.json", "site-map.json", "src/version.ts"]
+      "outputs": ["site-map.json", "src/version.ts"]
     },
     "fix:eslint": {
       "dependsOn": ["^build"],

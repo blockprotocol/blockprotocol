@@ -1,13 +1,4 @@
-import { getBlocksData } from "../shared/fixtures.js";
 import { expect, test } from "../shared/wrapped-playwright.js";
-
-const codeBlockMetadata = (await getBlocksData()).find(
-  ({ pathWithNamespace }) => pathWithNamespace === "@hash/code",
-);
-
-if (!codeBlockMetadata) {
-  throw new Error("Code block should be prepared before tests are run");
-}
 
 test("Hub page should contain key elements", async ({ page }) => {
   await page.goto("/hub");
