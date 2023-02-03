@@ -21,16 +21,18 @@ export const getEntities = <Temporal extends boolean>(
   latest: boolean = false,
 ): Entity<Temporal>[] => {
   return Object.values(
-    Object.values(subgraph.vertices).flatMap((versionObject) => {
-      const entityRevisionVertices = latest
-        ? Object.keys(versionObject)
-            .sort()
-            .slice(-1)
-            .map((latestVersion) => versionObject[latestVersion]!)
-            .filter(isEntityVertex)
-        : Object.values(versionObject).filter(isEntityVertex);
+    Object.values(subgraph.vertices).flatMap((entityRevisions) => {
+      if (latest) {
+        const revisionVersions = Object.keys(entityRevisions).sort();
 
-      return entityRevisionVertices.map((vertex) => vertex.inner);
+        const lastIndex = revisionVersions.length - 1;
+        const vertex = entityRevisions[revisionVersions[lastIndex]!]!;
+        return isEntityVertex(vertex) ? [vertex.inner] : [];
+      } else {
+        return Object.values(entityRevisions)
+          .filter(isEntityVertex)
+          .map((vertex) => vertex.inner);
+      }
     }),
   );
 };
@@ -65,10 +67,16 @@ export const getEntityRevision = <Temporal extends boolean>(
 
   // Short circuit for efficiency, just take the latest
   if (targetRevisionInformation === undefined) {
-    return revisionVersions
-      .slice(-1)
-      .map((latestVersion) => entityRevisions[latestVersion]!.inner)
-      .pop();
+    const lastIndex = revisionVersions.length - 1;
+    const vertex = entityRevisions[revisionVersions[lastIndex]!]!;
+
+    if (!isEntityVertex(vertex)) {
+      throw new Error(
+        `Found non-entity vertex associated with EntityId: ${entityId}`,
+      );
+    }
+
+    return vertex.inner;
   } else {
     const targetTime =
       typeof targetRevisionInformation === "string"
