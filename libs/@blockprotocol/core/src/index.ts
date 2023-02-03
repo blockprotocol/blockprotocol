@@ -19,6 +19,7 @@ export type {
   MessageCallback,
   MessageData,
   MessageError,
+  MessageReturn,
   ServiceDefinition,
   ServiceMessageDefinition,
   UnknownRecord,

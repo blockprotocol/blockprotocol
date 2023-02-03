@@ -1,8 +1,8 @@
-import { VersionedUri } from "@blockprotocol/type-system";
 import {
   EntityType,
   extractBaseUri,
   extractVersion,
+  VersionedUri,
 } from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
@@ -234,7 +234,10 @@ const _jsonSchemaToTypeScript = async (
         linkEntityTypeName: linkEntityType.typeName,
         rightEntityTypeNames: (rightEntityTypes.length > 0
           ? rightEntityTypes
-          : [{ typeName: "Entity" }]
+          : /**
+             * @todo - optionally support temporal versioning, for now we default to non-temporal support in blocks (hence `false`)
+             */
+            [{ typeName: "Entity<false>" }]
         ).map((type) => type.typeName),
       });
 

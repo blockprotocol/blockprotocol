@@ -28,11 +28,12 @@ export type EntityTypeVertex = {
 };
 
 export type EntityVertex<
+  Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
-> = { kind: "entity"; inner: Entity<Properties> };
+> = { kind: "entity"; inner: Entity<Temporal, Properties> };
 
 export type OntologyVertex =
   | DataTypeVertex
@@ -40,36 +41,42 @@ export type OntologyVertex =
   | EntityTypeVertex;
 
 export type KnowledgeGraphVertex<
+  Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
-> = EntityVertex<Properties>;
+> = EntityVertex<Temporal, Properties>;
 
 export type Vertex<
+  Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
-> = OntologyVertex | KnowledgeGraphVertex<Properties>;
+> = OntologyVertex | KnowledgeGraphVertex<Temporal, Properties>;
 
-export const isDataTypeVertex = (vertex: Vertex): vertex is DataTypeVertex => {
+export const isDataTypeVertex = (
+  vertex: Vertex<boolean>,
+): vertex is DataTypeVertex => {
   return vertex.kind === "dataType";
 };
 
 export const isPropertyTypeVertex = (
-  vertex: Vertex,
+  vertex: Vertex<boolean>,
 ): vertex is PropertyTypeVertex => {
   return vertex.kind === "propertyType";
 };
 
 export const isEntityTypeVertex = (
-  vertex: Vertex,
+  vertex: Vertex<boolean>,
 ): vertex is EntityTypeVertex => {
   return vertex.kind === "entityType";
 };
 
-export const isEntityVertex = (vertex: Vertex): vertex is EntityVertex => {
+export const isEntityVertex = <Temporal extends boolean>(
+  vertex: Vertex<Temporal>,
+): vertex is EntityVertex<Temporal> => {
   return vertex.kind === "entity";
 };
 
@@ -117,10 +124,11 @@ export type OntologyVertices = {
   };
 };
 
-export type KnowledgeGraphVertices = {
+export type KnowledgeGraphVertices<Temporal extends boolean> = {
   [entityId: EntityId]: {
-    [entityVersion: EntityRevisionId]: KnowledgeGraphVertex;
+    [entityVersion: EntityRevisionId]: KnowledgeGraphVertex<Temporal>;
   };
 };
 
-export type Vertices = OntologyVertices & KnowledgeGraphVertices;
+export type Vertices<Temporal extends boolean> = OntologyVertices &
+  KnowledgeGraphVertices<Temporal>;

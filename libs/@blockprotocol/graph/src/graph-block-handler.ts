@@ -36,15 +36,15 @@ import {
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the embedder.
  * Call the relevant methods to send messages to the embedder.
  */
-export class GraphBlockHandler
+export class GraphBlockHandler<Temporal extends boolean>
   extends ServiceHandler
-  implements BlockGraphMessages
+  implements BlockGraphMessages<Temporal>
 {
   constructor({
     callbacks,
     element,
   }: {
-    callbacks?: Partial<BlockGraphMessageCallbacks>;
+    callbacks?: Partial<BlockGraphMessageCallbacks<Temporal>>;
     element?: HTMLElement | null;
   }) {
     super({ element, callbacks, serviceName: "graph", sourceType: "block" });
@@ -59,7 +59,7 @@ export class GraphBlockHandler
    * Registers multiple callbacks at once.
    * Useful for bulk updates to callbacks after the service is first initialised.
    */
-  registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks>) {
+  registerCallbacks(callbacks: Partial<BlockGraphMessageCallbacks<Temporal>>) {
     super.registerCallbacks(callbacks);
   }
 
@@ -69,10 +69,10 @@ export class GraphBlockHandler
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  on<K extends keyof BlockGraphMessageCallbacks>(
-    this: GraphBlockHandler,
+  on<K extends keyof BlockGraphMessageCallbacks<Temporal>>(
+    this: GraphBlockHandler<Temporal>,
     messageName: K,
-    handlerFunction: BlockGraphMessageCallbacks[K],
+    handlerFunction: BlockGraphMessageCallbacks<Temporal>[K],
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
@@ -98,7 +98,7 @@ export class GraphBlockHandler
   createEntity<
     ValidProperties extends EntityPropertiesObject = EntityPropertiesObject,
   >({ data }: { data?: CreateEntityData & { properties: ValidProperties } }) {
-    return this.sendMessage<Entity, CreateResourceError>({
+    return this.sendMessage<Entity<Temporal>, CreateResourceError>({
       message: {
         messageName: "createEntity",
         data,
@@ -110,7 +110,7 @@ export class GraphBlockHandler
   updateEntity<
     ValidProperties extends EntityPropertiesObject = EntityPropertiesObject,
   >({ data }: { data?: UpdateEntityData & { properties: ValidProperties } }) {
-    return this.sendMessage<Entity, ReadOrModifyResourceError>({
+    return this.sendMessage<Entity<Temporal>, ReadOrModifyResourceError>({
       message: {
         messageName: "updateEntity",
         data,
@@ -130,9 +130,9 @@ export class GraphBlockHandler
     });
   }
 
-  getEntity({ data }: { data?: GetEntityData }) {
+  getEntity({ data }: { data?: GetEntityData<Temporal> }) {
     return this.sendMessage<
-      Subgraph<EntityRootType>,
+      Subgraph<Temporal, EntityRootType<Temporal>>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -143,9 +143,12 @@ export class GraphBlockHandler
     });
   }
 
-  aggregateEntities({ data }: { data?: AggregateEntitiesData }) {
+  aggregateEntities({ data }: { data?: AggregateEntitiesData<Temporal> }) {
     return this.sendMessage<
-      AggregateEntitiesResult<Subgraph<EntityRootType>>,
+      AggregateEntitiesResult<
+        Temporal,
+        Subgraph<Temporal, EntityRootType<Temporal>>
+      >,
       ReadOrModifyResourceError
     >({
       message: {
@@ -190,7 +193,7 @@ export class GraphBlockHandler
 
   getEntityType({ data }: { data?: GetEntityTypeData }) {
     return this.sendMessage<
-      Subgraph<EntityTypeRootType>,
+      Subgraph<Temporal, EntityTypeRootType>,
       ReadOrModifyResourceError
     >({
       message: {
@@ -203,7 +206,7 @@ export class GraphBlockHandler
 
   aggregateEntityTypes({ data }: { data?: AggregateEntityTypesData }) {
     return this.sendMessage<
-      AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>,
+      AggregateEntityTypesResult<Subgraph<Temporal, EntityTypeRootType>>,
       ReadOrModifyResourceError
     >({
       message: {

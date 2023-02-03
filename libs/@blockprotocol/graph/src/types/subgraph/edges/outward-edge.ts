@@ -1,42 +1,34 @@
 import { EntityId, isEntityRecordId } from "../../entity.js";
 import { isOntologyTypeRecordId } from "../../ontology.js";
-import { Timestamp } from "../../temporal-versioning.js";
-import { EntityVertexId, OntologyTypeVertexId } from "../vertices";
+import {
+  LimitedTemporalBound,
+  TemporalBound,
+  TimeInterval,
+  Timestamp,
+} from "../../temporal-versioning.js";
 import {
   isKnowledgeGraphEdgeKind,
   isOntologyEdgeKind,
   isSharedEdgeKind,
-  KnowledgeGraphEdgeKind,
-  OntologyEdgeKind,
-  SharedEdgeKind,
 } from "./kind.js";
+import { KnowledgeGraphOutwardEdge } from "./variants/knowledge.js";
+import { OntologyOutwardEdge } from "./variants/ontology.js";
 
 /**
- * A "partial" definition of an edge which is complete when joined with the missing left-endpoint (usually the source
- * of the edge)
+ * A simple tuple type which identifies an {@link Entity} by its {@link EntityId}, at a given {@link Timestamp}.
+ *
+ * When using this to query a {@link Subgraph}, along its variable axis, this should identify a single unique revision
+ * of an {@link Entity} or possibly refer to nothing.
  */
-type GenericOutwardEdge<
-  EdgeKind extends KnowledgeGraphEdgeKind | OntologyEdgeKind | SharedEdgeKind,
-  Endpoint,
-  Reversed extends boolean = boolean,
-> = {
-  kind: EdgeKind;
-  reversed: Reversed;
-  rightEndpoint: Endpoint;
-};
-
 export type EntityIdAndTimestamp = {
   baseId: EntityId;
   timestamp: Timestamp;
 };
 
-export type OntologyOutwardEdge =
-  | GenericOutwardEdge<OntologyEdgeKind, OntologyTypeVertexId>
-  | GenericOutwardEdge<SharedEdgeKind, EntityVertexId, true>;
-
-export type KnowledgeGraphOutwardEdge =
-  | GenericOutwardEdge<KnowledgeGraphEdgeKind, EntityIdAndTimestamp>
-  | GenericOutwardEdge<SharedEdgeKind, OntologyTypeVertexId, false>;
+export type EntityValidInterval = {
+  entityId: EntityId;
+  validInterval: TimeInterval<LimitedTemporalBound, TemporalBound>;
+};
 
 export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;
 

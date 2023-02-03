@@ -15,7 +15,7 @@ import { isEntityTypeVertex } from "../../../types/subgraph/vertices.js";
  * @param subgraph
  */
 export const getEntityTypes = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
 ): EntityTypeWithMetadata[] => {
   return Object.values(
     Object.values(subgraph.vertices).flatMap((versionObject) =>
@@ -35,7 +35,7 @@ export const getEntityTypes = (
  * @throws if the vertex isn't a `EntityTypeVertex`
  */
 export const getEntityTypeById = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
   entityTypeId: VersionedUri,
 ): EntityTypeWithMetadata | undefined => {
   const [baseUri, version] = [
@@ -64,7 +64,7 @@ export const getEntityTypeById = (
  * @throws if the vertex isn't a `EntityTypeVertex`
  */
 export const getEntityTypeByVertexId = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
   vertexId: OntologyTypeVertexId,
 ): EntityTypeWithMetadata | undefined => {
   const vertex = subgraph.vertices[vertexId.baseId]?.[vertexId.revisionId];
@@ -87,7 +87,7 @@ export const getEntityTypeByVertexId = (
  * @param baseUri
  */
 export const getEntityTypesByBaseUri = (
-  subgraph: Subgraph,
+  subgraph: Subgraph<boolean>,
   baseUri: BaseUri,
 ): EntityTypeWithMetadata[] => {
   const versionObject = subgraph.vertices[baseUri];
