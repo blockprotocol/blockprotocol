@@ -57,8 +57,6 @@ This folder contains the code for [blockprotocol.org](https://blockprotocol.org)
     yarn dev:seed-db
     ```
 
-1.  **On first run**, or **if you need to rebuild a block or blocks**, follow the steps to [build Hub blocks](#building-hub-blocks)
-
 1.  Run the Next.js app in a separate terminal using:
 
     ```sh
