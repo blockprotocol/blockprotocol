@@ -118,17 +118,12 @@ export const isEntityVertexId = (
   );
 };
 
-export type OntologyVertices = {
-  [typeBaseUri: BaseUri]: {
-    [typeVersion: number]: OntologyVertex;
-  };
-};
+export type OntologyVertices = Record<BaseUri, Record<number, OntologyVertex>>;
 
-export type KnowledgeGraphVertices<Temporal extends boolean> = {
-  [entityId: EntityId]: {
-    [entityVersion: EntityRevisionId]: KnowledgeGraphVertex<Temporal>;
-  };
-};
+export type KnowledgeGraphVertices<Temporal extends boolean> = Record<
+  EntityId,
+  Record<EntityRevisionId, KnowledgeGraphVertex<Temporal>>
+>;
 
 export type Vertices<Temporal extends boolean> = OntologyVertices &
   KnowledgeGraphVertices<Temporal>;
