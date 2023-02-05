@@ -13,7 +13,7 @@ The vast majority of this repository is dual-licensed under the [Apache License 
 
 The two limited exceptions to this are:
 
-- The Block Protocol WordPress plugin ([more information](https://blockprotocol.org/wordpress)), which is made available under the [Elastic License 2.0](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-ELASTIC.md)
+- The Block Protocol WordPress plugin ([more information](https://blockprotocol.org/wordpress)), available under the [GNU Affero General Public License Version 3](https://github.com/blockprotocol/blockprotocol/blob/main/.github/licenses/LICENSE-AGPL.md)
 - A small number of vector icons used on the public-facing BlockProtocol.org website ([view site](https://blockprotocol.org/)), licensed to us directly
 
 ## Questions
