@@ -1,5 +1,6 @@
 import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
 
+import { stringIsNonNegativeInteger } from "../../shared.js";
 import {
   Entity,
   EntityId,
@@ -7,7 +8,7 @@ import {
   EntityPropertyValue,
   EntityRevisionId,
 } from "../entity.js";
-import { isOntologyTypeRecordId } from "../ontology.js";
+import { OntologyTypeRevisionId } from "../ontology.js";
 import { DataTypeWithMetadata } from "../ontology/data-type.js";
 import { EntityTypeWithMetadata } from "../ontology/entity-type.js";
 import { PropertyTypeWithMetadata } from "../ontology/property-type.js";
@@ -85,7 +86,7 @@ export type VertexId<BaseId, RevisionId> = {
   revisionId: RevisionId;
 };
 export type EntityVertexId = VertexId<EntityId, EntityRevisionId>;
-export type OntologyTypeVertexId = VertexId<BaseUri, number>;
+export type OntologyTypeVertexId = VertexId<BaseUri, OntologyTypeRevisionId>;
 export type GraphElementVertexId = EntityVertexId | OntologyTypeVertexId;
 
 export const isOntologyTypeVertexId = (
@@ -96,10 +97,10 @@ export const isOntologyTypeVertexId = (
     typeof vertexId === "object" &&
     "baseId" in vertexId &&
     typeof vertexId.baseId === "string" &&
-    /** @todo - This means we need to have initialized the type system */
     validateBaseUri(vertexId.baseId).type === "Ok" &&
     "revisionId" in vertexId &&
-    typeof vertexId.revisionId === "number"
+    typeof vertexId.revisionId === "string" &&
+    stringIsNonNegativeInteger(vertexId.revisionId)
   );
 };
 
@@ -114,21 +115,23 @@ export const isEntityVertexId = (
     /** @todo - is it fine to just check that versionId is string, maybe timestamp if we want to lock it into being a
      *    timestamp?
      */
-    !isOntologyTypeRecordId(vertexId)
+    !isOntologyTypeVertexId(vertexId)
   );
 };
 
-export type OntologyVertices = {
-  [typeBaseUri: BaseUri]: {
-    [typeVersion: number]: OntologyVertex;
-  };
-};
+export type OntologyVertices = Record<
+  BaseUri,
+  Record<OntologyTypeRevisionId, OntologyVertex>
+>;
 
-export type KnowledgeGraphVertices<Temporal extends boolean> = {
-  [entityId: EntityId]: {
-    [entityVersion: EntityRevisionId]: KnowledgeGraphVertex<Temporal>;
-  };
-};
+export type KnowledgeGraphVertices<Temporal extends boolean> = Record<
+  EntityId,
+  Record<EntityRevisionId, KnowledgeGraphVertex<Temporal>>
+>;
 
-export type Vertices<Temporal extends boolean> = OntologyVertices &
-  KnowledgeGraphVertices<Temporal>;
+// We technically want to intersect (`&`) the types here, but as their property keys overlap it confuses things and we
+// end up with unsatisfiable values like `EntityVertex & DataTypeVertex`. While the union (`|`) is semantically
+// incorrect, it structurally matches the types we want.
+export type Vertices<Temporal extends boolean> =
+  | OntologyVertices
+  | KnowledgeGraphVertices<Temporal>;

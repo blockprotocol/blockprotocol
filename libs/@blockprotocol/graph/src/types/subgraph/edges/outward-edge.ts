@@ -20,14 +20,20 @@ import { OntologyOutwardEdge } from "./variants/ontology.js";
  * When using this to query a {@link Subgraph}, along its variable axis, this should identify a single unique revision
  * of an {@link Entity} or possibly refer to nothing.
  */
-export type EntityIdAndTimestamp = {
+export type EntityIdWithTimestamp = {
   baseId: EntityId;
   timestamp: Timestamp;
 };
 
-export type EntityValidInterval = {
+/**
+ * A simple tuple type which identifies an {@link Entity} by its {@link EntityId}, over a given {@link TimeInterval}.
+ *
+ * When using this to query a {@link Subgraph}, along its variable axis, this could return any number of revisions
+ * of an {@link Entity} (including possibly returning none).
+ */
+export type EntityIdWithInterval = {
   entityId: EntityId;
-  validInterval: TimeInterval<LimitedTemporalBound, TemporalBound>;
+  interval: TimeInterval<LimitedTemporalBound, TemporalBound>;
 };
 
 export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;

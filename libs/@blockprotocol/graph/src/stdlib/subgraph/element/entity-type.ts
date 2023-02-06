@@ -5,6 +5,7 @@ import {
   VersionedUri,
 } from "@blockprotocol/type-system/slim";
 
+import { typedValues } from "../../../shared.js";
 import { EntityTypeWithMetadata } from "../../../types/ontology/entity-type.js";
 import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
 import { isEntityTypeVertex } from "../../../types/subgraph/vertices.js";
@@ -17,12 +18,10 @@ import { isEntityTypeVertex } from "../../../types/subgraph/vertices.js";
 export const getEntityTypes = (
   subgraph: Subgraph<boolean>,
 ): EntityTypeWithMetadata[] => {
-  return Object.values(
-    Object.values(subgraph.vertices).flatMap((versionObject) =>
-      Object.values(versionObject)
-        .filter(isEntityTypeVertex)
-        .map((vertex) => vertex.inner),
-    ),
+  return typedValues(subgraph.vertices).flatMap((versionObject) =>
+    typedValues(versionObject)
+      .filter(isEntityTypeVertex)
+      .map((vertex) => vertex.inner),
   );
 };
 

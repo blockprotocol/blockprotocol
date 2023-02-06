@@ -247,7 +247,7 @@ export const useMockDatastore = (
                 currentEntity.metadata.temporalVersioning[
                   currentGraph.temporalAxes.resolved.variable.axis
                 ].start.limit
-              ]?.inner,
+              ]?.inner as Entity<true>,
             );
 
             newCurrentEntity.metadata.temporalVersioning.decisionTime.end =

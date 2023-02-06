@@ -1,6 +1,6 @@
 import {
   EntityId,
-  EntityValidInterval,
+  EntityIdWithInterval,
   GraphElementVertexId,
   GraphResolveDepths,
   HasLeftEntityEdge,
@@ -26,17 +26,23 @@ import {
   mapElementsIntoRevisions,
 } from "@blockprotocol/graph/stdlib";
 
-import { get, mustBeDefined, typedEntries } from "../util";
+import {
+  get,
+  mustBeDefined,
+  typedEntries,
+  typedKeys,
+  typedValues,
+} from "../util";
 
 const TIMESTAMP_PLACEHOLDER = "TIMESTAMP_PLACEHOLDER" as const;
 
 /**
- * Advanced type to recursively search a type for `EntityValidInterval` and patch those occurrences by removing the
- * definition of the "validInterval" property.
+ * Advanced type to recursively search a type for `EntityIdWithInterval` and patch those occurrences by removing the
+ * definition of the "interval" property.
  */
 type DeepOmitValidInterval<ToPatch extends unknown> = ToPatch extends object
-  ? ToPatch extends EntityValidInterval
-    ? Omit<ToPatch, "validInterval">
+  ? ToPatch extends EntityIdWithInterval
+    ? Omit<ToPatch, "interval">
     : { [key in keyof ToPatch]: DeepOmitValidInterval<ToPatch[key]> }
   : ToPatch;
 
@@ -50,12 +56,13 @@ export type TraversalSubgraph<
   RootType extends SubgraphRootType<Temporal> = SubgraphRootType<Temporal>,
 > = Omit<Subgraph<Temporal, RootType>, "edges"> & {
   edges: DeepOmitValidInterval<
-    OntologyRootedEdges & {
-      [entityId: EntityId]: Record<
-        typeof TIMESTAMP_PLACEHOLDER,
-        KnowledgeGraphOutwardEdge[]
-      >;
-    }
+    | OntologyRootedEdges
+    | {
+        [entityId: EntityId]: Record<
+          typeof TIMESTAMP_PLACEHOLDER,
+          KnowledgeGraphOutwardEdge[]
+        >;
+      }
   >;
 };
 
@@ -129,7 +136,7 @@ export const getNeighbors = <
         );
         const mappedRevisions = mapElementsIntoRevisions(outgoingLinks);
 
-        for (const outgoingLinkEntityId of Object.keys(mappedRevisions)) {
+        for (const outgoingLinkEntityId of typedKeys(mappedRevisions)) {
           const outgoingLinkEdge: PatchedOutgoingLinkEdge = {
             kind: "HAS_LEFT_ENTITY",
             reversed: true,
@@ -145,7 +152,7 @@ export const getNeighbors = <
           );
         }
 
-        return Object.values(mappedRevisions)
+        return typedValues(mappedRevisions)
           .flat()
           .map((entity) => ({
             kind: "entity",
@@ -204,7 +211,7 @@ export const getNeighbors = <
         );
         const mappedRevisions = mapElementsIntoRevisions(incomingLinks);
 
-        for (const incomingLinkEntityId of Object.keys(mappedRevisions)) {
+        for (const incomingLinkEntityId of typedKeys(mappedRevisions)) {
           const incomingLinkEdge: PatchedIncomingLinkEdge = {
             kind: "HAS_RIGHT_ENTITY",
             reversed: true,
@@ -220,7 +227,7 @@ export const getNeighbors = <
           );
         }
 
-        return Object.values(mappedRevisions)
+        return typedValues(mappedRevisions)
           .flat()
           .map((entity) => ({
             kind: "entity",
@@ -318,23 +325,24 @@ export const traverseElementTemporal = ({
 
         if (isEntityVertex(neighborVertex)) {
           // get from temporal data of the neighbor vertex
-          const entityValidInterval =
+          const entityInterval =
             neighborVertex.inner.metadata.temporalVersioning[
               traversalSubgraph.temporalAxes.resolved.variable.axis
             ];
           newIntersection = intervalIntersectionWithInterval(
             interval,
-            entityValidInterval,
+            entityInterval,
           );
           neighborVertexId = {
             baseId: neighborVertex.inner.metadata.recordId.entityId,
-            revisionId: entityValidInterval.start.limit,
+            revisionId: entityInterval.start.limit,
           };
         } else {
           newIntersection = interval;
           neighborVertexId = {
             baseId: neighborVertex.inner.metadata.recordId.baseUri,
-            revisionId: neighborVertex.inner.metadata.recordId.version,
+            revisionId:
+              neighborVertex.inner.metadata.recordId.version.toString(),
           };
         }
 
@@ -429,31 +437,27 @@ export const finalizeSubgraph = <
     const variableAxis = traversalSubgraph.temporalAxes.resolved.variable.axis;
 
     const validRanges = Object.fromEntries(
-      Object.entries(traversalSubgraph.vertices).map(
-        ([baseId, revisionMap]) => {
-          const sortedRevisions = Object.keys(revisionMap).sort();
+      typedEntries(traversalSubgraph.vertices).map(([baseId, revisionMap]) => {
+        const sortedRevisions = typedKeys(revisionMap).sort();
 
-          /** @todo - This cast is needed because TS is confused again and thinks these must always be entity vertices */
-          const latestVertex = revisionMap[
-            mustBeDefined(sortedRevisions.at(-1))
-          ]! as Vertex<true>; // this cast to true is safe as we checked if the traversal subgraph was temporal above
+        const latestVertex =
+          revisionMap[mustBeDefined(sortedRevisions.at(-1))]!;
 
-          let latest;
+        let latest;
 
-          if (isEntityVertex(latestVertex)) {
-            const endBound =
-              latestVertex.inner.metadata.temporalVersioning[variableAxis].end;
-            latest = endBound.kind === "unbounded" ? null : endBound.limit;
-          } else {
-            latest = latestVertex.inner.metadata.recordId.version;
-          }
+        if (isEntityVertex(latestVertex)) {
+          const endBound =
+            latestVertex.inner.metadata.temporalVersioning[variableAxis].end;
+          latest = endBound.kind === "unbounded" ? null : endBound.limit;
+        } else {
+          latest = latestVertex.inner.metadata.recordId.version;
+        }
 
-          return [
-            baseId,
-            { earliest: mustBeDefined(sortedRevisions[0]), latest },
-          ];
-        },
-      ),
+        return [
+          baseId,
+          { earliest: mustBeDefined(sortedRevisions[0]), latest },
+        ];
+      }),
     );
 
     for (const [baseId, outwardEdgeMap] of typedEntries(
@@ -492,7 +496,7 @@ export const finalizeSubgraph = <
                 ...outwardEdge,
                 rightEndpoint: {
                   ...outwardEdge.rightEndpoint,
-                  validInterval: {
+                  interval: {
                     start: { kind: "inclusive", limit: edgeFirstCreatedAt },
                     end: endLimit
                       ? { kind: "exclusive", limit: endLimit as string }

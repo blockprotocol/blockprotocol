@@ -2,12 +2,13 @@ import { unionOfIntervals } from "../stdlib/interval.js";
 import {
   Entity,
   EntityId,
-  EntityValidInterval,
+  EntityIdWithInterval,
   EntityVertex,
   isTemporalSubgraph,
   KnowledgeGraphOutwardEdge,
   KnowledgeGraphRootedEdges,
   KnowledgeGraphVertices,
+  OutwardEdge,
   Subgraph,
   Timestamp,
 } from "../types.js";
@@ -41,9 +42,11 @@ export const addKnowledgeGraphEdgeToSubgraphByMutation = <
   } else if (!subgraph.edges[sourceEntityId]![atTime]) {
     subgraph.edges[sourceEntityId]![atTime] = [outwardEdge];
   } else {
-    const outwardEdgesAtTime = subgraph.edges[sourceEntityId]![atTime]!;
+    const outwardEdgesAtTime = subgraph.edges[sourceEntityId]![
+      atTime
+    ]! as KnowledgeGraphOutwardEdge[];
     if (
-      !outwardEdgesAtTime.find((otherOutwardEdge) =>
+      !outwardEdgesAtTime.find((otherOutwardEdge: OutwardEdge) =>
         isEqual(otherOutwardEdge, outwardEdge),
       )
     ) {
@@ -81,14 +84,14 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
     {
       leftEntityId: EntityId;
       rightEntityId: EntityId;
-      validIntervals: EntityValidInterval["validInterval"][];
+      edgeIntervals: EntityIdWithInterval["interval"][];
     }
   > = {};
 
   for (const entity of entities) {
     const entityId = entity.metadata.recordId.entityId;
 
-    const entityRevisionValidInterval: EntityValidInterval["validInterval"] =
+    const entityRevisionValidInterval: EntityIdWithInterval["interval"] =
       isTemporalSubgraph(subgraph)
         ? /*
          these casts should be safe as we have just checked if the Subgraph has temporal information, in which case the
@@ -108,10 +111,10 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
         linkMap[entityId] = {
           leftEntityId: entity.linkData.leftEntityId,
           rightEntityId: entity.linkData.rightEntityId,
-          validIntervals: [entityRevisionValidInterval],
+          edgeIntervals: [entityRevisionValidInterval],
         };
       } else {
-        linkInfo.validIntervals.push(entityRevisionValidInterval);
+        linkInfo.edgeIntervals.push(entityRevisionValidInterval);
       }
     }
 
@@ -134,51 +137,51 @@ export const addEntitiesToSubgraphByMutation = <Temporal extends boolean>(
 
   for (const [
     linkEntityId,
-    { leftEntityId, rightEntityId, validIntervals },
+    { leftEntityId, rightEntityId, edgeIntervals },
   ] of Object.entries(linkMap)) {
     // If the list of entities is comprehensive, and link destinations cannot change, the result of this should be an
     // array with a single interval that spans the full lifespan of the link entity.
-    const unionedIntervals = unionOfIntervals(...validIntervals);
+    const unionedIntervals = unionOfIntervals(...edgeIntervals);
 
-    for (const validInterval of unionedIntervals) {
+    for (const edgeInterval of unionedIntervals) {
       addKnowledgeGraphEdgeToSubgraphByMutation(
         subgraph,
         linkEntityId,
-        validInterval.start.limit,
+        edgeInterval.start.limit,
         {
           kind: "HAS_LEFT_ENTITY",
           reversed: false,
-          rightEndpoint: { entityId: leftEntityId, validInterval },
+          rightEndpoint: { entityId: leftEntityId, interval: edgeInterval },
         },
       );
       addKnowledgeGraphEdgeToSubgraphByMutation(
         subgraph,
         leftEntityId,
-        validInterval.start.limit,
+        edgeInterval.start.limit,
         {
           kind: "HAS_LEFT_ENTITY",
           reversed: true,
-          rightEndpoint: { entityId: linkEntityId, validInterval },
+          rightEndpoint: { entityId: linkEntityId, interval: edgeInterval },
         },
       );
       addKnowledgeGraphEdgeToSubgraphByMutation(
         subgraph,
         linkEntityId,
-        validInterval.start.limit,
+        edgeInterval.start.limit,
         {
           kind: "HAS_RIGHT_ENTITY",
           reversed: false,
-          rightEndpoint: { entityId: rightEntityId, validInterval },
+          rightEndpoint: { entityId: rightEntityId, interval: edgeInterval },
         },
       );
       addKnowledgeGraphEdgeToSubgraphByMutation(
         subgraph,
         rightEntityId,
-        validInterval.start.limit,
+        edgeInterval.start.limit,
         {
           kind: "HAS_RIGHT_ENTITY",
           reversed: true,
-          rightEndpoint: { entityId: linkEntityId, validInterval },
+          rightEndpoint: { entityId: linkEntityId, interval: edgeInterval },
         },
       );
     }

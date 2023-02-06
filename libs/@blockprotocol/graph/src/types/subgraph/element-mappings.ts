@@ -7,8 +7,8 @@ import {
   OntologyTypeRecordId,
   PropertyTypeWithMetadata,
 } from "../ontology.js";
-import { EntityValidInterval } from "./edges.js";
-import { EntityIdAndTimestamp } from "./edges/outward-edge.js";
+import { EntityIdWithInterval } from "./edges.js";
+import { EntityIdWithTimestamp } from "./edges/outward-edge.js";
 import {
   DataTypeVertex,
   EntityTypeVertex,
@@ -42,12 +42,12 @@ export type GraphElementIdentifiers<Temporal extends boolean> =
       vertex: DataTypeVertex[] | PropertyTypeVertex[] | EntityTypeVertex[];
     }
   | {
-      identifier: EntityIdAndTimestamp | EntityVertexId | EntityRecordId;
+      identifier: EntityIdWithTimestamp | EntityVertexId | EntityRecordId;
       element: Entity<Temporal>;
       vertex: EntityVertex<Temporal>;
     }
   | {
-      identifier: EntityId | EntityValidInterval;
+      identifier: EntityId | EntityIdWithInterval;
       element: Entity<Temporal>[];
       vertex: EntityVertex<Temporal>[];
     };
