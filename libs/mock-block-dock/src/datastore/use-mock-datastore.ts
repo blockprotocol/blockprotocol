@@ -227,8 +227,9 @@ export const useMockDatastore = (
                   }
                 : undefined;
 
-            // This is fairly slow, we could leverage something like `immer` to make these partial updates more
-            // efficient
+            // This is fairly slow, we could leverage another deep-copy strategy such as lodash, or we could rework
+            // the datastore so that the whole state isn't stored within a single object, thus allowing us to do
+            // smaller update operations
             const newSubgraph = JSON.parse(
               JSON.stringify(currentGraph),
             ) as typeof currentGraph;
