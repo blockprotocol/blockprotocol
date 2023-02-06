@@ -28,7 +28,7 @@ import {
 
 import { get, mustBeDefined, typedEntries } from "../util";
 
-const TIMESTAMP_PLACEHOLDER = `TIMESTAMP_PLACEHOLDER` as const;
+const TIMESTAMP_PLACEHOLDER = "TIMESTAMP_PLACEHOLDER" as const;
 
 /**
  * Advanced type to recursively search a type for `EntityValidInterval` and patch those occurrences by removing the
