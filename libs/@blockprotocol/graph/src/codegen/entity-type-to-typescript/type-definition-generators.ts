@@ -6,8 +6,12 @@ export const generateImportStatements = () =>
 export const generateEntityDefinition = (
   name: string,
   propertyTypeName: string,
-) => `
-export type ${name} = Entity<${propertyTypeName}>;\n`;
+) =>
+  /**
+   * @todo - optionally support temporal versioning, for now we default to non-temporal support in blocks (hence `false`)
+   */
+  `
+export type ${name} = Entity<false, ${propertyTypeName}>;\n`;
 
 /*
  * Generate the type returned by functions which extract a link entity and its right entity from the subgraph

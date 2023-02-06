@@ -33,9 +33,6 @@
     "./react": "./dist/react.js",
     "./stdlib": [
       "./dist/stdlib.js"
-    ],
-    "./stdlib-temporal": [
-      "./dist/stdlib-temporal.js"
     ]
   },
   "types": "./dist/index.d.ts",
@@ -61,9 +58,6 @@
       ],
       "stdlib": [
         "./dist/stdlib.d.ts"
-      ],
-      "stdlib-temporal": [
-        "./dist/stdlib-temporal.d.ts"
       ]
     }
   },

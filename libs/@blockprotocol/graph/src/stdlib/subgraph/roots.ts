@@ -1,41 +1,48 @@
-import { isEntityEditionId } from "../../types/entity.js";
-import { isOntologyTypeEditionId } from "../../types/ontology.js";
 import {
+  DataTypeRootType,
+  EntityRootType,
+  EntityTypeRootType,
+  isEntityVertexId,
+  isOntologyTypeVertexId,
+  isTemporalSubgraph,
+  PropertyTypeRootType,
   Subgraph,
   SubgraphRootType,
-  SubgraphRootTypes,
 } from "../../types/subgraph.js";
 import { Vertex } from "../../types/subgraph/vertices.js";
 import { mustBeDefined } from "../must-be-defined.js";
-import { getDataTypeByEditionId } from "./element/data-type.js";
-import { getEntity } from "./element/entity.js";
-import { getEntityTypeByEditionId } from "./element/entity-type.js";
-import { getPropertyTypeByEditionId } from "./element/property-type.js";
+import { getDataTypeByVertexId } from "./element/data-type.js";
+import { getEntityRevision } from "./element/entity.js";
+import { getEntityTypeByVertexId } from "./element/entity-type.js";
+import { getPropertyTypeByVertexId } from "./element/property-type.js";
 
 /**
  * Returns all root elements.
  *
  * For a narrower return type, first narrow the type of `subgraph` by using one of the helper type-guards:
- * - isDataTypeRootedSubgraph
- * - isPropertyTypeRootedSubgraph
- * - isEntityTypeRootedSubgraph
- * - isEntityRootedSubgraph
+ * - {@link isDataTypeRootedSubgraph}
+ * - {@link isPropertyTypeRootedSubgraph}
+ * - {@link isEntityTypeRootedSubgraph}
+ * - {@link isEntityRootedSubgraph}
  *
  * @param subgraph
  */
-export const getRoots = <RootType extends SubgraphRootType>(
-  subgraph: Subgraph<RootType>,
+export const getRoots = <
+  Temporal extends boolean,
+  RootType extends SubgraphRootType<Temporal>,
+>(
+  subgraph: Subgraph<Temporal, RootType>,
 ): RootType["element"][] =>
-  subgraph.roots.map((rootEditionId) => {
+  subgraph.roots.map((rootVertexId) => {
     const root = mustBeDefined(
-      subgraph.vertices[rootEditionId.baseId]?.[
+      subgraph.vertices[rootVertexId.baseId]?.[
         // We could use type-guards here to convince TS that it's safe, but that would be slower, it's currently not
         // smart enough to realise this can produce a value of type `Vertex` as it struggles with discriminating
         // `EntityId` and `BaseUri`
-        rootEditionId.versionId
-      ] as Vertex,
+        rootVertexId.revisionId
+      ] as Vertex<Temporal>,
       `roots should have corresponding vertices but ${JSON.stringify(
-        rootEditionId,
+        rootVertexId,
       )} was missing`,
     );
 
@@ -50,18 +57,18 @@ export const getRoots = <RootType extends SubgraphRootType>(
  *
  * @param subgraph
  */
-export const isDataTypeRootedSubgraph = (
-  subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["dataType"]> => {
-  for (const rootEditionId of subgraph.roots) {
-    if (!isOntologyTypeEditionId(rootEditionId)) {
+export const isDataTypeRootedSubgraph = <Temporal extends boolean>(
+  subgraph: Subgraph<Temporal>,
+): subgraph is Subgraph<Temporal, DataTypeRootType> => {
+  for (const rootVertexId of subgraph.roots) {
+    if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
     }
 
     mustBeDefined(
-      getDataTypeByEditionId(subgraph, rootEditionId),
+      getDataTypeByVertexId(subgraph, rootVertexId),
       `roots should have corresponding vertices but ${JSON.stringify(
-        rootEditionId,
+        rootVertexId,
       )} was missing`,
     );
   }
@@ -77,18 +84,18 @@ export const isDataTypeRootedSubgraph = (
  *
  * @param subgraph
  */
-export const isPropertyTypeRootedSubgraph = (
-  subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["propertyType"]> => {
-  for (const rootEditionId of subgraph.roots) {
-    if (!isOntologyTypeEditionId(rootEditionId)) {
+export const isPropertyTypeRootedSubgraph = <Temporal extends boolean>(
+  subgraph: Subgraph<Temporal>,
+): subgraph is Subgraph<Temporal, PropertyTypeRootType> => {
+  for (const rootVertexId of subgraph.roots) {
+    if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
     }
 
     mustBeDefined(
-      getPropertyTypeByEditionId(subgraph, rootEditionId),
+      getPropertyTypeByVertexId(subgraph, rootVertexId),
       `roots should have corresponding vertices but ${JSON.stringify(
-        rootEditionId,
+        rootVertexId,
       )} was missing`,
     );
   }
@@ -104,18 +111,18 @@ export const isPropertyTypeRootedSubgraph = (
  *
  * @param subgraph
  */
-export const isEntityTypeRootedSubgraph = (
-  subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["entityType"]> => {
-  for (const rootEditionId of subgraph.roots) {
-    if (!isOntologyTypeEditionId(rootEditionId)) {
+export const isEntityTypeRootedSubgraph = <Temporal extends boolean>(
+  subgraph: Subgraph<Temporal>,
+): subgraph is Subgraph<Temporal, EntityTypeRootType> => {
+  for (const rootVertexId of subgraph.roots) {
+    if (!isOntologyTypeVertexId(rootVertexId)) {
       return false;
     }
 
     mustBeDefined(
-      getEntityTypeByEditionId(subgraph, rootEditionId),
+      getEntityTypeByVertexId(subgraph, rootVertexId),
       `roots should have corresponding vertices but ${JSON.stringify(
-        rootEditionId,
+        rootVertexId,
       )} was missing`,
     );
   }
@@ -131,20 +138,33 @@ export const isEntityTypeRootedSubgraph = (
  *
  * @param subgraph
  */
-export const isEntityRootedSubgraph = (
-  subgraph: Subgraph,
-): subgraph is Subgraph<SubgraphRootTypes["entity"]> => {
-  for (const rootEditionId of subgraph.roots) {
-    if (!isEntityEditionId(rootEditionId)) {
+export const isEntityRootedSubgraph = <Temporal extends boolean>(
+  subgraph: Subgraph<Temporal>,
+): subgraph is Subgraph<Temporal, EntityRootType<Temporal>> => {
+  for (const rootVertexId of subgraph.roots) {
+    if (!isEntityVertexId(rootVertexId)) {
       return false;
     }
 
-    mustBeDefined(
-      getEntity(subgraph, rootEditionId.baseId, rootEditionId.versionId),
-      `roots should have corresponding vertices but ${JSON.stringify(
-        rootEditionId,
-      )} was missing`,
-    );
+    if (isTemporalSubgraph(subgraph)) {
+      mustBeDefined(
+        getEntityRevision(
+          subgraph as Subgraph<true>,
+          rootVertexId.baseId,
+          rootVertexId.revisionId,
+        ),
+        `roots should have corresponding vertices but ${JSON.stringify(
+          rootVertexId,
+        )} was missing`,
+      );
+    } else {
+      mustBeDefined(
+        getEntityRevision(subgraph as Subgraph<false>, rootVertexId.baseId),
+        `roots should have corresponding vertices but ${JSON.stringify(
+          rootVertexId,
+        )} was missing`,
+      );
+    }
   }
 
   return true;

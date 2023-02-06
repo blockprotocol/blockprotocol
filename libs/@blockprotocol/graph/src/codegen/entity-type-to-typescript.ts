@@ -1,12 +1,13 @@
-import { VersionedUri } from "@blockprotocol/type-system";
 import {
   EntityType,
   extractBaseUri,
   extractVersion,
+  VersionedUri,
 } from "@blockprotocol/type-system/slim";
 import { compile, Options } from "json-schema-to-typescript";
 
 import { fetchAndValidateEntityType } from "../codegen.js";
+import { typedEntries } from "../shared.js";
 import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings.js";
 import {
   generateEntityDefinition,
@@ -15,7 +16,7 @@ import {
   generateLinkEntityAndRightEntityDefinition,
 } from "./entity-type-to-typescript/type-definition-generators.js";
 import { hardcodedBpTypes } from "./hardcoded-bp-types.js";
-import { fetchTypeAsJson, typedEntries } from "./shared.js";
+import { fetchTypeAsJson } from "./shared.js";
 
 const bannerComment = (uri: string, depth: number) => `/**
  * This file was automatically generated – do not edit it.
@@ -233,7 +234,10 @@ const _jsonSchemaToTypeScript = async (
         linkEntityTypeName: linkEntityType.typeName,
         rightEntityTypeNames: (rightEntityTypes.length > 0
           ? rightEntityTypes
-          : [{ typeName: "Entity" }]
+          : /**
+             * @todo - optionally support temporal versioning, for now we default to non-temporal support in blocks (hence `false`)
+             */
+            [{ typeName: "Entity<false>" }]
         ).map((type) => type.typeName),
       });
 

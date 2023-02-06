@@ -1,9 +1,9 @@
 import { Message } from "@blockprotocol/core";
 import {
   EmbedderGraphMessageCallbacks,
-  EntityEditionId,
+  EntityRecordId,
+  EntityRootType,
   Subgraph,
-  SubgraphRootTypes,
 } from "@blockprotocol/graph";
 import {
   createContext,
@@ -17,7 +17,7 @@ import {
 } from "react";
 
 type MockBlockDockInfo = {
-  blockEntitySubgraph: Subgraph<SubgraphRootTypes["entity"]>;
+  blockEntitySubgraph: Subgraph<true, EntityRootType<true>>;
   blockInfo: {
     blockType: {
       entryPoint?: "react" | "html" | "custom-element" | string;
@@ -28,15 +28,15 @@ type MockBlockDockInfo = {
     name?: string;
     protocol?: string;
   };
-  graph: Subgraph;
+  graph: Subgraph<true>;
   debugMode: boolean;
   logs: Message[];
   readonly: boolean;
   setDebugMode: Dispatch<SetStateAction<boolean>>;
-  setEntityEditionIdOfEntityForBlock: Dispatch<SetStateAction<EntityEditionId>>;
+  setEntityRecordIdOfEntityForBlock: Dispatch<SetStateAction<EntityRecordId>>;
   setLogs: Dispatch<SetStateAction<Message[]>>;
   setReadonly: Dispatch<SetStateAction<boolean>>;
-  updateEntity: EmbedderGraphMessageCallbacks["updateEntity"];
+  updateEntity: EmbedderGraphMessageCallbacks<true>["updateEntity"];
 };
 
 const MockBlockDockContext = createContext<MockBlockDockInfo | null>(null);

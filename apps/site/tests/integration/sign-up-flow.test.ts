@@ -16,7 +16,11 @@ test("sign up flow works", async ({ browserName, isMobile, page }) => {
   }
 
   await page
-    .locator(isMobile ? "a:has-text('Sign Up')" : "header >> text=Sign Up")
+    .locator(
+      isMobile
+        ? "a:has-text('Create your account')"
+        : "header >> text=Create your account",
+    )
     .click();
 
   await expect(page).toHaveURL("/signup");

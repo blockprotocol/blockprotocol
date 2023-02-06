@@ -4,12 +4,22 @@ import {
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
   Entity,
-  EntityType,
+  EntityRootType,
+  EntityTypeRootType,
+  EntityTypeWithMetadata,
   MultiFilter,
   MultiSort,
+  QueryTemporalAxes,
   Subgraph,
-  SubgraphRootTypes,
 } from "@blockprotocol/graph";
+
+export const mustBeDefined = <T>(x: T | undefined, message?: string): T => {
+  if (x === undefined) {
+    throw new Error(`invariant was broken: ${message ?? ""}`);
+  }
+
+  return x;
+};
 
 type TupleEntry<
   T extends readonly unknown[],
@@ -37,16 +47,20 @@ export type Entry<T extends {}> = T extends readonly [unknown, ...unknown[]]
   : ObjectEntry<T>;
 
 /** `Object.entries` analogue which returns a well-typed array */
-export function typedEntries<T extends {}>(object: T): ReadonlyArray<Entry<T>> {
+export const typedEntries = <T extends {}>(
+  object: T,
+): ReadonlyArray<Entry<T>> => {
   return Object.entries(object) as unknown as ReadonlyArray<Entry<T>>;
-}
+};
 
-type FilterEntitiesFn = {
-  (params: {
-    entityTypeId?: string | null;
-    entities: Entity[];
-    multiFilter: MultiFilter;
-  }): Entity[];
+/** `Object.values` analogue which returns a well-typed array */
+export const typedKeys = <T extends {}>(object: T): Entry<T>[0][] => {
+  return Object.keys(object) as Entry<T>[0][];
+};
+
+/** `Object.values` analogue which returns a well-typed array */
+export const typedValues = <T extends {}>(object: T): Entry<T>[1][] => {
+  return Object.values(object);
 };
 
 // Saves us from using heavy lodash dependency
@@ -54,7 +68,7 @@ type FilterEntitiesFn = {
 export const get = (
   obj: unknown,
   path: string | string[],
-  defaultValue = undefined,
+  defaultValue: unknown = undefined,
 ): unknown => {
   const travel = (regexp: RegExp) =>
     String.prototype.split
@@ -107,15 +121,20 @@ export const debounce = <T extends (...args: any[]) => any>(
   };
 };
 
-const filterEntities: FilterEntitiesFn = (params) => {
-  const { entityTypeId, entities, multiFilter } = params;
+const filterEntitiesOrEntityTypes = <
+  Temporal extends boolean,
+  Elements extends Entity<Temporal>[] | EntityTypeWithMetadata[],
+>(params: {
+  elements: Elements;
+  multiFilter: MultiFilter;
+}) => {
+  // We recast these to ensure there are callable implementations of the functional iterators
+  const elements: Array<Elements[number]> = params.elements;
+  const filterItems: Array<MultiFilter["filters"][number]> =
+    params.multiFilter.filters;
 
-  return entities.filter((entity) => {
-    if (entityTypeId && entityTypeId !== entity.metadata.entityTypeId) {
-      return false;
-    }
-
-    const results = multiFilter.filters
+  return elements.filter((entity) => {
+    const results = filterItems
       .map((filterItem) => {
         const item = get(entity, filterItem.field);
 
@@ -149,19 +168,22 @@ const filterEntities: FilterEntitiesFn = (params) => {
       })
       .filter((val) => val !== null);
 
-    return multiFilter.operator === "OR"
+    return params.multiFilter.operator === "OR"
       ? results.some(Boolean)
       : results.every(Boolean);
   });
 };
 
-const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
-  entities: T[];
+const sortEntitiesOrTypes = <
+  Temporal extends boolean,
+  Elements extends Entity<Temporal>[] | EntityTypeWithMetadata[],
+>(params: {
+  elements: Elements;
   multiSort: MultiSort;
-}): T[] => {
-  const { entities, multiSort } = params;
+}): Elements => {
+  const { elements, multiSort } = params;
 
-  return [...entities].sort((a, b) => {
+  return [...elements].sort((a, b) => {
     for (const sortItem of multiSort) {
       const aValue = get(a, sortItem.field);
       const bValue = get(b, sortItem.field);
@@ -176,37 +198,47 @@ const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
     }
 
     return 0;
-  });
+  }) as Elements;
 };
 
-const isEntityTypes = (
-  entities: Entity[] | EntityType[],
-): entities is EntityType[] => "schema" in (entities[0] ?? {});
+export type FilterResult<
+  Temporal extends boolean,
+  T extends Entity<Temporal> | EntityTypeWithMetadata =
+    | Entity<Temporal>
+    | EntityTypeWithMetadata,
+> = {
+  results: T[];
+  operation:
+    | AggregateEntitiesResult<
+        Temporal,
+        Subgraph<Temporal, EntityRootType<Temporal>>
+      >["operation"]
+    | AggregateEntityTypesResult<
+        Subgraph<Temporal, EntityTypeRootType>
+      >["operation"];
+};
 
-export type FilterResult<T extends Entity | EntityType = Entity | EntityType> =
-  {
-    results: T[];
-    operation:
-      | AggregateEntitiesResult<
-          Subgraph<SubgraphRootTypes["entity"]>
-        >["operation"]
-      | AggregateEntityTypesResult<
-          Subgraph<SubgraphRootTypes["entityType"]>
-        >["operation"];
-  };
-
-export function filterAndSortEntitiesOrTypes(
-  entities: Entity[],
-  payload: AggregateEntitiesData,
-): FilterResult<Entity>;
-export function filterAndSortEntitiesOrTypes(
-  entities: EntityType[],
+export function filterAndSortEntitiesOrTypes<Temporal extends boolean>(
+  elements: Entity<Temporal>[],
+  payload: Omit<AggregateEntitiesData<Temporal>, "temporalAxes"> & {
+    temporalAxes: QueryTemporalAxes;
+  },
+): FilterResult<Temporal, Entity<Temporal>>;
+export function filterAndSortEntitiesOrTypes<Temporal extends boolean>(
+  elements: EntityTypeWithMetadata[],
   payload: AggregateEntityTypesData,
-): FilterResult<EntityType>;
-export function filterAndSortEntitiesOrTypes(
-  entities: Entity[] | EntityType[],
-  payload: AggregateEntitiesData | AggregateEntityTypesData,
-): FilterResult {
+): FilterResult<Temporal, EntityTypeWithMetadata>;
+export function filterAndSortEntitiesOrTypes<
+  Temporal extends boolean,
+  Elements extends Entity<Temporal>[] | EntityTypeWithMetadata[],
+>(
+  elements: Elements,
+  payload:
+    | (Omit<AggregateEntitiesData<Temporal>, "temporalAxes"> & {
+        temporalAxes: QueryTemporalAxes;
+      })
+    | AggregateEntityTypesData,
+): FilterResult<Temporal> {
   const { operation } = payload;
 
   const pageNumber = operation?.pageNumber || 1;
@@ -222,55 +254,26 @@ export function filterAndSortEntitiesOrTypes(
   };
 
   const startIndex = pageNumber === 1 ? 0 : (pageNumber - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, entities.length);
+  const endIndex = Math.min(startIndex + itemsPerPage, elements.length);
 
-  // @todo add filtering to entityTypes, remove duplication below
-  if (isEntityTypes(entities)) {
-    let results = [...entities];
-    const totalCount = results.length;
-    const pageCount = Math.ceil(totalCount / itemsPerPage);
-    results = sortEntitiesOrTypes({ entities: results, multiSort }).slice(
-      startIndex,
-      endIndex,
-    );
-    return {
-      results,
-      operation: {
-        ...appliedOperation,
-        totalCount,
-        pageCount,
-      },
-    };
-  }
-
-  let results = [...entities];
+  let results = [...elements] as Elements;
   if (multiFilter) {
-    results = filterEntities({
-      entities: results,
+    results = filterEntitiesOrEntityTypes({
+      elements: results,
       multiFilter,
-    });
-  }
-  const entityTypeIdFilter =
-    operation && "entityTypeId" in operation
-      ? operation.entityTypeId
-      : undefined;
-  if (entityTypeIdFilter) {
-    results = results.filter(
-      (entity) => entity.metadata.entityTypeId === entityTypeIdFilter,
-    );
+    }) as Elements;
   }
 
   const totalCount = results.length;
   const pageCount = Math.ceil(totalCount / itemsPerPage);
-  results = sortEntitiesOrTypes({ entities: results, multiSort }).slice(
-    startIndex,
-    endIndex,
-  );
+  results = sortEntitiesOrTypes({
+    elements: results,
+    multiSort,
+  }).slice(startIndex, endIndex) as Elements;
   return {
     results,
     operation: {
       ...appliedOperation,
-      entityTypeId: entityTypeIdFilter,
       totalCount,
       pageCount,
     },

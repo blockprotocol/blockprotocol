@@ -28,7 +28,7 @@ export const generateSiteMap = (): SiteMap => ({
       href: "/hub",
     },
     {
-      title: "Documentation",
+      title: "Docs",
       href: "/docs",
       subPages: getDocumentationSubPages(),
     },

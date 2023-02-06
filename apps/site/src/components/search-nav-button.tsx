@@ -40,7 +40,6 @@ export const SearchNavButton = () => {
           padding: 0.5,
           paddingLeft: 1.5,
           boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-          marginRight: 3,
           "&::before": {
             borderColor: theme.palette.gray[30],
             position: "absolute",

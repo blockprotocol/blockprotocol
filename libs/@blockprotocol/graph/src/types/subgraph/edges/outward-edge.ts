@@ -1,44 +1,40 @@
-import { EntityEditionId, EntityId, isEntityEditionId } from "../../entity.js";
+import { EntityId, isEntityRecordId } from "../../entity.js";
+import { isOntologyTypeRecordId } from "../../ontology.js";
 import {
-  isOntologyTypeEditionId,
-  OntologyTypeEditionId,
-} from "../../ontology.js";
-import { Timestamp } from "../time.js";
+  LimitedTemporalBound,
+  TemporalBound,
+  TimeInterval,
+  Timestamp,
+} from "../../temporal-versioning.js";
 import {
   isKnowledgeGraphEdgeKind,
   isOntologyEdgeKind,
   isSharedEdgeKind,
-  KnowledgeGraphEdgeKind,
-  OntologyEdgeKind,
-  SharedEdgeKind,
 } from "./kind.js";
+import { KnowledgeGraphOutwardEdge } from "./variants/knowledge.js";
+import { OntologyOutwardEdge } from "./variants/ontology.js";
 
 /**
- * A "partial" definition of an edge which is complete when joined with the missing left-endpoint (usually the source
- * of the edge)
+ * A simple tuple type which identifies an {@link Entity} by its {@link EntityId}, at a given {@link Timestamp}.
+ *
+ * When using this to query a {@link Subgraph}, along its variable axis, this should identify a single unique revision
+ * of an {@link Entity} or possibly refer to nothing.
  */
-type GenericOutwardEdge<
-  EdgeKind extends KnowledgeGraphEdgeKind | OntologyEdgeKind | SharedEdgeKind,
-  Endpoint,
-  Reversed extends boolean = boolean,
-> = {
-  kind: EdgeKind;
-  reversed: Reversed;
-  rightEndpoint: Endpoint;
-};
-
-export type EntityIdAndTimestamp = {
+export type EntityIdWithTimestamp = {
   baseId: EntityId;
   timestamp: Timestamp;
 };
 
-export type OntologyOutwardEdge =
-  | GenericOutwardEdge<OntologyEdgeKind, OntologyTypeEditionId>
-  | GenericOutwardEdge<SharedEdgeKind, EntityEditionId, true>;
-
-export type KnowledgeGraphOutwardEdge =
-  | GenericOutwardEdge<KnowledgeGraphEdgeKind, EntityIdAndTimestamp>
-  | GenericOutwardEdge<SharedEdgeKind, OntologyTypeEditionId, false>;
+/**
+ * A simple tuple type which identifies an {@link Entity} by its {@link EntityId}, over a given {@link TimeInterval}.
+ *
+ * When using this to query a {@link Subgraph}, along its variable axis, this could return any number of revisions
+ * of an {@link Entity} (including possibly returning none).
+ */
+export type EntityIdWithInterval = {
+  entityId: EntityId;
+  interval: TimeInterval<LimitedTemporalBound, TemporalBound>;
+};
 
 export type OutwardEdge = OntologyOutwardEdge | KnowledgeGraphOutwardEdge;
 
@@ -49,7 +45,7 @@ export const isOntologyOutwardEdge = (
 ): edge is OntologyOutwardEdge => {
   return (
     isOntologyEdgeKind(edge.kind) ||
-    (isSharedEdgeKind(edge.kind) && isEntityEditionId(edge.rightEndpoint))
+    (isSharedEdgeKind(edge.kind) && isEntityRecordId(edge.rightEndpoint))
   );
 };
 
@@ -58,6 +54,6 @@ export const isKnowledgeGraphOutwardEdge = (
 ): edge is KnowledgeGraphOutwardEdge => {
   return (
     isKnowledgeGraphEdgeKind(edge.kind) ||
-    (isSharedEdgeKind(edge.kind) && isOntologyTypeEditionId(edge.rightEndpoint))
+    (isSharedEdgeKind(edge.kind) && isOntologyTypeRecordId(edge.rightEndpoint))
   );
 };

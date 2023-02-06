@@ -8,26 +8,34 @@ export * from "./ontology/property-type.js";
 /** @todo - Add documentation */
 /**
  *  @todo - Do we want to introduce "ontology" into code? Alternatives:
- *    * `TypeEditionId` - "type" is so ambiguous in languages and tends to clash with protected keywords
+ *    * `TypeRecordId` - "type" is so ambiguous in languages and tends to clash with protected keywords
  *    * `TypeSystemElementId` - This is about as wordy as below, and is an element of the ontology the same as an element
  *      of the type system? Not sure the type system == ontology, it's more like the type system describes the ontology.
  */
-export type OntologyTypeEditionId = {
-  baseId: BaseUri;
-  versionId: number;
+export type OntologyTypeRecordId = {
+  baseUri: BaseUri;
+  version: number;
 };
 
-export const isOntologyTypeEditionId = (
-  editionId: unknown,
-): editionId is OntologyTypeEditionId => {
+export const isOntologyTypeRecordId = (
+  recordId: unknown,
+): recordId is OntologyTypeRecordId => {
   return (
-    editionId != null &&
-    typeof editionId === "object" &&
-    "baseId" in editionId &&
-    typeof editionId.baseId === "string" &&
-    /** @todo - This means we need to have initialized the type system */
-    validateBaseUri(editionId.baseId).type === "Ok" &&
-    "versionId" in editionId &&
-    typeof editionId.versionId === "number"
+    recordId != null &&
+    typeof recordId === "object" &&
+    "baseUri" in recordId &&
+    typeof recordId.baseUri === "string" &&
+    validateBaseUri(recordId.baseUri).type === "Ok" &&
+    "version" in recordId &&
+    typeof recordId.version === "number"
   );
 };
+
+/**
+ * The second component of the [{@link BaseUri}, RevisionId] tuple needed to identify a specific ontology type vertex
+ * within a {@link Subgraph}. This should be the version number as a string.
+ *
+ * Although it would be possible to create a template literal type, this confuses TypeScript when traversing the
+ * {@link Subgraph} in generic contexts, whereby it then thinks any string must relate to a {@link EntityVertex}.
+ */
+export type OntologyTypeRevisionId = string; // we explicitly opt not to use `${number}`

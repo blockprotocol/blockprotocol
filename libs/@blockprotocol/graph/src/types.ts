@@ -4,3 +4,4 @@ export * from "./types/file.js";
 export * from "./types/linked-aggregation.js";
 export * from "./types/ontology.js";
 export * from "./types/subgraph.js";
+export * from "./types/temporal-versioning.js";

@@ -1,43 +1,83 @@
+import { EntityRootType, GetEntityData, Subgraph } from "@blockprotocol/graph";
+import { getEntityRevision } from "@blockprotocol/graph/stdlib";
+
+import { getDefaultTemporalAxes } from "../../get-default-temporal-axes";
+import { resolveTemporalAxes } from "../../resolve-temporal-axes";
 import {
-  GetEntityData,
-  Subgraph,
-  SubgraphRootTypes,
-} from "@blockprotocol/graph";
-import { getEntity as getEntityFromSubgraph } from "@blockprotocol/graph/stdlib";
+  finalizeSubgraph,
+  TraversalSubgraph,
+  traverseElement,
+} from "../../traverse";
 
-import { traverseElement } from "../../traverse";
-import { TraversalContext } from "../../traverse/traversal-context";
-
-export const getEntity = (
+export const getEntityImpl = (
   {
     entityId,
     graphResolveDepths = {
       hasLeftEntity: { incoming: 1, outgoing: 1 },
       hasRightEntity: { incoming: 1, outgoing: 1 },
     },
-  }: GetEntityData,
-  graph: Subgraph,
-): Subgraph<SubgraphRootTypes["entity"]> | undefined => {
-  const entityEdition = getEntityFromSubgraph(graph, entityId);
+    temporalAxes,
+  }: GetEntityData<true>,
+  graph: Subgraph<true>,
+): Subgraph<true, EntityRootType<true>> | undefined => {
+  const resolvedTemporalAxes = resolveTemporalAxes(temporalAxes);
 
-  if (entityEdition === undefined) {
+  const entityRevision = getEntityRevision(graph, entityId);
+
+  if (entityRevision === undefined) {
     return undefined;
   }
 
-  const subgraph = {
-    roots: [entityEdition.metadata.editionId],
+  const traversalSubgraph: TraversalSubgraph<true, EntityRootType<true>> = {
+    roots: [
+      {
+        baseId: entityRevision.metadata.recordId.entityId,
+        revisionId:
+          entityRevision.metadata.temporalVersioning[
+            resolvedTemporalAxes.variable.axis
+          ].start.limit,
+      },
+    ],
     vertices: {},
     edges: {},
     depths: graphResolveDepths,
+    temporalAxes: { initial: temporalAxes, resolved: resolvedTemporalAxes },
   };
 
-  traverseElement(
-    subgraph,
-    entityEdition.metadata.editionId,
-    graph,
-    new TraversalContext(graph),
-    graphResolveDepths,
-  );
+  traverseElement({
+    traversalSubgraph,
+    datastore: graph,
+    element: { kind: "entity", inner: entityRevision },
+    elementIdentifier: {
+      baseId: entityRevision.metadata.recordId.entityId,
+      revisionId:
+        entityRevision.metadata.temporalVersioning[
+          resolvedTemporalAxes.variable.axis
+        ].start.limit,
+    },
+    currentTraversalDepths: graphResolveDepths,
+    interval: resolvedTemporalAxes.variable.interval,
+  });
 
-  return subgraph;
+  return finalizeSubgraph(traversalSubgraph);
+};
+
+export const getEntity = <Temporal extends boolean>(
+  data: GetEntityData<Temporal>,
+  graph: Subgraph<true>,
+): Subgraph<Temporal, EntityRootType<Temporal>> | undefined => {
+  // this cast is safe as we're only checking against undefined
+  if ((data as GetEntityData<true>).temporalAxes !== undefined) {
+    return getEntityImpl(data as GetEntityData<true>, graph) as
+      | Subgraph<Temporal, EntityRootType<Temporal>>
+      | undefined;
+  } else {
+    return getEntityImpl(
+      {
+        ...(data as GetEntityData<false>),
+        temporalAxes: getDefaultTemporalAxes(),
+      },
+      graph,
+    ) as Subgraph<Temporal, EntityRootType<Temporal>> | undefined;
+  }
 };

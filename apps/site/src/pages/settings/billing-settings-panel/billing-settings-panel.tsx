@@ -1,12 +1,20 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { SubscriptionTierPrices } from "@local/internal-api-client";
 import { Box, Card, Grid, Typography } from "@mui/material";
-import { FunctionComponent, useMemo } from "react";
+import {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { FontAwesomeIcon } from "../../../components/icons";
 import { MapboxIcon } from "../../../components/icons/mapbox-icon";
 import { OpenAiIcon } from "../../../components/icons/open-ai-icon";
 import { Link } from "../../../components/link";
 import { useUser } from "../../../context/user-context";
+import { internalApi } from "../../../lib/internal-api-client";
 import {
   isPaidSubscriptionTier,
   subscriptionTierToHumanReadable,
@@ -16,6 +24,21 @@ import { ProSubscriptionTierOverview } from "./pro-subscription-tier-overview";
 
 export const BillingSettingsPanel: FunctionComponent = () => {
   const { user } = useUser();
+
+  const [subscriptionTierPrices, setSubscriptionTierPrices] =
+    useState<SubscriptionTierPrices>();
+
+  const fetchSubscriptionTierPrices = useCallback(async () => {
+    const {
+      data: { subscriptionTierPrices: fetchedSubscriptionTierPrices },
+    } = await internalApi.getSubscriptionTierPrices();
+
+    setSubscriptionTierPrices(fetchedSubscriptionTierPrices);
+  }, [setSubscriptionTierPrices]);
+
+  useEffect(() => {
+    void fetchSubscriptionTierPrices();
+  }, [fetchSubscriptionTierPrices]);
 
   /**
    * @todo: uncomment this when subscription object is required on the billing page.
@@ -48,6 +71,13 @@ export const BillingSettingsPanel: FunctionComponent = () => {
   const currentSubscriptionTierIsPaid = isPaidSubscriptionTier(
     currentSubscriptionTier,
   );
+
+  /**
+   * @todo: fetch the subscription tier prices server-side
+   */
+  if (!subscriptionTierPrices) {
+    return null;
+  }
 
   return (
     <>
@@ -101,7 +131,7 @@ export const BillingSettingsPanel: FunctionComponent = () => {
             href={
               currentSubscriptionTierIsPaid
                 ? "/settings/billing/change-payment-method"
-                : "/upgrade"
+                : "/settings/billing/upgrade"
             }
           >
             <Card
@@ -175,10 +205,13 @@ export const BillingSettingsPanel: FunctionComponent = () => {
       </Typography>
       <Box marginBottom={6}>
         {currentSubscriptionTier === "pro" ? (
-          <ProSubscriptionTierOverview />
+          <ProSubscriptionTierOverview
+            subscriptionTierPrices={subscriptionTierPrices}
+          />
         ) : (
           <FreeOrHobbySubscriptionTierOverview
             currentSubscriptionTier={currentSubscriptionTier}
+            subscriptionTierPrices={subscriptionTierPrices}
           />
         )}
       </Box>

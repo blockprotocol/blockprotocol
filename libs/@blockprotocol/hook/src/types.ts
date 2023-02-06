@@ -1,4 +1,4 @@
-import { MessageCallback } from "@blockprotocol/core";
+import { MessageCallback, MessageReturn } from "@blockprotocol/core";
 import { EntityId } from "@blockprotocol/graph";
 
 export type HookResponse = {
@@ -23,7 +23,7 @@ export type HookError = "INVALID_INPUT" | "NOT_FOUND" | "NOT_IMPLEMENTED";
  * @todo Generate these types from the JSON definition, to avoid manually keeping the JSON and types in sync
  */
 export type EmbedderHookMessageCallbacks = {
-  hook: MessageCallback<HookData, null, HookResponse, HookError>;
+  hook: MessageCallback<HookData, null, MessageReturn<HookResponse>, HookError>;
 };
 
 export type BlockHookMessages<

@@ -6,7 +6,7 @@ import { html } from "lit";
 
 import { propertyTypes } from "../src/data/property-types";
 
-export class TestCustomElementBlock extends BlockElementBase {
+export class TestCustomElementBlock extends BlockElementBase<true> {
   private handleInput(event: Event) {
     this.updateSelfProperties({
       [extractBaseUri(propertyTypes.name.$id)]: (
@@ -32,7 +32,7 @@ export class TestCustomElementBlock extends BlockElementBase {
         </h1>
         <p>
           The entityId of this block is
-          ${blockEntity?.metadata.editionId.baseId}.
+          ${blockEntity?.metadata.recordId.entityId}.
         </p>
         <p>
           ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
@@ -44,8 +44,9 @@ export class TestCustomElementBlock extends BlockElementBase {
         ${blockEntity?.properties[extractBaseUri(propertyTypes.name.$id)]}
       </h1>
       <p>
-        The entityId of this block is ${blockEntity?.metadata.editionId.baseId}.
-        Use it to update its data when calling updateEntities.
+        The entityId of this block is
+        ${blockEntity?.metadata.recordId.entityId}. Use it to update its data
+        when calling updateEntities.
       </p>
       <input
         @change=${this.handleInput}

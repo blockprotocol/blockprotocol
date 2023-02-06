@@ -81,10 +81,10 @@ export const PropertiesView = () => {
                   ) {
                     return false;
                   }
-                  const entity = args.updated_src as Entity;
+                  const entity = args.updated_src as Entity<true>;
                   void updateEntity({
                     data: {
-                      entityId: entity.metadata.editionId.baseId,
+                      entityId: entity.metadata.recordId.entityId,
                       entityTypeId: entity.metadata.entityTypeId,
                       properties: entity.properties,
                       leftToRightOrder: entity.linkData?.leftToRightOrder,
@@ -97,10 +97,10 @@ export const PropertiesView = () => {
                   if (!args.namespace.includes("properties")) {
                     return false;
                   }
-                  const entity = args.updated_src as Entity;
+                  const entity = args.updated_src as Entity<true>;
                   void updateEntity({
                     data: {
-                      entityId: entity.metadata.editionId.baseId,
+                      entityId: entity.metadata.recordId.entityId,
                       entityTypeId: entity.metadata.entityTypeId,
                       properties: entity.properties,
                       leftToRightOrder: entity.linkData?.leftToRightOrder,
@@ -113,10 +113,10 @@ export const PropertiesView = () => {
                   if (!args.namespace.includes("properties")) {
                     return false;
                   }
-                  const entity = args.updated_src as Entity;
+                  const entity = args.updated_src as Entity<true>;
                   void updateEntity({
                     data: {
-                      entityId: entity.metadata.editionId.baseId,
+                      entityId: entity.metadata.recordId.entityId,
                       entityTypeId: entity.metadata.entityTypeId,
                       properties: entity.properties,
                       leftToRightOrder: entity.linkData?.leftToRightOrder,

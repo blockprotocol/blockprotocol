@@ -1,55 +1,8 @@
+import { useServiceConstructor } from "@blockprotocol/core/react";
 import { EntityId } from "@blockprotocol/graph";
-import { RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { RefObject, useLayoutEffect, useRef, useState } from "react";
 
 import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
-
-const useHookServiceConstructor = <
-  T extends typeof HookBlockHandler | typeof HookEmbedderHandler,
->({
-  Handler,
-  constructorArgs,
-  ref,
-}: {
-  Handler: T;
-  constructorArgs?: Omit<ConstructorParameters<T>[0], "element">;
-  ref: RefObject<HTMLElement>;
-}) => {
-  const previousRef = useRef<HTMLElement | null>(null);
-
-  const [hookService, setHookService] = useState<
-    | (T extends typeof HookBlockHandler
-        ? HookBlockHandler
-        : HookEmbedderHandler)
-    | null
-  >(null);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps -- will not loop & we don't want to reconstruct on other args
-  useEffect(() => {
-    if (ref.current === previousRef.current) {
-      return;
-    }
-
-    if (previousRef.current) {
-      hookService?.destroy();
-    }
-
-    previousRef.current = ref.current;
-
-    if (ref.current) {
-      setHookService(
-        new Handler({
-          element: ref.current,
-          ...(constructorArgs as unknown as ConstructorParameters<T>), // @todo fix these casts
-        }) as T extends typeof HookBlockHandler // @todo fix these casts
-          ? HookBlockHandler
-          : HookEmbedderHandler,
-      );
-    }
-  });
-
-  return { hookService };
-};
-
 /**
  * Create a HookBlockHandler instance, using a reference to an element in the
  * block.
@@ -64,13 +17,13 @@ export const useHookBlockService = (
     ConstructorParameters<typeof HookBlockHandler>[0],
     "element"
   >,
-): { hookService: HookBlockHandler | null } => {
-  return useHookServiceConstructor({
+): { hookService: HookBlockHandler } => ({
+  hookService: useServiceConstructor({
     Handler: HookBlockHandler,
     constructorArgs,
     ref,
-  });
-};
+  }),
+});
 
 /**
  * Create a HookEmbedderHandler instance, using a reference to an element
@@ -86,13 +39,13 @@ export const useHookEmbedderService = (
     ConstructorParameters<typeof HookEmbedderHandler>[0],
     "element"
   >,
-): { hookService: HookEmbedderHandler | null } => {
-  return useHookServiceConstructor({
+): { hookService: HookEmbedderHandler } => ({
+  hookService: useServiceConstructor({
     Handler: HookEmbedderHandler,
     ref,
     constructorArgs,
-  });
-};
+  }),
+});
 
 type Hook<T extends HTMLElement> = {
   id: string | null;
@@ -123,7 +76,7 @@ type Hook<T extends HTMLElement> = {
  *                 fallback (i.e, remove any event listeners).
  */
 export const useHook = <T extends HTMLElement>(
-  service: HookBlockHandler | null,
+  service: HookBlockHandler,
   ref: RefObject<T | null | void>,
   type: string,
   entityId: EntityId,
@@ -194,7 +147,7 @@ export const useHook = <T extends HTMLElement>(
 
     existingHookRef.current?.cancel();
 
-    if (node && service) {
+    if (node) {
       const controller = new AbortController();
 
       const hook: Hook<T> = {

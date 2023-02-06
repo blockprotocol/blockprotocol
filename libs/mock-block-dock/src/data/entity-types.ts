@@ -16,6 +16,7 @@ const worksFor: EntityType = {
   ],
   properties: {},
   required: [],
+  additionalProperties: false,
 };
 const founderOf: EntityType = {
   kind: "entityType",
@@ -30,6 +31,7 @@ const founderOf: EntityType = {
   ],
   properties: {},
   required: [],
+  additionalProperties: false,
 };
 const company: EntityType = {
   kind: "entityType",
@@ -50,6 +52,7 @@ const company: EntityType = {
     extractBaseUri(propertyTypes.name.$id),
   ],
   links: {},
+  additionalProperties: false,
 };
 const person: EntityType = {
   kind: "entityType",
@@ -81,18 +84,19 @@ const person: EntityType = {
     [worksFor.$id]: {
       type: "array",
       items: {
-        $ref: company.$id,
+        oneOf: [{ $ref: company.$id }],
       },
       ordered: false,
     },
     [founderOf.$id]: {
       type: "array",
       items: {
-        $ref: company.$id,
+        oneOf: [{ $ref: company.$id }],
       },
       ordered: false,
     },
   },
+  additionalProperties: false,
 };
 const testType: EntityType = {
   kind: "entityType",
@@ -107,6 +111,7 @@ const testType: EntityType = {
   },
   required: [extractBaseUri(propertyTypes.name.$id)],
   links: {},
+  additionalProperties: false,
 };
 
 export const entityTypes = {

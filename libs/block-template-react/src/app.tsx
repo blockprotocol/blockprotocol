@@ -63,7 +63,7 @@ export const App: BlockComponent<RootEntity> = ({
     RootEntityLinkedEntities
   >(blockEntitySubgraph);
 
-  const entityId = blockEntity.metadata.editionId.baseId;
+  const entityId = blockEntity.metadata.recordId.entityId;
 
   const titleKey: keyof RootEntity["properties"] =
     "https://alpha.hash.ai/@hash/types/property-type/title/";

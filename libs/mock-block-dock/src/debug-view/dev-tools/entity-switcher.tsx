@@ -1,6 +1,6 @@
 import {
   getEntities,
-  getEntity,
+  getEntityRevision,
   getEntityTypes,
   getRoots,
 } from "@blockprotocol/graph/stdlib";
@@ -27,7 +27,7 @@ import { JsonView } from "./json-view";
 export const EntitySwitcher = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const { blockEntitySubgraph, setEntityEditionIdOfEntityForBlock, graph } =
+  const { blockEntitySubgraph, setEntityRecordIdOfEntityForBlock, graph } =
     useMockBlockDockContext();
 
   const blockEntity = useMemo(
@@ -40,10 +40,10 @@ export const EntitySwitcher = () => {
   );
   const [entityId, setEntityIdOfProposedEntityForBlock] = useState<
     string | undefined
-  >(blockEntity.metadata.editionId.baseId);
+  >(blockEntity.metadata.recordId.entityId);
 
   const selectedEntity = useMemo(
-    () => (entityId ? getEntity(graph, entityId)! : blockEntity),
+    () => (entityId ? getEntityRevision(graph, entityId)! : blockEntity),
     [graph, blockEntity, entityId],
   );
 
@@ -57,7 +57,7 @@ export const EntitySwitcher = () => {
 
   const handleSubmit = () => {
     if (selectedEntity) {
-      setEntityEditionIdOfEntityForBlock(selectedEntity.metadata.editionId);
+      setEntityRecordIdOfEntityForBlock(selectedEntity.metadata.recordId);
     }
     closePopover();
   };
@@ -155,10 +155,10 @@ export const EntitySwitcher = () => {
                 )
                 .map((entity) => (
                   <MenuItem
-                    key={entity.metadata.editionId.baseId}
-                    value={entity.metadata.editionId.baseId}
+                    key={entity.metadata.recordId.entityId}
+                    value={entity.metadata.recordId.entityId}
                   >
-                    {entity.metadata.editionId.baseId}
+                    {entity.metadata.recordId.entityId}
                   </MenuItem>
                 ))}
             </Select>

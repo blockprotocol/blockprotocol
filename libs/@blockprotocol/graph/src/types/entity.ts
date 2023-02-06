@@ -4,8 +4,17 @@ import type {
 } from "@blockprotocol/core";
 import { BaseUri, VersionedUri } from "@blockprotocol/type-system/slim";
 
-import { isOntologyTypeEditionId } from "../types.js";
-import { Subgraph, SubgraphRootTypes } from "./subgraph.js";
+import {
+  EntityRootType,
+  ExclusiveLimitedTemporalBound,
+  InclusiveLimitedTemporalBound,
+  QueryTemporalAxesUnresolved,
+  Subgraph,
+  TemporalAxes,
+  TimeInterval,
+  Timestamp,
+  Unbounded,
+} from "../types.js";
 import { GraphResolveDepths } from "./subgraph/graph-resolve-depths.js";
 
 export type JsonObject = CoreJsonObject;
@@ -14,24 +23,23 @@ export type JsonValue = CoreJsonValue;
 /** @todo - Consider branding these */
 /** @todo - Add documentation for these if we keep them */
 export type EntityId = string;
-export type EntityVersion = string;
-export type EntityEditionId = {
-  baseId: EntityId;
-  versionId: EntityVersion;
+// This isn't necessary, it just _could_ provide greater clarity that this corresponds to an exact vertex and can be
+// used in a direct lookup and not a search in the vertices
+export type EntityRevisionId = Timestamp;
+
+export type EntityRecordId = {
+  entityId: EntityId;
+  editionId: string;
 };
 
-export const isEntityEditionId = (
-  editionId: unknown,
-): editionId is EntityEditionId => {
+export const isEntityRecordId = (
+  recordId: unknown,
+): recordId is EntityRecordId => {
   return (
-    editionId != null &&
-    typeof editionId === "object" &&
-    "baseId" in editionId &&
-    "versionId" in editionId &&
-    /** @todo - is it fine to just check that versionId is string, maybe timestamp if we want to lock it into being a
-     *    timestamp?
-     */
-    !isOntologyTypeEditionId(editionId)
+    recordId != null &&
+    typeof recordId === "object" &&
+    "entityId" in recordId &&
+    "editionId" in recordId
   );
 };
 
@@ -44,10 +52,22 @@ export type EntityPropertiesObject = {
   [_: BaseUri]: EntityPropertyValue;
 };
 
-export type EntityMetadata = {
-  editionId: EntityEditionId;
+type HalfClosedInterval = TimeInterval<
+  InclusiveLimitedTemporalBound,
+  ExclusiveLimitedTemporalBound | Unbounded
+>;
+
+export type EntityTemporalVersioningMetadata = Record<
+  TemporalAxes,
+  HalfClosedInterval
+>;
+
+export type EntityMetadata<Temporal extends boolean> = {
+  recordId: EntityRecordId;
   entityTypeId: VersionedUri;
-};
+} & (Temporal extends true
+  ? { temporalVersioning: EntityTemporalVersioningMetadata }
+  : {});
 
 export type LinkData = {
   leftToRightOrder?: number;
@@ -57,14 +77,21 @@ export type LinkData = {
 };
 
 export type Entity<
+  Temporal extends boolean,
   Properties extends EntityPropertiesObject | null = Record<
     BaseUri,
     EntityPropertyValue
   >,
 > = {
-  metadata: EntityMetadata;
+  metadata: EntityMetadata<Temporal>;
   linkData?: LinkData;
 } & (Properties extends null ? {} : { properties: Properties });
+
+export type LinkEntityAndRightEntity<Temporal extends boolean> = {
+  // In a temporal system there may be multiple revisions of both link entities and their right entities
+  linkEntity: Temporal extends true ? Entity<Temporal>[] : Entity<Temporal>;
+  rightEntity: Temporal extends true ? Entity<Temporal>[] : Entity<Temporal>;
+};
 
 export type CreateEntityData = {
   entityTypeId: VersionedUri;
@@ -72,10 +99,12 @@ export type CreateEntityData = {
   linkData?: LinkData;
 };
 
-export type GetEntityData = {
+export type GetEntityData<Temporal extends boolean> = {
   entityId: EntityId;
   graphResolveDepths?: GraphResolveDepths;
-};
+} & (Temporal extends true
+  ? { temporalAxes: QueryTemporalAxesUnresolved }
+  : {});
 
 export type UpdateEntityData = {
   entityId: EntityId;
@@ -106,11 +135,11 @@ export type MultiFilterOperatorType = "AND" | "OR";
 export type MultiFilter = {
   filters: (
     | {
-        field: string;
+        field: string[];
         operator: FilterOperatorRequiringValue;
         value: string;
       }
-    | { field: string; operator: FilterOperatorWithoutValue }
+    | { field: string[]; operator: FilterOperatorWithoutValue }
   )[];
   operator: MultiFilterOperatorType;
 };
@@ -123,20 +152,22 @@ export type Sort = {
 export type MultiSort = Sort[];
 
 export type AggregateOperationInput = {
-  entityTypeId?: VersionedUri | null;
   pageNumber?: number | null;
   itemsPerPage?: number | null;
   multiSort?: MultiSort | null;
   multiFilter?: MultiFilter | null;
 };
 
-export type AggregateEntitiesData = {
+export type AggregateEntitiesData<Temporal extends boolean> = {
   operation: AggregateOperationInput;
   graphResolveDepths?: GraphResolveDepths;
-};
+} & (Temporal extends true
+  ? { temporalAxes: QueryTemporalAxesUnresolved }
+  : {});
 
 export type AggregateEntitiesResult<
-  T extends Subgraph<SubgraphRootTypes["entity"]>,
+  Temporal extends boolean,
+  T extends Subgraph<Temporal, EntityRootType<Temporal>>,
 > = {
   results: T;
   operation: AggregateOperationInput &
