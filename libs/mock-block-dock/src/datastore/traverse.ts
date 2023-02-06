@@ -26,7 +26,13 @@ import {
   mapElementsIntoRevisions,
 } from "@blockprotocol/graph/stdlib";
 
-import { get, mustBeDefined, typedEntries } from "../util";
+import {
+  get,
+  mustBeDefined,
+  typedEntries,
+  typedKeys,
+  typedValues,
+} from "../util";
 
 const TIMESTAMP_PLACEHOLDER = "TIMESTAMP_PLACEHOLDER" as const;
 
@@ -130,7 +136,7 @@ export const getNeighbors = <
         );
         const mappedRevisions = mapElementsIntoRevisions(outgoingLinks);
 
-        for (const outgoingLinkEntityId of Object.keys(mappedRevisions)) {
+        for (const outgoingLinkEntityId of typedKeys(mappedRevisions)) {
           const outgoingLinkEdge: PatchedOutgoingLinkEdge = {
             kind: "HAS_LEFT_ENTITY",
             reversed: true,
@@ -146,7 +152,7 @@ export const getNeighbors = <
           );
         }
 
-        return Object.values(mappedRevisions)
+        return typedValues(mappedRevisions)
           .flat()
           .map((entity) => ({
             kind: "entity",
@@ -205,7 +211,7 @@ export const getNeighbors = <
         );
         const mappedRevisions = mapElementsIntoRevisions(incomingLinks);
 
-        for (const incomingLinkEntityId of Object.keys(mappedRevisions)) {
+        for (const incomingLinkEntityId of typedKeys(mappedRevisions)) {
           const incomingLinkEdge: PatchedIncomingLinkEdge = {
             kind: "HAS_RIGHT_ENTITY",
             reversed: true,
@@ -221,7 +227,7 @@ export const getNeighbors = <
           );
         }
 
-        return Object.values(mappedRevisions)
+        return typedValues(mappedRevisions)
           .flat()
           .map((entity) => ({
             kind: "entity",
@@ -335,7 +341,8 @@ export const traverseElementTemporal = ({
           newIntersection = interval;
           neighborVertexId = {
             baseId: neighborVertex.inner.metadata.recordId.baseUri,
-            revisionId: neighborVertex.inner.metadata.recordId.version,
+            revisionId:
+              neighborVertex.inner.metadata.recordId.version.toString(),
           };
         }
 
@@ -430,31 +437,27 @@ export const finalizeSubgraph = <
     const variableAxis = traversalSubgraph.temporalAxes.resolved.variable.axis;
 
     const validRanges = Object.fromEntries(
-      Object.entries(traversalSubgraph.vertices).map(
-        ([baseId, revisionMap]) => {
-          const sortedRevisions = Object.keys(revisionMap).sort();
+      typedEntries(traversalSubgraph.vertices).map(([baseId, revisionMap]) => {
+        const sortedRevisions = typedKeys(revisionMap).sort();
 
-          /** @todo - This cast is needed because TS is confused again and thinks these must always be entity vertices */
-          const latestVertex = revisionMap[
-            mustBeDefined(sortedRevisions.at(-1))
-          ]! as Vertex<true>; // this cast to true is safe as we checked if the traversal subgraph was temporal above
+        const latestVertex =
+          revisionMap[mustBeDefined(sortedRevisions.at(-1))]!;
 
-          let latest;
+        let latest;
 
-          if (isEntityVertex(latestVertex)) {
-            const endBound =
-              latestVertex.inner.metadata.temporalVersioning[variableAxis].end;
-            latest = endBound.kind === "unbounded" ? null : endBound.limit;
-          } else {
-            latest = latestVertex.inner.metadata.recordId.version;
-          }
+        if (isEntityVertex(latestVertex)) {
+          const endBound =
+            latestVertex.inner.metadata.temporalVersioning[variableAxis].end;
+          latest = endBound.kind === "unbounded" ? null : endBound.limit;
+        } else {
+          latest = latestVertex.inner.metadata.recordId.version;
+        }
 
-          return [
-            baseId,
-            { earliest: mustBeDefined(sortedRevisions[0]), latest },
-          ];
-        },
-      ),
+        return [
+          baseId,
+          { earliest: mustBeDefined(sortedRevisions[0]), latest },
+        ];
+      }),
     );
 
     for (const [baseId, outwardEdgeMap] of typedEntries(
