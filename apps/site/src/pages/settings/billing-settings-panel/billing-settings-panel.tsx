@@ -118,8 +118,6 @@ export const BillingSettingsPanel: FunctionComponent = () => {
     setSubscriptionTierPrices(fetchedSubscriptionTierPrices);
   }, []);
 
-  useEffect(() => {}, [fetchSubscriptionTierPrices]);
-
   const [subscription, setSubscription] = useState<Stripe.Subscription>();
 
   const fetchSubscription = useCallback(async () => {
