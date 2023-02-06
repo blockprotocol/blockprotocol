@@ -29,7 +29,7 @@ export const useSendGraphValue = ({
       (!sentInitially.current ||
         JSON.stringify(value) !== JSON.stringify(sentValue.current))
     ) {
-      graphService[valueName](value as any); // @todo how to maintain the union GraphValue is initially set to?
+      graphService[valueName]({ data: value as any }); // @todo how to maintain the union GraphValue is initially set to?
       sentInitially.current = true;
       sentValue.current = value;
     }
