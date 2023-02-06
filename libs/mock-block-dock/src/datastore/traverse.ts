@@ -50,12 +50,13 @@ export type TraversalSubgraph<
   RootType extends SubgraphRootType<Temporal> = SubgraphRootType<Temporal>,
 > = Omit<Subgraph<Temporal, RootType>, "edges"> & {
   edges: DeepOmitValidInterval<
-    OntologyRootedEdges & {
-      [entityId: EntityId]: Record<
-        typeof TIMESTAMP_PLACEHOLDER,
-        KnowledgeGraphOutwardEdge[]
-      >;
-    }
+    | OntologyRootedEdges
+    | {
+        [entityId: EntityId]: Record<
+          typeof TIMESTAMP_PLACEHOLDER,
+          KnowledgeGraphOutwardEdge[]
+        >;
+      }
   >;
 };
 
