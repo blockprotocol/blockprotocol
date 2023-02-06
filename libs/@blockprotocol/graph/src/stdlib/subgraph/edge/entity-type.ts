@@ -7,6 +7,8 @@ import {
 
 import {
   isConstrainsPropertiesOnEdge,
+  OntologyOutwardEdge,
+  OntologyTypeRevisionId,
   OntologyTypeVertexId,
   Subgraph,
 } from "../../../types/subgraph.js";
@@ -24,19 +26,19 @@ export const getPropertyTypesReferencedByEntityType = (
   entityTypeId: OntologyTypeVertexId | VersionedUri,
 ): OntologyTypeVertexId[] => {
   let baseUri: BaseUri;
-  let version: number;
+  let revisionId: OntologyTypeRevisionId;
 
   if (typeof entityTypeId === "string") {
-    [baseUri, version] = [
-      extractBaseUri(entityTypeId),
-      extractVersion(entityTypeId),
-    ];
+    baseUri = extractBaseUri(entityTypeId);
+    revisionId = extractVersion(entityTypeId).toString();
   } else {
     baseUri = entityTypeId.baseId;
-    version = entityTypeId.revisionId;
+    revisionId = entityTypeId.revisionId;
   }
 
-  const outwardEdges = subgraph.edges[baseUri]?.[version];
+  const outwardEdges = subgraph.edges[baseUri]?.[
+    revisionId
+  ] as OntologyOutwardEdge[];
 
   if (outwardEdges === undefined) {
     return [];

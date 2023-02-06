@@ -22,7 +22,9 @@ import { mustBeDefined } from "../../must-be-defined.js";
 import { getEntityRevisionsByEntityId } from "../element/entity.js";
 import { getLatestInstantIntervalForSubgraph } from "../temporal-axes.js";
 
-const convertTimeToStringWithDefault = (timestamp?: Date | Timestamp) => {
+const convertTimeToTimestampWithDefault = (
+  timestamp?: Date | Timestamp,
+): Timestamp => {
   return timestamp === undefined
     ? new Date().toISOString()
     : typeof timestamp === "string"
@@ -356,7 +358,7 @@ export const getOutgoingLinkAndTargetEntities = <
 ): LinkAndRightEntities => {
   const searchInterval =
     timestamp !== undefined
-      ? intervalForTimestamp(convertTimeToStringWithDefault(timestamp))
+      ? intervalForTimestamp(convertTimeToTimestampWithDefault(timestamp))
       : getLatestInstantIntervalForSubgraph(subgraph);
 
   if (isTemporalSubgraph(subgraph)) {
