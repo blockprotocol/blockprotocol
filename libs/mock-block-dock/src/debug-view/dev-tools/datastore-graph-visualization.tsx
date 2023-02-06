@@ -23,7 +23,7 @@ import { SVGRenderer } from "echarts/renderers";
 import { useEffect, useRef, useState } from "react";
 
 import { useMockBlockDockContext } from "../../mock-block-dock-context";
-import { typedEntries } from "../../util";
+import { typedEntries, typedKeys } from "../../util";
 
 const parseLabelFromEntity = (
   entityToLabel: Entity<true>,
@@ -198,7 +198,7 @@ const getSubgraphEdgesAsEChartEdges = (
   typedEntries(subgraph.edges).flatMap(([sourceBaseId, inner]) => {
     return typedEntries(inner).flatMap(([revisionId, outwardEdges]) => {
       return outwardEdges.flatMap((outwardEdge) => {
-        const sourceRevisions = Object.keys(
+        const sourceRevisions = typedKeys(
           subgraph.vertices[sourceBaseId]!,
         ).filter((sourceRevisionId) => {
           return sourceRevisionId >= revisionId;
@@ -226,9 +226,7 @@ const getSubgraphEdgesAsEChartEdges = (
                 ],
               );
             } else {
-              return (
-                Number(targetRevisionId) >= outwardEdge.rightEndpoint.revisionId
-              );
+              return targetRevisionId >= outwardEdge.rightEndpoint.revisionId;
             }
           })
           .map(([targetRevisionId, _vertex]) => targetRevisionId);
