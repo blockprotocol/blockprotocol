@@ -128,5 +128,9 @@ export type KnowledgeGraphVertices<Temporal extends boolean> = Record<
   Record<EntityRevisionId, KnowledgeGraphVertex<Temporal>>
 >;
 
-export type Vertices<Temporal extends boolean> = OntologyVertices &
-  KnowledgeGraphVertices<Temporal>;
+// We technically want to intersect (`&`) the types here, but as their property keys overlap it confuses things and we
+// end up with unsatisfiable values like `EntityVertex & DataTypeVertex`. While the union (`|`) is semantically
+// incorrect, it structurally matches the types we want.
+export type Vertices<Temporal extends boolean> =
+  | OntologyVertices
+  | KnowledgeGraphVertices<Temporal>;

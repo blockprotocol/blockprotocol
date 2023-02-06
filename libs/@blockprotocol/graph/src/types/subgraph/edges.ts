@@ -20,4 +20,7 @@ export type KnowledgeGraphRootedEdges = Record<
   Record<Timestamp, KnowledgeGraphOutwardEdge[]>
 >;
 
-export type Edges = OntologyRootedEdges & KnowledgeGraphRootedEdges;
+// We technically want to intersect (`&`) the types here, but as their property keys overlap it confuses things and we
+// end up with unsatisfiable values like `EntityVertex & DataTypeVertex`. While the union (`|`) is semantically
+// incorrect, it structurally matches the types we want.
+export type Edges = OntologyRootedEdges | KnowledgeGraphRootedEdges;
