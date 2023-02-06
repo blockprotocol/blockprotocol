@@ -26,7 +26,7 @@ export class EntityType {
   createdAt: Date;
   updatedAt: Date;
   entityTypeId: string;
-  schema: BlockProtocolEntityType["schema"];
+  schema: BlockProtocolEntityType["entity"];
   user: DBRef;
 
   static readonly COLLECTION_NAME = "bp-entity-types";

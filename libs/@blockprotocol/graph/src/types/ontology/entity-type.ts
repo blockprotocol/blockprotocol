@@ -37,20 +37,15 @@ export type GetEntityTypeData = {
   entityTypeId: VersionedUri;
 };
 
-/** @todo - Add Type System mutation methods */
-/* eslint-disable @typescript-eslint/no-unused-vars -- To be re-enabled when we add Type System mutation methods */
-
-type CreateEntityTypeData = {
+export type CreateEntityTypeData = {
   entityType: EntityType;
 };
 
-type UpdateEntityTypeData = {
+export type UpdateEntityTypeData = {
   entityTypeId: VersionedUri;
-  entityType: Omit<EntityType, "$id">;
+  entityType: EntityType;
 };
 
-type DeleteEntityTypeData = {
+export type DeleteEntityTypeData = {
   entityTypeId: VersionedUri;
 };
-
-/* eslint-enable @typescript-eslint/no-unused-vars */
