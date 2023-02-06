@@ -34,10 +34,10 @@ const TIMESTAMP_PLACEHOLDER = `TIMESTAMP_PLACEHOLDER` as const;
  * Advanced type to recursively search a type for `EntityValidInterval` and patch those occurrences by removing the
  * definition of the "validInterval" property.
  */
-type PatchEntityValidInterval<ToPatch extends unknown> = ToPatch extends object
+type DeepOmitValidInterval<ToPatch extends unknown> = ToPatch extends object
   ? ToPatch extends EntityValidInterval
     ? Omit<ToPatch, "validInterval">
-    : { [key in keyof ToPatch]: PatchEntityValidInterval<ToPatch[key]> }
+    : { [key in keyof ToPatch]: DeepOmitValidInterval<ToPatch[key]> }
   : ToPatch;
 
 /**
@@ -49,7 +49,7 @@ export type TraversalSubgraph<
   Temporal extends boolean,
   RootType extends SubgraphRootType<Temporal> = SubgraphRootType<Temporal>,
 > = Omit<Subgraph<Temporal, RootType>, "edges"> & {
-  edges: PatchEntityValidInterval<
+  edges: DeepOmitValidInterval<
     OntologyRootedEdges & {
       [entityId: EntityId]: Record<
         typeof TIMESTAMP_PLACEHOLDER,
@@ -70,10 +70,10 @@ export const isTemporalTraversalSubgraph = <
   );
 };
 
-type PatchedOutgoingLinkEdge = PatchEntityValidInterval<OutgoingLinkEdge>;
-type PatchedIncomingLinkEdge = PatchEntityValidInterval<IncomingLinkEdge>;
-type PatchedHasLeftEntityEdge = PatchEntityValidInterval<HasLeftEntityEdge>;
-type PatchedHasRightEntityEdge = PatchEntityValidInterval<HasRightEntityEdge>;
+type PatchedOutgoingLinkEdge = DeepOmitValidInterval<OutgoingLinkEdge>;
+type PatchedIncomingLinkEdge = DeepOmitValidInterval<IncomingLinkEdge>;
+type PatchedHasLeftEntityEdge = DeepOmitValidInterval<HasLeftEntityEdge>;
+type PatchedHasRightEntityEdge = DeepOmitValidInterval<HasRightEntityEdge>;
 
 /**
  * Parallel of {@link addKnowledgeGraphEdgeToSubgraphByMutation} except that it operates on the patched
@@ -89,7 +89,7 @@ type PatchedHasRightEntityEdge = PatchEntityValidInterval<HasRightEntityEdge>;
 const patchedAddKnowledgeGraphEdge = <Temporal extends boolean>(
   traversalSubgraph: TraversalSubgraph<Temporal>,
   sourceEntityId: EntityId,
-  outwardEdge: PatchEntityValidInterval<KnowledgeGraphOutwardEdge>,
+  outwardEdge: DeepOmitValidInterval<KnowledgeGraphOutwardEdge>,
 ) =>
   addKnowledgeGraphEdgeToSubgraphByMutation(
     // intermediary `as unknown` cast is needed because otherwise tsc gets confused and complains about type
