@@ -9,8 +9,17 @@ import {
   EntityTypeRootType,
   MultiFilter,
   MultiSort,
+  QueryTemporalAxes,
   Subgraph,
 } from "@blockprotocol/graph";
+
+export const mustBeDefined = <T>(x: T | undefined, message?: string): T => {
+  if (x === undefined) {
+    throw new Error(`invariant was broken: ${message ?? ""}`);
+  }
+
+  return x;
+};
 
 type TupleEntry<
   T extends readonly unknown[],
@@ -43,11 +52,11 @@ export function typedEntries<T extends {}>(object: T): ReadonlyArray<Entry<T>> {
 }
 
 type FilterEntitiesFn = {
-  (params: {
+  <Temporal extends boolean>(params: {
     entityTypeId?: string | null;
-    entities: Entity[];
+    entities: Entity<Temporal>[];
     multiFilter: MultiFilter;
-  }): Entity[];
+  }): Entity<Temporal>[];
 };
 
 // Saves us from using heavy lodash dependency
@@ -55,7 +64,7 @@ type FilterEntitiesFn = {
 export const get = (
   obj: unknown,
   path: string | string[],
-  defaultValue = undefined,
+  defaultValue: unknown = undefined,
 ): unknown => {
   const travel = (regexp: RegExp) =>
     String.prototype.split
@@ -156,7 +165,10 @@ const filterEntities: FilterEntitiesFn = (params) => {
   });
 };
 
-const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
+const sortEntitiesOrTypes = <
+  Temporal extends boolean,
+  T extends Entity<Temporal> | EntityType,
+>(params: {
   entities: T[];
   multiSort: MultiSort;
 }): T[] => {
@@ -180,30 +192,43 @@ const sortEntitiesOrTypes = <T extends Entity | EntityType>(params: {
   });
 };
 
-const isEntityTypes = (
-  entities: Entity[] | EntityType[],
+const isEntityTypes = <Temporal extends boolean>(
+  entities: Entity<Temporal>[] | EntityType[],
 ): entities is EntityType[] => "schema" in (entities[0] ?? {});
 
-export type FilterResult<T extends Entity | EntityType = Entity | EntityType> =
-  {
-    results: T[];
-    operation:
-      | AggregateEntitiesResult<Subgraph<EntityRootType>>["operation"]
-      | AggregateEntityTypesResult<Subgraph<EntityTypeRootType>>["operation"];
-  };
+export type FilterResult<
+  Temporal extends boolean,
+  T extends Entity<Temporal> | EntityType = Entity<Temporal> | EntityType,
+> = {
+  results: T[];
+  operation:
+    | AggregateEntitiesResult<
+        Temporal,
+        Subgraph<Temporal, EntityRootType<Temporal>>
+      >["operation"]
+    | AggregateEntityTypesResult<
+        Subgraph<Temporal, EntityTypeRootType>
+      >["operation"];
+};
 
-export function filterAndSortEntitiesOrTypes(
-  entities: Entity[],
-  payload: AggregateEntitiesData,
-): FilterResult<Entity>;
-export function filterAndSortEntitiesOrTypes(
+export function filterAndSortEntitiesOrTypes<Temporal extends boolean>(
+  entities: Entity<Temporal>[],
+  payload: Omit<AggregateEntitiesData<Temporal>, "temporalAxes"> & {
+    temporalAxes: QueryTemporalAxes;
+  },
+): FilterResult<Temporal, Entity<Temporal>>;
+export function filterAndSortEntitiesOrTypes<Temporal extends boolean>(
   entities: EntityType[],
   payload: AggregateEntityTypesData,
-): FilterResult<EntityType>;
-export function filterAndSortEntitiesOrTypes(
-  entities: Entity[] | EntityType[],
-  payload: AggregateEntitiesData | AggregateEntityTypesData,
-): FilterResult {
+): FilterResult<Temporal, EntityType>;
+export function filterAndSortEntitiesOrTypes<Temporal extends boolean>(
+  entities: Entity<Temporal>[] | EntityType[],
+  payload:
+    | (Omit<AggregateEntitiesData<Temporal>, "temporalAxes"> & {
+        temporalAxes: QueryTemporalAxes;
+      })
+    | AggregateEntityTypesData,
+): FilterResult<Temporal> {
   const { operation } = payload;
 
   const pageNumber = operation?.pageNumber || 1;

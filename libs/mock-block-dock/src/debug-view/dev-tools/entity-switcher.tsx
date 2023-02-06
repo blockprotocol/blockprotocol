@@ -1,6 +1,6 @@
 import {
   getEntities,
-  getEntity,
+  getEntityRevision,
   getEntityTypes,
   getRoots,
 } from "@blockprotocol/graph/stdlib";
@@ -43,7 +43,7 @@ export const EntitySwitcher = () => {
   >(blockEntity.metadata.recordId.entityId);
 
   const selectedEntity = useMemo(
-    () => (entityId ? getEntity(graph, entityId)! : blockEntity),
+    () => (entityId ? getEntityRevision(graph, entityId)! : blockEntity),
     [graph, blockEntity, entityId],
   );
 

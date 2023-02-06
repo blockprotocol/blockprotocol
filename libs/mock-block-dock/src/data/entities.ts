@@ -1,11 +1,18 @@
-import { Entity } from "@blockprotocol/graph";
+import {
+  Entity,
+  EntityTemporalVersioningMetadata,
+  QueryTemporalAxes,
+} from "@blockprotocol/graph";
 import { extractBaseUri } from "@blockprotocol/type-system/slim";
 
 import { entityTypes } from "./entity-types";
 import { propertyTypes } from "./property-types";
 import { companyNames, personNames } from "./words";
 
-const createPerson = (entityId: number): Entity => {
+const createPerson = (
+  entityId: number,
+  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
+): Entity<true> => {
   const name = personNames[entityId] ?? "Unknown Person";
   return {
     metadata: {
@@ -14,6 +21,7 @@ const createPerson = (entityId: number): Entity => {
         editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.person.$id,
+      temporalVersioning: temporalVersioningMetadata,
     },
     properties: {
       [extractBaseUri(propertyTypes.age.$id)]: Math.ceil(Math.random() * 100),
@@ -24,7 +32,10 @@ const createPerson = (entityId: number): Entity => {
   };
 };
 
-const createCompany = (entityId: number): Entity => {
+const createCompany = (
+  entityId: number,
+  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
+): Entity<true> => {
   const name = companyNames[entityId] ?? "Unknown Company";
   return {
     metadata: {
@@ -33,6 +44,7 @@ const createCompany = (entityId: number): Entity => {
         editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.company.$id,
+      temporalVersioning: temporalVersioningMetadata,
     },
     properties: {
       [extractBaseUri(propertyTypes.numberOfEmployees.$id)]: Math.ceil(
@@ -46,7 +58,8 @@ const createCompany = (entityId: number): Entity => {
 const createWorksForLink = (
   sourceEntityId: string,
   destinationEntityId: string,
-): Entity => {
+  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
+): Entity<true> => {
   return {
     metadata: {
       recordId: {
@@ -54,6 +67,7 @@ const createWorksForLink = (
         editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.worksFor.$id,
+      temporalVersioning: temporalVersioningMetadata,
     },
     properties: {},
     linkData: {
@@ -66,7 +80,8 @@ const createWorksForLink = (
 const createFounderOfLink = (
   sourceEntityId: string,
   destinationEntityId: string,
-): Entity => {
+  temporalVersioningMetadata: EntityTemporalVersioningMetadata,
+): Entity<true> => {
   return {
     metadata: {
       recordId: {
@@ -74,6 +89,7 @@ const createFounderOfLink = (
         editionId: new Date().toISOString(),
       },
       entityTypeId: entityTypes.founderOf.$id,
+      temporalVersioning: temporalVersioningMetadata,
     },
     properties: {},
     linkData: {
@@ -83,16 +99,35 @@ const createFounderOfLink = (
   };
 };
 
-const createEntities = (): Entity[] => {
+const createEntities = (temporalAxes: QueryTemporalAxes): Entity<true>[] => {
   // First create people and companies in separate lists
   const people = [];
   const companies = [];
 
+  const interval = {
+    start: {
+      kind: "inclusive",
+      limit:
+        temporalAxes.variable.interval.start.kind === "unbounded"
+          ? new Date(0).toISOString()
+          : temporalAxes.variable.interval.start.limit,
+    },
+    end: {
+      kind: "exclusive",
+      limit: temporalAxes.variable.interval.end.limit,
+    },
+  } as const;
+
+  const temporalVersioningMetadata: EntityTemporalVersioningMetadata = {
+    transactionTime: interval,
+    decisionTime: interval,
+  };
+
   for (let idx = 0; idx < personNames.length; idx++) {
-    people.push(createPerson(idx));
+    people.push(createPerson(idx, temporalVersioningMetadata));
   }
   for (let idx = 0; idx < companyNames.length; idx++) {
-    companies.push(createCompany(idx));
+    companies.push(createCompany(idx, temporalVersioningMetadata));
   }
 
   const entities = [];
@@ -107,6 +142,7 @@ const createEntities = (): Entity[] => {
         createFounderOfLink(
           founder.metadata.recordId.entityId,
           company.metadata.recordId.entityId,
+          temporalVersioningMetadata,
         ),
       );
       entities.push(founder);
@@ -118,6 +154,7 @@ const createEntities = (): Entity[] => {
         person.metadata.recordId.entityId,
         companies[Math.floor(Math.random() * companies.length)]!.metadata
           .recordId.entityId,
+        temporalVersioningMetadata,
       ),
     );
   }
@@ -125,6 +162,4 @@ const createEntities = (): Entity[] => {
   return [...entities, ...people, ...companies];
 };
 
-const entities = createEntities();
-
-export { entities };
+export { createEntities };

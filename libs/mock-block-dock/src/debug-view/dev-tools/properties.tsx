@@ -81,7 +81,7 @@ export const PropertiesView = () => {
                   ) {
                     return false;
                   }
-                  const entity = args.updated_src as Entity;
+                  const entity = args.updated_src as Entity<true>;
                   void updateEntity({
                     data: {
                       entityId: entity.metadata.recordId.entityId,
@@ -97,7 +97,7 @@ export const PropertiesView = () => {
                   if (!args.namespace.includes("properties")) {
                     return false;
                   }
-                  const entity = args.updated_src as Entity;
+                  const entity = args.updated_src as Entity<true>;
                   void updateEntity({
                     data: {
                       entityId: entity.metadata.recordId.entityId,
@@ -113,7 +113,7 @@ export const PropertiesView = () => {
                   if (!args.namespace.includes("properties")) {
                     return false;
                   }
-                  const entity = args.updated_src as Entity;
+                  const entity = args.updated_src as Entity<true>;
                   void updateEntity({
                     data: {
                       entityId: entity.metadata.recordId.entityId,

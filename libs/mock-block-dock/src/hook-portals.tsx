@@ -1,4 +1,4 @@
-import { getEntity } from "@blockprotocol/graph/stdlib";
+import { getEntityRevision } from "@blockprotocol/graph/stdlib";
 import { HookData } from "@blockprotocol/hook";
 import { useCallback, useMemo } from "react";
 import { createPortal } from "react-dom";
@@ -11,7 +11,7 @@ const HookPortal = ({ entityId, path, type }: HookData) => {
   const { graph, readonly, updateEntity } = useMockBlockDockContext();
 
   const { entity, value } = useMemo(() => {
-    const foundEntity = getEntity(graph, entityId);
+    const foundEntity = getEntityRevision(graph, entityId);
 
     if (!foundEntity) {
       throw new Error(
