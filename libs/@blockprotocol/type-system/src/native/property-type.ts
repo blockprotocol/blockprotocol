@@ -28,37 +28,45 @@ export const getReferencedIdsFromPropertyType = (
   constrainsPropertiesOnPropertyTypes: VersionedUri[];
 } => {
   const recurseOneOf = (oneOf: PropertyValues[]) => {
-    const constrainsValuesOnDataTypes: VersionedUri[] = [];
-    const constrainsPropertiesOnPropertyTypes: VersionedUri[] = [];
+    const constrainsValuesOnDataTypes: Set<VersionedUri> = new Set();
+    const constrainsPropertiesOnPropertyTypes: Set<VersionedUri> = new Set();
 
     for (const oneOfValue of oneOf) {
       if (isPropertyValuesArray(oneOfValue)) {
         const nestedIds = recurseOneOf(oneOfValue.items.oneOf);
-        constrainsPropertiesOnPropertyTypes.push(
-          ...nestedIds.constrainsPropertiesOnPropertyTypes,
+        nestedIds.constrainsPropertiesOnPropertyTypes.forEach((ele) =>
+          constrainsPropertiesOnPropertyTypes.add(ele),
         );
-        constrainsValuesOnDataTypes.push(
-          ...nestedIds.constrainsValuesOnDataTypes,
+        nestedIds.constrainsValuesOnDataTypes.forEach((ele) =>
+          constrainsValuesOnDataTypes.add(ele),
         );
       } else if ("properties" in oneOfValue) {
         // property type object definition
         for (const propertyDefinition of Object.values(oneOfValue.properties)) {
           if ("items" in propertyDefinition) {
-            constrainsPropertiesOnPropertyTypes.push(
+            constrainsPropertiesOnPropertyTypes.add(
               propertyDefinition.items.$ref,
             );
           } else {
-            constrainsPropertiesOnPropertyTypes.push(propertyDefinition.$ref);
+            constrainsPropertiesOnPropertyTypes.add(propertyDefinition.$ref);
           }
         }
       } else {
         // data type reference
-        constrainsValuesOnDataTypes.push(oneOfValue.$ref);
+        constrainsValuesOnDataTypes.add(oneOfValue.$ref);
       }
     }
 
     return { constrainsValuesOnDataTypes, constrainsPropertiesOnPropertyTypes };
   };
 
-  return { ...recurseOneOf(propertyType.oneOf) };
+  const { constrainsValuesOnDataTypes, constrainsPropertiesOnPropertyTypes } =
+    recurseOneOf(propertyType.oneOf);
+
+  return {
+    constrainsValuesOnDataTypes: [...constrainsValuesOnDataTypes],
+    constrainsPropertiesOnPropertyTypes: [
+      ...constrainsPropertiesOnPropertyTypes,
+    ],
+  };
 };

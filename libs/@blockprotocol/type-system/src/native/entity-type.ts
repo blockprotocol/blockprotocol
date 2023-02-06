@@ -12,15 +12,15 @@ export const getReferencedIdsFromEntityType = (
   constrainsLinksOnEntityTypes: VersionedUri[];
   constrainsLinkDestinationsOnEntityTypes: VersionedUri[];
 } => {
-  const constrainsPropertiesOnPropertyTypes: VersionedUri[] = [];
-  const constrainsLinksOnEntityTypes: VersionedUri[] = [];
-  const constrainsLinkDestinationsOnEntityTypes: VersionedUri[] = [];
+  const constrainsPropertiesOnPropertyTypes: Set<VersionedUri> = new Set();
+  const constrainsLinksOnEntityTypes: Set<VersionedUri> = new Set();
+  const constrainsLinkDestinationsOnEntityTypes: Set<VersionedUri> = new Set();
 
   for (const propertyDefinition of Object.values(entityType.properties)) {
     if ("items" in propertyDefinition) {
-      constrainsPropertiesOnPropertyTypes.push(propertyDefinition.items.$ref);
+      constrainsPropertiesOnPropertyTypes.add(propertyDefinition.items.$ref);
     } else {
-      constrainsPropertiesOnPropertyTypes.push(propertyDefinition.$ref);
+      constrainsPropertiesOnPropertyTypes.add(propertyDefinition.$ref);
     }
   }
   // for (const inheritedEntityType of entityType.allOf ?? []) {
@@ -31,18 +31,22 @@ export const getReferencedIdsFromEntityType = (
     entityType.links ?? {},
   )) {
     /** @todo - if we had the `typedEntries` helper here we wouldn't need this cast */
-    constrainsLinksOnEntityTypes.push(linkTypeId as VersionedUri);
+    constrainsLinksOnEntityTypes.add(linkTypeId as VersionedUri);
 
-    if ("items" in linkDefinition && "oneOf" in linkDefinition.items) {
-      constrainsLinkDestinationsOnEntityTypes.push(
-        ...linkDefinition.items.oneOf.map((oneOfEntry) => oneOfEntry.$ref),
-      );
+    if (linkDefinition.items.oneOf !== undefined) {
+      linkDefinition.items.oneOf
+        .map((oneOfEntry) => oneOfEntry.$ref)
+        .forEach((ele) => constrainsLinkDestinationsOnEntityTypes.add(ele));
     }
   }
 
   return {
-    constrainsPropertiesOnPropertyTypes,
-    constrainsLinksOnEntityTypes,
-    constrainsLinkDestinationsOnEntityTypes,
+    constrainsPropertiesOnPropertyTypes: [
+      ...constrainsPropertiesOnPropertyTypes,
+    ],
+    constrainsLinksOnEntityTypes: [...constrainsLinksOnEntityTypes],
+    constrainsLinkDestinationsOnEntityTypes: [
+      ...constrainsLinkDestinationsOnEntityTypes,
+    ],
   };
 };
