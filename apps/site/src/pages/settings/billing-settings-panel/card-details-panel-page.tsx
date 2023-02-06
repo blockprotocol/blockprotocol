@@ -1,5 +1,5 @@
 import { UpdatePaymentMethodRequestUpdatedBillingDetails } from "@local/internal-api-client";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { AddressElement, Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
 import { useRouter } from "next/router";
@@ -14,6 +14,7 @@ import {
 
 import { Button } from "../../../components/button";
 import { internalApi } from "../../../lib/internal-api-client";
+import { createStripeOptions } from "../../shared/subscription-utils";
 import { useBillingPageContext } from "./billing-page-context";
 import { PaymentMethod } from "./payment-method";
 import { paymentMethodsPanelPageAsPath } from "./payment-methods";
@@ -104,7 +105,12 @@ export const CardDetailsPanelPage: FunctionComponent = () => {
     [paymentMethod, updatedBillingDetails],
   );
 
-  const stripeElementsOptions = useMemo<StripeElementsOptions>(() => ({}), []);
+  const theme = useTheme();
+
+  const stripeElementsOptions = useMemo<StripeElementsOptions>(
+    () => createStripeOptions({ theme }),
+    [theme],
+  );
 
   return (
     <>

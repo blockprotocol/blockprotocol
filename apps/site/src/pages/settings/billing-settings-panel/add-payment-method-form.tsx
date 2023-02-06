@@ -1,14 +1,18 @@
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
-import { Box, Collapse, Typography } from "@mui/material";
+import { Box, Collapse, Typography, useTheme } from "@mui/material";
 import {
   CardElement,
   Elements,
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { loadStripe, StripeCardElementChangeEvent } from "@stripe/stripe-js";
+import {
+  loadStripe,
+  StripeCardElementChangeEvent,
+  StripeElementsOptions,
+} from "@stripe/stripe-js";
 import {
   FormEvent,
   FunctionComponent,
@@ -23,6 +27,7 @@ import { Button } from "../../../components/button";
 import { FontAwesomeIcon } from "../../../components/icons";
 import { FRONTEND_URL } from "../../../lib/config";
 import { internalApi } from "../../../lib/internal-api-client";
+import { createStripeOptions } from "../../shared/subscription-utils";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_API_KEY ?? "",
@@ -104,7 +109,7 @@ const AddPaymentMethodForm: FunctionComponent<{
       <Collapse in={!!errorMessage} sx={{ marginBottom: 1 }}>
         <Typography
           variant="bpSmallCopy"
-          sx={{ color: ({ palette }) => palette.red[800] }}
+          sx={{ color: ({ palette }) => palette.error.main }}
         >
           {errorMessage}
         </Typography>
@@ -153,7 +158,16 @@ export const AddPaymentMethod: FunctionComponent<{
     }
   }, [clientSecret, createStripeSetupIntent]);
 
-  const options = useMemo(() => ({ clientSecret }), [clientSecret]);
+  const theme = useTheme();
+
+  const options = useMemo<StripeElementsOptions>(
+    () =>
+      createStripeOptions({
+        clientSecret,
+        theme,
+      }),
+    [clientSecret, theme],
+  );
 
   if (!options.clientSecret) {
     return null;

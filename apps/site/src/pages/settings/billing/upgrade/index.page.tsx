@@ -11,6 +11,7 @@ import {
   Paper,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
@@ -36,6 +37,7 @@ import { UserAvatar } from "../../../../components/user-avatar";
 import { useUser } from "../../../../context/user-context";
 import { internalApi } from "../../../../lib/internal-api-client";
 import {
+  createStripeOptions,
   dateToHumanReadable,
   isPaidSubscriptionTier,
   PaidSubscriptionTier,
@@ -154,11 +156,11 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
     [currentSubscriptionTier, upgradedSubscriptionTier],
   );
 
+  const theme = useTheme();
+
   const stripeElementsOptions = useMemo<StripeElementsOptions>(
-    () => ({
-      clientSecret,
-    }),
-    [clientSecret],
+    () => createStripeOptions({ clientSecret, theme }),
+    [clientSecret, theme],
   );
 
   const createSubscription = async (params: { tier: PaidSubscriptionTier }) => {
