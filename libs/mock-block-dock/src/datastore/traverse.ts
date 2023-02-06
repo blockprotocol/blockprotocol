@@ -16,7 +16,7 @@ import {
   TimeInterval,
   Vertex,
 } from "@blockprotocol/graph";
-import { addKnowledgeGraphEdgeToSubgraphByMutation } from "@blockprotocol/graph/internal";
+import { addOutwardEdgeToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import {
   getIncomingLinksForEntity,
   getLeftEntityForLinkEntity,
@@ -98,7 +98,7 @@ const patchedAddKnowledgeGraphEdge = <Temporal extends boolean>(
   sourceEntityId: EntityId,
   outwardEdge: DeepOmitValidInterval<KnowledgeGraphOutwardEdge>,
 ) =>
-  addKnowledgeGraphEdgeToSubgraphByMutation(
+  addOutwardEdgeToSubgraphByMutation(
     // intermediary `as unknown` cast is needed because otherwise tsc gets confused and complains about type
     // instantiation being excessively deep and possibly infinite
     traversalSubgraph as unknown as Subgraph<Temporal>,
