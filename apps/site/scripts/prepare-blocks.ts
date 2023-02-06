@@ -522,7 +522,11 @@ const script = async () => {
 
       const currentYarnCacheChecksum = calculateYarnCacheChecksum(blockInfo);
       if (yarnCacheChecksum !== currentYarnCacheChecksum) {
-        await execa("yarn", ["cache", "clean"], { cwd: monorepoRoot });
+        console.log("Cleaning global Yarn cache...");
+        await execa("yarn", ["cache", "clean"], {
+          cwd: monorepoRoot,
+          stdio: "inherit",
+        });
         yarnCacheChecksum = currentYarnCacheChecksum;
       }
 
