@@ -10,6 +10,7 @@ import { v4 as uuid } from "uuid";
 
 import { mockDataSubgraphTemporalAxes } from "../data/temporal-axes";
 import { useDefaultState } from "../use-default-state";
+import { mustBeDefined } from "../util";
 import { getDefaultEntityVersionInterval } from "./get-default-entity-version-interval";
 import { aggregateEntities as aggregateEntitiesImpl } from "./hook-implementations/entity/aggregate-entities";
 import { getEntity as getEntityImpl } from "./hook-implementations/entity/get-entity";
@@ -170,6 +171,7 @@ export const useMockDatastore = (
               leftToRightOrder,
               rightToLeftOrder,
             } = data;
+
             const currentEntity = getEntityRevisionFromSubgraph(
               currentGraph,
               entityId,
@@ -225,12 +227,12 @@ export const useMockDatastore = (
                   }
                 : undefined;
 
-            /**
-             * @todo - this is 'safe' because `getEntityRevisionFromSubgraph` returns the object from within the
-             *   `Subgraph`. If it did something like spreading and creating a new object then this wouldn't mutate
-             *   the vertex in the original graph. Are we happy with this, or should we do the messy code to refetch
-             *   it here again so we can be sure we're updating the object in the subgraph.
-             */
+            // This is fairly slow, we could leverage something like `immer` to make these partial updates more
+            // efficient
+            const newSubgraph = JSON.parse(
+              JSON.stringify(currentGraph),
+            ) as typeof currentGraph;
+
             const currentTime = new Date().toISOString();
 
             // Update the old entity revision's end times
@@ -239,9 +241,17 @@ export const useMockDatastore = (
               limit: currentTime,
             } as const;
 
-            currentEntity.metadata.temporalVersioning.decisionTime.end =
+            const newCurrentEntity = mustBeDefined(
+              newSubgraph.vertices[currentEntity.metadata.recordId.entityId]?.[
+                currentEntity.metadata.temporalVersioning[
+                  currentGraph.temporalAxes.resolved.variable.axis
+                ].start.limit
+              ]?.inner,
+            );
+
+            newCurrentEntity.metadata.temporalVersioning.decisionTime.end =
               updatedOldRevisionEndBound;
-            currentEntity.metadata.temporalVersioning.transactionTime.end =
+            newCurrentEntity.metadata.temporalVersioning.transactionTime.end =
               updatedOldRevisionEndBound;
 
             // We need a version that starts from the current time and is unbounded on the end bound
@@ -269,11 +279,6 @@ export const useMockDatastore = (
               },
               properties,
               linkData,
-            };
-
-            // A shallow copy should be enough to trigger a re-render
-            const newSubgraph = {
-              ...currentGraph,
             };
 
             resolve({ data: updatedEntity });
