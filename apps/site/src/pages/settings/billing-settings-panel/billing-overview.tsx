@@ -93,7 +93,14 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           </Card>
         </Grid>
         <Grid item md={6} sm={12} sx={{ position: "relative" }}>
-          <Link href={paymentMethodsPanelPageAsPath}>
+          <Link
+            href={
+              currentSubscriptionTierIsPaid
+                ? paymentMethodsPanelPageAsPath
+                : "#plans"
+            }
+            scroll={false}
+          >
             <Card
               elevation={0}
               sx={({ spacing, palette, transitions }) => ({
@@ -160,7 +167,11 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
           </Link>
         </Grid>
       </Grid>
-      <Typography variant="bpHeading2" sx={{ fontSize: 28, fontWeight: 400 }}>
+      <Typography
+        variant="bpHeading2"
+        sx={{ fontSize: 28, fontWeight: 400 }}
+        id="plans"
+      >
         {currentSubscriptionTier === "pro" ? "Plan details" : "Plans"}
       </Typography>
       <Typography

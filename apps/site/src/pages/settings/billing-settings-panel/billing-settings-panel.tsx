@@ -64,7 +64,7 @@ const getBillingPanelPageByHref = (params: {
 }): BillingPanelPage | undefined => {
   const { href, panelPageTree = billingPanelPageRoot } = params;
 
-  if (panelPageTree.href === href) {
+  if (href === panelPageTree.href) {
     return panelPageTree;
   }
 
@@ -155,10 +155,10 @@ export const BillingSettingsPanel: FunctionComponent = () => {
     if (router.isReady) {
       const { asPath } = router;
 
-      const asPathWithoutQueryParams = asPath.split("?")[0]!;
+      const asPathWithoutParams = asPath.split("#")[0]!.split("?")[0]!;
 
       const matchingBillingPanelPage = getBillingPanelPageByHref({
-        href: asPathWithoutQueryParams,
+        href: asPathWithoutParams,
       });
 
       if (matchingBillingPanelPage) {
