@@ -25,7 +25,6 @@ export const isOntologyTypeRecordId = (
     typeof recordId === "object" &&
     "baseUri" in recordId &&
     typeof recordId.baseUri === "string" &&
-    /** @todo - This means we need to have initialized the type system */
     validateBaseUri(recordId.baseUri).type === "Ok" &&
     "version" in recordId &&
     typeof recordId.version === "number"

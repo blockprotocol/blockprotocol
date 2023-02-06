@@ -96,7 +96,6 @@ export const isOntologyTypeVertexId = (
     typeof vertexId === "object" &&
     "baseId" in vertexId &&
     typeof vertexId.baseId === "string" &&
-    /** @todo - This means we need to have initialized the type system */
     validateBaseUri(vertexId.baseId).type === "Ok" &&
     "revisionId" in vertexId &&
     !Number.isNaN(Number(vertexId.revisionId))
