@@ -8,6 +8,7 @@ import {
   KnowledgeGraphOutwardEdge,
   KnowledgeGraphRootedEdges,
   KnowledgeGraphVertices,
+  OutwardEdge,
   Subgraph,
   Timestamp,
 } from "../types.js";
@@ -41,9 +42,11 @@ export const addKnowledgeGraphEdgeToSubgraphByMutation = <
   } else if (!subgraph.edges[sourceEntityId]![atTime]) {
     subgraph.edges[sourceEntityId]![atTime] = [outwardEdge];
   } else {
-    const outwardEdgesAtTime = subgraph.edges[sourceEntityId]![atTime]!;
+    const outwardEdgesAtTime = subgraph.edges[sourceEntityId]![
+      atTime
+    ]! as KnowledgeGraphOutwardEdge[];
     if (
-      !outwardEdgesAtTime.find((otherOutwardEdge) =>
+      !outwardEdgesAtTime.find((otherOutwardEdge: OutwardEdge) =>
         isEqual(otherOutwardEdge, outwardEdge),
       )
     ) {
