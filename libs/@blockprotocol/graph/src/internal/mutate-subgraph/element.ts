@@ -7,7 +7,7 @@ import {
   KnowledgeGraphVertices,
   Subgraph,
 } from "../../types/subgraph.js";
-import { addKnowledgeGraphEdgeToSubgraphByMutation } from "./edge.js";
+import { addOutwardEdgeToSubgraphByMutation } from "./edge.js";
 
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`

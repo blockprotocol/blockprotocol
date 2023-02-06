@@ -1,4 +1,4 @@
 export {
   addEntitiesToSubgraphByMutation,
-  addKnowledgeGraphEdgeToSubgraphByMutation,
+  addOutwardEdgeToSubgraphByMutation,
 } from "./internal/mutate-subgraph.js";

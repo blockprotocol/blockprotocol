@@ -2,8 +2,7 @@ import { BaseUri } from "@blockprotocol/type-system/slim";
 
 import { EntityId } from "../../types/entity.js";
 import {
-  KnowledgeGraphOutwardEdge,
-  OntologyOutwardEdge,
+  OntologyTypeRevisionId,
   OutwardEdge,
   Subgraph,
 } from "../../types/subgraph.js";
@@ -13,29 +12,27 @@ import { isEqual } from "./is-equal.js";
 /**
  * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
  *
- * This MUTATES the given {@link Subgraph}  by adding the given {@link OntologyOutwardEdge} to `edges` object from the
- * given ontology element at the specified version.
+ * This MUTATES the given {@link Subgraph}  by adding the given {@link OutwardEdge} to `edges` object from the
+ * given element at the specified point.
  *
  * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
  *
  * @param {Subgraph} subgraph – the subgraph to mutate by adding the outward edge
- * @param {BaseUri} sourceBaseUri – the id of the entity the edge is coming from
- * @param {number} atVersion – the version at which the edge should be recorded at
- * @param {OntologyOutwardEdge} outwardEdge – the edge itself
+ * @param {EntityId | BaseUri} sourceBaseId – the id of the element the edge is coming from
+ * @param {string} at – the identifier for the revision, or the timestamp, at which the edge was added
+ * @param {OutwardEdge} outwardEdge – the edge itself
  */
-export const addOntologyOutwardEdgeToSubgraphByMutation = <
-  Temporal extends boolean,
->(
+export const addOutwardEdgeToSubgraphByMutation = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
-  sourceBaseUri: BaseUri,
-  atVersion: number,
-  outwardEdge: OntologyOutwardEdge,
+  sourceBaseId: EntityId | BaseUri,
+  at: OntologyTypeRevisionId | Timestamp,
+  outwardEdge: OutwardEdge,
 ) => {
   /* eslint-disable no-param-reassign -- We want to mutate the input here */
-  subgraph.edges[sourceBaseUri] ??= {};
-  subgraph.edges[sourceBaseUri]![atVersion] ??= [];
+  subgraph.edges[sourceBaseId] ??= {};
+  subgraph.edges[sourceBaseId]![at] ??= [];
   const outwardEdgesAtVersion: OutwardEdge[] =
-    subgraph.edges[sourceBaseUri]![atVersion]!;
+    subgraph.edges[sourceBaseId]![at]!;
 
   if (
     !outwardEdgesAtVersion.find((otherOutwardEdge: OutwardEdge) =>
@@ -43,43 +40,6 @@ export const addOntologyOutwardEdgeToSubgraphByMutation = <
     )
   ) {
     outwardEdgesAtVersion.push(outwardEdge);
-  }
-  /* eslint-enable no-param-reassign */
-};
-
-/**
- * Looking to build a subgraph? You probably want {@link buildSubgraph} from `@blockprotocol/graph/stdlib`
- *
- * This MUTATES the given {@link Subgraph} by adding the given {@link KnowledgeGraphOutwardEdge} to the `edges` object,
- * from the given entity at the specified timestamp.
- *
- * Mutating a Subgraph is unsafe in most situations – you should know why you need to do it.
- *
- * @param {Subgraph} subgraph – the subgraph to mutate by adding the outward edge
- * @param {EntityId} sourceEntityId – the id of the entity the edge is coming from
- * @param {Timestamp} atTime – the time at which the edge should be recorded as being added at
- * @param {KnowledgeGraphOutwardEdge} outwardEdge – the edge itself
- */
-export const addKnowledgeGraphOutwardEdgeToSubgraphByMutation = <
-  Temporal extends boolean,
->(
-  subgraph: Subgraph<Temporal>,
-  sourceEntityId: EntityId,
-  atTime: Timestamp,
-  outwardEdge: KnowledgeGraphOutwardEdge,
-) => {
-  /* eslint-disable no-param-reassign -- We want to mutate the input here */
-  subgraph.edges[sourceEntityId] ??= {};
-  subgraph.edges[sourceEntityId]![atTime] ??= [];
-  const outwardEdgesAtTime: OutwardEdge[] =
-    subgraph.edges[sourceEntityId]![atTime]!;
-
-  if (
-    !outwardEdgesAtTime.find((otherOutwardEdge: OutwardEdge) =>
-      isEqual(otherOutwardEdge, outwardEdge),
-    )
-  ) {
-    outwardEdgesAtTime.push(outwardEdge);
   }
   /* eslint-enable no-param-reassign */
 };
