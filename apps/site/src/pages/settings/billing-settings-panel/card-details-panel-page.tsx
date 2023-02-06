@@ -188,6 +188,7 @@ export const CardDetailsPanelPage: FunctionComponent = () => {
               squared
               type="submit"
               sx={{ marginTop: 3 }}
+              loading={updatingBillingDetails}
               disabled={updatingBillingDetails || !isComplete}
             >
               Update billing information
