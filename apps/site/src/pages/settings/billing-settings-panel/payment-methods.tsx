@@ -56,7 +56,7 @@ const PaymentMethodMenu: FunctionComponent<{
   const handleMakeDefaultMethodClick = useCallback(async () => {
     setIsLoading(true);
 
-    await internalApi.updateSubscription({
+    await internalApi.updateSubscriptionDefaultPaymentMethod({
       updatedDefaultPaymentMethodId: paymentMethod.id,
     });
 

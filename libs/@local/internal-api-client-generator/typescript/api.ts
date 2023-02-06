@@ -420,34 +420,41 @@ export interface UpdatePaymentMethodRequestUpdatedBillingDetailsAddress {
 /**
  *
  * @export
- * @interface UpdateSubscription200Response
+ * @interface UpdateSubscriptionDefaultPaymentMethodRequest
  */
-export interface UpdateSubscription200Response {
+export interface UpdateSubscriptionDefaultPaymentMethodRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateSubscriptionDefaultPaymentMethodRequest
+   */
+  updatedDefaultPaymentMethodId: string;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSubscriptionTier200Response
+ */
+export interface UpdateSubscriptionTier200Response {
   /**
    *
    * @type {StripeSubscription}
-   * @memberof UpdateSubscription200Response
+   * @memberof UpdateSubscriptionTier200Response
    */
   updatedSubscription?: StripeSubscription;
 }
 /**
  *
  * @export
- * @interface UpdateSubscriptionRequest
+ * @interface UpdateSubscriptionTierRequest
  */
-export interface UpdateSubscriptionRequest {
+export interface UpdateSubscriptionTierRequest {
   /**
    *
    * @type {SubscriptionTier}
-   * @memberof UpdateSubscriptionRequest
+   * @memberof UpdateSubscriptionTierRequest
    */
-  updatedSubscriptionTier?: SubscriptionTier;
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateSubscriptionRequest
-   */
-  updatedDefaultPaymentMethodId?: string;
+  updatedSubscriptionTier: SubscriptionTier;
 }
 
 /**
@@ -838,22 +845,22 @@ export const DefaultApiAxiosParamCreator = function (
     },
     /**
      *
-     * @summary Update an existing subscription
-     * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+     * @summary Update the default payment method of an existing subscription
+     * @param {UpdateSubscriptionDefaultPaymentMethodRequest} updateSubscriptionDefaultPaymentMethodRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateSubscription: async (
-      updateSubscriptionRequest: UpdateSubscriptionRequest,
+    updateSubscriptionDefaultPaymentMethod: async (
+      updateSubscriptionDefaultPaymentMethodRequest: UpdateSubscriptionDefaultPaymentMethodRequest,
       options: AxiosRequestConfig = {},
     ): Promise<RequestArgs> => {
-      // verify required parameter 'updateSubscriptionRequest' is not null or undefined
+      // verify required parameter 'updateSubscriptionDefaultPaymentMethodRequest' is not null or undefined
       assertParamExists(
-        "updateSubscription",
-        "updateSubscriptionRequest",
-        updateSubscriptionRequest,
+        "updateSubscriptionDefaultPaymentMethod",
+        "updateSubscriptionDefaultPaymentMethodRequest",
+        updateSubscriptionDefaultPaymentMethodRequest,
       );
-      const localVarPath = `/subscription`;
+      const localVarPath = `/subscription-default-payment-method`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -880,7 +887,61 @@ export const DefaultApiAxiosParamCreator = function (
         ...options.headers,
       };
       localVarRequestOptions.data = serializeDataIfNeeded(
-        updateSubscriptionRequest,
+        updateSubscriptionDefaultPaymentMethodRequest,
+        localVarRequestOptions,
+        configuration,
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary Update the subscription tier of an existing subscription
+     * @param {UpdateSubscriptionTierRequest} updateSubscriptionTierRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSubscriptionTier: async (
+      updateSubscriptionTierRequest: UpdateSubscriptionTierRequest,
+      options: AxiosRequestConfig = {},
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'updateSubscriptionTierRequest' is not null or undefined
+      assertParamExists(
+        "updateSubscriptionTier",
+        "updateSubscriptionTierRequest",
+        updateSubscriptionTierRequest,
+      );
+      const localVarPath = `/subscription-tier`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: "PUT",
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter["Content-Type"] = "application/json";
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateSubscriptionTierRequest,
         localVarRequestOptions,
         configuration,
       );
@@ -1110,23 +1171,51 @@ export const DefaultApiFp = function (configuration?: Configuration) {
     },
     /**
      *
-     * @summary Update an existing subscription
-     * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+     * @summary Update the default payment method of an existing subscription
+     * @param {UpdateSubscriptionDefaultPaymentMethodRequest} updateSubscriptionDefaultPaymentMethodRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async updateSubscription(
-      updateSubscriptionRequest: UpdateSubscriptionRequest,
+    async updateSubscriptionDefaultPaymentMethod(
+      updateSubscriptionDefaultPaymentMethodRequest: UpdateSubscriptionDefaultPaymentMethodRequest,
       options?: AxiosRequestConfig,
     ): Promise<
       (
         axios?: AxiosInstance,
         basePath?: string,
-      ) => AxiosPromise<UpdateSubscription200Response>
+      ) => AxiosPromise<UpdateSubscriptionTier200Response>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.updateSubscription(
-          updateSubscriptionRequest,
+        await localVarAxiosParamCreator.updateSubscriptionDefaultPaymentMethod(
+          updateSubscriptionDefaultPaymentMethodRequest,
+          options,
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration,
+      );
+    },
+    /**
+     *
+     * @summary Update the subscription tier of an existing subscription
+     * @param {UpdateSubscriptionTierRequest} updateSubscriptionTierRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateSubscriptionTier(
+      updateSubscriptionTierRequest: UpdateSubscriptionTierRequest,
+      options?: AxiosRequestConfig,
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string,
+      ) => AxiosPromise<UpdateSubscriptionTier200Response>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateSubscriptionTier(
+          updateSubscriptionTierRequest,
           options,
         );
       return createRequestFunction(
@@ -1268,17 +1357,35 @@ export const DefaultApiFactory = function (
     },
     /**
      *
-     * @summary Update an existing subscription
-     * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+     * @summary Update the default payment method of an existing subscription
+     * @param {UpdateSubscriptionDefaultPaymentMethodRequest} updateSubscriptionDefaultPaymentMethodRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    updateSubscription(
-      updateSubscriptionRequest: UpdateSubscriptionRequest,
+    updateSubscriptionDefaultPaymentMethod(
+      updateSubscriptionDefaultPaymentMethodRequest: UpdateSubscriptionDefaultPaymentMethodRequest,
       options?: any,
-    ): AxiosPromise<UpdateSubscription200Response> {
+    ): AxiosPromise<UpdateSubscriptionTier200Response> {
       return localVarFp
-        .updateSubscription(updateSubscriptionRequest, options)
+        .updateSubscriptionDefaultPaymentMethod(
+          updateSubscriptionDefaultPaymentMethodRequest,
+          options,
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary Update the subscription tier of an existing subscription
+     * @param {UpdateSubscriptionTierRequest} updateSubscriptionTierRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSubscriptionTier(
+      updateSubscriptionTierRequest: UpdateSubscriptionTierRequest,
+      options?: any,
+    ): AxiosPromise<UpdateSubscriptionTier200Response> {
+      return localVarFp
+        .updateSubscriptionTier(updateSubscriptionTierRequest, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -1390,16 +1497,29 @@ export interface DefaultApiInterface {
 
   /**
    *
-   * @summary Update an existing subscription
-   * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+   * @summary Update the default payment method of an existing subscription
+   * @param {UpdateSubscriptionDefaultPaymentMethodRequest} updateSubscriptionDefaultPaymentMethodRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  updateSubscription(
-    updateSubscriptionRequest: UpdateSubscriptionRequest,
+  updateSubscriptionDefaultPaymentMethod(
+    updateSubscriptionDefaultPaymentMethodRequest: UpdateSubscriptionDefaultPaymentMethodRequest,
     options?: AxiosRequestConfig,
-  ): AxiosPromise<UpdateSubscription200Response>;
+  ): AxiosPromise<UpdateSubscriptionTier200Response>;
+
+  /**
+   *
+   * @summary Update the subscription tier of an existing subscription
+   * @param {UpdateSubscriptionTierRequest} updateSubscriptionTierRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApiInterface
+   */
+  updateSubscriptionTier(
+    updateSubscriptionTierRequest: UpdateSubscriptionTierRequest,
+    options?: AxiosRequestConfig,
+  ): AxiosPromise<UpdateSubscriptionTier200Response>;
 }
 
 /**
@@ -1533,18 +1653,38 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
 
   /**
    *
-   * @summary Update an existing subscription
-   * @param {UpdateSubscriptionRequest} updateSubscriptionRequest
+   * @summary Update the default payment method of an existing subscription
+   * @param {UpdateSubscriptionDefaultPaymentMethodRequest} updateSubscriptionDefaultPaymentMethodRequest
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public updateSubscription(
-    updateSubscriptionRequest: UpdateSubscriptionRequest,
+  public updateSubscriptionDefaultPaymentMethod(
+    updateSubscriptionDefaultPaymentMethodRequest: UpdateSubscriptionDefaultPaymentMethodRequest,
     options?: AxiosRequestConfig,
   ) {
     return DefaultApiFp(this.configuration)
-      .updateSubscription(updateSubscriptionRequest, options)
+      .updateSubscriptionDefaultPaymentMethod(
+        updateSubscriptionDefaultPaymentMethodRequest,
+        options,
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary Update the subscription tier of an existing subscription
+   * @param {UpdateSubscriptionTierRequest} updateSubscriptionTierRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public updateSubscriptionTier(
+    updateSubscriptionTierRequest: UpdateSubscriptionTierRequest,
+    options?: AxiosRequestConfig,
+  ) {
+    return DefaultApiFp(this.configuration)
+      .updateSubscriptionTier(updateSubscriptionTierRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }

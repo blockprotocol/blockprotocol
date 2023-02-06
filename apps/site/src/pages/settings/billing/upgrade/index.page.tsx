@@ -206,7 +206,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
   }) => {
     setIsUpgradingSubscription(true);
 
-    await internalApi.updateSubscription({
+    await internalApi.updateSubscriptionTier({
       updatedSubscriptionTier: params.tier,
     });
 
