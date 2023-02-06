@@ -27,6 +27,18 @@ type Entry<T extends {}> = T extends readonly [unknown, ...unknown[]]
  *
  * Source: https://dev.to/harry0000/a-bit-convenient-typescript-type-definitions-for-objectentries-d6g
  */
-export function typedEntries<T extends {}>(object: T): ReadonlyArray<Entry<T>> {
+export const typedEntries = <T extends {}>(
+  object: T,
+): ReadonlyArray<Entry<T>> => {
   return Object.entries(object) as unknown as ReadonlyArray<Entry<T>>;
-}
+};
+
+/** `Object.values` analogue which returns a well-typed array */
+export const typedKeys = <T extends {}>(object: T): Entry<T>[0][] => {
+  return Object.keys(object) as Entry<T>[0][];
+};
+
+/** `Object.values` analogue which returns a well-typed array */
+export const typedValues = <T extends {}>(object: T): Entry<T>[1][] => {
+  return Object.values(object);
+};
