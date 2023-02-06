@@ -22,6 +22,12 @@ import {
  * Block and Embedder, to handle the divergent functionality (e.g. init messages).
  */
 export abstract class CoreHandler {
+  /** Keeps track of if initialized, to know if can send messages yet */
+  private hasInitialized: boolean = false;
+
+  /** We won't send any non-init messages until we're initialized */
+  protected messageQueue: Omit<Message, "timestamp">[] = [];
+
   /** a default callback for use where no callback is registered for a message */
   private readonly defaultMessageCallback?: GenericMessageCallback;
 
@@ -136,6 +142,25 @@ export abstract class CoreHandler {
 
   abstract initialize(): void;
 
+  /**
+   * We defer some tasks until after initialization, but that process is handled
+   * by the block/embedder, which will call this function when done
+   */
+  protected afterInitialized() {
+    if (this.hasInitialized) {
+      throw new Error("Already initialized");
+    }
+
+    this.hasInitialized = true;
+
+    while (this.messageQueue.length) {
+      const message = this.messageQueue.shift();
+      if (message) {
+        this.dispatchMessage(message);
+      }
+    }
+  }
+
   private eventListener = (event: Event) => {
     this.processReceivedMessage(event as CustomEvent);
   };
@@ -224,21 +249,13 @@ export abstract class CoreHandler {
     if (!sender.serviceName) {
       throw new Error("Message sender has no serviceName set.");
     }
-    const fullMessage: Message = {
+    const fullMessage: Omit<Message, "timestamp"> = {
       ...partialMessage,
       requestId: requestId ?? uuid(),
       respondedToBy: "respondedToBy" in args ? args.respondedToBy : undefined,
       service: sender.serviceName,
       source: this.sourceType,
-      timestamp: new Date().toISOString(),
     };
-
-    const event = new CustomEvent(CoreHandler.customEventName, {
-      bubbles: true,
-      composed: true,
-      detail: fullMessage,
-    });
-    this.dispatchingElement.dispatchEvent(event);
 
     if ("respondedToBy" in args && args.respondedToBy) {
       let resolverToStore: PromiseResolver | undefined = undefined;
@@ -254,8 +271,35 @@ export abstract class CoreHandler {
         resolve: resolverToStore!,
         reject: rejecterToStore!,
       });
+
+      this.dispatchMessage(fullMessage);
+
       return promise;
     }
+
+    this.dispatchMessage(fullMessage);
+  }
+
+  private dispatchMessage(fullMessage: Omit<Message, "timestamp">) {
+    if (
+      !this.hasInitialized &&
+      fullMessage.messageName !== "init" &&
+      fullMessage.messageName !== "initResponse"
+    ) {
+      this.messageQueue.push(fullMessage);
+      return;
+    }
+
+    const event = new CustomEvent(CoreHandler.customEventName, {
+      bubbles: true,
+      composed: true,
+      detail: {
+        ...fullMessage,
+        timestamp: new Date().toISOString(),
+      },
+    });
+
+    this.dispatchingElement.dispatchEvent(event);
   }
 
   /**
@@ -348,17 +392,16 @@ export abstract class CoreHandler {
         (this.sourceType === "block" && messageName === "initResponse"))
     ) {
       this.processInitMessage({ event: messageEvent, message });
-      return;
+    } else {
+      // @todo should we await this?
+      this.callCallback({ message }).catch((err) => {
+        // eslint-disable-next-line no-console -- intentional feedback for users
+        console.error(
+          `Error calling callback for '${service}' service, for message '${messageName}: ${err}`,
+        );
+        throw err;
+      });
     }
-
-    // @todo should we await this?
-    this.callCallback({ message }).catch((err) => {
-      // eslint-disable-next-line no-console -- intentional feedback for users
-      console.error(
-        `Error calling callback for '${service}' service, for message '${messageName}: ${err}`,
-      );
-      throw err;
-    });
 
     // Check if this message is responding to another, and settle the outstanding promise
     const messageAwaitingResponse =

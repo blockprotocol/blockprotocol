@@ -59,6 +59,7 @@ export const useServiceConstructor = <T extends ServiceHandler>({
 
     if (ref.current) {
       if (!initialisedRef.current) {
+        initialisedRef.current = true;
         service.initialize(ref.current);
       } else {
         setService(
@@ -68,8 +69,6 @@ export const useServiceConstructor = <T extends ServiceHandler>({
           }),
         );
       }
-
-      initialisedRef.current = true;
     }
   });
 
