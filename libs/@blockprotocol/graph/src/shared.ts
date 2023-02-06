@@ -42,3 +42,26 @@ export const typedKeys = <T extends {}>(object: T): Entry<T>[0][] => {
 export const typedValues = <T extends {}>(object: T): Entry<T>[1][] => {
   return Object.values(object);
 };
+
+/**
+ * Checks if a given string is exactly a non-negative integer.
+ *
+ * For example, it will accept strings such as:
+ * - "0"
+ * - "1"
+ * - "94818981"
+ *
+ * And it will not accept strings such as:
+ * - "0.0"
+ * - "1.0"
+ * - "-1"
+ * - "foo"
+ * - "0foo"
+ * - "1.1"
+ *
+ * @param {string} input
+ */
+export const stringIsNonNegativeInteger = (input: string) => {
+  const asInteger = Number.parseInt(input, 10);
+  return asInteger.toString() === input && asInteger >= 0;
+};

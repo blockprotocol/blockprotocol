@@ -1,5 +1,6 @@
 import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
 
+import { stringIsNonNegativeInteger } from "../../shared.js";
 import {
   Entity,
   EntityId,
@@ -98,7 +99,8 @@ export const isOntologyTypeVertexId = (
     typeof vertexId.baseId === "string" &&
     validateBaseUri(vertexId.baseId).type === "Ok" &&
     "revisionId" in vertexId &&
-    !Number.isNaN(Number(vertexId.revisionId))
+    typeof vertexId.revisionId === "string" &&
+    stringIsNonNegativeInteger(vertexId.revisionId)
   );
 };
 
