@@ -1,10 +1,8 @@
 import {
-  getReferencedIdsFromEntityType,
-  getReferencedIdsFromPropertyType,
-} from "@blockprotocol/type-system";
-import {
   extractBaseUri,
   extractVersion,
+  getReferencedIdsFromEntityType,
+  getReferencedIdsFromPropertyType,
 } from "@blockprotocol/type-system/slim";
 
 import { unionOfIntervals } from "../../stdlib/interval.js";
