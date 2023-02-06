@@ -2,14 +2,14 @@ import { Subtype } from "../../../../util.js";
 import { OntologyTypeVertexId } from "../../vertices.js";
 import { GenericOutwardEdge } from "../generic-outward-edge.js";
 import { KnowledgeGraphEdgeKind, SharedEdgeKind } from "../kind.js";
-import { EntityValidInterval, OutwardEdge } from "../outward-edge.js";
+import { EntityIdWithInterval, OutwardEdge } from "../outward-edge.js";
 
 export type OutgoingLinkEdge = Subtype<
   GenericOutwardEdge,
   {
     reversed: true;
     kind: "HAS_LEFT_ENTITY";
-    rightEndpoint: EntityValidInterval;
+    rightEndpoint: EntityIdWithInterval;
   }
 >;
 
@@ -24,7 +24,7 @@ export type HasLeftEntityEdge = Subtype<
   {
     reversed: false;
     kind: "HAS_LEFT_ENTITY";
-    rightEndpoint: EntityValidInterval;
+    rightEndpoint: EntityIdWithInterval;
   }
 >;
 
@@ -39,7 +39,7 @@ export type HasRightEntityEdge = Subtype<
   {
     reversed: false;
     kind: "HAS_RIGHT_ENTITY";
-    rightEndpoint: EntityValidInterval;
+    rightEndpoint: EntityIdWithInterval;
   }
 >;
 
@@ -54,7 +54,7 @@ export type IncomingLinkEdge = Subtype<
   {
     reversed: true;
     kind: "HAS_RIGHT_ENTITY";
-    rightEndpoint: EntityValidInterval;
+    rightEndpoint: EntityIdWithInterval;
   }
 >;
 
@@ -94,6 +94,6 @@ export type KnowledgeGraphOutwardEdge =
  */
 type _CheckKnowledgeGraphOutwardEdge = Subtype<
   KnowledgeGraphOutwardEdge,
-  | GenericOutwardEdge<KnowledgeGraphEdgeKind, boolean, EntityValidInterval>
+  | GenericOutwardEdge<KnowledgeGraphEdgeKind, boolean, EntityIdWithInterval>
   | GenericOutwardEdge<SharedEdgeKind, false, OntologyTypeVertexId>
 >;

@@ -85,14 +85,14 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
     ) {
       for (const outwardEdge of outwardEdges) {
         if (isOutgoingLinkEdge(outwardEdge)) {
-          const { entityId: linkEntityId, validInterval } =
+          const { entityId: linkEntityId, interval: edgeInterval } =
             outwardEdge.rightEndpoint;
 
           if (isTemporalSubgraph(subgraph)) {
             // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
             const intersection = intervalIntersectionWithInterval(
               searchInterval,
-              validInterval,
+              edgeInterval,
             );
 
             if (intersection === null) {
@@ -100,7 +100,7 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
                 `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
                   `EntityId: ${linkEntityId}\n` +
                   `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
               );
             }
 
@@ -170,14 +170,14 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
     ) {
       for (const outwardEdge of outwardEdges) {
         if (isIncomingLinkEdge(outwardEdge)) {
-          const { entityId: linkEntityId, validInterval } =
+          const { entityId: linkEntityId, interval: edgeInterval } =
             outwardEdge.rightEndpoint;
 
           if (isTemporalSubgraph(subgraph)) {
             // Find the revisions of the link at the intersection of the search interval and the edge's valid interval
             const intersection = intervalIntersectionWithInterval(
               searchInterval,
-              validInterval,
+              edgeInterval,
             );
 
             if (intersection === null) {
@@ -185,7 +185,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
                 `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
                   `EntityId: ${linkEntityId}\n` +
                   `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-                  `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+                  `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
               );
             }
 
@@ -249,10 +249,10 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
   const leftEntityId = outwardEdge.rightEndpoint.entityId;
 
   if (isTemporalSubgraph(subgraph)) {
-    const { validInterval } = outwardEdge.rightEndpoint;
+    const { interval: edgeInterval } = outwardEdge.rightEndpoint;
     const intersection = intervalIntersectionWithInterval(
       searchInterval,
-      validInterval,
+      edgeInterval,
     );
 
     if (intersection === null) {
@@ -260,7 +260,7 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
         `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
           `EntityId: ${leftEntityId}\n` +
           `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-          `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+          `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
       );
     }
 
@@ -310,10 +310,10 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
   const rightEntityId = outwardEdge.rightEndpoint.entityId;
 
   if (isTemporalSubgraph(subgraph)) {
-    const { validInterval } = outwardEdge.rightEndpoint;
+    const { interval: edgeInterval } = outwardEdge.rightEndpoint;
     const intersection = intervalIntersectionWithInterval(
       searchInterval,
-      validInterval,
+      edgeInterval,
     );
 
     if (intersection === null) {
@@ -321,7 +321,7 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
         `No entity revision was found which overlapped the given edge, subgraph was likely malformed.\n` +
           `EntityId: ${rightEntityId}\n` +
           `Search Interval: ${JSON.stringify(searchInterval)}\n` +
-          `Edge Valid Interval: ${JSON.stringify(validInterval)}`,
+          `Edge Valid Interval: ${JSON.stringify(edgeInterval)}`,
       );
     }
 

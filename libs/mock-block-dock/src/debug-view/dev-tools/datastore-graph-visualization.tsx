@@ -220,7 +220,7 @@ const getSubgraphEdgesAsEChartEdges = (
                 );
               }
               return intervalOverlapsInterval(
-                outwardEdge.rightEndpoint.validInterval,
+                outwardEdge.rightEndpoint.interval,
                 vertex.inner.metadata.temporalVersioning[
                   subgraph.temporalAxes.resolved.variable.axis
                 ],

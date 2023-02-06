@@ -1,6 +1,6 @@
 import {
   EntityId,
-  EntityValidInterval,
+  EntityIdWithInterval,
   GraphElementVertexId,
   GraphResolveDepths,
   HasLeftEntityEdge,
@@ -37,12 +37,12 @@ import {
 const TIMESTAMP_PLACEHOLDER = "TIMESTAMP_PLACEHOLDER" as const;
 
 /**
- * Advanced type to recursively search a type for `EntityValidInterval` and patch those occurrences by removing the
- * definition of the "validInterval" property.
+ * Advanced type to recursively search a type for `EntityIdWithInterval` and patch those occurrences by removing the
+ * definition of the "interval" property.
  */
 type DeepOmitValidInterval<ToPatch extends unknown> = ToPatch extends object
-  ? ToPatch extends EntityValidInterval
-    ? Omit<ToPatch, "validInterval">
+  ? ToPatch extends EntityIdWithInterval
+    ? Omit<ToPatch, "interval">
     : { [key in keyof ToPatch]: DeepOmitValidInterval<ToPatch[key]> }
   : ToPatch;
 
@@ -325,17 +325,17 @@ export const traverseElementTemporal = ({
 
         if (isEntityVertex(neighborVertex)) {
           // get from temporal data of the neighbor vertex
-          const entityValidInterval =
+          const entityInterval =
             neighborVertex.inner.metadata.temporalVersioning[
               traversalSubgraph.temporalAxes.resolved.variable.axis
             ];
           newIntersection = intervalIntersectionWithInterval(
             interval,
-            entityValidInterval,
+            entityInterval,
           );
           neighborVertexId = {
             baseId: neighborVertex.inner.metadata.recordId.entityId,
-            revisionId: entityValidInterval.start.limit,
+            revisionId: entityInterval.start.limit,
           };
         } else {
           newIntersection = interval;
@@ -496,7 +496,7 @@ export const finalizeSubgraph = <
                 ...outwardEdge,
                 rightEndpoint: {
                   ...outwardEdge.rightEndpoint,
-                  validInterval: {
+                  interval: {
                     start: { kind: "inclusive", limit: edgeFirstCreatedAt },
                     end: endLimit
                       ? { kind: "exclusive", limit: endLimit as string }
