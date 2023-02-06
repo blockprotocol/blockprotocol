@@ -1,4 +1,4 @@
-import { typedEntries } from "../../../shared.js";
+import { typedEntries, typedValues } from "../../../shared.js";
 import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
 import { Subgraph } from "../../../types/subgraph.js";
 import { isEntityVertex } from "../../../types/subgraph/vertices.js";
@@ -20,7 +20,7 @@ export const getEntities = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   latest: boolean = false,
 ): Entity<Temporal>[] => {
-  return Object.values(subgraph.vertices).flatMap((revisions) => {
+  return typedValues(subgraph.vertices).flatMap((revisions) => {
     if (latest) {
       const revisionVersions = Object.keys(revisions).sort();
 
@@ -28,7 +28,7 @@ export const getEntities = <Temporal extends boolean>(
       const vertex = revisions[revisionVersions[lastIndex]!]!;
       return isEntityVertex(vertex) ? [vertex.inner] : [];
     } else {
-      return Object.values(revisions)
+      return typedValues(revisions)
         .filter(isEntityVertex)
         .map((vertex) => vertex.inner);
     }
@@ -162,7 +162,7 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
 
     return filteredEntities;
   } else {
-    const entityVertices = Object.values(versionObject);
+    const entityVertices = typedValues(versionObject);
     return entityVertices.filter(isEntityVertex).map((vertex) => {
       return vertex.inner;
     });

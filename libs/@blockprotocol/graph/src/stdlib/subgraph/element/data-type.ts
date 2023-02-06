@@ -5,6 +5,7 @@ import {
   VersionedUri,
 } from "@blockprotocol/type-system/slim";
 
+import { typedValues } from "../../../shared.js";
 import { DataTypeWithMetadata } from "../../../types/ontology/data-type.js";
 import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
 import { isDataTypeVertex } from "../../../types/subgraph/vertices.js";
@@ -17,12 +18,10 @@ import { isDataTypeVertex } from "../../../types/subgraph/vertices.js";
 export const getDataTypes = (
   subgraph: Subgraph<boolean>,
 ): DataTypeWithMetadata[] => {
-  return Object.values(
-    Object.values(subgraph.vertices).flatMap((versionObject) =>
-      Object.values(versionObject)
-        .filter(isDataTypeVertex)
-        .map((vertex) => vertex.inner),
-    ),
+  return typedValues(subgraph.vertices).flatMap((versionObject) =>
+    typedValues(versionObject)
+      .filter(isDataTypeVertex)
+      .map((vertex) => vertex.inner),
   );
 };
 

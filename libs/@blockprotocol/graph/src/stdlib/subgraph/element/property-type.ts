@@ -5,6 +5,7 @@ import {
   VersionedUri,
 } from "@blockprotocol/type-system/slim";
 
+import { typedValues } from "../../../shared.js";
 import { PropertyTypeWithMetadata } from "../../../types/ontology/property-type.js";
 import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
 import { isPropertyTypeVertex } from "../../../types/subgraph/vertices.js";
@@ -17,12 +18,10 @@ import { isPropertyTypeVertex } from "../../../types/subgraph/vertices.js";
 export const getPropertyTypes = (
   subgraph: Subgraph<boolean>,
 ): PropertyTypeWithMetadata[] => {
-  return Object.values(
-    Object.values(subgraph.vertices).flatMap((versionObject) =>
-      Object.values(versionObject)
-        .filter(isPropertyTypeVertex)
-        .map((vertex) => vertex.inner),
-    ),
+  return typedValues(subgraph.vertices).flatMap((versionObject) =>
+    typedValues(versionObject)
+      .filter(isPropertyTypeVertex)
+      .map((vertex) => vertex.inner),
   );
 };
 
