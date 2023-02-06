@@ -135,11 +135,11 @@ export type MultiFilterOperatorType = "AND" | "OR";
 export type MultiFilter = {
   filters: (
     | {
-        field: string;
+        field: string[];
         operator: FilterOperatorRequiringValue;
         value: string;
       }
-    | { field: string; operator: FilterOperatorWithoutValue }
+    | { field: string[]; operator: FilterOperatorWithoutValue }
   )[];
   operator: MultiFilterOperatorType;
 };
@@ -152,7 +152,6 @@ export type Sort = {
 export type MultiSort = Sort[];
 
 export type AggregateOperationInput = {
-  entityTypeId?: VersionedUri | null;
   pageNumber?: number | null;
   itemsPerPage?: number | null;
   multiSort?: MultiSort | null;
