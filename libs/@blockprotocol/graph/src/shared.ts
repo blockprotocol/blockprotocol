@@ -61,7 +61,9 @@ export const typedValues = <T extends {}>(object: T): Entry<T>[1][] => {
  *
  * @param {string} input
  */
-export const stringIsNonNegativeInteger = (input: string) => {
+export const stringIsNonNegativeInteger = (
+  input: string,
+): input is `${number}` => {
   const asInteger = Number.parseInt(input, 10);
   return asInteger.toString() === input && asInteger >= 0;
 };
