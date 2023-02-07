@@ -309,7 +309,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
           <Paper
             elevation={4}
             sx={{
-              borderRadius: 6,
+              borderRadius: "8px",
               padding: 6,
             }}
           >
