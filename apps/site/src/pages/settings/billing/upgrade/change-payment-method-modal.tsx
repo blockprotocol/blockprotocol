@@ -269,7 +269,7 @@ export const ChangePaymentMethodModal: FunctionComponent<
         <Button
           size="small"
           squared
-          endIcon={<FontAwesomeIcon icon={faArrowRight} />}
+          endIcon={<FontAwesomeIcon icon={faCheck} />}
           sx={{ width: "100%" }}
           onClick={handleSaveCard}
           loading={savingCardChoice}
