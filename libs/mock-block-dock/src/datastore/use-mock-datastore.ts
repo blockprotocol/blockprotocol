@@ -1,10 +1,13 @@
 import {
   EmbedderGraphMessageCallbacks,
   Entity,
+  FileEntity,
+  FileEntityProperties,
   Subgraph,
 } from "@blockprotocol/graph";
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import { getEntityRevision as getEntityRevisionFromSubgraph } from "@blockprotocol/graph/stdlib";
+import mime from "mime-types";
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
@@ -542,17 +545,6 @@ export const useMockDatastore = (
   const uploadFile: EmbedderGraphMessageCallbacks<true>["uploadFile"] =
     useCallback(
       async ({ data }) => {
-        return {
-          errors: [
-            {
-              code: "NOT_IMPLEMENTED",
-              message: `Uploading files is not currently supported`,
-            },
-          ],
-        };
-
-        /** @todo - create the file entity-type and re-enable file uploading */
-        // eslint-disable-next-line no-unreachable -- currently unimplemented
         if (readonly) {
           return readonlyErrorReturn;
         }
@@ -567,89 +559,79 @@ export const useMockDatastore = (
             ],
           };
         }
-        // const { file, url, mediaType } = data;
-        // if (!file && !url?.trim()) {
-        //   throw new Error(
-        //     `Please enter a valid ${mediaType} URL or select a file below`,
-        //   );
-        // }
-        //
-        // if (url?.trim()) {
-        //   const resp = await createEntity({
-        //     data: {
-        //       entityTypeId: "file1",
-        //       properties: {
-        //         url,
-        //         mediaType,
-        //       },
-        //     },
-        //   });
-        //   if (resp.errors || !resp.data) {
-        //     return {
-        //       errors: resp.errors ?? [
-        //         {
-        //           code: "INVALID_INPUT",
-        //           message: "Could not create File entity ",
-        //         },
-        //       ],
-        //     };
-        //   }
-        //   const returnData: UploadFileReturn = {
-        //     entityId: resp.data.entityId,
-        //     mediaType,
-        //     url,
-        //   };
-        //   return Promise.resolve({ data: returnData });
-        // } else if (file) {
-        //   const result = await new Promise<FileReader["result"] | null>(
-        //     (resolve, reject) => {
-        //       const reader = new FileReader();
-        //
-        //       reader.onload = (event) => {
-        //         resolve(event.target?.result ?? null);
-        //       };
-        //
-        //       reader.onerror = (event) => {
-        //         reject(event);
-        //       };
-        //
-        //       reader.readAsDataURL(file);
-        //     },
-        //   );
-        //
-        //   if (result) {
-        //     const resp = await createEntity({
-        //       data: {
-        //         entityTypeId: "file1",
-        //         properties: {
-        //           url: result.toString(),
-        //           mediaType,
-        //         },
-        //       },
-        //     });
-        //     if (resp.errors || !resp.data) {
-        //       return {
-        //         errors: resp.errors ?? [
-        //           {
-        //             code: "INVALID_INPUT",
-        //             message: "Could not create File entity ",
-        //           },
-        //         ],
-        //       };
-        //     }
-        //     const returnData: UploadFileReturn = {
-        //       entityId: resp.data.entityId,
-        //       mediaType,
-        //       url: result.toString(),
-        //     };
-        //     return Promise.resolve({ data: returnData });
-        //   }
-        //
-        //   throw new Error("Couldn't read your file");
-        // }
-        // throw new Error("Unreachable.");
+        const { description } = data;
+        const file = "file" in data ? data.file : null;
+        const url = "url" in data ? data.url : null;
+        if (!file && !url?.trim()) {
+          throw new Error("Please provide either a valid URL or file below");
+        }
+
+        let filename: string = "unknown-file";
+        let resolvedUrl: string = "https://unknown-url.example.com";
+        if (url) {
+          filename = url.split("/").pop() ?? filename;
+          resolvedUrl = url;
+        } else if (file) {
+          filename = file.name;
+          try {
+            const readFileResult = await new Promise<
+              FileReader["result"] | null
+            >((resolve, reject) => {
+              const reader = new FileReader();
+
+              reader.onload = (event) => {
+                resolve(event.target?.result ?? null);
+              };
+
+              reader.onerror = (event) => {
+                reject(event);
+              };
+
+              reader.readAsDataURL(file);
+            });
+            if (!readFileResult) {
+              throw new Error("No result from file reader");
+            }
+            resolvedUrl = readFileResult.toString();
+          } catch (err) {
+            throw new Error("Could not upload file");
+          }
+        }
+
+        const mimeType = mime.lookup(filename) || "application/octet-stream";
+
+        const newEntityProperties: FileEntityProperties = {
+          "https://blockprotocol.org/@blockprotocol/types/property-type/description/v/1":
+            description,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/filename/v/1":
+            filename,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/url/v/1":
+            resolvedUrl,
+          "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/v/1":
+            mimeType,
+        };
+
+        const { data: newEntity, errors } = await createEntity({
+          data: {
+            entityTypeId:
+              "https://blockprotocol.org/@blockprotocol/types/entity-type/file/v/1",
+            properties: newEntityProperties,
+          },
+        });
+
+        if (errors || !newEntity) {
+          return {
+            errors: errors ?? [
+              {
+                code: "INVALID_INPUT",
+                message: "Could not create File entity ",
+              },
+            ],
+          };
+        }
+        return Promise.resolve({ data: newEntity as FileEntity });
       },
-      [readonly],
+      [createEntity, readonly],
     );
 
   return {

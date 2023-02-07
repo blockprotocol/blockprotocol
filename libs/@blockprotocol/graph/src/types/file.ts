@@ -1,15 +1,18 @@
-import { EntityId } from "./entity.js";
-
-export type FileMediaType = "image" | "video";
+import { Entity } from "./entity.js";
 
 export type UploadFileData = {
-  file?: File | null;
-  url?: string | null;
-  mediaType: FileMediaType;
+  description?: string;
+  name?: string;
+} & ({ file: File } | { url: string });
+
+// @todo -
+export type FileEntityProperties = {
+  "https://blockprotocol.org/@blockprotocol/types/property-type/description/v/1"?: string;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/filename/v/1": string;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/v/1": string;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/url/v/1": string;
 };
 
-export type UploadFileReturn = {
-  entityId: EntityId;
-  url: string;
-  mediaType: FileMediaType;
-};
+export type FileEntity = Entity<true, FileEntityProperties>;
+
+export type UploadFileReturn = FileEntity;
