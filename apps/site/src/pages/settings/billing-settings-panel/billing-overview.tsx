@@ -150,6 +150,7 @@ export const BillingOverviewPanelPage: FunctionComponent = () => {
                 defaultSubscriptionPaymentMethod ? (
                   <PaymentMethod
                     paymentMethod={defaultSubscriptionPaymentMethod}
+                    sx={{ marginY: 2 }}
                   />
                 ) : null
               ) : (

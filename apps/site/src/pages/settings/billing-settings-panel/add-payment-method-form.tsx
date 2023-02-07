@@ -36,7 +36,7 @@ const stripePromise = loadStripe(
 const AddPaymentMethodForm: FunctionComponent<{
   clientSecret?: string;
   onCancel: () => void;
-  onPaymentMethodAdded: () => void;
+  onPaymentMethodAdded: (params: { paymentMethodId: string }) => void;
 }> = ({ onCancel, onPaymentMethodAdded, clientSecret }) => {
   const stripe = useStripe();
   const elements = useElements();
@@ -61,17 +61,29 @@ const AddPaymentMethodForm: FunctionComponent<{
 
       setIsLoading(true);
 
-      const { error } = await stripe.confirmCardSetup(clientSecret, {
-        payment_method: { card: stripeCardElement },
-        return_url: `${FRONTEND_URL}/settings/billing/payment-methods`,
-      });
+      const { setupIntent, error } = await stripe.confirmCardSetup(
+        clientSecret,
+        {
+          payment_method: { card: stripeCardElement },
+          return_url: `${FRONTEND_URL}/settings/billing/payment-methods`,
+        },
+      );
 
       setIsLoading(false);
 
       if (error) {
         setErrorMessage(error.message);
       } else {
-        onPaymentMethodAdded();
+        const paymentMethodId =
+          typeof setupIntent.payment_method === "object"
+            ? setupIntent.payment_method?.id
+            : setupIntent.payment_method;
+
+        if (!paymentMethodId) {
+          throw new Error("Payment method id not returned.");
+        }
+
+        onPaymentMethodAdded({ paymentMethodId });
       }
     },
     [elements, stripe, clientSecret, onPaymentMethodAdded],
@@ -142,7 +154,7 @@ const AddPaymentMethodForm: FunctionComponent<{
 
 export const AddPaymentMethod: FunctionComponent<{
   onCancel: () => void;
-  onPaymentMethodAdded: () => void;
+  onPaymentMethodAdded: (params: { paymentMethodId: string }) => void;
 }> = ({ onCancel, onPaymentMethodAdded }) => {
   const [clientSecret, setClientSecret] = useState<string>();
 
