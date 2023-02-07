@@ -5,6 +5,8 @@ import { EmbedderInitMessage, Message, MessageContents } from "./types";
  * Implements the Block Protocol Core Specification for embedding applications.
  */
 export class CoreEmbedderHandler extends CoreHandler {
+  private initResponse: null | EmbedderInitMessage = null;
+
   constructor({ element }: { element: HTMLElement }) {
     super({ element, sourceType: "embedder" });
   }
@@ -61,10 +63,17 @@ export class CoreEmbedderHandler extends CoreHandler {
     this.updateDispatchElementFromEvent(event);
 
     // get the properties sent on initialization for any registered services
-    const data: EmbedderInitMessage = {};
-    for (const [serviceName, serviceInstance] of this.services) {
-      data[serviceName] = serviceInstance.getInitPayload();
+    let data = this.initResponse;
+
+    if (!data) {
+      data = {};
+
+      for (const [serviceName, serviceInstance] of this.services) {
+        data[serviceName] = serviceInstance.getInitPayload();
+      }
     }
+
+    this.initResponse = data;
 
     const response: MessageContents = {
       messageName: "initResponse",
@@ -76,5 +85,7 @@ export class CoreEmbedderHandler extends CoreHandler {
       requestId: message.requestId,
       sender: this,
     });
+
+    this.afterInitialized();
   }
 }
