@@ -1,18 +1,25 @@
-import { addEntitiesToSubgraphByMutation } from "../../internal/mutate-subgraph.js";
 import {
+  addDataTypesToSubgraphByMutation,
+  addEntitiesToSubgraphByMutation,
+  addEntityTypesToSubgraphByMutation,
+  addPropertyTypesToSubgraphByMutation,
+} from "../../internal/mutate-subgraph/element.js";
+import {
+  DataTypeWithMetadata,
   Entity,
   EntityRecordId,
   EntityRootType,
+  EntityTypeWithMetadata,
   GraphResolveDepths,
+  PropertyTypeWithMetadata,
   Subgraph,
   SubgraphTemporalAxes,
 } from "../../types.js";
 
 /**
- * Builds a {@link Subgraph} from a given {@link Entity} set, some (or all) of which may be 'link entities' –
- * i.e. entities that represent relationships between other entities – or other entities.
+ * Builds a {@link Subgraph} from a given set of graph elements.
  *
- * The set of entities should represent the result of a query on a graph.
+ * The sets of elements should represent the result of a query on a graph.
  * The 'roots' and 'depths' used for that query should be provided along with the data.
  *
  * The maximum value for any single depth is 255.
@@ -23,7 +30,10 @@ import {
  * It DOES check that the provided roots are present in the data.
  *
  * @param data – the data to build the subgraph from (which becomes the vertices)
- * @param data.entities – the entities to build the subgraph from
+ * @param data.dataTypes – the data types to include in the subgraph
+ * @param data.propertyTypes – the property types to include in the subgraph
+ * @param data.entityTypes – the entity types to include in the subgraph
+ * @param data.entities – the entities to include in the subgraph
  * @param depths – the depth values to provide in the returned subgraph
  * @param rootRecordIds – the root values to provide in the returned subgraph
  * @param {SubgraphTemporalAxes} subgraphTemporalAxes - the sets of temporal axes that were used when originally
@@ -37,11 +47,14 @@ import {
  *   - 'temporalAxes' where both the `initial` and `resolved` are as provided by the caller
  *
  * @throws if the provided roots are not present in the data
- *
- * @todo add support for ontology vertices (e.g. entity types)
  */
 export const buildSubgraph = <Temporal extends boolean>(
-  data: { entities: Entity<Temporal>[] },
+  data: {
+    entities: Entity<Temporal>[];
+    entityTypes: EntityTypeWithMetadata[];
+    propertyTypes: PropertyTypeWithMetadata[];
+    dataTypes: DataTypeWithMetadata[];
+  },
   rootRecordIds: EntityRecordId[],
   depths: GraphResolveDepths,
   subgraphTemporalAxes: Temporal extends true
@@ -87,6 +100,9 @@ export const buildSubgraph = <Temporal extends boolean>(
       : {}),
   };
 
+  addDataTypesToSubgraphByMutation(subgraph, data.dataTypes);
+  addPropertyTypesToSubgraphByMutation(subgraph, data.propertyTypes);
+  addEntityTypesToSubgraphByMutation(subgraph, data.entityTypes);
   addEntitiesToSubgraphByMutation(subgraph, data.entities);
 
   return subgraph;
