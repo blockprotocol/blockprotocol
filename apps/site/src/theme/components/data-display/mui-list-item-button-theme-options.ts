@@ -1,4 +1,4 @@
-import { Components, Theme } from "@mui/material";
+import { Components, listItemButtonClasses, Theme } from "@mui/material";
 
 export const MuiListItemButtonThemeOptions: Components<Theme>["MuiListItemButton"] =
   {
@@ -10,6 +10,9 @@ export const MuiListItemButtonThemeOptions: Components<Theme>["MuiListItemButton
         paddingLeft: theme.spacing(5),
         "&:hover": {
           backgroundColor: theme.palette.gray[20],
+          [`& ${listItemButtonClasses.root}`]: {
+            color: theme.palette.gray[90],
+          },
         },
         "&.Mui-selected": {
           backgroundColor: "transparent",
