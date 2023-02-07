@@ -38,7 +38,11 @@ import {
  */
 export class GraphBlockHandler<Temporal extends boolean>
   extends ServiceHandler
-  implements BlockGraphMessages<Temporal>
+  implements
+    Omit<
+      BlockGraphMessages<Temporal>,
+      "createEntityType" | "updateEntityType" | "deleteEntityType"
+    >
 {
   constructor({
     callbacks,

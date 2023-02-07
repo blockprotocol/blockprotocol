@@ -1,5 +1,8 @@
-import { EmbedderGraphMessageCallbacks } from "@blockprotocol/graph";
-import { Box, Container, Typography } from "@mui/material";
+import {
+  EmbedderGraphMessageCallbacks,
+  EntityTypeWithMetadata,
+} from "@blockprotocol/graph";
+import { Container, Typography } from "@mui/material";
 import { NextPage } from "next";
 import NextError from "next/error";
 import { useRouter } from "next/router";
@@ -7,7 +10,6 @@ import { NextSeo } from "next-seo";
 import { useEffect, useState } from "react";
 import { tw } from "twind";
 
-import { SchemaEditor } from "../../../components/entity-types/schema-editor/schema-editor";
 import { Link } from "../../../components/link";
 import { useUser } from "../../../context/user-context";
 import { EntityType } from "../../../lib/api/model/entity-type.model";
@@ -48,7 +50,7 @@ const EntityTypePage: NextPage = () => {
       .finally(() => setIsLoading(false));
   }, [shortnameWithoutLeadingAt, title, setEntityType]);
 
-  const aggregateEntityTypes: EmbedderGraphMessageCallbacks["aggregateEntityTypes"] =
+  const _aggregateEntityTypes: EmbedderGraphMessageCallbacks<false>["aggregateEntityTypes"] =
     () => {
       if (!shortnameWithoutLeadingAt) {
         throw new Error(
@@ -59,43 +61,36 @@ const EntityTypePage: NextPage = () => {
         .getUserEntityTypes({ shortname: shortnameWithoutLeadingAt })
         .then(({ data }) => {
           return {
-            data: {
-              results: data?.entityTypes ?? [],
-              operation: {
-                pageNumber: 1,
-                itemsPerPage: 100,
-              },
-            },
+            data: data as any, // @todo fix this when introducing new type editor
           };
         });
     };
 
-  const updateEntityType: EmbedderGraphMessageCallbacks["updateEntityType"] = (
-    args,
-  ) => {
-    if (!args.data) {
-      throw new Error("No data supplied to updateEntityType request");
-    }
-    const { entityTypeId, schema } = args.data;
+  const _updateEntityType: EmbedderGraphMessageCallbacks<false>["updateEntityType"] =
+    (args) => {
+      if (!args.data) {
+        throw new Error("No data supplied to updateEntityType request");
+      }
+      const { entityTypeId, entityType: newEntityType } = args.data;
 
-    return apiClient
-      .updateEntityType({ schema: JSON.stringify(schema) }, entityTypeId)
-      .then(({ data }) => {
-        if (data) {
+      return apiClient
+        .updateEntityType({ entityType: newEntityType }, entityTypeId)
+        .then(({ data }) => {
+          if (data) {
+            return {
+              data,
+            };
+          }
           return {
-            data: data.entityType,
+            errors: [
+              {
+                code: "INVALID_INPUT",
+                message: "Could not update entity type",
+              },
+            ],
           };
-        }
-        return {
-          errors: [
-            {
-              code: "INVALID_INPUT",
-              message: "Could not update entity type",
-            },
-          ],
-        };
-      });
-  };
+        });
+    };
 
   if (isLoading) {
     // @todo proper loading state
@@ -106,10 +101,10 @@ const EntityTypePage: NextPage = () => {
     return <NextError statusCode={404} />;
   }
 
-  const userCanEdit =
+  const _userCanEdit =
     user !== "loading" && user?.shortname === shortnameWithoutLeadingAt;
 
-  const uri = entityType.schema.$id;
+  const _uri = entityType.schema.$id;
 
   return (
     <>
@@ -148,39 +143,8 @@ const EntityTypePage: NextPage = () => {
         </section>
 
         <main className={tw`pt-8 mb-14 w-auto`}>
-          <SchemaEditor
-            aggregateEntityTypes={aggregateEntityTypes}
-            entityTypeId={entityType.entityTypeId}
-            schema={entityType.schema}
-            updateEntityType={userCanEdit ? updateEntityType : undefined}
-          />
+          <h2>New type editor coming soon</h2>
         </main>
-
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="bpSmallCopy" sx={{ maxWidth: "100%" }}>
-            Link properties to schema.org or other equivalents — e.g.{" "}
-            <Link href="https://schema.org/givenName">
-              https://schema.org/givenName
-            </Link>{" "}
-            — to make them interpretable as RDF or JSON-LD.
-          </Typography>
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="bpSmallCopy" sx={{ maxWidth: "100%" }}>
-            This schema will always be available at{" "}
-            <Link href={uri}>{uri}</Link> - this is its <strong>$id</strong>.
-          </Typography>
-        </Box>
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="bpSmallCopy">
-            Looking for the raw JSON? Visit{" "}
-            <Link href={`${uri}?json`} target="_blank">
-              this link
-            </Link>{" "}
-            or request the $id with "application/json" in an "Accept" HTTP
-            header.
-          </Typography>
-        </Box>
       </Container>
     </>
   );

@@ -48,8 +48,6 @@ export type ExpandedBlockMetadata = BlockMetadata & {
   pathWithNamespace: string;
   // the repository URL as a string (including commit and folder info where appropriate)
   repository?: string;
-  // metadata.schema rewritten to be an absolute URL
-  schema?: string | null;
 };
 
 /**
@@ -187,7 +185,7 @@ export const expandBlockMetadata = ({
     pathWithNamespace,
     protocol: metadata.protocol ?? "0.1", // assume lowest if not specified - this is a required field so should be present
     repository: repositoryUrl,
-    schema: generateBlockFileUrl(metadata.schema, blockDistributionFolderUrl)!,
+    schema: metadata.schema,
     source: generateBlockFileUrl(metadata.source, blockDistributionFolderUrl)!,
     variants: metadata.variants?.length
       ? metadata.variants?.map((variant) => ({
@@ -264,7 +262,11 @@ export const retrieveBlockFileContent = async ({
             { encoding: "utf8" },
           ),
         )
-      : await (await fetch(metadataSchemaUrl)).json();
+      : await (
+          await fetch(metadataSchemaUrl, {
+            headers: { accept: "application/json" },
+          })
+        ).json();
   } catch (err) {
     // eslint-disable-next-line no-console -- intentional log to flag problem without tanking site
     console.error(
