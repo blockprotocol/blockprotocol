@@ -44,7 +44,7 @@ export const cardDetailsPanelPageAsPath = "/settings/billing/payment-method";
 
 export const CardDetailsPanelPage: FunctionComponent = () => {
   const router = useRouter();
-  const { paymentMethods } = useBillingPageContext();
+  const { paymentMethods, refetchPaymentMethods } = useBillingPageContext();
 
   const [isComplete, setIsComplete] = useState<boolean>(false);
 
@@ -100,9 +100,11 @@ export const CardDetailsPanelPage: FunctionComponent = () => {
         updatedBillingDetails,
       });
 
+      await refetchPaymentMethods?.();
+
       setUpdatingBillingDetails(false);
     },
-    [paymentMethod, updatedBillingDetails],
+    [paymentMethod, updatedBillingDetails, refetchPaymentMethods],
   );
 
   const theme = useTheme();
