@@ -2,7 +2,7 @@ import path from "node:path";
 
 import fs from "fs-extra";
 
-import { ExpandedBlockMetadata } from "../../blocks";
+import { BlockMetadataOnDisk, ExpandedBlockMetadata } from "../../blocks";
 import { getDbBlock, getDbBlocks } from "./db";
 
 const localBlocks = fs.readJsonSync(
@@ -14,6 +14,18 @@ export const getAllBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
 
   // the inferred type of the JSON is incompatible with the TS type because a string union is inferred as any string
   return [...allDbBlocks, ...localBlocks] as ExpandedBlockMetadata[];
+};
+
+const featuredBlocks = new Set([
+  "@alfie/github-pr-overview",
+  "@hash/code",
+  "@hash/shuffle",
+]);
+
+export const getFeaturedBlocks = async (): Promise<ExpandedBlockMetadata[]> => {
+  return localBlocks.filter((block) =>
+    featuredBlocks.has(block.pathWithNamespace),
+  );
 };
 
 export const getAllBlocksByUser = async (params: {
