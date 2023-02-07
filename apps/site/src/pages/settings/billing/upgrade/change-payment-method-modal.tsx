@@ -225,6 +225,11 @@ export const ChangePaymentMethodModal: FunctionComponent<
                         onClick={(event) => {
                           event.stopPropagation();
                         }}
+                        sx={{
+                          "& svg": {
+                            color: ({ palette }) => palette.gray[40],
+                          },
+                        }}
                       >
                         <FontAwesomeIcon
                           icon={faEdit}
