@@ -11,6 +11,12 @@ import {
 } from "./entity.js";
 import { UploadFileData, UploadFileReturn } from "./file.js";
 import {
+  CreateEntityTypeData,
+  DeleteEntityTypeData,
+  EntityTypeWithMetadata,
+  UpdateEntityTypeData,
+} from "./ontology.js";
+import {
   AggregateEntityTypesData,
   AggregateEntityTypesResult,
   GetEntityTypeData,
@@ -113,25 +119,24 @@ export type EmbedderGraphMessageCallbacks<Temporal extends boolean> = {
     >,
     ReadOrModifyResourceError
   >;
-  /** @todo - Add Type System mutation methods */
-  // createEntityType: MessageCallback<
-  //   CreateEntityTypeData,
-  //   null,
-  //   EntityType,
-  //   CreateResourceError
-  // >;
-  // updateEntityType: MessageCallback<
-  //   UpdateEntityTypeData,
-  //   null,
-  //   EntityType,
-  //   ReadOrModifyResourceError
-  // >;
-  // deleteEntityType: MessageCallback<
-  //   DeleteEntityTypeData,
-  //   null,
-  //   true,
-  //   ReadOrModifyResourceError
-  // >;
+  createEntityType: MessageCallback<
+    CreateEntityTypeData,
+    null,
+    MessageReturn<EntityTypeWithMetadata>,
+    CreateResourceError
+  >;
+  updateEntityType: MessageCallback<
+    UpdateEntityTypeData,
+    null,
+    MessageReturn<EntityTypeWithMetadata>,
+    ReadOrModifyResourceError
+  >;
+  deleteEntityType: MessageCallback<
+    DeleteEntityTypeData,
+    null,
+    MessageReturn<true>,
+    ReadOrModifyResourceError
+  >;
   getEntityType: MessageCallback<
     GetEntityTypeData,
     null,

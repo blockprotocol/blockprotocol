@@ -1,3 +1,5 @@
+import { VersionedUri } from "@blockprotocol/type-system/slim";
+
 import { CoreHandler } from "./core-handler";
 import { ServiceHandler } from "./service-handler";
 
@@ -100,7 +102,7 @@ export type BlockMetadata = {
   /**
    * The path or URL to the block's schema (e.g. block-schema.json)
    */
-  schema: string;
+  schema: VersionedUri;
   /**
    * The path or URL to the entrypoint source file (e.g. index.html, index.js).
    */

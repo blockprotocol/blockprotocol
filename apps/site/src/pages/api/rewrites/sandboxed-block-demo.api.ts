@@ -87,7 +87,8 @@ const handler: NextApiHandler = async (req, res) => {
       import React from "https://esm.sh/react@${reactVersion}?target=es2021"
       import ReactDOM from "https://esm.sh/react-dom@${reactVersion}?target=es2021"
       import { jsx as _jsx } from "https://esm.sh/react@${reactVersion}/jsx-runtime.js?target=es2021";
-      import { MockBlockDock } from "https://esm.sh/mock-block-dock@${mockBlockDockVersion}/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
+      // @todo-0.3 revert this hardcoded version to ${mockBlockDockVersion}
+      import { MockBlockDock } from "https://esm.sh/mock-block-dock@0.1.0-canary-20230206110959/dist/esm/index.js?target=es2021&deps=react@${reactVersion}";
 
       const requireLookup = {
         "react-dom": ReactDOM,
@@ -152,7 +153,7 @@ const handler: NextApiHandler = async (req, res) => {
       
           const render = (props) => {
             const { readonly, ...blockEntityProps } = props;
-            const mockBlockDockProps = { blockDefinition, blockEntity: blockEntityProps, ...mockBlockDockInitialData, hideDebugToggle: true, readonly  };
+            const mockBlockDockProps = { blockDefinition, ...mockBlockDockInitialData, hideDebugToggle: true, readonly  };
             
             document.getElementById("loading-indicator")?.remove();
           

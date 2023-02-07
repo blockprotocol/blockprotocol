@@ -19,7 +19,12 @@ import { useMockDataToSubgraph } from "./use-mock-data-to-subgraph";
 
 export type MockDatastore = {
   graph: Subgraph<true>;
-  graphServiceCallbacks: Required<EmbedderGraphMessageCallbacks<true>>;
+  graphServiceCallbacks: Required<
+    Omit<
+      EmbedderGraphMessageCallbacks<true>,
+      "createEntityType" | "updateEntityType" | "deleteEntityType"
+    >
+  >;
 };
 
 const readonlyErrorReturn: {

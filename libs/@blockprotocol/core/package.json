@@ -57,6 +57,7 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
+    "@blockprotocol/type-system": "0.0.3",
     "es-module-lexer": "^0.10.5",
     "uuid": "^8.3.2"
   },

@@ -36,9 +36,9 @@ type BlockDataContainerProps = {
 
 const validator = new Validator();
 
-/** Blocks that aren't compliant with BP V0.2  */
+/** Blocks that aren't compliant with BP V0.3  */
 const checkIfBlockIsSupported = ({ protocol }: BlockMetadata) =>
-  protocol === "0.2";
+  protocol === "0.3";
 
 export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   metadata,
@@ -136,9 +136,17 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
   }, [blockVariantsTab, metadata?.examples, metadata?.variants, text]);
 
   /** used to recompute props and errors on dep changes (caching has no benefit here) */
-  const [props, errors] = useMemo<[Entity<any> | undefined, string[]]>(() => {
+  const [props, errors] = useMemo<
+    [(Entity<false> & { readonly: boolean }) | undefined, string[]]
+  >(() => {
     const result = {
-      entityId: exampleEntityId,
+      metadata: {
+        entityTypeId: metadata.schema,
+        recordId: {
+          entityId: exampleEntityId,
+          editionId: new Date(0).toISOString(),
+        },
+      },
       properties: {},
       readonly,
     };
@@ -149,17 +157,19 @@ export const BlockDataContainer: FunctionComponent<BlockDataContainerProps> = ({
       return [result, [(err as Error).message]];
     }
 
-    const errorsToEat = ["uploadFile", "getEmbedBlock"];
+    // const errorsToEat = ["uploadFile", "getEmbedBlock"];
 
-    const errorMessages = validator
-      .validate(result.properties, schema ?? {})
-      .errors.map((err) => `ValidationError: ${err.stack}`)
-      .filter(
-        (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
-      );
+    const errorMessages: string[] = [];
+    // @todo-0.3 validating this requires fetching the entire schema for the block
+    // const errorMessages = validator
+    //   .validate(result.properties, schema ?? {})
+    //   .errors.map((err) => `ValidationError: ${err.stack}`)
+    //   .filter(
+    //     (err) => !errorsToEat.some((errorToEat) => err.includes(errorToEat)),
+    //   );
 
     return [result, errorMessages];
-  }, [exampleEntityId, text, schema, readonly]);
+  }, [exampleEntityId, metadata.schema, text, readonly]);
 
   return (
     <>
