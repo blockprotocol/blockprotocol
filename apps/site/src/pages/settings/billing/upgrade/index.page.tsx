@@ -770,12 +770,7 @@ const UpgradePage: AuthWallPageContent<UpgradePageProps> = ({
                             endIcon={<FontAwesomeIcon icon={faArrowRight} />}
                             loading={isUpgradingSubscription}
                           >
-                            Upgrade my account to{" "}
-                            {upgradedSubscriptionTier
-                              ? subscriptionTierToHumanReadable(
-                                  upgradedSubscriptionTier,
-                                )
-                              : ""}
+                            Upgrade my account and continue
                           </Button>
                         ) : null
                       ) : stripeElementsOptions.clientSecret ? (
