@@ -1,4 +1,4 @@
-import { Box, BoxProps, experimental_sx as sx, styled } from "@mui/material";
+import { Box, BoxProps, styled } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { Snippet } from "../../snippet";
@@ -20,7 +20,7 @@ const SnippetContainer = styled(({ children, ...props }: BoxProps) => (
     {children}
   </Box>
 ))(({ theme }) =>
-  sx({
+  theme.unstable_sx({
     fontSize: 14,
     backgroundColor: theme.palette.gray[90],
     borderTopLeftRadius: {
