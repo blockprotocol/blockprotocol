@@ -38,10 +38,10 @@ export type GetPropertyTypeData = {
 };
 
 export type CreatePropertyTypeData = {
-  propertyType: PropertyType;
+  propertyType: Omit<PropertyType, "$id">;
 };
 
 export type UpdatePropertyTypeData = {
   propertyTypeId: VersionedUri;
-  propertyType: PropertyType;
+  propertyType: Omit<PropertyType, "$id">;
 };

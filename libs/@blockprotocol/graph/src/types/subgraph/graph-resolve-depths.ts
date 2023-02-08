@@ -12,11 +12,10 @@ export type GraphResolveDepths = {
   hasLeftEntity: EdgeResolveDepths;
   hasRightEntity: EdgeResolveDepths;
 
-  // @todo decide if these should be required
-  constrainsLinkDestinationsOn?: OutgoingEdgeResolveDepth;
-  constrainsLinksOn?: OutgoingEdgeResolveDepth;
-  constrainsPropertiesOn?: OutgoingEdgeResolveDepth;
-  constrainsValuesOn?: OutgoingEdgeResolveDepth;
-  inheritsFrom?: OutgoingEdgeResolveDepth;
-  isOfType?: OutgoingEdgeResolveDepth;
+  constrainsLinkDestinationsOn: OutgoingEdgeResolveDepth;
+  constrainsLinksOn: OutgoingEdgeResolveDepth;
+  constrainsPropertiesOn: OutgoingEdgeResolveDepth;
+  constrainsValuesOn: OutgoingEdgeResolveDepth;
+  inheritsFrom: OutgoingEdgeResolveDepth;
+  isOfType: OutgoingEdgeResolveDepth;
 };

@@ -101,7 +101,7 @@ export type CreateEntityData = {
 
 export type GetEntityData<Temporal extends boolean> = {
   entityId: EntityId;
-  graphResolveDepths?: GraphResolveDepths;
+  graphResolveDepths?: Partial<GraphResolveDepths>;
 } & (Temporal extends true
   ? { temporalAxes: QueryTemporalAxesUnresolved }
   : {});
@@ -158,7 +158,7 @@ export type AggregateOperationInput = {
 
 export type AggregateEntitiesData<Temporal extends boolean> = {
   operation: AggregateOperationInput;
-  graphResolveDepths?: GraphResolveDepths;
+  graphResolveDepths?: Partial<GraphResolveDepths>;
 } & (Temporal extends true
   ? { temporalAxes: QueryTemporalAxesUnresolved }
   : {});
