@@ -1,5 +1,19 @@
 # block-template-custom-element
 
+## 0.2.0-canary-20230208230541
+
+### Minor Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
+
+### Patch Changes
+
+- Updated dependencies [[`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69), [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69), [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69), [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69), [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69), [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69)]:
+  - @blockprotocol/type-system@0.0.4-canary-20230208230541
+  - @blockprotocol/graph@0.1.0-canary-20230208230541
+  - mock-block-dock@0.1.0-canary-20230208230541
+  - block-scripts@0.1.0-canary-20230208230541
+
 ## 0.1.22
 
 ### Patch Changes
