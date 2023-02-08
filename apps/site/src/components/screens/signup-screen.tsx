@@ -98,6 +98,7 @@ export const SignupScreen: FunctionComponent<SignupScreenProps> = ({
       <Box display="flex" gap={3} mb={3} alignSelf="flex-start">
         <BlockProtocolIcon
           sx={{
+            width: 32,
             color: (theme) => theme.palette.purple[70],
             height: "unset",
           }}
