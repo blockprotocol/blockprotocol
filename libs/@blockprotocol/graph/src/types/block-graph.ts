@@ -11,10 +11,16 @@ import {
 } from "./entity.js";
 import { UploadFileData, UploadFileReturn } from "./file.js";
 import {
+  AggregatePropertyTypesData,
+  AggregatePropertyTypesResult,
   CreateEntityTypeData,
+  CreatePropertyTypeData,
   DeleteEntityTypeData,
   EntityTypeWithMetadata,
+  GetPropertyTypeData,
+  PropertyTypeWithMetadata,
   UpdateEntityTypeData,
+  UpdatePropertyTypeData,
 } from "./ontology.js";
 import {
   AggregateEntityTypesData,
@@ -25,6 +31,7 @@ import {
   EntityRootType,
   EntityTypeRootType,
   EntityVertexId,
+  PropertyTypeRootType,
   Subgraph,
 } from "./subgraph.js";
 
@@ -149,6 +156,30 @@ export type EmbedderGraphMessageCallbacks<Temporal extends boolean> = {
     MessageReturn<
       AggregateEntityTypesResult<Subgraph<Temporal, EntityTypeRootType>>
     >,
+    ReadOrModifyResourceError
+  >;
+  createPropertyType: MessageCallback<
+    CreatePropertyTypeData,
+    null,
+    MessageReturn<PropertyTypeWithMetadata>,
+    CreateResourceError
+  >;
+  updatePropertyType: MessageCallback<
+    UpdatePropertyTypeData,
+    null,
+    MessageReturn<PropertyTypeWithMetadata>,
+    ReadOrModifyResourceError
+  >;
+  getPropertyType: MessageCallback<
+    GetPropertyTypeData,
+    null,
+    MessageReturn<Subgraph<Temporal, PropertyTypeRootType>>,
+    ReadOrModifyResourceError
+  >;
+  aggregatePropertyTypes: MessageCallback<
+    AggregatePropertyTypesData,
+    null,
+    MessageReturn<AggregatePropertyTypesResult>,
     ReadOrModifyResourceError
   >;
   /** @todo - Reimplement linked aggregations */

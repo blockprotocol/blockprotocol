@@ -1,5 +1,12 @@
+import { VersionedUri } from "@blockprotocol/type-system";
 import { PropertyType } from "@blockprotocol/type-system/slim";
 
+import { AggregateOperationInput } from "../entity";
+import {
+  EntityTypeRootType,
+  PropertyTypeRootType,
+  Subgraph,
+} from "../subgraph";
 import { OntologyElementMetadata } from "./metadata.js";
 
 /**
@@ -11,4 +18,30 @@ export type { PropertyType };
 export type PropertyTypeWithMetadata = {
   schema: PropertyType;
   metadata: OntologyElementMetadata;
+};
+
+export type AggregatePropertyTypesData = {
+  graphResolveDepths?: Partial<
+    Pick<
+      Subgraph<true>["depths"],
+      "constrainsValuesOn" | "constrainsPropertiesOn"
+    >
+  >;
+};
+
+export type AggregatePropertyTypesResult = {
+  results: Subgraph<true, PropertyTypeRootType>;
+};
+
+export type GetPropertyTypeData = {
+  propertyTypeId: VersionedUri;
+};
+
+export type CreatePropertyTypeData = {
+  propertyType: PropertyType;
+};
+
+export type UpdatePropertyTypeData = {
+  propertyTypeId: VersionedUri;
+  propertyType: PropertyType;
 };

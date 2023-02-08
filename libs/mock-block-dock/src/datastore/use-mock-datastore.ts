@@ -27,7 +27,13 @@ export type MockDatastore = {
   graphServiceCallbacks: Required<
     Omit<
       EmbedderGraphMessageCallbacks<true>,
-      "createEntityType" | "updateEntityType" | "deleteEntityType"
+      | "createEntityType"
+      | "updateEntityType"
+      | "deleteEntityType"
+      | "getPropertyType"
+      | "createPropertyType"
+      | "updatePropertyType"
+      | "aggregatePropertyTypes"
     >
   >;
 };

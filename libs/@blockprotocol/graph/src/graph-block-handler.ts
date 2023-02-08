@@ -41,7 +41,13 @@ export class GraphBlockHandler<Temporal extends boolean>
   implements
     Omit<
       BlockGraphMessages<Temporal>,
-      "createEntityType" | "updateEntityType" | "deleteEntityType"
+      | "createEntityType"
+      | "updateEntityType"
+      | "deleteEntityType"
+      | "createPropertyType"
+      | "updatePropertyType"
+      | "getPropertyType"
+      | "aggregatePropertyTypes"
     >
 {
   constructor({
