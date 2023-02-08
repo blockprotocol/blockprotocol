@@ -66,6 +66,8 @@ export const ChangePaymentMethodModal: FunctionComponent<
     [subscription],
   );
 
+  const [animating, setAnimating] = useState(false);
+
   const handleSaveCard = useCallback(
     async (event: FormEvent) => {
       event.preventDefault();
@@ -244,7 +246,10 @@ export const ChangePaymentMethodModal: FunctionComponent<
           );
         })}
         <Box marginBottom={4}>
-          <Collapse in={addingPaymentMethod}>
+          <Collapse
+            in={addingPaymentMethod && !animating}
+            onExited={() => setAnimating(false)}
+          >
             <Box>
               <Divider
                 sx={{
@@ -253,14 +258,23 @@ export const ChangePaymentMethodModal: FunctionComponent<
                 }}
               />
               <AddPaymentMethod
-                onCancel={() => setAddingPaymentMethod(false)}
+                onCancel={() => {
+                  setAnimating(true);
+                  setAddingPaymentMethod(false);
+                }}
                 onPaymentMethodAdded={handlePaymentMethodAdded}
               />
             </Box>
           </Collapse>
-          <Collapse in={!addingPaymentMethod}>
+          <Collapse
+            in={!addingPaymentMethod && !animating}
+            onExited={() => setAnimating(false)}
+          >
             <Button
-              onClick={() => setAddingPaymentMethod(true)}
+              onClick={() => {
+                setAnimating(true);
+                setAddingPaymentMethod(true);
+              }}
               endIcon={<FontAwesomeIcon icon={faPlus} />}
               squared
               size="small"
