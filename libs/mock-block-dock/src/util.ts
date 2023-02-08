@@ -263,8 +263,6 @@ export function filterAndSortEntitiesOrTypes<
   });
   return {
     results,
-    operation: {
-      ...appliedOperation,
-    },
+    operation: appliedOperation,
   };
 }
