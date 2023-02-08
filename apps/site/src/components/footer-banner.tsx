@@ -10,6 +10,7 @@ import Image from "next/legacy/image";
 import { FunctionComponent, ReactNode } from "react";
 
 import backgroundCornerHelix from "../../public/assets/background-corner-helix.png";
+import backgroundCornerBlocks from "../../public/assets/background-corner-blocks.png";
 import { ArrowRightIcon, BoltIcon } from "./icons";
 import { Link as LinkComponent, LinkProps } from "./link";
 import { LinkButton } from "./link-button";
@@ -52,6 +53,15 @@ const BackgroundHelix: FunctionComponent = () => {
       objectFit="contain"
       objectPosition="right"
       src={backgroundCornerHelix}
+    />
+  );
+};
+const BackgroundBlocks: FunctionComponent = () => {
+  return (
+    <Image
+      objectFit="contain"
+      objectPosition="right"
+      src={backgroundCornerBlocks}
     />
   );
 };
@@ -162,7 +172,7 @@ export const BANNERS: Banner[] = [
                 },
               }}
             >
-              <BackgroundHelix />
+              <BackgroundBlocks />
             </Box>
 
             <Box sx={{ position: "relative", zIndex: 1 }}>
@@ -171,7 +181,7 @@ export const BANNERS: Banner[] = [
                 variant="bpHeading2"
                 sx={{ fontWeight: 700 }}
               >
-                Don't see the block you need?
+                Can’t find a block you need?
               </Typography>
               <Typography
                 component="h2"
@@ -182,15 +192,15 @@ export const BANNERS: Banner[] = [
                   mb: 2,
                 }}
               >
-                You can build it!
+                Build it!
               </Typography>
               <Typography
                 component="p"
                 variant="bpBodyCopy"
                 sx={{ maxWidth: 650 }}
               >
-                Anyone can create blocks and contribute to the growing,
-                open-source Hub. Read our{" "}
+                Anyone can create blocks and contribute to this growing,
+                open-source registry of blocks. Read our{" "}
                 <Link href="/docs/developing-blocks">quickstart guide</Link> to
                 start building your own blocks.
               </Typography>
