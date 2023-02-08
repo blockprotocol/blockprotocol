@@ -1,15 +1,5 @@
 # @blockprotocol/type-system
 
-## 0.0.4-canary-20230208230541
-
-### Patch Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Require `"additionalProperties": false` on entity types
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Fix empty object in links definition inside EntityType
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`378b39fe`](https://github.com/blockprotocol/blockprotocol/commit/378b39fe1ff6f86a05709ea4ce3c9177c8347d69) Thanks [@CiaranMn](https://github.com/CiaranMn)! - add stdlib functions for interacting with subgraph. reorganize types
-
 ## 0.0.3
 
 ### Patch Changes
