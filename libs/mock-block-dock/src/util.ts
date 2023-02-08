@@ -241,20 +241,13 @@ export function filterAndSortEntitiesOrTypes<
 ): FilterResult<Temporal> {
   const { operation } = payload;
 
-  const pageNumber = operation?.pageNumber || 1;
-  const itemsPerPage = operation?.itemsPerPage || 10;
   const multiSort = operation?.multiSort ?? [{ field: "updatedAt" }];
   const multiFilter = operation?.multiFilter;
 
   const appliedOperation = {
-    pageNumber,
-    itemsPerPage,
     multiFilter,
     multiSort,
   };
-
-  const startIndex = pageNumber === 1 ? 0 : (pageNumber - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, elements.length);
 
   let results = [...elements] as Elements;
   if (multiFilter) {
@@ -264,18 +257,14 @@ export function filterAndSortEntitiesOrTypes<
     }) as Elements;
   }
 
-  const totalCount = results.length;
-  const pageCount = Math.ceil(totalCount / itemsPerPage);
   results = sortEntitiesOrTypes({
     elements: results,
     multiSort,
-  }).slice(startIndex, endIndex) as Elements;
+  });
   return {
     results,
     operation: {
       ...appliedOperation,
-      totalCount,
-      pageCount,
     },
   };
 }
