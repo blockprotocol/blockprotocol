@@ -1,4 +1,4 @@
-import { faEllipsis, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faEllipsis, faPlus } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   CircularProgress,
@@ -217,7 +217,28 @@ export const PaymentMethodsPanelPage: FunctionComponent = () => {
               >
                 <PaymentMethod
                   paymentMethod={paymentMethod}
-                  isDefault={isDefault}
+                  sx={{ marginY: 2 }}
+                  titleEndAdornment={
+                    <Fade in={isDefault}>
+                      <Box
+                        component="span"
+                        sx={({ palette, spacing }) => ({
+                          padding: spacing(0.5, 0.75),
+                          color: palette.purple[700],
+                          background: palette.purple[20],
+                          borderRadius: 1,
+                          textTransform: "uppercase",
+                          fontSize: 11,
+                        })}
+                      >
+                        <FontAwesomeIcon
+                          icon={faCheck}
+                          sx={{ marginRight: 0.75, fontSize: 12 }}
+                        />
+                        <strong>Default</strong>
+                      </Box>
+                    </Fade>
+                  }
                 />
                 <PaymentMethodMenu
                   paymentMethod={paymentMethod}
