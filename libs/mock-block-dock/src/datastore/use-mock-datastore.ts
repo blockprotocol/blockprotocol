@@ -569,13 +569,17 @@ export const useMockDatastore = (
           throw new Error("Please provide either a valid URL or file");
         }
 
-        let filename: string = "unknown-file";
+        let filename: string | undefined = data.name;
         let resolvedUrl: string = "https://unknown-url.example.com";
         if (url) {
-          filename = url.split("/").pop() ?? filename;
+          if (!filename) {
+            filename = url.split("/").pop() ?? filename;
+          }
           resolvedUrl = url;
         } else if (file) {
-          filename = file.name;
+          if (!filename) {
+            filename = file.name;
+          }
           try {
             const readFileResult = await new Promise<
               FileReader["result"] | null
@@ -599,6 +603,10 @@ export const useMockDatastore = (
           } catch (err) {
             throw new Error("Could not upload file");
           }
+        }
+
+        if (!filename) {
+          throw new Error("Could not determine filename and no name provided");
         }
 
         const mimeType = mime.lookup(filename) || "application/octet-stream";
