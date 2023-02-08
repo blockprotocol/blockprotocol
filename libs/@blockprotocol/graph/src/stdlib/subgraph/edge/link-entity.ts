@@ -220,7 +220,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
     }
   }
 
-  return entities.filter(uniqueEntitiesFilter);
+  return entities;
 };
 
 /**
