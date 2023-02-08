@@ -34,10 +34,10 @@ export type GetEntityTypeData = {
 };
 
 export type CreateEntityTypeData = {
-  entityType: EntityType;
+  entityType: Omit<EntityType, "$id" | "additionalProperties">;
 };
 
 export type UpdateEntityTypeData = {
   entityTypeId: VersionedUri;
-  entityType: EntityType;
+  entityType: Omit<EntityType, "$id" | "additionalProperties">;
 };
