@@ -10,7 +10,7 @@ import {
   InclusiveLimitedTemporalBound,
   QueryTemporalAxesUnresolved,
   Subgraph,
-  TemporalAxes,
+  TemporalAxis,
   TimeInterval,
   Timestamp,
   Unbounded,
@@ -58,7 +58,7 @@ type HalfClosedInterval = TimeInterval<
 >;
 
 export type EntityTemporalVersioningMetadata = Record<
-  TemporalAxes,
+  TemporalAxis,
   HalfClosedInterval
 >;
 
