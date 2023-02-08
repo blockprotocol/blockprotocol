@@ -1,4 +1,9 @@
-import { EntityRootType, GetEntityData, Subgraph } from "@blockprotocol/graph";
+import {
+  EntityRootType,
+  GetEntityData,
+  GraphResolveDepths,
+  Subgraph,
+} from "@blockprotocol/graph";
 import { getEntityRevision } from "@blockprotocol/graph/stdlib";
 
 import { getDefaultTemporalAxes } from "../../get-default-temporal-axes";
@@ -9,13 +14,21 @@ import {
   traverseElement,
 } from "../../traverse";
 
+const defaultGraphResolveDepths: GraphResolveDepths = {
+  hasLeftEntity: { incoming: 1, outgoing: 1 },
+  hasRightEntity: { incoming: 1, outgoing: 1 },
+  constrainsLinkDestinationsOn: { outgoing: 0 },
+  constrainsLinksOn: { outgoing: 0 },
+  constrainsPropertiesOn: { outgoing: 0 },
+  constrainsValuesOn: { outgoing: 0 },
+  inheritsFrom: { outgoing: 0 },
+  isOfType: { outgoing: 0 },
+};
+
 export const getEntityImpl = (
   {
     entityId,
-    graphResolveDepths = {
-      hasLeftEntity: { incoming: 1, outgoing: 1 },
-      hasRightEntity: { incoming: 1, outgoing: 1 },
-    },
+    graphResolveDepths = defaultGraphResolveDepths,
     temporalAxes,
   }: GetEntityData<true>,
   graph: Subgraph<true>,
@@ -27,6 +40,11 @@ export const getEntityImpl = (
   if (entityRevision === undefined) {
     return undefined;
   }
+
+  const fullyDefinedGraphResolveDepths = {
+    ...defaultGraphResolveDepths,
+    ...graphResolveDepths,
+  };
 
   const traversalSubgraph: TraversalSubgraph<true, EntityRootType<true>> = {
     roots: [
@@ -40,7 +58,7 @@ export const getEntityImpl = (
     ],
     vertices: {},
     edges: {},
-    depths: graphResolveDepths,
+    depths: fullyDefinedGraphResolveDepths,
     temporalAxes: { initial: temporalAxes, resolved: resolvedTemporalAxes },
   };
 
@@ -55,7 +73,7 @@ export const getEntityImpl = (
           resolvedTemporalAxes.variable.axis
         ].start.limit,
     },
-    currentTraversalDepths: graphResolveDepths,
+    currentTraversalDepths: fullyDefinedGraphResolveDepths,
     interval: resolvedTemporalAxes.variable.interval,
   });
 

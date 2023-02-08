@@ -1,12 +1,7 @@
 import { VersionedUri } from "@blockprotocol/type-system";
 import { PropertyType } from "@blockprotocol/type-system/slim";
 
-import { AggregateOperationInput } from "../entity";
-import {
-  EntityTypeRootType,
-  PropertyTypeRootType,
-  Subgraph,
-} from "../subgraph";
+import { PropertyTypeRootType, Subgraph } from "../subgraph";
 import { OntologyElementMetadata } from "./metadata.js";
 
 /**
