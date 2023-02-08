@@ -5,12 +5,12 @@ export type UploadFileData = {
   name?: string;
 } & ({ file: File } | { url: string });
 
-// @todo -
+// @todo - auto-generate this from File type in blockprotocol.org when available
 export type FileEntityProperties = {
-  "https://blockprotocol.org/@blockprotocol/types/property-type/description/v/1"?: string;
-  "https://blockprotocol.org/@blockprotocol/types/property-type/filename/v/1": string;
-  "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/v/1": string;
-  "https://blockprotocol.org/@blockprotocol/types/property-type/url/v/1": string;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/description/"?: string;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/filename/": string;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/": string;
+  "https://blockprotocol.org/@blockprotocol/types/property-type/url/": string;
 };
 
 export type FileEntity = Entity<true, FileEntityProperties>;

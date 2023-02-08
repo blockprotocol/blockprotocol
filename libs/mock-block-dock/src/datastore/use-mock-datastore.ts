@@ -563,7 +563,7 @@ export const useMockDatastore = (
         const file = "file" in data ? data.file : null;
         const url = "url" in data ? data.url : null;
         if (!file && !url?.trim()) {
-          throw new Error("Please provide either a valid URL or file below");
+          throw new Error("Please provide either a valid URL or file");
         }
 
         let filename: string = "unknown-file";
@@ -601,13 +601,13 @@ export const useMockDatastore = (
         const mimeType = mime.lookup(filename) || "application/octet-stream";
 
         const newEntityProperties: FileEntityProperties = {
-          "https://blockprotocol.org/@blockprotocol/types/property-type/description/v/1":
+          "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
             description,
-          "https://blockprotocol.org/@blockprotocol/types/property-type/filename/v/1":
+          "https://blockprotocol.org/@blockprotocol/types/property-type/filename/":
             filename,
-          "https://blockprotocol.org/@blockprotocol/types/property-type/url/v/1":
+          "https://blockprotocol.org/@blockprotocol/types/property-type/url/":
             resolvedUrl,
-          "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/v/1":
+          "https://blockprotocol.org/@blockprotocol/types/property-type/mime-type/":
             mimeType,
         };
 
