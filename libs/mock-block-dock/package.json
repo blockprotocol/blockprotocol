@@ -1,6 +1,6 @@
 {
   "name": "mock-block-dock",
-  "version": "0.0.39",
+  "version": "0.1.0-canary-20230208150010",
   "description": "A mock embedding application for Block Protocol blocks",
   "keywords": [
     "blockprotocol",
@@ -37,10 +37,10 @@
     "run-dev-server": "cross-env NODE_ENV=development webpack-dev-server --config dev/webpack.config.js"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.13",
-    "@blockprotocol/graph": "0.0.19",
-    "@blockprotocol/hook": "0.0.9",
-    "@blockprotocol/type-system": "0.0.3",
+    "@blockprotocol/core": "0.0.14-canary-20230208150010",
+    "@blockprotocol/graph": "0.1.0-canary-20230208150010",
+    "@blockprotocol/hook": "0.1.0-canary-20230208150010",
+    "@blockprotocol/type-system": "0.0.4-canary-20230208150010",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@lit-labs/react": "^1.0.4",
