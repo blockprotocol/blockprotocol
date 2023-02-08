@@ -17,6 +17,7 @@ import {
   FormEvent,
   FunctionComponent,
   useCallback,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -54,6 +55,10 @@ export const ChangePaymentMethodModal: FunctionComponent<
 
   const [updatedDefaultPaymentMethodId, setUpdatedDefaultPaymentMethodId] =
     useState<string>();
+
+  useEffect(() => {
+    setUpdatedDefaultPaymentMethodId(undefined);
+  }, [open]);
 
   const [addingPaymentMethod, setAddingPaymentMethod] =
     useState<boolean>(false);
