@@ -3,6 +3,8 @@ import {
   Entity,
   FileEntity,
   FileEntityProperties,
+  isFileAtUrlData,
+  isFileData,
   Subgraph,
 } from "@blockprotocol/graph";
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
@@ -560,8 +562,9 @@ export const useMockDatastore = (
           };
         }
         const { description } = data;
-        const file = "file" in data ? data.file : null;
-        const url = "url" in data ? data.url : null;
+
+        const file = isFileData(data) ? data.file : null;
+        const url = isFileAtUrlData(data) ? data.url : null;
         if (!file && !url?.trim()) {
           throw new Error("Please provide either a valid URL or file");
         }
