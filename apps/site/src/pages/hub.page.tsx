@@ -146,7 +146,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
           />
           <Link href="/docs" display="flex" alignItems="center">
             Discover how blocks and types work{" "}
-            <FontAwesomeIcon icon={faChevronRight} />
+            <FontAwesomeIcon icon={faChevronRight} sx={{ ml: 0.75 }} />
           </Link>
         </Stack>
       </Container>
