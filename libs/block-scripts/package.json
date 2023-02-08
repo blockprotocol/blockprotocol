@@ -1,6 +1,6 @@
 {
   "name": "block-scripts",
-  "version": "0.1.0-canary-20230208173733",
+  "version": "0.0.19",
   "description": "Block development framework",
   "keywords": [
     "blockprotocol",
@@ -33,8 +33,8 @@
     "@babel/preset-react": "^7.18.6",
     "@babel/preset-typescript": "7.18.6",
     "@babel/runtime": "^7.20.6",
-    "@blockprotocol/graph": "0.1.0-canary-20230208173733",
-    "@blockprotocol/type-system": "0.0.4-canary-20230208173733",
+    "@blockprotocol/graph": "0.0.19",
+    "@blockprotocol/type-system": "0.0.3",
     "babel-loader": "^9.1.0",
     "chalk": "5.2.0",
     "copy-webpack-plugin": "10.2.4",
