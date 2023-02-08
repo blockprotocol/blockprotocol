@@ -43,7 +43,6 @@ export class GraphBlockHandler<Temporal extends boolean>
       BlockGraphMessages<Temporal>,
       | "createEntityType"
       | "updateEntityType"
-      | "deleteEntityType"
       | "createPropertyType"
       | "updatePropertyType"
       | "getPropertyType"

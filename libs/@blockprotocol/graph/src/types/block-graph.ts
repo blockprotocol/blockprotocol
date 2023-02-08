@@ -15,7 +15,6 @@ import {
   AggregatePropertyTypesResult,
   CreateEntityTypeData,
   CreatePropertyTypeData,
-  DeleteEntityTypeData,
   EntityTypeWithMetadata,
   GetPropertyTypeData,
   PropertyTypeWithMetadata,
@@ -136,12 +135,6 @@ export type EmbedderGraphMessageCallbacks<Temporal extends boolean> = {
     UpdateEntityTypeData,
     null,
     MessageReturn<EntityTypeWithMetadata>,
-    ReadOrModifyResourceError
-  >;
-  deleteEntityType: MessageCallback<
-    DeleteEntityTypeData,
-    null,
-    MessageReturn<true>,
     ReadOrModifyResourceError
   >;
   getEntityType: MessageCallback<
