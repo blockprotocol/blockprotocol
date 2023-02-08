@@ -9,7 +9,7 @@ export type VoteApplicationRequestBody = {
     ECO_SANITY?: string;
     ECO_STRAPI?: string;
     ECO_CONFUL?: string;
-    ECO_GITHUB?: string;
+    ECO_DRUPAL?: string;
     ECO_OTHER?: string;
     WISH_EA?: string;
   };
@@ -27,7 +27,7 @@ const validate = ajv.compile<VoteApplicationRequestBody>({
         ECO_SANITY: { type: "string", enum: ["Yes", "No"] },
         ECO_STRAPI: { type: "string", enum: ["Yes", "No"] },
         ECO_CONFUL: { type: "string", enum: ["Yes", "No"] },
-        ECO_GITHUB: { type: "string", enum: ["Yes", "No"] },
+        ECO_DRUPAL: { type: "string", enum: ["Yes", "No"] },
         ECO_OTHER: { type: "string", enum: ["Yes", "No"] },
         WISH_EA: { type: "string" },
       },
