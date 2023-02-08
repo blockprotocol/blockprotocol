@@ -15,14 +15,23 @@ const configFileTemplate = `${configFileKey}=b10ck5.0000000000000000000000000000
 
 /**
  * Retrieve an API key from a provided file of key=value lines
+ *
  * @param {string} filePath
+ * @param {string | undefined} namespace
  * @return {string}
  */
-const extractKeyFromRcFile = (filePath) => {
+const extractKeyFromRcFile = (filePath, namespace) => {
   const fileContent = fs.readFileSync(filePath);
   const lines = fileContent.toString().split("\n");
   for (const line of lines) {
     const [key, value] = line.split("=");
+    if (namespace && key === `${configFileKey}-${namespace}` && value) {
+      console.log(
+        chalk.green(`Found API key for @${namespace} in configuration file.`),
+      );
+      return value;
+    }
+
     if (key === configFileKey && value) {
       console.log(chalk.green(`Found API key in configuration file.`));
       return value;
@@ -37,10 +46,16 @@ const extractKeyFromRcFile = (filePath) => {
 };
 
 /**
+ * @param {string | undefined} namespace - if set, a suffixed env var / config file key
+ *    will be used if defined. This is useful when we want to deploy blocks in different
+ *    namespace from one machine without having to constantly switch between keys.
  * @returns {Promise<string>}
  */
-export const findApiKey = async () => {
-  const keyInEnvironment = process.env[environmentVariableName];
+export const findApiKey = async (namespace) => {
+  const keyInEnvironment =
+    (namespace &&
+      process.env[`${environmentVariableName}_${namespace.toUpperCase()}`]) ??
+    process.env[environmentVariableName];
 
   if (keyInEnvironment) {
     console.log(chalk.green("Found API key in environment."));
@@ -49,7 +64,7 @@ export const findApiKey = async () => {
 
   const existingConfigFilePath = await findUp(configFileName);
   if (existingConfigFilePath) {
-    return extractKeyFromRcFile(existingConfigFilePath);
+    return extractKeyFromRcFile(existingConfigFilePath, namespace);
   }
 
   printSpacer();

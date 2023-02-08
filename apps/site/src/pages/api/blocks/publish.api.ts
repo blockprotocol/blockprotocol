@@ -62,26 +62,55 @@ export default createApiKeyRequiredHandler<
       );
     }
 
-    const slugifiedBlockName = generateSlug(untransformedBlockName);
+    const [, , rawBlockNamespace, rawBlockNameWithoutNamespace] =
+      untransformedBlockName.match(
+        /^(@[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*\/)?([a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
+      ) ?? [];
 
-    if (slugifiedBlockName !== untransformedBlockName) {
+    if (!rawBlockNameWithoutNamespace) {
       return res.status(400).json(
         formatErrors({
-          msg: `Block name '${untransformedBlockName}' must be a slug. Try ${slugifiedBlockName} instead`,
-          code: "NAME_TAKEN",
+          msg: `Block name must be a slug or defined as '@namespace/block-name' (all lowercase). Current value: '${untransformedBlockName}'`,
+          code: "INVALID_INPUT",
+        }),
+      );
+    }
+
+    const blockName = createPathWithNamespace(
+      rawBlockNameWithoutNamespace,
+      rawBlockNamespace || shortname,
+    );
+
+    const canonicalBlockNameWithoutNamespace = generateSlug(
+      rawBlockNameWithoutNamespace,
+    );
+
+    const canonicalBlockName = createPathWithNamespace(
+      canonicalBlockNameWithoutNamespace,
+      generateSlug(rawBlockNamespace || shortname),
+    );
+
+    if (canonicalBlockName !== blockName) {
+      if (!rawBlockNamespace) {
+        return res.status(400).json(
+          formatErrors({
+            msg: `Block name '${untransformedBlockName}' must be a slug. Try ${canonicalBlockNameWithoutNamespace} instead`,
+            code: "INVALID_INPUT",
+          }),
+        );
+      }
+      return res.status(400).json(
+        formatErrors({
+          msg: `Block name '${untransformedBlockName}' does not match its canonical representation. Try ${canonicalBlockName} instead`,
+          code: "INVALID_INPUT",
         }),
       );
     }
 
     const existingBlock = await getDbBlock({
-      name: slugifiedBlockName,
+      name: canonicalBlockNameWithoutNamespace,
       author: shortname,
     });
-
-    const pathWithNamespace = createPathWithNamespace(
-      slugifiedBlockName,
-      shortname,
-    );
 
     if (!req.body.uploads?.tarball) {
       return res.status(400).json(
@@ -96,7 +125,7 @@ export default createApiKeyRequiredHandler<
       return res.status(500).json(
         formatErrors({
           code: "UNEXPECTED_STATE",
-          msg: `Block name '${slugifiedBlockName}' has no 'createdAt' Date set.`,
+          msg: `Block name '${canonicalBlockName}' has no 'createdAt' Date set.`,
         }),
       );
     }
@@ -104,11 +133,15 @@ export default createApiKeyRequiredHandler<
     try {
       const block = await publishBlockFromTarball(db, {
         createdAt: existingBlock ? existingBlock.createdAt! : null,
-        pathWithNamespace,
+        pathWithNamespace: canonicalBlockName,
         tarball: req.body.uploads.tarball.buffer,
       });
 
-      await revalidateBlockPages(res, shortname, slugifiedBlockName);
+      await revalidateBlockPages(
+        res,
+        shortname,
+        canonicalBlockNameWithoutNamespace,
+      );
 
       await notifySlackAboutBlock(block, existingBlock ? "update" : "publish");
 
