@@ -48,5 +48,11 @@ export {
   getPropertyTypes,
   getPropertyTypesByBaseUri,
 } from "./stdlib/subgraph/element/property-type.js";
-export { getRoots } from "./stdlib/subgraph/roots.js";
+export {
+  getRoots,
+  isDataTypeRootedSubgraph,
+  isEntityRootedSubgraph,
+  isEntityTypeRootedSubgraph,
+  isPropertyTypeRootedSubgraph,
+} from "./stdlib/subgraph/roots.js";
 export { getLatestInstantIntervalForSubgraph } from "./stdlib/subgraph/temporal-axes.js";
