@@ -26,11 +26,7 @@ export type AggregateEntityTypesResult<
   T extends Subgraph<boolean, EntityTypeRootType>,
 > = {
   results: T[];
-  operation: AggregateOperationInput &
-    Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
-      pageCount?: number | null;
-      totalCount?: number | null;
-    };
+  operation: AggregateOperationInput;
 };
 
 export type GetEntityTypeData = {

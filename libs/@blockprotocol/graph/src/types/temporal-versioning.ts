@@ -12,7 +12,7 @@ export type Timestamp = string;
 /**
  * @todo - doc
  */
-export type TemporalAxes = "transactionTime" | "decisionTime";
+export type TemporalAxis = "transactionTime" | "decisionTime";
 
 /**
  * The bound of a time-interval that is either exclusively or inclusively limited by a `Timestamp`
@@ -91,7 +91,7 @@ export type BoundedTimeInterval = TimeInterval<
  * {@link PinnedTemporalAxisUnresolved}.
  */
 export type VariableTemporalAxisUnresolved<
-  Axis extends TemporalAxes,
+  Axis extends TemporalAxis,
   StartBound extends TemporalBound | null = TemporalBound | null,
   EndBound extends LimitedTemporalBound | null = LimitedTemporalBound | null,
 > = {
@@ -107,7 +107,7 @@ export type VariableTemporalAxisUnresolved<
  * {@link PinnedTemporalAxis}.
  */
 export type VariableTemporalAxis<
-  Axis extends TemporalAxes,
+  Axis extends TemporalAxis,
   StartBound extends TemporalBound = TemporalBound,
   EndBound extends LimitedTemporalBound = LimitedTemporalBound,
 > = {
@@ -124,7 +124,7 @@ export type VariableTemporalAxis<
  * {@link VariableTemporalAxisUnresolved}.
  */
 export type PinnedTemporalAxisUnresolved<
-  Axis extends TemporalAxes,
+  Axis extends TemporalAxis,
   PinnedTime extends Timestamp | null = Timestamp | null,
 > = {
   axis: Axis;
@@ -139,7 +139,7 @@ export type PinnedTemporalAxisUnresolved<
  * {@link VariableTemporalAxis}.
  */
 export type PinnedTemporalAxis<
-  Axis extends TemporalAxes,
+  Axis extends TemporalAxis,
   PinnedTime extends Timestamp = Timestamp,
 > = {
   axis: Axis;

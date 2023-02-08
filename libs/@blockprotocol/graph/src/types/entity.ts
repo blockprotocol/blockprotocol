@@ -10,7 +10,7 @@ import {
   InclusiveLimitedTemporalBound,
   QueryTemporalAxesUnresolved,
   Subgraph,
-  TemporalAxes,
+  TemporalAxis,
   TimeInterval,
   Timestamp,
   Unbounded,
@@ -58,7 +58,7 @@ type HalfClosedInterval = TimeInterval<
 >;
 
 export type EntityTemporalVersioningMetadata = Record<
-  TemporalAxes,
+  TemporalAxis,
   HalfClosedInterval
 >;
 
@@ -152,8 +152,6 @@ export type Sort = {
 export type MultiSort = Sort[];
 
 export type AggregateOperationInput = {
-  pageNumber?: number | null;
-  itemsPerPage?: number | null;
   multiSort?: MultiSort | null;
   multiFilter?: MultiFilter | null;
 };
@@ -170,11 +168,7 @@ export type AggregateEntitiesResult<
   T extends Subgraph<Temporal, EntityRootType<Temporal>>,
 > = {
   results: T;
-  operation: AggregateOperationInput &
-    Required<Pick<AggregateOperationInput, "pageNumber" | "itemsPerPage">> & {
-      pageCount?: number | null;
-      totalCount?: number | null;
-    };
+  operation: AggregateOperationInput;
 };
 
 /**

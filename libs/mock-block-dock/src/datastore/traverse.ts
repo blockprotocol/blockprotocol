@@ -162,10 +162,9 @@ export const getNeighbors = <
         sourceEntity.linkData?.leftEntityId !== undefined &&
         sourceEntity.linkData?.rightEntityId !== undefined
       ) {
-        const leftEntityRevisions = getLeftEntityForLinkEntity(
-          datastore,
-          sourceEntityId,
-          interval,
+        const leftEntityRevisions = mustBeDefined(
+          getLeftEntityForLinkEntity(datastore, sourceEntityId, interval),
+          `links must have left entities in the datastore, ${sourceEntityId} did not`,
         );
         const hasLeftEntityEdge: PatchedHasLeftEntityEdge = {
           kind: "HAS_LEFT_ENTITY",
@@ -237,10 +236,9 @@ export const getNeighbors = <
         sourceEntity.linkData?.leftEntityId !== undefined &&
         sourceEntity.linkData?.rightEntityId !== undefined
       ) {
-        const rightEntityRevisions = getRightEntityForLinkEntity(
-          datastore,
-          sourceEntityId,
-          interval,
+        const rightEntityRevisions = mustBeDefined(
+          getRightEntityForLinkEntity(datastore, sourceEntityId, interval),
+          `links must have right entities in the datastore, ${sourceEntityId} did not`,
         );
         const hasRightEntityEdge: PatchedHasRightEntityEdge = {
           kind: "HAS_RIGHT_ENTITY",

@@ -18,7 +18,6 @@ import {
   intervalIntersectionWithInterval,
   intervalIsStrictlyAfterInterval,
 } from "../../interval.js";
-import { mustBeDefined } from "../../must-be-defined.js";
 import { getEntityRevisionsByEntityId } from "../element/entity.js";
 import { getLatestInstantIntervalForSubgraph } from "../temporal-axes.js";
 
@@ -54,6 +53,10 @@ const getUniqueEntitiesFilter = <Temporal extends boolean>() => {
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
+ *
+ * @returns {Entity[]} - A flat list of all {@link Entity}s associated with {@link OutgoingLinkEdge}s from the specified
+ *   {@link Entity}. This list may contain multiple revisions of the same {@link Entity}s, and it might be beneficial to
+ *   pair the output with {@link mapElementsIntoRevisions}.
  */
 export const getOutgoingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
@@ -140,6 +143,10 @@ export const getOutgoingLinksForEntity = <Temporal extends boolean>(
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
+ *
+ * @returns {Entity[]} - A flat list of all {@link Entity}s associated with {@link IncomingLinkEdge}s from the specified
+ *   {@link Entity}. This list may contain multiple revisions of the same {@link Entity}s, and it might be beneficial to
+ *   pair the output with {@link mapElementsIntoRevisions}.
  */
 export const getIncomingLinksForEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
@@ -213,7 +220,7 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
     }
   }
 
-  return entities.filter(uniqueEntitiesFilter);
+  return entities;
 };
 
 /**
@@ -225,26 +232,28 @@ export const getIncomingLinksForEntity = <Temporal extends boolean>(
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
+ *
+ * @returns {Entity[] | undefined} - all revisions of the left {@link Entity} which was associated with a
+ *   {@link HasLeftEntityEdge}, if found, from the given {@link EntityId} within the {@link Subgraph}, otherwise
+ *   `undefined`.
  */
 export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
-): Entity<Temporal>[] => {
+): Entity<Temporal>[] | undefined => {
   const searchInterval =
     interval !== undefined
       ? interval
       : getLatestInstantIntervalForSubgraph(subgraph);
 
-  const linkEntityEdges = mustBeDefined(
-    subgraph.edges[entityId],
-    "link entities must have left endpoints and therefore must have edges",
-  );
+  const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
+    .flat()
+    .find(isHasLeftEntityEdge);
 
-  const outwardEdge = mustBeDefined(
-    Object.values(linkEntityEdges).flat().find(isHasLeftEntityEdge),
-    "link entities must have left endpoints",
-  );
+  if (!outwardEdge) {
+    return undefined;
+  }
 
   const leftEntityId = outwardEdge.rightEndpoint.entityId;
 
@@ -286,26 +295,28 @@ export const getLeftEntityForLinkEntity = <Temporal extends boolean>(
  *  {@link Subgraph} that supports temporal versioning, will constrain the results to links that were present during
  *  that interval. If the parameter is omitted then results will default to only returning results that are active in
  *  the latest instant of time in the {@link Subgraph}
+ *
+ * @returns {Entity[] | undefined} - all revisions of the right {@link Entity} which was associated with a
+ *   {@link HasRightEntityEdge}, if found, from the given {@link EntityId} within the {@link Subgraph}, otherwise
+ *   `undefined`.
  */
 export const getRightEntityForLinkEntity = <Temporal extends boolean>(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
   interval?: Temporal extends true ? TimeInterval : undefined,
-): Entity<Temporal>[] => {
+): Entity<Temporal>[] | undefined => {
   const searchInterval =
     interval !== undefined
       ? interval
       : getLatestInstantIntervalForSubgraph(subgraph);
 
-  const linkEntityEdges = mustBeDefined(
-    subgraph.edges[entityId],
-    "link entities must have right endpoints and therefore must have edges",
-  );
+  const outwardEdge = Object.values(subgraph.edges[entityId] ?? {})
+    .flat()
+    .find(isHasRightEntityEdge);
 
-  const outwardEdge = mustBeDefined(
-    Object.values(linkEntityEdges).flat().find(isHasRightEntityEdge),
-    "link entities must have right endpoints",
-  );
+  if (!outwardEdge) {
+    return undefined;
+  }
 
   const rightEntityId = outwardEdge.rightEndpoint.entityId;
 
@@ -339,8 +350,8 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
 };
 
 /**
- * For a given moment in time, get all outgoing link entities, and their "target" entities (by default this is the
- * "right entity"), from a given entity.
+ * For a given moment in time, get all outgoing link {@link Entity} revisions, and their "target" {@link Entity}
+ * revisions (by default this is the "right entity"), from a given {@link Entity}.
  *
  * @param subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
@@ -395,10 +406,12 @@ export const getOutgoingLinkAndTargetEntities = <
   } else {
     return getOutgoingLinksForEntity(subgraph as Subgraph<false>, entityId).map(
       (linkEntity) => {
-        const rightEntityRevisions = getRightEntityForLinkEntity(
-          subgraph as Subgraph<false>,
-          linkEntity.metadata.recordId.entityId,
-        );
+        const rightEntityRevisions =
+          getRightEntityForLinkEntity(
+            subgraph as Subgraph<false>,
+            linkEntity.metadata.recordId.entityId,
+          ) ??
+          []; /** @todo - Are we comfortable hiding the `undefined` value here with an empty array? */
 
         if (rightEntityRevisions.length !== 1) {
           throw new Error(

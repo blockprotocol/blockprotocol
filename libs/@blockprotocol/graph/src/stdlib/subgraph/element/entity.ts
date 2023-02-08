@@ -5,6 +5,8 @@ import { isEntityVertex } from "../../../types/subgraph/vertices.js";
 import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
 import {
   intervalContainsTimestamp,
+  intervalForTimestamp,
+  intervalIsStrictlyAfterInterval,
   intervalOverlapsInterval,
 } from "../../interval.js";
 import { mustBeDefined } from "../../must-be-defined.js";
@@ -135,8 +137,12 @@ export const getEntityRevisionsByEntityId = <Temporal extends boolean>(
     const filteredEntities = [];
 
     for (const [startTime, vertex] of typedEntries(versionObject)) {
+      // Only look at vertices that were created before or within the search interval
       if (
-        intervalContainsTimestamp(interval, startTime) &&
+        !intervalIsStrictlyAfterInterval(
+          intervalForTimestamp(startTime),
+          interval,
+        ) &&
         isEntityVertex(vertex)
       ) {
         if (

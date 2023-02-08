@@ -41,7 +41,7 @@ export type PageProperties = {
   "https://alpha.hash.ai/@hash/types/property-type/archived/"?: Archived;
   "https://alpha.hash.ai/@hash/types/property-type/summary/"?: Summary;
   "https://alpha.hash.ai/@hash/types/property-type/icon/"?: Icon;
-}
+};
 
 export type Page = Entity<false, PageProperties>;
 
@@ -54,24 +54,22 @@ export type ParentProperties1 = Link;
 export type Link = {
   leftEntityId?: string;
   rightEntityId?: string;
-}
-export type ParentProperties2 = {}
+};
+export type ParentProperties2 = {};
 
 export type Parent = Entity<false, ParentProperties>;
-export type ParentLinksByLinkTypeId = {
-
-};
+export type ParentLinksByLinkTypeId = {};
 
 export type ParentLinkAndRightEntities = NonNullable<
   ParentLinksByLinkTypeId[keyof ParentLinksByLinkTypeId]
 >;
 
-export type PageParentLinks = [] |
-  {
-    linkEntity: Parent;
-    rightEntity: Page;
-  }[];
-
+export type PageParentLinks =
+  | []
+  | {
+      linkEntity: Parent;
+      rightEntity: Page;
+    }[];
 
 /**
  * Something containing something.
@@ -79,13 +77,10 @@ export type PageParentLinks = [] |
 export type ContainsProperties = ContainsProperties1 & ContainsProperties2;
 export type ContainsProperties1 = Link;
 
-
-export type ContainsProperties2 = {}
+export type ContainsProperties2 = {};
 
 export type Contains = Entity<false, ContainsProperties>;
-export type ContainsLinksByLinkTypeId = {
-
-};
+export type ContainsLinksByLinkTypeId = {};
 
 export type ContainsLinkAndRightEntities = NonNullable<
   ContainsLinksByLinkTypeId[keyof ContainsLinksByLinkTypeId]
@@ -95,10 +90,9 @@ export type ComponentId = Text;
  * An ordered sequence of characters
  */
 
-
 export type BlockProperties = {
   "https://alpha.hash.ai/@hash/types/property-type/component-id/": ComponentId;
-}
+};
 
 export type Block = Entity<false, BlockProperties>;
 
@@ -108,16 +102,16 @@ export type Block = Entity<false, BlockProperties>;
 export type BlockDataProperties = BlockDataProperties1 & BlockDataProperties2;
 export type BlockDataProperties1 = Link;
 
-
-export type BlockDataProperties2 = {}
+export type BlockDataProperties2 = {};
 
 export type BlockData = Entity<false, BlockDataProperties>;
 
-export type BlockBlockDataLinks = [] |
-  {
-    linkEntity: BlockData;
-    rightEntity: Entity<false>;
-  }[];
+export type BlockBlockDataLinks =
+  | []
+  | {
+      linkEntity: BlockData;
+      rightEntity: Entity<false>;
+    }[];
 
 export type BlockLinksByLinkTypeId = {
   "https://alpha.hash.ai/@hash/types/entity-type/block-data/v/1": BlockBlockDataLinks;
@@ -126,11 +120,12 @@ export type BlockLinksByLinkTypeId = {
 export type BlockLinkAndRightEntities = NonNullable<
   BlockLinksByLinkTypeId[keyof BlockLinksByLinkTypeId]
 >;
-export type PageContainsLinks = [] |
-  {
-    linkEntity: Contains;
-    rightEntity: Block;
-  }[];
+export type PageContainsLinks =
+  | []
+  | {
+      linkEntity: Contains;
+      rightEntity: Block;
+    }[];
 
 export type PageLinksByLinkTypeId = {
   "https://alpha.hash.ai/@hash/types/entity-type/parent/v/1": PageParentLinks;
