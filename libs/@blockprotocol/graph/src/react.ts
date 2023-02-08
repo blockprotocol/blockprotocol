@@ -1,9 +1,5 @@
 import { useServiceConstructor } from "@blockprotocol/core/react";
-import {
-  FunctionComponent,
-  RefObject,
-  useMemo,
-} from "react";
+import { FunctionComponent, RefObject, useMemo } from "react";
 
 import {
   BlockGraphProperties,
