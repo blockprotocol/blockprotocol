@@ -1,18 +1,5 @@
 # @blockprotocol/core
 
-## 0.0.14-canary-20230208150010
-
-### Patch Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`b63ea2cb`](https://github.com/blockprotocol/blockprotocol/commit/b63ea2cbf38769bf0510636b44a4527b8afee3ee) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Ensure callbacks to services passed via react are never stale
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`b63ea2cb`](https://github.com/blockprotocol/blockprotocol/commit/b63ea2cbf38769bf0510636b44a4527b8afee3ee) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Allow creating services before element is available
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`b63ea2cb`](https://github.com/blockprotocol/blockprotocol/commit/b63ea2cbf38769bf0510636b44a4527b8afee3ee) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Improve reliability of message passing between embedder and block
-
-- Updated dependencies [[`b63ea2cb`](https://github.com/blockprotocol/blockprotocol/commit/b63ea2cbf38769bf0510636b44a4527b8afee3ee), [`b63ea2cb`](https://github.com/blockprotocol/blockprotocol/commit/b63ea2cbf38769bf0510636b44a4527b8afee3ee), [`b63ea2cb`](https://github.com/blockprotocol/blockprotocol/commit/b63ea2cbf38769bf0510636b44a4527b8afee3ee)]:
-  - @blockprotocol/type-system@0.0.4-canary-20230208150010
-
 ## 0.0.13
 
 ### Patch Changes
