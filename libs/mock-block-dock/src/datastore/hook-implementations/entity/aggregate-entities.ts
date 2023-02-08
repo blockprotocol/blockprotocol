@@ -2,6 +2,7 @@ import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
   EntityRootType,
+  GraphResolveDepths,
   Subgraph,
 } from "@blockprotocol/graph";
 import { getEntities } from "@blockprotocol/graph/stdlib";
@@ -15,13 +16,21 @@ import {
   traverseElement,
 } from "../../traverse";
 
+const defaultGraphResolveDepths: GraphResolveDepths = {
+  hasLeftEntity: { incoming: 1, outgoing: 1 },
+  hasRightEntity: { incoming: 1, outgoing: 1 },
+  constrainsLinkDestinationsOn: { outgoing: 0 },
+  constrainsLinksOn: { outgoing: 0 },
+  constrainsPropertiesOn: { outgoing: 0 },
+  constrainsValuesOn: { outgoing: 0 },
+  inheritsFrom: { outgoing: 0 },
+  isOfType: { outgoing: 0 },
+};
+
 const aggregateEntitiesImpl = (
   {
     operation,
-    graphResolveDepths = {
-      hasLeftEntity: { incoming: 1, outgoing: 1 },
-      hasRightEntity: { incoming: 1, outgoing: 1 },
-    },
+    graphResolveDepths = defaultGraphResolveDepths,
     temporalAxes,
   }: AggregateEntitiesData<true>,
   graph: Subgraph<true>,
@@ -34,6 +43,11 @@ const aggregateEntitiesImpl = (
       temporalAxes: resolvedTemporalAxes,
     });
 
+  const fullyDefinedGraphResolveDepths = {
+    ...defaultGraphResolveDepths,
+    ...graphResolveDepths,
+  };
+
   const traversalSubgraph: TraversalSubgraph<true, EntityRootType<true>> = {
     roots: results.map((entity) => ({
       baseId: entity.metadata.recordId.entityId,
@@ -43,7 +57,7 @@ const aggregateEntitiesImpl = (
     })),
     vertices: {},
     edges: {},
-    depths: graphResolveDepths,
+    depths: fullyDefinedGraphResolveDepths,
     temporalAxes: {
       initial: temporalAxes,
       resolved: resolvedTemporalAxes,
@@ -62,7 +76,7 @@ const aggregateEntitiesImpl = (
             resolvedTemporalAxes.variable.axis
           ].start.limit,
       },
-      currentTraversalDepths: graphResolveDepths,
+      currentTraversalDepths: fullyDefinedGraphResolveDepths,
       interval: resolvedTemporalAxes.variable.interval,
     });
   }

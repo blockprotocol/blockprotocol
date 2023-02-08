@@ -41,7 +41,3 @@ export type UpdateEntityTypeData = {
   entityTypeId: VersionedUri;
   entityType: EntityType;
 };
-
-export type DeleteEntityTypeData = {
-  entityTypeId: VersionedUri;
-};

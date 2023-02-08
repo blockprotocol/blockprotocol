@@ -15,6 +15,12 @@ export const useMockDataToSubgraph = (mockData: MockData): Subgraph<true> => {
       {
         hasLeftEntity: { incoming: 255, outgoing: 255 },
         hasRightEntity: { incoming: 255, outgoing: 255 },
+        constrainsLinkDestinationsOn: { outgoing: 255 },
+        constrainsLinksOn: { outgoing: 255 },
+        constrainsPropertiesOn: { outgoing: 255 },
+        constrainsValuesOn: { outgoing: 255 },
+        inheritsFrom: { outgoing: 255 },
+        isOfType: { outgoing: 255 },
       },
       subgraphTemporalAxes,
     );
