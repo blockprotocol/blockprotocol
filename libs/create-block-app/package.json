@@ -1,6 +1,6 @@
 {
   "name": "create-block-app",
-  "version": "0.1.0-canary-20230208204713",
+  "version": "0.0.11",
   "description": "Create new https://blockprotocol.org blocks",
   "keywords": [
     "blockprotocol",
