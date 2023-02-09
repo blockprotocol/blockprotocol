@@ -2,6 +2,7 @@ import { SvgIconProps } from "@mui/material";
 import { FunctionComponent } from "react";
 
 import { CcAmexIcon } from "../../../components/icons/cc-amex-icon";
+import { CcDinersIcon } from "../../../components/icons/cc-diners-icon";
 import { CcDiscoverIcon } from "../../../components/icons/cc-discover-icon";
 import { CcJcbIcon } from "../../../components/icons/cc-jcb-icon";
 import { CcMastercardIcon } from "../../../components/icons/cc-mastercard-icon";
@@ -14,6 +15,7 @@ const cardIcons = {
   visa: CcVisaIcon,
   discover: CcDiscoverIcon,
   jcb: CcJcbIcon,
+  diners: CcDinersIcon,
   default: CreditCardSolidIcon,
 } as const;
 
