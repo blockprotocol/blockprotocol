@@ -1,4 +1,4 @@
-import { useServiceConstructor } from "@blockprotocol/core/react";
+import { useServiceConstructor } from "@blockprotocol/core/dist/esm/react.js";
 import { FunctionComponent, RefObject, useMemo } from "react";
 
 import {
