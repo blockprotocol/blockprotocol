@@ -1,4 +1,4 @@
-import { useServiceConstructor } from "@blockprotocol/core/react";
+import { useServiceConstructor } from "@blockprotocol/core/dist/esm/react.js";
 import { EntityId } from "@blockprotocol/graph";
 import { RefObject, useLayoutEffect, useRef, useState } from "react";
 
