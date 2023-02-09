@@ -124,8 +124,6 @@ const run = async (providedOptions) => {
       /^(@(?<blockNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?(?<blockNameWithoutNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
     )?.groups ?? {};
 
-  console.log(blockNamespace, blockNameWithoutNamespace);
-
   if (!blockNameWithoutNamespace) {
     if (!blockNamespace) {
       console.log(
