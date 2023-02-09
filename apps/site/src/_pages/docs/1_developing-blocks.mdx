@@ -65,6 +65,7 @@ The `create-block-app` package provides everything you need to develop a block.
       - `examples`: an array of example data structures your block would accept and use.
       - `image`: a preview image showing your block in action.
       - `icon`: an icon to be associated with your block.
+      - `name`: a slugified name for your block (which may differ to the package `name` in package.json); it can be defined as `blockname` or `@namespace/blockname`
     - list the `externals`, which are generated from `peerDependencies` in package.json.
 
 ## Lifecycle of a block
