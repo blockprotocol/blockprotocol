@@ -1,21 +1,5 @@
 # mock-block-dock
 
-## 0.1.0-canary-20230209191938
-
-### Minor Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
-
-### Patch Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Allow creating services before element is available
-
-- Updated dependencies [[`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9), [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9), [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9), [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9), [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9), [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9), [`55035e43`](https://github.com/blockprotocol/blockprotocol/commit/55035e431b67bf429f53837b7000a5e3764949b9)]:
-  - @blockprotocol/type-system@0.0.4-canary-20230209191938
-  - @blockprotocol/graph@0.1.0-canary-20230209191938
-  - @blockprotocol/core@0.0.14-canary-20230209191938
-  - @blockprotocol/hook@0.1.0-canary-20230209191938
-
 ## 0.0.39
 
 ### Patch Changes
