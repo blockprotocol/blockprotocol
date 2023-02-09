@@ -1,5 +1,13 @@
 # @blockprotocol/type-system
 
+## 0.0.4-canary-20230209090045
+
+### Patch Changes
+
+- [#937](https://github.com/blockprotocol/blockprotocol/pull/937) [`71d954c3`](https://github.com/blockprotocol/blockprotocol/commit/71d954c335cccb0274ac95fc677e1cb78b5f3d19) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Require `"additionalProperties": false` on entity types
+
+- [#937](https://github.com/blockprotocol/blockprotocol/pull/937) [`71d954c3`](https://github.com/blockprotocol/blockprotocol/commit/71d954c335cccb0274ac95fc677e1cb78b5f3d19) Thanks [@Alfred-Mountfield](https://github.com/Alfred-Mountfield)! - Fix empty object in links definition inside EntityType
+
 ## 0.0.3
 
 ### Patch Changes
