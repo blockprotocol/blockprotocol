@@ -48,14 +48,11 @@ module.exports = {
         ignore: [
           "^https?://",
           // These packages uses 'exports' field in package.json https://github.com/import-js/eslint-plugin-import/issues/1810
-          "^@blockprotocol/core",
           "^@blockprotocol/graph",
           "^@blockprotocol/hook",
         ],
       },
     ],
-    // this causes a false positive importing from @blockprotocol/core and is redundant for TypeScript code
-    "import/named": "off",
     "import/prefer-default-export": "off",
     "no-console": "error",
     "no-dupe-class-members": "off",
