@@ -62,10 +62,10 @@ export default createApiKeyRequiredHandler<
       );
     }
 
-    const [, , rawBlockNamespace, , , rawBlockNameWithoutNamespace] =
+    const { rawBlockNamespace, rawBlockNameWithoutNamespace } =
       untransformedBlockName.match(
-        /^(@([a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?([a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
-      ) ?? [];
+        /^(@(?<blockNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?(?<rawBlockNameWithoutNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
+      )?.groups ?? {};
 
     if (!rawBlockNameWithoutNamespace) {
       return res.status(400).json(

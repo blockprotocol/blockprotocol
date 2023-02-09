@@ -119,10 +119,12 @@ const run = async (providedOptions) => {
     process.exit();
   }
 
-  const [, , blockNamespace, , , blockNameWithoutNamespace] =
+  const { blockNamespace, blockNameWithoutNamespace } =
     blockName.match(
-      /^(@([a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?([a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
-    ) ?? [];
+      /^(@(?<blockNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?(?<blockNameWithoutNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
+    )?.groups ?? {};
+
+  console.log(blockNamespace, blockNameWithoutNamespace);
 
   if (!blockNameWithoutNamespace) {
     if (!blockNamespace) {
