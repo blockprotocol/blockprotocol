@@ -1,5 +1,21 @@
 # @blockprotocol/graph
 
+## 0.1.0-canary-20230209153829
+
+### Minor Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
+
+### Patch Changes
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Ensure callbacks to services passed via react are never stale
+
+- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Allow creating services before element is available
+
+- Updated dependencies [[`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090), [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090), [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090), [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090), [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090), [`1c4de6f2`](https://github.com/blockprotocol/blockprotocol/commit/1c4de6f2537098f3ca251e2dcb9242a2bd4a2090)]:
+  - @blockprotocol/type-system@0.0.4-canary-20230209153829
+  - @blockprotocol/core@0.0.14-canary-20230209153829
+
 ## 0.0.19
 
 ### Patch Changes
