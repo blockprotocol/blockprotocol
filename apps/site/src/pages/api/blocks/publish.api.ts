@@ -64,7 +64,7 @@ export default createApiKeyRequiredHandler<
 
     const { rawBlockNamespace, rawBlockNameWithoutNamespace } =
       untransformedBlockName.match(
-        /^(@(?<blockNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?(?<rawBlockNameWithoutNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
+        /^(@(?<rawBlockNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?(?<rawBlockNameWithoutNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
       )?.groups ?? {};
 
     if (!rawBlockNameWithoutNamespace) {
@@ -102,6 +102,15 @@ export default createApiKeyRequiredHandler<
       return res.status(400).json(
         formatErrors({
           msg: `Block name '${untransformedBlockName}' does not match its canonical representation. Try ${canonicalBlockName} instead`,
+          code: "INVALID_INPUT",
+        }),
+      );
+    }
+
+    if (rawBlockNamespace && rawBlockNamespace !== shortname) {
+      return res.status(400).json(
+        formatErrors({
+          msg: `Unable to publish '${untransformedBlockName}' because the token belongs to '${shortname}' and not '${rawBlockNamespace}'`,
           code: "INVALID_INPUT",
         }),
       );
