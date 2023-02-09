@@ -110,7 +110,7 @@ export default createAuthenticatedHandler<
     if (rawBlockNamespace && rawBlockNamespace !== shortname) {
       return res.status(400).json(
         formatErrors({
-          msg: `Unable to publish '${untransformedBlockName}' because the token belongs to '${shortname}' and not '${rawBlockNamespace}'`,
+          msg: `Unable to publish '${untransformedBlockName}' because the API key provided does not belong to '${rawBlockNamespace}'`,
           code: "INVALID_INPUT",
         }),
       );
