@@ -1,5 +1,15 @@
 # block-template-custom-element
 
+## 0.1.23
+
+### Patch Changes
+
+- [#953](https://github.com/blockprotocol/blockprotocol/pull/953) [`504a5087`](https://github.com/blockprotocol/blockprotocol/commit/504a50875a5355bbd24b1beb99e7865dc71f7389) Thanks [@kachkaev](https://github.com/kachkaev)! - Update README
+
+- Updated dependencies [[`c9607f6b`](https://github.com/blockprotocol/blockprotocol/commit/c9607f6b67809f43291a6824ecf49691d061f1f9), [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0)]:
+  - @blockprotocol/graph@0.0.20
+  - mock-block-dock@0.0.40
+
 ## 0.1.22
 
 ### Patch Changes
