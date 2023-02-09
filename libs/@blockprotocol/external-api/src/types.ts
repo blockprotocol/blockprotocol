@@ -226,24 +226,65 @@ export type MapboxRetrieveStaticMapData = {
 export type MapboxRetrieveStaticMapResponseData = string;
 
 export type EmbedderExternalApiMessageCallbacks = {
+  /** Mapbox Geocoding API */
+
+  mapboxForwardGeocoding: MessageCallback<
+    MapboxForwardGeocodingData,
+    null,
+    MapboxForwardGeocodingResponseData,
+    null
+  >;
+
+  mapboxReverseGeocoding: MessageCallback<
+    MapboxReverseGeocodingData,
+    null,
+    MapboxReverseGeocodingResponseData,
+    null
+  >;
+
+  /** Mapbox Directions API */
+
+  mapboxRetrieveDirections: MessageCallback<
+    MapboxRetrieveDirectionsData,
+    null,
+    MapboxRetrieveDirectionsResponseData,
+    null
+  >;
+
+  /** Mapbox Isochrone API */
+
+  mapboxRetrieveIsochrones: MessageCallback<
+    MapboxRetrieveIsochronesData,
+    null,
+    MapboxRetrieveIsochronesResponseData,
+    null
+  >;
+
+  /** Mapbox Autofill API */
+
   mapboxSuggestAddress: MessageCallback<
     MapboxSuggestAddressData,
     null,
     MapboxSuggestAddressResponseData,
     null
   >;
+
   mapboxRetrieveAddress: MessageCallback<
     MapboxRetrieveAddressData,
     null,
     MapboxRetrieveAddressResponseData,
     null
   >;
+
   mapboxCanRetrieveAddress: MessageCallback<
     MapboxCanRetrieveAddressData,
     null,
     MapboxCanRetrieveAddressResponseData,
     null
   >;
+
+  /** Mapbox Static Map API */
+
   mapboxRetrieveStaticMap: MessageCallback<
     MapboxRetrieveStaticMapData,
     null,

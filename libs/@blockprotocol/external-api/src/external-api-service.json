@@ -31,11 +31,7 @@
                   },
                   "reason": {}
                 },
-                "required": [
-                  "aborted",
-                  "onabort",
-                  "reason"
-                ]
+                "required": ["aborted", "onabort", "reason"]
               },
               "autocomplete": {
                 "description": "When autocomplete is enabled, results will be included that start with the requested string, rather than just responses that match it exactly.\n\nDefaults to true.",
@@ -91,10 +87,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lng"
-                            ]
+                            "required": ["lat", "lng"]
                           },
                           {
                             "type": "object",
@@ -106,10 +99,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lon"
-                            ]
+                            "required": ["lat", "lon"]
                           }
                         ]
                       },
@@ -138,10 +128,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lng"
-                            ]
+                            "required": ["lat", "lng"]
                           },
                           {
                             "type": "object",
@@ -153,10 +140,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lon"
-                            ]
+                            "required": ["lat", "lon"]
                           }
                         ]
                       }
@@ -211,10 +195,7 @@
                         "type": "number"
                       }
                     },
-                    "required": [
-                      "lat",
-                      "lng"
-                    ]
+                    "required": ["lat", "lng"]
                   },
                   {
                     "type": "object",
@@ -226,10 +207,7 @@
                         "type": "number"
                       }
                     },
-                    "required": [
-                      "lat",
-                      "lon"
-                    ]
+                    "required": ["lat", "lon"]
                   },
                   {
                     "type": "string"
@@ -253,10 +231,7 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "__@toStringTag@25",
-                      "size"
-                    ]
+                    "required": ["__@toStringTag@25", "size"]
                   },
                   {
                     "type": "string"
@@ -274,9 +249,7 @@
             }
           }
         },
-        "required": [
-          "searchText"
-        ],
+        "required": ["searchText"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -293,9 +266,7 @@
           "type": {
             "description": "`\"FeatureCollection\"`, a GeoJSON type from the [GeoJSON specification](https://tools.ietf.org/html/rfc7946).",
             "type": "string",
-            "enum": [
-              "FeatureCollection"
-            ]
+            "enum": ["FeatureCollection"]
           },
           "query": {
             "description": "Forward geocodes: An array of space and punctuation-separated strings from the original query.\n\nReverse geocodes: An array containing the coordinates being queried.",
@@ -316,9 +287,7 @@
                     "type": {
                       "description": "Specifies the type of GeoJSON object.",
                       "type": "string",
-                      "enum": [
-                        "Feature"
-                      ]
+                      "enum": ["Feature"]
                     },
                     "geometry": {
                       "description": "The feature's geometry",
@@ -327,9 +296,7 @@
                         "type": {
                           "description": "Specifies the type of GeoJSON object.",
                           "type": "string",
-                          "enum": [
-                            "Point"
-                          ]
+                          "enum": ["Point"]
                         },
                         "coordinates": {
                           "description": "A Position is an array of coordinates.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.1\nArray should contain between two and three elements.\nThe previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),\nbut the current specification only allows X, Y, and (optionally) Z to be defined.",
@@ -388,17 +355,11 @@
                           ]
                         }
                       },
-                      "required": [
-                        "coordinates",
-                        "type"
-                      ]
+                      "required": ["coordinates", "type"]
                     },
                     "id": {
                       "description": "A value that uniquely identifies this feature in a\nhttps://tools.ietf.org/html/rfc7946#section-3.2.",
-                      "type": [
-                        "string",
-                        "number"
-                      ]
+                      "type": ["string", "number"]
                     },
                     "properties": {
                       "description": "Properties associated with this feature.",
@@ -480,11 +441,7 @@
                       ]
                     }
                   },
-                  "required": [
-                    "geometry",
-                    "properties",
-                    "type"
-                  ]
+                  "required": ["geometry", "properties", "type"]
                 },
                 {
                   "type": "object",
@@ -581,10 +538,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lng"
-                                  ]
+                                  "required": ["lat", "lng"]
                                 },
                                 {
                                   "type": "object",
@@ -596,10 +550,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lon"
-                                  ]
+                                  "required": ["lat", "lon"]
                                 }
                               ]
                             },
@@ -628,10 +579,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lng"
-                                  ]
+                                  "required": ["lat", "lng"]
                                 },
                                 {
                                   "type": "object",
@@ -643,10 +591,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lon"
-                                  ]
+                                  "required": ["lat", "lon"]
                                 }
                               ]
                             }
@@ -682,10 +627,7 @@
                               "type": "number"
                             }
                           },
-                          "required": [
-                            "lat",
-                            "lng"
-                          ]
+                          "required": ["lat", "lng"]
                         },
                         {
                           "type": "object",
@@ -697,10 +639,7 @@
                               "type": "number"
                             }
                           },
-                          "required": [
-                            "lat",
-                            "lon"
-                          ]
+                          "required": ["lat", "lon"]
                         }
                       ]
                     },
@@ -750,10 +689,7 @@
                                 "type": "string"
                               }
                             },
-                            "required": [
-                              "id",
-                              "text"
-                            ]
+                            "required": ["id", "text"]
                           }
                         ]
                       }
@@ -777,12 +713,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "attribution",
-          "features",
-          "query",
-          "type"
-        ],
+        "required": ["attribution", "features", "query", "type"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -821,10 +752,7 @@
                     "type": "number"
                   }
                 },
-                "required": [
-                  "lat",
-                  "lng"
-                ]
+                "required": ["lat", "lng"]
               },
               {
                 "type": "object",
@@ -836,10 +764,7 @@
                     "type": "number"
                   }
                 },
-                "required": [
-                  "lat",
-                  "lon"
-                ]
+                "required": ["lat", "lon"]
               },
               {
                 "type": "string"
@@ -861,11 +786,7 @@
                   },
                   "reason": {}
                 },
-                "required": [
-                  "aborted",
-                  "onabort",
-                  "reason"
-                ]
+                "required": ["aborted", "onabort", "reason"]
               },
               "autocomplete": {
                 "description": "When autocomplete is enabled, results will be included that start with the requested string, rather than just responses that match it exactly.\n\nDefaults to true.",
@@ -921,10 +842,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lng"
-                            ]
+                            "required": ["lat", "lng"]
                           },
                           {
                             "type": "object",
@@ -936,10 +854,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lon"
-                            ]
+                            "required": ["lat", "lon"]
                           }
                         ]
                       },
@@ -968,10 +883,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lng"
-                            ]
+                            "required": ["lat", "lng"]
                           },
                           {
                             "type": "object",
@@ -983,10 +895,7 @@
                                 "type": "number"
                               }
                             },
-                            "required": [
-                              "lat",
-                              "lon"
-                            ]
+                            "required": ["lat", "lon"]
                           }
                         ]
                       }
@@ -1041,10 +950,7 @@
                         "type": "number"
                       }
                     },
-                    "required": [
-                      "lat",
-                      "lng"
-                    ]
+                    "required": ["lat", "lng"]
                   },
                   {
                     "type": "object",
@@ -1056,10 +962,7 @@
                         "type": "number"
                       }
                     },
-                    "required": [
-                      "lat",
-                      "lon"
-                    ]
+                    "required": ["lat", "lon"]
                   },
                   {
                     "type": "string"
@@ -1083,10 +986,7 @@
                         "type": "string"
                       }
                     },
-                    "required": [
-                      "__@toStringTag@25",
-                      "size"
-                    ]
+                    "required": ["__@toStringTag@25", "size"]
                   },
                   {
                     "type": "string"
@@ -1104,9 +1004,7 @@
             }
           }
         },
-        "required": [
-          "lngLat"
-        ],
+        "required": ["lngLat"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -1123,9 +1021,7 @@
           "type": {
             "description": "`\"FeatureCollection\"`, a GeoJSON type from the [GeoJSON specification](https://tools.ietf.org/html/rfc7946).",
             "type": "string",
-            "enum": [
-              "FeatureCollection"
-            ]
+            "enum": ["FeatureCollection"]
           },
           "query": {
             "description": "Forward geocodes: An array of space and punctuation-separated strings from the original query.\n\nReverse geocodes: An array containing the coordinates being queried.",
@@ -1146,9 +1042,7 @@
                     "type": {
                       "description": "Specifies the type of GeoJSON object.",
                       "type": "string",
-                      "enum": [
-                        "Feature"
-                      ]
+                      "enum": ["Feature"]
                     },
                     "geometry": {
                       "description": "The feature's geometry",
@@ -1157,9 +1051,7 @@
                         "type": {
                           "description": "Specifies the type of GeoJSON object.",
                           "type": "string",
-                          "enum": [
-                            "Point"
-                          ]
+                          "enum": ["Point"]
                         },
                         "coordinates": {
                           "description": "A Position is an array of coordinates.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.1\nArray should contain between two and three elements.\nThe previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),\nbut the current specification only allows X, Y, and (optionally) Z to be defined.",
@@ -1218,17 +1110,11 @@
                           ]
                         }
                       },
-                      "required": [
-                        "coordinates",
-                        "type"
-                      ]
+                      "required": ["coordinates", "type"]
                     },
                     "id": {
                       "description": "A value that uniquely identifies this feature in a\nhttps://tools.ietf.org/html/rfc7946#section-3.2.",
-                      "type": [
-                        "string",
-                        "number"
-                      ]
+                      "type": ["string", "number"]
                     },
                     "properties": {
                       "description": "Properties associated with this feature.",
@@ -1310,11 +1196,7 @@
                       ]
                     }
                   },
-                  "required": [
-                    "geometry",
-                    "properties",
-                    "type"
-                  ]
+                  "required": ["geometry", "properties", "type"]
                 },
                 {
                   "type": "object",
@@ -1411,10 +1293,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lng"
-                                  ]
+                                  "required": ["lat", "lng"]
                                 },
                                 {
                                   "type": "object",
@@ -1426,10 +1305,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lon"
-                                  ]
+                                  "required": ["lat", "lon"]
                                 }
                               ]
                             },
@@ -1458,10 +1334,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lng"
-                                  ]
+                                  "required": ["lat", "lng"]
                                 },
                                 {
                                   "type": "object",
@@ -1473,10 +1346,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lon"
-                                  ]
+                                  "required": ["lat", "lon"]
                                 }
                               ]
                             }
@@ -1512,10 +1382,7 @@
                               "type": "number"
                             }
                           },
-                          "required": [
-                            "lat",
-                            "lng"
-                          ]
+                          "required": ["lat", "lng"]
                         },
                         {
                           "type": "object",
@@ -1527,10 +1394,7 @@
                               "type": "number"
                             }
                           },
-                          "required": [
-                            "lat",
-                            "lon"
-                          ]
+                          "required": ["lat", "lon"]
                         }
                       ]
                     },
@@ -1580,10 +1444,7 @@
                                 "type": "string"
                               }
                             },
-                            "required": [
-                              "id",
-                              "text"
-                            ]
+                            "required": ["id", "text"]
                           }
                         ]
                       }
@@ -1607,12 +1468,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "attribution",
-          "features",
-          "query",
-          "type"
-        ],
+        "required": ["attribution", "features", "query", "type"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -1632,9 +1488,7 @@
                 "properties": {
                   "profile": {
                     "type": "string",
-                    "enum": [
-                      "mapbox/walking"
-                    ]
+                    "enum": ["mapbox/walking"]
                   },
                   "walking_speed": {
                     "type": "number"
@@ -1643,9 +1497,7 @@
                     "type": "number"
                   }
                 },
-                "required": [
-                  "profile"
-                ]
+                "required": ["profile"]
               },
               {
                 "description": "Mapbox Directions API",
@@ -1692,21 +1544,14 @@
                     "type": "string"
                   },
                   "include": {
-                    "enum": [
-                      "hot",
-                      "hov2",
-                      "hov3"
-                    ],
+                    "enum": ["hot", "hov2", "hov3"],
                     "type": "string"
                   },
                   "overview": {
                     "type": "string"
                   },
                   "radiuses": {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
+                    "type": ["string", "number"]
                   },
                   "approaches": {
                     "type": "string"
@@ -1751,9 +1596,7 @@
                     }
                   }
                 },
-                "required": [
-                  "coordinates"
-                ]
+                "required": ["coordinates"]
               }
             ]
           },
@@ -1764,9 +1607,7 @@
                 "properties": {
                   "profile": {
                     "type": "string",
-                    "enum": [
-                      "mapbox/driving-traffic"
-                    ]
+                    "enum": ["mapbox/driving-traffic"]
                   },
                   "alley_bias": {
                     "type": "number"
@@ -1790,9 +1631,7 @@
                     "type": "number"
                   }
                 },
-                "required": [
-                  "profile"
-                ]
+                "required": ["profile"]
               },
               {
                 "description": "Mapbox Directions API",
@@ -1839,21 +1678,14 @@
                     "type": "string"
                   },
                   "include": {
-                    "enum": [
-                      "hot",
-                      "hov2",
-                      "hov3"
-                    ],
+                    "enum": ["hot", "hov2", "hov3"],
                     "type": "string"
                   },
                   "overview": {
                     "type": "string"
                   },
                   "radiuses": {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
+                    "type": ["string", "number"]
                   },
                   "approaches": {
                     "type": "string"
@@ -1898,9 +1730,7 @@
                     }
                   }
                 },
-                "required": [
-                  "coordinates"
-                ]
+                "required": ["coordinates"]
               }
             ]
           },
@@ -1911,9 +1741,7 @@
                 "properties": {
                   "profile": {
                     "type": "string",
-                    "enum": [
-                      "mapbox/driving"
-                    ]
+                    "enum": ["mapbox/driving"]
                   },
                   "depart_at": {
                     "type": "string"
@@ -1937,9 +1765,7 @@
                     "type": "number"
                   }
                 },
-                "required": [
-                  "profile"
-                ]
+                "required": ["profile"]
               },
               {
                 "description": "Mapbox Directions API",
@@ -1986,21 +1812,14 @@
                     "type": "string"
                   },
                   "include": {
-                    "enum": [
-                      "hot",
-                      "hov2",
-                      "hov3"
-                    ],
+                    "enum": ["hot", "hov2", "hov3"],
                     "type": "string"
                   },
                   "overview": {
                     "type": "string"
                   },
                   "radiuses": {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
+                    "type": ["string", "number"]
                   },
                   "approaches": {
                     "type": "string"
@@ -2045,9 +1864,7 @@
                     }
                   }
                 },
-                "required": [
-                  "coordinates"
-                ]
+                "required": ["coordinates"]
               }
             ]
           },
@@ -2058,14 +1875,10 @@
                 "properties": {
                   "profile": {
                     "type": "string",
-                    "enum": [
-                      "mapbox/cycling"
-                    ]
+                    "enum": ["mapbox/cycling"]
                   }
                 },
-                "required": [
-                  "profile"
-                ]
+                "required": ["profile"]
               },
               {
                 "description": "Mapbox Directions API",
@@ -2112,21 +1925,14 @@
                     "type": "string"
                   },
                   "include": {
-                    "enum": [
-                      "hot",
-                      "hov2",
-                      "hov3"
-                    ],
+                    "enum": ["hot", "hov2", "hov3"],
                     "type": "string"
                   },
                   "overview": {
                     "type": "string"
                   },
                   "radiuses": {
-                    "type": [
-                      "string",
-                      "number"
-                    ]
+                    "type": ["string", "number"]
                   },
                   "approaches": {
                     "type": "string"
@@ -2171,9 +1977,7 @@
                     }
                   }
                 },
-                "required": [
-                  "coordinates"
-                ]
+                "required": ["coordinates"]
               }
             ]
           }
@@ -2199,10 +2003,7 @@
             "items": {}
           }
         },
-        "required": [
-          "code",
-          "routes"
-        ],
+        "required": ["code", "routes"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -2218,11 +2019,7 @@
         "type": "object",
         "properties": {
           "profile": {
-            "enum": [
-              "mapbox/cycling",
-              "mapbox/driving",
-              "mapbox/walking"
-            ],
+            "enum": ["mapbox/cycling", "mapbox/driving", "mapbox/walking"],
             "type": "string"
           },
           "coordinates": {
@@ -2281,9 +2078,7 @@
             "items": {}
           }
         },
-        "required": [
-          "features"
-        ],
+        "required": ["features"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -2311,9 +2106,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "sessionToken"
-                ]
+                "required": ["sessionToken"]
               },
               {
                 "type": "object",
@@ -2330,11 +2123,7 @@
                       },
                       "reason": {}
                     },
-                    "required": [
-                      "aborted",
-                      "onabort",
-                      "reason"
-                    ]
+                    "required": ["aborted", "onabort", "reason"]
                   },
                   "language": {
                     "description": "The [IETF language tag](https://en.wikipedia.org/wiki/IETF_language_tag) to be returned.\n\nIf not specified, `en` will be used.",
@@ -2394,10 +2183,7 @@
                                     "type": "number"
                                   }
                                 },
-                                "required": [
-                                  "lat",
-                                  "lng"
-                                ]
+                                "required": ["lat", "lng"]
                               },
                               {
                                 "type": "object",
@@ -2409,10 +2195,7 @@
                                     "type": "number"
                                   }
                                 },
-                                "required": [
-                                  "lat",
-                                  "lon"
-                                ]
+                                "required": ["lat", "lon"]
                               }
                             ]
                           },
@@ -2441,10 +2224,7 @@
                                     "type": "number"
                                   }
                                 },
-                                "required": [
-                                  "lat",
-                                  "lng"
-                                ]
+                                "required": ["lat", "lng"]
                               },
                               {
                                 "type": "object",
@@ -2456,10 +2236,7 @@
                                     "type": "number"
                                   }
                                 },
-                                "required": [
-                                  "lat",
-                                  "lon"
-                                ]
+                                "required": ["lat", "lon"]
                               }
                             ]
                           }
@@ -2474,10 +2251,7 @@
                   },
                   "limit": {
                     "description": "The number of results to return, up to `10`.",
-                    "type": [
-                      "string",
-                      "number"
-                    ]
+                    "type": ["string", "number"]
                   },
                   "proximity": {
                     "description": "Bias the response to favor results that are closer to this location.\n\nWhen both {@link AutofillOptions#proximity} and {@link AutofillOptions#origin} are specified, `origin` is interpreted as the\ntarget of a route, while `proximity` indicates the current user location.",
@@ -2505,10 +2279,7 @@
                             "type": "number"
                           }
                         },
-                        "required": [
-                          "lat",
-                          "lng"
-                        ]
+                        "required": ["lat", "lng"]
                       },
                       {
                         "type": "object",
@@ -2520,10 +2291,7 @@
                             "type": "number"
                           }
                         },
-                        "required": [
-                          "lat",
-                          "lon"
-                        ]
+                        "required": ["lat", "lon"]
                       },
                       {
                         "type": "string"
@@ -2535,10 +2303,7 @@
             ]
           }
         },
-        "required": [
-          "optionsArg",
-          "searchText"
-        ],
+        "required": ["optionsArg", "searchText"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -2637,9 +2402,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "iso_3166_1"
-                  ]
+                  "required": ["iso_3166_1"]
                 },
                 "place_name": {
                   "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
@@ -2698,9 +2461,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "id"
-                  ]
+                  "required": ["id"]
                 }
               },
               "required": [
@@ -2715,9 +2476,7 @@
             }
           }
         },
-        "required": [
-          "suggestions"
-        ],
+        "required": ["suggestions"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -2809,9 +2568,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "iso_3166_1"
-                ]
+                "required": ["iso_3166_1"]
               },
               "place_name": {
                 "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
@@ -2870,9 +2627,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "id"
-                ]
+                "required": ["id"]
               }
             },
             "required": [
@@ -2895,9 +2650,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "sessionToken"
-                ]
+                "required": ["sessionToken"]
               },
               {
                 "type": "object",
@@ -2914,21 +2667,14 @@
                       },
                       "reason": {}
                     },
-                    "required": [
-                      "aborted",
-                      "onabort",
-                      "reason"
-                    ]
+                    "required": ["aborted", "onabort", "reason"]
                   }
                 }
               }
             ]
           }
         },
-        "required": [
-          "optionsArg",
-          "suggestion"
-        ],
+        "required": ["optionsArg", "suggestion"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -2944,9 +2690,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "FeatureCollection"
-            ]
+            "enum": ["FeatureCollection"]
           },
           "attribution": {
             "description": "The attribution data for results.",
@@ -2964,9 +2708,7 @@
                     "type": {
                       "description": "Specifies the type of GeoJSON object.",
                       "type": "string",
-                      "enum": [
-                        "Feature"
-                      ]
+                      "enum": ["Feature"]
                     },
                     "geometry": {
                       "description": "The feature's geometry",
@@ -2975,9 +2717,7 @@
                         "type": {
                           "description": "Specifies the type of GeoJSON object.",
                           "type": "string",
-                          "enum": [
-                            "Point"
-                          ]
+                          "enum": ["Point"]
                         },
                         "coordinates": {
                           "description": "A Position is an array of coordinates.\nhttps://tools.ietf.org/html/rfc7946#section-3.1.1\nArray should contain between two and three elements.\nThe previous GeoJSON specification allowed more elements (e.g., which could be used to represent M values),\nbut the current specification only allows X, Y, and (optionally) Z to be defined.",
@@ -3036,17 +2776,11 @@
                           ]
                         }
                       },
-                      "required": [
-                        "coordinates",
-                        "type"
-                      ]
+                      "required": ["coordinates", "type"]
                     },
                     "id": {
                       "description": "A value that uniquely identifies this feature in a\nhttps://tools.ietf.org/html/rfc7946#section-3.2.",
-                      "type": [
-                        "string",
-                        "number"
-                      ]
+                      "type": ["string", "number"]
                     },
                     "properties": {
                       "description": "Properties associated with this feature.",
@@ -3063,9 +2797,7 @@
                               "type": "string"
                             }
                           },
-                          "required": [
-                            "iso_3166_1"
-                          ]
+                          "required": ["iso_3166_1"]
                         },
                         "description": {
                           "description": "Additional details, such as city and state for addresses.",
@@ -3240,11 +2972,7 @@
                       ]
                     }
                   },
-                  "required": [
-                    "geometry",
-                    "properties",
-                    "type"
-                  ]
+                  "required": ["geometry", "properties", "type"]
                 },
                 {
                   "type": "object",
@@ -3299,10 +3027,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lng"
-                                  ]
+                                  "required": ["lat", "lng"]
                                 },
                                 {
                                   "type": "object",
@@ -3314,10 +3039,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lon"
-                                  ]
+                                  "required": ["lat", "lon"]
                                 }
                               ]
                             },
@@ -3346,10 +3068,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lng"
-                                  ]
+                                  "required": ["lat", "lng"]
                                 },
                                 {
                                   "type": "object",
@@ -3361,10 +3080,7 @@
                                       "type": "number"
                                     }
                                   },
-                                  "required": [
-                                    "lat",
-                                    "lon"
-                                  ]
+                                  "required": ["lat", "lon"]
                                 }
                               ]
                             }
@@ -3380,10 +3096,7 @@
             }
           }
         },
-        "required": [
-          "features",
-          "type"
-        ],
+        "required": ["features", "type"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -3475,9 +3188,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "iso_3166_1"
-                ]
+                "required": ["iso_3166_1"]
               },
               "place_name": {
                 "description": "A string representing the feature in the requested language, if specified, and its full result hierarchy.",
@@ -3536,9 +3247,7 @@
                     "type": "string"
                   }
                 },
-                "required": [
-                  "id"
-                ]
+                "required": ["id"]
               }
             },
             "required": [
@@ -3552,9 +3261,7 @@
             ]
           }
         },
-        "required": [
-          "suggestion"
-        ],
+        "required": ["suggestion"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -3572,9 +3279,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "canRetrieveAddress"
-        ],
+        "required": ["canRetrieveAddress"],
         "$schema": "http://json-schema.org/draft-07/schema#"
       },
       "errorCodes": []
@@ -3656,10 +3361,7 @@
                             "type": "number"
                           }
                         },
-                        "required": [
-                          "lat",
-                          "lng"
-                        ]
+                        "required": ["lat", "lng"]
                       },
                       {
                         "type": "object",
@@ -3671,10 +3373,7 @@
                             "type": "number"
                           }
                         },
-                        "required": [
-                          "lat",
-                          "lon"
-                        ]
+                        "required": ["lat", "lon"]
                       }
                     ]
                   },
@@ -3703,10 +3402,7 @@
                             "type": "number"
                           }
                         },
-                        "required": [
-                          "lat",
-                          "lng"
-                        ]
+                        "required": ["lat", "lng"]
                       },
                       {
                         "type": "object",
@@ -3718,10 +3414,7 @@
                             "type": "number"
                           }
                         },
-                        "required": [
-                          "lat",
-                          "lon"
-                        ]
+                        "required": ["lat", "lon"]
                       }
                     ]
                   }
@@ -3810,10 +3503,7 @@
                 "type": "string"
               }
             },
-            "required": [
-              "id",
-              "type"
-            ]
+            "required": ["id", "type"]
           },
           "setfilter": {
             "type": "array",
