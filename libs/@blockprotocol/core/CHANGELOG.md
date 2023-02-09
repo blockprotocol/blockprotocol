@@ -1,5 +1,15 @@
 # @blockprotocol/core
 
+## 0.0.14
+
+### Patch Changes
+
+- [#926](https://github.com/blockprotocol/blockprotocol/pull/926) [`c9607f6b`](https://github.com/blockprotocol/blockprotocol/commit/c9607f6b67809f43291a6824ecf49691d061f1f9) Thanks [@nathggns](https://github.com/nathggns)! - Ensure callbacks to services passed via react are never stale
+
+- [#922](https://github.com/blockprotocol/blockprotocol/pull/922) [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0) Thanks [@nathggns](https://github.com/nathggns)! - Allow creating services before element is available
+
+- [#932](https://github.com/blockprotocol/blockprotocol/pull/932) [`1089dc55`](https://github.com/blockprotocol/blockprotocol/commit/1089dc558004c26cd07f606542631873e5d0894d) Thanks [@nathggns](https://github.com/nathggns)! - Improve reliability of message passing between embedder and block
+
 ## 0.0.13
 
 ### Patch Changes
