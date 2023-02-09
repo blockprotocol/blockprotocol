@@ -1,15 +1,5 @@
 # @blockprotocol/core
 
-## 0.0.14-canary-20230209082837
-
-### Patch Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`915bfdea`](https://github.com/blockprotocol/blockprotocol/commit/915bfdea172d1f9cae721d5fad3ae8a36557c840) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Ensure callbacks to services passed via react are never stale
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`915bfdea`](https://github.com/blockprotocol/blockprotocol/commit/915bfdea172d1f9cae721d5fad3ae8a36557c840) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Allow creating services before element is available
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`915bfdea`](https://github.com/blockprotocol/blockprotocol/commit/915bfdea172d1f9cae721d5fad3ae8a36557c840) Thanks [@CiaranMn](https://github.com/CiaranMn)! - Improve reliability of message passing between embedder and block
-
 ## 0.0.13
 
 ### Patch Changes

@@ -1,15 +1,5 @@
 # create-block-app
 
-## 0.1.0-canary-20230209082837
-
-### Minor Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`915bfdea`](https://github.com/blockprotocol/blockprotocol/commit/915bfdea172d1f9cae721d5fad3ae8a36557c840) Thanks [@CiaranMn](https://github.com/CiaranMn)! - multiple breaking API changes for 0.3 specification
-
-### Patch Changes
-
-- [#879](https://github.com/blockprotocol/blockprotocol/pull/879) [`915bfdea`](https://github.com/blockprotocol/blockprotocol/commit/915bfdea172d1f9cae721d5fad3ae8a36557c840) Thanks [@CiaranMn](https://github.com/CiaranMn)! - enable passing an npm tag when specifying template
-
 ## 0.0.11
 
 ### Patch Changes
