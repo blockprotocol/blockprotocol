@@ -62,43 +62,81 @@ export default createAuthenticatedHandler<
 
     const { blockName: untransformedBlockName, npmPackageName } = req.body;
 
-    const slugifiedBlockName = generateSlug(untransformedBlockName);
+    const { rawBlockNamespace, rawBlockNameWithoutNamespace } =
+      untransformedBlockName.match(
+        /^(@(?<rawBlockNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)\/)?(?<rawBlockNameWithoutNamespace>[a-z0-9]+(?:(?:-|_)+[a-z0-9]+)*)$/,
+      )?.groups ?? {};
 
-    if (slugifiedBlockName !== untransformedBlockName) {
+    if (!rawBlockNameWithoutNamespace) {
       return res.status(400).json(
         formatErrors({
-          msg: `Block name '${untransformedBlockName}' must be a slug. Try ${slugifiedBlockName} instead`,
-          code: "NAME_TAKEN",
+          msg: `Block name must be a slug or defined as '@namespace/block-name' (all lowercase). Current value: '${untransformedBlockName}'`,
+          code: "INVALID_INPUT",
+        }),
+      );
+    }
+
+    const blockName = createPathWithNamespace(
+      rawBlockNameWithoutNamespace,
+      rawBlockNamespace || shortname,
+    );
+
+    const canonicalBlockNameWithoutNamespace = generateSlug(
+      rawBlockNameWithoutNamespace,
+    );
+
+    const canonicalBlockName = createPathWithNamespace(
+      canonicalBlockNameWithoutNamespace,
+      generateSlug(rawBlockNamespace || shortname),
+    );
+
+    if (canonicalBlockName !== blockName) {
+      if (!rawBlockNamespace) {
+        return res.status(400).json(
+          formatErrors({
+            msg: `Block name '${untransformedBlockName}' must be a slug. Try ${canonicalBlockNameWithoutNamespace} instead`,
+            code: "INVALID_INPUT",
+          }),
+        );
+      }
+      return res.status(400).json(
+        formatErrors({
+          msg: `Block name '${untransformedBlockName}' does not match its canonical representation. Try ${canonicalBlockName} instead`,
+          code: "INVALID_INPUT",
+        }),
+      );
+    }
+
+    if (rawBlockNamespace && rawBlockNamespace !== shortname) {
+      return res.status(400).json(
+        formatErrors({
+          msg: `Unable to publish '${untransformedBlockName}' because the token belongs to '${shortname}' and not '${rawBlockNamespace}'`,
+          code: "INVALID_INPUT",
         }),
       );
     }
 
     const blockWithName = await getDbBlock({
-      name: slugifiedBlockName,
+      name: canonicalBlockNameWithoutNamespace,
       author: shortname,
     });
 
     if (blockWithName) {
       return res.status(400).json(
         formatErrors({
-          msg: `Block name '${slugifiedBlockName}' already exists in account ${shortname}`,
+          msg: `Block name '${canonicalBlockNameWithoutNamespace}' already exists in account ${shortname}`,
           code: "NAME_TAKEN",
         }),
       );
     }
 
-    const pathWithNamespace = createPathWithNamespace(
-      slugifiedBlockName,
-      shortname,
-    );
-
     try {
       const block = await publishBlockFromNpm(db, {
         createdAt: null,
         npmPackageName,
-        pathWithNamespace,
+        pathWithNamespace: canonicalBlockName,
       });
-      await revalidateBlockPages(res, shortname, slugifiedBlockName);
+      await revalidateBlockPages(res, shortname, canonicalBlockName);
 
       await notifySlackAboutBlock(block, "publish");
       return res.status(200).json({ block });
