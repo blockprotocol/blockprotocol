@@ -27,7 +27,6 @@ import {
 } from "@blockprotocol/graph/stdlib";
 
 import {
-  get,
   mustBeDefined,
   typedEntries,
   typedKeys,
@@ -521,14 +520,13 @@ export const finalizeSubgraph = <
             }
           }
 
-          const finalizedEdgeMap = get(finalizedSubgraph.edges, baseId, {});
-          const finalizedOutwardEdges = get(
-            finalizedEdgeMap,
-            edgeFirstCreatedAt,
-            [],
-          );
-
-          (finalizedOutwardEdges as OutwardEdge[]).push(finalizedOutwardEdge);
+          finalizedSubgraph.edges[baseId] ??= {};
+          finalizedSubgraph.edges[baseId]![edgeFirstCreatedAt] ??= [];
+          (
+            finalizedSubgraph.edges[baseId]![
+              edgeFirstCreatedAt
+              ]! as OutwardEdge[]
+          ).push(finalizedOutwardEdge);
         }
       }
     }
