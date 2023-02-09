@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/hook",
-  "version": "0.0.10-canary-20230209090045",
+  "version": "0.0.9",
   "description": "Implementation of the Block Protocol Hook service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -52,8 +52,8 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.14-canary-20230209090045",
-    "@blockprotocol/graph": "0.0.20-canary-20230209090045"
+    "@blockprotocol/core": "0.0.13",
+    "@blockprotocol/graph": "0.0.19"
   },
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",

@@ -1,17 +1,5 @@
 # mock-block-dock
 
-## 0.0.40-canary-20230209090045
-
-### Patch Changes
-
-- [#922](https://github.com/blockprotocol/blockprotocol/pull/922) [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0) Thanks [@nathggns](https://github.com/nathggns)! - Allow creating services before element is available
-
-- Updated dependencies [[`71d954c3`](https://github.com/blockprotocol/blockprotocol/commit/71d954c335cccb0274ac95fc677e1cb78b5f3d19), [`c9607f6b`](https://github.com/blockprotocol/blockprotocol/commit/c9607f6b67809f43291a6824ecf49691d061f1f9), [`81f32f26`](https://github.com/blockprotocol/blockprotocol/commit/81f32f269153ee6e8464ab831827d8e6a42b43a0), [`71d954c3`](https://github.com/blockprotocol/blockprotocol/commit/71d954c335cccb0274ac95fc677e1cb78b5f3d19), [`1089dc55`](https://github.com/blockprotocol/blockprotocol/commit/1089dc558004c26cd07f606542631873e5d0894d)]:
-  - @blockprotocol/type-system@0.0.4-canary-20230209090045
-  - @blockprotocol/graph@0.0.20-canary-20230209090045
-  - @blockprotocol/core@0.0.14-canary-20230209090045
-  - @blockprotocol/hook@0.0.10-canary-20230209090045
-
 ## 0.0.39
 
 ### Patch Changes
