@@ -52,10 +52,18 @@ const extractKeyFromRcFile = (filePath, namespace) => {
  * @returns {Promise<string>}
  */
 export const findApiKey = async (namespace) => {
-  const keyInEnvironment =
-    (namespace &&
-      process.env[`${environmentVariableName}_${namespace.toUpperCase()}`]) ??
-    process.env[environmentVariableName];
+  const namespaceSpecificKeyInEnvironment =
+    namespace &&
+    process.env[`${environmentVariableName}_${namespace.toUpperCase()}`];
+
+  if (namespaceSpecificKeyInEnvironment) {
+    console.log(
+      chalk.green(`Found API key in environment (specific to ${namespace}).`),
+    );
+    return namespaceSpecificKeyInEnvironment;
+  }
+
+  const keyInEnvironment = process.env[environmentVariableName];
 
   if (keyInEnvironment) {
     console.log(chalk.green("Found API key in environment."));
