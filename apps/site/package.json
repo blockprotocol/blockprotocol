@@ -66,6 +66,7 @@
     "immer": "^9.0.16",
     "jsonschema": "^1.4.0",
     "lodash": "^4.17.21",
+    "material-ui-popup-state": "^5.0.4",
     "md5": "^2.3.0",
     "mime-types": "^2.1.35",
     "mock-block-dock": "0.0.39",
