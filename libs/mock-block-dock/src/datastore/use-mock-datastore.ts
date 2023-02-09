@@ -9,7 +9,7 @@ import {
 } from "@blockprotocol/graph";
 import { addEntitiesToSubgraphByMutation } from "@blockprotocol/graph/internal";
 import { getEntityRevision as getEntityRevisionFromSubgraph } from "@blockprotocol/graph/stdlib";
-import mime from "mime-types";
+import mime from "mime/lite";
 import { useCallback } from "react";
 import { v4 as uuid } from "uuid";
 
@@ -615,7 +615,7 @@ export const useMockDatastore = (
           throw new Error("Could not determine filename and no name provided");
         }
 
-        const mimeType = mime.lookup(filename) || "application/octet-stream";
+        const mimeType = mime.getType(filename) || "application/octet-stream";
 
         const newEntityProperties: FileEntityProperties = {
           "https://blockprotocol.org/@blockprotocol/types/property-type/description/":
