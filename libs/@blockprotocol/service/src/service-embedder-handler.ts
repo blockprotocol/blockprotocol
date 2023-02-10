@@ -1,33 +1,33 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
 // @todo restore this when an issue with module resolution has been resolved
-// import externalApiServiceJson from "./externalApi-service.json" assert { type: "json" };
+// import serviceModuleJson from "./service-service.json" assert { type: "json" };
 import {
-  EmbedderExternalApiMessageCallbacks,
-  EmbedderExternalApiMessages,
+  EmbedderServiceMessageCallbacks,
+  EmbedderServiceMessages,
 } from "./types.js";
 
 /**
- * Creates a handler for the externalApi service for the embedder.
+ * Creates a handler for the service module for the embedder.
  * Register callbacks in the constructor or afterwards using the 'on' method to
  * react to messages from the block. Call the relevant methods to send messages
  * to the block.
  */
-export class ExternalApiEmbedderHandler
+export class ServiceEmbedderHandler
   extends ServiceHandler
-  implements EmbedderExternalApiMessages
+  implements EmbedderServiceMessages
 {
   constructor({
     callbacks,
     element,
   }: {
-    callbacks?: Partial<EmbedderExternalApiMessageCallbacks>;
+    callbacks?: Partial<EmbedderServiceMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
     super({
       element,
       callbacks,
-      serviceName: "externalApi",
+      serviceName: "service",
       sourceType: "embedder",
     });
   }
@@ -41,15 +41,15 @@ export class ExternalApiEmbedderHandler
    * @param handlerFunction the function to call when the message is received,
    *   with the message data / errors
    */
-  on<K extends keyof EmbedderExternalApiMessageCallbacks>(
-    this: ExternalApiEmbedderHandler,
+  on<K extends keyof EmbedderServiceMessageCallbacks>(
+    this: ServiceEmbedderHandler,
     messageName: K,
-    handlerFunction: NonNullable<EmbedderExternalApiMessageCallbacks[K]>,
+    handlerFunction: NonNullable<EmbedderServiceMessageCallbacks[K]>,
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
     // const expectedMessageSource = "block";
-    // const messageJsonDefinition = externalApiServiceJson.messages.find(
+    // const messageJsonDefinition = serviceModuleJson.messages.find(
     //   (message) =>
     //     message.messageName === messageName &&
     //     message.source === expectedMessageSource,
@@ -65,7 +65,7 @@ export class ExternalApiEmbedderHandler
     });
   }
 
-  getInitPayload(this: ExternalApiEmbedderHandler): Record<string, any> {
+  getInitPayload(this: ServiceEmbedderHandler): Record<string, any> {
     return {};
   }
 }

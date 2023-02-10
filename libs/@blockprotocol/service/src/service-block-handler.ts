@@ -1,16 +1,16 @@
 import { ServiceHandler } from "@blockprotocol/core";
 
 /**
- * There's an issue when importing useExternalApiEmbedderService from @blockprotocol/externalApi/react in hashintel/hash:
- * NextJS's output file tracing does not include externalApi-service.json, and yet an import statement for it is preserved.
+ * There's an issue when importing useServiceEmbedderService from @blockprotocol/service/react in hashintel/hash:
+ * NextJS's output file tracing does not include service-service.json, and yet an import statement for it is preserved.
  * This leads to a 'module cannot be found error'. For now, commenting out the import of the JSON from this file.
  * @todo restore this when module resolution issue resolved
  * @see https://app.asana.com/0/1202542409311090/1202614421149286/f
  */
-// import externalApiServiceJson from "./externalApi-service.json" assert { type: "json" };
+// import serviceModuleJson from "./service-service.json" assert { type: "json" };
 import {
-  BlockExternalApiMessageCallbacks,
-  BlockExternalApiMessages,
+  BlockServiceMessageCallbacks,
+  BlockServiceMessages,
   MapboxCanRetrieveAddressData,
   MapboxCanRetrieveAddressResponseData,
   MapboxForwardGeocodingData,
@@ -30,31 +30,31 @@ import {
 } from "./types.js";
 
 /**
- * Creates a handler for the externalApi service for the block.
+ * Creates a handler for the service module for the block.
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the embedder.
  * Call the relevant methods to send messages to the embedder.
  */
-export class ExternalApiBlockHandler
+export class ServiceBlockHandler
   extends ServiceHandler
-  implements BlockExternalApiMessages
+  implements BlockServiceMessages
 {
   constructor({
     callbacks,
     element,
   }: {
-    callbacks?: Partial<BlockExternalApiMessageCallbacks>;
+    callbacks?: Partial<BlockServiceMessageCallbacks>;
     element?: HTMLElement | null;
   }) {
     super({
       element,
       callbacks,
-      serviceName: "externalApi",
+      serviceName: "service",
       sourceType: "block",
     });
   }
 
   getInitPayload(): Record<string, any> {
-    // there are no block messages which are sentOnInitialization in the externalApi service
+    // there are no block messages which are sentOnInitialization in the service module
     return {};
   }
 
@@ -62,7 +62,7 @@ export class ExternalApiBlockHandler
    * Registers multiple callbacks at once.
    * Useful for bulk updates to callbacks after the service is first initialised.
    */
-  registerCallbacks(callbacks: Partial<BlockExternalApiMessageCallbacks>) {
+  registerCallbacks(callbacks: Partial<BlockServiceMessageCallbacks>) {
     super.registerCallbacks(callbacks);
   }
 
@@ -70,7 +70,7 @@ export class ExternalApiBlockHandler
    * Removes multiple callbacks at once.
    * Useful when replacing previously registered callbacks
    */
-  removeCallbacks(callbacks: Partial<BlockExternalApiMessageCallbacks>) {
+  removeCallbacks(callbacks: Partial<BlockServiceMessageCallbacks>) {
     super.removeCallbacks(callbacks);
   }
 
@@ -80,15 +80,15 @@ export class ExternalApiBlockHandler
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  on<K extends keyof BlockExternalApiMessageCallbacks>(
-    this: ExternalApiBlockHandler,
+  on<K extends keyof BlockServiceMessageCallbacks>(
+    this: ServiceBlockHandler,
     messageName: K,
-    handlerFunction: BlockExternalApiMessageCallbacks[K],
+    handlerFunction: BlockServiceMessageCallbacks[K],
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
     // const expectedMessageSource = "embedder";
-    // const messageJsonDefinition = externalApiServiceJson.messages.find(
+    // const messageJsonDefinition = serviceModuleJson.messages.find(
     //   (message) =>
     //     message.messageName === messageName &&
     //     message.source === expectedMessageSource,
@@ -104,7 +104,7 @@ export class ExternalApiBlockHandler
     });
   }
 
-  // @todo automate creation of these methods from externalApi-service.json and types.ts
+  // @todo automate creation of these methods from service-service.json and types.ts
 
   /** Mapbox Geocoding API */
 

@@ -14,15 +14,15 @@ import {
   SessionTokenOptions,
 } from "./mapbox-types";
 
-export type BlockExternalApiMessageCallbacks = {};
+export type BlockServiceMessageCallbacks = {};
 
-export type EmbedderExternalApiMessages = {};
+export type EmbedderServiceMessages = {};
 
 /**
- * @todo: add definition for external API errors
+ * @todo: add definition for service errors
  * @see TODO
  */
-// export type ExternalApiError = ...;
+// export type ServiceError = ...;
 
 /** Mapbox Geocoding API */
 
@@ -225,7 +225,7 @@ export type MapboxRetrieveStaticMapData = {
  */
 export type MapboxRetrieveStaticMapResponseData = string;
 
-export type EmbedderExternalApiMessageCallbacks = {
+export type EmbedderServiceMessageCallbacks = {
   /** Mapbox Geocoding API */
 
   mapboxForwardGeocoding: MessageCallback<
@@ -293,13 +293,13 @@ export type EmbedderExternalApiMessageCallbacks = {
   >;
 };
 
-export type BlockExternalApiMessages<
-  Key extends keyof EmbedderExternalApiMessageCallbacks = keyof EmbedderExternalApiMessageCallbacks,
+export type BlockServiceMessages<
+  Key extends keyof EmbedderServiceMessageCallbacks = keyof EmbedderServiceMessageCallbacks,
 > = {
   [key in Key]: ({
     data,
     errors,
-  }: Parameters<EmbedderExternalApiMessageCallbacks[key]>[0]) => ReturnType<
-    EmbedderExternalApiMessageCallbacks[key]
+  }: Parameters<EmbedderServiceMessageCallbacks[key]>[0]) => ReturnType<
+    EmbedderServiceMessageCallbacks[key]
   >;
 };

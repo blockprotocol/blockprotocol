@@ -16,7 +16,7 @@ export type ServiceJsonMessage = {
 
 const program = getProgramFromFiles([resolve("./src/types.ts")]);
 
-const generateExternalApiSchema = (params: { typeName: string }) => {
+const generateServiceSchema = (params: { typeName: string }) => {
   const schema = generateSchema(program, params.typeName, {
     required: true,
     ref: false,
@@ -39,7 +39,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxForwardGeocodingResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxForwardGeocodingData",
     }),
     errorCodes: [],
@@ -50,7 +50,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxForwardGeocodingResponseData",
     }),
     errorCodes: [],
@@ -61,7 +61,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxReverseGeocodingResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxReverseGeocodingData",
     }),
     errorCodes: [],
@@ -72,7 +72,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxReverseGeocodingResponseData",
     }),
     errorCodes: [],
@@ -84,7 +84,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxRetrieveDirectionsResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveDirectionsData",
     }),
     errorCodes: [],
@@ -95,7 +95,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveDirectionsResponseData",
     }),
     errorCodes: [],
@@ -107,7 +107,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxRetrieveIsochronesResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveIsochronesData",
     }),
     errorCodes: [],
@@ -118,7 +118,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveIsochronesResponseData",
     }),
     errorCodes: [],
@@ -130,7 +130,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxSuggestAddressResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({ typeName: "MapboxSuggestAddressData" }),
+    data: generateServiceSchema({ typeName: "MapboxSuggestAddressData" }),
     errorCodes: [],
   },
   {
@@ -139,7 +139,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxSuggestAddressResponseData",
     }),
     errorCodes: [],
@@ -150,7 +150,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxRetrieveAddressResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveAddressData",
     }),
     errorCodes: [],
@@ -161,7 +161,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveAddressResponseData",
     }),
     errorCodes: [],
@@ -172,7 +172,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxCanRetrieveAddressResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxCanRetrieveAddressData",
     }),
     errorCodes: [],
@@ -183,7 +183,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxCanRetrieveAddressResponseData",
     }),
     errorCodes: [],
@@ -195,7 +195,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "block",
     respondedToBy: "mapboxRetrieveStaticMapResponse",
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveStaticMapData",
     }),
     errorCodes: [],
@@ -206,7 +206,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     source: "embedder",
     respondedToBy: null,
     sentOnInitialization: false,
-    data: generateExternalApiSchema({
+    data: generateServiceSchema({
       typeName: "MapboxRetrieveStaticMapResponseData",
     }),
     errorCodes: [],
@@ -214,7 +214,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
 ];
 
 const serviceDefinition = {
-  name: "external-api",
+  name: "service",
   version: "0.1",
   coreVersion: "0.1",
   messages: [
@@ -227,6 +227,6 @@ const serviceDefinition = {
 };
 
 writeFileSync(
-  "./src/external-api-service.json",
+  "./src/service-service.json",
   JSON.stringify(serviceDefinition, null, 2),
 );
