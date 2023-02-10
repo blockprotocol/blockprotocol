@@ -111,20 +111,20 @@ export class ExternalApiBlockHandler
   mapboxForwardGeocoding({ data }: { data?: MapboxForwardGeocodingData }) {
     return this.sendMessage<MapboxForwardGeocodingResponseData, null>({
       message: {
-        messageName: "mapbox.forwardGeocoding",
+        messageName: "mapboxForwardGeocoding",
         data,
       },
-      respondedToBy: "mapbox.forwardGeocodingResponse",
+      respondedToBy: "mapboxForwardGeocodingResponse",
     });
   }
 
   mapboxReverseGeocoding({ data }: { data?: MapboxReverseGeocodingData }) {
     return this.sendMessage<MapboxReverseGeocodingResponseData, null>({
       message: {
-        messageName: "mapbox.reverseGeocoding",
+        messageName: "mapboxReverseGeocoding",
         data,
       },
-      respondedToBy: "mapbox.reverseGeocodingResponse",
+      respondedToBy: "mapboxReverseGeocodingResponse",
     });
   }
 
@@ -133,10 +133,10 @@ export class ExternalApiBlockHandler
   mapboxRetrieveDirections({ data }: { data?: MapboxRetrieveDirectionsData }) {
     return this.sendMessage<MapboxRetrieveDirectionsResponseData, null>({
       message: {
-        messageName: "mapbox.retrieveDirections",
+        messageName: "mapboxRetrieveDirections",
         data,
       },
-      respondedToBy: "mapbox.retrieveDirectionsResponse",
+      respondedToBy: "mapboxRetrieveDirectionsResponse",
     });
   }
 
@@ -145,10 +145,10 @@ export class ExternalApiBlockHandler
   mapboxRetrieveIsochrones({ data }: { data?: MapboxRetrieveIsochronesData }) {
     return this.sendMessage<MapboxRetrieveIsochronesResponseData, null>({
       message: {
-        messageName: "mapbox.retrieveIsochrones",
+        messageName: "mapboxRetrieveIsochrones",
         data,
       },
-      respondedToBy: "mapbox.retrieveIsochronesResponse",
+      respondedToBy: "mapboxRetrieveIsochronesResponse",
     });
   }
 
@@ -157,30 +157,30 @@ export class ExternalApiBlockHandler
   mapboxSuggestAddress({ data }: { data?: MapboxSuggestAddressData }) {
     return this.sendMessage<MapboxSuggestAddressResponseData, null>({
       message: {
-        messageName: "mapbox.suggestAddress",
+        messageName: "mapboxSuggestAddress",
         data,
       },
-      respondedToBy: "mapbox.suggestAddressResponse",
+      respondedToBy: "mapboxSuggestAddressResponse",
     });
   }
 
   mapboxRetrieveAddress({ data }: { data?: MapboxRetrieveAddressData }) {
     return this.sendMessage<MapboxRetrieveAddressResponseData, null>({
       message: {
-        messageName: "mapbox.retrieveAddress",
+        messageName: "mapboxRetrieveAddress",
         data,
       },
-      respondedToBy: "mapbox.retrieveAddressResponse",
+      respondedToBy: "mapboxRetrieveAddressResponse",
     });
   }
 
   mapboxCanRetrieveAddress({ data }: { data?: MapboxCanRetrieveAddressData }) {
     return this.sendMessage<MapboxCanRetrieveAddressResponseData, null>({
       message: {
-        messageName: "mapbox.canRetrieveAddress",
+        messageName: "mapboxCanRetrieveAddress",
         data,
       },
-      respondedToBy: "mapbox.canRetrieveAddressResponse",
+      respondedToBy: "mapboxCanRetrieveAddressResponse",
     });
   }
 
@@ -189,10 +189,10 @@ export class ExternalApiBlockHandler
   mapboxRetrieveStaticMap({ data }: { data?: MapboxRetrieveStaticMapData }) {
     return this.sendMessage<MapboxRetrieveStaticMapResponseData, null>({
       message: {
-        messageName: "mapbox.retrieveStaticMap",
+        messageName: "mapboxRetrieveStaticMap",
         data,
       },
-      respondedToBy: "mapbox.retrieveStaticMapResponse",
+      respondedToBy: "mapboxRetrieveStaticMapResponse",
     });
   }
 }

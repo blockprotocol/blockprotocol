@@ -34,10 +34,10 @@ const generateExternalApiSchema = (params: { typeName: string }) => {
 export const mapboxMessages: ServiceJsonMessage[] = [
   /** Mapbox Geocoding API */
   {
-    messageName: "mapbox.forwardGeocoding",
+    messageName: "mapboxForwardGeocoding",
     description: "Forward geocoding request",
     source: "block",
-    respondedToBy: "mapbox.forwardGeocodingResponse",
+    respondedToBy: "mapboxForwardGeocodingResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({
       typeName: "MapboxForwardGeocodingData",
@@ -45,7 +45,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.forwardGeocodingResponse",
+    messageName: "mapboxForwardGeocodingResponse",
     description: "Response to a forward geocoding request",
     source: "embedder",
     respondedToBy: null,
@@ -56,10 +56,10 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.reverseGeocoding",
+    messageName: "mapboxReverseGeocoding",
     description: "Reverse geocoding request",
     source: "block",
-    respondedToBy: "mapbox.reverseGeocodingResponse",
+    respondedToBy: "mapboxReverseGeocodingResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({
       typeName: "MapboxReverseGeocodingData",
@@ -67,7 +67,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.reverseGeocodingResponse",
+    messageName: "mapboxReverseGeocodingResponse",
     description: "The response to a request geocoding request",
     source: "embedder",
     respondedToBy: null,
@@ -79,10 +79,10 @@ export const mapboxMessages: ServiceJsonMessage[] = [
   },
   /** Mapbox Directions API */
   {
-    messageName: "mapbox.retrieveDirections",
+    messageName: "mapboxRetrieveDirections",
     description: "Retrieve directions request",
     source: "block",
-    respondedToBy: "mapbox.retrieveDirectionsResponse",
+    respondedToBy: "mapboxRetrieveDirectionsResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({
       typeName: "MapboxRetrieveDirectionsData",
@@ -90,7 +90,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.retrieveRetrieveDirectionsResponse",
+    messageName: "mapboxRetrieveRetrieveDirectionsResponse",
     description: "The response to a retrieve directions request",
     source: "embedder",
     respondedToBy: null,
@@ -102,10 +102,10 @@ export const mapboxMessages: ServiceJsonMessage[] = [
   },
   /** Mapbox Isochrone API */
   {
-    messageName: "mapbox.retrieveIsochrones",
+    messageName: "mapboxRetrieveIsochrones",
     description: "Retrieve isochrones",
     source: "block",
-    respondedToBy: "mapbox.retrieveIsochronesResponse",
+    respondedToBy: "mapboxRetrieveIsochronesResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({
       typeName: "MapboxRetrieveIsochronesData",
@@ -113,7 +113,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.retrieveIsochronesResponse",
+    messageName: "mapboxRetrieveIsochronesResponse",
     description: "The response to a retrieve isochrones request",
     source: "embedder",
     respondedToBy: null,
@@ -125,16 +125,16 @@ export const mapboxMessages: ServiceJsonMessage[] = [
   },
   /** Autofill API */
   {
-    messageName: "mapbox.suggestAddress",
+    messageName: "mapboxSuggestAddress",
     description: "Suggest an address",
     source: "block",
-    respondedToBy: "mapbox.suggestAddressResponse",
+    respondedToBy: "mapboxSuggestAddressResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({ typeName: "MapboxSuggestAddressData" }),
     errorCodes: [],
   },
   {
-    messageName: "mapbox.suggestAddressResponse",
+    messageName: "mapboxSuggestAddressResponse",
     description: "The response to a request to suggest an address",
     source: "embedder",
     respondedToBy: null,
@@ -145,10 +145,10 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.retrieveAddress",
+    messageName: "mapboxRetrieveAddress",
     description: "Retrieve an address",
     source: "block",
-    respondedToBy: "mapbox.retrieveAddressResponse",
+    respondedToBy: "mapboxRetrieveAddressResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({
       typeName: "MapboxRetrieveAddressData",
@@ -156,7 +156,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.retrieveAddressResponse",
+    messageName: "mapboxRetrieveAddressResponse",
     description: "The response to a retrieve an address",
     source: "embedder",
     respondedToBy: null,
@@ -167,10 +167,10 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.canRetrieveAddress",
+    messageName: "mapboxCanRetrieveAddress",
     description: "Whether an address can be retrieved",
     source: "block",
-    respondedToBy: "mapbox.canRetrieveAddressResponse",
+    respondedToBy: "mapboxCanRetrieveAddressResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({
       typeName: "MapboxCanRetrieveAddressData",
@@ -178,7 +178,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.canRetrieveAddressResponse",
+    messageName: "mapboxCanRetrieveAddressResponse",
     description: "The response to a can retrieve an address request",
     source: "embedder",
     respondedToBy: null,
@@ -190,10 +190,10 @@ export const mapboxMessages: ServiceJsonMessage[] = [
   },
   /** Static Image API */
   {
-    messageName: "mapbox.retrieveStaticMap",
+    messageName: "mapboxRetrieveStaticMap",
     description: "Retrieve a static map",
     source: "block",
-    respondedToBy: "mapbox.retrieveStaticMapResponse",
+    respondedToBy: "mapboxRetrieveStaticMapResponse",
     sentOnInitialization: false,
     data: generateExternalApiSchema({
       typeName: "MapboxRetrieveStaticMapData",
@@ -201,7 +201,7 @@ export const mapboxMessages: ServiceJsonMessage[] = [
     errorCodes: [],
   },
   {
-    messageName: "mapbox.retrieveStaticMapResponse",
+    messageName: "mapboxRetrieveStaticMapResponse",
     description: "The response to a retrieve static map request",
     source: "embedder",
     respondedToBy: null,
