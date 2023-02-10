@@ -6,6 +6,7 @@ import {
   QueryTemporalAxes,
 } from "@blockprotocol/graph";
 import { useGraphEmbedderService } from "@blockprotocol/graph/react";
+import { compareBounds } from "@blockprotocol/graph/stdlib";
 import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
 import { useHookEmbedderService } from "@blockprotocol/hook/react";
 import {
