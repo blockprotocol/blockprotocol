@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/external-api",
-  "version": "0.0.1-canary.11",
+  "version": "0.0.1-canary.12",
   "description": "Implementation of the Block Protocol external API service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
