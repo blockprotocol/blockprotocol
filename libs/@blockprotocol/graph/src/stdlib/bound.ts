@@ -14,7 +14,25 @@ export const compareBounds = (
     }
   }
 
-  if (left.kind === right.kind && leftType === rightType) {
+  if (
+    (left.kind === "unbounded" &&
+      right.kind === "unbounded" &&
+      leftType === "start" &&
+      rightType === "start") ||
+    (left.kind === "unbounded" &&
+      right.kind === "unbounded" &&
+      leftType === "end" &&
+      rightType === "end") ||
+    (left.kind === "exclusive" &&
+      right.kind === "exclusive" &&
+      leftType === "start" &&
+      rightType === "start") ||
+    (left.kind === "exclusive" &&
+      right.kind === "exclusive" &&
+      leftType === "end" &&
+      rightType === "end") ||
+    (left.kind === "inclusive" && right.kind === "inclusive")
+  ) {
     return 0;
   }
 
@@ -54,7 +72,9 @@ export const compareBounds = (
   throw new Error(
     `Implementation error, failed to compare bounds.\nLHS: ${JSON.stringify(
       left,
-    )}\nRHS: ${JSON.stringify(right)}`,
+    )}\nLHS Type: ${leftType}\nRHS: ${JSON.stringify(
+      right,
+    )}\nRHS Type: ${rightType}`,
   );
 };
 
