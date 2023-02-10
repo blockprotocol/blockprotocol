@@ -47,7 +47,7 @@ export type MapboxReverseGeocodingResponseData = GeocodeResponse;
 /** Mapbox Directions API */
 
 type RetrieveDirectionsBaseArgs = {
-  coordinates: number[];
+  coordinates: [number, number][];
   alternatives?: boolean;
   annotations?:
     | "distance"
@@ -134,7 +134,7 @@ export type MapboxRetrieveDirectionsResponseData = {
 
 export type MapboxRetrieveIsochronesData = {
   profile: "mapbox/driving" | "mapbox/walking" | "mapbox/cycling";
-  coordinates: [number, number];
+  coordinates: [number, number][];
   contours_minutes: number;
   contours_meters: number;
   contours_colors?: string;
