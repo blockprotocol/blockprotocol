@@ -1,5 +1,12 @@
 # block-template-html
 
+## 0.1.10-canary-20230210130343
+
+### Patch Changes
+
+- Updated dependencies [[`3c60337e`](https://github.com/blockprotocol/blockprotocol/commit/3c60337eb95c4bcaa31ea3cd9572b9e42efeb801)]:
+  - block-scripts@0.1.0-canary-20230210130343
+
 ## 0.1.9
 
 ### Patch Changes
