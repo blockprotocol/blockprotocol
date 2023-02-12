@@ -16,6 +16,7 @@ import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
+import { VerifiedCheckmarkIcon } from "../../../components/icons/verified-checkmark-icon";
 import { ClientOnlyLastUpdated } from "../../../components/last-updated";
 import { Link } from "../../../components/link";
 import { mdxComponents } from "../../../components/mdx/mdx-components";
@@ -287,7 +288,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
           ) : null}
 
           <Box>
-            <Box sx={{ mt: 2, display: { xs: "flex", md: "unset" } }}>
+            <Box sx={{ display: { xs: "flex", md: "unset" } }}>
               {!isDesktopSize && (
                 <Box
                   sx={{
@@ -300,11 +301,43 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   src={blockMetadata.icon ?? undefined}
                 />
               )}
-              <Typography
-                sx={{ display: { xs: "flex", md: "unset" } }}
-                variant="bpHeading1"
-              >
-                {blockMetadata.displayName}
+              <Typography variant="bpHeading1">
+                <Box component="span" sx={{ mr: 2.5 }}>
+                  {blockMetadata.displayName}{" "}
+                </Box>
+
+                {blockMetadata.verified ? (
+                  <Box
+                    sx={{
+                      position: "relative",
+                      bottom: 6.5,
+                      height: "fit-content",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      borderRadius: 7.5,
+                      background: "#FBF7FF",
+                      paddingY: 0.25,
+                      paddingX: 1,
+                    }}
+                  >
+                    <Typography
+                      variant="bpMicroCopy"
+                      sx={{
+                        fontWeight: 600,
+                        fontSize: 13,
+                        lineHeight: "18px",
+                        textTransform: "uppercase",
+                        color: "#7A4FF5",
+                      }}
+                    >
+                      Verified
+                    </Typography>
+                    <VerifiedCheckmarkIcon
+                      sx={{ fontSize: "13px !important" }}
+                    />
+                  </Box>
+                ) : null}
               </Typography>
             </Box>
 

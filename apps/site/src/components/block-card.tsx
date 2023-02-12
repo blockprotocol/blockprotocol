@@ -3,6 +3,7 @@ import { FunctionComponent } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../lib/blocks";
 import { BlockProtocolLogoIcon } from "./icons";
+import { VerifiedCheckmarkIcon } from "./icons/verified-checkmark-icon";
 import { ClientOnlyLastUpdated } from "./last-updated";
 import { Link } from "./link";
 import { Spacer } from "./spacer";
@@ -80,6 +81,7 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
     lastUpdated,
     blockSitePath,
     icon,
+    verified,
   } = data;
 
   return (
@@ -203,6 +205,9 @@ export const BlockCard: FunctionComponent<BlockCardProps> = ({
               variant="bpLargeText"
             >
               {displayName ?? undefined}
+              {verified ? (
+                <VerifiedCheckmarkIcon sx={{ fontSize: 16, ml: 1.5 }} />
+              ) : null}
             </Typography>
           </Box>
           <Typography
