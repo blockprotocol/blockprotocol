@@ -13,9 +13,9 @@ import {
   Typography,
 } from "@mui/material";
 import { GetStaticProps, NextPage } from "next";
-import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
-import { ComponentProps, ReactNode, useState } from "react";
+import { NextSeo } from "next-seo";
+import { ReactNode } from "react";
 
 import { BlockCard } from "../components/block-card";
 import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
@@ -52,7 +52,9 @@ const HubListBrowseType = ({
           fontWeight: 500,
           color: theme.palette.gray[90],
           position: "relative",
-          [`.${svgIconClasses.root}`]: { marginRight: 1 },
+          display: "flex",
+          alignItems: "center",
+          [`.${svgIconClasses.root}`]: { marginRight: 1, fontSize: 15 },
         }),
         active &&
           ((theme) => ({
