@@ -3,6 +3,7 @@
  */
 export { compareBounds } from "./stdlib/bound.js";
 export {
+  intervalCompareWithInterval,
   intervalContainsInterval,
   intervalContainsTimestamp,
   intervalForTimestamp,
@@ -13,6 +14,7 @@ export {
   intervalMergeWithInterval,
   intervalOverlapsInterval,
   intervalUnionWithInterval,
+  sortIntervals,
   unionOfIntervals,
 } from "./stdlib/interval.js";
 export { buildSubgraph } from "./stdlib/subgraph/builder.js";

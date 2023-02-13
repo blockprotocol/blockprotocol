@@ -12,7 +12,7 @@ import {
   isTemporalSubgraph,
   Subgraph,
 } from "../../../types/subgraph.js";
-import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
+import { TimeInterval } from "../../../types/temporal-versioning.js";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,
@@ -20,16 +20,6 @@ import {
 } from "../../interval.js";
 import { getEntityRevisionsByEntityId } from "../element/entity.js";
 import { getLatestInstantIntervalForSubgraph } from "../temporal-axes.js";
-
-const convertTimeToTimestampWithDefault = (
-  timestamp?: Date | Timestamp,
-): Timestamp => {
-  return timestamp === undefined
-    ? new Date().toISOString()
-    : typeof timestamp === "string"
-    ? timestamp
-    : timestamp.toISOString();
-};
 
 const getUniqueEntitiesFilter = <Temporal extends boolean>() => {
   const set = new Set();
@@ -350,14 +340,14 @@ export const getRightEntityForLinkEntity = <Temporal extends boolean>(
 };
 
 /**
- * For a given moment in time, get all outgoing link {@link Entity} revisions, and their "target" {@link Entity}
+ * For a given {@link TimeInterval}, get all outgoing link {@link Entity} revisions, and their "target" {@link Entity}
  * revisions (by default this is the "right entity"), from a given {@link Entity}.
  *
  * @param subgraph
  * @param {EntityId} entityId - The ID of the source entity to search for outgoing links from
- * @param {Date | Timestamp} [timestamp] - An optional `Date` or an ISO-formatted datetime string of the moment to
- *    search for. If the parameter is omitted then results will default to only returning results that are active in
- *    the latest instant of time in the {@link Subgraph}
+ * @param {TimeInterval} [interval] - An optional {@link TimeInterval} to constrain the period of time to search across.
+ * If the parameter is omitted then results will default to only returning results that are active in the latest instant
+ *   of time in the {@link Subgraph}
  */
 export const getOutgoingLinkAndTargetEntities = <
   Temporal extends boolean,
@@ -365,12 +355,10 @@ export const getOutgoingLinkAndTargetEntities = <
 >(
   subgraph: Subgraph<Temporal>,
   entityId: EntityId,
-  timestamp?: Temporal extends true ? Date | Timestamp : undefined,
+  interval?: Temporal extends true ? TimeInterval : undefined,
 ): LinkAndRightEntities => {
   const searchInterval =
-    timestamp !== undefined
-      ? intervalForTimestamp(convertTimeToTimestampWithDefault(timestamp))
-      : getLatestInstantIntervalForSubgraph(subgraph);
+    interval ?? getLatestInstantIntervalForSubgraph(subgraph);
 
   if (isTemporalSubgraph(subgraph)) {
     const outgoingLinkEntities = getOutgoingLinksForEntity(
