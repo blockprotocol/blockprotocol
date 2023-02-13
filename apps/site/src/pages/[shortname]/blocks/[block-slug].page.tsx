@@ -301,17 +301,20 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   src={blockMetadata.icon ?? undefined}
                 />
               )}
-              <Typography variant="bpHeading1">
-                <Box component="span" sx={{ mr: 2.5 }}>
-                  {blockMetadata.displayName}{" "}
-                </Box>
+              <Typography
+                variant="bpHeading1"
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <Box component="span">{blockMetadata.displayName} </Box>
 
                 {blockMetadata.verified ? (
                   <Box
                     sx={{
-                      position: "relative",
-                      bottom: 6.5,
-                      height: "fit-content",
                       display: "inline-flex",
                       alignItems: "center",
                       gap: 0.5,
