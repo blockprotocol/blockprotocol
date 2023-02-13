@@ -88,7 +88,7 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
               fontWeight={700}
               color={(theme) => theme.palette.purple[60]}
             >
-              endpoints
+              services
             </Box>
           </Box>
         </Typography>
