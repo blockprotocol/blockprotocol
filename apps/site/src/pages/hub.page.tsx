@@ -14,22 +14,21 @@ import {
 import { COPY_FONT_FAMILY } from "../theme/typography";
 
 interface PageProps {
-  catalog: BlockMetadata[];
+  featuredBlocks: BlockMetadata[];
 }
 
 /**
  * used to create an index of all available blocks, the catalog
  */
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const blocks = await getFeaturedBlocks();
-  const catalog = excludeHiddenBlocks(blocks);
+  const featuredBlocks = excludeHiddenBlocks(await getFeaturedBlocks());
 
   return {
-    props: { catalog },
+    props: { featuredBlocks },
   };
 };
 
-const HubPage: NextPage<PageProps> = ({ catalog }) => {
+const HubPage: NextPage<PageProps> = ({ featuredBlocks }) => {
   return (
     <>
       <NextSeo
@@ -182,11 +181,56 @@ const HubPage: NextPage<PageProps> = ({ catalog }) => {
                 FEATURED BLOCKS
               </Typography>
             </Grid>
-            {catalog.map((block) => (
+            {featuredBlocks.map((block) => (
               <Grid key={block.pathWithNamespace} item xs={12} sm={4}>
                 <BlockCard data={block} />
               </Grid>
             ))}
+          </Grid>
+        </Container>
+      </Box>
+      <Box
+        sx={(theme) => ({
+          borderBottom: 1,
+          borderColor: theme.palette.gray[30],
+        })}
+      >
+        <Container>
+          <Grid container columnSpacing={6}>
+            <Grid
+              item
+              xs={3}
+              sx={(theme) => ({
+                borderRight: 1,
+                borderColor: theme.palette.gray[30],
+              })}
+              pt={6.5}
+            >
+              Left
+            </Grid>
+            <Grid item xs={9} pt={6.5} pb={9}>
+              Right
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+      <Box>
+        <Container>
+          <Grid container columnSpacing={6}>
+            <Grid
+              item
+              xs={3}
+              sx={(theme) => ({
+                borderRight: 1,
+                borderColor: theme.palette.gray[30],
+              })}
+              pt={6.5}
+            >
+              Left
+            </Grid>
+            <Grid item xs={9} pt={6.5} pb={9}>
+              Right
+            </Grid>
           </Grid>
         </Container>
       </Box>
