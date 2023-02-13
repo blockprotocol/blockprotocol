@@ -3,5 +3,6 @@
   "commit": "09b559a2bc48973ab9a2cfa3be8bf28e84d2dd85",
 
   "workspace": "@blocks/drawing",
-  "distDir": "dist"
+  "distDir": "dist",
+  "verified": true
 }
