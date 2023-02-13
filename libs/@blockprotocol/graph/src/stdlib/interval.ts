@@ -8,6 +8,39 @@ import {
 import { boundIsAdjacentToBound, compareBounds } from "./bound.js";
 
 /**
+ * Standard comparison function that returns whether `IntervalA` is before the `IntervalB`. Where "before"
+ * is defined by first comparing the start bounds, and if those are equal, then the end bounds are compared.
+ *
+ * @param {TimeInterval} intervalA
+ * @param {TimeInterval} intervalB
+ */
+export const intervalCompareWithInterval = (
+  intervalA: TimeInterval,
+  intervalB: TimeInterval,
+): number => {
+  const startComparison = compareBounds(
+    intervalA.start,
+    intervalB.start,
+    "start",
+    "start",
+  );
+
+  return startComparison !== 0
+    ? startComparison
+    : compareBounds(intervalA.end, intervalB.end, "end", "end");
+};
+
+/**
+ * Sorts a given collection of {@link TimeInterval} in place, sorted first from earliest to latest start bounds, and
+ * then earliest to latest end bounds.
+ *
+ * @param {TimeInterval[]} intervals
+ */
+export const sortIntervals = (intervals: TimeInterval[]) => {
+  intervals.sort(intervalCompareWithInterval);
+};
+
+/**
  * Creates a {@link BoundedTimeInterval} that represents the instant of time identified by the given {@link Timestamp}.
  *
  * This is an interval where both bounds are `inclusive`, with limit points at the given {@link Timestamp}. Having an
@@ -327,18 +360,7 @@ export const unionOfIntervals = <IntervalsType extends TimeInterval>(
    -----------|---------------|---------------|---------------
    Union      | [------]  [-] | (------)  [-] | [-----------]
    */
-  intervals.sort((intervalA, intervalB) => {
-    const startComparison = compareBounds(
-      intervalA.start,
-      intervalB.start,
-      "start",
-      "start",
-    );
-
-    return startComparison !== 0
-      ? startComparison
-      : compareBounds(intervalA.end, intervalB.end, "end", "end");
-  });
+  sortIntervals(intervals);
 
   return intervals.reduce((union, currentInterval) => {
     if (union.length === 0) {
