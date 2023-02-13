@@ -6,7 +6,7 @@ export * from "./arrow-up-circle-icon";
 export * from "./arrows-left-right-icon";
 export * from "./atom-simple-icon";
 export * from "./badge-check-icon";
-export * from "./binary-icon";
+export * from "./binary-sharp-icon";
 export * from "./block-protocol-icon";
 export * from "./block-protocol-icon";
 export * from "./block-protocol-logo-icon";

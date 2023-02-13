@@ -1,10 +1,19 @@
-import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faAsterisk,
+  faBoxes,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 import { Box, Chip, Container, Grid, Stack, Typography } from "@mui/material";
 import { GetStaticProps, NextPage } from "next";
 import { NextSeo } from "next-seo";
 
 import { BlockCard } from "../components/block-card";
-import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
+import {
+  BinarySharpIcon,
+  BlockProtocolIcon,
+  FontAwesomeIcon,
+} from "../components/icons";
+import { faBinary } from "../components/icons/fa/binary";
 import { Link } from "../components/link";
 import { getFeaturedBlocks } from "../lib/api/blocks/get";
 import {
@@ -206,10 +215,25 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks }) => {
               })}
               pt={6.5}
             >
-              Left
+              <Typography>Browse</Typography>
+              <Typography>
+                <FontAwesomeIcon icon={faBoxes} /> Blocks
+              </Typography>
+              <Typography>
+                <FontAwesomeIcon icon={faAsterisk} /> Types
+              </Typography>
+              <Typography>
+                <FontAwesomeIcon icon={faBinary} /> Services
+              </Typography>
             </Grid>
-            <Grid item xs={9} pt={6.5} pb={9}>
-              Right
+            <Grid item xs={9} pt={6.5} pb={6.5}>
+              <Typography variant="bpHeading3" fontWeight={500} mb={2}>
+                Blocks
+              </Typography>
+              <Typography>
+                Blocks are interactive components that can be used to view
+                and/or edit information on a page
+              </Typography>
             </Grid>
           </Grid>
         </Container>
