@@ -307,7 +307,8 @@ const BlockPage: NextPage<BlockPageProps> = ({
                   display: "flex",
                   flexWrap: "wrap",
                   alignItems: "center",
-                  gap: 1,
+                  columnGap: 2.5,
+                  rowGap: 0.5,
                 }}
               >
                 <Box component="span">{blockMetadata.displayName} </Box>
