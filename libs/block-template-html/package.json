@@ -1,6 +1,6 @@
 {
   "name": "block-template-html",
-  "version": "0.1.10-canary-20230213183355",
+  "version": "0.1.9",
   "description": "Block Protocol block template for an html-based block",
   "keywords": [
     "blockprotocol",
@@ -34,7 +34,7 @@
   "dependencies": {},
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
-    "block-scripts": "0.1.0-canary-20230213183355",
+    "block-scripts": "0.0.19",
     "eslint": "8.33.0",
     "http-server": "14.1.1",
     "lnk-cli": "1.0.1",
