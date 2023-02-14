@@ -9,7 +9,9 @@ interface VerifiedBadgeProps {
 export const VerifiedBadge = ({ compact }: VerifiedBadgeProps) => (
   <Tooltip title="This block is verified">
     {compact ? (
-      <VerifiedCheckmarkIcon sx={{ fontSize: 16, ml: 1.5 }} />
+      <Box component="span">
+        <VerifiedCheckmarkIcon sx={{ fontSize: 16, ml: 1.5 }} />
+      </Box>
     ) : (
       <Box
         sx={{
