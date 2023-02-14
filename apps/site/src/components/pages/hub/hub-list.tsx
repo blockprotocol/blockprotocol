@@ -21,14 +21,16 @@ export const useRouteHubBrowseType = () => {
   return router.query.type ?? defaultBrowseType;
 };
 
-const HubItem = () => (
+const HubItem = ({ image }: { image?: string }) => (
   <Stack direction="row" spacing={2} alignItems="start">
-    <Box
-      component="img"
-      sx={{ width: 24 }}
-      // @todo make this correct
-      src="/blocks/@hash/code/public/code.svg"
-    />
+    {image ? (
+      <Box
+        component="img"
+        sx={{ width: 24 }}
+        // @todo make this correct
+        src={image}
+      />
+    ) : null}
     <Stack spacing={0.75}>
       <Typography
         fontSize={18}
@@ -141,63 +143,91 @@ const HubListBrowse = () => {
     </Stack>
   );
 };
-export const HubList = () => (
-  <>
-    <Box
-      sx={(theme) => ({
-        borderBottom: 1,
-        borderColor: theme.palette.gray[30],
-      })}
-    >
-      <Container>
-        <Grid container columnSpacing={6}>
-          <Grid
-            item
-            xs={3}
-            sx={(theme) => ({
-              borderRight: 1,
-              borderColor: theme.palette.gray[30],
-            })}
-            pt={6.5}
-          >
-            <HubListBrowse />
+export const HubList = () => {
+  const type = useRouteHubBrowseType();
+
+  return (
+    <>
+      <Box
+        sx={(theme) => ({
+          borderBottom: 1,
+          borderColor: theme.palette.gray[30],
+        })}
+      >
+        <Container>
+          <Grid container columnSpacing={6}>
+            <Grid
+              item
+              xs={3}
+              sx={(theme) => ({
+                borderRight: 1,
+                borderColor: theme.palette.gray[30],
+              })}
+              pt={6.5}
+            >
+              <HubListBrowse />
+            </Grid>
+            <Grid item xs={9} pt={6.5} pb={6.5}>
+              <Typography variant="bpHeading3" fontWeight={500} mb={2}>
+                Blocks
+              </Typography>
+              <Typography>
+                Blocks are interactive components that can be used to view
+                and/or edit information on a page
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid item xs={9} pt={6.5} pb={6.5}>
-            <Typography variant="bpHeading3" fontWeight={500} mb={2}>
-              Blocks
-            </Typography>
-            <Typography>
-              Blocks are interactive components that can be used to view and/or
-              edit information on a page
-            </Typography>
+        </Container>
+      </Box>
+      <Box>
+        <Container>
+          <Grid container columnSpacing={6}>
+            <Grid
+              item
+              xs={3}
+              sx={(theme) => ({
+                borderRight: 1,
+                borderColor: theme.palette.gray[30],
+              })}
+              pt={6.5}
+            >
+              Left
+            </Grid>
+            <Grid item xs={9} pt={6.5} pb={9}>
+              <Stack spacing={6}>
+                <HubItem
+                  image={
+                    type === "blocks"
+                      ? "/blocks/@hash/code/public/code.svg"
+                      : undefined
+                  }
+                />
+                <HubItem
+                  image={
+                    type === "blocks"
+                      ? "/blocks/@hash/code/public/code.svg"
+                      : undefined
+                  }
+                />
+                <HubItem
+                  image={
+                    type === "blocks"
+                      ? "/blocks/@hash/code/public/code.svg"
+                      : undefined
+                  }
+                />
+                <HubItem
+                  image={
+                    type === "blocks"
+                      ? "/blocks/@hash/code/public/code.svg"
+                      : undefined
+                  }
+                />
+              </Stack>
+            </Grid>
           </Grid>
-        </Grid>
-      </Container>
-    </Box>
-    <Box>
-      <Container>
-        <Grid container columnSpacing={6}>
-          <Grid
-            item
-            xs={3}
-            sx={(theme) => ({
-              borderRight: 1,
-              borderColor: theme.palette.gray[30],
-            })}
-            pt={6.5}
-          >
-            Left
-          </Grid>
-          <Grid item xs={9} pt={6.5} pb={9}>
-            <Stack spacing={6}>
-              <HubItem />
-              <HubItem />
-              <HubItem />
-              <HubItem />
-            </Stack>
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
-  </>
-);
+        </Container>
+      </Box>
+    </>
+  );
+};
