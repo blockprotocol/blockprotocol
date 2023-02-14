@@ -14,8 +14,6 @@ import { fetchTypeAsJson } from "./codegen/shared.js";
 const ajv = new Ajv2020();
 addFormats(ajv);
 
-const entityTypeValidator = await ajv.compile<EntityType>(entityTypeMetaSchema);
-
 /**
  * Validates that the schema at a given URI is a valid Entity Type
  * @param versionedUri – the URI / $id of the schema
@@ -24,6 +22,10 @@ const entityTypeValidator = await ajv.compile<EntityType>(entityTypeMetaSchema);
 export const fetchAndValidateEntityType = async (
   versionedUri: VersionedUri,
 ) => {
+  const entityTypeValidator = await ajv.compile<EntityType>(
+    entityTypeMetaSchema,
+  );
+
   const entityTypeSchema = await fetchTypeAsJson(versionedUri);
 
   if (!entityTypeValidator(entityTypeSchema)) {

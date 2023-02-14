@@ -23,41 +23,66 @@
   },
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./codegen": [
-      "./dist/codegen.js"
-    ],
-    "./custom-element": "./dist/custom-element.js",
-    "./graph-service-json": "./dist/graph-service-json.js",
-    "./internal": "./dist/internal.js",
-    "./react": "./dist/react.js",
-    "./stdlib": [
-      "./dist/stdlib.js"
-    ]
+    ".": {
+      "types": "./dist/cjs/index.d.ts",
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/es/index.js"
+    },
+    "./codegen": {
+      "types": "./dist/cjs/codegen.d.ts",
+      "require": "./dist/cjs/codegen.cjs",
+      "import": "./dist/es/codegen.js"
+    },
+    "./custom-element": {
+      "types": "./dist/cjs/custom-element.d.ts",
+      "require": "./dist/cjs/custom-element.cjs",
+      "import": "./dist/es/custom-element.js"
+    },
+    "./graph-service-json": {
+      "types": "./dist/cjs/graph-service-json.d.ts",
+      "require": "./dist/cjs/graph-service-json.cjs",
+      "import": "./dist/es/graph-service-json.js"
+    },
+    "./internal": {
+      "types": "./dist/cjs/internal.d.ts",
+      "require": "./dist/cjs/internal.cjs",
+      "import": "./dist/es/internal.js"
+    },
+    "./react": {
+      "types": "./dist/cjs/react.d.ts",
+      "require": "./dist/cjs/react.cjs",
+      "import": "./dist/es/react.js"
+    },
+    "./stdlib": {
+      "types": "./dist/cjs/stdlib.d.ts",
+      "require": "./dist/cjs/stdlib.cjs",
+      "import": "./dist/es/stdlib.js"
+    }
   },
-  "types": "./dist/index.d.ts",
+  "module": "./dist/es/index.js",
+  "types": "./dist/cjs/index.d.ts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/index.d.ts"
+        "./dist/cjs/index.d.ts"
       ],
       "codegen": [
-        "./dist/codegen.d.ts"
+        "./dist/cjs/codegen.d.ts"
       ],
       "custom-element": [
-        "./dist/custom-element.d.ts"
+        "./dist/cjs/custom-element.d.ts"
       ],
       "graph-service-json": [
-        "./dist/graph-service-json.d.ts"
+        "./dist/cjs/graph-service-json.d.ts"
       ],
       "internal": [
-        "./dist/internal.d.ts"
+        "./dist/cjs/internal.d.ts"
       ],
       "react": [
-        "./dist/react.d.ts"
+        "./dist/cjs/react.d.ts"
       ],
       "stdlib": [
-        "./dist/stdlib.d.ts"
+        "./dist/cjs/stdlib.d.ts"
       ]
     }
   },
@@ -65,7 +90,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "yarn clean && tsc --skipLibCheck",
+    "build": "yarn clean && yarn build:bundle",
+    "build:bundle": "rollup -c --bundleConfigAsCjs",
     "clean": "rimraf ./dist/",
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
@@ -83,8 +109,12 @@
   "devDependencies": {
     "@local/eslint-config": "0.0.0-private",
     "@local/tsconfig": "0.0.0-private",
+    "@rollup/plugin-commonjs": "24.0.1",
+    "@rollup/plugin-json": "6.0.0",
+    "@rollup/plugin-typescript": "9.0.2",
     "eslint": "8.33.0",
     "rimraf": "^3.0.2",
+    "rollup": "3.5.1",
     "typescript": "4.9.4"
   },
   "peerDependencies": {
