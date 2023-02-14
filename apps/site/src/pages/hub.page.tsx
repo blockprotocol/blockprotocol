@@ -1,13 +1,14 @@
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import { Box, Chip, Container, Grid, Stack, Typography } from "@mui/material";
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { NextSeo } from "next-seo";
 
 import { BlockCard } from "../components/block-card";
 import { BlockProtocolIcon, FontAwesomeIcon } from "../components/icons";
 import { Link } from "../components/link";
 import { HubList } from "../components/pages/hub/hub-list";
-import { getFeaturedBlocks } from "../lib/api/blocks/get";
+import { getRouteHubBrowseType } from "../components/pages/hub/hub-utils";
+import { getAllBlocks, getFeaturedBlocks } from "../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
   ExpandedBlockMetadata as BlockMetadata,
@@ -16,20 +17,30 @@ import { COPY_FONT_FAMILY } from "../theme/typography";
 
 interface PageProps {
   featuredBlocks: BlockMetadata[];
+  listing: BlockMetadata[];
 }
 
 /**
  * used to create an index of all available blocks, the catalog
  */
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const featuredBlocks = excludeHiddenBlocks(await getFeaturedBlocks());
+export const getServerSideProps: GetServerSideProps<PageProps> = async (
+  context,
+) => {
+  const type = getRouteHubBrowseType(context.query);
+  const [featuredBlocks, listing] = await Promise.all([
+    getFeaturedBlocks(),
+    type === "blocks" ? getAllBlocks() : [],
+  ]);
 
   return {
-    props: { featuredBlocks },
+    props: {
+      featuredBlocks: excludeHiddenBlocks(featuredBlocks),
+      listing: excludeHiddenBlocks(listing),
+    },
   };
 };
 
-const HubPage: NextPage<PageProps> = ({ featuredBlocks }) => {
+const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
   return (
     <>
       <NextSeo
@@ -190,7 +201,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks }) => {
           </Grid>
         </Container>
       </Box>
-      <HubList />
+      <HubList listing={listing} />
     </>
   );
 };

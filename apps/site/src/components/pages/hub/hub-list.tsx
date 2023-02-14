@@ -9,16 +9,16 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
+import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 
 import { FontAwesomeIcon } from "../../icons";
 import { faBinary } from "../../icons/fa/binary";
 import { Link } from "../../link";
-
-const defaultBrowseType = "blocks";
+import { getHubBrowseQuery, getRouteHubBrowseType } from "./hub-utils";
 
 export const useRouteHubBrowseType = () => {
   const router = useRouter();
-  return router.query.type ?? defaultBrowseType;
+  return getRouteHubBrowseType(router.query);
 };
 
 const HubItem = ({ image }: { image?: string }) => (
@@ -48,25 +48,25 @@ const HubItem = ({ image }: { image?: string }) => (
         Sort information into rows and columns with advanced filtering and
         sorting abilities.
       </Typography>
-      <Stack
-        direction="row"
-        spacing={2}
-        component={Typography}
+      <Typography
+        component="div"
         fontSize={14}
         color={(theme) => theme.palette.gray[70]}
       >
-        <Box
-          component={Link}
-          href="/@hash"
-          color={(theme) => theme.palette.purple[70]}
-          fontWeight={700}
-          sx={{ borderBottom: "0 !important" }}
-        >
-          @hash
-        </Box>
-        <Box>V1.0.2</Box>
-        <Box>Updated 1 year ago</Box>
-      </Stack>
+        <Stack direction="row" spacing={2}>
+          <Box
+            component={Link}
+            href="/@hash"
+            color={(theme) => theme.palette.purple[70]}
+            fontWeight={700}
+            sx={{ borderBottom: "0 !important" }}
+          >
+            @hash
+          </Box>
+          <Box>V1.0.2</Box>
+          <Box>Updated 1 year ago</Box>
+        </Stack>
+      </Typography>
     </Stack>
   </Stack>
 );
@@ -85,7 +85,7 @@ const HubListBrowseType = ({
     <Typography
       component={Link}
       scroll={false}
-      href={{ query: type === defaultBrowseType ? {} : { type } }}
+      href={{ query: getHubBrowseQuery(type) }}
       pl={1.5}
       sx={[
         (theme) => ({
@@ -143,7 +143,7 @@ const HubListBrowse = () => {
     </Stack>
   );
 };
-export const HubList = () => {
+export const HubList = ({ listing }: { listing: BlockMetadata[] }) => {
   const type = useRouteHubBrowseType();
 
   return (
@@ -195,34 +195,16 @@ export const HubList = () => {
             </Grid>
             <Grid item xs={9} pt={6.5} pb={9}>
               <Stack spacing={6}>
-                <HubItem
-                  image={
-                    type === "blocks"
-                      ? "/blocks/@hash/code/public/code.svg"
-                      : undefined
-                  }
-                />
-                <HubItem
-                  image={
-                    type === "blocks"
-                      ? "/blocks/@hash/code/public/code.svg"
-                      : undefined
-                  }
-                />
-                <HubItem
-                  image={
-                    type === "blocks"
-                      ? "/blocks/@hash/code/public/code.svg"
-                      : undefined
-                  }
-                />
-                <HubItem
-                  image={
-                    type === "blocks"
-                      ? "/blocks/@hash/code/public/code.svg"
-                      : undefined
-                  }
-                />
+                {listing.map((item) => (
+                  <HubItem
+                    key={item.pathWithNamespace}
+                    image={
+                      type === "blocks"
+                        ? "/blocks/@hash/code/public/code.svg"
+                        : undefined
+                    }
+                  />
+                ))}
               </Stack>
             </Grid>
           </Grid>
