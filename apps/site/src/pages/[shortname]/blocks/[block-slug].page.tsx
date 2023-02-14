@@ -16,7 +16,6 @@ import { FunctionComponent } from "react";
 import remarkGfm from "remark-gfm";
 
 import { BlocksSlider } from "../../../components/blocks-slider";
-import { VerifiedCheckmarkIcon } from "../../../components/icons/verified-checkmark-icon";
 import { ClientOnlyLastUpdated } from "../../../components/last-updated";
 import { Link } from "../../../components/link";
 import { mdxComponents } from "../../../components/mdx/mdx-components";
@@ -25,6 +24,7 @@ import {
   BlockExampleGraph,
   BlockSchema,
 } from "../../../components/pages/hub/hub-utils";
+import { VerifiedBadge } from "../../../components/verified-badge";
 import { getAllBlocks } from "../../../lib/api/blocks/get";
 import {
   excludeHiddenBlocks,
@@ -313,35 +313,7 @@ const BlockPage: NextPage<BlockPageProps> = ({
               >
                 <Box component="span">{blockMetadata.displayName} </Box>
 
-                {blockMetadata.verified ? (
-                  <Box
-                    sx={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 0.5,
-                      borderRadius: 7.5,
-                      background: "#FBF7FF",
-                      paddingY: 0.25,
-                      paddingX: 1,
-                    }}
-                  >
-                    <Typography
-                      variant="bpMicroCopy"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: 13,
-                        lineHeight: "18px",
-                        textTransform: "uppercase",
-                        color: "#7A4FF5",
-                      }}
-                    >
-                      Verified
-                    </Typography>
-                    <VerifiedCheckmarkIcon
-                      sx={{ fontSize: "13px !important" }}
-                    />
-                  </Box>
-                ) : null}
+                {blockMetadata.verified ? <VerifiedBadge /> : null}
               </Typography>
             </Box>
 
