@@ -91,7 +91,7 @@
   ],
   "scripts": {
     "build": "yarn clean && yarn build:bundle",
-    "build:bundle": "rollup -c --bundleConfigAsCjs",
+    "build:bundle": "node --max-old-space-size=4096 ../../../node_modules/rollup/dist/bin/rollup -c --bundleConfigAsCjs",
     "clean": "rimraf ./dist/",
     "fix:eslint": "eslint --fix .",
     "lint:eslint": "eslint --report-unused-disable-directives .",
