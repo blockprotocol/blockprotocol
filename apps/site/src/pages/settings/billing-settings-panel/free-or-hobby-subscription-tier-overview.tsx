@@ -70,6 +70,14 @@ export const paidSubscriptionFeatures: Record<
           </>
         ),
       },
+      {
+        icon: <MapLocationDotIcon sx={{ fontSize: 18 }} />,
+        title: (
+          <>
+            <strong>300</strong> Mapbox Static Maps
+          </>
+        ),
+      },
     ],
     additionalFeatures: [
       {
