@@ -16,6 +16,59 @@ import { Link } from "../../link";
 
 const defaultBrowseType = "blocks";
 
+export const useRouteHubBrowseType = () => {
+  const router = useRouter();
+  return router.query.type ?? defaultBrowseType;
+};
+
+const HubItem = () => (
+  <Stack direction="row" spacing={2} alignItems="start">
+    <Box
+      component="img"
+      sx={{ width: 24 }}
+      // @todo make this correct
+      src="/blocks/@hash/code/public/code.svg"
+    />
+    <Stack spacing={0.75}>
+      <Typography
+        fontSize={18}
+        fontWeight={600}
+        lineHeight={1.2}
+        color={(theme) => theme.palette.gray[90]}
+      >
+        Pivot Table
+      </Typography>
+      <Typography
+        variant="bpSmallCopy"
+        color={(theme) => theme.palette.gray[80]}
+        fontSize={15}
+      >
+        Sort information into rows and columns with advanced filtering and
+        sorting abilities.
+      </Typography>
+      <Stack
+        direction="row"
+        spacing={2}
+        component={Typography}
+        fontSize={14}
+        color={(theme) => theme.palette.gray[70]}
+      >
+        <Box
+          component={Link}
+          href="/@hash"
+          color={(theme) => theme.palette.purple[70]}
+          fontWeight={700}
+          sx={{ borderBottom: "0 !important" }}
+        >
+          @hash
+        </Box>
+        <Box>V1.0.2</Box>
+        <Box>Updated 1 year ago</Box>
+      </Stack>
+    </Stack>
+  </Stack>
+);
+
 const HubListBrowseType = ({
   children,
   type,
@@ -23,8 +76,7 @@ const HubListBrowseType = ({
   children: ReactNode;
   type: string;
 }) => {
-  const router = useRouter();
-  const currentType = router.query.type ?? defaultBrowseType;
+  const currentType = useRouteHubBrowseType();
   const active = type === currentType;
 
   return (
@@ -137,7 +189,12 @@ export const HubList = () => (
             Left
           </Grid>
           <Grid item xs={9} pt={6.5} pb={9}>
-            Right
+            <Stack spacing={6}>
+              <HubItem />
+              <HubItem />
+              <HubItem />
+              <HubItem />
+            </Stack>
           </Grid>
         </Grid>
       </Container>
