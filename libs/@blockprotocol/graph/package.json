@@ -25,45 +25,38 @@
   "exports": {
     ".": {
       "types": "./dist/cjs/index.d.ts",
-      "node": "./dist/cjs/index.cjs",
-      "import": "./dist/es/index.js",
-      "default": "./dist/cjs/index.cjs"
+      "require": "./dist/cjs/index.cjs",
+      "import": "./dist/es/index.js"
     },
     "./codegen": {
       "types": "./dist/cjs/codegen.d.ts",
-      "node": "./dist/cjs/codegen.cjs",
-      "import": "./dist/es/codegen.js",
-      "default": "./dist/cjs/codegen.cjs"
+      "require": "./dist/cjs/codegen.cjs",
+      "import": "./dist/es/codegen.js"
     },
     "./custom-element": {
       "types": "./dist/cjs/custom-element.d.ts",
-      "node": "./dist/cjs/custom-element.cjs",
-      "import": "./dist/es/custom-element.js",
-      "default": "./dist/cjs/custom-element.cjs"
+      "require": "./dist/cjs/custom-element.cjs",
+      "import": "./dist/es/custom-element.js"
     },
     "./graph-service-json": {
       "types": "./dist/cjs/graph-service-json.d.ts",
-      "node": "./dist/cjs/graph-service-json.cjs",
-      "import": "./dist/es/graph-service-json.js",
-      "default": "./dist/cjs/graph-service-json.cjs"
+      "require": "./dist/cjs/graph-service-json.cjs",
+      "import": "./dist/es/graph-service-json.js"
     },
     "./internal": {
       "types": "./dist/cjs/internal.d.ts",
-      "node": "./dist/cjs/internal.cjs",
-      "import": "./dist/es/internal.js",
-      "default": "./dist/cjs/internal.cjs"
+      "require": "./dist/cjs/internal.cjs",
+      "import": "./dist/es/internal.js"
     },
     "./react": {
       "types": "./dist/cjs/react.d.ts",
-      "node": "./dist/cjs/react.cjs",
-      "import": "./dist/es/react.js",
-      "default": "./dist/cjs/react.cjs"
+      "require": "./dist/cjs/react.cjs",
+      "import": "./dist/es/react.js"
     },
     "./stdlib": {
       "types": "./dist/cjs/stdlib.d.ts",
-      "node": "./dist/cjs/stdlib.cjs",
-      "import": "./dist/es/stdlib.js",
-      "default": "./dist/cjs/stdlib.cjs"
+      "require": "./dist/cjs/stdlib.cjs",
+      "import": "./dist/es/stdlib.js"
     }
   },
   "module": "./dist/es/index.js",
