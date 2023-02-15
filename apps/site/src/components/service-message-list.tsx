@@ -1,25 +1,25 @@
 import {
+  JsonObject,
   ServiceDefinition,
   ServiceMessageDefinition,
 } from "@blockprotocol/core";
 import { Box, Typography } from "@mui/material";
 import { Fragment, FunctionComponent } from "react";
 
-import { JsonSchema } from "../lib/json-schema";
 import { Link } from "./link";
 import { mdxComponents } from "./mdx/mdx-components";
 
-const DataType: FunctionComponent<{ propertySchema: JsonSchema }> = ({
+const DataType: FunctionComponent<{ propertySchema: JsonObject }> = ({
   propertySchema,
 }) => {
   const MdxA = mdxComponents.a!;
 
   const isArray = propertySchema.type === "array";
   const { type: innerType, $ref } = isArray
-    ? (propertySchema.items as JsonSchema)
+    ? (propertySchema.items as JsonObject)
     : propertySchema;
 
-  return $ref ? (
+  return typeof $ref === "string" ? (
     <MdxA href={$ref} target="_blank">
       {$ref.match(/[^/]+(?=\/$|$)/)?.[0]}
       {isArray ? "[]" : ""}
@@ -54,7 +54,7 @@ const ServiceMessageData: FunctionComponent<{
             </tr>
           </thead>
           <tbody>
-            {Object.entries(data.properties as Record<string, JsonSchema>).map(
+            {Object.entries(data.properties as Record<string, JsonObject>).map(
               ([propertyName, propertySchema]) => (
                 <tr key={propertyName}>
                   <td>
@@ -83,7 +83,9 @@ const ServiceMessageData: FunctionComponent<{
                   </td>
                   <td>
                     <Typography variant="bpMicroCopy">
-                      {propertySchema.description}
+                      {typeof propertySchema.description === "string"
+                        ? propertySchema.description
+                        : ""}
                     </Typography>
                   </td>
                 </tr>

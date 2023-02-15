@@ -69,8 +69,7 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
       if (error) {
         setApiErrorMessage(error.message);
       } else if (data) {
-        const schemaTitle = data.entityType.schema.title;
-        void router.push(`/@${user.shortname}/types/${schemaTitle}`);
+        void router.push(new URL(data.entityType.schema.$id).pathname);
       }
     },
     [user, newSchemaTitle, router],

@@ -1,9 +1,8 @@
+import { EntityTypeWithMetadata } from "@blockprotocol/graph/.";
 import { Box } from "@mui/material";
 import { FunctionComponent, useState } from "react";
 
-import { EntityType } from "../../../lib/api/model/entity-type.model";
 import { SerializedUser } from "../../../lib/api/model/user.model";
-import { formatUpdatedAt } from "../../../util/html-utils";
 import { Button } from "../../button";
 import { CreateSchemaModal } from "../../modal/create-schema-modal";
 import { ListViewCard } from "./list-view-card";
@@ -12,7 +11,7 @@ import { BrowseHubButton, CreateSchemaButton } from "./placeholder-buttons";
 import { useUserStatus } from "./use-user-status";
 
 export interface TabPanelContentsWithSchemasProps {
-  entityTypes: EntityType[];
+  entityTypes: EntityTypeWithMetadata[];
   user: SerializedUser;
 }
 
@@ -67,12 +66,12 @@ export const TabPanelContentsWithSchemas: FunctionComponent<
           </Button>
         </Box>
       )}
-      {entityTypes.map(({ entityTypeId, schema, updatedAt }) => (
+      {entityTypes.map(({ metadata, schema }) => (
         <ListViewCard
-          key={entityTypeId}
+          key={schema.$id}
           title={schema.title}
           description={schema.description as string}
-          extraContent={formatUpdatedAt(updatedAt as unknown as string)}
+          extraContent={`Version ${metadata.recordId.version}`}
           url={schema.$id}
         />
       ))}

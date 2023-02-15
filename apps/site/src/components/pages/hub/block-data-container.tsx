@@ -11,7 +11,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Validator } from "jsonschema";
 import { FunctionComponent, useEffect, useMemo, useRef, useState } from "react";
 
 import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
@@ -33,8 +32,6 @@ type BlockDataContainerProps = {
   sandboxBaseUrl: string;
   exampleGraph: BlockExampleGraph | null;
 };
-
-const validator = new Validator();
 
 /** Blocks that aren't compliant with BP V0.3  */
 const checkIfBlockIsSupported = ({ protocol }: BlockMetadata) =>
