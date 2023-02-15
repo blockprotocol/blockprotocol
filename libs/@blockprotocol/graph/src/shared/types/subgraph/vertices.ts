@@ -1,6 +1,6 @@
 import { BaseUri, validateBaseUri } from "@blockprotocol/type-system/slim";
 
-import { stringIsNonNegativeInteger } from "../../../shared.js";
+import { stringIsNonNegativeInteger } from "../../../util";
 import {
   Entity,
   EntityId,

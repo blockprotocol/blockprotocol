@@ -1,4 +1,4 @@
-import { typedEntries, typedValues } from "../../../../shared.js";
+import { typedEntries, typedValues } from "../../../../util";
 import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
 import { Subgraph } from "../../../types/subgraph.js";
 import { isEntityVertex } from "../../../types/subgraph/vertices.js";

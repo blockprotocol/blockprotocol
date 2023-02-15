@@ -1,4 +1,4 @@
-import { typedEntries } from "../../../../shared.js";
+import { typedEntries } from "../../../../util";
 import {
   Entity,
   EntityId,
