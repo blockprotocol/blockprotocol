@@ -66,19 +66,20 @@ export const returnTypeAsJson = async (request: NextRequest) => {
 
   const kind = url.match(versionedTypeUriRegExp)?.[1];
 
-  let type;
-  switch (kind) {
-    case "entity-type":
-    case "property-type":
-      type = await getTypeByVersionedUri(url, kind).then((apiResponse) => {
-        return "propertyType" in apiResponse
-          ? apiResponse.propertyType.schema
-          : apiResponse.entityType.schema;
-      });
-      break;
-    case "data-type":
-      type = hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];
-      break;
+  let type: DataType | PropertyType | EntityType =
+    hardcodedTypes[productionUrl as keyof typeof hardcodedTypes];
+
+  // Our hardcoded types have ALL data types and a single entity-type
+  // If it's not in there, it'll be an entity or property type
+  if (!type && kind !== "data-type") {
+    type = await getTypeByVersionedUri(
+      url,
+      kind as "entity-type" | "property-type",
+    ).then((apiResponse) => {
+      return "propertyType" in apiResponse
+        ? apiResponse.propertyType.schema
+        : apiResponse.entityType.schema;
+    });
   }
 
   if (!type) {
