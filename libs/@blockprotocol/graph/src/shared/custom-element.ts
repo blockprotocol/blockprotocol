@@ -1,14 +1,14 @@
 import { LitElement } from "lit";
 
+import { GraphBlockHandler } from "./graph-block-handler.js";
+import { getOutgoingLinkAndTargetEntities } from "./stdlib.js";
+import { getRoots } from "./stdlib/subgraph/roots.js";
 import {
   BlockGraphProperties,
   Entity,
   EntityPropertiesObject,
-  GraphBlockHandler,
   LinkEntityAndRightEntity,
-} from "./index.js";
-import { getRoots } from "./shared/stdlib/subgraph/roots.js";
-import { getOutgoingLinkAndTargetEntities } from "./stdlib.js";
+} from "./types";
 
 export interface BlockElementBase<
   Temporal extends boolean,

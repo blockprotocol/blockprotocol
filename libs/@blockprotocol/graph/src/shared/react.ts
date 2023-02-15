@@ -1,16 +1,16 @@
 import { useModuleConstructor } from "@blockprotocol/core/react";
 import { FunctionComponent, RefObject, useMemo } from "react";
 
+import { GraphBlockHandler } from "./graph-block-handler";
+import { GraphEmbedderHandler } from "./graph-embedder-handler";
+import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
 import {
   BlockGraphProperties,
   Entity,
   EntityVertexId,
-  GraphBlockHandler,
-  GraphEmbedderHandler,
   LinkEntityAndRightEntity,
   Subgraph,
-} from "./index.js";
-import { getOutgoingLinkAndTargetEntities, getRoots } from "./stdlib.js";
+} from "./types";
 
 export type BlockComponent<
   Temporal extends boolean,
