@@ -22,6 +22,77 @@ export const mustBeDefined = <T>(x: T | undefined, message?: string): T => {
   return x;
 };
 
+// @todo deduplicate this and libs/@blockprotocol/graph/src/internal/mutate-subgraph/is-equal.ts
+// https://gist.github.com/jsjain/a2ba5d40f20e19f734a53c0aad937fbb
+export const isEqual = (first: any, second: any): boolean => {
+  if (first === second) {
+    return true;
+  }
+  if (
+    (first === undefined ||
+      second === undefined ||
+      first === null ||
+      second === null) &&
+    (first || second)
+  ) {
+    return false;
+  }
+  const firstType = first?.constructor.name;
+  const secondType = second?.constructor.name;
+  if (firstType !== secondType) {
+    return false;
+  }
+  if (firstType === "Array") {
+    if (first.length !== second.length) {
+      return false;
+    }
+    let equal = true;
+    for (let i = 0; i < first.length; i++) {
+      if (!isEqual(first[i], second[i])) {
+        equal = false;
+        break;
+      }
+    }
+    return equal;
+  }
+  if (firstType === "Object") {
+    let equal = true;
+    const fKeys = Object.keys(first);
+    const sKeys = Object.keys(second);
+    if (fKeys.length !== sKeys.length) {
+      return false;
+    }
+    for (let i = 0; i < fKeys.length; i++) {
+      const firstField = first[fKeys[i]!];
+      const secondField = second[fKeys[i]!];
+      if (firstField && secondField) {
+        if (firstField === secondField) {
+          continue;
+        }
+        if (
+          firstField &&
+          (firstField.constructor.name === "Array" ||
+            firstField.constructor.name === "Object")
+        ) {
+          equal = isEqual(firstField, secondField);
+          if (!equal) {
+            break;
+          }
+        } else if (firstField !== secondField) {
+          equal = false;
+          break;
+        }
+      } else if ((firstField && !secondField) || (!firstField && secondField)) {
+        equal = false;
+        break;
+      }
+    }
+    return equal;
+  }
+  return first === second;
+};
+
+// @todo deduplicate this and libs/@blockprotocol/graph/src/shared.ts
 type TupleEntry<
   T extends readonly unknown[],
   I extends unknown[] = [],
@@ -230,6 +301,25 @@ export const debounce = <T extends (...args: any[]) => any>(
   };
 };
 
+const contains = (item: JsonValue, value: JsonValue): boolean | null => {
+  if (typeof item === "string" && typeof value === "string") {
+    return item.includes(value);
+  } else if (Array.isArray(item) && Array.isArray(value)) {
+    return value.every((val) => item.includes(val));
+  } else if (
+    typeof item === "object" &&
+    !Array.isArray(item) &&
+    typeof value === "object" &&
+    !Array.isArray(value)
+  ) {
+    if (item === null || value === null) {
+      return null;
+    }
+    return typedKeys(value).every((key) => isEqual(item[key], value[key]));
+  }
+  return null;
+};
+
 const filterEntitiesOrEntityTypes = <
   Temporal extends boolean,
   Elements extends Entity<Temporal>[] | EntityTypeWithMetadata[],
@@ -244,36 +334,52 @@ const filterEntitiesOrEntityTypes = <
 
   return elements.filter((entity) => {
     const results = filterItems
-      .map((filterItem) => {
+      .map((filterItem): boolean | null => {
+        /* @todo - should we catch potential errors here? */
         const item = getFromObjectByPathComponents(entity, filterItem.field);
 
-        // @todo support non-string comparison
-        if (typeof item !== "string") {
-          return null;
+        switch (filterItem.operator) {
+          case "IS_EMPTY": {
+            return item === undefined;
+          }
+          case "IS_NOT_EMPTY":
+            return item !== undefined;
+          case "CONTAINS":
+            if (item === undefined) {
+              return null;
+            }
+            return contains(item, filterItem.value);
+          case "DOES_NOT_CONTAIN": {
+            if (item === undefined) {
+              return null;
+            }
+            const doesContain = contains(item, filterItem.value);
+            return doesContain === null ? null : !doesContain;
+          }
+          case "IS":
+            return isEqual(item, filterItem.value);
+          case "IS_NOT":
+            return !isEqual(item, filterItem.value);
+          case "STARTS_WITH":
+            if (
+              typeof item !== "string" ||
+              typeof filterItem.value !== "string"
+            ) {
+              return null;
+            }
+            return item.startsWith(filterItem.value);
+          case "ENDS_WITH":
+            if (
+              typeof item !== "string" ||
+              typeof filterItem.value !== "string"
+            ) {
+              return null;
+            }
+            return item.endsWith(filterItem.value);
         }
 
-        switch (filterItem.operator) {
-          case "CONTAINS":
-            return item.toLowerCase().includes(filterItem.value.toLowerCase());
-          case "DOES_NOT_CONTAIN":
-            return !item.toLowerCase().includes(filterItem.value.toLowerCase());
-          case "STARTS_WITH":
-            return item
-              .toLowerCase()
-              .startsWith(filterItem.value.toLowerCase());
-          case "ENDS_WITH":
-            return item.toLowerCase().endsWith(filterItem.value.toLowerCase());
-          case "IS_EMPTY":
-            return !item;
-          case "IS_NOT_EMPTY":
-            return !!item;
-          case "IS":
-            return item.toLowerCase() === filterItem.value.toLowerCase();
-          case "IS_NOT":
-            return item.toLowerCase() !== filterItem.value.toLowerCase();
-          default:
-            return null;
-        }
+        /* @ts-expect-error - This should be unreachable, it's here for JS or incorrectly typed usages */
+        throw new Error(`Unknown filter operator: ${filterItem.operator}`);
       })
       .filter((val) => val !== null);
 
@@ -350,7 +456,7 @@ export function filterAndSortEntitiesOrTypes<
 ): FilterResult<Temporal> {
   const { operation } = payload;
 
-  const multiSort = operation?.multiSort ?? [{ field: "updatedAt" }];
+  const multiSort = operation?.multiSort ?? [{ field: ["updatedAt"] }];
   const multiFilter = operation?.multiFilter;
 
   const appliedOperation = {
