@@ -236,7 +236,7 @@ export const EntityTypeForm = ({
     }, [author, setEntityTypeOptions, setPropertyTypeOptions]);
 
   if (!entityTypeOptions || !propertyTypeOptions) {
-    return <>"Loading..."</>;
+    return <>Loading...</>;
   }
   return (
     <EntityTypeEditor

@@ -11,15 +11,7 @@ export default createBaseHandler<undefined, ApiMeResponse>().get((req, res) => {
   if (user) {
     res.status(200).json({ user: user.serialize(true) });
   } else {
-    const cookieDomain = isProduction
-      ? "blockprotocol.org"
-      : process.env.VERCEL
-      ? ".stage.hash.ai"
-      : "localhost";
-    res.setHeader(
-      "Set-Cookie",
-      `${SESSION_COOKIE_NAME}=; Domain=${cookieDomain}; Max-Age=-1; Path=/`,
-    );
+    res.setHeader("Set-Cookie", `${SESSION_COOKIE_NAME}=; Max-Age=-1; Path=/`);
 
     res.status(200).json({ guest: true });
   }
