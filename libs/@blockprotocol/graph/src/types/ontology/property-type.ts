@@ -32,11 +32,13 @@ export type GetPropertyTypeData = {
   propertyTypeId: VersionedUri;
 };
 
+type SystemDefinedPropertyTypeProperties = "$id" | "kind";
+
 export type CreatePropertyTypeData = {
-  propertyType: Omit<PropertyType, "$id">;
+  propertyType: Omit<PropertyType, SystemDefinedPropertyTypeProperties>;
 };
 
 export type UpdatePropertyTypeData = {
   propertyTypeId: VersionedUri;
-  propertyType: Omit<PropertyType, "$id">;
+  propertyType: Omit<PropertyType, SystemDefinedPropertyTypeProperties>;
 };

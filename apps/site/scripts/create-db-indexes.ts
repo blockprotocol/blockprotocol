@@ -1,6 +1,5 @@
 import chalk from "chalk";
 
-import { EntityType } from "../src/lib/api/model/entity-type.model";
 import { User, UserDocument } from "../src/lib/api/model/user.model";
 import {
   VerificationCode,
@@ -34,19 +33,6 @@ const script = async () => {
       .collection<UserDocument>(User.COLLECTION_NAME)
       .createIndex({ shortname: 1 }, { unique: true, sparse: true });
   });
-
-  await catchAndLog(async () => {
-    await db
-      .collection(EntityType.COLLECTION_NAME)
-      .createIndex({ entityTypeId: 1 }, { unique: true });
-  });
-
-  // @todo re-enable this when schema is jsonb again. it's currently a string
-  // await catchAndLog(async () => {
-  //   await db
-  //     .collection(EntityType.COLLECTION_NAME)
-  //     .createIndex({ user: 1, "schema.title": 1 }, { unique: true });
-  // });
 
   await catchAndLog(async () => {
     await db
