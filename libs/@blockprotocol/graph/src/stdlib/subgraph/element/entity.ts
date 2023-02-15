@@ -1,8 +1,15 @@
 import { typedEntries, typedValues } from "../../../shared.js";
-import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
-import { Subgraph } from "../../../types/subgraph.js";
-import { isEntityVertex } from "../../../types/subgraph/vertices.js";
-import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
+import {
+  Entity,
+  EntityId,
+  EntityRevisionId,
+} from "../../../shared/types/entity.js";
+import { Subgraph } from "../../../shared/types/subgraph.js";
+import { isEntityVertex } from "../../../shared/types/subgraph/vertices.js";
+import {
+  TimeInterval,
+  Timestamp,
+} from "../../../shared/types/temporal-versioning.js";
 import {
   intervalContainsTimestamp,
   intervalForTimestamp,

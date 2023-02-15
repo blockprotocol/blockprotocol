@@ -3,7 +3,7 @@ import {
   Entity,
   EntityId,
   LinkEntityAndRightEntity,
-} from "../../../types/entity.js";
+} from "../../../shared/types/entity.js";
 import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,
@@ -11,8 +11,8 @@ import {
   isOutgoingLinkEdge,
   isTemporalSubgraph,
   Subgraph,
-} from "../../../types/subgraph.js";
-import { TimeInterval } from "../../../types/temporal-versioning.js";
+} from "../../../shared/types/subgraph.js";
+import { TimeInterval } from "../../../shared/types/temporal-versioning.js";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,

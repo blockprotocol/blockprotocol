@@ -4,7 +4,7 @@ import {
   TemporalBound,
   TimeInterval,
   Timestamp,
-} from "../types/temporal-versioning.js";
+} from "../shared/types/temporal-versioning.js";
 import { boundIsAdjacentToBound, compareBounds } from "./bound.js";
 
 /**

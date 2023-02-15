@@ -6,9 +6,12 @@ import {
 } from "@blockprotocol/type-system/slim";
 
 import { typedValues } from "../../../shared.js";
-import { DataTypeWithMetadata } from "../../../types/ontology/data-type.js";
-import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
-import { isDataTypeVertex } from "../../../types/subgraph/vertices.js";
+import { DataTypeWithMetadata } from "../../../shared/types/ontology/data-type.js";
+import {
+  OntologyTypeVertexId,
+  Subgraph,
+} from "../../../shared/types/subgraph.js";
+import { isDataTypeVertex } from "../../../shared/types/subgraph/vertices.js";
 
 /**
  * Returns all `DataTypeWithMetadata`s within the vertices of the subgraph

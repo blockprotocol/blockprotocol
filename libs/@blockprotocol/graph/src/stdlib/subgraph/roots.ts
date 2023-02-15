@@ -8,8 +8,8 @@ import {
   PropertyTypeRootType,
   Subgraph,
   SubgraphRootType,
-} from "../../types/subgraph.js";
-import { Vertex } from "../../types/subgraph/vertices.js";
+} from "../../shared/types/subgraph.js";
+import { Vertex } from "../../shared/types/subgraph/vertices.js";
 import { mustBeDefined } from "../must-be-defined.js";
 import { getDataTypeByVertexId } from "./element/data-type.js";
 import { getEntityRevision } from "./element/entity.js";

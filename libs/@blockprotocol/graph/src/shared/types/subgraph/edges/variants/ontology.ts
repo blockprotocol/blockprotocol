@@ -1,4 +1,4 @@
-import { Subtype } from "../../../../util.js";
+import { Subtype } from "../../../../../util.js";
 import { OntologyTypeVertexId } from "../../vertices.js";
 import { GenericOutwardEdge } from "../generic-outward-edge.js";
 import { OntologyEdgeKind, SharedEdgeKind } from "../kind.js";
