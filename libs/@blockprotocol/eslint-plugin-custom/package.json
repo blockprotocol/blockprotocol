@@ -2,7 +2,7 @@
   "name": "eslint-plugin-custom",
   "version": "0.0.0-private",
   "main": "dist/main.cjs",
-  "types": "dist/main.d.ts",
+  "types": "dist/main.d.cts",
   "type": "module",
   "scripts": {
     "build" : "tsc"
