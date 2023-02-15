@@ -5,6 +5,10 @@ compatibility_date = "2022-06-30"
 account_id = "c6499786332a3d2fb35419a7803ab7aa"
 workers_dev = true
 
+[vars]
+DATA_URL = ""
+DATA_WRITE_KEY = "something-probably-secret"
+
 [[r2_buckets]]
 binding = "BLOCKPROTOCOL_BUCKET"
 bucket_name = "blockprotocol-preview"

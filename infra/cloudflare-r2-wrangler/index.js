@@ -2,6 +2,44 @@ import * as Realm from "realm-web";
 
 let App;
 
+/**
+ * @param {string} context.origin - used as the Anonymous ID for data sending
+ */
+const createDownloadReport = (context) => ({
+  anonymousId: context.origin,
+  event: "block_download",
+  properties: {
+    ...context,
+  },
+});
+
+const sendReport = async (env, reportArgs) => {
+  const dataUrl = env.DATA_URL;
+  const dataWriteKey = env.DATA_WRITE_KEY;
+  if (dataUrl && dataWriteKey) {
+    const data = createDownloadReport(reportArgs);
+
+    // `btoa` is supplied in the worker global scope
+    // set the write key as the username and leave the password blank using
+    // HTTP basic authentication.
+    const authHeader = `Basic ${btoa(dataWriteKey + ":")}`;
+    const _response = await fetch(dataUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader,
+      },
+      body: JSON.stringify(data),
+    }).catch((error) => {
+      console.error(
+        `Error sending report [report=${JSON.stringify(
+          reportArgs,
+        )},error="${error}"]`,
+      );
+    });
+  }
+};
+
 export default {
   async fetch(request, env, context) {
     const url = new URL(request.url);
@@ -55,11 +93,20 @@ export default {
               .db(env.MONGO_DB_NAME)
               .collection("bp-block-downloads");
 
+            await sendReport(env, {
+              origin: requestContext.origin,
+              author: block.author,
+              name: block.name,
+              blockId: block._id,
+              source: stringifiedUrl,
+              workerTimestamp: new Date().toISOString(),
+            });
+
             await blockDownloads.insertOne({
               author: block.author,
               name: block.name,
               blockId: block._id,
-              source: url.toString(),
+              source: stringifiedUrl,
               downloadedAt: new Date().toISOString(),
               context: requestContext,
             });
