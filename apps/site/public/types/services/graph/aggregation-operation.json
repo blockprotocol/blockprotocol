@@ -76,17 +76,17 @@
   "$defs": {
     "FilterOperatorRequiringValue": {
       "enum": [
-        "CONTAINS",
-        "DOES_NOT_CONTAIN",
+        "CONTAINS_SEGMENT",
+        "DOES_NOT_CONTAIN_SEGMENT",
         "ENDS_WITH",
-        "IS",
-        "IS_NOT",
+        "EQUALS",
+        "DOES_NOT_EQUAL",
         "STARTS_WITH"
       ],
       "type": "string"
     },
     "FilterOperatorWithoutValue": {
-      "enum": ["IS_EMPTY", "IS_NOT_EMPTY"],
+      "enum": ["IS_DEFINED", "IS_NOT_DEFINED"],
       "type": "string"
     },
     "MultiFilterOperatorType": {

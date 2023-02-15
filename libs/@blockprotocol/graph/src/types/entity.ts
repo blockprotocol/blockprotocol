@@ -120,13 +120,13 @@ export type FilterOperatorType =
   | FilterOperatorRequiringValue
   | FilterOperatorWithoutValue;
 
-export type FilterOperatorWithoutValue = "IS_EMPTY" | "IS_NOT_EMPTY";
+export type FilterOperatorWithoutValue = "IS_DEFINED" | "IS_NOT_DEFINED";
 
 export type FilterOperatorRequiringValue =
-  | "CONTAINS"
-  | "DOES_NOT_CONTAIN"
-  | "IS"
-  | "IS_NOT"
+  | "CONTAINS_SEGMENT"
+  | "DOES_NOT_CONTAIN_SEGMENT"
+  | "EQUALS"
+  | "DOES_NOT_EQUAL"
   | "STARTS_WITH"
   | "ENDS_WITH";
 

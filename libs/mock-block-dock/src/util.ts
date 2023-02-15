@@ -339,43 +339,53 @@ const filterEntitiesOrEntityTypes = <
         const item = getFromObjectByPathComponents(entity, filterItem.field);
 
         switch (filterItem.operator) {
-          case "IS_EMPTY": {
+          case "IS_DEFINED": {
             return item === undefined;
           }
-          case "IS_NOT_EMPTY":
+          case "IS_NOT_DEFINED":
             return item !== undefined;
-          case "CONTAINS":
+          case "CONTAINS_SEGMENT":
             if (item === undefined) {
               return null;
             }
             return contains(item, filterItem.value);
-          case "DOES_NOT_CONTAIN": {
+          case "DOES_NOT_CONTAIN_SEGMENT": {
             if (item === undefined) {
               return null;
             }
             const doesContain = contains(item, filterItem.value);
             return doesContain === null ? null : !doesContain;
           }
-          case "IS":
+          case "EQUALS":
             return isEqual(item, filterItem.value);
-          case "IS_NOT":
+          case "DOES_NOT_EQUAL":
             return !isEqual(item, filterItem.value);
           case "STARTS_WITH":
             if (
-              typeof item !== "string" ||
-              typeof filterItem.value !== "string"
+              typeof item === "string" &&
+              typeof filterItem.value === "string"
             ) {
-              return null;
+              return item.startsWith(filterItem.value);
+            } else if (Array.isArray(item) && Array.isArray(filterItem.value)) {
+              return isEqual(
+                item.slice(0, filterItem.value.length),
+                filterItem.value,
+              );
             }
-            return item.startsWith(filterItem.value);
+            return null;
           case "ENDS_WITH":
             if (
-              typeof item !== "string" ||
-              typeof filterItem.value !== "string"
+              typeof item === "string" &&
+              typeof filterItem.value === "string"
             ) {
-              return null;
+              return item.endsWith(filterItem.value);
+            } else if (Array.isArray(item) && Array.isArray(filterItem.value)) {
+              return isEqual(
+                item.slice(-filterItem.value.length),
+                filterItem.value,
+              );
             }
-            return item.endsWith(filterItem.value);
+            return null;
         }
 
         /* @ts-expect-error - This should be unreachable, it's here for JS or incorrectly typed usages */
