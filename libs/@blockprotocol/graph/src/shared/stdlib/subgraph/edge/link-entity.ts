@@ -1,4 +1,3 @@
-import { typedEntries } from "../../../../util";
 import {
   Entity,
   EntityId,
@@ -13,6 +12,7 @@ import {
   Subgraph,
 } from "../../../types/subgraph.js";
 import { TimeInterval } from "../../../types/temporal-versioning.js";
+import { typedEntries } from "../../../util";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,

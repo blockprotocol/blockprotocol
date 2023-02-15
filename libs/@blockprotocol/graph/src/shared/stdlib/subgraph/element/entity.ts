@@ -1,8 +1,8 @@
-import { typedEntries, typedValues } from "../../../../util";
 import { Entity, EntityId, EntityRevisionId } from "../../../types/entity.js";
 import { Subgraph } from "../../../types/subgraph.js";
 import { isEntityVertex } from "../../../types/subgraph/vertices.js";
 import { TimeInterval, Timestamp } from "../../../types/temporal-versioning.js";
+import { typedEntries, typedValues } from "../../../util";
 import {
   intervalContainsTimestamp,
   intervalForTimestamp,

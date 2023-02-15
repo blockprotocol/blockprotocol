@@ -7,7 +7,7 @@ import {
 import { compile, Options } from "json-schema-to-typescript";
 
 import { fetchAndValidateEntityType } from "../codegen.js";
-import { typedEntries } from "../util";
+import { typedEntries } from "../shared/util";
 import { deduplicateTypeScriptStrings } from "./entity-type-to-typescript/deduplicate-ts-strings.js";
 import {
   generateEntityDefinition,
