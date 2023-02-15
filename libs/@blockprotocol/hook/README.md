@@ -38,7 +38,7 @@ We also provide a `useHook` hook to make sending hook messages easier.
 ```typescript
 import { useHook } from "@blockprotocol/hook/react";
 
-useHook(hookService, nodeRef, "text", "$.text", (node) => {
+useHook(hookService, nodeRef, "text", ["text"], (node) => {
   node.innerText = "hook fallback";
 
   return () => {

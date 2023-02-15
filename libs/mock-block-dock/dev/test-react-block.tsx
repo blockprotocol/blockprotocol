@@ -27,7 +27,7 @@ export const TestReactBlock: BlockComponent<true> = ({ graph }) => {
     hookRef,
     "text",
     blockEntity?.metadata.recordId.entityId ?? "",
-    "$.description",
+    ["description"],
     () => {
       throw new Error(
         "Fallback called – dock is not correctly handling text hook.",
