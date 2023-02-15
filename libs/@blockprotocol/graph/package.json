@@ -1,6 +1,6 @@
 {
   "name": "@blockprotocol/graph",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "Implementation of the Block Protocol Graph service specification for blocks and embedding applications",
   "keywords": [
     "blockprotocol",
@@ -56,7 +56,7 @@
     "lint:tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "@blockprotocol/core": "0.0.13",
+    "@blockprotocol/core": "0.0.14",
     "lit": "^2.4.1"
   },
   "devDependencies": {
