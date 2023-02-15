@@ -8,7 +8,7 @@ export type HookResponse = {
 export type HookData = {
   node: HTMLElement | null;
   type: string;
-  path: string;
+  path: (string | number)[];
   hookId: string | null;
   entityId: EntityId;
 };

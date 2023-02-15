@@ -56,7 +56,7 @@ type Hook<T extends HTMLElement> = {
     node: T;
     type: string;
     entityId: EntityId;
-    path: string;
+    path: (string | number)[];
   };
 };
 
@@ -80,7 +80,7 @@ export const useHook = <T extends HTMLElement>(
   ref: RefObject<T | null | void>,
   type: string,
   entityId: EntityId,
-  path: string,
+  path: (string | number)[],
   fallback: (node: T) => void | (() => void),
 ) => {
   /**
@@ -137,7 +137,7 @@ export const useHook = <T extends HTMLElement>(
       existingHook.service === service &&
       existingHook.node === node &&
       existingHook.entityId === entityId &&
-      existingHook.path === path &&
+      JSON.stringify(existingHook.path) === JSON.stringify(path) &&
       existingHook.type === type
     ) {
       return;

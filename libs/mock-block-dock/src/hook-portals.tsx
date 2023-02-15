@@ -23,9 +23,7 @@ const HookPortal = ({ entityId, path, type }: HookData) => {
     /** @todo update `path` to be an array so this doesn't break on Base URIs */
     const foundValue = getFromObjectByPathComponents(
       foundEntity.properties,
-      path
-        .replace(/^\$\./, "") // remove json path root identifier '$.'
-        .split("."),
+      path,
     );
 
     return { entity: foundEntity, value: foundValue };

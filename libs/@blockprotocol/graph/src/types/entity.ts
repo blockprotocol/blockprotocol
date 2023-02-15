@@ -135,17 +135,17 @@ export type MultiFilterOperatorType = "AND" | "OR";
 export type MultiFilter = {
   filters: (
     | {
-        field: string[];
+        field: (string | number)[];
         operator: FilterOperatorRequiringValue;
-        value: string;
+        value: CoreJsonValue;
       }
-    | { field: string[]; operator: FilterOperatorWithoutValue }
+    | { field: (string | number)[]; operator: FilterOperatorWithoutValue }
   )[];
   operator: MultiFilterOperatorType;
 };
 
 export type Sort = {
-  field: string;
+  field: (string | number)[];
   desc?: boolean | undefined | null;
 };
 
