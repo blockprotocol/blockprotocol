@@ -3,10 +3,10 @@ import * as Realm from "realm-web";
 let App;
 
 /**
- * @param {string} context.origin - used as the Anonymous ID for data sending
+ * @param {string} context.identifier - used as the Anonymous ID for data sending
  */
 const createDownloadReport = (context) => ({
-  anonymousId: context.origin,
+  anonymousId: context.identifier,
   event: "block_download",
   properties: {
     ...context,
@@ -94,12 +94,16 @@ export default {
               .collection("bp-block-downloads");
 
             await sendReport(env, {
-              origin: requestContext.origin,
+              identifier:
+                requestContext.origin ??
+                requestContext.ip ??
+                "Unidentified origin",
               author: block.author,
               name: block.name,
               blockId: block._id,
               source: stringifiedUrl,
               workerTimestamp: new Date().toISOString(),
+              ...requestContext,
             });
 
             await blockDownloads.insertOne({
