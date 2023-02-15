@@ -14,6 +14,7 @@ const rolls = (fmt, input) => ({
     entryFileNames: `[name].${fmt === "cjs" ? "cjs" : "js"}`,
     name: "graph",
     sourcemap: !production,
+    preserveModules: true,
   },
   plugins: [
     typescript({
@@ -32,12 +33,12 @@ const rolls = (fmt, input) => ({
 
 export default ["es", "cjs"].flatMap((fmt) =>
   [
-    "src/index.ts",
+    "src/non-temporal/main.ts",
     "src/codegen.ts",
-    "src/custom-element.ts",
+    "src/non-temporal/custom-element.ts",
     "src/graph-module-json.ts",
     "src/internal.ts",
-    "src/react.ts",
-    "src/stdlib.ts",
+    "src/non-temporal/react.ts",
+    "src/non-temporal/stdlib.ts",
   ].map((input) => rolls(fmt, input)),
 );

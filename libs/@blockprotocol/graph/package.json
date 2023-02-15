@@ -24,9 +24,9 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/cjs/index.d.ts",
-      "require": "./dist/cjs/index.cjs",
-      "import": "./dist/es/index.js"
+      "types": "./dist/cjs/non-temporal/main.d.ts",
+      "require": "./dist/cjs/non-temporal/main.cjs",
+      "import": "./dist/es/non-temporal/main.js"
     },
     "./codegen": {
       "types": "./dist/cjs/codegen.d.ts",
@@ -34,9 +34,9 @@
       "import": "./dist/es/codegen.js"
     },
     "./custom-element": {
-      "types": "./dist/cjs/custom-element.d.ts",
-      "require": "./dist/cjs/custom-element.cjs",
-      "import": "./dist/es/custom-element.js"
+      "types": "./dist/cjs/non-temporal/custom-element.d.ts",
+      "require": "./dist/cjs/non-temporal/custom-element.cjs",
+      "import": "./dist/es/non-temporal/custom-element.js"
     },
     "./graph-module-json": {
       "types": "./dist/cjs/graph-module-json.d.ts",
@@ -49,28 +49,28 @@
       "import": "./dist/es/internal.js"
     },
     "./react": {
-      "types": "./dist/cjs/react.d.ts",
-      "require": "./dist/cjs/react.cjs",
-      "import": "./dist/es/react.js"
+      "types": "./dist/cjs/non-temporal/react.d.ts",
+      "require": "./dist/cjs/non-temporal/react.cjs",
+      "import": "./dist/es/non-temporal/react.js"
     },
     "./stdlib": {
-      "types": "./dist/cjs/stdlib.d.ts",
-      "require": "./dist/cjs/stdlib.cjs",
-      "import": "./dist/es/stdlib.js"
+      "types": "./dist/cjs/non-temporal/stdlib.d.ts",
+      "require": "./dist/cjs/non-temporal/stdlib.cjs",
+      "import": "./dist/es/non-temporal/stdlib.js"
     }
   },
-  "module": "./dist/es/index.js",
-  "types": "./dist/cjs/index.d.ts",
+  "module": "./dist/es/non-temporal/main.js",
+  "types": "./dist/cjs/non-temporal/main.d.ts",
   "typesVersions": {
     "*": {
       ".": [
-        "./dist/cjs/index.d.ts"
+        "./dist/cjs/non-temporal/main.d.ts"
       ],
       "codegen": [
         "./dist/cjs/codegen.d.ts"
       ],
       "custom-element": [
-        "./dist/cjs/custom-element.d.ts"
+        "./dist/cjs/non-temporal/custom-element.d.ts"
       ],
       "graph-module-json": [
         "./dist/cjs/graph-module-json.d.ts"
@@ -79,10 +79,10 @@
         "./dist/cjs/internal.d.ts"
       ],
       "react": [
-        "./dist/cjs/react.d.ts"
+        "./dist/cjs/non-temporal/react.d.ts"
       ],
       "stdlib": [
-        "./dist/cjs/stdlib.d.ts"
+        "./dist/cjs/non-temporal/stdlib.d.ts"
       ]
     }
   },
