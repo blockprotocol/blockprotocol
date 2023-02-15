@@ -50,13 +50,10 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  // check if we have a request for a type as JSON
+  // if this is a /types/* page, serve JSON unless asked for HTML
   const openingTypePage = Boolean(url.pathname.match(versionedTypeUriRegExp));
-  const jsonRequested = request.headers
-    .get("accept")
-    ?.includes("application/json");
-
-  if (openingTypePage && jsonRequested) {
+  const htmlRequested = request.headers.get("accept")?.includes("text/html");
+  if (openingTypePage && !htmlRequested) {
     return returnTypeAsJson(request);
   }
 }
