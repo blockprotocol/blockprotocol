@@ -1,3 +1,4 @@
+import { JsonValue } from "@blockprotocol/core";
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
@@ -63,27 +64,58 @@ export const typedValues = <T extends {}>(object: T): Entry<T>[1][] => {
   return Object.values(object);
 };
 
-// Saves us from using heavy lodash dependency
-// Source: https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_get
-export const get = (
-  obj: unknown,
-  path: string | string[],
-  defaultValue: unknown = undefined,
-): unknown => {
-  const travel = (regexp: RegExp) =>
-    String.prototype.split
-      .call(path, regexp)
-      .filter(Boolean)
-      .reduce(
-        (res, key) =>
-          res !== null && res !== undefined
-            ? // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
-              res[key]
-            : res,
-        obj,
+/**
+ * Extracts the value that lies at a given path in a given object, where the path is expressed as an array of JSON path
+ * components.
+ *
+ * @example
+ * const obj = {
+ *   a: {
+ *     b: true,
+ *     c: "foo",
+ *     d: [null, 23],
+ *     e: undefined
+ *   }
+ * }
+ *
+ * getFromObjectByPathComponents(obj, ["a"]); // { b: true, c: "foo", d: [null, 23]}
+ * getFromObjectByPathComponents(obj, ["a", "b"]); // true
+ * getFromObjectByPathComponents(obj, ["a", "c"]); // "foo"
+ * getFromObjectByPathComponents(obj, ["a", "d"]); // [null, 23]
+ * getFromObjectByPathComponents(obj, ["a", "d", 0]); // null
+ * getFromObjectByPathComponents(obj, ["a", "d", 1]); // 23
+ * getFromObjectByPathComponents(obj, ["a", "e"]); // undefined
+ * getFromObjectByPathComponents(obj, ["b"]); // undefined
+ *
+ * @param object - the object to search inside
+ * @param {(string|number)[]} path - the path as a list of path components where object keys are given as `string`s,
+ *   and array indices are given as `number`s
+ *
+ * @returns {JsonValue | undefined} - the value within the object at that path, or `undefined` if it does not exist
+ *
+ * @throws - if the path points to an invalid portion of the object, e.g. if it tries to index a null value `getFromObjectByPathComponents({ a: null }, ["a", "b"]);`
+ */
+export const getFromObjectByPathComponents = (
+  object: object,
+  path: (string | number)[],
+): JsonValue | undefined => {
+  let subObject = object as JsonValue;
+
+  for (const pathComponent of path) {
+    if (subObject === null) {
+      throw new Error(
+        `Invalid path: ${path} on object ${object}, can't index null value`,
       );
-  const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
-  return result === undefined || result === obj ? defaultValue : result;
+    }
+    // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
+    const innerVal = subObject[pathComponent];
+    if (innerVal === undefined) {
+      return undefined;
+    }
+    subObject = innerVal;
+  }
+
+  return subObject;
 };
 
 export const set = (obj: {}, path: string | string[], value: unknown) => {
@@ -136,7 +168,7 @@ const filterEntitiesOrEntityTypes = <
   return elements.filter((entity) => {
     const results = filterItems
       .map((filterItem) => {
-        const item = get(entity, filterItem.field);
+        const item = getFromObjectByPathComponents(entity, [filterItem.field]);
 
         // @todo support non-string comparison
         if (typeof item !== "string") {
@@ -185,8 +217,8 @@ const sortEntitiesOrTypes = <
 
   return [...elements].sort((a, b) => {
     for (const sortItem of multiSort) {
-      const aValue = get(a, sortItem.field);
-      const bValue = get(b, sortItem.field);
+      const aValue = getFromObjectByPathComponents(a, [sortItem.field]);
+      const bValue = getFromObjectByPathComponents(b, [sortItem.field]);
 
       // @ts-expect-error -- tolerating null and undefined
       if (aValue < bValue) {

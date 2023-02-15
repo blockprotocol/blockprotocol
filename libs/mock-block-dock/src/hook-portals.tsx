@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 
 import { TextHookView } from "./hook-portals/text";
 import { useMockBlockDockContext } from "./mock-block-dock-context";
-import { get, set } from "./util";
+import { getFromObjectByPathComponents, set } from "./util";
 
 const HookPortal = ({ entityId, path, type }: HookData) => {
   const { graph, readonly, updateEntity } = useMockBlockDockContext();
@@ -19,10 +19,13 @@ const HookPortal = ({ entityId, path, type }: HookData) => {
       );
     }
 
-    const foundValue = get(
+    /** @todo - do we want to catch potential errors here? */
+    /** @todo update `path` to be an array so this doesn't break on Base URIs */
+    const foundValue = getFromObjectByPathComponents(
       foundEntity.properties,
-      path.replace(/^\$\./, ""), // remove json path root identifier '$.'
-      undefined,
+      path
+        .replace(/^\$\./, "") // remove json path root identifier '$.'
+        .split("."),
     );
 
     return { entity: foundEntity, value: foundValue };
