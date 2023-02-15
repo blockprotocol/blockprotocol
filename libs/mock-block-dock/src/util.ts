@@ -1,4 +1,4 @@
-import { JsonValue } from "@blockprotocol/core";
+import { JsonObject, JsonValue } from "@blockprotocol/core";
 import {
   AggregateEntitiesData,
   AggregateEntitiesResult,
@@ -104,7 +104,9 @@ export const getFromObjectByPathComponents = (
   for (const pathComponent of path) {
     if (subObject === null) {
       throw new Error(
-        `Invalid path: ${path} on object ${object}, can't index null value`,
+        `Invalid path: ${path} on object ${JSON.stringify(
+          object,
+        )}, can't index null value`,
       );
     }
     // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
@@ -118,27 +120,102 @@ export const getFromObjectByPathComponents = (
   return subObject;
 };
 
-export const set = (obj: {}, path: string | string[], value: unknown) => {
-  const keys = typeof path === "string" ? path.split(".") : path;
+/**
+ * Sets a value that lies at a given path in a given object, where the path is expressed as an array of JSON path
+ * components.
+ *
+ * @example
+ * const obj = {
+ *   a: {
+ *     b: true,
+ *     c: [null, 23],
+ *     d: undefined
+ *   }
+ * }
+ *
+ * setValueInObjectByPathComponents(obj, ["a", "c", 0], 12); //  obj = { a: { b: true, c: [12, 23], d: undefined } }
+ * setValueInObjectByPathComponents(obj, ["a", "c", 1], null); //  obj = { a: { b: true, c: [12, null], d: undefined } }
+ * setValueInObjectByPathComponents(obj, ["a", "d"], { e: "bar" }); //  obj = { a: { b: true, c: [null, 23], d: { e: "bar" } } }
+ * setValueInObjectByPathComponents(obj, ["a", "b"], false); //  obj = { a: { b: false, c: [null, 23], d: { e: "bar" } } }
+ * setValueInObjectByPathComponents(obj, ["a"], 3); // obj = { a: 3 }
+ * setValueInObjectByPathComponents(obj, ["b"], true); // obj = { a: 3, b: true }
+ *
+ * @param object - the object to search inside
+ * @param {(string|number)[]} path - the path as a list of path components where object keys are given as `string`s,
+ * @param {JsonValue} value - the value to set within the object
+ *
+ * @returns {JsonValue | undefined} - the value within the object at that path, or `undefined` if it does not exist
+ *
+ * @throws - if the path points to an invalid portion of the object, e.g. if it tries to index a null or undefined
+ *    value `setValueInObjectByPathComponents({ a: null }, ["a", "b"], true);`
+ * @throws - if the path indexes a non-array or non-object
+ * @throws - if the path indexes an object with a non-string key
+ * @throws - if the path indexes an array with a non-number key
+ */
+export const setValueInObjectByPathComponents = (
+  object: object,
+  path: (string | number)[],
+  value: JsonValue,
+) => {
+  if (path.length === 0) {
+    throw new Error(`An empty path is invalid, can't set value.`);
+  }
 
-  let currentObj = obj;
+  let subObject = object as JsonValue;
 
-  let i;
+  for (let index = 0; index < path.length - 1; index++) {
+    const pathComponent = path[index];
 
-  for (i = 0; i < keys.length - 1; i++) {
-    if (i === 0 && keys[i] === "$") {
-      // ignore leading json path identifier, if present
-      continue;
+    if (pathComponent === "constructor" || pathComponent === "__proto__") {
+      throw new Error(`Disallowed key ${pathComponent}`);
     }
+
     // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
-    currentObj = currentObj[keys[i]!];
+    const innerVal = subObject[pathComponent];
+    if (innerVal === undefined) {
+      throw new Error(
+        `Unable to set value on object, ${path
+          .slice(0, index)
+          .map((component) => `[${component}]`)
+          .join(".")} was missing in object`,
+      );
+    }
+
+    // We check this here because the loop goes up to but _not including_ the last path component. So a `null` value
+    // would be an error
+    if (innerVal === null) {
+      throw new Error(
+        `Invalid path: ${path} on object ${JSON.stringify(
+          object,
+        )}, can't index null value`,
+      );
+    }
+
+    subObject = innerVal;
   }
 
-  if (keys[i] === "constructor" || keys[i] === "__proto__") {
-    throw new Error(`Disallowed key ${keys[i]}`);
+  const lastComponent = path.at(-1)!;
+  if (Array.isArray(subObject)) {
+    if (typeof lastComponent === "number") {
+      subObject[lastComponent] = value;
+    } else {
+      throw new Error(
+        `Unable to set value on array using non-number index: ${lastComponent}`,
+      );
+    }
+  } else if (typeof subObject === "object") {
+    if (typeof lastComponent === "string") {
+      (subObject as JsonObject)[lastComponent] = value;
+    } else {
+      throw new Error(
+        `Unable to set key on object using non-string index: ${lastComponent}`,
+      );
+    }
+  } else {
+    throw new Error(
+      `Unable to set value on non-object and non-array type: ${typeof subObject}`,
+    );
   }
-  // @ts-expect-error -- expected ‘No index signature with a parameter of type 'string' was found on type '{}'’
-  currentObj[keys[i]!] = value;
 };
 
 export const debounce = <T extends (...args: any[]) => any>(
@@ -168,7 +245,7 @@ const filterEntitiesOrEntityTypes = <
   return elements.filter((entity) => {
     const results = filterItems
       .map((filterItem) => {
-        const item = getFromObjectByPathComponents(entity, [filterItem.field]);
+        const item = getFromObjectByPathComponents(entity, filterItem.field);
 
         // @todo support non-string comparison
         if (typeof item !== "string") {
@@ -217,8 +294,8 @@ const sortEntitiesOrTypes = <
 
   return [...elements].sort((a, b) => {
     for (const sortItem of multiSort) {
-      const aValue = getFromObjectByPathComponents(a, [sortItem.field]);
-      const bValue = getFromObjectByPathComponents(b, [sortItem.field]);
+      const aValue = getFromObjectByPathComponents(a, sortItem.field);
+      const bValue = getFromObjectByPathComponents(b, sortItem.field);
 
       // @ts-expect-error -- tolerating null and undefined
       if (aValue < bValue) {
