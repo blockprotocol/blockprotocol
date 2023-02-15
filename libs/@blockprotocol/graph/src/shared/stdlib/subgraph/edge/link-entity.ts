@@ -1,9 +1,9 @@
-import { typedEntries } from "../../../shared.js";
+import { typedEntries } from "../../../../shared.js";
 import {
   Entity,
   EntityId,
   LinkEntityAndRightEntity,
-} from "../../../shared/types/entity.js";
+} from "../../../types/entity.js";
 import {
   isHasLeftEntityEdge,
   isHasRightEntityEdge,
@@ -11,8 +11,8 @@ import {
   isOutgoingLinkEdge,
   isTemporalSubgraph,
   Subgraph,
-} from "../../../shared/types/subgraph.js";
-import { TimeInterval } from "../../../shared/types/temporal-versioning.js";
+} from "../../../types/subgraph.js";
+import { TimeInterval } from "../../../types/temporal-versioning.js";
 import {
   intervalForTimestamp,
   intervalIntersectionWithInterval,

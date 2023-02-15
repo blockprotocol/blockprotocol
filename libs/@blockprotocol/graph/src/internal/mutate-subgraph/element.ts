@@ -5,6 +5,7 @@ import {
   getReferencedIdsFromPropertyType,
 } from "@blockprotocol/type-system/slim";
 
+import { unionOfIntervals } from "../../shared/stdlib/interval.js";
 import { Entity, EntityId } from "../../shared/types/entity.js";
 import {
   DataTypeVertex,
@@ -19,7 +20,6 @@ import {
   PropertyTypeWithMetadata,
   Subgraph,
 } from "../../shared/types/subgraph.js";
-import { unionOfIntervals } from "../../stdlib/interval.js";
 import { addOutwardEdgeToSubgraphByMutation } from "./edge.js";
 
 /**

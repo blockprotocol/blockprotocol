@@ -3,7 +3,7 @@ import {
   addEntitiesToSubgraphByMutation,
   addEntityTypesToSubgraphByMutation,
   addPropertyTypesToSubgraphByMutation,
-} from "../../internal/mutate-subgraph/element.js";
+} from "../../../internal/mutate-subgraph/element.js";
 import {
   DataTypeWithMetadata,
   Entity,

@@ -11,7 +11,7 @@ import {
   OntologyTypeRevisionId,
   OntologyTypeVertexId,
   Subgraph,
-} from "../../../shared/types/subgraph.js";
+} from "../../../types/subgraph.js";
 
 /**
  * Gets identifiers for all `PropertyType`s referenced within a given `EntityType` schema by searching for

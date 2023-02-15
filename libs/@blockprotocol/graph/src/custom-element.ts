@@ -7,8 +7,8 @@ import {
   GraphBlockHandler,
   LinkEntityAndRightEntity,
 } from "./index.js";
+import { getRoots } from "./shared/stdlib/subgraph/roots.js";
 import { getOutgoingLinkAndTargetEntities } from "./stdlib.js";
-import { getRoots } from "./stdlib/subgraph/roots.js";
 
 export interface BlockElementBase<
   Temporal extends boolean,

@@ -1,8 +1,8 @@
-import { isTemporalSubgraph, Subgraph } from "../../shared/types/subgraph.js";
+import { isTemporalSubgraph, Subgraph } from "../../types/subgraph.js";
 import {
   BoundedTimeInterval,
   TimeInterval,
-} from "../../shared/types/temporal-versioning.js";
+} from "../../types/temporal-versioning.js";
 import { intervalForTimestamp } from "../interval.js";
 
 // Separated out to improve the ergonomics of the `as` cast in the function, which is required due to limitations of TS

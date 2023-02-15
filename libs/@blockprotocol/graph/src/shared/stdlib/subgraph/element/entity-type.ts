@@ -5,13 +5,10 @@ import {
   VersionedUri,
 } from "@blockprotocol/type-system/slim";
 
-import { typedValues } from "../../../shared.js";
-import { EntityTypeWithMetadata } from "../../../shared/types/ontology/entity-type.js";
-import {
-  OntologyTypeVertexId,
-  Subgraph,
-} from "../../../shared/types/subgraph.js";
-import { isEntityTypeVertex } from "../../../shared/types/subgraph/vertices.js";
+import { typedValues } from "../../../../shared.js";
+import { EntityTypeWithMetadata } from "../../../types/ontology/entity-type.js";
+import { OntologyTypeVertexId, Subgraph } from "../../../types/subgraph.js";
+import { isEntityTypeVertex } from "../../../types/subgraph/vertices.js";
 
 /**
  * Returns all `EntityTypeWithMetadata`s within the vertices of the subgraph
