@@ -180,9 +180,8 @@ export const updateEntityType = async (
   const versionUpdateRequestAt = extractVersion(versionedUri);
 
   if (versionUpdateRequestAt !== latestVersion) {
-    const updateRequestAgainstVersion = extractVersion(versionedUri);
     throw new Error(
-      `Can only request an update using the latest type version, which is ${latestVersion} – the provided URI used ${updateRequestAgainstVersion}`,
+      `Can only request an update using the latest type version, which is ${latestVersion} – the provided URI used ${versionUpdateRequestAt}`,
     );
   }
 
