@@ -31,18 +31,9 @@ export const CreateSchemaModal: FunctionComponent<CreateSchemaModalProps> = ({
   const router = useRouter();
   const { user } = useUser();
 
-  // @todo might be a good idea to split this into a hook
-  // @see https://github.com/blockprotocol/blockprotocol/pull/223#discussion_r808072665
   const handleSchemaTitleChange = (value: string) => {
-    let formattedText = value.trim();
-    // replace all empty spaces
-    formattedText = formattedText.replace(/\s/g, "");
-
-    // capitalize text
-    const firstChar = formattedText[0];
-    if (typeof firstChar === "string") {
-      formattedText = firstChar.toUpperCase() + formattedText.slice(1);
-    }
+    // trim surrounding whitespace and remove most special characters
+    const formattedText = value.trim().replace(/[^a-zA-Z0-9-_ ]/g, "");
 
     setNewSchemaTitle(formattedText);
   };
