@@ -1,4 +1,4 @@
-import { faAsterisk, faBoxes } from "@fortawesome/free-solid-svg-icons";
+import { faAsterisk } from "@fortawesome/free-solid-svg-icons";
 import {
   Box,
   Container,
@@ -12,6 +12,7 @@ import { ReactNode } from "react";
 
 import { FontAwesomeIcon } from "../../icons";
 import { faBinary } from "../../icons/fa/binary";
+import { faBoxesStacked } from "../../icons/fa/boxes-stacked";
 import { Link } from "../../link";
 import { getHubBrowseQuery, getRouteHubBrowseType } from "./hub-utils";
 
@@ -148,7 +149,7 @@ const HubListBrowse = () => {
         Browse
       </Typography>
       <HubListBrowseType type="blocks">
-        <FontAwesomeIcon icon={faBoxes} /> Blocks
+        <FontAwesomeIcon icon={faBoxesStacked} /> Blocks
       </HubListBrowseType>
       <HubListBrowseType type="types">
         <FontAwesomeIcon icon={faAsterisk} /> Types
