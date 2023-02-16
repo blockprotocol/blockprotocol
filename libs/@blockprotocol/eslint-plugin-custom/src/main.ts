@@ -19,9 +19,7 @@ function parseAstForModuleExports(
   modulePath: string,
   filename: string,
   context: Readonly<RuleContext<never, never[]>>,
-  parserOptions?: ParserOptions
 ) {
-  console.log(({modulePath, filename}));
   if (!context.parserPath.includes("typescript-eslint")) {
     throw new Error(`This rule only works with the typescript-eslint parser`);
   }
@@ -38,10 +36,11 @@ function parseAstForModuleExports(
 
   try {
     const code = fs.readFileSync(tsResolved, "utf-8");
-    const opts = {
-      ...parserOptions,
+    const opts: ParserOptions = {
+      ...context.parserOptions,
       project: [`${path.dirname(tsResolved)}/**/tsconfig.json`],
       filePath: tsResolved,
+      range: true,
     };
     const ast = parse(code, opts);
 
@@ -62,7 +61,7 @@ function getExportedDeclarationKind(declaration: TSESTree.ExportDeclaration): st
     return 'type';
   }
   if (declaration.type === AST_NODE_TYPES.VariableDeclaration) {
-    return declaration.declare ? 'module' : 'variable';
+    return declaration.kind;
   }
   if (declaration.type === AST_NODE_TYPES.FunctionDeclaration) {
     return 'function';
@@ -70,125 +69,117 @@ function getExportedDeclarationKind(declaration: TSESTree.ExportDeclaration): st
   if (declaration.type === AST_NODE_TYPES.ClassDeclaration) {
     return 'class';
   }
-  return '';
+  if (declaration.type === AST_NODE_TYPES.TSModuleDeclaration) {
+    return 'module';
+  }
+  if (declaration.type === AST_NODE_TYPES.TSEnumDeclaration) {
+    return 'enum';
+  }
+  throw new Error(`Could not determine kind of exported declaration: ${declaration.type}`);
 }
 
-function collectExportNames(
-  exportedNames: { kind: string, name: string, node: TSESTree.Node, debug?: string }[],
+function getExportsForNode(
   node: TSESTree.ProgramStatement,
   context: Readonly<RuleContext<never, never[]>>,
   fileName: string
-) {
+): { name: string, kind: string, node: TSESTree.Node }[] {
+  const exportedNames: { name: string, kind: string, node: TSESTree.Node }[] = [];
   if (node.type === AST_NODE_TYPES.ExportDefaultDeclaration) {
     exportedNames.push({
       kind: 'default',
       name: 'default',
-      node
+      node,
     });
   } else if (node.type === AST_NODE_TYPES.ExportNamedDeclaration) {
     const {declaration, specifiers} = node;
     if (node.source?.value) {
-      console.log(`Parse AST for ExportNamedDeclaration from ${node.source.value} in ${fileName}`);
-
-      // Re-use the compiler options if it's in the same project
-      const relativePath = path.relative(context.getFilename(), node.source.value);
-      const parserOptions = (relativePath && !relativePath.startsWith("..") && !path.isAbsolute(relativePath)) ? context.parserOptions as ParserOptions : undefined;
-
-      const ast = parseAstForModuleExports(node.source.value, fileName, context, parserOptions);
-
-      if (declaration) {
-        const kind = getExportedDeclarationKind(declaration);
-        switch (declaration.type) {
-          case AST_NODE_TYPES.VariableDeclaration:
-            declaration.declarations.forEach((decl) => {
-              if (decl.id.type === AST_NODE_TYPES.Identifier && decl.id.name !== 'undefined') {
-                exportedNames.push({
-                  kind,
-                  name: decl.id.name,
-                  node,
-                  debug: "VariableDeclaration.declarations"
-                });
-              }
-            });
-            break;
-          case AST_NODE_TYPES.FunctionDeclaration:
-            exportedNames.push({
-              kind,
-              name: declaration.id!.name,
-              node,
-              debug: "FunctionDeclaration"
-            });
-            break;
-          case AST_NODE_TYPES.ClassDeclaration:
-            exportedNames.push({
-              kind,
-              name: declaration.id!.name,
-              node,
-              debug: "ClassDeclaration"
-            });
-            break;
-          case AST_NODE_TYPES.TSInterfaceDeclaration:
-            exportedNames.push({
-              kind: 'interface',
-              name: declaration.id!.name,
-              node,
-              debug: "TSInterfaceDeclaration"
-            });
-            break;
-          case AST_NODE_TYPES.TSTypeAliasDeclaration:
-            exportedNames.push({
-              kind: 'type',
-              name: declaration.id!.name,
-              node,
-              debug: "TSTypeAliasDeclaration"
-            });
-            break;
-          default:
-            break;
-        }
-      }
-
       if (specifiers) {
+        const ast = parseAstForModuleExports(node.source.value, fileName, context);
+
+        const tsResolved = ts.nodeModuleNameResolver(node.source.value, fileName, compilerOptions, ts.sys).resolvedModule?.resolvedFileName;
+
+        if (!tsResolved) {
+          throw new Error(`Could not resolve ${node.source.value} from ${fileName}`);
+        }
+
+        const dependencyExportedNames = ast.body.flatMap((node) => getExportsForNode(node, context, tsResolved));
+
         specifiers.forEach((specifier) => {
           if (specifier.exported) {
-            const namedExport = ast.body.find(
-              (node) =>
-                node.type === AST_NODE_TYPES.ExportNamedDeclaration &&
-                node.specifiers.some((s) => s.exported.name === specifier.exported!.name)
-            ) as TSESTree.ExportNamedDeclaration | undefined;
+            const reexportedElement = dependencyExportedNames.find((exportedName) => exportedName.name === specifier.local.name);
 
-            if (namedExport && namedExport.declaration) {
-              const kind = getExportedDeclarationKind(namedExport.declaration);
+            if (reexportedElement) {
               exportedNames.push({
-                kind,
+                kind: reexportedElement.kind,
                 name: specifier.exported.name,
                 node,
-                debug: "ExportNamedDeclaration.specifiers"
-              });
+              })
+            } else {
+              throw new Error(`Could not find definition of exported type: ${specifier.exported.name}`);
             }
           }
         });
       }
     }
+    if (declaration) {
+      const kind = getExportedDeclarationKind(declaration);
+      switch (declaration.type) {
+        case AST_NODE_TYPES.VariableDeclaration:
+          declaration.declarations.forEach((decl) => {
+            if (decl.id.type === AST_NODE_TYPES.Identifier && decl.id.name !== 'undefined') {
+              exportedNames.push({
+                kind,
+                name: decl.id.name,
+                node,
+              });
+            }
+          });
+          break;
+        case AST_NODE_TYPES.FunctionDeclaration:
+          exportedNames.push({
+            kind,
+            name: declaration.id!.name,
+            node,
+          });
+          break;
+        case AST_NODE_TYPES.ClassDeclaration:
+          exportedNames.push({
+            kind,
+            name: declaration.id!.name,
+            node,
+          });
+          break;
+        case AST_NODE_TYPES.TSInterfaceDeclaration:
+          exportedNames.push({
+            kind: 'interface',
+            name: declaration.id!.name,
+            node,
+          });
+          break;
+        case AST_NODE_TYPES.TSTypeAliasDeclaration:
+          exportedNames.push({
+            kind: 'type',
+            name: declaration.id!.name,
+            node,
+          });
+          break;
+        default:
+          break;
+      }
+    }
   } else if (node.type === AST_NODE_TYPES.ExportAllDeclaration) {
-    // Re-use the compiler options if it's in the same project
-    const relativePath = path.relative(context.getFilename(), node.source.value);
-    const parserOptions = (relativePath && !relativePath.startsWith("..") && !path.isAbsolute(relativePath)) ? context.parserOptions as ParserOptions : undefined;
-
-    console.log(`Parse AST for ExportAllDeclaration from ${node.source.value} in ${fileName}`);
-    const ast = parseAstForModuleExports(node.source.value, fileName, context, parserOptions);
+    const ast = parseAstForModuleExports(node.source.value, fileName, context);
 
     const tsResolved = ts.nodeModuleNameResolver(node.source.value, fileName, compilerOptions, ts.sys).resolvedModule?.resolvedFileName;
 
     if (!tsResolved) {
       throw new Error(`Could not resolve ${node.source.value} from ${fileName}`);
     }
-    console.log(tsResolved);
 
-    ast.body.forEach((bodyNode) => {
-      collectExportNames(exportedNames, bodyNode as TSESTree.ProgramStatement, context, tsResolved);
-    });
+    exportedNames.push(...ast.body.flatMap((node) => getExportsForNode(node, context, tsResolved)));
   }
+
+  return exportedNames;
 }
 
 module.exports = {
@@ -206,15 +197,15 @@ module.exports = {
       },
       defaultOptions: [],
       create(context) {
-        const exportedNames: { kind: string, name: string, node: TSESTree.Node, debug?: string }[] = [];
+        const exportedNames: { kind: string, name: string, node: TSESTree.Node,}[] = [];
         return {
           'Program:exit': (node: TSESTree.Program) => {
             node.body.forEach((node: TSESTree.Node) => {
               if (node.type === AST_NODE_TYPES.ExportDefaultDeclaration || node.type === AST_NODE_TYPES.ExportNamedDeclaration || node.type === AST_NODE_TYPES.ExportAllDeclaration) {
-                collectExportNames(exportedNames, node as TSESTree.ProgramStatement, context, context.getFilename());
+                exportedNames.push(...getExportsForNode(node as TSESTree.ProgramStatement, context, context.getFilename()));
               }
             });
-            console.log(util.inspect({file: context.getFilename(), exportedNames}, {depth: 6, colors: true}));
+            // console.log(util.inspect({file: context.getFilename(), exportedNames}, {depth: 6, colors: true}));
             console.log({file: context.getFilename(), names: exportedNames.map((n) => `export ${n.kind} ${n.name};`)})
             // Your rule logic here
           },
