@@ -1,9 +1,11 @@
 {
   "name": "eslint-plugin-custom",
   "version": "0.0.0-private",
-  "main": "dist/main.cjs",
-  "types": "dist/main.d.cts",
-  "type": "module",
+  "exports": {
+    "require": "./dist/main.js",
+    "default": "./dist/main.js"
+  },
+  "types": "dist/main.d.ts",
   "scripts": {
     "build" : "tsc"
   },

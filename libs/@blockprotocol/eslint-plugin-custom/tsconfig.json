@@ -3,7 +3,6 @@
   "compilerOptions": {
     "module": "commonjs",
     "outDir": "dist",
-
   },
   "include": [
     "src/main.ts"
