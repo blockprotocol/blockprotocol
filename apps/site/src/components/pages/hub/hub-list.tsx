@@ -21,32 +21,51 @@ export const useRouteHubBrowseType = () => {
   return getRouteHubBrowseType(router.query);
 };
 
-const HubItem = ({ image }: { image?: string }) => (
+const HubItem = ({
+  image,
+  title,
+  description,
+  author,
+  version,
+  updated,
+  url,
+}: {
+  image?: string | null;
+  title: ReactNode;
+  description: ReactNode;
+  author: string;
+  version: ReactNode;
+  updated: ReactNode;
+  url: string;
+}) => (
   <Stack direction="row" spacing={2} alignItems="start">
     {image ? (
-      <Box
-        component="img"
-        sx={{ width: 24 }}
-        // @todo make this correct
-        src={image}
-      />
+      <Link href={url}>
+        <Box
+          component="img"
+          sx={{ width: 24 }}
+          // @todo make this correct
+          src={image}
+        />
+      </Link>
     ) : null}
     <Stack spacing={0.75}>
       <Typography
+        component={Link}
+        href={url}
         fontSize={18}
         fontWeight={600}
         lineHeight={1.2}
         color={(theme) => theme.palette.gray[90]}
       >
-        Pivot Table
+        {title}
       </Typography>
       <Typography
         variant="bpSmallCopy"
         color={(theme) => theme.palette.gray[80]}
         fontSize={15}
       >
-        Sort information into rows and columns with advanced filtering and
-        sorting abilities.
+        {description}
       </Typography>
       <Typography
         component="div"
@@ -56,15 +75,15 @@ const HubItem = ({ image }: { image?: string }) => (
         <Stack direction="row" spacing={2}>
           <Box
             component={Link}
-            href="/@hash"
+            href={`/@${author}`}
             color={(theme) => theme.palette.purple[70]}
             fontWeight={700}
             sx={{ borderBottom: "0 !important" }}
           >
-            @hash
+            @{author}
           </Box>
-          <Box>V1.0.2</Box>
-          <Box>Updated 1 year ago</Box>
+          <Box>V{version}</Box>
+          <Box>{updated}</Box>
         </Stack>
       </Typography>
     </Stack>
@@ -144,8 +163,6 @@ const HubListBrowse = () => {
   );
 };
 export const HubList = ({ listing }: { listing: BlockMetadata[] }) => {
-  const type = useRouteHubBrowseType();
-
   return (
     <>
       <Box
@@ -198,11 +215,13 @@ export const HubList = ({ listing }: { listing: BlockMetadata[] }) => {
                 {listing.map((item) => (
                   <HubItem
                     key={item.pathWithNamespace}
-                    image={
-                      type === "blocks"
-                        ? "/blocks/@hash/code/public/code.svg"
-                        : undefined
-                    }
+                    image={item.icon}
+                    author={item.author}
+                    title={item.displayName}
+                    description={item.description}
+                    updated={item.lastUpdated}
+                    version={item.version}
+                    url={item.blockSitePath}
                   />
                 ))}
               </Stack>
