@@ -82,8 +82,8 @@ function getExportsForNode(
   node: TSESTree.ProgramStatement,
   context: Readonly<RuleContext<never, never[]>>,
   fileName: string
-): { name: string, kind: string, node: TSESTree.Node }[] {
-  const exportedNames: { name: string, kind: string, node: TSESTree.Node }[] = [];
+): { name: string, kind: string, from?: string, node: TSESTree.Node }[] {
+  const exportedNames: { name: string, kind: string, from?: string, node: TSESTree.Node }[] = [];
   if (node.type === AST_NODE_TYPES.ExportDefaultDeclaration) {
     exportedNames.push({
       kind: 'default',
@@ -112,6 +112,7 @@ function getExportsForNode(
               exportedNames.push({
                 kind: reexportedElement.kind,
                 name: specifier.exported.name,
+                from: node.source.value,
                 node,
               })
             } else {
@@ -176,7 +177,10 @@ function getExportsForNode(
       throw new Error(`Could not resolve ${node.source.value} from ${fileName}`);
     }
 
-    exportedNames.push(...ast.body.flatMap((node) => getExportsForNode(node, context, tsResolved)));
+    exportedNames.push(...ast.body.flatMap((node) => getExportsForNode(node, context, tsResolved)).map((exportedName) => ({
+      ...exportedName,
+      from: node.source.value,
+    })));
   }
 
   return exportedNames;
@@ -197,7 +201,7 @@ module.exports = {
       },
       defaultOptions: [],
       create(context) {
-        const exportedNames: { kind: string, name: string, node: TSESTree.Node,}[] = [];
+        const exportedNames: { kind: string, name: string, from?: string, node: TSESTree.Node, }[] = [];
         return {
           'Program:exit': (node: TSESTree.Program) => {
             node.body.forEach((node: TSESTree.Node) => {
@@ -206,7 +210,10 @@ module.exports = {
               }
             });
             // console.log(util.inspect({file: context.getFilename(), exportedNames}, {depth: 6, colors: true}));
-            console.log({file: context.getFilename(), names: exportedNames.map((n) => `export ${n.kind} ${n.name};`)})
+            console.log({
+              file: context.getFilename(),
+              names: exportedNames.map((n) => `export ${n.kind} ${n.name}${(n.from ? ` from ${n.from}` : "")};`)
+            })
             // Your rule logic here
           },
         };
