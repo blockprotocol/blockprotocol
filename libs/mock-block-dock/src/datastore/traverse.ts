@@ -26,12 +26,7 @@ import {
   mapElementsIntoRevisions,
 } from "@blockprotocol/graph/stdlib";
 
-import {
-  mustBeDefined,
-  typedEntries,
-  typedKeys,
-  typedValues,
-} from "../util";
+import { mustBeDefined, typedEntries, typedKeys, typedValues } from "../util";
 
 const TIMESTAMP_PLACEHOLDER = "TIMESTAMP_PLACEHOLDER" as const;
 
@@ -525,7 +520,7 @@ export const finalizeSubgraph = <
           (
             finalizedSubgraph.edges[baseId]![
               edgeFirstCreatedAt
-              ]! as OutwardEdge[]
+            ]! as OutwardEdge[]
           ).push(finalizedOutwardEdge);
         }
       }

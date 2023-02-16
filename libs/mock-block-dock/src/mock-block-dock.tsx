@@ -5,9 +5,9 @@ import {
   EntityRecordId,
   QueryTemporalAxes,
 } from "@blockprotocol/graph";
-import { useGraphEmbedderService } from "@blockprotocol/graph/react";
-import { EmbedderHookMessageCallbacks, HookData } from "@blockprotocol/hook/.";
-import { useHookEmbedderService } from "@blockprotocol/hook/react";
+import { useGraphEmbedderModule } from "@blockprotocol/graph/react";
+import { HookData, HookEmbedderMessageCallbacks } from "@blockprotocol/hook/.";
+import { useHookEmbedderModule } from "@blockprotocol/hook/react";
 import {
   ComponentType,
   FunctionComponent,
@@ -144,16 +144,16 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     },
   };
 
-  const { graphServiceCallbacks } = mockDatastore;
+  const { graphModuleCallbacks } = mockDatastore;
 
-  const { graphService } = useGraphEmbedderService<true>(wrapperRef, {
+  const { graphModule } = useGraphEmbedderModule<true>(wrapperRef, {
     blockEntitySubgraph,
     // linkedAggregations,
-    callbacks: graphServiceCallbacks,
+    callbacks: graphModuleCallbacks,
     readonly,
   });
 
-  const hookCallback = useCallback<EmbedderHookMessageCallbacks["hook"]>(
+  const hookCallback = useCallback<HookEmbedderMessageCallbacks["hook"]>(
     async ({ data }) => {
       if (!data) {
         return {
@@ -217,52 +217,52 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
     [hooks, setHooks],
   );
 
-  const { hookService } = useHookEmbedderService(wrapperRef, {
+  const { hookModule } = useHookEmbedderModule(wrapperRef, {
     callbacks: {
       hook: hookCallback,
     },
   });
 
   useEffect(() => {
-    if (hookService) {
-      hookService.on("hook", hookCallback);
+    if (hookModule) {
+      hookModule.on("hook", hookCallback);
     }
-  }, [hookCallback, hookService]);
+  }, [hookCallback, hookModule]);
 
   useSendGraphValue({
-    graphService,
+    graphModule,
     value: blockEntitySubgraph,
     valueName: "blockEntitySubgraph",
   });
   // useSendGraphValue({
-  //   graphService,
+  //   graphModule,
   //   value: linkedAggregations,
   //   valueName: "linkedAggregations",
   // });
   useSendGraphValue({
-    graphService,
+    graphModule,
     value: readonly,
     valueName: "readonly",
   });
 
   useEffect(() => {
-    if (graphService) {
+    if (graphModule) {
       // The callbacks are reconstructed when the data in the store changes
       // We need to register the updated callbacks or the data they use will be stale
       try {
-        graphService.registerCallbacks(graphServiceCallbacks);
+        graphModule.registerCallbacks(graphModuleCallbacks);
       } catch {
         /**
          * Registration can error when the user switches between preview and debug mode.
-         * Registration is attempted with the old service, which has been destroyed.
+         * Registration is attempted with the old module, which has been destroyed.
          * It then succeeds with the new one.
          * @todo can we avoid this error?
          */
       }
     }
-  }, [graphService, graphServiceCallbacks]);
+  }, [graphModule, graphModuleCallbacks]);
 
-  const blockRenderer = graphService ? (
+  const blockRenderer = graphModule ? (
     <BlockRenderer
       customElement={
         "customElement" in blockDefinition
@@ -295,7 +295,7 @@ export const MockBlockDock: FunctionComponent<MockBlockDockProps> = ({
       setReadonly={setReadonly}
       setDebugMode={setDebugMode}
       setEntityRecordIdOfEntityForBlock={setEntityRecordIdOfEntityForBlock}
-      updateEntity={graphServiceCallbacks.updateEntity}
+      updateEntity={graphModuleCallbacks.updateEntity}
     >
       <HookPortals hooks={hooks} />
       <div ref={wrapperRef}>

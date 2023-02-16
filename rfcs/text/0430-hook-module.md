@@ -1,4 +1,4 @@
-- **Feature Name:** `hook-service`
+- **Feature Name:** `hook-module`
 - **Start Date:** 2022-07-12
 - **RFC PR:** [blockprotocol/blockprotocol#430](https://github.com/blockprotocol/blockprotocol/pull/430)
 - **RFC Discussion:** [blockprotocol/blockprotocol#475](https://github.com/blockprotocol/blockprotocol/discussions/475)
@@ -7,9 +7,9 @@
 
 [summary]: #summary
 
-This RFC introduces a Hook Service which standardizes the communication necessary between blocks and embedding applications, allowing the latter to 'take over' rendering one or more parts of a block. This allows functionality to be extended, while ensuring blocks can remain uncoupled from embedding applications.
+This RFC introduces a Hook Module which standardizes the communication necessary between blocks and embedding applications, allowing the latter to 'take over' rendering one or more parts of a block. This allows functionality to be extended, while ensuring blocks can remain uncoupled from embedding applications.
 
-It also extends the Core Specification so that embedding applications must respond with a `NOT_IMPLEMENTED` error for messages to any Block Protocol services it does not implement. It is our stated intention to release an update to the `@blockprotocol/core` package which will do this for embedding applications.
+It also extends the Core Specification so that embedding applications must respond with a `NOT_IMPLEMENTED` error for messages to any Block Protocol modules it does not implement. It is our stated intention to release an update to the `@blockprotocol/core` package which will do this for embedding applications.
 
 # Motivation
 
@@ -21,25 +21,25 @@ It is not uncommon for embedding applications to want to provide a consistent 'l
 
 [guide-level-explanation]: #guide-level-explanation
 
-A **hook** is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a Graph Service property in the block's schema.
+A **hook** is an injection point blocks provide to embedding applications to allow them to optionally render or modify already rendered views associated with a Graph Module property in the block's schema.
 
 **Note: the word 'optionally' here is key.** Blocks cannot today _require_ embedding applications to implement a handler for any specific 'hook'. Instead, they should implement a fallback in the event the embedding application does not implement a hook (see the Errors section below)
 
 A classical example would be rich text editing. In this case, the data structure for formatted text may be bespoke to the embedding application, and impossible for the block to predictably parse or generate. The expected text editing experience may involve custom formatting controls, or special inline actions or commands. By injecting its own rich text editing input, an embedding application can provide all this.
 
-In the rich text example, a block would send a message under the service specifying a type of `"text"`, a DOM node in which to inject the rich text editing input, and the property path the data should be stored under. Any data created by the input can be stored by the embedding application in its own format. The block need not receive this data, since it won't understand it anyway. Instead, the application should send the block a value for the property which matches what the block expects in its schema. In the case of rich text, this is likely to be `"string"`, and the application may choose to supply a plain text representation of the rich text created.
+In the rich text example, a block would send a message under the module specifying a type of `"text"`, a DOM node in which to inject the rich text editing input, and the property path the data should be stored under. Any data created by the input can be stored by the embedding application in its own format. The block need not receive this data, since it won't understand it anyway. Instead, the application should send the block a value for the property which matches what the block expects in its schema. In the case of rich text, this is likely to be `"string"`, and the application may choose to supply a plain text representation of the rich text created.
 
 # Reference-level explanation
 
 [reference-level-explanation]: #reference-level-explanation
 
-## Hook Service
+## Hook Module
 
 A block implements a hook by sending a `hook` message to the embedding application, with five pieces of information:
 
 - `node: HTMLElement | null`: The DOM node the embedding application will render a view into, or modifying an already rendered view.
 - `type: "text" | "image" | "video" | string`: The type of view for the hook. While this can be any string, we believe `text`, `image`, and `video` will be commonly used. Straying from these commonly used types could make your block less portable between different embedding applications, particularly those designed to support all blocks.
-- `path: string`: A path (expressed as a [JSON path](https://goessner.net/articles/JsonPath/)) to a property present in the block's [schema](https://blockprotocol.org/docs/spec/graph-service#block-package), which the embedding application can use to render the view for this hook
+- `path: string`: A path (expressed as a [JSON path](https://goessner.net/articles/JsonPath/)) to a property present in the block's [schema](https://blockprotocol.org/docs/spec/graph-module#block-package), which the embedding application can use to render the view for this hook
 - `hookId: string | null`: The ID of the hook as provided in the response when first sending a `hook` message. This should be `null` on first call.
 
 The embedding application must respond with a `hookResponse` message specifying a `hookId: string` property, which will be provided in future `hook` messages to establish that the hook is simply being updated, and not set up for the first time.
@@ -52,7 +52,7 @@ Where a hook makes use of data, the embedding application should normally read t
 
 When receiving `null` for the `node`, the embedding application should tear down any and all subscriptions made in association with this hook.
 
-As this service relies on the embedding application directly manipulating DOM nodes, it will not be possible to implement this where block's 'proxy' the Block Protocol using `postMessage` (i.e, where a block includes an `iframe`). This service requires that the embedding application implementation of the service share the global environment (commonly referred to as a 'scope' or 'realm') with the DOM node passed by the block in the `hook` message.
+As this module relies on the embedding application directly manipulating DOM nodes, it will not be possible to implement this where block's 'proxy' the Block Protocol using `postMessage` (i.e, where a block includes an `iframe`). This module requires that the embedding application implementation of the module share the global environment (commonly referred to as a 'scope' or 'realm') with the DOM node passed by the block in the `hook` message.
 
 ### Errors
 
@@ -60,19 +60,19 @@ Where an embedding application has not implemented a hook, it must respond with 
 
 ### Notes
 
-- This RFC makes no changes to the Graph Service's requirements that an embedding application implementing the Graph Service must provide data in the format specified by a block's schema.
-- The embedding application remains in control of data, as specified in the Graph Service, and should continue to indicate whether the block is in a readonly state as specified in that service. The implementation of the Hook Service should mirror this state.
+- This RFC makes no changes to the Graph Module's requirements that an embedding application implementing the Graph Module must provide data in the format specified by a block's schema.
+- The embedding application remains in control of data, as specified in the Graph Module, and should continue to indicate whether the block is in a readonly state as specified in that module. The implementation of the Hook Module should mirror this state.
 
 ## Core Specification changes
 
-When an embedding application receives a message from a block where it does the implement the `service` specified in the message, it must respond with a `NOT_IMPLEMENTED` error, so that blocks can respond appropriately.
+When an embedding application receives a message from a block where it does the implement the `module` specified in the message, it must respond with a `NOT_IMPLEMENTED` error, so that blocks can respond appropriately.
 
 # Drawbacks
 
 [drawbacks]: #drawbacks
 
 - There is the possibility for explosion in values used in `type`, or for blocks to use it to tie their block to a specific embedding application, or set of embedding applications.
-- The core specification which services build on does not allow sync communication – which may be an issue when it comes to rendering UI. This RFC does not propose changing this at this time as we can investigate in the implementation of the Hook Service if this becomes a problem.
+- The core specification which modules build on does not allow sync communication – which may be an issue when it comes to rendering UI. This RFC does not propose changing this at this time as we can investigate in the implementation of the Hook Module if this becomes a problem.
 
 # Rationale and alternatives
 
@@ -82,7 +82,7 @@ When an embedding application receives a message from a block where it does the 
 
 [editableref]: #editableref
 
-A solution similar to the hooks service was first explored in a temporary implementation called `editableRef` within the [HASH](https://hash.ai) embedding application, enabling its _rich text_ blocks.
+A solution similar to the hooks module was first explored in a temporary implementation called `editableRef` within the [HASH](https://hash.ai) embedding application, enabling its _rich text_ blocks.
 
 This was designed to avoid blocks being coupled to the particular rich text editing solution implemented in HASH, and in that it succeeded.
 
@@ -106,19 +106,19 @@ This proposal fixes all of these problems.
 
 [unresolved-questions]: #unresolved-questions
 
-- Is _hook_ the best name for this service? Other possible options include (not exhaustive):
-  - editable/editing/editor service
-  - view service
-  - UI service
-  - plugin service
-  - DOM service
-  - extension service
-  - interface service
-- Is there any functionality expected to be enabled by this service where an embedding application would need to know statically that the service is being used – i.e., does this need to show up in the schema? If so, how does this work with dynamic properties (i.e., a property on a value in a list)?
+- Is _hook_ the best name for this module? Other possible options include (not exhaustive):
+  - editable/editing/editor module
+  - view module
+  - UI module
+  - plugin module
+  - DOM module
+  - extension module
+  - interface module
+- Is there any functionality expected to be enabled by this module where an embedding application would need to know statically that the module is being used – i.e., does this need to show up in the schema? If so, how does this work with dynamic properties (i.e., a property on a value in a list)?
 - Is the use of property paths to indicate the relevant value problematic? Do we need to make it easy to generate these property paths (possible using a proxy)?
-- Will blocks want to pass up data which is not present on their schema (i.e, on a linked entity or aggregation) or not provided by the graph service at all
-- Do we want to standardize the "types" of hook available or do we want it to be any arbitrary string? Should we 'special-case' the recommended types by providing specific message types for those, or should all uses of the service use the same message type?
-- How do we formalize the relationship between the hook service and the graph service?
+- Will blocks want to pass up data which is not present on their schema (i.e, on a linked entity or aggregation) or not provided by the graph module at all
+- Do we want to standardize the "types" of hook available or do we want it to be any arbitrary string? Should we 'special-case' the recommended types by providing specific message types for those, or should all uses of the module use the same message type?
+- How do we formalize the relationship between the hook module and the graph module?
 - Whether there’s some way of blocks requesting that a node is ONLY for displaying the relevant data, or editing the relevant data, rather than it being up to the embedding application.
 
 # Future possibilities
@@ -126,4 +126,4 @@ This proposal fixes all of these problems.
 [future-possibilities]: #future-possibilities
 
 - We will want a way for an embedding application to ask to take over rendering for a specific property path, essentially an inversion of the process specified in this RFC. This will enable blocks which are generic entity editors, and don't necessarily know much about the data they're editing – i.e, an Entity Editor block.
-- The Core specification should be extended so a block can know ahead of time what services / parts of services an embedding application implements. This will make some of the fallback behaviour specified in this RFC simpler.
+- The Core specification should be extended so a block can know ahead of time what modules / parts of modules an embedding application implements. This will make some of the fallback behaviour specified in this RFC simpler.

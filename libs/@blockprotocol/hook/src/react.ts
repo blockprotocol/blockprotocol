@@ -1,4 +1,4 @@
-import { useServiceConstructor } from "@blockprotocol/core/react";
+import { useModuleConstructor } from "@blockprotocol/core/react";
 import { EntityId } from "@blockprotocol/graph";
 import { RefObject, useLayoutEffect, useRef, useState } from "react";
 
@@ -7,18 +7,18 @@ import { HookBlockHandler, HookEmbedderHandler } from "./index.js";
  * Create a HookBlockHandler instance, using a reference to an element in the
  * block.
  *
- * The hookService will only be reconstructed if the element reference changes.
+ * The hookModule will only be reconstructed if the element reference changes.
  * Updates to any callbacks after first constructing should be made by
- * calling hookService.on("messageName", callback);
+ * calling hookModule.on("messageName", callback);
  */
-export const useHookBlockService = (
+export const useHookBlockModule = (
   ref: RefObject<HTMLElement>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof HookBlockHandler>[0],
     "element"
   >,
-): { hookService: HookBlockHandler } => ({
-  hookService: useServiceConstructor({
+): { hookModule: HookBlockHandler } => ({
+  hookModule: useModuleConstructor({
     Handler: HookBlockHandler,
     constructorArgs,
     ref,
@@ -29,18 +29,18 @@ export const useHookBlockService = (
  * Create a HookEmbedderHandler instance, using a reference to an element
  * around the block.
  *
- * The hookService will only be reconstructed if the element reference changes.
+ * The hookModule will only be reconstructed if the element reference changes.
  * Updates to any callbacks after first constructing should be made by
- * calling hookService.on("messageName", callback);
+ * calling hookModule.on("messageName", callback);
  */
-export const useHookEmbedderService = (
+export const useHookEmbedderModule = (
   ref: RefObject<HTMLElement>,
   constructorArgs?: Omit<
     ConstructorParameters<typeof HookEmbedderHandler>[0],
     "element"
   >,
-): { hookService: HookEmbedderHandler } => ({
-  hookService: useServiceConstructor({
+): { hookModule: HookEmbedderHandler } => ({
+  hookModule: useModuleConstructor({
     Handler: HookEmbedderHandler,
     ref,
     constructorArgs,
@@ -52,7 +52,7 @@ type Hook<T extends HTMLElement> = {
   cancel: () => void;
   teardown: (() => Promise<void>) | null;
   params: {
-    service: HookBlockHandler | null;
+    module: HookBlockHandler | null;
     node: T;
     type: string;
     entityId: EntityId;
@@ -61,9 +61,9 @@ type Hook<T extends HTMLElement> = {
 };
 
 /**
- * Pass a node by ref to the embedding application's hook service.
+ * Pass a node by ref to the embedding application's hook module.
  *
- * @param service The hook service returned by {@link useHookBlockService}
+ * @param module The hook module returned by {@link useHookBlockModule}
  * @param ref A React ref containing the DOM node. This hook will ensure the
  *            embedding application is notified when the underlying DOM node
  *            inside the ref changes
@@ -71,12 +71,12 @@ type Hook<T extends HTMLElement> = {
  * @param entityId The entityId of the entity on which to store data associated with the hook
  * @param path The path in the entity's properties to the data associated with the hook
  * @param fallback A fallback to be called if the embedding application doesn't
- *                 implement the hook service, or doesn't implement this
+ *                 implement the hook module, or doesn't implement this
  *                 specific type of hook. Return a function to "teardown" your
  *                 fallback (i.e, remove any event listeners).
  */
 export const useHook = <T extends HTMLElement>(
-  service: HookBlockHandler,
+  module: HookBlockHandler,
   ref: RefObject<T | null | void>,
   type: string,
   entityId: EntityId,
@@ -134,7 +134,7 @@ export const useHook = <T extends HTMLElement>(
      */
     if (
       existingHook &&
-      existingHook.service === service &&
+      existingHook.module === module &&
       existingHook.node === node &&
       existingHook.entityId === entityId &&
       JSON.stringify(existingHook.path) === JSON.stringify(path) &&
@@ -153,7 +153,7 @@ export const useHook = <T extends HTMLElement>(
       const hook: Hook<T> = {
         id: existingHookId ?? null,
         params: {
-          service,
+          module,
           type,
           entityId,
           path,
@@ -178,8 +178,8 @@ export const useHook = <T extends HTMLElement>(
                 existingHookRef.current = null;
               }
 
-              if (!service.destroyed) {
-                await service.hook({
+              if (!module.destroyed) {
+                await module.hook({
                   data: {
                     hookId,
                     entityId,
@@ -200,7 +200,7 @@ export const useHook = <T extends HTMLElement>(
 
       existingHookRef.current = hook;
 
-      service
+      module
         .hook({
           data: {
             hookId: hook.id,

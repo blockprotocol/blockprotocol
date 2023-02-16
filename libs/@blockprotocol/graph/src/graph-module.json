@@ -24,7 +24,7 @@
             "description": "Links to create along with the entity",
             "type": "array",
             "items": {
-              "$ref": "https://blockprotocol.org/types/services/graph/link"
+              "$ref": "https://blockprotocol.org/types/modules/graph/link"
             }
           }
         },
@@ -43,7 +43,7 @@
         "properties": {
           "entity": {
             "description": "The newly created entity",
-            "$ref": "https://blockprotocol.org/types/services/graph/entity"
+            "$ref": "https://blockprotocol.org/types/modules/graph/entity"
           }
         },
         "required": ["entity"]
@@ -83,7 +83,7 @@
         "properties": {
           "entity": {
             "description": "The updated entity",
-            "$ref": "https://blockprotocol.org/types/services/graph/entity"
+            "$ref": "https://blockprotocol.org/types/modules/graph/entity"
           }
         },
         "required": ["entity"]
@@ -149,7 +149,7 @@
         "properties": {
           "entity": {
             "description": "The retrieved entity",
-            "$ref": "https://blockprotocol.org/types/services/graph/entity"
+            "$ref": "https://blockprotocol.org/types/modules/graph/entity"
           }
         },
         "required": ["entity"]
@@ -167,7 +167,7 @@
         "properties": {
           "operation": {
             "description": "The aggregation operation to apply",
-            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
           }
         },
         "required": ["operation"]
@@ -185,13 +185,13 @@
         "properties": {
           "operation": {
             "description": "The aggregation operation that was applied to generate the results, including any defaults set by the application.",
-            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
           },
           "results": {
             "description": "The entities returned by the aggregation operation",
             "type": "array",
             "items": {
-              "$ref": "https://blockprotocol.org/types/services/graph/entity"
+              "$ref": "https://blockprotocol.org/types/modules/graph/entity"
             }
           }
         },
@@ -228,7 +228,7 @@
         "properties": {
           "entityType": {
             "description": "The created entity type",
-            "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
+            "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
           }
         },
         "required": ["entityType"]
@@ -268,7 +268,7 @@
         "properties": {
           "entityType": {
             "description": "The updated entity type",
-            "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
+            "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
           }
         },
         "required": ["entityType"]
@@ -334,7 +334,7 @@
         "properties": {
           "entityType": {
             "description": "The retrieved entity type",
-            "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
+            "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
           }
         },
         "required": ["entityType"]
@@ -352,7 +352,7 @@
         "properties": {
           "operation": {
             "description": "The aggregation operation to apply",
-            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
           }
         },
         "required": ["operation"]
@@ -370,13 +370,13 @@
         "properties": {
           "operation": {
             "description": "The aggregation operation that was applied to generate the results, including any defaults set by the application.",
-            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
           },
           "results": {
             "description": "The entity types returned by the aggregation operation",
             "type": "array",
             "items": {
-              "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
+              "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
             }
           }
         },
@@ -425,7 +425,7 @@
         "properties": {
           "link": {
             "description": "The created link",
-            "$ref": "https://blockprotocol.org/types/services/graph/link"
+            "$ref": "https://blockprotocol.org/types/modules/graph/link"
           }
         },
         "required": ["link"]
@@ -465,7 +465,7 @@
         "properties": {
           "link": {
             "description": "The updated link",
-            "$ref": "https://blockprotocol.org/types/services/graph/link"
+            "$ref": "https://blockprotocol.org/types/modules/graph/link"
           }
         },
         "required": ["link"]
@@ -531,7 +531,7 @@
         "properties": {
           "link": {
             "description": "The retrieved link",
-            "$ref": "https://blockprotocol.org/types/services/graph/link"
+            "$ref": "https://blockprotocol.org/types/modules/graph/link"
           }
         },
         "required": ["link"]
@@ -553,7 +553,7 @@
           },
           "operation": {
             "description": "The aggregation operation to apply",
-            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
           },
           "path": {
             "description": "The path or field on the entity where this linked aggregation is made (e.g. 'rows')",
@@ -575,7 +575,7 @@
         "properties": {
           "linkedAggregation": {
             "description": "The created linked aggregation",
-            "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition"
+            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
           }
         },
         "required": ["linkedAggregation"]
@@ -597,7 +597,7 @@
           },
           "operation": {
             "description": "The new aggregation operation",
-            "$ref": "https://blockprotocol.org/types/services/graph/aggregation-operation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/aggregation-operation"
           }
         },
         "required": ["aggregationId", "operation"]
@@ -615,7 +615,7 @@
         "properties": {
           "linkedAggregation": {
             "description": "The updated linked aggregation definition",
-            "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition"
+            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
           }
         },
         "required": ["linkedAggregation"]
@@ -680,7 +680,7 @@
         "properties": {
           "linkedAggregation": {
             "description": "The retrieved linked aggregation",
-            "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation"
+            "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation"
           }
         },
         "required": ["linkedAggregation"]
@@ -746,7 +746,7 @@
       "respondedToBy": null,
       "sentOnInitialization": true,
       "data": {
-        "$ref": "https://blockprotocol.org/types/services/graph/entity"
+        "$ref": "https://blockprotocol.org/types/modules/graph/entity"
       },
       "errorCodes": []
     },
@@ -763,14 +763,14 @@
             "description": "The entities linked from the block entity, and potentially entities linked from them, and so on, depending on depth.",
             "type": "array",
             "items": {
-              "$ref": "https://blockprotocol.org/types/services/graph/entity"
+              "$ref": "https://blockprotocol.org/types/modules/graph/entity"
             }
           },
           "linkGroups": {
             "description": "The links attached to the block or the entities provided in linkedEntities, grouped by entity and path.",
             "type": "array",
             "items": {
-              "$ref": "https://blockprotocol.org/types/services/graph/link-group"
+              "$ref": "https://blockprotocol.org/types/modules/graph/link-group"
             }
           },
           "depth": {
@@ -792,7 +792,7 @@
       "data": {
         "type": "array",
         "items": {
-          "$ref": "https://blockprotocol.org/types/services/graph/entity-type"
+          "$ref": "https://blockprotocol.org/types/modules/graph/entity-type"
         }
       },
       "errorCodes": []
@@ -806,7 +806,7 @@
       "data": {
         "type": "array",
         "items": {
-          "$ref": "https://blockprotocol.org/types/services/graph/linked-aggregation-definition"
+          "$ref": "https://blockprotocol.org/types/modules/graph/linked-aggregation-definition"
         }
       },
       "errorCodes": []

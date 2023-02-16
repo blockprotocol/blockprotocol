@@ -1,8 +1,8 @@
 import {
-  EmbedderGraphMessageCallbacks,
   Entity,
   FileEntity,
   FileEntityProperties,
+  GraphEmbedderMessageCallbacks,
   isFileAtUrlData,
   isFileData,
   Subgraph,
@@ -24,9 +24,9 @@ import { useMockDataToSubgraph } from "./use-mock-data-to-subgraph";
 
 export type MockDatastore = {
   graph: Subgraph<true>;
-  graphServiceCallbacks: Required<
+  graphModuleCallbacks: Required<
     Omit<
-      EmbedderGraphMessageCallbacks<true>,
+      GraphEmbedderMessageCallbacks<true>,
       | "createEntityType"
       | "updateEntityType"
       | "deleteEntityType"
@@ -64,7 +64,7 @@ export const useMockDatastore = (
   //   MockDataStore["linkedAggregationDefinitions"]
   // >(initialData.linkedAggregationDefinitions);
 
-  const aggregateEntities: EmbedderGraphMessageCallbacks<true>["aggregateEntities"] =
+  const aggregateEntities: GraphEmbedderMessageCallbacks<true>["aggregateEntities"] =
     useCallback(
       async ({ data }) => {
         if (!data) {
@@ -83,7 +83,7 @@ export const useMockDatastore = (
       [graph],
     );
 
-  const createEntity: EmbedderGraphMessageCallbacks<true>["createEntity"] =
+  const createEntity: GraphEmbedderMessageCallbacks<true>["createEntity"] =
     useCallback(
       async ({ data }) => {
         if (readonly) {
@@ -129,7 +129,7 @@ export const useMockDatastore = (
       [readonly, setGraph],
     );
 
-  const getEntity: EmbedderGraphMessageCallbacks<true>["getEntity"] =
+  const getEntity: GraphEmbedderMessageCallbacks<true>["getEntity"] =
     useCallback(
       async ({ data }) => {
         if (!data) {
@@ -160,7 +160,7 @@ export const useMockDatastore = (
       [graph],
     );
 
-  const updateEntity: EmbedderGraphMessageCallbacks<true>["updateEntity"] =
+  const updateEntity: GraphEmbedderMessageCallbacks<true>["updateEntity"] =
     useCallback(
       async ({ data }) => {
         if (readonly) {
@@ -308,7 +308,7 @@ export const useMockDatastore = (
       [readonly, setGraph],
     );
 
-  const deleteEntity: EmbedderGraphMessageCallbacks<true>["deleteEntity"] =
+  const deleteEntity: GraphEmbedderMessageCallbacks<true>["deleteEntity"] =
     useCallback(
       async ({ data }) => {
         return {
@@ -346,7 +346,7 @@ export const useMockDatastore = (
       [setGraph, readonly],
     );
 
-  const aggregateEntityTypes: EmbedderGraphMessageCallbacks<true>["aggregateEntityTypes"] =
+  const aggregateEntityTypes: GraphEmbedderMessageCallbacks<true>["aggregateEntityTypes"] =
     useCallback(async ({ data: _ }) => {
       return {
         errors: [
@@ -358,7 +358,7 @@ export const useMockDatastore = (
       };
     }, []);
 
-  const getEntityType: EmbedderGraphMessageCallbacks<true>["getEntityType"] =
+  const getEntityType: GraphEmbedderMessageCallbacks<true>["getEntityType"] =
     useCallback(async ({ data }) => {
       return {
         errors: [
@@ -385,7 +385,7 @@ export const useMockDatastore = (
     }, []);
 
   /** @todo - Reimplement linkedAggregations */
-  // const createLinkedAggregation: EmbedderGraphMessageCallbacks["createLinkedAggregation"] =
+  // const createLinkedAggregation: GraphEmbedderMessageCallbacks["createLinkedAggregation"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (readonly) {
@@ -415,7 +415,7 @@ export const useMockDatastore = (
   //     [setLinkedAggregations, readonly],
   //   );
   //
-  // const getLinkedAggregation: EmbedderGraphMessageCallbacks["getLinkedAggregation"] =
+  // const getLinkedAggregation: GraphEmbedderMessageCallbacks["getLinkedAggregation"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (!data) {
@@ -452,7 +452,7 @@ export const useMockDatastore = (
   //     [entities, linkedAggregations],
   //   );
   //
-  // const updateLinkedAggregation: EmbedderGraphMessageCallbacks["updateLinkedAggregation"] =
+  // const updateLinkedAggregation: GraphEmbedderMessageCallbacks["updateLinkedAggregation"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (readonly) {
@@ -503,7 +503,7 @@ export const useMockDatastore = (
   //     [setLinkedAggregations, readonly],
   //   );
   //
-  // const deleteLinkedAggregation: EmbedderGraphMessageCallbacks["deleteLinkedAggregation"] =
+  // const deleteLinkedAggregation: GraphEmbedderMessageCallbacks["deleteLinkedAggregation"] =
   //   useCallback(
   //     async ({ data }) => {
   //       if (readonly) {
@@ -550,7 +550,7 @@ export const useMockDatastore = (
   //     [setLinkedAggregations, readonly],
   //   );
 
-  const uploadFile: EmbedderGraphMessageCallbacks<true>["uploadFile"] =
+  const uploadFile: GraphEmbedderMessageCallbacks<true>["uploadFile"] =
     useCallback(
       async ({ data }) => {
         if (readonly) {
@@ -653,7 +653,7 @@ export const useMockDatastore = (
 
   return {
     graph,
-    graphServiceCallbacks: {
+    graphModuleCallbacks: {
       aggregateEntities,
       getEntity,
       createEntity,

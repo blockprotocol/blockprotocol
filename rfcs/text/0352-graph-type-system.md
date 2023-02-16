@@ -34,7 +34,7 @@ The Block Protocol operates in-between parties that otherwise have limited to no
 
 By getting both parties to agree to a prescriptive standard, new technological possibilities become viable. The Block Protocol is an example of this, enabling a new class of applications, ones that are able to dynamically load complex front-end components at run-time which are immediately usable and functional, even if the component was previously unknown to the application.
 
-The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph service](https://blockprotocol.org/docs/spec/graph-service) allow for dynamic resolution of expected input data.
+The foundation of this capability is standardizing how requirements are expressed. Most notably, the block and entity schemas expressed through [the graph module](https://blockprotocol.org/docs/spec/graph-module) allow for dynamic resolution of expected input data.
 
 ---
 
@@ -2170,17 +2170,17 @@ For the most part, we're using existing JSON Schema keywords, but it would be pr
 
 ## Using the Types in the Block Protocol
 
-Using the proposed type system for Block Protocol imposes changes on the Graph Service and how Block Schemas are defined.
+Using the proposed type system for Block Protocol imposes changes on the Graph Module and how Block Schemas are defined.
 
 While the examples so far have shown `properties` and `links` side by side in the Entity instances, the Block Protocol would treat these two concepts separately.
 
-Messages in the Graph Service are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-service).
+Messages in the Graph Module are currently specified under [this schema](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json) with additional requirements specified [here](https://blockprotocol.org/docs/spec/graph-module).
 
 ### Interfacing with properties on Entities
 
 A key change for allowing the proposed type system to work is moving away from arbitrary property keys and making use of canonical property URIs. As seen in the examples in earlier sections, properties that use simple keys will now have to point at _Property Type URIs_.
 
-**An example of an [`Entity`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
+**An example of an [`Entity`](https://blockprotocol.org/types/modules/graph/entity) instance in the current system:**
 
 ```json
 {
@@ -2228,9 +2228,9 @@ This change canonicalizes property keys, such that they uniquely identify a Prop
 
 #### Receiving Links and Linked Entities
 
-Link groups and Linked entities in the Graph Service are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
+Link groups and Linked entities in the Graph Module are currently supplied outside the entity as separate objects. This behavior will stay the same, but the objects received will be of a different shape.
 
-**An example of a [`LinkGroup`](https://blockprotocol.org/types/services/graph/link-group) instance in the current system:**
+**An example of a [`LinkGroup`](https://blockprotocol.org/types/modules/graph/link-group) instance in the current system:**
 
 ```json
 {
@@ -2270,7 +2270,7 @@ The `LinkGroup` has a new key `ordered` which specifies whether or not the `link
 
 As for the linked entities returned by `linkedEntities`, the imposed changes to Entities will apply here as well.
 
-**An example of [`linkedEntities`](https://blockprotocol.org/types/services/graph/entity) instance in the current system:**
+**An example of [`linkedEntities`](https://blockprotocol.org/types/modules/graph/entity) instance in the current system:**
 
 ```json
 [
@@ -2300,7 +2300,7 @@ As for the linked entities returned by `linkedEntities`, the imposed changes to 
 
 Link creation will not be using arbitrary `path`s, instead Link Types must be used through Link Type URIs.
 
-**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
+**An example of a [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2328,7 +2328,7 @@ Links in the proposed system have the notion of cardinality. A link can be one-t
 
 Links can be ordered in the current system, and the behavior will stay mostly the same in the proposed system
 
-**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json#L395) instance in the current system:**
+**An example of an _ordered_ [`createLink`](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json#L395) instance in the current system:**
 
 ```json
 {
@@ -2386,7 +2386,7 @@ The indices of ordered links are transparent to the users, and implicitly given 
 ### Block Schemas
 
 Block Schemas in the Block Protocol describe the shape of their own properties.
-These properties should be stored within the same type system as the one that can be queried through the Graph Service.
+These properties should be stored within the same type system as the one that can be queried through the Graph Module.
 
 In the proposed system, Block Schemas are analogous to Entity Types. A Block Schema would need to be described in terms of Property Types. Links in Block Schemas in the proposed system must be explicit.
 
@@ -2465,7 +2465,7 @@ With the proposed system, this needs to be expanded such that we can CRUD Proper
 
 The current system also supplies a way to "aggregate" Entity Types, which is a filtering operation on all Entity Types within the embedding application. On a side note, "aggregation" is a place where Structure-based Queries could be used.
 
-**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-service.json) in the current system:**
+**Type-related [CRUD operations](https://github.com/blockprotocol/blockprotocol/blob/main/libs/%40blockprotocol/graph/src/graph-module.json) in the current system:**
 
 - `createEntityType`
 - `updateEntityType`
@@ -2648,7 +2648,7 @@ For Entity Types, Property Types, and Link Types, changing anything on the types
 
 ## Implementation Complexity
 
-This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new service-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilize the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph service implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
+This RFC introduces additional barriers for developers who want to **fully** implement the Block Protocol specification. This could be viewed as a barrier-to-entry and potentially dissuade people from trying it out. Ideally the new module-based approach mitigates this in part, and people can continue to implement parts of the specification to gradually utilize the pieces they find useful. In the simple scenarios (for instance manually including a single block) this implementation complexity should be relatively constrained, and can be mitigated by helper methods in the Block Protocol Graph module implementation. In the more complex use-cases the embedding applications will likely need to implement methods to resolve external schemas, as well as functionality to handle, combine, and validate them.
 
 It's worth noting that standard JSON schema validators won't natively support the full Type System (due to some of the new keywords that have been created), however they should be able to do partial validation, where prior to this RFC there were occurrences where misusing JSON schema could break the validators entirely.
 
@@ -2680,7 +2680,7 @@ A more immediately apparent concern is if schemas are versioned, but their use i
 
 ## The Big Picture
 
-As outlined in the [Motivation section](#motivation), there are some clear shortcomings to how the Graph service works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
+As outlined in the [Motivation section](#motivation), there are some clear shortcomings to how the Graph module works at the moment in regards to how it expresses data structure. It's also important to mention that there is a tough balance between comprehensive functionality for:
 
 - Complex use-cases (such as those that are able to dynamically load and use a block at run-time)
 - Simple use-cases (such as those that include a handful of blocks in the source code at build-time).

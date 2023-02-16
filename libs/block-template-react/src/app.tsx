@@ -1,7 +1,7 @@
 import {
   type BlockComponent,
   useEntitySubgraph,
-  useGraphBlockService,
+  useGraphBlockModule,
 } from "@blockprotocol/graph/react";
 import { useRef } from "react";
 
@@ -33,10 +33,10 @@ export const App: BlockComponent<false, RootEntity> = ({
   graph: {
     /**
      * The properties sent to the block represent the messages sent automatically from the application to the block.
-     * All block <> application messages are split into services, and so is this property object.
-     * Here, we're extracting the 'graph' service messages from the property object.
+     * All block <> application messages are split into modules, and so is this property object.
+     * Here, we're extracting the 'graph' module messages from the property object.
      * – and then taking a single message from it, 'blockEntity'
-     * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions for other such messages
+     * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions for other such messages
      */
     blockEntitySubgraph,
   },
@@ -46,13 +46,13 @@ export const App: BlockComponent<false, RootEntity> = ({
    * You don't need to change or understand them, but if you are curious:
    * 1. we create a 'ref' which will store a reference to an element – we need an element to communicate to the app via
    *   - the ref stores 'null' at first, but will be attached to the root element in our block when it exists
-   * 2. we then feed the reference to a 'hook' (a function that uses React features), which sets up the graph service:
+   * 2. we then feed the reference to a 'hook' (a function that uses React features), which sets up the graph module:
    *   - this takes care of the lower-level details of communicating with the embedding application
-   *   - it returns a 'graphService' which has various methods on it, corresponding to messages your block can send
+   *   - it returns a 'graphModule' which has various methods on it, corresponding to messages your block can send
    *   - see an example below for sending an 'updateEntity' message, and a link to the other available messages
    */
   const blockRootRef = useRef<HTMLDivElement>(null);
-  const { graphService } = useGraphBlockService(blockRootRef);
+  const { graphModule } = useGraphBlockModule(blockRootRef);
 
   if (!blockEntitySubgraph) {
     throw new Error("No blockEntitySubgraph provided");
@@ -77,7 +77,7 @@ export const App: BlockComponent<false, RootEntity> = ({
      * 1. give it a class from our CSS module
      *   - the 'styles' object has properties corresponding to classes defined in base.module.scss
      * 2. attach the ref we created earlier, so that we have a reference to this element
-     *   - our service helper will dispatch messages to the app from this element, and listen for responses on it
+     *   - our module helper will dispatch messages to the app from this element, and listen for responses on it
      */
     <div className={styles.block} ref={blockRootRef}>
       <h1>{`Hello, ${title}`}</h1>
@@ -88,15 +88,15 @@ export const App: BlockComponent<false, RootEntity> = ({
       <button
         onClick={() =>
           /**
-           * This is an example of using the graph service to send a message to the embedding application
+           * This is an example of using the graph module to send a message to the embedding application
            * – this particular message asks the application update an entity's properties.
            * The specific entity to update is identified by 'entityId'
            * – we are passing the 'entityId' of the entity loaded into the block ('blockEntity').
            *
            * Many other messages are available for your block to read and update entities, and links between entities
-           * @see https://blockprotocol.org/docs/spec/graph-service#message-definitions
+           * @see https://blockprotocol.org/docs/spec/graph-module#message-definitions
            */
-          graphService?.updateEntity({
+          graphModule?.updateEntity({
             data: {
               entityId,
               entityTypeId: blockEntity.metadata.entityTypeId,

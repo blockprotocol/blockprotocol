@@ -226,7 +226,7 @@ Link types are only able to be changed through _semantic annotations_ and as suc
 
 ## When to Check Compatibility of Types
 
-Block schemas, and other uses of types (for example graph service methods), can request particular data structures from the embedding application by referencing types. Not relying on the version of a type to ensure compatibility means that if a block or data (associated with a versioned type) in an embedding application is associated with a different version of a type – or different types altogether – the compatibility of the data can still be checked by comparing the two schemas. Data blobs can continue to be validated against the relevant schema.
+Block schemas, and other uses of types (for example graph module methods), can request particular data structures from the embedding application by referencing types. Not relying on the version of a type to ensure compatibility means that if a block or data (associated with a versioned type) in an embedding application is associated with a different version of a type – or different types altogether – the compatibility of the data can still be checked by comparing the two schemas. Data blobs can continue to be validated against the relevant schema.
 
 This should allow a bit more flexibility within the system when it comes to compatibility of data requirements.
 

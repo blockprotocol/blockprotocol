@@ -1,22 +1,22 @@
-import { ServiceHandler } from "@blockprotocol/core";
+import { ModuleHandler } from "@blockprotocol/core";
 
 // @todo restore this when an issue with module resolution has been resolved
-// import graphServiceJson from "./graph-service.json" assert { type: "json" };
+// import graphModuleJson from "./graph-module.json" assert { type: "json" };
 import {
-  EmbedderGraphMessageCallbacks,
-  EmbedderGraphMessages,
   EntityRootType,
+  GraphEmbedderMessageCallbacks,
+  GraphEmbedderMessages,
   Subgraph,
 } from "./types.js";
 
 /**
- * Creates a handler for the graph service for the embedder.
+ * Creates a handler for the graph module for the embedder.
  * Register callbacks in the constructor or afterwards using the 'on' method to react to messages from the block.
  * Call the relevant methods to send messages to the block.
  */
 export class GraphEmbedderHandler<Temporal extends boolean>
-  extends ServiceHandler
-  implements EmbedderGraphMessages<Temporal>
+  extends ModuleHandler
+  implements GraphEmbedderMessages<Temporal>
 {
   private _blockEntitySubgraph?: Subgraph<Temporal, EntityRootType<Temporal>>;
   // private _linkedAggregations?: LinkedAggregations;
@@ -30,12 +30,12 @@ export class GraphEmbedderHandler<Temporal extends boolean>
     readonly,
   }: {
     blockEntitySubgraph?: Subgraph<Temporal, EntityRootType<Temporal>>;
-    callbacks?: Partial<EmbedderGraphMessageCallbacks<Temporal>>;
+    callbacks?: Partial<GraphEmbedderMessageCallbacks<Temporal>>;
     element?: HTMLElement | null;
     // linkedAggregations?: LinkedAggregations;
     readonly?: boolean;
   }) {
-    super({ element, callbacks, serviceName: "graph", sourceType: "embedder" });
+    super({ element, callbacks, moduleName: "graph", sourceType: "embedder" });
     this._blockEntitySubgraph = blockEntitySubgraph;
     // this._linkedAggregations = linkedAggregations;
     this._readonly = readonly;
@@ -43,10 +43,10 @@ export class GraphEmbedderHandler<Temporal extends boolean>
 
   /**
    * Registers multiple callbacks at once.
-   * Useful for bulk updates to callbacks after the service is first initialised.
+   * Useful for bulk updates to callbacks after the module is first initialised.
    */
   registerCallbacks(
-    callbacks: Partial<EmbedderGraphMessageCallbacks<Temporal>>,
+    callbacks: Partial<GraphEmbedderMessageCallbacks<Temporal>>,
   ) {
     super.registerCallbacks(callbacks);
   }
@@ -55,7 +55,7 @@ export class GraphEmbedderHandler<Temporal extends boolean>
    * Removes multiple callbacks at once.
    * Useful when replacing previously registered callbacks
    */
-  removeCallbacks(callbacks: Partial<EmbedderGraphMessageCallbacks<Temporal>>) {
+  removeCallbacks(callbacks: Partial<GraphEmbedderMessageCallbacks<Temporal>>) {
     super.removeCallbacks(callbacks);
   }
 
@@ -65,15 +65,15 @@ export class GraphEmbedderHandler<Temporal extends boolean>
    * @param messageName the message name to listen for
    * @param handlerFunction the function to call when the message is received, with the message data / errors
    */
-  on<K extends keyof EmbedderGraphMessageCallbacks<Temporal>>(
+  on<K extends keyof GraphEmbedderMessageCallbacks<Temporal>>(
     this: GraphEmbedderHandler<Temporal>,
     messageName: K,
-    handlerFunction: NonNullable<EmbedderGraphMessageCallbacks<Temporal>[K]>,
+    handlerFunction: NonNullable<GraphEmbedderMessageCallbacks<Temporal>[K]>,
   ) {
     // @todo restore this when module resolution issue resolved
     // @see https://app.asana.com/0/1202542409311090/1202614421149286/f
     // const expectedMessageSource = "block";
-    // const messageJsonDefinition = graphServiceJson.messages.find(
+    // const messageJsonDefinition = graphModuleJson.messages.find(
     //   (message) =>
     //     message.messageName === messageName &&
     //     message.source === expectedMessageSource,
