@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
+import { HUB_SERVICES_ENABLED } from "../../../pages/hub.page";
 
 import { FontAwesomeIcon } from "../../icons";
 import { faBinary } from "../../icons/fa/binary";
@@ -154,9 +155,11 @@ const HubListBrowse = () => {
       <HubListBrowseType type="types">
         <FontAwesomeIcon icon={faAsterisk} /> Types
       </HubListBrowseType>
-      <HubListBrowseType type="services">
-        <FontAwesomeIcon icon={faBinary} /> Services
-      </HubListBrowseType>
+      {HUB_SERVICES_ENABLED ? (
+        <HubListBrowseType type="services">
+          <FontAwesomeIcon icon={faBinary} /> Services
+        </HubListBrowseType>
+      ) : null}
     </Stack>
   );
 };

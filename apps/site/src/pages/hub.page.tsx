@@ -15,31 +15,38 @@ import {
 } from "../lib/blocks";
 import { COPY_FONT_FAMILY } from "../theme/typography";
 
+export const HUB_SERVICES_ENABLED = false;
+
 interface PageProps {
   featuredBlocks: BlockMetadata[];
   listing: HubItemDescription[];
   types: HubItemDescription[];
 }
 
-const getBlockHubItems = async (): Promise<HubItemDescription[]> => {
-  const blocks = await getAllBlocks();
+const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
+  {
+    async blocks() {
+      const blocks = await getAllBlocks();
 
-  return excludeHiddenBlocks(blocks).map(
-    (item): HubItemDescription => ({
-      image: item.icon,
-      author: item.author,
-      title: item.displayName ?? "",
-      description: item.description ?? "",
-      updated: item.lastUpdated ?? "UNKNOWN",
-      version: item.version,
-      url: item.blockSitePath,
-    }),
-  );
-};
-
-const getTypeHubItems = async (): Promise<HubItemDescription[]> => {
-  return [];
-};
+      return excludeHiddenBlocks(blocks).map(
+        (item): HubItemDescription => ({
+          image: item.icon,
+          author: item.author,
+          title: item.displayName ?? "",
+          description: item.description ?? "",
+          updated: item.lastUpdated ?? "UNKNOWN",
+          version: item.version,
+          url: item.blockSitePath,
+        }),
+      );
+    },
+    async types() {
+      return [];
+    },
+    async services() {
+      return HUB_SERVICES_ENABLED ? [] : null;
+    },
+  };
 
 /**
  * used to create an index of all available blocks, the catalog
@@ -47,11 +54,20 @@ const getTypeHubItems = async (): Promise<HubItemDescription[]> => {
 export const getServerSideProps: GetServerSideProps<PageProps> = async (
   context,
 ) => {
-  const browseType = getRouteHubBrowseType(context.query);
+  const browseType = getRouteHubBrowseType(context.query).toString();
   const [featuredBlocks, listing] = await Promise.all([
     getFeaturedBlocks(),
-    browseType === "blocks" ? getBlockHubItems() : getTypeHubItems(),
+    getHubItems[browseType]?.() ?? null,
   ]);
+
+  if (!listing) {
+    return {
+      redirect: {
+        destination: "/hub",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
@@ -107,7 +123,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing, types }) => {
             >
               blocks
             </Box>
-            ,{" "}
+            {HUB_SERVICES_ENABLED ? <>,</> : <> and</>}{" "}
             <Box
               component="strong"
               fontWeight={700}
@@ -115,14 +131,18 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing, types }) => {
             >
               types
             </Box>
-            , and{" "}
-            <Box
-              component="strong"
-              fontWeight={700}
-              color={(theme) => theme.palette.purple[60]}
-            >
-              services
-            </Box>
+            {HUB_SERVICES_ENABLED ? (
+              <>
+                , and{" "}
+                <Box
+                  component="strong"
+                  fontWeight={700}
+                  color={(theme) => theme.palette.purple[60]}
+                >
+                  services
+                </Box>
+              </>
+            ) : null}
           </Box>
         </Typography>
         <Typography
