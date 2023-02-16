@@ -1,3 +1,5 @@
+import { AuthenticatedApiRequest } from "../lib/api/handler/authenticated-handler";
+
 const dataUrl = process.env.DATA_URL;
 const dataWriteKey = process.env.DATA_WRITE_KEY;
 
@@ -59,4 +61,32 @@ export const sendReport = async (context: EventContext) => {
       );
     });
   }
+};
+
+export const parseClientIp = <RequestBody = unknown>(
+  req: AuthenticatedApiRequest<RequestBody>,
+): string | null => {
+  const xForwardedFor = req.headers["x-forwarded-for"];
+
+  const parseIp =
+    // This header would be given by Vercel
+    req.headers["x-real-ip"] ??
+    // x-forwarded-for is usually a list of IPs where the first one is the client (if we can trust all proxies)
+    (xForwardedFor && typeof xForwardedFor === "string"
+      ? xForwardedFor.split(/, /)[0]
+      : Array.isArray(xForwardedFor)
+      ? xForwardedFor[0]
+      : null) ??
+    // A fallback would be the remote address on the socket
+    req.socket.remoteAddress;
+
+  // This ensures that we don't pass down an array of IPs to the caller
+  let clientIp = (Array.isArray(parseIp) ? parseIp[0] : parseIp) ?? null;
+
+  // IPv4 addressed mapped as IPv6 are prefixed "::ffff:", we can just get rid of that
+  if (clientIp && clientIp.substring(0, 7) === "::ffff:") {
+    clientIp = clientIp.substring(7);
+  }
+
+  return clientIp;
 };
