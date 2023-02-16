@@ -20,7 +20,6 @@ export const HUB_SERVICES_ENABLED = false;
 interface PageProps {
   featuredBlocks: BlockMetadata[];
   listing: HubItemDescription[];
-  types: HubItemDescription[];
 }
 
 const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
@@ -34,7 +33,7 @@ const getHubItems: Record<string, () => Promise<HubItemDescription[] | null>> =
           author: item.author,
           title: item.displayName ?? "",
           description: item.description ?? "",
-          updated: item.lastUpdated ?? "UNKNOWN",
+          updated: item.lastUpdated ?? "",
           version: item.version,
           url: item.blockSitePath,
         }),
@@ -73,12 +72,11 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
     props: {
       featuredBlocks: excludeHiddenBlocks(featuredBlocks),
       listing,
-      types: [],
     },
   };
 };
 
-const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing, types }) => {
+const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing }) => {
   return (
     <>
       <NextSeo
@@ -243,7 +241,7 @@ const HubPage: NextPage<PageProps> = ({ featuredBlocks, listing, types }) => {
           </Grid>
         </Container>
       </Box>
-      <HubList listing={listing} types={types} />
+      <HubList listing={listing} />
     </>
   );
 };

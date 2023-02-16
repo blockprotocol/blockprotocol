@@ -5,7 +5,6 @@ import {
   LinkedAggregation,
 } from "@blockprotocol/graph";
 import { NextParsedUrlQuery } from "next/dist/server/request-meta";
-import { NextRouter } from "next/router";
 
 /** @todo type as JSON Schema. */
 export type BlockSchema = Record<string, any>;

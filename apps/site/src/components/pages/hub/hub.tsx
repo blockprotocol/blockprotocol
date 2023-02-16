@@ -25,7 +25,7 @@ export const useRouteHubBrowseType = () => {
 export type HubItemDescription = {
   image?: string | null;
   title: string;
-  description: string;
+  description?: string;
   author: string;
   version: string;
   updated: string;
@@ -59,13 +59,15 @@ const HubItem = ({
       >
         {title}
       </Typography>
-      <Typography
-        variant="bpSmallCopy"
-        color={(theme) => theme.palette.gray[80]}
-        fontSize={15}
-      >
-        {description}
-      </Typography>
+      {description ? (
+        <Typography
+          variant="bpSmallCopy"
+          color={(theme) => theme.palette.gray[80]}
+          fontSize={15}
+        >
+          {description}
+        </Typography>
+      ) : null}
       <Typography
         component="div"
         fontSize={14}
@@ -112,12 +114,20 @@ const HubListBrowseType = ({
           position: "relative",
           display: "flex",
           alignItems: "center",
-          [`.${svgIconClasses.root}`]: { marginRight: 1, fontSize: 15 },
+          [`.${svgIconClasses.root}`]: {
+            marginRight: 1,
+            fontSize: 15,
+            color: theme.palette.gray[80],
+          },
         }),
         active &&
           ((theme) => ({
             fontWeight: 600,
             color: theme.palette.purple[70],
+
+            [`.${svgIconClasses.root}`]: {
+              color: "inherit",
+            },
 
             "&:before": {
               position: "absolute",
@@ -168,7 +178,6 @@ const HubHeading = ({ children }: { children: ReactNode }) => (
   <Typography
     variant="bpHeading3"
     fontWeight={500}
-    mb={2}
     color={(theme) => theme.palette.gray[80]}
   >
     {children}
@@ -176,7 +185,9 @@ const HubHeading = ({ children }: { children: ReactNode }) => (
 );
 
 const HubSubHeading = ({ children }: { children: ReactNode }) => (
-  <Typography color={(theme) => theme.palette.gray[80]}>{children}</Typography>
+  <Typography mt={2} color={(theme) => theme.palette.gray[80]}>
+    {children}
+  </Typography>
 );
 
 const HubBrowseHeaderComponents = {
@@ -192,24 +203,10 @@ const HubBrowseHeaderComponents = {
     );
   },
   types: () => {
-    return (
-      <>
-        <HubHeading>Types</HubHeading>
-        <HubSubHeading>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit
-        </HubSubHeading>
-      </>
-    );
+    return <HubHeading>Types</HubHeading>;
   },
   services: () => {
-    return (
-      <>
-        <HubHeading>Services</HubHeading>
-        <HubSubHeading>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit
-        </HubSubHeading>
-      </>
-    );
+    return <HubHeading>Services</HubHeading>;
   },
 };
 
@@ -225,13 +222,7 @@ const HubBrowseHeader = () => {
   return HeadingComponent ? <HeadingComponent /> : null;
 };
 
-export const HubList = ({
-  listing,
-  types,
-}: {
-  listing: HubItemDescription[];
-  types: HubItemDescription[];
-}) => {
+export const HubList = ({ listing }: { listing: HubItemDescription[] }) => {
   return (
     <>
       <Box
@@ -276,9 +267,6 @@ export const HubList = ({
             <Grid item xs={9} pt={6.5} pb={9}>
               <Stack spacing={6}>
                 {listing.map((item) => (
-                  <HubItem key={item.url} item={item} />
-                ))}
-                {types.map((item) => (
                   <HubItem key={item.url} item={item} />
                 ))}
               </Stack>
