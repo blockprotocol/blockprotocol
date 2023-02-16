@@ -3,7 +3,7 @@ import { AuthenticatedApiRequest } from "../lib/api/handler/authenticated-handle
 const dataUrl = process.env.DATA_URL;
 const dataWriteKey = process.env.DATA_WRITE_KEY;
 
-export type BlockListingProperties = {
+export type BlockSearchProperties = {
   origin: string | null;
   bpUserId: string;
   ip: string | null;
@@ -13,9 +13,9 @@ export type BlockListingProperties = {
 };
 
 export type EventContext = {
-  event: "block_listing";
+  event: "block_search";
   userId: string;
-  properties: BlockListingProperties;
+  properties: BlockSearchProperties;
 };
 
 /**

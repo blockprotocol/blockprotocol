@@ -120,7 +120,7 @@ export default createApiKeyRequiredHandler<null, ApiBlockSearchResponse>()
     const userId = req.user.id;
 
     await sendReport({
-      event: "block_listing",
+      event: "block_search",
       userId,
       properties: {
         origin: req.headers.origin ?? null,
