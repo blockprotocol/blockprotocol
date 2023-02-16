@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
-import { ExpandedBlockMetadata as BlockMetadata } from "../../../lib/blocks";
 
 import { FontAwesomeIcon } from "../../icons";
 import { faBinary } from "../../icons/fa/binary";
@@ -21,22 +20,20 @@ export const useRouteHubBrowseType = () => {
   return getRouteHubBrowseType(router.query);
 };
 
-const HubItem = ({
-  image,
-  title,
-  description,
-  author,
-  version,
-  updated,
-  url,
-}: {
+export type HubItemDescription = {
   image?: string | null;
-  title: ReactNode;
-  description: ReactNode;
+  title: string;
+  description: string;
   author: string;
-  version: ReactNode;
-  updated: ReactNode;
+  version: string;
+  updated: string;
   url: string;
+};
+
+const HubItem = ({
+  item: { image, title, description, author, version, updated, url },
+}: {
+  item: HubItemDescription;
 }) => (
   <Stack direction="row" spacing={2} alignItems="start">
     {image ? (
@@ -162,7 +159,13 @@ const HubListBrowse = () => {
     </Stack>
   );
 };
-export const HubList = ({ listing }: { listing: BlockMetadata[] }) => {
+export const HubList = ({
+  listing,
+  types,
+}: {
+  listing: HubItemDescription[];
+  types: HubItemDescription[];
+}) => {
   return (
     <>
       <Box
@@ -213,16 +216,10 @@ export const HubList = ({ listing }: { listing: BlockMetadata[] }) => {
             <Grid item xs={9} pt={6.5} pb={9}>
               <Stack spacing={6}>
                 {listing.map((item) => (
-                  <HubItem
-                    key={item.pathWithNamespace}
-                    image={item.icon}
-                    author={item.author}
-                    title={item.displayName}
-                    description={item.description}
-                    updated={item.lastUpdated}
-                    version={item.version}
-                    url={item.blockSitePath}
-                  />
+                  <HubItem key={item.url} item={item} />
+                ))}
+                {types.map((item) => (
+                  <HubItem key={item.url} item={item} />
                 ))}
               </Stack>
             </Grid>
