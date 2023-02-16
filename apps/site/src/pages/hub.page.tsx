@@ -21,6 +21,26 @@ interface PageProps {
   types: HubItemDescription[];
 }
 
+const getBlockHubItems = async (): Promise<HubItemDescription[]> => {
+  const blocks = await getAllBlocks();
+
+  return excludeHiddenBlocks(blocks).map(
+    (item): HubItemDescription => ({
+      image: item.icon,
+      author: item.author,
+      title: item.displayName ?? "",
+      description: item.description ?? "",
+      updated: item.lastUpdated ?? "UNKNOWN",
+      version: item.version,
+      url: item.blockSitePath,
+    }),
+  );
+};
+
+const getTypeHubItems = async (): Promise<HubItemDescription[]> => {
+  return [];
+};
+
 /**
  * used to create an index of all available blocks, the catalog
  */
@@ -30,23 +50,13 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (
   const browseType = getRouteHubBrowseType(context.query);
   const [featuredBlocks, listing] = await Promise.all([
     getFeaturedBlocks(),
-    browseType === "blocks" ? getAllBlocks() : [],
+    browseType === "blocks" ? getBlockHubItems() : getTypeHubItems(),
   ]);
 
   return {
     props: {
       featuredBlocks: excludeHiddenBlocks(featuredBlocks),
-      listing: excludeHiddenBlocks(listing).map(
-        (item): HubItemDescription => ({
-          image: item.icon,
-          author: item.author,
-          title: item.displayName ?? "",
-          description: item.description ?? "",
-          updated: item.lastUpdated ?? "UNKNOWN",
-          version: item.version,
-          url: item.blockSitePath,
-        }),
-      ),
+      listing,
       types: [],
     },
   };
