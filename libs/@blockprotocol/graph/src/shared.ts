@@ -22,7 +22,7 @@ type Entry<T extends {}> = T extends readonly [unknown, ...unknown[]]
   ? [`${number}`, U]
   : ObjectEntry<T>;
 
-// @todo deduplicate this and packages/mock-block-dock/src/util.ts
+// @todo deduplicate this and libs/mock-block-dock/src/util.ts
 /** `Object.entries` analogue which returns a well-typed array
  *
  * Source: https://dev.to/harry0000/a-bit-convenient-typescript-type-definitions-for-objectentries-d6g
