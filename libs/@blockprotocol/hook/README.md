@@ -24,7 +24,7 @@ handler.hook({
     node, // a reference to the DOM node to render into
     type: "text", // the type of hook
     entityId: "entity1", // the id of the entity this hook will show/edit data for
-    path: "$.text", // the path in the entity's properties data will be taken from/saved to
+    path: ["http://example.com/property-type/text/"], // the path in the entity's properties data will be taken from/saved to
   },
 });
 ```
@@ -38,7 +38,7 @@ We also provide a `useHook` hook to make sending hook messages easier.
 ```typescript
 import { useHook } from "@blockprotocol/hook/react";
 
-useHook(hookService, nodeRef, "text", ["text"], (node) => {
+useHook(hookService, nodeRef, "text", ["http://example.com/property-type/text/"], (node) => {
   node.innerText = "hook fallback";
 
   return () => {
