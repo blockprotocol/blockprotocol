@@ -61,7 +61,10 @@ const blockEntityMap = {
       entityTypeId: entityTypes.testType.$id,
       temporalVersioning: entityTemporalMetadata(),
     },
-    properties: { [extractBaseUri(propertyTypes.name.$id)]: "World" },
+    properties: {
+      [extractBaseUri(propertyTypes.name.$id)]: "World",
+      [extractBaseUri(propertyTypes.description.$id)]: "This is a description",
+    },
   },
   "custom-element": {
     metadata: {

@@ -50,6 +50,16 @@ const username: PropertyType = {
     },
   ],
 };
+const description: PropertyType = {
+  kind: "propertyType",
+  $id: "http://example.com/types/property-type/description/v/1",
+  title: "An explanation of this thing",
+  oneOf: [
+    {
+      $ref: "https://blockprotocol.org/@blockprotocol/types/data-type/text/v/1",
+    },
+  ],
+};
 
 export const propertyTypes = {
   numberOfEmployees,
@@ -57,5 +67,6 @@ export const propertyTypes = {
   age,
   email,
   username,
+  description,
 };
 // satisfies Record<string, PropertyType>;
