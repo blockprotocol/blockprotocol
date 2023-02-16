@@ -102,7 +102,7 @@ impl From<&VersionedUri> for &DataTypeReference {
 
 impl ValidateUri for DataTypeReference {
     fn validate_uri(&self, base_uri: &BaseUri) -> Result<(), ValidationError> {
-        if base_uri == self.uri().base_uri() {
+        if base_uri == &self.uri().base_uri {
             Ok(())
         } else {
             Err(ValidationError::BaseUriMismatch {
